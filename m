@@ -1,85 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 6 Feb 2018 13:45:36 +0100
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 6 Feb 2018 14:52:02 +0200
 Subject: [Buildroot] [git commit branch/next] package/glibc: security
  bump to 2.27
-In-Reply-To: <20180206124246.13C0B884B3@busybox.osuosl.org>
+In-Reply-To: <20180206124536.GB28439@scaer>
 References: <20180206124246.13C0B884B3@busybox.osuosl.org>
-Message-ID: <20180206124536.GB28439@scaer>
+ <20180206124536.GB28439@scaer>
+Message-ID: <20180206125202.gdrli7t2g2bp4d3n@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Yann,
 
-On 2018-02-06 13:41 +0100, Thomas Petazzoni spake thusly:
-> commit: https://git.buildroot.net/buildroot/commit/?id=c032e6825ad96e6d4b69cecde2402c02a2a356b5
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Subject says "security bump". Sorry, but this is not a security bump.
-This is a normal bump that happens to have security fixes.
-
-Otherwise, almost any bump of almost any package is a security bump...
-
-Regards,
-Yann E. MORIN.
-
-> See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
-> https://sourceware.org/glibc/wiki/Release/2.27
+On Tue, Feb 06, 2018 at 01:45:36PM +0100, Yann E. MORIN wrote:
+> On 2018-02-06 13:41 +0100, Thomas Petazzoni spake thusly:
+> > commit: https://git.buildroot.net/buildroot/commit/?id=c032e6825ad96e6d4b69cecde2402c02a2a356b5
+> > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 > 
-> Fixes the following CVEs:
->  CVE-2017-1000408
->  CVE-2017-1000409
->  CVE-2017-16997
->  CVE-2018-1000001
->  CVE-2018-6485
+> Subject says "security bump". Sorry, but this is not a security bump.
+> This is a normal bump that happens to have security fixes.
 > 
-> While at it, add license file hashes.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/glibc/glibc.hash | 6 +++++-
->  package/glibc/glibc.mk   | 2 +-
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-> index f3a6577d2a..86d3bb56dd 100644
-> --- a/package/glibc/glibc.hash
-> +++ b/package/glibc/glibc.hash
-> @@ -1,4 +1,8 @@
->  # Locally calculated (fetched from Github)
-> -sha256  0766875391224153502c5542a71b6e46db53b44691078b3130e1a0df41586430     glibc-glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40.tar.gz
-> +sha256  a74489d14f4017bee6a6c6fe76f1de0dbf7d66c8695116de5aadd141c4757892     glibc-glibc-2.27.tar.gz
->  # Locally calculated (fetched from Github)
->  sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
-> +
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> +sha256  61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431  LICENSES
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index cf4bdec065..b674191b22 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
->  else
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
-> -GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
-> +GLIBC_VERSION = glibc-2.27
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
->  # sometimes the connection times out. So use an unofficial github mirror.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Otherwise, almost any bump of almost any package is a security bump...
+
+When we know that a package bump fixes a known security issue we usually note 
+that in the subject line. Look for 'security' in commit subjects. You will 
+find that many (most?) are just version bumps.
+
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
