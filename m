@@ -1,83 +1,53 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  6 Feb 2018 12:16:40 -0500
-Subject: [Buildroot] [PATCH v2 1/1] 2017.11.x: fix refpolicy build failure
-Message-ID: <20180206171640.12055-1-aduskett@gmail.com>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Tue, 6 Feb 2018 14:34:27 -0200
+Subject: [Buildroot] [PATCH 1/2] configs/wandboard: Bump U-Boot and kernel
+ versions
+Message-ID: <1517934868-3692-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix the fallthrough.
+From: Fabio Estevam <festevam@gmail.com>
 
-Taken from upstream:
-https://github.com/TresysTechnology/refpolicy/commit/89b53fafa9904ba7a3df2ad94d01a485eae5366f
+Bump U-Boot to 2018.01 version and kernel to 4.15.1.
 
-Fixes:
-http://autobuild.buildroot.net/results/54e240243aba31da33a2cbecdcc234b44f24dcf7
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
-Changes v1 -> v2:
-  - Added upstream commit link to the patch notes (Matthew Weber)
-  - Changed patch to full upstream patch.
+ configs/wandboard_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- .../refpolicy/0002-fix-fall-through-error.patch    | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/refpolicy/0002-fix-fall-through-error.patch
-
-diff --git a/package/refpolicy/0002-fix-fall-through-error.patch b/package/refpolicy/0002-fix-fall-through-error.patch
-new file mode 100644
-index 0000000000..d147507bac
---- /dev/null
-+++ b/package/refpolicy/0002-fix-fall-through-error.patch
-@@ -0,0 +1,48 @@
-+From 60a0fad3daebaa8fda5b79817b1b6e9cb01a1ad1 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Tue, 6 Feb 2018 12:12:36 -0500
-+Subject: [PATCH] fc_sort: avoid compiler warning/error
-+
-+Fix a "-Werror=implicit-fallthrough" compiler warning/error on
-+the switch statement.
-+
-+This third version (v3) fixes a bug introduced in the first
-+version and improves the style over the second version.
-+
-+Upstream Commit:
-+https://github.com/TresysTechnology/refpolicy/commit/89b53fafa9904ba7a3df2ad94d01a485eae5366f
-+
-+Signed-off-by: Guido Trentalancia <guido@trentalancia.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ support/fc_sort.c | 10 ++++++----
-+ 1 file changed, 6 insertions(+), 4 deletions(-)
-+
-+diff --git a/support/fc_sort.c b/support/fc_sort.c
-+index 5561288..66cdf39 100644
-+--- a/support/fc_sort.c
-++++ b/support/fc_sort.c
-+@@ -292,14 +292,16 @@ void fc_fill_data(file_context_node_t *fc_node)
-+ 			/* If a escape character is found,
-+ 			 *  skip the next character. */
-+ 			c++;
-++			break;
-+ 		default:
-+-			/* If no meta character has been found yet,
-+-			 *  add one to the stem length. */
-+-			if (!fc_node->meta)
-+-				fc_node->stem_len++;
-+ 			break;
-+ 		}
-+ 
-++		/* If no meta character has been found yet,
-++		 * add one to the stem length. */
-++		if (!fc_node->meta)
-++			fc_node->stem_len++;
-++
-+ 		fc_node->str_len++;
-+ 		c++;
-+ 	}
-+-- 
-+2.14.3
-+
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index e6ba1d4..8f28b60 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/wandboard/post-image.sh"
+@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="wandboard"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1"
 -- 
-2.14.3
+2.7.4
