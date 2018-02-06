@@ -1,38 +1,36 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  6 Feb 2018 15:44:06 -0600
-Subject: [Buildroot] [PATCH] libglib2: assume libpcre built with unicode
-Message-ID: <1517953446-13576-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue,  6 Feb 2018 15:54:05 -0600
+Subject: [Buildroot] [PATCH] setools: set package include path
+Message-ID: <1517954045-19326-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The pcre package already explicitly sets unicode, so have the dependent
-host-libglib2 do similar.  This resolves a build failure of the
-configure test for support of pcre unicode in an build environment
-where we stop using absolute paths in our rpath, plus create independent
-HOST_DIRs not in the search path.  Currently the configure test
-assumes some default search paths as part of the build and can't
-find the libpcre.so.x.
+With per-package host/staging, the setuptools include path will
+point at the python package's include folder and not the common
+sysroot/hostdir location.  So this patch updates to explicitly
+point at the respective folder for the target vs host.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/libglib2/libglib2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/setools/setools.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index b13da33..7cb7666 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -92,6 +92,8 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index 6748c95..a719ea6 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -20,6 +20,9 @@ SETOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+ SETOOLS_DEPENDENCIES += python-enum34
  endif
  
-+HOST_LIBGLIB2_CONF_ENV = glib_cv_pcre_has_unicode=yes
++SETOOLS_ENV += SEPOL_SRC=$(STAGING_DIR)
++HOST_SETOOLS_ENV += SEPOL_SRC=$(HOST_DIR)
 +
- HOST_LIBGLIB2_CONF_OPTS = \
- 	--disable-coverage \
- 	--disable-dtrace \
+ define SETOOLS_FIX_SETUP
+ 	# By default, setup.py will look for libsepol.a in the host machines
+ 	# /usr/lib directory. This needs to be changed to the staging directory.
 -- 
 1.9.1
