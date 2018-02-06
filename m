@@ -1,45 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Feb 2018 14:42:23 +0100
-Subject: [Buildroot] [PATCH v5 1/2] libkrb5: New package
-In-Reply-To: <CAH=K+6=G1ON+qsq8Jw7drxsYFXpuAm6fnqSba0bETJLwN65fmQ@mail.gmail.com>
-References: <1517593141-26017-1-git-send-email-nerv@dawncrow.de>
- <CAH=K+6krFtqB=hj-Fe+pC6LdHKeE-uLYaSKRuvhmoO6d1Y-=9g@mail.gmail.com>
- <CAH=K+6=G1ON+qsq8Jw7drxsYFXpuAm6fnqSba0bETJLwN65fmQ@mail.gmail.com>
-Message-ID: <0c1f1d4f-ccc0-689e-315f-eb14a3d46cfd@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 06 Feb 2018 14:44:36 +0100
+Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
+In-Reply-To: <20180206105019.tqnsw3i5l44mt5vs@tarshish> (Baruch Siach's
+ message of "Tue, 6 Feb 2018 12:50:19 +0200")
+References: <20180205205716.4279-1-romain.naour@gmail.com>
+ <20180205205716.4279-5-romain.naour@gmail.com>
+ <20180205210150.ok3hhfucmxu3uz3l@tarshish>
+ <cfa2c67c-d3c8-81cd-7f50-60de1834d1ed@mind.be>
+ <20180206105019.tqnsw3i5l44mt5vs@tarshish>
+Message-ID: <87d11itepn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
+ > Hi Arnout,
+ > On Tue, Feb 06, 2018 at 09:18:38AM +0100, Arnout Vandecappelle wrote:
+ >> On 05-02-18 22:01, Baruch Siach wrote:
+ >> > On Mon, Feb 05, 2018 at 09:57:16PM +0100, Romain Naour wrote:
+ >> >> See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
+ >> >> https://sourceware.org/glibc/wiki/Release/2.27
+ >> > Note that this is a security bump fixing CVE-2017-1000408, CVE-2017-1000409, 
+ >> > CVE-2017-16997, CVE-2018-1000001, and CVE-2018-6485.
+ >> 
+ >> Even though this release fixes a number of CVEs, I wouldn't call it a security
+ >> bump. Indeed, it also makes a number of potentially breaking feature updates,
+ >> cfr. the memfd_create() change.
+ >> 
+ >> So, I would indeed mention the CVE numbers in the commit message, but not put
+ >> "security bump" in the title so that it doesn't mindlessly get applied to LTS
+ >> branches.
+ >> 
+ >> Now, in this particular case we made enough noise about it that it really
+ >> doesn't matter what goes into the subject line :-) However I think it's good to
+ >> converge on some conventions on how to tag LTS things.
 
-On 06-02-18 14:28, Sam Voss wrote:
-> Andr?,
-> 
-> On Tue, Feb 6, 2018 at 2:07 PM, Sam Voss <sam.voss@rockwellcollins.com> wrote:
->> Andr?,
->>
-> [snip]
->>> +LIBKRB5_VERSION = 1.16
->>> +LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/1.16
->>
->> Can the version number be taken out of the url, and instead use
->> $(LIBKRB5_VERSION) once again here?
-> 
-> I actually take this back. I went and checked and minor revisions are
-> also stored in this folder, so that will not work.
+ > I agree that this bump might not be suitable for the maintenance branches. But 
+ > I think we should consider it for the master branch, especially since we are 
+ > still early in the -rc cycle.
 
- In such a case we usually have a _VERSION_MAJOR variable that is used in the
-definition of _VERSION and _SITE.
-
- Regards,
- Arnout
+Possibly, yes. Lets see how much blows up on next. Do you know if (some
+of) these issues are also fixed on the 2.26 branch?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
