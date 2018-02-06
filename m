@@ -1,52 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Feb 2018 09:07:45 +0100
-Subject: [Buildroot] [git commit] lightning: fix build issue by bumping to
- 2.1.2
-Message-ID: <20180206083307.9D86B88479@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 06 Feb 2018 09:45:50 +0100
+Subject: [Buildroot] [PATCH v9 2/3] board: vyasa: Add qst5 configuration
+In-Reply-To: <1517313835-21973-2-git-send-email-jagan@amarulasolutions.com>
+ (Jagan Teki's message of "Tue, 30 Jan 2018 13:03:54 +0100")
+References: <1517313835-21973-1-git-send-email-jagan@amarulasolutions.com>
+ <1517313835-21973-2-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <87po5itsjl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c08a2d5fd310fb2f5fd03c7c8f534c0db8b8045
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Jagan" == Jagan Teki <jagannadh.teki@gmail.com> writes:
 
-The current version of lightning doesn't build with recent versions of
-binutils. Since this has been fixed upstream in a dot release, let's
-bump to the upstream version that has the fix.
+Hi,
 
-While at it, add a hash for the license file.
+ > This configuration build qt5 along with MALI T76X
+ > for vyasa rk3288 board.
 
-Fixes:
+ > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
-  http://autobuild.buildroot.net/results/51424c044e11b89544824dbdf1af45b05b499ba4/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/lightning/lightning.hash | 3 ++-
- package/lightning/lightning.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
-index 4805686e98..8e78ef4f81 100644
---- a/package/lightning/lightning.hash
-+++ b/package/lightning/lightning.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256	1fa3a2421852598b3162d6765645bb3cd0fccb5f0c105d0800c64c8428b749a6	lightning-2.1.0.tar.gz
-+sha256	9b289ed1c977602f9282da507db2e980dcfb5207ee8bd2501536a6852a157a69	lightning-2.1.2.tar.gz
-+sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSER
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index 2b4931becc..b93946146d 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > @@ -29,3 +29,22 @@ You can write this image directly to an SD card device (i.e. /dev/xxx):
+ >    $ sudo sync
  
--LIGHTNING_VERSION = 2.1.0
-+LIGHTNING_VERSION = 2.1.2
- LIGHTNING_SITE = $(BR2_GNU_MIRROR)/lightning
- LIGHTNING_LICENSE = LGPL-3.0+
- LIGHTNING_LICENSE_FILES = COPYING.LESSER
+ >  Finally, you can insert the SD card to the Vyasa RK3288 board, close J4 and boot it.
+ > +
+ > +Testing graphics on Vysa RK3288
+ > +===============================
+ > +
+ > +Built Mali T76X, Qt5 and demo application:
+
+s/Built/Build/
+
+> +
+ > +   $ make amarula_vyasa_rk3288_qt5_defconfig
+ > +   $ make
+ > +
+ > +Test procedure:
+ > +- insert require modules
+ > +# modprobe -a rockchipdrm
+ > +# modprobe -a governor_simpleondemand
+ > +
+ > +- build kernel mali driver as module and insert
+
+So this defconfig isn't usable out of the box? That isn't really nice :/
+
+How about adding a t76x-mali kernel driver package, similar to
+E.G. sunxi-mali-driver-mainline:
+
+https://patchwork.ozlabs.org/patch/841314/
+
+-- 
+Bye, Peter Korsgaard
