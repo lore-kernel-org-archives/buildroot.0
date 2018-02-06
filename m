@@ -1,49 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Feb 2018 14:44:36 +0100
-Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
-In-Reply-To: <20180206105019.tqnsw3i5l44mt5vs@tarshish> (Baruch Siach's
- message of "Tue, 6 Feb 2018 12:50:19 +0200")
-References: <20180205205716.4279-1-romain.naour@gmail.com>
- <20180205205716.4279-5-romain.naour@gmail.com>
- <20180205210150.ok3hhfucmxu3uz3l@tarshish>
- <cfa2c67c-d3c8-81cd-7f50-60de1834d1ed@mind.be>
- <20180206105019.tqnsw3i5l44mt5vs@tarshish>
-Message-ID: <87d11itepn.fsf@dell.be.48ers.dk>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue,  6 Feb 2018 08:46:03 -0500
+Subject: [Buildroot] [PATCH 1/1] ncurses: bump to 6.1
+Message-ID: <20180206134603.19957-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Remove 0002-recognise-uclinux.patch as it has been applies upstream.
 
- > Hi Arnout,
- > On Tue, Feb 06, 2018 at 09:18:38AM +0100, Arnout Vandecappelle wrote:
- >> On 05-02-18 22:01, Baruch Siach wrote:
- >> > On Mon, Feb 05, 2018 at 09:57:16PM +0100, Romain Naour wrote:
- >> >> See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
- >> >> https://sourceware.org/glibc/wiki/Release/2.27
- >> > Note that this is a security bump fixing CVE-2017-1000408, CVE-2017-1000409, 
- >> > CVE-2017-16997, CVE-2018-1000001, and CVE-2018-6485.
- >> 
- >> Even though this release fixes a number of CVEs, I wouldn't call it a security
- >> bump. Indeed, it also makes a number of potentially breaking feature updates,
- >> cfr. the memfd_create() change.
- >> 
- >> So, I would indeed mention the CVE numbers in the commit message, but not put
- >> "security bump" in the title so that it doesn't mindlessly get applied to LTS
- >> branches.
- >> 
- >> Now, in this particular case we made enough noise about it that it really
- >> doesn't matter what goes into the subject line :-) However I think it's good to
- >> converge on some conventions on how to tag LTS things.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/ncurses/0001-gcc-5.x-MKlib_gen.patch |  5 +++--
+ package/ncurses/0002-recognise-uclinux.patch | 29 ----------------------------
+ package/ncurses/ncurses.hash                 |  2 +-
+ package/ncurses/ncurses.mk                   |  2 +-
+ 4 files changed, 5 insertions(+), 33 deletions(-)
+ delete mode 100644 package/ncurses/0002-recognise-uclinux.patch
 
- > I agree that this bump might not be suitable for the maintenance branches. But 
- > I think we should consider it for the master branch, especially since we are 
- > still early in the -rc cycle.
-
-Possibly, yes. Lets see how much blows up on next. Do you know if (some
-of) these issues are also fixed on the 2.26 branch?
-
+diff --git a/package/ncurses/0001-gcc-5.x-MKlib_gen.patch b/package/ncurses/0001-gcc-5.x-MKlib_gen.patch
+index df7c15fee9..0106e8077f 100644
+--- a/package/ncurses/0001-gcc-5.x-MKlib_gen.patch
++++ b/package/ncurses/0001-gcc-5.x-MKlib_gen.patch
+@@ -11,10 +11,11 @@ http://ncurses.scripts.mit.edu/?p=ncurses.git;a=commit;h=97bb4678dc03e753290b39b
+ 
+ Original author: Thomas E. Dickey <dickey@invisible-island.net>
+ Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+-
++[Adam Duskett: Refresh for 6.1]
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ --- a/ncurses/base/MKlib_gen.sh 2015-08-06 20:48:24.000000000 -0400
+ +++ b/ncurses/base/MKlib_gen.sh	2017-02-07 10:09:01.293962392 -0500
+-@@ -491,11 +491,22 @@
++@@ -505,11 +505,22 @@
+  	-e 's/gen_$//' \
+  	-e 's/  / /g' >>$TMP
+  
+diff --git a/package/ncurses/0002-recognise-uclinux.patch b/package/ncurses/0002-recognise-uclinux.patch
+deleted file mode 100644
+index 57dd4cf37f..0000000000
+--- a/package/ncurses/0002-recognise-uclinux.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-aclocal: fix detection for uclinux hosts
+-uclinux is just a linux like the others...
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Signed-off-by: "Adam Duskett" <aduskett@gmail.com>
+-
+---- a/aclocal.m4	2015-08-05 20:46:34.000000000 -0400
+-+++ b/aclocal.m4	2017-02-07 09:58:17.770056849 -0500
+-@@ -7656,7 +7656,7 @@
+- 	cf_xopen_source="-D_SGI_SOURCE"
+- 	cf_XOPEN_SOURCE=
+- 	;;
+--(linux*|gnu*|mint*|k*bsd*-gnu)
+-+(linux*|uclinux*|gnu*|mint*|k*bsd*-gnu)
+- 	CF_GNU_SOURCE
+- 	;;
+- (minix*)
+-diff -durN a/configure b/configure
+---- a/configure	2015-08-05 05:20:32.000000000 -0400
+-+++ b/configure	2017-02-07 09:58:52.883886426 -0500
+-@@ -7869,7 +7869,7 @@
+- 	cf_xopen_source="-D_SGI_SOURCE"
+- 	cf_XOPEN_SOURCE=
+- 	;;
+--(linux*|gnu*|mint*|k*bsd*-gnu)
+-+(linux*|uclinux*|gnu*|mint*|k*bsd*-gnu)
+- 
+- echo "$as_me:7874: checking if we must define _GNU_SOURCE" >&5
+- echo $ECHO_N "checking if we must define _GNU_SOURCE... $ECHO_C" >&6
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index 6bca143836..045625ae3b 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	f551c24b30ce8bfb6e96d9f59b42fbea30fa3a6123384172f9e7284bcf647260	ncurses-6.0.tar.gz
++sha256	aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17	ncurses-6.1.tar.gz
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index e63b6e4aed..32ee085314 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NCURSES_VERSION = 6.0
++NCURSES_VERSION = 6.1
+ NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
+ NCURSES_INSTALL_STAGING = YES
+ NCURSES_DEPENDENCIES = host-ncurses
 -- 
-Bye, Peter Korsgaard
+2.14.3
