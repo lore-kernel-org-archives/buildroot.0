@@ -1,37 +1,72 @@
-From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Tue, 6 Feb 2018 08:13:40 -0600
-Subject: [Buildroot] [PATCH 2/3] hostapd: make ACS dependent on nl80211
-In-Reply-To: <20171230155736.1668-3-alexander.i.mukhin@gmail.com>
-References: <20171230155736.1668-1-alexander.i.mukhin@gmail.com>
- <20171230155736.1668-3-alexander.i.mukhin@gmail.com>
-Message-ID: <CAKGmAFq8xxVj39yU206VUrPRq7_1KTPE65EO0BCijxTN0HtMww@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Feb 2018 15:10:39 +0100
+Subject: [Buildroot] [git commit branch/next] support/testing: add
+ python-cryptography tests
+Message-ID: <20180206142224.C7689884C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+Sam
+commit: https://git.buildroot.net/buildroot/commit/?id=ecfde09985c3f8c116f58176b871dedfac96fe4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, Dec 30, 2017 at 9:57 AM, Alexander Mukhin
-<alexander.i.mukhin@gmail.com> wrote:
-> According to hostapd's defconfig file, ACS is currently only supported
-> through the nl80211 driver. Search through the source code also confirms
-> that ACS machinery is present in the nl80211 driver only.
->
-> Although hostapd can be built with ACS enabled and nl80211 disabled, an
-> attempt to use ACS with other drivers by setting a wireless channel to 0
-> results in a runtime failure (driver doesn't accept this value). So we
-> might save a user from selecting a meaningless combination by making ACS
-> dependent on nl80211.
->
-> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml                                     |  2 ++
+ .../tests/package/test_python_cryptography.py      | 31 ++++++++++++++++++++++
+ 2 files changed, 33 insertions(+)
 
-
-Bryce Ferguson
-Software Engineer
-Airborne Information Solutions \ RC Linux Platform
-
-400 Collins Rd NE Cedar Rapids, Iowa 52498
-
-Bryce.Ferguson at rockwellcollins.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index b7dfef0935..b4be44843c 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -284,6 +284,8 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+ tests.package.test_python.TestPython2: *runtime_test
+ tests.package.test_python.TestPython3: *runtime_test
++tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
++tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
+ tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: *runtime_test
+ tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: *runtime_test
+ tests.toolchain.test_external.TestExternalToolchainCCache: *runtime_test
+diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
+new file mode 100644
+index 0000000000..b60152de1c
+--- /dev/null
++++ b/support/testing/tests/package/test_python_cryptography.py
+@@ -0,0 +1,31 @@
++import os
++
++from tests.package.test_python import TestPythonBase
++
++class TestPythonCryptography(TestPythonBase):
++    def fernet_test(self, timeout=-1):
++        cmd = self.interpreter + " -c 'from cryptography.fernet import Fernet;"
++        cmd += "key = Fernet.generate_key();"
++        cmd += "f = Fernet(key)'"
++        _, exit_code = self.emulator.run(cmd, timeout)
++        self.assertEqual(exit_code, 0)
++
++class TestPythonPy2Cryptography(TestPythonCryptography):
++    config = TestPythonBase.config + \
++"""
++BR2_PACKAGE_PYTHON=y
++BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
++"""
++    def test_run(self):
++        self.login()
++        self.fernet_test(40)
++
++class TestPythonPy3Cryptography(TestPythonCryptography):
++    config = TestPythonBase.config + \
++"""
++BR2_PACKAGE_PYTHON3=y
++BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
++"""
++    def test_run(self):
++        self.login()
++        self.fernet_test(40)
