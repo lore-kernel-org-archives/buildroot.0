@@ -1,39 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Feb 2018 14:51:40 +0100
-Subject: [Buildroot] [git commit branch/next] package/glibc: security
- bump to 2.27
-In-Reply-To: <20180206125202.gdrli7t2g2bp4d3n@tarshish> (Baruch Siach's
- message of "Tue, 6 Feb 2018 14:52:02 +0200")
-References: <20180206124246.13C0B884B3@busybox.osuosl.org>
- <20180206124536.GB28439@scaer>
- <20180206125202.gdrli7t2g2bp4d3n@tarshish>
-Message-ID: <878tc6tedv.fsf@dell.be.48ers.dk>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue,  6 Feb 2018 09:02:09 -0500
+Subject: [Buildroot] [PATCH 1/1] 2017.11.x: fix refpolicy build failure
+Message-ID: <20180206140209.18298-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Add a patch to fix the fallthrough.
 
- > Hi Yann,
- > On Tue, Feb 06, 2018 at 01:45:36PM +0100, Yann E. MORIN wrote:
- >> On 2018-02-06 13:41 +0100, Thomas Petazzoni spake thusly:
- >> > commit: https://git.buildroot.net/buildroot/commit/?id=c032e6825ad96e6d4b69cecde2402c02a2a356b5
- >> > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
- >> 
- >> Subject says "security bump". Sorry, but this is not a security bump.
- >> This is a normal bump that happens to have security fixes.
- >> 
- >> Otherwise, almost any bump of almost any package is a security bump...
+Taken from upstream:
+Fixes:
+http://autobuild.buildroot.net/results/54e240243aba31da33a2cbecdcc234b44f24dcf7
 
- > When we know that a package bump fixes a known security issue we usually note 
- > that in the subject line. Look for 'security' in commit subjects. You will 
- > find that many (most?) are just version bumps.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ .../refpolicy/0001-fix-fall-through-error.patch    | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/refpolicy/0001-fix-fall-through-error.patch
 
-Indeed, this is in line with the other commits. It is somewhat sad that
-glibc does not separate security fixes from feature releases, but that's
-how it is.
-
+diff --git a/package/refpolicy/0001-fix-fall-through-error.patch b/package/refpolicy/0001-fix-fall-through-error.patch
+new file mode 100644
+index 0000000000..524884b254
+--- /dev/null
++++ b/package/refpolicy/0001-fix-fall-through-error.patch
+@@ -0,0 +1,29 @@
++From 4c71351e7dc7817bdc553cf0104c491e029e1b59 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Tue, 6 Feb 2018 08:58:41 -0500
++Subject: [PATCH] fix fall through error
++
++Backported from upstream.
++
++Fixes:
++http://autobuild.buildroot.net/results/54e240243aba31da33a2cbecdcc234b44f24dcf7
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ support/fc_sort.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/support/fc_sort.c b/support/fc_sort.c
++index 5561288..b75c7b4 100644
++--- a/support/fc_sort.c
+++++ b/support/fc_sort.c
++@@ -292,6 +292,7 @@ void fc_fill_data(file_context_node_t *fc_node)
++ 			/* If a escape character is found,
++ 			 *  skip the next character. */
++ 			c++;
+++			break;
++ 		default:
++ 			/* If no meta character has been found yet,
++ 			 *  add one to the stem length. */
++-- 
++2.14.3
++
 -- 
-Bye, Peter Korsgaard
+2.14.3
