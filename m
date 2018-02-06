@@ -1,59 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  6 Feb 2018 20:35:05 +0100
-Subject: [Buildroot] [PATCH 1/1] tinycbor: bump to version 0.5.0
-Message-ID: <20180206193505.6189-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Feb 2018 21:02:35 +0100
+Subject: [Buildroot] [PATCH v2 2/2] xf86-video-armada: new package
+In-Reply-To: <CAOMZO5Bb0-Ng=OYi1EqXsKWsQTHuCkO+fyCktcZqCa-GjVaxpQ@mail.gmail.com>
+References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
+ <20180202145526.20133-3-Evgeniy.Didin@synopsys.com>
+ <CAOMZO5Bb0-Ng=OYi1EqXsKWsQTHuCkO+fyCktcZqCa-GjVaxpQ@mail.gmail.com>
+Message-ID: <20180206210235.0c9b8056@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version added support for shared or static library building
-through BUILD_STATIC and BUILD_SHARED variables so set them depending
-on BR2_xxx_LIBS variables
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/tinycbor/tinycbor.hash |  2 +-
- package/tinycbor/tinycbor.mk   | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+On Tue, 6 Feb 2018 14:25:46 -0200, Fabio Estevam wrote:
+> Hi Evgeniy,
+> 
+> On Fri, Feb 2, 2018 at 12:55 PM, Evgeniy Didin
+> <Evgeniy.Didin@synopsys.com> wrote:
+> 
+> > +++ b/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.hash
+> > @@ -0,0 +1,6 @@
+> > +# Locally calculated
+> > +sha256 5df615507ca6579ffba6df8a2aea6f6b542aa3985598efae836f335f9752cb39        xdriver_xf86-video-armada-04748ff4fb30370086cc97b9487a32951c5600ba.tar.gz  
+> 
+> I had to manually change the sha256 to
+> 5df615507ca6579ffba6df8a2aea6f6b542aa3985598efae836f335f9752cb39 in
+> order to fix the mismatch error.
+> 
+> With this fixed:
+> 
+> Tested-by: Fabio Estevam <festevam@gmail.com>
 
-diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
-index affc7a6e41..73ab82f528 100644
---- a/package/tinycbor/tinycbor.hash
-+++ b/package/tinycbor/tinycbor.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	37a06c618ccddd7edc3747277425fcd38fa71eab37c7aaf0b03818a49950da81	tinycbor-v0.4.2.tar.gz
-+sha256	5826a284e7f120a8d2c49cb581702be3e851acb4083a4f5af6112975a8b22209	tinycbor-v0.5.0.tar.gz
- sha256	3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e	LICENSE
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index b1848b56aa..a9afbb6e46 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINYCBOR_VERSION = v0.4.2
-+TINYCBOR_VERSION = v0.5.0
- TINYCBOR_SITE = $(call github,intel,tinycbor,$(TINYCBOR_VERSION))
- TINYCBOR_LICENSE = MIT
- TINYCBOR_LICENSE_FILES = LICENSE
-@@ -18,6 +18,14 @@ endif
- 
- TINYCBOR_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) V=1
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+TINYCBOR_MAKE_OPTS += BUILD_STATIC=1 BUILD_SHARED=0
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+TINYCBOR_MAKE_OPTS += BUILD_STATIC=1 BUILD_SHARED=1
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+TINYCBOR_MAKE_OPTS += BUILD_STATIC=0 BUILD_SHARED=1
-+endif
-+
- # disabled parallel build because of build failures while
- # producing the .config file
- define TINYCBOR_BUILD_CMDS
+Which version of tar are you using? Which version of tar is Evgeniy
+using?
+
+Best regards,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
