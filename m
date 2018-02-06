@@ -1,33 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Feb 2018 15:54:17 +0100
-Subject: [Buildroot] [PATCH 1/1] ncurses: bump to 6.1
-In-Reply-To: <20180206134603.19957-1-aduskett@gmail.com>
-References: <20180206134603.19957-1-aduskett@gmail.com>
-Message-ID: <20180206155417.7b8b66bd@windsurf>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Tue, 6 Feb 2018 15:55:52 +0100
+Subject: [Buildroot] [PATCH 1/1] fs/cpio: add option to manually specify
+ file list
+In-Reply-To: <20180101154724.10ad21fc@windsurf>
+References: <20171026191627.18949-1-sconnor@lynx.com>
+ <20171026191627.18949-2-sconnor@lynx.com>
+ <20180101125448.41ee4404@windsurf> <20180101132242.GB24931@scaer>
+ <20180101154724.10ad21fc@windsurf>
+Message-ID: <CAH=K+6mtD-TTp8+JtkDGB=xC3M7tgccRtPMKTv4jWA5boD7KFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
 
-On Tue,  6 Feb 2018 08:46:03 -0500, Adam Duskett wrote:
-> Remove 0002-recognise-uclinux.patch as it has been applies upstream.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/ncurses/0001-gcc-5.x-MKlib_gen.patch |  5 +++--
->  package/ncurses/0002-recognise-uclinux.patch | 29 ----------------------------
->  package/ncurses/ncurses.hash                 |  2 +-
->  package/ncurses/ncurses.mk                   |  2 +-
->  4 files changed, 5 insertions(+), 33 deletions(-)
->  delete mode 100644 package/ncurses/0002-recognise-uclinux.patch
+On Mon, Jan 1, 2018 at 3:47 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 1 Jan 2018 14:22:42 +0100, Yann E. MORIN wrote:
+>
+>> > So I'm inclined to just apply this, as it may be useful for some users.
+>> > If you don't voice a concern within the next days, I'll apply.
+>>
+>> I don't like this much, in fact.
+>>
+>> In such a case, I would say that the initramfs filesystem is a different
+>> system, and thus should be built with a different .config.
+>>
+>> Basically, what I do in this situation:
+>>
+>>   - have a first .config for kernel+modules + initramfs, and with a
+>>     post-build script that:
+>>     1. copy all the kernel modules "somewhere",
+>>     2. trim the kernel modules that end up in the initramfs, to keep
+>>        just what is needed to boot;
+>>
+>>   - have a second .config with just userland, plus a post-build script
+>>     that vampirises the kernel modules from "somwehere" (as saved above)
+>>
+>> Of course, the "somewhere" is agreed on because I know it.
 
-Applied to next, thanks.
+I'm not a fan of this method, because it introduces more complexity
+than I think is worth for such a simple concept.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>>
+>> Besides, this is much more flexible than what this patch proposes.
+>>
+>> Really, the core of the issue is to believe that the two systems are
+>> one. They are not: they are two different systems.
+>
+> On the other hand, the initramfs is very often a subset of the complete
+> root filesystem, and being able to generate an image of this subset
+> directly from the same configuration as the full-blown system is
+> definitely a nice thing.
+>
+> I agree that a separate configuration to build the initramfs is more
+> flexible, but it also has its drawbacks (to handle kernel modules, as
+> you mentioned, but also in terms of rebuilding the toolchain if you're
+> using an internal toolchain).
+
+We often use internal toolchain, and rebuilding it for a pure subset
+seems excessive.
+
+> One example where it might be annoying to
+> have a separate configuration is if you have a single package that
+> builds both a kernel module and a user-space counterpart.
+>
+> So yeah, Seamus proposal is not ideal in terms of flexibility, but it
+> does solve one common use-case with little complexity.
+>
+> Again, I'm not 100% convinced either, so it's good to have this
+> discussion.
+
+Overall, I think this is a reasonable solution, however maybe not the
+"best" solution.
+
+Sam
