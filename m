@@ -1,41 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Feb 2018 17:16:59 +0100
-Subject: [Buildroot] [PATCH 1/1] ncurses: bump to 6.1
-In-Reply-To: <20180206134603.19957-1-aduskett@gmail.com>
-References: <20180206134603.19957-1-aduskett@gmail.com>
-Message-ID: <20180206171659.42af67e1@windsurf>
+Date: Tue, 6 Feb 2018 17:21:09 +0100
+Subject: [Buildroot] [git commit] support/dependencies: add check for c++
+ multilib
+Message-ID: <20180206162120.BE64888508@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=27d22296927d7e4ec0965f2bdaa272b1e8ea15e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  6 Feb 2018 08:46:03 -0500, Adam Duskett wrote:
-> Remove 0002-recognise-uclinux.patch as it has been applies upstream.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/ncurses/0001-gcc-5.x-MKlib_gen.patch |  5 +++--
->  package/ncurses/0002-recognise-uclinux.patch | 29 ----------------------------
->  package/ncurses/ncurses.hash                 |  2 +-
->  package/ncurses/ncurses.mk                   |  2 +-
->  4 files changed, 5 insertions(+), 33 deletions(-)
->  delete mode 100644 package/ncurses/0002-recognise-uclinux.patch
+Some packages build C++ 32bits host-tools and need the g++-multilib to
+be installed on the build machine. As example, qt5webengine builds a C++
+host-tool when target is 32bits.
 
-This seems to break the build:
+Add the check for g++-multilib to the dependencies script; and update
+the Dockerfile to install g++-multilib package.
 
-  http://autobuild.buildroot.net/results/3a5/3a5ddfcf7cd3a5c2bc068e3e33c823d6bcd3e79b/build-end.log
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/dependencies/dependencies.sh | 8 ++++++++
+ support/docker/Dockerfile            | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-It's because "install -s" is being used, which strips the binary, but
-it's using plain "strip" and not the cross strip. Ideally, it shouldn't
-strip the binary at all.
-
-Could you have a look ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index a195c62c8c..1804e85508 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -249,6 +249,14 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
+ 		echo "For other distributions, refer to their documentation."
+ 		exit 1
+ 	fi
++
++	if ! echo "int main(void) {}" | g++ -m32 -x c++ - -o /dev/null 2>/dev/null; then
++		echo
++		echo "Your Buildroot configuration needs a compiler capable of building 32 bits binaries."
++		echo "If you're running a Debian/Ubuntu distribution, install the g++-multilib package."
++		echo "For other distributions, refer to their documentation."
++		exit 1
++	fi
+ fi
+ 
+ # Check that the Perl installation is complete enough for Buildroot.
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 474e073c61..ce3fdd9cc2 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -22,7 +22,7 @@ COPY apt-sources.list /etc/apt/sources.list
+ RUN dpkg --add-architecture i386 && \
+     apt-get update -y && \
+     apt-get install -y --no-install-recommends \
+-        build-essential cmake libc6:i386 gcc-multilib \
++        build-essential cmake libc6:i386 g++-multilib \
+         bc ca-certificates file locales rsync \
+         cvs bzr git mercurial subversion wget \
+         cpio unzip \
