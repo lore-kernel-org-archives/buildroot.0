@@ -1,33 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Feb 2018 15:04:57 +0100
-Subject: [Buildroot] [PATCH v3 3/3] autobuilder: failure reason use
- build-time.log
-In-Reply-To: <20180202205713.27191-5-matthew.weber@rockwellcollins.com>
-References: <20180202205713.27191-1-matthew.weber@rockwellcollins.com>
- <20180202205713.27191-5-matthew.weber@rockwellcollins.com>
-Message-ID: <20180206150457.5265bfcf@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 6 Feb 2018 15:05:01 +0100
+Subject: [Buildroot] [PATCH 1/1] 2017.11.x: fix refpolicy build failure
+In-Reply-To: <20180206140209.18298-1-aduskett@gmail.com>
+References: <20180206140209.18298-1-aduskett@gmail.com>
+Message-ID: <CANQCQpZy=kZRs-urnn0mpeLFMg0d7D21nXZGHMiyEiKfFR1_Kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Adam,
 
-On Fri,  2 Feb 2018 14:57:13 -0600, Matt Weber wrote:
+On Tue, Feb 6, 2018 at 3:02 PM, Adam Duskett <aduskett@gmail.com> wrote:
+> Add a patch to fix the fallthrough.
+>
+> Taken from upstream:
 
-> +	  exec("tail -1 " . $thisbuildfinaldir . "build-time.log | grep :start: | cut -d':' -f4", $tmp);
-> +	  if (trim($tmp[0]))
-> +	    print "Using build-time.log for reason[".trim($tmp[0])."]";
-> +	    $reason = trim($tmp[0]);
+Please add link to upsteam
 
-Curly braces missing here. I've added a bunch more curly braces in this
-piece of code, and applied to buildroot-test.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Matt
