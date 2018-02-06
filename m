@@ -1,81 +1,75 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Tue, 6 Feb 2018 15:55:52 +0100
-Subject: [Buildroot] [PATCH 1/1] fs/cpio: add option to manually specify
- file list
-In-Reply-To: <20180101154724.10ad21fc@windsurf>
-References: <20171026191627.18949-1-sconnor@lynx.com>
- <20171026191627.18949-2-sconnor@lynx.com>
- <20180101125448.41ee4404@windsurf> <20180101132242.GB24931@scaer>
- <20180101154724.10ad21fc@windsurf>
-Message-ID: <CAH=K+6mtD-TTp8+JtkDGB=xC3M7tgccRtPMKTv4jWA5boD7KFQ@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 6 Feb 2018 15:56:32 +0100
+Subject: [Buildroot] [PATCH] package/avahi: Add sysusers.d snippet
+In-Reply-To: <20180123232005.6005-1-chris.lesiak@licor.com>
+References: <20180123232005.6005-1-chris.lesiak@licor.com>
+Message-ID: <CAHXCMM+azgogE7evpT6aJ_pdh18b3m0XkA2H2zDwy9eLFXM1Yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Chris, all,
 
-On Mon, Jan 1, 2018 at 3:47 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
+On Wed, Jan 24, 2018 at 12:20 AM, Chris Lesiak <chris.lesiak@licor.com> wrote:
+> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+> ---
+>  package/avahi/avahi.mk            | 9 +++++++++
+>  package/avahi/avahi_sysusers.conf | 5 +++++
+>  2 files changed, 14 insertions(+)
+>  create mode 100644 package/avahi/avahi_sysusers.conf
 >
-> On Mon, 1 Jan 2018 14:22:42 +0100, Yann E. MORIN wrote:
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> index ef621620f0..baffe3cb69 100644
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -190,6 +190,13 @@ endif
 >
->> > So I'm inclined to just apply this, as it may be useful for some users.
->> > If you don't voice a concern within the next days, I'll apply.
->>
->> I don't like this much, in fact.
->>
->> In such a case, I would say that the initramfs filesystem is a different
->> system, and thus should be built with a different .config.
->>
->> Basically, what I do in this situation:
->>
->>   - have a first .config for kernel+modules + initramfs, and with a
->>     post-build script that:
->>     1. copy all the kernel modules "somewhere",
->>     2. trim the kernel modules that end up in the initramfs, to keep
->>        just what is needed to boot;
->>
->>   - have a second .config with just userland, plus a post-build script
->>     that vampirises the kernel modules from "somwehere" (as saved above)
->>
->> Of course, the "somewhere" is agreed on because I know it.
-
-I'm not a fan of this method, because it introduces more complexity
-than I think is worth for such a simple concept.
-
->>
->> Besides, this is much more flexible than what this patch proposes.
->>
->> Really, the core of the issue is to believe that the two systems are
->> one. They are not: they are two different systems.
+>  ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
 >
-> On the other hand, the initramfs is very often a subset of the complete
-> root filesystem, and being able to generate an image of this subset
-> directly from the same configuration as the full-blown system is
-> definitely a nice thing.
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
+> +define AVAHI_INSTALL_SYSTEMD_SYSUSERS
+> +       $(INSTALL) -D -m 644 package/avahi/avahi_sysusers.conf \
+> +               $(TARGET_DIR)/usr/lib/sysusers.d/avahi.conf
+> +endef
+> +endif
+> +
+>  define AVAHI_INSTALL_INIT_SYSTEMD
+>         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
 >
-> I agree that a separate configuration to build the initramfs is more
-> flexible, but it also has its drawbacks (to handle kernel modules, as
-> you mentioned, but also in terms of rebuilding the toolchain if you're
-> using an internal toolchain).
-
-We often use internal toolchain, and rebuilding it for a pure subset
-seems excessive.
-
-> One example where it might be annoying to
-> have a separate configuration is if you have a single package that
-> builds both a kernel module and a user-space counterpart.
+> @@ -201,6 +208,8 @@ define AVAHI_INSTALL_INIT_SYSTEMD
 >
-> So yeah, Seamus proposal is not ideal in terms of flexibility, but it
-> does solve one common use-case with little complexity.
+>         $(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
+>                 $(TARGET_DIR)/usr/lib/tmpfiles.d/avahi.conf
+> +
+> +       $(AVAHI_INSTALL_SYSTEMD_SYSUSERS)
+>  endef
 >
-> Again, I'm not 100% convinced either, so it's good to have this
-> discussion.
+>  define AVAHI_INSTALL_DAEMON_INIT_SYSV
+> diff --git a/package/avahi/avahi_sysusers.conf b/package/avahi/avahi_sysusers.conf
+> new file mode 100644
+> index 0000000000..463ce97cea
+> --- /dev/null
+> +++ b/package/avahi/avahi_sysusers.conf
+> @@ -0,0 +1,5 @@
+> +# sysusers.d snippet for creating the avahi system user automatically
+> +# at boot on systemd-based systems that ship with an unpopulated
+> +# /etc. See sysusers.d(5) for details.
+> +
+> +u avahi - "Avahi mDNS/DNS-SD Stack"
+> --
+> 2.13.6
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Overall, I think this is a reasonable solution, however maybe not the
-"best" solution.
 
-Sam
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
+Regards,
+
+-- 
+Samuel
