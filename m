@@ -1,13 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Feb 2018 13:38:10 +0100
-Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
-In-Reply-To: <20180206105019.tqnsw3i5l44mt5vs@tarshish>
-References: <20180205205716.4279-1-romain.naour@gmail.com>
- <20180205205716.4279-5-romain.naour@gmail.com>
- <20180205210150.ok3hhfucmxu3uz3l@tarshish>
- <cfa2c67c-d3c8-81cd-7f50-60de1834d1ed@mind.be>
- <20180206105019.tqnsw3i5l44mt5vs@tarshish>
-Message-ID: <11a3e447-082e-7c81-9bf9-e3a8d0c3af3f@mind.be>
+Date: Tue, 6 Feb 2018 13:41:24 +0100
+Subject: [Buildroot] [PATCH 1/1] core: rename FOO_BASE_NAME to
+ FOO_BASENAME to avoid clashes
+In-Reply-To: <20180206101318.GX20598@australia.be.alcatel-lucent.com>
+References: <20180205142914.GR20598@australia.be.alcatel-lucent.com>
+ <20180205145450.GC2417@scaer>
+ <20180206101318.GX20598@australia.be.alcatel-lucent.com>
+Message-ID: <e9bc5d7a-1baa-3fb8-c490-557e703ec5fb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,39 +15,87 @@ To: buildroot@busybox.net
 
 
 
-On 06-02-18 11:50, Baruch Siach wrote:
-> Hi Arnout,
+On 06-02-18 11:13, Thomas De Schampheleire wrote:
+> On Mon, Feb 05, 2018 at 03:54:50PM +0100, Yann E. MORIN wrote:
+>> Thomas, All,
+>>
+>> Quick review before in-depth review and testing...
+>>
+>> On 2018-02-05 15:29 +0100, Thomas De Schampheleire spake thusly:
+>>> In current Buildroot, clashes occur between the variables _NAME and
+>>> _BASE_NAME for two packages called foo and foo-base, i.e.
+>>>
+>>> Package foo:
+>>> FOO_NAME = foo
+>>> FOO_BASE_NAME = foo-1.2.3
+>>>
+>>> Package foo-base:
+>>> FOO_BASE_NAME = foo-base
+>>> FOO_BASE_BASE_NAME = foo-base-4.5.6
+>>>
+>>> where variable FOO_BASE_NAME is clashing between these two packages.
+>>>
+>>> The problem is generic and can occur for a number of variables in Buildroot.
+>>> One solution is to use a different separator than '_' to separate the
+>>> package name from the rest of the variable name. For example:
+>>> FOO_NAME could become FOO.NAME, FOO-NAME, or something else.
+>>> Then, in the example we would have following non-clashing variables:
+>>> FOO.NAME
+>>> FOO.BASE_NAME
+>>> FOO_BASE.NAME
+>>> FOO_BASE.BASE_NAME
+>>
+>> Another isadvantage is that those variables are not valid shell
+>> variables, so we ca=ould no longer use constructs like:
+>>
+>>     eval $(make -s printvars VARS=FOO.BASE_NAME)
+>>
+>> or similar...
+>>
+>> But this is also an advantage, in that those variable won't accidentally
+>> leak into the environment of _CMDS...
+>>
+>> But the disadvantage is more critical.
 > 
-> On Tue, Feb 06, 2018 at 09:18:38AM +0100, Arnout Vandecappelle wrote:
->> On 05-02-18 22:01, Baruch Siach wrote:
->>> On Mon, Feb 05, 2018 at 09:57:16PM +0100, Romain Naour wrote:
->>>> See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
->>>> https://sourceware.org/glibc/wiki/Release/2.27
->>> Note that this is a security bump fixing CVE-2017-1000408, CVE-2017-1000409, 
->>> CVE-2017-16997, CVE-2018-1000001, and CVE-2018-6485.
->>
->>  Even though this release fixes a number of CVEs, I wouldn't call it a security
->> bump. Indeed, it also makes a number of potentially breaking feature updates,
->> cfr. the memfd_create() change.
->>
->>  So, I would indeed mention the CVE numbers in the commit message, but not put
->> "security bump" in the title so that it doesn't mindlessly get applied to LTS
->> branches.
->>
->>  Now, in this particular case we made enough noise about it that it really
->> doesn't matter what goes into the subject line :-) However I think it's good to
->> converge on some conventions on how to tag LTS things.
+> Yes, we didn't think of that.
 > 
-> I agree that this bump might not be suitable for the maintenance branches. But 
-> I think we should consider it for the master branch, especially since we are 
-> still early in the -rc cycle.
+>>
+>>> However, making that change for only this case means that the variable
+>>> naming is no longer consistent. And making the change for all variables has
+>>> a large impact, also on certain user scripts.
+>>>
+>>> For now, keep it simple, and rename FOO_BASE_NAME into FOO_BASENAME, so that
+>>> the variables become:
+>>> FOO_NAME
+>>> FOO_BASENAME
+>>> FOO_BASE_NAME
+>>> FOO_BASE_BASENAME
+>>
+>> You're listing _NAME and _BASENAME, but are also changing _RAW_BASENAME.
+> 
+> Yes, I thought it would have been odd to have
+> FOO_BASENAME
+> and
+> FOO_RAW_BASE_NAME
+> 
+> so I aligned RAW_BASENAME as well.
+> 
+> This still exposes a problem with foo-raw, as Cam Hutchingson also mentioned,
+> but this is not the only remaining problem.
+> 
+> Renaming FOO_RAW_BASE_NAME into FOO_BASENAME_RAW solves that problem, because
+> there is no internal variable 'FOO_RAW'.
+> 
+> It still doesn't solve other possible variable clashes, like DL_DIR for 'foo'
+> with DIR for 'foo-dl'. But as we said, doing the full fix has some disadvantages
+> as well.
 
- After a bit of discussion at the BR developer meeting: if it fixes CVEs, it
-should be called a "security bump". So ignore my earlier comment. It something
-that should be backported to LTS.
+ We have a list of other conflicts in the BR meeting report, would be nice to
+include that list in the commit message for easy reference.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
