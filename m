@@ -1,39 +1,45 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 5 Feb 2018 23:36:26 -0200
-Subject: [Buildroot] [PATCH v2 0/2] Xorg: enable Etnaviv support
-In-Reply-To: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
-References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <CAOMZO5AdVkKu8iVcOi1Baw-v5iHgON4MMw7X+cwSNmgVkNrf5w@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 6 Feb 2018 06:15:04 +0200
+Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to 2.27
+In-Reply-To: <20180205214157.GC2806@scaer>
+References: <20180205205716.4279-1-romain.naour@gmail.com>
+ <20180205205716.4279-5-romain.naour@gmail.com>
+ <20180205210150.ok3hhfucmxu3uz3l@tarshish>
+ <20180205214157.GC2806@scaer>
+Message-ID: <20180206041504.u2uu4gd4d2d7wopn@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Evgeniy,
+Hi Yann,
 
-On Fri, Feb 2, 2018 at 12:55 PM, Evgeniy Didin
-<Evgeniy.Didin@synopsys.com> wrote:
-> From: Evgeniy Didin <didin@synopsys.com>
->
-> This patch series enables Etnaviv support in Xorg.
->
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
->
-> Evgeniy Didin (2):
->   libdrm-armada: new package
->   xf86-video-armada: new package
+On Mon, Feb 05, 2018 at 10:41:57PM +0100, Yann E. MORIN wrote:
+> On 2018-02-05 23:01 +0200, Baruch Siach spake thusly:
+> > On Mon, Feb 05, 2018 at 09:57:16PM +0100, Romain Naour wrote:
+> > > See: https://sourceware.org/ml/libc-announce/2018/msg00000.html
+> > > https://sourceware.org/glibc/wiki/Release/2.27
+> > Note that this is a security bump fixing CVE-2017-1000408, CVE-2017-1000409, 
+> > CVE-2017-16997, CVE-2018-1000001, and CVE-2018-6485.
+> 
+> There are 10 CVE listed in the release annoucement mail, but you list
+> only five here. Why only those?
 
-Thanks for this series.
+Because all other CVEs were fixed in the 2.26 stable branch that we currently 
+use. See 971ed9653e (glibc: security bump to the latest 2.26 branch).
 
-I would be interested in testing it.
+> Do we want to list all the CVEs fixed in a release? And if we don't list
+> all, why do we even list only a subset?
 
-From your previous version, it looks like you also used a imx6 wandboard.
+We do list all. See above.
 
-Could you please share the defconfig changes you did in wandboard and
-also the command lines you used to launch X11?
+> I don't think we should, especially since the release mail is linked to
+> the commit log and has all the details.
 
-Thanks
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
