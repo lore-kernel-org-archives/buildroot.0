@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 6 Feb 2018 14:37:35 +0100
-Subject: [Buildroot] [PATCH v2 4/5] python-visitor: new package
-In-Reply-To: <20180206132506.30389-4-aduskett@gmail.com>
+Date: Tue, 6 Feb 2018 14:37:47 +0100
+Subject: [Buildroot] [PATCH v2 3/5] python-flask-sqlalchemy: new package
+In-Reply-To: <20180206132506.30389-3-aduskett@gmail.com>
 References: <20180206132506.30389-1-aduskett@gmail.com>
- <20180206132506.30389-4-aduskett@gmail.com>
-Message-ID: <CAGm1_ktac0V+ZYA68-vEdc+0RKEqeN8Fva0TKLfN8zmUnMQLnQ@mail.gmail.com>
+ <20180206132506.30389-3-aduskett@gmail.com>
+Message-ID: <CAGm1_ksfEAPEDTv_F5yt_jH+cZj7OFrRSwmZ=dxgqm+i70oedA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,7 +12,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Tue, Feb 6, 2018 at 2:25 PM, Adam Duskett <aduskett@gmail.com> wrote:
-> A tiny library to facilitate visitor implementation in Python
+> Flask-SQLAlchemy is a Flask microframework extension which adds support for
+> the SQLAlchemy SQL toolkit/ORM.
 >
 > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
@@ -20,82 +21,85 @@ Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
 > Changes v1 -> v2:
->   - None
+>   - Changed license to BSD-3c (yegor)
 >
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/python-visitor/Config.in           |  6 ++++++
->  package/python-visitor/python-visitor.hash |  4 ++++
->  package/python-visitor/python-visitor.mk   | 14 ++++++++++++++
->  5 files changed, 26 insertions(+)
->  create mode 100644 package/python-visitor/Config.in
->  create mode 100644 package/python-visitor/python-visitor.hash
->  create mode 100644 package/python-visitor/python-visitor.mk
+>  DEVELOPERS                                                 |  1 +
+>  package/Config.in                                          |  1 +
+>  package/python-flask-sqlalchemy/Config.in                  |  9 +++++++++
+>  .../python-flask-sqlalchemy/python-flask-sqlalchemy.hash   |  4 ++++
+>  package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk | 14 ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/python-flask-sqlalchemy/Config.in
+>  create mode 100644 package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
+>  create mode 100644 package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index fdc4621a7f..32ae08c99a 100644
+> index f82f33a1c0..fdc4621a7f 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -55,6 +55,7 @@ F:    package/python-flask-sqlalchemy/
+> @@ -51,6 +51,7 @@ F:    package/libsemanage/
+>  F:     package/libsepol/
+>  F:     package/nginx-naxsi/
+>  F:     package/policycoreutils/
+> +F:     package/python-flask-sqlalchemy/
 >  F:     package/python-mutagen/
 >  F:     package/python-psycopg2/
 >  F:     package/python-sqlalchemy/
-> +F:     package/python-visitor/
->  F:     package/restorecond/
->  F:     package/refpolicy/
->  F:     package/selinux-python/
 > diff --git a/package/Config.in b/package/Config.in
-> index 583b379bcd..2f2b13e3c0 100644
+> index d250b59995..583b379bcd 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -940,6 +940,7 @@ menu "External python modules"
->         source "package/python-urllib3/Config.in"
->         source "package/python-urwid/Config.in"
->         source "package/python-versiontools/Config.in"
-> +       source "package/python-visitor/Config.in"
->         source "package/python-watchdog/Config.in"
->         source "package/python-wcwidth/Config.in"
->         source "package/python-web2py/Config.in"
-> diff --git a/package/python-visitor/Config.in b/package/python-visitor/Config.in
+> @@ -774,6 +774,7 @@ menu "External python modules"
+>         source "package/python-flask-babel/Config.in"
+>         source "package/python-flask-jsonrpc/Config.in"
+>         source "package/python-flask-login/Config.in"
+> +       source "package/python-flask-sqlalchemy/Config.in"
+>         source "package/python-flup/Config.in"
+>         source "package/python-futures/Config.in"
+>         source "package/python-gobject/Config.in"
+> diff --git a/package/python-flask-sqlalchemy/Config.in b/package/python-flask-sqlalchemy/Config.in
 > new file mode 100644
-> index 0000000000..1b3f4bbb65
+> index 0000000000..7ba6e6859c
 > --- /dev/null
-> +++ b/package/python-visitor/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_VISITOR
-> +       bool "python-visitor"
+> +++ b/package/python-flask-sqlalchemy/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_FLASK_SQLALCHEMY
+> +       bool "python-flask-sqlalchemy"
+> +       select BR2_PACKAGE_PYTHON_FLASK # runtime
+> +       select BR2_PACKAGE_PYTHON_SQLALCHEMY # runtime
 > +       help
-> +         A tiny pythonic visitor implementation.
+> +         Flask-SQLAlchemy is a Flask microframework extension which
+> +         adds support for the SQLAlchemy SQL toolkit/ORM.
 > +
-> +         http://github.com/mbr/visitor
-> diff --git a/package/python-visitor/python-visitor.hash b/package/python-visitor/python-visitor.hash
+> +         http://github.com/mitsuhiko/flask-sqlalchemy
+> diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
 > new file mode 100644
-> index 0000000000..6e0cffbd95
+> index 0000000000..9e15b5d8f0
 > --- /dev/null
-> +++ b/package/python-visitor/python-visitor.hash
+> +++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
 > @@ -0,0 +1,4 @@
-> +# md5 from https://pypi.python.org/pypi/visitor/json, sha256 locally computed
-> +md5    94a024ed0ec1b02b4497c15267d319ca  visitor-0.1.3.tar.gz
-> +sha256 2c737903b2b6864ebc6167eef7cf3b997126f1aa94bdf590f90f1436d23e480a  visitor-0.1.3.tar.gz
-> +sha256 184d1ebb65da97ada36447f3c028f2fd4890b874f17b18c023ce200dd96639af  LICENSE
-> diff --git a/package/python-visitor/python-visitor.mk b/package/python-visitor/python-visitor.mk
+> +# md5 from https://pypi.python.org/pypi/Flask-SQLAlchemy/json, sha256 locally computed
+> +md5    373ce61dfd03b593ad2eaba68c9fee35  Flask-SQLAlchemy-2.3.2.tar.gz
+> +sha256 5971b9852b5888655f11db634e87725a9031e170f37c0ce7851cf83497f56e53  Flask-SQLAlchemy-2.3.2.tar.gz
+> +sha256 de2011f25501c45f2b78bfa4f851ce021cfbab0f1e7ab763233688e0b969821f  PKG-INFO
+> diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
 > new file mode 100644
-> index 0000000000..1313491c96
+> index 0000000000..37fe603f1e
 > --- /dev/null
-> +++ b/package/python-visitor/python-visitor.mk
+> +++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-visitor
+> +# python-flask-sqlalchemy
 > +#
 > +################################################################################
 > +
-> +PYTHON_VISITOR_VERSION = 0.1.3
-> +PYTHON_VISITOR_SOURCE = visitor-$(PYTHON_VISITOR_VERSION).tar.gz
-> +PYTHON_VISITOR_SITE = https://pypi.python.org/packages/d7/58/785fcd6de4210049da5fafe62301b197f044f3835393594be368547142b0
-> +PYTHON_VISITOR_SETUP_TYPE = setuptools
-> +PYTHON_VISITOR_LICENSE = MIT
-> +PYTHON_VISITOR_LICENSE_FILES = LICENSE
+> +PYTHON_FLASK_SQLALCHEMY_VERSION = 2.3.2
+> +PYTHON_FLASK_SQLALCHEMY_SOURCE = Flask-SQLAlchemy-$(PYTHON_FLASK_SQLALCHEMY_VERSION).tar.gz
+> +PYTHON_FLASK_SQLALCHEMY_SITE = https://pypi.python.org/packages/3a/66/f5ace276517c075f102457dd2f7d8645b033758f9c6effb4e0970a90fec1
+> +PYTHON_FLASK_SQLALCHEMY_SETUP_TYPE = setuptools
+> +PYTHON_FLASK_SQLALCHEMY_LICENSE = BSD-3c
+> +PYTHON_FLASK_SQLALCHEMY_LICENSE_FILES = PKG-INFO
 > +
 > +$(eval $(python-package))
 > --
