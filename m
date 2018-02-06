@@ -1,65 +1,38 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 6 Feb 2018 16:10:43 +0100
-Subject: [Buildroot] [PATCH] package/openssh: Add sysusers.d snippet
-In-Reply-To: <20180123232221.6106-1-chris.lesiak@licor.com>
-References: <20180123232221.6106-1-chris.lesiak@licor.com>
-Message-ID: <CAHXCMML+X4mu0EC42_-31ZobnVkAfWZDHoYscDRCAPtzHSmEjg@mail.gmail.com>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Tue, 6 Feb 2018 16:25:16 +0100
+Subject: [Buildroot] [PATCH v2 1/1] core: rename FOO_BASE_NAME to
+ FOO_BASENAME to avoid clashes
+In-Reply-To: <20180206135105.GC28439@scaer>
+References: <20180206125923.GB20598@australia.be.alcatel-lucent.com>
+ <20180206135105.GC28439@scaer>
+Message-ID: <CAH=K+6nRr=oT9wr1eeVDkiRMreV3uFmhkBN4rws3ugabeO95Ng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris, all,
+All,
 
-On Wed, Jan 24, 2018 at 12:22 AM, Chris Lesiak <chris.lesiak@licor.com> wrote:
-> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
-> ---
->  package/openssh/openssh.mk | 8 ++++++++
->  package/openssh/sshd.conf  | 5 +++++
->  2 files changed, 13 insertions(+)
->  create mode 100644 package/openssh/sshd.conf
+On Tue, Feb 6, 2018 at 2:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, All,
 >
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 6b7ac22c19..fc82300ab7 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -60,12 +60,20 @@ else
->  OPENSSH_CONF_OPTS += --without-selinux
->  endif
+> On 2018-02-06 13:59 +0100, Thomas De Schampheleire spake thusly:
+>> In current Buildroot, clashes occur between the variables _NAME and
+>> _BASE_NAME for two packages called foo and foo-base, i.e.
+>>
+>> Package foo:
+>> FOO_NAME = foo
+>> FOO_BASE_NAME = foo-1.2.3
+>>
+>> Package foo-base:
+>> FOO_BASE_NAME = foo-base
+>> FOO_BASE_BASE_NAME = foo-base-4.5.6
+>>
+>> where variable FOO_BASE_NAME is clashing between these two packages.
+> [--SNIP--]
+>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 >
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
-> +define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
-> +       $(INSTALL) -m 0644 -D package/openssh/sshd.conf \
-> +               $(TARGET_DIR)/usr/lib/sysusers.d/sshd.conf
-> +endef
-> +endif
-> +
->  define OPENSSH_INSTALL_INIT_SYSTEMD
->         $(INSTALL) -D -m 644 package/openssh/sshd.service \
->                 $(TARGET_DIR)/usr/lib/systemd/system/sshd.service
->         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->         ln -fs ../../../../usr/lib/systemd/system/sshd.service \
->                 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-> +       $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
->  endef
->
->  define OPENSSH_INSTALL_INIT_SYSV
-> diff --git a/package/openssh/sshd.conf b/package/openssh/sshd.conf
-> new file mode 100644
-> index 0000000000..3ea46f65c6
-> --- /dev/null
-> +++ b/package/openssh/sshd.conf
-> @@ -0,0 +1,5 @@
-> +# sysusers.d snippet for creating the sshd system user automatically
-> +# at boot on systemd-based systems that ship with an unpopulated
-> +# /etc. See sysusers.d(5) for details.
-> +
-> +u sshd - "Privilege-separated SSH"
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-
-Regards,
-
--- 
-Samuel
+Reviewed-by: Sam Voss <sam.voss@rockwellcollins.com>
