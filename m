@@ -1,60 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Feb 2018 16:16:42 +0100
-Subject: [Buildroot] [git commit branch/next] package/ncurses: add option to
- install extra terminfo files
-Message-ID: <20180206152905.3FBBC83B38@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  6 Feb 2018 16:30:32 +0100
+Subject: [Buildroot] [PATCH] glibc: security bump to the latest commit on
+ 2.26 branch
+Message-ID: <20180206153032.903-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d020aeb60470c2ebf77cf10688e3d02cf0d3d4a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Fixes the following security issues according to NEWS:
 
-Add an option to ncurses to install extra user-configured terminfo
-files. By default, only a small number of vital terminfo files are
-installed on the target. This allows a build to specify the terminfo
-files it needs.
+CVE-2017-1000408: Incorrect array size computation in _dl_init_paths leads
+to the allocation of too much memory.  (This is not a security bug per se,
+it is mentioned here only because of the CVE assignment.) Reported by
+Qualys.
 
-Signed-off-by: Cam Hutchison <camh@xdna.net>
-[Thomas: qstrip the variable before using it.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+CVE-2017-1000409: Buffer overflow in _dl_init_paths due to miscomputation of
+the number of search path components.  (This is not a security vulnerability
+per se because no trust boundary is crossed if the fix for CVE-2017-1000366
+has been applied, but it is mentioned here only because of the CVE
+assignment.) Reported by Qualys.
+
+CVE-2017-16997: Incorrect handling of RPATH or RUNPATH containing $ORIGIN
+for AT_SECURE or SUID binaries could be used to load libraries from the
+current directory.
+
+CVE-2018-1000001: Buffer underflow in realpath function when getcwd function
+succeeds without returning an absolute path due to unexpected behaviour of
+the Linux kernel getcwd syscall.  Reported by halfdog.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/Config.in  | 10 ++++++++++
- package/ncurses/ncurses.mk |  3 ++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ package/glibc/glibc.hash | 2 +-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
-index bb45bd8dc0..297b2ee415 100644
---- a/package/ncurses/Config.in
-+++ b/package/ncurses/Config.in
-@@ -23,4 +23,14 @@ config BR2_PACKAGE_NCURSES_TARGET_PROGS
- 	help
- 	  Include ncurses programs in target (clear, reset, tput, ...)
- 
-+config BR2_PACKAGE_NCURSES_ADDITIONAL_TERMINFO
-+	string "additional terminfo files to install"
-+	help
-+	  Whitespace separated list of terminfo files to install on the
-+	  target. A small number of vital terminfo files are always
-+	  installed. This list is in addition to the vital ones.
-+
-+	  The terminfo filenames should have the single letter path
-+	  prefix. e.g. t/tmux.
-+
- endif
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 32ee085314..eccfbecb8b 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -63,7 +63,8 @@ NCURSES_TERMINFO_FILES = \
- 	x/xterm+256color \
- 	x/xterm-256color \
- 	x/xterm-color \
--	x/xterm-xfree86
-+	x/xterm-xfree86 \
-+	$(call qstrip,$(BR2_PACKAGE_NCURSES_ADDITIONAL_TERMINFO))
- 
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- NCURSES_CONF_OPTS += --enable-widec
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index f3a6577d2a..3311be665c 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated (fetched from Github)
+-sha256  0766875391224153502c5542a71b6e46db53b44691078b3130e1a0df41586430     glibc-glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40.tar.gz
++sha256  d0d44c2c7a46922376c08a1d45ae7bcbf9abd8f05603dd76637c8b74e6693e9e     glibc-glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index fd79d84f15..9126d8725f 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.26-107-g73a92363619e52c458146e903dfb9b1ba823aa40
++GLIBC_VERSION = glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+-- 
+2.11.0
