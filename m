@@ -1,57 +1,59 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 6 Feb 2018 22:23:57 +0100
-Subject: [Buildroot] [PATCH v2] libdrm: fix libatomic_ops linking
-In-Reply-To: <20180102214520.53169c7b@windsurf.lan>
-References: <20171218185531.31686-1-ps.report@gmx.net>
- <20180102214520.53169c7b@windsurf.lan>
-Message-ID: <20180206222357.77acdd1a@gmx.net>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 6 Feb 2018 22:40:59 +0100
+Subject: [Buildroot] [PATCH] utils/genrandconfig: check core-dependencies
+Message-ID: <20180206214059.9272-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+When generating a random configuration, also check the host
+dependencies for that configuration and error out if it fails.
 
-On Tue, 2 Jan 2018 21:45:20 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+This is mainly intended for the autobuilders, so they don't try to
+build a configuration for which the necessary host packages are not
+installed.
 
-> Hello,
-> 
-> On Mon, 18 Dec 2017 19:55:31 +0100, Peter Seiderer wrote:
-> > Add patch 0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
-> > provided by Thomas Petazzoni handling libatomic_ops linking when needed.
-> > 
-> > Fixes [1]:
-> > 
-> >     CCLD     etnaviv_cmd_stream_test
-> >   ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_store_full_emulation'
-> >   ../../etnaviv/.libs/libdrm_etnaviv.so: undefined reference to `AO_fetch_compare_and_swap_emulation'
-> >   collect2: error: ld returned 1 exit status
-> > 
-> > [1] http://autobuild.buildroot.net/results/92e074c49417261843eef95872ff935a56077c98
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v1 -> v2:
-> >   - use patch provided by Thomas Petazzoni instead of forced
-> >     libatomic_ops linking.
-> > ---
-> >  ...akefile.am-use-pkg-config-to-discover-lib.patch | 160 +++++++++++++++++++++
-> >  package/libdrm/libdrm.mk                           |   8 +-
-> >  2 files changed, 167 insertions(+), 1 deletion(-)
-> >  create mode 100644 package/libdrm/0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch  
-> 
-> Applied to master, thanks. Could you submit the patch upstream to the
-> libdrm project ?
+Instead of erroring out, we could also generate a different random
+config. However:
 
-Patch finally submitted upstream, see [2]...
+- When called for the autobuilders, the autobuild-run script will
+  anyway just attempt another build. The only difference is that a
+  warning will be printed in this autobuild log now. This warning
+  is in fact quite useful to hint that the autobuilder could benefit
+  from intalling this additional host package.
 
-Regards,
-Peter
+- When called manually, the user may in fact want to install the
+  missing host package and continue with the saved random config.
 
-[2] https://lists.freedesktop.org/archives/dri-devel/2018-February/164908.html
+Fixes:
 
-> 
-> Thanks a lot!
-> 
-> Thomas
+http://autobuild.buildroot.net/results/d7c/d7c12e873a71fef1e0b5e19cfad45024050614e1
+http://autobuild.buildroot.net/results/a0a/a0a105c1ec2d0517112b02932a85831d4b597b9f
+http://autobuild.buildroot.net/results/96c/96cc6cedc64c777e993671204809599a1498472a
+
+and many others...
+
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ utils/genrandconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 883322552c..0d08570bc5 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -401,7 +401,8 @@ def gen_config(args):
+     subprocess.check_call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
+                            "savedefconfig"])
+ 
+-    return 0
++    return subprocess.call(["make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
++                            "core-dependencies"])
+ 
+ 
+ if __name__ == '__main__':
+-- 
+2.15.1
