@@ -1,38 +1,60 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Tue, 6 Feb 2018 16:25:16 +0100
-Subject: [Buildroot] [PATCH v2 1/1] core: rename FOO_BASE_NAME to
- FOO_BASENAME to avoid clashes
-In-Reply-To: <20180206135105.GC28439@scaer>
-References: <20180206125923.GB20598@australia.be.alcatel-lucent.com>
- <20180206135105.GC28439@scaer>
-Message-ID: <CAH=K+6nRr=oT9wr1eeVDkiRMreV3uFmhkBN4rws3ugabeO95Ng@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Feb 2018 16:16:42 +0100
+Subject: [Buildroot] [git commit branch/next] package/ncurses: add option to
+ install extra terminfo files
+Message-ID: <20180206152905.3FBBC83B38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d020aeb60470c2ebf77cf10688e3d02cf0d3d4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, Feb 6, 2018 at 2:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On 2018-02-06 13:59 +0100, Thomas De Schampheleire spake thusly:
->> In current Buildroot, clashes occur between the variables _NAME and
->> _BASE_NAME for two packages called foo and foo-base, i.e.
->>
->> Package foo:
->> FOO_NAME = foo
->> FOO_BASE_NAME = foo-1.2.3
->>
->> Package foo-base:
->> FOO_BASE_NAME = foo-base
->> FOO_BASE_BASE_NAME = foo-base-4.5.6
->>
->> where variable FOO_BASE_NAME is clashing between these two packages.
-> [--SNIP--]
->> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Add an option to ncurses to install extra user-configured terminfo
+files. By default, only a small number of vital terminfo files are
+installed on the target. This allows a build to specify the terminfo
+files it needs.
 
-Reviewed-by: Sam Voss <sam.voss@rockwellcollins.com>
+Signed-off-by: Cam Hutchison <camh@xdna.net>
+[Thomas: qstrip the variable before using it.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ncurses/Config.in  | 10 ++++++++++
+ package/ncurses/ncurses.mk |  3 ++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
+index bb45bd8dc0..297b2ee415 100644
+--- a/package/ncurses/Config.in
++++ b/package/ncurses/Config.in
+@@ -23,4 +23,14 @@ config BR2_PACKAGE_NCURSES_TARGET_PROGS
+ 	help
+ 	  Include ncurses programs in target (clear, reset, tput, ...)
+ 
++config BR2_PACKAGE_NCURSES_ADDITIONAL_TERMINFO
++	string "additional terminfo files to install"
++	help
++	  Whitespace separated list of terminfo files to install on the
++	  target. A small number of vital terminfo files are always
++	  installed. This list is in addition to the vital ones.
++
++	  The terminfo filenames should have the single letter path
++	  prefix. e.g. t/tmux.
++
+ endif
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 32ee085314..eccfbecb8b 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -63,7 +63,8 @@ NCURSES_TERMINFO_FILES = \
+ 	x/xterm+256color \
+ 	x/xterm-256color \
+ 	x/xterm-color \
+-	x/xterm-xfree86
++	x/xterm-xfree86 \
++	$(call qstrip,$(BR2_PACKAGE_NCURSES_ADDITIONAL_TERMINFO))
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ NCURSES_CONF_OPTS += --enable-widec
