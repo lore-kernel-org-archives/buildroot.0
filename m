@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Feb 2018 13:41:24 +0100
+Date: Tue, 6 Feb 2018 13:42:03 +0100
 Subject: [Buildroot] [PATCH 1/1] core: rename FOO_BASE_NAME to
  FOO_BASENAME to avoid clashes
-In-Reply-To: <20180206101318.GX20598@australia.be.alcatel-lucent.com>
+In-Reply-To: <20180206101708.GY20598@australia.be.alcatel-lucent.com>
 References: <20180205142914.GR20598@australia.be.alcatel-lucent.com>
  <20180205145450.GC2417@scaer>
- <20180206101318.GX20598@australia.be.alcatel-lucent.com>
-Message-ID: <e9bc5d7a-1baa-3fb8-c490-557e703ec5fb@mind.be>
+ <20180206101708.GY20598@australia.be.alcatel-lucent.com>
+Message-ID: <7b0c7b63-66b8-cb75-18b0-bc5a536fb9f3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +15,7 @@ To: buildroot@busybox.net
 
 
 
-On 06-02-18 11:13, Thomas De Schampheleire wrote:
+On 06-02-18 11:17, Thomas De Schampheleire wrote:
 > On Mon, Feb 05, 2018 at 03:54:50PM +0100, Yann E. MORIN wrote:
 >> Thomas, All,
 >>
@@ -56,46 +56,21 @@ On 06-02-18 11:13, Thomas De Schampheleire wrote:
 >> leak into the environment of _CMDS...
 >>
 >> But the disadvantage is more critical.
-> 
-> Yes, we didn't think of that.
-> 
 >>
->>> However, making that change for only this case means that the variable
->>> naming is no longer consistent. And making the change for all variables has
->>> a large impact, also on certain user scripts.
->>>
->>> For now, keep it simple, and rename FOO_BASE_NAME into FOO_BASENAME, so that
->>> the variables become:
->>> FOO_NAME
->>> FOO_BASENAME
->>> FOO_BASE_NAME
->>> FOO_BASE_BASENAME
->>
->> You're listing _NAME and _BASENAME, but are also changing _RAW_BASENAME.
 > 
-> Yes, I thought it would have been odd to have
-> FOO_BASENAME
-> and
-> FOO_RAW_BASE_NAME
+> An alternative that was mentioned which solves that issue is separating package
+> name from the rest by a double underscore, i.e.
+> FOO__NAME
+> FOO__BASE_NAME
+> FOO__RAW_BASE_NAME
 > 
-> so I aligned RAW_BASENAME as well.
-> 
-> This still exposes a problem with foo-raw, as Cam Hutchingson also mentioned,
-> but this is not the only remaining problem.
-> 
-> Renaming FOO_RAW_BASE_NAME into FOO_BASENAME_RAW solves that problem, because
-> there is no internal variable 'FOO_RAW'.
-> 
-> It still doesn't solve other possible variable clashes, like DL_DIR for 'foo'
-> with DIR for 'foo-dl'. But as we said, doing the full fix has some disadvantages
-> as well.
+> This would still be acceptable by the shell.
 
- We have a list of other conflicts in the BR meeting report, would be nice to
-include that list in the commit message for easy reference.
+
+ Maybe use that example in the commit message then.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
