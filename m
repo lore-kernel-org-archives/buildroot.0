@@ -1,46 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Feb 2018 23:15:14 +0100
-Subject: [Buildroot] [PATCH 1/4] openjdk: new package
-In-Reply-To: <20180206145203.GD20598@australia.be.alcatel-lucent.com>
-References: <20180206143952.12332-1-thomas.de_schampheleire@nokia.com>
- <20180206143952.12332-2-thomas.de_schampheleire@nokia.com>
- <20180206145203.GD20598@australia.be.alcatel-lucent.com>
-Message-ID: <29b7df93-fa74-d453-aa0f-7d21a33ed719@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue,  6 Feb 2018 16:16:45 -0600
+Subject: [Buildroot] [PATCH v2] setools: set package include path
+Message-ID: <1517955405-12547-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+With per-package host/staging, the setuptools include path will
+point at the python package's include folder and not the common
+sysroot/hostdir location.  So this patch updates to explicitly
+point at the respective folder for the target vs host.
 
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+--
+Changes v1 -> v2
+ - correct path for target to be ${STAGING_DIR}/usr
+    (previous did not include usr)
+---
+ package/setools/setools.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 06-02-18 15:52, Thomas De Schampheleire wrote:
-> 
-> Note: I also added following lines in the top-level Buildroot Makefile to avoid
-> interference from the user's environment:
-> 
-> unexport PLATFORM
-> unexport JAVA_HOME
-> unexport OS
-
- You can achieve this locally by adding...
-
-[snip]
->> +OPENJDK_MAKE_ENV += X11_NOT_NEEDED=yes CUPS_NOT_NEEDED=yes ALSA_NOT_NEEDED=yes \
->> +		    PULSE_NOT_NEEDED=yes \
-		PLATFORM= JAVA_HOME= OS= \
->> +		    BUILD_LD="$(HOSTCC)"
-
-
- Regards,
- Arnout
-
-[snip]
-
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index 6748c95..bef7356 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -20,6 +20,9 @@ SETOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+ SETOOLS_DEPENDENCIES += python-enum34
+ endif
+ 
++SETOOLS_ENV += SEPOL_SRC=$(STAGING_DIR)/usr
++HOST_SETOOLS_ENV += SEPOL_SRC=$(HOST_DIR)
++
+ define SETOOLS_FIX_SETUP
+ 	# By default, setup.py will look for libsepol.a in the host machines
+ 	# /usr/lib directory. This needs to be changed to the staging directory.
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
