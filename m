@@ -1,53 +1,40 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 7 Feb 2018 20:49:08 +0100
-Subject: [Buildroot] [PATCH] ltp-testsuite: add numactl as optional
- dependency
-In-Reply-To: <cd25369f9e0588a17965bbabcf6214c110f86ef4.1518030288.git.baruch@tkos.co.il>
-References: <cd25369f9e0588a17965bbabcf6214c110f86ef4.1518030288.git.baruch@tkos.co.il>
-Message-ID: <20180207194907.GA1349@x230>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  7 Feb 2018 21:36:58 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.2
+Message-ID: <20180207203658.6432-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-> Make the detection of libnuma in the configure script consistent when
-> the numactl package is enabled.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> ltp-testsuite does not currently take explicit enable/disable for
-> libnuma, so none are used. The next ltp-testsuite version will add these
-> options.
-
-> Cc: Petr Vorel <petr.vorel@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/ltp-testsuite/ltp-testsuite.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-> index 5e0b35d12a22..c47f587836b3 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -40,6 +40,13 @@ else
->  LTP_TESTSUITE_CONF_ENV += ac_cv_lib_cap_cap_compare=no
->  endif
-
-> +# No explicit enable/disable options
-> +ifeq ($(BR2_PACKAGE_NUMACTL),y)
-> +LTP_TESTSUITE_DEPENDENCIES += numactl
-> +else
-> +LTP_TESTSUITE_CONF_ENV += have_numa_headers=no
-> +endif
-> +
->  # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
->  # support.
->  LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
-Thanks for implementing it, LGTM.
-I just think whether it wouldn't be better to create config option
-BR2_PACKAGE_LTP_TESTSUITE_LIBNUMA which would select numactl (this would also inform user
-about this dependency).
-
-
-Kind regards,
-Petr
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index ea2ecbb7e9..c72565d2bf 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 28ef8c069db19010b9af247b86b05f0f879ac914a4620997c3e5181465170b40  cjson-v1.7.1.tar.gz
++sha256 e5101b6c0416d26b8ce2dd3fcdd779eacd93d765a1872789ba099a5f31a338e7  cjson-v1.7.2.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 88a33a2ce4..31d57e1f2b 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.7.1
++CJSON_VERSION = v1.7.2
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
+-- 
+2.14.1
