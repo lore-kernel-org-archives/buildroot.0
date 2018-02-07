@@ -1,77 +1,154 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 7 Feb 2018 08:43:20 +0000
-Subject: [Buildroot] [PATCH v2] board: add support for ARC HS
- Development Kit (HSDK)
-In-Reply-To: <1517385496.6038.3.camel@synopsys.com>
-References: <20171219145554.17718-1-didin@synopsys.com>
- <1517385496.6038.3.camel@synopsys.com>
-Message-ID: <1517993000.5728.8.camel@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Feb 2018 10:58:28 +0100
+Subject: [Buildroot] [PATCH v2 1/5] package/gdb: rework dependency for
+ C++11
+In-Reply-To: <20180205211015.26819-2-thomas.petazzoni@bootlin.com>
+References: <20180205211015.26819-1-thomas.petazzoni@bootlin.com>
+ <20180205211015.26819-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20180207095828.GA2464@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Peter, Arnout,
+Thomas, All,
 
-On Wed, 2018-01-31 at 10:58 +0300, Alexey Brodkin wrote:
-> Hello,
+On 2018-02-05 22:10 +0100, Thomas Petazzoni spake thusly:
+> As we are about to switch to 8.0 as the default gdb dependency, we
+> need to adjust how the gdb dependencies are handled. Indeed, from 8.0
+> onwards, gdb needs a C++11 capable compiler, i.e at least gcc 4.8.
 > 
-> On Tue, 2017-12-19 at 17:55 +0300, Evgeniy Didin wrote:
-> > Synopsys DesignWare HSDK (which stands for ARC HS
-> > Development Kit) is the latest and greatest development
-> > platform that sports quad-core ARC HS38 in real silicon.
-> > 
-> > Most noticeable features of the board are:
-> >  * Quad-core ARC HS38 CPU running at 1GHz
-> >  * 4Gb of DDR
-> >  * Built-in Vivante GPU (well supported via open source
-> >    Etnaviv drivers)
-> >  * Built-in Wi-Fi/Bluetooth module (RedPine RS-9113)
-> > 
-> > And as usual we have:
-> >  * [micro] SD-card slot
-> >  * 2 USB 2.0 ports
-> >  * 1Gbit Ethernet port
-> >  * Built-in Digilent JTAG probe
-> >  * Serial port accessible via micro-USB port
-> > 
-> > Writing sdcard.img on SDcard creates two partitions:
-> >  * FAT32 with uImage and uboot.env
-> >  * EXT4 with root filesystem
-> > 
-> > We modify kernel config because in default hsdk kernel config
-> > CONFIG_INITRAMFS_SOURCE parameter is set and when we build
-> > rootfs separately (BR2_TARGET_ROOTFS_INITRAMFS is not set)
-> > error appears. Also we set up CONFIG_ARC_UBOOT_SUPPORT which
-> > enables usage of uboot variables in the boot process.
-> > 
-> > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> > Cc: arc-buildroot at synopsys.com
-> > ---
-> > Changes since v1:
-> > -add entries in DEVELOPERS and .gitlab-ci.yml
-> > -change genimage-hsdk.cfg to genimage.cfg
-> > -enable BR2_TARGET_UBOOT_ENVIMAGE against mkenvimage in post-image.sh
-> > -add renaming "uboot-env.bin" to "uboot.env" in post-image.sh
-> > -changed tar to gzip when archiving sdcard.img
+> Until now, Config.in.host was making sure that gdb 8.0 was not
+> selectable if the cross-compilation toolchain did not have C++ support
+> with gcc >= 4.8. This worked fine because the default version of gdb,
+> used as the target gdb version when no host gdb is built, was 7.11,
+> and did not require C++11.
 > 
-> I'm worried if we can make it merged before the next Buildroot
-> release. Any comments [except probably requirement to rebase as 
-> it's been more than a month since v2 was posted] or/and suggestions on
-> this one?
+> With the switch to 8.0 as the default version, when target gdb is
+> enabled but not host gdb, 8.0 is used, which means we need a C++11
+> capable compiler. The dependencies in Config.in.host are no longer
+> sufficient.
+> 
+> So instead, we remove the target-related dependencies from
+> Config.in.host and move them properly to Config.in. The overall logic
+> is the following:
+> 
+>  - In Config.in.host, BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS ensures that
+>    we have at least host gcc 4.8 if we're on ARC, because the ARC gdb
+>    needs C++11. We remove the target toolchain related dependencies
+>    from here.
+> 
+>  - In Config.in.host, the version selection ensures that 8.0 cannot be
+>    selected if the host toolchain does not have at least gcc 4.8. We
+>    remove the target toolchain related dependencies from here.
+> 
+>  - In Config.in, we handle gdb more like a regular target package,
+>    with a Config.in comment when its dependencies are not met. A
+>    hidden boolean BR2_PACKAGE_GDB_NEEDS_CXX11 indicates when the
+>    currently selected version requires C++11. Based on that, we show
+>    the Config.in comment, and add the proper dependencies to
+>    BR2_PACKAGE_GDB. It is worth mentioning that
+>    BR2_PACKAGE_GDB_NEEDS_CXX11 is intentionally created to be !7.10 &&
+>    !7.11 && !7.12 instead of 8.0, because we will gradually add more
+>    C++11-requiring versions, and remove non-C++11-requiring versions.
 
-Please pardon myself for being that annoying but it looks like 2018.02-rc1
-was recently cut and that patch is not there yet.
+Nice refactoring. :-)
 
-It would be really cool if we may still get this one merged ASAP so
-it becomes a part of the upcoming release.
+Yet, a comment below...
 
-FWIW the board was now officially released, see 
-https://www.synopsys.com/dw/ipdir.php?ds=arc-hs-development-kit
-and we're looking forward to have more people working with that
-quite capable board.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/gdb/Config.in      | 15 +++++++++++++++
+>  package/gdb/Config.in.host |  3 ---
+>  2 files changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+> index af020f40c5..b7f0565b92 100644
+> --- a/package/gdb/Config.in
+> +++ b/package/gdb/Config.in
+> @@ -11,15 +11,30 @@ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
+>  	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+>  
+> +config BR2_PACKAGE_GDB_NEEDS_CXX11
+> +	bool
+> +	default y
+> +	depends on !BR2_GDB_VERSION_7_10
+> +	depends on !BR2_GDB_VERSION_7_11
+> +	depends on !BR2_GDB_VERSION_7_12
 
--Alexey
+I would have expected that the various versions would select this,
+i.e. something like:
+
+    config BR2_PACKAGE_GDB_NEEDS_CXX11
+        bool
+
+
+    config BR2_GDB_VERSION_7_10
+        bool "7.10"
+
+    config BR2_GDB_VERSION_8_0
+        bool "8.0"
+        select BR2_PACKAGE_GDB_NEEDS_CXX11
+
+Otherwise, I'm OK with the patch.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> +comment "gdb/gdbserver >= 8.x needs a toolchain w/ C++, gcc >= 4.8"
+> +	depends on BR2_PACKAGE_GDB_NEEDS_CXX11
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +
+>  config BR2_PACKAGE_GDB
+>  	bool "gdb"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+>  	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_PACKAGE_GDB_NEEDS_CXX11
+> +	depends on BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_GDB_NEEDS_CXX11
+>  	# When the external toolchain gdbserver is copied to the
+>  	# target, we don't allow building a separate gdbserver. The
+>  	# one from the external toolchain should be used.
+>  	select BR2_PACKAGE_GDB_SERVER if \
+>  		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_PACKAGE_GDB_NEEDS_CXX11
+> +	depends on BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_GDB_NEEDS_CXX11
+>  	help
+>  	  GDB, the GNU Project debugger, allows you to see what is
+>  	  going on `inside' another program while it executes -- or
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index 99e1cae5ba..8676c6f01b 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -3,7 +3,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+>  	default y
+>  	# The ARC version needs C++11, thus gcc >= 4.8, like gdb-8.0.x
+>  	depends on BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_arc
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_arc
+>  	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+>  	depends on !BR2_microblaze
+>  	depends on !BR2_nios2
+> @@ -63,9 +62,7 @@ config BR2_GDB_VERSION_7_12
+>  config BR2_GDB_VERSION_8_0
+>  	bool "gdb 8.0.x"
+>  	# Needs a C++11 compiler
+> -	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_HOST_GCC_AT_LEAST_4_8
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>  
+>  endchoice
+>  
+> -- 
+> 2.14.3
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
