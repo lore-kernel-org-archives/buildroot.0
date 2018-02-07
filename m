@@ -1,87 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Feb 2018 22:39:47 +0100
-Subject: [Buildroot] [RFCv2 1/3] qemu: add
- BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-In-Reply-To: <20180207212355.7464-2-aduskett@gmail.com>
-References: <20180207212355.7464-1-aduskett@gmail.com>
- <20180207212355.7464-2-aduskett@gmail.com>
-Message-ID: <20180207213947.GA2007@scaer>
+From: Toan Pham <tpham3783@gmail.com>
+Date: Wed, 7 Feb 2018 17:29:01 -0500
+Subject: [Buildroot] Suggestion for Makefile to probably import
+ BR2_CONFIG
+In-Reply-To: <20180130181213.GB3468@scaer>
+References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
+ <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
+ <CAGNmLEMn=NFuq+iKj8e2PuF-A4+tGj_VDjq1FBj6+xzDPU=_iQ@mail.gmail.com>
+ <d7cd5dae-5ae3-54f3-4376-f17c27e98065@mind.be>
+ <CAGNmLEN0N9NziMj6OUDEAkEhu6bDmc43jBnXV6MFSP3EEupnSg@mail.gmail.com>
+ <be14460d-9241-e14a-d4f1-8c30a62d7451@mind.be>
+ <20180129091113.3acccd2c@windsurf.lan>
+ <87wp0183ww.fsf@dell.be.48ers.dk> <20180130181213.GB3468@scaer>
+Message-ID: <CAGNmLEPu=rTxVePUznQm5A5BmS_T2U5H8v1LREp9vRny+ZrhaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+>  >> Yann, Thomas, Peter, what do you think?
+>
+>
+Arnout,
 
-On 2018-02-07 16:23 -0500, Adam Duskett spake thusly:
-> Match the style used with other packages such as valgrind.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Thank you for the detailed explanation as to why "auto.conf" was needed.
+Please apply appropriate patches to remove the split config so that we can
+have a more intuitive build system.  In the meantime, I'll stick with using
+the supplied patch, which was passing BR2_CONFIG to silentoldconfig target.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-However, small comment below...
-
-> ---
->  package/qemu/Config.in.host | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-> index 71f38ef41f..78fe54a85c 100644
-> --- a/package/qemu/Config.in.host
-> +++ b/package/qemu/Config.in.host
-> @@ -1,15 +1,20 @@
-> -config BR2_PACKAGE_HOST_QEMU
-> -	bool "host qemu"
-> -	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
-> +config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-> +	bool
-> +	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
->  		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
->  		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
->  		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
->  		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
->  		BR2_sparc        || BR2_x86_64
-
-This would become more readable if we were to write:
-
-    default y if BR2_arm || BR2_armeb
-    default y if BR2_aarch64
-    default y if BR2_i386 || BR2_x86_64
-    etc...
-
-But of course, not part of this patch. ;-)
-
-> +config BR2_PACKAGE_HOST_QEMU
-> +	bool "host qemu"
-> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
->  	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
->  		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
->  	help
-> -	  QEMU is a generic and open source machine emulator and virtualizer.
-> +	  QEMU is a generic and open source machine emulator and
-> +	  virtualizer.
-
-Spurious wrapping. Not very important...
-
-Regards,
-Yann E. MORIN.
-
->  	  This option builds an emulator for your selected architecture.
->  
-> -- 
-> 2.14.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+TP
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180207/97ef7496/attachment.html>
