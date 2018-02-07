@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  7 Feb 2018 21:36:58 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.2
-Message-ID: <20180207203658.6432-1-fontaine.fabrice@gmail.com>
+Date: Wed,  7 Feb 2018 21:37:17 +0100
+Subject: [Buildroot] [PATCH 1/1] rygel: bump to version 0.36.1
+Message-ID: <20180207203717.6482-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rygel/rygel.hash | 4 ++--
+ package/rygel/rygel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index ea2ecbb7e9..c72565d2bf 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 28ef8c069db19010b9af247b86b05f0f879ac914a4620997c3e5181465170b40  cjson-v1.7.1.tar.gz
-+sha256 e5101b6c0416d26b8ce2dd3fcdd779eacd93d765a1872789ba099a5f31a338e7  cjson-v1.7.2.tar.gz
- sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 88a33a2ce4..31d57e1f2b 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
+index 028af21bb4..879cbd714b 100644
+--- a/package/rygel/rygel.hash
++++ b/package/rygel/rygel.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.36/rygel-0.36.0.sha256sum:
+-sha256	31e8ade78b4ea59978d1b59056fa5cd8aef6b9c1457d3dd06de4d2e75a01813f	rygel-0.36.0.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.36/rygel-0.36.1.sha256sum:
++sha256	a67fdd801f6e4121ae44cfffabc0f35fff487cab173b6c6f052449ad7b5fb820	rygel-0.36.1.tar.xz
+ 
+ # Locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
+index cd8897ceb5..d1bc30589c 100644
+--- a/package/rygel/rygel.mk
++++ b/package/rygel/rygel.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CJSON_VERSION = v1.7.1
-+CJSON_VERSION = v1.7.2
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+ RYGEL_VERSION_MAJOR = 0.36
+-RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).0
++RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).1
+ RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
+ RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
+ RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
 -- 
 2.14.1
