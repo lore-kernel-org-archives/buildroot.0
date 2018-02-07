@@ -1,57 +1,77 @@
-From: Laurent Charpentier <laurent_pubs@yahoo.com>
-Date: Wed, 7 Feb 2018 07:47:37 +0000 (UTC)
-Subject: [Buildroot] [PATCH v2] open-lldp: add patch to remove pid_t
- error
-In-Reply-To: <20180206164910.37620947@windsurf>
-References: <20180122120903.22839-1-laurent_pubs@yahoo.com>
- <20180206164910.37620947@windsurf>
-Message-ID: <2110951609.3446284.1517989657961@mail.yahoo.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 7 Feb 2018 08:43:20 +0000
+Subject: [Buildroot] [PATCH v2] board: add support for ARC HS
+ Development Kit (HSDK)
+In-Reply-To: <1517385496.6038.3.camel@synopsys.com>
+References: <20171219145554.17718-1-didin@synopsys.com>
+ <1517385496.6038.3.camel@synopsys.com>
+Message-ID: <1517993000.5728.8.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-I submitted this patch (and several other patches) to upstream last week.http://lists.open-lldp.org/pipermail/lldp-devel/2018-January/thread.html
+Hi Thomas, Peter, Arnout,
 
-Unfortunately I had no answer. I don't know whether the project is actively maintain or not.
-Best Regards,Laurent
-
-      From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- To: Laurent Charpentier <laurent_pubs@yahoo.com> 
-Cc: buildroot at buildroot.org
- Sent: Tuesday, February 6, 2018 4:49 PM
- Subject: Re: [Buildroot] [PATCH v2] open-lldp: add patch to remove pid_t error
-   
-Hello,
-
-On Mon, 22 Jan 2018 13:09:03 +0100, Laurent Charpentier wrote:
-> Added #include <sys/types.h> to fix unknown type 'pid_t' errors.
+On Wed, 2018-01-31 at 10:58 +0300, Alexey Brodkin wrote:
+> Hello,
 > 
-> This is to fix autobuild failures:
-> http://autobuild.buildroot.net/results/f7e94ae1c2aa6b3f6567d1f567a66329974834e9
-> http://autobuild.buildroot.net/results/8a43938d9c0391a846757a54cf5f956b64470865
+> On Tue, 2017-12-19 at 17:55 +0300, Evgeniy Didin wrote:
+> > Synopsys DesignWare HSDK (which stands for ARC HS
+> > Development Kit) is the latest and greatest development
+> > platform that sports quad-core ARC HS38 in real silicon.
+> > 
+> > Most noticeable features of the board are:
+> >  * Quad-core ARC HS38 CPU running at 1GHz
+> >  * 4Gb of DDR
+> >  * Built-in Vivante GPU (well supported via open source
+> >    Etnaviv drivers)
+> >  * Built-in Wi-Fi/Bluetooth module (RedPine RS-9113)
+> > 
+> > And as usual we have:
+> >  * [micro] SD-card slot
+> >  * 2 USB 2.0 ports
+> >  * 1Gbit Ethernet port
+> >  * Built-in Digilent JTAG probe
+> >  * Serial port accessible via micro-USB port
+> > 
+> > Writing sdcard.img on SDcard creates two partitions:
+> >  * FAT32 with uImage and uboot.env
+> >  * EXT4 with root filesystem
+> > 
+> > We modify kernel config because in default hsdk kernel config
+> > CONFIG_INITRAMFS_SOURCE parameter is set and when we build
+> > rootfs separately (BR2_TARGET_ROOTFS_INITRAMFS is not set)
+> > error appears. Also we set up CONFIG_ARC_UBOOT_SUPPORT which
+> > enables usage of uboot variables in the boot process.
+> > 
+> > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Alexey Brodkin <abrodkin@synopsys.com>
+> > Cc: arc-buildroot at synopsys.com
+> > ---
+> > Changes since v1:
+> > -add entries in DEVELOPERS and .gitlab-ci.yml
+> > -change genimage-hsdk.cfg to genimage.cfg
+> > -enable BR2_TARGET_UBOOT_ENVIMAGE against mkenvimage in post-image.sh
+> > -add renaming "uboot-env.bin" to "uboot.env" in post-image.sh
+> > -changed tar to gzip when archiving sdcard.img
 > 
-> Signed-off-by: Laurent Charpentier <laurent_pubs@yahoo.com>
-> ---
->? .../open-lldp/0004-fixed-unknown-type-pid_t.patch? | 41 ++++++++++++++++++++++
->? 1 file changed, 41 insertions(+)
->? create mode 100644 package/open-lldp/0004-fixed-unknown-type-pid_t.patch
+> I'm worried if we can make it merged before the next Buildroot
+> release. Any comments [except probably requirement to rebase as 
+> it's been more than a month since v2 was posted] or/and suggestions on
+> this one?
 
-Applied to master, thanks. Could you submit this patch upstream if not
-already done?
+Please pardon myself for being that annoying but it looks like 2018.02-rc1
+was recently cut and that patch is not there yet.
 
-Thanks!
+It would be really cool if we may still get this one merged ASAP so
+it becomes a part of the upcoming release.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+FWIW the board was now officially released, see 
+https://www.synopsys.com/dw/ipdir.php?ds=arc-hs-development-kit
+and we're looking forward to have more people working with that
+quite capable board.
 
-
-   
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180207/c00cd9ed/attachment-0001.html>
+-Alexey
