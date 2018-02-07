@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Feb 2018 10:58:28 +0100
-Subject: [Buildroot] [PATCH v2 1/5] package/gdb: rework dependency for
- C++11
-In-Reply-To: <20180205211015.26819-2-thomas.petazzoni@bootlin.com>
+Date: Wed, 7 Feb 2018 11:02:13 +0100
+Subject: [Buildroot] [PATCH v2 2/5] package/gdb: bump to version 8.1
+In-Reply-To: <20180205211015.26819-3-thomas.petazzoni@bootlin.com>
 References: <20180205211015.26819-1-thomas.petazzoni@bootlin.com>
- <20180205211015.26819-2-thomas.petazzoni@bootlin.com>
-Message-ID: <20180207095828.GA2464@scaer>
+ <20180205211015.26819-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20180207100213.GB2464@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,132 +14,104 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2018-02-05 22:10 +0100, Thomas Petazzoni spake thusly:
-> As we are about to switch to 8.0 as the default gdb dependency, we
-> need to adjust how the gdb dependencies are handled. Indeed, from 8.0
-> onwards, gdb needs a C++11 capable compiler, i.e at least gcc 4.8.
+> From: Romain Naour <romain.naour@gmail.com>
 > 
-> Until now, Config.in.host was making sure that gdb 8.0 was not
-> selectable if the cross-compilation toolchain did not have C++ support
-> with gcc >= 4.8. This worked fine because the default version of gdb,
-> used as the target gdb version when no host gdb is built, was 7.11,
-> and did not require C++11.
+> https://sourceware.org/ml/gdb-announce/2018/msg00001.html
 > 
-> With the switch to 8.0 as the default version, when target gdb is
-> enabled but not host gdb, 8.0 is used, which means we need a C++11
-> capable compiler. The dependencies in Config.in.host are no longer
-> sufficient.
+> gdb 8.1 has a new optional dependency on mpfr, which according to the
+> NEWS file:
 > 
-> So instead, we remove the target-related dependencies from
-> Config.in.host and move them properly to Config.in. The overall logic
-> is the following:
+>    GDB now uses the GNU MPFR library, if available, to emulate target
+>    floating-point arithmetic during expression evaluation when the
+>    target uses different floating-point formats than the host.  At
+>    least version 3.1 of GNU MPFR is required.
 > 
->  - In Config.in.host, BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS ensures that
->    we have at least host gcc 4.8 if we're on ARC, because the ARC gdb
->    needs C++11. We remove the target toolchain related dependencies
->    from here.
+> So for the target gdb, this is unnecessary, and therefore we
+> forcefully disable mpfr support by passing --without-mpfr.
 > 
->  - In Config.in.host, the version selection ensures that 8.0 cannot be
->    selected if the host toolchain does not have at least gcc 4.8. We
->    remove the target toolchain related dependencies from here.
-> 
->  - In Config.in, we handle gdb more like a regular target package,
->    with a Config.in comment when its dependencies are not met. A
->    hidden boolean BR2_PACKAGE_GDB_NEEDS_CXX11 indicates when the
->    currently selected version requires C++11. Based on that, we show
->    the Config.in comment, and add the proper dependencies to
->    BR2_PACKAGE_GDB. It is worth mentioning that
->    BR2_PACKAGE_GDB_NEEDS_CXX11 is intentionally created to be !7.10 &&
->    !7.11 && !7.12 instead of 8.0, because we will gradually add more
->    C++11-requiring versions, and remove non-C++11-requiring versions.
+> For the host gdb, it would potentially be useful, but since it's a new
+> feature that isn't essential, we for now keep it disabled as well. An
+> option may be added later if needed.
 
-Nice refactoring. :-)
+Agreed.
 
-Yet, a comment below...
-
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> [Thomas: change mpfr handling.]
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/gdb/Config.in      | 15 +++++++++++++++
->  package/gdb/Config.in.host |  3 ---
->  2 files changed, 15 insertions(+), 3 deletions(-)
+>  package/gdb/Config.in.host | 6 ++++++
+>  package/gdb/gdb.hash       | 1 +
+>  package/gdb/gdb.mk         | 4 +++-
+>  3 files changed, 10 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-> index af020f40c5..b7f0565b92 100644
-> --- a/package/gdb/Config.in
-> +++ b/package/gdb/Config.in
-> @@ -11,15 +11,30 @@ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
->  	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index 8676c6f01b..ae9a7257dd 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -64,6 +64,11 @@ config BR2_GDB_VERSION_8_0
+>  	# Needs a C++11 compiler
+>  	depends on BR2_HOST_GCC_AT_LEAST_4_8
 >  
-> +config BR2_PACKAGE_GDB_NEEDS_CXX11
-> +	bool
-> +	default y
-> +	depends on !BR2_GDB_VERSION_7_10
-> +	depends on !BR2_GDB_VERSION_7_11
-> +	depends on !BR2_GDB_VERSION_7_12
+> +config BR2_GDB_VERSION_8_1
+> +	bool "gdb 8.1.x"
+> +	# Needs a C++11 compiler
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_8
 
-I would have expected that the various versions would select this,
-i.e. something like:
+And there you would have added:
 
-    config BR2_PACKAGE_GDB_NEEDS_CXX11
-        bool
+    select BR2_PACKAGE_GDB_NEEDS_CXX11
 
-
-    config BR2_GDB_VERSION_7_10
-        bool "7.10"
-
-    config BR2_GDB_VERSION_8_0
-        bool "8.0"
-        select BR2_PACKAGE_GDB_NEEDS_CXX11
-
-Otherwise, I'm OK with the patch.
+Otherwise;
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +comment "gdb/gdbserver >= 8.x needs a toolchain w/ C++, gcc >= 4.8"
-> +	depends on BR2_PACKAGE_GDB_NEEDS_CXX11
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 > +
->  config BR2_PACKAGE_GDB
->  	bool "gdb"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_HAS_THREADS_DEBUG
->  	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_PACKAGE_GDB_NEEDS_CXX11
-> +	depends on BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_GDB_NEEDS_CXX11
->  	# When the external toolchain gdbserver is copied to the
->  	# target, we don't allow building a separate gdbserver. The
->  	# one from the external toolchain should be used.
->  	select BR2_PACKAGE_GDB_SERVER if \
->  		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_PACKAGE_GDB_NEEDS_CXX11
-> +	depends on BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_GDB_NEEDS_CXX11
->  	help
->  	  GDB, the GNU Project debugger, allows you to see what is
->  	  going on `inside' another program while it executes -- or
-> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index 99e1cae5ba..8676c6f01b 100644
-> --- a/package/gdb/Config.in.host
-> +++ b/package/gdb/Config.in.host
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
->  	default y
->  	# The ARC version needs C++11, thus gcc >= 4.8, like gdb-8.0.x
->  	depends on BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_arc
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_arc
->  	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
->  	depends on !BR2_microblaze
->  	depends on !BR2_nios2
-> @@ -63,9 +62,7 @@ config BR2_GDB_VERSION_7_12
->  config BR2_GDB_VERSION_8_0
->  	bool "gdb 8.0.x"
->  	# Needs a C++11 compiler
-> -	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_HOST_GCC_AT_LEAST_4_8
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->  
 >  endchoice
 >  
+>  endif
+> @@ -76,4 +81,5 @@ config BR2_GDB_VERSION
+>  	default "7.11.1"   if BR2_GDB_VERSION_7_11 || !BR2_PACKAGE_HOST_GDB
+>  	default "7.12.1"   if BR2_GDB_VERSION_7_12
+>  	default "8.0.1"    if BR2_GDB_VERSION_8_0
+> +	default "8.1"      if BR2_GDB_VERSION_8_1
+>  	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+> diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+> index 62edd93792..3af72db23d 100644
+> --- a/package/gdb/gdb.hash
+> +++ b/package/gdb/gdb.hash
+> @@ -3,6 +3,7 @@ sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe5049
+>  sha512  f80ec6c8a0f0b54c8b945666e875809174402b7e121efb378ebac931a91f9a1cc0048568f8e2f42ae8ae2392ff8d144c2e51d41c7398935017450aaf29838360	gdb-7.11.1.tar.xz
+>  sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7704251289cababbfaaf9e075550cdf741a54d6cd9ca3433d910efcd8	gdb-7.12.1.tar.xz
+>  sha512  5eb328910033f0918058be2f92caebf1e8dfc6caa3c730d99d621627e53de3c1b43761c2f683d53555893253c2f06768cbf56cdea051a3d291ffb6cfae87b5e1	gdb-8.0.1.tar.xz
+> +sha512  ffd82f415d7652d62dad1716c307836f594217a363429609beb7d70239e8bf06b73b393345b0e000796228e56681ed7656ac3c8be05e91d6d652ab0d5b1dc357	gdb-8.1.tar.xz
+>  
+>  # Locally calculated (fetched from Github)
+>  sha512  e57582766e7d510b26bea63606429e6289414c31c60e28fef24d3d82fa20fb5a1f92b3831fde53e4f7c178c9e099609d3292628cf921a99109e297af4e5f83d9 	gdb-arc-2017.09-release-gdb.tar.gz
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 5ca464ad46..4aa1a42b0a 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -113,7 +113,8 @@ GDB_CONF_OPTS = \
+>  	--with-curses \
+>  	--without-included-gettext \
+>  	--disable-werror \
+> -	--enable-static
+> +	--enable-static \
+> +	--without-mpfr
+>  
+>  # When gdb is built as C++ application for ARC it segfaults at runtime
+>  # So we pass --disable-build-with-cxx config option to force gdb not to
+> @@ -200,6 +201,7 @@ HOST_GDB_CONF_OPTS = \
+>  	--disable-werror \
+>  	--without-included-gettext \
+>  	--with-curses \
+> +	--without-mpfr \
+>  	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
+>  
+>  ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
 > -- 
 > 2.14.3
 > 
