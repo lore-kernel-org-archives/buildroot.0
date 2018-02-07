@@ -1,65 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 8 Feb 2018 00:07:03 +0100
-Subject: [Buildroot] [PATCH 1/1] configs: beaglebone: bump kernel and
- uboot version
-In-Reply-To: <20180206203606.26096-1-lothar.felten@gmail.com>
-References: <20180206203606.26096-1-lothar.felten@gmail.com>
-Message-ID: <40a72181-3571-9029-267e-2e10577f62af@mind.be>
+Date: Thu, 8 Feb 2018 00:12:29 +0100
+Subject: [Buildroot] BR2_GCC_SHARED_LIBGCC Deprecated? libstdc++
+ libgcc_s libc
+In-Reply-To: <1517949577363-0.post@n4.nabble.com>
+References: <1517949577363-0.post@n4.nabble.com>
+Message-ID: <5657dfa7-b9e1-71a2-aed0-bb51ca68e550@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Lothar,
 
-On 06-02-18 21:36, Lothar Felten wrote:
-[snip]
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
 
- Why do we suddenly need a huge rootfs?
+On 06-02-18 21:39, AAlex_ wrote:
+> Hi,
+> I need libstdc++ libgcc_s libc on the target. It?s a pc x86 target and
+> I don?t want to copy these from my development machine. 
 
->  BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ Copying those from the development machine would be a very bad idea indeed...
 
- It is weird that by going to a more recent U-Boot, you suddenly move *away*
-from the new Kconfig-based configuration system...
+> So How to? build root should build these libs for the target.
 
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ They are part of the toolchain and they will always be present on the target,
+with the following exceptions:
 
- You need to still keep a custom version, even if it is the same as the current
-default. Otherwise it will be bumped automatically when U-Boot is bumped and we
-don't want a bootloader (or kernel) that has not been boot-tested.
+- libstdc++ is only present if C++ support is enabled in the toolchain;
 
-> -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
-> -BR2_TARGET_UBOOT_NEEDS_DTC=y
+- only the .so files are present in the target, since the .a files are useless;
+and therefore
 
- So, the newer U-Boot also stopped using DT? I can hardly believe this...
-
-> +BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
->  # BR2_TARGET_UBOOT_FORMAT_BIN is not set
->  BR2_TARGET_UBOOT_FORMAT_IMG=y
-> -BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> -BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
-
- Huh, why was this in there before?
-
->  BR2_TARGET_UBOOT_SPL=y
->  BR2_TARGET_UBOOT_SPL_NAME="MLO"
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_DTC=y
-
- If U-Boot doesn't need, it, why is host-dtc still needed?
-
+- if you build a static-only target (under the 'Build options' menu,
+BR2_STATIC_LIBS option), the .so files are not copied to the target, since all
+binaries are linked statically.
 
  Regards,
  Arnout
 
->  BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_MTOOLS=y
+> BR2_GCC_SHARED_LIBGCC is deprecated. I?m using  buildroot 2017.rc2
+> 
+> Regards,
+> Alex
+> 
+> 
+> 
+> --
+> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
