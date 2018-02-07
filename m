@@ -1,52 +1,45 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 7 Feb 2018 10:30:48 -0500
-Subject: [Buildroot] [PATCH 1/1] busybox: bump to 1.28.0
-In-Reply-To: <20180207145915.pxmyc7ggfscxkpxs@sapphire.tkos.co.il>
-References: <20180207145215.19465-1-aduskett@gmail.com>
- <20180207145915.pxmyc7ggfscxkpxs@sapphire.tkos.co.il>
-Message-ID: <CAFSsvmpxvze6Q5MNzbebkrGMkg50QscTEcQBqL+t_K53ZCAV_Q@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed,  7 Feb 2018 16:54:54 +0100
+Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.0
+Message-ID: <20180207155454.30401-1-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch
+This is a major update for libgpiod. The API is not compatible with the
+v0.x.y series but since nothing in current buildroot git depends on
+this project, I believe we can simply bump the version.
 
-On Wed, Feb 7, 2018 at 9:59 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Adam,
->
-> On Wed, Feb 07, 2018 at 09:52:15AM -0500, Adam Duskett wrote:
->> Other changes:
->>  - Update 0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
->>    for 1.28.0
->>  - Remove upstream patches 3, 4, and 5.
->>  - Update buxybox.config and busybox-minimal.config
->
-> Also fixes CVE-2017-15873 (upstream commit 0402cb32d), and CVE-2017-15874
-> (upstream commit 9ac42c500586).
->
-I didn't catch that! Thanks!
-Should I resubmit?
+The included tools are compatible with their 0.x.y counterparts.
 
-> baruch
->
->> Signed-off-by: Adam Duskett <aduskett@gmail.com>
->> ---
->>  ...ags-strip-non-l-arguments-returned-by-pkg.patch |  4 +-
->>  ...clude-per-arch-Makefile-before-Makefile.f.patch | 46 -----------
->>  ...h-sparc-sparc64-Makefile-define-ARCH_FPIC.patch | 79 ------------------
->>  ...0005-httpd-fix-handling-of-range-requests.patch | 27 -------
->>  package/busybox/busybox-minimal.config             | 93 +++++++++++++---------
->>  package/busybox/busybox.config                     | 87 ++++++++++++--------
->>  package/busybox/busybox.hash                       |  6 +-
->>  package/busybox/busybox.mk                         |  2 +-
->>  8 files changed, 116 insertions(+), 228 deletions(-)
->>  delete mode 100644 package/busybox/0003-Makefile-include-per-arch-Makefile-before-Makefile.f.patch
->>  delete mode 100644 package/busybox/0004-arch-sparc-sparc64-Makefile-define-ARCH_FPIC.patch
->>  delete mode 100644 package/busybox/0005-httpd-fix-handling-of-range-requests.patch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 73150dc9b9..a98e138fa4 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 50c7862428ca90b58672e2475aea66d33a6fc86c6bab1928c0660f3aedf44a37  libgpiod-0.3.2.tar.xz
++sha256 34c76b3730b9d4a1159bcb14000f78b1e890251b8a3823b794fa930654eabdd0  libgpiod-1.0.tar.xz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index bc2e51d280..598adcc599 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 0.3.2
++LIBGPIOD_VERSION = 1.0
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
+-- 
+2.16.1
