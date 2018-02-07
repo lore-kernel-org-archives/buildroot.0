@@ -1,43 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  7 Feb 2018 21:37:17 +0100
-Subject: [Buildroot] [PATCH 1/1] rygel: bump to version 0.36.1
-Message-ID: <20180207203717.6482-1-fontaine.fabrice@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed,  7 Feb 2018 16:23:52 -0500
+Subject: [Buildroot] [RFCv2 0/1] gobject-introspection: new series
+Message-ID: <20180207212355.7464-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rygel/rygel.hash | 4 ++--
- package/rygel/rygel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+After a lot more pounding away at the keyboard, I am now ready to release
+version 2 of the gobject-introspection series patch.
 
-diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
-index 028af21bb4..879cbd714b 100644
---- a/package/rygel/rygel.hash
-+++ b/package/rygel/rygel.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.36/rygel-0.36.0.sha256sum:
--sha256	31e8ade78b4ea59978d1b59056fa5cd8aef6b9c1457d3dd06de4d2e75a01813f	rygel-0.36.0.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.36/rygel-0.36.1.sha256sum:
-+sha256	a67fdd801f6e4121ae44cfffabc0f35fff487cab173b6c6f052449ad7b5fb820	rygel-0.36.1.tar.xz
- 
- # Locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
-index cd8897ceb5..d1bc30589c 100644
---- a/package/rygel/rygel.mk
-+++ b/package/rygel/rygel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RYGEL_VERSION_MAJOR = 0.36
--RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).0
-+RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).1
- RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
- RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
- RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
+This new series has the following upgrades:
+  - It now works on arm.  (More on that later)
+  - Gstreamer1 can now use it.
+  - General makefile cleanups.
+  - New patches that make cross-compiling a bit nicer (thanks, yocto!)
+
+To start:
+
+I have tested this with a cortex-a9/gcc7.3 and of course glibc.
+So far GStreamer can now compile, which means that everything as far
+as I can tell is setup correctly to give this thing a genuine shot finally
+at being put into mainline Buildroot!
+
+What doesn't work:
+For some reason, x86_64/i7 does not work. Qemu segfaults. I have a
+suspicion that this is why Yocto does pre-linking, but I am not 100%
+sure.
+
+What I could use help with:
+
+- Obviously automated testing. I had a conversation in IRC with Yann, and he
+said that perhaps just merging it in now with only a small set of architectures
+might be an excellent way to go. 
+
+- Package updates: I will get around to updating python-gobject as it's needed
+  for GStreamer-python (the entire reason I started this venture)
+
+- Comments on the patches themselves would also be appreciated!.
+
+Thanks!
+
+Adam
+
+Adam Duskett (3):
+  qemu: add BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+  gobject-introspection: new package
+  gstreamer1: support gobject-introspection
+
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
 -- 
-2.14.1
+2.14.3
