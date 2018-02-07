@@ -1,63 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Feb 2018 19:54:56 +0100
-Subject: [Buildroot] [PATCH] package/openssh: also install ssh-copy-id
- script
-In-Reply-To: <1518028559-22988-1-git-send-email-julien.boibessot@free.fr>
-References: <1518028559-22988-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20180207185456.GB2250@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  7 Feb 2018 21:04:48 +0200
+Subject: [Buildroot] [PATCH] ltp-testsuite: add numactl as optional
+ dependency
+Message-ID: <cd25369f9e0588a17965bbabcf6214c110f86ef4.1518030288.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+Make the detection of libnuma in the configure script consistent when
+the numactl package is enabled.
 
-On 2018-02-07 19:35 +0100, julien.boibessot at free.fr spake thusly:
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> 
-> This script is useful to copy SSH keys between client and server [1] and
-> installed on most distributions (for example on debian: [2]).
-> 
-> [1] https://www.ssh.com/ssh/copy-id
-> [2] https://packages.debian.org/fr/jessie/armhf/openssh-client/filelist
-> 
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> 
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 6b7ac22..b0075e9 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -73,4 +73,10 @@ define OPENSSH_INSTALL_INIT_SYSV
->  		$(TARGET_DIR)/etc/init.d/S50sshd
->  endef
->  
-> +define OPENSSH_INSTALL_SSH_COPY_ID
-> +	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin
+ltp-testsuite does not currently take explicit enable/disable for
+libnuma, so none are used. The next ltp-testsuite version will add these
+options.
 
-Usually, we write the full mode, i.e. 0755 (but the tree is mixed: 371
-iterations of '0755', but only 116 for '0755').
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ltp-testsuite/ltp-testsuite.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> +endef
-> +
-> +OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
-> +
->  $(eval $(autotools-package))
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 5e0b35d12a22..c47f587836b3 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -40,6 +40,13 @@ else
+ LTP_TESTSUITE_CONF_ENV += ac_cv_lib_cap_cap_compare=no
+ endif
+ 
++# No explicit enable/disable options
++ifeq ($(BR2_PACKAGE_NUMACTL),y)
++LTP_TESTSUITE_DEPENDENCIES += numactl
++else
++LTP_TESTSUITE_CONF_ENV += have_numa_headers=no
++endif
++
+ # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
+ # support.
+ LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.15.1
