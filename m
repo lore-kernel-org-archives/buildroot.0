@@ -1,33 +1,87 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed,  7 Feb 2018 16:23:55 -0500
-Subject: [Buildroot] [RFCv2 3/3] gstreamer1: support gobject-introspection
-In-Reply-To: <20180207212355.7464-1-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Feb 2018 22:39:47 +0100
+Subject: [Buildroot] [RFCv2 1/3] qemu: add
+ BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+In-Reply-To: <20180207212355.7464-2-aduskett@gmail.com>
 References: <20180207212355.7464-1-aduskett@gmail.com>
-Message-ID: <20180207212355.7464-4-aduskett@gmail.com>
+ <20180207212355.7464-2-aduskett@gmail.com>
+Message-ID: <20180207213947.GA2007@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/gstreamer1/gstreamer1/gstreamer1.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Adam, All,
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index ea9f29a4f3..022676ca23 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -31,4 +31,9 @@ GSTREAMER1_DEPENDENCIES = \
- 	libglib2 \
- 	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+GSTREAMER1_DEPENDENCIES += gobject-introspection
-+TARGET_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/gst/.libs:$(@D)/libs/gst/base/.libs"
-+endif
-+
- $(eval $(autotools-package))
+On 2018-02-07 16:23 -0500, Adam Duskett spake thusly:
+> Match the style used with other packages such as valgrind.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+However, small comment below...
+
+> ---
+>  package/qemu/Config.in.host | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+> index 71f38ef41f..78fe54a85c 100644
+> --- a/package/qemu/Config.in.host
+> +++ b/package/qemu/Config.in.host
+> @@ -1,15 +1,20 @@
+> -config BR2_PACKAGE_HOST_QEMU
+> -	bool "host qemu"
+> -	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
+> +config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
+>  		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
+>  		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
+>  		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+>  		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+>  		BR2_sparc        || BR2_x86_64
+
+This would become more readable if we were to write:
+
+    default y if BR2_arm || BR2_armeb
+    default y if BR2_aarch64
+    default y if BR2_i386 || BR2_x86_64
+    etc...
+
+But of course, not part of this patch. ;-)
+
+> +config BR2_PACKAGE_HOST_QEMU
+> +	bool "host qemu"
+> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
+>  		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
+>  	help
+> -	  QEMU is a generic and open source machine emulator and virtualizer.
+> +	  QEMU is a generic and open source machine emulator and
+> +	  virtualizer.
+
+Spurious wrapping. Not very important...
+
+Regards,
+Yann E. MORIN.
+
+>  	  This option builds an emulator for your selected architecture.
+>  
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
