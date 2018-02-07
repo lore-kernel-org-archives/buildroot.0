@@ -1,39 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 7 Feb 2018 20:26:40 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: bump to 1.28.0
-In-Reply-To: <CAFSsvmpxvze6Q5MNzbebkrGMkg50QscTEcQBqL+t_K53ZCAV_Q@mail.gmail.com>
-References: <20180207145215.19465-1-aduskett@gmail.com>
- <20180207145915.pxmyc7ggfscxkpxs@sapphire.tkos.co.il>
- <CAFSsvmpxvze6Q5MNzbebkrGMkg50QscTEcQBqL+t_K53ZCAV_Q@mail.gmail.com>
-Message-ID: <20180207182640.eoqb3azybouhpp7s@tarshish>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed,  7 Feb 2018 19:35:59 +0100
+Subject: [Buildroot] [PATCH] package/openssh: also install ssh-copy-id script
+Message-ID: <1518028559-22988-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-On Wed, Feb 07, 2018 at 10:30:48AM -0500, Adam Duskett wrote:
-> On Wed, Feb 7, 2018 at 9:59 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > On Wed, Feb 07, 2018 at 09:52:15AM -0500, Adam Duskett wrote:
-> >> Other changes:
-> >>  - Update 0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-> >>    for 1.28.0
-> >>  - Remove upstream patches 3, 4, and 5.
-> >>  - Update buxybox.config and busybox-minimal.config
-> >
-> > Also fixes CVE-2017-15873 (upstream commit 0402cb32d), and CVE-2017-15874
-> > (upstream commit 9ac42c500586).
->
-> I didn't catch that! Thanks!
-> Should I resubmit?
+This script is useful to copy SSH keys between client and server [1] and
+installed on most distributions (for example on debian: [2]).
 
-I don't think so. The maintainers would probably fix that while applying.
+[1] https://www.ssh.com/ssh/copy-id
+[2] https://packages.debian.org/fr/jessie/armhf/openssh-client/filelist
 
-baruch
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 6b7ac22..b0075e9 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -73,4 +73,10 @@ define OPENSSH_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50sshd
+ endef
+ 
++define OPENSSH_INSTALL_SSH_COPY_ID
++	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin
++endef
++
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
++
+ $(eval $(autotools-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.1.4
