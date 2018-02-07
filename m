@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 8 Feb 2018 00:19:10 +0100
-Subject: [Buildroot] [PATCH v2 2/2] xf86-video-armada: new package
-In-Reply-To: <CAOMZO5Bb0-Ng=OYi1EqXsKWsQTHuCkO+fyCktcZqCa-GjVaxpQ@mail.gmail.com>
-References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
- <20180202145526.20133-3-Evgeniy.Didin@synopsys.com>
- <CAOMZO5Bb0-Ng=OYi1EqXsKWsQTHuCkO+fyCktcZqCa-GjVaxpQ@mail.gmail.com>
-Message-ID: <410be6fe-78b6-2898-adaf-a9a1abfdd53c@mind.be>
+Date: Thu, 8 Feb 2018 00:45:49 +0100
+Subject: [Buildroot] [PATCH 1/1] busybox: bump to 1.28.0
+In-Reply-To: <20180207182640.eoqb3azybouhpp7s@tarshish>
+References: <20180207145215.19465-1-aduskett@gmail.com>
+ <20180207145915.pxmyc7ggfscxkpxs@sapphire.tkos.co.il>
+ <CAFSsvmpxvze6Q5MNzbebkrGMkg50QscTEcQBqL+t_K53ZCAV_Q@mail.gmail.com>
+ <20180207182640.eoqb3azybouhpp7s@tarshish>
+Message-ID: <9548daaa-f14b-024e-0b9e-38f4b85a6e8d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,35 +15,33 @@ To: buildroot@busybox.net
 
 
 
-On 06-02-18 17:25, Fabio Estevam wrote:
-> Hi Evgeniy,
+On 07-02-18 19:26, Baruch Siach wrote:
+> Hi Adam,
 > 
-> On Fri, Feb 2, 2018 at 12:55 PM, Evgeniy Didin
-> <Evgeniy.Didin@synopsys.com> wrote:
+> On Wed, Feb 07, 2018 at 10:30:48AM -0500, Adam Duskett wrote:
+>> On Wed, Feb 7, 2018 at 9:59 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+>>> On Wed, Feb 07, 2018 at 09:52:15AM -0500, Adam Duskett wrote:
+>>>> Other changes:
+>>>>  - Update 0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+>>>>    for 1.28.0
+>>>>  - Remove upstream patches 3, 4, and 5.
+>>>>  - Update buxybox.config and busybox-minimal.config
+>>>
+>>> Also fixes CVE-2017-15873 (upstream commit 0402cb32d), and CVE-2017-15874
+>>> (upstream commit 9ac42c500586).
+>>
+>> I didn't catch that! Thanks!
+>> Should I resubmit?
 > 
->> +++ b/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.hash
->> @@ -0,0 +1,6 @@
->> +# Locally calculated
->> +sha256 5df615507ca6579ffba6df8a2aea6f6b542aa3985598efae836f335f9752cb39        xdriver_xf86-video-armada-04748ff4fb30370086cc97b9487a32951c5600ba.tar.gz
-> 
-> I had to manually change the sha256 to
-> 5df615507ca6579ffba6df8a2aea6f6b542aa3985598efae836f335f9752cb39 in
-> order to fix the mismatch error.
+> I don't think so. The maintainers would probably fix that while applying.
 
- My cmp-foo may be off, but that is what is in the hash file, no?
+ On the other hand, if you *do* resubmit, that will save the maintainers a
+little time.
+
+ Bottom line: it's fine if you don't, it's nice if you do.
 
  Regards,
  Arnout
-
-> 
-> With this fixed:
-> 
-> Tested-by: Fabio Estevam <festevam@gmail.com>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
