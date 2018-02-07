@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 8 Feb 2018 00:12:29 +0100
-Subject: [Buildroot] BR2_GCC_SHARED_LIBGCC Deprecated? libstdc++
- libgcc_s libc
-In-Reply-To: <1517949577363-0.post@n4.nabble.com>
-References: <1517949577363-0.post@n4.nabble.com>
-Message-ID: <5657dfa7-b9e1-71a2-aed0-bb51ca68e550@mind.be>
+Date: Thu, 8 Feb 2018 00:19:10 +0100
+Subject: [Buildroot] [PATCH v2 2/2] xf86-video-armada: new package
+In-Reply-To: <CAOMZO5Bb0-Ng=OYi1EqXsKWsQTHuCkO+fyCktcZqCa-GjVaxpQ@mail.gmail.com>
+References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
+ <20180202145526.20133-3-Evgeniy.Didin@synopsys.com>
+ <CAOMZO5Bb0-Ng=OYi1EqXsKWsQTHuCkO+fyCktcZqCa-GjVaxpQ@mail.gmail.com>
+Message-ID: <410be6fe-78b6-2898-adaf-a9a1abfdd53c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +14,30 @@ To: buildroot@busybox.net
 
 
 
-On 06-02-18 21:39, AAlex_ wrote:
-> Hi,
-> I need libstdc++ libgcc_s libc on the target. It?s a pc x86 target and
-> I don?t want to copy these from my development machine. 
+On 06-02-18 17:25, Fabio Estevam wrote:
+> Hi Evgeniy,
+> 
+> On Fri, Feb 2, 2018 at 12:55 PM, Evgeniy Didin
+> <Evgeniy.Didin@synopsys.com> wrote:
+> 
+>> +++ b/package/x11r7/xdriver_xf86-video-armada/xdriver_xf86-video-armada.hash
+>> @@ -0,0 +1,6 @@
+>> +# Locally calculated
+>> +sha256 5df615507ca6579ffba6df8a2aea6f6b542aa3985598efae836f335f9752cb39        xdriver_xf86-video-armada-04748ff4fb30370086cc97b9487a32951c5600ba.tar.gz
+> 
+> I had to manually change the sha256 to
+> 5df615507ca6579ffba6df8a2aea6f6b542aa3985598efae836f335f9752cb39 in
+> order to fix the mismatch error.
 
- Copying those from the development machine would be a very bad idea indeed...
-
-> So How to? build root should build these libs for the target.
-
- They are part of the toolchain and they will always be present on the target,
-with the following exceptions:
-
-- libstdc++ is only present if C++ support is enabled in the toolchain;
-
-- only the .so files are present in the target, since the .a files are useless;
-and therefore
-
-- if you build a static-only target (under the 'Build options' menu,
-BR2_STATIC_LIBS option), the .so files are not copied to the target, since all
-binaries are linked statically.
+ My cmp-foo may be off, but that is what is in the hash file, no?
 
  Regards,
  Arnout
 
-> BR2_GCC_SHARED_LIBGCC is deprecated. I?m using  buildroot 2017.rc2
 > 
-> Regards,
-> Alex
+> With this fixed:
 > 
-> 
-> 
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> Tested-by: Fabio Estevam <festevam@gmail.com>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
