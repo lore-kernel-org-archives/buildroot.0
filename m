@@ -1,59 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 07 Feb 2018 17:53:53 +0000
-Subject: [Buildroot] [Bug 10751] New: Missing dependency in pulseaudio
- package
-Message-ID: <bug-10751-163@https.bugs.busybox.net/>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 7 Feb 2018 19:05:05 +0100
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Add upstream patch to
+ fix build numa detection
+In-Reply-To: <20180203192750.pywvlwt25wlhvb4u@tarshish>
+References: <20180129202314.16767-1-petr.vorel@gmail.com>
+ <20180130051501.hvjb7h3smtif5zvu@sapphire.tkos.co.il>
+ <20180201221950.aj6hrj2do573aqcz@dell5510>
+ <20180202052328.f66l4zb2n6zkoypl@tarshish>
+ <20180202135956.GB8864@x230>
+ <20180203192750.pywvlwt25wlhvb4u@tarshish>
+Message-ID: <20180207180504.GA29417@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10751
+Hi Baruch,
 
-            Bug ID: 10751
-           Summary: Missing dependency in pulseaudio package
-           Product: buildroot
-           Version: 2017.02.7
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jpcartal at free.fr
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+thanks for info!
 
-Hello,
+> So the behaviour of ltp-testsuite changes when its configure script detects 
+> libnuma, right? We want this change to be consistent whenever numactl is 
+> enabled in buildroot, so that ltp-testsuite would always detect libnuma when 
+> it is available. We don't want to leave it up to the pseudo-random packages 
+> build order.
+Understand. I'm sorry I didn't realize that numactl is not name of binary package,
+but name of the whole library. I didn't know that upstream uses it as name of the whole
+project.
 
-I'm trying to add a2dp support (ie. sound over bluetooth) to my target.
+> > > Currently when the numactl package is enabled, ltp-testsuite would 
+> > > detect libnuma only if numactl happens to build before ltp-testsuite. To make 
+> > > builds consistent we need to make sure that numactl always build before 
+> > > ltp-testsuite by adding it to _DEPENDENCIES. Here is how the hwloc package 
+> > > does that:
 
-A2DP support can be achieved using bluez5 and pulseaudio.
+> > > ifeq ($(BR2_PACKAGE_NUMACTL),y)
+> > > HWLOC_CONF_OPTS += --enable-libnuma
+> > > HWLOC_DEPENDENCIES += numactl
+> > > else
+> > > HWLOC_CONF_OPTS += --disable-libnuma
+> > > endif
+> > So this is not needed.
 
-Pulseaudio only build bluetooth related modules if both BR2_PACKAGE_BLUEZ5 and
-BR2_PACKAGE_SBC are enabled and compiled before the configure step of the
-pulseaudio package.
+> So this is needed to make the build consistent, IMO.
+This makes sense. Would you please prepare patch?
 
-Current pulseaudio.mk file contains the following entry :
-PULSEAUDIO_DEPENDENCIES= .... $(if $(BR2_PACKAGE_BLUEZ5_UTILS),bluez5_utils)
-...
 
-But no corresponding entry for SBC (e.g. $(if $(BR2_PACKAGE_SBC),sbc)).
-
-So sbc might not be available when configuring pulseaudio and consequently no
-bluetooth related modules get built :
-...
-    Enable D-Bus:                  yes
-      Enable BlueZ 4:              no
-      Enable BlueZ 5:              no
-        Enable ofono headsets:     no
-        Enable native headsets:    no
-...
-
-Regards.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Kind regards,
+Petr
