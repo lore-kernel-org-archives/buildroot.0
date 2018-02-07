@@ -1,34 +1,61 @@
-From: Toan Pham <tpham3783@gmail.com>
-Date: Wed, 7 Feb 2018 17:29:01 -0500
-Subject: [Buildroot] Suggestion for Makefile to probably import
- BR2_CONFIG
-In-Reply-To: <20180130181213.GB3468@scaer>
-References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
- <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
- <CAGNmLEMn=NFuq+iKj8e2PuF-A4+tGj_VDjq1FBj6+xzDPU=_iQ@mail.gmail.com>
- <d7cd5dae-5ae3-54f3-4376-f17c27e98065@mind.be>
- <CAGNmLEN0N9NziMj6OUDEAkEhu6bDmc43jBnXV6MFSP3EEupnSg@mail.gmail.com>
- <be14460d-9241-e14a-d4f1-8c30a62d7451@mind.be>
- <20180129091113.3acccd2c@windsurf.lan>
- <87wp0183ww.fsf@dell.be.48ers.dk> <20180130181213.GB3468@scaer>
-Message-ID: <CAGNmLEPu=rTxVePUznQm5A5BmS_T2U5H8v1LREp9vRny+ZrhaQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 7 Feb 2018 23:35:28 +0100
+Subject: [Buildroot] [PATCH] package/openssh: Add tmpfiles.d snippet to
+ make /var/empty
+In-Reply-To: <20180123232451.6236-1-chris.lesiak@licor.com>
+References: <20180123232451.6236-1-chris.lesiak@licor.com>
+Message-ID: <145330a6-befd-c579-a403-855120946b5d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  >> Yann, Thomas, Peter, what do you think?
->
->
-Arnout,
 
-Thank you for the detailed explanation as to why "auto.conf" was needed.
-Please apply appropriate patches to remove the split config so that we can
-have a more intuitive build system.  In the meantime, I'll stick with using
-the supplied patch, which was passing BR2_CONFIG to silentoldconfig target.
 
-TP
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180207/97ef7496/attachment.html>
+On 24-01-18 00:24, Chris Lesiak wrote:
+> This is useful in volatile or stateless systems in which /var is empty.
+
+ This explanation is insufficient for me. Why is it a problem for openssh if
+/var is empty?
+
+ Regards,
+ Arnout
+
+
+> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+> ---
+>  package/openssh/openssh.mk        | 2 ++
+>  package/openssh/ssh_tmpfiles.conf | 1 +
+>  2 files changed, 3 insertions(+)
+>  create mode 100644 package/openssh/ssh_tmpfiles.conf
+> 
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index fc82300ab7..bb43b2edec 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -73,6 +73,8 @@ define OPENSSH_INSTALL_INIT_SYSTEMD
+>  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>  	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
+>  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
+> +	$(INSTALL) -m 0644 -D package/openssh/ssh_tmpfiles.conf \
+> +		$(TARGET_DIR)/usr/lib/tmpfiles.d/ssh.conf
+>  	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+>  endef
+>  
+> diff --git a/package/openssh/ssh_tmpfiles.conf b/package/openssh/ssh_tmpfiles.conf
+> new file mode 100644
+> index 0000000000..9d1370a930
+> --- /dev/null
+> +++ b/package/openssh/ssh_tmpfiles.conf
+> @@ -0,0 +1 @@
+> +d /var/empty 0711 root root
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
