@@ -1,45 +1,76 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed,  7 Feb 2018 16:54:54 +0100
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.0
-Message-ID: <20180207155454.30401-1-brgl@bgdev.pl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Feb 2018 18:34:41 +0100
+Subject: [Buildroot] [PATCH v2 1/5] package/gdb: rework dependency for
+ C++11
+In-Reply-To: <20180207133602.36f7646a@windsurf>
+References: <20180205211015.26819-1-thomas.petazzoni@bootlin.com>
+ <20180205211015.26819-2-thomas.petazzoni@bootlin.com>
+ <20180207095828.GA2464@scaer> <20180207133602.36f7646a@windsurf>
+Message-ID: <20180207173440.GA2250@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a major update for libgpiod. The API is not compatible with the
-v0.x.y series but since nothing in current buildroot git depends on
-this project, I believe we can simply bump the version.
+Thomas, All,
 
-The included tools are compatible with their 0.x.y counterparts.
+On 2018-02-07 13:36 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 7 Feb 2018 10:58:28 +0100, Yann E. MORIN wrote:
+[--SNIP--]
+> > > +config BR2_PACKAGE_GDB_NEEDS_CXX11
+> > > +	bool
+> > > +	default y
+> > > +	depends on !BR2_GDB_VERSION_7_10
+> > > +	depends on !BR2_GDB_VERSION_7_11
+> > > +	depends on !BR2_GDB_VERSION_7_12  
+> > I would have expected that the various versions would select this,
+> > i.e. something like:
+> > 
+> >     config BR2_PACKAGE_GDB_NEEDS_CXX11
+> >         bool
+> > 
+> > 
+> >     config BR2_GDB_VERSION_7_10
+> >         bool "7.10"
+> > 
+> >     config BR2_GDB_VERSION_8_0
+> >         bool "8.0"
+> >         select BR2_PACKAGE_GDB_NEEDS_CXX11
+> 
+> But this doesn't work; The BR2_GDB_VERSION_8_0 symbol is only enabled
+> if we build a host variant of gdb. If we build just the target
+> variant, then no version is selected at all, and therefore this symbol
+> would not be selected.
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Gah, I missed that...
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 73150dc9b9..a98e138fa4 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 50c7862428ca90b58672e2475aea66d33a6fc86c6bab1928c0660f3aedf44a37  libgpiod-0.3.2.tar.xz
-+sha256 34c76b3730b9d4a1159bcb14000f78b1e890251b8a3823b794fa930654eabdd0  libgpiod-1.0.tar.xz
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index bc2e51d280..598adcc599 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = 0.3.2
-+LIBGPIOD_VERSION = 1.0
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
+> So in fact, even my code is slightly wrong: it becomes correct once the
+> default version of gdb is 8.0, but it is wrong when the default version
+> is still 7.12 (which is the case at the time my patch is introduced).
+> 
+> Indeed, when my patch is introduced, 7.12 is the default gdb version,
+> used if you build only the target gdb. When you build just the target
+> gdb version, BR2_GDB_VERSION_7_12 is not enabled, and therefore
+> BR2_PACKAGE_GDB_NEEDS_CXX11=y even if it's not true.
+> 
+> So I should adjust that. I could use the BR2_GDB_VERSION string
+> option, which exists regardless of whether host gdb is enabled or not.
+> Or I could rely on BR2_PACKAGE_HOST_GDB somehow.
+> 
+> Meh. This is crappy :)
+
+OK, I think I have an idea about all this mess... But since I can have
+pretty weird ideas, I make no promise that it will materialise into
+something usefull...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.16.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
