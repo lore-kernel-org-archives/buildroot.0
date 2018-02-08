@@ -1,31 +1,33 @@
-From: Jens Maus <mail@jens-maus.de>
-Date: Thu, 8 Feb 2018 11:12:01 +0100
+From: daggs <daggs@gmx.com>
+Date: Thu, 8 Feb 2018 12:05:37 +0100
 Subject: [Buildroot] aarch64 + armhf multiarch support?
-Message-ID: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
+In-Reply-To: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
+References: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
+Message-ID: <trinity-566065ed-72d1-4d19-9ae3-ab3368c01d3a-1518087937117@3c-app-mailcom-bs16>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Greetings Jens,
 
-I am maintaining a buildroot environment for several ARM embedded boards. They are currently exclusively pure ?armhf? platforms. However, I am currently evaluating to support also the ODROIDC2 which has a 64bit ARM processor (ARMv8) and the buildroot images are thus generated for the aarch64 platform. The problem I am currently facing is that I have several dependencies in my buildroot environment which requires that armhf binaries have to also work properly without any possibilities to recompile them for aarch64. I was therefore looking at possibilities in buildroot to enable multiarch support like other environments (e.g. Debian) support. However, I wasn?t successful in finding any possibilities in specifying that in addition to primarily setup buildroot for aarch64 I can also run armhf binaries out-of-the-box. Already when running through all packages (including my own external package) buildroot recognizes that there are binaries not being compiled for the aarch64 platform and thus cancels the build.
+>
+> Hi,
+> 
+> I am maintaining a buildroot environment for several ARM embedded boards. They are currently exclusively pure ?armhf? platforms. However, I am currently evaluating to support also the ODROIDC2 which has a 64bit ARM processor (ARMv8) and the buildroot images are thus generated for the aarch64 platform. The problem I am currently facing is that I have several dependencies in my buildroot environment which requires that armhf binaries have to also work properly without any possibilities to recompile them for aarch64. I was therefore looking at possibilities in buildroot to enable multiarch support like other environments (e.g. Debian) support. However, I wasn?t successful in finding any possibilities in specifying that in addition to primarily setup buildroot for aarch64 I can also run armhf binaries out-of-the-box. Already when running through all packages (including my own external package) buildroot recognizes that there are binaries not being compiled for the aarch64 platform and thus cancels the build.
+> 
+> So is there any possibility to configure buildroot as a multiarch environment where the build process then automatically creates all necessary armhf dependencies (e.g. libc) for the armhf platform and install it properly so that armhf binaries run out-of-the-box on a aarch64 buildroot build?
+> 
+> best regards,
+> jens
+> -- 
+> Jens Maus, Dresden/Germany
+> http://jens-maus.de/
+> 
+> *** Content is authentic only with digital signature  ***
+> 
 
-So is there any possibility to configure buildroot as a multiarch environment where the build process then automatically creates all necessary armhf dependencies (e.g. libc) for the armhf platform and install it properly so that armhf binaries run out-of-the-box on a aarch64 buildroot build?
+what are you needs from the env? will headless buildroot works for you?
 
-best regards,
-jens
--- 
-Jens Maus, Dresden/Germany
-http://jens-maus.de/
-
-*** Content is authentic only with digital signature  ***
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/pkcs7-signature
-Size: 3745 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180208/42d7dcd3/attachment.p7s>
+Dagg.
