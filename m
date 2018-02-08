@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Feb 2018 23:48:43 +0100
-Subject: [Buildroot] [git commit branch/next] glibc: needs host-bison
-Message-ID: <20180208224857.441BD8860E@busybox.osuosl.org>
+Date: Thu, 8 Feb 2018 23:50:07 +0100
+Subject: [Buildroot] [NEXT] glibc: depends on host-bison
+In-Reply-To: <20180207004849.21747-1-bluemrp9@gmail.com>
+References: <20180207004849.21747-1-bluemrp9@gmail.com>
+Message-ID: <20180208235007.45b8da07@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61addf9107e5369b6dbc77724ab0b0ecede74897
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Since upstream commit 1faaf7035cabda101e1d6653bff7a539f201db91
-("plural.c: improve reproducibility"), glibc now requires bison to be
-available on the host for its build process. This is needed starting
-with glibc 2.27.
+On Tue,  6 Feb 2018 16:48:49 -0800, Ryan Coe wrote:
+> Fixes the following build error:
+> 
+> checking for bison... no
+> checking if ./buildroot/output/host/bin/arm-rpi1-linux-gnueabihf-gcc is sufficient to build libc... yes
+> checking for arm-rpi1-linux-gnueabihf-nm... ./buildroot/output/host/bin/arm-rpi1-linux-gnueabihf-nm
+> checking for python3... python3
+> configure: error:
+> *** These critical programs are missing or too old: bison
+> *** Check the INSTALL file for required versions.
+> package/pkg-generic.mk:237: recipe for target './buildroot/output/build/glibc-glibc-2.27/.stamp_configured' failed
+> make: *** [./buildroot/output/build/glibc-glibc-2.27/.stamp_configured] Error 1
+> 
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 
-Fixes:
+I've improved the commit log a bit:
 
-  http://autobuild.buildroot.net/results/ca4d883793c1674d3a052edd5e56897f79683448/
+ - To indicate which glibc upstream commit changed to making bison a
+   hard requirement. This allows to confirm it isn't an "accident" but
+   really an intentional move from glibc upstream.
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/glibc/glibc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ - By replacing the error log by a reference to an autobuilder failure.
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index b674191b22..00e114566c 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -28,7 +28,7 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- # Before glibc is configured, we must have the first stage
- # cross-compiler and the kernel headers
--GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
-+GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk
- 
- GLIBC_SUBDIR = build
- 
+Thanks a lot for this fix, applied to next!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
