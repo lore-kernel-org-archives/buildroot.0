@@ -1,28 +1,28 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Thu, 08 Feb 2018 14:23:41 +0100
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.0
-In-Reply-To: <20180207155454.30401-1-brgl@bgdev.pl>
-References: <20180207155454.30401-1-brgl@bgdev.pl>
-Message-ID: <65c56dc2-71b8-4710-aff9-d6bb6a4be1d9@cesnet.cz>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 8 Feb 2018 11:24:17 -0200
+Subject: [Buildroot] [PATCH v2 2/2] xf86-video-armada: new package
+In-Reply-To: <410be6fe-78b6-2898-adaf-a9a1abfdd53c@mind.be>
+References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
+ <20180202145526.20133-3-Evgeniy.Didin@synopsys.com>
+ <CAOMZO5Bb0-Ng=OYi1EqXsKWsQTHuCkO+fyCktcZqCa-GjVaxpQ@mail.gmail.com>
+ <410be6fe-78b6-2898-adaf-a9a1abfdd53c@mind.be>
+Message-ID: <CAOMZO5B7tRNYxd=nFaSs2LAeVLQ2sJutSnn8sSG8WxVhYWU5RQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On st?eda 7. ?nora 2018 16:54:54 CET, Bartosz Golaszewski wrote:
-> This is a major update for libgpiod. The API is not compatible with the
-> v0.x.y series but since nothing in current buildroot git depends on
-> this project, I believe we can simply bump the version.
->
-> The included tools are compatible with their 0.x.y counterparts.
->
-> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Hi Arnout,
 
-Reviewed-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+On Wed, Feb 7, 2018 at 9:19 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Sorry for a duplicate patch.
+>  My cmp-foo may be off, but that is what is in the hash file, no?
 
-Cheers,
-Jan
+Sorry, I typed the sha256 incorrectly.
+
+What I meant  to say is that I had to change it to:
+
+# Locally calculated
+sha256 6fdde0a589ae51f918a515506d425ae288116b0fc8b845e10d6fbeff75469028
+xdriver_xf86-video-armada-04748ff4fb30370086cc97b9487a32951c5600ba.tar.gz
