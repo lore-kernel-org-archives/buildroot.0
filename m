@@ -1,72 +1,32 @@
-From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Thu, 8 Feb 2018 12:22:21 +0100
-Subject: [Buildroot] [PATCH 1/3] systemd: Ensure /run and /var/run are the
- same on R/O rootfs
-Message-ID: <45c17d05433e7bb40ff6e2b30c5cb41fed04ec76.1518089469.git.jan.kundrat@cesnet.cz>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 8 Feb 2018 13:45:31 +0200
+Subject: [Buildroot] [PATCH 2/3] package/libgpiod: Bump to stable 1.0
+In-Reply-To: <e5dd92052698b756ed2e956aa246ea22276c97b5.1518089469.git.jan.kundrat@cesnet.cz>
+References: <45c17d05433e7bb40ff6e2b30c5cb41fed04ec76.1518089469.git.jan.kundrat@cesnet.cz>
+ <e5dd92052698b756ed2e956aa246ea22276c97b5.1518089469.git.jan.kundrat@cesnet.cz>
+Message-ID: <20180208114531.a2buxydflbqk74fi@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When I updated systemd from 234 to 237 and D-Bus from 1.12.0 to 1.12.2
-on my system with a read-only rootfs (buildroot 1c0c55c028 to buildroot
-27d2229692), my D-Bus-activated services stopped working. Checking the
-logs, it turned out that systemd PID 1 was not able to connect the D-Bus
-socket at all. There were some recent changes in systemd where upstream
-refactored code which waits for sockets to appear. However, the real
-problem is that systemd is configured to look for the D-Bus socket in
-/run/dbus, while D-Bus creates it at /var/run/dbus/. D-Bus upstream
-explains in a bugreport [1] that this "traditional" /var/run/dbus is
-going to stay because it's hardcoded in other independent
-implementations of the D-Bus APIs.
+Hi Jan,
 
-As is also said in that bugreport, the root cause is that /run and
-/var/run are effectively two separate directories on Buildroot -- at
-least when configured for a R/O rootfs. Furthermore, systemd actually
-actively warns about this:
+On Thu, Feb 08, 2018 at 10:27:36AM +0100, Jan Kundr?t wrote:
+> According to upstream, this one has non-backward-compatible API changes,
+> so porting of end users' code will be required. On the other hand, the
+> library also got a stable API now.
+> 
+> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
 
-  systemd[1]: System is tainted: var-run-bad
+The libgpiod maintainer has posted a bump patch yesterday.
 
-Looking further, systemd-tmpfiles also detects breakage:
+  http://patchwork.ozlabs.org/patch/870463/
 
-  systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:12] Duplicate line for path "/var/run", ignoring.
-  systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:14] Duplicate line for path "/var/log", ignoring.
-  systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:21] Duplicate line for path "/var/lib", ignoring.
+baruch
 
-This change simply skips /var/run from being copied from the
-/usr/share/factory. The symlink is still created by another tmpfiles.d
-entry which belongs to systemd.
-
-The other warnings are still in present:
-
-  systemd-tmpfiles[174]: [/usr/lib/tmpfiles.d/var.conf:14] Duplicate line for path "/var/log", ignoring.
-  systemd-tmpfiles[174]: [/usr/lib/tmpfiles.d/var.conf:21] Duplicate line for path "/var/lib", ignoring.
-
-I'm leaving that one to someone who is more familiar with systemd and
-buildroot conventions. My box now boots again, so I'm happy :).
-
-[1] https://bugs.freedesktop.org/show_bug.cgi?id=101628
-
-Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
----
- package/skeleton-init-systemd/skeleton-init-systemd.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index a2d4e8c4b3..95142904f5 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -42,7 +42,9 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 	mkdir $(TARGET_DIR)/var
- 	for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
- 		j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
--		if [ -L "$${i}" ]; then \
-+		if [ "$${j}" = "/var/run" ]; then \
-+			echo "# $${j} is being handled by systemd"
-+		elif [ -L "$${i}" ]; then \
- 			printf "L+! %s - - - - %s\n" \
- 				"$${j}" "../usr/share/factory/$${j}" \
- 			|| exit 1; \
 -- 
-2.14.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
