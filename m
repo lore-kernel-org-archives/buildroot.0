@@ -1,41 +1,43 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu,  8 Feb 2018 17:15:06 -0200
-Subject: [Buildroot] [PATCH NEXT] modem-manager: bump to version 1.6.12
-Message-ID: <20180208191506.16810-1-casantos@datacom.ind.br>
+Date: Thu,  8 Feb 2018 17:15:09 -0200
+Subject: [Buildroot] [PATCH NEXT] usb_modeswitch_data: bump to version
+ 20170806
+Message-ID: <20180208191509.16907-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add license hash for "make legal-info".
+
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/usb_modeswitch_data/usb_modeswitch_data.hash | 3 ++-
+ package/usb_modeswitch_data/usb_modeswitch_data.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index bc0804485f..8531330d22 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
-+sha256  eefb7615c2c7ebc994abfc2782bfa9e798643a633362b40db96f7f61706a6283  ModemManager-1.6.12.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index b741acf066..100c4a2941 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
+index e19fcac628..f35fd69a8b 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.hash
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	e2dcfd9d28928d8d8f03381571a23442b3c50d48d343bc40a1a07d01662738d1	usb-modeswitch-data-20170205.tar.bz2
++sha256	ce413ef2a50e648e9c81bc3ea6110e7324a8bf981034fc9ec4467d3562563c2c  usb-modeswitch-data-20170806.tar.bz2
++sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+index 4f634cdaf4..80ecd33d85 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.6.10
-+MODEM_MANAGER_VERSION = 1.6.12
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-USB_MODESWITCH_DATA_VERSION = 20170205
++USB_MODESWITCH_DATA_VERSION = 20170806
+ USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
+ USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
 -- 
 2.14.3
