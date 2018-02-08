@@ -1,7 +1,9 @@
 From: Alex B <alexbaldwinmusic@gmail.com>
-Date: Thu,  8 Feb 2018 20:37:48 +0100
+Date: Thu,  8 Feb 2018 20:37:49 +0100
 Subject: [Buildroot] [PATCH v2 1/1] LIBLO : bump version to 0.29
-Message-ID: <1518118669-24714-1-git-send-email-alexbaldwinmusic@gmail.com>
+In-Reply-To: <1518118669-24714-1-git-send-email-alexbaldwinmusic@gmail.com>
+References: <1518118669-24714-1-git-send-email-alexbaldwinmusic@gmail.com>
+Message-ID: <1518118669-24714-2-git-send-email-alexbaldwinmusic@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,6 +29,8 @@ CHANGELOG
 No longer including a patch for liblo/configure. This was the wrong way of dealing with --enable-ipv6.
 SHA256 for COPYING file instead of sha1.
 Include  # License files comment for clarity.
+
+Signed-off-by: Alex <alexbaldwinmusic@gmail.com>
 ---
  package/liblo/liblo.hash | 10 +++++++---
  package/liblo/liblo.mk   |  3 ++-
