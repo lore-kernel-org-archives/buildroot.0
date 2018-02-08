@@ -1,43 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Feb 2018 23:10:09 +0100
-Subject: [Buildroot] [git commit branch/next] package/openssh: also install
- ssh-copy-id script
-Message-ID: <20180208221027.B0875885F2@busybox.osuosl.org>
+Date: Thu, 8 Feb 2018 23:08:07 +0100
+Subject: [Buildroot] [git commit branch/next] libgpiod: bump version to v1.0
+Message-ID: <20180208221027.A1F1E7FB9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0552b7fc3878d7e446ee082f492845bc33594bba
+commit: https://git.buildroot.net/buildroot/commit/?id=f91a2b3772a9fe978538adfe4db6fd2af687e922
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This script is useful to copy SSH keys between client and server [1] and
-installed on most distributions (for example on debian: [2]).
+This is a major update for libgpiod. The API is not compatible with the
+v0.x.y series but since nothing in current buildroot git depends on
+this project, I believe we can simply bump the version.
 
-[1] https://www.ssh.com/ssh/copy-id
-[2] https://packages.debian.org/fr/jessie/armhf/openssh-client/filelist
+The included tools are compatible with their 0.x.y counterparts.
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas: use full destination path.]
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reviewed-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
+Tested-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openssh/openssh.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 6b7ac22c19..986bab413d 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -73,4 +73,10 @@ define OPENSSH_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50sshd
- endef
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 73150dc9b9..a98e138fa4 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 50c7862428ca90b58672e2475aea66d33a6fc86c6bab1928c0660f3aedf44a37  libgpiod-0.3.2.tar.xz
++sha256 34c76b3730b9d4a1159bcb14000f78b1e890251b8a3823b794fa930654eabdd0  libgpiod-1.0.tar.xz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index bc2e51d280..598adcc599 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define OPENSSH_INSTALL_SSH_COPY_ID
-+	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin/ssh-copy-id
-+endef
-+
-+OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
-+
- $(eval $(autotools-package))
+-LIBGPIOD_VERSION = 0.3.2
++LIBGPIOD_VERSION = 1.0
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
