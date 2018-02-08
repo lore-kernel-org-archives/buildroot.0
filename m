@@ -1,63 +1,47 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed,  7 Feb 2018 22:38:09 -0200
-Subject: [Buildroot] [PATCH NEXT] liburiparser: bump to version 0.8.5 and
- move to GitHub
-Message-ID: <20180208003809.8926-1-casantos@datacom.ind.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 8 Feb 2018 06:43:01 +0200
+Subject: [Buildroot] [RFCv2 2/3] gobject-introspection: new package
+In-Reply-To: <20180207212355.7464-3-aduskett@gmail.com>
+References: <20180207212355.7464-1-aduskett@gmail.com>
+ <20180207212355.7464-3-aduskett@gmail.com>
+Message-ID: <20180208044301.jvbotpwg3rl4g6ry@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uriparser 0.8.5 with bugfixes has been released. It has also moved from
-SourceForge to GitHub:
+Hi Adam,
 
-    https://uriparser.github.io/
+Thanks for working on this hard problem.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/liburiparser/Config.in         | 2 +-
- package/liburiparser/liburiparser.hash | 6 ++----
- package/liburiparser/liburiparser.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 7 deletions(-)
+On Wed, Feb 07, 2018 at 04:23:54PM -0500, Adam Duskett wrote: 
+> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+> new file mode 100644
+> index 0000000000..42f58c8c0e
+> --- /dev/null
+> +++ b/package/gobject-introspection/Config.in
+> @@ -0,0 +1,34 @@
+> +config BR2_PACKAGE_GOBJECT_INTROSPECTION
+> +	bool "gobject-introspection"
+> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS #host-qemu
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi, libglib2
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on BR2_USE_MMU # python3, libglib2
+> +	depends on BR2_USE_WCHAR # python3, libglib2 -> gettext
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on !BR2_MIPS_NABI32
+> +	depends on BR2_LINUX_KERNEL # qemu-host
 
-diff --git a/package/liburiparser/Config.in b/package/liburiparser/Config.in
-index e85a2626d2..b39e3907dd 100644
---- a/package/liburiparser/Config.in
-+++ b/package/liburiparser/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBURIPARSER
- 	  uriparser is a strictly RFC 3986 compliant URI parsing and
- 	  handling library written in C.
- 
--	  http://uriparser.sourceforge.net
-+	  https://uriparser.github.io
-diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-index 9e9517c17f..c03e832f9f 100644
---- a/package/liburiparser/liburiparser.hash
-+++ b/package/liburiparser/liburiparser.hash
-@@ -1,5 +1,3 @@
--# From http://sourceforge.net/projects/uriparser/files/Sources/0.8.4/
--md5	9aabdc3611546f553f4af372167de6d6		uriparser-0.8.4.tar.bz2
--sha1	7a1948c20bed54b04dad0e1d7d2fa8f80fc7b2b3	uriparser-0.8.4.tar.bz2
- # Locally calculated
--sha256  c6ef125800c2ef13a41a22126bfc77e8b8c08993a6b96196117695988ea76249  COPYING
-+sha256  58eacd5c03d9e341c04eb0b30831faec89f3b415949ff8d72254e63432352cdd  uriparser-0.8.5.tar.bz2
-+sha256  ee90029e62d11f48faa59360d15c3ad8e7c094c74cc25b055716d92340da561f  COPYING
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index 856a6aafd4..4b32b7f7f2 100644
---- a/package/liburiparser/liburiparser.mk
-+++ b/package/liburiparser/liburiparser.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBURIPARSER_VERSION = 0.8.4
-+LIBURIPARSER_VERSION = 0.8.5
- LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
--LIBURIPARSER_SITE = http://sourceforge.net/projects/uriparser/files/Sources/$(LIBURIPARSER_VERSION)
-+LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
- LIBURIPARSER_LICENSE = BSD-3-Clause
- LIBURIPARSER_LICENSE_FILES = COPYING
- LIBURIPARSER_INSTALL_STAGING = YES
+So the target board (not only architecture) must be one that qemu emulates. 
+This is a pretty big limitation. Since GI does not require any specific 
+hardware, would it be possible to use the qemu user space emulator[1] instead?
+
+[1] https://qemu.weilnetz.de/doc/qemu-doc.html#QEMU-User-space-emulator
+
+baruch
+
 -- 
-2.14.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
