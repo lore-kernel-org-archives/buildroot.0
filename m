@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Feb 2018 23:12:36 +0100
-Subject: [Buildroot] [PATCH] ltp-testsuite: add numactl as optional
- dependency
-In-Reply-To: <cd25369f9e0588a17965bbabcf6214c110f86ef4.1518030288.git.baruch@tkos.co.il>
-References: <cd25369f9e0588a17965bbabcf6214c110f86ef4.1518030288.git.baruch@tkos.co.il>
-Message-ID: <20180208231236.371dbeb3@windsurf.lan>
+Date: Thu, 8 Feb 2018 23:14:52 +0100
+Subject: [Buildroot] [PATCH 1/1] busybox: bump to 1.28.0
+In-Reply-To: <20180207145215.19465-1-aduskett@gmail.com>
+References: <20180207145215.19465-1-aduskett@gmail.com>
+Message-ID: <20180208231452.0c2691db@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  7 Feb 2018 21:04:48 +0200, Baruch Siach wrote:
-> Make the detection of libnuma in the configure script consistent when
-> the numactl package is enabled.
-> 
-> ltp-testsuite does not currently take explicit enable/disable for
-> libnuma, so none are used. The next ltp-testsuite version will add these
-> options.
-> 
-> Cc: Petr Vorel <petr.vorel@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/ltp-testsuite/ltp-testsuite.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+On Wed,  7 Feb 2018 09:52:15 -0500, Adam Duskett wrote:
 
-Applied to master, thanks.
+> diff --git a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+> index 105626cbe2..4a9881a075 100644
+> --- a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+> +++ b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+> @@ -4,6 +4,8 @@ Date: Mon, 25 Nov 2013 22:51:53 +0100
+>  Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
+>  
+>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +[Adam Duskett: update for busybox 1.28.0]
+> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+
+Can I ask that you refrain from adding such lines when the patch is
+simply refreshed? If you're doing some real changes in the patch to fix
+some conflicts, then it's fine to add that. But you seem to be adding
+these lines whenever a patch is preserved, even if it has just been
+refreshed in terms of line offsets. To me, re-adding a comment + SoB in
+such a situation is useless noise.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
-https://bootlin.com
+http://bootlin.com
