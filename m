@@ -1,47 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 8 Feb 2018 06:43:01 +0200
-Subject: [Buildroot] [RFCv2 2/3] gobject-introspection: new package
-In-Reply-To: <20180207212355.7464-3-aduskett@gmail.com>
-References: <20180207212355.7464-1-aduskett@gmail.com>
- <20180207212355.7464-3-aduskett@gmail.com>
-Message-ID: <20180208044301.jvbotpwg3rl4g6ry@tarshish>
+From: Lothar Felten <lothar.felten@gmail.com>
+Date: Thu,  8 Feb 2018 08:51:22 +0100
+Subject: [Buildroot] [PATCH v2] configs: beaglebone: bump kernel and uboot
+ version
+Message-ID: <20180208075122.13603-1-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+Switch to Linux kernel version 4.9.59 from the TI SDK 04.02.00.09
+(TI SDK release date: 23.12.2017)
+Updated uboot to version 2018.01
 
-Thanks for working on this hard problem.
+v2:
+- set uboot version to 2018.01 in defconfig
+- keep default rootfs size
+- keep Kconfig for uboot
 
-On Wed, Feb 07, 2018 at 04:23:54PM -0500, Adam Duskett wrote: 
-> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-> new file mode 100644
-> index 0000000000..42f58c8c0e
-> --- /dev/null
-> +++ b/package/gobject-introspection/Config.in
-> @@ -0,0 +1,34 @@
-> +config BR2_PACKAGE_GOBJECT_INTROSPECTION
-> +	bool "gobject-introspection"
-> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS #host-qemu
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi, libglib2
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on BR2_USE_MMU # python3, libglib2
-> +	depends on BR2_USE_WCHAR # python3, libglib2 -> gettext
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on !BR2_MIPS_NABI32
-> +	depends on BR2_LINUX_KERNEL # qemu-host
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+---
+ board/beaglebone/uEnv.txt    | 8 ++++++--
+ configs/beaglebone_defconfig | 9 +++------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-So the target board (not only architecture) must be one that qemu emulates. 
-This is a pretty big limitation. Since GI does not require any specific 
-hardware, would it be possible to use the qemu user space emulator[1] instead?
-
-[1] https://qemu.weilnetz.de/doc/qemu-doc.html#QEMU-User-space-emulator
-
-baruch
-
+diff --git a/board/beaglebone/uEnv.txt b/board/beaglebone/uEnv.txt
+index 70b3b721..8365c3af 100644
+--- a/board/beaglebone/uEnv.txt
++++ b/board/beaglebone/uEnv.txt
+@@ -1,4 +1,8 @@
+ bootpart=0:1
++devtype=mmc
+ bootdir=
+-bootargs=console=ttyO0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
+-uenvcmd=run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr};
++bootfile=zImage
++bootpartition=mmcblk0p2
++set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi; 
++set_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
++uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr};
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 611b6941..eea20436 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -1,13 +1,13 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f9f6f0db2d5e4f9d2ff46eb31a5a05276a92ed7d"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a75d8e93056181d512f6c818e8627bd4554aaf92"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
+@@ -16,13 +16,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.14.1
