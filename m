@@ -1,28 +1,70 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 8 Feb 2018 11:24:17 -0200
-Subject: [Buildroot] [PATCH v2 2/2] xf86-video-armada: new package
-In-Reply-To: <410be6fe-78b6-2898-adaf-a9a1abfdd53c@mind.be>
-References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
- <20180202145526.20133-3-Evgeniy.Didin@synopsys.com>
- <CAOMZO5Bb0-Ng=OYi1EqXsKWsQTHuCkO+fyCktcZqCa-GjVaxpQ@mail.gmail.com>
- <410be6fe-78b6-2898-adaf-a9a1abfdd53c@mind.be>
-Message-ID: <CAOMZO5B7tRNYxd=nFaSs2LAeVLQ2sJutSnn8sSG8WxVhYWU5RQ@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 8 Feb 2018 08:54:29 -0500
+Subject: [Buildroot] [RFCv2 2/3] gobject-introspection: new package
+In-Reply-To: <20180208044301.jvbotpwg3rl4g6ry@tarshish>
+References: <20180207212355.7464-1-aduskett@gmail.com>
+ <20180207212355.7464-3-aduskett@gmail.com>
+ <20180208044301.jvbotpwg3rl4g6ry@tarshish>
+Message-ID: <CAFSsvmpuJ+sEj7kRi1kYF6QcT_KaxQWyMwqsv9_WA3yan86oTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hey Baruch! Thanks so much for emailing back!
 
-On Wed, Feb 7, 2018 at 9:19 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Wed, Feb 7, 2018 at 11:43 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Adam,
+>
+> Thanks for working on this hard problem.
+>
+Thanks! I must admit this isn't for completely selfless reasons.  I
+want to use the gstreamer-python
+bindings for a product I am working on, but alas it uses
+gobject-intropsection. :)
 
->  My cmp-foo may be off, but that is what is in the hash file, no?
 
-Sorry, I typed the sha256 incorrectly.
+> On Wed, Feb 07, 2018 at 04:23:54PM -0500, Adam Duskett wrote:
+>> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+>> new file mode 100644
+>> index 0000000000..42f58c8c0e
+>> --- /dev/null
+>> +++ b/package/gobject-introspection/Config.in
+>> @@ -0,0 +1,34 @@
+>> +config BR2_PACKAGE_GOBJECT_INTROSPECTION
+>> +     bool "gobject-introspection"
+>> +     depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS #host-qemu
+>> +     depends on BR2_TOOLCHAIN_HAS_THREADS # libffi, libglib2
+>> +     depends on BR2_TOOLCHAIN_USES_GLIBC
+>> +     depends on BR2_USE_MMU # python3, libglib2
+>> +     depends on BR2_USE_WCHAR # python3, libglib2 -> gettext
+>> +     depends on !BR2_STATIC_LIBS
+>> +     depends on !BR2_MIPS_NABI32
+>> +     depends on BR2_LINUX_KERNEL # qemu-host
+>
+> So the target board (not only architecture) must be one that qemu emulates.
+> This is a pretty big limitation. Since GI does not require any specific
+> hardware, would it be possible to use the qemu user space emulator[1] instead?
+>
+Good catch! I am using the qemu-userspace!
 
-What I meant  to say is that I had to change it to:
+The only reason I am required BR2_LINUX_KERNEL is because I am using
+$(LINUX_VERSION) in gobject-introspection.mk here:
+$(SED) "s|@LINUX_VERSION@|$(LINUX_VERSION)|g"
 
-# Locally calculated
-sha256 6fdde0a589ae51f918a515506d425ae288116b0fc8b845e10d6fbeff75469028
-xdriver_xf86-video-armada-04748ff4fb30370086cc97b9487a32951c5600ba.tar.gz
+which get's turned into:
+PSEUDO_UNLOAD=1 $HOST_DIR/bin/qemu-x86_64 -r 3.10 -L ...
+
+So a question then: Is there a variable I could use to use the toolchains
+kernel header version instead? That would be an ideal solution in this
+instance.
+
+> [1] https://qemu.weilnetz.de/doc/qemu-doc.html#QEMU-User-space-emulator
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
