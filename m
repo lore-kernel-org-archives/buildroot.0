@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Feb 2018 23:05:30 +0100
-Subject: [Buildroot] [PATCH NEXT] libmbim: bump to version 1.16.0
-In-Reply-To: <20180208191447.16711-1-casantos@datacom.ind.br>
-References: <20180208191447.16711-1-casantos@datacom.ind.br>
-Message-ID: <20180208230530.7665c254@windsurf.lan>
+Date: Thu, 8 Feb 2018 23:05:51 +0100
+Subject: [Buildroot] [PATCH NEXT] libqmi: bump to version 1.20.0
+In-Reply-To: <20180208191504.16762-1-casantos@datacom.ind.br>
+References: <20180208191504.16762-1-casantos@datacom.ind.br>
+Message-ID: <20180208230551.43c2bdbc@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  8 Feb 2018 17:14:47 -0200, Carlos Santos wrote:
-> Drop the patch already applied upstream.
-> 
+On Thu,  8 Feb 2018 17:15:04 -0200, Carlos Santos wrote:
 > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > ---
->  ...-prefer-realpath-to-canonicalize_file_nam.patch | 37 ----------------------
->  package/libmbim/libmbim.hash                       |  2 +-
->  package/libmbim/libmbim.mk                         |  2 +-
->  3 files changed, 2 insertions(+), 39 deletions(-)
->  delete mode 100644 package/libmbim/0001-mbim-device-prefer-realpath-to-canonicalize_file_nam.patch
+>  package/libqmi/libqmi.hash | 2 +-
+>  package/libqmi/libqmi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
