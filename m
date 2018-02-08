@@ -1,63 +1,47 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 8 Feb 2018 14:56:44 -0500
-Subject: [Buildroot] [PATCH 1/1] dbus: fix system_bus_socket location
-In-Reply-To: <20180208193450.j4k5kj3ccdf5dk7o@tarshish>
-References: <20180208192324.10325-1-aduskett@gmail.com>
- <20180208193450.j4k5kj3ccdf5dk7o@tarshish>
-Message-ID: <CAFSsvmqDd_CrgW9VRUwfz34c28Qj5SkSWXs0pn2+bvki38cEOA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 8 Feb 2018 22:04:53 +0100
+Subject: [Buildroot] [git commit branch/next] wget: bump to version 1.19.4
+Message-ID: <20180208210457.34F988856F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch;
+commit: https://git.buildroot.net/buildroot/commit/?id=56057835f6b92f9a547892478ea2bf0165006602
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, Feb 8, 2018 at 2:34 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Adam,
->
-> On Thu, Feb 08, 2018 at 02:23:24PM -0500, Adam Duskett wrote:
->> systemd237 changed the default location it uses for system_bus_socket
->> from /var/run/dbus/system_bus_socket to /run/dbus/system_bus_socket
->>
->> see:
->> https://github.com/systemd/systemd/commit/15ca0a42c7db49146a7169dbcb0683f0836cf8c2
->>
->> Change the default location for dbus from /var/run/dbus/system_bus_socket to
->> /run/dbus/system_bus_socket to fix the issue.
->>
->> Signed-off-by: Adam Duskett <aduskett@gmail.com>
->
-> Jan Kundr?t suggested a different solution.
->
->   http://patchwork.ozlabs.org/patch/870834/
->
-> baruch
->
-That solution won't work on a rootfs with that is read/write.  My own filing
-system doesn't have a symlink from /var/run to ./run
+Update license hash; s/http/https/ of in-text URLs.
 
-Perhaps it's just me?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wget/wget.hash | 5 +++--
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
->> ---
->>  package/dbus/dbus.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
->> index 22ba22e17e..19f9b7ace8 100644
->> --- a/package/dbus/dbus.mk
->> +++ b/package/dbus/dbus.mk
->> @@ -27,7 +27,7 @@ DBUS_CONF_OPTS = \
->>       --disable-xml-docs \
->>       --disable-doxygen-docs \
->>       --with-xml=expat \
->> -     --with-system-socket=/var/run/dbus/system_bus_socket \
->> +     --with-system-socket=/run/dbus/system_bus_socket \
->>       --with-system-pid-file=/var/run/messagebus.pid
->>
->>  ifeq ($(BR2_STATIC_LIBS),y)
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 0048557946..ab0d1d1dfd 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,4 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 d59a745ad2c522970660bb30d38601f9457b151b322e01fa20a5a0da0f55df07  wget-1.19.2.tar.lz
++# https://ftp.gnu.org/gnu/wget/wget-1.19.4.tar.lz.sig
++sha256 2fc0ffb965a8dc8f1e4a89cbe834c0ae7b9c22f559ebafc84c7874ad1866559a  wget-1.19.4.tar.lz
+ # Locally calculated
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 3fee8e1b0c..23e4c8acca 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WGET_VERSION = 1.19.2
++WGET_VERSION = 1.19.4
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
