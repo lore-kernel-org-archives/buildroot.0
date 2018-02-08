@@ -1,61 +1,277 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Feb 2018 23:04:00 +0100
-Subject: [Buildroot] [PATCH v2 1/1] LIBLO : bump version to 0.29
-In-Reply-To: <1518118669-24714-1-git-send-email-alexbaldwinmusic@gmail.com>
-References: <1518118669-24714-1-git-send-email-alexbaldwinmusic@gmail.com>
-Message-ID: <20180208230400.06741487@windsurf.lan>
+Date: Thu, 8 Feb 2018 23:04:47 +0100
+Subject: [Buildroot] [git commit] dnsmasq: add upstream security fix patches
+Message-ID: <20180208220451.5D6F0885BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aec658f5d684be9e1b7801af5898b503c1a465fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Feb 2018 20:37:48 +0100, Alex B wrote:
+Fixes CVE-2017-15107: An attacker can craft an NSEC which wrongly proves
+non-existence.
 
-> diff --git a/package/liblo/liblo.hash b/package/liblo/liblo.hash
-> index a4e01a6..862b6fb 100644
-> --- a/package/liblo/liblo.hash
-> +++ b/package/liblo/liblo.hash
-> @@ -1,3 +1,7 @@
-> -# From http://sourceforge.net/projects/liblo/files/liblo/0.26/
-> -sha1	21942c8f19e9829b5842cb85352f98c49dfbc823  liblo-0.26.tar.gz
-> -md5	5351de14262560e15e7f23865293b16f  liblo-0.26.tar.gz
-> +# From http://sourceforge.net/projects/liblo/files/liblo/0.29/
-> +sha1    6aa69456787d3d6ef915281b4a0f8f2c79548ce3  liblo-0.29.tar.gz
-> +md5	b0e70bc0fb2254addf94adddf85cffd3  liblo-0.29.tar.gz
-> +
-> +# Locally computed
-> +sha1    caeb68c46fa36651acf592771d09de7937926bb3  COPYING	
-> +md5 fbc093901857fcd118f065f900982c24  COPYING
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...for-wildcard-NSEC-records.-CVE-2017-15107.patch | 212 +++++++++++++++++++++
+ ...validation-errors-introduced-in-4fe6744a2.patch |  29 +++
+ 2 files changed, 241 insertions(+)
 
-A single sha256 hash was sufficient here.
-
-> diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
-> index 3c852be..856b437 100644
-> --- a/package/liblo/liblo.mk
-> +++ b/package/liblo/liblo.mk
-> @@ -4,11 +4,12 @@
->  #
->  ################################################################################
->  
-> -LIBLO_VERSION = 0.26
-> +LIBLO_VERSION = 0.29
->  LIBLO_SITE = http://downloads.sourceforge.net/project/liblo/liblo/$(LIBLO_VERSION)
->  
->  LIBLO_LICENSE = LGPL-2.1+
->  LIBLO_LICENSE_FILES = COPYING
->  LIBLO_INSTALL_STAGING = YES
-> +LIBLO_CONF_OPTS += --disable-ipv6
-
-A comment above this line (in addition to the commit log) would have
-been nice.
-
-I've fixed both issues, and applied your patch to next. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+diff --git a/package/dnsmasq/0001-DNSSEC-fix-for-wildcard-NSEC-records.-CVE-2017-15107.patch b/package/dnsmasq/0001-DNSSEC-fix-for-wildcard-NSEC-records.-CVE-2017-15107.patch
+new file mode 100644
+index 0000000000..7b834e80e2
+--- /dev/null
++++ b/package/dnsmasq/0001-DNSSEC-fix-for-wildcard-NSEC-records.-CVE-2017-15107.patch
+@@ -0,0 +1,212 @@
++From 4fe6744a220eddd3f1749b40cac3dfc510787de6 Mon Sep 17 00:00:00 2001
++From: Simon Kelley <simon@thekelleys.org.uk>
++Date: Fri, 19 Jan 2018 12:26:08 +0000
++Subject: [PATCH] DNSSEC fix for wildcard NSEC records. CVE-2017-15107 applies.
++
++It's OK for NSEC records to be expanded from wildcards,
++but in that case, the proof of non-existence is only valid
++starting at the wildcard name, *.<domain> NOT the name expanded
++from the wildcard. Without this check it's possible for an
++attacker to craft an NSEC which wrongly proves non-existence
++in a domain which includes a wildcard for NSEC.
++
++[baruch: drop the CHANGELOG hunk]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: upstream commit 4fe6744a220e
++
++ CHANGELOG    |  12 +++++-
++ src/dnssec.c | 117 ++++++++++++++++++++++++++++++++++++++++++++++++++++-------
++ 2 files changed, 114 insertions(+), 15 deletions(-)
++
++diff --git a/src/dnssec.c b/src/dnssec.c
++index eb6c11cbe00f..a54a0b4f14cf 100644
++--- a/src/dnssec.c
+++++ b/src/dnssec.c
++@@ -103,15 +103,17 @@ static void from_wire(char *name)
++ static int count_labels(char *name)
++ {
++   int i;
++-
+++  char *p;
+++  
++   if (*name == 0)
++     return 0;
++ 
++-  for (i = 0; *name; name++)
++-    if (*name == '.')
+++  for (p = name, i = 0; *p; p++)
+++    if (*p == '.')
++       i++;
++ 
++-  return i+1;
+++  /* Don't count empty first label. */
+++  return *name == '.' ? i : i+1;
++ }
++ 
++ /* Implement RFC1982 wrapped compare for 32-bit numbers */
++@@ -1094,8 +1096,8 @@ static int hostname_cmp(const char *a, const char *b)
++     }
++ }
++ 
++-static int prove_non_existence_nsec(struct dns_header *header, size_t plen, unsigned char **nsecs, int nsec_count,
++-				    char *workspace1, char *workspace2, char *name, int type, int *nons)
+++static int prove_non_existence_nsec(struct dns_header *header, size_t plen, unsigned char **nsecs, unsigned char **labels, int nsec_count,
+++				    char *workspace1_in, char *workspace2, char *name, int type, int *nons)
++ {
++   int i, rc, rdlen;
++   unsigned char *p, *psave;
++@@ -1108,6 +1110,9 @@ static int prove_non_existence_nsec(struct dns_header *header, size_t plen, unsi
++   /* Find NSEC record that proves name doesn't exist */
++   for (i = 0; i < nsec_count; i++)
++     {
+++      char *workspace1 = workspace1_in;
+++      int sig_labels, name_labels;
+++
++       p = nsecs[i];
++       if (!extract_name(header, plen, &p, workspace1, 1, 10))
++ 	return 0;
++@@ -1116,7 +1121,27 @@ static int prove_non_existence_nsec(struct dns_header *header, size_t plen, unsi
++       psave = p;
++       if (!extract_name(header, plen, &p, workspace2, 1, 10))
++ 	return 0;
++-      
+++
+++      /* If NSEC comes from wildcard expansion, use original wildcard
+++	 as name for computation. */
+++      sig_labels = *labels[i];
+++      name_labels = count_labels(workspace1);
+++
+++      if (sig_labels < name_labels)
+++	{
+++	  int k;
+++	  for (k = name_labels - sig_labels; k != 0; k--)
+++	    {
+++	      while (*workspace1 != '.' && *workspace1 != 0)
+++		workspace1++;
+++	      if (k != 1 && *workspace1 == '.')
+++		workspace1++;
+++	    }
+++	  
+++	  workspace1--;
+++	  *workspace1 = '*';
+++	}
+++	  
++       rc = hostname_cmp(workspace1, name);
++       
++       if (rc == 0)
++@@ -1514,24 +1539,26 @@ static int prove_non_existence_nsec3(struct dns_header *header, size_t plen, uns
++ 
++ static int prove_non_existence(struct dns_header *header, size_t plen, char *keyname, char *name, int qtype, int qclass, char *wildname, int *nons)
++ {
++-  static unsigned char **nsecset = NULL;
++-  static int nsecset_sz = 0;
+++  static unsigned char **nsecset = NULL, **rrsig_labels = NULL;
+++  static int nsecset_sz = 0, rrsig_labels_sz = 0;
++   
++   int type_found = 0;
++-  unsigned char *p = skip_questions(header, plen);
+++  unsigned char *auth_start, *p = skip_questions(header, plen);
++   int type, class, rdlen, i, nsecs_found;
++   
++   /* Move to NS section */
++   if (!p || !(p = skip_section(p, ntohs(header->ancount), header, plen)))
++     return 0;
+++
+++  auth_start = p;
++   
++   for (nsecs_found = 0, i = ntohs(header->nscount); i != 0; i--)
++     {
++       unsigned char *pstart = p;
++       
++-      if (!(p = skip_name(p, header, plen, 10)))
+++      if (!extract_name(header, plen, &p, daemon->workspacename, 1, 10))
++ 	return 0;
++-      
+++	  
++       GETSHORT(type, p); 
++       GETSHORT(class, p);
++       p += 4; /* TTL */
++@@ -1548,7 +1575,69 @@ static int prove_non_existence(struct dns_header *header, size_t plen, char *key
++ 	  if (!expand_workspace(&nsecset, &nsecset_sz, nsecs_found))
++ 	    return 0; 
++ 	  
++-	  nsecset[nsecs_found++] = pstart;
+++	  if (type == T_NSEC)
+++	    {
+++	      /* If we're looking for NSECs, find the corresponding SIGs, to 
+++		 extract the labels value, which we need in case the NSECs
+++		 are the result of wildcard expansion.
+++		 Note that the NSEC may not have been validated yet
+++		 so if there are multiple SIGs, make sure the label value
+++		 is the same in all, to avoid be duped by a rogue one.
+++		 If there are no SIGs, that's an error */
+++	      unsigned char *p1 = auth_start;
+++	      int res, j, rdlen1, type1, class1;
+++	      
+++	      if (!expand_workspace(&rrsig_labels, &rrsig_labels_sz, nsecs_found))
+++		return 0;
+++	      
+++	      rrsig_labels[nsecs_found] = NULL;
+++	      
+++	      for (j = ntohs(header->nscount); j != 0; j--)
+++		{
+++		  if (!(res = extract_name(header, plen, &p1, daemon->workspacename, 0, 10)))
+++		    return 0;
+++
+++		   GETSHORT(type1, p1); 
+++		   GETSHORT(class1, p1);
+++		   p1 += 4; /* TTL */
+++		   GETSHORT(rdlen1, p1);
+++
+++		   if (!CHECK_LEN(header, p1, plen, rdlen1))
+++		     return 0;
+++		   
+++		   if (res == 1 && class1 == qclass && type1 == T_RRSIG)
+++		     {
+++		       int type_covered;
+++		       unsigned char *psav = p1;
+++		       
+++		       if (rdlen < 18)
+++			 return 0; /* bad packet */
+++
+++		       GETSHORT(type_covered, p1);
+++
+++		       if (type_covered == T_NSEC)
+++			 {
+++			   p1++; /* algo */
+++			   
+++			   /* labels field must be the same in every SIG we find. */
+++			   if (!rrsig_labels[nsecs_found])
+++			     rrsig_labels[nsecs_found] = p1;
+++			   else if (*rrsig_labels[nsecs_found] != *p1) /* algo */
+++			     return 0;
+++			   }
+++		       p1 = psav;
+++		     }
+++		   
+++		   if (!ADD_RDLEN(header, p1, plen, rdlen1))
+++		     return 0;
+++		}
+++
+++	      /* Must have found@least one sig. */
+++	      if (!rrsig_labels[nsecs_found])
+++		return 0;
+++	    }
+++
+++	  nsecset[nsecs_found++] = pstart;   
++ 	}
++       
++       if (!ADD_RDLEN(header, p, plen, rdlen))
++@@ -1556,7 +1645,7 @@ static int prove_non_existence(struct dns_header *header, size_t plen, char *key
++     }
++   
++   if (type_found == T_NSEC)
++-    return prove_non_existence_nsec(header, plen, nsecset, nsecs_found, daemon->workspacename, keyname, name, qtype, nons);
+++    return prove_non_existence_nsec(header, plen, nsecset, rrsig_labels, nsecs_found, daemon->workspacename, keyname, name, qtype, nons);
++   else if (type_found == T_NSEC3)
++     return prove_non_existence_nsec3(header, plen, nsecset, nsecs_found, daemon->workspacename, keyname, name, qtype, wildname, nons);
++   else
++-- 
++2.15.1
++
+diff --git a/package/dnsmasq/0002-Fix-DNSSEC-validation-errors-introduced-in-4fe6744a2.patch b/package/dnsmasq/0002-Fix-DNSSEC-validation-errors-introduced-in-4fe6744a2.patch
+new file mode 100644
+index 0000000000..ef28b90c58
+--- /dev/null
++++ b/package/dnsmasq/0002-Fix-DNSSEC-validation-errors-introduced-in-4fe6744a2.patch
+@@ -0,0 +1,29 @@
++From cd7df612b14ec1bf831a966ccaf076be0dae7404 Mon Sep 17 00:00:00 2001
++From: Simon Kelley <simon@thekelleys.org.uk>
++Date: Sat, 20 Jan 2018 00:10:55 +0000
++Subject: [PATCH] Fix DNSSEC validation errors introduced in
++ 4fe6744a220eddd3f1749b40cac3dfc510787de6
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: upstream commit cd7df612b14ec
++
++ src/dnssec.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/dnssec.c b/src/dnssec.c
++index a54a0b4f14cf..c47e33569f96 100644
++--- a/src/dnssec.c
+++++ b/src/dnssec.c
++@@ -1610,7 +1610,7 @@ static int prove_non_existence(struct dns_header *header, size_t plen, char *key
++ 		       int type_covered;
++ 		       unsigned char *psav = p1;
++ 		       
++-		       if (rdlen < 18)
+++		       if (rdlen1 < 18)
++ 			 return 0; /* bad packet */
++ 
++ 		       GETSHORT(type_covered, p1);
++-- 
++2.15.1
++
