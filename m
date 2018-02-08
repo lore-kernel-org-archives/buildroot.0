@@ -1,44 +1,39 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 8 Feb 2018 19:17:07 +0000
-Subject: [Buildroot] [PATCH] libgpiod: add hash for license file
-In-Reply-To: <1518113576-7551-1-git-send-email-rahulbedarkar89@gmail.com>
-References: <1518113576-7551-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <20180208191707.GB10590@momiji>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu,  8 Feb 2018 14:23:24 -0500
+Subject: [Buildroot] [PATCH 1/1] dbus: fix system_bus_socket location
+Message-ID: <20180208192324.10325-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  8 Feb 2018 23:42:56 +0530, Rahul Bedarkar <rahulbedarkar89@gmail.com> wrote:
-> Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-> ---
->  package/libgpiod/libgpiod.hash | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-> index 73150dc..6baeee2 100644
-> --- a/package/libgpiod/libgpiod.hash
-> +++ b/package/libgpiod/libgpiod.hash
-> @@ -1,2 +1,4 @@
->  # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
->  sha256 50c7862428ca90b58672e2475aea66d33a6fc86c6bab1928c0660f3aedf44a37  libgpiod-0.3.2.tar.xz
-> +# Hash for license file
-> +sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-> -- 
-> 2.7.4
+systemd237 changed the default location it uses for system_bus_socket
+from /var/run/dbus/system_bus_socket to /run/dbus/system_bus_socket
 
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+see:
+https://github.com/systemd/systemd/commit/15ca0a42c7db49146a7169dbcb0683f0836cf8c2
+
+Change the default location for dbus from /var/run/dbus/system_bus_socket to
+/run/dbus/system_bus_socket to fix the issue.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/dbus/dbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 22ba22e17e..19f9b7ace8 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -27,7 +27,7 @@ DBUS_CONF_OPTS = \
+ 	--disable-xml-docs \
+ 	--disable-doxygen-docs \
+ 	--with-xml=expat \
+-	--with-system-socket=/var/run/dbus/system_bus_socket \
++	--with-system-socket=/run/dbus/system_bus_socket \
+ 	--with-system-pid-file=/var/run/messagebus.pid
  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180208/fe536d43/attachment.asc>
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.14.3
