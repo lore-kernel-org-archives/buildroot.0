@@ -1,78 +1,50 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Thu,  8 Feb 2018 08:51:22 +0100
-Subject: [Buildroot] [PATCH v2] configs: beaglebone: bump kernel and uboot
- version
-Message-ID: <20180208075122.13603-1-lothar.felten@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 8 Feb 2018 09:05:57 +0100
+Subject: [Buildroot] [PATCH v2 1/5] package/gdb: rework dependency for
+ C++11
+In-Reply-To: <129e81ee-1a4e-10bd-16c2-996bedba6875@mind.be>
+References: <20180205211015.26819-1-thomas.petazzoni@bootlin.com>
+ <20180205211015.26819-2-thomas.petazzoni@bootlin.com>
+ <20180207095828.GA2464@scaer> <20180207133602.36f7646a@windsurf>
+ <20180207173440.GA2250@scaer>
+ <129e81ee-1a4e-10bd-16c2-996bedba6875@mind.be>
+Message-ID: <20180208090557.69911f6b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to Linux kernel version 4.9.59 from the TI SDK 04.02.00.09
-(TI SDK release date: 23.12.2017)
-Updated uboot to version 2018.01
+Hello,
 
-v2:
-- set uboot version to 2018.01 in defconfig
-- keep default rootfs size
-- keep Kconfig for uboot
+On Thu, 8 Feb 2018 01:22:20 +0100, Arnout Vandecappelle wrote:
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
----
- board/beaglebone/uEnv.txt    | 8 ++++++--
- configs/beaglebone_defconfig | 9 +++------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+>  So I messed around with gdb a bit, I noticed a couple of things.
+> 
+> - gdbserver really needs C++11; some of the shared files in the common directory
+> are C++ files.
 
-diff --git a/board/beaglebone/uEnv.txt b/board/beaglebone/uEnv.txt
-index 70b3b721..8365c3af 100644
---- a/board/beaglebone/uEnv.txt
-+++ b/board/beaglebone/uEnv.txt
-@@ -1,4 +1,8 @@
- bootpart=0:1
-+devtype=mmc
- bootdir=
--bootargs=console=ttyO0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
--uenvcmd=run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr};
-+bootfile=zImage
-+bootpartition=mmcblk0p2
-+set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi; 
-+set_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
-+uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr};
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 611b6941..eea20436 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a8=y
- BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f9f6f0db2d5e4f9d2ff46eb31a5a05276a92ed7d"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a75d8e93056181d512f6c818e8627bd4554aaf92"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
-@@ -16,13 +16,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+Correct.
+
+> - host-gdb does not build gdbserver. So all the dependencies we have in host-gdb
+> on the target's toolchain are phony. Or perhaps they are there just in case
+> target gdb is selected as well, but then it's not expressed very well...
+
+Those target toolchain dependencies in the host-gdb package where here
+to avoid selecting a wrong version of host-gdb (which affects the
+target gdb version) when the target toolchain does not have the
+required feature. For example, we would allow to select 8.0 only if the
+host toolchain *and* the target toolchain had C++11 support.
+
+My PATCH 1/5 in this series is precisely here to rework that.
+
+>  Bottom line, I think could be simplified a lot here by removing the version choice.
+
+Everything can be simplified with less options, it's pretty obvious.
+The question is whether having those options is useful :-)
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
