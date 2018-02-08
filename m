@@ -1,49 +1,59 @@
-From: daggs <daggs@gmx.com>
-Date: Thu, 8 Feb 2018 13:07:44 +0100
-Subject: [Buildroot] aarch64 + armhf multiarch support?
-In-Reply-To: <8A656331-7273-4C87-9E60-F62570C60828@jens-maus.de>
-References: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
- <trinity-566065ed-72d1-4d19-9ae3-ab3368c01d3a-1518087937117@3c-app-mailcom-bs16>
- <E10BD61C-1C84-4039-A741-331FC3C8B961@jens-maus.de>
- <trinity-ad8db11c-f541-454e-8440-6c47520cc02f-1518089812434@3c-app-mailcom-bs15>
- <8A656331-7273-4C87-9E60-F62570C60828@jens-maus.de>
-Message-ID: <trinity-b580d83a-4026-4b4f-991c-2bd4db9d4f2f-1518091664400@3c-app-mailcom-bs13>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Thu, 8 Feb 2018 14:22:16 +0100
+Subject: [Buildroot] [PATCH 1/1] udftools: new package
+In-Reply-To: <20180206170806.1ffc1c28@windsurf>
+References: <20180122213138.11855-1-skenton@ou.edu>
+ <20180206170806.1ffc1c28@windsurf>
+Message-ID: <20180208132216.GC2860@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Jens,
+Thomas,
 
-> > Am 08.02.2018 um 12:36 schrieb daggs <daggs@gmx.com>:
-> > 
-> >>>> 
-> >>>> I am maintaining a buildroot environment for several ARM embedded boards. They are currently exclusively pure ?armhf? platforms. However, I am currently evaluating to support also the ODROIDC2 which has a 64bit ARM processor (ARMv8) and the buildroot images are thus generated for the aarch64 platform. The problem I am currently facing is that I have several dependencies in my buildroot environment which requires that armhf binaries have to also work properly without any possibilities to recompile them for aarch64. I was therefore looking at possibilities in buildroot to enable multiarch support like other environments (e.g. Debian) support. However, I wasn?t successful in finding any possibilities in specifying that in addition to primarily setup buildroot for aarch64 I can also run armhf binaries out-of-the-box. Already when running through all packages (including my own external package) buildroot recognizes that there are binaries not being compiled for the aarch64 platform and thus cancels the build.
-> >>>> 
-> >>>> So is there any possibility to configure buildroot as a multiarch environment where the build process then automatically creates all necessary armhf dependencies (e.g. libc) for the armhf platform and install it properly so that armhf binaries run out-of-the-box on a aarch64 buildroot build?
-> >>> 
-> >>> what are you needs from the env? will headless buildroot works for you?
-> >> 
-> >> at least I don?t need X11 or any GPU stuff, but a pure console would be great (for debugging reasons). And if this is also not possible a complete headless buildroot would also be ok.
-> >> 
-> >> regards,
-> >> jens
-> >> -- 
-> >> Jens Maus, Dresden/Germany
-> >> http://jens-maus.de/
-> > 
-> > ok, currently in buildroot there is no possibility to build a odroid c2 based 32 big image because the vendor didn't implemented some of the opcode in u-boot.
-> > however, I've posted a bunch of patches 2 months ago which introduce mainline kernel (4.14.x) and mainline uboot (2017.07) support for this board.
-> > you might be able to build a 32 bit image using these patches.
-> > 
-> > imho it worth looking into it.
+On Tue, Feb 06, 2018 at 05:08:06PM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Would you mind sharing a link with me pointing to the corresponding patches? That would be great.
+> On Mon, 22 Jan 2018 15:31:38 -0600, Steve Kenton wrote:
+> > Signed-off-by: Steve Kenton <skenton@ou.edu>
+> > ---
+> > Try 2: fix stupid copy paste error in Config.in
+> > Try 3: remove duplicate/misplaced addition to master Config.in
+> > I wish I could see these issues  when I first look the patch over - sigh
+> > Try 4: Fixes for feedback from Thomas
+> > I computed the hash below for the license file but I did not see any others under the package directory
+> > so I think I must be misunderstanding where it should go from my reading of the on-line manual
+> > # Locally computed
+> > sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+> > I ran ./utils/check-package package/udftools/* and fixed up all the white space errors
+> > But I'm not sure what to do with ./utils/test-pkg, do I need to build all 47 tools chains?
+> > I tried ./utils/test-pkg -p udftools -c udftools.snippet (contents below) but just got errors
+> > BR2_PACKAGE_UDFTOOLS=y
 > 
-> regards,
+> I've added a hash for the license file, and applied to next. Thanks!
+
+I think the license should be "GPL-2.0" ?
+
 > 
-> jens
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 
-sure, see: https://patchwork.ozlabs.org/project/buildroot/list/?submitter=69054
+Best regards
+Marcus Folkesson
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180208/878c4a78/attachment.asc>
