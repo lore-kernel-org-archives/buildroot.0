@@ -1,51 +1,31 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Thu, 8 Feb 2018 11:28:28 +0100
-Subject: [Buildroot] [PATCH] package/openssh: also install ssh-copy-id
- script
-In-Reply-To: <20180207185456.GB2250@scaer>
-References: <1518028559-22988-1-git-send-email-julien.boibessot@free.fr>
- <20180207185456.GB2250@scaer>
-Message-ID: <a0599020-62f5-6176-b7ae-7beac2125c23@free.fr>
+From: Jens Maus <mail@jens-maus.de>
+Date: Thu, 8 Feb 2018 11:12:01 +0100
+Subject: [Buildroot] aarch64 + armhf multiarch support?
+Message-ID: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hi,
 
-thanks for reviewing,
+I am maintaining a buildroot environment for several ARM embedded boards. They are currently exclusively pure ?armhf? platforms. However, I am currently evaluating to support also the ODROIDC2 which has a 64bit ARM processor (ARMv8) and the buildroot images are thus generated for the aarch64 platform. The problem I am currently facing is that I have several dependencies in my buildroot environment which requires that armhf binaries have to also work properly without any possibilities to recompile them for aarch64. I was therefore looking at possibilities in buildroot to enable multiarch support like other environments (e.g. Debian) support. However, I wasn?t successful in finding any possibilities in specifying that in addition to primarily setup buildroot for aarch64 I can also run armhf binaries out-of-the-box. Already when running through all packages (including my own external package) buildroot recognizes that there are binaries not being compiled for the aarch64 platform and thus cancels the build.
 
-On 07/02/2018 19:54, Yann E. MORIN wrote:
-> Julien, All,
->
-> On 2018-02-07 19:35 +0100, julien.boibessot at free.fr spake thusly:
->> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->>
->> This script is useful to copy SSH keys between client and server [1] and
->> installed on most distributions (for example on debian: [2]).
->>
->> [1] https://www.ssh.com/ssh/copy-id
->> [2] https://packages.debian.org/fr/jessie/armhf/openssh-client/filelist
->>
->> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->>
->> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
->> index 6b7ac22..b0075e9 100644
->> --- a/package/openssh/openssh.mk
->> +++ b/package/openssh/openssh.mk
->> @@ -73,4 +73,10 @@ define OPENSSH_INSTALL_INIT_SYSV
->>  		$(TARGET_DIR)/etc/init.d/S50sshd
->>  endef
->>  
->> +define OPENSSH_INSTALL_SSH_COPY_ID
->> +	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin
-> Usually, we write the full mode, i.e. 0755 (but the tree is mixed: 371
-> iterations of '0755', but only 116 for '0755').
+So is there any possibility to configure buildroot as a multiarch environment where the build process then automatically creates all necessary armhf dependencies (e.g. libc) for the armhf platform and install it properly so that armhf binaries run out-of-the-box on a aarch64 buildroot build?
 
-Well, in fact, I just copy-pasted what was done line 44 of the same
-makefile.
-O:-)
+best regards,
+jens
+-- 
+Jens Maus, Dresden/Germany
+http://jens-maus.de/
 
-Regards,
-Julien
+*** Content is authentic only with digital signature  ***
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 3745 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180208/42d7dcd3/attachment.p7s>
