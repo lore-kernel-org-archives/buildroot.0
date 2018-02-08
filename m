@@ -1,47 +1,45 @@
-From: daggs <daggs@gmx.com>
-Date: Thu, 8 Feb 2018 12:36:52 +0100
-Subject: [Buildroot] aarch64 + armhf multiarch support?
-In-Reply-To: <E10BD61C-1C84-4039-A741-331FC3C8B961@jens-maus.de>
-References: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
- <trinity-566065ed-72d1-4d19-9ae3-ab3368c01d3a-1518087937117@3c-app-mailcom-bs16>
- <E10BD61C-1C84-4039-A741-331FC3C8B961@jens-maus.de>
-Message-ID: <trinity-ad8db11c-f541-454e-8440-6c47520cc02f-1518089812434@3c-app-mailcom-bs15>
+From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
+Date: Thu, 8 Feb 2018 10:27:36 +0100
+Subject: [Buildroot] [PATCH 2/3] package/libgpiod: Bump to stable 1.0
+In-Reply-To: <45c17d05433e7bb40ff6e2b30c5cb41fed04ec76.1518089469.git.jan.kundrat@cesnet.cz>
+References: <45c17d05433e7bb40ff6e2b30c5cb41fed04ec76.1518089469.git.jan.kundrat@cesnet.cz>
+Message-ID: <e5dd92052698b756ed2e956aa246ea22276c97b5.1518089469.git.jan.kundrat@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Jens,
+According to upstream, this one has non-backward-compatible API changes,
+so porting of end users' code will be required. On the other hand, the
+library also got a stable API now.
 
->
-> Hi Dagg,
-> 
-> > Am 08.02.2018 um 12:05 schrieb daggs <daggs@gmx.com>:
-> > 
-> > Greetings Jens,
-> > 
-> >> 
-> >> Hi,
-> >> 
-> >> I am maintaining a buildroot environment for several ARM embedded boards. They are currently exclusively pure ?armhf? platforms. However, I am currently evaluating to support also the ODROIDC2 which has a 64bit ARM processor (ARMv8) and the buildroot images are thus generated for the aarch64 platform. The problem I am currently facing is that I have several dependencies in my buildroot environment which requires that armhf binaries have to also work properly without any possibilities to recompile them for aarch64. I was therefore looking at possibilities in buildroot to enable multiarch support like other environments (e.g. Debian) support. However, I wasn?t successful in finding any possibilities in specifying that in addition to primarily setup buildroot for aarch64 I can also run armhf binaries out-of-the-box. Already when running through all packages (including my own external package) buildroot recognizes that there are binaries not being compiled for the aarch64 platform and thus cancels the build.
-> >> 
-> >> So is there any possibility to configure buildroot as a multiarch environment where the build process then automatically creates all necessary armhf dependencies (e.g. libc) for the armhf platform and install it properly so that armhf binaries run out-of-the-box on a aarch64 buildroot build?
-> > 
-> > what are you needs from the env? will headless buildroot works for you?
-> 
-> at least I don?t need X11 or any GPU stuff, but a pure console would be great (for debugging reasons). And if this is also not possible a complete headless buildroot would also be ok.
-> 
-> regards,
-> jens
-> -- 
-> Jens Maus, Dresden/Germany
-> http://jens-maus.de/
+Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-ok, currently in buildroot there is no possibility to build a odroid c2 based 32 big image because the vendor didn't implemented some of the opcode in u-boot.
-however, I've posted a bunch of patches 2 months ago which introduce mainline kernel (4.14.x) and mainline uboot (2017.07) support for this board.
-you might be able to build a 32 bit image using these patches.
-
-imho it worth looking into it.
-
-Dagg.
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 73150dc9b9..a98e138fa4 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 50c7862428ca90b58672e2475aea66d33a6fc86c6bab1928c0660f3aedf44a37  libgpiod-0.3.2.tar.xz
++sha256 34c76b3730b9d4a1159bcb14000f78b1e890251b8a3823b794fa930654eabdd0  libgpiod-1.0.tar.xz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index bc2e51d280..598adcc599 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 0.3.2
++LIBGPIOD_VERSION = 1.0
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
+-- 
+2.14.3
