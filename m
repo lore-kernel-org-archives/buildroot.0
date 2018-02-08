@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Feb 2018 22:25:27 +0100
-Subject: [Buildroot] [PATCH 1/2] configs/wandboard: Bump U-Boot and
- kernel versions
-In-Reply-To: <1517934868-3692-1-git-send-email-fabio.estevam@nxp.com>
-References: <1517934868-3692-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20180208222527.73e0571a@windsurf.lan>
+Date: Thu, 8 Feb 2018 22:35:13 +0100
+Subject: [Buildroot] [NEXT 1/1] sngrep: bump to 1.4.5
+In-Reply-To: <20180206180346.12338-1-aduskett@gmail.com>
+References: <20180206180346.12338-1-aduskett@gmail.com>
+Message-ID: <20180208223513.250deea9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 6 Feb 2018 14:34:27 -0200, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@gmail.com>
+On Tue,  6 Feb 2018 13:03:46 -0500, Adam Duskett wrote:
+> Also add 0001-Fix-building-against-LibreSSL.patch to fix compiling against
+> LibreSSL.
 > 
-> Bump U-Boot to 2018.01 version and kernel to 4.15.1.
+> This patch has been submitted and accepted upstream.
+> https://github.com/irontec/sngrep/commit/0ee014d497986c40de264f6392b01fdf4e337fd5
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 > ---
->  configs/wandboard_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  .../0001-Fix-building-against-LibreSSL.patch       | 78 ++++++++++++++++++++++
+>  package/sngrep/sngrep.hash                         |  6 +-
+>  package/sngrep/sngrep.mk                           |  2 +-
+>  3 files changed, 82 insertions(+), 4 deletions(-)
+>  create mode 100644 package/sngrep/0001-Fix-building-against-LibreSSL.patch
 
-Both applied to next. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
