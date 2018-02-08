@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Feb 2018 23:50:07 +0100
-Subject: [Buildroot] [NEXT] glibc: depends on host-bison
-In-Reply-To: <20180207004849.21747-1-bluemrp9@gmail.com>
-References: <20180207004849.21747-1-bluemrp9@gmail.com>
-Message-ID: <20180208235007.45b8da07@windsurf.lan>
+Date: Thu, 8 Feb 2018 23:52:21 +0100
+Subject: [Buildroot] [PATCH v10 01/10] rustc: new virtual package
+In-Reply-To: <20180204180749.29942-2-eric.le.bihan.dev@free.fr>
+References: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
+ <20180204180749.29942-2-eric.le.bihan.dev@free.fr>
+Message-ID: <20180208235221.1227a749@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +13,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  6 Feb 2018 16:48:49 -0800, Ryan Coe wrote:
-> Fixes the following build error:
-> 
-> checking for bison... no
-> checking if ./buildroot/output/host/bin/arm-rpi1-linux-gnueabihf-gcc is sufficient to build libc... yes
-> checking for arm-rpi1-linux-gnueabihf-nm... ./buildroot/output/host/bin/arm-rpi1-linux-gnueabihf-nm
-> checking for python3... python3
-> configure: error:
-> *** These critical programs are missing or too old: bison
-> *** Check the INSTALL file for required versions.
-> package/pkg-generic.mk:237: recipe for target './buildroot/output/build/glibc-glibc-2.27/.stamp_configured' failed
-> make: *** [./buildroot/output/build/glibc-glibc-2.27/.stamp_configured] Error 1
-> 
-> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
++Peter, Arnout, Ricardo in Cc.
 
-I've improved the commit log a bit:
+On Sun,  4 Feb 2018 19:07:40 +0100, Eric Le Bihan wrote:
 
- - To indicate which glibc upstream commit changed to making bison a
-   hard requirement. This allows to confirm it isn't an "accident" but
-   really an intentional move from glibc upstream.
+> diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
+> new file mode 100644
+> index 0000000000..7a951c0cfd
+> --- /dev/null
+> +++ b/package/rustc/rustc.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# rustc
+> +#
+> +################################################################################
+> +
+> +RUSTC_ARCH = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ARCH))
+> +RUSTC_ABI = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ABI))
+> +
+> +RUST_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
+> +
+> +ifeq ($(HOSTARCH),x86)
+> +RUSTC_HOST_ARCH = i686
+> +else
+> +RUSTC_HOST_ARCH = $(HOSTARCH)
+> +endif
+> +
+> +RUST_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
 
- - By replacing the error log by a reference to an autobuilder failure.
+check-package is not happy with RUST_TARGET_NAME and RUST_HOST_NAME
+because they don't have a RUSTC_ prefix, even though they are defined
+in rustc.mk:
 
-Thanks a lot for this fix, applied to next!
+./package/rustc/rustc.mk:10: possible typo: RUST_TARGET_NAME -> *RUSTC*
+./package/rustc/rustc.mk:18: possible typo: RUST_HOST_NAME -> *RUSTC*
 
-Best regards,
+Would renaming them to RUSTC_TARGET_NAME and RUSTC_HOST_NAME make
+sense ? Or do we need to keep RUST_TARGET_NAME/RUST_HOST_NAME and add
+an exception in check-package ?
+
+Thanks for your feedback,
 
 Thomas
 -- 
