@@ -1,61 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 9 Feb 2018 18:10:23 +0100
-Subject: [Buildroot] [PATCH v2] ejabberd: Bump to version 17.11
-In-Reply-To: <CAJtjsKZ4cDXe6WjMYb95hA_VJ51xwtX7YyyK7Q7S3i_EjsWrCQ@mail.gmail.com>
-References: <20180119162931.27721-1-johan.oudinet@gmail.com>
- <20180129222937.31264d2d@windsurf.lan>
- <CAJtjsKZ6dGEwjh-UhQPSsKdX+kwAcvQOUw2fExJ7hVkP_wbVQA@mail.gmail.com>
- <89231559-4423-6520-8d39-afe3fab0d5dc@mind.be>
- <CAJtjsKZ4cDXe6WjMYb95hA_VJ51xwtX7YyyK7Q7S3i_EjsWrCQ@mail.gmail.com>
-Message-ID: <3a067f05-45ae-5ed7-d708-8d29419bad6c@mind.be>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 9 Feb 2018 19:11:39 +0100
+Subject: [Buildroot] [PATCH v10 01/10] rustc: new virtual package
+In-Reply-To: <20180209095610.5f4fa6a5@windsurf.lan>
+References: <20180204180749.29942-1-eric.le.bihan.dev@free.fr>
+ <20180204180749.29942-2-eric.le.bihan.dev@free.fr>
+ <20180208235221.1227a749@windsurf.lan>
+ <20180209084906.GB6503@itchy>
+ <20180209095610.5f4fa6a5@windsurf.lan>
+Message-ID: <20180209181139.GA30282@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 2018-02-09 09:56, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Fri, 9 Feb 2018 09:49:06 +0100, Eric Le Bihan wrote:
+>
+> > > check-package is not happy with RUST_TARGET_NAME and RUST_HOST_NAME
+> > > because they don't have a RUSTC_ prefix, even though they are defined
+> > > in rustc.mk:
+> > >
+> > > ./package/rustc/rustc.mk:10: possible typo: RUST_TARGET_NAME -> *RUSTC*
+> > > ./package/rustc/rustc.mk:18: possible typo: RUST_HOST_NAME -> *RUSTC*
+> > >
+> > > Would renaming them to RUSTC_TARGET_NAME and RUSTC_HOST_NAME make
+> > > sense ? Or do we need to keep RUST_TARGET_NAME/RUST_HOST_NAME and add
+> > > an exception in check-package ?
+> >
+> > I do not see any problems using RUSTC_{HOST,TARGET}_NAME: it still caries
+> > the same information as RUST_{HOST,TARGET}_NAME.
+>
+> Question is: are these host and target names "Rust" related, or "Rust
+> compiler" related. If they are Rust related, the current RUST_ prefix
+> makes more sense. If they are specific to the Rust compiler, then
+> RUSTC_ would make more sense. If it isn't clear, then we can use RUSTC_
+> to avoid the problem :-)
 
+As RUSTC_{HOST,TARGET}_NAME is passed to the Rust compiler by the
+--target option, it is "Rust compiler" related. So the renaming makes
+sense.
 
-On 09-02-18 17:05, Johan Oudinet wrote:
-> Hi Arnout,
-> 
-> On Thu, Feb 8, 2018 at 6:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Originally, this was done with $(shell ....) so it would have worked. Two years
->> ago, in commit 7d69a79624b1f (signed off by yours truly) all the $(shell ...)
->> constructs were replaced with backticks `` and it stopped working. So it just
->> means all those variables would have been empty (the error messages would have
->> been visible on stderr but nobody looks at them). And I guess that the libraries
->> are just in default locations so it still works even if the lib_dir variables
->> are empty.
-> 
-> Thanks for the explanation. Indeed, commit 7d69a79624 changed $(shell
-> ...) to backticks and introduces this bug two years ago :-/
-> As you said, this was only visible on stderr and I notice it when
-> bumping ejabberd to 17.11 only.
-> 
->>  To be honest, I find the solution of copying the script a bit fragile. It would
->> be safer to just prepend $TOPDIR to the path so it is absolute.
-> 
-> Great, I was not aware of $TOPDIR. I looked for something like
-> PACKAGE_DIR but failed to find a solution and finally resigned to copy
-> this script to $(@D).
+> If you are happy with RUSTC_, could you submit a patch against "master"
+> that does the renaming ?
 
- Right, I forgot about that one! EJABBERD_PKGDIR would work as well. Hm, except,
-no, it's actually not an absolute path so that won't work. Pity.
+Should I provide a global patch or a series of patches, one for each
+affected package?
 
- Regards,
- Arnout
+Regards,
 
-> I'll send a small patch to remove this unnecessary copy and use $TOPDIR instead.
-> Thanks.
-> 
-> Best,
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+--
+ELB
