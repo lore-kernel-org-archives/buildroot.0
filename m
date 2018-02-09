@@ -1,34 +1,76 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Fri, 09 Feb 2018 13:28:59 +0100
-Subject: [Buildroot] 
- =?iso-8859-1?q?=5BPATCH_1/1=5D_dbus=3A_fix_system=5F?=
- =?iso-8859-1?q?bus=5Fsocket_location?=
-In-Reply-To: <CAFSsvmqDd_CrgW9VRUwfz34c28Qj5SkSWXs0pn2+bvki38cEOA@mail.gmail.com>
-References: <20180208192324.10325-1-aduskett@gmail.com>
- <20180208193450.j4k5kj3ccdf5dk7o@tarshish>
- <CAFSsvmqDd_CrgW9VRUwfz34c28Qj5SkSWXs0pn2+bvki38cEOA@mail.gmail.com>
-Message-ID: <62609522-18ba-40d6-847a-8feb00890602@cesnet.cz>
+From: daggs <daggs@gmx.com>
+Date: Fri, 9 Feb 2018 13:29:24 +0100
+Subject: [Buildroot] aarch64 + armhf multiarch support?
+In-Reply-To: <58733ED8-7525-4945-8665-6309CD838F3B@jens-maus.de>
+References: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
+ <trinity-566065ed-72d1-4d19-9ae3-ab3368c01d3a-1518087937117@3c-app-mailcom-bs16>
+ <E10BD61C-1C84-4039-A741-331FC3C8B961@jens-maus.de>
+ <trinity-ad8db11c-f541-454e-8440-6c47520cc02f-1518089812434@3c-app-mailcom-bs15>
+ <8A656331-7273-4C87-9E60-F62570C60828@jens-maus.de>
+ <trinity-b580d83a-4026-4b4f-991c-2bd4db9d4f2f-1518091664400@3c-app-mailcom-bs13>
+ <58733ED8-7525-4945-8665-6309CD838F3B@jens-maus.de>
+Message-ID: <trinity-508f433b-7a26-4c85-b97a-466528c8249f-1518179364228@3c-app-mailcom-bs05>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> That solution won't work on a rootfs with that is read/write.  My own filing
-> system doesn't have a symlink from /var/run to ./run
+Greetings Jens,
+
 >
-> Perhaps it's just me?
+> Hi Dagg,
+> 
+> > Am 08.02.2018 um 13:07 schrieb daggs <daggs@gmx.com>:
+> > 
+> >>> Am 08.02.2018 um 12:36 schrieb daggs <daggs@gmx.com>:
+> >>> 
+> >>> ok, currently in buildroot there is no possibility to build a odroid c2 based 32 big image because the vendor didn't implemented some of the opcode in u-boot.
+> >>> however, I've posted a bunch of patches 2 months ago which introduce mainline kernel (4.14.x) and mainline uboot (2017.07) support for this board.
+> >>> you might be able to build a 32 bit image using these patches.
+> >>> 
+> >>> imho it worth looking into it.
+> >> 
+> >> Would you mind sharing a link with me pointing to the corresponding patches? That would be great.
+> > 
+> > sure, see: https://patchwork.ozlabs.org/project/buildroot/list/?submitter=69054
+> 
+> Thanks for the link. I just integrated these patches into my buildroot environment and reconfigured the odroidc2 defconfig to build for BR2_arm=y and BR2_cortex_a53=y instead of aarch64. The results suggest, however, that uboot is not able to build for the odroidc2 with armhf only:
+> 
+> ? cut here ?
+>   CHK     include/config.h
+>   CFG     u-boot.cfg
+> cc1: warning: unknown register name: x18
+>   HOSTLD  tools/dumpimage
+>   HOSTLD  tools/mkimage
+>   CC      arch/arm/mach-meson/board.o
+>   CC      board/amlogic/odroid-c2/odroid-c2.o
+>   CC      arch/arm/cpu/armv8/cpu.o
+> cc1: warning: unknown register name: x18
+> cc1: warning: unknown register name: x18
+> cc1: warning: unknown register name: x18
+> In file included from ./arch/arm/include/asm/bitops.h:193:0,
+>                  from include/linux/bitops.h:124,
+>                  from include/common.h:25,
+>                  from board/amlogic/odroid-c2/odroid-c2.c:7:
+> include/asm-generic/bitops/__fls.h: In function ?__fls?:
+> include/asm-generic/bitops/__fls.h:17:21: warning: left shift count >= width of type [-Wshift-count-overflow]
+>   if (!(word & (~0ul << 32))) {
+> [?]
+> In file included from include/common.h:97:0,
+>                  from board/amlogic/odroid-c2/odroid-c2.c:7:
+> include/dm/of.h: At top level:
+> ./arch/arm/include/asm/global_data.h:107:58: error: invalid register name for ?gd?
+>  #define DECLARE_GLOBAL_DATA_PTR  register volatile gd_t *gd asm (?x18?)
+> ? cut here ?
+> 
+> To me this looks like U-Boot is not able to be built for the odroidc2 using only a armhf compiler. Or are there any u-boot defconfig changes I could try and hopefully see a 32bit build for the odroidc2?
+> 
+> Apart from that, are there really no possibilities to build a multiarch (aarch64+armhf) buildroot environment that allows to run 64bit and 32bit binaries at the same time? Or am I missing something?
+> 
+> regards,
+> jens
 
-Hi Adam, according to both D-Bus and systemd upstreams, having separate 
-/run from /var/run is broken. New enough systemd also warns against that.
+sorry it didn't helped you, I wonder, can you compile the 32 bit bins yourself? if so why not compile the bins you need statically, place it on a nfs server, mount it on the c2 boards and run the bins? will that work for you?
 
-Just changing the D-Bus socket location won't work. My patch links a 
-bugreport where people have mentioned that the /var/run/dbus essentially 
-cannot change because it's hard-coded in other SW as well.
-
-Can you investigate which part creates /run and /var/run on your 
-configuration of buildroot, but with a fresh-from-scratch build? Grepping 
-for "/run" in build/packages-file-list.txt should answer that.
-
-Cheers,
-Jan
+Dagg.
