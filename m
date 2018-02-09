@@ -1,27 +1,20 @@
-From: Riccardo Raneri <flip79@gmail.com>
-Date: Fri, 9 Feb 2018 09:41:07 +0100
-Subject: [Buildroot] Audio drivers for Orange PI Zero on 4.15
-Message-ID: <CADRL_XirL1OL6HnxdPv0LT1ecLV4=8OKgt3F52qxSfcXq81sFA@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 9 Feb 2018 09:44:26 +0100
+Subject: [Buildroot] [next] listing of tests is broken
+Message-ID: <CAGm1_kvtXtxu_YjCeXNOUr706hJp-nwrX77QOD9m9B7e3t6ftg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Does sound work on kernel 4.15 or it's mandatory to switch to a previous
-version?
+./support/testing/run-tests -l
 
-My Orange PI Zero doesn't see any soundcard, even if I enabled alsactl,
-alsautil and the device drivers for Allwinner SOCs:
+  File "/home/user/br_test/support/testing/infra/basetest.py", line
+45, in __init__
+    self.config += "\nBR2_JLEVEL={}\n".format(self.jlevel)
+TypeError: unsupported operand type(s) for +=: 'NoneType' and 'str'
 
- <*> Allwinner A10 Codec Support
-Allwinner SUN8I audio codec
-Allwinner sun8i Codec Analog Controls Support
-Allwinner A10 I2S Support
-Allwinner A10 SPDIF Support
+Any idea?
 
-Thanks,
-Riccardo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180209/3cd0992a/attachment.html>
+Yegor
