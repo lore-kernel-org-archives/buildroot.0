@@ -1,70 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  9 Feb 2018 14:55:58 +0200
-Subject: [Buildroot] [PATCH] nftables: fix build with glibc before 2.19
-Message-ID: <4fb69e5087a62872596d5a9bcab64b1417147e6a.1518180958.git.baruch@tkos.co.il>
+From: Jens Maus <mail@jens-maus.de>
+Date: Fri, 9 Feb 2018 14:02:21 +0100
+Subject: [Buildroot] aarch64 + armhf multiarch support?
+In-Reply-To: <trinity-508f433b-7a26-4c85-b97a-466528c8249f-1518179364228@3c-app-mailcom-bs05>
+References: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
+ <trinity-566065ed-72d1-4d19-9ae3-ab3368c01d3a-1518087937117@3c-app-mailcom-bs16>
+ <E10BD61C-1C84-4039-A741-331FC3C8B961@jens-maus.de>
+ <trinity-ad8db11c-f541-454e-8440-6c47520cc02f-1518089812434@3c-app-mailcom-bs15>
+ <8A656331-7273-4C87-9E60-F62570C60828@jens-maus.de>
+ <trinity-b580d83a-4026-4b4f-991c-2bd4db9d4f2f-1518091664400@3c-app-mailcom-bs13>
+ <58733ED8-7525-4945-8665-6309CD838F3B@jens-maus.de>
+ <trinity-508f433b-7a26-4c85-b97a-466528c8249f-1518179364228@3c-app-mailcom-bs05>
+Message-ID: <D8068D8E-77EA-42AA-A4FC-5A35BA5ABDBD@jens-maus.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch that has a local definition of IPPROTO_MH. This fixes build
-with glibc before 2.19 that missed IPPROTO_MH.
+Hi Dagg,
 
-Fixes:
-http://autobuild.buildroot.net/results/b0a/b0ab6c8c765977cfdc9791d768d3ec2cf129d25d/
-http://autobuild.buildroot.net/results/3ef/3ef36d9d03497ee1d5d20bd44aee6ccf12868f7b/
-http://autobuild.buildroot.net/results/445/445f2291ebba521f0faac961ca8868ae99b2d795/
+> Am 09.02.2018 um 13:29 schrieb daggs <daggs@gmx.com>:
+> 
+>> Apart from that, are there really no possibilities to build a multiarch (aarch64+armhf) buildroot environment that allows to run 64bit and 32bit binaries at the same time? Or am I missing something?
+> 
+> sorry it didn't helped you, I wonder, can you compile the 32 bit bins yourself? if so why not compile the bins you need statically, place it on a nfs server, mount it on the c2 boards and run the bins? will that work for you?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0001-src-fix-build-with-older-glibc.patch      | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/nftables/0001-src-fix-build-with-older-glibc.patch
+No, I can?t compile the 32bit bins myself as they are closed source. The point is really that it would be great if buildroot could be setup to support 64bit compilation (aarch64) with multiarch support so that 32bit libraries (libc, etc.) are automatically in place that 32bit binaries (armhf) will run out-of-the-box. Does anyone know how much effort it would take to add such multiarch support into buildroot and where to start implementing it in a nice and proper way?
 
-diff --git a/package/nftables/0001-src-fix-build-with-older-glibc.patch b/package/nftables/0001-src-fix-build-with-older-glibc.patch
-new file mode 100644
-index 000000000000..d1ba29530693
---- /dev/null
-+++ b/package/nftables/0001-src-fix-build-with-older-glibc.patch
-@@ -0,0 +1,38 @@
-+From 381eaa40735385a1a60e5ab0a7daf4bb847fc2ab Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 9 Feb 2018 14:42:31 +0200
-+Subject: [PATCH] src: fix build with older glibc
-+
-+glibc before 2.19 missed the definition of IPPROTO_MH. This leads to
-+build failure:
-+
-+parser_bison.y: In function 'nft_parse':
-+parser_bison.y:3793:21: error: 'IPPROTO_MH' undeclared (first use in this function)
-+    | MH { $$ = IPPROTO_MH; }
-+                     ^
-+
-+Since we have a local definition of IPPROTO_MH in headers.h use that to
-+fix the build.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://marc.info/?l=netfilter-devel&m=151818061103886&w=2
-+
-+ src/parser_bison.y | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/parser_bison.y b/src/parser_bison.y
-+index 2e79109f4da3..578bfdc10429 100644
-+--- a/src/parser_bison.y
-++++ b/src/parser_bison.y
-+@@ -29,6 +29,7 @@
-+ #include <rule.h>
-+ #include <statement.h>
-+ #include <expression.h>
-++#include <headers.h>
-+ #include <utils.h>
-+ #include <parser.h>
-+ #include <erec.h>
-+-- 
-+2.15.1
-+
+regards,
+jens
 -- 
-2.15.1
+Jens Maus, Dresden/Germany
+http://jens-maus.de/
+
+*** Content is authentic only with digital signature  ***
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 3745 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180209/13bb75b9/attachment.p7s>
