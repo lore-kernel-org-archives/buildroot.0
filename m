@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 15:34:17 +0100
-Subject: [Buildroot] [PATCH 1/1] qt53d: fix typo in <pkg>_SOURCES
-In-Reply-To: <20180210123800.7707-1-gael.portay@savoirfairelinux.com>
-References: <20180210123800.7707-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180210153417.3f4dee28@windsurf.lan>
+Date: Sat, 10 Feb 2018 15:34:52 +0100
+Subject: [Buildroot] [PATCH 1/1] qt5enginio: bump to 1.6.3
+In-Reply-To: <20180210131952.19924-1-gael.portay@savoirfairelinux.com>
+References: <20180210131952.19924-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180210153452.256abab2@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 10 Feb 2018 07:38:00 -0500, Ga?l PORTAY wrote:
-> The QT53D_SOURCE variable uses mismatch QT5SVG_VERSION variable.
+On Sat, 10 Feb 2018 08:19:52 -0500, Ga?l PORTAY wrote:
+> Qt Enginio has been bumped to 1.6.3 with Qt 5.6.3.
 > 
-> This commit fixes the typo by using the appropriate QT53D_VERSION
-> variable.
+> This new version follows the Qt release number and has only one change
+> since 1.6.2[1].
+> 
+> [1]: https://github.com/qt/qtenginio/commit/e447818458c9211e95ee5e75e294f76b6abf32d4
 > 
 > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  package/qt5/qt53d/qt53d.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Since 5.6.3 is used in master, I've applied this patch to master, for
+the sake of consistency. Also, the fact that there is a single change
+gives quite some confidence that things should be fine.
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
-https://bootlin.com
+http://bootlin.com
