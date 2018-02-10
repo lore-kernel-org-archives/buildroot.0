@@ -1,37 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 15:33:46 +0100
-Subject: [Buildroot] [git commit] qt53d: fix typo in <pkg>_SOURCES
-Message-ID: <20180210143407.3D60B88657@busybox.osuosl.org>
+Date: Sat, 10 Feb 2018 15:33:57 +0100
+Subject: [Buildroot] [git commit] qt5enginio: bump to 1.6.3
+Message-ID: <20180210143407.58595857AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caa3f12fd6fa63dbbcdc246c74a069fccc79ba41
+commit: https://git.buildroot.net/buildroot/commit/?id=04ceb347e5758844e7c703b2e4158bb107b08a96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The QT53D_SOURCE variable uses mismatch QT5SVG_VERSION variable.
+Qt Enginio has been bumped to 1.6.3 with Qt 5.6.3.
 
-This commit fixes the typo by using the appropriate QT53D_VERSION
-variable.
+This new version follows the Qt release number and has only one change
+since 1.6.2[1].
+
+[1]: https://github.com/qt/qtenginio/commit/e447818458c9211e95ee5e75e294f76b6abf32d4
 
 Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt53d/qt53d.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qt5/qt5enginio/qt5enginio.hash | 4 ++--
+ package/qt5/qt5enginio/qt5enginio.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index 4f37ae7f5d..fcb743db21 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
+diff --git a/package/qt5/qt5enginio/qt5enginio.hash b/package/qt5/qt5enginio/qt5enginio.hash
+index f970703687..424c4776e0 100644
+--- a/package/qt5/qt5enginio/qt5enginio.hash
++++ b/package/qt5/qt5enginio/qt5enginio.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtenginio-opensource-src-1.6.2.tar.xz.mirrorlist
+-sha256 90ffc38d214a75ab0ef90a4760843f12bc073ae49c17de24c677d1d403bddcc3 qtenginio-opensource-src-1.6.2.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtenginio-opensource-src-1.6.3.tar.xz.mirrorlist
++sha256 d907060b355512ceb7a8c3f6980e3979c20d54320b6804303b6c5e8ed42d3912  qtenginio-opensource-src-1.6.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
+index 5590d7cf4e..603b2a517d 100644
+--- a/package/qt5/qt5enginio/qt5enginio.mk
++++ b/package/qt5/qt5enginio/qt5enginio.mk
 @@ -6,7 +6,7 @@
  
- QT53D_VERSION = $(QT5_VERSION)
- QT53D_SITE = $(QT5_SITE)
--QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
-+QT53D_SOURCE = qt3d-opensource-src-$(QT53D_VERSION).tar.xz
- QT53D_DEPENDENCIES = qt5base qt5declarative
- QT53D_INSTALL_STAGING = YES
- 
+ # Qt5Enginio does not follow Qt versionning
+ # see https://bugreports.qt.io/browse/QTBUG-50111
+-QT5ENGINIO_VERSION = 1.6.2
++QT5ENGINIO_VERSION = 1.6.3
+ QT5ENGINIO_SITE = $(QT5_SITE)
+ QT5ENGINIO_SOURCE = qtenginio-opensource-src-$(QT5ENGINIO_VERSION).tar.xz
+ QT5ENGINIO_DEPENDENCIES = openssl qt5base
