@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 10:14:09 +0100
-Subject: [Buildroot] [PATCH] keepalived: bump to version 1.4.1
-In-Reply-To: <20180210101340.1c79fb16@windsurf.lan>
-References: <6870d7bcc1acb225625f92e2eba344975ba8ceaf.1518172127.git.baruch@tkos.co.il>
- <20180210101340.1c79fb16@windsurf.lan>
-Message-ID: <20180210101409.436a13d6@windsurf.lan>
+Date: Sat, 10 Feb 2018 10:14:24 +0100
+Subject: [Buildroot] [PATCH] libxml2: add security fix
+In-Reply-To: <1f304b7afb41b9d40ca50de930b2cbd2cda740cf.1518167278.git.baruch@tkos.co.il>
+References: <1f304b7afb41b9d40ca50de930b2cbd2cda740cf.1518167278.git.baruch@tkos.co.il>
+Message-ID: <20180210101424.6c870f03@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 10 Feb 2018 10:13:40 +0100, Thomas Petazzoni wrote:
-> Hello,
+On Fri,  9 Feb 2018 11:07:58 +0200, Baruch Siach wrote:
+> CVE-2017-8872: An attackers can cause a denial of service (buffer
+> over-read) or information disclosure.
 > 
-> On Fri,  9 Feb 2018 12:28:47 +0200, Baruch Siach wrote:
-> > Add license file hash.
-> > 
-> > Cc: Ilias Apalodimas <apalos@gmail.com>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  package/keepalived/keepalived.hash | 3 ++-
-> >  package/keepalived/keepalived.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 2 deletions(-)  
+> Patch from the upstream bug tracker.
 > 
-> Applied to master, thanks.
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/libxml2/0001-CVE-2017-8872.patch | 33 ++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/libxml2/0001-CVE-2017-8872.patch
 
-Not at all: I replied to the wrong patch. I haven't applied this one
-yet, and it should anyway be applied to the next branch.
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
-http://bootlin.com
+https://bootlin.com
