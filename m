@@ -1,56 +1,71 @@
-From: Toan Pham <tpham3783@gmail.com>
-Date: Fri, 9 Feb 2018 19:02:48 -0500
-Subject: [Buildroot] Suggestion for Makefile to probably import
- BR2_CONFIG
-In-Reply-To: <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
-References: <CAGNmLEM_x8ykDr54gbT94em9YyH5+0ec=jCgjULh68yJLUzjnw@mail.gmail.com>
- <1cb3ee33-b12f-6534-9dbf-fb697fbf3482@mind.be>
-Message-ID: <CAGNmLEN+OMauBsffMjJxU4LRRfy08_tHk-m57xt1TTYxvBEYOg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 10 Feb 2018 08:55:56 +0100
+Subject: [Buildroot] [git commit] nftables: fix build with glibc before 2.19
+Message-ID: <20180210075608.185FE88524@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->  If you have an existing defconfig file (normally generated with 'make
-> savedefconfig', but you can also just copy the .config file), you can use
-> it as
-> the source of the generated .config as follows:
->
-> make BR2_DEFCONFIG=$PWD/myTarget1 O=output.target1
-> make O=output.target1
->
->
-Arnout, Is there anyway you can consider one more patch (attached file)?
-It allows BR2 to bootstrap a build automatically if BR2_DEFCONFIG is
-defined, and that BR2_CONFIG file hasn't been created yet.  One does not
-have to copy a defconfig to the destination of .config to start the build.
-Moreover, if the user passes in BR2_DEFCONFIG, most likely he or she wants
-to use that as the config file.  There's no need to error out with a
-message like "You have to run menuconfig first"!  Most users at this time
-would run "make BR2_DEFCONFIG=/tmp/defconfig menuconfig", believing that
-the new config would be generated from defconfig.  That's not the case,
-let's improve it!
+commit: https://git.buildroot.net/buildroot/commit/?id=f5d5ae21b6982773789c282d3d4dbaadbca22be3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Add a patch that has a local definition of IPPROTO_MH. This fixes build
+with glibc before 2.19 that missed IPPROTO_MH.
 
-Without the patch, the user has to carry out one of the following steps:
+Fixes:
+http://autobuild.buildroot.net/results/b0a/b0ab6c8c765977cfdc9791d768d3ec2cf129d25d/
+http://autobuild.buildroot.net/results/3ef/3ef36d9d03497ee1d5d20bd44aee6ccf12868f7b/
+http://autobuild.buildroot.net/results/445/445f2291ebba521f0faac961ca8868ae99b2d795/
 
-  1.  copy defconfig file to config file (according to you)
-       ie:  mkdir $PWD/myTarget1 && cp defconfig $PWD/myTarget1/.config
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-src-fix-build-with-older-glibc.patch      | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-  2.  Manually generate .config from defconfig (according to BR2 manual)
-       make BR2_DEFCONFIG=$PWD/myTarget1 O=output.target1 defconfig
-
-
-It would be nice if that process is automated!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180209/cab8d8a3/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br2_auto_generate_config.patch
-Type: text/x-patch
-Size: 678 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180209/cab8d8a3/attachment.bin>
+diff --git a/package/nftables/0001-src-fix-build-with-older-glibc.patch b/package/nftables/0001-src-fix-build-with-older-glibc.patch
+new file mode 100644
+index 0000000000..d1ba295306
+--- /dev/null
++++ b/package/nftables/0001-src-fix-build-with-older-glibc.patch
+@@ -0,0 +1,38 @@
++From 381eaa40735385a1a60e5ab0a7daf4bb847fc2ab Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 9 Feb 2018 14:42:31 +0200
++Subject: [PATCH] src: fix build with older glibc
++
++glibc before 2.19 missed the definition of IPPROTO_MH. This leads to
++build failure:
++
++parser_bison.y: In function 'nft_parse':
++parser_bison.y:3793:21: error: 'IPPROTO_MH' undeclared (first use in this function)
++    | MH { $$ = IPPROTO_MH; }
++                     ^
++
++Since we have a local definition of IPPROTO_MH in headers.h use that to
++fix the build.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://marc.info/?l=netfilter-devel&m=151818061103886&w=2
++
++ src/parser_bison.y | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/parser_bison.y b/src/parser_bison.y
++index 2e79109f4da3..578bfdc10429 100644
++--- a/src/parser_bison.y
+++++ b/src/parser_bison.y
++@@ -29,6 +29,7 @@
++ #include <rule.h>
++ #include <statement.h>
++ #include <expression.h>
+++#include <headers.h>
++ #include <utils.h>
++ #include <parser.h>
++ #include <erec.h>
++-- 
++2.15.1
++
