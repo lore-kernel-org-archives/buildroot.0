@@ -1,39 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 09:00:03 +0100
-Subject: [Buildroot] [PATCH] keepalived: fix build with 4.15+ kernel
- headers
-In-Reply-To: <1b8c72598111d5bbdbd34631afb2f75682871d6d.1518171153.git.baruch@tkos.co.il>
-References: <1b8c72598111d5bbdbd34631afb2f75682871d6d.1518171153.git.baruch@tkos.co.il>
-Message-ID: <20180210090003.7829e95b@windsurf.lan>
+Date: Sat, 10 Feb 2018 10:12:54 +0100
+Subject: [Buildroot] [git commit] libxml2: add security fix
+Message-ID: <20180210091310.D1692882B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=86e027f6d3eee30304da6a4fff84c808cd79182f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  9 Feb 2018 12:12:33 +0200, Baruch Siach wrote:
-> Kernel version 4.15 change the logic of libc-compat.h in a way that
-> introduced libc/kernel network headers collision. Add a patch for fixing
-> that.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/000/000293275076c59e298d235e93ce9a92b66360e7/
-> http://autobuild.buildroot.net/results/2ba/2ba8722a42aa9b92f5194595f53130c97647b9b8/
-> http://autobuild.buildroot.net/results/114/114136447c9b18436ff9b2804c440a2e37576452/
-> 
-> Cc: Ilias Apalodimas <apalos@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...Fix-build-with-Linux-kernel-headers-v4.15.patch | 59 ++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
+CVE-2017-8872: An attackers can cause a denial of service (buffer
+over-read) or information disclosure.
 
-Applied to master, thanks.
+Patch from the upstream bug tracker.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libxml2/0001-CVE-2017-8872.patch | 33 ++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/package/libxml2/0001-CVE-2017-8872.patch b/package/libxml2/0001-CVE-2017-8872.patch
+new file mode 100644
+index 0000000000..b7a75c19a7
+--- /dev/null
++++ b/package/libxml2/0001-CVE-2017-8872.patch
+@@ -0,0 +1,33 @@
++From 8b329effb610f4138e4e680f6a6867570f6d6179 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 9 Feb 2018 10:58:11 +0200
++Subject: [PATCH] CVE-2017-8872
++
++Taken from attachment to upstream bug report comment #9.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=775200#c9
++https://bugzilla.gnome.org/attachment.cgi?id=366193&action=diff
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ parser.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/parser.c b/parser.c
++index 1c5e036ea265..025111067ae8 100644
++--- a/parser.c
+++++ b/parser.c
++@@ -12467,6 +12467,10 @@ xmlHaltParser(xmlParserCtxtPtr ctxt) {
++ 	ctxt->input->cur = BAD_CAST"";
++ 	ctxt->input->base = ctxt->input->cur;
++         ctxt->input->end = ctxt->input->cur;
+++    if (ctxt->input->buf)
+++        xmlBufEmpty (ctxt->input->buf->buffer);
+++    else
+++        ctxt->input->length = 0;
++     }
++ }
++ 
++-- 
++2.15.1
++
