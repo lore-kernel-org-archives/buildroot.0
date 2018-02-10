@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 10:14:24 +0100
-Subject: [Buildroot] [PATCH] libxml2: add security fix
-In-Reply-To: <1f304b7afb41b9d40ca50de930b2cbd2cda740cf.1518167278.git.baruch@tkos.co.il>
-References: <1f304b7afb41b9d40ca50de930b2cbd2cda740cf.1518167278.git.baruch@tkos.co.il>
-Message-ID: <20180210101424.6c870f03@windsurf.lan>
+Date: Sat, 10 Feb 2018 10:14:40 +0100
+Subject: [Buildroot] [PATCH] rsync: security bump to version 3.1.3
+In-Reply-To: <958696d988eecdc48bea09ad76234933706a7e0a.1518153988.git.baruch@tkos.co.il>
+References: <958696d988eecdc48bea09ad76234933706a7e0a.1518153988.git.baruch@tkos.co.il>
+Message-ID: <20180210101440.738778d6@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  9 Feb 2018 11:07:58 +0200, Baruch Siach wrote:
-> CVE-2017-8872: An attackers can cause a denial of service (buffer
-> over-read) or information disclosure.
+On Fri,  9 Feb 2018 07:26:28 +0200, Baruch Siach wrote:
+> Fixes CVE-2018-5764: remote attackers can bypass an
+> argument-sanitization protection mechanism
 > 
-> Patch from the upstream bug tracker.
+> Drop upstream patches.
+> 
+> Add license file hash.
 > 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/libxml2/0001-CVE-2017-8872.patch | 33 ++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/libxml2/0001-CVE-2017-8872.patch
+>  .../0001-Check-fname-in-recv_files-sooner.patch    | 45 ----------------------
+>  ...0002-Sanitize-xname-in-read_ndx_and_attrs.patch | 39 -------------------
+>  ...mon-filter-against-fnamecmp-in-recv_files.patch | 28 --------------
+>  ...ailing-0-when-receiving-xattr-name-values.patch | 33 ----------------
+>  package/rsync/rsync.hash                           |  5 ++-
+>  package/rsync/rsync.mk                             |  2 +-
+>  6 files changed, 5 insertions(+), 147 deletions(-)
+>  delete mode 100644 package/rsync/0001-Check-fname-in-recv_files-sooner.patch
+>  delete mode 100644 package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
+>  delete mode 100644 package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
+>  delete mode 100644 package/rsync/0004-Enforce-trailing-0-when-receiving-xattr-name-values.patch
 
 Applied to master, thanks.
 
