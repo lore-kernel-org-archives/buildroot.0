@@ -1,47 +1,40 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Sat, 10 Feb 2018 14:11:38 -0500
-Subject: [Buildroot] [PATCH 1/1] qt5webkit{,
- -examples}: use https link in hashfile
-Message-ID: <20180210191138.5518-1-gael.portay@savoirfairelinux.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Feb 2018 20:27:46 +0100
+Subject: [Buildroot] [PATCH 1/1] libupnp: bump to version 1.6.25
+Message-ID: <20180210192746.12311-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All Qt modules but qt5webkit use https link in their hashfile.
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/qt5/qt5webkit-examples/qt5webkit-examples.hash | 4 ++--
- package/qt5/qt5webkit/qt5webkit.hash                   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libupnp/libupnp.hash | 2 +-
+ package/libupnp/libupnp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-index 2af1efbaf0..6e4c090fdd 100644
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-examples-opensource-src-5.6.3.tar.xz.mirrorlist
-+# Hash from: https://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-examples-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256 2d6ce7146298d03b443cca4390bbfee17c4c0b08a31efcbf9fe0732291a6169e qtwebkit-examples-opensource-src-5.6.3.tar.xz
+diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
+index 929e5c42e7..e52b7ea9d7 100644
+--- a/package/libupnp/libupnp.hash
++++ b/package/libupnp/libupnp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	7d83d79af3bb4062e5c3a58bf2e90d2da5b8b99e2b2d57c23b5b6f766288cf96	libupnp-1.6.24.tar.bz2
++sha256	c5a300b86775435c076d58a79cc0d5a977d76027d2a7d721590729b7f369fa43	libupnp-1.6.25.tar.bz2
+ sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index c7085c2148..8831885ba4 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-examples-opensource-src-5.9.1.tar.xz.mirrorlist
-+# Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-examples-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256 e4ce4de6b468243abad2baabbe8ddfb05d25b186529bfe88cb8662fc983f54d0 qtwebkit-examples-opensource-src-5.9.1.tar.xz
-diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
-index aa3a71c8d0..57ff2ac1b7 100644
---- a/package/qt5/qt5webkit/qt5webkit.hash
-+++ b/package/qt5/qt5webkit/qt5webkit.hash
-@@ -1,7 +1,7 @@
--# Hash from: http://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
-+# Hash from: https://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
- sha256  098c6bb25798fbf1b619b540621287787064efc9b586d76ac0ce7e39b87a3896  qtwebkit-opensource-src-5.6.3.tar.xz
- 
--# hash from: http://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz.mirrorlist
-+# hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256  28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf  qtwebkit-opensource-src-5.9.1.tar.xz
- 
- # Hashes for license files:
+-LIBUPNP_VERSION = 1.6.24
++LIBUPNP_VERSION = 1.6.25
+ LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
+ LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
+ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
 -- 
-2.15.1
+2.14.1
