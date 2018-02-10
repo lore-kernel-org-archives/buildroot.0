@@ -1,40 +1,68 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Feb 2018 20:27:46 +0100
-Subject: [Buildroot] [PATCH 1/1] libupnp: bump to version 1.6.25
-Message-ID: <20180210192746.12311-1-fontaine.fabrice@gmail.com>
+Date: Sat, 10 Feb 2018 20:58:15 +0100
+Subject: [Buildroot] [PATCH v2,1/1] domoticz: depends on NPTL
+Message-ID: <20180210195815.20942-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+boost 1.66 uses pthread_condattr_setclock in
+boost/asio/detail/impl/posix_event.ipp.
+
+Boost is mostly a header-only library, in particular the asio stuff.
+There are sub-options for the parts of Boost that are not purely
+headers, but there are not any sub-options for the parts of Boost that
+are just headers.
+
+So, the options are either to add sub-options to Boost, or to make
+Boost as a whole only available on NPTL toolchains. The latter is a bit
+annoying as it would mean adding this dependency to all Boost reverse
+dependencies, even those not using asio.
+
+So, instead of updating boost, add a dependency to
+BR2_TOOLCHAIN_HAS_THREADS_NPTL to domoticz. This is the best solution
+that can be done today. It's not perfect, but it's good enough.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/197baa15cbf7f4fc7b3ccc602515af3f375ed68f
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v1 -> v2 (after review of Peter Korsgaard and Thomas Petazzoni):
+ - Add Thomas's explanation/opinion in commit message
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index 929e5c42e7..e52b7ea9d7 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	7d83d79af3bb4062e5c3a58bf2e90d2da5b8b99e2b2d57c23b5b6f766288cf96	libupnp-1.6.24.tar.bz2
-+sha256	c5a300b86775435c076d58a79cc0d5a977d76027d2a7d721590729b7f369fa43	libupnp-1.6.25.tar.bz2
- sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index c7085c2148..8831885ba4 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/domoticz/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index 34bf2521a2..530027f273 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -3,7 +3,8 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_USE_MMU # mosquitto
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
+ 	depends on !BR2_STATIC_LIBS # mosquitto
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# pthread_condattr_setclock
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
+@@ -26,10 +27,11 @@ config BR2_PACKAGE_DOMOTICZ
  
--LIBUPNP_VERSION = 1.6.24
-+LIBUPNP_VERSION = 1.6.25
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+ 	  http://domoticz.com
+ 
+-comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
++comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, NPTL, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+ 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
+ 
 -- 
 2.14.1
