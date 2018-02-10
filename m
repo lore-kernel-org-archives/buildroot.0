@@ -1,36 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 08:56:22 +0100
-Subject: [Buildroot] [PATCH] nftables: fix build with glibc before 2.19
-In-Reply-To: <4fb69e5087a62872596d5a9bcab64b1417147e6a.1518180958.git.baruch@tkos.co.il>
-References: <4fb69e5087a62872596d5a9bcab64b1417147e6a.1518180958.git.baruch@tkos.co.il>
-Message-ID: <20180210085622.65c76bd0@windsurf.lan>
+Date: Sat, 10 Feb 2018 08:57:08 +0100
+Subject: [Buildroot] [git commit] postgresql: security bump to 10.2
+Message-ID: <20180210075719.E3CAD8623C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=93781734b7d93ad4ca77add807c5e10a2862b6b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  9 Feb 2018 14:55:58 +0200, Baruch Siach wrote:
-> Add a patch that has a local definition of IPPROTO_MH. This fixes build
-> with glibc before 2.19 that missed IPPROTO_MH.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/b0a/b0ab6c8c765977cfdc9791d768d3ec2cf129d25d/
-> http://autobuild.buildroot.net/results/3ef/3ef36d9d03497ee1d5d20bd44aee6ccf12868f7b/
-> http://autobuild.buildroot.net/results/445/445f2291ebba521f0faac961ca8868ae99b2d795/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../0001-src-fix-build-with-older-glibc.patch      | 38 ++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/nftables/0001-src-fix-build-with-older-glibc.patch
+from https://www.postgresql.org/about/news/1829/
 
-Applied to master, thanks.
+[1] CVE-2018-1052: Fix the processing of partition keys containing multiple
+                   expressions
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[2] CVE-2018-1053: Ensure that all temporary files made with "pg_upgrade" are
+                   non-world-readable
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index e2347701c1..2950470fb9 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v10.1/postgresql-10.1.tar.bz2.sha256
+-sha256	3ccb4e25fe7a7ea6308dea103cac202963e6b746697366d72ec2900449a5e713	postgresql-10.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v10.2/postgresql-10.2.tar.bz2.sha256
++sha256	fe32009b62ddb97f7f014307ce9d0edb6972f5a698e63cb531088e147d145bad	postgresql-10.2.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256	7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676	COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 4657489a53..4b2bca714b 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 10.1
++POSTGRESQL_VERSION = 10.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
