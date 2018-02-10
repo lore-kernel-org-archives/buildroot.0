@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 16:13:42 +0100
-Subject: [Buildroot] [PATCH] package/efl: add in-tree eina library path
-In-Reply-To: <2d5d47ac-c522-3640-5122-86adc82b3e3f@mind.be>
-References: <20180206082114.3434-1-romain.naour@gmail.com>
- <2d5d47ac-c522-3640-5122-86adc82b3e3f@mind.be>
-Message-ID: <20180210161342.173daa34@windsurf.lan>
+Date: Sat, 10 Feb 2018 16:14:56 +0100
+Subject: [Buildroot] [git commit] qt5tools: fix typo in <pkg>_SOURCE
+Message-ID: <20180210151602.57CC28865A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7c384c3b0f292413c3364f5113b340e22efa76f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 6 Feb 2018 23:26:58 +0100, Arnout Vandecappelle wrote:
+The QT5TOOLS_SOURCE variable uses mismatch QT5BASE_VERSION variable.
 
-> > There is an issue while rebuilding host-efl, elua is stuck at 100% cpu
-> > for some reason...  
-> 
->  I meant to ask you life, but forgot:
-> 
->  Do you mean this problem occurs before or after this patch or both? Or do you
-> mean: when I reproduce the autobuild failure and then do "make host-efl-rebuild"
-> after changing something, elua is stuck at 100% cpu?
+This commit fixes the typo by using the appropriate QT5TOOLS_VERSION
+variable.
 
-If I remember correctly the discussion I had with Romain, his patch
-fixes the build issue of the autobuilder, but there is a 100% CPU
-consumption problem when doing a rebuild (which wouldn't be caught by
-the autobuilders, because we don't do rebuilds).
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5tools/qt5tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+index 3638b74163..cf181e576b 100644
+--- a/package/qt5/qt5tools/qt5tools.mk
++++ b/package/qt5/qt5tools/qt5tools.mk
+@@ -6,7 +6,7 @@
+ 
+ QT5TOOLS_VERSION = $(QT5_VERSION)
+ QT5TOOLS_SITE = $(QT5_SITE)
+-QT5TOOLS_SOURCE = qttools-opensource-src-$(QT5BASE_VERSION).tar.xz
++QT5TOOLS_SOURCE = qttools-opensource-src-$(QT5TOOLS_VERSION).tar.xz
+ 
+ QT5TOOLS_DEPENDENCIES = qt5base
+ QT5TOOLS_INSTALL_STAGING = YES
