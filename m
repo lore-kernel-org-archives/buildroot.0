@@ -1,43 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 10:14:40 +0100
-Subject: [Buildroot] [PATCH] rsync: security bump to version 3.1.3
-In-Reply-To: <958696d988eecdc48bea09ad76234933706a7e0a.1518153988.git.baruch@tkos.co.il>
-References: <958696d988eecdc48bea09ad76234933706a7e0a.1518153988.git.baruch@tkos.co.il>
-Message-ID: <20180210101440.738778d6@windsurf.lan>
+From: Vincent Stehle <vincent.stehle@laposte.net>
+Date: Sat, 10 Feb 2018 10:59:11 +0100
+Subject: [Buildroot] [PATCH next] configs/qemu_aarch64_virt_defconfig: bump
+ kernel to 4.15.2
+Message-ID: <20180210095911.12344-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Vincent Stehl? <vincent.stehle@laposte.net>
 
-On Fri,  9 Feb 2018 07:26:28 +0200, Baruch Siach wrote:
-> Fixes CVE-2018-5764: remote attackers can bypass an
-> argument-sanitization protection mechanism
-> 
-> Drop upstream patches.
-> 
-> Add license file hash.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../0001-Check-fname-in-recv_files-sooner.patch    | 45 ----------------------
->  ...0002-Sanitize-xname-in-read_ndx_and_attrs.patch | 39 -------------------
->  ...mon-filter-against-fnamecmp-in-recv_files.patch | 28 --------------
->  ...ailing-0-when-receiving-xattr-name-values.patch | 33 ----------------
->  package/rsync/rsync.hash                           |  5 ++-
->  package/rsync/rsync.mk                             |  2 +-
->  6 files changed, 5 insertions(+), 147 deletions(-)
->  delete mode 100644 package/rsync/0001-Check-fname-in-recv_files-sooner.patch
->  delete mode 100644 package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
->  delete mode 100644 package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
->  delete mode 100644 package/rsync/0004-Enforce-trailing-0-when-receiving-xattr-name-values.patch
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
 
-Applied to master, thanks.
 
-Thomas
+Hi,
+
+I guess this should go to the `next' branch, please.
+
+Best regards,
+
+Vincent.
+
+
+ board/qemu/aarch64-virt/{linux-4.13.config => linux-4.15.config} | 2 --
+ board/qemu/aarch64-virt/readme.txt                               | 2 +-
+ configs/qemu_aarch64_virt_defconfig                              | 8 ++++----
+ 3 files changed, 5 insertions(+), 7 deletions(-)
+ rename board/qemu/aarch64-virt/{linux-4.13.config => linux-4.15.config} (97%)
+
+diff --git a/board/qemu/aarch64-virt/linux-4.13.config b/board/qemu/aarch64-virt/linux-4.15.config
+similarity index 97%
+rename from board/qemu/aarch64-virt/linux-4.13.config
+rename to board/qemu/aarch64-virt/linux-4.15.config
+index 93cb42f2ea..c9f2708ad5 100644
+--- a/board/qemu/aarch64-virt/linux-4.13.config
++++ b/board/qemu/aarch64-virt/linux-4.15.config
+@@ -1,6 +1,5 @@
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+-CONFIG_FHANDLE=y
+ CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_TASKSTATS=y
+@@ -10,7 +9,6 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_BLK_DEV_BSGLIB=y
+ CONFIG_ARCH_VEXPRESS=y
+-CONFIG_SMP=y
+ CONFIG_TRANSPARENT_HUGEPAGE=y
+ CONFIG_BINFMT_MISC=y
+ CONFIG_COMPAT=y
+diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
+index 9e09d953f9..ce0b621366 100644
+--- a/board/qemu/aarch64-virt/readme.txt
++++ b/board/qemu/aarch64-virt/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 2.9.0
++Tested with QEMU 2.11.0
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index c94c4ac773..3bafd90e5a 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -10,12 +10,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.2"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.15.config"
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.15.1
