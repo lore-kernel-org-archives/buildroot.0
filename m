@@ -1,68 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Feb 2018 20:58:15 +0100
-Subject: [Buildroot] [PATCH v2,1/1] domoticz: depends on NPTL
-Message-ID: <20180210195815.20942-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 10 Feb 2018 22:16:38 +0200
+Subject: [Buildroot] [PATCH] postgresql: update license file hash
+Message-ID: <2d2c2eeb5a65d467ec93c2882c4efca4b88c57ae.1518293798.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-boost 1.66 uses pthread_condattr_setclock in
-boost/asio/detail/impl/posix_event.ipp.
-
-Boost is mostly a header-only library, in particular the asio stuff.
-There are sub-options for the parts of Boost that are not purely
-headers, but there are not any sub-options for the parts of Boost that
-are just headers.
-
-So, the options are either to add sub-options to Boost, or to make
-Boost as a whole only available on NPTL toolchains. The latter is a bit
-annoying as it would mean adding this dependency to all Boost reverse
-dependencies, even those not using asio.
-
-So, instead of updating boost, add a dependency to
-BR2_TOOLCHAIN_HAS_THREADS_NPTL to domoticz. This is the best solution
-that can be done today. It's not perfect, but it's good enough.
+Copyright year update.
 
 Fixes:
- - http://autobuild.buildroot.net/results/197baa15cbf7f4fc7b3ccc602515af3f375ed68f
+http://autobuild.buildroot.net/results/d79/d7989660584430945644e3a4406ba33cee22863d/
+http://autobuild.buildroot.net/results/b51/b5141b64ed838caa1daca1bf4fe322dd2afaf0b5/
+http://autobuild.buildroot.net/results/a37/a375d533036a1b95af32b6bda086e93174b8c5f0/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v1 -> v2 (after review of Peter Korsgaard and Thomas Petazzoni):
- - Add Thomas's explanation/opinion in commit message
+ package/postgresql/postgresql.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- package/domoticz/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 34bf2521a2..530027f273 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_DOMOTICZ
- 	depends on BR2_USE_MMU # mosquitto
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
- 	depends on !BR2_STATIC_LIBS # mosquitto
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# pthread_condattr_setclock
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-@@ -26,10 +27,11 @@ config BR2_PACKAGE_DOMOTICZ
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 2950470fb950..bf3d2a8733cd 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -2,4 +2,4 @@
+ sha256	fe32009b62ddb97f7f014307ce9d0edb6972f5a698e63cb531088e147d145bad	postgresql-10.2.tar.bz2
  
- 	  http://domoticz.com
- 
--comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
-+comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, NPTL, wchar, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
- 
+ # License file, Locally calculated
+-sha256	7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676	COPYRIGHT
++sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
 -- 
-2.14.1
+2.15.1
