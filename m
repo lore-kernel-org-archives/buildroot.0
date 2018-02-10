@@ -1,63 +1,224 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Feb 2018 10:12:54 +0100
-Subject: [Buildroot] [git commit] libxml2: add security fix
-Message-ID: <20180210091310.D1692882B6@busybox.osuosl.org>
+Date: Sat, 10 Feb 2018 10:13:03 +0100
+Subject: [Buildroot] [git commit] rsync: security bump to version 3.1.3
+Message-ID: <20180210091310.DED82882B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86e027f6d3eee30304da6a4fff84c808cd79182f
+commit: https://git.buildroot.net/buildroot/commit/?id=4652f5940137a03509ea3f4b32e50576a7ff7385
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2017-8872: An attackers can cause a denial of service (buffer
-over-read) or information disclosure.
+Fixes CVE-2018-5764: remote attackers can bypass an
+argument-sanitization protection mechanism
 
-Patch from the upstream bug tracker.
+Drop upstream patches.
+
+Add license file hash.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libxml2/0001-CVE-2017-8872.patch | 33 ++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ .../0001-Check-fname-in-recv_files-sooner.patch    | 45 ----------------------
+ ...0002-Sanitize-xname-in-read_ndx_and_attrs.patch | 39 -------------------
+ ...mon-filter-against-fnamecmp-in-recv_files.patch | 28 --------------
+ ...ailing-0-when-receiving-xattr-name-values.patch | 33 ----------------
+ package/rsync/rsync.hash                           |  5 ++-
+ package/rsync/rsync.mk                             |  2 +-
+ 6 files changed, 5 insertions(+), 147 deletions(-)
 
-diff --git a/package/libxml2/0001-CVE-2017-8872.patch b/package/libxml2/0001-CVE-2017-8872.patch
-new file mode 100644
-index 0000000000..b7a75c19a7
---- /dev/null
-+++ b/package/libxml2/0001-CVE-2017-8872.patch
-@@ -0,0 +1,33 @@
-+From 8b329effb610f4138e4e680f6a6867570f6d6179 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 9 Feb 2018 10:58:11 +0200
-+Subject: [PATCH] CVE-2017-8872
-+
-+Taken from attachment to upstream bug report comment #9.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=775200#c9
-+https://bugzilla.gnome.org/attachment.cgi?id=366193&action=diff
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ parser.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/parser.c b/parser.c
-+index 1c5e036ea265..025111067ae8 100644
-+--- a/parser.c
-++++ b/parser.c
-+@@ -12467,6 +12467,10 @@ xmlHaltParser(xmlParserCtxtPtr ctxt) {
-+ 	ctxt->input->cur = BAD_CAST"";
-+ 	ctxt->input->base = ctxt->input->cur;
-+         ctxt->input->end = ctxt->input->cur;
-++    if (ctxt->input->buf)
-++        xmlBufEmpty (ctxt->input->buf->buffer);
-++    else
-++        ctxt->input->length = 0;
-+     }
-+ }
-+ 
-+-- 
-+2.15.1
-+
+diff --git a/package/rsync/0001-Check-fname-in-recv_files-sooner.patch b/package/rsync/0001-Check-fname-in-recv_files-sooner.patch
+deleted file mode 100644
+index 3616960306..0000000000
+--- a/package/rsync/0001-Check-fname-in-recv_files-sooner.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 3e06d40029cfdce9d0f73d87cfd4edaf54be9c51 Mon Sep 17 00:00:00 2001
+-From: Jeriko One <jeriko.one@gmx.us>
+-Date: Thu, 2 Nov 2017 23:44:19 -0700
+-Subject: [PATCH] Check fname in recv_files sooner.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit 3e06d40029c
+-
+- receiver.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/receiver.c b/receiver.c
+-index baae3a919cdd..9fdafa152cb3 100644
+---- a/receiver.c
+-+++ b/receiver.c
+-@@ -574,6 +574,12 @@ int recv_files(int f_in, int f_out, char *local_name)
+- 			file = dir_flist->files[cur_flist->parent_ndx];
+- 		fname = local_name ? local_name : f_name(file, fbuf);
+- 
+-+		if (daemon_filter_list.head
+-+		    && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0) {
+-+			rprintf(FERROR, "attempt to hack rsync failed.\n");
+-+			exit_cleanup(RERR_PROTOCOL);
+-+		}
+-+
+- 		if (DEBUG_GTE(RECV, 1))
+- 			rprintf(FINFO, "recv_files(%s)\n", fname);
+- 
+-@@ -645,12 +651,6 @@ int recv_files(int f_in, int f_out, char *local_name)
+- 
+- 		cleanup_got_literal = 0;
+- 
+--		if (daemon_filter_list.head
+--		    && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0) {
+--			rprintf(FERROR, "attempt to hack rsync failed.\n");
+--			exit_cleanup(RERR_PROTOCOL);
+--		}
+--
+- 		if (read_batch) {
+- 			int wanted = redoing
+- 				   ? we_want_redo(ndx)
+--- 
+-2.15.0
+-
+diff --git a/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch b/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
+deleted file mode 100644
+index 1e5d3717c4..0000000000
+--- a/package/rsync/0002-Sanitize-xname-in-read_ndx_and_attrs.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 70aeb5fddd1b2f8e143276f8d5a085db16c593b9 Mon Sep 17 00:00:00 2001
+-From: Jeriko One <jeriko.one@gmx.us>
+-Date: Thu, 16 Nov 2017 17:05:42 -0800
+-Subject: [PATCH] Sanitize xname in read_ndx_and_attrs.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit 70aeb5fddd
+-
+- rsync.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/rsync.c b/rsync.c
+-index b82e59881018..a0945ba4e7f5 100644
+---- a/rsync.c
+-+++ b/rsync.c
+-@@ -49,6 +49,7 @@ extern int flist_eof;
+- extern int file_old_total;
+- extern int keep_dirlinks;
+- extern int make_backups;
+-+extern int sanitize_paths;
+- extern struct file_list *cur_flist, *first_flist, *dir_flist;
+- extern struct chmod_mode_struct *daemon_chmod_modes;
+- #ifdef ICONV_OPTION
+-@@ -396,6 +397,11 @@ int read_ndx_and_attrs(int f_in, int f_out, int *iflag_ptr, uchar *type_ptr,
+- 	if (iflags & ITEM_XNAME_FOLLOWS) {
+- 		if ((len = read_vstring(f_in, buf, MAXPATHLEN)) < 0)
+- 			exit_cleanup(RERR_PROTOCOL);
+-+
+-+		if (sanitize_paths) {
+-+			sanitize_path(buf, buf, "", 0, SP_DEFAULT);
+-+			len = strlen(buf);
+-+		}
+- 	} else {
+- 		*buf = '\0';
+- 		len = -1;
+--- 
+-2.15.0
+-
+diff --git a/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch b/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
+deleted file mode 100644
+index b19921c3eb..0000000000
+--- a/package/rsync/0003-Check-daemon-filter-against-fnamecmp-in-recv_files.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 5509597decdbd7b91994210f700329d8a35e70a1 Mon Sep 17 00:00:00 2001
+-From: Jeriko One <jeriko.one@gmx.us>
+-Date: Thu, 16 Nov 2017 17:26:03 -0800
+-Subject: [PATCH] Check daemon filter against fnamecmp in recv_files().
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit 5509597dec
+-
+- receiver.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/receiver.c b/receiver.c
+-index 9fdafa152cb3..9c46242e013c 100644
+---- a/receiver.c
+-+++ b/receiver.c
+-@@ -722,7 +722,7 @@ int recv_files(int f_in, int f_out, char *local_name)
+- 				break;
+- 			}
+- 			if (!fnamecmp || (daemon_filter_list.head
+--			  && check_filter(&daemon_filter_list, FLOG, fname, 0) < 0)) {
+-+			  && check_filter(&daemon_filter_list, FLOG, fnamecmp, 0) < 0)) {
+- 				fnamecmp = fname;
+- 				fnamecmp_type = FNAMECMP_FNAME;
+- 			}
+--- 
+-2.15.0
+-
+diff --git a/package/rsync/0004-Enforce-trailing-0-when-receiving-xattr-name-values.patch b/package/rsync/0004-Enforce-trailing-0-when-receiving-xattr-name-values.patch
+deleted file mode 100644
+index be9040010c..0000000000
+--- a/package/rsync/0004-Enforce-trailing-0-when-receiving-xattr-name-values.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 47a63d90e71d3e19e0e96052bb8c6b9cb140ecc1 Mon Sep 17 00:00:00 2001
+-From: Wayne Davison <wayned@samba.org>
+-Date: Sun, 5 Nov 2017 11:33:15 -0800
+-Subject: [PATCH] Enforce trailing \0 when receiving xattr name values. Fixes
+- bug 13112.
+-
+-Fixes CVE-2017-16548
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+-Patch status: upstream commit 47a63d90e7
+-
+- xattrs.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/xattrs.c b/xattrs.c
+-index 68305d75..4867e6f5 100644
+---- a/xattrs.c
+-+++ b/xattrs.c
+-@@ -824,6 +824,10 @@ void receive_xattr(int f, struct file_struct *file)
+- 			out_of_memory("receive_xattr");
+- 		name = ptr + dget_len + extra_len;
+- 		read_buf(f, name, name_len);
+-+		if (name_len < 1 || name[name_len-1] != '\0') {
+-+			rprintf(FERROR, "Invalid xattr name received (missing trailing \\0).\n");
+-+			exit_cleanup(RERR_FILEIO);
+-+		}
+- 		if (dget_len == datum_len)
+- 			read_buf(f, ptr, dget_len);
+- 		else {
+--- 
+-2.11.0
+-
+diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
+index 6311116141..2da62a18f1 100644
+--- a/package/rsync/rsync.hash
++++ b/package/rsync/rsync.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	ecfa62a7fa3c4c18b9eccd8c16eaddee4bd308a76ea50b5c02a5840f09c0a1c2	rsync-3.1.2.tar.gz
++# https://download.samba.org/pub/rsync/src/rsync-3.1.3.tar.gz.asc
++sha256	55cc554efec5fdaad70de921cd5a5eeb6c29a95524c715f3bbf849235b0800c0	rsync-3.1.3.tar.gz
++# Locally calculated
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index e6b955ae76..52875e428a 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RSYNC_VERSION = 3.1.2
++RSYNC_VERSION = 3.1.3
+ RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPL-3.0+
+ RSYNC_LICENSE_FILES = COPYING
