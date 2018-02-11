@@ -1,38 +1,34 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 11 Feb 2018 17:58:24 +0100
-Subject: [Buildroot] [PATCH 6/6] docs/manual: use RUSTC_{HOST,
- TARGET}_NAME in cargo howto
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Feb 2018 22:30:53 +0100
+Subject: [Buildroot] [PATCH 0/6] use RUSTC_{HOST,TARGET}_NAME
 In-Reply-To: <20180211165824.20213-1-eric.le.bihan.dev@free.fr>
 References: <20180211165824.20213-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180211165824.20213-7-eric.le.bihan.dev@free.fr>
+Message-ID: <20180211223053.4ce19e9b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- docs/manual/adding-packages-cargo.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
-index 3f9ddfed16..b78163e6a1 100644
---- a/docs/manual/adding-packages-cargo.txt
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -49,11 +49,11 @@ package. Let's start with an example:
- 15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
- 16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
- 17:
--18: FOO_BIN_DIR = target/$(RUST_TARGET_NAME)/$(FOO_CARGO_MODE)
-+18: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
- 19:
- 20: FOO_CARGO_OPTS = \
- 21:   --$(FOO_CARGO_MODE) \
--22: 	--target=$(RUST_TARGET_NAME) \
-+22: 	--target=$(RUSTC_TARGET_NAME) \
- 23: 	--manifest-path=$(@D)/Cargo.toml
- 24:
- 25: define FOO_BUILD_CMDS
+On Sun, 11 Feb 2018 17:58:18 +0100, Eric Le Bihan wrote:
+
+> Eric Le Bihan (6):
+>   rustc: use RUSTC_{HOST,TARGET}_NAME
+>   rust-bin: use RUSTC_{HOST,TARGET}_NAME
+>   cargo-bin: use RUSTC_{HOST,TARGET}_NAME
+>   rust: use RUSTC_{HOST,TARGET}_NAME
+>   cargo: use RUSTC_{HOST,TARGET}_NAME
+>   docs/manual: use RUSTC_{HOST,TARGET}_NAME in cargo howto
+
+Thanks for working on this. However, all those patches should be
+squashed into one, otherwise the series is not bisectable. Indeed, if
+only PATCH 1/6 is applied, everything is broken, because packages
+continue to use RUST_{HOST,TARGET}_NAME.
+
+Thomas
 -- 
-2.14.3
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
