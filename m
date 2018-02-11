@@ -1,230 +1,189 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun, 11 Feb 2018 18:56:49 +0300
-Subject: [Buildroot] [PATCH/next 2/2] orange-pi-zero-plus2: enable WiFi
- support
-In-Reply-To: <20180211155649.21996-1-geomatsi@gmail.com>
-References: <20180211155649.21996-1-geomatsi@gmail.com>
-Message-ID: <20180211155649.21996-3-geomatsi@gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Sun, 11 Feb 2018 11:13:18 -0500
+Subject: [Buildroot] [RFC 0/2] Qt5 bump latest version to 5.10.0
+Message-ID: <20180211161320.8864-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Orange-Pi Zero Plus2 board has AP6212 WiFi/BT combo, but does
-not have ethernet port. So it makes sense to enable wireless
-networking by default:
+Dear maintainers,
 
-- add DTS patch enabling AP6212 WiFi/BT combo support
-  -- this patch is on its way to mainline Linux v4.16
-- enable WiFi support in kernel config
-- enable Broadcom brcmfmac kernel driver in kernel config
-- add Broadcom wireless firmware package to image
-- add basic wireless tools to image
-- add mdev to image to enable module autoloading
-- add rootfs overlay with proper NVRAM file for on-board AP6212 chip
+I am working on bumping the latest version of Qt to 5.10. All modules
+except qtwebengine compile fine (on PC x86-64 BIOS configuration); and
+they are not tested yet.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
----
- .../orangepi-zero-plus2/linux-extras.config        | 10 +++
- ...64-dts-orange-pi-zero-plus2-enable-ap6212.patch | 73 ++++++++++++++++++++++
- .../lib/firmware/brcm/brcmfmac43430-sdio.txt       | 54 ++++++++++++++++
- configs/orangepi_zero_plus2_defconfig              | 17 ++++-
- 4 files changed, 153 insertions(+), 1 deletion(-)
- create mode 100644 board/orangepi/orangepi-zero-plus2/linux-extras.config
- create mode 100644 board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
- create mode 100644 board/orangepi/orangepi-zero-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.txt
+The first patch updates all hashes for all Qt5 modules; at the exception
+of qtwebkit (and qtwebkit-samples) that stay in 5.9.
 
-diff --git a/board/orangepi/orangepi-zero-plus2/linux-extras.config b/board/orangepi/orangepi-zero-plus2/linux-extras.config
-new file mode 100644
-index 0000000000..52b4b4b29e
---- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/linux-extras.config
-@@ -0,0 +1,10 @@
-+# wireless core
-+CONFIG_WIRELESS=y
-+CONFIG_CFG80211=y
-+CONFIG_MAC80211=y
-+CONFIG_CFG80211_WEXT=y
-+
-+# wireless drivers
-+CONFIG_WLAN=y
-+CONFIG_WLAN_VENDOR_BROADCOM=y
-+CONFIG_BRCMFMAC=m
-diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch b/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
-new file mode 100644
-index 0000000000..282e2171f2
---- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
-@@ -0,0 +1,73 @@
-+From: Sergey Matyukevich <geomatsi@gmail.com>
-+Date: Sun, 11 Feb 2018 16:21:43 +0300
-+Subject: [PATCH] arm64: dts: orange-pi-zero-plus2: enable AP6212a WiFi/BT combo
-+
-+Enable AP6212a WiFi/BT combo chip on orange-pi-zero-plus2 board:
-+- WiFi SDIO interface is connected to MMC1
-+- WiFi REG_ON pin connected to gpio PA9: attach to mmc-pwrseq
-+- WiFi HOST_WAKE pin connected to gpio PL7
-+- BT is connected to UART1
-+
-+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-+---
-+ .../allwinner/sun50i-h5-orangepi-zero-plus2.dts    | 32 ++++++++++++++++++++++
-+ 1 file changed, 32 insertions(+)
-+
-+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
-+index a42fd79a62a3..d415b7b67cce 100644
-+--- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
-++++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
-+@@ -64,6 +64,13 @@
-+ 		regulator-min-microvolt = <3300000>;
-+ 		regulator-max-microvolt = <3300000>;
-+ 	};
-++
-++	wifi_pwrseq: wifi_pwrseq {
-++		compatible = "mmc-pwrseq-simple";
-++		pinctrl-names = "default";
-++		reset-gpios = <&pio 0 9 GPIO_ACTIVE_LOW>; /* PA9 */
-++		post-power-on-delay-ms = <200>;
-++	};
-+ };
-+ 
-+ &mmc0 {
-+@@ -75,6 +82,25 @@
-+ 	status = "okay";
-+ };
-+ 
-++&mmc1 {
-++	pinctrl-names = "default";
-++	pinctrl-0 = <&mmc1_pins_a>;
-++	vmmc-supply = <&reg_vcc3v3>;
-++	vqmmc-supply = <&reg_vcc3v3>;
-++	mmc-pwrseq = <&wifi_pwrseq>;
-++	bus-width = <4>;
-++	non-removable;
-++	status = "okay";
-++
-++	brcmf: wifi at 1 {
-++		reg = <1>;
-++		compatible = "brcm,bcm4329-fmac";
-++		interrupt-parent = <&r_pio>;
-++		interrupts = <0 7 IRQ_TYPE_LEVEL_LOW>;	/* PL7 */
-++		interrupt-names = "host-wake";
-++	};
-++};
-++
-+ &mmc2 {
-+ 	pinctrl-names = "default";
-+ 	pinctrl-0 = <&mmc2_8bit_pins>;
-+@@ -90,3 +116,9 @@
-+ 	pinctrl-0 = <&uart0_pins_a>;
-+ 	status = "okay";
-+ };
-++
-++&uart1 {
-++	pinctrl-names = "default";
-++	pinctrl-0 = <&uart1_pins>, <&uart1_rts_cts_pins>;
-++	status = "okay";
-++};
-+-- 
-+2.16.1
-+
-diff --git a/board/orangepi/orangepi-zero-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.txt b/board/orangepi/orangepi-zero-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.txt
-new file mode 100644
-index 0000000000..8f0bf69063
---- /dev/null
-+++ b/board/orangepi/orangepi-zero-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.txt
-@@ -0,0 +1,54 @@
-+#AP6212_NVRAM_V1.0_20140603
-+# 2.4 GHz, 20 MHz BW mode
-+
-+# The following parameter values are just placeholders, need to be updated.
-+manfid=0x2d0
-+prodid=0x0726
-+vendid=0x14e4
-+devid=0x43e2
-+boardtype=0x0726
-+boardrev=0x1101
-+boardnum=22
-+macaddr=00:90:4c:c5:12:38
-+sromrev=11
-+boardflags=0x00404201
-+xtalfreq=26000
-+nocrc=1
-+ag0=255
-+aa2g=1
-+ccode=ALL
-+
-+pa0itssit=0x20
-+extpagain2g=0
-+
-+#PA parameters for 2.4GHz, measured at CHIP OUTPUT
-+pa2ga0=-168,7161,-820
-+AvVmid_c0=0x0,0xc8
-+cckpwroffset0=5
-+
-+# PPR params
-+maxp2ga0=90
-+txpwrbckof=6
-+cckbw202gpo=0x5555
-+legofdmbw202gpo=0x77777777
-+mcsbw202gpo=0xaaaaaaaa
-+
-+# OFDM IIR :
-+ofdmdigfilttype=7
-+# PAPD mode:
-+papdmode=2
-+
-+il0macaddr=00:90:4c:c5:12:38
-+wl0id=0x431b
-+
-+#OOB parameters
-+hostwake=0x40
-+hostrdy=0x41
-+usbrdy=0x03
-+usbrdydelay=100
-+deadman_to=0xffffffff
-+# muxenab: 0x1 for UART enable, 0x10 for Host awake
-+muxenab=0x10
-+# CLDO PWM voltage settings - 0x4 - 1.1 volt
-+#cldo_pwm=0x4
-+
-diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-index 7906dba5c7..5ca6cf0fe2 100644
---- a/configs/orangepi_zero_plus2_defconfig
-+++ b/configs/orangepi_zero_plus2_defconfig
-@@ -2,8 +2,10 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
- 
--# Linux headers same as kernel, a 4.15 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
-+BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
- 
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-@@ -35,6 +37,19 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.2"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero-plus2/linux-extras.config"
-+
-+# wireless firmware
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
-+
-+# wireless tools
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
-+BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
- 
- # Filesystem
- BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero Plus2"
+Unfortunately filename has changed since 5.10. The module suffix
+*opensource-src* has changed to *everywhere-src*. I introduced the
+*qt5source* function to compute automatically the right filename
+according to the Qt version. This function takes the module as first
+argument and its version as second argument.
+
+The second patch add libnss dependency to qtwebengine 5.10 to fix a new
+requirement.
+
+But I met a link issue with an 64bit host tool with lpthread. If someone
+may help about this issue...
+
+	FAILED: host/transport_security_state_generator 
+	/home/gportay/src/buildroot/output-qt5.10/host/bin/python2 "../../3rdparty/chromium/build/toolchain/gcc_link_wrapper.py" --output="host/transport_security_state_generator" -- /usr/bin/g++ -Wl,--fatal-warnings -fPIC -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -Wl,--no-as-needed -lpthread -Wl,--as-needed -m64 -Wl,-O1 -Wl,--gc-sections -Wl,-rpath-link=host -Wl,--disable-new-dtags -L/home/gportay/src/buildroot/output-qt5.10/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib -o "host/transport_security_state_generator" -Wl,--start-group @"host/transport_security_state_generator.rsp"  -Wl,--end-group   -ldl -lpthread -lrt -lnss3 -lnssutil3 -lsmime3 -lplds4 -lplc4 -lnspr4 
+	/usr/bin/ld: cannot find /lib64/libpthread.so.0
+	/usr/bin/ld: cannot find /usr/lib64/libpthread_nonshared.a
+	collect2: error: ld returned 1 exit status
+	ninja: build stopped: subcommand failed.
+	Makefile.gn_run:449: recipe for target 'run_ninja' failed
+
+The libpthread.so present in host directory is a ld script:
+
+	$ cat host/x86_64-buildroot-linux-gnu/sysroot/usr/lib64/libpthread.so 
+	/* GNU ld script
+	   Use the shared library, but some functions are only in
+	   the static library, so try that secondarily.  */
+	OUTPUT_FORMAT(elf64-x86-64)
+	GROUP ( /lib64/libpthread.so.0 /usr/lib64/libpthread_nonshared.a )
+
+When the script is removed, I met another link issue with other
+libraries.
+
+	/usr/bin/ld: cannot find /lib64/libm.so.6
+	/usr/bin/ld: cannot find /usr/lib64/libmvec_nonshared.a
+	/usr/bin/ld: cannot find /lib64/libmvec.so.1
+
+I also noticed a build issue with qtmultimedia, qtwayland and qtwebkit
+when using mesa3d as EGL library without X. When BR2_PACKAGE_LIBXCB is
+set the issue is gone.
+
+	/home/gportay/src/buildroot/output-qt5.10/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:118:22: fatal error: X11/Xlib.h: No such file or directory
+	 #include <X11/Xlib.h>
+	                      ^
+	compilation terminated.
+
+Theses following hunks fix the issue.
+
+	diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+	index 6df96bcab4..c890b31804 100644
+	--- a/package/qt5/qt5multimedia/qt5multimedia.mk
+	+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+	@@ -34,8 +34,12 @@ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+	 QT5MULTIMEDIA_DEPENDENCIES += alsa-lib
+	 endif
+
+	+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+	+QT5MULTIMEDIA_QMAKEFLAGS += QMAKE_CXXFLAGS+=-DMESA_EGL_NO_X11_HEADERS
+	+endif
+	+
+	 define QT5MULTIMEDIA_CONFIGURE_CMDS
+	-       (cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+	+       (cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake $(QT5MULTIMEDIA_QMAKEFLAGS))
+	 endef
+
+	 define QT5MULTIMEDIA_BUILD_CMDS
+	diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
+	index 0a7bdb8cf9..81f514c6a1 100644
+	--- a/package/qt5/qt5wayland/qt5wayland.mk
+	+++ b/package/qt5/qt5wayland/qt5wayland.mk
+	@@ -26,6 +26,10 @@ ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
+	 QT5WAYLAND_QMAKEFLAGS += CONFIG+=wayland-compositor
+	 endif
+
+	+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+	+QT5WAYLAND_QMAKEFLAGS += QMAKE_CXXFLAGS+=-DMESA_EGL_NO_X11_HEADERS
+	+endif
+	+
+	 define QT5WAYLAND_CONFIGURE_CMDS
+		(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake $(QT5WAYLAND_QMAKEFLAGS))
+	 endef
+	diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+	index 3b218a5385..f67bb50899 100644
+	--- a/package/qt5/qt5webkit/qt5webkit.mk
+	+++ b/package/qt5/qt5webkit/qt5webkit.mk
+	@@ -44,8 +44,12 @@ define QT5WEBKIT_PYTHON2_SYMLINK
+	 endef
+	 QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
+
+	+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+	+QT5WEBKIT_QMAKEFLAGS += QMAKE_CXXFLAGS+=-DMESA_EGL_NO_X11_HEADERS
+	+endif
+	+
+	 define QT5WEBKIT_CONFIGURE_CMDS
+	-       (cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/bin/qmake)
+	+       (cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/bin/qmake $(QT5WEBKIT_QMAKEFLAGS))
+	 endef
+
+	 define QT5WEBKIT_BUILD_CMDS
+
+The issue is present in Qt 5.9; that is why I did not send these patches
+withing this patch series. I will send them latter. I probably have to
+check for both BR2_PACKAGE_MESA3D_OPENGL_EGL and !BR2_PACKAGE_LIBXCB
+before setting the cflag MESA_EGL_NO_X11_HEADERS.
+
+Regards,
+Ga?l PORTAY (2):
+  qt5: bump to 5.10.0
+  qt5webengine: select libnss
+
+ package/qt5/Config.in                                    | 4 ++--
+ package/qt5/qt5.mk                                       | 8 ++++++--
+ package/qt5/qt53d/qt53d.hash                             | 4 ++--
+ package/qt5/qt53d/qt53d.mk                               | 2 +-
+ package/qt5/qt5base/qt5base.hash                         | 4 ++--
+ package/qt5/qt5base/qt5base.mk                           | 2 +-
+ package/qt5/qt5canvas3d/qt5canvas3d.hash                 | 4 ++--
+ package/qt5/qt5canvas3d/qt5canvas3d.mk                   | 2 +-
+ package/qt5/qt5charts/qt5charts.hash                     | 4 ++--
+ package/qt5/qt5charts/qt5charts.mk                       | 2 +-
+ package/qt5/qt5connectivity/qt5connectivity.hash         | 4 ++--
+ package/qt5/qt5connectivity/qt5connectivity.mk           | 2 +-
+ package/qt5/qt5declarative/qt5declarative.hash           | 4 ++--
+ package/qt5/qt5declarative/qt5declarative.mk             | 2 +-
+ package/qt5/qt5enginio/qt5enginio.mk                     | 2 +-
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 4 ++--
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk   | 2 +-
+ package/qt5/qt5imageformats/qt5imageformats.hash         | 4 ++--
+ package/qt5/qt5imageformats/qt5imageformats.mk           | 2 +-
+ package/qt5/qt5location/qt5location.hash                 | 4 ++--
+ package/qt5/qt5location/qt5location.mk                   | 2 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash             | 4 ++--
+ package/qt5/qt5multimedia/qt5multimedia.mk               | 2 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash       | 4 ++--
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk         | 2 +-
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash     | 4 ++--
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk       | 2 +-
+ package/qt5/qt5script/qt5script.hash                     | 4 ++--
+ package/qt5/qt5script/qt5script.mk                       | 2 +-
+ package/qt5/qt5scxml/qt5scxml.hash                       | 4 ++--
+ package/qt5/qt5scxml/qt5scxml.mk                         | 2 +-
+ package/qt5/qt5sensors/qt5sensors.hash                   | 4 ++--
+ package/qt5/qt5sensors/qt5sensors.mk                     | 2 +-
+ package/qt5/qt5serialbus/qt5serialbus.hash               | 4 ++--
+ package/qt5/qt5serialbus/qt5serialbus.mk                 | 2 +-
+ package/qt5/qt5serialport/qt5serialport.hash             | 4 ++--
+ package/qt5/qt5serialport/qt5serialport.mk               | 2 +-
+ package/qt5/qt5svg/qt5svg.hash                           | 4 ++--
+ package/qt5/qt5svg/qt5svg.mk                             | 2 +-
+ package/qt5/qt5tools/qt5tools.hash                       | 4 ++--
+ package/qt5/qt5tools/qt5tools.mk                         | 2 +-
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash   | 4 ++--
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk     | 2 +-
+ package/qt5/qt5wayland/qt5wayland.hash                   | 4 ++--
+ package/qt5/qt5wayland/qt5wayland.mk                     | 2 +-
+ package/qt5/qt5webchannel/qt5webchannel.hash             | 4 ++--
+ package/qt5/qt5webchannel/qt5webchannel.mk               | 2 +-
+ package/qt5/qt5webengine/Config.in                       | 1 +
+ package/qt5/qt5webengine/qt5webengine.hash               | 4 ++--
+ package/qt5/qt5webengine/qt5webengine.mk                 | 4 ++--
+ package/qt5/qt5webkit-examples/qt5webkit-examples.mk     | 2 +-
+ package/qt5/qt5websockets/qt5websockets.hash             | 4 ++--
+ package/qt5/qt5websockets/qt5websockets.mk               | 2 +-
+ package/qt5/qt5x11extras/qt5x11extras.hash               | 4 ++--
+ package/qt5/qt5x11extras/qt5x11extras.mk                 | 2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash           | 4 ++--
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk             | 2 +-
+ 57 files changed, 90 insertions(+), 85 deletions(-)
+
 -- 
-2.16.1
+2.15.1
