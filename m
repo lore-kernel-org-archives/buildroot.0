@@ -1,75 +1,65 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 11 Feb 2018 17:58:19 +0100
-Subject: [Buildroot] [PATCH 1/6] rustc: use RUSTC_{HOST,TARGET}_NAME
+Date: Sun, 11 Feb 2018 17:58:20 +0100
+Subject: [Buildroot] [PATCH 2/6] rust-bin: use RUSTC_{HOST,TARGET}_NAME
 In-Reply-To: <20180211165824.20213-1-eric.le.bihan.dev@free.fr>
 References: <20180211165824.20213-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180211165824.20213-2-eric.le.bihan.dev@free.fr>
+Message-ID: <20180211165824.20213-3-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-utils/check-package complains as follows:
-
-  package/rustc/rustc.mk:10: possible typo: RUST_TARGET_NAME -> *RUSTC*
-  package/rustc/rustc.mk:18: possible typo: RUST_HOST_NAME -> *RUSTC*
-
-As RUST_{HOST,TARGET}_NAME are related to the Rust compiler, it sounds
-sensible to rename them to RUSTC_{HOST,TARGET}_NAME.
-
-To make it even more happy, clean up Config.in.host too.
-
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/rustc/Config.in.host | 3 +--
- package/rustc/rustc.mk       | 4 ++--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/rust-bin/rust-bin.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index d93ff05209..bdbe488f48 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	bool
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	# The pre-built Rust standard library is only available for the
- 	# following architectures/ABIs, and is built against glibc.
- 	default y if BR2_i386
-@@ -12,6 +11,7 @@ config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
- 		&& BR2_MIPS_NABI64
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
+index 5ace7bf08f..cd5844b115 100644
+--- a/package/rust-bin/rust-bin.mk
++++ b/package/rust-bin/rust-bin.mk
+@@ -11,13 +11,13 @@ RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
  
- config BR2_PACKAGE_HOST_RUSTC_ARCH
- 	string
-@@ -76,4 +76,3 @@ config BR2_PACKAGE_PROVIDES_HOST_RUSTC
- 	default "host-rust-bin" if BR2_PACKAGE_HOST_RUST_BIN
+ HOST_RUST_BIN_PROVIDES = host-rustc
  
+-HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUST_HOST_NAME).tar.xz
++HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+ 
+ HOST_RUST_BIN_EXTRA_DOWNLOADS = \
+-	rust-std-$(RUST_BIN_VERSION)-$(RUST_HOST_NAME).tar.xz \
+-	rust-std-$(RUST_BIN_VERSION)-$(RUST_TARGET_NAME).tar.xz
++	rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz \
++	rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
+ 
+-HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUST_BIN_VERSION)-$(RUST_HOST_NAME)/rust-std-$(RUST_HOST_NAME)
++HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME)/rust-std-$(RUSTC_HOST_NAME)
+ 
+ define HOST_RUST_BIN_LIBSTD_EXTRACT
+ 	mkdir -p $(@D)/std
+@@ -26,7 +26,7 @@ define HOST_RUST_BIN_LIBSTD_EXTRACT
+ 			$(TAR) -C $(@D)/std $(TAR_OPTIONS) -
+ 	)
+ 	cd $(@D)/rustc/lib/rustlib; \
+-		ln -sf ../../../std/$(HOST_RUST_BIN_LIBSTD_HOST_PREFIX)/lib/rustlib/$(RUST_HOST_NAME)
++		ln -sf ../../../std/$(HOST_RUST_BIN_LIBSTD_HOST_PREFIX)/lib/rustlib/$(RUSTC_HOST_NAME)
+ endef
+ 
+ HOST_RUST_BIN_POST_EXTRACT_HOOKS += HOST_RUST_BIN_LIBSTD_EXTRACT
+@@ -42,12 +42,12 @@ define HOST_RUST_BIN_INSTALL_RUSTC
+ endef
+ 
+ define HOST_RUST_BIN_INSTALL_LIBSTD_HOST
+-	(cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUST_HOST_NAME); \
++	(cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME); \
+ 		./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
+ endef
+ 
+ define HOST_RUST_BIN_INSTALL_LIBSTD_TARGET
+-	(cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUST_TARGET_NAME); \
++	(cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME); \
+ 		./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
+ endef
  endif
--
-diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
-index 7a951c0cfd..bed74f3c2c 100644
---- a/package/rustc/rustc.mk
-+++ b/package/rustc/rustc.mk
-@@ -7,7 +7,7 @@
- RUSTC_ARCH = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ARCH))
- RUSTC_ABI = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ABI))
- 
--RUST_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
-+RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
- 
- ifeq ($(HOSTARCH),x86)
- RUSTC_HOST_ARCH = i686
-@@ -15,6 +15,6 @@ else
- RUSTC_HOST_ARCH = $(HOSTARCH)
- endif
- 
--RUST_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
-+RUSTC_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
- 
- $(eval $(host-virtual-package))
 -- 
 2.14.3
