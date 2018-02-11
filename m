@@ -1,192 +1,84 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Feb 2018 17:21:36 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/piglit: new package
-In-Reply-To: <20180211162136.15605-1-romain.naour@gmail.com>
-References: <20180211162136.15605-1-romain.naour@gmail.com>
-Message-ID: <20180211162136.15605-3-romain.naour@gmail.com>
+From: Alex Baldwin <alexbaldwinmusic@gmail.com>
+Date: Sun, 11 Feb 2018 17:25:25 +0100
+Subject: [Buildroot] [PATCH v2 1/1] LIBLO : bump version to 0.29
+In-Reply-To: <20180210184552.14500165@windsurf.lan>
+References: <1518118669-24714-1-git-send-email-alexbaldwinmusic@gmail.com>
+ <20180208230400.06741487@windsurf.lan>
+ <CA+bRTvCnigi1UKbkhQv2zGy0vCshgDfzGuOnvv_PjVMXq-_Qgw@mail.gmail.com>
+ <20180210184552.14500165@windsurf.lan>
+Message-ID: <CA+bRTvDn01oj1dD0NSDaOif8DPSFWLyCjFCGZu8Z=+W_zc_dtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Piglit is an open-source test suite for OpenGL implementations.
-It's an python3 script based around several tools like glxinfo,
-wflinfo, dmesg.
+Hi Thomas (sorry about the double message, forgot to include the mailing list!)
 
-Even though waffle support can be replaced by freeglut,
-using pliglit with waffle is recommended since freeglut
-will be replaced by waffle.
+On 10 February 2018 at 18:45, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello Alex,
+>
+> On Sat, 10 Feb 2018 17:19:16 +0100, Alex Baldwin wrote:
+>
+>> I  am not sure the best place to address this so please correct me :) I
+>> noticed that this patch failed with your submission as well as Matt
+>> Webber's, but for different reasons.
+>>
+>> It seems that on yours
+>> http://autobuild.buildroot.net/results/71a6d7e02a50f6cb53c70c38e82e2a2ae8af13ea/build-end.log
+>> there is a warning about having to redirect <sys/poll.h> to <poll.h> in the
+>> file "server.c:54". This could be sorted with a simple patch, is it
+>> acceptable to patch for this?
+>
+> Yes, it is acceptable. In addition to fixing this particular problem,
+> it would be nice to avoid using -Werror. Indeed, the problem here is
+> that this warning is treated as an error, causing a build failure.
+>
+> While -Werror makes sense during development, it doesn't make much
+> sense for releases.
+>
+>> On Matt's
+>> http://autobuild.buildroot.net/results/c8b/c8bed3a3fa7d2b2258f573cbfcb01af07419e0bf/build-end.log
+>> we fail because undefined reference to  __atomic_fetch_add_4 . I think a
+>> possible fix could be manually linking to libatomic. I am not entirely sure
+>> why, seems that some compilers are happy to find libatomic on their own and
+>> others aren't. Is this something that buildroot would normally patch for?
+>
+> The libatomic situation depends on the architecture. On most
+> architectures, __atomic_fetch_add_4 is a compiler builtin, so you don't
+> need to link with libatomic.
+>
+> However, on SPARC (which is the CPU architecture on which this build
+> failure occurs), libatomic is needed for __atomic_fetch_add_4.
+>
+> You have two solutions to handle that:
+>
+>  (1) Just pass LIBS="-latomic" in LIBLO_CONF_ENV when
+>      BR2_TOOLCHAIN_HAS_LIBATOMIC=y
+>
+>  (2) Patch the configure.ac script so that it tests if linking with
+>      libatomic is needed or not, and links with it if needed.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-Bernd, I'm Cc you since you're probably interested by piglit to
-test new mesa3d version.
 
-v2: bump version
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/piglit/Config.in   | 35 +++++++++++++++++++++++
- package/piglit/piglit.hash |  6 ++++
- package/piglit/piglit.mk   | 69 ++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 112 insertions(+)
- create mode 100644 package/piglit/Config.in
- create mode 100644 package/piglit/piglit.hash
- create mode 100644 package/piglit/piglit.mk
+>
+> In any case, if you do a patch against liblo, don't forget to submit it
+> upstream.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0e19f6a94e..31831ef9ed 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1513,6 +1513,7 @@ F:	package/minetest/
- F:	package/minetest-game/
- F:	package/openpowerlink/
- F:	package/physfs/
-+F:	package/piglit/
- F:	package/solarus/
- F:	package/stress-ng/
- F:	package/supertux/
-diff --git a/package/Config.in b/package/Config.in
-index 0622ec49b4..7e653301d6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -113,6 +113,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/nmon/Config.in"
- 	source "package/oprofile/Config.in"
- 	source "package/pax-utils/Config.in"
-+	source "package/piglit/Config.in"
- 	source "package/pv/Config.in"
- 	source "package/racehound/Config.in"
- 	source "package/ramsmp/Config.in"
-diff --git a/package/piglit/Config.in b/package/piglit/Config.in
-new file mode 100644
-index 0000000000..eaa19c17ba
---- /dev/null
-+++ b/package/piglit/Config.in
-@@ -0,0 +1,35 @@
-+config BR2_PACKAGE_PIGLIT
-+	bool "piglit"
-+	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_PYTHON3 # python3 only script
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	select BR2_PACKAGE_MESA3D_DEMOS # glxinfo
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XPROTO_GLPROTO if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_PYTHON_MAKO
-+	select BR2_PACKAGE_PYTHON_NUMPY
-+	select BR2_PACKAGE_PYTHON_SIX
-+	select BR2_PACKAGE_PYTHON3_BZIP2
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
-+	select BR2_PACKAGE_PYTHON3_XZ
-+	select BR2_PACKAGE_PYTHON3_ZLIB
-+	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES # require real dmesg tool
-+	select BR2_PACKAGE_WAFFLE # wflinfo
-+	help
-+	  Piglit is an open-source test suite for OpenGL
-+	  implementations.
-+
-+	  https://piglit.freedesktop.org
-+
-+comment "piglit needs an OpenGL GL or EGL provider"
-+	depends on BR2_PACKAGE_XORG7 || BR2_PACKAGE_WAYLAND
-+	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBEGL
-diff --git a/package/piglit/piglit.hash b/package/piglit/piglit.hash
-new file mode 100644
-index 0000000000..cf5b46afae
---- /dev/null
-+++ b/package/piglit/piglit.hash
-@@ -0,0 +1,6 @@
-+# Locally calculated
-+sha256 7e9ba2d1282eab81bc9ac5dd6158190bc7015f063708926aa6bf6723f14f23d9  piglit-5153c0bd89ca78e4dd56cc0917930909fa085eb0.tar.gz
-+sha256 dcc398730859aee7cc1d6aa57f526f8d181b47bb3a49830e85b5723d5bc2c3bc  COPYING
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licences/GPL-2
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  licences/GPL-3
-+sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  licences/LGPL-2
-diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
-new file mode 100644
-index 0000000000..c33a8f9022
---- /dev/null
-+++ b/package/piglit/piglit.mk
-@@ -0,0 +1,69 @@
-+################################################################################
-+#
-+# piglit
-+#
-+################################################################################
-+
-+PIGLIT_VERSION = 5153c0bd89ca78e4dd56cc0917930909fa085eb0
-+PIGLIT_SITE = https://anongit.freedesktop.org/git/piglit.git
-+PIGLIT_SITE_METHOD = git
-+PIGLIT_LICENSE = MIT (code), \
-+	LGPL-2.0+ (libpiglit*.so), \
-+	GPL-3.0 (tests/glslparsertest/glsl2/norsetto-*), \
-+	GPL-2.0+ (tests/glslparsertest/glsl2/gst-gl-*), \
-+	BSD-3-Clause (tests/glslparsertest/shaders/*)
-+PIGLIT_LICENSE_FILES = COPYING licences/GPL-2 licences/GPL-3 licences/LGPL-2
-+
-+PIGLIT_DEPENDENCIES = host-pkgconf \
-+	host-python-mako \
-+	host-python-numpy \
-+	host-python-six \
-+	libpng \
-+	python-mako \
-+	python-numpy \
-+	python-six \
-+	waffle \
-+	zlib
-+
-+PIGLIT_CONF_OPTS += \
-+	-DPIGLIT_USE_WAFFLE=ON \
-+	-DPIGLIT_BUILD_CL_TESTS=OFF \
-+	-DPIGLIT_BUILD_WGL_TESTS=OFF
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+# libxcb for xcb-dri2
-+PIGLIT_DEPENDENCIES += \
-+	xlib_libX11 \
-+	xlib_libXext \
-+	xproto_glproto \
-+	$(if $(BR2_PACKAGE_LIBXCB),libxcb)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+PIGLIT_DEPENDENCIES += libgl libdrm
-+PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GL_TESTS=ON
-+else
-+PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GL_TESTS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_HAS_LIBGL),yy)
-+PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLX_TESTS=ON
-+else
-+PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLX_TESTS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
-+PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLES1_TESTS=ON \
-+	-DPIGLIT_BUILD_GLES2_TESTS=ON \
-+	-DPIGLIT_BUILD_GLES3_TESTS=ON
-+else
-+PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLES1_TESTS=OFF \
-+	-DPIGLIT_BUILD_GLES2_TESTS=OFF \
-+	-DPIGLIT_BUILD_GLES3_TESTS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+PIGLIT_DEPENDENCIES += wayland libxkbcommon
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.14.3
+When submitting this patch should I include it as V3 (as V2 failed),
+with all the original patches and ammend the changlog or simply just
+submit the new changes?
+
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
+
+Thanks,
+
+Alex
