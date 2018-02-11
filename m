@@ -1,62 +1,31 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Sun, 11 Feb 2018 09:49:26 -0500
-Subject: [Buildroot] [PATCH 1/1] qt5webkit: add missing icu dependency
-In-Reply-To: <20180211101445.51c63dab@windsurf.lan>
-References: <20180211020330.32658-1-gael.portay@savoirfairelinux.com>
- <20180211101445.51c63dab@windsurf.lan>
-Message-ID: <20180211144926.jgne5lnzvlmoeq75@archlinux>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sun, 11 Feb 2018 18:56:47 +0300
+Subject: [Buildroot] [PATCH/next 0/2] orange-pi-zero-plus2: BSP update and
+ WiFi support
+Message-ID: <20180211155649.21996-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi all,
 
-On Sun, Feb 11, 2018 at 10:14:45AM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat, 10 Feb 2018 21:03:30 -0500, Ga?l PORTAY wrote:
-> 
-> > The Config.in is already selecting BR2_PACKAGE_QT5BASE_ICU but the
-> > dependency is missing from the QT5WEBKIT_DEPENDENCIES list in
-> > qt5webkit.mk.
-> 
-> And qt5base.mk has:
-> 
-> QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
-> 
-> and in turn, qt5webkit depends on qt5base.
-> 
-
-Good catch !
-
-> Therefore, I don't see how you can fall into the situation where the
-> qt5webkit build is started without icu being already built.
-> 
-> Could you explain ?
-> 
-
-Well, I do not remember exactly the situation :/
-
-It happened in development. I assume I had a qtbase already build
-(certainly without ICU support). And then, I build qtwebkit running
-`make qt5webkit`, the issue happened.
-
-BTW, I made a quick look to qtwebkit, and it does not seem to call some
-Qt ICU symbols. It looks qtwebkit requires ICU for its own needs.
-
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> http://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Here are two patches for Orange Pi Zero Plus2 board. The first
+patch updates mainline kernel and U-Boot versions. The second
+patch enables wireless networking by default on that board.
 
 Regards,
-Gael
+Sergey
+
+Sergey Matyukevich (2):
+  orange-pi-zero-plus2: bump kernel and u-boot versions
+  orange-pi-zero-plus2: enable WiFi support
+
+
+ board/orangepi/orangepi-zero-plus2/linux-extras.config                                                           |   10 +
+ board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch   |   73 ++++++++++
+ board/orangepi/orangepi-zero-plus2/rootfs_overlay/lib/firmware/brcm/brcmfmac43430-sdio.txt                       |   54 +++++++
+ configs/orangepi_zero_plus2_defconfig                                                                            |   24 ++-
+ board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-fix-sdcard-detect.patch |   30 ----
+ 5 files changed, 155 insertions(+), 36 deletions(-)
