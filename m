@@ -1,40 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 11 Feb 2018 23:11:26 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.3
-Message-ID: <20180211221126.4932-1-fontaine.fabrice@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 11 Feb 2018 23:44:02 -0200
+Subject: [Buildroot] [next] listing of tests is broken
+References: <20180209110643.7977e3ba@windsurf.lan>
+Message-ID: <5a80f162d1e9e_5e516a461c185b1@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index c72565d2bf..c75854d2ac 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 e5101b6c0416d26b8ce2dd3fcdd779eacd93d765a1872789ba099a5f31a338e7  cjson-v1.7.2.tar.gz
-+sha256 726a60137ab1aa6784dc575bf7d4c92f5367e937739c8bffcddce79071cf5f50  cjson-v1.7.3.tar.gz
- sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 31d57e1f2b..08020c48f6 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CJSON_VERSION = v1.7.2
-+CJSON_VERSION = v1.7.3
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
--- 
-2.14.1
+It happens on the master branch too.
+
+On Fri, Feb 09, 2018 at 08:06 AM, Thomas Petazzoni wrote:
+
+> On Fri, 9 Feb 2018 10:04:37 +0100, Yegor Yefremov wrote:
+> 
+>> > I have not yet decided if the right fix is to replace config = None by
+>> > config = list() in the base test class, or to fix the Rust test case.  
+>> 
+>> I'm for the first fix: config = list()
+> 
+> Before going with this fix, I'd like to understand if what the Rust
+> tests are doing is legit or not. If it isn't, then we may not
+> necessarily want to paper over the problem.
+
+The correct fix IMO is to change the Rust test case.
+
+With the current code, nose2 will collect 3 test cases from the file:
+TestRustBase, TestRustBin and TestRust. It happens because all three have a
+method called test_something. But TestRustBase is not a test case by itself.
+
+So we should move the test_* method from the base class to the 2 derived classes
+(yes, duplicating the code), like it is already done by the 'init' test cases.
+
+An alternative solution is to rename the method in the base class to not start
+with test_ and create a test_run method in each derived class calling it. The
+method is short, so I don't think we need to do this.
+
+
+With the listing of tests broken, also 'make .gitlab-ci.yml' is broken. Based
+only on this I would say we should fix that on master branch. But see below...
+And also the update to .gitlab-ci.yml must be committed. This way we fix
+check-gitlab-ci.yml in GitLab:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/52000035
+
+But after fixing those, the TestRustBin still fails at GitLab:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/52092045
+from test_rust.py, line 39, like this:
+>SystemError: Cargo init failed
+The build.log ends in these messages:
+>error: Failed to create project `hello-world` at `/tmp/tmp_US3dA-br2-testing-rust/hello-world`
+>
+>Caused by:
+>  could not determine the current user, please set $USER
+The same test case does not fail for me when it runs outside the Docker image,
+so I guess we will need to tweak the Docker image.
+
+
+I don't have the result yet for TestRust in GitLab. It is still running (105
+minutes and counting) by the time I write this.
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/52092044
+But running outside the Docker image it also passes.
+
+
+... Would it be the case to revert only the rust test case only from the master
+branch? If yes, extra care must be taken when merging the branches to not remove
+it from the next branch too.
+
+
+Regards,
+Ricardo
