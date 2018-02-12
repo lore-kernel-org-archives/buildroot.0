@@ -1,64 +1,83 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 12 Feb 2018 13:39:33 +0100
-Subject: [Buildroot] Using cross tools without knowing the cross prefix
-Message-ID: <CAAXf6LU9ZkpV+3wbjM_Ybb6F0DKsMY+8MUAd2SQi2ap2PnZ55A@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 12 Feb 2018 08:00:16 -0500
+Subject: [Buildroot] [PATCH v2 1/1] libcpprestsdk: fix building as a static
+ library
+Message-ID: <20180212130016.3054-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Use pkg-config to find OpenSSL. This will automatically find any
+dependent libraries and put them in the correct order for linking.
 
-The cross tools installed/extracted by Buildroot are in
-$(HOST_DIR)/bin/ and are called
-<prefix>-gcc, <prefix>-gdb, etc. where <prefix> could e.g.
-mips64-octeon-linux-gnu-
+Fixes:
+http://autobuild.buildroot.net/results/1df528254468a5ece2f6fe37b3401e68737beed1
 
-When working with many different Buildroot repositories and some
-common wrapper logic external to Buildroot (which I believe is not
-uncommon, at least in corporate environments) one does not always know
-the prefix upfront. One typically knows the path the Buildroot
-repository and the defconfig it should use, but all other details are
-supposed to be internal to Buildroot.
+Upstream status: submitted
+https://github.com/Microsoft/cpprestsdk/pull/688
 
-As such, there is not really a simple way to refer to these cross
-tools. One has to guess/determine the correct prefix.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - Now using pkg-config instead of manually moving library search order
+    (Thomas)
 
-Things become even more complex when tools could be named differently
-depending on whether they originate from an external toolchain, or are
-built by Buildroot, like gdb. As can be seen from the comment and
-logic in method setup_gdb_wrapper in (rejected) patch [1], there are
-several cases to consider:
+ ...prestsdk-fix-building-as-a-static-library.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
 
-For internal toolchains:
- - if BR2_PACKAGE_HOST_GDB is set, gdb is built by buildroot and a real file at
-   $(TARGET_CROSS)gdb ( == $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gdb )
-For external toolchains:
- - if BR2_PACKAGE_HOST_GDB is not set, gdb is provided by the external
-   toolchain and $(TARGET_CROSS)gdb is a symlink.
- - if BR2_PACKAGE_HOST_GDB is set, gdb is built by buildroot and a real file at
-   $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gdb
-
-
-Today, in our local tree, we add a symlink
-output/host/usr/bin/cross-gdb that points to the correct one. The
-external script then can point to that common path without having to
-know the underlying prefix.
-Using something like 'output/host/usr/bin/*-gdb' does not work
-reliably because the external toolchain could provide an (old) gdb and
-Buildroot could build one as well (typically a newer one).
-
-
-While I'm currently mostly interested in cross-gdb, the problem is
-generic for cross-gcc, cross-g++, ... as well. Can we create a
-mechanism that solves this problem generically, for example by
-adding links cross-<tool> for every useful tool inside $(HOST_DIR)/bin?
-Or alternatively, use a second directory tree like:
-$(HOST_DIR)/bin/cross/{gcc,gdb,nm,readelf} etc. ?
-
-Thanks for your input,
-Thomas
-
-
-[1] http://lists.busybox.net/pipermail/buildroot/2016-April/160055.html
+diff --git a/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch b/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
+new file mode 100644
+index 0000000000..c80f3f9ca0
+--- /dev/null
++++ b/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
+@@ -0,0 +1,45 @@
++From 8a9c3db14a390c0a8788405e52e9b8737a430191 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <aduskett@gmail.com>
++Date: Mon, 12 Feb 2018 07:49:34 -0500
++Subject: [PATCH] libcpprestsdk: fix building as a static library
++
++Use pkg-config to find OpenSSL. This will automatically find any
++dependent libraries and put them in the correct order for linking.
++
++Upstream status: submitted
++https://github.com/Microsoft/cpprestsdk/pull/688
++
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ Release/cmake/cpprest_find_openssl.cmake | 10 +++++++---
++ 1 file changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/Release/cmake/cpprest_find_openssl.cmake b/Release/cmake/cpprest_find_openssl.cmake
++index 0b49a7e..2be8afb 100644
++--- a/Release/cmake/cpprest_find_openssl.cmake
+++++ b/Release/cmake/cpprest_find_openssl.cmake
++@@ -41,8 +41,12 @@ function(cpprest_find_openssl)
++       # This should prevent linking against the system provided 0.9.8y
++       set(_OPENSSL_VERSION "")
++     endif()
++-    find_package(OpenSSL 1.0.0 REQUIRED)
++-
+++    if(UNIX)
+++		find_package(PkgConfig REQUIRED)
+++		pkg_search_module(OPENSSL openssl REQUIRED)
+++    else()
+++    	find_package(OpenSSL 1.0.0 REQUIRED)
+++	endif()
++     INCLUDE(CheckCXXSourceCompiles)
++     set(CMAKE_REQUIRED_INCLUDES "${OPENSSL_INCLUDE_DIR}")
++     set(CMAKE_REQUIRED_LIBRARIES "${OPENSSL_LIBRARIES}")
++@@ -67,4 +71,4 @@ function(cpprest_find_openssl)
++     # libressl doesn't ship with the cleanup method being used in ws_client_wspp
++     target_compile_definitions(cpprestsdk_openssl_internal INTERFACE -DCPPREST_NO_SSL_LEAK_SUPPRESS)
++   endif()
++-endfunction()
++\ No newline at end of file
+++endfunction()
++-- 
++2.14.3
++
+-- 
+2.14.3
