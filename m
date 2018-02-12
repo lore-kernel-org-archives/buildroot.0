@@ -1,74 +1,47 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 11 Feb 2018 23:44:02 -0200
-Subject: [Buildroot] [next] listing of tests is broken
-References: <20180209110643.7977e3ba@windsurf.lan>
-Message-ID: <5a80f162d1e9e_5e516a461c185b1@ultri3.mail>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Sun, 11 Feb 2018 23:25:21 -0500
+Subject: [Buildroot] [PATCH v1 0/3] qt5: fix build issue with mesa w/out xcb
+Message-ID: <20180212042524.28675-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all,
 
-It happens on the master branch too.
+Julien Corjon and I have noticed a build issue with qtmultimedia,
+qtwayland and qtwebkit modules when using mesa3d (as EGL backend)
+without using XCB. When BR2_PACKAGE_LIBXCB is set the issue is gone.
+Julien has opened an issue in Qt tracker[1].
 
-On Fri, Feb 09, 2018 at 08:06 AM, Thomas Petazzoni wrote:
+The mesa's EGL/eglplatform.h header includes X11 headers unless the
+macro MESA_EGL_NO_X11_HEADERS is defined[2].
 
-> On Fri, 9 Feb 2018 10:04:37 +0100, Yegor Yefremov wrote:
-> 
->> > I have not yet decided if the right fix is to replace config = None by
->> > config = list() in the base test class, or to fix the Rust test case.  
->> 
->> I'm for the first fix: config = list()
-> 
-> Before going with this fix, I'd like to understand if what the Rust
-> tests are doing is legit or not. If it isn't, then we may not
-> necessarily want to paper over the problem.
+	/home/gportay/src/buildroot/output-qt5.10/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:118:22: fatal error: X11/Xlib.h: No such file or directory
+	 #include <X11/Xlib.h>
+	                      ^
+	compilation terminated.
 
-The correct fix IMO is to change the Rust test case.
+The workaround tells qmake to pass the cflag MESA_EGL_NO_X11_HEADERS to
+make that prevents from including the missing X headers.
 
-With the current code, nose2 will collect 3 test cases from the file:
-TestRustBase, TestRustBin and TestRust. It happens because all three have a
-method called test_something. But TestRustBase is not a test case by itself.
+This workaround is performed in the situation when mesa3d is in use as
+OpenGL EGL backend and when XCB library is *not* compiled.
 
-So we should move the test_* method from the base class to the 2 derived classes
-(yes, duplicating the code), like it is already done by the 'init' test cases.
-
-An alternative solution is to rename the method in the base class to not start
-with test_ and create a test_run method in each derived class calling it. The
-method is short, so I don't think we need to do this.
-
-
-With the listing of tests broken, also 'make .gitlab-ci.yml' is broken. Based
-only on this I would say we should fix that on master branch. But see below...
-And also the update to .gitlab-ci.yml must be committed. This way we fix
-check-gitlab-ci.yml in GitLab:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/52000035
-
-But after fixing those, the TestRustBin still fails at GitLab:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/52092045
-from test_rust.py, line 39, like this:
->SystemError: Cargo init failed
-The build.log ends in these messages:
->error: Failed to create project `hello-world` at `/tmp/tmp_US3dA-br2-testing-rust/hello-world`
->
->Caused by:
->  could not determine the current user, please set $USER
-The same test case does not fail for me when it runs outside the Docker image,
-so I guess we will need to tweak the Docker image.
-
-
-I don't have the result yet for TestRust in GitLab. It is still running (105
-minutes and counting) by the time I write this.
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/52092044
-But running outside the Docker image it also passes.
-
-
-... Would it be the case to revert only the rust test case only from the master
-branch? If yes, extra care must be taken when merging the branches to not remove
-it from the next branch too.
-
+[1]: https://bugreports.qt.io/browse/QTBUG-66233
+[2]: https://github.com/mesa3d/mesa/blob/79ee1b2ff0b85f4eeb4165d23a7943c28d3a3d93/include/EGL/eglplatform.h#L109-L125
 
 Regards,
-Ricardo
+Ga?l PORTAY (3):
+  qt5webkit: fix build issue with mesa3d w/out xcb
+  qt5multimedia: fix build issue with mesa3d w/out xcb
+  qt5wayland: fix build issue with mesa3d w/out xcb
+
+ package/qt5/qt5multimedia/qt5multimedia.mk | 11 ++++++++++-
+ package/qt5/qt5wayland/qt5wayland.mk       |  9 +++++++++
+ package/qt5/qt5webkit/qt5webkit.mk         | 11 ++++++++++-
+ 3 files changed, 29 insertions(+), 2 deletions(-)
+
+-- 
+2.15.1
