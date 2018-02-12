@@ -1,10 +1,10 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 12 Feb 2018 17:31:10 -0500
-Subject: [Buildroot] [PATCH 1/1] json for modern cpp: fix license hash
-In-Reply-To: <20180212214934.32a52dd8@windsurf.lan>
-References: <20180212172748.13563-1-aduskett@gmail.com>
- <20180212214934.32a52dd8@windsurf.lan>
-Message-ID: <CAFSsvmqj1cgXYJ5WJsFuwPf28UwJxie9yhq4kkCP3_vNLNs0Qw@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 12 Feb 2018 23:51:12 +0000
+Subject: [Buildroot] [PATCH] package/mesa-demo: remove duplicate osmesa
+ option
+In-Reply-To: <20180212215931.6105-1-audrey.motheron@gmail.com>
+References: <20180212215931.6105-1-audrey.motheron@gmail.com>
+Message-ID: <20180212235112.GB20345@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Feb 12, 2018 at 3:49 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Mon, 12 Feb 2018 12:27:48 -0500, Adam Duskett wrote:
->> Fixes:
->> http://autobuild.buildroot.net/results/942/942485b94f21567c2f35a1a3cc62450f3461a4f9
->>
->> Signed-off-by: Adam Duskett <aduskett@gmail.com>
->
-> What was the change to the license file ?
->
-Year bump
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> http://bootlin.com
+Thanks for the patch, indeed the option was being duplicated! Just one small
+comment: usually the commit summary line has only the package name, without
+the ?package/? prefix, and in this case the package name is ?mesa-demos?,
+so the first line of the commit message should be.
+
+On Mon, 12 Feb 2018 22:59:31 +0100, Audrey Motheron <audrey.motheron@gmail.com> wrote:
+> --disable-osmesa option is unconditionally added to CONF_OPTS
+> even if --enable-osmesa is used latter.
+> 
+> Signed-off-by: Audrey Motheron <audrey.motheron@gmail.com>
+> ---
+>  package/mesa3d-demos/mesa3d-demos.mk | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+> index cbc15c3b69..9182803748 100644
+> --- a/package/mesa3d-demos/mesa3d-demos.mk
+> +++ b/package/mesa3d-demos/mesa3d-demos.mk
+> @@ -12,7 +12,6 @@ MESA3D_DEMOS_DEPENDENCIES = host-pkgconf
+>  MESA3D_DEMOS_LICENSE = MIT
+>  
+>  MESA3D_DEMOS_CONF_OPTS += \
+> -	--disable-osmesa \
+>  	--disable-gles1
+>  
+>  ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_HAS_LIBGL),yy)
+> -- 
+> 2.14.3
+
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+
+
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180212/95c882e4/attachment.asc>
