@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Feb 2018 16:54:03 +0100
-Subject: [Buildroot] [PATCH v3 1/1] LIBLO : bump version to 0.29
-In-Reply-To: <1518438804-7961-1-git-send-email-alexbaldwinmusic@gmail.com>
-References: <1518438804-7961-1-git-send-email-alexbaldwinmusic@gmail.com>
-Message-ID: <20180212165403.296e993c@windsurf.lan>
+Date: Mon, 12 Feb 2018 17:07:14 +0100
+Subject: [Buildroot] [PATCH v2 1/1] libcpprestsdk: fix building as a
+ static library
+In-Reply-To: <20180212130016.3054-1-aduskett@gmail.com>
+References: <20180212130016.3054-1-aduskett@gmail.com>
+Message-ID: <20180212170714.6715fcdf@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +13,80 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 12 Feb 2018 13:33:24 +0100, Alex B wrote:
-> From: Alex <alexbaldwinmusic@gmail.com>
-> 
-> Starting from version 0.28, C++ wrappers are provided as well. The configure
-> script appropriately detects the availability of a C++ compiler so no Buildroot
-> changes are needed for this.
-> 
-> Building fails with --enable-ipv6 so --disable-ipv6 is needed in CONF_OPTS.
-> This is known by liblo developers and building without ipv6 support is recomennded.
-> 
-> werror is kept on, so disable this with --disable-werror.
-> 
-> Patch to fix werror about redirect from sys/poll.h to poll.h
-> 
-> Liblo use's atomics, some architectures need explicit linking with libatomic. Added
-> link to reflect this.
-> 
-> Included hash for license files.
-> 
-> Signed-off-by: Alex Baldwin <alexbaldwinmusic@gmail.com>
+Thanks for working on this new version!
 
-The liblo package has already been merged in the 'next' branch. So if
-you want to send fixes, please send a patch on top of the current
-'next' branch, i.e an incremental patch on top of what has already been
-merged.
+On Mon, 12 Feb 2018 08:00:16 -0500, Adam Duskett wrote:
+> Use pkg-config to find OpenSSL. This will automatically find any
+> dependent libraries and put them in the correct order for linking.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/1df528254468a5ece2f6fe37b3401e68737beed1
+> 
+> Upstream status: submitted
+> https://github.com/Microsoft/cpprestsdk/pull/688
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Now using pkg-config instead of manually moving library search order
+>     (Thomas)
+> 
+>  ...prestsdk-fix-building-as-a-static-library.patch | 42 ++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
+> 
+> diff --git a/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch b/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
+> new file mode 100644
+> index 0000000000..c80f3f9ca0
+> --- /dev/null
+> +++ b/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
+> @@ -0,0 +1,45 @@
+> +From 8a9c3db14a390c0a8788405e52e9b8737a430191 Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <aduskett@gmail.com>
+> +Date: Mon, 12 Feb 2018 07:49:34 -0500
+> +Subject: [PATCH] libcpprestsdk: fix building as a static library
+> +
+> +Use pkg-config to find OpenSSL. This will automatically find any
+> +dependent libraries and put them in the correct order for linking.
+> +
+> +Upstream status: submitted
+> +https://github.com/Microsoft/cpprestsdk/pull/688
 
-Thanks!
+Your pull request now has both fixes. Are you sure this is what you
+wanted to do ?
+
+> +---
+> + Release/cmake/cpprest_find_openssl.cmake | 10 +++++++---
+> + 1 file changed, 7 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/Release/cmake/cpprest_find_openssl.cmake b/Release/cmake/cpprest_find_openssl.cmake
+> +index 0b49a7e..2be8afb 100644
+> +--- a/Release/cmake/cpprest_find_openssl.cmake
+> ++++ b/Release/cmake/cpprest_find_openssl.cmake
+> +@@ -41,8 +41,12 @@ function(cpprest_find_openssl)
+> +       # This should prevent linking against the system provided 0.9.8y
+> +       set(_OPENSSL_VERSION "")
+> +     endif()
+> +-    find_package(OpenSSL 1.0.0 REQUIRED)
+> +-
+> ++    if(UNIX)
+> ++		find_package(PkgConfig REQUIRED)
+> ++		pkg_search_module(OPENSSL openssl REQUIRED)
+> ++    else()
+> ++    	find_package(OpenSSL 1.0.0 REQUIRED)
+> ++	endif()
+> +     INCLUDE(CheckCXXSourceCompiles)
+> +     set(CMAKE_REQUIRED_INCLUDES "${OPENSSL_INCLUDE_DIR}")
+> +     set(CMAKE_REQUIRED_LIBRARIES "${OPENSSL_LIBRARIES}")
+> +@@ -67,4 +71,4 @@ function(cpprest_find_openssl)
+> +     # libressl doesn't ship with the cleanup method being used in ws_client_wspp
+> +     target_compile_definitions(cpprestsdk_openssl_internal INTERFACE -DCPPREST_NO_SSL_LEAK_SUPPRESS)
+> +   endif()
+> +-endfunction()
+> +\ No newline at end of file
+> ++endfunction()
+
+This last chunk is a spurious and unrelated change.
 
 Thomas
 -- 
