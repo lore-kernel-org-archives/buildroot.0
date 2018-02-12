@@ -1,117 +1,83 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 12 Feb 2018 22:06:33 +0100
-Subject: [Buildroot] [PATCH next v6] systemd: allow to build with uClibc
- toolchains
-Message-ID: <20180212210633.GA20420@waldemar-brodkorb.de>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Mon, 12 Feb 2018 16:07:03 -0500
+Subject: [Buildroot] [RFC 1/2] qt5: bump latest version to 5.10.0
+In-Reply-To: <20180211161320.8864-2-gael.portay@savoirfairelinux.com>
+References: <20180211161320.8864-1-gael.portay@savoirfairelinux.com>
+ <20180211161320.8864-2-gael.portay@savoirfairelinux.com>
+Message-ID: <20180212210702.lh2ho73ivp4ckov7@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to disable any systemd parts using either IDN, NSS or gshadow.
-IDN is only disabled in C library function call to getnameinfo(),
-it does not effect libidn/libidn2 usage in systemd.
+All,
 
-Tested with qemu-system-arm.
+On Sun, Feb 11, 2018 at 11:13:19AM -0500, Ga?l PORTAY wrote:
+> Hashes has been updated using the following script:
+> ...
+> ---
+>  package/qt5/Config.in                                    | 4 ++--
+>  package/qt5/qt5.mk                                       | 8 ++++++--
+>  package/qt5/qt53d/qt53d.hash                             | 4 ++--
+>  package/qt5/qt53d/qt53d.mk                               | 2 +-
+>  package/qt5/qt5base/qt5base.hash                         | 4 ++--
+>  package/qt5/qt5base/qt5base.mk                           | 2 +-
+>  package/qt5/qt5canvas3d/qt5canvas3d.hash                 | 4 ++--
+>  package/qt5/qt5canvas3d/qt5canvas3d.mk                   | 2 +-
+>  package/qt5/qt5charts/qt5charts.hash                     | 4 ++--
+>  package/qt5/qt5charts/qt5charts.mk                       | 2 +-
+>  package/qt5/qt5connectivity/qt5connectivity.hash         | 4 ++--
+>  package/qt5/qt5connectivity/qt5connectivity.mk           | 2 +-
+>  package/qt5/qt5declarative/qt5declarative.hash           | 4 ++--
+>  package/qt5/qt5declarative/qt5declarative.mk             | 2 +-
+>  package/qt5/qt5enginio/qt5enginio.mk                     | 2 +-
+>  package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 4 ++--
+>  package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk   | 2 +-
+>  package/qt5/qt5imageformats/qt5imageformats.hash         | 4 ++--
+>  package/qt5/qt5imageformats/qt5imageformats.mk           | 2 +-
+>  package/qt5/qt5location/qt5location.hash                 | 4 ++--
+>  package/qt5/qt5location/qt5location.mk                   | 2 +-
+>  package/qt5/qt5multimedia/qt5multimedia.hash             | 4 ++--
+>  package/qt5/qt5multimedia/qt5multimedia.mk               | 2 +-
+>  package/qt5/qt5quickcontrols/qt5quickcontrols.hash       | 4 ++--
+>  package/qt5/qt5quickcontrols/qt5quickcontrols.mk         | 2 +-
+>  package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash     | 4 ++--
+>  package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk       | 2 +-
+>  package/qt5/qt5script/qt5script.hash                     | 4 ++--
+>  package/qt5/qt5script/qt5script.mk                       | 2 +-
+>  package/qt5/qt5scxml/qt5scxml.hash                       | 4 ++--
+>  package/qt5/qt5scxml/qt5scxml.mk                         | 2 +-
+>  package/qt5/qt5sensors/qt5sensors.hash                   | 4 ++--
+>  package/qt5/qt5sensors/qt5sensors.mk                     | 2 +-
+>  package/qt5/qt5serialbus/qt5serialbus.hash               | 4 ++--
+>  package/qt5/qt5serialbus/qt5serialbus.mk                 | 2 +-
+>  package/qt5/qt5serialport/qt5serialport.hash             | 4 ++--
+>  package/qt5/qt5serialport/qt5serialport.mk               | 2 +-
+>  package/qt5/qt5svg/qt5svg.hash                           | 4 ++--
+>  package/qt5/qt5svg/qt5svg.mk                             | 2 +-
+>  package/qt5/qt5tools/qt5tools.hash                       | 4 ++--
+>  package/qt5/qt5tools/qt5tools.mk                         | 2 +-
+>  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash   | 4 ++--
+>  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk     | 2 +-
+>  package/qt5/qt5wayland/qt5wayland.hash                   | 4 ++--
+>  package/qt5/qt5wayland/qt5wayland.mk                     | 2 +-
+>  package/qt5/qt5webchannel/qt5webchannel.hash             | 4 ++--
+>  package/qt5/qt5webchannel/qt5webchannel.mk               | 2 +-
+>  package/qt5/qt5webengine/qt5webengine.hash               | 4 ++--
+>  package/qt5/qt5webengine/qt5webengine.mk                 | 2 +-
+>  package/qt5/qt5webkit-examples/qt5webkit-examples.mk     | 2 +-
+>  package/qt5/qt5websockets/qt5websockets.hash             | 4 ++--
+>  package/qt5/qt5websockets/qt5websockets.mk               | 2 +-
+>  package/qt5/qt5x11extras/qt5x11extras.hash               | 4 ++--
+>  package/qt5/qt5x11extras/qt5x11extras.mk                 | 2 +-
+>  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash           | 4 ++--
+>  package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk             | 2 +-
+>  56 files changed, 88 insertions(+), 84 deletions(-)
+> 
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1 -> v2:
-  - added Upstream commit URL suggested by Thomas Petazzoni
-  - rework enable/disable options suggested by Thomas Petazzoni
-  - extend commit message a little bit
-v2 -> v3:
-  - sync to latest master changes
-  - remove patches included upstream
-  - disable features not usable with uClibc-ng lacking nss.h
-v3 -> v4:
-  - add comment about missing nss suggested by Arnout
-  - add extra parenthesis suggested by Arnout
-v4 -> v5:
-  - update after switch to meson
-  - fix typo for resolve option
-v5 -> v6:
-  - split of typo fix from uClibc enable patch
----
- package/systemd/Config.in  |  3 +++
- package/systemd/systemd.mk | 11 +++++++++++
- system/Config.in           |  6 +++---
- 3 files changed, 17 insertions(+), 3 deletions(-)
+In the next version of the patch, I will remove the three patches
+(5.9.3) since they are all upstreamed in 5.10.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 661f40d..81eee96 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -190,6 +190,7 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
- 
- config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 	bool "enable myhostname NSS plugin"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	default y
- 	help
- 	  nss-myhostname is a plug-in module for the GNU Name Service
-@@ -245,6 +246,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
- 
- config BR2_PACKAGE_SYSTEMD_RESOLVED
- 	bool "enable resolve daemon"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	default y
- 	help
- 	  systemd-resolved is a system service that provides network
-@@ -278,6 +280,7 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
- 
- config BR2_PACKAGE_SYSTEMD_SYSUSERS
- 	bool "enable sysusers support"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs gshadow.h
- 	help
- 	  systemd-sysusers creates system users and groups, based on
- 	  the file format and location specified in sysusers.d(5).
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1c31ebb..a6c4b33 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -48,6 +48,17 @@ SYSTEMD_CONF_OPTS += \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dumount-path=/usr/bin/umount
- 
-+# disable unsupported features for non-glibc toolchains
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+SYSTEMD_CONF_OPTS += \
-+	-Didn=true \
-+	-Dnss-systemd=true
-+else
-+SYSTEMD_CONF_OPTS += \
-+	-Didn=false \
-+	-Dnss-systemd=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_ACL),y)
- SYSTEMD_DEPENDENCIES += acl
- SYSTEMD_CONF_OPTS += -Dacl=true
-diff --git a/system/Config.in b/system/Config.in
-index d48cf8d..7b36516 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -127,7 +127,7 @@ config BR2_INIT_SYSV
- config BR2_INIT_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_SSP
-@@ -137,8 +137,8 @@ config BR2_INIT_SYSTEMD
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment "systemd needs a glibc toolchain, headers >= 3.10"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
-+comment "systemd needs a glibc or uClibc toolchain, headers >= 3.10"
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
- 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
- 
- config BR2_INIT_NONE
--- 
-2.1.4
+Regards,
+Gael
