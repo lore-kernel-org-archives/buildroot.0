@@ -1,239 +1,57 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 12 Feb 2018 07:06:13 -0500
-Subject: [Buildroot] [PATCH v2 1/5] python-psycopg2: new package
-In-Reply-To: <CAGm1_ktNRN88kAztD=7owBB6LK1ShVexTwpqf8Ykhj14YjTYKQ@mail.gmail.com>
-References: <20180206132506.30389-1-aduskett@gmail.com>
- <20180210162230.136b9627@windsurf.lan>
- <CAGm1_ktNRN88kAztD=7owBB6LK1ShVexTwpqf8Ykhj14YjTYKQ@mail.gmail.com>
-Message-ID: <CAFSsvmrjmriHVyu4NMyNCHeB1U7VymCmJUYckuZ-HGU+TvBLPQ@mail.gmail.com>
+Date: Mon, 12 Feb 2018 07:12:16 -0500
+Subject: [Buildroot] [PATCH v2 2017.02.x 1/1] postgresql: security bump to
+ 9.6.7
+Message-ID: <20180212121216.23280-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+from https://www.postgresql.org/about/news/1829/
 
-On Sat, Feb 10, 2018 at 12:40 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Hi Thomas,
->
-> On Sat, Feb 10, 2018 at 4:22 PM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->> Hello Yegor,
->>
->> Any reason why you review all patches in this series, except this first
->> one ? Do you have issues/comments with it, or is it just that you had
->> no time/interest ?
->
-> I had no time to review this patch, especially 0001-don-t-use-pg_config.patch.
->
-This patch is from yocto actually.  pg_config is called by setup.py to
-get the PostgreSQL server version.
-There are two problems with this:
+Fixes:
+[1] CVE-2018-1052: Fix the processing of partition keys containing multiple
+                   expressions
 
-1) There is no way to specify a path to pg_config, so it uses the
-hosts pg_config (if it's not available it causes an error)
-2) Even if you do use pg_config, the one generated during
-cross-compilation doesn't print out the version information
-    that setup.py is looking for.
+[2] CVE-2018-1053: Ensure that all temporary files made with "pg_upgrade" are
+                   non-world-readable
 
-So the patch was modified from the original yocto version to work with
-BuildRoot, instead looking for the variable
-$(PSYCOPG2_POSTGRESQL_VERSION), which is just passed on to setup.py
-from the .mk file.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes V1 -> v2:
+  - Fixed license file sha256sum
+  - Fixed subject-prefix (Thomas)
 
-This makes it so updating to new version of PostgreSQL in the future
-doesn't break psycopg2.
+ package/postgresql/postgresql.hash | 6 +++---
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-Thanks!
-
-Adam
-
-> Other than that everything looks OK. So I have no issues with this patch.
->
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Yegor
->
->> Thanks a lot for having reviewed all other patches, that is very useful!
->>
->> Thomas
->>
->> On Tue,  6 Feb 2018 08:25:02 -0500, Adam Duskett wrote:
->>> Psycopg is the most popular PostgreSQL database adapter for the Python
->>> programming language. Its main features are the complete implementation of the
->>> Python DB API 2.0 specification and the thread safety (several threads can
->>> share the same connection). It was designed for heavily multi-threaded
->>> applications that create and destroy lots of cursors and make a large number of
->>> concurrent INSERTs or UPDATEs.
->>>
->>> Signed-off-by: Adam Duskett <aduskett@gmail.com>
->>> ---
->>> Changes v1 -> v2:
->>>   - None
->>>
->>>  DEVELOPERS                                         |  1 +
->>>  package/Config.in                                  |  1 +
->>>  .../python-psycopg2/0001-don-t-use-pg_config.patch | 49 ++++++++++++++++++++++
->>>  package/python-psycopg2/Config.in                  | 23 ++++++++++
->>>  package/python-psycopg2/python-psycopg2.hash       |  4 ++
->>>  package/python-psycopg2/python-psycopg2.mk         | 20 +++++++++
->>>  6 files changed, 98 insertions(+)
->>>  create mode 100644 package/python-psycopg2/0001-don-t-use-pg_config.patch
->>>  create mode 100644 package/python-psycopg2/Config.in
->>>  create mode 100644 package/python-psycopg2/python-psycopg2.hash
->>>  create mode 100644 package/python-psycopg2/python-psycopg2.mk
->>>
->>> diff --git a/DEVELOPERS b/DEVELOPERS
->>> index c524cb6ac5..8cf0836a1a 100644
->>> --- a/DEVELOPERS
->>> +++ b/DEVELOPERS
->>> @@ -52,6 +52,7 @@ F:  package/libsepol/
->>>  F:   package/nginx-naxsi/
->>>  F:   package/policycoreutils/
->>>  F:   package/python-mutagen/
->>> +F:   package/python-psycopg2/
->>>  F:   package/restorecond/
->>>  F:   package/refpolicy/
->>>  F:   package/selinux-python/
->>> diff --git a/package/Config.in b/package/Config.in
->>> index 9cd5d9c087..b039dea58f 100644
->>> --- a/package/Config.in
->>> +++ b/package/Config.in
->>> @@ -844,6 +844,7 @@ menu "External python modules"
->>>       source "package/python-prompt-toolkit/Config.in"
->>>       source "package/python-protobuf/Config.in"
->>>       source "package/python-psutil/Config.in"
->>> +     source "package/python-psycopg2/Config.in"
->>>       source "package/python-ptyprocess/Config.in"
->>>       source "package/python-pudb/Config.in"
->>>       source "package/python-pyasn/Config.in"
->>> diff --git a/package/python-psycopg2/0001-don-t-use-pg_config.patch b/package/python-psycopg2/0001-don-t-use-pg_config.patch
->>> new file mode 100644
->>> index 0000000000..e82e61b514
->>> --- /dev/null
->>> +++ b/package/python-psycopg2/0001-don-t-use-pg_config.patch
->>> @@ -0,0 +1,49 @@
->>> +From 92d42775735d1555449b860c214ca7265d7ad75b Mon Sep 17 00:00:00 2001
->>> +From: Mark Asselstine <mark.asselstine@windriver.com>
->>> +Date: Tue, 24 Jan 2017 00:43:35 +0900
->>> +Subject: [PATCH] setup: don't use pg_config
->>> +
->>> +pg_config is used to get library and include directories, and the postgresql
->>> +version. All of which is not available in the cross compiled version.
->>> +
->>> +Signed-off-by: Mark Asselstine <mark.asselstine@windriver.com>
->>> +Signed-off-by: Huang Qiyu <huangqy.fnst@cn.fujitsu.com>
->>> +[aduskett at gmail.com: Update for psycopg2 2.7.3.2]
->>> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
->>> +---
->>> + setup.py | 6 ++----
->>> + 1 file changed, 2 insertions(+), 4 deletions(-)
->>> +
->>> +diff --git a/setup.py b/setup.py
->>> +index 86f32d2..05b8eeb 100644
->>> +--- a/setup.py
->>> ++++ b/setup.py
->>> +@@ -404,16 +404,13 @@ class psycopg_build_ext(build_ext):
->>> +             self.libraries.append("pq")
->>> +
->>> +         try:
->>> +-            self.library_dirs.append(pg_config_helper.query("libdir"))
->>> +-            self.include_dirs.append(pg_config_helper.query("includedir"))
->>> +-            self.include_dirs.append(pg_config_helper.query("includedir-server"))
->>> +             try:
->>> +                 # Here we take a conservative approach: we suppose that
->>> +                 # *at least* PostgreSQL 7.4 is available (this is the only
->>> +                 # 7.x series supported by psycopg 2)
->>> +                 pgversion = pg_config_helper.query("version").split()[1]
->>> +             except:
->>> +-                pgversion = "7.4.0"
->>> ++                pgversion = str(os.environ['PSYCOPG2_POSTGRESQL_VERSION'])
->>> +
->>> +             verre = re.compile(
->>> +                 r"(\d+)(?:\.(\d+))?(?:(?:\.(\d+))|(devel|(?:alpha|beta|rc)\d+))?")
->>> +@@ -525,6 +522,7 @@ parser.read('setup.cfg')
->>> + # Choose a datetime module
->>> + have_pydatetime = True
->>> + have_mxdatetime = False
->>> ++pg_config="/bin/true"
->>> + use_pydatetime = int(parser.get('build_ext', 'use_pydatetime'))
->>> +
->>> + # check for mx package
->>> +--
->>> +2.14.3
->>> +
->>> diff --git a/package/python-psycopg2/Config.in b/package/python-psycopg2/Config.in
->>> new file mode 100644
->>> index 0000000000..c861ac2284
->>> --- /dev/null
->>> +++ b/package/python-psycopg2/Config.in
->>> @@ -0,0 +1,23 @@
->>> +config BR2_PACKAGE_PYTHON_PSYCOPG2
->>> +       bool "python-psycopg2"
->>> +       select BR2_PACKAGE_POSTGRESQL
->>> +       help
->>> +         Psycopg is the most popular PostgreSQL database adapter for
->>> +         the Python programming language. Its main features are the
->>> +         complete implementation of the Python DB API 2.0 specification
->>> +         and the thread safety (several threads can share the same
->>> +         connection). It was designed for heavily multi-threaded
->>> +         applications that create and destroy lots of cursors and make
->>> +         a large number of concurrent INSERTs or UPDATEs.
->>> +
->>> +         Psycopg 2 is mostly implemented in C as a libpq wrapper,
->>> +         resulting in being both efficient and secure. It features
->>> +         client-side and server-side cursors, asynchronous
->>> +         communication and notifications, COPY support. Many Python
->>> +         types are supported out-of-the-box and adapted to matching
->>> +         PostgreSQL data types; adaptation can be extended and
->>> +         customized thanks to a flexible objects adaptation system.
->>> +
->>> +         Psycopg 2 is both Unicode and Python 3 friendly.
->>> +
->>> +         http://initd.org/psycopg/
->>> diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
->>> new file mode 100644
->>> index 0000000000..a2cbb1f186
->>> --- /dev/null
->>> +++ b/package/python-psycopg2/python-psycopg2.hash
->>> @@ -0,0 +1,4 @@
->>> +# md5 from https://pypi.python.org/pypi/psycopg2/json, sha256 locally computed
->>> +md5    8114e672d5f23fa5329874a4314fbd6f  psycopg2-2.7.3.2.tar.gz
->>> +sha256 5c3213be557d0468f9df8fe2487eaf2990d9799202c5ff5cb8d394d09fad9b2a  psycopg2-2.7.3.2.tar.gz
->>> +sha256 1752db3c786e12b62ca804178dca033adce8bff4c4b3d98d3449d407fe45210d  LICENSE
->>> diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
->>> new file mode 100644
->>> index 0000000000..2d50624433
->>> --- /dev/null
->>> +++ b/package/python-psycopg2/python-psycopg2.mk
->>> @@ -0,0 +1,20 @@
->>> +################################################################################
->>> +#
->>> +# python-psycopg2
->>> +#
->>> +################################################################################
->>> +
->>> +PYTHON_PSYCOPG2_VERSION = 2.7.3.2
->>> +PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
->>> +PYTHON_PSYCOPG2_SITE = https://pypi.python.org/packages/dd/47/000b405d73ca22980684fd7bd3318690cc03cfa3b2ae1c5b7fff8050b28a
->>> +PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
->>> +PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
->>> +PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
->>> +PYTHON_PSYCOPG2_DEPENDENCIES = postgresql
->>> +
->>> +# Force psycopg2 to use the BuildRoot provided postgresql version instead of
->>> +# The host machines
->>> +PYTHON_PSYCOPG2_ENV += \
->>> +       PSYCOPG2_POSTGRESQL_VERSION=$(POSTGRESQL_VERSION)
->>> +
->>> +$(eval $(python-package))
->>
->>
->>
->> --
->> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
->> Embedded Linux and Kernel engineering
->> http://bootlin.com
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index e62838911e..092e852d10 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v9.6.6/postgresql-9.6.6.tar.bz2.sha256
+-sha256 399cdffcb872f785ba67e25d275463d74521566318cfef8fe219050d063c8154  postgresql-9.6.6.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.6.7/postgresql-9.6.7.tar.bz2.sha256
++sha256 2ebe3df3c1d1eab78023bdc3ffa55a154aa84300416b075ef996598d78a624c6  postgresql-9.6.7.tar.bz2
+ # License file, Locally calculated
+-sha256 7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676  COPYRIGHT
++sha256 24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 50ce212c1c..86f79c05ee 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.6.6
++POSTGRESQL_VERSION = 9.6.7
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+-- 
+2.14.3
