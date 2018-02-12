@@ -1,45 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 12 Feb 2018 22:02:31 +0200
-Subject: [Buildroot] [PATCH] librsvg: security bump to version 2.40.20
-Message-ID: <aaf6ad8dfb35b1dee1bcfaa1f00bb50f19fbcbf9.1518465751.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 12 Feb 2018 21:05:00 +0100
+Subject: [Buildroot] [PATCH v2 1/1] LIBLO : bump version to 0.29
+In-Reply-To: <CA+bRTvDn01oj1dD0NSDaOif8DPSFWLyCjFCGZu8Z=+W_zc_dtA@mail.gmail.com>
+References: <1518118669-24714-1-git-send-email-alexbaldwinmusic@gmail.com>
+ <20180208230400.06741487@windsurf.lan>
+ <CA+bRTvCnigi1UKbkhQv2zGy0vCshgDfzGuOnvv_PjVMXq-_Qgw@mail.gmail.com>
+ <20180210184552.14500165@windsurf.lan>
+ <CA+bRTvDn01oj1dD0NSDaOif8DPSFWLyCjFCGZu8Z=+W_zc_dtA@mail.gmail.com>
+Message-ID: <20180212210500.1832421b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-1000041: information disclosure via a crafted SVG file.
+Hello,
 
-Bump to the latest (maybe last) release in the 2.40.x series. Newer
-versions require a Rust compiler.
+On Sun, 11 Feb 2018 17:25:25 +0100, Alex Baldwin wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/librsvg/librsvg.hash | 4 ++--
- package/librsvg/librsvg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> > In any case, if you do a patch against liblo, don't forget to submit it
+> > upstream.  
+> 
+> When submitting this patch should I include it as V3 (as V2 failed),
+> with all the original patches and ammend the changlog or simply just
+> submit the new changes?
 
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-index 9ab798120f92..6f4b07423a28 100644
---- a/package/librsvg/librsvg.hash
-+++ b/package/librsvg/librsvg.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.18.sha256sum
--sha256	bfc8c488c89c1e7212c478beb95c41b44701636125a3e6dab41187f1485b564c	librsvg-2.40.18.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.20.sha256sum
-+sha256	cff4dd3c3b78bfe99d8fcfad3b8ba1eee3289a0823c0e118d78106be6b84c92b	librsvg-2.40.20.tar.xz
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index c8afdfd69fff..4f563ce6dbe7 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBRSVG_VERSION_MAJOR = 2.40
--LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).18
-+LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).20
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
+As replied to your new submission: you should have sent just the new
+changes, because the liblo package has been applied to the next branch
+already (which is why it was tested by our autobuilders, and why you
+received e-mails about build failures).
+
+Best regards,
+
+Thomas
 -- 
-2.15.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
