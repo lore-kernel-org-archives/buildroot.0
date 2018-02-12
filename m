@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Feb 2018 21:49:07 +0100
-Subject: [Buildroot] [PATCH v5] systemd: allow to build with uClibc
- toolchains
-In-Reply-To: <20180212201340.GA4165@waldemar-brodkorb.de>
-References: <20180212201340.GA4165@waldemar-brodkorb.de>
-Message-ID: <20180212214907.62615837@windsurf.lan>
+Date: Mon, 12 Feb 2018 21:49:34 +0100
+Subject: [Buildroot] [PATCH 1/1] json for modern cpp: fix license hash
+In-Reply-To: <20180212172748.13563-1-aduskett@gmail.com>
+References: <20180212172748.13563-1-aduskett@gmail.com>
+Message-ID: <20180212214934.32a52dd8@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 12 Feb 2018 21:13:41 +0100, Waldemar Brodkorb wrote:
+On Mon, 12 Feb 2018 12:27:48 -0500, Adam Duskett wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/942/942485b94f21567c2f35a1a3cc62450f3461a4f9
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
->  ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
-> -SYSTEMD_CONF_OPTS += -Dresolved=true
-> +SYSTEMD_CONF_OPTS += -Dresolve=true
->  SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
->  else
-> -SYSTEMD_CONF_OPTS += -Dresolved=false
-> +SYSTEMD_CONF_OPTS += -Dresolve=false
->  endif
-
-This should be a separate patch, to be applied on the master branch,
-while the rest (enabling on uClibc) is for the next branch. Could you
-make two separate patches ?
-
-Thanks!
+What was the change to the license file ?
 
 Thomas
 -- 
