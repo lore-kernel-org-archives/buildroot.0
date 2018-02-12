@@ -1,47 +1,26 @@
-From: Danilo Bargen <mail@dbrgn.ch>
-Date: Mon, 12 Feb 2018 09:21:50 +0100
-Subject: [Buildroot] [PATCH] dropbear: use https URLs
-Message-ID: <20180212092150.1ac237c5@x2000>
+From: AAlex_ <earthquake.de@freenet.de>
+Date: Mon, 12 Feb 2018 03:47:23 -0700 (MST)
+Subject: [Buildroot] Custom package using buildroot-linux-uclibc-g++
+Message-ID: <1518432443635-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While a hash check is being done, it's still better to use a download
-URL with HTTPS.
+Hi,
+i created a custom package like the libfoo example.
+Using $(eval $(generic-package))
+The makefile extracts objects from archive and should link them to a so.
+Buildroot is using x86_64-buildroot-linux-uclibc-gcc but this doesnt work
+(source is c++). 
+How can i define that the x86_64-buildroot-linux-uclibc-g++ (which is
+availalble in host/bin) is used instead of the
+x86_64-buildroot-linux-uclibc-gcc for this package?
 
-Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
----
- package/dropbear/Config.in   | 2 +-
- package/dropbear/dropbear.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Regards Alex
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index d92361fa39..6700778161 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_DROPBEAR
- 	  Alternatively, mount a persistent unionfs over your root
- 	  filesystem.
- 
--	  http://matt.ucc.asn.au/dropbear/dropbear.html
-+	  https://matt.ucc.asn.au/dropbear/dropbear.html
- 
- if BR2_PACKAGE_DROPBEAR
- 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bf7f99d975..01a1a07b76 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DROPBEAR_VERSION = 2017.75
--DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
-+DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
- DROPBEAR_LICENSE_FILES = LICENSE
--- 
-2.16.1
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
