@@ -1,130 +1,42 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 12 Feb 2018 21:13:41 +0100
-Subject: [Buildroot] [PATCH v5] systemd: allow to build with uClibc
- toolchains
-Message-ID: <20180212201340.GA4165@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 12 Feb 2018 21:19:22 +0100
+Subject: [Buildroot] [RFC v1] libv4l: fix qv4l2 libatomic related
+ compile failure
+In-Reply-To: <20180206220259.4cd2d00f@gmx.net>
+References: <20180203232127.22765-1-ps.report@gmx.net>
+ <20180204234301.39188706@windsurf>
+ <20180206220259.4cd2d00f@gmx.net>
+Message-ID: <20180212211922.12b3be43@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to disable any systemd parts using either IDN, NSS or gshadow.
-IDN is only disabled in C library function call to getnameinfo(),
-it does not effect libidn/libidn2 usage in systemd.
+Hello,
 
-While trying to disable resolve functionality, a typo was recognized.
+On Tue, 6 Feb 2018 22:02:59 +0100, Peter Seiderer wrote:
 
-Tested with qemu-system-arm.
+> > 
+> > On Sun,  4 Feb 2018 00:21:27 +0100, Peter Seiderer wrote:  
+> > > Fixes [1]:
+> > > 
+> > >   sparc-buildroot-linux-uclibc/bin/ld: qv4l2-qv4l2.o: undefined reference to symbol '__atomic_fetch_add_4@@LIBATOMIC_1.0'
+> > > 
+> > > [1] http://autobuild.buildroot.net/results/baa2595e1acdf4e795fbb940ca57fd136c827da3    
+> > 
+> > Did you analyze what part of the code is using atomic intrinsics? I
+> > don't see any use of atomic instrisics in qv4l2 itself (but perhaps I
+> > missed them), so they must be somewhere else.  
+> 
+> The atomic usage comes from the Qt5 libraries (libQt5Core.so,
+> libQt5Gui.so and libQt5Widgets.so)...
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1 -> v2:
-  - added Upstream commit URL suggested by Thomas Petazzoni
-  - rework enable/disable options suggested by Thomas Petazzoni
-  - extend commit message a little bit
-v2 -> v3:
-  - sync to latest master changes
-  - remove patches included upstream
-  - disable features not usable with uClibc-ng lacking nss.h
-v3 -> v4:
-  - add comment about missing nss suggested by Arnout
-  - add extra parenthesis suggested by Arnout
-v4 -> v5:
-  - update after switch to meson
-  - fix typo for resolve option
----
- package/systemd/Config.in  |  3 +++
- package/systemd/systemd.mk | 15 +++++++++++++--
- system/Config.in           |  6 +++---
- 3 files changed, 19 insertions(+), 5 deletions(-)
+Isn't Qt installing some .pc files ? Are they being used by libv4l ? If
+so, are these .pc files referencing libatomic ?
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 661f40d..81eee96 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -190,6 +190,7 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
- 
- config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 	bool "enable myhostname NSS plugin"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	default y
- 	help
- 	  nss-myhostname is a plug-in module for the GNU Name Service
-@@ -245,6 +246,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
- 
- config BR2_PACKAGE_SYSTEMD_RESOLVED
- 	bool "enable resolve daemon"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	default y
- 	help
- 	  systemd-resolved is a system service that provides network
-@@ -278,6 +280,7 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
- 
- config BR2_PACKAGE_SYSTEMD_SYSUSERS
- 	bool "enable sysusers support"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs gshadow.h
- 	help
- 	  systemd-sysusers creates system users and groups, based on
- 	  the file format and location specified in sysusers.d(5).
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1c31ebb..2bc665e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -48,6 +48,17 @@ SYSTEMD_CONF_OPTS += \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dumount-path=/usr/bin/umount
- 
-+# disable unsupported features for non-glibc toolchains
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+SYSTEMD_CONF_OPTS += \
-+	-Didn=true \
-+	-Dnss-systemd=true
-+else
-+SYSTEMD_CONF_OPTS += \
-+	-Didn=false \
-+	-Dnss-systemd=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_ACL),y)
- SYSTEMD_DEPENDENCIES += acl
- SYSTEMD_CONF_OPTS += -Dacl=true
-@@ -287,10 +298,10 @@ SYSTEMD_CONF_OPTS += -Dnetworkd=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
--SYSTEMD_CONF_OPTS += -Dresolved=true
-+SYSTEMD_CONF_OPTS += -Dresolve=true
- SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
- else
--SYSTEMD_CONF_OPTS += -Dresolved=false
-+SYSTEMD_CONF_OPTS += -Dresolve=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
-diff --git a/system/Config.in b/system/Config.in
-index d48cf8d..7b36516 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -127,7 +127,7 @@ config BR2_INIT_SYSV
- config BR2_INIT_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_SSP
-@@ -137,8 +137,8 @@ config BR2_INIT_SYSTEMD
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment "systemd needs a glibc toolchain, headers >= 3.10"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
-+comment "systemd needs a glibc or uClibc toolchain, headers >= 3.10"
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
- 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
- 
- config BR2_INIT_NONE
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
