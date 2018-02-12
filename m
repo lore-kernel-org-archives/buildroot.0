@@ -1,83 +1,74 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Mon, 12 Feb 2018 16:07:03 -0500
-Subject: [Buildroot] [RFC 1/2] qt5: bump latest version to 5.10.0
-In-Reply-To: <20180211161320.8864-2-gael.portay@savoirfairelinux.com>
-References: <20180211161320.8864-1-gael.portay@savoirfairelinux.com>
- <20180211161320.8864-2-gael.portay@savoirfairelinux.com>
-Message-ID: <20180212210702.lh2ho73ivp4ckov7@archlinux>
+From: Alex B <alexbaldwinmusic@gmail.com>
+Date: Mon, 12 Feb 2018 22:17:55 +0100
+Subject: [Buildroot] [PATCH NEXT 1/1] Liblo - disable werror and link
+ libatomic
+Message-ID: <1518470275-10997-1-git-send-email-alexbaldwinmusic@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: Alex <alexbaldwinmusic@gmail.com>
 
-On Sun, Feb 11, 2018 at 11:13:19AM -0500, Ga?l PORTAY wrote:
-> Hashes has been updated using the following script:
-> ...
-> ---
->  package/qt5/Config.in                                    | 4 ++--
->  package/qt5/qt5.mk                                       | 8 ++++++--
->  package/qt5/qt53d/qt53d.hash                             | 4 ++--
->  package/qt5/qt53d/qt53d.mk                               | 2 +-
->  package/qt5/qt5base/qt5base.hash                         | 4 ++--
->  package/qt5/qt5base/qt5base.mk                           | 2 +-
->  package/qt5/qt5canvas3d/qt5canvas3d.hash                 | 4 ++--
->  package/qt5/qt5canvas3d/qt5canvas3d.mk                   | 2 +-
->  package/qt5/qt5charts/qt5charts.hash                     | 4 ++--
->  package/qt5/qt5charts/qt5charts.mk                       | 2 +-
->  package/qt5/qt5connectivity/qt5connectivity.hash         | 4 ++--
->  package/qt5/qt5connectivity/qt5connectivity.mk           | 2 +-
->  package/qt5/qt5declarative/qt5declarative.hash           | 4 ++--
->  package/qt5/qt5declarative/qt5declarative.mk             | 2 +-
->  package/qt5/qt5enginio/qt5enginio.mk                     | 2 +-
->  package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 4 ++--
->  package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk   | 2 +-
->  package/qt5/qt5imageformats/qt5imageformats.hash         | 4 ++--
->  package/qt5/qt5imageformats/qt5imageformats.mk           | 2 +-
->  package/qt5/qt5location/qt5location.hash                 | 4 ++--
->  package/qt5/qt5location/qt5location.mk                   | 2 +-
->  package/qt5/qt5multimedia/qt5multimedia.hash             | 4 ++--
->  package/qt5/qt5multimedia/qt5multimedia.mk               | 2 +-
->  package/qt5/qt5quickcontrols/qt5quickcontrols.hash       | 4 ++--
->  package/qt5/qt5quickcontrols/qt5quickcontrols.mk         | 2 +-
->  package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash     | 4 ++--
->  package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk       | 2 +-
->  package/qt5/qt5script/qt5script.hash                     | 4 ++--
->  package/qt5/qt5script/qt5script.mk                       | 2 +-
->  package/qt5/qt5scxml/qt5scxml.hash                       | 4 ++--
->  package/qt5/qt5scxml/qt5scxml.mk                         | 2 +-
->  package/qt5/qt5sensors/qt5sensors.hash                   | 4 ++--
->  package/qt5/qt5sensors/qt5sensors.mk                     | 2 +-
->  package/qt5/qt5serialbus/qt5serialbus.hash               | 4 ++--
->  package/qt5/qt5serialbus/qt5serialbus.mk                 | 2 +-
->  package/qt5/qt5serialport/qt5serialport.hash             | 4 ++--
->  package/qt5/qt5serialport/qt5serialport.mk               | 2 +-
->  package/qt5/qt5svg/qt5svg.hash                           | 4 ++--
->  package/qt5/qt5svg/qt5svg.mk                             | 2 +-
->  package/qt5/qt5tools/qt5tools.hash                       | 4 ++--
->  package/qt5/qt5tools/qt5tools.mk                         | 2 +-
->  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash   | 4 ++--
->  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk     | 2 +-
->  package/qt5/qt5wayland/qt5wayland.hash                   | 4 ++--
->  package/qt5/qt5wayland/qt5wayland.mk                     | 2 +-
->  package/qt5/qt5webchannel/qt5webchannel.hash             | 4 ++--
->  package/qt5/qt5webchannel/qt5webchannel.mk               | 2 +-
->  package/qt5/qt5webengine/qt5webengine.hash               | 4 ++--
->  package/qt5/qt5webengine/qt5webengine.mk                 | 2 +-
->  package/qt5/qt5webkit-examples/qt5webkit-examples.mk     | 2 +-
->  package/qt5/qt5websockets/qt5websockets.hash             | 4 ++--
->  package/qt5/qt5websockets/qt5websockets.mk               | 2 +-
->  package/qt5/qt5x11extras/qt5x11extras.hash               | 4 ++--
->  package/qt5/qt5x11extras/qt5x11extras.mk                 | 2 +-
->  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash           | 4 ++--
->  package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk             | 2 +-
->  56 files changed, 88 insertions(+), 84 deletions(-)
-> 
+This patch fixes 2 errors that were discovered by the autobuild:
 
-In the next version of the patch, I will remove the three patches
-(5.9.3) since they are all upstreamed in 5.10.
+1) -werror is still present, which threw up errors regarding redirecting sys/poll.h
+to poll.h in the file server.c
+To fix this -werror has been disbled with a conf_opt and a patch applied to
+server.c that fixes the redirect.
 
-Regards,
-Gael
+2) On some architectures libatomic must be linked. A conf_env has been added
+that links libatomic if it is present in the toolchain.
+
+Signed-off-by: Alex <alexbaldwinmusic@gmail.com>
+---
+ package/liblo/0000-server.c-fixHeaderRedirects.patch | 13 +++++++++++++
+ package/liblo/liblo.mk                               | 13 +++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
+ create mode 100644 package/liblo/0000-server.c-fixHeaderRedirects.patch
+
+diff --git a/package/liblo/0000-server.c-fixHeaderRedirects.patch b/package/liblo/0000-server.c-fixHeaderRedirects.patch
+new file mode 100644
+index 0000000..ae284d2
+--- /dev/null
++++ b/package/liblo/0000-server.c-fixHeaderRedirects.patch
+@@ -0,0 +1,13 @@
++diff --git a/src/server.c b/src/server.c
++index 01fa08f..11c62d2 100644
++--- a/src/server.c
+++++ b/src/server.c
++@@ -51,7 +51,7 @@
++ #include <netdb.h>
++ #include <sys/socket.h>
++ #ifdef HAVE_POLL
++-#include <sys/poll.h>
+++#include <poll.h>
++ #endif
++ #include <sys/un.h>
++ #include <arpa/inet.h>
+diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
+index 14b0527..7332334 100644
+--- a/package/liblo/liblo.mk
++++ b/package/liblo/liblo.mk
+@@ -11,7 +11,16 @@ LIBLO_LICENSE = LGPL-2.1+
+ LIBLO_LICENSE_FILES = COPYING
+ LIBLO_INSTALL_STAGING = YES
+
+-# IPv6 support broken, issue known upstream
+-LIBLO_CONF_OPTS = --disable-ipv6
++# IPv6 support broken, issue known upstream.
++# wError - not needed for release.
++LIBLO_CONF_OPTS += \
++       --disable-ipv6 \
++       --disable-werror
++
++# Liblo uses atomics, so we need to link with
++# libatomic for the architectures who explicitly need libatomic.
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++	LIBLO_CONF_ENV += LIBS="-latomic"
++endif
+
+ $(eval $(autotools-package))
+--
+2.7.4
