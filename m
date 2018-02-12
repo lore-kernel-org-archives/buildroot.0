@@ -1,47 +1,38 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Mon, 12 Feb 2018 15:54:53 -0500
-Subject: [Buildroot] [PATCH 1/1] qt5webkit: add missing icu dependency
-In-Reply-To: <20180212210723.5148adca@windsurf.lan>
-References: <20180211020330.32658-1-gael.portay@savoirfairelinux.com>
- <20180211101445.51c63dab@windsurf.lan>
- <20180211144926.jgne5lnzvlmoeq75@archlinux>
- <20180212210723.5148adca@windsurf.lan>
-Message-ID: <20180212205453.fsrnoodvtoxe6jp4@archlinux>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 12 Feb 2018 22:02:41 +0100
+Subject: [Buildroot] [PATCH] systemd: resolved was renamed to resolve in
+ meson build
+Message-ID: <20180212210240.GA19381@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+While the conversion to meson, this seems to be missed.
+Found while trying to build systemd with uClibc toolchain.
 
-On Mon, Feb 12, 2018 at 09:07:23PM +0100, Thomas Petazzoni wrote:
-> > BTW, I made a quick look to qtwebkit, and it does not seem to call some
-> > Qt ICU symbols. It looks qtwebkit requires ICU for its own needs.
-> 
-> If that is truly the case, then qtwebkit should not select
-> BR2_PACKAGE_QT5BASE_ICU. Can you try to make a build with qt5webkit
-> enabled, but BR2_PACKAGE_QT5BASE_ICU disabled, and see what happens ?
-> 
-> Perhaps this select BR2_PACKAGE_QT5BASE_ICU needs to be turned into a
-> select BR2_PACKAGE_ICU + icu in QT5WEBKIT_DEPENDENCIES. Of course, make
-> sure to verify for Qt 5.6 and Qt 5.9. I hope you have some decent build
-> machines, because building qt5webkit is very long :)
-> 
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/systemd/systemd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Fore sure! I already have a patch for this :) I need to find time to
-test it and make sure it still works without QT5 ICU.
-
-Hopefuly, I have access to a powerful machine now. I get the output
-within the next 1 hour.
-
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> http://bootlin.com
-
-Regards,
-Gael
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index a6c4b33..2bc665e 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -298,10 +298,10 @@ SYSTEMD_CONF_OPTS += -Dnetworkd=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
+-SYSTEMD_CONF_OPTS += -Dresolved=true
++SYSTEMD_CONF_OPTS += -Dresolve=true
+ SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
+ else
+-SYSTEMD_CONF_OPTS += -Dresolved=false
++SYSTEMD_CONF_OPTS += -Dresolve=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+-- 
+2.1.4
