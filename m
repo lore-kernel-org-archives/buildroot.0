@@ -1,37 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 12 Feb 2018 21:17:19 +0200
-Subject: [Buildroot] Reg: Add a downloaded tar file directly to rootfs
-In-Reply-To: <CAAMHf5HizKFeDaj2v=fv0CCNh+pJhmh=Vrs+Gy0LRnKODDSk=A@mail.gmail.com>
-References: <CAAMHf5HizKFeDaj2v=fv0CCNh+pJhmh=Vrs+Gy0LRnKODDSk=A@mail.gmail.com>
-Message-ID: <20180212191719.4lkypyewitvwongq@tarshish>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 12 Feb 2018 20:25:13 +0100
+Subject: [Buildroot] [PATCH for-next] package/htop: bump to 2.1.0
+Message-ID: <20180212192513.4332-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ravi,
+No upstream hash provided with this release [1].
 
-On Tue, Feb 13, 2018 at 12:10:16AM +0530, ravi chandran wrote:
->      I am having a set of directories and files(actually contain some
-> add-on packages), which needs to be populated inside /srv directory  of
-> target system. I need a way to download the archived file and put it under
-> one of the directory of the rootfs. And during the target system
-> initialization, using init script i will extract the files and populate it
-> under the /srv directory.
-> 
->      could some please provide some hint, what is the right way to do this
-> in buildroot?
+Add licence file hash.
 
-You can use BR2_ROOTFS_OVERLAY or BR2_ROOTFS_POST_BUILD_SCRIPT or a 
-combination of both. See the detail on these and other local customizations in 
-chapter 9 "Project-specific customization" of the Buildroot manual:
+[1] http://www.freelists.org/post/htop/ANN-htop-210
 
-  http://nightly.buildroot.org/manual.html#customize
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/htop/htop.hash | 6 +++---
+ package/htop/htop.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-baruch
-
+diff --git a/package/htop/htop.hash b/package/htop/htop.hash
+index cfea23f99b..5419d767a3 100644
+--- a/package/htop/htop.hash
++++ b/package/htop/htop.hash
+@@ -1,3 +1,3 @@
+-# Hashes from: http://www.freelists.org/post/htop/ANN-htop-202
+-md5	7d354d904bad591a931ad57e99fea84a	htop-2.0.2.tar.gz
+-sha1	201f793f13dce2448e36047079875b9bd5bba75a	htop-2.0.2.tar.gz
++# Locally calculated
++sha256  3260be990d26e25b6b49fc9d96dbc935ad46e61083c0b7f6df413e513bf80748  htop-2.1.0.tar.gz
++sha256  70466e76443cb5b68144d9fcedca9584e7bfdb6c50859daa5a0290ea27c58aad  COPYING
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index d06e4a56d0..71889557ca 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HTOP_VERSION = 2.0.2
++HTOP_VERSION = 2.1.0
+ HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
+ HTOP_DEPENDENCIES = ncurses
+ # Prevent htop build system from searching the host paths
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.14.3
