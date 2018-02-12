@@ -1,22 +1,40 @@
-From: nimaim <nimaim@gmail.com>
-Date: Mon, 12 Feb 2018 06:37:10 -0700 (MST)
-Subject: [Buildroot] [RFC 1/2] qt5: bump latest version to 5.10.0
-In-Reply-To: <20180211161320.8864-2-gael.portay@savoirfairelinux.com>
-References: <20180211161320.8864-1-gael.portay@savoirfairelinux.com>
- <20180211161320.8864-2-gael.portay@savoirfairelinux.com>
-Message-ID: <1518442630960-0.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 12 Feb 2018 14:48:55 +0100
+Subject: [Buildroot] [PATCH v2 1/5] python-psycopg2: new package
+In-Reply-To: <CAFSsvmrjmriHVyu4NMyNCHeB1U7VymCmJUYckuZ-HGU+TvBLPQ@mail.gmail.com>
+References: <20180206132506.30389-1-aduskett@gmail.com>
+ <20180210162230.136b9627@windsurf.lan>
+ <CAGm1_ktNRN88kAztD=7owBB6LK1ShVexTwpqf8Ykhj14YjTYKQ@mail.gmail.com>
+ <CAFSsvmrjmriHVyu4NMyNCHeB1U7VymCmJUYckuZ-HGU+TvBLPQ@mail.gmail.com>
+Message-ID: <20180212144855.59b7b0df@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is semi unrelated, but along would this, would it make sense to bump the
-current Qt LTS version from 5.6.x to 5.9.x (currently 5.9.4, which should
-also be bumped from the 5.9.3 currently in the BR repo), and use this 5.10.x
-version as BR2_PACKAGE_QT5_VERSION_LATEST as currently proposed?
+Hello,
 
+On Mon, 12 Feb 2018 07:06:13 -0500, Adam Duskett wrote:
 
+> This patch is from yocto actually.  pg_config is called by setup.py to
+> get the PostgreSQL server version.
+> There are two problems with this:
+> 
+> 1) There is no way to specify a path to pg_config, so it uses the
+> hosts pg_config (if it's not available it causes an error)
+> 2) Even if you do use pg_config, the one generated during
+> cross-compilation doesn't print out the version information
+>     that setup.py is looking for.
 
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Did you notice that Buildroot has its own pg_config in
+package/postgresql/postgresql.mk ? Indeed, the pg_config built/installed
+by PostgreSQL didn't work properly in a cross-compilation context, so
+we simply implemented a simplified shell-based version. Perhaps it just
+needs to be extended to support what python-psycopg2 needs ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
