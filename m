@@ -1,96 +1,117 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 12 Feb 2018 19:02:08 -0200
-Subject: [Buildroot] [PATCH] support/testing: fix job check-gitlab-ci.yml
-In-Reply-To: <20180212090725.323e5a6c@windsurf.lan>
-References: <20180212090725.323e5a6c@windsurf.lan>
-Message-ID: <1518469328-5895-1-git-send-email-ricardo.martincoski@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 12 Feb 2018 22:06:33 +0100
+Subject: [Buildroot] [PATCH next v6] systemd: allow to build with uClibc
+ toolchains
+Message-ID: <20180212210633.GA20420@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently 'run-tests -l' is broken. It breaks 'make .gitlab-ci.yml' that
-in turn breaks the job in GitLab.
+We need to disable any systemd parts using either IDN, NSS or gshadow.
+IDN is only disabled in C library function call to getnameinfo(),
+it does not effect libidn/libidn2 usage in systemd.
 
-TestRustBase is not a test case by itself, so it can't have a method
-with the name starting with "test_" otherwise nose2 assumes it is a test
-case.
-Move the test_run method from the base class to the derived classes.
+Tested with qemu-system-arm.
 
-While at it, update .gitlab-ci.yml with the new test cases.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/52000035
-
-Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-check-gitlab-ci.yml after the fix:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/52092002
-which is part of a full run:
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/17391318
+v1 -> v2:
+  - added Upstream commit URL suggested by Thomas Petazzoni
+  - rework enable/disable options suggested by Thomas Petazzoni
+  - extend commit message a little bit
+v2 -> v3:
+  - sync to latest master changes
+  - remove patches included upstream
+  - disable features not usable with uClibc-ng lacking nss.h
+v3 -> v4:
+  - add comment about missing nss suggested by Arnout
+  - add extra parenthesis suggested by Arnout
+v4 -> v5:
+  - update after switch to meson
+  - fix typo for resolve option
+v5 -> v6:
+  - split of typo fix from uClibc enable patch
 ---
- .gitlab-ci.yml                             |  2 ++
- support/testing/tests/package/test_rust.py | 18 ++++++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ package/systemd/Config.in  |  3 +++
+ package/systemd/systemd.mk | 11 +++++++++++
+ system/Config.in           |  6 +++---
+ 3 files changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 30a4399..f76e53b 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -282,6 +282,8 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
- tests.package.test_ipython.TestIPythonPy3: *runtime_test
- tests.package.test_python.TestPython2: *runtime_test
- tests.package.test_python.TestPython3: *runtime_test
-+tests.package.test_rust.TestRust: *runtime_test
-+tests.package.test_rust.TestRustBin: *runtime_test
- tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: *runtime_test
- tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: *runtime_test
- tests.toolchain.test_external.TestExternalToolchainCCache: *runtime_test
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index 8035f8b..e6c0de2 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -53,12 +53,6 @@ class TestRustBase(infra.basetest.BRTest):
-         self.b.build()
-         shutil.rmtree(workdir)
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 661f40d..81eee96 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -190,6 +190,7 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
  
--    def test_run(self):
--        self.build_test_prog()
--        self.login()
--        _, exit_code = self.emulator.run(self.crate)
--        self.assertEqual(exit_code, 0)
--
+ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+ 	bool "enable myhostname NSS plugin"
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
+ 	default y
+ 	help
+ 	  nss-myhostname is a plug-in module for the GNU Name Service
+@@ -245,6 +246,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
  
- class TestRustBin(TestRustBase):
-     config = \
-@@ -82,6 +76,12 @@ class TestRustBin(TestRustBase):
-              BR2_PACKAGE_HOST_RUSTC=y
-              """
+ config BR2_PACKAGE_SYSTEMD_RESOLVED
+ 	bool "enable resolve daemon"
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
+ 	default y
+ 	help
+ 	  systemd-resolved is a system service that provides network
+@@ -278,6 +280,7 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
  
-+    def test_run(self):
-+        self.build_test_prog()
-+        self.login()
-+        _, exit_code = self.emulator.run(self.crate)
-+        self.assertEqual(exit_code, 0)
+ config BR2_PACKAGE_SYSTEMD_SYSUSERS
+ 	bool "enable sysusers support"
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs gshadow.h
+ 	help
+ 	  systemd-sysusers creates system users and groups, based on
+ 	  the file format and location specified in sysusers.d(5).
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1c31ebb..a6c4b33 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -48,6 +48,17 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dmount-path=/usr/bin/mount \
+ 	-Dumount-path=/usr/bin/umount
+ 
++# disable unsupported features for non-glibc toolchains
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
++SYSTEMD_CONF_OPTS += \
++	-Didn=true \
++	-Dnss-systemd=true
++else
++SYSTEMD_CONF_OPTS += \
++	-Didn=false \
++	-Dnss-systemd=false
++endif
 +
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ SYSTEMD_DEPENDENCIES += acl
+ SYSTEMD_CONF_OPTS += -Dacl=true
+diff --git a/system/Config.in b/system/Config.in
+index d48cf8d..7b36516 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -127,7 +127,7 @@ config BR2_INIT_SYSV
+ config BR2_INIT_SYSTEMD
+ 	bool "systemd"
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+@@ -137,8 +137,8 @@ config BR2_INIT_SYSTEMD
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
  
- class TestRust(TestRustBase):
-     config = \
-@@ -105,3 +105,9 @@ class TestRust(TestRustBase):
-              BR2_PACKAGE_HOST_RUSTC=y
-              BR2_PACKAGE_HOST_RUST=y
-              """
-+
-+    def test_run(self):
-+        self.build_test_prog()
-+        self.login()
-+        _, exit_code = self.emulator.run(self.crate)
-+        self.assertEqual(exit_code, 0)
+-comment "systemd needs a glibc toolchain, headers >= 3.10"
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
++comment "systemd needs a glibc or uClibc toolchain, headers >= 3.10"
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
+ 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
+ 
+ config BR2_INIT_NONE
 -- 
-2.7.4
+2.1.4
