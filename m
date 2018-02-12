@@ -1,25 +1,23 @@
-From: ravi chandran <ravigct27@gmail.com>
-Date: Tue, 13 Feb 2018 00:10:16 +0530
-Subject: [Buildroot] Reg: Add a downloaded tar file directly to rootfs
-Message-ID: <CAAMHf5HizKFeDaj2v=fv0CCNh+pJhmh=Vrs+Gy0LRnKODDSk=A@mail.gmail.com>
+From: David Corrigan <piense@gmail.com>
+Date: Mon, 12 Feb 2018 13:13:10 -0600
+Subject: [Buildroot] PI Board login prompt
+Message-ID: <CAA4dnqUoW0b=buUfEfPDFr6OAOdpLgDyp14RY6-eN8EOV8dk3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-     I am having a set of directories and files(actually contain some
-add-on packages), which needs to be populated inside /srv directory  of
-target system. I need a way to download the archived file and put it under
-one of the directory of the rootfs. And during the target system
-initialization, using init script i will extract the files and populate it
-under the /srv directory.
+Hey gang,
 
-     could some please provide some hint, what is the right way to do this
-in buildroot?
+Just started using 11.2 and noticed that the Pi board config doesn't
+respect the "Run a getty prompt" option in the menuconfig. Looks like
+board/raspberrypi/post-build could use a check for that menu item. Not
+entirely sure how to go about adding it in but if someone could put that in
+future versions it'd be nice.
 
-Thanks..
+Thanks,
+David Corrigan
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180213/3bd73634/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180212/e862fcd6/attachment.html>
