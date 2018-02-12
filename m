@@ -1,95 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Feb 2018 17:07:14 +0100
-Subject: [Buildroot] [PATCH v2 1/1] libcpprestsdk: fix building as a
- static library
-In-Reply-To: <20180212130016.3054-1-aduskett@gmail.com>
-References: <20180212130016.3054-1-aduskett@gmail.com>
-Message-ID: <20180212170714.6715fcdf@windsurf.lan>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 12 Feb 2018 17:51:06 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to 3.4.2
+Message-ID: <20180212165106.18383-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for working on this new version!
-
-On Mon, 12 Feb 2018 08:00:16 -0500, Adam Duskett wrote:
-> Use pkg-config to find OpenSSL. This will automatically find any
-> dependent libraries and put them in the correct order for linking.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1df528254468a5ece2f6fe37b3401e68737beed1
-> 
-> Upstream status: submitted
-> https://github.com/Microsoft/cpprestsdk/pull/688
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Now using pkg-config instead of manually moving library search order
->     (Thomas)
-> 
->  ...prestsdk-fix-building-as-a-static-library.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
-> 
-> diff --git a/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch b/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
-> new file mode 100644
-> index 0000000000..c80f3f9ca0
-> --- /dev/null
-> +++ b/package/libcpprestsdk/0004-libcpprestsdk-fix-building-as-a-static-library.patch
-> @@ -0,0 +1,45 @@
-> +From 8a9c3db14a390c0a8788405e52e9b8737a430191 Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <aduskett@gmail.com>
-> +Date: Mon, 12 Feb 2018 07:49:34 -0500
-> +Subject: [PATCH] libcpprestsdk: fix building as a static library
-> +
-> +Use pkg-config to find OpenSSL. This will automatically find any
-> +dependent libraries and put them in the correct order for linking.
-> +
-> +Upstream status: submitted
-> +https://github.com/Microsoft/cpprestsdk/pull/688
-
-Your pull request now has both fixes. Are you sure this is what you
-wanted to do ?
-
-> +---
-> + Release/cmake/cpprest_find_openssl.cmake | 10 +++++++---
-> + 1 file changed, 7 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/Release/cmake/cpprest_find_openssl.cmake b/Release/cmake/cpprest_find_openssl.cmake
-> +index 0b49a7e..2be8afb 100644
-> +--- a/Release/cmake/cpprest_find_openssl.cmake
-> ++++ b/Release/cmake/cpprest_find_openssl.cmake
-> +@@ -41,8 +41,12 @@ function(cpprest_find_openssl)
-> +       # This should prevent linking against the system provided 0.9.8y
-> +       set(_OPENSSL_VERSION "")
-> +     endif()
-> +-    find_package(OpenSSL 1.0.0 REQUIRED)
-> +-
-> ++    if(UNIX)
-> ++		find_package(PkgConfig REQUIRED)
-> ++		pkg_search_module(OPENSSL openssl REQUIRED)
-> ++    else()
-> ++    	find_package(OpenSSL 1.0.0 REQUIRED)
-> ++	endif()
-> +     INCLUDE(CheckCXXSourceCompiles)
-> +     set(CMAKE_REQUIRED_INCLUDES "${OPENSSL_INCLUDE_DIR}")
-> +     set(CMAKE_REQUIRED_LIBRARIES "${OPENSSL_LIBRARIES}")
-> +@@ -67,4 +71,4 @@ function(cpprest_find_openssl)
-> +     # libressl doesn't ship with the cleanup method being used in ws_client_wspp
-> +     target_compile_definitions(cpprestsdk_openssl_internal INTERFACE -DCPPREST_NO_SSL_LEAK_SUPPRESS)
-> +   endif()
-> +-endfunction()
-> +\ No newline at end of file
-> ++endfunction()
-
-This last chunk is a spurious and unrelated change.
-
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index cdf740834b..a8092616a9 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 5a77278a63741efa74e26bf197b9bb09ac6381b9757391b922407210f0f991c0  ffmpeg-3.4.1.tar.xz
++sha256 2b92e9578ef8b3e49eeab229e69305f5f4cbc1fdaa22e927fc7fca18acccd740  ffmpeg-3.4.2.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 76c31f5f52..5d2f89fb43 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.4.1
++FFMPEG_VERSION = 3.4.2
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.11.0
