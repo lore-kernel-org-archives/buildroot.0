@@ -1,54 +1,143 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Mon, 12 Feb 2018 16:19:54 -0500
-Subject: [Buildroot] [RFC 2/2] qt5webengine: select libnss
-In-Reply-To: <20180211161320.8864-3-gael.portay@savoirfairelinux.com>
-References: <20180211161320.8864-1-gael.portay@savoirfairelinux.com>
- <20180211161320.8864-3-gael.portay@savoirfairelinux.com>
-Message-ID: <20180212211954.qcnlrisf6trqve2q@archlinux>
+From: Julius Kriukas <julius@kriukas.lt>
+Date: Mon, 12 Feb 2018 23:34:00 +0200
+Subject: [Buildroot] [PATCH v3] systemd: switch to en_US.UTF-8 locale when
+ building
+In-Reply-To: <20180131213629.4385-1-julius@kriukas.lt>
+References: <20180131213629.4385-1-julius@kriukas.lt>
+Message-ID: <20180212213400.15061-1-julius@kriukas.lt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+When BR2_REPRODUCIBLE is enabled or host uses non UTF-8 capable locale
+building systemd fails with an error:
 
-On Sun, Feb 11, 2018 at 11:13:20AM -0500, Ga?l PORTAY wrote:
-> ...
-> 
-> diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-> index 387ce0a76e..c231ad2993 100644
-> --- a/package/qt5/qt5webengine/Config.in
-> +++ b/package/qt5/qt5webengine/Config.in
-> @@ -38,6 +38,7 @@ config BR2_PACKAGE_QT5WEBENGINE
->  	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if !BR2_ARCH_IS_64 # v8/chromium
->  	select BR2_PACKAGE_FFMPEG
->  	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_LIBNSS if !BR2_PACKAGE_QT5_VERSION_5_6
->  	select BR2_PACKAGE_LIBVPX
->  	select BR2_PACKAGE_OPUS
->  	select BR2_PACKAGE_WEBP
-> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-> index 31d625d06c..69b7356a51 100644
-> --- a/package/qt5/qt5webengine/qt5webengine.mk
-> +++ b/package/qt5/qt5webengine/qt5webengine.mk
-> @@ -7,7 +7,7 @@
->  QT5WEBENGINE_VERSION = $(QT5_VERSION)
->  QT5WEBENGINE_SITE = $(QT5_SITE)
->  QT5WEBENGINE_SOURCE = $(call qt5source,qtwebengine,$(QT5WEBENGINE_VERSION))
-> -QT5WEBENGINE_DEPENDENCIES = ffmpeg libglib2 libvpx opus webp qt5base \
-> +QT5WEBENGINE_DEPENDENCIES = ffmpeg libglib2 libnss libvpx opus webp qt5base \
->  	qt5declarative qt5webchannel host-bison host-flex host-gperf \
->  	host-pkgconf host-python
->  QT5WEBENGINE_INSTALL_STAGING = YES
+[1/1080] Generating systemd.bg.catalog with a meson_exe.py custom command.
+FAILED: catalog/systemd.bg.catalog
+/buildroot/output/host/bin/python3 /buildroot/output/host/bin/meson --internal exe /buildroot/output/build/systemd-236/build/meson-private/meson_exe_sed_232a0623cc7ce2cd67ec72ed784b76307102ed76.dat
+Warning: You are using 'ANSI_X3.4-1968' which is not a Unicode-compatible locale.
+You might see errors if you use UTF-8 strings as filenames, as strings, or as file contents.
+Please switch to a UTF-8 locale for your platform.
+...
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 1079: ordinal not in range(128)
+package/pkg-generic.mk:247: recipe for target '/buildroot/output/build/systemd-236/.stamp_built' failed
+make: *** [/buildroot/output/build/systemd-236/.stamp_built] Error 1
 
-In the next version of the patch, I will move the libnss dependency into
-a ifneq/endif block, since this depedency is a requirement of the latest
-(5.10) version of Qt WebEngine.
+This patch changes default host system locale from C to en_US.UTF-8 when
+building systemd package to fix this issue. It also introduces
+BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that checks if this locale is available on
+the host system. If locale is not available error message is show and build
+process is stopped.
 
-> -- 
-> 2.15.1
-> 
+Signed-off-by: Julius Kriukas <julius@kriukas.lt>
 
-Regards,
-Gael
+---
+Changes v1 -> v2:
+  - Added BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that is selected by
+    BR2_REPRODUCIBLE.
+  - Extended support/dependencies/dependencies.sh to check for
+    en_US.UTF-8 locale availability if BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
+    is set.
+
+Changes v2 -> v3:
+  - Always select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE by systemd package.
+  - Do not select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE by BR2_REPRODUCIBLE.
+  - Keep global locale set to C if BR2_REPRODUCIBLE=y.
+  - Use 'grep -q' instead of '> /dev/null' in dependencies.sh script.
+---
+ Config.in                            |  5 +++++
+ package/systemd/Config.in            |  1 +
+ package/systemd/systemd.mk           | 10 ++++++----
+ support/dependencies/dependencies.sh | 13 +++++++++++++
+ 4 files changed, 25 insertions(+), 4 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index 0002df5176..8d471dfb2e 100644
+--- a/Config.in
++++ b/Config.in
+@@ -94,6 +94,11 @@ config BR2_HOSTARCH_NEEDS_IA32_COMPILER
+ config BR2_NEEDS_HOST_UTF8_LOCALE
+ 	bool
+ 
++# Hidden boolean selected by packages that explicitly need en_US.UTF-8 locale
++# to be available on host system.
++config BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
++	bool
++
+ source "arch/Config.in"
+ 
+ menu "Build options"
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 661f40dee4..742b3f1f1d 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -27,6 +27,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
+ 	select BR2_TARGET_TZ_INFO
++        select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
+ 	help
+ 	  systemd is a system and service manager for Linux,
+ 	  compatible with SysV and LSB init scripts. systemd provides
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1c31ebb34c..58798f32df 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -385,23 +385,25 @@ endef
+ 
+ SYSTEMD_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+ 
++SYSTEMD_ENV = $(TARGET_MAKE_ENV) LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
++
+ define SYSTEMD_CONFIGURE_CMDS
+ 	rm -rf $(@D)/build
+ 	mkdir -p $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
++	$(SYSTEMD_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
+ endef
+ 
+ define SYSTEMD_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
++	$(SYSTEMD_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
+ endef
+ 
+ define SYSTEMD_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
++	$(SYSTEMD_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+ 		-C $(@D)/build install
+ endef
+ 
+ define SYSTEMD_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
++	$(SYSTEMD_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+ 		-C $(@D)/build install
+ endef
+ 
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 1804e85508..881f07008c 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -207,6 +207,19 @@ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+ 	fi
+ fi
+ 
++if grep -q ^BR2_NEEDS_HOST_EN_US_UTF8_LOCALE=y $BR2_CONFIG; then
++	if ! which locale > /dev/null ; then
++		echo
++		echo "You need locale support on your build machine"
++		exit 1 ;
++	fi
++	if ! LC_ALL=en_US.UTF-8 locale -c charmap | grep -q '^UTF-8$'; then
++		echo
++		echo "You need en_US.UTF-8 locale suppport on the host system"
++		exit 1 ;
++	fi
++fi
++
+ if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
+ 	check_prog_host "java"
+ 	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
+-- 
+2.15.1
