@@ -1,36 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 22:23:15 +0100
-Subject: [Buildroot] [PATCH] librsvg: security bump to version 2.40.20
-In-Reply-To: <aaf6ad8dfb35b1dee1bcfaa1f00bb50f19fbcbf9.1518465751.git.baruch@tkos.co.il>
-References: <aaf6ad8dfb35b1dee1bcfaa1f00bb50f19fbcbf9.1518465751.git.baruch@tkos.co.il>
-Message-ID: <20180213222315.1cfa6d8a@windsurf.lan>
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Date: Tue, 13 Feb 2018 22:11:09 +0100
+Subject: [Buildroot] [git commit] docs/website/news.html: update for
+ 2018.02-rc1
+In-Reply-To: <20180205162551.1CB0E88432@busybox.osuosl.org>
+References: <20180205162551.1CB0E88432@busybox.osuosl.org>
+Message-ID: <20180213211109.GA9763@australia.be.alcatel-lucent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Mon, 12 Feb 2018 22:02:31 +0200, Baruch Siach wrote:
-> Fixes CVE-2018-1000041: information disclosure via a crafted SVG file.
+On Mon, Feb 05, 2018 at 05:24:11PM +0100, Peter Korsgaard wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=f367a2f16504624ccc87f29374044be474b13170
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> Bump to the latest (maybe last) release in the 2.40.x series. Newer
-> versions require a Rust compiler.
-
-Dammit, SVG libraries will now require having a Rust compiler around...
-
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/librsvg/librsvg.hash | 4 ++--
->  package/librsvg/librsvg.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  docs/website/news.html | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/docs/website/news.html b/docs/website/news.html
+> index 59093577c9..e194d68b7e 100644
+> --- a/docs/website/news.html
+> +++ b/docs/website/news.html
+> @@ -9,6 +9,30 @@
+>  <h2>News</h2>
+>  <ul class="timeline">
+>  
+> +  <li class="timeline-inverted">
+> +    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+> +    <div class="timeline-panel">
+> +      <div class="timeline-heading">
+> +	<h4 class="timeline-title">2018.02-rc1 released</h4>
+> +	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 February 2018</small></p>
+> +      </div>
+> +      <div class="timeline-body">
+> +	<p>We have a new release candidate! Lots of changes all over the
+> +	  tree, see the
+> +	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02-rc1">CHANGES</a>
+> +	  file for details and read the
+> +	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-February/213171.html">announcement</a>.
+> +	</p>
+> +
+> +	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+> +	  <a href="/downloads/buildroot-2018.02-rc1.tar.bz2">2018.02-rc1
+> +	    release candidate</a>, and report any problems found to the
+> +	  <a href="support.html">mailing list</a> or
+> +	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
+> +      </div>
+> +    </div>
+> +  </li>
+> +
+>    <li>
+>      <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+>      <div class="timeline-panel">
 
-Anyway, applied to master, thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I don't see this change reflected on the website:
+https://buildroot.org/news.html
+and likewise, the download page does not show the rc1 tarball.
+Seems the update of the website went wrong somewhere?
+
+/Thomas
