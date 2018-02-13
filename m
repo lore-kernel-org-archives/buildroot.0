@@ -1,37 +1,52 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue, 13 Feb 2018 09:39:38 +0100
-Subject: [Buildroot] [PATCH v2 4/4] configs: add linux boot logo to
- raspberrypi3 defconfig
-In-Reply-To: <1518511178-28623-1-git-send-email-angelo@amarulasolutions.com>
-References: <1518511178-28623-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1518511178-28623-4-git-send-email-angelo@amarulasolutions.com>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Tue, 13 Feb 2018 09:44:04 +0100
+Subject: [Buildroot] [PATCH 08/14] diffconfig: fix code style
+In-Reply-To: <20180213084930.07104f73@windsurf.lan>
+References: <20180130202512.GA7723@gmail.com>
+ <5a825820cac23_51963fbb9c9c7128471b1@ultri3.mail>
+ <20180213084930.07104f73@windsurf.lan>
+Message-ID: <20180213084404.GA2455@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Hello,
 
-This patch adds a custom boot up logo to the raspberrypi3
-defconfig.
+On Tue, Feb 13, 2018 at 08:49:30AM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 13 Feb 2018 01:14:40 -0200, Ricardo Martincoski wrote:
+> 
+> > Adding this line to .flake8
+> > exclude=utils/diffconfig
+> > 
+> > It looks to me the later is preferable. This way a script that don't need any
+> > tweak can be a raw copy from the original.
+> 
+> Agreed, the latter seems preferable to me.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- configs/raspberrypi3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Yes, please do that.
 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 9304f0c..849b30e 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="33ee56d5927ceff630fbc87e3f5caa409b6ae114"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-+BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
- 
- # Build the DTB from the kernel sources
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--- 
-2.7.4
+Could you please add utils/config as well?
+
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
+
+
+Thank you,
+Marcus Folkesson
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180213/fd3d44c0/attachment.asc>
