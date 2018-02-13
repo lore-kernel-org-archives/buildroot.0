@@ -1,43 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 21:14:53 +0100
+From: Chris Brandt <Chris.Brandt@renesas.com>
+Date: Tue, 13 Feb 2018 20:24:21 +0000
 Subject: [Buildroot] [PATCH 1/2] cramfs: change to new site location
-In-Reply-To: <20180213195449.51516-2-chris.brandt@renesas.com>
+In-Reply-To: <20180213211453.519b65eb@windsurf.lan>
 References: <20180213195449.51516-1-chris.brandt@renesas.com>
  <20180213195449.51516-2-chris.brandt@renesas.com>
-Message-ID: <20180213211453.519b65eb@windsurf.lan>
+ <20180213211453.519b65eb@windsurf.lan>
+Message-ID: <SG2PR06MB1165EA4292BE78ADF8D3A1678AF60@SG2PR06MB1165.apcprd06.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tuesday, February 13, 2018, Thomas Petassoni wrote:
+> Do you know how endianess if handled by cramfs with the more recent
+> version of the cramfs tools ?
 
-Thanks for doing this work on cramfs!
+All I can tell you is that there is not a command line option for it.
+So, I assume it's not supported.
 
-On Tue, 13 Feb 2018 14:54:48 -0500, Chris Brandt wrote:
-> As of Linux-4.15, cramfs now has a official maintainer again.
-> Additionally, that person is hosting and maintaining a new version of
-> cramfs-tools.
-> 
-> The 0003-fix-missing-types.patch is no longer needed because that fix
-> is already included.
-> 
-> However, since patches 0001-endian.patch and 0002-cygwin_IO.patch are
-> so old, they are being removed until someone that needs them can
-> reapply and test them. At that point, they should submit the changes
-> to the new cramfs-tools maintainer instead of adding the patches back
-> here.
 
-Do you know how endianess if handled by cramfs with the more recent
-version of the cramfs tools ?
+$ output/build/host-cramfs-5aea81001ac6/mkcramfs 
+usage: output/build/host-cramfs-5aea81001ac6/mkcramfs [-h] [-e edition] [-i file] [-n name] [-D file] dirname outfile
+ -h         print this help
+ -E         make all warnings errors (non-zero exit status)
+ -e edition set edition number (part of fsid)
+ -i file    insert a file image into the filesystem (requires >= 2.4.0)
+ -n name    set name of cramfs filesystem
+ -p         pad by 512 bytes for boot code
+ -s         sort directory entries (old option, ignored)
+ -v         be more verbose
+ -x         use extended block pointers (requires >= 4.15)
+ -X         allow XIP of ELF files (imply -x)
+ -z         make explicit holes (requires >= 2.3.39)
+ -D         Use the named FILE as a device table file
+ -q         squash permissions (make everything owned by root)
+ dirname    root of the filesystem to be compressed
+ outfile    output file
 
-Other than that, the patches look good to me.
 
-Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+I don't have any big endian systems, so I can't test it either.
+
+But, Nicolas said that if someone is willing to test it and sign off on 
+it, he would add it to his repository.
+
+
+Chris
