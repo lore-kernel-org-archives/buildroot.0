@@ -1,181 +1,25 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 13 Feb 2018 18:51:41 +0200
-Subject: [Buildroot] [PATCH master] busybox: add upstream security fixes
-Message-ID: <cf05d959586b416bbae83f437fd84e66b3243776.1518540701.git.baruch@tkos.co.il>
+From: AAlex_ <earthquake.de@freenet.de>
+Date: Tue, 13 Feb 2018 12:29:57 -0700 (MST)
+Subject: [Buildroot] Custom package using buildroot-linux-uclibc-g++
+In-Reply-To: <20180213165147.4e6d97e6@windsurf.lan>
+References: <20180212165319.2d80d5e3@windsurf.lan>
+ <20180213165147.4e6d97e6@windsurf.lan>
+Message-ID: <1518550197252-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2017-15873: Integer overflow in decompress_bunzip2.c leads to a read
-access violation
+Hello,
+Thank you, that solve the problem.
 
-CVE-2017-15874: Integer overflow in decompress_unlzma.c leads to a read
-access violation
+Best regards,
+Alex 
 
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
 
-This is only applicable to master. These fixes are already in version
-1.28.0 that is now in next.
 
-Care should be take to remove these patches when next is merged into
-master.
----
- ...unzip2-fix-runCnt-overflow-from-bug-10431.patch | 101 +++++++++++++++++++++
- .../0007-unlzma-fix-SEGV-closes-10436.patch        |  34 +++++++
- 2 files changed, 135 insertions(+)
- create mode 100644 package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch
- create mode 100644 package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch
 
-diff --git a/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch b/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch
-new file mode 100644
-index 000000000000..e8fd2e027d4a
---- /dev/null
-+++ b/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch
-@@ -0,0 +1,101 @@
-+From 0402cb32df015d9372578e3db27db47b33d5c7b0 Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Sun, 22 Oct 2017 18:23:23 +0200
-+Subject: [PATCH] bunzip2: fix runCnt overflow from bug 10431
-+
-+This particular corrupted file can be dealth with by using "unsigned".
-+If there will be cases where it genuinely overflows, there is a disabled
-+code to deal with that too.
-+
-+function                                             old     new   delta
-+get_next_block                                      1678    1667     -11
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 0402cb32df0
-+
-+ archival/libarchive/decompress_bunzip2.c | 30 +++++++++++++++++++-----------
-+ 1 file changed, 19 insertions(+), 11 deletions(-)
-+
-+diff --git a/archival/libarchive/decompress_bunzip2.c b/archival/libarchive/decompress_bunzip2.c
-+index 7cd18f5ed4cf..bec89edd3a4d 100644
-+--- a/archival/libarchive/decompress_bunzip2.c
-++++ b/archival/libarchive/decompress_bunzip2.c
-+@@ -156,15 +156,15 @@ static unsigned get_bits(bunzip_data *bd, int bits_wanted)
-+ static int get_next_block(bunzip_data *bd)
-+ {
-+ 	struct group_data *hufGroup;
-+-	int dbufCount, dbufSize, groupCount, *base, *limit, selector,
-+-		i, j, runPos, symCount, symTotal, nSelectors, byteCount[256];
-+-	int runCnt = runCnt; /* for compiler */
-++	int groupCount, *base, *limit, selector,
-++		i, j, symCount, symTotal, nSelectors, byteCount[256];
-+ 	uint8_t uc, symToByte[256], mtfSymbol[256], *selectors;
-+ 	uint32_t *dbuf;
-+ 	unsigned origPtr, t;
-++	unsigned dbufCount, runPos;
-++	unsigned runCnt = runCnt; /* for compiler */
-+ 
-+ 	dbuf = bd->dbuf;
-+-	dbufSize = bd->dbufSize;
-+ 	selectors = bd->selectors;
-+ 
-+ /* In bbox, we are ok with aborting through setjmp which is set up in start_bunzip */
-+@@ -187,7 +187,7 @@ static int get_next_block(bunzip_data *bd)
-+ 	   it didn't actually work. */
-+ 	if (get_bits(bd, 1)) return RETVAL_OBSOLETE_INPUT;
-+ 	origPtr = get_bits(bd, 24);
-+-	if ((int)origPtr > dbufSize) return RETVAL_DATA_ERROR;
-++	if (origPtr > bd->dbufSize) return RETVAL_DATA_ERROR;
-+ 
-+ 	/* mapping table: if some byte values are never used (encoding things
-+ 	   like ascii text), the compression code removes the gaps to have fewer
-+@@ -435,7 +435,14 @@ static int get_next_block(bunzip_data *bd)
-+ 			   symbols, but a run of length 0 doesn't mean anything in this
-+ 			   context).  Thus space is saved. */
-+ 			runCnt += (runPos << nextSym); /* +runPos if RUNA; +2*runPos if RUNB */
-+-			if (runPos < dbufSize) runPos <<= 1;
-++//The 32-bit overflow of runCnt wasn't yet seen, but probably can happen.
-++//This would be the fix (catches too large count way before it can overflow):
-++//			if (runCnt > bd->dbufSize) {
-++//				dbg("runCnt:%u > dbufSize:%u RETVAL_DATA_ERROR",
-++//						runCnt, bd->dbufSize);
-++//				return RETVAL_DATA_ERROR;
-++//			}
-++			if (runPos < bd->dbufSize) runPos <<= 1;
-+ 			goto end_of_huffman_loop;
-+ 		}
-+ 
-+@@ -445,14 +452,15 @@ static int get_next_block(bunzip_data *bd)
-+ 		   literal used is the one@the head of the mtfSymbol array.) */
-+ 		if (runPos != 0) {
-+ 			uint8_t tmp_byte;
-+-			if (dbufCount + runCnt > dbufSize) {
-+-				dbg("dbufCount:%d+runCnt:%d %d > dbufSize:%d RETVAL_DATA_ERROR",
-+-						dbufCount, runCnt, dbufCount + runCnt, dbufSize);
-++			if (dbufCount + runCnt > bd->dbufSize) {
-++				dbg("dbufCount:%u+runCnt:%u %u > dbufSize:%u RETVAL_DATA_ERROR",
-++						dbufCount, runCnt, dbufCount + runCnt, bd->dbufSize);
-+ 				return RETVAL_DATA_ERROR;
-+ 			}
-+ 			tmp_byte = symToByte[mtfSymbol[0]];
-+ 			byteCount[tmp_byte] += runCnt;
-+-			while (--runCnt >= 0) dbuf[dbufCount++] = (uint32_t)tmp_byte;
-++			while ((int)--runCnt >= 0)
-++				dbuf[dbufCount++] = (uint32_t)tmp_byte;
-+ 			runPos = 0;
-+ 		}
-+ 
-+@@ -466,7 +474,7 @@ static int get_next_block(bunzip_data *bd)
-+ 		   first symbol in the mtf array, position 0, would have been handled
-+ 		   as part of a run above.  Therefore 1 unused mtf position minus
-+ 		   2 non-literal nextSym values equals -1.) */
-+-		if (dbufCount >= dbufSize) return RETVAL_DATA_ERROR;
-++		if (dbufCount >= bd->dbufSize) return RETVAL_DATA_ERROR;
-+ 		i = nextSym - 1;
-+ 		uc = mtfSymbol[i];
-+ 
-+-- 
-+2.15.1
-+
-diff --git a/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch b/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch
-new file mode 100644
-index 000000000000..c8d875010ebc
---- /dev/null
-+++ b/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch
-@@ -0,0 +1,34 @@
-+From 9ac42c500586fa5f10a1f6d22c3f797df11b1f6b Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Fri, 27 Oct 2017 15:37:03 +0200
-+Subject: [PATCH] unlzma: fix SEGV, closes 10436
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 9ac42c500586f
-+
-+ archival/libarchive/decompress_unlzma.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/archival/libarchive/decompress_unlzma.c b/archival/libarchive/decompress_unlzma.c
-+index a9040877efa0..be4342414435 100644
-+--- a/archival/libarchive/decompress_unlzma.c
-++++ b/archival/libarchive/decompress_unlzma.c
-+@@ -450,8 +450,12 @@ unpack_lzma_stream(transformer_state_t *xstate)
-+  IF_NOT_FEATURE_LZMA_FAST(string:)
-+ 			do {
-+ 				uint32_t pos = buffer_pos - rep0;
-+-				if ((int32_t)pos < 0)
-++				if ((int32_t)pos < 0) {
-+ 					pos += header.dict_size;
-++					/* bug 10436 has an example file where this triggers: */
-++					if ((int32_t)pos < 0)
-++						goto bad;
-++				}
-+ 				previous_byte = buffer[pos];
-+  IF_NOT_FEATURE_LZMA_FAST(one_byte2:)
-+ 				buffer[buffer_pos++] = previous_byte;
-+-- 
-+2.15.1
-+
--- 
-2.15.1
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
