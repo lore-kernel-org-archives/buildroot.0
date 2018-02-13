@@ -1,26 +1,69 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 12 Feb 2018 20:38:43 -0500
-Subject: [Buildroot] [PATCH] postgresql: update license file hash
-In-Reply-To: <2d2c2eeb5a65d467ec93c2882c4efca4b88c57ae.1518293798.git.baruch@tkos.co.il>
-References: <2d2c2eeb5a65d467ec93c2882c4efca4b88c57ae.1518293798.git.baruch@tkos.co.il>
-Message-ID: <CANQCQpZjsGv-G3cuKVkVs8dh9RAxPTgRvhpfDuSc3SfB89jFCA@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 13 Feb 2018 01:12:42 -0200
+Subject: [Buildroot] [PATCH 09/14] genrandconfig: fix code style
+References: <20180129231258.58dd6879@windsurf.lan>
+Message-ID: <5a8257aacb962_5196138d1a44697c@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello,
 
-On Sat, Feb 10, 2018 at 3:16 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Copyright year update.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/d79/d7989660584430945644e3a4406ba33cee22863d/
-> http://autobuild.buildroot.net/results/b51/b5141b64ed838caa1daca1bf4fe322dd2afaf0b5/
-> http://autobuild.buildroot.net/results/a37/a375d533036a1b95af32b6bda086e93174b8c5f0/
->
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Mon, Jan 29, 2018 at 08:12 PM, Thomas Petazzoni wrote:
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> On Sun, 21 Jan 2018 22:44:37 -0200, Ricardo Martincoski wrote:
+[snip]
+>>  Alternative solutions would be to isolate the common part of the
+>>  strings as a variable and concatenate on the fly the strings (using a
+>>  bit more processing):
+>>    ...="' + COMMON_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in ...
+> 
+> Yes, please do this. Or perhaps we could use some regexp, because we
+> really don't care about the full URL, but just about the tarball name,
+> no?
+
+Regexp would work, but to avoid joining configlines into a string to search in,
+I think we should change how the config file is opened in this method:
+
+    with open(configfile) as configf:
+        config = configf.read()
+...
+    if re.search(r'^BR2_PACKAGE_PYTHON_NFC=y$', config, re.M) and not sysinfo.has("bzr"):
+        return False
+    # The ctng toolchain is affected by PR58854
+    if re.search(r'^BR2_PACKAGE_LTTNG_TOOLS=y$', config, re.M) and \
+       re.search(r'^BR2_TOOLCHAIN_EXTERNAL_URL=".*armv5-ctng-linux-gnueabi.tar.xz"$', config, re.M):
+        return False
+
+Notice all 'if' lines will be changed.
+
+
+The nice thing about keeping using strings is that configlines is already the
+result of readlines(), so a list of strings, therefore each 'if' searches a
+string in a list.
+
+    BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
+...
+    if 'BR2_PACKAGE_PYTHON_NFC=y\n' in configlines and not sysinfo.has("bzr"):
+        return False
+    # The ctng toolchain is affected by PR58854
+    if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
+        return False
+
+We also have this code that takes advantage of configlines being a list:
+        configlines.remove('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE=""\n')
+
+And only the long lines need to be changed.
+
+> 
+> But I believe all those warning exceptions are really annoying to have.
+> I'd really prefer a smarter solution here.
+
+From the two snippets above I prefer the later.
+What do you think? Any of the two, or another solution?
+
+Regards,
+Ricardo
