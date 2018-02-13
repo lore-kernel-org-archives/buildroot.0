@@ -1,31 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 23:20:42 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5webkit{,
- -examples}: use https link in hashfile
-In-Reply-To: <20180210191138.5518-1-gael.portay@savoirfairelinux.com>
-References: <20180210191138.5518-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180213232042.72e6c985@windsurf.lan>
+Date: Tue, 13 Feb 2018 23:21:10 +0100
+Subject: [Buildroot] [git commit branch/next] configs/amarula_vyasa_rk3288:
+ uboot needs pylibfdt
+Message-ID: <20180213222112.A31388874D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=27562c2bf3871e7d5f3b64717b07f2a7230b542b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 10 Feb 2018 14:11:38 -0500, Ga?l PORTAY wrote:
-> All Qt modules but qt5webkit use https link in their hashfile.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  package/qt5/qt5webkit-examples/qt5webkit-examples.hash | 4 ++--
->  package/qt5/qt5webkit/qt5webkit.hash                   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+For this platform, u-boot uses dtoc during the build, which needs Python
+libfdt. Set the corresponding option TARGET_UBOOT_NEEDS_PYLIBFDT in the
+defconfig.
 
-Applied to master, thanks.
+Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/amarula_vyasa_rk3288_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
+index a020b353b9..4cd46e79de 100644
+--- a/configs/amarula_vyasa_rk3288_defconfig
++++ b/configs/amarula_vyasa_rk3288_defconfig
+@@ -13,6 +13,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="vyasa-rk3288"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
