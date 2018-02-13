@@ -1,35 +1,64 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Tue, 13 Feb 2018 11:35:53 -0500
-Subject: [Buildroot] [RFC 0/2] Qt5 bump latest version to 5.10.0
-In-Reply-To: <20180213152300.w52qim25v3h3h34u@archlinux>
-References: <20180211161320.8864-1-gael.portay@savoirfairelinux.com>
- <20180212222046.galqtm4hl5pnzr5t@archlinux>
- <20180213152300.w52qim25v3h3h34u@archlinux>
-Message-ID: <20180213163553.cbu7khpnf4b243e7@archlinux>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Tue, 13 Feb 2018 09:46:06 -0700
+Subject: [Buildroot] [PATCH v3] qt5base: Qt KMS support does not depend on
+ opengl
+Message-ID: <1518540366-13393-1-git-send-email-joshua.henderson@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 13, 2018 at 10:23:00AM -0500, Ga?l PORTAY wrote:
-> ...
->
-> After investigation, qtwebengine uses the pkg-config wrapper to get
-> libs/cflags for both target and host package...
-> 
-> That is why ninja is trying to link target libraries for an host tool...
-> 
-> I guess qtwebengine is broken for cross-compile for now :/
->
+Qt KMS support should not explicitly depend on the availability of opengl.
+Don't explicitly disable KMS if opengl is not available and fallback to
+detecting if libdrm is available before disabling kms.
 
-Two more things...
+The scenario where this is necessary involves using the Qt linuxfb backend
+"dumb buffer" support via the DRM API.  This is new in Qt 5.9 [1] and only
+requires KMS, but not opengl.
 
-	* Qt has release 5.10.1 yesterday
-	* A issue was closed in Qt tracker[1] and a workaround is merged
-	  in 5.10.1[2]
+[1] http://doc.qt.io/qt-5/embedded-linux.html#linuxfb
 
-I will try out this new version.
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 
-[1]: https://bugreports.qt.io/browse/QTBUG-65079
-[2]: https://codereview.qt-project.org/#/c/214623/
+---
+
+v3:
+- Reorganize libdrm/egl make condition to be more clear.
+
+v2:
+- If libdrm is configured, make it an explicit dependency.
+---
+ package/qt5/qt5base/qt5base.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index b3f9c79..644852d 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -35,12 +35,19 @@ endif
+ 
+ QT5BASE_CONFIGURE_OPTS += $(call qstrip,$(BR2_PACKAGE_QT5BASE_CUSTOM_CONF_OPTS))
+ 
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++QT5BASE_CONFIGURE_OPTS += -kms
++QT5BASE_DEPENDENCIES += libdrm
++else
++QT5BASE_CONFIGURE_OPTS += -no-kms
++endif
++
+ # Uses libgbm from mesa3d
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+-QT5BASE_CONFIGURE_OPTS += -kms -gbm
++QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += mesa3d
+ else
+-QT5BASE_CONFIGURE_OPTS += -no-kms
++QT5BASE_CONFIGURE_OPTS += -no-gbm
+ endif
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+-- 
+2.7.4
