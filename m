@@ -1,50 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 22:07:04 +0100
-Subject: [Buildroot] [git commit] dropbear: use https URLs
-Message-ID: <20180213210710.A39F4886FA@busybox.osuosl.org>
+Date: Tue, 13 Feb 2018 22:07:20 +0100
+Subject: [Buildroot] [PATCH] dropbear: use https URLs
+In-Reply-To: <20180212092150.1ac237c5@x2000>
+References: <20180212092150.1ac237c5@x2000>
+Message-ID: <20180213220720.3e2d1926@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09bc89a6fce8d3238575c2d8afede6970eae1c57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-While a hash check is being done, it's still better to use a download
-URL with HTTPS.
+On Mon, 12 Feb 2018 09:21:50 +0100, Danilo Bargen wrote:
+> While a hash check is being done, it's still better to use a download
+> URL with HTTPS.
+> 
+> Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
+> ---
+>  package/dropbear/Config.in   | 2 +-
+>  package/dropbear/dropbear.mk | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dropbear/Config.in   | 2 +-
- package/dropbear/dropbear.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index d92361fa39..6700778161 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_DROPBEAR
- 	  Alternatively, mount a persistent unionfs over your root
- 	  filesystem.
- 
--	  http://matt.ucc.asn.au/dropbear/dropbear.html
-+	  https://matt.ucc.asn.au/dropbear/dropbear.html
- 
- if BR2_PACKAGE_DROPBEAR
- 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bf7f99d975..01a1a07b76 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DROPBEAR_VERSION = 2017.75
--DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
-+DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
- DROPBEAR_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
