@@ -1,45 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 16:51:47 +0100
-Subject: [Buildroot] Custom package using buildroot-linux-uclibc-g++
-In-Reply-To: <08c05d6899a793abe8e5b0bb14d84033@email.freenet.de>
-References: <08c05d6899a793abe8e5b0bb14d84033@email.freenet.de>
-Message-ID: <20180213165147.4e6d97e6@windsurf.lan>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 13 Feb 2018 18:14:41 +0200
+Subject: [Buildroot] Reg: Add a downloaded tar file directly to rootfs
+In-Reply-To: <CAAMHf5FGV7Mj+suBO7133FNpGGh+tXUKuM4rR1SQM4t2deyVaA@mail.gmail.com>
+References: <CAAMHf5HizKFeDaj2v=fv0CCNh+pJhmh=Vrs+Gy0LRnKODDSk=A@mail.gmail.com>
+ <20180212191719.4lkypyewitvwongq@tarshish>
+ <CAAMHf5FGV7Mj+suBO7133FNpGGh+tXUKuM4rR1SQM4t2deyVaA@mail.gmail.com>
+Message-ID: <20180213161441.z2sunxu76yhsk6aq@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Ravi,
 
-Please keep the Buildroot mailing list in Cc. I've re-added it.
+Please keep the list on Cc.
 
-On Tue, 13 Feb 2018 16:32:50 +0100, earthquake.de at freenet.de wrote:
-> Hello,
->  thanks for your help.
->  With CXX the link works! I use my own makefile and call CXX.
-> 
->  mk-file:
->  CUSTOM_LIB_VERSION = 1.4.3
->  CUSTOM_LIB_SITE = $(BR2_EXTERNAL_CUSTOM_PATH)/package/custom_lib
->  CUSTOM_LIB_SITE_METHOD = local
->  CUSTOM_LIB_STAGING = YES
+On Tue, Feb 13, 2018 at 03:09:16PM +0530, ravi chandran wrote:
+>            Thanks for your response. By the way it is possible to mention a
+> custom repo URL  against any config option, so that buildroot can download
+> the tar file and copy it inside the BR2_ROOTFS_OVERLAY  location .
 
-This should be:
+BR2_ROOTFS_OVERLAY points to a directory tree that is copied over the rootfs. 
+To fetch a tar file from somewhere you can use BR2_ROOTFS_POST_BUILD_SCRIPT, 
+and extract it in $TARGET_DIR. See the details in the manual:
 
- CUSTOM_LIB_INSTALL_STAGING = YES
+  http://nightly.buildroot.org/manual.html#rootfs-custom
 
->  define CUSTOM_LIB_BUILD_CMDS
->      $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile-custom_lib all
->      $(INSTALL) -D -m 0755 $(@D)/libcustom.so* $(STAGING_DIR)/usr/lib/
->  endef
-> 
->  A further issue is that the CUSTOM_LIB_INSTALL_STAGING_CMDS will not be  called so i do the staging action in the build action (you see above) .
+baruch
 
-Which will solve this problem.
+> On Tue, Feb 13, 2018 at 12:47 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> >
+> > On Tue, Feb 13, 2018 at 12:10:16AM +0530, ravi chandran wrote:
+> > >      I am having a set of directories and files(actually contain some
+> > > add-on packages), which needs to be populated inside /srv directory  of
+> > > target system. I need a way to download the archived file and put it
+> > under
+> > > one of the directory of the rootfs. And during the target system
+> > > initialization, using init script i will extract the files and populate
+> > it
+> > > under the /srv directory.
+> > >
+> > >      could some please provide some hint, what is the right way to do
+> > this
+> > > in buildroot?
+> >
+> > You can use BR2_ROOTFS_OVERLAY or BR2_ROOTFS_POST_BUILD_SCRIPT or a
+> > combination of both. See the detail on these and other local
+> > customizations in
+> > chapter 9 "Project-specific customization" of the Buildroot manual:
+> >
+> >   http://nightly.buildroot.org/manual.html#customize
+> >
+> > baruch
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
