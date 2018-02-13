@@ -1,72 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 14:26:35 +0100
-Subject: [Buildroot] [PATCH 3/3] docs/website: Free Electrons is now Bootlin
+Date: Tue, 13 Feb 2018 14:26:34 +0100
+Subject: [Buildroot] [PATCH 2/3] DEVELOPERS: Free Electrons is now Bootlin
 In-Reply-To: <20180213132635.13455-1-thomas.petazzoni@bootlin.com>
 References: <20180213132635.13455-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180213132635.13455-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20180213132635.13455-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Free Electrons has been renamed to Bootlin, so update the
-Documentation section of our website describing the Buildroot training
-course to use the new company name and domain name.
+Free Electrons is being renamed to Bootlin. While the
+@free-electrons.com e-mail addresses still work, it is not guaranteed
+to be the case in the future. Hence, this patch updates the DEVELOPERS
+file to use the @bootlin.com addresses for all Bootlin engineers.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/docs.html       | 12 ++++++------
- docs/website/js/buildroot.js |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ DEVELOPERS | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/docs/website/docs.html b/docs/website/docs.html
-index 9cee36da28..9ef202ff9d 100644
---- a/docs/website/docs.html
-+++ b/docs/website/docs.html
-@@ -78,8 +78,8 @@
-   <div class="panel panel-primary">
-     <div class="panel-heading">Training</div>
-     <div class="panel-body">
--      <p><a href="http://www.free-electrons.com">Free Electrons</a> offers a
--	complete <a href="http://free-electrons.com/training/buildroot/">3-days
-+      <p><a href="http://www.bootlin.com">Bootlin</a> (formerly Free Electrons)
-+	offers a complete <a href="http://bootlin.com/training/buildroot/">3-days
- 	  training course on Buildroot</a>. They also make the training
- 	materials freely available:</p>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7c80790397..3af3aab549 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -91,7 +91,7 @@ F:	package/hostapd/
+ N:	Alexander Varnin <fenixk19@mail.ru>
+ F:	package/liblog4c-localtime/
  
-@@ -89,7 +89,7 @@
- 	    <div class="panel-heading">Slides preview</div>
- 	    <div class="panel-body">
- 	      <div id="slides" style="width: 100%; padding-bottom: 75%; position: relative">
--		<a href="http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf"><img src="images/buildroot-slides.png" alt="buildroot slides" style="position:absolute; width:100%; height:100%; top:0; left:0;"></a>
-+		<a href="http://bootlin.com/doc/training/buildroot/buildroot-slides.pdf"><img src="images/buildroot-slides.png" alt="buildroot slides" style="position:absolute; width:100%; height:100%; top:0; left:0;"></a>
- 	      </div>
- 	    </div>
- 	  </div>
-@@ -100,9 +100,9 @@
- 	    <div class="panel-heading">Training materials</div>
- 	    <div class="panel-body">
- 	      <ul>
--		<li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf">slides (PDF)</a></li>
--		<li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-labs.pdf">practical labs (PDF)</a></li>
--		<li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-labs.tar.xz">practical labs data (.tar.xz)</a></li>
-+		<li><a href="http://bootlin.com/doc/training/buildroot/buildroot-slides.pdf">slides (PDF)</a></li>
-+		<li><a href="http://bootlin.com/doc/training/buildroot/buildroot-labs.pdf">practical labs (PDF)</a></li>
-+		<li><a href="http://bootlin.com/doc/training/buildroot/buildroot-labs.tar.xz">practical labs data (.tar.xz)</a></li>
- 	      </ul>
- 	    </div>
- 	  </div>
-diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
-index a30da633e9..ec28cbb750 100644
---- a/docs/website/js/buildroot.js
-+++ b/docs/website/js/buildroot.js
-@@ -90,5 +90,5 @@ jQuery(document).ready(function($) {
-     load_activity("http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-busybox-ft2.xml", "mailing-list-activity");
-     load_activity("http://git.buildroot.org/buildroot/atom/?h=master", "commit-activity");
+-N:	Alexandre Belloni <alexandre.belloni@free-electrons.com>
++N:	Alexandre Belloni <alexandre.belloni@bootlin.com>
+ F:	package/tz/
  
--    $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
-+    $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://bootlin.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
- });
+ N:	Alexandre Esse <alexandre.esse.dev@gmail.com>
+@@ -150,7 +150,7 @@ F:	package/lsscsi/
+ N:	Anthony Viallard <viallard@syscom-instruments.com>
+ F:	package/gnuplot/
+ 
+-N:	Antoine T?nart <antoine.tenart@free-electrons.com>
++N:	Antoine T?nart <antoine.tenart@bootlin.com>
+ F:	package/wf111/
+ 
+ N:	ARC Maintainers <arc-buildroot@synopsys.com>
+@@ -1251,7 +1251,7 @@ F:	package/systemd-bootchart/
+ F:	package/tinyalsa/
+ F:	package/tinyxml/
+ 
+-N:	Maxime Ripard <maxime.ripard@free-electrons.com>
++N:	Maxime Ripard <maxime.ripard@bootlin.com>
+ F:	package/kmsxx/
+ 
+ N:	Michael Rommel <rommel@layer-7.net>
+@@ -1280,7 +1280,7 @@ N:	Mike Harmony <mike.harmony@snapav.com>
+ F:	board/sinovoip/m2-plus/
+ F:	configs/bananapi_m2_plus_defconfig
+ 
+-N:	Myl?ne Josserand <mylene.josserand@free-electrons.com>
++N:	Myl?ne Josserand <mylene.josserand@bootlin.com>
+ F:	package/rtl8723bu/
+ 
+ N:	Nathan Lynch <ntl@pobox.com>
+@@ -1735,7 +1735,7 @@ F:	support/scripts/size-stats
+ F:	utils/size-stats-compare
+ F:	toolchain/
+ 
+-N:	Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ F:	arch/Config.in.arm
+ F:	boot/boot-wrapper-aarch64/
+ F:	boot/grub2/
 -- 
 2.14.3
