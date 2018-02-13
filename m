@@ -1,53 +1,47 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 13 Feb 2018 14:27:11 +0100
-Subject: [Buildroot] [PATCH] ejabberd: Call check-erlang-lib script directly
- from its location
-Message-ID: <20180213132711.17722-1-johan.oudinet@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 13 Feb 2018 15:46:47 +0200
+Subject: [Buildroot] [PATCH next] iproute2: bump to version 4.15.0
+Message-ID: <492e49143bb778c17119b57ed55468c20dc6625d.1518529607.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avoid installing check-erlang-lib in the directory where the tarball is
-extracted. Instead, use an absolute path to its actual location, i.e.:
-$(TOPDIR)/$(EJABBERD_PKGDIR)/check-erlang-lib
+Keep the musl workaround patch for now, even though libc-compat.h has
+been updated from kernel v4.15. To take advantage of the new
+libc-compat.h we need a newer or patched version of musl. The workaround
+patch will be removed once musl is updated, and external autobuilders
+toolchains are rebuilt.
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/ejabberd/ejabberd.mk | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-index 0f7af9b83e..acd52e5b38 100644
---- a/package/ejabberd/ejabberd.mk
-+++ b/package/ejabberd/ejabberd.mk
-@@ -23,24 +23,15 @@ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- EJABBERD_DEPENDENCIES += linux-pam
- endif
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index e9b8a0ef26fc..630447cc7184 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	d43ac068afcc350a448f4581b6e292331ef7e4e7aa746e34981582d5fdb10067	iproute2-4.14.1.tar.xz
++sha256	48d4616a99d7b609b7b795c0ae8ec57099fb0271ed89253e8772c02327798355	iproute2-4.15.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 15bb132c5001..11db7d2c6e4e 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Install check-erlang-lib script to the directory in which the
--# package has been uncompressed, so it is available during the
--# configure step.
--define EJABBERD_INSTALL_CHECK_ERLANG_LIB
--	$(INSTALL) -m 0755 $(EJABBERD_PKGDIR)/check-erlang-lib \
--		$(@D)/check-erlang-lib
--endef
--
--EJABBERD_POST_EXTRACT_HOOKS += EJABBERD_INSTALL_CHECK_ERLANG_LIB
--
- EJABBERD_ERLANG_LIBS = sasl public_key mnesia inets compiler
- 
- # Guess answers for these tests, configure will bail out otherwise
- # saying error: cannot run test program while cross compiling.
-+EJABBERD_CHECK_LIB = $(TOPDIR)/$(EJABBERD_PKGDIR)/check-erlang-lib
- EJABBERD_CONF_ENV = \
- 	ac_cv_erlang_root_dir="$(HOST_DIR)/lib/erlang" \
- 	$(foreach lib,$(EJABBERD_ERLANG_LIBS), \
--		ac_cv_erlang_lib_dir_$(lib)="`./check-erlang-lib $(lib)`")
-+		ac_cv_erlang_lib_dir_$(lib)="`$(EJABBERD_CHECK_LIB) $(lib)`")
- 
- EJABBERD_CONF_OPTS = \
- 	--enable-system-deps \
+-IPROUTE2_VERSION = 4.14.1
++IPROUTE2_VERSION = 4.15.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
-2.14.1
+2.15.1
