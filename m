@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 08:49:30 +0100
-Subject: [Buildroot] [PATCH 08/14] diffconfig: fix code style
-In-Reply-To: <5a825820cac23_51963fbb9c9c7128471b1@ultri3.mail>
-References: <20180130202512.GA7723@gmail.com>
- <5a825820cac23_51963fbb9c9c7128471b1@ultri3.mail>
-Message-ID: <20180213084930.07104f73@windsurf.lan>
+Date: Tue, 13 Feb 2018 08:51:34 +0100
+Subject: [Buildroot] [PATCH 12/14] size-stats-compare: fix code style
+In-Reply-To: <5a825b5fea220_51963fbb9ca374f047327@ultri3.mail>
+References: <20180203152413.GK2369@scaer>
+ <5a825b5fea220_51963fbb9ca374f047327@ultri3.mail>
+Message-ID: <20180213085134.0e2096dc@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 13 Feb 2018 01:14:40 -0200, Ricardo Martincoski wrote:
+On Tue, 13 Feb 2018 01:28:31 -0200, Ricardo Martincoski wrote:
 
-> Adding this line to .flake8
-> exclude=utils/diffconfig
+> ... This is present in other scripts and I missed that in v1. I plan to use it
+> if you don't oppose to.
 > 
-> It looks to me the later is preferable. This way a script that don't need any
-> tweak can be a raw copy from the original.
+>     if header[0] != 'File name' or header[1] != 'Package name' or \
+>        header[2] != 'File size' or header[3] != 'Package size':
+>         print(("Input file %s does not contain the expected header. Are you "
 
-Agreed, the latter seems preferable to me.
-
-Thanks!
+This version looks good to me. The parenthesis around the if condition
+are useless in Python.
 
 Thomas
 -- 
