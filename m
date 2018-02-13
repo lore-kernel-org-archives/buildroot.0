@@ -1,38 +1,174 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 22:06:28 +0100
-Subject: [Buildroot] [git commit] postgresql: update license file hash
-Message-ID: <20180213210633.E13F288657@busybox.osuosl.org>
+Date: Tue, 13 Feb 2018 22:05:12 +0100
+Subject: [Buildroot] [git commit] busybox: add upstream security fixes
+Message-ID: <20180213210633.D25D4886F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=005c52f4bd1b977fa94f168908eff48830ee4b74
+commit: https://git.buildroot.net/buildroot/commit/?id=6665360b6dc9fce02381f20a3e0088974538b19f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Copyright year update.
+CVE-2017-15873: Integer overflow in decompress_bunzip2.c leads to a read
+access violation
 
-Fixes:
-http://autobuild.buildroot.net/results/d79/d7989660584430945644e3a4406ba33cee22863d/
-http://autobuild.buildroot.net/results/b51/b5141b64ed838caa1daca1bf4fe322dd2afaf0b5/
-http://autobuild.buildroot.net/results/a37/a375d533036a1b95af32b6bda086e93174b8c5f0/
+CVE-2017-15874: Integer overflow in decompress_unlzma.c leads to a read
+access violation
 
-Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/postgresql/postgresql.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...unzip2-fix-runCnt-overflow-from-bug-10431.patch | 101 +++++++++++++++++++++
+ .../0007-unlzma-fix-SEGV-closes-10436.patch        |  34 +++++++
+ 2 files changed, 135 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 2950470fb9..bf3d2a8733 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -2,4 +2,4 @@
- sha256	fe32009b62ddb97f7f014307ce9d0edb6972f5a698e63cb531088e147d145bad	postgresql-10.2.tar.bz2
- 
- # License file, Locally calculated
--sha256	7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676	COPYRIGHT
-+sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
+diff --git a/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch b/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch
+new file mode 100644
+index 0000000000..e8fd2e027d
+--- /dev/null
++++ b/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch
+@@ -0,0 +1,101 @@
++From 0402cb32df015d9372578e3db27db47b33d5c7b0 Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Sun, 22 Oct 2017 18:23:23 +0200
++Subject: [PATCH] bunzip2: fix runCnt overflow from bug 10431
++
++This particular corrupted file can be dealth with by using "unsigned".
++If there will be cases where it genuinely overflows, there is a disabled
++code to deal with that too.
++
++function                                             old     new   delta
++get_next_block                                      1678    1667     -11
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 0402cb32df0
++
++ archival/libarchive/decompress_bunzip2.c | 30 +++++++++++++++++++-----------
++ 1 file changed, 19 insertions(+), 11 deletions(-)
++
++diff --git a/archival/libarchive/decompress_bunzip2.c b/archival/libarchive/decompress_bunzip2.c
++index 7cd18f5ed4cf..bec89edd3a4d 100644
++--- a/archival/libarchive/decompress_bunzip2.c
+++++ b/archival/libarchive/decompress_bunzip2.c
++@@ -156,15 +156,15 @@ static unsigned get_bits(bunzip_data *bd, int bits_wanted)
++ static int get_next_block(bunzip_data *bd)
++ {
++ 	struct group_data *hufGroup;
++-	int dbufCount, dbufSize, groupCount, *base, *limit, selector,
++-		i, j, runPos, symCount, symTotal, nSelectors, byteCount[256];
++-	int runCnt = runCnt; /* for compiler */
+++	int groupCount, *base, *limit, selector,
+++		i, j, symCount, symTotal, nSelectors, byteCount[256];
++ 	uint8_t uc, symToByte[256], mtfSymbol[256], *selectors;
++ 	uint32_t *dbuf;
++ 	unsigned origPtr, t;
+++	unsigned dbufCount, runPos;
+++	unsigned runCnt = runCnt; /* for compiler */
++ 
++ 	dbuf = bd->dbuf;
++-	dbufSize = bd->dbufSize;
++ 	selectors = bd->selectors;
++ 
++ /* In bbox, we are ok with aborting through setjmp which is set up in start_bunzip */
++@@ -187,7 +187,7 @@ static int get_next_block(bunzip_data *bd)
++ 	   it didn't actually work. */
++ 	if (get_bits(bd, 1)) return RETVAL_OBSOLETE_INPUT;
++ 	origPtr = get_bits(bd, 24);
++-	if ((int)origPtr > dbufSize) return RETVAL_DATA_ERROR;
+++	if (origPtr > bd->dbufSize) return RETVAL_DATA_ERROR;
++ 
++ 	/* mapping table: if some byte values are never used (encoding things
++ 	   like ascii text), the compression code removes the gaps to have fewer
++@@ -435,7 +435,14 @@ static int get_next_block(bunzip_data *bd)
++ 			   symbols, but a run of length 0 doesn't mean anything in this
++ 			   context).  Thus space is saved. */
++ 			runCnt += (runPos << nextSym); /* +runPos if RUNA; +2*runPos if RUNB */
++-			if (runPos < dbufSize) runPos <<= 1;
+++//The 32-bit overflow of runCnt wasn't yet seen, but probably can happen.
+++//This would be the fix (catches too large count way before it can overflow):
+++//			if (runCnt > bd->dbufSize) {
+++//				dbg("runCnt:%u > dbufSize:%u RETVAL_DATA_ERROR",
+++//						runCnt, bd->dbufSize);
+++//				return RETVAL_DATA_ERROR;
+++//			}
+++			if (runPos < bd->dbufSize) runPos <<= 1;
++ 			goto end_of_huffman_loop;
++ 		}
++ 
++@@ -445,14 +452,15 @@ static int get_next_block(bunzip_data *bd)
++ 		   literal used is the one@the head of the mtfSymbol array.) */
++ 		if (runPos != 0) {
++ 			uint8_t tmp_byte;
++-			if (dbufCount + runCnt > dbufSize) {
++-				dbg("dbufCount:%d+runCnt:%d %d > dbufSize:%d RETVAL_DATA_ERROR",
++-						dbufCount, runCnt, dbufCount + runCnt, dbufSize);
+++			if (dbufCount + runCnt > bd->dbufSize) {
+++				dbg("dbufCount:%u+runCnt:%u %u > dbufSize:%u RETVAL_DATA_ERROR",
+++						dbufCount, runCnt, dbufCount + runCnt, bd->dbufSize);
++ 				return RETVAL_DATA_ERROR;
++ 			}
++ 			tmp_byte = symToByte[mtfSymbol[0]];
++ 			byteCount[tmp_byte] += runCnt;
++-			while (--runCnt >= 0) dbuf[dbufCount++] = (uint32_t)tmp_byte;
+++			while ((int)--runCnt >= 0)
+++				dbuf[dbufCount++] = (uint32_t)tmp_byte;
++ 			runPos = 0;
++ 		}
++ 
++@@ -466,7 +474,7 @@ static int get_next_block(bunzip_data *bd)
++ 		   first symbol in the mtf array, position 0, would have been handled
++ 		   as part of a run above.  Therefore 1 unused mtf position minus
++ 		   2 non-literal nextSym values equals -1.) */
++-		if (dbufCount >= dbufSize) return RETVAL_DATA_ERROR;
+++		if (dbufCount >= bd->dbufSize) return RETVAL_DATA_ERROR;
++ 		i = nextSym - 1;
++ 		uc = mtfSymbol[i];
++ 
++-- 
++2.15.1
++
+diff --git a/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch b/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch
+new file mode 100644
+index 0000000000..c8d875010e
+--- /dev/null
++++ b/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch
+@@ -0,0 +1,34 @@
++From 9ac42c500586fa5f10a1f6d22c3f797df11b1f6b Mon Sep 17 00:00:00 2001
++From: Denys Vlasenko <vda.linux@googlemail.com>
++Date: Fri, 27 Oct 2017 15:37:03 +0200
++Subject: [PATCH] unlzma: fix SEGV, closes 10436
++
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 9ac42c500586f
++
++ archival/libarchive/decompress_unlzma.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/archival/libarchive/decompress_unlzma.c b/archival/libarchive/decompress_unlzma.c
++index a9040877efa0..be4342414435 100644
++--- a/archival/libarchive/decompress_unlzma.c
+++++ b/archival/libarchive/decompress_unlzma.c
++@@ -450,8 +450,12 @@ unpack_lzma_stream(transformer_state_t *xstate)
++  IF_NOT_FEATURE_LZMA_FAST(string:)
++ 			do {
++ 				uint32_t pos = buffer_pos - rep0;
++-				if ((int32_t)pos < 0)
+++				if ((int32_t)pos < 0) {
++ 					pos += header.dict_size;
+++					/* bug 10436 has an example file where this triggers: */
+++					if ((int32_t)pos < 0)
+++						goto bad;
+++				}
++ 				previous_byte = buffer[pos];
++  IF_NOT_FEATURE_LZMA_FAST(one_byte2:)
++ 				buffer[buffer_pos++] = previous_byte;
++-- 
++2.15.1
++
