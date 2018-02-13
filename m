@@ -1,41 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 23:25:38 +0100
-Subject: [Buildroot] [PATCH 1/1] cmake: bump version to 3.10.2 and add
- license hash
-In-Reply-To: <20180213195729.33644-1-markhirota@gmail.com>
-References: <20180213195729.33644-1-markhirota@gmail.com>
-Message-ID: <20180213232538.0441c65a@windsurf.lan>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Tue, 13 Feb 2018 17:44:28 -0500
+Subject: [Buildroot] [PATCH 1/1] qt5webengine: fix build issue with alsa
+In-Reply-To: <20180213232229.5e36149c@windsurf.lan>
+References: <20180209012236.5118-1-gael.portay@savoirfairelinux.com>
+ <20180209013535.iazotrv3kjwzb4np@archlinux>
+ <20180213232229.5e36149c@windsurf.lan>
+Message-ID: <20180213224428.vbbv4nfkgxstp32s@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Tue, 13 Feb 2018 11:57:29 -0800, Mark Hirota wrote:
-> Signed-off-by: Mark Hirota <markhirota@gmail.com>
-> ---
->  package/cmake/cmake.hash | 5 +++--
->  package/cmake/cmake.mk   | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
+On Tue, Feb 13, 2018 at 11:22:29PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 8 Feb 2018 20:35:36 -0500, Ga?l PORTAY wrote:
+> > On Thu, Feb 08, 2018 at 08:22:36PM -0500, Ga?l PORTAY wrote:
+> > > +config BR2_PACKAGE_QT5WEBENGINE_ALSA
+> > > +	bool "alsa"
+> > > +	depends on BR2_PACKAGE_ALSA_LIB  
+> > 
+> > Well, I should probably select BR2_PACKAGE_ALSA_LIB instead of depending
+> > on it :/
+> 
+> Are you going to submit an updated version ?
+> 
 
-Thanks for this contribution. However, I'm a little bit worried by this
-bump: it was already submitted before, and we had to revert because it
-was causing gazillions of build failures.
+Let me test again the fix with select and I will send a v2 shortly.
 
-See https://patchwork.ozlabs.org/patch/846757/. Basically, unless CMake
-fixed the problem, CMake now requires C++11 to build, which is
-annoying, as not all environments where Buildroot is used have a C++11
-capable host compiler.
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Could you check the status of the emplace_hint() method usage? Has it
-been made conditional?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Regards,
+Gael
