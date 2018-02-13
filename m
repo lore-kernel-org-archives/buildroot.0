@@ -1,35 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 22:06:40 +0100
-Subject: [Buildroot] [PATCH] postgresql: update license file hash
-In-Reply-To: <2d2c2eeb5a65d467ec93c2882c4efca4b88c57ae.1518293798.git.baruch@tkos.co.il>
-References: <2d2c2eeb5a65d467ec93c2882c4efca4b88c57ae.1518293798.git.baruch@tkos.co.il>
-Message-ID: <20180213220640.19504a71@windsurf.lan>
+Date: Tue, 13 Feb 2018 22:07:04 +0100
+Subject: [Buildroot] [git commit] dropbear: use https URLs
+Message-ID: <20180213210710.A39F4886FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=09bc89a6fce8d3238575c2d8afede6970eae1c57
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 10 Feb 2018 22:16:38 +0200, Baruch Siach wrote:
-> Copyright year update.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d79/d7989660584430945644e3a4406ba33cee22863d/
-> http://autobuild.buildroot.net/results/b51/b5141b64ed838caa1daca1bf4fe322dd2afaf0b5/
-> http://autobuild.buildroot.net/results/a37/a375d533036a1b95af32b6bda086e93174b8c5f0/
-> 
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/postgresql/postgresql.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+While a hash check is being done, it's still better to use a download
+URL with HTTPS.
 
-Applied to master, thanks.
+Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dropbear/Config.in   | 2 +-
+ package/dropbear/dropbear.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index d92361fa39..6700778161 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_DROPBEAR
+ 	  Alternatively, mount a persistent unionfs over your root
+ 	  filesystem.
+ 
+-	  http://matt.ucc.asn.au/dropbear/dropbear.html
++	  https://matt.ucc.asn.au/dropbear/dropbear.html
+ 
+ if BR2_PACKAGE_DROPBEAR
+ 
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index bf7f99d975..01a1a07b76 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DROPBEAR_VERSION = 2017.75
+-DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
++DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
+ DROPBEAR_LICENSE_FILES = LICENSE
