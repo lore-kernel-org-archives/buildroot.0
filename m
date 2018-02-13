@@ -1,35 +1,33 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 13 Feb 2018 19:18:19 -0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 4.{9, 14}.x series
-Message-ID: <1518556699-2811-1-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 13 Feb 2018 22:19:57 +0100
+Subject: [Buildroot] [git commit branch/next] json-for-modern-cpp: fix
+ license hash
+Message-ID: <20180213212211.00419883C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=3c19c81d60f758a1011aa49135181e8621a02508
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2354761..f237a3f 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -243,11 +243,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.98"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.115"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.80"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.81"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.18"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.19"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.2"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-2.7.4
+Fixes:
+
+  http://autobuild.buildroot.net/results/942485b94f21567c2f35a1a3cc62450f3461a4f9
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+index b2abe49700..04a520d7d7 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256	b20be343922f73504baf8a01543c2a42d16e01f18bb231b324a8959416ccf4f8	json-v3.1.0.tar.gz
+-sha256	6a6115fc4a7239a135f2dce8d33f94cb8a936b8f608ac0f6699fbac278b0dd5b	LICENSE.MIT
++sha256	7b875bb7a4e28abb7956ea821b4b7d88ff6a2a4fabf261c3993730a365ec56dd	LICENSE.MIT
