@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 22:55:59 +0100
-Subject: [Buildroot] [PATCH] package/mesa-demo: remove duplicate osmesa
- option
-In-Reply-To: <20180212215931.6105-1-audrey.motheron@gmail.com>
-References: <20180212215931.6105-1-audrey.motheron@gmail.com>
-Message-ID: <20180213225559.4aa1f993@windsurf.lan>
+Date: Tue, 13 Feb 2018 23:10:24 +0100
+Subject: [Buildroot] [PATCH v2 0/2] use RUSTC_{HOST,TARGET}_NAME
+In-Reply-To: <20180213072128.4669-1-eric.le.bihan.dev@free.fr>
+References: <20180213072128.4669-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20180213231024.4aeaee6b@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 12 Feb 2018 22:59:31 +0100, Audrey Motheron wrote:
-> --disable-osmesa option is unconditionally added to CONF_OPTS
-> even if --enable-osmesa is used latter.
-> 
-> Signed-off-by: Audrey Motheron <audrey.motheron@gmail.com>
-> ---
->  package/mesa3d-demos/mesa3d-demos.mk | 1 -
->  1 file changed, 1 deletion(-)
+On Tue, 13 Feb 2018 08:21:26 +0100, Eric Le Bihan wrote:
 
-As Adrian said, the commit title should match the package name:
-mesa3d-demos. I've fixed that up and applied to master. Thanks!
+> Eric Le Bihan (2):
+>   rustc: use RUSTC_{HOST,TARGET}_NAME
+>   rustc: fix check-package warnings
+
+Thanks, series applied to master!
 
 Thomas
 -- 
