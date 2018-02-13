@@ -1,129 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Feb 2018 23:16:55 +0100
-Subject: [Buildroot] [git commit] configs: add pylibfdt where necessary
-Message-ID: <20180213221704.947558874E@busybox.osuosl.org>
+Date: Tue, 13 Feb 2018 23:19:30 +0100
+Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
+In-Reply-To: <981ecf77-767e-3c90-243f-67251d956c21@au1.ibm.com>
+References: <20180105214340.6f0cc1f7@windsurf>
+ <ced2aeb2-82f6-c836-dd5a-e65c6b49c81a@au1.ibm.com>
+ <20180108091044.1141f540@windsurf>
+ <20180205224500.1a34e02a@windsurf>
+ <981ecf77-767e-3c90-243f-67251d956c21@au1.ibm.com>
+Message-ID: <20180213231930.26ab0efb@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5222381f7a9b05b73f5d73df72857871249cddc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Andrew, Jeremy,
 
-Add TARGET_UBOOT_NEEDS_PYLIBFDT to all defconfigs, where u-boot needs
-Python libfdt to build.
+On Tue, 6 Feb 2018 19:41:09 +1100, Andrew Donnellan wrote:
+> On 06/02/18 08:45, Thomas Petazzoni wrote:
+> > Is there anything that can be done about this ? An example of
+> > Message-Id that was not recorded is:
+> > 
+> >   Message-Id: <8027bae45d8e041c8a1e0bc714ab378ff984ded3.1517820133.git.yann.morin.1998@free.fr>  
+> 
+> I've scraped the buildroot archives to see if there's anything obviously 
+> wrong with that particular message ID - it appears to parse fine.
+> 
+> jk, any idea whether there's something particular about the ozlabs.org 
+> instance that could be causing it to drop these patches?
 
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Cc: Mike Harmony <mike.harmony@snapav.com>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Cc: Jan Kraval <jan.kraval@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/bananapi_m1_defconfig        | 1 +
- configs/bananapi_m2_plus_defconfig   | 1 +
- configs/linksprite_pcduino_defconfig | 1 +
- configs/orangepi_lite_defconfig      | 1 +
- configs/orangepi_one_defconfig       | 1 +
- configs/orangepi_pc_defconfig        | 1 +
- configs/orangepi_pc_plus_defconfig   | 1 +
- configs/orangepi_zero_defconfig      | 1 +
- 8 files changed, 8 insertions(+)
+Any further comments ?
 
-diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
-index b084309d7c..f8c66a3334 100644
---- a/configs/bananapi_m1_defconfig
-+++ b/configs/bananapi_m1_defconfig
-@@ -12,6 +12,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-diff --git a/configs/bananapi_m2_plus_defconfig b/configs/bananapi_m2_plus_defconfig
-index ebaea2deab..bbc3eb0ebd 100644
---- a/configs/bananapi_m2_plus_defconfig
-+++ b/configs/bananapi_m2_plus_defconfig
-@@ -19,6 +19,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Sinovoip_BPI_M2_Plus"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
-index 79e0939792..dd9bcdc1f7 100644
---- a/configs/linksprite_pcduino_defconfig
-+++ b/configs/linksprite_pcduino_defconfig
-@@ -41,6 +41,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
- BR2_TARGET_UBOOT_USE_DEFCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-diff --git a/configs/orangepi_lite_defconfig b/configs/orangepi_lite_defconfig
-index 0f9a8e098b..1e5fca8677 100644
---- a/configs/orangepi_lite_defconfig
-+++ b/configs/orangepi_lite_defconfig
-@@ -24,6 +24,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_lite"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
-index 51f82054c5..3715f1ddbb 100644
---- a/configs/orangepi_one_defconfig
-+++ b/configs/orangepi_one_defconfig
-@@ -20,6 +20,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
-index 0fd90f008b..aa559e743e 100644
---- a/configs/orangepi_pc_defconfig
-+++ b/configs/orangepi_pc_defconfig
-@@ -20,6 +20,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-diff --git a/configs/orangepi_pc_plus_defconfig b/configs/orangepi_pc_plus_defconfig
-index 7969e8a4bf..053c3bffbd 100644
---- a/configs/orangepi_pc_plus_defconfig
-+++ b/configs/orangepi_pc_plus_defconfig
-@@ -22,6 +22,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc_plus"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 86c634e39b..2efccc0ced 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -23,6 +23,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+Today, patchwork missed the following e-mail:
+
+  http://lists.busybox.net/pipermail/buildroot/2018-February/213695.html
+
+Patches 1/3 and 2/3 in this series have been recorded, but not Patch
+3/3.
+
+This is really getting annoying for the Buildroot project, and we may
+potentially "miss" contributions because of this: we entirely rely on
+patchwork as our TODO-list, so if a patch is missing in patchwork, we
+will forget about it. When only a few patches within a series are
+missing, we obviously notice. But for single patches, when they are not
+recorded, we simply miss them entirely.
+
+Can we do something about this ? We're really happy otherwise by the
+patchwork instance at ozlabs.org, and we would hate having to run our
+own instance :-/
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
