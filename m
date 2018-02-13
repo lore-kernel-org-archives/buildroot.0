@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 13 Feb 2018 01:14:40 -0200
-Subject: [Buildroot] [PATCH 08/14] diffconfig: fix code style
-References: <20180130202512.GA7723@gmail.com>
-Message-ID: <5a825820cac23_51963fbb9c9c7128471b1@ultri3.mail>
+Date: Tue, 13 Feb 2018 01:28:31 -0200
+Subject: [Buildroot] [PATCH 12/14] size-stats-compare: fix code style
+References: <20180203152413.GK2369@scaer>
+Message-ID: <5a825b5fea220_51963fbb9ca374f047327@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,35 +11,64 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, Jan 30, 2018 at 06:25 PM, Marcus Folkesson wrote:
+On Sat, Feb 03, 2018 at 01:24 PM, Yann E. MORIN wrote:
 
-> On Mon, Jan 29, 2018 at 11:11:52PM +0100, Thomas Petazzoni wrote:
-[snip]
->> I haven't applied this one, because I don't really like the fact that
->> we're further tweaking a script that comes from the kernel sources. On
->> the other hand, we have already tweaked it for our purposes.
->>
->> What do others think? Should we stay as close to the original upstream
->> version as possible? Or because we have anyway already tweaked it, we
->> don't really care and can now do whatever changes we believe are useful?
+> On 2018-01-29 23:13 +0100, Thomas Petazzoni spake thusly:
+>> On Sun, 21 Jan 2018 22:44:40 -0200, Ricardo Martincoski wrote:
+>> > Fix these warnings:
+>> > E129 visually indented line with same indent as next logical line
+>> 
+>> Really?
+>> 
+>> >      header = next(reader)
+>> >      if (header[0] != 'File name' or header[1] != 'Package name' or
+>> > -        header[2] != 'File size' or header[3] != 'Package size'):
+>> > +            header[2] != 'File size' or header[3] != 'Package size'):
+>> 
+>> This looks totally bogus to me. The code was properly and nicely
+>> indented before the change, and now it looks badly indented. Is this
+>> really what flake8 wants? If so, flake8 is very strange.
 
-I am happy either way.
-If no one argues against, I will make flake8 ignore the file.
+Sorry. I failed to explore all possible acceptable formats, see below...
 
-> Well, I will try to keep the script reasonably synchronized between the
-> buildroot and kernel repo, and these type of patches does not really
-> help with that.
+> 
+> I guess it 's probably more about the following line than about hte
+> previous one:
+> 
+>     if (header[0] != 'File name' or header[1] != 'Package name' or
+>         header[2] != 'File size' or header[3] != 'Package size'):
+>         print(("Input file %s does not contain the expected header. Are you "
+> 
+> ... where there could be confusion with the 'printf' line.
 
-Ignoring the file can be accomplished by 2 ways:
+Yes. I think that's it.
 
-Adding this line to utils/diffconfig
-# flake8: noqa
+> 
+> Maybe the printf line could be indented one-level mnore, instead? Nope,
+> that does not solve the issue. I guess flake8 does not do look-ahead...
 
-Adding this line to .flake8
-exclude=utils/diffconfig
+Maybe one of these?
 
-It looks to me the later is preferable. This way a script that don't need any
-tweak can be a raw copy from the original.
+This I think it is uglier:
+
+    if (
+            header[0] != 'File name' or header[1] != 'Package name' or
+            header[2] != 'File size' or header[3] != 'Package size'):
+        print(("Input file %s does not contain the expected header. Are you "
+
+... This is present in other scripts and I missed that in v1. I plan to use it
+if you don't oppose to.
+
+    if header[0] != 'File name' or header[1] != 'Package name' or \
+       header[2] != 'File size' or header[3] != 'Package size':
+        print(("Input file %s does not contain the expected header. Are you "
+
+> 
+> In this case, I would be happy with an exception...  # noqa E129
+
+If we don't agree with this rule, perhaps is better to ignore it for any new
+script, by adding this line to .flake8:
+ignore=E129
 
 Regards,
 Ricardo
