@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 21:43:34 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to
- 3.4.2
-In-Reply-To: <20180212165106.18383-1-bernd.kuhls@t-online.de>
-References: <20180212165106.18383-1-bernd.kuhls@t-online.de>
-Message-ID: <20180214214334.0f3d3c7a@windsurf.lan>
+Date: Wed, 14 Feb 2018 21:44:00 +0100
+Subject: [Buildroot] [PATCH for-next] package/htop: bump to 2.1.0
+In-Reply-To: <20180212192513.4332-1-romain.naour@gmail.com>
+References: <20180212192513.4332-1-romain.naour@gmail.com>
+Message-ID: <20180214214400.542f4afb@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 12 Feb 2018 17:51:06 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Mon, 12 Feb 2018 20:25:13 +0100, Romain Naour wrote:
+> No upstream hash provided with this release [1].
+> 
+> Add licence file hash.
+> 
+> [1] http://www.freelists.org/post/htop/ANN-htop-210
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/ffmpeg/ffmpeg.hash | 2 +-
->  package/ffmpeg/ffmpeg.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/htop/htop.hash | 6 +++---
+>  package/htop/htop.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to next, thanks.
 
