@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 21:27:18 +0100
-Subject: [Buildroot] [PATCH 0/3] Config.in{,host}: check-package pass
-In-Reply-To: <20180214050458.32281-1-gael.portay@savoirfairelinux.com>
-References: <20180214050458.32281-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180214212718.6b2f46cd@windsurf.lan>
+Date: Wed, 14 Feb 2018 21:29:43 +0100
+Subject: [Buildroot] [PATCH 1/1] Add first KF5 packages
+In-Reply-To: <hrvclexdar.ln2@ID-313208.user.individual.net>
+References: <20180213213531.22910-1-pinaraf@pinaraf.info>
+ <hrvclexdar.ln2@ID-313208.user.individual.net>
+Message-ID: <20180214212943.3aa126a5@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 14 Feb 2018 00:04:55 -0500, Ga?l PORTAY wrote:
+On Wed, 14 Feb 2018 06:59:45 +0100, Bernd Kuhls wrote:
 
-> Ga?l PORTAY (3):
->   package/*/Config.in.host: fix help text check-package warnings
->   gconf: Config.in: fix help text wrapping
->   pure-ftpd: Config.in: fix help text wrapping
+> according to the buildroot manual[1], section 17.1, new subdirectories, 
+> like package/kf5/, are discouraged, please add the new packages directly 
+> to package/.
 
-I've applied the patches to the master branch, thanks. However, I'd
-like to finally find a solution to validate all those Config.in files
-from our .gitlab-ci.yml.
+I do agree in general. However, kf5 like qt5 is a group of packages
+that share the same site/version number, and in that case, like we do
+for qt5, a subdirectory is acceptable.
 
-The blocking problem is that package/Config.in and
-package/x11r7/Config.in generate a lot of warnings, but we in fact want
-to keep them as-is. See the thread at
-http://patchwork.ozlabs.org/patch/849882/.
-
-Best regards,
+I'm also not a big fan of sub-directories, but it's the only sane way
+to share version/site variables.
 
 Thomas
 -- 
