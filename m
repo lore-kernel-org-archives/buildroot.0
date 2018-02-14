@@ -1,105 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 22:02:25 +0100
-Subject: [Buildroot] [git commit branch/next] musl: add more kernel headers
- guards
-Message-ID: <20180214210440.3146184356@busybox.osuosl.org>
+Date: Wed, 14 Feb 2018 22:03:27 +0100
+Subject: [Buildroot] [git commit branch/next] configs/orange-pi-zero-plus2:
+ bump kernel and u-boot versions
+Message-ID: <20180214210440.7AF5B84331@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b99ca5ce3243cf06c45917bd07872aaf00d25e0a
+commit: https://git.buildroot.net/buildroot/commit/?id=5c5f274601902c9faa585233b774a5926b6105ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Kernel version 4.15 (not 4.16 as the musl commit log claims) allows
-disabling of more parts of the kernel headers definitions. Add upstream
-musl patch that defines the relevant macros. This solves issues of
-networking related symbols redefinition in kernel headers that cause
-headers conflicts. With that in place a subsequent commit will limit the
-musl/kernel headers conflict avoidance workaround in Buildroot to kernel
-headers older than 4.15. This workaround has been introduced in commit
-196932cd91 (toolchain: workaround musl/kernel headers conflict).
+Bump versions:
+- use U-Boot 2008.01
+- use Linux kernel v4.15.2
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Drop patch with dts sdcard fix since it has been
+merged to Linux v4.15.
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...nal-uapi-guards-for-Linux-kernel-header-f.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ ...ts-orange-pi-zero-plus2-fix-sdcard-detect.patch | 30 ----------------------
+ configs/orangepi_zero_plus2_defconfig              | 11 +++-----
+ 2 files changed, 4 insertions(+), 37 deletions(-)
 
-diff --git a/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch b/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
-new file mode 100644
-index 0000000000..cbfc9b668f
---- /dev/null
-+++ b/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
-@@ -0,0 +1,69 @@
-+From b583c5d3b4cc2c54c68eef5eb7855ecfacee8bfc Mon Sep 17 00:00:00 2001
-+From: Hauke Mehrtens <hauke@hauke-m.de>
-+Date: Sat, 6 Jan 2018 23:32:52 +0100
-+Subject: [PATCH] add additional uapi guards for Linux kernel header files
-+
-+With Linux kernel 4.16 it will be possible to guard more parts of the
-+Linux header files from a libc. Make use of this in musl to guard all
-+the structures and other definitions from the Linux header files which
-+are also defined by the header files provided by musl. This will make
-+it possible to compile source files which include both the libc
-+headers and the kernel userspace headers.
-+
-+This extends the definitions done in commit 04983f227238 ("make
-+netinet/in.h suppress clashing definitions from kernel headers")
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit b583c5d3b4cc
-+
-+ include/net/if.h           | 7 +++++++
-+ include/netinet/if_ether.h | 1 +
-+ include/sys/xattr.h        | 2 ++
-+ 3 files changed, 10 insertions(+)
-+
-+diff --git a/include/net/if.h b/include/net/if.h
-+index 2f2fcc10e484..774cbff0b506 100644
-+--- a/include/net/if.h
-++++ b/include/net/if.h
-+@@ -125,6 +125,13 @@ struct ifconf {
-+ #define ifc_req		ifc_ifcu.ifcu_req
-+ #define _IOT_ifconf _IOT(_IOTS(struct ifconf),1,0,0,0,0)
-+ 
-++#define __UAPI_DEF_IF_IFCONF                                    0
-++#define __UAPI_DEF_IF_IFMAP                                     0
-++#define __UAPI_DEF_IF_IFNAMSIZ                                  0
-++#define __UAPI_DEF_IF_IFREQ                                     0
-++#define __UAPI_DEF_IF_NET_DEVICE_FLAGS                          0
-++#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO    0
-++
-+ #endif
-+ 
-+ #ifdef __cplusplus
-+diff --git a/include/netinet/if_ether.h b/include/netinet/if_ether.h
-+index d9a131aa2d1d..97134d75b480 100644
-+--- a/include/netinet/if_ether.h
-++++ b/include/netinet/if_ether.h
-+@@ -133,5 +133,6 @@ do { \
-+ 	(enaddr)[5] = ((uint8_t *)ipaddr)[3]; \
-+ } while(0)
-+ 
-++#define __UAPI_DEF_ETHHDR       0
-+ 
-+ #endif
-+diff --git a/include/sys/xattr.h b/include/sys/xattr.h
-+index 6479fcc62e5f..eeeaafc44f09 100644
-+--- a/include/sys/xattr.h
-++++ b/include/sys/xattr.h
-+@@ -24,6 +24,8 @@ int removexattr(const char *, const char *);
-+ int lremovexattr(const char *, const char *);
-+ int fremovexattr(int, const char *);
-+ 
-++#define __UAPI_DEF_XATTR        0
-++
-+ #ifdef __cplusplus
-+ }
-+ #endif
-+-- 
-+2.15.1
-+
+diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-fix-sdcard-detect.patch b/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-fix-sdcard-detect.patch
+deleted file mode 100644
+index 203402932b..0000000000
+--- a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-fix-sdcard-detect.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From f88e9301948173dd35afad4a6939092c7f269aed Mon Sep 17 00:00:00 2001
+-From: Sergey Matyukevich <geomatsi@gmail.com>
+-Date: Fri, 3 Nov 2017 22:58:54 +0300
+-Subject: [PATCH] arm64: dts: orange-pi-zero-plus2: fix sdcard detect
+-
+-The sdcard detect pin on orange-pi-zero-plus2 is pulled up.
+-Fix cd-gpio description to enable sdcard detect.
+-
+-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+----
+- arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-index b6b7a56..a42fd79 100644
+---- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-@@ -71,7 +71,7 @@
+- 	pinctrl-0 = <&mmc0_pins_a>, <&mmc0_cd_pin>;
+- 	vmmc-supply = <&reg_vcc3v3>;
+- 	bus-width = <4>;
+--	cd-gpios = <&pio 5 6 GPIO_ACTIVE_HIGH>;
+-+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
+- 	status = "okay";
+- };
+- 
+--- 
+-1.9.1
+-
+diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+index 5b1ff3500c..7906dba5c7 100644
+--- a/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_zero_plus2_defconfig
+@@ -2,11 +2,8 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+-
+-# Patch dir
+-BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+@@ -20,7 +17,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+@@ -34,7 +31,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.2"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
