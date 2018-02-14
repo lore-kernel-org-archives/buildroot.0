@@ -1,50 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 22:02:45 +0100
-Subject: [Buildroot] [git commit branch/next] iproute2: bump to version
- 4.15.0
-Message-ID: <20180214210440.63DE1843DF@busybox.osuosl.org>
+Date: Wed, 14 Feb 2018 22:02:29 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain: limit musl/kernel
+ headers conflict workaround
+Message-ID: <20180214210440.4B81084356@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65a7e82c891e967c4dd96678be72b8acf16a0127
+commit: https://git.buildroot.net/buildroot/commit/?id=6afee03e3cc3b9afa4861cc0a9bbc6be03a16be8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Keep the musl workaround patch for now, even though libc-compat.h has
-been updated from kernel v4.15. To take advantage of the new
-libc-compat.h we need a newer or patched version of musl. The workaround
-patch will be removed once musl is updated, and external autobuilders
-toolchains are rebuilt.
+The musl/kernel headers workaround was added in commit 196932cd91
+(toolchain: workaround musl/kernel headers conflict) to fix definition
+collisions in networking related headers between musl headers and kernel
+headers. Kernel headers from version 4.15 and newer do not need this
+workaround anymore since kernel commit c0bace798436bc (uapi libc compat:
+add fallback for unsupported libcs). The C library does not have to
+define the __GLIBC__ macro to make the __UAPI_DEF_* macros effective.
 
-Cc: Petr Vorel <petr.vorel@gmail.com>
+Updated the comment to accordingly.
+
+Tested with the xl2tp package. This package fails to build with older
+kernel headers without the workaround (struct in_pktinfo redefinition,
+among others). With 4.15 headers, xl2tp builds fine with this patch
+applied. That is, no workaround needed.
+
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain/toolchain.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index e9b8a0ef26..630447cc71 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	d43ac068afcc350a448f4581b6e292331ef7e4e7aa746e34981582d5fdb10067	iproute2-4.14.1.tar.xz
-+sha256	48d4616a99d7b609b7b795c0ae8ec57099fb0271ed89253e8772c02327798355	iproute2-4.15.0.tar.xz
- sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 15bb132c50..11db7d2c6e 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index b55b0c712c..179c09edf1 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -13,18 +13,18 @@ endif
+ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
  
--IPROUTE2_VERSION = 4.14.1
-+IPROUTE2_VERSION = 4.15.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ # Apply a hack that Rick Felker suggested[1] to avoid conflicts between libc
+-# headers and kernel headers. This is a temporary measure until musl finds a
+-# better solution.
++# headers and kernel headers. This is needed for kernel headers older than
++# 4.15. Kernel headers 4.15 and newer don't require __GLIBC__ to be defined.
+ #
+ # Augment the original suggestion with __USE_MISC since recent kernels
+-# require this glibc internal macro. Also, as musl defines IFF_LOWER_UP,
+-# IFF_DORMANT and IFF_ECHO, add another macro to suppress them in the
+-# kernel header, and avoid macro/enum conflict.
++# (older than 4.15) require this glibc internal macro. Also, as musl defines
++# IFF_LOWER_UP, IFF_DORMANT and IFF_ECHO, add another macro to suppress
++# them in the kernel header, and avoid macro/enum conflict.
+ #
+ # Kernel version 3.12 introduced the libc-compat.h header.
+ #
+ # [1] http://www.openwall.com/lists/musl/2015/10/08/2
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12),yy)
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15),yy:)
+ define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
+ 	$(SED) 's/^#if defined(__GLIBC__)$$/#if 1/' \
+ 		$(STAGING_DIR)/usr/include/linux/libc-compat.h
