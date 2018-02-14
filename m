@@ -1,45 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 21:43:30 +0100
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: bump version
- to 3.4.2
-Message-ID: <20180214210140.E542187ECF@busybox.osuosl.org>
+Date: Wed, 14 Feb 2018 22:02:37 +0100
+Subject: [Buildroot] [PATCH 1/2] musl: add more kernel headers guards
+In-Reply-To: <00926ed70cd14972bac0ce653b1f383b4a31492c.1518524870.git.baruch@tkos.co.il>
+References: <00926ed70cd14972bac0ce653b1f383b4a31492c.1518524870.git.baruch@tkos.co.il>
+Message-ID: <20180214220237.379a45a5@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26e0186b5f41821dd7aec04d2d583e1c4b5afaad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 13 Feb 2018 14:27:49 +0200, Baruch Siach wrote:
+> Kernel version 4.15 (not 4.16 as the musl commit log claims) allows
+> disabling of more parts of the kernel headers definitions. Add upstream
+> musl patch that defines the relevant macros. This solves issues of
+> networking related symbols redefinition in kernel headers that cause
+> headers conflicts. With that in place a subsequent commit will limit the
+> musl/kernel headers conflict avoidance workaround in Buildroot to kernel
+> headers older than 4.15. This workaround has been introduced in commit
+> 196932cd91 (toolchain: workaround musl/kernel headers conflict).
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...nal-uapi-guards-for-Linux-kernel-header-f.patch | 69 ++++++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index cdf740834b..a8092616a9 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 5a77278a63741efa74e26bf197b9bb09ac6381b9757391b922407210f0f991c0  ffmpeg-3.4.1.tar.xz
-+sha256 2b92e9578ef8b3e49eeab229e69305f5f4cbc1fdaa22e927fc7fca18acccd740  ffmpeg-3.4.2.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 76c31f5f52..5d2f89fb43 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.4.1
-+FFMPEG_VERSION = 3.4.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+Both applied to next. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
