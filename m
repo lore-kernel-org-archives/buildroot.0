@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 22:02:37 +0100
-Subject: [Buildroot] [PATCH 1/2] musl: add more kernel headers guards
-In-Reply-To: <00926ed70cd14972bac0ce653b1f383b4a31492c.1518524870.git.baruch@tkos.co.il>
-References: <00926ed70cd14972bac0ce653b1f383b4a31492c.1518524870.git.baruch@tkos.co.il>
-Message-ID: <20180214220237.379a45a5@windsurf.lan>
+Date: Wed, 14 Feb 2018 21:43:16 +0100
+Subject: [Buildroot] [git commit branch/next] cjson: bump to version 1.7.3
+Message-ID: <20180214210140.CA7E0887CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1063e9ef80e2c4ac6c71518fc661381b42bcdd24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 13 Feb 2018 14:27:49 +0200, Baruch Siach wrote:
-> Kernel version 4.15 (not 4.16 as the musl commit log claims) allows
-> disabling of more parts of the kernel headers definitions. Add upstream
-> musl patch that defines the relevant macros. This solves issues of
-> networking related symbols redefinition in kernel headers that cause
-> headers conflicts. With that in place a subsequent commit will limit the
-> musl/kernel headers conflict avoidance workaround in Buildroot to kernel
-> headers older than 4.15. This workaround has been introduced in commit
-> 196932cd91 (toolchain: workaround musl/kernel headers conflict).
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...nal-uapi-guards-for-Linux-kernel-header-f.patch | 69 ++++++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to next. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index c72565d2bf..c75854d2ac 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 e5101b6c0416d26b8ce2dd3fcdd779eacd93d765a1872789ba099a5f31a338e7  cjson-v1.7.2.tar.gz
++sha256 726a60137ab1aa6784dc575bf7d4c92f5367e937739c8bffcddce79071cf5f50  cjson-v1.7.3.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 31d57e1f2b..08020c48f6 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.7.2
++CJSON_VERSION = v1.7.3
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
