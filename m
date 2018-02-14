@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 22:05:26 +0100
-Subject: [Buildroot] [git commit branch/next] libupnp: bump to version 1.6.25
-Message-ID: <20180214210532.05ED785027@busybox.osuosl.org>
+Date: Wed, 14 Feb 2018 22:05:16 +0100
+Subject: [Buildroot] [git commit branch/next] keepalived: bump to version
+ 1.4.1
+Message-ID: <20180214210531.E159385027@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18f33eee21d3ca947cf8a6b5c150bb29e8f711dc
+commit: https://git.buildroot.net/buildroot/commit/?id=6320325eba253935f53e75e8ed365ad704d2b443
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add license file hash.
+
+Cc: Ilias Apalodimas <apalos@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/keepalived/keepalived.hash | 3 ++-
+ package/keepalived/keepalived.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index 929e5c42e7..e52b7ea9d7 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	7d83d79af3bb4062e5c3a58bf2e90d2da5b8b99e2b2d57c23b5b6f766288cf96	libupnp-1.6.24.tar.bz2
-+sha256	c5a300b86775435c076d58a79cc0d5a977d76027d2a7d721590729b7f369fa43	libupnp-1.6.25.tar.bz2
- sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index c7085c2148..8831885ba4 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
+diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
+index 5d33c5be00..4590c33ef9 100644
+--- a/package/keepalived/keepalived.hash
++++ b/package/keepalived/keepalived.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	c0114d86ea4c896557beb0d9367819a423ffba772bc5d7c548dc455e6b3bd048  keepalived-1.3.5.tar.gz
++sha256	220407517ccad822d1ffa80f7bc37582abaf97da6f7bda2326fa6904b1855bd0  keepalived-1.4.1.tar.gz
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index 59d3cb5cfb..6d3d8e7cc6 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUPNP_VERSION = 1.6.24
-+LIBUPNP_VERSION = 1.6.25
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+-KEEPALIVED_VERSION = 1.3.5
++KEEPALIVED_VERSION = 1.4.1
+ KEEPALIVED_SITE = http://www.keepalived.org/software
+ KEEPALIVED_DEPENDENCIES = host-pkgconf openssl popt
+ KEEPALIVED_LICENSE = GPL-2.0+
