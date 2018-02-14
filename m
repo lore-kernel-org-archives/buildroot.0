@@ -1,35 +1,53 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 14 Feb 2018 10:55:22 -0600
-Subject: [Buildroot] Using cross tools without knowing the cross prefix
-In-Reply-To: <CAAXf6LU9ZkpV+3wbjM_Ybb6F0DKsMY+8MUAd2SQi2ap2PnZ55A@mail.gmail.com>
-References: <CAAXf6LU9ZkpV+3wbjM_Ybb6F0DKsMY+8MUAd2SQi2ap2PnZ55A@mail.gmail.com>
-Message-ID: <CANQCQpb91QxytrxpOVuNC5jwK0bK-Ato8JHgD5r-J_Ei2_461Q@mail.gmail.com>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Wed, 14 Feb 2018 11:19:27 -0600
+Subject: [Buildroot] [PATCH 3/3] pure-ftpd: Config.in: fix help text
+ wrapping
+In-Reply-To: <20180214050458.32281-4-gael.portay@savoirfairelinux.com>
+References: <20180214050458.32281-1-gael.portay@savoirfairelinux.com>
+ <20180214050458.32281-4-gael.portay@savoirfairelinux.com>
+Message-ID: <CAH=K+6n+y_0yyh-4KVNttVGCAsB_ARiFnHxBvWu9zSizwZdh8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+On Tue, Feb 13, 2018 at 11:04 PM, Ga?l PORTAY
+<gael.portay@savoirfairelinux.com> wrote:
+> This commit fixes the warnings reported by check-package on the help
+> text of package Config.in file, related to the formatting of the help
+> text: should start with a tab, then 2 spaces, then at most 62
+> characters.
 
-On Mon, Feb 12, 2018 at 6:39 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi,
+I thought I checked this, sorry.
+
 >
-[snip]
-> While I'm currently mostly interested in cross-gdb, the problem is
-> generic for cross-gcc, cross-g++, ... as well. Can we create a
-> mechanism that solves this problem generically, for example by
-> adding links cross-<tool> for every useful tool inside $(HOST_DIR)/bin?
-> Or alternatively, use a second directory tree like:
-> $(HOST_DIR)/bin/cross/{gcc,gdb,nm,readelf} etc. ?
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 
-I've noticed a similar concern when I have an application team
-"re-tool" for a new target and the prefix change results in a
-discussion about why is this changing.  It doesn't happen often
-enough, but their is always an extra prefix variable in any
-application developers configuration they maintain for the particular
-target they use. I'd agree the generically named folder structure
-would cleanup use and documentation from a SDK users perspective.
+Acked-by: Sam Voss <sam.voss@rockwellcollins.com>
 
-Matt
+> ---
+>  package/pure-ftpd/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/pure-ftpd/Config.in b/package/pure-ftpd/Config.in
+> index d03170b7cf..c060102650 100644
+> --- a/package/pure-ftpd/Config.in
+> +++ b/package/pure-ftpd/Config.in
+> @@ -33,7 +33,7 @@ config BR2_PACKAGE_PURE_FTPD_QUOTAS
+>  config BR2_PACKAGE_PURE_FTPD_UPLOADSCRIPT
+>         bool "uploadscript"
+>         help
+> -         Enable pure-upload script. Automatically run an external program
+> -         after a successful upload.
+> +         Enable pure-upload script. Automatically run an external
+> +         program after a successful upload.
+>
+>  endif
+> --
+> 2.15.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
