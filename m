@@ -1,43 +1,35 @@
-From: Remco Poelstra <r.poelstra@vogels.com>
-Date: Wed, 14 Feb 2018 15:21:14 +0000
-Subject: [Buildroot] Custom package that installs into ${TARGET_DIR}/${O}
-Message-ID: <AM3PR02MB312BD4F64980262863DEBBCEFF50@AM3PR02MB312.eurprd02.prod.outlook.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 14 Feb 2018 10:55:22 -0600
+Subject: [Buildroot] Using cross tools without knowing the cross prefix
+In-Reply-To: <CAAXf6LU9ZkpV+3wbjM_Ybb6F0DKsMY+8MUAd2SQi2ap2PnZ55A@mail.gmail.com>
+References: <CAAXf6LU9ZkpV+3wbjM_Ybb6F0DKsMY+8MUAd2SQi2ap2PnZ55A@mail.gmail.com>
+Message-ID: <CANQCQpb91QxytrxpOVuNC5jwK0bK-Ato8JHgD5r-J_Ei2_461Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thomas,
 
-I'm trying to add bluez-alsa as a package. Compiling etc works fine, but at the install phase I get the following error:
+On Mon, Feb 12, 2018 at 6:39 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi,
+>
+[snip]
+> While I'm currently mostly interested in cross-gdb, the problem is
+> generic for cross-gcc, cross-g++, ... as well. Can we create a
+> mechanism that solves this problem generically, for example by
+> adding links cross-<tool> for every useful tool inside $(HOST_DIR)/bin?
+> Or alternatively, use a second directory tree like:
+> $(HOST_DIR)/bin/cross/{gcc,gdb,nm,readelf} etc. ?
 
-bluealsa: installs files in /home/architech/renesas/rza_linux-4.9_bsp/output/buildroot-git/output/target//home/architech/renesas/rza_linux-4.9_bsp/output/buildroot-git/output
+I've noticed a similar concern when I have an application team
+"re-tool" for a new target and the prefix change results in a
+discussion about why is this changing.  It doesn't happen often
+enough, but their is always an extra prefix variable in any
+application developers configuration they maintain for the particular
+target they use. I'd agree the generically named folder structure
+would cleanup use and documentation from a SDK users perspective.
 
-Specifically it installs (its modules) into:
-/home/architech/renesas/rza_linux-4.9_bsp/output/buildroot-git/output/target/home/architech/renesas/rza_linux-4.9_bsp/output/buildroot-git/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/alsa-lib/
-
-It's a bit strange it installs into the sysroot, as the modules should go into the target.
-What do I need to add to make sure it installs the modules properly? My .mk file looks as follows:
-
-BLUEALSA_VERSION = master
-BLUEALSA_SITE = git://github.com/Arkq/bluez-alsa.git
-BLUEALSA_SITE_METHOD = git
-BLUEALSA_SITE_LICENSE = MIT
-BLUEALSA_AUTORECONF = YES
-BLUEALSA_AUTORECONF_OPTS = --install
-BLUEALSA_DEPENDENCIES = alsa-lib bluez5_utils sbc
-
-ifeq ($(BR2_PACKAGE_BLUEALSA_AAC),y)
-BLUEALSA_CONF_OPTS += --enable-aac
-BLUEALSA_DEPENDENCIES += fdk-aac
-endif
-
-$(eval $(autotools-package))
-
-Thanks in advance!
-
-Kind regards,
-
-Remco Poelstra
-*Nosig*
+Matt
