@@ -1,40 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 13:38:56 +0100
-Subject: [Buildroot] [PATCH v2 1/2] iqvlinux: bump to version 1.2.0.3
-In-Reply-To: <1165835580.151356.1518608286300.JavaMail.zimbra@datacom.ind.br>
-References: <20171215153830.4864-1-casantos@datacom.ind.br>
- <20171216155053.2b40b409@windsurf>
- <367239421.6256025.1513450988190.JavaMail.zimbra@datacom.ind.br>
- <1833448217.6256112.1513453992880.JavaMail.zimbra@datacom.ind.br>
- <20171217050554.5377c971@windsurf>
- <20180109105628.6bd70119@windsurf>
- <1044274388.21428.1515549369997.JavaMail.zimbra@datacom.ind.br>
- <1165835580.151356.1518608286300.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20180214133856.0b932d8a@windsurf.lan>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 14 Feb 2018 15:04:43 +0200
+Subject: [Buildroot] [PATCH RFC] 18xx-ti-utils: new package
+Message-ID: <f92c71ab69063c62e8562b05062a70fdb91b187f.1518613483.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+These are spacial RF calibration utilities for the TI Wilink 18xx
+modules.
 
-On Wed, 14 Feb 2018 09:38:06 -0200 (BRST), Carlos Santos wrote:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
 
-> >> In the end, did you get the chance to raise the issue of the tarball
-> >> name with the upstream developers ?  
-> > 
-> > Thanks for reminding me of this issue. I just submitted a ticket:
-> > 
-> >    https://sourceforge.net/p/e1000/bugs/589/
-> 
-> No love, so far. :-(
+I encountered strange behaviour with this package. Simple 'make' does
+not build the package even when 'BR2_18XX_TI_UTILS=y' is in my .config.
+All other packages in my .config build fine. Running 'make
+18xx-ti-utils' does build the package, though. 'make printvars' shows
+the package in PACKAGES_ALL but not in PACKAGES.
 
-I pinged on the bug report, just in case, but indeed, there isn't much
-hope.
+I might have missed something obvious. Maybe someone on the list can
+enlighten me.
+---
+ DEVELOPERS                             |  1 +
+ package/18xx-ti-utils/18xx-ti-utils.mk | 28 ++++++++++++++++++++++++++++
+ package/18xx-ti-utils/Config.in        | 10 ++++++++++
+ package/Config.in                      |  1 +
+ 4 files changed, 40 insertions(+)
+ create mode 100644 package/18xx-ti-utils/18xx-ti-utils.mk
+ create mode 100644 package/18xx-ti-utils/Config.in
 
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c524cb6ac505..2dc2d0665fcb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -203,6 +203,7 @@ F:	package/pulseview/
+ F:	package/sigrok-cli/
+ 
+ N:	Baruch Siach <baruch@tkos.co.il>
++F:	package/18xx-ti-utils/
+ F:	package/daemon/
+ F:	package/dropbear/
+ F:	package/ebtables/
+diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
+new file mode 100644
+index 000000000000..be8a67608165
+--- /dev/null
++++ b/package/18xx-ti-utils/18xx-ti-utils.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# 18xx-ti-utils
++#
++################################################################################
++
++18XX_TI_UTILS_VERSION = R8.7_SP3
++18XX_TI_UTILS_SITE = git://git.ti.com/wilink8-wlan/18xx-ti-utils
++18XX_TI_UTILS_DEPENDENCIES = libnl
++
++18XX_TI_UTILS_CFLAGS = -I$(STAGING_DIR)/usr/include/libnl3 -DCONFIG_LIBNL32
++
++ifeq ($(BR2_STATIC_LIBS),y)
++18XX_TI_UTILS_BUILD_TARGET = static
++endif
++
++define 18XX_TI_UTILS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) CROSS_COMPILE=$(TARGET_CROSS) \
++		NFSROOT=/noexistent NLVER=3 $(MAKE) -C $(@D) \
++		CFLAGS="$(TARGET_CFLAGS) $(18XX_TI_UTILS_CFLAGS)" \
++		$(18XX_TI_UTILS_BUILD_TARGET)
++endef
++
++define 18XX_TI_UTILS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/calibrator $(TARGET_DIR)/usr/bin/calibrator
++endef
++
++$(eval $(generic-package))
+diff --git a/package/18xx-ti-utils/Config.in b/package/18xx-ti-utils/Config.in
+new file mode 100644
+index 000000000000..fcdb80673c7e
+--- /dev/null
++++ b/package/18xx-ti-utils/Config.in
+@@ -0,0 +1,10 @@
++config BR2_18XX_TI_UTILS
++	bool "18xx-ti-utils"
++	select BR2_PACKAGE_LIBNL
++	help
++	  TI Wilink calibration utilities.
++
++	  CONFIG_NL80211_TESTMODE must be enabled in the kernel
++	  configuration for this package to work.
++
++	  http://processors.wiki.ti.com/index.php/WL18xx_TX_Testing
+diff --git a/package/Config.in b/package/Config.in
+index 9cd5d9c08741..3c82f7ab00d5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -374,6 +374,7 @@ menu "Firmware"
+ 	source "package/wilink-bt-firmware/Config.in"
+ 	source "package/zd1211-firmware/Config.in"
+ endmenu
++	source "package/18xx-ti-utils/Config.in"
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpica/Config.in"
+ 	source "package/acpid/Config.in"
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.15.1
