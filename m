@@ -1,50 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 16:36:28 +0100
-Subject: [Buildroot] Adding package libgit2
-In-Reply-To: <f909d627-970f-490b-0c9f-678bb3461bc9@green-communications.fr>
-References: <20180214111351.4801-1-nicolas.cavallari@green-communications.fr>
- <20180214160622.789eb7e9@windsurf.lan>
- <f909d627-970f-490b-0c9f-678bb3461bc9@green-communications.fr>
-Message-ID: <20180214163628.22360128@windsurf.lan>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 14 Feb 2018 18:43:54 +0200
+Subject: [Buildroot] [PATCH v2] 18xx-ti-utils: new package
+Message-ID: <8239d07281c8cfecf4621067c18415f2b6a547d6.1518626634.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+These are spacial RF calibration utilities for the TI Wilink 18xx
+modules.
 
-On Wed, 14 Feb 2018 16:30:24 +0100, Nicolas Cavallari wrote:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2:
+  * Fix the config symbol as noted by ThomasP
+  * Use STAGING_DIR for NFSROOT
+---
+ DEVELOPERS                             |  1 +
+ package/18xx-ti-utils/18xx-ti-utils.mk | 28 ++++++++++++++++++++++++++++
+ package/18xx-ti-utils/Config.in        | 10 ++++++++++
+ package/Config.in                      |  1 +
+ 4 files changed, 40 insertions(+)
+ create mode 100644 package/18xx-ti-utils/18xx-ti-utils.mk
+ create mode 100644 package/18xx-ti-utils/Config.in
 
-> > ARCH is set to ${CMAKE_SYSTEM_PROCESSOR}, and CMAKE_SYSTEM_PROCESSOR is
-> > explicitly passed by Buildroot in package/pkg-cmake.mk. So it should be
-> > correct. zlib-ng CMakeLists.txt uses its ${ARCH} variable to decide
-> > whether the x86 code should be built or not:
-> > 
-> > if("${ARCH}" MATCHES "x86_64" OR "${ARCH}" MATCHES "AMD64")
-> >     set(ARCHDIR "arch/x86")
-> >     add_definitions(-DX86_64 -DX86_NOCHECK_SSE2 -DUNALIGNED_OK -DUNROLL_LESS)
-> >     add_feature_info(SSE2 1 "Use the SSE2 instruction set, using \"${SSE2FLAG}\"")  
-> 
-> I have added --trace to cmake.  There is this gem a few lines below:
-> 
-> else()
->     set(ARCHDIR "arch/x86")
->     add_definitions(-DX86 -DUNALIGNED_OK -DUNROLL_LESS)
->     add_feature_info(SSE2 1 "Support the SSE2 instruction set, using
-> \"${SSE2FLAG}\"")
-> endif()
-> 
-> So anything not arm/aarch64/x86 is treated like x86 anyway...
-
-Which obviously is not going to work very well :)
-
-I guess this should be fixed and/or reported to zlib-ng upstream. In
-the mean time, either we fix it, or we disallow zlib-ng on
-architectures other than arm/aarch64/x86.
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c524cb6ac505..2dc2d0665fcb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -203,6 +203,7 @@ F:	package/pulseview/
+ F:	package/sigrok-cli/
+ 
+ N:	Baruch Siach <baruch@tkos.co.il>
++F:	package/18xx-ti-utils/
+ F:	package/daemon/
+ F:	package/dropbear/
+ F:	package/ebtables/
+diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
+new file mode 100644
+index 000000000000..b4af0f84dacd
+--- /dev/null
++++ b/package/18xx-ti-utils/18xx-ti-utils.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# 18xx-ti-utils
++#
++################################################################################
++
++18XX_TI_UTILS_VERSION = R8.7_SP3
++18XX_TI_UTILS_SITE = git://git.ti.com/wilink8-wlan/18xx-ti-utils
++18XX_TI_UTILS_DEPENDENCIES = libnl
++
++18XX_TI_UTILS_CFLAGS = -I$(STAGING_DIR)/usr/include/libnl3 -DCONFIG_LIBNL32
++
++ifeq ($(BR2_STATIC_LIBS),y)
++18XX_TI_UTILS_BUILD_TARGET = static
++endif
++
++define 18XX_TI_UTILS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) CROSS_COMPILE=$(TARGET_CROSS) \
++		NFSROOT="$(STAGING_DIR)" NLVER=3 $(MAKE) -C $(@D) \
++		CFLAGS="$(TARGET_CFLAGS) $(18XX_TI_UTILS_CFLAGS)" \
++		$(18XX_TI_UTILS_BUILD_TARGET)
++endef
++
++define 18XX_TI_UTILS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/calibrator $(TARGET_DIR)/usr/bin/calibrator
++endef
++
++$(eval $(generic-package))
+diff --git a/package/18xx-ti-utils/Config.in b/package/18xx-ti-utils/Config.in
+new file mode 100644
+index 000000000000..1bfbb8dbec8f
+--- /dev/null
++++ b/package/18xx-ti-utils/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_18XX_TI_UTILS
++	bool "18xx-ti-utils"
++	select BR2_PACKAGE_LIBNL
++	help
++	  TI Wilink calibration utilities.
++
++	  CONFIG_NL80211_TESTMODE must be enabled in the kernel
++	  configuration for this package to work.
++
++	  http://processors.wiki.ti.com/index.php/WL18xx_TX_Testing
+diff --git a/package/Config.in b/package/Config.in
+index 9cd5d9c08741..3c82f7ab00d5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -374,6 +374,7 @@ menu "Firmware"
+ 	source "package/wilink-bt-firmware/Config.in"
+ 	source "package/zd1211-firmware/Config.in"
+ endmenu
++	source "package/18xx-ti-utils/Config.in"
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpica/Config.in"
+ 	source "package/acpid/Config.in"
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.15.1
