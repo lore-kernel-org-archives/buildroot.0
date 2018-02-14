@@ -1,70 +1,35 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Tue, 13 Feb 2018 21:37:14 -0500
-Subject: [Buildroot] [PATCH v2 1/1] qt5webengine: fix build issue with alsa
-Message-ID: <20180214023714.21143-1-gael.portay@savoirfairelinux.com>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 13 Feb 2018 21:55:40 -0500
+Subject: [Buildroot] systemd: build failure against pam on arm
+In-Reply-To: <874lo9xqb7.fsf@paral.in>
+References: <873741w59p.fsf@paral.in>
+ <20171224120957.GY27558@waldemar-brodkorb.de> <87po73d1xz.fsf@paral.in>
+ <20171225151337.GC27558@waldemar-brodkorb.de> <87mv25cg5t.fsf@paral.in>
+ <87shbxq99x.fsf@paral.in> <20171227030548.GE27558@waldemar-brodkorb.de>
+ <87y3loenlr.fsf@paral.in> <20171227080520.GF27558@waldemar-brodkorb.de>
+ <87o9mkdlf1.fsf@paral.in> <20171228180402.GR27558@waldemar-brodkorb.de>
+ <874lo9xqb7.fsf@paral.in>
+Message-ID: <87wozgz3df.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt WebEngine auto-guesses if it compiles support for alsa. When the
-alsa-lib config is enabled but the features mixer, rawmidi, hwdep and
-seq are not also enabled, it leads to a build failure.
+Hi Waldemar, all,
 
-Lets the developer decide whether or not support for alsa in Qt
-WebEngine by adding the new config BR2_PACKAGE_QT5WEBENGINE_ALSA that
-selects the features it needs when it is set.
 
-Fixes [1].
+Christian Stewart <christian@paral.in> writes:
+> Waldemar Brodkorb <wbx@openadk.org> writes:
+>>> Thank you again for taking the time to debug this, I've had this issue
+>>> early 2017 and have avoided upgrading Buildroot until we find a fix.
+>>
+>> Sorry I believe you entered the world of libtool hell.
+>>
+>> For the hardcore buildroot hackers, if you create a symlink in /lib
+>> pointing to libpam.so / libpam_misc.so you can reproduce the issue.
 
-[1]: http://autobuild.buildroot.net/results/d81537a8f67bb0a3625057560b2f16daf4828f98/build-end.log
+It appears that this bug is fixed in the latest release (2018.02 rc2).
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
-
-Changes since v1:
-	* turn alsa-lib dependency into select
-
- package/qt5/qt5webengine/Config.in       | 10 ++++++++++
- package/qt5/qt5webengine/qt5webengine.mk |  6 ++++++
- 2 files changed, 16 insertions(+)
-
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index d0c8d18210..7c99255061 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -81,4 +81,14 @@ config BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS
- 	  which includes required proprietary audio and video codecs,
- 	  such as H.264 and MPEG layer-3 (MP3).
- 
-+config BR2_PACKAGE_QT5WEBENGINE_ALSA
-+	bool "alsa"
-+	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_ALSA_LIB_MIXER
-+	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
-+	select BR2_PACKAGE_ALSA_LIB_HWDEP
-+	select BR2_PACKAGE_ALSA_LIB_SEQ
-+	help
-+	  Enable ALSA support.
-+
- endif
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 365d7d5a17..4d423f8329 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -28,6 +28,12 @@ ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
- QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
-+QT5WEBENGINE_DEPENDENCIES += alsa-lib
-+else
-+QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
-+endif
-+
- # QtWebengine's build system uses python, but only supports python2. We work
- # around this by forcing python2 early in the PATH, via a python->python2
- # symlink.
--- 
-2.11.0
+Thanks!
+Christian
