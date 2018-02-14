@@ -1,87 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 22:50:51 +0100
-Subject: [Buildroot] [PATCH v2 2/2] xf86-video-armada: new package
-In-Reply-To: <20180202145526.20133-3-Evgeniy.Didin@synopsys.com>
-References: <20180202145526.20133-1-Evgeniy.Didin@synopsys.com>
- <20180202145526.20133-3-Evgeniy.Didin@synopsys.com>
-Message-ID: <20180214225051.1a942a26@windsurf.lan>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 14 Feb 2018 18:13:37 -0500
+Subject: [Buildroot] 
+ =?utf-8?b?W0phbiBLdW5kcsOhdF0gIFtQQVRDSCAxLzNdIHN5?=
+ =?utf-8?q?stemd=3A_Ensure_/run_and_/var/run_are_the_same_on_R/O_rootfs?=
+In-Reply-To: <87k1vfz2m4.fsf@paral.in>
+References: <87k1vfz2m4.fsf@paral.in>
+Message-ID: <87eflnyxjy.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Evgeniy,
+Hi Jan, all,
 
-On Fri,  2 Feb 2018 17:55:26 +0300, Evgeniy Didin wrote:
+> From: Jan Kundr?t <jan.kundrat@cesnet.cz>
+> I'm leaving that one to someone who is more familiar with systemd and
+> buildroot conventions. My box now boots again, so I'm happy :).
+>
+> [1] https://bugs.freedesktop.org/show_bug.cgi?id=101628
+>
+> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+> ---
+>  package/skeleton-init-systemd/skeleton-init-systemd.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> index a2d4e8c4b3..95142904f5 100644
+> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> @@ -42,7 +42,9 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+>  	mkdir $(TARGET_DIR)/var
+>  	for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
+>  		j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
+> -		if [ -L "$${i}" ]; then \
+> +		if [ "$${j}" = "/var/run" ]; then \
+> +			echo "# $${j} is being handled by systemd"
+> +		elif [ -L "$${i}" ]; then \
+>  			printf "L+! %s - - - - %s\n" \
+>  				"$${j}" "../usr/share/factory/$${j}" \
+>  			|| exit 1; \
+> -- 
+> 2.14.3
+>
+
+I applied this patch, thanks. Unfortunately, it seems the problem is
+still occurring. Maybe it's a different problem?
 
 
-> diff --git a/package/x11r7/xdriver_xf86-video-armada/Config.in b/package/x11r7/xdriver_xf86-video-armada/Config.in
-> new file mode 100644
-> index 0000000000..ade8a75643
-> --- /dev/null
-> +++ b/package/x11r7/xdriver_xf86-video-armada/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ARMADA
-> +	bool "xf86-video-armada"
-> +	depends on BR2_PACKAGE_MESA3D
-
-It would be nice to add a comment about this dependency here, because
-your package doesn't itself depend on mesa3d. I assume it's because you
-need GLX support in the X.org server, but it would be nice to make this
-explicit.
+[   16.650294] systemd[1]: System is tainted: var-run-bad
+[   16.680724] systemd[1]: Starting Network Connectivity...
+[   16.710421] systemd[1]: Started D-Bus System Message Bus.
+[   16.740678] systemd[1]: Failed to connect to system bus: No such file or directory
+[   16.770425] systemd[1]: Failed to initialize D-Bus connection: No such file or directory
+[   16.800386] systemd[1]: Starting Network Manager...
 
 
-> +XDRIVER_XF86_VIDEO_ARMADA_VERSION = 04748ff4fb30370086cc97b9487a32951c5600ba
-> +XDRIVER_XF86_VIDEO_ARMADA_SITE = http://git.arm.linux.org.uk/cgit/xf86-video-armada.git
-> +XDRIVER_XF86_VIDEO_ARMADA_SITE_METHOD = git
-> +XDRIVER_XF86_VIDEO_ARMADA_AUTORECONF = YES
-> +XDRIVER_XF86_VIDEO_ARMADA_DEPENDENCIES = \
-> +	libdrm-armada \
-> +	xserver_xorg-server
-> +
-> +XDRIVER_XF86_VIDEO_ARMADA_LICENSE_FILES= README etna_viv/LICENSE
+[1518648890.7497] hostname: hostname: hostnamed not used as proxy creation failed
 
-Space before =, and please put the LICENSE_FILES variable after the
-LICENSE variable.
+[   39.020736] dbus-daemon[314]: [system] Failed to activate service 'org.freedesktop.systemd1': timed out
+[   39.100451] dbus-daemon[314]: [system] Activating systemd to hand-off: service name='org.freedesktop.nm
+_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.0' (uid=0 pid=315 comm="/u
+sr/sbin/NetworkManager --no-daemon ")                                                                    
+[   39.150403] NetworkManager[315]: <info>  [1518648890.7540] manager[0x20ac030]: rfkill: WWAN hardware ra
 
-> +XDRIVER_XF86_VIDEO_ARMADA_LICENSE = BSD
+It seems that systemd still cannot talk to the system bus.
 
-BSD is not a license. See https://spdx.org/licenses/ for a list of
-license codes.
+I can also see this happening if I try to execute systemd-hostnamed:
 
-> +#Need etna_viv source files for driver
-> +define XDRIVER_XF86_VIDEO_ARMADA_ETNASRC
-> +	git clone https://github.com/laanwj/etna_viv.git $(@D)/etna_viv
+# ./systemd-hostnamed 
+Failed to get system bus connection: No such file or directory
 
-This is not acceptable, as it completely works around the Buildroot
-download infrastructure, preventing offline builds. Why do we need
-this ? Why isn't the upstream version of etnaviv sufficient ?
+# ls /var/run/
+NetworkManager  dhcpcd.pid          docker       ifstate   utmp
+dbus            dhcpcd.sock         docker.pid   sepermit
+dhcpcd          dhcpcd.unpriv.sock  docker.sock  sshd.pid
 
-If it's really needed, a separate package will have to be created.
+# ls /var/run/dbus
+system_bus_socket
 
-> +        mkdir $(@D)/m4
-> +endef
-> +
-> +XDRIVER_XF86_VIDEO_ARMADA_POST_PATCH_HOOKS += XDRIVER_XF86_VIDEO_ARMADA_ETNASRC
-> +
-> +define XDRIVER_XF86_VIDEO_ARMADA_INSTALL_CONF_FILE
-> +        $(INSTALL) -m 0644 -D $(@D)/conf/xorg-sample.conf $(TARGET_DIR)/etc/X11/xorg.conf
-> +endef
-> +
-> +XDRIVER_XF86_VIDEO_ARMADA_POST_INSTALL_TARGET_HOOKS += XDRIVER_XF86_VIDEO_ARMADA_INSTALL_CONF_FILE
-> +
-> +
-> +XDRIVER_XF86_VIDEO_ARMADA_CONF_OPTS = \
-> +  --prefix=/usr --disable-vivante --disable-etnaviv \
+# ls /run/
+blkid   lock  mount     systemd  user  xtables.lock
+docker  log   ntpd.pid  udev     utmp
 
---prefix=/usr is already passed by the autotools-package
-infrastructure. Why do you disable vivante and etnaviv ?
+If I link dbus like so:
 
-Thanks,
+# ln -s /var/run/dbus/ /run/dbus
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+It seems then that everything works fine.
+
+~ Christian
