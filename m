@@ -1,38 +1,51 @@
-From: Pierre <pinaraf@pinaraf.info>
-Date: Wed, 14 Feb 2018 09:44:39 +0100
-Subject: [Buildroot] [PATCH 1/1] Add first KF5 packages
-In-Reply-To: <hrvclexdar.ln2@ID-313208.user.individual.net>
-References: <20180213213531.22910-1-pinaraf@pinaraf.info>
- <hrvclexdar.ln2@ID-313208.user.individual.net>
-Message-ID: <2412544.jXCSD0vXVS@pierred-pdoc>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 14 Feb 2018 09:02:29 -0200 (BRST)
+Subject: [Buildroot] Disable e2fsprogfs utilities chattr and lsattr
+In-Reply-To: <CAN+Pz6PQ_2u4AxzmUYFmihD1Vfbo1cq14CKHyK9xzN5i_7u18g@mail.gmail.com>
+References: <CAN+Pz6N=Artes_iA=aDj+Dd_yfLQw1QM8_iFKgEiLQVLfM+5jQ@mail.gmail.com>
+ <CAN+Pz6PQ_2u4AxzmUYFmihD1Vfbo1cq14CKHyK9xzN5i_7u18g@mail.gmail.com>
+Message-ID: <135394184.139988.1518606149517.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, February 14, 2018 6:59:45 AM CET Bernd Kuhls wrote:
-> Am Tue, 13 Feb 2018 22:35:31 +0100 schrieb Pierre Ducroquet:
-> > This first commit introduce the kf5 packages folder and the first two
-> 
-> > KF5 packages:
-> Hi Pierre,
-> 
-> according to the buildroot manual[1], section 17.1, new subdirectories,
-> like package/kf5/, are discouraged, please add the new packages directly
-> to package/.
-> 
-> Regards, Bernd
+> From: "Gani Suresh" <sureshgani@gmail.com>
+> To: "buildroot" <buildroot@busybox.net>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> Sent: Thursday, February 1, 2018 10:23:08 PM
+> Subject: Re: [Buildroot] Disable e2fsprogfs utilities chattr and lsattr
 
-Hi
+> On Tue, Jan 30, 2018 at 10:17 PM, Gani Suresh < [ mailto:sureshgani@gmail.com |
+> sureshgani at gmail.com ] > wrote:
 
-If I package every KF5 library that can be used outside a full featured 
-desktop environment, there will be more than 30 libraries (they split the 
-libraries in several tiers, and tier 1 contains 32 libraries). Grouping them 
-in a subdirectory made more sense to me.
-But if it's the rule, I will comply. How should I, under this restriction, 
-share makefile variables (like KF5_VERSION) between the packages ?
+>> We have a requirement to avoid the vulnerability of our system. So, we are
+>> planning to disable chattr and lsattr when e2fsprogs package is built.
 
-Thanks
+Extended attributes belong to the filesystem and will still be there
+regardless the absence of the corresponding userland utilities. Why
+could the presence of chattr and lsattr be considered a vulnerability?
 
- Pierre
+>> Until, e2fsprogs version 1.43.1 these utilities were optional in building i.e.
+>> there were separate build flags( e.g BR2_PACKAGE_E2FSPROGS_CHATTR ) to
+>> enable/disable the same. In below, commit these flags were removed to enable
+>> these utilities by default. Then, we can remove the binaries in our post
+>> installation processing. Please clarify our question below.
+
+Please read carefully the commit message see the discussion in the
+bug report:
+
+    https://bugs.busybox.net/show_bug.cgi?id=9436
+
+>> Are these utilities used by the binaries built as part of e2fsprogs package or
+>> some other programs ? If so, what is the impact of removing these binaries from
+>> the target ?
+
+They are normally used by user scripts. Other e2fsprogs utilities do
+not use them.
+
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
