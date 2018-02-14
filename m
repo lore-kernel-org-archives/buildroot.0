@@ -1,72 +1,173 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Feb 2018 22:16:08 +0100
-Subject: [Buildroot] [PATCH v6 1/2] libkrb5: New package
-In-Reply-To: <1517937729-12832-1-git-send-email-nerv@dawncrow.de>
-References: <1517937729-12832-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <20180214221608.2cb324f3@windsurf.lan>
+Date: Wed, 14 Feb 2018 22:41:58 +0100
+Subject: [Buildroot] [PATCH 1/1] Odroid XU4: Hardkernel new board support
+In-Reply-To: <1517655722-20132-1-git-send-email-pct@crookies.net>
+References: <1517655722-20132-1-git-send-email-pct@crookies.net>
+Message-ID: <20180214224158.7943d151@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Pierre,
 
-On Tue,  6 Feb 2018 18:22:08 +0100, Andr? Hentschel wrote:
+On Sat,  3 Feb 2018 12:02:02 +0100, Pierre CROKAERT wrote:
+> This patch provides support for the board Odroid XU4
+> This version is using the latest 4.9 kernel released by Hardkernel,
+> and the current u-boot 2017.05 also from Hardkernel.
+> The support was implemented based on comments about Andi's patch (https://patchwork.ozlabs.org/patch/640695/).
+> 
+> Signed-off-by: Pierre CROKAERT <pct@crookies.net>
 
-> diff --git a/package/libkrb5/Config.in b/package/libkrb5/Config.in
+Thanks for working on this topic. However, there are still a few things
+that I don't understand and/or that don't feel correct.
+
+> diff --git a/board/hardkernel/odroidxu4/boot.cmd b/board/hardkernel/odroidxu4/boot.cmd
 > new file mode 100644
-> index 0000000..bdddd2e
+> index 0000000..2fb4c16
 > --- /dev/null
-> +++ b/package/libkrb5/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LIBKRB5
-> +	bool "libkrb5"
-> +	# needs fork()
-> +	depends on BR2_USE_MMU
-> +	# static libs are not supported on all platforms
-> +	depends on !(BR2_STATIC_LIBS && (BR2_ARM_CPU_ARMV7M || BR2_m68k))
+> +++ b/board/hardkernel/odroidxu4/boot.cmd
+> @@ -0,0 +1,10 @@
+> +setenv kernelname zImage;
+> +setenv boot_kernel "setenv bootargs \"${console} root=/dev/mmcblk${mmcrootdev}p${mmcrootpart} rootfstype=${rootfstype} rootwait ${opts}\";
+> +load mmc ${mmcbootdev}:${mmcbootpart} 0x40007FC0 '${kernelname}';
+> +if load mmc ${mmcbootdev}:${mmcbootpart} 40800000 ${fdtfile}; then
+> +	bootz 0x40007FC0 - 40800000;
+> +else
+> +	echo Warning! Booting without DTB: '${fdtfile}'!;
+> +	bootz 0x40007FC0 -;
+> +fi;"
 
-Could you give more details about this ? It feels like these exclusions
-have been added just for the sake of making test-pkg happy. What are
-the problems you have encountered ?
+Is this condition really needed? Aren't you always going to boot with a
+DTB ?
 
-I'm particularly wondering about the BR2_ARM_CPU_ARMV7M case, which
-always has BR2_USE_MMU disabled, so I'm not sure how you can have
-reached a problem on ARMv7-M.
+> +run boot_kernel;
+> \ No newline at end of file
 
-Also, the following defconfigs fails to build libkrb5:
+Nit: please add a new line here.
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LIBKRB5=y
-# BR2_TARGET_ROOTFS_TAR is not set
+> diff --git a/board/hardkernel/odroidxu4/genimage_bootloader_fragment.cfg b/board/hardkernel/odroidxu4/genimage_bootloader_fragment.cfg
+> new file mode 100644
+> index 0000000..a8e8379
+> --- /dev/null
+> +++ b/board/hardkernel/odroidxu4/genimage_bootloader_fragment.cfg
 
-Failure is:
+I don't see this file being used anywhere. Why isn't this done in
+genimage.cfg itself ?
 
-In file included from net-server.c:61:0:
-../../include/net-server.h:32:19: fatal error: verto.h: No such file or directory
- #include <verto.h>
-                   ^
-compilation terminated.
-make[4]: *** [Makefile:487: net-server.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-make[3]: *** [Makefile:984: all-recurse] Error 1
-make[2]: *** [Makefile:1524: all-recurse] Error 1
-make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/buildroot/output/build/libkrb5-1.16/.stamp_built] Error 2
+> diff --git a/board/hardkernel/odroidxu4/post-image.sh b/board/hardkernel/odroidxu4/post-image.sh
+> new file mode 100755
+> index 0000000..1722c4b
+> --- /dev/null
+> +++ b/board/hardkernel/odroidxu4/post-image.sh
+> @@ -0,0 +1,50 @@
+> +#!/bin/sh
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +
+> +cp ${BOARD_DIR}/boot.ini ${BINARIES_DIR}/
+> +
+> +rm -rf "${GENIMAGE_TMP}"
+> +
+> +genimage                           \
+> +	--rootpath "${TARGET_DIR}"     \
+> +	--tmppath "${GENIMAGE_TMP}"    \
+> +	--inputpath "${BINARIES_DIR}"  \
+> +	--outputpath "${BINARIES_DIR}" \
+> +	--config "${GENIMAGE_CFG}"
+> +
+> +#dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
+> +#dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
 
-Could you have a look and submit an updated version ?
+Those lines are commented, they should be removed.
+
+> +
+> +signed_bl1_position=0
+> +bl2_position=30
+> +uboot_position=62
+> +tzsw_position=1502
+> +device="${BINARIES_DIR}/sdcard.img"
+> +uboot="${BINARIES_DIR}/u-boot-dtb.bin"
+> +
+> +env_position=2015
+> +
+> +#<BL1 fusing>
+> +echo "BL1 fusing"
+> +dd if=${BINARIES_DIR}/bl1.bin.hardkernel of=$device seek=$signed_bl1_position conv=fsync,notrunc
+> +
+> +#<BL2 fusing>
+> +echo "BL2 fusing"
+> +dd if=${BINARIES_DIR}/bl2.bin.hardkernel.720k_uboot of=$device seek=$bl2_position conv=fsync,notrunc
+> +
+> +#<u-boot fusing>
+> +echo "u-boot fusing"
+> +dd if=$uboot of=$device seek=$uboot_position conv=fsync,notrunc
+> +
+> +#<TrustZone S/W fusing>
+> +echo "TrustZone S/W fusing"
+> +dd if=${BINARIES_DIR}/tzsw.bin.hardkernel of=$device seek=$tzsw_position conv=fsync,notrunc
+> +
+> +#<u-boot env erase>
+> +echo "u-boot env erase..."
+> +dd if=/dev/zero of=$device seek=$env_position bs=512 count=32 conv=fsync,notrunc
+
+Why are you doing all those dd invocations here instead of using a
+genimage configuration file that will put all those images at the right
+offset in the SD card image ?
+
+> diff --git a/board/hardkernel/odroidxu4/readme.txt b/board/hardkernel/odroidxu4/readme.txt
+> new file mode 100644
+> index 0000000..24a0184
+> --- /dev/null
+> +++ b/board/hardkernel/odroidxu4/readme.txt
+> @@ -0,0 +1,76 @@
+> +Odroid XU-4 board with Samsung Exynos 5422 SoC
+> +
+> +Introduction
+> +------------
+> +
+> +The Odroid XU 4 board is developed and shipped by Hrdkernel (hardkernel.com). It
+> +uses the Samsung Exynos 5422 Soc.
+> +
+> +Odroid boot process
+> +-------------------
+> +
+> +The odroid boot process requires three stages of boot plus trust zone:
+> +
+> +    boot level 1
+> +
+> +        |
+> +        V
+> +
+> +    boot level 2
+> +
+> +        |
+> +        V
+> +
+> +     u-boot
+> +
+> +and they need to be raw copied to the SD card in the following order:
+> +
+> +    +----------------+----------------+
+> +    | boot level 1   | 1 block        |
+> +    +----------------+----------------+
+> +    | boot level 2   | 31 block       |
+> +    +----------------+----------------+
+> +    | u-boot         | 63 block       |
+> +    +----------------+----------------+
+> +    | trust zone     | 2111 block     |
+> +    +----------------+----------------+
+> +    | boot partition | 4096 block     |
+> +    +----------------+----------------+
+
+Are those "1 block", "31 block", etc. information the offset or the
+size of each part ?
+
+Do we really need this explained in the readme.txt, if the genimage.cfg
+file already documents that ?
 
 Thanks!
 
