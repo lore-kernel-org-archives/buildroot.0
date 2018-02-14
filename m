@@ -1,53 +1,44 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Wed, 14 Feb 2018 11:19:27 -0600
-Subject: [Buildroot] [PATCH 3/3] pure-ftpd: Config.in: fix help text
- wrapping
-In-Reply-To: <20180214050458.32281-4-gael.portay@savoirfairelinux.com>
-References: <20180214050458.32281-1-gael.portay@savoirfairelinux.com>
- <20180214050458.32281-4-gael.portay@savoirfairelinux.com>
-Message-ID: <CAH=K+6n+y_0yyh-4KVNttVGCAsB_ARiFnHxBvWu9zSizwZdh8w@mail.gmail.com>
+From: Chris Brandt <Chris.Brandt@renesas.com>
+Date: Wed, 14 Feb 2018 17:37:35 +0000
+Subject: [Buildroot] [PATCH 1/2] cramfs: change to new site location
+In-Reply-To: <20180213212650.3fe2884b@windsurf.lan>
+References: <20180213195449.51516-1-chris.brandt@renesas.com>
+ <20180213195449.51516-2-chris.brandt@renesas.com>
+ <20180213211453.519b65eb@windsurf.lan>
+ <SG2PR06MB1165EA4292BE78ADF8D3A1678AF60@SG2PR06MB1165.apcprd06.prod.outlook.com>
+ <20180213212650.3fe2884b@windsurf.lan>
+Message-ID: <SG2PR06MB1165BF807108E915E3F539B68AF50@SG2PR06MB1165.apcprd06.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 13, 2018 at 11:04 PM, Ga?l PORTAY
-<gael.portay@savoirfairelinux.com> wrote:
-> This commit fixes the warnings reported by check-package on the help
-> text of package Config.in file, related to the formatting of the help
-> text: should start with a tab, then 2 spaces, then at most 62
-> characters.
+Hello,
 
-I thought I checked this, sorry.
+On Tuesday, February 13, 2018, Thomas Petazzoni wrote:
+> > I don't have any big endian systems, so I can't test it either.
+> 
+> We have a number of Qemu defconfigs, including for big-endian systems
+> such as PowerPC. It should be doable to perform a test :)
 
->
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Since I've never used QEMU before, what config would you suggest I use 
+in order to make the simplest system to test a cramfs rootfs?
 
-Acked-by: Sam Voss <sam.voss@rockwellcollins.com>
+All I want to do is just confirm it boots.
 
-> ---
->  package/pure-ftpd/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/pure-ftpd/Config.in b/package/pure-ftpd/Config.in
-> index d03170b7cf..c060102650 100644
-> --- a/package/pure-ftpd/Config.in
-> +++ b/package/pure-ftpd/Config.in
-> @@ -33,7 +33,7 @@ config BR2_PACKAGE_PURE_FTPD_QUOTAS
->  config BR2_PACKAGE_PURE_FTPD_UPLOADSCRIPT
->         bool "uploadscript"
->         help
-> -         Enable pure-upload script. Automatically run an external program
-> -         after a successful upload.
-> +         Enable pure-upload script. Automatically run an external
-> +         program after a successful upload.
->
->  endif
-> --
-> 2.15.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Should I just pick one with BR2_powerpc=y?
+
+qemu_ppc64le_pseries_defconfig:BR2_powerpc_power8=y
+qemu_ppc64_pseries_defconfig:BR2_powerpc64=y
+qemu_ppc64_pseries_defconfig:BR2_powerpc_power7=y
+qemu_ppc_g3beige_defconfig:BR2_powerpc=y
+qemu_ppc_g3beige_defconfig:BR2_powerpc_750=y
+qemu_ppc_mpc8544ds_defconfig:BR2_powerpc=y
+qemu_ppc_mpc8544ds_defconfig:BR2_powerpc_8548=y
+qemu_ppc_virtex_ml507_defconfig:BR2_powerpc=y
+qemu_ppc_virtex_ml507_defconfig:BR2_powerpc_440=y
+
+
+Thank you,
+Chris
