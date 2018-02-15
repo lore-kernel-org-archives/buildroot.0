@@ -1,82 +1,65 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Thu, 15 Feb 2018 12:37:18 +0100
-Subject: [Buildroot] [PATCH v3 1/1] configs: beaglebone: bump kernel and
- uboot version
-Message-ID: <20180215113718.27952-1-lothar.felten@gmail.com>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Thu, 15 Feb 2018 13:42:13 +0100
+Subject: [Buildroot] 
+ =?iso-8859-1?q?=5BJan_Kundr=E1t=5D__=5BPATCH_1/3=5D_?=
+ =?iso-8859-1?q?systemd=3A_Ensure_/run_and_/var/run_are_the_same_on_R/O_ro?=
+ =?iso-8859-1?q?otfs?=
+In-Reply-To: <87eflnyxjy.fsf@paral.in>
+References: <87k1vfz2m4.fsf@paral.in> <87eflnyxjy.fsf@paral.in>
+Message-ID: <4c98d294-42c6-45f7-b518-f5d7901ad0db@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to Linux kernel version 4.9.59 from the TI SDK 04.02.00.09
-(TI SDK release date: 23.12.2017)
-Updated uboot to version 2018.01
-uEnv.txt corrected to boot from sd card on the ti-am335x-evm
+On ?tvrtek 15. ?nora 2018 0:13:37 CET, Christian Stewart wrote:
+>> From: Jan Kundr?t <jan.kundrat@cesnet.cz>
+>> I'm leaving that one to someone who is more familiar with systemd and
+>> buildroot conventions. My box now boots again, so I'm happy :).
+>> 
+>> [1] https://bugs.freedesktop.org/show_bug.cgi?id=101628
+>> 
+>> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz> ...
+>
+> I applied this patch, thanks. Unfortunately, it seems the problem is
+> still occurring. Maybe it's a different problem?
+>
+>
+> [   16.650294] systemd[1]: System is tainted: var-run-bad
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
----
+Systemd reports that your /var/run is "bad". From what you wrote later, 
+that's indeed the root cause which should be fixed.
 
-v3:
-- set uboot version to 2018.01 in defconfig
-- keep default rootfs size
-- keep Kconfig and dtc for uboot
+Now, my patch fixed it only for a read-only rootfs. I assumed that 
+everything worked well on a regular, r/w rootfs.
 
-Tested on beaglebone back and ti-am335x-evm.
+Can you please:
 
- board/beaglebone/uEnv.txt    | 8 ++++++--
- configs/beaglebone_defconfig | 8 +++-----
- 2 files changed, 9 insertions(+), 7 deletions(-)
+- state whether you're using a read-only or read-write rootfs 
+(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW config option),
+- confirm that you completely nuked your build dir after applying this 
+patch,
+- check which packages actually provide your /var/run and /run, and how 
+your setup looks like, i.e.:
+  - grep ,./run build/packages-file-list.txt
+  - grep ,./var build/packages-file-list.txt
+  - grep dbus build/packages-file-list.txt | grep run
+- how is your /etc/fstab?
 
-diff --git a/board/beaglebone/uEnv.txt b/board/beaglebone/uEnv.txt
-index 70b3b721..a665f208 100644
---- a/board/beaglebone/uEnv.txt
-+++ b/board/beaglebone/uEnv.txt
-@@ -1,4 +1,8 @@
- bootpart=0:1
-+devtype=mmc
- bootdir=
--bootargs=console=ttyO0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
--uenvcmd=run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr};
-+bootfile=zImage
-+bootpartition=mmcblk0p2
-+set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi
-+set_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
-+uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr}
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 611b6941..80b27147 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a8=y
- BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f9f6f0db2d5e4f9d2ff46eb31a5a05276a92ed7d"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a75d8e93056181d512f6c818e8627bd4554aaf92"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
-@@ -16,13 +16,11 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
--- 
-2.14.1
+> # ls /var/run/
+
+These are not sufficient as they do not show the type of the individual 
+items. `ls -al` should be better.
+
+> If I link dbus like so:
+>
+> # ln -s /var/run/dbus/ /run/dbus
+>
+> It seems then that everything works fine.
+
+Yeah, that's it. Based on how I read the code, though, this should already 
+happen on a regular installation without a r/o rootfs...
+
+Cheers,
+Jan
