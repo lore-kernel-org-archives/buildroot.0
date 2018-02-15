@@ -1,105 +1,86 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Thu, 15 Feb 2018 14:45:06 -0600
-Subject: [Buildroot] [PATCH 2/2] modem-manager: Update to version 1.7.990
-In-Reply-To: <1518727506-15403-1-git-send-email-jared.bents@rockwellcollins.com>
-References: <1518727506-15403-1-git-send-email-jared.bents@rockwellcollins.com>
-Message-ID: <1518727506-15403-2-git-send-email-jared.bents@rockwellcollins.com>
+From: Pierre Ducroquet <pinaraf@pinaraf.info>
+Date: Thu, 15 Feb 2018 21:48:11 +0100
+Subject: [Buildroot] [PATCH 1/5] Introduce KDE Frameworks 5 packages
+Message-ID: <20180215204815.14707-1-pinaraf@pinaraf.info>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to modem manager 1.7.990 which does not require
-udev.  Added option to build without udev but if udev
-exists in the build, it will default to build with
-libgudev.
+KDE Frameworks 5 is a set of libraries built on the Qt framework providing a
+lot of powerfull classes and solutions for developers building Qt
+applications.
+Unlike the previous KDE libraries, they are split in tiny packages, reducing
+dependencies as much as possible, making them usable even for embedded
+projects.
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+This first commit introduce the kf5 packages folder
+
+Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
 ---
- package/modem-manager/Config.in          | 12 +++++++++---
- package/modem-manager/modem-manager.hash |  2 +-
- package/modem-manager/modem-manager.mk   | 11 +++++++++--
- 3 files changed, 19 insertions(+), 6 deletions(-)
+ DEVELOPERS            |  3 +++
+ package/Config.in     |  1 +
+ package/kf5/Config.in |  9 +++++++++
+ package/kf5/kf5.mk    | 11 +++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/kf5/Config.in
+ create mode 100644 package/kf5/kf5.mk
 
-diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-index 8e995b4..38e017b 100644
---- a/package/modem-manager/Config.in
-+++ b/package/modem-manager/Config.in
-@@ -1,12 +1,10 @@
- config BR2_PACKAGE_MODEM_MANAGER
- 	bool "modemmanager"
--	depends on BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_USE_WCHAR # libglib2 and gnutls
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus
- 	select BR2_PACKAGE_DBUS # runtime dependency
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_LIBGUDEV
- 	help
- 	  ModemManager is a DBus-activated daemon which controls mobile
- 	  broadband (2G/3G/4G) devices and connections.
-@@ -26,9 +24,17 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
- 	select BR2_PACKAGE_LIBQMI
- 	help
- 	  This option enables support for QMI protocol
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c524cb6ac5..c0e061c764 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1957,3 +1957,6 @@ F:	package/qjson/
+ F:	package/quazip/
+ F:	package/shapelib/
+ F:	package/tinc/
 +
-+config BR2_PACKAGE_MODEM_MANAGER_UDEV
-+	bool "Use udev"
-+	default y if BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_LIBGUDEV
++N:	Pierre Ducroquet <pinaraf@pinaraf.info>
++F:	package/kf5/
+diff --git a/package/Config.in b/package/Config.in
+index 9cd5d9c087..f9d7a6e190 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -302,6 +302,7 @@ comment "Graphic libraries"
+ comment "Other GUIs"
+ 	source "package/qt/Config.in"
+ 	source "package/qt5/Config.in"
++	source "package/kf5/Config.in"
+ if BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+ comment "QT libraries and helper libraries"
+ 	source "package/grantlee/Config.in"
+diff --git a/package/kf5/Config.in b/package/kf5/Config.in
+new file mode 100644
+index 0000000000..4e6ee3a107
+--- /dev/null
++++ b/package/kf5/Config.in
+@@ -0,0 +1,9 @@
++menuconfig BR2_PACKAGE_KF5
++	bool "KF5"
++	depends on BR2_PACKAGE_QT5
 +	help
-+	  This option allows support for builds without udev. If udev
-+	  is not included, say N.
- endif
- 
--comment "modemmanager needs udev /dev management and a toolchain w/ wchar, threads"
-+comment "modemmanager needs /dev management and a toolchain w/ wchar, threads"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_USE_MMU
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index bc08044..52cc7a6 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
-+sha256  d465094fc6fc173354f5a00d212049056829cc245d60a9083f3c53f86a8f90ec  ModemManager-1.7.990.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index b741acf..3015b00 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--MODEM_MANAGER_VERSION = 1.6.10
-+MODEM_MANAGER_VERSION = 1.7.990
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
- MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
--MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2 libgudev
-+MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2
- MODEM_MANAGER_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
-@@ -26,6 +26,13 @@ else
- MODEM_MANAGER_CONF_OPTS += --without-mbim
- endif
- 
-+ifeq ($(BR2_PACKAGE_MODEM_MANAGER_UDEV),y)
-+MODEM_MANAGER_DEPENDENCIES += libgudev
-+MODEM_MANAGER_CONF_OPTS += --with-udev
-+else
-+MODEM_MANAGER_CONF_OPTS += --without-udev
-+endif
++	  This option enables the KF5 KDE Frameworks. Sub-options allow to
++	  select which modules should be built.
 +
- define MODEM_MANAGER_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
- 		$(TARGET_DIR)/etc/init.d/S44modem-manager
++if BR2_PACKAGE_KF5
++endif
+diff --git a/package/kf5/kf5.mk b/package/kf5/kf5.mk
+new file mode 100644
+index 0000000000..14cae5fb74
+--- /dev/null
++++ b/package/kf5/kf5.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# kf5
++#
++################################################################################
++
++KF5_VERSION_MAJOR = 5.43
++KF5_VERSION = $(KF5_VERSION_MAJOR).0
++KF5_SITE = https://download.kde.org/stable/frameworks/$(KF5_VERSION_MAJOR)
++
++include $(sort $(wildcard package/kf5/*/*.mk))
 -- 
-1.9.1
+2.16.1
