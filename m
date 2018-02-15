@@ -1,12 +1,7 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 15 Feb 2018 23:06:28 +0100
-Subject: [Buildroot] [PATCH 1/2] sunxi-mali-driver-mainline: new package
-In-Reply-To: <87vaexlxld.fsf@dell.be.48ers.dk>
-References: <1511648569-18855-1-git-send-email-giulio.benetti@micronovasrl.com>
- <87lgfum0aq.fsf@dell.be.48ers.dk>
- <6f81dc33-b3a2-223e-1628-aed8a2e1e747@micronovasrl.com>
- <87vaexlxld.fsf@dell.be.48ers.dk>
-Message-ID: <979834e4-a338-525b-c7fd-1241c72127fb@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Feb 2018 23:15:53 +0100
+Subject: [Buildroot] Buildroot 2018.02-rc2 released
+Message-ID: <87r2pllx0m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +10,50 @@ To: buildroot@busybox.net
 
 Hi,
 
-Il 15/02/2018 23:03, Peter Korsgaard ha scritto:
->>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
-> 
-> Hi,
-> 
->   > Thank you very much for helping me on this,
->   > it was not so easy as first package to me.
-> 
-> You are welcome, thank you for contributing!
-> 
-> As you perhaps noticed, I've also bumped the sunxi-mali-mainline-driver
-> version for 4.15 support:
-> 
-> https://git.busybox.net/buildroot/commit/?h=next&id=1d339809d61aeed2911291830581f643596a2e5c
+Buildroot 2018.02-rc2 is released - Go download it at:
 
-Yes, I've seen, I'm almost trying to rebuild.
-I've seen you use quilt before calling build.sh script.
-But build.sh should call it by itself.
-Now I check and eventually I send you a patch.
+http://buildroot.net/downloads/buildroot-2018.02-rc2.tar.gz
 
-As soon as Maxime accepts my PR on sunxi-mali we can bump again for 
-4.16-rc1 building.
+or
 
-Ah, one question, you figure as Author because you've reworked heavily 
-the patch, right? (and it seems more than right to me)
-Or was it a mistake?
+http://buildroot.net/downloads/buildroot-2018.02-rc2.tar.bz2
 
-> 
+Or get it from Git:
 
+git://git.buildroot.net/buildroot
+
+Another week, another release candidate.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2018.02-rc1..
+    10  Baruch Siach
+    10  Ga?l PORTAY
+     5  Fabio Estevam
+     5  Peter Korsgaard
+     5  Thomas Petazzoni
+     3  Adam Duskett
+     2  Bernd Kuhls
+     2  Eric Le Bihan
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Audrey Motheron
+     1  Danilo Bargen
+     1  Fabrice Fontaine
+     1  Laurent Charpentier
+     1  Peter Seiderer
+     1  Rahul Bedarkar
+     1  Ricardo Martincoski
+     1  Vincent Stehl?
+     1  Waldemar Brodkorb
+     1  Yann E. MORIN
+     1  Yegor Yefremov
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02-rc2
+
+Expect the final 2018.02 release by the end of the month.
 
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Bye, Peter Korsgaard
