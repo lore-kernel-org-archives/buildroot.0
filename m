@@ -1,41 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Feb 2018 11:10:56 +0100
-Subject: [Buildroot] [PATCH v3 1/1] libcpprestsdk: fix building as a
- static library
-In-Reply-To: <20180213231451.41f46d44@windsurf.lan> (Thomas Petazzoni's
- message of "Tue, 13 Feb 2018 23:14:51 +0100")
-References: <20180212172350.5697-1-aduskett@gmail.com>
- <20180213231451.41f46d44@windsurf.lan>
-Message-ID: <873722o95b.fsf@dell.be.48ers.dk>
+Date: Thu, 15 Feb 2018 11:37:10 +0100
+Subject: [Buildroot] [git commit] docs/website/news.html: update for
+ 2018.02-rc1
+In-Reply-To: <20180213211109.GA9763@australia.be.alcatel-lucent.com> (Thomas
+ De Schampheleire's message of "Tue, 13 Feb 2018 22:11:09 +0100")
+References: <20180205162551.1CB0E88432@busybox.osuosl.org>
+ <20180213211109.GA9763@australia.be.alcatel-lucent.com>
+Message-ID: <87y3jumtd5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <thomas.de_schampheleire@nokia.com> writes:
 
- > Hello,
- > On Mon, 12 Feb 2018 12:23:50 -0500, Adam Duskett wrote:
- >> Use pkg-config to find OpenSSL. This will automatically find any
- >> dependent libraries and put them in the correct order for linking.
- >> 
- >> Upstream status: submitted
- >> https://github.com/Microsoft/cpprestsdk/pull/688
- >> 
- >> Signed-off-by: Adam Duskett <aduskett@gmail.com>
- >> ---
- >> Changes v1 -> v2:
- >> - Now using pkg-config instead of manually moving library search order
- >> (Thomas)
+Hi,
 
- > Your commit log was missing a reference to the autobuilder failure
- > being fixed, so I've added one and applied to master.
+ > I don't see this change reflected on the website:
+ > https://buildroot.org/news.html
+ > and likewise, the download page does not show the rc1 tarball.
+ > Seems the update of the website went wrong somewhere?
 
-As it now uses pkg-config, libcpprestsdk should add host-pkgconf to
-_DEPENDENCIES.
-
-Care to send a patch?
+Thanks for the heads up! It seems crond was acting up and the cronjob
+handling the website hadn't been executed since Jan 28th. I've now
+restarted it, so hopefully it should be running again now.
 
 -- 
 Bye, Peter Korsgaard
