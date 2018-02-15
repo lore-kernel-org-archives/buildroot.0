@@ -1,35 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Feb 2018 22:35:36 +0100
-Subject: [Buildroot] [git commit] libcpprestsdk: needs host-pkgconf
-Message-ID: <20180215213744.7785687CE5@busybox.osuosl.org>
+Date: Thu, 15 Feb 2018 22:38:07 +0100
+Subject: [Buildroot] [PATCH v3 1/1] libcpprestsdk: fix building as a
+ static library
+In-Reply-To: <873722o95b.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 15 Feb 2018 11:10:56 +0100")
+References: <20180212172350.5697-1-aduskett@gmail.com>
+ <20180213231451.41f46d44@windsurf.lan>
+ <873722o95b.fsf@dell.be.48ers.dk>
+Message-ID: <87zi4akk74.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e66d15646f886fed08c2bd59b06bc55bdecd38d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Commit d2f0a9bba400 (libcpprestsdk: fix building as a static library)
-changed libcpprestsdk to use pkg-config to find the linker flags for
-openssl, so ensure it is available.
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcpprestsdk/libcpprestsdk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> Your commit log was missing a reference to the autobuilder failure
+ >> being fixed, so I've added one and applied to master.
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index 4aafa6e593..4d30f07c39 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -9,7 +9,7 @@ LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION)
- LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
- LIBCPPRESTSDK_SUBDIR = Release
--LIBCPPRESTSDK_DEPENDENCIES += boost openssl zlib
-+LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
- LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF
- 
- $(eval $(cmake-package))
+ > As it now uses pkg-config, libcpprestsdk should add host-pkgconf to
+ > _DEPENDENCIES.
+
+ > Care to send a patch?
+
+I've now fixed it in git.
+
+-- 
+Bye, Peter Korsgaard
