@@ -1,86 +1,122 @@
-From: Pierre Ducroquet <pinaraf@pinaraf.info>
-Date: Thu, 15 Feb 2018 21:48:13 +0100
-Subject: [Buildroot] [PATCH 3/5] Add KF5 package networkmanager-qt
-In-Reply-To: <20180215204815.14707-1-pinaraf@pinaraf.info>
-References: <20180215204815.14707-1-pinaraf@pinaraf.info>
-Message-ID: <20180215204815.14707-3-pinaraf@pinaraf.info>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 15 Feb 2018 21:51:25 +0100
+Subject: [Buildroot] [PATCH 2/2] sunxi-mali-mainline: new package
+In-Reply-To: <87po56m1ac.fsf@dell.be.48ers.dk>
+References: <1511648569-18855-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <1511648569-18855-2-git-send-email-giulio.benetti@micronovasrl.com>
+ <87po56m1ac.fsf@dell.be.48ers.dk>
+Message-ID: <0d0b136d-bb03-dd7f-a21a-bc9558b22da8@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-networkmanager-qt is a simple Qt wrapper on the NetworkManager API.
+Il 15/02/2018 21:43, Peter Korsgaard ha scritto:
+>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+> 
+>   > Add Allwinner Mali openGL userspace driver r6p2.
+>   > Used combined with kernelspace Mali driver,
+>   > it gives possibility to use 3D openGL SoC acceleration.
+>   > It provides fbdev libraries and headers.
+>   > It is compatible with Linux >= 4.4 as sunxi-mali-driver-mainline.
+> 
+>   > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>   > ---
+>   >  DEVELOPERS                                         |  1 +
+>   >  package/Config.in                                  |  1 +
+>   >  package/sunxi-mali-mainline/Config.in              | 36 ++++++++++++++++++++++
+>   >  package/sunxi-mali-mainline/egl.pc                 | 12 ++++++++
+>   >  package/sunxi-mali-mainline/glesv2.pc              | 12 ++++++++
+>   >  package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 33 ++++++++++++++++++++
+>   >  6 files changed, 95 insertions(+)
+>   >  create mode 100644 package/sunxi-mali-mainline/Config.in
+>   >  create mode 100644 package/sunxi-mali-mainline/egl.pc
+>   >  create mode 100644 package/sunxi-mali-mainline/glesv2.pc
+>   >  create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> 
+>   > diff --git a/DEVELOPERS b/DEVELOPERS
+>   > index 60a934e..b26706b 100644
+>   > --- a/DEVELOPERS
+>   > +++ b/DEVELOPERS
+>   > @@ -700,6 +700,7 @@ F:	package/webp/
+>   
+>   >  N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
+>   >  F:	package/sunxi-mali-driver-mainline/
+>   > +F:	package/sunxi-mali-mainline/
+> 
+> In Buildroot we "always" build user space and optionally build a Linux
+> kernel, so I've swapped these two packages around.
 
-Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
----
- package/kf5/Config.in                                    |  1 +
- package/kf5/kf5-networkmanager-qt/Config.in              | 13 +++++++++++++
- .../kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash |  2 ++
- .../kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk   | 16 ++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/kf5/kf5-networkmanager-qt/Config.in
- create mode 100644 package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash
- create mode 100644 package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk
+Ok, I see the point.
 
-diff --git a/package/kf5/Config.in b/package/kf5/Config.in
-index 89d8c7a140..2770ba81e7 100644
---- a/package/kf5/Config.in
-+++ b/package/kf5/Config.in
-@@ -7,4 +7,5 @@ menuconfig BR2_PACKAGE_KF5
- 
- if BR2_PACKAGE_KF5
- source "package/kf5/kf5-extra-cmake-modules/Config.in"
-+source "package/kf5/kf5-networkmanager-qt/Config.in"
- endif
-diff --git a/package/kf5/kf5-networkmanager-qt/Config.in b/package/kf5/kf5-networkmanager-qt/Config.in
-new file mode 100644
-index 0000000000..aff4f39ae2
---- /dev/null
-+++ b/package/kf5/kf5-networkmanager-qt/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_KF5_NETWORKMANAGER_QT
-+	bool "kf5-networkmanager-qt"
-+	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
-+	select BR2_PACKAGE_NETWORK_MANAGER
-+	help
-+	  KF5 is a set of Qt framework addons, extending Qt in
-+	  various ways, not only restricted in helping integration
-+	  in KDE.
-+	  
-+	  This package contains the NetworkManager Qt5 bindings from the
-+	  KF5 project.
-+
-+	  https://api.kde.org/frameworks/networkmanager-qt/html/index.html
-diff --git a/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash
-new file mode 100644
-index 0000000000..d3c0f96d46
---- /dev/null
-+++ b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 0cbbcaa2db1f9bd5445b9c7c5f1e79313df5060f7c31617d673d00f19600755e networkmanager-qt-5.43.0.tar.xz
-diff --git a/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk
-new file mode 100644
-index 0000000000..edaa7999f5
---- /dev/null
-+++ b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# kf5-networkmanager-qt
-+#
-+################################################################################
-+
-+KF5_NETWORKMANAGER_QT_VERSION = $(KF5_VERSION)
-+KF5_NETWORKMANAGER_QT_SITE = $(KF5_SITE)
-+KF5_NETWORKMANAGER_QT_SOURCE = networkmanager-qt-$(KF5_NETWORKMANAGER_QT_VERSION).tar.xz
-+KF5_NETWORKMANAGER_QT_LICENSE = LGPL-2.1+
-+KF5_NETWORKMANAGER_QT_LICENSE_FILE = COPYING.LIB
-+
-+KF5_NETWORKMANAGER_QT_DEPENDENCIES = kf5-extra-cmake-modules network-manager
-+KF5_NETWORKMANAGER_QT_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
+> 
+> 
+>   > +++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+>   > @@ -0,0 +1,33 @@
+>   > +################################################################################
+>   > +#
+>   > +# sunxi-mali-mainline
+>   > +#
+>   > +################################################################################
+>   > +
+>   > +SUNXI_MALI_MAINLINE_VERSION = cb3e8ece9b2c3a70cbeb3204cd6f30eceaa32023
+>   > +SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
+>   > +SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
+>   > +SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
+>   > +
+>   > +ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2),y)
+>   > +SUNXI_MALI_LIB_VER=r6p2
+>   > +endif
+> 
+> Variables should be prefixed with the package name. You have all the
+> other version logic in the Config.in, so I've changed it to use a
+> BR2_PACKAGE_SUNXI_MALI_MAINLINE_REVISION symbol in Config.in and then
+> assign that to SUNXI_MALI_MAINLINE_REV similar to E.G. how it is done
+> for linux-headers.
+
+Cleaner and easier this way.
+
+> 
+> 
+>   > +
+>   > +define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
+>   > +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* \
+>   > +		$(STAGING_DIR)/usr/lib/
+>   > +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/include/* \
+>   > +		$(STAGING_DIR)/usr/include/
+>   > +
+>   > +	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
+>   > +		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
+>   > +	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
+>   > +		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
+>   > +endef
+>   > +
+>   > +define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
+>   > +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* \
+>   > +		$(TARGET_DIR)/usr/lib/
+>   > +endef
+> 
+> You need to ensure that the destination directories already exist, so
+> I've added the needed mkdir -p calls before.
+
+Right, forgotten.
+
+> 
+> Committed to next with these fixes, thanks.
+
+Thanks!!
+
 -- 
-2.16.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+> 
