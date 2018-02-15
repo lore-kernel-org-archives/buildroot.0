@@ -1,40 +1,43 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Thu, 15 Feb 2018 21:44:13 +0100
-Subject: [Buildroot] [PATCH] libostree: bump to version 2018.2
-Message-ID: <20180215204413.10974-1-marcus.folkesson@gmail.com>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Thu, 15 Feb 2018 14:45:05 -0600
+Subject: [Buildroot] [PATCH 1/2] libqmi: Update to use libqmi 1.20.0
+Message-ID: <1518727506-15403-1-git-send-email-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Update to use libqmi 1.20.0
+
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 54bc263f06..6ae4824007 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 8b5e3b80425b91c93aeb916bb047ee194aa138a9cf00ce173dcc0ebc0dd11f4b  libostree-2018.1.tar.xz
-+sha256 37661de4a0ac73af5d921f494f17dd052ae2844111ba7c5aaeb1cbc4aae94bea  libostree-2018.2.tar.xz
- sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 336d11a978..236657e9fa 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 1c54231..297e1f0 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 a0a42c55935e75a630208e2f70840bd4407f56fe1c5258f5b0f6c0aaedf88cec  libqmi-1.18.0.tar.xz
++sha256 21428cd3749c56246565123f707fee51238651a22c60bdc85ebce97388626eb4  libqmi-1.20.0.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 0887564..a7140dc 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSTREE_VERSION = 2018.1
-+LIBOSTREE_VERSION = 2018.2
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+-LIBQMI_VERSION = 1.18.0
++LIBQMI_VERSION = 1.20.0
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
 -- 
-2.15.1
+1.9.1
