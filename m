@@ -1,103 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Feb 2018 23:03:40 +0100
-Subject: [Buildroot] [PATCH next 0/5] New pkg-stats,
- with upstream version comparison
-Message-ID: <20180215220345.8532-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Feb 2018 23:03:42 +0100
+Subject: [Buildroot] [PATCH next 2/5] support/scripts/pkg-stats-new: add -n
+ and -p options
+In-Reply-To: <20180215220345.8532-1-thomas.petazzoni@bootlin.com>
+References: <20180215220345.8532-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180215220345.8532-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit adds the following options to the pkg-stats-new script:
 
-This series rewrites the pkg-stats script in Python, and adds two new
-very useful information to it:
+ -n, to specify a number of packages to parse instead of all packages
 
- - The current version of each package in Buildroot
+ -p, to specify a list of packages (comma-separated) to parse instead
+     of all packages
 
- - The latest upstream version of each package, as provided by the
-   release-monitoring.org web site.
+These options are basically only useful when debugging/developping
+this script, but they are very useful, because the script is rather
+slow to run completely with all 2000+ packages, especially once
+upstream versions will be fetched from release-monitoring.org.
 
-The script then compares the current version in Buildroot with the
-latest upstream version, and tells whether they are different.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/pkg-stats-new | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
-You can see the script output at:
-
- https://bootlin.com/~thomas/stats.html
-
-release-monitoring.org is a very useful web site, monitoring more than
-16000 projects. It is also very easy to add new projects to be
-monitored. It supports monitoring projects on popular hosting
-platforms such as Github, but can also monitor plain HTTP folders, or
-even web pages using a regexp to identify what is a version number
-within the HTML blurb.
-
-Projects can be found by regular search, but it is also possible to
-add a mapping between the name of a package in a given distribution,
-and the name of the package as known by release-monitoring.org. For
-example in Buildroot "samba" is not named "samba" but "samba4", and
-this mapping mechanism allows release-monitoring.org to reply to
-requests for samba4 within the Buildroot distribution.
-
-I had very good interactions with the release-monitoring.org
-maintainers:
-
- - They are easily available on IRC
-
- - They created the "Buildroot" distribution within minutes,
-   https://release-monitoring.org/distro/Buildroot/.
-
- - They have been very responsive to fix issues in existing packages.
-
-It doesn't provide CVE related information for security, so it would
-still be useful to extend this mechanism with another CVE related
-database. But as we discussed during the last Buildroot meeting in
-Brussels, the NIST database is not very up to date, while
-release-monitoring.org is very up to date, thanks to the process being
-fully automated.
-
-Before people start sending gazillions of patches to update packages,
-I would like us to focus on:
-
- - Adding missing projects on release-monitoring.org
-
- - Adding missing mappings for the Buildroot distribution on
-   release-monitoring.org
-
- - Deciding how to handle packages such as all python-* packages or
-   all x11r7 packages, for which the name never matches with the
-   release-monitoring.org package name.
-
-   Do we create a mapping for each of them on release-monitoring.org
-   (which we would have to do for every new python package) or do we
-   make the script smarter, and attempt to search the package without
-   its python- prefix (which won't always work either) ?
-
-Basically, I would like to focus on making the output of the script
-more useful/relevant, and then only start getting gazillions of
-patches updating packages.
-
-The code is also available at:
-
-  https://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=pkg-stats
-
-As usual, I'm not a Python programmer, so the Python code is probably
-horrible. Comments welcome.
-
-Thanks for your review, and contributions!
-
-Thomas
-
-Thomas Petazzoni (5):
-  support/scripts/pkg-stats-new: rewrite in Python
-  support/scripts/pkg-stats-new: add -n and -p options
-  support/scripts/pkg-stats-new: add current version information
-  support/scripts/pkg-stats-new: add latest upstream version information
-  support/scripts/pkg-stats: replace with new Python version
-
- support/scripts/pkg-stats | 946 ++++++++++++++++++++++++++--------------------
- 1 file changed, 539 insertions(+), 407 deletions(-)
-
+diff --git a/support/scripts/pkg-stats-new b/support/scripts/pkg-stats-new
+index a5e056a948..d018e1fed4 100755
+--- a/support/scripts/pkg-stats-new
++++ b/support/scripts/pkg-stats-new
+@@ -31,7 +31,7 @@ class Package:
+ # npackages: limit to N packages
+ # package_list: limit to those packages in this list
+ #
+-def get_pkglist():
++def get_pkglist(npackages, package_list):
+     WALK_USEFUL_SUBDIRS = ["boot", "linux", "package", "toolchain"]
+     WALK_EXCLUDES = [ "boot/common.mk",
+                       "linux/linux-ext-.*.mk",
+@@ -53,6 +53,7 @@ def get_pkglist():
+                       "toolchain/helpers.mk",
+                       "toolchain/toolchain-wrapper.mk" ]
+     packages = dict()
++    count = 0
+     for root, dirs, files in os.walk("."):
+         rootdir = root.split("/")
+         if len(rootdir) < 2:
+@@ -64,6 +65,8 @@ def get_pkglist():
+                 continue
+             # Strip ending ".mk"
+             pkgname = f[:-3]
++            if package_list and pkgname not in package_list:
++                continue
+             pkgpath = os.path.join(root, f)
+             skip = False
+             for exclude in WALK_EXCLUDES:
+@@ -76,6 +79,9 @@ def get_pkglist():
+             p = Package(pkgname)
+             p.path = pkgpath
+             packages[pkgname] = p
++            count += 1
++            if npackages and count == npackages:
++                return packages
+     return packages
+ 
+ INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
+@@ -400,12 +406,23 @@ def parse_args():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('-o', dest='output', action='store', required=True,
+                         help='HTML output file')
++    parser.add_argument('-n', dest='npackages', type=int, action='store',
++                        help='Number of packages')
++    parser.add_argument('-p', dest='packages', action='store',
++                        help='List of packages')
+     return parser.parse_args()
+ 
+ def __main__():
+     args = parse_args()
++    if args.npackages and args.packages:
++        print "ERROR: -n and -p are mutually exclusive"
++        sys.exit(1)
++    if args.packages:
++        package_list = args.packages.split(",")
++    else:
++        package_list = None
+     print "Build package list ..."
+-    packages = get_pkglist()
++    packages = get_pkglist(args.npackages, package_list)
+     print "Get package infra ..."
+     add_infra_info(packages)
+     print "Get make info ..."
 -- 
 2.14.3
