@@ -1,99 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Feb 2018 21:43:39 +0100
-Subject: [Buildroot] [PATCH 2/2] sunxi-mali-mainline: new package
-In-Reply-To: <1511648569-18855-2-git-send-email-giulio.benetti@micronovasrl.com>
- (Giulio Benetti's message of "Sat, 25 Nov 2017 23:22:49 +0100")
-References: <1511648569-18855-1-git-send-email-giulio.benetti@micronovasrl.com>
- <1511648569-18855-2-git-send-email-giulio.benetti@micronovasrl.com>
-Message-ID: <87po56m1ac.fsf@dell.be.48ers.dk>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Thu, 15 Feb 2018 21:44:13 +0100
+Subject: [Buildroot] [PATCH] libostree: bump to version 2018.2
+Message-ID: <20180215204413.10974-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Add Allwinner Mali openGL userspace driver r6p2.
- > Used combined with kernelspace Mali driver,
- > it gives possibility to use 3D openGL SoC acceleration.
- > It provides fbdev libraries and headers.
- > It is compatible with Linux >= 4.4 as sunxi-mali-driver-mainline.
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
- > ---
- >  DEVELOPERS                                         |  1 +
- >  package/Config.in                                  |  1 +
- >  package/sunxi-mali-mainline/Config.in              | 36 ++++++++++++++++++++++
- >  package/sunxi-mali-mainline/egl.pc                 | 12 ++++++++
- >  package/sunxi-mali-mainline/glesv2.pc              | 12 ++++++++
- >  package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 33 ++++++++++++++++++++
- >  6 files changed, 95 insertions(+)
- >  create mode 100644 package/sunxi-mali-mainline/Config.in
- >  create mode 100644 package/sunxi-mali-mainline/egl.pc
- >  create mode 100644 package/sunxi-mali-mainline/glesv2.pc
- >  create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-
- > diff --git a/DEVELOPERS b/DEVELOPERS
- > index 60a934e..b26706b 100644
- > --- a/DEVELOPERS
- > +++ b/DEVELOPERS
- > @@ -700,6 +700,7 @@ F:	package/webp/
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 54bc263f06..6ae4824007 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 8b5e3b80425b91c93aeb916bb047ee194aa138a9cf00ce173dcc0ebc0dd11f4b  libostree-2018.1.tar.xz
++sha256 37661de4a0ac73af5d921f494f17dd052ae2844111ba7c5aaeb1cbc4aae94bea  libostree-2018.2.tar.xz
+ sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 336d11a978..236657e9fa 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
- >  F:	package/sunxi-mali-driver-mainline/
- > +F:	package/sunxi-mali-mainline/
-
-In Buildroot we "always" build user space and optionally build a Linux
-kernel, so I've swapped these two packages around.
-
-
- > +++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
- > @@ -0,0 +1,33 @@
- > +################################################################################
- > +#
- > +# sunxi-mali-mainline
- > +#
- > +################################################################################
- > +
- > +SUNXI_MALI_MAINLINE_VERSION = cb3e8ece9b2c3a70cbeb3204cd6f30eceaa32023
- > +SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
- > +SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
- > +SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
- > +
- > +ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2),y)
- > +SUNXI_MALI_LIB_VER=r6p2
- > +endif
-
-Variables should be prefixed with the package name. You have all the
-other version logic in the Config.in, so I've changed it to use a
-BR2_PACKAGE_SUNXI_MALI_MAINLINE_REVISION symbol in Config.in and then
-assign that to SUNXI_MALI_MAINLINE_REV similar to E.G. how it is done
-for linux-headers.
-
-
- > +
- > +define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
- > +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* \
- > +		$(STAGING_DIR)/usr/lib/
- > +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/include/* \
- > +		$(STAGING_DIR)/usr/include/
- > +
- > +	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
- > +		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
- > +	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/glesv2.pc \
- > +		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
- > +endef
- > +
- > +define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
- > +	cp -rf $(@D)/$(SUNXI_MALI_LIB_VER)/fbdev/lib/lib_fb_dev/* \
- > +		$(TARGET_DIR)/usr/lib/
- > +endef
-
-You need to ensure that the destination directories already exist, so
-I've added the needed mkdir -p calls before.
-
-Committed to next with these fixes, thanks.
-
+-LIBOSTREE_VERSION = 2018.1
++LIBOSTREE_VERSION = 2018.2
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
 -- 
-Bye, Peter Korsgaard
+2.15.1
