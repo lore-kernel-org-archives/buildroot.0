@@ -1,27 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Feb 2018 22:20:33 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 17.3.4
-References: <20180215192640.30190-1-bernd.kuhls@t-online.de>
-Message-ID: <16ahlex27m.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Feb 2018 22:29:13 +0100
+Subject: [Buildroot] [PATCH v2 2017.02.x 1/1] postgresql: security bump
+ to 9.6.7
+In-Reply-To: <20180212121216.23280-1-aduskett@gmail.com> (Adam Duskett's
+ message of "Mon, 12 Feb 2018 07:12:16 -0500")
+References: <20180212121216.23280-1-aduskett@gmail.com>
+Message-ID: <874lmilz6e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 15 Feb 2018 20:26:40 +0100 schrieb Bernd Kuhls:
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> -MESA3D_VERSION = 17.3.3
-> +MESA3D_VERSION = 17.3.4
+ > from https://www.postgresql.org/about/news/1829/
+ > Fixes:
+ > [1] CVE-2018-1052: Fix the processing of partition keys containing multiple
+ >                    expressions
 
-Hi,
+ > [2] CVE-2018-1053: Ensure that all temporary files made with "pg_upgrade" are
+ >                    non-world-readable
 
-this bump is a bugfix-only release according to the release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2018-February/000400.html
+ > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ > ---
+ > Changes V1 -> v2:
+ >   - Fixed license file sha256sum
+ >   - Fixed subject-prefix (Thomas)
 
-Please commit to master branch, thanks!
+Committed to 2017.02.x, thanks.
 
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
