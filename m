@@ -1,92 +1,90 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 14 Feb 2018 18:13:37 -0500
-Subject: [Buildroot] 
- =?utf-8?b?W0phbiBLdW5kcsOhdF0gIFtQQVRDSCAxLzNdIHN5?=
- =?utf-8?q?stemd=3A_Ensure_/run_and_/var/run_are_the_same_on_R/O_rootfs?=
-In-Reply-To: <87k1vfz2m4.fsf@paral.in>
-References: <87k1vfz2m4.fsf@paral.in>
-Message-ID: <87eflnyxjy.fsf@paral.in>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 15 Feb 2018 07:58:34 +0200
+Subject: [Buildroot] [PATCH] iproute2: fix build with uclibc-ng
+Message-ID: <4e9671e90351352197f0d14165365e811435633e.1518674314.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jan, all,
+ublibc-ng does not provide PF_VSOCK/AF_VSOCK definitions. Add them
+locally until ucblibc-ng updates its headers.
 
-> From: Jan Kundr?t <jan.kundrat@cesnet.cz>
-> I'm leaving that one to someone who is more familiar with systemd and
-> buildroot conventions. My box now boots again, so I'm happy :).
->
-> [1] https://bugs.freedesktop.org/show_bug.cgi?id=101628
->
-> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-> ---
->  package/skeleton-init-systemd/skeleton-init-systemd.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> index a2d4e8c4b3..95142904f5 100644
-> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> @@ -42,7 +42,9 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
->  	mkdir $(TARGET_DIR)/var
->  	for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
->  		j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
-> -		if [ -L "$${i}" ]; then \
-> +		if [ "$${j}" = "/var/run" ]; then \
-> +			echo "# $${j} is being handled by systemd"
-> +		elif [ -L "$${i}" ]; then \
->  			printf "L+! %s - - - - %s\n" \
->  				"$${j}" "../usr/share/factory/$${j}" \
->  			|| exit 1; \
-> -- 
-> 2.14.3
->
+Fixes:
+http://autobuild.buildroot.net/results/3d5/3d5a29e3c61ff071628c2937844ea4156059b3dd/
 
-I applied this patch, thanks. Unfortunately, it seems the problem is
-still occurring. Maybe it's a different problem?
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...s-add-local-PF_VSOCK-AF_VSOCK-definitions.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/iproute2/0002-ss-add-local-PF_VSOCK-AF_VSOCK-definitions.patch
 
-
-[   16.650294] systemd[1]: System is tainted: var-run-bad
-[   16.680724] systemd[1]: Starting Network Connectivity...
-[   16.710421] systemd[1]: Started D-Bus System Message Bus.
-[   16.740678] systemd[1]: Failed to connect to system bus: No such file or directory
-[   16.770425] systemd[1]: Failed to initialize D-Bus connection: No such file or directory
-[   16.800386] systemd[1]: Starting Network Manager...
-
-
-[1518648890.7497] hostname: hostname: hostnamed not used as proxy creation failed
-
-[   39.020736] dbus-daemon[314]: [system] Failed to activate service 'org.freedesktop.systemd1': timed out
-[   39.100451] dbus-daemon[314]: [system] Activating systemd to hand-off: service name='org.freedesktop.nm
-_dispatcher' unit='dbus-org.freedesktop.nm-dispatcher.service' requested by ':1.0' (uid=0 pid=315 comm="/u
-sr/sbin/NetworkManager --no-daemon ")                                                                    
-[   39.150403] NetworkManager[315]: <info>  [1518648890.7540] manager[0x20ac030]: rfkill: WWAN hardware ra
-
-It seems that systemd still cannot talk to the system bus.
-
-I can also see this happening if I try to execute systemd-hostnamed:
-
-# ./systemd-hostnamed 
-Failed to get system bus connection: No such file or directory
-
-# ls /var/run/
-NetworkManager  dhcpcd.pid          docker       ifstate   utmp
-dbus            dhcpcd.sock         docker.pid   sepermit
-dhcpcd          dhcpcd.unpriv.sock  docker.sock  sshd.pid
-
-# ls /var/run/dbus
-system_bus_socket
-
-# ls /run/
-blkid   lock  mount     systemd  user  xtables.lock
-docker  log   ntpd.pid  udev     utmp
-
-If I link dbus like so:
-
-# ln -s /var/run/dbus/ /run/dbus
-
-It seems then that everything works fine.
-
-~ Christian
+diff --git a/package/iproute2/0002-ss-add-local-PF_VSOCK-AF_VSOCK-definitions.patch b/package/iproute2/0002-ss-add-local-PF_VSOCK-AF_VSOCK-definitions.patch
+new file mode 100644
+index 000000000000..bbd1f45de95b
+--- /dev/null
++++ b/package/iproute2/0002-ss-add-local-PF_VSOCK-AF_VSOCK-definitions.patch
+@@ -0,0 +1,58 @@
++From ca5562864f3c45557ee96a6fd6036150066c6b58 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 15 Feb 2018 07:39:52 +0200
++Subject: [PATCH] ss: add local PF_VSOCK/AF_VSOCK definitions
++
++uclibc-ng does not provide these definitions yet. Add them locally to
++fix the build.
++
++Increase AF_MAX to cover AF_VSOCK.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: not upstreamable. uclibc-ng needs to update its Linux
++socket.h.
++---
++ misc/ss.c | 12 ++++++++++--
++ 1 file changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/misc/ss.c b/misc/ss.c
++index 29a250704c2d..b3f289ae358e 100644
++--- a/misc/ss.c
+++++ b/misc/ss.c
++@@ -50,6 +50,14 @@
++ #define BUF_CHUNK (1024 * 1024)
++ #define LEN_ALIGN(x) (((x) + 1) & ~1)
++ 
+++#ifndef PF_VSOCK
+++#define PF_VSOCK 40
+++#endif
+++
+++#ifndef AF_VSOCK
+++#define AF_VSOCK PF_VSOCK
+++#endif
+++
++ #define DIAG_REQUEST(_req, _r)						    \
++ 	struct {							    \
++ 		struct nlmsghdr nlh;					    \
++@@ -298,7 +306,7 @@ static const struct filter default_dbs[MAX_DB] = {
++ 	},
++ };
++ 
++-static const struct filter default_afs[AF_MAX] = {
+++static const struct filter default_afs[AF_MAX+1] = {
++ 	[AF_INET] = {
++ 		.dbs    = INET_DBM,
++ 		.states = SS_CONN,
++@@ -383,7 +391,7 @@ static void filter_merge_defaults(struct filter *f)
++ 		if (!(default_dbs[db].families & f->families))
++ 			f->families |= default_dbs[db].families;
++ 	}
++-	for (af = 0; af < AF_MAX; af++) {
+++	for (af = 0; af < AF_MAX+1; af++) {
++ 		if (!(f->families & FAMILY_MASK(af)))
++ 			continue;
++ 
++-- 
++2.15.1
++
+-- 
+2.15.1
