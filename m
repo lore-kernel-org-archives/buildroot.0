@@ -1,231 +1,151 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Feb 2018 23:03:44 +0100
-Subject: [Buildroot] [PATCH next 4/5] support/scripts/pkg-stats-new: add
- latest upstream version information
-In-Reply-To: <20180215220345.8532-1-thomas.petazzoni@bootlin.com>
-References: <20180215220345.8532-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180215220345.8532-5-thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Feb 2018 23:03:43 +0100
+Subject: [Buildroot] [git commit] Update for 2018.02-rc2
+Message-ID: <20180215220419.DB37C87D7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds fetching the latest upstream version of each package
-from release-monitoring.org.
+commit: https://git.buildroot.net/buildroot/commit/?id=44cec6431c97da810f92d1590292799a17ea9cdc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The fetching process first tries to use the package mappings of the
-"Buildroot" distribution [1]. If there is no result, then it does a
-regular search, and within the search results, looks for a package
-whose name matches the Buildroot name.
-
-Since release-monitoring.org is a bit slow, we have 8 threads that
-fetch information in parallel.
-
-From an output point of view, the latest version column:
-
- - Is green when the version in Buildroot matches the latest upstream
-   version
-
- - Is orange when the latest upstream version is unknown because the
-   package was not found on release-monitoring.org
-
- - Is red when the version in Buildroot doesn't match the latest
-   upstream version. Note that we are not doing anything smart here:
-   we are just testing if the strings are equal or not.
-
- - The cell contains the link to the project on release-monitoring.org
-   if found.
-
- - The cell indicates if the match was done using a distro mapping, or
-   through a regular search.
-
-[1] https://release-monitoring.org/distro/Buildroot/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats-new | 120 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 120 insertions(+)
+ CHANGES                    | 22 ++++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 22 ++++++++++++++++++++++
+ 4 files changed, 55 insertions(+), 11 deletions(-)
 
-diff --git a/support/scripts/pkg-stats-new b/support/scripts/pkg-stats-new
-index 32227a8906..0d682656df 100755
---- a/support/scripts/pkg-stats-new
-+++ b/support/scripts/pkg-stats-new
-@@ -7,6 +7,10 @@ from collections import defaultdict
- import re
- import subprocess
- import sys
-+import json
-+import urllib2
-+from Queue import Queue
-+from threading import Thread
+diff --git a/CHANGES b/CHANGES
+index b897d4f996..e62bc6c100 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,25 @@
++2018.02-rc2, Released February 15th, 2018
++
++	Fixes all over the tree.
++
++	Dependencies: Ensure C++ support is available like for C
++	support for packages needing 32bit host support.
++
++	utils/genrandconfig: Check host dependencies for config.
++
++	Updated/fixed packages: busybox, dnsmasq, dropbear, ffmpeg,
++	glibc, keepalived, libcpprestsdk, libgpiod, libmaxminddb,
++	librsvg, libtasn1, libv4l, libxml2, lightning, ltp-testsuite,
++	mesa3d, mesa3d-demos, mesa3d-headers, nftables, open-lldp,
++	php, postgresql, python-crossbar, qt5, qt53d, qt5enginio,
++	qt5tools, qt5webengine, qt5webkit, rsync, rust-bin, rustc,
++	systemd
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#9781: ti-sgx-km build on kernel >4.1
++	#10141: Squashfs extended attribute failures
++
+ 2018.02-rc1, Released February 5th, 2018
  
- class Package:
-     def __init__(self, name):
-@@ -19,6 +23,7 @@ class Package:
-         self.patch_count = 0
-         self.warnings = 0
-         self.current_version = None
-+        self.latest_version = None
-     def __str__(self):
-         return "%s (path='%s', license='%s', license_files='%s', hash='%s', patches=%d)" % \
-             (self.name, self.path, self.has_license, self.has_license_files, self.has_hash, self.patch_count)
-@@ -211,6 +216,70 @@ def add_check_package_warnings(packages):
-     for name, pkg in packages.iteritems():
-         pkg.warnings = get_check_package_warnings(os.path.dirname(pkg.path))
+ 	The global source-check and per-package <pkg>-source-check
+diff --git a/Makefile b/Makefile
+index 90019bd764..ec39bcdb9c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
  
-+RELEASE_MONITORING_API = "http://release-monitoring.org/api"
-+
-+def get_latest_version_by_distro(package):
-+    req = urllib2.Request(os.path.join(RELEASE_MONITORING_API, "project", "Buildroot", package))
-+    f = urllib2.urlopen(req)
-+    data = json.loads(f.read())
-+    if len(data['versions']) > 0:
-+        return (True, data['versions'][0], data['id'])
-+    else:
-+        return (True, None, data['id'])
-+
-+def get_latest_version_by_guess(package):
-+    req = urllib2.Request(os.path.join(RELEASE_MONITORING_API, "projects", "?pattern=%s" % package))
-+    f = urllib2.urlopen(req)
-+    data = json.loads(f.read())
-+    for p in data['projects']:
-+        if p['name'] == package and len(p['versions']) > 0:
-+            return (False, p['versions'][0], p['id'])
-+    return (False, None, None)
-+
-+def get_latest_version(package):
-+    try:
-+        # We first try by using the "Buildroot" distribution on
-+        # release-monitoring.org, if it has a mapping for the current
-+        # package name.
-+        return get_latest_version_by_distro(package)
-+    except urllib2.HTTPError, e:
-+        # If that fails because there is no mapping, we try to search
-+        # in all packages for a package of this name.
-+        if e.code == 404:
-+            return get_latest_version_by_guess(package)
-+        else:
-+            return (False, None, None)
-+
-+def get_version_worker(q):
-+    while True:
-+        name, pkg = q.get()
-+        pkg.latest_version = get_latest_version(name)
-+        print " [%04d] %s  => %s" % (q.qsize(), name, str(pkg.latest_version))
-+        q.task_done()
-+
-+# Fills in the .latest_version field of all Package objects
-+#
-+# This field has a special format:
-+#   (mapping, version, id)
-+# with:
-+#  - mapping: boolean that indicates whether release-monitoring.org
-+#    has a mapping for this package name in the Buildroot distribution
-+#    or not
-+#  - version: string containing the latest version known by
-+#    release-monitoring.org for this package
-+#  - id: string containing the id of the project corresponding to this
-+#    package, as known by release-monitoring.org
-+def add_latest_version_info(packages):
-+    q = Queue()
-+    for name, pkg in packages.iteritems():
-+        q.put((name, pkg))
-+    # Since release-monitoring.org is rather slow, we create 8 threads
-+    # that do HTTP requests to the site.
-+    for i in range(8):
-+        t = Thread(target=get_version_worker, args=[q])
-+        t.daemon = True
-+        t.start()
-+    q.join()
+ # Set and export the version string
+-export BR2_VERSION := 2018.02-rc1
++export BR2_VERSION := 2018.02-rc2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1517840000
++BR2_VERSION_EPOCH = 1518732000
  
- def calculate_stats(packages):
-     stats = defaultdict(int)
-@@ -236,6 +305,16 @@ def calculate_stats(packages):
-             stats["hash"] += 1
-         else:
-             stats["no-hash"] += 1
-+        if pkg.latest_version[0]:
-+            stats["rmo-mapping"] += 1
-+        else:
-+            stats["rmo-no-mapping"] += 1
-+        if not pkg.latest_version[1]:
-+            stats["version-unknown"] += 1
-+        elif pkg.latest_version[1] == pkg.current_version:
-+            stats["version-uptodate"] += 1
-+        else:
-+            stats["version-not-uptodate"] += 1
-         stats["patches"] += pkg.patch_count
-     return stats
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 57c82e2739..4244b169df 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
  
-@@ -371,6 +450,34 @@ def dump_html_pkg(f, pkg):
-     # Current version
-     f.write("  <td class=\"centered\">%s</td>" % pkg.current_version)
+-      <h3 style="text-align: center;">Latest release candidate: <b>2018.02-rc1</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2018.02-rc2</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
  
-+    # Latest version
-+    if pkg.latest_version[1] == None:
-+        td_class.append("version-unknown")
-+    elif pkg.latest_version[1] != pkg.current_version:
-+        td_class.append("version-needs-update")
-+    else:
-+        td_class.append("version-good")
-+
-+    if pkg.latest_version[1] is None:
-+        latest_version_text = "<b>Unknown</b>"
-+    else:
-+        latest_version_text = "<b>%s</b>" % str(pkg.latest_version[1])
-+
-+    latest_version_text += "<br/>"
-+
-+    if pkg.latest_version[2]:
-+        latest_version_text += "<a href=\"https://release-monitoring.org/project/%s\">link</a>, " % pkg.latest_version[2]
-+    else:
-+        latest_version_text += "no link, "
-+
-+    if pkg.latest_version[0]:
-+        latest_version_text += "has <a href=\"https://release-monitoring.org/distro/Buildroot/\">mapping</a>"
-+    else:
-+        latest_version_text += "has <a href=\"https://release-monitoring.org/distro/Buildroot/\">no mapping</a>"
-+
-+    f.write("  <td class=\"%s\">%s</td>" % \
-+            (" ".join(td_class), latest_version_text))
-+
-     # Warnings
-     td_class = ["centered"]
-     if pkg.warnings == 0:
-@@ -393,6 +500,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">License files</td>
- <td class=\"centered\">Hash file</td>
- <td class=\"centered\">Current version</td>
-+<td class=\"centered\">Latest version</td>
- <td class=\"centered\">Warnings</td>
- </tr>""")
-     for name, pkg in sorted(packages.iteritems()):
-@@ -419,6 +527,16 @@ def dump_html_stats(f, stats):
-             stats["no-hash"])
-     f.write("<tr><td>Total number of patches</td><td>%s</td></tr>" %
-             stats["patches"])
-+    f.write("<tr><td>Packages having a mapping on <i>release-monitoring.org</i></td><td>%s</td></tr>" %
-+            stats["rmo-mapping"])
-+    f.write("<tr><td>Packages lacking a mapping on <i>release-monitoring.org</i></td><td>%s</td></tr>" %
-+            stats["rmo-no-mapping"])
-+    f.write("<tr><td>Packages that are up-to-date</td><td>%s</td></tr>" %
-+            stats["version-uptodate"])
-+    f.write("<tr><td>Packages that are not up-to-date</td><td>%s</td></tr>" %
-+            stats["version-not-uptodate"])
-+    f.write("<tr><td>Packages with no known upstream version</td><td>%s</td></tr>" %
-+            stats["version-unknown"])
-     f.write("</table>")
+-	  <h3><a href="/downloads/buildroot-2018.02-rc1.tar.gz">buildroot-2018.02-rc1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02-rc1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02-rc2.tar.gz">buildroot-2018.02-rc2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02-rc2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.02-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.02-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
  
- def dump_html(packages, stats, output):
-@@ -459,6 +577,8 @@ def __main__():
-     add_patch_count(packages)
-     print "Get package warnings ..."
-     add_check_package_warnings(packages)
-+    print "Get latest version ..."
-+    add_latest_version_info(packages)
-     print "Calculate stats"
-     stats = calculate_stats(packages)
-     print "Write HTML"
--- 
-2.14.3
+-	  <h3><a href="/downloads/buildroot-2018.02-rc1.tar.bz2">buildroot-2018.02-rc1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.02-rc1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02-rc2.tar.bz2">buildroot-2018.02-rc2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02-rc2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index e194d68b7e..211029461a 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.02-rc2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>15 February 2018</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>Another week, another release candidate with more cleanups
++          and build fixes. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02-rc2">CHANGES</a>
++	  file for details.</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.02-rc2.tar.bz2">2018.02-rc2
++	  release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
