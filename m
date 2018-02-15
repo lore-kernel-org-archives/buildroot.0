@@ -1,69 +1,39 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 15 Feb 2018 14:41:02 +0100
-Subject: [Buildroot] [RFC] testing: add python-crossbar tests
-In-Reply-To: <1518701885-16545-1-git-send-email-yegorslists@googlemail.com>
-References: <1518701885-16545-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_ku_EsWrA-qCxkgg6xe-HkdVLB=x_10BN2fNYDAcKk7eng@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 15 Feb 2018 08:39:00 -0600
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-02-14
+In-Reply-To: <20180215070039.30E972081E@mail.free-electrons.com>
+References: <20180215070039.30E972081E@mail.free-electrons.com>
+Message-ID: <CANQCQpb4buukSXdoV8KvwZ9SUFJxX3uiggoFE7RJyh-jHVhR2g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 15, 2018 at 2:38 PM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+Thomas,
+
+On Thu, Feb 15, 2018 at 1:00 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> This test invokes "crossbar version" command, that checks
-> all dependencies found in setup.py files and prints some
-> system related information.
+> Hello,
 >
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  .../testing/tests/package/test_python_crossbar.py  | 27 ++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 support/testing/tests/package/test_python_crossbar.py
->
-> diff --git a/support/testing/tests/package/test_python_crossbar.py b/support/testing/tests/package/test_python_crossbar.py
-> new file mode 100644
-> index 0000000..a67bdea
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_python_crossbar.py
-> @@ -0,0 +1,27 @@
-> +from tests.package.test_python import TestPythonBase
-> +
-> +class TestPythonCrossbar(TestPythonBase):
-> +    def version_test(self, timeout=-1):
-> +        cmd = self.interpreter + " -m crossbar version"
-> +        _, exit_code = self.emulator.run(cmd, timeout)
-> +        self.assertEqual(exit_code, 0)
-> +
-> +class TestPythonPy2Crossbar(TestPythonCrossbar):
-> +    config = TestPythonBase.config + \
-> +"""
-> +BR2_PACKAGE_PYTHON=y
-> +BR2_PACKAGE_PYTHON_CROSSBAR=y
-> +"""
-> +    def test_run(self):
-> +        self.login()
-> +        self.version_test(60)
-> +
-> +class TestPythonPy3Crossbar(TestPythonCrossbar):
-> +    config = TestPythonBase.config + \
-> +"""
-> +BR2_PACKAGE_PYTHON3=y
-> +BR2_PACKAGE_PYTHON_CROSSBAR=y
-> +"""
-> +    def test_run(self):
-> +        self.login()
-> +        self.version_test(60)
+> Build statistics for 2018-02-14
+[snip]
 
-I've tried this test locally, but it always timeouts. Even if I
-specify an hour as a timeout.
+> microblazeel |                     gst-ffmpeg | TIM | http://autobuild.buildroot.net/results/ac6079ca20e922e635df00d3fdb472616bb702e2 |
+>          arm |                      host-mono | TIM | http://autobuild.buildroot.net/results/00b98df10be21a1134f67d60a8465c8f81fe557b |
 
-If a dependency is missing (like python-bitstring), then the test also
-fails with an expected message, but if all dependencies are met, the
-test doesn't return.
+For these too, it looks like their builds take > 2hrs for the "build"
+step.  I'll try and characterize and send a bump in the duration we
+use for hung package builds.
 
-Any idea?
+Another item I noticed is the duration bookkeeping in the
+import.inc.php needs update to append the hung period in sec if the
+build timed out.  Currently the duration listed is the time the build
+has taken before it hung for 2hrs.  I'm unsure if we want that update
+to the duration to be made or just assume that the hung timeout is on
+top of that duration listed.  Thus just keeping the actual build time
+as the reported duration.
 
-Yegor
+Matt
