@@ -1,44 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Feb 2018 22:09:23 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to
- 3.4.2
-In-Reply-To: <q3vglex27m.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Thu, 15 Feb 2018 19:11:38 +0100")
-References: <20180212165106.18383-1-bernd.kuhls@t-online.de>
- <87tvuimsab.fsf@dell.be.48ers.dk>
- <q3vglex27m.ln2@ID-313208.user.individual.net>
-Message-ID: <87h8qim03g.fsf@dell.be.48ers.dk>
+Date: Thu, 15 Feb 2018 22:10:05 +0100
+Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 3.4.2
+Message-ID: <20180215211031.2B8D68748B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=480e8f734f99e39ce404a633045fecdad83143e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Am Thu, 15 Feb 2018 12:00:28 +0100 schrieb Peter Korsgaard:
- >> > -FFMPEG_VERSION = 3.4.1 +FFMPEG_VERSION = 3.4.2
- >> 
- >> Is this not 'master' material? Doesn't this only contain bugfixes
- >> relative to 3.4.1?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Hi Peter,
-
- > according to the changelog http://git.videolan.org/?
- > p=ffmpeg.git;a=blob;f=Changelog;h=5db7b0a8a7643bc0a9a310fc642c84e003300a8a;hb=refs/
- > heads/release/3.4 it looks like the release only contains bugfixes, but 
- > afaics, nothing security related.
-
- > Whether this patch should be committed to master or next branch when we 
- > are in -rc phase is a question I am unable to answer, I thought that only 
- > security bumps to the master branch are allowed during the rc phase. Did 
- > this change?
-
-Well, the idea is to not add any new features after RC1, but
-(security-)bugfixes are fine, so I believe this is OK for master as
-well, especially as we are quite early in the RC phase.
-
-I'll cherry pick it to master, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index cdf740834b..a8092616a9 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 5a77278a63741efa74e26bf197b9bb09ac6381b9757391b922407210f0f991c0  ffmpeg-3.4.1.tar.xz
++sha256 2b92e9578ef8b3e49eeab229e69305f5f4cbc1fdaa22e927fc7fca18acccd740  ffmpeg-3.4.2.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 76c31f5f52..5d2f89fb43 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.4.1
++FFMPEG_VERSION = 3.4.2
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
