@@ -1,33 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Feb 2018 19:11:38 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to
- 3.4.2
-References: <20180212165106.18383-1-bernd.kuhls@t-online.de>
- <87tvuimsab.fsf@dell.be.48ers.dk>
-Message-ID: <q3vglex27m.ln2@ID-313208.user.individual.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 15 Feb 2018 19:35:28 +0100
+Subject: [Buildroot] Can't build customized packages
+In-Reply-To: <CAPzckP4HAA7mSPAr+vFgyjNihRhB805cbev_gxJAz4RCqK5Ezw@mail.gmail.com>
+References: <CAPzckP4HAA7mSPAr+vFgyjNihRhB805cbev_gxJAz4RCqK5Ezw@mail.gmail.com>
+Message-ID: <20180215193528.043ea476@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 15 Feb 2018 12:00:28 +0100 schrieb Peter Korsgaard:
+On Thu, 15 Feb 2018 18:48:17 +0100, Sjoerd Venema <srg.venema@gmail.com> wrote:
+Hello Sjoerd,
 
->  > -FFMPEG_VERSION = 3.4.1 +FFMPEG_VERSION = 3.4.2
+> Hi,
 > 
-> Is this not 'master' material? Doesn't this only contain bugfixes
-> relative to 3.4.1?
+> I'm probably missing something basic here, but I can't see it. Any way, I
+> have created a number of custom packages, which I have grouped under a
+> sub-directory of packages.
+> 
+> I have added a Config.in to that sub-directory ("packages/arctura"... see
+> link below), which makes everything selectable in the "make
+> menuconfig"-menu. So far, so good.
+> 
+> However, I noticed that the packages are not being build. And running make
+> <custom package> returns a "No rule to make target" error.
+> 
+> I hadn't added a <company>.mk makefile ("actura.mk", see link below) yet,
+> so I did, according to the documentation, but no difference.
+> 
+> My setup can be seen here:
+> https://github.com/Sjoerd82/buildroot/tree/master/buildroot-2017.08
 
-Hi Peter,
 
-according to the changelog http://git.videolan.org/?
-p=ffmpeg.git;a=blob;f=Changelog;h=5db7b0a8a7643bc0a9a310fc642c84e003300a8a;hb=refs/
-heads/release/3.4 it looks like the release only contains bugfixes, but 
-afaics, nothing security related.
+diff -u package/arctura/arctura.mk_orig package/arctura/arctura.mk
+--- package/arctura/arctura.mk_orig	2018-02-15 19:32:11.572197327 +0100
++++ package/arctura/arctura.mk	2018-02-15 19:32:23.460406475 +0100
+@@ -1 +1 @@
+-include $(sort $(wildcard package/<company>/*/*.mk))
++include $(sort $(wildcard package/arctura/*/*.mk))
 
-Whether this patch should be committed to master or next branch when we 
-are in -rc phase is a question I am unable to answer, I thought that only 
-security bumps to the master branch are allowed during the rc phase. Did 
-this change?
+Regards,
+Peter
 
-Regards, Bernd
+
+> 
+> Thanks
+> 
+> <https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail>
+> Virus-free.
+> www.avast.com
+> <https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail>
+> <#DAB4FAD8-2DD7-40BB-A1B8-4E2AA1F9FDF2>
