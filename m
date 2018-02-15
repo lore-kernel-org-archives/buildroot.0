@@ -1,90 +1,55 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Thu, 15 Feb 2018 16:19:10 -0600
-Subject: [Buildroot] [PATCH 2/2] modem-manager: Update to version 1.7.990
-In-Reply-To: <CANQCQpYhsMNWTWJO0M-0_06H6ZrN7N3-XkS4vHNgVF4x3phTuw@mail.gmail.com>
-References: <1518727506-15403-1-git-send-email-jared.bents@rockwellcollins.com>
- <1518727506-15403-2-git-send-email-jared.bents@rockwellcollins.com>
- <CANQCQpYhsMNWTWJO0M-0_06H6ZrN7N3-XkS4vHNgVF4x3phTuw@mail.gmail.com>
-Message-ID: <CAM=7fbfjhcdu8o91A=1ajet6ZWnS5280T88AajT5gQD5TrLq3g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 15 Feb 2018 23:32:58 +0100
+Subject: [Buildroot] [PATCH 1/2] sunxi-mali-driver-mainline: new package
+In-Reply-To: <979834e4-a338-525b-c7fd-1241c72127fb@micronovasrl.com> (Giulio
+ Benetti's message of "Thu, 15 Feb 2018 23:06:28 +0100")
+References: <1511648569-18855-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <87lgfum0aq.fsf@dell.be.48ers.dk>
+ <6f81dc33-b3a2-223e-1628-aed8a2e1e747@micronovasrl.com>
+ <87vaexlxld.fsf@dell.be.48ers.dk>
+ <979834e4-a338-525b-c7fd-1241c72127fb@micronovasrl.com>
+Message-ID: <87mv09lw85.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 15, 2018 at 3:54 PM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Jared,
->
-> On Thu, Feb 15, 2018 at 2:45 PM, Jared Bents
-> <jared.bents@rockwellcollins.com> wrote:
->> Update to modem manager 1.7.990 which does not require
->> udev.  Added option to build without udev but if udev
->> exists in the build, it will default to build with
->> libgudev.
->>
->> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
->> ---
->>  package/modem-manager/Config.in          | 12 +++++++++---
->>  package/modem-manager/modem-manager.hash |  2 +-
->>  package/modem-manager/modem-manager.mk   | 11 +++++++++--
->>  3 files changed, 19 insertions(+), 6 deletions(-)
->>
->> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
->> index 8e995b4..38e017b 100644
->> --- a/package/modem-manager/Config.in
->> +++ b/package/modem-manager/Config.in
->> @@ -1,12 +1,10 @@
->>  config BR2_PACKAGE_MODEM_MANAGER
->>         bool "modemmanager"
->> -       depends on BR2_PACKAGE_HAS_UDEV
->>         depends on BR2_USE_WCHAR # libglib2 and gnutls
->>         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
->>         depends on BR2_USE_MMU # dbus
->>         select BR2_PACKAGE_DBUS # runtime dependency
->>         select BR2_PACKAGE_LIBGLIB2
->> -       select BR2_PACKAGE_LIBGUDEV
->>         help
->>           ModemManager is a DBus-activated daemon which controls mobile
->>           broadband (2G/3G/4G) devices and connections.
->> @@ -26,9 +24,17 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
->>         select BR2_PACKAGE_LIBQMI
->>         help
->>           This option enables support for QMI protocol
->> +
->> +config BR2_PACKAGE_MODEM_MANAGER_UDEV
->> +       bool "Use udev"
->> +       default y if BR2_PACKAGE_HAS_UDEV
->> +       select BR2_PACKAGE_LIBGUDEV
->> +       help
->> +         This option allows support for builds without udev. If udev
->> +         is not included, say N.
->>  endif
->>
->> -comment "modemmanager needs udev /dev management and a toolchain w/ wchar, threads"
->> +comment "modemmanager needs /dev management and a toolchain w/ wchar, threads"
->>         depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
->>                 !BR2_PACKAGE_HAS_UDEV
->>         depends on BR2_USE_MMU
->> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
->> index bc08044..52cc7a6 100644
->> --- a/package/modem-manager/modem-manager.hash
->> +++ b/package/modem-manager/modem-manager.hash
->> @@ -1,4 +1,4 @@
->>  # Locally computed
->> -sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
->> +sha256  d465094fc6fc173354f5a00d212049056829cc245d60a9083f3c53f86a8f90ec  ModemManager-1.7.990.tar.xz
->>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
->
->
-> Please check these license hash didn't change.
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-Matt,
+ > Hi,
+ > Il 15/02/2018 23:03, Peter Korsgaard ha scritto:
+ >>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+ >> 
+ >> Hi,
+ >> 
+ >> > Thank you very much for helping me on this,
+ >> > it was not so easy as first package to me.
+ >> 
+ >> You are welcome, thank you for contributing!
+ >> 
+ >> As you perhaps noticed, I've also bumped the sunxi-mali-mainline-driver
+ >> version for 4.15 support:
+ >> 
+ >> https://git.busybox.net/buildroot/commit/?h=next&id=1d339809d61aeed2911291830581f643596a2e5c
 
-I have verified the sha256 for both library files did not change
+ > Yes, I've seen, I'm almost trying to rebuild.
+ > I've seen you use quilt before calling build.sh script.
+ > But build.sh should call it by itself.
 
-Jared
+No, I'm NOT using quilt. quilt is not a required dependency for
+Buildroot (and we don't have a host-quilt package), so I'm tweaking
+build.sh to use our apply-patches.sh script like we use to apply our
+patches instead of quilt.
 
->
-> Matt
+ > Ah, one question, you figure as Author because you've reworked heavily
+ > the patch, right? (and it seems more than right to me)
+ > Or was it a mistake?
+
+Ups, that was mistake. I wanted to keep you authorship for the 2
+patches, but me for the version bump - But apparently git ends up
+changing the authorship when you squash commits which I did to apply the
+various fixups - Sorry about that!
+
+-- 
+Bye, Peter Korsgaard
