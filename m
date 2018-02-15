@@ -1,32 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Feb 2018 22:38:07 +0100
-Subject: [Buildroot] [PATCH v3 1/1] libcpprestsdk: fix building as a
- static library
-In-Reply-To: <873722o95b.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 15 Feb 2018 11:10:56 +0100")
-References: <20180212172350.5697-1-aduskett@gmail.com>
- <20180213231451.41f46d44@windsurf.lan>
- <873722o95b.fsf@dell.be.48ers.dk>
-Message-ID: <87zi4akk74.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 15 Feb 2018 15:53:21 -0600
+Subject: [Buildroot] [PATCH 1/2] libqmi: Update to use libqmi 1.20.0
+In-Reply-To: <1518727506-15403-1-git-send-email-jared.bents@rockwellcollins.com>
+References: <1518727506-15403-1-git-send-email-jared.bents@rockwellcollins.com>
+Message-ID: <CANQCQpY+rpUGhhBxc2K9Zr=2SCu5b4gRNA-eSusXaqZ3Hr9YUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Jared,
 
-Hi,
+On Thu, Feb 15, 2018 at 2:45 PM, Jared Bents
+<jared.bents@rockwellcollins.com> wrote:
+>
+> Update to use libqmi 1.20.0
+>
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+> ---
+>  package/libqmi/libqmi.hash | 2 +-
+>  package/libqmi/libqmi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+> index 1c54231..297e1f0 100644
+> --- a/package/libqmi/libqmi.hash
+> +++ b/package/libqmi/libqmi.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+> -sha256 a0a42c55935e75a630208e2f70840bd4407f56fe1c5258f5b0f6c0aaedf88cec  libqmi-1.18.0.tar.xz
+> +sha256 21428cd3749c56246565123f707fee51238651a22c60bdc85ebce97388626eb4  libqmi-1.20.0.tar.xz
+>  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
 
- >> Your commit log was missing a reference to the autobuilder failure
- >> being fixed, so I've added one and applied to master.
+Please check that both of these library files didn't change.
 
- > As it now uses pkg-config, libcpprestsdk should add host-pkgconf to
- > _DEPENDENCIES.
-
- > Care to send a patch?
-
-I've now fixed it in git.
-
--- 
-Bye, Peter Korsgaard
+Matt
