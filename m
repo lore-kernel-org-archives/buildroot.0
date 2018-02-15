@@ -1,75 +1,53 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 15 Feb 2018 23:35:15 +0100
-Subject: [Buildroot] [PATCH 1/2] sunxi-mali-driver-mainline: new package
-In-Reply-To: <87mv09lw85.fsf@dell.be.48ers.dk>
-References: <1511648569-18855-1-git-send-email-giulio.benetti@micronovasrl.com>
- <87lgfum0aq.fsf@dell.be.48ers.dk>
- <6f81dc33-b3a2-223e-1628-aed8a2e1e747@micronovasrl.com>
- <87vaexlxld.fsf@dell.be.48ers.dk>
- <979834e4-a338-525b-c7fd-1241c72127fb@micronovasrl.com>
- <87mv09lw85.fsf@dell.be.48ers.dk>
-Message-ID: <7d1928bb-c0ba-6298-6859-2840e9315620@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 Feb 2018 00:01:00 +0100
+Subject: [Buildroot] [PATCH] glibc: security bump to the latest commit on
+ 2.26 branch
+Message-ID: <20180215230100.7869-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes the following security issues according to NEWS:
 
-Il 15/02/2018 23:32, Peter Korsgaard ha scritto:
->>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
-> 
->   > Hi,
->   > Il 15/02/2018 23:03, Peter Korsgaard ha scritto:
->   >>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
->   >>
->   >> Hi,
->   >>
->   >> > Thank you very much for helping me on this,
->   >> > it was not so easy as first package to me.
->   >>
->   >> You are welcome, thank you for contributing!
->   >>
->   >> As you perhaps noticed, I've also bumped the sunxi-mali-mainline-driver
->   >> version for 4.15 support:
->   >>
->   >> https://git.busybox.net/buildroot/commit/?h=next&id=1d339809d61aeed2911291830581f643596a2e5c
-> 
->   > Yes, I've seen, I'm almost trying to rebuild.
->   > I've seen you use quilt before calling build.sh script.
->   > But build.sh should call it by itself.
-> 
-> No, I'm NOT using quilt. quilt is not a required dependency for
-> Buildroot (and we don't have a host-quilt package), so I'm tweaking
-> build.sh to use our apply-patches.sh script like we use to apply our
-> patches instead of quilt.
+CVE-2018-6485: An integer overflow in the implementation of the
+posix_memalign in memalign functions in the GNU C Library (aka
 
-Ah right, not host-quilt, now I've got the point.
-Of course I had quilt installed on my host :)
+CVE-2018-6551: The malloc implementation in the GNU C Library (aka glibc or
+libc6), from version 2.24 to 2.26 on powerpc, and only in version 2.26 on
+i386, did not properly handle malloc calls with arguments close to SIZE_MAX
+and could return a pointer to a heap region that is smaller than requested,
+eventually leading to heap corruption.
 
-> 
->   > Ah, one question, you figure as Author because you've reworked heavily
->   > the patch, right? (and it seems more than right to me)
->   > Or was it a mistake?
-> 
-> Ups, that was mistake. I wanted to keep you authorship for the 2
-> patches, but me for the version bump - But apparently git ends up
-> changing the authorship when you squash commits which I did to apply the
-> various fixups - Sorry about that!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/glibc.hash | 2 +-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-No problem! It was only to understand.
-Thanks again
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 3311be665c..3dab1e1516 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated (fetched from Github)
+-sha256  d0d44c2c7a46922376c08a1d45ae7bcbf9abd8f05603dd76637c8b74e6693e9e     glibc-glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8.tar.gz
++sha256  00fbc845678a96f4acc574c4bda4be76506ecd8bafb2d08c58bfa3507625c81a     glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 9126d8725f..0351433e6a 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8
++GLIBC_VERSION = glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
-
-> 
+2.11.0
