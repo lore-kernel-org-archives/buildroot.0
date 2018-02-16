@@ -1,53 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 Feb 2018 00:01:00 +0100
-Subject: [Buildroot] [PATCH] glibc: security bump to the latest commit on
- 2.26 branch
-Message-ID: <20180215230100.7869-1-peter@korsgaard.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Thu, 15 Feb 2018 16:56:10 -0800
+Subject: [Buildroot] [RFC 4/6] core/pkg-toolchain-external: copy external
+ 32-bit libraries to staging
+In-Reply-To: <20180216005612.69593-1-mmayer@broadcom.com>
+References: <20180216005612.69593-1-mmayer@broadcom.com>
+Message-ID: <20180216005612.69593-5-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues according to NEWS:
+We use rsync to copy the 32-bit libraries from the 32-bit sysroot into
+staging.
 
-CVE-2018-6485: An integer overflow in the implementation of the
-posix_memalign in memalign functions in the GNU C Library (aka
-
-CVE-2018-6551: The malloc implementation in the GNU C Library (aka glibc or
-libc6), from version 2.24 to 2.26 on powerpc, and only in version 2.26 on
-i386, did not properly handle malloc calls with arguments close to SIZE_MAX
-and could return a pointer to a heap region that is smaller than requested,
-eventually leading to heap corruption.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 ---
- package/glibc/glibc.hash | 2 +-
- package/glibc/glibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 3311be665c..3dab1e1516 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated (fetched from Github)
--sha256  d0d44c2c7a46922376c08a1d45ae7bcbf9abd8f05603dd76637c8b74e6693e9e     glibc-glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8.tar.gz
-+sha256  00fbc845678a96f4acc574c4bda4be76506ecd8bafb2d08c58bfa3507625c81a     glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98.tar.gz
- # Locally calculated (fetched from Github)
- sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 9126d8725f..0351433e6a 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8
-+GLIBC_VERSION = glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index d7cf97d170ca..0c5cd4b9f6d7 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -445,7 +445,12 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+ 		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+ 	fi ; \
+ 	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
+-	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
++	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}); \
++	if [ "$(BR2_ROOTFS_RUNTIME32)" = "y" ]; then \
++		$(call MESSAGE,"Copying external toolchain 32-bit libraries to staging...") ; \
++		mkdir -p "$${STAGING_DIR}/$(BR2_ROOTFS_LIB32_DIR)"; \
++		rsync -a --exclude '*.a' "$(BR2_ROOTFS_RUNTIME32_PATH)/$(BR2_ROOTFS_LIB32_DIR)" "$${STAGING_DIR}"; \
++	fi
+ endef
+ 
+ ifeq ($(BR2_ROOTFS_RUNTIME32),)
 -- 
-2.11.0
+2.7.4
