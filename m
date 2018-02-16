@@ -1,98 +1,118 @@
 From: Christian Stewart <christian@paral.in>
-Date: Fri, 16 Feb 2018 03:26:08 -0500
-Subject: [Buildroot] [PATCH 01/10] dumb-init: new package
+Date: Fri, 16 Feb 2018 03:26:09 -0500
+Subject: [Buildroot] [PATCH 02/10] tini: new package
 In-Reply-To: <20180216082617.12039-1-christian@paral.in>
 References: <20180216082617.12039-1-christian@paral.in>
-Message-ID: <20180216082617.12039-2-christian@paral.in>
+Message-ID: <20180216082617.12039-3-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dumb-init is a minimal init process to act as PID 1 for containers.
+Tini is a minimal init process to act as PID 1 for containers.
 
-dumb-init can be used to satisfy docker-engine's docker-init binary
+Tini can be used to satisfy docker-engine's docker-init binary
 requirement.
 
-In many cases docker-init backing processes like dumb-init must be static, as
+In many cases docker-init backing processes like Tini must be static, as
 they are executed inside a container in an unknown environment. This
-patch includes an option to specifically compile dumb-init statically, even if
+patch adds an option to specifically compile Tini statically, even if
 the system is compiled dynamically.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                |  1 +
- package/dumb-init/Config.in      |  7 +++++++
- package/dumb-init/dumb-init.hash |  2 ++
- package/dumb-init/dumb-init.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 34 insertions(+)
- create mode 100644 package/dumb-init/Config.in
- create mode 100644 package/dumb-init/dumb-init.hash
- create mode 100644 package/dumb-init/dumb-init.mk
+ package/Config.in      |  1 +
+ package/tini/Config.in | 16 ++++++++++++++++
+ package/tini/tini.hash |  2 ++
+ package/tini/tini.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 54 insertions(+)
+ create mode 100644 package/tini/Config.in
+ create mode 100644 package/tini/tini.hash
+ create mode 100644 package/tini/tini.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9cd5d9c087..f90a9e7bad 100644
+index f90a9e7bad..dd42db79ec 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1906,6 +1906,7 @@ comment "Utilities"
- 	source "package/crudini/Config.in"
- 	source "package/dialog/Config.in"
- 	source "package/dtach/Config.in"
-+	source "package/dumb-init/Config.in"
- 	source "package/easy-rsa/Config.in"
- 	source "package/file/Config.in"
- 	source "package/gnupg/Config.in"
-diff --git a/package/dumb-init/Config.in b/package/dumb-init/Config.in
+@@ -1922,6 +1922,7 @@ comment "Utilities"
+ 	source "package/sudo/Config.in"
+ 	source "package/terminology/Config.in"
+ 	source "package/time/Config.in"
++	source "package/tini/Config.in"
+ 	source "package/tmux/Config.in"
+ 	source "package/which/Config.in"
+ 	source "package/xmlstarlet/Config.in"
+diff --git a/package/tini/Config.in b/package/tini/Config.in
 new file mode 100644
-index 0000000000..e817493605
+index 0000000000..235fc1a8fb
 --- /dev/null
-+++ b/package/dumb-init/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DUMB_INIT
-+	bool "dumb-init"
++++ b/package/tini/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_TINI
++	bool "tini"
 +	help
-+	  dumb-init is a simple but valid init binary to
++	  tini is a simple but valid init binary to
 +	  act as PID 1 for containers.
 +
-+	  https://github.com/Yelp/dumb-init
-diff --git a/package/dumb-init/dumb-init.hash b/package/dumb-init/dumb-init.hash
++	  https://github.com/krallin/tini
++
++if BR2_PACKAGE_TINI
++
++config BR2_PACKAGE_TINI_MINIMAL
++	bool "build minimal variant"
++	help
++	  Disables argument parsing and verbose output.
++
++endif
+diff --git a/package/tini/tini.hash b/package/tini/tini.hash
 new file mode 100644
-index 0000000000..4705ce4368
+index 0000000000..f8c8c2a3aa
 --- /dev/null
-+++ b/package/dumb-init/dumb-init.hash
++++ b/package/tini/tini.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256	74486997321bd939cad2ee6af030f481d39751bc9aa0ece84ed55f864e309a3f	v1.2.0.tar.gz
-diff --git a/package/dumb-init/dumb-init.mk b/package/dumb-init/dumb-init.mk
++sha256	c2b7fe2fb92e71911d06b7571b53d4e7e8985b34efe2a599670b070b000c8dbe	tini-v0.16.1.tar.gz
+diff --git a/package/tini/tini.mk b/package/tini/tini.mk
 new file mode 100644
-index 0000000000..3133384f5a
+index 0000000000..e345acd7b2
 --- /dev/null
-+++ b/package/dumb-init/dumb-init.mk
-@@ -0,0 +1,24 @@
++++ b/package/tini/tini.mk
+@@ -0,0 +1,35 @@
 +################################################################################
 +#
-+# dumb-init
++# tini
 +#
 +################################################################################
 +
-+DUMB_INIT_VERSION = v1.2.0
-+DUMB_INIT_SITE = $(call github,Yelp,dumb-init,$(DUMB_INIT_VERSION))
++TINI_VERSION = v0.16.1
++TINI_SITE = $(call github,krallin,tini,$(TINI_VERSION))
 +
-+DUMB_INIT_LICENSE = MIT
-+DUMB_INIT_LICENSE_FILES = LICENSE
-+DUMB_INIT_CFLAGS += -static
++TINI_LICENSE = MIT
++TINI_LICENSE_FILES = LICENSE
 +
-+define DUMB_INIT_BUILD_CMDS
++TINI_CFLAGS = $(TARGET_CFLAGS) -DTINI_VERSION=\"$(TINI_VERSION)\" -DTINI_GIT=\"\"
++TINI_CFLAGS += -static
++
++ifeq ($(BR2_PACKAGE_TINI_MINIMAL),y)
++TINI_CFLAGS += -DTINI_MINIMAL
++endif
++
++define TINI_CONFIGURE_CMDS
++	printf "#pragma once\n" > $(@D)/src/tiniConfig.h
++endef
++
++define TINI_BUILD_CMDS
 +	$(TARGET_CC) \
-+		$(DUMB_INIT_CFLAGS) \
-+		-o $(@D)/dumb-init $(@D)/dumb-init.c
++		$(TINI_CFLAGS) \
++		-o $(@D)/tini $(@D)/src/tini.c
 +endef
 +
-+define DUMB_INIT_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/dumb-init $(TARGET_DIR)/usr/bin/dumb-init
++define TINI_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/tini $(TARGET_DIR)/usr/bin/tini
 +endef
 +
++# Tini's CMakeLists.txt is not suitable for Buildroot.
 +$(eval $(generic-package))
 -- 
 2.13.6
