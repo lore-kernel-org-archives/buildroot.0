@@ -1,61 +1,72 @@
 From: Chris Lesiak <chris.lesiak@licor.com>
-Date: Fri, 16 Feb 2018 12:10:16 -0600
-Subject: [Buildroot] [PATCH v2] package/openssh: Add sysusers.d snippet
-In-Reply-To: <20180123232221.6106-1-chris.lesiak@licor.com>
-References: <20180123232221.6106-1-chris.lesiak@licor.com>
-Message-ID: <20180216181016.8747-1-chris.lesiak@licor.com>
+Date: Fri, 16 Feb 2018 12:11:41 -0600
+Subject: [Buildroot] [PATCH v3] package/openssh: Add tmpfiles.d snippet to
+ create /var/empty
+In-Reply-To: <20180206162102.4322-1-chris.lesiak@licor.com>
+References: <20180206162102.4322-1-chris.lesiak@licor.com>
+Message-ID: <20180216181141.8893-1-chris.lesiak@licor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The openssh privilege separation feature, enabled by default,
+requires that the path /var/empty exist; see README.privsep
+included as part of the openssh distribution.
+
+On a volatile or stateless system, that path might not exist.
+Use systemd-tmpfiles (if enabled) to ensure that the path exists
+and has the correct permissions.
+
 Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
 ---
+Changes v2 --> v3
+  - Provide a more detailed explanation as suggested by
+    Arnout Vandecappelle<arnout@mind.be>.
+  - Only bother if BR2_PACKAGE_SYSTEMD_TMPFILES=y
 Changes v1 --> v2
-  - Rename the snippet file to sshd_sysusers.conf to make the
-    use more apparent.
+  - Use 0755 as the permission of /var/empty as suggested by
+    Samual Martin <s.martin49@gmail.com> and the README.privsep
+    included with openssh-7.6p1.
 ---
- package/openssh/openssh.mk         | 8 ++++++++
- package/openssh/sshd_sysusers.conf | 5 +++++
- 2 files changed, 13 insertions(+)
- create mode 100644 package/openssh/sshd_sysusers.conf
+ package/openssh/openssh.mk        | 8 ++++++++
+ package/openssh/ssh_tmpfiles.conf | 1 +
+ 2 files changed, 9 insertions(+)
+ create mode 100644 package/openssh/ssh_tmpfiles.conf
 
 diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 6b7ac22c19..5d099ceb13 100644
+index 5d099ceb13..cdafdedae4 100644
 --- a/package/openssh/openssh.mk
 +++ b/package/openssh/openssh.mk
-@@ -60,12 +60,20 @@ else
- OPENSSH_CONF_OPTS += --without-selinux
+@@ -67,6 +67,13 @@ define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
+ endef
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
-+define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
-+	$(INSTALL) -m 0644 -D package/openssh/sshd_sysusers.conf \
-+		$(TARGET_DIR)/usr/lib/sysusers.d/sshd.conf
++ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
++define OPENSSH_INSTALL_SYSTEMD_TMPFILES
++	$(INSTALL) -m 0644 -D package/openssh/ssh_tmpfiles.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/ssh.conf
 +endef
 +endif
 +
  define OPENSSH_INSTALL_INIT_SYSTEMD
  	$(INSTALL) -D -m 644 package/openssh/sshd.service \
  		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+@@ -74,6 +81,7 @@ define OPENSSH_INSTALL_INIT_SYSTEMD
  	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-+	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+ 	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
++	$(OPENSSH_INSTALL_SYSTEMD_TMPFILES)
  endef
  
  define OPENSSH_INSTALL_INIT_SYSV
-diff --git a/package/openssh/sshd_sysusers.conf b/package/openssh/sshd_sysusers.conf
+diff --git a/package/openssh/ssh_tmpfiles.conf b/package/openssh/ssh_tmpfiles.conf
 new file mode 100644
-index 0000000000..3ea46f65c6
+index 0000000000..ca2a393542
 --- /dev/null
-+++ b/package/openssh/sshd_sysusers.conf
-@@ -0,0 +1,5 @@
-+# sysusers.d snippet for creating the sshd system user automatically
-+# at boot on systemd-based systems that ship with an unpopulated
-+# /etc. See sysusers.d(5) for details.
-+
-+u sshd - "Privilege-separated SSH"
++++ b/package/openssh/ssh_tmpfiles.conf
+@@ -0,0 +1 @@
++d /var/empty 0755 root root
 -- 
 2.14.3
