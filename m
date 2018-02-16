@@ -1,72 +1,85 @@
-From: Chris Lesiak <chris.lesiak@licor.com>
-Date: Fri, 16 Feb 2018 12:11:41 -0600
-Subject: [Buildroot] [PATCH v3] package/openssh: Add tmpfiles.d snippet to
- create /var/empty
-In-Reply-To: <20180206162102.4322-1-chris.lesiak@licor.com>
-References: <20180206162102.4322-1-chris.lesiak@licor.com>
-Message-ID: <20180216181141.8893-1-chris.lesiak@licor.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 16 Feb 2018 21:53:34 +0100
+Subject: [Buildroot] [PATCH v2 2/2] modem-manager: Update to version
+ 1.7.990
+In-Reply-To: <1518799091-845-2-git-send-email-jared.bents@rockwellcollins.com>
+References: <1518799091-845-1-git-send-email-jared.bents@rockwellcollins.com>
+ <1518799091-845-2-git-send-email-jared.bents@rockwellcollins.com>
+Message-ID: <20180216215334.7385e898@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The openssh privilege separation feature, enabled by default,
-requires that the path /var/empty exist; see README.privsep
-included as part of the openssh distribution.
+Hello,
 
-On a volatile or stateless system, that path might not exist.
-Use systemd-tmpfiles (if enabled) to ensure that the path exists
-and has the correct permissions.
+On Fri, 16 Feb 2018 10:38:11 -0600, Jared Bents wrote:
 
-Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
----
-Changes v2 --> v3
-  - Provide a more detailed explanation as suggested by
-    Arnout Vandecappelle<arnout@mind.be>.
-  - Only bother if BR2_PACKAGE_SYSTEMD_TMPFILES=y
-Changes v1 --> v2
-  - Use 0755 as the permission of /var/empty as suggested by
-    Samual Martin <s.martin49@gmail.com> and the README.privsep
-    included with openssh-7.6p1.
----
- package/openssh/openssh.mk        | 8 ++++++++
- package/openssh/ssh_tmpfiles.conf | 1 +
- 2 files changed, 9 insertions(+)
- create mode 100644 package/openssh/ssh_tmpfiles.conf
+> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+> index 8e995b4..5f1f6d5 100644
+> --- a/package/modem-manager/Config.in
+> +++ b/package/modem-manager/Config.in
+> @@ -1,12 +1,11 @@
+>  config BR2_PACKAGE_MODEM_MANAGER
+>  	bool "modemmanager"
+> -	depends on BR2_PACKAGE_HAS_UDEV
+>  	depends on BR2_USE_WCHAR # libglib2 and gnutls
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+>  	depends on BR2_USE_MMU # dbus
+>  	select BR2_PACKAGE_DBUS # runtime dependency
+>  	select BR2_PACKAGE_LIBGLIB2
+> -	select BR2_PACKAGE_LIBGUDEV
+> +	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
+>  	help
+>  	  ModemManager is a DBus-activated daemon which controls mobile
+>  	  broadband (2G/3G/4G) devices and connections.
+> @@ -28,7 +27,7 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+>  	  This option enables support for QMI protocol
+>  endif
+>  
+> -comment "modemmanager needs udev /dev management and a toolchain w/ wchar, threads"
+> +comment "modemmanager needs /dev management and a toolchain w/ wchar, threads"
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 5d099ceb13..cdafdedae4 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -67,6 +67,13 @@ define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
-+define OPENSSH_INSTALL_SYSTEMD_TMPFILES
-+	$(INSTALL) -m 0644 -D package/openssh/ssh_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/ssh.conf
-+endef
-+endif
-+
- define OPENSSH_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/openssh/sshd.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
-@@ -74,6 +81,7 @@ define OPENSSH_INSTALL_INIT_SYSTEMD
- 	ln -fs ../../../../usr/lib/systemd/system/sshd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
- 	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
-+	$(OPENSSH_INSTALL_SYSTEMD_TMPFILES)
- endef
- 
- define OPENSSH_INSTALL_INIT_SYSV
-diff --git a/package/openssh/ssh_tmpfiles.conf b/package/openssh/ssh_tmpfiles.conf
-new file mode 100644
-index 0000000000..ca2a393542
---- /dev/null
-+++ b/package/openssh/ssh_tmpfiles.conf
-@@ -0,0 +1 @@
-+d /var/empty 0755 root root
+The "/dev management and" part should be removed entirely.
+
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+>  		!BR2_PACKAGE_HAS_UDEV
+
+And the BR2_PACKAGE_HAS_UDEV dependency.
+
+>  	depends on BR2_USE_MMU
+> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+> index bc08044..52cc7a6 100644
+> --- a/package/modem-manager/modem-manager.hash
+> +++ b/package/modem-manager/modem-manager.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+> -sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
+> +sha256  d465094fc6fc173354f5a00d212049056829cc245d60a9083f3c53f86a8f90ec  ModemManager-1.7.990.tar.xz
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+> index b741acf..61672dd 100644
+> --- a/package/modem-manager/modem-manager.mk
+> +++ b/package/modem-manager/modem-manager.mk
+> @@ -4,12 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -MODEM_MANAGER_VERSION = 1.6.10
+> +MODEM_MANAGER_VERSION = 1.7.990
+
+Are you sure 1.7.990 isn't a development version ? Interestingly, their
+Git repo has no tag with this name:
+https://cgit.freedesktop.org/ModemManager/ModemManager/refs/tags. It
+has a 1.8-rc1 version. So it does feel like 1.7.x might be a
+development version. Could you double check this ?
+
+Thanks!
+
+Thomas
 -- 
-2.14.3
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
