@@ -1,10 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Feb 2018 17:54:25 +0000
-Subject: [Buildroot] [Bug 10226] Hacked By KingSkrupellos Cyberizm.Org
- Digital Security Technological Turkish Moslem Army
+Date: Fri, 16 Feb 2018 17:54:41 +0000
+Subject: [Buildroot] [Bug 10226] asdasd
 In-Reply-To: <bug-10226-163@https.bugs.busybox.net/>
 References: <bug-10226-163@https.bugs.busybox.net/>
-Message-ID: <bug-10226-163-gfJ2CUCeFO@https.bugs.busybox.net/>
+Message-ID: <bug-10226-163-R47cJ30OHj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,12 +16,10 @@ cut <nomlebirde@ziyap.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Attachment #7186|Hacked By KingSkrupellos    |asdasda
-        description|Cyberizm.Org Digital        |
+            Summary|Hacked By KingSkrupellos    |asdasd
+                   |Cyberizm.Org Digital        |
                    |Security Technological      |
                    |Turkish Moslem Army         |
-   Attachment #7186|kingskrupellos.html         |asdasd
-           filename|                            |
 
 -- 
 You are receiving this mail because:
