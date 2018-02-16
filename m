@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Feb 2018 23:46:19 +0100
-Subject: [Buildroot] [PATCH] Sets LD_LIBRARY_PATH inside
- toolchain-wrapper.
-In-Reply-To: <20180216221845.13337-1-daniel.serpell@gmail.com>
-References: <20180216221845.13337-1-daniel.serpell@gmail.com>
-Message-ID: <20180216234619.3b1815a6@windsurf.lan>
+Date: Fri, 16 Feb 2018 23:51:35 +0100
+Subject: [Buildroot] [PATCH 1/1] fs/cpio: add option to manually specify
+ file list
+In-Reply-To: <20171026191627.18949-2-sconnor@lynx.com>
+References: <Multiple root filesystems for single kernel/toolchain>
+ <20171026191627.18949-1-sconnor@lynx.com>
+ <20171026191627.18949-2-sconnor@lynx.com>
+Message-ID: <20180216235135.248cc872@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +15,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 16 Feb 2018 19:18:45 -0300, Daniel Serpell wrote:
-> Setting the host library path in the toolchain wrapper allows moving the
-> host toolchain folder to a new path, as some of the tools depends on
-> buildroot provided libraries.
+On Thu, 26 Oct 2017 12:16:27 -0700, Seamus Connor wrote:
+> For some systems it may be desireable to have an initramfs that is
+> smaller than the full root filesystem. This commit adds support for
+> creating an initramfs based on a manually specified set of files. It is
+> up to the user to define a sensible set of files. This file list could
+> either be statically created, or it could be created as the result of a
+> pre-fs hook script.
 > 
-> Signed-off-by: Daniel Serpell <daniel.serpell@gmail.com>
+> Signed-off-by: Seamus Connor <sconnor@lynx.com>
 
-This is not needed. If you want to move around the host toolchain
-folder, run "make sdk", which prepares the host toolchain to be a
-relocatable SDK.
-
-See slide 280 of
-https://bootlin.com/doc/training/buildroot/buildroot-slides.pdf for
-more details.
-
-And yes, we should mention this in the Buildroot manual. Patches
-welcome :-)
+Considering the replies from both Yann and Arnout who were both not
+very convinced by the approach, and Arnout's idea of using a fakeroot
+script to achieve the same thing in a more flexible way, I've marked
+this patch as Rejected in our patch tracking system.
 
 Best regards,
 
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
