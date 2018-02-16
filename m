@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Feb 2018 21:53:34 +0100
-Subject: [Buildroot] [PATCH v2 2/2] modem-manager: Update to version
- 1.7.990
-In-Reply-To: <1518799091-845-2-git-send-email-jared.bents@rockwellcollins.com>
-References: <1518799091-845-1-git-send-email-jared.bents@rockwellcollins.com>
- <1518799091-845-2-git-send-email-jared.bents@rockwellcollins.com>
-Message-ID: <20180216215334.7385e898@windsurf.lan>
+Date: Fri, 16 Feb 2018 21:59:28 +0100
+Subject: [Buildroot] [RFC 0/6] Support 32-bit binaries on a 64-bit
+ architecture
+In-Reply-To: <20180216064557.d6zfemlr7c2zj4x3@tarshish>
+References: <20180216005612.69593-1-mmayer@broadcom.com>
+ <20180216064557.d6zfemlr7c2zj4x3@tarshish>
+Message-ID: <20180216215928.4ada222c@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,69 +14,59 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 16 Feb 2018 10:38:11 -0600, Jared Bents wrote:
+On Fri, 16 Feb 2018 08:45:57 +0200, Baruch Siach wrote:
 
-> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-> index 8e995b4..5f1f6d5 100644
-> --- a/package/modem-manager/Config.in
-> +++ b/package/modem-manager/Config.in
-> @@ -1,12 +1,11 @@
->  config BR2_PACKAGE_MODEM_MANAGER
->  	bool "modemmanager"
-> -	depends on BR2_PACKAGE_HAS_UDEV
->  	depends on BR2_USE_WCHAR # libglib2 and gnutls
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
->  	depends on BR2_USE_MMU # dbus
->  	select BR2_PACKAGE_DBUS # runtime dependency
->  	select BR2_PACKAGE_LIBGLIB2
-> -	select BR2_PACKAGE_LIBGUDEV
-> +	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
->  	help
->  	  ModemManager is a DBus-activated daemon which controls mobile
->  	  broadband (2G/3G/4G) devices and connections.
-> @@ -28,7 +27,7 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
->  	  This option enables support for QMI protocol
->  endif
->  
-> -comment "modemmanager needs udev /dev management and a toolchain w/ wchar, threads"
-> +comment "modemmanager needs /dev management and a toolchain w/ wchar, threads"
+> On Thu, Feb 15, 2018 at 04:56:06PM -0800, Markus Mayer wrote:
+> > This series contains a proposal for supporting 32-bit libraries and
+> > binaries on a 64-bit platform.
+> > 
+> > There are some limitations and prerequisites as to the scope this has
+> > been tested.
+> > 
+> > - It has only been tested on ARM/ARM64.
+> > - It has only been tested with an external toolchain
+> >   (https://github.com/Broadcom/stbgcc-6.3/releases).
+> > - It requires that the Aarch64 compiler be compiled with "multi-lib"
+> >   enabled. This ensures that the sysroot doesn't contain a lib64 ->
+> >   lib symlink. Instead, lib and lib64 are separate directories.
+> > - It has only been tested with a fairly limited number of packages.
+> >   There might be other packages that don't correctly pass --libdir,
+> >   similar to bzip2 as mentioned below.  
+> 
+> There is one thing I am missing here. AFAICS, this series does not add support 
+> for building 32-bit libraries in addition to their 64-bit versions. So the 
+> 32-bit binaries that are to run on target must have their dependencies 
+> satisfied from the toolchain provided libraries. Is that correct?
 
-The "/dev management and" part should be removed entirely.
+Yes, indeed, I'm interested in understanding that part as well. It
+seems like the assumption is that the external toolchain has a 32-bit
+sysroot, and only the libraries from this sysroot are necessary.
 
->  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
->  		!BR2_PACKAGE_HAS_UDEV
+This feels very limited/restricted to very specific use cases and
+therefore not very usable in a broader context.
 
-And the BR2_PACKAGE_HAS_UDEV dependency.
+And extending that to building packages is really difficult with
+Buildroot:
 
->  	depends on BR2_USE_MMU
-> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-> index bc08044..52cc7a6 100644
-> --- a/package/modem-manager/modem-manager.hash
-> +++ b/package/modem-manager/modem-manager.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
-> +sha256  d465094fc6fc173354f5a00d212049056829cc245d60a9083f3c53f86a8f90ec  ModemManager-1.7.990.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index b741acf..61672dd 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -4,12 +4,12 @@
->  #
->  ################################################################################
->  
-> -MODEM_MANAGER_VERSION = 1.6.10
-> +MODEM_MANAGER_VERSION = 1.7.990
+ (1) Kconfig has no way to easily allow to select for each and every
+     package whether it should be built 32-bit, 64-bit or both.
 
-Are you sure 1.7.990 isn't a development version ? Interestingly, their
-Git repo has no tag with this name:
-https://cgit.freedesktop.org/ModemManager/ModemManager/refs/tags. It
-has a 1.8-rc1 version. So it does feel like 1.7.x might be a
-development version. Could you double check this ?
+ (2) Our package infrastructure is entirely based on the fact that a
+     given package is built only once. So if you assume that you
+     solved problem (1) by adding gazillions of Config.in options to
+     each and every package, there is still no way the zlib package
+     will be built two times, once 32-bit and 64-bit. No without major
+     changes to the package infrastructure.
 
-Thanks!
+So supporting multilib has already been discussed several times, but
+nobody ever came up with a proposal that could reasonably solve
+problems (1) and (2). Unfortunately, unless there are some proposals to
+solve those problems, I don't think we want to have some very limited
+and highly specific multilib support, that only works with external
+toolchains and that only works for 32-bit libraries provided by the
+external toolchain.
+
+Best regards,
 
 Thomas
 -- 
