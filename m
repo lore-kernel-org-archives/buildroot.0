@@ -1,117 +1,82 @@
 From: Markus Mayer <mmayer@broadcom.com>
-Date: Thu, 15 Feb 2018 16:56:08 -0800
-Subject: [Buildroot] [RFC 2/6] system/Config.in: add configuration options
- for 32-bit library support
+Date: Thu, 15 Feb 2018 16:56:09 -0800
+Subject: [Buildroot] [RFC 3/6] core: system and toolchain: 32-bit run-time
+ support on 64-bit platform
 In-Reply-To: <20180216005612.69593-1-mmayer@broadcom.com>
 References: <20180216005612.69593-1-mmayer@broadcom.com>
-Message-ID: <20180216005612.69593-3-mmayer@broadcom.com>
+Message-ID: <20180216005612.69593-4-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to support 32-bit shared libraries in a 64-bit root file
-system, we need several configuration options that let us tell
-buildroot which libraries to put where.
+Set up library symlinks only if we don't want to support 32-bit
+libraries on 64-bit platforms.
 
-Specifically, we introduce the following:
-
-BR2_ROOTFS_LIB_DIR
-------------------
-
-Tells buildroot where to put the main system libraries. On 32-bit
-setups, this will mean 32-bit libraries. On 64-bit setups, this
-setting will apply to 64-bit libraries. Typical values for
-BR2_ROOTFS_LIB_DIR are "lib", "lib32" or "lib64".
-
-The default value for 32-bit setups is "lib". For 64-bit setups it is
-"lib64".
-
-BR2_ROOTFS_LIB32_DIR
---------------------
-
-This tells buildroot where to put 32-bit libraries on a 64-bit system.
-Typical values for BR2_ROOTFS_LIB32_DIR are "lib" or "lib32". The
-default value is "lib".
-
-On 32-bit setups, this variable is not available. On 64-bit systems
-with 32-bit support disabled, this variable will not be used.
-
-BR2_ROOTFS_RUNTIME32
---------------------
-
-Tells buildroot whether it should install 32-bit shared libraries into
-a 64-bit root file system. If set to false, the root file system will
-not be able to support 32-bit binaries.
-
-This variable is not available on 32-bit setups.
-
-BR2_ROOTFS_RUNTIME32_PATH
--------------------------
-
-Points to the sys-root of a 32-bit toolchain for the current 64-bit
-architecture (i.e. an ARM sys-root on AArch64 or MIPS32 on MIPS64).
-
-This path is used to copy all 32-bit shared libraries from the 32-bit
-sys-root into the buildroot staging area. From there, they will be
-included into the root file system. Care is taken that 32-bit libraries
-will not interfere with 64-bit libraries already in staging.
-
-We need the ability to specify a separate sys-root for 32-bit, because
-the 64-bit sys-root may not include 32-bit libraries.
-
-This variable is not available on 32-bit setups.
+We cannot set up sym-links such as "lib64" -> "lib" if we want to
+support 32-bit binaries on a 64-bit platform. Instead, we need to keep
+32-bit and 64-bit libraries in separate directories, so we must skip
+generating sym-links that would prevent this.
 
 Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 ---
- system/Config.in | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ system/system.mk                                       | 11 ++++++++++-
+ toolchain/toolchain-external/pkg-toolchain-external.mk |  6 ++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index d48cf8d8c4ed..1e9415ae6f6d 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -24,6 +24,40 @@ config BR2_ROOTFS_SKELETON_CUSTOM
+diff --git a/system/system.mk b/system/system.mk
+index ca6bf1388f39..e0d45356fe66 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -55,6 +55,14 @@ define SYSTEM_RSYNC
+ 		$(1)/ $(2)/
+ endef
  
- endchoice
++ifeq ($(BR2_ROOTFS_RUNTIME32),y)
++
++define SYSTEM_LIB_SYMLINK
++	@echo "SYSTEM_LIB_SYMLINK: nothing to do"
++endef
++
++else
++
+ # Make a symlink lib32->lib or lib64->lib as appropriate.
+ # MIPS64/n32 requires lib32 even though it's a 64-bit arch.
+ # $(1): base dir (either staging or target)
+@@ -68,7 +76,8 @@ define SYSTEM_LIB_SYMLINK
+ 	ln -snf lib $(1)/lib32
+ 	ln -snf lib $(1)/usr/lib32
+ endef
+-endif
++endif # BR2_ARCH_IS_64
++endif # BR2_ROOTFS_RUNTIME32
  
-+config BR2_ROOTFS_LIB_DIR
-+	string "Name of system library directories (e.g. lib or lib64)"
-+	default "lib64" if BR2_ARCH_IS_64
-+	default "lib"
-+	help
-+	  The name of the directories where system libraries live. This will
-+	  most often be "lib", "lib32" or "lib64". This name will be used in
-+	  the root directory (e.g. /lib64) as well as the /usr directory (e.g.
-+	  /usr/lib64).
-+
-+if BR2_ARCH_IS_64
-+
-+config BR2_ROOTFS_LIB32_DIR
-+	string "Name of directory for 32-bit libraries (e.g. lib or lib32)"
-+	default "lib"
-+	help
-+	  The name of the directories where 32-bit libraries live. This will
-+	  most often be "lib" or "lib32". This name will be used in the root
-+	  directory (e.g. /lib) as well as the /usr directory (e.g. /usr/lib).
-+
-+config BR2_ROOTFS_RUNTIME32
-+	bool "Install 32-bit runtime on 64-bit system"
-+	help
-+	  Install 32-bit libraries and the 32-bit shared library loader on a
-+	  64-bit system, so it is possible to execute 32-bit applications.
-+
-+config BR2_ROOTFS_RUNTIME32_PATH
-+	string "Path to the 32-bit run-time"
-+	help
-+	  Specifies the path to the 32-bit run-time that should be copied into
-+	  the root file system.
-+
+ SYSTEM_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+ SYSTEM_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 3bf9fac4121c..d7cf97d170ca 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -448,6 +448,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+ 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
+ endef
+ 
++ifeq ($(BR2_ROOTFS_RUNTIME32),)
+ # Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
+ # Note: the skeleton package additionally creates lib32->lib or lib64->lib
+ # (as appropriate)
+@@ -462,6 +463,11 @@ create_lib_symlinks = \
+ 		ln -snf $${relpath}lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+ 	fi
+ 
++else
++create_lib_symlinks = \
++	@echo "BR2_ROOTFS_RUNTIME32 is set, skipping lib symlinks creation"
 +endif
 +
- if BR2_ROOTFS_SKELETON_CUSTOM
- 
- config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+ define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
+ 	$(call create_lib_symlinks,$(STAGING_DIR))
+ endef
 -- 
 2.7.4
