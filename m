@@ -1,43 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 Feb 2018 10:15:10 +0100
-Subject: [Buildroot] Build error for lz4 package on x86-64 (buildroot
- 2017.02.10)
-In-Reply-To: <CAKH+9mwNZHORzcWssYX3fKeRCke7YN9xNPwZ4AMH9B-UZhmO-g@mail.gmail.com>
- (Tjeerd Bakker's message of "Fri, 16 Feb 2018 09:17:12 +0100")
-References: <CAKH+9mwNZHORzcWssYX3fKeRCke7YN9xNPwZ4AMH9B-UZhmO-g@mail.gmail.com>
-Message-ID: <87inaxl2ht.fsf@dell.be.48ers.dk>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 16 Feb 2018 10:20:27 +0100
+Subject: [Buildroot] [PATCH 1/2] sunxi-mali-driver-mainline: new package
+In-Reply-To: <87mv09lw85.fsf@dell.be.48ers.dk>
+References: <1511648569-18855-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <87lgfum0aq.fsf@dell.be.48ers.dk>
+ <6f81dc33-b3a2-223e-1628-aed8a2e1e747@micronovasrl.com>
+ <87vaexlxld.fsf@dell.be.48ers.dk>
+ <979834e4-a338-525b-c7fd-1241c72127fb@micronovasrl.com>
+ <87mv09lw85.fsf@dell.be.48ers.dk>
+Message-ID: <59e456bb-cc6d-d209-0853-c53a8eec7a85@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Tjeerd" == Tjeerd Bakker <tjeerd.bakker38@gmail.com> writes:
+Hi,
 
- > Hi all,
- > Since the latest LTS release 2017.02.10, lz4 fails to build on x86-64, it
- > gives an include error for gnu/stubs-32.h. This is caused by commit
- > https://git.buildroot.org/buildroot/commit/?id=
- > 6f1c11f79a64387c1f1749550804f8aae0cfa7a7,
- > which causes lz4 to try to build 32 bit binaries because of the "all" make
- > target in the LZ4_BUILD_CMDS. Replacing the "all" target with "lib
- > lz4programs" fixes this. (Actually, this excludes the 'm32' target in
- > programs/Makefile).
+Il 15/02/2018 23:32, Peter Korsgaard ha scritto:
+>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+> 
+>   > Hi,
+>   > Il 15/02/2018 23:03, Peter Korsgaard ha scritto:
+>   >>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+>   >>
+>   >> Hi,
+>   >>
+>   >> > Thank you very much for helping me on this,
+>   >> > it was not so easy as first package to me.
+>   >>
+>   >> You are welcome, thank you for contributing!
+>   >>
+>   >> As you perhaps noticed, I've also bumped the sunxi-mali-mainline-driver
+>   >> version for 4.15 support:
+>   >>
+>   >> https://git.busybox.net/buildroot/commit/?h=next&id=1d339809d61aeed2911291830581f643596a2e5c
+> 
+>   > Yes, I've seen, I'm almost trying to rebuild.
+>   > I've seen you use quilt before calling build.sh script.
+>   > But build.sh should call it by itself.
+> 
+> No, I'm NOT using quilt. quilt is not a required dependency for
+> Buildroot (and we don't have a host-quilt package), so I'm tweaking
+> build.sh to use our apply-patches.sh script like we use to apply our
+> patches instead of quilt.
 
-Thanks for the heads up. Looking at the history, this is because that
-commit was backported to 2017.02.x, but not the commit bumping the lz4
-version to 1.7.5.
+Would it make sense to add host-quilt package?
 
-Looking at the r131 makefiles, it looks like the lz4programs target
-doesn't build lz4c, which was the reason for the change - So perhaps a
-better solution is to simply bump the lz4 version to 1.7.5?
+> 
+>   > Ah, one question, you figure as Author because you've reworked heavily
+>   > the patch, right? (and it seems more than right to me)
+>   > Or was it a mistake?
+> 
+> Ups, that was mistake. I wanted to keep you authorship for the 2
+> patches, but me for the version bump - But apparently git ends up
+> changing the authorship when you squash commits which I did to apply the
+> various fixups - Sorry about that!
+> 
 
- > I'm new to buildroot development. Should I create a patch in Patchwork, or
- > a pull request in Github?
-
-We do not use github pull requests, so please send patches with
-git-send-email to the mailing list (where they will be picked up by
-patchwork) - Thanks!
 
 -- 
-Bye, Peter Korsgaard
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
