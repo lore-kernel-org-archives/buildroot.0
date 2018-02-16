@@ -1,57 +1,36 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Fri, 16 Feb 2018 09:42:42 +0000
-Subject: [Buildroot] [PATCH 0/4] llvm for mesa3d
-In-Reply-To: <20180216083606.6472-1-valentin.korenblit@smile.fr>
-References: <20180216083606.6472-1-valentin.korenblit@smile.fr>
-Message-ID: <0d3785ce-032b-330c-d7ff-fb92bcc07f1d@carallon.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 Feb 2018 13:26:14 +0100
+Subject: [Buildroot] [PATCH 1/2] sunxi-mali-driver-mainline: new package
+In-Reply-To: <59e456bb-cc6d-d209-0853-c53a8eec7a85@micronovasrl.com> (Giulio
+ Benetti's message of "Fri, 16 Feb 2018 10:20:27 +0100")
+References: <1511648569-18855-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <87lgfum0aq.fsf@dell.be.48ers.dk>
+ <6f81dc33-b3a2-223e-1628-aed8a2e1e747@micronovasrl.com>
+ <87vaexlxld.fsf@dell.be.48ers.dk>
+ <979834e4-a338-525b-c7fd-1241c72127fb@micronovasrl.com>
+ <87mv09lw85.fsf@dell.be.48ers.dk>
+ <59e456bb-cc6d-d209-0853-c53a8eec7a85@micronovasrl.com>
+Message-ID: <87efllktnd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/02/2018 08:36, Valentin Korenblit wrote:
-> Hello all,
-> 
-> This series provides LLVM support for Mesa3d, enabling
-> llvmpipe software rasterizer.
-> 
-> It must be considered that it does not provide a full LLVM
-> installation for the host, only the necessary components to
-> cross-compile LLVM for the target. It will install all target
-> components as libLLVM.so.
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-Hi Valentin,
+Hi,
 
-As it happens I've just been updating my patches for llvm as I added it 
-to get radeonsi gallium working in mesa3d. My patches are much messier 
-than your and hence I've never tried to upstream anything.
+ >> No, I'm NOT using quilt. quilt is not a required dependency for
+ >> Buildroot (and we don't have a host-quilt package), so I'm tweaking
+ >> build.sh to use our apply-patches.sh script like we use to apply our
+ >> patches instead of quilt.
 
-A couple of overall questions:
+ > Would it make sense to add host-quilt package?
 
-Have you only added host-llvm because of llvm-tblgen and llvm-config? 
-llvm will try to build native versions of those for you but I had 
-problems with llvm-tblgen and so had to go to a host package like you. 
-However I only built those two tools with:
-
-HOST_LLVM_MAKE_OPTS = llvm-tblgen llvm-config
-
-It makes the build smaller and faster and it means you don't need to 
-care about almost all of the host conf options.
-
-
-My other question is about AMDGPU support, you seem to have mixed this 
-up into a number of your patches not just number 3. What are you trying 
-to do here, add an option to build amdgpu as well as the target arch? In 
-my case I wanted to be able to build for only amdgpu and not the target 
-arch as this is what radeonsi needs.
-
-Regards
-Will
+Well, we could - But as it is fairly simple to patch build.sh to use
+apply-patches.sh and no other packages currently needs it I decided not
+to do so yet.
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Engineering Manager                      Office Tel: +44 (0)20 7471 9424
-Carallon Ltd, International House, 7 High Street, Ealing, London  W5 5DB
-------------------------------------------------------------------------
+Bye, Peter Korsgaard
