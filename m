@@ -1,82 +1,62 @@
 From: Markus Mayer <mmayer@broadcom.com>
-Date: Thu, 15 Feb 2018 16:56:09 -0800
-Subject: [Buildroot] [RFC 3/6] core: system and toolchain: 32-bit run-time
- support on 64-bit platform
-In-Reply-To: <20180216005612.69593-1-mmayer@broadcom.com>
-References: <20180216005612.69593-1-mmayer@broadcom.com>
-Message-ID: <20180216005612.69593-4-mmayer@broadcom.com>
+Date: Thu, 15 Feb 2018 17:15:05 -0800
+Subject: [Buildroot] aarch64 + armhf multiarch support?
+In-Reply-To: <CAGt4E5uPcFe=vwjnJU9XY_JeYawDQ0pEXt_3HGRSMXixkK=cAQ@mail.gmail.com>
+References: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
+ <trinity-566065ed-72d1-4d19-9ae3-ab3368c01d3a-1518087937117@3c-app-mailcom-bs16>
+ <E10BD61C-1C84-4039-A741-331FC3C8B961@jens-maus.de>
+ <trinity-ad8db11c-f541-454e-8440-6c47520cc02f-1518089812434@3c-app-mailcom-bs15>
+ <8A656331-7273-4C87-9E60-F62570C60828@jens-maus.de>
+ <trinity-b580d83a-4026-4b4f-991c-2bd4db9d4f2f-1518091664400@3c-app-mailcom-bs13>
+ <58733ED8-7525-4945-8665-6309CD838F3B@jens-maus.de>
+ <trinity-508f433b-7a26-4c85-b97a-466528c8249f-1518179364228@3c-app-mailcom-bs05>
+ <D8068D8E-77EA-42AA-A4FC-5A35BA5ABDBD@jens-maus.de>
+ <CAGt4E5uxjDVhkxrneDbP4ip_fVT11DhduKsiiXLbENKnSB9huw@mail.gmail.com>
+ <2FCF28DB-9039-45DD-9C48-A806BF0E63BE@jens-maus.de>
+ <trinity-2838266b-ace7-400f-b269-42570dde54c2-1518262499968@3c-app-mailcom-bs15>
+ <32D57CAA-56CA-4828-A157-67B03F040224@jens-maus.de>
+ <5FDFFC51-FC11-461F-85F4-70E43911ED82@jens-maus.de>
+ <CAGt4E5uPcFe=vwjnJU9XY_JeYawDQ0pEXt_3HGRSMXixkK=cAQ@mail.gmail.com>
+Message-ID: <CAGt4E5t9MTxHaBjPne1ExOQJMrFSGn_Dn1-vrnRSeyXuOU2EVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set up library symlinks only if we don't want to support 32-bit
-libraries on 64-bit platforms.
+On 12 February 2018 at 17:37, Markus Mayer <mmayer@broadcom.com> wrote:
+> On 12 February 2018 at 07:49, Jens Maus <mail@jens-maus.de> wrote:
+>> Hi Markus,
+>>
+>>> Am 10.02.2018 um 12:56 schrieb Jens Maus <mail@jens-maus.de>:
+>>>
+>>> Hi Dagg,
+>>>
+>>>> Am 10.02.2018 um 12:35 schrieb daggs <daggs@gmx.com>:
+>>>>
+>>>> if you are not locked upon buildroot env, take a look at https://www.armbian.com/odroid-c2/
+>>>> from what I can understand it will allow you to run 32bit applications on an 64 bit env.
+>>>
+>>> Thanks for the hint. But as I am happily maintaining a Smart Home platform (raspberrymatic.de) which is based on buildroot I really need to find a way in buildroot to support multiarch uses like I pointed out. And I really hope that Markus can point me in the rught direction how he actually implemented this himself. If possible, I could then potentially adapt his patch for Integration in mainline buildroot.
+>>
+>> Would you please be so kind and elaborating a bit more how you actually implemented 32bit armhf support in your aarch64 buildroot environment so that I can try to mimic this on my own buildroot environment.
+>>
+>> thanks in advance.
+>
+> Sorry, holiday today in British Columbia. I was out and about. I'll
+> send the changes as RFC patches tomorrow.
 
-We cannot set up sym-links such as "lib64" -> "lib" if we want to
-support 32-bit binaries on a 64-bit platform. Instead, we need to keep
-32-bit and 64-bit libraries in separate directories, so we must skip
-generating sym-links that would prevent this.
+I send the changes as patch series that can be found here:
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
----
- system/system.mk                                       | 11 ++++++++++-
- toolchain/toolchain-external/pkg-toolchain-external.mk |  6 ++++++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+http://lists.busybox.net/pipermail/buildroot/2018-February/213913.html
 
-diff --git a/system/system.mk b/system/system.mk
-index ca6bf1388f39..e0d45356fe66 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -55,6 +55,14 @@ define SYSTEM_RSYNC
- 		$(1)/ $(2)/
- endef
- 
-+ifeq ($(BR2_ROOTFS_RUNTIME32),y)
-+
-+define SYSTEM_LIB_SYMLINK
-+	@echo "SYSTEM_LIB_SYMLINK: nothing to do"
-+endef
-+
-+else
-+
- # Make a symlink lib32->lib or lib64->lib as appropriate.
- # MIPS64/n32 requires lib32 even though it's a 64-bit arch.
- # $(1): base dir (either staging or target)
-@@ -68,7 +76,8 @@ define SYSTEM_LIB_SYMLINK
- 	ln -snf lib $(1)/lib32
- 	ln -snf lib $(1)/usr/lib32
- endef
--endif
-+endif # BR2_ARCH_IS_64
-+endif # BR2_ROOTFS_RUNTIME32
- 
- SYSTEM_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
- SYSTEM_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 3bf9fac4121c..d7cf97d170ca 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -448,6 +448,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
- 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
- endef
- 
-+ifeq ($(BR2_ROOTFS_RUNTIME32),)
- # Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
- # Note: the skeleton package additionally creates lib32->lib or lib64->lib
- # (as appropriate)
-@@ -462,6 +463,11 @@ create_lib_symlinks = \
- 		ln -snf $${relpath}lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
- 	fi
- 
-+else
-+create_lib_symlinks = \
-+	@echo "BR2_ROOTFS_RUNTIME32 is set, skipping lib symlinks creation"
-+endif
-+
- define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
- 	$(call create_lib_symlinks,$(STAGING_DIR))
- endef
--- 
-2.7.4
+> Regards,
+> -Markus
+>
+>> jens
+>> --
+>> Jens Maus, Dresden/Germany
+>> http://jens-maus.de/
+>>
+>> *** Content is authentic only with digital signature  ***
+>>
