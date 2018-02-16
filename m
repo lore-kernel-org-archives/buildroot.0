@@ -1,45 +1,43 @@
 From: Christian Stewart <christian@paral.in>
-Date: Fri, 16 Feb 2018 03:26:11 -0500
-Subject: [Buildroot] [PATCH 04/10] docker-engine: select static for tini and
- dumb-init
+Date: Fri, 16 Feb 2018 03:26:13 -0500
+Subject: [Buildroot] [PATCH 06/10] docker-engine: add dependency on
+ docker-proxy
 In-Reply-To: <20180216082617.12039-1-christian@paral.in>
 References: <20180216082617.12039-1-christian@paral.in>
-Message-ID: <20180216082617.12039-5-christian@paral.in>
+Message-ID: <20180216082617.12039-7-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In many cases docker-init backing processes like Tini and dumb-init must
-be static, as they are executed inside a container in an unknown
-environment. This patch selects the static compilation options on both
-packages when used as docker-init backing processes.
+docker-proxy is needed by docker-engine at runtime, and was
+previously not included. This leads to the following error
+when attempting to port-map ports to a container:
+
+  $ docker run -p 8080:8080 nginx
+  docker: Error response from daemon: driver failed programming external
+  connectivity on endpoint:
+  exec: "docker-proxy": executable file not found in $PATH.
+
+Docker expects the docker-proxy binary to exist in the PATH.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/docker-engine/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 7d9a87f7bb..47ac7f57a3 100644
+index 47ac7f57a3..05e7aca7ab 100644
 --- a/package/docker-engine/Config.in
 +++ b/package/docker-engine/Config.in
-@@ -44,6 +44,7 @@ choice
- config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
- 	bool "tini"
- 	select BR2_PACKAGE_TINI
-+	select BR2_PACKAGE_TINI_STATIC
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ 	default y
+ 	depends on BR2_USE_MMU # docker-containerd
+ 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
++	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
+ 	select BR2_PACKAGE_SQLITE # runtime dependency
  	help
- 	  Use Tini as the container init process.
- 
-@@ -52,6 +53,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
- config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
- 	bool "dumb-init"
- 	select BR2_PACKAGE_DUMB_INIT
-+	select BR2_PACKAGE_DUMB_INIT_STATIC
- 	help
- 	  Use dumb-init as the container init process.
- 
 -- 
 2.13.6
