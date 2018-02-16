@@ -1,138 +1,89 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Feb 2018 07:18:11 +0200
-Subject: [Buildroot] [PATCH 2/2] modem-manager: Update to version 1.7.990
-In-Reply-To: <1518727506-15403-2-git-send-email-jared.bents@rockwellcollins.com>
-References: <1518727506-15403-1-git-send-email-jared.bents@rockwellcollins.com>
- <1518727506-15403-2-git-send-email-jared.bents@rockwellcollins.com>
-Message-ID: <20180216051811.32vyf5bm7ntohb5p@tarshish>
+Date: Fri, 16 Feb 2018 08:45:57 +0200
+Subject: [Buildroot] [RFC 0/6] Support 32-bit binaries on a 64-bit
+ architecture
+In-Reply-To: <20180216005612.69593-1-mmayer@broadcom.com>
+References: <20180216005612.69593-1-mmayer@broadcom.com>
+Message-ID: <20180216064557.d6zfemlr7c2zj4x3@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jared,
+Hi Markus,
 
-On Thu, Feb 15, 2018 at 02:45:06PM -0600, Jared Bents wrote:
-> Update to modem manager 1.7.990 which does not require
-> udev.  Added option to build without udev but if udev
-> exists in the build, it will default to build with
-> libgudev.
+On Thu, Feb 15, 2018 at 04:56:06PM -0800, Markus Mayer wrote:
+> This series contains a proposal for supporting 32-bit libraries and
+> binaries on a 64-bit platform.
 > 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> ---
->  package/modem-manager/Config.in          | 12 +++++++++---
->  package/modem-manager/modem-manager.hash |  2 +-
->  package/modem-manager/modem-manager.mk   | 11 +++++++++--
->  3 files changed, 19 insertions(+), 6 deletions(-)
+> There are some limitations and prerequisites as to the scope this has
+> been tested.
 > 
-> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-> index 8e995b4..38e017b 100644
-> --- a/package/modem-manager/Config.in
-> +++ b/package/modem-manager/Config.in
-> @@ -1,12 +1,10 @@
->  config BR2_PACKAGE_MODEM_MANAGER
->  	bool "modemmanager"
-> -	depends on BR2_PACKAGE_HAS_UDEV
->  	depends on BR2_USE_WCHAR # libglib2 and gnutls
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
->  	depends on BR2_USE_MMU # dbus
->  	select BR2_PACKAGE_DBUS # runtime dependency
->  	select BR2_PACKAGE_LIBGLIB2
-> -	select BR2_PACKAGE_LIBGUDEV
->  	help
->  	  ModemManager is a DBus-activated daemon which controls mobile
->  	  broadband (2G/3G/4G) devices and connections.
-> @@ -26,9 +24,17 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
->  	select BR2_PACKAGE_LIBQMI
->  	help
->  	  This option enables support for QMI protocol
-> +
-> +config BR2_PACKAGE_MODEM_MANAGER_UDEV
-> +	bool "Use udev"
-> +	default y if BR2_PACKAGE_HAS_UDEV
-> +	select BR2_PACKAGE_LIBGUDEV
-> +	help
-> +	  This option allows support for builds without udev. If udev
-> +	  is not included, say N.
+> - It has only been tested on ARM/ARM64.
+> - It has only been tested with an external toolchain
+>   (https://github.com/Broadcom/stbgcc-6.3/releases).
+> - It requires that the Aarch64 compiler be compiled with "multi-lib"
+>   enabled. This ensures that the sysroot doesn't contain a lib64 ->
+>   lib symlink. Instead, lib and lib64 are separate directories.
+> - It has only been tested with a fairly limited number of packages.
+>   There might be other packages that don't correctly pass --libdir,
+>   similar to bzip2 as mentioned below.
 
-Is udev an actual run-time dependency when building with libgudev? If not, you 
-can remove this part, and make libgudev an optional dependency. See below.
-
-Even if udev is really needed, I don't think it should be user selectable. 
-Just do
-
-  select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
-
-This reduced the number of options, which is something we always try to do.
-
->  endif
->  
-> -comment "modemmanager needs udev /dev management and a toolchain w/ wchar, threads"
-> +comment "modemmanager needs /dev management and a toolchain w/ wchar, threads"
->  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
->  		!BR2_PACKAGE_HAS_UDEV
->  	depends on BR2_USE_MMU
-> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-> index bc08044..52cc7a6 100644
-> --- a/package/modem-manager/modem-manager.hash
-> +++ b/package/modem-manager/modem-manager.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
-> +sha256  d465094fc6fc173354f5a00d212049056829cc245d60a9083f3c53f86a8f90ec  ModemManager-1.7.990.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index b741acf..3015b00 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -4,12 +4,12 @@
->  #
->  ################################################################################
->  
-> -MODEM_MANAGER_VERSION = 1.6.10
-> +MODEM_MANAGER_VERSION = 1.7.990
-
-Looks like a beta release. Any reason you need this specific release?
-
->  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
->  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
->  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
->  MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
-> -MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2 libgudev
-> +MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2
->  MODEM_MANAGER_INSTALL_STAGING = YES
->  
->  ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
-> @@ -26,6 +26,13 @@ else
->  MODEM_MANAGER_CONF_OPTS += --without-mbim
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_MODEM_MANAGER_UDEV),y)
-> +MODEM_MANAGER_DEPENDENCIES += libgudev
-> +MODEM_MANAGER_CONF_OPTS += --with-udev
-> +else
-> +MODEM_MANAGER_CONF_OPTS += --without-udev
-> +endif
-
-Something like (copied from libmbim.mk):
-
-ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-LIBMBIM_DEPENDENCIES += libgudev
-LIBMBIM_CONF_OPTS += --with-udev
-else
-LIBMBIM_CONF_OPTS += --without-udev
-endif
-
-with the needed changes.
-
-> +
->  define MODEM_MANAGER_INSTALL_INIT_SYSV
->  	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
->  		$(TARGET_DIR)/etc/init.d/S44modem-manager
+There is one thing I am missing here. AFAICS, this series does not add support 
+for building 32-bit libraries in addition to their 64-bit versions. So the 
+32-bit binaries that are to run on target must have their dependencies 
+satisfied from the toolchain provided libraries. Is that correct?
 
 baruch
+
+> The patches in this series make the following changes, in this order:
+> 
+> - ensure that check-bin-arch allows Aarch32 binaries on Aarch64
+> - introduce some new BR2 configuration variables (primarily for the
+>   32-bit sysroot location on the host and where system libraries live
+>   by default on the target)
+> - tell the Buildroot core not to create lib32 or lib64 symlink when
+>   32-bit support is enabled
+> - tell the Buildroot core to copy the 32-bit sysroot when 32-bit support
+>   is enabled
+> - introduce the $(LIBDIR) variable to the bzip2 package, so we can tell
+>   it that libbz2.so should go in /usr/lib64 when that is desired
+> - modify the package core to pass /usr/lib (or /usr/lib64) as the library
+>   location for the system
+> 
+> The result is that all 64-bit shared libraries should be installed into
+> /usr/lib64. The 32-bit libraries are copied from the 32-bit sysroot on
+> the host into /usr/lib.
+> 
+> I am quite certain this submission will only be a first step, but it does
+> look like there are others who are faced with the same issue.
+> 
+> Markus Mayer (6):
+>   support/scripts/check-bin-arch: improve architecture check
+>   system/Config.in: add configuration options for 32-bit library support
+>   core: system and toolchain: 32-bit run-time support on 64-bit platform
+>   core/pkg-toolchain-external: copy external 32-bit libraries to staging
+>   bzip2: introduce make variable $(LIBDIR)
+>   package: use BR2_ROOTFS_LIB_DIR for all libraries we use
+> 
+>  package/bzip2/0003-add-libdir-to-makefile.patch    | 36 ++++++++++++++++++++++
+>  .../bzip2/0004-add-libdir-to-makefile-libbz2.patch | 31 +++++++++++++++++++
+>  package/bzip2/bzip2.mk                             |  4 ++-
+>  package/dmalloc/dmalloc.mk                         |  7 +++--
+>  package/e2fsprogs/e2fsprogs.mk                     |  2 ++
+>  package/libzlib/libzlib.mk                         |  3 +-
+>  package/linux-tools/linux-tool-cpupower.mk.in      |  7 ++++-
+>  package/pciutils/pciutils.mk                       |  2 ++
+>  package/pkg-autotools.mk                           |  1 +
+>  package/readline/readline.mk                       |  2 +-
+>  support/scripts/check-bin-arch                     | 15 +++++++++
+>  system/Config.in                                   | 34 ++++++++++++++++++++
+>  system/system.mk                                   | 11 ++++++-
+>  .../toolchain-external/pkg-toolchain-external.mk   | 13 +++++++-
+>  15 files changed, 161 insertions(+), 10 deletions(-)
+>  create mode 100644 package/bzip2/0003-add-libdir-to-makefile.patch
+>  create mode 100644 package/bzip2/0004-add-libdir-to-makefile-libbz2.patch
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
