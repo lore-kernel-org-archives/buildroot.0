@@ -1,62 +1,102 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Thu, 15 Feb 2018 17:15:05 -0800
-Subject: [Buildroot] aarch64 + armhf multiarch support?
-In-Reply-To: <CAGt4E5uPcFe=vwjnJU9XY_JeYawDQ0pEXt_3HGRSMXixkK=cAQ@mail.gmail.com>
-References: <8EB2320D-F586-45FA-A9F4-F49D7FD5DD5D@jens-maus.de>
- <trinity-566065ed-72d1-4d19-9ae3-ab3368c01d3a-1518087937117@3c-app-mailcom-bs16>
- <E10BD61C-1C84-4039-A741-331FC3C8B961@jens-maus.de>
- <trinity-ad8db11c-f541-454e-8440-6c47520cc02f-1518089812434@3c-app-mailcom-bs15>
- <8A656331-7273-4C87-9E60-F62570C60828@jens-maus.de>
- <trinity-b580d83a-4026-4b4f-991c-2bd4db9d4f2f-1518091664400@3c-app-mailcom-bs13>
- <58733ED8-7525-4945-8665-6309CD838F3B@jens-maus.de>
- <trinity-508f433b-7a26-4c85-b97a-466528c8249f-1518179364228@3c-app-mailcom-bs05>
- <D8068D8E-77EA-42AA-A4FC-5A35BA5ABDBD@jens-maus.de>
- <CAGt4E5uxjDVhkxrneDbP4ip_fVT11DhduKsiiXLbENKnSB9huw@mail.gmail.com>
- <2FCF28DB-9039-45DD-9C48-A806BF0E63BE@jens-maus.de>
- <trinity-2838266b-ace7-400f-b269-42570dde54c2-1518262499968@3c-app-mailcom-bs15>
- <32D57CAA-56CA-4828-A157-67B03F040224@jens-maus.de>
- <5FDFFC51-FC11-461F-85F4-70E43911ED82@jens-maus.de>
- <CAGt4E5uPcFe=vwjnJU9XY_JeYawDQ0pEXt_3HGRSMXixkK=cAQ@mail.gmail.com>
-Message-ID: <CAGt4E5t9MTxHaBjPne1ExOQJMrFSGn_Dn1-vrnRSeyXuOU2EVw@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 15 Feb 2018 23:16:32 -0200
+Subject: [Buildroot] [RFC] testing: add python-crossbar tests
+References: <CAGm1_ku_EsWrA-qCxkgg6xe-HkdVLB=x_10BN2fNYDAcKk7eng@mail.gmail.com>
+Message-ID: <5a8630f052ad0_2a8f13e76e012768@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12 February 2018 at 17:37, Markus Mayer <mmayer@broadcom.com> wrote:
-> On 12 February 2018 at 07:49, Jens Maus <mail@jens-maus.de> wrote:
->> Hi Markus,
->>
->>> Am 10.02.2018 um 12:56 schrieb Jens Maus <mail@jens-maus.de>:
->>>
->>> Hi Dagg,
->>>
->>>> Am 10.02.2018 um 12:35 schrieb daggs <daggs@gmx.com>:
->>>>
->>>> if you are not locked upon buildroot env, take a look at https://www.armbian.com/odroid-c2/
->>>> from what I can understand it will allow you to run 32bit applications on an 64 bit env.
->>>
->>> Thanks for the hint. But as I am happily maintaining a Smart Home platform (raspberrymatic.de) which is based on buildroot I really need to find a way in buildroot to support multiarch uses like I pointed out. And I really hope that Markus can point me in the rught direction how he actually implemented this himself. If possible, I could then potentially adapt his patch for Integration in mainline buildroot.
->>
->> Would you please be so kind and elaborating a bit more how you actually implemented 32bit armhf support in your aarch64 buildroot environment so that I can try to mimic this on my own buildroot environment.
->>
->> thanks in advance.
->
-> Sorry, holiday today in British Columbia. I was out and about. I'll
-> send the changes as RFC patches tomorrow.
+Hello,
 
-I send the changes as patch series that can be found here:
+On Thu, Feb 15, 2018 at 11:41 AM, Yegor Yefremov wrote:
 
-http://lists.busybox.net/pipermail/buildroot/2018-February/213913.html
+[snip]
+> 
+> I've tried this test locally, but it always timeouts. Even if I
+> specify an hour as a timeout.
 
-> Regards,
-> -Markus
->
->> jens
->> --
->> Jens Maus, Dresden/Germany
->> http://jens-maus.de/
->>
->> *** Content is authentic only with digital signature  ***
->>
+I confirm that here, both test cases fail by timeout, so it should not be
+related to the host.
+
+> 
+> If a dependency is missing (like python-bitstring), then the test also
+> fails with an expected message, but if all dependencies are met, the
+> test doesn't return.
+> 
+> Any idea?
+
+I have no idea of what causes it or how to fix it.
+
+However I can give you some ideas how to try to debug using the test infra.
+I don't know how far you already explored these options, so please forgive me if
+I say only obvious things.
+
+1) run the test case locally using -k
+2) look at the first line of the -run.log to get the qemu command
+3) execute the qemu command and get to the VM prompt
+4) check that the import of the module is not broken:
+    buildroot login: root
+    # python
+    Python 3.6.3 (default, Feb 15 2018, 20:46:37) 
+    [GCC 4.9.4] on linux
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import crossbar
+    >>> crossbar.__version__
+    '17.6.1-3'
+    >>> 
+5) check a command that should print the usage
+    # python -m crossbar othervalue
+    Traceback (most recent call last):
+      File "usr/lib/python3.6/site-packages/watchdog/observers/inotify_c.py", line 46, in _load_libc
+      File "/tmp/tmp2/o/TestPythonPy3Crossbar/target/usr/lib/python3.6/ctypes/__init__.py", line 348, in __init__
+    OSError: File not found
+   (omitted lines)
+
+   NOTICE the host path (/tmp/tmp2 is my buildroot dir) being displayed inside
+   the target.
+
+6) ctrl+C to kill the VM
+7) enter the <test-output>/TestPythonPy3Crossbar dir - this is the build
+   directory, so you can do what we know well, for example, enter menuconfig,
+   select 'strace', and call make (or do a clean build)
+8) run the qemu command again with the new image
+    # strace python -m crossbar version
+   Wait a few minutes for many messages and look at them. These ones called my
+   attention, maybe unrelated to the problem:
+   (omitted lines)
+    open("/lib//libc.so", O_RDONLY)         = -1 ENOENT (No such file or directory)
+    open("/usrlib//libc.so", O_RDONLY)      = -1 ENOENT (No such file or directory)
+    open("/lib/libc.so", O_RDONLY)          = -1 ENOENT (No such file or directory)
+    open("/lib/libc.so", O_RDONLY)          = -1 ENOENT (No such file or directory)
+    open("/usr/lib/libc.so", O_RDONLY)      = -1 ENOENT (No such file or directory)
+    open("/usr/X11R6/lib/libc.so", O_RDONLY) = -1 ENOENT (No such file or directory)
+    open("/lib//libc.so.6", O_RDONLY)       = -1 ENOENT (No such file or directory)
+    open("/usrlib//libc.so.6", O_RDONLY)    = -1 ENOENT (No such file or directory)
+    open("/lib/libc.so.6", O_RDONLY)        = -1 ENOENT (No such file or directory)
+    open("/lib/libc.so.6", O_RDONLY)        = -1 ENOENT (No such file or directory)
+    open("/usr/lib/libc.so.6", O_RDONLY)    = -1 ENOENT (No such file or directory)
+    open("/usr/X11R6/lib/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
+    write(2, "Traceback (most recent call last"..., 35Traceback (most recent call last):
+   (omitted lines)
+   See also:
+    # find / -name 'libc.so*'
+    /lib/libc.so.1
+    /lib/libc.so.0
+    # ls /lib
+    ld-uClibc-1.0.25.so  libatomic.so.1       libc.so.1
+    ld-uClibc.so.0       libatomic.so.1.1.0   libgcc_s.so.1
+    ld-uClibc.so.1       libc.so.0            libuClibc-1.0.25.so
+9) repeat steps 6 to 8 with your favorite debug tools
+
+So... (wild guesses!)
+Could it be related to not finding libc?
+Could it be related to paths from host leaked to the target?
+
+Also, did you try to rebase the test case to the previous package version just
+to know if the behavior is new?
+
+Regards,
+Ricardo
