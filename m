@@ -1,71 +1,68 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 16 Feb 2018 14:32:00 +0100
-Subject: [Buildroot] [PATCH 1/2] python-watchdog: add support for uClibc
-Message-ID: <1518787921-32089-1-git-send-email-yegorslists@googlemail.com>
+From: Valentin KORENBLIT <valentin.korenblit@smile.fr>
+Date: Fri, 16 Feb 2018 15:31:24 +0100
+Subject: [Buildroot] [PATCH 0/4] llvm for mesa3d
+In-Reply-To: <0d3785ce-032b-330c-d7ff-fb92bcc07f1d@carallon.com>
+References: <20180216083606.6472-1-valentin.korenblit@smile.fr>
+ <0d3785ce-032b-330c-d7ff-fb92bcc07f1d@carallon.com>
+Message-ID: <5fb32f7a-205d-07a9-07bd-f8110259ea2a@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi WIll,
 
-This patch fixes uClibc detection.
+On 16/02/2018 10:42, Will Wagner wrote:
+> On 16/02/2018 08:36, Valentin Korenblit wrote:
+>> Hello all,
+>>
+>> This series provides LLVM support for Mesa3d, enabling
+>> llvmpipe software rasterizer.
+>>
+>> It must be considered that it does not provide a full LLVM
+>> installation for the host, only the necessary components to
+>> cross-compile LLVM for the target. It will install all target
+>> components as libLLVM.so.
+>
+> Hi Valentin,
+>
+> As it happens I've just been updating my patches for llvm as I added 
+> it to get radeonsi gallium working in mesa3d. My patches are much 
+> messier than your and hence I've never tried to upstream anything.
+>
+> A couple of overall questions:
+>
+> Have you only added host-llvm because of llvm-tblgen and llvm-config? 
+> llvm will try to build native versions of those for you but I had 
+> problems with llvm-tblgen and so had to go to a host package like you. 
+> However I only built those two tools with:
+>
+> HOST_LLVM_MAKE_OPTS = llvm-tblgen llvm-config
+>
+> It makes the build smaller and faster and it means you don't need to 
+> care about almost all of the host conf options.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- ...dd-a-workaround-to-support-uClibc-library.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/python-watchdog/0001-Add-a-workaround-to-support-uClibc-library.patch
+Correct, host-llvm installs only llvm-tblgen and llvm-config and I agree 
+with you that we could use that option for this case.
+>
+> My other question is about AMDGPU support, you seem to have mixed this 
+> up into a number of your patches not just number 3. What are you 
+> trying to do here, add an option to build amdgpu as well as the target 
+> arch? In my case I wanted to be able to build for only amdgpu and not 
+> the target arch as this is what radeonsi needs.
+You're right, I should move:
 
-diff --git a/package/python-watchdog/0001-Add-a-workaround-to-support-uClibc-library.patch b/package/python-watchdog/0001-Add-a-workaround-to-support-uClibc-library.patch
-new file mode 100644
-index 0000000..c21e6cd
---- /dev/null
-+++ b/package/python-watchdog/0001-Add-a-workaround-to-support-uClibc-library.patch
-@@ -0,0 +1,43 @@
-+From c3b3c4581b25d7e62f5c2ce1484133229d5e657a Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Fri, 16 Feb 2018 13:26:23 +0100
-+Subject: [PATCH] Add a workaround to support uClibc library
-+
-+uClibc based systems provide only libc.so.0 and libc.so.1
-+symlinks.
-+
-+So try to find libc.so.0 if neither libc.so nor libc.so.6
-+could be found.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ src/watchdog/observers/inotify_c.py | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+
-+diff --git a/src/watchdog/observers/inotify_c.py b/src/watchdog/observers/inotify_c.py
-+index 5f208b6..0dc7b50 100644
-+--- a/src/watchdog/observers/inotify_c.py
-++++ b/src/watchdog/observers/inotify_c.py
-+@@ -45,7 +45,19 @@ def _load_libc():
-+     try:
-+         return ctypes.CDLL('libc.so')
-+     except (OSError, IOError):
-++        pass
-++
-++    try:
-+         return ctypes.CDLL('libc.so.6')
-++    except (OSError, IOError):
-++        pass
-++
-++    # uClibc
-++    try:
-++        return ctypes.CDLL('libc.so.0')
-++    except (OSError, IOError) as err:
-++        raise err
-++
-+ 
-+ libc = _load_libc()
-+ 
-+-- 
-+2.1.4
-+
--- 
-2.1.4
+ifeq ($(BR2_PACKAGE_LLVM_TARGET_ARCH_AMDGPU),y)
+HOST_LLVM_TARGET_TO_BUILD = "$(HOST_LLVM_TARGET_ARCH);AMDGPU"
+endif
+
+to patch 3. Yes, by using this option I limit the targets to build to 
+'target_arch + amdgpu' because by default it is set to 'all'.
+>
+> Regards
+> Will
+>
+Thanks and regards,
+
+Valent?n
