@@ -1,102 +1,140 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 15 Feb 2018 23:16:32 -0200
-Subject: [Buildroot] [RFC] testing: add python-crossbar tests
-References: <CAGm1_ku_EsWrA-qCxkgg6xe-HkdVLB=x_10BN2fNYDAcKk7eng@mail.gmail.com>
-Message-ID: <5a8630f052ad0_2a8f13e76e012768@ultri3.mail>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 16 Feb 2018 07:18:11 +0200
+Subject: [Buildroot] [PATCH 2/2] modem-manager: Update to version 1.7.990
+In-Reply-To: <1518727506-15403-2-git-send-email-jared.bents@rockwellcollins.com>
+References: <1518727506-15403-1-git-send-email-jared.bents@rockwellcollins.com>
+ <1518727506-15403-2-git-send-email-jared.bents@rockwellcollins.com>
+Message-ID: <20180216051811.32vyf5bm7ntohb5p@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Jared,
 
-On Thu, Feb 15, 2018 at 11:41 AM, Yegor Yefremov wrote:
-
-[snip]
+On Thu, Feb 15, 2018 at 02:45:06PM -0600, Jared Bents wrote:
+> Update to modem manager 1.7.990 which does not require
+> udev.  Added option to build without udev but if udev
+> exists in the build, it will default to build with
+> libgudev.
 > 
-> I've tried this test locally, but it always timeouts. Even if I
-> specify an hour as a timeout.
-
-I confirm that here, both test cases fail by timeout, so it should not be
-related to the host.
-
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+> ---
+>  package/modem-manager/Config.in          | 12 +++++++++---
+>  package/modem-manager/modem-manager.hash |  2 +-
+>  package/modem-manager/modem-manager.mk   | 11 +++++++++--
+>  3 files changed, 19 insertions(+), 6 deletions(-)
 > 
-> If a dependency is missing (like python-bitstring), then the test also
-> fails with an expected message, but if all dependencies are met, the
-> test doesn't return.
-> 
-> Any idea?
+> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+> index 8e995b4..38e017b 100644
+> --- a/package/modem-manager/Config.in
+> +++ b/package/modem-manager/Config.in
+> @@ -1,12 +1,10 @@
+>  config BR2_PACKAGE_MODEM_MANAGER
+>  	bool "modemmanager"
+> -	depends on BR2_PACKAGE_HAS_UDEV
+>  	depends on BR2_USE_WCHAR # libglib2 and gnutls
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+>  	depends on BR2_USE_MMU # dbus
+>  	select BR2_PACKAGE_DBUS # runtime dependency
+>  	select BR2_PACKAGE_LIBGLIB2
+> -	select BR2_PACKAGE_LIBGUDEV
+>  	help
+>  	  ModemManager is a DBus-activated daemon which controls mobile
+>  	  broadband (2G/3G/4G) devices and connections.
+> @@ -26,9 +24,17 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+>  	select BR2_PACKAGE_LIBQMI
+>  	help
+>  	  This option enables support for QMI protocol
+> +
+> +config BR2_PACKAGE_MODEM_MANAGER_UDEV
+> +	bool "Use udev"
+> +	default y if BR2_PACKAGE_HAS_UDEV
+> +	select BR2_PACKAGE_LIBGUDEV
+> +	help
+> +	  This option allows support for builds without udev. If udev
+> +	  is not included, say N.
 
-I have no idea of what causes it or how to fix it.
+Is udev an actual run-time dependency when building with libgudev? If not, you 
+can remove this part, and make libgudev an optional dependency. See below.
 
-However I can give you some ideas how to try to debug using the test infra.
-I don't know how far you already explored these options, so please forgive me if
-I say only obvious things.
+Even if udev is really needed, I don't think it should be user selectable. 
+Just do
 
-1) run the test case locally using -k
-2) look at the first line of the -run.log to get the qemu command
-3) execute the qemu command and get to the VM prompt
-4) check that the import of the module is not broken:
-    buildroot login: root
-    # python
-    Python 3.6.3 (default, Feb 15 2018, 20:46:37) 
-    [GCC 4.9.4] on linux
-    Type "help", "copyright", "credits" or "license" for more information.
-    >>> import crossbar
-    >>> crossbar.__version__
-    '17.6.1-3'
-    >>> 
-5) check a command that should print the usage
-    # python -m crossbar othervalue
-    Traceback (most recent call last):
-      File "usr/lib/python3.6/site-packages/watchdog/observers/inotify_c.py", line 46, in _load_libc
-      File "/tmp/tmp2/o/TestPythonPy3Crossbar/target/usr/lib/python3.6/ctypes/__init__.py", line 348, in __init__
-    OSError: File not found
-   (omitted lines)
+  select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
 
-   NOTICE the host path (/tmp/tmp2 is my buildroot dir) being displayed inside
-   the target.
+This reduced the number of options, which is something we always try to do.
 
-6) ctrl+C to kill the VM
-7) enter the <test-output>/TestPythonPy3Crossbar dir - this is the build
-   directory, so you can do what we know well, for example, enter menuconfig,
-   select 'strace', and call make (or do a clean build)
-8) run the qemu command again with the new image
-    # strace python -m crossbar version
-   Wait a few minutes for many messages and look at them. These ones called my
-   attention, maybe unrelated to the problem:
-   (omitted lines)
-    open("/lib//libc.so", O_RDONLY)         = -1 ENOENT (No such file or directory)
-    open("/usrlib//libc.so", O_RDONLY)      = -1 ENOENT (No such file or directory)
-    open("/lib/libc.so", O_RDONLY)          = -1 ENOENT (No such file or directory)
-    open("/lib/libc.so", O_RDONLY)          = -1 ENOENT (No such file or directory)
-    open("/usr/lib/libc.so", O_RDONLY)      = -1 ENOENT (No such file or directory)
-    open("/usr/X11R6/lib/libc.so", O_RDONLY) = -1 ENOENT (No such file or directory)
-    open("/lib//libc.so.6", O_RDONLY)       = -1 ENOENT (No such file or directory)
-    open("/usrlib//libc.so.6", O_RDONLY)    = -1 ENOENT (No such file or directory)
-    open("/lib/libc.so.6", O_RDONLY)        = -1 ENOENT (No such file or directory)
-    open("/lib/libc.so.6", O_RDONLY)        = -1 ENOENT (No such file or directory)
-    open("/usr/lib/libc.so.6", O_RDONLY)    = -1 ENOENT (No such file or directory)
-    open("/usr/X11R6/lib/libc.so.6", O_RDONLY) = -1 ENOENT (No such file or directory)
-    write(2, "Traceback (most recent call last"..., 35Traceback (most recent call last):
-   (omitted lines)
-   See also:
-    # find / -name 'libc.so*'
-    /lib/libc.so.1
-    /lib/libc.so.0
-    # ls /lib
-    ld-uClibc-1.0.25.so  libatomic.so.1       libc.so.1
-    ld-uClibc.so.0       libatomic.so.1.1.0   libgcc_s.so.1
-    ld-uClibc.so.1       libc.so.0            libuClibc-1.0.25.so
-9) repeat steps 6 to 8 with your favorite debug tools
+>  endif
+>  
+> -comment "modemmanager needs udev /dev management and a toolchain w/ wchar, threads"
+> +comment "modemmanager needs /dev management and a toolchain w/ wchar, threads"
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+>  		!BR2_PACKAGE_HAS_UDEV
+>  	depends on BR2_USE_MMU
+> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+> index bc08044..52cc7a6 100644
+> --- a/package/modem-manager/modem-manager.hash
+> +++ b/package/modem-manager/modem-manager.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+> -sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
+> +sha256  d465094fc6fc173354f5a00d212049056829cc245d60a9083f3c53f86a8f90ec  ModemManager-1.7.990.tar.xz
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+> index b741acf..3015b00 100644
+> --- a/package/modem-manager/modem-manager.mk
+> +++ b/package/modem-manager/modem-manager.mk
+> @@ -4,12 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -MODEM_MANAGER_VERSION = 1.6.10
+> +MODEM_MANAGER_VERSION = 1.7.990
 
-So... (wild guesses!)
-Could it be related to not finding libc?
-Could it be related to paths from host leaked to the target?
+Looks like a beta release. Any reason you need this specific release?
 
-Also, did you try to rebase the test case to the previous package version just
-to know if the behavior is new?
+>  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+>  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+>  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+>  MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
+> -MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2 libgudev
+> +MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2
+>  MODEM_MANAGER_INSTALL_STAGING = YES
+>  
+>  ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
+> @@ -26,6 +26,13 @@ else
+>  MODEM_MANAGER_CONF_OPTS += --without-mbim
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_MODEM_MANAGER_UDEV),y)
+> +MODEM_MANAGER_DEPENDENCIES += libgudev
+> +MODEM_MANAGER_CONF_OPTS += --with-udev
+> +else
+> +MODEM_MANAGER_CONF_OPTS += --without-udev
+> +endif
 
-Regards,
-Ricardo
+Something like (copied from libmbim.mk):
+
+ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+LIBMBIM_DEPENDENCIES += libgudev
+LIBMBIM_CONF_OPTS += --with-udev
+else
+LIBMBIM_CONF_OPTS += --without-udev
+endif
+
+with the needed changes.
+
+> +
+>  define MODEM_MANAGER_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 0755 -D package/modem-manager/S44modem-manager \
+>  		$(TARGET_DIR)/etc/init.d/S44modem-manager
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
