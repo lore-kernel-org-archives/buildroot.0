@@ -1,41 +1,153 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 17 Feb 2018 12:06:15 -0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14,
- 15}.x series
-In-Reply-To: <1518876375-4400-1-git-send-email-festevam@gmail.com>
-References: <1518876375-4400-1-git-send-email-festevam@gmail.com>
-Message-ID: <1518876375-4400-2-git-send-email-festevam@gmail.com>
+From: John Keeping <john@metanate.com>
+Date: Sat, 17 Feb 2018 18:06:03 +0000
+Subject: [Buildroot] [PATCH v3] systemd: switch to en_US.UTF-8 locale
+ when building
+In-Reply-To: <20180212213400.15061-1-julius@kriukas.lt>
+References: <20180131213629.4385-1-julius@kriukas.lt>
+ <20180212213400.15061-1-julius@kriukas.lt>
+Message-ID: <20180217180603.6df91068.john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Mon, 12 Feb 2018 23:34:00 +0200, Julius Kriukas wrote:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3d8920b..4762494 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.98"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.115"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.81"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.116"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.82"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.19"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.3"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.20"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.4"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-2.7.4
+> When BR2_REPRODUCIBLE is enabled or host uses non UTF-8 capable locale
+> building systemd fails with an error:
+> 
+> [1/1080] Generating systemd.bg.catalog with a meson_exe.py custom command.
+> FAILED: catalog/systemd.bg.catalog
+> /buildroot/output/host/bin/python3 /buildroot/output/host/bin/meson --internal exe /buildroot/output/build/systemd-236/build/meson-private/meson_exe_sed_232a0623cc7ce2cd67ec72ed784b76307102ed76.dat
+> Warning: You are using 'ANSI_X3.4-1968' which is not a Unicode-compatible locale.
+> You might see errors if you use UTF-8 strings as filenames, as strings, or as file contents.
+> Please switch to a UTF-8 locale for your platform.
+> ...
+> UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 1079: ordinal not in range(128)
+> package/pkg-generic.mk:247: recipe for target '/buildroot/output/build/systemd-236/.stamp_built' failed
+> make: *** [/buildroot/output/build/systemd-236/.stamp_built] Error 1
+> 
+> This patch changes default host system locale from C to en_US.UTF-8 when
+> building systemd package to fix this issue. It also introduces
+> BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that checks if this locale is available on
+> the host system. If locale is not available error message is show and build
+> process is stopped.
+> 
+> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
+
+Tested-by: John Keeping <john@metanate.com>
+
+And, FWIW, with the indentation in Config.in fixed,
+
+Reviewed-by: John Keeping <john@metanate.com>
+
+> ---
+> Changes v1 -> v2:
+>   - Added BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that is selected by
+>     BR2_REPRODUCIBLE.
+>   - Extended support/dependencies/dependencies.sh to check for
+>     en_US.UTF-8 locale availability if BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
+>     is set.
+> 
+> Changes v2 -> v3:
+>   - Always select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE by systemd package.
+>   - Do not select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE by BR2_REPRODUCIBLE.
+>   - Keep global locale set to C if BR2_REPRODUCIBLE=y.
+>   - Use 'grep -q' instead of '> /dev/null' in dependencies.sh script.
+> ---
+>  Config.in                            |  5 +++++
+>  package/systemd/Config.in            |  1 +
+>  package/systemd/systemd.mk           | 10 ++++++----
+>  support/dependencies/dependencies.sh | 13 +++++++++++++
+>  4 files changed, 25 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index 0002df5176..8d471dfb2e 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -94,6 +94,11 @@ config BR2_HOSTARCH_NEEDS_IA32_COMPILER
+>  config BR2_NEEDS_HOST_UTF8_LOCALE
+>  	bool
+>  
+> +# Hidden boolean selected by packages that explicitly need en_US.UTF-8 locale
+> +# to be available on host system.
+> +config BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
+> +	bool
+> +
+>  source "arch/Config.in"
+>  
+>  menu "Build options"
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 661f40dee4..742b3f1f1d 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -27,6 +27,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+>  	select BR2_PACKAGE_KMOD_TOOLS
+>  	select BR2_TARGET_TZ_INFO
+> +        select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
+
+This should use TAB for indentation.
+
+>  	help
+>  	  systemd is a system and service manager for Linux,
+>  	  compatible with SysV and LSB init scripts. systemd provides
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 1c31ebb34c..58798f32df 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -385,23 +385,25 @@ endef
+>  
+>  SYSTEMD_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+>  
+> +SYSTEMD_ENV = $(TARGET_MAKE_ENV) LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+> +
+>  define SYSTEMD_CONFIGURE_CMDS
+>  	rm -rf $(@D)/build
+>  	mkdir -p $(@D)/build
+> -	$(TARGET_MAKE_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
+> +	$(SYSTEMD_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
+>  endef
+>  
+>  define SYSTEMD_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
+> +	$(SYSTEMD_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
+>  endef
+>  
+>  define SYSTEMD_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+> +	$(SYSTEMD_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+>  		-C $(@D)/build install
+>  endef
+>  
+>  define SYSTEMD_INSTALL_STAGING_CMDS
+> -	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+> +	$(SYSTEMD_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+>  		-C $(@D)/build install
+>  endef
+>  
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 1804e85508..881f07008c 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -207,6 +207,19 @@ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+>  	fi
+>  fi
+>  
+> +if grep -q ^BR2_NEEDS_HOST_EN_US_UTF8_LOCALE=y $BR2_CONFIG; then
+> +	if ! which locale > /dev/null ; then
+> +		echo
+> +		echo "You need locale support on your build machine"
+> +		exit 1 ;
+> +	fi
+> +	if ! LC_ALL=en_US.UTF-8 locale -c charmap | grep -q '^UTF-8$'; then
+> +		echo
+> +		echo "You need en_US.UTF-8 locale suppport on the host system"
+> +		exit 1 ;
+> +	fi
+> +fi
+> +
+>  if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
+>  	check_prog_host "java"
+>  	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
