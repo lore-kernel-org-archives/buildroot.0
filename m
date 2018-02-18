@@ -1,54 +1,44 @@
-From: Erik Larsson <karl.erik.larsson@gmail.com>
-Date: Sun, 18 Feb 2018 14:55:24 +0100
-Subject: [Buildroot] [PATCH 2/3] imx-atf: new package
-In-Reply-To: <20180218134603.j25zh3qxb2l6dt34@sapphire.tkos.co.il>
-References: <1518960511-4823-1-git-send-email-karl.erik.larsson@gmail.com>
- <1518960511-4823-3-git-send-email-karl.erik.larsson@gmail.com>
- <20180218134603.j25zh3qxb2l6dt34@sapphire.tkos.co.il>
-Message-ID: <CAPP7BN3gnngU6w9jKHsvQp_=AAUEabDQdRc7ScsU_99OYHD+Aw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 18 Feb 2018 15:30:12 +0100
+Subject: [Buildroot] [PATCH] Sets LD_LIBRARY_PATH inside
+ toolchain-wrapper.
+In-Reply-To: <CANepG=PL=4t10iC=GUi2F5BkEUH27XyCpMAFfk2g3hDQwESgcw@mail.gmail.com>
+References: <20180216221845.13337-1-daniel.serpell@gmail.com>
+ <20180216234619.3b1815a6@windsurf.lan>
+ <CANepG=MckvkieMHtLfR2fsrH1yJzvjUwDiritOk-YvP5-ghE8g@mail.gmail.com>
+ <CANepG=PL=4t10iC=GUi2F5BkEUH27XyCpMAFfk2g3hDQwESgcw@mail.gmail.com>
+Message-ID: <20180218153012.58e0b0e1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hello,
 
-2018-02-18 14:46 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
+On Fri, 16 Feb 2018 21:43:36 -0300, Daniel Serpell wrote:
 
-> Hi Erik,
->
-> On Sun, Feb 18, 2018 at 02:28:30PM +0100, Erik Larsson wrote:
-> > Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
-> > ---
-> >  package/freescale-imx/Config.in            |  4 ++++
-> >  package/freescale-imx/imx-atf/Config.in    |  5 +++++
-> >  package/freescale-imx/imx-atf/imx-atf.hash |  3 +++
-> >  package/freescale-imx/imx-atf/imx-atf.mk   | 23 +++++++++++++++++++++++
-> >  4 files changed, 35 insertions(+)
-> >  create mode 100644 package/freescale-imx/imx-atf/Config.in
-> >  create mode 100644 package/freescale-imx/imx-atf/imx-atf.hash
-> >  create mode 100644 package/freescale-imx/imx-atf/imx-atf.mk
->
-> We have an arm-trusted-firmware already at boot/arm-trusted-firmware/. Any
-> reason you can't use that?
->
+> I see that you are using patchelf to make RPATH relative inside host binaries,
+> is there any reason to not run that always, or at least in the "make toolchain"
+> target?
 
-Sorry to say, but I completely missed that there already where an
-ATF-package. After a first glance there shouldn't be any reason not to use
-boot/arm-trusted-firmware. I will look into this.
+Because there's no real reason to do that. During the build, the
+toolchain and other host tools are not moving, so keeping the absolute
+RPATH is fine. It's only when you want to move the toolchain/SDK around
+that the rpath needs to be adjusted to be relative RPATH.
 
+> I'm not very good at writing documentation, perhaps the attached patch
+> is enough.
 
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--
-> Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180218/06346e60/attachment.html>
+Patch looks good. Could you send it with "git send-email", and change
+the commit title to something like:
+
+ docs/manual: add documentation for the "make sdk" target
+
+Thanks!
+
+Thoas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
