@@ -1,45 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Feb 2018 21:07:15 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] lz4: version v1.7.5
-Message-ID: <20180218200916.24A8086110@busybox.osuosl.org>
+Date: Sun, 18 Feb 2018 21:56:01 +0100
+Subject: [Buildroot] [PATCH] glibc: security bump to the latest commit
+ on 2.26 branch
+In-Reply-To: <20180215230100.7869-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 16 Feb 2018 00:01:00 +0100")
+References: <20180215230100.7869-1-peter@korsgaard.com>
+Message-ID: <87606ukof2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c849300796b72b58a78514ada88d496f8cab8c70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Jeroen Roovers <jer@airfi.aero>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 5408fc925d06d5225a6ba7d18f71fc97cc3a813a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lz4/lz4.hash | 2 +-
- package/lz4/lz4.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fixes the following security issues according to NEWS:
+ > CVE-2018-6485: An integer overflow in the implementation of the
+ > posix_memalign in memalign functions in the GNU C Library (aka
 
-diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
-index 1281284697..5048503f80 100644
---- a/package/lz4/lz4.hash
-+++ b/package/lz4/lz4.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 9d4d00614d6b9dec3114b33d1224b6262b99ace24434c53487a0c8fd0b18cfed  lz4-r131.tar.gz
-+sha256 0190cacd63022ccb86f44fa5041dc6c3804407ad61550ca21c382827319e7e7e  lz4-v1.7.5.tar.gz
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index b0d45474cd..292bf4a27b 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LZ4_VERSION = r131
--LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
-+LZ4_VERSION = v1.7.5
-+LZ4_SITE = $(call github,lz4,lz4,$(LZ4_VERSION))
- LZ4_INSTALL_STAGING = YES
- LZ4_LICENSE = BSD-2c (library), GPLv2+ (programs)
- LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
+ > CVE-2018-6551: The malloc implementation in the GNU C Library (aka glibc or
+ > libc6), from version 2.24 to 2.26 on powerpc, and only in version 2.26 on
+ > i386, did not properly handle malloc calls with arguments close to SIZE_MAX
+ > and could return a pointer to a heap region that is smaller than requested,
+ > eventually leading to heap corruption.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
