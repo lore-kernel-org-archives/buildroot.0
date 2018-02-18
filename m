@@ -1,134 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Feb 2018 21:56:19 +0100
-Subject: [Buildroot] [git commit] libvorbis: add upstream security fixes
-Message-ID: <20180218210246.C2A0B86835@busybox.osuosl.org>
+From: Pierre Ducroquet <pinaraf@pinaraf.info>
+Date: Sun, 18 Feb 2018 22:50:39 +0100
+Subject: [Buildroot] [PATCH 1/1] wpa_supplicant - Specify that old and new
+ dbus are incompatible
+Message-ID: <20180218215039.4811-1-pinaraf@pinaraf.info>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc9282ae8c346c0b46fb249008696f6e9bc35f2c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Building wpa-supplicant with support for both DBus interfaces
+generates broken .service files.
+Marking old and new DBus incompatible in Config.in makes this
+conflict clear.
 
-Fixes the following security issues:
-
-CVE-2017-14632: Libvorbis 1.3.5 allows Remote Code Execution upon freeing
-uninitialized memory in the function vorbis_analysis_headerout() in info.c
-when vi->channels<=0, a similar issue to Mozilla bug 550184.
-
-CVE-2017-14633: In libvorbis 1.3.5, an out-of-bounds array read
-vulnerability exists in the function mapping0_forward() in mapping0.c, which
-may lead to DoS when operating on a crafted audio file with
-vorbis_analysis().
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
 ---
- ...633-Don-t-allow-for-more-than-256-channel.patch | 36 ++++++++++++++
- ...632-vorbis_analysis_header_out-Don-t-clea.patch | 56 ++++++++++++++++++++++
- 2 files changed, 92 insertions(+)
+ package/wpa_supplicant/Config.in | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvorbis/0001-CVE-2017-14633-Don-t-allow-for-more-than-256-channel.patch b/package/libvorbis/0001-CVE-2017-14633-Don-t-allow-for-more-than-256-channel.patch
-new file mode 100644
-index 0000000000..416aa66ddf
---- /dev/null
-+++ b/package/libvorbis/0001-CVE-2017-14633-Don-t-allow-for-more-than-256-channel.patch
-@@ -0,0 +1,36 @@
-+From a79ec216cd119069c68b8f3542c6a425a74ab993 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-+Date: Tue, 31 Oct 2017 18:32:46 +0100
-+Subject: [PATCH] CVE-2017-14633: Don't allow for more than 256 channels
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 58a074fae8..500df354a2 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -100,20 +100,33 @@ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+ 	help
+ 	  Install wpa_passphrase command line utility.
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_DBUS
++	bool "Enable support for DBus control interface"
++	depends on BR2_PACKAGE_DBUS
++	help
++	 Enable support for DBus control interface
 +
-+Otherwise
++if BR2_PACKAGE_WPA_SUPPLICANT_DBUS
 +
-+ for(i=0;i<vi->channels;i++){
-+      /* the encoder setup assumes that all the modes used by any
-+         specific bitrate tweaking use the same floor */
-+      int submap=info->chmuxlist[i];
++choice
++	prompt "DBus interface"
 +
-+overreads later in mapping0_forward since chmuxlist is a fixed array of
-+256 elements max.
+ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD
+-	bool "Enable support for old DBus control interface"
++	bool "Use old DBus control interface"
+ 	depends on BR2_PACKAGE_DBUS
+ 	help
+ 	  Enable support for old DBus control interface
+ 	  (fi.epitest.hostap.WPASupplicant).
+ 
+ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW
+-	bool "Enable support for new DBus control interface"
++	bool "Use new DBus control interface"
+ 	depends on BR2_PACKAGE_DBUS
+ 	help
+ 	  Enable support for new DBus control interface
+ 	  (fi.w1.wpa_supplicant1).
+ 
++endchoice
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ lib/info.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
+ 	bool "Introspection support"
+ 	depends on BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW
+@@ -121,3 +134,5 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
+ 	  Add introspection support for new DBus control interface.
+ 
+ endif
 +
-+diff --git a/lib/info.c b/lib/info.c
-+index fe759ed..7bc4ea4 100644
-+--- a/lib/info.c
-++++ b/lib/info.c
-+@@ -588,7 +588,7 @@ int vorbis_analysis_headerout(vorbis_dsp_state *v,
-+   oggpack_buffer opb;
-+   private_state *b=v->backend_state;
-+ 
-+-  if(!b||vi->channels<=0){
-++  if(!b||vi->channels<=0||vi->channels>256){
-+     ret=OV_EFAULT;
-+     goto err_out;
-+   }
-+-- 
-+2.11.0
-+
-diff --git a/package/libvorbis/0002-CVE-2017-14632-vorbis_analysis_header_out-Don-t-clea.patch b/package/libvorbis/0002-CVE-2017-14632-vorbis_analysis_header_out-Don-t-clea.patch
-new file mode 100644
-index 0000000000..ffb4cc92f2
---- /dev/null
-+++ b/package/libvorbis/0002-CVE-2017-14632-vorbis_analysis_header_out-Don-t-clea.patch
-@@ -0,0 +1,56 @@
-+From c1c2831fc7306d5fbd7bc800324efd12b28d327f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-+Date: Wed, 15 Nov 2017 18:22:59 +0100
-+Subject: [PATCH] CVE-2017-14632: vorbis_analysis_header_out: Don't clear opb
-+ if not initialized
-+
-+If the number of channels is not within the allowed range
-+we call oggback_writeclear altough it's not initialized yet.
-+
-+This fixes
-+
-+    =23371== Invalid free() / delete / delete[] / realloc()
-+    ==23371==    at 0x4C2CE1B: free (vg_replace_malloc.c:530)
-+    ==23371==    by 0x829CA31: oggpack_writeclear (in /usr/lib/x86_64-linux-gnu/libogg.so.0.8.2)
-+    ==23371==    by 0x84B96EE: vorbis_analysis_headerout (info.c:652)
-+    ==23371==    by 0x9FBCBCC: ??? (in /usr/lib/x86_64-linux-gnu/sox/libsox_fmt_vorbis.so)
-+    ==23371==    by 0x4E524F1: ??? (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
-+    ==23371==    by 0x4E52CCA: sox_open_write (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
-+    ==23371==    by 0x10D82A: open_output_file (sox.c:1556)
-+    ==23371==    by 0x10D82A: process (sox.c:1753)
-+    ==23371==    by 0x10D82A: main (sox.c:3012)
-+    ==23371==  Address 0x68768c8 is 488 bytes inside a block of size 880 alloc'd
-+    ==23371==    at 0x4C2BB1F: malloc (vg_replace_malloc.c:298)
-+    ==23371==    by 0x4C2DE9F: realloc (vg_replace_malloc.c:785)
-+    ==23371==    by 0x4E545C2: lsx_realloc (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
-+    ==23371==    by 0x9FBC9A0: ??? (in /usr/lib/x86_64-linux-gnu/sox/libsox_fmt_vorbis.so)
-+    ==23371==    by 0x4E524F1: ??? (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
-+    ==23371==    by 0x4E52CCA: sox_open_write (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
-+    ==23371==    by 0x10D82A: open_output_file (sox.c:1556)
-+    ==23371==    by 0x10D82A: process (sox.c:1753)
-+    ==23371==    by 0x10D82A: main (sox.c:3012)
-+
-+as seen when using the testcase from CVE-2017-11333 with
-+008d23b782be09c8d75ba8190b1794abd66c7121 applied. However the error was
-+there before.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ lib/info.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/lib/info.c b/lib/info.c
-+index 7bc4ea4..8d0b2ed 100644
-+--- a/lib/info.c
-++++ b/lib/info.c
-+@@ -589,6 +589,7 @@ int vorbis_analysis_headerout(vorbis_dsp_state *v,
-+   private_state *b=v->backend_state;
-+ 
-+   if(!b||vi->channels<=0||vi->channels>256){
-++    b = NULL;
-+     ret=OV_EFAULT;
-+     goto err_out;
-+   }
-+-- 
-+2.11.0
-+
++endif
+-- 
+2.16.1
