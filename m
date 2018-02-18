@@ -1,46 +1,32 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Sun, 18 Feb 2018 19:45:08 +0100
-Subject: [Buildroot] __mcount on ARC
-Message-ID: <8e90a87a-7e64-6662-3309-ce0325bc686f@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Feb 2018 21:08:51 +0100
+Subject: [Buildroot] Build error for lz4 package on x86-64 (buildroot
+ 2017.02.10)
+In-Reply-To: <87inaxl2ht.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Fri, 16 Feb 2018 10:15:10 +0100")
+References: <CAKH+9mwNZHORzcWssYX3fKeRCke7YN9xNPwZ4AMH9B-UZhmO-g@mail.gmail.com>
+ <87inaxl2ht.fsf@dell.be.48ers.dk>
+Message-ID: <87a7w6kqlo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear All,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-I'm investigating this [1] autobuild error, where the gpsd build fails
-while profiling is enabled, due to undefined reference to `__mcount', on
-ARC arch.
+Hi,
 
-Ironically enough due to a bug in the gpsd build config the -pg flag is
-not passed to the linker only to the compiler, but after patching that
-one, the build issue remains.
-According to this thread [2] this happened earlier with ARC but other
-package, so is there anything particular about ARC regarding to
-profiling? Should we just disable the gpsd profiling option on ARC?
+ > Thanks for the heads up. Looking at the history, this is because that
+ > commit was backported to 2017.02.x, but not the commit bumping the lz4
+ > version to 1.7.5.
 
+ > Looking at the r131 makefiles, it looks like the lz4programs target
+ > doesn't build lz4c, which was the reason for the change - So perhaps a
+ > better solution is to simply bump the lz4 version to 1.7.5?
 
-
-[1]
-http://autobuild.buildroot.net/results/88870f5bf4aff557d8eac4e1cc5d3e397e607af0/
-
-[2]
-http://buildroot-busybox.2317881.n4.nabble.com/autobuild-buildroot-net-Build-results-for-2017-11-19-td180416.html
-
-
-Thanks,
+I've now cherry picked the version bump to 1.7.5 to the 2017.02.x branch
+and it will be included in the upcoming 2017.02.11 release - Thanks!
 
 -- 
-Zoltan Gyarmati
-https://zgyarmati.de
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180218/d3452e7c/attachment.asc>
+Bye, Peter Korsgaard
