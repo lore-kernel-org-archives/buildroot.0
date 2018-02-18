@@ -1,31 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Feb 2018 21:56:23 +0100
-Subject: [Buildroot] [PATCH] libvorbis: add upstream security fixes
-In-Reply-To: <20180216080955.21114-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 16 Feb 2018 09:09:55 +0100")
-References: <20180216080955.21114-1-peter@korsgaard.com>
-Message-ID: <871shikoeg.fsf@dell.be.48ers.dk>
+Date: Sun, 18 Feb 2018 21:58:55 +0100
+Subject: [Buildroot] [PATCH] libostree: bump to version 2018.2
+In-Reply-To: <20180217110401.GC20477@gmail.com> (Marcus Folkesson's message of
+ "Sat, 17 Feb 2018 12:04:01 +0100")
+References: <20180215204413.10974-1-marcus.folkesson@gmail.com>
+ <878tbulzqh.fsf@dell.be.48ers.dk> <20180217110401.GC20477@gmail.com>
+Message-ID: <87wozaj9ps.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Marcus" == Marcus Folkesson <marcus.folkesson@gmail.com> writes:
 
- > Fixes the following security issues:
- > CVE-2017-14632: Libvorbis 1.3.5 allows Remote Code Execution upon freeing
- > uninitialized memory in the function vorbis_analysis_headerout() in info.c
- > when vi->channels<=0, a similar issue to Mozilla bug 550184.
+ > Hello Peter,
+ > On Thu, Feb 15, 2018 at 10:17:10PM +0100, Peter Korsgaard wrote:
+ >> >>>>> "Marcus" == Marcus Folkesson <marcus.folkesson@gmail.com> writes:
+ >> 
+ >> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+ >> 
+ >> Does this need to go to master for the 2018.02 release? According to the
+ >> release notes it seems to be a mix of bugfixes and new features.
 
- > CVE-2017-14633: In libvorbis 1.3.5, an out-of-bounds array read
- > vulnerability exists in the function mapping0_forward() in mapping0.c, which
- > may lead to DoS when operating on a crafted audio file with
- > vorbis_analysis().
+ > I'm not sure what qualifies a bump to go to master, but sure, it does
+ > not hurt.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+master material during the stabilization phase is stuff fixing
+security/important issues, preferably without adding any new features.
 
 -- 
 Bye, Peter Korsgaard
