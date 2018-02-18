@@ -1,54 +1,134 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Feb 2018 21:55:40 +0100
-Subject: [Buildroot] [git commit] glibc: security bump to the latest commit
- on 2.26 branch
-Message-ID: <20180218210246.B2E978523D@busybox.osuosl.org>
+Date: Sun, 18 Feb 2018 21:56:19 +0100
+Subject: [Buildroot] [git commit] libvorbis: add upstream security fixes
+Message-ID: <20180218210246.C2A0B86835@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f55ab4a08ff8e02575759d58a7972824e792e657
+commit: https://git.buildroot.net/buildroot/commit/?id=cc9282ae8c346c0b46fb249008696f6e9bc35f2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues according to NEWS:
+Fixes the following security issues:
 
-CVE-2018-6485: An integer overflow in the implementation of the
-posix_memalign in memalign functions in the GNU C Library (aka
+CVE-2017-14632: Libvorbis 1.3.5 allows Remote Code Execution upon freeing
+uninitialized memory in the function vorbis_analysis_headerout() in info.c
+when vi->channels<=0, a similar issue to Mozilla bug 550184.
 
-CVE-2018-6551: The malloc implementation in the GNU C Library (aka glibc or
-libc6), from version 2.24 to 2.26 on powerpc, and only in version 2.26 on
-i386, did not properly handle malloc calls with arguments close to SIZE_MAX
-and could return a pointer to a heap region that is smaller than requested,
-eventually leading to heap corruption.
+CVE-2017-14633: In libvorbis 1.3.5, an out-of-bounds array read
+vulnerability exists in the function mapping0_forward() in mapping0.c, which
+may lead to DoS when operating on a crafted audio file with
+vorbis_analysis().
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/glibc.hash | 2 +-
- package/glibc/glibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...633-Don-t-allow-for-more-than-256-channel.patch | 36 ++++++++++++++
+ ...632-vorbis_analysis_header_out-Don-t-clea.patch | 56 ++++++++++++++++++++++
+ 2 files changed, 92 insertions(+)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 3311be665c..3dab1e1516 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated (fetched from Github)
--sha256  d0d44c2c7a46922376c08a1d45ae7bcbf9abd8f05603dd76637c8b74e6693e9e     glibc-glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8.tar.gz
-+sha256  00fbc845678a96f4acc574c4bda4be76506ecd8bafb2d08c58bfa3507625c81a     glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98.tar.gz
- # Locally calculated (fetched from Github)
- sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 9126d8725f..0351433e6a 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8
-+GLIBC_VERSION = glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+diff --git a/package/libvorbis/0001-CVE-2017-14633-Don-t-allow-for-more-than-256-channel.patch b/package/libvorbis/0001-CVE-2017-14633-Don-t-allow-for-more-than-256-channel.patch
+new file mode 100644
+index 0000000000..416aa66ddf
+--- /dev/null
++++ b/package/libvorbis/0001-CVE-2017-14633-Don-t-allow-for-more-than-256-channel.patch
+@@ -0,0 +1,36 @@
++From a79ec216cd119069c68b8f3542c6a425a74ab993 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
++Date: Tue, 31 Oct 2017 18:32:46 +0100
++Subject: [PATCH] CVE-2017-14633: Don't allow for more than 256 channels
++
++Otherwise
++
++ for(i=0;i<vi->channels;i++){
++      /* the encoder setup assumes that all the modes used by any
++         specific bitrate tweaking use the same floor */
++      int submap=info->chmuxlist[i];
++
++overreads later in mapping0_forward since chmuxlist is a fixed array of
++256 elements max.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/info.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/info.c b/lib/info.c
++index fe759ed..7bc4ea4 100644
++--- a/lib/info.c
+++++ b/lib/info.c
++@@ -588,7 +588,7 @@ int vorbis_analysis_headerout(vorbis_dsp_state *v,
++   oggpack_buffer opb;
++   private_state *b=v->backend_state;
++ 
++-  if(!b||vi->channels<=0){
+++  if(!b||vi->channels<=0||vi->channels>256){
++     ret=OV_EFAULT;
++     goto err_out;
++   }
++-- 
++2.11.0
++
+diff --git a/package/libvorbis/0002-CVE-2017-14632-vorbis_analysis_header_out-Don-t-clea.patch b/package/libvorbis/0002-CVE-2017-14632-vorbis_analysis_header_out-Don-t-clea.patch
+new file mode 100644
+index 0000000000..ffb4cc92f2
+--- /dev/null
++++ b/package/libvorbis/0002-CVE-2017-14632-vorbis_analysis_header_out-Don-t-clea.patch
+@@ -0,0 +1,56 @@
++From c1c2831fc7306d5fbd7bc800324efd12b28d327f Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
++Date: Wed, 15 Nov 2017 18:22:59 +0100
++Subject: [PATCH] CVE-2017-14632: vorbis_analysis_header_out: Don't clear opb
++ if not initialized
++
++If the number of channels is not within the allowed range
++we call oggback_writeclear altough it's not initialized yet.
++
++This fixes
++
++    =23371== Invalid free() / delete / delete[] / realloc()
++    ==23371==    at 0x4C2CE1B: free (vg_replace_malloc.c:530)
++    ==23371==    by 0x829CA31: oggpack_writeclear (in /usr/lib/x86_64-linux-gnu/libogg.so.0.8.2)
++    ==23371==    by 0x84B96EE: vorbis_analysis_headerout (info.c:652)
++    ==23371==    by 0x9FBCBCC: ??? (in /usr/lib/x86_64-linux-gnu/sox/libsox_fmt_vorbis.so)
++    ==23371==    by 0x4E524F1: ??? (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
++    ==23371==    by 0x4E52CCA: sox_open_write (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
++    ==23371==    by 0x10D82A: open_output_file (sox.c:1556)
++    ==23371==    by 0x10D82A: process (sox.c:1753)
++    ==23371==    by 0x10D82A: main (sox.c:3012)
++    ==23371==  Address 0x68768c8 is 488 bytes inside a block of size 880 alloc'd
++    ==23371==    at 0x4C2BB1F: malloc (vg_replace_malloc.c:298)
++    ==23371==    by 0x4C2DE9F: realloc (vg_replace_malloc.c:785)
++    ==23371==    by 0x4E545C2: lsx_realloc (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
++    ==23371==    by 0x9FBC9A0: ??? (in /usr/lib/x86_64-linux-gnu/sox/libsox_fmt_vorbis.so)
++    ==23371==    by 0x4E524F1: ??? (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
++    ==23371==    by 0x4E52CCA: sox_open_write (in /usr/lib/x86_64-linux-gnu/libsox.so.2.0.1)
++    ==23371==    by 0x10D82A: open_output_file (sox.c:1556)
++    ==23371==    by 0x10D82A: process (sox.c:1753)
++    ==23371==    by 0x10D82A: main (sox.c:3012)
++
++as seen when using the testcase from CVE-2017-11333 with
++008d23b782be09c8d75ba8190b1794abd66c7121 applied. However the error was
++there before.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/info.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/info.c b/lib/info.c
++index 7bc4ea4..8d0b2ed 100644
++--- a/lib/info.c
+++++ b/lib/info.c
++@@ -589,6 +589,7 @@ int vorbis_analysis_headerout(vorbis_dsp_state *v,
++   private_state *b=v->backend_state;
++ 
++   if(!b||vi->channels<=0||vi->channels>256){
+++    b = NULL;
++     ret=OV_EFAULT;
++     goto err_out;
++   }
++-- 
++2.11.0
++
