@@ -1,124 +1,359 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 Feb 2018 15:51:00 +0100
-Subject: [Buildroot] [PATCH 1/3] imx-mkimage: new package
-In-Reply-To: <1518960511-4823-2-git-send-email-karl.erik.larsson@gmail.com>
-References: <1518960511-4823-1-git-send-email-karl.erik.larsson@gmail.com>
- <1518960511-4823-2-git-send-email-karl.erik.larsson@gmail.com>
-Message-ID: <20180218155100.3e4e090f@windsurf>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 18 Feb 2018 19:21:52 +0100
+Subject: [Buildroot] [PATCH] m68k: add the real gcc bugfix from upstream
+Message-ID: <20180218182151.GA5995@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/gcc/4.9.4/0002-m68k-coldfire-pr68467.patch | 48 ++++++++++++++++++++++
+ package/gcc/4.9.4/891-fix-m68k-uclinux.patch       | 18 --------
+ package/gcc/5.5.0/0001-m68k-coldfire-pr68467.patch | 48 ++++++++++++++++++++++
+ package/gcc/5.5.0/891-fix-m68k-uclinux.patch       | 18 --------
+ package/gcc/6.4.0/0001-m68k-coldfire-pr68467.patch | 48 ++++++++++++++++++++++
+ package/gcc/6.4.0/891-fix-m68k-uclinux.patch       | 18 --------
+ package/gcc/7.3.0/0001-m68k-coldfire-pr68467.patch | 48 ++++++++++++++++++++++
+ package/gcc/7.3.0/0891-fix-m68k-uclinux.patch      | 30 --------------
+ 8 files changed, 192 insertions(+), 84 deletions(-)
+ create mode 100644 package/gcc/4.9.4/0002-m68k-coldfire-pr68467.patch
+ delete mode 100644 package/gcc/4.9.4/891-fix-m68k-uclinux.patch
+ create mode 100644 package/gcc/5.5.0/0001-m68k-coldfire-pr68467.patch
+ delete mode 100644 package/gcc/5.5.0/891-fix-m68k-uclinux.patch
+ create mode 100644 package/gcc/6.4.0/0001-m68k-coldfire-pr68467.patch
+ delete mode 100644 package/gcc/6.4.0/891-fix-m68k-uclinux.patch
+ create mode 100644 package/gcc/7.3.0/0001-m68k-coldfire-pr68467.patch
+ delete mode 100644 package/gcc/7.3.0/0891-fix-m68k-uclinux.patch
 
-Thanks for this contribution!
+diff --git a/package/gcc/4.9.4/0002-m68k-coldfire-pr68467.patch b/package/gcc/4.9.4/0002-m68k-coldfire-pr68467.patch
+new file mode 100644
+index 0000000..d701ab6
+--- /dev/null
++++ b/package/gcc/4.9.4/0002-m68k-coldfire-pr68467.patch
+@@ -0,0 +1,48 @@
++Backport from upstream, see
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-4.9.4.orig/gcc/config/m68k/m68k.c gcc-4.9.4/gcc/config/m68k/m68k.c
++--- gcc-4.9.4.orig/gcc/config/m68k/m68k.c	2014-02-27 12:10:55.000000000 +0100
+++++ gcc-4.9.4/gcc/config/m68k/m68k.c	2018-02-17 21:28:53.430538916 +0100
++@@ -166,6 +166,8 @@
++ 			      const_tree, bool);
++ static bool m68k_cannot_force_const_mem (enum machine_mode mode, rtx x);
++ static bool m68k_output_addr_const_extra (FILE *, rtx);
+++static machine_mode m68k_promote_function_mode (const_tree, machine_mode,
+++						int *, const_tree, int);
++ static void m68k_init_sync_libfuncs (void) ATTRIBUTE_UNUSED;
++ 
 
-On Sun, 18 Feb 2018 14:28:29 +0100, Erik Larsson wrote:
-> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
-> ---
->  package/Config.in.host                             |  1 +
->  .../0001-make-bl33-read-env-variables.patch        | 37 ++++++++++++++++++++++
->  package/freescale-imx/imx-mkimage/Config.in.host   |  5 +++
->  package/freescale-imx/imx-mkimage/imx-mkimage.hash |  3 ++
->  package/freescale-imx/imx-mkimage/imx-mkimage.mk   | 23 ++++++++++++++
->  5 files changed, 69 insertions(+)
->  create mode 100644 package/freescale-imx/imx-mkimage/0001-make-bl33-read-env-variables.patch
->  create mode 100644 package/freescale-imx/imx-mkimage/Config.in.host
->  create mode 100644 package/freescale-imx/imx-mkimage/imx-mkimage.hash
->  create mode 100644 package/freescale-imx/imx-mkimage/imx-mkimage.mk
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 199a8e9..b1cfa75 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -15,6 +15,7 @@ menu "Host utilities"
->  	source "package/e2fsprogs/Config.in.host"
->  	source "package/e2tools/Config.in.host"
->  	source "package/faketime/Config.in.host"
-> +	source "package/freescale-imx/imx-mkimage/Config.in.host"
++ /* Initialize the GCC target structure.  */
++@@ -308,6 +310,9 @@
++ #undef TARGET_ATOMIC_TEST_AND_SET_TRUEVAL
++ #define TARGET_ATOMIC_TEST_AND_SET_TRUEVAL 128
++ 
+++#undef TARGET_PROMOTE_FUNCTION_MODE
+++#define TARGET_PROMOTE_FUNCTION_MODE m68k_promote_function_mode
+++
++ static const struct attribute_spec m68k_attribute_table[] =
++ {
++   /* { name, min_len, max_len, decl_req, type_req, fn_type_req, handler,
++@@ -6527,4 +6532,20 @@
++ 	      == m68k_fk_interrupt_handler));
++ }
++ 
+++/* Implement TARGET_PROMOTE_FUNCTION_MODE.  */
+++
+++static machine_mode
+++m68k_promote_function_mode (const_tree type, machine_mode mode,
+++                            int *punsignedp ATTRIBUTE_UNUSED,
+++                            const_tree fntype ATTRIBUTE_UNUSED,
+++                            int for_return)
+++{
+++  /* Promote libcall arguments narrower than int to match the normal C
+++     ABI (for which promotions are handled via
+++     TARGET_PROMOTE_PROTOTYPES).  */
+++  if (type == NULL_TREE && !for_return && (mode == QImode || mode == HImode))
+++    return SImode;
+++  return mode;
+++}
+++
++ #include "gt-m68k.h"
+diff --git a/package/gcc/4.9.4/891-fix-m68k-uclinux.patch b/package/gcc/4.9.4/891-fix-m68k-uclinux.patch
+deleted file mode 100644
+index 4347642..0000000
+--- a/package/gcc/4.9.4/891-fix-m68k-uclinux.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-avoids internal compiler error while compiling linux-atomic.c
+-See here:
+-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-
+-diff -Nur gcc-4.9.3.orig/libgcc/config.host gcc-4.9.3/libgcc/config.host
+---- gcc-4.9.3.orig/libgcc/config.host	2014-03-27 16:40:31.000000000 +0100
+-+++ gcc-4.9.3/libgcc/config.host	2016-04-05 16:20:53.422809885 +0200
+-@@ -750,7 +750,7 @@
+- m68k*-*-openbsd*)
+- 	;;
+- m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
+--	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
+-+	tmake_file="$tmake_file m68k/t-floatlib"
+- 	md_unwind_header=m68k/linux-unwind.h
+- 	;;
+- m68k-*-linux*)			# Motorola m68k's running GNU/Linux
+diff --git a/package/gcc/5.5.0/0001-m68k-coldfire-pr68467.patch b/package/gcc/5.5.0/0001-m68k-coldfire-pr68467.patch
+new file mode 100644
+index 0000000..75ad536
+--- /dev/null
++++ b/package/gcc/5.5.0/0001-m68k-coldfire-pr68467.patch
+@@ -0,0 +1,48 @@
++Backport from upstream, see
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-5.5.0.orig/gcc/config/m68k/m68k.c gcc-5.5.0/gcc/config/m68k/m68k.c
++--- gcc-5.5.0.orig/gcc/config/m68k/m68k.c	2015-01-15 14:28:42.000000000 +0100
+++++ gcc-5.5.0/gcc/config/m68k/m68k.c	2018-02-17 19:34:33.146309632 +0100
++@@ -196,6 +196,8 @@
++ 			      const_tree, bool);
++ static bool m68k_cannot_force_const_mem (machine_mode mode, rtx x);
++ static bool m68k_output_addr_const_extra (FILE *, rtx);
+++static machine_mode m68k_promote_function_mode (const_tree, machine_mode,
+++						int *, const_tree, int);
++ static void m68k_init_sync_libfuncs (void) ATTRIBUTE_UNUSED;
++ 
 
-I'm not sure this package needs to be under package/freescale-imx/.
-This sub-directory was initially created to share the
-FREESCALE_IMX_SITE and FREESCALE_IMX_EXTRACT_HELPER definitions, but
-you don't use them.
++ /* Initialize the GCC target structure.  */
++@@ -338,6 +340,9 @@
++ #undef TARGET_ATOMIC_TEST_AND_SET_TRUEVAL
++ #define TARGET_ATOMIC_TEST_AND_SET_TRUEVAL 128
++ 
+++#undef TARGET_PROMOTE_FUNCTION_MODE
+++#define TARGET_PROMOTE_FUNCTION_MODE m68k_promote_function_mode
+++
++ static const struct attribute_spec m68k_attribute_table[] =
++ {
++   /* { name, min_len, max_len, decl_req, type_req, fn_type_req, handler,
++@@ -6548,4 +6553,20 @@
++ 	      == m68k_fk_interrupt_handler));
++ }
++ 
+++/* Implement TARGET_PROMOTE_FUNCTION_MODE.  */
+++
+++static machine_mode
+++m68k_promote_function_mode (const_tree type, machine_mode mode,
+++                            int *punsignedp ATTRIBUTE_UNUSED,
+++                            const_tree fntype ATTRIBUTE_UNUSED,
+++                            int for_return)
+++{
+++  /* Promote libcall arguments narrower than int to match the normal C
+++     ABI (for which promotions are handled via
+++     TARGET_PROMOTE_PROTOTYPES).  */
+++  if (type == NULL_TREE && !for_return && (mode == QImode || mode == HImode))
+++    return SImode;
+++  return mode;
+++}
+++
++ #include "gt-m68k.h"
+diff --git a/package/gcc/5.5.0/891-fix-m68k-uclinux.patch b/package/gcc/5.5.0/891-fix-m68k-uclinux.patch
+deleted file mode 100644
+index 4e186bd..0000000
+--- a/package/gcc/5.5.0/891-fix-m68k-uclinux.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-avoids internal compiler error while compiling linux-atomic.c
+-See here:
+-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-
+-diff -Nur gcc-5.3.0.orig/libgcc/config.host gcc-5.3.0/libgcc/config.host
+---- gcc-5.3.0.orig/libgcc/config.host	2015-10-01 14:01:18.000000000 +0200
+-+++ gcc-5.3.0/libgcc/config.host	2016-04-26 21:30:25.353691745 +0200
+-@@ -794,7 +794,7 @@
+- m68k*-*-openbsd*)
+- 	;;
+- m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
+--	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
+-+	tmake_file="$tmake_file m68k/t-floatlib"
+- 	md_unwind_header=m68k/linux-unwind.h
+- 	;;
+- m68k-*-linux*)			# Motorola m68k's running GNU/Linux
+diff --git a/package/gcc/6.4.0/0001-m68k-coldfire-pr68467.patch b/package/gcc/6.4.0/0001-m68k-coldfire-pr68467.patch
+new file mode 100644
+index 0000000..afc18a5
+--- /dev/null
++++ b/package/gcc/6.4.0/0001-m68k-coldfire-pr68467.patch
+@@ -0,0 +1,48 @@
++Backport from upstream, see
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-6.4.0.orig/gcc/config/m68k/m68k.c gcc-6.4.0/gcc/config/m68k/m68k.c
++--- gcc-6.4.0.orig/gcc/config/m68k/m68k.c	2016-01-04 15:30:50.652828000 +0100
+++++ gcc-6.4.0/gcc/config/m68k/m68k.c	2018-02-17 19:08:16.313168186 +0100
++@@ -180,6 +180,8 @@
++ 			      const_tree, bool);
++ static bool m68k_cannot_force_const_mem (machine_mode mode, rtx x);
++ static bool m68k_output_addr_const_extra (FILE *, rtx);
+++static machine_mode m68k_promote_function_mode (const_tree, machine_mode,
+++						int *, const_tree, int);
++ static void m68k_init_sync_libfuncs (void) ATTRIBUTE_UNUSED;
++ 
 
-> diff --git a/package/freescale-imx/imx-mkimage/0001-make-bl33-read-env-variables.patch b/package/freescale-imx/imx-mkimage/0001-make-bl33-read-env-variables.patch
-> new file mode 100644
-> index 0000000..490eb05
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-mkimage/0001-make-bl33-read-env-variables.patch
-> @@ -0,0 +1,37 @@
-> +From 5ca549356ef889286c12b4d736d9026efafb8fff Mon Sep 17 00:00:00 2001
-> +From: Erik Larsson <erik.larsson@combitech.se>
-> +Date: Mon, 29 Jan 2018 08:00:57 +0100
-> +Subject: [PATCH] Add support for overriding BL32 and BL33 not only BL31
-> +
-> +Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
-> +Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
-> +Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-
-What is the upstream status of this patch ?
-
-> diff --git a/package/freescale-imx/imx-mkimage/Config.in.host b/package/freescale-imx/imx-mkimage/Config.in.host
-> new file mode 100644
-> index 0000000..3cf0966
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-mkimage/Config.in.host
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_HOST_IMX_MKIMAGE
-> +	bool "host imx-mkimage"
-> +	help
-> +	  imx-mkimage is used to combine input images and generate
-> +	  final boot image with appropriate IVT set.
-
-We like to have a blank line, and then the URL of the upstream project
-main page. Here, https://source.codeaurora.org/external/imx/imx-mkimage
-might be enough, unless there is a better page.
-
-> diff --git a/package/freescale-imx/imx-mkimage/imx-mkimage.mk b/package/freescale-imx/imx-mkimage/imx-mkimage.mk
-> new file mode 100644
-> index 0000000..a5b1f93
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-mkimage/imx-mkimage.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# imx-mkimage
-> +#
-> +################################################################################
-> +
-> +IMX_MKIMAGE_VERSION = imx_4.9.51_imx8m_beta
-> +IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
-> +IMX_MKIMAGE_SITE_METHOD = git
-> +IMX_MKIMAGE_LICENSE = GPL-2.0
-> +IMX_MKIMAGE_LICENSE_FILES = iMX8dv/COPYING
-> +
-> +define HOST_IMX_MKIMAGE_BUILD_CMDS
-> +	$(MAKE) -C $(@D)/iMX8M -f soc.mak mkimage_imx8
-
-Why are you building just the tool in iMX8M ? There is also one in src/
-and in iMX8dv. What are the differences ? Should we build/install all
-of them ? Conditionally ?
-
-> +define HOST_IMX_MKIMAGE_INSTALL_CMDS
-> +	mkdir -p $(HOST_DIR)/bin
-
-This line is not needed... if...
-
-> +	$(INSTALL) -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin
-> +	$(INSTALL) -m 755 $(@D)/iMX8M/mkimage_fit_atf.sh $(HOST_DIR)/bin
-
-You replace those lines by:
-
-	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin/mkimage_imx8
-	$(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_fit_atf.sh $(HOST_DIR)/bin/mkimage_fit_atf.sh
-
-Best regards,
-
-Thomas
++ /* Initialize the GCC target structure.  */
++@@ -322,6 +324,9 @@
++ #undef TARGET_ATOMIC_TEST_AND_SET_TRUEVAL
++ #define TARGET_ATOMIC_TEST_AND_SET_TRUEVAL 128
++ 
+++#undef TARGET_PROMOTE_FUNCTION_MODE
+++#define TARGET_PROMOTE_FUNCTION_MODE m68k_promote_function_mode
+++
++ static const struct attribute_spec m68k_attribute_table[] =
++ {
++   /* { name, min_len, max_len, decl_req, type_req, fn_type_req, handler,
++@@ -6524,4 +6529,20 @@
++ 	      == m68k_fk_interrupt_handler));
++ }
++ 
+++/* Implement TARGET_PROMOTE_FUNCTION_MODE.  */
+++
+++static machine_mode
+++m68k_promote_function_mode (const_tree type, machine_mode mode,
+++                            int *punsignedp ATTRIBUTE_UNUSED,
+++                            const_tree fntype ATTRIBUTE_UNUSED,
+++                            int for_return)
+++{
+++  /* Promote libcall arguments narrower than int to match the normal C
+++     ABI (for which promotions are handled via
+++     TARGET_PROMOTE_PROTOTYPES).  */
+++  if (type == NULL_TREE && !for_return && (mode == QImode || mode == HImode))
+++    return SImode;
+++  return mode;
+++}
+++
++ #include "gt-m68k.h"
+diff --git a/package/gcc/6.4.0/891-fix-m68k-uclinux.patch b/package/gcc/6.4.0/891-fix-m68k-uclinux.patch
+deleted file mode 100644
+index 754aa74..0000000
+--- a/package/gcc/6.4.0/891-fix-m68k-uclinux.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-avoids internal compiler error while compiling linux-atomic.c
+-See here:
+-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-
+-diff -Nur gcc-6.1.0.orig/libgcc/config.host gcc-6.1.0/libgcc/config.host
+---- gcc-6.1.0.orig/libgcc/config.host	2016-02-26 21:02:28.000000000 +0100
+-+++ gcc-6.1.0/libgcc/config.host	2016-04-29 09:18:40.377989160 +0200
+-@@ -812,7 +812,7 @@
+- m68k*-*-openbsd*)
+- 	;;
+- m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
+--	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
+-+	tmake_file="$tmake_file m68k/t-floatlib"
+- 	md_unwind_header=m68k/linux-unwind.h
+- 	;;
+- m68k-*-linux*)			# Motorola m68k's running GNU/Linux
+diff --git a/package/gcc/7.3.0/0001-m68k-coldfire-pr68467.patch b/package/gcc/7.3.0/0001-m68k-coldfire-pr68467.patch
+new file mode 100644
+index 0000000..629c649
+--- /dev/null
++++ b/package/gcc/7.3.0/0001-m68k-coldfire-pr68467.patch
+@@ -0,0 +1,48 @@
++Backport from upstream, see
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68467
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-7.2.0.orig/gcc/config/m68k/m68k.c gcc-7.2.0/gcc/config/m68k/m68k.c
++--- gcc-7.2.0.orig/gcc/config/m68k/m68k.c	2017-04-03 22:30:56.274463000 +0000
+++++ gcc-7.2.0/gcc/config/m68k/m68k.c	2018-01-27 02:16:53.779367849 +0000
++@@ -182,6 +182,8 @@
++ 			      const_tree, bool);
++ static bool m68k_cannot_force_const_mem (machine_mode mode, rtx x);
++ static bool m68k_output_addr_const_extra (FILE *, rtx);
+++static machine_mode m68k_promote_function_mode (const_tree, machine_mode,
+++						int *, const_tree, int);
++ static void m68k_init_sync_libfuncs (void) ATTRIBUTE_UNUSED;
++ static enum flt_eval_method
++ m68k_excess_precision (enum excess_precision_type);
++@@ -332,6 +334,9 @@
++ #undef TARGET_ATOMIC_TEST_AND_SET_TRUEVAL
++ #define TARGET_ATOMIC_TEST_AND_SET_TRUEVAL 128
++ 
+++#undef TARGET_PROMOTE_FUNCTION_MODE
+++#define TARGET_PROMOTE_FUNCTION_MODE m68k_promote_function_mode
+++
++ static const struct attribute_spec m68k_attribute_table[] =
++ {
++   /* { name, min_len, max_len, decl_req, type_req, fn_type_req, handler,
++@@ -6571,4 +6576,20 @@
++   return FLT_EVAL_METHOD_UNPREDICTABLE;
++ }
++ 
+++/* Implement TARGET_PROMOTE_FUNCTION_MODE.  */
+++
+++static machine_mode
+++m68k_promote_function_mode (const_tree type, machine_mode mode,
+++                            int *punsignedp ATTRIBUTE_UNUSED,
+++                            const_tree fntype ATTRIBUTE_UNUSED,
+++                            int for_return)
+++{
+++  /* Promote libcall arguments narrower than int to match the normal C
+++     ABI (for which promotions are handled via
+++     TARGET_PROMOTE_PROTOTYPES).  */
+++  if (type == NULL_TREE && !for_return && (mode == QImode || mode == HImode))
+++    return SImode;
+++  return mode;
+++}
+++
++ #include "gt-m68k.h"
+diff --git a/package/gcc/7.3.0/0891-fix-m68k-uclinux.patch b/package/gcc/7.3.0/0891-fix-m68k-uclinux.patch
+deleted file mode 100644
+index e84fd92..0000000
+--- a/package/gcc/7.3.0/0891-fix-m68k-uclinux.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From c2773170a1b0e2728f71f2275a99fd177ba2cef4 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Tue, 2 May 2017 23:25:17 +0200
+-Subject: [PATCH] fix m68k uclinux avoids internal compiler error while
+- compiling linux-atomic.c See here:
+- https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-[Romain: convert to git patch]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- libgcc/config.host | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libgcc/config.host b/libgcc/config.host
+-index b279a64..04fe183 100644
+---- a/libgcc/config.host
+-+++ b/libgcc/config.host
+-@@ -820,7 +820,7 @@ m68k*-*-netbsdelf*)
+- m68k*-*-openbsd*)
+- 	;;
+- m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
+--	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
+-+	tmake_file="$tmake_file m68k/t-floatlib"
+- 	md_unwind_header=m68k/linux-unwind.h
+- 	;;
+- m68k-*-linux*)			# Motorola m68k's running GNU/Linux
+--- 
+-2.9.3
+-
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.1.4
