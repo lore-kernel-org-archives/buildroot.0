@@ -1,32 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Feb 2018 21:59:20 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.15.4
-Message-ID: <20180218210246.D5E3D8523D@busybox.osuosl.org>
+Date: Sun, 18 Feb 2018 21:55:40 +0100
+Subject: [Buildroot] [git commit] glibc: security bump to the latest commit
+ on 2.26 branch
+Message-ID: <20180218210246.B2E978523D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=562d734c277f6d55e8f8e03ba6fd207c1b685761
+commit: https://git.buildroot.net/buildroot/commit/?id=f55ab4a08ff8e02575759d58a7972824e792e657
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Fixes the following security issues according to NEWS:
+
+CVE-2018-6485: An integer overflow in the implementation of the
+posix_memalign in memalign functions in the GNU C Library (aka
+
+CVE-2018-6551: The malloc implementation in the GNU C Library (aka glibc or
+libc6), from version 2.24 to 2.26 on powerpc, and only in version 2.26 on
+i386, did not properly handle malloc calls with arguments close to SIZE_MAX
+and could return a pointer to a heap region that is smaller than requested,
+eventually leading to heap corruption.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/glibc/glibc.hash | 2 +-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a4bbdd3d42..0e1e4c287b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.15.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.15.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 3311be665c..3dab1e1516 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated (fetched from Github)
+-sha256  d0d44c2c7a46922376c08a1d45ae7bcbf9abd8f05603dd76637c8b74e6693e9e     glibc-glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8.tar.gz
++sha256  00fbc845678a96f4acc574c4bda4be76506ecd8bafb2d08c58bfa3507625c81a     glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 9126d8725f..0351433e6a 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.26-144-gbbabb868cd248763373d0db763bacd84ce27ede8
++GLIBC_VERSION = glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
