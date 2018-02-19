@@ -1,45 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Feb 2018 20:35:22 +0100
-Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20180218
-Message-ID: <20180219193552.762C387FFA@busybox.osuosl.org>
+Date: Mon, 19 Feb 2018 20:34:10 +0100
+Subject: [Buildroot] [git commit] mariadb: security bump version to 10.1.31
+Message-ID: <20180219193552.415EE87FFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1e4a383832ff7a4df75ecd3d976b7dc2bce3aac
+commit: https://git.buildroot.net/buildroot/commit/?id=fcdaab19bb564af01016b6632736f98baecbd22c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a memory leak and various minor tooling fixes.
+Release notes: https://mariadb.com/kb/en/mariadb-10131-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10131-changelog/
 
+Fixes the following security vulnerabilities:
+
+CVE-2018-2562 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server : Partition). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.19 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server as well as unauthorized update, insert or
+delete access to some of MySQL Server accessible data.
+
+CVE-2018-2622 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL). Supported versions that are affected are 5.5.58
+and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2640 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2665 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2668 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2612 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB). Supported versions that are affected are 5.6.38 and
+prior and 5.7.20 and prior. Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server. Successful attacks of this vulnerability can result in
+unauthorized creation, deletion or modification access to critical data or all
+MySQL Server accessible data and unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 1bc6599620..4961d4fd14 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-February/002350.html
--sha256 ee3415b482265ad9e8721aa746aaffdf311058a2d1a4d80e7b6d11bbbf71c722  WireGuard-0.0.20180202.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-February/002406.html
-+sha256 4ac4c4e4ad4dc2cf9dcb831b0cf347567ccea675ca524528cf5a4d9dccb2fe52  WireGuard-0.0.20180218.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 0b5a837a44..aa86b5782b 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index f8e1c6ce10..cc1e353ab7 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.30/
+-sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.31/
++sha256 ab7641c2fe4e5289da6141766a9c3350e013def56fafd6f1377080bc8048b2e6  mariadb-10.1.31.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index b406692b47..54eafc1702 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIREGUARD_VERSION = 0.0.20180202
-+WIREGUARD_VERSION = 0.0.20180218
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+-MARIADB_VERSION = 10.1.30
++MARIADB_VERSION = 10.1.31
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
