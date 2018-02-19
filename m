@@ -1,40 +1,44 @@
-From: Pierre <pinaraf@pinaraf.info>
-Date: Wed, 28 Feb 2018 23:55:34 +0100
-Subject: [Buildroot] [PATCH 1/1] wpa_supplicant - Specify that old and
- new dbus are incompatible
-In-Reply-To: <87fu5kkfy0.fsf@dell.be.48ers.dk>
-References: <20180218215039.4811-1-pinaraf@pinaraf.info>
- <87fu5kkfy0.fsf@dell.be.48ers.dk>
-Message-ID: <3603330.UGTkN10abk@peanuts2>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Feb 2018 20:51:14 +0100
+Subject: [Buildroot] [git commit] libite: bump version to 2.0.1
+Message-ID: <20180305200716.A252A8126F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, February 28, 2018 9:38:31 PM CET Peter Korsgaard wrote:
-> >>>>> "Pierre" == Pierre Ducroquet <pinaraf@pinaraf.info> writes:
->  > Building wpa-supplicant with support for both DBus interfaces
->  > generates broken .service files.
-> 
-> In what way are they broken? I did a quick test build of 3
-> configurations:
-> 
-> - Only old
-> - Only new
-> - Old and new
-> 
-> and I don't see any difference in the .service files?
+commit: https://git.buildroot.net/buildroot/commit/?id=fd5762538680e9d0c15b80b5da4109a24630e6a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It generated a .service file with an empty BusName in the [Service] part of 
-the .service.
-Since enabling only one interface generated the proper file, I deduced both 
-could not be enabled together. Maybe something else in my configuration 
-impacted that, I will check that again if you can't reproduce.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180228/fb2c328f/attachment.asc>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libite/libite.hash | 2 +-
+ package/libite/libite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+index ec894c5e00..437127d15c 100644
+--- a/package/libite/libite.hash
++++ b/package/libite/libite.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 18c087123f02cc3cfb612bf53b12dc8a94d4d3ebf015ed5937b1f9203eef72f8  libite-v1.9.2.tar.gz
++sha256 39a4c12af30a38a813fac7c8d7512efb3692f910eba9c697a50ce0203e039dad  libite-v2.0.1.tar.gz
+ sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
+ sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  chomp.c
+ sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  pidfile.c
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+index e88060d1dc..02ea948ef2 100644
+--- a/package/libite/libite.mk
++++ b/package/libite/libite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBITE_VERSION = v1.9.2
++LIBITE_VERSION = v2.0.1
+ LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
+ LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+ LIBITE_LICENSE_FILES = LICENSE chomp.c pidfile.c
