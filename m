@@ -1,43 +1,72 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Mon, 19 Feb 2018 16:57:34 +0100
-Subject: [Buildroot] [PATCH master 1/1] jq: compile as _GNU_SOURCE to fix
- segfault after compilation with gcc 6
-Message-ID: <20180219155734.31427-1-thomas.de_schampheleire@nokia.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Feb 2018 17:14:35 +0100
+Subject: [Buildroot] [PATCH] exim: add upstream security fix
+Message-ID: <20180219161435.20547-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling host-jq with gcc 6+, running it gives an immediate segfault.
-Reported upstream: https://github.com/stedolan/jq/issues/1598
+Fixes the following security issue:
 
-The issue can be solved by compiling with _GNU_SOURCE as extra preprocessor
-define. Once the issue is solved upstream, this change can be reverted.
+CVE-2018-6789: Meh Chang discovered a buffer overflow flaw in a utility
+function used in the SMTP listener of Exim, a mail transport agent.  A
+remote attacker can take advantage of this flaw to cause a denial of
+service, or potentially the execution of arbitrary code via a specially
+crafted message.
 
-As the issue will normally be the same for target, apply the same fix there.
+Dropped ChangeLog hunk and adjusted file path of upstream commit so it
+applies to tarball.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jq/jq.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ ...005-Fix-base64d-buffer-size-CVE-2018-6789.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
 
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index aecdba2280..79629faa5e 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -11,8 +11,10 @@ JQ_LICENSE_FILES = COPYING
- JQ_INSTALL_STAGING = YES
- 
- # uses c99 specific features
--JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
--HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99"
-+# _GNU_SOURCE added to fix gcc6+ host compilation
-+# (https://github.com/stedolan/jq/issues/1598)
-+JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_GNU_SOURCE"
-+HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99 -D_GNU_SOURCE"
- 
- # jq explicitly enables maintainer mode, which we don't need/want
- JQ_CONF_OPTS += --disable-maintainer-mode
+diff --git a/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
+new file mode 100644
+index 0000000000..1811a7ff98
+--- /dev/null
++++ b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
+@@ -0,0 +1,37 @@
++From 062990cc1b2f9e5d82a413b53c8f0569075de700 Mon Sep 17 00:00:00 2001
++From: "Heiko Schlittermann (HS12-RIPE)" <hs@schlittermann.de>
++Date: Mon, 5 Feb 2018 22:23:32 +0100
++Subject: [PATCH] Fix base64d() buffer size (CVE-2018-6789)
++
++Credits for discovering this bug: Meh Chang <meh@devco.re>
++
++[Peter: Drop ChangeLog change, fix path]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/base64.c      | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/base64.c b/src/base64.c
++index f6f187f0..e58ca6c7 100644
++--- a/src/base64.c
+++++ b/src/base64.c
++@@ -152,10 +152,14 @@ static uschar dec64table[] = {
++ int
++ b64decode(const uschar *code, uschar **ptr)
++ {
+++
++ int x, y;
++-uschar *result = store_get(3*(Ustrlen(code)/4) + 1);
+++uschar *result;
++ 
++-*ptr = result;
+++{
+++  int l = Ustrlen(code);
+++  *ptr = result = store_get(1 + l/4 * 3 + l%4);
+++}
++ 
++ /* Each cycle of the loop handles a quantum of 4 input bytes. For the last
++ quantum this may decode to 1, 2, or 3 output bytes. */
++-- 
++2.11.0
++
 -- 
-2.13.6
+2.11.0
