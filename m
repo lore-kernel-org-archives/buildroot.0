@@ -1,36 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Feb 2018 22:43:44 +0100
-Subject: [Buildroot] [PATCH master 1/1] zic: bump to 2018c
-In-Reply-To: <20180219222250.2fde9d31@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 19 Feb 2018 22:22:50 +0100")
-References: <20180219132212.19877-1-aduskett@gmail.com>
- <877er8kc4a.fsf@dell.be.48ers.dk>
- <20180219212453.705a4846@windsurf.home>
- <878tboisr6.fsf@dell.be.48ers.dk>
- <20180219222250.2fde9d31@windsurf.home>
-Message-ID: <874lmcirjj.fsf@dell.be.48ers.dk>
+Date: Mon, 19 Feb 2018 22:46:28 +0100
+Subject: [Buildroot] Read only rootfs with writable (aufs) overlay
+In-Reply-To: <5a8b2633.54afdf0a.cb7dd.554c@mx.google.com> (Alex Hildebrand's
+ message of "Mon, 19 Feb 2018 20:32:02 +0100")
+References: <5a8b2633.54afdf0a.cb7dd.554c@mx.google.com>
+Message-ID: <87zi44hcuj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Alex" == Alex Hildebrand <alexander.hildebrand@googlemail.com> writes:
 
- > Hello,
- > On Mon, 19 Feb 2018 22:17:33 +0100, Peter Korsgaard wrote:
+ > Hi there,
+ > Does anyone of you have experience with a rootfs with a writable (aufs) overlay?
+ > I managed to compile aufs and mount a folder combining the read only
+ > rootfs with a read write data overlay. How to switch the rootfs to
+ > this mount point? Tried to move the mount point to this folder in the
+ > inittab, but this fails with "Too many levels of symbolic links"
 
- >> > Why was this targeted for master, and committed in master ?  
- >> 
- >> I must say I was wondering that as well, but given that this is the
- >> timezone database, I could see the advantage of having uptodate
- >> information for the (LTS) release, and a relatively limited risk of
- >> issues, so I applied it.
-
- > zic is not the time zone database in fact. tzdata is the timezone
- > database. zic is the host tool used to compile time zone files.
-
-Indeed, seems like I mixed that up.
+I don't have any specific experience with aufs (any specific reasons to
+not use the in-kernel overlayfs instead), but you would normally need to
+setup the overlay in an initramfs and then switch_root to it before
+executing init.
 
 -- 
 Bye, Peter Korsgaard
