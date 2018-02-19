@@ -1,100 +1,111 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Feb 2018 20:34:10 +0100
-Subject: [Buildroot] [git commit] mariadb: security bump version to 10.1.31
-Message-ID: <20180219193552.415EE87FFA@busybox.osuosl.org>
+Date: Mon, 19 Feb 2018 20:34:54 +0100
+Subject: [Buildroot] [git commit] e2fsprogs: bump version to 1.43.9
+Message-ID: <20180219193552.5C2F787FFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcdaab19bb564af01016b6632736f98baecbd22c
+commit: https://git.buildroot.net/buildroot/commit/?id=2dc4e64354f8ebb04ff29b9a0bf16ed366de631e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://mariadb.com/kb/en/mariadb-10131-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10131-changelog/
+Drop 0001-libext2fs-fix-build-failure-in-swapfs.c-on-big-endia.patch as it
+is now upstream.
 
-Fixes the following security vulnerabilities:
+Only contains minor bugfixes since 1.43.8 and no new features.
 
-CVE-2018-2562 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server : Partition). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.19 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server as well as unauthorized update, insert or
-delete access to some of MySQL Server accessible data.
+From the release notes:
 
-CVE-2018-2622 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL). Supported versions that are affected are 5.5.58
-and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
+Remove the huge file flag from libe2p (and hence from chattr/lsattr),
+since it was never made visible by the kernel.  Remove the description
+of some compression related flags, and add a description of the
+encrypted file flag, and the project hierarchy flag.
 
-CVE-2018-2640 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
+Remove a misplaced "MNP is unsupported" message from debugfs.
 
-CVE-2018-2665 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
+Fix a build failure in lib/ext2fs/swapfs.c on big-endian systems.
+(Addresses Debian Bug #886119)
 
-CVE-2018-2668 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
+Fix various Debian packaging issues.  (Addresses Debian Bug #269569).
 
-CVE-2018-2612 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB). Supported versions that are affected are 5.6.38 and
-prior and 5.7.20 and prior. Easily exploitable vulnerability allows high
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server. Successful attacks of this vulnerability can result in
-unauthorized creation, deletion or modification access to critical data or all
-MySQL Server accessible data and unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ix-build-failure-in-swapfs.c-on-big-endia.patch | 41 ----------------------
+ package/e2fsprogs/e2fsprogs.hash                   |  4 +--
+ package/e2fsprogs/e2fsprogs.mk                     |  2 +-
+ 3 files changed, 3 insertions(+), 44 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index f8e1c6ce10..cc1e353ab7 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
+diff --git a/package/e2fsprogs/0001-libext2fs-fix-build-failure-in-swapfs.c-on-big-endia.patch b/package/e2fsprogs/0001-libext2fs-fix-build-failure-in-swapfs.c-on-big-endia.patch
+deleted file mode 100644
+index 526157d7e9..0000000000
+--- a/package/e2fsprogs/0001-libext2fs-fix-build-failure-in-swapfs.c-on-big-endia.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 876d9b0c8eac2fd80dd62bfa1b09adea62aa08f3 Mon Sep 17 00:00:00 2001
+-From: Theodore Ts'o <tytso@mit.edu>
+-Date: Wed, 3 Jan 2018 01:32:02 -0500
+-Subject: [PATCH] libext2fs: fix build failure in swapfs.c on big-endian
+- systems
+-
+-Addresses-Debian-Bug: #886119
+-
+-Reported-by: James Clarke <jrtc27@debian.org>
+-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit 876d9b0c8eac
+-
+- lib/ext2fs/swapfs.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/ext2fs/swapfs.c b/lib/ext2fs/swapfs.c
+-index 6e5cff97e505..b13dc4229225 100644
+---- a/lib/ext2fs/swapfs.c
+-+++ b/lib/ext2fs/swapfs.c
+-@@ -19,6 +19,7 @@
+- 
+- #include "ext2_fs.h"
+- #include "ext2fs.h"
+-+#include "ext2fsP.h"
+- #include <ext2fs/ext2_ext_attr.h>
+- 
+- #ifdef WORDS_BIGENDIAN
+-@@ -358,7 +359,7 @@ void ext2fs_swap_inode_full(ext2_filsys fs, struct ext2_inode_large *t,
+- 	if (inode_includes(inode_size, i_projid))
+-                 t->i_projid = ext2fs_swab16(f->i_projid);
+- 	/* catch new static fields added after i_projid */
+--	EXT2FS_BUILD_BUG_ON(sizeof(ext2_inode_large) != 160);
+-+	EXT2FS_BUILD_BUG_ON(sizeof(struct ext2_inode_large) != 160);
+- 
+- 	i = sizeof(struct ext2_inode) + extra_isize + sizeof(__u32);
+- 	if (bufsize < (int) i)
+--- 
+-2.15.1
+-
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index da5d5f4110..3def51f95b 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
 @@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.30/
--sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.31/
-+sha256 ab7641c2fe4e5289da6141766a9c3350e013def56fafd6f1377080bc8048b2e6  mariadb-10.1.31.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index b406692b47..54eafc1702 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.8/sha256sums.asc
+-sha256 c0841d5fe724d49132158850f3975e886fccfcef642878dca2425a1b5d30b12a  e2fsprogs-1.43.8.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.9/sha256sums.asc
++sha256 926f8e8de1ffba55d791f21b71334e8a32b5227257ad370f2bf7e4396629e97f  e2fsprogs-1.43.9.tar.xz
+ # Locally calculated
+ sha256 680f852df303874fe9c722283a7da571ae9a0477768df8af1e363298e2adc51e  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index e77b10f26d..99019c7317 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.1.30
-+MARIADB_VERSION = 10.1.31
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-E2FSPROGS_VERSION = 1.43.8
++E2FSPROGS_VERSION = 1.43.9
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
