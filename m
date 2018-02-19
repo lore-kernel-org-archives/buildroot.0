@@ -1,46 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Feb 2018 20:51:49 +0100
-Subject: [Buildroot] [git commit branch/next] inadyn: bump version to 2.3
-Message-ID: <20180219200453.527C082848@busybox.osuosl.org>
+Date: Mon, 19 Feb 2018 20:55:27 +0100
+Subject: [Buildroot] [git commit branch/next] go: bump to 1.10
+Message-ID: <20180219200453.673C3875A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8e60ff15eacc496eae053a93e15e5c0d8f284e7
+commit: https://git.buildroot.net/buildroot/commit/?id=576437cdb197afdd3e6c2200a16da73943c8c050
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+This commit bumps the Go programming language to the 1.10 release.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/inadyn/inadyn.hash | 6 +++---
- package/inadyn/inadyn.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
-index c6c062ce15..742b6f226f 100644
---- a/package/inadyn/inadyn.hash
-+++ b/package/inadyn/inadyn.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/troglobit/inadyn/releases/download/v2.2.1/inadyn-2.2.1.tar.xz.md5
--md5 8f7796ee45b2a2e282a54a2d31d03953  inadyn-2.2.1.tar.xz
-+# From https://github.com/troglobit/inadyn/releases/download/v2.3/inadyn-2.3.tar.xz.md5
-+md5 63efb284b7f3f389c01bad19ee28407e  inadyn-2.3.tar.xz
- # Locally computed
--sha256 e7a74fcf8b7c069990940c0dc4d4d18071005be225667fdfcfa4156c44384579  inadyn-2.2.1.tar.xz
-+sha256 4a98b80d8565b9e4cb32b19b7a8b06a22a7d9a6f4f03a5298a8d441b6187c760  inadyn-2.3.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 5eac3b5c3a..0b1f82dae8 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 445a0b7c20..73c1578d0b 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,2 +1,2 @@
+ # From https://golang.org/dl/
+-sha256	a4ab229028ed167ba1986825751463605264e44868362ca8e7accc8be057e993	go1.9.src.tar.gz
++sha256	f3de49289405fda5fd1483a8fe6bd2fa5469e005fd567df64485c4fa000c7f24	go1.10.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 23facbdd81..4d55e16cc3 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INADYN_VERSION = 2.2.1
-+INADYN_VERSION = 2.3
- INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
- INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
- INADYN_LICENSE = GPL-2.0+
+-GO_VERSION = 1.9
++GO_VERSION = 1.10
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
