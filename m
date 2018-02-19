@@ -1,43 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Feb 2018 20:55:27 +0100
-Subject: [Buildroot] [git commit branch/next] go: bump to 1.10
-Message-ID: <20180219200453.673C3875A9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Feb 2018 21:22:13 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/llvm: new host package
+In-Reply-To: <20180219171805.13769-2-valentin.korenblit@smile.fr>
+References: <20180219171805.13769-1-valentin.korenblit@smile.fr>
+ <20180219171805.13769-2-valentin.korenblit@smile.fr>
+Message-ID: <20180219212213.33f289c4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=576437cdb197afdd3e6c2200a16da73943c8c050
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-This commit bumps the Go programming language to the 1.10 release.
+I have by far not reviewed everything, but noticed one problem.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 19 Feb 2018 18:18:03 +0100, Valentin Korenblit wrote:
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 445a0b7c20..73c1578d0b 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,2 +1,2 @@
- # From https://golang.org/dl/
--sha256	a4ab229028ed167ba1986825751463605264e44868362ca8e7accc8be057e993	go1.9.src.tar.gz
-+sha256	f3de49289405fda5fd1483a8fe6bd2fa5469e005fd567df64485c4fa000c7f24	go1.10.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 23facbdd81..4d55e16cc3 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.9
-+GO_VERSION = 1.10
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+> +# Get target architecture
+> +HOST_LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+
+BR2_PACKAGE_LLVM_TARGET_ARCH does not exist, it is created by PATCH
+2/3. This is not good, as it breaks bisectability.
+
+Basically, your series should work even if we apply only PATCH 1/3. Or
+if we apply only PATCH 1/3 and 2/3, etc.
+
+So using in PATCH 1/3 something that is introduced in PATCH 2/3 is not
+good.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
