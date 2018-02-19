@@ -1,11 +1,11 @@
 From: Erik Larsson <karl.erik.larsson@gmail.com>
-Date: Mon, 19 Feb 2018 06:43:15 +0100
-Subject: [Buildroot] [PATCH 1/3] imx-mkimage: new package
-In-Reply-To: <20180218155100.3e4e090f@windsurf>
+Date: Mon, 19 Feb 2018 07:01:54 +0100
+Subject: [Buildroot] [PATCH 3/3] add support for iMX8MQ-evk board
+In-Reply-To: <20180218144709.gcmyrsjowpmii446@sapphire.tkos.co.il>
 References: <1518960511-4823-1-git-send-email-karl.erik.larsson@gmail.com>
- <1518960511-4823-2-git-send-email-karl.erik.larsson@gmail.com>
- <20180218155100.3e4e090f@windsurf>
-Message-ID: <CAPP7BN1TZfMrNAbVaRFy1hOfi1Dnxht+0Q0z0=qKN-YPY8T0fA@mail.gmail.com>
+ <1518960511-4823-4-git-send-email-karl.erik.larsson@gmail.com>
+ <20180218144709.gcmyrsjowpmii446@sapphire.tkos.co.il>
+Message-ID: <CAPP7BN3ZFBKcn6+ALDUCLvZTBce0dBAn4f5=ycUVky39WVBy=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,158 +14,154 @@ To: buildroot@busybox.net
 
 Hello,
 
-2018-02-18 15:51 GMT+01:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+2018-02-18 15:47 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
 
-> Hello,
+> Hi Erik,
 >
-> Thanks for this contribution!
+> On Sun, Feb 18, 2018 at 02:28:31PM +0100, Erik Larsson wrote:
+> > +gen_imx8_boot()
+> > +{
+> > +     objcopy -I binary -O binary --pad-to 0x8000 --gap-fill=0x0
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_imem.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_imem_pad.bin
+> > +     objcopy -I binary -O binary --pad-to 0x4000 --gap-fill=0x0
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_dmem.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_dmem_pad.bin
+> > +     objcopy -I binary -O binary --pad-to 0x8000 --gap-fill=0x0
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_2d_imem.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_2d_imem_pad.bin
+> > +     cat ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_imem_pad.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_dmem_pad.bin >
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_fw.bin
+> > +     cat ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_2d_imem_pad.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_2d_dmem.bin >
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_2d_fw.bin
+> > +     cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_fw.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_2d_fw.bin >
+> ${BINARIES_DIR}/u-boot-spl-ddr.bin
+> > +     rm -f ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_fw.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_2d_fw.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_imem_pad.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_1d_dmem_pad.bin
+> ${BINARIES_DIR}/imx-boot/lpddr4_pmu_train_2d_imem_pad.bin
+> > +
+> > +     BL31=${BINARIES_DIR}/imx-boot/bl31.bin
+> BL33=${BINARIES_DIR}/u-boot.bin mkimage_fit_atf.sh
+> ${BINARIES_DIR}/fsl-imx8mq-evk.dtb > ${BINARIES_DIR}/imx-boot/u-boot.its
+> > +     pushd ${BINARIES_DIR}
+> > +     mkimage -E -p 0x3000 -f ${BINARIES_DIR}/imx-boot/u-boot.its
+> ${BINARIES_DIR}/u-boot.itb
+> > +     popd
+> > +        rm -f ${BINARIES_DIR}/imx-boot/u-boot.its
+> > +
+> > +     mkimage_imx8 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin
+> 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out
+> ${BINARIES_DIR}/imx-boot-imx8mqevk-sd.bin
+> > +}
 >
-> On Sun, 18 Feb 2018 14:28:29 +0100, Erik Larsson wrote:
-> > Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
-> > ---
-> >  package/Config.in.host                             |  1 +
-> >  .../0001-make-bl33-read-env-variables.patch        | 37
-> ++++++++++++++++++++++
-> >  package/freescale-imx/imx-mkimage/Config.in.host   |  5 +++
-> >  package/freescale-imx/imx-mkimage/imx-mkimage.hash |  3 ++
-> >  package/freescale-imx/imx-mkimage/imx-mkimage.mk   | 23 ++++++++++++++
-> >  5 files changed, 69 insertions(+)
-> >  create mode 100644 package/freescale-imx/imx-
-> mkimage/0001-make-bl33-read-env-variables.patch
-> >  create mode 100644 package/freescale-imx/imx-mkimage/Config.in.host
-> >  create mode 100644 package/freescale-imx/imx-mkimage/imx-mkimage.hash
-> >  create mode 100644 package/freescale-imx/imx-mkimage/imx-mkimage.mk
+> Instead of reproducing the convoluted way of generating the i.MX8 boot
+> image,
+> can't you just copy the files into the iMX8M/ subdirectory of imx-mkimage,
+> and
+> run there 'make SOC=iMX8M flash_spl_uboot'?
+>
+Yes this is pretty convoluted, just as you say. There are some issues with
+doing this in the imx-mkimage (at least I think so, please let me know if
+I'm wrong :) ).
+The main Makefile of imx-mkimage has a step called buildinfo which reads
+information from its git repository, in buildroot there are no git
+repository during build time. This can off course be fixed using a small
+patch in the packet. The other problem is that we need to have a way of
+selecting which file is used as BL33 in the mkimage_fit_aft.sh which is
+called from iMX8M/soc.mk. This can also be fixed with a packet patch, or we
+can simply copy our u-boot.bin and call it u-boot-nodtb.bin as
+mkimage_fit_atf.sh is expecting it to be called.
+
+Please let my know what you think!
+
+
+> [...]
+>
+> > diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/
+> Config.in
+> > index 2535caa..adda403 100644
+> > --- a/package/freescale-imx/Config.in
+> > +++ b/package/freescale-imx/Config.in
+> > @@ -1,6 +1,6 @@
+> >  menuconfig BR2_PACKAGE_FREESCALE_IMX
+> >       bool "Freescale i.MX libraries"
+> > -     depends on BR2_arm
+> > +     depends on BR2_arm || BR2_aarch64
+> >       help
+> >         Those packages provide hardware acceleration for GPU or VPU,
+> >         hardware optimization or some hardware tools for Freescale
+> > @@ -40,6 +40,8 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+> >  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+> >       bool "imx7d/imx7ulp"
 > >
-> > diff --git a/package/Config.in.host b/package/Config.in.host
-> > index 199a8e9..b1cfa75 100644
-> > --- a/package/Config.in.host
-> > +++ b/package/Config.in.host
-> > @@ -15,6 +15,7 @@ menu "Host utilities"
-> >       source "package/e2fsprogs/Config.in.host"
-> >       source "package/e2tools/Config.in.host"
-> >       source "package/faketime/Config.in.host"
-> > +     source "package/freescale-imx/imx-mkimage/Config.in.host"
+> > +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+> > +     bool "imx8m"
+> >  endchoice
+> >
+> >  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+> > diff --git a/package/freescale-imx/firmware-imx/Config.in
+> b/package/freescale-imx/firmware-imx/Config.in
+> > index fca280a..56d5b80 100644
+> > --- a/package/freescale-imx/firmware-imx/Config.in
+> > +++ b/package/freescale-imx/firmware-imx/Config.in
+> > @@ -1,6 +1,6 @@
+> >  config BR2_PACKAGE_FIRMWARE_IMX
+> >       bool "firmware-imx"
+> > -     depends on BR2_arm # Only relevant for i.MX
+> > +     depends on BR2_arm || BR2_aarch64 # Only relevant for i.MX
+> >       help
+> >         Firmware blobs for the Freescale i.MX SoCs.
+> >
+> > diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk
+> b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> > index 630afca..040a088 100644
+> > --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
+> > +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> > @@ -18,6 +18,13 @@ define FIRMWARE_IMX_EXTRACT_CMDS
+> >       $(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(FIRMWARE_IMX_
+> SOURCE))
+> >  endef
+> >
+> > +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
+> > +define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+> > +     mkdir -p $(BINARIES_DIR)/imx-boot
+> > +     cp $(@D)/firmware/ddr/synopsys/lpddr4_pmu_train_*.bin
+> $(BINARIES_DIR)/imx-boot
+> > +     cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin
+> $(BINARIES_DIR)/imx-boot
+> > +endef
+> > +else
+> >  define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+> >       mkdir -p $(TARGET_DIR)/lib/firmware/imx
+> >       for blobdir in $(FIRMWARE_IMX_BLOBS); do \
+> > @@ -27,5 +34,6 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+> >       mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted
+> \
+> >               $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
+> >  endef
+> > +endif
 >
-> I'm not sure this package needs to be under package/freescale-imx/.
-> This sub-directory was initially created to share the
-> FREESCALE_IMX_SITE and FREESCALE_IMX_EXTRACT_HELPER definitions, but
-> you don't use them.
+> These changes should be in a separate patch to firmware-imx.
 >
-Thanks for the information, I'll move it.
-
-
-> > diff --git a/package/freescale-imx/imx-mkimage/0001-make-bl33-read-env-variables.patch
-> b/package/freescale-imx/imx-mkimage/0001-make-bl33-read-
-> env-variables.patch
-> > new file mode 100644
-> > index 0000000..490eb05
-> > --- /dev/null
-> > +++ b/package/freescale-imx/imx-mkimage/0001-make-bl33-read-
-> env-variables.patch
-> > @@ -0,0 +1,37 @@
-> > +From 5ca549356ef889286c12b4d736d9026efafb8fff Mon Sep 17 00:00:00 2001
-> > +From: Erik Larsson <erik.larsson@combitech.se>
-> > +Date: Mon, 29 Jan 2018 08:00:57 +0100
-> > +Subject: [PATCH] Add support for overriding BL32 and BL33 not only BL31
-> > +
-> > +Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
-> > +Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
-> > +Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
->
-> What is the upstream status of this patch ?
->
-I've sent the patch to some of the developers, but still waiting for a
-reaction.
-
-
-> > diff --git a/package/freescale-imx/imx-mkimage/Config.in.host
-> b/package/freescale-imx/imx-mkimage/Config.in.host
-> > new file mode 100644
-> > index 0000000..3cf0966
-> > --- /dev/null
-> > +++ b/package/freescale-imx/imx-mkimage/Config.in.host
-> > @@ -0,0 +1,5 @@
-> > +config BR2_PACKAGE_HOST_IMX_MKIMAGE
-> > +     bool "host imx-mkimage"
-> > +     help
-> > +       imx-mkimage is used to combine input images and generate
-> > +       final boot image with appropriate IVT set.
->
-> We like to have a blank line, and then the URL of the upstream project
-> main page. Here, https://source.codeaurora.org/external/imx/imx-mkimage
-> might be enough, unless there is a better page.
-
-Ok! I'll fix that
-
+Ok, I will fix that!
 
 >
-> > diff --git a/package/freescale-imx/imx-mkimage/imx-mkimage.mk
-> b/package/freescale-imx/imx-mkimage/imx-mkimage.mk
-> > new file mode 100644
-> > index 0000000..a5b1f93
-> > --- /dev/null
-> > +++ b/package/freescale-imx/imx-mkimage/imx-mkimage.mk
-> > @@ -0,0 +1,23 @@
-> > +###########################################################
-> #####################
-> > +#
-> > +# imx-mkimage
-> > +#
-> > +###########################################################
-> #####################
-> > +
-> > +IMX_MKIMAGE_VERSION = imx_4.9.51_imx8m_beta
-> > +IMX_MKIMAGE_SITE = https://source.codeaurora.org/
-> external/imx/imx-mkimage
-> > +IMX_MKIMAGE_SITE_METHOD = git
-> > +IMX_MKIMAGE_LICENSE = GPL-2.0
-> > +IMX_MKIMAGE_LICENSE_FILES = iMX8dv/COPYING
-> > +
-> > +define HOST_IMX_MKIMAGE_BUILD_CMDS
-> > +     $(MAKE) -C $(@D)/iMX8M -f soc.mak mkimage_imx8
+> baruch
 >
-> Why are you building just the tool in iMX8M ? There is also one in src/
-> and in iMX8dv. What are the differences ? Should we build/install all
-> of them ? Conditionally ?
->
-I'm currently only building for IMX8M because that's the only hardware I
-have access to. Preferably this should be conditional. Do you think I shall
-add it as a conditional option right away event though I can't test it
-against other hardware?
-
-
-> > +define HOST_IMX_MKIMAGE_INSTALL_CMDS
-> > +     mkdir -p $(HOST_DIR)/bin
->
-> This line is not needed... if...
->
-Ok, I'll fix it!
-
-
->
-> > +     $(INSTALL) -m 755 $(@D)/iMX8M/mkimage_imx8 $(HOST_DIR)/bin
-> > +     $(INSTALL) -m 755 $(@D)/iMX8M/mkimage_fit_atf.sh $(HOST_DIR)/bin
->
-> You replace those lines by:
->
->         $(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_imx8
-> $(HOST_DIR)/bin/mkimage_imx8
->         $(INSTALL) -D -m 755 $(@D)/iMX8M/mkimage_fit_atf.sh
-> $(HOST_DIR)/bin/mkimage_fit_atf.sh
->
-> Best regards,
->
-> Thomas
 > --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> http://bootlin.com
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--
+> Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 >
 
-Thanks for your feedback!
-
-Best regards,
 Erik
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180219/648e79db/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180219/ecd58e84/attachment.html>
