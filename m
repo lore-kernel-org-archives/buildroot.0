@@ -1,73 +1,43 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Mon, 19 Feb 2018 16:56:31 +0100
-Subject: [Buildroot] [PATCH master 1/2] uboot: use local fdt headers
-In-Reply-To: <20180219155632.30086-1-thomas.de_schampheleire@nokia.com>
-References: <20180219155632.30086-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180219155632.30086-2-thomas.de_schampheleire@nokia.com>
+Date: Mon, 19 Feb 2018 16:57:34 +0100
+Subject: [Buildroot] [PATCH master 1/1] jq: compile as _GNU_SOURCE to fix
+ segfault after compilation with gcc 6
+Message-ID: <20180219155734.31427-1-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After commit b8c3e941731d ("package/dtc: qemu system build need libfdt")
-changed the dtc install target from 'install-bin' to 'install', uboot
-compilation failures occurred because libfdt related headers were now
-suddenly taken from output/host/include rather than from the uboot sources
-itself.
+When compiling host-jq with gcc 6+, running it gives an immediate segfault.
+Reported upstream: https://github.com/stedolan/jq/issues/1598
 
-Commit 3a6573ccee26 ("uboot: use local libfdt.h") solved this by patching
-one specific uboot source file, tools/fdtgrep.c, to replace '<...>'-style
-includes by '"..."'-style includes.
+The issue can be solved by compiling with _GNU_SOURCE as extra preprocessor
+define. Once the issue is solved upstream, this change can be reverted.
 
-However, depending on the uboot version, this may not be enough: there may
-be other references to fdt header files. In particular taking into account
-that it is not uncommon to have vendor-provided uboot trees which have
-custom changes.
-
-The root of the problem is that the uboot.mk file passes the host compiler
-as follows:
-	UBOOT_MAKE_OPTS += \
-		...
-		HOSTCC="$(HOSTCC) $(HOST_CFLAGS)" \
-		...
-where HOST_CFLAGS contains the string '-I$(HOST_DIR)/include'
-The uboot makefiles then use constructs of the form:
-	$(CC) $(CPPFLAGS) $(CFLAGS) .....
-where CPPFLAGS may contain -I references pointing to local directories.
-
-On the expanded compiler command-line, Buildroot's '-I$(HOST_DIR)/include'
-is thus present _before_ any -I to local directories, and thus takes
-precedence.  And that becomes a problem for header files present both
-locally as in the Buildroot host directory, which is the case for libfdt.
-
-To fix this problem without having to patch u-boot sources, use '-idirafter'
-rather than '-I' to pass the Buildroot host include directory. '-idirafter'
-is basically the same thing, but adds the specified directory at the end
-of the include precedence chain, rather than at the beginning.
-
----
-
-Note: it is to be discussed whether we want to change $(HOST_CFLAGS)
-globally to use -idirafter rather than -I. It may be risky.
+As the issue will normally be the same for target, apply the same fix there.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- boot/uboot/uboot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/jq/jq.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index d2f241cd8b..977f44cad8 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -131,7 +131,7 @@ endif
- UBOOT_MAKE_OPTS += \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	ARCH=$(UBOOT_ARCH) \
--	HOSTCC="$(HOSTCC) $(HOST_CFLAGS)" \
-+	HOSTCC="$(HOSTCC) $(subst -I/,-idirafter /,$(subst -I /,-idirafter /,$(HOST_CFLAGS)))" \
- 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index aecdba2280..79629faa5e 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -11,8 +11,10 @@ JQ_LICENSE_FILES = COPYING
+ JQ_INSTALL_STAGING = YES
  
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
+ # uses c99 specific features
+-JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+-HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99"
++# _GNU_SOURCE added to fix gcc6+ host compilation
++# (https://github.com/stedolan/jq/issues/1598)
++JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -D_GNU_SOURCE"
++HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99 -D_GNU_SOURCE"
+ 
+ # jq explicitly enables maintainer mode, which we don't need/want
+ JQ_CONF_OPTS += --disable-maintainer-mode
 -- 
 2.13.6
