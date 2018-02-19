@@ -1,98 +1,42 @@
 From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon, 19 Feb 2018 06:23:39 -0800
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to 10.1.31
-Message-ID: <20180219142339.2372-1-bluemrp9@gmail.com>
+Date: Mon, 19 Feb 2018 06:30:31 -0800
+Subject: [Buildroot] [PATCH next 1/2] libite: bump version to 2.0.1
+Message-ID: <20180219143032.3741-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://mariadb.com/kb/en/mariadb-10131-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10131-changelog/
-
-Fixes the following security vulnerabilities:
-
-CVE-2018-2562 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server : Partition). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.19 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server as well as unauthorized update, insert or
-delete access to some of MySQL Server accessible data.
-
-CVE-2018-2622 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL). Supported versions that are affected are 5.5.58
-and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
-
-CVE-2018-2640 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
-
-CVE-2018-2665 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
-
-CVE-2018-2668 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
-
-CVE-2018-2612 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB). Supported versions that are affected are 5.6.38 and
-prior and 5.7.20 and prior. Easily exploitable vulnerability allows high
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server. Successful attacks of this vulnerability can result in
-unauthorized creation, deletion or modification access to critical data or all
-MySQL Server accessible data and unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libite/libite.hash | 2 +-
+ package/libite/libite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index f8e1c6ce10..cc1e353ab7 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+index ec894c5e00..437127d15c 100644
+--- a/package/libite/libite.hash
++++ b/package/libite/libite.hash
 @@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.30/
--sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.31/
-+sha256 ab7641c2fe4e5289da6141766a9c3350e013def56fafd6f1377080bc8048b2e6  mariadb-10.1.31.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index b406692b47..54eafc1702 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
+ # Locally calculated
+-sha256 18c087123f02cc3cfb612bf53b12dc8a94d4d3ebf015ed5937b1f9203eef72f8  libite-v1.9.2.tar.gz
++sha256 39a4c12af30a38a813fac7c8d7512efb3692f910eba9c697a50ce0203e039dad  libite-v2.0.1.tar.gz
+ sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
+ sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  chomp.c
+ sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  pidfile.c
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+index e88060d1dc..02ea948ef2 100644
+--- a/package/libite/libite.mk
++++ b/package/libite/libite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.1.30
-+MARIADB_VERSION = 10.1.31
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-LIBITE_VERSION = v1.9.2
++LIBITE_VERSION = v2.0.1
+ LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
+ LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+ LIBITE_LICENSE_FILES = LICENSE chomp.c pidfile.c
 -- 
 2.16.1
