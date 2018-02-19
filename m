@@ -1,55 +1,76 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Mon, 19 Feb 2018 11:12:39 +0100
-Subject: [Buildroot] [PATCH 3/3] add support for iMX8MQ-evk board
-In-Reply-To: <1518960511-4823-4-git-send-email-karl.erik.larsson@gmail.com>
-References: <1518960511-4823-1-git-send-email-karl.erik.larsson@gmail.com>
- <1518960511-4823-4-git-send-email-karl.erik.larsson@gmail.com>
-Message-ID: <20180219101239.GC10694@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 19 Feb 2018 10:50:49 +0000
+Subject: [Buildroot] [Bug 10766] New: upmpdcli: Segmentation fault
+Message-ID: <bug-10766-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 18, 2018 at 02:28:31PM +0100, Erik Larsson wrote:
-> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=10766
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+            Bug ID: 10766
+           Summary: upmpdcli: Segmentation fault
+           Product: buildroot
+           Version: 2017.08.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: yangtze31 at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Ask Christopher if he want to be stated here as well.
+Hello,
 
-> ---
-> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-> index b239743..e3082a3 100755
-> --- a/board/freescale/common/imx/post-image.sh
-> +++ b/board/freescale/common/imx/post-image.sh
-> @@ -7,10 +7,10 @@
->  #
->  dtb_list()
->  {
-> -	local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
-> +	local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([\/a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
+upmpdcli Segmentation fault.
+The same config works fine with 2017.11 on a NanoPi NEO.
 
-Just a thought.. is ${BR2_LINUX_KERNEL_INTREE_DTS_NAME} available in
-postscripts?
-It would be nice if we could avoid this sed magic.
+# upmpdcli -l 4 -c /etc/upmpdcli.conf
+:4:src/mpdcli.cxx:129::MPDCLi::openconn: mpd protocol version: 0.20.0
+:4:libupnpp/upnpplib.cxx:156::LibUPnP: Using IP 192.168.0.19 port 49154
+:4:src/httpfs.cxx:231::Failed reading /usr/share/upmpdcli/icon.png : open/stat:
+errno: 2 : 
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:upnp-org:serviceId:AVTransport]
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:upnp-org:serviceId:RenderingControl]
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:upnp-org:serviceId:ConnectionManager]
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:av-openhome-org:serviceId:Info]
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:av-openhome-org:serviceId:Time]
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:av-openhome-org:serviceId:Volume]
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:av-openhome-org:serviceId:Playlist]
+:4:src/ohplaylist.cxx:108::ohPlaylist: cache restore done
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:av-openhome-org:serviceId:Radio]
+:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
+[urn:av-openhome-org:serviceId:Product]
+:4:src/ohproduct.cxx:108::OHProduct::OHProduct: sources: <SourceList>
+ <Source>
+  <Name>Playlist</Name>
+  <Type>Playlist</Type>
+  <Visible>1</Visible>
+  </Source>
+ <Source>
+  <Name>Radio</Name>
+  <Type>Radio</Type>
+  <Visible>1</Visible>
+  </Source>
+</SourceList>
 
-I'm not in an environment that I can check this by myself.
+:4:src/main.cxx:712::Entering event loop
+:4:src/main.cxx:719::Renderer event loop
+Segmentation fault
 
->  
->  	for dt in $DTB_LIST; do
-> -		echo -n "\"$dt.dtb\", "
-> +		echo -n "\"`basename $dt`.dtb\", "
->  	done
->  }
-
-Best regards
-Marcus Folkesson
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180219/4d67c64f/attachment.asc>
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
