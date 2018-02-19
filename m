@@ -1,68 +1,98 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 19 Feb 2018 08:48:38 -0500
-Subject: [Buildroot] [PATCH next v2] waf: bump to 2.0.6
-Message-ID: <20180219134838.6073-1-aduskett@gmail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Mon, 19 Feb 2018 06:23:39 -0800
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to 10.1.31
+Message-ID: <20180219142339.2372-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition:
-- Download the tar.bz2 package instead of just the file. The tar
-  includes waf-light which is needed to parse the license.
+Release notes: https://mariadb.com/kb/en/mariadb-10131-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10131-changelog/
 
-- Remove HOST_WAF_EXTRACT_CMDS as the make system can handle extracting
-  the tar.bz2 automatically.
+Fixes the following security vulnerabilities:
 
-- Add license and license_files to waf.mk
+CVE-2018-2562 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server : Partition). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.19 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server as well as unauthorized update, insert or
+delete access to some of MySQL Server accessible data.
 
-- Add sha256sum hash for the license.
+CVE-2018-2622 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL). Supported versions that are affected are 5.5.58
+and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+CVE-2018-2640 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2665 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2668 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2612 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB). Supported versions that are affected are 5.6.38 and
+prior and 5.7.20 and prior. Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server. Successful attacks of this vulnerability can result in
+unauthorized creation, deletion or modification access to critical data or all
+MySQL Server accessible data and unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
-Changes v1 -> v2:
-  - Changed License to BSD-3-Clause (Baruch)
-  - Use waf-light instead of waf for license file. (Baruch)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/waf/waf.hash |  6 ++++--
- package/waf/waf.mk   | 12 +++++-------
- 2 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 9d610b2c1e..3e887248d1 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,3 +1,5 @@
- # Locally computed
--sha1    33d170c738ed8c92dda2945b445272972f558244                          waf-1.9.5
--sha256  101f14e0f47a6410c00b8feda094948516cd3989491c56eb8268907fcd164909  waf-1.9.5
-+sha1    dc5fe90642350c72f4934871f78b360d39419774                          waf-2.0.6.tar.bz2
-+sha256  188d4cfc88b9e3555a197baf8a27c5f3ddeb632e2fea446416174410a804d4f3  waf-2.0.6.tar.bz2
-+# License
-+sha256  92bee884f4c2a302522a8322d38b720331c42da60b120f5bcd15958961b744e9  waf-light
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index e7ac891b39..039c7c4d4e 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
-@@ -4,13 +4,11 @@
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index f8e1c6ce10..cc1e353ab7 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.30/
+-sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.31/
++sha256 ab7641c2fe4e5289da6141766a9c3350e013def56fafd6f1377080bc8048b2e6  mariadb-10.1.31.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index b406692b47..54eafc1702 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAF_VERSION = 1.9.5
--WAF_SOURCE = waf-$(WAF_VERSION)
--WAF_SITE = https://waf.io/
--
--define HOST_WAF_EXTRACT_CMDS
--	$(INSTALL) -D -m 0755 $(DL_DIR)/waf-$(WAF_VERSION) $(@D)/waf
--endef
-+WAF_VERSION = 2.0.6
-+WAF_SOURCE = waf-$(WAF_VERSION).tar.bz2
-+WAF_SITE = https://waf.io
-+WAF_LICENSE = BSD-3-Clause
-+WAF_LICENSE_FILES = waf-light
- 
- define HOST_WAF_INSTALL_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/waf $(HOST_DIR)/bin/waf
+-MARIADB_VERSION = 10.1.30
++MARIADB_VERSION = 10.1.31
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
 -- 
-2.14.3
+2.16.1
