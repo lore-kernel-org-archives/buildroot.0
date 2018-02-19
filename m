@@ -1,32 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Feb 2018 23:13:41 +0100
-Subject: [Buildroot] Read only rootfs with writable (aufs) overlay
-In-Reply-To: <5a8b48c6.06581c0a.8860b.c092@mx.google.com> (Alex Hildebrand's
- message of "Mon, 19 Feb 2018 22:59:34 +0100")
-References: <5a8b48c6.06581c0a.8860b.c092@mx.google.com>
-Message-ID: <87r2pghbl6.fsf@dell.be.48ers.dk>
+Date: Mon, 19 Feb 2018 23:37:30 +0100
+Subject: [Buildroot] Report of the Buildroot meeting after FOSDEM 2018
+In-Reply-To: <20180219231149.6a93be28@windsurf.home> (Thomas Petazzoni's
+ message of "Mon, 19 Feb 2018 23:11:49 +0100")
+References: <20180219214100.0c564db2@windsurf.home>
+ <87vaeshcmy.fsf@dell.be.48ers.dk>
+ <20180219231149.6a93be28@windsurf.home>
+Message-ID: <87inashahh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alex" == Alex Hildebrand <alexander.hildebrand@googlemail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > So switch_root does not work when used without an initramfs?
+ > Hello,
+ > On Mon, 19 Feb 2018 22:51:01 +0100, Peter Korsgaard wrote:
 
-Correct. switch_root is specific to initramfs. See the description at
-the bottom of switch_root.c:
+ >> > Some slides from Valentin Korenblit and Matt Weber are missing, but
+ >> > hopefully, they will put them online soon, so that everyone can access
+ >> > them.  
+ >> 
+ >> I do see links to (Google Slides) presentations from both on the page
+ >> and in Framapad?
 
-https://git.buildroot.net/busybox/tree/util-linux/switch_root.c
+ > There are only the slides from Matt about CPE/CVE management. But not
+ > his slides on security hardening or SELinux (don't remember if he had
+ > some slides on the latter, but I'm pretty he had for the former). And
+ > the slides from Valentin on LLVM are missing as far as I can see.
 
+I don't recall about SELinux, but the wiki page atleast has links to the
+hardening and LLVM slides:
 
- > Tried it directly from my read only rootfs but it does not change the
- > root...  Is this the same with in-kernel overlayfs?
-
-Yes, this is independent of the overlay fs implementation. If you only
-want to add the overlay to a subset of the tree (E.G /etc), then you can
-do it from your rootfs, but not when you want to replace /.
+https://docs.google.com/presentation/d/1IyrflpslZ6Gnsl-deR5G3sODfuICe-UkBeD44Edudhk/edit#slide=id.p
+https://drive.google.com/file/d/131hHp9YYR6yk-vf4qYVuaV7iOZxAutUt/view
 
 -- 
 Bye, Peter Korsgaard
