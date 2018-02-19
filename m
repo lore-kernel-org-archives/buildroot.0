@@ -1,58 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 19 Feb 2018 17:55:51 +0100
-Subject: [Buildroot] [PATCH 1/3] imx-mkimage: new package
-In-Reply-To: <20180219164406.GA22465@t450s.lan>
-References: <1518960511-4823-1-git-send-email-karl.erik.larsson@gmail.com>
- <1518960511-4823-2-git-send-email-karl.erik.larsson@gmail.com>
- <20180218155100.3e4e090f@windsurf>
- <20180219164406.GA22465@t450s.lan>
-Message-ID: <20180219175551.761f4da4@windsurf.lan>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Mon, 19 Feb 2018 18:18:02 +0100
+Subject: [Buildroot] [PATCH v2 0/3]  llvm for mesa3d
+Message-ID: <20180219171805.13769-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello all,
 
-On Mon, 19 Feb 2018 17:44:06 +0100, Gary Bisson wrote:
+This series provides LLVM support for Mesa3d, enabling
+llvmpipe software rasterizer.
 
-> > I'm not sure this package needs to be under package/freescale-imx/.
-> > This sub-directory was initially created to share the
-> > FREESCALE_IMX_SITE and FREESCALE_IMX_EXTRACT_HELPER definitions, but
-> > you don't use them.  
-> 
-> Actually there are plenty of packages in that folder that don't need the
-> extract helper nor the site address. Would you like those moved out of
-> it? (imx-kobs, imx-uuc, imx-vpuwrap etc..).
+It must be considered that it does not provide a full LLVM
+installation for the host, only the necessary components to
+cross-compile LLVM for the target. It will install all target
+components as libLLVM.so.
 
-I don't have a very clear cut opinion about this. If they don't need to
-be in package/freescale-imx/, then in theory they should be outside
-yes.
+Changes in v2:
 
-> Another aspect of that folder is BR2_PACKAGE_FREESCALE_IMX_PLATFORM,
-> although it is accessible at other places, which has an effect on which
-> packages are available.
+The series has been simplified:
 
-Yeah, but that's just Config.in values, which are available to all
-packages without problem.
+*Build only backend for target architecture by default.
 
-> > Why are you building just the tool in iMX8M ? There is also one in src/
-> > and in iMX8dv. What are the differences ? Should we build/install all
-> > of them ? Conditionally ?  
-> 
-> That is where new BR2_PACKAGE_FREESCALE_IMX_PLATFORM values would be
-> needed to separate iMX8M, iMX8QM and iMX8QX.
-> 
-> As a FYI, iMX8dv was some sort of development version of i.MX8, this
-> will not be supported moving forward, only the 3 families listed above.
+*Support for AMDGPU(PATCH 3/4 in v1) was removed because I cannot test
+it currently. 
 
-OK, thanks for the info!
+*Host: make options modified to build only llvm-config and llvm-tblgen
+(reduces drastically build time for host).
 
-Best regards,
+*Target: support only x86 currently (tested), I will test on ARM soon.
 
-Thomas
+
+The idea is to add incrementally more options to configure LLVM as soon
+as I can test them.
+ 
+Regards,
+
+Valent?n
+
+
+Romain Naour (3):
+  package/llvm: new host package
+  package/llvm: enable target variant
+  package/mesa3d: enable llvm support
+
+ package/Config.in           |   1 +
+ package/Config.in.host      |   1 +
+ package/llvm/Config.in      |  19 +++
+ package/llvm/Config.in.host |   8 +
+ package/llvm/llvm.hash      |   2 +
+ package/llvm/llvm.mk        | 360 ++++++++++++++++++++++++++++++++++++++++++++
+ package/mesa3d/Config.in    |   8 +
+ package/mesa3d/mesa3d.mk    |  18 ++-
+ 8 files changed, 414 insertions(+), 3 deletions(-)
+ create mode 100644 package/llvm/Config.in
+ create mode 100644 package/llvm/Config.in.host
+ create mode 100644 package/llvm/llvm.hash
+ create mode 100644 package/llvm/llvm.mk
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.14.3
