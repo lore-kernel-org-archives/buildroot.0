@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Feb 2018 20:53:40 +0100
-Subject: [Buildroot] [PATCH next 1/2] libite: bump version to 2.0.1
-In-Reply-To: <20180219143032.3741-1-bluemrp9@gmail.com> (Ryan Coe's message of
- "Mon, 19 Feb 2018 06:30:31 -0800")
+Date: Mon, 19 Feb 2018 20:53:47 +0100
+Subject: [Buildroot] [PATCH next 2/2] inadyn: bump version to 2.3
+In-Reply-To: <20180219143032.3741-2-bluemrp9@gmail.com> (Ryan Coe's message of
+ "Mon, 19 Feb 2018 06:30:32 -0800")
 References: <20180219143032.3741-1-bluemrp9@gmail.com>
-Message-ID: <87po50iwmz.fsf@dell.be.48ers.dk>
+ <20180219143032.3741-2-bluemrp9@gmail.com>
+Message-ID: <87lgfoiwms.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
