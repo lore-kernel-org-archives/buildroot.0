@@ -1,88 +1,64 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 19 Feb 2018 07:56:46 +0000
-Subject: [Buildroot] [PATCH v2] board: add support for ARC HS
- Development Kit (HSDK)
-In-Reply-To: <1517993000.5728.8.camel@synopsys.com>
-References: <20171219145554.17718-1-didin@synopsys.com>
- <1517385496.6038.3.camel@synopsys.com>
- <1517993000.5728.8.camel@synopsys.com>
-Message-ID: <1519027005.14718.2.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Feb 2018 09:02:54 +0100
+Subject: [Buildroot] [PATCH 1/3] imx-mkimage: new package
+In-Reply-To: <CAPP7BN1TZfMrNAbVaRFy1hOfi1Dnxht+0Q0z0=qKN-YPY8T0fA@mail.gmail.com>
+References: <1518960511-4823-1-git-send-email-karl.erik.larsson@gmail.com>
+ <1518960511-4823-2-git-send-email-karl.erik.larsson@gmail.com>
+ <20180218155100.3e4e090f@windsurf>
+ <CAPP7BN1TZfMrNAbVaRFy1hOfi1Dnxht+0Q0z0=qKN-YPY8T0fA@mail.gmail.com>
+Message-ID: <20180219090254.05ce8a8f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi gents,
+Hello Erik,
 
-Most probably this thread somehow slipped through the cracks...
-I guess that's already too late for 2018.02 as we're on RC2 already :(
+On Mon, 19 Feb 2018 06:43:15 +0100, Erik Larsson wrote:
 
-But anyways is there a chance to review/comment on this one?
+> > > diff --git a/package/freescale-imx/imx-mkimage/0001-make-bl33-read-env-variables.patch  
+> > b/package/freescale-imx/imx-mkimage/0001-make-bl33-read-
+> > env-variables.patch  
+> > > new file mode 100644
+> > > index 0000000..490eb05
+> > > --- /dev/null
+> > > +++ b/package/freescale-imx/imx-mkimage/0001-make-bl33-read-  
+> > env-variables.patch  
+> > > @@ -0,0 +1,37 @@
+> > > +From 5ca549356ef889286c12b4d736d9026efafb8fff Mon Sep 17 00:00:00 2001
+> > > +From: Erik Larsson <erik.larsson@combitech.se>
+> > > +Date: Mon, 29 Jan 2018 08:00:57 +0100
+> > > +Subject: [PATCH] Add support for overriding BL32 and BL33 not only BL31
+> > > +
+> > > +Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+> > > +Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
+> > > +Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>  
+> >
+> > What is the upstream status of this patch ?
+> >  
+> I've sent the patch to some of the developers, but still waiting for a
+> reaction.
 
--Alexey
+OK. Then who are those other people who have Signed-off on your patch ?
 
-On Wed, 2018-02-07 at 09:43 +0100, Alexey Brodkin wrote:
-> Hi Thomas, Peter, Arnout,
-> 
-> On Wed, 2018-01-31 at 10:58 +0300, Alexey Brodkin wrote:
-> > Hello,
-> > 
-> > On Tue, 2017-12-19 at 17:55 +0300, Evgeniy Didin wrote:
-> > > Synopsys DesignWare HSDK (which stands for ARC HS
-> > > Development Kit) is the latest and greatest development
-> > > platform that sports quad-core ARC HS38 in real silicon.
-> > > 
-> > > Most noticeable features of the board are:
-> > >  * Quad-core ARC HS38 CPU running at 1GHz
-> > >  * 4Gb of DDR
-> > >  * Built-in Vivante GPU (well supported via open source
-> > >    Etnaviv drivers)
-> > >  * Built-in Wi-Fi/Bluetooth module (RedPine RS-9113)
-> > > 
-> > > And as usual we have:
-> > >  * [micro] SD-card slot
-> > >  * 2 USB 2.0 ports
-> > >  * 1Gbit Ethernet port
-> > >  * Built-in Digilent JTAG probe
-> > >  * Serial port accessible via micro-USB port
-> > > 
-> > > Writing sdcard.img on SDcard creates two partitions:
-> > >  * FAT32 with uImage and uboot.env
-> > >  * EXT4 with root filesystem
-> > > 
-> > > We modify kernel config because in default hsdk kernel config
-> > > CONFIG_INITRAMFS_SOURCE parameter is set and when we build
-> > > rootfs separately (BR2_TARGET_ROOTFS_INITRAMFS is not set)
-> > > error appears. Also we set up CONFIG_ARC_UBOOT_SUPPORT which
-> > > enables usage of uboot variables in the boot process.
-> > > 
-> > > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> > > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > > Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> > > Cc: arc-buildroot at synopsys.com
-> > > ---
-> > > Changes since v1:
-> > > -add entries in DEVELOPERS and .gitlab-ci.yml
-> > > -change genimage-hsdk.cfg to genimage.cfg
-> > > -enable BR2_TARGET_UBOOT_ENVIMAGE against mkenvimage in post-image.sh
-> > > -add renaming "uboot-env.bin" to "uboot.env" in post-image.sh
-> > > -changed tar to gzip when archiving sdcard.img
-> > 
-> > I'm worried if we can make it merged before the next Buildroot
-> > release. Any comments [except probably requirement to rebase as 
-> > it's been more than a month since v2 was posted] or/and suggestions on
-> > this one?
-> 
-> Please pardon myself for being that annoying but it looks like 2018.02-rc1
-> was recently cut and that patch is not there yet.
-> 
-> It would be really cool if we may still get this one merged ASAP so
-> it becomes a part of the upcoming release.
-> 
-> FWIW the board was now officially released, see 
-> https://www.synopsys.com/dw/ipdir.php?ds=arc-hs-development-kit
-> and we're looking forward to have more people working with that
-> quite capable board.
-> 
-> -Alexey
+> > Why are you building just the tool in iMX8M ? There is also one in src/
+> > and in iMX8dv. What are the differences ? Should we build/install all
+> > of them ? Conditionally ?
+> >  
+> I'm currently only building for IMX8M because that's the only hardware I
+> have access to. Preferably this should be conditional. Do you think I shall
+> add it as a conditional option right away event though I can't test it
+> against other hardware?
+
+It's fine to support just what you need today. However, it would be
+nice to explain it in the commit log and/or in a comment above those
+lines in the .mk file.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
