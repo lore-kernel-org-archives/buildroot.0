@@ -1,79 +1,46 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Tue, 20 Feb 2018 11:51:40 +0100
-Subject: [Buildroot] [PATCH v6 1/2] libkrb5: New package
-In-Reply-To: <20180214221608.2cb324f3@windsurf.lan>
-References: <1517937729-12832-1-git-send-email-nerv@dawncrow.de>
- <20180214221608.2cb324f3@windsurf.lan>
-Message-ID: <54f9f97b-6196-7b42-f96c-2cb9277b798a@dawncrow.de>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Tue, 20 Feb 2018 11:53:37 +0100
+Subject: [Buildroot] [PATCH next v7 2/2] squid: Add optional dependency on
+ libkrb5
+In-Reply-To: <1519124017-7510-1-git-send-email-nerv@dawncrow.de>
+References: <1519124017-7510-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <1519124017-7510-2-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 14.02.2018 um 22:16 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> On Tue,  6 Feb 2018 18:22:08 +0100, Andr? Hentschel wrote:
-> 
->> diff --git a/package/libkrb5/Config.in b/package/libkrb5/Config.in
->> new file mode 100644
->> index 0000000..bdddd2e
->> --- /dev/null
->> +++ b/package/libkrb5/Config.in
->> @@ -0,0 +1,15 @@
->> +config BR2_PACKAGE_LIBKRB5
->> +	bool "libkrb5"
->> +	# needs fork()
->> +	depends on BR2_USE_MMU
->> +	# static libs are not supported on all platforms
->> +	depends on !(BR2_STATIC_LIBS && (BR2_ARM_CPU_ARMV7M || BR2_m68k))
-> 
-> Could you give more details about this ? It feels like these exclusions
-> have been added just for the sake of making test-pkg happy. What are
-> the problems you have encountered ?
-> 
-> I'm particularly wondering about the BR2_ARM_CPU_ARMV7M case, which
-> always has BR2_USE_MMU disabled, so I'm not sure how you can have
-> reached a problem on ARMv7-M.
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/squid/squid.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-
-It seems I indeed overfixed it, sorry. Removed the static check in v7
-
-
-> Also, the following defconfigs fails to build libkrb5:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_LIBKRB5=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> Failure is:
-> 
-> In file included from net-server.c:61:0:
-> ../../include/net-server.h:32:19: fatal error: verto.h: No such file or directory
->  #include <verto.h>
->                    ^
-> compilation terminated.
-> make[4]: *** [Makefile:487: net-server.o] Error 1
-> make[4]: *** Waiting for unfinished jobs....
-> make[3]: *** [Makefile:984: all-recurse] Error 1
-> make[2]: *** [Makefile:1524: all-recurse] Error 1
-> make[1]: *** [package/pkg-generic.mk:250: /home/thomas/projets/buildroot/output/build/libkrb5-1.16/.stamp_built] Error 2
-> 
-> Could you have a look and submit an updated version ?
-
-
-I can't reproduce that here with that defconfig. So I checked if I can find verto.h somewhere else on my computer where it might interfer, but no hit.
-verto.h is part of the libkrb5 source, so no idea why it can't be found in your case... Could you please check again with patch next v7?
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 8ade55e..2d21ad8 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -29,7 +29,6 @@ SQUID_CONF_OPTS = \
+ 	--enable-removal-policies="lru,heap" \
+ 	--with-filedescriptors=1024 \
+ 	--disable-ident-lookups \
+-	--without-mit-krb5 \
+ 	--enable-auth-basic="fake getpwnam" \
+ 	--enable-auth-digest="file" \
+ 	--enable-auth-negotiate="wrapper" \
+@@ -50,6 +49,13 @@ else
+ SQUID_CONF_ENV += squid_cv_gnu_atomics=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBKRB5),y)
++SQUID_CONF_OPTS += --with-mit-krb5
++SQUID_DEPENDENCIES += libkrb5
++else
++SQUID_CONF_OPTS += --without-mit-krb5
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SQUID_CONF_OPTS += --with-openssl
+ SQUID_DEPENDENCIES += openssl
+-- 
+2.7.4
