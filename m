@@ -1,47 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Feb 2018 13:41:11 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/llvm: new host package
-In-Reply-To: <CALoSW6517hOpJqRgUPcVkbG+hpso1VcOagOrhxG4nqtLHg=D9Q@mail.gmail.com>
-References: <20180219171805.13769-1-valentin.korenblit@smile.fr>
- <20180219171805.13769-2-valentin.korenblit@smile.fr>
- <20180219212213.33f289c4@windsurf.home>
- <8d272d0a-d3bc-b9c9-6cfc-ca1164cc7032@smile.fr>
- <CALoSW6517hOpJqRgUPcVkbG+hpso1VcOagOrhxG4nqtLHg=D9Q@mail.gmail.com>
-Message-ID: <20180220134111.0807307e@windsurf>
+From: Scott Ellis <scott@jumpnowtek.com>
+Date: Tue, 20 Feb 2018 08:09:06 -0500 (EST)
+Subject: [Buildroot] buildroot-2017.11.1 and cape manager for Beaglebone
+ Black.
+Message-ID: <1519132146.05324245@apps.rackspace.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 20 Feb 2018 12:13:54 +0000, Nimai Mahajan wrote:
-
-> I can test this today at work, but I am using the same target architecture
-> as you, x86. We use this sw rasturizer with a Qt5 app on an old atom
-> platform (that has no modern kernel support for hw accelerated graphics).
-> 
-> I'd love to see it in 2018.02 if possible as that is BRs next LTS release
-> but Thomas and the team may not be adding anymore packages there as they
-> are already cutting RCs. For older platforms though, llvmpipe is pretty big
-> and should be in there. The difference between that and older sw renderers
-> like softpipe is tremendous.
-
-I do realize the value of llvmpipe, and what it brings compared to
-softpipe. However, we're already past 2018.02-rc2, and 2018.02 being a
-LTS release, we really want to avoid introducing major changes that
-close to the release.
-
-Therefore I don't think llvm and llvmpipe support will make it to
-2018.02. However, it should hopefully be in 2018.05, and you can always
-backport the relevant patches if you want to stick to 2018.02 to
-benefit from security updates.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+You don't need cape manager for the built-in CAN controllers of the BBB
+or to use any CAN capes with external CAN controllers that the BBB
+communicates with over SPI.
+ 
+It's just a matter of adding some sections to your dts. You can do it with
+an include to your main dts.
+ 
+Here are some links for dts includes to the 4.4 mainline kernel to enable
+the built-in CAN controllers. Just a little pin muxing. This assumes you
+have the kernel modules enabled, which you probably do.
+ 
+The cape manager stuff was never supported by mainline linux or even TI
+linux kernels only the Beaglebone specific kernels. And it's not even
+supported by the Beagleboard folks anymore.They have moved to a u-boot
+approach.
+ 
+Cape manager is a technological dead-end.
+ 
+ 
+ 
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180220/48c986f4/attachment.html>
