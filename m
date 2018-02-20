@@ -1,64 +1,51 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Tue, 20 Feb 2018 15:57:44 +0100
-Subject: [Buildroot] [PATCH v2 2/2] modem-manager: Update to version
- 1.7.990
-In-Reply-To: <2137381520.124019.1519075425250.JavaMail.zimbra@datacom.ind.br>
-References: <1518799091-845-1-git-send-email-jared.bents@rockwellcollins.com>
- <1518799091-845-2-git-send-email-jared.bents@rockwellcollins.com>
- <20180216215334.7385e898@windsurf.lan>
- <361202886.84859.1518998584797.JavaMail.zimbra@datacom.ind.br>
- <20180219090504.745c4841@windsurf.lan>
- <2137381520.124019.1519075425250.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <05fed3b8-01d4-1f66-6de6-0164d6388507@free.fr>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 20 Feb 2018 15:46:46 +0000
+Subject: [Buildroot] __mcount on ARC
+In-Reply-To: <f0f25d75-38f2-8587-61a8-76bf0259247f@gmail.com>
+References: <8e90a87a-7e64-6662-3309-ce0325bc686f@gmail.com>
+ <20180219090939.1f050545@windsurf.lan>
+ <1519030700.14718.9.camel@synopsys.com>
+ <f0f25d75-38f2-8587-61a8-76bf0259247f@gmail.com>
+Message-ID: <1519141605.6393.78.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Zoltan,
 
-Thomas, Carlos, Jared,
+On Mon, 2018-02-19 at 21:02 +0100, Zoltan Gyarmati wrote:
+> Dear All
+> On 02/19/2018 09:58 AM, Alexey Brodkin wrote:
+> > Hi Zoltan,
+> > 
+> > On Mon, 2018-02-19 at 09:09 +0100, Thomas Petazzoni wrote:
+> > > Hello,
 
-On 19/02/2018 22:23, Carlos Santos wrote:
->> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
->> To: "Carlos Santos" <casantos@datacom.ind.br>
->> Cc: "Jared Bents" <jared.bents@rockwellcollins.com>, "buildroot" <buildroot@buildroot.org>
->> Sent: Monday, February 19, 2018 5:05:04 AM
->> Subject: Re: [Buildroot] [PATCH v2 2/2] modem-manager: Update to version 1.7.990
->> Hello,
->>
->> On Sun, 18 Feb 2018 21:03:04 -0300 (BRT), Carlos Santos wrote:
->>
->>>> Are you sure 1.7.990 isn't a development version ? Interestingly, their
->>>> Git repo has no tag with this name:
->>>> https://cgit.freedesktop.org/ModemManager/ModemManager/refs/tags. It
->>>> has a 1.8-rc1 version. So it does feel like 1.7.x might be a
->>>> development version. Could you double check this ?
->>> It is a development version. That's why I submitted an update to the
->>> latest release version, which is 1.6.12:
->>>
->>>     https://patchwork.ozlabs.org/patch/871059/
->> When is the final 1.8.x version expected ? If it's in the very near
->> future (i.e before 2018.05-rc1), then we could accept the 1.7.x bump for
->> now, and move to 1.8.x when it lands. Otherwise, I'd prefer to stick
->> with 1.6.x for now.
-> The announcement message[1], from Sun Jan 21, informs that 1.7.990
-> corresponds to 1.8-rc1. From the list of 1.5.99x releases, which spans
-> several months, I believe that 1.8 will unlikely be released before
-> the end of February.
->
-> Notice that I'm sympathetic to upgrading the Buildroot package to
-> 1.7.990, since this release includes the quectel plugin. Currently I
-> need to maintain that change as a local patch in my BR2_LOCAL.
->
-> 1. https://lists.freedesktop.org/archives/modemmanager-devel/2018-January/006157.html
->
+[snip]
+ 
+> Thanks for the background info!
+> According to the gprof documentation [1]:
+> 
+> "which causes every function to call mcount (or _mcount, or __mcount, depending on the OS and compiler) as one of its first operations."
+> 
+>  And a couldn't find any note about difference between the 3 so it seems we are safe to assume that these are the same. 
+> Is there any intention to patch the ARC glibc in Buildroot with the mentioned strong_alias (or at later point even the upstream source tree?)
+> Any opinions?
+> 
+> 
+> [1] https://sourceware.org/binutils/docs/gprof/Implementation.html
 
-+1 to bump modemmanager to 1.7.990, as it adds support for Sierra
-EM7565, which I'm using. But for me, beside bump of libqmi to 1.20.0, it
-also requires bump of libmbim to 1.16.0.
+Keeping in mind your input I really think it worth addressing in glibc for ARC.
+And given our port was not yet upstreamed maybe we may squeeze that approach with
+an alias as on AArch64 into the next respin of Vineet's patches and we'll
+just get new set of patches on top of the most recent glibc in Buildroot.
 
-Best regards,
+Or as a short-term solution just to get rid of that build failure right before
+Buildroot release we may just hand-copy "strong_alias (__mcount, _mcount);" in
+sysdeps/arc/machine-gmon.h.
 
-Julien
+Which option do you prefer?
+
+-Alexey
