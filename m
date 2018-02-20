@@ -1,31 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Feb 2018 09:06:47 +0100
-Subject: [Buildroot] [PATCH] exim: add upstream security fix
-In-Reply-To: <20180219161435.20547-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 19 Feb 2018 17:14:35 +0100")
-References: <20180219161435.20547-1-peter@korsgaard.com>
-Message-ID: <871shggk4o.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Feb 2018 09:04:53 +0100
+Subject: [Buildroot] [git commit] exim: add upstream security fix
+Message-ID: <20180220080701.B214588070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8343069e2c3cc79ad14600816a772fcd7592e291
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security issue:
- > CVE-2018-6789: Meh Chang discovered a buffer overflow flaw in a utility
- > function used in the SMTP listener of Exim, a mail transport agent.  A
- > remote attacker can take advantage of this flaw to cause a denial of
- > service, or potentially the execution of arbitrary code via a specially
- > crafted message.
+Fixes the following security issue:
 
- > Dropped ChangeLog hunk and adjusted file path of upstream commit so it
- > applies to tarball.
+CVE-2018-6789: Meh Chang discovered a buffer overflow flaw in a utility
+function used in the SMTP listener of Exim, a mail transport agent.  A
+remote attacker can take advantage of this flaw to cause a denial of
+service, or potentially the execution of arbitrary code via a specially
+crafted message.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Dropped ChangeLog hunk and adjusted file path of upstream commit so it
+applies to tarball.
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...005-Fix-base64d-buffer-size-CVE-2018-6789.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
+new file mode 100644
+index 0000000000..1811a7ff98
+--- /dev/null
++++ b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
+@@ -0,0 +1,37 @@
++From 062990cc1b2f9e5d82a413b53c8f0569075de700 Mon Sep 17 00:00:00 2001
++From: "Heiko Schlittermann (HS12-RIPE)" <hs@schlittermann.de>
++Date: Mon, 5 Feb 2018 22:23:32 +0100
++Subject: [PATCH] Fix base64d() buffer size (CVE-2018-6789)
++
++Credits for discovering this bug: Meh Chang <meh@devco.re>
++
++[Peter: Drop ChangeLog change, fix path]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/base64.c      | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/base64.c b/src/base64.c
++index f6f187f0..e58ca6c7 100644
++--- a/src/base64.c
+++++ b/src/base64.c
++@@ -152,10 +152,14 @@ static uschar dec64table[] = {
++ int
++ b64decode(const uschar *code, uschar **ptr)
++ {
+++
++ int x, y;
++-uschar *result = store_get(3*(Ustrlen(code)/4) + 1);
+++uschar *result;
++ 
++-*ptr = result;
+++{
+++  int l = Ustrlen(code);
+++  *ptr = result = store_get(1 + l/4 * 3 + l%4);
+++}
++ 
++ /* Each cycle of the loop handles a quantum of 4 input bytes. For the last
++ quantum this may decode to 1, 2, or 3 output bytes. */
++-- 
++2.11.0
++
