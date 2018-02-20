@@ -1,72 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Feb 2018 09:04:53 +0100
-Subject: [Buildroot] [git commit] exim: add upstream security fix
-Message-ID: <20180220080701.B214588070@busybox.osuosl.org>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Tue, 20 Feb 2018 16:19:31 +0800
+Subject: [Buildroot] [git commit branch/next] package/sqlite: bump
+ version to 3220000 (3.22.0)
+In-Reply-To: <87606sgk5b.fsf@dell.be.48ers.dk>
+References: <20180205171736.A4FC381937@busybox.osuosl.org>
+ <CAFkzVZZji+p+eXu=eU31_hUN2WdauwgmnYCoVoGge9sOW99gtQ@mail.gmail.com>
+ <87606sgk5b.fsf@dell.be.48ers.dk>
+Message-ID: <CAFkzVZaHPs4Vrmaa5CRu=7piAa0-eh5Q8f9Hpm4ie8zgLZttqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8343069e2c3cc79ad14600816a772fcd7592e291
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+http://sqlite.org/releaselog/3_22_0.html
 
-Fixes the following security issue:
+Bug fixes:
 
-CVE-2018-6789: Meh Chang discovered a buffer overflow flaw in a utility
-function used in the SMTP listener of Exim, a mail transport agent.  A
-remote attacker can take advantage of this flaw to cause a denial of
-service, or potentially the execution of arbitrary code via a specially
-crafted message.
+   1. Infinite loop on an UPDATE that uses an OR operator in the WHERE
+   clause. Problem introduced with 3.17.0 and reported on the mailing list
+   about one year later. Ticket47b2581aa9bfecec
+   <https://www.sqlite.org/src/info/47b2581aa9bfecec>.
+   2. Incorrect query results when the skip-ahead-distinct optimization is
+   used. Ticket ef9318757b152e3a
+   <https://sqlite.org/src/info/ef9318757b152e3a>.
+   3. Incorrect query results on a join with a ORDER BY DESC. Ticket
+   123c9ba32130a6c9 <https://sqlite.org/src/info/123c9ba32130a6c9>.
+   4. Inconsistent result set column names between CREATE TABLE AS and a
+   simple SELECT. Ticket3b4450072511e621
+   <https://sqlite.org/src/info/3b4450072511e621>
+   5. Assertion fault when doing REPLACE on an index on an expression.
+   Ticket dc3f932f5a147771 <https://sqlite.org/src/info/dc3f932f5a147771>
+   6. Assertion fault when doing an IN operator on a constant index. Ticket
+   aa98619ad08ddcab <https://sqlite.org/src/info/aa98619ad08ddcab>
 
-Dropped ChangeLog hunk and adjusted file path of upstream commit so it
-applies to tarball.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...005-Fix-base64d-buffer-size-CVE-2018-6789.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+2018?2?20? 16:06?"Peter Korsgaard" <peter@korsgaard.com>???
 
-diff --git a/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
-new file mode 100644
-index 0000000000..1811a7ff98
---- /dev/null
-+++ b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
-@@ -0,0 +1,37 @@
-+From 062990cc1b2f9e5d82a413b53c8f0569075de700 Mon Sep 17 00:00:00 2001
-+From: "Heiko Schlittermann (HS12-RIPE)" <hs@schlittermann.de>
-+Date: Mon, 5 Feb 2018 22:23:32 +0100
-+Subject: [PATCH] Fix base64d() buffer size (CVE-2018-6789)
-+
-+Credits for discovering this bug: Meh Chang <meh@devco.re>
-+
-+[Peter: Drop ChangeLog change, fix path]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/base64.c      | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/base64.c b/src/base64.c
-+index f6f187f0..e58ca6c7 100644
-+--- a/src/base64.c
-++++ b/src/base64.c
-+@@ -152,10 +152,14 @@ static uschar dec64table[] = {
-+ int
-+ b64decode(const uschar *code, uschar **ptr)
-+ {
-++
-+ int x, y;
-+-uschar *result = store_get(3*(Ustrlen(code)/4) + 1);
-++uschar *result;
-+ 
-+-*ptr = result;
-++{
-++  int l = Ustrlen(code);
-++  *ptr = result = store_get(1 + l/4 * 3 + l%4);
-++}
-+ 
-+ /* Each cycle of the loop handles a quantum of 4 input bytes. For the last
-+ quantum this may decode to 1, 2, or 3 output bytes. */
-+-- 
-+2.11.0
-+
+> >>>>> "Scott" == Scott Fan <fancp2007@gmail.com> writes:
+>
+>  > Why was this committed in next ?
+>  > Thanks
+>
+> Because we are past rc1. Does this fix any important issues making it a
+> candidate for master?
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180220/ce6f9d62/attachment.html>
