@@ -1,53 +1,64 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Tue, 20 Feb 2018 16:19:31 +0800
-Subject: [Buildroot] [git commit branch/next] package/sqlite: bump
- version to 3220000 (3.22.0)
-In-Reply-To: <87606sgk5b.fsf@dell.be.48ers.dk>
-References: <20180205171736.A4FC381937@busybox.osuosl.org>
- <CAFkzVZZji+p+eXu=eU31_hUN2WdauwgmnYCoVoGge9sOW99gtQ@mail.gmail.com>
- <87606sgk5b.fsf@dell.be.48ers.dk>
-Message-ID: <CAFkzVZaHPs4Vrmaa5CRu=7piAa0-eh5Q8f9Hpm4ie8zgLZttqw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Feb 2018 10:05:08 +0100
+Subject: [Buildroot] [2018.02] check-bin-arch fails for PowerPC 32-bit
+ userland, 64-bit kernel
+In-Reply-To: <20180220085638.GB11289@australia>
+References: <20180220085638.GB11289@australia>
+Message-ID: <20180220100508.5c71fa1c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://sqlite.org/releaselog/3_22_0.html
+Hello Thomas,
 
-Bug fixes:
+Thanks for taking the time to test 2018.02 in your setup!
 
-   1. Infinite loop on an UPDATE that uses an OR operator in the WHERE
-   clause. Problem introduced with 3.17.0 and reported on the mailing list
-   about one year later. Ticket47b2581aa9bfecec
-   <https://www.sqlite.org/src/info/47b2581aa9bfecec>.
-   2. Incorrect query results when the skip-ahead-distinct optimization is
-   used. Ticket ef9318757b152e3a
-   <https://sqlite.org/src/info/ef9318757b152e3a>.
-   3. Incorrect query results on a join with a ORDER BY DESC. Ticket
-   123c9ba32130a6c9 <https://sqlite.org/src/info/123c9ba32130a6c9>.
-   4. Inconsistent result set column names between CREATE TABLE AS and a
-   simple SELECT. Ticket3b4450072511e621
-   <https://sqlite.org/src/info/3b4450072511e621>
-   5. Assertion fault when doing REPLACE on an index on an expression.
-   Ticket dc3f932f5a147771 <https://sqlite.org/src/info/dc3f932f5a147771>
-   6. Assertion fault when doing an IN operator on a constant index. Ticket
-   aa98619ad08ddcab <https://sqlite.org/src/info/aa98619ad08ddcab>
+On Tue, 20 Feb 2018 09:56:38 +0100, Thomas De Schampheleire wrote:
 
+> I have a defconfig with a multilib toolchain for PowerPC e6500 which is a 64-bit
+> architecture. The toolchain builds 32-bit by default, which is used for
+> userland. The kernel forces 64-bit anyway.
+> BR2_ARCH is set to "powerpc".
+> 
+> With the introduction of check-bin-arch, I now see failures after the kernel
+> compilation:
+>     ERROR: architecture for "/lib/modules/3.12.37-rt51/kernel/lib/libcrc32c.ko" is "PowerPC64", should be "PowerPC"
+> and same for other modules.
+> For actual userland binaries, readelf does show PowerPC as expected.
+> 
+> According to me, the situation is normal and check-bin-arch should accept it.
+> However, how to deal with it?
 
-2018?2?20? 16:06?"Peter Korsgaard" <peter@korsgaard.com>???
+Indeed.
 
-> >>>>> "Scott" == Scott Fan <fancp2007@gmail.com> writes:
->
->  > Why was this committed in next ?
->  > Thanks
->
-> Because we are past rc1. Does this fix any important issues making it a
-> candidate for master?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180220/ce6f9d62/attachment.html>
+> We could add a second variable BR2_READELF_ARCH_NAME_KERNEL.
+> Its value would be the same as the existing BR2_READELF_ARCH_NAME in case we are
+> dealing with a 32-bit arch, but the 64-bit equivalent in case of a 64-bit arch.
+> However, we don't currently mark all 64-bit powerpc architectures as such, so
+> we'd need some more knowledge about them (or could add them case by case as
+> required).
+
+How would the value of BR2_READELF_ARCH_NAME_KERNEL be defined? How
+would Buildroot know that despite the architecture being PowerPC, the
+Linux kernel image and modules being built are PowerPC64 ?
+
+Another alternative is to simply blacklist /lib/modules from
+check-bin-arch, like we're already doing
+for /lib/firmware, /usr/lib/firmware and /usr/share. It's unlikely that
+there will be an architecture mismatch on kernel modules.
+
+Also, it is worth mentioning that Markus recently raised another issue
+with check-bin-arch, when you're building a multilib system, mixing 32
+bit and 64 bit binaries: http://patchwork.ozlabs.org/patch/874245/.
+However, I don't think we will be able to support Markus use case,
+since we don't have a good way to support multilib.
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
