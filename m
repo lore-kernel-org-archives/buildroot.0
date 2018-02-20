@@ -1,21 +1,73 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 19 Feb 2018 23:01:38 +0000
-Subject: [Buildroot] [Bug 10776] ktap fails to build
-In-Reply-To: <bug-10776-163@https.bugs.busybox.net/>
-References: <bug-10776-163@https.bugs.busybox.net/>
-Message-ID: <bug-10776-163-1bywV5JTnG@https.bugs.busybox.net/>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Tue, 20 Feb 2018 10:40:56 +0800
+Subject: [Buildroot] [git commit branch/next] package/sqlite: bump
+ version to 3220000 (3.22.0)
+In-Reply-To: <20180205171736.A4FC381937@busybox.osuosl.org>
+References: <20180205171736.A4FC381937@busybox.osuosl.org>
+Message-ID: <CAFkzVZZji+p+eXu=eU31_hUN2WdauwgmnYCoVoGge9sOW99gtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10776
+Why was this committed in next ?
+Thanks
 
---- Comment #4 from Davide Viti <zinosat@gmail.com> ---
-The last error is reported upstream as https://github.com/ktap/ktap/issues/80
-and there seem not to have a fix available yet
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2018?2?6? 01:17?"Thomas Petazzoni" <thomas.petazzoni@bootlin.com>???
+
+> commit: https://git.buildroot.net/buildroot/commit/?id=
+> f83d92b60f25df3178ce7775716403c76d63d9b1
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/sqlite/sqlite.hash | 4 ++--
+>  package/sqlite/sqlite.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+> index be5820e1f8..2aac7dc1d3 100644
+> --- a/package/sqlite/sqlite.hash
+> +++ b/package/sqlite/sqlite.hash
+> @@ -1,6 +1,6 @@
+>  # From http://www.sqlite.org/download.html
+> -sha1 f56fe3407d8297fc0a68a058f4c9e6b77e83575c
+> sqlite-autoconf-3210000.tar.gz
+> +sha1 2fb24ec12001926d5209d2da90d252b9825366ac
+> sqlite-autoconf-3220000.tar.gz
+>  # Calculated based on the hash above
+> -sha256 d7dd516775005ad87a57f428b6f86afd206cb341722927f104d3f0cf65fbbbe3
+> sqlite-autoconf-3210000.tar.gz
+> +sha256 2824ab1238b706bc66127320afbdffb096361130e23291f26928a027b885c612
+> sqlite-autoconf-3220000.tar.gz
+>  # Locally calculated
+>  sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9
+> tea/license.terms
+> diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+> index 5239592f18..e8ce92df56 100644
+> --- a/package/sqlite/sqlite.mk
+> +++ b/package/sqlite/sqlite.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ############################################################
+> ####################
+>
+> -SQLITE_VERSION = 3210000
+> +SQLITE_VERSION = 3220000
+>  SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+> -SQLITE_SITE = http://www.sqlite.org/2017
+> +SQLITE_SITE = http://www.sqlite.org/2018
+>  SQLITE_LICENSE = Public domain
+>  SQLITE_LICENSE_FILES = tea/license.terms
+>  SQLITE_INSTALL_STAGING = YES
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180220/a2b48939/attachment.html>
