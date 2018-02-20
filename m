@@ -1,63 +1,74 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Tue, 20 Feb 2018 17:15:57 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-headers: Resynchronize same-as-kernel
- source selection.
-Message-ID: <20180220161557.14766-1-nicolas.cavallari@green-communications.fr>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Tue, 20 Feb 2018 12:41:04 -0500
+Subject: [Buildroot] [PATCH v2 1/3] package/llvm: new host package
+In-Reply-To: <20180220134111.0807307e@windsurf>
+References: <20180219171805.13769-1-valentin.korenblit@smile.fr>
+ <20180219171805.13769-2-valentin.korenblit@smile.fr>
+ <20180219212213.33f289c4@windsurf.home>
+ <8d272d0a-d3bc-b9c9-6cfc-ca1164cc7032@smile.fr>
+ <CALoSW6517hOpJqRgUPcVkbG+hpso1VcOagOrhxG4nqtLHg=D9Q@mail.gmail.com>
+ <20180220134111.0807307e@windsurf>
+Message-ID: <CALoSW64Qopg9Z--Ty_RbXfrYV2Lu_Vnxrx+zewO4xqS-jQSsDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The source selection done by linux.mk need to be duplicated to
-linux-headers.mk for the BR2_KERNEL_HEADERS_AS_KERNEL option to work.
+On Tue, Feb 20, 2018 at 7:41 AM, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-This duplicates these linux.mk changes to linux-headers.mk:
-- Add custom Subversion repository support for the package (986fa44)
-- Add CIP SLTS selection option (31d4fa7)
-- Fix URL for release candidate versions (ff4cccb)
+> Hello,
+>
+> On Tue, 20 Feb 2018 12:13:54 +0000, Nimai Mahajan wrote:
+>
+> > I can test this today at work, but I am using the same target
+> architecture
+> > as you, x86. We use this sw rasturizer with a Qt5 app on an old atom
+> > platform (that has no modern kernel support for hw accelerated graphics).
+>
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- package/linux-headers/linux-headers.mk | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+Tested! Works just fine on x86. Pulled in BR master, applied the 3 patches
+successfully, LLVM builds, mesa3d builds and links against it properly.
 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index f1e3790608..7bc22d3e2a 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -26,6 +26,21 @@ LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_HEADERS_SITE_METHOD = hg
- # use same hg tarball as linux kernel
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
-+LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+LINUX_HEADERS_SITE_METHOD = svn
-+# use same hg tarball as linux kernel
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
-+else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
-+LINUX_HEADERS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/bwh/linux-cip.git
-+# use same hg tarball as linux kernel
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
-+else ifneq ($(findstring -rc,$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))),)
-+# Since 4.12-rc1, -rc kernels are generated from cgit. This also works for
-+# older -rc kernels.
-+LINUX_HEADERS_SITE = https://git.kernel.org/torvalds/t
-+# use same hg tarball as linux kernel
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
- else
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
-@@ -38,10 +53,6 @@ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
- else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
- endif
--# release candidates are in testing/ subdir
--ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
--LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)/testing
--endif # -rc
- endif
- 
- LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
--- 
-2.15.1
+
+> >
+> > I'd love to see it in 2018.02 if possible as that is BRs next LTS release
+> > but Thomas and the team may not be adding anymore packages there as they
+> > are already cutting RCs. For older platforms though, llvmpipe is pretty
+> big
+> > and should be in there. The difference between that and older sw
+> renderers
+> > like softpipe is tremendous.
+>
+> I do realize the value of llvmpipe, and what it brings compared to
+> softpipe. However, we're already past 2018.02-rc2, and 2018.02 being a
+> LTS release, we really want to avoid introducing major changes that
+> close to the release.
+>
+
+Understood, no problem. Thanks for the consideration.
+
+>
+> Therefore I don't think llvm and llvmpipe support will make it to
+> 2018.02. However, it should hopefully be in 2018.05, and you can always
+> backport the relevant patches if you want to stick to 2018.02 to
+> benefit from security updates.
+>
+
+Yes, will do that. It's just a pain in the build process to pre-patch a
+tagged release rather than just having it committed upstream. But I
+definitely understand.
+
+>
+> Best regards,
+>
+> Thomas Petazzoni
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180220/a25f6a04/attachment.html>
