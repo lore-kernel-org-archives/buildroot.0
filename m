@@ -1,56 +1,93 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Feb 2018 22:59:31 +0100
-Subject: [Buildroot] [PATCH-FOR-NEXT v1 6/6] qt5webengine: set ninja
- host pkg-config tool
-In-Reply-To: <20180221142801.28997-7-gael.portay@savoirfairelinux.com>
-References: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
- <20180221142801.28997-7-gael.portay@savoirfairelinux.com>
-Message-ID: <20180221225931.5996c857@windsurf.lan>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 21 Feb 2018 23:13:18 +0100
+Subject: [Buildroot] BUG: systemd/dbus broken in -rc1
+In-Reply-To: <20180221172202.uqpupaoy5bp65reu@sapphire.tkos.co.il>
+References: <c2b37eb8-10f7-f27c-6175-6b3f08e937be@smile.fr>
+ <20180221172202.uqpupaoy5bp65reu@sapphire.tkos.co.il>
+Message-ID: <e5ed15f4-8d4e-a9dc-fb2c-40ce9f4109a7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch,
 
-On Wed, 21 Feb 2018 09:28:01 -0500, Ga?l PORTAY wrote:
-> The WebEngine build system uses pkg-config to get package data for both
-> host and target architectures.
+Le 21/02/2018 ? 18:22, Baruch Siach a ?crit?:
+> Hi J?r?my,
 > 
-> Using the same call to pkg-config for both target and host leads to
-> build mismatches.
+> On Wed, Feb 21, 2018 at 01:42:32PM +0100, J?r?my Rosen wrote:
+>> I have a systemd course where I use a minimal buildroot system as my
+>> exercise machine.
+>> It is a very minimal configuration based on 86_64+systemd+not much else.
+>>
+>> since the update of systemd to v237 there has been various problems related
+>> to the
+>> connexion between systemd and dbus. The easiest way to test is to run
+>> "busctl" on
+>> the system. It won't work complaining about "no such file or directory"
+>>
+>> This bug affects more or less all systemd-provided utilities, including
+>> logind and systemd
+>> itself.
+>>
+>> After investigating, the problem is that systemd looks for the dbus socket
+>> in /run/dbus instead of
+>> /var/run/dbus which is not where dbus puts the socket.
+>>
+>> However, systemd mandates that /run be a symlink to /var/run. The file
+>> /usr/lib/tmpfiles.d/var.con
+>> will create automatically that symlink at bootup. So in theory, looking at
+>> the socket in /run should
+>> work too.
+>>
+>> However, there is a second stacked bug. dbus creates, at install time, the
+>> directory /var/run/dbus.
+>> This breaks tmpfile.d which will not create the symlink since the directory
+>> already exists.
+>> Creating a file in /var/run makes no sense in the first place since that
+>> directory is a tmpfs and will
+>> be emptied at reboot time
+>>
+>> Now, I am not sure what to do from here on the buildroot side. I think it
+>> could be usefull to have
+>> some sort of security to check that /var/run doesn't exist and yell loudly
+>> if it does, but I don't know
+>> how to implement that
+>>
+>> An other approch would be for the systemd skeleton to create /var/run as a
+>> symlink to ../run
+>> (not /run) in order to let stuff be installed. The tmpfs mount at boot time
+>> would hide the content,
+>> but it should work
+>>
+>> To sum it up :
+>> * systemd should look for the socket in /var/run :
+>> https://github.com/systemd/systemd/issues/8197
+>> * dbus should not create the /run/dbus directory in the first place : bug to
+>> be opened
+>> * buildroot needs to make sure /var/run is not created or is a correct
+>> symlink.
+>>
+>> I'd gladly take advice on what to do to move forward on that issue...
 > 
-> In this situation, it tries to link a host-tool using target libraries.
-> 
-> Qt is able to set host pkg-config for Ninja, using environment variable
-> $GN_PKG_CONFIG_HOST[1].
-> 
-> Fixes:
-> 
-> 	FAILED: host/transport_security_state_generator
-> 	/home/gportay/src/buildroot/output-qt5.10/host/bin/python2 "../../3rdparty/chromium/build/toolchain/gcc_link_wrapper.py" --output="host/transport_security_state_generator" -- /usr/bin/g++ -Wl,--fatal-warnings -fPIC -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -Wl,--no-as-needed -lpthread -Wl,--as-needed -m64 -Wl,-O1 -Wl,--gc-sections -Wl,-rpath-link=host -Wl,--disable-new-dtags -L/home/gportay/src/buildroot/output-qt5.10/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib -o "host/transport_security_state_generator" -Wl,--start-group @"host/transport_security_state_generator.rsp"  -Wl,--end-group   -ldl -lpthread -lrt -lnss3 -lnssutil3 -lsmime3 -lplds4 -lplc4 -lnspr4
-> 	/usr/bin/ld: cannot find /lib64/libpthread.so.0
-> 	/usr/bin/ld: cannot find /usr/lib64/libpthread_nonshared.a
-> 	collect2: error: ld returned 1 exit status
-> 	ninja: build stopped: subcommand failed.
-> 	Makefile.gn_run:449: recipe for target 'run_ninja' failed
-> 
-> [1]: https://github.com/qt/qtwebengine/blob/v5.10.1/src/core/config/linux.pri#L111-L125
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> The patch of Jan Kundr?t at http://patchwork.ozlabs.org/patch/870834/ might 
+> solve your last issue. Not sure about the rest.
 
-Same comment for this one as for PATCH 5/6: what happens if we apply
-your series up to PATCH 5/6, but excluding PATCH 6/6 ? qt5webengine
-will fail to build, while it was building before, which is a
-regression. So I assume this should be in the 5.10 bump as well, or
-kept separate during the review, and squashed when applying. But it
-should be mentioned.
+This patch doesn't solve J?r?my's issue since it only for the rootfs RO case.
 
-Thanks!
+define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+ 	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+ 	mkdir -p $(TARGET_DIR)/var
++	ln -s ../run $(TARGET_DIR)/var/run
+ endef
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Adding a symlink for the read-write case allow to make systemd work with dbus
+but we have /run/dbud in the target directory (which will be hidden by the tmpfs
+mount).
+
+Romain
+
+> 
+> baruch
+> 
