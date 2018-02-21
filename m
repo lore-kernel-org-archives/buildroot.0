@@ -1,164 +1,54 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 21 Feb 2018 14:26:43 +0100
-Subject: [Buildroot] [PATCH] scanpypi: add support for Python3
-Message-ID: <20180221132643.3502-1-yegorslists@googlemail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Wed, 21 Feb 2018 06:17:36 -0800
+Subject: [Buildroot] [PATCH next] libite: update path for license files
+Message-ID: <20180221141736.15759-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Two of the license files have moved in the source package. Update the package
+to reflect these changes.
 
-The script was changed via modernize utility. The only manual
-made part was the handling of StringIO.
+Fixes:
+http://autobuild.buildroot.net/results/8fd71513f021652a9a4ff2354dd5fe4fedf3d557
+http://autobuild.buildroot.net/results/6a1ab663f1093351662ca7b86c9224a630798f35
+http://autobuild.buildroot.net/results/066373da2da2cc8c0c22cc4a3048d1b187c9c389
+http://autobuild.buildroot.net/results/edad6ac5d3f61257e99b90c6f54d4d6786aa7ad7
+http://autobuild.buildroot.net/results/c2b72c2a32de949a5b1ab46d6d7c540353cfaf5e
+http://autobuild.buildroot.net/results/8635ca4bbec464d196846a4018d1228d6651b211
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- utils/scanpypi | 43 ++++++++++++++++++++++++++-----------------
- 1 file changed, 26 insertions(+), 17 deletions(-)
+ package/libite/libite.hash | 4 ++--
+ package/libite/libite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 55bfb2fedb..12bfc24e10 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -7,13 +7,13 @@ Any package built by scanpypi should be manually checked for
- errors.
- """
- from __future__ import print_function
-+from __future__ import absolute_import
- import argparse
- import json
--import urllib2
-+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
- import sys
- import os
- import shutil
--import StringIO
- import tarfile
- import zipfile
- import errno
-@@ -23,6 +23,13 @@ import textwrap
- import tempfile
- import imp
- from functools import wraps
-+from six.moves import map
-+from six.moves import zip
-+from six.moves import input
-+if six.PY2:
-+    import StringIO
-+else:
-+    import io
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+index 437127d15c..7ef9dca57a 100644
+--- a/package/libite/libite.hash
++++ b/package/libite/libite.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+ sha256 39a4c12af30a38a813fac7c8d7512efb3692f910eba9c697a50ce0203e039dad  libite-v2.0.1.tar.gz
+ sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
+-sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  chomp.c
+-sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  pidfile.c
++sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
++sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+index 02ea948ef2..a128953c7a 100644
+--- a/package/libite/libite.mk
++++ b/package/libite/libite.mk
+@@ -7,7 +7,7 @@
+ LIBITE_VERSION = v2.0.1
+ LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
+ LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+-LIBITE_LICENSE_FILES = LICENSE chomp.c pidfile.c
++LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
+ LIBITE_INSTALL_STAGING = YES
+ LIBITE_AUTORECONF = YES
  
- BUF_SIZE = 65536
- 
-@@ -147,15 +154,15 @@ class BuildrootPackage():
-         self.metadata_url = 'https://pypi.python.org/pypi/{pkg}/json'.format(
-             pkg=self.real_name)
-         try:
--            pkg_json = urllib2.urlopen(self.metadata_url).read().decode()
--        except urllib2.HTTPError as error:
-+            pkg_json = six.moves.urllib.request.urlopen(self.metadata_url).read().decode()
-+        except six.moves.urllib.error.HTTPError as error:
-             print('ERROR:', error.getcode(), error.msg, file=sys.stderr)
-             print('ERROR: Could not find package {pkg}.\n'
-                   'Check syntax inside the python package index:\n'
-                   'https://pypi.python.org/pypi/ '
-                   .format(pkg=self.real_name))
-             raise
--        except urllib2.URLError:
-+        except six.moves.urllib.error.URLError:
-             print('ERROR: Could not find package {pkg}.\n'
-                   'Check syntax inside the python package index:\n'
-                   'https://pypi.python.org/pypi/ '
-@@ -193,8 +200,8 @@ class BuildrootPackage():
-             try:
-                 print('Downloading package {pkg} from {url}...'.format(
-                       pkg=self.real_name, url=download_url['url']))
--                download = urllib2.urlopen(download_url['url'])
--            except urllib2.HTTPError as http_error:
-+                download = six.moves.urllib.request.urlopen(download_url['url'])
-+            except six.moves.urllib.error.HTTPError as http_error:
-                 download = http_error
-             else:
-                 self.used_url = download_url
-@@ -205,7 +212,7 @@ class BuildrootPackage():
-                 if self.md5_sum == download_url['md5_digest']:
-                     break
-         else:
--            if download.__class__ == urllib2.HTTPError:
-+            if download.__class__ == six.moves.urllib.error.HTTPError:
-                 raise download
-             raise DownloadFailed('Failed to downloas package {pkg}'
-                                  .format(pkg=self.real_name))
-@@ -219,7 +226,10 @@ class BuildrootPackage():
-         Keyword arguments:
-         tmp_path -- directory where you want the package to be extracted
-         """
--        as_file = StringIO.StringIO(self.as_string)
-+        if six.PY2:
-+            as_file = StringIO.StringIO(self.as_string)
-+        else:
-+            as_file = io.BytesIO(self.as_string)
-         if self.filename[-3:] == 'zip':
-             with zipfile.ZipFile(as_file) as as_zipfile:
-                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
-@@ -303,8 +313,8 @@ class BuildrootPackage():
-                         if len(item) > 0 and item[0] != '#']
- 
-         req_not_found = self.pkg_req
--        self.pkg_req = map(pkg_buildroot_name, self.pkg_req)
--        pkg_tuples = zip(req_not_found, self.pkg_req)
-+        self.pkg_req = list(map(pkg_buildroot_name, self.pkg_req))
-+        pkg_tuples = list(zip(req_not_found, self.pkg_req))
-         # pkg_tuples is a list of tuples that looks like
-         # ('werkzeug','python-werkzeug') because I need both when checking if
-         # dependencies already exist or are already in the download list
-@@ -412,8 +422,7 @@ class BuildrootPackage():
-             classifiers_licenses = [regexp.sub(r"\1", lic)
-                                     for lic in self.metadata['info']['classifiers']
-                                     if regexp.match(lic)]
--            licenses = map(lambda x: license_dict[x] if x in license_dict else x,
--                           classifiers_licenses)
-+            licenses = [license_dict[x] if x in license_dict else x for x in classifiers_licenses]
-             if not len(licenses):
-                 print('WARNING: License has been set to "{license}". It is most'
-                       ' likely wrong, please change it if need be'.format(
-@@ -583,7 +592,7 @@ class BuildrootPackage():
-         # \t + two spaces is 3 char long
-         help_lines.append('')
-         help_lines.append('\t  ' + self.metadata['info']['home_page'])
--        help_lines = map(lambda x: x + '\n', help_lines)
-+        help_lines = [x + '\n' for x in help_lines]
-         lines += help_lines
- 
-         with open(path_to_config, 'w') as config_file:
-@@ -624,7 +633,7 @@ def main():
-             print('Fetching package', package.real_name)
-             try:
-                 package.fetch_package_info()
--            except (urllib2.URLError, urllib2.HTTPError):
-+            except (six.moves.urllib.error.URLError, six.moves.urllib.error.HTTPError):
-                 continue
-             if package.metadata_name.lower() == 'setuptools':
-                 # setuptools imports itself, that does not work very well
-@@ -634,7 +643,7 @@ def main():
- 
-             try:
-                 package.download_package()
--            except urllib2.HTTPError as error:
-+            except six.moves.urllib.error.HTTPError as error:
-                 print('Error: {code} {reason}'.format(code=error.code,
-                                                       reason=error.reason))
-                 print('Error downloading package :', package.buildroot_name)
-@@ -682,7 +691,7 @@ def main():
-                     continue
-                 print('Error: Package {name} already exists'
-                       .format(name=package.pkg_dir))
--                del_pkg = raw_input(
-+                del_pkg = input(
-                     'Do you want to delete existing package ? [y/N]')
-                 if del_pkg.lower() == 'y':
-                     shutil.rmtree(package.pkg_dir)
 -- 
-2.11.0
+2.16.1
