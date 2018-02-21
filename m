@@ -1,116 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Feb 2018 23:13:39 +0100
-Subject: [Buildroot] [PATCH next v2 2/5] support/scripts/pkg-stats-new: add
- -n and -p options
+Date: Wed, 21 Feb 2018 23:13:40 +0100
+Subject: [Buildroot] [PATCH next v2 3/5] support/scripts/pkg-stats-new: add
+ current version information
 In-Reply-To: <20180221221342.15683-1-thomas.petazzoni@bootlin.com>
 References: <20180221221342.15683-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180221221342.15683-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20180221221342.15683-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds the following options to the pkg-stats-new script:
-
- -n, to specify a number of packages to parse instead of all packages
-
- -p, to specify a list of packages (comma-separated) to parse instead
-     of all packages
-
-These options are basically only useful when debugging/developping
-this script, but they are very useful, because the script is rather
-slow to run completely with all 2000+ packages, especially once
-upstream versions will be fetched from release-monitoring.org.
+This commit adds a new column in the HTML output containing the
+current version of a package in Buildroot. As such, it isn't terribly
+useful, but combined with the latest upstream version added in a
+follow-up commit, it will become very useful.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
 Changes since v1:
 - Fix flake8 warnings
+- Pass BR2_HAVE_DOT_CONFIG=y when calling make, in order to fake
+  having a .config. This allows "printvars" to dump all variables even
+  without a .config.
+- Add missing newline in HTML code
 ---
- support/scripts/pkg-stats-new | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats-new | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
 diff --git a/support/scripts/pkg-stats-new b/support/scripts/pkg-stats-new
-index 8c74ff2a37..85a6caeeb9 100755
+index 85a6caeeb9..c4174877aa 100755
 --- a/support/scripts/pkg-stats-new
 +++ b/support/scripts/pkg-stats-new
-@@ -23,6 +23,7 @@ import os
- from collections import defaultdict
- import re
- import subprocess
-+import sys
+@@ -36,6 +36,7 @@ class Package:
+         self.has_hash = False
+         self.patch_count = 0
+         self.warnings = 0
++        self.current_version = None
  
- 
- class Package:
-@@ -47,11 +48,14 @@ class Package:
-             (self.name, self.path, self.has_license, self.has_license_files, self.has_hash, self.patch_count)
- 
- 
--def get_pkglist():
-+def get_pkglist(npackages, package_list):
+     def __eq__(self, other):
+         return self.path == other.path
+@@ -148,6 +149,7 @@ def add_pkg_make_info(packages):
      """
-     Builds the list of Buildroot packages, returning a list of Package
-     objects. Only the .name and .path fields of the Package object are
-     initialized.
+     licenses = list()
+     license_files = list()
++    versions = dict()
+ 
+     # Licenses
+     o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
+@@ -187,12 +189,33 @@ def add_pkg_make_info(packages):
+ 
+         license_files.append(pkgvar)
+ 
++    # Version
++    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
++                                 "-s", "printvars", "VARS=%_VERSION"])
++    for l in o.splitlines():
++        # Get variable name and value
++        pkgvar, value = l.split("=")
 +
-+    npackages: limit to N packages
-+    package_list: limit to those packages in this list
-     """
-     WALK_USEFUL_SUBDIRS = ["boot", "linux", "package", "toolchain"]
-     WALK_EXCLUDES = ["boot/common.mk",
-@@ -74,6 +78,7 @@ def get_pkglist():
-                      "toolchain/helpers.mk",
-                      "toolchain/toolchain-wrapper.mk"]
-     packages = list()
-+    count = 0
-     for root, dirs, files in os.walk("."):
-         rootdir = root.split("/")
-         if len(rootdir) < 2:
-@@ -85,6 +90,8 @@ def get_pkglist():
-                 continue
-             # Strip ending ".mk"
-             pkgname = f[:-3]
-+            if package_list and pkgname not in package_list:
-+                continue
-             pkgpath = os.path.join(root, f)
-             skip = False
-             for exclude in WALK_EXCLUDES:
-@@ -96,6 +103,9 @@ def get_pkglist():
-                 continue
-             p = Package(pkgname, pkgpath)
-             packages.append(p)
-+            count += 1
-+            if npackages and count == npackages:
-+                return packages
-     return packages
++        # If present, strip HOST_ from variable name
++        if pkgvar.startswith("HOST_"):
++            pkgvar = pkgvar[5:]
++
++        if pkgvar.endswith("_DL_VERSION"):
++            continue
++
++        # Strip _VERSION
++        pkgvar = pkgvar[:-8]
++
++        versions[pkgvar] = value
++
+     for pkg in packages:
+         var = pkgname_to_pkgvar(pkg.name)
+         if var in licenses:
+             pkg.has_license = True
+         if var in license_files:
+             pkg.has_license_files = True
++        if var in versions:
++            pkg.current_version = versions[var]
  
  
-@@ -452,13 +462,24 @@ def parse_args():
-     parser = argparse.ArgumentParser()
-     parser.add_argument('-o', dest='output', action='store', required=True,
-                         help='HTML output file')
-+    parser.add_argument('-n', dest='npackages', type=int, action='store',
-+                        help='Number of packages')
-+    parser.add_argument('-p', dest='packages', action='store',
-+                        help='List of packages')
-     return parser.parse_args()
+ def add_hash_info(packages):
+@@ -387,6 +410,9 @@ def dump_html_pkg(f, pkg):
+     f.write("  <td class=\"%s\">%s</td>\n" %
+             (" ".join(td_class), boolean_str(pkg.has_hash)))
  
- 
- def __main__():
-     args = parse_args()
-+    if args.npackages and args.packages:
-+        print "ERROR: -n and -p are mutually exclusive"
-+        sys.exit(1)
-+    if args.packages:
-+        package_list = args.packages.split(",")
-+    else:
-+        package_list = None
-     print "Build package list ..."
--    packages = get_pkglist()
-+    packages = get_pkglist(args.npackages, package_list)
-     print "Get package infra ..."
-     add_infra_info(packages)
-     print "Get make info ..."
++    # Current version
++    f.write("  <td class=\"centered\">%s</td>\n" % pkg.current_version)
++
+     # Warnings
+     td_class = ["centered"]
+     if pkg.warnings == 0:
+@@ -409,6 +435,7 @@ def dump_html_all_pkgs(f, packages):
+ <td class=\"centered\">License</td>
+ <td class=\"centered\">License files</td>
+ <td class=\"centered\">Hash file</td>
++<td class=\"centered\">Current version</td>
+ <td class=\"centered\">Warnings</td>
+ </tr>
+ """)
 -- 
 2.14.3
