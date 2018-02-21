@@ -1,54 +1,146 @@
 From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Wed, 21 Feb 2018 09:27:56 -0500
-Subject: [Buildroot] [PATCH-FOR-NEXT v1 1/6] package: add libnpsr host
- package
-In-Reply-To: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
-References: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180221142801.28997-2-gael.portay@savoirfairelinux.com>
+Date: Wed, 21 Feb 2018 09:27:55 -0500
+Subject: [Buildroot] [PATCH-FOR-NEXT v1 0/6] Qt5 bump latest version to
+ 5.10.1
+Message-ID: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- package/libnspr/Config.in.host | 10 ++++++++++
- package/libnspr/libnspr.mk     |  7 +++++++
- 2 files changed, 17 insertions(+)
- create mode 100644 package/libnspr/Config.in.host
+Dear maintainers,
 
-diff --git a/package/libnspr/Config.in.host b/package/libnspr/Config.in.host
-new file mode 100644
-index 0000000000..a80b55e122
---- /dev/null
-+++ b/package/libnspr/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_LIBNSPR
-+	bool "host libnspr"
-+	help
-+	  NSPR is the Netscape Portable Runtime library which provides
-+	  a platform-neutral API for system level and libc like
-+	  functions. The library is used by the Mozilla project as well
-+	  as others.
-+
-+	  http://www.mozilla.org/projects/nspr/
-+
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 0c782ae309..c1662947f7 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -49,4 +49,11 @@ LIBNSPR_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIBRARY= install
- LIBNSPR_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIBRARY= install
- endif
- 
-+ifeq ($(HOSTARCH),x86_64)
-+HOST_LIBNSPR_CONF_OPTS += --enable-64bit
-+else
-+HOST_LIBNSPR_CONF_OPTS += --disable-64bit
-+endif
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+This patch series bumps the latest version of Qt to 5.10.1. All modules
+compile fine (on PC x86-64 BIOS configuration). I tested a few of them
+through the examples.
+
+The first two patches add two new host libraries that are needed by
+qtwebengine (since 5.10.0). I patched libnss to be able to set the
+include directory for zlib. The patch works the same way as for sqlite.
+I have not submitted the patch mainline yet. 
+
+The third patch adds a pkg-config wrapper for host packages. This
+wrapper is needed by qtwebengine since this new version compiles host
+tools that get host package data using pkg-config (host-libnss,
+host-libpng).
+
+The fourth patch updates all hashes for all Qt5 modules; at the
+exception of qtwebkit (and qtwebkit-samples) that stay in 5.9.
+
+Unfortunately, the filename has changed since 5.10. The module suffix
+*opensource-src* has changed to *everywhere-src*. I introduced the
+*qt5source* function to compute automatically the right filename
+according to the Qt version. This function takes the module as first
+argument and its version as second argument.
+
+The two last patches fix build issues with qtwebengine. One adds the new
+requirements (libnss, host-libnss, host-libpng). One sets the host
+pkg-config wrapper for host to Ninja using the qmake $GN_PKG_CONFIG_HOST
+environment variable. Those two last patches can be squashed to the
+fourth patch.
+
+Note: The third and the sixth patch fixes the issue below:
+
+	FAILED: host/transport_security_state_generator 
+	/home/gportay/src/buildroot/output-qt5.10/host/bin/python2 "../../3rdparty/chromium/build/toolchain/gcc_link_wrapper.py" --output="host/transport_security_state_generator" -- /usr/bin/g++ -Wl,--fatal-warnings -fPIC -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs -Wl,--no-as-needed -lpthread -Wl,--as-needed -m64 -Wl,-O1 -Wl,--gc-sections -Wl,-rpath-link=host -Wl,--disable-new-dtags -L/home/gportay/src/buildroot/output-qt5.10/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib -o "host/transport_security_state_generator" -Wl,--start-group @"host/transport_security_state_generator.rsp"  -Wl,--end-group   -ldl -lpthread -lrt -lnss3 -lnssutil3 -lsmime3 -lplds4 -lplc4 -lnspr4 
+	/usr/bin/ld: cannot find /lib64/libpthread.so.0
+	/usr/bin/ld: cannot find /usr/lib64/libpthread_nonshared.a
+	collect2: error: ld returned 1 exit status
+	ninja: build stopped: subcommand failed.
+	Makefile.gn_run:449: recipe for target 'run_ninja' failed
+
+[1]: https://github.com/qt/qtwebengine/blob/v5.10.1/src/core/config/linux.pri#L111-L125
+
+Changes since RFC:
+ * add libnss and libnpsr host packages (qtwebengine)
+ * add host-pkg-config wrapper (qtwebengine)
+ * bump to Qt 5.10.1
+ * add host-libnss and host-libpng dependencies to qtwebengine
+ * set host pkg-config using $GN_PKG_CONFIG_HOST in qtwebengine
+
+Regards,
+Ga?l PORTAY (6):
+  package: add libnpsr host package
+  package: add libnss host package
+  pkgconf: add host-pkg-config wrapper
+  qt5: bump latest version to 5.10.1
+  qt5webengine: satisfy new requirements for 5.10
+  qt5webengine: set ninja host pkg-config tool
+
+ package/libnspr/Config.in.host                     | 10 +++
+ package/libnspr/libnspr.mk                         |  7 ++
+ .../0002-add-zlib-include-dir-variable.patch       | 30 ++++++++
+ package/libnss/libnss.mk                           | 50 ++++++++++++
+ package/pkgconf/host-pkg-config                    |  4 +
+ package/pkgconf/pkgconf.mk                         |  6 +-
+ package/qt5/Config.in                              |  4 +-
+ package/qt5/qt5.mk                                 | 10 ++-
+ package/qt5/qt53d/qt53d.hash                       |  4 +-
+ package/qt5/qt53d/qt53d.mk                         |  2 +-
+ package/qt5/qt5base/qt5base.hash                   |  4 +-
+ package/qt5/qt5base/qt5base.mk                     |  2 +-
+ package/qt5/qt5canvas3d/qt5canvas3d.hash           |  4 +-
+ package/qt5/qt5canvas3d/qt5canvas3d.mk             |  2 +-
+ package/qt5/qt5charts/qt5charts.hash               |  4 +-
+ package/qt5/qt5charts/qt5charts.mk                 |  2 +-
+ ...rtrate-server-needs-only-core-and-bluetoo.patch | 32 --------
+ package/qt5/qt5connectivity/qt5connectivity.hash   |  4 +-
+ package/qt5/qt5connectivity/qt5connectivity.mk     |  2 +-
+ package/qt5/qt5declarative/qt5declarative.hash     |  4 +-
+ package/qt5/qt5declarative/qt5declarative.mk       |  2 +-
+ package/qt5/qt5enginio/qt5enginio.mk               |  4 +-
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   |  4 +-
+ .../qt5/qt5graphicaleffects/qt5graphicaleffects.mk |  2 +-
+ package/qt5/qt5imageformats/qt5imageformats.hash   |  4 +-
+ package/qt5/qt5imageformats/qt5imageformats.mk     |  2 +-
+ package/qt5/qt5location/qt5location.hash           |  4 +-
+ package/qt5/qt5location/qt5location.mk             |  2 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash       |  4 +-
+ package/qt5/qt5multimedia/qt5multimedia.mk         |  2 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  4 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |  2 +-
+ ...01-Example-flatstyle-needs-widgets-module.patch | 31 --------
+ .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  4 +-
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk |  2 +-
+ package/qt5/qt5script/qt5script.hash               |  4 +-
+ package/qt5/qt5script/qt5script.mk                 |  2 +-
+ package/qt5/qt5scxml/qt5scxml.hash                 |  4 +-
+ package/qt5/qt5scxml/qt5scxml.mk                   |  2 +-
+ package/qt5/qt5sensors/qt5sensors.hash             |  4 +-
+ package/qt5/qt5sensors/qt5sensors.mk               |  2 +-
+ package/qt5/qt5serialbus/qt5serialbus.hash         |  4 +-
+ package/qt5/qt5serialbus/qt5serialbus.mk           |  2 +-
+ package/qt5/qt5serialport/qt5serialport.hash       |  4 +-
+ package/qt5/qt5serialport/qt5serialport.mk         |  2 +-
+ package/qt5/qt5svg/qt5svg.hash                     |  4 +-
+ package/qt5/qt5svg/qt5svg.mk                       |  2 +-
+ package/qt5/qt5tools/qt5tools.hash                 |  4 +-
+ package/qt5/qt5tools/qt5tools.mk                   |  2 +-
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |  4 +-
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   |  2 +-
+ package/qt5/qt5wayland/qt5wayland.hash             |  4 +-
+ package/qt5/qt5wayland/qt5wayland.mk               |  2 +-
+ package/qt5/qt5webchannel/qt5webchannel.hash       |  4 +-
+ package/qt5/qt5webchannel/qt5webchannel.mk         |  2 +-
+ ...ad-libEGL-and-libGLES2-symbols-implicitly.patch | 89 ----------------------
+ package/qt5/qt5webengine/Config.in                 |  1 +
+ package/qt5/qt5webengine/qt5webengine.hash         |  4 +-
+ package/qt5/qt5webengine/qt5webengine.mk           |  8 +-
+ .../qt5/qt5webkit-examples/qt5webkit-examples.mk   |  2 +-
+ package/qt5/qt5websockets/qt5websockets.hash       |  4 +-
+ package/qt5/qt5websockets/qt5websockets.mk         |  2 +-
+ package/qt5/qt5x11extras/qt5x11extras.hash         |  4 +-
+ package/qt5/qt5x11extras/qt5x11extras.mk           |  2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  4 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |  2 +-
+ 66 files changed, 202 insertions(+), 240 deletions(-)
+ create mode 100644 package/libnspr/Config.in.host
+ create mode 100644 package/libnss/0002-add-zlib-include-dir-variable.patch
+ create mode 100644 package/pkgconf/host-pkg-config
+ delete mode 100644 package/qt5/qt5connectivity/5.9.3/0001-Example-heartrate-server-needs-only-core-and-bluetoo.patch
+ delete mode 100644 package/qt5/qt5quickcontrols2/5.9.3/0001-Example-flatstyle-needs-widgets-module.patch
+ delete mode 100644 package/qt5/qt5webengine/5.9.3/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
+
 -- 
 2.16.1
