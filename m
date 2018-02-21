@@ -1,29 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Feb 2018 22:13:16 +0100
-Subject: [Buildroot] [PATCH 1/2] pkgconf: pkg-config.in: double quote $@
-In-Reply-To: <20180221205555.2728-1-gael.portay@savoirfairelinux.com>
-References: <20180221205555.2728-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180221221316.5ff3a77a@windsurf.lan>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 21 Feb 2018 21:23:28 +0000
+Subject: [Buildroot] [Bug 10796] New: Cannot generate cpio image without
+ selecting CONFIG_BLK_DEV_INITRD
+Message-ID: <bug-10796-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10796
 
-On Wed, 21 Feb 2018 15:55:54 -0500, Ga?l PORTAY wrote:
-> Double quote $@ to prevent from splitting elements.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+            Bug ID: 10796
+           Summary: Cannot generate cpio image without selecting
+                    CONFIG_BLK_DEV_INITRD
+           Product: buildroot
+           Version: 2017.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: adyke at harris.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Could you give more details about what this is fixing, i.e a specific
-scenario that is fixed by this patch ?
+If BR2_TARGET_ROOTFS_CPIO is selected, the next time linux-menuconfig is run
+CONFIG_BLK_DEV_INITRD becomes selected. If CONFIG_BLK_DEV_INITRD is unselected,
+it is silently reselected when linux-menuconfig exits.
 
-Thanks!
+Therefore, it is not possible to generate rootfs.cpio without building it into
+the kernel image.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
