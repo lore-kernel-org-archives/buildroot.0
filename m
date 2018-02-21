@@ -1,88 +1,32 @@
-From: Simon van der Veldt <simon.vanderveldt@gmail.com>
-Date: Wed, 21 Feb 2018 20:53:16 +0100
-Subject: [Buildroot] [PATCH 1/1] linux: allow both in-tree and custom dts
- files
-Message-ID: <20180221195316.8496-1-simon.vanderveldt@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Feb 2018 21:05:30 +0100
+Subject: [Buildroot] [PATCH next] libite: update path for license files
+In-Reply-To: <20180221141736.15759-1-bluemrp9@gmail.com> (Ryan Coe's message
+ of "Wed, 21 Feb 2018 06:17:36 -0800")
+References: <20180221141736.15759-1-bluemrp9@gmail.com>
+Message-ID: <87d10yjegl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some boards, for example the Raspberry Pi, it's necessary to build in-tree dts files as well
-as custom/out of tree dts-files (dt-blob.bin).
-The existing logic made these two options exclusive, this commit changes that to allow both
-in-tree as well as custom sources for dts files.
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
-Signed-off-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
----
- linux/Config.in | 19 +++++++------------
- linux/linux.mk  |  5 +++--
- 2 files changed, 10 insertions(+), 14 deletions(-)
+ > Two of the license files have moved in the source package. Update the package
+ > to reflect these changes.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0e1e4c287b..38b0334ed7 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -363,10 +363,6 @@ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
- config BR2_LINUX_KERNEL_APPENDED_DTB
- 	bool
- 
--choice
--	prompt "Device tree source"
--	default BR2_LINUX_KERNEL_USE_INTREE_DTS
--
- config BR2_LINUX_KERNEL_USE_INTREE_DTS
- 	bool "Use a device tree present in the kernel"
- 	help
-@@ -374,14 +370,6 @@ config BR2_LINUX_KERNEL_USE_INTREE_DTS
- 	  the kernel sources. The dts files are located
- 	  in the arch/<arch>/boot/dts folder.
- 
--config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
--	bool "Use a custom device tree file"
--	help
--	  Use a custom device tree file, i.e, a device
--	  tree file that does not belong to the kernel
--	  source tree.
--endchoice
--
- config BR2_LINUX_KERNEL_INTREE_DTS_NAME
- 	string "Device Tree Source file names"
- 	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
-@@ -390,6 +378,13 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
- 	  the trailing .dts. You can provide a list of
- 	  dts files to build, separated by spaces.
- 
-+config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-+	bool "Use a custom device tree file"
-+	help
-+	  Use a custom device tree file, i.e, a device
-+	  tree file that does not belong to the kernel
-+	  source tree.
-+
- config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	string "Device Tree Source file paths"
- 	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5300b9cfc5..58a38aa0e0 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -120,12 +120,13 @@ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-d
- 
- ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
- KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
--else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
-+endif
-+ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
- # We keep only the .dts files, so that the user can specify both .dts
- # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
- # copied to arch/<arch>/boot/dts, but only the .dts files will
- # actually be generated as .dtb.
--KERNEL_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
-+KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
- endif
- 
- KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+ > Fixes:
+ > http://autobuild.buildroot.net/results/8fd71513f021652a9a4ff2354dd5fe4fedf3d557
+ > http://autobuild.buildroot.net/results/6a1ab663f1093351662ca7b86c9224a630798f35
+ > http://autobuild.buildroot.net/results/066373da2da2cc8c0c22cc4a3048d1b187c9c389
+ > http://autobuild.buildroot.net/results/edad6ac5d3f61257e99b90c6f54d4d6786aa7ad7
+ > http://autobuild.buildroot.net/results/c2b72c2a32de949a5b1ab46d6d7c540353cfaf5e
+ > http://autobuild.buildroot.net/results/8635ca4bbec464d196846a4018d1228d6651b211
+
+ > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+
+Committed to next, thanks.
+
 -- 
-2.16.1
+Bye, Peter Korsgaard
