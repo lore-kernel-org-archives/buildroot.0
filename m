@@ -1,29 +1,29 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Wed, 21 Feb 2018 16:02:16 -0500
-Subject: [Buildroot] [PATCH 1/1] fs/cpio/init: preserve arguments
-Message-ID: <20180221210216.5167-1-gael.portay@savoirfairelinux.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Feb 2018 22:13:16 +0100
+Subject: [Buildroot] [PATCH 1/2] pkgconf: pkg-config.in: double quote $@
+In-Reply-To: <20180221205555.2728-1-gael.portay@savoirfairelinux.com>
+References: <20180221205555.2728-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180221221316.5ff3a77a@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use "$@" instead of $* to preserve argument.
+Hello,
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- fs/cpio/init | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 21 Feb 2018 15:55:54 -0500, Ga?l PORTAY wrote:
+> Double quote $@ to prevent from splitting elements.
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 
-diff --git a/fs/cpio/init b/fs/cpio/init
-index a275482177..dbe09ac68e 100755
---- a/fs/cpio/init
-+++ b/fs/cpio/init
-@@ -4,4 +4,4 @@
- exec 0</dev/console
- exec 1>/dev/console
- exec 2>/dev/console
--exec /sbin/init $*
-+exec /sbin/init "$@"
+Could you give more details about what this is fixing, i.e a specific
+scenario that is fixed by this patch ?
+
+Thanks!
+
+Thomas
 -- 
-2.16.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
