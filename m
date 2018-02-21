@@ -1,93 +1,138 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 21 Feb 2018 23:13:18 +0100
-Subject: [Buildroot] BUG: systemd/dbus broken in -rc1
-In-Reply-To: <20180221172202.uqpupaoy5bp65reu@sapphire.tkos.co.il>
-References: <c2b37eb8-10f7-f27c-6175-6b3f08e937be@smile.fr>
- <20180221172202.uqpupaoy5bp65reu@sapphire.tkos.co.il>
-Message-ID: <e5ed15f4-8d4e-a9dc-fb2c-40ce9f4109a7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Feb 2018 23:13:37 +0100
+Subject: [Buildroot] [PATCH next v2 0/5] New pkg-stats script,
+ with version information
+Message-ID: <20180221221342.15683-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hello,
 
-Le 21/02/2018 ? 18:22, Baruch Siach a ?crit?:
-> Hi J?r?my,
-> 
-> On Wed, Feb 21, 2018 at 01:42:32PM +0100, J?r?my Rosen wrote:
->> I have a systemd course where I use a minimal buildroot system as my
->> exercise machine.
->> It is a very minimal configuration based on 86_64+systemd+not much else.
->>
->> since the update of systemd to v237 there has been various problems related
->> to the
->> connexion between systemd and dbus. The easiest way to test is to run
->> "busctl" on
->> the system. It won't work complaining about "no such file or directory"
->>
->> This bug affects more or less all systemd-provided utilities, including
->> logind and systemd
->> itself.
->>
->> After investigating, the problem is that systemd looks for the dbus socket
->> in /run/dbus instead of
->> /var/run/dbus which is not where dbus puts the socket.
->>
->> However, systemd mandates that /run be a symlink to /var/run. The file
->> /usr/lib/tmpfiles.d/var.con
->> will create automatically that symlink at bootup. So in theory, looking at
->> the socket in /run should
->> work too.
->>
->> However, there is a second stacked bug. dbus creates, at install time, the
->> directory /var/run/dbus.
->> This breaks tmpfile.d which will not create the symlink since the directory
->> already exists.
->> Creating a file in /var/run makes no sense in the first place since that
->> directory is a tmpfs and will
->> be emptied at reboot time
->>
->> Now, I am not sure what to do from here on the buildroot side. I think it
->> could be usefull to have
->> some sort of security to check that /var/run doesn't exist and yell loudly
->> if it does, but I don't know
->> how to implement that
->>
->> An other approch would be for the systemd skeleton to create /var/run as a
->> symlink to ../run
->> (not /run) in order to let stuff be installed. The tmpfs mount at boot time
->> would hide the content,
->> but it should work
->>
->> To sum it up :
->> * systemd should look for the socket in /var/run :
->> https://github.com/systemd/systemd/issues/8197
->> * dbus should not create the /run/dbus directory in the first place : bug to
->> be opened
->> * buildroot needs to make sure /var/run is not created or is a correct
->> symlink.
->>
->> I'd gladly take advice on what to do to move forward on that issue...
-> 
-> The patch of Jan Kundr?t at http://patchwork.ozlabs.org/patch/870834/ might 
-> solve your last issue. Not sure about the rest.
+This series rewrites the pkg-stats script in Python, and adds two new
+very useful information to it:
 
-This patch doesn't solve J?r?my's issue since it only for the rootfs RO case.
+ - The current version of each package in Buildroot
 
-define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
- 	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
- 	mkdir -p $(TARGET_DIR)/var
-+	ln -s ../run $(TARGET_DIR)/var/run
- endef
+ - The latest upstream version of each package, as provided by the
+   release-monitoring.org web site.
 
-Adding a symlink for the read-write case allow to make systemd work with dbus
-but we have /run/dbud in the target directory (which will be hidden by the tmpfs
-mount).
+The script then compares the current version in Buildroot with the
+latest upstream version, and tells whether they are different.
 
-Romain
+You can see the script output at:
 
-> 
-> baruch
-> 
+ https://bootlin.com/~thomas/stats.html
+
+The code is available at:
+
+ https://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=pkg-stats-v2
+
+Changes since v1
+================
+
+This version mainly focuses on fixing the numerous comments and issues
+pointed out by Ricardo Martincoski (many thanks for his very detailed
+and useful review!), and also fixes a few other things:
+
+ - Added copyright notice in the new script
+
+ - Fixed all flake8 warnings (I still personally find the "let's force
+   to have two empty lines between every function" a very silly rule,
+   but well)
+
+ - Pass the package path to the Package() constructor directly
+
+ - Only introduce CSS properties when they are really needed (some
+   were introduced in PATCH 1, but they were only really used by later
+   patches)
+
+ - Fix the broken #results internal link, which now properly points to
+   the statistics table.
+
+ - Remove double </table> tag.
+
+ - Fix the sorting of the table by defining __eq__ and __lt__ in
+   Package(), and make 'packages' a list rather than a dict.
+
+ - Add the build date and git commit in the HTML page footer
+
+ - Pass BR2_HAVE_DOT_CONFIG=y when calling make, in order to fake
+   having a .config. This allows "printvars" to dump all variables
+   even without a .config.
+
+ - Add newlines in the HTML to make it readable.
+
+More details
+============
+
+release-monitoring.org is a very useful web site, monitoring more than
+16000 projects. It is also very easy to add new projects to be
+monitored. It supports monitoring projects on popular hosting
+platforms such as Github, but can also monitor plain HTTP folders, or
+even web pages using a regexp to identify what is a version number
+within the HTML blurb.
+
+Projects can be found by regular search, but it is also possible to
+add a mapping between the name of a package in a given distribution,
+and the name of the package as known by release-monitoring.org. For
+example in Buildroot "samba" is not named "samba" but "samba4", and
+this mapping mechanism allows release-monitoring.org to reply to
+requests for samba4 within the Buildroot distribution.
+
+I had very good interactions with the release-monitoring.org
+maintainers:
+
+ - They are easily available on IRC
+
+ - They created the "Buildroot" distribution within minutes,
+   https://release-monitoring.org/distro/Buildroot/.
+
+ - They have been very responsive to fix issues in existing packages.
+
+It doesn't provide CVE related information for security, so it would
+still be useful to extend this mechanism with another CVE related
+database. But as we discussed during the last Buildroot meeting in
+Brussels, the NIST database is not very up to date, while
+release-monitoring.org, thanks to the process being fully automated.
+
+Before people start sending gazillions of patches to update packages,
+I would like us to focus on:
+
+ - Adding missing projects on release-monitoring.org
+
+ - Adding missing mappings for the Buildroot distribution on
+   release-monitoring.org
+
+ - Deciding how to handle packages such as all python-* packages or
+   all x11r7 packages, for which the name never matches with the
+   release-monitoring.org package name.
+
+   Do we create a mapping for each of them on release-monitoring.org
+   (which we would have to do for every new python package) or do we
+   make the script smarter, and attempt to search the package without
+   its python- prefix (which won't always work either) ?
+
+Basically, I would like to focus on making the output of the script
+more useful/relevant, and then only start getting gazillions of
+patches updating packages.
+
+Thanks for your review, and contributions!
+
+Thomas
+
+
+Thomas Petazzoni (5):
+  support/scripts/pkg-stats-new: rewrite in Python
+  support/scripts/pkg-stats-new: add -n and -p options
+  support/scripts/pkg-stats-new: add current version information
+  support/scripts/pkg-stats-new: add latest upstream version information
+  support/scripts/pkg-stats: replace with new Python version
+
+ support/scripts/pkg-stats | 1001 +++++++++++++++++++++++++++------------------
+ 1 file changed, 607 insertions(+), 394 deletions(-)
+
+-- 
+2.14.3
