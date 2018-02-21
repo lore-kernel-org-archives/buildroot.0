@@ -1,67 +1,52 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 21 Feb 2018 07:06:14 +0000
-Subject: [Buildroot] __mcount on ARC
-In-Reply-To: <e88703ad-f70c-27b3-d142-18b898fa57b0@synopsys.com>
-References: <8e90a87a-7e64-6662-3309-ce0325bc686f@gmail.com>
- <20180219090939.1f050545@windsurf.lan>
- <1519030700.14718.9.camel@synopsys.com>
- <e88703ad-f70c-27b3-d142-18b898fa57b0@synopsys.com>
-Message-ID: <1519196773.5212.10.camel@synopsys.com>
+From: carlos at fgh.co.uk <carlos@fgh.co.uk>
+Date: Wed, 21 Feb 2018 10:35:26 +0000
+Subject: [Buildroot] buildroot-2017.11.1 and cape manager for Beaglebone
+ Black.
+In-Reply-To: <1519132146.05324245@apps.rackspace.com>
+References: <1519132146.05324245@apps.rackspace.com>
+Message-ID: <2f59a73010754a544d0673389f188a67@fgh.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vineet, Zoltan,
+Thanks a lot, you have saved me. It's working and I owe to you a couple 
+of beers :)
 
-On Tue, 2018-02-20 at 12:53 -0800, Vineet Gupta wrote:
-> On 02/19/2018 12:58 AM, Alexey Brodkin wrote:
-> > 
-> > Looks like ARC port of glibc only defines "_mcount" but not "__mcount", see
+On 2018-02-20 13:09, Scott Ellis wrote:
+> You don't need cape manager for the built-in CAN controllers of the
+> BBB
 > 
-> It used to be so before glibc commit 46e2c0e216ba ARC: Fix -pg build error which 
-> has been in my
-> glibc branch #vineet-glibc-master for quite some time and hopefully is the one 
-> buildroot is picking up.
-
-Nope we still refer to "arc-2017.09-release". That will be kept for upcoming BR release
-which is happening this month and then we'll switch to newer tag like the most recent
-arc-2018.03-eng00x.
-
-> The driving force here is gcc which defines what mc* call is generated, and that 
-> for ARC is __mcount
+> or to use any CAN capes with external CAN controllers that the BBB
 > 
-> > ------------------------------------->8---------------------------------
-> > arc-linux-readelf -s libc.so.6 | grep mcount
-> >     124: 000b397c     4 FUNC    GLOBAL DEFAULT   11 _mcount@@GLIBC_2.26
-> >     423: 000df95c    44 FUNC    GLOBAL DEFAULT   11 _dl_mcount_wrapper_check@@GLIBC_2.26
-> >    1584: 000df944    22 FUNC    GLOBAL DEFAULT   11 _dl_mcount_wrapper@@GLIBC_2.26
+> communicates with over SPI.
 > 
-> On my end, I see
+> It's just a matter of adding some sections to your dts. You can do it
+> with
 > 
-> arc-linux-nm ./build/glibc-vineet-glibc-master/build/linkobj/libc.so | grep mcount
-> 00070930 T __mcount
+> an include to your main dts.
 > 
-> > ------------------------------------->8---------------------------------
-> > 
-> > and https://github.com/foss-for-synopsys-dwc-arc-processors/glibc/blob/vineet-glibc-master/sysdeps/arc/machine-gmon.h#L26
+> Here are some links for dts includes to the 4.4 mainline kernel to
+> enable
 > 
-> Look carefully, this actually defines __mcount not _mcount
+> the built-in CAN controllers. Just a little pin muxing. This assumes
+> you
 > 
-> > 
-> > I'm an expert in neither glibc nor gprof so not sure what is a difference between
-> > _mcount vs __mcount but for AArch64 thay set "strong_alias (__mcount, _mcount)" here:
-> > https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/aarch64/mcount.c#l32
-> > 
-> > So maybe we need to do the same for ARC.
+> have the kernel modules enabled, which you probably do.
 > 
-> No, we don't have to  - don't try to apply bandaid without first checking if it is 
-> really needed.
-
-Thanks for all that technical background.
-
-So Zoltan, please go ahead and disable profiling of GPSD for ARC but please
-add a comment like "# Needs glibc for ARC to arc-2018.03-eng007+".
-
--Alexey
+> The cape manager stuff was never supported by mainline linux or even
+> TI
+> 
+> linux kernels only the Beaglebone specific kernels. And it's not even
+> 
+> supported by the Beagleboard folks anymore.They have moved to a u-boot
+> 
+> 
+> approach.
+> 
+> Cape manager is a technological dead-end.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
