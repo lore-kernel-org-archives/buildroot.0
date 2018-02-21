@@ -1,38 +1,78 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed, 21 Feb 2018 17:55:52 +0100
-Subject: [Buildroot] [PATCH] package/gpsd: disable profiling support on ARC
-Message-ID: <1519232152-26469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 21 Feb 2018 19:22:02 +0200
+Subject: [Buildroot] BUG: systemd/dbus broken in -rc1
+In-Reply-To: <c2b37eb8-10f7-f27c-6175-6b3f08e937be@smile.fr>
+References: <c2b37eb8-10f7-f27c-6175-6b3f08e937be@smile.fr>
+Message-ID: <20180221172202.uqpupaoy5bp65reu@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- With the currently used ARC glibc version the profiling build fails with
-linking error to __mcount. The ARC glibc version arc-2018.03-eng007+
-fixes this, therefore when glibc is bumped, this restriction can be
-removed.
+Hi J?r?my,
 
-Fixes:
-    http://autobuild.buildroot.net/results/88870f5bf4aff557d8eac4e1cc5d3e397e607af0/
+On Wed, Feb 21, 2018 at 01:42:32PM +0100, J?r?my Rosen wrote:
+> I have a systemd course where I use a minimal buildroot system as my
+> exercise machine.
+> It is a very minimal configuration based on 86_64+systemd+not much else.
+> 
+> since the update of systemd to v237 there has been various problems related
+> to the
+> connexion between systemd and dbus. The easiest way to test is to run
+> "busctl" on
+> the system. It won't work complaining about "no such file or directory"
+> 
+> This bug affects more or less all systemd-provided utilities, including
+> logind and systemd
+> itself.
+> 
+> After investigating, the problem is that systemd looks for the dbus socket
+> in /run/dbus instead of
+> /var/run/dbus which is not where dbus puts the socket.
+> 
+> However, systemd mandates that /run be a symlink to /var/run. The file
+> /usr/lib/tmpfiles.d/var.con
+> will create automatically that symlink at bootup. So in theory, looking at
+> the socket in /run should
+> work too.
+> 
+> However, there is a second stacked bug. dbus creates, at install time, the
+> directory /var/run/dbus.
+> This breaks tmpfile.d which will not create the symlink since the directory
+> already exists.
+> Creating a file in /var/run makes no sense in the first place since that
+> directory is a tmpfs and will
+> be emptied at reboot time
+> 
+> Now, I am not sure what to do from here on the buildroot side. I think it
+> could be usefull to have
+> some sort of security to check that /var/run doesn't exist and yell loudly
+> if it does, but I don't know
+> how to implement that
+> 
+> An other approch would be for the systemd skeleton to create /var/run as a
+> symlink to ../run
+> (not /run) in order to let stuff be installed. The tmpfs mount at boot time
+> would hide the content,
+> but it should work
+> 
+> To sum it up :
+> * systemd should look for the socket in /var/run :
+> https://github.com/systemd/systemd/issues/8197
+> * dbus should not create the /run/dbus directory in the first place : bug to
+> be opened
+> * buildroot needs to make sure /var/run is not created or is a correct
+> symlink.
+> 
+> I'd gladly take advice on what to do to move forward on that issue...
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
- package/gpsd/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+The patch of Jan Kundr?t at http://patchwork.ozlabs.org/patch/870834/ might 
+solve your last issue. Not sure about the rest.
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index d9ab7b7..849d22f 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -38,6 +38,8 @@ config BR2_PACKAGE_GPSD_PROFILING
- 	bool "profiling support"
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_aarch64
-+	# Needs glibc for ARC arc-2018.03-eng007+ for correct __mcount linking
-+	depends on !BR2_arc
- 
- comment "profiling support not available with uClibc-based toolchain"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+baruch
+
 -- 
-2.7.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
