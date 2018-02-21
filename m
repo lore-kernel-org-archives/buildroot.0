@@ -1,100 +1,164 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUm9zZW4=?= <jeremy.rosen@smile.fr>
-Date: Wed, 21 Feb 2018 13:42:32 +0100
-Subject: [Buildroot] BUG: systemd/dbus broken in -rc1
-Message-ID: <c2b37eb8-10f7-f27c-6175-6b3f08e937be@smile.fr>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 21 Feb 2018 14:26:43 +0100
+Subject: [Buildroot] [PATCH] scanpypi: add support for Python3
+Message-ID: <20180221132643.3502-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everybody
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-I have a systemd course where I use a minimal buildroot system as my 
-exercise machine.
-It is a very minimal configuration based on 86_64+systemd+not much else.
+The script was changed via modernize utility. The only manual
+made part was the handling of StringIO.
 
-since the update of systemd to v237 there has been various problems 
-related to the
-connexion between systemd and dbus. The easiest way to test is to run 
-"busctl" on
-the system. It won't work complaining about "no such file or directory"
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ utils/scanpypi | 43 ++++++++++++++++++++++++++-----------------
+ 1 file changed, 26 insertions(+), 17 deletions(-)
 
-This bug affects more or less all systemd-provided utilities, including 
-logind and systemd
-itself.
-
-
-After investigating, the problem is that systemd looks for the dbus 
-socket in /run/dbus instead of
-/var/run/dbus which is not where dbus puts the socket.
-
-However, systemd mandates that /run be a symlink to /var/run. The file 
-/usr/lib/tmpfiles.d/var.con
-will create automatically that symlink at bootup. So in theory, looking 
-at the socket in /run should
-work too.
-
-However, there is a second stacked bug. dbus creates, at install time, 
-the directory /var/run/dbus.
-This breaks tmpfile.d which will not create the symlink since the 
-directory already exists.
-Creating a file in /var/run makes no sense in the first place since that 
-directory is a tmpfs and will
-be emptied at reboot time
-
-Now, I am not sure what to do from here on the buildroot side. I think 
-it could be usefull to have
-some sort of security to check that /var/run doesn't exist and yell 
-loudly if it does, but I don't know
-how to implement that
-
-An other approch would be for the systemd skeleton to create /var/run as 
-a symlink to ../run
-(not /run) in order to let stuff be installed. The tmpfs mount at boot 
-time would hide the content,
-but it should work
-
-To sum it up :
-* systemd should look for the socket in /var/run : 
-https://github.com/systemd/systemd/issues/8197
-* dbus should not create the /run/dbus directory in the first place : 
-bug to be opened
-* buildroot needs to make sure /var/run is not created or is a correct 
-symlink.
-
-I'd gladly take advice on what to do to move forward on that issue...
-
-Regards
-J?r?my
-
-
-
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 55bfb2fedb..12bfc24e10 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -7,13 +7,13 @@ Any package built by scanpypi should be manually checked for
+ errors.
+ """
+ from __future__ import print_function
++from __future__ import absolute_import
+ import argparse
+ import json
+-import urllib2
++import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
+ import sys
+ import os
+ import shutil
+-import StringIO
+ import tarfile
+ import zipfile
+ import errno
+@@ -23,6 +23,13 @@ import textwrap
+ import tempfile
+ import imp
+ from functools import wraps
++from six.moves import map
++from six.moves import zip
++from six.moves import input
++if six.PY2:
++    import StringIO
++else:
++    import io
+ 
+ BUF_SIZE = 65536
+ 
+@@ -147,15 +154,15 @@ class BuildrootPackage():
+         self.metadata_url = 'https://pypi.python.org/pypi/{pkg}/json'.format(
+             pkg=self.real_name)
+         try:
+-            pkg_json = urllib2.urlopen(self.metadata_url).read().decode()
+-        except urllib2.HTTPError as error:
++            pkg_json = six.moves.urllib.request.urlopen(self.metadata_url).read().decode()
++        except six.moves.urllib.error.HTTPError as error:
+             print('ERROR:', error.getcode(), error.msg, file=sys.stderr)
+             print('ERROR: Could not find package {pkg}.\n'
+                   'Check syntax inside the python package index:\n'
+                   'https://pypi.python.org/pypi/ '
+                   .format(pkg=self.real_name))
+             raise
+-        except urllib2.URLError:
++        except six.moves.urllib.error.URLError:
+             print('ERROR: Could not find package {pkg}.\n'
+                   'Check syntax inside the python package index:\n'
+                   'https://pypi.python.org/pypi/ '
+@@ -193,8 +200,8 @@ class BuildrootPackage():
+             try:
+                 print('Downloading package {pkg} from {url}...'.format(
+                       pkg=self.real_name, url=download_url['url']))
+-                download = urllib2.urlopen(download_url['url'])
+-            except urllib2.HTTPError as http_error:
++                download = six.moves.urllib.request.urlopen(download_url['url'])
++            except six.moves.urllib.error.HTTPError as http_error:
+                 download = http_error
+             else:
+                 self.used_url = download_url
+@@ -205,7 +212,7 @@ class BuildrootPackage():
+                 if self.md5_sum == download_url['md5_digest']:
+                     break
+         else:
+-            if download.__class__ == urllib2.HTTPError:
++            if download.__class__ == six.moves.urllib.error.HTTPError:
+                 raise download
+             raise DownloadFailed('Failed to downloas package {pkg}'
+                                  .format(pkg=self.real_name))
+@@ -219,7 +226,10 @@ class BuildrootPackage():
+         Keyword arguments:
+         tmp_path -- directory where you want the package to be extracted
+         """
+-        as_file = StringIO.StringIO(self.as_string)
++        if six.PY2:
++            as_file = StringIO.StringIO(self.as_string)
++        else:
++            as_file = io.BytesIO(self.as_string)
+         if self.filename[-3:] == 'zip':
+             with zipfile.ZipFile(as_file) as as_zipfile:
+                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
+@@ -303,8 +313,8 @@ class BuildrootPackage():
+                         if len(item) > 0 and item[0] != '#']
+ 
+         req_not_found = self.pkg_req
+-        self.pkg_req = map(pkg_buildroot_name, self.pkg_req)
+-        pkg_tuples = zip(req_not_found, self.pkg_req)
++        self.pkg_req = list(map(pkg_buildroot_name, self.pkg_req))
++        pkg_tuples = list(zip(req_not_found, self.pkg_req))
+         # pkg_tuples is a list of tuples that looks like
+         # ('werkzeug','python-werkzeug') because I need both when checking if
+         # dependencies already exist or are already in the download list
+@@ -412,8 +422,7 @@ class BuildrootPackage():
+             classifiers_licenses = [regexp.sub(r"\1", lic)
+                                     for lic in self.metadata['info']['classifiers']
+                                     if regexp.match(lic)]
+-            licenses = map(lambda x: license_dict[x] if x in license_dict else x,
+-                           classifiers_licenses)
++            licenses = [license_dict[x] if x in license_dict else x for x in classifiers_licenses]
+             if not len(licenses):
+                 print('WARNING: License has been set to "{license}". It is most'
+                       ' likely wrong, please change it if need be'.format(
+@@ -583,7 +592,7 @@ class BuildrootPackage():
+         # \t + two spaces is 3 char long
+         help_lines.append('')
+         help_lines.append('\t  ' + self.metadata['info']['home_page'])
+-        help_lines = map(lambda x: x + '\n', help_lines)
++        help_lines = [x + '\n' for x in help_lines]
+         lines += help_lines
+ 
+         with open(path_to_config, 'w') as config_file:
+@@ -624,7 +633,7 @@ def main():
+             print('Fetching package', package.real_name)
+             try:
+                 package.fetch_package_info()
+-            except (urllib2.URLError, urllib2.HTTPError):
++            except (six.moves.urllib.error.URLError, six.moves.urllib.error.HTTPError):
+                 continue
+             if package.metadata_name.lower() == 'setuptools':
+                 # setuptools imports itself, that does not work very well
+@@ -634,7 +643,7 @@ def main():
+ 
+             try:
+                 package.download_package()
+-            except urllib2.HTTPError as error:
++            except six.moves.urllib.error.HTTPError as error:
+                 print('Error: {code} {reason}'.format(code=error.code,
+                                                       reason=error.reason))
+                 print('Error downloading package :', package.buildroot_name)
+@@ -682,7 +691,7 @@ def main():
+                     continue
+                 print('Error: Package {name} already exists'
+                       .format(name=package.pkg_dir))
+-                del_pkg = raw_input(
++                del_pkg = input(
+                     'Do you want to delete existing package ? [y/N]')
+                 if del_pkg.lower() == 'y':
+                     shutil.rmtree(package.pkg_dir)
 -- 
-SMILE <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-
-	
-*J?r?my ROSEN*
-Architecte technique
-Responsable de l'expertise Smile-ECS
-
-email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
-phone +33141402967
-url http://www.smile.eu
-
-Twitter <https://twitter.com/GroupeSmile> Facebook 
-<https://www.facebook.com/smileopensource> LinkedIn 
-<https://www.linkedin.com/company/smile> Github 
-<https://github.com/Smile-SA>
-
-
-D?couvrez l?univers Smile, rendez-vous sur smile.eu 
-<http://smile.eu/?utm_source=signature&utm_medium=email&utm_campaign=signature>
-
-eco Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180221/f796e003/attachment.html>
+2.11.0
