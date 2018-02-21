@@ -1,54 +1,62 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Wed, 21 Feb 2018 06:17:36 -0800
-Subject: [Buildroot] [PATCH next] libite: update path for license files
-Message-ID: <20180221141736.15759-1-bluemrp9@gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Wed, 21 Feb 2018 09:27:58 -0500
+Subject: [Buildroot] [PATCH-FOR-NEXT v1 3/6] pkgconf: add host-pkg-config
+ wrapper
+In-Reply-To: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
+References: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180221142801.28997-4-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Two of the license files have moved in the source package. Update the package
-to reflect these changes.
+The host-pkg-config wrapper gets package data compiled for host.
 
-Fixes:
-http://autobuild.buildroot.net/results/8fd71513f021652a9a4ff2354dd5fe4fedf3d557
-http://autobuild.buildroot.net/results/6a1ab663f1093351662ca7b86c9224a630798f35
-http://autobuild.buildroot.net/results/066373da2da2cc8c0c22cc4a3048d1b187c9c389
-http://autobuild.buildroot.net/results/edad6ac5d3f61257e99b90c6f54d4d6786aa7ad7
-http://autobuild.buildroot.net/results/c2b72c2a32de949a5b1ab46d6d7c540353cfaf5e
-http://autobuild.buildroot.net/results/8635ca4bbec464d196846a4018d1228d6651b211
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
- package/libite/libite.hash | 4 ++--
- package/libite/libite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkgconf/host-pkg-config | 4 ++++
+ package/pkgconf/pkgconf.mk      | 6 ++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+ create mode 100644 package/pkgconf/host-pkg-config
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 437127d15c..7ef9dca57a 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
- sha256 39a4c12af30a38a813fac7c8d7512efb3692f910eba9c697a50ce0203e039dad  libite-v2.0.1.tar.gz
- sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
--sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  chomp.c
--sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  pidfile.c
-+sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
-+sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index 02ea948ef2..a128953c7a 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -7,7 +7,7 @@
- LIBITE_VERSION = v2.0.1
- LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
--LIBITE_LICENSE_FILES = LICENSE chomp.c pidfile.c
-+LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
- LIBITE_INSTALL_STAGING = YES
- LIBITE_AUTORECONF = YES
+diff --git a/package/pkgconf/host-pkg-config b/package/pkgconf/host-pkg-config
+new file mode 100644
+index 0000000000..3362a3f927
+--- /dev/null
++++ b/package/pkgconf/host-pkg-config
+@@ -0,0 +1,4 @@
++#!/bin/sh
++PKGCONFDIR=$(dirname "$0")
++DEFAULT_PKG_CONFIG_PATH=${PKGCONFDIR}/../lib/pkgconfig:${PKGCONFDIR}/../share/pkgconfig
++PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-${DEFAULT_PKG_CONFIG_PATH}} exec ${PKGCONFDIR}/pkgconf "$@"
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index 00b2d017ee..54b4570419 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -16,11 +16,13 @@ define PKGCONF_LINK_PKGCONFIG
+ 	ln -sf pkgconf $(TARGET_DIR)/usr/bin/pkg-config
+ endef
  
+-define HOST_PKGCONF_INSTALL_WRAPPER
++define HOST_PKGCONF_INSTALL_WRAPPERS
+ 	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
+ 		$(HOST_DIR)/bin/pkg-config
+ 	$(SED) 's, at STAGING_SUBDIR@,$(STAGING_SUBDIR),g' \
+ 		$(HOST_DIR)/bin/pkg-config
++	$(INSTALL) -m 0755 -D package/pkgconf/host-pkg-config \
++		$(HOST_DIR)/bin/host-pkg-config
+ endef
+ 
+ define HOST_PKGCONF_STATIC
+@@ -32,7 +34,7 @@ define HOST_PKGCONF_SHARED
+ endef
+ 
+ PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
+-HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
++HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPERS
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
 -- 
 2.16.1
