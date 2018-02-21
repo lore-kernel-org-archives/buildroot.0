@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Feb 2018 22:56:34 +0100
-Subject: [Buildroot] [PATCH-FOR-NEXT v1 4/6] qt5: bump latest version to
- 5.10.1
-In-Reply-To: <20180221142801.28997-5-gael.portay@savoirfairelinux.com>
+Date: Wed, 21 Feb 2018 22:58:15 +0100
+Subject: [Buildroot] [PATCH-FOR-NEXT v1 5/6] qt5webengine: satisfy new
+ requirements for 5.10
+In-Reply-To: <20180221142801.28997-6-gael.portay@savoirfairelinux.com>
 References: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
- <20180221142801.28997-5-gael.portay@savoirfairelinux.com>
-Message-ID: <20180221225634.251e40f6@windsurf.lan>
+ <20180221142801.28997-6-gael.portay@savoirfairelinux.com>
+Message-ID: <20180221225815.0ee22315@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,68 +14,67 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Feb 2018 09:27:59 -0500, Ga?l PORTAY wrote:
-> qtconnectivity:
+On Wed, 21 Feb 2018 09:28:00 -0500, Ga?l PORTAY wrote:
+> Since Qt WebEngine 5.10, libnss is a requirement[1] because OpenSSL
+> certificate validation[3] and NSS bundle[3] was dropped.
 > 
-> 	0001-Example-heartrate-server-needs-only-core-and-bluetoo.patch
-> 	was upstreamed[1].
+> Also, it compiles host-tools that require libnss and libpng.
 > 
-> qtquickcontrols:
+> Let satisfy these new requirements by selecting libnss and adding
+> host-libnss and host-libpng dependencies.
 > 
-> 	0001-Example-flatstyle-needs-widgets-module.patch was
-> 	upstreamed[2]
+> [1]: https://github.com/qt/qtwebengine/commit/9b449045fbd5fd3b58bcaff6cf0c5878cd6e64eb
+> [2]: https://codereview.chromium.org/2862543003
+> [3]: https://codereview.chromium.org/1882433002
 > 
-> qtwebengine:
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+
+So if we merge PATCH 4/6, but not this PATCH 5/6, qt5webengine doesn't
+build in its 5.10 version ? If that's the case, then you have a
+bisectability problem.
+
+I'm fine with having it separate during the review, to make PATCH 4/6
+be just a mechanism change of all versions and hashes, and PATCH 5/6 be
+a fixup patch that should be squashed into the 5.10 bump once applied.
+But if that's the case, it should be noted...
+
+> ---
+
+... here.
+
+>  package/qt5/qt5webengine/Config.in       | 1 +
+>  package/qt5/qt5webengine/qt5webengine.mk | 4 ++++
+>  2 files changed, 5 insertions(+)
 > 
-> 	0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch was
-> 	upstreamed[3], then reverted[4] and finally restored[5].
-> 
-> [1]: https://code.qt.io/cgit/qt/qtconnectivity.git/commit/?id=22d20e81d866b79e1e9fefe3f24f93aeb687a450
-> [2]: https://code.qt.io/cgit/qt/qtquickcontrols2.git/commit/?id=bd617ed62ba35ee11da75b7e92db3fd190751b0f
-> [3]: https://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=d4c621f6a6b87f2a86069fa393b9f7c4f9e7b9ad
-> [4]: https://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=c11c2c8981e647c1eb2c6753ce77d436b92fff87
-> [5]: https://code.qt.io/cgit/qt/qtwebengine.git/commit/?id=e812237b6980584fc5939f49f6a18315cc694c3a
-
-Thanks for this detailed description of what happened to the different
-patches. However, one thing that your commit log lacks is to explain
-the addition of the qt5source macro. I know you explained it in your
-cover letter, but the cover letter is never committed, so make sure to
-include the relevant details in the commit log as well.
-
-
->  ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> -QT5_VERSION_MAJOR = 5.9
-> -QT5_VERSION = $(QT5_VERSION_MAJOR).3
-> +QT5_VERSION_MAJOR = 5.10
-> +QT5_VERSION = $(QT5_VERSION_MAJOR).1
-> +QT5_SRC = everywhere-src
->  else
->  QT5_VERSION_MAJOR = 5.6
->  QT5_VERSION = $(QT5_VERSION_MAJOR).3
-> +QT5_SRC = opensource-src
-
-I find QT5_SRC a bit "short", and likely to cause name clash.
-QT5_SOURCE_TARBALL_PREFIX or something like that perhaps ?
-
-Also, you should introduce this qt5source macro in a separate commit,
-prior to the 5.10 bump. Indeed, it can be done separately, and
-therefore it should.
-
+> diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+> index d0c8d18210..c0d2a54682 100644
+> --- a/package/qt5/qt5webengine/Config.in
+> +++ b/package/qt5/qt5webengine/Config.in
+> @@ -38,6 +38,7 @@ config BR2_PACKAGE_QT5WEBENGINE
+>  	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if !BR2_ARCH_IS_64 # v8/chromium
+>  	select BR2_PACKAGE_FFMPEG
+>  	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_LIBNSS if !BR2_PACKAGE_QT5_VERSION_5_6
+>  	select BR2_PACKAGE_LIBVPX
+>  	select BR2_PACKAGE_OPUS
+>  	select BR2_PACKAGE_WEBP
+> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+> index b9edacec62..47084c1af4 100644
+> --- a/package/qt5/qt5webengine/qt5webengine.mk
+> +++ b/package/qt5/qt5webengine/qt5webengine.mk
+> @@ -22,6 +22,10 @@ QT5WEBENGINE_DEPENDENCIES += xlib_libXScrnSaver xlib_libXcomposite \
+>  	xlib_libXcursor xlib_libXi xlib_libXrandr xlib_libXtst
 >  endif
-> -QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
-> +QT5_SITE = https://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
-> +# qt5(module,version): returns site of Qt5 tarball
+>  
+> +ifneq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+> +QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
+> +endif
+> +
+>  QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
+>  
+>  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
 
-It doesn't return the site but the name of the tarball.
-
-> +qt5source = $(1)-$(QT5_SRC)-$(2).tar.xz
-
-I'm also wondering if we really need a macro. Can't we just change all
-packages to do:
-
-FOO_SOURCE = foo-$(QT5_SOURCE_TARBALL_PREFIX)-$(FOO_VERSION).tar.xz
-
-Other than that, looks good to me. Thanks!
+Thanks!
 
 Thomas
 -- 
