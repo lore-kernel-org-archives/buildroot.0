@@ -1,43 +1,60 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 21 Feb 2018 23:21:34 +0000
-Subject: [Buildroot] [PATCH 1/1] fs/cpio/init: preserve arguments
-In-Reply-To: <20180221234332.0aab34e2@windsurf.lan>
-References: <20180221210216.5167-1-gael.portay@savoirfairelinux.com>
- <20180221234332.0aab34e2@windsurf.lan>
-Message-ID: <20180221232134.GD22894@momiji>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Wed, 21 Feb 2018 18:48:54 -0500
+Subject: [Buildroot] [PATCH 1/2] pkgconf: pkg-config.in: double quote $@
+In-Reply-To: <20180221221316.5ff3a77a@windsurf.lan>
+References: <20180221205555.2728-1-gael.portay@savoirfairelinux.com>
+ <20180221221316.5ff3a77a@windsurf.lan>
+Message-ID: <20180221234854.u46pcpr4heesrzim@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 21 Feb 2018 23:43:32 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Thomas,
+
+On Wed, Feb 21, 2018 at 10:13:16PM +0100, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Wed, 21 Feb 2018 16:02:16 -0500, Ga?l PORTAY wrote:
-> > Use "$@" instead of $* to preserve argument.
+> On Wed, 21 Feb 2018 15:55:54 -0500, Ga?l PORTAY wrote:
+> > Double quote $@ to prevent from splitting elements.
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 > 
-> Thanks for your patch, but why ? The commit log needs to explain the
-> use-case/motivations/reasons.
+> Could you give more details about what this is fixing, i.e a specific
+> scenario that is fixed by this patch ?
 
-Using $* here will split each of the arguments at the spaces (well, at any of
-the characters fro $IFS): that means that passing 'has space' as argument,
-using $* will result in two arguments 'has' and 'space' being passed down.
-Using "$@" prevents $IFS-splitting and passes argument unchanged as-is.
+In the case pkgconf, I can not see a real situation where this patch
+fixes an issue.
 
-In most cases whenever there is a $* in a shell script, pretty much it means
-that passing the parameters with spaces (file names, paths, etc.) will break
-things.
+There is an important difference between $@ and "$@". The shell expands
+"$@" as "$1" "$2" "$3"... while it expands $@ as $1 $2 $3.
 
-Cheers,
+With the second form, we losts spaces in positional parameters.
 
+As example, the following call
 
---
- Adri?n ?
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180221/3604ce5f/attachment.asc>
+	pkg-config --cflags "one two" three
+
+is wrapped as
+
+	pkgconf --cflags one two three
+
+while we are expecting
+
+	pkgconf --cflags "one two" three
+
+"$@" is really useful when writing wrappers. It passes the positional
+arguments *as* they are given.
+
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
+
+Regards,
+Gael
