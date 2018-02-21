@@ -1,30 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 21 Feb 2018 22:35:10 +0000
-Subject: [Buildroot] [Bug 10796] Cannot generate cpio image without
- selecting CONFIG_BLK_DEV_INITRD
-In-Reply-To: <bug-10796-163@https.bugs.busybox.net/>
-References: <bug-10796-163@https.bugs.busybox.net/>
-Message-ID: <bug-10796-163-yfNxlUBGbU@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Feb 2018 23:43:32 +0100
+Subject: [Buildroot] [PATCH 1/1] fs/cpio/init: preserve arguments
+In-Reply-To: <20180221210216.5167-1-gael.portay@savoirfairelinux.com>
+References: <20180221210216.5167-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180221234332.0aab34e2@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10796
+Hello,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Indeed, linux/linux.mk contains:
+On Wed, 21 Feb 2018 16:02:16 -0500, Ga?l PORTAY wrote:
+> Use "$@" instead of $* to preserve argument.
 
-        $(if $(BR2_TARGET_ROOTFS_CPIO),
-                $(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
+Thanks for your patch, but why ? The commit log needs to explain the
+use-case/motivations/reasons.
 
-Which forces CONFIG_BLK_DEV_INITRD to be set when you're generating a cpio
-image of the filesystem.
+Thanks!
 
-What is your use-case for generating a cpio image, but not enabling
-CONFIG_BLK_DEV_INITRD ?
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
