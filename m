@@ -1,26 +1,38 @@
-From: Remco Poelstra <r.poelstra@vogels.com>
-Date: Wed, 21 Feb 2018 15:47:34 +0000
-Subject: [Buildroot] Start daemon from eudev with Busybox init system
-Message-ID: <AM3PR02MB312173A6AF15DE4EB01D15AEFCE0@AM3PR02MB312.eurprd02.prod.outlook.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Wed, 21 Feb 2018 17:55:52 +0100
+Subject: [Buildroot] [PATCH] package/gpsd: disable profiling support on ARC
+Message-ID: <1519232152-26469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+ With the currently used ARC glibc version the profiling build fails with
+linking error to __mcount. The ARC glibc version arc-2018.03-eng007+
+fixes this, therefore when glibc is bumped, this restriction can be
+removed.
 
-I need to start a daemon when the 'hci0' device becomes available, but (e)udev can't be used to run long-lasting processes.
-All solutions on the internet seem to use systemd to solve this problem, but I'm using the busybox init system.
-Does busybox/buildroot have some kind of provision for this?
+Fixes:
+    http://autobuild.buildroot.net/results/88870f5bf4aff557d8eac4e1cc5d3e397e607af0/
 
-Thanks in advance.
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ package/gpsd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Kind regards,
-
-Remco Poelstra
-*Nosig*
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180221/bbf86b08/attachment.html>
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index d9ab7b7..849d22f 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -38,6 +38,8 @@ config BR2_PACKAGE_GPSD_PROFILING
+ 	bool "profiling support"
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_aarch64
++	# Needs glibc for ARC arc-2018.03-eng007+ for correct __mcount linking
++	depends on !BR2_arc
+ 
+ comment "profiling support not available with uClibc-based toolchain"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+-- 
+2.7.4
