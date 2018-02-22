@@ -1,47 +1,33 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 22 Feb 2018 16:41:12 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-02-21
-In-Reply-To: <20180222070010.882C22071A@mail.free-electrons.com>
-References: <20180222070010.882C22071A@mail.free-electrons.com>
-Message-ID: <CANQCQpZ4LfgTJakUKquxknPxepYKmoXoGGAztFwMEuBiw1nY7Q@mail.gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Thu, 22 Feb 2018 17:49:05 -0500
+Subject: [Buildroot] [PATCH v2 2/2] pkgconf: pkg-config.in: exec pkgconf
+In-Reply-To: <20180222224905.28618-1-gael.portay@savoirfairelinux.com>
+References: <20180222224905.28618-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180222224905.28618-2-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas/Fabrice,
+Replace the shell script with pkgconf without creating a new process.
 
-On Thu, Feb 22, 2018 at 1:00 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> Build statistics for 2018-02-21
-> ===============================
->
->       branch |  OK | NOK | TIM | TOT |
->       master | 172 |  28 |   0 | 200 |
->    2017.11.x |  23 |   0 |   0 |  23 |
->         next |  32 |  28 |   0 |  60 |
->
-> Results for branch 'master'
-> ===========================
->
-> Classification of failures by reason
-> ------------------------------------
->
->                   boost-1.66.0 | 6
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+No changes since v1
 
->         bfin |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/ffa5f21d7e7c38ea7adebc84f1cc8ee4cff74f1b |
-> microblazeel |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/2879576eaa870eecd31af1ff9261df1b86966542 |
->          arm |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/a89df3195b44f125ba1797cf866f4a266909ec05 |
->      powerpc |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/c947986e4f460c1733c81585302f58baca84f01a |
->          arm |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/679a12c04e9954947dd51df2017af561c362f8ec |
->         or1k |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/4e901a97ad1c21f21e508eab8268374220f2eba3 |
+ package/pkgconf/pkg-config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Similar to (https://patchwork.ozlabs.org/patch/871696/).  Feels like a
-similar patch is needed for Boost?  I don't have the history on the
-discussion for the domoticz pkg.
-
-Matt
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+index 9387931ff2..99c0add8fb 100644
+--- a/package/pkgconf/pkg-config.in
++++ b/package/pkgconf/pkg-config.in
+@@ -2,4 +2,4 @@
+ PKGCONFDIR=$(dirname $0)
+ DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
+ DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
+-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
++PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+-- 
+2.16.1
