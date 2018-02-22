@@ -1,147 +1,152 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Feb 2018 10:27:13 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Feb 2018 10:41:46 +0100
 Subject: [Buildroot] [PATCH-FOR-NEXT v1 3/6] pkgconf: add
  host-pkg-config wrapper
-In-Reply-To: <20180221225010.4b4228aa@windsurf.lan>
+In-Reply-To: <0e296fe2-3359-581f-6d3d-d3bc3cac06eb@mind.be>
 References: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
  <20180221142801.28997-4-gael.portay@savoirfairelinux.com>
  <20180221225010.4b4228aa@windsurf.lan>
-Message-ID: <0e296fe2-3359-581f-6d3d-d3bc3cac06eb@mind.be>
+ <0e296fe2-3359-581f-6d3d-d3bc3cac06eb@mind.be>
+Message-ID: <20180222104146.5d4efe6e@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+Thanks for the feedback!
 
-On 21-02-18 22:50, Thomas Petazzoni wrote:
-> Hello,
+On Thu, 22 Feb 2018 10:27:13 +0100, Arnout Vandecappelle wrote:
+
+> > I've been thinking about this for a while, and I remember having a
+> > discussion about this with some other Buildroot developer a while ago.
+> > I think the most correct thing to do would be:
+> > 
+> >  $(HOST_DIR)/bin/pkg-config returns results valid for native compilation
+> > 
+> >  $(HOST_DIR)/bin/<tuple>-pkg-config returns results valid for cross-compilation  
 > 
-> +Peter, Yann, Arnout, there's a question below about a small change but
-> has a big impact.
+>  This sounds like a good idea, but as you note below, could lead to breakage as
+> well.
+
+Yes.
+
 > 
-> On Wed, 21 Feb 2018 09:27:58 -0500, Ga?l PORTAY wrote:
->> The host-pkg-config wrapper gets package data compiled for host.
->>
->> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
->> ---
->>  package/pkgconf/host-pkg-config | 4 ++++
->>  package/pkgconf/pkgconf.mk      | 6 ++++--
->>  2 files changed, 8 insertions(+), 2 deletions(-)
->>  create mode 100644 package/pkgconf/host-pkg-config
->>
->> diff --git a/package/pkgconf/host-pkg-config b/package/pkgconf/host-pkg-config
->> new file mode 100644
->> index 0000000000..3362a3f927
->> --- /dev/null
->> +++ b/package/pkgconf/host-pkg-config
->> @@ -0,0 +1,4 @@
->> +#!/bin/sh
->> +PKGCONFDIR=$(dirname "$0")
->> +DEFAULT_PKG_CONFIG_PATH=${PKGCONFDIR}/../lib/pkgconfig:${PKGCONFDIR}/../share/pkgconfig
->> +PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-${DEFAULT_PKG_CONFIG_PATH}} exec ${PKGCONFDIR}/pkgconf "$@"
+>  An alternative would be (IIRC this idea was launched by ThomasDS (added in Cc)):
 > 
-> I've been thinking about this for a while, and I remember having a
-> discussion about this with some other Buildroot developer a while ago.
-> I think the most correct thing to do would be:
+> $(HOST_DIR)/bin/ contains binaries valid for native compilation (i.e. no
+> cross-compiler, cross-pkg-config, ...)
 > 
->  $(HOST_DIR)/bin/pkg-config returns results valid for native compilation
+> $(HOST_DIR)/<tuple>/bin contains binaries valid for cross-compilation
+
+Changing this will also lead to a lot of breakage. All our users who
+have scripts doing $(HOST_DIR)/bin/<tuple>-gcc will be broken. I would
+even qualify it as an even more radical change, breaking even more
+stuff.
+
+And more importantly, the result is not great. I think the most correct
+result is to have a single HOST_DIR/bin, with both native and cross
+compilation tools, with cross-compilation tools prefixed by <tuple>.
+
+> > I.e, the current pkg-config wrapper should be renamed
+> > <tuple>-pkg-config, and pkg-config should behave like a normal native
+> > pkg-config, except that it provides results for libraries located in
+> > $(HOST_DIR).
+> > 
+> > The autoconf PKG_CHECK_MODULES() macro uses PKG_PROG_PKG_CONFIG(),
+> > which internally uses AC_PATH_TOOL(). And AC_PATH_TOOL() will first
+> > search for the program with the host machine tuple, and warn if the
+> > program cannot be found with this tuple. From
+> > https://www.gnu.org/software/autoconf/manual/autoconf-2.68/html_node/Generic-Programs.html:
+> > 
+> > """
+> > When cross-compiling, this macro will issue a warning if no program
+> > prefixed with the host type could be found. For more information, see
+> > Specifying Target Triplets.   
 > 
->  $(HOST_DIR)/bin/<tuple>-pkg-config returns results valid for cross-compilation
+>  Weird, I checked a couple of log files and I could see no such warning. Ah,
+> that's because we pass PKG_CONFIG=... in the environment.
 
- This sounds like a good idea, but as you note below, could lead to breakage as
-well.
+Yes, I believe it is because we pass PKG_CONFIG=.
 
- An alternative would be (IIRC this idea was launched by ThomasDS (added in Cc)):
+> Is it the idea to remove that from the environment then?
 
-$(HOST_DIR)/bin/ contains binaries valid for native compilation (i.e. no
-cross-compiler, cross-pkg-config, ...)
+Not necessarily, because PKG_CONFIG may be used by non-autoconf based
+packages. Some non-autotools packages do:
 
-$(HOST_DIR)/<tuple>/bin contains binaries valid for cross-compilation
+	FOO=`$PKG_CONFIG ...`
 
-When building for host, PATH contains $(HOST_DIR)/bin
-
-When building for target, PATH contains $(HOST_DIR)/<tuple>/bin:$(HOST_DIR)/bin
-
-
- So let's analyse that option:
-
-> I.e, the current pkg-config wrapper should be renamed
-> <tuple>-pkg-config, and pkg-config should behave like a normal native
-> pkg-config, except that it provides results for libraries located in
-> $(HOST_DIR).
+>  Anyway, the PATH-based alternative will not remove this warning, but that
+> shouldn't be different from the current situation.
 > 
-> The autoconf PKG_CHECK_MODULES() macro uses PKG_PROG_PKG_CONFIG(),
-> which internally uses AC_PATH_TOOL(). And AC_PATH_TOOL() will first
-> search for the program with the host machine tuple, and warn if the
-> program cannot be found with this tuple. From
-> https://www.gnu.org/software/autoconf/manual/autoconf-2.68/html_node/Generic-Programs.html:
+> > """
+> > 
+> > I know this change will:
+> > 
+> >  - Potentially break a number of packages we have in Buildroot, which
+> >    directly use pkg-config without first trying to use
+> >    <tuple>-pkg-config  
 > 
-> """
-> When cross-compiling, this macro will issue a warning if no program
-> prefixed with the host type could be found. For more information, see
-> Specifying Target Triplets. 
+>  I.e. anything not using autotools? Well, most will probably heed the
+> PKG_CONFIG=... in the environment.
 
- Weird, I checked a couple of log files and I could see no such warning. Ah,
-that's because we pass PKG_CONFIG=... in the environment. Is it the idea to
-remove that from the environment then?
+Most yes, but not all. Some of them do:
 
- Anyway, the PATH-based alternative will not remove this warning, but that
-shouldn't be different from the current situation.
+	FOO=`pkg-config ...`
 
-> """
+which currently works because PATH contains $(HOST_DIR)/bin, and
+pkg-config returns correct results thanks to us injecting the proper
+PKG_CONFIG_LIBDIR and PKG_CONFIG_SYSROOT_DIR depending on whether we're
+building a host or target package.
+
+>  The PATH-based alternative doesn't have this potential breakage.
 > 
-> I know this change will:
 > 
->  - Potentially break a number of packages we have in Buildroot, which
->    directly use pkg-config without first trying to use
->    <tuple>-pkg-config
-
- I.e. anything not using autotools? Well, most will probably heed the
-PKG_CONFIG=... in the environment.
-
- The PATH-based alternative doesn't have this potential breakage.
-
-
->  - Potentially break a number of downstream users who are using
->    pkg-config.
-
- The PATH-based alternative reduces this problem, downstream users just have to
-add $(HOST_DIR)/tuple/bin to their path (and Buildroot will do this for post-xxx
-scripts).
-
-
-> However:
+> >  - Potentially break a number of downstream users who are using
+> >    pkg-config.  
 > 
->  - It would solve that once you add $(HOST_DIR)/bin to your PATH, you
->    cannot anymore do native builds because "pkg-config" returns results
->    that are not relevant for native builds. I already saw a number of
->    people affected by this.
+>  The PATH-based alternative reduces this problem, downstream users just have to
+> add $(HOST_DIR)/tuple/bin to their path (and Buildroot will do this for post-xxx
+> scripts).
 
- The PATH-based alternative solves this as well.
+Well, they still have to change to $(HOST_DIR)/tuple/bin, which means
+it breaks stuff for them anyway.
 
- Note BTW that neither alternative solves the problem when building a host-tool
-during a target build (and yes, we have seen this problem already in some
-packages). AFAICS, autotools will also for host builds use the PKG_CONFIG passed
-in the environment or discovered through the tuple. Same for CMake.
+> > However:
+> > 
+> >  - It would solve that once you add $(HOST_DIR)/bin to your PATH, you
+> >    cannot anymore do native builds because "pkg-config" returns results
+> >    that are not relevant for native builds. I already saw a number of
+> >    people affected by this.  
+> 
+>  The PATH-based alternative solves this as well.
+> 
+>  Note BTW that neither alternative solves the problem when building a host-tool
+> during a target build (and yes, we have seen this problem already in some
+> packages). AFAICS, autotools will also for host builds use the PKG_CONFIG passed
+> in the environment or discovered through the tuple. Same for CMake.
 
+Potentially autotools could be taught about PKG_CONFIG_FOR_BUILD, just
+like it does for CC_FOR_BUILD and al. But that's obviously not
+supported by packages today.
 
->  - It would comply with the standard autoconf expectations.
+> >  - It would comply with the standard autoconf expectations.  
+> 
+>  With the PATH-based alternative, it might make sense to have the cross-stuff
+> both in $(HOST_DIR)/bin with the tuple prefix, and in $(HOST_DIR)/tuple/bin
+> without the prefix. That way, we get the advantages of both: comply with
+> autoconf expectations, and avoid breaking packages or downstream users.
 
- With the PATH-based alternative, it might make sense to have the cross-stuff
-both in $(HOST_DIR)/bin with the tuple prefix, and in $(HOST_DIR)/tuple/bin
-without the prefix. That way, we get the advantages of both: comply with
-autoconf expectations, and avoid breaking packages or downstream users.
+I'm still not convinced about changing the HOST_DIR/ organization. It's
+a massive change, affecting everything, and not just pkg-config, and
+the outcome is less nice than what we have today, for my perspective.
 
+Best regards,
 
- Regards,
- Arnout
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
