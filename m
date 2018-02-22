@@ -1,41 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Feb 2018 23:18:10 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
- 15}.x series
-Message-ID: <20180222221859.C71B684744@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Feb 2018 23:27:23 +0100
+Subject: [Buildroot] [RFCv3 05/15] pkg-generic: add .stamp_installed step
+In-Reply-To: <CANQCQpb9_0-pcZXJ3egrmDZfMtdv9UYNuZzCcycO=87Ku=OAEg@mail.gmail.com>
+References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
+ <20171201205352.24287-6-thomas.petazzoni@free-electrons.com>
+ <CANQCQpb9_0-pcZXJ3egrmDZfMtdv9UYNuZzCcycO=87Ku=OAEg@mail.gmail.com>
+Message-ID: <20180222232723.5a9a5ac9@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3733907f673427205288645a078691f930898333
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Thu, 22 Feb 2018 15:48:46 -0600, Matthew Weber wrote:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4762494f69..87fe0a6d38 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.98"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.116"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.82"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.117"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.83"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.20"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.4"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.21"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.5"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> On Fri, Dec 1, 2017 at 9:53 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> 
+> > +# Some packages use install-staging stuff for install-target
+> > +$$($(2)_TARGET_INSTALL_TARGET):                $$($(2)_TARGET_INSTALL_STAGING)
+> > +
+> >  $(1)-build:            $$($(2)_TARGET_BUILD)
+> >  $$($(2)_TARGET_BUILD): $$($(2)_TARGET_CONFIGURE)
+> >
+> > @@ -813,6 +822,7 @@ $(1)-reconfigure:   $(1)-clean-for-reconfigure $(1)
+> >  
+> 
+> Should the pkgname-dirclean target also remove its per-package folder ?
+
+Yes, I would think so indeed.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
