@@ -1,50 +1,37 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 22 Feb 2018 23:10:14 +0100
-Subject: [Buildroot] [PATCH] package/skeleton-init-systemd: create a symlink
- /var/run to ../run
-Message-ID: <20180222221014.19584-1-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 22 Feb 2018 23:17:31 +0100
+Subject: [Buildroot] [PATCH] website: update package number text
+Message-ID: <20180222221731.7946-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by J?r?my Rosen [1] and Jan Kundr?t (RO case)[2], systemd
-looks for the dbus socket in /run/dbus instead of /var/run/dbus which
-is not where dbus puts the socket. This is a change introduced with
-the last version bump v237 [3].
+We have quite a bit more than "hundreds of packages" nowadays:
 
-The file /usr/lib/tmpfiles.d/var.con will create automatically that
-symlink at bootup /var/run doesn't exist yet. But dbus creates, at
-install time, the directory /var/run/dbus without taking care of
-/var/run. So we end up with two different directories /run and
-/var/run. This bug affects more or less all systemd-provided
-utilities, including logind and systemd itself.
+find package -name \*.mk | wc -l
+2285
 
-This patch create the correct symlink run -> ../run when systemd
-is used as init system.
+So adjust the text to say 'several thousand' instead.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2018-February/214129.html
-[2] http://lists.busybox.net/pipermail/buildroot/2018-February/213420.html
-[3] https://github.com/systemd/systemd/commit/15ca0a42c7db49146a7169dbcb0683f0836cf8c2
-
-Reported-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/skeleton-init-systemd/skeleton-init-systemd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ docs/website/index.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index 95142904f5..d435aa54ee 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -20,6 +20,7 @@ ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
- define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
- 	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
- 	mkdir -p $(TARGET_DIR)/var
-+	ln -s ../run $(TARGET_DIR)/var/run
- endef
+diff --git a/docs/website/index.html b/docs/website/index.html
+index f0d0175bb7..300adbb83d 100644
+--- a/docs/website/index.html
++++ b/docs/website/index.html
+@@ -78,7 +78,7 @@
+ 	</div>
+       </div>
  
- else
+-      <h4>Supports hundreds of packages</h4>
++      <h4>Supports several thousand packages</h4>
+       <p>X.org stack, Gtk3, Qt 5, GStreamer, Webkit, Kodi, a large number of network-related and system-related utilities are supported.</p>
+ 
+     </div><!--/col-lg-4 -->
 -- 
-2.14.3
+2.11.0
