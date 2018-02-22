@@ -1,60 +1,45 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Wed, 21 Feb 2018 18:48:54 -0500
-Subject: [Buildroot] [PATCH 1/2] pkgconf: pkg-config.in: double quote $@
-In-Reply-To: <20180221221316.5ff3a77a@windsurf.lan>
-References: <20180221205555.2728-1-gael.portay@savoirfairelinux.com>
- <20180221221316.5ff3a77a@windsurf.lan>
-Message-ID: <20180221234854.u46pcpr4heesrzim@archlinux>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Wed, 21 Feb 2018 22:53:18 -0300
+Subject: [Buildroot] [RFC] testing: add python-crossbar tests
+References: <1518701885-16545-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <5a8e228e69301_2426136620c3284e@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On Wed, Feb 21, 2018 at 10:13:16PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 21 Feb 2018 15:55:54 -0500, Ga?l PORTAY wrote:
-> > Double quote $@ to prevent from splitting elements.
-> > 
-> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> 
-> Could you give more details about what this is fixing, i.e a specific
-> scenario that is fixed by this patch ?
+On Thu, Feb 15, 2018 at 11:38 AM, Yegor Yefremov wrote:
 
-In the case pkgconf, I can not see a real situation where this patch
-fixes an issue.
+[snip]
+> ---
+>  .../testing/tests/package/test_python_crossbar.py  | 27 ++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_python_crossbar.py
 
-There is an important difference between $@ and "$@". The shell expands
-"$@" as "$1" "$2" "$3"... while it expands $@ as $1 $2 $3.
+The update to .gitlab.yml can be added now that 'make .gitlab-ci.yml' is fixed
+(on master).
 
-With the second form, we losts spaces in positional parameters.
+[snip]
+> +++ b/support/testing/tests/package/test_python_crossbar.py
 
-As example, the following call
+My series fixing flake8 warnings are now mostly applied (a few items need v2).
 
-	pkg-config --cflags "one two" three
+Can you run flake8 and fix the 7 warnings? You can see the updated
+test_python.py for reference.
 
-is wrapped as
 
-	pkgconf --cflags one two three
+I applied this and also
+http://patchwork.ozlabs.org/patch/874421/
+http://patchwork.ozlabs.org/patch/874422/
+but the test still fails with timeout:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/53345963
+I did not debugged it.
 
-while we are expecting
+Maybe I missed something?
 
-	pkgconf --cflags "one two" three
-
-"$@" is really useful when writing wrappers. It passes the positional
-arguments *as* they are given.
-
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> http://bootlin.com
 
 Regards,
-Gael
+Ricardo
