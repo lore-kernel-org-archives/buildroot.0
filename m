@@ -1,23 +1,23 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 21 Feb 2018 23:05:51 -0300
-Subject: [Buildroot] [PATCH] scanpypi: add support for Python3
-References: <20180221132643.3502-1-yegorslists@googlemail.com>
-Message-ID: <5a8e257f4ae09_24263ff17cabba78334f3@ultri3.mail>
+From: Mister Woland <pwmvsi@gmail.com>
+Date: Wed, 21 Feb 2018 21:43:12 -0600
+Subject: [Buildroot] Noob with a Beaglebone black wireless
+Message-ID: <CALw7ttFsg6vxrCVvtRJVu1x34XhBkC4mSrRTuBH4z1wUoTJKgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Wed, Feb 21, 2018 at 10:26 AM, Yegor Yefremov wrote:
+I am new to all this.  I found a tutorial for the BBB on the net.  I built
+and put it on my BBBWireless.  Naturally it booted the operating system ,
+but how would I get wireless to work?  Could I take the def config for the
+BBB and modify it?  Do I need a dts file?
 
-[snip]
-> The script was changed via modernize utility. The only manual
-> made part was the handling of StringIO.
+Enlighten me.
 
-A tool that helps to make a script Python3 compliant. Nice!
-
-Regards,
-Ricardo
+Rick the Noob
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180221/d755d28e/attachment.html>
