@@ -1,51 +1,146 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Thu, 22 Feb 2018 17:49:04 -0500
-Subject: [Buildroot] [PATCH v2 1/2] pkgconf: pkg-config.in: double quote $@
-Message-ID: <20180222224905.28618-1-gael.portay@savoirfairelinux.com>
+From: Julius Kriukas <julius@kriukas.lt>
+Date: Fri, 23 Feb 2018 01:00:55 +0200
+Subject: [Buildroot] [PATCH v4] systemd: switch to en_US.UTF-8 locale when
+ building
+In-Reply-To: <20180212213400.15061-1-julius@kriukas.lt>
+References: <20180212213400.15061-1-julius@kriukas.lt>
+Message-ID: <20180222230055.25455-1-julius@kriukas.lt>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The shell expands "$@" as "$1" "$2" "$3"... while it expands $@ as $1 $2
-$3. With the second form, we loses spaces in positional parameters.
+When BR2_REPRODUCIBLE is enabled or host uses non UTF-8 capable locale
+building systemd fails with an error:
 
-As example, the following call
+[1/1080] Generating systemd.bg.catalog with a meson_exe.py custom command.
+FAILED: catalog/systemd.bg.catalog
+/buildroot/output/host/bin/python3 /buildroot/output/host/bin/meson --internal exe /buildroot/output/build/systemd-236/build/meson-private/meson_exe_sed_232a0623cc7ce2cd67ec72ed784b76307102ed76.dat
+Warning: You are using 'ANSI_X3.4-1968' which is not a Unicode-compatible locale.
+You might see errors if you use UTF-8 strings as filenames, as strings, or as file contents.
+Please switch to a UTF-8 locale for your platform.
+...
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 1079: ordinal not in range(128)
+package/pkg-generic.mk:247: recipe for target '/buildroot/output/build/systemd-236/.stamp_built' failed
+make: *** [/buildroot/output/build/systemd-236/.stamp_built] Error 1
 
-        pkg-config --cflags "one two" three
+This patch changes default host system locale from C to en_US.UTF-8 when
+building systemd package to fix this issue. It also introduces
+BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that checks if this locale is available on
+the host system. If locale is not available error message is show and build
+process is stopped.
 
-is wrapped as
+Signed-off-by: Julius Kriukas <julius@kriukas.lt>
 
-        pkgconf --cflags one two three
-
-while we are expecting
-
-        pkgconf --cflags "one two" three
-
-"$@" is really useful when writing wrappers. It passes the positional
-arguments *as* they are given.
-
-Double quote $@ to prevent from splitting elements.
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
+Changes v1 -> v2:
+  - Added BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that is selected by
+    BR2_REPRODUCIBLE.
+  - Extended support/dependencies/dependencies.sh to check for
+    en_US.UTF-8 locale availability if BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
+    is set.
 
-Changes since v1:
- - improve commit message.
+Changes v2 -> v3:
+  - Always select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE by systemd package.
+  - Do not select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE by BR2_REPRODUCIBLE.
+  - Keep global locale set to C if BR2_REPRODUCIBLE=y.
+  - Use 'grep -q' instead of '> /dev/null' in dependencies.sh script.
 
- package/pkgconf/pkg-config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v3 -> v4:
+  - Fix indentation in package/systemd/Config.in, spaces -> tab.
+---
+ Config.in                            |  5 +++++
+ package/systemd/Config.in            |  1 +
+ package/systemd/systemd.mk           | 10 ++++++----
+ support/dependencies/dependencies.sh | 13 +++++++++++++
+ 4 files changed, 25 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-index b9ce0935cc..9387931ff2 100644
---- a/package/pkgconf/pkg-config.in
-+++ b/package/pkgconf/pkg-config.in
-@@ -2,4 +2,4 @@
- PKGCONFDIR=$(dirname $0)
- DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
- DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
--PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ $@
-+PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+diff --git a/Config.in b/Config.in
+index 0002df5176..8d471dfb2e 100644
+--- a/Config.in
++++ b/Config.in
+@@ -94,6 +94,11 @@ config BR2_HOSTARCH_NEEDS_IA32_COMPILER
+ config BR2_NEEDS_HOST_UTF8_LOCALE
+ 	bool
+ 
++# Hidden boolean selected by packages that explicitly need en_US.UTF-8 locale
++# to be available on host system.
++config BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
++	bool
++
+ source "arch/Config.in"
+ 
+ menu "Build options"
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 661f40dee4..e83f75c733 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -27,6 +27,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
+ 	select BR2_TARGET_TZ_INFO
++	select BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
+ 	help
+ 	  systemd is a system and service manager for Linux,
+ 	  compatible with SysV and LSB init scripts. systemd provides
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 126727d602..9a6a9cfcbc 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -385,23 +385,25 @@ endef
+ 
+ SYSTEMD_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+ 
++SYSTEMD_ENV = $(TARGET_MAKE_ENV) LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
++
+ define SYSTEMD_CONFIGURE_CMDS
+ 	rm -rf $(@D)/build
+ 	mkdir -p $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
++	$(SYSTEMD_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
+ endef
+ 
+ define SYSTEMD_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
++	$(SYSTEMD_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
+ endef
+ 
+ define SYSTEMD_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
++	$(SYSTEMD_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+ 		-C $(@D)/build install
+ endef
+ 
+ define SYSTEMD_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
++	$(SYSTEMD_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+ 		-C $(@D)/build install
+ endef
+ 
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 1804e85508..881f07008c 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -207,6 +207,19 @@ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+ 	fi
+ fi
+ 
++if grep -q ^BR2_NEEDS_HOST_EN_US_UTF8_LOCALE=y $BR2_CONFIG; then
++	if ! which locale > /dev/null ; then
++		echo
++		echo "You need locale support on your build machine"
++		exit 1 ;
++	fi
++	if ! LC_ALL=en_US.UTF-8 locale -c charmap | grep -q '^UTF-8$'; then
++		echo
++		echo "You need en_US.UTF-8 locale suppport on the host system"
++		exit 1 ;
++	fi
++fi
++
+ if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
+ 	check_prog_host "java"
+ 	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
 -- 
 2.16.1
