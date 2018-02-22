@@ -1,10 +1,12 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Thu, 22 Feb 2018 10:04:54 +0100
-Subject: [Buildroot] [PATCH v2 0/3] llvm for mesa3d
-In-Reply-To: <CAEj2-1Mg73ZORc95J8-athRuZnmOs-j+n05tG-O_gmc7=8801A@mail.gmail.com>
-References: <20180219171805.13769-1-valentin.korenblit@smile.fr>
- <CAEj2-1Mg73ZORc95J8-athRuZnmOs-j+n05tG-O_gmc7=8801A@mail.gmail.com>
-Message-ID: <9231fc3b-1943-bbab-3377-5de5e87a60a3@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 22 Feb 2018 10:27:13 +0100
+Subject: [Buildroot] [PATCH-FOR-NEXT v1 3/6] pkgconf: add
+ host-pkg-config wrapper
+In-Reply-To: <20180221225010.4b4228aa@windsurf.lan>
+References: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
+ <20180221142801.28997-4-gael.portay@savoirfairelinux.com>
+ <20180221225010.4b4228aa@windsurf.lan>
+Message-ID: <0e296fe2-3359-581f-6d3d-d3bc3cac06eb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,126 +15,133 @@ To: buildroot@busybox.net
 
 
 
-On 21/02/2018 21:55, Andre Renaud wrote:
-> Hi Valentin,
-> Thanks for these patches - I've been looking at getting the llvmpipe 
-> mesa3d driver going on the Dragonboard 410C, which uses the freedreno 
-> driver. The work you've done here gets me very close, but I'm having 
-> one last issue I thought you might know something about.
->
-> I'm having to patch in a change to enable this for AARCH64 on top of 
-> the changes that you've made, but it looks like I'm ending up with the 
-> LLVM tools generating output for the host architecture, 
-> x86_64-unknown-linux-gnu, rather than the target architecture. As such 
-> I'm getting the "No available targets are compatible with this triple" 
-> error when llvmpipe gets initialised.
->
-Hi Andre,
+On 21-02-18 22:50, Thomas Petazzoni wrote:
+> Hello,
+> 
+> +Peter, Yann, Arnout, there's a question below about a small change but
+> has a big impact.
+> 
+> On Wed, 21 Feb 2018 09:27:58 -0500, Ga?l PORTAY wrote:
+>> The host-pkg-config wrapper gets package data compiled for host.
+>>
+>> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+>> ---
+>>  package/pkgconf/host-pkg-config | 4 ++++
+>>  package/pkgconf/pkgconf.mk      | 6 ++++--
+>>  2 files changed, 8 insertions(+), 2 deletions(-)
+>>  create mode 100644 package/pkgconf/host-pkg-config
+>>
+>> diff --git a/package/pkgconf/host-pkg-config b/package/pkgconf/host-pkg-config
+>> new file mode 100644
+>> index 0000000000..3362a3f927
+>> --- /dev/null
+>> +++ b/package/pkgconf/host-pkg-config
+>> @@ -0,0 +1,4 @@
+>> +#!/bin/sh
+>> +PKGCONFDIR=$(dirname "$0")
+>> +DEFAULT_PKG_CONFIG_PATH=${PKGCONFDIR}/../lib/pkgconfig:${PKGCONFDIR}/../share/pkgconfig
+>> +PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-${DEFAULT_PKG_CONFIG_PATH}} exec ${PKGCONFDIR}/pkgconf "$@"
+> 
+> I've been thinking about this for a while, and I remember having a
+> discussion about this with some other Buildroot developer a while ago.
+> I think the most correct thing to do would be:
+> 
+>  $(HOST_DIR)/bin/pkg-config returns results valid for native compilation
+> 
+>  $(HOST_DIR)/bin/<tuple>-pkg-config returns results valid for cross-compilation
 
-Today I will start working on aarch64, so I'll check that. I guess that 
-error should be related to TARGETS_TO_BUILD.
-> The changes I made to enable compilation were:
-> --- a/package/llvm/Config.in2018-02-22 09:49:46.635210136 +1300
-> +++ b/package/llvm/Config.in2018-02-21 11:49:39.638970682 +1300
-> @@ -3,11 +3,12 @@
-> # 
-> http://llvm.org/docs/GettingStarted.html#host-c-toolchain-both-compiler-and-standard-library
-> # http://llvm.org/docs/GettingStarted.html#local-llvm-configuration
-> depends on BR2_HOST_GCC_AT_LEAST_4_8
-> -default y if BR2_i386 || BR2_x86_64
-> +default y if BR2_i386 || BR2_x86_64 || BR2_aarch64
-> ?config BR2_PACKAGE_LLVM_TARGET_ARCH
-> string
-> default "X86" if BR2_i386 || BR2_x86_64
-> +default "AArch64" if BR2_aarch64
-> ?config BR2_PACKAGE_LLVM
-> bool "llvm"
->
-Your changes are ok, it shouldn't be necessary to do other 
-modifications, but I haven't tested it yet.
-> In addition I've tried tinkering with LLVM_NATIVE_ARCH, and 
-> LLVM_TARGET_TRIPLE_ENV, but haven't had much luck.
->
-> I don't suppose you have any thoughts on what I might have missed? I'm 
-> assuming that there is some confusion over the host llvm vs. the 
-> target. I appreciate that your initial patch targeted x86 only, so if 
-> you're still working on the ARM support then it may be easiest if I 
-> wait on that.
- ?I will keep you up to date.
->
-> Regards,
-> Andre
->
-> On Tue, 20 Feb 2018 at 06:18 Valentin Korenblit 
-> <valentin.korenblit at smile.fr <mailto:valentin.korenblit@smile.fr>> wrote:
->
->     Hello all,
->
->     This series provides LLVM support for Mesa3d, enabling
->     llvmpipe software rasterizer.
->
->     It must be considered that it does not provide a full LLVM
->     installation for the host, only the necessary components to
->     cross-compile LLVM for the target. It will install all target
->     components as libLLVM.so.
->
->     Changes in v2:
->
->     The series has been simplified:
->
->     *Build only backend for target architecture by default.
->
->     *Support for AMDGPU(PATCH 3/4 in v1) was removed because I cannot test
->     it currently.
->
->     *Host: make options modified to build only llvm-config and llvm-tblgen
->     (reduces drastically build time for host).
->
->     *Target: support only x86 currently (tested), I will test on ARM soon.
->
->
->     The idea is to add incrementally more options to configure LLVM as
->     soon
->     as I can test them.
->
->     Regards,
->
->     Valent?n
->
->
->     Romain Naour (3):
->     ? package/llvm: new host package
->     ? package/llvm: enable target variant
->     ? package/mesa3d: enable llvm support
->
->     ?package/Config.in? ? ? ? ? ?|? ?1 +
->     ?package/Config.in.host? ? ? |? ?1 +
->     ?package/llvm/Config.in? ? ? |? 19 +++
->     ?package/llvm/Config.in.host |? ?8 +
->     ?package/llvm/llvm.hash? ? ? |? ?2 +
->     ?package/llvm/llvm.mk <http://llvm.mk> ? | 360
->     ++++++++++++++++++++++++++++++++++++++++++++
->     ?package/mesa3d/Config.in? ? |? ?8 +
->     ?package/mesa3d/mesa3d.mk <http://mesa3d.mk> ? |? 18 ++-
->     ?8 files changed, 414 insertions(+), 3 deletions(-)
->     ?create mode 100644 package/llvm/Config.in
->     ?create mode 100644 package/llvm/Config.in.host
->     ?create mode 100644 package/llvm/llvm.hash
->     ?create mode 100644 package/llvm/llvm.mk <http://llvm.mk>
->
->     --
->     2.14.3
->
->     _______________________________________________
->     buildroot mailing list
->     buildroot at busybox.net <mailto:buildroot@busybox.net>
->     http://lists.busybox.net/mailman/listinfo/buildroot
->
+ This sounds like a good idea, but as you note below, could lead to breakage as
+well.
 
-Best regards,
+ An alternative would be (IIRC this idea was launched by ThomasDS (added in Cc)):
 
-Valent?n
+$(HOST_DIR)/bin/ contains binaries valid for native compilation (i.e. no
+cross-compiler, cross-pkg-config, ...)
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180222/011265c0/attachment.html>
+$(HOST_DIR)/<tuple>/bin contains binaries valid for cross-compilation
+
+When building for host, PATH contains $(HOST_DIR)/bin
+
+When building for target, PATH contains $(HOST_DIR)/<tuple>/bin:$(HOST_DIR)/bin
+
+
+ So let's analyse that option:
+
+> I.e, the current pkg-config wrapper should be renamed
+> <tuple>-pkg-config, and pkg-config should behave like a normal native
+> pkg-config, except that it provides results for libraries located in
+> $(HOST_DIR).
+> 
+> The autoconf PKG_CHECK_MODULES() macro uses PKG_PROG_PKG_CONFIG(),
+> which internally uses AC_PATH_TOOL(). And AC_PATH_TOOL() will first
+> search for the program with the host machine tuple, and warn if the
+> program cannot be found with this tuple. From
+> https://www.gnu.org/software/autoconf/manual/autoconf-2.68/html_node/Generic-Programs.html:
+> 
+> """
+> When cross-compiling, this macro will issue a warning if no program
+> prefixed with the host type could be found. For more information, see
+> Specifying Target Triplets. 
+
+ Weird, I checked a couple of log files and I could see no such warning. Ah,
+that's because we pass PKG_CONFIG=... in the environment. Is it the idea to
+remove that from the environment then?
+
+ Anyway, the PATH-based alternative will not remove this warning, but that
+shouldn't be different from the current situation.
+
+> """
+> 
+> I know this change will:
+> 
+>  - Potentially break a number of packages we have in Buildroot, which
+>    directly use pkg-config without first trying to use
+>    <tuple>-pkg-config
+
+ I.e. anything not using autotools? Well, most will probably heed the
+PKG_CONFIG=... in the environment.
+
+ The PATH-based alternative doesn't have this potential breakage.
+
+
+>  - Potentially break a number of downstream users who are using
+>    pkg-config.
+
+ The PATH-based alternative reduces this problem, downstream users just have to
+add $(HOST_DIR)/tuple/bin to their path (and Buildroot will do this for post-xxx
+scripts).
+
+
+> However:
+> 
+>  - It would solve that once you add $(HOST_DIR)/bin to your PATH, you
+>    cannot anymore do native builds because "pkg-config" returns results
+>    that are not relevant for native builds. I already saw a number of
+>    people affected by this.
+
+ The PATH-based alternative solves this as well.
+
+ Note BTW that neither alternative solves the problem when building a host-tool
+during a target build (and yes, we have seen this problem already in some
+packages). AFAICS, autotools will also for host builds use the PKG_CONFIG passed
+in the environment or discovered through the tuple. Same for CMake.
+
+
+>  - It would comply with the standard autoconf expectations.
+
+ With the PATH-based alternative, it might make sense to have the cross-stuff
+both in $(HOST_DIR)/bin with the tuple prefix, and in $(HOST_DIR)/tuple/bin
+without the prefix. That way, we get the advantages of both: comply with
+autoconf expectations, and avoid breaking packages or downstream users.
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
