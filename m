@@ -1,8 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 21 Feb 2018 22:53:18 -0300
-Subject: [Buildroot] [RFC] testing: add python-crossbar tests
-References: <1518701885-16545-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <5a8e228e69301_2426136620c3284e@ultri3.mail>
+Date: Wed, 21 Feb 2018 22:55:54 -0300
+Subject: [Buildroot] [PATCH next 1/5] support/scripts/pkg-stats-new:
+ rewrite in Python
+References: <20180219215708.75721513@windsurf.home>
+Message-ID: <5a8e232ac3d9f_24263ff17c9dc73833077@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,35 +12,62 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, Feb 15, 2018 at 11:38 AM, Yegor Yefremov wrote:
+On Mon, Feb 19, 2018 at 05:57 PM, Thomas Petazzoni wrote:
 
 [snip]
-> ---
->  .../testing/tests/package/test_python_crossbar.py  | 27 ++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 support/testing/tests/package/test_python_crossbar.py
+>> > +def get_pkg_infra_info(pkgpath):
+>> > +    infras = list()
+>> > +    with open(pkgpath, 'r') as f:
+>> > +        lines = f.readlines()
+>> > +        for l in lines:
+>> > +            match = INFRA_RE.match(l)
+>> > +            if not match:
+>> > +                continue
+>> > +            infra = match.group(1)
+>> > +            if infra.startswith("host-"):
+>> > +                infras.append(("host", infra[5:]))
+>> > +            else:
+>> > +                infras.append(("target", infra))
+>> > +    return infras  
+>> Many methods like this one could become part of the class:
+>> class Package:
+>>     def get_pkg_infra_info(self):
+>>         infras = list()
+>>         with open(self.path, 'r') as f:
+>>             lines = f.readlines()
+>>             for l in lines:
+>>                 match = INFRA_RE.match(l)
+>>                 if not match:
+>>                     continue
+>>                 infra = match.group(1)
+>>                 if infra.startswith("host-"):
+>>                     infras.append(("host", infra[5:]))
+>>                 else:
+>>                     infras.append(("target", infra))
+>>         self.infras = infras
+>> 
+>> But that's a considerable effort with small gain.
+>> The script can always be refactored later.
+> 
+> I don't entirely agree: some of those functions don't apply to one
+> package object, they apply to the whole set of package objects.
+> Therefore, semantically, there are not methods of the Package() class,
+> as they don't manipulate just that object.
+> 
+> The main problem is with getting the license, license files and version
+> information. Indeed, this cannot be done as a method of a single
+> package, without slowing down the script significantly. Right now, we
+> are doing a single "make VARS=%_LICENSE printvars" invocation, and
+> parsing the output. This gives us the full list of licenses for all
+> packages, in just one make invocation. If we do this once per-package,
+> we pay the cost of running make + parsing time of all Buildroot
+> makefiles for the 2000+ packages, which isn't reasonable. One option
+> here would have to simply cache this value somewhere, and have the
+> method just use the cached value. Do you have a suggestion to handle
+> this in a beautiful way ?
 
-The update to .gitlab.yml can be added now that 'make .gitlab-ci.yml' is fixed
-(on master).
-
-[snip]
-> +++ b/support/testing/tests/package/test_python_crossbar.py
-
-My series fixing flake8 warnings are now mostly applied (a few items need v2).
-
-Can you run flake8 and fix the 7 warnings? You can see the updated
-test_python.py for reference.
-
-
-I applied this and also
-http://patchwork.ozlabs.org/patch/874421/
-http://patchwork.ozlabs.org/patch/874422/
-but the test still fails with timeout:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/53345963
-I did not debugged it.
-
-Maybe I missed something?
-
+Unfortunately no.
+Let's keep it as is.
 
 Regards,
 Ricardo
