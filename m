@@ -1,43 +1,101 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 22 Feb 2018 14:12:11 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14,
- 15}.x series
-In-Reply-To: <1519319531-17823-1-git-send-email-festevam@gmail.com>
-References: <1519319531-17823-1-git-send-email-festevam@gmail.com>
-Message-ID: <1519319531-17823-2-git-send-email-festevam@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 22 Feb 2018 19:32:20 +0100
+Subject: [Buildroot] [PATCH v1 0/3] qt5: fix build issue with mesa w/out
+ xcb
+In-Reply-To: <20180222164738.kprf7kz2u3vywpxm@archlinux>
+References: <20180212042524.28675-1-gael.portay@savoirfairelinux.com>
+ <20180222164738.kprf7kz2u3vywpxm@archlinux>
+Message-ID: <20180222193220.38bc39cc@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hello Ga?l,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Thu, 22 Feb 2018 11:47:38 -0500, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4762494..87fe0a6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.98"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.116"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.82"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.117"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.83"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.20"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.4"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.21"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.5"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-2.7.4
+> All,
+> 
+> On Sun, Feb 11, 2018 at 11:25:21PM -0500, Ga?l PORTAY wrote:
+> > Hi all,
+> > 
+> > Julien Corjon and I have noticed a build issue with qtmultimedia,
+> > qtwayland and qtwebkit modules when using mesa3d (as EGL backend)
+> > without using XCB. When BR2_PACKAGE_LIBXCB is set the issue is gone.
+> > Julien has opened an issue in Qt tracker[1].
+> > 
+> > The mesa's EGL/eglplatform.h header includes X11 headers unless the
+> > macro MESA_EGL_NO_X11_HEADERS is defined[2].
+> > 
+> > 	/home/gportay/src/buildroot/output-qt5.10/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:118:22: fatal error: X11/Xlib.h: No such file or directory
+> > 	 #include <X11/Xlib.h>
+> > 	                      ^
+> > 	compilation terminated.
+> > 
+> > The workaround tells qmake to pass the cflag MESA_EGL_NO_X11_HEADERS to
+> > make that prevents from including the missing X headers.
+> > 
+> > This workaround is performed in the situation when mesa3d is in use as
+> > OpenGL EGL backend and when XCB library is *not* compiled.
+> > 
+> > [1]: https://bugreports.qt.io/browse/QTBUG-66233
+> > [2]: https://github.com/mesa3d/mesa/blob/79ee1b2ff0b85f4eeb4165d23a7943c28d3a3d93/include/EGL/eglplatform.h#L109-L125
+> >   
+> 
+> As discussed with Thomas on the #buildroot channel:
+> 
+> 	2018-02-16 09:01:14	kos_tom	gportay: I think the OpenGL implementation should provide those flags in its .pc file, and qt should pick them up from there
+> 
+> Hopefully, the MESA_EGL_NO_X11_HEADERS cflags is present the egl.pc file
+> from mesa3d:
+> 
+> 	$ output/host/bin/pkg-config --cflags-only-other egl
+> 	 -DMESA_EGL_NO_X11_HEADERS
+> 
+> I will work on a proper solution that will be integrated in every Qt
+> projects that are impacted by this issue.
+> 
+> I need time/help to hundersand how qmake works in order to append the
+> egl cflags given by pkg-config in qmake.
+> 
+
+Maybe take a look at the openembedded patch [1] (and upstream bug report[2]
+and patch [3]) 'egl.prf: Fix build error when egl headers need platform
+definition', stating:
+
+  Gain the value through pkg-config and pass it through QMAKE_CFLAGS_EGL.
+
+Regards,
+Peter
+
+[1] https://patchwork.openembedded.org/patch/141287/
+[2] https://bugreports.qt.io/browse/QTBUG-61712
+[3] https://codereview.qt-project.org/#/c/198906/
+
+> I almost sure that I will miss the release. So, would you agree to
+> accept this patch serie as a temporary workaround since it fixes a real
+> build issue?
+> 
+> > Regards,
+> > Ga?l PORTAY (3):
+> >   qt5webkit: fix build issue with mesa3d w/out xcb
+> >   qt5multimedia: fix build issue with mesa3d w/out xcb
+> >   qt5wayland: fix build issue with mesa3d w/out xcb
+> > 
+> >  package/qt5/qt5multimedia/qt5multimedia.mk | 11 ++++++++++-
+> >  package/qt5/qt5wayland/qt5wayland.mk       |  9 +++++++++
+> >  package/qt5/qt5webkit/qt5webkit.mk         | 11 ++++++++++-
+> >  3 files changed, 29 insertions(+), 2 deletions(-)
+> > 
+> > -- 
+> > 2.15.1
+> >  
+> 
+> Regards,
+> Gael
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
