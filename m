@@ -1,37 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Feb 2018 23:17:31 +0100
-Subject: [Buildroot] [PATCH] website: update package number text
-Message-ID: <20180222221731.7946-1-peter@korsgaard.com>
+Date: Thu, 22 Feb 2018 23:18:30 +0100
+Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14,
+ 15}.x series
+In-Reply-To: <1519319531-17823-2-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Thu, 22 Feb 2018 14:12:11 -0300")
+References: <1519319531-17823-1-git-send-email-festevam@gmail.com>
+ <1519319531-17823-2-git-send-email-festevam@gmail.com>
+Message-ID: <87a7w0r7m1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have quite a bit more than "hundreds of packages" nowadays:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-find package -name \*.mk | wc -l
-2285
+ > From: Fabio Estevam <fabio.estevam@nxp.com>
+ > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
-So adjust the text to say 'several thousand' instead.
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/index.html | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/docs/website/index.html b/docs/website/index.html
-index f0d0175bb7..300adbb83d 100644
---- a/docs/website/index.html
-+++ b/docs/website/index.html
-@@ -78,7 +78,7 @@
- 	</div>
-       </div>
- 
--      <h4>Supports hundreds of packages</h4>
-+      <h4>Supports several thousand packages</h4>
-       <p>X.org stack, Gtk3, Qt 5, GStreamer, Webkit, Kodi, a large number of network-related and system-related utilities are supported.</p>
- 
-     </div><!--/col-lg-4 -->
 -- 
-2.11.0
+Bye, Peter Korsgaard
