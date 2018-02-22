@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Feb 2018 23:18:30 +0100
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14,
- 15}.x series
-In-Reply-To: <1519319531-17823-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Thu, 22 Feb 2018 14:12:11 -0300")
+Date: Thu, 22 Feb 2018 23:18:26 +0100
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.15.5
+In-Reply-To: <1519319531-17823-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Thu, 22 Feb 2018 14:12:10 -0300")
 References: <1519319531-17823-1-git-send-email-festevam@gmail.com>
- <1519319531-17823-2-git-send-email-festevam@gmail.com>
-Message-ID: <87a7w0r7m1.fsf@dell.be.48ers.dk>
+Message-ID: <87eflcr7m5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
