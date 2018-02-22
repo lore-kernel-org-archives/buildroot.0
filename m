@@ -1,149 +1,80 @@
 From: Erik Larsson <karl.erik.larsson@gmail.com>
-Date: Thu, 22 Feb 2018 11:02:56 +0100
-Subject: [Buildroot] [PATCH v2 1/3] imx-mkimage: new package
+Date: Thu, 22 Feb 2018 11:02:57 +0100
+Subject: [Buildroot] [PATCH v2 2/3] firmware-imx: add support for iMX8M
+ firmware
 In-Reply-To: <1519293778-5185-1-git-send-email-karl.erik.larsson@gmail.com>
 References: <1519293778-5185-1-git-send-email-karl.erik.larsson@gmail.com>
-Message-ID: <1519293778-5185-2-git-send-email-karl.erik.larsson@gmail.com>
+Message-ID: <1519293778-5185-3-git-send-email-karl.erik.larsson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package add support for imx-mkimage for iMX8M.
-Currently the only hardware it's tested for.
-
 Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
 ---
- package/Config.in.host                             |  1 +
- .../imx-mkimage/0001-remove-git-build-info.patch   | 28 +++++++++++++++
- package/imx-mkimage/Config.in.host                 | 11 ++++++
- package/imx-mkimage/imx-mkimage.hash               |  3 ++
- package/imx-mkimage/imx-mkimage.mk                 | 41 ++++++++++++++++++++++
- 5 files changed, 84 insertions(+)
- create mode 100644 package/imx-mkimage/0001-remove-git-build-info.patch
- create mode 100644 package/imx-mkimage/Config.in.host
- create mode 100644 package/imx-mkimage/imx-mkimage.hash
- create mode 100644 package/imx-mkimage/imx-mkimage.mk
+ package/freescale-imx/Config.in                    | 4 +++-
+ package/freescale-imx/firmware-imx/Config.in       | 2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 8 ++++++++
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 199a8e9..06ef5cb 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -24,6 +24,7 @@ menu "Host utilities"
- 	source "package/go-bootstrap/Config.in.host"
- 	source "package/google-breakpad/Config.in.host"
- 	source "package/gptfdisk/Config.in.host"
-+	source "package/imx-mkimage/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jq/Config.in.host"
- 	source "package/jsmin/Config.in.host"
-diff --git a/package/imx-mkimage/0001-remove-git-build-info.patch b/package/imx-mkimage/0001-remove-git-build-info.patch
-new file mode 100644
-index 0000000..e472133
---- /dev/null
-+++ b/package/imx-mkimage/0001-remove-git-build-info.patch
-@@ -0,0 +1,28 @@
-+From d1bb893300b1bd80eaac27fcc8eb4347f56f83b4 Mon Sep 17 00:00:00 2001
-+From: Erik Larsson <erik.larsson@combitech.se>
-+Date: Thu, 22 Feb 2018 09:56:53 +0100
-+Subject: [PATCH] Remove buildinformation step.
-+
-+Signed-off-by: Erik Larsson <erik.larsson@combitech.se>
-+---
-+ Makefile | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 4b449ad..4042a39 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -33,9 +33,7 @@ $(MKIMG): buildinfo $(SRCS)
-+ bin: $(MKIMG)
-+ 
-+ buildinfo:
-+-	@echo -n '#define MKIMAGE_COMMIT 0x' > src/build_info.h
-+-	@git rev-parse --short=8 HEAD >> src/build_info.h
-+-	@echo '' >> src/build_info.h
-++	@echo "#define MKIMAGE_COMMIT 0x0000" > src/build_info.h
-+ 
-+ help:
-+ 	@echo $(CURR_DIR)
-+-- 
-+2.7.4
-+
-diff --git a/package/imx-mkimage/Config.in.host b/package/imx-mkimage/Config.in.host
-new file mode 100644
-index 0000000..411f67c
---- /dev/null
-+++ b/package/imx-mkimage/Config.in.host
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_HOST_IMX_MKIMAGE
-+	bool "host imx-mkimage"
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_TARGET_UBOOT
-+	help
-+	  imx-mkimage is used to combine input images and generate
-+	  final boot image with appropriate IVT set.
-+
-+	  https://source.codeaurora.org/external/imx/imx-mkimage
-diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
-new file mode 100644
-index 0000000..08d31ce
---- /dev/null
-+++ b/package/imx-mkimage/imx-mkimage.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 4ddb144520001c33baa24493f68ef2ea9434ac36bf3ae223f78d7ec581aa484c  imx-mkimage-imx_4.9.51_imx8m_beta.tar.gz
-+sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  iMX8dv/COPYING
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-new file mode 100644
-index 0000000..e3c62bb
---- /dev/null
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# imx-mkimage
-+#
-+################################################################################
-+
-+IMX_MKIMAGE_VERSION = imx_4.9.51_imx8m_beta
-+IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
-+IMX_MKIMAGE_SITE_METHOD = git
-+IMX_MKIMAGE_LICENSE = GPL-2.0
-+IMX_MKIMAGE_LICENSE_FILES = iMX8dv/COPYING
-+HOST_IMX_MKIMAGE_DEPENDENCIES = uboot linux firmware-imx arm-trusted-firmware
-+
-+define HOST_IMX_MKIMAGE_BUILD_CMDS
-+	# These files are generated by firmware-imx, uboot and arm-trusted-firmware
-+	# Copy the files into the iMX8M folder to make building of this package simple
-+	# The NXP engineers has constructed to buildprocess with a bunch of hardcoded
-+	# file names and pathes.
-+
-+	# Currently this only supports iMX8M. When more hardware is available
-+	# this needs to be selectable based on iMX8-version (iMX8M,iMXQ etc).
-+	cp $(BINARIES_DIR)/u-boot-spl.bin $(@D)/iMX8M
-+	cp $(BINARIES_DIR)/lpddr4_pmu_train* $(@D)/iMX8M
-+	cp $(BINARIES_DIR)/fsl-imx8mq-evk.dtb $(@D)/iMX8M
-+	cp $(BINARIES_DIR)/bl31.bin $(@D)/iMX8M
-+
-+	# We must rename this file because mkimage_fit_atf.sh has hardcoded names
-+	cp ${BINARIES_DIR}/u-boot.bin $(@D)/iMX8M/u-boot-nodtb.bin
-+
-+	# In soc.mk it's hardcoded that the mkimage tool is named mkimage_uboot
-+	# and that it's located in the iMX8M folder.
-+	cp $(HOST_DIR)/bin/mkimage $(@D)/iMX8M/mkimage_uboot
-+
-+	$(MAKE) -C $(@D) SOC=iMX8M flash_spl_uboot
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index b5e5ab2..b5df642 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -1,6 +1,6 @@
+ menuconfig BR2_PACKAGE_FREESCALE_IMX
+ 	bool "Freescale i.MX libraries"
+-	depends on BR2_arm
++	depends on BR2_arm || BR2_aarch64
+ 	help
+ 	  Those packages provide hardware acceleration for GPU or VPU,
+ 	  hardware optimization or some hardware tools for Freescale
+@@ -40,6 +40,8 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+ 	bool "imx7d/imx7ulp"
+ 
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++	bool "imx8m"
+ endchoice
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index fca280a..56d5b80 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_FIRMWARE_IMX
+ 	bool "firmware-imx"
+-	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_arm || BR2_aarch64 # Only relevant for i.MX
+ 	help
+ 	  Firmware blobs for the Freescale i.MX SoCs.
+ 
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 630afca..f03daf2 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -18,6 +18,13 @@ define FIRMWARE_IMX_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+ endef
+ 
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
++FIRMWARE_IMX_INSTALL_IMAGES = YES
++define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
++	cp $(@D)/firmware/ddr/synopsys/lpddr4_pmu_train_*.bin $(BINARIES_DIR)
++	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin $(BINARIES_DIR)
 +endef
-+
-+define HOST_IMX_MKIMAGE_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/iMX8M/flash.bin $(BINARIES_DIR)/imx-boot-imx8mqevk-sd.bin
-+endef
-+
-+$(eval $(host-generic-package))
++else
+ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+ 	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
+@@ -27,5 +34,6 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+ 		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
+ endef
++endif
+ 
+ $(eval $(generic-package))
 -- 
 2.7.4
