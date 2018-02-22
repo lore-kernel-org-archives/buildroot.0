@@ -1,30 +1,50 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 22 Feb 2018 15:48:46 -0600
-Subject: [Buildroot] [RFCv3 05/15] pkg-generic: add .stamp_installed step
-In-Reply-To: <20171201205352.24287-6-thomas.petazzoni@free-electrons.com>
-References: <20171201205352.24287-1-thomas.petazzoni@free-electrons.com>
- <20171201205352.24287-6-thomas.petazzoni@free-electrons.com>
-Message-ID: <CANQCQpb9_0-pcZXJ3egrmDZfMtdv9UYNuZzCcycO=87Ku=OAEg@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 22 Feb 2018 23:10:14 +0100
+Subject: [Buildroot] [PATCH] package/skeleton-init-systemd: create a symlink
+ /var/run to ../run
+Message-ID: <20180222221014.19584-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+As reported by J?r?my Rosen [1] and Jan Kundr?t (RO case)[2], systemd
+looks for the dbus socket in /run/dbus instead of /var/run/dbus which
+is not where dbus puts the socket. This is a change introduced with
+the last version bump v237 [3].
 
-On Fri, Dec 1, 2017 at 9:53 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+The file /usr/lib/tmpfiles.d/var.con will create automatically that
+symlink at bootup /var/run doesn't exist yet. But dbus creates, at
+install time, the directory /var/run/dbus without taking care of
+/var/run. So we end up with two different directories /run and
+/var/run. This bug affects more or less all systemd-provided
+utilities, including logind and systemd itself.
 
-> +# Some packages use install-staging stuff for install-target
-> +$$($(2)_TARGET_INSTALL_TARGET):                $$($(2)_TARGET_INSTALL_STAGING)
-> +
->  $(1)-build:            $$($(2)_TARGET_BUILD)
->  $$($(2)_TARGET_BUILD): $$($(2)_TARGET_CONFIGURE)
->
-> @@ -813,6 +822,7 @@ $(1)-reconfigure:   $(1)-clean-for-reconfigure $(1)
->
+This patch create the correct symlink run -> ../run when systemd
+is used as init system.
 
-Should the pkgname-dirclean target also remove its per-package folder ?
+[1] http://lists.busybox.net/pipermail/buildroot/2018-February/214129.html
+[2] http://lists.busybox.net/pipermail/buildroot/2018-February/213420.html
+[3] https://github.com/systemd/systemd/commit/15ca0a42c7db49146a7169dbcb0683f0836cf8c2
 
-Matt
+Reported-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/skeleton-init-systemd/skeleton-init-systemd.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index 95142904f5..d435aa54ee 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -20,6 +20,7 @@ ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+ define SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW
+ 	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+ 	mkdir -p $(TARGET_DIR)/var
++	ln -s ../run $(TARGET_DIR)/var/run
+ endef
+ 
+ else
+-- 
+2.14.3
