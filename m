@@ -1,22 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Feb 2018 23:18:26 +0100
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.15.5
-In-Reply-To: <1519319531-17823-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Thu, 22 Feb 2018 14:12:10 -0300")
-References: <1519319531-17823-1-git-send-email-festevam@gmail.com>
-Message-ID: <87eflcr7m5.fsf@dell.be.48ers.dk>
+Date: Thu, 22 Feb 2018 23:18:05 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.15.5
+Message-ID: <20180222221859.9FC1184744@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c36c51d8485709d0f5480aaaf9107e2d76ccfe80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Fabio Estevam <fabio.estevam@nxp.com>
- > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 0e1e4c287b..4403e84f9f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.15.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.15.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
