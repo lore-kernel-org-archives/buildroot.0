@@ -1,34 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Feb 2018 09:09:49 +0100
-Subject: [Buildroot] [PATCH] patch: security bump to version 2.7.6
-In-Reply-To: <e16723b54e63c62981c659f83eb6991853bf529a.1519363351.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 23 Feb 2018 07:22:31 +0200")
-References: <e16723b54e63c62981c659f83eb6991853bf529a.1519363351.git.baruch@tkos.co.il>
-Message-ID: <87woz4p1o2.fsf@dell.be.48ers.dk>
+Date: Fri, 23 Feb 2018 09:08:25 +0100
+Subject: [Buildroot] [git commit] mbedtls: security bump to version 2.7.0
+Message-ID: <20180223081037.3A01F88111@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3b7a59304a9c377b9aec1303d85a60d019b4b9b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes CVE-2016-10713: Out-of-bounds access within pch_write_line() in
- > pch.c can possibly lead to DoS via a crafted input file.
+CVE-2018-0487: Remote attackers can execute arbitrary code or cause a
+denial of service (buffer overflow) via a crafted certificate chain that
+is mishandled during RSASSA-PSS signature verification within a TLS or
+DTLS session.
 
- > Add upstream patch fixing CVE-2018-6951: There is a segmentation fault,
- > associated with a NULL pointer dereference, leading to a denial of
- > service in the intuit_diff_type function in pch.c, aka a "mangled
- > rename" issue.
+CVE-2018-0488: When the truncated HMAC extension and CBC are used,
+allows remote attackers to execute arbitrary code or cause a denial of
+service (heap corruption) via a crafted application packet within a TLS
+or DTLS session.
 
- > This bump does NOT fix CVE-2018-6952. See upstream bug #53133
- > (https://savannah.gnu.org/bugs/index.php?53133).
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mbedtls/mbedtls.hash | 6 +++---
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Add license file hash.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index d04b867754..a62c0f58de 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.6.0-2.1.9-and-1.3.21-released
+-sha1	e914288da50977f541773f9d36e26f14926594a5	mbedtls-2.6.0-apache.tgz
+-sha256	99bc9d4212d3d885eeb96273bcde8ecc649a481404b8d7ea7bb26397c9909687	mbedtls-2.6.0-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.7.0-2.1.10-and-1.3.22-released
++sha1	01ffebf679c8696cc941c41224fa73d8944d2c85	mbedtls-2.7.0-apache.tgz
++sha256	aeb66d6cd43aa1c79c145d15845c655627a7fc30d624148aaafbb6c36d7f55ef	mbedtls-2.7.0-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 64ce18cf6f..7c26ea95ee 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.6.0
++MBEDTLS_VERSION = 2.7.0
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
