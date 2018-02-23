@@ -1,56 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Feb 2018 21:02:00 +0100
-Subject: [Buildroot] [git commit] libite: update path for license files
-Message-ID: <20180305200716.EE0F781EDA@busybox.osuosl.org>
+Date: Fri, 23 Feb 2018 16:52:06 +0100
+Subject: [Buildroot] [git commit] iptables: bump to version 1.6.2
+Message-ID: <20180305200717.4BF6581EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e10f1eb5b1309366a8309f2c0d63dd5a755f7fd8
+commit: https://git.buildroot.net/buildroot/commit/?id=e1a8cdca5d5990ded69ebf521a4a4aa325fe1f6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Two of the license files have moved in the source package. Update the package
-to reflect these changes.
+Also removed a patch fixing the build with musl as it made its way into
+the 1.6.2 version.
 
-Fixes:
-http://autobuild.buildroot.net/results/8fd71513f021652a9a4ff2354dd5fe4fedf3d557
-http://autobuild.buildroot.net/results/6a1ab663f1093351662ca7b86c9224a630798f35
-http://autobuild.buildroot.net/results/066373da2da2cc8c0c22cc4a3048d1b187c9c389
-http://autobuild.buildroot.net/results/edad6ac5d3f61257e99b90c6f54d4d6786aa7ad7
-http://autobuild.buildroot.net/results/c2b72c2a32de949a5b1ab46d6d7c540353cfaf5e
-http://autobuild.buildroot.net/results/8635ca4bbec464d196846a4018d1228d6651b211
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libite/libite.hash | 4 ++--
- package/libite/libite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...utils-nfsynproxy-fix-build-with-musl-libc.patch | 44 ----------------------
+ package/iptables/iptables.hash                     |  6 +--
+ package/iptables/iptables.mk                       |  2 +-
+ 3 files changed, 4 insertions(+), 48 deletions(-)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index 437127d15c..7ef9dca57a 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
- sha256 39a4c12af30a38a813fac7c8d7512efb3692f910eba9c697a50ce0203e039dad  libite-v2.0.1.tar.gz
- sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
--sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  chomp.c
--sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  pidfile.c
-+sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
-+sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index 02ea948ef2..a128953c7a 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -7,7 +7,7 @@
- LIBITE_VERSION = v2.0.1
- LIBITE_SITE = $(call github,troglobit,libite,$(LIBITE_VERSION))
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
--LIBITE_LICENSE_FILES = LICENSE chomp.c pidfile.c
-+LIBITE_LICENSE_FILES = LICENSE src/chomp.c src/pidfile.c
- LIBITE_INSTALL_STAGING = YES
- LIBITE_AUTORECONF = YES
+diff --git a/package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch b/package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch
+deleted file mode 100644
+index 1f86ad1354..0000000000
+--- a/package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 06e0312d0bfd1f0b9e7c23ab654f18524d49e86b Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 2 Mar 2017 09:20:48 +0200
+-Subject: [PATCH] utils: nfsynproxy: fix build with musl libc
+-
+-The musl libc exposes some struct tcphdr field only when _GNU_SOURCE is
+-defined. Fix the following build failure:
+-
+-nfsynproxy.c: In function ???parse_packet???:
+-nfsynproxy.c:34:9: error: ???const struct tcphdr??? has no member named ???syn???
+-  if (!th->syn || !th->ack)
+-         ^
+-nfsynproxy.c:34:21: error: ???const struct tcphdr??? has no member named ???ack???
+-  if (!th->syn || !th->ack)
+-                     ^
+-nfsynproxy.c:42:8: error: ???const struct tcphdr??? has no member named ???res2???
+-  if (th->res2 == 0x1)
+-        ^
+-nfsynproxy.c:45:13: error: ???const struct tcphdr??? has no member named ???doff???
+-  length = th->doff * 4 - sizeof(*th);
+-             ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: pending (http://patchwork.ozlabs.org/patch/734503/)
+-
+- utils/nfsynproxy.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/utils/nfsynproxy.c b/utils/nfsynproxy.c
+-index baedc92c5d9f..bf5c416340f1 100644
+---- a/utils/nfsynproxy.c
+-+++ b/utils/nfsynproxy.c
+-@@ -6,6 +6,7 @@
+-  * published by the Free Software Foundation.
+-  */
+- 
+-+#define _GNU_SOURCE
+- #include <stdlib.h>
+- #include <stdbool.h>
+- #include <unistd.h>
+--- 
+-2.11.0
+-
+diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
+index b673c8abdb..8b191797fb 100644
+--- a/package/iptables/iptables.hash
++++ b/package/iptables/iptables.hash
+@@ -1,3 +1,3 @@
+-# From ftp://ftp.netfilter.org/pub/iptables/iptables-1.6.1.tar.bz2.{md5sum,sha1sum}
+-md5	ab38a33806b6182c6f53d6afb4619add	iptables-1.6.1.tar.bz2
+-sha1	b2592490ca7a6c2cd0f069e167a4337c86acdf91	iptables-1.6.1.tar.bz2
++# From ftp://ftp.netfilter.org/pub/iptables/iptables-1.6.2.tar.bz2.{md5sum,sha1sum}
++md5	7d2b7847e4aa8832a18437b8a4c1873d	iptables-1.6.2.tar.bz2
++sha1	6279effbf8f2c7ff53d19ae13308f8a6e6a60dd9	iptables-1.6.2.tar.bz2
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 44cfde2b9a..49a537f608 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-IPTABLES_VERSION = 1.6.1
++IPTABLES_VERSION = 1.6.2
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
+ IPTABLES_INSTALL_STAGING = YES
