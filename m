@@ -1,51 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 23 Feb 2018 18:50:37 +0100
-Subject: [Buildroot] [PATCH 1/1] azmq: add NPTL dependency
-Message-ID: <20180223175037.7555-1-fontaine.fabrice@gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Fri, 23 Feb 2018 18:25:38 +0000
+Subject: [Buildroot] [PATCH] package/skeleton-init-systemd: create a
+ symlink /var/run to ../run
+In-Reply-To: <20180222221014.19584-1-romain.naour@gmail.com>
+References: <20180222221014.19584-1-romain.naour@gmail.com>
+Message-ID: <1519410337.25567.173.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-boost-log depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL so add this
-dependency to azmq
+On Thu, 2018-02-22 at 23:10 +0100, Romain Naour wrote:
+> As reported by J?r?my Rosen [1] and Jan Kundr?t (RO case)[2], systemd
+> looks for the dbus socket in /run/dbus instead of /var/run/dbus which
+> is not where dbus puts the socket. This is a change introduced with
+> the last version bump v237 [3].
+> 
+> The file /usr/lib/tmpfiles.d/var.con will create automatically that
+> symlink at bootup /var/run doesn't exist yet. But dbus creates, at
+> install time, the directory /var/run/dbus without taking care of
+> /var/run. So we end up with two different directories /run and
+> /var/run. This bug affects more or less all systemd-provided
+> utilities, including logind and systemd itself.
+> 
+> This patch create the correct symlink run -> ../run when systemd
+> is used as init system.
 
-Fixes:
- - http://autobuild.buildroot.net/results/ffa5f21d7e7c38ea7adebc84f1cc8ee4cff74f1b
+This doesn't work in the RO root case.  I described this in another
+mail to the list, but in the RO root case target/var is a symlink to
+target/usr/share/factory/var.  Thus this link is actually created as:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Fix error in subject (NPTL instead of NTPL)
+target/usr/share/factory/var/run -> ../run
 
- package/azmq/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+It points to target/usr/share/factory/run, which is wrong.  In order to
+get it to work in the RO case, instead create this link.
 
-diff --git a/package/azmq/Config.in b/package/azmq/Config.in
-index 422a058832..eeafa2ad6d 100644
---- a/package/azmq/Config.in
-+++ b/package/azmq/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_AZMQ
- 	bool "azmq"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_USE_WCHAR # boost
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-@@ -20,9 +20,9 @@ config BR2_PACKAGE_AZMQ
+define SKELETON_INIT_SYSTEMD_VAR_RUN_LINK
+       ln -sf ../../../../run $(TARGET_DIR)/usr/share/factory/var/run
+endef
  
- 	  https://github.com/zeromq/azmq
- 
--comment "azmq needs a toolchain w/ C++11, wchar and threads"
-+comment "azmq needs a toolchain w/ C++11, wchar and NTPL"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
--		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
- 
- comment "azmq needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--- 
-2.14.1
+SKELETON_INIT_SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+       SKELETON_INIT_SYSTEMD_VAR_RUN_LINK
+
+Then you get a target that looks like this:
+                                                                 
+lrwxrwxrwx    1 root     root  29 Feb 23 02:35 /var/run -> ../usr/share/factory//var/run
+lrwxrwxrwx    1 root     root  15 Feb 23 00:51 /usr/share/factory/var/run -> ../../../../run
+
+On the target, /var/run ends up pointing to /run and also on the host
+$TARGET_DIR/var/run points to $TARGET_DIR/run.
