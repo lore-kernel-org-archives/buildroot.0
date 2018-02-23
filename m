@@ -1,111 +1,51 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 23 Feb 2018 18:39:29 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-02-21
-In-Reply-To: <CANQCQpYuRiHF+AebVDW6H7a9nEgSfvST2jy2gDZFpHxdRPnkmA@mail.gmail.com>
-References: <20180222070010.882C22071A@mail.free-electrons.com>
- <CANQCQpZ4LfgTJakUKquxknPxepYKmoXoGGAztFwMEuBiw1nY7Q@mail.gmail.com>
- <CAPi7W80GcVM8JeM0Svzxb=AG=b2tJ59=QYArRWY6HkR9OjArGQ@mail.gmail.com>
- <CAPi7W80DWG852ah5OeiYvqCdyFBvx_G3pGYo-D786P=OjVTjnQ@mail.gmail.com>
- <CANQCQpYuRiHF+AebVDW6H7a9nEgSfvST2jy2gDZFpHxdRPnkmA@mail.gmail.com>
-Message-ID: <CAPi7W82DSaOc7U=r8679EqqM=vKP65c7CXAnTKSZ-rnaNG5NYw@mail.gmail.com>
+Date: Fri, 23 Feb 2018 18:50:37 +0100
+Subject: [Buildroot] [PATCH 1/1] azmq: add NPTL dependency
+Message-ID: <20180223175037.7555-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt,
+boost-log depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL so add this
+dependency to azmq
 
-2018-02-23 15:05 GMT+01:00 Matthew Weber <matthew.weber@rockwellcollins.com>
-:
+Fixes:
+ - http://autobuild.buildroot.net/results/ffa5f21d7e7c38ea7adebc84f1cc8ee4cff74f1b
 
-> Fabrice,
->
-> On Fri, Feb 23, 2018 at 6:02 AM, Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> > Dear all,
-> >
-> > 2018-02-23 9:28 GMT+01:00 Fabrice Fontaine <fontaine.fabrice@gmail.com>:
-> >>
-> >> Dear Matthew,
-> >>
-> >>
-> >> 2018-02-22 23:41 GMT+01:00 Matthew Weber
-> >> <matthew.weber@rockwellcollins.com>:
-> >>>
-> >>> Thomas/Fabrice,
-> >>>
-> >>> On Thu, Feb 22, 2018 at 1:00 AM, Thomas Petazzoni
-> >>> <thomas.petazzoni@bootlin.com> wrote:
-> >>> > Hello,
-> >>> >
-> >>> > Build statistics for 2018-02-21
-> >>> > ===============================
-> >>> >
-> >>> >       branch |  OK | NOK | TIM | TOT |
-> >>> >       master | 172 |  28 |   0 | 200 |
-> >>> >    2017.11.x |  23 |   0 |   0 |  23 |
-> >>> >         next |  32 |  28 |   0 |  60 |
-> >>> >
-> >>> > Results for branch 'master'
-> >>> > ===========================
-> >>> >
-> >>> > Classification of failures by reason
-> >>> > ------------------------------------
-> >>> >
-> >>> >                   boost-1.66.0 | 6
-> >>>
-> >>> >         bfin |                   boost-1.66.0 | NOK |
-> >>> > http://autobuild.buildroot.net/results/
-> ffa5f21d7e7c38ea7adebc84f1cc8ee4cff74f1b
-> >>> > |
-> >>> > microblazeel |                   boost-1.66.0 | NOK |
-> >>> > http://autobuild.buildroot.net/results/
-> 2879576eaa870eecd31af1ff9261df1b86966542
-> >>> > |
-> >>> >          arm |                   boost-1.66.0 | NOK |
-> >>> > http://autobuild.buildroot.net/results/
-> a89df3195b44f125ba1797cf866f4a266909ec05
-> >>> > |
-> >>> >      powerpc |                   boost-1.66.0 | NOK |
-> >>> > http://autobuild.buildroot.net/results/
-> c947986e4f460c1733c81585302f58baca84f01a
-> >>> > |
-> >>> >          arm |                   boost-1.66.0 | NOK |
-> >>> > http://autobuild.buildroot.net/results/
-> 679a12c04e9954947dd51df2017af561c362f8ec
-> >>> > |
-> >>> >         or1k |                   boost-1.66.0 | NOK |
-> >>> > http://autobuild.buildroot.net/results/
-> 4e901a97ad1c21f21e508eab8268374220f2eba3
-> >>> > |
-> >>>
-> >>> Similar to (https://patchwork.ozlabs.org/patch/871696/).  Feels like a
-> >>> similar patch is needed for Boost?  I don't have the history on the
-> >>> discussion for the domoticz pkg.
-> >>
-> >> You're right, this is the same issue. we should add a
-> >> BR2_TOOLCHAIN_HAS_THREADS_NPTL dependency to BR2_PACKAGE_BOOST_THREAD.
-> >> This dependency should be added to all packages using boost_thread
-> >> including domoticz. I can make this patch or let you do it if you want.
-> >
-> > After some investigations, it seems the issue was raised by azmq package
-> > which was missing a NPTL dependency. As a result, BR2_PACKAGE_BOOST_LOG
-> was
-> > wrongly selected. I will send you a patch for azmq.
-> >>
->
-> All yours if you want to submit it, I can test.
->
-Here it is: https://patchwork.ozlabs.org/patch/877212
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Fix error in subject (NPTL instead of NTPL)
 
->
-> Matt
->
-Best Regards,
+ package/azmq/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180223/eb96149f/attachment.html>
+diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+index 422a058832..eeafa2ad6d 100644
+--- a/package/azmq/Config.in
++++ b/package/azmq/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_AZMQ
+ 	bool "azmq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+@@ -20,9 +20,9 @@ config BR2_PACKAGE_AZMQ
+ 
+ 	  https://github.com/zeromq/azmq
+ 
+-comment "azmq needs a toolchain w/ C++11, wchar and threads"
++comment "azmq needs a toolchain w/ C++11, wchar and NTPL"
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+-		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
++		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+ 
+ comment "azmq needs exception_ptr"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-- 
+2.14.1
