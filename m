@@ -1,36 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 23 Feb 2018 16:40:02 +0000
-Subject: [Buildroot] [Bug 10806] New: Allow nfs-utils to use ipv6
-Message-ID: <bug-10806-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 23 Feb 2018 18:37:52 +0100
+Subject: [Buildroot] [PATCH 1/1] azmq: add NTPL dependency
+Message-ID: <20180223173752.6658-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10806
+boost-log depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL so add this
+dependency to azmq
 
-            Bug ID: 10806
-           Summary: Allow nfs-utils to use ipv6
-           Product: buildroot
-           Version: 2017.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: adyke at harris.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Fixes:
+ - http://autobuild.buildroot.net/results/ffa5f21d7e7c38ea7adebc84f1cc8ee4cff74f1b
 
-Buildroot always configures nfs-utils without ipv6 support.
-My solution is to edit package/nfs-utils/nfs-utils.mk and change --disable-ipv6
-to --enable-ipv6 (in the NFS_UTILS_CONF_OPTS variable). I would submit a patch,
-but I think this option should be selected by enabling ipv6 in the kernel, and
-I don't know how to accomplish that.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/azmq/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+index 422a058832..eeafa2ad6d 100644
+--- a/package/azmq/Config.in
++++ b/package/azmq/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_AZMQ
+ 	bool "azmq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+@@ -20,9 +20,9 @@ config BR2_PACKAGE_AZMQ
+ 
+ 	  https://github.com/zeromq/azmq
+ 
+-comment "azmq needs a toolchain w/ C++11, wchar and threads"
++comment "azmq needs a toolchain w/ C++11, wchar and NTPL"
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+-		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
++		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+ 
+ comment "azmq needs exception_ptr"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
