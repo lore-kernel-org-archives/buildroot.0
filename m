@@ -1,96 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Feb 2018 09:08:48 +0100
-Subject: [Buildroot] [git commit] patch: security bump to version 2.7.6
-Message-ID: <20180223081037.4E1FC88111@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 23 Feb 2018 09:28:46 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-02-21
+In-Reply-To: <CANQCQpZ4LfgTJakUKquxknPxepYKmoXoGGAztFwMEuBiw1nY7Q@mail.gmail.com>
+References: <20180222070010.882C22071A@mail.free-electrons.com>
+ <CANQCQpZ4LfgTJakUKquxknPxepYKmoXoGGAztFwMEuBiw1nY7Q@mail.gmail.com>
+Message-ID: <CAPi7W80GcVM8JeM0Svzxb=AG=b2tJ59=QYArRWY6HkR9OjArGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38d8d86d31147ef83d1d79f67b7ae90e4cefaaea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Matthew,
 
-Fixes CVE-2016-10713: Out-of-bounds access within pch_write_line() in
-pch.c can possibly lead to DoS via a crafted input file.
 
-Add upstream patch fixing CVE-2018-6951: There is a segmentation fault,
-associated with a NULL pointer dereference, leading to a denial of
-service in the intuit_diff_type function in pch.c, aka a "mangled
-rename" issue.
+2018-02-22 23:41 GMT+01:00 Matthew Weber <matthew.weber@rockwellcollins.com>
+:
 
-This bump does NOT fix CVE-2018-6952. See upstream bug #53133
-(https://savannah.gnu.org/bugs/index.php?53133).
+> Thomas/Fabrice,
+>
+> On Thu, Feb 22, 2018 at 1:00 AM, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > Hello,
+> >
+> > Build statistics for 2018-02-21
+> > ===============================
+> >
+> >       branch |  OK | NOK | TIM | TOT |
+> >       master | 172 |  28 |   0 | 200 |
+> >    2017.11.x |  23 |   0 |   0 |  23 |
+> >         next |  32 |  28 |   0 |  60 |
+> >
+> > Results for branch 'master'
+> > ===========================
+> >
+> > Classification of failures by reason
+> > ------------------------------------
+> >
+> >                   boost-1.66.0 | 6
+>
+> >         bfin |                   boost-1.66.0 | NOK |
+> http://autobuild.buildroot.net/results/ffa5f21d7e7c38ea7adebc84f1cc8e
+> e4cff74f1b |
+> > microblazeel |                   boost-1.66.0 | NOK |
+> http://autobuild.buildroot.net/results/2879576eaa870eecd31af1ff9261df
+> 1b86966542 |
+> >          arm |                   boost-1.66.0 | NOK |
+> http://autobuild.buildroot.net/results/a89df3195b44f125ba1797cf866f4a
+> 266909ec05 |
+> >      powerpc |                   boost-1.66.0 | NOK |
+> http://autobuild.buildroot.net/results/c947986e4f460c1733c81585302f58
+> baca84f01a |
+> >          arm |                   boost-1.66.0 | NOK |
+> http://autobuild.buildroot.net/results/679a12c04e9954947dd51df2017af5
+> 61c362f8ec |
+> >         or1k |                   boost-1.66.0 | NOK |
+> http://autobuild.buildroot.net/results/4e901a97ad1c21f21e508eab826837
+> 4220f2eba3 |
+>
+> Similar to (https://patchwork.ozlabs.org/patch/871696/).  Feels like a
+> similar patch is needed for Boost?  I don't have the history on the
+> discussion for the domoticz pkg.
+>
+You're right, this is the same issue. we should add a
+BR2_TOOLCHAIN_HAS_THREADS_NPTL
+dependency to BR2_PACKAGE_BOOST_THREAD.
+This dependency should be added to all packages using boost_thread
+including domoticz. I can make this patch or let you do it if you want.
 
-Add license file hash.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...01-Fix-segfault-with-mangled-rename-patch.patch | 33 ++++++++++++++++++++++
- package/patch/patch.hash                           |  4 ++-
- package/patch/patch.mk                             |  2 +-
- 3 files changed, 37 insertions(+), 2 deletions(-)
+>
+> Matt
+>
+Best Regards,
 
-diff --git a/package/patch/0001-Fix-segfault-with-mangled-rename-patch.patch b/package/patch/0001-Fix-segfault-with-mangled-rename-patch.patch
-new file mode 100644
-index 0000000000..19a67573c4
---- /dev/null
-+++ b/package/patch/0001-Fix-segfault-with-mangled-rename-patch.patch
-@@ -0,0 +1,33 @@
-+From f290f48a621867084884bfff87f8093c15195e6a Mon Sep 17 00:00:00 2001
-+From: Andreas Gruenbacher <agruen@gnu.org>
-+Date: Mon, 12 Feb 2018 16:48:24 +0100
-+Subject: [PATCH] Fix segfault with mangled rename patch
-+
-+http://savannah.gnu.org/bugs/?53132
-+* src/pch.c (intuit_diff_type): Ensure that two filenames are specified
-+for renames and copies (fix the existing check).
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit f290f48a6218
-+
-+ src/pch.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/pch.c b/src/pch.c
-+index ff9ed2cebb8a..bc6278c4032c 100644
-+--- a/src/pch.c
-++++ b/src/pch.c
-+@@ -974,7 +974,8 @@ intuit_diff_type (bool need_header, mode_t *p_file_type)
-+     if ((pch_rename () || pch_copy ())
-+ 	&& ! inname
-+ 	&& ! ((i == OLD || i == NEW) &&
-+-	      p_name[! reverse] &&
-++	      p_name[reverse] && p_name[! reverse] &&
-++	      name_is_valid (p_name[reverse]) &&
-+ 	      name_is_valid (p_name[! reverse])))
-+       {
-+ 	say ("Cannot %s file without two valid file names\n", pch_rename () ? "rename" : "copy");
-+-- 
-+2.16.1
-+
-diff --git a/package/patch/patch.hash b/package/patch/patch.hash
-index d6e3a2d261..917d951a94 100644
---- a/package/patch/patch.hash
-+++ b/package/patch/patch.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	fd95153655d6b95567e623843a0e77b81612d502ecf78a489a4aed7867caa299	patch-2.7.5.tar.xz
-+sha256	ac610bda97abe0d9f6b7c963255a11dcb196c25e337c61f94e4778d632f1d8fd	patch-2.7.6.tar.xz
-+# Locally calculated
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/patch/patch.mk b/package/patch/patch.mk
-index 4c76a3123b..33f0039d60 100644
---- a/package/patch/patch.mk
-+++ b/package/patch/patch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PATCH_VERSION = 2.7.5
-+PATCH_VERSION = 2.7.6
- PATCH_SOURCE = patch-$(PATCH_VERSION).tar.xz
- PATCH_SITE = $(BR2_GNU_MIRROR)/patch
- PATCH_LICENSE = GPL-3.0+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180223/a45dee63/attachment.html>
