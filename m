@@ -1,41 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 21:54:47 +0100
-Subject: [Buildroot] [git commit] liblo: link with libatomic when available
-Message-ID: <20180305200717.97AAC81EDA@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 23 Feb 2018 14:47:31 +0100
+Subject: [Buildroot] [git commit] linux-firmware: add firmware for ath10k
+ QCA6174 module
+Message-ID: <20180305200717.3147A81EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e44ae2afe7f39240ce5c17a104f73f3b4e492b64
+commit: https://git.buildroot.net/buildroot/commit/?id=8b8f664a94dc4b34543591da1bb6fcd0de21fcbe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-liblo uses atomic builtins that are only available inside libatomic on
-some architectures, so link with it when available.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/c8bed3a3fa7d2b2258f573cbfcb01af07419e0bf/
-
-Signed-off-by: Alex Baldwin <alexbaldwinmusic@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liblo/liblo.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
-index c7d163dae2..7845c68ff2 100644
---- a/package/liblo/liblo.mk
-+++ b/package/liblo/liblo.mk
-@@ -17,4 +17,10 @@ LIBLO_CONF_OPTS += \
- 	--disable-ipv6 \
- 	--disable-werror
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index f93561ee14..4e77a3f9a3 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -83,6 +83,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X
+ 	help
+ 	  Firmware files for the Atheros QCA988X module
  
-+# Liblo uses atomic builtins, so we need to link with libatomic for
-+# the architectures who explicitly need libatomic.
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBLO_CONF_ENV += LIBS="-latomic"
++config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA6174
++	bool "Atheros 10k (QCA6174)"
++	help
++	  Firmware files for the Atheros QCA6174 module
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX
+ 	bool "Broadcom BRCM bcm43xx"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 82680937aa..a6fd8ebba4 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -143,6 +143,14 @@ LINUX_FIRMWARE_FILES += ath10k/QCA988X/hw2.0/board.bin \
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
+ endif
+ 
++# ath10k-qca6174
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA6174),y)
++LINUX_FIRMWARE_FILES += ath10k/QCA6174/hw3.0/board.bin \
++			ath10k/QCA6174/hw3.0/firmware-4.bin \
++			ath10k/QCA6174/hw3.0/firmware-6.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
 +endif
 +
- $(eval $(autotools-package))
+ # sd8686 v8
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8),y)
+ LINUX_FIRMWARE_FILES += libertas/sd8686_v8.bin libertas/sd8686_v8_helper.bin
