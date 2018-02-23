@@ -1,28 +1,63 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 23 Feb 2018 11:43:31 +0100
-Subject: [Buildroot] [PATCH v2 3/3] add support iMX8MQ-evk board
-In-Reply-To: <1519293778-5185-4-git-send-email-karl.erik.larsson@gmail.com>
-References: <1519293778-5185-1-git-send-email-karl.erik.larsson@gmail.com>
- <1519293778-5185-4-git-send-email-karl.erik.larsson@gmail.com>
-Message-ID: <20180223104331.GB6998@t450s.lan>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Fri, 23 Feb 2018 12:17:41 +0100
+Subject: [Buildroot] [PATCH v2 2/2] modem-manager: Update to version
+ 1.7.990
+In-Reply-To: <2048847825.30672.1519142191454.JavaMail.zimbra@datacom.ind.br>
+References: <1518799091-845-1-git-send-email-jared.bents@rockwellcollins.com>
+ <1518799091-845-2-git-send-email-jared.bents@rockwellcollins.com>
+ <20180216215334.7385e898@windsurf.lan>
+ <361202886.84859.1518998584797.JavaMail.zimbra@datacom.ind.br>
+ <20180219090504.745c4841@windsurf.lan>
+ <2137381520.124019.1519075425250.JavaMail.zimbra@datacom.ind.br>
+ <05fed3b8-01d4-1f66-6de6-0164d6388507@free.fr>
+ <2048847825.30672.1519142191454.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <a9a3d93e-53dc-cf6b-9ffa-2e8758f0f1df@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Erik,
+On 20/02/18 16:56, Carlos Santos wrote:
+>>>>>> Are you sure 1.7.990 isn't a development version ? Interestingly, their
+>>>>>> Git repo has no tag with this name:
+>>>>>> https://cgit.freedesktop.org/ModemManager/ModemManager/refs/tags. It
+>>>>>> has a 1.8-rc1 version. So it does feel like 1.7.x might be a
+>>>>>> development version. Could you double check this ?
+>>>>> It is a development version. That's why I submitted an update to the
+>>>>> latest release version, which is 1.6.12:
+>>>>>
+>>>>>     https://patchwork.ozlabs.org/patch/871059/
+>>>> When is the final 1.8.x version expected ? If it's in the very near
+>>>> future (i.e before 2018.05-rc1), then we could accept the 1.7.x bump for
+>>>> now, and move to 1.8.x when it lands. Otherwise, I'd prefer to stick
+>>>> with 1.6.x for now.
+>>> The announcement message[1], from Sun Jan 21, informs that 1.7.990
+>>> corresponds to 1.8-rc1. From the list of 1.5.99x releases, which spans
+>>> several months, I believe that 1.8 will unlikely be released before
+>>> the end of February.
+>>>
+>>> Notice that I'm sympathetic to upgrading the Buildroot package to
+>>> 1.7.990, since this release includes the quectel plugin. Currently I
+>>> need to maintain that change as a local patch in my BR2_LOCAL.
+>>>
+>>> 1.
+>>> https://lists.freedesktop.org/archives/modemmanager-devel/2018-January/006157.html
+>>>
+>> +1 to bump modemmanager to 1.7.990, as it adds support for Sierra
+>> EM7565, which I'm using. But for me, beside bump of libqmi to 1.20.0, it
+>> also requires bump of libmbim to 1.16.0.
+> It's on the "next" branch, already:
+> 
+>     https://git.buildroot.net/buildroot/commit/?id=0a726eab68b4f8c8a760da049fd538fb35f4d201
 
-On Thu, Feb 22, 2018 at 11:02:58AM +0100, Erik Larsson wrote:
-> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
-> ---
->  .../common/imx/genimage.cfg.template_imx8          |  40 ++
->  board/freescale/common/imx/post-image.sh           |  10 +-
->  board/freescale/imx8mqevk/linux-4.9.config         | 625 +++++++++++++++++++++
->  configs/freescale_imx8mqevk_defconfig              |  37 ++
+MM 1.8.x will come with the new "filter-policies" logic, for which I totally suggest adding some new configurability. Right now the filter policy is an option that can be given to MM when it's started, and is "DEFAULT" by default. See:
+https://www.freedesktop.org/software/ModemManager/api/1.8.0/ch03s02.html
 
-Why do we copy the defconfig in board folder although it present in the
-kernel tree directly?
+This is already available in 1.7.990 (1.8-rc1), and I believe it's very interesting in buildroot as most people building custom systems using buildroot may already be using a single set of modem devices to work with, so the whitelist-only filter is very convenient to avoid MM fiddling with non-modem TTY ports. For those expecting a lot of different devices, the new "strict" policy would probably help as well, which is what we'll be suggesting to distributions (e.g. this was developed after discussions with Debian).
 
-Regards,
-Gary
+And regarding dates for a 1.8 release... not yet :)
+
+-- 
+Aleksander
+https://aleksander.es
