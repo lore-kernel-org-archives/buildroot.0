@@ -1,71 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Feb 2018 09:37:10 +0100
-Subject: [Buildroot] [PATCH] asterisk: security bump to version 14.7.6
-Message-ID: <20180223083710.31207-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 23 Feb 2018 10:06:37 +0100
+Subject: [Buildroot] [PATCH v3] systemd: switch to en_US.UTF-8 locale
+ when building
+In-Reply-To: <20180212213400.15061-1-julius@kriukas.lt>
+References: <20180131213629.4385-1-julius@kriukas.lt>
+ <20180212213400.15061-1-julius@kriukas.lt>
+Message-ID: <b4cc74b7-5b2c-8805-7f96-fafd9dcffa23@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+ Hi Julius,
 
-AST-2018-002: Crash when given an invalid SDP media format description
+ I wanted to take the time to think of better solutions, but since I don't find
+the time, here is a very quick review.
 
-By crafting an SDP message with an invalid media format description Asterisk
-crashes when using the pjsip channel driver because pjproject's sdp parsing
-algorithm fails to catch the invalid media format description.
 
-AST-2018-003: Crash with an invalid SDP fmtp attribute
+On 12-02-18 22:34, Julius Kriukas wrote:
+> When BR2_REPRODUCIBLE is enabled or host uses non UTF-8 capable locale
+> building systemd fails with an error:
+> 
+> [1/1080] Generating systemd.bg.catalog with a meson_exe.py custom command.
+> FAILED: catalog/systemd.bg.catalog
+> /buildroot/output/host/bin/python3 /buildroot/output/host/bin/meson --internal exe /buildroot/output/build/systemd-236/build/meson-private/meson_exe_sed_232a0623cc7ce2cd67ec72ed784b76307102ed76.dat
+> Warning: You are using 'ANSI_X3.4-1968' which is not a Unicode-compatible locale.
+> You might see errors if you use UTF-8 strings as filenames, as strings, or as file contents.
+> Please switch to a UTF-8 locale for your platform.
+> ...
+> UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 1079: ordinal not in range(128)
 
-By crafting an SDP message body with an invalid fmtp attribute Asterisk
-crashes when using the pjsip channel driver because pjproject's fmtp
-retrieval function fails to check if fmtp value is empty (set empty if
-previously parsed as invalid).
+ As someone mentioned (IIRC), it's really not OK that some Python script (is it
+meson or ninja?) is relying on a locale being set to work correctly. So it would
+be much preferable to find out what the real problem is, and to have an
+upstreamable patch that fixes it.
 
-AST-2018-004: Crash when receiving SUBSCRIBE request
+ That said, getting to the bottom of this is work, someone has to do it, and in
+the mean time we've got a broken system, and we're about to release 2018.02. So
+I'm OK to accept this workaround for the time being (and as we all now, that can
+be a very long time :-).
 
-When processing a SUBSCRIBE request the res_pjsip_pubsub  module stores the
-accepted formats present in the Accept headers of the request.  This code
-did not limit the number of headers it processed despite having a fixed
-limit of 32.  If more than 32 Accept headers were present the code would
-write outside of its memory and cause a crash.
+ I would, however, like to mention explicitly in the commit message that this is
+just a workaround and that really one of the underlying scripts (either meson or
+ninja or something systemd-specific, TBD) is broken.
 
-AST-2018-005: Crash when large numbers of TCP connections are closed suddenly
 
-A crash occurs when a number of authenticated INVITE messages are sent over
-TCP or TLS and then the connection is suddenly closed.  This issue leads to
-a segmentation fault.
+> package/pkg-generic.mk:247: recipe for target '/buildroot/output/build/systemd-236/.stamp_built' failed
+> make: *** [/buildroot/output/build/systemd-236/.stamp_built] Error 1
+> 
+> This patch changes default host system locale from C to en_US.UTF-8 when
+> building systemd package to fix this issue. It also introduces
+> BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that checks if this locale is available on
+> the host system. If locale is not available error message is show and build
+> process is stopped.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ The part that introduces BR2_NEEDS_HOST_EN_US_UTF8_LOCALE and uses it for
+BR2_REPRODUCIBLE should be a separate patch. Indeed, when we find a better
+solution for the systemd/meson issue, then we can revert this patch, but the
+BR2_REPRODUCIBLE bit should stay.
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index f537c2df66..a3e9d10aff 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  6525170fa16fecb08cb3cde2c1bd5d3140df55b14e4561ac0771fbd1e04b3b75  asterisk-14.7.5.tar.gz
-+sha256  249cf223ef4dd7aea01f0d250a6b9cad661ebd78910c73adb7f59c1c46f9fed8  asterisk-14.7.6.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index fc9a961c89..f14c008111 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 14.7.5
-+ASTERISK_VERSION = 14.7.6
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
