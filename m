@@ -1,74 +1,54 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 22 Feb 2018 23:06:15 +0000
-Subject: [Buildroot] Issue getting /var/lib created correctly with RO rootfs
- and systemd
-Message-ID: <1519340775.25567.164.camel@impinj.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 23 Feb 2018 06:56:11 +0200
+Subject: [Buildroot] [PATCH] mbedtls: security bump to version 2.7.0
+Message-ID: <e096f49c1c72f1bbd299136397eac58fe385618f.1519361771.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've found that /var/lib is not getting created correctly with a RO
-rootfs and systemd.
+CVE-2018-0487: Remote attackers can execute arbitrary code or cause a
+denial of service (buffer overflow) via a crafted certificate chain that
+is mishandled during RSASSA-PSS signature verification within a TLS or
+DTLS session.
 
-What buildroot does is have ${TARGET_DIR}/var be a symlink to
-${TARGET_DIR}/usr/share/factory/var.  Then, as a rootfs build step, it
-turns each entry in ${TARGET_DIR}/usr/share/factory/var/* into a
-tmpfiles line to copy that tree into the real /var (a tmpfs) on the
-target.
+CVE-2018-0488: When the truncated HMAC extension and CBC are used,
+allows remote attackers to execute arbitrary code or cause a denial of
+service (heap corruption) via a crafted application packet within a TLS
+or DTLS session.
 
-So one gets /etc/tmpfiles.d/var-factory.conf with lines like:
-C! /var/empty
-C! /var/lib
-C! /var/www
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/mbedtls/mbedtls.hash | 6 +++---
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-The problem is that systemd-tmpfiles behavior for "C!" if the target
-directory already exists is to silently do nothing (which is
-documented, if not helpful in this case).
-
-It turns out during boot, before tmpfiles is run, something in systemd
-will create /var/lib/systemd/catalog.
-
-So when tmpfiles gets to "C! /var/lib", rather than recursively
-populate /var/lib from /usr/share/factory/var/lib, it does nothing,
-because /var/lib already exists.
-
-My hacky solution is to modify SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR to
-processes not just $(TARGET_DIR)/usr/share/factory/var/*, but also
-...var/lib/*, and ...var/lib/systemd/*.  Then one gets:
-
-C! /var/empty - - - -
-C! /var/lib - - - -
-C! /var/www - - - -
-C! /var/lib/dbus - - - -
-C! /var/lib/nginx - - - -
-C! /var/lib/systemd - - - -
-C! /var/lib/systemd/coredump - - - -
-
-The /var/lib line may do nothing, but then the /var/lib/dbus, etc.
-lines will take care of the rest of the tree /var/lib.
-
-It occurs to me if that if tmpfiles had a "merge tree" operation that
-would pull in new files/directories even if the destination tree
-exists, rather than do nothing, one could use:
-M! /var
-and be done with it.
-
-buildroot making $TARGET_DIR/var a symlink to
-$TARGET_DIR/usr/share/factory/var has problems if anything wants to
-create a symlink in /var.  For instance, if one creates:
-ln -s ../run $TARGET_DIR/var/run
-
-You do not get a link that has $TARGET_DIR/var/run point to
-$TARGET_DIR/run as desired, but rather
-$TARGET_DIR/usr/share/factory/var/../run.
-
-It can still work if the link is made correctly, ../../../../run, but
-one has to know if target/var is really target/var or a link.  It seems
-nicer if anything creating a symlink in /var didn't need to know if the
-rootfs was RO or not.
-
-So maybe it would be better to leave target/var as a real directory,
-then create target/usr/share/factory/var from it at rootfs creation
-time?
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index d04b8677540a..a62c0f58decf 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.6.0-2.1.9-and-1.3.21-released
+-sha1	e914288da50977f541773f9d36e26f14926594a5	mbedtls-2.6.0-apache.tgz
+-sha256	99bc9d4212d3d885eeb96273bcde8ecc649a481404b8d7ea7bb26397c9909687	mbedtls-2.6.0-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.7.0-2.1.10-and-1.3.22-released
++sha1	01ffebf679c8696cc941c41224fa73d8944d2c85	mbedtls-2.7.0-apache.tgz
++sha256	aeb66d6cd43aa1c79c145d15845c655627a7fc30d624148aaafbb6c36d7f55ef	mbedtls-2.7.0-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 64ce18cf6fe5..7c26ea95ee60 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.6.0
++MBEDTLS_VERSION = 2.7.0
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+-- 
+2.16.1
