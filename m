@@ -1,63 +1,95 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Fri, 23 Feb 2018 12:17:41 +0100
-Subject: [Buildroot] [PATCH v2 2/2] modem-manager: Update to version
- 1.7.990
-In-Reply-To: <2048847825.30672.1519142191454.JavaMail.zimbra@datacom.ind.br>
-References: <1518799091-845-1-git-send-email-jared.bents@rockwellcollins.com>
- <1518799091-845-2-git-send-email-jared.bents@rockwellcollins.com>
- <20180216215334.7385e898@windsurf.lan>
- <361202886.84859.1518998584797.JavaMail.zimbra@datacom.ind.br>
- <20180219090504.745c4841@windsurf.lan>
- <2137381520.124019.1519075425250.JavaMail.zimbra@datacom.ind.br>
- <05fed3b8-01d4-1f66-6de6-0164d6388507@free.fr>
- <2048847825.30672.1519142191454.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <a9a3d93e-53dc-cf6b-9ffa-2e8758f0f1df@aleksander.es>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 23 Feb 2018 13:02:58 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-02-21
+In-Reply-To: <CAPi7W80GcVM8JeM0Svzxb=AG=b2tJ59=QYArRWY6HkR9OjArGQ@mail.gmail.com>
+References: <20180222070010.882C22071A@mail.free-electrons.com>
+ <CANQCQpZ4LfgTJakUKquxknPxepYKmoXoGGAztFwMEuBiw1nY7Q@mail.gmail.com>
+ <CAPi7W80GcVM8JeM0Svzxb=AG=b2tJ59=QYArRWY6HkR9OjArGQ@mail.gmail.com>
+Message-ID: <CAPi7W80DWG852ah5OeiYvqCdyFBvx_G3pGYo-D786P=OjVTjnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/02/18 16:56, Carlos Santos wrote:
->>>>>> Are you sure 1.7.990 isn't a development version ? Interestingly, their
->>>>>> Git repo has no tag with this name:
->>>>>> https://cgit.freedesktop.org/ModemManager/ModemManager/refs/tags. It
->>>>>> has a 1.8-rc1 version. So it does feel like 1.7.x might be a
->>>>>> development version. Could you double check this ?
->>>>> It is a development version. That's why I submitted an update to the
->>>>> latest release version, which is 1.6.12:
->>>>>
->>>>>     https://patchwork.ozlabs.org/patch/871059/
->>>> When is the final 1.8.x version expected ? If it's in the very near
->>>> future (i.e before 2018.05-rc1), then we could accept the 1.7.x bump for
->>>> now, and move to 1.8.x when it lands. Otherwise, I'd prefer to stick
->>>> with 1.6.x for now.
->>> The announcement message[1], from Sun Jan 21, informs that 1.7.990
->>> corresponds to 1.8-rc1. From the list of 1.5.99x releases, which spans
->>> several months, I believe that 1.8 will unlikely be released before
->>> the end of February.
->>>
->>> Notice that I'm sympathetic to upgrading the Buildroot package to
->>> 1.7.990, since this release includes the quectel plugin. Currently I
->>> need to maintain that change as a local patch in my BR2_LOCAL.
->>>
->>> 1.
->>> https://lists.freedesktop.org/archives/modemmanager-devel/2018-January/006157.html
->>>
->> +1 to bump modemmanager to 1.7.990, as it adds support for Sierra
->> EM7565, which I'm using. But for me, beside bump of libqmi to 1.20.0, it
->> also requires bump of libmbim to 1.16.0.
-> It's on the "next" branch, already:
-> 
->     https://git.buildroot.net/buildroot/commit/?id=0a726eab68b4f8c8a760da049fd538fb35f4d201
+Dear all,
 
-MM 1.8.x will come with the new "filter-policies" logic, for which I totally suggest adding some new configurability. Right now the filter policy is an option that can be given to MM when it's started, and is "DEFAULT" by default. See:
-https://www.freedesktop.org/software/ModemManager/api/1.8.0/ch03s02.html
+2018-02-23 9:28 GMT+01:00 Fabrice Fontaine <fontaine.fabrice@gmail.com>:
 
-This is already available in 1.7.990 (1.8-rc1), and I believe it's very interesting in buildroot as most people building custom systems using buildroot may already be using a single set of modem devices to work with, so the whitelist-only filter is very convenient to avoid MM fiddling with non-modem TTY ports. For those expecting a lot of different devices, the new "strict" policy would probably help as well, which is what we'll be suggesting to distributions (e.g. this was developed after discussions with Debian).
+> Dear Matthew,
+>
+>
+> 2018-02-22 23:41 GMT+01:00 Matthew Weber <matthew.weber@rockwellcollins
+> .com>:
+>
+>> Thomas/Fabrice,
+>>
+>> On Thu, Feb 22, 2018 at 1:00 AM, Thomas Petazzoni
+>> <thomas.petazzoni@bootlin.com> wrote:
+>> > Hello,
+>> >
+>> > Build statistics for 2018-02-21
+>> > ===============================
+>> >
+>> >       branch |  OK | NOK | TIM | TOT |
+>> >       master | 172 |  28 |   0 | 200 |
+>> >    2017.11.x |  23 |   0 |   0 |  23 |
+>> >         next |  32 |  28 |   0 |  60 |
+>> >
+>> > Results for branch 'master'
+>> > ===========================
+>> >
+>> > Classification of failures by reason
+>> > ------------------------------------
+>> >
+>> >                   boost-1.66.0 | 6
+>>
+>> >         bfin |                   boost-1.66.0 | NOK |
+>> http://autobuild.buildroot.net/results/ffa5f21d7e7c38ea7adeb
+>> c84f1cc8ee4cff74f1b |
+>> > microblazeel |                   boost-1.66.0 | NOK |
+>> http://autobuild.buildroot.net/results/2879576eaa870eecd31af
+>> 1ff9261df1b86966542 |
+>> >          arm |                   boost-1.66.0 | NOK |
+>> http://autobuild.buildroot.net/results/a89df3195b44f125ba179
+>> 7cf866f4a266909ec05 |
+>> >      powerpc |                   boost-1.66.0 | NOK |
+>> http://autobuild.buildroot.net/results/c947986e4f460c1733c81
+>> 585302f58baca84f01a |
+>> >          arm |                   boost-1.66.0 | NOK |
+>> http://autobuild.buildroot.net/results/679a12c04e9954947dd51
+>> df2017af561c362f8ec |
+>> >         or1k |                   boost-1.66.0 | NOK |
+>> http://autobuild.buildroot.net/results/4e901a97ad1c21f21e508
+>> eab8268374220f2eba3 |
+>>
+>> Similar to (https://patchwork.ozlabs.org/patch/871696/).  Feels like a
+>> similar patch is needed for Boost?  I don't have the history on the
+>> discussion for the domoticz pkg.
+>>
+> You're right, this is the same issue. we should add a
+> BR2_TOOLCHAIN_HAS_THREADS_NPTL dependency to BR2_PACKAGE_BOOST_THREAD.
+> This dependency should be added to all packages using boost_thread
+> including domoticz. I can make this patch or let you do it if you want.
+>
+After some investigations, it seems the issue was raised by azmq package
+which was missing a NPTL dependency. As a result, BR2_PACKAGE_BOOST_LOG was
+wrongly selected. I will send you a patch for azmq.
 
-And regarding dates for a 1.8 release... not yet :)
+>
+>
+>
+>>
+>> Matt
+>>
+> Best Regards,
+>
+> Fabrice
+>
+> Best Regards,
 
--- 
-Aleksander
-https://aleksander.es
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180223/9538f2b1/attachment.html>
