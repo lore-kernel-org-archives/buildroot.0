@@ -1,36 +1,39 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sat, 24 Feb 2018 13:25:57 +0100
-Subject: [Buildroot] [PATCH] sunxi-mali-mainline-driver: bump version
-Message-ID: <1519475157-63049-1-git-send-email-giulio.benetti@micronovasrl.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 24 Feb 2018 18:43:05 +0200
+Subject: [Buildroot] [PATCH 1/1] czmq: bump to version v4.1.0
+Message-ID: <20180224164305.6133-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For 4.16 support.
-
-git shortlog --invert-grep --grep travis --no-merges e752ddc8c4b9f2b9b9c6d193e2ba354caf8707f5..
-Giulio Benetti (1):
-      mali: Fix build in 4.16
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/czmq/czmq.hash | 2 +-
+ package/czmq/czmq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index cde76e2..24e759a 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
+index 526ea594b9..77fdda0863 100644
+--- a/package/czmq/czmq.hash
++++ b/package/czmq/czmq.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 5c76de41f736f0c059e0b26174ef99200f2aba2fa38333683dbe4944b2f80555 czmq-5205ec201e97c3a652c17eb86b18b70350b54512.tar.gz
++sha256 2e87c19988d1168b70d7ec0fdce79aba4e92a6330959c3a2576c72b319acb478 czmq-v4.1.0.tar.gz
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index 5305789d7a..c9a6b3c66a 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUNXI_MALI_MAINLINE_DRIVER_VERSION = e752ddc8c4b9f2b9b9c6d193e2ba354caf8707f5
-+SUNXI_MALI_MAINLINE_DRIVER_VERSION = 94ccbc8924c12a818d61d36a4b389b74a89fde3c
- SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
- SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+-CZMQ_VERSION = 5205ec201e97c3a652c17eb86b18b70350b54512
++CZMQ_VERSION = v4.1.0
+ CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
  
+ # Autoreconf required as we use the git tree
 -- 
-2.7.4
+2.14.1
