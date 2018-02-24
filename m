@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Feb 2018 18:55:24 +0100
-Subject: [Buildroot] [PATCH next v2 0/5] New pkg-stats script,
- with version information
-In-Reply-To: <20180221221342.15683-1-thomas.petazzoni@bootlin.com>
-References: <20180221221342.15683-1-thomas.petazzoni@bootlin.com>
-Message-ID: <bc56171d-08ad-6b1f-ac80-edc80e5a07db@mind.be>
+Date: Sat, 24 Feb 2018 19:15:49 +0100
+Subject: [Buildroot] [PATCH] package/skeleton-init-systemd: create a
+ symlink /var/run to ../run
+In-Reply-To: <1519410337.25567.173.camel@impinj.com>
+References: <20180222221014.19584-1-romain.naour@gmail.com>
+ <1519410337.25567.173.camel@impinj.com>
+Message-ID: <05855f3c-84ce-01b1-d86f-0394a807d01f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +14,89 @@ To: buildroot@busybox.net
 
 
 
-On 21-02-18 23:13, Thomas Petazzoni wrote:
->  - Pass BR2_HAVE_DOT_CONFIG=y when calling make, in order to fake
->    having a .config. This allows "printvars" to dump all variables
->    even without a .config.
+On 23-02-18 19:25, Trent Piepho wrote:
+> On Thu, 2018-02-22 at 23:10 +0100, Romain Naour wrote:
+>> As reported by J?r?my Rosen [1] and Jan Kundr?t (RO case)[2], systemd
+>> looks for the dbus socket in /run/dbus instead of /var/run/dbus which
+>> is not where dbus puts the socket. This is a change introduced with
+>> the last version bump v237 [3].
+>>
+>> The file /usr/lib/tmpfiles.d/var.con will create automatically that
+>> symlink at bootup /var/run doesn't exist yet. But dbus creates, at
+>> install time, the directory /var/run/dbus without taking care of
+>> /var/run. So we end up with two different directories /run and
+>> /var/run. This bug affects more or less all systemd-provided
+>> utilities, including logind and systemd itself.
+>>
+>> This patch create the correct symlink run -> ../run when systemd
+>> is used as init system.
+> 
+> This doesn't work in the RO root case.  I described this in another
+> mail to the list, but in the RO root case target/var is a symlink to
+> target/usr/share/factory/var.  Thus this link is actually created as:
+> 
+> target/usr/share/factory/var/run -> ../run
+> 
+> It points to target/usr/share/factory/run, which is wrong.
 
- Perhaps it would make more sense to do this directly in the top-level Makefile:
+ Well, as such it is not wrong. What is wrong IMO is that we do:
 
-# Some targets require the package information but don't really require a
-# .config. Force BR2_HAVE_DOT_CONFIG=y for these so the packages get included.
-ifneq ($(filter printvars,$(MAKECMDGOALS),)
-BR2_HAVE_DOT_CONFIG = y
-endif
+        for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
+                j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
+                if [ -L "$${i}" ]; then \
+                        printf "L+! %s - - - - %s\n" \
+                                "$${j}" "../usr/share/factory/$${j}" \
+                        || exit 1; \
+                else \
+...
+
+ The correct thing to do would be to copy the symlink I think, so something like:
+
+                if [ -L "$${i}" ]; then \
+			target=`readlink $${i}`
+                        printf "L+! %s - - - - %s\n" \
+                                "$${j}" "$${target}" \
+                        || exit 1; \
 
 
- There are probably more targets in addition to printvars that could benefit
-from this (though I can't immediately think of any).
+ However, I believe our var-factory.conf is even more wrong. systemd already
+supplies /usr/lib/tmpfiles.d/var.conf for exactly this purpose. That one already
+has the stanza to create the correct /var/run symlink. That var.conf is not
+complete though. For example, mysql expects /var/lib/mysql to exist while
+var.conf just creates /var/lib. So we do indeed need something like
+var-factory.conf, but I think that it should take into account anything that is
+already created by other tmpfiles configurations. So it should search each
+file/directory that it finds in /usr/share/factory/var in all of the existing
+tmpfiles.d entries, and if it is found there and it is not a C entry, it should
+recurse.
+
+ Well, that's my feeling, but I'm not a systemd expert :-)
 
  Regards,
  Arnout
+
+>  In order to
+> get it to work in the RO case, instead create this link.
+> 
+> define SKELETON_INIT_SYSTEMD_VAR_RUN_LINK
+>        ln -sf ../../../../run $(TARGET_DIR)/usr/share/factory/var/run
+> endef
+>  
+> SKELETON_INIT_SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+>        SKELETON_INIT_SYSTEMD_VAR_RUN_LINK
+> 
+> Then you get a target that looks like this:
+>                                                                  
+> lrwxrwxrwx    1 root     root  29 Feb 23 02:35 /var/run -> ../usr/share/factory//var/run
+> lrwxrwxrwx    1 root     root  15 Feb 23 00:51 /usr/share/factory/var/run -> ../../../../run
+> 
+> On the target, /var/run ends up pointing to /run and also on the host
+> $TARGET_DIR/var/run points to $TARGET_DIR/run.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
