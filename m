@@ -1,65 +1,65 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 24 Feb 2018 22:49:00 +0200
-Subject: [Buildroot] [PATCH master] mbedtls: fix API compatibility
-Message-ID: <df116322c8e36b017055d6be9f5af3c1631fdf89.1519505340.git.baruch@tkos.co.il>
+From: Sjoerd Venema <srg.venema@gmail.com>
+Date: Sat, 24 Feb 2018 22:12:19 +0100
+Subject: [Buildroot] unsafe header/library path used in cross-compilation:
+ '-I/usr/include/readline'
+Message-ID: <CAPzckP7PfQYz-+vH09kjX3v0C7kM8nrdEB8aNrhoe4ZfiiF2dQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch fixing API compatibility with previous releases.
+Hi all,
 
-Fixes (hiawatha):
-http://autobuild.buildroot.net/results/ce6/ce6b4a50e6aafd06f82eaae688dd8720b982e9c2/
-http://autobuild.buildroot.net/results/cde/cdec7ae3565d5b76a9bc50156c6244b44197534e/
-http://autobuild.buildroot.net/results/9c1/9c1aec09c03f60bee9dc134da5a29e2671fc3b5e/
+I'm getting an "unsafe header/library path used in cross-compilation"-error
+while building ecasound (https://ecasound.seul.org/ecasound/download.php).
+From what I've read so far is that it's because the makefile references the
+/usr/-directory. What I can't figure out is how to change the makefile to
+not do that. Turning on/off the "paranoid"-function in menuconfig didn't
+make a difference.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0001-dhm-Fix-typo-in-RFC-5114-constants.patch  | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
+[buildroot at br buildroot]$ make ecasound
+>>> ecasound 2.9.1 Building
+PATH="/home/buildroot/buildroot-2018.02-rc2/output/host/bin:/home/buildroot/buildroot-2018.02-rc2/output/host/sbin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/buildroot/.local/bin:/home/buildroot/bin"
+/usr/bin/make -j5  -C
+/home/buildroot/buildroot-2018.02-rc2/output/build/ecasound-2.9.1/
+/usr/bin/make  all-recursive
+Making all in kvutils
+make[4]: Nothing to be done for `all'.
+Making all in libecasound
+Making all in plugins
+make[5]: Nothing to be done for `all'.
+make[5]: Nothing to be done for `all-am'.
+Making all in ecasound
+/home/buildroot/buildroot-2018.02-rc2/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-g++
+-DHAVE_CONFIG_H -I. -I. -I.. *-I/usr/include/readline* -I. -I..
+-I../libecasound -I../kvutils -D_REENTRANT -D_XOPEN_SOURCE=600
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-ffast-math -fstrict-aliasing -DNDEBUG -DENABLE_DBC -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -c -o eca-curses.o
+eca-curses.cpp
+arm-buildroot-linux-uclibcgnueabihf-g++: WARNING: unsafe header/library
+path used in cross-compilation: '*-I/usr/include/readline*'
+eca-curses.cpp:46:22: fatal error: readline.h: No such file or directory
+ #include <readline.h>
+                      ^
+compilation terminated.
+make[4]: *** [eca-curses.o] Error 1
+make[3]: *** [all-recursive] Error 1
+make[2]: *** [all] Error 2
+make[1]: ***
+[/home/buildroot/buildroot-2018.02-rc2/output/build/ecasound-2.9.1/.stamp_built]
+Error 2
+make: *** [_all] Error 2
 
-diff --git a/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
-new file mode 100644
-index 000000000000..effaf3d931a5
---- /dev/null
-+++ b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
-@@ -0,0 +1,33 @@
-+From 129f50838bf14f4e1319f06f41c827fae9cc4b73 Mon Sep 17 00:00:00 2001
-+From: Jaeden Amero <jaeden.amero@arm.com>
-+Date: Thu, 8 Feb 2018 14:25:36 +0000
-+Subject: [PATCH] dhm: Fix typo in RFC 5114 constants
-+
-+We accidentally named the constant MBEDTLS_DHM_RFC5114_MODP_P instead of
-+MBEDTLS_DHM_RFC5114_MODP_2048_P.
-+
-+Fixes #1358
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 129f50838bf
-+
-+ include/mbedtls/dhm.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/mbedtls/dhm.h b/include/mbedtls/dhm.h
-+index da2e66b111b6..00fafd8d16f4 100644
-+--- a/include/mbedtls/dhm.h
-++++ b/include/mbedtls/dhm.h
-+@@ -372,7 +372,7 @@ MBEDTLS_DEPRECATED typedef char const * mbedtls_deprecated_constant_t;
-+  * in <em>RFC-5114: Additional Diffie-Hellman Groups for Use with
-+  * IETF Standards</em>.
-+  */
-+-#define MBEDTLS_DHM_RFC5114_MODP_P                              \
-++#define MBEDTLS_DHM_RFC5114_MODP_2048_P                         \
-+     MBEDTLS_DEPRECATED_STRING_CONSTANT(                         \
-+         "AD107E1E9123A9D0D660FAA79559C51FA20D64E5683B9FD1"      \
-+         "B54B1597B61D0A75E6FA141DF95A56DBAF9A3C407BA1DF15"      \
-+-- 
-+2.16.1
-+
--- 
-2.16.1
+Many thanks!
+Sjoerd Venema
+
+<https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail>
+Virus-free.
+www.avast.com
+<https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail>
+<#DAB4FAD8-2DD7-40BB-A1B8-4E2AA1F9FDF2>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180224/3143bc08/attachment.html>
