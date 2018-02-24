@@ -1,107 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Feb 2018 19:15:49 +0100
-Subject: [Buildroot] [PATCH] package/skeleton-init-systemd: create a
- symlink /var/run to ../run
-In-Reply-To: <1519410337.25567.173.camel@impinj.com>
-References: <20180222221014.19584-1-romain.naour@gmail.com>
- <1519410337.25567.173.camel@impinj.com>
-Message-ID: <05855f3c-84ce-01b1-d86f-0394a807d01f@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 24 Feb 2018 22:49:00 +0200
+Subject: [Buildroot] [PATCH master] mbedtls: fix API compatibility
+Message-ID: <df116322c8e36b017055d6be9f5af3c1631fdf89.1519505340.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add upstream patch fixing API compatibility with previous releases.
 
+Fixes (hiawatha):
+http://autobuild.buildroot.net/results/ce6/ce6b4a50e6aafd06f82eaae688dd8720b982e9c2/
+http://autobuild.buildroot.net/results/cde/cdec7ae3565d5b76a9bc50156c6244b44197534e/
+http://autobuild.buildroot.net/results/9c1/9c1aec09c03f60bee9dc134da5a29e2671fc3b5e/
 
-On 23-02-18 19:25, Trent Piepho wrote:
-> On Thu, 2018-02-22 at 23:10 +0100, Romain Naour wrote:
->> As reported by J?r?my Rosen [1] and Jan Kundr?t (RO case)[2], systemd
->> looks for the dbus socket in /run/dbus instead of /var/run/dbus which
->> is not where dbus puts the socket. This is a change introduced with
->> the last version bump v237 [3].
->>
->> The file /usr/lib/tmpfiles.d/var.con will create automatically that
->> symlink at bootup /var/run doesn't exist yet. But dbus creates, at
->> install time, the directory /var/run/dbus without taking care of
->> /var/run. So we end up with two different directories /run and
->> /var/run. This bug affects more or less all systemd-provided
->> utilities, including logind and systemd itself.
->>
->> This patch create the correct symlink run -> ../run when systemd
->> is used as init system.
-> 
-> This doesn't work in the RO root case.  I described this in another
-> mail to the list, but in the RO root case target/var is a symlink to
-> target/usr/share/factory/var.  Thus this link is actually created as:
-> 
-> target/usr/share/factory/var/run -> ../run
-> 
-> It points to target/usr/share/factory/run, which is wrong.
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../0001-dhm-Fix-typo-in-RFC-5114-constants.patch  | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
 
- Well, as such it is not wrong. What is wrong IMO is that we do:
-
-        for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
-                j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
-                if [ -L "$${i}" ]; then \
-                        printf "L+! %s - - - - %s\n" \
-                                "$${j}" "../usr/share/factory/$${j}" \
-                        || exit 1; \
-                else \
-...
-
- The correct thing to do would be to copy the symlink I think, so something like:
-
-                if [ -L "$${i}" ]; then \
-			target=`readlink $${i}`
-                        printf "L+! %s - - - - %s\n" \
-                                "$${j}" "$${target}" \
-                        || exit 1; \
-
-
- However, I believe our var-factory.conf is even more wrong. systemd already
-supplies /usr/lib/tmpfiles.d/var.conf for exactly this purpose. That one already
-has the stanza to create the correct /var/run symlink. That var.conf is not
-complete though. For example, mysql expects /var/lib/mysql to exist while
-var.conf just creates /var/lib. So we do indeed need something like
-var-factory.conf, but I think that it should take into account anything that is
-already created by other tmpfiles configurations. So it should search each
-file/directory that it finds in /usr/share/factory/var in all of the existing
-tmpfiles.d entries, and if it is found there and it is not a C entry, it should
-recurse.
-
- Well, that's my feeling, but I'm not a systemd expert :-)
-
- Regards,
- Arnout
-
->  In order to
-> get it to work in the RO case, instead create this link.
-> 
-> define SKELETON_INIT_SYSTEMD_VAR_RUN_LINK
->        ln -sf ../../../../run $(TARGET_DIR)/usr/share/factory/var/run
-> endef
->  
-> SKELETON_INIT_SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
->        SKELETON_INIT_SYSTEMD_VAR_RUN_LINK
-> 
-> Then you get a target that looks like this:
->                                                                  
-> lrwxrwxrwx    1 root     root  29 Feb 23 02:35 /var/run -> ../usr/share/factory//var/run
-> lrwxrwxrwx    1 root     root  15 Feb 23 00:51 /usr/share/factory/var/run -> ../../../../run
-> 
-> On the target, /var/run ends up pointing to /run and also on the host
-> $TARGET_DIR/var/run points to $TARGET_DIR/run.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
+new file mode 100644
+index 000000000000..effaf3d931a5
+--- /dev/null
++++ b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
+@@ -0,0 +1,33 @@
++From 129f50838bf14f4e1319f06f41c827fae9cc4b73 Mon Sep 17 00:00:00 2001
++From: Jaeden Amero <jaeden.amero@arm.com>
++Date: Thu, 8 Feb 2018 14:25:36 +0000
++Subject: [PATCH] dhm: Fix typo in RFC 5114 constants
++
++We accidentally named the constant MBEDTLS_DHM_RFC5114_MODP_P instead of
++MBEDTLS_DHM_RFC5114_MODP_2048_P.
++
++Fixes #1358
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 129f50838bf
++
++ include/mbedtls/dhm.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/mbedtls/dhm.h b/include/mbedtls/dhm.h
++index da2e66b111b6..00fafd8d16f4 100644
++--- a/include/mbedtls/dhm.h
+++++ b/include/mbedtls/dhm.h
++@@ -372,7 +372,7 @@ MBEDTLS_DEPRECATED typedef char const * mbedtls_deprecated_constant_t;
++  * in <em>RFC-5114: Additional Diffie-Hellman Groups for Use with
++  * IETF Standards</em>.
++  */
++-#define MBEDTLS_DHM_RFC5114_MODP_P                              \
+++#define MBEDTLS_DHM_RFC5114_MODP_2048_P                         \
++     MBEDTLS_DEPRECATED_STRING_CONSTANT(                         \
++         "AD107E1E9123A9D0D660FAA79559C51FA20D64E5683B9FD1"      \
++         "B54B1597B61D0A75E6FA141DF95A56DBAF9A3C407BA1DF15"      \
++-- 
++2.16.1
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.16.1
