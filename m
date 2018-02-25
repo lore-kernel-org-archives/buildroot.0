@@ -1,121 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Feb 2018 20:03:28 +0100
-Subject: [Buildroot] [git commit branch/next] linux: allow both in-tree
- and custom dts files
-In-Reply-To: <20180225171345.A60E48809E@busybox.osuosl.org>
-References: <20180225171345.A60E48809E@busybox.osuosl.org>
-Message-ID: <20180225190328.GD2276@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 25 Feb 2018 20:16:30 +0100
+Subject: [Buildroot] [PATCH] package/skeleton-init-systemd: create a
+ symlink /var/run to ../run
+In-Reply-To: <1519410337.25567.173.camel@impinj.com>
+References: <20180222221014.19584-1-romain.naour@gmail.com>
+ <1519410337.25567.173.camel@impinj.com>
+Message-ID: <594ebd6a-1bb7-9b97-66af-d55344f8c8e9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon, All,
+Hi Trent,
 
-On 2018-02-25 17:19 +0100, Arnout Vandecappelle spake thusly:
-> commit: https://git.buildroot.net/buildroot/commit/?id=382fe9f9261812682eab2d35e47aa94dc554380e
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Le 23/02/2018 ? 19:25, Trent Piepho a ?crit?:
+> On Thu, 2018-02-22 at 23:10 +0100, Romain Naour wrote:
+>> As reported by J?r?my Rosen [1] and Jan Kundr?t (RO case)[2], systemd
+>> looks for the dbus socket in /run/dbus instead of /var/run/dbus which
+>> is not where dbus puts the socket. This is a change introduced with
+>> the last version bump v237 [3].
+>>
+>> The file /usr/lib/tmpfiles.d/var.con will create automatically that
+>> symlink at bootup /var/run doesn't exist yet. But dbus creates, at
+>> install time, the directory /var/run/dbus without taking care of
+>> /var/run. So we end up with two different directories /run and
+>> /var/run. This bug affects more or less all systemd-provided
+>> utilities, including logind and systemd itself.
+>>
+>> This patch create the correct symlink run -> ../run when systemd
+>> is used as init system.
 > 
-> For some boards, for example the Raspberry Pi, it's necessary to build
-> in-tree dts files as well as custom/out of tree dts-files (dt-blob.bin).
-> The existing logic made these two options exclusive, this commit changes
-> that to allow both in-tree as well as custom sources for dts files.
+> This doesn't work in the RO root case.
 
-This breaks all our cufrrent defconfig files that build a DTB, like
-for example configs/stm32f429_disco_defconfig, because the default
-that was implied by a choice is no longer true, so we need to add
-BR2_LINUX_KERNEL_USE_INTREE_DTS=y to those defconfig files.
+Indeed, but I'm testing/fixing the RW case with this patch
+(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW).
 
-Care to send an update, please? ;-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
-> [Arnout: re-wrap help, add extra empty line, change = into +=]
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  linux/Config.in | 19 +++++++------------
->  linux/linux.mk  |  8 +++++---
->  2 files changed, 12 insertions(+), 15 deletions(-)
+> I described this in another
+> mail to the list, but in the RO root case target/var is a symlink to
+> target/usr/share/factory/var.  Thus this link is actually created as:
 > 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 1bc8171291..80e85b9e8b 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -363,10 +363,6 @@ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
->  config BR2_LINUX_KERNEL_APPENDED_DTB
->  	bool
->  
-> -choice
-> -	prompt "Device tree source"
-> -	default BR2_LINUX_KERNEL_USE_INTREE_DTS
-> -
->  config BR2_LINUX_KERNEL_USE_INTREE_DTS
->  	bool "Use a device tree present in the kernel"
->  	help
-> @@ -374,14 +370,6 @@ config BR2_LINUX_KERNEL_USE_INTREE_DTS
->  	  the kernel sources. The dts files are located
->  	  in the arch/<arch>/boot/dts folder.
->  
-> -config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-> -	bool "Use a custom device tree file"
-> -	help
-> -	  Use a custom device tree file, i.e, a device
-> -	  tree file that does not belong to the kernel
-> -	  source tree.
-> -endchoice
-> -
->  config BR2_LINUX_KERNEL_INTREE_DTS_NAME
->  	string "Device Tree Source file names"
->  	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
-> @@ -390,6 +378,13 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
->  	  the trailing .dts. You can provide a list of
->  	  dts files to build, separated by spaces.
->  
-> +config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-> +	bool "Use a custom device tree file"
-> +	help
-> +	  Use a custom device tree file, i.e, a device
-> +	  tree file that does not belong to the kernel
-> +	  source tree.
-> +
->  config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
->  	string "Device Tree Source file paths"
->  	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 776304e730..ab940e7305 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -119,13 +119,15 @@ endif
->  LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
->  
->  ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
-> -KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
-> -else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
-> +KERNEL_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
-> +endif
-> +
-> +ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
->  # We keep only the .dts files, so that the user can specify both .dts
->  # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
->  # copied to arch/<arch>/boot/dts, but only the .dts files will
->  # actually be generated as .dtb.
-> -KERNEL_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
-> +KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
->  endif
->  
->  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> target/usr/share/factory/var/run -> ../run
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+The symlink is only created when BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is set.
+The RO behavior is left unchanged.
+
+> 
+> It points to target/usr/share/factory/run, which is wrong.  In order to
+> get it to work in the RO case, instead create this link.
+> 
+> define SKELETON_INIT_SYSTEMD_VAR_RUN_LINK
+>        ln -sf ../../../../run $(TARGET_DIR)/usr/share/factory/var/run
+> endef
+>  
+> SKELETON_INIT_SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+>        SKELETON_INIT_SYSTEMD_VAR_RUN_LINK
+> 
+> Then you get a target that looks like this:
+>                                                                  
+> lrwxrwxrwx    1 root     root  29 Feb 23 02:35 /var/run -> ../usr/share/factory//var/run
+> lrwxrwxrwx    1 root     root  15 Feb 23 00:51 /usr/share/factory/var/run -> ../../../../run
+> 
+> On the target, /var/run ends up pointing to /run and also on the host
+> $TARGET_DIR/var/run points to $TARGET_DIR/run.
+> 
+
+The RO case can be fixed in a follow up patch or you can rework this patch with
+your modifications. Maybe Adam can help here.
+
+Adam, you bumped systemd to v237 can you have a look ?
+
+Best regards,
+Romain
