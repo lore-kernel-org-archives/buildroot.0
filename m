@@ -1,164 +1,127 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Feb 2018 00:20:45 +0100
-Subject: [Buildroot] [PATH for-next] package/htop: remove 0xe2 from
- MetersPanel.c
-In-Reply-To: <c2a2a9c6-2437-4182-7432-11e8db9521da@gmail.com>
-References: <20180220222025.3202-1-romain.naour@gmail.com>
- <9da09787-d0ae-f573-e226-12bee40b0c37@mind.be>
- <c2a2a9c6-2437-4182-7432-11e8db9521da@gmail.com>
-Message-ID: <c53f4177-750a-e478-c64e-2a3cb3ae1f16@mind.be>
+Date: Mon, 26 Feb 2018 00:20:54 +0100
+Subject: [Buildroot] [PATCH 1/1] linux: allow both in-tree and custom
+ dts files
+In-Reply-To: <20180221195316.8496-1-simon.vanderveldt@gmail.com>
+References: <20180221195316.8496-1-simon.vanderveldt@gmail.com>
+Message-ID: <37664d3f-0c64-4120-7c89-e11a70a45705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Simon,
+
+ Thank you for your contribution.
+
+On 21-02-18 20:53, Simon van der Veldt wrote:
+> For some boards, for example the Raspberry Pi, it's necessary to build in-tree dts files as well
+> as custom/out of tree dts-files (dt-blob.bin).
+
+ Indeed, this makes a lot of sense, and will make more sense when overlays
+become commonplace.
+
+ I have applied to next, with a few changes, as noted below.
 
 
-On 25-02-18 21:30, Romain Naour wrote:
-> Hi Arnout,
+> The existing logic made these two options exclusive, this commit changes that to allow both
+> in-tree as well as custom sources for dts files.
+
+ Please wrap the commit message at 72 columns.
+
 > 
-> Le 25/02/2018 ? 17:54, Arnout Vandecappelle a ?crit?:
->>
->>
->> On 20-02-18 23:20, Romain Naour wrote:
->>> This non ascii character trigger an issue with MakeHeader.py.
->>>
->>> ./scripts/MakeHeader.py MetersPanel.c
->>> Traceback (most recent call last):
->>>   File "./scripts/MakeHeader.py", line 32, in <module>
->>>     for line in file.readlines():
->>>   File "[...]/output/host/lib/python3.6/encodings/ascii.py", line 26, in decode
->>>     return codecs.ascii_decode(input, self.errors)[0]
->>> UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 956: ordinal not in range(128)
->>
->>  It would be better to patch MakeHeader.py to avoid this error entirely, which
->> could also be upstreamed. I *think* it is sufficient to do:
->>
->> file = open(sys.argv[1], 'rb')
->>
->> and later
->>
->> for line in file.readlines():
->>    line = line[:-1]
->>    line = line.decode('utf-8')
->>
->> That should work both in Python 2 and 3.
+> Signed-off-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+> ---
+>  linux/Config.in | 19 +++++++------------
+>  linux/linux.mk  |  5 +++--
+>  2 files changed, 10 insertions(+), 14 deletions(-)
 > 
-> The problem is that Matt and I can't reproduce the issue, even on the same machine.
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 0e1e4c287b..38b0334ed7 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -363,10 +363,6 @@ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
+>  config BR2_LINUX_KERNEL_APPENDED_DTB
+>  	bool
+>  
+> -choice
+> -	prompt "Device tree source"
+> -	default BR2_LINUX_KERNEL_USE_INTREE_DTS
+> -
+>  config BR2_LINUX_KERNEL_USE_INTREE_DTS
+>  	bool "Use a device tree present in the kernel"
+>  	help
+> @@ -374,14 +370,6 @@ config BR2_LINUX_KERNEL_USE_INTREE_DTS
+>  	  the kernel sources. The dts files are located
+>  	  in the arch/<arch>/boot/dts folder.
+>  
+> -config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> -	bool "Use a custom device tree file"
+> -	help
+> -	  Use a custom device tree file, i.e, a device
+> -	  tree file that does not belong to the kernel
+> -	  source tree.
+> -endchoice
+> -
+>  config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+>  	string "Device Tree Source file names"
+>  	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
+> @@ -390,6 +378,13 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+>  	  the trailing .dts. You can provide a list of
+>  	  dts files to build, separated by spaces.
+>  
+> +config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> +	bool "Use a custom device tree file"
+> +	help
+> +	  Use a custom device tree file, i.e, a device
+> +	  tree file that does not belong to the kernel
+> +	  source tree.
 
- You can't? I believe it should happen whenever you run the script under Python
-3 and in a clean (non-UTF8) environment. So just do:
+ I think that his option and BR2_LINUX_KERNEL_USE_INTREE_DTS are now redundant.
+Indeed, we can just check if the string is non-empty. That said, it's better to
+do this as a separate patch, and anyway there is no agreement between Buildroot
+developers whether it's better to have an explicit boolean Kconfig variable or
+whether to use the non-emptiness.
 
-LC_ALL=C make host-python3 htop
+ I've also been thinking about the possibility to have just a single string
+option with all dts'es, but that would be complicated for no real gain.
 
-should reproduce it.
+> +
+>  config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+>  	string "Device Tree Source file paths"
+>  	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 5300b9cfc5..58a38aa0e0 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -120,12 +120,13 @@ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-d
+>  
+>  ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
+>  KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
 
+ I've changed this into +=, so it can be safely moved around without overwriting
+the assignment below.
 
-> I'm not sure your proposal can fix the issue, the error seems come from
-> "file.readlines()" call.
+> -else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+> +endif
 
- Indeed, it's when you open the file in Unicode mode (which is the default), the
-readlines() will try to convert with the default codec (which depends on the
-i18n settings, so 'ascii' under C). By opening in binary mode ('rb'), no
-conversion will be done by readlines(). But then, you can't use normal strings
-in the rest of the code; either all strings have to be prefixed with b'' or
-(simpler) the read line has to be converted to a unicode string by calling
-decode() on it.
+ I've added an empty line here since the conditions are now really separate.
 
- I believe my proposal should work both in 2 and 3, but haven't got time to test :-)
 
  Regards,
  Arnout
 
-> 
-> Best regards,
-> Romain
-> 
->>
->>  Regards,
->>  Arnout
->>
->>>
->>> Fixes:
->>> http://autobuild.buildroot.net/results/8ed/8edb78b054a265447fd0e83f67cba5f978be4ed6
->>>
->>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>> ---
->>> Matt, can you test on "U16.04 Bacon" autobuilder ? I can't reproduce here.
->>>
->>> I just looked what changed recently in htop and this commit looks
->>> suspicious:
->>> https://github.com/hishamhm/htop/commit/0108117d0b4f1e822f434db173e976aac20b26b5
->>>
->>> Thanks !
->>>
->>> Romain
->>> ---
->>>  ...etersPanel-remove-0xe2-from-MetersPanel.c.patch | 52 ++++++++++++++++++++++
->>>  1 file changed, 52 insertions(+)
->>>  create mode 100644 package/htop/0001-MetersPanel-remove-0xe2-from-MetersPanel.c.patch
->>>
->>> diff --git a/package/htop/0001-MetersPanel-remove-0xe2-from-MetersPanel.c.patch b/package/htop/0001-MetersPanel-remove-0xe2-from-MetersPanel.c.patch
->>> new file mode 100644
->>> index 0000000000..81f9d1bd97
->>> --- /dev/null
->>> +++ b/package/htop/0001-MetersPanel-remove-0xe2-from-MetersPanel.c.patch
->>> @@ -0,0 +1,52 @@
->>> +From ae32d292ca641c08b6db8d2f7cfcce2a54d00835 Mon Sep 17 00:00:00 2001
->>> +From: Romain Naour <romain.naour@gmail.com>
->>> +Date: Tue, 20 Feb 2018 23:09:24 +0100
->>> +Subject: [PATCH] MetersPanel: remove 0xe2 from MetersPanel.c
->>> +
->>> +This non ascii character trigger an issue with MakeHeader.py.
->>> +
->>> +./scripts/MakeHeader.py MetersPanel.c
->>> +Traceback (most recent call last):
->>> +  File "./scripts/MakeHeader.py", line 32, in <module>
->>> +    for line in file.readlines():
->>> +  File "[...]/output/host/lib/python3.6/encodings/ascii.py", line 26, in decode
->>> +    return codecs.ascii_decode(input, self.errors)[0]
->>> +UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 956: ordinal not in range(128)
->>> +
->>> +http://autobuild.buildroot.net/results/8ed/8edb78b054a265447fd0e83f67cba5f978be4ed6/build-end.log
->>> +
->>> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>> +---
->>> + MetersPanel.c | 2 +-
->>> + MetersPanel.h | 2 +-
->>> + 2 files changed, 2 insertions(+), 2 deletions(-)
->>> +
->>> +diff --git a/MetersPanel.c b/MetersPanel.c
->>> +index 3cf3e07..47296a4 100644
->>> +--- a/MetersPanel.c
->>> ++++ b/MetersPanel.c
->>> +@@ -37,7 +37,7 @@ static const char* const MetersFunctions[] = {"Style ", "Move  ", "
->>> + static const char* const MetersKeys[] = {"Space", "Enter", "  ", "Del", "F10"};
->>> + static int MetersEvents[] = {' ', 13, ERR, KEY_DC, KEY_F(10)};
->>> + 
->>> +-// We avoid UTF-8 arrows ? ? here as they might display full-width on Chinese
->>> ++// We avoid UTF-8 arrows <- -> here as they might display full-width on Chinese
->>> + // terminals, breaking our aligning.
->>> + // In <http://unicode.org/reports/tr11/>, arrows (U+2019..U+2199) are
->>> + // considered "Ambiguous characters".
->>> +diff --git a/MetersPanel.h b/MetersPanel.h
->>> +index e00169c..e80754a 100644
->>> +--- a/MetersPanel.h
->>> ++++ b/MetersPanel.h
->>> +@@ -29,7 +29,7 @@ struct MetersPanel_ {
->>> + 
->>> + // Note: In code the meters are known to have bar/text/graph "Modes", but in UI
->>> + // we call them "Styles".
->>> +-// We avoid UTF-8 arrows ? ? here as they might display full-width on Chinese
->>> ++// We avoid UTF-8 arrows <- -> here as they might display full-width on Chinese
->>> + // terminals, breaking our aligning.
->>> + // In <http://unicode.org/reports/tr11/>, arrows (U+2019..U+2199) are
->>> + // considered "Ambiguous characters".
->>> +-- 
->>> +2.14.3
->>> +
->>>
->>
+> +ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+>  # We keep only the .dts files, so that the user can specify both .dts
+>  # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+>  # copied to arch/<arch>/boot/dts, but only the .dts files will
+>  # actually be generated as .dtb.
+> -KERNEL_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+> +KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+>  endif
+>  
+>  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
 > 
 
 -- 
