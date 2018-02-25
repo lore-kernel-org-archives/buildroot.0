@@ -1,37 +1,68 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 25 Feb 2018 21:38:06 +0000
-Subject: [Buildroot] [Bug 10786] Linux fails to build unless make
- linux-menuconfig is run first
-In-Reply-To: <bug-10786-163@https.bugs.busybox.net/>
-References: <bug-10786-163@https.bugs.busybox.net/>
-Message-ID: <bug-10786-163-gFp6rNHVTE@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Feb 2018 22:40:17 +0100
+Subject: [Buildroot] [git commit] uboot: use local fdt headers
+Message-ID: <20180225214110.79DDA881DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10786
+commit: https://git.buildroot.net/buildroot/commit/?id=baae5156ce37e8b2775f04710f7d1c8e97e4114c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+After commit b8c3e941731d ("package/dtc: qemu system build need libfdt")
+changed the dtc install target from 'install-bin' to 'install', uboot
+compilation failures occurred because libfdt related headers were now
+suddenly taken from output/host/include rather than from the uboot sources
+itself.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WORKSFORME
-             Status|NEW                         |RESOLVED
+Commit 3a6573ccee26 ("uboot: use local libfdt.h") solved this by patching
+one specific uboot source file, tools/fdtgrep.c, to replace '<...>'-style
+includes by '"..."'-style includes.
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-You have CONFIG_INITRAMFS_SOURCE defined in your linux_defconfig, but you have
-not enabled initramfs support in Buildroot. So obviously this cannot work.
+However, depending on the uboot version, this may not be enough: there may
+be other references to fdt header files. In particular taking into account
+that it is not uncommon to have vendor-provided uboot trees which have
+custom changes.
 
-If you enable initramfs support in Buildroot, then Buildroot will make sure to
-have a dummy rootfs.cpio when the kernel is first built, will make sure to set
-CONFIG_INITRAMFS_SOURCE to the correct value, and will rebuild the kernel image
-at the end of the build with the final rootfs.cpio.
+The root of the problem is that the uboot.mk file passes the host compiler
+as follows:
+	UBOOT_MAKE_OPTS += \
+		...
+		HOSTCC="$(HOSTCC) $(HOST_CFLAGS)" \
+		...
+where HOST_CFLAGS contains the string '-I$(HOST_DIR)/include'
+The uboot makefiles then use constructs of the form:
+	$(CC) $(CPPFLAGS) $(CFLAGS) .....
+where CPPFLAGS may contain -I references pointing to local directories.
 
-Therefore, there is no bug per se: there is just a mis-use of the initramfs
-support.
+On the expanded compiler command-line, Buildroot's '-I$(HOST_DIR)/include'
+is thus present _before_ any -I to local directories, and thus takes
+precedence.  And that becomes a problem for header files present both
+locally as in the Buildroot host directory, which is the case for libfdt.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+To fix this problem without having to patch u-boot sources, use '-idirafter'
+rather than '-I' to pass the Buildroot host include directory. '-idirafter'
+is basically the same thing, but adds the specified directory at the end
+of the include precedence chain, rather than at the beginning.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/uboot/uboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index d2f241cd8b..977f44cad8 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -131,7 +131,7 @@ endif
+ UBOOT_MAKE_OPTS += \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	ARCH=$(UBOOT_ARCH) \
+-	HOSTCC="$(HOSTCC) $(HOST_CFLAGS)" \
++	HOSTCC="$(HOSTCC) $(subst -I/,-idirafter /,$(subst -I /,-idirafter /,$(HOST_CFLAGS)))" \
+ 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
+ 
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
