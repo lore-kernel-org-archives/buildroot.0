@@ -1,43 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Feb 2018 20:55:27 +0100
-Subject: [Buildroot] [git commit] go: bump to 1.10
-Message-ID: <20180305200716.D390C81EDA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Feb 2018 21:54:47 +0100
+Subject: [Buildroot] [git commit] liblo: disable werror to fix build issues
+Message-ID: <20180305200717.7DC7981EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=576437cdb197afdd3e6c2200a16da73943c8c050
+commit: https://git.buildroot.net/buildroot/commit/?id=2759ba039790cd15892bafbd140b34c1b63e299e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit bumps the Go programming language to the 1.10 release.
+Pass the --disable-werror option to remove -Werror, and therefore
+avoid a number of build failures.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/61ab7e23d2ef62f055efc74a998e3c108a3cdb43
+
+Signed-off-by: Alex Baldwin <alexbaldwinmusic@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/liblo/liblo.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 445a0b7c20..73c1578d0b 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,2 +1,2 @@
- # From https://golang.org/dl/
--sha256	a4ab229028ed167ba1986825751463605264e44868362ca8e7accc8be057e993	go1.9.src.tar.gz
-+sha256	f3de49289405fda5fd1483a8fe6bd2fa5469e005fd567df64485c4fa000c7f24	go1.10.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 23facbdd81..4d55e16cc3 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
+index 14b0527966..c7d163dae2 100644
+--- a/package/liblo/liblo.mk
++++ b/package/liblo/liblo.mk
+@@ -12,6 +12,9 @@ LIBLO_LICENSE_FILES = COPYING
+ LIBLO_INSTALL_STAGING = YES
  
--GO_VERSION = 1.9
-+GO_VERSION = 1.10
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ # IPv6 support broken, issue known upstream
+-LIBLO_CONF_OPTS = --disable-ipv6
++# werror - not needed for release.
++LIBLO_CONF_OPTS += \
++	--disable-ipv6 \
++	--disable-werror
  
+ $(eval $(autotools-package))
