@@ -1,49 +1,63 @@
-From: Sjoerd Venema <srg.venema@gmail.com>
-Date: Sun, 25 Feb 2018 11:59:05 +0100
-Subject: [Buildroot] Building Kodi; dependencies
-Message-ID: <CAPzckP6rcjcRLvdCfPYr5bFUv6JVg6PShaxzq0yirmR41_T3XQ@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 25 Feb 2018 13:18:57 +0100
+Subject: [Buildroot] How to install Perl install.pl based package to
+ target
+In-Reply-To: <CAPi4xiWQtndML7mb_n2HCXn3WMcK3afwj-bJaDQ=Gwk7nyBZFg@mail.gmail.com>
+References: <CAPi4xiWQtndML7mb_n2HCXn3WMcK3afwj-bJaDQ=Gwk7nyBZFg@mail.gmail.com>
+Message-ID: <CAB0FRsuPAYQt7nzHQV6Lasgjd0Ys=zVurdqkMN_+N9kcbbbiJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using Buildroot for some time now, now decided to make a "Buildroot"
-for my Kodi. However, I'm getting stuck at some sort of catch 22 trying to
-fulfill all of its dependencies..
+2018-02-24 18:53 GMT+01:00 Sam <samiswt@gmail.com>:
 
-*** kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++,
-threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6 ***
-*** kodi needs an OpenGL EGL with either an openGL or an OpenGL ES backend
-***
+> Hey everyone,
+>
+> I'm trying to add a package named fwsnort to my buildroot package, what
+> should I do? Or it's impossible?
+>
+> I tried to use generic-package and put command line ' Perl ./install.pl'
+> into CONFIGURE_CMDS block, and it didn't work by throwing an error message:
+> /bin/sh, unrecognized command end.
+>
+> Thanks,
+>
+>
+generic-package is the good way, an INSTALL_TARGET_CMDS will do all the job
 
-Coming from:
+FWSNORT_VERSION = 1.6.7
+FWSNORT_SITE = http://www.cipherdyne.org/fwsnort/download
+FWSNORT_DEPENDENCIES = perl-netaddr-ip perl-iptables-parse
 
-comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/
-C++, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
-depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS\
-|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-|| !BR2_HOST_GCC_AT_LEAST_4_6 \
-|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-|| BR2_TOOLCHAIN_USES_MUSL \
-|| !BR2_PACKAGE_PYTHON \
-|| BR2_PACKAGE_PYTHON_PYC_ONLY
+define FWSNORT_INSTALL_TARGET_CMDS
+	$(INSTALL) -m 0755 -D $(@D)/fwsnort $(TARGET_DIR)/usr/bin/fwsnort
+	$(INSTALL) -m 0644 -D $(@D)/fwsnort.conf $(TARGET_DIR)/etc/fwsnort/fwsnort.conf
+	mkdir -p $(TARGET_DIR)/etc/snort/rules
+	$(INSTALL) -m 0644 $(@D)/deps/snort_rules/*.rules $(TARGET_DIR)/etc/snort/rules
+endef
 
-First off, I assume the ! means a Not, so, for example  !BR2_USE_WCHAR
-means that BR2_USE_WCHAR must be [=n]. Correct?
+$(eval $(generic-package))
 
-Secondly, can I set all these dependencies via make menuconfig? Or do I
-have to configure things outside of that environment?
+The missing dependency (perl-iptables-parse) could be created by the
+following command:
+$ utils/scancpan IPTables-Parse
 
-Now, a "catch 22" seems to be for example: BR2_TOOLCHAIN_HAS_THREADS (must
-be false) is selected by BR2_TOOLCHAIN_USES_MUSL (must be true).
+Fran?ois
 
-What am I missing here? Also, if anyone would have a working Kodi defconfig
-for a Raspberry Pi, I'd be very interested ;-)
 
-Thanks!
-Sjoerd
+>
+> Tao
+> --
+> Sent from Gmail Mobile
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180225/968f7730/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180225/b61b97c9/attachment.html>
