@@ -1,65 +1,66 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 25 Feb 2018 21:50:34 +0100
-Subject: [Buildroot] [PATCH 2/3] package/strace: add missing libunwind
- optional dependency
-In-Reply-To: <CAAXf6LXnevwOqgTb7yV5AraDkHsauEfhJNoQr8rNgWFLQKp15Q@mail.gmail.com>
-References: <20180225183415.8362-1-romain.naour@gmail.com>
- <20180225183415.8362-2-romain.naour@gmail.com>
- <CAAXf6LXnevwOqgTb7yV5AraDkHsauEfhJNoQr8rNgWFLQKp15Q@mail.gmail.com>
-Message-ID: <d5803d2e-773e-10ce-71b0-e5ca69671cf8@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Feb 2018 21:53:26 +0100
+Subject: [Buildroot] [PATCH-FOR-NEXT v1 3/6] pkgconf: add
+ host-pkg-config wrapper
+In-Reply-To: <CAAXf6LXh2EjCqMXrsUA1qSSk_NNFLD2HFe2_QtWXqW1LDA4Dbw@mail.gmail.com>
+References: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
+ <20180221142801.28997-4-gael.portay@savoirfairelinux.com>
+ <20180221225010.4b4228aa@windsurf.lan>
+ <0e296fe2-3359-581f-6d3d-d3bc3cac06eb@mind.be>
+ <20180222104146.5d4efe6e@windsurf.lan>
+ <ac315087-1cdd-a2c6-3a5c-2142137cdb79@mind.be>
+ <CAAXf6LXh2EjCqMXrsUA1qSSk_NNFLD2HFe2_QtWXqW1LDA4Dbw@mail.gmail.com>
+Message-ID: <20180225205326.GF2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas, All,
 
-Le 25/02/2018 ? 21:28, Thomas De Schampheleire a ?crit?:
-> Hi,
+On 2018-02-25 21:38 +0100, Thomas De Schampheleire spake thusly:
+[--SNIP--]
+> For reference, here is my mail:
+> http://lists.busybox.net/pipermail/buildroot/2018-February/213629.html
 > 
-> 2018-02-25 19:34 GMT+01:00 Romain Naour <romain.naour@gmail.com>:
->> This improve the reproducible build.
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/strace/strace.mk | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/package/strace/strace.mk b/package/strace/strace.mk
->> index e292c60f2a..9c1fab3871 100644
->> --- a/package/strace/strace.mk
->> +++ b/package/strace/strace.mk
->> @@ -10,6 +10,13 @@ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSI
->>  STRACE_LICENSE = BSD-3-Clause
->>  STRACE_LICENSE_FILES = COPYING
->>
->> +ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
->> +STRACE_DEPENDENCIES += libunwind
->> +STRACE_CONF_OPTS += --with-libunwind
->> +else
->> +STRACE_CONF_OPTS += --without-libunwind
->> +endif
->> +
+> I think you misunderstood my question/proposal: what I'd need is a
+> unique path to the cross tools (gcc, ...) that does _not_ contain the
+> tuple anywhere in it (or is reachable via a symlink that does not
+> contain the tuple).
+> Where I wrote 'cross' in the example path:
+>     $(HOST_DIR)/bin/cross/{gcc,gdb,nm,readelf}
+> I really meant the literal string 'cross', not the tuple (the exact
+> string is of course something that can be discussed)
 > 
-> As far as I know, the main (only?) reason for a libunwind dependency
-> is to support 'strace -k' to get callstack info. Perhaps it would be
-> useful to update the Config.in file to hint about this, i.e. that
-> users should enable libunwind manually if they want 'strace -k'
-> support.
+> The reason I need something like that is for scripts/build systems
+> external to Buildroot. They do not know the tuple upfront, and would
+> have to do tricks to determine it. All they typically know is a
+> reference to the buildroot path and a defconfig name.
 
-Ok, why not.
+But then they can call buildroot to know the tuple:
+    eval $(make -s printvars VARS=GNU_TARGET_NAME)
 
-> 
-> In our local tree, I had added a config option to strace for that, but
-> perhaps that is overkill?
+and then gain access to the tuple with ${GNU_TARGET_NAME}.
 
-Most packages optional dependencies are handled like this, otherwise we have to
-maintain one config option for each optional dependencies.
+> So, for that use case, I do not need any changes to the PATH env
+> variable. Just an extra shadow tree with symlinks to the necessary
+> cross tools, but reachable without knowing the tuple.
 
-Best regards,
-Romain
+I wonder if we would want to support this case, especially since we
+can't have a sane way to keep it working.
 
-> 
-> /Thomas
-> 
+What worries me is that by doing what you suggest, we would be diverging
+*greatly* from established conventions, and any patch to packagees to
+support that, would not be upstreamable...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
