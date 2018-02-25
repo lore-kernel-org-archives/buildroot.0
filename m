@@ -1,85 +1,68 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 25 Feb 2018 22:56:47 +0100
-Subject: [Buildroot] [PATCH-FOR-NEXT v1 3/6] pkgconf: add
- host-pkg-config wrapper
-In-Reply-To: <20180225205326.GF2276@scaer>
-References: <20180221142801.28997-1-gael.portay@savoirfairelinux.com>
- <20180221142801.28997-4-gael.portay@savoirfairelinux.com>
- <20180221225010.4b4228aa@windsurf.lan>
- <0e296fe2-3359-581f-6d3d-d3bc3cac06eb@mind.be>
- <20180222104146.5d4efe6e@windsurf.lan>
- <ac315087-1cdd-a2c6-3a5c-2142137cdb79@mind.be>
- <CAAXf6LXh2EjCqMXrsUA1qSSk_NNFLD2HFe2_QtWXqW1LDA4Dbw@mail.gmail.com>
- <20180225205326.GF2276@scaer>
-Message-ID: <CAAXf6LUeYyo0jJApJ8rf04ZM6Lez3Ct4af3DaTnEFEfoowNvPg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Feb 2018 22:58:29 +0100
+Subject: [Buildroot] [PATCH next v2] waf: bump to 2.0.6
+In-Reply-To: <20180219134838.6073-1-aduskett@gmail.com>
+References: <20180219134838.6073-1-aduskett@gmail.com>
+Message-ID: <20180225225829.2534814d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-02-25 21:53 GMT+01:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Thomas, All,
->
-> On 2018-02-25 21:38 +0100, Thomas De Schampheleire spake thusly:
-> [--SNIP--]
->> For reference, here is my mail:
->> http://lists.busybox.net/pipermail/buildroot/2018-February/213629.html
->>
->> I think you misunderstood my question/proposal: what I'd need is a
->> unique path to the cross tools (gcc, ...) that does _not_ contain the
->> tuple anywhere in it (or is reachable via a symlink that does not
->> contain the tuple).
->> Where I wrote 'cross' in the example path:
->>     $(HOST_DIR)/bin/cross/{gcc,gdb,nm,readelf}
->> I really meant the literal string 'cross', not the tuple (the exact
->> string is of course something that can be discussed)
->>
->> The reason I need something like that is for scripts/build systems
->> external to Buildroot. They do not know the tuple upfront, and would
->> have to do tricks to determine it. All they typically know is a
->> reference to the buildroot path and a defconfig name.
->
-> But then they can call buildroot to know the tuple:
->     eval $(make -s printvars VARS=GNU_TARGET_NAME)
->
-> and then gain access to the tuple with ${GNU_TARGET_NAME}.
+Hello,
 
-Except that this is not always correct :-)
-For example, on a MIPS octeon based defconfig with external toolchain,
-I see:
-GNU_TARGET_NAME=mips64-buildroot-linux-gnu
-but:
-BR2_TOOLCHAIN_EXTERNAL_PREFIX=mips64-octeon-linux-gnu
-i.e. GNU_TARGET_NAME does not give the answer for all cases.
+On Mon, 19 Feb 2018 08:48:38 -0500, Adam Duskett wrote:
+> In addition:
+> - Download the tar.bz2 package instead of just the file. The tar
+>   includes waf-light which is needed to parse the license.
+> 
+> - Remove HOST_WAF_EXTRACT_CMDS as the make system can handle extracting
+>   the tar.bz2 automatically.
+> 
+> - Add license and license_files to waf.mk
+> 
+> - Add sha256sum hash for the license.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Changed License to BSD-3-Clause (Baruch)
+>   - Use waf-light instead of waf for license file. (Baruch)
 
-Depending on whether you have internal or external toolchain, and in
-the latter case on whether the tool you need to access is provided by
-the external toolchain or built by Buildroot (like gdb), you need more
-logic.
-See also the logic and comment here:
-http://lists.busybox.net/pipermail/buildroot/2016-April/160055.html
+Thanks, but this bump breaks the build of mpv (which uses waf). During
+the mpv installation step, the build fails with:
 
+Waf: Leaving directory `/home/thomas/projets/buildroot/output/build/mpv-0.27.0/build'
+'install' finished successfully (0.366s)
+mpv: installs files in /home/thomas/projets/buildroot/output/target//home/thomas/projets/buildroot/output
+make[1]: *** [package/pkg-generic.mk:336: /home/thomas/projets/buildroot/output/build/mpv-0.27.0/.stamp_target_installed] Error 1
 
->> So, for that use case, I do not need any changes to the PATH env
->> variable. Just an extra shadow tree with symlinks to the necessary
->> cross tools, but reachable without knowing the tuple.
->
-> I wonder if we would want to support this case, especially since we
-> can't have a sane way to keep it working.
+Reverting the waf bump fixes the problem. Here is the defconfig used to
+reproduce the problem:
 
-While I'm open to alternative solutions, I don't see the difficulty here.
-All existing logic remains, we'd just add a few extra symlinks from
-the shadow path pointing to outpt/host/bin/...
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_MPV=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
->
-> What worries me is that by doing what you suggest, we would be diverging
-> *greatly* from established conventions, and any patch to packagees to
-> support that, would not be upstreamable...
+Could you have a look at this ?
 
-But none of the packages' source code would need any change for this.
-Everything remains exactly as it was.
-Only some additional symlinks are provided, which should normally not
-be needed by anything inside of Buildroot.
+Thanks!
 
-/Thomas
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
