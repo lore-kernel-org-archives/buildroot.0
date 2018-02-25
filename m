@@ -1,164 +1,162 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 22:21:54 +0100
-Subject: [Buildroot] [git commit] scanpypi: add support for Python3
-Message-ID: <20180305200718.3F48181EDC@busybox.osuosl.org>
+Date: Sun, 25 Feb 2018 22:06:46 +0100
+Subject: [Buildroot] [git commit] package/mesa3d-demos: bump to 8.4.0
+Message-ID: <20180305200717.F0EFE8126F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a0c20c5309b36c379af97038e69c8ebd4119f83
+commit: https://git.buildroot.net/buildroot/commit/?id=ee5efb464418fb31c6c96434f4ede4f83f8afb0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The script was changed via modernize utility. The only manual
-made part was the handling of StringIO.
+Use the new upstream url.
+Added all hashes provided by upstream.
+Rebase patch on top of 8.4.0 and convert it to git formated patch.
+Add a comment above "MESA3D_DEMOS_AUTORECONF = YES"
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+See https://lists.freedesktop.org/archives/mesa-dev/2018-February/186542.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/scanpypi | 43 ++++++++++++++++++++++++++-----------------
- 1 file changed, 26 insertions(+), 17 deletions(-)
+ ...demos-makes-opengl-an-optional-component.patch} | 56 ++++++++++++++--------
+ package/mesa3d-demos/mesa3d-demos.hash             |  7 ++-
+ package/mesa3d-demos/mesa3d-demos.mk               |  5 +-
+ 3 files changed, 43 insertions(+), 25 deletions(-)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 55bfb2fedb..12bfc24e10 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -7,13 +7,13 @@ Any package built by scanpypi should be manually checked for
- errors.
- """
- from __future__ import print_function
-+from __future__ import absolute_import
- import argparse
- import json
--import urllib2
-+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
- import sys
- import os
- import shutil
--import StringIO
- import tarfile
- import zipfile
- import errno
-@@ -23,6 +23,13 @@ import textwrap
- import tempfile
- import imp
- from functools import wraps
-+from six.moves import map
-+from six.moves import zip
-+from six.moves import input
-+if six.PY2:
-+    import StringIO
-+else:
-+    import io
+diff --git a/package/mesa3d-demos/0001-demos-optional-gl.patch b/package/mesa3d-demos/0001-demos-makes-opengl-an-optional-component.patch
+similarity index 52%
+rename from package/mesa3d-demos/0001-demos-optional-gl.patch
+rename to package/mesa3d-demos/0001-demos-makes-opengl-an-optional-component.patch
+index 6470e9d8d9..b328fca810 100644
+--- a/package/mesa3d-demos/0001-demos-optional-gl.patch
++++ b/package/mesa3d-demos/0001-demos-makes-opengl-an-optional-component.patch
+@@ -1,12 +1,22 @@
+-This patches makes opengl an optional component.
++From bb0ffae7164d296d32da24fa5499534de259169a Mon Sep 17 00:00:00 2001
++From: Spenser Gilliland <spenser@gillilanding.com>
++Date: Sat, 24 Feb 2018 11:36:17 +0100
++Subject: [PATCH] demos: makes opengl an optional component
  
- BUF_SIZE = 65536
+ Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
++[Romain: convert to git patch, rebase on 8.4.0]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+-Index: mesa3d-demos-8.1.0/configure.ac
+-===================================================================
+---- mesa3d-demos-8.1.0.orig/configure.ac
+-+++ mesa3d-demos-8.1.0/configure.ac
+-@@ -51,6 +51,14 @@
++ configure.ac               | 12 +++++++++++-
++ src/egl/opengl/Makefile.am |  2 ++
++ src/util/Makefile.am       |  2 ++
++ 3 files changed, 15 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 0b5e9a76..24298c44 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -51,6 +51,14 @@ m4_ifndef([PKG_PROG_PKG_CONFIG],
+    ACLOCAL="aclocal -I/other/macro/dir" before running autoreconf.])])
+  PKG_PROG_PKG_CONFIG()
+  
+@@ -21,7 +31,7 @@ Index: mesa3d-demos-8.1.0/configure.ac
+  dnl Get the pkg-config definitions for libGL.  We include a fallback
+  dnl path for GL implementation that don't provide a .pc file
+  PKG_CHECK_MODULES(GL, [gl], [], [
+-@@ -113,6 +121,8 @@
++@@ -112,6 +120,8 @@ PKG_CHECK_MODULES(GLU, [glu], [],
+  DEMO_CFLAGS="$DEMO_CFLAGS $GLU_CFLAGS"
+  DEMO_LIBS="$DEMO_LIBS $GLU_LIBS"
+  
+@@ -30,7 +40,7 @@ Index: mesa3d-demos-8.1.0/configure.ac
+  AC_ARG_ENABLE([egl],
+      [AS_HELP_STRING([--enable-egl],
+          [enable EGL library @<:@default=auto@:>@])],
+-@@ -303,7 +313,7 @@
++@@ -302,7 +312,7 @@ AC_SUBST([MESA_GLAPI])
+  AC_SUBST([WAYLAND_CFLAGS])
+  AC_SUBST([WAYLAND_LIBS])
+  
+@@ -39,29 +49,30 @@ Index: mesa3d-demos-8.1.0/configure.ac
+  AM_CONDITIONAL(HAVE_EGL, test "x$egl_enabled" = "xyes")
+  AM_CONDITIONAL(HAVE_GLESV1, test "x$glesv1_enabled" = "xyes")
+  AM_CONDITIONAL(HAVE_GLESV2, test "x$glesv2_enabled" = "xyes")
+-Index: mesa3d-demos-8.1.0/src/egl/opengl/Makefile.am
+-===================================================================
+---- mesa3d-demos-8.1.0.orig/src/egl/opengl/Makefile.am
+-+++ mesa3d-demos-8.1.0/src/egl/opengl/Makefile.am
+-@@ -50,12 +50,14 @@
++diff --git a/src/egl/opengl/Makefile.am b/src/egl/opengl/Makefile.am
++index 6d184ff6..219ab850 100644
++--- a/src/egl/opengl/Makefile.am
+++++ b/src/egl/opengl/Makefile.am
++@@ -56,6 +56,7 @@ endif
+  endif
+  
+  if HAVE_EGL
+ +if HAVE_GL
++ bin_PROGRAMS = \
++ 	eglinfo
+  noinst_PROGRAMS = \
+- 	eglinfo \
+- 	peglgears \
+- 	$(EGL_DRM_DEMOS) \
+- 	$(EGL_X11_DEMOS)
++@@ -64,6 +65,7 @@ noinst_PROGRAMS = \
++ 	$(EGL_X11_DEMOS) \
++ 	$(EGL_WL_DEMOS)
+  endif
+ +endif
+  
+  egltri_x11_SOURCES = egltri.c
+  eglgears_x11_SOURCES = eglgears.c
+-Index: mesa3d-demos-8.1.0/src/util/Makefile.am
+-===================================================================
+---- mesa3d-demos-8.1.0.orig/src/util/Makefile.am
+-+++ mesa3d-demos-8.1.0/src/util/Makefile.am
++diff --git a/src/util/Makefile.am b/src/util/Makefile.am
++index 759a293a..012b9c75 100644
++--- a/src/util/Makefile.am
+++++ b/src/util/Makefile.am
+ @@ -27,7 +27,9 @@ AM_CFLAGS = \
+  AM_LDFLAGS = \
+  	$(DEMO_LIBS)
+@@ -72,3 +83,6 @@ Index: mesa3d-demos-8.1.0/src/util/Makefile.am
+  
+  if HAVE_GLUT
+  AM_CFLAGS += \
++-- 
++2.14.3
++
+diff --git a/package/mesa3d-demos/mesa3d-demos.hash b/package/mesa3d-demos/mesa3d-demos.hash
+index a50a3a1e0c..8a771df2f8 100644
+--- a/package/mesa3d-demos/mesa3d-demos.hash
++++ b/package/mesa3d-demos/mesa3d-demos.hash
+@@ -1,2 +1,5 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-December/000191.html
+-sha256	c173154bbd0d5fb53d732471984def42fb1b14ac85fcb834138fb9518b3e0bef	mesa-demos-8.3.0.tar.bz2
++# From https://lists.freedesktop.org/archives/mesa-dev/2018-February/186542.html
++md5  6b65a02622765522176d00f553086fa3  mesa-demos-8.4.0.tar.bz2
++sha1 57ba892e919fa22ce3db9f25e7331a6fa33c652c  mesa-demos-8.4.0.tar.bz2
++sha256 01e99c94a0184e63e796728af89bfac559795fb2a0d6f506fa900455ca5fff7d  mesa-demos-8.4.0.tar.bz2
++sha512 b72d03cad36e0535ff18dcfb222ec4200064b9264f6da51a6e5f03b0dd912abe188bc1d600b6698de3ce6f63b28d2ce01565886ca8e7079edc4967fbf2fb0957  mesa-demos-8.4.0.tar.bz2
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+index cbc15c3b69..52a1e2420a 100644
+--- a/package/mesa3d-demos/mesa3d-demos.mk
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
-@@ -147,15 +154,15 @@ class BuildrootPackage():
-         self.metadata_url = 'https://pypi.python.org/pypi/{pkg}/json'.format(
-             pkg=self.real_name)
-         try:
--            pkg_json = urllib2.urlopen(self.metadata_url).read().decode()
--        except urllib2.HTTPError as error:
-+            pkg_json = six.moves.urllib.request.urlopen(self.metadata_url).read().decode()
-+        except six.moves.urllib.error.HTTPError as error:
-             print('ERROR:', error.getcode(), error.msg, file=sys.stderr)
-             print('ERROR: Could not find package {pkg}.\n'
-                   'Check syntax inside the python package index:\n'
-                   'https://pypi.python.org/pypi/ '
-                   .format(pkg=self.real_name))
-             raise
--        except urllib2.URLError:
-+        except six.moves.urllib.error.URLError:
-             print('ERROR: Could not find package {pkg}.\n'
-                   'Check syntax inside the python package index:\n'
-                   'https://pypi.python.org/pypi/ '
-@@ -193,8 +200,8 @@ class BuildrootPackage():
-             try:
-                 print('Downloading package {pkg} from {url}...'.format(
-                       pkg=self.real_name, url=download_url['url']))
--                download = urllib2.urlopen(download_url['url'])
--            except urllib2.HTTPError as http_error:
-+                download = six.moves.urllib.request.urlopen(download_url['url'])
-+            except six.moves.urllib.error.HTTPError as http_error:
-                 download = http_error
-             else:
-                 self.used_url = download_url
-@@ -205,7 +212,7 @@ class BuildrootPackage():
-                 if self.md5_sum == download_url['md5_digest']:
-                     break
-         else:
--            if download.__class__ == urllib2.HTTPError:
-+            if download.__class__ == six.moves.urllib.error.HTTPError:
-                 raise download
-             raise DownloadFailed('Failed to downloas package {pkg}'
-                                  .format(pkg=self.real_name))
-@@ -219,7 +226,10 @@ class BuildrootPackage():
-         Keyword arguments:
-         tmp_path -- directory where you want the package to be extracted
-         """
--        as_file = StringIO.StringIO(self.as_string)
-+        if six.PY2:
-+            as_file = StringIO.StringIO(self.as_string)
-+        else:
-+            as_file = io.BytesIO(self.as_string)
-         if self.filename[-3:] == 'zip':
-             with zipfile.ZipFile(as_file) as as_zipfile:
-                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
-@@ -303,8 +313,8 @@ class BuildrootPackage():
-                         if len(item) > 0 and item[0] != '#']
- 
-         req_not_found = self.pkg_req
--        self.pkg_req = map(pkg_buildroot_name, self.pkg_req)
--        pkg_tuples = zip(req_not_found, self.pkg_req)
-+        self.pkg_req = list(map(pkg_buildroot_name, self.pkg_req))
-+        pkg_tuples = list(zip(req_not_found, self.pkg_req))
-         # pkg_tuples is a list of tuples that looks like
-         # ('werkzeug','python-werkzeug') because I need both when checking if
-         # dependencies already exist or are already in the download list
-@@ -412,8 +422,7 @@ class BuildrootPackage():
-             classifiers_licenses = [regexp.sub(r"\1", lic)
-                                     for lic in self.metadata['info']['classifiers']
-                                     if regexp.match(lic)]
--            licenses = map(lambda x: license_dict[x] if x in license_dict else x,
--                           classifiers_licenses)
-+            licenses = [license_dict[x] if x in license_dict else x for x in classifiers_licenses]
-             if not len(licenses):
-                 print('WARNING: License has been set to "{license}". It is most'
-                       ' likely wrong, please change it if need be'.format(
-@@ -583,7 +592,7 @@ class BuildrootPackage():
-         # \t + two spaces is 3 char long
-         help_lines.append('')
-         help_lines.append('\t  ' + self.metadata['info']['home_page'])
--        help_lines = map(lambda x: x + '\n', help_lines)
-+        help_lines = [x + '\n' for x in help_lines]
-         lines += help_lines
- 
-         with open(path_to_config, 'w') as config_file:
-@@ -624,7 +633,7 @@ def main():
-             print('Fetching package', package.real_name)
-             try:
-                 package.fetch_package_info()
--            except (urllib2.URLError, urllib2.HTTPError):
-+            except (six.moves.urllib.error.URLError, six.moves.urllib.error.HTTPError):
-                 continue
-             if package.metadata_name.lower() == 'setuptools':
-                 # setuptools imports itself, that does not work very well
-@@ -634,7 +643,7 @@ def main():
- 
-             try:
-                 package.download_package()
--            except urllib2.HTTPError as error:
-+            except six.moves.urllib.error.HTTPError as error:
-                 print('Error: {code} {reason}'.format(code=error.code,
-                                                       reason=error.reason))
-                 print('Error downloading package :', package.buildroot_name)
-@@ -682,7 +691,7 @@ def main():
-                     continue
-                 print('Error: Package {name} already exists'
-                       .format(name=package.pkg_dir))
--                del_pkg = raw_input(
-+                del_pkg = input(
-                     'Do you want to delete existing package ? [y/N]')
-                 if del_pkg.lower() == 'y':
-                     shutil.rmtree(package.pkg_dir)
+-MESA3D_DEMOS_VERSION = 8.3.0
++MESA3D_DEMOS_VERSION = 8.4.0
+ MESA3D_DEMOS_SOURCE = mesa-demos-$(MESA3D_DEMOS_VERSION).tar.bz2
+-MESA3D_DEMOS_SITE = ftp://ftp.freedesktop.org/pub/mesa/demos/$(MESA3D_DEMOS_VERSION)
++MESA3D_DEMOS_SITE = ftp://ftp.freedesktop.org/pub/mesa/demos
++# 0001-demos-makes-opengl-an-optional-component.patch
+ MESA3D_DEMOS_AUTORECONF = YES
+ MESA3D_DEMOS_DEPENDENCIES = host-pkgconf
+ MESA3D_DEMOS_LICENSE = MIT
