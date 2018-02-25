@@ -1,18 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 21:55:28 +0100
-Subject: [Buildroot] [git commit branch/next] pkgconf: pkg-config.in: exec
- pkgconf
-Message-ID: <20180225210120.DFE2488126@busybox.osuosl.org>
+Date: Sun, 25 Feb 2018 21:55:25 +0100
+Subject: [Buildroot] [git commit branch/next] pkgconf: pkg-config.in: double
+ quote $@
+Message-ID: <20180225210120.C980588124@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc2f3a2a5924934b14a078d914ad3c4d731f3e8a
+commit: https://git.buildroot.net/buildroot/commit/?id=cc526b428bb6f1e35ce9165f94e6f2fd306a37c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Replace the shell script with pkgconf without creating a new process.
+The shell expands "$@" as "$1" "$2" "$3"... while it expands $@ as $1 $2
+$3. With the second form, we loses spaces in positional parameters.
+
+As example, the following call
+
+        pkg-config --cflags "one two" three
+
+is wrapped as
+
+        pkgconf --cflags one two three
+
+while we are expecting
+
+        pkgconf --cflags "one two" three
+
+"$@" is really useful when writing wrappers. It passes the positional
+arguments *as* they are given.
+
+Double quote $@ to prevent from splitting elements.
 
 Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -21,12 +39,12 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-index 9387931ff2..99c0add8fb 100644
+index b9ce0935cc..9387931ff2 100644
 --- a/package/pkgconf/pkg-config.in
 +++ b/package/pkgconf/pkg-config.in
 @@ -2,4 +2,4 @@
  PKGCONFDIR=$(dirname $0)
  DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
  DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
--PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
-+PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ $@
++PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
