@@ -1,31 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 22:34:38 +0100
-Subject: [Buildroot] [PATCH 2/3] package/strace: add missing libunwind
- optional dependency
-In-Reply-To: <CAAXf6LXnevwOqgTb7yV5AraDkHsauEfhJNoQr8rNgWFLQKp15Q@mail.gmail.com>
-References: <20180225183415.8362-1-romain.naour@gmail.com>
- <20180225183415.8362-2-romain.naour@gmail.com>
- <CAAXf6LXnevwOqgTb7yV5AraDkHsauEfhJNoQr8rNgWFLQKp15Q@mail.gmail.com>
-Message-ID: <20180225223438.42357172@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 25 Feb 2018 21:36:01 +0000
+Subject: [Buildroot] [Bug 10726] Current libglib2.mk creates broken libglib2
+ binary when using glibc 2.26
+In-Reply-To: <bug-10726-163@https.bugs.busybox.net/>
+References: <bug-10726-163@https.bugs.busybox.net/>
+Message-ID: <bug-10726-163-TsSpklyrKe@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=10726
 
-On Sun, 25 Feb 2018 21:28:19 +0100, Thomas De Schampheleire wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> In our local tree, I had added a config option to strace for that, but
-> perhaps that is overkill?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Are you saying that you have changes in your local tree on packages
-available in upstream Buildroot, and you did not submit such
-changes ? :-)
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=eb1a45f4c1e01fa1af7ad3dbbd6b2bade7fc958d.
+Thanks!
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
