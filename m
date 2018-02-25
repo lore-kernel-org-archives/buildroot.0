@@ -1,64 +1,78 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Sun, 25 Feb 2018 18:29:49 +0000
-Subject: [Buildroot] Drop support for Qt 5.6? [was: [RFC 1/2] qt5: bump
- latest version to 5.10.0]
-In-Reply-To: <20180225182810.GC2276@scaer>
-References: <20180211161320.8864-1-gael.portay@savoirfairelinux.com>
- <20180211161320.8864-2-gael.portay@savoirfairelinux.com>
- <1518442630960-0.post@n4.nabble.com>
- <78215947-020b-17da-27d8-89bcdfe1c859@mind.be> <20180225172619.GA2276@scaer>
- <CALoSW672Hh1KbdDRWE72JjZn4ajqM1zdFuNakGEJ3G0XM=g6hQ@mail.gmail.com>
- <20180225175247.GB2276@scaer>
- <CALoSW678nNChNVY1pJfq7BKxW4f1YfGXXdcgRW8xsYQDSO0XvA@mail.gmail.com>
- <20180225182810.GC2276@scaer>
-Message-ID: <CALoSW67Cxk=J2GDpjJ4kr7qpGe5C9Kks3mb1iqmHsVZCpsaDbw@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 25 Feb 2018 19:34:13 +0100
+Subject: [Buildroot] [PATCH 1/3] package/strace: bump to 4.21
+Message-ID: <20180225183415.8362-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 25, 2018, 1:28 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Switch to the new upstream url [1].
 
-> Nimai, All,
->
-> On 2018-02-25 18:10 +0000, Nimai Mahajan spake thusly:
-> > That's fine, but keep in mind this will never be as stable as their LTS
-> > releases, where they are constantly fixing bugs (5.9 is supposed to be
-> > supported til 2020, whereas 5.11 will come out in May and deprecate
-> 5.10).
-> > Latest branch just keeps getting new > features thrown in it without
-> fixes
-> > to existing ones.
->
-> 5.6 is supposed to be maintained for three years after being introduced,
-> that is 2016-03-16 [0], which brings us toward 2019-03-16 as well, so a
-> bit more than a year still. ;-)
->
-> [0] https://www1.qt.io/qt-news/2057 <https://www1.qt.io/qt-news/20578/>
+Use new --disable-mpers option instead of
+st_cv_m32_mpers=no and st_cv_mx32_mpers=no
 
+Restore previous mpers check behaviour (strace < 4.21) by specifying
+--enable-mpers=check. Otherwire strace enforces mpers support by
+default which require a specific compiler. See [2].
 
-Yes, also true :-)
+[1] https://github.com/strace/strace/commit/51d40516df28d03e693fd782a4167d7bcf4c6ad3
+[2] https://lists.strace.io/pipermail/strace-devel/2018-February/007924.html
 
->
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180225/e94a7f1d/attachment.html>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+Even if there are 4.21 archive file hashes provided by sourceforge, don't
+use them since we just switched to github.
+---
+ package/strace/strace.hash |  7 ++-----
+ package/strace/strace.mk   | 12 ++++++++----
+ 2 files changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 404be39788..f05df2bb5e 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,7 +1,4 @@
+-# From https://sourceforge.net/projects/strace/files/strace/4.20/
+-md5	f2271ab0fac49ebee9cbd7f3469227cb	strace-4.20.tar.xz
+-sha1	9cebc754af3434e4027a07745770892f685c0316	strace-4.20.tar.xz
+ # Locally calculated after checking signature
+-# https://sourceforge.net/projects/strace/files/strace/4.20/strace-4.20.tar.xz.asc
+-sha256	5bf3148dd17306a42566f7da17368fdd781afa147db05ea63a4ca2b50f58c523	strace-4.20.tar.xz
++# https://github.com/strace/strace/releases/download/v4.21/strace-4.21.tar.xz.asc
++sha256	5c7688db44073e94c59a5627744e5699454419824cc8166e8bcfd7ec58375c37	strace-4.21.tar.xz
+ sha256	ea7ff222f36c9df0aa2924a8f7c7d2aec3ea11e752feba4b15ec79b695b6236a	COPYING
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index ba57774e5d..e292c60f2a 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,18 +4,22 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 4.20
++STRACE_VERSION = 4.21
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+-STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
++STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = BSD-3-Clause
+ STRACE_LICENSE_FILES = COPYING
+ 
+ # strace bundle some kernel headers to build libmpers, this mixes userspace
+ # headers and kernel headers which break the build with musl.
+ # The stddef.h from gcc is used instead of the one from musl.
++# Restore previous mpers check behaviour (strace < 4.21) by specifying
++# --enable-mpers=check. Otherwire strace enforces mpers support by default
++# which require a specific compiler.
+ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-STRACE_CONF_OPTS += st_cv_m32_mpers=no \
+-	st_cv_mx32_mpers=no
++STRACE_CONF_OPTS += --disable-mpers
++else
++STRACE_CONF_OPTS += --enable-mpers=check
+ endif
+ 
+ define STRACE_REMOVE_STRACE_GRAPH
+-- 
+2.14.3
