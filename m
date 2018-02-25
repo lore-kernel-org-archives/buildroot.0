@@ -1,44 +1,86 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 25 Feb 2018 16:05:06 +0000
-Subject: [Buildroot] [Bug 10796] Cannot generate cpio image without
- selecting CONFIG_BLK_DEV_INITRD
-In-Reply-To: <bug-10796-163@https.bugs.busybox.net/>
-References: <bug-10796-163@https.bugs.busybox.net/>
-Message-ID: <bug-10796-163-HTAEZx1iQB@https.bugs.busybox.net/>
+From: Sjoerd Venema <srg.venema@gmail.com>
+Date: Sun, 25 Feb 2018 17:17:27 +0100
+Subject: [Buildroot] Building Kodi; dependencies
+In-Reply-To: <rnvamexlhk.ln2@ID-313208.user.individual.net>
+References: <CAPzckP6rcjcRLvdCfPYr5bFUv6JVg6PShaxzq0yirmR41_T3XQ@mail.gmail.com>
+ <rnvamexlhk.ln2@ID-313208.user.individual.net>
+Message-ID: <CAPzckP6ORO48KZ1b2n+vm4v4kXuds9X1TSPfQ44YJ1xKUaQ_qA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10796
+Thanks! I managed to select it :)
 
-Arnout Vandecappelle <arnout@mind.be> changed:
+On 25 February 2018 at 16:01, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
-
---- Comment #3 from Arnout Vandecappelle <arnout@mind.be> ---
-(In reply to adyke from comment #2)
-CONFIG_BLK_DEV_INITRD does not link the cpio image into the kernel. It only
-makes it possible that the bootloader passes a cpio image to the kernel. To
-link it into the kernel, the option CONFIG_INITRAMFS_SOURCE must be non-empty.
-
-Buildroot will set this option when you enable the "initial RAM filesystem
-linked into linux kernel". However, when you unset this option again, the
-CONFIG_INITRAMFS_SOURCE is *not* removed from the kernel configuration. Indeed,
-Buildroot has no way to know if this was added by Buildroot itself, or if it
-was set by the user to refer to an externally-generated initramfs. So I guess
-you are in this situation.
-
-The CONFIG_BLK_DEV_INITRD option is on in most defconfig and just has a few KB
-overhead, so it is not worth removing this from linux.mk IMO. Therefore, I'm
-marking this as WONTFIX.
-
-If you disagree, or if you see some other problem, feel free to reopen.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> Hi Sjoerd,
+>
+> Am Sun, 25 Feb 2018 11:59:05 +0100 schrieb Sjoerd Venema:
+>
+> > Coming from:
+> >
+> > comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain
+> w/
+> > C++, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
+> > depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+> > depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS\
+> > || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+> > || !BR2_HOST_GCC_AT_LEAST_4_6 \
+> > || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+> > || BR2_TOOLCHAIN_USES_MUSL \
+> > || !BR2_PACKAGE_PYTHON \
+> > || BR2_PACKAGE_PYTHON_PYC_ONLY
+> >
+> > First off, I assume the ! means a Not, so, for example  !BR2_USE_WCHAR
+> > means that BR2_USE_WCHAR must be [=n]. Correct?
+>
+> technically yes, but the dependencies you are looking at are only valid
+> for the comment telling you why Kodi can not be selected atm. To build
+> Kodi you need to enable all necessary options for the comment to
+> disappear. For example: You need a wchar-enabled toolchain.
+>
+> The positive list of Kodi dependencies can be found here:
+> https://git.buildroot.net/buildroot/tree/package/kodi/Config.in#n36
+>
+> > Secondly, can I set all these dependencies via make menuconfig? Or do I
+> > have to configure things outside of that environment?
+>
+> Yes. No. ;)
+>
+> > Now, a "catch 22" seems to be for example: BR2_TOOLCHAIN_HAS_THREADS
+> (must
+> > be false) is selected by BR2_TOOLCHAIN_USES_MUSL (must be true).
+>
+> You need a toolchains with threads, and a musl-based toolchain can not be
+> used for Kodi, only uClibc & glibc.
+>
+> Here is the list of minimal menuconfig options needed to enable Kodi for
+> x86_64 in an otherwise unaltered buildroot base directory:
+>
+> Target options, "Target Architecture", "x86_64"
+>
+> Toolchain, "Enable WCHAR support", "Enable C++ support"
+>
+> Target packages
+> - Interpreter languages and scripting, "Python", "python module format to
+>   install", ".py sources only"
+> - Graphic libraries and applications (graphic/text), "X.org X Window
+>   System"
+> - Graphic libraries and applications (graphic/text), "mesa3d", "DRI
+>   swrast driver", "OpenGL EGL"
+> - Audio and video applications, "kodi"
+>
+> Please adjust these options for your personal needs.
+>
+> Regards, Bernd
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180225/f8096919/attachment.html>
