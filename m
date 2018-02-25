@@ -1,36 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 23:14:50 +0100
-Subject: [Buildroot] [PATCH master] mbedtls: fix API compatibility
-In-Reply-To: <df116322c8e36b017055d6be9f5af3c1631fdf89.1519505340.git.baruch@tkos.co.il>
-References: <df116322c8e36b017055d6be9f5af3c1631fdf89.1519505340.git.baruch@tkos.co.il>
-Message-ID: <20180225231450.19463603@windsurf.home>
+Date: Sun, 25 Feb 2018 23:16:05 +0100
+Subject: [Buildroot] [git commit] check-bin-arch: skip /lib/modules to allow
+ 32-bit userland on 64-bit arch
+Message-ID: <20180225221607.DD6B48821B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=78ec4bd9e639616480d3e024a2bd6b2e52b4072d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 24 Feb 2018 22:49:00 +0200, Baruch Siach wrote:
-> Add upstream patch fixing API compatibility with previous releases.
-> 
-> Fixes (hiawatha):
-> http://autobuild.buildroot.net/results/ce6/ce6b4a50e6aafd06f82eaae688dd8720b982e9c2/
-> http://autobuild.buildroot.net/results/cde/cdec7ae3565d5b76a9bc50156c6244b44197534e/
-> http://autobuild.buildroot.net/results/9c1/9c1aec09c03f60bee9dc134da5a29e2671fc3b5e/
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../0001-dhm-Fix-typo-in-RFC-5114-constants.patch  | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
+The script check-bin-arch fails as follows on a config for PowerPC e6500
+(64-bit CPU) with BR2_ARCH="powerpc" (32-bit userland desired):
 
-Applied to master, thanks.
+ERROR: architecture for "/lib/modules/..../lib/libcrc32c.ko"
+            is "PowerPC64", should be "PowerPC"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This situation is perfectly acceptable: the kernel is 64-bit and so are its
+modules, even though userland is 32-bit.
+
+To keep check-bin-arch and its caller simple, just skip /lib/modules/
+entirely, like is done for /lib/firmware and some others.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/check-bin-arch | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+index 887b6613cd..f6a4569c62 100755
+--- a/support/scripts/check-bin-arch
++++ b/support/scripts/check-bin-arch
+@@ -29,6 +29,14 @@ while read f; do
+ 		continue
+ 	fi
+ 
++	# Skip kernel modules
++	# When building a 32-bit userland on 64-bit architectures, the kernel
++	# and its modules may still be 64-bit. To keep the basic
++	# check-bin-arch logic simple, just skip this directory.
++	if [[ "${f}" =~ ^/lib/modules/.* ]]; then
++		continue
++	fi
++
+ 	# Skip files in /usr/share, several packages (qemu,
+ 	# pru-software-support) legitimately install ELF binaries that
+ 	# are not for the target architecture
