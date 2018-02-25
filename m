@@ -1,60 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Feb 2018 22:27:53 +0100
-Subject: [Buildroot] Adding package libgit2
-In-Reply-To: <20180214163628.22360128@windsurf.lan>
-References: <20180214111351.4801-1-nicolas.cavallari@green-communications.fr>
- <20180214160622.789eb7e9@windsurf.lan>
- <f909d627-970f-490b-0c9f-678bb3461bc9@green-communications.fr>
- <20180214163628.22360128@windsurf.lan>
-Message-ID: <20180225212753.GG2276@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Feb 2018 22:32:16 +0100
+Subject: [Buildroot] [git commit] libglib2: don't override
+ ac_cv_func_strerror_r_char_p
+Message-ID: <20180225213219.712F4881CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicolas, Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=eb1a45f4c1e01fa1af7ad3dbbd6b2bade7fc958d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-02-14 16:36 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 14 Feb 2018 16:30:24 +0100, Nicolas Cavallari wrote:
-> > > ARCH is set to ${CMAKE_SYSTEM_PROCESSOR}, and CMAKE_SYSTEM_PROCESSOR is
-> > > explicitly passed by Buildroot in package/pkg-cmake.mk. So it should be
-> > > correct. zlib-ng CMakeLists.txt uses its ${ARCH} variable to decide
-> > > whether the x86 code should be built or not:
-> > > 
-> > > if("${ARCH}" MATCHES "x86_64" OR "${ARCH}" MATCHES "AMD64")
-> > >     set(ARCHDIR "arch/x86")
-> > >     add_definitions(-DX86_64 -DX86_NOCHECK_SSE2 -DUNALIGNED_OK -DUNROLL_LESS)
-> > >     add_feature_info(SSE2 1 "Use the SSE2 instruction set, using \"${SSE2FLAG}\"")  
-> > 
-> > I have added --trace to cmake.  There is this gem a few lines below:
-> > 
-> > else()
-> >     set(ARCHDIR "arch/x86")
-> >     add_definitions(-DX86 -DUNALIGNED_OK -DUNROLL_LESS)
-> >     add_feature_info(SSE2 1 "Support the SSE2 instruction set, using
-> > \"${SSE2FLAG}\"")
-> > endif()
-> > 
-> > So anything not arm/aarch64/x86 is treated like x86 anyway...
-> 
-> Which obviously is not going to work very well :)
-> 
-> I guess this should be fixed and/or reported to zlib-ng upstream. In
-> the mean time, either we fix it, or we disallow zlib-ng on
-> architectures other than arm/aarch64/x86.
+libglib2 recently changed to use the result of the autoconf macro to
+decide how to use strerror_r() in g_strerror() instead of embedding the
+same preprocessor condition as in glibc's strings.h (upstream commit
+c8e268bb was first included in release 2.53.4).
 
-Yes, let's limit zlib-ng to the only arch upstream supports.
+Following this change, if ac_cv_func_strerror_r_char_p is incorrectly
+set to "no", the error string is an uninitialized buffer which cannot be
+encoded as UTF-8.  The final result of this is that GLib functions that
+are expected to fill in an error pointer on failure in fact leave this
+pointing to NULL which is likely to cause a segfault in client
+applications.
 
-I'll send a patch...
+In fact the autoconf check compiles a test file but does not need to run
+it, so the test is safe when cross-compiling and returns the correct
+answer.  So remove this cached value and let the configure script figure
+it out for itself, fixing g_strerror() on glibc systems.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libglib2/libglib2.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index b13da333d8..097c980393 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -42,8 +42,6 @@ LIBGLIB2_CONF_ENV = \
+ 	jm_cv_func_nanosleep_works=yes \
+ 	gl_cv_func_working_utimes=yes \
+ 	ac_cv_func_utime_null=yes \
+-	ac_cv_have_decl_strerror_r=yes \
+-	ac_cv_func_strerror_r_char_p=no \
+ 	jm_cv_func_svid_putenv=yes \
+ 	ac_cv_func_getcwd_null=yes \
+ 	ac_cv_func_getdelim=yes \
