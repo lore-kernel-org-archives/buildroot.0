@@ -1,91 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 23:19:26 +0100
-Subject: [Buildroot] [git commit branch/next] package/htop: remove 0xe2 from
+Date: Sun, 25 Feb 2018 23:20:08 +0100
+Subject: [Buildroot] [PATH for-next] package/htop: remove 0xe2 from
  MetersPanel.c
-Message-ID: <20180225221931.3536586AE6@busybox.osuosl.org>
+In-Reply-To: <20180220222025.3202-1-romain.naour@gmail.com>
+References: <20180220222025.3202-1-romain.naour@gmail.com>
+Message-ID: <20180225232008.04986f15@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64ca9a51306d10862e3c04d7e9b1ee99557a9e4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-This non ascii character trigger an issue with MakeHeader.py.
+On Tue, 20 Feb 2018 23:20:25 +0100, Romain Naour wrote:
+> This non ascii character trigger an issue with MakeHeader.py.
+> 
+> ./scripts/MakeHeader.py MetersPanel.c
+> Traceback (most recent call last):
+>   File "./scripts/MakeHeader.py", line 32, in <module>
+>     for line in file.readlines():
+>   File "[...]/output/host/lib/python3.6/encodings/ascii.py", line 26, in decode
+>     return codecs.ascii_decode(input, self.errors)[0]
+> UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 956: ordinal not in range(128)
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/8ed/8edb78b054a265447fd0e83f67cba5f978be4ed6
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> Matt, can you test on "U16.04 Bacon" autobuilder ? I can't reproduce here.
 
-./scripts/MakeHeader.py MetersPanel.c
-Traceback (most recent call last):
-  File "./scripts/MakeHeader.py", line 32, in <module>
-    for line in file.readlines():
-  File "[...]/output/host/lib/python3.6/encodings/ascii.py", line 26, in decode
-    return codecs.ascii_decode(input, self.errors)[0]
-UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 956: ordinal not in range(128)
+I do agree with Arnout that a better fix would be nice, but in the mean
+time, I applied your patch to the next branch (after initially screwing
+up and applying it to the master branch).
 
-Fixes:
-http://autobuild.buildroot.net/results/8ed/8edb78b054a265447fd0e83f67cba5f978be4ed6
+Thanks,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...etersPanel-remove-0xe2-from-MetersPanel.c.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
-
-diff --git a/package/htop/0001-MetersPanel-remove-0xe2-from-MetersPanel.c.patch b/package/htop/0001-MetersPanel-remove-0xe2-from-MetersPanel.c.patch
-new file mode 100644
-index 0000000000..81f9d1bd97
---- /dev/null
-+++ b/package/htop/0001-MetersPanel-remove-0xe2-from-MetersPanel.c.patch
-@@ -0,0 +1,52 @@
-+From ae32d292ca641c08b6db8d2f7cfcce2a54d00835 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 20 Feb 2018 23:09:24 +0100
-+Subject: [PATCH] MetersPanel: remove 0xe2 from MetersPanel.c
-+
-+This non ascii character trigger an issue with MakeHeader.py.
-+
-+./scripts/MakeHeader.py MetersPanel.c
-+Traceback (most recent call last):
-+  File "./scripts/MakeHeader.py", line 32, in <module>
-+    for line in file.readlines():
-+  File "[...]/output/host/lib/python3.6/encodings/ascii.py", line 26, in decode
-+    return codecs.ascii_decode(input, self.errors)[0]
-+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 956: ordinal not in range(128)
-+
-+http://autobuild.buildroot.net/results/8ed/8edb78b054a265447fd0e83f67cba5f978be4ed6/build-end.log
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ MetersPanel.c | 2 +-
-+ MetersPanel.h | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/MetersPanel.c b/MetersPanel.c
-+index 3cf3e07..47296a4 100644
-+--- a/MetersPanel.c
-++++ b/MetersPanel.c
-+@@ -37,7 +37,7 @@ static const char* const MetersFunctions[] = {"Style ", "Move  ", "
-+ static const char* const MetersKeys[] = {"Space", "Enter", "  ", "Del", "F10"};
-+ static int MetersEvents[] = {' ', 13, ERR, KEY_DC, KEY_F(10)};
-+ 
-+-// We avoid UTF-8 arrows ??? ??? here as they might display full-width on Chinese
-++// We avoid UTF-8 arrows <- -> here as they might display full-width on Chinese
-+ // terminals, breaking our aligning.
-+ // In <http://unicode.org/reports/tr11/>, arrows (U+2019..U+2199) are
-+ // considered "Ambiguous characters".
-+diff --git a/MetersPanel.h b/MetersPanel.h
-+index e00169c..e80754a 100644
-+--- a/MetersPanel.h
-++++ b/MetersPanel.h
-+@@ -29,7 +29,7 @@ struct MetersPanel_ {
-+ 
-+ // Note: In code the meters are known to have bar/text/graph "Modes", but in UI
-+ // we call them "Styles".
-+-// We avoid UTF-8 arrows ??? ??? here as they might display full-width on Chinese
-++// We avoid UTF-8 arrows <- -> here as they might display full-width on Chinese
-+ // terminals, breaking our aligning.
-+ // In <http://unicode.org/reports/tr11/>, arrows (U+2019..U+2199) are
-+ // considered "Ambiguous characters".
-+-- 
-+2.14.3
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
