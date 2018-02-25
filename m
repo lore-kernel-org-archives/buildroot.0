@@ -1,53 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 20:51:33 +0100
-Subject: [Buildroot] [PATCH next v7 1/2] libkrb5: New package
-In-Reply-To: <1519124017-7510-1-git-send-email-nerv@dawncrow.de>
-References: <1519124017-7510-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <20180225205133.5a02f4ae@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Feb 2018 21:18:14 +0100
+Subject: [Buildroot] [PATCH 0/6] arch/ar: add cortex-m7, and cortex-M FPUs
+Message-ID: <cover.1519589817.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All!
 
-On Tue, 20 Feb 2018 11:53:36 +0100, Andr? Hentschel wrote:
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+This small series adds support for cortex-m7, and support for using the
+FPUs present in some cortex-M cpu, like the FPv4 on cortex-m4, or the
+FPv5 on cortex-m7.
 
-This still doesn't build for me, as I reported on a previous
-iteration, but I found out why: I have libverto installed on my host
-system, and libkrb5 tries to use it instead of the bundled one.
+It has not been runtime-tested by lack of hardware, but it can at least
+build a toolchain and busybox [0], which is basically all that we can
+expect to run on such CPUs anyway.
 
-> +LIBKRB5_VERSION_MAJOR = 1.16
-> +LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR)
-> +LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
-> +LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
-> +LIBKRB5_SUBDIR = src
-> +LIBKRB5_LICENSE = MIT
-> +LIBKRB5_LICENSE_FILES = NOTICE
-> +LIBKRB5_INSTALL_STAGING = YES
+[0] https://gitlab.com/ymorin/buildroot-ci/pipelines/17864347/builds
 
-Please add:
+Regards,
+Yann E. MORIN.
 
-LIBKRB5_CONF_OPTS = --without-system-verto
 
-here to solve this build issue.
+The following changes since commit 382fe9f9261812682eab2d35e47aa94dc554380e
 
-However, I see that it has a bunch of similar options:
+  linux: allow both in-tree and custom dts files (2018-02-25 17:19:11 +0100)
 
- --with-system-et
- --with-system-ss
- --with-system-db
 
-and it also has other options like --without-libedit and
---with-readline. You should handle all those options, at the very least
-to disable detection libedit and readline.
+are available in the git repository at:
 
-Thanks,
+  git://git.buildroot.org/~ymorin/git/buildroot.git
 
-Thomas
+for you to fetch changes up to e3cc02b38674ecfdb83d9adc32cf504c3b85cd1f
+
+  arch/arm: cortex-m7 may have a FPv5 FPU (2018-02-25 19:04:09 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      arch/arm: add cortex-m7 core
+      arch/arm: introduce generic FPU internal option
+      arch/arm: add option for FPv4 FPU
+      arch/arm: add options for FPv5 FPU
+      arch/arm: cortex-m4 may have an FPv4 FPU
+      arch/arm: cortex-m7 may have a FPv5 FPU
+
+ arch/Config.in.arm | 82 +++++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 78 insertions(+), 4 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
