@@ -1,71 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Feb 2018 16:01:47 +0100
-Subject: [Buildroot] Building Kodi; dependencies
-References: <CAPzckP6rcjcRLvdCfPYr5bFUv6JVg6PShaxzq0yirmR41_T3XQ@mail.gmail.com>
-Message-ID: <rnvamexlhk.ln2@ID-313208.user.individual.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 25 Feb 2018 15:57:27 +0000
+Subject: [Buildroot] [Bug 10806] Allow nfs-utils to use ipv6
+In-Reply-To: <bug-10806-163@https.bugs.busybox.net/>
+References: <bug-10806-163@https.bugs.busybox.net/>
+Message-ID: <bug-10806-163-CQDrNER8lh@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sjoerd,
+https://bugs.busybox.net/show_bug.cgi?id=10806
 
-Am Sun, 25 Feb 2018 11:59:05 +0100 schrieb Sjoerd Venema:
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+We decided a few years ago to no longer make ipv6 support in packages optional,
+i.e. always assume it is there. Note that even if the kernel is built without
+IPv6 support, it is possible to run executables in it that are built with IPv6
+support - but obviously no IPv6 connection will ever be made.
 
-> Coming from:
-> 
-> comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain 
-w/
-> C++, threads, wchar, dynamic library, gcc >= 4.8, host gcc >= 4.6"
-> depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-> depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS\
-> || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-> || !BR2_HOST_GCC_AT_LEAST_4_6 \
-> || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-> || BR2_TOOLCHAIN_USES_MUSL \
-> || !BR2_PACKAGE_PYTHON \
-> || BR2_PACKAGE_PYTHON_PYC_ONLY
-> 
-> First off, I assume the ! means a Not, so, for example  !BR2_USE_WCHAR
-> means that BR2_USE_WCHAR must be [=n]. Correct?
+So you can just unconditionally enable IPv6 support in nfs-utils. Except,
+apparently, nfs-utils requires libtirpc for IPv6 support, as witnessed by this
+commit:
 
-technically yes, but the dependencies you are looking at are only valid 
-for the comment telling you why Kodi can not be selected atm. To build 
-Kodi you need to enable all necessary options for the comment to 
-disappear. For example: You need a wchar-enabled toolchain.
+commit e23be36ab3a110787917db59618d9f5280457938
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Wed Apr 25 22:29:34 2012
 
-The positive list of Kodi dependencies can be found here:
-https://git.buildroot.net/buildroot/tree/package/kodi/Config.in#n36
+    nfs-utils: fix build with ipv6 after 2a10c9 (pass --enable-ipv6 to
+autotargets configure)
 
-> Secondly, can I set all these dependencies via make menuconfig? Or do I
-> have to configure things outside of that environment?
+    IPv6 support needs the TIRPC library, which we don't have in Buildroot, so
+    forcibly disable IPv6 support.
 
-Yes. No. ;)
 
-> Now, a "catch 22" seems to be for example: BR2_TOOLCHAIN_HAS_THREADS 
-(must
-> be false) is selected by BR2_TOOLCHAIN_USES_MUSL (must be true).
+Now, that's a commit from 6 years ago, so the situation may have changed.
+Therefore, please try if it is possible to build and run nfs-utils *without*
+libtirpc and *with* --enable-ipv6. If that works, just enable ipv6
+unconditionally. If it doesn't work, add the --enable/disable-ipv6 to the
+existing libtirpc condition in nfs-utils.mk. In that case, please also make a
+note in the commit message that native RPC is being deprecated so libtirpc (and
+therefore IPv6) will be enabled unconditionally in the future.
 
-You need a toolchains with threads, and a musl-based toolchain can not be 
-used for Kodi, only uClibc & glibc.
-
-Here is the list of minimal menuconfig options needed to enable Kodi for 
-x86_64 in an otherwise unaltered buildroot base directory:
-
-Target options, "Target Architecture", "x86_64"
-
-Toolchain, "Enable WCHAR support", "Enable C++ support"
-
-Target packages
-- Interpreter languages and scripting, "Python", "python module format to
-  install", ".py sources only"
-- Graphic libraries and applications (graphic/text), "X.org X Window
-  System"
-- Graphic libraries and applications (graphic/text), "mesa3d", "DRI
-  swrast driver", "OpenGL EGL"
-- Audio and video applications, "kodi"
-
-Please adjust these options for your personal needs.
-
-Regards, Bernd
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
