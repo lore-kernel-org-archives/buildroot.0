@@ -1,138 +1,121 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 25 Feb 2018 19:34:15 +0100
-Subject: [Buildroot] [PATCH 3/3] package/strace: enable demangling of C++
- symbol names in stack trace
-In-Reply-To: <20180225183415.8362-1-romain.naour@gmail.com>
-References: <20180225183415.8362-1-romain.naour@gmail.com>
-Message-ID: <20180225183415.8362-3-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Feb 2018 20:03:28 +0100
+Subject: [Buildroot] [git commit branch/next] linux: allow both in-tree
+ and custom dts files
+In-Reply-To: <20180225171345.A60E48809E@busybox.osuosl.org>
+References: <20180225171345.A60E48809E@busybox.osuosl.org>
+Message-ID: <20180225190328.GD2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a new feature of strace 4.21 but the configure check need to
-be fixed for Buildroot.
+Simon, All,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...1-configure-allow-autoreconf-from-tarball.patch | 36 ++++++++++++++++++++++
- ...0002-configure-fix-libiberty-header-check.patch | 33 ++++++++++++++++++++
- package/strace/strace.mk                           | 12 ++++++++
- 3 files changed, 81 insertions(+)
- create mode 100644 package/strace/0001-configure-allow-autoreconf-from-tarball.patch
- create mode 100644 package/strace/0002-configure-fix-libiberty-header-check.patch
+On 2018-02-25 17:19 +0100, Arnout Vandecappelle spake thusly:
+> commit: https://git.buildroot.net/buildroot/commit/?id=382fe9f9261812682eab2d35e47aa94dc554380e
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+> 
+> For some boards, for example the Raspberry Pi, it's necessary to build
+> in-tree dts files as well as custom/out of tree dts-files (dt-blob.bin).
+> The existing logic made these two options exclusive, this commit changes
+> that to allow both in-tree as well as custom sources for dts files.
 
-diff --git a/package/strace/0001-configure-allow-autoreconf-from-tarball.patch b/package/strace/0001-configure-allow-autoreconf-from-tarball.patch
-new file mode 100644
-index 0000000000..92dc7ed585
---- /dev/null
-+++ b/package/strace/0001-configure-allow-autoreconf-from-tarball.patch
-@@ -0,0 +1,36 @@
-+From b2247bbd30989c707f3cb5bbd9635c52e5c962e6 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 17 Feb 2018 13:23:25 +0100
-+Subject: [PATCH] configure: allow autoreconf from tarball
-+
-+git-version-gen copyright-year-gen file-date-gen tools
-+are missing from the strace tarball breaking autoreconf.
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ configure.ac | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 86b8a8eb..f1a47b97 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -32,12 +32,12 @@
-+ 
-+ AC_PREREQ(2.57)
-+ AC_INIT([strace],
-+-	m4_esyscmd([./git-version-gen .tarball-version]),
-++	4.21,
-+ 	[strace-devel at lists.sourceforge.net],
-+ 	[strace],
-+ 	[https://strace.io])
-+-m4_define([copyright_year], m4_esyscmd([./copyright-year-gen .year]))
-+-m4_define([manpage_date], m4_esyscmd([./file-date-gen strace.1.in]))
-++m4_define([copyright_year], 2018)
-++m4_define([manpage_date], 2018-02-11)
-+ AC_COPYRIGHT([Copyright (c) 1999-]copyright_year[ The strace developers.])
-+ AC_CONFIG_SRCDIR([strace.c])
-+ AC_CONFIG_AUX_DIR([.])
-+-- 
-+2.14.3
-+
-diff --git a/package/strace/0002-configure-fix-libiberty-header-check.patch b/package/strace/0002-configure-fix-libiberty-header-check.patch
-new file mode 100644
-index 0000000000..29bfb40ac3
---- /dev/null
-+++ b/package/strace/0002-configure-fix-libiberty-header-check.patch
-@@ -0,0 +1,33 @@
-+From 9487aac43518272074a1e1131c517b35b2529580 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 17 Feb 2018 12:38:37 +0100
-+Subject: [PATCH] configure: fix libiberty header check
-+
-+The demangle.h header check for libiberty is looking at two potential
-+file location. If one is missing the check fail.
-+
-+Since binutils package install demangle.h in
-+"STAGING_DIR/usr/include/libiberty/demangle.h", remove the wrong
-+path.
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f1a47b97..052ce971 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -922,7 +922,7 @@ use_libiberty=no
-+ AS_IF([test "x$use_libunwind" = xyes && test "x$with_libiberty" != xno],
-+       [saved_CPPFLAGS="$CPPFLAGS"
-+        CPPFLAGS="$CPPFLAGS $libiberty_CPPFLAGS"
-+-       AC_CHECK_HEADERS([demangle.h libiberty/demangle.h],
-++       AC_CHECK_HEADERS([libiberty/demangle.h],
-+ 	 [saved_LDFLAGS="$LDFLAGS"
-+ 	  LDFLAGS="$LDFLAGS $libiberty_LDFLAGS"
-+ 	  AC_CHECK_LIB([iberty],[cplus_demangle],
-+-- 
-+2.14.3
-+
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 9c1fab3871..f55755429d 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -10,6 +10,10 @@ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSI
- STRACE_LICENSE = BSD-3-Clause
- STRACE_LICENSE_FILES = COPYING
- 
-+# 0001-configure-allow-autoreconf-from-tarball.patch
-+# 0002-configure-fix-libiberty-header-check.patch
-+STRACE_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- STRACE_DEPENDENCIES += libunwind
- STRACE_CONF_OPTS += --with-libunwind
-@@ -17,6 +21,14 @@ else
- STRACE_CONF_OPTS += --without-libunwind
- endif
- 
-+# Demangling symbols in stack trace needs libunwind and libiberty.
-+ifeq ($(BR2_PACKAGE_BINUTILS)$(BR2_PACKAGE_LIBUNWIND),yy)
-+STRACE_DEPENDENCIES += binutils
-+STRACE_CONF_OPTS += --with-libiberty=$(STAGING_DIR)/usr
-+else
-+STRACE_CONF_OPTS += --without-libiberty
-+endif
-+
- # strace bundle some kernel headers to build libmpers, this mixes userspace
- # headers and kernel headers which break the build with musl.
- # The stddef.h from gcc is used instead of the one from musl.
+This breaks all our cufrrent defconfig files that build a DTB, like
+for example configs/stm32f429_disco_defconfig, because the default
+that was implied by a choice is no longer true, so we need to add
+BR2_LINUX_KERNEL_USE_INTREE_DTS=y to those defconfig files.
+
+Care to send an update, please? ;-)
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+> [Arnout: re-wrap help, add extra empty line, change = into +=]
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  linux/Config.in | 19 +++++++------------
+>  linux/linux.mk  |  8 +++++---
+>  2 files changed, 12 insertions(+), 15 deletions(-)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 1bc8171291..80e85b9e8b 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -363,10 +363,6 @@ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
+>  config BR2_LINUX_KERNEL_APPENDED_DTB
+>  	bool
+>  
+> -choice
+> -	prompt "Device tree source"
+> -	default BR2_LINUX_KERNEL_USE_INTREE_DTS
+> -
+>  config BR2_LINUX_KERNEL_USE_INTREE_DTS
+>  	bool "Use a device tree present in the kernel"
+>  	help
+> @@ -374,14 +370,6 @@ config BR2_LINUX_KERNEL_USE_INTREE_DTS
+>  	  the kernel sources. The dts files are located
+>  	  in the arch/<arch>/boot/dts folder.
+>  
+> -config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> -	bool "Use a custom device tree file"
+> -	help
+> -	  Use a custom device tree file, i.e, a device
+> -	  tree file that does not belong to the kernel
+> -	  source tree.
+> -endchoice
+> -
+>  config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+>  	string "Device Tree Source file names"
+>  	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
+> @@ -390,6 +378,13 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+>  	  the trailing .dts. You can provide a list of
+>  	  dts files to build, separated by spaces.
+>  
+> +config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> +	bool "Use a custom device tree file"
+> +	help
+> +	  Use a custom device tree file, i.e, a device
+> +	  tree file that does not belong to the kernel
+> +	  source tree.
+> +
+>  config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+>  	string "Device Tree Source file paths"
+>  	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 776304e730..ab940e7305 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -119,13 +119,15 @@ endif
+>  LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+>  
+>  ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
+> -KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+> -else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+> +KERNEL_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+> +endif
+> +
+> +ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+>  # We keep only the .dts files, so that the user can specify both .dts
+>  # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+>  # copied to arch/<arch>/boot/dts, but only the .dts files will
+>  # actually be generated as .dtb.
+> -KERNEL_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+> +KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+>  endif
+>  
+>  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
