@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 21:54:47 +0100
-Subject: [Buildroot] [git commit branch/next] liblo: disable werror to fix
- build issues
-Message-ID: <20180225205448.A0E9088101@busybox.osuosl.org>
+Date: Sun, 25 Feb 2018 21:54:57 +0100
+Subject: [Buildroot] [git commit] website: update package number text
+Message-ID: <20180225205502.C28BD88110@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2759ba039790cd15892bafbd140b34c1b63e299e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=c9c2ed71a0872e00c7e0043e74e28a37efc73cd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pass the --disable-werror option to remove -Werror, and therefore
-avoid a number of build failures.
+We have quite a bit more than "hundreds of packages" nowadays:
 
-Fixes:
+find package -name \*.mk | wc -l
+2285
 
-  http://autobuild.buildroot.net/results/61ab7e23d2ef62f055efc74a998e3c108a3cdb43
+So adjust the text to say 'several thousand' instead.
 
-Signed-off-by: Alex Baldwin <alexbaldwinmusic@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liblo/liblo.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ docs/website/index.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
-index 14b0527966..c7d163dae2 100644
---- a/package/liblo/liblo.mk
-+++ b/package/liblo/liblo.mk
-@@ -12,6 +12,9 @@ LIBLO_LICENSE_FILES = COPYING
- LIBLO_INSTALL_STAGING = YES
+diff --git a/docs/website/index.html b/docs/website/index.html
+index f0d0175bb7..300adbb83d 100644
+--- a/docs/website/index.html
++++ b/docs/website/index.html
+@@ -78,7 +78,7 @@
+ 	</div>
+       </div>
  
- # IPv6 support broken, issue known upstream
--LIBLO_CONF_OPTS = --disable-ipv6
-+# werror - not needed for release.
-+LIBLO_CONF_OPTS += \
-+	--disable-ipv6 \
-+	--disable-werror
+-      <h4>Supports hundreds of packages</h4>
++      <h4>Supports several thousand packages</h4>
+       <p>X.org stack, Gtk3, Qt 5, GStreamer, Webkit, Kodi, a large number of network-related and system-related utilities are supported.</p>
  
- $(eval $(autotools-package))
+     </div><!--/col-lg-4 -->
