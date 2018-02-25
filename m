@@ -1,75 +1,53 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 25 Feb 2018 23:00:11 +0100
-Subject: [Buildroot] Buildroot 2018.02-rc1 released
-In-Reply-To: <CAAXf6LWR-NbdcsJe+H4tMgDvBmVqqBn44y7S5qvuaoaeXy0R4g@mail.gmail.com>
-References: <87h8qvv2kz.fsf@dell.be.48ers.dk>
- <CAAXf6LWR-NbdcsJe+H4tMgDvBmVqqBn44y7S5qvuaoaeXy0R4g@mail.gmail.com>
-Message-ID: <CAAXf6LU6ANbU7J7v=gm8cqkxcj-Pwt6Fauy1Y_upEzbgd3e0Uw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Feb 2018 23:10:43 +0100
+Subject: [Buildroot] [PATCH] package/zlib: zlib-ng only available on some
+ archs
+Message-ID: <20180225221043.7517-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-02-25 22:45 GMT+01:00 Thomas De Schampheleire <patrickdepinguin@gmail.com>:
-> Hi,
->
-> 2018-02-05 17:11 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
->> Hi,
->>
->> Buildroot 2018.02-rc1 is released - Go download it at:
->>
->> http://buildroot.net/downloads/buildroot-2018.02-rc1.tar.gz
->>
->> or
->>
->> http://buildroot.net/downloads/buildroot-2018.02-rc1.tar.bz2
->>
->> Or get it from Git:
->>
->> git://git.buildroot.net/buildroot
->>
->> Please give it a spin and report any problems to the mailing list or
->> bug tracker.
->>
->
->
-> While I haven't been able to do much target testing yet, I have
-> successfully merged 2018.02-rc1 with our local tree, and get
-> successful compilation of all our defconfigs.
-> Most of the issues I encountered were due to local (non-upstreamed)
-> changes conflicting with upstream changes. For the rest I have sent
-> patches.
-> For the release notes I have no special suggestions. All relevant
-> changes were already listed in the CHANGES file.
->
-> Below I am listing the patches that have not yet been merged, with
-> some analysis about their urgency/risk.
->
-> - http://patchwork.ozlabs.org/patch/869757/
-> core: rename FOO_BASE_NAME to FOO_BASENAME to avoid clashes
-> --> this is actually a bug fix, relevant if you enable packages
-> alljoyn-base, alljoyn-tcl-base or perl-xml-sax-base. The patch is not
-> more urgent than before, but I would think it should at some point be
-> part of the 2018.02 long-term series, either from the start or if you
-> prefer in a dot release.
->
-> - http://patchwork.ozlabs.org/project/buildroot/list/?series=29376
-> uboot: better fix for host-dtc influence
-> --> I bump into this issue with a u-boot tree provided by Cavium
-> Networks. On mainline U-boot it seems this problem is not present. The
-> patch has not been reviewed yet, so perhaps it is too risky to include
-> in 2018.02 from the start, but should be deferred to a dot release?
+Upstream has code only for those architectures, with no fallback generic
+code, so we must restrict zlib-ng to only those four archs...
 
-It seems ThomasP and I had a race condition and this series is now
-merged in master... Thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
->
-> - http://patchwork.ozlabs.org/patch/875483/
-> check-bin-arch: skip /lib/modules to allow 32-bit userland on 64-bit arch
-> --> this is a small patch with no real risk. I would suggest to still
-> apply it for 2018.02.
->
->
-> Best regards,
-> Thomas
+---
+Note: I was not sure if the big-endian variants for arm and Aarch64 are
+supported or not, so to be safe, we supopse they are not. Interested
+parties can send further patches to improve the situation.
+---
+ package/zlib/Config.in | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/zlib/Config.in b/package/zlib/Config.in
+index 87abc2bdd5..40b2e6e0cf 100644
+--- a/package/zlib/Config.in
++++ b/package/zlib/Config.in
+@@ -1,3 +1,10 @@
++config BR2_PACKAGE_ZLIB_NG_ARCH_SUPPOPRT
++	bool
++	default y if BR2_arm
++	default y if BR2_aarch64
++	default y if BR2_i386
++	default y if BR2_x86_64
++
+ config BR2_PACKAGE_ZLIB
+ 	bool "zlib support"
+ 	help
+@@ -22,6 +29,7 @@ config BR2_PACKAGE_LIBZLIB
+ 
+ config BR2_PACKAGE_ZLIB_NG
+ 	bool "zlib-ng"
++	depends on BR2_PACKAGE_ZLIB_NG_ARCH_SUPPOPRT
+ 	select BR2_PACKAGE_HAS_ZLIB
+ 	help
+ 	  Zlib replacement with optimizations for
+-- 
+2.14.1
