@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 25 Feb 2018 21:54:47 +0100
-Subject: [Buildroot] [git commit branch/next] liblo: link with libatomic
- when available
-Message-ID: <20180225205448.B715C88101@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] liblo: disable werror to fix
+ build issues
+Message-ID: <20180225205448.A0E9088101@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e44ae2afe7f39240ce5c17a104f73f3b4e492b64
+commit: https://git.buildroot.net/buildroot/commit/?id=2759ba039790cd15892bafbd140b34c1b63e299e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-liblo uses atomic builtins that are only available inside libatomic on
-some architectures, so link with it when available.
+Pass the --disable-werror option to remove -Werror, and therefore
+avoid a number of build failures.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/c8bed3a3fa7d2b2258f573cbfcb01af07419e0bf/
+  http://autobuild.buildroot.net/results/61ab7e23d2ef62f055efc74a998e3c108a3cdb43
 
 Signed-off-by: Alex Baldwin <alexbaldwinmusic@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liblo/liblo.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/liblo/liblo.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
-index c7d163dae2..7845c68ff2 100644
+index 14b0527966..c7d163dae2 100644
 --- a/package/liblo/liblo.mk
 +++ b/package/liblo/liblo.mk
-@@ -17,4 +17,10 @@ LIBLO_CONF_OPTS += \
- 	--disable-ipv6 \
- 	--disable-werror
+@@ -12,6 +12,9 @@ LIBLO_LICENSE_FILES = COPYING
+ LIBLO_INSTALL_STAGING = YES
  
-+# Liblo uses atomic builtins, so we need to link with libatomic for
-+# the architectures who explicitly need libatomic.
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBLO_CONF_ENV += LIBS="-latomic"
-+endif
-+
+ # IPv6 support broken, issue known upstream
+-LIBLO_CONF_OPTS = --disable-ipv6
++# werror - not needed for release.
++LIBLO_CONF_OPTS += \
++	--disable-ipv6 \
++	--disable-werror
+ 
  $(eval $(autotools-package))
