@@ -1,35 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Feb 2018 20:49:40 +0100
-Subject: [Buildroot] [git commit] fs/cpio/init: preserve arguments
-Message-ID: <20180226195243.37388882B6@busybox.osuosl.org>
+Date: Mon, 26 Feb 2018 20:54:07 +0100
+Subject: [Buildroot] [PATCH 1/2] scanpypi: fix Py2/3 conversion leftover
+In-Reply-To: <20180226130118.3621-1-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Mon, 26 Feb 2018 14:01:17
+ +0100")
+References: <20180226130118.3621-1-yegorslists@googlemail.com>
+Message-ID: <87y3jfr0gw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fa524144bd2019f98159f21802de08be7b5bea0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Use "$@" instead of $* to preserve arguments containing spaces.
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Use urlparse from six package.
 
-The shell expands "$@" as "$1" "$2" "$3"... while it expands $@ as $1 $2
-$3. With the second form, we loses spaces in positional parameters.
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- fs/cpio/init | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to next, thanks.
 
-diff --git a/fs/cpio/init b/fs/cpio/init
-index a275482177..dbe09ac68e 100755
---- a/fs/cpio/init
-+++ b/fs/cpio/init
-@@ -4,4 +4,4 @@
- exec 0</dev/console
- exec 1>/dev/console
- exec 2>/dev/console
--exec /sbin/init $*
-+exec /sbin/init "$@"
+-- 
+Bye, Peter Korsgaard
