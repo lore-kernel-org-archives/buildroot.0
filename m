@@ -1,38 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Feb 2018 22:18:14 +0100
-Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: bump version
-Message-ID: <20180305200718.18CCE81EDB@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Feb 2018 20:54:00 +0100
+Subject: [Buildroot] [git commit] scanpypi: fix Py2/3 conversion leftover
+Message-ID: <20180305200718.A7A3F8106A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14b7b8ac50eaef8b09920c75d5dcfc196764b6db
+commit: https://git.buildroot.net/buildroot/commit/?id=cfafcfa9af4ee04c563d3c682d2001a8516a866c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For 4.16 support.
+Use urlparse from six package.
 
-git shortlog --invert-grep --grep travis --no-merges e752ddc8c4b9f2b9b9c6d193e2ba354caf8707f5..
-Giulio Benetti (1):
-      mali: Fix build in 4.16
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 2 +-
+ utils/scanpypi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index cde76e2655..24e759aaa7 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_MALI_MAINLINE_DRIVER_VERSION = e752ddc8c4b9f2b9b9c6d193e2ba354caf8707f5
-+SUNXI_MALI_MAINLINE_DRIVER_VERSION = 94ccbc8924c12a818d61d36a4b389b74a89fde3c
- SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
- SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
- 
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 12bfc24e10..1720c0c051 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -188,7 +188,7 @@ class BuildrootPackage():
+                 'md5_digest': None}]
+             # In this case, we can't get the name of the downloaded file
+             # from the pypi api, so we need to find it, this should work
+-            urlpath = urllib2.urlparse.urlparse(
++            urlpath = six.moves.urllib.parse.urlparse(
+                 self.metadata['info']['download_url']).path
+             # urlparse().path give something like
+             # /path/to/file-version.tar.gz
