@@ -1,58 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Feb 2018 15:06:20 +0100
-Subject: [Buildroot] Analysis of build results for 2018-02-25
-In-Reply-To: <20180226140029.45325514@windsurf.lan> (Thomas Petazzoni's
- message of "Mon, 26 Feb 2018 14:00:29 +0100")
-References: <20180226070010.28C8620727@mail.bootlin.com>
- <20180226113319.7e3bcf6b@windsurf.lan>
- <87fu5nsyrg.fsf@dell.be.48ers.dk>
- <20180226140029.45325514@windsurf.lan>
-Message-ID: <87bmgbsv4z.fsf@dell.be.48ers.dk>
+From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Mon, 26 Feb 2018 15:08:49 +0100
+Subject: [Buildroot] qt5 (5.9.3): custom app fails to build: multiple
+ definition of `__bss_start'
+Message-ID: <6c0e8f87-d704-c3cc-0866-a32ba36e603c@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello,
 
-Hi,
+When I try to build my Qt application, I got the following error:
 
- >> > I guess this is fixed by the old patches submitted by Bernd, which are
- >> > still in patchwork. I'm still not super happy about these patches,
- >> > though (as I already expressed as a reply to those patches).  
- >> 
- >> Agreed, but what are the alternatives? Make the package unavailable for
- >> x86 or drop it completely, as it is afaik dead upstream.
+/home/sszy/development/buildroot-git/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5QuickTemplates2.so.5:(*IND*+0x0):
+multiple definition of `_edata'
+/home/sszy/development/buildroot-git/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5QuickTemplates2.so.5:(*IND*+0x0):
+multiple definition of `__bss_start'
+collect2: error: ld returned 1 exit status
 
- > mplayer upstream is dead ? If that is the case, then indeed we should
- > just take those patches as-is.
+I get a similar issue with the wearable demo, but only if I copy the
+project outside the qt sources.
 
-I haven't followed development in details, but the latest mplayer
-release is more than 2 years old and several forks exists (E.G. mpv).
+After some time looking on Google [1] [2] [3], I found out that it seems
+to be an issue with Binutils 2.28, which is the one used by the current
+ARM Linaro toolchain (Linaro ARM 2017.11) available in Buildroot.
 
+A workaround is to add "QMAKE_LFLAGS += -fuse-ld=gold" to the .pro files.
 
- >> > tools/qtextboundaryfinder.cpp:444:1: internal compiler error: in
- >> > validate_condition_mode, at config/rs6000/rs6000.c:18074  
- >> 
- >> > Someone to test this with newer gcc versions ?  
- >> 
- >> Or deprecate qt4?
+My defconfig is:
 
- > Just because it's broken on powerpc?
+BR2_arm=y
+BR2_cortex_a7=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_DL_DIR="/home/sszy/development/buildroot-download"
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+BR2_PACKAGE_GDB=y
+BR2_PACKAGE_GDB_DEBUGGER=y
+BR2_PACKAGE_BITSTREAM_VERA=y
+BR2_PACKAGE_CANTARELL=y
+BR2_PACKAGE_DEJAVU=y
+BR2_PACKAGE_FONT_AWESOME=y
+BR2_PACKAGE_LIBERATION=y
+BR2_PACKAGE_FBV=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5BASE_WIDGETS=y
+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="linuxfb"
+BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+BR2_PACKAGE_QT5BASE_HARFBUZZ=y
+BR2_PACKAGE_QT5BASE_GIF=y
+BR2_PACKAGE_QT5BASE_JPEG=y
+BR2_PACKAGE_QT5BASE_PNG=y
+BR2_PACKAGE_QT5BASE_ICU=y
+BR2_PACKAGE_QT5BASE_TSLIB=y
+BR2_PACKAGE_QT5QUICKCONTROLS=y
+BR2_PACKAGE_QT5QUICKCONTROLS2=y
+BR2_PACKAGE_QT5SERIALBUS=y
+BR2_PACKAGE_QT5VIRTUALKEYBOARD=y
+BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING=y
+BR2_PACKAGE_EVTEST=y
+BR2_PACKAGE_PCIUTILS=y
+BR2_PACKAGE_LIBDRM=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+BR2_PACKAGE_HOST_AESPIPE=y
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
 
-Well, mainly because it is no longer maintained upstream. Even Debian is
-removing Qt4:
+Does anyone has the same issue or can reproduce it ?
+Do you consider this as a bug ? If so, should we disable gold when
+building Qt ?
 
-https://wiki.debian.org/Qt4Removal
+[1] https://bugreports.qt.io/browse/QTBUG-65071
+[2] https://bugreports.qt.io/browse/QTBUG-63083
+[3] https://sourceware.org/bugzilla/show_bug.cgi?id=21074
 
- >> Agreed, considering how close we are getting to 2018.02.
-
- > We also have the issue that systemd is currently broken anyway (see the
- > report from J?r?my Rosen, the attempt to fix it from Jan and Romain). I
- > don't think we can release until this problem is resolved.
-
-Agreed!
+Best regards,
 
 -- 
-Bye, Peter Korsgaard
+S?bastien Szymanski
+Software engineer, Armadeus Systems
