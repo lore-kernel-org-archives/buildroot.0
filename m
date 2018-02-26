@@ -1,133 +1,80 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 26 Feb 2018 00:20:54 +0100
-Subject: [Buildroot] [PATCH 1/1] linux: allow both in-tree and custom
- dts files
-In-Reply-To: <20180221195316.8496-1-simon.vanderveldt@gmail.com>
-References: <20180221195316.8496-1-simon.vanderveldt@gmail.com>
-Message-ID: <37664d3f-0c64-4120-7c89-e11a70a45705@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 25 Feb 2018 21:47:48 -0300
+Subject: [Buildroot] [PATCH next v2 3/5] support/scripts/pkg-stats-new:
+ add current version information
+References: <20180221221342.15683-4-thomas.petazzoni@bootlin.com>
+Message-ID: <5a9359348b151_fe2161c02836544@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Simon,
+Hello,
 
- Thank you for your contribution.
+On Wed, Feb 21, 2018 at 07:13 PM, Thomas Petazzoni wrote:
 
-On 21-02-18 20:53, Simon van der Veldt wrote:
-> For some boards, for example the Raspberry Pi, it's necessary to build in-tree dts files as well
-> as custom/out of tree dts-files (dt-blob.bin).
-
- Indeed, this makes a lot of sense, and will make more sense when overlays
-become commonplace.
-
- I have applied to next, with a few changes, as noted below.
-
-
-> The existing logic made these two options exclusive, this commit changes that to allow both
-> in-tree as well as custom sources for dts files.
-
- Please wrap the commit message at 72 columns.
-
-> 
-> Signed-off-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
-> ---
->  linux/Config.in | 19 +++++++------------
->  linux/linux.mk  |  5 +++--
->  2 files changed, 10 insertions(+), 14 deletions(-)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 0e1e4c287b..38b0334ed7 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -363,10 +363,6 @@ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
->  config BR2_LINUX_KERNEL_APPENDED_DTB
->  	bool
+[snip]
+> @@ -187,12 +189,33 @@ def add_pkg_make_info(packages):
 >  
-> -choice
-> -	prompt "Device tree source"
-> -	default BR2_LINUX_KERNEL_USE_INTREE_DTS
-> -
->  config BR2_LINUX_KERNEL_USE_INTREE_DTS
->  	bool "Use a device tree present in the kernel"
->  	help
-> @@ -374,14 +370,6 @@ config BR2_LINUX_KERNEL_USE_INTREE_DTS
->  	  the kernel sources. The dts files are located
->  	  in the arch/<arch>/boot/dts folder.
+>          license_files.append(pkgvar)
 >  
-> -config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-> -	bool "Use a custom device tree file"
-> -	help
-> -	  Use a custom device tree file, i.e, a device
-> -	  tree file that does not belong to the kernel
-> -	  source tree.
-> -endchoice
-> -
->  config BR2_LINUX_KERNEL_INTREE_DTS_NAME
->  	string "Device Tree Source file names"
->  	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
-> @@ -390,6 +378,13 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
->  	  the trailing .dts. You can provide a list of
->  	  dts files to build, separated by spaces.
->  
-> +config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-> +	bool "Use a custom device tree file"
-> +	help
-> +	  Use a custom device tree file, i.e, a device
-> +	  tree file that does not belong to the kernel
-> +	  source tree.
+> +    # Version
+> +    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
+> +                                 "-s", "printvars", "VARS=%_VERSION"])
+> +    for l in o.splitlines():
+> +        # Get variable name and value
+> +        pkgvar, value = l.split("=")
+> +
+> +        # If present, strip HOST_ from variable name
+> +        if pkgvar.startswith("HOST_"):
+> +            pkgvar = pkgvar[5:]
 
- I think that his option and BR2_LINUX_KERNEL_USE_INTREE_DTS are now redundant.
-Indeed, we can just check if the string is non-empty. That said, it's better to
-do this as a separate patch, and anyway there is no agreement between Buildroot
-developers whether it's better to have an explicit boolean Kconfig variable or
-whether to use the non-emptiness.
+The output of printvars is sorted, so this makes the 'versions' dict to
+contain at the very end:
+ 1) the target version when there is no host version
+ 2) the host version for packages alphabetically before hostapd
+ 3) the target version for packages alphabetically after hplip
+ 4) the host version when there is no target version
 
- I've also been thinking about the possibility to have just a single string
-option with all dts'es, but that would be complicated for no real gain.
+The inconsistency between 2 and 3 is not a problem right now because all
+packages that have host and target versions use the same versions for both.
+Maybe it will never be a problem?
+
+I hope Yann can help us here (I added to CC).
+
+The case 4 seems to serve a single package: lpc3250loader
+We have other packages that are host-only, i.e. vboot-utils, they set _VERSION,
+not HOST.*_VERSION.
+Maybe it is something to fix in the package?
+If yes, you could just ignore the entries starting with HOST_.
 
 > +
->  config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
->  	string "Device Tree Source file paths"
->  	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 5300b9cfc5..58a38aa0e0 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -120,12 +120,13 @@ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-d
+> +        if pkgvar.endswith("_DL_VERSION"):
+> +            continue
+> +        if pkgvar.startswith("HOST_"):
+> +            pkgvar = pkgvar[5:]
+> +
+> +        # Strip _VERSION
+> +        pkgvar = pkgvar[:-8]
+> +
+> +        versions[pkgvar] = value
+[snip]
+> @@ -387,6 +410,9 @@ def dump_html_pkg(f, pkg):
+>      f.write("  <td class=\"%s\">%s</td>\n" %
+>              (" ".join(td_class), boolean_str(pkg.has_hash)))
 >  
->  ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
->  KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+> +    # Current version
+> +    f.write("  <td class=\"centered\">%s</td>\n" % pkg.current_version)
 
- I've changed this into +=, so it can be safely moved around without overwriting
-the assignment below.
+This column shows raw sha1 for git packages.
+Wouldn't be visually better to show only the first, say 20, characters?
+At the end, it's a matter of option.
 
-> -else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
-> +endif
+If more people have the same opinion you could cut the string after checking
+with a regexp for 40 or 39 (see sunxi-mali) hexa digits.
 
- I've added an empty line here since the conditions are now really separate.
+Anyway it can be done later.
 
-
- Regards,
- Arnout
-
-> +ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
->  # We keep only the .dts files, so that the user can specify both .dts
->  # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
->  # copied to arch/<arch>/boot/dts, but only the .dts files will
->  # actually be generated as .dtb.
-> -KERNEL_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
-> +KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
->  endif
->  
->  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards,
+Ricardo
