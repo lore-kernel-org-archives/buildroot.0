@@ -1,68 +1,51 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Mon, 26 Feb 2018 15:45:35 -0500
-Subject: [Buildroot] Drop support for Qt 5.6? [was: [RFC 1/2] qt5: bump
- latest version to 5.10.0]
-In-Reply-To: <CALoSW65=FRNLPyPW0iKg6qo6QCB+-kZQi-paaErr=82DBuKjng@mail.gmail.com>
-References: <20180211161320.8864-1-gael.portay@savoirfairelinux.com>
- <20180211161320.8864-2-gael.portay@savoirfairelinux.com>
- <1518442630960-0.post@n4.nabble.com>
- <78215947-020b-17da-27d8-89bcdfe1c859@mind.be> <20180225172619.GA2276@scaer>
- <CALoSW672Hh1KbdDRWE72JjZn4ajqM1zdFuNakGEJ3G0XM=g6hQ@mail.gmail.com>
- <20180225175247.GB2276@scaer>
- <CALoSW678nNChNVY1pJfq7BKxW4f1YfGXXdcgRW8xsYQDSO0XvA@mail.gmail.com>
- <20180225182810.GC2276@scaer> <87woz0rwi2.fsf@dell.be.48ers.dk>
- <CALoSW65ULMaHGSw6_rF0WptF_uw-hEAo-LHwO9dcj2T5t8L6ZQ@mail.gmail.com>
- <87sh9orlqv.fsf@dell.be.48ers.dk>
- <CALoSW65=FRNLPyPW0iKg6qo6QCB+-kZQi-paaErr=82DBuKjng@mail.gmail.com>
-Message-ID: <CALoSW64eQjZXZPXdt=WP2aRTDo4qU8xBACLqMoDummOq11CDdg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Feb 2018 23:06:02 +0100
+Subject: [Buildroot] [git commit branch/next] linux: allow both in-tree
+ and custom dts files
+In-Reply-To: <87606ktbl1.fsf@dell.be.48ers.dk>
+References: <20180225171345.A60E48809E@busybox.osuosl.org>
+ <20180225190328.GD2276@scaer> <87606ktbl1.fsf@dell.be.48ers.dk>
+Message-ID: <20180226220602.GA2678@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 26, 2018 at 7:17 AM, Nimai Mahajan <nimaim@gmail.com> wrote:
+On 2018-02-26 09:11 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > Simon, All,
+>  > On 2018-02-25 17:19 +0100, Arnout Vandecappelle spake thusly:
+>  >> commit: https://git.buildroot.net/buildroot/commit/?id=382fe9f9261812682eab2d35e47aa94dc554380e
+>  >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>  >> 
+>  >> For some boards, for example the Raspberry Pi, it's necessary to build
+>  >> in-tree dts files as well as custom/out of tree dts-files (dt-blob.bin).
+>  >> The existing logic made these two options exclusive, this commit changes
+>  >> that to allow both in-tree as well as custom sources for dts files.
+> 
+>  > This breaks all our cufrrent defconfig files that build a DTB, like
+>  > for example configs/stm32f429_disco_defconfig, because the default
+>  > that was implied by a choice is no longer true, so we need to add
+>  > BR2_LINUX_KERNEL_USE_INTREE_DTS=y to those defconfig files.
+> 
+> That still doesn't fix it for any external defconfig. Adding a 'default
+> y' to BR2_LINUX_KERNEL_USE_INTREE_DTS will likewise break it for users
+> of BR2_LINUX_KERNEL_USE_CUSTOM_DTS. Perhaps we can change the logic to
+> look for nonempty BR2_LINUX_KERNEL_INTREE_DTS_NAME /
+> BR2_LINUX_KERNEL_CUSTOM_DTS_PATH variables?
 
->
->
-> On Mon, Feb 26, 2018, 7:14 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
->> >>>>> "Nimai" == Nimai Mahajan <nimaim@gmail.com> writes:
->>
->> Hi,
->>
->>
->>  >> Correct, so this IMHO means we need to move to 5.9 for the LTS version
->>  >> by the time we release Buildroot 2019.02, unless something changes -
->> But
->>  >> until then I would prefer to keep 5.6.
->>
->>  > Sounds good. People that require this version in the future can simply
->>  > patch/port this package. At the very least, we should track the latest
->>  > 5.9.x for BR 2018.02 LTS then (as it seems that release will include
->> 5.6.x
->>  > and 5.9.x). I believe that is currently 5.9.4, with 5.9.5 coming in
->> March.
->>  > Their patch version updates contain hundreds of bug fixes. Thanks.
->>
->> Indeed. Care to send a patch bumping the 5.9 version to 5.9.4 for master?
->>
->
-> I can take a look, though I can only really test on x86 due to lack of
-> resources/time. Ill have to see what patches were upstreamed first. Stay
-> tuned.
->
+As the patch that I sent does, maybe?
+    https://patchwork.ozlabs.org/patch/878006/
 
-I actually won't get a chance to work on this until I get some things
-finished at work the next few weeks. If someone else wants to take a stab
-at sending a patch to upgrade to 5.9.4 before BR 2018.02 comes out, please
-do so!
+Cordialement,
+Yann E. MORIN.
 
->
->> --
->> Bye, Peter Korsgaard
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180226/f892a830/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
