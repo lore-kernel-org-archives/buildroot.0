@@ -1,39 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 22:22:14 +0100
-Subject: [Buildroot] [git commit] bind: use BIND_PKGDIR vairable
-Message-ID: <20180305200718.DE77281199@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Feb 2018 20:55:19 +0100
+Subject: [Buildroot] [git commit] scanpypi: fix licence detection handling
+ for unknown licences
+Message-ID: <20180305200718.C13BC8106A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=716cfa6744b542a25a969088c73ad66dffbf6fcf
+commit: https://git.buildroot.net/buildroot/commit/?id=c46f72b61e4dc989f520271bc98f7b15015fcdcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use the BIND_PKGDIR variable instead of package/bind.
+Check for match object not being None.
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ utils/scanpypi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index bec902079c..392ef321c2 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -93,11 +93,11 @@ endef
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 1720c0c051..14ee87784a 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -436,7 +436,7 @@ class BuildrootPackage():
+             for license_file in license_files:
+                 with open(license_file) as lic_file:
+                     match = liclookup.match(lic_file.read())
+-                if match.confidence >= 90.0:
++                if match is not None and match.confidence >= 90.0:
+                     license_names.append(match.license.id)
  
- ifeq ($(BR2_PACKAGE_BIND_SERVER),y)
- define BIND_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/bind/S81named \
-+	$(INSTALL) -m 0755 -D $(BIND_PKGDIR)/S81named \
- 		$(TARGET_DIR)/etc/init.d/S81named
- endef
- define BIND_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/bind/named.service \
-+	$(INSTALL) -D -m 644 $(BIND_PKGDIR)/named.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/named.service
- 
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+             if len(license_names) > 0:
