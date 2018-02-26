@@ -1,56 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Feb 2018 21:34:29 +0100
-Subject: [Buildroot] [PATCH 2/2] php: disable on configurations using
- BR2_BINFMT_FLAT
-In-Reply-To: <20180226203429.25294-1-thomas.petazzoni@bootlin.com>
-References: <20180226203429.25294-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180226203429.25294-2-thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Feb 2018 21:34:28 +0100
+Subject: [Buildroot] [PATCH 1/2] php: add patch to fix build on static-only
+ systems
+Message-ID: <20180226203429.25294-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_BINFMT_FLAT configurations require the use of elf2flt. However,
-PHP uses -export-dynamic which breaks badly with elf2flt. Even a
-simple program fails to build:
+This commit adds a patch to PHP to fix the build on static-only
+system, a regression introduced in PHP recently.
 
-$ ./output/host/bin/arm-linux-gcc -Wl,-export-dynamic -o toto toto.c
-/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: section .junk LMA [0000000000000000,0000000000000027] overlaps section .text LMA [0000000000000000,0000000000006d07]
+Fixes:
 
--export-dynamic is clearly not useful for FLAT configurations, which
-are always statically linked, but it's quite a bit of work to change
-the PHP build system to use it only conditionall.
-
-It looks more like an interaction bug between gcc (which wants to put
-the .text section at address 0x0 in its linker script) and elf2flt,
-which wants to put its .junk section (containing the .rel.text stuff)
-also at address 0x0.
-
-Fixes (works around) the "section overlap" part of:
-
-  http://autobuild.buildroot.net/results/35cbed8927bb10500ecf2816aa728ea240a0be21/
+  http://autobuild.buildroot.net/results/fbf7ebbb9502424727006f39e169ec1ee870186d/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/php/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...i.c-build-empty-php_load_zend_extension_c.patch | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/php/0009-main-php_ini.c-build-empty-php_load_zend_extension_c.patch
 
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 0fb80063af..11514e04b1 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -6,6 +6,10 @@ config BR2_PACKAGE_PHP
- 	       !BR2_PACKAGE_PHP_SAPI_FPM &&  \
- 	       BR2_USE_MMU
- 	select BR2_PACKAGE_PHP_SAPI_CLI if !BR2_USE_MMU
-+	# PHP uses -export-dynamic, which breaks with elf2flt with a
-+	# message like "ld.real: section .junk LMA [...,...] overlaps
-+	# section .text LMA [...,...]"
-+	depends on !BR2_BINFMT_FLAT
- 	help
- 	  PHP  is a widely-used general-purpose scripting
- 	  language that is especially suited for Web development
+diff --git a/package/php/0009-main-php_ini.c-build-empty-php_load_zend_extension_c.patch b/package/php/0009-main-php_ini.c-build-empty-php_load_zend_extension_c.patch
+new file mode 100644
+index 0000000000..bc5149d1d6
+--- /dev/null
++++ b/package/php/0009-main-php_ini.c-build-empty-php_load_zend_extension_c.patch
+@@ -0,0 +1,62 @@
++From b7bbdfbcb0869b5c068143d4e27bab9eac4ae72b Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Mon, 26 Feb 2018 19:30:55 +0100
++Subject: [PATCH] main/php_ini.c: build empty php_load_zend_extension_cb() when
++ !HAVE_LIBDL
++
++Commit 0782a7fc6314c8bd3cbfd57f12d0479bf9cc8dc7 ("Fixed bug #74866
++extension_dir = "./ext" now use current directory for base") modified
++the php_load_zend_extension_cb() function to use php_load_shlib(), and
++pass a handle to the newly introduced zend_load_extension_handle()
++function instead of passing the extension path to
++zend_load_extension().
++
++While doing so, it introduced a call to php_load_shlib() from code
++that is built even when HAVE_LIBDL is not defined. However,
++php_load_shlib() is not implemented when HAVE_LIBDL is not defined,
++for obvious reasons.
++
++It turns out that zend_load_extension_handle() anyway doesn't do
++anything when ZEND_EXTENSIONS_SUPPORT is defined to 0, and
++ZEND_EXTENSIONS_SUPPORT is not defined when HAVE_LIBDL is not defined
++(Zend/zend_portability.h).
++
++Fixes the following build failure when building on a system that
++doesn't have libdl:
++
++main/php_ini.o: In function `php_load_zend_extension_cb':
++php_ini.c:(.text+0x478): undefined reference to `php_load_shlib'
++php_ini.c:(.text+0x4b0): undefined reference to `php_load_shlib'
++collect2: error: ld returned 1 exit status
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream-status: https://github.com/php/php-src/pull/3161
++---
++ main/php_ini.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/main/php_ini.c b/main/php_ini.c
++index ba58eb1180..fca263e5f0 100644
++--- a/main/php_ini.c
+++++ b/main/php_ini.c
++@@ -350,6 +350,7 @@ static void php_load_php_extension_cb(void *arg)
++ 
++ /* {{{ php_load_zend_extension_cb
++  */
+++#ifdef HAVE_LIBDL
++ static void php_load_zend_extension_cb(void *arg)
++ {
++ 	char *filename = *((char **) arg);
++@@ -409,6 +410,9 @@ static void php_load_zend_extension_cb(void *arg)
++ 		efree(libpath);
++ 	}
++ }
+++#else
+++static void php_load_zend_extension_cb(void *arg) { }
+++#endif
++ /* }}} */
++ 
++ /* {{{ php_init_config
++-- 
++2.14.3
++
 -- 
 2.14.3
