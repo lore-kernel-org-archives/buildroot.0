@@ -1,93 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Feb 2018 19:17:11 +0100
-Subject: [Buildroot] [PATCH] php: fix build on C libraries that don't
- provide AI_IDN
-Message-ID: <20180226181711.31203-1-thomas.petazzoni@bootlin.com>
+From: Sam <samiswt@gmail.com>
+Date: Mon, 26 Feb 2018 19:01:24 +0000
+Subject: [Buildroot] How to install Perl install.pl based package to
+ target
+In-Reply-To: <CAB0FRsuPAYQt7nzHQV6Lasgjd0Ys=zVurdqkMN_+N9kcbbbiJA@mail.gmail.com>
+References: <CAPi4xiWQtndML7mb_n2HCXn3WMcK3afwj-bJaDQ=Gwk7nyBZFg@mail.gmail.com>
+ <CAB0FRsuPAYQt7nzHQV6Lasgjd0Ys=zVurdqkMN_+N9kcbbbiJA@mail.gmail.com>
+Message-ID: <CAPi4xiVQpCAqTK9hNom8DwzKkpPQHimLEOv90JQMjF_JC5vYDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The PHP sockets module now provides access to AI_IDN functionality (by
-simply declaring a bunch of constants available from PHP code). AI_IDN
-(internationalized domain names) is not supported in uClibc or musl,
-which breaks the build.
+Thank you so much for your help!
 
-This commit adds a patch to PHP which makes the use of AI_IDN
-conditional, in a way that is identical to what is already done for
-AI_ALL. The patch has been submitted upstream.
+Problem solved.
 
-Fixes:
 
-  http://autobuild.buildroot.net/results/ef040cc45bb2789ead82a8c445db3376e36b5ac7/
+On Sun, Feb 25, 2018 at 04:18 Fran?ois Perrad <francois.perrad@gadz.org>
+wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...08-ext-sockets-make-AI_IDN-usage-optional.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/php/0008-ext-sockets-make-AI_IDN-usage-optional.patch
-
-diff --git a/package/php/0008-ext-sockets-make-AI_IDN-usage-optional.patch b/package/php/0008-ext-sockets-make-AI_IDN-usage-optional.patch
-new file mode 100644
-index 0000000000..7ab086865e
---- /dev/null
-+++ b/package/php/0008-ext-sockets-make-AI_IDN-usage-optional.patch
-@@ -0,0 +1,55 @@
-+From 923cab3a5ee112d3de44b5571e73402f1fa3d619 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Mon, 26 Feb 2018 19:06:40 +0100
-+Subject: [PATCH] ext/sockets: make AI_IDN usage optional
-+
-+AI_IDN is not supported by all C libraries (uClibc, musl), so make it
-+optional, like AI_ALL.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream-status: https://github.com/php/php-src/pull/3160
-+---
-+ ext/sockets/config.m4 | 13 +++++++++++++
-+ ext/sockets/sockets.c |  2 +-
-+ 2 files changed, 14 insertions(+), 1 deletion(-)
-+
-+diff --git a/ext/sockets/config.m4 b/ext/sockets/config.m4
-+index fe7d22a10a..2bf6a2bd11 100644
-+--- a/ext/sockets/config.m4
-++++ b/ext/sockets/config.m4
-+@@ -69,6 +69,19 @@ if test "$PHP_SOCKETS" != "no"; then
-+     AC_DEFINE(HAVE_AI_ALL,1,[Whether you have AI_ALL])
-+   fi
-+ 
-++  dnl Check for AI_IDN flag
-++  AC_CACHE_CHECK([if getaddrinfo supports AI_IDN],[ac_cv_gai_ai_idn],
-++  [
-++    AC_TRY_COMPILE([
-++#include <netdb.h>
-++  ], [int flag = AI_IDN;],
-++     ac_cv_gai_ai_idn=yes, ac_cv_gai_ai_idn=no)
-++  ])
-++
-++  if test "$ac_cv_gai_ai_idn" = yes; then
-++    AC_DEFINE(HAVE_AI_IDN,1,[Whether you have AI_IDN])
-++  fi
-++
-+   PHP_NEW_EXTENSION([sockets], [sockets.c multicast.c conversions.c sockaddr_conv.c sendrecvmsg.c], [$ext_shared],, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
-+   PHP_INSTALL_HEADERS([ext/sockets/], [php_sockets.h])
-+ fi
-+diff --git a/ext/sockets/sockets.c b/ext/sockets/sockets.c
-+index 6db56c2816..ee9651ce09 100644
-+--- a/ext/sockets/sockets.c
-++++ b/ext/sockets/sockets.c
-+@@ -796,7 +796,7 @@ static PHP_MINIT_FUNCTION(sockets)
-+ 	REGISTER_LONG_CONSTANT("AI_ALL",			AI_ALL,				CONST_CS | CONST_PERSISTENT);
-+ #endif
-+ 	REGISTER_LONG_CONSTANT("AI_ADDRCONFIG",		AI_ADDRCONFIG,		CONST_CS | CONST_PERSISTENT);
-+-#ifdef __USE_GNU
-++#if defined(HAVE_AI_IDN) && defined(__USE_GNU)
-+ 	REGISTER_LONG_CONSTANT("AI_IDN",			AI_IDN,				CONST_CS | CONST_PERSISTENT);
-+ 	REGISTER_LONG_CONSTANT("AI_CANONIDN",		AI_CANONIDN,		CONST_CS | CONST_PERSISTENT);
-+ 	REGISTER_LONG_CONSTANT("AI_IDN_ALLOW_UNASSIGNED",		AI_IDN_ALLOW_UNASSIGNED, CONST_CS | CONST_PERSISTENT);
-+-- 
-+2.14.3
-+
--- 
-2.14.3
+> 2018-02-24 18:53 GMT+01:00 Sam <samiswt@gmail.com>:
+>
+>> Hey everyone,
+>>
+>> I'm trying to add a package named fwsnort to my buildroot package, what
+>> should I do? Or it's impossible?
+>>
+>> I tried to use generic-package and put command line ' Perl ./install.pl'
+>> into CONFIGURE_CMDS block, and it didn't work by throwing an error message:
+>> /bin/sh, unrecognized command end.
+>>
+>> Thanks,
+>>
+>>
+> generic-package is the good way, an INSTALL_TARGET_CMDS will do all the job
+>
+> FWSNORT_VERSION = 1.6.7
+> FWSNORT_SITE = http://www.cipherdyne.org/fwsnort/download
+> FWSNORT_DEPENDENCIES = perl-netaddr-ip perl-iptables-parse
+>
+> define FWSNORT_INSTALL_TARGET_CMDS
+> 	$(INSTALL) -m 0755 -D $(@D)/fwsnort $(TARGET_DIR)/usr/bin/fwsnort
+> 	$(INSTALL) -m 0644 -D $(@D)/fwsnort.conf $(TARGET_DIR)/etc/fwsnort/fwsnort.conf
+> 	mkdir -p $(TARGET_DIR)/etc/snort/rules
+> 	$(INSTALL) -m 0644 $(@D)/deps/snort_rules/*.rules $(TARGET_DIR)/etc/snort/rules
+> endef
+>
+> $(eval $(generic-package))
+>
+> The missing dependency (perl-iptables-parse) could be created by the
+> following command:
+> $ utils/scancpan IPTables-Parse
+>
+> Fran?ois
+>
+>
+>>
+>> Tao
+>> --
+>> Sent from Gmail Mobile
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+> --
+Sent from Gmail Mobile
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180226/295bc828/attachment.html>
