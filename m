@@ -1,56 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Feb 2018 23:45:39 +0100
-Subject: [Buildroot] [git commit] php: disable on configurations using
- BR2_BINFMT_FLAT
-Message-ID: <20180226224614.23A8D882EA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Feb 2018 23:52:26 +0100
+Subject: [Buildroot] [PATCH 1/1] rustc: disable for ARMV7A with EABI
+In-Reply-To: <20180226200421.18131-1-eric.le.bihan.dev@free.fr>
+References: <20180226200421.18131-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20180226235226.62ad68b3@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0eec7a4f752364b5ca2580979f28435be0a41a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-BR2_BINFMT_FLAT configurations require the use of elf2flt. However,
-PHP uses -export-dynamic which breaks badly with elf2flt. Even a
-simple program fails to build:
+On Mon, 26 Feb 2018 21:04:21 +0100, Eric Le Bihan wrote:
+> The Rust project does not support armv7a EABI, only EABIHF [1]. So
+> disable rustc for this ARM variant.
 
-$ ./output/host/bin/arm-linux-gcc -Wl,-export-dynamic -o toto toto.c
-/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: section .junk LMA [0000000000000000,0000000000000027] overlaps section .text LMA [0000000000000000,0000000000006d07]
+Are you sure ?
 
--export-dynamic is clearly not useful for FLAT configurations, which
-are always statically linked, but it's quite a bit of work to change
-the PHP build system to use it only conditionall.
+> [1] https://forge.rust-lang.org/platform-support.html
 
-It looks more like an interaction bug between gcc (which wants to put
-the .text section at address 0x0 in its linker script) and elf2flt,
-which wants to put its .junk section (containing the .rel.text stuff)
-also at address 0x0.
+On this page, I see:
 
-Fixes (works around) the "section overlap" part of:
+arm-unknown-linux-gnueabi 	? 	? 	? 	ARMv6 Linux
+arm-unknown-linux-gnueabihf 	? 	? 	? 	ARMv6 Linux, hardfloat
+armv7-unknown-linux-gnueabihf 	? 	? 	? 	ARMv7 Linux
 
-  http://autobuild.buildroot.net/results/35cbed8927bb10500ecf2816aa728ea240a0be21/
+The arm-unknown-linux-gnueabi variant should apply to ARMv7 as well.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+It looks like a better fix would be:
 
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 0fb80063af..11514e04b1 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -6,6 +6,10 @@ config BR2_PACKAGE_PHP
- 	       !BR2_PACKAGE_PHP_SAPI_FPM &&  \
- 	       BR2_USE_MMU
- 	select BR2_PACKAGE_PHP_SAPI_CLI if !BR2_USE_MMU
-+	# PHP uses -export-dynamic, which breaks with elf2flt with a
-+	# message like "ld.real: section .junk LMA [...,...] overlaps
-+	# section .text LMA [...,...]"
-+	depends on !BR2_BINFMT_FLAT
- 	help
- 	  PHP  is a widely-used general-purpose scripting
- 	  language that is especially suited for Web development
+config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+        bool
+        # The pre-built Rust standard library is only available for the
+        # following architectures/ABIs, and is built against glibc.
+        default y if BR2_i386
+        default y if BR2_x86_64
+        default y if BR2_aarch64
+-       default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
++	default y if BR2_ARM_CPU_ARMV6 || BR2_ARM_CPU_ARMV7A
+        default y if BR2_powerpc || BR2_powerpc64
+        default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU_MIPS32R6
+        default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
+                && BR2_MIPS_NABI64
+        depends on BR2_TOOLCHAIN_USES_GLIBC
+        depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+
+config BR2_PACKAGE_HOST_RUSTC_ARCH
+        string
+-	default "armv7"  if BR2_ARM_CPU_ARMV7A
++       default "armv7"  if (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF)
+        default BR2_ARCH if !BR2_ARM_CPU_ARMV7A
+
+config BR2_PACKAGE_HOST_RUSTC_ABI
+        string
+        default "eabi"   if BR2_ARM_EABI
+        default "eabihf" if BR2_ARM_EABIHF
+        default "abi64"  if BR2_MIPS_NABI64
+
+Indeed arm-unknown-linux-gnueabi can support ARMv6 and later (including
+ARMv7) with EABI, arm-unknown-linux-gnueabihf can support ARMv6 EABIhf,
+and armv7-unknown-linux-gnueabihf can support ARMv7 EABIhf.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
