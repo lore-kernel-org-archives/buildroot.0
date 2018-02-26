@@ -1,45 +1,53 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 26 Feb 2018 11:51:41 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Feb 2018 11:58:54 +0100
 Subject: [Buildroot] Analysis of build results for 2018-02-25
-In-Reply-To: <20180226113319.7e3bcf6b@windsurf.lan>
+In-Reply-To: <CAJtjsKYkA53_yxOmB4jxy1Kc=iWEWrKYyz2GLKTKhSs7UMGCZw@mail.gmail.com>
 References: <20180226070010.28C8620727@mail.bootlin.com>
  <20180226113319.7e3bcf6b@windsurf.lan>
-Message-ID: <CAJtjsKYkA53_yxOmB4jxy1Kc=iWEWrKYyz2GLKTKhSs7UMGCZw@mail.gmail.com>
+ <CAJtjsKYkA53_yxOmB4jxy1Kc=iWEWrKYyz2GLKTKhSs7UMGCZw@mail.gmail.com>
+Message-ID: <20180226115854.0f07b0d5@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+Hello,
 
-On Mon, Feb 26, 2018 at 11:33 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> We're almost at the end of the month, and therefore almost at the
-> final 2018.02, which will be a LTS. I believe it is a good opportunity
-> to make a final effort to resolve the remaining build failures. See
-> below for an analysis.
->
-> Romain, Johan, Frank, Eric, Mahyar, Bernd, Guillermo, Pierre, Waldemar,
-> there are questions for you below. Thanks!
->
-> On Mon, 26 Feb 2018 08:00:10 +0100 (CET), Thomas Petazzoni wrote:
->
->>      powerpc |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/45edf95c0c44c9d553879e0cbb771098d7c63aa1 |
->>          arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/a36d00407a371d70b4551a9717ebd6ff852c8bca |
->
-> I propose that we make erlang depend on x86/x86_64 as host
-> architecture. Johan, Frank, are you OK ?
+On Mon, 26 Feb 2018 11:51:41 +0100, Johan Oudinet wrote:
 
-Yes, I agree with making host-erlang depends on x86/x86_64
-architectures. I never compile it from another architecture anyway. I
-looked at existing patches to such errors, but find nothing that make
-Erlang successfully compiled from a powerpc or an arm host.
-What is the exact option to add to Config.in to achieve this?
-Do you want me to submit a patch or you do it?
+> > I propose that we make erlang depend on x86/x86_64 as host
+> > architecture. Johan, Frank, are you OK ?  
+> 
+> Yes, I agree with making host-erlang depends on x86/x86_64
+> architectures. I never compile it from another architecture anyway. I
+> looked at existing patches to such errors, but find nothing that make
+> Erlang successfully compiled from a powerpc or an arm host.
+> What is the exact option to add to Config.in to achieve this?
+> Do you want me to submit a patch or you do it?
 
-Best,
+Since there is nothing that selects BR2_PACKAGE_ERLANG, it's pretty
+easy as there only one place to modify.
+
+I think I would keep it simple and in package/erlang/Config.in, do:
+
+config BR2_PACKAGE_HOST_ERLANG_ARCH_SUPPORTS
+	bool
+	default y if BR2_HOSTARCH = "x86_64"
+	default y if BR2_HOSTARCH = "x86"
+
+config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+	bool
+	... keep existing code ...
+	# erlang needs host-erlang
+	depends on BR2_PACKAGE_HOST_ERLANG_ARCH_SUPPORTS
+
+And be done with it :)
+
+If you could submit a patch doing this, it'd be nice. Thanks!
+
+Thomas
 -- 
-Johan
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
