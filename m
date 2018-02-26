@@ -1,51 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Feb 2018 23:06:02 +0100
-Subject: [Buildroot] [git commit branch/next] linux: allow both in-tree
- and custom dts files
-In-Reply-To: <87606ktbl1.fsf@dell.be.48ers.dk>
-References: <20180225171345.A60E48809E@busybox.osuosl.org>
- <20180225190328.GD2276@scaer> <87606ktbl1.fsf@dell.be.48ers.dk>
-Message-ID: <20180226220602.GA2678@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Feb 2018 23:38:05 +0100
+Subject: [Buildroot] [PATCH 2/2] check-host-tar.sh: blacklist tar 1.30+
+In-Reply-To: <20180226223805.17496-1-peter@korsgaard.com>
+References: <20180226223805.17496-1-peter@korsgaard.com>
+Message-ID: <20180226223805.17496-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-02-26 09:11 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > Simon, All,
->  > On 2018-02-25 17:19 +0100, Arnout Vandecappelle spake thusly:
->  >> commit: https://git.buildroot.net/buildroot/commit/?id=382fe9f9261812682eab2d35e47aa94dc554380e
->  >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
->  >> 
->  >> For some boards, for example the Raspberry Pi, it's necessary to build
->  >> in-tree dts files as well as custom/out of tree dts-files (dt-blob.bin).
->  >> The existing logic made these two options exclusive, this commit changes
->  >> that to allow both in-tree as well as custom sources for dts files.
-> 
->  > This breaks all our cufrrent defconfig files that build a DTB, like
->  > for example configs/stm32f429_disco_defconfig, because the default
->  > that was implied by a choice is no longer true, so we need to add
->  > BR2_LINUX_KERNEL_USE_INTREE_DTS=y to those defconfig files.
-> 
-> That still doesn't fix it for any external defconfig. Adding a 'default
-> y' to BR2_LINUX_KERNEL_USE_INTREE_DTS will likewise break it for users
-> of BR2_LINUX_KERNEL_USE_CUSTOM_DTS. Perhaps we can change the logic to
-> look for nonempty BR2_LINUX_KERNEL_INTREE_DTS_NAME /
-> BR2_LINUX_KERNEL_CUSTOM_DTS_PATH variables?
+Tar 1.30 changed the --numeric-owner output for filenames > 100 characters,
+leading to hash mismatches for the tar archives we create ourselves from
+git.  This is really a fix for a bug in earlier tar versions regarding
+deterministic output, so it is unlikely to be reverted in later versions.
 
-As the patch that I sent does, maybe?
-    https://patchwork.ozlabs.org/patch/878006/
+To work around this issue, blacklist tar 1.30+ similar to how we do it for
+pre-1.17 versions so Buildroot falls back to building host-tar.
 
-Cordialement,
-Yann E. MORIN.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/dependencies/check-host-tar.sh | 33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
+diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+index 932d3c4fb2..2143877524 100755
+--- a/support/dependencies/check-host-tar.sh
++++ b/support/dependencies/check-host-tar.sh
+@@ -30,13 +30,28 @@ fi
+ # containing hard-links if the --strip-components option is used).
+ major_min=1
+ minor_min=17
+-if [ $major -gt $major_min ]; then
+-	echo $tar
+-else
+-	if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
+-		echo $tar
+-	else
+-		# echo nothing: no suitable tar found
+-		exit 1
+-	fi
++
++# Maximal version = 1.29 (1.30 changed --numeric-owner output for
++# filenames > 100 characters). This is really a fix for a bug in
++# earlier tar versions regarding deterministic output so it is
++# unlikely to be reverted in later versions.
++major_max=1
++minor_max=29
++
++if [ $major -lt $major_min -o $major -gt $major_max ]; then
++	# echo nothing: no suitable tar found
++	exit 1
+ fi
++
++if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
++	# echo nothing: no suitable tar found
++	exit 1
++fi
++
++if [ $major -eq $major_max -a $minor -gt $minor_max ]; then
++	# echo nothing: no suitable tar found
++	exit 1
++fi
++
++# valid
++echo $tar
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
