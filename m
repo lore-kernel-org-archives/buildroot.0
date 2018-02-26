@@ -1,74 +1,65 @@
-From: Sam <samiswt@gmail.com>
-Date: Mon, 26 Feb 2018 19:01:24 +0000
-Subject: [Buildroot] How to install Perl install.pl based package to
- target
-In-Reply-To: <CAB0FRsuPAYQt7nzHQV6Lasgjd0Ys=zVurdqkMN_+N9kcbbbiJA@mail.gmail.com>
-References: <CAPi4xiWQtndML7mb_n2HCXn3WMcK3afwj-bJaDQ=Gwk7nyBZFg@mail.gmail.com>
- <CAB0FRsuPAYQt7nzHQV6Lasgjd0Ys=zVurdqkMN_+N9kcbbbiJA@mail.gmail.com>
-Message-ID: <CAPi4xiVQpCAqTK9hNom8DwzKkpPQHimLEOv90JQMjF_JC5vYDA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Feb 2018 20:01:38 +0100
+Subject: [Buildroot] Analysis of build results for 2018-02-25
+In-Reply-To: <20180226154724.4e87f072@windsurf.lan> (Thomas Petazzoni's
+ message of "Mon, 26 Feb 2018 15:47:24 +0100")
+References: <20180226070010.28C8620727@mail.bootlin.com>
+ <20180226113319.7e3bcf6b@windsurf.lan>
+ <87fu5nsyrg.fsf@dell.be.48ers.dk>
+ <20180226140029.45325514@windsurf.lan>
+ <87bmgbsv4z.fsf@dell.be.48ers.dk>
+ <20180226154724.4e87f072@windsurf.lan>
+Message-ID: <877eqzshgt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you so much for your help!
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Problem solved.
+ > Hello,
+ > On Mon, 26 Feb 2018 15:06:20 +0100, Peter Korsgaard wrote:
 
+ >> > mplayer upstream is dead ? If that is the case, then indeed we should
+ >> > just take those patches as-is.  
+ >> 
+ >> I haven't followed development in details, but the latest mplayer
+ >> release is more than 2 years old and several forks exists (E.G. mpv).
 
-On Sun, Feb 25, 2018 at 04:18 Fran?ois Perrad <francois.perrad@gadz.org>
-wrote:
+ > But isn't mplayer one of those projects that says that releases are
+ > useless, and people should always use the latest trunk/master/tip
+ > because it's obviously "the best".
 
-> 2018-02-24 18:53 GMT+01:00 Sam <samiswt@gmail.com>:
->
->> Hey everyone,
->>
->> I'm trying to add a package named fwsnort to my buildroot package, what
->> should I do? Or it's impossible?
->>
->> I tried to use generic-package and put command line ' Perl ./install.pl'
->> into CONFIGURE_CMDS block, and it didn't work by throwing an error message:
->> /bin/sh, unrecognized command end.
->>
->> Thanks,
->>
->>
-> generic-package is the good way, an INSTALL_TARGET_CMDS will do all the job
->
-> FWSNORT_VERSION = 1.6.7
-> FWSNORT_SITE = http://www.cipherdyne.org/fwsnort/download
-> FWSNORT_DEPENDENCIES = perl-netaddr-ip perl-iptables-parse
->
-> define FWSNORT_INSTALL_TARGET_CMDS
-> 	$(INSTALL) -m 0755 -D $(@D)/fwsnort $(TARGET_DIR)/usr/bin/fwsnort
-> 	$(INSTALL) -m 0644 -D $(@D)/fwsnort.conf $(TARGET_DIR)/etc/fwsnort/fwsnort.conf
-> 	mkdir -p $(TARGET_DIR)/etc/snort/rules
-> 	$(INSTALL) -m 0644 $(@D)/deps/snort_rules/*.rules $(TARGET_DIR)/etc/snort/rules
-> endef
->
-> $(eval $(generic-package))
->
-> The missing dependency (perl-iptables-parse) could be created by the
-> following command:
-> $ utils/scancpan IPTables-Parse
->
-> Fran?ois
->
->
->>
->> Tao
->> --
->> Sent from Gmail Mobile
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->>
-> --
-Sent from Gmail Mobile
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180226/295bc828/attachment.html>
+Maybe. I do see some recent changes in subversion, but mainly small
+things (tweaks to the handwritten configure script).
+
+ >> >> Or deprecate qt4?  
+ >> 
+ >> > Just because it's broken on powerpc?  
+ >> 
+ >> Well, mainly because it is no longer maintained upstream. Even Debian is
+ >> removing Qt4:
+ >> 
+ >> https://wiki.debian.org/Qt4Removal
+
+ > True, but we are not going to remove it for 2018.02, right ?
+
+It is indeed getting quite late for 2018.02, but given that:
+
+- It isn't supported upstream
+- The package is orphaned in Buildroot
+- Other distributions (like Debian) no longer supports it
+
+Makes me think that we won't be able to do a good job supporting it
+throughout the 2018.02 support cycle.
+
+We don't have a good way of handling deprecations, so I'm not sure what
+the best option is:
+
+- Do nothing
+- Change prompt to "Qt (obsolete)"
+- Remove package
+
+-- 
+Bye, Peter Korsgaard
