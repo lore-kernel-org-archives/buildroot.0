@@ -1,44 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 27 Feb 2018 21:51:25 +0100
-Subject: [Buildroot] [PATCH 1/1] azmq: bump to version 1.0.2
-Message-ID: <20180227205125.8121-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Feb 2018 21:56:17 +0100
+Subject: [Buildroot] [PATCH v1 0/3] qt5: fix build issue with mesa w/out
+ xcb
+In-Reply-To: <20180222164738.kprf7kz2u3vywpxm@archlinux> (=?utf-8?Q?=22Ga?=
+ =?utf-8?Q?=C3=ABl?= PORTAY"'s
+ message of "Thu, 22 Feb 2018 11:47:38 -0500")
+References: <20180212042524.28675-1-gael.portay@savoirfairelinux.com>
+ <20180222164738.kprf7kz2u3vywpxm@archlinux>
+Message-ID: <87371mnocu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add license hash
+>>>>> "Ga?l" == Ga?l PORTAY <gael.portay@savoirfairelinux.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/azmq/azmq.hash | 5 +++--
- package/azmq/azmq.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
-index d3993f4988..35139cfaeb 100644
---- a/package/azmq/azmq.hash
-+++ b/package/azmq/azmq.hash
-@@ -1,3 +1,4 @@
- # Locally calculated
--# https://github.com/zeromq/azmq/archive/v1.0.tar.gz
--sha256 c204c731bcb7810ca3a2c5515e88974ef2ff8d0589e60a897dc238b369180e7b  azmq-v1.0.tar.gz
-+# https://github.com/zeromq/azmq/archive/v1.0.2.tar.gz
-+sha256 25fa8b07756cffae95e25a55c7ea42efe02e8cd797552201aa771dd69cfc8fbf  azmq-v1.0.2.tar.gz
-+sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
-diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
-index 427ad0f5b4..9ccb407a65 100644
---- a/package/azmq/azmq.mk
-+++ b/package/azmq/azmq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AZMQ_VERSION = v1.0
-+AZMQ_VERSION = v1.0.2
- AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
- AZMQ_DEPENDENCIES = boost zeromq
- AZMQ_LICENSE = BSL-1.0
+ > As discussed with Thomas on the #buildroot channel:
+
+ > 	2018-02-16 09:01:14	kos_tom	gportay: I think the OpenGL implementation should provide those flags in its .pc file, and qt should pick them up from there
+
+ > Hopefully, the MESA_EGL_NO_X11_HEADERS cflags is present the egl.pc file
+ > from mesa3d:
+
+ > 	$ output/host/bin/pkg-config --cflags-only-other egl
+ > 	 -DMESA_EGL_NO_X11_HEADERS
+
+ > I will work on a proper solution that will be integrated in every Qt
+ > projects that are impacted by this issue.
+
+ > I need time/help to hundersand how qmake works in order to append the
+ > egl cflags given by pkg-config in qmake.
+
+ > I almost sure that I will miss the release. So, would you agree to
+ > accept this patch serie as a temporary workaround since it fixes a real
+ > build issue?
+
+Yes, I guess that is the best solution for 2018.02. I'll apply the 3 patches.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
