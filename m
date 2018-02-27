@@ -1,37 +1,39 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Tue, 27 Feb 2018 13:21:31 -0800
-Subject: [Buildroot] [PATCH] bluez5_utils: Make systemd link correctly
-Message-ID: <20180227212131.3142-1-tpiepho@impinj.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Feb 2018 22:22:14 +0100
+Subject: [Buildroot] [git commit branch/next] bind: use BIND_PKGDIR vairable
+Message-ID: <20180227212237.A93F68138B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The link in /etc/systemd/system/, named dbus-org.bluez.service, pointing to
-../../../../usr/lib/systemd/system/bluetooth.service has one too many ".." in
-it.  Likely the target was copied from the other link in
-/etc/systemd/system/bluetooth.target.wants/, which is one level deeper.
+commit: https://git.buildroot.net/buildroot/commit/?id=716cfa6744b542a25a969088c73ad66dffbf6fcf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Adjust link to be correct.
+Use the BIND_PKGDIR variable instead of package/bind.
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bluez5_utils/bluez5_utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bind/bind.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 0634ec9f6f..395340a3e6 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -116,7 +116,7 @@ define BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
- 		$(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants/bluetooth.service
--	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
-+	ln -fs ../../../usr/lib/systemd/system/bluetooth.service \
- 		$(TARGET_DIR)/etc/systemd/system/dbus-org.bluez.service
- endef
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index bec902079c..392ef321c2 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -93,11 +93,11 @@ endef
  
--- 
-2.14.3
+ ifeq ($(BR2_PACKAGE_BIND_SERVER),y)
+ define BIND_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 0755 -D package/bind/S81named \
++	$(INSTALL) -m 0755 -D $(BIND_PKGDIR)/S81named \
+ 		$(TARGET_DIR)/etc/init.d/S81named
+ endef
+ define BIND_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/bind/named.service \
++	$(INSTALL) -D -m 644 $(BIND_PKGDIR)/named.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/named.service
+ 
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
