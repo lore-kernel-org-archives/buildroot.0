@@ -1,31 +1,46 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 26 Feb 2018 20:10:35 -0600
-Subject: [Buildroot] [NEXT 20/26] linux: add CPE id
-In-Reply-To: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1519697441-54194-21-git-send-email-matthew.weber@rockwellcollins.com>
+From: Erik Larsson <karl.erik.larsson@gmail.com>
+Date: Tue, 27 Feb 2018 05:15:15 +0100
+Subject: [Buildroot] [PATCH v2 3/3] add support iMX8MQ-evk board
+In-Reply-To: <20180223104331.GB6998@t450s.lan>
+References: <1519293778-5185-1-git-send-email-karl.erik.larsson@gmail.com>
+ <1519293778-5185-4-git-send-email-karl.erik.larsson@gmail.com>
+ <20180223104331.GB6998@t450s.lan>
+Message-ID: <CAPP7BN0vqy-J=6GE+S5cEqwwEhC-yiJLjvrZttqEC7c2XFLMJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- linux/linux.mk | 1 +
- 1 file changed, 1 insertion(+)
+Hi Gary,
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5300b9c..7afd9b5 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -7,6 +7,7 @@
- LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- LINUX_LICENSE = GPL-2.0
- LINUX_LICENSE_FILES = COPYING
-+LINUX_CPE_ID = $(LINUX_NAME):$(LINUX_NAME)_kernel:$(LINUX_VERSION)
- 
- define LINUX_HELP_CMDS
- 	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
--- 
-1.9.1
+2018-02-23 11:43 GMT+01:00 Gary Bisson <gary.bisson@boundarydevices.com>:
+> Hi Erik,
+>
+> On Thu, Feb 22, 2018 at 11:02:58AM +0100, Erik Larsson wrote:
+>> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+>> ---
+>>  .../common/imx/genimage.cfg.template_imx8          |  40 ++
+>>  board/freescale/common/imx/post-image.sh           |  10 +-
+>>  board/freescale/imx8mqevk/linux-4.9.config         | 625 +++++++++++++++++++++
+>>  configs/freescale_imx8mqevk_defconfig              |  37 ++
+>
+> Why do we copy the defconfig in board folder although it present in the
+> kernel tree directly?
+The reason I add the kernel defconfig into the board folder is that
+NXP removed all defconfigs and renamed the valid one to 'defconfig' in
+the kernel. This makes it impossible (at least I think so) to use an
+in tree defconfig.
+
+$ ls -l arch/arm64/configs/
+total 16
+-rw-r--r-- 1 erik erik 14337 dec 15 02:52 defconfig
+
+Copying it into the board folder was the best solution available.
+
+>
+> Regards,
+> Gary
+
+Regards,
+Erik
