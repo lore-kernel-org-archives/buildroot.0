@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 22:22:14 +0100
-Subject: [Buildroot] [git commit branch/next] bind: use BIND_PKGDIR vairable
-Message-ID: <20180227212237.A93F68138B@busybox.osuosl.org>
+Date: Tue, 27 Feb 2018 22:23:40 +0100
+Subject: [Buildroot] [PATCH 1/3] bind BIND_PKGDIR
+In-Reply-To: <20180227123924.20725-1-chrismcc@gmail.com>
+References: <20180227123924.20725-1-chrismcc@gmail.com>
+Message-ID: <20180227222340.3406f799@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=716cfa6744b542a25a969088c73ad66dffbf6fcf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Use the BIND_PKGDIR variable instead of package/bind.
+On Tue, 27 Feb 2018 04:39:22 -0800, Christopher McCrory wrote:
+> use BIND_PKGDIR instead of package/bind
+> 
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  package/bind/bind.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bind/bind.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I've applied to next, after changing the commit title to follow the
+convention:
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index bec902079c..392ef321c2 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -93,11 +93,11 @@ endef
- 
- ifeq ($(BR2_PACKAGE_BIND_SERVER),y)
- define BIND_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/bind/S81named \
-+	$(INSTALL) -m 0755 -D $(BIND_PKGDIR)/S81named \
- 		$(TARGET_DIR)/etc/init.d/S81named
- endef
- define BIND_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/bind/named.service \
-+	$(INSTALL) -D -m 644 $(BIND_PKGDIR)/named.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/named.service
- 
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	<package>: <description>
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
