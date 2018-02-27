@@ -1,37 +1,72 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 27 Feb 2018 22:15:18 +0100
-Subject: [Buildroot] [PATCH 1/1] azmq: bump to version 1.0.2
-In-Reply-To: <87lgfem9h0.fsf@dell.be.48ers.dk>
-References: <20180227205125.8121-1-fontaine.fabrice@gmail.com>
- <87lgfem9h0.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W834dtD=dvd+zs0qdu=UBueSP0CR_586naD+iObL+h3iHA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Feb 2018 22:18:15 +0100
+Subject: [Buildroot] [PATCH 2/2] apache init script
+In-Reply-To: <20180227115022.8802-1-chrismcc@gmail.com>
+References: <20180227115022.8802-1-chrismcc@gmail.com>
+Message-ID: <20180227221815.21afde38@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+Hello,
 
-2018-02-27 22:03 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+Thanks for this contribution!
 
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > Add license hash
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Does this fix any big / security issues so it needs to go to master or
-> is this for next?
->
-There is no big / security issues, this is for next.
+The commit title should be something like:
 
->
-> --
-> Bye, Peter Korsgaard
->
-Best Regards,
+	apache: install an sysv init script
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180227/6129d8af/attachment.html>
+On Tue, 27 Feb 2018 03:50:22 -0800, Christopher McCrory wrote:
+> This patches and installs the included init script.  The script mostly works, but could use a little more editing.
+
+The commit log should be wrapped to 72 characters.
+
+>  package/apache/0003-init-script.patch | 56 +++++++++++++++++++++++++++++++++++
+>  package/apache/apache.mk              |  6 ++++
+>  2 files changed, 62 insertions(+)
+>  create mode 100644 package/apache/0003-init-script.patch
+> 
+> diff --git a/package/apache/0003-init-script.patch b/package/apache/0003-init-script.patch
+> new file mode 100644
+> index 0000000000..1d7a6a022a
+> --- /dev/null
+> +++ b/package/apache/0003-init-script.patch
+
+All patches should have a description and a Signed-off-by line.
+
+What does the complete init script looks like after your patch ? Is it
+worth re-using the init script provided by Apache, as opposed to
+providing a simple one in package/apache/S<xy>apache  ?
+
+> +define APACHE_INSTALL_INIT_SCRIPT
+
+Just call this variable:
+
+APACHE_INSTALL_INIT_SYSV
+
+This way, no need to add it to APACHE_POST_INSTALL_TARGET_HOOKS, and
+the script will not be installed if the Buildroot configuration uses
+systemd instead of busybox init or sysvinit.
+
+> +	$(INSTALL) -D -m 0755 $(@D)/build/rpm/httpd.init \
+> +	 $(TARGET_DIR)/etc/init.d/S85httpd
+
+Second line should be intended with two tabs.
+
+> +endef
+> +APACHE_POST_INSTALL_TARGET_HOOKS += APACHE_INSTALL_INIT_SCRIPT
+
+So this line can go away.
+
+Could you take into account those comments and submit an updated
+version ?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
