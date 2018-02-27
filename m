@@ -1,30 +1,31 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Tue, 27 Feb 2018 03:28:18 -0800
-Subject: [Buildroot] [PATCH 1/1] Main Makefile Have "make savedefconfig"
- show where the file is being written to.
-Message-ID: <20180227112818.6766-1-chrismcc@gmail.com>
+Date: Tue, 27 Feb 2018 03:40:33 -0800
+Subject: [Buildroot] [PATCH 1/1] apache sbindir
+Message-ID: <20180227114033.7746-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The apache configure script help indicates that the sbindir is PREFIX/sbin , but it actually uses PREFIX/bin. I suspect most people would expect httpd to be /usr/sbin/httpd , not /usr/bin/httpd.
+
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- Makefile | 1 +
+ package/apache/apache.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Makefile b/Makefile
-index ec39bcdb9c..4ac2435a9c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -927,6 +927,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
- 	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
-+	@echo "Saved to $(DEFCONFIG)"
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index e1b1a209cb..010ec31c33 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -29,6 +29,7 @@ APACHE_MPM = worker
+ endif
  
- .PHONY: defconfig savedefconfig
- 
+ APACHE_CONF_OPTS = \
++	--sbindir=/usr/sbin \
+ 	--sysconfdir=/etc/apache2 \
+ 	--with-apr=$(STAGING_DIR)/usr \
+ 	--with-apr-util=$(STAGING_DIR)/usr \
 -- 
 2.14.3
