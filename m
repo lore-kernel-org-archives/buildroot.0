@@ -1,45 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 09:39:35 +0100
-Subject: [Buildroot] [PATCH 1/1] rustc: disable for ARMV7A with EABI
-In-Reply-To: <87zi3uq391.fsf@dell.be.48ers.dk>
-References: <20180226200421.18131-1-eric.le.bihan.dev@free.fr>
- <20180226235226.62ad68b3@windsurf.lan>
- <87zi3uq391.fsf@dell.be.48ers.dk>
-Message-ID: <20180227093935.4be76eab@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Feb 2018 09:55:40 +0100
+Subject: [Buildroot] [PATCH v2 1/2] dependencies.mk: check for valid
+ host-tar before other host dependencies
+Message-ID: <20180227085541.11318-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+host-{cmake,lzip,xz} needs host-tar to extract their source code tarball, so
+we need to ensure that host-tar gets added to DEPENDENCIES_HOST_PREREQ
+before these in case they are both needed, otherwise the tools will fail to
+extract.
 
-On Tue, 27 Feb 2018 08:51:38 +0100, Peter Korsgaard wrote:
+With the upcoming change to blacklist modern tar versions this situation is
+likely to trigger more often.
 
->  > It looks like a better fix would be:  
-> 
->  > config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
->  >         bool
->  >         # The pre-built Rust standard library is only available for the
->  >         # following architectures/ABIs, and is built against glibc.
->  >         default y if BR2_i386
->  >         default y if BR2_x86_64
->  >         default y if BR2_aarch64
->  > -       default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
->  > +	default y if BR2_ARM_CPU_ARMV6 || BR2_ARM_CPU_ARMV7A  
-> 
-> I agree that having positive logic would be nicer. It is a bit more
-> complicated than this as we also should handle ARMV8A cores in ARM mode
-> similar to how ve handle ARMV7A.
-> 
-> Care to send an updated patch on top of master doing that?
+The real solution to this issue is the <foo>_EXTRACT_DEPENDENCIES rework,
+but that series is a bit too intrusive to add this close to 2018.02, so
+therefore this hack.
 
-I was hoping that Eric would handle that :-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+Changes since v1:
+ - Issue not specific to lzip, so put tar in front of everything else
 
-Best regards,
+ support/dependencies/dependencies.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index 4f606f849d..3fc235863c 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -12,7 +12,10 @@
+ define suitable-host-package
+ $(shell support/dependencies/check-host-$(1).sh $(2))
+ endef
+--include $(sort $(wildcard support/dependencies/check-host-*.mk))
++# host utilities needs host-tar to extract the source code tarballs, so
++# ensure check-host-tar.mk is included before the rest
++include support/dependencies/check-host-tar.mk
++-include $(sort $(filter-out %-tar.mk,$(wildcard support/dependencies/check-host-*.mk)))
+ 
+ ifeq ($(BR2_CCACHE),y)
+ DEPENDENCIES_HOST_PREREQ += host-ccache
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.11.0
