@@ -1,54 +1,31 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 27 Feb 2018 14:13:32 +0100
-Subject: [Buildroot] glibc : cannot compute suffix of object files:
- cannot compile
-In-Reply-To: <1519696992821-0.post@n4.nabble.com>
-References: <1519696992821-0.post@n4.nabble.com>
-Message-ID: <20180227141332.08113b98@gmx.net>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 27 Feb 2018 08:36:54 -0600
+Subject: [Buildroot] [PATCH v2 1/2] dependencies.mk: check for valid
+ host-tar before other host dependencies
+In-Reply-To: <20180227085541.11318-1-peter@korsgaard.com>
+References: <20180227085541.11318-1-peter@korsgaard.com>
+Message-ID: <CANQCQpZJ2iaq6ovQF8wb6dcAASFmHCye9mcYjyG6XVDwDt0SYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julia,
+All,
 
-On Mon, 26 Feb 2018 19:03:12 -0700 (MST), Julia Ding <dingtasiling@gmail.com> wrote:
+On Tue, Feb 27, 2018 at 2:55 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> host-{cmake,lzip,xz} needs host-tar to extract their source code tarball, so
+> we need to ensure that host-tar gets added to DEPENDENCIES_HOST_PREREQ
+> before these in case they are both needed, otherwise the tools will fail to
+> extract.
+>
+> With the upcoming change to blacklist modern tar versions this situation is
+> likely to trigger more often.
+>
+> The real solution to this issue is the <foo>_EXTRACT_DEPENDENCIES rework,
+> but that series is a bit too intrusive to add this close to 2018.02, so
+> therefore this hack.
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-> I'm using i.Mx6Q and I need QT5 + OpenGL. So I just change C library to glibc
-> in 'imx6-sabresd_qt5_defconfig'
-> When I try to make it, it shows this error
-> 
-> configure: error: cannot compute suffix of object files: cannot compile
-> See `config.log' for more details
-> package/pkg-generic.mk:237: recipe for target
-> '/buildroot/output/build/glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98/.stamp_configured'
-> failed
-> make[1]: ***
-> [/buildroot/output/build/glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98/.stamp_configured]
-> Error 1
-> 
-> My GCC compiler version is 6.X.
-> 
-> How to fix this? Thanks.
-
-	$ make clean
-	$ make
-
-As stated in [1] 'Cleaning: Explicit cleaning is required when any of the architecture
-or toolchain configuration options are changed.'...
-
-Regards,
-Peter
-
-[1] http://nightly.buildroot.org/manual.html#make-tips
-
-> 
-> 
-> 
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
