@@ -1,16 +1,51 @@
-From: daggs <daggs@gmx.com>
-Date: Tue, 27 Feb 2018 15:41:19 +0100
-Subject: [Buildroot] [PATCH 1/2] mpv: disable mali-fbdev support
-In-Reply-To: <BE2712E5-4F27-4DE9-9F0A-2972C15AB582@gmail.com>
-References: <20180226154112.12857-1-mahyar.koshkouei@gmail.com>
- <trinity-3bb9e648-463e-4288-a645-80758d979719-1519672443490@3c-app-mailcom-bs03>
- <BE2712E5-4F27-4DE9-9F0A-2972C15AB582@gmail.com>
-Message-ID: <trinity-3698265a-577d-4b9f-af66-6156f225dbf0-1519742479495@3c-app-mailcom-bs15>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 27 Feb 2018 15:07:43 +0000
+Subject: [Buildroot] LADSPA on Buildroot
+In-Reply-To: <CAPzckP6rEshBt-zHN+rfUd7eVS07Xp=KS3xJpVKLC4LnkuGu8g@mail.gmail.com>
+References: <CAPzckP6rEshBt-zHN+rfUd7eVS07Xp=KS3xJpVKLC4LnkuGu8g@mail.gmail.com>
+Message-ID: <CAFGQKxdJkP0feX-dxhXDa3RQHxtN7G7V_V4x-5Nd=kUq4fSzTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180227/955df75c/attachment.html>
+Hi,
+
+Can you make sure you include the buildroot mailing list for buildroot questions
+
+On 26 February 2018 at 18:38, Sjoerd Venema <srg.venema@gmail.com> wrote:
+> Hi Martin,
+>
+> I see that you have tried to install LADSPA on Buildroot?
+> Did you ever succeed at that?
+
+It was a while back now but from memory I experimented with LADSPA
+using it to add a high pass filter to the audio device.  I submitted
+some patches but in then end we decided not to include them in
+buildroot due to the lack of development in the project (no activity
+since 2007).
+
+>
+> I ask, because I'm trying the same thing, but don't know much about
+> cross-compiling..
+
+You can find my old patches here:
+
+http://lists.busybox.net/pipermail/buildroot/2014-April/095073.html
+http://lists.busybox.net/pipermail/buildroot/2014-April/095075.html
+http://lists.busybox.net/pipermail/buildroot/2014-April/095074.html
+
+They add the ladspa-sdk, caps and alsaequal packages to buildroot so
+they will get cross compiled for your target.  You could try
+resurrecting them for your needs.
+
+Thanks
+
+Martin
+
+>
+> Love to hear.
+>
+> rgds,
+> Sjoerd
