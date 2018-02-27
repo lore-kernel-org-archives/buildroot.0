@@ -1,48 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 22:37:48 +0100
-Subject: [Buildroot] [NEXT 00/26] Package CVE Reporting
-In-Reply-To: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180227223748.5c65e492@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 27 Feb 2018 22:31:34 +0100
+Subject: [Buildroot] [PATCH] bluez5_utils: Make systemd link correctly
+In-Reply-To: <20180227212131.3142-1-tpiepho@impinj.com>
+References: <20180227212131.3142-1-tpiepho@impinj.com>
+Message-ID: <20180227213134.GD11186@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Trent, All,
 
-On Mon, 26 Feb 2018 20:10:15 -0600, Matt Weber wrote:
-> This series adds new infrastructure to report
-> a packages CPE identifier in a similar way
-> that the legal info is currently reported.
+On 2018-02-27 13:21 -0800, Trent Piepho spake thusly:
+> The link in /etc/systemd/system/, named dbus-org.bluez.service, pointing to
+> ../../../../usr/lib/systemd/system/bluetooth.service has one too many ".." in
+> it.  Likely the target was copied from the other link in
+> /etc/systemd/system/bluetooth.target.wants/, which is one level deeper.
 > 
-> The addition of CPE IDs to the packages is a
-> manual process, but in a later patchset
-> additions are planned to the pkg-stats script
-> to automate maintenance the process.
+> Adjust link to be correct.
+> 
+> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 
-Thanks for working on this and coming up with a proposal!
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-While I'm fine with the package annotations, I am not yet sure that a
-"make cpe-info" is what we want here.
+However, this should not have any real problem on the target: this
+succession of '..' will eventually reach / which has its own '..'
+pointing back to itself; that is /.. points to / and so everything
+should just work as expected. Only on the build machine does that have
+an impact.
 
-In particular, I'm thinking about the interaction with pkg-stats, and
-the work I've done to make pkg-stats query release-monitoring.org to
-check for new upstream versions. Ideally, pkg-stats should also query
-the CPE information and add it to its report.
+So, can you confirm that this is not fixing any runtime issue, but just
+making the symlink "less incorrect"?
 
-For now, pkg-stats reports about all packages in Buildroot, but I'm
-hoping to improve that and make it possible for pkg-stats to only
-generate a report about the list of packages selected in the current
-Buildroot configuration.
+Regards,
+Yann E. MORIN.
 
-So I don't have a very clear cut answer, but I see some overlap between
-cpe-info and pkg-stats, and I'd like to have a common view on what is
-the mid/long-term direction we want to take.
+> ---
+>  package/bluez5_utils/bluez5_utils.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+> index 0634ec9f6f..395340a3e6 100644
+> --- a/package/bluez5_utils/bluez5_utils.mk
+> +++ b/package/bluez5_utils/bluez5_utils.mk
+> @@ -116,7 +116,7 @@ define BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD
+>  	mkdir -p $(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants
+>  	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
+>  		$(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants/bluetooth.service
+> -	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
+> +	ln -fs ../../../usr/lib/systemd/system/bluetooth.service \
+>  		$(TARGET_DIR)/etc/systemd/system/dbus-org.bluez.service
+>  endef
+>  
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
