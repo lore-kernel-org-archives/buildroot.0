@@ -1,38 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 23:39:39 +0100
-Subject: [Buildroot] [git commit] qt5wayland: fix build issue with
- mesa3d w/out xcb
-In-Reply-To: <20180227222806.pzbq5wz6fftrxqj3@archlinux>
-References: <20180227210121.125F78137A@busybox.osuosl.org>
- <20180227231125.528dcbf9@windsurf.lan>
- <20180227222806.pzbq5wz6fftrxqj3@archlinux>
-Message-ID: <20180227233939.2925e4dc@windsurf.lan>
+From: A <aaron.biver@gmail.com>
+Date: Tue, 27 Feb 2018 18:34:53 -0500
+Subject: [Buildroot] Trouble with offline build
+Message-ID: <CAMd7AX_bD6b4c2xhnsWPicPCETk9z3bDP4yT9k3Jpd9Op1F8tA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ I'm a long-time fan, but first-time user.  I'm using buildroot-2017.11.2
+for an ARM target system.
 
-On Tue, 27 Feb 2018 17:28:06 -0500, Ga?l PORTAY wrote:
+My build system doesn't have internet access, so I need the offline build
+capabilities, which I am having trouble with.  The build system also is
+pretty old, and tends to lack modern packages.
 
-> Peter Seiderer sent me an hint[1].
-> 
-> I have to find time to send a proper patch. Do not worry, I have that
-> fix in mind.
-> 
-> Gael
-> 
-> [1]: http://lists.busybox.net/pipermail/buildroot/2018-February/214210.html
+I do a "make source" on a cygwin system that has internet and, and copy the
+whole thing over to the build system.
 
-Indeed, this hint looks good. It will be nice to have a better fix for
-this.
+Then, on the build system, I do a "make", and I get undesired internet
+access attempts and an ultimate failure, which I show below.
 
-Thanks!
+I saw an archive post from 2007 here where the OP was told there are buggy
+packages that need to be patched in order for this to happen.  They are
+said to be buggy because "they lack a foo-source: target.  These need to be
+fixed."  (there was an attachment to the forum post, but the attachment has
+since been scrubbed).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Can someone please weigh in on whether this might be what is happening with
+lzip (below), and how I might go about fixing this?
+
+I'm new enough that I'm not even sure why this package is being
+downloaded.  I must have it in one of the config files, but it's not an
+obvious.
+
+A brute-force find/grep shows that there might be something about the
+BR2_LZCAT variable.  I've no idea what this means.  Is there an
+undocumented host dependency on lzip?  I see it's not installed on my
+system.
+
+
+user at host:~/src/buildroot-2017.11.2$ make source
+>>> host-lzip 1.19 Downloading
+--2018-02-27 22:51:58--  http://download.savannah.gnu.
+org/releases/lzip/lzip-1.19.tar.gz
+Resolving download.savannah.gnu.org... 208.118.235.200
+Connecting to download.savannah.gnu.org|208.118.235.200|:80... connected.
+HTTP request sent, awaiting response... 503 Service Unavailable
+2018-02-27 22:52:03 ERROR 503: Service Unavailable.
+
+--2018-02-27 22:52:04--  http://sources.buildroot.net/lzip-1.19.tar.gz
+Resolving sources.buildroot.net... 104.27.166.48, 104.27.167.48,
+2400:cb00:2048:1::681b:a730, ...
+Connecting to sources.buildroot.net|104.27.166.48|:80... connected.
+HTTP request sent, awaiting response... 503 Service Unavailable
+2018-02-27 22:52:04 ERROR 503: Service Unavailable.
+
+make[1]: *** [/home/user/src/buildroot-2017.11.2/output/build/host-lzip-1.19/.stamp_downloaded]
+Error 1
+make: *** [_all] Error 2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180227/4c4fd0eb/attachment.html>
