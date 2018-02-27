@@ -1,67 +1,102 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 27 Feb 2018 20:21:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 17.3.6
-Message-ID: <20180227192145.29575-1-bernd.kuhls@t-online.de>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Tue, 27 Feb 2018 19:28:40 +0000
+Subject: [Buildroot] [PATCH] package/skeleton-init-systemd: create a
+ symlink /var/run to ../run
+In-Reply-To: <05855f3c-84ce-01b1-d86f-0394a807d01f@mind.be>
+References: <20180222221014.19584-1-romain.naour@gmail.com>
+ <1519410337.25567.173.camel@impinj.com>
+ <05855f3c-84ce-01b1-d86f-0394a807d01f@mind.be>
+Message-ID: <1519759720.25567.204.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release note of this emergency release:
-https://lists.freedesktop.org/archives/mesa-announce/2018-February/000403.html
+On Sat, 2018-02-24 at 19:15 +0100, Arnout Vandecappelle wrote:
+> 
+> > target/usr/share/factory/var/run -> ../run
+> > 
+> > It points to target/usr/share/factory/run, which is wrong.
+> 
+>  Well, as such it is not wrong. What is wrong IMO is that we do:
+> 
+>         for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
+>                 j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
+>                 if [ -L "$${i}" ]; then \
+>                         printf "L+! %s - - - - %s\n" \
+>                                 "$${j}" "../usr/share/factory/$${j}" \
+>                         || exit 1; \
+>                 else \
+> ...
+> 
+>  The correct thing to do would be to copy the symlink I think, so something like:
+> 
+>                 if [ -L "$${i}" ]; then \
+> 			target=`readlink $${i}`
+>                         printf "L+! %s - - - - %s\n" \
+>                                 "$${j}" "$${target}" \
+>                         || exit 1; \
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+But that ends up with another problem.  While the var-factory.conf file
+will be ok:
+/var/run - - - - ../run
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 4c1353ac7a..4eb57b3ad4 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 17.3.5
-+MESA3D_HEADERS_VERSION = 17.3.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index cb4041172a..a61fe02b6d 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-February/000401.html
--md5 bf73288c33cf12abe62045c25e2196b4  mesa-17.3.5.tar.xz
--sha1 5168471ad19945a2f76a14c842b8273e4c29aba4  mesa-17.3.5.tar.xz
--sha256 eb9228fc8aaa71e0205c1481c5b157752ebaec9b646b030d27478e25a6d7936a  mesa-17.3.5.tar.xz
--sha512 39ada2480aa12c42bbff6a1b5c957f99934193d19eb5f44e102ef8302d26f777cee63af1140aa8623bbc1ebd6d69e172cecca798780b8eb594f2ebbb217afd29  mesa-17.3.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-February/000403.html
-+md5 ba66ae0f09b9b84482268608557cd175  mesa-17.3.6.tar.xz
-+sha1 eff29cb8c284a813977d4201dd646d949b1d8fc4  mesa-17.3.6.tar.xz
-+sha256 e5915680d44ac9d05defdec529db7459ac9edd441c9845266eff2e2d3e57fbf8  mesa-17.3.6.tar.xz
-+sha512 5164ed5a1d3d25031b712a9f443f0e467a29b2bca0a1aa11324ed5c10279411979c9c7482825053926a813e76c58b78a3439c7c81fcd51a7808f53977080828f  mesa-17.3.6.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 7e46681ab7..5f4832c0f0 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 17.3.5
-+MESA3D_VERSION = 17.3.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.11.0
+The target tree in the build area is not ok:
+
+$ mkdir -p target/var/run/nginx
+mkdir: cannot create directory ?target/var/run?: File exists
+
+The problem is like I said, ${TARGET_DIR}/var is a symlink to
+${TARGET_DIR}/usr/share/factory/var.  This means the link
+${TARGET_DIR}/var/run -> ../run actually points to
+${TARGET_DIR}/usr/share/factory/run, which does not exist.
+
+So while you do get a valid /var on the target when tmpfiles is
+creating things, the tree in the build area is broken and any package
+that tries to create things in ${TARGET_DIR}/var/run (like nginx) will
+break at target install time.
+
+The double symlink that the current tmpfile code in buildroot makes
+actually works.  I suspect that's why it was written that way to begin
+with.
+
+When building, you get:
+${TARGET_DIR}/var -> ../usr/share/factory/var
+${TARGET_DIR)/usr/share/factory/var/run -> ../../../../run
+Producing, as desired:
+${TARGET_DIR)/var/run -> ${TARGET_DIR}/run
+
+Then on the target after tmpfiles has created the links:
+/var is a directory
+/var/run -> ../usr/share/factory/var/run
+/usr/share/factory/var/run -> ../../../../run
+Producing, again as desired:
+/var/run -> /run
+
+It would be simpler to just use explicit tmpfiles entries to make
+everything, but one needs a valid target tree when building too.  Thus
+the process of creating tmpfiles entries from the target tree.
+
+>  However, I believe our var-factory.conf is even more wrong. systemd already
+> supplies /usr/lib/tmpfiles.d/var.conf for exactly this purpose. That one already
+> has the stanza to create the correct /var/run symlink. That var.conf is not
+> complete though. For example, mysql expects /var/lib/mysql to exist while
+> var.conf just creates /var/lib. So we do indeed need something like
+> var-factory.conf, but I think that it should take into account anything that is
+> already created by other tmpfiles configurations. So it should search each
+> file/directory that it finds in /usr/share/factory/var in all of the existing
+> tmpfiles.d entries, and if it is found there and it is not a C entry, it should
+> recurse.
+
+If buildroot were to create /etc/tmpfile.d/var.conf, instead of var-
+factory.conf, it would override the systemd supplied var.conf rather
+than augmenting it.
+
+This is what I do to make RO rootfs work.  In my overlay, I have an my
+own var.conf file in /etc to override the systemd one.  Mine does not
+have the /var/run symlink, since buildroot will produces this.
+
+A useful RO root likely also needs a persistent writable partition, for
+ instance to store logs.  So I also have lines to make /var/log
+persistent in the replacement for the systemd var.conf file.
