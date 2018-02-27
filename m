@@ -1,40 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Feb 2018 21:01:56 +0100
-Subject: [Buildroot] [git commit] mpv: disable mali-fbdev support
-Message-ID: <20180227200714.CEBDD81342@busybox.osuosl.org>
+Date: Tue, 27 Feb 2018 21:05:00 +0100
+Subject: [Buildroot] [git commit] mpv: security bump to 0.27.2
+Message-ID: <20180227200714.DE3EE81342@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52cec04a6cf7a9bc1e5d9d0479580cd4b086ce31
+commit: https://git.buildroot.net/buildroot/commit/?id=2ec6b8b31e1930df4f10c65ec11cce0cca018e96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/2ce/2ce2d9be9e0699114e3bc3c0434ba05f64741f89/
+Fixes CVE-2018-6360: mpv through 0.28.0 allows remote attackers to execute
+arbitrary code via a crafted web site, because it reads HTML documents
+containing VIDEO elements, and accepts arbitrary URLs in a src attribute
+without a protocol whitelist.
 
-A compile error occurs when attempting to compile mpv with mali support
-(eg. when odroid-mali package is selected).
-
+[Peter: Add CVE description]
 Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-Signed-off-by: Mahyar Koshkouei &lt;mahyar.koshkouei at gmail.com&gt;<br/>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpv/mpv.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/mpv/mpv.hash | 2 +-
+ package/mpv/mpv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index 60fb84335e..1dac3a4940 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 341d8bf18b75c1f78d5b681480b5b7f5c8b87d97a0d4f53a5648ede9c219a49c v0.27.0.tar.gz
++sha256 2ad104d83fd3b2b9457716615acad57e479fd1537b8fc5e37bfe9065359b50be v0.27.2.tar.gz
 diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 8d10aa7c47..d577674bd9 100644
+index d577674bd9..f38a6b916f 100644
 --- a/package/mpv/mpv.mk
 +++ b/package/mpv/mpv.mk
-@@ -31,7 +31,8 @@ MPV_CONF_OPTS = \
- 	--disable-uchardet \
- 	--disable-vapoursynth \
- 	--disable-vapoursynth-lazy \
--	--disable-vdpau
-+	--disable-vdpau \
-+	--disable-mali-fbdev
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # ALSA support requires pcm+mixer
- ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
+-MPV_VERSION = 0.27.0
++MPV_VERSION = 0.27.2
+ MPV_SITE = https://github.com/mpv-player/mpv/archive
+ MPV_SOURCE = v$(MPV_VERSION).tar.gz
+ MPV_DEPENDENCIES = \
