@@ -1,53 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 22:04:37 +0100
-Subject: [Buildroot] [PATCH 1/1] apache sbindir
-In-Reply-To: <20180227114033.7746-1-chrismcc@gmail.com>
-References: <20180227114033.7746-1-chrismcc@gmail.com>
-Message-ID: <20180227220437.5691b327@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Feb 2018 22:06:22 +0100
+Subject: [Buildroot] [PATCH] systemd: Fix relative ln add-wants wrapper
+In-Reply-To: <20180223201835.16143-1-tpiepho@impinj.com> (Trent Piepho's
+ message of "Fri, 23 Feb 2018 12:18:35 -0800")
+References: <20180223201835.16143-1-tpiepho@impinj.com>
+Message-ID: <87d10qm9bl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-The commit title should be:
+ > The patch to allow systemd to work with old "ln" versions that don't
+ > support --relative didn't work properly in the the meson-add-wants.sh
+ > script.
 
-	apache: pass explicit sbindir
+ > This results in all the links in systemd's "*.wants" directories being
+ > broken, e.g.
+ > /usr/lib/systemd/system/multi-user.target.wants/getty.target ->
+ >   ../../../../usr/lib/systemd/system/getty.target
+ > There is one too few ".." in that relative link.
 
-On Tue, 27 Feb 2018 03:40:33 -0800, Christopher McCrory wrote:
+ > The problem is that the script is called with the link name being either a
+ > file or an existing directory.  In the latter case, ln creates the link in
+ > the directory using the name of the target.  This means the link is one
+ > level deeper than the relative link making code thinks.
 
-> The apache configure script help indicates that the sbindir is PREFIX/sbin , but it actually uses PREFIX/bin. I suspect most people would expect httpd to be /usr/sbin/httpd , not /usr/bin/httpd.
+ > The solution used is to only dirname the link, moving up a level, if it's
+ > not a directory, to mimic ln's logic in how it creates links.
 
-This needs to be wrapped at 72 characters. Also, it's good avoid first
-person sentences. So instead of "I suspect" you could say: "Most people
-probably expect httpd to be located in /usr/sbin/httpd".
+ > Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 
-> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-> index e1b1a209cb..010ec31c33 100644
-> --- a/package/apache/apache.mk
-> +++ b/package/apache/apache.mk
-> @@ -29,6 +29,7 @@ APACHE_MPM = worker
->  endif
->  
->  APACHE_CONF_OPTS = \
-> +	--sbindir=/usr/sbin \
+Committed, thanks.
 
-Perhaps a quick comment would be appropriate above APACHE_CONF_OPTS,
-like:
-
-# Explicitly pass sbindir, because apache configure script defines it
-# to PREFIX/bin, which doesn't make much sense
-
-Or something like that.
-
-Could you respin an updated version ?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Bye, Peter Korsgaard
