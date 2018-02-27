@@ -1,100 +1,290 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Tue, 27 Feb 2018 03:50:22 -0800
-Subject: [Buildroot] [PATCH 2/2] apache init script
-Message-ID: <20180227115022.8802-1-chrismcc@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 27 Feb 2018 12:54:27 +0100
+Subject: [Buildroot] unsafe header/library path used in
+ cross-compilation: '-I/usr/include/readline'
+In-Reply-To: <CAPzckP5q2T+-=4EjzrsyWku5Qupby1Vs0reeK57KHXVRWipa+A@mail.gmail.com>
+References: <CAPzckP7PfQYz-+vH09kjX3v0C7kM8nrdEB8aNrhoe4ZfiiF2dQ@mail.gmail.com>
+ <20180224212548.i2xsnhq6clxclmob@tarshish>
+ <CAPzckP5unJcBFCt-At53B1k2huN-WBFY=RVH2ovpqKY_o6=HdA@mail.gmail.com>
+ <20180225053633.olwtzm2gtmf5tmix@sapphire.tkos.co.il>
+ <CAPzckP7nabX7LWat7=h52avsdU5=EjyiRqtFD+B1Gf3FCSsQCg@mail.gmail.com>
+ <20180226054259.emj4ut4q43dsmrzm@sapphire.tkos.co.il>
+ <CAPzckP5q2T+-=4EjzrsyWku5Qupby1Vs0reeK57KHXVRWipa+A@mail.gmail.com>
+Message-ID: <20180227125427.4b0ee21a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patches and installs the included init script.  The script mostly works, but could use a little more editing.
+Hello Sjoerd,
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
----
- package/apache/0003-init-script.patch | 56 +++++++++++++++++++++++++++++++++++
- package/apache/apache.mk              |  6 ++++
- 2 files changed, 62 insertions(+)
- create mode 100644 package/apache/0003-init-script.patch
+On Mon, 26 Feb 2018 18:51:30 +0100, Sjoerd Venema <srg.venema@gmail.com> wrote:
 
-diff --git a/package/apache/0003-init-script.patch b/package/apache/0003-init-script.patch
-new file mode 100644
-index 0000000000..1d7a6a022a
---- /dev/null
-+++ b/package/apache/0003-init-script.patch
-@@ -0,0 +1,56 @@
-+--- apache-2.4.29/build/rpm/httpd.init.orig	2018-02-26 01:04:07.243097556 -0800
-++++ apache-2.4.29/build/rpm/httpd.init	2018-02-26 01:50:18.311683909 -0800
-+@@ -22,7 +22,7 @@
-+ # description: The Apache HTTP Server is an efficient and extensible  \
-+ #             server implementing the current HTTP standards.
-+ # processname: httpd
-+-# pidfile: /var/run/httpd.pid
-++# pidfile: /var/logs/httpd.pid
-+ # config: /etc/sysconfig/httpd
-+ #
-+ ### BEGIN INIT INFO
-+@@ -36,7 +36,7 @@
-+ ### END INIT INFO
-+ 
-+ # Source function library.
-+-. /etc/rc.d/init.d/functions
-++#. /etc/rc.d/init.d/functions
-+ 
-+ # What were we called? Multiple instances of the same daemon can be
-+ # created by creating suitably named symlinks to this startup script
-+@@ -58,13 +58,13 @@
-+ # work correctly with a thread-based MPM; notably PHP will refuse to start.
-+ 
-+ httpd=${HTTPD-/usr/sbin/httpd}
-+-pidfile=${PIDFILE-/var/run/${prog}.pid}
-+-lockfile=${LOCKFILE-/var/lock/subsys/${prog}}
-++pidfile=${PIDFILE-/var/logs/httpd.pid}
-++lockfile=${LOCKFILE-/var/lock/httpd}
-+ RETVAL=0
-+ 
-+ # check for 1.3 configuration
-+ check13 () {
-+-	CONFFILE=/etc/httpd/conf/httpd.conf
-++	CONFFILE=/etc/apache2/httpd.conf
-+ 	GONE="(ServerType|BindAddress|Port|AddModule|ClearModuleList|"
-+ 	GONE="${GONE}AgentLog|RefererLog|RefererIgnore|FancyIndexing|"
-+ 	GONE="${GONE}AccessConfig|ResourceConfig)"
-+@@ -85,7 +85,8 @@
-+ start() {
-+         echo -n $"Starting $prog: "
-+         check13 || exit 1
-+-        LANG=$HTTPD_LANG daemon --pidfile=${pidfile} $httpd $OPTIONS
-++        LANG=$HTTPD_LANG start-stop-daemon -S -q --pidfile=${pidfile} -x $httpd -- $OPTIONS
-++
-+         RETVAL=$?
-+         echo
-+         [ $RETVAL = 0 ] && touch ${lockfile}
-+@@ -93,7 +94,7 @@
-+ }
-+ stop() {
-+ 	echo -n $"Stopping $prog: "
-+-	killproc -p ${pidfile} -d 10 $httpd
-++	start-stop-daemon -K -p ${pidfile}
-+ 	RETVAL=$?
-+ 	echo
-+ 	[ $RETVAL = 0 ] && rm -f ${lockfile} ${pidfile}
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 010ec31c33..5921d48b18 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -82,6 +82,12 @@ define APACHE_FIX_STAGING_APACHE_CONFIG
- endef
- APACHE_POST_INSTALL_STAGING_HOOKS += APACHE_FIX_STAGING_APACHE_CONFIG
- 
-+define APACHE_INSTALL_INIT_SCRIPT
-+	$(INSTALL) -D -m 0755 $(@D)/build/rpm/httpd.init \
-+	 $(TARGET_DIR)/etc/init.d/S85httpd
-+endef
-+APACHE_POST_INSTALL_TARGET_HOOKS += APACHE_INSTALL_INIT_SCRIPT
-+
- define APACHE_CLEANUP_TARGET
- 	$(RM) -rf $(TARGET_DIR)/usr/manual $(TARGET_DIR)/usr/build
- endef
--- 
-2.14.3
+> Hi Baruch,
+> 
+> Still fails on the readline.h
+> 
+> Full output:
+> https://pastebin.com/1eM3dZBiusr/include/readline
+> 
+> I'm starting to think that there's a problem with the installation of
+> readline perhaps?
+
+No, a problem with the suggested patch, try the following:
+
+diff --git a/package/ecasound/0001-makefile.am-unsafereadine.patch b/package/ecasound/0001-makefile.am-unsafereadine.patch
+index a7eb1c3824..87a8eb078e 100644
+--- a/package/ecasound/0001-makefile.am-unsafereadine.patch
++++ b/package/ecasound/0001-makefile.am-unsafereadine.patch
+@@ -2,7 +2,7 @@
+ +++ ecasound-2.9.1/ecasound/Makefile.am        2018-02-27 12:49:04.641658026 +0100
+ @@ -1,4 +1,4 @@
+ -INCLUDES = -I$(ECA_S_READLINE_INCLUDES) -I$(srcdir) -I$(top_srcdir) -I$(top_srcdir)/libecasound -I$(top_srcdir)/kvutils
+-+INCLUDES = -I=/readline -I$(srcdir) -I$(top_srcdir) -I$(top_srcdir)/libecasound -I$(top_srcdir)/kvutils
+++INCLUDES = -I=/usr/include/readline -I$(srcdir) -I$(top_srcdir) -I$(top_srcdir)/libecasound -I$(top_srcdir)/kvutils
+  
+  if ECA_AM_USE_NCURSES
+  termcap_library_ncurses = -lncurses
+diff --git a/package/ecasound/Config.in b/package/ecasound/Config.in
+index b443127bf8..15338b13aa 100644
+--- a/package/ecasound/Config.in
++++ b/package/ecasound/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ECASOUND
+        bool "ecasound"
++       select BR2_PACKAGE_READLINE
+        help
+          Ecasound is a software package designed for
+          multitrack audio processing.
+diff --git a/package/ecasound/ecasound.mk b/package/ecasound/ecasound.mk
+index 657248e78b..f48ed4168c 100644
+--- a/package/ecasound/ecasound.mk
++++ b/package/ecasound/ecasound.mk
+@@ -10,7 +10,7 @@ ECASOUND_SITE = http://ecasound.seul.org/download
+ ECASOUND_INSTALL_STAGING = NO
+ ECASOUND_INSTALL_TARGET = YES
+ #ECASOUND_CONF_OPTS =
+-ECASOUND_DEPENDENCIES = readline
++ECASOUND_DEPENDENCIES = host-pkgconf readline
+ ECASOUND_AUTORECONF = YES
+  
+ $(eval $(autotools-package))
+
+
+Regards,
+Peter
+
+> 
+> kind regards,
+> Sjoerd
+> 
+> On 26 February 2018 at 06:42, Baruch Siach <baruch@usr/include/readlinetkos.co.il> wrote:
+> 
+> > Hi Sjoerd,
+> >
+> > On Sun, Feb 25, 2018 at 11:12:10AM +0100, Sjoerd Venema wrote:  
+> > > Thanks for the patch, at this point, quick hacks are welcome ;-).
+> > > I'm new at Buildroot and (Cross-)Compilation. So, it's not always that
+> > > clear to me what errors mean exactly and how to deal with them.
+> > >
+> > > The patch, however, doesn't seem to work:
+> > >
+> > > On 25 February 2018 at 06:36, Baruch Siach <baruch@tkos.co.il> wrote:
+> > >  
+> > > > Hi Sjoerd Venema,
+> > > >
+> > > > On Sun, Feb 25, 2018 at 01:03:03AM +0100, Sjoerd Venema wrote:  
+> > > > > Ok, but package BR2_PACKAGE_READLINE is actually selected. Still, I  
+> > get  
+> > > > the  
+> > > > > error.
+> > > > > I'm now running a make clean all, to be sure, but I don't think it  
+> > > > resolves  
+> > > > > the issue. This is my .mk file:
+> > > > >
+> > > > > ############################################################  
+> > > > ####################  
+> > > > > #
+> > > > > # ecasound
+> > > > > #
+> > > > > ############################################################  
+> > > > ####################  usr/include/readline
+> > > > >
+> > > > > ECASOUND_VERSION = 2.9.1
+> > > > > ECASOUND_SOURCE = ecasound-$(ECASOUND_VERSION).tar.gz
+> > > > > ECASOUND_SITE = http://ecasound.seul.org/download
+> > > > > ECASOUND_INSTALL_STAGING = NO
+> > > > > ECASOUND_INSTALL_TARGET = YES
+> > > > > #ECASOUND_CONF_OPTS =
+> > > > > ECASOUND_DEPENDENCIES = readline
+> > > > >
+> > > > > $(eval $(autotools-package))  
+> > > >
+> > > > Unfortunately the ecasound build systems is not cross compile  
+> > friendly. It  
+> > > > insists on looking for readline.h in the host include directory. The  
+> > quick  
+> > > > hack below might help. Make sure to add _AUTORECONF to regenerate the
+> > > > Makefile.  
+> > >
+> > > Added.
+> > >  
+> > > > This does not fix the cross compile issue completely, since ecasound  
+> > still  
+> > > > depends on readline headers being installed on your host, otherwise
+> > > > configure
+> > > > failes.
+> > > >
+> > > > diff --git a/ecasound/Makefile.am b/ecasound/Makefile.am
+> > > > index 9378d40ecb10..d2e58ab6e50c 100644
+> > > > --- a/ecasound/Makefile.amusr/include/readline
+> > > > +++ b/ecasound/Makefile.am
+> > > > @@ -1,4 +1,4 @@
+> > > > -AM_CPPFLAGS = -I$(ECA_S_READLINE_INCLUDES) -I$(srcdir) -I$(top_srcdir)
+> > > > -I$(top_srcdir)/libecasound -I$(top_srcdir)/kvutils
+> > > > +AM_CPPFLAGS = -I=/readline -I$(srcdir) -I$(top_srcdir)
+> > > > -I$(top_srcdir)/libecasound -I$(top_srcdir)/kvutils
+> > > >
+> > > >  
+> > > This patch gives me an error:
+> > >  
+> > > >>> ecasound 2.9.1 Patching  
+> > >
+> > > Applying 0001-makefile.am-unsafereadline.patch using patch:
+> > > patching file ecasound/Makefile.am
+> > > Hunk #1 FAILED at 1.
+> > > 1 out of 1 hunk FAILED -- saving rejects to file ecasound/Makefile.am.rej
+> > > make[1]: ***
+> > > [/home/buildroot/buildroot-2018.02-rc2/output/build/  
+> > ecasound-2.9.1/.stamp_patched]  
+> > > Error 1
+> > > make: *** [_all] Error 2
+> > >
+> > > Can't find that .rej file. But upon closer inspection, there is no
+> > > AM_CPPFLAGS in Makefile.am.
+> > > There is one in the Makefile:
+> > >
+> > > AM_CPPFLAGS =  -D_REENTRANT -D_XOPEN_SOURCE=600
+> > >
+> > > I've tried appending the line from the patch, but no luck on that.  
+> >
+> > That's because I generated the patch against the master branch. Here it is
+> > against v2.9.1:
+> >
+> > diff --git a/ecasound/Makefile.am b/ecasound/Makefile.am
+> > index 7346a51d5b94..1223f346aff7 100644
+> > --- a/ecasound/Makefile.am
+> > +++ b/ecasound/Makefile.am
+> > @@ -1,4 +1,4 @@
+> > -INCLUDES = -I$(ECA_S_READLINE_INCLUDES) -I$(srcdir) -I$(top_srcdir)
+> > -I$(top_srcdir)/libecasound -I$(top_srcdir)/kvutils
+> > +INCLUDES = -I=/readline -I$(srcdir) -I$(top_srcdir)
+> > -I$(top_srcdir)/libecasound -I$(top_srcdir)/kvutils
+> >
+> >  if ECA_AM_USE_NCURSES
+> >  termcap_library_ncurses = -lncurses
+> >  
+> > > >  if ECA_AM_USE_NCURSES
+> > > >  termcap_library_ncurses = -lncurses  
+> > >
+> > > Should this be part of the patch too?  
+> >
+> > Yes. This is the patch hunk context. See
+> > https://en.wikipedia.org/wiki/Diff_utility#Unified_format.
+> >  
+> 
+> Thanks, that clarifies that.
+> 
+> 
+> 
+> >  
+> > > > > On 24 February 2018 at 22:25, Baruch Siach <baruchusr/include/readline@tkos.co.il>  
+> > wrote:  
+> > > > > > On Sat, Feb 24, 2018 at 10:12:19PM +0100, Sjoerd Venema wrote:  
+> > > > > > > I'm getting an "unsafe header/library path used in  
+> > > > > > cross-compilation"-error  
+> > > > > > > while building ecasound (https://ecasound.seul.org/  
+> > > > ecasound/download.php  
+> > > > > > ).  
+> > > > > > > From what I've read so far is that it's because the makefile  
+> > > > references  
+> > > > > > the  
+> > > > > > > /usr/-directory. What I can't figure out is how to change the  
+> > > > makefile to  
+> > > > > > > not do that. Turning on/off the "paranoid"-function in menuconfig  
+> > > > didn't  
+> > > > > > > make a difference.  
+> > > > > >
+> > > > > > There is no ecasound package in current Buildroot. Have you added  
+> > this  
+> > > > > > package
+> > > > > > locally?
+> > > > > >  
+> > > > > > > [buildroot at br buildroot]$ make ecasound  
+> > > > > > > >>> ecasound 2.9.1 Building  
+> > > > > > > PATH="/home/buildroot/buildroot-2018.02-rc2/output/  
+> > > > > > host/bin:/home/buildroot/buildroot-2018.02-rc2/output/
+> > > > > > host/sbin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:
+> > > > > > /home/buildroot/.local/bin:/home/buildroot/bin"  
+> > > > > > > /usr/bin/make -j5  -C
+> > > > > > > /home/buildroot/buildroot-2018.02-rc2/output/build/  
+> > ecasound-2.9.1/  
+> > > > > > > /usr/bin/make  all-recursive
+> > > > > > > Making all in kvutils
+> > > > > > > make[4]: Nothing to be done for `all'.
+> > > > > > > Making all in libecasound
+> > > > > > > Making all in plugins
+> > > > > > > make[5]: Nothing to be done for `all'.
+> > > > > > > make[5]: Nothing to be done for `all-am'.
+> > > > > > > Making all in ecasound
+> > > > > > > /home/buildroot/buildroot-2018.02-rc2/output/host/bin/  
+> > > > > > arm-buildroot-linux-uclibcgnueabihf-g++  
+> > > > > > > -DHAVE_CONFIG_H -I. -I. -I.. *-I/usr/include/readline* -I. -I..
+> > > > > > > -I../libecasound -I../kvutils -D_REENTRANT -D_XOPEN_SOURCE=600
+> > > > > > > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> > > > > > > -ffast-math -fstrict-aliasing -DNDEBUG -DENABLE_DBC  
+> > > > -D_LARGEFILE_SOURCE  
+> > > > > > > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -c -o  
+> > eca-curses.o  
+> > > > > > > eca-curses.cpp
+> > > > > > > arm-buildroot-linux-uclibcgnueabihf-g++: WARNING: unsafe  
+> > > > header/library  
+> > > > > > > path used in cross-compilation: '*-I/usr/include/readline*'  
+> > > > > >
+> > > > > > This is just a warning, it doesn't break your build. But you should  
+> > > > fix it.  
+> > > > > >
+> > > > > > The BR2_COMPILER_PARANOID_UNSAFE_PATH option makes this a hard  
+> > error.  
+> > > > But  
+> > > > > > the
+> > > > > > warning is shown anyway.
+> > > > > >  
+> > > > > > > eca-curses.cpp:46:22: fatal error: readline.h: No such file or  
+> > > > directory  
+> > > > > > >  #include <readline.h>
+> > > > > > >                       ^  
+> > > > > >
+> > > > > > This is your problem. Your package need readline. You need to  
+> > select  
+> > > > > > BR2_PACKAGE_READLINE, as well as add readline to your package  
+> > > > dependencies.  
+> > > > > >  
+> > > > > > > compilation terminated.
+> > > > > > > make[4]: *** [eca-curses.o] Error 1
+> > > > > > > make[3]: *** [all-recursive] Error 1
+> > > > > > > make[2]: *** [all] Error 2
+> > > > > > > make[1]: ***
+> > > > > > > [/home/buildroot/buildroot-2018.02-rc2/output/build/  
+> > > > > > ecasound-2.9.1/.stamp_built]  
+> > > > > > > Error 2
+> > > > > > > make: *** [_all] Error 2  
+> >
+> > --
+> >      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> > Systems
+> > =}------------------------------------------------ooO--U--
+> > Ooo------------{=
+> >    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> >  
