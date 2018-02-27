@@ -1,63 +1,49 @@
-From: Mahyar <mahyar.koshkouei@gmail.com>
-Date: Tue, 27 Feb 2018 13:01:22 +0000
-Subject: [Buildroot] [PATCH 1/2] mpv: disable mali-fbdev support
-In-Reply-To: <trinity-3bb9e648-463e-4288-a645-80758d979719-1519672443490@3c-app-mailcom-bs03>
-References: <20180226154112.12857-1-mahyar.koshkouei@gmail.com>
- <trinity-3bb9e648-463e-4288-a645-80758d979719-1519672443490@3c-app-mailcom-bs03>
-Message-ID: <BE2712E5-4F27-4DE9-9F0A-2972C15AB582@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Feb 2018 14:12:38 +0100
+Subject: [Buildroot] Analysis of build results for 2018-02-25
+In-Reply-To: <20180227130822.2208e02b@gmx.net> (Peter Seiderer's message of
+ "Tue, 27 Feb 2018 13:08:22 +0100")
+References: <20180226070010.28C8620727@mail.bootlin.com>
+ <20180226113319.7e3bcf6b@windsurf.lan>
+ <87fu5nsyrg.fsf@dell.be.48ers.dk> <20180227130822.2208e02b@gmx.net>
+Message-ID: <87efl6poe1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dagg,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-The compile failed when odroid-mali specifically was selected. Other Mali packages may work, but I've chosen to disable Mali support until someone with a Mali device can test and fix its support.
+ > Hello Peter,
+ > On Mon, 26 Feb 2018 13:48:03 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Kind Regards,
-Mahyar
+ >> 
+ >> >> powerpc | binutils-2.29.1 | NOK |
+ >> >> http://autobuild.buildroot.net/results/22839bca79e16fc0d76ebc0f3e5ec4a6d23e99f6
+ >> >> | ORPH  
+ >> 
+ >> > read.c: In function 's_app_line':
+ >> > read.c:2001:1: internal compiler error: Segmentation fault
+ >> >  s_app_line (int appline)  
+ >> 
+ >> > Compiler error. It's on PowerPC, with a toolchain from 2017.11. Could
+ >> > someone retry with a newer gcc, and see if it is fixed ?  
+ >> 
+ >> Notice that this happened on gcc67, so on the Ryzen CPU (and nowhere
+ >> else), so I'm afraid the Ryzen crashes are _STILL_ not fixed. I'll stop
+ >> the autobuilder again.
 
+ > Is it a Ryzen CPU manufactured prior to week 25/2017? It is possible to
+ > get an exchange CPU via RMA by AMD Customer Care, see [1] (worked for me
+ > and the new delivered CPU runs stable (and after disabling PowerSaveStates
+ > leading to machine-check exception)...
 
-On 26 February 2018 19:14:03 GMT+00:00, daggs <daggs@gmx.com> wrote:
->Greetings Mahyar ,
->
->>
->> A compile error occurs when attempting to compile mpv with mali
->support
->> (eg. when odroid-mali package is selected).
->> 
->> Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
->> ---
->>  package/mpv/mpv.mk | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->> 
->> diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
->> index 8d10aa7c47..d577674bd9 100644
->> --- a/package/mpv/mpv.mk
->> +++ b/package/mpv/mpv.mk
->> @@ -31,7 +31,8 @@ MPV_CONF_OPTS = \
->>  	--disable-uchardet \
->>  	--disable-vapoursynth \
->>  	--disable-vapoursynth-lazy \
->> -	--disable-vdpau
->> +	--disable-vdpau \
->> +	--disable-mali-fbdev
->>  
->>  # ALSA support requires pcm+mixer
->>  ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
->> -- 
->> 2.16.2
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->> 
->
->I wonder, did it ever compiled when odroid mali is selected?
->
->Dagg.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180227/c694b24e/attachment.html>
+Thanks, but this should already be an exchanged CPU with an updated
+BIOS:
+
+https://lists.tetaneutral.net/pipermail/cfarm-users/2018-February/000252.html
+
+:/
+-- 
+Bye, Peter Korsgaard
