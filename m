@@ -1,32 +1,45 @@
-From: Julia Ding <dingtasiling@gmail.com>
-Date: Mon, 26 Feb 2018 19:03:12 -0700 (MST)
-Subject: [Buildroot] glibc : cannot compute suffix of object files: cannot
- compile
-Message-ID: <1519696992821-0.post@n4.nabble.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 26 Feb 2018 20:10:19 -0600
+Subject: [Buildroot] [NEXT 04/26] cpe-info: only report target pkgs
+In-Reply-To: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1519697441-54194-5-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using i.Mx6Q and I need QT5 + OpenGL. So I just change C library to glibc
-in 'imx6-sabresd_qt5_defconfig'
-When I try to make it, it shows this error
+The reporting of host packages causes some duplication
+and complicates what is really in the targets configuration.
+For the purpose of the first version of this patchset,
+its assumed that host packages aren't relevant for the
+configuration and we only report the target's contents.
 
-configure: error: cannot compute suffix of object files: cannot compile
-See `config.log' for more details
-package/pkg-generic.mk:237: recipe for target
-'/buildroot/output/build/glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98/.stamp_configured'
-failed
-make[1]: ***
-[/buildroot/output/build/glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98/.stamp_configured]
-Error 1
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-My GCC compiler version is 6.X.
-
-How to fix this? Thanks.
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8b80de7..21d62a5 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -842,6 +842,7 @@ else
+ endif
+ 
+ 
++ifneq ($$($(2)_TYPE),host)
+ $(1)-cpe-info: PKG=$(2)
+ $(1)-cpe-info:
+ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+@@ -852,6 +853,7 @@ else
+ 	$(Q)$$(foreach id,$$($(2)_CPE_ID),$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$(id):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))$$(sep))
+ endif # ifeq ($$(call qstrip,$$($(2)_CPE_ID)),)
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
++endif # ifeq ($$($(2)_TYPE),target)
+ 
+ # legal-info: declare dependencies and set values used later for the manifest
+ ifneq ($$($(2)_LICENSE_FILES),)
+-- 
+1.9.1
