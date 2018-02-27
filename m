@@ -1,42 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 23:11:25 +0100
-Subject: [Buildroot] [git commit] qt5wayland: fix build issue with
- mesa3d w/out xcb
-In-Reply-To: <20180227210121.125F78137A@busybox.osuosl.org>
-References: <20180227210121.125F78137A@busybox.osuosl.org>
-Message-ID: <20180227231125.528dcbf9@windsurf.lan>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Tue, 27 Feb 2018 14:16:28 -0800
+Subject: [Buildroot] [PATCH] skeleton-init-systemd: Work around for RO root
+ /var/lib not populating
+Message-ID: <20180227221628.8283-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When using a RO root with systemd, it is intended that /var/lib should be
+populated at boot time by tmpfiles system mirroring it from
+/usr/share/factory/var/lib.
 
-On Tue, 27 Feb 2018 21:48:17 +0100, Peter Korsgaard wrote:
+However, this will only happen if /var/lib does not already exist at the
+time systemd-tmpfiles runs.  If it does exist, then tmpfiles will
+(silently) skip it and do nothing.
 
-> +# The mesa's EGL/eglplatform.h header includes X11 headers unless the flag
-> +# MESA_EGL_NO_X11_HEADERS is defined. Tell to not include X11 headers if
-> +# the libxcb is not selected.
-> +ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL)x$(BR2_PACKAGE_LIBXCB),yx)
-> +QT5WAYLAND_QMAKEFLAGS += QMAKE_CXXFLAGS+=-DMESA_EGL_NO_X11_HEADERS
-> +endif
+It turns out /var/lib will exist, because some part of systemd creates
+/var/lib/systemd/catalog on boot before tmpfiles runs.
 
-I should have replied to the patch, but: I'm not happy with this
-change. Indeed this -D flag should be part of mesa's pkg-config files,
-and be picked up by Qt.
+The fix used here is to also create tmpfiles entries for the contents of
+/var/lib/* and /var/lib/systemd/*.  This way, when those directories
+already exist, the entire tree is not skipped and instead the
+not-yet-existing contents of /var/lib and /var/lib/systemd will be still
+be mirrored from the factory dir.
 
-The simple fact that this identical fix had to be added to qt5wayland,
-qt5webkit and qt5multimedia is a good indication that the fix is not
-the appropriate one. We may have to replicate this fix to lots of other
-qt5 packages.
+And if /var/lib/systemd, or a prefix of that, stops getting created and
+does not exist, it'll still mirror properly.
 
-So the right fix is to propagate the flag using pkg-config.
+It does cause some warnings from systemd:
+systemd[1]: Starting Create Volatile Files and Directories...
+systemd-tmpfiles[148]: [/etc/tmpfiles.d/var-factory.conf:7] Duplicate line for path "/var/lib/systemd", ignoring.
+systemd-tmpfiles[148]: [/etc/tmpfiles.d/var-factory.conf:8] Duplicate line for path "/var/lib/systemd/coredump", ignoring.
 
-Best regards,
+But they can be ignored.
 
-Thomas
+IMHO, I think a better solution would be for systemd-tmpfiles to gain a
+"merge tree" operation that is like "C" but doesn't abort if the
+destination exists, but rather merges the source into it.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/skeleton-init-systemd/skeleton-init-systemd.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index 93bff9d27b..0ff3c774ba 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -42,7 +42,10 @@ endef
+ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 	rm -f $(TARGET_DIR)/var
+ 	mkdir $(TARGET_DIR)/var
+-	for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
++	for i in $(TARGET_DIR)/usr/share/factory/var/* \
++		 $(TARGET_DIR)/usr/share/factory/var/lib/* \
++		 $(TARGET_DIR)/usr/share/factory/var/lib/systemd/*; do \
++		[ -e "$${i}" ] || continue; \
+ 		j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
+ 		if [ -L "$${i}" ]; then \
+ 			printf "L+! %s - - - - %s\n" \
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.14.3
