@@ -1,39 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 22:45:55 +0100
-Subject: [Buildroot] [NEXT 04/26] cpe-info: only report target pkgs
-In-Reply-To: <1519697441-54194-5-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1519697441-54194-5-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180227224555.2d44721c@windsurf.lan>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 27 Feb 2018 22:51:31 +0100
+Subject: [Buildroot] [PATCH] package/tvheadend: disable for microblazeel
+Message-ID: <20180227215131.14972-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+tvheadend does not build on microblazeel, because of some assertion
+failure in binutils:
 
-On Mon, 26 Feb 2018 20:10:19 -0600, Matt Weber wrote:
+    [...]/microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in [...]/lib/gcc/microblazeel-buildroot-linux-uclibc/6.4.0/libgcc.a(_divdi3.o)(.eh_frame) prevents .eh_frame_hdr table being created.
+    [...]/microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in [...]/lib/gcc/microblazeel-buildroot-linux-uclibc/6.4.0/libgcc.a(_udivdi3.o)(.eh_frame) prevents .eh_frame_hdr table being created.
+    [...]/microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in [...]/lib/gcc/microblazeel-buildroot-linux-uclibc/6.4.0/libgcc.a(_umoddi3.o)(.eh_frame) prevents .eh_frame_hdr table being created.
+    [...]/microblazeel-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.29.1 assertion fail elf32-microblaze.c:1494
+    [...]/microblazeel-buildroot-linux-uclibc/bin/ld: [...]/sysroot/usr/lib/Scrt1.o: probably compiled without -fPIC?
+    [...]/microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: Bad value
+    collect2: error: ld returned 1 exit status
 
-> +ifneq ($$($(2)_TYPE),host)
+Fixes:
+    http://autobuild.buildroot.org/results/85475885a95f23f3dbc88e5b162108a458233bc4/
+    [...]
 
-Why not:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/tvheadend/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-ifeq ($$($(2)_TYPE),target)
-
->  $(1)-cpe-info: PKG=$(2)
->  $(1)-cpe-info:
->  ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-> @@ -852,6 +853,7 @@ else
->  	$(Q)$$(foreach id,$$($(2)_CPE_ID),$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$(id):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))$$(sep))
->  endif # ifeq ($$(call qstrip,$$($(2)_CPE_ID)),)
->  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-> +endif # ifeq ($$($(2)_TYPE),target)
-
-... just like your endif comment shows ? :-)
-
-Thomas
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index 44a69a27ba..7c9fb6051e 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -1,10 +1,12 @@
+ comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
++	depends on !BR2_microblazeel
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_TVHEADEND
+ 	bool "tvheadend"
++	depends on !BR2_microblazeel
+ 	depends on !BR2_STATIC_LIBS # dladdr()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.14.1
