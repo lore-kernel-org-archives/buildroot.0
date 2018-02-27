@@ -1,37 +1,30 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Tue, 27 Feb 2018 04:39:24 -0800
-Subject: [Buildroot] [PATCH 3/3] bind sed
-In-Reply-To: <20180227123924.20725-1-chrismcc@gmail.com>
-References: <20180227123924.20725-1-chrismcc@gmail.com>
-Message-ID: <20180227123924.20725-3-chrismcc@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Feb 2018 13:44:57 +0100
+Subject: [Buildroot] [PATCH v2] erlang: enable host-erlang for
+ x86/x86_64 architectures only
+In-Reply-To: <20180226165838.9793-1-johan.oudinet@gmail.com> (Johan Oudinet's
+ message of "Mon, 26 Feb 2018 17:58:38 +0100")
+References: <20180226165838.9793-1-johan.oudinet@gmail.com>
+Message-ID: <87inaippo6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-    sed script to alter directory locations
+>>>>> "Johan" == Johan Oudinet <johan.oudinet@gmail.com> writes:
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
----
- package/bind/configs.sed | 9 +++++++++
- 1 file changed, 9 insertions(+)
- create mode 100644 package/bind/configs.sed
+ > And make erlang depends on host-erlang.
+ > This patch aims at avoiding the following autobuilder failures:
+ > http://autobuild.buildroot.net/results/45edf95c0c44c9d553879e0cbb771098d7c63aa1
+ > http://autobuild.buildroot.net/results/a36d00407a371d70b4551a9717ebd6ff852c8bca
 
-diff --git a/package/bind/configs.sed b/package/bind/configs.sed
-new file mode 100644
-index 0000000000..809da8e10c
---- /dev/null
-+++ b/package/bind/configs.sed
-@@ -0,0 +1,9 @@
-+s#/var/run/named/pid#/var/run/named.pid#
-+s#/var/dump/named_dump.db#/var/named/named_dump.db#
-+s#/var/stats/named.stats#/var/named/named.stats#
-+s#%%ETCDIR%%/master#/etc/bind/master#
-+s#%%ETCDIR%%/named.root#/etc/bind/master/named.root#
-+s#%%ETCDIR%%/working#/var/named#
-+s#%%ETCDIR%%/slave#/var/named/slave#
-+s#%%ETCDIR%%/dynamic#/var/named/dynamic#
-+
+ > Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - Add references to autobuilder failures (suggested by Baruch Siach).
+
+Committed to 2017.11.x, thanks.
+
 -- 
-2.14.3
+Bye, Peter Korsgaard
