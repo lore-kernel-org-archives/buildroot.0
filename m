@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 22:45:23 +0100
-Subject: [Buildroot] [NEXT 03/26] cpe-info: id prefix/suffix
-In-Reply-To: <1519697441-54194-4-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue, 27 Feb 2018 22:45:55 +0100
+Subject: [Buildroot] [NEXT 04/26] cpe-info: only report target pkgs
+In-Reply-To: <1519697441-54194-5-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1519697441-54194-4-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180227224523.002a9e52@windsurf.lan>
+ <1519697441-54194-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180227224555.2d44721c@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 26 Feb 2018 20:10:18 -0600, Matt Weber wrote:
+On Mon, 26 Feb 2018 20:10:19 -0600, Matt Weber wrote:
 
-> +ifeq ($(1),linux)
-> +	$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
-> +else ifeq ($(1),linux-headers)
-> +	$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
+> +ifneq ($$($(2)_TYPE),host)
 
-You can also do:
+Why not:
 
-ifneq ($(filter linux linux-headers,$(1)),)
-$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
-else
-$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
-endif
-
-But OK, it's not a big difference :)
+ifeq ($$($(2)_TYPE),target)
 
 >  $(1)-cpe-info: PKG=$(2)
 >  $(1)-cpe-info:
-> @@ -837,9 +849,9 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
->  ifeq ($$(call qstrip,$$($(2)_CPE_ID)),)
->  	$(Q)$$(call cpe-manifest,"unknown",$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
->  else
-> -	$(Q)$$(foreach id,$$($(2)_CPE_ID),$$(call cpe-manifest,$$(id),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))$$(sep))
-> -endif
-> -endif
-> +	$(Q)$$(foreach id,$$($(2)_CPE_ID),$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$(id):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))$$(sep))
-> +endif # ifeq ($$(call qstrip,$$($(2)_CPE_ID)),)
-> +endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+>  ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+> @@ -852,6 +853,7 @@ else
+>  	$(Q)$$(foreach id,$$($(2)_CPE_ID),$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$(id):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))$$(sep))
+>  endif # ifeq ($$(call qstrip,$$($(2)_CPE_ID)),)
+>  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+> +endif # ifeq ($$($(2)_TYPE),target)
 
-These two comments after the endif's are good, but should have been
-part of a previous commit, which was adding the endif's.
-
-Thanks!
+... just like your endif comment shows ? :-)
 
 Thomas
 -- 
