@@ -1,51 +1,37 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 27 Feb 2018 15:07:43 +0000
-Subject: [Buildroot] LADSPA on Buildroot
-In-Reply-To: <CAPzckP6rEshBt-zHN+rfUd7eVS07Xp=KS3xJpVKLC4LnkuGu8g@mail.gmail.com>
-References: <CAPzckP6rEshBt-zHN+rfUd7eVS07Xp=KS3xJpVKLC4LnkuGu8g@mail.gmail.com>
-Message-ID: <CAFGQKxdJkP0feX-dxhXDa3RQHxtN7G7V_V4x-5Nd=kUq4fSzTA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Feb 2018 17:03:10 +0100
+Subject: [Buildroot] [PATCH v2 1/2] dependencies.mk: check for valid
+ host-tar before other host dependencies
+In-Reply-To: <20180227085541.11318-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 27 Feb 2018 09:55:40 +0100")
+References: <20180227085541.11318-1-peter@korsgaard.com>
+Message-ID: <87a7vupght.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Can you make sure you include the buildroot mailing list for buildroot questions
+ > host-{cmake,lzip,xz} needs host-tar to extract their source code tarball, so
+ > we need to ensure that host-tar gets added to DEPENDENCIES_HOST_PREREQ
+ > before these in case they are both needed, otherwise the tools will fail to
+ > extract.
 
-On 26 February 2018 at 18:38, Sjoerd Venema <srg.venema@gmail.com> wrote:
-> Hi Martin,
->
-> I see that you have tried to install LADSPA on Buildroot?
-> Did you ever succeed at that?
+ > With the upcoming change to blacklist modern tar versions this situation is
+ > likely to trigger more often.
 
-It was a while back now but from memory I experimented with LADSPA
-using it to add a high pass filter to the audio device.  I submitted
-some patches but in then end we decided not to include them in
-buildroot due to the lack of development in the project (no activity
-since 2007).
+ > The real solution to this issue is the <foo>_EXTRACT_DEPENDENCIES rework,
+ > but that series is a bit too intrusive to add this close to 2018.02, so
+ > therefore this hack.
 
->
-> I ask, because I'm trying the same thing, but don't know much about
-> cross-compiling..
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes since v1:
+ >  - Issue not specific to lzip, so put tar in front of everything else
 
-You can find my old patches here:
+Committed, thanks.
 
-http://lists.busybox.net/pipermail/buildroot/2014-April/095073.html
-http://lists.busybox.net/pipermail/buildroot/2014-April/095075.html
-http://lists.busybox.net/pipermail/buildroot/2014-April/095074.html
-
-They add the ladspa-sdk, caps and alsaequal packages to buildroot so
-they will get cross compiled for your target.  You could try
-resurrecting them for your needs.
-
-Thanks
-
-Martin
-
->
-> Love to hear.
->
-> rgds,
-> Sjoerd
+-- 
+Bye, Peter Korsgaard
