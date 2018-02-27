@@ -1,43 +1,37 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 27 Feb 2018 13:08:22 +0100
-Subject: [Buildroot] Analysis of build results for 2018-02-25
-In-Reply-To: <87fu5nsyrg.fsf@dell.be.48ers.dk>
-References: <20180226070010.28C8620727@mail.bootlin.com>
- <20180226113319.7e3bcf6b@windsurf.lan>
- <87fu5nsyrg.fsf@dell.be.48ers.dk>
-Message-ID: <20180227130822.2208e02b@gmx.net>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Tue, 27 Feb 2018 04:39:22 -0800
+Subject: [Buildroot] [PATCH 1/3] bind BIND_PKGDIR
+Message-ID: <20180227123924.20725-1-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+use BIND_PKGDIR instead of package/bind
 
-On Mon, 26 Feb 2018 13:48:03 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+---
+ package/bind/bind.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
->  >> powerpc | binutils-2.29.1 | NOK |
->  >> http://autobuild.buildroot.net/results/22839bca79e16fc0d76ebc0f3e5ec4a6d23e99f6
->  >> | ORPH  
-> 
->  > read.c: In function 's_app_line':
->  > read.c:2001:1: internal compiler error: Segmentation fault
->  >  s_app_line (int appline)  
-> 
->  > Compiler error. It's on PowerPC, with a toolchain from 2017.11. Could
->  > someone retry with a newer gcc, and see if it is fixed ?  
-> 
-> Notice that this happened on gcc67, so on the Ryzen CPU (and nowhere
-> else), so I'm afraid the Ryzen crashes are _STILL_ not fixed. I'll stop
-> the autobuilder again.
-
-Is it a Ryzen CPU manufactured prior to week 25/2017? It is possible to
-get an exchange CPU via RMA by AMD Customer Care, see [1] (worked for me
-and the new delivered CPU runs stable (and after disabling PowerSaveStates
-leading to machine-check exception)...
-
-Regards,
-Peter
-
-[1] https://www.phoronix.com/scan.php?page=article&item=new-ryzen-fixed&num=1
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index bec902079c..392ef321c2 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -93,11 +93,11 @@ endef
+ 
+ ifeq ($(BR2_PACKAGE_BIND_SERVER),y)
+ define BIND_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 0755 -D package/bind/S81named \
++	$(INSTALL) -m 0755 -D $(BIND_PKGDIR)/S81named \
+ 		$(TARGET_DIR)/etc/init.d/S81named
+ endef
+ define BIND_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/bind/named.service \
++	$(INSTALL) -D -m 644 $(BIND_PKGDIR)/named.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/named.service
+ 
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-- 
+2.14.3
