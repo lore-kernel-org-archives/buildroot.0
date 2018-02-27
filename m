@@ -1,35 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Feb 2018 22:03:26 +0100
-Subject: [Buildroot] [PATCH v2] pcre2: add patch fixing a build issue on
- m68k
-In-Reply-To: <20180227205047.20356-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Tue, 27 Feb 2018 21:50:47 +0100")
-References: <20180227205047.20356-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87h8q2m9gh.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Feb 2018 22:04:37 +0100
+Subject: [Buildroot] [PATCH 1/1] apache sbindir
+In-Reply-To: <20180227114033.7746-1-chrismcc@gmail.com>
+References: <20180227114033.7746-1-chrismcc@gmail.com>
+Message-ID: <20180227220437.5691b327@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello,
 
- > A pretty nasty difference in alignment rules between most
- > architectures and m68k lead pcre2 to fail building its 16-bit and
- > 32-bit variants on m68k. This commit adds a patch that fixes that.
+The commit title should be:
 
- > Fixes:
+	apache: pass explicit sbindir
 
- >   http://autobuild.buildroot.net/results/f6a45df5cb80e3fd94d57163bd28a0014a02bf4/
+On Tue, 27 Feb 2018 03:40:33 -0800, Christopher McCrory wrote:
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- > Changes since v1:
- > - Slightly improve the patch for the 32-bit variant. As noted by Peter
- >   Korsgaard, the unused[] array should be before the occu[] array in
- >   this case, to keep the same structure layout.
+> The apache configure script help indicates that the sbindir is PREFIX/sbin , but it actually uses PREFIX/bin. I suspect most people would expect httpd to be /usr/sbin/httpd , not /usr/bin/httpd.
 
-Committed, thanks.
+This needs to be wrapped at 72 characters. Also, it's good avoid first
+person sentences. So instead of "I suspect" you could say: "Most people
+probably expect httpd to be located in /usr/sbin/httpd".
 
+> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+> index e1b1a209cb..010ec31c33 100644
+> --- a/package/apache/apache.mk
+> +++ b/package/apache/apache.mk
+> @@ -29,6 +29,7 @@ APACHE_MPM = worker
+>  endif
+>  
+>  APACHE_CONF_OPTS = \
+> +	--sbindir=/usr/sbin \
+
+Perhaps a quick comment would be appropriate above APACHE_CONF_OPTS,
+like:
+
+# Explicitly pass sbindir, because apache configure script defines it
+# to PREFIX/bin, which doesn't make much sense
+
+Or something like that.
+
+Could you respin an updated version ?
+
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
