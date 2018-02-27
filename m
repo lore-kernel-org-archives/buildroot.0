@@ -1,83 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Feb 2018 22:02:23 +0100
-Subject: [Buildroot] [git commit] pcre2: add patch fixing a build issue on
- m68k
-Message-ID: <20180227210629.8A11D81384@busybox.osuosl.org>
+Date: Tue, 27 Feb 2018 22:05:30 +0100
+Subject: [Buildroot] [git commit] systemd: Fix relative ln add-wants wrapper
+Message-ID: <20180227210629.A01C581384@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9892a795ab1bc6d078cd803b4211f2c5c974b01
+commit: https://git.buildroot.net/buildroot/commit/?id=1cf62bfc1e0774fc36b7acc8b09613dbf46e985b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A pretty nasty difference in alignment rules between most
-architectures and m68k lead pcre2 to fail building its 16-bit and
-32-bit variants on m68k. This commit adds a patch that fixes that.
+The patch to allow systemd to work with old "ln" versions that don't
+support --relative didn't work properly in the the meson-add-wants.sh
+script.
 
-Fixes:
+This results in all the links in systemd's "*.wants" directories being
+broken, e.g.
+/usr/lib/systemd/system/multi-user.target.wants/getty.target ->
+  ../../../../usr/lib/systemd/system/getty.target
+There is one too few ".." in that relative link.
 
-  http://autobuild.buildroot.net/results/f6a45df5cb80e3fd94d57163bd28a0014a02bf4/
+The problem is that the script is called with the link name being either a
+file or an existing directory.  In the latter case, ln creates the link in
+the directory using the name of the target.  This means the link is one
+level deeper than the relative link making code thinks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The solution used is to only dirname the link, moving up a level, if it's
+not a directory, to mimic ln's logic in how it creates links.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre2/0001-fix-heapframe-alignment.patch | 49 ++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ .../0002-install-don-t-use-ln-relative.patch       | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/package/pcre2/0001-fix-heapframe-alignment.patch b/package/pcre2/0001-fix-heapframe-alignment.patch
-new file mode 100644
-index 0000000000..a10e9e793f
---- /dev/null
-+++ b/package/pcre2/0001-fix-heapframe-alignment.patch
-@@ -0,0 +1,49 @@
-+src/pcre2_intmodedep.h: fix alignment of fields in struct heapframe
-+
-+pcre2_intmodedep.h has a check to verify that the size of the struct
-+heapframe is a multiple of 4 bytes. On most architectures this works
-+fine, but not on m68k. Indeed, when building the 16-bit variant of
-+pcre2, the heapframe structure contains:
-+
-+ PCRE2_UCHAR occu[2];
-+ PCRE2_SPTR  eptr;
-+
-+Where PCRE2_UCHAR is a 16-bit data type, and PCRE2_SPTR is a
-+pointer. The occu[] array starts at byte 0x32, so not aligned on a
-+32-bit boundary. With 2 x 16-bit, the occur[] array ends at byte 0x36.
-+
-+Now, on most architectures, the alignment required for a pointer will
-+make the eptr field start at 0x38 (on 32 bit architectures). However,
-+on m68k, it is fine to have a pointer aligned only on a 16-bit
-+boundary, and the eptr pointer will be at offset 0x36.
-+
-+This doesn't cause a problem per-se, but breaks the check that
-+heapframe should be a multiple of 4 bytes.
-+
-+To fix this, we make sure eptr is aligned by introducing an unused
-+field of 16 bits after the occu[] array (in the 16-bit variant) or
-+after the occu[] array (in the 32-bit variant). These choices have
-+been made to keep the structure layout unchanged.
-+
-+Fixes the following build failure on m68k:
-+
-+src/pcre2_intmodedep.h:818:14: error: size of array 'check_heapframe_size' is negative
-+ typedef char check_heapframe_size[
-+              ^~~~~~~~~~~~~~~~~~~~
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream: https://bugs.exim.org/show_bug.cgi?id=2247
-+
-+Index: src/pcre2_intmodedep.h
-+===================================================================
-+--- a/src/pcre2_intmodedep.h	(revision 923)
-++++ b/src/pcre2_intmodedep.h	(working copy)
-+@@ -797,7 +797,9 @@
-+   PCRE2_UCHAR occu[6];       /* Used for other case code units */
-+ #elif PCRE2_CODE_UNIT_WIDTH == 16
-+   PCRE2_UCHAR occu[2];       /* Used for other case code units */
-++  uint8_t     unused[2];     /* Ensure 32 bit alignment */
-+ #else
-++  uint8_t     unused[2];     /* Ensure 32 bit alignment */
-+   PCRE2_UCHAR occu[1];       /* Used for other case code units */
-+ #endif
+diff --git a/package/systemd/0002-install-don-t-use-ln-relative.patch b/package/systemd/0002-install-don-t-use-ln-relative.patch
+index 5f34b56969..61a139e2a2 100644
+--- a/package/systemd/0002-install-don-t-use-ln-relative.patch
++++ b/package/systemd/0002-install-don-t-use-ln-relative.patch
+@@ -1,4 +1,4 @@
+-From ecf3b9baaebda1d9182c22dc504e32ed275d4abb Mon Sep 17 00:00:00 2001
++From 17560d52e9ec0afebbfe31e694870c6433b36f60 Mon Sep 17 00:00:00 2001
+ From: Adam Duskett <Adamduskett@outlook.com>
+ Date: Sun, 31 Dec 2017 12:46:04 -0500
+ Subject: [PATCH] install: don't use ln --relative
+@@ -21,17 +21,20 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ [aduskett at gmail.com: Added meson.build section and dirname wrapper in add-wants]
+ [aduskett at gmail.com: Update for systemd v237]
+ Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
++[tpiepho at impinj.com: Fix add-wants wrapper]
++Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+ ---
+  meson.build                 | 2 +-
+  tools/meson-make-symlink.sh | 3 ++-
+- units/meson-add-wants.sh    | 5 +++--
+- 3 files changed, 6 insertions(+), 4 deletions(-)
++ units/meson-add-wants.sh    | 6 ++++--
++ 3 files changed, 7 insertions(+), 4 deletions(-)
+ 
+ diff --git a/meson.build b/meson.build
+-index ddc061c..614201a 100644
++index d4af95a44..d75f2b34c 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -572,6 +572,6 @@ conf.set_quoted('TELINIT', get_option('telinit-path'))
++@@ -586,7 +586,7 @@ endforeach
++ conf.set_quoted('TELINIT', get_option('telinit-path'))
+  
+  if run_command('ln', '--relative', '--help').returncode() != 0
+ -        error('ln does not support --relative')
+@@ -40,7 +43,7 @@ index ddc061c..614201a 100644
+  
+  ############################################################
+ diff --git a/tools/meson-make-symlink.sh b/tools/meson-make-symlink.sh
+-index 47a5e70..e9002ad 100755
++index 501cd43d4..25e7f89fd 100755
+ --- a/tools/meson-make-symlink.sh
+ +++ b/tools/meson-make-symlink.sh
+ @@ -8,5 +8,6 @@ mkdir -vp "$(dirname "${DESTDIR:-}$2")"
+@@ -52,7 +55,7 @@ index 47a5e70..e9002ad 100755
+ +        ln -vfs -T "${dds}$1" "${DESTDIR:-}$2"
+  fi
+ diff --git a/units/meson-add-wants.sh b/units/meson-add-wants.sh
+-index dfd287e..8c08283 100755
++index 70f7172ae..bb8155075 100755
+ --- a/units/meson-add-wants.sh
+ +++ b/units/meson-add-wants.sh
+ @@ -14,7 +14,7 @@ case "$target" in
+@@ -64,12 +67,13 @@ index dfd287e..8c08283 100755
+  
+  case "$target" in
+          */)
+-@@ -25,4 +25,5 @@ case "$target" in
++@@ -25,4 +25,6 @@ case "$target" in
+                  ;;
+  esac
+  
+ -ln -vfs --relative "$unitpath" "$dir"
+-+dds="$( dirname `printf "%s" "${dir#${DESTDIR:-}}" |sed -r -e 's:/+[^/]+:../:g; s:/$::'` )"
+++[ ! -d "${dir}" ] && linkdir=`dirname "${dir}"` || linkdir="${dir}"
+++dds="$(printf "%s" "${linkdir#${DESTDIR:-}}" |sed -r -e 's:/+[^/]+:../:g; s:/$::')"
+ +ln -vfs "$dds$unitpath" "$dir"
+ -- 
+ 2.14.3
