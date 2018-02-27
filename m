@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 26 Feb 2018 20:10:34 -0600
-Subject: [Buildroot] [NEXT 19/26] libzlib: add CPE id
+Date: Mon, 26 Feb 2018 20:10:24 -0600
+Subject: [Buildroot] [NEXT 09/26] bzip2: add CPE id
 In-Reply-To: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1519697441-54194-20-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1519697441-54194-10-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/libzlib/libzlib.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/bzip2/bzip2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
-index eea0c12..b94a1d7 100644
---- a/package/libzlib/libzlib.mk
-+++ b/package/libzlib/libzlib.mk
-@@ -11,6 +11,7 @@ LIBZLIB_LICENSE = Zlib
- LIBZLIB_LICENSE_FILES = README
- LIBZLIB_INSTALL_STAGING = YES
- LIBZLIB_PROVIDES = zlib
-+LIBZLIB_CPE_ID = gnu:zlib:$(LIBZLIB_VERSION)
+diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+index e435330..c81f587 100644
+--- a/package/bzip2/bzip2.mk
++++ b/package/bzip2/bzip2.mk
+@@ -10,6 +10,8 @@ BZIP2_INSTALL_STAGING = YES
+ BZIP2_LICENSE = bzip2 license
+ BZIP2_LICENSE_FILES = LICENSE
  
- # It is not possible to build only a shared version of zlib, so we build both
- # shared and static, unless we only want the static libs, and we eventually
++BZIP2_CPE_ID=bzip:$(BZIP2_NAME):$(BZIP2_VERSION)
++
+ ifeq ($(BR2_STATIC_LIBS),)
+ define BZIP2_BUILD_SHARED_CMDS
+ 	$(TARGET_MAKE_ENV) \
 -- 
 1.9.1
