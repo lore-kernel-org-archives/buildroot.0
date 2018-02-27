@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Feb 2018 21:02:32 +0100
-Subject: [Buildroot] [PATCH 1/2] mpv: disable mali-fbdev support
-In-Reply-To: <20180226154112.12857-1-mahyar.koshkouei@gmail.com> (Mahyar
- Koshkouei's message of "Mon, 26 Feb 2018 15:41:11 +0000")
+Date: Tue, 27 Feb 2018 21:06:02 +0100
+Subject: [Buildroot] [PATCH 2/2] mpv: security bump to 0.27.2
+In-Reply-To: <20180226154112.12857-2-mahyar.koshkouei@gmail.com> (Mahyar
+ Koshkouei's message of "Mon, 26 Feb 2018 15:41:12 +0000")
 References: <20180226154112.12857-1-mahyar.koshkouei@gmail.com>
-Message-ID: <87fu5mnquf.fsf@dell.be.48ers.dk>
+ <20180226154112.12857-2-mahyar.koshkouei@gmail.com>
+Message-ID: <87bmganqol.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Mahyar" == Mahyar Koshkouei <mahyar.koshkouei@gmail.com> writes:
 
- > A compile error occurs when attempting to compile mpv with mali support
- > (eg. when odroid-mali package is selected).
-
+ > Fixes CVE-2018-6360.
  > Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 
-Committed after adding an autobuilder reference, thanks.
+Committed after adding a description of the CVE, thanks.
 
 -- 
 Bye, Peter Korsgaard
