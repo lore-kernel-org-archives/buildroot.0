@@ -1,72 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 22:18:15 +0100
-Subject: [Buildroot] [PATCH 2/2] apache init script
-In-Reply-To: <20180227115022.8802-1-chrismcc@gmail.com>
-References: <20180227115022.8802-1-chrismcc@gmail.com>
-Message-ID: <20180227221815.21afde38@windsurf.lan>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Tue, 27 Feb 2018 13:21:31 -0800
+Subject: [Buildroot] [PATCH] bluez5_utils: Make systemd link correctly
+Message-ID: <20180227212131.3142-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The link in /etc/systemd/system/, named dbus-org.bluez.service, pointing to
+../../../../usr/lib/systemd/system/bluetooth.service has one too many ".." in
+it.  Likely the target was copied from the other link in
+/etc/systemd/system/bluetooth.target.wants/, which is one level deeper.
 
-Thanks for this contribution!
+Adjust link to be correct.
 
-The commit title should be something like:
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/bluez5_utils/bluez5_utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	apache: install an sysv init script
-
-On Tue, 27 Feb 2018 03:50:22 -0800, Christopher McCrory wrote:
-> This patches and installs the included init script.  The script mostly works, but could use a little more editing.
-
-The commit log should be wrapped to 72 characters.
-
->  package/apache/0003-init-script.patch | 56 +++++++++++++++++++++++++++++++++++
->  package/apache/apache.mk              |  6 ++++
->  2 files changed, 62 insertions(+)
->  create mode 100644 package/apache/0003-init-script.patch
-> 
-> diff --git a/package/apache/0003-init-script.patch b/package/apache/0003-init-script.patch
-> new file mode 100644
-> index 0000000000..1d7a6a022a
-> --- /dev/null
-> +++ b/package/apache/0003-init-script.patch
-
-All patches should have a description and a Signed-off-by line.
-
-What does the complete init script looks like after your patch ? Is it
-worth re-using the init script provided by Apache, as opposed to
-providing a simple one in package/apache/S<xy>apache  ?
-
-> +define APACHE_INSTALL_INIT_SCRIPT
-
-Just call this variable:
-
-APACHE_INSTALL_INIT_SYSV
-
-This way, no need to add it to APACHE_POST_INSTALL_TARGET_HOOKS, and
-the script will not be installed if the Buildroot configuration uses
-systemd instead of busybox init or sysvinit.
-
-> +	$(INSTALL) -D -m 0755 $(@D)/build/rpm/httpd.init \
-> +	 $(TARGET_DIR)/etc/init.d/S85httpd
-
-Second line should be intended with two tabs.
-
-> +endef
-> +APACHE_POST_INSTALL_TARGET_HOOKS += APACHE_INSTALL_INIT_SCRIPT
-
-So this line can go away.
-
-Could you take into account those comments and submit an updated
-version ?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 0634ec9f6f..395340a3e6 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -116,7 +116,7 @@ define BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants
+ 	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
+ 		$(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants/bluetooth.service
+-	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
++	ln -fs ../../../usr/lib/systemd/system/bluetooth.service \
+ 		$(TARGET_DIR)/etc/systemd/system/dbus-org.bluez.service
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.14.3
