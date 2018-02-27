@@ -1,86 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Feb 2018 21:50:47 +0100
-Subject: [Buildroot] [PATCH v2] pcre2: add patch fixing a build issue on m68k
-Message-ID: <20180227205047.20356-1-thomas.petazzoni@bootlin.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 27 Feb 2018 21:51:25 +0100
+Subject: [Buildroot] [PATCH 1/1] azmq: bump to version 1.0.2
+Message-ID: <20180227205125.8121-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A pretty nasty difference in alignment rules between most
-architectures and m68k lead pcre2 to fail building its 16-bit and
-32-bit variants on m68k. This commit adds a patch that fixes that.
+Add license hash
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/f6a45df5cb80e3fd94d57163bd28a0014a02bf4/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes since v1:
-- Slightly improve the patch for the 32-bit variant. As noted by Peter
-  Korsgaard, the unused[] array should be before the occu[] array in
-  this case, to keep the same structure layout.
----
- package/pcre2/0001-fix-heapframe-alignment.patch | 49 ++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/pcre2/0001-fix-heapframe-alignment.patch
+ package/azmq/azmq.hash | 5 +++--
+ package/azmq/azmq.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/pcre2/0001-fix-heapframe-alignment.patch b/package/pcre2/0001-fix-heapframe-alignment.patch
-new file mode 100644
-index 0000000000..a10e9e793f
---- /dev/null
-+++ b/package/pcre2/0001-fix-heapframe-alignment.patch
-@@ -0,0 +1,49 @@
-+src/pcre2_intmodedep.h: fix alignment of fields in struct heapframe
-+
-+pcre2_intmodedep.h has a check to verify that the size of the struct
-+heapframe is a multiple of 4 bytes. On most architectures this works
-+fine, but not on m68k. Indeed, when building the 16-bit variant of
-+pcre2, the heapframe structure contains:
-+
-+ PCRE2_UCHAR occu[2];
-+ PCRE2_SPTR  eptr;
-+
-+Where PCRE2_UCHAR is a 16-bit data type, and PCRE2_SPTR is a
-+pointer. The occu[] array starts at byte 0x32, so not aligned on a
-+32-bit boundary. With 2 x 16-bit, the occur[] array ends at byte 0x36.
-+
-+Now, on most architectures, the alignment required for a pointer will
-+make the eptr field start at 0x38 (on 32 bit architectures). However,
-+on m68k, it is fine to have a pointer aligned only on a 16-bit
-+boundary, and the eptr pointer will be at offset 0x36.
-+
-+This doesn't cause a problem per-se, but breaks the check that
-+heapframe should be a multiple of 4 bytes.
-+
-+To fix this, we make sure eptr is aligned by introducing an unused
-+field of 16 bits after the occu[] array (in the 16-bit variant) or
-+after the occu[] array (in the 32-bit variant). These choices have
-+been made to keep the structure layout unchanged.
-+
-+Fixes the following build failure on m68k:
-+
-+src/pcre2_intmodedep.h:818:14: error: size of array 'check_heapframe_size' is negative
-+ typedef char check_heapframe_size[
-+              ^~~~~~~~~~~~~~~~~~~~
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream: https://bugs.exim.org/show_bug.cgi?id=2247
-+
-+Index: src/pcre2_intmodedep.h
-+===================================================================
-+--- a/src/pcre2_intmodedep.h	(revision 923)
-++++ b/src/pcre2_intmodedep.h	(working copy)
-+@@ -797,7 +797,9 @@
-+   PCRE2_UCHAR occu[6];       /* Used for other case code units */
-+ #elif PCRE2_CODE_UNIT_WIDTH == 16
-+   PCRE2_UCHAR occu[2];       /* Used for other case code units */
-++  uint8_t     unused[2];     /* Ensure 32 bit alignment */
-+ #else
-++  uint8_t     unused[2];     /* Ensure 32 bit alignment */
-+   PCRE2_UCHAR occu[1];       /* Used for other case code units */
-+ #endif
+diff --git a/package/azmq/azmq.hash b/package/azmq/azmq.hash
+index d3993f4988..35139cfaeb 100644
+--- a/package/azmq/azmq.hash
++++ b/package/azmq/azmq.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+-# https://github.com/zeromq/azmq/archive/v1.0.tar.gz
+-sha256 c204c731bcb7810ca3a2c5515e88974ef2ff8d0589e60a897dc238b369180e7b  azmq-v1.0.tar.gz
++# https://github.com/zeromq/azmq/archive/v1.0.2.tar.gz
++sha256 25fa8b07756cffae95e25a55c7ea42efe02e8cd797552201aa771dd69cfc8fbf  azmq-v1.0.2.tar.gz
++sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-BOOST_1_0
+diff --git a/package/azmq/azmq.mk b/package/azmq/azmq.mk
+index 427ad0f5b4..9ccb407a65 100644
+--- a/package/azmq/azmq.mk
++++ b/package/azmq/azmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AZMQ_VERSION = v1.0
++AZMQ_VERSION = v1.0.2
+ AZMQ_SITE = $(call github,zeromq,azmq,$(AZMQ_VERSION))
+ AZMQ_DEPENDENCIES = boost zeromq
+ AZMQ_LICENSE = BSL-1.0
 -- 
-2.14.3
+2.14.1
