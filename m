@@ -1,75 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Feb 2018 07:38:27 +0100
-Subject: [Buildroot] [NEXT 06/26] boa: add CPE id
-In-Reply-To: <CANQCQpbM3VHid2rGTFAA=HwkhsUfmHRbGw9EDtT2dPUWwQRDog@mail.gmail.com>
-References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1519697441-54194-7-git-send-email-matthew.weber@rockwellcollins.com>
- <20180227231718.090c22ef@windsurf.lan>
- <CANQCQpbM3VHid2rGTFAA=HwkhsUfmHRbGw9EDtT2dPUWwQRDog@mail.gmail.com>
-Message-ID: <20180228073827.312a9a6f@windsurf.home>
+Date: Wed, 28 Feb 2018 07:55:33 +0100
+Subject: [Buildroot] Trouble with offline build
+In-Reply-To: <20180228045310.bugxi5bb3w2djjaa@tarshish>
+References: <CAMd7AX_bD6b4c2xhnsWPicPCETk9z3bDP4yT9k3Jpd9Op1F8tA@mail.gmail.com>
+ <20180228045310.bugxi5bb3w2djjaa@tarshish>
+Message-ID: <20180228075533.564a23b7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Baruch, Hello Aaron,
 
-On Tue, 27 Feb 2018 22:00:31 -0600, Matthew Weber wrote:
+On Wed, 28 Feb 2018 06:53:10 +0200, Baruch Siach wrote:
 
-> > LIBZLIB_CPE_ID_VENDOR = gnu
-> > LIBZLIB_CPE_ID_NAME = zlib
-> >  
+> > I'm new enough that I'm not even sure why this package is being
+> > downloaded.  I must have it in one of the config files, but it's not an
+> > obvious.  
 > 
-> Where it gets difficult is when a package has multiple CPEs so that
-> you catch all possible combinations that could be relevant for the
-> package.  Eventually there shouldn't be multiple once the dictionary
-> at NIST is cleaned up......
+> As you can see from the output below, this is a host package (host-lzip). lzip 
+> is needed to extract some packages. Buildroot builds this host package only 
+> when the host has no lzip installed. The same goes for a number of other 
+> dependencies. See support/dependencies/. So you can either install lzip on 
+> your build machine, or force the download of lzip with 'make lzip-source'
 
-Well, my proposal contained:
+I obviously entirely agree with Baruch analysis here. However, I am a
+bit unhappy about the fact that Buildroot doesn't handle this in a
+better way, even though I'm not sure what the better way would be.
 
-$(2)_CPE_ID ?= $($(2)_CPE_ID_VENDOR):$($(2)_CPE_ID_NAME):$($(2)_CPE_ID_VERSION)
+I believe Aaron's expectation that given a Buildroot configuration, a
+"make source" on machine A should download everything that is needed to
+do a build of the same configuration on machine B is a reasonable
+expectation.
 
-Notice the ?=, which still allows a given package to override its
-<pkg>_CPE_ID value entirely, potentially with a list of multiple values.
+However, there are several host machine details that prevent this from
+happening today:
 
-> One thing I didn't think about with the multiple CPEs is the logic to
-> detect if a CPE needs updating in the CPE dictionary.  We'd have to
-> look at all possible CPE id options to see if any match.  This may
-> lead to us wanting to push to update the primary CPE ID sooner then
-> later and align all our packages to use it instead of supporting
-> multiple.  Then we could use the logic of having all packages set the
-> LIBZLIB_CPE_ID_VENDOR and key off that to know we report that packages
-> info.
+ - host architecture: we may download a x86 or x86-64 pre-built binary.
+   External toolchains come to mind, but also things like pre-built
+   rust compiler, or other things like that.
 
-I am not sure what is the story being multiple CPE IDs. Is it the NIST
-database having two entries for what is essentially the same upstream
-software ? If that's the case, then it really is a bug in the NIST
-database, which should rather be fixed in the database rather than
-worked around on our side by supporting CPE IDs, no ?
+ - Things that we skip building if a suitable version if found on the
+   host: host-cmake, host-lzip, host-xzcat, host-tar.
 
-Of course, fixing the NIST database is the ideal situation, but it is
-only reasonable if the NIST people are interested in fixing those
-issues in a timely fashion. If they are not, then I'd say it's fine to
-support multiple CPE IDs in Buildroot for the time being.
+To be honest, I don't really see how to solve that problem. the
+host-{cmake,lzip,xzcat,tar} issue could probably be solved by
+downloading all of them even if some of them won't be needed (we may
+have a "make all-source" that differs from "make source" to avoid "make
+source" from downloading useless stuff). However, for the host
+architecture difference, I'm not sure how to proceed, and I'm not sure
+there is a reasonable solution.
 
-> > The drawback is obviously that all packages will suddenly have a
-> > <pkg>_CPE_ID value, even if this value may potentially be incorrect
-> > because it hasn't been checked. And this may be a real problem, so
-> > probably your solution is better, I just wanted to point out the
-> > (admittedly limited) duplication.  
-> 
-> Yeah, eventually I'd argue we could revert back to infra logic and
-> clean it all up once there is a baseline or majority of packages with
-> valid CPE IDs.    However for now, I default those we don't have to
-> unknown so it's clear for a developer to go research or request a new
-> CPE.
+Bottom line: should we document/make it clear that doing a "make
+source" on machine A and then do a build on machine B is not
+guaranteeing a fully offline build ? It's a bit of a pity, because I
+know there are some environment where only a given machine has Internet
+access, and the developer machines don't, but I don't see a good way of
+solving this in Buildroot.
 
-Yes, that is a possibility. As I said, I do realize that my proposal
-has the significant drawback of not allowing to identify clearly which
-package has a correct CPE_ID (voluntarily added by a developer) vs.
-some potentially random CPE_ID (set by default by the package
-infrastructure).
+Any comments or suggestions ?
 
 Thomas
 -- 
