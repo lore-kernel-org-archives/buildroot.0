@@ -1,48 +1,63 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Wed, 28 Feb 2018 06:47:52 -0500
-Subject: [Buildroot] [git commit] qt5wayland: fix build issue with
- mesa3d w/out xcb
-In-Reply-To: <87zi3tlj4q.fsf@dell.be.48ers.dk>
-References: <20180227210121.125F78137A@busybox.osuosl.org>
- <20180227231125.528dcbf9@windsurf.lan>
- <87zi3tlj4q.fsf@dell.be.48ers.dk>
-Message-ID: <20180228114752.h66a7qpvfug3dn3g@archlinux>
+From: =?UTF-8?B?KioqKiogKioqKio=?= <zyama.abel@mail.ru>
+Date: Wed, 28 Feb 2018 15:00:49 +0300
+Subject: [Buildroot] =?utf-8?q?Bug=3A_buildroot_failed_when_build_asteris?=
+ =?utf-8?q?k_13=2E19?=
+Message-ID: <1519819249.769725505@f221.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter,
 
-On Wed, Feb 28, 2018 at 07:32:05AM +0100, Peter Korsgaard wrote:
-> ...
-> 
-> Yes, you had already discussed this on IRC and I agree, but that fix
-> does not look like it will be ready in time for 2018.02, so I've added
-> these fixes for now.
-> 
-> But indeed, please continue to work on the real upstreamable pkg-config
-> fix.
->
 
-I have backported the patch[1] pointed by Peter Seiderer and the build
-of qt5multimedia, qt5wayland and qt5webkit passed successfully on next
-branch where the workaround is not preset (+ qt5.10).
+Why happens fail when I build asterisk 13.19 with buildroot-2018.02-rc2 ?
+I modified file ./package/asterisk/asterisk.mk typed version 13.19.0
 
-As you can see, the -DMESA_EGL_NO_X11_HEADERS flag is passed to the
-compiler.
+Log buildroot:
+============================================================================================================================
 
-	/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/bin/x86_64-buildroot-linux-gnu-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot -O2 -O3 -std=c++1z -fvisibility=hidden -fvisibility-inlines-hidden -fno-exceptions -Wall -W -Wvla -Wdate-time -Wshift-overflow=2 -Wduplicated-cond -D_REENTRANT -fPIC -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_PLUGIN -DQT_WAYLANDCLIENT_LIB -DQT_SERVICE_SUPPORT_LIB -DQT_EGL_SUPPORT_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DMESA_EGL_NO_X11_HEADERS -I. -I../../../../hardwareintegration/client/wayland-egl -I../../../../../include/QtWaylandClient/5.10.1 -I../../../../../include/QtWaylandClient/5.10.1/QtWaylandClient -I../../../../../include -I../../../../../include/QtWaylandClient -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5 -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtServiceSupport -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtServiceSupport/5.10.1 -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtServiceSupport/5.10.1/QtServiceSupport -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtEglSupport -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtEglSupport/5.10.1 -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtEglSupport/5.10.1/QtEglSupport -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtGui/5.10.1 -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtGui/5.10.1/QtGui -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtGui -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtCore/5.10.1 -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtCore/5.10.1/QtCore -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/qt5/QtCore -I.moc -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include -I/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/mkspecs/devices/linux-buildroot-g++ -o .obj/qwaylandglcontext.o ../../../../hardwareintegration/client/wayland-egl/qwaylandglcontext.cpp
+root at container_debian_9_stretch:/buildroot# make
 
-So sorry for the noise; I finally found the time (copy a simple patch
-and start a build). I can send a patch serie today for master that
-reverts my workaround.
+host-asterisk 13.19.0 Downloading
+--2018-02-27 19:24:13--? https://github.com/asterisk/asterisk/archive/13.19.0/asterisk-13.19.0.tar.gz
+Resolving proxy.domain.lan (proxy.domain.lan)... 148.54.5.8
+Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
+Proxy request sent, awaiting response... 302 Found
+Location: https://codeload.github.com/asterisk/asterisk/tar.gz/13.19.0 [following]
+--2018-02-27 19:24:14--? https://codeload.github.com/asterisk/asterisk/tar.gz/13.19.0
+Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 8892922 (8.5M) [application/x-gzip]
+Saving to: '/buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/output'
 
-Note: It is not tested on other EGL platform without XCB and MESA3D/EGL
-with XCB.
+/buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/ou 100%[======================================================================================================================================>]? ?8.48M? 2.37MB/s? ? in 3.6s
 
-[1]: https://codereview.qt-project.org/#/c/198906/
+2018-02-27 19:24:18 (2.37 MB/s) - '/buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/output' saved [8892922/8892922]
 
-Regards,
-Gael
+ERROR: No hash found for asterisk-13.19.0.tar.gz
+--2018-02-27 19:24:18--? http://sources.buildroot.net/asterisk-13.19.0.tar.gz
+Resolving proxy.domain.lan (proxy.domain.lan)... 148.54.5.8
+Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
+Proxy request sent, awaiting response... 404 Not Found
+2018-02-27 19:24:18 ERROR 404: Not Found.? ? ? ? ? ? ? ? ? ?<------------ file not found (asterisk-13.19.0) http://sources.buildroot.net
+
+package/pkg-generic.mk:159: recipe for target '/buildroot/output/build/host-asterisk-13.19.0/.stamp_downloaded' failed
+make: *** [/buildroot/output/build/host-asterisk-13.19.0/.stamp_downloaded] Error 1
+root@container_debian_9_stretch:/buildroot#
+
+Site http://sources.buildroot.net contain asterisk 14.x version only.
+============================================================================================================================
+assimp-v3.2.tar.gz? ? 2015-Dec-28 23:05:09? ? 32.1M? ? application/x-gtar-compressed
+asterisk-1.6.0-beta6.tar.gz? ? 2008-Sep-04 01:10:21? ? 12.4M? ? application/x-gtar-compressed
+asterisk-14.5.0.tar.gz? ? 2017-Sep-25 10:04:22? ? 8.5M? ? application/x-gtar-compressed
+asterisk-14.6.2.tar.gz? ? 2018-Jan-08 03:18:52? ? 8.5M? ? application/x-gtar-compressed
+asterisk-14.7.5.tar.gz? ? 2018-Jan-22 11:16:04? ? 8.6M? ? application/x-gtar-compressed
+asterisk-14.7.6.tar.gz? ? 2018-Feb-26 04:16:20? ? 8.6M? ? application/x-gtar-compressed
+asterisk-core-sounds-en-gsm-1.5.tar.gz? ? 2017-Sep-25 10:04:25? ? 2.3M? ? application/x-gtar-compressed
+asterisk-moh-opsound-wav-2.03.tar.gz? ? 2017-Sep-25 10:04:40? ? 14.6M? ? application/x-gtar-compressed
+at_3.1.10.tar.gz? ? 2006-Jan-03 07:32:05? ? 96.8K? ? application/x-gtar-compressed
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180228/569b1794/attachment.html>
