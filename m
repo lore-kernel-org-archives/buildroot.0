@@ -1,63 +1,64 @@
-From: =?UTF-8?B?KioqKiogKioqKio=?= <zyama.abel@mail.ru>
-Date: Wed, 28 Feb 2018 15:00:49 +0300
-Subject: [Buildroot] =?utf-8?q?Bug=3A_buildroot_failed_when_build_asteris?=
- =?utf-8?q?k_13=2E19?=
-Message-ID: <1519819249.769725505@f221.i.mail.ru>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Wed, 28 Feb 2018 07:15:27 -0500
+Subject: [Buildroot] [PATCH 1/1] postgresql: bump to 10.2
+Message-ID: <20180228121527.2556-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+Hi,
 
+It solves the following error met when I tried to compile all qt5 modules,
+including the PostgreSQL Plugin (BR2_PACKAGE_QT5BASE_PSQL).
 
-Why happens fail when I build asterisk 13.19 with buildroot-2018.02-rc2 ?
-I modified file ./package/asterisk/asterisk.mk typed version 13.19.0
+Fixes (with 10.1):
 
-Log buildroot:
-============================================================================================================================
+	copy_fetch.c:159:1: error: conflicting types for ?copy_file_range?
+	 copy_file_range(const char *path, off_t begin, off_t end, bool trunc)
+	 ^~~~~~~~~~~~~~~
+	In file included from copy_fetch.c:15:0:
+	/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/unistd.h:1110:9:
+	note: previous declaration of ?copy_file_range? was here
+	 ssize_t copy_file_range (int __infd, __off64_t *__pinoff,
+	         ^~~~~~~~~~~~~~~
+	<builtin>: recipe for target 'copy_fetch.o' failed
+	make[5]: *** [copy_fetch.o] Error 1
 
-root at container_debian_9_stretch:/buildroot# make
+Regards,
+Gael
 
-host-asterisk 13.19.0 Downloading
---2018-02-27 19:24:13--? https://github.com/asterisk/asterisk/archive/13.19.0/asterisk-13.19.0.tar.gz
-Resolving proxy.domain.lan (proxy.domain.lan)... 148.54.5.8
-Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
-Proxy request sent, awaiting response... 302 Found
-Location: https://codeload.github.com/asterisk/asterisk/tar.gz/13.19.0 [following]
---2018-02-27 19:24:14--? https://codeload.github.com/asterisk/asterisk/tar.gz/13.19.0
-Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
-Proxy request sent, awaiting response... 200 OK
-Length: 8892922 (8.5M) [application/x-gzip]
-Saving to: '/buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/output'
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-/buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/ou 100%[======================================================================================================================================>]? ?8.48M? 2.37MB/s? ? in 3.6s
-
-2018-02-27 19:24:18 (2.37 MB/s) - '/buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/output' saved [8892922/8892922]
-
-ERROR: No hash found for asterisk-13.19.0.tar.gz
---2018-02-27 19:24:18--? http://sources.buildroot.net/asterisk-13.19.0.tar.gz
-Resolving proxy.domain.lan (proxy.domain.lan)... 148.54.5.8
-Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
-Proxy request sent, awaiting response... 404 Not Found
-2018-02-27 19:24:18 ERROR 404: Not Found.? ? ? ? ? ? ? ? ? ?<------------ file not found (asterisk-13.19.0) http://sources.buildroot.net
-
-package/pkg-generic.mk:159: recipe for target '/buildroot/output/build/host-asterisk-13.19.0/.stamp_downloaded' failed
-make: *** [/buildroot/output/build/host-asterisk-13.19.0/.stamp_downloaded] Error 1
-root@container_debian_9_stretch:/buildroot#
-
-Site http://sources.buildroot.net contain asterisk 14.x version only.
-============================================================================================================================
-assimp-v3.2.tar.gz? ? 2015-Dec-28 23:05:09? ? 32.1M? ? application/x-gtar-compressed
-asterisk-1.6.0-beta6.tar.gz? ? 2008-Sep-04 01:10:21? ? 12.4M? ? application/x-gtar-compressed
-asterisk-14.5.0.tar.gz? ? 2017-Sep-25 10:04:22? ? 8.5M? ? application/x-gtar-compressed
-asterisk-14.6.2.tar.gz? ? 2018-Jan-08 03:18:52? ? 8.5M? ? application/x-gtar-compressed
-asterisk-14.7.5.tar.gz? ? 2018-Jan-22 11:16:04? ? 8.6M? ? application/x-gtar-compressed
-asterisk-14.7.6.tar.gz? ? 2018-Feb-26 04:16:20? ? 8.6M? ? application/x-gtar-compressed
-asterisk-core-sounds-en-gsm-1.5.tar.gz? ? 2017-Sep-25 10:04:25? ? 2.3M? ? application/x-gtar-compressed
-asterisk-moh-opsound-wav-2.03.tar.gz? ? 2017-Sep-25 10:04:40? ? 14.6M? ? application/x-gtar-compressed
-at_3.1.10.tar.gz? ? 2006-Jan-03 07:32:05? ? 96.8K? ? application/x-gtar-compressed
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180228/569b1794/attachment.html>
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index e2347701c1..2950470fb9 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v10.1/postgresql-10.1.tar.bz2.sha256
+-sha256	3ccb4e25fe7a7ea6308dea103cac202963e6b746697366d72ec2900449a5e713	postgresql-10.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v10.2/postgresql-10.2.tar.bz2.sha256
++sha256	fe32009b62ddb97f7f014307ce9d0edb6972f5a698e63cb531088e147d145bad	postgresql-10.2.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256	7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676	COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 4657489a53..4b2bca714b 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 10.1
++POSTGRESQL_VERSION = 10.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+-- 
+2.11.0
