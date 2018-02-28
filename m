@@ -1,68 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Feb 2018 07:55:33 +0100
-Subject: [Buildroot] Trouble with offline build
-In-Reply-To: <20180228045310.bugxi5bb3w2djjaa@tarshish>
-References: <CAMd7AX_bD6b4c2xhnsWPicPCETk9z3bDP4yT9k3Jpd9Op1F8tA@mail.gmail.com>
- <20180228045310.bugxi5bb3w2djjaa@tarshish>
-Message-ID: <20180228075533.564a23b7@windsurf.home>
+Date: Wed, 28 Feb 2018 08:00:32 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-02-27
+Message-ID: <20180228070032.8565F20986@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch, Hello Aaron,
+Hello,
 
-On Wed, 28 Feb 2018 06:53:10 +0200, Baruch Siach wrote:
+Build statistics for 2018-02-27
+===============================
 
-> > I'm new enough that I'm not even sure why this package is being
-> > downloaded.  I must have it in one of the config files, but it's not an
-> > obvious.  
-> 
-> As you can see from the output below, this is a host package (host-lzip). lzip 
-> is needed to extract some packages. Buildroot builds this host package only 
-> when the host has no lzip installed. The same goes for a number of other 
-> dependencies. See support/dependencies/. So you can either install lzip on 
-> your build machine, or force the download of lzip with 'make lzip-source'
+      branch |  OK | NOK | TIM | TOT |
+      master | 130 |   2 |   0 | 132 |
+   2017.11.x |  12 |   1 |   0 |  13 |
+        next |  27 |   7 |   0 |  34 |
 
-I obviously entirely agree with Baruch analysis here. However, I am a
-bit unhappy about the fact that Buildroot doesn't handle this in a
-better way, even though I'm not sure what the better way would be.
+Results for branch 'master'
+===========================
 
-I believe Aaron's expectation that given a Buildroot configuration, a
-"make source" on machine A should download everything that is needed to
-do a build of the same configuration on machine B is a reasonable
-expectation.
+Classification of failures by reason
+------------------------------------
 
-However, there are several host machine details that prevent this from
-happening today:
+             bluez5_utils-5.48 | 1 
+                    sdl2-2.0.7 | 1 
 
- - host architecture: we may download a x86 or x86-64 pre-built binary.
-   External toolchains come to mind, but also things like pre-built
-   rust compiler, or other things like that.
 
- - Things that we skip building if a suitable version if found on the
-   host: host-cmake, host-lzip, host-xzcat, host-tar.
+Detail of failures
+------------------
 
-To be honest, I don't really see how to solve that problem. the
-host-{cmake,lzip,xzcat,tar} issue could probably be solved by
-downloading all of them even if some of them won't be needed (we may
-have a "make all-source" that differs from "make source" to avoid "make
-source" from downloading useless stuff). However, for the host
-architecture difference, I'm not sure how to proceed, and I'm not sure
-there is a reasonable solution.
+microblazeel |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/75b2025131439e2e8f77f7182d3d77c9152c273f |     
+         arm |                     sdl2-2.0.7 | NOK | http://autobuild.buildroot.net/results/9612d43b192bbb88214a11fe18f8b8da6ad10313 |     
 
-Bottom line: should we document/make it clear that doing a "make
-source" on machine A and then do a build on machine B is not
-guaranteeing a fully offline build ? It's a bit of a pity, because I
-know there are some environment where only a given machine has Internet
-access, and the developer machines don't, but I don't see a good way of
-solving this in Buildroot.
+Results for branch '2017.11.x'
+==============================
 
-Any comments or suggestions ?
+Classification of failures by reason
+------------------------------------
 
-Thomas
+              host-erlang-19.3 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |               host-erlang-19.3 | NOK | http://autobuild.buildroot.net/results/b9a64dd9400c9c9e9805c93ba8ed74ef9e5192dc |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                    htop-2.1.0 | 3 
+                  host-go-1.10 | 1 
+              keepalived-1.4.1 | 1 
+                     php-7.2.2 | 1 
+                   systemd-237 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/8e2263cefbffda0cdd85903bb29beddd18eb8a14 | ORPH
+     aarch64 |                     htop-2.1.0 | NOK | http://autobuild.buildroot.net/results/543f4d824b8d0f0c0b975bcb788ee48419fd22aa | ORPH
+     powerpc |                     htop-2.1.0 | NOK | http://autobuild.buildroot.net/results/0c870969f6370bc57e213ab985d72fdd1294197c | ORPH
+        m68k |                     htop-2.1.0 | NOK | http://autobuild.buildroot.net/results/90cca9ce83b000788eff6bb228344f6210f600dc | ORPH
+         arc |               keepalived-1.4.1 | NOK | http://autobuild.buildroot.net/results/c069defd30b76ae213e2beaddcec6fa16b9faf5b |     
+      mipsel |                      php-7.2.2 | NOK | http://autobuild.buildroot.net/results/8159b44a8f6875d41b882174efed6d4d434d7c5e | ORPH
+     powerpc |                    systemd-237 | NOK | http://autobuild.buildroot.net/results/a2b9cb107dcbd9bd6ac7c610675d13f7beece3a4 |     
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+http://autobuild.buildroot.net
