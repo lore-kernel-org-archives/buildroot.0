@@ -1,35 +1,39 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Wed, 28 Feb 2018 10:10:31 -0800
-Subject: [Buildroot] Introduction
-Message-ID: <CALURroS282mUC4nBeF-1+7K=+QNMzvtMkNA36OOa2TMMEuiTPQ@mail.gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Wed, 28 Feb 2018 18:23:28 +0000
+Subject: [Buildroot] [PATCH 1/1] azmq: bump to version 1.0.2
+In-Reply-To: <87vaehlj1v.fsf@dell.be.48ers.dk>
+References: <20180227205125.8121-1-fontaine.fabrice@gmail.com>
+ <87lgfem9h0.fsf@dell.be.48ers.dk>
+ <MWHPR0601MB37534B75BE813D41A6C3920ED3C70@MWHPR0601MB3753.namprd06.prod.outlook.com>
+ <87vaehlj1v.fsf@dell.be.48ers.dk>
+Message-ID: <1519842208.25567.225.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello...
+On Wed, 2018-02-28 at 07:33 +0100, Peter Korsgaard wrote:
+> > > > > > "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
+> 
+>  >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>  >> Does this fix any big / security issues so it needs to go to master or
+>  >> s this for next?
+> 
+>  > The previous version of azmq will not build with the boost version in 2018.02-rc2.
+> 
+>  > It does work with buildroot 2017.11.2.
+> 
+>  > Not sure exactly where the breakage point was between those releases.
+> 
+> Ahh, so azmq-1.0 doesn't build in 2018.02-rc3? Odd, I don't see it in
+> the autobuilder
 
- I sent in a few patches yesterday.  I read the responses and am working on
-new submissions. I am new to using git to submit patches, the Kconfig
-framework, and buildroot in general.  I was a sysadmin for many years, but
-haven't worked professionally for a while so my skills are a little rusty
-:).  I started on a few pet projects for my raspberry pi and found
-buildroot and crosstool-ng, both of which make testing much faster and
-easier.  When I needed changes to what buildroot did for things like init
-scripts and config files, rather than just use a local overlay, I decided
-to try to improve the existing packages.  I needed something to do while
-waiting on the compile process :)  If any of my submissions don't fit in
-with "the buildroot way" and are rejected, that's ok, you won't hurt my
-feelings.  Hopefully my submissions are useful and I have a few more to
-send.  Thanks
+azmq is a header only library and buildroot disables the library's unit
+tests, so there is nothing to fail when buildroot "builds" the library.
+ But if you use it, it doesn't work with some asio changes that went
+into boost.
 
-
--- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180228/69f97c47/attachment.html>
+It would be interesting if buildroot could build and run a package's
+unit tests.  I wonder if autobuilders would be able to find many bugs
+that way?
