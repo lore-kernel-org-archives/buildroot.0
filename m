@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Feb 2018 20:45:19 +0100
-Subject: [Buildroot] [PATCH next] gnupg2: bump to version 2.2.5
-In-Reply-To: <e6492bd390c846a671ad3852c07bef0843dd180b.1519844428.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 28 Feb 2018 21:00:28 +0200")
-References: <e6492bd390c846a671ad3852c07bef0843dd180b.1519844428.git.baruch@tkos.co.il>
-Message-ID: <87o9k8kieo.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Feb 2018 20:45:34 +0100
+Subject: [Buildroot] [PATCH next] iw: bump to version 4.14
+In-Reply-To: <bd63f8c762f0043a583dfb093c87c445af65365d.1519844472.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 28 Feb 2018 21:01:12 +0200")
+References: <bd63f8c762f0043a583dfb093c87c445af65365d.1519844472.git.baruch@tkos.co.il>
+Message-ID: <87k1uwkie9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Drop IW_MAKE_OPTS, passing the CC, LD, and LDFLAGS in the environment
+ > via TARGET_CONFIGURE_OPTS is enough.
+
+ > Add license file hash.
+
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to next, thanks.
