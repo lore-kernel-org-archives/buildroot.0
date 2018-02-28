@@ -1,71 +1,78 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 28 Feb 2018 13:28:34 +0100
-Subject: [Buildroot] Bug: buildroot failed when build asterisk 13.19
-In-Reply-To: <1519819249.769725505@f221.i.mail.ru>
-References: <1519819249.769725505@f221.i.mail.ru>
-Message-ID: <20180228132834.4c7b4ec3@gmx.net>
+Date: Wed, 28 Feb 2018 13:34:35 +0100
+Subject: [Buildroot] [PATCH 1/1] postgresql: bump to 10.2
+In-Reply-To: <20180228121527.2556-1-gael.portay@savoirfairelinux.com>
+References: <20180228121527.2556-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180228133435.4b094760@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Zyama,
+Hello Ga?l,
 
-On Wed, 28 Feb 2018 15:00:49 +0300, ***** ***** <zyama.abel@mail.ru> wrote:
+On Wed, 28 Feb 2018 07:15:27 -0500, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
 
-> Why happens fail when I build asterisk 13.19 with buildroot-2018.02-rc2 ?
-> I modified file ./package/asterisk/asterisk.mk typed version 13.19.0
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> ---
+> Hi,
 > 
-> Log buildroot:
-> ============================================================================================================================
+> It solves the following error met when I tried to compile all qt5 modules,
+> including the PostgreSQL Plugin (BR2_PACKAGE_QT5BASE_PSQL).
 > 
-> root at container_debian_9_stretch:/buildroot# make
+> Fixes (with 10.1):
 > 
-> host-asterisk 13.19.0 Downloading
-> --2018-02-27 19:24:13--? https://github.com/asterisk/asterisk/archive/13.19.0/asterisk-13.19.0.tar.gz
-> Resolving proxy.domain.lan (proxy.domain.lan)... 148.54.5.8
-> Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
-> Proxy request sent, awaiting response... 302 Found
-> Location: https://codeload.github.com/asterisk/asterisk/tar.gz/13.19.0 [following]
-> --2018-02-27 19:24:14--? https://codeload.github.com/asterisk/asterisk/tar.gz/13.19.0
-> Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
-> Proxy request sent, awaiting response... 200 OK
-> Length: 8892922 (8.5M) [application/x-gzip]
-> Saving to: '/buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/output'
+> 	copy_fetch.c:159:1: error: conflicting types for ?copy_file_range?
+> 	 copy_file_range(const char *path, off_t begin, off_t end, bool trunc)
+> 	 ^~~~~~~~~~~~~~~
+> 	In file included from copy_fetch.c:15:0:
+> 	/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/unistd.h:1110:9:
+> 	note: previous declaration of ?copy_file_range? was here
+> 	 ssize_t copy_file_range (int __infd, __off64_t *__pinoff,
+> 	         ^~~~~~~~~~~~~~~
+> 	<builtin>: recipe for target 'copy_fetch.o' failed
+> 	make[5]: *** [copy_fetch.o] Error 1
 > 
-> /buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/ou 100%[======================================================================================================================================>]? ?8.48M? 2.37MB/s? ? in 3.6s
-> 
-> 2018-02-27 19:24:18 (2.37 MB/s) - '/buildroot/output/build/.asterisk-13.19.0.tar.gz.tfl1T2/output' saved [8892922/8892922]
-> 
-> ERROR: No hash found for asterisk-13.19.0.tar.gz
 
-This line is the key to your problem, you need to adjust the content
-of the  file package/asterisk/asterisk.hash to contain a valid hash
-for asterisk-13.19.0.tar.gz (or remove the file completely)...
+The postgresql version bump is already done on the master (upcoming 2018.02) branch [1],
+but no yet on the next branch (will be merged as soon as 2018.02 is released)...
 
 Regards,
 Peter
 
-> --2018-02-27 19:24:18--? http://sources.buildroot.net/asterisk-13.19.0.tar.gz
-> Resolving proxy.domain.lan (proxy.domain.lan)... 148.54.5.8
-> Connecting to proxy.domain.lan (proxy.domain.lan)|148.54.5.8|:3128... connected.
-> Proxy request sent, awaiting response... 404 Not Found
-> 2018-02-27 19:24:18 ERROR 404: Not Found.? ? ? ? ? ? ? ? ? ?<------------ file not found (asterisk-13.19.0) http://sources.buildroot.net
+[1] https://git.buildroot.net/buildroot/commit/?id=93781734b7d93ad4ca77add807c5e10a2862b6b9
+
+
+> Regards,
+> Gael
 > 
-> package/pkg-generic.mk:159: recipe for target '/buildroot/output/build/host-asterisk-13.19.0/.stamp_downloaded' failed
-> make: *** [/buildroot/output/build/host-asterisk-13.19.0/.stamp_downloaded] Error 1
-> root at container_debian_9_stretch:/buildroot#
+>  package/postgresql/postgresql.hash | 4 ++--
+>  package/postgresql/postgresql.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> Site http://sources.buildroot.net contain asterisk 14.x version only.
-> ============================================================================================================================
-> assimp-v3.2.tar.gz? ? 2015-Dec-28 23:05:09? ? 32.1M? ? application/x-gtar-compressed
-> asterisk-1.6.0-beta6.tar.gz? ? 2008-Sep-04 01:10:21? ? 12.4M? ? application/x-gtar-compressed
-> asterisk-14.5.0.tar.gz? ? 2017-Sep-25 10:04:22? ? 8.5M? ? application/x-gtar-compressed
-> asterisk-14.6.2.tar.gz? ? 2018-Jan-08 03:18:52? ? 8.5M? ? application/x-gtar-compressed
-> asterisk-14.7.5.tar.gz? ? 2018-Jan-22 11:16:04? ? 8.6M? ? application/x-gtar-compressed
-> asterisk-14.7.6.tar.gz? ? 2018-Feb-26 04:16:20? ? 8.6M? ? application/x-gtar-compressed
-> asterisk-core-sounds-en-gsm-1.5.tar.gz? ? 2017-Sep-25 10:04:25? ? 2.3M? ? application/x-gtar-compressed
-> asterisk-moh-opsound-wav-2.03.tar.gz? ? 2017-Sep-25 10:04:40? ? 14.6M? ? application/x-gtar-compressed
-> at_3.1.10.tar.gz? ? 2006-Jan-03 07:32:05? ? 96.8K? ? application/x-gtar-compressed
-> 
+> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+> index e2347701c1..2950470fb9 100644
+> --- a/package/postgresql/postgresql.hash
+> +++ b/package/postgresql/postgresql.hash
+> @@ -1,5 +1,5 @@
+> -# From https://ftp.postgresql.org/pub/source/v10.1/postgresql-10.1.tar.bz2.sha256
+> -sha256	3ccb4e25fe7a7ea6308dea103cac202963e6b746697366d72ec2900449a5e713	postgresql-10.1.tar.bz2
+> +# From https://ftp.postgresql.org/pub/source/v10.2/postgresql-10.2.tar.bz2.sha256
+> +sha256	fe32009b62ddb97f7f014307ce9d0edb6972f5a698e63cb531088e147d145bad	postgresql-10.2.tar.bz2
+>  
+>  # License file, Locally calculated
+>  sha256	7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676	COPYRIGHT
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index 4657489a53..4b2bca714b 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -POSTGRESQL_VERSION = 10.1
+> +POSTGRESQL_VERSION = 10.2
+>  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+>  POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+>  POSTGRESQL_LICENSE = PostgreSQL
