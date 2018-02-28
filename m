@@ -1,78 +1,30 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 28 Feb 2018 13:34:35 +0100
-Subject: [Buildroot] [PATCH 1/1] postgresql: bump to 10.2
-In-Reply-To: <20180228121527.2556-1-gael.portay@savoirfairelinux.com>
-References: <20180228121527.2556-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180228133435.4b094760@gmx.net>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 28 Feb 2018 09:36:42 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.15.7
+Message-ID: <1519821403-30973-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ga?l,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, 28 Feb 2018 07:15:27 -0500, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
-
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
-> Hi,
-> 
-> It solves the following error met when I tried to compile all qt5 modules,
-> including the PostgreSQL Plugin (BR2_PACKAGE_QT5BASE_PSQL).
-> 
-> Fixes (with 10.1):
-> 
-> 	copy_fetch.c:159:1: error: conflicting types for ?copy_file_range?
-> 	 copy_file_range(const char *path, off_t begin, off_t end, bool trunc)
-> 	 ^~~~~~~~~~~~~~~
-> 	In file included from copy_fetch.c:15:0:
-> 	/home/gportay/src/buildroot-for-int/output-qt5.10-next/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/unistd.h:1110:9:
-> 	note: previous declaration of ?copy_file_range? was here
-> 	 ssize_t copy_file_range (int __infd, __off64_t *__pinoff,
-> 	         ^~~~~~~~~~~~~~~
-> 	<builtin>: recipe for target 'copy_fetch.o' failed
-> 	make[5]: *** [copy_fetch.o] Error 1
-> 
-
-The postgresql version bump is already done on the master (upcoming 2018.02) branch [1],
-but no yet on the next branch (will be merged as soon as 2018.02 is released)...
-
-Regards,
-Peter
-
-[1] https://git.buildroot.net/buildroot/commit/?id=93781734b7d93ad4ca77add807c5e10a2862b6b9
-
-
-> Regards,
-> Gael
-> 
->  package/postgresql/postgresql.hash | 4 ++--
->  package/postgresql/postgresql.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-> index e2347701c1..2950470fb9 100644
-> --- a/package/postgresql/postgresql.hash
-> +++ b/package/postgresql/postgresql.hash
-> @@ -1,5 +1,5 @@
-> -# From https://ftp.postgresql.org/pub/source/v10.1/postgresql-10.1.tar.bz2.sha256
-> -sha256	3ccb4e25fe7a7ea6308dea103cac202963e6b746697366d72ec2900449a5e713	postgresql-10.1.tar.bz2
-> +# From https://ftp.postgresql.org/pub/source/v10.2/postgresql-10.2.tar.bz2.sha256
-> +sha256	fe32009b62ddb97f7f014307ce9d0edb6972f5a698e63cb531088e147d145bad	postgresql-10.2.tar.bz2
->  
->  # License file, Locally calculated
->  sha256	7dc8de32741ad1b03e21710771b55a1b9d460671d47f28a8840f917e38c66676	COPYRIGHT
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index 4657489a53..4b2bca714b 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -POSTGRESQL_VERSION = 10.1
-> +POSTGRESQL_VERSION = 10.2
->  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
->  POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
->  POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/linux/Config.in b/linux/Config.in
+index 4087019..5afd620 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.15.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.15.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.7.4
