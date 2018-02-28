@@ -1,63 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Feb 2018 20:45:08 +0100
-Subject: [Buildroot] [git commit branch/next] iw: bump to version 4.14
-Message-ID: <20180228194545.947FE81390@busybox.osuosl.org>
+Date: Wed, 28 Feb 2018 20:44:53 +0100
+Subject: [Buildroot] [git commit branch/next] gnupg2: bump to version 2.2.5
+Message-ID: <20180228194545.880F581440@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b690d534679ddf188d67289141af6167044af459
+commit: https://git.buildroot.net/buildroot/commit/?id=379c34739082f3906ccf4877b85a2e714606bffe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop IW_MAKE_OPTS, passing the CC, LD, and LDFLAGS in the environment
-via TARGET_CONFIGURE_OPTS is enough.
-
-Add license file hash.
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iw/iw.hash | 4 +++-
- package/iw/iw.mk   | 5 ++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/iw/iw.hash b/package/iw/iw.hash
-index 414f34225f..6423df7732 100644
---- a/package/iw/iw.hash
-+++ b/package/iw/iw.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
--sha256	324cc805fad52cba2c16b9ab569906889fb645cc962aac4cfda1db85d2de97ce	iw-4.9.tar.xz
-+sha256	f01671c0074bfdec082a884057edba1b9efd35c89eda554638496f03b769ad89	iw-4.14.tar.xz
-+# Locally calculated
-+sha256	5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af	COPYING
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index aa85cbb5b9..8264e8b5dc 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -4,20 +4,19 @@
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index a003da668b..9cc8e4c913 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000419.html
+-sha1 732266e8888c6f41c084d043c7a0058332ff3580  gnupg-2.2.4.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q1/000420.html
++sha1 9dec110397e460b3950943e18f5873a4f277f216  gnupg-2.2.5.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.4.tar.bz2.sig
+-sha256 401a3e64780fdfa6d7670de0880aa5c9d589b3db7a7098979d7606cec546f2ec  gnupg-2.2.4.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.5.tar.bz2.sig
++sha256 3fa189a32d4fb62147874eb1389047c267d9ba088f57ab521cb0df46f08aef57  gnupg-2.2.5.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 980fae342b..ba5370902f 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IW_VERSION = 4.9
-+IW_VERSION = 4.14
- IW_SOURCE = iw-$(IW_VERSION).tar.xz
- IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
- IW_LICENSE = ISC
- IW_LICENSE_FILES = COPYING
- IW_DEPENDENCIES = host-pkgconf libnl
--IW_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
- IW_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	PKG_CONFIG="$(HOST_DIR)/bin/pkg-config" \
- 	GIT_DIR=$(IW_DIR)
- 
- define IW_BUILD_CMDS
--	$(IW_MAKE_ENV) $(MAKE) $(IW_MAKE_OPTS) -C $(@D)
-+	$(IW_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define IW_INSTALL_TARGET_CMDS
+-GNUPG2_VERSION = 2.2.4
++GNUPG2_VERSION = 2.2.5
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
