@@ -1,39 +1,47 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Wed, 28 Feb 2018 18:23:28 +0000
-Subject: [Buildroot] [PATCH 1/1] azmq: bump to version 1.0.2
-In-Reply-To: <87vaehlj1v.fsf@dell.be.48ers.dk>
-References: <20180227205125.8121-1-fontaine.fabrice@gmail.com>
- <87lgfem9h0.fsf@dell.be.48ers.dk>
- <MWHPR0601MB37534B75BE813D41A6C3920ED3C70@MWHPR0601MB3753.namprd06.prod.outlook.com>
- <87vaehlj1v.fsf@dell.be.48ers.dk>
-Message-ID: <1519842208.25567.225.camel@impinj.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 28 Feb 2018 21:00:28 +0200
+Subject: [Buildroot] [PATCH next] gnupg2: bump to version 2.2.5
+Message-ID: <e6492bd390c846a671ad3852c07bef0843dd180b.1519844428.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2018-02-28 at 07:33 +0100, Peter Korsgaard wrote:
-> > > > > > "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
-> 
->  >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->  >> Does this fix any big / security issues so it needs to go to master or
->  >> s this for next?
-> 
->  > The previous version of azmq will not build with the boost version in 2018.02-rc2.
-> 
->  > It does work with buildroot 2017.11.2.
-> 
->  > Not sure exactly where the breakage point was between those releases.
-> 
-> Ahh, so azmq-1.0 doesn't build in 2018.02-rc3? Odd, I don't see it in
-> the autobuilder
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-azmq is a header only library and buildroot disables the library's unit
-tests, so there is nothing to fail when buildroot "builds" the library.
- But if you use it, it doesn't work with some asio changes that went
-into boost.
-
-It would be interesting if buildroot could build and run a package's
-unit tests.  I wonder if autobuilders would be able to find many bugs
-that way?
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index a003da668bec..9cc8e4c9138c 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000419.html
+-sha1 732266e8888c6f41c084d043c7a0058332ff3580  gnupg-2.2.4.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q1/000420.html
++sha1 9dec110397e460b3950943e18f5873a4f277f216  gnupg-2.2.5.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.4.tar.bz2.sig
+-sha256 401a3e64780fdfa6d7670de0880aa5c9d589b3db7a7098979d7606cec546f2ec  gnupg-2.2.4.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.5.tar.bz2.sig
++sha256 3fa189a32d4fb62147874eb1389047c267d9ba088f57ab521cb0df46f08aef57  gnupg-2.2.5.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 980fae342b7b..ba5370902f1e 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.2.4
++GNUPG2_VERSION = 2.2.5
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
+-- 
+2.16.1
