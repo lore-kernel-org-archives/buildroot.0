@@ -1,59 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 28 Feb 2018 23:13:47 +0100
-Subject: [Buildroot] [PATCH v4] systemd: switch to en_US.UTF-8 locale
- when building
-In-Reply-To: <20180228213104.GA16465@scaer>
-References: <20180212213400.15061-1-julius@kriukas.lt>
- <20180222230055.25455-1-julius@kriukas.lt>
- <20180228213104.GA16465@scaer>
-Message-ID: <20180228231347.1e2896a2@windsurf.lan>
+From: Pierre <pinaraf@pinaraf.info>
+Date: Wed, 28 Feb 2018 23:55:34 +0100
+Subject: [Buildroot] [PATCH 1/1] wpa_supplicant - Specify that old and
+ new dbus are incompatible
+In-Reply-To: <87fu5kkfy0.fsf@dell.be.48ers.dk>
+References: <20180218215039.4811-1-pinaraf@pinaraf.info>
+ <87fu5kkfy0.fsf@dell.be.48ers.dk>
+Message-ID: <3603330.UGTkN10abk@peanuts2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 28 Feb 2018 22:31:04 +0100, Yann E. MORIN wrote:
-
-> OK, so I do not have en_USUTF-8 on my machine. I have en_GB.UTF-8 (which
-> I am using). So I'm left out in the cold with this patch.
+On Wednesday, February 28, 2018 9:38:31 PM CET Peter Korsgaard wrote:
+> >>>>> "Pierre" == Pierre Ducroquet <pinaraf@pinaraf.info> writes:
+>  > Building wpa-supplicant with support for both DBus interfaces
+>  > generates broken .service files.
 > 
-> However, C.UTF-8 is virtually available everywhere. And I was able to
-> build systemd with C.UTF-8 without any problem.
+> In what way are they broken? I did a quick test build of 3
+> configurations:
 > 
-> So, I would  prefer, if we have to force anything, that we force the
-> use of C.UTF-8.
+> - Only old
+> - Only new
+> - Old and new
 > 
-> But then that also means that we override the users' environments, users
-> that may prefer to see localised messages.
-> 
-> So, as a stop-gap measure, I'm OK with this patch as long as it is
-> switched to using C.UTF-8. Also, rename the variable, something like:
-> 
->     BR2_NEEDS_HOST_UTF8_LOCALE_CURRENT
-> 
-> Note: this is different from the existing BR2_NEEDS_HOST_UTF8_LOCALE: it
-> onlhy requires that a UTF-8 locale be present on the system, while we
-> now require that it be the current locale.
+> and I don't see any difference in the .service files?
 
-Now, we don't require it to be the current locale:
-
-
-> > +SYSTEMD_ENV = $(TARGET_MAKE_ENV) LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
-
-The systemd package ensures to pass LANG/LC_ALL pointing to an UTF-8
-locale.
-
-So even if your current locale is something else, as long as
-en_US.UTF-8 is *available*, things are going to work.
-
-That being said, I also dislike this solution, and think the sytemd
-build system should be fixed instead.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+It generated a .service file with an empty BusName in the [Service] part of 
+the .service.
+Since enabling only one interface generated the proper file, I deduced both 
+could not be enabled together. Maybe something else in my configuration 
+impacted that, I will check that again if you can't reproduce.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180228/fb2c328f/attachment.asc>
