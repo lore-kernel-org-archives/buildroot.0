@@ -1,9 +1,10 @@
 From: Erik Larsson <karl.erik.larsson@gmail.com>
-Date: Wed, 28 Feb 2018 09:37:44 +0100
-Subject: [Buildroot] [PATCH v3 2/4] freescale-imx: add new device iMX8mq
+Date: Wed, 28 Feb 2018 09:37:45 +0100
+Subject: [Buildroot] [PATCH v3 3/4] firmware-imx: add support for iMX8M
+ firmware
 In-Reply-To: <1519807066-21466-1-git-send-email-karl.erik.larsson@gmail.com>
 References: <1519807066-21466-1-git-send-email-karl.erik.larsson@gmail.com>
-Message-ID: <1519807066-21466-3-git-send-email-karl.erik.larsson@gmail.com>
+Message-ID: <1519807066-21466-4-git-send-email-karl.erik.larsson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +14,49 @@ To: buildroot@busybox.net
 Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
 Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
 ---
- package/freescale-imx/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+v3: Split v2 commit into two commits (suggested by Garry B.)
+v2: Split v1 commit into two commits (suggested by Baruch)
+---
+ package/freescale-imx/firmware-imx/Config.in       | 2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 8 ++++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index b5e5ab2..fe993f3 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index fca280a..56d5b80 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
 @@ -1,6 +1,6 @@
- menuconfig BR2_PACKAGE_FREESCALE_IMX
- 	bool "Freescale i.MX libraries"
--	depends on BR2_arm
-+	depends on BR2_arm || BR2_aarch64
+ config BR2_PACKAGE_FIRMWARE_IMX
+ 	bool "firmware-imx"
+-	depends on BR2_arm # Only relevant for i.MX
++	depends on BR2_arm || BR2_aarch64 # Only relevant for i.MX
  	help
- 	  Those packages provide hardware acceleration for GPU or VPU,
- 	  hardware optimization or some hardware tools for Freescale
-@@ -40,6 +40,8 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
- 	bool "imx7d/imx7ulp"
+ 	  Firmware blobs for the Freescale i.MX SoCs.
  
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
-+	bool "imx8m"
- endchoice
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 630afca..f03daf2 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -18,6 +18,13 @@ define FIRMWARE_IMX_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+ endef
  
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
-@@ -54,6 +56,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
- 	default "IMX6S" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
- 	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
- 	default "IMX7" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
-+	default "IMX8" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
++FIRMWARE_IMX_INSTALL_IMAGES = YES
++define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
++	cp $(@D)/firmware/ddr/synopsys/lpddr4_pmu_train_*.bin $(BINARIES_DIR)
++	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin $(BINARIES_DIR)
++endef
++else
+ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+ 	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
+@@ -27,5 +34,6 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+ 		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
+ endef
++endif
  
- config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- 	bool
+ $(eval $(generic-package))
 -- 
 2.7.4
