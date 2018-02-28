@@ -1,11 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 27 Feb 2018 22:00:31 -0600
-Subject: [Buildroot] [NEXT 06/26] boa: add CPE id
-In-Reply-To: <20180227231718.090c22ef@windsurf.lan>
+Date: Tue, 27 Feb 2018 22:12:18 -0600
+Subject: [Buildroot] [NEXT 20/26] linux: add CPE id
+In-Reply-To: <20180227231826.79f1bdec@windsurf.lan>
 References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1519697441-54194-7-git-send-email-matthew.weber@rockwellcollins.com>
- <20180227231718.090c22ef@windsurf.lan>
-Message-ID: <CANQCQpbM3VHid2rGTFAA=HwkhsUfmHRbGw9EDtT2dPUWwQRDog@mail.gmail.com>
+ <1519697441-54194-21-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180227231826.79f1bdec@windsurf.lan>
+Message-ID: <CANQCQpaMEC_smNisciWyapbcLiMh9zccqFqeeAuEHm58t73KpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,75 +14,38 @@ To: buildroot@busybox.net
 
 Thomas,
 
-On Tue, Feb 27, 2018 at 4:17 PM, Thomas Petazzoni
+On Tue, Feb 27, 2018 at 4:18 PM, Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 > Hello,
 >
-> On Mon, 26 Feb 2018 20:10:21 -0600, Matt Weber wrote:
->> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->> ---
->>  package/boa/boa.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/boa/boa.mk b/package/boa/boa.mk
->> index d8bcaa1..1ded702 100644
->> --- a/package/boa/boa.mk
->> +++ b/package/boa/boa.mk
->> @@ -8,7 +8,7 @@ BOA_VERSION = 0.94.14rc21
->>  BOA_SITE = http://www.boa.org
->>  BOA_LICENSE = GPL-2.0+
->>  BOA_LICENSE_FILES = COPYING
->> -
->> +BOA_CPE_ID = $(BOE_NAME):$(BOE_NAME):$(BOE_VERSION)
+> On Mon, 26 Feb 2018 20:10:35 -0600, Matt Weber wrote:
 >
-> Typo: BOE -> BOA
+>> +LINUX_CPE_ID = $(LINUX_NAME):$(LINUX_NAME)_kernel:$(LINUX_VERSION)
 >
-> Also, please keep an empty line before BOA_INSTALL_TARGET_CMDS.
->
+> How is the CPE database reacting when LINUX_VERSION is some random Git
+> SHA1, from a private Git tree that nobody has access to ?
 
-Noted, will fix in v2
+I brought this up to one of my security guys and he had a good point.
+He pointed out that since we keep the reporting seperate from any
+proposed automated CVE analysis.  The user specific analysis could
+manage taking the hash and manually doing the effort to tie that to a
+linux version.  Then looking at the individual CVEs on top of that
+version.  There isn't a good way to include that in the buildsystem
+that we can see but most analysis tools have a way to keep notes with
+a configuration.  For any buildroot automated CVE reporting I don't
+think you'd run into this hash case for linux as there wouldn't be a
+default version selected as a hash (so far at least that I know of)
 
-[snip]
-> There is clearly a pattern, no?
->
-> Does it make sense to define in the infra:
->
-> $(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)
-> $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
-> $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
-> $(2)_CPE_ID ?= $($(2)_CPE_ID_VENDOR):$($(2)_CPE_ID_NAME):$($(2)_CPE_ID_VERSION)
->
-> With this, in many packages, you can avoid <pkg>_CPE_ID completely. In
-> a few other packages you'll have to do:
->
-> LIBZLIB_CPE_ID_VENDOR = gnu
-> LIBZLIB_CPE_ID_NAME = zlib
->
-
-Where it gets difficult is when a package has multiple CPEs so that
-you catch all possible combinations that could be relevant for the
-package.  Eventually there shouldn't be multiple once the dictionary
-at NIST is cleaned up......
-
-One thing I didn't think about with the multiple CPEs is the logic to
-detect if a CPE needs updating in the CPE dictionary.  We'd have to
-look at all possible CPE id options to see if any match.  This may
-lead to us wanting to push to update the primary CPE ID sooner then
-later and align all our packages to use it instead of supporting
-multiple.  Then we could use the logic of having all packages set the
-LIBZLIB_CPE_ID_VENDOR and key off that to know we report that packages
-info.
-
-> The drawback is obviously that all packages will suddenly have a
-> <pkg>_CPE_ID value, even if this value may potentially be incorrect
-> because it hasn't been checked. And this may be a real problem, so
-> probably your solution is better, I just wanted to point out the
-> (admittedly limited) duplication.
-
-Yeah, eventually I'd argue we could revert back to infra logic and
-clean it all up once there is a baseline or majority of packages with
-valid CPE IDs.    However for now, I default those we don't have to
-unknown so it's clear for a developer to go research or request a new
-CPE.
+For packages which use hashes, the suggestion was made to use the
+major and minor syntax where we state the version to be the last
+release and the next wildcard field is the minor version and set we
+that to the hash.  So for validating a CPE is correct (pkg-stats
+maintenance), we would just look at the major version.  However for
+the analysis activity where a target CPE report is used to find CVEs,
+they would take into account the major and also go look at the hash
+manually to determine where that falls past the  major.  On the
+buildroot side we could also add CVE_PATCHED items covering that delta
+if we know what they are.  I should do an example of this in my next
+patchset (one of the github packages).
 
 Matt
