@@ -1,61 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Feb 2018 09:13:23 +0100
-Subject: [Buildroot] Buildroot 2018.02-rc3 released
-Message-ID: <87muztlefw.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Feb 2018 09:14:03 +0100
+Subject: [Buildroot] [PATCH] wavpack: add upstream security fixes
+In-Reply-To: <20180227212652.18759-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 27 Feb 2018 22:26:52 +0100")
+References: <20180227212652.18759-1-peter@korsgaard.com>
+Message-ID: <87inahlees.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Buildroot 2018.02-rc3 is released - Go download it at:
+ > Fixes the following security issues:
+ > CVE-2018-6767: A stack-based buffer over-read in the ParseRiffHeaderConfig
+ > function of cli/riff.c file of WavPack 5.1.0 allows a remote attacker to
+ > cause a denial-of-service attack or possibly have unspecified other impact
+ > via a maliciously crafted RF64 file.
 
-http://buildroot.net/downloads/buildroot-2018.02-rc3.tar.gz
+ > CVE-2018-7253: The ParseDsdiffHeaderConfig function of the cli/dsdiff.c file
+ > of WavPack 5.1.0 allows a remote attacker to cause a denial-of-service
+ > (heap-based buffer over-read) or possibly overwrite the heap via a
+ > maliciously crafted DSDIFF file.
 
-or
+ > CVE-2018-7254: The ParseCaffHeaderConfig function of the cli/caff.c file of
+ > WavPack 5.1.0 allows a remote attacker to cause a denial-of-service (global
+ > buffer over-read), or possibly trigger a buffer overflow or incorrect memory
+ > allocation, via a maliciously crafted CAF file.
 
-http://buildroot.net/downloads/buildroot-2018.02-rc3.tar.bz2
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2018.02-rc2..
-    11  Peter Korsgaard
-     6  Fabio Estevam
-     5  Ga?l PORTAY
-     5  Thomas De Schampheleire
-     5  Thomas Petazzoni
-     3  Baruch Siach
-     2  Bernd Kuhls
-     2  Fabrice Fontaine
-     2  Mahyar Koshkouei
-     2  Romain Naour
-     2  Trent Piepho
-     1  Adam Duskett
-     1  Alistair Francis
-     1  Daniel Serpell
-     1  Eric Le Bihan
-     1  Johan Oudinet
-     1  John Keeping
-     1  Ryan Coe
-     1  S?bastien Szymanski
-     1  Yann E. MORIN
-     1  Zoltan Gyarmati
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02-rc3
-
-Expect the final 2018.02 release by a day or two, unless something
-critical shows up.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
