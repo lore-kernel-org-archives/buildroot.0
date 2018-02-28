@@ -1,37 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Feb 2018 09:14:03 +0100
-Subject: [Buildroot] [PATCH] wavpack: add upstream security fixes
-In-Reply-To: <20180227212652.18759-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 27 Feb 2018 22:26:52 +0100")
-References: <20180227212652.18759-1-peter@korsgaard.com>
-Message-ID: <87inahlees.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Feb 2018 09:16:13 +0100
+Subject: [Buildroot] [PATCH] package/tvheadend: disable for microblazeel
+In-Reply-To: <20180227215131.14972-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 27 Feb 2018 22:51:31 +0100")
+References: <20180227215131.14972-1-yann.morin.1998@free.fr>
+Message-ID: <87efl5leb6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes the following security issues:
- > CVE-2018-6767: A stack-based buffer over-read in the ParseRiffHeaderConfig
- > function of cli/riff.c file of WavPack 5.1.0 allows a remote attacker to
- > cause a denial-of-service attack or possibly have unspecified other impact
- > via a maliciously crafted RF64 file.
+ > tvheadend does not build on microblazeel, because of some assertion
+ > failure in binutils:
 
- > CVE-2018-7253: The ParseDsdiffHeaderConfig function of the cli/dsdiff.c file
- > of WavPack 5.1.0 allows a remote attacker to cause a denial-of-service
- > (heap-based buffer over-read) or possibly overwrite the heap via a
- > maliciously crafted DSDIFF file.
+ >     [...]/microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in [...]/lib/gcc/microblazeel-buildroot-linux-uclibc/6.4.0/libgcc.a(_divdi3.o)(.eh_frame) prevents .eh_frame_hdr table being created.
+ >     [...]/microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in [...]/lib/gcc/microblazeel-buildroot-linux-uclibc/6.4.0/libgcc.a(_udivdi3.o)(.eh_frame) prevents .eh_frame_hdr table being created.
+ >     [...]/microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in [...]/lib/gcc/microblazeel-buildroot-linux-uclibc/6.4.0/libgcc.a(_umoddi3.o)(.eh_frame) prevents .eh_frame_hdr table being created.
+ >     [...]/microblazeel-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.29.1 assertion fail elf32-microblaze.c:1494
+ >     [...]/microblazeel-buildroot-linux-uclibc/bin/ld: [...]/sysroot/usr/lib/Scrt1.o: probably compiled without -fPIC?
+ >     [...]/microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: Bad value
+ >     collect2: error: ld returned 1 exit status
 
- > CVE-2018-7254: The ParseCaffHeaderConfig function of the cli/caff.c file of
- > WavPack 5.1.0 allows a remote attacker to cause a denial-of-service (global
- > buffer over-read), or possibly trigger a buffer overflow or incorrect memory
- > allocation, via a maliciously crafted CAF file.
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/85475885a95f23f3dbc88e5b162108a458233bc4/
+ >     [...]
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Waldemar Brodkorb <wbx@openadk.org>
+ > ---
+ >  package/tvheadend/Config.in | 2 ++
+ >  1 file changed, 2 insertions(+)
 
-Committed, thanks.
+ > diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+ > index 44a69a27ba..7c9fb6051e 100644
+ > --- a/package/tvheadend/Config.in
+ > +++ b/package/tvheadend/Config.in
+ > @@ -1,10 +1,12 @@
+ >  comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
+ > +	depends on !BR2_microblazeel
+ >  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ >  		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
+ >  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ >  config BR2_PACKAGE_TVHEADEND
+ >  	bool "tvheadend"
+ > +	depends on !BR2_microblazeel
+
+Committed after adding a comment explaining the assertion failure, thanks.
 
 -- 
 Bye, Peter Korsgaard
