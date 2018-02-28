@@ -1,198 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 23:27:37 +0200
-Subject: [Buildroot] [PATCH v2 3/5] support/scripts/graph-depends: add
- --quiet option
-In-Reply-To: <20180331163543.6278-4-thomas.petazzoni@bootlin.com>
-References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
- <20180331163543.6278-4-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331212737.GS25161@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  1 Mar 2018 00:11:40 +0100
+Subject: [Buildroot] [PATCH] mosquitto: security bump to version 1.4.15
+Message-ID: <20180228231140.7660-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fixes CVE-2017-7651: Unauthenticated clients can send a crafted CONNECT
+packet which causes large amounts of memory use in the broker.  If multiple
+clients do this, an out of memory situation can occur and the system may
+become unresponsive or the broker will be killed by the operating system.
 
-On 2018-03-31 18:35 +0200, Thomas Petazzoni spake thusly:
-> This will be useful for the upcoming recursive show-depends and
-> show-rdepends features.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/scripts/brpkgutil.py  | 18 ++++++++++--------
->  support/scripts/graph-depends | 22 +++++++++++++---------
->  2 files changed, 23 insertions(+), 17 deletions(-)
-> 
-> diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
-> index 4c99ae9110..7c70ae7cab 100644
-> --- a/support/scripts/brpkgutil.py
-> +++ b/support/scripts/brpkgutil.py
-> @@ -6,8 +6,9 @@ import subprocess
->  
->  # Execute the "make <pkg>-show-version" command to get the version of a given
->  # list of packages, and return the version formatted as a Python dictionary.
-> -def get_version(pkgs):
-> -    sys.stderr.write("Getting version for %s\n" % pkgs)
-> +def get_version(pkgs, quiet=False):
-> +    if not quiet:
-> +        sys.stderr.write("Getting version for %s\n" % pkgs)
+The fix addresses the problem by limiting the permissible size for CONNECT
+packet, and by adding a memory_limit configuration option that allows the
+broker to self limit the amount of memory it uses.
 
-Having all those 'quiet' being propagated everywhere is ugly... ;-)
+The hash of new tarball is not (yet) available through download.php, so use
+a locally calculated hash.
 
-Instead, I would have done something like:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-    def verbose_trace(.....):
-        sys.stderr.write(....)
-
-    def quite_trace(......):
-        pass
-
-and then in main:
-
-    if needs_traces:
-        trace = verbose_trace
-    else
-        trace = quite_trace
-
-and then everywhere you need to trace, just call trace(...)
-
-Regards,
-Yann E. MORIN.
-
->      cmd = ["make", "-s", "--no-print-directory"]
->      for pkg in pkgs:
->          cmd.append("%s-show-version" % pkg)
-> @@ -27,8 +28,9 @@ def get_version(pkgs):
->      return version
->  
->  
-> -def _get_depends(pkgs, rule):
-> -    sys.stderr.write("Getting dependencies for %s\n" % pkgs)
-> +def _get_depends(pkgs, rule, quiet=False):
-> +    if not quiet:
-> +        sys.stderr.write("Getting dependencies for %s\n" % pkgs)
->      cmd = ["make", "-s", "--no-print-directory"]
->      for pkg in pkgs:
->          cmd.append("%s-%s" % (pkg, rule))
-> @@ -55,12 +57,12 @@ def _get_depends(pkgs, rule):
->  # Execute the "make <pkg>-show-depends" command to get the list of
->  # dependencies of a given list of packages, and return the list of
->  # dependencies formatted as a Python dictionary.
-> -def get_depends(pkgs):
-> -    return _get_depends(pkgs, 'show-depends')
-> +def get_depends(pkgs, quiet=False):
-> +    return _get_depends(pkgs, 'show-depends', quiet)
->  
->  
->  # Execute the "make <pkg>-show-rdepends" command to get the list of
->  # reverse dependencies of a given list of packages, and return the
->  # list of dependencies formatted as a Python dictionary.
-> -def get_rdepends(pkgs):
-> -    return _get_depends(pkgs, 'show-rdepends')
-> +def get_rdepends(pkgs, quiet=False):
-> +    return _get_depends(pkgs, 'show-rdepends', quiet)
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index dc265ae28c..3a60e478d4 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -38,8 +38,9 @@ allpkgs = []
->  # Execute the "make show-targets" command to get the list of the main
->  # Buildroot PACKAGES and return it formatted as a Python list. This
->  # list is used as the starting point for full dependency graphs
-> -def get_targets():
-> -    sys.stderr.write("Getting targets\n")
-> +def get_targets(quiet):
-> +    if not quiet:
-> +        sys.stderr.write("Getting targets\n")
->      cmd = ["make", "-s", "--no-print-directory", "show-targets"]
->      p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
->      output = p.communicate()[0].strip()
-> @@ -55,7 +56,7 @@ def get_targets():
->  # 'dependencies', which contains tuples of the form (pkg1 ->
->  # pkg2_on_which_pkg1_depends, pkg3 -> pkg4_on_which_pkg3_depends) and
->  # the function finally returns this list.
-> -def get_all_depends(pkgs, get_depends_func):
-> +def get_all_depends(pkgs, get_depends_func, quiet):
->      dependencies = []
->  
->      # Filter the packages for which we already have the dependencies
-> @@ -69,7 +70,7 @@ def get_all_depends(pkgs, get_depends_func):
->      if len(filtered_pkgs) == 0:
->          return []
->  
-> -    depends = get_depends_func(filtered_pkgs)
-> +    depends = get_depends_func(filtered_pkgs, quiet)
->  
->      deps = set()
->      for pkg in filtered_pkgs:
-> @@ -85,7 +86,7 @@ def get_all_depends(pkgs, get_depends_func):
->              deps.add(dep)
->  
->      if len(deps) != 0:
-> -        newdeps = get_all_depends(deps, get_depends_func)
-> +        newdeps = get_all_depends(deps, get_depends_func, quiet)
->          if newdeps is not None:
->              dependencies += newdeps
->  
-> @@ -311,6 +312,8 @@ def parse_args():
->                          help="Draw direct dependencies (the default)")
->      parser.add_argument("--reverse", dest="direct", action='store_false',
->                          help="Draw reverse dependencies")
-> +    parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
-> +                        help="Quiet")
->      return parser.parse_args()
->  
->  
-> @@ -364,7 +367,7 @@ def main():
->      # In full mode, start with the result of get_targets() to get the main
->      # targets and then use get_all_depends() for all targets
->      if mode == MODE_FULL:
-> -        targets = get_targets()
-> +        targets = get_targets(args.quiet)
->          dependencies = []
->          allpkgs.append('all')
->          filtered_targets = []
-> @@ -374,7 +377,7 @@ def main():
->                  continue
->              dependencies.append(('all', tg))
->              filtered_targets.append(tg)
-> -        deps = get_all_depends(filtered_targets, get_depends_func)
-> +        deps = get_all_depends(filtered_targets, get_depends_func, args.quiet)
->          if deps is not None:
->              dependencies += deps
->          rootpkg = 'all'
-> @@ -382,7 +385,7 @@ def main():
->      # In pkg mode, start directly with get_all_depends() on the requested
->      # package
->      elif mode == MODE_PKG:
-> -        dependencies = get_all_depends([rootpkg], get_depends_func)
-> +        dependencies = get_all_depends([rootpkg], get_depends_func, args.quiet)
->  
->      # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
->      dict_deps = {}
-> @@ -397,7 +400,8 @@ def main():
->  
->      dict_deps = remove_extra_deps(dict_deps, args.transitive)
->      dict_version = brpkgutil.get_version([pkg for pkg in allpkgs
-> -                                          if pkg != "all" and not pkg.startswith("root")])
-> +                                          if pkg != "all" and not pkg.startswith("root")],
-> +                                         args.quiet)
->  
->      # Start printing the graph data
->      outfile.write("digraph G {\n")
-> -- 
-> 2.14.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index f6f17aa5ef..91c855cb4e 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,5 +1,5 @@
+-# From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.14.tar.gz
+-sha512 dc75a971354f87deeb79f32435acfae9bc561a1a24a75ee4940a35176ff91758071930d2105d8dee2a090e07527dbfaa5692bece67e03cc87e8b4b8b46f846c2  mosquitto-1.4.14.tar.gz
++# Locally calculated after checking gpg signature
++sha256 7d3b3e245a3b4ec94b05678c8199c806359737949f4cfe0bf936184f6ca89a83  mosquitto-1.4.15.tar.gz
+ 
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index c9b4418d04..ec5fc02f9f 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.4.14
++MOSQUITTO_VERSION = 1.4.15
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
