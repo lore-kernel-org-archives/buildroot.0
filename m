@@ -1,41 +1,35 @@
-From: charles.hardin at storagecraft.com <charles.hardin@storagecraft.com>
-Date: Wed, 28 Feb 2018 09:38:52 -0800
-Subject: [Buildroot] [PATCH 1/1] rust: make sure the cxx compiler is also
- set for the target
-Message-ID: <20180228173852.66069-1-charles.hardin@storagecraft.com>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Wed, 28 Feb 2018 10:10:31 -0800
+Subject: [Buildroot] Introduction
+Message-ID: <CALURroS282mUC4nBeF-1+7K=+QNMzvtMkNA36OOa2TMMEuiTPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Charles Hardin <charles.hardin@storagecraft.com>
+Hello...
 
-Noticed that building the LLVM build -DCMAKE_CXX_COMPILER=c++
-during the rust build which the C compiler was set to the
-expected buildroot compiler. So, update the toml file to
-also set the cxx variable.
+ I sent in a few patches yesterday.  I read the responses and am working on
+new submissions. I am new to using git to submit patches, the Kconfig
+framework, and buildroot in general.  I was a sysadmin for many years, but
+haven't worked professionally for a while so my skills are a little rusty
+:).  I started on a few pet projects for my raspberry pi and found
+buildroot and crosstool-ng, both of which make testing much faster and
+easier.  When I needed changes to what buildroot did for things like init
+scripts and config files, rather than just use a local overlay, I decided
+to try to improve the existing packages.  I needed something to do while
+waiting on the compile process :)  If any of my submissions don't fit in
+with "the buildroot way" and are rejected, that's ok, you won't hurt my
+feelings.  Hopefully my submissions are useful and I have a few more to
+send.  Thanks
 
-Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
----
- package/rust/rust.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index ff2634b996..9ea4c79af5 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -62,7 +62,10 @@ define HOST_RUST_CONFIGURE_CMDS
- 		echo '[rust]'; \
- 		echo 'use-jemalloc = $(HOST_RUST_JEMALLOC_ENABLED)'; \
- 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
--		echo 'cc = "$(TARGET_CROSS)gcc"'; \
-+		if [ "x$(RUSTC_HOST_NAME)" != "x$(RUSTC_TARGET_NAME)" ]; then \
-+			echo 'cc = "$(TARGET_CROSS)gcc"'; \
-+			echo 'cxx = "$(TARGET_CROSS)g++"'; \
-+		fi; \
- 		echo $(HOST_RUST_JEMALLOC_CONF); \
- 	) > $(@D)/config.toml
- endef
 -- 
-2.14.3 (Apple Git-98)
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180228/69f97c47/attachment.html>
