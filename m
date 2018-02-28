@@ -1,94 +1,49 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 25 Feb 2018 17:19:11 +0100
-Subject: [Buildroot] [git commit] linux: allow both in-tree and custom dts
- files
-Message-ID: <20180305200717.6540681EDA@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Feb 2018 20:44:53 +0100
+Subject: [Buildroot] [git commit] gnupg2: bump to version 2.2.5
+Message-ID: <20180305200719.1CA6481199@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=382fe9f9261812682eab2d35e47aa94dc554380e
+commit: https://git.buildroot.net/buildroot/commit/?id=379c34739082f3906ccf4877b85a2e714606bffe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For some boards, for example the Raspberry Pi, it's necessary to build
-in-tree dts files as well as custom/out of tree dts-files (dt-blob.bin).
-The existing logic made these two options exclusive, this commit changes
-that to allow both in-tree as well as custom sources for dts files.
-
-Signed-off-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
-[Arnout: re-wrap help, add extra empty line, change = into +=]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 19 +++++++------------
- linux/linux.mk  |  8 +++++---
- 2 files changed, 12 insertions(+), 15 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1bc8171291..80e85b9e8b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -363,10 +363,6 @@ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
- config BR2_LINUX_KERNEL_APPENDED_DTB
- 	bool
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index a003da668b..9cc8e4c913 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000419.html
+-sha1 732266e8888c6f41c084d043c7a0058332ff3580  gnupg-2.2.4.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q1/000420.html
++sha1 9dec110397e460b3950943e18f5873a4f277f216  gnupg-2.2.5.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.4.tar.bz2.sig
+-sha256 401a3e64780fdfa6d7670de0880aa5c9d589b3db7a7098979d7606cec546f2ec  gnupg-2.2.4.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.5.tar.bz2.sig
++sha256 3fa189a32d4fb62147874eb1389047c267d9ba088f57ab521cb0df46f08aef57  gnupg-2.2.5.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 980fae342b..ba5370902f 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--choice
--	prompt "Device tree source"
--	default BR2_LINUX_KERNEL_USE_INTREE_DTS
--
- config BR2_LINUX_KERNEL_USE_INTREE_DTS
- 	bool "Use a device tree present in the kernel"
- 	help
-@@ -374,14 +370,6 @@ config BR2_LINUX_KERNEL_USE_INTREE_DTS
- 	  the kernel sources. The dts files are located
- 	  in the arch/<arch>/boot/dts folder.
- 
--config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
--	bool "Use a custom device tree file"
--	help
--	  Use a custom device tree file, i.e, a device
--	  tree file that does not belong to the kernel
--	  source tree.
--endchoice
--
- config BR2_LINUX_KERNEL_INTREE_DTS_NAME
- 	string "Device Tree Source file names"
- 	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
-@@ -390,6 +378,13 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
- 	  the trailing .dts. You can provide a list of
- 	  dts files to build, separated by spaces.
- 
-+config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-+	bool "Use a custom device tree file"
-+	help
-+	  Use a custom device tree file, i.e, a device
-+	  tree file that does not belong to the kernel
-+	  source tree.
-+
- config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	string "Device Tree Source file paths"
- 	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 776304e730..ab940e7305 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -119,13 +119,15 @@ endif
- LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
- 
- ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
--KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
--else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
-+KERNEL_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
-+endif
-+
-+ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
- # We keep only the .dts files, so that the user can specify both .dts
- # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
- # copied to arch/<arch>/boot/dts, but only the .dts files will
- # actually be generated as .dtb.
--KERNEL_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
-+KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
- endif
- 
- KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+-GNUPG2_VERSION = 2.2.4
++GNUPG2_VERSION = 2.2.5
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
