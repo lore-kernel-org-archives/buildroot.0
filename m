@@ -1,37 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 28 Feb 2018 05:57:44 +0100
-Subject: [Buildroot] Trouble with offline build
-References: <CAMd7AX_bD6b4c2xhnsWPicPCETk9z3bDP4yT9k3Jpd9Op1F8tA@mail.gmail.com>
-Message-ID: <8fphmex2hp.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Feb 2018 07:32:05 +0100
+Subject: [Buildroot] [git commit] qt5wayland: fix build issue with
+ mesa3d w/out xcb
+In-Reply-To: <20180227231125.528dcbf9@windsurf.lan> (Thomas Petazzoni's
+ message of "Tue, 27 Feb 2018 23:11:25 +0100")
+References: <20180227210121.125F78137A@busybox.osuosl.org>
+ <20180227231125.528dcbf9@windsurf.lan>
+Message-ID: <87zi3tlj4q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Am Tue, 27 Feb 2018 18:34:53 -0500 schrieb A:
+ > Hello,
+ > On Tue, 27 Feb 2018 21:48:17 +0100, Peter Korsgaard wrote:
 
-> I do a "make source" on a cygwin system that has internet and, and copy 
-the
-> whole thing over to the build system.
+ >> +# The mesa's EGL/eglplatform.h header includes X11 headers unless the flag
+ >> +# MESA_EGL_NO_X11_HEADERS is defined. Tell to not include X11 headers if
+ >> +# the libxcb is not selected.
+ >> +ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL)x$(BR2_PACKAGE_LIBXCB),yx)
+ >> +QT5WAYLAND_QMAKEFLAGS += QMAKE_CXXFLAGS+=-DMESA_EGL_NO_X11_HEADERS
+ >> +endif
 
-does your cygwin system include a "lzip" binary?
+ > I should have replied to the patch, but: I'm not happy with this
+ > change. Indeed this -D flag should be part of mesa's pkg-config files,
+ > and be picked up by Qt.
 
-> Then, on the build system, I do a "make", and I get undesired internet
-> access attempts and an ultimate failure, which I show below.
+ > The simple fact that this identical fix had to be added to qt5wayland,
+ > qt5webkit and qt5multimedia is a good indication that the fix is not
+ > the appropriate one. We may have to replicate this fix to lots of other
+ > qt5 packages.
 
-[...]
-> user at host:~/src/buildroot-2017.11.2$ make source
->>>> host-lzip 1.19 Downloading
+ > So the right fix is to propagate the flag using pkg-config.
 
-Buildroot checks the host system for needed dependencies and, if they are 
-missing, downloads and builds the missing package(s), for details check 
-the scripts in support/dependencies/. Apparently cygwin includes lzip 
-whereas your build system lacks it.
+Yes, you had already discussed this on IRC and I agree, but that fix
+does not look like it will be ready in time for 2018.02, so I've added
+these fixes for now.
 
-The solution is to call "make host-lzip-source" on your cygwin system and 
-then copy lzip-1.19.tar.gz to your build system.
+But indeed, please continue to work on the real upstreamable pkg-config
+fix.
 
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
