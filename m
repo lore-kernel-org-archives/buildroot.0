@@ -1,61 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 28 Feb 2018 21:01:12 +0200
-Subject: [Buildroot] [PATCH next] iw: bump to version 4.14
-Message-ID: <bd63f8c762f0043a583dfb093c87c445af65365d.1519844472.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Feb 2018 20:31:53 +0100
+Subject: [Buildroot] Introduction
+In-Reply-To: <CALURroS282mUC4nBeF-1+7K=+QNMzvtMkNA36OOa2TMMEuiTPQ@mail.gmail.com>
+ (Christopher McCrory's message of "Wed, 28 Feb 2018 10:10:31 -0800")
+References: <CALURroS282mUC4nBeF-1+7K=+QNMzvtMkNA36OOa2TMMEuiTPQ@mail.gmail.com>
+Message-ID: <87sh9kkj12.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop IW_MAKE_OPTS, passing the CC, LD, and LDFLAGS in the environment
-via TARGET_CONFIGURE_OPTS is enough.
+>>>>> "Christopher" == Christopher McCrory <chrismcc@gmail.com> writes:
 
-Add license file hash.
+Hi,
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/iw/iw.hash | 4 +++-
- package/iw/iw.mk   | 5 ++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ >  I sent in a few patches yesterday.  I read the responses and am working on
+ > new submissions. I am new to using git to submit patches, the Kconfig
+ > framework, and buildroot in general.  I was a sysadmin for many years, but
+ > haven't worked professionally for a while so my skills are a little rusty
+ > :).  I started on a few pet projects for my raspberry pi and found
+ > buildroot and crosstool-ng, both of which make testing much faster and
+ > easier.  When I needed changes to what buildroot did for things like init
+ > scripts and config files, rather than just use a local overlay, I decided
+ > to try to improve the existing packages.  I needed something to do while
+ > waiting on the compile process :)  If any of my submissions don't fit in
+ > with "the buildroot way" and are rejected, that's ok, you won't hurt my
+ > feelings.  Hopefully my submissions are useful and I have a few more to
+ > send.  Thanks
 
-diff --git a/package/iw/iw.hash b/package/iw/iw.hash
-index 414f34225f7c..6423df77325c 100644
---- a/package/iw/iw.hash
-+++ b/package/iw/iw.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
--sha256	324cc805fad52cba2c16b9ab569906889fb645cc962aac4cfda1db85d2de97ce	iw-4.9.tar.xz
-+sha256	f01671c0074bfdec082a884057edba1b9efd35c89eda554638496f03b769ad89	iw-4.14.tar.xz
-+# Locally calculated
-+sha256	5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af	COPYING
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index aa85cbb5b90c..8264e8b5dcc6 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -4,20 +4,19 @@
- #
- ################################################################################
- 
--IW_VERSION = 4.9
-+IW_VERSION = 4.14
- IW_SOURCE = iw-$(IW_VERSION).tar.xz
- IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
- IW_LICENSE = ISC
- IW_LICENSE_FILES = COPYING
- IW_DEPENDENCIES = host-pkgconf libnl
--IW_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
- IW_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	PKG_CONFIG="$(HOST_DIR)/bin/pkg-config" \
- 	GIT_DIR=$(IW_DIR)
- 
- define IW_BUILD_CMDS
--	$(IW_MAKE_ENV) $(MAKE) $(IW_MAKE_OPTS) -C $(@D)
-+	$(IW_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define IW_INSTALL_TARGET_CMDS
+Great, welcome to Buildroot and thanks for the patches you have already
+sent!
+
 -- 
-2.16.1
+Bye, Peter Korsgaard
