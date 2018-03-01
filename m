@@ -1,49 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Mar 2018 23:17:32 +0100
-Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
- to 2.4.90
-Message-ID: <20180301222104.5D285814D5@busybox.osuosl.org>
+Date: Thu, 1 Mar 2018 23:18:38 +0100
+Subject: [Buildroot] [git commit branch/next] package/nasm: bump version to
+ 2.13.03
+Message-ID: <20180301222104.7D33E814D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ced7bcbb253cf52f0d870cad3646d2c6a7d55adf
+commit: https://git.buildroot.net/buildroot/commit/?id=ee8d397a25dd7dfadeb74522336a9c5e990db454
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/nasm/nasm.hash | 2 +-
+ package/nasm/nasm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 0842411c5a..b1784b4c07 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2017-December/160530.html
--md5 5307a147dde67ac643f6753a42b5d32c  libdrm-2.4.89.tar.bz2
--sha1 43123da26271df9a29deb687c1855bef3fed249c  libdrm-2.4.89.tar.bz2
--sha256 629f9782aabbb4809166de5f24d26fe0766055255038f16935602d89f136a02e  libdrm-2.4.89.tar.bz2
--sha512 380e4e46cd3971a73264bd1b482791fab0503268adb65ac81b674df009662cfb8ef5741e362f19670b2a43b1c46f022d857706c9a4bebed2b1cddaa317b7706d  libdrm-2.4.89.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-February/002838.html
-+md5 61dcb4989c728f566e3c15c236585a17  libdrm-2.4.90.tar.bz2
-+sha1 7630ba36c65433251a0494b47086fbd0b32ff7a8  libdrm-2.4.90.tar.bz2
-+sha256 db37ec8f1dbaa2c192ad9903c8d0988b858ae88031e96f169bf76aaf705db68b  libdrm-2.4.90.tar.bz2
-+sha512 3d32d60c44ffdcb58667d0926e6af8d375332add1f243d8b2d37567aeef4e4b26d786294aeecf46c3dea94fc002fb73756567c457300703acfc21e32ffbd458c  libdrm-2.4.90.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 1c898a5b54..7121f06c9a 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
+index 260e5d7bc4..db5b857193 100644
+--- a/package/nasm/nasm.hash
++++ b/package/nasm/nasm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757  nasm-2.13.02.tar.xz
++sha256 812ecfb0dcbc5bd409aaa8f61c7de94c5b8752a7b00c632883d15b2ed6452573  nasm-2.13.03.tar.xz
+ sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index ee3fd9c542..76bcca3bbf 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.89
-+LIBDRM_VERSION = 2.4.90
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-NASM_VERSION = 2.13.02
++NASM_VERSION = 2.13.03
+ NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
+ NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2-Clause
