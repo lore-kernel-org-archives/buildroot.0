@@ -1,40 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Mar 2018 23:29:18 +0100
-Subject: [Buildroot] [git commit] qt: mark as obsolete
-Message-ID: <20180301223008.7C176811B2@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 2 Mar 2018 00:30:50 +0200
+Subject: [Buildroot] [PATCH next] 18xx-ti-utils: new package
+In-Reply-To: <87fu5jfnem.fsf@dell.be.48ers.dk>
+References: <d322743a2a05c94eb5e1403f726b2c55372df556.1519941102.git.baruch@tkos.co.il>
+ <87fu5jfnem.fsf@dell.be.48ers.dk>
+Message-ID: <20180301223050.zdh7n2xfm3u5eqja@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3538b5fb10ca1eeedb5d8957a58c464f5f9f45bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-qt 4.x is no longer supported upstream since December 2015:
+On Thu, Mar 01, 2018 at 11:20:49PM +0100, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+>  > These are spacial RF calibration utilities for TI Wilink 18xx
+>  > modules.
+> 
+>  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>  > ---
+>  > v3:
+>  >   * Propagate dependencies (Marcus)
+>  >   * Add license information and hash
+>  > +	help
+>  > +	  TI Wilink calibration utilities.
+>  > +
+>  > +	  CONFIG_NL80211_TESTMODE must be enabled in the kernel
+>  > +	  configuration for this package to work.
+> 
+> Would it make sense to force this option on in linux.mk like we do for
+> other packages?
 
-https://blog.qt.io/blog/2015/05/26/qt-4-8-7-released/
+I don't think so. I don't like this magic config manipulation in the general 
+case. CONFIG_NL80211_TESTMODE in particular is meant for those who really know 
+what they are doing. As the kernel config option help text put it:
 
-So it shouldn't be used for new projects.  Add an obsolete warning to the
-package prompt to make this clear.
+  Say N.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+baruch
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 4804a81537..0ecfafada5 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -3,7 +3,7 @@ comment "qt needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
- 
- menuconfig BR2_PACKAGE_QT
--	bool "Qt"
-+	bool "Qt (obsolete)"
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
