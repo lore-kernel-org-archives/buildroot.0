@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Mar 2018 23:17:38 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/libdrm: bump version to
- 2.4.90
-In-Reply-To: <20180301202942.3071-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 1 Mar 2018 21:29:42 +0100")
-References: <20180301202942.3071-1-bernd.kuhls@t-online.de>
-Message-ID: <87o9k7fnjx.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Mar 2018 23:18:55 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/nasm: bump version to
+ 2.13.03
+In-Reply-To: <20180301200953.18312-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 1 Mar 2018 21:09:53 +0100")
+References: <20180301200953.18312-1-bernd.kuhls@t-online.de>
+Message-ID: <87k1uvfnhs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
