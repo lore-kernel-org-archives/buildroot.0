@@ -1,30 +1,48 @@
-From: Julia Ding <dingtasiling@gmail.com>
-Date: Wed, 28 Feb 2018 20:40:39 -0700 (MST)
-Subject: [Buildroot] QT5 camera error: Unknown module(s) in QT: multimedia
- multimediawidgets
-Message-ID: <1519875639555-0.post@n4.nabble.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 28 Feb 2018 23:23:31 -0600
+Subject: [Buildroot] [next,v2 0/8] Package CPE Reporting
+Message-ID: <1519881819-51445-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I run qt camera demo, and it show this error
+This series adds new infrastructure to report
+a packages CPE identifier in a similar way
+that the legal info is currently reported.
 
-:-1: error: Unknown module(s) in QT: multimedia multimediawidgets
-
-So I add qt5multimedia. (I'm using 'imx6-sabresd_qt5_defconfig' +
-qt5multimedia.)
-Then, build. Show this error:
-
-Makefile:179: recipe for target 'sub-plugins-make_first' failed
-make[3]: *** [sub-plugins-make_first] Error 2
-Makefile:46: recipe for target 'sub-src-make_first' failed
-make[2]: *** [sub-src-make_first] Error 2
-
-How to fix this? Thanks.
+The addition of CPE IDs to the packages is a
+manual process, but in a later patchset
+additions are planned to the pkg-stats script
+to automate maintenance the process.
 
 
+v2
+- Used pkg infra to hid the common CPE ID definition
+- Misc cleanup of Makefile approach
 
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
+
+Matt Weber (8):
+  cpe-info: new make target
+  cpe-info: id prefix/suffix
+  cpe-info: only report target pkgs
+  cpe-info: infra defines CPE_ID_* defaults
+  cpe-info: update manual for new pkg vars
+  bash: add CPE id
+  e2fsprogs: add CPE id
+  boa: add CPE id
+
+ Makefile                                |  17 ++++-
+ docs/manual/adding-packages-generic.txt | 119 ++++++++++++++++++++------------
+ package/bash/bash.mk                    |   1 +
+ package/boa/boa.mk                      |   1 +
+ package/e2fsprogs/e2fsprogs.mk          |   2 +
+ package/pkg-generic.mk                  |  28 ++++++++
+ package/pkg-utils.mk                    |   8 +++
+ 7 files changed, 132 insertions(+), 44 deletions(-)
+
+-- 
+1.9.1
