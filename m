@@ -1,77 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Mar 2018 10:02:27 +0100
-Subject: [Buildroot] [PATCH v2 2/9] dumb-init: new package
-In-Reply-To: <20180301072012.25884-3-christian@paral.in>
-References: <20180301072012.25884-1-christian@paral.in>
- <20180301072012.25884-3-christian@paral.in>
-Message-ID: <20180301100227.3fb09c06@windsurf.lan>
+Date: Thu, 1 Mar 2018 10:13:20 +0100
+Subject: [Buildroot] util-linux pkg-config files point to build machine
+ paths
+In-Reply-To: <CAFOYHZBt8tGfL+vbT=jGLuGoGLp8CUNKjBuJ_Z7ArMTOj7gbJA@mail.gmail.com>
+References: <CAFOYHZBt8tGfL+vbT=jGLuGoGLp8CUNKjBuJ_Z7ArMTOj7gbJA@mail.gmail.com>
+Message-ID: <20180301101320.671394fe@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+Hello Chris,
 
-On Thu,  1 Mar 2018 02:20:05 -0500, Christian Stewart wrote:
+On Thu, 1 Mar 2018 14:16:20 +1300, Chris Packham wrote:
+> Hi Buildroot,
+> 
+> I imagine this will end-up on the util-linux mailing-list eventually
+> but hopefully someone here can help me formulate an intelligent
+> suggestion first.
+> 
+> If I build one of the libraries from util-linux the generated .pc
+> refers to /usr/include instead of ${prefix}/include which makes
+> cross-compilation interesting (particularly when the host doesn't have
+> those files).
+> 
+> For example here's uuid.pc
+> 
+> prefix=/usr
+> exec_prefix=/usr
+> libdir=/usr/lib
+> includedir=/usr/include
+> 
+> Name: uuid
+> Description: Universally unique id library
+> Version: 2.31.1
+> Requires:
+> Cflags: -I${includedir}/uuid
+> Libs: -L${libdir} -luuid
+> 
+> Compare that with zlib.pc
+> 
+> prefix=/usr
+> exec_prefix=${prefix}
+> libdir=${exec_prefix}/lib
+> sharedlibdir=${libdir}
+> includedir=${prefix}/include
+> 
+> Name: zlib
+> Description: zlib compression library
+> Version: 1.2.11
+> 
+> Requires:
+> Libs: -L${libdir} -L${sharedlibdir} -lz
+> Cflags: -I${includedir}
+> 
+> But the .pc.in files that these were generated from are pretty
+> similar. I assume it has something to do with the way these are
+> generated. Does anyone have an intelligent suggestion for something to
+> propose upstream or should I just patch the pc files after the fact?
 
-> diff --git a/package/dumb-init/Config.in b/package/dumb-init/Config.in
-> new file mode 100644
-> index 0000000000..e817493605
-> --- /dev/null
-> +++ b/package/dumb-init/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_DUMB_INIT
-> +	bool "dumb-init"
-> +	help
-> +	  dumb-init is a simple but valid init binary to
-> +	  act as PID 1 for containers.
-> +
-> +	  https://github.com/Yelp/dumb-init
-> diff --git a/package/dumb-init/dumb-init.hash b/package/dumb-init/dumb-init.hash
-> new file mode 100644
-> index 0000000000..4705ce4368
-> --- /dev/null
-> +++ b/package/dumb-init/dumb-init.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256	74486997321bd939cad2ee6af030f481d39751bc9aa0ece84ed55f864e309a3f	v1.2.0.tar.gz
+The way uuid.pc is written is perfectly fine. See:
 
-Argh, what an annoying name for the tarball :-/
+thomas at windsurf:~$ cat /usr/lib64/pkgconfig/uuid.pc 
+prefix=/usr
+exec_prefix=/usr
+libdir=/usr/lib64
+includedir=/usr/include
 
-Could you add an entry with the hash of the license file ?
+Name: uuid
+Description: Universally unique id library
+Version: 2.30.2
+Requires:
+Cflags: -I${includedir}/uuid
+Libs: -L${libdir} -luuid
+thomas at windsurf:~$ cat /usr/lib64/pkgconfig/uuid.pc 
+prefix=/usr
+exec_prefix=/usr
+libdir=/usr/lib64
+includedir=/usr/include
 
-> diff --git a/package/dumb-init/dumb-init.mk b/package/dumb-init/dumb-init.mk
-> new file mode 100644
-> index 0000000000..3133384f5a
-> --- /dev/null
-> +++ b/package/dumb-init/dumb-init.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# dumb-init
-> +#
-> +################################################################################
-> +
-> +DUMB_INIT_VERSION = v1.2.0
-> +DUMB_INIT_SITE = $(call github,Yelp,dumb-init,$(DUMB_INIT_VERSION))
-> +
-> +DUMB_INIT_LICENSE = MIT
-> +DUMB_INIT_LICENSE_FILES = LICENSE
-> +DUMB_INIT_CFLAGS += -static
+Name: uuid
+Description: Universally unique id library
+Version: 2.30.2
+Requires:
+Cflags: -I${includedir}/uuid
+Libs: -L${libdir} -luuid
+thomas at windsurf:~$ pkg-config --cflags uuid
+-I/usr/include/uuid 
+thomas at windsurf:~$ PKG_CONFIG_SYSROOT_DIR=/foo/bar/ pkg-config --cflags uuid
+-I/foo/bar/usr/include/uuid 
 
-This should be:
+I.e, pkg-config doesn't use the ${prefix} variable or anything like
+that to prepend the sysroot location. The ${prefix} variable is just a
+convenience to make the .pc file easier to read. But the
+PKG_CONFIG_SYSROOT_DIR mechanism is independent of that. As you can see
+above, despite uuid.pc not using ${prefix}, PKG_CONFIG_SYSROOT_DIR does
+work as expected.
 
-DUMB_INIT_CFLAGS = $(TARGET_CFLAGS) -static
-
-with a comment above it that explains why we are forcing -static.
-
-However, using -static has a problem: what happens when you're doing a
-BR2_SHARED_LIBS=y configuration, i.e when there is only support for
-shared libraries, and not static libraries ? And BR2_SHARED_LIBS=y is
-our default.
-
-Best regards,
+Therefore, unless I misunderstood your concern, I believe there is no
+need to contact the util-linux guys :-)
 
 Thomas
 -- 
