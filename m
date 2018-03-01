@@ -1,105 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Mar 2018 10:13:20 +0100
-Subject: [Buildroot] util-linux pkg-config files point to build machine
- paths
-In-Reply-To: <CAFOYHZBt8tGfL+vbT=jGLuGoGLp8CUNKjBuJ_Z7ArMTOj7gbJA@mail.gmail.com>
-References: <CAFOYHZBt8tGfL+vbT=jGLuGoGLp8CUNKjBuJ_Z7ArMTOj7gbJA@mail.gmail.com>
-Message-ID: <20180301101320.671394fe@windsurf.lan>
+Date: Thu, 1 Mar 2018 10:14:46 +0100
+Subject: [Buildroot] QT5 camera error: Unknown module(s) in QT:
+ multimedia multimediawidgets
+In-Reply-To: <1519875639555-0.post@n4.nabble.com>
+References: <1519875639555-0.post@n4.nabble.com>
+Message-ID: <20180301101446.5d64784f@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+Hello Julia,
 
-On Thu, 1 Mar 2018 14:16:20 +1300, Chris Packham wrote:
-> Hi Buildroot,
+On Wed, 28 Feb 2018 20:40:39 -0700 (MST), Julia Ding wrote:
+> I run qt camera demo, and it show this error
 > 
-> I imagine this will end-up on the util-linux mailing-list eventually
-> but hopefully someone here can help me formulate an intelligent
-> suggestion first.
+> :-1: error: Unknown module(s) in QT: multimedia multimediawidgets
 > 
-> If I build one of the libraries from util-linux the generated .pc
-> refers to /usr/include instead of ${prefix}/include which makes
-> cross-compilation interesting (particularly when the host doesn't have
-> those files).
+> So I add qt5multimedia. (I'm using 'imx6-sabresd_qt5_defconfig' +
+> qt5multimedia.)
+> Then, build. Show this error:
 > 
-> For example here's uuid.pc
+> Makefile:179: recipe for target 'sub-plugins-make_first' failed
+> make[3]: *** [sub-plugins-make_first] Error 2
+> Makefile:46: recipe for target 'sub-src-make_first' failed
+> make[2]: *** [sub-src-make_first] Error 2
 > 
-> prefix=/usr
-> exec_prefix=/usr
-> libdir=/usr/lib
-> includedir=/usr/include
-> 
-> Name: uuid
-> Description: Universally unique id library
-> Version: 2.31.1
-> Requires:
-> Cflags: -I${includedir}/uuid
-> Libs: -L${libdir} -luuid
-> 
-> Compare that with zlib.pc
-> 
-> prefix=/usr
-> exec_prefix=${prefix}
-> libdir=${exec_prefix}/lib
-> sharedlibdir=${libdir}
-> includedir=${prefix}/include
-> 
-> Name: zlib
-> Description: zlib compression library
-> Version: 1.2.11
-> 
-> Requires:
-> Libs: -L${libdir} -L${sharedlibdir} -lz
-> Cflags: -I${includedir}
-> 
-> But the .pc.in files that these were generated from are pretty
-> similar. I assume it has something to do with the way these are
-> generated. Does anyone have an intelligent suggestion for something to
-> propose upstream or should I just patch the pc files after the fact?
+> How to fix this? Thanks.
 
-The way uuid.pc is written is perfectly fine. See:
+Thanks for your report. Could you:
 
-thomas at windsurf:~$ cat /usr/lib64/pkgconfig/uuid.pc 
-prefix=/usr
-exec_prefix=/usr
-libdir=/usr/lib64
-includedir=/usr/include
+ (1) Make sure this error happens when you do a rebuild from scratch
+     ("make clean all")
 
-Name: uuid
-Description: Universally unique id library
-Version: 2.30.2
-Requires:
-Cflags: -I${includedir}/uuid
-Libs: -L${libdir} -luuid
-thomas at windsurf:~$ cat /usr/lib64/pkgconfig/uuid.pc 
-prefix=/usr
-exec_prefix=/usr
-libdir=/usr/lib64
-includedir=/usr/include
+ (2) Post the .config, and the last ~200 lines of build output. The
+     part of the error log you have copy/pasted is not sufficient to
+     understand the issue.
 
-Name: uuid
-Description: Universally unique id library
-Version: 2.30.2
-Requires:
-Cflags: -I${includedir}/uuid
-Libs: -L${libdir} -luuid
-thomas at windsurf:~$ pkg-config --cflags uuid
--I/usr/include/uuid 
-thomas at windsurf:~$ PKG_CONFIG_SYSROOT_DIR=/foo/bar/ pkg-config --cflags uuid
--I/foo/bar/usr/include/uuid 
-
-I.e, pkg-config doesn't use the ${prefix} variable or anything like
-that to prepend the sysroot location. The ${prefix} variable is just a
-convenience to make the .pc file easier to read. But the
-PKG_CONFIG_SYSROOT_DIR mechanism is independent of that. As you can see
-above, despite uuid.pc not using ${prefix}, PKG_CONFIG_SYSROOT_DIR does
-work as expected.
-
-Therefore, unless I misunderstood your concern, I believe there is no
-need to contact the util-linux guys :-)
+Thanks!
 
 Thomas
 -- 
