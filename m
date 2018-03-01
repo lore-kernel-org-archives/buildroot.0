@@ -1,99 +1,186 @@
 From: Christian Stewart <christian@paral.in>
-Date: Thu,  1 Mar 2018 02:20:06 -0500
-Subject: [Buildroot] [PATCH v2 3/9] docker-engine: add support for init
- processes
+Date: Thu,  1 Mar 2018 02:20:12 -0500
+Subject: [Buildroot] [PATCH v2 9/9] docker-engine: bump to v18.03.0-ce-rc1
 In-Reply-To: <20180301072012.25884-1-christian@paral.in>
 References: <20180301072012.25884-1-christian@paral.in>
-Message-ID: <20180301072012.25884-4-christian@paral.in>
+Message-ID: <20180301072012.25884-10-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a docker container is run with the --init flag, the Docker engine
-uses the docker-init binary as PID 1 inside the container. This is
-necessary in may cases to avoid issues with signal handling, zombie
-processes, and other quirks when running as PID 1.
+This commit bumps docker-engine to v18.03.0-ce-rc1
 
-The docker-init binary is backed by tini on default, but optionally can
-be changed to docker-init by user preference.
+The docker-engine repository has now been moved to:
 
-Furthermore, this patch fixes the following Docker error:
+  https://github.com/docker/docker-ce
 
-  dockerd: level=warning msg="failed to retrieve docker-init version"
+The CLI and the daemon have been split into separate repositories:
+
+  - https://github.com/docker/cli
+  - https://github.com/moby/moby
+
+The daemon codebase lives in the "moby" repo, but the import paths in Go are:
+
+  github.com/docker/docker
+
+As before. Presumably, the maintainers will eventually split the engine out
+to a different repository as well.
+
+Please note that the entire docker/cli and moby/moby repositories are copied
+into the docker-ce repository, as well as all of their dependencies in the
+vendor directories. This means that downloading the docker-ce source tarball
+contains:
+
+ - The cli sources
+ - The daemon sources
+ - Two copies of all of the dependencies of both
+
+At the moment this is unavoidable, but does produce a working build.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk | 11 +++++++++++
- 2 files changed, 37 insertions(+)
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 05670a716e..7d9a87f7bb 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -33,6 +33,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
- 
- if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- 
-+choice
-+	bool "docker-init to use"
-+	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	help
-+	  The docker engine uses a minimal init process as PID 1
-+	  inside containers. There are several implementations
-+	  of this init process.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	bool "tini"
-+	select BR2_PACKAGE_TINI
-+	help
-+	  Use Tini as the container init process.
-+
-+	  https://github.com/krallin/tini
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
-+	bool "dumb-init"
-+	select BR2_PACKAGE_DUMB_INIT
-+	help
-+	  Use dumb-init as the container init process.
-+
-+	  https://github.com/Yelp/dumb-init
-+
-+endchoice
-+
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
- 	depends on BR2_USE_MMU # btrfs-progs
+---
+
+Changes since initial series:
+
+ - Upgrade to 2018.03-ce-rc1 due to critical bugs in 2018.02.
+
+Recommended merge to next branch.
+---
+ package/docker-engine/docker-engine.hash |  2 +-
+ package/docker-engine/docker-engine.mk   | 48 +++++++++++++++++++-------------
+ 2 files changed, 29 insertions(+), 21 deletions(-)
+
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 6c0ed338a5..add0b89d39 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	4716df117d867b82ddab2e82395cd40aa3d0925a689eedcec8919729e4c9f121	docker-engine-v17.05.0-ce.tar.gz
++sha256	45cda237a2eea4f0415bfb1f755ba64724833ac026328b765ee82aedfcfa36f3	docker-engine-v18.03.0-ce-rc1.tar.gz
 diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 8928f072e7..a2776ed78c 100644
+index a2776ed78c..f9cb4b8879 100644
 --- a/package/docker-engine/docker-engine.mk
 +++ b/package/docker-engine/docker-engine.mk
-@@ -50,6 +50,13 @@ endif
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
- DOCKER_ENGINE_BUILD_TAGS += daemon
- DOCKER_ENGINE_BUILD_TARGETS += dockerd
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = v17.05.0-ce
+-DOCKER_ENGINE_COMMIT = 89658bed64c2a8fe05a978e5b87dbec409d57a0f
+-DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
++DOCKER_ENGINE_VERSION = v18.03.0-ce-rc1
++DOCKER_ENGINE_SITE = $(call github,docker,docker-ce,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE_FILES = LICENSE
+@@ -19,37 +18,43 @@ DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+ 	CGO_NO_EMULATION=1 \
+ 	GOBIN="$(@D)/bin" \
+ 	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
+-	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG="$(PKG_CONFIG)" \
+ 	$(TARGET_MAKE_ENV)
+ 
+ DOCKER_ENGINE_GLDFLAGS = \
+ 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
+-	-X main.Version=$(DOCKER_ENGINE_VERSION)
++	-X main.Version=$(DOCKER_ENGINE_VERSION) \
++	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_ENGINE_VERSION) \
++	-X github.com/docker/cli/cli.Version=$(DOCKER_ENGINE_VERSION)
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
-+DOCKER_ENGINE_INIT = dumb-init
-+else
-+DOCKER_ENGINE_INIT = tini
-+endif
-+
++DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
++DOCKER_ENGINE_BUILD_TARGETS = cli:docker
++DOCKER_ENGINE_BUILD_TARGET_PARSE = \
++		export targetpkg=$$(echo $(target) | cut -d: -f1); \
++		export targetbin=$$(echo $(target) | cut -d: -f2)
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DOCKER_ENGINE_GLDFLAGS += -extldflags '-static'
++DOCKER_ENGINE_BUILD_TAGS += static_build
+ else
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
+ DOCKER_ENGINE_GLDFLAGS_DOCKER += -extldflags '-static'
+ endif
  endif
  
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-@@ -119,6 +126,10 @@ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
+-DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
+-DOCKER_ENGINE_BUILD_TARGETS = docker
+-
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ DOCKER_ENGINE_BUILD_TAGS += seccomp
+ DOCKER_ENGINE_DEPENDENCIES += libseccomp
+ endif
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+-DOCKER_ENGINE_BUILD_TAGS += journald
+ DOCKER_ENGINE_DEPENDENCIES += systemd
++DOCKER_ENGINE_BUILD_TAGS += systemd journald
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+ DOCKER_ENGINE_BUILD_TAGS += daemon
+-DOCKER_ENGINE_BUILD_TARGETS += dockerd
++DOCKER_ENGINE_BUILD_TARGETS += docker:dockerd
+ 
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
+ DOCKER_ENGINE_INIT = dumb-init
+@@ -83,10 +88,11 @@ endif
+ 
+ define DOCKER_ENGINE_CONFIGURE_CMDS
+ 	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
+-	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
+-	cd $(@D) && \
+-		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
++	ln -fs $(@D)/components/engine $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
++	ln -fs $(@D)/components/cli $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/cli
++	cd $(@D)/components/engine && \
+ 		BUILDTIME="$$(date)" \
++		IAMSTATIC="true" \
+ 		VERSION="$(patsubst v%,%,$(DOCKER_ENGINE_VERSION))" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
+ 		bash ./hack/make/.go-autogen
+@@ -95,9 +101,9 @@ endef
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+ 
+ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
++	$(INSTALL) -D -m 0644 $(@D)/components/engine/contrib/init/systemd/docker.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
+-	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
++	$(INSTALL) -D -m 0644 $(@D)/components/engine/contrib/init/systemd/docker.socket \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
+ 	ln -fs ../../../../usr/lib/systemd/system/docker.service \
+@@ -112,19 +118,21 @@ endif
+ 
+ define DOCKER_ENGINE_BUILD_CMDS
  	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
- 		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
+-		cd $(@D)/gopath/src/github.com/docker/docker; \
++		$(DOCKER_ENGINE_BUILD_TARGET_PARSE); \
++		cd $(@D)/gopath/src/github.com/docker/$${targetpkg}; \
+ 		$(DOCKER_ENGINE_MAKE_ENV) \
+ 		$(HOST_DIR)/bin/go build -v \
+-			-o $(@D)/bin/$(target) \
++			-o $(@D)/bin/$${targetbin} \
+ 			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
+-			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
+-			github.com/docker/docker/cmd/$(target)
++			-ldflags "$(DOCKER_ENGINE_GLDFLAGS)" \
++			./cmd/$${targetbin}
  	)
-+
-+	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
-+		ln -fs $(DOCKER_ENGINE_INIT) $(TARGET_DIR)/usr/bin/docker-init
-+	)
  endef
  
- $(eval $(generic-package))
+ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
+ 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+-		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
++		$(DOCKER_ENGINE_BUILD_TARGET_PARSE); \
++		$(INSTALL) -D -m 0755 $(@D)/bin/$${targetbin} $(TARGET_DIR)/usr/bin/$${targetbin}
+ 	)
+ 
+ 	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
 -- 
 2.13.6
