@@ -1,43 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Mar 2018 23:18:38 +0100
-Subject: [Buildroot] [git commit branch/next] package/nasm: bump version to
- 2.13.03
-Message-ID: <20180301222104.7D33E814D5@busybox.osuosl.org>
+Date: Thu, 1 Mar 2018 23:16:34 +0100
+Subject: [Buildroot] [git commit branch/next] package/x265: bump version to
+ 2.7
+Message-ID: <20180301222104.398BA814D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee8d397a25dd7dfadeb74522336a9c5e990db454
+commit: https://git.buildroot.net/buildroot/commit/?id=0f2dbcd3c700c29d8fdfb8761add76c14906cd71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Upstream switched to nasm:
+https://mailman.videolan.org/pipermail/x265-devel/2018-March/011615.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nasm/nasm.hash | 2 +-
- package/nasm/nasm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-index 260e5d7bc4..db5b857193 100644
---- a/package/nasm/nasm.hash
-+++ b/package/nasm/nasm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757  nasm-2.13.02.tar.xz
-+sha256 812ecfb0dcbc5bd409aaa8f61c7de94c5b8752a7b00c632883d15b2ed6452573  nasm-2.13.03.tar.xz
- sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index ee3fd9c542..76bcca3bbf 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index 3e44b03692..e6f22db646 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256 2e53259b504a7edb9b21b9800163b1ff4c90e60c74e23e7001d423c69c5d3d17  x265_2.5.tar.gz
++sha256 d5e75fa62ffe6ed49e691f8eb8ab8c1634ffcc0725dd553c6fdb4d5443b494a2  x265_2.7.tar.gz
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index ae570e6e4c..243025c08b 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NASM_VERSION = 2.13.02
-+NASM_VERSION = 2.13.03
- NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
- NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2-Clause
+-X265_VERSION = 2.5
++X265_VERSION = 2.7
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPL-2.0+
+@@ -13,7 +13,7 @@ X265_SUBDIR = source
+ X265_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+-X265_DEPENDENCIES += host-yasm
++X265_DEPENDENCIES += host-nasm
+ endif
+ 
+ # disable altivec, it has build issues
