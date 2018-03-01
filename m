@@ -1,17 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Mar 2018 22:17:32 +0100
-Subject: [Buildroot] Analysis of build results for 2018-02-25
-In-Reply-To: <096b2356-52d1-ee4d-0dc4-504d4a0dfee7@mind.be> (Arnout
- Vandecappelle's message of "Thu, 1 Mar 2018 20:41:13 +0100")
-References: <20180226070010.28C8620727@mail.bootlin.com>
- <20180226113319.7e3bcf6b@windsurf.lan>
- <87fu5nsyrg.fsf@dell.be.48ers.dk>
- <20180226140029.45325514@windsurf.lan>
- <87bmgbsv4z.fsf@dell.be.48ers.dk>
- <20180226154724.4e87f072@windsurf.lan>
- <877eqzshgt.fsf@dell.be.48ers.dk>
- <096b2356-52d1-ee4d-0dc4-504d4a0dfee7@mind.be>
-Message-ID: <87inafh4wj.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Mar 2018 22:21:45 +0100
+Subject: [Buildroot] [PATCH 1/1] Main Makefile Have "make savedefconfig"
+ show where the file is being written to.
+In-Reply-To: <dd0ef897-7b93-4c58-6f6f-a33e33f4e28a@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 1 Mar 2018 20:50:30 +0100")
+References: <20180227112818.6766-1-chrismcc@gmail.com>
+ <dd0ef897-7b93-4c58-6f6f-a33e33f4e28a@mind.be>
+Message-ID: <87efl3h4pi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,43 +15,32 @@ To: buildroot@busybox.net
 
 >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Hi,
-
- >> Makes me think that we won't be able to do a good job supporting it
- >> throughout the 2018.02 support cycle.
-
- >  Well, for most packages, the "support" is limited to "it's still there and it
- > still doesn't fail in autobuilders".
-
-I was hoping for a bit more than that, E.G. has no known security
-issues.
-
-
- > Which will not happen because we don't use any new toolchains or
- > anything during the LTS support cycle.
-
-Unless there is a security issue in one of the libraries it uses (like
-openssl) and we need to bump the version to fix that issue.
-
-
- >> We don't have a good way of handling deprecations, so I'm not sure what
- >> the best option is:
+ > On 27-02-18 12:28, Christopher McCrory wrote:
+ >> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+ >> ---
+ >> Makefile | 1 +
+ >> 1 file changed, 1 insertion(+)
  >> 
- >> - Do nothing
- >> - Change prompt to "Qt (obsolete)"
+ >> diff --git a/Makefile b/Makefile
+ >> index ec39bcdb9c..4ac2435a9c 100644
+ >> --- a/Makefile
+ >> +++ b/Makefile
+ >> @@ -927,6 +927,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ >> --savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ >> $(CONFIG_CONFIG_IN)
+ >> @$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
+ >> +	@echo "Saved to $(DEFCONFIG)"
 
- >  I like this one. It costs us nothing, it makes it clear that you can't expect
- > support updates on this package, and it's an advance warning that it may be removed.
+ >  If BR2_DEFCONFIG is not set, you'll get "Saved to " which is a bit weird. So
+ > change into:
 
-Ok, I'll send a patch.
+ > 	@echo "Saved to $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)"
 
+ >  But now $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) is used 3
+ > times, so perhaps it's worth adding a variable for it. I can't think of a good
+ > name for it unfortunately.
 
- >> - Remove package
-
- >  Eventually, yes, with legacy handling. I would remove it only when it breaks.
-
-Ok.
-
+Perhaps we could just set DEFCONFIG to $(CONFIG_DIR)/defconfig if empty?
 
 -- 
 Bye, Peter Korsgaard
