@@ -1,98 +1,80 @@
 From: Christian Stewart <christian@paral.in>
-Date: Thu,  1 Mar 2018 02:20:05 -0500
-Subject: [Buildroot] [PATCH v2 2/9] dumb-init: new package
+Date: Thu,  1 Mar 2018 02:20:10 -0500
+Subject: [Buildroot] [PATCH v2 7/9] runc: bump to 9f9c96235cc
 In-Reply-To: <20180301072012.25884-1-christian@paral.in>
 References: <20180301072012.25884-1-christian@paral.in>
-Message-ID: <20180301072012.25884-3-christian@paral.in>
+Message-ID: <20180301072012.25884-8-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dumb-init is a minimal init process to act as PID 1 for containers.
-
-dumb-init can be used to satisfy docker-engine's docker-init binary
-requirement.
-
-In many cases docker-init backing processes like dumb-init must be static, as
-they are executed inside a container in an unknown environment. This
-patch includes an option to specifically compile dumb-init statically, even if
-the system is compiled dynamically.
+This commit bumps runc to the requisite version for Docker 2018.03.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                |  1 +
- package/dumb-init/Config.in      |  7 +++++++
- package/dumb-init/dumb-init.hash |  2 ++
- package/dumb-init/dumb-init.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 34 insertions(+)
- create mode 100644 package/dumb-init/Config.in
- create mode 100644 package/dumb-init/dumb-init.hash
- create mode 100644 package/dumb-init/dumb-init.mk
+ package/runc/runc.hash |  2 +-
+ package/runc/runc.mk   | 17 +++++++++++------
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5bdaa24340..dd42db79ec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1906,6 +1906,7 @@ comment "Utilities"
- 	source "package/crudini/Config.in"
- 	source "package/dialog/Config.in"
- 	source "package/dtach/Config.in"
-+	source "package/dumb-init/Config.in"
- 	source "package/easy-rsa/Config.in"
- 	source "package/file/Config.in"
- 	source "package/gnupg/Config.in"
-diff --git a/package/dumb-init/Config.in b/package/dumb-init/Config.in
-new file mode 100644
-index 0000000000..e817493605
---- /dev/null
-+++ b/package/dumb-init/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DUMB_INIT
-+	bool "dumb-init"
-+	help
-+	  dumb-init is a simple but valid init binary to
-+	  act as PID 1 for containers.
-+
-+	  https://github.com/Yelp/dumb-init
-diff --git a/package/dumb-init/dumb-init.hash b/package/dumb-init/dumb-init.hash
-new file mode 100644
-index 0000000000..4705ce4368
---- /dev/null
-+++ b/package/dumb-init/dumb-init.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	74486997321bd939cad2ee6af030f481d39751bc9aa0ece84ed55f864e309a3f	v1.2.0.tar.gz
-diff --git a/package/dumb-init/dumb-init.mk b/package/dumb-init/dumb-init.mk
-new file mode 100644
-index 0000000000..3133384f5a
---- /dev/null
-+++ b/package/dumb-init/dumb-init.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# dumb-init
-+#
-+################################################################################
-+
-+DUMB_INIT_VERSION = v1.2.0
-+DUMB_INIT_SITE = $(call github,Yelp,dumb-init,$(DUMB_INIT_VERSION))
-+
-+DUMB_INIT_LICENSE = MIT
-+DUMB_INIT_LICENSE_FILES = LICENSE
-+DUMB_INIT_CFLAGS += -static
-+
-+define DUMB_INIT_BUILD_CMDS
-+	$(TARGET_CC) \
-+		$(DUMB_INIT_CFLAGS) \
-+		-o $(@D)/dumb-init $(@D)/dumb-init.c
-+endef
-+
-+define DUMB_INIT_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/dumb-init $(TARGET_DIR)/usr/bin/dumb-init
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 3e188c5c79..f762707869 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
++sha256	df8e7cd1d332d97b468ee455164f3959246bb5fc639dd8042d0db3bded621ad7	runc-6c55f98695e902427906eed2c799e566e3d3dfb5.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index fb3fec20f5..f19fc5f068 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
++RUNC_VERSION = 6c55f98695e902427906eed2c799e566e3d3dfb5
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+ 
+ RUNC_DEPENDENCIES = host-go
+ 
+-RUNC_GOPATH = "$(@D)/Godeps/_workspace"
++RUNC_GOPATH = $(@D)/gopath
+ RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+ 	CGO_ENABLED=1 \
+ 	GOBIN="$(@D)/bin" \
+@@ -23,9 +23,10 @@ RUNC_GLDFLAGS = \
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ RUNC_GLDFLAGS += -extldflags '-static'
++RUNC_GOTAGS += static_build
+ endif
+ 
+-RUNC_GOTAGS = cgo static_build
++RUNC_GOTAGS = cgo
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ RUNC_GOTAGS += seccomp
+@@ -38,9 +39,13 @@ define RUNC_CONFIGURE_CMDS
+ endef
+ 
+ define RUNC_BUILD_CMDS
+-	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
+-		build -v -o $(@D)/bin/runc \
+-		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
++	cd $(RUNC_GOPATH)/src/github.com/opencontainers/runc; \
++		$(RUNC_MAKE_ENV) \
++		$(HOST_DIR)/bin/go build -v -i \
++		-o $(@D)/bin/runc \
++		-tags "$(RUNC_GOTAGS)" \
++		-ldflags "$(RUNC_GLDFLAGS)" \
++		./
+ endef
+ 
+ define RUNC_INSTALL_TARGET_CMDS
 -- 
 2.13.6
