@@ -1,50 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Mar 2018 19:06:39 +0100
-Subject: [Buildroot] [PATCH v4] systemd: switch to en_US.UTF-8 locale
- when building
-In-Reply-To: <20180228231347.1e2896a2@windsurf.lan>
-References: <20180212213400.15061-1-julius@kriukas.lt>
- <20180222230055.25455-1-julius@kriukas.lt>
- <20180228213104.GA16465@scaer>
- <20180228231347.1e2896a2@windsurf.lan>
-Message-ID: <20180301180639.GA2449@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Mar 2018 19:15:07 +0100
+Subject: [Buildroot] [PATCH v2 0/9] upgrade docker-engine and associated
+ components
+In-Reply-To: <874llzr8at.fsf@paral.in> (Christian Stewart's message of "Thu,
+ 01 Mar 2018 12:54:02 -0500")
+References: <20180301072012.25884-1-christian@paral.in>
+ <87y3jchzk2.fsf@dell.be.48ers.dk> <874llzr8at.fsf@paral.in>
+Message-ID: <87371jirx0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-On 2018-02-28 23:13 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 28 Feb 2018 22:31:04 +0100, Yann E. MORIN wrote:
-[--SNIP--]
-> > Note: this is different from the existing BR2_NEEDS_HOST_UTF8_LOCALE: it
-> > onlhy requires that a UTF-8 locale be present on the system, while we
-> > now require that it be the current locale.
-> Now, we don't require it to be the current locale:
-> > > +SYSTEMD_ENV = $(TARGET_MAKE_ENV) LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
-> The systemd package ensures to pass LANG/LC_ALL pointing to an UTF-8
-> locale.
+ > Hi Peter,
+ > Peter Korsgaard <peter@korsgaard.com> writes:
+ >> >  - runc to 9f9c96235cc97674e935002fc3d78361b696a69e
+ >> >  - docker-containerd to v1.0.2
+ >> >  - docker-engine to v2018.03.0-ce-rc1
 
-Ah, yes, you're right, sorry...
+ >> 
+ >> I am far from a docker expert, but isn't this an 'edge' release? Given
+ >> the Buildroot release schedule, wouldn't it make more sense to use the
+ >> 'stable' releases with a similar quarterly support/release schedule?
 
-I was confused now, because (without this patch) I had to change my
-locale to be able to build systemd. My bad, sorry...
+ > Yes, it's intended to be merged into "next" for release not in Buildroot
+ > 2018.02 but later. I thought I had mentioned that in the cover letter,
+ > but I guess that was in another revision, lost somewhere months ago.
 
-> That being said, I also dislike this solution, and think the sytemd
-> build system should be fixed instead.
+ > The reason is because from our testing on various devices with varying
+ > container workloads, the only two stable versions (with no critical
+ > bugs) of Docker that we have been able to find were early 2017 or 2018.03-rc1.
 
-Yup, that's really sad... But properly fixing it is a totally different
-endeavour... :-/
+That sounds pretty horrible :/
 
-Regards,
-Yann E. MORIN.
+
+ > 2018.03-rc1 will be released as a full release soon as 2018.02 was
+ > completely unusable due to a "container already exists" error when
+ > trying to start a container.
+
+ > If you would like me to make another series based around 17.12.1-ce that
+ > was just released, I would be happy to do so.
+
+Well, only if it actually works. But if you think there will be a new
+(working) stable release before our next release (E.G. by April) then
+I'm also fine with going with this 2018.03 version.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
