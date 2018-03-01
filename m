@@ -1,51 +1,113 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Mar 2018 10:17:09 +0100
-Subject: [Buildroot] [next,
- v2 4/8] cpe-info: infra defines CPE_ID_* defaults
-In-Reply-To: <1519881819-51445-5-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1519881819-51445-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1519881819-51445-5-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180301101709.409c59eb@windsurf.lan>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Thu, 01 Mar 2018 10:03:47 +0000
+Subject: [Buildroot] util-linux pkg-config files point to build machine
+ paths
+Message-ID: <CAFOYHZDQLym0CLnKWL5ncjEt2dkH2sm8+euOQLu0xUL85QAQgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 28 Feb 2018 23:23:35 -0600, Matt Weber wrote:
-> Default to using the package name for the vendor
-> and name as most CPE IDs seem to align with that
-> assumption. Also use the pkg version as the CPE IDs
-> initial version field.
+On Thu, 1 Mar 2018, 10:13 PM Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
+wrote:
 
-Nits:
+> Hello Chris,
+>
+> On Thu, 1 Mar 2018 14:16:20 +1300, Chris Packham wrote:
+> > Hi Buildroot,
+> >
+> > I imagine this will end-up on the util-linux mailing-list eventually
+> > but hopefully someone here can help me formulate an intelligent
+> > suggestion first.
+> >
+> > If I build one of the libraries from util-linux the generated .pc
+> > refers to /usr/include instead of ${prefix}/include which makes
+> > cross-compilation interesting (particularly when the host doesn't have
+> > those files).
+> >
+> > For example here's uuid.pc
+> >
+> > prefix=/usr
+> > exec_prefix=/usr
+> > libdir=/usr/lib
+> > includedir=/usr/include
+> >
+> > Name: uuid
+> > Description: Universally unique id library
+> > Version: 2.31.1
+> > Requires:
+> > Cflags: -I${includedir}/uuid
+> > Libs: -L${libdir} -luuid
+> >
+> > Compare that with zlib.pc
+> >
+> > prefix=/usr
+> > exec_prefix=${prefix}
+> > libdir=${exec_prefix}/lib
+> > sharedlibdir=${libdir}
+> > includedir=${prefix}/include
+> >
+> > Name: zlib
+> > Description: zlib compression library
+> > Version: 1.2.11
+> >
+> > Requires:
+> > Libs: -L${libdir} -L${sharedlibdir} -lz
+> > Cflags: -I${includedir}
+> >
+> > But the .pc.in files that these were generated from are pretty
+> > similar. I assume it has something to do with the way these are
+> > generated. Does anyone have an intelligent suggestion for something to
+> > propose upstream or should I just patch the pc files after the fact?
+>
+> The way uuid.pc is written is perfectly fine. See:
+>
+> thomas at windsurf:~$ cat /usr/lib64/pkgconfig/uuid.pc
+> prefix=/usr
+> exec_prefix=/usr
+> libdir=/usr/lib64
+> includedir=/usr/include
+>
+> Name: uuid
+> Description: Universally unique id library
+> Version: 2.30.2
+> Requires:
+> Cflags: -I${includedir}/uuid
+> Libs: -L${libdir} -luuid
+> thomas at windsurf:~$ cat /usr/lib64/pkgconfig/uuid.pc
+> prefix=/usr
+> exec_prefix=/usr
+> libdir=/usr/lib64
+> includedir=/usr/include
+>
+> Name: uuid
+> Description: Universally unique id library
+> Version: 2.30.2
+> Requires:
+> Cflags: -I${includedir}/uuid
+> Libs: -L${libdir} -luuid
+> thomas at windsurf:~$ pkg-config --cflags uuid
+> -I/usr/include/uuid
+> thomas at windsurf:~$ PKG_CONFIG_SYSROOT_DIR=/foo/bar/ pkg-config --cflags
+> uuid
+> -I/foo/bar/usr/include/uuid
+>
+> I.e, pkg-config doesn't use the ${prefix} variable or anything like
+> that to prepend the sysroot location. The ${prefix} variable is just a
+> convenience to make the .pc file easier to read. But the
+> PKG_CONFIG_SYSROOT_DIR mechanism is independent of that. As you can see
+> above, despite uuid.pc not using ${prefix}, PKG_CONFIG_SYSROOT_DIR does
+> work as expected.
+>
+> Therefore, unless I misunderstood your concern, I believe there is no
+> need to contact the util-linux guys :-)
+>
 
- - You're wrapping the lines too short. Funnily, the common mistake is
-   to not wrap, or wrap too long. But here, you wrap too short. 72
-   characters is the good length :)
-
- - Missing SoB.
-
-> v2
-> [Thomas P
->  - Created patch per suggestion to use infra
->    to cleanup common case in individual pkg
->    CPE_ID definition.
-
-I'm surprised, because I thought the conclusion of our discussion was
-that it was not desirable to have such default, because then we
-couldn't make the difference between packages that have had their CPE
-ID explicitly added/verified by someone, and packages that have their
-CPE ID defined by default, and which may be incorrect.
-
-Have you changed your mind about this ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Thanks for pointing that out. I had been using pkg-config
+--define-variable=prefix=/foo but SYSROOT_DIR makes much more sense.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180301/8dc4dbb5/attachment.html>
