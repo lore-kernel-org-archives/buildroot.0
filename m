@@ -1,56 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Mar 2018 23:03:56 +0100
-Subject: [Buildroot] [git commit] mosquitto: security bump to version 1.4.15
-Message-ID: <20180301220444.5E847814AD@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 1 Mar 2018 23:07:14 +0100
+Subject: [Buildroot] [PATCH] qt: mark as obsolete
+In-Reply-To: <20180301215606.3788-1-peter@korsgaard.com>
+References: <20180301215606.3788-1-peter@korsgaard.com>
+Message-ID: <20180301220714.GE2449@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4df4a18e5dd4702f842e61ee815f13afd93c366
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Fixes CVE-2017-7651: Unauthenticated clients can send a crafted CONNECT
-packet which causes large amounts of memory use in the broker.  If multiple
-clients do this, an out of memory situation can occur and the system may
-become unresponsive or the broker will be killed by the operating system.
+On 2018-03-01 22:56 +0100, Peter Korsgaard spake thusly:
+> qt 4.x is no longer supported upstream since December 2015:
+> 
+> https://blog.qt.io/blog/2015/05/26/qt-4-8-7-released/
+> 
+> So it shouldn't be used for new projects.  Add an obsolete warning to the
+> package prompt to make this clear.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-The fix addresses the problem by limiting the permissible size for CONNECT
-packet, and by adding a memory_limit configuration option that allows the
-broker to self limit the amount of memory it uses.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The hash of new tarball is not (yet) available through download.php, so use
-a locally calculated hash.
+Once we eventually ger tid of it, we will be able to greatly simplify
+the dependencies that ensure that qt qnd qt5 are mutually exclusive.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+In the future... ;-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index f6f17aa5ef..91c855cb4e 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
--# From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.14.tar.gz
--sha512 dc75a971354f87deeb79f32435acfae9bc561a1a24a75ee4940a35176ff91758071930d2105d8dee2a090e07527dbfaa5692bece67e03cc87e8b4b8b46f846c2  mosquitto-1.4.14.tar.gz
-+# Locally calculated after checking gpg signature
-+sha256 7d3b3e245a3b4ec94b05678c8199c806359737949f4cfe0bf936184f6ca89a83  mosquitto-1.4.15.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index c9b4418d04..ec5fc02f9f 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.4.14
-+MOSQUITTO_VERSION = 1.4.15
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/qt/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index 4804a81537..0ecfafada5 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -3,7 +3,7 @@ comment "qt needs a toolchain w/ C++, threads"
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+>  
+>  menuconfig BR2_PACKAGE_QT
+> -	bool "Qt"
+> +	bool "Qt (obsolete)"
+>  	depends on BR2_USE_MMU # fork
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
