@@ -1,49 +1,57 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Thu,  1 Mar 2018 08:46:10 +0100
-Subject: [Buildroot] [PATCH] package/qt5/qt5scxml: install missing QML module
-Message-ID: <20180301074610.18946-1-b.bilas@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Mar 2018 09:59:56 +0100
+Subject: [Buildroot] [PATCH v2 4/9] docker-engine: select static for
+ tini and dumb-init
+In-Reply-To: <20180301072012.25884-5-christian@paral.in>
+References: <20180301072012.25884-1-christian@paral.in>
+ <20180301072012.25884-5-christian@paral.in>
+Message-ID: <20180301095956.11e3be8e@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch add support for scxml module in QML projects.
-When would you like to use state machines in qml files,
-you get an error like this:
+Hello Christian,
 
-qrc:/MainUI.qml:2 module "QtScxml" is not installed
+On Thu,  1 Mar 2018 02:20:07 -0500, Christian Stewart wrote:
+> In many cases docker-init backing processes like Tini and dumb-init must
+> be static, as they are executed inside a container in an unknown
+> environment. This patch selects the static compilation options on both
+> packages when used as docker-init backing processes.
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/docker-engine/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+> index 7d9a87f7bb..47ac7f57a3 100644
+> --- a/package/docker-engine/Config.in
+> +++ b/package/docker-engine/Config.in
+> @@ -44,6 +44,7 @@ choice
+>  config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
+>  	bool "tini"
+>  	select BR2_PACKAGE_TINI
+> +	select BR2_PACKAGE_TINI_STATIC
+>  	help
+>  	  Use Tini as the container init process.
+>  
+> @@ -52,6 +53,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
+>  config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
+>  	bool "dumb-init"
+>  	select BR2_PACKAGE_DUMB_INIT
+> +	select BR2_PACKAGE_DUMB_INIT_STATIC
+>  	help
+>  	  Use dumb-init as the container init process.
 
+Unless I'm missing something, this patch is selecting options that
+don't exist anymore.
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- package/qt5/qt5scxml/qt5scxml.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Best regards,
 
-diff --git a/package/qt5/qt5scxml/qt5scxml.mk b/package/qt5/qt5scxml/qt5scxml.mk
-index 2d197a2bca..3f0f1a9054 100644
---- a/package/qt5/qt5scxml/qt5scxml.mk
-+++ b/package/qt5/qt5scxml/qt5scxml.mk
-@@ -35,6 +35,12 @@ define QT5SCXML_INSTALL_TARGET_LIBS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+define QT5SCXML_INSTALL_TARGET_QMLS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtScxml/ $(TARGET_DIR)/usr/qml/
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- define QT5SCXML_INSTALL_TARGET_EXAMPLES
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/scxml $(TARGET_DIR)/usr/lib/qt/examples/
-@@ -43,6 +49,7 @@ endif
- 
- define QT5SCXML_INSTALL_TARGET_CMDS
- 	$(QT5SCXML_INSTALL_TARGET_LIBS)
-+	$(QT5SCXML_INSTALL_TARGET_QMLS)
- 	$(QT5SCXML_INSTALL_TARGET_EXAMPLES)
- endef
- 
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
