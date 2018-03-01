@@ -1,41 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jan 2018 22:47:20 +0100
-Subject: [Buildroot] [git commit] autofs: update to 5.1.4
-Message-ID: <20180131214757.0E9B7881C9@busybox.osuosl.org>
+From: Julia Ding <dingtasiling@gmail.com>
+Date: Wed, 28 Feb 2018 20:40:39 -0700 (MST)
+Subject: [Buildroot] QT5 camera error: Unknown module(s) in QT: multimedia
+ multimediawidgets
+Message-ID: <1519875639555-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=772cac0f4695eb0d0a3cc06ee4f6279c6ddac139
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I run qt camera demo, and it show this error
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/autofs/autofs.hash | 2 +-
- package/autofs/autofs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+:-1: error: Unknown module(s) in QT: multimedia multimediawidgets
 
-diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
-index 61e58825cc..1f2060bdef 100644
---- a/package/autofs/autofs.hash
-+++ b/package/autofs/autofs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
--sha256 e96eebfe3ed5fb1a30f4510f538198affde223e370c6dc2bed9780309272b1bf  autofs-5.1.3.tar.xz
-+sha256 8fce30ee51ffd528fe1a4e8374ef57f43367e1f123030e175fb1b1cf15bc1722  autofs-5.1.4.tar.xz
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 148ab1bd3d..90cc38de55 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUTOFS_VERSION = 5.1.3
-+AUTOFS_VERSION = 5.1.4
- AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPL-2.0+
+So I add qt5multimedia. (I'm using 'imx6-sabresd_qt5_defconfig' +
+qt5multimedia.)
+Then, build. Show this error:
+
+Makefile:179: recipe for target 'sub-plugins-make_first' failed
+make[3]: *** [sub-plugins-make_first] Error 2
+Makefile:46: recipe for target 'sub-src-make_first' failed
+make[2]: *** [sub-src-make_first] Error 2
+
+How to fix this? Thanks.
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
