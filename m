@@ -1,27 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Mar 2018 23:29:34 +0100
-Subject: [Buildroot] [PATCH] qt: mark as obsolete
-In-Reply-To: <20180301215606.3788-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 1 Mar 2018 22:56:06 +0100")
-References: <20180301215606.3788-1-peter@korsgaard.com>
-Message-ID: <877eqvfn01.fsf@dell.be.48ers.dk>
+Date: Thu, 1 Mar 2018 23:29:18 +0100
+Subject: [Buildroot] [git commit] qt: mark as obsolete
+Message-ID: <20180301223008.7C176811B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3538b5fb10ca1eeedb5d8957a58c464f5f9f45bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > qt 4.x is no longer supported upstream since December 2015:
- > https://blog.qt.io/blog/2015/05/26/qt-4-8-7-released/
+qt 4.x is no longer supported upstream since December 2015:
 
- > So it shouldn't be used for new projects.  Add an obsolete warning to the
- > package prompt to make this clear.
+https://blog.qt.io/blog/2015/05/26/qt-4-8-7-released/
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+So it shouldn't be used for new projects.  Add an obsolete warning to the
+package prompt to make this clear.
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 4804a81537..0ecfafada5 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -3,7 +3,7 @@ comment "qt needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ menuconfig BR2_PACKAGE_QT
+-	bool "Qt"
++	bool "Qt (obsolete)"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
