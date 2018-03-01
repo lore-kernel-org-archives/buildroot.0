@@ -1,33 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Mar 2018 23:04:35 +0100
-Subject: [Buildroot] [PATCH] mosquitto: security bump to version 1.4.15
-In-Reply-To: <20180228231140.7660-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 1 Mar 2018 00:11:40 +0100")
-References: <20180228231140.7660-1-peter@korsgaard.com>
-Message-ID: <87606fh2q4.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Mar 2018 23:04:27 +0100
+Subject: [Buildroot] [PATCH v2 2/9] dumb-init: new package
+In-Reply-To: <87a7vriudq.fsf@dell.be.48ers.dk>
+References: <20180301072012.25884-1-christian@paral.in>
+ <20180301072012.25884-3-christian@paral.in>
+ <20180301100227.3fb09c06@windsurf.lan>
+ <87lgfbiyk8.fsf@dell.be.48ers.dk>
+ <20180301170807.2cd21163@windsurf.lan>
+ <87a7vriudq.fsf@dell.be.48ers.dk>
+Message-ID: <20180301230427.28e24d47@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello,
 
- > Fixes CVE-2017-7651: Unauthenticated clients can send a crafted CONNECT
- > packet which causes large amounts of memory use in the broker.  If multiple
- > clients do this, an out of memory situation can occur and the system may
- > become unresponsive or the broker will be killed by the operating system.
+On Thu, 01 Mar 2018 18:21:53 +0100, Peter Korsgaard wrote:
 
- > The fix addresses the problem by limiting the permissible size for CONNECT
- > packet, and by adding a memory_limit configuration option that allows the
- > broker to self limit the amount of memory it uses.
+>  >> dumb-init doesn't depend on any libraries, so the only issue is static
+>  >> linking with glibc, right?  
+> 
+>  > No, you can also have musl or uclibc configured shared-only, which is
+>  > the case by default since BR2_SHARED_LIBS=y.  
+> 
+> Yes, but static linking against libc still works in that case, right?
 
- > The hash of new tarball is not (yet) available through download.php, so use
- > a locally calculated hash.
+I'm not sure you have libc.a with uClibc or musl if you build
+shared-only.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
