@@ -1,92 +1,69 @@
-From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
-Date: Thu, 1 Mar 2018 13:26:44 +0100
-Subject: [Buildroot] [PATCH] package/qt5/qt5scxml: install missing QML
- module
-In-Reply-To: <20180301115003.6cc39376@gmx.net>
-References: <20180301074610.18946-1-b.bilas@grinn-global.com>
- <20180301115003.6cc39376@gmx.net>
-Message-ID: <537151c4-3d13-6afa-8bed-e75647bf08de@grinn-global.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 1 Mar 2018 06:30:00 -0600
+Subject: [Buildroot] [next,
+ v2 4/8] cpe-info: infra defines CPE_ID_* defaults
+In-Reply-To: <20180301101709.409c59eb@windsurf.lan>
+References: <1519881819-51445-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1519881819-51445-5-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180301101709.409c59eb@windsurf.lan>
+Message-ID: <CANQCQpYTt_P9WxOq=49pe_SEaJmtGRnS4J_=8qsD_=7VkyOKHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Thomas,
 
-On 01.03.2018 11:50, Peter Seiderer wrote:
-> Hello Bartosz,
+On Thu, Mar 1, 2018 at 3:17 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> first thanks for the suggested patch.
->   
-> On Thu,  1 Mar 2018 08:46:10 +0100, Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+> Hello,
 >
->> This patch add support for scxml module in QML projects.
->> When would you like to use state machines in qml files,
->> you get an error like this:
->>
->> qrc:/MainUI.qml:2 module "QtScxml" is not installed
->>
-> Patch subject: 'qt5scxml: install missing QML module' and
+> On Wed, 28 Feb 2018 23:23:35 -0600, Matt Weber wrote:
+> > Default to using the package name for the vendor
+> > and name as most CPE IDs seem to align with that
+> > assumption. Also use the pkg version as the CPE IDs
+> > initial version field.
 >
->    Fixes:
+> Nits:
 >
->      qrc:/MainUI.qml:2 module "QtScxml" is not installed
+>  - You're wrapping the lines too short. Funnily, the common mistake is
+>    to not wrap, or wrap too long. But here, you wrap too short. 72
+>    characters is the good length :)
 >
-> would be enough (I think the patched lines are self-explanatory)...
->
->> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
->> ---
->>   package/qt5/qt5scxml/qt5scxml.mk | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/package/qt5/qt5scxml/qt5scxml.mk b/package/qt5/qt5scxml/qt5scxml.mk
->> index 2d197a2bca..3f0f1a9054 100644
->> --- a/package/qt5/qt5scxml/qt5scxml.mk
->> +++ b/package/qt5/qt5scxml/qt5scxml.mk
->> @@ -35,6 +35,12 @@ define QT5SCXML_INSTALL_TARGET_LIBS
->>   endef
->>   endif
->>   
->> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
->> +define QT5SCXML_INSTALL_TARGET_QMLS
->> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtScxml/ $(TARGET_DIR)/usr/qml/
->> +endef
->> +endif
->> +
-> The dependency on BR2_PACKAGE_QT5DECLARATIVE_QUICK is not needed, the QtScxml
-> module is build/installed even without enabled BR2_PACKAGE_QT5DECLARATIVE_QUICK...
-I was thinking about it but without qt quick this module is unnecessary 
-so I'm not sure that we should copy this to the image.
+>  - Missing SoB.
 
-Best regards,
-Bartosz Bi?as
->
-> With this changes you can add my
->
-> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
->
-> Regards,
-> Peter
->
->
->>   ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
->>   define QT5SCXML_INSTALL_TARGET_EXAMPLES
->>   	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/scxml $(TARGET_DIR)/usr/lib/qt/examples/
->> @@ -43,6 +49,7 @@ endif
->>   
->>   define QT5SCXML_INSTALL_TARGET_CMDS
->>   	$(QT5SCXML_INSTALL_TARGET_LIBS)
->> +	$(QT5SCXML_INSTALL_TARGET_QMLS)
->>   	$(QT5SCXML_INSTALL_TARGET_EXAMPLES)
->>   endef
->>   
+Noted.
 
--- 
+>
+> > v2
+> > [Thomas P
+> >  - Created patch per suggestion to use infra
+> >    to cleanup common case in individual pkg
+> >    CPE_ID definition.
+>
+> I'm surprised, because I thought the conclusion of our discussion was
+> that it was not desirable to have such default, because then we
+> couldn't make the difference between packages that have had their CPE
+> ID explicitly added/verified by someone, and packages that have their
+> CPE ID defined by default, and which may be incorrect.
+>
 
-	
+I took your suggestion and made one change.  I use the _CPE_ID_VENDOR
+as my criteria to note a CPE should be considered(default or custom)
+for reporting.   So if it isn't explicit defined, I default to unknown
+in my report.  This is clunky now but eventually we could go through
+and remove all the _CPE_ID_VENDOR = $(pkg_NAME) entries.
 
+I should have commented on it in the commit description and change
+log.  I'll make note for v3.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180301/34a91dad/attachment.html>
+Example of a basic target config.  Util-linux shows the double CPE, pv
+is the nothing defined and the rest are a combination of vendor as
+name and/or specified.  Should I add an example in the manual of the
+output?  I need to look how detailed the manual is for legal
+reporting.
+https://pastebin.com/XuJrXRat
+
+Matt
