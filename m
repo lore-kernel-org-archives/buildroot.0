@@ -1,113 +1,29 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu, 01 Mar 2018 10:03:47 +0000
-Subject: [Buildroot] util-linux pkg-config files point to build machine
- paths
-Message-ID: <CAFOYHZDQLym0CLnKWL5ncjEt2dkH2sm8+euOQLu0xUL85QAQgQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Mar 2018 11:15:25 +0100
+Subject: [Buildroot] [PATCH v2 0/9] upgrade docker-engine and associated
+ components
+In-Reply-To: <20180301072012.25884-1-christian@paral.in> (Christian Stewart's
+ message of "Thu, 1 Mar 2018 02:20:03 -0500")
+References: <20180301072012.25884-1-christian@paral.in>
+Message-ID: <87y3jchzk2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-On Thu, 1 Mar 2018, 10:13 PM Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
-wrote:
+ > Hi all,
+ > This series upgrades Docker and associated components:
 
-> Hello Chris,
->
-> On Thu, 1 Mar 2018 14:16:20 +1300, Chris Packham wrote:
-> > Hi Buildroot,
-> >
-> > I imagine this will end-up on the util-linux mailing-list eventually
-> > but hopefully someone here can help me formulate an intelligent
-> > suggestion first.
-> >
-> > If I build one of the libraries from util-linux the generated .pc
-> > refers to /usr/include instead of ${prefix}/include which makes
-> > cross-compilation interesting (particularly when the host doesn't have
-> > those files).
-> >
-> > For example here's uuid.pc
-> >
-> > prefix=/usr
-> > exec_prefix=/usr
-> > libdir=/usr/lib
-> > includedir=/usr/include
-> >
-> > Name: uuid
-> > Description: Universally unique id library
-> > Version: 2.31.1
-> > Requires:
-> > Cflags: -I${includedir}/uuid
-> > Libs: -L${libdir} -luuid
-> >
-> > Compare that with zlib.pc
-> >
-> > prefix=/usr
-> > exec_prefix=${prefix}
-> > libdir=${exec_prefix}/lib
-> > sharedlibdir=${libdir}
-> > includedir=${prefix}/include
-> >
-> > Name: zlib
-> > Description: zlib compression library
-> > Version: 1.2.11
-> >
-> > Requires:
-> > Libs: -L${libdir} -L${sharedlibdir} -lz
-> > Cflags: -I${includedir}
-> >
-> > But the .pc.in files that these were generated from are pretty
-> > similar. I assume it has something to do with the way these are
-> > generated. Does anyone have an intelligent suggestion for something to
-> > propose upstream or should I just patch the pc files after the fact?
->
-> The way uuid.pc is written is perfectly fine. See:
->
-> thomas at windsurf:~$ cat /usr/lib64/pkgconfig/uuid.pc
-> prefix=/usr
-> exec_prefix=/usr
-> libdir=/usr/lib64
-> includedir=/usr/include
->
-> Name: uuid
-> Description: Universally unique id library
-> Version: 2.30.2
-> Requires:
-> Cflags: -I${includedir}/uuid
-> Libs: -L${libdir} -luuid
-> thomas at windsurf:~$ cat /usr/lib64/pkgconfig/uuid.pc
-> prefix=/usr
-> exec_prefix=/usr
-> libdir=/usr/lib64
-> includedir=/usr/include
->
-> Name: uuid
-> Description: Universally unique id library
-> Version: 2.30.2
-> Requires:
-> Cflags: -I${includedir}/uuid
-> Libs: -L${libdir} -luuid
-> thomas at windsurf:~$ pkg-config --cflags uuid
-> -I/usr/include/uuid
-> thomas at windsurf:~$ PKG_CONFIG_SYSROOT_DIR=/foo/bar/ pkg-config --cflags
-> uuid
-> -I/foo/bar/usr/include/uuid
->
-> I.e, pkg-config doesn't use the ${prefix} variable or anything like
-> that to prepend the sysroot location. The ${prefix} variable is just a
-> convenience to make the .pc file easier to read. But the
-> PKG_CONFIG_SYSROOT_DIR mechanism is independent of that. As you can see
-> above, despite uuid.pc not using ${prefix}, PKG_CONFIG_SYSROOT_DIR does
-> work as expected.
->
-> Therefore, unless I misunderstood your concern, I believe there is no
-> need to contact the util-linux guys :-)
->
+ >  - runc to 9f9c96235cc97674e935002fc3d78361b696a69e
+ >  - docker-containerd to v1.0.2
+ >  - docker-engine to v2018.03.0-ce-rc1
 
-Thanks for pointing that out. I had been using pkg-config
---define-variable=prefix=/foo but SYSROOT_DIR makes much more sense.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180301/8dc4dbb5/attachment.html>
+I am far from a docker expert, but isn't this an 'edge' release? Given
+the Buildroot release schedule, wouldn't it make more sense to use the
+'stable' releases with a similar quarterly support/release schedule?
+
+-- 
+Bye, Peter Korsgaard
