@@ -1,90 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  1 Mar 2018 20:41:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dovecot: security bump to version
- 2.3.4
-Message-ID: <20180301194151.7078-1-bernd.kuhls@t-online.de>
+Date: Thu,  1 Mar 2018 20:53:16 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/busybox: bump version to 1.28.1
+Message-ID: <20180301195316.1325-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-15130, CVE-2017-14461 & CVE-2017-15132:
-https://www.dovecot.org/list/dovecot-news/2018-February/000370.html
-
-Removed patch applied upstream:
-https://github.com/dovecot/core/commit/a008617e811673064fd657acf517dc4a12493d29
+Added sha256 hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...x-memory-leak-in-auth_client_request_abor.patch | 33 ----------------------
- package/dovecot/dovecot.hash                       |  2 +-
- package/dovecot/dovecot.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 35 deletions(-)
- delete mode 100644 package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
+ package/busybox/busybox.hash | 9 +++++----
+ package/busybox/busybox.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
-deleted file mode 100644
-index babccd3acf..0000000000
---- a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 1a29ed2f96da1be22fa5a4d96c7583aa81b8b060 Mon Sep 17 00:00:00 2001
--From: Timo Sirainen <timo.sirainen@dovecot.fi>
--Date: Mon, 18 Dec 2017 16:50:51 +0200
--Subject: [PATCH] lib-auth: Fix memory leak in auth_client_request_abort()
--
--This caused memory leaks when authentication was aborted. For example
--with IMAP:
--
--a AUTHENTICATE PLAIN
--*
--
--Broken by 9137c55411aa39d41c1e705ddc34d5bd26c65021
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/lib-auth/auth-client-request.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/lib-auth/auth-client-request.c b/src/lib-auth/auth-client-request.c
--index 480fb42b3..046f7c307 100644
----- a/src/lib-auth/auth-client-request.c
--+++ b/src/lib-auth/auth-client-request.c
--@@ -186,6 +186,7 @@ void auth_client_request_abort(struct auth_client_request **_request)
-- 
-- 	auth_client_send_cancel(request->conn->client, request->id);
-- 	call_callback(request, AUTH_REQUEST_STATUS_ABORT, NULL, NULL);
--+	pool_unref(&request->pool);
-- }
-- 
-- unsigned int auth_client_request_get_id(struct auth_client_request *request)
---- 
--2.11.0
--
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 33163d6d8c..fef0746089 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 fe1e3b78609a56ee22fc209077e4b75348fa1bbd54c46f52bde2472a4c4cee84  dovecot-2.2.33.2.tar.gz
-+sha256 5e92a4325409e66b343f6aaa67174b8921ce83d0df792c6eeb0b7b7e2c808353  dovecot-2.2.34.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 71a76c2818..e1b4bb21b8 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 4ca3936ada..b7067b6633 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,5 +1,6 @@
+-# From https://busybox.net/downloads/busybox-1.28.0.tar.bz2.sign
+-md5	b119b8decda796ab5cee5478dc9c642c	busybox-1.28.0.tar.bz2
+-sha1	a25e9a33e830e307c2a446ca234531049dd427f2	busybox-1.28.0.tar.bz2
+-# License files, locally calculated
++# From https://busybox.net/downloads/busybox-1.28.1.tar.bz2.sign
++md5 928919a21e34d5c5507d872a4fb7b9f4  busybox-1.28.1.tar.bz2
++sha1 932e2a77c3ddaa7f0915ed6fe9232041d261f86b  busybox-1.28.1.tar.bz2
++# Locally calculated
++sha256 98fe1d3c311156c597cd5cfa7673bb377dc552b6fa20b5d3834579da3b13652e  busybox-1.28.1.tar.bz2
+ sha256	bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548	LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 73353baeda..bc0c661754 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).34
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-BUSYBOX_VERSION = 1.28.0
++BUSYBOX_VERSION = 1.28.1
+ BUSYBOX_SITE = http://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0
 -- 
 2.11.0
