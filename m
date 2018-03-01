@@ -1,24 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Mar 2018 23:01:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lvm2
-In-Reply-To: <trinity-009358ba-f6fe-4164-a34c-6e3e4992e5f6-1519934911173@3c-app-gmx-bs41>
- (Jens Scheidemann's message of "Thu, 1 Mar 2018 21:08:31 +0100")
-References: <trinity-009358ba-f6fe-4164-a34c-6e3e4992e5f6-1519934911173@3c-app-gmx-bs41>
-Message-ID: <87a7vrh2vi.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Mar 2018 23:04:35 +0100
+Subject: [Buildroot] [PATCH] mosquitto: security bump to version 1.4.15
+In-Reply-To: <20180228231140.7660-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 1 Mar 2018 00:11:40 +0100")
+References: <20180228231140.7660-1-peter@korsgaard.com>
+Message-ID: <87606fh2q4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jens" == Jens Scheidemann <nobodyman@gmx.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > # Please add this patch to correct bug
- > https://bugs.buildroot.org/show_bug.cgi?id=10781
- > 0001-libdm-iface.patch
+ > Fixes CVE-2017-7651: Unauthenticated clients can send a crafted CONNECT
+ > packet which causes large amounts of memory use in the broker.  If multiple
+ > clients do this, an out of memory situation can occur and the system may
+ > become unresponsive or the broker will be killed by the operating system.
 
-Please submit this (with a proper description) to lvm2/dm upstream,
-thanks.
+ > The fix addresses the problem by limiting the permissible size for CONNECT
+ > packet, and by adding a memory_limit configuration option that allows the
+ > broker to self limit the amount of memory it uses.
+
+ > The hash of new tarball is not (yet) available through download.php, so use
+ > a locally calculated hash.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
