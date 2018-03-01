@@ -1,50 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 2 Mar 2018 01:02:14 +0200
-Subject: [Buildroot] [PATCH v2 2/9] dumb-init: new package
-In-Reply-To: <20180301222342.GF2449@scaer>
-References: <20180301072012.25884-1-christian@paral.in>
- <20180301072012.25884-3-christian@paral.in>
- <20180301100227.3fb09c06@windsurf.lan>
- <87lgfbiyk8.fsf@dell.be.48ers.dk>
- <20180301170807.2cd21163@windsurf.lan>
- <87a7vriudq.fsf@dell.be.48ers.dk>
- <20180301230427.28e24d47@windsurf.lan>
- <20180301222342.GF2449@scaer>
-Message-ID: <20180301230214.lkzpfyad6m7p43jq@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Mar 2018 00:12:57 +0100
+Subject: [Buildroot] [PATCH] uboot: ensure host includes are searched
+ before system default includes
+In-Reply-To: <20180301205429.4191-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 1 Mar 2018 21:54:29 +0100")
+References: <20180301205429.4191-1-peter@korsgaard.com>
+Message-ID: <87po4ne6fa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Thu, Mar 01, 2018 at 11:23:42PM +0100, Yann E. MORIN wrote:
-> On 2018-03-01 23:04 +0100, Thomas Petazzoni spake thusly:
-> > On Thu, 01 Mar 2018 18:21:53 +0100, Peter Korsgaard wrote:
-> > >  >> dumb-init doesn't depend on any libraries, so the only issue is static
-> > >  >> linking with glibc, right?  
-> 
-> One can do a static link with glibc, as long as one does not do any name
-> resolution (username, hostname, etc...). But basically, static linking
-> with glibc has long been frowned upon...
+ > Commit baae5156ce37e (uboot: use local fdt headers) changed the uboot logic
+ > to pass the host include directories with -idirafter instead of -I, so
+ > include files local to u-boot would be preferred over host includes.
 
-This has changed a little recently. Toolchain support is still limited though. 
-glibc NEWS for 2.27 says:
+ > This unfortunately breaks configurations using
+ > BR2_TARGET_UBOOT_NEEDS_OPENSSL on hosts with incompatible openssl headers
+ > installed in the system default include directories as explained here:
 
-* The GNU C Library can now be compiled with support for building static
-  PIE executables (See --enable-static-pie in INSTALL).  These static PIE
-  executables are like static executables but can be loaded at any address
-  and provide additional security hardening benefits at the cost of some
-  memory and performance.  When the library is built with --enable-static-pie
-  the resulting libc.a is usable with GCC 8 and above to create static PIE
-  executables using the GCC option '-static-pie'.  This feature is currently
-  supported on i386, x86_64 and x32 with binutils 2.29 or later, and on
-  aarch64 with binutils 2.30 or later.
+ > http://lists.busybox.net/pipermail/buildroot/2018-March/214651.html
 
-baruch
+ > The problem is that -idirafter directories gets added to the very end of the
+ > search order, AFTER the system default directories.
+
+ > Instead use -isystem which causes the directories to be added after -I but
+ > before the system default directories.  With this in place, the include
+ > directories of u-boot will first be scanned, followed by the host includes
+ > and finally the system default include directories.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
