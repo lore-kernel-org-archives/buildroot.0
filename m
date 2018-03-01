@@ -1,53 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Mar 2018 08:38:33 +0100
-Subject: [Buildroot] [git commit] autofs: disable for musl
-Message-ID: <20180305200720.5774981012@busybox.osuosl.org>
+Date: Thu, 1 Mar 2018 23:16:34 +0100
+Subject: [Buildroot] [git commit] package/x265: bump version to 2.7
+Message-ID: <20180305200719.BEF9681012@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=936c0e10c1c8d7f5ca9d84324dadbc337accaf59
+commit: https://git.buildroot.net/buildroot/commit/?id=0f2dbcd3c700c29d8fdfb8761add76c14906cd71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-autofs requires nsswitch which musl libc does not implement. Commit
-873040371b14 (autofs: allow to use libtirpc) removed the
-BR2_TOOLCHAIN_HAS_NATIVE_RPC dependency, making autofs available for
-musl. Disable musl explicitly.
+Upstream switched to nasm:
+https://mailman.videolan.org/pipermail/x265-devel/2018-March/011615.html
 
-Fixes:
-http://autobuild.buildroot.net/results/a54/a549b62fbf03474ffd8586869637d083de275091/
-http://autobuild.buildroot.net/results/b32/b3276b2cbd1e1c260f8df4c3945f51ddc09d492f/
-http://autobuild.buildroot.net/results/10b/10b5c5b13971214d0439b715f1a46c78a5249309/
-
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Jonathan Ben Avraham <yba@tkos.co.il>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/autofs/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/autofs/Config.in b/package/autofs/Config.in
-index efb0ec28ee..8bb5fe276f 100644
---- a/package/autofs/Config.in
-+++ b/package/autofs/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_AUTOFS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS # dlfcn
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # nsswitch
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Autofs controls the operation of the automount daemons. The
-@@ -15,6 +16,7 @@ config BR2_PACKAGE_AUTOFS
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index 3e44b03692..e6f22db646 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256 2e53259b504a7edb9b21b9800163b1ff4c90e60c74e23e7001d423c69c5d3d17  x265_2.5.tar.gz
++sha256 d5e75fa62ffe6ed49e691f8eb8ab8c1634ffcc0725dd553c6fdb4d5443b494a2  x265_2.7.tar.gz
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index ae570e6e4c..243025c08b 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
+-X265_VERSION = 2.5
++X265_VERSION = 2.7
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPL-2.0+
+@@ -13,7 +13,7 @@ X265_SUBDIR = source
+ X265_INSTALL_STAGING = YES
  
--comment "autofs needs a toolchain w/ NPTL and dynamic library"
-+comment "autofs needs a glibc or uClibc toolchain w/ NPTL and dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| BR2_TOOLCHAIN_USES_MUSL
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+-X265_DEPENDENCIES += host-yasm
++X265_DEPENDENCIES += host-nasm
+ endif
+ 
+ # disable altivec, it has build issues
