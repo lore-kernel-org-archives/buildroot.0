@@ -1,45 +1,92 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  1 Mar 2018 14:18:13 +0200
-Subject: [Buildroot] [PATCH next] gnutls: bump to version 3.5.18
-Message-ID: <f35ebd2e93a6d9246eaf3ccdfc26dea2e89ac8f6.1519906693.git.baruch@tkos.co.il>
+From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
+Date: Thu, 1 Mar 2018 13:26:44 +0100
+Subject: [Buildroot] [PATCH] package/qt5/qt5scxml: install missing QML
+ module
+In-Reply-To: <20180301115003.6cc39376@gmx.net>
+References: <20180301074610.18946-1-b.bilas@grinn-global.com>
+ <20180301115003.6cc39376@gmx.net>
+Message-ID: <537151c4-3d13-6afa-8bed-e75647bf08de@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Peter,
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 173cb40683c3..be2913e00f4e 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.17.tar.xz.sig
--sha256	86b142afef587c118d63f72ccf307f3321dbc40357aae528202b65d913d20919	gnutls-3.5.17.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.18.tar.xz.sig
-+sha256	ae2248d9e78747cf9c469dde81ff8f90b56838b707a0637f3f7d4eee90e80234	gnutls-3.5.18.tar.xz
- # Locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
- sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 1ce7a742e3d1..6be7c6e27e2f 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.5
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).18
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+On 01.03.2018 11:50, Peter Seiderer wrote:
+> Hello Bartosz,
+>
+> first thanks for the suggested patch.
+>   
+> On Thu,  1 Mar 2018 08:46:10 +0100, Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>
+>> This patch add support for scxml module in QML projects.
+>> When would you like to use state machines in qml files,
+>> you get an error like this:
+>>
+>> qrc:/MainUI.qml:2 module "QtScxml" is not installed
+>>
+> Patch subject: 'qt5scxml: install missing QML module' and
+>
+>    Fixes:
+>
+>      qrc:/MainUI.qml:2 module "QtScxml" is not installed
+>
+> would be enough (I think the patched lines are self-explanatory)...
+>
+>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>> ---
+>>   package/qt5/qt5scxml/qt5scxml.mk | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/package/qt5/qt5scxml/qt5scxml.mk b/package/qt5/qt5scxml/qt5scxml.mk
+>> index 2d197a2bca..3f0f1a9054 100644
+>> --- a/package/qt5/qt5scxml/qt5scxml.mk
+>> +++ b/package/qt5/qt5scxml/qt5scxml.mk
+>> @@ -35,6 +35,12 @@ define QT5SCXML_INSTALL_TARGET_LIBS
+>>   endef
+>>   endif
+>>   
+>> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+>> +define QT5SCXML_INSTALL_TARGET_QMLS
+>> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtScxml/ $(TARGET_DIR)/usr/qml/
+>> +endef
+>> +endif
+>> +
+> The dependency on BR2_PACKAGE_QT5DECLARATIVE_QUICK is not needed, the QtScxml
+> module is build/installed even without enabled BR2_PACKAGE_QT5DECLARATIVE_QUICK...
+I was thinking about it but without qt quick this module is unnecessary 
+so I'm not sure that we should copy this to the image.
+
+Best regards,
+Bartosz Bi?as
+>
+> With this changes you can add my
+>
+> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+>
+> Regards,
+> Peter
+>
+>
+>>   ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+>>   define QT5SCXML_INSTALL_TARGET_EXAMPLES
+>>   	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/scxml $(TARGET_DIR)/usr/lib/qt/examples/
+>> @@ -43,6 +49,7 @@ endif
+>>   
+>>   define QT5SCXML_INSTALL_TARGET_CMDS
+>>   	$(QT5SCXML_INSTALL_TARGET_LIBS)
+>> +	$(QT5SCXML_INSTALL_TARGET_QMLS)
+>>   	$(QT5SCXML_INSTALL_TARGET_EXAMPLES)
+>>   endef
+>>   
+
 -- 
-2.16.1
+
+	
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180301/34a91dad/attachment.html>
