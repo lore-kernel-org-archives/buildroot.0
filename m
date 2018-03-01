@@ -1,44 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Mar 2018 10:14:46 +0100
-Subject: [Buildroot] QT5 camera error: Unknown module(s) in QT:
- multimedia multimediawidgets
-In-Reply-To: <1519875639555-0.post@n4.nabble.com>
-References: <1519875639555-0.post@n4.nabble.com>
-Message-ID: <20180301101446.5d64784f@windsurf.lan>
+Date: Thu, 1 Mar 2018 10:17:09 +0100
+Subject: [Buildroot] [next,
+ v2 4/8] cpe-info: infra defines CPE_ID_* defaults
+In-Reply-To: <1519881819-51445-5-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1519881819-51445-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1519881819-51445-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180301101709.409c59eb@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julia,
+Hello,
 
-On Wed, 28 Feb 2018 20:40:39 -0700 (MST), Julia Ding wrote:
-> I run qt camera demo, and it show this error
-> 
-> :-1: error: Unknown module(s) in QT: multimedia multimediawidgets
-> 
-> So I add qt5multimedia. (I'm using 'imx6-sabresd_qt5_defconfig' +
-> qt5multimedia.)
-> Then, build. Show this error:
-> 
-> Makefile:179: recipe for target 'sub-plugins-make_first' failed
-> make[3]: *** [sub-plugins-make_first] Error 2
-> Makefile:46: recipe for target 'sub-src-make_first' failed
-> make[2]: *** [sub-src-make_first] Error 2
-> 
-> How to fix this? Thanks.
+On Wed, 28 Feb 2018 23:23:35 -0600, Matt Weber wrote:
+> Default to using the package name for the vendor
+> and name as most CPE IDs seem to align with that
+> assumption. Also use the pkg version as the CPE IDs
+> initial version field.
 
-Thanks for your report. Could you:
+Nits:
 
- (1) Make sure this error happens when you do a rebuild from scratch
-     ("make clean all")
+ - You're wrapping the lines too short. Funnily, the common mistake is
+   to not wrap, or wrap too long. But here, you wrap too short. 72
+   characters is the good length :)
 
- (2) Post the .config, and the last ~200 lines of build output. The
-     part of the error log you have copy/pasted is not sufficient to
-     understand the issue.
+ - Missing SoB.
 
-Thanks!
+> v2
+> [Thomas P
+>  - Created patch per suggestion to use infra
+>    to cleanup common case in individual pkg
+>    CPE_ID definition.
+
+I'm surprised, because I thought the conclusion of our discussion was
+that it was not desirable to have such default, because then we
+couldn't make the difference between packages that have had their CPE
+ID explicitly added/verified by someone, and packages that have their
+CPE ID defined by default, and which may be incorrect.
+
+Have you changed your mind about this ?
+
+Best regards,
 
 Thomas
 -- 
