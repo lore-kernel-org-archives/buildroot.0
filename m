@@ -1,118 +1,127 @@
 From: Christian Stewart <christian@paral.in>
-Date: Thu,  1 Mar 2018 02:20:04 -0500
-Subject: [Buildroot] [PATCH v2 1/9] tini: new package
+Date: Thu,  1 Mar 2018 02:20:11 -0500
+Subject: [Buildroot] [PATCH v2 8/9] docker-containerd: bump to v1.0.2
 In-Reply-To: <20180301072012.25884-1-christian@paral.in>
 References: <20180301072012.25884-1-christian@paral.in>
-Message-ID: <20180301072012.25884-2-christian@paral.in>
+Message-ID: <20180301072012.25884-9-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tini is a minimal init process to act as PID 1 for containers.
+This commit bumps docker-containerd to v1.0.2.
 
-Tini can be used to satisfy docker-engine's docker-init binary
-requirement.
-
-In many cases docker-init backing processes like Tini must be static, as
-they are executed inside a container in an unknown environment. This
-patch adds an option to specifically compile Tini statically, even if
-the system is compiled dynamically.
+This is a requisite bump for the upgrade of docker-engine to 2018.03.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in      |  1 +
- package/tini/Config.in | 16 ++++++++++++++++
- package/tini/tini.hash |  2 ++
- package/tini/tini.mk   | 35 +++++++++++++++++++++++++++++++++++
- 4 files changed, 54 insertions(+)
- create mode 100644 package/tini/Config.in
- create mode 100644 package/tini/tini.hash
- create mode 100644 package/tini/tini.mk
+ package/docker-containerd/Config.in              | 12 ++++++++
+ package/docker-containerd/docker-containerd.hash |  2 +-
+ package/docker-containerd/docker-containerd.mk   | 38 ++++++++++++++++++------
+ 3 files changed, 42 insertions(+), 10 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9cd5d9c087..5bdaa24340 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1921,6 +1921,7 @@ comment "Utilities"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-+	source "package/tini/Config.in"
- 	source "package/tmux/Config.in"
- 	source "package/which/Config.in"
- 	source "package/xmlstarlet/Config.in"
-diff --git a/package/tini/Config.in b/package/tini/Config.in
-new file mode 100644
-index 0000000000..235fc1a8fb
---- /dev/null
-+++ b/package/tini/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_TINI
-+	bool "tini"
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+index 2f7bf71af1..851345f73e 100644
+--- a/package/docker-containerd/Config.in
++++ b/package/docker-containerd/Config.in
+@@ -15,6 +15,18 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 
+ 	  https://github.com/docker/containerd
+ 
++if BR2_PACKAGE_DOCKER_CONTAINERD
++
++config BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS
++	bool "btrfs snapshot driver"
++	depends on BR2_USE_MMU # btrfs-progs
++	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
++	select BR2_PACKAGE_BTRFS_PROGS
 +	help
-+	  tini is a simple but valid init binary to
-+	  act as PID 1 for containers.
-+
-+	  https://github.com/krallin/tini
-+
-+if BR2_PACKAGE_TINI
-+
-+config BR2_PACKAGE_TINI_MINIMAL
-+	bool "build minimal variant"
-+	help
-+	  Disables argument parsing and verbose output.
++	  Build the btrfs snapshot driver for containerd.
 +
 +endif
-diff --git a/package/tini/tini.hash b/package/tini/tini.hash
-new file mode 100644
-index 0000000000..f8c8c2a3aa
---- /dev/null
-+++ b/package/tini/tini.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	c2b7fe2fb92e71911d06b7571b53d4e7e8985b34efe2a599670b070b000c8dbe	tini-v0.16.1.tar.gz
-diff --git a/package/tini/tini.mk b/package/tini/tini.mk
-new file mode 100644
-index 0000000000..e345acd7b2
---- /dev/null
-+++ b/package/tini/tini.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# tini
-+#
-+################################################################################
 +
-+TINI_VERSION = v0.16.1
-+TINI_SITE = $(call github,krallin,tini,$(TINI_VERSION))
+ comment "docker-containerd needs a toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index 992eb5b01a..bc67fe50dc 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256	da89086a7c643702a2ddecec67a45d3d8e4b0d610dd19036be63e6bd54cc1a85	docker-containerd-9048e5e50717ea4497b757314bad98ea3763c145.tar.gz
++sha256	a31a12846a7a2f697f8fdd82cedd1626fc5f6345e59ae880664196c73e4c2226	docker-containerd-v1.0.2.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index ffbadb0c3f..230307d6b4 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,37 +4,57 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
+-DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
++DOCKER_CONTAINERD_VERSION = v1.0.2
++DOCKER_CONTAINERD_COMMIT = cfd04396dc68220d1cecbe686a6cc3aa5ce3667c
++DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+ 
+ DOCKER_CONTAINERD_DEPENDENCIES = host-go
+ 
+-DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
++DOCKER_CONTAINERD_GOPATH = "$(@D)/gopath"
+ DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+ 	CGO_ENABLED=1 \
+ 	GOBIN="$(@D)/bin" \
+ 	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
+ 
+ DOCKER_CONTAINERD_GLDFLAGS = \
+-	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
++	-X github.com/containerd/containerd.GitCommit=$(DOCKER_CONTAINERD_COMMIT)
 +
-+TINI_LICENSE = MIT
-+TINI_LICENSE_FILES = LICENSE
-+
-+TINI_CFLAGS = $(TARGET_CFLAGS) -DTINI_VERSION=\"$(TINI_VERSION)\" -DTINI_GIT=\"\"
-+TINI_CFLAGS += -static
-+
-+ifeq ($(BR2_PACKAGE_TINI_MINIMAL),y)
-+TINI_CFLAGS += -DTINI_MINIMAL
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++DOCKER_CONTAINERD_BUILD_TAGS += seccomp
++DOCKER_CONTAINERD_DEPENDENCIES += libseccomp
 +endif
 +
-+define TINI_CONFIGURE_CMDS
-+	printf "#pragma once\n" > $(@D)/src/tiniConfig.h
-+endef
-+
-+define TINI_BUILD_CMDS
-+	$(TARGET_CC) \
-+		$(TINI_CFLAGS) \
-+		-o $(@D)/tini $(@D)/src/tini.c
-+endef
-+
-+define TINI_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/tini $(TARGET_DIR)/usr/bin/tini
-+endef
-+
-+# Tini's CMakeLists.txt is not suitable for Buildroot.
-+$(eval $(generic-package))
++ifeq ($(BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS),y)
++DOCKER_CONTAINERD_DEPENDENCIES += btrfs-progs
++else
++DOCKER_CONTAINERD_BUILD_TAGS += no_btrfs
++endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
++DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static -fno-PIC'
++DOCKER_CONTAINERD_BUILD_TAGS += static_build
++DOCKER_CONTAINERD_BUILD_FLAGS += -buildmode pie
+ endif
+ 
+ define DOCKER_CONTAINERD_CONFIGURE_CMDS
+-	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
+-	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
++	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd
++	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd/containerd
+ 	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
+ 	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
+ endef
+ 
+ define DOCKER_CONTAINERD_BUILD_CMDS
+ 	$(foreach d,ctr containerd containerd-shim,\
+-		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
+-			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
++		cd $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd/containerd; \
++			$(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
++			-v -i -o $(@D)/bin/$(d) \
++			-tags "$(DOCKER_CONTAINERD_BUILD_TAGS)" \
++			-ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" \
++			$(DOCKER_CONTAINERD_BUILD_FLAGS) \
++			./cmd/$(d)$(sep)
++	)
+ endef
+ 
+ define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
 -- 
 2.13.6
