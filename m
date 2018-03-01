@@ -1,44 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Mar 2018 23:32:39 +0100
-Subject: [Buildroot] [PATCH v2 2/9] dumb-init: new package
-In-Reply-To: <20180301230427.28e24d47@windsurf.lan> (Thomas Petazzoni's
- message of "Thu, 1 Mar 2018 23:04:27 +0100")
-References: <20180301072012.25884-1-christian@paral.in>
- <20180301072012.25884-3-christian@paral.in>
- <20180301100227.3fb09c06@windsurf.lan>
- <87lgfbiyk8.fsf@dell.be.48ers.dk>
- <20180301170807.2cd21163@windsurf.lan>
- <87a7vriudq.fsf@dell.be.48ers.dk>
- <20180301230427.28e24d47@windsurf.lan>
-Message-ID: <87371jfmuw.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Mar 2018 23:33:50 +0100
+Subject: [Buildroot] [PATCH next] 18xx-ti-utils: new package
+In-Reply-To: <20180301223050.zdh7n2xfm3u5eqja@tarshish> (Baruch Siach's
+ message of "Fri, 2 Mar 2018 00:30:50 +0200")
+References: <d322743a2a05c94eb5e1403f726b2c55372df556.1519941102.git.baruch@tkos.co.il>
+ <87fu5jfnem.fsf@dell.be.48ers.dk>
+ <20180301223050.zdh7n2xfm3u5eqja@tarshish>
+Message-ID: <87y3jbe88h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hello,
- > On Thu, 01 Mar 2018 18:21:53 +0100, Peter Korsgaard wrote:
+Hi,
 
- >> >> dumb-init doesn't depend on any libraries, so the only issue is static
- >> >> linking with glibc, right?  
- >> 
- >> > No, you can also have musl or uclibc configured shared-only, which is
- >> > the case by default since BR2_SHARED_LIBS=y.  
- >> 
- >> Yes, but static linking against libc still works in that case, right?
+ >> Would it make sense to force this option on in linux.mk like we do for
+ >> other packages?
 
- > I'm not sure you have libc.a with uClibc or musl if you build
- > shared-only.
+ > I don't think so. I don't like this magic config manipulation in the general 
+ > case. CONFIG_NL80211_TESTMODE in particular is meant for those who really know 
+ > what they are doing. As the kernel config option help text put it:
 
-Today we unconditionally build the static version of musl and uClibc, so
-yes.
+ >   Say N.
 
-We may have other situations where we link statically against libc with
-BR2_SHARED_LIBS. go is normally statically linked, doesn't that use
-libc?
+OK. I agree that we should keep the "magic" kernel config tweaks to a
+minimum.
 
 -- 
 Bye, Peter Korsgaard
