@@ -1,60 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Mar 2018 23:15:34 +0100
-Subject: [Buildroot] [git commit branch/next] package/libvpx: bump version
- to 1.7.0
-Message-ID: <20180301222104.168C4814D5@busybox.osuosl.org>
+Date: Thu, 1 Mar 2018 23:17:32 +0100
+Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
+ to 2.4.90
+Message-ID: <20180301222104.5D285814D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2682d77d1a7eee678a974e33d14eb4559225cf33
+commit: https://git.buildroot.net/buildroot/commit/?id=ced7bcbb253cf52f0d870cad3646d2c6a7d55adf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Switched _SITE to github, current _SITE is broken.
-
-The URL
-https://chromium.googlesource.com/webm/libvpx/+archive/v1.7.0.tar.gz
-
-proposed by upstream
-https://storage.googleapis.com/downloads.webmproject.org/releases/webm/index.html
-
-provides archives with different hashes for each download so we use
-Github instead.
-
-Added license hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvpx/libvpx.hash | 4 +++-
- package/libvpx/libvpx.mk   | 5 ++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index 95ff3a8082..1397b62f7b 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,2 +1,4 @@
- # Locally computed:
--sha256 1c2c0c2a97fba9474943be34ee39337dee756780fc12870ba1dc68372586a819  libvpx-1.6.1.tar.bz2
-+sha256 1fec931eb5c94279ad219a5b6e0202358e94a93a90cfb1603578c326abfc1238  libvpx-v1.7.0.tar.gz
-+sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
-+sha256 cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index 24c39032e4..0f867eb2a9 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 0842411c5a..b1784b4c07 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2017-December/160530.html
+-md5 5307a147dde67ac643f6753a42b5d32c  libdrm-2.4.89.tar.bz2
+-sha1 43123da26271df9a29deb687c1855bef3fed249c  libdrm-2.4.89.tar.bz2
+-sha256 629f9782aabbb4809166de5f24d26fe0766055255038f16935602d89f136a02e  libdrm-2.4.89.tar.bz2
+-sha512 380e4e46cd3971a73264bd1b482791fab0503268adb65ac81b674df009662cfb8ef5741e362f19670b2a43b1c46f022d857706c9a4bebed2b1cddaa317b7706d  libdrm-2.4.89.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-February/002838.html
++md5 61dcb4989c728f566e3c15c236585a17  libdrm-2.4.90.tar.bz2
++sha1 7630ba36c65433251a0494b47086fbd0b32ff7a8  libdrm-2.4.90.tar.bz2
++sha256 db37ec8f1dbaa2c192ad9903c8d0988b858ae88031e96f169bf76aaf705db68b  libdrm-2.4.90.tar.bz2
++sha512 3d32d60c44ffdcb58667d0926e6af8d375332add1f243d8b2d37567aeef4e4b26d786294aeecf46c3dea94fc002fb73756567c457300703acfc21e32ffbd458c  libdrm-2.4.90.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 1c898a5b54..7121f06c9a 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVPX_VERSION = 1.6.1
--LIBVPX_SOURCE = libvpx-$(LIBVPX_VERSION).tar.bz2
--LIBVPX_SITE = http://storage.googleapis.com/downloads.webmproject.org/releases/webm
-+LIBVPX_VERSION = v1.7.0
-+LIBVPX_SITE = $(call github,webmproject,libvpx,$(LIBVPX_VERSION))
- LIBVPX_LICENSE = BSD-3-Clause
- LIBVPX_LICENSE_FILES = LICENSE PATENTS
- LIBVPX_INSTALL_STAGING = YES
+-LIBDRM_VERSION = 2.4.89
++LIBDRM_VERSION = 2.4.90
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
