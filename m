@@ -1,58 +1,53 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu, 1 Mar 2018 14:16:20 +1300
-Subject: [Buildroot] util-linux pkg-config files point to build machine paths
-Message-ID: <CAFOYHZBt8tGfL+vbT=jGLuGoGLp8CUNKjBuJ_Z7ArMTOj7gbJA@mail.gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Thu, 1 Mar 2018 01:48:30 +0000
+Subject: [Buildroot] [master,1/2] uboot: use local fdt headers
+In-Reply-To: <20180219155632.30086-2-thomas.de_schampheleire@nokia.com>
+References: <20180219155632.30086-2-thomas.de_schampheleire@nokia.com>
+Message-ID: <1519868910.25567.259.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot,
+On Mon, 2018-02-19 at 16:56 +0100, Thomas De Schampheleire wrote:
+> 
+> On the expanded compiler command-line, Buildroot's '-I$(HOST_DIR)/include'
+> is thus present _before_ any -I to local directories, and thus takes
+> precedence.  And that becomes a problem for header files present both
+> locally as in the Buildroot host directory, which is the case for libfdt.
+> 
+> To fix this problem without having to patch u-boot sources, use '-idirafter'
+> rather than '-I' to pass the Buildroot host include directory. '-idirafter'
+> is basically the same thing, but adds the specified directory at the end
+> of the include precedence chain, rather than at the beginning.
 
-I imagine this will end-up on the util-linux mailing-list eventually
-but hopefully someone here can help me formulate an intelligent
-suggestion first.
+This is breaking the build of uboot host tools for me.
 
-If I build one of the libraries from util-linux the generated .pc
-refers to /usr/include instead of ${prefix}/include which makes
-cross-compilation interesting (particularly when the host doesn't have
-those files).
+My issue is that uboot's build of the host object rsa-sign.o is using
+the system installed openssl header files.  One can verify this by
+looking at the file build/uboot-<hash>/tools/lib/rsa/.rsa-sign.o.cmd,
+which will have the auto-dependency info, and thus shows exactly what
+header files were used to compile the object.
 
-For example here's uuid.pc
+buildroot is also compiling host openssl, with headers and libraries in
+the buildroot host output tree.  When uboot tries to link the host
+programs, it uses the buildroot built openssl library (like it should),
+but this doesn't match the headers.
 
-prefix=/usr
-exec_prefix=/usr
-libdir=/usr/lib
-includedir=/usr/include
+It see the include dir order should be:
+u-boot
+buildroot host
+host os
 
-Name: uuid
-Description: Universally unique id library
-Version: 2.31.1
-Requires:
-Cflags: -I${includedir}/uuid
-Libs: -L${libdir} -luuid
+But this patch gives:
+u-boot
+host os
+buildroot host
 
-Compare that with zlib.pc
+Like all "host system's headers" problems, if your host and buildroot
+have nearly the same openssl version, or you have no openssl devel on
+your host, then you wouldn't see this.
 
-prefix=/usr
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-sharedlibdir=${libdir}
-includedir=${prefix}/include
-
-Name: zlib
-Description: zlib compression library
-Version: 1.2.11
-
-Requires:
-Libs: -L${libdir} -L${sharedlibdir} -lz
-Cflags: -I${includedir}
-
-But the .pc.in files that these were generated from are pretty
-similar. I assume it has something to do with the way these are
-generated. Does anyone have an intelligent suggestion for something to
-propose upstream or should I just patch the pc files after the fact?
-
-Thanks,
-Chris
+I think the real solution here is to get u-boot's build system to
+support building with an external libfdt and do that.
