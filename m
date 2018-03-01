@@ -1,97 +1,91 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 1 Mar 2018 14:52:39 +0100
-Subject: [Buildroot] [PATCH] package/qt5/qt5scxml: install missing QML
- module
-In-Reply-To: <537151c4-3d13-6afa-8bed-e75647bf08de@grinn-global.com>
-References: <20180301074610.18946-1-b.bilas@grinn-global.com>
- <20180301115003.6cc39376@gmx.net>
- <537151c4-3d13-6afa-8bed-e75647bf08de@grinn-global.com>
-Message-ID: <20180301145239.5faf7c05@gmx.net>
+From: John Murray <john@gardenway.org>
+Date: Thu, 1 Mar 2018 06:57:29 -0700
+Subject: [Buildroot] Xilinx-specific files not present in offline build
+In-Reply-To: <d4b33919-b5b8-d354-1b7a-9be97e1ebe95@mind.be>
+References: <CAMd7AX_ChKxJPAyhS9WeOP=AB0upLQ5COkQ-MYw6mg63GX3knQ@mail.gmail.com>
+ <d4b33919-b5b8-d354-1b7a-9be97e1ebe95@mind.be>
+Message-ID: <CAHiO-hes_JYrq7Ru2nSv6sEqsojtdi-CF+rpr-p+5DO+CUWkJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bartosz,
+Hi Aaron,
 
-On Thu, 1 Mar 2018 13:26:44 +0100, Bartosz Bi?as <b.bilas@grinn-global.com> wrote:
+Are you trying to build only the linux kernel and rootfs image without
+using petalinux, or are you trying to build the "bsp" portion without
+petalinux as well?
 
-> Hi Peter,
-> 
-> On 01.03.2018 11:50, Peter Seiderer wrote:
-> > Hello Bartosz,
-> >
-> > first thanks for the suggested patch.
-> >   
-> > On Thu,  1 Mar 2018 08:46:10 +0100, Bartosz Bilas <b.bilas@grinn-global.com> wrote:
-> >  
-> >> This patch add support for scxml module in QML projects.
-> >> When would you like to use state machines in qml files,
-> >> you get an error like this:
-> >>
-> >> qrc:/MainUI.qml:2 module "QtScxml" is not installed
-> >>  
-> > Patch subject: 'qt5scxml: install missing QML module' and
-> >
-> >    Fixes:
-> >
-> >      qrc:/MainUI.qml:2 module "QtScxml" is not installed
-> >
-> > would be enough (I think the patched lines are self-explanatory)...
-> >  
-> >> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> >> ---
-> >>   package/qt5/qt5scxml/qt5scxml.mk | 7 +++++++
-> >>   1 file changed, 7 insertions(+)
-> >>
-> >> diff --git a/package/qt5/qt5scxml/qt5scxml.mk b/package/qt5/qt5scxml/qt5scxml.mk
-> >> index 2d197a2bca..3f0f1a9054 100644
-> >> --- a/package/qt5/qt5scxml/qt5scxml.mk
-> >> +++ b/package/qt5/qt5scxml/qt5scxml.mk
-> >> @@ -35,6 +35,12 @@ define QT5SCXML_INSTALL_TARGET_LIBS
-> >>   endef
-> >>   endif
-> >>   
-> >> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-> >> +define QT5SCXML_INSTALL_TARGET_QMLS
-> >> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtScxml/ $(TARGET_DIR)/usr/qml/
-> >> +endef
-> >> +endif
-> >> +  
-> > The dependency on BR2_PACKAGE_QT5DECLARATIVE_QUICK is not needed, the QtScxml
-> > module is build/installed even without enabled BR2_PACKAGE_QT5DECLARATIVE_QUICK...  
-> I was thinking about it but without qt quick this module is unnecessary 
-> so I'm not sure that we should copy this to the image.
 
-Mhhh, point for you ;-), I would still prefer the version without dependency on quick
-(as the qt compile/configure logic does) even if a usage without quick is more or
-less theoretically? But I am o.k. with both solutions in case you add a little comment...
+Just curious as I am looking at those issues.
 
-Regards,
-Peter
+john
 
-> 
-> Best regards,
-> Bartosz Bi?as
+On Wed, Feb 28, 2018 at 8:20 AM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
+
+>  Hi Aaron,
+>
+> On 28-02-18 15:13, A wrote:
 > >
-> > With this changes you can add my
+> > I'm attempting an offline build, dowloading sources on a cygwin system
+> with
+> > internet, and copying the dl/* files to the redhat system without
+> internet.
 > >
-> > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> > My most recent issue is the "make" on the build system appears to make
+> some
+> > progress, then eventually fails due to missing xilinx header files.
+>
+>  Why do you say that this is about Xilinx header files?
+>
 > >
-> > Regards,
-> > Peter
+> > Any advice for things to check, or more information that would be
+> helpful to
+> > diagnose?
 > >
-> >  
-> >>   ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-> >>   define QT5SCXML_INSTALL_TARGET_EXAMPLES
-> >>   	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/scxml $(TARGET_DIR)/usr/lib/qt/examples/
-> >> @@ -43,6 +49,7 @@ endif
-> >>   
-> >>   define QT5SCXML_INSTALL_TARGET_CMDS
-> >>   	$(QT5SCXML_INSTALL_TARGET_LIBS)
-> >> +	$(QT5SCXML_INSTALL_TARGET_QMLS)
-> >>   	$(QT5SCXML_INSTALL_TARGET_EXAMPLES)
-> >>   endef
-> >>     
-> 
+> >   INSTALL include/linux/isdn (1 file)
+> >   INSTALL include/linux/mmc (1 file)
+> > ./scripts/Makefile.headersinst:55: *** Missing UAPI file
+> > ./include/uapi/linux/netfilter/xt_CONNMARK.h.  Stop.
+>
+>  This looks like it's the installation of the kernel headers (but the part
+> of
+> the log that proves that is missing here; it's a few lines after). This
+> should
+> not happen, it looks as if your kernel archive is broken somehow.
+>
+>  Or more likely, I'm missing something :-)
+>
+>  Could you paste a little more of the output?
+>
+>  Regards,
+>  Arnout
+>
+> > make[4]: *** [netfilter] Error 2
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+
+-- 
+
+*John W. Murray*
+John at gardenway.org <Michael@HepworthMurray.com>
+801-628-0543
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180301/aaae2ee0/attachment.html>
