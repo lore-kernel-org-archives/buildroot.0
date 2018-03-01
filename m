@@ -1,66 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Mar 2018 23:07:14 +0100
-Subject: [Buildroot] [PATCH] qt: mark as obsolete
-In-Reply-To: <20180301215606.3788-1-peter@korsgaard.com>
-References: <20180301215606.3788-1-peter@korsgaard.com>
-Message-ID: <20180301220714.GE2449@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 2 Mar 2018 00:07:43 +0200
+Subject: [Buildroot] pulseaudio isn't work on buildroot-2017.02.5
+In-Reply-To: <1519913539.26930.5.camel@embedded.rocks>
+References: <1503571325385-173857.post@n4.nabble.com>
+ <20170824192644.56481029@windsurf>
+ <1503640121686-173903.post@n4.nabble.com>
+ <1519913539.26930.5.camel@embedded.rocks>
+Message-ID: <20180301220743.vmhgrpj2kwt7bdmh@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi J?rg,
 
-On 2018-03-01 22:56 +0100, Peter Korsgaard spake thusly:
-> qt 4.x is no longer supported upstream since December 2015:
+On Thu, Mar 01, 2018 at 03:12:19PM +0100, J?rg Krause wrote:
+> On Thu, 2017-08-24 at 22:48 -0700, Jonas wrote:
+> > thank you for your reply.
+> > 
+> > I try to set "BR2_PACKAGE_PULSEAUDIO_DAEMON".
+> > 
+> > # ps
+> > ...
+> >   223 root     -sh
+> >   224 root     /sbin/getty -L tty1 0 vt100
+> >   256 pulse    pulseaudio --system --daemonize
+> >   260 root     ps
+> > 
+> > it seen works in system mode, but I want to use "pactl" command.
+> > I need set source and sink.
+> > 
+> > I get this error message:
+> > # pactl stat
+> > Connection failure: Access denied
+> > 
+> > #pactl list sources short
+> > Connection failure: Access denied
+> > 
+> > #pactl list sink short
+> > Connection failure: Access denied
+> > 
+> > Could you help me again.
+> > Thank you very much.
 > 
-> https://blog.qt.io/blog/2015/05/26/qt-4-8-7-released/
+> In case someone has the same issue. I got it working adding the root
+> user to the pulse-access group:
 > 
-> So it shouldn't be used for new projects.  Add an obsolete warning to the
-> package prompt to make this clear.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> # grep pulse-access /etc/group
+> pulse-access:x:1006:pulse,root
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Do you have any idea how this solves the permission issue?
 
-Once we eventually ger tid of it, we will be able to greatly simplify
-the dependencies that ensure that qt qnd qt5 are mutually exclusive.
+> @Thomas: Is this something we need to address if
+> BR2_PACKAGE_PULSEAUDIO_DAEMON is selected?
 
-In the future... ;-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/qt/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> index 4804a81537..0ecfafada5 100644
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -3,7 +3,7 @@ comment "qt needs a toolchain w/ C++, threads"
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
->  
->  menuconfig BR2_PACKAGE_QT
-> -	bool "Qt"
-> +	bool "Qt (obsolete)"
->  	depends on BR2_USE_MMU # fork
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+barauch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
