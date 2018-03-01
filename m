@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 1 Mar 2018 20:50:30 +0100
-Subject: [Buildroot] [PATCH 1/1] Main Makefile Have "make savedefconfig"
- show where the file is being written to.
-In-Reply-To: <20180227112818.6766-1-chrismcc@gmail.com>
-References: <20180227112818.6766-1-chrismcc@gmail.com>
-Message-ID: <dd0ef897-7b93-4c58-6f6f-a33e33f4e28a@mind.be>
+Date: Thu, 1 Mar 2018 20:41:13 +0100
+Subject: [Buildroot] Analysis of build results for 2018-02-25
+In-Reply-To: <877eqzshgt.fsf@dell.be.48ers.dk>
+References: <20180226070010.28C8620727@mail.bootlin.com>
+ <20180226113319.7e3bcf6b@windsurf.lan> <87fu5nsyrg.fsf@dell.be.48ers.dk>
+ <20180226140029.45325514@windsurf.lan> <87bmgbsv4z.fsf@dell.be.48ers.dk>
+ <20180226154724.4e87f072@windsurf.lan> <877eqzshgt.fsf@dell.be.48ers.dk>
+Message-ID: <096b2356-52d1-ee4d-0dc4-504d4a0dfee7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +15,66 @@ To: buildroot@busybox.net
 
 
 
-On 27-02-18 12:28, Christopher McCrory wrote:
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
+On 26-02-18 20:01, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 > 
-> diff --git a/Makefile b/Makefile
-> index ec39bcdb9c..4ac2435a9c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -927,6 +927,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
->  		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
->  		$(CONFIG_CONFIG_IN)
->  	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
-> +	@echo "Saved to $(DEFCONFIG)"
+>  > Hello,
+>  > On Mon, 26 Feb 2018 15:06:20 +0100, Peter Korsgaard wrote:
+> 
+>  >> > mplayer upstream is dead ? If that is the case, then indeed we should
+>  >> > just take those patches as-is.  
+>  >> 
+>  >> I haven't followed development in details, but the latest mplayer
+>  >> release is more than 2 years old and several forks exists (E.G. mpv).
+> 
+>  > But isn't mplayer one of those projects that says that releases are
+>  > useless, and people should always use the latest trunk/master/tip
+>  > because it's obviously "the best".
+> 
+> Maybe. I do see some recent changes in subversion, but mainly small
+> things (tweaks to the handwritten configure script).
+> 
+>  >> >> Or deprecate qt4?  
+>  >> 
+>  >> > Just because it's broken on powerpc?  
+>  >> 
+>  >> Well, mainly because it is no longer maintained upstream. Even Debian is
+>  >> removing Qt4:
+>  >> 
+>  >> https://wiki.debian.org/Qt4Removal
+> 
+>  > True, but we are not going to remove it for 2018.02, right ?
+> 
+> It is indeed getting quite late for 2018.02, but given that:
+> 
+> - It isn't supported upstream
+> - The package is orphaned in Buildroot
+> - Other distributions (like Debian) no longer supports it
+> 
+> Makes me think that we won't be able to do a good job supporting it
+> throughout the 2018.02 support cycle.
 
- If BR2_DEFCONFIG is not set, you'll get "Saved to " which is a bit weird. So
-change into:
+ Well, for most packages, the "support" is limited to "it's still there and it
+still doesn't fail in autobuilders". Which will not happen because we don't use
+any new toolchains or anything during the LTS support cycle.
 
-	@echo "Saved to $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)"
+> 
+> We don't have a good way of handling deprecations, so I'm not sure what
+> the best option is:
+> 
+> - Do nothing
+> - Change prompt to "Qt (obsolete)"
 
- But now $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) is used 3
-times, so perhaps it's worth adding a variable for it. I can't think of a good
-name for it unfortunately.
+ I like this one. It costs us nothing, it makes it clear that you can't expect
+support updates on this package, and it's an advance warning that it may be removed.
+
+> - Remove package
+
+ Eventually, yes, with legacy handling. I would remove it only when it breaks.
+
 
  Regards,
  Arnout
-
->  
->  .PHONY: defconfig savedefconfig
->  
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
