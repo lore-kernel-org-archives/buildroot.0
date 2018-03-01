@@ -1,42 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Mar 2018 17:08:07 +0100
-Subject: [Buildroot] [PATCH v2 2/9] dumb-init: new package
-In-Reply-To: <87lgfbiyk8.fsf@dell.be.48ers.dk>
-References: <20180301072012.25884-1-christian@paral.in>
- <20180301072012.25884-3-christian@paral.in>
- <20180301100227.3fb09c06@windsurf.lan>
- <87lgfbiyk8.fsf@dell.be.48ers.dk>
-Message-ID: <20180301170807.2cd21163@windsurf.lan>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 1 Mar 2018 17:14:01 +0100
+Subject: [Buildroot] [git commit] utils/scanpypi: fix 'downloas' typo in
+ error message
+Message-ID: <20180301161437.03D6F81487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7cf95a8a78929e85f1a673134e0ebb9e9433bd5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 01 Mar 2018 16:51:35 +0100, Peter Korsgaard wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/scanpypi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->  > On Thu,  1 Mar 2018 02:20:05 -0500, Christian Stewart wrote:  
-> 
->  > However, using -static has a problem: what happens when you're doing a
->  > BR2_SHARED_LIBS=y configuration, i.e when there is only support for
->  > shared libraries, and not static libraries ? And BR2_SHARED_LIBS=y is
->  > our default.  
-> 
-> dumb-init doesn't depend on any libraries, so the only issue is static
-> linking with glibc, right?
-
-No, you can also have musl or uclibc configured shared-only, which is
-the case by default since BR2_SHARED_LIBS=y.
-
-Basically, I believe that Christian's patch simply doesn't work with
-the default Buildroot configuration of BR2_SHARED_LIBS=y.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 55bfb2fedb..c96f1bc892 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -207,7 +207,7 @@ class BuildrootPackage():
+         else:
+             if download.__class__ == urllib2.HTTPError:
+                 raise download
+-            raise DownloadFailed('Failed to downloas package {pkg}'
++            raise DownloadFailed('Failed to download package {pkg}'
+                                  .format(pkg=self.real_name))
+         self.filename = self.used_url['filename']
+         self.url = self.used_url['url']
