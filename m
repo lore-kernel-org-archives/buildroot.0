@@ -1,78 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 2 Mar 2018 11:20:56 +0200
-Subject: [Buildroot] [PATCH next] autofs: disable for musl
-In-Reply-To: <210C7F60-BE04-4B02-9968-BD555DA0B783@openadk.org>
-References: <d54d651ab276a4ae248de1c302788d3960103ff8.1519965634.git.baruch@tkos.co.il>
- <210C7F60-BE04-4B02-9968-BD555DA0B783@openadk.org>
-Message-ID: <20180302092056.r3xnguaquajpq4ud@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Mar 2018 10:49:33 +0100
+Subject: [Buildroot] [NEXT 06/26] boa: add CPE id
+In-Reply-To: <8245f0c5-94fc-a0b3-9710-8c0c779dcbdd@mind.be>
+References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1519697441-54194-7-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180227231718.090c22ef@windsurf.lan>
+ <CANQCQpbM3VHid2rGTFAA=HwkhsUfmHRbGw9EDtT2dPUWwQRDog@mail.gmail.com>
+ <20180228073827.312a9a6f@windsurf.home>
+ <3a17ac42-e24b-149d-30d3-654545e8c1eb@mind.be>
+ <CANQCQpbzWdfmXe-6dJuWzNM0S_DgVYDazFC2_ZsdbVnA3WHcEQ@mail.gmail.com>
+ <8245f0c5-94fc-a0b3-9710-8c0c779dcbdd@mind.be>
+Message-ID: <20180302104933.39fbda31@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Hello,
 
-On Fri, Mar 02, 2018 at 08:51:17AM +0100, Waldemar Brodkorb wrote:
-> oh, that is bad.
-> Why it isn't failing for uClibc-ng?
+On Fri, 2 Mar 2018 09:19:25 +0100, Arnout Vandecappelle wrote:
 
-Because uClibc-ng provides the _PATH_NSSWITCH_CONF macro.
+>  Just to be clear about what you're saying here: in v3, you'll making it so that
+> nothing has to be done explicitly in the package to get a CPE ID, but it may be
+> (and probably will be) invalid? So that the initial report will contain a huge
+> amount of invalid entries, and we can fix them one by one?
+> 
+>  I realize I'm contradicting myself, but that still leaves us with a problem (or
+> rather, limitation). We have no way of keeping track of which packages have been
+> checked and which haven't, so we have no way of keeping track of which ones are
+> broken.
+> 
+>  Or perhaps the pkg-stats script could eventually check the entry in the CPE
+> database, and add a column to indicate that it's valid or not?
 
-> Or will it fail when running on the target?
+Yes, that would be the idea.
 
-I don't know, I have not tested. Looking through the code I see that autofs 
-parses the content of nsswitch.conf. But I could not figure out how this 
-information is used.
+> > The CPE list will be as accurate as people using it update the NIST
+> > entries, either manually or as Buildroot nudges them to send an email.
+> > The CVEs those CPEs will find is another complete story and most open
+> > ways of searching for those don't concluded clean results without a
+> > good amount of manual intervention.  
+> 
+>  Yes, I do realize that this is a kind of catch-22 situation, if nobody uses the
+> database then obviously it will not be up-to-date. But to be honest, right now I
+> don't even really understand what kind of information you can get from it even
+> in the ideal case. That's why I asked to post an RFC script, so we can get some
+> idea of what the end goal is (and ultimately, whether this is worth the effort).
 
-Maybe the correct fix is to provide a local _PATH_NSSWITCH_CONF definition for 
-musl?
+Yes, I agree. The current proposal that just adds CPE_ID to packages,
+and has a mechanism to generate a CSV based on that isn't very useful
+per-se. I would also like to see the tooling that processes those
+CPE_ID to query the NIST database, and get some useful data out of it.
 
-baruch
+Even if the data isn't great for the moment because the NIST database
+is limited, it would show how the whole thing would be useful.
 
-> > On 2. Mar 2018, at 05:40, Baruch Siach <baruch@tkos.co.il> wrote:
-> > 
-> > autofs requires nsswitch which musl libc does not implement. Commit
-> > 873040371b14 (autofs: allow to use libtirpc) removed the
-> > BR2_TOOLCHAIN_HAS_NATIVE_RPC dependency, making autofs available for
-> > musl. Disable musl explicitly.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/a54/a549b62fbf03474ffd8586869637d083de275091/
-> > http://autobuild.buildroot.net/results/b32/b3276b2cbd1e1c260f8df4c3945f51ddc09d492f/
-> > http://autobuild.buildroot.net/results/10b/10b5c5b13971214d0439b715f1a46c78a5249309/
-> > 
-> > Cc: Waldemar Brodkorb <wbx@openadk.org>
-> > Cc: Jonathan Ben Avraham <yba@tkos.co.il>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> > package/autofs/Config.in | 6 ++++--
-> > 1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/package/autofs/Config.in b/package/autofs/Config.in
-> > index efb0ec28ee7d..8bb5fe276f65 100644
-> > --- a/package/autofs/Config.in
-> > +++ b/package/autofs/Config.in
-> > @@ -3,6 +3,7 @@ config BR2_PACKAGE_AUTOFS
-> >    depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> >    depends on BR2_USE_MMU
-> >    depends on !BR2_STATIC_LIBS # dlfcn
-> > +    depends on !BR2_TOOLCHAIN_USES_MUSL # nsswitch
-> >    select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> >    help
-> >      Autofs controls the operation of the automount daemons. The
-> > @@ -15,6 +16,7 @@ config BR2_PACKAGE_AUTOFS
-> > 
-> >      http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
-> > 
-> > -comment "autofs needs a toolchain w/ NPTL and dynamic library"
-> > +comment "autofs needs a glibc or uClibc toolchain w/ NPTL and dynamic library"
-> >    depends on BR2_USE_MMU
-> > -    depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-> > +    depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-> > +        || BR2_TOOLCHAIN_USES_MUSL
+Right now the patch series just adds some IDs and generates a CSV with
+those IDs, which isn't terribly useful.
 
+Best regards,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
