@@ -1,57 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Mar 2018 21:08:47 +0100
-Subject: [Buildroot] [PATCH 2/2] apache init script
-In-Reply-To: <CALURroQSLWQ1TD7gEf-KYqOg3Y8x9mZeo3DAkKd2-B=MZwO02g@mail.gmail.com>
-References: <20180227115022.8802-1-chrismcc@gmail.com>
- <20180227221815.21afde38@windsurf.lan>
- <CALURroQSLWQ1TD7gEf-KYqOg3Y8x9mZeo3DAkKd2-B=MZwO02g@mail.gmail.com>
-Message-ID: <20180302210847.48cd8e47@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 2 Mar 2018 21:13:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: fix build without
+ pthreads
+In-Reply-To: <20180302191603.8499-1-bernd.kuhls@t-online.de>
+References: <20180302191603.8499-1-bernd.kuhls@t-online.de>
+Message-ID: <72cb17c1-cde4-2c0c-27d3-6c2719b60838@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Bernd,
 
-On Fri, 2 Mar 2018 09:08:06 -0800, Christopher McCrory wrote:
+Le 02/03/2018 ? 20:16, Bernd Kuhls a ?crit?:
+> Fixes
+> http://autobuild.buildroot.org/results/4c7/4c77c15eaa2e44d0854cf24ab872e7b2ef83ebd6/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> I started with the idea of changing just enough of the included init script
-> to get the daemon running.  I am used to the RedHat/Fedora sysv init
-> system, not the debian/start-stop-daemon style.  I didn't want to snag some
-> other init file using start-stop-daemon, replace a variable, and submit it
-> as my own work.  I'd rather learn the nuances of start-stop-daemon and
-> write a script that I understand and works as expected.
+Acked-by: Romain Naour <romain.naour@gmail.com>
 
-Well, we very much prefer to have init scripts that all follow the same
-patterns, rather than init scripts that are all very different from
-each other. Having similar init scriptss makes maintenance a lot easier
-for us.
-
-So please, re-use the same pattern as existing init scripts. You're not
-stealing the work of anyone, because you're also contributing to
-Buildroot, under the same license.
-
-> After testing a few other packages, I noticed quite a few that don't have
-> init scripts.  Is this by design?  I'd like to add the ability to generate
-> an initscript within the buildroot system.  something like
-> $PACKAGE_GENERATE_AND_INSTALL_SYSV_INIT_SCRIPT = YES # with a shorter name
-> though :)
-> in the package.mk file that would use a template to create a working init
-> script. And a global toggle in makemenu -> Build Options to
-> enable/disable.  yes? no? maybe?
-
-Most init scripts have subtle nuances that make a completely
-auto-generated init script mechanism not really desirable. I think we
-prefer the dumb approach we have today.
-
-However, patches adding init scripts to more packages are definitely
-welcome.
+Thanks !
 
 Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+> ---
+>  package/ffmpeg/0002-ffmpeg-pthreads.patch | 34 +++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/ffmpeg/0002-ffmpeg-pthreads.patch
+> 
+> diff --git a/package/ffmpeg/0002-ffmpeg-pthreads.patch b/package/ffmpeg/0002-ffmpeg-pthreads.patch
+> new file mode 100644
+> index 0000000000..c6d75d2297
+> --- /dev/null
+> +++ b/package/ffmpeg/0002-ffmpeg-pthreads.patch
+> @@ -0,0 +1,34 @@
+> +From patchwork Wed Oct 25 13:32:36 2017
+> +Content-Type: text/plain; charset="utf-8"
+> +MIME-Version: 1.0
+> +Content-Transfer-Encoding: 7bit
+> +Subject: [FFmpeg-devel] configure: v4l2_m2m depends on pthreads
+> +From: Mark Thompson <sw@jkqxz.net>
+> +X-Patchwork-Id: 5688
+> +Message-Id: <27e5b360-1210-d550-c8de-a761f8e9f326@jkqxz.net>
+> +To: FFmpeg development discussions and patches <ffmpeg-devel@ffmpeg.org>
+> +Date: Wed, 25 Oct 2017 14:32:36 +0100
+> +
+> +Fixes build with --disable-pthreads.
+> +
+> +Downloaded from upstream patchworks:
+> +https://patchwork.ffmpeg.org/patch/5688/
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + configure | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/configure b/configure
+> +index c86e578..76523c8 100755
+> +--- a/configure
+> ++++ b/configure
+> +@@ -2780,7 +2780,7 @@ omx_rpi_select="omx"
+> + qsvdec_select="qsv"
+> + qsvenc_select="qsv"
+> + vaapi_encode_deps="vaapi"
+> +-v4l2_m2m_deps_any="linux_videodev2_h"
+> ++v4l2_m2m_deps="linux_videodev2_h pthreads"
+> + 
+> + hwupload_cuda_filter_deps="cuda"
+> + scale_npp_filter_deps="cuda libnpp"
+> 
