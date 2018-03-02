@@ -1,43 +1,51 @@
-From: scsijon <scsijon@lamiaworks.com.au>
-Date: Fri, 2 Mar 2018 12:21:23 +1100
-Subject: [Buildroot] SSD Kernel PCIe NVME Drivers?
-Message-ID: <2095f39f-c9b0-f758-90c1-b89f057b786d@lamiaworks.com.au>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  2 Mar 2018 06:40:34 +0200
+Subject: [Buildroot] [PATCH next] autofs: disable for musl
+Message-ID: <d54d651ab276a4ae248de1c302788d3960103ff8.1519965634.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a copy of what I submitted for Puppy Linux and a few other 
-"Linux's" I interact with. Since you are up to a RC I though i'd best 
-check out buildroot. However I can't find anything for it in any of the 
-linux kernel config files, so I thought I need to let you know to add 
-it, especially as quite a lot of the mainstream laptops with 
-touchscreens are either already using it or making it available as an 
-option now.
+autofs requires nsswitch which musl libc does not implement. Commit
+873040371b14 (autofs: allow to use libtirpc) removed the
+BR2_TOOLCHAIN_HAS_NATIVE_RPC dependency, making autofs available for
+musl. Disable musl explicitly.
 
-The background doccument is a bit out of date, but for once it was 
-written in a manner that most people are able to understand. :-)}
+Fixes:
+http://autobuild.buildroot.net/results/a54/a549b62fbf03474ffd8586869637d083de275091/
+http://autobuild.buildroot.net/results/b32/b3276b2cbd1e1c260f8df4c3945f51ddc09d492f/
+http://autobuild.buildroot.net/results/10b/10b5c5b13971214d0439b715f1a46c78a5249309/
 
-regards
-scsijon
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/autofs/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
--------------------------------------
-After doing some research I came across the fix for the NVME ssd 
-problem. It's apparently a setting in the kernel, can you add it into 
-your default set please as more and more notebooks are now using them.
-
-Basically it's:-
-Confirm that the NVMe Driver under Block is set to <M>
-Go to Device Drivers -> Block Devices - > NVM Express block device
-:and of course a driver is built.
-
-There is also opensource test programs at:-
-https://github.com/linux-nvme/nvme-cli
-
-Full doc is:-
-https://www.intel.com/content/dam/support/us/en/documents/ssdc/data-center-ssds/Intel_Linux_NVMe_Guide_330602-002.pdf
-
-NVME Background worth reading can be found at:-
-https://www.pcworld.com/article/2899351/everything-you-need-to-know-about-nvme.html
------------------------------------------------------
+diff --git a/package/autofs/Config.in b/package/autofs/Config.in
+index efb0ec28ee7d..8bb5fe276f65 100644
+--- a/package/autofs/Config.in
++++ b/package/autofs/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_AUTOFS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS # dlfcn
++	depends on !BR2_TOOLCHAIN_USES_MUSL # nsswitch
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Autofs controls the operation of the automount daemons. The
+@@ -15,6 +16,7 @@ config BR2_PACKAGE_AUTOFS
+ 
+ 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
+ 
+-comment "autofs needs a toolchain w/ NPTL and dynamic library"
++comment "autofs needs a glibc or uClibc toolchain w/ NPTL and dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAIN_USES_MUSL
+-- 
+2.16.1
