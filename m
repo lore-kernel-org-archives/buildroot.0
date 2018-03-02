@@ -1,47 +1,73 @@
-From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
-Date: Fri, 2 Mar 2018 09:33:13 -0500
-Subject: [Buildroot] [PATCH] configs/arcturus_ucls1012a: new defconfig
-In-Reply-To: <20180301224321.1b3ee3ef@windsurf.lan>
-References: <20180129230804.24157-1-oleks@arcturusnetworks.com>
- <3349d749-230a-60ef-c341-9a7e438bf921@arcturusnetworks.com>
- <20180301224321.1b3ee3ef@windsurf.lan>
-Message-ID: <eeba8403-9c6b-d94a-0f04-6b0607924fee@arcturusnetworks.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 2 Mar 2018 10:14:54 -0600
+Subject: [Buildroot] [NEXT 06/26] boa: add CPE id
+In-Reply-To: <20180302104933.39fbda31@windsurf.lan>
+References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1519697441-54194-7-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180227231718.090c22ef@windsurf.lan>
+ <CANQCQpbM3VHid2rGTFAA=HwkhsUfmHRbGw9EDtT2dPUWwQRDog@mail.gmail.com>
+ <20180228073827.312a9a6f@windsurf.home>
+ <3a17ac42-e24b-149d-30d3-654545e8c1eb@mind.be>
+ <CANQCQpbzWdfmXe-6dJuWzNM0S_DgVYDazFC2_ZsdbVnA3WHcEQ@mail.gmail.com>
+ <8245f0c5-94fc-a0b3-9710-8c0c779dcbdd@mind.be>
+ <20180302104933.39fbda31@windsurf.lan>
+Message-ID: <CANQCQpbB88cHGc6B1DF0b1cWVTBdhYeE0bHw80-+C9P0V1571Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you Thomas.
+All,
 
-On 03/01/2018 04:43 PM, Thomas Petazzoni wrote:
-> Hello Oleksandr,
+On Fri, Mar 2, 2018 at 3:49 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
 >
-> On Thu, 1 Mar 2018 14:19:18 -0500, Oleksandr G Zhadan wrote:
+> On Fri, 2 Mar 2018 09:19:25 +0100, Arnout Vandecappelle wrote:
 >
->> I am addressing these questions to you, because we where working
->> together to commit previous Arcturus BSP package to the buildroot.
->> Your help was very useful and it was done in relatively short period of
->> time.
+>>  Just to be clear about what you're saying here: in v3, you'll making it so that
+>> nothing has to be done explicitly in the package to get a CPE ID, but it may be
+>> (and probably will be) invalid? So that the initial report will contain a huge
+>> amount of invalid entries, and we can fix them one by one?
 >>
->> The questions:
->> I sent our new BSP support patches (see bellow)? month ago and no one
->> applied them or replied with any comments.
->> Is anything changed in patches submitting procedure ?
->> What is the usual and the longest wait time for patches to be committed ?
-> There is nothing wrong in how you submitted your patch. It's just that
-> we have a 250+ patches backlog. Yours is by far not the oldest: you can
-> check the list at http://patchwork.ozlabs.org/project/buildroot/list/.
-> I know it is not great to have so many patches waiting for so long, but
-> we are doing our best to review all those contributions.
+>>  I realize I'm contradicting myself, but that still leaves us with a problem (or
+>> rather, limitation). We have no way of keeping track of which packages have been
+>> checked and which haven't, so we have no way of keeping track of which ones are
+>> broken.
+>>
+>>  Or perhaps the pkg-stats script could eventually check the entry in the CPE
+>> database, and add a column to indicate that it's valid or not?
 >
-> Best regards,
+> Yes, that would be the idea.
 >
-> Thomas
+>> > The CPE list will be as accurate as people using it update the NIST
+>> > entries, either manually or as Buildroot nudges them to send an email.
+>> > The CVEs those CPEs will find is another complete story and most open
+>> > ways of searching for those don't concluded clean results without a
+>> > good amount of manual intervention.
+>>
+>>  Yes, I do realize that this is a kind of catch-22 situation, if nobody uses the
+>> database then obviously it will not be up-to-date. But to be honest, right now I
+>> don't even really understand what kind of information you can get from it even
+>> in the ideal case. That's why I asked to post an RFC script, so we can get some
+>> idea of what the end goal is (and ultimately, whether this is worth the effort).
+>
+> Yes, I agree. The current proposal that just adds CPE_ID to packages,
+> and has a mechanism to generate a CSV based on that isn't very useful
+> per-se. I would also like to see the tooling that processes those
+> CPE_ID to query the NIST database, and get some useful data out of it.
+>
+> Even if the data isn't great for the moment because the NIST database
+> is limited, it would show how the whole thing would be useful.
+>
+> Right now the patch series just adds some IDs and generates a CSV with
+> those IDs, which isn't terribly useful.
+>
 
+At this point, disregard my current patches and I'll resubmit in a
+week or so.  At that point, I'll include scripting and better set of
+patch descriptions which cover the dialogue in this email and the
+other thread.
 
--- 
-Oleksandr Zhadan
-Arcturus Networks
-T 416 621-0125 x235
-F 416 621-0190
+Matt
