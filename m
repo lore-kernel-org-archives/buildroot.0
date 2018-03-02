@@ -1,115 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Mar 2018 23:19:20 +0100
-Subject: [Buildroot] [git commit] 18xx-ti-utils: new package
-Message-ID: <20180305200720.1EBEB81012@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Mar 2018 22:22:32 +0100
+Subject: [Buildroot] [git commit] libepoxy: bump to version 1.5.0,
+ add license hash
+Message-ID: <20180305200720.750E181012@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8304e920cb9e1728aee9e69c28f029130c42a1d8
+commit: https://git.buildroot.net/buildroot/commit/?id=be7be667de6f01627839fdf8794e38220951ce58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These are spacial RF calibration utilities for TI Wilink 18xx
-modules.
+This release of Epoxy makes "0001-Forward-EGL-cflags-into-epoxy.pc.patch"
+unnecessary. Other than bugfixes and a couple of functions added to the
+API, this release is backwards-compatible with programs built against
+the 1.4.x releases.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/18xx-ti-utils/18xx-ti-utils.hash |  3 +++
- package/18xx-ti-utils/18xx-ti-utils.mk   | 30 ++++++++++++++++++++++++++++++
- package/18xx-ti-utils/Config.in          | 14 ++++++++++++++
- package/Config.in                        |  1 +
- 5 files changed, 49 insertions(+)
+ .../0001-Forward-EGL-cflags-into-epoxy.pc.patch    | 32 ----------------------
+ package/libepoxy/libepoxy.hash                     |  7 +++--
+ package/libepoxy/libepoxy.mk                       |  4 +--
+ 3 files changed, 7 insertions(+), 36 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e2b3901425..77b6df3cd3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -205,6 +205,7 @@ F:	package/pulseview/
- F:	package/sigrok-cli/
+diff --git a/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch b/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
+deleted file mode 100644
+index 286f875bc9..0000000000
+--- a/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 99b8373dbe8fb3bac835ebad90f91cfd213e4acb Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 15 Mar 2017 10:02:54 -0300
+-Subject: [PATCH] Forward EGL cflags into epoxy.pc
+-
+-When building mesa egl without x11 and gles2 the headers need a
+-MESA_EGL_NO_X11_HEADERS define to avoid including X11 headers.
+-Forward EGL CFLAGS into epoxy.pc to avoid build failures when linking
+-against libepoxy on this scenario.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Status: pull request https://github.com/anholt/libepoxy/pull/113
+-
+- epoxy.pc.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/epoxy.pc.in b/epoxy.pc.in
+-index 7828a77..8278b7d 100644
+---- a/epoxy.pc.in
+-+++ b/epoxy.pc.in
+-@@ -10,6 +10,6 @@ epoxy_has_wgl=@epoxy_has_wgl@
+- Name: epoxy
+- Description: epoxy GL dispatch Library
+- Version: @PACKAGE_VERSION@
+--Cflags: -I${includedir}
+-+Cflags: -I${includedir} @EGL_CFLAGS@
+- Libs: -L${libdir} -lepoxy
+- Libs.private: @DLOPEN_LIBS@
+--- 
+-2.10.2
+-
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index d7ebec5b5f..654d1675fd 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,2 +1,5 @@
+-# From ftp://ftp.gnome.org/pub/GNOME/sources/libepoxy/1.4/libepoxy-1.4.3.sha256sum
+-sha256 0b808a06c9685a62fca34b680abb8bc7fb2fda074478e329b063c1f872b826f6  libepoxy-1.4.3.tar.xz
++# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.0.sha256sum
++sha256 4c94995398a6ebf691600dda2e9685a0cac261414175c2adf4645cdfab42a5d5  libepoxy-1.5.0.tar.xz
++
++# Hashes for license files:
++sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index 366cc11367..b9498b17b4 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- N:	Baruch Siach <baruch@tkos.co.il>
-+F:	package/18xx-ti-utils/
- F:	package/daemon/
- F:	package/dropbear/
- F:	package/ebtables/
-diff --git a/package/18xx-ti-utils/18xx-ti-utils.hash b/package/18xx-ti-utils/18xx-ti-utils.hash
-new file mode 100644
-index 0000000000..faa23d0b3e
---- /dev/null
-+++ b/package/18xx-ti-utils/18xx-ti-utils.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 9ce2c7228dd0ac8d3cc530a32bb92b532bdbc5dfb6a405c245abee678d878697  18xx-ti-utils-R8.7_SP3.tar.gz
-+sha256 363cef40b276a7a91ebcff3f78626d9cfe5e5a51927c725236007259403d5fc4  COPYING
-diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
-new file mode 100644
-index 0000000000..d1f0388c3a
---- /dev/null
-+++ b/package/18xx-ti-utils/18xx-ti-utils.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# 18xx-ti-utils
-+#
-+################################################################################
-+
-+18XX_TI_UTILS_VERSION = R8.7_SP3
-+18XX_TI_UTILS_SITE = git://git.ti.com/wilink8-wlan/18xx-ti-utils
-+18XX_TI_UTILS_DEPENDENCIES = libnl
-+18XX_TI_UTILS_LICENSE = BSD-3-Clause
-+18XX_TI_UTILS_LICENSE_FILES = COPYING
-+
-+18XX_TI_UTILS_CFLAGS = -I$(STAGING_DIR)/usr/include/libnl3 -DCONFIG_LIBNL32
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+18XX_TI_UTILS_BUILD_TARGET = static
-+endif
-+
-+define 18XX_TI_UTILS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) CROSS_COMPILE=$(TARGET_CROSS) \
-+		NFSROOT="$(STAGING_DIR)" NLVER=3 $(MAKE) -C $(@D) \
-+		CFLAGS="$(TARGET_CFLAGS) $(18XX_TI_UTILS_CFLAGS)" \
-+		$(18XX_TI_UTILS_BUILD_TARGET)
-+endef
-+
-+define 18XX_TI_UTILS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/calibrator $(TARGET_DIR)/usr/bin/calibrator
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/18xx-ti-utils/Config.in b/package/18xx-ti-utils/Config.in
-new file mode 100644
-index 0000000000..571d196e09
---- /dev/null
-+++ b/package/18xx-ti-utils/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_18XX_TI_UTILS
-+	bool "18xx-ti-utils"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+	select BR2_PACKAGE_LIBNL
-+	help
-+	  TI Wilink calibration utilities.
-+
-+	  CONFIG_NL80211_TESTMODE must be enabled in the kernel
-+	  configuration for this package to work.
-+
-+	  http://processors.wiki.ti.com/index.php/WL18xx_TX_Testing
-+
-+comment "18xx-ti-utils needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/Config.in b/package/Config.in
-index 97317fdb5f..12d3d2bbff 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -375,6 +375,7 @@ menu "Firmware"
- 	source "package/wilink-bt-firmware/Config.in"
- 	source "package/zd1211-firmware/Config.in"
- endmenu
-+	source "package/18xx-ti-utils/Config.in"
- 	source "package/a10disp/Config.in"
- 	source "package/acpica/Config.in"
- 	source "package/acpid/Config.in"
+-LIBEPOXY_VERSION_MAJOR = 1.4
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).3
++LIBEPOXY_VERSION_MAJOR = 1.5
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).0
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
