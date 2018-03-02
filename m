@@ -1,45 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Mar 2018 07:59:27 +0100
-Subject: [Buildroot] [git commit] dash: fix static link with libedit
-Message-ID: <20180302073757.26EFF802D2@busybox.osuosl.org>
+Date: Fri, 02 Mar 2018 08:39:36 +0100
+Subject: [Buildroot] [PATCH next] autofs: disable for musl
+In-Reply-To: <d54d651ab276a4ae248de1c302788d3960103ff8.1519965634.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 2 Mar 2018 06:40:34 +0200")
+References: <d54d651ab276a4ae248de1c302788d3960103ff8.1519965634.git.baruch@tkos.co.il>
+Message-ID: <874llzdiyv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3f24ac341d07f62f51d9951acdb7eac896d57a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-libedit is an optional dependency of dash since commit 651af57cf011e
-(dash: enable line editting if libedit is selected). Unfortunately, the
-dash build system does not take into account the ncurses dependency of
-libedit. Use pkgconf to get that right.
+ > autofs requires nsswitch which musl libc does not implement. Commit
+ > 873040371b14 (autofs: allow to use libtirpc) removed the
+ > BR2_TOOLCHAIN_HAS_NATIVE_RPC dependency, making autofs available for
+ > musl. Disable musl explicitly.
 
-Fixes:
-http://autobuild.buildroot.net/results/801/801e8bc06277978556a301ddf54f609169de37bb/
-http://autobuild.buildroot.net/results/123/12367267735b9165afef77289460c247aaad494a/
-http://autobuild.buildroot.net/results/aa7/aa7cc7315d778c15c5165ca6423257a84b957482/
+ > Fixes:
+ > http://autobuild.buildroot.net/results/a54/a549b62fbf03474ffd8586869637d083de275091/
+ > http://autobuild.buildroot.net/results/b32/b3276b2cbd1e1c260f8df4c3945f51ddc09d492f/
+ > http://autobuild.buildroot.net/results/10b/10b5c5b13971214d0439b715f1a46c78a5249309/
 
-Cc: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dash/dash.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Cc: Waldemar Brodkorb <wbx@openadk.org>
+ > Cc: Jonathan Ben Avraham <yba@tkos.co.il>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 87c9cc9f8b..2ee292b8d3 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -10,8 +10,9 @@ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
- DASH_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_LIBEDIT),y)
--DASH_DEPENDENCIES += libedit
-+DASH_DEPENDENCIES += libedit host-pkgconf
- DASH_CONF_OPTS += --with-libedit
-+DASH_CONF_ENV += LIBS=`pkg-config --libs libedit`
- 
- # Enable line editing, Emacs style
- define DASH_INSTALL_PROFILE
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
