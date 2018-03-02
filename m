@@ -1,91 +1,68 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri,  2 Mar 2018 15:04:28 +0200
-Subject: [Buildroot] [PATCH/next 1/1] libepoxy: bump to version 1.5.0,
- add license hash
-Message-ID: <20180302130428.92132-1-aperez@igalia.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Mar 2018 14:23:01 +0100
+Subject: [Buildroot] [PATCH v2 1/1] qt5webkit: fix build issue with
+ 32-bits armv8-a
+In-Reply-To: <20180302115853.4181-1-gael.portay@savoirfairelinux.com>
+References: <20180302115853.4181-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180302142301.513bb769@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release of Epoxy makes "0001-Forward-EGL-cflags-into-epoxy.pc.patch"
-unnecessary. Other than bugfixes and a couple of functions added to the
-API, this release is backwards-compatible with programs built against
-the 1.4.x releases.
+Hello,
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- .../0001-Forward-EGL-cflags-into-epoxy.pc.patch    | 32 ----------------------
- package/libepoxy/libepoxy.hash                     |  7 +++--
- package/libepoxy/libepoxy.mk                       |  4 +--
- 3 files changed, 7 insertions(+), 36 deletions(-)
- delete mode 100644 package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
+On Fri,  2 Mar 2018 06:58:53 -0500, Ga?l PORTAY wrote:
+> Adds WTF platform support for the 32-bits armv8-a architectures.
+> 
+> Fixes:
+> 
+> 	In file included from ./config.h:30:0,
+> 	                 from ...
+> 	./wtf/Platform.h:323:6: error: #error "Not supported ARM
+> architecture"
+> 	 #    error "Not supported ARM architecture"
+> 	      ^~~~~
+> 
+> The patch is an adaptation of an upstream fix in version 5.212 of
+> qtwebkit[1].
+> 
+> Unfortunately, the commit cannot be backported and has to be fixed since
+> the toolchain does not define __ARM_ARCH_8__ but __ARM_ARCH_8A__.
 
-diff --git a/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch b/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
-deleted file mode 100644
-index 286f875bc9..0000000000
---- a/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 99b8373dbe8fb3bac835ebad90f91cfd213e4acb Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Wed, 15 Mar 2017 10:02:54 -0300
--Subject: [PATCH] Forward EGL cflags into epoxy.pc
--
--When building mesa egl without x11 and gles2 the headers need a
--MESA_EGL_NO_X11_HEADERS define to avoid including X11 headers.
--Forward EGL CFLAGS into epoxy.pc to avoid build failures when linking
--against libepoxy on this scenario.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Status: pull request https://github.com/anholt/libepoxy/pull/113
--
-- epoxy.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/epoxy.pc.in b/epoxy.pc.in
--index 7828a77..8278b7d 100644
----- a/epoxy.pc.in
--+++ b/epoxy.pc.in
--@@ -10,6 +10,6 @@ epoxy_has_wgl=@epoxy_has_wgl@
-- Name: epoxy
-- Description: epoxy GL dispatch Library
-- Version: @PACKAGE_VERSION@
---Cflags: -I${includedir}
--+Cflags: -I${includedir} @EGL_CFLAGS@
-- Libs: -L${libdir} -lepoxy
-- Libs.private: @DLOPEN_LIBS@
---- 
--2.10.2
--
-diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
-index d7ebec5b5f..654d1675fd 100644
---- a/package/libepoxy/libepoxy.hash
-+++ b/package/libepoxy/libepoxy.hash
-@@ -1,2 +1,5 @@
--# From ftp://ftp.gnome.org/pub/GNOME/sources/libepoxy/1.4/libepoxy-1.4.3.sha256sum
--sha256 0b808a06c9685a62fca34b680abb8bc7fb2fda074478e329b063c1f872b826f6  libepoxy-1.4.3.tar.xz
-+# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.0.sha256sum
-+sha256 4c94995398a6ebf691600dda2e9685a0cac261414175c2adf4645cdfab42a5d5  libepoxy-1.5.0.tar.xz
-+
-+# Hashes for license files:
-+sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
-diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
-index 366cc11367..b9498b17b4 100644
---- a/package/libepoxy/libepoxy.mk
-+++ b/package/libepoxy/libepoxy.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBEPOXY_VERSION_MAJOR = 1.4
--LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).3
-+LIBEPOXY_VERSION_MAJOR = 1.5
-+LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).0
- LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
- LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
- LIBEPOXY_INSTALL_STAGING = YES
+Do you know why we have this difference between __ARM_ARCH_8__ and
+__ARM_ARCH_8A__ ?
+
+
+> diff --git a/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
+> new file mode 100644
+> index 0000000000..1cb655c078
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
+> @@ -0,0 +1,48 @@
+> +From 068bf2d2d91382ea0d8ec24a142a30ea429704db Mon Sep 17 00:00:00 2001
+> +From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+> +Date: Tue, 15 Aug 2017 18:28:49 -0400
+> +Subject: [PATCH 1/1] Detect 32-bits armv8-a architecture
+
+Nit: generate your patch with "git format-patch -N" to get rid of the
+"1/1" in [PATCH 1/1]. Indeed, this patch is the fifth patch in the
+series :)
+
+> +Upstream-Status: Inappropriate
+
+This is not really correct: your patch is a backport from upstream,
+with adaptations.
+
+> +Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+
+(Both comments also apply to the 5.9.3 patch, of course).
+
+Thanks!
+
+Thomas
 -- 
-2.16.2
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
