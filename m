@@ -1,76 +1,47 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Fri,  2 Mar 2018 17:16:04 +0300
-Subject: [Buildroot] [PATCH] package/python-numpy: fix fenv build failure on
- ARCv2 with glibc
-Message-ID: <20180302141604.42489-1-Evgeniy.Didin@synopsys.com>
+From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
+Date: Fri, 2 Mar 2018 09:33:13 -0500
+Subject: [Buildroot] [PATCH] configs/arcturus_ucls1012a: new defconfig
+In-Reply-To: <20180301224321.1b3ee3ef@windsurf.lan>
+References: <20180129230804.24157-1-oleks@arcturusnetworks.com>
+ <3349d749-230a-60ef-c341-9a7e438bf921@arcturusnetworks.com>
+ <20180301224321.1b3ee3ef@windsurf.lan>
+Message-ID: <eeba8403-9c6b-d94a-0f04-6b0607924fee@arcturusnetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building python-numpy on ARC HS with glibc fails due to missing FE_*
-definitions in <fenv.h>. There exceptions are not supported by
-ARCv2 architecture.
-Let's add patch, which disables compilation of a part of the
-code in which FE_* errors occur for ARC.
+Thank you Thomas.
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
----
- .../0003-no-FPU-exceptions-bits-on-ARC-glibc.patch | 28 ++++++++++++++++++++++
- package/python-numpy/Config.in                     |  2 +-
- 2 files changed, 29 insertions(+), 1 deletion(-)
- create mode 100644 package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
+On 03/01/2018 04:43 PM, Thomas Petazzoni wrote:
+> Hello Oleksandr,
+>
+> On Thu, 1 Mar 2018 14:19:18 -0500, Oleksandr G Zhadan wrote:
+>
+>> I am addressing these questions to you, because we where working
+>> together to commit previous Arcturus BSP package to the buildroot.
+>> Your help was very useful and it was done in relatively short period of
+>> time.
+>>
+>> The questions:
+>> I sent our new BSP support patches (see bellow)? month ago and no one
+>> applied them or replied with any comments.
+>> Is anything changed in patches submitting procedure ?
+>> What is the usual and the longest wait time for patches to be committed ?
+> There is nothing wrong in how you submitted your patch. It's just that
+> we have a 250+ patches backlog. Yours is by far not the oldest: you can
+> check the list at http://patchwork.ozlabs.org/project/buildroot/list/.
+> I know it is not great to have so many patches waiting for so long, but
+> we are doing our best to review all those contributions.
+>
+> Best regards,
+>
+> Thomas
 
-diff --git a/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch b/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
-new file mode 100644
-index 0000000000..8347b96931
---- /dev/null
-+++ b/package/python-numpy/0003-no-FPU-exceptions-bits-on-ARC-glibc.patch
-@@ -0,0 +1,28 @@
-+From 0a667a5b31ca8a3ebc31f96b919e7e11d3bde856 Mon Sep 17 00:00:00 2001
-+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-+Date: Tue, 6 Feb 2018 15:59:22 +0300
-+Subject: [PATCH] FIX: no FPU exceptions bits on ARC glibc
-+
-+The FPU exceptions bits are missing in fenv.h in glibc for ARC architecture.
-+
-+Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-+---
-+ numpy/core/src/npymath/ieee754.c.src | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/numpy/core/src/npymath/ieee754.c.src b/numpy/core/src/npymath/ieee754.c.src
-+index e63e409b6..944b2ea7c 100644
-+--- a/numpy/core/src/npymath/ieee754.c.src
-++++ b/numpy/core/src/npymath/ieee754.c.src
-+@@ -612,7 +612,7 @@ void npy_set_floatstatus_invalid(void)
-+ }
-+ 
-+ 
-+-#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
-++#elif (defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(__arc__)) || defined(__APPLE__) || \
-+       defined(__CYGWIN__) || defined(__MINGW32__) || \
-+       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-+ #  include <fenv.h>
-+-- 
-+2.11.0
-+
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index 067085bf41..a1f31ef688 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	# Numpy has some CPU specific code
- 	# ARCompact build fails due to toolchain issue
- 	# ARC HS38 build fails on glibc due to missing FE_* definitions
--	default y if BR2_arc && BR2_archs38 && !BR2_TOOLCHAIN_USES_GLIBC
-+	default y if BR2_arc
- 	default y if BR2_aarch64
- 	default y if BR2_arm
- 	default y if BR2_armeb
+
 -- 
-2.11.0
+Oleksandr Zhadan
+Arcturus Networks
+T 416 621-0125 x235
+F 416 621-0190
