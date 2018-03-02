@@ -1,55 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Mar 2018 22:45:35 +0100
-Subject: [Buildroot] [PATCH v4] systemd: switch to en_US.UTF-8 locale
- when building
-In-Reply-To: <20180222230055.25455-1-julius@kriukas.lt>
-References: <20180212213400.15061-1-julius@kriukas.lt>
- <20180222230055.25455-1-julius@kriukas.lt>
-Message-ID: <20180302224535.38c7ccd9@windsurf.home>
+Date: Fri, 2 Mar 2018 22:46:33 +0100
+Subject: [Buildroot] [git commit] package/efl: add missing licenses
+Message-ID: <20180302214648.23C49815BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7df3014d84ff4b4d588e2857ee62a4bc0b3707d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 23 Feb 2018 01:00:55 +0200, Julius Kriukas wrote:
-> When BR2_REPRODUCIBLE is enabled or host uses non UTF-8 capable locale
-> building systemd fails with an error:
-> 
-> [1/1080] Generating systemd.bg.catalog with a meson_exe.py custom command.
-> FAILED: catalog/systemd.bg.catalog
-> /buildroot/output/host/bin/python3 /buildroot/output/host/bin/meson --internal exe /buildroot/output/build/systemd-236/build/meson-private/meson_exe_sed_232a0623cc7ce2cd67ec72ed784b76307102ed76.dat
-> Warning: You are using 'ANSI_X3.4-1968' which is not a Unicode-compatible locale.
-> You might see errors if you use UTF-8 strings as filenames, as strings, or as file contents.
-> Please switch to a UTF-8 locale for your platform.
-> ...
-> UnicodeDecodeError: 'ascii' codec can't decode byte 0xd0 in position 1079: ordinal not in range(128)
-> package/pkg-generic.mk:247: recipe for target '/buildroot/output/build/systemd-236/.stamp_built' failed
-> make: *** [/buildroot/output/build/systemd-236/.stamp_built] Error 1
-> 
-> This patch changes default host system locale from C to en_US.UTF-8 when
-> building systemd package to fix this issue. It also introduces
-> BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that checks if this locale is available on
-> the host system. If locale is not available error message is show and build
-> process is stopped.
-> 
-> Signed-off-by: Julius Kriukas <julius@kriukas.lt>
-> 
-> ---
-> Changes v1 -> v2:
->   - Added BR2_NEEDS_HOST_EN_US_UTF8_LOCALE flag that is selected by
->     BR2_REPRODUCIBLE.
->   - Extended support/dependencies/dependencies.sh to check for
->     en_US.UTF-8 locale availability if BR2_NEEDS_HOST_EN_US_UTF8_LOCALE
->     is set.
+ecore_con added with efl 1.17 is under MIT license (COPYING.NGINX-MIT)
+ector added with efl 1.15 is under FTL license (COPYING.FTL)
 
-I've changed to use C.UTF-8 instead of en_US.UTF-8 and applied to
-master. Thanks!
+While at it, add license file hash.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/efl/efl.hash | 8 ++++++++
+ package/efl/efl.mk   | 3 ++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 8b0543007e..5507bda3ef 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,10 @@
+ # From https://download.enlightenment.org/rel/libs/efl/efl-1.20.6.tar.xz.sha256
+ sha256	56c67ea77435753a4f324a0a13488ba58f4ed7eb35a97c1a354fdc79c39a32c1	efl-1.20.6.tar.xz
++sha256 d949e42ca8fd48d275c397c5fc2ac34c9b63ada715dcaf1a670e17bb62964341  COMPLIANCE
++sha256 1f0597d326e2fdb54aa2f0caec6d8bb0afb9941ef32475f017ed02ca214fcf37  COPYING
++sha256 781ee841d15835b393bfe7d4c6497dc1b05217479abd40daceaf7aa102a758e1  licenses/COPYING.BSD
++sha256 e60d07dfb2c5264f9f405fa52bf0d4f85429dd9ae1bc2ffcff8af1924ef720d1  licenses/COPYING.FTL
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licenses/COPYING.GPL
++sha256 89f79ccd2c35ba220ddeba70ee36ca867226c41fc210bc5e7f1e9032c5b16d5f  licenses/COPYING.LGPL
++sha256 2996a1c43ee757f9c997a829d82bdd584052323e73cf02ff8126c6fbd95c2d87  licenses/COPYING.NGINX-MIT
++sha256 48f124212f8fc024392a2d1d011fbb96c7ab8f89c0b72c671c33e9e1cb1d0790  licenses/COPYING.SMALL
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 5a82479ff5..7085796756 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -7,7 +7,7 @@
+ EFL_VERSION = 1.20.6
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+-EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+
++EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
+ EFL_LICENSE_FILES = \
+ 	COMPLIANCE \
+ 	COPYING \
+@@ -15,6 +15,7 @@ EFL_LICENSE_FILES = \
+ 	licenses/COPYING.FTL \
+ 	licenses/COPYING.GPL \
+ 	licenses/COPYING.LGPL \
++	licenses/COPYING.NGINX-MIT \
+ 	licenses/COPYING.SMALL
+ 
+ EFL_INSTALL_STAGING = YES
