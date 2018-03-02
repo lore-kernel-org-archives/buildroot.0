@@ -1,35 +1,43 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Fri, 2 Mar 2018 00:11:59 +0000
-Subject: [Buildroot] [PATCH] uboot: ensure host includes are searched
- before system default includes
-In-Reply-To: <20180301205429.4191-1-peter@korsgaard.com>
-References: <20180301205429.4191-1-peter@korsgaard.com>
-Message-ID: <1519949518.25567.274.camel@impinj.com>
+From: scsijon <scsijon@lamiaworks.com.au>
+Date: Fri, 2 Mar 2018 12:21:23 +1100
+Subject: [Buildroot] SSD Kernel PCIe NVME Drivers?
+Message-ID: <2095f39f-c9b0-f758-90c1-b89f057b786d@lamiaworks.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2018-03-01 at 21:54 +0100, Peter Korsgaard wrote:
-> Commit baae5156ce37e (uboot: use local fdt headers) changed the uboot logic
-> to pass the host include directories with -idirafter instead of -I, so
-> include files local to u-boot would be preferred over host includes.
-> 
-> This unfortunately breaks configurations using
-> BR2_TARGET_UBOOT_NEEDS_OPENSSL on hosts with incompatible openssl headers
-> installed in the system default include directories as explained here:
-> 
-> http://lists.busybox.net/pipermail/buildroot/2018-March/214651.html
-> 
-> The problem is that -idirafter directories gets added to the very end of the
-> search order, AFTER the system default directories.
-> 
-> Instead use -isystem which causes the directories to be added after -I but
-> before the system default directories.  With this in place, the include
-> directories of u-boot will first be scanned, followed by the host includes
-> and finally the system default include directories.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This is a copy of what I submitted for Puppy Linux and a few other 
+"Linux's" I interact with. Since you are up to a RC I though i'd best 
+check out buildroot. However I can't find anything for it in any of the 
+linux kernel config files, so I thought I need to let you know to add 
+it, especially as quite a lot of the mainstream laptops with 
+touchscreens are either already using it or making it available as an 
+option now.
 
-Acked-by: Trent Piepho <tpiepho@impinj.com>
+The background doccument is a bit out of date, but for once it was 
+written in a manner that most people are able to understand. :-)}
+
+regards
+scsijon
+
+-------------------------------------
+After doing some research I came across the fix for the NVME ssd 
+problem. It's apparently a setting in the kernel, can you add it into 
+your default set please as more and more notebooks are now using them.
+
+Basically it's:-
+Confirm that the NVMe Driver under Block is set to <M>
+Go to Device Drivers -> Block Devices - > NVM Express block device
+:and of course a driver is built.
+
+There is also opensource test programs at:-
+https://github.com/linux-nvme/nvme-cli
+
+Full doc is:-
+https://www.intel.com/content/dam/support/us/en/documents/ssdc/data-center-ssds/Intel_Linux_NVMe_Guide_330602-002.pdf
+
+NVME Background worth reading can be found at:-
+https://www.pcworld.com/article/2899351/everything-you-need-to-know-about-nvme.html
+-----------------------------------------------------
