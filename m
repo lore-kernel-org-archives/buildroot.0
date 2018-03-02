@@ -1,73 +1,94 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 2 Mar 2018 10:14:54 -0600
-Subject: [Buildroot] [NEXT 06/26] boa: add CPE id
-In-Reply-To: <20180302104933.39fbda31@windsurf.lan>
-References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1519697441-54194-7-git-send-email-matthew.weber@rockwellcollins.com>
- <20180227231718.090c22ef@windsurf.lan>
- <CANQCQpbM3VHid2rGTFAA=HwkhsUfmHRbGw9EDtT2dPUWwQRDog@mail.gmail.com>
- <20180228073827.312a9a6f@windsurf.home>
- <3a17ac42-e24b-149d-30d3-654545e8c1eb@mind.be>
- <CANQCQpbzWdfmXe-6dJuWzNM0S_DgVYDazFC2_ZsdbVnA3WHcEQ@mail.gmail.com>
- <8245f0c5-94fc-a0b3-9710-8c0c779dcbdd@mind.be>
- <20180302104933.39fbda31@windsurf.lan>
-Message-ID: <CANQCQpbB88cHGc6B1DF0b1cWVTBdhYeE0bHw80-+C9P0V1571Q@mail.gmail.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Fri, 2 Mar 2018 11:16:24 -0500
+Subject: [Buildroot] [PATCH v2 1/1] qt5webkit: fix build issue with
+ 32-bits armv8-a
+In-Reply-To: <20180302142301.513bb769@windsurf.lan>
+References: <20180302115853.4181-1-gael.portay@savoirfairelinux.com>
+ <20180302142301.513bb769@windsurf.lan>
+Message-ID: <20180302161624.bc5u3pib3pfqdc77@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Thomas,
 
-On Fri, Mar 2, 2018 at 3:49 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+On Fri, Mar 02, 2018 at 02:23:01PM +0100, Thomas Petazzoni wrote:
 > Hello,
->
-> On Fri, 2 Mar 2018 09:19:25 +0100, Arnout Vandecappelle wrote:
->
->>  Just to be clear about what you're saying here: in v3, you'll making it so that
->> nothing has to be done explicitly in the package to get a CPE ID, but it may be
->> (and probably will be) invalid? So that the initial report will contain a huge
->> amount of invalid entries, and we can fix them one by one?
->>
->>  I realize I'm contradicting myself, but that still leaves us with a problem (or
->> rather, limitation). We have no way of keeping track of which packages have been
->> checked and which haven't, so we have no way of keeping track of which ones are
->> broken.
->>
->>  Or perhaps the pkg-stats script could eventually check the entry in the CPE
->> database, and add a column to indicate that it's valid or not?
->
-> Yes, that would be the idea.
->
->> > The CPE list will be as accurate as people using it update the NIST
->> > entries, either manually or as Buildroot nudges them to send an email.
->> > The CVEs those CPEs will find is another complete story and most open
->> > ways of searching for those don't concluded clean results without a
->> > good amount of manual intervention.
->>
->>  Yes, I do realize that this is a kind of catch-22 situation, if nobody uses the
->> database then obviously it will not be up-to-date. But to be honest, right now I
->> don't even really understand what kind of information you can get from it even
->> in the ideal case. That's why I asked to post an RFC script, so we can get some
->> idea of what the end goal is (and ultimately, whether this is worth the effort).
->
-> Yes, I agree. The current proposal that just adds CPE_ID to packages,
-> and has a mechanism to generate a CSV based on that isn't very useful
-> per-se. I would also like to see the tooling that processes those
-> CPE_ID to query the NIST database, and get some useful data out of it.
->
-> Even if the data isn't great for the moment because the NIST database
-> is limited, it would show how the whole thing would be useful.
->
-> Right now the patch series just adds some IDs and generates a CSV with
-> those IDs, which isn't terribly useful.
+> 
+> On Fri,  2 Mar 2018 06:58:53 -0500, Ga?l PORTAY wrote:
+> > Adds WTF platform support for the 32-bits armv8-a architectures.
+> > 
+> > Fixes:
+> > 
+> > 	In file included from ./config.h:30:0,
+> > 	                 from ...
+> > 	./wtf/Platform.h:323:6: error: #error "Not supported ARM
+> > architecture"
+> > 	 #    error "Not supported ARM architecture"
+> > 	      ^~~~~
+> > 
+> > The patch is an adaptation of an upstream fix in version 5.212 of
+> > qtwebkit[1].
+> > 
+> > Unfortunately, the commit cannot be backported and has to be fixed since
+> > the toolchain does not define __ARM_ARCH_8__ but __ARM_ARCH_8A__.
+> 
+> Do you know why we have this difference between __ARM_ARCH_8__ and
+> __ARM_ARCH_8A__ ?
+> 
+
+Honestly I don't.
+
+I think that the __ARM_ARCH_8__ is never defined and probably does not
+exist (at least with gcc). But I may be wrong.
+
+I tried to all the armv8 -mcpu option with gcc and I never had
+__ARM_ARCH_8__ defined.
+
+> 
+> > diff --git a/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
+> > new file mode 100644
+> > index 0000000000..1cb655c078
+> > --- /dev/null
+> > +++ b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
+> > @@ -0,0 +1,48 @@
+> > +From 068bf2d2d91382ea0d8ec24a142a30ea429704db Mon Sep 17 00:00:00 2001
+> > +From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+> > +Date: Tue, 15 Aug 2017 18:28:49 -0400
+> > +Subject: [PATCH 1/1] Detect 32-bits armv8-a architecture
+> 
+> Nit: generate your patch with "git format-patch -N" to get rid of the
+> "1/1" in [PATCH 1/1]. Indeed, this patch is the fifth patch in the
+> series :)
+> 
+
+Fixed for v3.
+
+> > +Upstream-Status: Inappropriate
+> 
+> This is not really correct: your patch is a backport from upstream,
+> with adaptations.
 >
 
-At this point, disregard my current patches and I'll resubmit in a
-week or so.  At that point, I'll include scripting and better set of
-patch descriptions which cover the dialogue in this email and the
-other thread.
+Well, okay.
 
-Matt
+> > +Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> 
+> (Both comments also apply to the 5.9.3 patch, of course).
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+Gael
