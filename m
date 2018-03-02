@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Mar 2018 14:23:01 +0100
-Subject: [Buildroot] [PATCH v2 1/1] qt5webkit: fix build issue with
- 32-bits armv8-a
-In-Reply-To: <20180302115853.4181-1-gael.portay@savoirfairelinux.com>
-References: <20180302115853.4181-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180302142301.513bb769@windsurf.lan>
+Date: Fri, 2 Mar 2018 14:27:14 +0100
+Subject: [Buildroot] [PATCH] mono: only available for x86/x86-64 host
+ architectures
+In-Reply-To: <20180302074929.21404-1-peter@korsgaard.com>
+References: <20180302074929.21404-1-peter@korsgaard.com>
+Message-ID: <20180302142714.564bb9c7@windsurf.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  2 Mar 2018 06:58:53 -0500, Ga?l PORTAY wrote:
-> Adds WTF platform support for the 32-bits armv8-a architectures.
-> 
+On Fri,  2 Mar 2018 08:49:29 +0100, Peter Korsgaard wrote:
 > Fixes:
 > 
-> 	In file included from ./config.h:30:0,
-> 	                 from ...
-> 	./wtf/Platform.h:323:6: error: #error "Not supported ARM
-> architecture"
-> 	 #    error "Not supported ARM architecture"
-> 	      ^~~~~
+> http://autobuild.buildroot.net/results/3cab7b54390feb5f952407f1e7fa49b9633a5f76/
+> http://autobuild.buildroot.net/results/ad9fc1f8a598d2c1ee7e6f8884f897f7b8bbb657/
 > 
-> The patch is an adaptation of an upstream fix in version 5.212 of
-> qtwebkit[1].
+> And many others.
 > 
-> Unfortunately, the commit cannot be backported and has to be fixed since
-> the toolchain does not define __ARM_ARCH_8__ but __ARM_ARCH_8A__.
+> Mono needs host-mono, which fails to build on the ppc64le autobuilder.
+> There is unlikely to be any real use cases of people building mono on !x86,
+> so only make it available on x86/x86-64 hosts, similar to how it was
+> recently done for erlang.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Do you know why we have this difference between __ARM_ARCH_8__ and
-__ARM_ARCH_8A__ ?
-
-
-> diff --git a/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
-> new file mode 100644
-> index 0000000000..1cb655c078
-> --- /dev/null
-> +++ b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
-> @@ -0,0 +1,48 @@
-> +From 068bf2d2d91382ea0d8ec24a142a30ea429704db Mon Sep 17 00:00:00 2001
-> +From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-> +Date: Tue, 15 Aug 2017 18:28:49 -0400
-> +Subject: [PATCH 1/1] Detect 32-bits armv8-a architecture
-
-Nit: generate your patch with "git format-patch -N" to get rid of the
-"1/1" in [PATCH 1/1]. Indeed, this patch is the fifth patch in the
-series :)
-
-> +Upstream-Status: Inappropriate
-
-This is not really correct: your patch is a backport from upstream,
-with adaptations.
-
-> +Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-
-(Both comments also apply to the 5.9.3 patch, of course).
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Thanks!
 
