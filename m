@@ -1,101 +1,107 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 2 Mar 2018 09:19:25 +0100
-Subject: [Buildroot] [NEXT 06/26] boa: add CPE id
-In-Reply-To: <CANQCQpbzWdfmXe-6dJuWzNM0S_DgVYDazFC2_ZsdbVnA3WHcEQ@mail.gmail.com>
-References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1519697441-54194-7-git-send-email-matthew.weber@rockwellcollins.com>
- <20180227231718.090c22ef@windsurf.lan>
- <CANQCQpbM3VHid2rGTFAA=HwkhsUfmHRbGw9EDtT2dPUWwQRDog@mail.gmail.com>
- <20180228073827.312a9a6f@windsurf.home>
- <3a17ac42-e24b-149d-30d3-654545e8c1eb@mind.be>
- <CANQCQpbzWdfmXe-6dJuWzNM0S_DgVYDazFC2_ZsdbVnA3WHcEQ@mail.gmail.com>
-Message-ID: <8245f0c5-94fc-a0b3-9710-8c0c779dcbdd@mind.be>
+Date: Fri, 2 Mar 2018 09:38:00 +0100
+Subject: [Buildroot] [PATCH 1/1] czmq: bump to version v4.1.0
+In-Reply-To: <CALFsTFWDLH5gJuPRLtYEqV8fJSs0Rt9mMg4BpMFmKSJp-Nvjow@mail.gmail.com>
+References: <20180224164305.6133-1-asafka7@gmail.com>
+ <d43c54d6-2c1b-c2fb-06ee-e396490fbb69@mind.be>
+ <CALFsTFWDLH5gJuPRLtYEqV8fJSs0Rt9mMg4BpMFmKSJp-Nvjow@mail.gmail.com>
+Message-ID: <61e3571e-d247-7c16-a80c-59317228247f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Asaf,
 
+On 26-02-18 20:20, Asaf Kahlon wrote:
+> Hi Arnout, thanks for the productive comments.
+> I fixed all, but didn't change CZMQ_AUTORECONF because it seems all the
+> autotools-related files were generated and expect autotools version of 1.14 and
+> can't be compiled with 1.15.
 
-On 01-03-18 23:55, Matthew Weber wrote:
-> Arnout,
+ This statement doesn't make sense to me. But I understand why it is needed, see
+below.
+
+> I uploaded a new patch here. Tell me if there's something else you want to change.
+
+ Thank you for that. However, you should still submit it as a proper patch in a
+separate e-mail, using git send-email (not just pasting it in a mail). If you
+send it like this, it gets incorrectly line-wrapped and can't be applied.
+
+> Signed-off-by: Asaf Kahlon <asafka7 at gmail.com <mailto:asafka7@gmail.com>>
+
+ If you want to keep me in Cc of new versions, you can add here a line:
+
+Cc: Arnout Vandecappelle <arnout@mind.be>
+
+and git send-email will also send it to me directly.
+
+> ---
+
+ The additional remarks (i.e. "I fixed all comments, but didn't change...") you
+can put directly in the git commit message, here, below the --- line. That way,
+they will be in the mail but will not be included in the final git history.
+
+> ?package/czmq/czmq.hash |? 6 +++++-
+> ?package/czmq/czmq.mk <http://czmq.mk>? ?| 10 ++--------
+> ?2 files changed, 7 insertions(+), 9 deletions(-)
 > 
-> On Thu, Mar 1, 2018 at 2:47 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[snip]
->> Indeed, when someone bumps a package, will they have to verify if the
->> new CPE ID is still valid? If it isn't, what should be done? Report to NIST, of
->> course, but while the database isn't updated, should we just remove the CPE_ID
->> or what?
-> 
-> We did walk this discussion a bit a developer day.  I think the
-> feeling was we document the process of suggesting a update to NIST.
-> We may catch that the version bump doesn't have a CPE before merge but
-> if we don't, we have a nightly/weekly script which runs to check
-> current buildroot CPEs vs their pkg versions for validity.  Then send
-> an email to the DEVELOPERS asking them to submit the update to NIST
-> (we can have the templated for them to just cut/paste/send).  There
-> will be gaps between when a version bumps and the CPE is invalid, that
-> should be ok.  We could make it a goal to have the LTS/releases all
-> have valid CPEs before they go out (pks-stats helping us).
-> 
-> So in retrospect (even against my v2), I'd argue we should just report
-> everything as the script we'll propose soon with find the CPEs without
-> a NIST entry and we can choose to email the DEVELOPER or catch that as
-> part of a pkg-stats like activity.
+> diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
+> index 526ea594b9..c0a7176f8d 100644
+> --- a/package/czmq/czmq.hash
+> +++ b/package/czmq/czmq.hash
+> @@ -1,2 +1,6 @@
+> +# From https://github.com/zeromq/czmq/releases
+> +md5 d29baef1079f19a2c6a360eb6be984f8 czmq-4.1.0.tar.gz
+> +sha1 1d201a87205811367f7c92cbbd36a899edda68bf czmq-4.1.0.tar.gz
+> ?# Locally calculated
+> -sha256 5c76de41f736f0c059e0b26174ef99200f2aba2fa38333683dbe4944b2f80555
+> czmq-5205ec201e97c3a652c17eb86b18b70350b54512.tar.gz
+> +sha256 3befa35b4886b5298e8329b4f0aa5bb9bde0e7439bd3c5c53295cb988371fc11
+> czmq-4.1.0.tar.gz
+> +sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5 LICENCE
+> diff --git a/package/czmq/czmq.mk <http://czmq.mk> b/package/czmq/czmq.mk
+> <http://czmq.mk>
+> index 5305789d7a..3c07845d9c 100644
+> --- a/package/czmq/czmq.mk <http://czmq.mk>
+> +++ b/package/czmq/czmq.mk <http://czmq.mk>
+> @@ -4,8 +4,8 @@
+> ?#
+> ?################################################################################
+> ?
+> -CZMQ_VERSION = 5205ec201e97c3a652c17eb86b18b70350b54512
+> -CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
+> +CZMQ_VERSION = 4.1.0
+> +CZMQ_SITE = https://github.com/zeromq/czmq/releases/download/v$(CZMQ_VERSION)
+> ?
+> ?# Autoreconf required as we use the git tree
 
- Just to be clear about what you're saying here: in v3, you'll making it so that
-nothing has to be done explicitly in the package to get a CPE ID, but it may be
-(and probably will be) invalid? So that the initial report will contain a huge
-amount of invalid entries, and we can fix them one by one?
+ If autoreconf really is required, then this comment has to change, since now we
+are no longer using the git tree but we're using a tarball that does contain the
+configure script. However, now I see why it is needed. So change this comment into:
 
- I realize I'm contradicting myself, but that still leaves us with a problem (or
-rather, limitation). We have no way of keeping track of which packages have been
-checked and which haven't, so we have no way of keeping track of which ones are
-broken.
+# 0001-configure.ac-remove-Werror.patch touches configure.ac
 
- Or perhaps the pkg-stats script could eventually check the entry in the CPE
-database, and add a column to indicate that it's valid or not?
-
-
->>  To help a bit with deciding on this, it could be nice if you could add an RFC
->> patch with a script that takes the cpe-manifest.csv and outputs something real -
->> i.e., a list of open and closed CVEs.
-> 
-> Ok but the goal I'm shooting for is just a mostly accurate list and a
-> way to try and improve that metadata over time.  It won't be perfect.
-> A good example of this are the duplicate CPEs, over time they can be
-> discarded as we validate they are legacy and no one is cataloguing
-> things against them.  Until they're removed, we will have no-hits on
-> most of the duplicates in whichever tool a person uses to do their CVE
-> checking.
-> 
->> The latter will also help to evaluate to
->> what extent this whole thing is useful. In other words, how accurate is that
->> generated list? It's a question we had ad the BR developer meeting and which
->> still remains unanswered IMO.
-> 
-> The CPE list will be as accurate as people using it update the NIST
-> entries, either manually or as Buildroot nudges them to send an email.
-> The CVEs those CPEs will find is another complete story and most open
-> ways of searching for those don't concluded clean results without a
-> good amount of manual intervention.
-
- Yes, I do realize that this is a kind of catch-22 situation, if nobody uses the
-database then obviously it will not be up-to-date. But to be honest, right now I
-don't even really understand what kind of information you can get from it even
-in the ideal case. That's why I asked to post an RFC script, so we can get some
-idea of what the end goal is (and ultimately, whether this is worth the effort).
-
- Instead of posting a script (e.g. if you don't have that script, or you're not
-allowed to redistribute it), you could also describe in the cover letter what
-additional steps you have taken to get your final CVE list, and some statistics
-about e.g. how many additional CVEs you find with manual checking. And maybe
-also mention the commercial tools you've used (if you're allowed to do that). Or
-even better, if there are any FLOSS tools, point to them.
+ I have made this small modification and applied to next, thanks! So there is no
+need to resubmit now.
 
  Regards,
  Arnout
+
+> ?CZMQ_AUTORECONF = YES
+> @@ -18,10 +18,4 @@ CZMQ_LICENSE_FILES = LICENSE
+> ?# host-python, so disable asciidoc entirely.
+> ?CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
+> ?
+> -define CZMQ_CREATE_CONFIG_DIR
+> -mkdir -p $(@D)/config
+> -endef
+> -
+> -CZMQ_POST_PATCH_HOOKS += CZMQ_CREATE_CONFIG_DIR
+> -
+> ?$(eval $(autotools-package))
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
