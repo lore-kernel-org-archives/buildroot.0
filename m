@@ -1,47 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  2 Mar 2018 07:16:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version 7.2.3
-Message-ID: <20180302061646.20182-1-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  2 Mar 2018 08:41:12 +0200
+Subject: [Buildroot] [PATCH master] dash: fix build with musl
+Message-ID: <d86e4eb5defd3f473f9aa443428c4bf48dd225cb.1519972872.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE 2018-7584: https://bugs.php.net/bug.php?id=75981
+musl libc requires the getopt.h header for the definition of 'optreset'.
 
-For details see release notes:
-http://www.php.net/archive/2018.php#id2018-03-01-2
+Fixes:
+http://autobuild.buildroot.net/results/c23/c233ade479d6124ed7b382f2aa9859fe509d7bca/
+http://autobuild.buildroot.net/results/081/0813c13c2a978316e6fa9a3cdbd5512612f5c374/
+http://autobuild.buildroot.net/results/182/18230384d8225fbd7fddabfcbd685eaa38e31b31/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0002-histedit-fix-build-with-musl-libc.patch   | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/dash/0002-histedit-fix-build-with-musl-libc.patch
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index fdb4446d2b..34230df874 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 47d7607d38a1d565fc43ea942c92229a7cd165f156737f210937e375b243cb11  php-7.2.2.tar.xz
-+sha256 b3a94f1b562f413c0b96f54bc309706d83b29ac65d9b172bc7ed9fb40a5e651f  php-7.2.3.tar.xz
- 
- # License file
- sha256 00e567a8d50359d93ee1f9afdd9511277660c1e70a0cbf3229f84403aa9aebb1  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index e6bc1e47e1..dcb89b03d3 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.2.2
-+PHP_VERSION = 7.2.3
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/dash/0002-histedit-fix-build-with-musl-libc.patch b/package/dash/0002-histedit-fix-build-with-musl-libc.patch
+new file mode 100644
+index 000000000000..a9e4c5aea162
+--- /dev/null
++++ b/package/dash/0002-histedit-fix-build-with-musl-libc.patch
+@@ -0,0 +1,35 @@
++From 2da5b72c704fed10f1b04b5432ac6b078d016fae Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 2 Mar 2018 08:25:36 +0200
++Subject: [PATCH] histedit: fix build with musl libc
++
++musl libc defines the optreset BSD extension only in getopt.h. This
++fixes the following build failure:
++
++histedit.c: In function 'histcmd':
++histedit.c:220:2: error: 'optreset' undeclared (first use in this function)
++  optreset = 1; optind = 1; /* initialize getopt */
++  ^~~~~~~~
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://www.mail-archive.com/dash at vger.kernel.org/msg01389.html
++
++ src/histedit.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/histedit.c b/src/histedit.c
++index 94465d785cc9..f5c90aba873b 100644
++--- a/src/histedit.c
+++++ b/src/histedit.c
++@@ -39,6 +39,7 @@
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <unistd.h>
+++#include <getopt.h>
++ /*
++  * Editline and history functions (and glue).
++  */
++-- 
++2.16.1
++
 -- 
-2.11.0
+2.16.1
