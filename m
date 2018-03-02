@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Mar 2018 22:23:12 +0100
-Subject: [Buildroot] [PATCH/next 1/1] libepoxy: bump to version 1.5.0,
- add license hash
-In-Reply-To: <20180302130428.92132-1-aperez@igalia.com>
-References: <20180302130428.92132-1-aperez@igalia.com>
-Message-ID: <20180302222312.192cb340@windsurf.home>
+Date: Fri, 2 Mar 2018 22:24:23 +0100
+Subject: [Buildroot] [PATCH] package/qt5/qt5scxml: install missing QML
+ module
+In-Reply-To: <20180301115003.6cc39376@gmx.net>
+References: <20180301074610.18946-1-b.bilas@grinn-global.com>
+ <20180301115003.6cc39376@gmx.net>
+Message-ID: <20180302222423.678df640@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  2 Mar 2018 15:04:28 +0200, Adrian Perez de Castro wrote:
-> This release of Epoxy makes "0001-Forward-EGL-cflags-into-epoxy.pc.patch"
-> unnecessary. Other than bugfixes and a couple of functions added to the
-> API, this release is backwards-compatible with programs built against
-> the 1.4.x releases.
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  .../0001-Forward-EGL-cflags-into-epoxy.pc.patch    | 32 ----------------------
->  package/libepoxy/libepoxy.hash                     |  7 +++--
->  package/libepoxy/libepoxy.mk                       |  4 +--
->  3 files changed, 7 insertions(+), 36 deletions(-)
->  delete mode 100644 package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
+On Thu, 1 Mar 2018 11:50:03 +0100, Peter Seiderer wrote:
 
-Applied to next, thanks.
+> The dependency on BR2_PACKAGE_QT5DECLARATIVE_QUICK is not needed, the QtScxml
+> module is build/installed even without enabled BR2_PACKAGE_QT5DECLARATIVE_QUICK...
+
+But does it make sense to install QML files if the Qt that has been
+built has no way to use them ? Or am I missing something about what
+BR2_PACKAGE_QT5DECLARATIVE_QUICK is ?
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
-https://bootlin.com
+http://bootlin.com
