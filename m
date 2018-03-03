@@ -1,77 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  3 Mar 2018 11:15:45 +0100
-Subject: [Buildroot] [PATCH] mosquitto: unbreak build with websockets and
- !libopenssl
-Message-ID: <20180303101545.11446-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat,  3 Mar 2018 15:36:19 +0100
+Subject: [Buildroot] [PATCH 1/2] support/scripts/check-uniq-files: add
+ indices in format string
+Message-ID: <20180303143620.16859-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d69/d693f3e3f1c73ccf54ac7076623e436355a9d901/b
+Using {} in format strings is only supported in sufficiently recent
+Python versions. Python 2.6 doesn't support this, and only format
+strings with numbered arguments: {0}, {1}, etc.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Python 2.7:
+
+$ python -c 'print("foo {}".format(12))'
+foo 12
+$ python -c 'print("foo {0}".format(12))'
+foo 12
+
+Python 2.6:
+
+$ python -c 'print("foo {}".format(12))'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: zero length field name in format
+$ python -c 'print("foo {0}".format(12))'
+foo 12
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...01-websockets.c-unbreak-build-without-TLS.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
+ support/scripts/check-uniq-files | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
-new file mode 100644
-index 0000000000..e977fae56c
---- /dev/null
-+++ b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
-@@ -0,0 +1,49 @@
-+From 4822aa97da80a86033ec6e4a8b2f4ad0911235cf Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Sat, 3 Mar 2018 11:04:47 +0100
-+Subject: [PATCH] websockets.c: unbreak build without TLS
-+
-+Commit 7943072b1f3b (Fix use_identity_as_username not working on websockets
-+clients) added code which unconditionally accesses mosq-ssl, breaking the
-+build when TLS support is disabled.
-+
-+Fix it by guarding this logic inside #ifdef WITH_TLS.
-+
-+[Upstream: https://dev.eclipse.org/mhonarc/lists/mosquitto-dev/msg01813.html]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/websockets.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/websockets.c b/src/websockets.c
-+index d4d7961..a796f0a 100644
-+--- a/src/websockets.c
-++++ b/src/websockets.c
-+@@ -201,12 +201,14 @@ static int callback_mqtt(struct libwebsocket_context *context,
-+ 				mosq->ws_context = context;
-+ #endif
-+ 				mosq->wsi = wsi;
-++#ifdef WITH_TLS
-+ 				if(in){
-+ 					mosq->ssl = (SSL *)in;
-+ 					if(!mosq->listener->ssl_ctx){
-+ 						mosq->listener->ssl_ctx = SSL_get_SSL_CTX(mosq->ssl);
-+ 					}
-+ 				}
-++#endif
-+ 				u->mosq = mosq;
-+ 			}else{
-+ 				return -1;
-+@@ -240,7 +242,9 @@ static int callback_mqtt(struct libwebsocket_context *context,
-+ 					mosq->pollfd_index = -1;
-+ 				}
-+ 				mosq->wsi = NULL;
-++#ifdef WITH_TLS
-+ 				mosq->ssl = NULL;
-++#endif
-+ 				do_disconnect(db, mosq);
-+ 			}
-+ 			break;
-+-- 
-+2.11.0
-+
+diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+index a3d176710e..be808cce03 100755
+--- a/support/scripts/check-uniq-files
++++ b/support/scripts/check-uniq-files
+@@ -5,7 +5,7 @@ import csv
+ import argparse
+ from collections import defaultdict
+ 
+-warn = 'Warning: {} file "{}" is touched by more than one package: {}\n'
++warn = 'Warning: {0} file "{1}" is touched by more than one package: {2}\n'
+ 
+ 
+ def main():
 -- 
-2.11.0
+2.14.3
