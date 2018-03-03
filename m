@@ -1,54 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Mar 2018 17:17:41 +0100
-Subject: [Buildroot] [git commit] support/scripts/check-uniq-files: add
- indices in format string
-Message-ID: <20180303162031.C38C6815FF@busybox.osuosl.org>
+Date: Sat, 3 Mar 2018 17:19:25 +0100
+Subject: [Buildroot] [git commit] board/qemu/ppc64le-pseries: put Qemu
+ command on one line
+Message-ID: <20180303162032.0A3F2815FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62fa5e17cbce8cc5f7f308b5916b2ed5fd98816d
+commit: https://git.buildroot.net/buildroot/commit/?id=1b554aa849c2ac9c9bdd805253e806b411df6e28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Using {} in format strings is only supported in sufficiently recent
-Python versions. Python 2.6 doesn't support this, and only format
-strings with numbered arguments: {0}, {1}, etc.
-
-Python 2.7:
-
-$ python -c 'print("foo {}".format(12))'
-foo 12
-$ python -c 'print("foo {0}".format(12))'
-foo 12
-
-Python 2.6:
-
-$ python -c 'print("foo {}".format(12))'
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-ValueError: zero length field name in format
-$ python -c 'print("foo {0}".format(12))'
-foo 12
+This allows the toolchain building machinery used by
+https://toolchains.bootlin.com to automatically re-use this Qemu
+command line.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/check-uniq-files | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/qemu/ppc64le-pseries/readme.txt | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
-index a3d176710e..be808cce03 100755
---- a/support/scripts/check-uniq-files
-+++ b/support/scripts/check-uniq-files
-@@ -5,7 +5,7 @@ import csv
- import argparse
- from collections import defaultdict
+diff --git a/board/qemu/ppc64le-pseries/readme.txt b/board/qemu/ppc64le-pseries/readme.txt
+index beda5c0618..0fdb389828 100644
+--- a/board/qemu/ppc64le-pseries/readme.txt
++++ b/board/qemu/ppc64le-pseries/readme.txt
+@@ -1,8 +1,6 @@
+ Run the emulation with:
  
--warn = 'Warning: {} file "{}" is touched by more than one package: {}\n'
-+warn = 'Warning: {0} file "{1}" is touched by more than one package: {2}\n'
+-qemu-system-ppc64 -M pseries -nographic \
+-		-kernel output/images/vmlinux \
+-		-initrd output/images/rootfs.ext2
++qemu-system-ppc64 -M pseries -nographic -kernel output/images/vmlinux -initrd output/images/rootfs.ext2
  
+ The login prompt will appear in the terminal window.
  
- def main():
