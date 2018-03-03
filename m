@@ -1,77 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Mar 2018 17:16:42 +0100
-Subject: [Buildroot] [git commit] mosquitto: unbreak build with websockets
- and !libopenssl
-Message-ID: <20180303162031.ADD7D815FF@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  3 Mar 2018 17:55:56 +0100
+Subject: [Buildroot] [PATCH] package/systemd: create groups required for
+ udevd
+Message-ID: <20180303165556.25630-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63dfbca2c3ad509504e9118a49d396210917b079
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+udevd needs extra groups for its bundled rules:
 
-Fixes:
-http://autobuild.buildroot.net/results/d69/d693f3e3f1c73ccf54ac7076623e436355a9d901/b
+    Mar 03 12:21:30 buildroot systemd-udevd[732]: Specified group 'render' unknown
+    Mar 03 12:21:30 buildroot systemd-udevd[732]: Specified group 'kvm' unknown
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Add those missing groups.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Julius Kriukas <julius@kriukas.lt>
+Cc: Trent Piepho <tpiepho@impinj.com>
+Cc: Adam Duskett <aduskett@gmail.com>
 ---
- ...01-websockets.c-unbreak-build-without-TLS.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ package/systemd/systemd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
-new file mode 100644
-index 0000000000..e977fae56c
---- /dev/null
-+++ b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
-@@ -0,0 +1,49 @@
-+From 4822aa97da80a86033ec6e4a8b2f4ad0911235cf Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Sat, 3 Mar 2018 11:04:47 +0100
-+Subject: [PATCH] websockets.c: unbreak build without TLS
-+
-+Commit 7943072b1f3b (Fix use_identity_as_username not working on websockets
-+clients) added code which unconditionally accesses mosq-ssl, breaking the
-+build when TLS support is disabled.
-+
-+Fix it by guarding this logic inside #ifdef WITH_TLS.
-+
-+[Upstream: https://dev.eclipse.org/mhonarc/lists/mosquitto-dev/msg01813.html]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/websockets.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/websockets.c b/src/websockets.c
-+index d4d7961..a796f0a 100644
-+--- a/src/websockets.c
-++++ b/src/websockets.c
-+@@ -201,12 +201,14 @@ static int callback_mqtt(struct libwebsocket_context *context,
-+ 				mosq->ws_context = context;
-+ #endif
-+ 				mosq->wsi = wsi;
-++#ifdef WITH_TLS
-+ 				if(in){
-+ 					mosq->ssl = (SSL *)in;
-+ 					if(!mosq->listener->ssl_ctx){
-+ 						mosq->listener->ssl_ctx = SSL_get_SSL_CTX(mosq->ssl);
-+ 					}
-+ 				}
-++#endif
-+ 				u->mosq = mosq;
-+ 			}else{
-+ 				return -1;
-+@@ -240,7 +242,9 @@ static int callback_mqtt(struct libwebsocket_context *context,
-+ 					mosq->pollfd_index = -1;
-+ 				}
-+ 				mosq->wsi = NULL;
-++#ifdef WITH_TLS
-+ 				mosq->ssl = NULL;
-++#endif
-+ 				do_disconnect(db, mosq);
-+ 			}
-+ 			break;
-+-- 
-+2.11.0
-+
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 793b966ff5..22384c648b 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -343,6 +343,8 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ define SYSTEMD_USERS
+ 	- - input -1 * - - - Input device group
+ 	- - systemd-journal -1 * - - - Journal
++	- - render -1 * - - - DRI rendering nodes
++	- - kvm -1 * - - - kvm nodes
+ 	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
+ 	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
+ 	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+-- 
+2.14.1
