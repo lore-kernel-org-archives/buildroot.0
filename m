@@ -1,144 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat,  3 Mar 2018 21:43:56 +0200
-Subject: [Buildroot] [PATCH master] dhcp: add upstream security fixes
-Message-ID: <93f778684109325d734bfccd28ffa23485c95cfc.1520106236.git.baruch@tkos.co.il>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 3 Mar 2018 20:51:39 +0100
+Subject: [Buildroot] [PATCH] package/qt5/qt5scxml: install missing QML
+ module
+In-Reply-To: <20180302222423.678df640@windsurf.home>
+References: <20180301074610.18946-1-b.bilas@grinn-global.com>
+ <20180301115003.6cc39376@gmx.net>
+ <20180302222423.678df640@windsurf.home>
+Message-ID: <20180303205139.3e62b047@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2018-5732: The DHCP client incorrectly handled certain malformed
-responses. A remote attacker could use this issue to cause the DHCP
-client to crash, resulting in a denial of service, or possibly execute
-arbitrary code. In the default installation, attackers would be isolated
-by the dhclient AppArmor profile.
+Hello Thomas,
+On Fri, 2 Mar 2018 22:24:23 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-CVE-2018-5733: The DHCP server incorrectly handled reference counting. A
-remote attacker could possibly use this issue to cause the DHCP server
-to crash, resulting in a denial of service.
+> Hello,
+> 
+> On Thu, 1 Mar 2018 11:50:03 +0100, Peter Seiderer wrote:
+> 
+> > The dependency on BR2_PACKAGE_QT5DECLARATIVE_QUICK is not needed, the QtScxml
+> > module is build/installed even without enabled BR2_PACKAGE_QT5DECLARATIVE_QUICK...  
+> 
+> But does it make sense to install QML files if the Qt that has been
+> built has no way to use them ? Or am I missing something about what
+> BR2_PACKAGE_QT5DECLARATIVE_QUICK is ?
 
-Both issues are fixed in version 4.4.1. But we are close to release, so
-backport the fixes instead of bumping version.
+No expert for Qml/QtQuick either, but as explained in [1] 'QML is the Language (just like C++)'
+and 'QtQuick is a toolkit for QML, allowing to develop graphical interface in QML language
+(there are other toolkits for QML, some are graphical like Sailfish Silica or BlackBerry Cascade,
+and some are non-graphical like QBS...'
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...ect-buffer-overrun-in-pretty_print_option.patch | 59 ++++++++++++++++++++++
- ...4-Corrected-refcnt-loss-in-option-parsing.patch | 40 +++++++++++++++
- 2 files changed, 99 insertions(+)
- create mode 100644 package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
- create mode 100644 package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
+Qscxml is usable from QtQuick, but QtQuick is no prerequisite to use Qscxml (from a theoretical
+point of view (and practical the QML module is buildable  without QtQuick))....
 
-diff --git a/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch b/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
-new file mode 100644
-index 000000000000..aad20ff93f90
---- /dev/null
-+++ b/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
-@@ -0,0 +1,59 @@
-+From b8c29336bd5401a5f962bc6ddfa4ebb6f0274f3c Mon Sep 17 00:00:00 2001
-+From: Thomas Markwalder <tmark@isc.org>
-+Date: Sat, 10 Feb 2018 12:15:27 -0500
-+Subject: [PATCH 1/2] Correct buffer overrun in pretty_print_option
-+
-+    Merges in rt47139.
-+
-+[baruch: drop RELNOTES and test; address CVE-2018-5732]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: backported from commit c5931725b48
-+---
-+ common/options.c | 15 ++++++++++++---
-+ 1 file changed, 12 insertions(+), 3 deletions(-)
-+
-+diff --git a/common/options.c b/common/options.c
-+index 5547287fb6e5..2ed6b16c6412 100644
-+--- a/common/options.c
-++++ b/common/options.c
-+@@ -1758,7 +1758,8 @@ format_min_length(format, oc)
-+ 
-+ 
-+ /* Format the specified option so that a human can easily read it. */
-+-
-++/* Maximum pretty printed size */
-++#define MAX_OUTPUT_SIZE 32*1024
-+ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
-+ 	struct option *option;
-+ 	const unsigned char *data;
-+@@ -1766,8 +1767,9 @@ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
-+ 	int emit_commas;
-+ 	int emit_quotes;
-+ {
-+-	static char optbuf [32768]; /* XXX */
-+-	static char *endbuf = &optbuf[sizeof(optbuf)];
-++	/* We add 128 byte pad so we don't have to add checks everywhere. */
-++	static char optbuf [MAX_OUTPUT_SIZE + 128]; /* XXX */
-++	static char *endbuf = optbuf + MAX_OUTPUT_SIZE;
-+ 	int hunksize = 0;
-+ 	int opthunk = 0;
-+ 	int hunkinc = 0;
-+@@ -2193,7 +2195,14 @@ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
-+ 				log_error ("Unexpected format code %c",
-+ 					   fmtbuf [j]);
-+ 			}
-++
-+ 			op += strlen (op);
-++			if (op >= endbuf) {
-++				log_error ("Option data exceeds"
-++					   " maximum size %d", MAX_OUTPUT_SIZE);
-++					   return ("<error>");
-++			}
-++
-+ 			if (dp == data + len)
-+ 				break;
-+ 			if (j + 1 < numelem && comma != ':')
-+-- 
-+2.16.1
-+
-diff --git a/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch b/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
-new file mode 100644
-index 000000000000..c79bbc7f8219
---- /dev/null
-+++ b/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
-@@ -0,0 +1,40 @@
-+From 93b5b67dd31b9efcbfaabc2df1e1d9d164a5e04a Mon Sep 17 00:00:00 2001
-+From: Thomas Markwalder <tmark@isc.org>
-+Date: Fri, 9 Feb 2018 14:46:08 -0500
-+Subject: [PATCH 2/2] Corrected refcnt loss in option parsing
-+
-+    Merges in 47140.
-+
-+[baruch: drop RELNOTES and tests; address CVE-2018-5733]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: backported from commit 197b26f25309
-+---
-+ common/options.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/common/options.c b/common/options.c
-+index 2ed6b16c6412..25b29a6be7bb 100644
-+--- a/common/options.c
-++++ b/common/options.c
-+@@ -3,7 +3,7 @@
-+    DHCP options parsing and reassembly. */
-+ 
-+ /*
-+- * Copyright (c) 2004-2017 by Internet Systems Consortium, Inc. ("ISC")
-++ * Copyright (c) 2004-2018 by Internet Systems Consortium, Inc. ("ISC")
-+  * Copyright (c) 1995-2003 by Internet Software Consortium
-+  *
-+  * Permission to use, copy, modify, and distribute this software for any
-+@@ -177,6 +177,8 @@ int parse_option_buffer (options, buffer, length, universe)
-+ 
-+ 		/* If the length is outrageous, the options are bad. */
-+ 		if (offset + len > length) {
-++			/* Avoid reference count overflow */
-++			option_dereference(&option, MDL);
-+ 			reason = "option length exceeds option buffer length";
-+ 		      bogus:
-+ 			log_error("parse_option_buffer: malformed option "
-+-- 
-+2.16.1
-+
--- 
-2.16.1
+Regards,
+Peter
+
+[1] https://stackoverflow.com/questions/19696153/difference-between-qt-qml-and-qt-quick
+
+> 
+> Best regards,
+> 
+> Thomas
