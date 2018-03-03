@@ -1,46 +1,40 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 3 Mar 2018 20:51:39 +0100
-Subject: [Buildroot] [PATCH] package/qt5/qt5scxml: install missing QML
- module
-In-Reply-To: <20180302222423.678df640@windsurf.home>
-References: <20180301074610.18946-1-b.bilas@grinn-global.com>
- <20180301115003.6cc39376@gmx.net>
- <20180302222423.678df640@windsurf.home>
-Message-ID: <20180303205139.3e62b047@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Mar 2018 22:28:09 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.4
+Message-ID: <20180303212809.16414-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-On Fri, 2 Mar 2018 22:24:23 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Hello,
-> 
-> On Thu, 1 Mar 2018 11:50:03 +0100, Peter Seiderer wrote:
-> 
-> > The dependency on BR2_PACKAGE_QT5DECLARATIVE_QUICK is not needed, the QtScxml
-> > module is build/installed even without enabled BR2_PACKAGE_QT5DECLARATIVE_QUICK...  
-> 
-> But does it make sense to install QML files if the Qt that has been
-> built has no way to use them ? Or am I missing something about what
-> BR2_PACKAGE_QT5DECLARATIVE_QUICK is ?
-
-No expert for Qml/QtQuick either, but as explained in [1] 'QML is the Language (just like C++)'
-and 'QtQuick is a toolkit for QML, allowing to develop graphical interface in QML language
-(there are other toolkits for QML, some are graphical like Sailfish Silica or BlackBerry Cascade,
-and some are non-graphical like QBS...'
-
-Qscxml is usable from QtQuick, but QtQuick is no prerequisite to use Qscxml (from a theoretical
-point of view (and practical the QML module is buildable  without QtQuick))....
-
-Regards,
-Peter
-
-[1] https://stackoverflow.com/questions/19696153/difference-between-qt-qml-and-qt-quick
-
-> 
-> Best regards,
-> 
-> Thomas
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index c75854d2ac..2e615ad447 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 726a60137ab1aa6784dc575bf7d4c92f5367e937739c8bffcddce79071cf5f50  cjson-v1.7.3.tar.gz
++sha256 c3fc800cf9106db4ef5a5ef1fba7d144b21d73b68ad78234e182ebab12079277  cjson-v1.7.4.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 08020c48f6..7c302abbf5 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.7.3
++CJSON_VERSION = v1.7.4
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
+-- 
+2.14.1
