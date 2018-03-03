@@ -1,71 +1,65 @@
-From: Ciro Santilli <ciro.santilli@gmail.com>
-Date: Sat, 3 Mar 2018 08:09:27 +0000
-Subject: [Buildroot] [PATCH] Fix "Incorrect selection of kernel headers:
- expected 4.11.x, got 4.15.x" for qemu_x86_64_defconfig
-In-Reply-To: <878tb9d23y.fsf@dell.be.48ers.dk>
-References: <20180303072704.11166-1-ciro.santilli@gmail.com>
- <878tb9d23y.fsf@dell.be.48ers.dk>
-Message-ID: <CAFXrp_co-hTv-3tztgWrL2326BwAGXma-wVMD5aRN8OZrBqTgQ@mail.gmail.com>
+From: Erik Larsson <karl.erik.larsson@gmail.com>
+Date: Sat,  3 Mar 2018 09:17:36 +0100
+Subject: [Buildroot] [PATCH v4 0/4] Initial support for NXP iMX8 (imx8mq-evk)
+Message-ID: <1520065060-20046-1-git-send-email-karl.erik.larsson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 3, 2018 at 7:56 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Ciro" == Ciro Santilli <ciro.santilli@gmail.com> writes:
->
-> Committed, thanks.
->
-> We normally prefix the first commit line with the file/area touched
-> instead of suffixing it. It is also nice to explain what commit
-> introduced the issue.
->
-> You also added a bugzilla entry for this, so it is nice to reference it
-> here.
->
-> You should add your signed-off-by (git commit -s) to commits. As this is
-> such a trivial change I did took the liberty to do so for this commit,
-> hopefully that is OK?
->
-> For more details, see the manual:
-> https://buildroot.org/downloads/manual/manual.html#submitting-patches
->
-> Committed with these minor changes, thanks!
->
+This series provides initial support for NXP iMX8 (imx8mq-evk).
 
-Thanks, Peter.
+This series of patches are tested against NXP imx8mq-evk.
+It only handles basic support for iIMX8M, currently no
+support for GPU, VPU and other HW features. This series
+makes it possible to build a minimal system for imx8mq-evk.
 
-Sorry for the multiple posts and bad practices, I'm learning the
-obscure arts of mailing list patches now, I'll keep those in mind for
-future contribs.
+Changes since v3
+================
+  - Use Buildroot toolchain instead of external Linareo toolchain.
+  - Changed title on patch number 2
 
->  > ---
->  >  configs/qemu_x86_64_defconfig | 4 ++--
->  >  1 file changed, 2 insertions(+), 2 deletions(-)
->
->  > diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
->  > index 92a196790d..b92ae17ae6 100644
->  > --- a/configs/qemu_x86_64_defconfig
->  > +++ b/configs/qemu_x86_64_defconfig
->  > @@ -9,8 +9,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
->  >  BR2_TARGET_ROOTFS_EXT2=y
->  >  # BR2_TARGET_ROOTFS_TAR is not set
->
->  > -# Linux headers same as kernel, a 4.11 series
->  > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
->  > +# Linux headers same as kernel, a 4.15 series
->  > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
->
->  >  # Kernel
->  >  BR2_LINUX_KERNEL=y
->  > --
->  > 2.16.1
->
->  > _______________________________________________
->  > buildroot mailing list
->  > buildroot at busybox.net
->  > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> Bye, Peter Korsgaard
+Changes since v2
+================
+  - Build kernel, u-boot, atf based on tags instead of branches.
+  - Make sure to assign BR2_PACKAGE_FREESCALE_IMX_PLATFORM to IMX8M.
+  - Remove kernel defconfig from board folder and use arch default in kernel tree.
+  - Split third commit into two commits.
+
+Changes since v1
+================
+  - Removed new imx-atf package, use boot/arm-trusted-firmware.
+  - Move imx-mkimage from package/freescale-imx to package.
+  - Add upstream URL for imx-mkimage in Config.in.host.
+  - Fix install command syntax for imx-mkimage package.
+  - Use Makefile in imx-mkimage to build imx-boot-imx8mqevk-sd.bin instead of doing that in the post-script.sh
+  - Split third commit into two, one for firmware-img package and one for iMX8 board.
+
+Erik Larsson (4):
+  imx-mkimage: new package
+  freescale-imx: add config option for i.MX8M
+  firmware-imx: add support for iMX8M firmware
+  configs/freescale_imx8mqevk: new defconfig
+
+ .../common/imx/genimage.cfg.template_imx8          | 40 ++++++++++++++++++++++
+ board/freescale/common/imx/post-image.sh           | 10 ++++--
+ configs/freescale_imx8mqevk_defconfig              | 38 ++++++++++++++++++++
+ package/Config.in.host                             |  1 +
+ package/freescale-imx/Config.in                    |  5 ++-
+ package/freescale-imx/firmware-imx/Config.in       |  2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.mk |  8 +++++
+ .../imx-mkimage/0001-remove-git-build-info.patch   | 29 ++++++++++++++++
+ package/imx-mkimage/Config.in.host                 | 11 ++++++
+ package/imx-mkimage/imx-mkimage.hash               |  3 ++
+ package/imx-mkimage/imx-mkimage.mk                 | 39 +++++++++++++++++++++
+ 11 files changed, 181 insertions(+), 5 deletions(-)
+ create mode 100644 board/freescale/common/imx/genimage.cfg.template_imx8
+ create mode 100644 configs/freescale_imx8mqevk_defconfig
+ create mode 100644 package/imx-mkimage/0001-remove-git-build-info.patch
+ create mode 100644 package/imx-mkimage/Config.in.host
+ create mode 100644 package/imx-mkimage/imx-mkimage.hash
+ create mode 100644 package/imx-mkimage/imx-mkimage.mk
+
+-- 
+2.7.4
