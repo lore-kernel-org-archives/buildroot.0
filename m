@@ -1,28 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Mar 2018 11:02:44 +0100
-Subject: [Buildroot] [PATCH] Fix "Incorrect selection of kernel headers:
- expected 4.11.x, got 4.15.x" for qemu_x86_64_defconfig
-In-Reply-To: <CAFXrp_co-hTv-3tztgWrL2326BwAGXma-wVMD5aRN8OZrBqTgQ@mail.gmail.com>
- (Ciro Santilli's message of "Sat, 3 Mar 2018 08:09:27 +0000")
-References: <20180303072704.11166-1-ciro.santilli@gmail.com>
- <878tb9d23y.fsf@dell.be.48ers.dk>
- <CAFXrp_co-hTv-3tztgWrL2326BwAGXma-wVMD5aRN8OZrBqTgQ@mail.gmail.com>
-Message-ID: <87zi3pbhob.fsf@dell.be.48ers.dk>
+Date: Sat,  3 Mar 2018 11:15:45 +0100
+Subject: [Buildroot] [PATCH] mosquitto: unbreak build with websockets and
+ !libopenssl
+Message-ID: <20180303101545.11446-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ciro" == Ciro Santilli <ciro.santilli@gmail.com> writes:
+Fixes:
+http://autobuild.buildroot.net/results/d69/d693f3e3f1c73ccf54ac7076623e436355a9d901/b
 
-Hi,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...01-websockets.c-unbreak-build-without-TLS.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
 
- > Sorry for the multiple posts and bad practices, I'm learning the
- > obscure arts of mailing list patches now, I'll keep those in mind for
- > future contribs.
-
-Great, thank you for your contribution!
-
+diff --git a/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
+new file mode 100644
+index 0000000000..e977fae56c
+--- /dev/null
++++ b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
+@@ -0,0 +1,49 @@
++From 4822aa97da80a86033ec6e4a8b2f4ad0911235cf Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sat, 3 Mar 2018 11:04:47 +0100
++Subject: [PATCH] websockets.c: unbreak build without TLS
++
++Commit 7943072b1f3b (Fix use_identity_as_username not working on websockets
++clients) added code which unconditionally accesses mosq-ssl, breaking the
++build when TLS support is disabled.
++
++Fix it by guarding this logic inside #ifdef WITH_TLS.
++
++[Upstream: https://dev.eclipse.org/mhonarc/lists/mosquitto-dev/msg01813.html]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/websockets.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/websockets.c b/src/websockets.c
++index d4d7961..a796f0a 100644
++--- a/src/websockets.c
+++++ b/src/websockets.c
++@@ -201,12 +201,14 @@ static int callback_mqtt(struct libwebsocket_context *context,
++ 				mosq->ws_context = context;
++ #endif
++ 				mosq->wsi = wsi;
+++#ifdef WITH_TLS
++ 				if(in){
++ 					mosq->ssl = (SSL *)in;
++ 					if(!mosq->listener->ssl_ctx){
++ 						mosq->listener->ssl_ctx = SSL_get_SSL_CTX(mosq->ssl);
++ 					}
++ 				}
+++#endif
++ 				u->mosq = mosq;
++ 			}else{
++ 				return -1;
++@@ -240,7 +242,9 @@ static int callback_mqtt(struct libwebsocket_context *context,
++ 					mosq->pollfd_index = -1;
++ 				}
++ 				mosq->wsi = NULL;
+++#ifdef WITH_TLS
++ 				mosq->ssl = NULL;
+++#endif
++ 				do_disconnect(db, mosq);
++ 			}
++ 			break;
++-- 
++2.11.0
++
 -- 
-Bye, Peter Korsgaard
+2.11.0
