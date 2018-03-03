@@ -1,55 +1,47 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 2 Mar 2018 21:01:03 -0600
-Subject: [Buildroot] [NEXT 03/26] cpe-info: id prefix/suffix
-In-Reply-To: <29fbea6a-19e2-b3ca-8ac1-f3caa7a022da@mind.be>
-References: <1519697441-54194-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1519697441-54194-4-git-send-email-matthew.weber@rockwellcollins.com>
- <20180227224523.002a9e52@windsurf.lan>
- <CANQCQpa-_SD=kwh3fTLpna9hk7c1tAoucM5q-Ua=SnsVvUhK4g@mail.gmail.com>
- <29fbea6a-19e2-b3ca-8ac1-f3caa7a022da@mind.be>
-Message-ID: <CANQCQpbEykwr5oSqhGF5D4TAxG-zUT0pTtJC4MEJWVBnSpA9uA@mail.gmail.com>
+Date: Fri, 2 Mar 2018 21:32:44 -0600
+Subject: [Buildroot] RFC: cpe-info and utils/scancpe
+Message-ID: <CANQCQpZkV_eVMFB-W5UeTt8VTLPvxgnWurN-5TfCqqDG4+19hA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+I started a pull request for these changes so I could capture the
+infra/scripting as well as an initial set of CPE ID tweaks.  Feel free
+to comment on the commits or here.
 
-On Thu, Mar 1, 2018 at 2:34 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 28-02-18 05:14, Matthew Weber wrote:
->> Thomas,
->>
->> On Tue, Feb 27, 2018 at 3:45 PM, Thomas Petazzoni
->> <thomas.petazzoni@bootlin.com> wrote:
->>> Hello,
->>>
->>> On Mon, 26 Feb 2018 20:10:18 -0600, Matt Weber wrote:
->>>
->>>> +ifeq ($(1),linux)
->>>> +     $(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
->>>> +else ifeq ($(1),linux-headers)
->>>> +     $(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
->>>
->>> You can also do:
->>>
->>> ifneq ($(filter linux linux-headers,$(1)),)
->>> $(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
->>> else
->>> $(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
->>> endif
->>>
->>> But OK, it's not a big difference :)
->>
->> Cleaner though if there are any others.  Will update in v2.
->
->  Yeah, like, what about bootloaders?
->
+https://github.com/buildroot/buildroot/pull/32
 
-Looks like uboot isn't yet defined.  So that one will need to be
-proposed before we'll know os or app.  However grub is listed and is
-of app type.
+Changes since v1/v2
+- Includes script to determine if CPEs are valid and which ones need
+version updating vs created at NIST
+- Figured out I could just retrieve the raw xml and search it vs using
+a offline software to do it.  It makes the script usable immediately
+by anyone (pardon my bad python skills)
+- make cpe-info, defaults to all packages creating an entry using the
+package name for vendor:name of the CPE
+- All changes incorporated from emails and change logs updated.
+
+
+TODO
+- Have script generate a suggested submission to NIST for bumps and
+new CPEs.  Filling in as much information as we can using buildroot's
+package variables
+- Add CPE missing/needs update analysis to pkg-stats
+- looks at complete buildroot system CPE reports and see if there are
+cornercases I don't see with a set of ~90 packages
+- Figure out plan for hash based versions and if we just suggest to
+register those in NIST for major buildroot revs?
+- Figure out if once we get cached git repos, if we can mine that repo
+for last tag and use that to help construct a major/minor CPE version
+- Document CPE submission process to NIST
+- Automate pkg maintainer notifications to take action on package
+bumps were we need to update NIST.  This assumes we don't just send an
+automated email to NIST vs provide the maintainer with a pretty close
+email template they can just send.
+- Look at host pkg-stats tracks hash based versions
+
 
 Matt
