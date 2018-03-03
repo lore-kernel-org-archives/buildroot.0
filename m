@@ -1,40 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Mar 2018 22:28:09 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.4
-Message-ID: <20180303212809.16414-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 Mar 2018 23:10:30 +0100
+Subject: [Buildroot] [PATCH v2 2/9] dumb-init: new package
+In-Reply-To: <20180301230214.lkzpfyad6m7p43jq@tarshish>
+References: <20180301072012.25884-1-christian@paral.in>
+ <20180301072012.25884-3-christian@paral.in>
+ <20180301100227.3fb09c06@windsurf.lan>
+ <87lgfbiyk8.fsf@dell.be.48ers.dk>
+ <20180301170807.2cd21163@windsurf.lan>
+ <87a7vriudq.fsf@dell.be.48ers.dk>
+ <20180301230427.28e24d47@windsurf.lan>
+ <20180301222342.GF2449@scaer>
+ <20180301230214.lkzpfyad6m7p43jq@tarshish>
+Message-ID: <20180303221030.GA16780@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Baruch, All,
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index c75854d2ac..2e615ad447 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 726a60137ab1aa6784dc575bf7d4c92f5367e937739c8bffcddce79071cf5f50  cjson-v1.7.3.tar.gz
-+sha256 c3fc800cf9106db4ef5a5ef1fba7d144b21d73b68ad78234e182ebab12079277  cjson-v1.7.4.tar.gz
- sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 08020c48f6..7c302abbf5 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CJSON_VERSION = v1.7.3
-+CJSON_VERSION = v1.7.4
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+On 2018-03-02 01:02 +0200, Baruch Siach spake thusly:
+> On Thu, Mar 01, 2018 at 11:23:42PM +0100, Yann E. MORIN wrote:
+> > On 2018-03-01 23:04 +0100, Thomas Petazzoni spake thusly:
+> > > On Thu, 01 Mar 2018 18:21:53 +0100, Peter Korsgaard wrote:
+> > > >  >> dumb-init doesn't depend on any libraries, so the only issue is static
+> > > >  >> linking with glibc, right?  
+> > 
+> > One can do a static link with glibc, as long as one does not do any name
+> > resolution (username, hostname, etc...). But basically, static linking
+> > with glibc has long been frowned upon...
+> 
+> This has changed a little recently. Toolchain support is still limited though. 
+> glibc NEWS for 2.27 says:
+> 
+> * The GNU C Library can now be compiled with support for building static
+>   PIE executables (See --enable-static-pie in INSTALL).  These static PIE
+>   executables are like static executables but can be loaded at any address
+>   and provide additional security hardening benefits at the cost of some
+>   memory and performance.  When the library is built with --enable-static-pie
+>   the resulting libc.a is usable with GCC 8 and above to create static PIE
+>   executables using the GCC option '-static-pie'.  This feature is currently
+>   supported on i386, x86_64 and x32 with binutils 2.29 or later, and on
+>   aarch64 with binutils 2.30 or later.
+
+Ah, interesting, thanks! :-)
+
+I always wondered why pie and static were mutually exclusive...
+Afterall, semantically they mean two orthogonal things.
+
+Incidentally, I also always wondered why code was not
+position-indpendent by default...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
