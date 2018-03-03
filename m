@@ -1,47 +1,72 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 2 Mar 2018 21:32:44 -0600
-Subject: [Buildroot] RFC: cpe-info and utils/scancpe
-Message-ID: <CANQCQpZkV_eVMFB-W5UeTt8VTLPvxgnWurN-5TfCqqDG4+19hA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 03 Mar 2018 05:34:39 +0000
+Subject: [Buildroot] [Bug 10831] New: qemu_x86_64_defconfig build fails with
+ "Incorrect selection of kernel headers: expected 4.11.x, got 4.15.x"
+Message-ID: <bug-10831-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I started a pull request for these changes so I could capture the
-infra/scripting as well as an initial set of CPE ID tweaks.  Feel free
-to comment on the commits or here.
+https://bugs.busybox.net/show_bug.cgi?id=10831
 
-https://github.com/buildroot/buildroot/pull/32
+            Bug ID: 10831
+           Summary: qemu_x86_64_defconfig build fails with "Incorrect
+                    selection of kernel headers: expected 4.11.x, got
+                    4.15.x"
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ciro.santilli at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Changes since v1/v2
-- Includes script to determine if CPEs are valid and which ones need
-version updating vs created at NIST
-- Figured out I could just retrieve the raw xml and search it vs using
-a offline software to do it.  It makes the script usable immediately
-by anyone (pardon my bad python skills)
-- make cpe-info, defaults to all packages creating an entry using the
-package name for vendor:name of the CPE
-- All changes incorporated from emails and change logs updated.
+Ubuntu 17.10 master:
 
+git checkout 7df3014d84ff4b4d588e2857ee62a4bc0b3707d8
+make qemu_x86_64_defconfig
+make BR2_JLEVEL=6
 
-TODO
-- Have script generate a suggested submission to NIST for bumps and
-new CPEs.  Filling in as much information as we can using buildroot's
-package variables
-- Add CPE missing/needs update analysis to pkg-stats
-- looks at complete buildroot system CPE reports and see if there are
-cornercases I don't see with a set of ~90 packages
-- Figure out plan for hash based versions and if we just suggest to
-register those in NIST for major buildroot revs?
-- Figure out if once we get cached git repos, if we can mine that repo
-for last tag and use that to help construct a major/minor CPE version
-- Document CPE submission process to NIST
-- Automate pkg maintainer notifications to take action on package
-bumps were we need to update NIST.  This assumes we don't just send an
-automated email to NIST vs provide the maintainer with a pretty close
-email template they can just send.
-- Look at host pkg-stats tracks hash based versions
+Outcome:
 
+>>> linux-headers 4.15 Building                     
+>>> linux-headers 4.15 Installing to staging directory                                                   
+(cd /home/ciro/bak/git/buildroot/output/build/linux-headers-4.15;
+PATH="/home/ciro/bak/git/buildroot/output/host/bin:/home/ciro/bak/git/buildroot/output/host/sbin:./node_modules/.bin:/usr/local/heroku/bin:/home/
+ciro/android-sdk/platform-tools:/home/ciro/android-sdk/tools:/home/ciro/android-studio//bin:/home/ciro/android-sdk/ndk-bundle:/home/ciro/android-sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/linux
+-x86_64/bin:/home/ciro/bak/git/devbin:/home/ciro/bin:/usr/local/texlive/2013/bin/x86_64-linux:/home/ciro/.rvm/gems/ruby-2.4.1/bin:/home/ciro/.rvm/gems/ruby-2.4.1 at global/bin:/home/ciro/.rvm/rubies/ruby-2.4.1/bin:
+./node_modules/.bin:/usr/local/heroku/bin:/home/ciro/android-sdk/platform-tools:/home/ciro/android-sdk/tools:/home/ciro/android-studio//bin:/home/ciro/android-sdk/ndk-bundle:/home/ciro/android-sdk/ndk-bundle/too
+lchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:/home/ciro/bak/git/devbin:/home/ciro/bin:/usr/local/texlive/2013/bin/x86_64-linux:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/gam
+es:/usr/local/games:/usr/bin:/snap/bin:/home/ciro/bak/git/latex:/home/ciro/.rvm/bin:/home/ciro/anaconda2/bin:/home/ciro/.cabal/bin:/bin:/home/ciro/.go/bin:/home/ciro/.local/bin/:/home/ciro/bak/git/runlinux:/usr/
+bin:/home/ciro/bak/git/latex:/home/ciro/.rvm/bin:/home/ciro/anaconda2/bin:/home/ciro/.cabal/bin:/bin:/home/ciro/.go/bin:/home/ciro/.local/bin/:/home/ciro/bak/git/runlinux"
+/usr/bin/make -j6 ARCH=x86_64 HOSTCC="/
+usr/bin/gcc" HOSTCFLAGS="" HOSTCXX="/usr/bin/g++"
+INSTALL_HDR_PATH=/home/ciro/bak/git/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr
+headers_install)
+  CHK     include/generated/uapi/linux/version.h    
+  INSTALL include/misc (1 file)
+[...]
+  INSTALL include/asm (63 files)
+if ! support/scripts/check-kernel-headers.sh 
+/home/ciro/bak/git/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot 
+4.11; then exit 1; fi                                                           
+Incorrect selection of kernel headers: expected 4.11.x, got 4.15.x              
+package/pkg-generic.mk:286: recipe for target
+'/home/ciro/bak/git/buildroot/output/build/linux-headers-4.15/.stamp_staging_installed'
+failed                                                                       
+make[1]: ***
+[/home/ciro/bak/git/buildroot/output/build/linux-headers-4.15/.stamp_staging_installed]
+Error 1                                                                         
+Makefile:79: recipe for target '_all' failed                                    
+make: *** [_all] Error 2
 
-Matt
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
