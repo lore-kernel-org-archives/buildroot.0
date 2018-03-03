@@ -1,50 +1,144 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Mar 2018 20:15:59 +0100
-Subject: [Buildroot] [git commit] postgresql: security bump to 10.3
-Message-ID: <20180303191647.3973E815BE@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat,  3 Mar 2018 21:43:56 +0200
+Subject: [Buildroot] [PATCH master] dhcp: add upstream security fixes
+Message-ID: <93f778684109325d734bfccd28ffa23485c95cfc.1520106236.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00fc361b0a1693e701485ab177e9d12b59652170
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+CVE-2018-5732: The DHCP client incorrectly handled certain malformed
+responses. A remote attacker could use this issue to cause the DHCP
+client to crash, resulting in a denial of service, or possibly execute
+arbitrary code. In the default installation, attackers would be isolated
+by the dhclient AppArmor profile.
 
-Helps mitigate CVE-2018-1058
+CVE-2018-5733: The DHCP server incorrectly handled reference counting. A
+remote attacker could possibly use this issue to cause the DHCP server
+to crash, resulting in a denial of service.
 
-see: https://www.postgresql.org/docs/current/static/release-10-3.html for more
-bugfixes.
+Both issues are fixed in version 4.4.1. But we are close to release, so
+backport the fixes instead of bumping version.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ect-buffer-overrun-in-pretty_print_option.patch | 59 ++++++++++++++++++++++
+ ...4-Corrected-refcnt-loss-in-option-parsing.patch | 40 +++++++++++++++
+ 2 files changed, 99 insertions(+)
+ create mode 100644 package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
+ create mode 100644 package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index bf3d2a8733..533c398d59 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v10.2/postgresql-10.2.tar.bz2.sha256
--sha256	fe32009b62ddb97f7f014307ce9d0edb6972f5a698e63cb531088e147d145bad	postgresql-10.2.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v10.3/postgresql-10.3.tar.bz2.sha256
-+sha256	6ea268780ee35e88c65cdb0af7955ad90b7d0ef34573867f223f14e43467931a	postgresql-10.3.tar.bz2
- 
- # License file, Locally calculated
- sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 4b2bca714b..c6b689a146 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 10.2
-+POSTGRESQL_VERSION = 10.3
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch b/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
+new file mode 100644
+index 000000000000..aad20ff93f90
+--- /dev/null
++++ b/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
+@@ -0,0 +1,59 @@
++From b8c29336bd5401a5f962bc6ddfa4ebb6f0274f3c Mon Sep 17 00:00:00 2001
++From: Thomas Markwalder <tmark@isc.org>
++Date: Sat, 10 Feb 2018 12:15:27 -0500
++Subject: [PATCH 1/2] Correct buffer overrun in pretty_print_option
++
++    Merges in rt47139.
++
++[baruch: drop RELNOTES and test; address CVE-2018-5732]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: backported from commit c5931725b48
++---
++ common/options.c | 15 ++++++++++++---
++ 1 file changed, 12 insertions(+), 3 deletions(-)
++
++diff --git a/common/options.c b/common/options.c
++index 5547287fb6e5..2ed6b16c6412 100644
++--- a/common/options.c
+++++ b/common/options.c
++@@ -1758,7 +1758,8 @@ format_min_length(format, oc)
++ 
++ 
++ /* Format the specified option so that a human can easily read it. */
++-
+++/* Maximum pretty printed size */
+++#define MAX_OUTPUT_SIZE 32*1024
++ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
++ 	struct option *option;
++ 	const unsigned char *data;
++@@ -1766,8 +1767,9 @@ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
++ 	int emit_commas;
++ 	int emit_quotes;
++ {
++-	static char optbuf [32768]; /* XXX */
++-	static char *endbuf = &optbuf[sizeof(optbuf)];
+++	/* We add 128 byte pad so we don't have to add checks everywhere. */
+++	static char optbuf [MAX_OUTPUT_SIZE + 128]; /* XXX */
+++	static char *endbuf = optbuf + MAX_OUTPUT_SIZE;
++ 	int hunksize = 0;
++ 	int opthunk = 0;
++ 	int hunkinc = 0;
++@@ -2193,7 +2195,14 @@ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
++ 				log_error ("Unexpected format code %c",
++ 					   fmtbuf [j]);
++ 			}
+++
++ 			op += strlen (op);
+++			if (op >= endbuf) {
+++				log_error ("Option data exceeds"
+++					   " maximum size %d", MAX_OUTPUT_SIZE);
+++					   return ("<error>");
+++			}
+++
++ 			if (dp == data + len)
++ 				break;
++ 			if (j + 1 < numelem && comma != ':')
++-- 
++2.16.1
++
+diff --git a/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch b/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
+new file mode 100644
+index 000000000000..c79bbc7f8219
+--- /dev/null
++++ b/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
+@@ -0,0 +1,40 @@
++From 93b5b67dd31b9efcbfaabc2df1e1d9d164a5e04a Mon Sep 17 00:00:00 2001
++From: Thomas Markwalder <tmark@isc.org>
++Date: Fri, 9 Feb 2018 14:46:08 -0500
++Subject: [PATCH 2/2] Corrected refcnt loss in option parsing
++
++    Merges in 47140.
++
++[baruch: drop RELNOTES and tests; address CVE-2018-5733]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: backported from commit 197b26f25309
++---
++ common/options.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/common/options.c b/common/options.c
++index 2ed6b16c6412..25b29a6be7bb 100644
++--- a/common/options.c
+++++ b/common/options.c
++@@ -3,7 +3,7 @@
++    DHCP options parsing and reassembly. */
++ 
++ /*
++- * Copyright (c) 2004-2017 by Internet Systems Consortium, Inc. ("ISC")
+++ * Copyright (c) 2004-2018 by Internet Systems Consortium, Inc. ("ISC")
++  * Copyright (c) 1995-2003 by Internet Software Consortium
++  *
++  * Permission to use, copy, modify, and distribute this software for any
++@@ -177,6 +177,8 @@ int parse_option_buffer (options, buffer, length, universe)
++ 
++ 		/* If the length is outrageous, the options are bad. */
++ 		if (offset + len > length) {
+++			/* Avoid reference count overflow */
+++			option_dereference(&option, MDL);
++ 			reason = "option length exceeds option buffer length";
++ 		      bogus:
++ 			log_error("parse_option_buffer: malformed option "
++-- 
++2.16.1
++
+-- 
+2.16.1
