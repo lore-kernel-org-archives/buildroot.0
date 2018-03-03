@@ -1,48 +1,50 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat,  3 Mar 2018 12:59:23 -0500
-Subject: [Buildroot] [PATCH 2018.02 1/1] postgresql: security bump to 10.3
-Message-ID: <20180303175923.29865-1-aduskett@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat,  3 Mar 2018 15:03:15 -0300
+Subject: [Buildroot] [PATCH] mx25pdk: Bump U-Boot and kernel versions
+Message-ID: <1520100195-30441-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Helps mitigate CVE-2018-1058
+Bump U-Boot to version 2018.01 and kernel to 4.15.7.
 
-see: https://www.postgresql.org/docs/current/static/release-10-3.html for more
-bugfixes.
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/mx25pdk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index bf3d2a8733..533c398d59 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v10.2/postgresql-10.2.tar.bz2.sha256
--sha256	fe32009b62ddb97f7f014307ce9d0edb6972f5a698e63cb531088e147d145bad	postgresql-10.2.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v10.3/postgresql-10.3.tar.bz2.sha256
-+sha256	6ea268780ee35e88c65cdb0af7955ad90b7d0ef34573867f223f14e43467931a	postgresql-10.3.tar.bz2
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+index a88fb2a..f86ce7a 100644
+--- a/configs/mx25pdk_defconfig
++++ b/configs/mx25pdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
  
- # License file, Locally calculated
- sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 4b2bca714b..c6b689a146 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
  
--POSTGRESQL_VERSION = 10.2
-+POSTGRESQL_VERSION = 10.3
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
 -- 
-2.14.3
+2.7.4
