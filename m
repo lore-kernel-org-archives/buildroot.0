@@ -1,31 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 03 Mar 2018 07:57:13 +0000
-Subject: [Buildroot] [Bug 10831] qemu_x86_64_defconfig build fails on
- linux-headers with "Incorrect selection of kernel headers: expected 4.11.x,
- got 4.15.x"
-In-Reply-To: <bug-10831-163@https.bugs.busybox.net/>
-References: <bug-10831-163@https.bugs.busybox.net/>
-Message-ID: <bug-10831-163-3X8orBYnny@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Mar 2018 08:59:09 +0100
+Subject: [Buildroot] [PATCH 1/2] package/efl: add missing licenses
+In-Reply-To: <20180303073507.20146-1-ciro.santilli@gmail.com> (Ciro Santilli's
+ message of "Sat, 3 Mar 2018 07:35:06 +0000")
+References: <20180303073507.20146-1-ciro.santilli@gmail.com>
+Message-ID: <874llxd1yq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10831
+>>>>> "Ciro" == Ciro Santilli <ciro.santilli@gmail.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > From: Romain Naour <romain.naour@gmail.com>
+ > ecore_con added with efl 1.17 is under MIT license (COPYING.NGINX-MIT)
+ > ector added with efl 1.15 is under FTL license (COPYING.FTL)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+ > While at it, add license file hash.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed by
-https://git.buildroot.net/buildroot/commit/?id=8a6e30efdeb9f31d51a92ed465373f4128f55e8a
-- Thanks!
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Ehh, why did you send this patch and resend the kernel headers patch?
+This is already in master and the kernel headers patch looks identical
+to your first one.
+
+I've marked these as superseeded in patchwork.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
