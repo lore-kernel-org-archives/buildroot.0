@@ -1,8 +1,10 @@
 From: Ciro Santilli <ciro.santilli@gmail.com>
-Date: Sat,  3 Mar 2018 07:27:04 +0000
-Subject: [Buildroot] [PATCH] Fix "Incorrect selection of kernel headers:
+Date: Sat,  3 Mar 2018 07:35:07 +0000
+Subject: [Buildroot] [PATCH 2/2] Fix "Incorrect selection of kernel headers:
  expected 4.11.x, got 4.15.x" for qemu_x86_64_defconfig
-Message-ID: <20180303072704.11166-1-ciro.santilli@gmail.com>
+In-Reply-To: <20180303073507.20146-1-ciro.santilli@gmail.com>
+References: <20180303073507.20146-1-ciro.santilli@gmail.com>
+Message-ID: <20180303073507.20146-2-ciro.santilli@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
