@@ -1,50 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Mar 2018 17:18:18 +0100
-Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
- check for Python argparse module
-Message-ID: <20180303162031.D699D815FF@busybox.osuosl.org>
+Date: Sat, 3 Mar 2018 17:17:41 +0100
+Subject: [Buildroot] [git commit] support/scripts/check-uniq-files: add
+ indices in format string
+Message-ID: <20180303162031.C38C6815FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cde7e6af9193545819c05369b87c8a61b2a61fb
+commit: https://git.buildroot.net/buildroot/commit/?id=62fa5e17cbce8cc5f7f308b5916b2ed5fd98816d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The script support/scripts/check-uniq-files uses the argparse Python
-module. In most recent Python versions (starting with 2.7), the
-argparse module is part of the standard library, and we already check
-for the availability of Python in
-support/dependencies/dependencies.sh.
+Using {} in format strings is only supported in sufficiently recent
+Python versions. Python 2.6 doesn't support this, and only format
+strings with numbered arguments: {0}, {1}, etc.
 
-However, when running on an ancient distribution with Python 2.6, the
-argparse module is not part of the Python standard library, but
-available as an external module. Without this module, the build fails,
-because check-uniq-files, which is used in target-finalize, fails to
-run.
+Python 2.7:
 
-To avoid this failure, this commit adds a check in
-support/dependencies/dependencies.sh to verify that the argparse
-module is available.
+$ python -c 'print("foo {}".format(12))'
+foo 12
+$ python -c 'print("foo {0}".format(12))'
+foo 12
+
+Python 2.6:
+
+$ python -c 'print("foo {}".format(12))'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: zero length field name in format
+$ python -c 'print("foo {0}".format(12))'
+foo 12
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+ support/scripts/check-uniq-files | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 17dbe08fa4..6698f21a7a 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -301,3 +301,8 @@ if [ -n "$missing_perl_modules" ] ; then
- 	echo
- 	exit 1
- fi
-+
-+if ! python -c "import argparse" > /dev/null 2>&1 ; then
-+	echo "Your Python installation is not complete enough: argparse module is missing"
-+	exit 1
-+fi
+diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+index a3d176710e..be808cce03 100755
+--- a/support/scripts/check-uniq-files
++++ b/support/scripts/check-uniq-files
+@@ -5,7 +5,7 @@ import csv
+ import argparse
+ from collections import defaultdict
+ 
+-warn = 'Warning: {} file "{}" is touched by more than one package: {}\n'
++warn = 'Warning: {0} file "{1}" is touched by more than one package: {2}\n'
+ 
+ 
+ def main():
