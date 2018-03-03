@@ -1,49 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  3 Mar 2018 15:36:20 +0100
-Subject: [Buildroot] [PATCH 2/2] support/dependencies/dependencies.sh: check
- for Python argparse module
-In-Reply-To: <20180303143620.16859-1-thomas.petazzoni@bootlin.com>
-References: <20180303143620.16859-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180303143620.16859-2-thomas.petazzoni@bootlin.com>
+Date: Sat,  3 Mar 2018 15:36:51 +0100
+Subject: [Buildroot] [PATCH 1/3] board/qemu/ppc64le-pseries: use
+ qemu-system-ppc64
+Message-ID: <20180303143653.16934-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The script support/scripts/check-uniq-files uses the argparse Python
-module. In most recent Python versions (starting with 2.7), the
-argparse module is part of the standard library, and we already check
-for the availability of Python in
-support/dependencies/dependencies.sh.
+qemu-system-ppc64le doesn't necessarily exist: it isn't installed by
+Qemu, and only created as a symlink to qemu-system-ppc64 by some
+distributions (Ubuntu). Other distributions (Fedora) just have
+qemu-system-ppc64.
 
-However, when running on an ancient distribution with Python 2.6, the
-argparse module is not part of the Python standard library, but
-available as an external module. Without this module, the build fails,
-because check-uniq-files, which is used in target-finalize, fails to
-run.
-
-To avoid this failure, this commit adds a check in
-support/dependencies/dependencies.sh to verify that the argparse
-module is available.
+But qemu-system-ppc64 is capable of running little-endian PPC64
+systems, so use this one instead.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/dependencies/dependencies.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+ board/qemu/ppc64le-pseries/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 1804e85508..423fed8110 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -288,3 +288,8 @@ if [ -n "$missing_perl_modules" ] ; then
- 	echo
- 	exit 1
- fi
-+
-+if ! python -c "import argparse" > /dev/null 2>&1 ; then
-+	echo "Your Python installation is not complete enough: argparse module is missing"
-+	exit 1
-+fi
+diff --git a/board/qemu/ppc64le-pseries/readme.txt b/board/qemu/ppc64le-pseries/readme.txt
+index dd188c505f..beda5c0618 100644
+--- a/board/qemu/ppc64le-pseries/readme.txt
++++ b/board/qemu/ppc64le-pseries/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-qemu-system-ppc64le -M pseries -nographic \
++qemu-system-ppc64 -M pseries -nographic \
+ 		-kernel output/images/vmlinux \
+ 		-initrd output/images/rootfs.ext2
+ 
 -- 
 2.14.3
