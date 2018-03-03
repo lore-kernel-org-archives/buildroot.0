@@ -1,71 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Mar 2018 16:52:25 +0100
-Subject: [Buildroot] [PATCH 1/1] libaio: add mips64 to the supported
- architecture for libaio
-In-Reply-To: <20180228173651.65873-1-charles.hardin@storagecraft.com>
-References: <20180228173651.65873-1-charles.hardin@storagecraft.com>
-Message-ID: <20180303165225.778c78da@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 Mar 2018 17:01:35 +0100
+Subject: [Buildroot] [PATCH 1/2] support/scripts/check-uniq-files: add
+ indices in format string
+In-Reply-To: <20180303143620.16859-1-thomas.petazzoni@bootlin.com>
+References: <20180303143620.16859-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180303160135.GA20055@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Charles,
+Thomas, All,
 
-On Wed, 28 Feb 2018 09:36:51 -0800, charles.hardin at storagecraft.com
-wrote:
-> From: Charles Hardin <charles.hardin@storagecraft.com>
+On 2018-03-03 15:36 +0100, Thomas Petazzoni spake thusly:
+> Using {} in format strings is only supported in sufficiently recent
+> Python versions. Python 2.6 doesn't support this, and only format
+> strings with numbered arguments: {0}, {1}, etc.
 > 
-> The required support is available for libaio on mips64
-> architectures - or at least the Cavium Octeon at least and
-> the linux kernel running on it.
+> Python 2.7:
 > 
-> Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
+> $ python -c 'print("foo {}".format(12))'
+> foo 12
+> $ python -c 'print("foo {0}".format(12))'
+> foo 12
+> 
+> Python 2.6:
+> 
+> $ python -c 'print("foo {}".format(12))'
+> Traceback (most recent call last):
+>   File "<string>", line 1, in <module>
+> ValueError: zero length field name in format
+> $ python -c 'print("foo {0}".format(12))'
+> foo 12
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Thanks for this patch. A few comments below, though.
+https://docs.python.org/release/2.6/library/string.html#formatstrings
 
-> diff --git a/package/libaio/0004-fix-mips64-padding.patch b/package/libaio/0004-fix-mips64-padding.patch
-> new file mode 100644
-> index 0000000000..d88d6e6ab2
-> --- /dev/null
-> +++ b/package/libaio/0004-fix-mips64-padding.patch
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This patch needs a description and Signed-off-by.
+Regards,
+Yann E. MORIN.
 
-> @@ -0,0 +1,43 @@
-> +diff -Naur libaio-0.3.110.orig/src/libaio.h libaio-0.3.110/src/libaio.h
-> +--- libaio-0.3.110.orig/src/libaio.h	2014-01-24 08:01:02.000000000 -0800
-> ++++ libaio-0.3.110/src/libaio.h	2018-02-27 20:06:36.000000000 -0800
-> +@@ -51,7 +51,8 @@
-> + 
-> + /* little endian, 32 bits */
-> + #if defined(__i386__) || (defined(__arm__) && !defined(__ARMEB__)) || \
-> +-    defined(__sh__) || defined(__bfin__) || defined(__MIPSEL__) || \
-> ++    defined(__sh__) || defined(__bfin__) || \
-> ++    (defined(__mips__) && defined(__MIPSEL__)) || \
-> +     defined(__cris__)
+> ---
+>  support/scripts/check-uniq-files | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+> index a3d176710e..be808cce03 100755
+> --- a/support/scripts/check-uniq-files
+> +++ b/support/scripts/check-uniq-files
+> @@ -5,7 +5,7 @@ import csv
+>  import argparse
+>  from collections import defaultdict
+>  
+> -warn = 'Warning: {} file "{}" is touched by more than one package: {}\n'
+> +warn = 'Warning: {0} file "{1}" is touched by more than one package: {2}\n'
+>  
+>  
+>  def main():
+> -- 
+> 2.14.3
+> 
 
-All those architecture conditions are really annoying. What about
-replacing this with:
-
-#if (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__) && (__LONG_WIDTH__ == 32)
-...
-#elif (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__) && (__LONG_WIDTH__ == 32)
-...
-#elif (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__) && (__LONG_WIDTH__ == 64)
-...
-#elif (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__) && (__LONG_WIDTH__ == 64)
-...
-#endif
-
-But well, upstream libaio seems to be dead, so perhaps your small patch
-is good enough. Just need a description + Signed-off-by.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
