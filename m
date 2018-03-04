@@ -1,144 +1,114 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Mar 2018 23:26:08 +0100
-Subject: [Buildroot] [git commit] dhcp: add upstream security fixes
-Message-ID: <20180303222656.B5C4C816A9@busybox.osuosl.org>
+From: Christian Stewart <christian@paral.in>
+Date: Sat,  3 Mar 2018 19:43:38 -0500
+Subject: [Buildroot] [PATCH v3 0/8] upgrade docker-engine and associated
+ components
+Message-ID: <20180304004346.331-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=047cec5993223944d0765468f11aa137d3ade543
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-CVE-2018-5732: The DHCP client incorrectly handled certain malformed
-responses. A remote attacker could use this issue to cause the DHCP
-client to crash, resulting in a denial of service, or possibly execute
-arbitrary code. In the default installation, attackers would be isolated
-by the dhclient AppArmor profile.
+This series upgrades Docker and associated components:
 
-CVE-2018-5733: The DHCP server incorrectly handled reference counting. A
-remote attacker could possibly use this issue to cause the DHCP server
-to crash, resulting in a denial of service.
+ - runc to 9f9c96235cc97674e935002fc3d78361b696a69e
+ - docker-containerd to v1.0.2
+ - docker-engine to v2018.03.0-ce-rc1
 
-Both issues are fixed in version 4.4.1. But we are close to release, so
-backport the fixes instead of bumping version.
+Docker is updated to v2018.03.0-ce-rc1 due to critical bugs in 2018.02.
+2018.03 full release is expected in the month of March.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+It is thus suggested that this series be merged to target the next
+Buildroot stable release later this year, with the plan to upgrade to
+2018.03 when it is released in place.
+
+Suggested naming changes:
+
+ - docker-containerd -> containerd
+
+This project has been split off from Docker, and is now hosted at:
+
+  https://github.com/containerd/containerd
+
+It is not specifically a docker project.
+
+ - docker-engine -> docker-ce
+
+Docker "Community Edition" is the name for the daemon and CLI bundled
+together by the "moby" bundler/project duo.
+
+It's still named the "Engine" but with the CLI as well, it makes more
+sense to name it "Docker Community Edition" which also avoids a
+collision with the "docker" package.
+
+An old version of this series adding docker-init exists.
+
+ - https://patchwork.ozlabs.org/patch/827886/
+
+Changes v1 -> v2:
+
+ - Make static default for tini and dumb-init
+ - Bump package versions (as described above)
+ - Added fix to not link against libsystemd without systemd
+ - Removed unnecessary stack protector flags from tini
+ - Fixed confusing commit messages
+ - Upgraded to 18.03.0-rc1, skipping 18.02, to address critical bugs in 2018.02.
+ - Tested on Raspberry Pi 3, Odroid XU4, Odroid HC2, and Raspberry Pi 0.
+
+Changes v2 -> v3:
+
+ - Remove unnecessary static select options for dumb-init and tini and associated comments.
+ - Tini was updated to v0.17.0
+ - Dumb-init was updated to v1.2.1
+ - License hash files added for tini and dumb-init
+ - Comment explaining -static option for tini and dumb-init added
+ - Dumb-init tarball named correctly in hash file
+
+Best,
+Christian Stewart
+
 ---
- ...ect-buffer-overrun-in-pretty_print_option.patch | 59 ++++++++++++++++++++++
- ...4-Corrected-refcnt-loss-in-option-parsing.patch | 40 +++++++++++++++
- 2 files changed, 99 insertions(+)
 
-diff --git a/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch b/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
-new file mode 100644
-index 0000000000..aad20ff93f
---- /dev/null
-+++ b/package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
-@@ -0,0 +1,59 @@
-+From b8c29336bd5401a5f962bc6ddfa4ebb6f0274f3c Mon Sep 17 00:00:00 2001
-+From: Thomas Markwalder <tmark@isc.org>
-+Date: Sat, 10 Feb 2018 12:15:27 -0500
-+Subject: [PATCH 1/2] Correct buffer overrun in pretty_print_option
-+
-+    Merges in rt47139.
-+
-+[baruch: drop RELNOTES and test; address CVE-2018-5732]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: backported from commit c5931725b48
-+---
-+ common/options.c | 15 ++++++++++++---
-+ 1 file changed, 12 insertions(+), 3 deletions(-)
-+
-+diff --git a/common/options.c b/common/options.c
-+index 5547287fb6e5..2ed6b16c6412 100644
-+--- a/common/options.c
-++++ b/common/options.c
-+@@ -1758,7 +1758,8 @@ format_min_length(format, oc)
-+ 
-+ 
-+ /* Format the specified option so that a human can easily read it. */
-+-
-++/* Maximum pretty printed size */
-++#define MAX_OUTPUT_SIZE 32*1024
-+ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
-+ 	struct option *option;
-+ 	const unsigned char *data;
-+@@ -1766,8 +1767,9 @@ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
-+ 	int emit_commas;
-+ 	int emit_quotes;
-+ {
-+-	static char optbuf [32768]; /* XXX */
-+-	static char *endbuf = &optbuf[sizeof(optbuf)];
-++	/* We add 128 byte pad so we don't have to add checks everywhere. */
-++	static char optbuf [MAX_OUTPUT_SIZE + 128]; /* XXX */
-++	static char *endbuf = optbuf + MAX_OUTPUT_SIZE;
-+ 	int hunksize = 0;
-+ 	int opthunk = 0;
-+ 	int hunkinc = 0;
-+@@ -2193,7 +2195,14 @@ const char *pretty_print_option (option, data, len, emit_commas, emit_quotes)
-+ 				log_error ("Unexpected format code %c",
-+ 					   fmtbuf [j]);
-+ 			}
-++
-+ 			op += strlen (op);
-++			if (op >= endbuf) {
-++				log_error ("Option data exceeds"
-++					   " maximum size %d", MAX_OUTPUT_SIZE);
-++					   return ("<error>");
-++			}
-++
-+ 			if (dp == data + len)
-+ 				break;
-+ 			if (j + 1 < numelem && comma != ':')
-+-- 
-+2.16.1
-+
-diff --git a/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch b/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
-new file mode 100644
-index 0000000000..c79bbc7f82
---- /dev/null
-+++ b/package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
-@@ -0,0 +1,40 @@
-+From 93b5b67dd31b9efcbfaabc2df1e1d9d164a5e04a Mon Sep 17 00:00:00 2001
-+From: Thomas Markwalder <tmark@isc.org>
-+Date: Fri, 9 Feb 2018 14:46:08 -0500
-+Subject: [PATCH 2/2] Corrected refcnt loss in option parsing
-+
-+    Merges in 47140.
-+
-+[baruch: drop RELNOTES and tests; address CVE-2018-5733]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: backported from commit 197b26f25309
-+---
-+ common/options.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/common/options.c b/common/options.c
-+index 2ed6b16c6412..25b29a6be7bb 100644
-+--- a/common/options.c
-++++ b/common/options.c
-+@@ -3,7 +3,7 @@
-+    DHCP options parsing and reassembly. */
-+ 
-+ /*
-+- * Copyright (c) 2004-2017 by Internet Systems Consortium, Inc. ("ISC")
-++ * Copyright (c) 2004-2018 by Internet Systems Consortium, Inc. ("ISC")
-+  * Copyright (c) 1995-2003 by Internet Software Consortium
-+  *
-+  * Permission to use, copy, modify, and distribute this software for any
-+@@ -177,6 +177,8 @@ int parse_option_buffer (options, buffer, length, universe)
-+ 
-+ 		/* If the length is outrageous, the options are bad. */
-+ 		if (offset + len > length) {
-++			/* Avoid reference count overflow */
-++			option_dereference(&option, MDL);
-+ 			reason = "option length exceeds option buffer length";
-+ 		      bogus:
-+ 			log_error("parse_option_buffer: malformed option "
-+-- 
-+2.16.1
-+
+Christian Stewart (8):
+  tini: new package
+  dumb-init: new package
+  docker-engine: add support for init processes
+  docker-proxy: new package
+  docker-engine: add dependency on docker-proxy
+  runc: bump to 9f9c96235cc
+  docker-containerd: bump to v1.0.2
+  docker-engine: bump to v18.03.0-ce-rc1
+
+ package/Config.in                                |  3 ++
+ package/docker-containerd/Config.in              | 12 +++++
+ package/docker-containerd/docker-containerd.hash |  2 +-
+ package/docker-containerd/docker-containerd.mk   | 38 +++++++++++----
+ package/docker-engine/Config.in                  | 27 +++++++++++
+ package/docker-engine/docker-engine.hash         |  2 +-
+ package/docker-engine/docker-engine.mk           | 59 ++++++++++++++++--------
+ package/docker-proxy/Config.in                   | 18 ++++++++
+ package/docker-proxy/docker-proxy.hash           |  2 +
+ package/docker-proxy/docker-proxy.mk             | 46 ++++++++++++++++++
+ package/dumb-init/Config.in                      |  7 +++
+ package/dumb-init/dumb-init.hash                 |  3 ++
+ package/dumb-init/dumb-init.mk                   | 24 ++++++++++
+ package/runc/runc.hash                           |  2 +-
+ package/runc/runc.mk                             | 17 ++++---
+ package/tini/Config.in                           | 16 +++++++
+ package/tini/tini.hash                           |  3 ++
+ package/tini/tini.mk                             | 35 ++++++++++++++
+ 18 files changed, 278 insertions(+), 38 deletions(-)
+ create mode 100644 package/docker-proxy/Config.in
+ create mode 100644 package/docker-proxy/docker-proxy.hash
+ create mode 100644 package/docker-proxy/docker-proxy.mk
+ create mode 100644 package/dumb-init/Config.in
+ create mode 100644 package/dumb-init/dumb-init.hash
+ create mode 100644 package/dumb-init/dumb-init.mk
+ create mode 100644 package/tini/Config.in
+ create mode 100644 package/tini/tini.hash
+ create mode 100644 package/tini/tini.mk
+
+-- 
+2.13.6
