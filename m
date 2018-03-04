@@ -1,103 +1,99 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat,  3 Mar 2018 19:43:40 -0500
-Subject: [Buildroot] [PATCH v3 2/8] dumb-init: new package
+Date: Sat,  3 Mar 2018 19:43:41 -0500
+Subject: [Buildroot] [PATCH v3 3/8] docker-engine: add support for init
+ processes
 In-Reply-To: <20180304004346.331-1-christian@paral.in>
 References: <20180304004346.331-1-christian@paral.in>
-Message-ID: <20180304004346.331-3-christian@paral.in>
+Message-ID: <20180304004346.331-4-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dumb-init is a minimal init process to act as PID 1 for containers.
+When a docker container is run with the --init flag, the Docker engine
+uses the docker-init binary as PID 1 inside the container. This is
+necessary in may cases to avoid issues with signal handling, zombie
+processes, and other quirks when running as PID 1.
 
-Static compilation is used, as dumb-init will typically be executed inside a
-container.
+The docker-init binary is backed by tini on default, but optionally can
+be changed to docker-init by user preference.
 
-dumb-init can satisfy docker-engine's docker-init requirement.
+Furthermore, this patch fixes the following Docker error:
+
+  dockerd: level=warning msg="failed to retrieve docker-init version"
 
 Signed-off-by: Christian Stewart <christian@paral.in>
-
 ---
+ package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
+ package/docker-engine/docker-engine.mk | 11 +++++++++++
+ 2 files changed, 37 insertions(+)
 
-Changes since v1:
-
- - Upgraded to v1.2.1
- - Added license hash
----
- package/Config.in                |  1 +
- package/dumb-init/Config.in      |  7 +++++++
- package/dumb-init/dumb-init.hash |  3 +++
- package/dumb-init/dumb-init.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/dumb-init/Config.in
- create mode 100644 package/dumb-init/dumb-init.hash
- create mode 100644 package/dumb-init/dumb-init.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 5bdaa24340..dd42db79ec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1906,6 +1906,7 @@ comment "Utilities"
- 	source "package/crudini/Config.in"
- 	source "package/dialog/Config.in"
- 	source "package/dtach/Config.in"
-+	source "package/dumb-init/Config.in"
- 	source "package/easy-rsa/Config.in"
- 	source "package/file/Config.in"
- 	source "package/gnupg/Config.in"
-diff --git a/package/dumb-init/Config.in b/package/dumb-init/Config.in
-new file mode 100644
-index 0000000000..e817493605
---- /dev/null
-+++ b/package/dumb-init/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DUMB_INIT
-+	bool "dumb-init"
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 05670a716e..7d9a87f7bb 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -33,6 +33,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
+ 
+ if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ 
++choice
++	bool "docker-init to use"
++	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
 +	help
-+	  dumb-init is a simple but valid init binary to
-+	  act as PID 1 for containers.
++	  The docker engine uses a minimal init process as PID 1
++	  inside containers. There are several implementations
++	  of this init process.
++
++config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
++	bool "tini"
++	select BR2_PACKAGE_TINI
++	help
++	  Use Tini as the container init process.
++
++	  https://github.com/krallin/tini
++
++config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
++	bool "dumb-init"
++	select BR2_PACKAGE_DUMB_INIT
++	help
++	  Use dumb-init as the container init process.
 +
 +	  https://github.com/Yelp/dumb-init
-diff --git a/package/dumb-init/dumb-init.hash b/package/dumb-init/dumb-init.hash
-new file mode 100644
-index 0000000000..9e74ff5580
---- /dev/null
-+++ b/package/dumb-init/dumb-init.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	56858088d9d6c911c227d196fcbfca06aff31fbe83e1519f9cabe5cf6f11b242	dumb-init-v1.2.1.tar.gz
-+sha256	4d74123f166ad8f147e9939bfb451578db84823f22b48fd64b1086d3654a0149  LICENSE
-diff --git a/package/dumb-init/dumb-init.mk b/package/dumb-init/dumb-init.mk
-new file mode 100644
-index 0000000000..4ebbff1930
---- /dev/null
-+++ b/package/dumb-init/dumb-init.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# dumb-init
-+#
-+################################################################################
 +
-+DUMB_INIT_VERSION = v1.2.1
-+DUMB_INIT_SITE = $(call github,Yelp,dumb-init,$(DUMB_INIT_VERSION))
++endchoice
 +
-+DUMB_INIT_LICENSE = MIT
-+DUMB_INIT_LICENSE_FILES = LICENSE
-+DUMB_INIT_CFLAGS += -static
+ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
+ 	bool "btrfs filesystem driver"
+ 	depends on BR2_USE_MMU # btrfs-progs
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 8928f072e7..a2776ed78c 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -50,6 +50,13 @@ endif
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+ DOCKER_ENGINE_BUILD_TAGS += daemon
+ DOCKER_ENGINE_BUILD_TARGETS += dockerd
 +
-+define DUMB_INIT_BUILD_CMDS
-+	$(TARGET_CC) \
-+		$(DUMB_INIT_CFLAGS) \
-+		-o $(@D)/dumb-init $(@D)/dumb-init.c
-+endef
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
++DOCKER_ENGINE_INIT = dumb-init
++else
++DOCKER_ENGINE_INIT = tini
++endif
 +
-+define DUMB_INIT_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/dumb-init $(TARGET_DIR)/usr/bin/dumb-init
-+endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
+@@ -119,6 +126,10 @@ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
+ 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+ 		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
+ 	)
 +
-+$(eval $(generic-package))
++	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
++		ln -fs $(DOCKER_ENGINE_INIT) $(TARGET_DIR)/usr/bin/docker-init
++	)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.13.6
