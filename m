@@ -1,62 +1,43 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 04 Mar 2018 10:18:46 +0100
-Subject: [Buildroot] pulseaudio isn't work on buildroot-2017.02.5
-In-Reply-To: <20180301220743.vmhgrpj2kwt7bdmh@tarshish>
-References: <1503571325385-173857.post@n4.nabble.com>
- <20170824192644.56481029@windsurf>
- <1503640121686-173903.post@n4.nabble.com>
- <1519913539.26930.5.camel@embedded.rocks>
- <20180301220743.vmhgrpj2kwt7bdmh@tarshish>
-Message-ID: <1520155126.3062.6.camel@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  4 Mar 2018 10:30:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: security bump to version
+ 0.3.1.10
+Message-ID: <20180304093009.16455-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Fixes CVE-2018-0490.
 
-On Fri, 2018-03-02 at 00:07 +0200, Baruch Siach wrote:
-> Hi J?rg,
-> 
-> On Thu, Mar 01, 2018 at 03:12:19PM +0100, J?rg Krause wrote:
-> > On Thu, 2017-08-24 at 22:48 -0700, Jonas wrote:
-> > > thank you for your reply.
-> > > 
-> > > I try to set "BR2_PACKAGE_PULSEAUDIO_DAEMON".
-> > > 
-> > > # ps
-> > > ...
-> > >   223 root     -sh
-> > >   224 root     /sbin/getty -L tty1 0 vt100
-> > >   256 pulse    pulseaudio --system --daemonize
-> > >   260 root     ps
-> > > 
-> > > it seen works in system mode, but I want to use "pactl" command.
-> > > I need set source and sink.
-> > > 
-> > > I get this error message:
-> > > # pactl stat
-> > > Connection failure: Access denied
-> > > 
-> > > #pactl list sources short
-> > > Connection failure: Access denied
-> > > 
-> > > #pactl list sink short
-> > > Connection failure: Access denied
-> > > 
-> > > Could you help me again.
-> > > Thank you very much.
-> > 
-> > In case someone has the same issue. I got it working adding the root
-> > user to the pulse-access group:
-> > 
-> > # grep pulse-access /etc/group
-> > pulse-access:x:1006:pulse,root
-> 
-> Do you have any idea how this solves the permission issue?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Not really. To be honest, I didn't really try to find a better
-solution.
-
-J?rg
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 08ab61ec14..db946eec07 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 6e1b04f7890e782fd56014a0de5075e4ab29b52a35d8bca1f6b80c93f58f3d26  tor-0.3.1.9.tar.gz
++sha256 c0e1a71e8e079ddd7951f846bcbd79d5e716b602faa5b890c70762fe95cd04e0  tor-0.3.1.10.tar.gz
+ sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 6065f6e2c3..1a6c69d724 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.3.1.9
++TOR_VERSION = 0.3.1.10
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
+-- 
+2.11.0
