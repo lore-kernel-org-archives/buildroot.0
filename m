@@ -1,58 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Mar 2018 11:46:48 +0100
-Subject: [Buildroot] [git commit] support/dependencies: unbreak check for
- UTF-8 locale
-Message-ID: <20180304110028.24B5C8138C@busybox.osuosl.org>
+Date: Sun, 4 Mar 2018 11:59:03 +0100
+Subject: [Buildroot] [git commit] core: find a host UTF-8 locale
+Message-ID: <20180304110028.3C5E08138C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f8c7766e43d3a4e655d8073450e5e60abcdddd7
+commit: https://git.buildroot.net/buildroot/commit/?id=c2a9358b6e7d1432856b05bddcab66723f9ea847
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Although the UTF-8 locales in mainstream distributions all are suffixed
-with just 'utf8', the nomenclature is a bit ambiguous with the way they
-are to be specified with the various LC_* variables, suffixed there with
-'UTF-8'.
+Some packages really want to use an UTF-8 locale, or they break.
 
-Also, POSIX, ISO, and IEC do not enforce any specific suffix in LC_*
-variables:
+However, there is no guarantee that any given locale is available on a
+system. For example,, while most mainstream distros (Debian and
+derivatives, Fedora...) do have the generic, language-agnostic C.UTF-8
+locale, Gentoo does not provide it.
+
+So, find the first UTF-8 locale available on the system, and take any
+that is available. We however do favour using the user-set current
+locale, then using the language-agnostic C.UTF-8, and eventually any
+random UTF-8 locale.
+
+Note: we only need to enforce LC_ALL, because setting it implies
+everything else:
     http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08_02
 
     """
-    If the locale value has the form:
-        language[_territory][.codeset]
-
-    it refers to an implementation-provided locale, where settings of
-    language, territory, and codeset are implementation-defined.
+    1. If the LC_ALL environment variable is defined and is not null,
+    the value of LC_ALL shall be used.
     """
 
-To avoid any confusion, use a regexp that is a bit more lax when
-matching locales.
-
-Also, quote the regexp, so that the '?' and '$' are not interpreted by
-the shell.
-
+[Peter: use same regexp as in dependencies.sh]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 6698f21a7a..656cb09d42 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -200,7 +200,7 @@ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
- 		echo "You need locale support on your build machine to build a toolchain supporting locales"
- 		exit 1 ;
- 	fi
--	if ! locale -a | grep -q -i utf8$ ; then
-+	if ! locale -a | grep -q -i -E 'utf-?8$' ; then
- 		echo
- 		echo "You need at least one UTF8 locale to build a toolchain supporting locales"
- 		exit 1 ;
+diff --git a/Makefile b/Makefile
+index 5fe3a34c47..49c03b7008 100644
+--- a/Makefile
++++ b/Makefile
+@@ -363,6 +363,22 @@ ifneq ($(firstword $(HOSTCC_VERSION)),4)
+ HOSTCC_VERSION := $(firstword $(HOSTCC_VERSION))
+ endif
+ 
++ifeq ($(BR2_NEEDS_HOST_UTF8_LOCALE),y)
++# First, we try to use the user's configured locale (as that's the
++# language they'd expect messages to be displayed), then we favour
++# a non language-specific locale like C.UTF-8 if one is available,
++# so we sort with the C locale to get it at the top.
++# This is guaranteed to not be empty, because of the check in
++# support/dependencies/dependencies.sh
++HOST_UTF8_LOCALE := $(shell \
++			( echo $${LC_ALL:-$${LC_MESSAGES:-$${LANG}}}; \
++			  locale -a 2>/dev/null | LC_ALL=C sort \
++			) \
++			| grep -i -E 'utf-?8$$' \
++			| head -n 1)
++HOST_UTF8_LOCALE_ENV := LC_ALL=$(HOST_UTF8_LOCALE)
++endif
++
+ # Make sure pkg-config doesn't look outside the buildroot tree
+ HOST_PKG_CONFIG_PATH := $(PKG_CONFIG_PATH)
+ unexport PKG_CONFIG_PATH
