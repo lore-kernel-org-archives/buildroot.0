@@ -1,68 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Mar 2018 11:59:16 +0100
-Subject: [Buildroot] [git commit] core: drop no-longer used C.UTF-8 locale
- option
-Message-ID: <20180304110028.6AC1E8138C@busybox.osuosl.org>
+Date: Sun, 4 Mar 2018 11:46:48 +0100
+Subject: [Buildroot] [git commit] support/dependencies: unbreak check for
+ UTF-8 locale
+Message-ID: <20180304110028.24B5C8138C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1aa2148b0365776a17af3d8e22edd3622d475e4
+commit: https://git.buildroot.net/buildroot/commit/?id=9f8c7766e43d3a4e655d8073450e5e60abcdddd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Its use has been globbed into the more generic
-BR2_NEEDS_HOST_UTF8_LOCALE option now.
+Although the UTF-8 locales in mainstream distributions all are suffixed
+with just 'utf8', the nomenclature is a bit ambiguous with the way they
+are to be specified with the various LC_* variables, suffixed there with
+'UTF-8'.
+
+Also, POSIX, ISO, and IEC do not enforce any specific suffix in LC_*
+variables:
+    http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08_02
+
+    """
+    If the locale value has the form:
+        language[_territory][.codeset]
+
+    it refers to an implementation-provided locale, where settings of
+    language, territory, and codeset are implementation-defined.
+    """
+
+To avoid any confusion, use a regexp that is a bit more lax when
+matching locales.
+
+Also, quote the regexp, so that the '?' and '$' are not interpreted by
+the shell.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Julius Kriukas <julius@kriukas.lt>
-Cc: Christian Stewart <kidovate@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in                            |  5 -----
- support/dependencies/dependencies.sh | 13 -------------
- 2 files changed, 18 deletions(-)
+ support/dependencies/dependencies.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index 704840653e..0002df5176 100644
---- a/Config.in
-+++ b/Config.in
-@@ -94,11 +94,6 @@ config BR2_HOSTARCH_NEEDS_IA32_COMPILER
- config BR2_NEEDS_HOST_UTF8_LOCALE
- 	bool
- 
--# Hidden boolean selected by packages that explicitly need C.UTF-8 locale
--# to be available on host system.
--config BR2_NEEDS_HOST_C_UTF8_LOCALE
--	bool
--
- source "arch/Config.in"
- 
- menu "Build options"
 diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 656cb09d42..985b1d863b 100755
+index 6698f21a7a..656cb09d42 100755
 --- a/support/dependencies/dependencies.sh
 +++ b/support/dependencies/dependencies.sh
-@@ -207,19 +207,6 @@ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+@@ -200,7 +200,7 @@ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+ 		echo "You need locale support on your build machine to build a toolchain supporting locales"
+ 		exit 1 ;
  	fi
- fi
- 
--if grep -q ^BR2_NEEDS_HOST_C_UTF8_LOCALE=y $BR2_CONFIG; then
--	if ! which locale > /dev/null ; then
--		echo
--		echo "You need locale support on your build machine"
--		exit 1 ;
--	fi
--	if ! LC_ALL=C.UTF-8 locale -c charmap | grep -q '^UTF-8$'; then
--		echo
--		echo "You need C.UTF-8 locale suppport on the host system"
--		exit 1 ;
--	fi
--fi
--
- if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
- 	check_prog_host "java"
- 	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
+-	if ! locale -a | grep -q -i utf8$ ; then
++	if ! locale -a | grep -q -i -E 'utf-?8$' ; then
+ 		echo
+ 		echo "You need at least one UTF8 locale to build a toolchain supporting locales"
+ 		exit 1 ;
