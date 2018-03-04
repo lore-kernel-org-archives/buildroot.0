@@ -1,99 +1,43 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat,  3 Mar 2018 19:43:41 -0500
-Subject: [Buildroot] [PATCH v3 3/8] docker-engine: add support for init
- processes
+Date: Sat,  3 Mar 2018 19:43:43 -0500
+Subject: [Buildroot] [PATCH v3 5/8] docker-engine: add dependency on
+ docker-proxy
 In-Reply-To: <20180304004346.331-1-christian@paral.in>
 References: <20180304004346.331-1-christian@paral.in>
-Message-ID: <20180304004346.331-4-christian@paral.in>
+Message-ID: <20180304004346.331-6-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a docker container is run with the --init flag, the Docker engine
-uses the docker-init binary as PID 1 inside the container. This is
-necessary in may cases to avoid issues with signal handling, zombie
-processes, and other quirks when running as PID 1.
+docker-proxy is needed by docker-engine at runtime, and was
+previously not included. This leads to the following error
+when attempting to port-map ports to a container:
 
-The docker-init binary is backed by tini on default, but optionally can
-be changed to docker-init by user preference.
+  $ docker run -p 8080:8080 nginx
+  docker: Error response from daemon: driver failed programming external
+  connectivity on endpoint:
+  exec: "docker-proxy": executable file not found in $PATH.
 
-Furthermore, this patch fixes the following Docker error:
-
-  dockerd: level=warning msg="failed to retrieve docker-init version"
+Docker expects the docker-proxy binary to exist in the PATH.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk | 11 +++++++++++
- 2 files changed, 37 insertions(+)
+ package/docker-engine/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 05670a716e..7d9a87f7bb 100644
+index 7d9a87f7bb..a76940b6c0 100644
 --- a/package/docker-engine/Config.in
 +++ b/package/docker-engine/Config.in
-@@ -33,6 +33,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
- 
- if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- 
-+choice
-+	bool "docker-init to use"
-+	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	help
-+	  The docker engine uses a minimal init process as PID 1
-+	  inside containers. There are several implementations
-+	  of this init process.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	bool "tini"
-+	select BR2_PACKAGE_TINI
-+	help
-+	  Use Tini as the container init process.
-+
-+	  https://github.com/krallin/tini
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
-+	bool "dumb-init"
-+	select BR2_PACKAGE_DUMB_INIT
-+	help
-+	  Use dumb-init as the container init process.
-+
-+	  https://github.com/Yelp/dumb-init
-+
-+endchoice
-+
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
- 	depends on BR2_USE_MMU # btrfs-progs
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 8928f072e7..a2776ed78c 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -50,6 +50,13 @@ endif
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
- DOCKER_ENGINE_BUILD_TAGS += daemon
- DOCKER_ENGINE_BUILD_TARGETS += dockerd
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
-+DOCKER_ENGINE_INIT = dumb-init
-+else
-+DOCKER_ENGINE_INIT = tini
-+endif
-+
- endif
- 
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-@@ -119,6 +126,10 @@ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
- 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
- 		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
- 	)
-+
-+	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
-+		ln -fs $(DOCKER_ENGINE_INIT) $(TARGET_DIR)/usr/bin/docker-init
-+	)
- endef
- 
- $(eval $(generic-package))
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ 	default y
+ 	depends on BR2_USE_MMU # docker-containerd
+ 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
++	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
+ 	select BR2_PACKAGE_SQLITE # runtime dependency
+ 	help
 -- 
 2.13.6
