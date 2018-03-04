@@ -1,46 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Mar 2018 11:01:45 +0100
-Subject: [Buildroot] [git commit] package/tor: security bump to version
- 0.3.1.10
-Message-ID: <20180304100346.D1BEB8124D@busybox.osuosl.org>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 4 Mar 2018 11:17:26 +0100
+Subject: [Buildroot] [PATCH next] uclibc: update to 1.0.29
+Message-ID: <20180304101726.GA1833@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63497e02607543c6b27c8b59c026e78b0337dbaf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This release adds a lot of bugfixes for x86_64 and aarch64.
+It allows to compile and use more desktop applications.
+For this gettext-tiny was integrated, but unfortunately it
+fails to build in the context of buildroot, so I have to
+disable UCLIBC_HAS_LIBINTL until this is fixed.
 
-Fixes CVE-2018-0490: null-pointer crash in directory authority protocol list
-code.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uclibc/uClibc-ng.config | 1 -
+ package/uclibc/uclibc.hash      | 2 +-
+ package/uclibc/uclibc.mk        | 2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 08ab61ec14..db946eec07 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 6e1b04f7890e782fd56014a0de5075e4ab29b52a35d8bca1f6b80c93f58f3d26  tor-0.3.1.9.tar.gz
-+sha256 c0e1a71e8e079ddd7951f846bcbd79d5e716b602faa5b890c70762fe95cd04e0  tor-0.3.1.10.tar.gz
- sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 925e4d8f09..ddf912fe18 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+index 5beb2bd..f0a876f 100644
+--- a/package/uclibc/uClibc-ng.config
++++ b/package/uclibc/uClibc-ng.config
+@@ -23,7 +23,6 @@ UCLIBC_HAS_RESOLVER_SUPPORT=y
+ UCLIBC_HAS_LIBRESOLV_STUB=y
+ UCLIBC_HAS_LIBNSL_STUB=y
+ UCLIBC_HAS_CTYPE_CHECKED=y
+-UCLIBC_HAS_LIBINTL=y
+ UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+ UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
+ UCLIBC_HAS_STDIO_GETC_MACRO=y
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 0a15683..14f71d0 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,2 +1,2 @@
+ # From https://uclibc-ng.org/
+-sha256  a1504ddc34a29cc9bfd1f5a7419c4b63bb510d9e2faed81618d1b596ceb0a5a9        uClibc-ng-1.0.28.tar.xz
++sha256  e014e34abb13e97ca81694927f8ba95484cca2d3abac64b71f1a7981a96cb99c        uClibc-ng-1.0.29.tar.xz
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index c5b0c6b..8d198f6 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.3.1.9
-+TOR_VERSION = 0.3.1.10
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-UCLIBC_VERSION = 1.0.28
++UCLIBC_VERSION = 1.0.29
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+-- 
+2.1.4
