@@ -1,80 +1,186 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat,  3 Mar 2018 19:43:44 -0500
-Subject: [Buildroot] [PATCH v3 6/8] runc: bump to 9f9c96235cc
+Date: Sat,  3 Mar 2018 19:43:46 -0500
+Subject: [Buildroot] [PATCH v3 8/8] docker-engine: bump to v18.03.0-ce-rc1
 In-Reply-To: <20180304004346.331-1-christian@paral.in>
 References: <20180304004346.331-1-christian@paral.in>
-Message-ID: <20180304004346.331-7-christian@paral.in>
+Message-ID: <20180304004346.331-9-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps runc to the requisite version for Docker 2018.03.
+This commit bumps docker-engine to v18.03.0-ce-rc1
+
+The docker-engine repository has now been moved to:
+
+  https://github.com/docker/docker-ce
+
+The CLI and the daemon have been split into separate repositories:
+
+  - https://github.com/docker/cli
+  - https://github.com/moby/moby
+
+The daemon codebase lives in the "moby" repo, but the import paths in Go are:
+
+  github.com/docker/docker
+
+As before. Presumably, the maintainers will eventually split the engine out
+to a different repository as well.
+
+Please note that the entire docker/cli and moby/moby repositories are copied
+into the docker-ce repository, as well as all of their dependencies in the
+vendor directories. This means that downloading the docker-ce source tarball
+contains:
+
+ - The cli sources
+ - The daemon sources
+ - Two copies of all of the dependencies of both
+
+At the moment this is unavoidable, but does produce a working build.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/runc/runc.hash |  2 +-
- package/runc/runc.mk   | 17 +++++++++++------
- 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 3e188c5c79..f762707869 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+---
+
+Changes since initial series:
+
+ - Upgrade to 2018.03-ce-rc1 due to critical bugs in 2018.02.
+
+Recommended merge to next branch.
+---
+ package/docker-engine/docker-engine.hash |  2 +-
+ package/docker-engine/docker-engine.mk   | 48 +++++++++++++++++++-------------
+ 2 files changed, 29 insertions(+), 21 deletions(-)
+
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 6c0ed338a5..add0b89d39 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
-+sha256	df8e7cd1d332d97b468ee455164f3959246bb5fc639dd8042d0db3bded621ad7	runc-6c55f98695e902427906eed2c799e566e3d3dfb5.tar.gz
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index fb3fec20f5..f19fc5f068 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,14 +4,14 @@
+ # Locally calculated
+-sha256	4716df117d867b82ddab2e82395cd40aa3d0925a689eedcec8919729e4c9f121	docker-engine-v17.05.0-ce.tar.gz
++sha256	45cda237a2eea4f0415bfb1f755ba64724833ac026328b765ee82aedfcfa36f3	docker-engine-v18.03.0-ce-rc1.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index a2776ed78c..f9cb4b8879 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
-+RUNC_VERSION = 6c55f98695e902427906eed2c799e566e3d3dfb5
- RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+-DOCKER_ENGINE_VERSION = v17.05.0-ce
+-DOCKER_ENGINE_COMMIT = 89658bed64c2a8fe05a978e5b87dbec409d57a0f
+-DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
++DOCKER_ENGINE_VERSION = v18.03.0-ce-rc1
++DOCKER_ENGINE_SITE = $(call github,docker,docker-ce,$(DOCKER_ENGINE_VERSION))
  
- RUNC_DEPENDENCIES = host-go
- 
--RUNC_GOPATH = "$(@D)/Godeps/_workspace"
-+RUNC_GOPATH = $(@D)/gopath
- RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
- 	CGO_ENABLED=1 \
+ DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE_FILES = LICENSE
+@@ -19,37 +18,43 @@ DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+ 	CGO_NO_EMULATION=1 \
  	GOBIN="$(@D)/bin" \
-@@ -23,9 +23,10 @@ RUNC_GLDFLAGS = \
+ 	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
+-	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG="$(PKG_CONFIG)" \
+ 	$(TARGET_MAKE_ENV)
+ 
+ DOCKER_ENGINE_GLDFLAGS = \
+ 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
+-	-X main.Version=$(DOCKER_ENGINE_VERSION)
++	-X main.Version=$(DOCKER_ENGINE_VERSION) \
++	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_ENGINE_VERSION) \
++	-X github.com/docker/cli/cli.Version=$(DOCKER_ENGINE_VERSION)
++
++DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
++DOCKER_ENGINE_BUILD_TARGETS = cli:docker
++DOCKER_ENGINE_BUILD_TARGET_PARSE = \
++		export targetpkg=$$(echo $(target) | cut -d: -f1); \
++		export targetbin=$$(echo $(target) | cut -d: -f2)
  
  ifeq ($(BR2_STATIC_LIBS),y)
- RUNC_GLDFLAGS += -extldflags '-static'
-+RUNC_GOTAGS += static_build
+ DOCKER_ENGINE_GLDFLAGS += -extldflags '-static'
++DOCKER_ENGINE_BUILD_TAGS += static_build
+ else
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
+ DOCKER_ENGINE_GLDFLAGS_DOCKER += -extldflags '-static'
+ endif
  endif
  
--RUNC_GOTAGS = cgo static_build
-+RUNC_GOTAGS = cgo
- 
+-DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
+-DOCKER_ENGINE_BUILD_TARGETS = docker
+-
  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- RUNC_GOTAGS += seccomp
-@@ -38,9 +39,13 @@ define RUNC_CONFIGURE_CMDS
+ DOCKER_ENGINE_BUILD_TAGS += seccomp
+ DOCKER_ENGINE_DEPENDENCIES += libseccomp
+ endif
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+-DOCKER_ENGINE_BUILD_TAGS += journald
+ DOCKER_ENGINE_DEPENDENCIES += systemd
++DOCKER_ENGINE_BUILD_TAGS += systemd journald
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+ DOCKER_ENGINE_BUILD_TAGS += daemon
+-DOCKER_ENGINE_BUILD_TARGETS += dockerd
++DOCKER_ENGINE_BUILD_TARGETS += docker:dockerd
+ 
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
+ DOCKER_ENGINE_INIT = dumb-init
+@@ -83,10 +88,11 @@ endif
+ 
+ define DOCKER_ENGINE_CONFIGURE_CMDS
+ 	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
+-	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
+-	cd $(@D) && \
+-		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
++	ln -fs $(@D)/components/engine $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
++	ln -fs $(@D)/components/cli $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/cli
++	cd $(@D)/components/engine && \
+ 		BUILDTIME="$$(date)" \
++		IAMSTATIC="true" \
+ 		VERSION="$(patsubst v%,%,$(DOCKER_ENGINE_VERSION))" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
+ 		bash ./hack/make/.go-autogen
+@@ -95,9 +101,9 @@ endef
+ ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+ 
+ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
++	$(INSTALL) -D -m 0644 $(@D)/components/engine/contrib/init/systemd/docker.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
+-	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
++	$(INSTALL) -D -m 0644 $(@D)/components/engine/contrib/init/systemd/docker.socket \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
+ 	ln -fs ../../../../usr/lib/systemd/system/docker.service \
+@@ -112,19 +118,21 @@ endif
+ 
+ define DOCKER_ENGINE_BUILD_CMDS
+ 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+-		cd $(@D)/gopath/src/github.com/docker/docker; \
++		$(DOCKER_ENGINE_BUILD_TARGET_PARSE); \
++		cd $(@D)/gopath/src/github.com/docker/$${targetpkg}; \
+ 		$(DOCKER_ENGINE_MAKE_ENV) \
+ 		$(HOST_DIR)/bin/go build -v \
+-			-o $(@D)/bin/$(target) \
++			-o $(@D)/bin/$${targetbin} \
+ 			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
+-			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
+-			github.com/docker/docker/cmd/$(target)
++			-ldflags "$(DOCKER_ENGINE_GLDFLAGS)" \
++			./cmd/$${targetbin}
+ 	)
  endef
  
- define RUNC_BUILD_CMDS
--	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
--		build -v -o $(@D)/bin/runc \
--		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
-+	cd $(RUNC_GOPATH)/src/github.com/opencontainers/runc; \
-+		$(RUNC_MAKE_ENV) \
-+		$(HOST_DIR)/bin/go build -v -i \
-+		-o $(@D)/bin/runc \
-+		-tags "$(RUNC_GOTAGS)" \
-+		-ldflags "$(RUNC_GLDFLAGS)" \
-+		./
- endef
+ define DOCKER_ENGINE_INSTALL_TARGET_CMDS
+ 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+-		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
++		$(DOCKER_ENGINE_BUILD_TARGET_PARSE); \
++		$(INSTALL) -D -m 0755 $(@D)/bin/$${targetbin} $(TARGET_DIR)/usr/bin/$${targetbin}
+ 	)
  
- define RUNC_INSTALL_TARGET_CMDS
+ 	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
 -- 
 2.13.6
