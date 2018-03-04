@@ -1,77 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Mar 2018 16:06:06 +0100
-Subject: [Buildroot] [PATCH 2/2] package/kodi: remove imx support
-In-Reply-To: <20180304150606.32748-1-bernd.kuhls@t-online.de>
-References: <20180304150606.32748-1-bernd.kuhls@t-online.de>
-Message-ID: <20180304150606.32748-2-bernd.kuhls@t-online.de>
+Date: Sun,  4 Mar 2018 16:06:05 +0100
+Subject: [Buildroot] [PATCH 1/2] package/freescale-imx: Remove imx6s from
+ has_vpu list
+Message-ID: <20180304150606.32748-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://git.buildroot.net/buildroot/commit/?id=266208972192f1e0869f89d7be941de6294a810a
-broke imx support in Kodi because previously the G2D libraries were
-part of the imx-gpu-viv package:
+According to imx-vpu-5.4.37/Makefile, line 6:
 
-CMake Error at /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:138 (message):
-  Could NOT find IMX (missing: G2D_LIBRARY)
+	INCLUDE_LIST:= IMX27ADS IMX51 IMX53 IMX6Q
 
-Adjusting the Kodi package to use the imx-gpu-g2d as well still does
-not provide a working build:
+imx6s is not supported by the imx-vpu package. Its install target,
+guarded by
 
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'void CIMX::Deinitialize()':
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:79:21: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
-     ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
-                     ^~~~~~~~~~~~~~~~~~~
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'bool CIMX::UpdateDCIC()':
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:109:19: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
-   ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
-                   ^~~~~~~~~~~~~~~~~~~
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:115:21: error: 'DCIC_IOC_START_VSYNC' was not declared in this scope
-     ioctl(m_fddcic, DCIC_IOC_START_VSYNC, 0);
-                     ^~~~~~~~~~~~~~~~~~~~
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'virtual void CIMX::Process()':
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:125:19: error: 'DCIC_IOC_START_VSYNC' was not declared in this scope
-   ioctl(m_fddcic, DCIC_IOC_START_VSYNC, 0);
-                   ^~~~~~~~~~~~~~~~~~~~
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:131:19: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
-   ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
-                   ^~~~~~~~~~~~~~~~~~~
+	ifeq ($(PLATFORM), $(findstring $(PLATFORM), $(INCLUDE_LIST)))
 
-Although it might be possible to fix these bugs with something like
+does nothing, causing a build error later on in the imx-vpuwrap package
 
-	#define DCIC_IOC_CONFIG_DCIC    _IO('D', 12)
-	#define DCIC_IOC_START_VSYNC    _IO('D', 15)
-	#define DCIC_IOC_STOP_VSYNC     _IO('D', 16)
-
-as done in
-https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/libreelec-7.0/projects/imx6/patches/kodi/imx6-jarvis.patch
-
-we would still try to ride a dead horse. The upcoming Kodi version
-18.0-Leia will remove imx support completely, see upstream PR 12990.
+checking for vpu_lib.h... no
+configure: error: lib_vpu is required, consider installing imx-lib
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/kodi.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/freescale-imx/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 132037049d..3a72a5a1b8 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -191,12 +191,6 @@ KODI_DEPENDENCIES += libamcodec
- else
- KODI_CONF_OPTS += -DENABLE_AML=OFF
- endif
--ifeq ($(BR2_PACKAGE_IMX_VPUWRAP),y)
--KODI_CONF_OPTS += -DENABLE_IMX=ON
--KODI_DEPENDENCIES += imx-vpuwrap
--else
--KODI_CONF_OPTS += -DENABLE_IMX=OFF
--endif
- endif
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index b5e5ab23dc..e33a90d912 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -60,8 +60,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53 || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
  
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 	bool
 -- 
 2.11.0
