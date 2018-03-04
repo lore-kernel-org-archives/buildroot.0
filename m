@@ -1,38 +1,77 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun,  4 Mar 2018 12:02:47 -0300
-Subject: [Buildroot] [PATCH v2] linux-headers: bump 4.{9, 14}.x series
-Message-ID: <1520175767-6243-1-git-send-email-festevam@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  4 Mar 2018 16:06:06 +0100
+Subject: [Buildroot] [PATCH 2/2] package/kodi: remove imx support
+In-Reply-To: <20180304150606.32748-1-bernd.kuhls@t-online.de>
+References: <20180304150606.32748-1-bernd.kuhls@t-online.de>
+Message-ID: <20180304150606.32748-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+https://git.buildroot.net/buildroot/commit/?id=266208972192f1e0869f89d7be941de6294a810a
+broke imx support in Kodi because previously the G2D libraries were
+part of the imx-gpu-viv package:
+
+CMake Error at /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:138 (message):
+  Could NOT find IMX (missing: G2D_LIBRARY)
+
+Adjusting the Kodi package to use the imx-gpu-g2d as well still does
+not provide a working build:
+
+/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'void CIMX::Deinitialize()':
+/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:79:21: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
+     ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
+                     ^~~~~~~~~~~~~~~~~~~
+/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'bool CIMX::UpdateDCIC()':
+/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:109:19: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
+   ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
+                   ^~~~~~~~~~~~~~~~~~~
+/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:115:21: error: 'DCIC_IOC_START_VSYNC' was not declared in this scope
+     ioctl(m_fddcic, DCIC_IOC_START_VSYNC, 0);
+                     ^~~~~~~~~~~~~~~~~~~~
+/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'virtual void CIMX::Process()':
+/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:125:19: error: 'DCIC_IOC_START_VSYNC' was not declared in this scope
+   ioctl(m_fddcic, DCIC_IOC_START_VSYNC, 0);
+                   ^~~~~~~~~~~~~~~~~~~~
+/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:131:19: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
+   ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
+                   ^~~~~~~~~~~~~~~~~~~
+
+Although it might be possible to fix these bugs with something like
+
+	#define DCIC_IOC_CONFIG_DCIC    _IO('D', 12)
+	#define DCIC_IOC_START_VSYNC    _IO('D', 15)
+	#define DCIC_IOC_STOP_VSYNC     _IO('D', 16)
+
+as done in
+https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/libreelec-7.0/projects/imx6/patches/kodi/imx6-jarvis.patch
+
+we would still try to ride a dead horse. The upcoming Kodi version
+18.0-Leia will remove imx support completely, see upstream PR 12990.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes since v1:
-- Also bump 4.14
+ package/kodi/kodi.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 397068d..d74f267 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -243,11 +243,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.99"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.119"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.85"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.86"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.23"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.24"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.7"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 132037049d..3a72a5a1b8 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -191,12 +191,6 @@ KODI_DEPENDENCIES += libamcodec
+ else
+ KODI_CONF_OPTS += -DENABLE_AML=OFF
+ endif
+-ifeq ($(BR2_PACKAGE_IMX_VPUWRAP),y)
+-KODI_CONF_OPTS += -DENABLE_IMX=ON
+-KODI_DEPENDENCIES += imx-vpuwrap
+-else
+-KODI_CONF_OPTS += -DENABLE_IMX=OFF
+-endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
 -- 
-2.7.4
+2.11.0
