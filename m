@@ -1,186 +1,103 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat,  3 Mar 2018 19:43:46 -0500
-Subject: [Buildroot] [PATCH v3 8/8] docker-engine: bump to v18.03.0-ce-rc1
-In-Reply-To: <20180304004346.331-1-christian@paral.in>
-References: <20180304004346.331-1-christian@paral.in>
-Message-ID: <20180304004346.331-9-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun,  4 Mar 2018 08:00:21 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-03-03
+Message-ID: <20180304070021.3A75A206A6@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps docker-engine to v18.03.0-ce-rc1
+Hello,
 
-The docker-engine repository has now been moved to:
+Build statistics for 2018-03-03
+===============================
 
-  https://github.com/docker/docker-ce
+      branch |  OK | NOK | TIM | TOT |
+      master | 160 |  11 |   0 | 171 |
+   2017.11.x |  12 |   1 |   0 |  13 |
+        next |  44 |  13 |   0 |  57 |
 
-The CLI and the daemon have been split into separate repositories:
+Results for branch 'master'
+===========================
 
-  - https://github.com/docker/cli
-  - https://github.com/moby/moby
+Classification of failures by reason
+------------------------------------
 
-The daemon codebase lives in the "moby" repo, but the import paths in Go are:
+             bluez5_utils-5.48 | 3 
+           cups-filters-1.17.9 | 1 
+                   jamvm-2.0.0 | 1 
+                 libv4l-1.14.1 | 1 
+                 mesa3d-17.3.6 | 1 
+             qt5location-5.9.4 | 1 
+                    tekui-1.12 | 1 
+    trace-cmd-trace-cmd-v2.6.1 | 1 
+              wireshark-2.2.12 | 1 
 
-  github.com/docker/docker
 
-As before. Presumably, the maintainers will eventually split the engine out
-to a different repository as well.
+Detail of failures
+------------------
 
-Please note that the entire docker/cli and moby/moby repositories are copied
-into the docker-ce repository, as well as all of their dependencies in the
-vendor directories. This means that downloading the docker-ce source tarball
-contains:
+         arm |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/ea6496d16a9ba0def899aeecfd002fd24dec1951 |     
+   powerpc64 |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/7cdc869f4ff9daf6e2543d8777d3ca049b9a0198 |     
+     sparc64 |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/0349e71688663d0ef369d30e162daa46534a1173 |     
+         arm |            cups-filters-1.17.9 | NOK | http://autobuild.buildroot.net/results/45f31e480fe4429d3dc2acf78c6a79d2fcf0f3eb |     
+      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/886e9fa82a0f59a19e6a3909ff9e108d5cdddb01 | ORPH
+      x86_64 |                  libv4l-1.14.1 | NOK | http://autobuild.buildroot.net/results/7aea0cbb9e7fe7d9919c9be04ba4567ddcf4e15e | ORPH
+     powerpc |                  mesa3d-17.3.6 | NOK | http://autobuild.buildroot.net/results/1e3fb11271be772e8dc3b15aadb99d605bb96fd6 |     
+      x86_64 |              qt5location-5.9.4 | NOK | http://autobuild.buildroot.net/results/b7aafbe06fde77c26941eb55a188bc5a01471123 |     
+microblazeel |                     tekui-1.12 | NOK | http://autobuild.buildroot.net/results/a687b4a0633d823b442106ae89259f73357841b5 |     
+       sparc |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/604408b7761051c90daa1f74d1cd2068b636dac8 |     
+         arm |               wireshark-2.2.12 | NOK | http://autobuild.buildroot.net/results/0b7c7c17b93b224397c02983ea275093e4b57cf1 | ORPH
 
- - The cli sources
- - The daemon sources
- - Two copies of all of the dependencies of both
+Results for branch '2017.11.x'
+==============================
 
-At the moment this is unavoidable, but does produce a working build.
+Classification of failures by reason
+------------------------------------
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+                  boost-1.65.1 | 1 
 
----
 
-Changes since initial series:
+Detail of failures
+------------------
 
- - Upgrade to 2018.03-ce-rc1 due to critical bugs in 2018.02.
+     powerpc |                   boost-1.65.1 | NOK | http://autobuild.buildroot.net/results/a13e9bcf93681c1f7aec97b7021268a33ac455ab |     
 
-Recommended merge to next branch.
----
- package/docker-engine/docker-engine.hash |  2 +-
- package/docker-engine/docker-engine.mk   | 48 +++++++++++++++++++-------------
- 2 files changed, 29 insertions(+), 21 deletions(-)
+Results for branch 'next'
+=========================
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 6c0ed338a5..add0b89d39 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	4716df117d867b82ddab2e82395cd40aa3d0925a689eedcec8919729e4c9f121	docker-engine-v17.05.0-ce.tar.gz
-+sha256	45cda237a2eea4f0415bfb1f755ba64724833ac026328b765ee82aedfcfa36f3	docker-engine-v18.03.0-ce-rc1.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index a2776ed78c..f9cb4b8879 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = v17.05.0-ce
--DOCKER_ENGINE_COMMIT = 89658bed64c2a8fe05a978e5b87dbec409d57a0f
--DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
-+DOCKER_ENGINE_VERSION = v18.03.0-ce-rc1
-+DOCKER_ENGINE_SITE = $(call github,docker,docker-ce,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
- DOCKER_ENGINE_LICENSE_FILES = LICENSE
-@@ -19,37 +18,43 @@ DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
- 	CGO_NO_EMULATION=1 \
- 	GOBIN="$(@D)/bin" \
- 	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
--	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	PKG_CONFIG="$(PKG_CONFIG)" \
- 	$(TARGET_MAKE_ENV)
- 
- DOCKER_ENGINE_GLDFLAGS = \
- 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
--	-X main.Version=$(DOCKER_ENGINE_VERSION)
-+	-X main.Version=$(DOCKER_ENGINE_VERSION) \
-+	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_ENGINE_VERSION) \
-+	-X github.com/docker/cli/cli.Version=$(DOCKER_ENGINE_VERSION)
-+
-+DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
-+DOCKER_ENGINE_BUILD_TARGETS = cli:docker
-+DOCKER_ENGINE_BUILD_TARGET_PARSE = \
-+		export targetpkg=$$(echo $(target) | cut -d: -f1); \
-+		export targetbin=$$(echo $(target) | cut -d: -f2)
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- DOCKER_ENGINE_GLDFLAGS += -extldflags '-static'
-+DOCKER_ENGINE_BUILD_TAGS += static_build
- else
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
- DOCKER_ENGINE_GLDFLAGS_DOCKER += -extldflags '-static'
- endif
- endif
- 
--DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
--DOCKER_ENGINE_BUILD_TARGETS = docker
--
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- DOCKER_ENGINE_BUILD_TAGS += seccomp
- DOCKER_ENGINE_DEPENDENCIES += libseccomp
- endif
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
--DOCKER_ENGINE_BUILD_TAGS += journald
- DOCKER_ENGINE_DEPENDENCIES += systemd
-+DOCKER_ENGINE_BUILD_TAGS += systemd journald
- endif
- 
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
- DOCKER_ENGINE_BUILD_TAGS += daemon
--DOCKER_ENGINE_BUILD_TARGETS += dockerd
-+DOCKER_ENGINE_BUILD_TARGETS += docker:dockerd
- 
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
- DOCKER_ENGINE_INIT = dumb-init
-@@ -83,10 +88,11 @@ endif
- 
- define DOCKER_ENGINE_CONFIGURE_CMDS
- 	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
--	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
--	cd $(@D) && \
--		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
-+	ln -fs $(@D)/components/engine $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
-+	ln -fs $(@D)/components/cli $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/cli
-+	cd $(@D)/components/engine && \
- 		BUILDTIME="$$(date)" \
-+		IAMSTATIC="true" \
- 		VERSION="$(patsubst v%,%,$(DOCKER_ENGINE_VERSION))" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
- 		bash ./hack/make/.go-autogen
-@@ -95,9 +101,9 @@ endef
- ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
- 
- define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
-+	$(INSTALL) -D -m 0644 $(@D)/components/engine/contrib/init/systemd/docker.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
--	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
-+	$(INSTALL) -D -m 0644 $(@D)/components/engine/contrib/init/systemd/docker.socket \
- 		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
- 	ln -fs ../../../../usr/lib/systemd/system/docker.service \
-@@ -112,19 +118,21 @@ endif
- 
- define DOCKER_ENGINE_BUILD_CMDS
- 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
--		cd $(@D)/gopath/src/github.com/docker/docker; \
-+		$(DOCKER_ENGINE_BUILD_TARGET_PARSE); \
-+		cd $(@D)/gopath/src/github.com/docker/$${targetpkg}; \
- 		$(DOCKER_ENGINE_MAKE_ENV) \
- 		$(HOST_DIR)/bin/go build -v \
--			-o $(@D)/bin/$(target) \
-+			-o $(@D)/bin/$${targetbin} \
- 			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
--			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
--			github.com/docker/docker/cmd/$(target)
-+			-ldflags "$(DOCKER_ENGINE_GLDFLAGS)" \
-+			./cmd/$${targetbin}
- 	)
- endef
- 
- define DOCKER_ENGINE_INSTALL_TARGET_CMDS
- 	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
--		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
-+		$(DOCKER_ENGINE_BUILD_TARGET_PARSE); \
-+		$(INSTALL) -D -m 0755 $(@D)/bin/$${targetbin} $(TARGET_DIR)/usr/bin/$${targetbin}
- 	)
- 
- 	$(if $(filter $(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y), \
+Classification of failures by reason
+------------------------------------
+
+              host-erlang-20.0 | 2 
+                    htop-2.1.0 | 2 
+              keepalived-1.4.1 | 2 
+                 libv4l-1.14.1 | 2 
+                  ffmpeg-3.4.2 | 1 
+                  host-go-1.10 | 1 
+                iptables-1.6.2 | 1 
+       kompexsqlite-v1.10.12-1 | 1 
+                    liblo-0.29 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                   ffmpeg-3.4.2 | NOK | http://autobuild.buildroot.net/results/10df72e87831cccab62ab09ea476d9ee4e8beda5 |     
+     powerpc |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/1323d8b3c5463ba9e49f49223f1c98e615454700 |     
+         arm |               host-erlang-20.0 | NOK | http://autobuild.buildroot.net/results/89ab9b89f86d999db9e4108f8a95d2009ebcf70a |     
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/d275990af9e58d9b652c22240c871fcfb24e6ed4 | ORPH
+         arm |                     htop-2.1.0 | NOK | http://autobuild.buildroot.net/results/8831257f09a59c950aa2061947fd57d6ad82714b | ORPH
+         arc |                     htop-2.1.0 | NOK | http://autobuild.buildroot.net/results/28aa65fc3913b82627e71cac4f0c8cc7d9d9ec15 | ORPH
+       sparc |                 iptables-1.6.2 | NOK | http://autobuild.buildroot.net/results/3894e81e259e6cc2b3cb02a5dea0484f79ea63be | ORPH
+     powerpc |               keepalived-1.4.1 | NOK | http://autobuild.buildroot.net/results/7f5bfb3035f23cff94aa84477433dedd767def3c |     
+         arc |               keepalived-1.4.1 | NOK | http://autobuild.buildroot.net/results/9f61ce7447d13ffae247745da03ca9b098175fcb |     
+     powerpc |        kompexsqlite-v1.10.12-1 | NOK | http://autobuild.buildroot.net/results/48975ee67040128790bc38db6c2bf26563710629 | ORPH
+         arm |                     liblo-0.29 | NOK | http://autobuild.buildroot.net/results/e2015ce629d5608e76acedbcf55531437ce72f60 | ORPH
+        i686 |                  libv4l-1.14.1 | NOK | http://autobuild.buildroot.net/results/0761dacc5a41aa42aaf582ff65e6fbe5d05a593d | ORPH
+         arm |                  libv4l-1.14.1 | NOK | http://autobuild.buildroot.net/results/d03e1ff7075269d65ef28adc9f620c1d1f53f5ce | ORPH
+
+
 -- 
-2.13.6
+http://autobuild.buildroot.net
