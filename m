@@ -1,50 +1,122 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Mar 2018 10:01:06 +0100
-Subject: [Buildroot] [PATCH v4] systemd: switch to en_US.UTF-8 locale
- when building
-In-Reply-To: <87vaecbsf2.fsf@paral.in>
-References: <20180212213400.15061-1-julius@kriukas.lt>
- <20180222230055.25455-1-julius@kriukas.lt>
- <20180302224535.38c7ccd9@windsurf.home> <87vaecbsf2.fsf@paral.in>
-Message-ID: <20180304090106.GA2389@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Mar 2018 10:06:16 +0100
+Subject: [Buildroot] [PATCH 1/1] cryptopp: bump to version 6.1.0
+Message-ID: <20180304090616.27036-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+Remove patch (applied upstream)
 
-On 2018-03-03 19:22 -0500, Christian Stewart spake thusly:
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> > I've changed to use C.UTF-8 instead of en_US.UTF-8 and applied to
-> > master. Thanks!
-> 
-> This has broken the build on Gentoo, unfortunately.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 69 ----------------------
+ package/cryptopp/cryptopp.hash                     |  7 ++-
+ package/cryptopp/cryptopp.mk                       |  2 +-
+ 3 files changed, 6 insertions(+), 72 deletions(-)
+ delete mode 100644 package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
 
-Grr.. Gentoo... Grr...
-
-The major distros (Debian and derivatives, Fedora...) all have C.UTF-8.
-Gentoo is again playing solo... Sigh... :-/
-
-I'm onto a fix for that, now...
-
-> Is it possible to compile with an en_US.UTF-8 or other language-specific
-> UTF-8 locale, such that the build again works on Gentoo?
-
-Not everyone on Earth is American, by far, so we already ruled out using
-a hard-coded en_US.UTF-8 locale; for example, I don't have it on my
-system (although I do have, and do use, an english locale, en_GB.UTF-8).
-
-I'm onto a fix now...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
+deleted file mode 100644
+index 2d0f1d91da..0000000000
+--- a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
++++ /dev/null
+@@ -1,69 +0,0 @@
+-From 3d9181d7bdd8e491f745dbc9e34bd20b6f6da069 Mon Sep 17 00:00:00 2001
+-From: Gergely Nagy <ngg@tresorit.com>
+-Date: Wed, 14 Dec 2016 13:19:01 +0100
+-Subject: [PATCH] Fix possible DoS in ASN.1 decoders (CVE-2016-9939)
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- asn.cpp | 10 ++++++++++
+- asn.h   |  2 ++
+- 2 files changed, 12 insertions(+)
+-
+-diff --git a/asn.cpp b/asn.cpp
+-index 297ff01..2e923ef 100644
+---- a/asn.cpp
+-+++ b/asn.cpp
+-@@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
+- 	size_t bc;
+- 	if (!BERLengthDecode(bt, bc))
+- 		BERDecodeError();
+-+	if (bc > bt.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	str.New(bc);
+- 	if (bc != bt.Get(str, bc))
+-@@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
+- 	size_t bc;
+- 	if (!BERLengthDecode(bt, bc))
+- 		BERDecodeError();
+-+	if (bc > bt.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	bt.TransferTo(str, bc);
+- 	return bc;
+-@@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
+- 	size_t bc;
+- 	if (!BERLengthDecode(bt, bc))
+- 		BERDecodeError();
+-+	if (bc > bt.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	SecByteBlock temp(bc);
+- 	if (bc != bt.Get(temp, bc))
+-@@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
+- 	size_t bc;
+- 	if (!BERLengthDecode(bt, bc))
+- 		BERDecodeError();
+-+	if (bc == 0)
+-+		BERDecodeError();
+-+	if (bc > bt.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	byte unused;
+- 	if (!bt.Get(unused))
+-diff --git a/asn.h b/asn.h
+-index ed9de52..33f0dd0 100644
+---- a/asn.h
+-+++ b/asn.h
+-@@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
+- 	bool definite = BERLengthDecode(in, bc);
+- 	if (!definite)
+- 		BERDecodeError();
+-+	if (bc > in.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	SecByteBlock buf(bc);
+- 
+--- 
+-2.10.2
+-
+diff --git a/package/cryptopp/cryptopp.hash b/package/cryptopp/cryptopp.hash
+index 577638c1c9..d124e11a81 100644
+--- a/package/cryptopp/cryptopp.hash
++++ b/package/cryptopp/cryptopp.hash
+@@ -1,2 +1,5 @@
+-# Locally computed
+-sha256  a75ef486fe3128008bbb201efee3dcdcffbe791120952910883b26337ec32c34  cryptopp565.zip
++# Hash from: https://www.cryptopp.com/release610.html:
++sha256  21289d2511101a9350c87c8eb1f4982d4a266e8037b19dab79a32cc13ea108c7  cryptopp610.zip
++
++# Hash for license file:
++sha256  fe5f5f187e6e38ac2f833956fc5c4cab2df08797cff07f540e4ee74f12f7ee5b  License.txt
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 4b121aef2d..d7aabf04b8 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRYPTOPP_VERSION = 5.6.5
++CRYPTOPP_VERSION = 6.1.0
+ CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
+ CRYPTOPP_SITE = http://cryptopp.com/
+ CRYPTOPP_LICENSE = BSL-1.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
