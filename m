@@ -1,31 +1,49 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 4 Mar 2018 20:02:41 -0300
-Subject: [Buildroot] Defconfigs failing to build with gcc 6.x
-In-Reply-To: <20180304224808.566fa00d@windsurf.home>
-References: <20180304224808.566fa00d@windsurf.home>
-Message-ID: <CAAEAJfCAANWTWCM8bWQG8ggwZnLnQR53mri+pjaNjdBx49dE0A@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 4 Mar 2018 20:21:14 -0300
+Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
+In-Reply-To: <20180304225550.74761708@windsurf.home>
+References: <20180304225550.74761708@windsurf.home>
+Message-ID: <CAOMZO5BntMxqEBPuXVs2CX2L9OWGrf-AzbsOUeDN8qqcJgS8cg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 4 March 2018 at 18:48, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-[..]
->
->  - firefly_rk3288{,_demo}_defconfig
->
->    https://gitlab.com/buildroot.org/buildroot/-/jobs/55306815
->    https://gitlab.com/buildroot.org/buildroot/-/jobs/55306814
->
->    Ariel, Ezequiel: could you add yourself as the maintainers for this
->    board in the DEVELOPERS file ? If you're no longer interested by
->    this board, please let us know, and we'll drop the
->    defconfig. Thanks!
->
+Hi Thomas,
 
-Sorry, unfortunately we no longer have the firefly board,
-so we can't maintain it.
--- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+On Sun, Mar 4, 2018 at 6:55 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Vincent, Gary, Fabio,
+>
+> I'm contacting you because the freescale_imx31_3stack_defconfig
+> doesn't build anymore, with the following error during the kernel
+> build:
+>
+>
+> arch/arm/mach-imx/built-in.o: In function `init_mmdc_lpddr2_settings':
+> platform-spi_imx.c:(.text+0x8f18): undefined reference to
+> `imx6sll_lpddr2_freq_change' arch/arm/mach-imx/built-in.o: In function
+> `imx6ul_cpuidle_init': platform-spi_imx.c:(.init.text+0x195c):
+> undefined reference to `mx6ull_lpm_wfi_end'
+> platform-spi_imx.c:(.init.text+0x1960): undefined reference to
+> `mx6ull_lpm_wfi_start' platform-spi_imx.c:(.init.text+0x1964):
+> undefined reference to `imx6ull_low_power_idle'
+> arch/arm/mach-imx/built-in.o: In function `imx6sl_init_late':
+> platform-spi_imx.c:(.init.text+0x56f0): undefined reference to
+> `imx6sll_cpuidle_init' Makefile:969: recipe for target 'vmlinux' failed
+> make[1]: *** [vmlinux] Error 1
+>
+> See:
+>
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/55306817
+>
+> Is one of you interested in maintaining/fixing this board ? If so,
+> could you fix it and also submit a patch to add yourself to the
+> DEVELOPERS file ?
+
+I can send a patch converting the defconfig to use a mainline kernel instead.
+
+Regards,
+
+Fabio Estevam
