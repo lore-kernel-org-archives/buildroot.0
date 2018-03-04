@@ -1,114 +1,121 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat,  3 Mar 2018 19:43:38 -0500
-Subject: [Buildroot] [PATCH v3 0/8] upgrade docker-engine and associated
- components
-Message-ID: <20180304004346.331-1-christian@paral.in>
+Date: Sat,  3 Mar 2018 19:43:39 -0500
+Subject: [Buildroot] [PATCH v3 1/8] tini: new package
+In-Reply-To: <20180304004346.331-1-christian@paral.in>
+References: <20180304004346.331-1-christian@paral.in>
+Message-ID: <20180304004346.331-2-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Tini is a minimal init process to act as PID 1 for containers.
 
-This series upgrades Docker and associated components:
+Tini can be used to satisfy docker-engine's docker-init binary
+requirement.
 
- - runc to 9f9c96235cc97674e935002fc3d78361b696a69e
- - docker-containerd to v1.0.2
- - docker-engine to v2018.03.0-ce-rc1
-
-Docker is updated to v2018.03.0-ce-rc1 due to critical bugs in 2018.02.
-2018.03 full release is expected in the month of March.
-
-It is thus suggested that this series be merged to target the next
-Buildroot stable release later this year, with the plan to upgrade to
-2018.03 when it is released in place.
-
-Suggested naming changes:
-
- - docker-containerd -> containerd
-
-This project has been split off from Docker, and is now hosted at:
-
-  https://github.com/containerd/containerd
-
-It is not specifically a docker project.
-
- - docker-engine -> docker-ce
-
-Docker "Community Edition" is the name for the daemon and CLI bundled
-together by the "moby" bundler/project duo.
-
-It's still named the "Engine" but with the CLI as well, it makes more
-sense to name it "Docker Community Edition" which also avoids a
-collision with the "docker" package.
-
-An old version of this series adding docker-init exists.
-
- - https://patchwork.ozlabs.org/patch/827886/
-
-Changes v1 -> v2:
-
- - Make static default for tini and dumb-init
- - Bump package versions (as described above)
- - Added fix to not link against libsystemd without systemd
- - Removed unnecessary stack protector flags from tini
- - Fixed confusing commit messages
- - Upgraded to 18.03.0-rc1, skipping 18.02, to address critical bugs in 2018.02.
- - Tested on Raspberry Pi 3, Odroid XU4, Odroid HC2, and Raspberry Pi 0.
-
-Changes v2 -> v3:
-
- - Remove unnecessary static select options for dumb-init and tini and associated comments.
- - Tini was updated to v0.17.0
- - Dumb-init was updated to v1.2.1
- - License hash files added for tini and dumb-init
- - Comment explaining -static option for tini and dumb-init added
- - Dumb-init tarball named correctly in hash file
-
-Best,
-Christian Stewart
+Signed-off-by: Christian Stewart <christian@paral.in>
 
 ---
 
-Christian Stewart (8):
-  tini: new package
-  dumb-init: new package
-  docker-engine: add support for init processes
-  docker-proxy: new package
-  docker-engine: add dependency on docker-proxy
-  runc: bump to 9f9c96235cc
-  docker-containerd: bump to v1.0.2
-  docker-engine: bump to v18.03.0-ce-rc1
+Changes since v2:
 
- package/Config.in                                |  3 ++
- package/docker-containerd/Config.in              | 12 +++++
- package/docker-containerd/docker-containerd.hash |  2 +-
- package/docker-containerd/docker-containerd.mk   | 38 +++++++++++----
- package/docker-engine/Config.in                  | 27 +++++++++++
- package/docker-engine/docker-engine.hash         |  2 +-
- package/docker-engine/docker-engine.mk           | 59 ++++++++++++++++--------
- package/docker-proxy/Config.in                   | 18 ++++++++
- package/docker-proxy/docker-proxy.hash           |  2 +
- package/docker-proxy/docker-proxy.mk             | 46 ++++++++++++++++++
- package/dumb-init/Config.in                      |  7 +++
- package/dumb-init/dumb-init.hash                 |  3 ++
- package/dumb-init/dumb-init.mk                   | 24 ++++++++++
- package/runc/runc.hash                           |  2 +-
- package/runc/runc.mk                             | 17 ++++---
- package/tini/Config.in                           | 16 +++++++
- package/tini/tini.hash                           |  3 ++
- package/tini/tini.mk                             | 35 ++++++++++++++
- 18 files changed, 278 insertions(+), 38 deletions(-)
- create mode 100644 package/docker-proxy/Config.in
- create mode 100644 package/docker-proxy/docker-proxy.hash
- create mode 100644 package/docker-proxy/docker-proxy.mk
- create mode 100644 package/dumb-init/Config.in
- create mode 100644 package/dumb-init/dumb-init.hash
- create mode 100644 package/dumb-init/dumb-init.mk
+ - Upgraded to v0.17.0
+ - Added hash for license file
+---
+ package/Config.in      |  1 +
+ package/tini/Config.in | 16 ++++++++++++++++
+ package/tini/tini.hash |  3 +++
+ package/tini/tini.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 55 insertions(+)
  create mode 100644 package/tini/Config.in
  create mode 100644 package/tini/tini.hash
  create mode 100644 package/tini/tini.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 9cd5d9c087..5bdaa24340 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1921,6 +1921,7 @@ comment "Utilities"
+ 	source "package/sudo/Config.in"
+ 	source "package/terminology/Config.in"
+ 	source "package/time/Config.in"
++	source "package/tini/Config.in"
+ 	source "package/tmux/Config.in"
+ 	source "package/which/Config.in"
+ 	source "package/xmlstarlet/Config.in"
+diff --git a/package/tini/Config.in b/package/tini/Config.in
+new file mode 100644
+index 0000000000..235fc1a8fb
+--- /dev/null
++++ b/package/tini/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_TINI
++	bool "tini"
++	help
++	  tini is a simple but valid init binary to
++	  act as PID 1 for containers.
++
++	  https://github.com/krallin/tini
++
++if BR2_PACKAGE_TINI
++
++config BR2_PACKAGE_TINI_MINIMAL
++	bool "build minimal variant"
++	help
++	  Disables argument parsing and verbose output.
++
++endif
+diff --git a/package/tini/tini.hash b/package/tini/tini.hash
+new file mode 100644
+index 0000000000..c4f85c43b0
+--- /dev/null
++++ b/package/tini/tini.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256	5244691718f6856db74dcf6dbb3576a901e737f41412e7895747f0ccb4ccaff0	tini-v0.17.0.tar.gz
++sha256	e5f46bca81266bdd511cf08018d66866870531794569c04f9b45f50dd23c28b0	LICENSE
+diff --git a/package/tini/tini.mk b/package/tini/tini.mk
+new file mode 100644
+index 0000000000..9f9d986745
+--- /dev/null
++++ b/package/tini/tini.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# tini
++#
++################################################################################
++
++TINI_VERSION = v0.17.0
++TINI_SITE = $(call github,krallin,tini,$(TINI_VERSION))
++
++TINI_LICENSE = MIT
++TINI_LICENSE_FILES = LICENSE
++
++TINI_CFLAGS = $(TARGET_CFLAGS) -DTINI_VERSION=\"$(TINI_VERSION)\" -DTINI_GIT=\"\"
++TINI_CFLAGS += -static
++
++ifeq ($(BR2_PACKAGE_TINI_MINIMAL),y)
++TINI_CFLAGS += -DTINI_MINIMAL
++endif
++
++define TINI_CONFIGURE_CMDS
++	printf "#pragma once\n" > $(@D)/src/tiniConfig.h
++endef
++
++define TINI_BUILD_CMDS
++	$(TARGET_CC) \
++		$(TINI_CFLAGS) \
++		-o $(@D)/tini $(@D)/src/tini.c
++endef
++
++define TINI_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/tini $(TARGET_DIR)/usr/bin/tini
++endef
++
++# Tini's CMakeLists.txt is not suitable for Buildroot.
++$(eval $(generic-package))
 -- 
 2.13.6
