@@ -1,64 +1,83 @@
-From: Clemens Gruber <clemens.gruber@pqgruber.com>
-Date: Sun,  4 Mar 2018 18:18:15 +0100
-Subject: [Buildroot] [PATCH next] uboot: support external DTB in U-Boot
- images
-Message-ID: <20180304171815.35061-1-clemens.gruber@pqgruber.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 4 Mar 2018 19:25:53 +0200
+Subject: [Buildroot] [PATCH v4 4/4] configs/freescale_imx8mqevk: new
+ defconfig
+In-Reply-To: <1520065060-20046-5-git-send-email-karl.erik.larsson@gmail.com>
+References: <1520065060-20046-1-git-send-email-karl.erik.larsson@gmail.com>
+ <1520065060-20046-5-git-send-email-karl.erik.larsson@gmail.com>
+Message-ID: <20180304172552.owvawfc35w2mg5hg@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allows signed FIT images to be verified with the public key in the DTB.
-The public key is stored in the bootloader image, which must have been
-verified by the previous stage in the trust chain, before loading it.
+Hi Erik,
 
-Signed-off-by: Clemens Gruber <clemens.gruber@pqgruber.com>
----
- boot/uboot/Config.in | 14 ++++++++++++++
- boot/uboot/uboot.mk  |  5 +++++
- 2 files changed, 19 insertions(+)
+On Sat, Mar 03, 2018 at 09:17:40AM +0100, Erik Larsson wrote:
+> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+> Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
+> ---
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 264f343767..620aa02bb9 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -460,6 +460,20 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
- 	  To use this device tree source file, the U-Boot configuration
- 	  file must refer to it.
- 
-+config BR2_TARGET_UBOOT_EXT_DTB
-+	bool "External DTB"
-+	help
-+	  Put an external DTB in the U-Boot image. Used to store public
-+	  keys for verifying signed FIT images.
-+
-+config BR2_TARGET_UBOOT_EXT_DTB_PATH
-+	string "Path to external DTB"
-+	depends on BR2_TARGET_UBOOT_EXT_DTB
-+	help
-+	  Path to external DTB to be put in the U-Boot image.
-+	  Prepend ${TOPDIR}/ to specify paths relative to the top
-+	  buildroot source directory.
-+
- endif
- 
- endif # BR2_TARGET_UBOOT
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index d2f241cd8b..469673bebf 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -134,6 +134,11 @@ UBOOT_MAKE_OPTS += \
- 	HOSTCC="$(HOSTCC) $(HOST_CFLAGS)" \
- 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
- 
-+ifeq ($(BR2_TARGET_UBOOT_EXT_DTB),y)
-+UBOOT_MAKE_OPTS += \
-+	EXT_DTB="$(call qstrip,$(BR2_TARGET_UBOOT_EXT_DTB_PATH))"
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
- UBOOT_DEPENDENCIES += arm-trusted-firmware
- UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
+[snip]
+
+> diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+> new file mode 100644
+> index 0000000..313bfd9
+> --- /dev/null
+> +++ b/configs/freescale_imx8mqevk_defconfig
+> @@ -0,0 +1,38 @@
+> +BR2_aarch64=y
+> +BR2_ARM_FPU_VFPV3=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_beta"
+
+You can now use the more recent 'rel_imx_4.9.51_8mq_beta_patch' tag here, ...
+
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mq-evk"
+> +BR2_PACKAGE_FREESCALE_IMX=y
+> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
+> +BR2_PACKAGE_FIRMWARE_IMX=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_beta"
+
+... here, and ...
+
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="o8.0.0_1.3.0_8m-prc"
+
+... here.
+
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+> +BR2_TARGET_UBOOT_FORMAT_IMX=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_IMX_MKIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+
+baruch
+
 -- 
-2.16.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
