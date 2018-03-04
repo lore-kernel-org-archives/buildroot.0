@@ -1,68 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Mar 2018 11:59:03 +0100
-Subject: [Buildroot] [git commit] core: find a host UTF-8 locale
-Message-ID: <20180304110028.3C5E08138C@busybox.osuosl.org>
+Date: Sun, 4 Mar 2018 11:59:16 +0100
+Subject: [Buildroot] [git commit] package/systemd: needs any UTF-8 locale
+Message-ID: <20180304110028.543928138C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2a9358b6e7d1432856b05bddcab66723f9ea847
+commit: https://git.buildroot.net/buildroot/commit/?id=20862443b864e1abe94fa2bb81b7e70daf0a0f5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some packages really want to use an UTF-8 locale, or they break.
+Not all distributions have the language-agnostic C.UTF-8 locale (Gentoo,
+I'm frowning at you!).
 
-However, there is no guarantee that any given locale is available on a
-system. For example,, while most mainstream distros (Debian and
-derivatives, Fedora...) do have the generic, language-agnostic C.UTF-8
-locale, Gentoo does not provide it.
+Instead, use any UTF-8 locale provided by the system.
 
-So, find the first UTF-8 locale available on the system, and take any
-that is available. We however do favour using the user-set current
-locale, then using the language-agnostic C.UTF-8, and eventually any
-random UTF-8 locale.
-
-Note: we only need to enforce LC_ALL, because setting it implies
-everything else:
-    http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08_02
-
-    """
-    1. If the LC_ALL environment variable is defined and is not null,
-    the value of LC_ALL shall be used.
-    """
-
-[Peter: use same regexp as in dependencies.sh]
+Reported-by: Christian Stewart <kidovate@gmail.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Julius Kriukas <julius@kriukas.lt>
+Cc: Christian Stewart <kidovate@gmail.com>
+Cc: Trent Piepho <tpiepho@impinj.com>
+Cc: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ package/systemd/Config.in  | 2 +-
+ package/systemd/systemd.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 5fe3a34c47..49c03b7008 100644
---- a/Makefile
-+++ b/Makefile
-@@ -363,6 +363,22 @@ ifneq ($(firstword $(HOSTCC_VERSION)),4)
- HOSTCC_VERSION := $(firstword $(HOSTCC_VERSION))
- endif
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 8978e3bac1..7b613df02c 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -27,7 +27,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
+ 	select BR2_TARGET_TZ_INFO
+-	select BR2_NEEDS_HOST_C_UTF8_LOCALE
++	select BR2_NEEDS_HOST_UTF8_LOCALE
+ 	help
+ 	  systemd is a system and service manager for Linux,
+ 	  compatible with SysV and LSB init scripts. systemd provides
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 22384c648b..8c22c08dd1 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -387,7 +387,7 @@ endef
  
-+ifeq ($(BR2_NEEDS_HOST_UTF8_LOCALE),y)
-+# First, we try to use the user's configured locale (as that's the
-+# language they'd expect messages to be displayed), then we favour
-+# a non language-specific locale like C.UTF-8 if one is available,
-+# so we sort with the C locale to get it at the top.
-+# This is guaranteed to not be empty, because of the check in
-+# support/dependencies/dependencies.sh
-+HOST_UTF8_LOCALE := $(shell \
-+			( echo $${LC_ALL:-$${LC_MESSAGES:-$${LANG}}}; \
-+			  locale -a 2>/dev/null | LC_ALL=C sort \
-+			) \
-+			| grep -i -E 'utf-?8$$' \
-+			| head -n 1)
-+HOST_UTF8_LOCALE_ENV := LC_ALL=$(HOST_UTF8_LOCALE)
-+endif
-+
- # Make sure pkg-config doesn't look outside the buildroot tree
- HOST_PKG_CONFIG_PATH := $(PKG_CONFIG_PATH)
- unexport PKG_CONFIG_PATH
+ SYSTEMD_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+ 
+-SYSTEMD_ENV = $(TARGET_MAKE_ENV) LANG=C.UTF-8 LC_ALL=C.UTF-8
++SYSTEMD_ENV = $(TARGET_MAKE_ENV) $(HOST_UTF8_LOCALE_ENV)
+ 
+ define SYSTEMD_CONFIGURE_CMDS
+ 	rm -rf $(@D)/build
