@@ -1,44 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Mar 2018 11:42:12 +0100
-Subject: [Buildroot] [git commit] package/systemd: create groups required
- for udevd
-Message-ID: <20180304104629.390BE811B3@busybox.osuosl.org>
+Date: Sun, 04 Mar 2018 11:51:41 +0100
+Subject: [Buildroot] [PATCH 1/4] support/dependencies: unbreak check for
+ UTF-8 locale
+In-Reply-To: <33170da034bc7e7d13f68fae924ce2192a11ee36.1520159327.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 4 Mar 2018 11:29:03 +0100")
+References: <cover.1520159327.git.yann.morin.1998@free.fr>
+ <33170da034bc7e7d13f68fae924ce2192a11ee36.1520159327.git.yann.morin.1998@free.fr>
+Message-ID: <87k1us9kqq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f208cf296c2c7c049d11d15b6d0546214c4d0357
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-udevd needs extra groups for its bundled rules:
+ > Although the UTF-8 locales in mainstream distributions all are suffixed
+ > with just 'utf8', the nomenclature is a bit ambiguous with the way they
+ > are to be specified with the various LC_* variables, suffixed there with
+ > 'UTF-8'.
 
-    Mar 03 12:21:30 buildroot systemd-udevd[732]: Specified group 'render' unknown
-    Mar 03 12:21:30 buildroot systemd-udevd[732]: Specified group 'kvm' unknown
+ > Also, POSIX, ISO, and IEC do not enforce any specific suffix in LC_*
+ > variables:
+ >     http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08_02
 
-Add those missing groups.
+ >     """
+ >     If the locale value has the form:
+ >         language[_territory][.codeset]
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Julius Kriukas <julius@kriukas.lt>
-Cc: Trent Piepho <tpiepho@impinj.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/systemd/systemd.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ >     it refers to an implementation-provided locale, where settings of
+ >     language, territory, and codeset are implementation-defined.
+ >     """
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 793b966ff5..22384c648b 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -343,6 +343,8 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- define SYSTEMD_USERS
- 	- - input -1 * - - - Input device group
- 	- - systemd-journal -1 * - - - Journal
-+	- - render -1 * - - - DRI rendering nodes
-+	- - kvm -1 * - - - kvm nodes
- 	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
- 	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
- 	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+ > To avoid any confusion, use a regexp that is a bit more lax when
+ > matching locales.
+
+ > Also, quote the regexp, so that the '?' and '$' are not interpreted by
+ > the shell.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
