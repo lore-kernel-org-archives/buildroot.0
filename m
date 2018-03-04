@@ -1,44 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  4 Mar 2018 22:31:19 +0100
-Subject: [Buildroot] [PATCH 05/23] configs/qemu_x86_defconfig: remove kernel
- options that need openssl
+Date: Sun,  4 Mar 2018 22:31:24 +0100
+Subject: [Buildroot] [PATCH 10/23] configs/mx53loco: needs host-openssl for
+ the Linux kernel build
 In-Reply-To: <20180304213137.24681-1-thomas.petazzoni@bootlin.com>
 References: <20180304213137.24681-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180304213137.24681-6-thomas.petazzoni@bootlin.com>
+Message-ID: <20180304213137.24681-11-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wireless support ends up enabling CONFIG_SYSTEM_TRUSTED_KEYRING, which
-requires openssl to be available on the host, so disable wireless
-support, which isn't needed in Qemu.
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306856
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/qemu/x86/linux-4.15.config | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/mx53loco_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/qemu/x86/linux-4.15.config b/board/qemu/x86/linux-4.15.config
-index 0e59b87bd6..79f7537d80 100644
---- a/board/qemu/x86/linux-4.15.config
-+++ b/board/qemu/x86/linux-4.15.config
-@@ -9,6 +9,7 @@ CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
- CONFIG_INET=y
-+# CONFIG_WIRELESS is not set
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_VIRTIO_BLK=y
-@@ -20,6 +21,7 @@ CONFIG_NETDEVICES=y
- CONFIG_VIRTIO_NET=y
- CONFIG_NE2K_PCI=y
- CONFIG_8139CP=y
-+# CONFIG_WLAN is not set
- CONFIG_INPUT_EVDEV=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index aaba4767ed..8bb4014178 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -32,3 +32,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -- 
 2.14.3
