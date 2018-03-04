@@ -1,141 +1,176 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 4 Mar 2018 22:41:31 +0200
-Subject: [Buildroot] [PATCH 1/1] czmq: bump to version v4.1.0
-In-Reply-To: <61e3571e-d247-7c16-a80c-59317228247f@mind.be>
-References: <20180224164305.6133-1-asafka7@gmail.com>
- <d43c54d6-2c1b-c2fb-06ee-e396490fbb69@mind.be>
- <CALFsTFWDLH5gJuPRLtYEqV8fJSs0Rt9mMg4BpMFmKSJp-Nvjow@mail.gmail.com>
- <61e3571e-d247-7c16-a80c-59317228247f@mind.be>
-Message-ID: <CALFsTFURrVY9gk2nQMQmbzq14M5yFO2BAa7iWawbzeSJ9RcWjA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 4 Mar 2018 22:28:34 +0100
+Subject: [Buildroot] [git commit] Update for 2018.02
+Message-ID: <20180304213009.2ACD18154A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK, thanks again. Though I still don't see the patch on next... DId you
-apply it?
+commit: https://git.buildroot.net/buildroot/commit/?id=8a94ff12d232ada68cff5957089a78a1f0b8f192
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Asaf.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    | 21 +++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 56 insertions(+), 14 deletions(-)
 
-On Fri, Mar 2, 2018 at 10:38 AM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
-
->  Hi Asaf,
->
-> On 26-02-18 20:20, Asaf Kahlon wrote:
-> > Hi Arnout, thanks for the productive comments.
-> > I fixed all, but didn't change CZMQ_AUTORECONF because it seems all the
-> > autotools-related files were generated and expect autotools version of
-> 1.14 and
-> > can't be compiled with 1.15.
->
->  This statement doesn't make sense to me. But I understand why it is
-> needed, see
-> below.
->
-> > I uploaded a new patch here. Tell me if there's something else you want
-> to change.
->
->  Thank you for that. However, you should still submit it as a proper patch
-> in a
-> separate e-mail, using git send-email (not just pasting it in a mail). If
-> you
-> send it like this, it gets incorrectly line-wrapped and can't be applied.
->
-> > Signed-off-by: Asaf Kahlon <asafka7 at gmail.com <mailto:asafka7@gmail.com
-> >>
->
->  If you want to keep me in Cc of new versions, you can add here a line:
->
-> Cc: Arnout Vandecappelle <arnout@mind.be>
->
-> and git send-email will also send it to me directly.
->
-> > ---
->
->  The additional remarks (i.e. "I fixed all comments, but didn't
-> change...") you
-> can put directly in the git commit message, here, below the --- line. That
-> way,
-> they will be in the mail but will not be included in the final git history.
->
-> >  package/czmq/czmq.hash |  6 +++++-
-> >  package/czmq/czmq.mk <http://czmq.mk>   | 10 ++--------
-> >  2 files changed, 7 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
-> > index 526ea594b9..c0a7176f8d 100644
-> > --- a/package/czmq/czmq.hash
-> > +++ b/package/czmq/czmq.hash
-> > @@ -1,2 +1,6 @@
-> > +# From https://github.com/zeromq/czmq/releases
-> > +md5 d29baef1079f19a2c6a360eb6be984f8 czmq-4.1.0.tar.gz
-> > +sha1 1d201a87205811367f7c92cbbd36a899edda68bf czmq-4.1.0.tar.gz
-> >  # Locally calculated
-> > -sha256 5c76de41f736f0c059e0b26174ef99200f2aba2fa38333683dbe4944b2f80555
-> > czmq-5205ec201e97c3a652c17eb86b18b70350b54512.tar.gz
-> > +sha256 3befa35b4886b5298e8329b4f0aa5bb9bde0e7439bd3c5c53295cb988371fc11
-> > czmq-4.1.0.tar.gz
-> > +sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5
-> LICENCE
-> > diff --git a/package/czmq/czmq.mk <http://czmq.mk> b/package/czmq/
-> czmq.mk
-> > <http://czmq.mk>
-> > index 5305789d7a..3c07845d9c 100644
-> > --- a/package/czmq/czmq.mk <http://czmq.mk>
-> > +++ b/package/czmq/czmq.mk <http://czmq.mk>
-> > @@ -4,8 +4,8 @@
-> >  #
-> >  ###########################################################
-> #####################
-> >
-> > -CZMQ_VERSION = 5205ec201e97c3a652c17eb86b18b70350b54512
-> > -CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
-> > +CZMQ_VERSION = 4.1.0
-> > +CZMQ_SITE = https://github.com/zeromq/czmq/releases/download/v$(
-> CZMQ_VERSION)
-> >
-> >  # Autoreconf required as we use the git tree
->
->  If autoreconf really is required, then this comment has to change, since
-> now we
-> are no longer using the git tree but we're using a tarball that does
-> contain the
-> configure script. However, now I see why it is needed. So change this
-> comment into:
->
-> # 0001-configure.ac-remove-Werror.patch touches configure.ac
->
->  I have made this small modification and applied to next, thanks! So there
-> is no
-> need to resubmit now.
->
->  Regards,
->  Arnout
->
-> >  CZMQ_AUTORECONF = YES
-> > @@ -18,10 +18,4 @@ CZMQ_LICENSE_FILES = LICENSE
-> >  # host-python, so disable asciidoc entirely.
-> >  CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
-> >
-> > -define CZMQ_CREATE_CONFIG_DIR
-> > -mkdir -p $(@D)/config
-> > -endef
-> > -
-> > -CZMQ_POST_PATCH_HOOKS += CZMQ_CREATE_CONFIG_DIR
-> > -
-> >  $(eval $(autotools-package))
-> [snip]
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180304/39dca0ae/attachment.html>
+diff --git a/CHANGES b/CHANGES
+index f2de1149ce..c7925bdedc 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,24 @@
++2018.02, Released March 4th, 2018
++
++	Fixes all over the tree.
++
++	Issues with systemd with a readonly rootfs and DBus fixed.
++
++	Instructure:
++	- check-uniq-files: fix Python 2.6 compatibility.
++	- dependencies.sh: check for external argparse module for
++	  Python 2.6.
++	- Add infrastructure to detect and use a UTF-8 locale on the
++	  host, needed by systemd.
++
++	Update/fixed packages: clamav, dash, dhcp, dovecot, efl,
++	ffmpeg, libv4l, mono, mosquitto, php, postgresql, qt,
++	scanpypi, sdl2, systemd, tor, tvheadend, uboot, wavpack
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10831: qemu_x86_64_defconfig build fails on linux-headers..
++
+ 2018.02-rc3, Released February 27th, 2018
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 49c03b7008..957ba6634a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.02-rc3
++export BR2_VERSION := 2018.02
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1519768000
++BR2_VERSION_EPOCH = 1520198000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index c9133eca6a..cf99b22cd1 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,40 +8,40 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest long term support release: <b>2017.02.10</b></h3>
++      <h3 style="text-align: center;">Latest stable / long term support release: <b>2018.02</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2017.02.10.tar.gz">buildroot-2017.02.10.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.02.10.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.tar.gz">buildroot-2018.02.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2017.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2017.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2017.02.10.tar.bz2">buildroot-2017.02.10.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2017.02.10.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.02.tar.bz2">buildroot-2018.02.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.02.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++<!--
+       <h3 style="text-align: center;">Latest stable release: <b>2017.11.2</b></h3>
+ 
+       <div class="row mt centered">
+@@ -109,7 +109,7 @@
+ 	  <p><a href="/downloads/buildroot-2018.02-rc3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++-->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index fc11572f2d..f729a59543 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.02 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 March 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2018.02 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.02.tar.bz2">2018.02 release</a>.</p>
++
++	  <p>Notice that this is a long term support release which will be
++	  supported with security and other important fixes until February 2019.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 3d833f09fc..54b45da69e 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2017.11'
++RELEASE='2018.02'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
