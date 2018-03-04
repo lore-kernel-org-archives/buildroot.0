@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  4 Mar 2018 22:31:22 +0100
-Subject: [Buildroot] [PATCH 08/23] configs/snps_archs38_axs103: needs
- host-openssl for the Linux kernel build
+Date: Sun,  4 Mar 2018 22:31:19 +0100
+Subject: [Buildroot] [PATCH 05/23] configs/qemu_x86_defconfig: remove kernel
+ options that need openssl
 In-Reply-To: <20180304213137.24681-1-thomas.petazzoni@bootlin.com>
 References: <20180304213137.24681-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180304213137.24681-9-thomas.petazzoni@bootlin.com>
+Message-ID: <20180304213137.24681-6-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306944
+Wireless support ends up enabling CONFIG_SYSTEM_TRUSTED_KEYRING, which
+requires openssl to be available on the host, so disable wireless
+support, which isn't needed in Qemu.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/snps_archs38_axs103_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ board/qemu/x86/linux-4.15.config | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/configs/snps_archs38_axs103_defconfig b/configs/snps_archs38_axs103_defconfig
-index 42a4feaba8..39ceeae433 100644
---- a/configs/snps_archs38_axs103_defconfig
-+++ b/configs/snps_archs38_axs103_defconfig
-@@ -17,6 +17,7 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
- BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
- # Bootloader
- BR2_TARGET_UBOOT=y
+diff --git a/board/qemu/x86/linux-4.15.config b/board/qemu/x86/linux-4.15.config
+index 0e59b87bd6..79f7537d80 100644
+--- a/board/qemu/x86/linux-4.15.config
++++ b/board/qemu/x86/linux-4.15.config
+@@ -9,6 +9,7 @@ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
++# CONFIG_WIRELESS is not set
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_VIRTIO_BLK=y
+@@ -20,6 +21,7 @@ CONFIG_NETDEVICES=y
+ CONFIG_VIRTIO_NET=y
+ CONFIG_NE2K_PCI=y
+ CONFIG_8139CP=y
++# CONFIG_WLAN is not set
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
 -- 
 2.14.3
