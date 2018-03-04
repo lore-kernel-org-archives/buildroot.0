@@ -1,58 +1,62 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 4 Mar 2018 11:17:26 +0100
-Subject: [Buildroot] [PATCH next] uclibc: update to 1.0.29
-Message-ID: <20180304101726.GA1833@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  4 Mar 2018 11:29:02 +0100
+Subject: [Buildroot] [PATCH 0/4] package/systemd: further fix for
+ locale-related issues
+Message-ID: <cover.1520159327.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release adds a lot of bugfixes for x86_64 and aarch64.
-It allows to compile and use more desktop applications.
-For this gettext-tiny was integrated, but unfortunately it
-fails to build in the context of buildroot, so I have to
-disable UCLIBC_HAS_LIBINTL until this is fixed.
+Hello All!
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/uclibc/uClibc-ng.config | 1 -
- package/uclibc/uclibc.hash      | 2 +-
- package/uclibc/uclibc.mk        | 2 +-
- 3 files changed, 2 insertions(+), 3 deletions(-)
+As reported by Christian, not all distros have a way to provide C.UTF-8.
+For example, Gentoo does not have it, and it is noteven possible to
+generate it (damn...).
 
-diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
-index 5beb2bd..f0a876f 100644
---- a/package/uclibc/uClibc-ng.config
-+++ b/package/uclibc/uClibc-ng.config
-@@ -23,7 +23,6 @@ UCLIBC_HAS_RESOLVER_SUPPORT=y
- UCLIBC_HAS_LIBRESOLV_STUB=y
- UCLIBC_HAS_LIBNSL_STUB=y
- UCLIBC_HAS_CTYPE_CHECKED=y
--UCLIBC_HAS_LIBINTL=y
- UCLIBC_HAS_HEXADECIMAL_FLOATS=y
- UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
- UCLIBC_HAS_STDIO_GETC_MACRO=y
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 0a15683..14f71d0 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,2 +1,2 @@
- # From https://uclibc-ng.org/
--sha256  a1504ddc34a29cc9bfd1f5a7419c4b63bb510d9e2faed81618d1b596ceb0a5a9        uClibc-ng-1.0.28.tar.xz
-+sha256  e014e34abb13e97ca81694927f8ba95484cca2d3abac64b71f1a7981a96cb99c        uClibc-ng-1.0.29.tar.xz
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index c5b0c6b..8d198f6 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.28
-+UCLIBC_VERSION = 1.0.29
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+So we go another route: find any UTF-8 locale from the user's system,
+still preferring the one they expect to see messages in.
+
+Also, unbreak the check for an UTF-8 locale.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 63497e02607543c6b27c8b59c026e78b0337dbaf
+
+  package/tor: security bump to version 0.3.1.10 (2018-03-04 11:01:45 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 27e66e08ce8a1493c52a43e2a34aa1ed75a043f9
+
+  core: drop no-longer used C.UTF-8 locale option (2018-03-04 11:28:29 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      support/dependencies: unbreak check for UTF-8 locale
+      core: find a host UTF-8 locale
+      package/systemd: needs any UTF-8 locale
+      core: drop no-longer used C.UTF-8 locale option
+
+ Config.in                            |  5 -----
+ Makefile                             | 16 ++++++++++++++++
+ package/systemd/Config.in            |  2 +-
+ package/systemd/systemd.mk           |  2 +-
+ support/dependencies/dependencies.sh | 15 +--------------
+ 5 files changed, 19 insertions(+), 21 deletions(-)
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
