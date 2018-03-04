@@ -1,23 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Mar 2018 11:02:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: security bump to version
+Date: Sun, 4 Mar 2018 11:01:45 +0100
+Subject: [Buildroot] [git commit] package/tor: security bump to version
  0.3.1.10
-In-Reply-To: <20180304093009.16455-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 4 Mar 2018 10:30:09 +0100")
-References: <20180304093009.16455-1-bernd.kuhls@t-online.de>
-Message-ID: <87sh9g9n0o.fsf@dell.be.48ers.dk>
+Message-ID: <20180304100346.D1BEB8124D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=63497e02607543c6b27c8b59c026e78b0337dbaf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes CVE-2018-0490.
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes CVE-2018-0490: null-pointer crash in directory authority protocol list
+code.
 
-Committed after adding a short description of the CVE, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 08ab61ec14..db946eec07 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 6e1b04f7890e782fd56014a0de5075e4ab29b52a35d8bca1f6b80c93f58f3d26  tor-0.3.1.9.tar.gz
++sha256 c0e1a71e8e079ddd7951f846bcbd79d5e716b602faa5b890c70762fe95cd04e0  tor-0.3.1.10.tar.gz
+ sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 925e4d8f09..ddf912fe18 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.3.1.9
++TOR_VERSION = 0.3.1.10
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
