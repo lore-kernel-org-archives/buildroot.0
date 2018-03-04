@@ -1,57 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Mar 2018 11:29:05 +0100
-Subject: [Buildroot] [PATCH 3/4] package/systemd: needs any UTF-8 locale
+Date: Sun,  4 Mar 2018 11:29:06 +0100
+Subject: [Buildroot] [PATCH 4/4] core: drop no-longer used C.UTF-8 locale
+ option
 In-Reply-To: <cover.1520159327.git.yann.morin.1998@free.fr>
 References: <cover.1520159327.git.yann.morin.1998@free.fr>
-Message-ID: <c442605e0677f8b55af90f71c23a039e3d87c92b.1520159327.git.yann.morin.1998@free.fr>
+Message-ID: <27e66e08ce8a1493c52a43e2a34aa1ed75a043f9.1520159327.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not all distributions have the language-agnostic C.UTF-8 locale (Gentoo,
-I'm frowning at you!).
+Its use has been globbed into the more generic
+BR2_NEEDS_HOST_UTF8_LOCALE option now.
 
-Instead, use any UTF-8 locale provided by the system.
-
-Reported-by: Christian Stewart <kidovate@gmail.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Julius Kriukas <julius@kriukas.lt>
 Cc: Christian Stewart <kidovate@gmail.com>
-Cc: Trent Piepho <tpiepho@impinj.com>
-Cc: Adam Duskett <aduskett@gmail.com>
 ---
- package/systemd/Config.in  | 2 +-
- package/systemd/systemd.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in                            |  5 -----
+ support/dependencies/dependencies.sh | 13 -------------
+ 2 files changed, 18 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 8978e3bac1..7b613df02c 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -27,7 +27,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
- 	select BR2_PACKAGE_KMOD_TOOLS
- 	select BR2_TARGET_TZ_INFO
--	select BR2_NEEDS_HOST_C_UTF8_LOCALE
-+	select BR2_NEEDS_HOST_UTF8_LOCALE
- 	help
- 	  systemd is a system and service manager for Linux,
- 	  compatible with SysV and LSB init scripts. systemd provides
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 793b966ff5..f47dfe7b1d 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -385,7 +385,7 @@ endef
+diff --git a/Config.in b/Config.in
+index 704840653e..0002df5176 100644
+--- a/Config.in
++++ b/Config.in
+@@ -94,11 +94,6 @@ config BR2_HOSTARCH_NEEDS_IA32_COMPILER
+ config BR2_NEEDS_HOST_UTF8_LOCALE
+ 	bool
  
- SYSTEMD_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+-# Hidden boolean selected by packages that explicitly need C.UTF-8 locale
+-# to be available on host system.
+-config BR2_NEEDS_HOST_C_UTF8_LOCALE
+-	bool
+-
+ source "arch/Config.in"
  
--SYSTEMD_ENV = $(TARGET_MAKE_ENV) LANG=C.UTF-8 LC_ALL=C.UTF-8
-+SYSTEMD_ENV = $(TARGET_MAKE_ENV) $(HOST_UTF8_LOCALE_ENV)
+ menu "Build options"
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 656cb09d42..985b1d863b 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -207,19 +207,6 @@ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+ 	fi
+ fi
  
- define SYSTEMD_CONFIGURE_CMDS
- 	rm -rf $(@D)/build
+-if grep -q ^BR2_NEEDS_HOST_C_UTF8_LOCALE=y $BR2_CONFIG; then
+-	if ! which locale > /dev/null ; then
+-		echo
+-		echo "You need locale support on your build machine"
+-		exit 1 ;
+-	fi
+-	if ! LC_ALL=C.UTF-8 locale -c charmap | grep -q '^UTF-8$'; then
+-		echo
+-		echo "You need C.UTF-8 locale suppport on the host system"
+-		exit 1 ;
+-	fi
+-fi
+-
+ if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
+ 	check_prog_host "java"
+ 	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
 -- 
 2.14.1
