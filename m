@@ -1,37 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Mar 2018 18:36:11 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{9, 14}.x series
-Message-ID: <20180304174116.665DF81569@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 4 Mar 2018 15:05:08 -0300
+Subject: [Buildroot] [PATCH v4 0/4] Initial support for NXP iMX8
+ (imx8mq-evk)
+In-Reply-To: <1520065060-20046-1-git-send-email-karl.erik.larsson@gmail.com>
+References: <1520065060-20046-1-git-send-email-karl.erik.larsson@gmail.com>
+Message-ID: <CAOMZO5Cgd_p7W_A8Oa+fmKKJ2ZpDou+A4e1BBxsjjA4ceuiXcA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59e8b056ab1ed0e32b1913a9eee7d66a3c39ff0b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Erik,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sat, Mar 3, 2018 at 5:17 AM, Erik Larsson
+<karl.erik.larsson@gmail.com> wrote:
+> This series provides initial support for NXP iMX8 (imx8mq-evk).
+>
+> This series of patches are tested against NXP imx8mq-evk.
+> It only handles basic support for iIMX8M, currently no
+> support for GPU, VPU and other HW features. This series
+> makes it possible to build a minimal system for imx8mq-evk.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 397068d49b..d74f267a2e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -243,11 +243,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.99"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.119"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.85"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.86"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.23"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.24"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.7"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Thanks for working on this series.
+
+In case you need to respin it, please add a readme.txt file so that
+people can know how to build and flash a SD card to boot this board.
+
+An example of a readme.txt: board/freescale/imx51evk/readme.txt
+
+Thanks
