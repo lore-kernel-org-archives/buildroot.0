@@ -1,91 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 05 Mar 2018 20:07:19 -0000
-Subject: [Buildroot] [git commit] iproute2: fix build with uclibc-ng
-Message-ID: <20180305200716.26AA980FAF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: new package
+Message-ID: <20180305200716.5A10680FAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4081ee424a8a6d4d965d683437a28c72ceb9b90c
+commit: https://git.buildroot.net/buildroot/commit/?id=4fdf2d642b8d1a7fcabf1a995887c33581fa7aad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ublibc-ng does not provide PF_VSOCK/AF_VSOCK definitions. Add them
-locally until ucblibc-ng updates its headers.
+Add allwinner mali kernel driver package.  Used in combination with
+userspace Allwinner openGL libraries, it gives possibility to use 3D openGL
+SoC acceleration.
 
-Fixes:
-http://autobuild.buildroot.net/results/3d5/3d5a29e3c61ff071628c2937844ea4156059b3dd/
-
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Peter: Rename to sunxi-mali-mainline-driver.  Use revision selection from
+	sunxi-mali-mainline package.  Depend on that package and default to
+	y if dependencies are met. Tweak Linux config]
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s-add-local-PF_VSOCK-AF_VSOCK-definitions.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ DEVELOPERS                                         |  1 +
+ linux/linux.mk                                     |  3 +++
+ package/Config.in                                  |  1 +
+ package/sunxi-mali-mainline-driver/Config.in       | 25 +++++++++++++++++++++
+ .../sunxi-mali-mainline-driver.mk                  | 26 ++++++++++++++++++++++
+ 5 files changed, 56 insertions(+)
 
-diff --git a/package/iproute2/0002-ss-add-local-PF_VSOCK-AF_VSOCK-definitions.patch b/package/iproute2/0002-ss-add-local-PF_VSOCK-AF_VSOCK-definitions.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1b14927228..e2b3901425 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -732,6 +732,7 @@ F:	package/webp/
+ 
+ N:	Giulio Benetti <giulio.benetti@micronovasrl.com>
+ F:	package/sunxi-mali-mainline/
++F:	package/sunxi-mali-mainline-driver/
+ 
+ N:	Gregory Dymarek <gregd72002@gmail.com>
+ F:	package/ding-libs/
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 5300b9cfc5..776304e730 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -291,6 +291,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config))
++	$(if $(BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_CMA,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DMA_CMA,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_IPTABLES),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
+diff --git a/package/Config.in b/package/Config.in
+index 87c55e227b..97317fdb5f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -505,6 +505,7 @@ endmenu
+ 	source "package/sunxi-cedarx/Config.in"
+ 	source "package/sunxi-mali/Config.in"
+ 	source "package/sunxi-mali-mainline/Config.in"
++	source "package/sunxi-mali-mainline-driver/Config.in"
+ 	source "package/sysstat/Config.in"
+ 	source "package/targetcli-fb/Config.in"
+ 	source "package/ti-gfx/Config.in"
+diff --git a/package/sunxi-mali-mainline-driver/Config.in b/package/sunxi-mali-mainline-driver/Config.in
 new file mode 100644
-index 0000000000..bbd1f45de9
+index 0000000000..c939d2a957
 --- /dev/null
-+++ b/package/iproute2/0002-ss-add-local-PF_VSOCK-AF_VSOCK-definitions.patch
-@@ -0,0 +1,58 @@
-+From ca5562864f3c45557ee96a6fd6036150066c6b58 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 15 Feb 2018 07:39:52 +0200
-+Subject: [PATCH] ss: add local PF_VSOCK/AF_VSOCK definitions
++++ b/package/sunxi-mali-mainline-driver/Config.in
+@@ -0,0 +1,25 @@
++comment "sunxi-mali-mainline-driver needs a Linux kernel to be built"
++	depends on BR2_PACKAGE_SUNXI_MALI_MAINLINE
++	depends on !BR2_LINUX_KERNEL
 +
-+uclibc-ng does not provide these definitions yet. Add them locally to
-+fix the build.
++config BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER
++	bool "sunxi-mali-mainline-driver"
++	default y
++	depends on BR2_PACKAGE_SUNXI_MALI_MAINLINE # runtime
++	depends on BR2_LINUX_KERNEL
++	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
++	help
++	  This package builds and installs the Linux kernel driver for
++	  the Mali GPU on Allwinner platforms, compatible with recent
++	  Linux kernels (>= 4.4). Note that it should be installed
++	  together with the corresponding userspace OpenGL libraries,
++	  which are provided as binaries only at:
++	  https://github.com/free-electrons/mali-blobs
 +
-+Increase AF_MAX to cover AF_VSOCK.
++	  sunxi-mali-mainline-driver requires a Linux kernel >= 4.4
++	  with the following options enabled:
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: not upstreamable. uclibc-ng needs to update its Linux
-+socket.h.
-+---
-+ misc/ss.c | 12 ++++++++++--
-+ 1 file changed, 10 insertions(+), 2 deletions(-)
++	  - CONFIG_CMA
++	  - CONFIG_DMA_CMA
 +
-+diff --git a/misc/ss.c b/misc/ss.c
-+index 29a250704c2d..b3f289ae358e 100644
-+--- a/misc/ss.c
-++++ b/misc/ss.c
-+@@ -50,6 +50,14 @@
-+ #define BUF_CHUNK (1024 * 1024)
-+ #define LEN_ALIGN(x) (((x) + 1) & ~1)
-+ 
-++#ifndef PF_VSOCK
-++#define PF_VSOCK 40
-++#endif
-++
-++#ifndef AF_VSOCK
-++#define AF_VSOCK PF_VSOCK
-++#endif
-++
-+ #define DIAG_REQUEST(_req, _r)						    \
-+ 	struct {							    \
-+ 		struct nlmsghdr nlh;					    \
-+@@ -298,7 +306,7 @@ static const struct filter default_dbs[MAX_DB] = {
-+ 	},
-+ };
-+ 
-+-static const struct filter default_afs[AF_MAX] = {
-++static const struct filter default_afs[AF_MAX+1] = {
-+ 	[AF_INET] = {
-+ 		.dbs    = INET_DBM,
-+ 		.states = SS_CONN,
-+@@ -383,7 +391,7 @@ static void filter_merge_defaults(struct filter *f)
-+ 		if (!(default_dbs[db].families & f->families))
-+ 			f->families |= default_dbs[db].families;
-+ 	}
-+-	for (af = 0; af < AF_MAX; af++) {
-++	for (af = 0; af < AF_MAX+1; af++) {
-+ 		if (!(f->families & FAMILY_MASK(af)))
-+ 			continue;
-+ 
-+-- 
-+2.15.1
++	  https://github.com/mripard/sunxi-mali/blob/master/README.md
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+new file mode 100644
+index 0000000000..e4871c0bf0
+--- /dev/null
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# sunxi-mali-mainline-driver
++#
++################################################################################
 +
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = 42c7c139c14103a83bb2ad7e7a1f0ed491f96500
++SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
++SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
++
++SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS = \
++	KDIR=$(LINUX_DIR) \
++	CROSS_COMPILE=$(TARGET_CROSS) \
++	INSTALL_MOD_PATH=$(TARGET_DIR)
++
++define SUNXI_MALI_MAINLINE_DRIVER_BUILD_CMDS
++	cd $(@D) && $(SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS) \
++		$(SHELL) ./build.sh -r $(SUNXI_MALI_MAINLINE_REV) -b
++endef
++
++define SUNXI_MALI_MAINLINE_DRIVER_INSTALL_TARGET_CMDS
++	cd $(@D) && $(SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS) \
++		$(SHELL) ./build.sh -r $(SUNXI_MALI_MAINLINE_REV) -i
++endef
++
++$(eval $(generic-package))
