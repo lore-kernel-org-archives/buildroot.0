@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 05 Mar 2018 21:52:26 +0000
+Date: Mon, 05 Mar 2018 21:57:48 +0000
 Subject: [Buildroot] [Bug 10836] Missing Qt5 component : translations
 In-Reply-To: <bug-10836-163@https.bugs.busybox.net/>
 References: <bug-10836-163@https.bugs.busybox.net/>
-Message-ID: <bug-10836-163-uHz6dlb0Ou@https.bugs.busybox.net/>
+Message-ID: <bug-10836-163-9XBmYHIm87@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,16 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=10836
 
---- Comment #3 from Pierre Ducroquet <pinaraf@pinaraf.info> ---
-Hi Yann
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Pierre,
 
-I will do so, I'm just testing with my application. Adding every translations
-is ok for a first step I guess ?
+> Adding every translations is ok for a first step I guess ?
 
-?Pierre
+Yes, I'm fine with that. But we should discuss this on
+the mailing list; it's easier to do reviews by mail.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
