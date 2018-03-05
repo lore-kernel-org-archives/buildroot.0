@@ -1,41 +1,204 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Mar 2018 09:09:53 +0100
-Subject: [Buildroot] [PATCH] mosquitto: unbreak build with websockets
- and !libopenssl
-In-Reply-To: <20180305075851.qi7x46yj7swdge6b@falbala.home.lespocky.de>
- (Alexander Dahl's message of "Mon, 5 Mar 2018 08:58:52 +0100")
-References: <20180303101545.11446-1-peter@korsgaard.com>
- <87vaedb0bz.fsf@dell.be.48ers.dk>
- <20180305075851.qi7x46yj7swdge6b@falbala.home.lespocky.de>
-Message-ID: <87lgf77xke.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  5 Mar 2018 09:25:15 +0100
+Subject: [Buildroot] [PATCH] configs/ci40: remove defconfig
+Message-ID: <20180305082515.2565-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
+From the original submitter of this defconfig:
 
- > Hello Peter,
- > On Sat, Mar 03, 2018 at 05:17:20PM +0100, Peter Korsgaard wrote:
- >> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
- >> 
- >> > Fixes:
- >> > http://autobuild.buildroot.net/results/d69/d693f3e3f1c73ccf54ac7076623e436355a9d901/b
- >> 
- >> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> 
- >> Committed, thanks.
+"""
+I no longer have access to ci40 board. It would be difficult for me to
+maintain it.
+"""
 
- > Do you thank yourself here? Doesn't that somehow circumvent a probably
- > desired review?
+And this defconfig currently fails to build with gcc 6.x. Therefore,
+drop it.
 
-It would certainly be nicer if other people would review the patch, but
-given how obvious it is and how close we were to the release I opted to
-apply it myself.
+Fixes:
 
-Are you interested in mosquitto? If so, please add an entry to
-DEVELOPERS for it and I'll ensure I CC you on future patches to it.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306806
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml           |  1 -
+ board/ci40/genimage.cfg  | 12 ---------
+ board/ci40/post-build.sh |  4 ---
+ board/ci40/readme.txt    | 65 ------------------------------------------------
+ configs/ci40_defconfig   | 48 -----------------------------------
+ 5 files changed, 130 deletions(-)
+ delete mode 100644 board/ci40/genimage.cfg
+ delete mode 100755 board/ci40/post-build.sh
+ delete mode 100644 board/ci40/readme.txt
+ delete mode 100644 configs/ci40_defconfig
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index c651c73df5..e5e1aa522b 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -102,7 +102,6 @@ beaglebone_defconfig: *defconfig
+ beaglebone_qt5_defconfig: *defconfig
+ chromebook_snow_defconfig: *defconfig
+ ci20_defconfig: *defconfig
+-ci40_defconfig: *defconfig
+ csky_gx6605s_defconfig: *defconfig
+ cubieboard2_defconfig: *defconfig
+ engicam_imx6qdl_icore_defconfig: *defconfig
+diff --git a/board/ci40/genimage.cfg b/board/ci40/genimage.cfg
+deleted file mode 100644
+index 0ffc91ce87..0000000000
+--- a/board/ci40/genimage.cfg
++++ /dev/null
+@@ -1,12 +0,0 @@
+-# Minimal SD card image
+-#
+-
+-image sdcard.img {
+-  hdimage {
+-  }
+-
+-  partition rootfs {
+-    partition-type = 0x83
+-    image = "rootfs.ext4"
+-  }
+-}
+diff --git a/board/ci40/post-build.sh b/board/ci40/post-build.sh
+deleted file mode 100755
+index 9af74c7a7e..0000000000
+--- a/board/ci40/post-build.sh
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#!/bin/sh
+-
+-# Copy to target
+-cp ${BINARIES_DIR}/vmlinux.gz.itb ${TARGET_DIR}/fitImage
+diff --git a/board/ci40/readme.txt b/board/ci40/readme.txt
+deleted file mode 100644
+index ba1eb93883..0000000000
+--- a/board/ci40/readme.txt
++++ /dev/null
+@@ -1,65 +0,0 @@
+-*********************
+-* MIPS Creator CI40 *
+-*********************
+-
+-This document details how to build and run a Buildroot system on the
+-MIPS Creator CI40 platform. For more details about the CI40, see
+-https://creatordev.io/ci40-iot-hub.html.
+-
+-How to build
+-------------
+-
+-$ make ci40_defconfig
+-$ make
+-
+-Prepare USB/MMC for boot
+-------------------------
+-
+-On successful build, "sdcard.img" file will be created in 'output/images'
+-folder.
+-
+-Use following command to write image to bootable device
+-
+-$ sudo dd if=./output/images/sdcard.img of=/dev/<your-microsd-or-usb-device>
+-
+-Booting from USB/MMC
+---------------------
+-
+-The boot loader is already present in NOR flash. To boot your newly generated
+-Linux and root filesystem, you need to interrupt U-Boot autoboot. Current
+-U-Boot is configured with 2 seconds of boot-delay, after expiry of this
+-boot-delay timeout U-Boot starts booting the default image. To interrupt
+-autoboot, press any key before the boot-delay time expires, U-Boot will
+-stop the autoboot process and give a U-Boot prompt. You can now boot to
+-your preferred boot method as describe below:
+-
+-From USB
+-  pistachio # run usbboot
+-
+-From SD-Card
+-  pistachio # run mmcboot
+-
+-Persistent boot command
+------------------------
+-
+-To boot automatically to your preferred boot method, use following command to
+-make it persistent, for example to automatically boot to usb:
+-
+-  pistachio # setenv bootcmd run usbboot
+-  pistachio # saveenv
+-
+-Flash new bootloader
+---------------------
+-
+-The bootloader image will be available in the 'output/images' folder. To flash
+-the new bootloader, copy it to the device and use the following command on the
+-device:
+-
+-# flashcp -v u-boot-pistachio_marduk-<version>.img /dev/mtd0
+-
+-Online docs
+------------
+-
+-Mostly for OpenWRT but it is applicable to Buildroot
+-https://docs.creatordev.io/ci40/guides/openwrt-platform/#overview
+-
+diff --git a/configs/ci40_defconfig b/configs/ci40_defconfig
+deleted file mode 100644
+index 2ea3afe47d..0000000000
+--- a/configs/ci40_defconfig
++++ /dev/null
+@@ -1,48 +0,0 @@
+-# architecture
+-BR2_mipsel=y
+-BR2_mips_32r2=y
+-
+-# linux header same as custom kernel ie 4.4.x
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+-
+-# kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,CreatorDev,linux,openwrt-4.4.14)/linux-openwrt-4.4.14.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="pistachio"
+-BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-# vmlinux.gz.itb image includes img/pistachio_marduk device tree
+-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="vmlinux.gz.itb"
+-
+-# bootloader flash support
+-BR2_PACKAGE_MTD=y
+-
+-# wireless firmware
+-BR2_PACKAGE_UCCP420WLAN=y
+-
+-# wireless package
+-BR2_PACKAGE_WIRELESS_TOOLS=y
+-BR2_PACKAGE_WPA_SUPPLICANT=y
+-BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+-
+-# bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pistachio_marduk"
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,CreatorDev,u-boot,v1.0.5)/u-boot-CreatorDev-v1.0.5.tar.gz"
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-pistachio_marduk-2015.10-v1.0.5.img"
+-
+-# fitimage / image generation
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT=y
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/ci40/post-build.sh"
+-
+-# image generation
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci40/genimage.cfg"
 -- 
-Bye, Peter Korsgaard
+2.14.3
