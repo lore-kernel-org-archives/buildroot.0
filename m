@@ -1,46 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:17 -0000
-Subject: [Buildroot] [git commit] qemu: add
- BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-Message-ID: <20180305200712.A8C8A80FFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] usb_modeswitch_data: bump to version
+ 20170806
+Message-ID: <20180305200713.B8E8C81EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62099784d40333079a811503bc4f5cd138d9f6ed
+commit: https://git.buildroot.net/buildroot/commit/?id=f8cdb979c2bb8f71d9c24c3747fda3bfb0cb4ab1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Match the style used with other packages such as valgrind.
+Also add license hash for "make legal-info".
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qemu/Config.in.host | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ package/usb_modeswitch_data/usb_modeswitch_data.hash | 3 ++-
+ package/usb_modeswitch_data/usb_modeswitch_data.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 71f38ef41f..b001dd9514 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -1,11 +1,15 @@
--config BR2_PACKAGE_HOST_QEMU
--	bool "host qemu"
--	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
-+config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
- 		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
- 		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
- 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
- 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
- 		BR2_sparc        || BR2_x86_64
-+
-+config BR2_PACKAGE_HOST_QEMU
-+	bool "host qemu"
-+	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
- 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
- 	help
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
+index e19fcac628..f35fd69a8b 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.hash
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	e2dcfd9d28928d8d8f03381571a23442b3c50d48d343bc40a1a07d01662738d1	usb-modeswitch-data-20170205.tar.bz2
++sha256	ce413ef2a50e648e9c81bc3ea6110e7324a8bf981034fc9ec4467d3562563c2c  usb-modeswitch-data-20170806.tar.bz2
++sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+index 4f634cdaf4..80ecd33d85 100644
+--- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_DATA_VERSION = 20170205
++USB_MODESWITCH_DATA_VERSION = 20170806
+ USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
+ USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
