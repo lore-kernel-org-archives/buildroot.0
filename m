@@ -1,65 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:19 -0000
-Subject: [Buildroot] [git commit] liburiparser: bump to version 0.8.5 and
- move to GitHub
-Message-ID: <20180305200716.106DE80137@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] keepalived: bump to version 1.4.1
+Message-ID: <20180305200715.D7BF980FAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca0e6272008dfc5e90f3f5a0de5eaa4d345b122e
+commit: https://git.buildroot.net/buildroot/commit/?id=6320325eba253935f53e75e8ed365ad704d2b443
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uriparser 0.8.5 with bugfixes has been released. It has also moved from
-SourceForge to GitHub:
+Add license file hash.
 
-    https://uriparser.github.io/
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Cc: Ilias Apalodimas <apalos@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liburiparser/Config.in         | 2 +-
- package/liburiparser/liburiparser.hash | 6 ++----
- package/liburiparser/liburiparser.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ package/keepalived/keepalived.hash | 3 ++-
+ package/keepalived/keepalived.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/liburiparser/Config.in b/package/liburiparser/Config.in
-index e85a2626d2..b39e3907dd 100644
---- a/package/liburiparser/Config.in
-+++ b/package/liburiparser/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBURIPARSER
- 	  uriparser is a strictly RFC 3986 compliant URI parsing and
- 	  handling library written in C.
- 
--	  http://uriparser.sourceforge.net
-+	  https://uriparser.github.io
-diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-index 9e9517c17f..c03e832f9f 100644
---- a/package/liburiparser/liburiparser.hash
-+++ b/package/liburiparser/liburiparser.hash
-@@ -1,5 +1,3 @@
--# From http://sourceforge.net/projects/uriparser/files/Sources/0.8.4/
--md5	9aabdc3611546f553f4af372167de6d6		uriparser-0.8.4.tar.bz2
--sha1	7a1948c20bed54b04dad0e1d7d2fa8f80fc7b2b3	uriparser-0.8.4.tar.bz2
+diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
+index 5d33c5be00..4590c33ef9 100644
+--- a/package/keepalived/keepalived.hash
++++ b/package/keepalived/keepalived.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256  c6ef125800c2ef13a41a22126bfc77e8b8c08993a6b96196117695988ea76249  COPYING
-+sha256  58eacd5c03d9e341c04eb0b30831faec89f3b415949ff8d72254e63432352cdd  uriparser-0.8.5.tar.bz2
-+sha256  ee90029e62d11f48faa59360d15c3ad8e7c094c74cc25b055716d92340da561f  COPYING
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index 856a6aafd4..4b32b7f7f2 100644
---- a/package/liburiparser/liburiparser.mk
-+++ b/package/liburiparser/liburiparser.mk
-@@ -4,9 +4,9 @@
+-sha256	c0114d86ea4c896557beb0d9367819a423ffba772bc5d7c548dc455e6b3bd048  keepalived-1.3.5.tar.gz
++sha256	220407517ccad822d1ffa80f7bc37582abaf97da6f7bda2326fa6904b1855bd0  keepalived-1.4.1.tar.gz
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index 59d3cb5cfb..6d3d8e7cc6 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBURIPARSER_VERSION = 0.8.4
-+LIBURIPARSER_VERSION = 0.8.5
- LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
--LIBURIPARSER_SITE = http://sourceforge.net/projects/uriparser/files/Sources/$(LIBURIPARSER_VERSION)
-+LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
- LIBURIPARSER_LICENSE = BSD-3-Clause
- LIBURIPARSER_LICENSE_FILES = COPYING
- LIBURIPARSER_INSTALL_STAGING = YES
+-KEEPALIVED_VERSION = 1.3.5
++KEEPALIVED_VERSION = 1.4.1
+ KEEPALIVED_SITE = http://www.keepalived.org/software
+ KEEPALIVED_DEPENDENCIES = host-pkgconf openssl popt
+ KEEPALIVED_LICENSE = GPL-2.0+
