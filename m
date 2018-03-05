@@ -1,60 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:15 -0000
-Subject: [Buildroot] [git commit] package/ncurses: add option to install
- extra terminfo files
-Message-ID: <20180305200712.3033E810D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libxshmfence: fix build
+ with glibc 2.27
+Message-ID: <20180305200710.E8EF2810D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d020aeb60470c2ebf77cf10688e3d02cf0d3d4a
+commit: https://git.buildroot.net/buildroot/commit/?id=ab9b556f981c6b0d22325455bb47927f109b7584
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an option to ncurses to install extra user-configured terminfo
-files. By default, only a small number of vital terminfo files are
-installed on the target. This allows a build to specify the terminfo
-files it needs.
+With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
+AC_USE_SYSTEM_EXTENSIONS to get this defined.
 
-Signed-off-by: Cam Hutchison <camh@xdna.net>
-[Thomas: qstrip the variable before using it.]
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: add reference to upstream commit, as suggested by Yann E. Morin.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ncurses/Config.in  | 10 ++++++++++
- package/ncurses/ncurses.mk |  3 ++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ ...onfigure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch | 31 ++++++++++++++++++++++
+ .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |  3 +++
+ 2 files changed, 34 insertions(+)
 
-diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
-index bb45bd8dc0..297b2ee415 100644
---- a/package/ncurses/Config.in
-+++ b/package/ncurses/Config.in
-@@ -23,4 +23,14 @@ config BR2_PACKAGE_NCURSES_TARGET_PROGS
- 	help
- 	  Include ncurses programs in target (clear, reset, tput, ...)
- 
-+config BR2_PACKAGE_NCURSES_ADDITIONAL_TERMINFO
-+	string "additional terminfo files to install"
-+	help
-+	  Whitespace separated list of terminfo files to install on the
-+	  target. A small number of vital terminfo files are always
-+	  installed. This list is in addition to the vital ones.
+diff --git a/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch b/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
+new file mode 100644
+index 0000000000..1ca1303267
+--- /dev/null
++++ b/package/x11r7/xlib_libxshmfence/0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
+@@ -0,0 +1,31 @@
++From 0b550a4e7acf02d3478602848f6afbfcbfb0d4b2 Mon Sep 17 00:00:00 2001
++From: Ross Burton <ross.burton@intel.com>
++Date: Mon, 29 Jan 2018 16:24:36 +0000
++Subject: [PATCH] configure.ac: call AC_USE_SYSTEM_EXTENSIONS
 +
-+	  The terminfo filenames should have the single letter path
-+	  prefix. e.g. t/tmux.
++With glibc 2.27 memfd_create() is inside a _GNU_SOURCE guard, so call
++AC_USE_SYSTEM_EXTENSIONS to get this defined.
 +
- endif
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 32ee085314..eccfbecb8b 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -63,7 +63,8 @@ NCURSES_TERMINFO_FILES = \
- 	x/xterm+256color \
- 	x/xterm-256color \
- 	x/xterm-color \
--	x/xterm-xfree86
-+	x/xterm-xfree86 \
-+	$(call qstrip,$(BR2_PACKAGE_NCURSES_ADDITIONAL_TERMINFO))
++Signed-off-by: Ross Burton <ross.burton@intel.com>
++Upstream: https://cgit.freedesktop.org/xorg/lib/libxshmfence/commit/?id=0b550a4e7acf02d3478602848f6afbfcbfb0d4b2
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 55772d0..ed77e6d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -28,6 +28,8 @@ AC_INIT([libxshmfence], [1.2],
++ AC_CONFIG_SRCDIR([Makefile.am])
++ AC_CONFIG_HEADERS([config.h])
++ 
+++AC_USE_SYSTEM_EXTENSIONS
+++
++ # Initialize Automake
++ AM_INIT_AUTOMAKE([foreign dist-bzip2])
++ 
++-- 
++2.14.3
++
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+index 3a2f32623a..9686c408c1 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+@@ -12,4 +12,7 @@ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
+ XLIB_LIBXSHMFENCE_INSTALL_STAGING = YES
+ XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xproto_xproto
  
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- NCURSES_CONF_OPTS += --enable-widec
++# 0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
++XLIB_LIBXSHMFENCE_AUTORECONF = YES
++
+ $(eval $(autotools-package))
