@@ -1,44 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Mar 2018 20:52:27 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add odroidc2 defconfig to my
- list
-In-Reply-To: <20180305174323.5629-1-daggs@gmx.com>
-References: <20180305174323.5629-1-daggs@gmx.com>
-Message-ID: <20180305205227.0ea0835d@windsurf.home>
+Date: Mon, 05 Mar 2018 20:07:13 -0000
+Subject: [Buildroot] [git commit] support/config-fragments: add internal
+ defconfigs for glibc and musl
+Message-ID: <20180305200710.B5D0681EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6030986311434d554635761925925bfd351b836b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Mar 2018 19:43:23 +0200, Dagg Stompler wrote:
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 73c0231bc0..fffc646973 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -458,6 +458,7 @@ N:	Dagg Stompler <daggs@gmx.com>
->  F:	package/libamcodec/
->  F:	package/odroid-mali/
->  F:	package/odroid-scripts/
-> +F:	configs/odroidc2_defconfig
+While we have several defconfigs building internal toolchains with
+uClibc, we don't have any building internal toolchain with glibc and
+musl. However, having such defconfigs is nice when we bump the C
+library version, in order to immediately get feedback on build
+failures.
 
-Thanks! However, alphabetic ordering is not respected here, and you
-should also add an entry for board/hardkernel/odroidc2/.
+Note that while the ARC internal defconfig uses glibc, it uses the
+special ARC glibc version, so it doesn't test version bumps of the
+upstream glibc C library.
 
-This can be fixed when we apply, unless you want to send a v2 for
-this :)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/config-fragments/autobuild/br-arm-internal-glibc.config | 4 ++++
+ support/config-fragments/autobuild/br-arm-internal-musl.config  | 4 ++++
+ support/config-fragments/autobuild/toolchain-configs.csv        | 2 ++
+ 3 files changed, 10 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+diff --git a/support/config-fragments/autobuild/br-arm-internal-glibc.config b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+new file mode 100644
+index 0000000000..6b2566eedc
+--- /dev/null
++++ b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+@@ -0,0 +1,4 @@
++BR2_arm=y
++BR2_cortex_a8=y
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/support/config-fragments/autobuild/br-arm-internal-musl.config b/support/config-fragments/autobuild/br-arm-internal-musl.config
+new file mode 100644
+index 0000000000..92788626d6
+--- /dev/null
++++ b/support/config-fragments/autobuild/br-arm-internal-musl.config
+@@ -0,0 +1,4 @@
++BR2_arm=y
++BR2_cortex_a8=y
++BR2_TOOLCHAIN_BUILDROOT_MUSL=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index efb78eec4f..2010113f44 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -12,6 +12,8 @@ support/config-fragments/autobuild/br-arm-full.config,x86_64
+ support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
+ support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+ support/config-fragments/autobuild/br-arm-internal-full.config,any
++support/config-fragments/autobuild/br-arm-internal-glibc.config,any
++support/config-fragments/autobuild/br-arm-internal-musl.config,any
+ support/config-fragments/autobuild/br-bfin-full.config,x86_64
+ support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
+ support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config,x86_64
