@@ -1,42 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 5 Mar 2018 18:44:52 +0200
-Subject: [Buildroot] Help ! I can not mount on boot my root filesystem
- with user_xattr, acl mount options (only remount works)
-In-Reply-To: <211811520264204@web51j.yandex.ru>
-References: <211811520264204@web51j.yandex.ru>
-Message-ID: <20180305164451.6lujpx7wxqjtyimj@sapphire.tkos.co.il>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 5 Mar 2018 18:09:36 +0100
+Subject: [Buildroot] Defconfigs failing to build with gcc 6.x
+In-Reply-To: <20180304224808.566fa00d@windsurf.home>
+References: <20180304224808.566fa00d@windsurf.home>
+Message-ID: <CAHkwnC_CBRZGZmV9J7PbWYdyquMHh4OdYVdsMdxWq-_+4F2QGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Lev,
+2018-03-04 22:48 GMT+01:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+> Hello,
+>
+> You are in charge of a defconfig that causes some build failures.
+>
+> The defconfigs listed below still don't build with gcc 6.x. It is more
+> than time to fix those defconfigs: gcc 6.x has been around for a
+> while. If those defconfigs are not fixed in the very near future, we
+> will have to remove them. Usually, the fix is to upgrade the U-Boot
+> and/or Linux kernel version.
+>
+...
+>  - telit_evk_pro3_defconfig
+>
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/55306952
+>
+>    Fabio (Porcedda): could you add yourself as the maintainer for this
+>    board in the DEVELOPERS file ? Thanks!
+>
 
-On Mon, Mar 05, 2018 at 06:36:44PM +0300, Lev Olshvang wrote:
-> I do not understand how to boot my QEMU versatile arm with EXT4 root 
-> filesystem with extented attribute mount option??user_xattr.
-> ?
-> The kernel 4.9.6 is compiled with support for EXTENDED attributes and I can do
-> mount -o remount inside embedded?machine enabling user_attr.
-> ?
-> I tried to change /etc/fstab to add user_attr option but to no success.
-> ?
-> But I was able to chage reatime optin in fstab to noatime and see it accepted
-> after reboot.
-> ?
-> I also tried to pass mount option using kernel boot parameters line, rootflags=
-> user_xattr, rootfstype=ext4 but also to no success.
-> ?
-> I also tried tune2fs inside buildroot, but to no effect either.
-> ?
-> I am desperate,
+Unfortunately a newer kernel doesn't boot and I don't have the time to
+fix the issue.
+If having a defconfig that doesn't build on gcc 6.x is unacceptable
+feel free to remove it.
 
-Adding rootflags=user_xattr to the kernel command line might help.
-
-baruch
-
+Best regards
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Fabio Porcedda
