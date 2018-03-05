@@ -1,42 +1,48 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 4 Mar 2018 20:53:05 -0300
-Subject: [Buildroot] Defconfigs failing to build with gcc 6.x
-In-Reply-To: <CAOMZO5DXmGWSbfE9PEp+srYkM8ieMX0NYOmyOgza0cuSHsjr9A@mail.gmail.com>
-References: <20180304224808.566fa00d@windsurf.home>
- <CAOMZO5DXmGWSbfE9PEp+srYkM8ieMX0NYOmyOgza0cuSHsjr9A@mail.gmail.com>
-Message-ID: <CAOMZO5Dy61MpiKuD-ExCj+OQA0RRT=3x=BhuB2rWub71uM9TEw@mail.gmail.com>
+Date: Sun,  4 Mar 2018 21:21:30 -0300
+Subject: [Buildroot] [PATCH] DEVELOPERS: Add some i.MX boards to my name
+Message-ID: <1520209290-13608-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+I would like to help maintaining the following defconfigs:
 
-On Sun, Mar 4, 2018 at 8:29 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> Hi Thomas,
->
-> On Sun, Mar 4, 2018 at 6:48 PM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->
->>  - freescale_p1010rdb_pa_defconfig
->>
->>    https://gitlab.com/buildroot.org/buildroot/-/jobs/55306827
->>
->>    Gustavo was taking care of this board. I'm adding Fabio (Estevam)
->>    from Freescale/NXP as a replacement, in case he is
->>    interested. Fabio (Estevam): let me know if you're interested. If
->>    not, we'll remove this defconfig.
->
-> I don't have access to this board, but I can try to bump the kernel to
-> 4.15.7 and see if it builds fine.
+imx23evk_defconfig
+imx6-sabreauto_defconfig
+imx7dpico_defconfig
+mx25pdk_defconfig
+mx51evk_defconfig
+mx53loco_defconfig
 
-I was not able to find a suitable defconfig for this board in mainline.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ DEVELOPERS | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-As I am not familiar with the PowerPC devices I don't think I will be
-in a good position to maintain this defconfig.
-
-So unless someone is interested in maintaining p1010rdb, I think we
-can remove it.
-
-Thanks
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 41e1b54..de78c51 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -600,11 +600,16 @@ F:	package/supertuxkart/
+ N:	Fabio Estevam <festevam@gmail.com>
+ F:	board/warp7/
+ F:	configs/freescale_imx*
+-F:	configs/imx6-sabresd*
++F:	configs/imx23evk_defconfig
++F:	configs/imx6-sabre*
+ F:	configs/imx6slevk_defconfig
+ F:	configs/imx6sx-sdb_defconfig
+ F:	configs/imx6ulevk_defconfig
+ F:	configs/imx6ulpico_defconfig
++F:	configs/imx7dpico_defconfig
++F:	configs/mx25pdk_defconfig
++F:	configs/mx51evk_defconfig
++F:	configs/mx53loco_defconfig
+ F:	configs/mx6cubox_defconfig
+ F:	configs/mx6sx_udoo_neo_defconfig
+ F:	configs/mx6udoo_defconfig
+-- 
+2.7.4
