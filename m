@@ -1,42 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 05 Mar 2018 20:07:18 -0000
-Subject: [Buildroot] [git commit] libupnp: bump to version 1.6.25
-Message-ID: <20180305200715.EB51980FAF@busybox.osuosl.org>
+Date: Mon, 05 Mar 2018 20:07:19 -0000
+Subject: [Buildroot] [git commit] liburiparser: bump to version 0.8.5 and
+ move to GitHub
+Message-ID: <20180305200716.106DE80137@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18f33eee21d3ca947cf8a6b5c150bb29e8f711dc
+commit: https://git.buildroot.net/buildroot/commit/?id=ca0e6272008dfc5e90f3f5a0de5eaa4d345b122e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+uriparser 0.8.5 with bugfixes has been released. It has also moved from
+SourceForge to GitHub:
+
+    https://uriparser.github.io/
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/liburiparser/Config.in         | 2 +-
+ package/liburiparser/liburiparser.hash | 6 ++----
+ package/liburiparser/liburiparser.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index 929e5c42e7..e52b7ea9d7 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	7d83d79af3bb4062e5c3a58bf2e90d2da5b8b99e2b2d57c23b5b6f766288cf96	libupnp-1.6.24.tar.bz2
-+sha256	c5a300b86775435c076d58a79cc0d5a977d76027d2a7d721590729b7f369fa43	libupnp-1.6.25.tar.bz2
- sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index c7085c2148..8831885ba4 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/liburiparser/Config.in b/package/liburiparser/Config.in
+index e85a2626d2..b39e3907dd 100644
+--- a/package/liburiparser/Config.in
++++ b/package/liburiparser/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBURIPARSER
+ 	  uriparser is a strictly RFC 3986 compliant URI parsing and
+ 	  handling library written in C.
+ 
+-	  http://uriparser.sourceforge.net
++	  https://uriparser.github.io
+diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
+index 9e9517c17f..c03e832f9f 100644
+--- a/package/liburiparser/liburiparser.hash
++++ b/package/liburiparser/liburiparser.hash
+@@ -1,5 +1,3 @@
+-# From http://sourceforge.net/projects/uriparser/files/Sources/0.8.4/
+-md5	9aabdc3611546f553f4af372167de6d6		uriparser-0.8.4.tar.bz2
+-sha1	7a1948c20bed54b04dad0e1d7d2fa8f80fc7b2b3	uriparser-0.8.4.tar.bz2
+ # Locally calculated
+-sha256  c6ef125800c2ef13a41a22126bfc77e8b8c08993a6b96196117695988ea76249  COPYING
++sha256  58eacd5c03d9e341c04eb0b30831faec89f3b415949ff8d72254e63432352cdd  uriparser-0.8.5.tar.bz2
++sha256  ee90029e62d11f48faa59360d15c3ad8e7c094c74cc25b055716d92340da561f  COPYING
+diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
+index 856a6aafd4..4b32b7f7f2 100644
+--- a/package/liburiparser/liburiparser.mk
++++ b/package/liburiparser/liburiparser.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBUPNP_VERSION = 1.6.24
-+LIBUPNP_VERSION = 1.6.25
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+-LIBURIPARSER_VERSION = 0.8.4
++LIBURIPARSER_VERSION = 0.8.5
+ LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
+-LIBURIPARSER_SITE = http://sourceforge.net/projects/uriparser/files/Sources/$(LIBURIPARSER_VERSION)
++LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+ LIBURIPARSER_LICENSE = BSD-3-Clause
+ LIBURIPARSER_LICENSE_FILES = COPYING
+ LIBURIPARSER_INSTALL_STAGING = YES
