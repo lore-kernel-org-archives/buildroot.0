@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:17 -0000
-Subject: [Buildroot] [git commit] cjson: bump to version 1.7.2
-Message-ID: <20180305200713.D73BF81EDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] glibc: needs host-bison
+Message-ID: <20180305200714.64DD281130@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73569ed6f8b66699b5d65dfb057dad3c99b56cae
+commit: https://git.buildroot.net/buildroot/commit/?id=61addf9107e5369b6dbc77724ab0b0ecede74897
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since upstream commit 1faaf7035cabda101e1d6653bff7a539f201db91
+("plural.c: improve reproducibility"), glibc now requires bison to be
+available on the host for its build process. This is needed starting
+with glibc 2.27.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ca4d883793c1674d3a052edd5e56897f79683448/
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/glibc/glibc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index ea2ecbb7e9..c72565d2bf 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 28ef8c069db19010b9af247b86b05f0f879ac914a4620997c3e5181465170b40  cjson-v1.7.1.tar.gz
-+sha256 e5101b6c0416d26b8ce2dd3fcdd779eacd93d765a1872789ba099a5f31a338e7  cjson-v1.7.2.tar.gz
- sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 88a33a2ce4..31d57e1f2b 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index b674191b22..00e114566c 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -28,7 +28,7 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
  
--CJSON_VERSION = v1.7.1
-+CJSON_VERSION = v1.7.2
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+ # Before glibc is configured, we must have the first stage
+ # cross-compiler and the kernel headers
+-GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
++GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk
+ 
+ GLIBC_SUBDIR = build
+ 
