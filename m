@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:17 -0000
-Subject: [Buildroot] [git commit] configs/wandboard: Add support for the rev
- D1 variants
-Message-ID: <20180305200712.EA3B280FFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cjson: bump to version 1.7.3
+Message-ID: <20180305200715.14D087FFA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c44cf5e98c9b02a2889e63b556ce78221d0e4110
+commit: https://git.buildroot.net/buildroot/commit/?id=1063e9ef80e2c4ac6c71518fc661381b42bcdd24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since kernel 4.15 the wandboard rev D1 variants are supported.
-
-Add support for them.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/wandboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index 8f28b60ecf..b43c0c0e13 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -22,7 +22,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.1"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- # required tools to create the SD card image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index c72565d2bf..c75854d2ac 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 e5101b6c0416d26b8ce2dd3fcdd779eacd93d765a1872789ba099a5f31a338e7  cjson-v1.7.2.tar.gz
++sha256 726a60137ab1aa6784dc575bf7d4c92f5367e937739c8bffcddce79071cf5f50  cjson-v1.7.3.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 31d57e1f2b..08020c48f6 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.7.2
++CJSON_VERSION = v1.7.3
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
