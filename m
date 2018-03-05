@@ -1,24 +1,159 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 5 Mar 2018 08:05:49 -0300
-Subject: [Buildroot] Defconfigs failing to build with gcc 6.x
-In-Reply-To: <20180305085751.1b03854f@windsurf.home>
-References: <20180304224808.566fa00d@windsurf.home>
- <CAOMZO5DXmGWSbfE9PEp+srYkM8ieMX0NYOmyOgza0cuSHsjr9A@mail.gmail.com>
- <20180305085751.1b03854f@windsurf.home>
-Message-ID: <CAOMZO5CtNrJNna_=3-qmBXUs-++cKutSkQtXvT2-yEq9dSh+Kg@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 5 Mar 2018 12:07:22 +0000
+Subject: [Buildroot] Board defconfigs lacking maintainers
+In-Reply-To: <20180304231547.7ed3f5af@windsurf.home>
+References: <20180304231547.7ed3f5af@windsurf.home>
+Message-ID: <20180305120722.GD7096@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 5, 2018 at 4:57 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Hello everybody,
 
-> If you don't have access to this board, and nobody else does, isn't it
-> better to simply drop the defconfig ?
+On Sun, 4 Mar 2018 23:15:47 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ 
+> A significant number of our defconfigs don't have anyone in charge of
+> them according to the DEVELOPERS file.
+> 
+> If you are interested in one of the below defconfigs, could you please
+> send an update to the DEVELOPERS file to add yourself? Defconfigs not
+> associated to any developer are likely to be dropped at some point in
+> the future, since they will most likely fail to build due to toolchain
+> updates, and nobody will be there to fix those issues.
+> 
+> Here is the complete list of defconfigs that aren't associated to
+> anybody in the DEVELOPERS file:
+> 
+>  - arcturus_ucp1020_defconfig
+>  - arm_foundationv8_defconfig
+>  - arm_juno_defconfig
+>  - beagleboardx15_defconfig
+>  - beaglebone_defconfig
+>  - beaglebone_qt5_defconfig
+>  - chromebook_snow_defconfig
+>  - ci20_defconfig
 
-Yes, agreed.
+One if my work colleagues has a ci20 around which I *think* he has been using
+mostly with Buildroot as the base system. I'll get to him and see whether it
+may be possible for one of us to adopt this one.
 
-Matthew has sent a patch removing this defconfig:
-http://patchwork.ozlabs.org/patch/881276/
+>  - ci40_defconfig
+>  - cubieboard2_defconfig
+>  - firefly_rk3288_defconfig
+>  - firefly_rk3288_demo_defconfig
+>  - freescale_p1010rdb_pa_defconfig
+>  - galileo_defconfig
+>  - gdb_bfin_bf512_defconfig
+>  - imx23evk_defconfig
+>  - imx6-sabreauto_defconfig
+>  - imx7dpico_defconfig
+>  - minnowboard_max_defconfig
+>  - minnowboard_max-graphical_defconfig
+>  - mx25pdk_defconfig
+>  - mx51evk_defconfig
+>  - mx53loco_defconfig
+>  - nanopi_neo_defconfig
+>  - nexbox_a95x_defconfig
+>  - odroidc2_defconfig
+
+We have at the office a couple of Odroid C2 which I think may not be in use, 
+but I do not have physical access to them (I work remotely), but I might be
+able to do something about them. I'll ask around as well.
+
+>  - olimex_imx233_olinuxino_defconfig
+>  - openblocks_a6_defconfig
+>  - pandaboard_defconfig
+
+I have a Pandaboard in storage, which I will get back by June. After that I
+could probably take over this defconfig.
+
+That being said, I do not have much interest in toying with it, so if somebody
+else would commit to maintaining Buildroot on the Pandaboard I would happily
+consider donating it to someone in the Finland or the EU ? send me an e-mail
+off-list if you are interested.
+
+>  - qemu_aarch64_virt_defconfig
+>  - qemu_arm_versatile_defconfig
+>  - qemu_arm_versatile_nommu_defconfig
+>  - qemu_arm_vexpress_defconfig
+>  - qemu_m68k_mcf5208_defconfig
+>  - qemu_m68k_q800_defconfig
+>  - qemu_microblazebe_mmu_defconfig
+>  - qemu_microblazeel_mmu_defconfig
+>  - qemu_mips32r2el_malta_defconfig
+>  - qemu_mips32r2_malta_defconfig
+>  - qemu_mips32r6el_malta_defconfig
+>  - qemu_mips32r6_malta_defconfig
+>  - qemu_mips64el_malta_defconfig
+>  - qemu_mips64_malta_defconfig
+>  - qemu_mips64r6el_malta_defconfig
+>  - qemu_mips64r6_malta_defconfig
+>  - qemu_nios2_10m50_defconfig
+>  - qemu_or1k_defconfig
+>  - qemu_ppc64_pseries_defconfig
+>  - qemu_ppc_g3beige_defconfig
+>  - qemu_ppc_mpc8544ds_defconfig
+>  - qemu_ppc_virtex_ml507_defconfig
+>  - qemu_sh4eb_r2d_defconfig
+>  - qemu_sh4_r2d_defconfig
+>  - qemu_sparc64_sun4u_defconfig
+>  - qemu_sparc_ss10_defconfig
+>  - qemu_x86_64_defconfig
+>  - qemu_x86_defconfig
+>  - qemu_xtensa_lx60_defconfig
+>  - qemu_xtensa_lx60_nommu_defconfig
+>  - raspberrypi0_defconfig
+>  - raspberrypi2_defconfig
+>  - raspberrypi3_64_defconfig
+>  - raspberrypi3_qt5we_defconfig
+>  - raspberrypi_defconfig
+
+I tend use the Raspberry Pi 2/3 defconfigs whenever I bump the WebKitGTK+
+package (and recently libepoxy), and they are very popular boards. It would
+be a pity to lose those. I can help out with them, but I bet there are people
+with better knowledge about the hardware details who should be listes as
+maintainers ;-)
+
+>  - riotboard_defconfig
+>  - roseapplepi_defconfig
+>  - s6lx9_microboard_defconfig
+>  - sheevaplug_defconfig
+
+The Sheevaplug configuration should also work for the GuruPlug, right? I also
+have a GuruPlug in storage which I would be happy to donate if somebody is
+interested.
+
+>  - snps_aarch64_vdk_defconfig
+>  - snps_arc700_axs101_defconfig
+>  - snps_archs38_axs103_defconfig
+>  - snps_archs38_haps_defconfig
+>  - snps_archs38_vdk_defconfig
+>  - stm32f429_disco_defconfig
+>  - stm32f469_disco_defconfig
+>  - telit_evk_pro3_defconfig
+>  - toradex_apalis_imx6_defconfig
+>  - ts4800_defconfig
+>  - ts5x00_defconfig
+>  - ts7680_defconfig
+>  - warpboard_defconfig
+>  - zynq_microzed_defconfig
+>  - zynq_zc706_defconfig
+>  - zynq_zed_defconfig
+>  - zynq_zybo_defconfig
+> 
+> Thanks for your participation!
+
+Best regards,
+
+
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180305/09f3c6a7/attachment.asc>
