@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Mar 2018 08:53:14 +0100
-Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
-In-Reply-To: <CAOMZO5BntMxqEBPuXVs2CX2L9OWGrf-AzbsOUeDN8qqcJgS8cg@mail.gmail.com>
-References: <20180304225550.74761708@windsurf.home>
- <CAOMZO5BntMxqEBPuXVs2CX2L9OWGrf-AzbsOUeDN8qqcJgS8cg@mail.gmail.com>
-Message-ID: <20180305085314.3ce92959@windsurf.home>
+Date: Mon, 5 Mar 2018 08:57:21 +0100
+Subject: [Buildroot] [PATCH 11/23] configs/imx6-sabresd: needs
+ host-openssl for the Linux kernel build
+In-Reply-To: <CAOMZO5CgKRFwU_NDc6VmLYUwHiBrFvVjpoBn1Cram_vD9+Lu1g@mail.gmail.com>
+References: <20180304213137.24681-1-thomas.petazzoni@bootlin.com>
+ <20180304213137.24681-12-thomas.petazzoni@bootlin.com>
+ <CAOMZO5CgKRFwU_NDc6VmLYUwHiBrFvVjpoBn1Cram_vD9+Lu1g@mail.gmail.com>
+Message-ID: <20180305085721.73a15209@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +15,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 4 Mar 2018 20:21:14 -0300, Fabio Estevam wrote:
+On Sun, 4 Mar 2018 20:24:52 -0300, Fabio Estevam wrote:
 
-> > See:
-> >
-> >   https://gitlab.com/buildroot.org/buildroot/-/jobs/55306817
-> >
-> > Is one of you interested in maintaining/fixing this board ? If so,
-> > could you fix it and also submit a patch to add yourself to the
-> > DEVELOPERS file ?  
-> 
-> I can send a patch converting the defconfig to use a mainline kernel instead.
+> It seems that all kernels >= 4.15 need to have
+> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL selected, right?
 
-Would be good, thanks! Do you have a way of testing it, or you don't
-have access to the HW platform ?
+No, as explained in PATCH 1 of the series, it depends on your kernel
+configuration. If you have wireless enabled, a chain of dependency
+results in the need for host-openssl. If you don't have wireless
+enabled, you don't necessarily need host-openssl.
 
-If nobody has access to the HW platform, I think we could just as well
-drop the defconfig.
+Patch 4 in the series shows for example how the host-openssl dependency
+can be avoided for a Linux 4.15 configuration, by simply disabling
+wireless support (which isn't terribly useful for a Qemu emulation).
 
-Best regards,
+> Can we have this selection made on a common place?
+
+I'm afraid we can't, without enforcing this dependency for a number of
+users who don't need it.
 
 Thomas
 -- 
