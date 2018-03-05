@@ -1,128 +1,264 @@
-From: daggs <daggs@gmx.com>
-Date: Mon, 5 Mar 2018 08:50:30 +0100
-Subject: [Buildroot] Board defconfigs lacking maintainers
-In-Reply-To: <20180304231547.7ed3f5af@windsurf.home>
-References: <20180304231547.7ed3f5af@windsurf.home>
-Message-ID: <trinity-7084c87a-b5bc-4dc4-b641-0eb7549eb0f7-1520236230212@3c-app-mailcom-bs12>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  5 Mar 2018 08:51:04 +0100
+Subject: [Buildroot] [PATCH] configs/firefly_rk3288: remove defconfig
+Message-ID: <20180305075104.1191-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Thomas,
+The original submitter of this defconfig:
 
-> Sent: Monday, March 05, 2018 at 12:15 AM
-> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> To: "buildroot at uclibc.org" <buildroot@uclibc.org>
-> Subject: [Buildroot] Board defconfigs lacking maintainers
->
-> Hello,
-> 
-> A significant number of our defconfigs don't have anyone in charge of
-> them according to the DEVELOPERS file.
-> 
-> If you are interested in one of the below defconfigs, could you please
-> send an update to the DEVELOPERS file to add yourself? Defconfigs not
-> associated to any developer are likely to be dropped at some point in
-> the future, since they will most likely fail to build due to toolchain
-> updates, and nobody will be there to fix those issues.
-> 
-> Here is the complete list of defconfigs that aren't associated to
-> anybody in the DEVELOPERS file:
-> 
->  - arcturus_ucp1020_defconfig
->  - arm_foundationv8_defconfig
->  - arm_juno_defconfig
->  - beagleboardx15_defconfig
->  - beaglebone_defconfig
->  - beaglebone_qt5_defconfig
->  - chromebook_snow_defconfig
->  - ci20_defconfig
->  - ci40_defconfig
->  - cubieboard2_defconfig
->  - firefly_rk3288_defconfig
->  - firefly_rk3288_demo_defconfig
->  - freescale_p1010rdb_pa_defconfig
->  - galileo_defconfig
->  - gdb_bfin_bf512_defconfig
->  - imx23evk_defconfig
->  - imx6-sabreauto_defconfig
->  - imx7dpico_defconfig
->  - minnowboard_max_defconfig
->  - minnowboard_max-graphical_defconfig
->  - mx25pdk_defconfig
->  - mx51evk_defconfig
->  - mx53loco_defconfig
->  - nanopi_neo_defconfig
->  - nexbox_a95x_defconfig
->  - odroidc2_defconfig
->  - olimex_imx233_olinuxino_defconfig
->  - openblocks_a6_defconfig
->  - pandaboard_defconfig
->  - qemu_aarch64_virt_defconfig
->  - qemu_arm_versatile_defconfig
->  - qemu_arm_versatile_nommu_defconfig
->  - qemu_arm_vexpress_defconfig
->  - qemu_m68k_mcf5208_defconfig
->  - qemu_m68k_q800_defconfig
->  - qemu_microblazebe_mmu_defconfig
->  - qemu_microblazeel_mmu_defconfig
->  - qemu_mips32r2el_malta_defconfig
->  - qemu_mips32r2_malta_defconfig
->  - qemu_mips32r6el_malta_defconfig
->  - qemu_mips32r6_malta_defconfig
->  - qemu_mips64el_malta_defconfig
->  - qemu_mips64_malta_defconfig
->  - qemu_mips64r6el_malta_defconfig
->  - qemu_mips64r6_malta_defconfig
->  - qemu_nios2_10m50_defconfig
->  - qemu_or1k_defconfig
->  - qemu_ppc64_pseries_defconfig
->  - qemu_ppc_g3beige_defconfig
->  - qemu_ppc_mpc8544ds_defconfig
->  - qemu_ppc_virtex_ml507_defconfig
->  - qemu_sh4eb_r2d_defconfig
->  - qemu_sh4_r2d_defconfig
->  - qemu_sparc64_sun4u_defconfig
->  - qemu_sparc_ss10_defconfig
->  - qemu_x86_64_defconfig
->  - qemu_x86_defconfig
->  - qemu_xtensa_lx60_defconfig
->  - qemu_xtensa_lx60_nommu_defconfig
->  - raspberrypi0_defconfig
->  - raspberrypi2_defconfig
->  - raspberrypi3_64_defconfig
->  - raspberrypi3_qt5we_defconfig
->  - raspberrypi_defconfig
->  - riotboard_defconfig
->  - roseapplepi_defconfig
->  - s6lx9_microboard_defconfig
->  - sheevaplug_defconfig
->  - snps_aarch64_vdk_defconfig
->  - snps_arc700_axs101_defconfig
->  - snps_archs38_axs103_defconfig
->  - snps_archs38_haps_defconfig
->  - snps_archs38_vdk_defconfig
->  - stm32f429_disco_defconfig
->  - stm32f469_disco_defconfig
->  - telit_evk_pro3_defconfig
->  - toradex_apalis_imx6_defconfig
->  - ts4800_defconfig
->  - ts5x00_defconfig
->  - ts7680_defconfig
->  - warpboard_defconfig
->  - zynq_microzed_defconfig
->  - zynq_zc706_defconfig
->  - zynq_zed_defconfig
->  - zynq_zybo_defconfig
-> 
-> Thanks for your participation!
-> 
-> Thomas
+"""
+Sorry, unfortunately we no longer have the firefly board,
+so we can't maintain it.
+"""
 
-I was under the impression I'm maintaining the odroidc2 board, did to got changed?
-the config didn't got updated lately because I'm focusing on the mainline support (see patches pending).
-regardless, I'll make a pass on the vendor's repo to see if there are any updates.
+And this defconfig fails to build with gcc 6.x, causing breakage in
+the defconfig testing.
 
-Dagg.
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306815
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306814
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml                             |  2 --
+ board/firefly/firefly-rk3288/extlinux.conf |  6 -----
+ board/firefly/firefly-rk3288/post-build.sh |  3 ---
+ board/firefly/firefly-rk3288/post-image.sh | 20 ---------------
+ board/firefly/firefly-rk3288/readme.txt    | 40 ------------------------------
+ board/firefly/firefly-rk3288/sd-image.cfg  | 22 ----------------
+ configs/firefly_rk3288_defconfig           | 32 ------------------------
+ configs/firefly_rk3288_demo_defconfig      | 40 ------------------------------
+ 8 files changed, 165 deletions(-)
+ delete mode 100644 board/firefly/firefly-rk3288/extlinux.conf
+ delete mode 100755 board/firefly/firefly-rk3288/post-build.sh
+ delete mode 100755 board/firefly/firefly-rk3288/post-image.sh
+ delete mode 100644 board/firefly/firefly-rk3288/readme.txt
+ delete mode 100644 board/firefly/firefly-rk3288/sd-image.cfg
+ delete mode 100644 configs/firefly_rk3288_defconfig
+ delete mode 100644 configs/firefly_rk3288_demo_defconfig
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 2f542c0703..c651c73df5 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -110,8 +110,6 @@ engicam_imx6qdl_icore_qt5_defconfig: *defconfig
+ engicam_imx6qdl_icore_rqs_defconfig: *defconfig
+ engicam_imx6ul_geam_defconfig: *defconfig
+ engicam_imx6ul_isiot_defconfig: *defconfig
+-firefly_rk3288_defconfig: *defconfig
+-firefly_rk3288_demo_defconfig: *defconfig
+ freescale_imx28evk_defconfig: *defconfig
+ freescale_imx31_3stack_defconfig: *defconfig
+ freescale_imx6dlsabreauto_defconfig: *defconfig
+diff --git a/board/firefly/firefly-rk3288/extlinux.conf b/board/firefly/firefly-rk3288/extlinux.conf
+deleted file mode 100644
+index 39ac5b9dac..0000000000
+--- a/board/firefly/firefly-rk3288/extlinux.conf
++++ /dev/null
+@@ -1,6 +0,0 @@
+-default firefly-rk3288
+-
+-label firefly-rk3288
+-kernel /boot/uImage
+-devicetree /boot/rk3288-firefly.dtb
+-append console=ttyS2,115200n8 root=/dev/mmcblk0p1 rootwait
+diff --git a/board/firefly/firefly-rk3288/post-build.sh b/board/firefly/firefly-rk3288/post-build.sh
+deleted file mode 100755
+index 94e89ce6a4..0000000000
+--- a/board/firefly/firefly-rk3288/post-build.sh
++++ /dev/null
+@@ -1,3 +0,0 @@
+-BOARD_DIR="$(dirname $0)"
+-
+-install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+diff --git a/board/firefly/firefly-rk3288/post-image.sh b/board/firefly/firefly-rk3288/post-image.sh
+deleted file mode 100755
+index d89bc7e550..0000000000
+--- a/board/firefly/firefly-rk3288/post-image.sh
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#!/bin/sh
+-
+-MKIMAGE=$HOST_DIR/bin/mkimage
+-
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/sd-image.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage							\
+-	--rootpath "${TARGET_DIR}"		\
+-	--tmppath "${GENIMAGE_TMP}"		\
+-	--inputpath "${BINARIES_DIR}"	\
+-	--outputpath "${BINARIES_DIR}"	\
+-	--config "${GENIMAGE_CFG}"
+-
+-exit $?
+diff --git a/board/firefly/firefly-rk3288/readme.txt b/board/firefly/firefly-rk3288/readme.txt
+deleted file mode 100644
+index d6210857f1..0000000000
+--- a/board/firefly/firefly-rk3288/readme.txt
++++ /dev/null
+@@ -1,40 +0,0 @@
+-Firefly RK3288
+-
+-How to build it
+-===============
+-
+-  $ make firefly_rk3288_defconfig
+-
+-Then you can edit the build options using
+-
+-  $ make menuconfig
+-
+-Compile all and build rootfs image:
+-
+-  $ make
+-
+-Result of the build
+--------------------
+-
+-After building, you should get a tree like this:
+-
+-  output/images/
+-  ??? rk3288-firefly.dtb
+-  ??? rootfs.ext2
+-  ??? rootfs.ext4 -> rootfs.ext2
+-  ??? sdcard.img
+-  ??? u-boot-dtb.img
+-  ??? u-boot-spl-dtb.bin
+-  ??? u-boot-spl-dtb.img
+-  ??? uImage
+-
+-Prepare your SDCard
+-===================
+-
+-Buildroot generates a ready-to-use SD card image that you can flash directly to
+-the card. The image will be in output/images/sdcard.img.
+-You can write this image directly to an SD card device (i.e. /dev/xxx):
+-
+-  $ dd if=output/images/sdcard.img of=/dev/xxx
+-
+-Finally, you can insert the SD card to the Firefly RK3288 board and boot it.
+diff --git a/board/firefly/firefly-rk3288/sd-image.cfg b/board/firefly/firefly-rk3288/sd-image.cfg
+deleted file mode 100644
+index a9eb9f0142..0000000000
+--- a/board/firefly/firefly-rk3288/sd-image.cfg
++++ /dev/null
+@@ -1,22 +0,0 @@
+-image sdcard.img {
+-  hdimage {
+-  }
+-
+-  partition u-boot-spl-dtb {
+-    in-partition-table = "no"
+-    image = "u-boot-spl-dtb.img"
+-    offset = 32K
+-  }
+-
+-  partition u-boot-dtb {
+-    in-partition-table = "no"
+-    image = "u-boot-dtb.img"
+-    offset = 128K
+-  }
+-
+-  partition rootfs {
+-    partition-type = 0x83
+-    image = "rootfs.ext4"
+-    size = 512M
+-  }
+-}
+diff --git a/configs/firefly_rk3288_defconfig b/configs/firefly_rk3288_defconfig
+deleted file mode 100644
+index 017a7ee6d7..0000000000
+--- a/configs/firefly_rk3288_defconfig
++++ /dev/null
+@@ -1,32 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a17=y
+-BR2_ARM_FPU_NEON_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+-BR2_TARGET_GENERIC_HOSTNAME="firefly-rk3288"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to FIREFLY RK3288!"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/firefly-rk3288/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/firefly/firefly-rk3288/post-image.sh"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mmind/linux-rockchip.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ccb89e9b5657b4911c16d08e1581121222ee12c4"
+-BR2_LINUX_KERNEL_DEFCONFIG="rk3288_veyron"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-firefly"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="firefly-rk3288"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/firefly_rk3288_demo_defconfig b/configs/firefly_rk3288_demo_defconfig
+deleted file mode 100644
+index d394ede30e..0000000000
+--- a/configs/firefly_rk3288_demo_defconfig
++++ /dev/null
+@@ -1,40 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a17=y
+-BR2_ARM_FPU_NEON_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-BR2_TARGET_GENERIC_HOSTNAME="firefly-rk3288"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to FIREFLY RK3288!"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/firefly-rk3288/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/firefly/firefly-rk3288/post-image.sh"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mmind/linux-rockchip.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ccb89e9b5657b4911c16d08e1581121222ee12c4"
+-BR2_LINUX_KERNEL_DEFCONFIG="rk3288_veyron"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-firefly"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_PACKAGE_QT5=y
+-BR2_PACKAGE_QT5BASE_EXAMPLES=y
+-BR2_PACKAGE_QT5BASE_GUI=y
+-BR2_PACKAGE_QT5BASE_EGLFS=y
+-BR2_PACKAGE_MALI_T76X=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+-# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="firefly-rk3288"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-- 
+2.14.3
