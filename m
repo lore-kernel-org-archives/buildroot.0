@@ -1,43 +1,34 @@
-From: John Keeping <john@metanate.com>
-Date: Mon,  5 Mar 2018 14:26:38 +0000
-Subject: [Buildroot] [PATCH] libusbgx: bump to v0.2.0
-Message-ID: <20180305142638.20492-1-john@metanate.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 5 Mar 2018 15:35:27 +0100
+Subject: [Buildroot] Board defconfigs lacking maintainers
+In-Reply-To: <20180304231547.7ed3f5af@windsurf.home>
+References: <20180304231547.7ed3f5af@windsurf.home>
+Message-ID: <a838cf4c-612f-2af4-c5c3-25dc9d51d859@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GitHub tag is really "libusbgx-0.2.0" so we end up with a slightly
-strange looking version and archive name, but this is correct given the
-tag.
+Hi,
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- package/libusbgx/libusbgx.hash | 2 +-
- package/libusbgx/libusbgx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 04/03/2018 23:15, Thomas Petazzoni wrote:
+> Hello,
+> 
+> A significant number of our defconfigs don't have anyone in charge of
+> them according to the DEVELOPERS file.
+> 
+> If you are interested in one of the below defconfigs, could you please
+> send an update to the DEVELOPERS file to add yourself? Defconfigs not
+> associated to any developer are likely to be dropped at some point in
+> the future, since they will most likely fail to build due to toolchain
+> updates, and nobody will be there to fix those issues.
 
-diff --git a/package/libusbgx/libusbgx.hash b/package/libusbgx/libusbgx.hash
-index c185c5803c..c153acaf4a 100644
---- a/package/libusbgx/libusbgx.hash
-+++ b/package/libusbgx/libusbgx.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  1e258205dcde99d0eeb52404ee7ff1bc9a39eb3878e8455fb72bad7cf90c7357  libusbgx-2e3d43ee098ed928d1baa61ce791ce9ff4788c5a.tar.gz
-+sha256  b15abc89a0ef82c6a650cc1d58b5ba50f7ce076db392add84caabcd86c608ee2  libusbgx-libusbgx-v0.2.0.tar.gz
-diff --git a/package/libusbgx/libusbgx.mk b/package/libusbgx/libusbgx.mk
-index 1964b47d02..e7c082f9f3 100644
---- a/package/libusbgx/libusbgx.mk
-+++ b/package/libusbgx/libusbgx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUSBGX_VERSION = 2e3d43ee098ed928d1baa61ce791ce9ff4788c5a
-+LIBUSBGX_VERSION = libusbgx-v0.2.0
- LIBUSBGX_SITE = $(call github,libusbgx,libusbgx,$(LIBUSBGX_VERSION))
- LIBUSBGX_LICENSE = GPL-2.0+ (examples), LGPL-2.1+ (library)
- LIBUSBGX_LICENSE_FILES = COPYING COPYING.LGPL
+What is required exactly to be considered a board maintainer? Ensure
+that it builds, or that it boots? I could take over the zynq boards, but
+I have access only to some and only at spots so I cannot always ensure
+they all boot.
+
+Bye,
 -- 
-2.16.2
+Luca
