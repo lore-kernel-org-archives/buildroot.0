@@ -1,97 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:17 -0000
-Subject: [Buildroot] [git commit] python-flask-sqlalchemy: new package
-Message-ID: <20180305200714.B506D7FFA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libgpiod: bump version to v1.0
+Message-ID: <20180305200714.17B1481130@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bfaedca37e8f4c68cbfa72d227b2c4074bbe57d
+commit: https://git.buildroot.net/buildroot/commit/?id=f91a2b3772a9fe978538adfe4db6fd2af687e922
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Flask-SQLAlchemy is a Flask microframework extension which adds support for
-the SQLAlchemy SQL toolkit/ORM.
+This is a major update for libgpiod. The API is not compatible with the
+v0.x.y series but since nothing in current buildroot git depends on
+this project, I believe we can simply bump the version.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Thomas: fix check-package warnings.]
+The included tools are compatible with their 0.x.y counterparts.
+
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reviewed-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
+Tested-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/python-flask-sqlalchemy/Config.in                  |  9 +++++++++
- .../python-flask-sqlalchemy/python-flask-sqlalchemy.hash   |  4 ++++
- package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f859ebe984..293bd73797 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -51,6 +51,7 @@ F:	package/libsemanage/
- F:	package/libsepol/
- F:	package/nginx-naxsi/
- F:	package/policycoreutils/
-+F:	package/python-flask-sqlalchemy/
- F:	package/python-mutagen/
- F:	package/python-sqlalchemy/
- F:	package/restorecond/
-diff --git a/package/Config.in b/package/Config.in
-index 6bd95e3bf0..19dda8aad9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -775,6 +775,7 @@ menu "External python modules"
- 	source "package/python-flask-babel/Config.in"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
-+	source "package/python-flask-sqlalchemy/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-futures/Config.in"
- 	source "package/python-gobject/Config.in"
-diff --git a/package/python-flask-sqlalchemy/Config.in b/package/python-flask-sqlalchemy/Config.in
-new file mode 100644
-index 0000000000..fa4a035110
---- /dev/null
-+++ b/package/python-flask-sqlalchemy/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_FLASK_SQLALCHEMY
-+	bool "python-flask-sqlalchemy"
-+	select BR2_PACKAGE_PYTHON_FLASK # runtime
-+	select BR2_PACKAGE_PYTHON_SQLALCHEMY # runtime
-+	help
-+	  Flask-SQLAlchemy is a Flask microframework extension which
-+	  adds support for the SQLAlchemy SQL toolkit/ORM.
-+
-+	  http://github.com/mitsuhiko/flask-sqlalchemy
-diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
-new file mode 100644
-index 0000000000..9e15b5d8f0
---- /dev/null
-+++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/Flask-SQLAlchemy/json, sha256 locally computed
-+md5    373ce61dfd03b593ad2eaba68c9fee35  Flask-SQLAlchemy-2.3.2.tar.gz
-+sha256 5971b9852b5888655f11db634e87725a9031e170f37c0ce7851cf83497f56e53  Flask-SQLAlchemy-2.3.2.tar.gz
-+sha256 de2011f25501c45f2b78bfa4f851ce021cfbab0f1e7ab763233688e0b969821f  PKG-INFO
-diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
-new file mode 100644
-index 0000000000..37fe603f1e
---- /dev/null
-+++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-flask-sqlalchemy
-+#
-+################################################################################
-+
-+PYTHON_FLASK_SQLALCHEMY_VERSION = 2.3.2
-+PYTHON_FLASK_SQLALCHEMY_SOURCE = Flask-SQLAlchemy-$(PYTHON_FLASK_SQLALCHEMY_VERSION).tar.gz
-+PYTHON_FLASK_SQLALCHEMY_SITE = https://pypi.python.org/packages/3a/66/f5ace276517c075f102457dd2f7d8645b033758f9c6effb4e0970a90fec1
-+PYTHON_FLASK_SQLALCHEMY_SETUP_TYPE = setuptools
-+PYTHON_FLASK_SQLALCHEMY_LICENSE = BSD-3c
-+PYTHON_FLASK_SQLALCHEMY_LICENSE_FILES = PKG-INFO
-+
-+$(eval $(python-package))
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 73150dc9b9..a98e138fa4 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 50c7862428ca90b58672e2475aea66d33a6fc86c6bab1928c0660f3aedf44a37  libgpiod-0.3.2.tar.xz
++sha256 34c76b3730b9d4a1159bcb14000f78b1e890251b8a3823b794fa930654eabdd0  libgpiod-1.0.tar.xz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index bc2e51d280..598adcc599 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 0.3.2
++LIBGPIOD_VERSION = 1.0
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
