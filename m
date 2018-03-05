@@ -1,102 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:18 -0000
-Subject: [Buildroot] [git commit] systemd: allow to build with uClibc
- toolchains
-Message-ID: <20180305200714.F34BE7FFA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_aarch64_virt_defconfig: bump
+ kernel to 4.15.2
+Message-ID: <20180305200714.80A3A81130@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=879fa7f82a86ffdc6d1cf7c9bfbb5cf830583d69
+commit: https://git.buildroot.net/buildroot/commit/?id=fe563efcb1877d11753bf3acc19694bfdd0f63ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We need to disable any systemd parts using either IDN, NSS or gshadow.
-IDN is only disabled in C library function call to getnameinfo(),
-it does not effect libidn/libidn2 usage in systemd.
-
-Tested with qemu-system-arm.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/Config.in  |  3 +++
- package/systemd/systemd.mk | 11 +++++++++++
- system/Config.in           |  6 +++---
- 3 files changed, 17 insertions(+), 3 deletions(-)
+ board/qemu/aarch64-virt/{linux-4.13.config => linux-4.15.config} | 2 --
+ board/qemu/aarch64-virt/readme.txt                               | 2 +-
+ configs/qemu_aarch64_virt_defconfig                              | 8 ++++----
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 661f40dee4..81eee96c57 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -190,6 +190,7 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
+diff --git a/board/qemu/aarch64-virt/linux-4.13.config b/board/qemu/aarch64-virt/linux-4.15.config
+similarity index 97%
+rename from board/qemu/aarch64-virt/linux-4.13.config
+rename to board/qemu/aarch64-virt/linux-4.15.config
+index 93cb42f2ea..c9f2708ad5 100644
+--- a/board/qemu/aarch64-virt/linux-4.13.config
++++ b/board/qemu/aarch64-virt/linux-4.15.config
+@@ -1,6 +1,5 @@
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+-CONFIG_FHANDLE=y
+ CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
+ CONFIG_TASKSTATS=y
+@@ -10,7 +9,6 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_BLK_DEV_BSGLIB=y
+ CONFIG_ARCH_VEXPRESS=y
+-CONFIG_SMP=y
+ CONFIG_TRANSPARENT_HUGEPAGE=y
+ CONFIG_BINFMT_MISC=y
+ CONFIG_COMPAT=y
+diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
+index 9e09d953f9..ce0b621366 100644
+--- a/board/qemu/aarch64-virt/readme.txt
++++ b/board/qemu/aarch64-virt/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
  
- config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 	bool "enable myhostname NSS plugin"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	default y
- 	help
- 	  nss-myhostname is a plug-in module for the GNU Name Service
-@@ -245,6 +246,7 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
+ The login prompt will appear in the terminal that started Qemu.
  
- config BR2_PACKAGE_SYSTEMD_RESOLVED
- 	bool "enable resolve daemon"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	default y
- 	help
- 	  systemd-resolved is a system service that provides network
-@@ -278,6 +280,7 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+-Tested with QEMU 2.9.0
++Tested with QEMU 2.11.0
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index c94c4ac773..3bafd90e5a 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -10,12 +10,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
  
- config BR2_PACKAGE_SYSTEMD_SYSUSERS
- 	bool "enable sysusers support"
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs gshadow.h
- 	help
- 	  systemd-sysusers creates system users and groups, based on
- 	  the file format and location specified in sysusers.d(5).
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1c31ebb34c..a6c4b338e9 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -48,6 +48,17 @@ SYSTEMD_CONF_OPTS += \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dumount-path=/usr/bin/umount
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
  
-+# disable unsupported features for non-glibc toolchains
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+SYSTEMD_CONF_OPTS += \
-+	-Didn=true \
-+	-Dnss-systemd=true
-+else
-+SYSTEMD_CONF_OPTS += \
-+	-Didn=false \
-+	-Dnss-systemd=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_ACL),y)
- SYSTEMD_DEPENDENCIES += acl
- SYSTEMD_CONF_OPTS += -Dacl=true
-diff --git a/system/Config.in b/system/Config.in
-index d48cf8d8c4..7b36516cc7 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -127,7 +127,7 @@ config BR2_INIT_SYSV
- config BR2_INIT_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_SSP
-@@ -137,8 +137,8 @@ config BR2_INIT_SYSTEMD
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment "systemd needs a glibc toolchain, headers >= 3.10"
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
-+comment "systemd needs a glibc or uClibc toolchain, headers >= 3.10"
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC \
- 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
- 
- config BR2_INIT_NONE
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.2"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.15.config"
