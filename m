@@ -1,46 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Mar 2018 23:18:31 +0100
-Subject: [Buildroot] [git commit] musl: bump to version 1.1.19
-Message-ID: <20180305222055.8A53882166@busybox.osuosl.org>
+Date: Mon, 5 Mar 2018 21:32:40 +0100
+Subject: [Buildroot] [git commit] mx25pdk: Bump U-Boot and kernel versions
+Message-ID: <20180305222055.7FC28821CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1296d57918fd2245f65414db6dad3cec25a97360
+commit: https://git.buildroot.net/buildroot/commit/?id=e2046ecee910c9b27869168b56c8f92d1a9a2b56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for the licence file.
+Bump U-Boot to version 2018.01 and kernel to 4.15.7.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl/musl.hash | 5 +++--
- package/musl/musl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ configs/mx25pdk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 68e6aab1fd..c011bbb711 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,3 +1,4 @@
- # Locally calculated after checking pgp signature from
--# http://www.musl-libc.org/releases/musl-1.1.18.tar.gz.asc
--sha256	d017ee5d01aec0c522a1330fdff06b1e428cb409e1db819cc4935d5da4a5a118  musl-1.1.18.tar.gz
-+# http://www.musl-libc.org/releases/musl-1.1.19.tar.gz.asc
-+sha256  db59a8578226b98373f5b27e61f0dd29ad2456f4aa9cec587ba8c24508e4c1d9  musl-1.1.19.tar.gz
-+sha256  15d9afbf84041872b4d840ed7d165d3eee786ff3f97e703b10467c259ff4e7d9  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index b1aace0400..fa775d1e78 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+index a88fb2aeb7..f86ce7af02 100644
+--- a/configs/mx25pdk_defconfig
++++ b/configs/mx25pdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
  
--MUSL_VERSION = 1.1.18
-+MUSL_VERSION = 1.1.19
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
