@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:17 -0000
-Subject: [Buildroot] [git commit] rygel: bump to version 0.36.1
-Message-ID: <20180305200714.00562803F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qemu: add
+ BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+Message-ID: <20180305200712.A8C8A80FFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=421ac4fafb3dd86e3e620f5bd8361478c73e8fe4
+commit: https://git.buildroot.net/buildroot/commit/?id=62099784d40333079a811503bc4f5cd138d9f6ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Match the style used with other packages such as valgrind.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rygel/rygel.hash | 4 ++--
- package/rygel/rygel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/qemu/Config.in.host | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
-index 028af21bb4..879cbd714b 100644
---- a/package/rygel/rygel.hash
-+++ b/package/rygel/rygel.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.36/rygel-0.36.0.sha256sum:
--sha256	31e8ade78b4ea59978d1b59056fa5cd8aef6b9c1457d3dd06de4d2e75a01813f	rygel-0.36.0.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.36/rygel-0.36.1.sha256sum:
-+sha256	a67fdd801f6e4121ae44cfffabc0f35fff487cab173b6c6f052449ad7b5fb820	rygel-0.36.1.tar.xz
- 
- # Locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
-index cd8897ceb5..d1bc30589c 100644
---- a/package/rygel/rygel.mk
-+++ b/package/rygel/rygel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RYGEL_VERSION_MAJOR = 0.36
--RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).0
-+RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).1
- RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
- RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
- RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 71f38ef41f..b001dd9514 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -1,11 +1,15 @@
+-config BR2_PACKAGE_HOST_QEMU
+-	bool "host qemu"
+-	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
++config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
+ 		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
+ 		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
+ 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+ 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+ 		BR2_sparc        || BR2_x86_64
++
++config BR2_PACKAGE_HOST_QEMU
++	bool "host qemu"
++	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
+ 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
+ 	help
