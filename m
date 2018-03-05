@@ -1,47 +1,50 @@
-From: daggs <daggs@gmx.com>
-Date: Mon, 5 Mar 2018 22:31:15 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add odroidc2 defconfig to my
- list
-In-Reply-To: <20180305205227.0ea0835d@windsurf.home>
-References: <20180305174323.5629-1-daggs@gmx.com>
- <20180305205227.0ea0835d@windsurf.home>
-Message-ID: <trinity-8eeb8bbb-57aa-466c-9fda-3ea3062e2728-1520285475317@3c-app-mailcom-bs06>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 05 Mar 2018 21:31:27 +0000
+Subject: [Buildroot] [Bug 10836] New: Missing Qt5 component : translations
+Message-ID: <bug-10836-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=10836
 
-> Hello,
-> 
-> On Mon,  5 Mar 2018 19:43:23 +0200, Dagg Stompler wrote:
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> > ---
-> >  DEVELOPERS | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 73c0231bc0..fffc646973 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -458,6 +458,7 @@ N:	Dagg Stompler <daggs@gmx.com>
-> >  F:	package/libamcodec/
-> >  F:	package/odroid-mali/
-> >  F:	package/odroid-scripts/
-> > +F:	configs/odroidc2_defconfig
-> 
-> Thanks! However, alphabetic ordering is not respected here, and you
-> should also add an entry for board/hardkernel/odroidc2/.
-> 
-> This can be fixed when we apply, unless you want to send a v2 for
-> this :)
-> 
-> Thanks!
-> 
-> Thomas
+            Bug ID: 10836
+           Summary: Missing Qt5 component : translations
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: pinaraf at pinaraf.info
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-you can fix it when applying, that's how I'll know what to do in V4 of the mainline support (forgot to add the dev entries)
+Hi
 
-Dagg.
+The translations for the Qt5 user interface is split from the Qt5 code in a
+qt5translations submodule, for instance
+http://download.qt.io/official_releases/qt/5.9/5.9.3/submodules/qttranslations-opensource-src-5.9.3.tar.xz
+
+It is a simple package, depending on the linguist host tools (already
+packages).
+The only trick would be to be able to choose the required languages from the
+configuration menu. It is of great importance for people building embedded Qt
+applications targeting non-english users.
+
+I am willing to work on this package if you can not work on it (I'm not 100%
+familiar with buildroot packaging rules, even less with a complex multi-version
+package like Qt5, so I can not guarantee the quality of my work there).
+
+Regards
+
+ Pierre
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
