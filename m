@@ -1,65 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:18 -0000
-Subject: [Buildroot] [git commit] toolchain: limit musl/kernel headers
- conflict workaround
-Message-ID: <20180305200715.7F4737FFA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/orange-pi-zero-plus2: bump kernel
+ and u-boot versions
+Message-ID: <20180305200715.AE09080FAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6afee03e3cc3b9afa4861cc0a9bbc6be03a16be8
+commit: https://git.buildroot.net/buildroot/commit/?id=5c5f274601902c9faa585233b774a5926b6105ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The musl/kernel headers workaround was added in commit 196932cd91
-(toolchain: workaround musl/kernel headers conflict) to fix definition
-collisions in networking related headers between musl headers and kernel
-headers. Kernel headers from version 4.15 and newer do not need this
-workaround anymore since kernel commit c0bace798436bc (uapi libc compat:
-add fallback for unsupported libcs). The C library does not have to
-define the __GLIBC__ macro to make the __UAPI_DEF_* macros effective.
+Bump versions:
+- use U-Boot 2008.01
+- use Linux kernel v4.15.2
 
-Updated the comment to accordingly.
+Drop patch with dts sdcard fix since it has been
+merged to Linux v4.15.
 
-Tested with the xl2tp package. This package fails to build with older
-kernel headers without the workaround (struct in_pktinfo redefinition,
-among others). With 4.15 headers, xl2tp builds fine with this patch
-applied. That is, no workaround needed.
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/toolchain/toolchain.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ ...ts-orange-pi-zero-plus2-fix-sdcard-detect.patch | 30 ----------------------
+ configs/orangepi_zero_plus2_defconfig              | 11 +++-----
+ 2 files changed, 4 insertions(+), 37 deletions(-)
 
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index b55b0c712c..179c09edf1 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -13,18 +13,18 @@ endif
- TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-fix-sdcard-detect.patch b/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-fix-sdcard-detect.patch
+deleted file mode 100644
+index 203402932b..0000000000
+--- a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-fix-sdcard-detect.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From f88e9301948173dd35afad4a6939092c7f269aed Mon Sep 17 00:00:00 2001
+-From: Sergey Matyukevich <geomatsi@gmail.com>
+-Date: Fri, 3 Nov 2017 22:58:54 +0300
+-Subject: [PATCH] arm64: dts: orange-pi-zero-plus2: fix sdcard detect
+-
+-The sdcard detect pin on orange-pi-zero-plus2 is pulled up.
+-Fix cd-gpio description to enable sdcard detect.
+-
+-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+----
+- arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-index b6b7a56..a42fd79 100644
+---- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-@@ -71,7 +71,7 @@
+- 	pinctrl-0 = <&mmc0_pins_a>, <&mmc0_cd_pin>;
+- 	vmmc-supply = <&reg_vcc3v3>;
+- 	bus-width = <4>;
+--	cd-gpios = <&pio 5 6 GPIO_ACTIVE_HIGH>;
+-+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
+- 	status = "okay";
+- };
+- 
+--- 
+-1.9.1
+-
+diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+index 5b1ff3500c..7906dba5c7 100644
+--- a/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_zero_plus2_defconfig
+@@ -2,11 +2,8 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
  
- # Apply a hack that Rick Felker suggested[1] to avoid conflicts between libc
--# headers and kernel headers. This is a temporary measure until musl finds a
--# better solution.
-+# headers and kernel headers. This is needed for kernel headers older than
-+# 4.15. Kernel headers 4.15 and newer don't require __GLIBC__ to be defined.
- #
- # Augment the original suggestion with __USE_MISC since recent kernels
--# require this glibc internal macro. Also, as musl defines IFF_LOWER_UP,
--# IFF_DORMANT and IFF_ECHO, add another macro to suppress them in the
--# kernel header, and avoid macro/enum conflict.
-+# (older than 4.15) require this glibc internal macro. Also, as musl defines
-+# IFF_LOWER_UP, IFF_DORMANT and IFF_ECHO, add another macro to suppress
-+# them in the kernel header, and avoid macro/enum conflict.
- #
- # Kernel version 3.12 introduced the libc-compat.h header.
- #
- # [1] http://www.openwall.com/lists/musl/2015/10/08/2
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12),yy)
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15),yy:)
- define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
- 	$(SED) 's/^#if defined(__GLIBC__)$$/#if 1/' \
- 		$(STAGING_DIR)/usr/include/linux/libc-compat.h
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+-
+-# Patch dir
+-BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+@@ -20,7 +17,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+@@ -34,7 +31,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.2"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
