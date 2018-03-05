@@ -1,32 +1,24 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 5 Mar 2018 08:03:56 -0300
-Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
-In-Reply-To: <20180305085314.3ce92959@windsurf.home>
-References: <20180304225550.74761708@windsurf.home>
- <CAOMZO5BntMxqEBPuXVs2CX2L9OWGrf-AzbsOUeDN8qqcJgS8cg@mail.gmail.com>
- <20180305085314.3ce92959@windsurf.home>
-Message-ID: <CAOMZO5DxGfnCCOF3MgJMmmAdKTs3sdGiq2Z2w9UXjV7nvOUpHA@mail.gmail.com>
+Date: Mon, 5 Mar 2018 08:05:49 -0300
+Subject: [Buildroot] Defconfigs failing to build with gcc 6.x
+In-Reply-To: <20180305085751.1b03854f@windsurf.home>
+References: <20180304224808.566fa00d@windsurf.home>
+ <CAOMZO5DXmGWSbfE9PEp+srYkM8ieMX0NYOmyOgza0cuSHsjr9A@mail.gmail.com>
+ <20180305085751.1b03854f@windsurf.home>
+Message-ID: <CAOMZO5CtNrJNna_=3-qmBXUs-++cKutSkQtXvT2-yEq9dSh+Kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Mon, Mar 5, 2018 at 4:53 AM, Thomas Petazzoni
+On Mon, Mar 5, 2018 at 4:57 AM, Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 
-> Would be good, thanks! Do you have a way of testing it, or you don't
-> have access to the HW platform ?
->
-> If nobody has access to the HW platform, I think we could just as well
-> drop the defconfig.
+> If you don't have access to this board, and nobody else does, isn't it
+> better to simply drop the defconfig ?
 
-Yes, we have a mx31pdk board in the office.
+Yes, agreed.
 
-I will try to have access to it this week and give it a try with mainline.
-
-Regards,
-
-Fabio Estevam
+Matthew has sent a patch removing this defconfig:
+http://patchwork.ozlabs.org/patch/881276/
