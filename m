@@ -1,47 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:15 -0000
-Subject: [Buildroot] [git commit] package/rauc: Version bump to 0.3
-Message-ID: <20180305200712.8FDAB80FFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] udftools: new package
+Message-ID: <20180305200712.5052B810D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab863898812a926f0ee687269c2e2ed61bc7adc7
+commit: https://git.buildroot.net/buildroot/commit/?id=aa33514beee68b919682f447bd07e89815083868
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There's a bug in 0.2 which prevents proper operation when activated via
-D-Bus, which is why I'm bumping this.
-
-Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Link: https://github.com/rauc/rauc/issues/125
+Signed-off-by: Steve Kenton <skenton@ou.edu>
+[Thomas: add hash for the license file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/udftools/Config.in     | 12 ++++++++++++
+ package/udftools/udftools.hash |  3 +++
+ package/udftools/udftools.mk   | 12 ++++++++++++
+ 5 files changed, 29 insertions(+)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index 649d19571e..91d7c1d62e 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v0.2/rauc-0.2.tar.xz.asc
--sha256 83aa3ac3716e1c29315162e3cbf5d4db79f26dd95efe1bc634bbce364b95491a rauc-0.2.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v0.3/rauc-0.3.tar.xz.asc
-+sha256 dc01bfb08b1830376782f9a51cfec290171519267ab97cc909435da9ac6d6d98 rauc-0.3.tar.xz
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 4909062cf5..63fbc53022 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 665fb653c7..d0605af387 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1693,6 +1693,7 @@ F:	package/dvdrw-tools/
+ F:	package/memtest86/
+ F:	package/mjpegtools/
+ F:	package/tovid/
++F:	package/udftools/
+ F:	package/xorriso/
  
--RAUC_VERSION = 0.2
-+RAUC_VERSION = 0.3
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+ N:	Steve Thomas <scjthm@live.com>
+diff --git a/package/Config.in b/package/Config.in
+index 9cd5d9c087..5929cfea2d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -196,6 +196,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/squashfs/Config.in"
+ 	source "package/sshfs/Config.in"
+ 	source "package/sunxi-tools/Config.in"
++	source "package/udftools/Config.in"
+ 	source "package/unionfs/Config.in"
+ 	source "package/xfsprogs/Config.in"
+ endmenu
+diff --git a/package/udftools/Config.in b/package/udftools/Config.in
+new file mode 100644
+index 0000000000..bbccd60186
+--- /dev/null
++++ b/package/udftools/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_UDFTOOLS
++	bool "udftools"
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_READLINE
++	help
++	  Tools for creating UDF filesystems
++	  Maintained fork of the 2004 Sourcforge package
++
++	  https://github.com/pali/udftools
++
++comment "udftools needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/udftools/udftools.hash b/package/udftools/udftools.hash
+new file mode 100644
+index 0000000000..837a515726
+--- /dev/null
++++ b/package/udftools/udftools.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256	67fe428d452901215cfad8049d250540c97114b1a20dd63277b91c2c4fae8292	udftools-2.0.tar.gz
++sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
+diff --git a/package/udftools/udftools.mk b/package/udftools/udftools.mk
+new file mode 100644
+index 0000000000..708fef9ab7
+--- /dev/null
++++ b/package/udftools/udftools.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# udftools
++#
++################################################################################
++
++UDFTOOLS_VERSION = 2.0
++UDFTOOLS_SITE = https://github.com/pali/udftools/releases/download/$(UDFTOOLS_VERSION)
++UDFTOOLS_LICENSE = GPL-2.0+
++UDFTOOLS_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
