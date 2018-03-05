@@ -1,78 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 05 Mar 2018 20:07:14 -0000
-Subject: [Buildroot] [git commit] autofs: allow to use libtirpc
-Message-ID: <20180305200711.BADC1810D6@busybox.osuosl.org>
+Date: Mon, 05 Mar 2018 20:07:15 -0000
+Subject: [Buildroot] [git commit] support/testing: add python-cryptography
+ tests
+Message-ID: <20180305200711.D053B810D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=873040371b1436d480fb9153427504ce9e3d78cf
+commit: https://git.buildroot.net/buildroot/commit/?id=ecfde09985c3f8c116f58176b871dedfac96fe4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uClibc-ng removed internal RPC implementation as it
-is ipv4 only and can not be used for most important RPC software
-rpcbind and nfs-utils.
-musl does not implement RPC and GNU C library deprecated the
-internal implementation a while ago.
-It is still possible to use the C library implementation.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Thomas: change to use libtirpc when available, not just when the
-toolchain does not have RPC support.]
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/autofs/Config.in | 7 +++----
- package/autofs/autofs.mk | 9 ++++++++-
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ .gitlab-ci.yml                                     |  2 ++
+ .../tests/package/test_python_cryptography.py      | 31 ++++++++++++++++++++++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/package/autofs/Config.in b/package/autofs/Config.in
-index 8e08357a4e..efb0ec28ee 100644
---- a/package/autofs/Config.in
-+++ b/package/autofs/Config.in
-@@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
- 	bool "autofs"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on !BR2_STATIC_LIBS # dlfcn
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Autofs controls the operation of the automount daemons. The
- 	  automount daemons automatically mount filesystems when they
-@@ -15,7 +15,6 @@ config BR2_PACKAGE_AUTOFS
- 
- 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
- 
--comment "autofs needs a toolchain w/ NPTL, RPC, dynamic library"
-+comment "autofs needs a toolchain w/ NPTL and dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 90cc38de55..87a218441e 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -9,7 +9,7 @@ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPL-2.0+
- AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
--AUTOFS_DEPENDENCIES = host-flex host-bison
-+AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf
- 
- # autofs looks on the build machine for the path of modprobe, so tell
- # it explicitly where it will be located on the target.
-@@ -31,4 +31,11 @@ AUTOFS_CONF_OPTS = \
- 
- AUTOFS_MAKE_ENV = DONTSTRIP=1
- 
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+AUTOFS_CONF_OPTS += --with-libtirpc
-+AUTOFS_DEPENDENCIES += libtirpc
-+else
-+AUTOFS_CONF_OPTS += --without-libtirpc
-+endif
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index b7dfef0935..b4be44843c 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -284,6 +284,8 @@ tests.package.test_ipython.TestIPythonPy2: *runtime_test
+ tests.package.test_ipython.TestIPythonPy3: *runtime_test
+ tests.package.test_python.TestPython2: *runtime_test
+ tests.package.test_python.TestPython3: *runtime_test
++tests.package.test_python_cryptography.TestPythonPy2Cryptography: *runtime_test
++tests.package.test_python_cryptography.TestPythonPy3Cryptography: *runtime_test
+ tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: *runtime_test
+ tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: *runtime_test
+ tests.toolchain.test_external.TestExternalToolchainCCache: *runtime_test
+diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
+new file mode 100644
+index 0000000000..b60152de1c
+--- /dev/null
++++ b/support/testing/tests/package/test_python_cryptography.py
+@@ -0,0 +1,31 @@
++import os
 +
- $(eval $(autotools-package))
++from tests.package.test_python import TestPythonBase
++
++class TestPythonCryptography(TestPythonBase):
++    def fernet_test(self, timeout=-1):
++        cmd = self.interpreter + " -c 'from cryptography.fernet import Fernet;"
++        cmd += "key = Fernet.generate_key();"
++        cmd += "f = Fernet(key)'"
++        _, exit_code = self.emulator.run(cmd, timeout)
++        self.assertEqual(exit_code, 0)
++
++class TestPythonPy2Cryptography(TestPythonCryptography):
++    config = TestPythonBase.config + \
++"""
++BR2_PACKAGE_PYTHON=y
++BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
++"""
++    def test_run(self):
++        self.login()
++        self.fernet_test(40)
++
++class TestPythonPy3Cryptography(TestPythonCryptography):
++    config = TestPythonBase.config + \
++"""
++BR2_PACKAGE_PYTHON3=y
++BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
++"""
++    def test_run(self):
++        self.login()
++        self.fernet_test(40)
