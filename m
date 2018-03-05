@@ -1,39 +1,44 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 5 Mar 2018 20:48:31 +0100
-Subject: [Buildroot] [PATCH next] uclibc: update to 1.0.29
-In-Reply-To: <20180304230213.2858266d@windsurf.home>
-References: <20180304101726.GA1833@waldemar-brodkorb.de>
- <20180304230213.2858266d@windsurf.home>
-Message-ID: <20180305194831.GO12535@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 5 Mar 2018 20:52:27 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add odroidc2 defconfig to my
+ list
+In-Reply-To: <20180305174323.5629-1-daggs@gmx.com>
+References: <20180305174323.5629-1-daggs@gmx.com>
+Message-ID: <20180305205227.0ea0835d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Hello,
 
-> Hello,
+On Mon,  5 Mar 2018 19:43:23 +0200, Dagg Stompler wrote:
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> On Sun, 4 Mar 2018 11:17:26 +0100, Waldemar Brodkorb wrote:
-> > This release adds a lot of bugfixes for x86_64 and aarch64.
-> > It allows to compile and use more desktop applications.
-> > For this gettext-tiny was integrated, but unfortunately it
-> > fails to build in the context of buildroot, so I have to
-> > disable UCLIBC_HAS_LIBINTL until this is fixed.
-> 
-> Disabling the libintl stub is going to break a *lot* of things in
-> Buildroot. Last summer, we did a major revamp of the gettext handling,
-> and one of the key thing that allowed this cleanup was the availability
-> of a libintl stub in uClibc.
-> 
-> Therefore, until UCLIBC_HAS_LIBINTL is fixed, I don't think we can
-> merge this bump, unless I missed something of course.
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 73c0231bc0..fffc646973 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -458,6 +458,7 @@ N:	Dagg Stompler <daggs@gmx.com>
+>  F:	package/libamcodec/
+>  F:	package/odroid-mali/
+>  F:	package/odroid-scripts/
+> +F:	configs/odroidc2_defconfig
 
-Yes, that was crap. I was confused with the libiconv usage in
-Buildroot. Libintl is used, Libiconv is not.
+Thanks! However, alphabetic ordering is not respected here, and you
+should also add an entry for board/hardkernel/odroidc2/.
 
-Sent an update patch,
- best regards
-   Waldemar
+This can be fixed when we apply, unless you want to send a v2 for
+this :)
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
