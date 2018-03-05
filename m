@@ -1,49 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:17 -0000
-Subject: [Buildroot] [git commit] libgpiod: bump version to v1.0
-Message-ID: <20180305200714.17B1481130@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/wandboard: Add support for the rev
+ D1 variants
+Message-ID: <20180305200712.EA3B280FFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f91a2b3772a9fe978538adfe4db6fd2af687e922
+commit: https://git.buildroot.net/buildroot/commit/?id=c44cf5e98c9b02a2889e63b556ce78221d0e4110
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a major update for libgpiod. The API is not compatible with the
-v0.x.y series but since nothing in current buildroot git depends on
-this project, I believe we can simply bump the version.
+Since kernel 4.15 the wandboard rev D1 variants are supported.
 
-The included tools are compatible with their 0.x.y counterparts.
+Add support for them.
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Reviewed-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Tested-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/wandboard_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 73150dc9b9..a98e138fa4 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 50c7862428ca90b58672e2475aea66d33a6fc86c6bab1928c0660f3aedf44a37  libgpiod-0.3.2.tar.xz
-+sha256 34c76b3730b9d4a1159bcb14000f78b1e890251b8a3823b794fa930654eabdd0  libgpiod-1.0.tar.xz
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index bc2e51d280..598adcc599 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = 0.3.2
-+LIBGPIOD_VERSION = 1.0
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 8f28b60ecf..b43c0c0e13 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -22,7 +22,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
