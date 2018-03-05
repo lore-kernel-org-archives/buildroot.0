@@ -1,58 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Mar 2018 13:37:13 +0100
-Subject: [Buildroot] Board defconfigs lacking maintainers
-In-Reply-To: <20180305120722.GD7096@momiji>
-References: <20180304231547.7ed3f5af@windsurf.home>
- <20180305120722.GD7096@momiji>
-Message-ID: <20180305133713.0232b1b3@windsurf.home>
+From: John Keeping <john@metanate.com>
+Date: Mon,  5 Mar 2018 14:26:38 +0000
+Subject: [Buildroot] [PATCH] libusbgx: bump to v0.2.0
+Message-ID: <20180305142638.20492-1-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian,
+The GitHub tag is really "libusbgx-0.2.0" so we end up with a slightly
+strange looking version and archive name, but this is correct given the
+tag.
 
-On Mon, 5 Mar 2018 12:07:22 +0000, Adrian Perez de Castro wrote:
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ package/libusbgx/libusbgx.hash | 2 +-
+ package/libusbgx/libusbgx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> >  - ci20_defconfig  
-> 
-> One if my work colleagues has a ci20 around which I *think* he has been using
-> mostly with Buildroot as the base system. I'll get to him and see whether it
-> may be possible for one of us to adopt this one.
-
-Great! This defconfig was initially contributed by Vicente Olivert
-Riera, but he has left Imagination Technologies, so he is no longer
-working on Buildroot or MIPS.
-
-> >  - odroidc2_defconfig  
-> 
-> We have at the office a couple of Odroid C2 which I think may not be in use, 
-> but I do not have physical access to them (I work remotely), but I might be
-> able to do something about them. I'll ask around as well.
-
-Dagg is already working on this defconfig, is actively using the
-board, and already replied that he is willing to be in the DEVELOPERS
-file for this board.
-
-> >  - raspberrypi0_defconfig
-> >  - raspberrypi2_defconfig
-> >  - raspberrypi3_64_defconfig
-> >  - raspberrypi3_qt5we_defconfig
-> >  - raspberrypi_defconfig  
-> 
-> I tend use the Raspberry Pi 2/3 defconfigs whenever I bump the WebKitGTK+
-> package (and recently libepoxy), and they are very popular boards. It would
-> be a pity to lose those. I can help out with them, but I bet there are people
-> with better knowledge about the hardware details who should be listes as
-> maintainers ;-)
-
-Yeah, I'm sure the RPi defconfigs will find one or several adopters.
-
-Thanks,
-
-Thomas
+diff --git a/package/libusbgx/libusbgx.hash b/package/libusbgx/libusbgx.hash
+index c185c5803c..c153acaf4a 100644
+--- a/package/libusbgx/libusbgx.hash
++++ b/package/libusbgx/libusbgx.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  1e258205dcde99d0eeb52404ee7ff1bc9a39eb3878e8455fb72bad7cf90c7357  libusbgx-2e3d43ee098ed928d1baa61ce791ce9ff4788c5a.tar.gz
++sha256  b15abc89a0ef82c6a650cc1d58b5ba50f7ce076db392add84caabcd86c608ee2  libusbgx-libusbgx-v0.2.0.tar.gz
+diff --git a/package/libusbgx/libusbgx.mk b/package/libusbgx/libusbgx.mk
+index 1964b47d02..e7c082f9f3 100644
+--- a/package/libusbgx/libusbgx.mk
++++ b/package/libusbgx/libusbgx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUSBGX_VERSION = 2e3d43ee098ed928d1baa61ce791ce9ff4788c5a
++LIBUSBGX_VERSION = libusbgx-v0.2.0
+ LIBUSBGX_SITE = $(call github,libusbgx,libusbgx,$(LIBUSBGX_VERSION))
+ LIBUSBGX_LICENSE = GPL-2.0+ (examples), LGPL-2.1+ (library)
+ LIBUSBGX_LICENSE_FILES = COPYING COPYING.LGPL
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.16.2
