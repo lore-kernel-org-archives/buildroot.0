@@ -1,93 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:15 -0000
-Subject: [Buildroot] [git commit] udftools: new package
-Message-ID: <20180305200712.5052B810D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] wget: bump to version 1.19.4
+Message-ID: <20180305200712.734CA810D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa33514beee68b919682f447bd07e89815083868
+commit: https://git.buildroot.net/buildroot/commit/?id=56057835f6b92f9a547892478ea2bf0165006602
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Steve Kenton <skenton@ou.edu>
-[Thomas: add hash for the license file.]
+Update license hash; s/http/https/ of in-text URLs.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/udftools/Config.in     | 12 ++++++++++++
- package/udftools/udftools.hash |  3 +++
- package/udftools/udftools.mk   | 12 ++++++++++++
- 5 files changed, 29 insertions(+)
+ package/wget/wget.hash | 5 +++--
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 665fb653c7..d0605af387 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1693,6 +1693,7 @@ F:	package/dvdrw-tools/
- F:	package/memtest86/
- F:	package/mjpegtools/
- F:	package/tovid/
-+F:	package/udftools/
- F:	package/xorriso/
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 0048557946..ab0d1d1dfd 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,4 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 d59a745ad2c522970660bb30d38601f9457b151b322e01fa20a5a0da0f55df07  wget-1.19.2.tar.lz
++# https://ftp.gnu.org/gnu/wget/wget-1.19.4.tar.lz.sig
++sha256 2fc0ffb965a8dc8f1e4a89cbe834c0ae7b9c22f559ebafc84c7874ad1866559a  wget-1.19.4.tar.lz
+ # Locally calculated
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 3fee8e1b0c..23e4c8acca 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Steve Thomas <scjthm@live.com>
-diff --git a/package/Config.in b/package/Config.in
-index 9cd5d9c087..5929cfea2d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -196,6 +196,7 @@ menu "Filesystem and flash utilities"
- 	source "package/squashfs/Config.in"
- 	source "package/sshfs/Config.in"
- 	source "package/sunxi-tools/Config.in"
-+	source "package/udftools/Config.in"
- 	source "package/unionfs/Config.in"
- 	source "package/xfsprogs/Config.in"
- endmenu
-diff --git a/package/udftools/Config.in b/package/udftools/Config.in
-new file mode 100644
-index 0000000000..bbccd60186
---- /dev/null
-+++ b/package/udftools/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_UDFTOOLS
-+	bool "udftools"
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  Tools for creating UDF filesystems
-+	  Maintained fork of the 2004 Sourcforge package
-+
-+	  https://github.com/pali/udftools
-+
-+comment "udftools needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/udftools/udftools.hash b/package/udftools/udftools.hash
-new file mode 100644
-index 0000000000..837a515726
---- /dev/null
-+++ b/package/udftools/udftools.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	67fe428d452901215cfad8049d250540c97114b1a20dd63277b91c2c4fae8292	udftools-2.0.tar.gz
-+sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
-diff --git a/package/udftools/udftools.mk b/package/udftools/udftools.mk
-new file mode 100644
-index 0000000000..708fef9ab7
---- /dev/null
-+++ b/package/udftools/udftools.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# udftools
-+#
-+################################################################################
-+
-+UDFTOOLS_VERSION = 2.0
-+UDFTOOLS_SITE = https://github.com/pali/udftools/releases/download/$(UDFTOOLS_VERSION)
-+UDFTOOLS_LICENSE = GPL-2.0+
-+UDFTOOLS_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+-WGET_VERSION = 1.19.2
++WGET_VERSION = 1.19.4
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
