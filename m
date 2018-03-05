@@ -1,61 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:16 -0000
-Subject: [Buildroot] [git commit] tinycbor: bump to version 0.5.0
-Message-ID: <20180305200713.2781280FFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pulseaudio: only define
+ memfd_create() if not already defined
+Message-ID: <20180305200711.112B6810D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cdf2fb747b1520f05776501455fc6a84ac20545
+commit: https://git.buildroot.net/buildroot/commit/?id=e14eea82acb4cf95f0064afa2c98c27a0fc97269
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version added support for shared or static library building
-through BUILD_STATIC and BUILD_SHARED variables so set them depending
-on BR2_xxx_LIBS variables
+Before glibc version 2.27 there was no wrapper for memfd_create(2).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tinycbor/tinycbor.hash |  2 +-
- package/tinycbor/tinycbor.mk   | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ ...ers-only-define-memfd_create-if-not-alrea.patch | 64 ++++++++++++++++++++++
+ package/pulseaudio/pulseaudio.mk                   |  3 +
+ 2 files changed, 67 insertions(+)
 
-diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
-index affc7a6e41..73ab82f528 100644
---- a/package/tinycbor/tinycbor.hash
-+++ b/package/tinycbor/tinycbor.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	37a06c618ccddd7edc3747277425fcd38fa71eab37c7aaf0b03818a49950da81	tinycbor-v0.4.2.tar.gz
-+sha256	5826a284e7f120a8d2c49cb581702be3e851acb4083a4f5af6112975a8b22209	tinycbor-v0.5.0.tar.gz
- sha256	3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e	LICENSE
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index b1848b56aa..a9afbb6e46 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINYCBOR_VERSION = v0.4.2
-+TINYCBOR_VERSION = v0.5.0
- TINYCBOR_SITE = $(call github,intel,tinycbor,$(TINYCBOR_VERSION))
- TINYCBOR_LICENSE = MIT
- TINYCBOR_LICENSE_FILES = LICENSE
-@@ -18,6 +18,14 @@ endif
- 
- TINYCBOR_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) V=1
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+TINYCBOR_MAKE_OPTS += BUILD_STATIC=1 BUILD_SHARED=0
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+TINYCBOR_MAKE_OPTS += BUILD_STATIC=1 BUILD_SHARED=1
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+TINYCBOR_MAKE_OPTS += BUILD_STATIC=0 BUILD_SHARED=1
-+endif
+diff --git a/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch b/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
+new file mode 100644
+index 0000000000..8f103bf201
+--- /dev/null
++++ b/package/pulseaudio/0002-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
+@@ -0,0 +1,64 @@
++From dfb0460fb4743aec047cdf755a660a9ac2d0f3fb Mon Sep 17 00:00:00 2001
++From: Tanu Kaskinen <tanuk@iki.fi>
++Date: Wed, 24 Jan 2018 03:51:49 +0200
++Subject: [PATCH] memfd-wrappers: only define memfd_create() if not already
++ defined
 +
- # disabled parallel build because of build failures while
- # producing the .config file
- define TINYCBOR_BUILD_CMDS
++glibc 2.27 is to be released soon, and it will provide memfd_create().
++If glibc provides the function, we must not define it ourselves,
++otherwise building fails due to conflict between the two implementations
++of the same function.
++
++BugLink: https://bugs.freedesktop.org/show_bug.cgi?id=104733
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure.ac                   | 3 +++
++ src/pulsecore/memfd-wrappers.h | 7 ++++---
++ 2 files changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 0084c86e..0eb44b08 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -610,6 +610,9 @@ AS_IF([test "x$enable_memfd" = "xyes" && test "x$HAVE_MEMFD" = "x0"],
++     [AC_MSG_ERROR([*** Your Linux kernel does not support memfd shared memory.
++                   *** Use linux v3.17 or higher for such a feature.])])
++ 
+++AS_IF([test "x$HAVE_MEMFD" = "x1"],
+++    AC_CHECK_FUNCS([memfd_create]))
+++
++ AC_SUBST(HAVE_MEMFD)
++ AM_CONDITIONAL([HAVE_MEMFD], [test "x$HAVE_MEMFD" = x1])
++ AS_IF([test "x$HAVE_MEMFD" = "x1"], AC_DEFINE([HAVE_MEMFD], 1, [Have memfd shared memory.]))
++diff --git a/src/pulsecore/memfd-wrappers.h b/src/pulsecore/memfd-wrappers.h
++index 3bed9b2b..c7aadfd3 100644
++--- a/src/pulsecore/memfd-wrappers.h
+++++ b/src/pulsecore/memfd-wrappers.h
++@@ -20,13 +20,14 @@
++   License along with PulseAudio; if not, see <http://www.gnu.org/licenses/>.
++ ***/
++ 
++-#ifdef HAVE_MEMFD
+++#if defined(HAVE_MEMFD) && !defined(HAVE_MEMFD_CREATE)
++ 
++ #include <sys/syscall.h>
++ #include <fcntl.h>
++ 
++ /*
++- * No glibc wrappers exist for memfd_create(2), so provide our own.
+++ * Before glibc version 2.27 there was no wrapper for memfd_create(2),
+++ * so we have to provide our own.
++  *
++  * Also define memfd fcntl sealing macros. While they are already
++  * defined in the kernel header file <linux/fcntl.h>, that file as
++@@ -63,6 +64,6 @@ static inline int memfd_create(const char *name, unsigned int flags) {
++ #define F_SEAL_WRITE    0x0008  /* prevent writes */
++ #endif
++ 
++-#endif /* HAVE_MEMFD */
+++#endif /* HAVE_MEMFD && !HAVE_MEMFD_CREATE */
++ 
++ #endif
++-- 
++2.14.3
++
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 13fcec52a3..f59828d43d 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -15,6 +15,9 @@ PULSEAUDIO_CONF_OPTS = \
+ 	--disable-legacy-database-entry-format \
+ 	--disable-manpages
+ 
++# 0001-memfd-wrappers-only-define-memfd_create-if-not-alrea.patch
++PULSEAUDIO_AUTORECONF = YES
++
+ PULSEAUDIO_DEPENDENCIES = \
+ 	host-pkgconf libtool libsndfile speex host-intltool \
+ 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
