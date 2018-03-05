@@ -1,54 +1,78 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 5 Mar 2018 09:42:44 +0100
-Subject: [Buildroot] [PATCH] mosquitto: unbreak build with websockets
- and !libopenssl
-In-Reply-To: <87lgf77xke.fsf@dell.be.48ers.dk>
-References: <20180303101545.11446-1-peter@korsgaard.com>
- <87vaedb0bz.fsf@dell.be.48ers.dk>
- <20180305075851.qi7x46yj7swdge6b@falbala.home.lespocky.de>
- <87lgf77xke.fsf@dell.be.48ers.dk>
-Message-ID: <20180305084244.q5q7gm2nbazhc5ae@falbala.home.lespocky.de>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 5 Mar 2018 09:54:52 +0100
+Subject: [Buildroot] [PATCH 2/2] package/kodi: remove imx support
+In-Reply-To: <20180304150606.32748-2-bernd.kuhls@t-online.de>
+References: <20180304150606.32748-1-bernd.kuhls@t-online.de>
+ <20180304150606.32748-2-bernd.kuhls@t-online.de>
+Message-ID: <20180305085452.GA20775@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hi Bernd,
 
-On Mon, Mar 05, 2018 at 09:09:53AM +0100, Peter Korsgaard wrote:
-> It would certainly be nicer if other people would review the patch, but
-> given how obvious it is and how close we were to the release I opted to
-> apply it myself.
+On Sun, Mar 04, 2018 at 04:06:06PM +0100, Bernd Kuhls wrote:
+> https://git.buildroot.net/buildroot/commit/?id=266208972192f1e0869f89d7be941de6294a810a
+> broke imx support in Kodi because previously the G2D libraries were
+> part of the imx-gpu-viv package:
+> 
+> CMake Error at /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:138 (message):
+>   Could NOT find IMX (missing: G2D_LIBRARY)
 
-Understood.
+How could it build before since it never explicitely depended on G2D?
 
-> Are you interested in mosquitto? If so, please add an entry to
-> DEVELOPERS for it and I'll ensure I CC you on future patches to it.
+> Adjusting the Kodi package to use the imx-gpu-g2d as well still does
+> not provide a working build:
+> 
+> /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'void CIMX::Deinitialize()':
+> /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:79:21: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
+>      ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
+>                      ^~~~~~~~~~~~~~~~~~~
+> /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'bool CIMX::UpdateDCIC()':
+> /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:109:19: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
+>    ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
+>                    ^~~~~~~~~~~~~~~~~~~
+> /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:115:21: error: 'DCIC_IOC_START_VSYNC' was not declared in this scope
+>      ioctl(m_fddcic, DCIC_IOC_START_VSYNC, 0);
+>                      ^~~~~~~~~~~~~~~~~~~~
+> /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'virtual void CIMX::Process()':
+> /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:125:19: error: 'DCIC_IOC_START_VSYNC' was not declared in this scope
+>    ioctl(m_fddcic, DCIC_IOC_START_VSYNC, 0);
+>                    ^~~~~~~~~~~~~~~~~~~~
+> /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:131:19: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
+>    ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
+>                    ^~~~~~~~~~~~~~~~~~~
+> 
+> Although it might be possible to fix these bugs with something like
+> 
+> 	#define DCIC_IOC_CONFIG_DCIC    _IO('D', 12)
+> 	#define DCIC_IOC_START_VSYNC    _IO('D', 15)
+> 	#define DCIC_IOC_STOP_VSYNC     _IO('D', 16)
+> 
+> as done in
+> https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/libreelec-7.0/projects/imx6/patches/kodi/imx6-jarvis.patch
 
-In general I'm interested in mosquitto, I added a package for ptxdist
-[1] last year, which is a requirement for a mosquitto based
-mqtt-library [2] I'm working on in my spare time, but currently I have
-no usecase to use it with buildroot. Maybe later, if I decide it would
-be useful on the fli4l [3] router in the hackerspace I'm member of. I
-can send a patch to add myself then. O:-)
+Wow I never paid attention to Kodi support but I'm not surprised it's
+not working since those ioctl are Kodi-specific, not available in NXP
+default tree (checked 3.10, 3.14 and 4.1.15):
+https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/video/mxc/mxc_dcic.c?h=imx_3.10.53_1.1.0_ga_caf#n386
+https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/video/mxc/mxc_dcic.c?h=imx_3.14.52_1.1.0_ga#n386
+https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/video/mxc/mxc_dcic.c?h=imx_3.14.52_1.1.0_ga#n386
 
-Have a nice day.
-Alex
+Seems to need that patch:
+https://github.com/osmc/vero-linux/commit/ac572b2d2b
 
-[1] https://git.pengutronix.de/cgit/ptxdist/commit/?id=8201e3d29e950e713f755ec4e864ce0869bdd060
-[2] https://github.com/penguineer/mqtt-tools
-[3] https://www.fli4l.de/
+> we would still try to ride a dead horse. The upcoming Kodi version
+> 18.0-Leia will remove imx support completely, see upstream PR 12990.
 
--- 
-?With the first link, the chain is forged. The first speech censured, 
-the first thought forbidden, the first freedom denied, chains us all 
-irrevocably.? (Jean-Luc Picard, quoting Judge Aaron Satie)
-*** GnuPG-FP: C28E E6B9 0263 95CF 8FAF  08FA 34AD CD00 7221 5CC6 ***
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180305/e7dcd57c/attachment.asc>
+Yes I believe they are switching to mainline kernel support (using
+Etnaviv + standard V4L2 CODA support).
+
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+
+Regards,
+Gary
