@@ -1,45 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Mar 2018 10:39:40 +0100
-Subject: [Buildroot] Freescale defconfigs failing to build U-Boot
-In-Reply-To: <20180305103341.4afeacac@windsurf.home>
-References: <20180305103341.4afeacac@windsurf.home>
-Message-ID: <20180305103940.53b67a24@windsurf.home>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 5 Mar 2018 08:03:56 -0300
+Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
+In-Reply-To: <20180305085314.3ce92959@windsurf.home>
+References: <20180304225550.74761708@windsurf.home>
+ <CAOMZO5BntMxqEBPuXVs2CX2L9OWGrf-AzbsOUeDN8qqcJgS8cg@mail.gmail.com>
+ <20180305085314.3ce92959@windsurf.home>
+Message-ID: <CAOMZO5DxGfnCCOF3MgJMmmAdKTs3sdGiq2Z2w9UXjV7nvOUpHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 5 Mar 2018 10:33:41 +0100, Thomas Petazzoni wrote:
+On Mon, Mar 5, 2018 at 4:53 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
->   MKIMAGE u-boot-dtb.imx
-> Error: No BOOT_FROM tag in board/freescale/mx6sxsabresd/imximage.cfg.cfgtmp
-> arch/arm/imx-common/Makefile:91: recipe for target 'u-boot-dtb.imx' failed
-> 
-> (for freescale_imx6sxsabresd_defconfig, see
-> https://gitlab.com/tpetazzoni/buildroot/-/jobs/55673304)
-> 
-> and:
-> 
-> 
->   MKIMAGE u-boot-dtb.imx
-> Error: No BOOT_FROM tag in board/freescale/mx6sabresd/mx6q_4x_mt41j128.cfg.cfgtmp
-> arch/arm/imx-common/Makefile:91: recipe for target 'u-boot-dtb.imx' failed
-> 
-> (for freescale_imx6qsabresd_defconfig, see
-> https://gitlab.com/tpetazzoni/buildroot/-/jobs/55673302)
+> Would be good, thanks! Do you have a way of testing it, or you don't
+> have access to the HW platform ?
+>
+> If nobody has access to the HW platform, I think we could just as well
+> drop the defconfig.
 
-The freescale_imx6qsabreauto_defconfig also fails to build in the same
-way:
+Yes, we have a mx31pdk board in the office.
 
-  https://gitlab.com/tpetazzoni/buildroot/-/jobs/55673301
+I will try to have access to it this week and give it a try with mainline.
 
-Best regards,
+Regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Fabio Estevam
