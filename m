@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:17 -0000
-Subject: [Buildroot] [git commit] glibc: needs host-bison
-Message-ID: <20180305200714.64DD281130@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] json-for-modern-cpp: fix license hash
+Message-ID: <20180305200714.CAD727FFA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61addf9107e5369b6dbc77724ab0b0ecede74897
+commit: https://git.buildroot.net/buildroot/commit/?id=3c19c81d60f758a1011aa49135181e8621a02508
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since upstream commit 1faaf7035cabda101e1d6653bff7a539f201db91
-("plural.c: improve reproducibility"), glibc now requires bison to be
-available on the host for its build process. This is needed starting
-with glibc 2.27.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/ca4d883793c1674d3a052edd5e56897f79683448/
+  http://autobuild.buildroot.net/results/942485b94f21567c2f35a1a3cc62450f3461a4f9
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glibc/glibc.mk | 2 +-
+ package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index b674191b22..00e114566c 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -28,7 +28,7 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- # Before glibc is configured, we must have the first stage
- # cross-compiler and the kernel headers
--GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-gawk
-+GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk
- 
- GLIBC_SUBDIR = build
- 
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+index b2abe49700..04a520d7d7 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256	b20be343922f73504baf8a01543c2a42d16e01f18bb231b324a8959416ccf4f8	json-v3.1.0.tar.gz
+-sha256	6a6115fc4a7239a135f2dce8d33f94cb8a936b8f608ac0f6699fbac278b0dd5b	LICENSE.MIT
++sha256	7b875bb7a4e28abb7956ea821b4b7d88ff6a2a4fabf261c3993730a365ec56dd	LICENSE.MIT
