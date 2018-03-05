@@ -1,43 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 05 Mar 2018 20:07:17 -0000
-Subject: [Buildroot] [git commit] modem-manager: bump to version 1.6.12
-Message-ID: <20180305200713.86D7580FFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-sqlalchemy: new package
+Message-ID: <20180305200714.9887581130@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2348e35cb3b72f95154e3a8801c358cc8311cd0f
+commit: https://git.buildroot.net/buildroot/commit/?id=133a0a3b9e0ec743ac3e673e97a551e6be403c55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+SQLAlchemy is the Python SQL toolkit and Object Relational Mapper that
+gives application developers the full power and flexibility of SQL.
+
+It provides a full suite of well known enterprise-level persistence
+patterns, designed for efficient and high-performing database access,
+adapted into a simple and Pythonic domain language.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Thomas: fix check-package warnings.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-sqlalchemy/Config.in              | 13 +++++++++++++
+ package/python-sqlalchemy/python-sqlalchemy.hash |  4 ++++
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 14 ++++++++++++++
+ 5 files changed, 33 insertions(+)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index bc0804485f..8531330d22 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  bc74326fa69ae8012f806e235f3d296144922669b952d4d4987dd0af645d5f68  ModemManager-1.6.10.tar.xz
-+sha256  eefb7615c2c7ebc994abfc2782bfa9e798643a633362b40db96f7f61706a6283  ModemManager-1.6.12.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index b741acf066..100c4a2941 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MODEM_MANAGER_VERSION = 1.6.10
-+MODEM_MANAGER_VERSION = 1.6.12
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d0605af387..f859ebe984 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -52,6 +52,7 @@ F:	package/libsepol/
+ F:	package/nginx-naxsi/
+ F:	package/policycoreutils/
+ F:	package/python-mutagen/
++F:	package/python-sqlalchemy/
+ F:	package/restorecond/
+ F:	package/refpolicy/
+ F:	package/selinux-python/
+diff --git a/package/Config.in b/package/Config.in
+index 5929cfea2d..6bd95e3bf0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -919,6 +919,7 @@ menu "External python modules"
+ 	source "package/python-socketio/Config.in"
+ 	source "package/python-sortedcontainers//Config.in"
+ 	source "package/python-spidev/Config.in"
++	source "package/python-sqlalchemy/Config.in"
+ 	source "package/python-systemd/Config.in"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
+diff --git a/package/python-sqlalchemy/Config.in b/package/python-sqlalchemy/Config.in
+new file mode 100644
+index 0000000000..f7ec3a6ad4
+--- /dev/null
++++ b/package/python-sqlalchemy/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_SQLALCHEMY
++	bool "python-sqlalchemy"
++	help
++	  SQLAlchemy is the Python SQL toolkit and Object Relational
++	  Mapper that gives application developers the full power and
++	  flexibility of SQL.
++
++	  It provides a full suite of well known enterprise-level
++	  persistence patterns, designed for efficient and
++	  high-performing database access, adapted into a simple and
++	  Pythonic domain language.
++
++	  http://www.sqlalchemy.org
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+new file mode 100644
+index 0000000000..9e13a2f20f
+--- /dev/null
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/SQLAlchemy/json, sha256 locally computed
++md5    968e07dc0aa92f9205bb3877f33f498f  SQLAlchemy-1.2.2.tar.gz
++sha256 64b4720f0a8e033db0154d3824f5bf677cf2797e11d44743cf0aebd2a0499d9d  SQLAlchemy-1.2.2.tar.gz
++sha256 73bda3d7d6c568f494c1d12520a97d41a38b7ce91d88c21f1b469b747b17f7fd  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+new file mode 100644
+index 0000000000..c0023712a2
+--- /dev/null
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-sqlalchemy
++#
++################################################################################
++
++PYTHON_SQLALCHEMY_VERSION = 1.2.2
++PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
++PYTHON_SQLALCHEMY_SITE = https://pypi.python.org/packages/b9/fb/a56d2fc0ce3571328fa872734ad124cae25a4cea422088987f865fb71787
++PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
++PYTHON_SQLALCHEMY_LICENSE = MIT
++PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
