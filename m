@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Mar 2018 09:27:14 +0100
-Subject: [Buildroot] Defconfigs failing to build with gcc 6.x
-In-Reply-To: <CA+V_ovtUx3Hzin9ZOTamnskD84Afpwv-Kd8BcBv6PKHvqi=XLQ@mail.gmail.com>
-References: <20180304224808.566fa00d@windsurf.home>
- <CA+V_ovtUx3Hzin9ZOTamnskD84Afpwv-Kd8BcBv6PKHvqi=XLQ@mail.gmail.com>
-Message-ID: <20180305092714.3ad4ab31@windsurf.home>
+Date: Mon, 5 Mar 2018 09:31:22 +0100
+Subject: [Buildroot] Board defconfigs lacking maintainers
+In-Reply-To: <trinity-7084c87a-b5bc-4dc4-b641-0eb7549eb0f7-1520236230212@3c-app-mailcom-bs12>
+References: <20180304231547.7ed3f5af@windsurf.home>
+ <trinity-7084c87a-b5bc-4dc4-b641-0eb7549eb0f7-1520236230212@3c-app-mailcom-bs12>
+Message-ID: <20180305093122.7dccdf3c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 5 Mar 2018 08:25:26 +0530, abhimanyu.v at gmail.com wrote:
+On Mon, 5 Mar 2018 08:50:30 +0100, daggs wrote:
 
-> >- ci40_defconfig  
-> 
-> >   Abhimanyu: could you add yourself as the >maintainer for this board
-> >   in the DEVELOPERS file ? Thanks!  
-> 
-> I no longer have access to ci40 board. It would be difficult for me to
-> maintain it.
+> I was under the impression I'm maintaining the odroidc2 board, did to got changed?
 
-OK, thanks. I have just submitted a patch to remove ci40_defconfig then.
+Well, the DEVELOPERS file doesn't have any entry that links your
+name/email to configs/odroidc2_defconfig.
+
+If you want to maintain the board, could you send a patch updating the
+DEVELOPERS file accordingly ?
 
 Thanks!
 
