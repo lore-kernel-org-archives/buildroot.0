@@ -1,7 +1,44 @@
-From: Shyrokov, Sasha <Sasha-Shyrokov@idexx.com>
-Date: Tue, 6 Mar 2018 17:19:18 +0000
-Subject: [Buildroot] Patch for opencv3: python module was built for the host
- instead of target.
-Message-ID: <MW2PR02MB3724CAF4A9F9EF9FEBF4C35E95D90@MW2PR02MB3724.namprd02.prod.outlook.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 06 Mar 2018 19:03:57 +0100
+Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p11
+In-Reply-To: <6be4748599ab638473e99b71ed5343181787ede0.1520355647.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 6 Mar 2018 19:00:47 +0200")
+References: <6be4748599ab638473e99b71ed5343181787ede0.1520355647.git.baruch@tkos.co.il>
+Message-ID: <87lgf5ozci.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+
+ > Fixed or improved security issues:
+ >   CVE-2016-1549 (fixed in 4.2.8p7; this release adds protection): A
+ >   malicious authenticated peer can create arbitrarily-many ephemeral
+ >   associations in order to win the clock selection algorithm
+
+ >   CVE-2018-7182: Buffer read overrun leads to undefined behavior and
+ >   information leak
+
+ >   CVE-2018-7170: Multiple authenticated ephemeral associations
+
+ >   CVE-2018-7184: Interleaved symmetric mode cannot recover from bad
+ >   state
+
+ >   CVE-2018-7185: Unauthenticated packet can reset authenticated
+ >   interleaved association
+
+ >   CVE-2018-7183: ntpq:decodearr() can write beyond its buffer limit
+
+ > Drop patch #3. libntpq_a_CFLAGS now includes NTP_HARD_CFLAGS via
+ > AM_CFLAGS.
+
+ > Add license file hash.
+
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
