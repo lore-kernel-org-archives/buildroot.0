@@ -1,101 +1,83 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  6 Mar 2018 06:32:12 +0200
-Subject: [Buildroot] [PATCH] musl: drop upstream patch
-Message-ID: <c953f8543d16ede5bdb9780a99dd3574cd91ba17.1520310732.git.baruch@tkos.co.il>
+Date: Tue,  6 Mar 2018 07:05:53 +0200
+Subject: [Buildroot] [PATCH] iptables: fix build with older kernel headers
+Message-ID: <732e96c8f30e874d16bc42df3e721b3386cf7da7.1520312753.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 1296d57918fd2 (musl: bump to version 1.1.19) forgot to remove an
-upstream patch. Do that now.
+iptables version 1.6.2 uses the BPF_OBJ_GET macro that is only available
+since kernel version 4.4. Add a patch fixing the detection of the
+feature availability.
 
 Fixes:
-http://autobuild.buildroot.net/results/3ea/3ea23854c501d12aa69012df9d38d33cd10ac83c/
+http://autobuild.buildroot.net/results/e67/e670548c4b250e8a102a4929cafa85634fc79a3d/
+http://autobuild.buildroot.net/results/1a7/1a7ab509440c9acacf606f238b8989d9b4287d52/
+http://autobuild.buildroot.net/results/555/55583e20bcdf602132c074e08d1a49507d5a48ad/
 
-Cc: J?rg Krause <joerg.krause@embedded.rocks>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Antoine Tenart <antoine.tenart@bootlin.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...nal-uapi-guards-for-Linux-kernel-header-f.patch | 69 ----------------------
- 1 file changed, 69 deletions(-)
- delete mode 100644 package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
+ ...libxt_bpf-Fix-build-with-old-kernel-versi.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/iptables/0001-extensions-libxt_bpf-Fix-build-with-old-kernel-versi.patch
 
-diff --git a/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch b/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
-deleted file mode 100644
-index cbfc9b668f91..000000000000
---- a/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
-+++ /dev/null
-@@ -1,69 +0,0 @@
--From b583c5d3b4cc2c54c68eef5eb7855ecfacee8bfc Mon Sep 17 00:00:00 2001
--From: Hauke Mehrtens <hauke@hauke-m.de>
--Date: Sat, 6 Jan 2018 23:32:52 +0100
--Subject: [PATCH] add additional uapi guards for Linux kernel header files
--
--With Linux kernel 4.16 it will be possible to guard more parts of the
--Linux header files from a libc. Make use of this in musl to guard all
--the structures and other definitions from the Linux header files which
--are also defined by the header files provided by musl. This will make
--it possible to compile source files which include both the libc
--headers and the kernel userspace headers.
--
--This extends the definitions done in commit 04983f227238 ("make
--netinet/in.h suppress clashing definitions from kernel headers")
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream commit b583c5d3b4cc
--
-- include/net/if.h           | 7 +++++++
-- include/netinet/if_ether.h | 1 +
-- include/sys/xattr.h        | 2 ++
-- 3 files changed, 10 insertions(+)
--
--diff --git a/include/net/if.h b/include/net/if.h
--index 2f2fcc10e484..774cbff0b506 100644
----- a/include/net/if.h
--+++ b/include/net/if.h
--@@ -125,6 +125,13 @@ struct ifconf {
-- #define ifc_req		ifc_ifcu.ifcu_req
-- #define _IOT_ifconf _IOT(_IOTS(struct ifconf),1,0,0,0,0)
-- 
--+#define __UAPI_DEF_IF_IFCONF                                    0
--+#define __UAPI_DEF_IF_IFMAP                                     0
--+#define __UAPI_DEF_IF_IFNAMSIZ                                  0
--+#define __UAPI_DEF_IF_IFREQ                                     0
--+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS                          0
--+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO    0
--+
-- #endif
-- 
-- #ifdef __cplusplus
--diff --git a/include/netinet/if_ether.h b/include/netinet/if_ether.h
--index d9a131aa2d1d..97134d75b480 100644
----- a/include/netinet/if_ether.h
--+++ b/include/netinet/if_ether.h
--@@ -133,5 +133,6 @@ do { \
-- 	(enaddr)[5] = ((uint8_t *)ipaddr)[3]; \
-- } while(0)
-- 
--+#define __UAPI_DEF_ETHHDR       0
-- 
-- #endif
--diff --git a/include/sys/xattr.h b/include/sys/xattr.h
--index 6479fcc62e5f..eeeaafc44f09 100644
----- a/include/sys/xattr.h
--+++ b/include/sys/xattr.h
--@@ -24,6 +24,8 @@ int removexattr(const char *, const char *);
-- int lremovexattr(const char *, const char *);
-- int fremovexattr(int, const char *);
-- 
--+#define __UAPI_DEF_XATTR        0
--+
-- #ifdef __cplusplus
-- }
-- #endif
---- 
--2.15.1
--
+diff --git a/package/iptables/0001-extensions-libxt_bpf-Fix-build-with-old-kernel-versi.patch b/package/iptables/0001-extensions-libxt_bpf-Fix-build-with-old-kernel-versi.patch
+new file mode 100644
+index 000000000000..966cbe31ab62
+--- /dev/null
++++ b/package/iptables/0001-extensions-libxt_bpf-Fix-build-with-old-kernel-versi.patch
+@@ -0,0 +1,49 @@
++From 5beb1582d13d3bfdd0d2b277f5f3154b2fbf4a8e Mon Sep 17 00:00:00 2001
++From: Hauke Mehrtens <hauke@hauke-m.de>
++Date: Tue, 27 Feb 2018 16:56:55 +0100
++Subject: [PATCH] extensions: libxt_bpf: Fix build with old kernel versions
++
++In kernel 3.18 the union bpf_attr does not have a pathname attribute and
++BPF_OBJ_GET is also not defined in these versions.
++This was added in Linux commit b2197755b263 ("bpf: add support for
++persistent maps/progs"). Check for the BPF_FS_MAGIC define which was
++also added in this Linux commit and only activate this code in case we
++find that define.
++
++This fixes a build problem with Linux 3.18.
++Netfilter bug: #1231
++
++Fixes: f17f9ace8a8 ("extensions: libxt_bpf: support ebpf pinned objects")
++Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
++Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 5beb1582d13d
++
++ extensions/libxt_bpf.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/extensions/libxt_bpf.c b/extensions/libxt_bpf.c
++index 9510c190f315..92958247c756 100644
++--- a/extensions/libxt_bpf.c
+++++ b/extensions/libxt_bpf.c
++@@ -22,6 +22,7 @@
++ #include <linux/bpf.h>
++ #endif
++ 
+++#include <linux/magic.h>
++ #include <linux/unistd.h>
++ 
++ #define BCODE_FILE_MAX_LEN_B	1024
++@@ -62,7 +63,7 @@ static const struct xt_option_entry bpf_opts_v1[] = {
++ 
++ static int bpf_obj_get(const char *filepath)
++ {
++-#if defined HAVE_LINUX_BPF_H && defined __NR_bpf
+++#if defined HAVE_LINUX_BPF_H && defined __NR_bpf && defined BPF_FS_MAGIC
++ 	union bpf_attr attr;
++ 
++ 	memset(&attr, 0, sizeof(attr));
++-- 
++2.16.1
++
 -- 
 2.16.1
