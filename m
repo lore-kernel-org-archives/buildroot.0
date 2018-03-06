@@ -1,44 +1,49 @@
 From: James Knight <james.d.knight@live.com>
-Date: Tue, 6 Mar 2018 02:22:23 +0000
-Subject: [Buildroot] [PATCH 2/2] inotify-tools: update license information
-In-Reply-To: <20180306022209.8448-1-james.d.knight@live.com>
-References: <20180306022209.8448-1-james.d.knight@live.com>
-Message-ID: <BN6PR2001MB09489B7EB40B99A0BA58D32DA0D90@BN6PR2001MB0948.namprd20.prod.outlook.com>
+Date: Tue, 6 Mar 2018 02:39:33 +0000
+Subject: [Buildroot] [PATCH 1/1] get-developers: explicitly set devs
+ document encoding
+Message-ID: <BN6PR2001MB094879FCCDB0C266DE027DFFA0D90@BN6PR2001MB0948.namprd20.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Explicitly indicate that this package is GPL v2.0+ as well as
-provide a hash for the source's license file (COPYING).
+Explicitly indicate the file encoding (to UTF-8) for the DEVELOPERS
+document. This prevents Unicode decoding errors where some systems
+assume an alternative default encoding (ex. 'CP1252').
+
+This corrects the following observed error:
+
+    $ ./utils/get-developers outgoing/*
+    Traceback (most recent call last):
+      File "./utils/get-developers", line 101, in <module>
+        __main__()
+      File "./utils/get-developers", line 25, in __main__
+        devs = getdeveloperlib.parse_developers()
+      File "...\buildroot\utils\getdeveloperlib.py", line 164, in parse_developers
+        for line in f:
+      File "...\Python36\lib\encodings\cp1252.py", line 23, in decode
+        return codecs.charmap_decode(input,self.errors,decoding_table)[0]
+    UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 7087: character maps to <undefined>
 
 Signed-off-by: James Knight <james.d.knight@live.com>
 ---
- package/inotify-tools/inotify-tools.hash | 1 +
- package/inotify-tools/inotify-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ utils/getdeveloperlib.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/inotify-tools/inotify-tools.hash b/package/inotify-tools/inotify-tools.hash
-index 83ad5b9212..83dc22b4a2 100644
---- a/package/inotify-tools/inotify-tools.hash
-+++ b/package/inotify-tools/inotify-tools.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 a433cc1dedba851078276db69b0e97f9fe41e4ba3336d2971adfca4b3a6242ac inotify-tools-3.20.1.tar.gz
-+sha256 e41fc126320a79ed53b5aa3386f059f7d10770856d6fd714ab80a96ce6bd09d6 COPYING
-diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
-index 407aefb69f..63626307c2 100644
---- a/package/inotify-tools/inotify-tools.mk
-+++ b/package/inotify-tools/inotify-tools.mk
-@@ -6,7 +6,7 @@
- 
- INOTIFY_TOOLS_VERSION = 3.20.1
- INOTIFY_TOOLS_SITE = $(call github,rvoicilas,inotify-tools,$(INOTIFY_TOOLS_VERSION))
--INOTIFY_TOOLS_LICENSE = GPL
-+INOTIFY_TOOLS_LICENSE = GPL-2.0+
- INOTIFY_TOOLS_LICENSE_FILES = COPYING
- INOTIFY_TOOLS_INSTALL_STAGING = YES
- INOTIFY_TOOLS_AUTORECONF = YES
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 2c8d477583..30374d77f8 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -158,7 +158,7 @@ def parse_developers(basepath=None):
+     linen = 0
+     if basepath is None:
+         basepath = os.getcwd()
+-    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
++    with open(os.path.join(basepath, "DEVELOPERS"), "r", encoding="utf8") as f:
+         files = []
+         name = None
+         for line in f:
 -- 
 2.16.2.windows.1
