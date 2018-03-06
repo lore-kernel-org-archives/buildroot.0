@@ -1,33 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Mar 2018 11:59:26 +0100
-Subject: [Buildroot] [PATCH] configs/firefly_rk3288: remove defconfig
-In-Reply-To: <20180305075104.1191-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 5 Mar 2018 08:51:04 +0100")
-References: <20180305075104.1191-1-thomas.petazzoni@bootlin.com>
-Message-ID: <877eqpqxkh.fsf@dell.be.48ers.dk>
+Date: Tue, 06 Mar 2018 11:59:55 +0100
+Subject: [Buildroot] [PATCH] freescale_p1010rdb_pa_defconfig: remove
+ board
+In-Reply-To: <1520218020-17008-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Sun, 4 Mar 2018 20:47:00 -0600")
+References: <1520218020-17008-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87371dqxjo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > The original submitter of this defconfig:
- > """
- > Sorry, unfortunately we no longer have the firefly board,
- > so we can't maintain it.
- > """
+ > This defconfig currently doesn't build with GCC6 (Linux 4.1).
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/55306827
 
- > And this defconfig fails to build with gcc 6.x, causing breakage in
- > the defconfig testing.
+ > A maintainer w/board isn't available to make updates, so removing
+ > this config.
 
- > Fixes:
-
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/55306815
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/55306814
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 Committed, thanks.
 
