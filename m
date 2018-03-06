@@ -1,61 +1,117 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  6 Mar 2018 08:06:58 +0200
-Subject: [Buildroot] [PATCH] ser2net: bump to version 3.5
-Message-ID: <a0af4d19ebffe47dca7416e27fb37941e9ca7ceb.1520316418.git.baruch@tkos.co.il>
+Date: Tue,  6 Mar 2018 08:36:53 +0200
+Subject: [Buildroot] [PATCH] nftables: bump to version 0.8.3
+Message-ID: <d1e991d03418266a0be271604d0604fb506b3dc4.1520318213.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove also a redundant dot from description text.
+Disable man pages and pdf build to avoid dependency on docbook and
+dblatex.
 
-Add upstream hashes, and a license file hash.
+Drop upstream patch.
 
-Cc: Francisco Gonzalez <gzmorell@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/ser2net/Config.in    | 2 +-
- package/ser2net/ser2net.hash | 6 +++++-
- package/ser2net/ser2net.mk   | 2 +-
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ .../0001-src-fix-build-with-older-glibc.patch      | 38 ----------------------
+ package/nftables/nftables.hash                     |  6 ++--
+ package/nftables/nftables.mk                       | 11 ++-----
+ 3 files changed, 6 insertions(+), 49 deletions(-)
+ delete mode 100644 package/nftables/0001-src-fix-build-with-older-glibc.patch
 
-diff --git a/package/ser2net/Config.in b/package/ser2net/Config.in
-index 3f0d15b30d6b..cb4d69f7417d 100644
---- a/package/ser2net/Config.in
-+++ b/package/ser2net/Config.in
-@@ -3,6 +3,6 @@ config BR2_PACKAGE_SER2NET
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  Ser2net provides a way for a user to connect from a network
--	  connection to a serial port..
-+	  connection to a serial port.
- 
- 	  http://ser2net.sourceforge.net
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 67782357685a..c736c726ac45 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,2 +1,6 @@
-+# From https://sourceforge.net/projects/ser2net/files/ser2net/
-+md5 e10e7c8c97e5bade5e85ce6e89bdf1f4  ser2net-3.5.tar.gz
-+sha1 0ad0affd37ef544c23f42a3f46d09e969d0d9116  ser2net-3.5.tar.gz
- # Locally computed:
--sha256 d846066e27c3072565990745d030357aa0c278f96b7d1d4f59023347c1db8824  ser2net-3.4.tar.gz
-+sha256 ba9e1d60a89fd7ed075553b4a2074352902203f7fbd9b65b15048c05f0e3f3be  ser2net-3.5.tar.gz
-+sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 833becc3e0a6..5ab5c4d2ae28 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/nftables/0001-src-fix-build-with-older-glibc.patch b/package/nftables/0001-src-fix-build-with-older-glibc.patch
+deleted file mode 100644
+index d1ba29530693..000000000000
+--- a/package/nftables/0001-src-fix-build-with-older-glibc.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 381eaa40735385a1a60e5ab0a7daf4bb847fc2ab Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Fri, 9 Feb 2018 14:42:31 +0200
+-Subject: [PATCH] src: fix build with older glibc
+-
+-glibc before 2.19 missed the definition of IPPROTO_MH. This leads to
+-build failure:
+-
+-parser_bison.y: In function 'nft_parse':
+-parser_bison.y:3793:21: error: 'IPPROTO_MH' undeclared (first use in this function)
+-    | MH { $$ = IPPROTO_MH; }
+-                     ^
+-
+-Since we have a local definition of IPPROTO_MH in headers.h use that to
+-fix the build.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://marc.info/?l=netfilter-devel&m=151818061103886&w=2
+-
+- src/parser_bison.y | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/parser_bison.y b/src/parser_bison.y
+-index 2e79109f4da3..578bfdc10429 100644
+---- a/src/parser_bison.y
+-+++ b/src/parser_bison.y
+-@@ -29,6 +29,7 @@
+- #include <rule.h>
+- #include <statement.h>
+- #include <expression.h>
+-+#include <headers.h>
+- #include <utils.h>
+- #include <parser.h>
+- #include <erec.h>
+--- 
+-2.15.1
+-
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index d6ccf7b479a8..3effe68f2ebd 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
+@@ -1,6 +1,6 @@
+ # From http://www.netfilter.org/projects/nftables/downloads.html
+-sha1	51fd436845718f1221ee198128656ef9055c2588	nftables-0.8.1.tar.bz2
++sha1	533cb3bf17e90579d24f9621fdb22bdb4f7e3287 	nftables-0.8.3.tar.bz2
+ # Locally calculated after checking pgp signature
+-# http://www.netfilter.org/projects/nftables/files/nftables-0.8.1.tar.bz2.sig
+-sha256	8aead66cce70d68c70e4be917813abcbcf62811ee6de4c7761d0e34391772fc4	nftables-0.8.1.tar.bz2
++# http://www.netfilter.org/projects/nftables/files/nftables-0.8.3.tar.bz2.sig
++sha256	d16be1f5db88e95d29fc0b0e4df88acd079f3ee8e2b872ec7673f9a0d5d95e38	nftables-0.8.3.tar.bz2
+ sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 329b9871feab..571cd33ad5f1 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -4,13 +4,14 @@
  #
  ################################################################################
  
--SER2NET_VERSION = 3.4
-+SER2NET_VERSION = 3.5
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
+-NFTABLES_VERSION = 0.8.1
++NFTABLES_VERSION = 0.8.3
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = http://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+ 	host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ NFTABLES_LICENSE = GPL-2.0
+ NFTABLES_LICENSE_FILES = COPYING
++NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ NFTABLES_DEPENDENCIES += readline
+@@ -23,12 +24,6 @@ ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
+ NFTABLES_LIBS += -ljansson -lm
+ endif
+ 
+-NFTABLES_CONF_ENV = \
+-	ac_cv_prog_CONFIG_PDF=no \
+-	LIBS="$(NFTABLES_LIBS)" \
+-	DBLATEX=no \
+-	DOCBOOK2X_MAN=no \
+-	DOCBOOK2MAN=no \
+-	DB2X_DOCBOOK2MAN=no
++NFTABLES_CONF_ENV = LIBS="$(NFTABLES_LIBS)"
+ 
+ $(eval $(autotools-package))
 -- 
 2.16.1
