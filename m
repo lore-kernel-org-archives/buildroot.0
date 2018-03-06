@@ -1,37 +1,29 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  6 Mar 2018 09:48:05 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: taint the build on external
- modules
-In-Reply-To: <1520326085-18337-1-git-send-email-angelo@amarulasolutions.com>
-References: <1520326085-18337-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1520326085-18337-3-git-send-email-angelo@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 06 Mar 2018 11:03:36 +0100
+Subject: [Buildroot] [PATCH] musl: drop upstream patch
+In-Reply-To: <c953f8543d16ede5bdb9780a99dd3574cd91ba17.1520310732.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 6 Mar 2018 06:32:12 +0200")
+References: <c953f8543d16ede5bdb9780a99dd3574cd91ba17.1520310732.git.baruch@tkos.co.il>
+Message-ID: <87sh9dr05j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-This patch enables the tainting of the build if when an
-external module is added.
+ > Commit 1296d57918fd2 (musl: bump to version 1.1.19) forgot to remove an
+ > upstream patch. Do that now.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/nodejs/nodejs.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/3ea/3ea23854c501d12aa69012df9d38d33cd10ac83c/
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index a72b9a7..9733701 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -160,6 +160,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
- # We can only call NPM if there's something to install.
- #
- ifneq ($(NODEJS_MODULES_LIST),)
-+NODEJS_TAINTS = YES
- define NODEJS_INSTALL_MODULES
- 	# If you're having trouble with module installation, adding -d to the
- 	# npm install call below and setting npm_config_rollback=false can both
+ > Cc: J?rg Krause <joerg.krause@embedded.rocks>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
