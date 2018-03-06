@@ -1,46 +1,44 @@
-From: Erik Larsson <karl.erik.larsson@gmail.com>
-Date: Tue, 6 Mar 2018 14:09:49 +0100
-Subject: [Buildroot] [PATCH v4 0/4] Initial support for NXP iMX8
- (imx8mq-evk)
-In-Reply-To: <CAOMZO5Cgd_p7W_A8Oa+fmKKJ2ZpDou+A4e1BBxsjjA4ceuiXcA@mail.gmail.com>
-References: <1520065060-20046-1-git-send-email-karl.erik.larsson@gmail.com>
- <CAOMZO5Cgd_p7W_A8Oa+fmKKJ2ZpDou+A4e1BBxsjjA4ceuiXcA@mail.gmail.com>
-Message-ID: <CAPP7BN1QObzFFHDeNhr+6vtMTn4g4y2cdUvaB6uVZU0_UWPOpg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 6 Mar 2018 15:25:35 +0100
+Subject: [Buildroot] [git commit] configs/qemu_x86_defconfig: remove kernel
+ options that need openssl
+Message-ID: <20180306143235.7083282534@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio
+commit: https://git.buildroot.net/buildroot/commit/?id=5c5f1b07434a1d17cace941ffcec791f3633b5ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2018-03-04 19:05 GMT+01:00 Fabio Estevam <festevam@gmail.com>:
+Wireless support ends up enabling CONFIG_SYSTEM_TRUSTED_KEYRING, which
+requires openssl to be available on the host, so disable wireless
+support, which isn't needed in Qemu.
 
-> Hi Erik,
->
-> On Sat, Mar 3, 2018 at 5:17 AM, Erik Larsson
-> <karl.erik.larsson@gmail.com> wrote:
-> > This series provides initial support for NXP iMX8 (imx8mq-evk).
-> >
-> > This series of patches are tested against NXP imx8mq-evk.
-> > It only handles basic support for iIMX8M, currently no
-> > support for GPU, VPU and other HW features. This series
-> > makes it possible to build a minimal system for imx8mq-evk.
->
-> Thanks for working on this series.
->
-> In case you need to respin it, please add a readme.txt file so that
-> people can know how to build and flash a SD card to boot this board.
->
-> An example of a readme.txt: board/freescale/imx51evk/readme.txt
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/qemu/x86/linux-4.15.config | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I will add a readme file and respin these patches.
-
-
->
-Thanks
->
-/Erik
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180306/9a9b416b/attachment.html>
+diff --git a/board/qemu/x86/linux-4.15.config b/board/qemu/x86/linux-4.15.config
+index 0e59b87bd6..79f7537d80 100644
+--- a/board/qemu/x86/linux-4.15.config
++++ b/board/qemu/x86/linux-4.15.config
+@@ -9,6 +9,7 @@ CONFIG_NET=y
+ CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
++# CONFIG_WIRELESS is not set
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_VIRTIO_BLK=y
+@@ -20,6 +21,7 @@ CONFIG_NETDEVICES=y
+ CONFIG_VIRTIO_NET=y
+ CONFIG_NE2K_PCI=y
+ CONFIG_8139CP=y
++# CONFIG_WLAN is not set
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
