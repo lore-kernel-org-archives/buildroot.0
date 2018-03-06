@@ -1,33 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Mar 2018 15:31:26 +0100
-Subject: [Buildroot] [git commit] configs/freescale_imx6sxsabresd: U-Boot
- needs host-dtc
-Message-ID: <20180306143236.EF58B80DEB@busybox.osuosl.org>
+Date: Tue, 06 Mar 2018 15:32:50 +0100
+Subject: [Buildroot] [PATCH 00/23] Fix numerous defconfig build failures
+In-Reply-To: <20180304213137.24681-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 4 Mar 2018 22:31:14 +0100")
+References: <20180304213137.24681-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87tvttp94d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41dca854e641044a01402897a34518c4cab5095a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Fixes:
+ > Hello,
+ > This commit fixes a significant number of defconfig build failures:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306823
+ >  - Some defconfigs have a Linux kernel that needs openssl on the
+ >    host. This requires adding a mechanism to add host-openssl as a
+ >    dependency of the linux package. This is done by introducing
+ >    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL in patch 1.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/freescale_imx6sxsabresd_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ >    Then, numerous defconfigs are fixed to use
+ >    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL: patches 6 to 13.
 
-diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
-index 01e13143b2..eb11fb8ae1 100644
---- a/configs/freescale_imx6sxsabresd_defconfig
-+++ b/configs/freescale_imx6sxsabresd_defconfig
-@@ -39,3 +39,4 @@ BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
+ >    The qemu_x86_defconfig and qemu_x86_64_defconfig are however
+ >    changed in a different way: by removing wireless support, which is
+ >    the reason why host-openssl becomes necessary in recent kernel
+ >    versions. Since Qemu doesn't emulate a wireless interface, it
+ >    didn't make much sense to have this additional dependency. See
+ >    patch 4 and 5.
+
+ >    For all other defconfigs, we erred on the safe side, and kept the
+ >    configuration as-is, and simply added
+ >    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL.
+
+ >  - Some defconfigs have a Linux kernel that needs libelf on the
+ >    host. Like host-openssl, we added a new option
+ >    BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF. See patch 2.
+
+ >    In practice, only qemu_x86_64_defconfig needed libelf and the host,
+ >    and instead of bringing this dependency, we have disabled the ORC
+ >    Unwinder from the kernel defconfig. See patch 4.
+
+ >    Therefore, there are no in-tree defconfig that uses
+ >    BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF.
+
+ >  - In order to make the host openssl and host libelf usable by the
+ >    Linux kernel build system, we had to ensure that HOST_CFLAGS and
+ >    HOST_LDFLAGS were properly taken into account. This is done in
+ >    patch 3.
+
+ >  - Some defconfigs have a U-Boot that needs dtc on the host. For
+ >    these, the fix is simple: add BR2_TARGET_UBOOT_NEEDS_DTC=y in the
+ >    defconfig. Patches 14 to 22.
+
+ >  - Finally, one defconfig, ts4900_defconfig, had a separate issue: it
+ >    wasn't explicitly specifying a kernel version, causing a mismatch
+ >    with the selected kernel headers version.
+
+ > Best regards,
+
+ > Thomas
+
+ > Thomas Petazzoni (23):
+ >   linux: add BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL
+ >   linux: add BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF
+ >   linux: fix passing of host CFLAGS and LDFLAGS
+
+I've put this patch in front of the rest and committed the entire
+series, thanks!
+
+I'll also backport to 2018.02.x once we've verified that it doesn't
+break anything.
+
+-- 
+Bye, Peter Korsgaard
