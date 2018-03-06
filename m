@@ -1,83 +1,61 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  6 Mar 2018 07:05:53 +0200
-Subject: [Buildroot] [PATCH] iptables: fix build with older kernel headers
-Message-ID: <732e96c8f30e874d16bc42df3e721b3386cf7da7.1520312753.git.baruch@tkos.co.il>
+Date: Tue,  6 Mar 2018 08:06:58 +0200
+Subject: [Buildroot] [PATCH] ser2net: bump to version 3.5
+Message-ID: <a0af4d19ebffe47dca7416e27fb37941e9ca7ceb.1520316418.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-iptables version 1.6.2 uses the BPF_OBJ_GET macro that is only available
-since kernel version 4.4. Add a patch fixing the detection of the
-feature availability.
+Remove also a redundant dot from description text.
 
-Fixes:
-http://autobuild.buildroot.net/results/e67/e670548c4b250e8a102a4929cafa85634fc79a3d/
-http://autobuild.buildroot.net/results/1a7/1a7ab509440c9acacf606f238b8989d9b4287d52/
-http://autobuild.buildroot.net/results/555/55583e20bcdf602132c074e08d1a49507d5a48ad/
+Add upstream hashes, and a license file hash.
 
-Cc: Antoine Tenart <antoine.tenart@bootlin.com>
+Cc: Francisco Gonzalez <gzmorell@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...libxt_bpf-Fix-build-with-old-kernel-versi.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/iptables/0001-extensions-libxt_bpf-Fix-build-with-old-kernel-versi.patch
+ package/ser2net/Config.in    | 2 +-
+ package/ser2net/ser2net.hash | 6 +++++-
+ package/ser2net/ser2net.mk   | 2 +-
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/iptables/0001-extensions-libxt_bpf-Fix-build-with-old-kernel-versi.patch b/package/iptables/0001-extensions-libxt_bpf-Fix-build-with-old-kernel-versi.patch
-new file mode 100644
-index 000000000000..966cbe31ab62
---- /dev/null
-+++ b/package/iptables/0001-extensions-libxt_bpf-Fix-build-with-old-kernel-versi.patch
-@@ -0,0 +1,49 @@
-+From 5beb1582d13d3bfdd0d2b277f5f3154b2fbf4a8e Mon Sep 17 00:00:00 2001
-+From: Hauke Mehrtens <hauke@hauke-m.de>
-+Date: Tue, 27 Feb 2018 16:56:55 +0100
-+Subject: [PATCH] extensions: libxt_bpf: Fix build with old kernel versions
-+
-+In kernel 3.18 the union bpf_attr does not have a pathname attribute and
-+BPF_OBJ_GET is also not defined in these versions.
-+This was added in Linux commit b2197755b263 ("bpf: add support for
-+persistent maps/progs"). Check for the BPF_FS_MAGIC define which was
-+also added in this Linux commit and only activate this code in case we
-+find that define.
-+
-+This fixes a build problem with Linux 3.18.
-+Netfilter bug: #1231
-+
-+Fixes: f17f9ace8a8 ("extensions: libxt_bpf: support ebpf pinned objects")
-+Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
-+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 5beb1582d13d
-+
-+ extensions/libxt_bpf.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/extensions/libxt_bpf.c b/extensions/libxt_bpf.c
-+index 9510c190f315..92958247c756 100644
-+--- a/extensions/libxt_bpf.c
-++++ b/extensions/libxt_bpf.c
-+@@ -22,6 +22,7 @@
-+ #include <linux/bpf.h>
-+ #endif
-+ 
-++#include <linux/magic.h>
-+ #include <linux/unistd.h>
-+ 
-+ #define BCODE_FILE_MAX_LEN_B	1024
-+@@ -62,7 +63,7 @@ static const struct xt_option_entry bpf_opts_v1[] = {
-+ 
-+ static int bpf_obj_get(const char *filepath)
-+ {
-+-#if defined HAVE_LINUX_BPF_H && defined __NR_bpf
-++#if defined HAVE_LINUX_BPF_H && defined __NR_bpf && defined BPF_FS_MAGIC
-+ 	union bpf_attr attr;
-+ 
-+ 	memset(&attr, 0, sizeof(attr));
-+-- 
-+2.16.1
-+
+diff --git a/package/ser2net/Config.in b/package/ser2net/Config.in
+index 3f0d15b30d6b..cb4d69f7417d 100644
+--- a/package/ser2net/Config.in
++++ b/package/ser2net/Config.in
+@@ -3,6 +3,6 @@ config BR2_PACKAGE_SER2NET
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Ser2net provides a way for a user to connect from a network
+-	  connection to a serial port..
++	  connection to a serial port.
+ 
+ 	  http://ser2net.sourceforge.net
+diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+index 67782357685a..c736c726ac45 100644
+--- a/package/ser2net/ser2net.hash
++++ b/package/ser2net/ser2net.hash
+@@ -1,2 +1,6 @@
++# From https://sourceforge.net/projects/ser2net/files/ser2net/
++md5 e10e7c8c97e5bade5e85ce6e89bdf1f4  ser2net-3.5.tar.gz
++sha1 0ad0affd37ef544c23f42a3f46d09e969d0d9116  ser2net-3.5.tar.gz
+ # Locally computed:
+-sha256 d846066e27c3072565990745d030357aa0c278f96b7d1d4f59023347c1db8824  ser2net-3.4.tar.gz
++sha256 ba9e1d60a89fd7ed075553b4a2074352902203f7fbd9b65b15048c05f0e3f3be  ser2net-3.5.tar.gz
++sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 833becc3e0a6..5ab5c4d2ae28 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SER2NET_VERSION = 3.4
++SER2NET_VERSION = 3.5
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPL-2.0+
+ SER2NET_LICENSE_FILES = COPYING
 -- 
 2.16.1
