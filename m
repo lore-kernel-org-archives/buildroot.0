@@ -1,110 +1,124 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  6 Mar 2018 08:00:11 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-03-05
-Message-ID: <20180306070011.40DAE20722@mail.bootlin.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 06 Mar 2018 08:54:31 +0100
+Subject: [Buildroot] [PATCH] musl: drop upstream patch
+In-Reply-To: <c953f8543d16ede5bdb9780a99dd3574cd91ba17.1520310732.git.baruch@tkos.co.il>
+References: <c953f8543d16ede5bdb9780a99dd3574cd91ba17.1520310732.git.baruch@tkos.co.il>
+Message-ID: <1520322871.15758.18.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch,
 
-Build statistics for 2018-03-05
-===============================
+On Tue, 2018-03-06 at 06:32 +0200, Baruch Siach wrote:
+> Commit 1296d57918fd2 (musl: bump to version 1.1.19) forgot to remove
+> an
+> upstream patch. Do that now.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/3ea/3ea23854c501d12aa69012df9d
+> 38d33cd10ac83c/
+> 
+> Cc: J?rg Krause <joerg.krause@embedded.rocks>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...nal-uapi-guards-for-Linux-kernel-header-f.patch | 69 ------------
+> ----------
+>  1 file changed, 69 deletions(-)
+>  delete mode 100644 package/musl/0002-add-additional-uapi-guards-for-
+> Linux-kernel-header-f.patch
+> 
+> diff --git a/package/musl/0002-add-additional-uapi-guards-for-Linux-
+> kernel-header-f.patch b/package/musl/0002-add-additional-uapi-guards-
+> for-Linux-kernel-header-f.patch
+> deleted file mode 100644
+> index cbfc9b668f91..000000000000
+> --- a/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-
+> header-f.patch
+> +++ /dev/null
+> @@ -1,69 +0,0 @@
+> -From b583c5d3b4cc2c54c68eef5eb7855ecfacee8bfc Mon Sep 17 00:00:00
+> 2001
+> -From: Hauke Mehrtens <hauke@hauke-m.de>
+> -Date: Sat, 6 Jan 2018 23:32:52 +0100
+> -Subject: [PATCH] add additional uapi guards for Linux kernel header
+> files
+> -
+> -With Linux kernel 4.16 it will be possible to guard more parts of
+> the
+> -Linux header files from a libc. Make use of this in musl to guard
+> all
+> -the structures and other definitions from the Linux header files
+> which
+> -are also defined by the header files provided by musl. This will
+> make
+> -it possible to compile source files which include both the libc
+> -headers and the kernel userspace headers.
+> -
+> -This extends the definitions done in commit 04983f227238 ("make
+> -netinet/in.h suppress clashing definitions from kernel headers")
+> -
+> -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ----
+> -Patch status: upstream commit b583c5d3b4cc
+> -
+> - include/net/if.h           | 7 +++++++
+> - include/netinet/if_ether.h | 1 +
+> - include/sys/xattr.h        | 2 ++
+> - 3 files changed, 10 insertions(+)
+> -
+> -diff --git a/include/net/if.h b/include/net/if.h
+> -index 2f2fcc10e484..774cbff0b506 100644
+> ---- a/include/net/if.h
+> -+++ b/include/net/if.h
+> -@@ -125,6 +125,13 @@ struct ifconf {
+> - #define ifc_req		ifc_ifcu.ifcu_req
+> - #define _IOT_ifconf _IOT(_IOTS(struct ifconf),1,0,0,0,0)
+> - 
+> -+#define __UAPI_DEF_IF_IFCONF                                    0
+> -+#define __UAPI_DEF_IF_IFMAP                                     0
+> -+#define __UAPI_DEF_IF_IFNAMSIZ                                  0
+> -+#define __UAPI_DEF_IF_IFREQ                                     0
+> -+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS                          0
+> -+#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO    0
+> -+
+> - #endif
+> - 
+> - #ifdef __cplusplus
+> -diff --git a/include/netinet/if_ether.h b/include/netinet/if_ether.h
+> -index d9a131aa2d1d..97134d75b480 100644
+> ---- a/include/netinet/if_ether.h
+> -+++ b/include/netinet/if_ether.h
+> -@@ -133,5 +133,6 @@ do { \
+> - 	(enaddr)[5] = ((uint8_t *)ipaddr)[3]; \
+> - } while(0)
+> - 
+> -+#define __UAPI_DEF_ETHHDR       0
+> - 
+> - #endif
+> -diff --git a/include/sys/xattr.h b/include/sys/xattr.h
+> -index 6479fcc62e5f..eeeaafc44f09 100644
+> ---- a/include/sys/xattr.h
+> -+++ b/include/sys/xattr.h
+> -@@ -24,6 +24,8 @@ int removexattr(const char *, const char *);
+> - int lremovexattr(const char *, const char *);
+> - int fremovexattr(int, const char *);
+> - 
+> -+#define __UAPI_DEF_XATTR        0
+> -+
+> - #ifdef __cplusplus
+> - }
+> - #endif
+> --- 
+> -2.15.1
+> -
 
-      branch |  OK | NOK | TIM | TOT |
-      master | 150 |  12 |   0 | 162 |
-   2017.11.x |  15 |   2 |   0 |  17 |
-        next |  39 |  15 |   0 |  54 |
+Upstream commit is b583c5d3b4cc2c54c68eef5eb7855ecfacee8bfc [1].
 
-Results for branch 'master'
-===========================
+[1] https://git.musl-libc.org/cgit/musl/commit/?id=b583c5d3b4cc2c54c68e
+ef5eb7855ecfacee8bfc
 
-Classification of failures by reason
-------------------------------------
-
-             bluez5_utils-5.48 | 2 
-                     php-7.2.3 | 2 
-                  cc-tool-0.26 | 1 
-                    htop-2.1.0 | 1 
-                iptables-1.6.2 | 1 
-              keepalived-1.4.1 | 1 
-              lynx-2.8.9dev.16 | 1 
-                 mesa3d-17.3.6 | 1 
-               qt5webkit-5.9.1 | 1 
-                   zmqpp-4.1.2 | 1 
-
-
-Detail of failures
-------------------
-
-     sparc64 |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/2117de369f73a885317f8145f35c81666ab2705f |     
-         arm |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/ca0d6c9ee60a867a49487b7f286486786aaf74da |     
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/c7f28bd03a051f90bff1decff919b42ff5e8a1ef |     
-      mipsel |                     htop-2.1.0 | NOK | http://autobuild.buildroot.net/results/2f7d98ebb6a86a8c736f09858b548f7c3a90e65d | ORPH
-       sparc |                 iptables-1.6.2 | NOK | http://autobuild.buildroot.net/results/94e7d648fd4884d80b17670d2ffb0b4bd6265a2c | ORPH
-        m68k |               keepalived-1.4.1 | NOK | http://autobuild.buildroot.net/results/8ed24903e1c9b7025785a0b179d7f5a0a190e52b |     
-microblazeel |               lynx-2.8.9dev.16 | NOK | http://autobuild.buildroot.net/results/decf7812ce35f80ce08a86894a4deb372e3d73d9 |     
-     powerpc |                  mesa3d-17.3.6 | NOK | http://autobuild.buildroot.net/results/0e1a8dc02b1f982c1ddf7d4979eff770d7f59cb1 |     
-        m68k |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/4e5a8da40678b7797342ed5716b42f84495ad9a5 | ORPH
-        bfin |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/18fd2df026c8b893ba0e2ea089dda7cac27def1c | ORPH
-      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/9026d0fa29d97166ee353e7725fe50f56cc4d5f2 |     
-        or1k |                    zmqpp-4.1.2 | NOK | http://autobuild.buildroot.net/results/33d401c0e9591dc92e14176e79a1b1d805adcfd4 |     
-
-Results for branch '2017.11.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                 mplayer-1.3.0 | 1 
-                   pcre2-10.30 | 1 
-
-
-Detail of failures
-------------------
-
-         arc |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/ba1eb3b0c83ccf870adaf501ad405c46cc9fb070 |     
-        m68k |                    pcre2-10.30 | NOK | http://autobuild.buildroot.net/results/d01135c6038113055bd9830f4d67eac1208ab407 | ORPH
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-              keepalived-1.4.1 | 4 
-                     php-7.2.2 | 2 
-                  udftools-2.0 | 2 
-                  cc-tool-0.26 | 1 
-                iptables-1.6.2 | 1 
-         libcpprestsdk-v2.10.1 | 1 
-               lightning-2.1.0 | 1 
-                nftables-0.8.1 | 1 
-             qt5location-5.6.3 | 1 
-zyre-1d949e4bf79b694ea883c3... | 1 
-
-
-Detail of failures
-------------------
-
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/c225b461bc2249fa1e8eff4bcd2309ef3ec777d5 |     
-     sparc64 |                 iptables-1.6.2 | NOK | http://autobuild.buildroot.net/results/68dce91171a689e521985763d6dcabd47a5df66f | ORPH
-microblazeel |               keepalived-1.4.1 | NOK | http://autobuild.buildroot.net/results/f3e9fa3414ee3519b9e307f6185e3580b2eea15d |     
-      xtensa |               keepalived-1.4.1 | NOK | http://autobuild.buildroot.net/results/f2b6dd1ce5202722bb03db095c02b630f510e85f |     
-         arc |               keepalived-1.4.1 | NOK | http://autobuild.buildroot.net/results/4c64bd97833161f957b4f69044e6ba2f762502a3 |     
-         arm |               keepalived-1.4.1 | NOK | http://autobuild.buildroot.net/results/56eb3dbf7b9bcc199ed6afa370be555706f21242 |     
-     powerpc |          libcpprestsdk-v2.10.1 | NOK | http://autobuild.buildroot.net/results/14330ca04a8f8c37524018e21ce675ce171bad3f |     
-      x86_64 |                lightning-2.1.0 | NOK | http://autobuild.buildroot.net/results/586f3f65ce84fdc0c8584d0e36345cae107a73fa |     
-     powerpc |                 nftables-0.8.1 | NOK | http://autobuild.buildroot.net/results/79278943933225a86dc7a1aab25d2e1f76d1b062 | ORPH
-microblazeel |                      php-7.2.2 | NOK | http://autobuild.buildroot.net/results/177680bcbbc5f642e7c46ad26e56ec854ae015db | ORPH
-        bfin |                      php-7.2.2 | NOK | http://autobuild.buildroot.net/results/8c81d5b284ccddbac28422fc8930c485e9eac00f | ORPH
-     powerpc |              qt5location-5.6.3 | NOK | http://autobuild.buildroot.net/results/669b3962f291d62dc22d18091c8dafd1726fe810 |     
-         arm |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/b8329b52ad05070162931ad56b4df05ec3dea446 |     
-         arm |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/6a4190f36ee92d4cda6a776985815354aee30608 |     
-         arm | zyre-1d949e4bf79b694ea883c3... | NOK | http://autobuild.buildroot.net/results/2cd5110e969931b533fd8af1f878eae27da3f863 |     
-
-
--- 
-http://autobuild.buildroot.net
+Acked-by: J?rg Krause <joerg.krause@embedded.rocks>
