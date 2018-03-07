@@ -1,33 +1,27 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 7 Mar 2018 16:35:39 -0300
-Subject: [Buildroot] [PATCH v5 4/4] configs/freescale_imx8mqevk: new
- defconfig
-In-Reply-To: <1520448738-5794-5-git-send-email-karl.erik.larsson@gmail.com>
-References: <1520448738-5794-1-git-send-email-karl.erik.larsson@gmail.com>
- <1520448738-5794-5-git-send-email-karl.erik.larsson@gmail.com>
-Message-ID: <CAOMZO5CWCyZbC=BhS=6w+tSk+bt8VWkWvOEmzKAw2tRgfg4S+w@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  7 Mar 2018 21:00:59 +0100
+Subject: [Buildroot] [PATCH 1/1] upmpdcli: add license hash
+Message-ID: <20180307200059.5707-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 7, 2018 at 3:52 PM, Erik Larsson
-<karl.erik.larsson@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/upmpdcli/upmpdcli.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> +Build
-> +=====
-> +
-> +First, configure Buildroot for the i.MX51 EVK board:
-
-Minor nit:
-
-s/i.MX51 EVK board/i.MX8MQ EVK board
-
-(Maybe it can be fixed while applying if no other issues)
-
-The series looks good:
-
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-
-Thanks
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 364fa914e9..e497352682 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,2 +1,5 @@
+ # From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.15.tar.gz.sha256:
+ sha256  93d2b9cfd6cb8643c5a23d4115b44622d76c71abe15db9bb8d5b4d83f4d9b49c  upmpdcli-1.2.15.tar.gz
++
++# Hash for license file:
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+-- 
+2.14.1
