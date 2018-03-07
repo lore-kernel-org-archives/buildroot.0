@@ -1,48 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Mar 2018 22:16:00 +0100
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.91
-Message-ID: <20180307212119.D13F28103D@busybox.osuosl.org>
+Date: Wed, 7 Mar 2018 22:18:03 +0100
+Subject: [Buildroot] [git commit] package/x11r7/libxcb: bump version to 1.13
+Message-ID: <20180307212119.E3E458103D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96a52efb0951dadf6266a701febf4bef2b0ed0b4
+commit: https://git.buildroot.net/buildroot/commit/?id=d3b065a0e1e0d2ee4607b92618a736a0e19e02ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Added all upstream hashes and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/libxcb/libxcb.hash | 9 +++++++--
+ package/x11r7/libxcb/libxcb.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index b1784b4c07..bc15ecf79f 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-February/002838.html
--md5 61dcb4989c728f566e3c15c236585a17  libdrm-2.4.90.tar.bz2
--sha1 7630ba36c65433251a0494b47086fbd0b32ff7a8  libdrm-2.4.90.tar.bz2
--sha256 db37ec8f1dbaa2c192ad9903c8d0988b858ae88031e96f169bf76aaf705db68b  libdrm-2.4.90.tar.bz2
--sha512 3d32d60c44ffdcb58667d0926e6af8d375332add1f243d8b2d37567aeef4e4b26d786294aeecf46c3dea94fc002fb73756567c457300703acfc21e32ffbd458c  libdrm-2.4.90.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002853.html
-+md5 23d87cda92700b710a37d9b8edaa9f54  libdrm-2.4.91.tar.bz2
-+sha1 44e42ce3cd41666e343ba393c73f6f1ad9fe1e74  libdrm-2.4.91.tar.bz2
-+sha256 634a0ed0cc1eff06f48674b1da81aafa661a9f001e7a4f43dde81076886dc800  libdrm-2.4.91.tar.bz2
-+sha512 07578c00c121ba37033db7172590e26d1545f81c242bbce2cfb7fb904bde504822c275d6468e5c5d20360d0046ae73d9b058aa0459ba35eb11927141cc998772  libdrm-2.4.91.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 7121f06c9a..8f533d72d7 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+diff --git a/package/x11r7/libxcb/libxcb.hash b/package/x11r7/libxcb/libxcb.hash
+index 6df7d01792..d2b5da6b52 100644
+--- a/package/x11r7/libxcb/libxcb.hash
++++ b/package/x11r7/libxcb/libxcb.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-May/002694.html
+-sha256	4adfb1b7c67e99bc9c2ccb110b2f175686576d2f792c8a71b9c8b19014057b5b	libxcb-1.12.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002851.html
++md5 c2b6cf928afa16b0047c974e7aaa783f  libxcb-1.13.tar.bz2
++sha1 212ad5f1f80def80536d78e3d20354a0370e7fe9  libxcb-1.13.tar.bz2
++sha256 188c8752193c50ff2dbe89db4554c63df2e26a2e47b0fa415a70918b5b851daa  libxcb-1.13.tar.bz2
++sha512 d99bbe386a65f60fcc0cc2935e4a365bc0577b5e90433e18778a665a5aee8ebc8e9e8cb0aedac0ac4a276147c0507e759a716874ea4f80792b2fc18eefbc128c  libxcb-1.13.tar.bz2
++# Locally computed
++sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index 32edbb9e90..7e467aca3f 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.90
-+LIBDRM_VERSION = 2.4.91
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-LIBXCB_VERSION = 1.12
++LIBXCB_VERSION = 1.13
+ LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.bz2
+ LIBXCB_SITE = http://xcb.freedesktop.org/dist
+ LIBXCB_LICENSE = MIT
