@@ -1,107 +1,88 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 7 Mar 2018 23:22:50 +0100
-Subject: [Buildroot] Bugs in patch [v2,7/7] package/mender: new package
-In-Reply-To: <CAGkEsZz0uiR95Q7QSbOQC1GCccsy2vCm=1n8w3wXYbbOqwPvNg@mail.gmail.com>
-References: <CAGkEsZy33hDrAeY3Cq+_w2Z_EH5WTMqF1fw4dL5q21G1_ev+=Q@mail.gmail.com>
- <CAGkEsZz0uiR95Q7QSbOQC1GCccsy2vCm=1n8w3wXYbbOqwPvNg@mail.gmail.com>
-Message-ID: <CA+TH9Vk-FXmSt1k6UB=rCVyk3w0S7jJcxRWeKcARukipa-Z6Sg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 7 Mar 2018 23:25:58 +0100
+Subject: [Buildroot] [PATCH next v2 3/5] support/scripts/pkg-stats-new:
+ add current version information
+In-Reply-To: <5a9359348b151_fe2161c02836544@ultri3.mail>
+References: <20180221221342.15683-4-thomas.petazzoni@bootlin.com>
+ <5a9359348b151_fe2161c02836544@ultri3.mail>
+Message-ID: <20180307232558.2d9b358f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Auke,
+Hello,
 
-2018-02-13 13:46 GMT+01:00 Auke Oosterhoff <a.oosterhoff@climotion.com>:
+Thanks for your review!
 
-> I think Mender should be started at boot. It's otherwise not very useful.
-> To achieve this I suggest to add this line to MENDER_INSTALL_TARGET_CMDS
-> variable:
->
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -fs ../../../../usr/lib/systemd/system/memder.service \
-> +             $(TARGET_DIR)/etc/systemd/system/multi-user.target.
-> wants/mender.service
->
->
-> 2018-01-30 15:27 GMT+01:00 Auke Oosterhoff <a.oosterhoff@climotion.com>:
->
->> Hello,
->>
->> I tested a series of patches which add a new infrastructure for go
->> packages[1] and patch 7[2] of this series contains a few bugs. The patch
->> add support for the package Mender.
->>
->> The MENDER_INSTALL_TARGET_CMDS copies 2 different files to the same
->> location, which is wrong. Both files should keep their name in target.
->>
->> +	$(INSTALL) -D -m 0644 package/mender/mender.conf \+		$(TARGET_DIR)/etc/mender/mender.conf+	$(INSTALL) -D -m 0644 package/mender/tenant.conf \+		$(TARGET_DIR)/etc/mender/mender.conf
->>
->> And also, the mender binary isn't copied to the target.
->> I think the content of MENDER_INSTALL_TARGET_CMDS should be extended with:
->>
->> +	$(INSTALL) -D -m 0755 $(@D)/$(MENDER_BINDIR)/mender $(TARGET_DIR)/usr/bin/mender
->>
->>
-Sorry for the late reply, I totally missed this email. Please reply in the
-patch thread to be sure an author of a patch get notified of a message next
-time!
+On Sun, 25 Feb 2018 21:47:48 -0300, Ricardo Martincoski wrote:
 
-I just pushed an update to the series that should address your concerns.
+> The output of printvars is sorted, so this makes the 'versions' dict to
+> contain at the very end:
+>  1) the target version when there is no host version
+>  2) the host version for packages alphabetically before hostapd
+>  3) the target version for packages alphabetically after hplip
+>  4) the host version when there is no target version
+> 
+> The inconsistency between 2 and 3 is not a problem right now because all
+> packages that have host and target versions use the same versions for both.
+> Maybe it will never be a problem?
+> 
+> I hope Yann can help us here (I added to CC).
+> 
+> The case 4 seems to serve a single package: lpc3250loader
+> We have other packages that are host-only, i.e. vboot-utils, they set _VERSION,
+> not HOST.*_VERSION.
+> Maybe it is something to fix in the package?
+> If yes, you could just ignore the entries starting with HOST_.
 
-Sincerely, Angelo
+I've addressed your concern by doing this:
 
->
->> --
->> Met vriendelijke groet,
->>
->> Auke Willem Oosterhoff
->>
->>
->> [1]: https://patchwork.ozlabs.org/cover/854079/
->> [2]: https://patchwork.ozlabs.org/patch/854085/
->>
->>
->> <http://www.climotion.com/>
->>
->
->
->
-> --
-> Met vriendelijke groet,
->
-> Auke Willem Oosterhoff
-> 023 576 88 55
-> 06 8360 935 50
->
-> <http://www.climotion.com/>
->
-> Climotion bv | +31 (0)23 576 88 55 | Wilhelminastraat 51 | 2011VL |
-> Postbus 5241 | 2000 CE | Haarlem | www.climotion.com
->
->
->
->
-> <http://www.climotion.com/>
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
++    # We process first the host package VERSION, and then the target
++    # package VERSION. This means that if a package exists in both
++    # target and host variants, with different version numbers
++    # (unlikely), we'll report the target version number.
++    version_list = o.splitlines()
++    version_list = [ x for x in version_list if x.startswith("HOST_") ] + \
++                   [ x for x in version_list if not x.startswith("HOST_") ]
++    for l in version_list:
 
+This means that we will first process all the HOST_*_VERSION variables,
+filling up the dict with the version numbers for the host packages, and
+then we will process the *_VERSION variables.
 
+With this:
+
+ - If the package specifies only a target version, the target version
+   is saved.
+
+ - If the package specifies only a host version, the host version is
+   saved.
+
+ - If the package specifies both a target version and a host version,
+   the target version always wins. So the scripts doesn't handle
+   differentiating host and target versions for the same package, but
+   at least we are consistent in the fact that we will always report
+   the target version.
+
+How does that sound ?
+
+> This column shows raw sha1 for git packages.
+> Wouldn't be visually better to show only the first, say 20, characters?
+> At the end, it's a matter of option.
+> 
+> If more people have the same opinion you could cut the string after checking
+> with a regexp for 40 or 39 (see sunxi-mali) hexa digits.
+
+I'm just cutting after 20 characters, and adding "..." at the end, and
+it seems good enough to me (compared to doing a regexp to try to guess
+if it's a git hash or not).
+
+Best regards,
+
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180307/abbf7886/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.jpg
-Type: image/jpeg
-Size: 2656 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180307/abbf7886/attachment.jpg>
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
