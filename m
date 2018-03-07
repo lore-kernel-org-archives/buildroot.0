@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Mar 2018 23:35:19 +0100
-Subject: [Buildroot] [PATCH next v2 1/5] support/scripts/pkg-stats-new:
- rewrite in Python
-In-Reply-To: <5a8e23dda8705_24263ff17ca48f783320@ultri3.mail>
-References: <20180221221342.15683-2-thomas.petazzoni@bootlin.com>
- <5a8e23dda8705_24263ff17ca48f783320@ultri3.mail>
-Message-ID: <20180307233519.6eeda226@windsurf>
+Date: Wed, 7 Mar 2018 23:35:43 +0100
+Subject: [Buildroot] [PATCH next v2 2/5] support/scripts/pkg-stats-new:
+ add -n and -p options
+In-Reply-To: <5a90f003e116f_4611fdab2450876@ultri3.mail>
+References: <20180221221342.15683-3-thomas.petazzoni@bootlin.com>
+ <5a90f003e116f_4611fdab2450876@ultri3.mail>
+Message-ID: <20180307233543.7e89512e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +14,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 21 Feb 2018 22:58:53 -0300, Ricardo Martincoski wrote:
-
-> This method is missing patches in subdirs for binutils, gdb, ...
+On Sat, 24 Feb 2018 01:54:27 -0300, Ricardo Martincoski wrote:
+> Hello,
 > 
->     for pkg in packages:
->         pkg.patch_count = 0
->         for subdir, _, _ in os.walk(pkgdir):
->             pkg.patch_count += len(fnmatch.filter(os.listdir(subdir), '*.patch'))
-
-ACK, already fixed for v3.
-
-> > +def get_check_package_warnings(pkgdir):
-> > +    cmd = ["./utils/check-package"]
-> > +    for root, dirs, files in os.walk(pkgdir):
-> > +        for f in files:
-> > +            if f.endswith(".mk") or f.endswith(".hash") or f == "Config.in" or f == "Config.in.host":
-> > +                cmd.append(f)  
+> On Wed, Feb 21, 2018 at 07:13 PM, Thomas Petazzoni wrote:
 > 
-> Here you need:
->                 cmd.append(os.path.join(root, f))
-> otherwise the whole column is filled with zeros.
+> > This commit adds the following options to the pkg-stats-new script:
+> > 
+> >  -n, to specify a number of packages to parse instead of all packages
+> > 
+> >  -p, to specify a list of packages (comma-separated) to parse instead
+> >      of all packages
+> > 
+> > These options are basically only useful when debugging/developping  
+> 
+> typo:                                                    developing
 
-Indeed. Fixed for v3.
+Fixed.
 
 > 
-> > +    o = subprocess.check_output(cmd, stderr=subprocess.STDOUT)  
+> > this script, but they are very useful, because the script is rather
+> > slow to run completely with all 2000+ packages, especially once
+> > upstream versions will be fetched from release-monitoring.org.
+> > 
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
 > 
-> When above line is fixed, this command can return non-zero code that leads to
-> exception CalledProcessError. There are a few ways to solve it:
-> 
-> 1)
->     o = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
-> 2)
->     try:
->         ...
->     except ...
-> 3) change check-package, adding an option to always return code zero.
-> 
-> IMO, option 1 is the better one.
+> With the typo fixed and regardless your decision about the help below:
+> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-Agreed, fixed for v3 as well.
+Thanks!
 
-Thanks for the review!
+> > +    parser.add_argument('-n', dest='npackages', type=int, action='store',
+> > +                        help='Number of packages')
+> > +    parser.add_argument('-p', dest='packages', action='store',
+> > +                        help='List of packages')  
+> 
+> Should the help also mention the option expects a comma-separated list?
+
+Absolutely, fixed in v3!
 
 Thomas
 -- 
