@@ -1,44 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Mar 2018 08:42:35 +0100
-Subject: [Buildroot] [git commit] ntp: fix build without SSP support
-Message-ID: <20180307074337.7122F825AA@busybox.osuosl.org>
+Date: Wed, 07 Mar 2018 09:04:32 +0100
+Subject: [Buildroot] [PATCH 1/1] python-jsonmodels: new package
+In-Reply-To: <20180306200325.9532-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Tue, 6 Mar 2018 22:03:25 +0200")
+References: <20180306200325.9532-1-asafka7@gmail.com>
+Message-ID: <878tb4pazz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5766b6fb34a897092092f7d76d6b4f2bc8c48571
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-In version 4.2.8p11 ntp changed its configure script build hardening
-parameter to '--with-hardenfile'. Update the parameter name to avoid
--fstack-protector-all when the toolchain does not support this option.
+ > Package to create and handle json structures in Python,
+ > with very easy and convenient API.
 
-Fixes:
-http://autobuild.buildroot.net/results/60e/60e8b9864932f2cabc7deb43234abe168bd113c5/
-http://autobuild.buildroot.net/results/592/592db6836817bb078a2f1146d2ce6241bf7997a3/
-http://autobuild.buildroot.net/results/b07/b070fbc66a928888df8d2561dad3632778d55e0d/
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ntp/ntp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 1f66ad996b..b5e2c1e026 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -30,9 +30,9 @@ NTP_CONF_OPTS += --without-crypto --disable-openssl-random
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
--NTP_CONF_OPTS += --with-locfile=linux
-+NTP_CONF_OPTS += --with-hardenfile=linux
- else
--NTP_CONF_OPTS += --with-locfile=default
-+NTP_CONF_OPTS += --with-hardenfile=default
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
+-- 
+Bye, Peter Korsgaard
