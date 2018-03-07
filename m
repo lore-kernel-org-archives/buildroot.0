@@ -1,31 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 07 Mar 2018 22:31:24 +0100
-Subject: [Buildroot] [PATCH 01/19] package/libdrm: bump version to 2.4.91
-References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
- <87sh9bmvpl.fsf@dell.be.48ers.dk>
-Message-ID: <ca26nexqq9.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Mar 2018 22:35:35 +0100
+Subject: [Buildroot] [PATCH 2/2] support/check-bin-arch: exclude kernel
+ modules for merged /usr
+In-Reply-To: <20180307212345.GD2578@scaer> (Yann E. MORIN's message of "Wed, 7
+ Mar 2018 22:23:45 +0100")
+References: <cover.1520454419.git.yann.morin.1998@free.fr>
+ <ce786b49c9bbe6a3e2ebde9ca28b56de86e68b2e.1520454419.git.yann.morin.1998@free.fr>
+ <876067obr5.fsf@dell.be.48ers.dk> <20180307212345.GD2578@scaer>
+Message-ID: <87fu5bmuvs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Am Wed, 07 Mar 2018 22:17:42 +0100 schrieb Peter Korsgaard:
+ > Peter, All,
+ > On 2018-03-07 21:45 +0100, Peter Korsgaard spake thusly:
+ >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+ >> 
+ >> > When using a merged /usr, the kernel module path is really
+ >> > /usr/lib/modules, as /lib is a symlink to usr/lib .
+ >> 
+ >> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ >> 
+ >> Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
 
->  > -sha512
->  > 
-3d32d60c44ffdcb58667d0926e6af8d375332add1f243d8b2d37567aeef4e4b26d786294aeecf46c3dea94fc002fb73756567c457300703acfc21e32ffbd458c
-> 
-> Hmm, did you do anything special when sending this patch? I see that it
-> claims to be sent with git-send-email, but it is word wrapped?
+ > But I forgot to update the manual with this new location! ;-)
 
-no, I sent all patches with git-send-email and here I can not see the 
-wrapping you mentioned: http://lists.busybox.net/pipermail/buildroot/2018-
-March/215314.html. Weird...
+ > Should I still cary your rev-tag in round 2?
 
-Also the known problem with patchwork.ozlabs.org struck again, only two 
-of the 19 patches were processed.
+Sure!
 
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
