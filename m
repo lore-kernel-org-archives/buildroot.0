@@ -1,38 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  7 Mar 2018 22:18:42 +0100
-Subject: [Buildroot] [PATCH 1/1] jsoncpp: do not always build static library
-Message-ID: <20180307211842.27111-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 7 Mar 2018 22:16:00 +0100
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.91
+Message-ID: <20180307212119.D13F28103D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, static libray is always built as BUILD_STATIC_LIBS is ON by
-default so correctly set BUILD_STATIC_LIBS and BUILD_SHARED_LIBS
-depending on BR2_xxx_LIBS variables
+commit: https://git.buildroot.net/buildroot/commit/?id=96a52efb0951dadf6266a701febf4bef2b0ed0b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jsoncpp/jsoncpp.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index 3a2ee087b3..eb471561f0 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -15,4 +15,12 @@ JSONCPP_CONF_OPTS += \
- 	-DJSONCPP_WITH_TESTS=OFF \
- 	-DJSONCPP_WITH_STRICT_ISO=OFF
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index b1784b4c07..bc15ecf79f 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-February/002838.html
+-md5 61dcb4989c728f566e3c15c236585a17  libdrm-2.4.90.tar.bz2
+-sha1 7630ba36c65433251a0494b47086fbd0b32ff7a8  libdrm-2.4.90.tar.bz2
+-sha256 db37ec8f1dbaa2c192ad9903c8d0988b858ae88031e96f169bf76aaf705db68b  libdrm-2.4.90.tar.bz2
+-sha512 3d32d60c44ffdcb58667d0926e6af8d375332add1f243d8b2d37567aeef4e4b26d786294aeecf46c3dea94fc002fb73756567c457300703acfc21e32ffbd458c  libdrm-2.4.90.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002853.html
++md5 23d87cda92700b710a37d9b8edaa9f54  libdrm-2.4.91.tar.bz2
++sha1 44e42ce3cd41666e343ba393c73f6f1ad9fe1e74  libdrm-2.4.91.tar.bz2
++sha256 634a0ed0cc1eff06f48674b1da81aafa661a9f001e7a4f43dde81076886dc800  libdrm-2.4.91.tar.bz2
++sha512 07578c00c121ba37033db7172590e26d1545f81c242bbce2cfb7fb904bde504822c275d6468e5c5d20360d0046ae73d9b058aa0459ba35eb11927141cc998772  libdrm-2.4.91.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 7121f06c9a..8f533d72d7 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+JSONCPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+JSONCPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+JSONCPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.14.1
+-LIBDRM_VERSION = 2.4.90
++LIBDRM_VERSION = 2.4.91
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
