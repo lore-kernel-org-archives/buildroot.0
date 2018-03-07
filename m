@@ -1,104 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Mar 2018 23:41:44 +0100
-Subject: [Buildroot] [PATCH next v2 4/5] support/scripts/pkg-stats-new:
- add latest upstream version information
-In-Reply-To: <5a961c197f405_484fb72dfc147d@ultri3.mail>
-References: <20180221221342.15683-5-thomas.petazzoni@bootlin.com>
- <5a961c197f405_484fb72dfc147d@ultri3.mail>
-Message-ID: <20180307234144.69fc987b@windsurf>
+From: Joshua.Henderson at microchip.com <Joshua.Henderson@microchip.com>
+Date: Wed, 7 Mar 2018 22:45:52 +0000
+Subject: [Buildroot] [PATCH RFC next] package/linux: drop useless
+ intermediate DTS booleans
+In-Reply-To: <20180226174721.5785-1-yann.morin.1998@free.fr>
+References: <20180226174721.5785-1-yann.morin.1998@free.fr>
+Message-ID: <82608B5578637D449D4F6ADA43F8E58715CB57@CHN-SV-EXMX01.mchp-main.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
 
-On Wed, 28 Feb 2018 00:03:53 -0300, Ricardo Martincoski wrote:
-
-> When running the script with a few packages it works well.
-> But when running the script for all packages, for me it often hangs at the end
-> (2 out of 5 tries).
-> It can be related to my setup (python module versions?, internet connection?)
-> But anyway see later in this email an alternative approach.
-
-This could probably be solved by adding timeouts, but I find your
-solution below interesting and useful.
-
-> There is also an undocumented API:
-> http://release-monitoring.org/api/projects/?distro=Buildroot
-> It was implemented here:
-> https://github.com/release-monitoring/anitya/commit/f3d8be75a6643b5d8c55754b74ed4f74f71fe952
-> and will eventually be documented here:
-> https://github.com/release-monitoring/anitya/issues/420
+> -----Original Message-----
+> From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Yann
+> E. MORIN
+> Sent: Monday, February 26, 2018 10:47 AM
+> To: buildroot at buildroot.org
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>; Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com>; Simon van der Veldt
+> <simon.vanderveldt@gmail.com>
+> Subject: [Buildroot] [PATCH RFC next] package/linux: drop useless
+> intermediate DTS booleans
 > 
-> When the Buildroot distro becomes 90% filled we could get something like this:
-> $ wget -O Alpine 'http://release-monitoring.org/api/projects/?distro=Alpine'
-> ... 1MB, 15 seconds ...
-> $ grep -c '"name"' Alpine
-> 1838
-
-Right, but it's going to take a while before we reach this :-)
-
-> Also there is a field 'version' that looks to contain the latest version (or
-> None if there is none). For the majority of projects it is exactly equal to
-> 'versions'[0].
-> See the test below, but I didn't find a documentation to corroborate this.
-
-We can probably talk with the maintainers of release-monitoring.org
-about this.
-
-> As an alternative approach we could first download 2 lists:
-> - all projects for distro (now 10, eventually 2000+)
-> - all projects (now 16000+)
-> It could even be saved to a file by one option and then loaded by other option
-> to speedup the development/maintenance.
-
-Yes, I'll do something like this: download both files to some
-~/.release-monitoring-all-packages.cache and
-~/.release-monitoring-buildroot-packages.cache, and use them if they
-already exist. Then an option such as -r/--reload can force pkg-stats
-to re-download the new version.
-
-> But that would require:
-> The projects in the Buildroot distro to be named exactly as the buildroot
-> package, i.e. samba4, not samba.
-
-Well, that is the whole point of "distros" on release-monitoring.org:
-provide a mapping between the package name in the distribution and the
-package name on release-monitoring.org.
-
-The packages present in the "Buildroot" distro on
-release-monitoring.org were added by me, often to fix a mismatch
-between the Buildroot name and the release-monitoring.org name. samba4
-(Buildroot) vs. samba (release-monitoring.org) is a good example.
-
-> Or of course implementing the search by
-> similarity with regexp.
+> Just use whatever the user specified in the list. An empty list means no DTS
+> was specified.
 > 
-> And be aware: it produces few different guesses (some better, some worst).
-
-I didn't understand this part. Why would the results be different ?
-
-> > +    if pkg.latest_version[0]:
-> > +        latest_version_text += "has <a href=\"https://release-monitoring.org/distro/Buildroot/\">mapping</a>"
-> > +    else:
-> > +        latest_version_text += "has <a href=\"https://release-monitoring.org/distro/Buildroot/\">no mapping</a>"  
+> No need to add legacy option, as the behaviour does not change.
 > 
-> If you don't think it gets too ugly, you could invert the text, putting
-> 'mapping'/'no mapping' as the first cell text. It should make sorting by this
-> column to show all 'mapping' together and 'no mapping' together. I did not
-> tested this.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Simon van der Veldt <simon.vanderveldt@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> ---
+> This is an RFC patch, totally untested, as an attempt to fix the fallout of
+> allowing both in-tree and out-of-tree DTS files at the same time.
+> It's here just to kickstart a discussion, especially about the help texts... ;-)
+> 
+> ---
+>  linux/Config.in | 28 ++++++----------------------  linux/linux.mk  |  4 ----
+>  2 files changed, 6 insertions(+), 26 deletions(-)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in index 80e85b9e8b..15394eb810
+> 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -363,35 +363,19 @@ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
+>  config BR2_LINUX_KERNEL_APPENDED_DTB
+>  	bool
+> 
+> -config BR2_LINUX_KERNEL_USE_INTREE_DTS
+> -	bool "Use a device tree present in the kernel"
+> -	help
+> -	  Use a device tree source distributed with
+> -	  the kernel sources. The dts files are located
+> -	  in the arch/<arch>/boot/dts folder.
+> -
+>  config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+> -	string "Device Tree Source file names"
+> -	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
+> +	string "In-tree Device Tree Source file names"
+>  	help
+> -	  Name of the device tree source file, without
+> +	  Name of in-tree device tree source file, without
+>  	  the trailing .dts. You can provide a list of
+>  	  dts files to build, separated by spaces.
+> 
+> -config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> -	bool "Use a custom device tree file"
+> -	help
+> -	  Use a custom device tree file, i.e, a device
+> -	  tree file that does not belong to the kernel
+> -	  source tree.
+> -
+>  config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+> -	string "Device Tree Source file paths"
+> -	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+> +	string "Out-of-tree Device Tree Source file paths"
+>  	help
+> -	  Path to the device tree source files. You can
+> -	  provide a list of dts paths to copy and build,
+> -	  separated by spaces.
+> +	  Path to to out-of-tree device tree source files.
+> +	  You can provide a list of dts paths to copy and
+> +	  build, separated by spaces.
+> 
+>  endif
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk index ab940e7305..c59050a194
+> 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -118,17 +118,13 @@ endif
+>  # going to be installed in the target filesystem.
+>  LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C
+> $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+> 
+> -ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
+>  KERNEL_DTS_NAME += $(call
+> qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+> -endif
+> 
+> -ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+>  # We keep only the .dts files, so that the user can specify both .dts  # and
+> .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be  # copied
+> to arch/<arch>/boot/dts, but only the .dts files will  # actually be generated
+> as .dtb.
+>  KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call
+> qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+> -endif
+> 
+>  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+> 
+> --
+> 2.14.1
+> 
 
-I understand the point, but I find it a bit ugly that this information
-appears first in this cell. One option is to make this a separate
-column, but we already have a lot of columns. Can we handle that later
-on ?
+This is a fix for many current broken defconfigs on master resulting in:
 
-Thanks!
+    linux/linux.mk:490: *** No kernel device tree source specified, check your BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings.  Stop.
+    Makefile:79: recipe for target '_all' failed
+    make: *** [_all] Error 2
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Tested-by: Joshua Henderson <joshua.henderson@microchip.com>
+
+Josh
