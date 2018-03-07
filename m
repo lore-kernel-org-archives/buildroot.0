@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Mar 2018 21:18:59 +0100
-Subject: [Buildroot] [PATCH v5 1/4] imx-mkimage: new package
-In-Reply-To: <1520448738-5794-2-git-send-email-karl.erik.larsson@gmail.com>
-References: <1520448738-5794-1-git-send-email-karl.erik.larsson@gmail.com>
- <1520448738-5794-2-git-send-email-karl.erik.larsson@gmail.com>
-Message-ID: <20180307211859.60ebace3@windsurf>
+Date: Wed, 7 Mar 2018 21:22:58 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix fbgrab pixel format report
+In-Reply-To: <50026cb3-4323-cda8-f272-cf0c2c112d1a@exertus.fi>
+References: <1520431971-767-1-git-send-email-timo.ketola@exertus.fi>
+ <20180307151526.GB14986@momiji>
+ <50026cb3-4323-cda8-f272-cf0c2c112d1a@exertus.fi>
+Message-ID: <20180307212258.01072ef0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Timo,
 
-On Wed,  7 Mar 2018 19:52:15 +0100, Erik Larsson wrote:
-> This package add support for imx-mkimage for iMX8M.
-> Currently the only hardware it's tested for.
-> 
-> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
-> Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
+On Wed, 7 Mar 2018 19:28:30 +0200, Timo Ketola wrote:
 
-For the record, I already expressed my dislike of this host package
-depending on uboot, linux, and generating images in BINARIES_DIR, and I
-still dislike this approach.
+> BTW, DEVELOPERS states Daniel taking care of fbgrab package but I get
+> bounces from his address.
 
-So I am not in favor of applying this patch as it is proposed today.
+Don't hesitate to send a patch removing Daniel. And perhaps adding
+yourself for the fbgrab package :-)
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
