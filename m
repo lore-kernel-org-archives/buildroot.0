@@ -1,42 +1,40 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed,  7 Mar 2018 22:13:45 +0100
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.18
-Message-ID: <20180307211345.5338-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Mar 2018 22:17:42 +0100
+Subject: [Buildroot] [PATCH 01/19] package/libdrm: bump version to 2.4.91
+In-Reply-To: <20180307205844.3240-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 7 Mar 2018 21:58:26 +0100")
+References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
+Message-ID: <87sh9bmvpl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash for license file.
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/mpd.hash | 3 ++-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/libdrm/libdrm.hash | 10 +++++-----
+ >  package/libdrm/libdrm.mk   |  2 +-
+ >  2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 735ea700ff..d6e66216cf 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  c69c4f67e665380ea3bbde6cff8958edc85f7cd40e7918ae5ce0a2184ca9eb40  mpd-0.20.15.tar.xz
-+sha256  6a582dc2ae90b94ff3853f9ffd7d80b2c2b5fe2e2c35cb1da0b36f3f3dfad434  mpd-0.20.18.tar.xz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 482859518a..26e82af0a8 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.20
--MPD_VERSION = $(MPD_VERSION_MAJOR).15
-+MPD_VERSION = $(MPD_VERSION_MAJOR).18
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+ > diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+ > index b1784b4c07..bc15ecf79f 100644
+ > --- a/package/libdrm/libdrm.hash
+ > +++ b/package/libdrm/libdrm.hash
+ > @@ -1,5 +1,5 @@
+ > -# From https://lists.x.org/archives/xorg-announce/2018-February/002838.html
+ > -md5 61dcb4989c728f566e3c15c236585a17  libdrm-2.4.90.tar.bz2
+ > -sha1 7630ba36c65433251a0494b47086fbd0b32ff7a8  libdrm-2.4.90.tar.bz2
+ > -sha256 db37ec8f1dbaa2c192ad9903c8d0988b858ae88031e96f169bf76aaf705db68b  libdrm-2.4.90.tar.bz2
+ > -sha512
+ > 3d32d60c44ffdcb58667d0926e6af8d375332add1f243d8b2d37567aeef4e4b26d786294aeecf46c3dea94fc002fb73756567c457300703acfc21e32ffbd458c
+
+Hmm, did you do anything special when sending this patch? I see that it
+claims to be sent with git-send-email, but it is word wrapped?
+
+Anyway, committed after fixing up the word wrapping - Thanks.
+
 -- 
-2.16.2
+Bye, Peter Korsgaard
