@@ -1,49 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Mar 2018 22:18:03 +0100
-Subject: [Buildroot] [git commit] package/x11r7/libxcb: bump version to 1.13
-Message-ID: <20180307212119.E3E458103D@busybox.osuosl.org>
+Date: Wed, 07 Mar 2018 22:21:47 +0100
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.18
+In-Reply-To: <20180307211345.5338-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Wed, 7 Mar 2018 22:13:45 +0100")
+References: <20180307211345.5338-1-joerg.krause@embedded.rocks>
+Message-ID: <87k1unmvis.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3b065a0e1e0d2ee4607b92618a736a0e19e02ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Added all upstream hashes and license hash.
+ > Also add hash for license file.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/libxcb/libxcb.hash | 9 +++++++--
- package/x11r7/libxcb/libxcb.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+Committed, thanks.
 
-diff --git a/package/x11r7/libxcb/libxcb.hash b/package/x11r7/libxcb/libxcb.hash
-index 6df7d01792..d2b5da6b52 100644
---- a/package/x11r7/libxcb/libxcb.hash
-+++ b/package/x11r7/libxcb/libxcb.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2016-May/002694.html
--sha256	4adfb1b7c67e99bc9c2ccb110b2f175686576d2f792c8a71b9c8b19014057b5b	libxcb-1.12.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002851.html
-+md5 c2b6cf928afa16b0047c974e7aaa783f  libxcb-1.13.tar.bz2
-+sha1 212ad5f1f80def80536d78e3d20354a0370e7fe9  libxcb-1.13.tar.bz2
-+sha256 188c8752193c50ff2dbe89db4554c63df2e26a2e47b0fa415a70918b5b851daa  libxcb-1.13.tar.bz2
-+sha512 d99bbe386a65f60fcc0cc2935e4a365bc0577b5e90433e18778a665a5aee8ebc8e9e8cb0aedac0ac4a276147c0507e759a716874ea4f80792b2fc18eefbc128c  libxcb-1.13.tar.bz2
-+# Locally computed
-+sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index 32edbb9e90..7e467aca3f 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXCB_VERSION = 1.12
-+LIBXCB_VERSION = 1.13
- LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.bz2
- LIBXCB_SITE = http://xcb.freedesktop.org/dist
- LIBXCB_LICENSE = MIT
+-- 
+Bye, Peter Korsgaard
