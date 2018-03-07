@@ -1,53 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Mar 2018 21:58:43 +0100
-Subject: [Buildroot] [PATCH 18/19] package/x11r7/xdriver_xf86-video-ati:
- bump version to 18.0.0
+Date: Wed,  7 Mar 2018 21:58:39 +0100
+Subject: [Buildroot] [PATCH 14/19] package/x11r7/xapp_viewres: bump version
+ to 1.0.5
 In-Reply-To: <20180307205844.3240-1-bernd.kuhls@t-online.de>
 References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
-Message-ID: <20180307205844.3240-18-bernd.kuhls@t-online.de>
+Message-ID: <20180307205844.3240-14-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Added all upstream hashes and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 12 +++++++-----
- .../x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   |  2 +-
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_viewres/xapp_viewres.hash | 9 +++++++--
+ package/x11r7/xapp_viewres/xapp_viewres.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-index 117c5749ff..54c553e6ce 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-@@ -1,5 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-September/002806.html
--md5 0ff538f78ae82ccce384dadf7a705863  xf86-video-ati-7.10.0.tar.bz2
--sha1 38e535ecc8445c1b9464ac34db959337929887f7  xf86-video-ati-7.10.0.tar.bz2
--sha256 ee51d642e3105cb5424f02622dc2966b87b42d498bb34104a70fcf6d4a8f4e79  xf86-video-ati-7.10.0.tar.bz2
--sha512 1f2f4af1d299af62644693e6fbc47a5078c9bc5e7887a1ac217121ef2fd29d8c9f50a8d9be9ddb0887d0b49141bb33484f82c1313a472ad6867266b53b4a11ad  xf86-video-ati-7.10.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002854.html
-+md5 4d41bfe860dc719654cad3f82d00f6f3  xf86-video-ati-18.0.0.tar.bz2
-+sha1 da1b89a747264d976d824ddc7b5b4f803d3cf765  xf86-video-ati-18.0.0.tar.bz2
-+sha256 2c0368fb620d1fdfa2b435e672d65444c2fb9df21bbaf979298484b89ef83981  xf86-video-ati-18.0.0.tar.bz2
-+sha512 a9a634091f208099885039d42433cee061e03968417c0d535691833abcc9162d8d0a46f99bac902f0885beb14dcc9a011d104b535ffe492562fd5bb740ad4721  xf86-video-ati-18.0.0.tar.bz2
+diff --git a/package/x11r7/xapp_viewres/xapp_viewres.hash b/package/x11r7/xapp_viewres/xapp_viewres.hash
+index c45b1b25f7..539bb431ee 100644
+--- a/package/x11r7/xapp_viewres/xapp_viewres.hash
++++ b/package/x11r7/xapp_viewres/xapp_viewres.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-January/002122.html
+-sha256	d9c11b44908d91926df8b33428ae04c86c85e4f8380e9b5e68326a651c872e59	viewres-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002849.html
++md5 08def461f135832136624855763b20fa  viewres-1.0.5.tar.bz2
++sha1 d03832456dde6c2a91086e6563d52fd936425948  viewres-1.0.5.tar.bz2
++sha256 5ed818e84c39bcf26dadc885c9860432b85843caad3621e26d99edea660ae3d7  viewres-1.0.5.tar.bz2
++sha512 fe573e9b5ae679b65eee95733cbea20c86c92089c3a2dadfe977bc9c54d1f58c5e5f4663e51a1cf206543a43592b3a3c266da1769279f08be85c66b0aa5b0f7f  viewres-1.0.5.tar.bz2
 +# Locally computed
-+sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index f8b8f70cb6..0e9d412b75 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++sha256 aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
+diff --git a/package/x11r7/xapp_viewres/xapp_viewres.mk b/package/x11r7/xapp_viewres/xapp_viewres.mk
+index 3e1fd8ddca..95205b4352 100644
+--- a/package/x11r7/xapp_viewres/xapp_viewres.mk
++++ b/package/x11r7/xapp_viewres/xapp_viewres.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_ATI_VERSION = 7.10.0
-+XDRIVER_XF86_VIDEO_ATI_VERSION = 18.0.0
- XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
+-XAPP_VIEWRES_VERSION = 1.0.4
++XAPP_VIEWRES_VERSION = 1.0.5
+ XAPP_VIEWRES_SOURCE = viewres-$(XAPP_VIEWRES_VERSION).tar.bz2
+ XAPP_VIEWRES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_VIEWRES_LICENSE = MIT
 -- 
 2.11.0
