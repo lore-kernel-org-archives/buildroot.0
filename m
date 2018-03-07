@@ -1,46 +1,30 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed,  7 Mar 2018 14:02:37 -0800
-Subject: [Buildroot] [PATCH 1/1] python-schedule: bump to version 0.5.0
-Message-ID: <20180307220237.20012-1-joseph.kogut@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Mar 2018 23:03:04 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] jsoncpp: do not always build static library
+In-Reply-To: <20180307214703.15105-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 7 Mar 2018 22:47:03 +0100")
+References: <20180307214703.15105-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y3j3lf1j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- package/python-schedule/python-schedule.hash | 4 ++--
- package/python-schedule/python-schedule.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/python-schedule/python-schedule.hash b/package/python-schedule/python-schedule.hash
-index 2b2f0489e8..92475f973c 100644
---- a/package/python-schedule/python-schedule.hash
-+++ b/package/python-schedule/python-schedule.hash
-@@ -1,5 +1,5 @@
- # md5 from https://pypi.python.org/pypi/schedule/json, sha256 locally computed
--md5	ab135a73458547d2b836beddd168528b  schedule-0.4.3.tar.gz
--sha256	31a160546a17838842199c792ba267575cf41339ca730aaf060567b798f4f46e  schedule-0.4.3.tar.gz
-+md5	53fb2e550b2539264eeceb5d85e82759  schedule-0.5.0.tar.gz
-+sha256	1003a07c2dce12828c25a03a611a7371cedfa956e5f1b4abc32bcc94eb5a335b  schedule-0.5.0.tar.gz
- # License file, locally calculated
- sha256	30a8352c318ce1b645acde0299697342d4380ed2637d7ca18a8ad25661e3b41b  LICENSE.txt
-diff --git a/package/python-schedule/python-schedule.mk b/package/python-schedule/python-schedule.mk
-index 26a3f5bce1..16612a0881 100644
---- a/package/python-schedule/python-schedule.mk
-+++ b/package/python-schedule/python-schedule.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ > Currently, static libray is always built as BUILD_STATIC_LIBS is ON by
+ > default so correctly set BUILD_STATIC_LIBS depending on BR2_SHARED_LIBS
+ > variable
 
--PYTHON_SCHEDULE_VERSION = 0.4.3
-+PYTHON_SCHEDULE_VERSION = 0.5.0
- PYTHON_SCHEDULE_SOURCE = schedule-$(PYTHON_SCHEDULE_VERSION).tar.gz
--PYTHON_SCHEDULE_SITE = https://pypi.python.org/packages/ee/68/ba6b0bb69b2be13b32983971bca6c5adf22df6321945232e1419bc34a82f
-+PYTHON_SCHEDULE_SITE = https://pypi.python.org/packages/fd/31/599a3387c2e98c270d5ac21a1575f3eb60a3712c192a0ca97a494a207739
- PYTHON_SCHEDULE_SETUP_TYPE = setuptools
- PYTHON_SCHEDULE_LICENSE = MIT
- PYTHON_SCHEDULE_LICENSE_FILES = LICENSE.txt
---
-2.16.2
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Only set BUILD_STATIC_LIBS and not BUILD_SHARED_LIBS as it is already
+ > set by the build system
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
