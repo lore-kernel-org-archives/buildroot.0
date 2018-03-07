@@ -1,171 +1,159 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed,  7 Mar 2018 23:19:33 +0100
-Subject: [Buildroot] [PATCH v3 1/7] package/pkg-golang: new package
- infrastructure
+Date: Wed,  7 Mar 2018 23:19:34 +0100
+Subject: [Buildroot] [PATCH v3 2/7] docs/manual: adding documentation for
+ the golang infrastructure
 In-Reply-To: <1520461179-31679-1-git-send-email-angelo@amarulasolutions.com>
 References: <1520461179-31679-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1520461179-31679-2-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1520461179-31679-3-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a new infrastructure for golang based packages.
+This patch adds the documentation for the golang infrastructure.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
-Changes:
-v2 -> v3:
-* If GOBIN variable is already present in environment it
-  will used by the go command for compiling and fails
-  with the error 
-  "cannot install cross-compiled binaries when GOBIN is set"
-v1 -> v2:
-* Renamed GOBIN to GO_BIN for clarity
+ docs/manual/adding-packages-golang.txt | 116 +++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt        |   2 +
+ 2 files changed, 118 insertions(+)
+ create mode 100644 docs/manual/adding-packages-golang.txt
 
- package/Makefile.in   |   1 +
- package/pkg-golang.mk | 123 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 124 insertions(+)
- create mode 100644 package/pkg-golang.mk
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index e387ce6..379af5d 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -441,3 +441,4 @@ include package/pkg-kconfig.mk
- include package/pkg-rebar.mk
- include package/pkg-kernel-module.mk
- include package/pkg-waf.mk
-+include package/pkg-golang.mk
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
 new file mode 100644
-index 0000000..370db07
+index 0000000..5d6de3a
 --- /dev/null
-+++ b/package/pkg-golang.mk
-@@ -0,0 +1,123 @@
-+################################################################################
-+# Golang package infrastructure
-+#
-+# This file implements an infrastructure that eases development of
-+# package .mk files for Go packages. It should be used for all
-+# packages that are written in go.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+#
-+# In terms of implementation, this golang infrastructure requires
-+# the .mk file to only specify metadata information about the
-+# package: name, version, download URL, etc.
-+#
-+# We still allow the package .mk file to override what the different
-+# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
-+# already defined, it is used as the list of commands to perform to
-+# build the package, instead of the default golang behavior. The
-+# package can also define some post operation hooks.
-+#
-+################################################################################
++++ b/docs/manual/adding-packages-golang.txt
+@@ -0,0 +1,116 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+unexport GOBIN
++=== Infrastructure for Go packages
 +
-+GO_BIN = $(HOST_DIR)/bin/go
++This infrastructure applies to Go packages that use the standard
++build system and use bundled dependencies.
 +
-+################################################################################
-+# inner-golang-package -- defines how the configuration, compilation and
-+# installation of a Go package should be done, implements a few hooks to
-+# tune the build process for Go specificities and calls the generic package
-+# infrastructure to generate the necessary make targets
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including a HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
-+################################################################################
++[[golang-package-tutorial]]
 +
-+define inner-golang-package
++==== +golang-package+ tutorial
 +
-+$(2)_GOPATH ?= _gopath
-+$(2)_GO_ENV ?= $$(HOST_GO_TARGET_ENV) \
-+		GOPATH="$$(@D)/$$($(2)_GOPATH)" \
-+		CGO_ENABLED=$$(HOST_GO_CGO_ENABLED)
++First, let's see how to write a +.mk+ file for a go package,
++with an example :
 +
-+ifeq ($(BR2_STATIC_LIBS),y)
-+	$(2)_GO_LDFLAGS += -extldflags '-static'
-+endif
++------------------------
++01: ################################################################################
++02: #
++03: # go-foo
++04: #
++05: ################################################################################
++06:
++07: GO_FOO_VERSION = 1.0
++08: GO_FOO_SOURCE = go-foo-$(GO_FOO_VERSION).tar.xz
++09: GO_FOO_SITE = http://www.foosoftware.org/download
++10: GO_FOO_LICENSE = BSD-3-Clause
++11: GO_FOO_LICENSE_FILES = LICENSE
++12:
++13: $(eval $(golang-package))
++------------------------
 +
-+ifdef $(2)_GO_LDFLAGS
-+	$(2)_BUILD_OPTS += -ldflags "$$($(2)_GO_LDFLAGS)"
-+endif
++On line 7, we declare the version of the package.
 +
-+ifdef $(2)_GO_TAGS
-+	$(2)_BUILD_OPTS += -tags "$$($(2)_GO_TAGS)"
-+endif
++On line 8 and 9, we declare the name of the tarball (xz-ed tarball
++recommended) and the location of the tarball on the Web. Buildroot
++will automatically download the tarball from this location.
 +
-+# Target packages need the Go compiler on the host.
-+$(2)_DEPENDENCIES += host-go
++On line 10 and 11, we give licensing details about the package (its
++license on line 10, and the file containing the license text on line
++11).
 +
-+#
-+# The go build/install command installs the binaries inside
-+# gopath/bin/linux_GOARCH/ when cross compilation is enabled.
-+# We set this variable here to be used by packages if needed.
-+#
-+$(2)_BINDIR = $$($(2)_GOPATH)/bin/linux_$$(GO_GOARCH)
++Finally, on line 13, we invoke the +golang-package+ macro that
++generates all the Makefile rules that actually allow the package to be
++built.
 +
-+#
-+# Source files in Go should be uncompressed in a precise folder in the
-+# hierarchy of GOPATH. It usually resolves around domain/vendor/software.
-+#
-+$(2)_GO_SRC_PATH ?= $$(call domain,$($(2)_SITE))/$$(firstword $$(subst /, ,$$(call notdomain,$($(2)_SITE))))
-+$(2)_SRC_PATH  = $$(@D)/$$($(2)_GOPATH)/src/$$($(2)_GO_SRC_PATH)/$(1)
++[[golang-package-reference]]
 +
-+#
-+# Configure step. Only define it if not already defined by the package
-+# .mk file.
-+#
-+ifndef $(2)_CONFIGURE_CMDS
-+define $(2)_CONFIGURE_CMDS
-+	mkdir -p $$(@D)/$$($(2)_GOPATH)/bin
-+	mkdir -p $$(@D)/$$($(2)_GOPATH)/src/$$($(2)_GO_SRC_PATH)
-+	ln -sf $$(@D) $$($(2)_SRC_PATH)
-+endef
-+endif
++==== +golang-package+ reference
 +
-+#
-+# Build step. Only define it if not already defined by the package .mk file.
-+# We use the install command instead of build command here because the
-+# install command also moves the package binaries in gopath/bin/linux_GOARCH/.
-+# Using the install command also leverages the go build infrastructure
-+# for building and installing multiple binaries.
-+#
-+ifndef $(2)_BUILD_CMDS
-+define $(2)_BUILD_CMDS
-+	cd $$($(2)_SRC_PATH) && $$($(2)_GO_ENV) $$(GO_BIN) install -v $$($(2)_BUILD_OPTS)
-+endef
-+endif
++As a policy packages can freely choose their name (existing example in 
++Buildroot is +flannel+).
 +
-+#
-+# Target installation step. Only define it if not already defined by the
-+# package .mk file.
-+#
-+ifndef $(2)_INSTALL_TARGET_CMDS
-+define $(2)_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $$(@D)/$$($(2)_BINDIR)/$(1) $(TARGET_DIR)/usr/bin/
-+endef
-+endif
++In their +Config.in+ file, they should depend on 
+++BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS+ and
+++BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ cause host-go will compile when Buildroot will add the
++dependency automatically.
 +
-+# Call the generic package infrastructure to generate the necessary make
-+# targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
++The main macro of the Go package infrastructure is
+++golang-package+. It is similar to the +generic-package+ macro.
 +
-+endef # inner-golang-package
++Just like the generic infrastructure, the Go infrastructure works
++by defining a number of variables before calling the +golang-package+.
 +
-+################################################################################
-+# golang-package -- the target generator macro for Go packages
-+################################################################################
++All the package metadata information variables that exist in the
++xref:generic-package-reference[generic package infrastructure] also
++exist in the Go infrastructure: +GO_FOO_VERSION+,
+++GO_FOO_SOURCE+, +GO_FOO_PATCH+, +GO_FOO_SITE+,
+++GO_FOO_SUBDIR+, +GO_FOO_DEPENDENCIES+, +GO_FOO_LICENSE+,
+++GO_FOO_LICENSE_FILES+, +GO_FOO_INSTALL_STAGING+, etc.
 +
-+golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++Note that:
++
++ * It is not necessary to add +go+ or +host-go+ in the
++   +GO_FOO_DEPENDENCIES+ variable of a package, since these basic
++   dependencies are automatically added as needed by the Go
++   package infrastructure.
++
++A few additional variables, specific to the Go infrastructure, can
++optionally be defined, depending on the package's needs. Many of them
++are only useful in very specific cases, typical packages will
++therefore only use a few of them, or none.
++
++* If your package need a custom GOPATH to be compiled in, you can use the
++  +GO_FOO_GOPATH+.
++
++* +GO_FOO_GO_SRC_PATH+ is the path where your source will be compiled
++  relatively to the GOPATH.
++  The golang package infrastructure tries to guess the correct 
++  sub folder to compile in but if guessing is not correct for you or your
++  package behaves differently, you can use this variable to
++  redefine the path.
++
++* +GOO_FOO_GO_LDFLAGS+ and +GO_FOO_GO_TAGS+ can be used to pass
++  respectively the LDFLAGS or the TAGS to the build command.
++  +GOO_FOO_GO_LDFLAGS+ and +GO_FOO_GO_TAGS+ will be combined into
++  the proper command line options to be passed to the compiler.
++
++* If you need to customize the install location for you binaries, you
++  can use +GOO_FOO_BINDIR+ to know where the binaries are.
++
++* If you need to customize the building tags you can use GOO_FOO_GO_TAGS
++
++With the Go infrastructure, all the steps required to build and
++install the packages are already defined, and they generally work well
++for most Go-based packages. However, when required, it is still
++possible to customize what is done in any particular step:
++
++* By adding a post-operation hook (after extract, patch, configure,
++  build or install). See xref:hooks[] for details.
++
++* By overriding one of the steps. For example, even if the Go
++  infrastructure is used, if the package +.mk+ file defines its own
++  +GO_FOO_BUILD_CMDS+ variable, it will be used instead of the
++  default Go one. However, using this method should be restricted
++  to very specific cases. Do not use it in the general case.
++
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index e8d40da..c642146 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -38,6 +38,8 @@ include::adding-packages-meson.txt[]
+ 
+ include::adding-packages-cargo.txt[]
+ 
++include::adding-packages-golang.txt[]
++
+ include::adding-packages-kernel-module.txt[]
+ 
+ include::adding-packages-asciidoc.txt[]
 -- 
 2.7.4
