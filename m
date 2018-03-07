@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Mar 2018 21:58:30 +0100
-Subject: [Buildroot] [PATCH 05/19] package/x11r7/xkeyboard-config: bump
- version to 2.23.1
+Date: Wed,  7 Mar 2018 21:58:33 +0100
+Subject: [Buildroot] [PATCH 08/19] package/x11r7/xapp_editres: bump version
+ to 1.0.7
 In-Reply-To: <20180307205844.3240-1-bernd.kuhls@t-online.de>
 References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
-Message-ID: <20180307205844.3240-5-bernd.kuhls@t-online.de>
+Message-ID: <20180307205844.3240-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +15,36 @@ Added all upstream hashes and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.hash | 11 +++++++----
- package/x11r7/xkeyboard-config/xkeyboard-config.mk   |  2 +-
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_editres/xapp_editres.hash | 9 +++++++--
+ package/x11r7/xapp_editres/xapp_editres.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index a0f781d881..56ea0e5251 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-@@ -1,4 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-October/002811.html
--md5 eb61fb3fd419e817df572b0c8d94a883  xkeyboard-config-2.22.tar.bz2
--sha1 1e252098685afc3e802c98f3fd70d683654a13ab  xkeyboard-config-2.22.tar.bz2
--sha256 deaec9989fbc443358b43864437b7b6d39caff07890a4a8055105ce9fcaa59bd  xkeyboard-config-2.22.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-February/002833.html
-+md5 875cbd09ab8394277fd16070326abbae  xkeyboard-config-2.23.1.tar.bz2
-+sha1 184c9ce35f4fa44188acbf549f80d36407697ac3  xkeyboard-config-2.23.1.tar.bz2
-+sha256 2a4bbc05fea22151b7a7c8ac2655d549aa9b0486bedc7f5a68c72716343b02f3  xkeyboard-config-2.23.1.tar.bz2
-+sha512 d651bb89c265e58abe8bba4af6683364a8023cb73af7d00f401f33960e44fa94a7d8a8fdd2483d6703d1c261ca72ae5f2b53f543cfb70b2f571cfe9dcb80c3ba  xkeyboard-config-2.23.1.tar.bz2
+diff --git a/package/x11r7/xapp_editres/xapp_editres.hash b/package/x11r7/xapp_editres/xapp_editres.hash
+index 74fc98d63c..1536795515 100644
+--- a/package/x11r7/xapp_editres/xapp_editres.hash
++++ b/package/x11r7/xapp_editres/xapp_editres.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-January/002120.html
+-sha256	3b66d1240bde853872bbb341c4b8fb029094d0a5d21347a58831f15b162c4df0	editres-1.0.6.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002846.html
++md5 526cf79edc0c5e379aefb21539243f96  editres-1.0.7.tar.bz2
++sha1 389e953ebb5080564a6780cb34b72bafae7f5540  editres-1.0.7.tar.bz2
++sha256 089ad34628e55a779b97e369f55fb12caefc96d684b508d9022eb9e12b775c11  editres-1.0.7.tar.bz2
++sha512 b9c928b556116bf50cf4b6ea779bdc9fedf29f5db3e6a8cc75c122578c92e1cc530a81b226ec24aad183b8ebc2de570f200314b0d9ce7883b6e3306007365b32  editres-1.0.7.tar.bz2
 +# Locally computed
-+sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index ae88db785f..d9998aa489 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++sha256 b1049cf96db2c00428b8313541ab333ec4e06f102955f3edd44f88ec43b0acd6  COPYING
+diff --git a/package/x11r7/xapp_editres/xapp_editres.mk b/package/x11r7/xapp_editres/xapp_editres.mk
+index 6cc4805f5f..1a947d478e 100644
+--- a/package/x11r7/xapp_editres/xapp_editres.mk
++++ b/package/x11r7/xapp_editres/xapp_editres.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.22
-+XKEYBOARD_CONFIG_VERSION = 2.23.1
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
+-XAPP_EDITRES_VERSION = 1.0.6
++XAPP_EDITRES_VERSION = 1.0.7
+ XAPP_EDITRES_SOURCE = editres-$(XAPP_EDITRES_VERSION).tar.bz2
+ XAPP_EDITRES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_EDITRES_LICENSE = MIT
 -- 
 2.11.0
