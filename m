@@ -1,53 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Mar 2018 21:58:42 +0100
-Subject: [Buildroot] [PATCH 17/19] package/x11r7/xdriver_xf86-video-amdgpu:
- bump version to 18.0.0
+Date: Wed,  7 Mar 2018 21:58:34 +0100
+Subject: [Buildroot] [PATCH 09/19] package/x11r7/xapp_iceauth: bump version
+ to 1.0.8
 In-Reply-To: <20180307205844.3240-1-bernd.kuhls@t-online.de>
 References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
-Message-ID: <20180307205844.3240-17-bernd.kuhls@t-online.de>
+Message-ID: <20180307205844.3240-9-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Added all upstream hashes and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash | 12 +++++++-----
- .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk   |  2 +-
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_iceauth/xapp_iceauth.hash | 9 +++++++--
+ package/x11r7/xapp_iceauth/xapp_iceauth.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-index b5910f3c0f..b03a010f84 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -1,5 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-September/002805.html
--md5 15a54f0a7870a57e3f611c9114924137  xf86-video-amdgpu-1.4.0.tar.bz2
--sha1 d9971cc6177095219a6687328aef25a72df3dd9d  xf86-video-amdgpu-1.4.0.tar.bz2
--sha256 f8cac4bf3dd795b93cc337e5c0c62618026f597890a10d996f09c73eb88ba67c  xf86-video-amdgpu-1.4.0.tar.bz2
--sha512 cae6417a45f6b981e007e080486083f1c38eaca58c6e331b04bbf46c86f23394742a722ae0d798d8dcad66879e99d90e57f04ae9ccb198f3ed26ec745878ccc2  xf86-video-amdgpu-1.4.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002844.html
-+md5 24b2c9dc27a6083289bc86023eb3b1fe  xf86-video-amdgpu-18.0.0.tar.bz2
-+sha1 360d619de1629913d356c60f1e155553e0e55dbb  xf86-video-amdgpu-18.0.0.tar.bz2
-+sha256 e909b9707d2562dfc36d8075a8cbddbc93901aaa8f2522d9a429c3fc5ad66d94  xf86-video-amdgpu-18.0.0.tar.bz2
-+sha512 5f9fa173c1b2f90878a9cc961e49abb0ad56db16fd80ec9fe6788fcc90eaa1906f3bff74437cb9afa95b9212ff946e1558736739f27e959a3848e77e4dabbd17  xf86-video-amdgpu-18.0.0.tar.bz2
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.hash b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
+index 90c5f70bfa..f1ea73a7af 100644
+--- a/package/x11r7/xapp_iceauth/xapp_iceauth.hash
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-January/002519.html
+-sha256	1216af2dee99b318fcf8bf9a259915273bcb37a7f1e7859af4f15d0ebf6f3f0a	iceauth-1.0.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002850.html
++md5 3b9b79fa0f9928161f4bad94273de7ae  iceauth-1.0.8.tar.bz2
++sha1 2ce23c40a17d98badeb8ce70d26e81a5ac0e178c  iceauth-1.0.8.tar.bz2
++sha256 e6ee213a217265cc76050e4293ea70b98c32dce6505c6421227efbda62ab60c6  iceauth-1.0.8.tar.bz2
++sha512 9d4520adf951b16a3e784349dbb70d5d8176b74b956f8adc63abf55d049745c113b03ccfa60a281fc39b487db3742302dc6287c9985ce83a0157bf4674df2af1  iceauth-1.0.8.tar.bz2
 +# Locally computed
-+sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index 50e5310e46..2c3986252c 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
++sha256 fdd9ba8ccb92af2f31f542e7b7a18c27257e6cdce147d231bc9ba3654ad84976  COPYING
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.mk b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
+index d30ff6f786..0e0e001705 100644
+--- a/package/x11r7/xapp_iceauth/xapp_iceauth.mk
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.4.0
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.0.0
- XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
+-XAPP_ICEAUTH_VERSION = 1.0.7
++XAPP_ICEAUTH_VERSION = 1.0.8
+ XAPP_ICEAUTH_SOURCE = iceauth-$(XAPP_ICEAUTH_VERSION).tar.bz2
+ XAPP_ICEAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_ICEAUTH_LICENSE = MIT
 -- 
 2.11.0
