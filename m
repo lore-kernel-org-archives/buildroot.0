@@ -1,32 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Mar 2018 21:03:55 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add few items to my list
-Message-ID: <20180307200924.5C0428016A@busybox.osuosl.org>
+Date: Wed, 7 Mar 2018 21:07:06 +0100
+Subject: [Buildroot] [git commit] libupnpp: fix license
+Message-ID: <20180307200924.7E3ED825BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e56fbeaee9b4abb428a8f982be6d0c6869f52d1
+commit: https://git.buildroot.net/buildroot/commit/?id=c0451e4bb1ebf01ed025751d3c68548b11c832cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Add license hash and fix LICENSE: since November 2016 (release 0.15.2),
+libupnpp is licensed under LGPL-2.1+ and not GPL-2.0+
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libupnpp/libupnpp.hash | 3 +++
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f3590f8b52..1d09102eab 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -464,6 +464,8 @@ F:	arch/Config.in.powerpc
- F:	package/kvm-unit-tests
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index f19e0b5441..fe67987c4e 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,2 +1,5 @@
+ # Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.16.0.tar.gz.sha256
+ sha256  b34b179e69c46993cf360da9e85db646b03c15ab2927b19eb70e27bf3c359017  libupnpp-0.16.0.tar.gz
++
++# Hash for license file:
++sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 4755b706d6..98cb515fe2 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -6,7 +6,7 @@
  
- N:	Dagg Stompler <daggs@gmx.com>
-+F:	board/hardkernel/odroidc2
-+F:	configs/odroidc2_defconfig
- F:	package/libamcodec/
- F:	package/odroid-mali/
- F:	package/odroid-scripts/
+ LIBUPNPP_VERSION = 0.16.0
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+-LIBUPNPP_LICENSE = GPL-2.0+
++LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
+ LIBUPNPP_INSTALL_STAGING = YES
+ LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
