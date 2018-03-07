@@ -1,25 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  7 Mar 2018 20:34:39 +0100
-Subject: [Buildroot] [PATCH 1/1] libminiupnpc: add license hash
-Message-ID: <20180307193439.6914-1-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 7 Mar 2018 16:35:39 -0300
+Subject: [Buildroot] [PATCH v5 4/4] configs/freescale_imx8mqevk: new
+ defconfig
+In-Reply-To: <1520448738-5794-5-git-send-email-karl.erik.larsson@gmail.com>
+References: <1520448738-5794-1-git-send-email-karl.erik.larsson@gmail.com>
+ <1520448738-5794-5-git-send-email-karl.erik.larsson@gmail.com>
+Message-ID: <CAOMZO5CWCyZbC=BhS=6w+tSk+bt8VWkWvOEmzKAw2tRgfg4S+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libminiupnpc/libminiupnpc.hash | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, Mar 7, 2018 at 3:52 PM, Erik Larsson
+<karl.erik.larsson@gmail.com> wrote:
 
-diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
-index 985d69d45f..c83b38aa60 100644
---- a/package/libminiupnpc/libminiupnpc.hash
-+++ b/package/libminiupnpc/libminiupnpc.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 d434ceb8986efbe199c5ca53f90ed53eab290b1e6d0530b717eb6fa49d61f93b  miniupnpc-2.0.tar.gz
-+sha256 4025f2214fa46ad40c156605b83d66e8faf45823e67eb3337af3869716e6d7dd  LICENSE
--- 
-2.14.1
+> +Build
+> +=====
+> +
+> +First, configure Buildroot for the i.MX51 EVK board:
+
+Minor nit:
+
+s/i.MX51 EVK board/i.MX8MQ EVK board
+
+(Maybe it can be fixed while applying if no other issues)
+
+The series looks good:
+
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+
+Thanks
