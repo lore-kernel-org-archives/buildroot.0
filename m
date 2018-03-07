@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Mar 2018 22:22:59 +0100
-Subject: [Buildroot] [PATCH 1/2] spport/check-bin-arch: accept arbitrary
- ignore paths
-In-Reply-To: <87a7vjobry.fsf@dell.be.48ers.dk>
+Date: Wed, 7 Mar 2018 22:23:45 +0100
+Subject: [Buildroot] [PATCH 2/2] support/check-bin-arch: exclude kernel
+ modules for merged /usr
+In-Reply-To: <876067obr5.fsf@dell.be.48ers.dk>
 References: <cover.1520454419.git.yann.morin.1998@free.fr>
- <8a08e5fbfab7e4d021565077544576ad495c8097.1520454419.git.yann.morin.1998@free.fr>
- <87a7vjobry.fsf@dell.be.48ers.dk>
-Message-ID: <20180307212259.GC2578@scaer>
+ <ce786b49c9bbe6a3e2ebde9ca28b56de86e68b2e.1520454419.git.yann.morin.1998@free.fr>
+ <876067obr5.fsf@dell.be.48ers.dk>
+Message-ID: <20180307212345.GD2578@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,45 +17,18 @@ Peter, All,
 
 On 2018-03-07 21:45 +0100, Peter Korsgaard spake thusly:
 > >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-[--SNIP--]
->  > +* +LIBFOO_BIN_ARCH_EXCLUDE+ is a space-separated list of path (relative
-> s/path/paths/
-> > +  to the target directory) to ignore when checking that the package
->  > +  installs correctly cross-compiled binaries. You seldom need to set this
->  > +  variable, unless the package installs installs binary blobs in the
-> s/installs installs/installs/
-
-Typoes fixed.
-
->  > +  non-default locations: `/lib/firmware`, `/usr/lib/firmware`,
->  > +  `/lib/modules`, and `/usr/share`.
 > 
-> This sounds a bit confusing to me, E.G. like these are non default
-> locations.
+>  > When using a merged /usr, the kernel module path is really
+>  > /usr/lib/modules, as /lib is a symlink to usr/lib .
 > 
-> Perhaps we should instead write:
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > 
-> variable, unless the package installs binary blobs outside the default
-> locations, which are `/lib/firmware`, `/usr/lib/firmware`,
-> `/lib/modules` and '/usr/share`, as these locations are automatically
-> excluded.
+> Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
 
-Indeed, it was not clear (except maybe just in my twisted head). I've
-rephrased slightly differently from your suggestion, but if you don;t
-like it, we can go with yours instead.
+But I forgot to update the manual with this new location! ;-)
 
->  >  if test -z "${package}" -o -z "${pkg_list}" -o -z "${readelf}" -o -z "${arch_name}" ; then
->  > -	echo "Usage: $0 -p <pkg> -l <pkg-file-list> -r <readelf> -a <arch name>"
->  > +	echo "Usage: $0 -p <pkg> -l <pkg-file-list> -r <readelf> -a <arch name> [-i PATTERN ...]"
-> 
-> We don't really document this as a pattern (even if it gets passed to ~=
-> in the end), so perhaps it would be clearer to say [ -i PATH ]?
-
-ACK.
-
-> Otherwise it looks good to me, thanks!
-
-Thanks! :-)
+Should I still cary your rev-tag in round 2?
 
 Regards,
 Yann E. MORIN.
