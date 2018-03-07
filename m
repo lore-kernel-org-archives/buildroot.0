@@ -1,45 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Mar 2018 22:32:23 +0100
-Subject: [Buildroot] [PATCH 1/1] jsoncpp: do not always build static
- library
-In-Reply-To: <20180307211842.27111-1-fontaine.fabrice@gmail.com>
-References: <20180307211842.27111-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180307223223.5841e792@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 07 Mar 2018 22:31:24 +0100
+Subject: [Buildroot] [PATCH 01/19] package/libdrm: bump version to 2.4.91
+References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
+ <87sh9bmvpl.fsf@dell.be.48ers.dk>
+Message-ID: <ca26nexqq9.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
-On Wed,  7 Mar 2018 22:18:42 +0100, Fabrice Fontaine wrote:
+Am Wed, 07 Mar 2018 22:17:42 +0100 schrieb Peter Korsgaard:
 
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +JSONCPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF
-> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-> +JSONCPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=ON
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +JSONCPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON
-> +endif
+>  > -sha512
+>  > 
+3d32d60c44ffdcb58667d0926e6af8d375332add1f243d8b2d37567aeef4e4b26d786294aeecf46c3dea94fc002fb73756567c457300703acfc21e32ffbd458c
+> 
+> Hmm, did you do anything special when sending this patch? I see that it
+> claims to be sent with git-send-email, but it is word wrapped?
 
-BUILD_SHARED_LIBS=ON/OFF is already passed by package/pkg-cmake.mk. I
-don't think we need to replicate it here.
+no, I sent all patches with git-send-email and here I can not see the 
+wrapping you mentioned: http://lists.busybox.net/pipermail/buildroot/2018-
+March/215314.html. Weird...
 
-So, just:
+Also the known problem with patchwork.ozlabs.org struck again, only two 
+of the 19 patches were processed.
 
-ifeq ($(BR2_SHARED_LIBS),y)
-JSONCPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
-else
-JSONCPP_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
-endif
-
-is enough, no?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Regards, Bernd
