@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Mar 2018 21:58:32 +0100
-Subject: [Buildroot] [PATCH 07/19] package/x11r7/xapp_appres: bump version
- to 1.0.5
+Date: Wed,  7 Mar 2018 21:58:30 +0100
+Subject: [Buildroot] [PATCH 05/19] package/x11r7/xkeyboard-config: bump
+ version to 2.23.1
 In-Reply-To: <20180307205844.3240-1-bernd.kuhls@t-online.de>
 References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
-Message-ID: <20180307205844.3240-7-bernd.kuhls@t-online.de>
+Message-ID: <20180307205844.3240-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,38 @@ Added all upstream hashes and license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_appres/xapp_appres.hash | 9 +++++++--
- package/x11r7/xapp_appres/xapp_appres.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 11 +++++++----
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_appres/xapp_appres.hash b/package/x11r7/xapp_appres/xapp_appres.hash
-index a1cbf0b4b9..8750e2d14c 100644
---- a/package/x11r7/xapp_appres/xapp_appres.hash
-+++ b/package/x11r7/xapp_appres/xapp_appres.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002211.html
--sha256	9f614e9427cd9641a4a801ed5055700afa410674c0b7aa186b86078f11b83e8d	appres-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002847.html
-+md5 f544e701043249d2bb3deed48314bc55  appres-1.0.5.tar.bz2
-+sha1 5e5dbffd0a125732bb8bb8a202e04555a9604089  appres-1.0.5.tar.bz2
-+sha256 ffad893712c81943b919e3cbfe46fc65259cc0d9eb96d5e658670e3fbb265928  appres-1.0.5.tar.bz2
-+sha512 70825563cd80f0f433c48ab2fdae888072939c1b22fb22340b70b9444c97916275ed92c9e5bf9a06bb76c32a5371b89ff7c0211a9a47a227c88311078c2c4137  appres-1.0.5.tar.bz2
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index a0f781d881..56ea0e5251 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,4 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-October/002811.html
+-md5 eb61fb3fd419e817df572b0c8d94a883  xkeyboard-config-2.22.tar.bz2
+-sha1 1e252098685afc3e802c98f3fd70d683654a13ab  xkeyboard-config-2.22.tar.bz2
+-sha256 deaec9989fbc443358b43864437b7b6d39caff07890a4a8055105ce9fcaa59bd  xkeyboard-config-2.22.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-February/002833.html
++md5 875cbd09ab8394277fd16070326abbae  xkeyboard-config-2.23.1.tar.bz2
++sha1 184c9ce35f4fa44188acbf549f80d36407697ac3  xkeyboard-config-2.23.1.tar.bz2
++sha256 2a4bbc05fea22151b7a7c8ac2655d549aa9b0486bedc7f5a68c72716343b02f3  xkeyboard-config-2.23.1.tar.bz2
++sha512 d651bb89c265e58abe8bba4af6683364a8023cb73af7d00f401f33960e44fa94a7d8a8fdd2483d6703d1c261ca72ae5f2b53f543cfb70b2f571cfe9dcb80c3ba  xkeyboard-config-2.23.1.tar.bz2
 +# Locally computed
-+sha256 5969302729a9621fd526a7f9942a51a29b858e0b682ffd28eeda5fc4dfaddf55  COPYING
-diff --git a/package/x11r7/xapp_appres/xapp_appres.mk b/package/x11r7/xapp_appres/xapp_appres.mk
-index b84d7426c6..4159332bd3 100644
---- a/package/x11r7/xapp_appres/xapp_appres.mk
-+++ b/package/x11r7/xapp_appres/xapp_appres.mk
++sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index ae88db785f..d9998aa489 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_APPRES_VERSION = 1.0.4
-+XAPP_APPRES_VERSION = 1.0.5
- XAPP_APPRES_SOURCE = appres-$(XAPP_APPRES_VERSION).tar.bz2
- XAPP_APPRES_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_APPRES_LICENSE = MIT
+-XKEYBOARD_CONFIG_VERSION = 2.22
++XKEYBOARD_CONFIG_VERSION = 2.23.1
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
 -- 
 2.11.0
