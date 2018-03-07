@@ -1,44 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Mar 2018 21:46:42 +0100
-Subject: [Buildroot] [git commit] jsoncpp: bump to version 1.8.4
-Message-ID: <20180307204900.52B488262E@busybox.osuosl.org>
+From: Erik Larsson <karl.erik.larsson@gmail.com>
+Date: Wed, 7 Mar 2018 21:50:38 +0100
+Subject: [Buildroot] [PATCH v5 1/4] imx-mkimage: new package
+In-Reply-To: <20180307211859.60ebace3@windsurf>
+References: <1520448738-5794-1-git-send-email-karl.erik.larsson@gmail.com>
+ <1520448738-5794-2-git-send-email-karl.erik.larsson@gmail.com>
+ <20180307211859.60ebace3@windsurf>
+Message-ID: <CAPP7BN3H6ct7pg7nVgSV1ZnZtficqxD3wDKKZ_cvfZCmCuK0Jg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a479530b4d9428349aa325716ed0d5de6ddf01c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+2018-03-07 21:18 GMT+01:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+> Hello,
+>
+> On Wed,  7 Mar 2018 19:52:15 +0100, Erik Larsson wrote:
+>> This package add support for imx-mkimage for iMX8M.
+>> Currently the only hardware it's tested for.
+>>
+>> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+>> Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
+>
+> For the record, I already expressed my dislike of this host package
+> depending on uboot, linux, and generating images in BINARIES_DIR, and I
+> still dislike this approach.
+>
+> So I am not in favor of applying this patch as it is proposed today.
 
-Add license hash
+Yes, I know. But I didn't get any response on my reply. But maybe a
+simple misunderstanding from my side, sorry I'm a newbie here.
+But as I wrote in my replay the first version did contain a solution
+were imx-mkimage package just built mkimage_imx8 tool and installed
+it, together with mkimage_fit_atf.sh, into host binaries. See
+http://lists.busybox.net/pipermail/buildroot/2018-February/213976.html.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jsoncpp/jsoncpp.hash | 3 ++-
- package/jsoncpp/jsoncpp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+The first version also contained a post-script,
+http://lists.busybox.net/pipermail/buildroot/2018-February/213978.html,
+which uses mkimage_imx8 and mkimage_fit_atf.sh together with some
+other tools. I just realized that I need to double check that PATH
+variable so corrty objcopy is used.
 
-diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
-index 09ceb58553..3391d9ecc3 100644
---- a/package/jsoncpp/jsoncpp.hash
-+++ b/package/jsoncpp/jsoncpp.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256  3671ba6051e0f30849942cc66d1798fdf0362d089343a83f704c09ee7156604f  jsoncpp-1.8.3.tar.gz
-+sha256  c49deac9e0933bcb7044f08516861a2d560988540b23de2ac1ad443b219afdb6  jsoncpp-1.8.4.tar.gz
-+sha256  95039d77a20e75b428207740d9a8f97b2dce3c89da4b21f1ad862b5997160e0a  LICENSE
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index 6dfaecefdd..3a2ee087b3 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSONCPP_VERSION = 1.8.3
-+JSONCPP_VERSION = 1.8.4
- JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
- JSONCPP_LICENSE = Public Domain or MIT
- JSONCPP_LICENSE_FILES = LICENSE
+Please advice me in which solution is the best.
+
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
+
+Best regards,
+Erik
