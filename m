@@ -1,50 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Mar 2018 21:58:35 +0100
-Subject: [Buildroot] [PATCH 10/19] package/x11r7/xapp_listres: bump version
- to 1.0.4
+Date: Wed,  7 Mar 2018 21:58:42 +0100
+Subject: [Buildroot] [PATCH 17/19] package/x11r7/xdriver_xf86-video-amdgpu:
+ bump version to 18.0.0
 In-Reply-To: <20180307205844.3240-1-bernd.kuhls@t-online.de>
 References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
-Message-ID: <20180307205844.3240-10-bernd.kuhls@t-online.de>
+Message-ID: <20180307205844.3240-17-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all upstream hashes and license hash.
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_listres/xapp_listres.hash | 9 +++++++--
- package/x11r7/xapp_listres/xapp_listres.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash | 12 +++++++-----
+ .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xapp_listres/xapp_listres.hash b/package/x11r7/xapp_listres/xapp_listres.hash
-index ffc9f7eecb..1e1c11953a 100644
---- a/package/x11r7/xapp_listres/xapp_listres.hash
-+++ b/package/x11r7/xapp_listres/xapp_listres.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2012-February/001838.html
--sha256	c3d71e9a01650e3fd470189a749cd0202ef03d9e399350a7a7443d7595ed478e	listres-1.0.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002848.html
-+md5 24e05349f2881aaa58cbe160e49223ac  listres-1.0.4.tar.bz2
-+sha1 903857c7a9ec3d8edc8a88101aef33cd27796649  listres-1.0.4.tar.bz2
-+sha256 6a1229f478796e141d6658762f432ebbe1f6083b27550847d52239b3f7ec2b10  listres-1.0.4.tar.bz2
-+sha512 925bceab6ff96fcf91f58ba2f858905d6e2eff7074ba29cfc02def7c19fb493545837884f1070dc004422451f749cd459000c01e8c9bb51a7cce7f7ab4067b8a  listres-1.0.4.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+index b5910f3c0f..b03a010f84 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+@@ -1,5 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-September/002805.html
+-md5 15a54f0a7870a57e3f611c9114924137  xf86-video-amdgpu-1.4.0.tar.bz2
+-sha1 d9971cc6177095219a6687328aef25a72df3dd9d  xf86-video-amdgpu-1.4.0.tar.bz2
+-sha256 f8cac4bf3dd795b93cc337e5c0c62618026f597890a10d996f09c73eb88ba67c  xf86-video-amdgpu-1.4.0.tar.bz2
+-sha512 cae6417a45f6b981e007e080486083f1c38eaca58c6e331b04bbf46c86f23394742a722ae0d798d8dcad66879e99d90e57f04ae9ccb198f3ed26ec745878ccc2  xf86-video-amdgpu-1.4.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002844.html
++md5 24b2c9dc27a6083289bc86023eb3b1fe  xf86-video-amdgpu-18.0.0.tar.bz2
++sha1 360d619de1629913d356c60f1e155553e0e55dbb  xf86-video-amdgpu-18.0.0.tar.bz2
++sha256 e909b9707d2562dfc36d8075a8cbddbc93901aaa8f2522d9a429c3fc5ad66d94  xf86-video-amdgpu-18.0.0.tar.bz2
++sha512 5f9fa173c1b2f90878a9cc961e49abb0ad56db16fd80ec9fe6788fcc90eaa1906f3bff74437cb9afa95b9212ff946e1558736739f27e959a3848e77e4dabbd17  xf86-video-amdgpu-18.0.0.tar.bz2
 +# Locally computed
-+sha256 aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
-diff --git a/package/x11r7/xapp_listres/xapp_listres.mk b/package/x11r7/xapp_listres/xapp_listres.mk
-index 88cdd4f033..b4ac3e1de8 100644
---- a/package/x11r7/xapp_listres/xapp_listres.mk
-+++ b/package/x11r7/xapp_listres/xapp_listres.mk
++sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+index 50e5310e46..2c3986252c 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_LISTRES_VERSION = 1.0.3
-+XAPP_LISTRES_VERSION = 1.0.4
- XAPP_LISTRES_SOURCE = listres-$(XAPP_LISTRES_VERSION).tar.bz2
- XAPP_LISTRES_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_LISTRES_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.4.0
++XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.0.0
+ XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
 -- 
 2.11.0
