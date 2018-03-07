@@ -1,46 +1,35 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Wed,  7 Mar 2018 21:15:58 +0100
-Subject: [Buildroot] [PATCH next v8 2/2] squid: Add optional dependency on
- libkrb5
-In-Reply-To: <1520453758-27666-1-git-send-email-nerv@dawncrow.de>
-References: <1520453758-27666-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <1520453758-27666-2-git-send-email-nerv@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 7 Mar 2018 21:18:59 +0100
+Subject: [Buildroot] [PATCH v5 1/4] imx-mkimage: new package
+In-Reply-To: <1520448738-5794-2-git-send-email-karl.erik.larsson@gmail.com>
+References: <1520448738-5794-1-git-send-email-karl.erik.larsson@gmail.com>
+ <1520448738-5794-2-git-send-email-karl.erik.larsson@gmail.com>
+Message-ID: <20180307211859.60ebace3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/squid/squid.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Hello,
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 8ade55e..2d21ad8 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -29,7 +29,6 @@ SQUID_CONF_OPTS = \
- 	--enable-removal-policies="lru,heap" \
- 	--with-filedescriptors=1024 \
- 	--disable-ident-lookups \
--	--without-mit-krb5 \
- 	--enable-auth-basic="fake getpwnam" \
- 	--enable-auth-digest="file" \
- 	--enable-auth-negotiate="wrapper" \
-@@ -50,6 +49,13 @@ else
- SQUID_CONF_ENV += squid_cv_gnu_atomics=no
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBKRB5),y)
-+SQUID_CONF_OPTS += --with-mit-krb5
-+SQUID_DEPENDENCIES += libkrb5
-+else
-+SQUID_CONF_OPTS += --without-mit-krb5
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SQUID_CONF_OPTS += --with-openssl
- SQUID_DEPENDENCIES += openssl
+On Wed,  7 Mar 2018 19:52:15 +0100, Erik Larsson wrote:
+> This package add support for imx-mkimage for iMX8M.
+> Currently the only hardware it's tested for.
+> 
+> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+> Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
+
+For the record, I already expressed my dislike of this host package
+depending on uboot, linux, and generating images in BINARIES_DIR, and I
+still dislike this approach.
+
+So I am not in favor of applying this patch as it is proposed today.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
