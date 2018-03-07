@@ -1,30 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Mar 2018 23:03:04 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] jsoncpp: do not always build static library
-In-Reply-To: <20180307214703.15105-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 7 Mar 2018 22:47:03 +0100")
-References: <20180307214703.15105-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y3j3lf1j.fsf@dell.be.48ers.dk>
+Date: Wed, 07 Mar 2018 23:04:56 +0100
+Subject: [Buildroot] [PATCH 1/2 v2] spport/check-bin-arch: accept
+ arbitrary ignore paths
+In-Reply-To: <161df6edb84bab2b76a3b9ae0527e479674b1be8.1520459473.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Wed, 7 Mar 2018 22:51:23 +0100")
+References: <cover.1520459473.git.yann.morin.1998@free.fr>
+ <161df6edb84bab2b76a3b9ae0527e479674b1be8.1520459473.git.yann.morin.1998@free.fr>
+Message-ID: <87tvtrleyf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Currently, static libray is always built as BUILD_STATIC_LIBS is ON by
- > default so correctly set BUILD_STATIC_LIBS depending on BR2_SHARED_LIBS
- > variable
+ > Some packages (mostly, out-of-tree) may want to install binary blobs for
+ > another architecture,  outside the locations we currently exclude, like
+ > in /opt or whatever...
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Add support in check-bin-arch to accept any arbitrary location, that
+ > individual package can each request to excude from the check, when they
+ > are installed.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
  > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Only set BUILD_STATIC_LIBS and not BUILD_SHARED_LIBS as it is already
- > set by the build system
+ > Changes v1 -> v2:
+ >   - typoes and rephrasing  (Peter)
+ >   - use intermediate variable to cleanup the ignore option  (Thomas)
 
-Committed, thanks.
+I've added 'per-package' to $SUBJECT to make it clear that this is
+per-package and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
