@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  7 Mar 2018 23:56:00 +0100
-Subject: [Buildroot] [PATCH 1/1] rapidjson: add license hash
-Message-ID: <20180307225600.6600-1-fontaine.fabrice@gmail.com>
+Date: Wed,  7 Mar 2018 23:56:15 +0100
+Subject: [Buildroot] [PATCH 1/1] libcoap: add licenses hash
+Message-ID: <20180307225615.6650-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +10,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rapidjson/rapidjson.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/libcoap/libcoap.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/rapidjson/rapidjson.hash b/package/rapidjson/rapidjson.hash
-index bde8319cd8..a4b02cffb9 100644
---- a/package/rapidjson/rapidjson.hash
-+++ b/package/rapidjson/rapidjson.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index 708ca1b6e7..deb94ecd6d 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
+@@ -1,2 +1,5 @@
  # Locally calculated
- sha256 bf7ced29704a1e696fbccf2a2b4ea068e7774fa37f6d7dd4039d0787f8bed98e  rapidjson-v1.1.0.tar.gz
-+sha256 a140e5d46fe734a1c78f1a3c3ef207871dd75648be71fdda8e309b23ab8b1f32  license.txt
+ sha256 f7e26dc232c177336474a14487771037a8fb32e311f5ccd076a00dc04b6d7b7a libcoap-v4.1.2.tar.gz
++sha256 28b61fbf3c5477611d7f6ead97d15348934496d27dca815b34d45e622730e72e COPYING
++sha256 d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388 LICENSE.GPL
++sha256 9d5aeec17bdf82369bbe6e89efb07b7b35abefa044ea1d25cb2feeb70df1c208 LICENSE.BSD
 -- 
 2.14.1
