@@ -1,46 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Mar 2018 21:58:26 +0100
-Subject: [Buildroot] [PATCH 01/19] package/libdrm: bump version to 2.4.91
-Message-ID: <20180307205844.3240-1-bernd.kuhls@t-online.de>
+Date: Wed,  7 Mar 2018 21:58:35 +0100
+Subject: [Buildroot] [PATCH 10/19] package/x11r7/xapp_listres: bump version
+ to 1.0.4
+In-Reply-To: <20180307205844.3240-1-bernd.kuhls@t-online.de>
+References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
+Message-ID: <20180307205844.3240-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added all upstream hashes and license hash.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_listres/xapp_listres.hash | 9 +++++++--
+ package/x11r7/xapp_listres/xapp_listres.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index b1784b4c07..bc15ecf79f 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-February/002838.html
--md5 61dcb4989c728f566e3c15c236585a17  libdrm-2.4.90.tar.bz2
--sha1 7630ba36c65433251a0494b47086fbd0b32ff7a8  libdrm-2.4.90.tar.bz2
--sha256 db37ec8f1dbaa2c192ad9903c8d0988b858ae88031e96f169bf76aaf705db68b  libdrm-2.4.90.tar.bz2
--sha512 3d32d60c44ffdcb58667d0926e6af8d375332add1f243d8b2d37567aeef4e4b26d786294aeecf46c3dea94fc002fb73756567c457300703acfc21e32ffbd458c  libdrm-2.4.90.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002853.html
-+md5 23d87cda92700b710a37d9b8edaa9f54  libdrm-2.4.91.tar.bz2
-+sha1 44e42ce3cd41666e343ba393c73f6f1ad9fe1e74  libdrm-2.4.91.tar.bz2
-+sha256 634a0ed0cc1eff06f48674b1da81aafa661a9f001e7a4f43dde81076886dc800  libdrm-2.4.91.tar.bz2
-+sha512 07578c00c121ba37033db7172590e26d1545f81c242bbce2cfb7fb904bde504822c275d6468e5c5d20360d0046ae73d9b058aa0459ba35eb11927141cc998772  libdrm-2.4.91.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 7121f06c9a..8f533d72d7 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+diff --git a/package/x11r7/xapp_listres/xapp_listres.hash b/package/x11r7/xapp_listres/xapp_listres.hash
+index ffc9f7eecb..1e1c11953a 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.hash
++++ b/package/x11r7/xapp_listres/xapp_listres.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2012-February/001838.html
+-sha256	c3d71e9a01650e3fd470189a749cd0202ef03d9e399350a7a7443d7595ed478e	listres-1.0.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002848.html
++md5 24e05349f2881aaa58cbe160e49223ac  listres-1.0.4.tar.bz2
++sha1 903857c7a9ec3d8edc8a88101aef33cd27796649  listres-1.0.4.tar.bz2
++sha256 6a1229f478796e141d6658762f432ebbe1f6083b27550847d52239b3f7ec2b10  listres-1.0.4.tar.bz2
++sha512 925bceab6ff96fcf91f58ba2f858905d6e2eff7074ba29cfc02def7c19fb493545837884f1070dc004422451f749cd459000c01e8c9bb51a7cce7f7ab4067b8a  listres-1.0.4.tar.bz2
++# Locally computed
++sha256 aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
+diff --git a/package/x11r7/xapp_listres/xapp_listres.mk b/package/x11r7/xapp_listres/xapp_listres.mk
+index 88cdd4f033..b4ac3e1de8 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.mk
++++ b/package/x11r7/xapp_listres/xapp_listres.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.90
-+LIBDRM_VERSION = 2.4.91
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-XAPP_LISTRES_VERSION = 1.0.3
++XAPP_LISTRES_VERSION = 1.0.4
+ XAPP_LISTRES_SOURCE = listres-$(XAPP_LISTRES_VERSION).tar.bz2
+ XAPP_LISTRES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_LISTRES_LICENSE = MIT
 -- 
 2.11.0
