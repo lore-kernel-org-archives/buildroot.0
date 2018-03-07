@@ -1,31 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 7 Mar 2018 21:22:58 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix fbgrab pixel format report
-In-Reply-To: <50026cb3-4323-cda8-f272-cf0c2c112d1a@exertus.fi>
-References: <1520431971-767-1-git-send-email-timo.ketola@exertus.fi>
- <20180307151526.GB14986@momiji>
- <50026cb3-4323-cda8-f272-cf0c2c112d1a@exertus.fi>
-Message-ID: <20180307212258.01072ef0@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Mar 2018 21:23:47 +0100
+Subject: [Buildroot] [PATCH 1/1] upmpdcli: add license hash
+In-Reply-To: <20180307200059.5707-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 7 Mar 2018 21:00:59 +0100")
+References: <20180307200059.5707-1-fontaine.fabrice@gmail.com>
+Message-ID: <87efkvocrw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Timo,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Wed, 7 Mar 2018 19:28:30 +0200, Timo Ketola wrote:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-> BTW, DEVELOPERS states Daniel taking care of fbgrab package but I get
-> bounces from his address.
+Committed, thanks.
 
-Don't hesitate to send a patch removing Daniel. And perhaps adding
-yourself for the fbgrab package :-)
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Bye, Peter Korsgaard
