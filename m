@@ -1,36 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Mar 2018 09:20:35 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-03-07
-In-Reply-To: <87lgf3knkk.fsf@dell.be.48ers.dk>
-References: <20180308070030.7B02A20993@mail.bootlin.com>
- <87lgf3knkk.fsf@dell.be.48ers.dk>
-Message-ID: <20180308092035.5f07ea4b@windsurf>
+From: Timo Ketola <timo.ketola@exertus.fi>
+Date: Thu,  8 Mar 2018 10:28:37 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Add myself as a maintainer of
+ fbgrab
+Message-ID: <1520497717-16711-1-git-send-email-timo.ketola@exertus.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Daniel's address is bouncing and my touch on fbgrab is now the most
+recent one.
 
-On Thu, 08 Mar 2018 08:56:27 +0100, Peter Korsgaard wrote:
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+---
+ DEVELOPERS | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
->  > Classification of failures by reason
->  > ------------------------------------  
-> 
->  > zyre-1d949e4bf79b694ea883c3... | 14  
-> 
-> Started happening when czmq got bumped, so probably an incompatibility
-> with the new version.
-> 
-> I see upstream released a v2.0.0 back in January 2017, so bumping the
-> version might fix it. Any takers?
-
-I'll take a look.
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b0aab54..dba0e58 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -476,7 +476,6 @@ F:	package/log4cpp/
+ 
+ N:	Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+ F:	package/e2tools/
+-F:	package/fbgrab/
+ 
+ N:	Daniel Price <daniel.price@gmail.com>
+ F:	package/nodejs/
+@@ -1819,6 +1818,9 @@ F:	toolchain/
+ N:	Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+ F:	package/aer-inject/
+ 
++N:	Timo Ketola <timo.ketola@exertus.fi>
++F:	package/fbgrab/
++
+ N:	Tzu-Jung Lee <roylee17@gmail.com>
+ F:	package/dropwatch/
+ F:	package/tstools/
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.7.4
