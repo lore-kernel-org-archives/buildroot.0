@@ -1,25 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  8 Mar 2018 11:51:18 +0100
-Subject: [Buildroot] [PATCH 1/1] ympd: add license hash
-Message-ID: <20180308105118.14747-1-fontaine.fabrice@gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 8 Mar 2018 11:23:25 +0000
+Subject: [Buildroot] [PATCH 2/2] Add NodeJS requires options in case of
+ custom Linux kernel configuration
+In-Reply-To: <VI1PR0201MB178934D161D5ED1D14E7A17CE5DF0@VI1PR0201MB1789.eurprd02.prod.outlook.com>
+References: <VI1PR0201MB178934D161D5ED1D14E7A17CE5DF0@VI1PR0201MB1789.eurprd02.prod.outlook.com>
+Message-ID: <CAFGQKxfLUheQ77Bso4tcB=KwOR1+2usCWgWJg0C4mDfzqgSvvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ympd/ympd.hash | 1 +
- 1 file changed, 1 insertion(+)
+Hi,
 
-diff --git a/package/ympd/ympd.hash b/package/ympd/ympd.hash
-index 7483083b4d..1c4ad8dc8f 100644
---- a/package/ympd/ympd.hash
-+++ b/package/ympd/ympd.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  092c26c51166d1d1f025cd06742981783dea7e42bfe4f73f10c4418fc003de94  ympd-v1.2.3.tar.gz
-+sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE
--- 
-2.14.1
+On 8 March 2018 at 08:54, Stanislas Leduc <stanislas.leduc@balinor.net> wrote:
+> Signed-off-by: Stanislas Leduc <stanislas.leduc@balinor.net>
+> ---
+>  package/nodejs/Config.in | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+> index d2846f8d57..8d6a8145a9 100644
+> --- a/package/nodejs/Config.in
+> +++ b/package/nodejs/Config.in
+> @@ -36,6 +36,13 @@ config BR2_PACKAGE_NODEJS
+>
+>           http://nodejs.org/
+>
+> +         NodeJS requires the following options to be enabled in your
+> +          Linux kernel configuration:
+> +         CONFIG_SYSVIPC, CONFIG_POSIX_MQUEUE and CONFIG_EPOLL
+
+It will be libuv that has the dependencies not nodejs.  nodejs uses
+libuv to handle epoll, IPC etc
+
+Thanks
+
+Martin
+
+> +
+> +         Without these options, NodeJS and npm will exit with
+> +          a Segmentation fault"
+> +
+>  if BR2_PACKAGE_NODEJS
+>
+>  config BR2_PACKAGE_NODEJS_NPM
+> --
+> 2.14.3
+>
