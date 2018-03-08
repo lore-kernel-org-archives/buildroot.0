@@ -1,54 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Mar 2018 09:06:33 +0100
-Subject: [Buildroot] [git commit] fbgrab: add patch fixing pixel format
- report
-Message-ID: <20180308080759.7016F7F9A4@busybox.osuosl.org>
+Date: Thu, 8 Mar 2018 09:05:51 +0100
+Subject: [Buildroot] [git commit] gtest: add license hash
+Message-ID: <20180308080759.51DAD827C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5be0b3440e81aa364fb337b5e981f3396bdf8e02
+commit: https://git.buildroot.net/buildroot/commit/?id=8eee2fbf09e56f7a3db86302a8d693391ef04630
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When verbosive, fbgrab reports pixel format. Green and blue offset and
-msb_right fields are accidentally swapped there. This commit adds a patch
-which straightens them up.
-
-Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
-
-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbgrab/0100-fix-pixfmt-report.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/gtest/gtest.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
-new file mode 100644
-index 0000000000..18bcf96df2
---- /dev/null
-+++ b/package/fbgrab/0100-fix-pixfmt-report.patch
-@@ -0,0 +1,22 @@
-+Fix pixel format report
-+
-+When fbgrab tells about the framebuffer pixel format, blue and green
-+are accidentally swapped in 'length' and 'msb_right' columns. Let's
-+order everything as RGB.
-+
-+Signed-off-by timo.ketola at exertus.fi
-+
-+diff -u a/fbgrab.c b/fbgrab.c
-+--- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
-++++ b/fbgrab.c	2018-03-07 11:43:26.128043877 +0200
-+@@ -169,8 +169,8 @@
-+         fprintf(stderr, "bits_per_pixel: %i\n", fb_varinfo_p->bits_per_pixel);
-+         fprintf(stderr, "grayscale: %s\n", fb_varinfo_p->grayscale ? "true" : "false");
-+         fprintf(stderr, "red:   offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->red.offset, fb_varinfo_p->red.length, fb_varinfo_p->red.msb_right);
-+-        fprintf(stderr, "blue:  offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->blue.offset, fb_varinfo_p->green.length, fb_varinfo_p->green.msb_right);
-+-        fprintf(stderr, "green: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->green.offset, fb_varinfo_p->blue.length, fb_varinfo_p->blue.msb_right);
-++        fprintf(stderr, "green: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->green.offset, fb_varinfo_p->green.length, fb_varinfo_p->green.msb_right);
-++        fprintf(stderr, "blue:  offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->blue.offset, fb_varinfo_p->blue.length, fb_varinfo_p->blue.msb_right);
-+         fprintf(stderr, "alpha: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->transp.offset, fb_varinfo_p->transp.length, fb_varinfo_p->transp.msb_right);
-+         fprintf(stderr, "pixel format: %s\n", fb_varinfo_p->nonstd == 0 ? "standard" : "non-standard");
-+     }
+diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
+index 474008d2cd..0a8d8ba096 100644
+--- a/package/gtest/gtest.hash
++++ b/package/gtest/gtest.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256	58a6f4277ca2bc8565222b3bbd58a177609e9c488e8a72649359ba51450db7d8	gtest-release-1.8.0.tar.gz
++sha256	9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138	googletest/LICENSE
