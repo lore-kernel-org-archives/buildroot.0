@@ -1,47 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  8 Mar 2018 09:29:05 +0100
-Subject: [Buildroot] [PATCH] zyre: bump to v2.0.0
-Message-ID: <20180308082905.11592-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 8 Mar 2018 09:30:34 +0100
+Subject: [Buildroot] [PATCH v2 1/1] fbgrab: add patch fixing pixel
+ format report
+In-Reply-To: <1520493725-1146-1-git-send-email-timo.ketola@exertus.fi>
+References: <1520493725-1146-1-git-send-email-timo.ketola@exertus.fi>
+Message-ID: <20180308093034.002c8987@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v2.0.0 has been released after commit
-1d949e4bf79b694ea883c325f5813e87ddc2a687, which we currently use, and
-it has the advantage of fixing the build with recent versions of czmq.
+Hello,
 
-Fixes:
+On Thu,  8 Mar 2018 09:22:05 +0200, Timo Ketola wrote:
+> When verbosive, fbgrab reports pixel format. Green and blue offset and
+> msb_right fields are accidentally swapped there. This commit adds a patch
+> which straightens them up.
+> 
+> Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
 
-  http://autobuild.buildroot.net/results/f5804474033d5ff781af2bf195de2b81362f7be2/
+We normally put the Upstream-Status in the patch itself, i.e
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/zyre/zyre.hash | 2 +-
- package/zyre/zyre.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+> ---
+> No changes in the payload. Only added Upstream-status (Adrian) and
+> adjusted subject line (Thomas).
+> ---
+>  package/fbgrab/0100-fix-pixfmt-report.patch | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>  create mode 100644 package/fbgrab/0100-fix-pixfmt-report.patch
+> 
+> diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
+> new file mode 100644
+> index 0000000..18bcf96
+> --- /dev/null
+> +++ b/package/fbgrab/0100-fix-pixfmt-report.patch
+> @@ -0,0 +1,22 @@
+> +Fix pixel format report
+> +
+> +When fbgrab tells about the framebuffer pixel format, blue and green
+> +are accidentally swapped in 'length' and 'msb_right' columns. Let's
+> +order everything as RGB.
 
-diff --git a/package/zyre/zyre.hash b/package/zyre/zyre.hash
-index 5b38b8039d..8cc860232a 100644
---- a/package/zyre/zyre.hash
-+++ b/package/zyre/zyre.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 0ce8328a2b9fe46aafc4627fc4ebd4d815f4d9f7d9708088459306c87bf5fb4b zyre-1d949e4bf79b694ea883c325f5813e87ddc2a687.tar.gz
-+sha256 b978a999947ddb6722d956db2427869b313225e50518c4fbbf960a68109e3e91 zyre-v2.0.0.tar.gz
-diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
-index baaa57f5f6..82a0f517ce 100644
---- a/package/zyre/zyre.mk
-+++ b/package/zyre/zyre.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZYRE_VERSION = 1d949e4bf79b694ea883c325f5813e87ddc2a687
-+ZYRE_VERSION = v2.0.0
- ZYRE_SITE = $(call github,zeromq,zyre,$(ZYRE_VERSION))
- ZYRE_LICENSE = MPL-2.0
- ZYRE_LICENSE_FILES = LICENSE
+... here.
+
+> +
+> +Signed-off-by timo.ketola at exertus.fi
+
+This Signed-off-by line doesn't follow the usual format, it should have
+been:
+
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+
+(But your patch has been applied already anyway).
+
+Best regards,
+
+Thomas
 -- 
-2.14.3
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
