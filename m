@@ -1,85 +1,165 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  8 Mar 2018 22:15:38 +0100
-Subject: [Buildroot] [PATCH 14/15 v3] fs: get rid of package-provided
- post-fs hooks
+Date: Thu,  8 Mar 2018 22:15:36 +0100
+Subject: [Buildroot] [PATCH 12/15 v3] fs: use a common tarball as base for
+ the other filesystems
 In-Reply-To: <cover.1520543724.git.yann.morin.1998@free.fr>
 References: <cover.1520543724.git.yann.morin.1998@free.fr>
-Message-ID: <289b93599235b9d019b09ff1eac9a53d71a9b2b3.1520543724.git.yann.morin.1998@free.fr>
+Message-ID: <c5c92bae5b3a0fb9863905787d1eea3dcd1fd7d1.1520543724.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that the pre-fs ones are run on a transient copy of target/, the
-post-fs hooks are no longer needed because we no longer need to restore
-the target/ directory as it is only a internal copy.
+Currently, some filesystems may want to tweak the content of the target
+directory, create special device nodes etc... This all means that:
 
-Remove support for the post-fs hooks, and update the sole package using
-them.
+  - the content of the target directory for a specific filesystems may
+    depend on whether another filesystem is enabled or not; for example,
+    cpio will create a /init script or symlink and a /dev/console node;
 
-Unlike for the pre-/post-gen hooks, we do not add a legacy check because
-this was mostly a purely-internal detail that was never really exposed
-nor documented.
+  - the filesysems can not be built in parallel, because they may change
+    the content of the target directory wil another is being assembled.
+
+Furthermore, the same fakeroot script is executed over-and-over-again
+for each filesystem, to create the device nodes, the users and their
+homes and files, and setting permissions...
+
+We introduce an intermediate tarball, for which we do the full fakeroot
+shebang.
+
+That tarball then serves as the base for the other filesystems, with a
+very simple fakeroot script that untars the common tarball, and calls
+the actual filesystem image generator on that.
+
+Note that we use a very simple tar command to generate the intermediate
+tarball, because we are not concerned with reproducibility of the
+archive itself (only of the archived files).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- fs/common.mk                                           | 2 --
- package/pkg-generic.mk                                 | 2 --
- package/skeleton-init-systemd/skeleton-init-systemd.mk | 6 ------
- 3 files changed, 10 deletions(-)
+ fs/common.mk | 75 +++++++++++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 47 insertions(+), 28 deletions(-)
 
 diff --git a/fs/common.mk b/fs/common.mk
-index 8bb26f1146..bacc98ec68 100644
+index 05ae107192..f3d42519f6 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -94,8 +94,6 @@ endif
- 	$(foreach hook,$(ROOTFS_PRE_CMD_HOOKS),\
- 		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
- 	$(call PRINTF,$(ROOTFS_COMMON_TAR_CMD)) >> $(FAKEROOT_SCRIPT)
--	$(foreach hook,$(ROOTFS_POST_CMD_HOOKS),\
--		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
- 	chmod a+x $(FAKEROOT_SCRIPT)
- 	PATH=$(BR_PATH) $(HOST_DIR)/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+@@ -42,6 +42,19 @@ endif
  
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1a637ea288..c0f100354e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -638,7 +638,6 @@ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
- $(2)_TARGET_FINALIZE_HOOKS      ?=
- $(2)_ROOTFS_PRE_CMD_HOOKS       ?=
--$(2)_ROOTFS_POST_CMD_HOOKS      ?=
+ ROOTFS_COMMON_TAR = $(FS_DIR)/rootfs.common.tar
  
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -949,7 +948,6 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
++# Command to create the common tarball from the base target directory.
++define ROOTFS_COMMON_TAR_CMD
++	tar cf $(ROOTFS_COMMON_TAR) --numeric-owner \
++		--exclude=$(notdir $(TARGET_DIR_WARNING_FILE)) \
++		-C $(TARGET_DIR) .
++endef
++
++# Command to extract the common tarball into the per-rootfs target directory
++define ROOTFS_COMMON_UNTAR_CMD
++	mkdir -p $(TARGET_DIR)
++	tar xf $(ROOTFS_COMMON_TAR) -C $(TARGET_DIR)
++endef
++
+ .PHONY: rootfs-common
+ rootfs-common: $(ROOTFS_COMMON_TAR)
+ 
+@@ -49,11 +62,39 @@ ROOTFS_COMMON_DEPENDENCIES = \
+ 	host-fakeroot host-makedevs \
+ 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
+ 
+-.PHONY: $(ROOTFS_COMMON_TAR)
+ # When doing the common tarball, we're not really doing a rootfs.
+ $(ROOTFS_COMMON_TAR): ROOTFS=
++$(ROOTFS_COMMON_TAR): FAKEROOT_SCRIPT=$(FS_DIR)/fakeroot.fs
+ $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+-	@:
++	@$(call MESSAGE,"Generating common rootfs tarball")
++	rm -rf $(FS_DIR)
++	mkdir -p $(FS_DIR)
++	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
++	echo "set -e" >> $(FAKEROOT_SCRIPT)
++	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++ifneq ($(ROOTFS_USERS_TABLES),)
++	cat $(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
++endif
++	$(call PRINTF,$(PACKAGES_USERS)) >> $(USERS_TABLE)
++	PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
++ifneq ($(ROOTFS_DEVICE_TABLES),)
++	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
++	$(call PRINTF,$(PACKAGES_DEVICES_TABLE)) >> $(FULL_DEVICE_TABLE)
++endif
++endif
++	$(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
++	echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++	$(foreach s,$(call qstrip,$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
++		echo "echo '$(TERM_BOLD)>>>   Executing fakeroot script $(s)$(TERM_RESET)'" >> $(FAKEROOT_SCRIPT); \
++		echo $(EXTRA_ENV) $(s) $(TARGET_DIR) $(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $(FAKEROOT_SCRIPT)$(sep))
++	$(foreach hook,$(ROOTFS_PRE_CMD_HOOKS),\
++		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
++	$(call PRINTF,$(ROOTFS_COMMON_TAR_CMD)) >> $(FAKEROOT_SCRIPT)
++	$(foreach hook,$(ROOTFS_POST_CMD_HOOKS),\
++		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
++	chmod a+x $(FAKEROOT_SCRIPT)
++	PATH=$(BR_PATH) $(HOST_DIR)/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+ 
+ rootfs-common-show-depends:
+ 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
+@@ -64,7 +105,7 @@ define inner-rootfs
+ 
+ ROOTFS_$(2)_NAME = $(1)
+ ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+-ROOTFS_$(2)_TARGET_DIR = $$(BASE_TARGET_DIR)
++ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+ 
+ ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+ 
+@@ -101,39 +142,17 @@ $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+ $$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+ $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+-	rm -rf $(FS_DIR) $$(ROOTFS_$(2)_DIR)
+-	mkdir -p $(FS_DIR) $$(ROOTFS_$(2)_DIR)
++	rm -rf $$(ROOTFS_$(2)_DIR)
++	mkdir -p $$(ROOTFS_$(2)_DIR)
+ 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
++	$$(call PRINTF,$$(ROOTFS_COMMON_UNTAR_CMD)) >> $$(FAKEROOT_SCRIPT)
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
+ 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+-	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+-ifneq ($$(ROOTFS_USERS_TABLES),)
+-	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
+-endif
+-	$$(call PRINTF,$$(PACKAGES_USERS)) >> $$(USERS_TABLE)
+-	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+-ifneq ($$(ROOTFS_DEVICE_TABLES),)
+-	cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
+-ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+-	$$(call PRINTF,$$(PACKAGES_DEVICES_TABLE)) >> $$(FULL_DEVICE_TABLE)
+-endif
+-endif
+-	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
+-	echo "$$(HOST_DIR)/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+-	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+-		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+-		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+-	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
+-		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+-	$$(foreach hook,$$(ROOTFS_POST_CMD_HOOKS),\
+-		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+-	rm -f $$(TARGET_DIR_WARNING_FILE)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+-	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+ 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
  endif
- TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
- ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
--ROOTFS_POST_CMD_HOOKS += $$($(2)_ROOTFS_POST_CMD_HOOKS)
- 
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index ff64205cbe..5d6b716f7a 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -55,12 +55,6 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- endef
- SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 
--define SKELETON_INIT_SYSTEMD_POST_ROOTFS_VAR
--	rm -rf $(TARGET_DIR)/var
--	mv $(TARGET_DIR)/usr/share/factory/var $(TARGET_DIR)/var
--endef
--SKELETON_INIT_SYSTEMD_ROOTFS_POST_CMD_HOOKS += SKELETON_INIT_SYSTEMD_POST_ROOTFS_VAR
--
- endif
- 
- define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
 -- 
 2.14.1
