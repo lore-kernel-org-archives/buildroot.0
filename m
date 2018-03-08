@@ -1,27 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Mar 2018 09:05:51 +0100
-Subject: [Buildroot] [git commit] gtest: add license hash
-Message-ID: <20180308080759.51DAD827C2@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 08 Mar 2018 09:07:05 +0100
+Subject: [Buildroot] [PATCH] libmpdclient: bump to version 2.14
+In-Reply-To: <878tb3kn77.fsf@dell.be.48ers.dk>
+References: <20180307225257.30336-1-joerg.krause@embedded.rocks>
+ <878tb3kn77.fsf@dell.be.48ers.dk>
+Message-ID: <1520496425.2267.2.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8eee2fbf09e56f7a3db86302a8d693391ef04630
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gtest/gtest.hash | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, 2018-03-08 at 09:04 +0100, Peter Korsgaard wrote:
+> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+> 
+>  > Since version 2.13 libmpdclient only supports the meson build.
+>  > Therefore, adapt to package infrastructure according to the user manual.
+> 
+>  > Also add a hash for the license file.
+> 
+>  > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+>  > ---
+>  >  package/libmpdclient/libmpdclient.hash |  5 +++--
+>  >  package/libmpdclient/libmpdclient.mk   | 32 +++++++++++++++++++++++++++++---
+>  >  2 files changed, 32 insertions(+), 5 deletions(-)
+> 
+>  > diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+>  > index 2fd20a41fb..eb32786419 100644
+>  > --- a/package/libmpdclient/libmpdclient.hash
+>  > +++ b/package/libmpdclient/libmpdclient.hash
+>  > @@ -1,2 +1,3 @@
+>  > -# Verified against
+>  > http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.xz.sig,
+>  > sha256 locally computed
+>  > -sha256 4f08cde82dae70895f8e4532a6e9b54b201efd5591c6b5d6834895807ed2ff82  libmpdclient-2.10.tar.xz
+>  > +# Verified against
+>  > http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.14.tar.xz.sig,
+>  > sha256 locally computed
+>  > +sha256  0a84e2791bfe3077cf22ee1784c805d5bb550803dffe56a39aa3690a38061372  libmpdclient-2.14.tar.xz
+>  > +sha256  9574c3b0a9c31723cc3d5f32af4655a015fff5ec6ec8115b7906cd7d9623cf32  COPYING
+>  > diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+>  > index 691aba9f71..5574bde948 100644
+>  > --- a/package/libmpdclient/libmpdclient.mk
+>  > +++ b/package/libmpdclient/libmpdclient.mk
+>  > @@ -5,12 +5,38 @@
+>  >  ################################################################################
+>  
+>  >  LIBMPDCLIENT_VERSION_MAJOR = 2
+>  > -LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).10
+>  > +LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).14
+>  >  LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
+>  >  LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
+>  > -LIBMPDCLIENT_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+>  >  LIBMPDCLIENT_INSTALL_STAGING = YES
+>  >  LIBMPDCLIENT_LICENSE = BSD-3-Clause
+>  >  LIBMPDCLIENT_LICENSE_FILES = COPYING
+>  
+>  > -$(eval $(autotools-package))
+>  > +LIBMPDCLIENT_CONF_OPTS += \
+>  > +	--prefix=/usr \
+>  > +	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+>  > +	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
+>  > +
+>  > +LIBMPDCLIENT_NINJA_OPTS = $(if $(VERBOSE),-v)
+> 
+> I see that systemd also passes -j$(PARALLEL_JOBS). Any specific reason
+> why you don't?
 
-diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
-index 474008d2cd..0a8d8ba096 100644
---- a/package/gtest/gtest.hash
-+++ b/package/gtest/gtest.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256	58a6f4277ca2bc8565222b3bbd58a177609e9c488e8a72649359ba51450db7d8	gtest-release-1.8.0.tar.gz
-+sha256	9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138	googletest/LICENSE
+No specific reason. I just follow the user manual, which does not
+mention this option.
+
+> If not, please send a followup patch to add it.
+
+I'll do.
