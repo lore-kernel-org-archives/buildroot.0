@@ -1,49 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Mar 2018 09:34:35 +0100
-Subject: [Buildroot] [git commit] zyre: bump to v2.0.0
-Message-ID: <20180308083523.C4E69827C6@busybox.osuosl.org>
+Date: Thu, 8 Mar 2018 09:33:56 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Add myself as a maintainer of
+ fbgrab
+Message-ID: <20180308083523.B16658280A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55ee1bd958885a2f2abe8a2bb07fd0af846e1c1c
+commit: https://git.buildroot.net/buildroot/commit/?id=8ea3dd2d6258cabecaa5796d58bce31d94abe056
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-v2.0.0 has been released after commit
-1d949e4bf79b694ea883c325f5813e87ddc2a687, which we currently use, and
-it has the advantage of fixing the build with recent versions of czmq.
+Daniel's address is bouncing and my touch on fbgrab is now the most
+recent one.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/f5804474033d5ff781af2bf195de2b81362f7be2/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zyre/zyre.hash | 2 +-
- package/zyre/zyre.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/zyre/zyre.hash b/package/zyre/zyre.hash
-index 5b38b8039d..8cc860232a 100644
---- a/package/zyre/zyre.hash
-+++ b/package/zyre/zyre.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 0ce8328a2b9fe46aafc4627fc4ebd4d815f4d9f7d9708088459306c87bf5fb4b zyre-1d949e4bf79b694ea883c325f5813e87ddc2a687.tar.gz
-+sha256 b978a999947ddb6722d956db2427869b313225e50518c4fbbf960a68109e3e91 zyre-v2.0.0.tar.gz
-diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
-index baaa57f5f6..82a0f517ce 100644
---- a/package/zyre/zyre.mk
-+++ b/package/zyre/zyre.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b0aab54d8f..dba0e58757 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -476,7 +476,6 @@ F:	package/log4cpp/
  
--ZYRE_VERSION = 1d949e4bf79b694ea883c325f5813e87ddc2a687
-+ZYRE_VERSION = v2.0.0
- ZYRE_SITE = $(call github,zeromq,zyre,$(ZYRE_VERSION))
- ZYRE_LICENSE = MPL-2.0
- ZYRE_LICENSE_FILES = LICENSE
+ N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
+ F:	package/e2tools/
+-F:	package/fbgrab/
+ 
+ N:	Daniel Price <daniel.price@gmail.com>
+ F:	package/nodejs/
+@@ -1819,6 +1818,9 @@ F:	toolchain/
+ N:	Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+ F:	package/aer-inject/
+ 
++N:	Timo Ketola <timo.ketola@exertus.fi>
++F:	package/fbgrab/
++
+ N:	Tzu-Jung Lee <roylee17@gmail.com>
+ F:	package/dropwatch/
+ F:	package/tstools/
