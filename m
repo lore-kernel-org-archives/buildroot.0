@@ -1,29 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Mar 2018 09:05:26 +0100
-Subject: [Buildroot] [git commit] libcoap: add licenses hash
-Message-ID: <20180308080759.3701B827C2@busybox.osuosl.org>
+Date: Thu, 8 Mar 2018 09:06:33 +0100
+Subject: [Buildroot] [git commit] fbgrab: add patch fixing pixel format
+ report
+Message-ID: <20180308080759.7016F7F9A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae8f5b0d440d3cb7b37b69cfe03c26af52111172
+commit: https://git.buildroot.net/buildroot/commit/?id=5be0b3440e81aa364fb337b5e981f3396bdf8e02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+When verbosive, fbgrab reports pixel format. Green and blue offset and
+msb_right fields are accidentally swapped there. This commit adds a patch
+which straightens them up.
+
+Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
+
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcoap/libcoap.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/fbgrab/0100-fix-pixfmt-report.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
-index 708ca1b6e7..deb94ecd6d 100644
---- a/package/libcoap/libcoap.hash
-+++ b/package/libcoap/libcoap.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
- sha256 f7e26dc232c177336474a14487771037a8fb32e311f5ccd076a00dc04b6d7b7a libcoap-v4.1.2.tar.gz
-+sha256 28b61fbf3c5477611d7f6ead97d15348934496d27dca815b34d45e622730e72e COPYING
-+sha256 d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388 LICENSE.GPL
-+sha256 9d5aeec17bdf82369bbe6e89efb07b7b35abefa044ea1d25cb2feeb70df1c208 LICENSE.BSD
+diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
+new file mode 100644
+index 0000000000..18bcf96df2
+--- /dev/null
++++ b/package/fbgrab/0100-fix-pixfmt-report.patch
+@@ -0,0 +1,22 @@
++Fix pixel format report
++
++When fbgrab tells about the framebuffer pixel format, blue and green
++are accidentally swapped in 'length' and 'msb_right' columns. Let's
++order everything as RGB.
++
++Signed-off-by timo.ketola at exertus.fi
++
++diff -u a/fbgrab.c b/fbgrab.c
++--- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
+++++ b/fbgrab.c	2018-03-07 11:43:26.128043877 +0200
++@@ -169,8 +169,8 @@
++         fprintf(stderr, "bits_per_pixel: %i\n", fb_varinfo_p->bits_per_pixel);
++         fprintf(stderr, "grayscale: %s\n", fb_varinfo_p->grayscale ? "true" : "false");
++         fprintf(stderr, "red:   offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->red.offset, fb_varinfo_p->red.length, fb_varinfo_p->red.msb_right);
++-        fprintf(stderr, "blue:  offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->blue.offset, fb_varinfo_p->green.length, fb_varinfo_p->green.msb_right);
++-        fprintf(stderr, "green: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->green.offset, fb_varinfo_p->blue.length, fb_varinfo_p->blue.msb_right);
+++        fprintf(stderr, "green: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->green.offset, fb_varinfo_p->green.length, fb_varinfo_p->green.msb_right);
+++        fprintf(stderr, "blue:  offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->blue.offset, fb_varinfo_p->blue.length, fb_varinfo_p->blue.msb_right);
++         fprintf(stderr, "alpha: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->transp.offset, fb_varinfo_p->transp.length, fb_varinfo_p->transp.msb_right);
++         fprintf(stderr, "pixel format: %s\n", fb_varinfo_p->nonstd == 0 ? "standard" : "non-standard");
++     }
