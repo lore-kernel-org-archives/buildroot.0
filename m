@@ -1,45 +1,66 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  8 Mar 2018 19:43:33 +0200
-Subject: [Buildroot] [RFC] lm-sensors: fix static build
-Message-ID: <4c4c3f8770727f91fb173fbc077dd8b7c15cc216.1520531013.git.baruch@tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  8 Mar 2018 20:15:27 +0100
+Subject: [Buildroot] [PATCH v2,1/1] libmpdclient: fix install
+Message-ID: <20180308191527.5946-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add -static to the link command line to have libgcc resolve libc
-symbols. This overrides the default -Wl,-rpath,/usr/lib, which is
-useless for static build anyway.
+meson adds the build machine architecture for installation, see:
+https://github.com/mesonbuild/meson/issues/2535
+Until this is fixed, fix libmpdclient.pc and copy the libraries and
+libmpclient.pc to the correct place.
 
-Fixes:
-http://autobuild.buildroot.net/results/25d/25d580bee6f609f6b28ebd6cc96d180179901b0e/
+Without this fix, ympd does not find libmpdclient
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix install of libmpdclient.pc
 
-I'm not sure this is the right fix. Adding -lc to the failed link
-command also fixes the issue. But libc is always a dependency of libgcc.
+ package/libmpdclient/libmpdclient.mk | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-It is also not clear why this issue appeared now. This is the only
-lm-sensors failure in the current autobuilder database. The only recent
-change that might be related is the musl bump to 1.1.19.
----
- package/lm-sensors/lm-sensors.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index f581b5cd8f21..6fc7ce4981c9 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -26,7 +26,7 @@ LM_SENSORS_MAKE_OPTS = \
- 	PREFIX=/usr
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 5574bde948..8a47812836 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -34,9 +34,34 @@ define LIBMPDCLIENT_INSTALL_TARGET_CMDS
+ 		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+ endef
  
- ifeq ($(BR2_STATIC_LIBS),y)
--LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=0
-+LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=0 EXLDFLAGS=-static
- else
- LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=1
- endif
++# meson adds the build machine architecture for installation, see:
++# https://github.com/mesonbuild/meson/issues/2535
++# Until this is fixed, copy the libraries to the correct place
++define LIBMPDCLIENT_FIX_LIBRARY_INSTALL_TARGET
++	cp -a $(@D)/build/libmpdclient.* $(TARGET_DIR)/usr/lib
++endef
++
++LIBMPDCLIENT_POST_INSTALL_TARGET_HOOKS += \
++	LIBMPDCLIENT_FIX_LIBRARY_INSTALL_TARGET
++
+ define LIBMPDCLIENT_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
+ 		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+ endef
+ 
++# meson adds the build machine architecture for installation, see:
++# https://github.com/mesonbuild/meson/issues/2535
++# Until this is fixed, fix libmpdclient.pc and copy the libraries and
++# libmpclient.pc to the correct place
++define LIBMPDCLIENT_FIX_LIBRARY_INSTALL_STAGING
++	$(INSTALL) -D -m 644 $(@D)/build/meson-private/libmpdclient.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libmpdclient.pc
++	$(SED) 's,^libdir=.*,libdir=$${prefix}/lib,' \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libmpdclient.pc
++	cp -a $(@D)/build/libmpdclient.* $(STAGING_DIR)/usr/lib
++endef
++
++LIBMPDCLIENT_POST_INSTALL_STAGING_HOOKS += \
++	LIBMPDCLIENT_FIX_LIBRARY_INSTALL_STAGING
++
+ $(eval $(generic-package))
 -- 
-2.16.1
+2.14.1
