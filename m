@@ -1,78 +1,73 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 8 Mar 2018 14:33:36 +0200
-Subject: [Buildroot] [PATCH RESEND] toolchain: use -ffp-contract=off on
- MIPS in the wrapper when needed
-In-Reply-To: <20180308121430.20013-1-ezequiel@vanguardiasur.com.ar>
-References: <20180308121430.20013-1-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20180308123336.ywdsi5b5lo4iwjvv@tarshish>
+From: =?utf-8?Q?Sh=C3=A9rab?= <Sebastien.Hinderer@ens-lyon.org>
+Date: Thu, 8 Mar 2018 14:01:35 +0100
+Subject: [Buildroot] Unable to build Buildroot
+Message-ID: <20180308130135.GA1675@pema>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ezequiel,
+Dear all,
 
-On Thu, Mar 08, 2018 at 09:14:30AM -0300, Ezequiel Garcia wrote:
-> From: Johannes Schmitz <johannes.schmitz1@gmail.com>
-> 
-> This fix is necessary for to build for MIPS, for example for the MIPS
-> XBurst architecture used on ci20 boards.
-> 
-> GCC has replaced (no)mfused-madd with ffp-contract.
-> Find more details and a long discussion at
-> https://gcc.gnu.org/ml/gcc-patches/2015-06/msg00876.html
-> 
-> Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
-> Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> ---
-> Ci20 builds are currently broken without this patch.
-> 
->  toolchain/toolchain-wrapper.c  | 3 ---
->  toolchain/toolchain-wrapper.mk | 4 ++++
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index 2928ea42d0e6..04b263199547 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -79,9 +79,6 @@ static char *predef_args[] = {
->  #ifdef BR_OMIT_LOCK_PREFIX
->  	"-Wa,-momit-lock-prefix=yes",
->  #endif
-> -#ifdef BR_NO_FUSED_MADD
+I am not able to build Buildroot any longer, although it used to work
+and I can't remember of any change on the machine used tobuild.
 
-Since you remove this macro reference, ...
+Here is what happens just before the failure:
 
-> -	"-mno-fused-madd",
-> -#endif
->  #ifdef BR_BINFMT_FLAT
->  	"-Wl,-elf2flt",
->  #endif
-> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-> index 7f72a0cadec9..7faa033f605c 100644
-> --- a/toolchain/toolchain-wrapper.mk
-> +++ b/toolchain/toolchain-wrapper.mk
-> @@ -28,8 +28,12 @@ endif
->  
->  # Avoid FPU bug on XBurst CPUs
->  ifeq ($(BR2_mips_xburst),y)
-> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_6),y)
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR_FP_CONTRACT_OFF
-> +else
->  TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
+making all in debugfs
+	MK_CMDS debug_cmds.c
+	CC debugfs.c
+	CC util.c
+	CC ncheck.c
+	CC icheck.c
+	CC lsdel.c
+	CC ls.c
+	CC set_fields.c
+	CC dump.c
+	CC logdump.c
+	CC htree.c
+	CC unused.c
+	CC e2freefrag.o
+	CC filefrag.c
+	MK_CMDS extent_cmds.c
+	CC extent_inode.c
+	CC zap.c
+	CC create_inode.o
+./../misc/create_inode.c: In function ?set_inode_xattr?:
+./../misc/create_inode.c:140:9: warning: implicit declaration of function ?llistxattr?; did you mean ?lstat64?? [-Wimplicit-function-declaration]
+  size = llistxattr(filename, NULL, 0);
+         ^~~~~~~~~~
+         lstat64
+./../misc/create_inode.c:176:16: warning: implicit declaration of function ?lgetxattr?; did you mean ?getdate_r?? [-Wimplicit-function-declaration]
+   value_size = lgetxattr(filename, name, NULL, 0);
+                ^~~~~~~~~
+                getdate_r
+./../misc/create_inode.c: At top level:
+./../misc/create_inode.c:399:18: error: conflicting types for ?copy_file_range?
+ static errcode_t copy_file_range(ext2_filsys fs, int fd, ext2_file_t e2_file,
+                  ^~~~~~~~~~~~~~~
+In file included from ./../misc/create_inode.c:19:0:
+/usr/include/unistd.h:1110:9: note: previous declaration of ?copy_file_range? was here
+ ssize_t copy_file_range (int __infd, __off64_t *__pinoff,
+         ^~~~~~~~~~~~~~~
+Makefile:422?: la recette pour la cible ??create_inode.o?? a ?chou?e
+make[5]: *** [create_inode.o] Erreur 1
+make[5]: *** Attente des t?ches non termin?es....
+Makefile:404?: la recette pour la cible ??all-progs-recursive?? a ?chou?e
+make[4]: *** [all-progs-recursive] Erreur 1
+Makefile:339?: la recette pour la cible ??all?? a ?chou?e
+make[3]: *** [all] Erreur 2
+package/pkg-generic.mk:247?: la recette pour la cible ??/home/shindere/src/brlpi/brlpi0w/build/host-e2fsprogs-1.43.7/.stamp_built?? a ?chou?e
+make[2]: *** [/home/shindere/src/brlpi/brlpi0w/build/host-e2fsprogs-1.43.7/.stamp_built] Erreur 2
+Makefile:16?: la recette pour la cible ??_all?? a ?chou?e
+make[1]: *** [_all] Erreur 2
+make[1]?: on quitte le r?pertoire ??/home/shindere/src/brlpi/brlpi0w??
+Makefile:4?: la recette pour la cible ??brlpi0w/images/sdcard.img?? a ?chou?e
+make: *** [brlpi0w/images/sdcard.img] Erreur 2
 
-... why not remove it here as well?
+Can somebody see what could be wrong, please?
 
->  endif
-> +endif
->  
->  ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
->  TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
+Many thanksin advance,
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Sh?rab.
