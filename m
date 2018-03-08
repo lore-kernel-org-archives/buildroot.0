@@ -1,28 +1,54 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 8 Mar 2018 16:53:34 -0300 (BRT)
-Subject: [Buildroot] [git commit] tpm2-tss: new package
-In-Reply-To: <20180308090237.C2C4582814@busybox.osuosl.org>
-References: <20180308090237.C2C4582814@busybox.osuosl.org>
-Message-ID: <1431823865.1093060.1520538814142.JavaMail.zimbra@datacom.ind.br>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  8 Mar 2018 21:39:01 +0100
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.5.9
+Message-ID: <20180308203901.12387-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: "buildroot" <buildroot@buildroot.org>
-> Sent: Thursday, March 8, 2018 5:58:02 AM
-> Subject: [Buildroot] [git commit] tpm2-tss: new package
+- for details see [1]
+- add hash for license file
 
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=7b3bb51809517ea045dedc8544db51fc0515d5b4
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+[1] https://lists.freedesktop.org/archives/input-tools/2018-March/001464.html
 
-What about the other packages in this series, tpm2-abrmd and tmp2-tools?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libevdev/libevdev.hash | 13 ++++++++-----
+ package/libevdev/libevdev.mk   |  2 +-
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 0702a7b006..e4294dcade 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,5 +1,8 @@
+-# From https://lists.freedesktop.org/archives/input-tools/2018-January/001447.html
+-md5 c25a8c3939e4ad59a5e9e5e1e354832d libevdev-1.5.8.tar.xz
+-sha1 a60e7a43570cdbc64af5adf99ca80023d21a1174 libevdev-1.5.8.tar.xz
+-sha256 6083d81e46609da8ba80cb826c02d9080764a6dec33c8267ccb7e158833d4c6d libevdev-1.5.8.tar.xz
+-sha512 e9485d8c6b48ebf762b32b003bc6b761c548024ad3bc34a0793485b53383746881fcc9b206a078d571937291e519d9822e50c5d8816778d347094691b65ec3fa libevdev-1.5.8.tar.xz
++# https://lists.freedesktop.org/archives/input-tools/2018-March/001464.html
++md5  a1ca11e961c1efed720fac4130881904 libevdev-1.5.9.tar.xz
++sha1 9457e33af5c1e66e29c1385a5550fe60aef8e42e libevdev-1.5.9.tar.xz
++sha256 e1663751443bed9d3e76a4fe2caf6fa866a79705d91cacad815c04e706198a75 libevdev-1.5.9.tar.xz
++sha512 4496ab4d9dc165f416a574c21a7fcee54ae104c21ef4785a4dd0311fff428020cdbb5da7bf3f835e78dae05effdb1a557d189347f6e62dd6be2d8bcdc845850c libevdev-1.5.9.tar.xz
++
++# Hash for license files:
++sha256 f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137 COPYING
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 1893863efd..880d75dfbd 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.5.8
++LIBEVDEV_VERSION = 1.5.9
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.16.2
