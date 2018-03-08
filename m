@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 08 Mar 2018 09:04:28 +0100
-Subject: [Buildroot] [PATCH] libmpdclient: bump to version 2.14
-In-Reply-To: <20180307225257.30336-1-joerg.krause@embedded.rocks>
+Date: Thu, 08 Mar 2018 09:05:07 +0100
+Subject: [Buildroot] [PATCH] mpd-mpc: bump to version 0.29
+In-Reply-To: <20180307225421.30632-1-joerg.krause@embedded.rocks>
  (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Wed, 7 Mar 2018 23:52:57 +0100")
-References: <20180307225257.30336-1-joerg.krause@embedded.rocks>
-Message-ID: <878tb3kn77.fsf@dell.be.48ers.dk>
+ Krause"'s message of "Wed, 7 Mar 2018 23:54:21 +0100")
+References: <20180307225421.30632-1-joerg.krause@embedded.rocks>
+Message-ID: <874llrkn64.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,58 +14,53 @@ To: buildroot@busybox.net
 
 >>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Since version 2.13 libmpdclient only supports the meson build.
- > Therefore, adapt to package infrastructure according to the user manual.
+ > Since version 0.29 MPDs mpc only supports the meson build. Therefore,
+ > adapt the package infrastructure according to the user manual.
 
  > Also add a hash for the license file.
 
  > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
  > ---
- >  package/libmpdclient/libmpdclient.hash |  5 +++--
- >  package/libmpdclient/libmpdclient.mk   | 32 +++++++++++++++++++++++++++++---
- >  2 files changed, 32 insertions(+), 5 deletions(-)
+ >  package/mpd-mpc/mpd-mpc.hash |  3 ++-
+ >  package/mpd-mpc/mpd-mpc.mk   | 29 +++++++++++++++++++++++++----
+ >  2 files changed, 27 insertions(+), 5 deletions(-)
 
- > diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
- > index 2fd20a41fb..eb32786419 100644
- > --- a/package/libmpdclient/libmpdclient.hash
- > +++ b/package/libmpdclient/libmpdclient.hash
+ > diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
+ > index 8336893744..972d169438 100644
+ > --- a/package/mpd-mpc/mpd-mpc.hash
+ > +++ b/package/mpd-mpc/mpd-mpc.hash
  > @@ -1,2 +1,3 @@
- > -# Verified against
- > http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.xz.sig,
- > sha256 locally computed
- > -sha256 4f08cde82dae70895f8e4532a6e9b54b201efd5591c6b5d6834895807ed2ff82  libmpdclient-2.10.tar.xz
- > +# Verified against
- > http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.14.tar.xz.sig,
- > sha256 locally computed
- > +sha256  0a84e2791bfe3077cf22ee1784c805d5bb550803dffe56a39aa3690a38061372  libmpdclient-2.14.tar.xz
- > +sha256  9574c3b0a9c31723cc3d5f32af4655a015fff5ec6ec8115b7906cd7d9623cf32  COPYING
- > diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
- > index 691aba9f71..5574bde948 100644
- > --- a/package/libmpdclient/libmpdclient.mk
- > +++ b/package/libmpdclient/libmpdclient.mk
- > @@ -5,12 +5,38 @@
+ >  # Locally calculated after checking pgp signature
+ > -sha256	a4337d06c85dc81a638821d30fce8a137a58d13d510be34a11c1cce95cabc547	mpc-0.28.tar.xz
+ > +sha256  02f1daec902cb48f8cdaa6fe21c7219f6231b091dddbe437a3a4fb12cb07b9d3  mpc-0.29.tar.xz
+ > +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+ > diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+ > index 6c15c0d9a3..3eecf8a3ef 100644
+ > --- a/package/mpd-mpc/mpd-mpc.mk
+ > +++ b/package/mpd-mpc/mpd-mpc.mk
+ > @@ -5,12 +5,33 @@
  >  ################################################################################
  
- >  LIBMPDCLIENT_VERSION_MAJOR = 2
- > -LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).10
- > +LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).14
- >  LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
- >  LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
- > -LIBMPDCLIENT_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- >  LIBMPDCLIENT_INSTALL_STAGING = YES
- >  LIBMPDCLIENT_LICENSE = BSD-3-Clause
- >  LIBMPDCLIENT_LICENSE_FILES = COPYING
+ >  MPD_MPC_VERSION_MAJOR = 0
+ > -MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).28
+ > +MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).29
+ >  MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ >  MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ >  MPD_MPC_LICENSE = GPL-2.0+
+ >  MPD_MPC_LICENSE_FILES = COPYING
+ > -MPD_MPC_DEPENDENCIES = host-pkgconf libmpdclient
+ > -MPD_MPC_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
+ > +MPD_MPC_DEPENDENCIES = host-meson host-pkgconf libmpdclient
  
  > -$(eval $(autotools-package))
- > +LIBMPDCLIENT_CONF_OPTS += \
+ > +MPD_MPC_CONF_OPTS += \
  > +	--prefix=/usr \
  > +	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
  > +	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
  > +
- > +LIBMPDCLIENT_NINJA_OPTS = $(if $(VERBOSE),-v)
+ > +MPD_MPC_NINJA_OPTS = $(if $(VERBOSE),-v)
 
-I see that systemd also passes -j$(PARALLEL_JOBS). Any specific reason
-why you don't? If not, please send a followup patch to add it.
+Same comment regarding -j option.
 
 Committed, thanks.
 
