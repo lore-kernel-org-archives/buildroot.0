@@ -1,62 +1,28 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 8 Mar 2018 20:23:55 +0100
-Subject: [Buildroot] [PATCH 18/19] package/x11r7/xdriver_xf86-video-ati:
- bump version to 18.0.0
-In-Reply-To: <20180307205844.3240-18-bernd.kuhls@t-online.de>
-References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
- <20180307205844.3240-18-bernd.kuhls@t-online.de>
-Message-ID: <67fcff9c-dc88-c566-4130-45e27038b340@gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu, 8 Mar 2018 16:53:34 -0300 (BRT)
+Subject: [Buildroot] [git commit] tpm2-tss: new package
+In-Reply-To: <20180308090237.C2C4582814@busybox.osuosl.org>
+References: <20180308090237.C2C4582814@busybox.osuosl.org>
+Message-ID: <1431823865.1093060.1520538814142.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 07/03/2018 ? 21:58, Bernd Kuhls a ?crit?:
-> Added license hash.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> From: "Peter Korsgaard" <peter@korsgaard.com>
+> To: "buildroot" <buildroot@buildroot.org>
+> Sent: Thursday, March 8, 2018 5:58:02 AM
+> Subject: [Buildroot] [git commit] tpm2-tss: new package
 
-I'm still using an HD6310 graphic card.
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=7b3bb51809517ea045dedc8544db51fc0515d5b4
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tested-by: Romain Naour <romain.naour@gmail.com>
+What about the other packages in this series, tpm2-abrmd and tmp2-tools?
 
-Best regards,
-Romain
-
-> ---
->  .../x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 12 +++++++-----
->  .../x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   |  2 +-
->  2 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-> index 117c5749ff..54c553e6ce 100644
-> --- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-> +++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-> @@ -1,5 +1,7 @@
-> -# From https://lists.x.org/archives/xorg-announce/2017-September/002806.html
-> -md5 0ff538f78ae82ccce384dadf7a705863  xf86-video-ati-7.10.0.tar.bz2
-> -sha1 38e535ecc8445c1b9464ac34db959337929887f7  xf86-video-ati-7.10.0.tar.bz2
-> -sha256 ee51d642e3105cb5424f02622dc2966b87b42d498bb34104a70fcf6d4a8f4e79  xf86-video-ati-7.10.0.tar.bz2
-> -sha512 1f2f4af1d299af62644693e6fbc47a5078c9bc5e7887a1ac217121ef2fd29d8c9f50a8d9be9ddb0887d0b49141bb33484f82c1313a472ad6867266b53b4a11ad  xf86-video-ati-7.10.0.tar.bz2
-> +# From https://lists.x.org/archives/xorg-announce/2018-March/002854.html
-> +md5 4d41bfe860dc719654cad3f82d00f6f3  xf86-video-ati-18.0.0.tar.bz2
-> +sha1 da1b89a747264d976d824ddc7b5b4f803d3cf765  xf86-video-ati-18.0.0.tar.bz2
-> +sha256 2c0368fb620d1fdfa2b435e672d65444c2fb9df21bbaf979298484b89ef83981  xf86-video-ati-18.0.0.tar.bz2
-> +sha512 a9a634091f208099885039d42433cee061e03968417c0d535691833abcc9162d8d0a46f99bac902f0885beb14dcc9a011d104b535ffe492562fd5bb740ad4721  xf86-video-ati-18.0.0.tar.bz2
-> +# Locally computed
-> +sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
-> diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-> index f8b8f70cb6..0e9d412b75 100644
-> --- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-> +++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -XDRIVER_XF86_VIDEO_ATI_VERSION = 7.10.0
-> +XDRIVER_XF86_VIDEO_ATI_VERSION = 18.0.0
->  XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
->  XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
->  XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
-> 
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
