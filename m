@@ -1,45 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Mar 2018 09:33:56 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: Add myself as a maintainer of
- fbgrab
-Message-ID: <20180308083523.B16658280A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 8 Mar 2018 09:39:57 +0100
+Subject: [Buildroot] Buildroot hackathon on Mar 31 - Apr 2
+Message-ID: <20180308093957.297efb49@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ea3dd2d6258cabecaa5796d58bce31d94abe056
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Daniel's address is bouncing and my touch on fbgrab is now the most
-recent one.
+A small number of core/active/regular Buildroot developers from Europe
+will be gathering during a 3-day week-end from Mar 31 to April 2 for a
+Buildroot hackathon.
 
-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Arnout Vandecappelle, Yann E. Morin, Peter Korsgaard, Romain Naour,
+Maxime Hadjinlian and myself will participate to this event. We will be
+physically meeting in Paris, hosted by La Maison from Scaleway [1], who
+is generously offering the meeting space and accommodation.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b0aab54d8f..dba0e58757 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -476,7 +476,6 @@ F:	package/log4cpp/
- 
- N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
- F:	package/e2tools/
--F:	package/fbgrab/
- 
- N:	Daniel Price <daniel.price@gmail.com>
- F:	package/nodejs/
-@@ -1819,6 +1818,9 @@ F:	toolchain/
- N:	Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
- F:	package/aer-inject/
- 
-+N:	Timo Ketola <timo.ketola@exertus.fi>
-+F:	package/fbgrab/
-+
- N:	Tzu-Jung Lee <roylee17@gmail.com>
- F:	package/dropwatch/
- F:	package/tstools/
+[1] https://careers.scaleway.com/la-maison/
+
+For logistics reasons, this event is not open to everyone like the
+FOSDEM and ELCE meetings are. However, we wanted to announce it
+publicly nonetheless so that:
+
+ *) People know that there will most likely be lots of Buildroot
+    activity during this week-end, especially reviewing and merging
+    patches, and reducing the patchwork backlog.
+
+ *) Interested people may want to make themselves available on IRC
+    during this week-end (or part of the week-end) to participate to
+    the effort. Indeed, it would definitely be useful to have more
+    participants looking at pending patches, taking over some of the
+    patches that need further tweaks, etc.
+
+ *) Some people may be interested in sending a new iteration of their
+    patch series before this week-end, so that we can take the
+    opportunity of this meeting to discuss and merge
+    large/controversial/complicated changes.
+
+If you have any question on how to participate remotely, do not
+hesitate to ask!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
