@@ -1,68 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Mar 2018 08:48:08 +0100
-Subject: [Buildroot] [PATCH next v2 3/5] support/scripts/pkg-stats-new:
- add current version information
-In-Reply-To: <5aa0aaabf354_230cd1b5a053590@ultri3.mail>
-References: <20180307232558.2d9b358f@windsurf>
- <5aa0aaabf354_230cd1b5a053590@ultri3.mail>
-Message-ID: <20180308084808.5ff15bbb@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 08 Mar 2018 08:56:27 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-03-07
+In-Reply-To: <20180308070030.7B02A20993@mail.bootlin.com> (Thomas Petazzoni's
+ message of "Thu, 8 Mar 2018 08:00:30 +0100 (CET)")
+References: <20180308070030.7B02A20993@mail.bootlin.com>
+Message-ID: <87lgf3knkk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Thu, 08 Mar 2018 00:14:51 -0300, Ricardo Martincoski wrote:
+ > Hello,
+ > Build statistics for 2018-03-07
+ > ===============================
 
-> > With this:
-> > 
-> >  - If the package specifies only a target version, the target version
-> >    is saved.
-> > 
-> >  - If the package specifies only a host version, the host version is
-> >    saved.
-> > 
-> >  - If the package specifies both a target version and a host version,
-> >    the target version always wins. So the scripts doesn't handle
-> >    differentiating host and target versions for the same package, but
-> >    at least we are consistent in the fact that we will always report
-> >    the target version.
-> > 
-> > How does that sound ?  
-> 
-> Sounds good.
-> Nit: please recheck with flake8.
+ >       branch |  OK | NOK | TIM | TOT |
+ >    2018.02.x |  11 |   1 |   0 |  12 |
+ >       master | 141 |  56 |   0 | 197 |
 
-Will do.
+ > Results for branch '2018.02.x'
+ > ==============================
+
+ > Classification of failures by reason
+ > ------------------------------------
+
+ >            cups-filters-1.17.9 | 1 
 
 
-> > I'm just cutting after 20 characters, and adding "..." at the end, and
-> > it seems good enough to me (compared to doing a regexp to try to guess
-> > if it's a git hash or not).  
-> 
-> OK since you are only changing the display of the version, not the string that
-> will be compared to the new column.
-> 
-> The few version strings in the tree that are not sha1 larger than 20 are:
-> 2.0.0.alpha20140727b
-> kvm-unit-tests-20171020
-> rel_imx_4.9.x_1.0.0_ga
-> 
-> For me these are OK:
-> 2.0.0.alpha20140727...
-> kvm-unit-tests-2017...
-> rel_imx_4.9.x_1.0.0...
+ > Detail of failures
+ > ------------------
 
-Yes, I'm only changing the display of the version, and I'm also adding
-"..." which helps the reader understand that the version string has
-been cut.
+ >          arc |            cups-filters-1.17.9 | NOK | http://autobuild.buildroot.net/results/77a6369f3530a2a6a055f7fd664f1ad424274d77 |     
 
-Best regards,
+The install steps are using ln -s -r, so we probably need a workaround
+for old distributions like we have for systemd:
 
-Thomas
+package/systemd/0002-install-don-t-use-ln-relative.patch
+
+Olivier, can you take a look?
+
+ > Classification of failures by reason
+ > ------------------------------------
+
+ > zyre-1d949e4bf79b694ea883c3... | 14
+
+Started happening when czmq got bumped, so probably an incompatibility
+with the new version.
+
+I see upstream released a v2.0.0 back in January 2017, so bumping the
+version might fix it. Any takers?
+
+>                     htop-2.1.0 | 10
+
+It looks like it needs the same utf8 locale workaround as for
+systemd. Any takers?
+
+ >                   ntp-4.2.8p11 | 7 
+
+Already fixed by 5766b6fb34a897092092f7d76d6b4f2bc8c48571
+
+>                     liblo-0.29 | 6 
+
+musl compatibility issue:
+
+In file included from server.c:54:0:
+/home/buildroot/autobuild/run/instance-0/output/host/arm-buildroot-linux-musleabihf/sysroot/usr/include/sys/poll.h:1:2: error: #warning redirecting incorrect #include <sys/poll.h> to <poll.h> [-Werror=cpp]
+ #warning redirecting incorrect #include <sys/poll.h> to <poll.h>
+
+It apparently builds with -Werror, which is why this is fatal.
+
+Alex, you recently submitted a patch to pass --disable-werror, but the
+configure script doesn't understand that option:
+
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-nls, --disable-werror
+
+Can you take another look? Thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Bye, Peter Korsgaard
