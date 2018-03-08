@@ -1,57 +1,62 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 8 Mar 2018 11:43:30 +0000
-Subject: [Buildroot] [PATCH 1/1] fbgrab: Fix some problems in the patch
- metadata
-In-Reply-To: <1520505753-13884-1-git-send-email-timo.ketola@exertus.fi>
-References: <1520505753-13884-1-git-send-email-timo.ketola@exertus.fi>
-Message-ID: <20180308114330.GB20111@momiji>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Thu,  8 Mar 2018 09:14:30 -0300
+Subject: [Buildroot] [PATCH RESEND] toolchain: use -ffp-contract=off on MIPS
+ in the wrapper when needed
+Message-ID: <20180308121430.20013-1-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  8 Mar 2018 12:42:33 +0200, Timo Ketola <timo.ketola@exertus.fi> wrote:
-> The patch description was missing Upstream-Status tag. It was given in the
-> commit which added this patch but not in the patch itself as should be.
-> 
-> Signed-off-by tag accidentally didn't follow the usual format.
-> 
-> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+From: Johannes Schmitz <johannes.schmitz1@gmail.com>
 
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+This fix is necessary for to build for MIPS, for example for the MIPS
+XBurst architecture used on ci20 boards.
 
-> ---
->  package/fbgrab/0100-fix-pixfmt-report.patch | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
-> index 18bcf96..8cff7ef 100644
-> --- a/package/fbgrab/0100-fix-pixfmt-report.patch
-> +++ b/package/fbgrab/0100-fix-pixfmt-report.patch
-> @@ -4,7 +4,9 @@ When fbgrab tells about the framebuffer pixel format, blue and green
->  are accidentally swapped in 'length' and 'msb_right' columns. Let's
->  order everything as RGB.
->  
-> -Signed-off-by timo.ketola at exertus.fi
-> +Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
-> +
-> +Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
->  
->  diff -u a/fbgrab.c b/fbgrab.c
->  --- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180308/498d1f32/attachment-0001.asc>
+GCC has replaced (no)mfused-madd with ffp-contract.
+Find more details and a long discussion at
+https://gcc.gnu.org/ml/gcc-patches/2015-06/msg00876.html
+
+Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
+Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+Ci20 builds are currently broken without this patch.
+
+ toolchain/toolchain-wrapper.c  | 3 ---
+ toolchain/toolchain-wrapper.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 2928ea42d0e6..04b263199547 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -79,9 +79,6 @@ static char *predef_args[] = {
+ #ifdef BR_OMIT_LOCK_PREFIX
+ 	"-Wa,-momit-lock-prefix=yes",
+ #endif
+-#ifdef BR_NO_FUSED_MADD
+-	"-mno-fused-madd",
+-#endif
+ #ifdef BR_BINFMT_FLAT
+ 	"-Wl,-elf2flt",
+ #endif
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 7f72a0cadec9..7faa033f605c 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -28,8 +28,12 @@ endif
+ 
+ # Avoid FPU bug on XBurst CPUs
+ ifeq ($(BR2_mips_xburst),y)
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_6),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_FP_CONTRACT_OFF
++else
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
+ endif
++endif
+ 
+ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
+-- 
+2.16.2
