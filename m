@@ -1,77 +1,33 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 08 Mar 2018 09:07:05 +0100
-Subject: [Buildroot] [PATCH] libmpdclient: bump to version 2.14
-In-Reply-To: <878tb3kn77.fsf@dell.be.48ers.dk>
-References: <20180307225257.30336-1-joerg.krause@embedded.rocks>
- <878tb3kn77.fsf@dell.be.48ers.dk>
-Message-ID: <1520496425.2267.2.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 08 Mar 2018 09:08:39 +0100
+Subject: [Buildroot] [PATCH RFC next] package/linux: drop useless
+ intermediate DTS booleans
+In-Reply-To: <82608B5578637D449D4F6ADA43F8E58715CB57@CHN-SV-EXMX01.mchp-main.com>
+ (Joshua Henderson's message of "Wed, 7 Mar 2018 22:45:52 +0000")
+References: <20180226174721.5785-1-yann.morin.1998@free.fr>
+ <82608B5578637D449D4F6ADA43F8E58715CB57@CHN-SV-EXMX01.mchp-main.com>
+Message-ID: <87ina7j8fs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>>   <Joshua.Henderson@microchip.com> writes:
 
-On Thu, 2018-03-08 at 09:04 +0100, Peter Korsgaard wrote:
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
->  > Since version 2.13 libmpdclient only supports the meson build.
->  > Therefore, adapt to package infrastructure according to the user manual.
-> 
->  > Also add a hash for the license file.
-> 
->  > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
->  > ---
->  >  package/libmpdclient/libmpdclient.hash |  5 +++--
->  >  package/libmpdclient/libmpdclient.mk   | 32 +++++++++++++++++++++++++++++---
->  >  2 files changed, 32 insertions(+), 5 deletions(-)
-> 
->  > diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
->  > index 2fd20a41fb..eb32786419 100644
->  > --- a/package/libmpdclient/libmpdclient.hash
->  > +++ b/package/libmpdclient/libmpdclient.hash
->  > @@ -1,2 +1,3 @@
->  > -# Verified against
->  > http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.xz.sig,
->  > sha256 locally computed
->  > -sha256 4f08cde82dae70895f8e4532a6e9b54b201efd5591c6b5d6834895807ed2ff82  libmpdclient-2.10.tar.xz
->  > +# Verified against
->  > http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.14.tar.xz.sig,
->  > sha256 locally computed
->  > +sha256  0a84e2791bfe3077cf22ee1784c805d5bb550803dffe56a39aa3690a38061372  libmpdclient-2.14.tar.xz
->  > +sha256  9574c3b0a9c31723cc3d5f32af4655a015fff5ec6ec8115b7906cd7d9623cf32  COPYING
->  > diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
->  > index 691aba9f71..5574bde948 100644
->  > --- a/package/libmpdclient/libmpdclient.mk
->  > +++ b/package/libmpdclient/libmpdclient.mk
->  > @@ -5,12 +5,38 @@
->  >  ################################################################################
->  
->  >  LIBMPDCLIENT_VERSION_MAJOR = 2
->  > -LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).10
->  > +LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).14
->  >  LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
->  >  LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
->  > -LIBMPDCLIENT_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
->  >  LIBMPDCLIENT_INSTALL_STAGING = YES
->  >  LIBMPDCLIENT_LICENSE = BSD-3-Clause
->  >  LIBMPDCLIENT_LICENSE_FILES = COPYING
->  
->  > -$(eval $(autotools-package))
->  > +LIBMPDCLIENT_CONF_OPTS += \
->  > +	--prefix=/usr \
->  > +	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
->  > +	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
->  > +
->  > +LIBMPDCLIENT_NINJA_OPTS = $(if $(VERBOSE),-v)
-> 
-> I see that systemd also passes -j$(PARALLEL_JOBS). Any specific reason
-> why you don't?
+Hi,
 
-No specific reason. I just follow the user manual, which does not
-mention this option.
+ > This is a fix for many current broken defconfigs on master resulting in:
 
-> If not, please send a followup patch to add it.
+ >     linux/linux.mk:490: *** No kernel device tree source specified,
+ > check your BR2_LINUX_KERNEL_USE_INTREE_DTS /
+ > BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings.  Stop.
+ >     Makefile:79: recipe for target '_all' failed
+ >     make: *** [_all] Error 2
 
-I'll do.
+ > Tested-by: Joshua Henderson <joshua.henderson@microchip.com>
+
+Committed, thanks both.
+
+-- 
+Bye, Peter Korsgaard
