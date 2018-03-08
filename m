@@ -1,47 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  8 Mar 2018 17:50:06 +0100
-Subject: [Buildroot] [PATCH 1/1] libmpdclient: add host-meson dependency
-Message-ID: <20180308165006.10903-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  8 Mar 2018 19:43:33 +0200
+Subject: [Buildroot] [RFC] lm-sensors: fix static build
+Message-ID: <4c4c3f8770727f91fb173fbc077dd8b7c15cc216.1520531013.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add -static to the link command line to have libgcc resolve libc
+symbols. This overrides the default -Wl,-rpath,/usr/lib, which is
+useless for static build anyway.
+
 Fixes:
- - http://autobuild.buildroot.net/results/00a/00af3302c4029670a585beb3cb65bd8623cf12da
+http://autobuild.buildroot.net/results/25d/25d580bee6f609f6b28ebd6cc96d180179901b0e/
 
-Add a libmpdclient entry for myself in DEVELOPERS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- DEVELOPERS                           | 1 +
- package/libmpdclient/libmpdclient.mk | 1 +
- 2 files changed, 2 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 625fafc686..8e8ed14cd4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -653,6 +653,7 @@ F:	package/gupnp-tools/
- F:	package/hiredis/
- F:	package/i2pd/
- F:	package/igd2-for-linux/
-+F:	package/libmpdclient/
- F:	package/libupnp/
- F:	package/libupnp18/
- F:	package/minissdpd/
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index 10281391aa..96e1f783fb 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -11,6 +11,7 @@ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_
- LIBMPDCLIENT_INSTALL_STAGING = YES
- LIBMPDCLIENT_LICENSE = BSD-3-Clause
- LIBMPDCLIENT_LICENSE_FILES = COPYING
-+LIBMPDCLIENT_DEPENDENCIES = host-meson
+I'm not sure this is the right fix. Adding -lc to the failed link
+command also fixes the issue. But libc is always a dependency of libgcc.
+
+It is also not clear why this issue appeared now. This is the only
+lm-sensors failure in the current autobuilder database. The only recent
+change that might be related is the musl bump to 1.1.19.
+---
+ package/lm-sensors/lm-sensors.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index f581b5cd8f21..6fc7ce4981c9 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -26,7 +26,7 @@ LM_SENSORS_MAKE_OPTS = \
+ 	PREFIX=/usr
  
- LIBMPDCLIENT_CONF_OPTS += \
- 	--prefix=/usr \
+ ifeq ($(BR2_STATIC_LIBS),y)
+-LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=0
++LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=0 EXLDFLAGS=-static
+ else
+ LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=1
+ endif
 -- 
-2.14.1
+2.16.1
