@@ -1,52 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Mar 2018 09:39:57 +0100
-Subject: [Buildroot] Buildroot hackathon on Mar 31 - Apr 2
-Message-ID: <20180308093957.297efb49@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 08 Mar 2018 10:02:28 +0100
+Subject: [Buildroot] [PATCH 1/4] tpm2-tss: new package
+In-Reply-To: <20180202155614.26938-2-casantos@datacom.ind.br> (Carlos Santos's
+ message of "Fri, 2 Feb 2018 13:56:11 -0200")
+References: <20180202155614.26938-1-casantos@datacom.ind.br>
+ <20180202155614.26938-2-casantos@datacom.ind.br>
+Message-ID: <876067j5y3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
-A small number of core/active/regular Buildroot developers from Europe
-will be gathering during a 3-day week-end from Mar 31 to April 2 for a
-Buildroot hackathon.
+ > OSS implementation of the TCG TPM2 Software Stack (TSS2). This stack
+ > consists of the following layers from top to bottom:
 
-Arnout Vandecappelle, Yann E. Morin, Peter Korsgaard, Romain Naour,
-Maxime Hadjinlian and myself will participate to this event. We will be
-physically meeting in Paris, hosted by La Maison from Scaleway [1], who
-is generously offering the meeting space and accommodation.
+ > * System API (SAPI) as described in the system level API and TPM command
+ >   transmission interface specification. This API is a 1-to-1 mapping of
+ >   the TPM2 commands documented in Part 3 of the TPM2 specification.
+ >   Additionally there are asynchronous versions of each command. These
+ >   asynchronous variants may be useful for integration into event-driven
+ >   programming environments. Both the synchronous and asynchronous API
+ >   are exposed through a single library: libsapi.
 
-[1] https://careers.scaleway.com/la-maison/
+ > * TPM Command Transmission Interface (TCTI) that is described in the
+ >   same specification. This API provides a standard interface to transmit
+ >   / receive TPM command / response buffers. It is expected that any
+ >   number of libraries implementing the TCTI API will be implemented as a
+ >   way to abstract various platform specific IPC mechanisms. Currently
+ >   this repository provides two TCTI implementations: libtcti-device and
+ >   libtcti-socket. The prior should be used for direct access to the TPM
+ >   through the Linux kernel driver. The later implements the protocol
+ >   exposed by the Microsoft software TPM2 simulator.
 
-For logistics reasons, this event is not open to everyone like the
-FOSDEM and ELCE meetings are. However, we wanted to announce it
-publicly nonetheless so that:
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
- *) People know that there will most likely be lots of Buildroot
-    activity during this week-end, especially reviewing and merging
-    patches, and reducing the patchwork backlog.
+Committed, thanks.
 
- *) Interested people may want to make themselves available on IRC
-    during this week-end (or part of the week-end) to participate to
-    the effort. Indeed, it would definitely be useful to have more
-    participants looking at pending patches, taking over some of the
-    patches that need further tweaks, etc.
-
- *) Some people may be interested in sending a new iteration of their
-    patch series before this week-end, so that we can take the
-    opportunity of this meeting to discuss and merge
-    large/controversial/complicated changes.
-
-If you have any question on how to participate remotely, do not
-hesitate to ask!
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Bye, Peter Korsgaard
