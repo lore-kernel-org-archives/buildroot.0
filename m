@@ -1,38 +1,63 @@
-From: Timo Ketola <timo.ketola@exertus.fi>
-Date: Thu,  8 Mar 2018 12:42:33 +0200
-Subject: [Buildroot] [PATCH 1/1] fbgrab: Fix some problems in the patch
- metadata
-Message-ID: <1520505753-13884-1-git-send-email-timo.ketola@exertus.fi>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  8 Mar 2018 11:48:08 +0100
+Subject: [Buildroot] [PATCH 1/1] libmpdclient: fix install
+Message-ID: <20180308104808.13870-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch description was missing Upstream-Status tag. It was given in the
-commit which added this patch but not in the patch itself as should be.
+meson adds the build machine architecture for installation, see:
+https://github.com/mesonbuild/meson/issues/2535
+Until this is fixed, fix libmpdclient.pc and copy the libraries and
+libmpclient.pc to the correct place.
 
-Signed-off-by tag accidentally didn't follow the usual format.
+Without this fix, ympd does not find libmpdclient
 
-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fbgrab/0100-fix-pixfmt-report.patch | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/libmpdclient/libmpdclient.mk | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
-index 18bcf96..8cff7ef 100644
---- a/package/fbgrab/0100-fix-pixfmt-report.patch
-+++ b/package/fbgrab/0100-fix-pixfmt-report.patch
-@@ -4,7 +4,9 @@ When fbgrab tells about the framebuffer pixel format, blue and green
- are accidentally swapped in 'length' and 'msb_right' columns. Let's
- order everything as RGB.
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 5574bde948..10281391aa 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -34,9 +34,34 @@ define LIBMPDCLIENT_INSTALL_TARGET_CMDS
+ 		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+ endef
  
--Signed-off-by timo.ketola at exertus.fi
-+Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
++# meson adds the build machine architecture for installation, see:
++# https://github.com/mesonbuild/meson/issues/2535
++# Until this is fixed, copy the libraries to the correct place
++define LIBMPDCLIENT_FIX_LIBRARY_INSTALL_TARGET
++	cp -a $(@D)/build/libmpdclient.* $(TARGET_DIR)/usr/lib
++endef
 +
-+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
++LIBMPDCLIENT_POST_INSTALL_TARGET_HOOKS += \
++	LIBMPDCLIENT_FIX_LIBRARY_INSTALL_TARGET
++
+ define LIBMPDCLIENT_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
+ 		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+ endef
  
- diff -u a/fbgrab.c b/fbgrab.c
- --- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
++# meson adds the build machine architecture for installation, see:
++# https://github.com/mesonbuild/meson/issues/2535
++# Until this is fixed, fix libmpdclient.pc and copy the libraries and
++# libmpclient.pc to the correct place
++define LIBMPDCLIENT_FIX_LIBRARY_INSTALL_STAGING
++	$(INSTALL) -D -m 644 $(@D)/build/meson-private/libmpdclient.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig
++	$(SED) 's,^libdir=.*,libdir=$${prefix}/lib,' \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libmpdclient.pc
++	cp -a $(@D)/build/libmpdclient.* $(STAGING_DIR)/usr/lib
++endef
++
++LIBMPDCLIENT_POST_INSTALL_STAGING_HOOKS += \
++	LIBMPDCLIENT_FIX_LIBRARY_INSTALL_STAGING
++
+ $(eval $(generic-package))
 -- 
-2.7.4
+2.14.1
