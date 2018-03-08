@@ -1,50 +1,39 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 8 Mar 2018 11:23:25 +0000
-Subject: [Buildroot] [PATCH 2/2] Add NodeJS requires options in case of
- custom Linux kernel configuration
-In-Reply-To: <VI1PR0201MB178934D161D5ED1D14E7A17CE5DF0@VI1PR0201MB1789.eurprd02.prod.outlook.com>
-References: <VI1PR0201MB178934D161D5ED1D14E7A17CE5DF0@VI1PR0201MB1789.eurprd02.prod.outlook.com>
-Message-ID: <CAFGQKxfLUheQ77Bso4tcB=KwOR1+2usCWgWJg0C4mDfzqgSvvA@mail.gmail.com>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Thu,  8 Mar 2018 13:35:58 +0200
+Subject: [Buildroot] [PATCH 1/2] cups-filters: bump to 1.20.1
+Message-ID: <20180308113559.3222-1-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+---
+ package/cups-filters/cups-filters.hash | 2 +-
+ package/cups-filters/cups-filters.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 8 March 2018 at 08:54, Stanislas Leduc <stanislas.leduc@balinor.net> wrote:
-> Signed-off-by: Stanislas Leduc <stanislas.leduc@balinor.net>
-> ---
->  package/nodejs/Config.in | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-> index d2846f8d57..8d6a8145a9 100644
-> --- a/package/nodejs/Config.in
-> +++ b/package/nodejs/Config.in
-> @@ -36,6 +36,13 @@ config BR2_PACKAGE_NODEJS
->
->           http://nodejs.org/
->
-> +         NodeJS requires the following options to be enabled in your
-> +          Linux kernel configuration:
-> +         CONFIG_SYSVIPC, CONFIG_POSIX_MQUEUE and CONFIG_EPOLL
-
-It will be libuv that has the dependencies not nodejs.  nodejs uses
-libuv to handle epoll, IPC etc
-
-Thanks
-
-Martin
-
-> +
-> +         Without these options, NodeJS and npm will exit with
-> +          a Segmentation fault"
-> +
->  if BR2_PACKAGE_NODEJS
->
->  config BR2_PACKAGE_NODEJS_NPM
-> --
-> 2.14.3
->
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index da9d31c998..043252803f 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 95254d7950df4c74d293ed7dfa0b714f51cff329a82da74a4ac976d342bb35ab  cups-filters-1.17.9.tar.gz
++sha256 f7b3853f9567e0213b4e1602bc670a626c3060e2a043e31b6dee21174d5469a5  cups-filters-1.20.1.tar.gz
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 6d05aa7e31..fd21bff6d4 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUPS_FILTERS_VERSION = 1.17.9
++CUPS_FILTERS_VERSION = 1.20.1
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
+-- 
+2.14.1
