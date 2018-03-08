@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Mar 2018 09:30:34 +0100
-Subject: [Buildroot] [PATCH v2 1/1] fbgrab: add patch fixing pixel
- format report
-In-Reply-To: <1520493725-1146-1-git-send-email-timo.ketola@exertus.fi>
-References: <1520493725-1146-1-git-send-email-timo.ketola@exertus.fi>
-Message-ID: <20180308093034.002c8987@windsurf>
+Date: Thu, 8 Mar 2018 09:32:06 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: Add myself to Ci20
+In-Reply-To: <20180307224127.16733-1-ezequiel@vanguardiasur.com.ar>
+References: <20180307224127.16733-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20180308093206.7263a324@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  8 Mar 2018 09:22:05 +0200, Timo Ketola wrote:
-> When verbosive, fbgrab reports pixel format. Green and blue offset and
-> msb_right fields are accidentally swapped there. This commit adds a patch
-> which straightens them up.
-> 
-> Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
-
-We normally put the Upstream-Status in the patch itself, i.e
-
-> 
-> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+On Wed,  7 Mar 2018 19:41:27 -0300, Ezequiel Garcia wrote:
+> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 > ---
-> No changes in the payload. Only added Upstream-status (Adrian) and
-> adjusted subject line (Thomas).
-> ---
->  package/fbgrab/0100-fix-pixfmt-report.patch | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/fbgrab/0100-fix-pixfmt-report.patch
+>  DEVELOPERS | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
-> new file mode 100644
-> index 0000000..18bcf96
-> --- /dev/null
-> +++ b/package/fbgrab/0100-fix-pixfmt-report.patch
-> @@ -0,0 +1,22 @@
-> +Fix pixel format report
-> +
-> +When fbgrab tells about the framebuffer pixel format, blue and green
-> +are accidentally swapped in 'length' and 'msb_right' columns. Let's
-> +order everything as RGB.
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 1d09102eab50..b0aab54d8f04 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -597,6 +597,8 @@ N:	Evan Zelkowitz <evan.zelkowitz@gmail.com>
+>  F:	package/sdl_gfx/
+>  
+>  N:	Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> +F:	board/ci20/
+> +F:	configs/ci20_defconfig
+>  F:	arch/Config.in.nios2
 
-... here.
-
-> +
-> +Signed-off-by timo.ketola at exertus.fi
-
-This Signed-off-by line doesn't follow the usual format, it should have
-been:
-
-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
-
-(But your patch has been applied already anyway).
-
-Best regards,
+Alphabetic ordering is not great here :-)
 
 Thomas
 -- 
