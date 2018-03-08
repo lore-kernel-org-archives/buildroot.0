@@ -1,26 +1,38 @@
-From: John Keeping <john@metanate.com>
-Date: Thu,  8 Mar 2018 10:37:31 +0000
-Subject: [Buildroot] [PATCH] libusbgx: add license hashes
-Message-ID: <20180308103731.7452-1-john@metanate.com>
+From: Timo Ketola <timo.ketola@exertus.fi>
+Date: Thu,  8 Mar 2018 12:42:33 +0200
+Subject: [Buildroot] [PATCH 1/1] fbgrab: Fix some problems in the patch
+ metadata
+Message-ID: <1520505753-13884-1-git-send-email-timo.ketola@exertus.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- package/libusbgx/libusbgx.hash | 2 ++
- 1 file changed, 2 insertions(+)
+The patch description was missing Upstream-Status tag. It was given in the
+commit which added this patch but not in the patch itself as should be.
 
-diff --git a/package/libusbgx/libusbgx.hash b/package/libusbgx/libusbgx.hash
-index c153acaf4a..107123ae11 100644
---- a/package/libusbgx/libusbgx.hash
-+++ b/package/libusbgx/libusbgx.hash
-@@ -1,2 +1,4 @@
- # Locally computed:
- sha256  b15abc89a0ef82c6a650cc1d58b5ba50f7ce076db392add84caabcd86c608ee2  libusbgx-libusbgx-v0.2.0.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+Signed-off-by tag accidentally didn't follow the usual format.
+
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+---
+ package/fbgrab/0100-fix-pixfmt-report.patch | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
+index 18bcf96..8cff7ef 100644
+--- a/package/fbgrab/0100-fix-pixfmt-report.patch
++++ b/package/fbgrab/0100-fix-pixfmt-report.patch
+@@ -4,7 +4,9 @@ When fbgrab tells about the framebuffer pixel format, blue and green
+ are accidentally swapped in 'length' and 'msb_right' columns. Let's
+ order everything as RGB.
+ 
+-Signed-off-by timo.ketola at exertus.fi
++Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
++
++Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+ 
+ diff -u a/fbgrab.c b/fbgrab.c
+ --- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
 -- 
-2.16.2
+2.7.4
