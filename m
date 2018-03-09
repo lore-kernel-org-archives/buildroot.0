@@ -1,15 +1,18 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Thu, 8 Mar 2018 14:29:06 -0800
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Thu, 8 Mar 2018 16:34:39 -0800
 Subject: [Buildroot] [PATCH] package: dropbear: make PATH configurable
-In-Reply-To: <20180308214801.GA8180@scaer>
+In-Reply-To: <CAGt4E5s10L9SxMzSR8-CSu1Q23woZGKHuyHgJM4EENWKR7TTqQ@mail.gmail.com>
 References: <20180308214403.94906-1-mmayer@broadcom.com>
  <20180308214801.GA8180@scaer>
-Message-ID: <CAGt4E5s10L9SxMzSR8-CSu1Q23woZGKHuyHgJM4EENWKR7TTqQ@mail.gmail.com>
+ <CAGt4E5s10L9SxMzSR8-CSu1Q23woZGKHuyHgJM4EENWKR7TTqQ@mail.gmail.com>
+Message-ID: <CALURroToOdxgb1bpT3d50j4POkmh+BkLGOWHQF_fqh0gCuzo-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+On Mar 8, 2018 2:29 PM, "Markus Mayer" <mmayer@broadcom.com> wrote:
 
 On 8 March 2018 at 13:48, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > Markus, All,
@@ -74,7 +77,18 @@ $ ssh brcmstb
 # echo $PATH
 /bin:/usr/bin:/sbin:/usr/sbin
 
-Hence the idea of allowing a user to modify the DEFAULT_PATH in dropbear itself.
+
+
+
+ssh -t $host echo $PATH
+
+
+
+
+
+
+Hence the idea of allowing a user to modify the DEFAULT_PATH in dropbear
+itself.
 
 Regards,
 -Markus
@@ -116,7 +130,8 @@ Regards,
 >>
 >> +ifneq ($(BR2_PACKAGE_DROPBEAR_PATH),"")
 >> +define DROPBEAR_CUSTOM_PATH
->> +     $(SED) 's|^\(#define DEFAULT_PATH\).*|\1 $(BR2_PACKAGE_DROPBEAR_PATH)|' $(@D)/options.h
+>> +     $(SED) 's|^\(#define DEFAULT_PATH\).*|\1
+$(BR2_PACKAGE_DROPBEAR_PATH)|' $(@D)/options.h
 >> +endef
 >> +
 >> +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_CUSTOM_PATH
@@ -134,9 +149,22 @@ Regards,
 >> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> .-----------------.--------------------.------------------.-
+-------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+     |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
+is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+ conspiracy.  |
+> '------------------------------^-------^------------------^-
+-------------------'
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180308/e5021b41/attachment.html>
