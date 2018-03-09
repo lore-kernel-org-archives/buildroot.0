@@ -1,114 +1,45 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu,  8 Mar 2018 20:36:38 -0600
-Subject: [Buildroot] [PATCH] configs/freescale_p1025twr_defconfig: new board
-Message-ID: <1520562998-51817-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 08 Mar 2018 23:41:41 -0300
+Subject: [Buildroot] [PATCH next v2 4/5] support/scripts/pkg-stats-new:
+ add latest upstream version information
+References: <20180308105619.54b75ca1@windsurf>
+Message-ID: <5aa1f465d6aa1_36ed152233428337@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replacing the p1010rdb, this board is based on the tower development
-system still available by NXP. The board is setup to track upstream
-Linux and has been bumped from 4.1 to 4.15 (compared to p1010).
+Hello,
 
-The target does not build uboot and assumes the user still uses the NXP
-suggested prebuilts in the SDK2.0 (last release for PowerPC). If a
-uboot is required, the source for SDK2.0 can be found in the following
-repo.
-http://git.freescale.com/git/cgit.cgi/ppc/sdk/u-boot.git/tag/?id=fsl-sdk-v2.0-1703
+On Thu, Mar 08, 2018 at 06:56 AM, Thomas Petazzoni wrote:
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- .gitlab-ci.yml                       |  1 +
- DEVELOPERS                           |  2 ++
- board/freescale/p1025twr/readme.txt  | 25 +++++++++++++++++++++++++
- configs/freescale_p1025twr_defconfig | 20 ++++++++++++++++++++
- 4 files changed, 48 insertions(+)
- create mode 100644 board/freescale/p1025twr/readme.txt
- create mode 100644 configs/freescale_p1025twr_defconfig
+[snip]
+>> It seems to not always return the same order. If I run the above script few
+>> times in a row the order is consistent. If I wait few hours the result can
+>> change.
+> 
+> Perhaps we should report this upstream to the people maintaining
+> release-monitoring.org ?
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 808d66c..6ed70d9 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -121,6 +121,7 @@ freescale_imx6sololiteevk_defconfig: *defconfig
- freescale_imx6sxsabresd_defconfig: *defconfig
- freescale_imx6ulevk_defconfig: *defconfig
- freescale_imx7dsabresd_defconfig: *defconfig
-+freescale_p1025twr_defconfig: *defconfig
- friendlyarm_nanopi_a64_defconfig: *defconfig
- friendlyarm_nanopi_neo2_defconfig: *defconfig
- galileo_defconfig: *defconfig
-diff --git a/DEVELOPERS b/DEVELOPERS
-index dba0e58..88e04db 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1149,6 +1149,8 @@ F:	configs/ts4900_defconfig
- F:	package/ts4900-fpga/
- 
- N:	Matt Weber <matthew.weber@rockwellcollins.com>
-+F:	board/freescale/p*
-+F:	configs/freescale_p*
- F:	package/argp-standalone/
- F:	package/aufs/
- F:	package/aufs-util/
-diff --git a/board/freescale/p1025twr/readme.txt b/board/freescale/p1025twr/readme.txt
-new file mode 100644
-index 0000000..9179aea
---- /dev/null
-+++ b/board/freescale/p1025twr/readme.txt
-@@ -0,0 +1,25 @@
-+The bootloader is no longer buildable in the latest Freescale/NXP tree or
-+upstream.  As such, retrieve the "Image: SDK V1.2 e500v2 Binary ISO" from
-+NXP downloads and follow the release notes for reflashing.
-+
-+For programming the kernel and rootfs created by buildroot into the flash.
-+The fast way is to tftp transfer the files via one of the network interfaces.
-+Make sure your devkit has ipaddr and serverip defined to reach your tftp
-+server.
-+
-+(Assuming the default u-boot env from NXP)
-+1. Program the DTB to NOR flash
-+
-+    => setenv dtbfile p1025twr.dtb
-+    => run dtbflash
-+
-+2. Program the kernel and rootfs to NOR flash (reusing orignal rootfs
-+   NOR location, as the kernel location is to small)
-+
-+    => tftpboot $loadaddr uImage; protect off 0xeeb80000 +$filesize; erase 0xeeb80000 +$filesize; cp.b $loadaddr 0xeeb80000 $filesize; protect on 0xeeb80000 +$filesize; cmp.b $loadaddr 0xefa80000 $filesize
-+
-+3. Booting your new system
-+
-+    => bootm 0xeeb80000 - 0xefe80000
-+
-+    You can login with user "root".
-diff --git a/configs/freescale_p1025twr_defconfig b/configs/freescale_p1025twr_defconfig
-new file mode 100644
-index 0000000..f7cc50f
---- /dev/null
-+++ b/configs/freescale_p1025twr_defconfig
-@@ -0,0 +1,20 @@
-+# Architecture
-+BR2_powerpc=y
-+BR2_powerpc_8548=y
-+
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
-+BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx_smp"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/p1025twr"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-+# BR2_TARGET_ROOTFS_TAR is not set
--- 
-1.9.1
+I created:
+https://github.com/release-monitoring/anitya/issues/533
+
+
+Also, regarding the 'version' field, I found these lines of code:
+
+class Project(Base):
+...
+        latest_version (sa.Boolean): The latest version for the project, as determined
+            by the version sorting algorithm.
+...
+    def __json__(self, detailed=False):
+...
+            version=self.latest_version,
+
+https://github.com/release-monitoring/anitya/blob/a0a9343dd86d9b7d41487b241f8e102d3321deee/anitya/db/models.py#L415
+(PS: it's not a boolean of course, the comment is wrong in this aspect)
+
+
+Regards,
+Ricardo
