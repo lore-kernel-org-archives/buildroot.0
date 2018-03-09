@@ -1,71 +1,68 @@
 From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Fri,  9 Mar 2018 17:49:36 +0100
-Subject: [Buildroot] [PATCH v3 3/6] package/llvm: enable AMDGPU
-In-Reply-To: <20180309164939.16075-1-valentin.korenblit@smile.fr>
-References: <20180309164939.16075-1-valentin.korenblit@smile.fr>
-Message-ID: <20180309164939.16075-4-valentin.korenblit@smile.fr>
+Date: Fri,  9 Mar 2018 17:49:33 +0100
+Subject: [Buildroot] [PATCH v3 0/6] llvm for mesa3d
+Message-ID: <20180309164939.16075-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The AMDGPU backend provides ISA code generation for AMD GPU's,
-starting with the R600 family up until the current GCN families.
+Hello all,
 
-It should not be confused with the AMDGPU Linux kernel DRM driver.
+This series provides llvm support for Mesa 3D.
 
-For more info: https://llvm.org/docs/AMDGPUUsage.html
+With respect to the previous two versions, the biggest change is that
+it now provides a full installation of host-llvm. The reason for this
+is explained in PATCH 1/6.
 
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
----
 
-Tested on HD6480 using Gallium Radeon R600 driver.
- 
- package/llvm/Config.in | 7 +++++++
- package/llvm/llvm.mk   | 8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+Changes v1 -> v2:
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 52bf079acf..d9a36223f7 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -18,3 +18,10 @@ config BR2_PACKAGE_LLVM
- 	  compiler and toolchain technologies.
- 
- 	  http://llvm.org
-+
-+config BR2_PACKAGE_LLVM_AMDGPU
-+	bool "AMDGPU backend"
-+	depends on BR2_PACKAGE_LLVM
-+	help
-+	  Build AMDGPU target. Select this option if you are going
-+	  to install mesa3d with llvm and use Gallium Radeon driver.
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 4e58c96e0f..b787d2da15 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -226,14 +226,20 @@ LLVM_CONF_OPTS += -DLLVM_BUILD_EXTERNAL_COMPILER_RT=OFF
- # Get target architecture
- HOST_LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
- 
-+# Build AMDGPU backend
-+ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
-+HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH);AMDGPU"
-+LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH);AMDGPU"
-+else
- # Build backend for target architecture
- HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH)"
- LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH)"
-+endif
- 
- # LLVM target to use for native code generation.
- HOST_LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(HOST_LLVM_TARGET_ARCH)
- LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(HOST_LLVM_TARGET_ARCH)
--
-+ 
- # * LLVM_ENABLE_CXX1Y: Compile with C++1y enabled OFF
- #   Enable C++ and C++11 support if BR2_INSTALL_LIBSTDCPP=y
- HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_CXX1Y=$(if $(BR2_INSTALL_LIBSTDCPP),ON,OFF)
+The series has been simplified:
+
+*Build only backend for target architecture by default.
+*Support for AMDGPU(PATCH 3/4 in v1) was removed because I cannot test
+it currently. 
+*Host: make options modified to build only llvm-config and llvm-tblgen
+(reduces drastically build time for host).
+*Target: support only x86 currently (tested), I will test on ARM soon.
+
+Changes v2 -> v3:
+
+* Full installation of LLVM (tools and libLLVM.so) for the host.
+* Disable Mesa 3D static linking, it now links with shared lib.
+* Options to disable building each tool one by one were removed.
+* Support for AMDGPU.
+* Support for ARM and AArch64.
+*-DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME) added. This fixes the error:
+"No available targets are compatible with this triple" for llvmpipe.
+
+Regards,
+
+Valent?n
+
+Valentin Korenblit (6):
+  package/llvm: new host package
+  package/llvm: enable target variant
+  package/llvm: enable AMDGPU
+  package/mesa3d: enable llvm support
+  package/llvm: enable ARM
+  package/llvm: enable AArch64
+
+ package/Config.in           |   1 +
+ package/Config.in.host      |   1 +
+ package/llvm/Config.in      |  31 +++++
+ package/llvm/Config.in.host |   8 ++
+ package/llvm/llvm.hash      |   3 +
+ package/llvm/llvm.mk        | 302 ++++++++++++++++++++++++++++++++++++++++++++
+ package/mesa3d/Config.in    |   8 ++
+ package/mesa3d/mesa3d.mk    |  17 ++-
+ 8 files changed, 368 insertions(+), 3 deletions(-)
+ create mode 100644 package/llvm/Config.in
+ create mode 100644 package/llvm/Config.in.host
+ create mode 100644 package/llvm/llvm.hash
+ create mode 100644 package/llvm/llvm.mk
+
 -- 
 2.14.3
