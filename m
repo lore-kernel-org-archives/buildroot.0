@@ -1,62 +1,40 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Fri, 9 Mar 2018 13:29:53 -0800
-Subject: [Buildroot] [PATCH] package: dropbear: make PATH configurable
-In-Reply-To: <CALURroR3pvrWv_gtkqBMtE8OgSwUUbC9tBrfUbiiMf8=tcJmTw@mail.gmail.com>
-References: <20180308214403.94906-1-mmayer@broadcom.com>
- <20180308214801.GA8180@scaer>
- <CAGt4E5s10L9SxMzSR8-CSu1Q23woZGKHuyHgJM4EENWKR7TTqQ@mail.gmail.com>
- <CALURroToOdxgb1bpT3d50j4POkmh+BkLGOWHQF_fqh0gCuzo-w@mail.gmail.com>
- <CALURroR3pvrWv_gtkqBMtE8OgSwUUbC9tBrfUbiiMf8=tcJmTw@mail.gmail.com>
-Message-ID: <CAGt4E5vNc39-zSfrdan1-JB8-sJxnSToJJn0hf7WFf_budAKtg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 09 Mar 2018 22:33:41 +0100
+Subject: [Buildroot] [PATCH] x11vnc: add license hash
+In-Reply-To: <87zi3hgct6.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Fri, 09 Mar 2018 22:27:01 +0100")
+References: <20180309123053.21552-1-martink@posteo.de>
+ <87zi3hgct6.fsf@dell.be.48ers.dk>
+Message-ID: <87sh99gci2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 9 March 2018 at 09:10, Christopher McCrory <chrismcc@gmail.com> wrote:
->
-> On Thu, Mar 8, 2018 at 4:34 PM, Christopher McCrory <chrismcc@gmail.com>
-> wrote:
->
-> <snip>
->
->>
->> $ ssh brcmstb
->> # echo $PATH
->> /bin:/usr/bin:/sbin:/usr/sbin
->>
->>
->> ssh -t $host echo $PATH
->>
->
-> I thought that would work (forcing a term), but it doesn't
->
-> This will do what you want on your local project
->
-> $ cat output/local.mk
-> DROPBEAR_CONF_OPTS += --enable-foo=bar
->
-> define DROPBEAR_CUSTOM_PATH
-> $(SED) 's|^\(#define DEFAULT_PATH\).*|\1
-> "/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"|'
-> $(@D)/options.h
-> endef
->
-> DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_CUSTOM_PATH
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-If nobody else wants to make use of this feature, we can certainly
-stick it in local.mk. I figured it might be beneficial to others, as
-well.
+>>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
+ >> Signed-off-by: Martin Kepplinger <martink@posteo.de>
 
-I'll create a version with a safer regexp as suggested by Nicolas, and
-then I'll let the maintainers decide if this is worthwhile or not.
+ > Committed, thanks.
 
-Regards,
--Markus
+Ehh, I take that back. My x11vnc-0.9.15 tarball does not have a COPYING
+file:
 
-> --
-> Christopher McCrory
-> To the optimist, the glass is half full.
-> To the pessimist, the glass is half empty.
-> To the engineer, the glass is twice as big as it needs to be.
+make x11vnc-patch
+x11vnc-0.9.15.tar.gz: OK (sha256: 3e43bd875edc3c7f52a0d3676c4ec7de910fcd210240ee20b4522deb2bf84cff)
+>>> x11vnc 0.9.15 Extracting
+gzip -d -c /var/lib/downloads/x11vnc-0.9.15.tar.gz | tar --strip-components=1 -C /home/peko/source/buildroot/output/build/x11vnc-0.9.15   -xf -
+>>> x11vnc 0.9.15 Patching
+>>> x11vnc 0.9.15 Updating config.sub and config.guess
+for file in config.guess config.sub; do for i in $(find /home/peko/source/buildroot/output/build/x11vnc-0.9.15 -name $file); do cp support/gnuconfig/$file $i; done; done
+ls output/build/x11vnc-0.9.15
+AUTHORS     configure.ac  misc    README.md                                      tkx11vnc
+autogen.sh  m4            NEWS    src                                            x11vnc.1
+ChangeLog   Makefile.am   README  tightvnc-1.3dev5-vncviewer-alpha-cursor.patch  x11vnc.desktop
+
+What went wrong?
+
+-- 
+Bye, Peter Korsgaard
