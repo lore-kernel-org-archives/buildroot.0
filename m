@@ -1,79 +1,71 @@
 From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Fri,  9 Mar 2018 17:49:37 +0100
-Subject: [Buildroot] [PATCH v3 4/6] package/mesa3d: enable llvm support
+Date: Fri,  9 Mar 2018 17:49:36 +0100
+Subject: [Buildroot] [PATCH v3 3/6] package/llvm: enable AMDGPU
 In-Reply-To: <20180309164939.16075-1-valentin.korenblit@smile.fr>
 References: <20180309164939.16075-1-valentin.korenblit@smile.fr>
-Message-ID: <20180309164939.16075-5-valentin.korenblit@smile.fr>
+Message-ID: <20180309164939.16075-4-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides LLVM support for Mesa3D, enabling llvmpipe
-software rasterizer.
+The AMDGPU backend provides ISA code generation for AMD GPU's,
+starting with the R600 family up until the current GCN families.
 
-It uses llvm-config (host variant) installed in STAGING_DIR/usr/bin
-to get LLVM libraries. Assuming that LLVM version 5.0.1 is installed,
-llvm-config --libs will output -lLLVM-5.0.
+It should not be confused with the AMDGPU Linux kernel DRM driver.
+
+For more info: https://llvm.org/docs/AMDGPUUsage.html
 
 Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 ---
- package/mesa3d/Config.in |  8 ++++++++
- package/mesa3d/mesa3d.mk | 17 ++++++++++++++---
- 2 files changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index f141587c4d..e99e737d31 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -25,6 +25,14 @@ menuconfig BR2_PACKAGE_MESA3D
+Tested on HD6480 using Gallium Radeon R600 driver.
  
- if BR2_PACKAGE_MESA3D
+ package/llvm/Config.in | 7 +++++++
+ package/llvm/llvm.mk   | 8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 52bf079acf..d9a36223f7 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -18,3 +18,10 @@ config BR2_PACKAGE_LLVM
+ 	  compiler and toolchain technologies.
  
-+config BR2_PACKAGE_MESA3D_LLVM
-+	bool "mesa3d w/ llvm"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	select BR2_PACKAGE_LLVM
+ 	  http://llvm.org
 +
-+comment "mesa3d w/ llvm needs llvm"
-+	depends on !BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+
- # inform the .mk file of gallium, dri or vulkan driver selection
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	bool
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 5f4832c0f0..03104c3c00 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -32,6 +32,20 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- MESA3D_CONF_OPTS += --disable-static
- endif
++config BR2_PACKAGE_LLVM_AMDGPU
++	bool "AMDGPU backend"
++	depends on BR2_PACKAGE_LLVM
++	help
++	  Build AMDGPU target. Select this option if you are going
++	  to install mesa3d with llvm and use Gallium Radeon driver.
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 4e58c96e0f..b787d2da15 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -226,14 +226,20 @@ LLVM_CONF_OPTS += -DLLVM_BUILD_EXTERNAL_COMPILER_RT=OFF
+ # Get target architecture
+ HOST_LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
  
-+ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
-+MESA3D_DEPENDENCIES += host-llvm llvm
-+MESA3D_CONF_OPTS += \
-+	--with-llvm-prefix=$(STAGING_DIR)/usr \
-+	--enable-llvm-shared-libs \
-+	--enable-llvm
++# Build AMDGPU backend
++ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
++HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH);AMDGPU"
++LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH);AMDGPU"
 +else
-+# Avoid automatic search of llvm-config
-+MESA3D_CONF_OPTS += \
-+	--with-llvm-prefix=$(STAGING_DIR)/usr \
-+	--disable-llvm-shared-libs \
-+	--disable-llvm
+ # Build backend for target architecture
+ HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH)"
+ LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH)"
 +endif
-+
- # The Sourcery MIPS toolchain has a special (non-upstream) feature to
- # have "compact exception handling", which unfortunately breaks with
- # mesa3d, so we disable it here by passing -mno-compact-eh.
-@@ -219,7 +233,4 @@ else
- MESA3D_CONF_OPTS += --disable-lmsensors
- endif
  
--# Avoid automatic search of llvm-config
--MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
+ # LLVM target to use for native code generation.
+ HOST_LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(HOST_LLVM_TARGET_ARCH)
+ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(HOST_LLVM_TARGET_ARCH)
 -
- $(eval $(autotools-package))
++ 
+ # * LLVM_ENABLE_CXX1Y: Compile with C++1y enabled OFF
+ #   Enable C++ and C++11 support if BR2_INSTALL_LIBSTDCPP=y
+ HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_CXX1Y=$(if $(BR2_INSTALL_LIBSTDCPP),ON,OFF)
 -- 
 2.14.3
