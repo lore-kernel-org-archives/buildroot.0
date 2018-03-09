@@ -1,170 +1,114 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Thu, 8 Mar 2018 16:34:39 -0800
-Subject: [Buildroot] [PATCH] package: dropbear: make PATH configurable
-In-Reply-To: <CAGt4E5s10L9SxMzSR8-CSu1Q23woZGKHuyHgJM4EENWKR7TTqQ@mail.gmail.com>
-References: <20180308214403.94906-1-mmayer@broadcom.com>
- <20180308214801.GA8180@scaer>
- <CAGt4E5s10L9SxMzSR8-CSu1Q23woZGKHuyHgJM4EENWKR7TTqQ@mail.gmail.com>
-Message-ID: <CALURroToOdxgb1bpT3d50j4POkmh+BkLGOWHQF_fqh0gCuzo-w@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu,  8 Mar 2018 20:36:38 -0600
+Subject: [Buildroot] [PATCH] configs/freescale_p1025twr_defconfig: new board
+Message-ID: <1520562998-51817-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mar 8, 2018 2:29 PM, "Markus Mayer" <mmayer@broadcom.com> wrote:
+Replacing the p1010rdb, this board is based on the tower development
+system still available by NXP. The board is setup to track upstream
+Linux and has been bumped from 4.1 to 4.15 (compared to p1010).
 
-On 8 March 2018 at 13:48, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Markus, All,
->
-> On 2018-03-08 13:44 -0800, Markus Mayer spake thusly:
->> Make the default PATH dropbear is using configurable.
->>
->> If not specified, it will continue to default to dropbear's
->> DEFAULT_PATH.
->
-> Isn't it better to jut let the user provide a ~/.profile file which
-> actually sets the PATH?
+The target does not build uboot and assumes the user still uses the NXP
+suggested prebuilts in the SDK2.0 (last release for PowerPC). If a
+uboot is required, the source for SDK2.0 can be found in the following
+repo.
+http://git.freescale.com/git/cgit.cgi/ppc/sdk/u-boot.git/tag/?id=fsl-sdk-v2.0-1703
 
-That's certainly one way to do it and one can still choose to do that
-for when it works.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ .gitlab-ci.yml                       |  1 +
+ DEVELOPERS                           |  2 ++
+ board/freescale/p1025twr/readme.txt  | 25 +++++++++++++++++++++++++
+ configs/freescale_p1025twr_defconfig | 20 ++++++++++++++++++++
+ 4 files changed, 48 insertions(+)
+ create mode 100644 board/freescale/p1025twr/readme.txt
+ create mode 100644 configs/freescale_p1025twr_defconfig
 
-Where we have found it helpful to change the default is for
-non-interactive shells, i.e. running a command via ssh without logging
-in first. If you try to do "ssh eval-board ifconfig" it'll fail,
-because /sbin isn't in the path. And .profile doesn't help you.
-
-There's an example:
-
-$ ssh brcmstb ifconfig
-sh: ifconfig: command not found
-
-No surprise, because /sbin isn't in the PATH.
-
-$ ssh brcmstb 'echo $PATH'
-/usr/bin:/bin
-
-But hold on. ".profile" does exist and it does add /sbin to the PATH.
-Still no luck, though.
-
-$ ssh brcmstb 'cat .profile'
-PATH=/bin:/usr/bin:/sbin:/usr/sbin
-
-Of course it works if you specify the full path.
-
-$ ssh brcmstb /sbin/ifconfig
-eth0      Link encap:Ethernet  HWaddr 00:10:18:DD:33:10
-          inet addr:192.168.15.8  Bcast:192.168.15.255  Mask:255.255.255.0
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:364 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:274 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000
-          RX bytes:65845 (64.3 KiB)  TX bytes:45749 (44.6 KiB)
-
-lo        Link encap:Local Loopback
-          inet addr:127.0.0.1  Mask:255.0.0.0
-          UP LOOPBACK RUNNING  MTU:65536  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
-
-And when you log in, ".profile" does what you expect it to do. So,
-".profile" works for interactive shells, but not for non-interactive
-ones.
-
-$ ssh brcmstb
-# echo $PATH
-/bin:/usr/bin:/sbin:/usr/sbin
-
-
-
-
-ssh -t $host echo $PATH
-
-
-
-
-
-
-Hence the idea of allowing a user to modify the DEFAULT_PATH in dropbear
-itself.
-
-Regards,
--Markus
-
-> Regards,
-> Yann E. MORIN.
->
->> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
->> ---
->>
->> Please let me know what you think. Thanks.
->>
->>  package/dropbear/Config.in   | 6 ++++++
->>  package/dropbear/dropbear.mk | 8 ++++++++
->>  2 files changed, 14 insertions(+)
->>
->> diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
->> index 6700778161ba..d38ecf50834a 100644
->> --- a/package/dropbear/Config.in
->> +++ b/package/dropbear/Config.in
->> @@ -55,4 +55,10 @@ config BR2_PACKAGE_DROPBEAR_LASTLOG
->>         Enable logging of dropbear access to lastlog. Notice that
->>         Buildroot does not generate lastlog by default.
->>
->> +config BR2_PACKAGE_DROPBEAR_PATH
->> +     string "dropbear default path"
->> +     help
->> +       Use the path specified here as dropbear's default path.
->> +       If not specified, dropbear will use "/usr/bin:/bin".
->> +
->>  endif
->> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
->> index 01a1a07b7696..ddbedf3bce93 100644
->> --- a/package/dropbear/dropbear.mk
->> +++ b/package/dropbear/dropbear.mk
->> @@ -51,6 +51,14 @@ define DROPBEAR_DISABLE_STANDALONE
->>       $(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
->>  endef
->>
->> +ifneq ($(BR2_PACKAGE_DROPBEAR_PATH),"")
->> +define DROPBEAR_CUSTOM_PATH
->> +     $(SED) 's|^\(#define DEFAULT_PATH\).*|\1
-$(BR2_PACKAGE_DROPBEAR_PATH)|' $(@D)/options.h
->> +endef
->> +
->> +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_CUSTOM_PATH
->> +endif
->> +
->>  define DROPBEAR_INSTALL_INIT_SYSTEMD
->>       $(INSTALL) -D -m 644 package/dropbear/dropbear.service \
->>               $(TARGET_DIR)/usr/lib/systemd/system/dropbear.service
->> --
->> 2.7.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.-
--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
-     |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
- conspiracy.  |
-> '------------------------------^-------^------------------^-
--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180308/e5021b41/attachment.html>
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 808d66c..6ed70d9 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -121,6 +121,7 @@ freescale_imx6sololiteevk_defconfig: *defconfig
+ freescale_imx6sxsabresd_defconfig: *defconfig
+ freescale_imx6ulevk_defconfig: *defconfig
+ freescale_imx7dsabresd_defconfig: *defconfig
++freescale_p1025twr_defconfig: *defconfig
+ friendlyarm_nanopi_a64_defconfig: *defconfig
+ friendlyarm_nanopi_neo2_defconfig: *defconfig
+ galileo_defconfig: *defconfig
+diff --git a/DEVELOPERS b/DEVELOPERS
+index dba0e58..88e04db 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1149,6 +1149,8 @@ F:	configs/ts4900_defconfig
+ F:	package/ts4900-fpga/
+ 
+ N:	Matt Weber <matthew.weber@rockwellcollins.com>
++F:	board/freescale/p*
++F:	configs/freescale_p*
+ F:	package/argp-standalone/
+ F:	package/aufs/
+ F:	package/aufs-util/
+diff --git a/board/freescale/p1025twr/readme.txt b/board/freescale/p1025twr/readme.txt
+new file mode 100644
+index 0000000..9179aea
+--- /dev/null
++++ b/board/freescale/p1025twr/readme.txt
+@@ -0,0 +1,25 @@
++The bootloader is no longer buildable in the latest Freescale/NXP tree or
++upstream.  As such, retrieve the "Image: SDK V1.2 e500v2 Binary ISO" from
++NXP downloads and follow the release notes for reflashing.
++
++For programming the kernel and rootfs created by buildroot into the flash.
++The fast way is to tftp transfer the files via one of the network interfaces.
++Make sure your devkit has ipaddr and serverip defined to reach your tftp
++server.
++
++(Assuming the default u-boot env from NXP)
++1. Program the DTB to NOR flash
++
++    => setenv dtbfile p1025twr.dtb
++    => run dtbflash
++
++2. Program the kernel and rootfs to NOR flash (reusing orignal rootfs
++   NOR location, as the kernel location is to small)
++
++    => tftpboot $loadaddr uImage; protect off 0xeeb80000 +$filesize; erase 0xeeb80000 +$filesize; cp.b $loadaddr 0xeeb80000 $filesize; protect on 0xeeb80000 +$filesize; cmp.b $loadaddr 0xefa80000 $filesize
++
++3. Booting your new system
++
++    => bootm 0xeeb80000 - 0xefe80000
++
++    You can login with user "root".
+diff --git a/configs/freescale_p1025twr_defconfig b/configs/freescale_p1025twr_defconfig
+new file mode 100644
+index 0000000..f7cc50f
+--- /dev/null
++++ b/configs/freescale_p1025twr_defconfig
+@@ -0,0 +1,20 @@
++# Architecture
++BR2_powerpc=y
++BR2_powerpc_8548=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
++BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx_smp"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/p1025twr"
++
++# Filesystem
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
++# BR2_TARGET_ROOTFS_TAR is not set
+-- 
+1.9.1
