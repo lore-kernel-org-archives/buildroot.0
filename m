@@ -1,50 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 9 Mar 2018 16:26:04 +0100
-Subject: [Buildroot] [PATCH v4 1/4] imx-mkimage: new package
-In-Reply-To: <CAPP7BN3ewrHnw2nUUO3UtOYG=+zv9hjEatg+y_7JRo4tOcv8qA@mail.gmail.com>
-References: <1520065060-20046-1-git-send-email-karl.erik.larsson@gmail.com>
- <1520065060-20046-2-git-send-email-karl.erik.larsson@gmail.com>
- <20180303164706.0084b2ec@windsurf.home>
- <CAPP7BN3ewrHnw2nUUO3UtOYG=+zv9hjEatg+y_7JRo4tOcv8qA@mail.gmail.com>
-Message-ID: <20180309162604.73d98870@windsurf>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Fri,  9 Mar 2018 17:49:37 +0100
+Subject: [Buildroot] [PATCH v3 4/6] package/mesa3d: enable llvm support
+In-Reply-To: <20180309164939.16075-1-valentin.korenblit@smile.fr>
+References: <20180309164939.16075-1-valentin.korenblit@smile.fr>
+Message-ID: <20180309164939.16075-5-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch provides LLVM support for Mesa3D, enabling llvmpipe
+software rasterizer.
 
-On Sat, 3 Mar 2018 19:46:34 +0100, Erik Larsson wrote:
+It uses llvm-config (host variant) installed in STAGING_DIR/usr/bin
+to get LLVM libraries. Assuming that LLVM version 5.0.1 is installed,
+llvm-config --libs will output -lLLVM-5.0.
 
-> > I'm not a big fan of the fact that this host package not does not
-> > install any host tool, but instead post-processes images created by
-> > other packages.
-> >
-> > Would it be possible for this package to just install host tools, and
-> > then have a post-image script that uses these host tools to provide the
-> > final flash.bin image ?  
-> 
-> This first version if this patch-serie did sort of that. It build and
-> installed host tools. And then they were used in post-image.sh. But
-> after a comments/suggestion from Baruch I got encouraged do it this
-> way. This solution is much clearer when reading the code then the
-> first version, but maybe with the drawback of this host-package not
-> really being a host-package as you stated. If you compare this
-> solution with the first you will see that there is a pretty convoluted
-> solution for doing parts that are in the Makefile och imx-mkimage. The
-> main problem here may be the fact that NXP put stuff in there Makefile
-> that rally doesn't have anything with the creation of the tool.
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+---
+ package/mesa3d/Config.in |  8 ++++++++
+ package/mesa3d/mesa3d.mk | 17 ++++++++++++++---
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
-I think I really prefer the approach where the imx-mkimage package only
-installs a host tool, and then a post-image script that uses the host
-tool installed by imx-mkimage to post-process the images, and generate
-the final bootloader.
-
-Best regards,
-
-Thomas
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index f141587c4d..e99e737d31 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -25,6 +25,14 @@ menuconfig BR2_PACKAGE_MESA3D
+ 
+ if BR2_PACKAGE_MESA3D
+ 
++config BR2_PACKAGE_MESA3D_LLVM
++	bool "mesa3d w/ llvm"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	select BR2_PACKAGE_LLVM
++
++comment "mesa3d w/ llvm needs llvm"
++	depends on !BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++
+ # inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	bool
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 5f4832c0f0..03104c3c00 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -32,6 +32,20 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ MESA3D_CONF_OPTS += --disable-static
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
++MESA3D_DEPENDENCIES += host-llvm llvm
++MESA3D_CONF_OPTS += \
++	--with-llvm-prefix=$(STAGING_DIR)/usr \
++	--enable-llvm-shared-libs \
++	--enable-llvm
++else
++# Avoid automatic search of llvm-config
++MESA3D_CONF_OPTS += \
++	--with-llvm-prefix=$(STAGING_DIR)/usr \
++	--disable-llvm-shared-libs \
++	--disable-llvm
++endif
++
+ # The Sourcery MIPS toolchain has a special (non-upstream) feature to
+ # have "compact exception handling", which unfortunately breaks with
+ # mesa3d, so we disable it here by passing -mno-compact-eh.
+@@ -219,7 +233,4 @@ else
+ MESA3D_CONF_OPTS += --disable-lmsensors
+ endif
+ 
+-# Avoid automatic search of llvm-config
+-MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
+-
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.14.3
