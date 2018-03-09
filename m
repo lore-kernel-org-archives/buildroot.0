@@ -1,160 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  9 Mar 2018 20:16:55 +0100
-Subject: [Buildroot] [PATCH 04/10] package: add python-docker
+Date: Fri,  9 Mar 2018 20:16:57 +0100
+Subject: [Buildroot] [PATCH 06/10] package: add python-texttable
 In-Reply-To: <20180309191701.23760-1-peter@korsgaard.com>
 References: <20180309191701.23760-1-peter@korsgaard.com>
-Message-ID: <20180309191701.23760-5-peter@korsgaard.com>
+Message-ID: <20180309191701.23760-7-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python library for the Docker Engine API.
+Module for creating simple ASCII tables.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-setup.py-make-pip-optional.patch          | 50 ++++++++++++++++++++++
- package/python-docker/Config.in                    | 15 +++++++
- package/python-docker/python-docker.hash           |  4 ++
- package/python-docker/python-docker.mk             | 14 ++++++
- 6 files changed, 85 insertions(+)
- create mode 100644 package/python-docker/0001-setup.py-make-pip-optional.patch
- create mode 100644 package/python-docker/Config.in
- create mode 100644 package/python-docker/python-docker.hash
- create mode 100644 package/python-docker/python-docker.mk
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-texttable/Config.in             |  6 ++++++
+ package/python-texttable/python-texttable.hash |  4 ++++
+ package/python-texttable/python-texttable.mk   | 14 ++++++++++++++
+ 5 files changed, 26 insertions(+)
+ create mode 100644 package/python-texttable/Config.in
+ create mode 100644 package/python-texttable/python-texttable.hash
+ create mode 100644 package/python-texttable/python-texttable.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 34ecfeeb02..9b68652b5f 100644
+index ced3af7169..10dab1d2e4 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1385,6 +1385,7 @@ F:	package/memtool/
- F:	package/mosquitto/
- F:	package/python-alsaaudio/
- F:	package/python-backports-ssl-match-hostname/
-+F:	package/python-docker/
- F:	package/python-docker-pycreds/
- F:	package/python-enum/
- F:	package/python-enum34/
+@@ -1393,6 +1393,7 @@ F:	package/python-enum34/
+ F:	package/python-ipaddr/
+ F:	package/python-pam/
+ F:	package/python-psutil/
++F:	package/python-texttable/
+ F:	package/python-websocket-client/
+ F:	package/triggerhappy/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index d3018aee47..c1bf7067aa 100644
+index 1043338a7e..6068ef573e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -766,6 +766,7 @@ menu "External python modules"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-django/Config.in"
-+	source "package/python-docker/Config.in"
- 	source "package/python-docker-pycreds/Config.in"
- 	source "package/python-docopt/Config.in"
- 	source "package/python-docutils/Config.in"
-diff --git a/package/python-docker/0001-setup.py-make-pip-optional.patch b/package/python-docker/0001-setup.py-make-pip-optional.patch
+@@ -932,6 +932,7 @@ menu "External python modules"
+ 	source "package/python-systemd/Config.in"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
++	source "package/python-texttable/Config.in"
+ 	source "package/python-typepy/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
+diff --git a/package/python-texttable/Config.in b/package/python-texttable/Config.in
 new file mode 100644
-index 0000000000..d9c958311d
+index 0000000000..1c8dde8d3f
 --- /dev/null
-+++ b/package/python-docker/0001-setup.py-make-pip-optional.patch
-@@ -0,0 +1,50 @@
-+From 978643b7222db66837d39037f884be01fb9af234 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Fri, 9 Mar 2018 18:40:16 +0100
-+Subject: [PATCH] setup.py: make pip optional
-+
-+pip may not be available on the build host, and it is only used to check if
-+docker-py is already installed, so skip the check if pip isn't available.
-+
-+[Upstream-status: submitted (https://github.com/docker/docker-py/pull/1948)]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ setup.py | 20 ++++++++++++--------
-+ 1 file changed, 12 insertions(+), 8 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 271d94f..c9b91a3 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -5,16 +5,20 @@ import codecs
-+ import os
-+ import sys
-+ 
-+-import pip
-+-
-+ from setuptools import setup, find_packages
-+ 
-+-if 'docker-py' in [x.project_name for x in pip.get_installed_distributions()]:
-+-    print(
-+-        'ERROR: "docker-py" needs to be uninstalled before installing this'
-+-        ' package:\npip uninstall docker-py', file=sys.stderr
-+-    )
-+-    sys.exit(1)
-++try:
-++    import pip
-++
-++    if 'docker-py' in \
-++            [x.project_name for x in pip.get_installed_distributions()]:
-++        print(
-++            'ERROR: "docker-py" needs to be uninstalled before installing this'
-++            ' package:\npip uninstall docker-py', file=sys.stderr
-++        )
-++        sys.exit(1)
-++except ImportError:
-++    pass
-+ 
-+ ROOT_DIR = os.path.dirname(__file__)
-+ SOURCE_DIR = os.path.join(ROOT_DIR)
-+-- 
-+2.11.0
-+
-diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
-new file mode 100644
-index 0000000000..35f7666f19
---- /dev/null
-+++ b/package/python-docker/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_DOCKER
-+	bool "python-docker"
-+	# docker-engine may be running on another host, so no dependency
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME \
-+	       if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT # runtime
-+	select BR2_PACKAGE_PYTHON_DOCKER_PYCREDS # runtime
++++ b/package/python-texttable/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_TEXTTABLE
++	bool "python-texttable"
 +	help
-+	  A Python library for the Docker Engine API.
++	  module for creating simple ASCII tables.
 +
-+	  https://github.com/docker/docker-py
-diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
++	  https://github.com/foutaise/texttable/
+diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
 new file mode 100644
-index 0000000000..c09ccc3859
+index 0000000000..448d6b7dd1
 --- /dev/null
-+++ b/package/python-docker/python-docker.hash
++++ b/package/python-texttable/python-texttable.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/docker/json, sha256 locally computed
-+md5	71e97726a8bdc56effa7df8321c47af1  docker-3.1.1.tar.gz
-+sha256	462165ca6367f802280684ab44e581cd2efba8995d78d07ea994e42194927c3b  docker-3.1.1.tar.gz
-+sha256	f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
-diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
++# md5 from https://pypi.python.org/pypi/texttable/json, sha256 locally computed
++md5	a712b5a5464d51c5fc43c64d9d2cd0de  texttable-0.9.1.tar.gz
++sha256	119041773ff03596b56392532f9315cb3a3116e404fd6f36e76a7dc088d95c79  texttable-0.9.1.tar.gz
++sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE
+diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
 new file mode 100644
-index 0000000000..fb9b32a603
+index 0000000000..96fe6cf882
 --- /dev/null
-+++ b/package/python-docker/python-docker.mk
++++ b/package/python-texttable/python-texttable.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-docker
++# python-texttable
 +#
 +################################################################################
 +
-+PYTHON_DOCKER_VERSION = 3.1.1
-+PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
-+PYTHON_DOCKER_SITE = https://pypi.python.org/packages/0d/17/ad98e025e5528337c4dc5835a5874898eb226da17e4ffed732c894cb1938
-+PYTHON_DOCKER_SETUP_TYPE = setuptools
-+PYTHON_DOCKER_LICENSE = Apache-2.0
-+PYTHON_DOCKER_LICENSE_FILES = LICENSE
++PYTHON_TEXTTABLE_VERSION = 0.9.1
++PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
++PYTHON_TEXTTABLE_SITE = https://pypi.python.org/packages/02/e1/2565e6b842de7945af0555167d33acfc8a615584ef7abd30d1eae00a4d80
++PYTHON_TEXTTABLE_SETUP_TYPE = distutils
++PYTHON_TEXTTABLE_LICENSE = LGPL-3.0+
++PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
