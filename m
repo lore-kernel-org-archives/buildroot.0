@@ -1,89 +1,38 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Fri, 9 Mar 2018 10:38:18 -0300
-Subject: [Buildroot] [PATCH RESEND] toolchain: use -ffp-contract=off on
- MIPS in the wrapper when needed
-In-Reply-To: <20180308123336.ywdsi5b5lo4iwjvv@tarshish>
-References: <20180308121430.20013-1-ezequiel@vanguardiasur.com.ar>
- <20180308123336.ywdsi5b5lo4iwjvv@tarshish>
-Message-ID: <CAAEAJfApADjywenR1NfeXrVqTLNPAtv0SFWOdgie6eS7xhQr8g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  9 Mar 2018 15:30:43 +0100
+Subject: [Buildroot] [PATCH] utils/scanpypi: correctly handle license dirs
+ in subdirs for .hash files
+Message-ID: <20180309143043.8287-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+create_hash_file() used basename(licensefile) when it writes the entry for
+the license file in the .hash, which is obviously not correct when license
+file is locate in a sub directory.
 
-On 8 March 2018 at 09:33, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Ezequiel,
->
-> On Thu, Mar 08, 2018 at 09:14:30AM -0300, Ezequiel Garcia wrote:
->> From: Johannes Schmitz <johannes.schmitz1@gmail.com>
->>
->> This fix is necessary for to build for MIPS, for example for the MIPS
->> XBurst architecture used on ci20 boards.
->>
->> GCC has replaced (no)mfused-madd with ffp-contract.
->> Find more details and a long discussion at
->> https://gcc.gnu.org/ml/gcc-patches/2015-06/msg00876.html
->>
->> Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
->> Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->> ---
->> Ci20 builds are currently broken without this patch.
->>
->>  toolchain/toolchain-wrapper.c  | 3 ---
->>  toolchain/toolchain-wrapper.mk | 4 ++++
->>  2 files changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
->> index 2928ea42d0e6..04b263199547 100644
->> --- a/toolchain/toolchain-wrapper.c
->> +++ b/toolchain/toolchain-wrapper.c
->> @@ -79,9 +79,6 @@ static char *predef_args[] = {
->>  #ifdef BR_OMIT_LOCK_PREFIX
->>       "-Wa,-momit-lock-prefix=yes",
->>  #endif
->> -#ifdef BR_NO_FUSED_MADD
->
-> Since you remove this macro reference, ...
->
->> -     "-mno-fused-madd",
->> -#endif
->>  #ifdef BR_BINFMT_FLAT
->>       "-Wl,-elf2flt",
->>  #endif
->> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
->> index 7f72a0cadec9..7faa033f605c 100644
->> --- a/toolchain/toolchain-wrapper.mk
->> +++ b/toolchain/toolchain-wrapper.mk
->> @@ -28,8 +28,12 @@ endif
->>
->>  # Avoid FPU bug on XBurst CPUs
->>  ifeq ($(BR2_mips_xburst),y)
->> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_6),y)
->> +TOOLCHAIN_WRAPPER_ARGS += -DBR_FP_CONTRACT_OFF
->> +else
->>  TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
->
-> ... why not remove it here as well?
->
+Instead copy the logic from __create_mk_license() to strip the directory
+prefix from the absolute filename instead.
 
-OK, so now I actually looked at this patch, and I think that it's
-all wrong:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/scanpypi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1. BR_FP_CONTRACT_OFF is not used anywhere.
-2. BR_NO_FUSED_MADD usage is removed,
-although it's still defined for GCC < 4.6.
-
-Johannes, want to give a shot@sending a correct version?
-Probably we just need to add:
-
-#ifdef BR_FP_CONTRACT_OFF
-    "-ffp-contract=off",
-#endif
-
-somewhere?
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 2b3188dbf6..b9006ee4f7 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -554,7 +554,7 @@ class BuildrootPackage():
+             hash_line = '{method}\t{digest}  {filename}\n'.format(
+                 method='sha256',
+                 digest=sha256.hexdigest(),
+-                filename=os.path.basename(license_file))
++                filename=license_file.replace(self.tmp_extract, '')[1:])
+             lines.append(hash_line)
+ 
+         with open(path_to_hash, 'w') as hash_file:
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+2.11.0
