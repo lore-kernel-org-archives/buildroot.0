@@ -1,98 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  9 Mar 2018 09:12:00 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.15.1
-Message-ID: <523c80cff000a6c35a19922e22239e0490ce6a85.1520579520.git.baruch@tkos.co.il>
+From: Anssi Hannula <anssi.hannula@bitwise.fi>
+Date: Fri, 9 Mar 2018 10:15:09 +0200
+Subject: [Buildroot] [PATCH] systemd: do not use host system-uid/gid
+ ranges
+In-Reply-To: <20180308162710.GA5823@scaer>
+References: <20180308142509.26795-1-anssi.hannula@bitwise.fi>
+ <20180308162710.GA5823@scaer>
+Message-ID: <a2103e3b-0126-fa3f-65aa-7192a4042a7c@bitwise.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable libzstd support explicitly to avoid configure failure. The
-Buildroot zstd package does not currently install its library.
+On 8.3.2018 18:27, Yann E. MORIN wrote:
+> Anssi, All,
+>
+> On 2018-03-08 16:25 +0200, Anssi Hannula spake thusly:
+>> systemd meson.build uses values from host /etc/login.defs if
+>> system-uid-max and system-gid-max build options are not explicitly
+>> specified.
+>>
+>> Avoid that by setting system-uid-max and system-gid-max to 999 which is
+>> the systemd default if SYSTEM_UID_MAX and SYSTEM_GID_MAX are not set in
+>> /etc/login.defs.
+>>
+>> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Would we need to do something with dynamic-uid-min, dynamic-uid-max, and
+> so on?
 
-Drop upstream patch.
+I don't think so, for the other uid/gid options the defaults seemed sane
+and did not depend on the host system.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...fs-progs-convert-add-missing-types-header.patch | 39 ----------------------
- package/btrfs-progs/btrfs-progs.hash               |  2 +-
- package/btrfs-progs/btrfs-progs.mk                 |  4 +--
- 3 files changed, 3 insertions(+), 42 deletions(-)
- delete mode 100644 package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch
+>> ---
+>>  package/systemd/systemd.mk | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+>> index 8c22c08..3bc322c 100644
+>> --- a/package/systemd/systemd.mk
+>> +++ b/package/systemd/systemd.mk
+>> @@ -40,6 +40,8 @@ SYSTEMD_CONF_OPTS += \
+>>  	-Dldconfig=false \
+>>  	-Ddefault-dnssec=no \
+>>  	-Dtests=false \
+>> +	-Dsystem-uid-max=999 \
+>> +	-Dsystem-gid-max=999 \
+>>  	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
+>>  	-Dkill-path=/usr/bin/kill \
+>>  	-Dkmod-path=/usr/bin/kmod \
+>> -- 
+>> 2.8.3
+>>
 
-diff --git a/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch b/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch
-deleted file mode 100644
-index 7b09f2785c20..000000000000
---- a/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From dda485a3d788c47bb6849218f695db7b51822872 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 31 Oct 2017 14:51:51 +0200
--Subject: [PATCH] btrfs-progs: convert: add missing types header
--
--Build with musl libc needs the sys/types.h header for the dev_t type,
--since this header is not included indirectly. This fixes the following
--build failure:
--
--In file included from convert/source-fs.c:23:0:
--./convert/source-fs.h:112:1: error: unknown type name ?dev_t?
-- dev_t decode_dev(u32 dev);
-- ^~~~~
--convert/source-fs.c:31:1: error: unknown type name ?dev_t?
-- dev_t decode_dev(u32 dev)
-- ^~~~~
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://marc.info/?l=linux-btrfs&m=150945479718731&w=2
--
-- convert/source-fs.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/convert/source-fs.h b/convert/source-fs.h
--index 23f33567b42d..4e5babefe6a2 100644
----- a/convert/source-fs.h
--+++ b/convert/source-fs.h
--@@ -19,6 +19,7 @@
-- 
-- #include "kerncompat.h"
-- #include <linux/kdev_t.h>
--+#include <sys/types.h>
-- #include <pthread.h>
-- 
-- #define CONV_IMAGE_SUBVOL_OBJECTID BTRFS_FIRST_FREE_OBJECTID
---- 
--2.14.2
--
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index bdcb8bada19e..54d34c919156 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256 805bdb0031c21a0a5d2ba295a8c9bdd8ba831a68c3fa801aab85677ec902d783  btrfs-progs-v4.13.3.tar.xz
-+sha256 67102ac0d6795f368acc94efaca29b6626d972638790a4a0c9f89a27cd543f96  btrfs-progs-v4.15.1.tar.xz
- # Locally computed
- sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 96c4350d26db..776a3ef84154 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 4.13.3
-+BTRFS_PROGS_VERSION = 4.15.1
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
--BTRFS_PROGS_CONF_OPTS = --disable-backtrace
-+BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd
- BTRFS_PROGS_LICENSE = GPL-2.0
- BTRFS_PROGS_LICENSE_FILES = COPYING
- BTRFS_PROGS_INSTALL_STAGING = YES
 -- 
-2.16.1
+Anssi Hannula / Bitwise Oy
++358503803997
