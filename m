@@ -1,55 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  9 Mar 2018 23:49:12 +0100
-Subject: [Buildroot] [PATCH 1/1] ympd: bump to version 1.3.0
-Message-ID: <20180309224912.25244-1-fontaine.fabrice@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 9 Mar 2018 23:35:07 +0000
+Subject: [Buildroot] [PATCH 1/6] new package golang-embed
+In-Reply-To: <trinity-76ca5ff0-acca-40b3-a2b2-0d235150bfb4-1520632316035@3c-app-gmx-bs33>
+Message-ID: <20180309233507.GD31984@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove mkdata hook as this is not needed since version 1.2.3.
-Indeed, when CMAKE_CROSSCOMPILING is defined, ympd will use a perl
-script (mkdata.pl) instead of mkdata binary
+Hi Jens,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ympd/ympd.hash |  2 +-
- package/ympd/ympd.mk   | 10 +---------
- 2 files changed, 2 insertions(+), 10 deletions(-)
+Thanks for contributing. Unfortunately it seems that your mail client sent the
+e-mail messages as HTML, which makes them difficult to review and prevents
+Patchwork from picking them. Could you please re-submit the patch series using
+plain text? The best option is to use ?git send-email? to post patches to the
+mailing list. The ?Submitting Patches? section of the manual has instructions
+on how to do this:
 
-diff --git a/package/ympd/ympd.hash b/package/ympd/ympd.hash
-index 1c4ad8dc8f..6d45d63862 100644
---- a/package/ympd/ympd.hash
-+++ b/package/ympd/ympd.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  092c26c51166d1d1f025cd06742981783dea7e42bfe4f73f10c4418fc003de94  ympd-v1.2.3.tar.gz
-+sha256  d9f68920cd93d1cfa971e1d7b9162a2b1724909bc9753c1338cecb3688d234d5  ympd-v1.3.0.tar.gz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE
-diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
-index a50aee074e..e3f21e9eb0 100644
---- a/package/ympd/ympd.mk
-+++ b/package/ympd/ympd.mk
-@@ -4,18 +4,10 @@
- #
- ################################################################################
- 
--YMPD_VERSION = v1.2.3
-+YMPD_VERSION = v1.3.0
- YMPD_SITE = $(call github,notandy,ympd,$(YMPD_VERSION))
- YMPD_LICENSE = GPL-2.0
- YMPD_LICENSE_FILES = LICENSE
- YMPD_DEPENDENCIES = libmpdclient
- 
--define YMPD_MAKE_HOST_TOOL
--	$(HOSTCC) $(HOST_CFLAGS) $(@D)/htdocs/mkdata.c -o $(@D)/mkdata
--endef
--
--YMPD_PRE_BUILD_HOOKS += YMPD_MAKE_HOST_TOOL
--
--YMPD_CONF_OPTS += -DMKDATA_EXE=$(@D)/mkdata
--
- $(eval $(cmake-package))
--- 
-2.14.1
+  https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+Cheers,
+
+
+--
+ Adri?n ?
+
+On Fri, 9 Mar 2018 22:51:56 +0100, "Jens Scheidemann" <nobodyman@gmx.de> wrote:
+Non-text part: text/html
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180309/9adad668/attachment.asc>
