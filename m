@@ -1,26 +1,12 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Mar 2018 22:53:38 +0100
-Subject: [Buildroot] [PATCH 1/1] libmpdclient: add host-meson dependency
-In-Reply-To: <20180308165006.10903-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 8 Mar 2018 17:50:06 +0100")
-References: <20180308165006.10903-1-fontaine.fabrice@gmail.com>
-Message-ID: <87fu58hq59.fsf@dell.be.48ers.dk>
+From: Jens Scheidemann <nobodyman@gmx.de>
+Date: Fri, 9 Mar 2018 22:53:39 +0100
+Subject: [Buildroot] [PATCH 6/6] new package golang-gb
+Message-ID: <trinity-5a60ecb7-0cc4-4e87-96c9-c5a8569cdee6-1520632419205@3c-app-gmx-bs33>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
-
- > Fixes:
- >  - http://autobuild.buildroot.net/results/00a/00af3302c4029670a585beb3cb65bd8623cf12da
-
- > Add a libmpdclient entry for myself in DEVELOPERS
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180309/89ee5cb0/attachment.html>
