@@ -1,96 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  9 Mar 2018 20:16:53 +0100
-Subject: [Buildroot] [PATCH 02/10] package: add python-websocket-client
+Date: Fri,  9 Mar 2018 20:16:52 +0100
+Subject: [Buildroot] [PATCH 01/10] package: add python-docker-pycreds
 In-Reply-To: <20180309191701.23760-1-peter@korsgaard.com>
 References: <20180309191701.23760-1-peter@korsgaard.com>
-Message-ID: <20180309191701.23760-3-peter@korsgaard.com>
+Message-ID: <20180309191701.23760-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WebSocket client module for python.
+Python bindings for the docker credentials store API.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/python-websocket-client/Config.in                  |  9 +++++++++
- .../python-websocket-client/python-websocket-client.hash   |  4 ++++
- package/python-websocket-client/python-websocket-client.mk | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/python-websocket-client/Config.in
- create mode 100644 package/python-websocket-client/python-websocket-client.hash
- create mode 100644 package/python-websocket-client/python-websocket-client.mk
+ DEVELOPERS                                               |  1 +
+ package/Config.in                                        |  1 +
+ package/python-docker-pycreds/Config.in                  |  7 +++++++
+ package/python-docker-pycreds/python-docker-pycreds.hash |  4 ++++
+ package/python-docker-pycreds/python-docker-pycreds.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
+ create mode 100644 package/python-docker-pycreds/Config.in
+ create mode 100644 package/python-docker-pycreds/python-docker-pycreds.hash
+ create mode 100644 package/python-docker-pycreds/python-docker-pycreds.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 2cd2ac85ae..d4bd10fa28 100644
+index dba0e58757..2cd2ac85ae 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1390,6 +1390,7 @@ F:	package/python-enum34/
+@@ -1384,6 +1384,7 @@ F:	package/lzop/
+ F:	package/memtool/
+ F:	package/mosquitto/
+ F:	package/python-alsaaudio/
++F:	package/python-docker-pycreds/
+ F:	package/python-enum/
+ F:	package/python-enum34/
  F:	package/python-ipaddr/
- F:	package/python-pam/
- F:	package/python-psutil/
-+F:	package/python-websocket-client/
- F:	package/triggerhappy/
- 
- N:	Peter Seiderer <ps.report@gmx.net>
 diff --git a/package/Config.in b/package/Config.in
-index a5604fc36b..9c727cad6c 100644
+index f455e74735..a5604fc36b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -949,6 +949,7 @@ menu "External python modules"
- 	source "package/python-wcwidth/Config.in"
- 	source "package/python-web2py/Config.in"
- 	source "package/python-webpy/Config.in"
-+	source "package/python-websocket-client/Config.in"
- 	source "package/python-websockets/Config.in"
- 	source "package/python-werkzeug/Config.in"
- 	source "package/python-whoosh/Config.in"
-diff --git a/package/python-websocket-client/Config.in b/package/python-websocket-client/Config.in
+@@ -765,6 +765,7 @@ menu "External python modules"
+ 	source "package/python-dialog3/Config.in"
+ 	source "package/python-dicttoxml/Config.in"
+ 	source "package/python-django/Config.in"
++	source "package/python-docker-pycreds/Config.in"
+ 	source "package/python-docopt/Config.in"
+ 	source "package/python-docutils/Config.in"
+ 	source "package/python-dominate/Config.in"
+diff --git a/package/python-docker-pycreds/Config.in b/package/python-docker-pycreds/Config.in
 new file mode 100644
-index 0000000000..0fbb15b328
+index 0000000000..584c1dbc0e
 --- /dev/null
-+++ b/package/python-websocket-client/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT
-+	bool "python-websocket-client"
++++ b/package/python-docker-pycreds/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_DOCKER_PYCREDS
++	bool "python-docker-pycreds"
 +	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
 +	help
-+	  WebSocket client for python. hybi13 is supported.
++	  Python bindings for the docker credentials store API.
 +
-+	  https://github.com/websocket-client/websocket-client.git
-diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
++	  https://github.com/shin-/dockerpy-creds
+diff --git a/package/python-docker-pycreds/python-docker-pycreds.hash b/package/python-docker-pycreds/python-docker-pycreds.hash
 new file mode 100644
-index 0000000000..3672ca074b
+index 0000000000..9e1182d4a4
 --- /dev/null
-+++ b/package/python-websocket-client/python-websocket-client.hash
++++ b/package/python-docker-pycreds/python-docker-pycreds.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/websocket-client/json, sha256 locally computed
-+md5	790b3ecb5364293ad70c59a1b92debb1  websocket_client-0.47.0.tar.gz
-+sha256	a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149  websocket_client-0.47.0.tar.gz
-+sha256	e580b2a1a57c33085dd6a07cff693d828f7c3fa8a11ce56ade2a62c46951930d  LICENSE
-diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
++# md5 from https://pypi.python.org/pypi/docker-pycreds/json, sha256 locally computed
++md5	ae63c7def3e58cb51a4d8f5810683030  docker-pycreds-0.2.2.tar.gz
++sha256	c7ab85de2894baff6ee8f15160cbbfa2fd3a04e56f0372c5793d24060687b299  docker-pycreds-0.2.2.tar.gz
++sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-docker-pycreds/python-docker-pycreds.mk b/package/python-docker-pycreds/python-docker-pycreds.mk
 new file mode 100644
-index 0000000000..58c8407db3
+index 0000000000..e7ffd0eb51
 --- /dev/null
-+++ b/package/python-websocket-client/python-websocket-client.mk
++++ b/package/python-docker-pycreds/python-docker-pycreds.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-websocket-client
++# python-docker-pycreds
 +#
 +################################################################################
 +
-+PYTHON_WEBSOCKET_CLIENT_VERSION = 0.47.0
-+PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
-+PYTHON_WEBSOCKET_CLIENT_SITE = https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27
-+PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
-+PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
-+PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
++PYTHON_DOCKER_PYCREDS_VERSION = 0.2.2
++PYTHON_DOCKER_PYCREDS_SOURCE = docker-pycreds-$(PYTHON_DOCKER_PYCREDS_VERSION).tar.gz
++PYTHON_DOCKER_PYCREDS_SITE = https://pypi.python.org/packages/db/73/42d4c698e70633d99f7f7c4c87c6de45ead5ad7b36dcfccd998fd1556ac9
++PYTHON_DOCKER_PYCREDS_SETUP_TYPE = setuptools
++PYTHON_DOCKER_PYCREDS_LICENSE = Apache-2.0
++PYTHON_DOCKER_PYCREDS_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
