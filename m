@@ -1,93 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  9 Mar 2018 20:16:57 +0100
-Subject: [Buildroot] [PATCH 06/10] package: add python-texttable
+Date: Fri,  9 Mar 2018 20:16:59 +0100
+Subject: [Buildroot] [PATCH 08/10] package: add python-functools32
 In-Reply-To: <20180309191701.23760-1-peter@korsgaard.com>
 References: <20180309191701.23760-1-peter@korsgaard.com>
-Message-ID: <20180309191701.23760-7-peter@korsgaard.com>
+Message-ID: <20180309191701.23760-9-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Module for creating simple ASCII tables.
+Backport of the functools module from Python 3.2.3 for use on 2.7 and PyPy.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-texttable/Config.in             |  6 ++++++
- package/python-texttable/python-texttable.hash |  4 ++++
- package/python-texttable/python-texttable.mk   | 14 ++++++++++++++
- 5 files changed, 26 insertions(+)
- create mode 100644 package/python-texttable/Config.in
- create mode 100644 package/python-texttable/python-texttable.hash
- create mode 100644 package/python-texttable/python-texttable.mk
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-functools32/Config.in               |  8 ++++++++
+ package/python-functools32/python-functools32.hash |  4 ++++
+ package/python-functools32/python-functools32.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/python-functools32/Config.in
+ create mode 100644 package/python-functools32/python-functools32.hash
+ create mode 100644 package/python-functools32/python-functools32.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ced3af7169..10dab1d2e4 100644
+index 1119f78ccc..e6dc51e1fe 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1393,6 +1393,7 @@ F:	package/python-enum34/
+@@ -1391,6 +1391,7 @@ F:	package/python-dockerpty/
+ F:	package/python-docker-pycreds/
+ F:	package/python-enum/
+ F:	package/python-enum34/
++F:	package/python-functools32/
  F:	package/python-ipaddr/
  F:	package/python-pam/
  F:	package/python-psutil/
-+F:	package/python-texttable/
- F:	package/python-websocket-client/
- F:	package/triggerhappy/
- 
 diff --git a/package/Config.in b/package/Config.in
-index 1043338a7e..6068ef573e 100644
+index b7e0da6dd4..6fd61a0dea 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -932,6 +932,7 @@ menu "External python modules"
- 	source "package/python-systemd/Config.in"
- 	source "package/python-tabledata/Config.in"
- 	source "package/python-tempora/Config.in"
-+	source "package/python-texttable/Config.in"
- 	source "package/python-typepy/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tomako/Config.in"
-diff --git a/package/python-texttable/Config.in b/package/python-texttable/Config.in
+@@ -785,6 +785,7 @@ menu "External python modules"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flask-sqlalchemy/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-functools32/Config.in"
+ 	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-gunicorn/Config.in"
+diff --git a/package/python-functools32/Config.in b/package/python-functools32/Config.in
 new file mode 100644
-index 0000000000..1c8dde8d3f
+index 0000000000..cc12557edc
 --- /dev/null
-+++ b/package/python-texttable/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_TEXTTABLE
-+	bool "python-texttable"
++++ b/package/python-functools32/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_FUNCTOOLS32
++	bool "python-functools32"
++	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  module for creating simple ASCII tables.
++	  Backport of the functools module from Python 3.2.3 for use on 2.7
++	  and PyPy.
 +
-+	  https://github.com/foutaise/texttable/
-diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
++	  https://github.com/MiCHiLU/python-functools32
+diff --git a/package/python-functools32/python-functools32.hash b/package/python-functools32/python-functools32.hash
 new file mode 100644
-index 0000000000..448d6b7dd1
+index 0000000000..606de81774
 --- /dev/null
-+++ b/package/python-texttable/python-texttable.hash
++++ b/package/python-functools32/python-functools32.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/texttable/json, sha256 locally computed
-+md5	a712b5a5464d51c5fc43c64d9d2cd0de  texttable-0.9.1.tar.gz
-+sha256	119041773ff03596b56392532f9315cb3a3116e404fd6f36e76a7dc088d95c79  texttable-0.9.1.tar.gz
-+sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE
-diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
++# md5 from https://pypi.python.org/pypi/functools32/json, sha256 locally computed
++md5	09f24ffd9af9f6cd0f63cb9f4e23d4b2  functools32-3.2.3-2.tar.gz
++sha256	f6253dfbe0538ad2e387bd8fdfd9293c925d63553f5813c4e587745416501e6d  functools32-3.2.3-2.tar.gz
++sha256	3f9ea6b89abe1556b72aff67b987d64c8272564815cd6a2832e6c4f6abdfe3b1  LICENSE
+diff --git a/package/python-functools32/python-functools32.mk b/package/python-functools32/python-functools32.mk
 new file mode 100644
-index 0000000000..96fe6cf882
+index 0000000000..8a88bb2a7f
 --- /dev/null
-+++ b/package/python-texttable/python-texttable.mk
++++ b/package/python-functools32/python-functools32.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-texttable
++# python-functools32
 +#
 +################################################################################
 +
-+PYTHON_TEXTTABLE_VERSION = 0.9.1
-+PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
-+PYTHON_TEXTTABLE_SITE = https://pypi.python.org/packages/02/e1/2565e6b842de7945af0555167d33acfc8a615584ef7abd30d1eae00a4d80
-+PYTHON_TEXTTABLE_SETUP_TYPE = distutils
-+PYTHON_TEXTTABLE_LICENSE = LGPL-3.0+
-+PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
++PYTHON_FUNCTOOLS32_VERSION = 3.2.3-2
++PYTHON_FUNCTOOLS32_SOURCE = functools32-$(PYTHON_FUNCTOOLS32_VERSION).tar.gz
++PYTHON_FUNCTOOLS32_SITE = https://pypi.python.org/packages/c5/60/6ac26ad05857c601308d8fb9e87fa36d0ebf889423f47c3502ef034365db
++PYTHON_FUNCTOOLS32_SETUP_TYPE = distutils
++PYTHON_FUNCTOOLS32_LICENSE = Python-2.0
++PYTHON_FUNCTOOLS32_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
