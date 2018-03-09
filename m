@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Mar 2018 22:23:27 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{14, 15}.x series
-Message-ID: <20180309213409.1C0E182885@busybox.osuosl.org>
+Date: Fri, 9 Mar 2018 22:23:35 +0100
+Subject: [Buildroot] [git commit] utils/scanpypi: correctly handle license
+ dirs in subdirs for .hash files
+Message-ID: <20180309213409.3461782885@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=324cc39ba13a3cbdd1f146cf59d0f145661830bc
+commit: https://git.buildroot.net/buildroot/commit/?id=7cfceeb91e2d14907cd48226ccc7bcb6df10ee1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+create_hash_file() used basename(licensefile) when it writes the entry for
+the license file in the .hash, which is obviously not correct when license
+file is locate in a sub directory.
+
+Instead copy the logic from __create_mk_license() to strip the directory
+prefix from the absolute filename instead.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ utils/scanpypi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d74f267a2e..3723e8edec 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -248,6 +248,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.24"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.7"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.25"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.8"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 2b3188dbf6..b9006ee4f7 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -554,7 +554,7 @@ class BuildrootPackage():
+             hash_line = '{method}\t{digest}  {filename}\n'.format(
+                 method='sha256',
+                 digest=sha256.hexdigest(),
+-                filename=os.path.basename(license_file))
++                filename=license_file.replace(self.tmp_extract, '')[1:])
+             lines.append(hash_line)
+ 
+         with open(path_to_hash, 'w') as hash_file:
