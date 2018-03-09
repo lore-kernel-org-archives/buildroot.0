@@ -1,104 +1,63 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  9 Mar 2018 23:33:37 +0100
-Subject: [Buildroot] [PATCH v2,1/1] libcdio-paranoia: new package
-Message-ID: <20180309223337.23916-1-fontaine.fabrice@gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Fri,  9 Mar 2018 14:41:49 -0800
+Subject: [Buildroot] [PATCH v2] package: dropbear: make PATH configurable
+Message-ID: <20180309224149.20225-1-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CD paranoia on top of libcdio
+Make the default PATH dropbear is using configurable.
 
-http://www.gnu.org/software/libcdio/
+If not specified, it will continue to default to dropbear's
+DEFAULT_PATH.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 ---
-Changes v1 -> v2:
- - Add host-pkgconf dependency
- - Move LIBCDIO_PARANOIA_INSTALL_STAGING after LICENSE variables
 
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/libcdio-paranoia/Config.in             |  8 ++++++++
- package/libcdio-paranoia/libcdio-paranoia.hash |  3 +++
- package/libcdio-paranoia/libcdio-paranoia.mk   | 19 +++++++++++++++++++
- 5 files changed, 32 insertions(+)
- create mode 100644 package/libcdio-paranoia/Config.in
- create mode 100644 package/libcdio-paranoia/libcdio-paranoia.hash
- create mode 100644 package/libcdio-paranoia/libcdio-paranoia.mk
+Changes since v1:
+- Made regex safer
+  + allow multiple spaces after #define
+  + make sure there are spaces or tabs after DEFAULT_PATH
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8e8ed14cd4..26a40d4e39 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -644,6 +644,7 @@ F:	package/alljoyn-base/
- F:	package/alljoyn-tcl/
- F:	package/alljoyn-tcl-base/
- F:	package/boinc/
-+F:	package/libcdio-paranoia/
- F:	package/flatbuffers/
- F:	package/gtksourceview/
- F:	package/gssdp/
-diff --git a/package/Config.in b/package/Config.in
-index edcf03b70b..7a15990f00 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -987,6 +987,7 @@ menu "Audio/Sound"
- 	source "package/libcdaudio/Config.in"
- 	source "package/libcddb/Config.in"
- 	source "package/libcdio/Config.in"
-+	source "package/libcdio-paranoia/Config.in"
- 	source "package/libcodec2/Config.in"
- 	source "package/libcue/Config.in"
- 	source "package/libcuefile/Config.in"
-diff --git a/package/libcdio-paranoia/Config.in b/package/libcdio-paranoia/Config.in
-new file mode 100644
-index 0000000000..28c9ac9cd5
---- /dev/null
-+++ b/package/libcdio-paranoia/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBCDIO_PARANOIA
-+	bool "libcdio-paranoia"
-+	depends on BR2_USE_MMU # libcdio
-+	select BR2_PACKAGE_LIBCDIO
+ package/dropbear/Config.in   | 6 ++++++
+ package/dropbear/dropbear.mk | 8 ++++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 6700778161ba..0cc68d737d2c 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -55,4 +55,10 @@ config BR2_PACKAGE_DROPBEAR_LASTLOG
+ 	  Enable logging of dropbear access to lastlog. Notice that
+ 	  Buildroot does not generate lastlog by default.
+ 
++config BR2_PACKAGE_DROPBEAR_PATH
++	string "dropbear default path"
 +	help
-+	  CD paranoia on top of libcdio
++	  Use the path specified here as dropbear's default path.
++	  If not specified, dropbear will use "/usr/bin:/bin".
 +
-+	  http://www.gnu.org/software/libcdio/
-diff --git a/package/libcdio-paranoia/libcdio-paranoia.hash b/package/libcdio-paranoia/libcdio-paranoia.hash
-new file mode 100644
-index 0000000000..33e59ba704
---- /dev/null
-+++ b/package/libcdio-paranoia/libcdio-paranoia.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 d60f82ece97eeb92407a9ee03f3499c8983206672c28ae5e4e22179063c81941  libcdio-paranoia-10.2+0.94+2.tar.gz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libcdio-paranoia/libcdio-paranoia.mk b/package/libcdio-paranoia/libcdio-paranoia.mk
-new file mode 100644
-index 0000000000..3281aa0145
---- /dev/null
-+++ b/package/libcdio-paranoia/libcdio-paranoia.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# libcdio-paranoia
-+#
-+################################################################################
+ endif
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 01a1a07b7696..9da340670a70 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -51,6 +51,14 @@ define DROPBEAR_DISABLE_STANDALONE
+ 	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
+ endef
+ 
++ifneq ($(BR2_PACKAGE_DROPBEAR_PATH),"")
++define DROPBEAR_CUSTOM_PATH
++	$(SED) 's|^\(#define \+DEFAULT_PATH\)[	 ]\+.*|\1 $(BR2_PACKAGE_DROPBEAR_PATH)|' $(@D)/options.h
++endef
 +
-+LIBCDIO_PARANOIA_VERSION = 10.2+0.94+2
-+LIBCDIO_PARANOIA_SITE = $(BR2_GNU_MIRROR)/libcdio
-+LIBCDIO_PARANOIA_LICENSE = GPL-3.0+
-+LIBCDIO_PARANOIA_LICENSE_FILES = COPYING
-+LIBCDIO_PARANOIA_INSTALL_STAGING = YES
-+LIBCDIO_PARANOIA_DEPENDENCIES = host-pkgconf libcdio
-+LIBCDIO_PARANOIA_CONF_OPTS = --disable-example-progs
-+
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),)
-+LIBCDIO_PARANOIA_CONF_OPTS += --disable-cxx
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_CUSTOM_PATH
 +endif
 +
-+$(eval $(autotools-package))
+ define DROPBEAR_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/dropbear.service
 -- 
-2.14.1
+2.7.4
