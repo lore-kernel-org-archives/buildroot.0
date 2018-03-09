@@ -1,28 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Mar 2018 22:35:31 +0100
-Subject: [Buildroot] [PATCH] systemd: do not use host system-uid/gid
- ranges
-In-Reply-To: <20180308142509.26795-1-anssi.hannula@bitwise.fi> (Anssi
- Hannula's message of "Thu, 8 Mar 2018 16:25:09 +0200")
-References: <20180308142509.26795-1-anssi.hannula@bitwise.fi>
-Message-ID: <87o9jxgcf0.fsf@dell.be.48ers.dk>
+Date: Fri, 09 Mar 2018 22:37:59 +0100
+Subject: [Buildroot] [PATCH 1/1] fbgrab: Fix some problems in the patch
+ metadata
+In-Reply-To: <1520505753-13884-1-git-send-email-timo.ketola@exertus.fi> (Timo
+ Ketola's message of "Thu, 8 Mar 2018 12:42:33 +0200")
+References: <1520505753-13884-1-git-send-email-timo.ketola@exertus.fi>
+Message-ID: <87k1ulgcaw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Anssi" == Anssi Hannula <anssi.hannula@bitwise.fi> writes:
+>>>>> "Timo" == Timo Ketola <timo.ketola@exertus.fi> writes:
 
- > systemd meson.build uses values from host /etc/login.defs if
- > system-uid-max and system-gid-max build options are not explicitly
- > specified.
+ > The patch description was missing Upstream-Status tag. It was given in the
+ > commit which added this patch but not in the patch itself as should be.
 
- > Avoid that by setting system-uid-max and system-gid-max to 999 which is
- > the systemd default if SYSTEM_UID_MAX and SYSTEM_GID_MAX are not set in
- > /etc/login.defs.
+ > Signed-off-by tag accidentally didn't follow the usual format.
 
- > Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+ > Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
 
 Committed, thanks.
 
