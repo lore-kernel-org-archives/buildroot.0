@@ -1,60 +1,89 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 9 Mar 2018 08:28:10 -0500
-Subject: [Buildroot] [PATCH 1/1] libmpdclient: add host-meson dependency
-In-Reply-To: <20180308165006.10903-1-fontaine.fabrice@gmail.com>
-References: <20180308165006.10903-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAFSsvmoVtUXzKC75L4hfyQ=p-62W58_Q9ibCQ9e95=zD_Kh4sQ@mail.gmail.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Fri, 9 Mar 2018 10:38:18 -0300
+Subject: [Buildroot] [PATCH RESEND] toolchain: use -ffp-contract=off on
+ MIPS in the wrapper when needed
+In-Reply-To: <20180308123336.ywdsi5b5lo4iwjvv@tarshish>
+References: <20180308121430.20013-1-ezequiel@vanguardiasur.com.ar>
+ <20180308123336.ywdsi5b5lo4iwjvv@tarshish>
+Message-ID: <CAAEAJfApADjywenR1NfeXrVqTLNPAtv0SFWOdgie6eS7xhQr8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+Hi Baruch,
 
-On Thu, Mar 8, 2018 at 11:50 AM, Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/00a/00af3302c4029670a585beb3cb65bd8623cf12da
+On 8 March 2018 at 09:33, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Ezequiel,
 >
-> Add a libmpdclient entry for myself in DEVELOPERS
+> On Thu, Mar 08, 2018 at 09:14:30AM -0300, Ezequiel Garcia wrote:
+>> From: Johannes Schmitz <johannes.schmitz1@gmail.com>
+>>
+>> This fix is necessary for to build for MIPS, for example for the MIPS
+>> XBurst architecture used on ci20 boards.
+>>
+>> GCC has replaced (no)mfused-madd with ffp-contract.
+>> Find more details and a long discussion at
+>> https://gcc.gnu.org/ml/gcc-patches/2015-06/msg00876.html
+>>
+>> Signed-off-by: Johannes Schmitz <johannes.schmitz1@gmail.com>
+>> Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>> ---
+>> Ci20 builds are currently broken without this patch.
+>>
+>>  toolchain/toolchain-wrapper.c  | 3 ---
+>>  toolchain/toolchain-wrapper.mk | 4 ++++
+>>  2 files changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+>> index 2928ea42d0e6..04b263199547 100644
+>> --- a/toolchain/toolchain-wrapper.c
+>> +++ b/toolchain/toolchain-wrapper.c
+>> @@ -79,9 +79,6 @@ static char *predef_args[] = {
+>>  #ifdef BR_OMIT_LOCK_PREFIX
+>>       "-Wa,-momit-lock-prefix=yes",
+>>  #endif
+>> -#ifdef BR_NO_FUSED_MADD
 >
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  DEVELOPERS                           | 1 +
->  package/libmpdclient/libmpdclient.mk | 1 +
->  2 files changed, 2 insertions(+)
+> Since you remove this macro reference, ...
 >
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 625fafc686..8e8ed14cd4 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -653,6 +653,7 @@ F:  package/gupnp-tools/
->  F:     package/hiredis/
->  F:     package/i2pd/
->  F:     package/igd2-for-linux/
-> +F:     package/libmpdclient/
->  F:     package/libupnp/
->  F:     package/libupnp18/
->  F:     package/minissdpd/
-> diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-> index 10281391aa..96e1f783fb 100644
-> --- a/package/libmpdclient/libmpdclient.mk
-> +++ b/package/libmpdclient/libmpdclient.mk
-> @@ -11,6 +11,7 @@ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_
->  LIBMPDCLIENT_INSTALL_STAGING = YES
->  LIBMPDCLIENT_LICENSE = BSD-3-Clause
->  LIBMPDCLIENT_LICENSE_FILES = COPYING
-> +LIBMPDCLIENT_DEPENDENCIES = host-meson
+>> -     "-mno-fused-madd",
+>> -#endif
+>>  #ifdef BR_BINFMT_FLAT
+>>       "-Wl,-elf2flt",
+>>  #endif
+>> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+>> index 7f72a0cadec9..7faa033f605c 100644
+>> --- a/toolchain/toolchain-wrapper.mk
+>> +++ b/toolchain/toolchain-wrapper.mk
+>> @@ -28,8 +28,12 @@ endif
+>>
+>>  # Avoid FPU bug on XBurst CPUs
+>>  ifeq ($(BR2_mips_xburst),y)
+>> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_6),y)
+>> +TOOLCHAIN_WRAPPER_ARGS += -DBR_FP_CONTRACT_OFF
+>> +else
+>>  TOOLCHAIN_WRAPPER_ARGS += -DBR_NO_FUSED_MADD
 >
->  LIBMPDCLIENT_CONF_OPTS += \
->         --prefix=/usr \
-> --
-> 2.14.1
+> ... why not remove it here as well?
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Tested-by: Adam Duskett <aduskett@gmail.com>
+OK, so now I actually looked at this patch, and I think that it's
+all wrong:
+
+1. BR_FP_CONTRACT_OFF is not used anywhere.
+2. BR_NO_FUSED_MADD usage is removed,
+although it's still defined for GCC < 4.6.
+
+Johannes, want to give a shot@sending a correct version?
+Probably we just need to add:
+
+#ifdef BR_FP_CONTRACT_OFF
+    "-ffp-contract=off",
+#endif
+
+somewhere?
+-- 
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
