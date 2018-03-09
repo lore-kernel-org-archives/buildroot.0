@@ -1,63 +1,55 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Fri,  9 Mar 2018 14:41:49 -0800
-Subject: [Buildroot] [PATCH v2] package: dropbear: make PATH configurable
-Message-ID: <20180309224149.20225-1-mmayer@broadcom.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  9 Mar 2018 23:49:12 +0100
+Subject: [Buildroot] [PATCH 1/1] ympd: bump to version 1.3.0
+Message-ID: <20180309224912.25244-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the default PATH dropbear is using configurable.
+Remove mkdata hook as this is not needed since version 1.2.3.
+Indeed, when CMAKE_CROSSCOMPILING is defined, ympd will use a perl
+script (mkdata.pl) instead of mkdata binary
 
-If not specified, it will continue to default to dropbear's
-DEFAULT_PATH.
-
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+ package/ympd/ympd.hash |  2 +-
+ package/ympd/ympd.mk   | 10 +---------
+ 2 files changed, 2 insertions(+), 10 deletions(-)
 
-Changes since v1:
-- Made regex safer
-  + allow multiple spaces after #define
-  + make sure there are spaces or tabs after DEFAULT_PATH
-
- package/dropbear/Config.in   | 6 ++++++
- package/dropbear/dropbear.mk | 8 ++++++++
- 2 files changed, 14 insertions(+)
-
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index 6700778161ba..0cc68d737d2c 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -55,4 +55,10 @@ config BR2_PACKAGE_DROPBEAR_LASTLOG
- 	  Enable logging of dropbear access to lastlog. Notice that
- 	  Buildroot does not generate lastlog by default.
+diff --git a/package/ympd/ympd.hash b/package/ympd/ympd.hash
+index 1c4ad8dc8f..6d45d63862 100644
+--- a/package/ympd/ympd.hash
++++ b/package/ympd/ympd.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  092c26c51166d1d1f025cd06742981783dea7e42bfe4f73f10c4418fc003de94  ympd-v1.2.3.tar.gz
++sha256  d9f68920cd93d1cfa971e1d7b9162a2b1724909bc9753c1338cecb3688d234d5  ympd-v1.3.0.tar.gz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE
+diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
+index a50aee074e..e3f21e9eb0 100644
+--- a/package/ympd/ympd.mk
++++ b/package/ympd/ympd.mk
+@@ -4,18 +4,10 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_DROPBEAR_PATH
-+	string "dropbear default path"
-+	help
-+	  Use the path specified here as dropbear's default path.
-+	  If not specified, dropbear will use "/usr/bin:/bin".
-+
- endif
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 01a1a07b7696..9da340670a70 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -51,6 +51,14 @@ define DROPBEAR_DISABLE_STANDALONE
- 	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
- endef
+-YMPD_VERSION = v1.2.3
++YMPD_VERSION = v1.3.0
+ YMPD_SITE = $(call github,notandy,ympd,$(YMPD_VERSION))
+ YMPD_LICENSE = GPL-2.0
+ YMPD_LICENSE_FILES = LICENSE
+ YMPD_DEPENDENCIES = libmpdclient
  
-+ifneq ($(BR2_PACKAGE_DROPBEAR_PATH),"")
-+define DROPBEAR_CUSTOM_PATH
-+	$(SED) 's|^\(#define \+DEFAULT_PATH\)[	 ]\+.*|\1 $(BR2_PACKAGE_DROPBEAR_PATH)|' $(@D)/options.h
-+endef
-+
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_CUSTOM_PATH
-+endif
-+
- define DROPBEAR_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/dropbear.service
+-define YMPD_MAKE_HOST_TOOL
+-	$(HOSTCC) $(HOST_CFLAGS) $(@D)/htdocs/mkdata.c -o $(@D)/mkdata
+-endef
+-
+-YMPD_PRE_BUILD_HOOKS += YMPD_MAKE_HOST_TOOL
+-
+-YMPD_CONF_OPTS += -DMKDATA_EXE=$(@D)/mkdata
+-
+ $(eval $(cmake-package))
 -- 
-2.7.4
+2.14.1
