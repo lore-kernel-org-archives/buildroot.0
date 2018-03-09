@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Mar 2018 22:24:29 +0100
-Subject: [Buildroot] [PATCH] rhash: bump to version 1.3.5
-In-Reply-To: <c919d57dd5fa0c6a2f7296119a0c316c3edf7d6c.1520572866.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 9 Mar 2018 07:21:06 +0200")
-References: <c919d57dd5fa0c6a2f7296119a0c316c3edf7d6c.1520572866.git.baruch@tkos.co.il>
-Message-ID: <87h8pphrhu.fsf@dell.be.48ers.dk>
+Date: Fri, 09 Mar 2018 22:25:06 +0100
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.15.1
+In-Reply-To: <523c80cff000a6c35a19922e22239e0490ce6a85.1520579520.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 9 Mar 2018 09:12:00 +0200")
+References: <523c80cff000a6c35a19922e22239e0490ce6a85.1520579520.git.baruch@tkos.co.il>
+Message-ID: <87d10dhrgt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Add sha256 and license file hash.
+ > Disable libzstd support explicitly to avoid configure failure. The
+ > Buildroot zstd package does not currently install its library.
+
+ > Drop upstream patch.
+
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
