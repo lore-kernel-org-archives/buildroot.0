@@ -1,27 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Mar 2018 22:37:59 +0100
-Subject: [Buildroot] [PATCH 1/1] fbgrab: Fix some problems in the patch
- metadata
-In-Reply-To: <1520505753-13884-1-git-send-email-timo.ketola@exertus.fi> (Timo
- Ketola's message of "Thu, 8 Mar 2018 12:42:33 +0200")
-References: <1520505753-13884-1-git-send-email-timo.ketola@exertus.fi>
-Message-ID: <87k1ulgcaw.fsf@dell.be.48ers.dk>
+Date: Fri, 9 Mar 2018 22:35:21 +0100
+Subject: [Buildroot] [git commit] systemd: do not use host system-uid/gid
+ ranges
+Message-ID: <20180309213813.9DBD182895@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Timo" == Timo Ketola <timo.ketola@exertus.fi> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=183d2097ffef5d8d7e1ac07d3b613ecacdd8c876
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The patch description was missing Upstream-Status tag. It was given in the
- > commit which added this patch but not in the patch itself as should be.
+systemd meson.build uses values from host /etc/login.defs if
+system-uid-max and system-gid-max build options are not explicitly
+specified.
 
- > Signed-off-by tag accidentally didn't follow the usual format.
+Avoid that by setting system-uid-max and system-gid-max to 999 which is
+the systemd default if SYSTEM_UID_MAX and SYSTEM_GID_MAX are not set in
+/etc/login.defs.
 
- > Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/systemd/systemd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 34b70c754a..76b7e8382f 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -40,6 +40,8 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dldconfig=false \
+ 	-Ddefault-dnssec=no \
+ 	-Dtests=false \
++	-Dsystem-uid-max=999 \
++	-Dsystem-gid-max=999 \
+ 	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
+ 	-Dkill-path=/usr/bin/kill \
+ 	-Dkmod-path=/usr/bin/kmod \
