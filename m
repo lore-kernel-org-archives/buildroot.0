@@ -1,99 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Mar 2018 22:24:51 +0100
-Subject: [Buildroot] [git commit] btrfs-progs: bump to version 4.15.1
-Message-ID: <20180309213409.5FC6C82885@busybox.osuosl.org>
+Date: Fri, 9 Mar 2018 22:26:30 +0100
+Subject: [Buildroot] [git commit] libevdev: bump version to 1.5.9
+Message-ID: <20180309213409.79D1781184@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d314d9cc2aea106f52fff18d9120eb4ea80769a1
+commit: https://git.buildroot.net/buildroot/commit/?id=3df649aa4206bc68181f3e8bb7f624d1adcacba6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable libzstd support explicitly to avoid configure failure. The
-Buildroot zstd package does not currently install its library.
+- for details see [1]
+- add hash for license file
 
-Drop upstream patch.
+[1] https://lists.freedesktop.org/archives/input-tools/2018-March/001464.html
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fs-progs-convert-add-missing-types-header.patch | 39 ----------------------
- package/btrfs-progs/btrfs-progs.hash               |  2 +-
- package/btrfs-progs/btrfs-progs.mk                 |  4 +--
- 3 files changed, 3 insertions(+), 42 deletions(-)
+ package/libevdev/libevdev.hash | 13 ++++++++-----
+ package/libevdev/libevdev.mk   |  2 +-
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch b/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch
-deleted file mode 100644
-index 7b09f2785c..0000000000
---- a/package/btrfs-progs/0003-btrfs-progs-convert-add-missing-types-header.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From dda485a3d788c47bb6849218f695db7b51822872 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 31 Oct 2017 14:51:51 +0200
--Subject: [PATCH] btrfs-progs: convert: add missing types header
--
--Build with musl libc needs the sys/types.h header for the dev_t type,
--since this header is not included indirectly. This fixes the following
--build failure:
--
--In file included from convert/source-fs.c:23:0:
--./convert/source-fs.h:112:1: error: unknown type name ???dev_t???
-- dev_t decode_dev(u32 dev);
-- ^~~~~
--convert/source-fs.c:31:1: error: unknown type name ???dev_t???
-- dev_t decode_dev(u32 dev)
-- ^~~~~
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://marc.info/?l=linux-btrfs&m=150945479718731&w=2
--
-- convert/source-fs.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/convert/source-fs.h b/convert/source-fs.h
--index 23f33567b42d..4e5babefe6a2 100644
----- a/convert/source-fs.h
--+++ b/convert/source-fs.h
--@@ -19,6 +19,7 @@
-- 
-- #include "kerncompat.h"
-- #include <linux/kdev_t.h>
--+#include <sys/types.h>
-- #include <pthread.h>
-- 
-- #define CONV_IMAGE_SUBVOL_OBJECTID BTRFS_FIRST_FREE_OBJECTID
---- 
--2.14.2
--
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index bdcb8bada1..54d34c9191 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256 805bdb0031c21a0a5d2ba295a8c9bdd8ba831a68c3fa801aab85677ec902d783  btrfs-progs-v4.13.3.tar.xz
-+sha256 67102ac0d6795f368acc94efaca29b6626d972638790a4a0c9f89a27cd543f96  btrfs-progs-v4.15.1.tar.xz
- # Locally computed
- sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 96c4350d26..776a3ef841 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 0702a7b006..e4294dcade 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,5 +1,8 @@
+-# From https://lists.freedesktop.org/archives/input-tools/2018-January/001447.html
+-md5 c25a8c3939e4ad59a5e9e5e1e354832d libevdev-1.5.8.tar.xz
+-sha1 a60e7a43570cdbc64af5adf99ca80023d21a1174 libevdev-1.5.8.tar.xz
+-sha256 6083d81e46609da8ba80cb826c02d9080764a6dec33c8267ccb7e158833d4c6d libevdev-1.5.8.tar.xz
+-sha512 e9485d8c6b48ebf762b32b003bc6b761c548024ad3bc34a0793485b53383746881fcc9b206a078d571937291e519d9822e50c5d8816778d347094691b65ec3fa libevdev-1.5.8.tar.xz
++# https://lists.freedesktop.org/archives/input-tools/2018-March/001464.html
++md5  a1ca11e961c1efed720fac4130881904 libevdev-1.5.9.tar.xz
++sha1 9457e33af5c1e66e29c1385a5550fe60aef8e42e libevdev-1.5.9.tar.xz
++sha256 e1663751443bed9d3e76a4fe2caf6fa866a79705d91cacad815c04e706198a75 libevdev-1.5.9.tar.xz
++sha512 4496ab4d9dc165f416a574c21a7fcee54ae104c21ef4785a4dd0311fff428020cdbb5da7bf3f835e78dae05effdb1a557d189347f6e62dd6be2d8bcdc845850c libevdev-1.5.9.tar.xz
++
++# Hash for license files:
++sha256 f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137 COPYING
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 1893863efd..880d75dfbd 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BTRFS_PROGS_VERSION = 4.13.3
-+BTRFS_PROGS_VERSION = 4.15.1
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
--BTRFS_PROGS_CONF_OPTS = --disable-backtrace
-+BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd
- BTRFS_PROGS_LICENSE = GPL-2.0
- BTRFS_PROGS_LICENSE_FILES = COPYING
- BTRFS_PROGS_INSTALL_STAGING = YES
+-LIBEVDEV_VERSION = 1.5.8
++LIBEVDEV_VERSION = 1.5.9
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
