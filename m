@@ -1,59 +1,65 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 10 Mar 2018 21:58:17 +0200
-Subject: [Buildroot] [PATCH v4 1/4] imx-mkimage: new package
-In-Reply-To: <20180309162604.73d98870@windsurf>
-References: <1520065060-20046-1-git-send-email-karl.erik.larsson@gmail.com>
- <1520065060-20046-2-git-send-email-karl.erik.larsson@gmail.com>
- <20180303164706.0084b2ec@windsurf.home>
- <CAPP7BN3ewrHnw2nUUO3UtOYG=+zv9hjEatg+y_7JRo4tOcv8qA@mail.gmail.com>
- <20180309162604.73d98870@windsurf>
-Message-ID: <20180310195817.x4ipzhx47hgeoaja@tarshish>
+From: Jens Scheidemann <nobodyman@gmx.de>
+Date: Sat, 10 Mar 2018 21:39:50 +0100
+Subject: [Buildroot] [PATCH 1/5] New package golang-embed
+Message-ID: <1520714394-2918-1-git-send-email-nobodyman@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This package is needed for example to compile gosdm630.
 
-On Fri, Mar 09, 2018 at 04:26:04PM +0100, Thomas Petazzoni wrote:
-> On Sat, 3 Mar 2018 19:46:34 +0100, Erik Larsson wrote:
-> 
-> > > I'm not a big fan of the fact that this host package not does not
-> > > install any host tool, but instead post-processes images created by
-> > > other packages.
-> > >
-> > > Would it be possible for this package to just install host tools, and
-> > > then have a post-image script that uses these host tools to provide the
-> > > final flash.bin image ?  
-> > 
-> > This first version if this patch-serie did sort of that. It build and
-> > installed host tools. And then they were used in post-image.sh. But
-> > after a comments/suggestion from Baruch I got encouraged do it this
-> > way. This solution is much clearer when reading the code then the
-> > first version, but maybe with the drawback of this host-package not
-> > really being a host-package as you stated. If you compare this
-> > solution with the first you will see that there is a pretty convoluted
-> > solution for doing parts that are in the Makefile och imx-mkimage. The
-> > main problem here may be the fact that NXP put stuff in there Makefile
-> > that rally doesn't have anything with the creation of the tool.
-> 
-> I think I really prefer the approach where the imx-mkimage package only
-> installs a host tool, and then a post-image script that uses the host
-> tool installed by imx-mkimage to post-process the images, and generate
-> the final bootloader.
+Signed-off-by: Jens Scheidemann <nobodyman@gmx.de>
+---
+ package/golang-embed/Config.in.host  |  7 +++++++
+ package/golang-embed/golang-embed.mk | 24 ++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 package/golang-embed/Config.in.host
+ create mode 100644 package/golang-embed/golang-embed.mk
 
-Erik has been quick to respin the series. The result is at
-
-  http://lists.busybox.net/pipermail/buildroot/2018-March/215611.html
-
-(not on patchwork). Now the gen_imx8_boot() shell function in the post image 
-script duplicates the logic from the imx-mkimage Makefile to generate the boot 
-image. Do you find this better?
-
-baruch
-
+diff --git a/package/golang-embed/Config.in.host b/package/golang-embed/Config.in.host
+new file mode 100644
+index 0000000..d9449d0
+--- /dev/null
++++ b/package/golang-embed/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_GOLANG_EMBED
++	bool "golang-embed"
++	depends on BR2_PACKAGE_HOST_GOLANG
++	help
++          Static content embedding for Golang.
++
++	  https://github.com/aprice/embed
+diff --git a/package/golang-embed/golang-embed.mk b/package/golang-embed/golang-embed.mk
+new file mode 100644
+index 0000000..49faeb1
+--- /dev/null
++++ b/package/golang-embed/golang-embed.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# golang-embed
++#
++################################################################################
++
++GOLANG_EMBED_SITE_METHOD = local
++
++GOLANG_EMBED_DEPENDENCIES = host-go
++
++GOLANG_EMBED_GOPATH = "$(@D)"
++
++GOLANG_EMBED_MAKE_ENV = GOPATH=$(GOLANG_EMBED_GOPATH)
++
++define HOST_GOLANG_EMBED_BUILD_CMDS
++	cd $(@D) && $(GOLANG_EMBED_MAKE_ENV) $(HOST_DIR)/bin/go get github.com/aprice/embed/cmd/embed
++endef
++
++define HOST_GOLANG_EMBED_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(GOLANG_EMBED_GOPATH)/bin/embed $(HOST_GO_ROOT)/bin/embed
++	ln -sf ../lib/go/bin/embed $(HOST_DIR)/bin
++endef
++
++$(eval $(host-generic-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
