@@ -1,71 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Mar 2018 10:46:08 +0100
-Subject: [Buildroot] [PATCH v3,1/1] libmpdclient: fix install
-Message-ID: <20180310094608.19499-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 10 Mar 2018 12:32:15 +0100
+Subject: [Buildroot] Build time increase in 2018.02
+In-Reply-To: <1520644453.25567.398.camel@impinj.com> (Trent Piepho's message
+ of "Sat, 10 Mar 2018 01:14:13 +0000")
+References: <1520644453.25567.398.camel@impinj.com>
+Message-ID: <87k1ukcgjk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-meson adds the build machine architecture for installation, see:
-https://github.com/mesonbuild/meson/issues/2535
-Until this is fixed, fix libmpdclient.pc and copy the libraries and
-libmpclient.pc to the correct place.
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.net/results/aec/aec9f3de545a832b66cd00c217fbaa99246e1715
- - http://autobuild.buildroot.net/results/07a/07adcba71106a2dca963e4071f4673791b41a603
- - http://autobuild.buildroot.net/results/a27/a272a8e521863374901a5e3c0fb9da0b8daa4076
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v2 -> v3:
- - Add autobuilder links
-Changes v1 -> v2:
- - Fix install of libmpdclient.pc
+ > We've seen a big increase in build time with the latest buildroot.  On
+ > a vpshere instance, times have gone up from 45 minutes to 180+ minutes.
 
- package/libmpdclient/libmpdclient.mk | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Wow! What version did you use before upgrading to 2018.02 (the 45min)?
 
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index 3148fd2873..2b27eff397 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -35,9 +35,34 @@ define LIBMPDCLIENT_INSTALL_TARGET_CMDS
- 		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
- endef
- 
-+# meson adds the build machine architecture for installation, see:
-+# https://github.com/mesonbuild/meson/issues/2535
-+# Until this is fixed, copy the libraries to the correct place
-+define LIBMPDCLIENT_FIX_LIBRARY_INSTALL_TARGET
-+	cp -a $(@D)/build/libmpdclient.* $(TARGET_DIR)/usr/lib
-+endef
-+
-+LIBMPDCLIENT_POST_INSTALL_TARGET_HOOKS += \
-+	LIBMPDCLIENT_FIX_LIBRARY_INSTALL_TARGET
-+
- define LIBMPDCLIENT_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
- 		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
- endef
- 
-+# meson adds the build machine architecture for installation, see:
-+# https://github.com/mesonbuild/meson/issues/2535
-+# Until this is fixed, fix libmpdclient.pc and copy the libraries and
-+# libmpclient.pc to the correct place
-+define LIBMPDCLIENT_FIX_LIBRARY_INSTALL_STAGING
-+	$(INSTALL) -D -m 644 $(@D)/build/meson-private/libmpdclient.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libmpdclient.pc
-+	$(SED) 's,^libdir=.*,libdir=$${prefix}/lib,' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libmpdclient.pc
-+	cp -a $(@D)/build/libmpdclient.* $(STAGING_DIR)/usr/lib
-+endef
-+
-+LIBMPDCLIENT_POST_INSTALL_STAGING_HOOKS += \
-+	LIBMPDCLIENT_FIX_LIBRARY_INSTALL_STAGING
-+
- $(eval $(generic-package))
+ > Here's a breakdown of build time by task for a build that takes 26.5
+ > minutes.  ccache is in use and is quite effectively decreasing the
+ > compile time.  I've split out all the instrumentation steps so they can
+ > be accounted separately from the rest of host-install, etc.  In this
+ > list, host-install only includes the time spent executing the install
+ > commands, not instrumentation or pre/post-hooks.
+
+ > step_pkg_size        831.17
+ > configure            441.77
+ > build                149.56
+ > extract               40.28
+ > host-install          31.96
+ > all other             27.78
+ > check_host_rpath      20.86
+ > check_bin_arch        20.77
+ > target-install        19.84
+ > stage-install         13.25
+
+ > Finding the package sizes takes more time than everything else put
+ > together.  And indeed, if I remove that step, check_bin_arch, and fake
+ > out check-uniq-files, the build drops from 26.5 minutes to 12 minutes!
+
+Argh, that's pretty horrible :/ I have noticed some overhead from the
+various instrumentation steps, but nothing as significant as this.
+
+Out of interest, what kind of storage are you building this on? SSD or
+spinning disk?
+
+ > On the vsphere instance, the time is much much worse.  I'm still
+ > waiting for numbers.  It takes hours.  I think the lousy vm filesystem
+ > performance magnifies the problem.
+
+Yes, I/O performance is absolutely critical for stuff like Buildroot.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
