@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 22:24:34 +0100
-Subject: [Buildroot] [PATCH] libusbgx: add license hashes
-In-Reply-To: <20180308103731.7452-1-john@metanate.com> (John Keeping's message
- of "Thu, 8 Mar 2018 10:37:31 +0000")
-References: <20180308103731.7452-1-john@metanate.com>
-Message-ID: <876063bp4d.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Mar 2018 22:25:47 +0100
+Subject: [Buildroot] [PATCH 1/1] python-schedule: bump to version 0.5.0
+In-Reply-To: <20180307220237.20012-1-joseph.kogut@gmail.com> (Joseph Kogut's
+ message of "Wed, 7 Mar 2018 14:02:37 -0800")
+References: <20180307220237.20012-1-joseph.kogut@gmail.com>
+Message-ID: <871sgrbp2c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Keeping <john@metanate.com> writes:
+>>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
 
- > Signed-off-by: John Keeping <john@metanate.com>
+ > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 
 Committed, thanks.
 
