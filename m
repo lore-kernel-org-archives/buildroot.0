@@ -1,93 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 08:28:18 +0100
-Subject: [Buildroot] [git commit] package: add python-docker-pycreds
-Message-ID: <20180310074849.23DA8800EB@busybox.osuosl.org>
+Date: Sat, 10 Mar 2018 08:31:11 +0100
+Subject: [Buildroot] [git commit] package: add
+ python-backports-ssl-match-hostname
+Message-ID: <20180310074849.665DF800EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93cc6b6cb0cbf90c1eac13f4546e54d423d06233
+commit: https://git.buildroot.net/buildroot/commit/?id=9757f6d11aeb672904b62df28702bdce5097fc6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Python bindings for the docker credentials store API.
+The ssl.match_hostname() function from Python 3.5.
+
+This function IS available in python 2.7 since 2.7.9, but it doesn't support
+matching on IP addresses which is needed for some use cases.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                               |  1 +
- package/Config.in                                        |  1 +
- package/python-docker-pycreds/Config.in                  |  7 +++++++
- package/python-docker-pycreds/python-docker-pycreds.hash |  4 ++++
- package/python-docker-pycreds/python-docker-pycreds.mk   | 14 ++++++++++++++
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/python-backports-ssl-match-hostname/Config.in      |  7 +++++++
+ .../python-backports-ssl-match-hostname.hash               |  4 ++++
+ .../python-backports-ssl-match-hostname.mk                 | 14 ++++++++++++++
  5 files changed, 27 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 78a0721201..845aece54e 100644
+index c13bb448f5..14f12e36ec 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -1385,6 +1385,7 @@ F:	package/lzop/
  F:	package/memtool/
  F:	package/mosquitto/
  F:	package/python-alsaaudio/
-+F:	package/python-docker-pycreds/
++F:	package/python-backports-ssl-match-hostname/
+ F:	package/python-docker-pycreds/
  F:	package/python-enum/
  F:	package/python-enum34/
- F:	package/python-ipaddr/
 diff --git a/package/Config.in b/package/Config.in
-index f455e74735..a5604fc36b 100644
+index 9c727cad6c..d3018aee47 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -765,6 +765,7 @@ menu "External python modules"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-django/Config.in"
-+	source "package/python-docker-pycreds/Config.in"
- 	source "package/python-docopt/Config.in"
- 	source "package/python-docutils/Config.in"
- 	source "package/python-dominate/Config.in"
-diff --git a/package/python-docker-pycreds/Config.in b/package/python-docker-pycreds/Config.in
+@@ -732,6 +732,7 @@ menu "External python modules"
+ 	source "package/python-babel/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-backports-shutil-get-terminal-size/Config.in"
++	source "package/python-backports-ssl-match-hostname/Config.in"
+ 	source "package/python-bcrypt/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bitstring/Config.in"
+diff --git a/package/python-backports-ssl-match-hostname/Config.in b/package/python-backports-ssl-match-hostname/Config.in
 new file mode 100644
-index 0000000000..584c1dbc0e
+index 0000000000..8e55191a9e
 --- /dev/null
-+++ b/package/python-docker-pycreds/Config.in
++++ b/package/python-backports-ssl-match-hostname/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_DOCKER_PYCREDS
-+	bool "python-docker-pycreds"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
++config BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME
++	bool "python-backports-ssl-match-hostname"
++	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  Python bindings for the docker credentials store API.
++	  The ssl.match_hostname() function from Python 3.5.
 +
-+	  https://github.com/shin-/dockerpy-creds
-diff --git a/package/python-docker-pycreds/python-docker-pycreds.hash b/package/python-docker-pycreds/python-docker-pycreds.hash
++	  http://bitbucket.org/brandon/backports.ssl_match_hostname
+diff --git a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
 new file mode 100644
-index 0000000000..9e1182d4a4
+index 0000000000..b43e1af5a6
 --- /dev/null
-+++ b/package/python-docker-pycreds/python-docker-pycreds.hash
++++ b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/docker-pycreds/json, sha256 locally computed
-+md5	ae63c7def3e58cb51a4d8f5810683030  docker-pycreds-0.2.2.tar.gz
-+sha256	c7ab85de2894baff6ee8f15160cbbfa2fd3a04e56f0372c5793d24060687b299  docker-pycreds-0.2.2.tar.gz
-+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-docker-pycreds/python-docker-pycreds.mk b/package/python-docker-pycreds/python-docker-pycreds.mk
++# md5 from https://pypi.python.org/pypi/backports.ssl_match_hostname/json, sha256 locally computed
++md5	c03fc5e2c7b3da46b81acf5cbacfe1e6  backports.ssl_match_hostname-3.5.0.1.tar.gz
++sha256	502ad98707319f4a51fa2ca1c677bd659008d27ded9f6380c79e8932e38dcdf2  backports.ssl_match_hostname-3.5.0.1.tar.gz
++sha256	bfc8a75a4b9aec224aa7973c0c9d7cc0134bdcbf8eefd008936b58554d66e97e  backports/ssl_match_hostname/LICENSE.txt
+diff --git a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
 new file mode 100644
-index 0000000000..e7ffd0eb51
+index 0000000000..01c8bc448c
 --- /dev/null
-+++ b/package/python-docker-pycreds/python-docker-pycreds.mk
++++ b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-docker-pycreds
++# python-backports-ssl-match-hostname
 +#
 +################################################################################
 +
-+PYTHON_DOCKER_PYCREDS_VERSION = 0.2.2
-+PYTHON_DOCKER_PYCREDS_SOURCE = docker-pycreds-$(PYTHON_DOCKER_PYCREDS_VERSION).tar.gz
-+PYTHON_DOCKER_PYCREDS_SITE = https://pypi.python.org/packages/db/73/42d4c698e70633d99f7f7c4c87c6de45ead5ad7b36dcfccd998fd1556ac9
-+PYTHON_DOCKER_PYCREDS_SETUP_TYPE = setuptools
-+PYTHON_DOCKER_PYCREDS_LICENSE = Apache-2.0
-+PYTHON_DOCKER_PYCREDS_LICENSE_FILES = LICENSE
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION = 3.5.0.1
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SOURCE = backports.ssl_match_hostname-$(PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION).tar.gz
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SITE = https://pypi.python.org/packages/76/21/2dc61178a2038a5cb35d14b61467c6ac632791ed05131dda72c20e7b9e23
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SETUP_TYPE = distutils
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE = Python-2.0
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE_FILES = backports/ssl_match_hostname/LICENSE.txt
 +
 +$(eval $(python-package))
