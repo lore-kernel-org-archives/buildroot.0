@@ -1,110 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 19:58:08 +0100
-Subject: [Buildroot] [git commit] libcpprestsdk: fix template
- whitespace-syntax
-Message-ID: <20180310191622.722937FA5F@busybox.osuosl.org>
+Date: Sat, 10 Mar 2018 20:15:24 +0100
+Subject: [Buildroot] [git commit] cryptopp: fix build with host-gcc 4.7.x
+Message-ID: <20180310191622.87F508007A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4832b04c95af9f2cea9502f6cf3425b01eefa213
+commit: https://git.buildroot.net/buildroot/commit/?id=22ee82bb93c80a6cda5ca1734d140626115c6fa3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-some files don't have a space inbetween the '<' and '::' charachters, which
-will cause build failures on older toolchains. Adding a space inbetween these
-two characters fixes the issue.
+Fixes:
+ - http://autobuild.buildroot.org/results/9ab386124e4a09b50598c6f95ad40b25a83d227e
 
-upstream-status: pending
-https://github.com/Microsoft/cpprestsdk/pull/715
-
-fixes:
-http://autobuild.buildroot.net/results/797a9b5fdf6ab0f16f2249324b48292dfab61d9f
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-fix-template-whitespace-syntax.patch      | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ ...0001-Fix-GCC-version-for-RDSEED-intrinsic.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/libcpprestsdk/0002-fix-template-whitespace-syntax.patch b/package/libcpprestsdk/0002-fix-template-whitespace-syntax.patch
+diff --git a/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch b/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
 new file mode 100644
-index 0000000000..81f7ea19ec
+index 0000000000..e0596017ad
 --- /dev/null
-+++ b/package/libcpprestsdk/0002-fix-template-whitespace-syntax.patch
-@@ -0,0 +1,75 @@
-+From 546e89a29a82cc4f7de6c99be5a07221aa7443df Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Fri, 9 Mar 2018 08:09:52 -0500
-+Subject: [PATCH] fix template whitespace syntax
++++ b/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
+@@ -0,0 +1,49 @@
++From 31465400675c75d8ea0556d708a7efbf915bc366 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 10 Mar 2018 12:14:23 +0100
++Subject: [PATCH] Fix GCC version for RDSEED intrinsic
 +
-+Some files don't have a space inbetween the '<' and '::' charachters, which
-+will cause build failures on older toolchains. Adding a space inbetween these
-+two characters fixes the issue.
++rdseed is only available on gcc 4.8.x, not on gcc 4.7.x
 +
-+upstream-status: pending
-+https://github.com/Microsoft/cpprestsdk/pull/715
++Fixes:
++ - http://autobuild.buildroot.org/results/9ab386124e4a09b50598c6f95ad40b25a83d227e
 +
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ Release/include/cpprest/details/web_utilities.h | 2 +-
-+ Release/include/cpprest/http_client.h           | 2 +-
-+ Release/include/cpprest/json.h                  | 2 +-
-+ Release/include/cpprest/ws_client.h             | 2 +-
-+ 4 files changed, 4 insertions(+), 4 deletions(-)
++ rdrand.cpp | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/Release/include/cpprest/details/web_utilities.h b/Release/include/cpprest/details/web_utilities.h
-+index ba641654..9855c315 100644
-+--- a/Release/include/cpprest/details/web_utilities.h
-++++ b/Release/include/cpprest/details/web_utilities.h
-+@@ -33,7 +33,7 @@ class zero_memory_deleter
-+ public:
-+     _ASYNCRTIMP void operator()(::utility::string_t *data) const;
-+ };
-+-typedef std::unique_ptr<::utility::string_t, zero_memory_deleter> plaintext_string;
-++typedef std::unique_ptr< ::utility::string_t, zero_memory_deleter> plaintext_string;
-+ 
-+ #if defined(_WIN32) && !defined(CPPREST_TARGET_XP)
-+ #if defined(__cplusplus_winrt)
-+diff --git a/Release/include/cpprest/http_client.h b/Release/include/cpprest/http_client.h
-+index a936a23e..f5ad8fac 100644
-+--- a/Release/include/cpprest/http_client.h
-++++ b/Release/include/cpprest/http_client.h
-+@@ -757,7 +757,7 @@ public:
-+ 
-+ private:
-+ 
-+-    std::shared_ptr<::web::http::client::http_pipeline> m_pipeline;
-++    std::shared_ptr< ::web::http::client::http_pipeline> m_pipeline;
-+ };
-+ 
-+ namespace details {
-+diff --git a/Release/include/cpprest/json.h b/Release/include/cpprest/json.h
-+index 07c54502..dfdeead4 100644
-+--- a/Release/include/cpprest/json.h
-++++ b/Release/include/cpprest/json.h
-+@@ -301,7 +301,7 @@ public:
-+         /// <param name="fields">Field names associated with JSON values</param>
-+         /// <param name="keep_order">Whether to preserve the original order of the fields</param>
-+         /// <returns>A non-empty JSON object value</returns>
-+-        static _ASYNCRTIMP json::value __cdecl object(std::vector<std::pair<::utility::string_t, value>> fields, bool keep_order = false);
-++        static _ASYNCRTIMP json::value __cdecl object(std::vector<std::pair< ::utility::string_t, value>> fields, bool keep_order = false);
-+ 
-+         /// <summary>
-+         /// Creates an empty JSON array
-+diff --git a/Release/include/cpprest/ws_client.h b/Release/include/cpprest/ws_client.h
-+index 9a324cde..98f933e1 100644
-+--- a/Release/include/cpprest/ws_client.h
-++++ b/Release/include/cpprest/ws_client.h
-+@@ -184,7 +184,7 @@ public:
-+     /// <returns>Vector of all the subprotocols </returns>
-+     /// <remarks>If you want all the subprotocols in a comma separated string
-+     /// they can be directly looked up in the headers using 'Sec-WebSocket-Protocol'.</remarks>
-+-    _ASYNCRTIMP std::vector<::utility::string_t> subprotocols() const;
-++    _ASYNCRTIMP std::vector< ::utility::string_t> subprotocols() const;
-+ 	
-+     /// <summary>
-+     /// Gets the server certificate validation property.
++diff --git a/rdrand.cpp b/rdrand.cpp
++index 900fcd96..64b12208 100644
++--- a/rdrand.cpp
+++++ b/rdrand.cpp
++@@ -74,7 +74,7 @@
++ #  else
++ #    define GCC_RDRAND_ASM_AVAILABLE 1
++ #  endif
++-#  if defined(__RDSEED__) && (CRYPTOPP_GCC_VERSION >= 40700) && !defined(__OPTIMIZE__)
+++#  if defined(__RDSEED__) && (CRYPTOPP_GCC_VERSION >= 40800) && !defined(__OPTIMIZE__)
++ #    define ALL_RDSEED_INTRIN_AVAILABLE 1
++ #  else
++ #    define GCC_RDSEED_ASM_AVAILABLE 1
++@@ -291,7 +291,7 @@ inline void RDSEED32(void* output)
++         : "=a" (*reinterpret_cast<word32*>(output))
++         : : "cc"
++     );
++-#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40700)
+++#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40800)
++     __asm__ __volatile__
++     (
++         INTEL_NOPREFIX
++@@ -333,7 +333,7 @@ inline void RDSEED64(void* output)
++         : "=a" (*reinterpret_cast<word64*>(output))
++         : : "cc"
++     );
++-#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40700)
+++#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40800)
++     __asm__ __volatile__
++     (
++         INTEL_NOPREFIX
 +-- 
-+2.14.3
++2.11.0
 +
