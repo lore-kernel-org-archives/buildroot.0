@@ -1,37 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 09:43:47 +0100
-Subject: [Buildroot] [git commit] tpm2-tss: new package
-In-Reply-To: <497594174.1292740.1520644151438.JavaMail.zimbra@datacom.ind.br>
- (Carlos Santos's message of "Fri, 9 Mar 2018 22:09:11 -0300 (BRT)")
-References: <20180308090237.C2C4582814@busybox.osuosl.org>
- <1431823865.1093060.1520538814142.JavaMail.zimbra@datacom.ind.br>
- <878tb1hrf8.fsf@dell.be.48ers.dk>
- <497594174.1292740.1520644151438.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <87r2oscocc.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Mar 2018 10:42:23 +0100
+Subject: [Buildroot] [PATCH v2,1/1] libmpdclient: fix install
+Message-ID: <20180310094223.19103-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+meson adds the build machine architecture for installation, see:
+https://github.com/mesonbuild/meson/issues/2535
+Until this is fixed, fix libmpdclient.pc and copy the libraries and
+libmpclient.pc to the correct place.
 
- >> Thomas asked on IRC why this was x86 only. Can you explain why?
+Fixes:
+ - http://autobuild.buildroot.net/results/aec/aec9f3de545a832b66cd00c217fbaa99246e1715
+ - http://autobuild.buildroot.net/results/07a/07adcba71106a2dca963e4071f4673791b41a603
+ - http://autobuild.buildroot.net/results/a27/a272a8e521863374901a5e3c0fb9da0b8daa4076
 
- > Because it needs a hardware TPM, which as far as I know is available
- > only in some Intel processors (I tested it in a C3000 SOC).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Add autobuilder links
 
-Aren't TPM2 devices still available as small microcontrollers connected
-to the main processor over i2c/spi? I've seen ARM boards with such
-TPM1.2 devices, and I think Thomas mentioned an ARM board with a TPM2
-device connected over SPI.
+ package/libmpdclient/libmpdclient.mk | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-In general, unless there is a build time dependency on architecture
-specific files or the package is very specific to a SoC or board I
-prefer to not hide packages, even if it is unlikely to be used on other
-architectures.
-
-So I think we should remove the dependencies from tpm2-tss.
-
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 3148fd2873..2b27eff397 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -35,9 +35,34 @@ define LIBMPDCLIENT_INSTALL_TARGET_CMDS
+ 		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+ endef
+ 
++# meson adds the build machine architecture for installation, see:
++# https://github.com/mesonbuild/meson/issues/2535
++# Until this is fixed, copy the libraries to the correct place
++define LIBMPDCLIENT_FIX_LIBRARY_INSTALL_TARGET
++	cp -a $(@D)/build/libmpdclient.* $(TARGET_DIR)/usr/lib
++endef
++
++LIBMPDCLIENT_POST_INSTALL_TARGET_HOOKS += \
++	LIBMPDCLIENT_FIX_LIBRARY_INSTALL_TARGET
++
+ define LIBMPDCLIENT_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
+ 		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+ endef
+ 
++# meson adds the build machine architecture for installation, see:
++# https://github.com/mesonbuild/meson/issues/2535
++# Until this is fixed, fix libmpdclient.pc and copy the libraries and
++# libmpclient.pc to the correct place
++define LIBMPDCLIENT_FIX_LIBRARY_INSTALL_STAGING
++	$(INSTALL) -D -m 644 $(@D)/build/meson-private/libmpdclient.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libmpdclient.pc
++	$(SED) 's,^libdir=.*,libdir=$${prefix}/lib,' \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libmpdclient.pc
++	cp -a $(@D)/build/libmpdclient.* $(STAGING_DIR)/usr/lib
++endef
++
++LIBMPDCLIENT_POST_INSTALL_STAGING_HOOKS += \
++	LIBMPDCLIENT_FIX_LIBRARY_INSTALL_STAGING
++
+ $(eval $(generic-package))
 -- 
-Bye, Peter Korsgaard
+2.14.1
