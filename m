@@ -1,82 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 23:50:58 +0100
-Subject: [Buildroot] [git commit] uboot-tools: backport patch fixing build
- failure with libfdt-devel installed
-Message-ID: <20180310225130.A939182AE5@busybox.osuosl.org>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 10 Mar 2018 20:30:55 -0300
+Subject: [Buildroot] Unable to build Buildroot
+References: <20180309191151.GA11285@pema>
+Message-ID: <5aa46aaf74feb_16e6139a304805b4@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cbfc94c5a0ac4120925aa8c7337eb7957dc4678
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-U-Boot host programs fail to build when libfdt-devel is installed
-system-wide, with errors like this:
+I add Mario Lang to CC.
 
-      HOSTCC  tools/aisimage.o
-    In file included from tools/../include/../lib/libfdt/libfdt.h:10:0,
-                     from tools/../include/libfdt.h:1,
-                     from tools/fdt_host.h:11,
-                     from tools/imagetool.h:24,
-                     from tools/aisimage.c:8:
-    /usr/include/libfdt_env.h:70:30: error: conflicting types for ???fdt64_t???
-     typedef uint64_t FDT_BITWISE fdt64_t;
-                                  ^~~~~~~
-    In file included from <command-line>:0:0:
-    ././include/libfdt_env.h:19:16: note: previous declaration of ???fdt64_t??? was here
-     typedef __be64 fdt64_t;
-                    ^~~~~~~
-    In file included from ././include/libfdt_env.h:12:0,
-                     from <command-line>:0:
-    /usr/include/libfdt_env.h:90:24: error: expected ???)??? before ???x???
-     static inline uint32_t fdt32_to_cpu(fdt32_t x)
-                            ^
-This commit backports an upstream patch that fixes this problem.
+On Fri, Mar 09, 2018 at 04:11 PM, Sh?rab wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...de-U-Boot-libfdt-headers-from-their-actua.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+[snip]
+> Baruch Siach (2018/03/08 15:13 +0200):
+[snip]
+>> 
+>> Your host seems to have glibc 2.27 installed. In this version glibc added 
+>> copy_file_range() which collides with a local definition of the same symbol in 
+>> e2fsprogs. This issue is fixed in e2fsprogs commit 01551bdba1 (misc: rename 
+>> copy_file_range to copy_file_chunk), which is included in version 1.43.8. The 
+>> latest Buildroot release, 2018.02, has 1.43.9.
+> 
+> Okay thanks a lot!
+> 
+> I am facing another problemnow which may be slightly off-topic here but
+> let me try.
+> 
+> The buildroot I am using is a submoduleof this repository:
+> 
+> https://github.com/mlang/brlpi
 
-diff --git a/package/uboot-tools/0004-tools-Include-U-Boot-libfdt-headers-from-their-actua.patch b/package/uboot-tools/0004-tools-Include-U-Boot-libfdt-headers-from-their-actua.patch
-new file mode 100644
-index 0000000000..9f18342868
---- /dev/null
-+++ b/package/uboot-tools/0004-tools-Include-U-Boot-libfdt-headers-from-their-actua.patch
-@@ -0,0 +1,33 @@
-+From e0d20dc1521e74b82dbd69be53a048847798a90a Mon Sep 17 00:00:00 2001
-+From: Paul Kocialkowski <contact@paulk.fr>
-+Date: Fri, 2 Mar 2018 23:13:42 +0100
-+Subject: [PATCH] tools: Include U-Boot libfdt headers from their actual path
-+
-+There are no headers for libfdt in lib/libfdt, as they are instead
-+located in scripts/dtc/libfdt. Specifying lib/libfdt for headers
-+inclusion in host tools results in using the system libfdt headers,
-+which is not what we want. Change this to the proper path.
-+
-+Signed-off-by: Paul Kocialkowski <contact@paulk.fr>
-+[Backport from upstream commit e0d20dc1521e74b82dbd69be53a048847798a90a]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ tools/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/Makefile b/tools/Makefile
-+index d3387fad69..f38f68ee47 100644
-+--- a/tools/Makefile
-++++ b/tools/Makefile
-+@@ -244,7 +244,7 @@ endif # !LOGO_BMP
-+ #
-+ HOST_EXTRACFLAGS += -include $(srctree)/include/compiler.h \
-+ 		$(patsubst -I%,-idirafter%, $(filter -I%, $(UBOOTINCLUDE))) \
-+-		-I$(srctree)/lib/libfdt \
-++		-I$(srctree)/scripts/dtc/libfdt \
-+ 		-I$(srctree)/tools \
-+ 		-DUSE_HOSTCC \
-+ 		-D__KERNEL_STRICT_NAMES \
-+-- 
-+2.14.3
-+
+which is using a development version of Buildroot between 2017.11 and 2018.02:
+2017.11-354-g85e08bf
+
+> 
+> Although I did makeclean etc., the buildroot submodule was not updated
+> and I was not able to find a way to ask git to update it through a
+> submodule subcommand.
+
+It seems to me the Makefile for brlpi does the right thing for:
+1) make clean
+  - deinit the submodule buildroot
+  - remove the Buildroot output dirs 
+2) make
+  - init/update the submodule buildroot
+  - configure the builds as out-of-tree
+    (http://nightly.buildroot.org/#_building_out_of_tree)
+  - call make inside the output dirs
+
+But if it fails for you, you could create an "issue" in brlpi github page.
+
+> 
+> So I went to the buildroot subdirectory, did a git fetch and then
+> checked out 2018.02, which worked.
+
+So you are working to update the Buildroot version for a br2-external.
+It's possible you need to do other changes to the br2-external as well.
+
+> 
+> But then when I tried to run make cleand and make again to rebuild my
+> image,
+> 
+> quickly I got the following error message:
+> 
+> umask 0022 && make -C /home/shindere/src/brlpi/buildroot O=/home/shindere/src/brlpi/brlpi0w/.
+> /home/shindere/src/brlpi/package/brltty/brltty.mk:104: *** Package
+> 'brltty' defined a second time in
+> '/home/shindere/src/brlpi/package/brltty/'; previous definition was in
+
+This is the package defined by the br2-external.
+
+> 'package/brltty/'. Arr?t.
+
+This is the package defined by Buildroot.
+It was not there in commit 85e08bf, but it is there at 2018.02 as the patch
+sent by Mario adding the package was applied.
+
+> 
+> I'm sory but I have no idea how to deal with this. Any suggestion would
+> be welcome.
+
+Tips:
+ - read the br2-external section in the manual:
+   http://nightly.buildroot.org/#customize
+ - check the diff between the two brltty packages (the one from Buildroot and
+   the one from br2-external);
+ - remove the package from br2-external and do a clean build to check. If is
+   breaks, you probably will need more changes to the br2-external.
+
+Regards,
+Ricardo
