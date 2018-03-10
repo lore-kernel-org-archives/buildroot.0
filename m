@@ -1,31 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 19:59:12 +0100
-Subject: [Buildroot] [PATCH 1/1] libcpprestsdk: fix template
- whitespace-syntax
-In-Reply-To: <20180309131816.32466-1-aduskett@gmail.com> (Adam Duskett's
- message of "Fri, 9 Mar 2018 08:18:16 -0500")
-References: <20180309131816.32466-1-aduskett@gmail.com>
-Message-ID: <87r2orbvun.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Mar 2018 20:16:05 +0100
+Subject: [Buildroot] [PATCH 1/1] cryptopp: fix build with host-gcc 4.7.x
+In-Reply-To: <20180310152943.20884-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 10 Mar 2018 16:29:43 +0100")
+References: <20180310152943.20884-1-fontaine.fabrice@gmail.com>
+Message-ID: <87muzfbv2i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > some files don't have a space inbetween the '<' and '::' charachters, which
- > will cause build failures on older toolchains. Adding a space inbetween these
- > two characters fixes the issue.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/9ab386124e4a09b50598c6f95ad40b25a83d227e
 
- > upstream-status: pending
- > https://github.com/Microsoft/cpprestsdk/pull/715
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > fixes:
- > http://autobuild.buildroot.net/results/797a9b5fdf6ab0f16f2249324b48292dfab61d9f
- > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+The DOS newlines didn't make it through the mailing list, so I had to
+recreate the patch locally.
 
-Committed, thanks.
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
