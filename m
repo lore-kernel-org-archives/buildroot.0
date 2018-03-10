@@ -1,21 +1,17 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 08:31:11 +0100
-Subject: [Buildroot] [git commit] package: add
- python-backports-ssl-match-hostname
-Message-ID: <20180310074849.665DF800EB@busybox.osuosl.org>
+Date: Sat, 10 Mar 2018 08:30:16 +0100
+Subject: [Buildroot] [git commit] package: add python-websocket-client
+Message-ID: <20180310074849.4B03080073@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9757f6d11aeb672904b62df28702bdce5097fc6f
+commit: https://git.buildroot.net/buildroot/commit/?id=6fccba603342e8538f41ec25c7fd76b7afe6695a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ssl.match_hostname() function from Python 3.5.
-
-This function IS available in python 2.7 since 2.7.9, but it doesn't support
-matching on IP addresses which is needed for some use cases.
+WebSocket client module for python.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
@@ -23,75 +19,77 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  DEVELOPERS                                                 |  1 +
  package/Config.in                                          |  1 +
- package/python-backports-ssl-match-hostname/Config.in      |  7 +++++++
- .../python-backports-ssl-match-hostname.hash               |  4 ++++
- .../python-backports-ssl-match-hostname.mk                 | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
+ package/python-websocket-client/Config.in                  |  9 +++++++++
+ .../python-websocket-client/python-websocket-client.hash   |  4 ++++
+ package/python-websocket-client/python-websocket-client.mk | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c13bb448f5..14f12e36ec 100644
+index 845aece54e..c13bb448f5 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1385,6 +1385,7 @@ F:	package/lzop/
- F:	package/memtool/
- F:	package/mosquitto/
- F:	package/python-alsaaudio/
-+F:	package/python-backports-ssl-match-hostname/
- F:	package/python-docker-pycreds/
- F:	package/python-enum/
- F:	package/python-enum34/
+@@ -1391,6 +1391,7 @@ F:	package/python-enum34/
+ F:	package/python-ipaddr/
+ F:	package/python-pam/
+ F:	package/python-psutil/
++F:	package/python-websocket-client/
+ F:	package/triggerhappy/
+ 
+ N:	Peter Seiderer <ps.report@gmx.net>
 diff --git a/package/Config.in b/package/Config.in
-index 9c727cad6c..d3018aee47 100644
+index a5604fc36b..9c727cad6c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -732,6 +732,7 @@ menu "External python modules"
- 	source "package/python-babel/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-backports-shutil-get-terminal-size/Config.in"
-+	source "package/python-backports-ssl-match-hostname/Config.in"
- 	source "package/python-bcrypt/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bitstring/Config.in"
-diff --git a/package/python-backports-ssl-match-hostname/Config.in b/package/python-backports-ssl-match-hostname/Config.in
+@@ -949,6 +949,7 @@ menu "External python modules"
+ 	source "package/python-wcwidth/Config.in"
+ 	source "package/python-web2py/Config.in"
+ 	source "package/python-webpy/Config.in"
++	source "package/python-websocket-client/Config.in"
+ 	source "package/python-websockets/Config.in"
+ 	source "package/python-werkzeug/Config.in"
+ 	source "package/python-whoosh/Config.in"
+diff --git a/package/python-websocket-client/Config.in b/package/python-websocket-client/Config.in
 new file mode 100644
-index 0000000000..8e55191a9e
+index 0000000000..0fbb15b328
 --- /dev/null
-+++ b/package/python-backports-ssl-match-hostname/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME
-+	bool "python-backports-ssl-match-hostname"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/python-websocket-client/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT
++	bool "python-websocket-client"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
 +	help
-+	  The ssl.match_hostname() function from Python 3.5.
++	  WebSocket client for python. hybi13 is supported.
 +
-+	  http://bitbucket.org/brandon/backports.ssl_match_hostname
-diff --git a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
++	  https://github.com/websocket-client/websocket-client.git
+diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
 new file mode 100644
-index 0000000000..b43e1af5a6
+index 0000000000..3672ca074b
 --- /dev/null
-+++ b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
++++ b/package/python-websocket-client/python-websocket-client.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/backports.ssl_match_hostname/json, sha256 locally computed
-+md5	c03fc5e2c7b3da46b81acf5cbacfe1e6  backports.ssl_match_hostname-3.5.0.1.tar.gz
-+sha256	502ad98707319f4a51fa2ca1c677bd659008d27ded9f6380c79e8932e38dcdf2  backports.ssl_match_hostname-3.5.0.1.tar.gz
-+sha256	bfc8a75a4b9aec224aa7973c0c9d7cc0134bdcbf8eefd008936b58554d66e97e  backports/ssl_match_hostname/LICENSE.txt
-diff --git a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
++# md5 from https://pypi.python.org/pypi/websocket-client/json, sha256 locally computed
++md5	790b3ecb5364293ad70c59a1b92debb1  websocket_client-0.47.0.tar.gz
++sha256	a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149  websocket_client-0.47.0.tar.gz
++sha256	e580b2a1a57c33085dd6a07cff693d828f7c3fa8a11ce56ade2a62c46951930d  LICENSE
+diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
 new file mode 100644
-index 0000000000..01c8bc448c
+index 0000000000..58c8407db3
 --- /dev/null
-+++ b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
++++ b/package/python-websocket-client/python-websocket-client.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-backports-ssl-match-hostname
++# python-websocket-client
 +#
 +################################################################################
 +
-+PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION = 3.5.0.1
-+PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SOURCE = backports.ssl_match_hostname-$(PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION).tar.gz
-+PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SITE = https://pypi.python.org/packages/76/21/2dc61178a2038a5cb35d14b61467c6ac632791ed05131dda72c20e7b9e23
-+PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SETUP_TYPE = distutils
-+PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE = Python-2.0
-+PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE_FILES = backports/ssl_match_hostname/LICENSE.txt
++PYTHON_WEBSOCKET_CLIENT_VERSION = 0.47.0
++PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
++PYTHON_WEBSOCKET_CLIENT_SITE = https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27
++PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
++PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
++PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
