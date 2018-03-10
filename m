@@ -1,76 +1,34 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Mar 2018 16:29:43 +0100
-Subject: [Buildroot] [PATCH 1/1] cryptopp: fix build with host-gcc 4.7.x
-Message-ID: <20180310152943.20884-1-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 10 Mar 2018 12:39:45 -0300
+Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
+In-Reply-To: <CAOMZO5BGUhobyE=gmMC5BDp2dMkuxRXn0jGckcHr56q08QPRAw@mail.gmail.com>
+References: <20180304225550.74761708@windsurf.home>
+ <CAOMZO5BntMxqEBPuXVs2CX2L9OWGrf-AzbsOUeDN8qqcJgS8cg@mail.gmail.com>
+ <20180305085314.3ce92959@windsurf.home>
+ <CAOMZO5DxGfnCCOF3MgJMmmAdKTs3sdGiq2Z2w9UXjV7nvOUpHA@mail.gmail.com>
+ <CAOMZO5BGUhobyE=gmMC5BDp2dMkuxRXn0jGckcHr56q08QPRAw@mail.gmail.com>
+Message-ID: <CAOMZO5AmG-pJHDqR_-iVfpZzQa2K2nFRp_TXwKNAryrP=H14Lw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/9ab386124e4a09b50598c6f95ad40b25a83d227e
+On Sat, Mar 10, 2018 at 11:40 AM, Fabio Estevam <festevam@gmail.com> wrote:
+> Hi Thomas,
+>
+> On Mon, Mar 5, 2018 at 8:03 AM, Fabio Estevam <festevam@gmail.com> wrote:
+>
+>>> If nobody has access to the HW platform, I think we could just as well
+>>> drop the defconfig.
+>>
+>> Yes, we have a mx31pdk board in the office.
+>>
+>> I will try to have access to it this week and give it a try with mainline.
+>
+> The mx31pdk board I have access to is bricked and it will take me some
+> time to unbrick it.
+>
+> If anyone else has access to this board and would like to maintain it
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...0001-Fix-GCC-version-for-RDSEED-intrinsic.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
-
-diff --git a/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch b/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
-new file mode 100644
-index 0000000000..0cf30d1a37
---- /dev/null
-+++ b/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
-@@ -0,0 +1,49 @@
-+From 31465400675c75d8ea0556d708a7efbf915bc366 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 10 Mar 2018 12:14:23 +0100
-+Subject: [PATCH] Fix GCC version for RDSEED intrinsic
-+
-+rdseed is only available on gcc 4.8.x, not on gcc 4.7.x
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9ab386124e4a09b50598c6f95ad40b25a83d227e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ rdrand.cpp | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/rdrand.cpp b/rdrand.cpp
-+index 900fcd96..64b12208 100644
-+--- a/rdrand.cpp
-++++ b/rdrand.cpp
-+@@ -74,7 +74,7 @@
-+ #  else
-+ #    define GCC_RDRAND_ASM_AVAILABLE 1
-+ #  endif
-+-#  if defined(__RDSEED__) && (CRYPTOPP_GCC_VERSION >= 40700) && !defined(__OPTIMIZE__)
-++#  if defined(__RDSEED__) && (CRYPTOPP_GCC_VERSION >= 40800) && !defined(__OPTIMIZE__)
-+ #    define ALL_RDSEED_INTRIN_AVAILABLE 1
-+ #  else
-+ #    define GCC_RDSEED_ASM_AVAILABLE 1
-+@@ -291,7 +291,7 @@ inline void RDSEED32(void* output)
-+         : "=a" (*reinterpret_cast<word32*>(output))
-+         : : "cc"
-+     );
-+-#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40700)
-++#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40800)
-+     __asm__ __volatile__
-+     (
-+         INTEL_NOPREFIX
-+@@ -333,7 +333,7 @@ inline void RDSEED64(void* output)
-+         : "=a" (*reinterpret_cast<word64*>(output))
-+         : : "cc"
-+     );
-+-#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40700)
-++#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40800)
-+     __asm__ __volatile__
-+     (
-+         INTEL_NOPREFIX
-+-- 
-+2.14.1
-+
--- 
-2.14.1
+Ops, I meant "If anyone else does not have access to this board..."
