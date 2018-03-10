@@ -1,10 +1,11 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 10 Mar 2018 07:11:04 +0100
-Subject: [Buildroot] [PATCH 02/10] package: add python-websocket-client
-In-Reply-To: <20180309191701.23760-3-peter@korsgaard.com>
+Date: Sat, 10 Mar 2018 07:11:52 +0100
+Subject: [Buildroot] [PATCH 03/10] package: add
+ python-backports-ssl-match-hostname
+In-Reply-To: <20180309191701.23760-4-peter@korsgaard.com>
 References: <20180309191701.23760-1-peter@korsgaard.com>
- <20180309191701.23760-3-peter@korsgaard.com>
-Message-ID: <CAGm1_ks92BUE3e9Jqi1Q+XmfSvefvT3j-6TCxpCNmi+MiF6O8g@mail.gmail.com>
+ <20180309191701.23760-4-peter@korsgaard.com>
+Message-ID: <CAGm1_kv5O_DKo5kxnha1nZeXZ5xAEu0xieAM3zi8D5mF-W0nGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,7 +13,10 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Fri, Mar 9, 2018 at 8:16 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> WebSocket client module for python.
+> The ssl.match_hostname() function from Python 3.5.
+>
+> This function IS available in python 2.7 since 2.7.9, but it doesn't support
+> matching on IP addresses which is needed for some use cases.
 >
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
@@ -21,86 +25,87 @@ Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
 >  DEVELOPERS                                                 |  1 +
 >  package/Config.in                                          |  1 +
->  package/python-websocket-client/Config.in                  |  9 +++++++++
->  .../python-websocket-client/python-websocket-client.hash   |  4 ++++
->  package/python-websocket-client/python-websocket-client.mk | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-websocket-client/Config.in
->  create mode 100644 package/python-websocket-client/python-websocket-client.hash
->  create mode 100644 package/python-websocket-client/python-websocket-client.mk
+>  package/python-backports-ssl-match-hostname/Config.in      |  7 +++++++
+>  .../python-backports-ssl-match-hostname.hash               |  4 ++++
+>  .../python-backports-ssl-match-hostname.mk                 | 14 ++++++++++++++
+>  5 files changed, 27 insertions(+)
+>  create mode 100644 package/python-backports-ssl-match-hostname/Config.in
+>  create mode 100644 package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
+>  create mode 100644 package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 2cd2ac85ae..d4bd10fa28 100644
+> index d4bd10fa28..34ecfeeb02 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1390,6 +1390,7 @@ F:        package/python-enum34/
->  F:     package/python-ipaddr/
->  F:     package/python-pam/
->  F:     package/python-psutil/
-> +F:     package/python-websocket-client/
->  F:     package/triggerhappy/
->
->  N:     Peter Seiderer <ps.report@gmx.net>
+> @@ -1384,6 +1384,7 @@ F:        package/lzop/
+>  F:     package/memtool/
+>  F:     package/mosquitto/
+>  F:     package/python-alsaaudio/
+> +F:     package/python-backports-ssl-match-hostname/
+>  F:     package/python-docker-pycreds/
+>  F:     package/python-enum/
+>  F:     package/python-enum34/
 > diff --git a/package/Config.in b/package/Config.in
-> index a5604fc36b..9c727cad6c 100644
+> index 9c727cad6c..d3018aee47 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -949,6 +949,7 @@ menu "External python modules"
->         source "package/python-wcwidth/Config.in"
->         source "package/python-web2py/Config.in"
->         source "package/python-webpy/Config.in"
-> +       source "package/python-websocket-client/Config.in"
->         source "package/python-websockets/Config.in"
->         source "package/python-werkzeug/Config.in"
->         source "package/python-whoosh/Config.in"
-> diff --git a/package/python-websocket-client/Config.in b/package/python-websocket-client/Config.in
+> @@ -732,6 +732,7 @@ menu "External python modules"
+>         source "package/python-babel/Config.in"
+>         source "package/python-backports-abc/Config.in"
+>         source "package/python-backports-shutil-get-terminal-size/Config.in"
+> +       source "package/python-backports-ssl-match-hostname/Config.in"
+>         source "package/python-bcrypt/Config.in"
+>         source "package/python-beautifulsoup4/Config.in"
+>         source "package/python-bitstring/Config.in"
+> diff --git a/package/python-backports-ssl-match-hostname/Config.in b/package/python-backports-ssl-match-hostname/Config.in
 > new file mode 100644
-> index 0000000000..0fbb15b328
+> index 0000000000..8e55191a9e
 > --- /dev/null
-> +++ b/package/python-websocket-client/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT
-> +       bool "python-websocket-client"
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+> +++ b/package/python-backports-ssl-match-hostname/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME
+> +       bool "python-backports-ssl-match-hostname"
+> +       depends on BR2_PACKAGE_PYTHON
 > +       help
-> +         WebSocket client for python. hybi13 is supported.
+> +         The ssl.match_hostname() function from Python 3.5.
 > +
-> +         https://github.com/websocket-client/websocket-client.git
-> diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
+> +         http://bitbucket.org/brandon/backports.ssl_match_hostname
+> diff --git a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
 > new file mode 100644
-> index 0000000000..3672ca074b
+> index 0000000000..b43e1af5a6
 > --- /dev/null
-> +++ b/package/python-websocket-client/python-websocket-client.hash
+> +++ b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
 > @@ -0,0 +1,4 @@
-> +# md5 from https://pypi.python.org/pypi/websocket-client/json, sha256 locally computed
-> +md5    790b3ecb5364293ad70c59a1b92debb1  websocket_client-0.47.0.tar.gz
-> +sha256 a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149  websocket_client-0.47.0.tar.gz
-> +sha256 e580b2a1a57c33085dd6a07cff693d828f7c3fa8a11ce56ade2a62c46951930d  LICENSE
-> diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
+> +# md5 from https://pypi.python.org/pypi/backports.ssl_match_hostname/json, sha256 locally computed
+> +md5    c03fc5e2c7b3da46b81acf5cbacfe1e6  backports.ssl_match_hostname-3.5.0.1.tar.gz
+> +sha256 502ad98707319f4a51fa2ca1c677bd659008d27ded9f6380c79e8932e38dcdf2  backports.ssl_match_hostname-3.5.0.1.tar.gz
+> +sha256 bfc8a75a4b9aec224aa7973c0c9d7cc0134bdcbf8eefd008936b58554d66e97e  backports/ssl_match_hostname/LICENSE.txt
+> diff --git a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
 > new file mode 100644
-> index 0000000000..58c8407db3
+> index 0000000000..01c8bc448c
 > --- /dev/null
-> +++ b/package/python-websocket-client/python-websocket-client.mk
+> +++ b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-websocket-client
+> +# python-backports-ssl-match-hostname
 > +#
 > +################################################################################
 > +
-> +PYTHON_WEBSOCKET_CLIENT_VERSION = 0.47.0
-> +PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
-> +PYTHON_WEBSOCKET_CLIENT_SITE = https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27
-> +PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
-> +PYTHON_WEBSOCKET_CLIENT_LICENSE = LGPL-2.1+
-> +PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
+> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION = 3.5.0.1
+> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SOURCE = backports.ssl_match_hostname-$(PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION).tar.gz
+> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SITE = https://pypi.python.org/packages/76/21/2dc61178a2038a5cb35d14b61467c6ac632791ed05131dda72c20e7b9e23
+> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SETUP_TYPE = distutils
+> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE = Python-2.0
+> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE_FILES = backports/ssl_match_hostname/LICENSE.txt
 > +
 > +$(eval $(python-package))
 > --
 > 2.11.0
-><div class="gmail_extra"><br><div class="gmail_quote">On Fri, Mar 9, 2018 at 8:16 PM, Peter Korsgaard <span dir="ltr">&lt;<a href="mailto:peter@korsgaard.com" target="_blank">peter at korsgaard.com</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">WebSocket client module for python.<br>
+><div class="gmail_extra"><br><div class="gmail_quote">On Fri, Mar 9, 2018 at 8:16 PM, Peter Korsgaard <span dir="ltr">&lt;<a href="mailto:peter@korsgaard.com" target="_blank">peter at korsgaard.com</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">The ssl.match_hostname() function from Python 3.5.<br>
+<br>
+This function IS available in python 2.7 since 2.7.9, but it doesn't support<br>
+matching on IP addresses which is needed for some use cases.<br>
 <br>
 Signed-off-by: Peter Korsgaard &lt;<a
 href="mailto:peter@korsgaard.com">peter at korsgaard.com</a>&gt;<br>
@@ -111,129 +116,130 @@ href="mailto:peter@korsgaard.com">peter at korsgaard.com</a>&gt;<br>
 &nbsp;package/Config.in&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |&nbsp; 1 +<br>
-&nbsp;package/python-websocket-<wbr>client/Config.in&nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |&nbsp; 9
-+++++++++<br>
-&nbsp;.../python-websocket-client/<wbr>python-websocket-client.hash&nbsp;
-&nbsp;|&nbsp; 4 ++++<br>
-&nbsp;package/python-websocket-<wbr>client/<a
-href="http://python-websocket-client.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-websocket-client.mk&amp;source=gmail&amp;ust=1520748594591000&amp;usg=AFQjCNFE2RmTLhTG92zQFBnG9s6mPJVR_Q"
-rel="noreferrer" target="_blank">python-websocket-<wbr>client.mk</a> |
-14 ++++++++++++++<br>
-&nbsp;5 files changed, 29 insertions(+)<br>
-&nbsp;create mode 100644 package/python-websocket-<wbr>client/Config.in<br>
-&nbsp;create mode 100644
-package/python-websocket-<wbr>client/python-websocket-<wbr>client.hash<br>
-&nbsp;create mode 100644 package/python-websocket-<wbr>client/<a
-href="http://python-websocket-client.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-websocket-client.mk&amp;source=gmail&amp;ust=1520748594592000&amp;usg=AFQjCNHbVX2gNKe_0ErXy9wQLr6ixlldQA"
+&nbsp;package/python-backports-ssl-<wbr>match-hostname/Config.in&nbsp;
+&nbsp; &nbsp; |&nbsp; 7 +++++++<br>
+&nbsp;.../python-backports-ssl-<wbr>match-hostname.hash&nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; 4 ++++<br>
+&nbsp;.../<a href="http://python-backports-ssl-match-hostname.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-backports-ssl-match-hostname.mk&amp;source=gmail&amp;ust=1520748594582000&amp;usg=AFQjCNE7-vIA1pQ6vlGosk_sE8foorNDEw"
 rel="noreferrer"
-target="_blank">python-websocket-<wbr>client.mk</a><br>
+target="_blank">python-backports-ssl-<wbr>match-hostname.mk</a>&nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| 14
+++++++++++++++<br>
+&nbsp;5 files changed, 27 insertions(+)<br>
+&nbsp;create mode 100644
+package/python-backports-ssl-<wbr>match-hostname/Config.in<br>
+&nbsp;create mode 100644
+package/python-backports-ssl-<wbr>match-hostname/python-<wbr>backports-ssl-match-hostname.<wbr>hash<br>
+&nbsp;create mode 100644
+package/python-backports-ssl-<wbr>match-hostname/<a
+href="http://python-backports-ssl-match-hostname.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-backports-ssl-match-hostname.mk&amp;source=gmail&amp;ust=1520748594583000&amp;usg=AFQjCNFIiwhKzJYfI5ub2fj9Tg-M4oTVrQ"
+rel="noreferrer"
+target="_blank">python-<wbr>backports-ssl-match-hostname.<wbr>mk</a><br>
 <br>
 diff --git a/DEVELOPERS b/DEVELOPERS<br>
-index 2cd2ac85ae..d4bd10fa28 100644<br>
+index d4bd10fa28..34ecfeeb02 100644<br>
 --- a/DEVELOPERS<br>
 +++ b/DEVELOPERS<br>
-@@ -1390,6 +1390,7 @@ F:&nbsp; &nbsp; &nbsp; &nbsp; package/python-enum34/<br>
-&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-ipaddr/<br>
-&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-pam/<br>
-&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-psutil/<br>
-+F:&nbsp; &nbsp; &nbsp;package/python-websocket-<wbr>client/<br>
-&nbsp;F:&nbsp; &nbsp; &nbsp;package/triggerhappy/<br>
-<br>
-&nbsp;N:&nbsp; &nbsp; &nbsp;Peter Seiderer &lt;<a
-href="mailto:ps.report@gmx.net">ps.report at gmx.net</a>&gt;<br>
+@@ -1384,6 +1384,7 @@ F:&nbsp; &nbsp; &nbsp; &nbsp; package/lzop/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/memtool/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/mosquitto/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-alsaaudio/<br>
++F:&nbsp; &nbsp; &nbsp;package/python-backports-ssl-<wbr>match-hostname/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-docker-pycreds/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-enum/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-enum34/<br>
 diff --git a/package/Config.in b/package/Config.in<br>
-index a5604fc36b..9c727cad6c 100644<br>
+index 9c727cad6c..d3018aee47 100644<br>
 --- a/package/Config.in<br>
 +++ b/package/Config.in<br>
-@@ -949,6 +949,7 @@ menu "External python modules"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-wcwidth/<wbr>Config.in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-web2py/Config.<wbr>in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-webpy/Config.<wbr>in"<br>
-+&nbsp; &nbsp; &nbsp; &nbsp;source
-"package/python-websocket-<wbr>client/Config.in"<br>
+@@ -732,6 +732,7 @@ menu "External python modules"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-babel/Config.<wbr>in"<br>
 &nbsp; &nbsp; &nbsp; &nbsp; source
-"package/python-websockets/<wbr>Config.in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-werkzeug/<wbr>Config.in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-whoosh/Config.<wbr>in"<br>
-diff --git a/package/python-websocket-<wbr>client/Config.in
-b/package/python-websocket-<wbr>client/Config.in<br>
+"package/python-backports-abc/<wbr>Config.in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source
+"package/python-backports-<wbr>shutil-get-terminal-size/<wbr>Config.in"<br>
++&nbsp; &nbsp; &nbsp; &nbsp;source
+"package/python-backports-ssl-<wbr>match-hostname/Config.in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-bcrypt/Config.<wbr>in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source
+"package/python-<wbr>beautifulsoup4/Config.in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-bitstring/<wbr>Config.in"<br>
+diff --git a/package/python-backports-<wbr>ssl-match-hostname/Config.in
+b/package/python-backports-<wbr>ssl-match-hostname/Config.in<br>
 new file mode 100644<br>
-index 0000000000..0fbb15b328<br>
+index 0000000000..8e55191a9e<br>
 --- /dev/null<br>
-+++ b/package/python-websocket-<wbr>client/Config.in<br>
-@@ -0,0 +1,9 @@<br>
-+config BR2_PACKAGE_PYTHON_WEBSOCKET_<wbr>CLIENT<br>
-+&nbsp; &nbsp; &nbsp; &nbsp;bool "python-websocket-client"<br>
-+&nbsp; &nbsp; &nbsp; &nbsp;select BR2_PACKAGE_PYTHON_SIX # runtime<br>
-+&nbsp; &nbsp; &nbsp; &nbsp;select BR2_PACKAGE_PYTHON_SSL if
-BR2_PACKAGE_PYTHON # runtime<br>
-+&nbsp; &nbsp; &nbsp; &nbsp;select BR2_PACKAGE_PYTHON3_SSL if
-BR2_PACKAGE_PYTHON3 # runtime<br>
++++ b/package/python-backports-<wbr>ssl-match-hostname/Config.in<br>
+@@ -0,0 +1,7 @@<br>
++config BR2_PACKAGE_PYTHON_BACKPORTS_<wbr>SSL_MATCH_HOSTNAME<br>
++&nbsp; &nbsp; &nbsp; &nbsp;bool "python-backports-ssl-match-<wbr>hostname"<br>
++&nbsp; &nbsp; &nbsp; &nbsp;depends on BR2_PACKAGE_PYTHON<br>
 +&nbsp; &nbsp; &nbsp; &nbsp;help<br>
-+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;WebSocket client for python. hybi13
-is supported.<br>
++&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The ssl.match_hostname() function
+from Python 3.5.<br>
 +<br>
 +&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a
-href="https://github.com/websocket-client/websocket-client.git"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://github.com/websocket-client/websocket-client.git&amp;source=gmail&amp;ust=1520748594592000&amp;usg=AFQjCNEsAJJs7AbXINBcnNOwMhZVv3S_Yg"
+href="http://bitbucket.org/brandon/backports.ssl_match_hostname"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://bitbucket.org/brandon/backports.ssl_match_hostname&amp;source=gmail&amp;ust=1520748594583000&amp;usg=AFQjCNHghZhbeIKEeffh0lgSJBkrLIcT-w"
 rel="noreferrer"
-target="_blank">https://github.com/websocket-<wbr>client/websocket-client.git</a><br>
-diff --git a/package/python-websocket-<wbr>client/python-websocket-<wbr>client.hash
-b/package/python-websocket-<wbr>client/python-websocket-<wbr>client.hash<br>
+target="_blank">http://bitbucket.org/brandon/<wbr>backports.ssl_match_hostname</a><br>
+diff --git a/package/python-backports-<wbr>ssl-match-hostname/python-<wbr>backports-ssl-match-hostname.<wbr>hash
+b/package/python-backports-<wbr>ssl-match-hostname/python-<wbr>backports-ssl-match-hostname.<wbr>hash<br>
 new file mode 100644<br>
-index 0000000000..3672ca074b<br>
+index 0000000000..b43e1af5a6<br>
 --- /dev/null<br>
-+++ b/package/python-websocket-<wbr>client/python-websocket-<wbr>client.hash<br>
++++ b/package/python-backports-<wbr>ssl-match-hostname/python-<wbr>backports-ssl-match-hostname.<wbr>hash<br>
 @@ -0,0 +1,4 @@<br>
-+# md5 from <a href="https://pypi.python.org/pypi/websocket-client/json"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://pypi.python.org/pypi/websocket-client/json&amp;source=gmail&amp;ust=1520748594593000&amp;usg=AFQjCNHKmM4X_2FOhiAzg5NmJ7xmn0xuhg"
++# md5 from <a href="https://pypi.python.org/pypi/backports.ssl_match_hostname/json"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://pypi.python.org/pypi/backports.ssl_match_hostname/json&amp;source=gmail&amp;ust=1520748594584000&amp;usg=AFQjCNGkKcixgPUjCS4TctS3ON_soGPidw"
 rel="noreferrer"
-target="_blank">https://pypi.python.org/pypi/<wbr>websocket-client/json</a>,
+target="_blank">https://pypi.python.org/pypi/<wbr>backports.ssl_match_hostname/<wbr>json</a>,
 sha256 locally computed<br>
-+md5&nbsp; &nbsp; 790b3ecb5364293ad70c59a1b92deb<wbr>b1&nbsp;
-websocket_client-0.47.0.tar.gz<br>
-+sha256 a453dc4dfa6e0db3d8fd7738a308a8<wbr>8effe6240c59f3226eb93e8f020c21<wbr>6149&nbsp;
-websocket_client-0.47.0.tar.gz<br>
-+sha256 e580b2a1a57c33085dd6a07cff693d<wbr>828f7c3fa8a11ce56ade2a62c46951<wbr>930d&nbsp;
-LICENSE<br>
-diff --git a/package/python-websocket-<wbr>client/<a
-href="http://python-websocket-client.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-websocket-client.mk&amp;source=gmail&amp;ust=1520748594593000&amp;usg=AFQjCNF12ZQ2DV74_tqsnK-hwBaraRXVnA"
-rel="noreferrer" target="_blank">python-websocket-<wbr>client.mk</a>
-b/package/python-websocket-<wbr>client/<a
-href="http://python-websocket-client.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-websocket-client.mk&amp;source=gmail&amp;ust=1520748594593000&amp;usg=AFQjCNF12ZQ2DV74_tqsnK-hwBaraRXVnA"
++md5&nbsp; &nbsp; c03fc5e2c7b3da46b81acf5cbacfe1<wbr>e6&nbsp;
+backports.ssl_match_hostname-<wbr>3.5.0.1.tar.gz<br>
++sha256 502ad98707319f4a51fa2ca1c677bd<wbr>659008d27ded9f6380c79e8932e38d<wbr>cdf2&nbsp;
+backports.ssl_match_hostname-<wbr>3.5.0.1.tar.gz<br>
++sha256 bfc8a75a4b9aec224aa7973c0c9d7c<wbr>c0134bdcbf8eefd008936b58554d66<wbr>e97e&nbsp;
+backports/ssl_match_hostname/<wbr>LICENSE.txt<br>
+diff --git a/package/python-backports-<wbr>ssl-match-hostname/<a
+href="http://python-backports-ssl-match-hostname.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-backports-ssl-match-hostname.mk&amp;source=gmail&amp;ust=1520748594584000&amp;usg=AFQjCNEcmGrCoGzKnuJiCMWK1yBKlhlguQ"
 rel="noreferrer"
-target="_blank">python-websocket-<wbr>client.mk</a><br>
+target="_blank">python-<wbr>backports-ssl-match-hostname.<wbr>mk</a>
+b/package/python-backports-<wbr>ssl-match-hostname/<a
+href="http://python-backports-ssl-match-hostname.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-backports-ssl-match-hostname.mk&amp;source=gmail&amp;ust=1520748594584000&amp;usg=AFQjCNEcmGrCoGzKnuJiCMWK1yBKlhlguQ"
+rel="noreferrer"
+target="_blank">python-<wbr>backports-ssl-match-hostname.<wbr>mk</a><br>
 new file mode 100644<br>
-index 0000000000..58c8407db3<br>
+index 0000000000..01c8bc448c<br>
 --- /dev/null<br>
-+++ b/package/python-websocket-<wbr>client/<a
-href="http://python-websocket-client.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-websocket-client.mk&amp;source=gmail&amp;ust=1520748594593000&amp;usg=AFQjCNF12ZQ2DV74_tqsnK-hwBaraRXVnA"
++++ b/package/python-backports-<wbr>ssl-match-hostname/<a
+href="http://python-backports-ssl-match-hostname.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-backports-ssl-match-hostname.mk&amp;source=gmail&amp;ust=1520748594585000&amp;usg=AFQjCNE5fuaNO9h6coeUNlEDLjEdOW5Xbw"
 rel="noreferrer"
-target="_blank">python-websocket-<wbr>client.mk</a><br>
+target="_blank">python-<wbr>backports-ssl-match-hostname.<wbr>mk</a><br>
 @@ -0,0 +1,14 @@<br>
 +#############################<wbr>##############################<wbr>#####################<br>
 +#<br>
-+# python-websocket-client<br>
++# python-backports-ssl-match-<wbr>hostname<br>
 +#<br>
 +#############################<wbr>##############################<wbr>#####################<br>
 +<br>
-+PYTHON_WEBSOCKET_CLIENT_<wbr>VERSION = 0.47.0<br>
-+PYTHON_WEBSOCKET_CLIENT_<wbr>SOURCE =
-websocket_client-$(PYTHON_<wbr>WEBSOCKET_CLIENT_VERSION).tar.<wbr>gz<br>
-+PYTHON_WEBSOCKET_CLIENT_SITE = <a
-href="https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://pypi.python.org/packages/c9/bb/8d3dd9063cfe0cd5d03fe6a1f74ddd948f384e9c1eff0eb978f3976a7d27&amp;source=gmail&amp;ust=1520748594594000&amp;usg=AFQjCNEArCvUFjy9BpEThAaAHZcO5u1IJA"
++PYTHON_BACKPORTS_SSL_MATCH_<wbr>HOSTNAME_VERSION = 3.5.0.1<br>
++PYTHON_BACKPORTS_SSL_MATCH_<wbr>HOSTNAME_SOURCE =
+backports.ssl_match_hostname-$<wbr>(PYTHON_BACKPORTS_SSL_MATCH_<wbr>HOSTNAME_VERSION).tar.gz<br>
++PYTHON_BACKPORTS_SSL_MATCH_<wbr>HOSTNAME_SITE = <a
+href="https://pypi.python.org/packages/76/21/2dc61178a2038a5cb35d14b61467c6ac632791ed05131dda72c20e7b9e23"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://pypi.python.org/packages/76/21/2dc61178a2038a5cb35d14b61467c6ac632791ed05131dda72c20e7b9e23&amp;source=gmail&amp;ust=1520748594585000&amp;usg=AFQjCNEc3e4Up2jBKL6IFe-l4ZtJE6dIHw"
 rel="noreferrer"
-target="_blank">https://pypi.python.org/<wbr>packages/c9/bb/<wbr>8d3dd9063cfe0cd5d03fe6a1f74ddd<wbr>948f384e9c1eff0eb978f3976a7d27</a><br>
-+PYTHON_WEBSOCKET_CLIENT_<wbr>SETUP_TYPE = setuptools<br>
-+PYTHON_WEBSOCKET_CLIENT_<wbr>LICENSE = LGPL-2.1+<br>
-+PYTHON_WEBSOCKET_CLIENT_<wbr>LICENSE_FILES = LICENSE<br>
+target="_blank">https://pypi.python.org/<wbr>packages/76/21/<wbr>2dc61178a2038a5cb35d14b61467c6<wbr>ac632791ed05131dda72c20e7b9e23</a><br>
++PYTHON_BACKPORTS_SSL_MATCH_<wbr>HOSTNAME_SETUP_TYPE = distutils<br>
++PYTHON_BACKPORTS_SSL_MATCH_<wbr>HOSTNAME_LICENSE = Python-2.0<br>
++PYTHON_BACKPORTS_SSL_MATCH_<wbr>HOSTNAME_LICENSE_FILES =
+backports/ssl_match_hostname/<wbr>LICENSE.txt<br>
 +<br>
 +$(eval $(python-package))<br>
 <span class="HOEnZb"><font color="#888888">--<br>
