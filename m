@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Mar 2018 10:42:23 +0100
-Subject: [Buildroot] [PATCH v2,1/1] libmpdclient: fix install
-Message-ID: <20180310094223.19103-1-fontaine.fabrice@gmail.com>
+Date: Sat, 10 Mar 2018 10:46:08 +0100
+Subject: [Buildroot] [PATCH v3,1/1] libmpdclient: fix install
+Message-ID: <20180310094608.19499-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,8 +20,10 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
+Changes v2 -> v3:
  - Add autobuilder links
+Changes v1 -> v2:
+ - Fix install of libmpdclient.pc
 
  package/libmpdclient/libmpdclient.mk | 25 +++++++++++++++++++++++++
  1 file changed, 25 insertions(+)
