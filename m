@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 10 Mar 2018 07:14:13 +0100
-Subject: [Buildroot] [PATCH 05/10] package: add python-cached-property
-In-Reply-To: <20180309191701.23760-6-peter@korsgaard.com>
+Date: Sat, 10 Mar 2018 07:15:37 +0100
+Subject: [Buildroot] [PATCH 08/10] package: add python-functools32
+In-Reply-To: <20180309191701.23760-9-peter@korsgaard.com>
 References: <20180309191701.23760-1-peter@korsgaard.com>
- <20180309191701.23760-6-peter@korsgaard.com>
-Message-ID: <CAGm1_kuj5R9szHq880vNKQ3GswnnDJf5Crz_WppHoe8AjsGYSA@mail.gmail.com>
+ <20180309191701.23760-9-peter@korsgaard.com>
+Message-ID: <CAGm1_ktiAo5Ugbp=ZzTsJr9AeLY+_X6HxmaHbYUg74+u+CeC=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,228 +12,220 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Fri, Mar 9, 2018 at 8:16 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
-> A decorator for caching properties in classes.
+> Backport of the functools module from Python 3.2.3 for use on 2.7 and PyPy.
 >
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
 > ---
->  DEVELOPERS                                                 |  1 +
->  package/Config.in                                          |  1 +
->  package/python-cached-property/Config.in                   |  6 ++++++
->  package/python-cached-property/python-cached-property.hash |  4 ++++
->  package/python-cached-property/python-cached-property.mk   | 14 ++++++++++++++
->  5 files changed, 26 insertions(+)
->  create mode 100644 package/python-cached-property/Config.in
->  create mode 100644 package/python-cached-property/python-cached-property.hash
->  create mode 100644 package/python-cached-property/python-cached-property.mk
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/python-functools32/Config.in               |  8 ++++++++
+>  package/python-functools32/python-functools32.hash |  4 ++++
+>  package/python-functools32/python-functools32.mk   | 14 ++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/python-functools32/Config.in
+>  create mode 100644 package/python-functools32/python-functools32.hash
+>  create mode 100644 package/python-functools32/python-functools32.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9b68652b5f..ced3af7169 100644
+> index 1119f78ccc..e6dc51e1fe 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1385,6 +1385,7 @@ F:        package/memtool/
->  F:     package/mosquitto/
->  F:     package/python-alsaaudio/
->  F:     package/python-backports-ssl-match-hostname/
-> +F:     package/python-cached-property/
->  F:     package/python-docker/
+> @@ -1391,6 +1391,7 @@ F:        package/python-dockerpty/
 >  F:     package/python-docker-pycreds/
 >  F:     package/python-enum/
+>  F:     package/python-enum34/
+> +F:     package/python-functools32/
+>  F:     package/python-ipaddr/
+>  F:     package/python-pam/
+>  F:     package/python-psutil/
 > diff --git a/package/Config.in b/package/Config.in
-> index c1bf7067aa..1043338a7e 100644
+> index b7e0da6dd4..6fd61a0dea 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -737,6 +737,7 @@ menu "External python modules"
->         source "package/python-beautifulsoup4/Config.in"
->         source "package/python-bitstring/Config.in"
->         source "package/python-bottle/Config.in"
-> +       source "package/python-cached-property/Config.in"
->         source "package/python-can/Config.in"
->         source "package/python-cbor/Config.in"
->         source "package/python-certifi/Config.in"
-> diff --git a/package/python-cached-property/Config.in b/package/python-cached-property/Config.in
+> @@ -785,6 +785,7 @@ menu "External python modules"
+>         source "package/python-flask-login/Config.in"
+>         source "package/python-flask-sqlalchemy/Config.in"
+>         source "package/python-flup/Config.in"
+> +       source "package/python-functools32/Config.in"
+>         source "package/python-futures/Config.in"
+>         source "package/python-gobject/Config.in"
+>         source "package/python-gunicorn/Config.in"
+> diff --git a/package/python-functools32/Config.in b/package/python-functools32/Config.in
 > new file mode 100644
-> index 0000000000..8343973342
+> index 0000000000..cc12557edc
 > --- /dev/null
-> +++ b/package/python-cached-property/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_CACHED_PROPERTY
-> +       bool "python-cached-property"
+> +++ b/package/python-functools32/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_FUNCTOOLS32
+> +       bool "python-functools32"
+> +       depends on BR2_PACKAGE_PYTHON
 > +       help
-> +         A decorator for caching properties in classes.
+> +         Backport of the functools module from Python 3.2.3 for use on 2.7
+> +         and PyPy.
 > +
-> +         https://github.com/pydanny/cached-property
-> diff --git a/package/python-cached-property/python-cached-property.hash b/package/python-cached-property/python-cached-property.hash
+> +         https://github.com/MiCHiLU/python-functools32
+> diff --git a/package/python-functools32/python-functools32.hash b/package/python-functools32/python-functools32.hash
 > new file mode 100644
-> index 0000000000..255b2d9ec6
+> index 0000000000..606de81774
 > --- /dev/null
-> +++ b/package/python-cached-property/python-cached-property.hash
+> +++ b/package/python-functools32/python-functools32.hash
 > @@ -0,0 +1,4 @@
-> +# md5 from https://pypi.python.org/pypi/cached-property/json, sha256 locally computed
-> +md5    fc7a49d2c4b7987f92b00c7b49128530  cached-property-1.4.0.tar.gz
-> +sha256 a2fa0f89dd422f7e5dd992a4a3e0ce209d5d1e47a4db28fd0a7b5273ec8da3f0  cached-property-1.4.0.tar.gz
-> +sha256 ba4756c8039b25b66e3c456cc5bf635aa528cf459b97ee1499d06684ccd89b9a  LICENSE
-> diff --git a/package/python-cached-property/python-cached-property.mk b/package/python-cached-property/python-cached-property.mk
+> +# md5 from https://pypi.python.org/pypi/functools32/json, sha256 locally computed
+> +md5    09f24ffd9af9f6cd0f63cb9f4e23d4b2  functools32-3.2.3-2.tar.gz
+> +sha256 f6253dfbe0538ad2e387bd8fdfd9293c925d63553f5813c4e587745416501e6d  functools32-3.2.3-2.tar.gz
+> +sha256 3f9ea6b89abe1556b72aff67b987d64c8272564815cd6a2832e6c4f6abdfe3b1  LICENSE
+> diff --git a/package/python-functools32/python-functools32.mk b/package/python-functools32/python-functools32.mk
 > new file mode 100644
-> index 0000000000..ccc2037f4f
+> index 0000000000..8a88bb2a7f
 > --- /dev/null
-> +++ b/package/python-cached-property/python-cached-property.mk
+> +++ b/package/python-functools32/python-functools32.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-cached-property
+> +# python-functools32
 > +#
 > +################################################################################
 > +
-> +PYTHON_CACHED_PROPERTY_VERSION = 1.4.0
-> +PYTHON_CACHED_PROPERTY_SOURCE = cached-property-$(PYTHON_CACHED_PROPERTY_VERSION).tar.gz
-> +PYTHON_CACHED_PROPERTY_SITE = https://pypi.python.org/packages/ce/87/72b7a5a0504ad8d5d5ea6804ac5b24ce4f07869f61c47ea00cd4382320ba
-> +PYTHON_CACHED_PROPERTY_SETUP_TYPE = setuptools
-> +PYTHON_CACHED_PROPERTY_LICENSE = BSD
-
-What kind of BSD?
-
-> +PYTHON_CACHED_PROPERTY_LICENSE_FILES = LICENSE
+> +PYTHON_FUNCTOOLS32_VERSION = 3.2.3-2
+> +PYTHON_FUNCTOOLS32_SOURCE = functools32-$(PYTHON_FUNCTOOLS32_VERSION).tar.gz
+> +PYTHON_FUNCTOOLS32_SITE = https://pypi.python.org/packages/c5/60/6ac26ad05857c601308d8fb9e87fa36d0ebf889423f47c3502ef034365db
+> +PYTHON_FUNCTOOLS32_SETUP_TYPE = distutils
+> +PYTHON_FUNCTOOLS32_LICENSE = Python-2.0
+> +PYTHON_FUNCTOOLS32_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(python-package))
 > --
 > 2.11.0
->
-<div class="gmail_extra"><br><div class="gmail_quote">On Fri, Mar 9,
-2018 at 8:16 PM, Peter Korsgaard <span dir="ltr">&lt;<a
-href="mailto:peter@korsgaard.com"
-target="_blank">peter at korsgaard.com</a>&gt;</span>
-wrote:<br><blockquote class="gmail_quote" style="margin:0 0 0
-.8ex;border-left:1px #ccc solid;padding-left:1ex">A decorator for
-caching properties in classes.<br>
+><div class="gmail_extra"><br><div class="gmail_quote">On Fri, Mar 9, 2018 at 8:16 PM, Peter Korsgaard <span dir="ltr">&lt;<a href="mailto:peter@korsgaard.com" target="_blank">peter at korsgaard.com</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Backport of the functools module from Python 3.2.3 for use on 2.7 and PyPy.<br>
 <br>
 Signed-off-by: Peter Korsgaard &lt;<a
 href="mailto:peter@korsgaard.com">peter at korsgaard.com</a>&gt;<br>
 ---<br>
 &nbsp;DEVELOPERS&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; 1 +<br>
+&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; 1 +<br>
 &nbsp;package/Config.in&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |&nbsp; 1 +<br>
-&nbsp;package/python-cached-<wbr>property/Config.in&nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; 6
-++++++<br>
-&nbsp;package/python-cached-<wbr>property/python-cached-<wbr>property.hash
-|&nbsp; 4 ++++<br>
-&nbsp;package/python-cached-<wbr>property/<a
-href="http://python-cached-property.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-cached-property.mk&amp;source=gmail&amp;ust=1520748594561000&amp;usg=AFQjCNFUnjqD43Wota5qc15axVB019jQIQ"
-rel="noreferrer"
-target="_blank">python-cached-<wbr>property.mk</a>&nbsp; &nbsp;| 14
-++++++++++++++<br>
-&nbsp;5 files changed, 26 insertions(+)<br>
-&nbsp;create mode 100644 package/python-cached-<wbr>property/Config.in<br>
+&nbsp; |&nbsp; 1 +<br>
+&nbsp;package/python-functools32/<wbr>Config.in&nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; 8 ++++++++<br>
+&nbsp;package/python-functools32/<wbr>python-functools32.hash |&nbsp; 4 ++++<br>
+&nbsp;package/python-functools32/<a
+href="http://python-functools32.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-functools32.mk&amp;source=gmail&amp;ust=1520748594552000&amp;usg=AFQjCNFld3LSz4CWNt5GyCcyJ3G5fLt6Nw"
+rel="noreferrer" target="_blank">pyt<wbr>hon-functools32.mk</a>&nbsp;
+&nbsp;| 14 ++++++++++++++<br>
+&nbsp;5 files changed, 28 insertions(+)<br>
+&nbsp;create mode 100644 package/python-functools32/<wbr>Config.in<br>
 &nbsp;create mode 100644
-package/python-cached-<wbr>property/python-cached-<wbr>property.hash<br>
-&nbsp;create mode 100644 package/python-cached-<wbr>property/<a
-href="http://python-cached-property.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-cached-property.mk&amp;source=gmail&amp;ust=1520748594562000&amp;usg=AFQjCNFq3boM4BllkK_aJ0Z1U2Jp-uXnew"
-rel="noreferrer"
-target="_blank">python-cached-<wbr>property.mk</a><br>
+package/python-functools32/<wbr>python-functools32.hash<br>
+&nbsp;create mode 100644 package/python-functools32/<a
+href="http://python-functools32.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-functools32.mk&amp;source=gmail&amp;ust=1520748594553000&amp;usg=AFQjCNGtFUGYdbuF5_IDtO4WOhSfrHcMRQ"
+rel="noreferrer" target="_blank">pyt<wbr>hon-functools32.mk</a><br>
 <br>
 diff --git a/DEVELOPERS b/DEVELOPERS<br>
-index 9b68652b5f..ced3af7169 100644<br>
+index 1119f78ccc..e6dc51e1fe 100644<br>
 --- a/DEVELOPERS<br>
 +++ b/DEVELOPERS<br>
-@@ -1385,6 +1385,7 @@ F:&nbsp; &nbsp; &nbsp; &nbsp; package/memtool/<br>
-&nbsp;F:&nbsp; &nbsp; &nbsp;package/mosquitto/<br>
-&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-alsaaudio/<br>
-&nbsp;F:&nbsp; &nbsp;
-&nbsp;package/python-backports-ssl-<wbr>match-hostname/<br>
-+F:&nbsp; &nbsp; &nbsp;package/python-cached-<wbr>property/<br>
-&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-docker/<br>
+@@ -1391,6 +1391,7 @@ F:&nbsp; &nbsp; &nbsp; &nbsp;
+package/python-dockerpty/<br>
 &nbsp;F:&nbsp; &nbsp; &nbsp;package/python-docker-pycreds/<br>
 &nbsp;F:&nbsp; &nbsp; &nbsp;package/python-enum/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-enum34/<br>
++F:&nbsp; &nbsp; &nbsp;package/python-functools32/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-ipaddr/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-pam/<br>
+&nbsp;F:&nbsp; &nbsp; &nbsp;package/python-psutil/<br>
 diff --git a/package/Config.in b/package/Config.in<br>
-index c1bf7067aa..1043338a7e 100644<br>
+index b7e0da6dd4..6fd61a0dea 100644<br>
 --- a/package/Config.in<br>
 +++ b/package/Config.in<br>
-@@ -737,6 +737,7 @@ menu "External python modules"<br>
+@@ -785,6 +785,7 @@ menu "External python modules"<br>
 &nbsp; &nbsp; &nbsp; &nbsp; source
-"package/python-<wbr>beautifulsoup4/Config.in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-bitstring/<wbr>Config.in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-bottle/Config.<wbr>in"<br>
+"package/python-flask-login/<wbr>Config.in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source
+"package/python-flask-<wbr>sqlalchemy/Config.in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-flup/Config.<wbr>in"<br>
 +&nbsp; &nbsp; &nbsp; &nbsp;source
-"package/python-cached-<wbr>property/Config.in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-can/Config.in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-cbor/Config.<wbr>in"<br>
-&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-certifi/<wbr>Config.in"<br>
-diff --git a/package/python-cached-<wbr>property/Config.in
-b/package/python-cached-<wbr>property/Config.in<br>
+"package/python-functools32/<wbr>Config.in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-futures/<wbr>Config.in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-gobject/<wbr>Config.in"<br>
+&nbsp; &nbsp; &nbsp; &nbsp; source "package/python-gunicorn/<wbr>Config.in"<br>
+diff --git a/package/python-functools32/<wbr>Config.in
+b/package/python-functools32/<wbr>Config.in<br>
 new file mode 100644<br>
-index 0000000000..8343973342<br>
+index 0000000000..cc12557edc<br>
 --- /dev/null<br>
-+++ b/package/python-cached-<wbr>property/Config.in<br>
-@@ -0,0 +1,6 @@<br>
-+config BR2_PACKAGE_PYTHON_CACHED_<wbr>PROPERTY<br>
-+&nbsp; &nbsp; &nbsp; &nbsp;bool "python-cached-property"<br>
++++ b/package/python-functools32/<wbr>Config.in<br>
+@@ -0,0 +1,8 @@<br>
++config BR2_PACKAGE_PYTHON_FUNCTOOLS32<br>
++&nbsp; &nbsp; &nbsp; &nbsp;bool "python-functools32"<br>
++&nbsp; &nbsp; &nbsp; &nbsp;depends on BR2_PACKAGE_PYTHON<br>
 +&nbsp; &nbsp; &nbsp; &nbsp;help<br>
-+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;A decorator for caching properties
-in classes.<br>
++&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Backport of the functools module
+from Python 3.2.3 for use on 2.7<br>
++&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;and PyPy.<br>
 +<br>
 +&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a
-href="https://github.com/pydanny/cached-property"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://github.com/pydanny/cached-property&amp;source=gmail&amp;ust=1520748594563000&amp;usg=AFQjCNHZZymryELcerBsh88yXatwssKYSg"
+href="https://github.com/MiCHiLU/python-functools32"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://github.com/MiCHiLU/python-functools32&amp;source=gmail&amp;ust=1520748594553000&amp;usg=AFQjCNHiyqvjtchUmw9OAAhGlisNG2M_7g"
 rel="noreferrer"
-target="_blank">https://github.com/pydanny/<wbr>cached-property</a><br>
-diff --git a/package/python-cached-<wbr>property/python-cached-<wbr>property.hash
-b/package/python-cached-<wbr>property/python-cached-<wbr>property.hash<br>
+target="_blank">https://github.com/MiCHiLU/<wbr>python-functools32</a><br>
+diff --git a/package/python-functools32/<wbr>python-functools32.hash
+b/package/python-functools32/<wbr>python-functools32.hash<br>
 new file mode 100644<br>
-index 0000000000..255b2d9ec6<br>
+index 0000000000..606de81774<br>
 --- /dev/null<br>
-+++ b/package/python-cached-<wbr>property/python-cached-<wbr>property.hash<br>
++++ b/package/python-functools32/<wbr>python-functools32.hash<br>
 @@ -0,0 +1,4 @@<br>
-+# md5 from <a href="https://pypi.python.org/pypi/cached-property/json"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://pypi.python.org/pypi/cached-property/json&amp;source=gmail&amp;ust=1520748594563000&amp;usg=AFQjCNEL6tl7wTszUlSrkUjSi7z9wOV-AA"
++# md5 from <a href="https://pypi.python.org/pypi/functools32/json"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://pypi.python.org/pypi/functools32/json&amp;source=gmail&amp;ust=1520748594554000&amp;usg=AFQjCNEPwWEYi9z56qfGGHMw2vtbbZ6lMA"
 rel="noreferrer"
-target="_blank">https://pypi.python.org/pypi/<wbr>cached-property/json</a>,
+target="_blank">https://pypi.python.org/pypi/<wbr>functools32/json</a>,
 sha256 locally computed<br>
-+md5&nbsp; &nbsp; fc7a49d2c4b7987f92b00c7b491285<wbr>30&nbsp;
-cached-property-1.4.0.tar.gz<br>
-+sha256 a2fa0f89dd422f7e5dd992a4a3e0ce<wbr>209d5d1e47a4db28fd0a7b5273ec8d<wbr>a3f0&nbsp;
-cached-property-1.4.0.tar.gz<br>
-+sha256 ba4756c8039b25b66e3c456cc5bf63<wbr>5aa528cf459b97ee1499d06684ccd8<wbr>9b9a&nbsp;
++md5&nbsp; &nbsp; 09f24ffd9af9f6cd0f63cb9f4e23d4<wbr>b2&nbsp;
+functools32-3.2.3-2.tar.gz<br>
++sha256 f6253dfbe0538ad2e387bd8fdfd929<wbr>3c925d63553f5813c4e58774541650<wbr>1e6d&nbsp;
+functools32-3.2.3-2.tar.gz<br>
++sha256 3f9ea6b89abe1556b72aff67b987d6<wbr>4c8272564815cd6a2832e6c4f6abdf<wbr>e3b1&nbsp;
 LICENSE<br>
-diff --git a/package/python-cached-<wbr>property/<a
-href="http://python-cached-property.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-cached-property.mk&amp;source=gmail&amp;ust=1520748594563000&amp;usg=AFQjCNHXpuuanKGzUvCiN0nARtxkvvoxiQ"
-rel="noreferrer" target="_blank">python-cached-<wbr>property.mk</a>
-b/package/python-cached-<wbr>property/<a
-href="http://python-cached-property.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-cached-property.mk&amp;source=gmail&amp;ust=1520748594563000&amp;usg=AFQjCNHXpuuanKGzUvCiN0nARtxkvvoxiQ"
-rel="noreferrer"
-target="_blank">python-cached-<wbr>property.mk</a><br>
+diff --git a/package/python-functools32/<a
+href="http://python-functools32.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-functools32.mk&amp;source=gmail&amp;ust=1520748594554000&amp;usg=AFQjCNFs3bmkswOrgnMDiJDszVhuN_A5OQ"
+rel="noreferrer" target="_blank">p<wbr>ython-functools32.mk</a>
+b/package/python-functools32/<a href="http://python-functools32.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-functools32.mk&amp;source=gmail&amp;ust=1520748594554000&amp;usg=AFQjCNFs3bmkswOrgnMDiJDszVhuN_A5OQ"
+rel="noreferrer" target="_blank">p<wbr>ython-functools32.mk</a><br>
 new file mode 100644<br>
-index 0000000000..ccc2037f4f<br>
+index 0000000000..8a88bb2a7f<br>
 --- /dev/null<br>
-+++ b/package/python-cached-<wbr>property/<a
-href="http://python-cached-property.mk"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-cached-property.mk&amp;source=gmail&amp;ust=1520748594564000&amp;usg=AFQjCNGTz_JtpLigylaxuz8XNrNODCFCrA"
-rel="noreferrer"
-target="_blank">python-cached-<wbr>property.mk</a><br>
++++ b/package/python-functools32/<a
+href="http://python-functools32.mk"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=http://python-functools32.mk&amp;source=gmail&amp;ust=1520748594554000&amp;usg=AFQjCNFs3bmkswOrgnMDiJDszVhuN_A5OQ"
+rel="noreferrer" target="_blank">p<wbr>ython-functools32.mk</a><br>
 @@ -0,0 +1,14 @@<br>
 +#############################<wbr>##############################<wbr>#####################<br>
 +#<br>
-+# python-cached-property<br>
++# python-functools32<br>
 +#<br>
 +#############################<wbr>##############################<wbr>#####################<br>
 +<br>
-+PYTHON_CACHED_PROPERTY_<wbr>VERSION = 1.4.0<br>
-+PYTHON_CACHED_PROPERTY_SOURCE =
-cached-property-$(PYTHON_<wbr>CACHED_PROPERTY_VERSION).tar.<wbr>gz<br>
-+PYTHON_CACHED_PROPERTY_SITE = <a
-href="https://pypi.python.org/packages/ce/87/72b7a5a0504ad8d5d5ea6804ac5b24ce4f07869f61c47ea00cd4382320ba"
-data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://pypi.python.org/packages/ce/87/72b7a5a0504ad8d5d5ea6804ac5b24ce4f07869f61c47ea00cd4382320ba&amp;source=gmail&amp;ust=1520748594564000&amp;usg=AFQjCNFIxlLn9PjxwIPVOgHoN_TTBD6yww"
++PYTHON_FUNCTOOLS32_VERSION = 3.2.3-2<br>
++PYTHON_FUNCTOOLS32_SOURCE =
+functools32-$(PYTHON_<wbr>FUNCTOOLS32_VERSION).tar.gz<br>
++PYTHON_FUNCTOOLS32_SITE = <a
+href="https://pypi.python.org/packages/c5/60/6ac26ad05857c601308d8fb9e87fa36d0ebf889423f47c3502ef034365db
++PYTHON_FUNCTOOLS32_SETUP_TYPE"
+data-saferedirecturl="https://www.google.com/url?hl=en&amp;q=https://pypi.python.org/packages/c5/60/6ac26ad05857c601308d8fb9e87fa36d0ebf889423f47c3502ef034365db%0A%2BPYTHON_FUNCTOOLS32_SETUP_TYPE&amp;source=gmail&amp;ust=1520748594555000&amp;usg=AFQjCNFdlxn6rJ3Za0IdxXL3KLV2r-Ipbg"
 rel="noreferrer"
-target="_blank">https://pypi.python.org/<wbr>packages/ce/87/<wbr>72b7a5a0504ad8d5d5ea6804ac5b24<wbr>ce4f07869f61c47ea00cd4382320ba</a><br>
-+PYTHON_CACHED_PROPERTY_SETUP_<wbr>TYPE = setuptools<br>
-+PYTHON_CACHED_PROPERTY_<wbr>LICENSE = BSD<br>
-+PYTHON_CACHED_PROPERTY_<wbr>LICENSE_FILES = LICENSE<br>
+target="_blank">https://pypi.python.org/<wbr>packages/c5/60/<wbr>6ac26ad05857c601308d8fb9e87fa3<wbr>6d0ebf889423f47c3502ef034365db<br>
++PYTHON_FUNCTOOLS32_SETUP_TYPE</a> = distutils<br>
++PYTHON_FUNCTOOLS32_LICENSE = Python-2.0<br>
++PYTHON_FUNCTOOLS32_LICENSE_<wbr>FILES = LICENSE<br>
 +<br>
 +$(eval $(python-package))<br>
 <span class="HOEnZb"><font color="#888888">--<br>
