@@ -1,71 +1,56 @@
-From: Jens Scheidemann <nobodyman@gmx.de>
-Date: Sat, 10 Mar 2018 21:39:53 +0100
-Subject: [Buildroot] [PATCH 4/5] New package gosdm630
-In-Reply-To: <1520714394-2918-1-git-send-email-nobodyman@gmx.de>
-References: <1520714394-2918-1-git-send-email-nobodyman@gmx.de>
-Message-ID: <1520714394-2918-4-git-send-email-nobodyman@gmx.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 10 Mar 2018 21:58:41 +0100
+Subject: [Buildroot] Is there a way to automatically detect the minimum
+ required BR2_TARGET_ROOTFS_EXT2_SIZE?
+In-Reply-To: <CAFXrp_exNc=GtVqbuRmYqKiDNXgD+pawnCSmRH-1FrF2dxXgLQ@mail.gmail.com>
+References: <CAFXrp_exNc=GtVqbuRmYqKiDNXgD+pawnCSmRH-1FrF2dxXgLQ@mail.gmail.com>
+Message-ID: <20180310205841.GA2097@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is useful to read data from energy meter SDM630.
+Ciro, All,
 
-Signed-off-by: Jens Scheidemann <nobodyman@gmx.de>
----
- package/gosdm630/Config.in   | 14 ++++++++++++++
- package/gosdm630/gosdm630.mk | 21 +++++++++++++++++++++
- 2 files changed, 35 insertions(+)
- create mode 100644 package/gosdm630/Config.in
- create mode 100644 package/gosdm630/gosdm630.mk
+On 2018-03-10 16:14 +0000, Ciro Santilli spake thusly:
+> https://stackoverflow.com/questions/49211241/is-there-a-way-to-automatically-detect-the-minimum-required-br2-target-rootfs-ex
+> 
+> I'm when making a big non-embedded image, I keep hitting the error:
+> 
+>     *** Maybe you need to increase the filesystem size
+> (BR2_TARGET_ROOTFS_EXT2_SIZE)
+> 
+> and then I have to do a `du` on `output/target` to find out how big I
+> have to make `BR2_TARGET_ROOTFS_EXT2_SIZE`.
+> 
+> Is there a way to automate this, or a decent workaround?
 
-diff --git a/package/gosdm630/Config.in b/package/gosdm630/Config.in
-new file mode 100644
-index 0000000..6f29b3d
---- /dev/null
-+++ b/package/gosdm630/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_GOSDM630
-+	bool "gosdm630"
-+	help
-+	  A HTTP interface to MODBUS smart meters
-+	  This project provides a http interface to smart meters
-+	  with a MODBUS interface. Beside the EASTRON SDM series,
-+	  the software also supports the Janitza B23 DIN-rail meters.
-+	  The meters provide all measured values over an RS485
-+	  connection. The software reads the measurements and wraps
-+	  them into a HTTP interface, making it very easy to
-+	  integrate it into your home automation system.
-+	  Both a REST-style API and a streaming API are available.
-+
-+	  https://github.com/gonium/gosdm630
-diff --git a/package/gosdm630/gosdm630.mk b/package/gosdm630/gosdm630.mk
-new file mode 100644
-index 0000000..6457bc0
---- /dev/null
-+++ b/package/gosdm630/gosdm630.mk
-@@ -0,0 +1,21 @@
-+GOSDM630_VERSION = 7361b08a6bfe2629863875d4c871867ac0f75285
-+GOSDM630_SITE = git://github.com/gonium/gosdm630
-+
-+GOSDM630_DEPENDENCIES = host-go host-golang-gb host-golang-embed
-+
-+GOSDM630_GOOS = linux
-+GOSDM630_GOARCH = $(GO_GOARCH)
-+
-+GOSDM630_MAKE_ENV = GOOS=$(GOSDM630_GOOS) \
-+        GOARCH=$(GOSDM630_GOARCH) \
-+        $(if $(GO_GOARM),GOARM=$(GO_GOARM))
-+
-+define GOSDM630_BUILD_CMDS
-+	cd $(@D) && $(GOSDM630_MAKE_ENV) $(HOST_DIR)/bin/gb build all
-+endef
-+
-+define GOSDM630_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/*-$(GOSDM630_GOOS)-$(GOSDM630_GOARCH) $(TARGET_DIR)/usr/bin
-+endef
-+
-+$(eval $(generic-package))
+No, becaaue it is not reliable, see commit:
+
+    c6bca8cef fs/ext2: Remove support for auto-calculation of rootfs size
+
+In the end, it does nto make sense to do auto-calculation, because on an
+embedded device, you have to now the layout and size of your storage.
+So, you know what size you want your ext filesystem to be.
+
+Regards,
+Yann E. MORIN.
+
+> Some workarounds I'm considering:
+> 
+> * put the big stuff under 9p:
+> https://superuser.com/questions/628169/how-to-share-a-directory-with-the-host-without-networking-in-qemu
+> * use CPIO and `-initrd`
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
