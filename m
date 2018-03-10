@@ -1,17 +1,17 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 08:31:42 +0100
-Subject: [Buildroot] [git commit] package: add python-docker
-Message-ID: <20180310074849.8DFC3800EB@busybox.osuosl.org>
+Date: Sat, 10 Mar 2018 08:38:34 +0100
+Subject: [Buildroot] [git commit] package: add python-functools32
+Message-ID: <20180310074850.027FC800EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b46a14d174235b284e2ae72610dcb967e590d12
+commit: https://git.buildroot.net/buildroot/commit/?id=146b8d31ea9d96212eb2e6458b3bc69b5a391e73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Python library for the Docker Engine API.
+Backport of the functools module from Python 3.2.3 for use on 2.7 and PyPy.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
@@ -19,140 +19,76 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  DEVELOPERS                                         |  1 +
  package/Config.in                                  |  1 +
- .../0001-setup.py-make-pip-optional.patch          | 50 ++++++++++++++++++++++
- package/python-docker/Config.in                    | 15 +++++++
- package/python-docker/python-docker.hash           |  4 ++
- package/python-docker/python-docker.mk             | 14 ++++++
- 6 files changed, 85 insertions(+)
+ package/python-functools32/Config.in               |  8 ++++++++
+ package/python-functools32/python-functools32.hash |  4 ++++
+ package/python-functools32/python-functools32.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 14f12e36ec..0bb140ec98 100644
+index 7809b5182b..d0c3894ecc 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1386,6 +1386,7 @@ F:	package/memtool/
- F:	package/mosquitto/
- F:	package/python-alsaaudio/
- F:	package/python-backports-ssl-match-hostname/
-+F:	package/python-docker/
+@@ -1392,6 +1392,7 @@ F:	package/python-dockerpty/
  F:	package/python-docker-pycreds/
  F:	package/python-enum/
  F:	package/python-enum34/
++F:	package/python-functools32/
+ F:	package/python-ipaddr/
+ F:	package/python-pam/
+ F:	package/python-psutil/
 diff --git a/package/Config.in b/package/Config.in
-index d3018aee47..c1bf7067aa 100644
+index b7e0da6dd4..6fd61a0dea 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -766,6 +766,7 @@ menu "External python modules"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-django/Config.in"
-+	source "package/python-docker/Config.in"
- 	source "package/python-docker-pycreds/Config.in"
- 	source "package/python-docopt/Config.in"
- 	source "package/python-docutils/Config.in"
-diff --git a/package/python-docker/0001-setup.py-make-pip-optional.patch b/package/python-docker/0001-setup.py-make-pip-optional.patch
+@@ -785,6 +785,7 @@ menu "External python modules"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flask-sqlalchemy/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-functools32/Config.in"
+ 	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-gunicorn/Config.in"
+diff --git a/package/python-functools32/Config.in b/package/python-functools32/Config.in
 new file mode 100644
-index 0000000000..d9c958311d
+index 0000000000..cc12557edc
 --- /dev/null
-+++ b/package/python-docker/0001-setup.py-make-pip-optional.patch
-@@ -0,0 +1,50 @@
-+From 978643b7222db66837d39037f884be01fb9af234 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Fri, 9 Mar 2018 18:40:16 +0100
-+Subject: [PATCH] setup.py: make pip optional
-+
-+pip may not be available on the build host, and it is only used to check if
-+docker-py is already installed, so skip the check if pip isn't available.
-+
-+[Upstream-status: submitted (https://github.com/docker/docker-py/pull/1948)]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ setup.py | 20 ++++++++++++--------
-+ 1 file changed, 12 insertions(+), 8 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 271d94f..c9b91a3 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -5,16 +5,20 @@ import codecs
-+ import os
-+ import sys
-+ 
-+-import pip
-+-
-+ from setuptools import setup, find_packages
-+ 
-+-if 'docker-py' in [x.project_name for x in pip.get_installed_distributions()]:
-+-    print(
-+-        'ERROR: "docker-py" needs to be uninstalled before installing this'
-+-        ' package:\npip uninstall docker-py', file=sys.stderr
-+-    )
-+-    sys.exit(1)
-++try:
-++    import pip
-++
-++    if 'docker-py' in \
-++            [x.project_name for x in pip.get_installed_distributions()]:
-++        print(
-++            'ERROR: "docker-py" needs to be uninstalled before installing this'
-++            ' package:\npip uninstall docker-py', file=sys.stderr
-++        )
-++        sys.exit(1)
-++except ImportError:
-++    pass
-+ 
-+ ROOT_DIR = os.path.dirname(__file__)
-+ SOURCE_DIR = os.path.join(ROOT_DIR)
-+-- 
-+2.11.0
-+
-diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
-new file mode 100644
-index 0000000000..35f7666f19
---- /dev/null
-+++ b/package/python-docker/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PYTHON_DOCKER
-+	bool "python-docker"
-+	# docker-engine may be running on another host, so no dependency
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME \
-+	       if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT # runtime
-+	select BR2_PACKAGE_PYTHON_DOCKER_PYCREDS # runtime
++++ b/package/python-functools32/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_FUNCTOOLS32
++	bool "python-functools32"
++	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  A Python library for the Docker Engine API.
++	  Backport of the functools module from Python 3.2.3 for use on 2.7
++	  and PyPy.
 +
-+	  https://github.com/docker/docker-py
-diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
++	  https://github.com/MiCHiLU/python-functools32
+diff --git a/package/python-functools32/python-functools32.hash b/package/python-functools32/python-functools32.hash
 new file mode 100644
-index 0000000000..c09ccc3859
+index 0000000000..606de81774
 --- /dev/null
-+++ b/package/python-docker/python-docker.hash
++++ b/package/python-functools32/python-functools32.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/docker/json, sha256 locally computed
-+md5	71e97726a8bdc56effa7df8321c47af1  docker-3.1.1.tar.gz
-+sha256	462165ca6367f802280684ab44e581cd2efba8995d78d07ea994e42194927c3b  docker-3.1.1.tar.gz
-+sha256	f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
-diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
++# md5 from https://pypi.python.org/pypi/functools32/json, sha256 locally computed
++md5	09f24ffd9af9f6cd0f63cb9f4e23d4b2  functools32-3.2.3-2.tar.gz
++sha256	f6253dfbe0538ad2e387bd8fdfd9293c925d63553f5813c4e587745416501e6d  functools32-3.2.3-2.tar.gz
++sha256	3f9ea6b89abe1556b72aff67b987d64c8272564815cd6a2832e6c4f6abdfe3b1  LICENSE
+diff --git a/package/python-functools32/python-functools32.mk b/package/python-functools32/python-functools32.mk
 new file mode 100644
-index 0000000000..fb9b32a603
+index 0000000000..8a88bb2a7f
 --- /dev/null
-+++ b/package/python-docker/python-docker.mk
++++ b/package/python-functools32/python-functools32.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-docker
++# python-functools32
 +#
 +################################################################################
 +
-+PYTHON_DOCKER_VERSION = 3.1.1
-+PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
-+PYTHON_DOCKER_SITE = https://pypi.python.org/packages/0d/17/ad98e025e5528337c4dc5835a5874898eb226da17e4ffed732c894cb1938
-+PYTHON_DOCKER_SETUP_TYPE = setuptools
-+PYTHON_DOCKER_LICENSE = Apache-2.0
-+PYTHON_DOCKER_LICENSE_FILES = LICENSE
++PYTHON_FUNCTOOLS32_VERSION = 3.2.3-2
++PYTHON_FUNCTOOLS32_SOURCE = functools32-$(PYTHON_FUNCTOOLS32_VERSION).tar.gz
++PYTHON_FUNCTOOLS32_SITE = https://pypi.python.org/packages/c5/60/6ac26ad05857c601308d8fb9e87fa36d0ebf889423f47c3502ef034365db
++PYTHON_FUNCTOOLS32_SETUP_TYPE = distutils
++PYTHON_FUNCTOOLS32_LICENSE = Python-2.0
++PYTHON_FUNCTOOLS32_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
