@@ -1,93 +1,158 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 08:38:04 +0100
-Subject: [Buildroot] [git commit] package: add python-dockerpty
-Message-ID: <20180310074849.DC141800EB@busybox.osuosl.org>
+Date: Sat, 10 Mar 2018 08:31:42 +0100
+Subject: [Buildroot] [git commit] package: add python-docker
+Message-ID: <20180310074849.8DFC3800EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7096961385541eca22cbd89e852468b16ef384d6
+commit: https://git.buildroot.net/buildroot/commit/?id=8b46a14d174235b284e2ae72610dcb967e590d12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Library to use the pseudo-tty of a docker container.
+Python library for the Docker Engine API.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-dockerpty/Config.in             |  7 +++++++
- package/python-dockerpty/python-dockerpty.hash |  4 ++++
- package/python-dockerpty/python-dockerpty.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-setup.py-make-pip-optional.patch          | 50 ++++++++++++++++++++++
+ package/python-docker/Config.in                    | 15 +++++++
+ package/python-docker/python-docker.hash           |  4 ++
+ package/python-docker/python-docker.mk             | 14 ++++++
+ 6 files changed, 85 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 877ad8a8db..7809b5182b 100644
+index 14f12e36ec..0bb140ec98 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1388,6 +1388,7 @@ F:	package/python-alsaaudio/
+@@ -1386,6 +1386,7 @@ F:	package/memtool/
+ F:	package/mosquitto/
+ F:	package/python-alsaaudio/
  F:	package/python-backports-ssl-match-hostname/
- F:	package/python-cached-property/
- F:	package/python-docker/
-+F:	package/python-dockerpty/
++F:	package/python-docker/
  F:	package/python-docker-pycreds/
  F:	package/python-enum/
  F:	package/python-enum34/
 diff --git a/package/Config.in b/package/Config.in
-index 6068ef573e..b7e0da6dd4 100644
+index d3018aee47..c1bf7067aa 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -768,6 +768,7 @@ menu "External python modules"
+@@ -766,6 +766,7 @@ menu "External python modules"
+ 	source "package/python-dialog3/Config.in"
  	source "package/python-dicttoxml/Config.in"
  	source "package/python-django/Config.in"
- 	source "package/python-docker/Config.in"
-+	source "package/python-dockerpty/Config.in"
++	source "package/python-docker/Config.in"
  	source "package/python-docker-pycreds/Config.in"
  	source "package/python-docopt/Config.in"
  	source "package/python-docutils/Config.in"
-diff --git a/package/python-dockerpty/Config.in b/package/python-dockerpty/Config.in
+diff --git a/package/python-docker/0001-setup.py-make-pip-optional.patch b/package/python-docker/0001-setup.py-make-pip-optional.patch
 new file mode 100644
-index 0000000000..f0bd85a68f
+index 0000000000..d9c958311d
 --- /dev/null
-+++ b/package/python-dockerpty/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_DOCKERPTY
-+	bool "python-dockerpty"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Python library to use the pseudo-tty of a docker container.
++++ b/package/python-docker/0001-setup.py-make-pip-optional.patch
+@@ -0,0 +1,50 @@
++From 978643b7222db66837d39037f884be01fb9af234 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Fri, 9 Mar 2018 18:40:16 +0100
++Subject: [PATCH] setup.py: make pip optional
 +
-+	  https://github.com/d11wtq/dockerpty
-diff --git a/package/python-dockerpty/python-dockerpty.hash b/package/python-dockerpty/python-dockerpty.hash
++pip may not be available on the build host, and it is only used to check if
++docker-py is already installed, so skip the check if pip isn't available.
++
++[Upstream-status: submitted (https://github.com/docker/docker-py/pull/1948)]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ setup.py | 20 ++++++++++++--------
++ 1 file changed, 12 insertions(+), 8 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 271d94f..c9b91a3 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -5,16 +5,20 @@ import codecs
++ import os
++ import sys
++ 
++-import pip
++-
++ from setuptools import setup, find_packages
++ 
++-if 'docker-py' in [x.project_name for x in pip.get_installed_distributions()]:
++-    print(
++-        'ERROR: "docker-py" needs to be uninstalled before installing this'
++-        ' package:\npip uninstall docker-py', file=sys.stderr
++-    )
++-    sys.exit(1)
+++try:
+++    import pip
+++
+++    if 'docker-py' in \
+++            [x.project_name for x in pip.get_installed_distributions()]:
+++        print(
+++            'ERROR: "docker-py" needs to be uninstalled before installing this'
+++            ' package:\npip uninstall docker-py', file=sys.stderr
+++        )
+++        sys.exit(1)
+++except ImportError:
+++    pass
++ 
++ ROOT_DIR = os.path.dirname(__file__)
++ SOURCE_DIR = os.path.join(ROOT_DIR)
++-- 
++2.11.0
++
+diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
 new file mode 100644
-index 0000000000..f5ed252bcf
+index 0000000000..35f7666f19
 --- /dev/null
-+++ b/package/python-dockerpty/python-dockerpty.hash
++++ b/package/python-docker/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PYTHON_DOCKER
++	bool "python-docker"
++	# docker-engine may be running on another host, so no dependency
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME \
++	       if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT # runtime
++	select BR2_PACKAGE_PYTHON_DOCKER_PYCREDS # runtime
++	help
++	  A Python library for the Docker Engine API.
++
++	  https://github.com/docker/docker-py
+diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
+new file mode 100644
+index 0000000000..c09ccc3859
+--- /dev/null
++++ b/package/python-docker/python-docker.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/dockerpty/json, sha256 locally computed
-+md5	028bacb34536f3ee6a2ccd668c27e8e4  dockerpty-0.4.1.tar.gz
-+sha256	69a9d69d573a0daa31bcd1c0774eeed5c15c295fe719c61aca550ed1393156ce  dockerpty-0.4.1.tar.gz
-+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/python-dockerpty/python-dockerpty.mk b/package/python-dockerpty/python-dockerpty.mk
++# md5 from https://pypi.python.org/pypi/docker/json, sha256 locally computed
++md5	71e97726a8bdc56effa7df8321c47af1  docker-3.1.1.tar.gz
++sha256	462165ca6367f802280684ab44e581cd2efba8995d78d07ea994e42194927c3b  docker-3.1.1.tar.gz
++sha256	f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
+diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
 new file mode 100644
-index 0000000000..e6fe6e3b49
+index 0000000000..fb9b32a603
 --- /dev/null
-+++ b/package/python-dockerpty/python-dockerpty.mk
++++ b/package/python-docker/python-docker.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-dockerpty
++# python-docker
 +#
 +################################################################################
 +
-+PYTHON_DOCKERPTY_VERSION = 0.4.1
-+PYTHON_DOCKERPTY_SOURCE = dockerpty-$(PYTHON_DOCKERPTY_VERSION).tar.gz
-+PYTHON_DOCKERPTY_SITE = https://pypi.python.org/packages/8d/ee/e9ecce4c32204a6738e0a5d5883d3413794d7498fe8b06f44becc028d3ba
-+PYTHON_DOCKERPTY_SETUP_TYPE = setuptools
-+PYTHON_DOCKERPTY_LICENSE = Apache-2.0
-+PYTHON_DOCKERPTY_LICENSE_FILES = LICENSE.txt
++PYTHON_DOCKER_VERSION = 3.1.1
++PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
++PYTHON_DOCKER_SITE = https://pypi.python.org/packages/0d/17/ad98e025e5528337c4dc5835a5874898eb226da17e4ffed732c894cb1938
++PYTHON_DOCKER_SETUP_TYPE = setuptools
++PYTHON_DOCKER_LICENSE = Apache-2.0
++PYTHON_DOCKER_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
