@@ -1,922 +1,119 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Sat, 10 Mar 2018 17:04:20 +0200
-Subject: [Buildroot] [PATCH v4 4/4] odroidc2: add support for mainline
- kernel and u-boot
-In-Reply-To: <20180310150420.22364-1-daggs@gmx.com>
-References: <20180310150420.22364-1-daggs@gmx.com>
-Message-ID: <20180310150420.22364-4-daggs@gmx.com>
+From: daggs <daggs@gmx.com>
+Date: Sat, 10 Mar 2018 16:24:57 +0100
+Subject: [Buildroot] [PATCH 1/4] meson-tools: new Package
+In-Reply-To: <20180310145857.22026-1-daggs@gmx.com>
+References: <20180310145857.22026-1-daggs@gmx.com>
+Message-ID: <trinity-0d8116ab-a61c-4a4e-94b6-8e547b2d8258-1520695497791@3c-app-mailcom-bs14>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
-Changes v3 -> v4:
- - add entry to DEVELOPERS file
+please ignore this mail it was sent by mistake 
 
-Changes v2 -> v3:
- - board/hardkernel/odroidc2/odroidc2_mainline_defconfig is not needed because update_arm64_defconfig_with_meson_configs.patch is used.
-
-Changes v1 -> v2:
- - handle general mail patch rejects (Thomas)
- - use BR2_TARGET_UBOOT_BOOT_SCRIPT and BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE instead of script's
-   boot.scr generation (Thomas)
- - use defconfig in mainline kernel config (Thomas)
- - add patch of mainline kernel diff instead of complete config and use arch default config (Arnout)
- - move vendor's ATF handling to a separated patch (Thomas)
- - add mainline config support for post image script (Thomas)
- - fixed mainline defconfig rejects (Thomas)
- - squashed all previous 2-8 patches into one patch (Thomas)
-
- DEVELOPERS                                         |   1 +
- board/hardkernel/odroidc2/boot.cmd                 |  10 +
- board/hardkernel/odroidc2/genimage-mainline.cfg    |  33 ++
- ...update_arm64_defconfig_with_meson_configs.patch | 642 +++++++++++++++++++++
- board/hardkernel/odroidc2/post-build.sh            |  12 +
- board/hardkernel/odroidc2/post-image.sh            |  25 +-
- board/hardkernel/odroidc2/readme.txt               |  27 +-
- configs/odroidc2_mainline_defconfig                |  38 ++
- 8 files changed, 783 insertions(+), 5 deletions(-)
- create mode 100644 board/hardkernel/odroidc2/boot.cmd
- create mode 100644 board/hardkernel/odroidc2/genimage-mainline.cfg
- create mode 100644 board/hardkernel/odroidc2/patches/linux/0001-update_arm64_defconfig_with_meson_configs.patch
- create mode 100755 board/hardkernel/odroidc2/post-build.sh
- create mode 100644 configs/odroidc2_mainline_defconfig
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1cb46cfd28..97d24f631b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -466,6 +466,7 @@ F:	package/kvm-unit-tests
- N:	Dagg Stompler <daggs@gmx.com>
- F:	board/hardkernel/odroidc2
- F:	configs/odroidc2_defconfig
-+F:	configs/odroidc2_mainline_defconfig
- F:	package/libamcodec/
- F:	package/meson-tools/
- F:	package/odroidc2-ATF/
-diff --git a/board/hardkernel/odroidc2/boot.cmd b/board/hardkernel/odroidc2/boot.cmd
-new file mode 100644
-index 0000000000..85a1a0a020
---- /dev/null
-+++ b/board/hardkernel/odroidc2/boot.cmd
-@@ -0,0 +1,10 @@
-+setenv loadaddr "0x1080000"
-+setenv dtb_loadaddr "0x01000000"
-+setenv kernel_filename "uImage"
-+setenv fdt_filename "meson-gxbb-odroidc2.dtb"
-+setenv bootargs "console=ttyAML0,115200n8 earlyprintk root=/dev/mmcblk1p2 rootwait panic=10 ${extra} rw"
-+
-+fatload mmc 0:1 ${loadaddr} ${kernel_filename}
-+fatload mmc 0:1 ${dtb_loadaddr} ${fdt_filename}
-+
-+bootm ${loadaddr} - ${dtb_loadaddr}
-diff --git a/board/hardkernel/odroidc2/genimage-mainline.cfg b/board/hardkernel/odroidc2/genimage-mainline.cfg
-new file mode 100644
-index 0000000000..77e4d6dd2f
---- /dev/null
-+++ b/board/hardkernel/odroidc2/genimage-mainline.cfg
-@@ -0,0 +1,33 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"uImage",
-+			"meson-gxbb-odroidc2.dtb",
-+			"boot.scr"
-+		}
-+	}
-+	size = 64M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "uboot-odc2.img"
-+		offset = 49664
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/hardkernel/odroidc2/patches/linux/0001-update_arm64_defconfig_with_meson_configs.patch b/board/hardkernel/odroidc2/patches/linux/0001-update_arm64_defconfig_with_meson_configs.patch
-new file mode 100644
-index 0000000000..d7b36a601f
---- /dev/null
-+++ b/board/hardkernel/odroidc2/patches/linux/0001-update_arm64_defconfig_with_meson_configs.patch
-@@ -0,0 +1,642 @@
-+Apply meson's required changes on the arm64 defconfig.
-+
-+Signed-off-by: Dagg Stompler <daggs@gmx.com>
-+---
-+diff -Naur a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-+--- a/arch/arm64/configs/defconfig	2017-12-08 14:11:55.000000000 +0200
-++++ b/arch/arm64/configs/defconfig	2017-12-08 14:10:06.000000000 +0200
-+@@ -1,9 +1,9 @@
-++# CONFIG_SWAP is not set
-+ CONFIG_SYSVIPC=y
-+ CONFIG_POSIX_MQUEUE=y
-+ CONFIG_AUDIT=y
-+ CONFIG_NO_HZ_IDLE=y
-+ CONFIG_HIGH_RES_TIMERS=y
-+-CONFIG_IRQ_TIME_ACCOUNTING=y
-+ CONFIG_BSD_PROCESS_ACCT=y
-+ CONFIG_BSD_PROCESS_ACCT_V3=y
-+ CONFIG_TASKSTATS=y
-+@@ -12,9 +12,7 @@ CONFIG_TASK_XACCT=y
-+ CONFIG_TASK_IO_ACCOUNTING=y
-+ CONFIG_IKCONFIG=y
-+ CONFIG_IKCONFIG_PROC=y
-+-CONFIG_NUMA_BALANCING=y
-+ CONFIG_MEMCG=y
-+-CONFIG_MEMCG_SWAP=y
-+ CONFIG_BLK_CGROUP=y
-+ CONFIG_CGROUP_PIDS=y
-+ CONFIG_CGROUP_HUGETLB=y
-+@@ -31,72 +29,39 @@ CONFIG_PROFILING=y
-+ CONFIG_JUMP_LABEL=y
-+ CONFIG_MODULES=y
-+ CONFIG_MODULE_UNLOAD=y
-++CONFIG_BLK_DEV_INTEGRITY=y
-++# CONFIG_BLK_DEBUG_FS is not set
-+ # CONFIG_IOSCHED_DEADLINE is not set
-+-CONFIG_ARCH_SUNXI=y
-+-CONFIG_ARCH_ALPINE=y
-+-CONFIG_ARCH_BCM2835=y
-+-CONFIG_ARCH_BCM_IPROC=y
-+-CONFIG_ARCH_BERLIN=y
-+-CONFIG_ARCH_BRCMSTB=y
-+-CONFIG_ARCH_EXYNOS=y
-+-CONFIG_ARCH_LAYERSCAPE=y
-+-CONFIG_ARCH_LG1K=y
-+-CONFIG_ARCH_HISI=y
-+-CONFIG_ARCH_MEDIATEK=y
-++# CONFIG_MQ_IOSCHED_DEADLINE is not set
-++# CONFIG_MQ_IOSCHED_KYBER is not set
-+ CONFIG_ARCH_MESON=y
-+-CONFIG_ARCH_MVEBU=y
-+-CONFIG_ARCH_QCOM=y
-+-CONFIG_ARCH_ROCKCHIP=y
-+-CONFIG_ARCH_SEATTLE=y
-+-CONFIG_ARCH_RENESAS=y
-+-CONFIG_ARCH_R8A7795=y
-+-CONFIG_ARCH_R8A7796=y
-+-CONFIG_ARCH_STRATIX10=y
-+-CONFIG_ARCH_TEGRA=y
-+-CONFIG_ARCH_SPRD=y
-+-CONFIG_ARCH_THUNDER=y
-+-CONFIG_ARCH_THUNDER2=y
-+-CONFIG_ARCH_UNIPHIER=y
-+-CONFIG_ARCH_VEXPRESS=y
-+-CONFIG_ARCH_XGENE=y
-+-CONFIG_ARCH_ZX=y
-+-CONFIG_ARCH_ZYNQMP=y
-+-CONFIG_PCI=y
-+-CONFIG_HOTPLUG_PCI_PCIE=y
-+-CONFIG_PCI_IOV=y
-+-CONFIG_HOTPLUG_PCI=y
-+-CONFIG_HOTPLUG_PCI_ACPI=y
-+-CONFIG_PCI_LAYERSCAPE=y
-+-CONFIG_PCI_HISI=y
-+-CONFIG_PCIE_QCOM=y
-+-CONFIG_PCIE_KIRIN=y
-+-CONFIG_PCIE_ARMADA_8K=y
-+-CONFIG_PCI_AARDVARK=y
-+-CONFIG_PCIE_RCAR=y
-+-CONFIG_PCIE_ROCKCHIP=m
-+-CONFIG_PCI_HOST_GENERIC=y
-+-CONFIG_PCI_XGENE=y
-++# CONFIG_CAVIUM_ERRATUM_30115 is not set
-++# CONFIG_QCOM_FALKOR_ERRATUM_1003 is not set
-++# CONFIG_QCOM_FALKOR_ERRATUM_1009 is not set
-++# CONFIG_QCOM_QDF2400_ERRATUM_0065 is not set
-+ CONFIG_ARM64_VA_BITS_48=y
-+ CONFIG_SCHED_MC=y
-+-CONFIG_NUMA=y
-+ CONFIG_PREEMPT=y
-+ CONFIG_KSM=y
-+ CONFIG_TRANSPARENT_HUGEPAGE=y
-+ CONFIG_CMA=y
-+ CONFIG_SECCOMP=y
-+ CONFIG_KEXEC=y
-+-CONFIG_CRASH_DUMP=y
-+ CONFIG_XEN=y
-++# CONFIG_EFI is not set
-+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+ CONFIG_COMPAT=y
-+-CONFIG_HIBERNATION=y
-+-CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
-++CONFIG_CPU_IDLE=y
-+ CONFIG_ARM_CPUIDLE=y
-+ CONFIG_CPU_FREQ=y
-++CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL=y
-++CONFIG_CPU_FREQ_GOV_POWERSAVE=y
-++CONFIG_CPU_FREQ_GOV_USERSPACE=y
-++CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-++CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
-+ CONFIG_CPUFREQ_DT=y
-+ CONFIG_ARM_BIG_LITTLE_CPUFREQ=y
-+ CONFIG_ARM_SCPI_CPUFREQ=y
-+-CONFIG_ACPI_CPPC_CPUFREQ=m
-+ CONFIG_NET=y
-+ CONFIG_PACKET=y
-+ CONFIG_UNIX=y
-+@@ -140,7 +105,6 @@ CONFIG_BT_HIDP=m
-+ CONFIG_BT_LEDS=y
-+ # CONFIG_BT_DEBUGFS is not set
-+ CONFIG_BT_HCIUART=m
-+-CONFIG_BT_HCIUART_LL=y
-+ CONFIG_CFG80211=m
-+ CONFIG_MAC80211=m
-+ CONFIG_MAC80211_LEDS=y
-+@@ -151,63 +115,52 @@ CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug
-+ CONFIG_DEVTMPFS=y
-+ CONFIG_DEVTMPFS_MOUNT=y
-+ CONFIG_DMA_CMA=y
-+-CONFIG_MTD=y
-+-CONFIG_MTD_BLOCK=y
-+-CONFIG_MTD_M25P80=y
-+-CONFIG_MTD_NAND=y
-+-CONFIG_MTD_NAND_DENALI_DT=y
-+-CONFIG_MTD_SPI_NOR=y
-+ CONFIG_BLK_DEV_LOOP=y
-+ CONFIG_BLK_DEV_NBD=m
-+ CONFIG_VIRTIO_BLK=y
-+-CONFIG_BLK_DEV_NVME=m
-+ CONFIG_SRAM=y
-+ CONFIG_EEPROM_AT25=m
-++CONFIG_SCSI=y
-+ # CONFIG_SCSI_PROC_FS is not set
-+ CONFIG_BLK_DEV_SD=y
-+-CONFIG_SCSI_SAS_ATA=y
-+-CONFIG_SCSI_HISI_SAS=y
-+-CONFIG_SCSI_HISI_SAS_PCI=y
-+-CONFIG_ATA=y
-+-CONFIG_SATA_AHCI=y
-+-CONFIG_SATA_AHCI_PLATFORM=y
-+-CONFIG_AHCI_CEVA=y
-+-CONFIG_AHCI_MVEBU=y
-+-CONFIG_AHCI_XGENE=y
-+-CONFIG_AHCI_QORIQ=y
-+-CONFIG_SATA_SIL24=y
-+-CONFIG_SATA_RCAR=y
-+-CONFIG_PATA_PLATFORM=y
-+-CONFIG_PATA_OF_PLATFORM=y
-++CONFIG_SCSI_SAS_LIBSAS=y
-+ CONFIG_NETDEVICES=y
-+ CONFIG_MACVLAN=m
-+ CONFIG_MACVTAP=m
-+ CONFIG_TUN=y
-+ CONFIG_VETH=m
-+ CONFIG_VIRTIO_NET=y
-+-CONFIG_AMD_XGBE=y
-+-CONFIG_NET_XGENE=y
-+-CONFIG_MACB=y
-+-CONFIG_HNS_DSAF=y
-+-CONFIG_HNS_ENET=y
-+-CONFIG_E1000E=y
-+-CONFIG_IGB=y
-+-CONFIG_IGBVF=y
-+-CONFIG_MVNETA=y
-+-CONFIG_MVPP2=y
-+-CONFIG_SKY2=y
-+-CONFIG_QCOM_EMAC=m
-+-CONFIG_RAVB=y
-+-CONFIG_SMC91X=y
-+-CONFIG_SMSC911X=y
-+-CONFIG_STMMAC_ETH=m
-++# CONFIG_NET_VENDOR_ALACRITECH is not set
-++# CONFIG_NET_VENDOR_AMAZON is not set
-++# CONFIG_NET_VENDOR_AMD is not set
-++# CONFIG_NET_VENDOR_AQUANTIA is not set
-++# CONFIG_NET_VENDOR_ARC is not set
-++# CONFIG_NET_CADENCE is not set
-++# CONFIG_NET_VENDOR_BROADCOM is not set
-++# CONFIG_NET_VENDOR_EZCHIP is not set
-++# CONFIG_NET_VENDOR_HISILICON is not set
-++# CONFIG_NET_VENDOR_INTEL is not set
-++# CONFIG_NET_VENDOR_MARVELL is not set
-++# CONFIG_NET_VENDOR_MICREL is not set
-++# CONFIG_NET_VENDOR_MICROCHIP is not set
-++# CONFIG_NET_VENDOR_NATSEMI is not set
-++# CONFIG_NET_VENDOR_NETRONOME is not set
-++# CONFIG_NET_VENDOR_QUALCOMM is not set
-++# CONFIG_NET_VENDOR_RENESAS is not set
-++# CONFIG_NET_VENDOR_ROCKER is not set
-++# CONFIG_NET_VENDOR_SAMSUNG is not set
-++# CONFIG_NET_VENDOR_SEEQ is not set
-++# CONFIG_NET_VENDOR_SOLARFLARE is not set
-++# CONFIG_NET_VENDOR_SMSC is not set
-++CONFIG_STMMAC_ETH=y
-++# CONFIG_NET_VENDOR_VIA is not set
-++# CONFIG_NET_VENDOR_WIZNET is not set
-++# CONFIG_NET_VENDOR_SYNOPSYS is not set
-++CONFIG_MDIO_BITBANG=y
-+ CONFIG_MDIO_BUS_MUX_MMIOREG=y
-+-CONFIG_AT803X_PHY=m
-+-CONFIG_MARVELL_PHY=m
-+-CONFIG_MESON_GXL_PHY=m
-++CONFIG_MESON_GXL_PHY=y
-+ CONFIG_MICREL_PHY=y
-+ CONFIG_REALTEK_PHY=m
-+-CONFIG_ROCKCHIP_PHY=y
-+ CONFIG_USB_PEGASUS=m
-+ CONFIG_USB_RTL8150=m
-+ CONFIG_USB_RTL8152=m
-+@@ -221,13 +174,12 @@ CONFIG_USB_NET_MCS7830=m
-+ CONFIG_BRCMFMAC=m
-+ CONFIG_WL18XX=m
-+ CONFIG_WLCORE_SDIO=m
-++# CONFIG_XEN_NETDEV_FRONTEND is not set
-++CONFIG_INPUT_MOUSEDEV=y
-++CONFIG_INPUT_MOUSEDEV_PSAUX=y
-+ CONFIG_INPUT_EVDEV=y
-+-CONFIG_KEYBOARD_ADC=m
-+-CONFIG_KEYBOARD_CROS_EC=y
-+ CONFIG_KEYBOARD_GPIO=y
-+ CONFIG_INPUT_MISC=y
-+-CONFIG_INPUT_PM8941_PWRKEY=y
-+-CONFIG_INPUT_HISI_POWERKEY=y
-+ # CONFIG_SERIO_SERPORT is not set
-+ CONFIG_SERIO_AMBAKMI=y
-+ CONFIG_LEGACY_PTY_COUNT=16
-+@@ -235,188 +187,98 @@ CONFIG_SERIAL_8250=y
-+ CONFIG_SERIAL_8250_CONSOLE=y
-+ CONFIG_SERIAL_8250_EXTENDED=y
-+ CONFIG_SERIAL_8250_SHARE_IRQ=y
-+-CONFIG_SERIAL_8250_BCM2835AUX=y
-+ CONFIG_SERIAL_8250_DW=y
-+-CONFIG_SERIAL_8250_MT6577=y
-+-CONFIG_SERIAL_8250_UNIPHIER=y
-+ CONFIG_SERIAL_OF_PLATFORM=y
-+ CONFIG_SERIAL_AMBA_PL011=y
-+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-+ CONFIG_SERIAL_MESON=y
-+ CONFIG_SERIAL_MESON_CONSOLE=y
-+-CONFIG_SERIAL_SAMSUNG=y
-+-CONFIG_SERIAL_SAMSUNG_CONSOLE=y
-+-CONFIG_SERIAL_TEGRA=y
-+-CONFIG_SERIAL_SH_SCI=y
-+-CONFIG_SERIAL_SH_SCI_NR_UARTS=11
-+-CONFIG_SERIAL_SH_SCI_CONSOLE=y
-+-CONFIG_SERIAL_MSM=y
-+-CONFIG_SERIAL_MSM_CONSOLE=y
-+ CONFIG_SERIAL_XILINX_PS_UART=y
-+ CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=y
-+-CONFIG_SERIAL_MVEBU_UART=y
-+-CONFIG_SERIAL_DEV_BUS=y
-+-CONFIG_SERIAL_DEV_CTRL_TTYPORT=y
-+ CONFIG_VIRTIO_CONSOLE=y
-+ CONFIG_I2C_CHARDEV=y
-+ CONFIG_I2C_MUX=y
-+ CONFIG_I2C_MUX_PCA954x=y
-+-CONFIG_I2C_BCM2835=m
-+ CONFIG_I2C_DESIGNWARE_PLATFORM=y
-+-CONFIG_I2C_IMX=y
-+ CONFIG_I2C_MESON=y
-+-CONFIG_I2C_MV64XXX=y
-+-CONFIG_I2C_PXA=y
-+-CONFIG_I2C_QUP=y
-+ CONFIG_I2C_RK3X=y
-+-CONFIG_I2C_SH_MOBILE=y
-+-CONFIG_I2C_TEGRA=y
-+-CONFIG_I2C_UNIPHIER_F=y
-+-CONFIG_I2C_RCAR=y
-+ CONFIG_I2C_CROS_EC_TUNNEL=y
-++CONFIG_I2C_SLAVE=y
-+ CONFIG_SPI=y
-+-CONFIG_SPI_MESON_SPICC=m
-++CONFIG_SPI_MESON_SPICC=y
-+ CONFIG_SPI_MESON_SPIFC=m
-+-CONFIG_SPI_BCM2835=m
-+-CONFIG_SPI_BCM2835AUX=m
-+-CONFIG_SPI_ORION=y
-+ CONFIG_SPI_PL022=y
-+-CONFIG_SPI_QUP=y
-+-CONFIG_SPI_ROCKCHIP=y
-+-CONFIG_SPI_S3C64XX=y
-+ CONFIG_SPI_SPIDEV=m
-+-CONFIG_SPMI=y
-+-CONFIG_PINCTRL_IPQ8074=y
-+ CONFIG_PINCTRL_SINGLE=y
-+ CONFIG_PINCTRL_MAX77620=y
-+-CONFIG_PINCTRL_MSM8916=y
-+-CONFIG_PINCTRL_MSM8994=y
-+-CONFIG_PINCTRL_MSM8996=y
-+-CONFIG_PINCTRL_QDF2XXX=y
-+-CONFIG_PINCTRL_QCOM_SPMI_PMIC=y
-+ CONFIG_GPIO_DWAPB=y
-++CONFIG_GPIO_GENERIC_PLATFORM=y
-+ CONFIG_GPIO_PL061=y
-+-CONFIG_GPIO_RCAR=y
-+ CONFIG_GPIO_XGENE=y
-+-CONFIG_GPIO_XGENE_SB=y
-+ CONFIG_GPIO_PCA953X=y
-+ CONFIG_GPIO_PCA953X_IRQ=y
-+ CONFIG_GPIO_MAX77620=y
-+-CONFIG_POWER_RESET_MSM=y
-+-CONFIG_POWER_RESET_XGENE=y
-+ CONFIG_POWER_RESET_SYSCON=y
-+-CONFIG_SYSCON_REBOOT_MODE=y
-+-CONFIG_BATTERY_BQ27XXX=y
-+ CONFIG_SENSORS_ARM_SCPI=y
-+ CONFIG_SENSORS_LM90=m
-+ CONFIG_SENSORS_INA2XX=m
-++CONFIG_THERMAL=y
-+ CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
-+ CONFIG_CPU_THERMAL=y
-+ CONFIG_THERMAL_EMULATION=y
-+-CONFIG_BRCMSTB_THERMAL=m
-+-CONFIG_EXYNOS_THERMAL=y
-+-CONFIG_ROCKCHIP_THERMAL=m
-+ CONFIG_WATCHDOG=y
-+-CONFIG_S3C2410_WATCHDOG=y
-+ CONFIG_MESON_GXBB_WATCHDOG=m
-+ CONFIG_MESON_WATCHDOG=m
-+-CONFIG_RENESAS_WDT=y
-+-CONFIG_UNIPHIER_WATCHDOG=y
-+-CONFIG_BCM2835_WDT=y
-+-CONFIG_MFD_AXP20X_RSB=y
-+ CONFIG_MFD_CROS_EC=y
-+ CONFIG_MFD_CROS_EC_I2C=y
-+-CONFIG_MFD_CROS_EC_SPI=y
-+-CONFIG_MFD_EXYNOS_LPASS=m
-+-CONFIG_MFD_HI6421_PMIC=y
-+-CONFIG_MFD_HI655X_PMIC=y
-+ CONFIG_MFD_MAX77620=y
-+-CONFIG_MFD_SPMI_PMIC=y
-+ CONFIG_MFD_RK808=y
-+ CONFIG_MFD_SEC_CORE=y
-+-CONFIG_REGULATOR_AXP20X=y
-+-CONFIG_REGULATOR_FAN53555=y
-++CONFIG_REGULATOR=y
-+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+ CONFIG_REGULATOR_GPIO=y
-+-CONFIG_REGULATOR_HI6421V530=y
-+-CONFIG_REGULATOR_HI655X=y
-+ CONFIG_REGULATOR_MAX77620=y
-+ CONFIG_REGULATOR_PWM=y
-+-CONFIG_REGULATOR_QCOM_SMD_RPM=y
-+-CONFIG_REGULATOR_QCOM_SPMI=y
-+ CONFIG_REGULATOR_RK808=y
-+ CONFIG_REGULATOR_S2MPS11=y
-++CONFIG_RC_CORE=m
-++CONFIG_RC_DEVICES=y
-++CONFIG_IR_MESON=m
-+ CONFIG_MEDIA_SUPPORT=m
-+ CONFIG_MEDIA_CAMERA_SUPPORT=y
-+ CONFIG_MEDIA_ANALOG_TV_SUPPORT=y
-+ CONFIG_MEDIA_DIGITAL_TV_SUPPORT=y
-+ CONFIG_MEDIA_CONTROLLER=y
-+-CONFIG_MEDIA_RC_SUPPORT=y
-+-CONFIG_RC_CORE=m
-+-CONFIG_RC_DEVICES=y
-+-CONFIG_RC_DECODERS=y
-+-CONFIG_IR_MESON=m
-+ CONFIG_VIDEO_V4L2_SUBDEV_API=y
-+ # CONFIG_DVB_NET is not set
-+ CONFIG_V4L_MEM2MEM_DRIVERS=y
-+-CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
-+-CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
-+-CONFIG_VIDEO_SAMSUNG_EXYNOS_GSC=m
-+-CONFIG_VIDEO_RENESAS_FCP=m
-+-CONFIG_VIDEO_RENESAS_VSP1=m
-+-CONFIG_DRM=m
-+-CONFIG_DRM_NOUVEAU=m
-+-CONFIG_DRM_EXYNOS=m
-+-CONFIG_DRM_EXYNOS5433_DECON=y
-+-CONFIG_DRM_EXYNOS7_DECON=y
-+-CONFIG_DRM_EXYNOS_DSI=y
-+-# CONFIG_DRM_EXYNOS_DP is not set
-+-CONFIG_DRM_EXYNOS_HDMI=y
-+-CONFIG_DRM_EXYNOS_MIC=y
-+-CONFIG_DRM_ROCKCHIP=m
-+-CONFIG_ROCKCHIP_ANALOGIX_DP=y
-+-CONFIG_ROCKCHIP_CDN_DP=y
-+-CONFIG_ROCKCHIP_DW_HDMI=y
-+-CONFIG_ROCKCHIP_DW_MIPI_DSI=y
-+-CONFIG_ROCKCHIP_INNO_HDMI=y
-+-CONFIG_DRM_RCAR_DU=m
-+-CONFIG_DRM_RCAR_LVDS=y
-+-CONFIG_DRM_RCAR_VSP=y
-+-CONFIG_DRM_TEGRA=m
-+-CONFIG_DRM_PANEL_SIMPLE=m
-++CONFIG_DRM=y
-++CONFIG_DRM_FBDEV_OVERALLOC=300
-++CONFIG_DRM_I2C_CH7006=m
-++CONFIG_DRM_I2C_SIL164=m
-+ CONFIG_DRM_I2C_ADV7511=m
-+-CONFIG_DRM_VC4=m
-+-CONFIG_DRM_HISI_KIRIN=m
-+-CONFIG_DRM_MESON=m
-+-CONFIG_FB=y
-++CONFIG_DRM_DW_HDMI_I2S_AUDIO=y
-++CONFIG_DRM_MESON=y
-+ CONFIG_FB_ARMCLCD=y
-+-CONFIG_BACKLIGHT_GENERIC=m
-+-CONFIG_BACKLIGHT_PWM=m
-+-CONFIG_BACKLIGHT_LP855X=m
-+-CONFIG_FRAMEBUFFER_CONSOLE=y
-++# CONFIG_LCD_CLASS_DEVICE is not set
-++# CONFIG_BACKLIGHT_GENERIC is not set
-+ CONFIG_LOGO=y
-+ # CONFIG_LOGO_LINUX_MONO is not set
-+ # CONFIG_LOGO_LINUX_VGA16 is not set
-+ CONFIG_SOUND=y
-+ CONFIG_SND=y
-+ CONFIG_SND_SOC=y
-+-CONFIG_SND_BCM2835_SOC_I2S=m
-+-CONFIG_SND_SOC_SAMSUNG=y
-+-CONFIG_SND_SOC_RCAR=m
-+-CONFIG_SND_SOC_AK4613=m
-++CONFIG_SND_SOC_AK4613=y
-++CONFIG_SND_SOC_DIO2125=y
-++CONFIG_SND_SOC_ES7134=y
-+ CONFIG_SND_SIMPLE_CARD=y
-+ CONFIG_USB=y
-+ CONFIG_USB_OTG=y
-+ CONFIG_USB_XHCI_HCD=y
-+-CONFIG_USB_XHCI_TEGRA=y
-+ CONFIG_USB_EHCI_HCD=y
-+-CONFIG_USB_EHCI_MSM=y
-+-CONFIG_USB_EHCI_EXYNOS=y
-+ CONFIG_USB_EHCI_HCD_PLATFORM=y
-+ CONFIG_USB_OHCI_HCD=y
-+-CONFIG_USB_OHCI_EXYNOS=y
-+ CONFIG_USB_OHCI_HCD_PLATFORM=y
-+-CONFIG_USB_RENESAS_USBHS=m
-+ CONFIG_USB_STORAGE=y
-+ CONFIG_USB_DWC3=y
-+ CONFIG_USB_DWC2=y
-+@@ -425,131 +287,69 @@ CONFIG_USB_CHIPIDEA_UDC=y
-+ CONFIG_USB_CHIPIDEA_HOST=y
-+ CONFIG_USB_ISP1760=y
-+ CONFIG_USB_HSIC_USB3503=y
-+-CONFIG_NOP_USB_XCEIV=y
-+-CONFIG_USB_MSM_OTG=y
-+-CONFIG_USB_QCOM_8X16_PHY=y
-+ CONFIG_USB_ULPI=y
-+ CONFIG_USB_GADGET=y
-+-CONFIG_USB_RENESAS_USBHS_UDC=m
-++CONFIG_USB_SNP_UDC_PLAT=y
-+ CONFIG_MMC=y
-+ CONFIG_MMC_BLOCK_MINORS=32
-+ CONFIG_MMC_ARMMMCI=y
-+ CONFIG_MMC_SDHCI=y
-+-CONFIG_MMC_SDHCI_ACPI=y
-+ CONFIG_MMC_SDHCI_PLTFM=y
-+ CONFIG_MMC_SDHCI_OF_ARASAN=y
-+-CONFIG_MMC_SDHCI_OF_ESDHC=y
-+-CONFIG_MMC_SDHCI_CADENCE=y
-+-CONFIG_MMC_SDHCI_TEGRA=y
-+ CONFIG_MMC_MESON_GX=y
-+-CONFIG_MMC_SDHCI_MSM=y
-+ CONFIG_MMC_SPI=y
-+-CONFIG_MMC_SDHI=y
-+ CONFIG_MMC_DW=y
-+ CONFIG_MMC_DW_EXYNOS=y
-+ CONFIG_MMC_DW_K3=y
-+-CONFIG_MMC_DW_ROCKCHIP=y
-+-CONFIG_MMC_SUNXI=y
-+-CONFIG_MMC_BCM2835=y
-+-CONFIG_MMC_SDHCI_XENON=y
-+ CONFIG_NEW_LEDS=y
-+ CONFIG_LEDS_CLASS=y
-+ CONFIG_LEDS_GPIO=y
-+-CONFIG_LEDS_PWM=y
-+ CONFIG_LEDS_SYSCON=y
-+ CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+ CONFIG_LEDS_TRIGGER_CPU=y
-+-CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
-+-CONFIG_EDAC=y
-+ CONFIG_RTC_CLASS=y
-+ CONFIG_RTC_DRV_MAX77686=y
-+ CONFIG_RTC_DRV_RK808=m
-+ CONFIG_RTC_DRV_S5M=y
-+ CONFIG_RTC_DRV_DS3232=y
-+-CONFIG_RTC_DRV_EFI=y
-+-CONFIG_RTC_DRV_S3C=y
-+ CONFIG_RTC_DRV_PL031=y
-+-CONFIG_RTC_DRV_SUN6I=y
-+-CONFIG_RTC_DRV_TEGRA=y
-+-CONFIG_RTC_DRV_XGENE=y
-+ CONFIG_DMADEVICES=y
-+-CONFIG_DMA_BCM2835=m
-+-CONFIG_K3_DMA=y
-+-CONFIG_MV_XOR_V2=y
-+ CONFIG_PL330_DMA=y
-+-CONFIG_TEGRA20_APB_DMA=y
-+-CONFIG_QCOM_BAM_DMA=y
-+ CONFIG_QCOM_HIDMA_MGMT=y
-+ CONFIG_QCOM_HIDMA=y
-+-CONFIG_RCAR_DMAC=y
-+-CONFIG_VFIO=y
-+-CONFIG_VFIO_PCI=y
-+-CONFIG_VIRTIO_PCI=y
-+ CONFIG_VIRTIO_BALLOON=y
-+ CONFIG_VIRTIO_MMIO=y
-+-CONFIG_XEN_GNTDEV=y
-+-CONFIG_XEN_GRANT_DEV_ALLOC=y
-++# CONFIG_XEN_BALLOON is not set
-++# CONFIG_XEN_DEV_EVTCHN is not set
-++# CONFIG_XEN_BACKEND is not set
-++# CONFIG_XENFS is not set
-++# CONFIG_XEN_SYS_HYPERVISOR is not set
-++# CONFIG_XEN_GNTDEV is not set
-++# CONFIG_XEN_GRANT_DEV_ALLOC is not set
-++CONFIG_COMMON_CLK_VERSATILE=y
-++CONFIG_CLK_SP810=y
-+ CONFIG_COMMON_CLK_RK808=y
-+ CONFIG_COMMON_CLK_SCPI=y
-+ CONFIG_COMMON_CLK_CS2000_CP=y
-+ CONFIG_COMMON_CLK_S2MPS11=y
-+ CONFIG_CLK_QORIQ=y
-+ CONFIG_COMMON_CLK_PWM=y
-+-CONFIG_COMMON_CLK_QCOM=y
-+-CONFIG_QCOM_CLK_SMD_RPM=y
-+-CONFIG_IPQ_GCC_8074=y
-+-CONFIG_MSM_GCC_8916=y
-+-CONFIG_MSM_GCC_8994=y
-+-CONFIG_MSM_MMCC_8996=y
-+-CONFIG_HWSPINLOCK=y
-+-CONFIG_HWSPINLOCK_QCOM=y
-++# CONFIG_HISILICON_ERRATUM_161010101 is not set
-++# CONFIG_ARM64_ERRATUM_858921 is not set
-++CONFIG_ARM_TIMER_SP804=y
-++CONFIG_MAILBOX=y
-+ CONFIG_ARM_MHU=y
-+ CONFIG_PLATFORM_MHU=y
-+-CONFIG_BCM2835_MBOX=y
-+-CONFIG_HI6220_MBOX=y
-+-CONFIG_ROCKCHIP_IOMMU=y
-+-CONFIG_ARM_SMMU=y
-+-CONFIG_ARM_SMMU_V3=y
-+-CONFIG_RPMSG_QCOM_SMD=y
-+-CONFIG_RASPBERRYPI_POWER=y
-+-CONFIG_QCOM_SMEM=y
-+-CONFIG_QCOM_SMD_RPM=y
-+-CONFIG_QCOM_SMP2P=y
-+-CONFIG_QCOM_SMSM=y
-+-CONFIG_ROCKCHIP_PM_DOMAINS=y
-+-CONFIG_ARCH_TEGRA_132_SOC=y
-+-CONFIG_ARCH_TEGRA_210_SOC=y
-+-CONFIG_ARCH_TEGRA_186_SOC=y
-++# CONFIG_IOMMU_SUPPORT is not set
-+ CONFIG_EXTCON_USB_GPIO=y
-+ CONFIG_IIO=y
-+-CONFIG_EXYNOS_ADC=y
-+-CONFIG_ROCKCHIP_SARADC=m
-+ CONFIG_PWM=y
-+-CONFIG_PWM_BCM2835=m
-+-CONFIG_PWM_CROS_EC=m
-+ CONFIG_PWM_MESON=m
-+-CONFIG_PWM_ROCKCHIP=y
-+-CONFIG_PWM_SAMSUNG=y
-+-CONFIG_PWM_TEGRA=m
-+-CONFIG_PHY_RCAR_GEN3_USB2=y
-+-CONFIG_PHY_HI6220_USB=y
-+-CONFIG_PHY_SUN4I_USB=y
-+-CONFIG_PHY_ROCKCHIP_INNO_USB2=y
-+-CONFIG_PHY_ROCKCHIP_EMMC=y
-+-CONFIG_PHY_ROCKCHIP_PCIE=m
-+ CONFIG_PHY_XGENE=y
-+-CONFIG_PHY_TEGRA_XUSB=y
-+-CONFIG_QCOM_L2_PMU=y
-+-CONFIG_QCOM_L3_PMU=y
-++CONFIG_PHY_SAMSUNG_USB2=y
-+ CONFIG_TEE=y
-+ CONFIG_OPTEE=y
-+ CONFIG_ARM_SCPI_PROTOCOL=y
-+-CONFIG_RASPBERRYPI_FIRMWARE=y
-+-CONFIG_EFI_CAPSULE_LOADER=y
-+-CONFIG_ACPI=y
-+-CONFIG_ACPI_APEI=y
-+-CONFIG_ACPI_APEI_GHES=y
-+-CONFIG_ACPI_APEI_PCIEAER=y
-+ CONFIG_EXT2_FS=y
-+ CONFIG_EXT3_FS=y
-+ CONFIG_EXT4_FS_POSIX_ACL=y
-+@@ -563,10 +363,13 @@ CONFIG_FUSE_FS=m
-+ CONFIG_CUSE=m
-+ CONFIG_OVERLAY_FS=m
-+ CONFIG_VFAT_FS=y
-++CONFIG_TMPFS=y
-+ CONFIG_HUGETLBFS=y
-+ CONFIG_CONFIGFS_FS=y
-+-CONFIG_EFIVAR_FS=y
-+ CONFIG_SQUASHFS=y
-++CONFIG_SQUASHFS_LZ4=y
-++CONFIG_SQUASHFS_LZO=y
-++CONFIG_SQUASHFS_XZ=y
-+ CONFIG_NFS_FS=y
-+ CONFIG_NFS_V4=y
-+ CONFIG_NFS_V4_1=y
-+@@ -575,14 +378,12 @@ CONFIG_ROOT_NFS=y
-+ CONFIG_9P_FS=y
-+ CONFIG_NLS_CODEPAGE_437=y
-+ CONFIG_NLS_ISO8859_1=y
-+-CONFIG_VIRTUALIZATION=y
-+-CONFIG_KVM=y
-+ CONFIG_PRINTK_TIME=y
-+ CONFIG_DEBUG_INFO=y
-+ CONFIG_DEBUG_FS=y
-+ CONFIG_MAGIC_SYSRQ=y
-+ CONFIG_DEBUG_KERNEL=y
-+-CONFIG_LOCKUP_DETECTOR=y
-++CONFIG_DETECT_HUNG_TASK=y
-+ # CONFIG_SCHED_DEBUG is not set
-+ # CONFIG_DEBUG_PREEMPT is not set
-+ # CONFIG_FTRACE is not set
-+@@ -591,17 +392,10 @@ CONFIG_SECURITY=y
-+ CONFIG_CRYPTO_ECHAINIV=y
-+ CONFIG_CRYPTO_ANSI_CPRNG=y
-+ CONFIG_ARM64_CRYPTO=y
-+-CONFIG_CRYPTO_SHA256_ARM64=m
-+-CONFIG_CRYPTO_SHA512_ARM64=m
-+ CONFIG_CRYPTO_SHA1_ARM64_CE=y
-+ CONFIG_CRYPTO_SHA2_ARM64_CE=y
-+ CONFIG_CRYPTO_GHASH_ARM64_CE=y
-+-CONFIG_CRYPTO_CRCT10DIF_ARM64_CE=m
-+-CONFIG_CRYPTO_CRC32_ARM64_CE=m
-+-CONFIG_CRYPTO_AES_ARM64=m
-+-CONFIG_CRYPTO_AES_ARM64_CE=m
-+ CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
-+ CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
-+-CONFIG_CRYPTO_AES_ARM64_NEON_BLK=m
-+-CONFIG_CRYPTO_CHACHA20_NEON=m
-+-CONFIG_CRYPTO_AES_ARM64_BS=m
-++CONFIG_CRYPTO_CHACHA20_NEON=y
-++CONFIG_CRYPTO_AES_ARM64_BS=y
-diff --git a/board/hardkernel/odroidc2/post-build.sh b/board/hardkernel/odroidc2/post-build.sh
-new file mode 100755
-index 0000000000..30e1dd2f0e
---- /dev/null
-+++ b/board/hardkernel/odroidc2/post-build.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+# post-build.sh for Odroid C2 taken from CubieBoard's post-build.sh
-+# 2013, Carlo Caione <carlo.caione@gmail.com>
-+
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=$HOST_DIR/bin/mkimage
-+
-+# vendor u-boot uses uImage
-+if [ -f "${BINARIES_DIR}/Image" ]; then
-+    ${MKIMAGE} -A arm64 -O linux -T kernel -C none -a 0x1080000 -e 0x1080000 \
-+	     -n linux -d ${BINARIES_DIR}/Image ${BINARIES_DIR}/uImage
-+fi
-diff --git a/board/hardkernel/odroidc2/post-image.sh b/board/hardkernel/odroidc2/post-image.sh
-index a53f87ec11..bc885d4c51 100755
---- a/board/hardkernel/odroidc2/post-image.sh
-+++ b/board/hardkernel/odroidc2/post-image.sh
-@@ -2,12 +2,29 @@
- 
- BOARD_DIR="$(dirname $0)"
- GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+TARGET_MAINLINE="$2"
- IM_FILE=""
-+CLEANUPS_CMD=""
- 
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--IM_FILE="${BINARIES_DIR}/u-boot.bin"
-+if [ "${TARGET_MAINLINE}" = "yes" ]; then
-+	GENIMAGE_CFG="${BOARD_DIR}/genimage-mainline.cfg"
-+	SIGNED_UBOOT_IMG="${BINARIES_DIR}/uboot-odc2.img"
-+	ODRODIDC2_ATF_FOLDER="${HOST_DIR}/usr/share/odroidc2_atf"
-+	IM_FILE="${ODRODIDC2_ATF_FOLDER}/bl1.bin.hardkernel"
-+	CLEANUPS_CMD="rm -rf ${BINARIES_DIR}/fip.bin ${BINARIES_DIR}/boot_new.bin ${BINARIES_DIR}/u-boot.img"
- 
--cp ${BOARD_DIR}/boot.ini ${BINARIES_DIR}/
-+	${HOST_DIR}/bin/fip_create --bl30 ${ODRODIDC2_ATF_FOLDER}/bl30.bin --bl301 ${ODRODIDC2_ATF_FOLDER}/bl301.bin --bl31 ${ODRODIDC2_ATF_FOLDER}/bl31.bin --bl33 ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/fip.bin
-+	${HOST_DIR}/bin/fip_create --dump ${BINARIES_DIR}/fip.bin
-+	cat ${ODRODIDC2_ATF_FOLDER}/bl2.package ${BINARIES_DIR}/fip.bin > ${BINARIES_DIR}/boot_new.bin
-+	${HOST_DIR}/bin/amlbootsig ${BINARIES_DIR}/boot_new.bin ${BINARIES_DIR}/u-boot.img
-+
-+	dd if=${BINARIES_DIR}/u-boot.img of=${SIGNED_UBOOT_IMG} bs=512 skip=96
-+else
-+	GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+	IM_FILE="${BINARIES_DIR}/u-boot.bin"
-+
-+	cp ${BOARD_DIR}/boot.ini ${BINARIES_DIR}/
-+fi
- 
- rm -rf "${GENIMAGE_TMP}"
- 
-@@ -20,3 +37,5 @@ genimage                           \
- 
- dd if=${IM_FILE} of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
- dd if=${IM_FILE} of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
-+
-+${CLEANUPS_CMD}
-diff --git a/board/hardkernel/odroidc2/readme.txt b/board/hardkernel/odroidc2/readme.txt
-index b44aa67f5a..1ca90546b5 100644
---- a/board/hardkernel/odroidc2/readme.txt
-+++ b/board/hardkernel/odroidc2/readme.txt
-@@ -10,7 +10,11 @@ How to build it
- 
-   $ make odroidc2_defconfig
- 
--Then you can edit the build options using
-+For vendor based configuration or
-+
-+  $ make odroidc2_mainline_defconfig
-+
-+For community based configuration, then you can edit the build options using
- 
-   $ make menuconfig
- 
-@@ -24,7 +28,9 @@ download the packages' sources.
- Result of the build
- -------------------
- 
--After building, you should obtain this tree:
-+After building, you should obtain one of the following trees:
-+
-+For vendor based configuration:
- 
-     output/images/
-     +-- Image
-@@ -37,7 +43,24 @@ After building, you should obtain this tree:
-     +-- sdcard.img
-     `-- u-boot.bin
- 
-+For community based configuration:
-+
-+    output/images/
-+    +-- Image
-+    +-- uImage			   [2]
-+    +-- boot.scr                   [1]
-+    +-- boot.vfat
-+    +-- meson-gxbb-odroidc2.dtb
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4
-+    +-- rootfs.tar
-+    +-- sdcard.img
-+    +-- uboot-odc2.img		   [3]
-+    `-- u-boot.bin
-+
- [1] This is the ODROID-C2 configuration file used in u-boot.
-+[2] This is the ODROID-C2 kernel image file which will be booted.
-+[3] This is the ODROID-C2 signed u-boot image which will be used.
- 
- How to write the SD card or eMMC
- ================================
-diff --git a/configs/odroidc2_mainline_defconfig b/configs/odroidc2_mainline_defconfig
-new file mode 100644
-index 0000000000..6a4015425e
---- /dev/null
-+++ b/configs/odroidc2_mainline_defconfig
-@@ -0,0 +1,38 @@
-+# Architecture
-+BR2_aarch64=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_GLOBAL_PATCH_DIR="board/hardkernel/odroidc2/patches"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/hardkernel/odroidc2/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="yes"
-+BR2_KERNEL_HEADERS_4_14=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.4"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-odroidc2"
-+BR2_LINUX_KERNEL_IMAGE=y
-+
-+# U-Boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="odroid-c2"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/hardkernel/odroidc2/boot.cmd"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MESON_TOOLS=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_ODROIDC2_ATF=y
--- 
-2.16.2
+> Sent: Saturday, March 10, 2018 at 4:58 PM
+> From: "Dagg Stompler" <daggs@gmx.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [PATCH 1/4] meson-tools: new Package
+>
+> all amlogic's meson based soc require a signed firmware to boot, this
+> package provides a binary to do so.
+> 
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  DEVELOPERS                           |  1 +
+>  package/Config.in.host               |  1 +
+>  package/meson-tools/Config.in.host   |  9 +++++++++
+>  package/meson-tools/meson-tools.hash |  2 ++
+>  package/meson-tools/meson-tools.mk   | 24 ++++++++++++++++++++++++
+>  5 files changed, 37 insertions(+)
+>  create mode 100644 package/meson-tools/Config.in.host
+>  create mode 100644 package/meson-tools/meson-tools.hash
+>  create mode 100644 package/meson-tools/meson-tools.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a2bfdabb88..a622e7cc08 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -467,6 +467,7 @@ N:	Dagg Stompler <daggs@gmx.com>
+>  F:	board/hardkernel/odroidc2
+>  F:	configs/odroidc2_defconfig
+>  F:	package/libamcodec/
+> +F:	package/meson-tools/
+>  F:	package/odroid-mali/
+>  F:	package/odroid-scripts/
+>  
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 199a8e9856..5f17640eb1 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -29,6 +29,7 @@ menu "Host utilities"
+>  	source "package/jsmin/Config.in.host"
+>  	source "package/lpc3250loader/Config.in.host"
+>  	source "package/lttng-babeltrace/Config.in.host"
+> +	source "package/meson-tools/Config.in.host"
+>  	source "package/mfgtools/Config.in.host"
+>  	source "package/mkpasswd/Config.in.host"
+>  	source "package/mtd/Config.in.host"
+> diff --git a/package/meson-tools/Config.in.host b/package/meson-tools/Config.in.host
+> new file mode 100644
+> index 0000000000..d90be61aeb
+> --- /dev/null
+> +++ b/package/meson-tools/Config.in.host
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_HOST_MESON_TOOLS
+> +	bool "host meson-tools"
+> +	help
+> +	  meson-tools is a collection of tools for use with
+> +	  the Amlogic Meson family of ARM based SoCs.
+> +	  it allows management of signatures which are required
+> +	  for booting amlogic based boards with u-boot.
+> +
+> +	  https://github.com/afaerber/meson-tools
+> diff --git a/package/meson-tools/meson-tools.hash b/package/meson-tools/meson-tools.hash
+> new file mode 100644
+> index 0000000000..b5f844ab58
+> --- /dev/null
+> +++ b/package/meson-tools/meson-tools.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256	5a956f5a6ff8c45fc79d649982287c4548a1df4f0ef9e5aa6584493d552a54a3	meson-tools-5e01cbadc6f6f21ad88a63492a83182fc4b19d37.tar.gz
+> diff --git a/package/meson-tools/meson-tools.mk b/package/meson-tools/meson-tools.mk
+> new file mode 100644
+> index 0000000000..6b8cc06582
+> --- /dev/null
+> +++ b/package/meson-tools/meson-tools.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# meson-tools
+> +#
+> +################################################################################
+> +
+> +HOST_MESON_TOOLS_VERSION = 5e01cbadc6f6f21ad88a63492a83182fc4b19d37
+> +HOST_MESON_TOOLS_SITE = $(call github,afaerber,meson-tools,$(HOST_MESON_TOOLS_VERSION))
+> +HOST_MESON_TOOLS_LICENSE = GPL-2.0+
+> +HOST_MESON_TOOLS_LICENSE_FILES = COPYING README.md
+> +HOST_MESON_TOOLS_DEPENDENCIES = host-openssl
+> +
+> +HOST_MESON_TOOLS_PROGS = amlbootsig unamlbootsig amlinfo
+> +
+> +define HOST_MESON_TOOLS_BUILD_CMDS
+> +	$(MAKE) -C $(@D) CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS) -lssl -lcrypto"
+> +endef
+> +
+> +define HOST_MESON_TOOLS_INSTALL_CMDS
+> +	$(foreach f,$(HOST_MESON_TOOLS_PROGS),
+> +		$(INSTALL) -D -m 0755 $(@D)/$(f) $(HOST_DIR)/bin/$(f))
+> +endef
+> +
+> +$(eval $(host-generic-package))
+> -- 
+> 2.16.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
