@@ -1,34 +1,28 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 10 Mar 2018 12:39:45 -0300
-Subject: [Buildroot] freescale_imx31_3stack_defconfig fails to build
-In-Reply-To: <CAOMZO5BGUhobyE=gmMC5BDp2dMkuxRXn0jGckcHr56q08QPRAw@mail.gmail.com>
-References: <20180304225550.74761708@windsurf.home>
- <CAOMZO5BntMxqEBPuXVs2CX2L9OWGrf-AzbsOUeDN8qqcJgS8cg@mail.gmail.com>
- <20180305085314.3ce92959@windsurf.home>
- <CAOMZO5DxGfnCCOF3MgJMmmAdKTs3sdGiq2Z2w9UXjV7nvOUpHA@mail.gmail.com>
- <CAOMZO5BGUhobyE=gmMC5BDp2dMkuxRXn0jGckcHr56q08QPRAw@mail.gmail.com>
-Message-ID: <CAOMZO5AmG-pJHDqR_-iVfpZzQa2K2nFRp_TXwKNAryrP=H14Lw@mail.gmail.com>
+From: Ciro Santilli <ciro.santilli@gmail.com>
+Date: Sat, 10 Mar 2018 16:14:45 +0000
+Subject: [Buildroot] Is there a way to automatically detect the minimum
+ required BR2_TARGET_ROOTFS_EXT2_SIZE?
+Message-ID: <CAFXrp_exNc=GtVqbuRmYqKiDNXgD+pawnCSmRH-1FrF2dxXgLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 10, 2018 at 11:40 AM, Fabio Estevam <festevam@gmail.com> wrote:
-> Hi Thomas,
->
-> On Mon, Mar 5, 2018 at 8:03 AM, Fabio Estevam <festevam@gmail.com> wrote:
->
->>> If nobody has access to the HW platform, I think we could just as well
->>> drop the defconfig.
->>
->> Yes, we have a mx31pdk board in the office.
->>
->> I will try to have access to it this week and give it a try with mainline.
->
-> The mx31pdk board I have access to is bricked and it will take me some
-> time to unbrick it.
->
-> If anyone else has access to this board and would like to maintain it
+https://stackoverflow.com/questions/49211241/is-there-a-way-to-automatically-detect-the-minimum-required-br2-target-rootfs-ex
 
-Ops, I meant "If anyone else does not have access to this board..."
+I'm when making a big non-embedded image, I keep hitting the error:
+
+    *** Maybe you need to increase the filesystem size
+(BR2_TARGET_ROOTFS_EXT2_SIZE)
+
+and then I have to do a `du` on `output/target` to find out how big I
+have to make `BR2_TARGET_ROOTFS_EXT2_SIZE`.
+
+Is there a way to automate this, or a decent workaround?
+
+Some workarounds I'm considering:
+
+* put the big stuff under 9p:
+https://superuser.com/questions/628169/how-to-share-a-directory-with-the-host-without-networking-in-qemu
+* use CPIO and `-initrd`
