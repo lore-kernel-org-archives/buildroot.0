@@ -1,23 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Mar 2018 22:24:00 +0100
-Subject: [Buildroot] [PATCH 1/1] ympd: bump to version 1.3.0
-In-Reply-To: <20180309224912.25244-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 9 Mar 2018 23:49:12 +0100")
-References: <20180309224912.25244-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a7vfbp5b.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Mar 2018 22:24:34 +0100
+Subject: [Buildroot] [PATCH] libusbgx: add license hashes
+In-Reply-To: <20180308103731.7452-1-john@metanate.com> (John Keeping's message
+ of "Thu, 8 Mar 2018 10:37:31 +0000")
+References: <20180308103731.7452-1-john@metanate.com>
+Message-ID: <876063bp4d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
- > Remove mkdata hook as this is not needed since version 1.2.3.
- > Indeed, when CMAKE_CROSSCOMPILING is defined, ympd will use a perl
- > script (mkdata.pl) instead of mkdata binary
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: John Keeping <john@metanate.com>
 
 Committed, thanks.
 
