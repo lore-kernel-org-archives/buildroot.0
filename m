@@ -1,119 +1,76 @@
-From: daggs <daggs@gmx.com>
-Date: Sat, 10 Mar 2018 16:24:57 +0100
-Subject: [Buildroot] [PATCH 1/4] meson-tools: new Package
-In-Reply-To: <20180310145857.22026-1-daggs@gmx.com>
-References: <20180310145857.22026-1-daggs@gmx.com>
-Message-ID: <trinity-0d8116ab-a61c-4a4e-94b6-8e547b2d8258-1520695497791@3c-app-mailcom-bs14>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Mar 2018 16:29:43 +0100
+Subject: [Buildroot] [PATCH 1/1] cryptopp: fix build with host-gcc 4.7.x
+Message-ID: <20180310152943.20884-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-please ignore this mail it was sent by mistake 
+Fixes:
+ - http://autobuild.buildroot.org/results/9ab386124e4a09b50598c6f95ad40b25a83d227e
 
-> Sent: Saturday, March 10, 2018 at 4:58 PM
-> From: "Dagg Stompler" <daggs@gmx.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [PATCH 1/4] meson-tools: new Package
->
-> all amlogic's meson based soc require a signed firmware to boot, this
-> package provides a binary to do so.
-> 
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  DEVELOPERS                           |  1 +
->  package/Config.in.host               |  1 +
->  package/meson-tools/Config.in.host   |  9 +++++++++
->  package/meson-tools/meson-tools.hash |  2 ++
->  package/meson-tools/meson-tools.mk   | 24 ++++++++++++++++++++++++
->  5 files changed, 37 insertions(+)
->  create mode 100644 package/meson-tools/Config.in.host
->  create mode 100644 package/meson-tools/meson-tools.hash
->  create mode 100644 package/meson-tools/meson-tools.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a2bfdabb88..a622e7cc08 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -467,6 +467,7 @@ N:	Dagg Stompler <daggs@gmx.com>
->  F:	board/hardkernel/odroidc2
->  F:	configs/odroidc2_defconfig
->  F:	package/libamcodec/
-> +F:	package/meson-tools/
->  F:	package/odroid-mali/
->  F:	package/odroid-scripts/
->  
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 199a8e9856..5f17640eb1 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -29,6 +29,7 @@ menu "Host utilities"
->  	source "package/jsmin/Config.in.host"
->  	source "package/lpc3250loader/Config.in.host"
->  	source "package/lttng-babeltrace/Config.in.host"
-> +	source "package/meson-tools/Config.in.host"
->  	source "package/mfgtools/Config.in.host"
->  	source "package/mkpasswd/Config.in.host"
->  	source "package/mtd/Config.in.host"
-> diff --git a/package/meson-tools/Config.in.host b/package/meson-tools/Config.in.host
-> new file mode 100644
-> index 0000000000..d90be61aeb
-> --- /dev/null
-> +++ b/package/meson-tools/Config.in.host
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_HOST_MESON_TOOLS
-> +	bool "host meson-tools"
-> +	help
-> +	  meson-tools is a collection of tools for use with
-> +	  the Amlogic Meson family of ARM based SoCs.
-> +	  it allows management of signatures which are required
-> +	  for booting amlogic based boards with u-boot.
-> +
-> +	  https://github.com/afaerber/meson-tools
-> diff --git a/package/meson-tools/meson-tools.hash b/package/meson-tools/meson-tools.hash
-> new file mode 100644
-> index 0000000000..b5f844ab58
-> --- /dev/null
-> +++ b/package/meson-tools/meson-tools.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256	5a956f5a6ff8c45fc79d649982287c4548a1df4f0ef9e5aa6584493d552a54a3	meson-tools-5e01cbadc6f6f21ad88a63492a83182fc4b19d37.tar.gz
-> diff --git a/package/meson-tools/meson-tools.mk b/package/meson-tools/meson-tools.mk
-> new file mode 100644
-> index 0000000000..6b8cc06582
-> --- /dev/null
-> +++ b/package/meson-tools/meson-tools.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# meson-tools
-> +#
-> +################################################################################
-> +
-> +HOST_MESON_TOOLS_VERSION = 5e01cbadc6f6f21ad88a63492a83182fc4b19d37
-> +HOST_MESON_TOOLS_SITE = $(call github,afaerber,meson-tools,$(HOST_MESON_TOOLS_VERSION))
-> +HOST_MESON_TOOLS_LICENSE = GPL-2.0+
-> +HOST_MESON_TOOLS_LICENSE_FILES = COPYING README.md
-> +HOST_MESON_TOOLS_DEPENDENCIES = host-openssl
-> +
-> +HOST_MESON_TOOLS_PROGS = amlbootsig unamlbootsig amlinfo
-> +
-> +define HOST_MESON_TOOLS_BUILD_CMDS
-> +	$(MAKE) -C $(@D) CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS) -lssl -lcrypto"
-> +endef
-> +
-> +define HOST_MESON_TOOLS_INSTALL_CMDS
-> +	$(foreach f,$(HOST_MESON_TOOLS_PROGS),
-> +		$(INSTALL) -D -m 0755 $(@D)/$(f) $(HOST_DIR)/bin/$(f))
-> +endef
-> +
-> +$(eval $(host-generic-package))
-> -- 
-> 2.16.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...0001-Fix-GCC-version-for-RDSEED-intrinsic.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
+
+diff --git a/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch b/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
+new file mode 100644
+index 0000000000..0cf30d1a37
+--- /dev/null
++++ b/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
+@@ -0,0 +1,49 @@
++From 31465400675c75d8ea0556d708a7efbf915bc366 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 10 Mar 2018 12:14:23 +0100
++Subject: [PATCH] Fix GCC version for RDSEED intrinsic
++
++rdseed is only available on gcc 4.8.x, not on gcc 4.7.x
++
++Fixes:
++ - http://autobuild.buildroot.org/results/9ab386124e4a09b50598c6f95ad40b25a83d227e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ rdrand.cpp | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/rdrand.cpp b/rdrand.cpp
++index 900fcd96..64b12208 100644
++--- a/rdrand.cpp
+++++ b/rdrand.cpp
++@@ -74,7 +74,7 @@
++ #  else
++ #    define GCC_RDRAND_ASM_AVAILABLE 1
++ #  endif
++-#  if defined(__RDSEED__) && (CRYPTOPP_GCC_VERSION >= 40700) && !defined(__OPTIMIZE__)
+++#  if defined(__RDSEED__) && (CRYPTOPP_GCC_VERSION >= 40800) && !defined(__OPTIMIZE__)
++ #    define ALL_RDSEED_INTRIN_AVAILABLE 1
++ #  else
++ #    define GCC_RDSEED_ASM_AVAILABLE 1
++@@ -291,7 +291,7 @@ inline void RDSEED32(void* output)
++         : "=a" (*reinterpret_cast<word32*>(output))
++         : : "cc"
++     );
++-#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40700)
+++#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40800)
++     __asm__ __volatile__
++     (
++         INTEL_NOPREFIX
++@@ -333,7 +333,7 @@ inline void RDSEED64(void* output)
++         : "=a" (*reinterpret_cast<word64*>(output))
++         : : "cc"
++     );
++-#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40700)
+++#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40800)
++     __asm__ __volatile__
++     (
++         INTEL_NOPREFIX
++-- 
++2.14.1
++
+-- 
+2.14.1
