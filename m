@@ -1,7 +1,7 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Sat, 10 Mar 2018 16:58:54 +0200
-Subject: [Buildroot] [PATCH 1/4] meson-tools: new Package
-Message-ID: <20180310145857.22026-1-daggs@gmx.com>
+Date: Sat, 10 Mar 2018 17:04:17 +0200
+Subject: [Buildroot] [PATCH v3 1/4] meson-tools: new Package
+Message-ID: <20180310150420.22364-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,16 @@ package provides a binary to do so.
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
+Changes v2 -> v3:
+ - add entry to DEVELOPERS FILE
+
+Changes v1 -> v2:
+ - drop hunk which was sent by mistake (Brauch)
+ - drop cross compile patch as it isn't needed (Brauch)
+ - refractor bins installation cmd (Thomas)
+ - refractor build cmd (Thomas)
+ - handle general mail patch rejects (Thomas)
+
  DEVELOPERS                           |  1 +
  package/Config.in.host               |  1 +
  package/meson-tools/Config.in.host   |  9 +++++++++
