@@ -1,56 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Mar 2018 22:37:11 +0100
-Subject: [Buildroot] [PATCH v3,1/1] libmpdclient: fix install
-In-Reply-To: <87efkrbpbp.fsf@dell.be.48ers.dk>
-References: <20180310094608.19499-1-fontaine.fabrice@gmail.com>
- <87ina3bpi3.fsf@dell.be.48ers.dk> <87efkrbpbp.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W83-Sv6Sb4oWnQzTVM8U3XVnF1t8zL3pUTptda0=mwcgWA@mail.gmail.com>
+Date: Sat, 10 Mar 2018 22:45:34 +0100
+Subject: [Buildroot] [PATCH v4,1/1] libmpdclient: fix install
+Message-ID: <20180310214534.13121-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+By default, meson adds the build machine architecture for installation,
+see: https://github.com/mesonbuild/meson/issues/2535
+Use --libdir to override this default behavior
 
-2018-03-10 22:20 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+Fixes:
+ - http://autobuild.buildroot.net/results/aec/aec9f3de545a832b66cd00c217fbaa99246e1715
+ - http://autobuild.buildroot.net/results/07a/07adcba71106a2dca963e4071f4673791b41a603
+ - http://autobuild.buildroot.net/results/a27/a272a8e521863374901a5e3c0fb9da0b8daa4076
 
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
->
-> Hi,
->
->  > It would be a lot nicer to fix the problem. I have no experience with
->  > mesonbuild, but grepping around the problem seems to come from
->
->  > is_debianlike() in mesonbuild/mesonlib.py, which looks for
->  > /etc/debian_version on the host(!) so this behaviour depends on the host
->  > OS. changing this to just a 'return False' fixes it for me.
->
->  > There's other problems though. If it isn't a debianlike system, then it
->  > looks if /usr/lib64 on the host(!) is a directory, and if so uses that
->  > instead of usr/lib :/
->
->  > Similary, get_library_dirs() has login to look at uname -m and again
->  > look in /usr/lib64 on the host, which breaks horrible for cross
->  > compilation :/
->
->  > I guess we need to patch out all of this crap until upstream gains real
->  > cross compilation support :/
->
->  > Any takers?
->
-> Sorry, after looking closer it seems most of these are just about the
-> default location, so we can override then with the right values by
-> passing the needed arguments to meson (--libdir).
->
-> You're perfectly right, I will send you an update of the patch.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v3 -> v4 (after review of Peter Korsgaard):
+ - Use libdir instead of the ugly hack
+Changes v2 -> v3:
+ - Add autobuilder links
+Changes v1 -> v2:
+ - Fix install of libmpdclient.pc
 
-> --
-> Bye, Peter Korsgaard
->
-Best Regards,
+ package/libmpdclient/libmpdclient.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180310/5cb381fc/attachment.html>
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 3148fd2873..3ab8e9884c 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -15,6 +15,7 @@ LIBMPDCLIENT_DEPENDENCIES = host-meson
+ 
+ LIBMPDCLIENT_CONF_OPTS += \
+ 	--prefix=/usr \
++	--libdir=/usr/lib \
+ 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
+ 
+-- 
+2.14.1
