@@ -1,74 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 11 Mar 2018 06:57:53 +0200
-Subject: [Buildroot] [PATCH 1/1] mpd: add support for libupnp18
-In-Reply-To: <20180310224056.3860-1-fontaine.fabrice@gmail.com>
-References: <20180310224056.3860-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180311045752.ns6kotqmnwsf653w@sapphire.tkos.co.il>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 11 Mar 2018 02:15:27 -0300
+Subject: [Buildroot] [PATCH v2 0/7] fix Python code style v2
+In-Reply-To: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
+References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <1520745334-13411-1-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hello,
 
-On Sat, Mar 10, 2018 at 11:40:56PM +0100, Fabrice Fontaine wrote:
-> Instead of selecting BR2_PACKAGE_LIBUPNP, makes UPnP option depending on
-> BR2_PACKAGE_LIBUPNP or BR2_PACKAGE_LIBUPNP18 and let the user choose his
-> preferred libupnp version
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mpd/Config.in | 5 ++++-
->  package/mpd/mpd.mk    | 4 +++-
->  2 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index 5991b6f4bb..eee25c4c07 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -308,11 +308,14 @@ config BR2_PACKAGE_MPD_TCP
->  
->  config BR2_PACKAGE_MPD_UPNP
->  	bool "UPnP"
-> +	depends on BR2_PACKAGE_LIBUPNP || BR2_PACKAGE_LIBUPNP18
->  	select BR2_PACKAGE_EXPAT
-> -	select BR2_PACKAGE_LIBUPNP
+This series fixes code style warnings reported by flake8 in the Python
+scripts in the tree. Many patches from v1 were already applied.
 
-Why not
+I am ignoring this script for now:
+support/scripts/xorg-release
+I opened a thread about it:
+http://lists.busybox.net/pipermail/buildroot/2018-January/211557.html
 
-  select BR2_PACKAGE_LIBUPNP if !BR2_PACKAGE_LIBUPNP18
+The first 4 patches fix each script.
+I tried to do the minimum to accomplish the task avoiding any unrelated
+refactoring, what IMO brings these advantages:
+ - small chance of introducing regressions;
+ - easy code review;
+ - less testing effort.
+The commit messages are terse as the changes I introduced are minimal.
 
-?
+Patch 5 adds flake8 to the Docker image, needed by the next patch.
 
->  	help
->  	  Enable MPD UPnP client support.
->  
-> +comment "UPnP client support needs libupnp or libupnp18"
-> +	depends on !BR2_PACKAGE_LIBUPNP && !BR2_PACKAGE_LIBUPNP18
-> +
->  endif
->  
->  comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
-> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-> index 26e82af0a8..f50e3d90c7 100644
-> --- a/package/mpd/mpd.mk
-> +++ b/package/mpd/mpd.mk
-> @@ -236,7 +236,9 @@ MPD_CONF_OPTS += --disable-twolame-encoder
->  endif
->  
->  ifeq ($(BR2_PACKAGE_MPD_UPNP),y)
-> -MPD_DEPENDENCIES += expat libupnp
-> +MPD_DEPENDENCIES += \
-> +	expat \
-> +	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
->  MPD_CONF_OPTS += --enable-upnp
->  else
->  MPD_CONF_OPTS += --disable-upnp
+Patch 6 creates a job in GitLab to run flake8:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/56769344
 
-baruch
+Patch 7 ignores a file from the check.
+
+And here a complete run on GitLab using a preview of the new Docker image:
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/18703075
+
+Regards,
+Ricardo
+
+
+Ricardo Martincoski (7):
+  genrandconfig: fix code style
+  size-stats-compare: fix code style
+  test_python_cryptography: fix code style
+  scanpypi: fix code style
+  support/dockerfile: install flake8
+  .gitlab-ci.yml: check flake8
+  .flake8: ignore utils/diffconfig
+
+ .flake8                                            |  3 ++
+ .gitlab-ci.yml                                     | 11 +++++++
+ .gitlab-ci.yml.in                                  | 11 +++++++
+ support/docker/Dockerfile                          |  7 ++++-
+ .../tests/package/test_python_cryptography.py      | 23 ++++++++------
+ utils/genrandconfig                                | 36 ++++++++++++----------
+ utils/scanpypi                                     |  4 ++-
+ utils/size-stats-compare                           |  7 +++--
+ 8 files changed, 71 insertions(+), 31 deletions(-)
+--
+Changes v1 -> v2:
+  - genrandconfig: fix the long lines instead of ignoring them.  (suggested by
+    Thomas Petazzoni)
+  - size-stats-compare: the fix for E129 made the code less readable, use
+    another fix.  (suggested by Thomas Petazzoni)
+  - test_python_cryptography: new patch.
+  - scanpypi: new patch.
+  - dockerfile: install flake8 to the base docker image instead of adding sudo
+    to install tools on the fly.  (suggested by Yann E. MORIN)
+  - .gitlab-ci.yml: use flake8 pre-installed.  (suggested by Yann E. MORIN)
+  - utils/diffconfig: ignore warnings for this file that comes from kernel
+    source.  (suggested by Thomas Petazzoni)
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.7.4
