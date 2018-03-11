@@ -1,53 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 11 Mar 2018 10:33:58 +0100
-Subject: [Buildroot] [PATCH v2,1/1] mpd: add support for libupnp18
-Message-ID: <20180311093358.20853-1-fontaine.fabrice@gmail.com>
+From: Ciro Santilli <ciro.santilli@gmail.com>
+Date: Sun, 11 Mar 2018 09:57:58 +0000
+Subject: [Buildroot] Is there a way to automatically detect the minimum
+ required BR2_TARGET_ROOTFS_EXT2_SIZE?
+In-Reply-To: <20180310205841.GA2097@scaer>
+References: <CAFXrp_exNc=GtVqbuRmYqKiDNXgD+pawnCSmRH-1FrF2dxXgLQ@mail.gmail.com>
+ <20180310205841.GA2097@scaer>
+Message-ID: <CAFXrp_dVR_5HHbQySfnyXh_bpY_6-YiyT40msj-b7us-8PotMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of selecting BR2_PACKAGE_LIBUPNP, select BR2_PACKAGE_LIBUPNP18
-if BR2_PACKAGE_LIBUPNP is not enabled
+On Sat, Mar 10, 2018 at 8:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Ciro, All,
+>
+> On 2018-03-10 16:14 +0000, Ciro Santilli spake thusly:
+>> https://stackoverflow.com/questions/49211241/is-there-a-way-to-automatically-detect-the-minimum-required-br2-target-rootfs-ex
+>>
+>> I'm when making a big non-embedded image, I keep hitting the error:
+>>
+>>     *** Maybe you need to increase the filesystem size
+>> (BR2_TARGET_ROOTFS_EXT2_SIZE)
+>>
+>> and then I have to do a `du` on `output/target` to find out how big I
+>> have to make `BR2_TARGET_ROOTFS_EXT2_SIZE`.
+>>
+>> Is there a way to automate this, or a decent workaround?
+>
+> No, becaaue it is not reliable, see commit:
+>
+>     c6bca8cef fs/ext2: Remove support for auto-calculation of rootfs size
+>
+> In the end, it does nto make sense to do auto-calculation, because on an
+> embedded device, you have to now the layout and size of your storage.
+> So, you know what size you want your ext filesystem to be.
+>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1->v2 (after review of Baruch Siach and Yann E. Morin):
- - select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP instead of using
- depends on BR2_PACKAGE_LIBUPNP || BR2_PACKAGE_LIBUPNP18
+Thanks for the info.
 
- package/mpd/Config.in | 2 +-
- package/mpd/mpd.mk    | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+I'm considering using Buildroot to get clean neat images for emulation
+applications (like learn Linux kernel, benchmark some stuff on gem5),
+but since it is not possible to do it reliably, I will use another
+method instead of ext2 images.
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 5991b6f4bb..bad32f8440 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -309,7 +309,7 @@ config BR2_PACKAGE_MPD_TCP
- config BR2_PACKAGE_MPD_UPNP
- 	bool "UPnP"
- 	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
- 	help
- 	  Enable MPD UPnP client support.
- 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 26e82af0a8..f50e3d90c7 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -236,7 +236,9 @@ MPD_CONF_OPTS += --disable-twolame-encoder
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_UPNP),y)
--MPD_DEPENDENCIES += expat libupnp
-+MPD_DEPENDENCIES += \
-+	expat \
-+	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
- MPD_CONF_OPTS += --enable-upnp
- else
- MPD_CONF_OPTS += --disable-upnp
--- 
-2.14.1
+> Regards,
+> Yann E. MORIN.
+>
+>> Some workarounds I'm considering:
+>>
+>> * put the big stuff under 9p:
+>> https://superuser.com/questions/628169/how-to-share-a-directory-with-the-host-without-networking-in-qemu
+>> * use CPIO and `-initrd`
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
