@@ -1,26 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Mar 2018 08:55:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add the macros
- to install docker-proxy
-In-Reply-To: <D16DD98E-33CF-423C-9AF0-FF07AFF5374E@storagecraft.com> (Charles
- Hardin's message of "Sun, 11 Mar 2018 00:15:06 +0000")
-References: <20180116214046.10605-1-charles.hardin@storagecraft.com>
- <87zi3fc1yz.fsf@dell.be.48ers.dk>
- <D16DD98E-33CF-423C-9AF0-FF07AFF5374E@storagecraft.com>
-Message-ID: <87h8pn9hd5.fsf@dell.be.48ers.dk>
+Date: Sun, 11 Mar 2018 09:32:09 +0100
+Subject: [Buildroot] [PATCH 07/19] package/x11r7/xapp_appres: bump
+ version to 1.0.5
+In-Reply-To: <20180307205844.3240-7-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 7 Mar 2018 21:58:32 +0100")
+References: <20180307205844.3240-1-bernd.kuhls@t-online.de>
+ <20180307205844.3240-7-bernd.kuhls@t-online.de>
+Message-ID: <87d10b9fna.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Charles" == Charles Hardin <charles.hardin@storagecraft.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > It got decoupled go with the other package - it supersedes this one.
- > Sent from my iPhone
+ > Added all upstream hashes and license hash.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Ok, I'll mark this patch as superseeded and work on merging Christian's
-patch instead.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
