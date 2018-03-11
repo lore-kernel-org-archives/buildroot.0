@@ -1,85 +1,51 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 11 Mar 2018 02:15:33 -0300
-Subject: [Buildroot] [PATCH v2 6/7] .gitlab-ci.yml: check flake8
+Date: Sun, 11 Mar 2018 02:15:34 -0300
+Subject: [Buildroot] [PATCH v2 7/7] .flake8: ignore utils/diffconfig
 In-Reply-To: <1520745334-13411-1-git-send-email-ricardo.martincoski@gmail.com>
 References: <1520745334-13411-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1520745334-13411-7-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <1520745334-13411-8-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a test to check Python code style in the whole buildroot tree.
+This script comes from the kernel source, so ignore any code style
+warnings for it in order to keep it as close as possible to the original
+one, making synchronization between repos easier.
 
-Search files by type in order to help flake8 to find the Python scripts
-without .py extension. But don't rely only in the output of 'file' as it
-uses heuristics and sometimes it is wrong (specially identifying Python
-files as C++ source for the 'file' version currently in the Docker
-image).
-
-Include in the output:
- - the list of Python files processed;
- - statistics for each kind of warning;
- - the total number of warnings;
- - the number of Python files processed.
+The option --exclude for flake8/pycodestyle is an absolute list and has
+a default, so ideally the default values should be added too.
+But the use cases for flake8 in the tree are:
+ - when developing a new script or changing an existing one, the
+   developer calls flake8 only on that script;
+ - in the GitLab job, a list of all Python files to be tested is created
+   and then passed to flake8.
+None of these involve calling 'flake8' without parameters, so don't care
+about adding the default value.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2:  (suggested by Yann E. MORIN)
-  - install flake8 to the base docker image (in the previous patch)
-
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/56769344
+Changes v1 -> v2:
+  - instead of tweaking even more the script from the kernel source,
+    ignore any warnings for it;  (suggested by Thomas Petazzoni)
+  - move the patch after the one adding the GitLab job so I can
+    reference it in the commit message.
 ---
- .gitlab-ci.yml    | 11 +++++++++++
- .gitlab-ci.yml.in | 11 +++++++++++
- 2 files changed, 22 insertions(+)
+ .flake8 | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 4cdaa09..efd2587 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -30,6 +30,17 @@ check-DEVELOPERS:
-     script:
-         - "! utils/get-developers | grep -v 'No action specified'"
- 
-+check-flake8:
-+    before_script:
-+        # Help flake8 to find the Python files without .py extension.
-+        - find * -type f -name '*.py' > files.txt
-+        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-+        - sort -u files.txt | tee files.processed
-+    script:
-+        - python -m flake8 --statistics --count $(cat files.processed)
-+    after_script:
-+        - wc -l files.processed
-+
- check-package:
-     script:
-         - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index cb3eb71..95fc025 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -30,6 +30,17 @@ check-DEVELOPERS:
-     script:
-         - "! utils/get-developers | grep -v 'No action specified'"
- 
-+check-flake8:
-+    before_script:
-+        # Help flake8 to find the Python files without .py extension.
-+        - find * -type f -name '*.py' > files.txt
-+        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-+        - sort -u files.txt | tee files.processed
-+    script:
-+        - python -m flake8 --statistics --count $(cat files.processed)
-+    after_script:
-+        - wc -l files.processed
-+
- check-package:
-     script:
-         - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
+diff --git a/.flake8 b/.flake8
+index afdb967..7dd7b54 100644
+--- a/.flake8
++++ b/.flake8
+@@ -1,2 +1,5 @@
+ [flake8]
++exclude=
++    # copied from the kernel sources
++    utils/diffconfig
+ max-line-length=132
 -- 
 2.7.4
