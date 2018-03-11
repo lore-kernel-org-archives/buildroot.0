@@ -1,27 +1,26 @@
-From: Laurent GONZALEZ <br22@gezedo.com>
-Date: Sun, 11 Mar 2018 11:32:04 +0100
-Subject: [Buildroot] binutils >=2.29 broken for existing thumb2 code
-Message-ID: <d463d846-2545-4a6d-d6cf-8761adfdcc6c@gezedo.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 11 Mar 2018 18:40:59 +0100
+Subject: [Buildroot] [PATCH 1/2] inotify-tools: bump to version 3.20.1
+In-Reply-To: <BN6PR2001MB0948A3CA973163DBC6D80EBFA0D90@BN6PR2001MB0948.namprd20.prod.outlook.com>
+ (James Knight's message of "Tue, 6 Mar 2018 02:22:15 +0000")
+References: <BN6PR2001MB0948A3CA973163DBC6D80EBFA0D90@BN6PR2001MB0948.namprd20.prod.outlook.com>
+Message-ID: <87sh967bo4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi list,
+>>>>> "James" == James Knight <james.d.knight@live.com> writes:
 
-binutils 2.29 introduced a new behavior of pseudo assembly ARM instruction "adr". This broke a few existing software including linux kernel for cortex-M devices. I tumbled on these trying to rebuild stm32f4 config (I might propose to adopt them ;) )
+ > Bumping this package to the most recent stable version. Drops the
+ > need for the GCC 6.x patch as a related fix has been merged in [1].
 
-Here are a some pertinent messages about this issue:
-https://www.spinics.net/lists/arm-kernel/msg618268.html
-https://www.spinics.net/lists/arm-kernel/msg618250.html
+ > [1]: https://github.com/rvoicilas/inotify-tools/pull/65
 
-As far as I know, gnu as did not recover its legacy "adr" behavior, neither Linux has a patch to overcome the issue.
+ > Signed-off-by: James Knight <james.d.knight@live.com>
 
-About buildroot, which will be preferable to fix the issue:
-* have a temporary linux patch until it appears in the mainline
-* force the use of pre-2.29 binutils
-* something else
+Committed, thanks.
 
---
-Laurent
+-- 
+Bye, Peter Korsgaard
