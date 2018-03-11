@@ -1,44 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Mar 2018 18:38:55 +0100
-Subject: [Buildroot] [git commit] inotify-tools: update license information
-Message-ID: <20180311174355.5723B7FE78@busybox.osuosl.org>
+Date: Sun, 11 Mar 2018 18:10:37 +0100
+Subject: [Buildroot] [git commit] inotify-tools: bump to version 3.20.1
+Message-ID: <20180311174355.4A0FA8039E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d56bb4f6fa839aaa26b5d27bd047edb446f14a3
+commit: https://git.buildroot.net/buildroot/commit/?id=1314459a863daf92bd952f42e0180bc8fbb666fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Explicitly indicate that this package is GPL v2.0+ as well as
-provide a hash for the source's license file (COPYING).
+Bumping this package to the most recent stable version. Drops the
+need for the GCC 6.x patch as a related fix has been merged in [1].
+
+[1]: https://github.com/rvoicilas/inotify-tools/pull/65
 
 Signed-off-by: James Knight <james.d.knight@live.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/inotify-tools/inotify-tools.hash | 1 +
- package/inotify-tools/inotify-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/inotify-tools/0001-gcc6.patch    | 49 --------------------------------
+ package/inotify-tools/inotify-tools.hash |  2 +-
+ package/inotify-tools/inotify-tools.mk   |  2 +-
+ 3 files changed, 2 insertions(+), 51 deletions(-)
 
+diff --git a/package/inotify-tools/0001-gcc6.patch b/package/inotify-tools/0001-gcc6.patch
+deleted file mode 100644
+index aae622ebf5..0000000000
+--- a/package/inotify-tools/0001-gcc6.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 5fe3ba82134d8b85adc69cf1d6c5742b4bde20b4 Mon Sep 17 00:00:00 2001
+-From: James Knight <james.d.knight@live.com>
+-Date: Thu, 16 Jun 2016 00:00:57 -0400
+-Subject: [PATCH] correct code alignment
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The following replaces the indented section of code from spaces to tabs.
+-No functional changes. Aside from consistency, this resolves a GCC 6
+-build issue with the flag `-Werror=misleading-indentation` enabled:
+-
+-    inotifywait.c: In function ???output_event_csv???:
+-    inotifywait.c:126:5: error: this ???if??? clause does not guard...
+-                                [-Werror=misleading-indentation]
+-         if (filename != NULL)
+-         ^~
+-    inotifywait.c:129:2: note: ...this statement, but the latter is
+-                               misleadingly indented as if it is guarded
+-                               by the ???if???
+-      printf("%s,", csv_escape( inotifytools_event_to_str( event->mask )
+-                                                                    ) );
+-      ^~~~~~
+-
+-Signed-off-by: James Knight <james.d.knight@live.com>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-(downloaded from upstream pull request
+- https://github.com/rvoicilas/inotify-tools/pull/65)
+----
+- src/inotifywait.c | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/inotifywait.c b/src/inotifywait.c
+-index c5ce5e3..404a85b 100644
+---- a/src/inotifywait.c
+-+++ b/src/inotifywait.c
+-@@ -122,9 +122,9 @@ void validate_format( char * fmt ) {
+- 
+- 
+- void output_event_csv( struct inotify_event * event ) {
+--    char *filename = csv_escape(inotifytools_filename_from_wd(event->wd));
+--    if (filename != NULL)
+--        printf("%s,", filename);
+-+	char *filename = csv_escape(inotifytools_filename_from_wd(event->wd));
+-+	if (filename != NULL)
+-+		printf("%s,", filename);
+- 
+- 	printf("%s,", csv_escape( inotifytools_event_to_str( event->mask ) ) );
+- 	if ( event->len > 0 )
 diff --git a/package/inotify-tools/inotify-tools.hash b/package/inotify-tools/inotify-tools.hash
-index 83ad5b9212..83dc22b4a2 100644
+index 0993dc44c4..83ad5b9212 100644
 --- a/package/inotify-tools/inotify-tools.hash
 +++ b/package/inotify-tools/inotify-tools.hash
-@@ -1,2 +1,3 @@
+@@ -1,2 +1,2 @@
  # Locally computed
- sha256 a433cc1dedba851078276db69b0e97f9fe41e4ba3336d2971adfca4b3a6242ac inotify-tools-3.20.1.tar.gz
-+sha256 e41fc126320a79ed53b5aa3386f059f7d10770856d6fd714ab80a96ce6bd09d6 COPYING
+-sha256 628b8efabb65a739dd747fe43b73b29a609b5cfa9628caa127764ed77766a6e1 inotify-tools-1df9af4d6cd0f4af4b1b19254bcf056aed4ae395.tar.gz
++sha256 a433cc1dedba851078276db69b0e97f9fe41e4ba3336d2971adfca4b3a6242ac inotify-tools-3.20.1.tar.gz
 diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
-index 407aefb69f..63626307c2 100644
+index e8b1498e6f..407aefb69f 100644
 --- a/package/inotify-tools/inotify-tools.mk
 +++ b/package/inotify-tools/inotify-tools.mk
-@@ -6,7 +6,7 @@
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- INOTIFY_TOOLS_VERSION = 3.20.1
+-INOTIFY_TOOLS_VERSION = 1df9af4d6cd0f4af4b1b19254bcf056aed4ae395
++INOTIFY_TOOLS_VERSION = 3.20.1
  INOTIFY_TOOLS_SITE = $(call github,rvoicilas,inotify-tools,$(INOTIFY_TOOLS_VERSION))
--INOTIFY_TOOLS_LICENSE = GPL
-+INOTIFY_TOOLS_LICENSE = GPL-2.0+
+ INOTIFY_TOOLS_LICENSE = GPL
  INOTIFY_TOOLS_LICENSE_FILES = COPYING
- INOTIFY_TOOLS_INSTALL_STAGING = YES
- INOTIFY_TOOLS_AUTORECONF = YES
