@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Mar 2018 09:31:56 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_appres: bump version to
- 1.0.5
-Message-ID: <20180311084455.875847F952@busybox.osuosl.org>
+Date: Sun, 11 Mar 2018 09:34:21 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_listres: bump version
+ to 1.0.4
+Message-ID: <20180311084455.D8A858007A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24b70f68eadde7509d5fda8a37b6757dc9e32c73
+commit: https://git.buildroot.net/buildroot/commit/?id=e5309f9fb43dee0c4c60362f57137ab6d431d5f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all upstream hashes and license hash.
@@ -17,34 +17,34 @@ Added all upstream hashes and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_appres/xapp_appres.hash | 9 +++++++--
- package/x11r7/xapp_appres/xapp_appres.mk   | 2 +-
+ package/x11r7/xapp_listres/xapp_listres.hash | 9 +++++++--
+ package/x11r7/xapp_listres/xapp_listres.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_appres/xapp_appres.hash b/package/x11r7/xapp_appres/xapp_appres.hash
-index a1cbf0b4b9..8750e2d14c 100644
---- a/package/x11r7/xapp_appres/xapp_appres.hash
-+++ b/package/x11r7/xapp_appres/xapp_appres.hash
+diff --git a/package/x11r7/xapp_listres/xapp_listres.hash b/package/x11r7/xapp_listres/xapp_listres.hash
+index ffc9f7eecb..1e1c11953a 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.hash
++++ b/package/x11r7/xapp_listres/xapp_listres.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002211.html
--sha256	9f614e9427cd9641a4a801ed5055700afa410674c0b7aa186b86078f11b83e8d	appres-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002847.html
-+md5 f544e701043249d2bb3deed48314bc55  appres-1.0.5.tar.bz2
-+sha1 5e5dbffd0a125732bb8bb8a202e04555a9604089  appres-1.0.5.tar.bz2
-+sha256 ffad893712c81943b919e3cbfe46fc65259cc0d9eb96d5e658670e3fbb265928  appres-1.0.5.tar.bz2
-+sha512 70825563cd80f0f433c48ab2fdae888072939c1b22fb22340b70b9444c97916275ed92c9e5bf9a06bb76c32a5371b89ff7c0211a9a47a227c88311078c2c4137  appres-1.0.5.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2012-February/001838.html
+-sha256	c3d71e9a01650e3fd470189a749cd0202ef03d9e399350a7a7443d7595ed478e	listres-1.0.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002848.html
++md5 24e05349f2881aaa58cbe160e49223ac  listres-1.0.4.tar.bz2
++sha1 903857c7a9ec3d8edc8a88101aef33cd27796649  listres-1.0.4.tar.bz2
++sha256 6a1229f478796e141d6658762f432ebbe1f6083b27550847d52239b3f7ec2b10  listres-1.0.4.tar.bz2
++sha512 925bceab6ff96fcf91f58ba2f858905d6e2eff7074ba29cfc02def7c19fb493545837884f1070dc004422451f749cd459000c01e8c9bb51a7cce7f7ab4067b8a  listres-1.0.4.tar.bz2
 +# Locally computed
-+sha256 5969302729a9621fd526a7f9942a51a29b858e0b682ffd28eeda5fc4dfaddf55  COPYING
-diff --git a/package/x11r7/xapp_appres/xapp_appres.mk b/package/x11r7/xapp_appres/xapp_appres.mk
-index b84d7426c6..4159332bd3 100644
---- a/package/x11r7/xapp_appres/xapp_appres.mk
-+++ b/package/x11r7/xapp_appres/xapp_appres.mk
++sha256 aefb540c54bc95c68702cd2ae668c559e63cc1a84f55ae5c0e78547e7d75d2d5  COPYING
+diff --git a/package/x11r7/xapp_listres/xapp_listres.mk b/package/x11r7/xapp_listres/xapp_listres.mk
+index 88cdd4f033..b4ac3e1de8 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.mk
++++ b/package/x11r7/xapp_listres/xapp_listres.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_APPRES_VERSION = 1.0.4
-+XAPP_APPRES_VERSION = 1.0.5
- XAPP_APPRES_SOURCE = appres-$(XAPP_APPRES_VERSION).tar.bz2
- XAPP_APPRES_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_APPRES_LICENSE = MIT
+-XAPP_LISTRES_VERSION = 1.0.3
++XAPP_LISTRES_VERSION = 1.0.4
+ XAPP_LISTRES_SOURCE = listres-$(XAPP_LISTRES_VERSION).tar.bz2
+ XAPP_LISTRES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_LISTRES_LICENSE = MIT
