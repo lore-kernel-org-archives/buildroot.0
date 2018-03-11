@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Mar 2018 09:32:39 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_editres: bump version
- to 1.0.7
-Message-ID: <20180311084455.A37087F952@busybox.osuosl.org>
+Date: Sun, 11 Mar 2018 09:42:07 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_twm: bump version to
+ 1.0.10
+Message-ID: <20180311084456.234278007A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c317465e95d75d6f38f519fde52b5ea07c2a7308
+commit: https://git.buildroot.net/buildroot/commit/?id=4e0d1741985349bbae7c882014302f91158edb55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all upstream hashes and license hash.
@@ -17,34 +17,34 @@ Added all upstream hashes and license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_editres/xapp_editres.hash | 9 +++++++--
- package/x11r7/xapp_editres/xapp_editres.mk   | 2 +-
+ package/x11r7/xapp_twm/xapp_twm.hash | 9 +++++++--
+ package/x11r7/xapp_twm/xapp_twm.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_editres/xapp_editres.hash b/package/x11r7/xapp_editres/xapp_editres.hash
-index 74fc98d63c..1536795515 100644
---- a/package/x11r7/xapp_editres/xapp_editres.hash
-+++ b/package/x11r7/xapp_editres/xapp_editres.hash
+diff --git a/package/x11r7/xapp_twm/xapp_twm.hash b/package/x11r7/xapp_twm/xapp_twm.hash
+index eecc5c4e51..572ecb9820 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.hash
++++ b/package/x11r7/xapp_twm/xapp_twm.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-January/002120.html
--sha256	3b66d1240bde853872bbb341c4b8fb029094d0a5d21347a58831f15b162c4df0	editres-1.0.6.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002846.html
-+md5 526cf79edc0c5e379aefb21539243f96  editres-1.0.7.tar.bz2
-+sha1 389e953ebb5080564a6780cb34b72bafae7f5540  editres-1.0.7.tar.bz2
-+sha256 089ad34628e55a779b97e369f55fb12caefc96d684b508d9022eb9e12b775c11  editres-1.0.7.tar.bz2
-+sha512 b9c928b556116bf50cf4b6ea779bdc9fedf29f5db3e6a8cc75c122578c92e1cc530a81b226ec24aad183b8ebc2de570f200314b0d9ce7883b6e3306007365b32  editres-1.0.7.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002565.html
+-sha256	c575167ac33edf3bd1592f1bedfe0559debb128ed5fb4873c1278e3be166310a	twm-1.0.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002857.html
++md5 e322c08eeb635f924ede5b8eba3db54e  twm-1.0.10.tar.bz2
++sha1 f632a47620dfe6d75b003839d269b14fa22b262e  twm-1.0.10.tar.bz2
++sha256 6449eadca16ce0f0d900605b0cc020b95f40619261b7beccfb46bcc1836445d7  twm-1.0.10.tar.bz2
++sha512 1280683fce7ebbf5670239cb1f3cee2b40612bd9850d98827e793cf8bf298bdb58e48387cab943ea6befc6f7b34da2567353c22b8eaeb8bcf1b9e303cd7e6a9e  twm-1.0.10.tar.bz2
 +# Locally computed
-+sha256 b1049cf96db2c00428b8313541ab333ec4e06f102955f3edd44f88ec43b0acd6  COPYING
-diff --git a/package/x11r7/xapp_editres/xapp_editres.mk b/package/x11r7/xapp_editres/xapp_editres.mk
-index 6cc4805f5f..1a947d478e 100644
---- a/package/x11r7/xapp_editres/xapp_editres.mk
-+++ b/package/x11r7/xapp_editres/xapp_editres.mk
++sha256 4809ffc9656bc9a704e19ab467d1cedc97c48c9d1f9a4018e6d99d2e61f75945  COPYING
+diff --git a/package/x11r7/xapp_twm/xapp_twm.mk b/package/x11r7/xapp_twm/xapp_twm.mk
+index 1f576e15bd..0af30f737c 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.mk
++++ b/package/x11r7/xapp_twm/xapp_twm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_EDITRES_VERSION = 1.0.6
-+XAPP_EDITRES_VERSION = 1.0.7
- XAPP_EDITRES_SOURCE = editres-$(XAPP_EDITRES_VERSION).tar.bz2
- XAPP_EDITRES_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_EDITRES_LICENSE = MIT
+-XAPP_TWM_VERSION = 1.0.9
++XAPP_TWM_VERSION = 1.0.10
+ XAPP_TWM_SOURCE = twm-$(XAPP_TWM_VERSION).tar.bz2
+ XAPP_TWM_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_TWM_LICENSE = MIT
