@@ -1,32 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 11 Mar 2018 14:42:30 +0100
-Subject: [Buildroot] [PATCH 1/1] libmpdclient: fix static linking
-Message-ID: <20180311134230.6626-1-fontaine.fabrice@gmail.com>
+From: Laurent GONZALEZ <br22@gezedo.com>
+Date: Sun, 11 Mar 2018 11:32:04 +0100
+Subject: [Buildroot] binutils >=2.29 broken for existing thumb2 code
+Message-ID: <d463d846-2545-4a6d-d6cf-8761adfdcc6c@gezedo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/45208e51814b777a5a133b0e345e800ee51d8a53
+Hi list,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmpdclient/libmpdclient.mk | 1 +
- 1 file changed, 1 insertion(+)
+binutils 2.29 introduced a new behavior of pseudo assembly ARM instruction "adr". This broke a few existing software including linux kernel for cortex-M devices. I tumbled on these trying to rebuild stm32f4 config (I might propose to adopt them ;) )
 
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index 3ab8e9884c..a399516fe3 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -16,6 +16,7 @@ LIBMPDCLIENT_DEPENDENCIES = host-meson
- LIBMPDCLIENT_CONF_OPTS += \
- 	--prefix=/usr \
- 	--libdir=/usr/lib \
-+	--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
- 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
- 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
- 
--- 
-2.14.1
+Here are a some pertinent messages about this issue:
+https://www.spinics.net/lists/arm-kernel/msg618268.html
+https://www.spinics.net/lists/arm-kernel/msg618250.html
+
+As far as I know, gnu as did not recover its legacy "adr" behavior, neither Linux has a patch to overcome the issue.
+
+About buildroot, which will be preferable to fix the issue:
+* have a temporary linux patch until it appears in the mainline
+* force the use of pre-2.29 binutils
+* something else
+
+--
+Laurent
