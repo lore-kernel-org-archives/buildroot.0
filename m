@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Mar 2018 22:14:46 +0100
-Subject: [Buildroot] [git commit] libmpdclient: fix static linking
-Message-ID: <20180311211645.249AE82DE2@busybox.osuosl.org>
+Date: Sun, 11 Mar 2018 22:22:28 +0100
+Subject: [Buildroot] [PATCH] configs/freescale_p1025twr_defconfig: new
+ board
+In-Reply-To: <1520562998-51817-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Thu, 8 Mar 2018 20:36:38 -0600")
+References: <1520562998-51817-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <874llm71ez.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be40c05dc5865feeb36436b5d4be5a1dc51598f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.net/results/45208e51814b777a5a133b0e345e800ee51d8a53
+ > Replacing the p1010rdb, this board is based on the tower development
+ > system still available by NXP. The board is setup to track upstream
+ > Linux and has been bumped from 4.1 to 4.15 (compared to p1010).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libmpdclient/libmpdclient.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > The target does not build uboot and assumes the user still uses the NXP
+ > suggested prebuilts in the SDK2.0 (last release for PowerPC). If a
+ > uboot is required, the source for SDK2.0 can be found in the following
+ > repo.
+ > http://git.freescale.com/git/cgit.cgi/ppc/sdk/u-boot.git/tag/?id=fsl-sdk-v2.0-1703
 
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index 3ab8e9884c..a399516fe3 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -16,6 +16,7 @@ LIBMPDCLIENT_DEPENDENCIES = host-meson
- LIBMPDCLIENT_CONF_OPTS += \
- 	--prefix=/usr \
- 	--libdir=/usr/lib \
-+	--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
- 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
- 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
- 
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
