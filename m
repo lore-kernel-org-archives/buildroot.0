@@ -1,66 +1,32 @@
-From: Ciro Santilli <ciro.santilli@gmail.com>
-Date: Sun, 11 Mar 2018 09:57:58 +0000
-Subject: [Buildroot] Is there a way to automatically detect the minimum
- required BR2_TARGET_ROOTFS_EXT2_SIZE?
-In-Reply-To: <20180310205841.GA2097@scaer>
-References: <CAFXrp_exNc=GtVqbuRmYqKiDNXgD+pawnCSmRH-1FrF2dxXgLQ@mail.gmail.com>
- <20180310205841.GA2097@scaer>
-Message-ID: <CAFXrp_dVR_5HHbQySfnyXh_bpY_6-YiyT40msj-b7us-8PotMg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 11 Mar 2018 14:42:30 +0100
+Subject: [Buildroot] [PATCH 1/1] libmpdclient: fix static linking
+Message-ID: <20180311134230.6626-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 10, 2018 at 8:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Ciro, All,
->
-> On 2018-03-10 16:14 +0000, Ciro Santilli spake thusly:
->> https://stackoverflow.com/questions/49211241/is-there-a-way-to-automatically-detect-the-minimum-required-br2-target-rootfs-ex
->>
->> I'm when making a big non-embedded image, I keep hitting the error:
->>
->>     *** Maybe you need to increase the filesystem size
->> (BR2_TARGET_ROOTFS_EXT2_SIZE)
->>
->> and then I have to do a `du` on `output/target` to find out how big I
->> have to make `BR2_TARGET_ROOTFS_EXT2_SIZE`.
->>
->> Is there a way to automate this, or a decent workaround?
->
-> No, becaaue it is not reliable, see commit:
->
->     c6bca8cef fs/ext2: Remove support for auto-calculation of rootfs size
->
-> In the end, it does nto make sense to do auto-calculation, because on an
-> embedded device, you have to now the layout and size of your storage.
-> So, you know what size you want your ext filesystem to be.
->
+Fixes:
+ - http://autobuild.buildroot.net/results/45208e51814b777a5a133b0e345e800ee51d8a53
 
-Thanks for the info.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libmpdclient/libmpdclient.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I'm considering using Buildroot to get clean neat images for emulation
-applications (like learn Linux kernel, benchmark some stuff on gem5),
-but since it is not possible to do it reliably, I will use another
-method instead of ext2 images.
-
-> Regards,
-> Yann E. MORIN.
->
->> Some workarounds I'm considering:
->>
->> * put the big stuff under 9p:
->> https://superuser.com/questions/628169/how-to-share-a-directory-with-the-host-without-networking-in-qemu
->> * use CPIO and `-initrd`
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 3ab8e9884c..a399516fe3 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -16,6 +16,7 @@ LIBMPDCLIENT_DEPENDENCIES = host-meson
+ LIBMPDCLIENT_CONF_OPTS += \
+ 	--prefix=/usr \
+ 	--libdir=/usr/lib \
++	--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
+ 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
+ 
+-- 
+2.14.1
