@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 Mar 2018 09:54:31 +0100
-Subject: [Buildroot] [PATCH v2 6/7] .gitlab-ci.yml: check flake8
-In-Reply-To: <1520745334-13411-7-git-send-email-ricardo.martincoski@gmail.com>
+Date: Sun, 11 Mar 2018 09:57:36 +0100
+Subject: [Buildroot] [PATCH v2 2/7] size-stats-compare: fix code style
+In-Reply-To: <1520745334-13411-3-git-send-email-ricardo.martincoski@gmail.com>
 References: <1516581882-30582-1-git-send-email-ricardo.martincoski@gmail.com>
- <1520745334-13411-7-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <20180311085431.GB2429@scaer>
+ <1520745334-13411-3-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <20180311085736.GC2429@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,87 +14,62 @@ To: buildroot@busybox.net
 Ricardo, All,
 
 On 2018-03-11 02:15 -0300, Ricardo Martincoski spake thusly:
-> Add a test to check Python code style in the whole buildroot tree.
-
-Note: this can only be applied _after_ we regenerate the docker image.
-Then we'll have to update the version of the image at the top of the
-gitlab-ci.yml file.
-
-> Search files by type in order to help flake8 to find the Python scripts
-> without .py extension. But don't rely only in the output of 'file' as it
-> uses heuristics and sometimes it is wrong (specially identifying Python
-> files as C++ source for the 'file' version currently in the Docker
-> image).
-> 
-> Include in the output:
->  - the list of Python files processed;
->  - statistics for each kind of warning;
->  - the total number of warnings;
->  - the number of Python files processed.
+> Fix these warnings:
+> E129 visually indented line with same indent as next logical line
+> E302 expected 2 blank lines, found 1
 > 
 > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Regards,
-Yann E. MORIN.
-
 > ---
-> Changes v1 -> v2:  (suggested by Yann E. MORIN)
->   - install flake8 to the base docker image (in the previous patch)
-> 
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/56769344
+> Changes v1 -> v2:  (suggested by Thomas Petazzoni)
+>   - the fix for E129 made the code less readable, use another fix.
 > ---
->  .gitlab-ci.yml    | 11 +++++++++++
->  .gitlab-ci.yml.in | 11 +++++++++++
->  2 files changed, 22 insertions(+)
+>  utils/size-stats-compare | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index 4cdaa09..efd2587 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -30,6 +30,17 @@ check-DEVELOPERS:
->      script:
->          - "! utils/get-developers | grep -v 'No action specified'"
+> diff --git a/utils/size-stats-compare b/utils/size-stats-compare
+> index e5a1ec3..a3d7f25 100755
+> --- a/utils/size-stats-compare
+> +++ b/utils/size-stats-compare
+> @@ -24,14 +24,15 @@ import csv
+>  import argparse
+>  import sys
 >  
-> +check-flake8:
-> +    before_script:
-> +        # Help flake8 to find the Python files without .py extension.
-> +        - find * -type f -name '*.py' > files.txt
-> +        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-> +        - sort -u files.txt | tee files.processed
-> +    script:
-> +        - python -m flake8 --statistics --count $(cat files.processed)
-> +    after_script:
-> +        - wc -l files.processed
 > +
->  check-package:
->      script:
->          - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
-> diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-> index cb3eb71..95fc025 100644
-> --- a/.gitlab-ci.yml.in
-> +++ b/.gitlab-ci.yml.in
-> @@ -30,6 +30,17 @@ check-DEVELOPERS:
->      script:
->          - "! utils/get-developers | grep -v 'No action specified'"
+>  def read_file_size_csv(inputf, detail=None):
+>      """Extract package or file sizes from CSV file into size dictionary"""
+>      sizes = {}
+>      reader = csv.reader(inputf)
 >  
-> +check-flake8:
-> +    before_script:
-> +        # Help flake8 to find the Python files without .py extension.
-> +        - find * -type f -name '*.py' > files.txt
-> +        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-> +        - sort -u files.txt | tee files.processed
-> +    script:
-> +        - python -m flake8 --statistics --count $(cat files.processed)
-> +    after_script:
-> +        - wc -l files.processed
+>      header = next(reader)
+> -    if (header[0] != 'File name' or header[1] != 'Package name' or
+> -        header[2] != 'File size' or header[3] != 'Package size'):
+> +    if header[0] != 'File name' or header[1] != 'Package name' or \
+> +       header[2] != 'File size' or header[3] != 'Package size':
+>          print(("Input file %s does not contain the expected header. Are you "
+>                 "sure this file corresponds to the file-size-stats.csv "
+>                 "file created by 'make graph-size'?") % inputf.name)
+> @@ -45,6 +46,7 @@ def read_file_size_csv(inputf, detail=None):
+>  
+>      return sizes
+>  
 > +
->  check-package:
->      script:
->          - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
+>  def compare_sizes(old, new):
+>      """Return delta/added/removed dictionaries based on two input size
+>      dictionaries"""
+> @@ -64,6 +66,7 @@ def compare_sizes(old, new):
+>  
+>      return delta
+>  
+> +
+>  def print_results(result, threshold):
+>      """Print the given result dictionary sorted by size, ignoring any entries
+>      below or equal to threshold"""
 > -- 
 > 2.7.4
 > 
