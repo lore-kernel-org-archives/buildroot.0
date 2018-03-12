@@ -1,48 +1,89 @@
-From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Mon, 12 Mar 2018 19:41:00 +0100
-Subject: [Buildroot] [PATCH] cmake: Fix RPATH for host libraries built by
- CMake
-Message-ID: <ef04ec321632c14eb54ccc7bbd3638d60f602d3e.1520880682.git.jan.kundrat@cesnet.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 12 Mar 2018 19:53:06 +0100
+Subject: [Buildroot] Build time increase in 2018.02
+In-Reply-To: <1520879262.10662.24.camel@impinj.com> (Trent Piepho's message of
+ "Mon, 12 Mar 2018 18:27:42 +0000")
+References: <1520644453.25567.398.camel@impinj.com>
+ <87k1ukcgjk.fsf@dell.be.48ers.dk>
+ <1520879262.10662.24.camel@impinj.com>
+Message-ID: <87woyh3z3h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The host shared libraries produced by CMake were missing a proper
-DT_RPATH. That became a problem because the DT_RPATH handling is not
-transitive by design.
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-Consider the following scenario:
+ > On Sat, 2018-03-10 at 12:32 +0100, Peter Korsgaard wrote:
+ >> > > > > >  > We've seen a big increase in build time with the latest buildroot.  On
+ >> > a vpshere instance, times have gone up from 45 minutes to 180+ minutes.
+ >> 
+ >> Wow! What version did you use before upgrading to 2018.02 (the 45min)?
 
-- pkg-a provides a library (`liba`) which links to `libpcre`
-- pkg-b provides a binary (`foo`) and a shared library (`libb`) which is
-needed by that binary
-- `libb` links to `liba`
-- pkg-a and pkg-b are both built by CMake
+ > 2017.11.1.  I see one change that went in between that and 2018.02 is,
+ > "core/pkg-generic: store file->package list for staging and host too"
 
-In this scenario, `foo` is correctly marked with DT_RPATH pointing to
-host/lib/, but that path is not used when (recursively) resolving PCRE's
-symbols in `liba`. When attempting to run the `foo` binary, the linker
-correctly finds both `liba` and `libb`, but it cannot find the
-libpcre.so as built by Buildroot for host.
+Ok, then lets ensure the author on that patch (Yann) is aware of this
+discussion.
 
-Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
----
- package/pkg-cmake.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > If I breakdown step_pkg_size by tree:
+ > step_pkg_size-stage      143.50
+ > step_pkg_size-target     267.14
+ > step_pkg_size-host       419.21
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 14ffe4a88f..9b07798a1e 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -132,6 +132,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
-+		-DCMAKE_SHARED_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
- 		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
- 		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
- 		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
+ > The other targets, extract, build, etc. are <1 second.  So adding
+ > package size stats for staging and host is responsible for tripling the
+ > time this step takes.
+
+ > Looking at how the file accounting is done, it will md5sum the tree
+ > with complexity O(n^2) on the size of the tree.  So it is not
+ > surprising that it is very slow.  It also explains why re-installing a
+ > host package after the build is done slow, since it must md5sum the
+ > entire host tree twice.  At least when building it takes about half as
+ > long since the earlier packages to install have a smaller tree to sum.
+
+This indeed looks quite bad performance wise. Yann, any input?
+
+ >> Argh, that's pretty horrible :/ I have noticed some overhead from the
+ >> various instrumentation steps, but nothing as significant as this.
+ >> 
+ >> Out of interest, what kind of storage are you building this on? SSD or
+ >> spinning disk?
+
+ > A good NVMe SSD using PCI-Express.
+
+Ok, nice ;)
+
+
+ >> > On the vsphere instance, the time is much much worse.  I'm still
+ >> > waiting for numbers.  It takes hours.  I think the lousy vm filesystem
+ >> > performance magnifies the problem.
+ >> 
+ >> Yes, I/O performance is absolutely critical for stuff like Buildroot.
+
+ > Here's the time for running on a VM.  
+ > targetinstall             29.65
+ > stageinstall              31.57
+ > check_bin_arch            34.11
+ > post_image                38.63
+ > check_host_rpath          41.23
+ > hostinstall               55.40
+ > extract                   72.99
+ > other                     73.77
+ > build                    465.93
+ > configure                689.38
+ > step_pkg_size            2872.76
+
+ > 47 minutes to check the package sizes.
+
+ > While I don't use a VM myself, the people who run the infrastructure
+ > for the CI and nightly builds think they are great.  It's the way
+ > things are now.  Everyone's IT dept uses vsphere or AWS or some other
+ > tech to allow them to create instances that are decoupled from the
+ > physical hardware present (or in the cloud).
+
+Yes :/
+
 -- 
-2.16.2
+Bye, Peter Korsgaard
