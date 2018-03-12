@@ -1,67 +1,85 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Mon, 12 Mar 2018 09:40:44 +0100
-Subject: [Buildroot] [PATCH] x11vnc: add license hash
-In-Reply-To: <87sh99gci2.fsf@dell.be.48ers.dk>
-References: <20180309123053.21552-1-martink@posteo.de>
- <87zi3hgct6.fsf@dell.be.48ers.dk> <87sh99gci2.fsf@dell.be.48ers.dk>
-Message-ID: <cbdbab87-aa81-4930-16a5-07e7f92a18af@ginzinger.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 12 Mar 2018 05:29:47 -0400
+Subject: [Buildroot] [PATCH v4 1/7] libpjsip: Add Alsa option
+Message-ID: <20180312092953.24258-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?
+This is the first patch in a series that will enable audio support
+for libpjsip. This patch does the following:
 
-Martin?Kepplinger?|?Entwicklung Software?
+- Turn libpjsip into a menuconfig option
+- Add a option for alsa support
 
-GINZINGER ELECTRONIC SYSTEMS GMBH
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - Remove the option to enable or disable alsa support in favor of
+    just depending on alsa-lib if it's selected by the user.
 
-Tel.: +43 7723 5422 157
-Mail: martin.kepplinger at ginzinger.com
-Web: www.ginzinger.com
+Changes v2 -> v3:
+  - Make this patch the start of the series.
+  - Re-add the option to enable or disable support (Thomas)
 
+Changes v3 -> v4:
+  - None
 
+ package/libpjsip/Config.in   | 12 +++++++++++-
+ package/libpjsip/libpjsip.mk |  8 +++++++-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-
-On 2018-03-09 22:33, Peter Korsgaard wrote:
->>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-> 
->>>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
->  >> Signed-off-by: Martin Kepplinger <martink@posteo.de>
-> 
->  > Committed, thanks.
-> 
-> Ehh, I take that back. My x11vnc-0.9.15 tarball does not have a COPYING
-> file:
-> 
-> make x11vnc-patch
-> x11vnc-0.9.15.tar.gz: OK (sha256: 3e43bd875edc3c7f52a0d3676c4ec7de910fcd210240ee20b4522deb2bf84cff)
->>>> x11vnc 0.9.15 Extracting
-> gzip -d -c /var/lib/downloads/x11vnc-0.9.15.tar.gz | tar --strip-components=1 -C /home/peko/source/buildroot/output/build/x11vnc-0.9.15   -xf -
->>>> x11vnc 0.9.15 Patching
->>>> x11vnc 0.9.15 Updating config.sub and config.guess
-> for file in config.guess config.sub; do for i in $(find /home/peko/source/buildroot/output/build/x11vnc-0.9.15 -name $file); do cp support/gnuconfig/$file $i; done; done
-> ls output/build/x11vnc-0.9.15
-> AUTHORS     configure.ac  misc    README.md                                      tkx11vnc
-> autogen.sh  m4            NEWS    src                                            x11vnc.1
-> ChangeLog   Makefile.am   README  tightvnc-1.3dev5-vncviewer-alpha-cursor.patch  x11vnc.desktop
-> 
-> What went wrong?
-> 
-
-I'm a fool. They generate it. -.- Please ignore until there is a
-solution at the project.
-
-
-
-________________________________________
-
-Ginzinger electronic systems GmbH
-Gewerbegebiet Pirath 16
-4952 Weng im Innkreis
-www.ginzinger.com
-
-Firmenbuchnummer: FN 364958d
-Firmenbuchgericht: Ried im Innkreis
-UID-Nr.: ATU66521089
+diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
+index 727d2ec3d0..0e03ebf7a3 100644
+--- a/package/libpjsip/Config.in
++++ b/package/libpjsip/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_LIBPJSIP
++menuconfig BR2_PACKAGE_LIBPJSIP
+ 	bool "libpjsip"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -10,5 +10,15 @@ config BR2_PACKAGE_LIBPJSIP
+ 
+ 	  http://www.pjsip.org
+ 
++if BR2_PACKAGE_LIBPJSIP
++
++comment "sound"
++
++config BR2_PACKAGE_LIBPJSIP_ALSA
++	bool "alsa support"
++	select BR2_PACKAGE_ALSA_LIB
++
++endif #BR2_PACKAGE_LIBPJSIP
++
+ comment "libpjsip needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 53b654d072..a584e8c73a 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -25,7 +25,6 @@ LIBPJSIP_CONF_ENV = \
+ 	CFLAGS="$(LIBPJSIP_CFLAGS)"
+ 
+ LIBPJSIP_CONF_OPTS = \
+-	--disable-sound \
+ 	--disable-gsm-codec \
+ 	--disable-speex-codec \
+ 	--disable-speex-aec \
+@@ -67,4 +66,11 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ LIBPJSIP_DEPENDENCIES += util-linux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBPJSIP_ALSA),y)
++LIBPJSIP_DEPENDENCIES += alsa-lib
++LIBPJSIP_CONF_OPTS += --enable-sound
++else
++LIBPJSIP_CONF_OPTS += --disable-sound
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.14.3
