@@ -1,78 +1,76 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 12 Mar 2018 18:44:45 +0100
-Subject: [Buildroot] [PATCH v2 2/6] arm-trusted-firmware: generate
- atf-uboot.ub for ZynqMP booting
+Date: Mon, 12 Mar 2018 18:44:47 +0100
+Subject: [Buildroot] [PATCH v2 4/6] uboot: zynqmp: generate SPL image with
+ PMUFW binary
 In-Reply-To: <1520876689-2975-1-git-send-email-luca@lucaceresoli.net>
 References: <1520876689-2975-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1520876689-2975-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1520876689-2975-5-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot SPL for the Xilinx ZynqMP SoCs needs ATF in this format to load
-it.
+In order to boot on the Xilinx ZynqMP SoCs, U-Boot SPL requires a
+recent PMU firmware loaded. Instruct U-Boot to add pmufw.bin to the
+boot.bin file together with U-Boot SPL, to the boot ROM will load
+both.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Changes v1 -> v2: none.
 ---
- boot/arm-trusted-firmware/Config.in               |  9 +++++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 21 +++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+Changes v1 -> v2:
+ - split from a larger patch doing 2 things.
+---
+ boot/uboot/Config.in | 11 +++++++++++
+ boot/uboot/uboot.mk  | 13 +++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 7aef87cb746c..dca9958423b9 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -71,6 +71,15 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
- 	  typically used on platforms where another bootloader (e.g
- 	  U-Boot) encapsulates ATF BL31.
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 264f34376749..a45b4202fe2e 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -367,6 +367,17 @@ config BR2_TARGET_UBOOT_ZYNQ_IMAGE
+ 	  for u-boot-dtb.img file so this U-Boot format is required
+ 	  to be set.
  
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
-+	bool "Generate a U-Boot image (for Xilinx ZynqMP U-Boot)"
-+	depends on BR2_cortex_a53
-+	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
++config BR2_TARGET_UBOOT_ZYNQMP
++	bool "Boot on the Xilinx ZynqMP SoCs"
++	depends on BR2_aarch64
++	select BR2_TARGET_ZYNQMP_PMUFW_BINARIES
 +	help
-+	  Uses mkimage from uboot-tools to encapsulate bl31.bin into
-+	  a U-Boot image named atf-uboot.ub. This is needed by the
-+	  Xilinx version of U-Boot SPL to load ATF on the ZynqMP SoC.
++	  Instruct the U-Boot build process to generate a file named
++	  boot.bin, which is the file loaded by the ZynqMP boot ROM.
++	  boot.bin contains both the U-Boot SPL and the PMU firmware
++	  (downloaded by the zynqmp-pmufw-binaries package) formatted
++	  with the Xilinx-specific format.
 +
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 	bool "Use U-Boot as BL33"
- 	depends on BR2_TARGET_UBOOT
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 212bb5049f2b..69aac4ee3eb4 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -86,6 +86,27 @@ define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
- 	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
+ config BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC
+ 	bool "CRC image for Altera SoC FPGA (mkpimage)"
+ 	depends on BR2_arm
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 58dd906a274a..1890bbfa4405 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -274,6 +274,19 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 			$(BINARIES_DIR)/boot.scr)
  endef
  
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE),y)
-+define ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
-+# Get the entry point address from the elf.
-+	BASE_ADDR=$$($(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | \
-+	             grep -E -m 1 -i "entry point.*?0x" | \
-+	             sed -r 's/.*?(0x.*?)/\1/g') && \
-+	$(HOST_DIR)/bin/mkimage \
-+		-A arm64 -O arm-trusted-firmware -C none \
-+		-a $${BASE_ADDR} -e $${BASE_ADDR} \
-+		-d $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31.bin \
-+		$(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub
-+endef
-+define ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL
-+	install $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub $(BINARIES_DIR)
-+endef
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RESET_TO_BL31=1
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
-+ARM_TRUSTED_FIRMWARE_POST_BUILD_HOOKS += ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
-+ARM_TRUSTED_FIRMWARE_POST_INSTALL_IMAGES_HOOKS += ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL
-+endif
++ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
 +
- # Configuration check
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR_BUILDING),yy)
- 
++UBOOT_DEPENDENCIES += zynqmp-pmufw-binaries
++define UBOOT_KCONFIG_FIXUP_CMDS
++	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"board/xilinx/zynqmp/pmufw.bin",$(@D)/.config)
++endef
++define UBOOT_ZYNQMP_COPY_PMUFW
++	cp ${BINARIES_DIR}/pmufw.bin $(@D)/board/xilinx/zynqmp/
++endef
++UBOOT_PRE_CONFIGURE_HOOKS += UBOOT_ZYNQMP_COPY_PMUFW
++
++endif # BR2_TARGET_UBOOT_ZYNQMP
++
+ define UBOOT_INSTALL_OMAP_IFT_IMAGE
+ 	cp -dpf $(@D)/$(UBOOT_BIN_IFT) $(BINARIES_DIR)/
+ endef
 -- 
 2.7.4
