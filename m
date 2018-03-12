@@ -1,54 +1,55 @@
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Mon, 12 Mar 2018 12:57:18 +0800
-Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
-In-Reply-To: <20180312015055.3dc9789c@canb.auug.org.au>
-References: <20180105214340.6f0cc1f7@windsurf>
- <ced2aeb2-82f6-c836-dd5a-e65c6b49c81a@au1.ibm.com>
- <20180108091044.1141f540@windsurf> <20180205224500.1a34e02a@windsurf>
- <981ecf77-767e-3c90-243f-67251d956c21@au1.ibm.com>
- <20180213231930.26ab0efb@windsurf.lan>
- <16c3e28e-8da0-75f0-1f9a-c1ed86741fc3@au1.ibm.com>
- <20180214090148.5b21f55e@windsurf.lan> <87lgftau6p.fsf@linkitivity.dja.id.au>
- <20180216154959.4db712f5@windsurf.lan> <874llocfch.fsf@dell.be.48ers.dk>
- <20180312015055.3dc9789c@canb.auug.org.au>
-Message-ID: <7a371f6c-1705-dcf6-2ff5-dc5ba46b7114@ozlabs.org>
+From: =?utf-8?Q?Sh=C3=A9rab?= <Sebastien.Hinderer@ens-lyon.org>
+Date: Mon, 12 Mar 2018 06:42:04 +0100
+Subject: [Buildroot] Unable to build Buildroot
+In-Reply-To: <20180311214546.GA11903@pema>
+References: <20180309191151.GA11285@pema>
+ <5aa46aaf74feb_16e6139a304805b4@ultri3.mail>
+ <20180311214546.GA11903@pema>
+Message-ID: <20180312054204.GA10530@pema>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Daniel,
+Dear all,
 
-> We have quite a few of these sitting in our queue :-(
+So, I updated the buildroot submodule properly and removed brltty as an
+external package.
 
-After a bit of time with some extra debug enabled for the buildroot mail
-feed, I see this for the failed parsemail invocations where we've
-returned a temp-fail:
+I am now facing another compile problem, with qemu I think:
 
-  No handlers could be found for logger "patchwork.management.commands.parsemail"
+...
+  CC      .../targetqga/channel-posix.o
+  CC      .../targetqga/qapi-generated/qga-qapi-types.o
+  CC      .../targetqga/qapi-generated/qga-qapi-visit.o
+  CC      .../targetqga/qapi-generated/qga-qmp-marshal.o
+  CC      .../targetutil/memfd.o
+  CC      .../targetutil/path.o
+util/memfd.c:40:12: error: static declaration of ?memfd_create? follows non-static declaration
+ static int memfd_create(const char *name, unsigned int flags)
+            ^~~~~~~~~~~~
+In file included from /usr/include/x86_64-linux-gnu/bits/mman-linux.h:115:0,
+                 from /usr/include/x86_64-linux-gnu/bits/mman.h:45,
+                 from /usr/include/x86_64-linux-gnu/sys/mman.h:41,
+                 from .../build/host-qemu-2.10.2/include/sysemu/os-posix.h:29,
+                 from .../build/host-qemu-2.10.2/include/qemu/osdep.h:104,
+                 from util/memfd.c:28:
+/usr/include/x86_64-linux-gnu/bits/mman-shared.h:46:5: note: previous declaration of ?memfd_create? was here
+ int memfd_create (const char *__name, unsigned int __flags) __THROW;
+     ^~~~~~~~~~~~
+.../build/host-qemu-2.10.2/rules.mak:66?: la recette pour la cible ??util/memfd.o?? a ?chou?e
+make[3]: *** [util/memfd.o] Erreur 1
 
-If you recall, we had to alter the logging configuration for the ozlabs
-instance:
+I tried to disable the host qemu in make menuconfig but that was not
+possible.
 
-  --- a/patchwork/settings/production.py
-  +++ b/patchwork/settings/production.py
-  @@ -70,7 +70,7 @@
-   STATIC_URL = '/static/'
-   
-   
-  -LOGGING = {
-  +_LOGGING = {
-       'version': 1,
-       'disable_existing_loggers': False,
-       'formatters': {
+I also discovered that the host qemu seems to be selected by emacs but I
+don't understand what's the linkbetween the two (emacs is provided in
+the br2-external tree).
 
-[this was your suggested fix an issue with parsemail failing with the
-shipped LOGGING configuration, but I don't have the specifics of that..]
+Any hint?
 
-So, it appears that this workaround needs to be reworked?
+Thanks,
 
-Regards,
-
-
-Jeremy
+Sh?rab.
