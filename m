@@ -1,49 +1,67 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 12 Mar 2018 04:44:44 -0400
-Subject: [Buildroot] [PATCH 1/1] libpjsip: security bump to 2.7.2
-Message-ID: <20180312084444.31321-1-aduskett@gmail.com>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Mon, 12 Mar 2018 09:40:44 +0100
+Subject: [Buildroot] [PATCH] x11vnc: add license hash
+In-Reply-To: <87sh99gci2.fsf@dell.be.48ers.dk>
+References: <20180309123053.21552-1-martink@posteo.de>
+ <87zi3hgct6.fsf@dell.be.48ers.dk> <87sh99gci2.fsf@dell.be.48ers.dk>
+Message-ID: <cbdbab87-aa81-4930-16a5-07e7f92a18af@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fixes:
-- Crash when receiving SDP with invalid fmtp attribute
-- Crash when parsing SDP with an invalid media format description
+?
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/libpjsip/libpjsip.hash | 6 +++---
- package/libpjsip/libpjsip.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Martin?Kepplinger?|?Entwicklung Software?
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index edac3d578f..36c2ea1289 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,6 +1,6 @@
--# From http://www.pjsip.org/release/2.7.1/MD5SUM.TXT
--md5	99a64110fa5c2debff40e0e8d4676380  pjproject-2.7.1.tar.bz2
-+# From http://www.pjsip.org/release/2.7.2/MD5SUM.TXT
-+md5	fa3f0bc098c4bff48ddd92db1c016a7a  pjproject-2.7.2.tar.bz2
- 
- # Locally computed
--sha256	59fabc62a02b2b80857297cfb10e2c68c473f4a0acc6e848cfefe8421f2c3126	pjproject-2.7.1.tar.bz2
-+sha256	9c2c828abab7626edf18e04b041ef274bfaa86f99adf2c25ff56f1509e813772	pjproject-2.7.2.tar.bz2
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 53b654d072..db9e474be7 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPJSIP_VERSION = 2.7.1
-+LIBPJSIP_VERSION = 2.7.2
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
- LIBPJSIP_DEPENDENCIES = libsrtp
--- 
-2.14.3
+GINZINGER ELECTRONIC SYSTEMS GMBH
+
+Tel.: +43 7723 5422 157
+Mail: martin.kepplinger at ginzinger.com
+Web: www.ginzinger.com
+
+
+
+
+On 2018-03-09 22:33, Peter Korsgaard wrote:
+>>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+> 
+>>>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
+>  >> Signed-off-by: Martin Kepplinger <martink@posteo.de>
+> 
+>  > Committed, thanks.
+> 
+> Ehh, I take that back. My x11vnc-0.9.15 tarball does not have a COPYING
+> file:
+> 
+> make x11vnc-patch
+> x11vnc-0.9.15.tar.gz: OK (sha256: 3e43bd875edc3c7f52a0d3676c4ec7de910fcd210240ee20b4522deb2bf84cff)
+>>>> x11vnc 0.9.15 Extracting
+> gzip -d -c /var/lib/downloads/x11vnc-0.9.15.tar.gz | tar --strip-components=1 -C /home/peko/source/buildroot/output/build/x11vnc-0.9.15   -xf -
+>>>> x11vnc 0.9.15 Patching
+>>>> x11vnc 0.9.15 Updating config.sub and config.guess
+> for file in config.guess config.sub; do for i in $(find /home/peko/source/buildroot/output/build/x11vnc-0.9.15 -name $file); do cp support/gnuconfig/$file $i; done; done
+> ls output/build/x11vnc-0.9.15
+> AUTHORS     configure.ac  misc    README.md                                      tkx11vnc
+> autogen.sh  m4            NEWS    src                                            x11vnc.1
+> ChangeLog   Makefile.am   README  tightvnc-1.3dev5-vncviewer-alpha-cursor.patch  x11vnc.desktop
+> 
+> What went wrong?
+> 
+
+I'm a fool. They generate it. -.- Please ignore until there is a
+solution at the project.
+
+
+
+________________________________________
+
+Ginzinger electronic systems GmbH
+Gewerbegebiet Pirath 16
+4952 Weng im Innkreis
+www.ginzinger.com
+
+Firmenbuchnummer: FN 364958d
+Firmenbuchgericht: Ried im Innkreis
+UID-Nr.: ATU66521089
