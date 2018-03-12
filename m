@@ -1,83 +1,70 @@
-From: daggs <daggs@gmx.com>
-Date: Mon, 12 Mar 2018 20:53:15 +0100
-Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
-In-Reply-To: <874llocfch.fsf@dell.be.48ers.dk>
-References: <20180105214340.6f0cc1f7@windsurf>
- <ced2aeb2-82f6-c836-dd5a-e65c6b49c81a@au1.ibm.com>
- <20180108091044.1141f540@windsurf> <20180205224500.1a34e02a@windsurf>
- <981ecf77-767e-3c90-243f-67251d956c21@au1.ibm.com>
- <20180213231930.26ab0efb@windsurf.lan>
- <16c3e28e-8da0-75f0-1f9a-c1ed86741fc3@au1.ibm.com>
- <20180214090148.5b21f55e@windsurf.lan>
- <87lgftau6p.fsf@linkitivity.dja.id.au>
- <20180216154959.4db712f5@windsurf.lan> <874llocfch.fsf@dell.be.48ers.dk>
-Message-ID: <trinity-d9f1b1c8-791f-45d3-bad0-ba02edfe4550-1520884395790@3c-app-mailcom-bs06>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 12 Mar 2018 21:00:04 +0100
+Subject: [Buildroot] [PATCH] cmake: Fix RPATH for host libraries built
+ by CMake
+In-Reply-To: <ef04ec321632c14eb54ccc7bbd3638d60f602d3e.1520880682.git.jan.kundrat@cesnet.cz>
+References: <ef04ec321632c14eb54ccc7bbd3638d60f602d3e.1520880682.git.jan.kundrat@cesnet.cz>
+Message-ID: <CAHXCMM+Bk4w6Rzh+RJ=wTKViB==1TRBPf78buYH8qqkjGUFX9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Hi Jan, all,
 
-> Sent: Saturday, March 10, 2018 at 1:58 PM
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: "Daniel Axtens" <dja@axtens.net>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> Cc: patchwork at lists.ozlabs.org, "buildroot at uclibc.org" <buildroot@uclibc.org>, "Jeremy Kerr" <jk@ozlabs.org>, "Andrew Donnellan" <andrew.donnellan@au1.ibm.com>, "Stephen Rothwell" <sfr@canb.auug.org.au>
-> Subject: Re: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
+On Mon, Mar 12, 2018 at 7:41 PM, Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
+> The host shared libraries produced by CMake were missing a proper
+> DT_RPATH. That became a problem because the DT_RPATH handling is not
+> transitive by design.
 >
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> 
-> Hi Daniel,
-> 
->  >> Andrew mentioned to me that we might have a race condition, and so I had
->  >> a quick poke at loading patches in parallel. Sure enough I was able to
->  >> easily hit an issue at least on the MySQL backend. (OzLabs uses postgres
->  >> but it's still a good data-point as it shows we're not handling this
->  >> sort of thing in code.)
->  >> 
->  >> This is quite possibly related to your issue - I will do some more
->  >> investigation and let you know how we go.
-> 
->  > Thanks a lot for the follow-up details on this.
-> 
->  > I think it's worth mentioning that it seems to be a relatively "recent"
->  > regression, probably within the last 6 months or so. In the past, we
->  > were clearly not seeing such a problem, and all patches were properly
->  > recorded. The problem is frequent enough that we would have noticed.
-> 
-> Any news on this? We still see missing mails, and I even received a
-> temporary bounce from the patchwork addres this morning:
-> 
-> 
-> This is the mail system at host ozlabs.org.
-> 
-> I'm sorry to have to inform you that your message could not
-> be delivered to one or more recipients. It's attached below.
-> 
-> For further assistance, please send mail to postmaster.
-> 
-> If you do so, please include this problem report. You can
-> delete your own text from the attached returned message.
-> 
->                    The mail system
-> 
-> <patchwork-incoming-buildroot@bilbo.ozlabs.org> (expanded from
->     <incoming-buildroot@patchwork.ozlabs.org>): temporary failure
-> 
-> Reporting-MTA: dns; ozlabs.org
-> X-Postfix-Queue-ID: 3zvfxM6m0Nz9sZ8
-> X-Postfix-Sender: rfc822; buildroot-bounces at busybox.net
-> Arrival-Date: Mon,  5 Mar 2018 10:53:10 +1100 (AEDT)
-> 
-> Final-Recipient: rfc822; patchwork-incoming-buildroot at bilbo.ozlabs.org
-> Original-Recipient: rfc822;incoming-buildroot at patchwork.ozlabs.org
-> Action: failed
-> Status: 4.3.0
-> Diagnostic-Code: x-unix; temporary failure
-> 
+> Consider the following scenario:
+>
+> - pkg-a provides a library (`liba`) which links to `libpcre`
+> - pkg-b provides a binary (`foo`) and a shared library (`libb`) which is
+> needed by that binary
+> - `libb` links to `liba`
+> - pkg-a and pkg-b are both built by CMake
+>
+> In this scenario, `foo` is correctly marked with DT_RPATH pointing to
+> host/lib/, but that path is not used when (recursively) resolving PCRE's
+> symbols in `liba`. When attempting to run the `foo` binary, the linker
+> correctly finds both `liba` and `libb`, but it cannot find the
+> libpcre.so as built by Buildroot for host.
+>
+> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+> ---
+>  package/pkg-cmake.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 14ffe4a88f..9b07798a1e 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -132,6 +132,7 @@ define $(2)_CONFIGURE_CMDS
+>                 -DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
+>                 -DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
+>                 -DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
+> +               -DCMAKE_SHARED_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
 
-happened to me too (not rejection), I've sent 4 patches in hope that they will be reviewed on the hackathon but I don't see them in patchwork.
-do I need to resend the patches?
+hmm... I though this was already in Buildroot... I must mix up with
+something else :-/
 
-Dagg.
+>                 -DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
+>                 -DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
+>                 -DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
+> --
+> 2.16.2
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
+Regard,
+
+-- 
+Samuel
