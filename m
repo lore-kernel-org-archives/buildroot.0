@@ -1,45 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Mar 2018 22:23:03 +0100
-Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
-In-Reply-To: <trinity-d9f1b1c8-791f-45d3-bad0-ba02edfe4550-1520884395790@3c-app-mailcom-bs06>
- (daggs@gmx.com's message of "Mon, 12 Mar 2018 20:53:15 +0100")
-References: <20180105214340.6f0cc1f7@windsurf>
- <ced2aeb2-82f6-c836-dd5a-e65c6b49c81a@au1.ibm.com>
- <20180108091044.1141f540@windsurf> <20180205224500.1a34e02a@windsurf>
- <981ecf77-767e-3c90-243f-67251d956c21@au1.ibm.com>
- <20180213231930.26ab0efb@windsurf.lan>
- <16c3e28e-8da0-75f0-1f9a-c1ed86741fc3@au1.ibm.com>
- <20180214090148.5b21f55e@windsurf.lan>
- <87lgftau6p.fsf@linkitivity.dja.id.au>
- <20180216154959.4db712f5@windsurf.lan>
- <874llocfch.fsf@dell.be.48ers.dk>
- <trinity-d9f1b1c8-791f-45d3-bad0-ba02edfe4550-1520884395790@3c-app-mailcom-bs06>
-Message-ID: <87r2opf0p4.fsf@dell.be.48ers.dk>
+From: Rafal Susz <rafal.susz@gmail.com>
+Date: Mon, 12 Mar 2018 22:35:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/linux: fix custom dts files handling
+Message-ID: <20180312213523.32213-1-rafal.susz@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "daggs" == daggs  <daggs@gmx.com> writes:
+Custom dts files are still conditionally copied based on non existing
+boolean. So it is currently not possible to use custom dts file(s) at all.
 
-Hi,
+List of dts files is now iterated and files are copied into dedicated kernel arch dir.
 
- > happened to me too (not rejection), I've sent 4 patches in hope that
- > they will be reviewed on the hackathon but I don't see them in
- > patchwork.
+Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
+---
+ linux/linux.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I guess you are referring to these patches?
-
-http://lists.busybox.net/pipermail/buildroot/2018-March/215615.html
-
-If so, they made it to the list atleast. We'll get to them sooner or
-later.
-
-> do I need to resend the patches?
-
-Until we have a fix for patchwork I would prefer not, changes are that
-one or more patches will be missed anyway.
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e98b25cb72..a69cb3ee51 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -370,8 +370,8 @@ endif
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+-	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+-		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
++	$(foreach dts, $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH),
++		cp -f $(call qstrip,$(dts)) $(KERNEL_ARCH_PATH)/boot/dts/)
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
+ 		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
 -- 
-Bye, Peter Korsgaard
+2.16.1
