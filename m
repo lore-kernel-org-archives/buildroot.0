@@ -1,55 +1,69 @@
-From: charles.hardin at storagecraft.com <charles.hardin@storagecraft.com>
-Date: Sun, 11 Mar 2018 15:17:41 -0700
-Subject: [Buildroot] [PATCH v2 3/3] runc: bump to v1.0.0-rc5
-In-Reply-To: <20180311221741.11346-1-charles.hardin@storagecraft.com>
-References: <20180311221741.11346-1-charles.hardin@storagecraft.com>
-Message-ID: <20180311221741.11346-3-charles.hardin@storagecraft.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 11 Mar 2018 22:19:16 -0300
+Subject: [Buildroot] [PATCH v2 5/7] support/dockerfile: install flake8
+References: <20180311085119.GA2429@scaer>
+Message-ID: <5aa5d594c6c4_510118947ec236be@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Charles Hardin <charles.hardin@storagecraft.com>
+Hello,
 
-This is a dependency of docker-engine v2017.12.1-ce.
+Thank you for your review.
 
-Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
----
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Now I see the entire series is missing from patchwork.
+Well... I need to send v3 anyway.
+I will manually accept your review tags in the other patches.
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 3e188c5c79..f403b6d9e2 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
-+sha256	770e180d1cca1f3c1a67512ebf9720caafe97af4fc2fe12fa43a3cf7bfa77522	runc-v1.0.0-rc5.tar.gz
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index fb3fec20f5..62ff707d0f 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
-+RUNC_VERSION = v1.0.0-rc5
- RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
-@@ -38,7 +38,8 @@ define RUNC_CONFIGURE_CMDS
- endef
- 
- define RUNC_BUILD_CMDS
--	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
-+	cd $(RUNC_GOPATH)/src/github.com/opencontainers/runc && \
-+		$(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
- 		build -v -o $(@D)/bin/runc \
- 		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
- endef
--- 
-2.14.3 (Apple Git-98)
+On Sun, Mar 11, 2018 at 05:51 AM, Yann E. MORIN wrote:
+
+> On 2018-03-11 02:15 -0300, Ricardo Martincoski spake thusly:
+[snip]
+>> +# For check-flake8
+>> +RUN pip install -q setuptools
+>> +RUN pip install -q flake8==3.5.0 mccabe==0.6.1 pycodestyle==2.3.1 pyflakes==1.6.0
+> 
+> Please, run this with a single RUN command, to minimise the inter;ediate
+> layers.
+
+OK.
+
+> 
+> Also, you need to explain why you install setuptools separately, and why
+
+I don't know the root cause for that. I tried (few months ago in the docker
+image) and installing setuptools and packages together didn't worked.
+Even in the docs, setuptools is assumed to be installed before installing
+packages.
+https://packaging.python.org/tutorials/installing-packages/#requirements-for-installing-packages
+But I will add this info to the commit log.
+
+> you don't force the version for it.
+
+Same here. I don't know the internals to say why we should always use the
+latest version. But maybe an acceptable approach is to use the exact command
+line the docs recommend (I didn't tried yet, but it should work):
+
+python -m pip install --upgrade pip setuptools wheel
+
+This way the docker image will be ready to install any package we eventually
+need.
+
+> 
+> Finally, , have a single pacakge on each line, so that it is easier to
+> maintain.
+> 
+>     RUN pip install -q setuptools && \
+>         pip install -q \
+>             flake8==3.5.0 \
+>             mccabe==0.6.1 \
+>             pycodestyle==2.3.1 \
+>             pyflakes==1.6.0
+
+Indeed, much easier to maintain. I will do.
+
+
+Regards,
+Ricardo
