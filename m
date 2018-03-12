@@ -1,59 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Mar 2018 23:36:03 +0100
-Subject: [Buildroot] [PATCH] pkg-virtual.mk: explicitly set <pkg>_VERSION /
- _SOURCE for robustness
-Message-ID: <20180312223603.21788-1-peter@korsgaard.com>
+Date: Mon, 12 Mar 2018 23:46:39 +0100
+Subject: [Buildroot] [PATCH 1/1] Revert "uboot: fix build when
+ libfdt-devel is installed system-wide"
+In-Reply-To: <CAOJ2eMe32YexFnqS6wnUyGn3eJ1UVwbin3=QnEN1bhzRC7HGBA@mail.gmail.com>
+ (Stefan Becker's message of "Mon, 12 Mar 2018 14:37:00 +0200")
+References: <20180312105905.10918-1-chemobejk@gmail.com>
+ <8760615y80.fsf@dell.be.48ers.dk>
+ <CAOJ2eMe32YexFnqS6wnUyGn3eJ1UVwbin3=QnEN1bhzRC7HGBA@mail.gmail.com>
+Message-ID: <87ina0gbe8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recently a build failure was reported which was traced back to to the fact
-that the user had a TOOLCHAIN_VERSION environment variable set which leads
-to a strange looking error message:
+>>>>> "Stefan" == Stefan Becker <chemobejk@gmail.com> writes:
 
-toolchain/toolchain/toolchain.mk:40: *** TOOLCHAIN_SITE cannot be empty when
-TOOLCHAIN_SOURCE is not.  Stop.
+ > Agreed.
+ > I made the suggested change and verified it in my build. Please see
+ > attached patch.
 
-Environment variables automatically gets converted to make variables by GNU
-make - E.G. from the manual
-(https://www.gnu.org/software/make/manual/html_node/Environment.html):
+Committed, thanks.
 
-Variables in make can come from the environment in which make is run.  Every
-environment variable that make sees when it starts up is transformed into a
-make variable with the same name and value
+From our discussion on IRC I understood that these older u-boot versions
+are also affected by the build error when libfdt-dev is installed on the
+host, so it would be great if we could find a simple way to fix the
+build if libfdt-dev is installed for these older versions as well.
 
-So we end up in make with TOOLCHAIN_VERSION set to the value of the
-environment variable.  As virtual packages do not have a version, there is
-no explicit TOOLCHAIN_VERSION = ..  line in toolchain.mk overriding this
-value, and the logic in package/pkg-generic.mk sets a default value for
-TOOLCHAIN_SOURCE when TOOLCHAIN_VERSION is set, and finally errors out as
-TOOLCHAIN_SITE isn't set.
+But I agree, completely breaking the build for older u-boot versions is
+obviously not good - So lets apply this workaround for now at least.
 
-As a workaround, explicitly set <pkg>_VERSION and <pkg>_SOURCE to the empty
-string in the virtual package infrastructure.
+ > On Mon, Mar 12, 2018 at 1:29 PM, Peter Korsgaard <peter@korsgaard.com>
+ > wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-virtual.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ >> >>>>> "Stefan" == Stefan Becker <chemobejk@gmail.com> writes:
+ >> 
+ >> > From: Stefan Becker <sbecker@neolitics.com>
+ >> > This reverts commit bf733342324b414a1142b57781504111f81c97ea.
+ >> 
+ >> > There is no scripts/dtc directory in our u-boot source tree, hence
+ >> > modifying the uboot makefile to search scripts/dtc/libfdt instead of
+ >> > lib/libfdt leads to build errors.
+ >> 
+ >> just reverting it would bring back the issue this commit tries to
+ >> solve. Perhaps we should just extend the logic to only do the sed
+ >> invocation if scripts/dtc/libfdt exists?
+ >> 
+ >> E.G. something like:
+ >> 
+ >> define UBOOT_FIXUP_LIBFDT_INCLUDE
+ >> if [ -d $(@D)/scripts/dtc/libfdt ]; then \
+ >> $(SED) 's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%'
+ >> $(@D)/tools/Makefile; \
+ >> fi
+ >> endef
+ >> 
+ >> > Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+ >> > ---
+ >> >  boot/uboot/uboot.mk | 8 --------
+ >> >  1 file changed, 8 deletions(-)
+ >> 
+ >> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+ >> > index 58dd906a27..5da339850d 100644
+ >> > --- a/boot/uboot/uboot.mk
+ >> > +++ b/boot/uboot/uboot.mk
+ >> > @@ -188,14 +188,6 @@ define UBOOT_APPLY_LOCAL_PATCHES
+ >> >  endef
+ >> >  UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
+ >> 
+ >> > -# This is equivalent to upstream commit
+ >> > -# http://git.denx.de/?p=u-boot.git;a=commitdiff;h=
+ >> e0d20dc1521e74b82dbd69be53a048847798a90a. It
+ >> > -# fixes a build failure when libfdt-devel is installed system-wide.
+ >> > -define UBOOT_FIXUP_LIBFDT_INCLUDE
+ >> > -    $(SED) 's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%'
+ >> $(@D)/tools/Makefile
+ >> > -endef
+ >> > -UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
+ >> > -
+ >> >  ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
+ >> >  define UBOOT_CONFIGURE_CMDS
+ >> >      $(TARGET_CONFIGURE_OPTS)        \
+ >> > --
+ >> > 2.14.3
+ >> 
+ >> 
+ >> --
+ >> Bye, Peter Korsgaard
+ >> 
 
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 0de79d49be..05bd63eb18 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -41,6 +41,11 @@ $$(error No implementation selected for virtual package $(1). Configuration erro
- endif
- endif
- 
-+# explicitly set these so we do not get confused by environment
-+# variables with the same names.
-+$(2)_VERSION =
-+$(2)_SOURCE =
-+
- $(2)_IS_VIRTUAL = YES
- 
- # Add dependency against the provider
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
