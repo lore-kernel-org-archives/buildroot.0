@@ -1,61 +1,53 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 12 Mar 2018 05:29:52 -0400
-Subject: [Buildroot] [PATCH v4 6/7] libpjsip: enable opus codec
-In-Reply-To: <20180312092953.24258-1-aduskett@gmail.com>
-References: <20180312092953.24258-1-aduskett@gmail.com>
-Message-ID: <20180312092953.24258-6-aduskett@gmail.com>
+Date: Mon, 12 Mar 2018 06:12:30 -0400
+Subject: [Buildroot] [PATCH v3 1/2] postgresql: add version output to
+ pg_config
+Message-ID: <20180312101231.2280-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Some external packages call pg_config to determine the installed PostgreSQL
+version. Add this output to Buildroots own pg_config, so these packages
+correctly compile.
+
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
-Changes v1 -> v4:
-  - Add each codec with a dependency as a seperate patch.
+Changes v1 -> v3:
+ - Added this patch to the series.
 
- package/libpjsip/Config.in   | 4 ++++
- package/libpjsip/libpjsip.mk | 7 ++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/postgresql/pg_config     | 5 ++++-
+ package/postgresql/postgresql.mk | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index a7bbd866ea..028339f319 100644
---- a/package/libpjsip/Config.in
-+++ b/package/libpjsip/Config.in
-@@ -53,6 +53,10 @@ config BR2_PACKAGE_LIBPJSIP_CODEC_OPENCORE_AMR
- 	bool "Opencore-amr"
- 	select BR2_PACKAGE_OPENCORE_AMR
+diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
+index 85c0e63ddb..642252f27f 100644
+--- a/package/postgresql/pg_config
++++ b/package/postgresql/pg_config
+@@ -14,6 +14,9 @@ case "$1" in
+   --libdir)
+ 	echo "$prefix/lib"
+ 	;;
++  --version)
++	echo "PostgreSQL @POSTGRESQL_VERSION@"
++	;;
+   *)
+-	echo "Usage: $0 {--includedir|--libdir}"
++	echo "Usage: $0 {--includedir|--libdir|--version}"
+ esac
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c6b689a146..94b3e60e59 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -84,6 +84,7 @@ POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
+ define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
+ 	$(INSTALL) -m 0755 -D package/postgresql/pg_config \
+ 		$(STAGING_DIR)/usr/bin/pg_config
++	$(SED) "s|@POSTGRESQL_VERSION@|$(POSTGRESQL_VERSION)|g" $(STAGING_DIR)/usr/bin/pg_config
+ endef
  
-+config BR2_PACKAGE_LIBPJSIP_CODEC_OPUS
-+	bool "Opus"
-+	select BR2_PACKAGE_OPUS
-+
- endif #BR2_PACKAGE_LIBPJSIP
- 
- comment "libpjsip needs a toolchain w/ C++, threads"
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 2ea0da3f77..943a99bc5a 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -30,7 +30,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-resample \
- 	--disable-video \
- 	--disable-libwebrtc \
--	--disable-opus \
- 	--disable-oss \
- 	--disable-ext-sound \
- 	--disable-libsamplerate \
-@@ -115,4 +114,10 @@ else
- LIBPJSIP_CONF_OPTS += --disable-opencore-amr
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_OPUS),y)
-+LIBPJSIP_DEPENDENCIES += opus
-+else
-+LIBPJSIP_CONF_OPTS += --disable-opus
-+endif
-+
- $(eval $(autotools-package))
+ POSTGRESQL_POST_INSTALL_STAGING_HOOKS += POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
 -- 
 2.14.3
