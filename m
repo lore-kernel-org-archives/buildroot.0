@@ -1,45 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 22:11:27 +0100
-Subject: [Buildroot] [git commit] cryptsetup: bump to version 2.0.2
-Message-ID: <20180313211610.7493583250@busybox.osuosl.org>
+Date: Tue, 13 Mar 2018 22:11:38 +0100
+Subject: [Buildroot] [git commit] flashrom: bump to version 1.0
+Message-ID: <20180313211610.9348682551@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b85b59709b444d3fb0a2a6edfd4caafdcf105be
+commit: https://git.buildroot.net/buildroot/commit/?id=09378b474f916c76ef6d09cfb1b7d7dde5c10fc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Martin Hicks <mort@bork.org>
+Add license file hash.
+
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Martin Hicks <mort@bork.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/flashrom/flashrom.hash | 6 ++++--
+ package/flashrom/flashrom.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index c54b0dc607..7629691a66 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
--sha256 adc623b9e3e3ab5c14145b8baf21b741e513ee5bf90d2b4d85a745c2f05da199  cryptsetup-2.0.0.tar.xz
-+sha256 4f8105d7f3bf758d58da3058b3cbd66c0ca81492b2dafe8ae7c049cc9e939e97  cryptsetup-2.0.2.tar.xz
- sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 0d8480ba48..39c9b7b0bc 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/flashrom/flashrom.hash b/package/flashrom/flashrom.hash
+index 64b67b99cf..3a68e8acb7 100644
+--- a/package/flashrom/flashrom.hash
++++ b/package/flashrom/flashrom.hash
+@@ -1,2 +1,4 @@
+-# Locally computed
+-sha256 cb3156b0f63eb192024b76c0814135930297aac41f80761a5d293de769783c45  flashrom-0.9.9.tar.bz2
++# Locally computed after checking pgp signature
++# https://download.flashrom.org/releases/flashrom-1.0.tar.bz2.asc
++sha256 3702fa215ba5fb5af8e54c852d239899cfa1389194c1e51cb2a170c4dc9dee64  flashrom-1.0.tar.bz2
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index f9ab6294a5..95ce86c52c 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CRYPTSETUP_VERSION_MAJOR = 2.0
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c \
+-FLASHROM_VERSION = 0.9.9
++FLASHROM_VERSION = 1.0
+ FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
+ FLASHROM_SITE = http://download.flashrom.org/releases
+ FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi host-pkgconf
