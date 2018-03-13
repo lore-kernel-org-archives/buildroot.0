@@ -1,38 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 22:14:37 +0100
-Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: bump version
-Message-ID: <20180313211611.1464C7FBB5@busybox.osuosl.org>
+Date: Tue, 13 Mar 2018 22:14:56 +0100
+Subject: [Buildroot] [git commit] luarocks: bump to version 2.4.4
+Message-ID: <20180313211611.431CF8079B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c08116f4cb98fd322dd5ef54326f36953668d63
+commit: https://git.buildroot.net/buildroot/commit/?id=6b68c83282bc6abe6781b7c79f7d8f228f12978e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For stop using cma.
-
-git shortlog --invert-grep --grep travis --no-merges 94ccbc8924c12a818d61d36a4b389b74a89fde3c..
-Maxime Ripard (1):
-      mali: Stop using the reserved-memory region to setup the fb area
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index 24e759aaa7..24817b07c7 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 27845a46c4..7c3f96606f 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 4d414d32fed5bb121c72d3ff1280b7f2dc9027a9bc012e41dfbffd5b519b362e  luarocks-2.4.3.tar.gz
++sha256 3938df33de33752ff2c526e604410af3dceb4b7ff06a770bc4a240de80a1f934  luarocks-2.4.4.tar.gz
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index e050cb553c..389d521832 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUNXI_MALI_MAINLINE_DRIVER_VERSION = 94ccbc8924c12a818d61d36a4b389b74a89fde3c
-+SUNXI_MALI_MAINLINE_DRIVER_VERSION = 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5
- SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
- SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
- 
+-LUAROCKS_VERSION = 2.4.3
++LUAROCKS_VERSION = 2.4.4
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
