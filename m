@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Mar 2018 22:05:20 +0100
-Subject: [Buildroot] [PATCH 15/22] package/x11r7/xapp_xset: bump version to
- 1.2.4
+Date: Tue, 13 Mar 2018 22:05:17 +0100
+Subject: [Buildroot] [PATCH 12/22] package/x11r7/xapp_xprop: bump version to
+ 1.2.3
 In-Reply-To: <20180313210527.309-1-bernd.kuhls@t-online.de>
 References: <20180313210527.309-1-bernd.kuhls@t-online.de>
-Message-ID: <20180313210527.309-15-bernd.kuhls@t-online.de>
+Message-ID: <20180313210527.309-12-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xset/xapp_xset.hash | 9 +++++++--
- package/x11r7/xapp_xset/xapp_xset.mk   | 2 +-
+ package/x11r7/xapp_xprop/xapp_xprop.hash | 9 +++++++--
+ package/x11r7/xapp_xprop/xapp_xprop.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xset/xapp_xset.hash b/package/x11r7/xapp_xset/xapp_xset.hash
-index f9ff3920c6..62f951ba70 100644
---- a/package/x11r7/xapp_xset/xapp_xset.hash
-+++ b/package/x11r7/xapp_xset/xapp_xset.hash
+diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
+index 4758979c44..a57d375b84 100644
+--- a/package/x11r7/xapp_xprop/xapp_xprop.hash
++++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-August/002291.html
--sha256	4382f4fb29b88647e13f3b4bc29263134270747fc159cfc5f7e3af23588c8063	xset-1.2.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002873.html
-+md5 70ea7bc7bacf1a124b1692605883f620  xset-1.2.4.tar.bz2
-+sha1 41a857f30ff5bb0dfbda1549bb703984344ea228  xset-1.2.4.tar.bz2
-+sha256 e4fd95280df52a88e9b0abc1fee11dcf0f34fc24041b9f45a247e52df941c957  xset-1.2.4.tar.bz2
-+sha512 f24714c9a82081a09d3054bbad98553de9366992f22eaf3e2bcadbb58fad1d3dad2547fef6fa9898d8a9df064573c29df9d82a5c801fa92248604c95f65dc83d  xset-1.2.4.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-August/002290.html
+-sha256	9bee88b1025865ad121f72d32576dd3027af1446774aa8300cce3c261d869bc6	xprop-1.2.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002870.html
++md5 4becb3ddc4674d741487189e4ce3d0b6  xprop-1.2.3.tar.bz2
++sha1 77062c08a23cfca76824b7e8f9860678255d6b1a  xprop-1.2.3.tar.bz2
++sha256 d22afb28c86d85fff10a50156a7d0fa930c80ae865d70b26d805fd28a17a521b  xprop-1.2.3.tar.bz2
++sha512 ad7987fec11ae19b7adc3b0f683fc393e95155f3b6c753d1d8744aedcfb360452eee5735a4c380152b286905931515f3e1a28676b5531001eb8dd93b7249916a  xprop-1.2.3.tar.bz2
 +# Locally computed
-+sha256 6bfc619b6d37dd0e6ca575edcb3a05194136e04d1d9989b8e14e6f7850587382 COPYING
-diff --git a/package/x11r7/xapp_xset/xapp_xset.mk b/package/x11r7/xapp_xset/xapp_xset.mk
-index 157cd229a7..9ead55a20f 100644
---- a/package/x11r7/xapp_xset/xapp_xset.mk
-+++ b/package/x11r7/xapp_xset/xapp_xset.mk
++sha256 f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
+diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
+index 40a8577304..d8063d94c8 100644
+--- a/package/x11r7/xapp_xprop/xapp_xprop.mk
++++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XSET_VERSION = 1.2.3
-+XAPP_XSET_VERSION = 1.2.4
- XAPP_XSET_SOURCE = xset-$(XAPP_XSET_VERSION).tar.bz2
- XAPP_XSET_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XSET_LICENSE = MIT
+-XAPP_XPROP_VERSION = 1.2.2
++XAPP_XPROP_VERSION = 1.2.3
+ XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
+ XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XPROP_LICENSE = MIT
 -- 
 2.11.0
