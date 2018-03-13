@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Mar 2018 22:05:17 +0100
-Subject: [Buildroot] [PATCH 12/22] package/x11r7/xapp_xprop: bump version to
- 1.2.3
+Date: Tue, 13 Mar 2018 22:05:24 +0100
+Subject: [Buildroot] [PATCH 19/22] package/x11r7/xapp_xwininfo: bump version
+ to 1.1.4
 In-Reply-To: <20180313210527.309-1-bernd.kuhls@t-online.de>
 References: <20180313210527.309-1-bernd.kuhls@t-online.de>
-Message-ID: <20180313210527.309-12-bernd.kuhls@t-online.de>
+Message-ID: <20180313210527.309-19-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xprop/xapp_xprop.hash | 9 +++++++--
- package/x11r7/xapp_xprop/xapp_xprop.mk   | 2 +-
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.hash | 9 +++++++--
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
-index 4758979c44..a57d375b84 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.hash
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
+diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+index 4b891a2084..e3882584c3 100644
+--- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
++++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-August/002290.html
--sha256	9bee88b1025865ad121f72d32576dd3027af1446774aa8300cce3c261d869bc6	xprop-1.2.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002870.html
-+md5 4becb3ddc4674d741487189e4ce3d0b6  xprop-1.2.3.tar.bz2
-+sha1 77062c08a23cfca76824b7e8f9860678255d6b1a  xprop-1.2.3.tar.bz2
-+sha256 d22afb28c86d85fff10a50156a7d0fa930c80ae865d70b26d805fd28a17a521b  xprop-1.2.3.tar.bz2
-+sha512 ad7987fec11ae19b7adc3b0f683fc393e95155f3b6c753d1d8744aedcfb360452eee5735a4c380152b286905931515f3e1a28676b5531001eb8dd93b7249916a  xprop-1.2.3.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002215.html
+-sha256	218eb0ea95bd8de7903dfaa26423820c523ad1598be0751d2d8b6a2c23b23ff8	xwininfo-1.1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002877.html
++md5 9a505b91ae7160bbdec360968d060c83  xwininfo-1.1.4.tar.bz2
++sha1 7364e79d1de7bb612dd98c336c649648c6c081ca  xwininfo-1.1.4.tar.bz2
++sha256 839498aa46b496492a5c65cd42cd2e86e0da88149b0672e90cb91648f8cd5b01  xwininfo-1.1.4.tar.bz2
++sha512 d3ab103a0a311e08d1eabc4346750c21eb7d2fbcdc27cab0989a2624b9cd488911614fcf9832603353450114b1231a8f8262cab16e090a0d458d83ec7b6b959b  xwininfo-1.1.4.tar.bz2
 +# Locally computed
-+sha256 f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
-index 40a8577304..d8063d94c8 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.mk
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
++sha256 443d675237c023a47e4886506b72796afbb2633394812027f91d6e8fa433b2af COPYING
+diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+index 8ae5961ee4..7da881a9fc 100644
+--- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
++++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XPROP_VERSION = 1.2.2
-+XAPP_XPROP_VERSION = 1.2.3
- XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
- XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XPROP_LICENSE = MIT
+-XAPP_XWININFO_VERSION = 1.1.3
++XAPP_XWININFO_VERSION = 1.1.4
+ XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.bz2
+ XAPP_XWININFO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XWININFO_LICENSE = MIT
 -- 
 2.11.0
