@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Mar 2018 22:05:14 +0100
-Subject: [Buildroot] [PATCH 09/22] package/x11r7/xapp_xlsfonts: bump version
- to 1.0.6
+Date: Tue, 13 Mar 2018 22:05:23 +0100
+Subject: [Buildroot] [PATCH 18/22] package/x11r7/xapp_xwd: bump version to
+ 1.0.7
 In-Reply-To: <20180313210527.309-1-bernd.kuhls@t-online.de>
 References: <20180313210527.309-1-bernd.kuhls@t-online.de>
-Message-ID: <20180313210527.309-9-bernd.kuhls@t-online.de>
+Message-ID: <20180313210527.309-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash | 9 +++++++--
- package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk   | 2 +-
+ package/x11r7/xapp_xwd/xapp_xwd.hash | 9 +++++++--
+ package/x11r7/xapp_xwd/xapp_xwd.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash b/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash
-index f3a2603171..f76369f97e 100644
---- a/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash
-+++ b/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.hash
+diff --git a/package/x11r7/xapp_xwd/xapp_xwd.hash b/package/x11r7/xapp_xwd/xapp_xwd.hash
+index 1d9b4d5cff..606618bcc6 100644
+--- a/package/x11r7/xapp_xwd/xapp_xwd.hash
++++ b/package/x11r7/xapp_xwd/xapp_xwd.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002580.html
--sha256	40295bec35077cee93be2e4c26cc00268ed6ace779ae6e97766a866c1e3927fa	xlsfonts-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002867.html
-+md5 5774fd4f518b3f338f2b28f270e04bfc  xlsfonts-1.0.6.tar.bz2
-+sha1 bf95e46e0897dcb9d197ce20d4fa024b8ace5148  xlsfonts-1.0.6.tar.bz2
-+sha256 89b80b3a030006ab6cef717be286c12f2477894b227158b1e6133274f6ebd368  xlsfonts-1.0.6.tar.bz2
-+sha512 052a3b1dec23cb20fdfacd4500cb836feb3b888bf568a548ea71deb58a4ba10a1ad5392d658e95272c6d4a1832edf1f19c3de2498b78dca82c43ee52800a30c0  xlsfonts-1.0.6.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-August/002292.html
+-sha256	3bb396a2268d78de4b1c3e5237a85f7849d3434e87b3cd1f4d57eef614227d79	xwd-1.0.6.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002876.html
++md5 11794a8eba6d295a192a8975287fd947  xwd-1.0.7.tar.bz2
++sha1 65ce0617be29687cf6082c3a0e85d15a0dcccda9  xwd-1.0.7.tar.bz2
++sha256 cd6815b8b9e0b98e284d3d732fb12162159cb9dcee4f45a7d4c0bd8b308a6794  xwd-1.0.7.tar.bz2
++sha512 6fdb0a115ae505169bbc7fcc45580daf26bced2e26e0bf9a877636016038931a8386e8edcbe015f4024be508d0461906adef4834cf22a445e3c282f0b8fad17e  xwd-1.0.7.tar.bz2
 +# Locally computed
-+sha256 dcdf5fa36a652efbe61a21def1301739b0010334ae3f049f1cff433221a8c7a5 COPYING
-diff --git a/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk b/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk
-index 1c42a61a97..0ccd4ea6b0 100644
---- a/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk
-+++ b/package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk
++sha256 7cfda56afd92a1ecd2f23bd0064e01b5141053390d854785504adfe2c0fbd946 COPYING
+diff --git a/package/x11r7/xapp_xwd/xapp_xwd.mk b/package/x11r7/xapp_xwd/xapp_xwd.mk
+index 0cda34ee26..4d7ed0f877 100644
+--- a/package/x11r7/xapp_xwd/xapp_xwd.mk
++++ b/package/x11r7/xapp_xwd/xapp_xwd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XLSFONTS_VERSION = 1.0.5
-+XAPP_XLSFONTS_VERSION = 1.0.6
- XAPP_XLSFONTS_SOURCE = xlsfonts-$(XAPP_XLSFONTS_VERSION).tar.bz2
- XAPP_XLSFONTS_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XLSFONTS_LICENSE = MIT
+-XAPP_XWD_VERSION = 1.0.6
++XAPP_XWD_VERSION = 1.0.7
+ XAPP_XWD_SOURCE = xwd-$(XAPP_XWD_VERSION).tar.bz2
+ XAPP_XWD_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XWD_LICENSE = MIT
 -- 
 2.11.0
