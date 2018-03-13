@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 22:27:53 +0100
-Subject: [Buildroot] [PATCH v3 2/7] size-stats-compare: fix code style
-In-Reply-To: <1520910585-19097-3-git-send-email-ricardo.martincoski@gmail.com>
- (Ricardo Martincoski's message of "Tue, 13 Mar 2018 00:09:40 -0300")
+Date: Tue, 13 Mar 2018 22:32:13 +0100
+Subject: [Buildroot] [PATCH v3 3/7] test_python_cryptography: fix code
+ style
+In-Reply-To: <1520910585-19097-4-git-send-email-ricardo.martincoski@gmail.com>
+ (Ricardo Martincoski's message of "Tue, 13 Mar 2018 00:09:41 -0300")
 References: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
- <1520910585-19097-3-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <87a7vbk6na.fsf@dell.be.48ers.dk>
+ <1520910585-19097-4-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <87605zk6g2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +16,21 @@ To: buildroot@busybox.net
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
  > Fix these warnings:
- > E129 visually indented line with same indent as next logical line
+ > E122 continuation line missing indentation or outdented
+ > E301 expected 1 blank line, found 0
  > E302 expected 2 blank lines, found 1
+ > F401 'os' imported but unused
 
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
- > Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Yegor Yefremov <yegorslists@googlemail.com>
  > ---
  > Changes v2 -> v3:
- >   - manually accepted review tag
+ >   - no changes
+
+ > Changes v1 -> v2:
+ >   - new patch (v1 of this series was not sent yet during the review of
+ >     http://patchwork.ozlabs.org/patch/811011/ so I asked to fix all in
+ >     the same series.
 
 Committed, thanks.
 
