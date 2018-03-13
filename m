@@ -1,83 +1,122 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 09:26:37 +0100
-Subject: [Buildroot] [git commit] xfsprogs: bump to version 4.15.1
-Message-ID: <20180313082715.6F13380FCD@busybox.osuosl.org>
+Date: Tue, 13 Mar 2018 09:26:30 +0100
+Subject: [Buildroot] [git commit] trinity: fix build with glibc 2.27
+Message-ID: <20180313082715.3F91B80FCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=814a9c32aed47eb7fb3240ae58175846c7e2de48
+commit: https://git.buildroot.net/buildroot/commit/?id=412443fb8fe309086c1da99d9ee441492d142211
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes compatibility with glibc 2.27.
+glibc 2.27 added a system call wrapper for memfd_create() which collides
+with the local definition of the same symbol in trinity. Add a patch to
+detect the presence of memfd_create(), and avoid collision.
 
 Fixes:
-http://autobuild.buildroot.net/results/bd7/bd7e1af33e6e937c75b44c7c9ab991d2b10f2931/
-http://autobuild.buildroot.net/results/58b/58b59b74f6a138b51206f24481f7268104f0a052/
+http://autobuild.buildroot.net/results/fda/fda07327395921fdc79cbb4f24b662209fee1be1/
+http://autobuild.buildroot.net/results/f98/f98f43657cbf519a626257af5a21c8c228423856/
+http://autobuild.buildroot.net/results/575/57558c418ea5c5011ac22e5236beff4d823c825b/
 
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch | 10 ++++++----
- package/xfsprogs/xfsprogs.hash                                 |  2 +-
- package/xfsprogs/xfsprogs.mk                                   |  2 +-
- 3 files changed, 8 insertions(+), 6 deletions(-)
+ .../0002-memfd-fix-build-with-glibc-2.27.patch     | 87 ++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
-diff --git a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
-index 2bb0b7dbcd..4eb43480c0 100644
---- a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
-+++ b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
-@@ -11,23 +11,25 @@ ld: attempted static link of dynamic object `/usr/lib/libuuid.so'
- 
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- [Sent upstream: https://www.spinics.net/lists/xfs/msg36149.html]
-+[baruch: update for v4.15.1]
+diff --git a/package/trinity/0002-memfd-fix-build-with-glibc-2.27.patch b/package/trinity/0002-memfd-fix-build-with-glibc-2.27.patch
+new file mode 100644
+index 0000000000..9ea3634688
+--- /dev/null
++++ b/package/trinity/0002-memfd-fix-build-with-glibc-2.27.patch
+@@ -0,0 +1,87 @@
++From c93bb184ce996c4d77eefbae2ab0bf74f396ec45 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 13 Mar 2018 06:53:06 +0200
++Subject: [PATCH] memfd: fix build with glibc 2.27
++
++glibc 2.27 added a wrapper for memfd_create(). This causes build
++failure:
++
++fds/memfd.c:19:12: error: static declaration of 'memfd_create' follows non-static declaration
++ static int memfd_create(__unused__ const char *uname, __unused__ unsigned int flag)
++            ^~~~~~~~~~~~
++
++Don't use the local definition when the libc provides one.
++
 +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- ---
-  mdrestore/Makefile | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/mdrestore/Makefile b/mdrestore/Makefile
--index 5171306..1b34a0e 100644
-+index 136ae716d691..75ff1bad78e9 100644
- --- a/mdrestore/Makefile
- +++ b/mdrestore/Makefile
- @@ -10,7 +10,7 @@ CFILES = xfs_mdrestore.c
-  
-- LLDLIBS = $(LIBXFS) $(LIBRT) $(LIBPTHREAD) $(LIBUUID)
-- LTDEPENDENCIES = $(LIBXFS)
-+ LLDLIBS = $(LIBXFS) $(LIBFROG) $(LIBRT) $(LIBPTHREAD) $(LIBUUID)
-+ LTDEPENDENCIES = $(LIBXFS) $(LIBFROG)
- -LLDFLAGS = -static
- +LLDFLAGS = -static-libtool-libs
-  
-  default: depend $(LTCOMMAND)
-  
- -- 
--2.7.4
++---
++Upstream status: https://github.com/kernelslacker/trinity/pull/23
++
++ configure   | 23 +++++++++++++++++++++++
++ fds/memfd.c |  3 +++
++ 2 files changed, 26 insertions(+)
++
++diff --git a/configure b/configure
++index dc0a87d8c1ad..c0166af33048 100755
++--- a/configure
+++++ b/configure
++@@ -288,6 +288,29 @@ else
++ 	echo "#define USE_BTRFS 1" >> $CONFIGH
++ fi
++ 
+++#############################################################################################
+++# Does glibc provide memfd_create() syscall wrapper
+++#
+++echo -n "[*] Checking if glibc provides memfd_create.. "
+++rm -f "$TMP" || exit 1
+++
+++cat >"$TMP.c" << EOF
+++#include <sys/mman.h>
+++
+++void main()
+++{
+++	memfd_create();
+++}
+++EOF
+++
+++${CC} ${CFLAGS} "$TMP.c" -o "$TMP" &>"$TMP.log"
+++if [ ! -x "$TMP" ]; then
+++	echo $RED "[NO]" $COL_RESET
+++else
+++	echo $GREEN "[YES]" $COL_RESET
+++	echo "#define USE_MEMFD_CREATE 1" >> $CONFIGH
+++fi
+++
++ #############################################################################################
++ 
++ check_header linux/caif/caif_socket.h USE_CAIF
++diff --git a/fds/memfd.c b/fds/memfd.c
++index 210678e4571c..aaaac2f78f54 100644
++--- a/fds/memfd.c
+++++ b/fds/memfd.c
++@@ -5,6 +5,7 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <unistd.h>
+++#include <sys/mman.h>
++ 
++ #include "fd.h"
++ #include "memfd.h"
++@@ -16,6 +17,7 @@
++ #include "trinity.h"
++ #include "udp.h"
++ 
+++#ifndef USE_MEMFD_CREATE
++ static int memfd_create(__unused__ const char *uname, __unused__ unsigned int flag)
++ {
++ #ifdef SYS_memfd_create
++@@ -24,6 +26,7 @@ static int memfd_create(__unused__ const char *uname, __unused__ unsigned int fl
++ 	return -ENOSYS;
++ #endif
++ }
+++#endif
++ 
++ static void memfd_destructor(struct object *obj)
++ {
++-- 
 +2.16.1
- 
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
-index 886a8f10c5..c58dbb0766 100644
---- a/package/xfsprogs/xfsprogs.hash
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -1,3 +1,3 @@
- # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
--sha256 b1b710b268bc95d6f45eca06e1262c29eb38865a19cd4404e48ba446e043b7ec  xfsprogs-4.14.0.tar.xz
-+sha256 27c36de9346a274143ad06c65b2fdbafd2806f3f37fa2c1235a08ed920d2bf3c  xfsprogs-4.15.1.tar.xz
- sha256 ee304b1b1da08b261f1d1f31d229fc70d2d0c552c7429e9e84c0fac878d94209  doc/COPYING
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index e6e8493684..7f49e2312f 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XFSPROGS_VERSION = 4.14.0
-+XFSPROGS_VERSION = 4.15.1
- XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
- XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
- XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
++
