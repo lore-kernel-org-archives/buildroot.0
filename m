@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 13 Mar 2018 00:09:39 -0300
-Subject: [Buildroot] [PATCH v3 1/7] genrandconfig: fix code style
+Date: Tue, 13 Mar 2018 00:09:40 -0300
+Subject: [Buildroot] [PATCH v3 2/7] size-stats-compare: fix code style
 In-Reply-To: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
 References: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1520910585-19097-2-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <1520910585-19097-3-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,140 +11,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fix these warnings:
-E201 whitespace after '['
-E202 whitespace before ']'
-E501 line too long (138 > 132 characters)
- -> isolate the common part of the external toolchain url in a variable
- to make the long lines shorter and more readable.
+E129 visually indented line with same indent as next logical line
+E302 expected 2 blank lines, found 1
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 Changes v2 -> v3:
-  - no changes
+  - manually accepted review tag
 
 Changes v1 -> v2:  (suggested by Thomas Petazzoni)
-  - fix the long lines instead of ignoring them
-
-Tested using this script:
-https://gitlab.com/RicardoMartincoski/buildroot/commit/19edfa388981e656216af7b8b566142161fa6142
+  - the fix for E129 made the code less readable, use another fix.
 ---
- utils/genrandconfig | 36 +++++++++++++++++++-----------------
- 1 file changed, 19 insertions(+), 17 deletions(-)
+ utils/size-stats-compare | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 0d08570..d958664 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -127,7 +127,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
+diff --git a/utils/size-stats-compare b/utils/size-stats-compare
+index e5a1ec3..a3d7f25 100755
+--- a/utils/size-stats-compare
++++ b/utils/size-stats-compare
+@@ -24,14 +24,15 @@ import csv
+ import argparse
+ import sys
  
-     with open(toolchains_csv) as r:
-         # filter empty lines and comments
--        lines = [ t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#' ]
-+        lines = [t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#']
-         toolchains = decode_byte_list(lines)
-     configs = []
- 
-@@ -210,6 +210,8 @@ def fixup_config(configfile):
-     with open(configfile) as configf:
-         configlines = configf.readlines()
- 
-+    BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
 +
-     if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not sysinfo.has("java"):
-         return False
-     if "BR2_NEEDS_HOST_JAVAC=y\n" in configlines and not sysinfo.has("javac"):
-@@ -221,36 +223,36 @@ def fixup_config(configfile):
-         return False
-     # The ctng toolchain is affected by PR58854
-     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
-         return False
-     # The ctng toolchain tigger an assembler error with guile package when compiled with -Os (same issue as for CS ARM 2014.05-29)
-     if 'BR2_PACKAGE_GUILE=y\n' in configlines and \
-        'BR2_OPTIMIZE_S=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
-         return False
-     # The ctng toolchain is affected by PR58854
-     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:
-         return False
-     # The ctng toolchain is affected by PR58854
-     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:
-         return False
-     # The ctng toolchain is affected by PR60155
-     if 'BR2_PACKAGE_SDL=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # The ctng toolchain is affected by PR60155
-     if 'BR2_PACKAGE_LIBMPEG2=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
-     if 'BR2_PACKAGE_STRONGSWAN=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-         return False
-     # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
-     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-         return False
-     # libffi not available on sh2a and ARMv7-M, but propagating libffi
-     # arch dependencies in Buildroot is really too much work, so we
-@@ -266,37 +268,37 @@ def fixup_config(configfile):
-         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
-     # This MIPS uClibc toolchain fails to build the gdb package
-     if 'BR2_PACKAGE_GDB=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # This MIPS uClibc toolchain fails to build the rt-tests package
-     if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # This MIPS uClibc toolchain fails to build the civetweb package
-     if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # This MIPS ctng toolchain fails to build the python3 package
-     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-         return False
-     # This MIPS uClibc toolchain fails to build the strace package
-     if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # This MIPS uClibc toolchain fails to build the cdrkit package
-     if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
-        'BR2_STATIC_LIBS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # uClibc vfork static linking issue
-     if 'BR2_PACKAGE_ALSA_LIB=y\n' in configlines and \
-        'BR2_STATIC_LIBS=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/i486-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'i486-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # This MIPS uClibc toolchain fails to build the weston package
-     if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
--       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-     # The cs nios2 2017.02 toolchain is affected by binutils PR19405
-     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
+ def read_file_size_csv(inputf, detail=None):
+     """Extract package or file sizes from CSV file into size dictionary"""
+     sizes = {}
+     reader = csv.reader(inputf)
+ 
+     header = next(reader)
+-    if (header[0] != 'File name' or header[1] != 'Package name' or
+-        header[2] != 'File size' or header[3] != 'Package size'):
++    if header[0] != 'File name' or header[1] != 'Package name' or \
++       header[2] != 'File size' or header[3] != 'Package size':
+         print(("Input file %s does not contain the expected header. Are you "
+                "sure this file corresponds to the file-size-stats.csv "
+                "file created by 'make graph-size'?") % inputf.name)
+@@ -45,6 +46,7 @@ def read_file_size_csv(inputf, detail=None):
+ 
+     return sizes
+ 
++
+ def compare_sizes(old, new):
+     """Return delta/added/removed dictionaries based on two input size
+     dictionaries"""
+@@ -64,6 +66,7 @@ def compare_sizes(old, new):
+ 
+     return delta
+ 
++
+ def print_results(result, threshold):
+     """Print the given result dictionary sorted by size, ignoring any entries
+     below or equal to threshold"""
 -- 
 2.7.4
