@@ -1,38 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 13 Mar 2018 17:59:40 +0200
-Subject: [Buildroot] [PATCH] glibc: install the obsolete libnsl
-Message-ID: <d9f3b3cf8413fcabd4468a6057ee399a3968d20d.1520956780.git.baruch@tkos.co.il>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 13 Mar 2018 17:08:08 +0100
+Subject: [Buildroot] [PATCH] sunxi-mali-mainline-driver: bump version
+Message-ID: <1520957288-107199-1-git-send-email-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc 2.27 stopped installing libnsl by default. Restore libnsl install
-to fix packages, like exim, that use that library.
+For stop using cma.
 
-Fixes (exim):
-http://autobuild.buildroot.net/results/a19/a19df43be7d27cf8815e1257122d25aa8285d75b/
-http://autobuild.buildroot.net/results/8ec/8ecfc42a81efec8485784f945e231eb40a087b5b/
-http://autobuild.buildroot.net/results/054/054eb702a9b8c66454970333ef45a0afccb7cc80/
+git shortlog --invert-grep --grep travis --no-merges 94ccbc8924c12a818d61d36a4b389b74a89fde3c..
+Maxime Ripard (1):
+      mali: Stop using the reserved-memory region to setup the fb area
 
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/glibc/glibc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 00e114566cbe..f724ced857fe 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -100,6 +100,7 @@ define GLIBC_CONFIGURE_CMDS
- 		--disable-profile \
- 		--without-gd \
- 		--enable-obsolete-rpc \
-+		--enable-obsolete-nsl \
- 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
- 		--with-headers=$(STAGING_DIR)/usr/include)
- 	$(GLIBC_ADD_MISSING_STUB_H)
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index 24e759a..24817b0 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = 94ccbc8924c12a818d61d36a4b389b74a89fde3c
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ 
 -- 
-2.16.1
+2.7.4
