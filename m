@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Mar 2018 22:05:24 +0100
-Subject: [Buildroot] [PATCH 19/22] package/x11r7/xapp_xwininfo: bump version
- to 1.1.4
+Date: Tue, 13 Mar 2018 22:05:18 +0100
+Subject: [Buildroot] [PATCH 13/22] package/x11r7/xapp_xrdb: bump version to
+ 1.1.1
 In-Reply-To: <20180313210527.309-1-bernd.kuhls@t-online.de>
 References: <20180313210527.309-1-bernd.kuhls@t-online.de>
-Message-ID: <20180313210527.309-19-bernd.kuhls@t-online.de>
+Message-ID: <20180313210527.309-13-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xwininfo/xapp_xwininfo.hash | 9 +++++++--
- package/x11r7/xapp_xwininfo/xapp_xwininfo.mk   | 2 +-
+ package/x11r7/xapp_xrdb/xapp_xrdb.hash | 9 +++++++--
+ package/x11r7/xapp_xrdb/xapp_xrdb.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
-index 4b891a2084..e3882584c3 100644
---- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
-+++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.hash b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
+index 4844a09b4a..c729861724 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.hash
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002215.html
--sha256	218eb0ea95bd8de7903dfaa26423820c523ad1598be0751d2d8b6a2c23b23ff8	xwininfo-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002877.html
-+md5 9a505b91ae7160bbdec360968d060c83  xwininfo-1.1.4.tar.bz2
-+sha1 7364e79d1de7bb612dd98c336c649648c6c081ca  xwininfo-1.1.4.tar.bz2
-+sha256 839498aa46b496492a5c65cd42cd2e86e0da88149b0672e90cb91648f8cd5b01  xwininfo-1.1.4.tar.bz2
-+sha512 d3ab103a0a311e08d1eabc4346750c21eb7d2fbcdc27cab0989a2624b9cd488911614fcf9832603353450114b1231a8f8262cab16e090a0d458d83ec7b6b959b  xwininfo-1.1.4.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002316.html
+-sha256	73827b6bbfc9d27ca287d95a1224c306d7053cd7b8156641698d7dc541ca565b	xrdb-1.1.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002871.html
++md5 96f9423eab4d0641c70848d665737d2e  xrdb-1.1.1.tar.bz2
++sha1 0d6b1cae357574d565d6e6bc10f6ccf073e1b9dd  xrdb-1.1.1.tar.bz2
++sha256 2d23ade7cdbb487996bf77cbb32cbe9bdb34d004748a53de7a4a97660d2217b7  xrdb-1.1.1.tar.bz2
++sha512 20c342004ef911fc4d3ef4ac3ac15d1c30bb946b8156f3a6916c242e470be0cb63261563462fd1e2e07b1a7cc527b8cacf5f913e31b02196629a95043cf8d13f  xrdb-1.1.1.tar.bz2
 +# Locally computed
-+sha256 443d675237c023a47e4886506b72796afbb2633394812027f91d6e8fa433b2af COPYING
-diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
-index 8ae5961ee4..7da881a9fc 100644
---- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
-+++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
++sha256 ca1b3e2f9f37c35876b69a9c1c5a7860fae59b7ba87a1d2dc541b722e29b1ecc COPYING
+diff --git a/package/x11r7/xapp_xrdb/xapp_xrdb.mk b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
+index f32afa45ab..4b84c64a92 100644
+--- a/package/x11r7/xapp_xrdb/xapp_xrdb.mk
++++ b/package/x11r7/xapp_xrdb/xapp_xrdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XWININFO_VERSION = 1.1.3
-+XAPP_XWININFO_VERSION = 1.1.4
- XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.bz2
- XAPP_XWININFO_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XWININFO_LICENSE = MIT
+-XAPP_XRDB_VERSION = 1.1.0
++XAPP_XRDB_VERSION = 1.1.1
+ XAPP_XRDB_SOURCE = xrdb-$(XAPP_XRDB_VERSION).tar.bz2
+ XAPP_XRDB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XRDB_LICENSE = MIT
 -- 
 2.11.0
