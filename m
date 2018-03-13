@@ -1,122 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 09:26:30 +0100
-Subject: [Buildroot] [git commit] trinity: fix build with glibc 2.27
-Message-ID: <20180313082715.3F91B80FCD@busybox.osuosl.org>
+Date: Tue, 13 Mar 2018 09:28:49 +0100
+Subject: [Buildroot] [PATCH] cmake: Fix RPATH for host libraries built
+ by CMake
+In-Reply-To: <ef04ec321632c14eb54ccc7bbd3638d60f602d3e.1520880682.git.jan.kundrat@cesnet.cz>
+ ("Jan =?utf-8?Q?Kundr=C3=A1t=22's?= message of "Mon, 12 Mar 2018 19:41:00
+ +0100")
+References: <ef04ec321632c14eb54ccc7bbd3638d60f602d3e.1520880682.git.jan.kundrat@cesnet.cz>
+Message-ID: <876060fkfy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=412443fb8fe309086c1da99d9ee441492d142211
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Jan" == Jan Kundr?t <jan.kundrat@cesnet.cz> writes:
 
-glibc 2.27 added a system call wrapper for memfd_create() which collides
-with the local definition of the same symbol in trinity. Add a patch to
-detect the presence of memfd_create(), and avoid collision.
+ > The host shared libraries produced by CMake were missing a proper
+ > DT_RPATH. That became a problem because the DT_RPATH handling is not
+ > transitive by design.
 
-Fixes:
-http://autobuild.buildroot.net/results/fda/fda07327395921fdc79cbb4f24b662209fee1be1/
-http://autobuild.buildroot.net/results/f98/f98f43657cbf519a626257af5a21c8c228423856/
-http://autobuild.buildroot.net/results/575/57558c418ea5c5011ac22e5236beff4d823c825b/
+ > Consider the following scenario:
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-memfd-fix-build-with-glibc-2.27.patch     | 87 ++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ > - pkg-a provides a library (`liba`) which links to `libpcre`
+ > - pkg-b provides a binary (`foo`) and a shared library (`libb`) which is
+ > needed by that binary
+ > - `libb` links to `liba`
+ > - pkg-a and pkg-b are both built by CMake
 
-diff --git a/package/trinity/0002-memfd-fix-build-with-glibc-2.27.patch b/package/trinity/0002-memfd-fix-build-with-glibc-2.27.patch
-new file mode 100644
-index 0000000000..9ea3634688
---- /dev/null
-+++ b/package/trinity/0002-memfd-fix-build-with-glibc-2.27.patch
-@@ -0,0 +1,87 @@
-+From c93bb184ce996c4d77eefbae2ab0bf74f396ec45 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 13 Mar 2018 06:53:06 +0200
-+Subject: [PATCH] memfd: fix build with glibc 2.27
-+
-+glibc 2.27 added a wrapper for memfd_create(). This causes build
-+failure:
-+
-+fds/memfd.c:19:12: error: static declaration of 'memfd_create' follows non-static declaration
-+ static int memfd_create(__unused__ const char *uname, __unused__ unsigned int flag)
-+            ^~~~~~~~~~~~
-+
-+Don't use the local definition when the libc provides one.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/kernelslacker/trinity/pull/23
-+
-+ configure   | 23 +++++++++++++++++++++++
-+ fds/memfd.c |  3 +++
-+ 2 files changed, 26 insertions(+)
-+
-+diff --git a/configure b/configure
-+index dc0a87d8c1ad..c0166af33048 100755
-+--- a/configure
-++++ b/configure
-+@@ -288,6 +288,29 @@ else
-+ 	echo "#define USE_BTRFS 1" >> $CONFIGH
-+ fi
-+ 
-++#############################################################################################
-++# Does glibc provide memfd_create() syscall wrapper
-++#
-++echo -n "[*] Checking if glibc provides memfd_create.. "
-++rm -f "$TMP" || exit 1
-++
-++cat >"$TMP.c" << EOF
-++#include <sys/mman.h>
-++
-++void main()
-++{
-++	memfd_create();
-++}
-++EOF
-++
-++${CC} ${CFLAGS} "$TMP.c" -o "$TMP" &>"$TMP.log"
-++if [ ! -x "$TMP" ]; then
-++	echo $RED "[NO]" $COL_RESET
-++else
-++	echo $GREEN "[YES]" $COL_RESET
-++	echo "#define USE_MEMFD_CREATE 1" >> $CONFIGH
-++fi
-++
-+ #############################################################################################
-+ 
-+ check_header linux/caif/caif_socket.h USE_CAIF
-+diff --git a/fds/memfd.c b/fds/memfd.c
-+index 210678e4571c..aaaac2f78f54 100644
-+--- a/fds/memfd.c
-++++ b/fds/memfd.c
-+@@ -5,6 +5,7 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <unistd.h>
-++#include <sys/mman.h>
-+ 
-+ #include "fd.h"
-+ #include "memfd.h"
-+@@ -16,6 +17,7 @@
-+ #include "trinity.h"
-+ #include "udp.h"
-+ 
-++#ifndef USE_MEMFD_CREATE
-+ static int memfd_create(__unused__ const char *uname, __unused__ unsigned int flag)
-+ {
-+ #ifdef SYS_memfd_create
-+@@ -24,6 +26,7 @@ static int memfd_create(__unused__ const char *uname, __unused__ unsigned int fl
-+ 	return -ENOSYS;
-+ #endif
-+ }
-++#endif
-+ 
-+ static void memfd_destructor(struct object *obj)
-+ {
-+-- 
-+2.16.1
-+
+ > In this scenario, `foo` is correctly marked with DT_RPATH pointing to
+ > host/lib/, but that path is not used when (recursively) resolving PCRE's
+ > symbols in `liba`. When attempting to run the `foo` binary, the linker
+ > correctly finds both `liba` and `libb`, but it cannot find the
+ > libpcre.so as built by Buildroot for host.
+
+ > Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
