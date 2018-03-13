@@ -1,75 +1,141 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 22:28:05 +0100
-Subject: [Buildroot] [git commit] test_python_cryptography: fix code style
-Message-ID: <20180313213834.89D908013D@busybox.osuosl.org>
+Date: Tue, 13 Mar 2018 22:26:55 +0100
+Subject: [Buildroot] [git commit] genrandconfig: fix code style
+Message-ID: <20180313213834.6A4AC83573@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d44816f611a552716c878642f397a58cb034088b
+commit: https://git.buildroot.net/buildroot/commit/?id=f6809dba0ff6139bcc7d77ae5d237a8de0ed5ea1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fix these warnings:
-E122 continuation line missing indentation or outdented
-E301 expected 1 blank line, found 0
-E302 expected 2 blank lines, found 1
-F401 'os' imported but unused
+E201 whitespace after '['
+E202 whitespace before ']'
+E501 line too long (138 > 132 characters)
+ -> isolate the common part of the external toolchain url in a variable
+ to make the long lines shorter and more readable.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../tests/package/test_python_cryptography.py      | 23 ++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ utils/genrandconfig | 36 +++++++++++++++++++-----------------
+ 1 file changed, 19 insertions(+), 17 deletions(-)
 
-diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
-index b60152de1c..78c3ef55b3 100644
---- a/support/testing/tests/package/test_python_cryptography.py
-+++ b/support/testing/tests/package/test_python_cryptography.py
-@@ -1,7 +1,6 @@
--import os
--
- from tests.package.test_python import TestPythonBase
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 0d08570bc5..d958664572 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -127,7 +127,7 @@ def get_toolchain_configs(toolchains_csv, buildrootdir):
  
-+
- class TestPythonCryptography(TestPythonBase):
-     def fernet_test(self, timeout=-1):
-         cmd = self.interpreter + " -c 'from cryptography.fernet import Fernet;"
-@@ -10,22 +9,26 @@ class TestPythonCryptography(TestPythonBase):
-         _, exit_code = self.emulator.run(cmd, timeout)
-         self.assertEqual(exit_code, 0)
+     with open(toolchains_csv) as r:
+         # filter empty lines and comments
+-        lines = [ t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#' ]
++        lines = [t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#']
+         toolchains = decode_byte_list(lines)
+     configs = []
  
-+
- class TestPythonPy2Cryptography(TestPythonCryptography):
-     config = TestPythonBase.config + \
--"""
--BR2_PACKAGE_PYTHON=y
--BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
--"""
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-+        """
-+
-     def test_run(self):
-         self.login()
-         self.fernet_test(40)
+@@ -210,6 +210,8 @@ def fixup_config(configfile):
+     with open(configfile) as configf:
+         configlines = configf.readlines()
  
++    BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
 +
- class TestPythonPy3Cryptography(TestPythonCryptography):
-     config = TestPythonBase.config + \
--"""
--BR2_PACKAGE_PYTHON3=y
--BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
--"""
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-+        """
-+
-     def test_run(self):
-         self.login()
-         self.fernet_test(40)
+     if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not sysinfo.has("java"):
+         return False
+     if "BR2_NEEDS_HOST_JAVAC=y\n" in configlines and not sysinfo.has("javac"):
+@@ -221,36 +223,36 @@ def fixup_config(configfile):
+         return False
+     # The ctng toolchain is affected by PR58854
+     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
+         return False
+     # The ctng toolchain tigger an assembler error with guile package when compiled with -Os (same issue as for CS ARM 2014.05-29)
+     if 'BR2_PACKAGE_GUILE=y\n' in configlines and \
+        'BR2_OPTIMIZE_S=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
+         return False
+     # The ctng toolchain is affected by PR58854
+     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:
+         return False
+     # The ctng toolchain is affected by PR58854
+     if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:
+         return False
+     # The ctng toolchain is affected by PR60155
+     if 'BR2_PACKAGE_SDL=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # The ctng toolchain is affected by PR60155
+     if 'BR2_PACKAGE_LIBMPEG2=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
+     if 'BR2_PACKAGE_STRONGSWAN=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
+         return False
+     # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
+     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
+         return False
+     # libffi not available on sh2a and ARMv7-M, but propagating libffi
+     # arch dependencies in Buildroot is really too much work, so we
+@@ -266,37 +268,37 @@ def fixup_config(configfile):
+         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
+     # This MIPS uClibc toolchain fails to build the gdb package
+     if 'BR2_PACKAGE_GDB=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # This MIPS uClibc toolchain fails to build the rt-tests package
+     if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # This MIPS uClibc toolchain fails to build the civetweb package
+     if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # This MIPS ctng toolchain fails to build the python3 package
+     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
+         return False
+     # This MIPS uClibc toolchain fails to build the strace package
+     if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # This MIPS uClibc toolchain fails to build the cdrkit package
+     if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
+        'BR2_STATIC_LIBS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # uClibc vfork static linking issue
+     if 'BR2_PACKAGE_ALSA_LIB=y\n' in configlines and \
+        'BR2_STATIC_LIBS=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/i486-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'i486-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # This MIPS uClibc toolchain fails to build the weston package
+     if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
+-       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
+     # The cs nios2 2017.02 toolchain is affected by binutils PR19405
+     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
