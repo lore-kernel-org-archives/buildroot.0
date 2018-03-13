@@ -1,51 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 09:27:50 +0100
-Subject: [Buildroot] [git commit] cmake: Fix RPATH for host libraries built
- by CMake
-Message-ID: <20180313082854.69A3A83499@busybox.osuosl.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 13 Mar 2018 05:44:57 -0400
+Subject: [Buildroot] [PATCH] qemu: bump to 2.11.1
+Message-ID: <20180313094457.594-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d43534625ac06ae01987113e912ffaf1aec2302
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also refresh patch.
 
-The host shared libraries produced by CMake were missing a proper
-DT_RPATH. That became a problem because the DT_RPATH handling is not
-transitive by design.
-
-Consider the following scenario:
-
-- pkg-a provides a library (`liba`) which links to `libpcre`
-- pkg-b provides a binary (`foo`) and a shared library (`libb`) which is
-needed by that binary
-- `libb` links to `liba`
-- pkg-a and pkg-b are both built by CMake
-
-In this scenario, `foo` is correctly marked with DT_RPATH pointing to
-host/lib/, but that path is not used when (recursively) resolving PCRE's
-symbols in `liba`. When attempting to run the `foo` binary, the linker
-correctly finds both `liba` and `libb`, but it cannot find the
-libpcre.so as built by Buildroot for host.
-
-Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/pkg-cmake.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch | 10 ++++++----
+ package/qemu/qemu.hash                                         |  2 +-
+ package/qemu/qemu.mk                                           |  2 +-
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 14ffe4a88f..9b07798a1e 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -132,6 +132,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
-+		-DCMAKE_SHARED_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
- 		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
- 		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
- 		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
+diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+index 6d6d024d9d..98783a38ee 100644
+--- a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
++++ b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+@@ -13,15 +13,17 @@ general case of using uc_mcontext.arm_pc, which works fine with
+ uClibc.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++[aduskett at gmail.com: Update for 2.11.1]
+ ---
+  user-exec.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/user-exec.c b/user-exec.c
++diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
+ index 6db0758..2b3d116 100644
+---- a/user-exec.c
+-+++ b/user-exec.c
+-@@ -409,7 +409,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
++--- a/accel/tcg/user-exec.c
+++++ b/accel/tcg/user-exec.c
++@@ -456,7 +456,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
+  
+  #if defined(__NetBSD__)
+      pc = uc->uc_mcontext.__gregs[_REG_R15];
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 1173c1bf3d..dd1ac9a179 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 fcfdaa1ecdaac8aead616fe811bfb8fe4a8f2cd59796aa446c5175b5af0e829f  qemu-2.10.2.tar.xz
++sha256 8a5145d1f8bd2eadc6776f3e13c68cd28d01349e30639bdbcb26ac588d668686  qemu-2.11.1.tar.xz
+ sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 345ef52668..7762ad73e2 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QEMU_VERSION = 2.10.2
++QEMU_VERSION = 2.11.1
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+-- 
+2.14.3
