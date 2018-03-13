@@ -1,84 +1,83 @@
-From: dev_stefan <dev-blst@gmx.de>
-Date: Tue, 13 Mar 2018 00:22:37 +0100
-Subject: [Buildroot] Linker error while building glibc
-Message-ID: <03BF469D-1273-46FF-9282-82A829CD81C4@gmx.de>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 13 Mar 2018 00:09:38 -0300
+Subject: [Buildroot] [PATCH v3 0/7] fix Python code style v3
+Message-ID: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, 
+Hello,
 
-I want to build a image from my beaglebone, but if i add some target packages eg. Python i got a linker error:
- 
-init.c:(.text+0x54): undefined reference to 'main'
-collect2: error: ld returned 1 exit status
+This series fixes code style warnings reported by flake8 in the Python scripts
+in the tree. Many patches from v1 were already applied.
 
-while building libzlib 1.2.11.
+I am ignoring this script for now:
+support/scripts/xorg-release
+I opened a thread about it:
+http://lists.busybox.net/pipermail/buildroot/2018-January/211557.html
 
-But there are familiar errors if I enable other packages. 
+The first 4 patches fix each script.
+I tried to do the minimum to accomplish the task avoiding any unrelated
+refactoring, what IMO brings these advantages:
+ - small chance of introducing regressions;
+ - easy code review;
+ - less testing effort.
+The commit messages are terse as the changes I introduced are minimal.
 
-I use buildroot version 2018.02 on ubuntu 14.04 LTS. 
+Patch 5 adds flake8 to the Docker image, needed by the next patch.
 
-Here is my config (working): 
+After this patch, the docker image must be built, published, and have its tag
+added to .gitlab.yml{,.in}
 
-BR2_arm=y 
-2 BR2_cortex_a8=y 
-3 BR2_ARM_FPU_NEON=y 
-4 BR2_GLOBAL_PATCH_DIR="board/testo/beagleBoneTesto/patches" 
-5 BR2_SSP_ALL=y 
-6 BR2_RELRO_FULL=y 
-7 BR2_FORTIFY_SOURCE_2=y 
-8 BR2_TOOLCHAIN_BUILDROOT_GLIBC=y 
-9 BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y 
-10 BR2_BINUTILS_VERSION_2_30_X=y 
-11 BR2_GCC_VERSION_7_X=y 
-12 BR2_TOOLCHAIN_BUILDROOT_CXX=y 
-13 BR2_GCC_ENABLE_LTO=y 
-14 BR2_TARGET_GENERIC_ISSUE="Welcome to Testo BeagleBone " 
-15 BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y 
-16 BR2_TARGET_GENERIC_GETTY_PORT="ttyO0" 
-17 BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y 
-18 BR2_ROOTFS_OVERLAY="board/testo/beagleBoneTesto/add2rootfs" 
-19 BR2_ROOTFS_POST_IMAGE_SCRIPT="board/testo/beagleBoneTesto/post-image.sh" 
-20 BR2_LINUX_KERNEL=y 
-21 BR2_LINUX_KERNEL_CUSTOM_GIT=y 
-22 BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/beagleboard/linux.git" 
-23 BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="5d84ea71b463b8c98bad9fcd8d92e0781a0e5b2a" 
-24 BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y 
-25 BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/testo/beagleBoneTesto/linux.config" 
-26 BR2_LINUX_KERNEL_DTS_SUPPORT=y 
-27 BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y 
-28 BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/testo/beagleBoneTesto/dts/am335x-bbt.dts" 
-29 BR2_PACKAGE_BUSYBOX_CONFIG="board/testo/beagleBoneTesto/busybox.config" 
-30 BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y 
-31 BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES=y 
-32 BR2_PACKAGE_BUSYBOX_WATCHDOG=y 
-33 BR2_PACKAGE_SWUPDATE=y 
-34 # BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE is not set 
-35 BR2_TARGET_ROOTFS_EXT2=y 
-36 BR2_TARGET_ROOTFS_EXT2_4=y 
-37 BR2_TARGET_ROOTFS_EXT2_SIZE="256M" 
-38 BR2_TARGET_UBOOT=y 
-39 BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y 
-40 BR2_TARGET_UBOOT_CUSTOM_VERSION=y 
-41 BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01" 
-42 BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG=y 
-43 BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE="board/testo/beagleBoneTesto/uboot.config" 
-44 BR2_TARGET_UBOOT_NEEDS_DTC=y 
-45 # BR2_TARGET_UBOOT_FORMAT_BIN is not set 
-46 BR2_TARGET_UBOOT_FORMAT_IMG=y 
-47 BR2_TARGET_UBOOT_FORMAT_CUSTOM=y 
-48 BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin" 
-49 BR2_TARGET_UBOOT_SPL=y 
-50 BR2_TARGET_UBOOT_SPL_NAME="MLO" 
-51 BR2_PACKAGE_HOST_DOSFSTOOLS=y 
-52 BR2_PACKAGE_HOST_GENIMAGE=y 
-53 BR2_PACKAGE_HOST_MTOOLS=y 
+Patch 6 creates a job in GitLab to run flake8:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/57046920
 
+Patch 7 ignores a file from the check.
 
+And here a complete run on GitLab using a preview of the new Docker image:
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/18789118
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180313/9edb35b0/attachment-0001.html>
+Regards,
+Ricardo
+--
+Changes v2 -> v3:
+  - manually accepted review tags.
+  - dockerfile: improve commit log and use best practices.  (suggested by
+    Yann E. MORIN)
+
+Changes v1 -> v2:
+  - genrandconfig: fix the long lines instead of ignoring them.  (suggested by
+    Thomas Petazzoni)
+  - size-stats-compare: the fix for E129 made the code less readable, use
+    another fix.  (suggested by Thomas Petazzoni)
+  - test_python_cryptography: new patch.
+  - scanpypi: new patch.
+  - dockerfile: install flake8 to the base docker image instead of adding sudo
+    to install tools on the fly.  (suggested by Yann E. MORIN)
+  - .gitlab-ci.yml: use flake8 pre-installed.  (suggested by Yann E. MORIN)
+  - utils/diffconfig: ignore warnings for this file that comes from kernel
+    source.  (suggested by Thomas Petazzoni)
+--
+Ricardo Martincoski (7):
+  genrandconfig: fix code style
+  size-stats-compare: fix code style
+  test_python_cryptography: fix code style
+  scanpypi: fix code style
+  support/dockerfile: install flake8
+  .gitlab-ci.yml: check flake8
+  .flake8: ignore utils/diffconfig
+
+ .flake8                                            |  3 ++
+ .gitlab-ci.yml                                     | 11 +++++++
+ .gitlab-ci.yml.in                                  | 11 +++++++
+ support/docker/Dockerfile                          | 11 ++++++-
+ .../tests/package/test_python_cryptography.py      | 23 ++++++++------
+ utils/genrandconfig                                | 36 ++++++++++++----------
+ utils/scanpypi                                     |  4 ++-
+ utils/size-stats-compare                           |  7 +++--
+ 8 files changed, 75 insertions(+), 31 deletions(-)
+
+-- 
+2.7.4
