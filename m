@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Mar 2018 22:05:10 +0100
-Subject: [Buildroot] [PATCH 05/22] package/x11r7/xapp_xinit: bump version to
- 1.4.0
+Date: Tue, 13 Mar 2018 22:05:11 +0100
+Subject: [Buildroot] [PATCH 06/22] package/x11r7/xapp_xkill: bump version to
+ 1.0.5
 In-Reply-To: <20180313210527.309-1-bernd.kuhls@t-online.de>
 References: <20180313210527.309-1-bernd.kuhls@t-online.de>
-Message-ID: <20180313210527.309-5-bernd.kuhls@t-online.de>
+Message-ID: <20180313210527.309-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xinit/xapp_xinit.hash | 9 +++++++--
- package/x11r7/xapp_xinit/xapp_xinit.mk   | 2 +-
+ package/x11r7/xapp_xkill/xapp_xkill.hash | 9 +++++++--
+ package/x11r7/xapp_xkill/xapp_xkill.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xinit/xapp_xinit.hash b/package/x11r7/xapp_xinit/xapp_xinit.hash
-index f8bab9114c..58ee1ecb1d 100644
---- a/package/x11r7/xapp_xinit/xapp_xinit.hash
-+++ b/package/x11r7/xapp_xinit/xapp_xinit.hash
+diff --git a/package/x11r7/xapp_xkill/xapp_xkill.hash b/package/x11r7/xapp_xkill/xapp_xkill.hash
+index 22c256d49d..0602971705 100644
+--- a/package/x11r7/xapp_xkill/xapp_xkill.hash
++++ b/package/x11r7/xapp_xkill/xapp_xkill.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2014-September/002477.html
--sha256	75d88d7397a07e01db253163b7c7a00b249b3d30e99489f2734cac9a0c7902b3	xinit-1.3.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002863.html
-+md5 2da154b2f80ca9637b1a17b13af0880c  xinit-1.4.0.tar.bz2
-+sha1 fcdca692b09a45f546016fff78718d1cf7e7852f  xinit-1.4.0.tar.bz2
-+sha256 230835eef2f5978a1e1344928168119373f6df1d0a32c09515e545721ee582ef  xinit-1.4.0.tar.bz2
-+sha512 53a29081130c1e195eb441ee77ccaa044b18b4cca3d2d5da3a6d67aa421dfd9718fa18b6be6232a41e40cf260c8190064c4d8d9ab771177bd5cd12e77a8fa79e  xinit-1.4.0.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002313.html
+-sha256	88ef2a304f32f24b255e879f03c1dcd3a2be3e71d5562205414f267d919f812e	xkill-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002864.html
++md5 938177e4472c346cf031c1aefd8934fc  xkill-1.0.5.tar.bz2
++sha1 c5ee06b33adb252a41e4f737be6bd47651ff582a  xkill-1.0.5.tar.bz2
++sha256 c5f0bb6a95e1ac7c4def8a657496d5d2f21ccd41eb47ef2c9ccb03fb6d6aff6b  xkill-1.0.5.tar.bz2
++sha512 4603a1794f114f5cea2c885020c9d073c8421d1e785c99ff6b936ae97139c8dac8020a187b5bbd0fa6d56ed6fab879441b42ba900cc5f2f5a534dafdc86b9249  xkill-1.0.5.tar.bz2
 +# Locally computed
-+sha256 c47001aa217d4ae7787121d80634db4bdba564e49a0ecab8d48b1bdc4edee1c7 COPYING
-diff --git a/package/x11r7/xapp_xinit/xapp_xinit.mk b/package/x11r7/xapp_xinit/xapp_xinit.mk
-index a796884f6b..d911a45953 100644
---- a/package/x11r7/xapp_xinit/xapp_xinit.mk
-+++ b/package/x11r7/xapp_xinit/xapp_xinit.mk
++sha256 13306c3890e4c8710bc468dee0eba7f9677cd94c7a67d2d81fa932d4f635b21f COPYING
+diff --git a/package/x11r7/xapp_xkill/xapp_xkill.mk b/package/x11r7/xapp_xkill/xapp_xkill.mk
+index 76af1b95cb..64ddbca694 100644
+--- a/package/x11r7/xapp_xkill/xapp_xkill.mk
++++ b/package/x11r7/xapp_xkill/xapp_xkill.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XINIT_VERSION = 1.3.4
-+XAPP_XINIT_VERSION = 1.4.0
- XAPP_XINIT_SOURCE = xinit-$(XAPP_XINIT_VERSION).tar.bz2
- XAPP_XINIT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XINIT_DEPENDENCIES = xapp_xauth xlib_libX11
+-XAPP_XKILL_VERSION = 1.0.4
++XAPP_XKILL_VERSION = 1.0.5
+ XAPP_XKILL_SOURCE = xkill-$(XAPP_XKILL_VERSION).tar.bz2
+ XAPP_XKILL_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKILL_LICENSE = MIT
 -- 
 2.11.0
