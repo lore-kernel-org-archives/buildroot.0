@@ -1,55 +1,42 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 13 Mar 2018 13:49:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linux: fix custom dts files
- handling
-In-Reply-To: <20180313113217.27657-1-rafal.susz@gmail.com>
-References: <20180312213523.32213-1-rafal.susz@gmail.com>
- <20180313113217.27657-1-rafal.susz@gmail.com>
-Message-ID: <20180313114901.unmgzziwzgim6dkz@tarshish>
+Date: Tue, 13 Mar 2018 14:12:36 +0200
+Subject: [Buildroot] [PATCH] cryptsetup: bump to version 2.0.2
+Message-ID: <5b149bd17fe250b527ebed2cd0d83ccea9718561.1520943156.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Rafal,
+Cc: Martin Hicks <mort@bork.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Mar 13, 2018 at 12:32:17PM +0100, Rafal Susz wrote:
-> Custom dts files are still conditionally copied based on non existing
-> boolean. So it is currently not possible to use custom dts file(s) at all.
-> 
-> List of dts files is now iterated and files are copied into dedicated kernel arch dir.
-> 
-> Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
-> ---
->  linux/linux.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index e98b25cb72..12f0b03dbc 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -370,8 +370,9 @@ endif
->  # Compilation. We make sure the kernel gets rebuilt when the
->  # configuration has changed.
->  define LINUX_BUILD_CMDS
-> -	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
-> -		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
-
-Commit f142f23ecf9ee (package/linux: drop useless intermediate DTS booleans) 
-should have removed BR2_LINUX_KERNEL_USE_CUSTOM_DTS. There is another 
-reference to this symbol below.
-
-> +	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
-> +		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ;   \
-> +	done
->  	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
->  	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
->  		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
-
-baruch
-
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index c54b0dc60711..7629691a6680 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
+-sha256 adc623b9e3e3ab5c14145b8baf21b741e513ee5bf90d2b4d85a745c2f05da199  cryptsetup-2.0.0.tar.xz
++sha256 4f8105d7f3bf758d58da3058b3cbd66c0ca81492b2dafe8ae7c049cc9e939e97  cryptsetup-2.0.2.tar.xz
+ sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 0d8480ba4886..39c9b7b0bc19 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CRYPTSETUP_VERSION_MAJOR = 2.0
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.16.1
