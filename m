@@ -1,45 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 22:37:54 +0100
-Subject: [Buildroot] [git commit] .flake8: ignore utils/diffconfig
-Message-ID: <20180313213834.BCA0B82566@busybox.osuosl.org>
+Date: Tue, 13 Mar 2018 22:28:05 +0100
+Subject: [Buildroot] [git commit] test_python_cryptography: fix code style
+Message-ID: <20180313213834.89D908013D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9324167b8090fa4703703c28e8cefff7fa001d21
+commit: https://git.buildroot.net/buildroot/commit/?id=d44816f611a552716c878642f397a58cb034088b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This script comes from the kernel source, so ignore any code style
-warnings for it in order to keep it as close as possible to the original
-one, making synchronization between repos easier.
-
-The option --exclude for flake8/pycodestyle is an absolute list and has
-a default, so ideally the default values should be added too.
-But the use cases for flake8 in the tree are:
- - when developing a new script or changing an existing one, the
-   developer calls flake8 only on that script;
- - in the GitLab job, a list of all Python files to be tested is created
-   and then passed to flake8.
-None of these involve calling 'flake8' without parameters, so don't care
-about adding the default value.
+Fix these warnings:
+E122 continuation line missing indentation or outdented
+E301 expected 1 blank line, found 0
+E302 expected 2 blank lines, found 1
+F401 'os' imported but unused
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .flake8 | 3 +++
- 1 file changed, 3 insertions(+)
+ .../tests/package/test_python_cryptography.py      | 23 ++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/.flake8 b/.flake8
-index afdb967930..7dd7b541cc 100644
---- a/.flake8
-+++ b/.flake8
-@@ -1,2 +1,5 @@
- [flake8]
-+exclude=
-+    # copied from the kernel sources
-+    utils/diffconfig
- max-line-length=132
+diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
+index b60152de1c..78c3ef55b3 100644
+--- a/support/testing/tests/package/test_python_cryptography.py
++++ b/support/testing/tests/package/test_python_cryptography.py
+@@ -1,7 +1,6 @@
+-import os
+-
+ from tests.package.test_python import TestPythonBase
+ 
++
+ class TestPythonCryptography(TestPythonBase):
+     def fernet_test(self, timeout=-1):
+         cmd = self.interpreter + " -c 'from cryptography.fernet import Fernet;"
+@@ -10,22 +9,26 @@ class TestPythonCryptography(TestPythonBase):
+         _, exit_code = self.emulator.run(cmd, timeout)
+         self.assertEqual(exit_code, 0)
+ 
++
+ class TestPythonPy2Cryptography(TestPythonCryptography):
+     config = TestPythonBase.config + \
+-"""
+-BR2_PACKAGE_PYTHON=y
+-BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
+-"""
++        """
++        BR2_PACKAGE_PYTHON=y
++        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
++        """
++
+     def test_run(self):
+         self.login()
+         self.fernet_test(40)
+ 
++
+ class TestPythonPy3Cryptography(TestPythonCryptography):
+     config = TestPythonBase.config + \
+-"""
+-BR2_PACKAGE_PYTHON3=y
+-BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
+-"""
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
++        """
++
+     def test_run(self):
+         self.login()
+         self.fernet_test(40)
