@@ -1,55 +1,38 @@
-From: Ciro Santilli <ciro.santilli@gmail.com>
-Date: Tue, 13 Mar 2018 15:58:23 +0000
-Subject: [Buildroot] Why when I change BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- and run make linux-reconfigure the kernel .config does not change? Ask
- Question
-Message-ID: <CAFXrp_dhva_S7=5FqRqVefYDMNSjc-vPBR=bTTE9P16rJRWL1w@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 13 Mar 2018 17:59:40 +0200
+Subject: [Buildroot] [PATCH] glibc: install the obsolete libnsl
+Message-ID: <d9f3b3cf8413fcabd4468a6057ee399a3968d20d.1520956780.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://stackoverflow.com/questions/49260466
+glibc 2.27 stopped installing libnsl by default. Restore libnsl install
+to fix packages, like exim, that use that library.
 
-Buildroot 7d43534625ac06ae01987113e912ffaf1aec2302 post 2018.02,
-Ubuntu 17.10 host.
+Fixes (exim):
+http://autobuild.buildroot.net/results/a19/a19df43be7d27cf8815e1257122d25aa8285d75b/
+http://autobuild.buildroot.net/results/8ec/8ecfc42a81efec8485784f945e231eb40a087b5b/
+http://autobuild.buildroot.net/results/054/054eb702a9b8c66454970333ef45a0afccb7cc80/
 
-I run:
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/glibc/glibc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-    make qemu_x86_64_defconfig
-    printf 'BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=\"kdb\"\n' >>.config
-    make olddefconfig
-    time make BR2_JLEVEL="$(nproc)"
-
-where kdb is a Linux kernel configuration that has `CONFIG_KGDB=y`.
-
-Then as expected:
-
-    grep '^CONFIG_KGDB=y' ./output/build/linux-4.15/.config
-
-has a match.
-
-But then I want to try out a new kernel config, so I try:
-
-    sed -i 's/BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=kdb/BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=nokdb/'
-
-where `nokdb` is a kernel config that has `CONFIG_KGDB=n` and then:
-
-    time make BR2_JLEVEL="$(nproc)" linux-reconfigure
-
-However to my surprise, the kernel `.config` did not change,
-`CONFIG_KGDB=y` is still there.
-
-Only if I do:
-
-    rm -f ./output/build/linux-4.15/.config
-    time make BR2_JLEVEL="$(nproc)" linux-reconfigure
-
-Is there a better way to force the kernel `.config` to be regenerated,
-e.g. some other `linux-*` target?
-
-I don't like this `rm` solution because it forces me to deal with
-"internal" paths inside `output`.
-
-I'd  expect `linux-reconfigure` to do that regeneration for me.
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 00e114566cbe..f724ced857fe 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -100,6 +100,7 @@ define GLIBC_CONFIGURE_CMDS
+ 		--disable-profile \
+ 		--without-gd \
+ 		--enable-obsolete-rpc \
++		--enable-obsolete-nsl \
+ 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
+ 		--with-headers=$(STAGING_DIR)/usr/include)
+ 	$(GLIBC_ADD_MISSING_STUB_H)
+-- 
+2.16.1
