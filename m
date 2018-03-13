@@ -1,83 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 13 Mar 2018 18:21:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linux: fix custom dts files
- handling
-In-Reply-To: <20180313142635.27423-1-rafal.susz@gmail.com>
-References: <20180313113217.27657-1-rafal.susz@gmail.com>
- <20180313142635.27423-1-rafal.susz@gmail.com>
-Message-ID: <20180313172102.GA4317@scaer>
+Date: Tue, 13 Mar 2018 18:22:28 +0100
+Subject: [Buildroot] [PATCH v3 5/7] support/dockerfile: install flake8
+In-Reply-To: <1520910585-19097-6-git-send-email-ricardo.martincoski@gmail.com>
+References: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
+ <1520910585-19097-6-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <20180313172228.GB4317@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rafal, All,
+Ricardo, All,
 
-On 2018-03-13 15:26 +0100, Rafal Susz spake thusly:
-> Custom dts files are still conditionally copied based on non existing
-> boolean. So it is currently not possible to use custom dts file(s) at all.
+On 2018-03-13 00:09 -0300, Ricardo Martincoski spake thusly:
+> Use the latest version of the tool because it is actively maintained.
+> But use a fixed version of the tool and its dependencies to get stable
+> results. It can be manually bumped from time to time.
 > 
-> List of dts files is now iterated and files are copied into dedicated kernel arch dir.
+> Before installing any Python packages, ensure pip, setuptools, and wheel
+> are up to date as recommended in the docs [1].
 > 
-> Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
-> ---
->  configs/s6lx9_microboard_defconfig | 1 -
->  linux/linux.mk                     | 9 +++++----
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> [1] https://packaging.python.org/tutorials/installing-packages/
 > 
-> diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
-> index f77c80ba87..97b2d3fe79 100644
-> --- a/configs/s6lx9_microboard_defconfig
-> +++ b/configs/s6lx9_microboard_defconfig
-> @@ -10,5 +10,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.7"
->  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/avnet/s6lx9_microboard/lx9_mmu_defconfig"
-> -BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
->  BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/avnet/s6lx9_microboard/lx9_mmu.dts"
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 
-I would prefer if it were two patches:
-  - one to fix linux.mk
-  - another to fix the defconfig
-
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index e98b25cb72..94bfb9661a 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -370,8 +370,9 @@ endif
->  # Compilation. We make sure the kernel gets rebuilt when the
->  # configuration has changed.
->  define LINUX_BUILD_CMDS
-> -	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
-> -		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
-> +	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
-> +		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ;   \
-> +	done
->  	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
->  	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
->  		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
-> @@ -482,9 +483,9 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
->  endif
->  endif
->  
-> -ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
-> +ifeq ($(strip $(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME)),y)
-
-Only $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) should be stripped, while the
-boolean $(BR2_LINUX_KERNEL_DTS_SUPPORT) needs not. Also, I'd prefer if
-there was a separator between the boolean and the free-form string:
-
-    ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(KERNEL_DTS_NAME)),y:)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  endif
+> ---
+> Changes v2 -> v3:  (suggested by Yann E. MORIN)
+>   - minimise the number of intermediate layers;
+>   - explain why install setuptools separately using the latest version
+>     (I actually just used the exact command line from the docs and
+>     referenced it in the commit log);
+>   - use a single package on each line, sorted.
+> 
+> Changes v1 -> v2:  (suggested by Yann E. MORIN)
+>   - install flake8 to the base docker image instead of adding sudo to
+>     install tools on the fly.
+> ---
+>  support/docker/Dockerfile | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+> index ce3fdd9..f01ac25 100644
+> --- a/support/docker/Dockerfile
+> +++ b/support/docker/Dockerfile
+> @@ -27,10 +27,19 @@ RUN dpkg --add-architecture i386 && \
+>          cvs bzr git mercurial subversion wget \
+>          cpio unzip \
+>          libncurses5-dev \
+> -        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 && \
+> +        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
+> +        python-pip && \
+>      apt-get -y autoremove && \
+>      apt-get -y clean
 >  
->  endif # BR_BUILDING
+> +# For check-flake8
+> +RUN python -m pip install --upgrade pip setuptools wheel && \
+> +    pip install -q \
+> +        flake8==3.5.0 \
+> +        mccabe==0.6.1 \
+> +        pycodestyle==2.3.1 \
+> +        pyflakes==1.6.0
+> +
+>  # To be able to generate a toolchain with locales, enable one UTF-8 locale
+>  RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
+>      /usr/sbin/locale-gen
 > -- 
-> 2.16.1
+> 2.7.4
 > 
 
 -- 
