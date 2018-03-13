@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Mar 2018 22:05:08 +0100
-Subject: [Buildroot] [PATCH 03/22] package/x11r7/xapp_xeyes: bump version to
- 1.1.2
+Date: Tue, 13 Mar 2018 22:05:09 +0100
+Subject: [Buildroot] [PATCH 04/22] package/x11r7/xapp_xfontsel: bump version
+ to 1.0.6
 In-Reply-To: <20180313210527.309-1-bernd.kuhls@t-online.de>
 References: <20180313210527.309-1-bernd.kuhls@t-online.de>
-Message-ID: <20180313210527.309-3-bernd.kuhls@t-online.de>
+Message-ID: <20180313210527.309-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xeyes/xapp_xeyes.hash | 9 +++++++--
- package/x11r7/xapp_xeyes/xapp_xeyes.mk   | 2 +-
+ package/x11r7/xapp_xfontsel/xapp_xfontsel.hash | 9 +++++++--
+ package/x11r7/xapp_xfontsel/xapp_xfontsel.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.hash b/package/x11r7/xapp_xeyes/xapp_xeyes.hash
-index 02eb26b7b9..bbb6a9b08b 100644
---- a/package/x11r7/xapp_xeyes/xapp_xeyes.hash
-+++ b/package/x11r7/xapp_xeyes/xapp_xeyes.hash
+diff --git a/package/x11r7/xapp_xfontsel/xapp_xfontsel.hash b/package/x11r7/xapp_xfontsel/xapp_xfontsel.hash
+index 40f55236f0..a09df5585b 100644
+--- a/package/x11r7/xapp_xfontsel/xapp_xfontsel.hash
++++ b/package/x11r7/xapp_xfontsel/xapp_xfontsel.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2010-November/001552.html
--sha1	efe6116d31a7f69e4fb6038613e52b0960b9b61c	xeyes-1.1.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002860.html
-+md5 6f0543ec84283df5743eeafc173bea4a  xeyes-1.1.2.tar.bz2
-+sha1 458987f8accdbd8abf993ee51030391cf584d2e8  xeyes-1.1.2.tar.bz2
-+sha256 57bcec0d2d167af9e5d44d0dbd74c6d7c0f0591cd0608952b23c749fdd910553  xeyes-1.1.2.tar.bz2
-+sha512 008d76f03ddabd3d86ad9e52a540504553b94cb7a6743b20cf08897549eb27505667365ab9af21956a1b5ec7297acca8903a326536e6195a30e643cd93297ee0  xeyes-1.1.2.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002213.html
+-sha256	170d8550b96fb47b04db6181b947e6f6b8b97f4df5d691c351a278480cc931bf	xfontsel-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002861.html
++md5 13150ff98846bf6d9a14bee00697fa47  xfontsel-1.0.6.tar.bz2
++sha1 3fd8d78cc270030b41298170c3e5222065dd1cfd  xfontsel-1.0.6.tar.bz2
++sha256 25aa0b7c4262f5e99c07c2b96e00e4eb25b7e53f94fa803942af9d0e8da3001c  xfontsel-1.0.6.tar.bz2
++sha512 2f6bc51549a302404cdaf9a5a825add383953fcbb2a0c7076691cefd4dd7e4a3c772c047be74101c8486f75d03ce0bd3e65ede14e91732cf2a932810441c9099  xfontsel-1.0.6.tar.bz2
 +# Locally computed
-+sha256 d8de1de40e16227d1eb4b19e95117ce3f990f71f71df096a2259b0bc9931e042 COPYING
-diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-index 07c12002be..6c7f859d35 100644
---- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
-+++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
++sha256 a27097bcc5cdf4fa5d761dd4e5cea1f41911c51b0a7d9da6e3a48f69d9fd0c09 COPYING
+diff --git a/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk b/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk
+index 781b4d3542..9dea4299b3 100644
+--- a/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk
++++ b/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XEYES_VERSION = 1.1.1
-+XAPP_XEYES_VERSION = 1.1.2
- XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
- XAPP_XEYES_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XEYES_LICENSE = MIT
+-XAPP_XFONTSEL_VERSION = 1.0.5
++XAPP_XFONTSEL_VERSION = 1.0.6
+ XAPP_XFONTSEL_SOURCE = xfontsel-$(XAPP_XFONTSEL_VERSION).tar.bz2
+ XAPP_XFONTSEL_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFONTSEL_LICENSE = MIT
 -- 
 2.11.0
