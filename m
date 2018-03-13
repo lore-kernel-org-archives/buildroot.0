@@ -1,93 +1,81 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 13 Mar 2018 08:39:53 +0100
-Subject: [Buildroot] [PATCH v3 3/7] test_python_cryptography: fix code
- style
-In-Reply-To: <1520910585-19097-4-git-send-email-ricardo.martincoski@gmail.com>
-References: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
- <1520910585-19097-4-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <CAGm1_ktLep5DC3DODq3rw1va4Ebe6n5Xu=WAdp7s=P0=4pwcbw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 13 Mar 2018 10:04:34 +0200
+Subject: [Buildroot] [PATCH] xfsprogs: bump to version 4.15.1
+Message-ID: <08a4568f50410fe726ef02849b2d8bfd04679afd.1520928274.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 13, 2018 at 4:09 AM, Ricardo Martincoski
-<ricardo.martincoski@gmail.com> wrote:
-> Fix these warnings:
-> E122 continuation line missing indentation or outdented
-> E301 expected 1 blank line, found 0
-> E302 expected 2 blank lines, found 1
-> F401 'os' imported but unused
->
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes compatibility with glibc 2.27.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes:
+http://autobuild.buildroot.net/results/bd7/bd7e1af33e6e937c75b44c7c9ab991d2b10f2931/
+http://autobuild.buildroot.net/results/58b/58b59b74f6a138b51206f24481f7268104f0a052/
 
-> ---
-> Changes v2 -> v3:
->   - no changes
->
-> Changes v1 -> v2:
->   - new patch (v1 of this series was not sent yet during the review of
->     http://patchwork.ozlabs.org/patch/811011/ so I asked to fix all in
->     the same series.
->
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/57046960
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/57046961
-> ---
->  .../tests/package/test_python_cryptography.py      | 23 ++++++++++++----------
->  1 file changed, 13 insertions(+), 10 deletions(-)
->
-> diff --git a/support/testing/tests/package/test_python_cryptography.py b/support/testing/tests/package/test_python_cryptography.py
-> index b60152d..78c3ef5 100644
-> --- a/support/testing/tests/package/test_python_cryptography.py
-> +++ b/support/testing/tests/package/test_python_cryptography.py
-> @@ -1,7 +1,6 @@
-> -import os
-> -
->  from tests.package.test_python import TestPythonBase
->
-> +
->  class TestPythonCryptography(TestPythonBase):
->      def fernet_test(self, timeout=-1):
->          cmd = self.interpreter + " -c 'from cryptography.fernet import Fernet;"
-> @@ -10,22 +9,26 @@ class TestPythonCryptography(TestPythonBase):
->          _, exit_code = self.emulator.run(cmd, timeout)
->          self.assertEqual(exit_code, 0)
->
-> +
->  class TestPythonPy2Cryptography(TestPythonCryptography):
->      config = TestPythonBase.config + \
-> -"""
-> -BR2_PACKAGE_PYTHON=y
-> -BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-> -"""
-> +        """
-> +        BR2_PACKAGE_PYTHON=y
-> +        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-> +        """
-> +
->      def test_run(self):
->          self.login()
->          self.fernet_test(40)
->
-> +
->  class TestPythonPy3Cryptography(TestPythonCryptography):
->      config = TestPythonBase.config + \
-> -"""
-> -BR2_PACKAGE_PYTHON3=y
-> -BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-> -"""
-> +        """
-> +        BR2_PACKAGE_PYTHON3=y
-> +        BR2_PACKAGE_PYTHON_CRYPTOGRAPHY=y
-> +        """
-> +
->      def test_run(self):
->          self.login()
->          self.fernet_test(40)
-> --
-> 2.7.4
->
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch | 10 ++++++----
+ package/xfsprogs/xfsprogs.hash                                 |  2 +-
+ package/xfsprogs/xfsprogs.mk                                   |  2 +-
+ 3 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
+index 2bb0b7dbcd9c..4eb43480c0d5 100644
+--- a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
++++ b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
+@@ -11,23 +11,25 @@ ld: attempted static link of dynamic object `/usr/lib/libuuid.so'
+ 
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ [Sent upstream: https://www.spinics.net/lists/xfs/msg36149.html]
++[baruch: update for v4.15.1]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ ---
+  mdrestore/Makefile | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/mdrestore/Makefile b/mdrestore/Makefile
+-index 5171306..1b34a0e 100644
++index 136ae716d691..75ff1bad78e9 100644
+ --- a/mdrestore/Makefile
+ +++ b/mdrestore/Makefile
+ @@ -10,7 +10,7 @@ CFILES = xfs_mdrestore.c
+  
+- LLDLIBS = $(LIBXFS) $(LIBRT) $(LIBPTHREAD) $(LIBUUID)
+- LTDEPENDENCIES = $(LIBXFS)
++ LLDLIBS = $(LIBXFS) $(LIBFROG) $(LIBRT) $(LIBPTHREAD) $(LIBUUID)
++ LTDEPENDENCIES = $(LIBXFS) $(LIBFROG)
+ -LLDFLAGS = -static
+ +LLDFLAGS = -static-libtool-libs
+  
+  default: depend $(LTCOMMAND)
+  
+ -- 
+-2.7.4
++2.16.1
+ 
+diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
+index 886a8f10c54b..c58dbb07669d 100644
+--- a/package/xfsprogs/xfsprogs.hash
++++ b/package/xfsprogs/xfsprogs.hash
+@@ -1,3 +1,3 @@
+ # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
+-sha256 b1b710b268bc95d6f45eca06e1262c29eb38865a19cd4404e48ba446e043b7ec  xfsprogs-4.14.0.tar.xz
++sha256 27c36de9346a274143ad06c65b2fdbafd2806f3f37fa2c1235a08ed920d2bf3c  xfsprogs-4.15.1.tar.xz
+ sha256 ee304b1b1da08b261f1d1f31d229fc70d2d0c552c7429e9e84c0fac878d94209  doc/COPYING
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index e6e8493684f1..7f49e2312f97 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XFSPROGS_VERSION = 4.14.0
++XFSPROGS_VERSION = 4.15.1
+ XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
+ XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
+ XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
+-- 
+2.16.1
