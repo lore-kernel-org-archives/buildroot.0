@@ -1,68 +1,94 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 13 Mar 2018 00:09:43 -0300
-Subject: [Buildroot] [PATCH v3 5/7] support/dockerfile: install flake8
+Date: Tue, 13 Mar 2018 00:09:44 -0300
+Subject: [Buildroot] [PATCH v3 6/7] .gitlab-ci.yml: check flake8
 In-Reply-To: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
 References: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1520910585-19097-6-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <1520910585-19097-7-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the latest version of the tool because it is actively maintained.
-But use a fixed version of the tool and its dependencies to get stable
-results. It can be manually bumped from time to time.
+Add a test to check Python code style in the whole buildroot tree.
 
-Before installing any Python packages, ensure pip, setuptools, and wheel
-are up to date as recommended in the docs [1].
+Search files by type in order to help flake8 to find the Python scripts
+without .py extension. But don't rely only in the output of 'file' as it
+uses heuristics and sometimes it is wrong (specially identifying Python
+files as C++ source for the 'file' version currently in the Docker
+image).
 
-[1] https://packaging.python.org/tutorials/installing-packages/
+Include in the output:
+ - the list of Python files processed;
+ - statistics for each kind of warning;
+ - the total number of warnings;
+ - the number of Python files processed.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-Changes v2 -> v3:  (suggested by Yann E. MORIN)
-  - minimise the number of intermediate layers;
-  - explain why install setuptools separately using the latest version
-    (I actually just used the exact command line from the docs and
-    referenced it in the commit log);
-  - use a single package on each line, sorted.
+BEFORE APPLYING, see this note from Yann:
+Note: this can only be applied _after_ we regenerate the docker image.
+Then we'll have to update the version of the image at the top of the
+gitlab-ci.yml file.
+
+Changes v2 -> v3:
+  - manually accepted review tag
 
 Changes v1 -> v2:  (suggested by Yann E. MORIN)
-  - install flake8 to the base docker image instead of adding sudo to
-    install tools on the fly.
----
- support/docker/Dockerfile | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+  - install flake8 to the base docker image (in the previous patch)
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index ce3fdd9..f01ac25 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -27,10 +27,19 @@ RUN dpkg --add-architecture i386 && \
-         cvs bzr git mercurial subversion wget \
-         cpio unzip \
-         libncurses5-dev \
--        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 && \
-+        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
-+        python-pip && \
-     apt-get -y autoremove && \
-     apt-get -y clean
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/57046920
+---
+ .gitlab-ci.yml    | 11 +++++++++++
+ .gitlab-ci.yml.in | 11 +++++++++++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index f44c3a9..9ad4c5f 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -30,6 +30,17 @@ check-DEVELOPERS:
+     script:
+         - "! utils/get-developers | grep -v 'No action specified'"
  
-+# For check-flake8
-+RUN python -m pip install --upgrade pip setuptools wheel && \
-+    pip install -q \
-+        flake8==3.5.0 \
-+        mccabe==0.6.1 \
-+        pycodestyle==2.3.1 \
-+        pyflakes==1.6.0
++check-flake8:
++    before_script:
++        # Help flake8 to find the Python files without .py extension.
++        - find * -type f -name '*.py' > files.txt
++        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
++        - sort -u files.txt | tee files.processed
++    script:
++        - python -m flake8 --statistics --count $(cat files.processed)
++    after_script:
++        - wc -l files.processed
 +
- # To be able to generate a toolchain with locales, enable one UTF-8 locale
- RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
-     /usr/sbin/locale-gen
+ check-package:
+     script:
+         - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index cb3eb71..95fc025 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -30,6 +30,17 @@ check-DEVELOPERS:
+     script:
+         - "! utils/get-developers | grep -v 'No action specified'"
+ 
++check-flake8:
++    before_script:
++        # Help flake8 to find the Python files without .py extension.
++        - find * -type f -name '*.py' > files.txt
++        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
++        - sort -u files.txt | tee files.processed
++    script:
++        - python -m flake8 --statistics --count $(cat files.processed)
++    after_script:
++        - wc -l files.processed
++
+ check-package:
+     script:
+         - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
 -- 
 2.7.4
