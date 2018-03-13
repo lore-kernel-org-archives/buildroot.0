@@ -1,34 +1,64 @@
-From: Rafal Susz <rafal.susz@gmail.com>
-Date: Tue, 13 Mar 2018 19:00:06 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/s6lx9_microboard_defconfig: purge
- custom dts boolean
-In-Reply-To: <20180313180006.5364-1-rafal.susz@gmail.com>
-References: <20180313142635.27423-1-rafal.susz@gmail.com>
- <20180313180006.5364-1-rafal.susz@gmail.com>
-Message-ID: <20180313180006.5364-2-rafal.susz@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 13 Mar 2018 19:07:37 +0100
+Subject: [Buildroot] [PATCH 1/1] meson: fix error when restorecon unavailable
+Message-ID: <20180313180737.1065-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since custom dts files are unconditionally handled *KERNEL_USE_CUSTOM_DTS
-is no longer available/needed.
+host-meson is used by some packages such as libmpdclient.
+If selinuxenabled is installed on host but restorecon is unavailable
+(for an "unknwown" reason), install will crash.
 
-Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/d5dcdfdfab3503fdc387f99e68267972a38c417d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- configs/s6lx9_microboard_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ ...NotFoundError-when-restorecon-unavailable.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/meson/0001-Fix-FileNotFoundError-when-restorecon-unavailable.patch
 
-diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
-index f77c80ba87..97b2d3fe79 100644
---- a/configs/s6lx9_microboard_defconfig
-+++ b/configs/s6lx9_microboard_defconfig
-@@ -10,5 +10,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/avnet/s6lx9_microboard/lx9_mmu_defconfig"
--BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/avnet/s6lx9_microboard/lx9_mmu.dts"
+diff --git a/package/meson/0001-Fix-FileNotFoundError-when-restorecon-unavailable.patch b/package/meson/0001-Fix-FileNotFoundError-when-restorecon-unavailable.patch
+new file mode 100644
+index 0000000000..d2737f7fab
+--- /dev/null
++++ b/package/meson/0001-Fix-FileNotFoundError-when-restorecon-unavailable.patch
+@@ -0,0 +1,33 @@
++From 5aa4320566f25db2bbe1a1069d795ba728413e92 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 13 Mar 2018 18:52:36 +0100
++Subject: [PATCH] Fix FileNotFoundError when restorecon unavailable
++
++Fixes:
++ - http://autobuild.buildroot.net/results/d5dcdfdfab3503fdc387f99e68267972a38c417d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ mesonbuild/scripts/meson_install.py | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
++index f895f17d..4e9cfa74 100644
++--- a/mesonbuild/scripts/meson_install.py
+++++ b/mesonbuild/scripts/meson_install.py
++@@ -97,6 +97,12 @@ def restore_selinux_contexts():
++         # is ignored quietly.
++         return
++ 
+++    try:
+++        subprocess.check_call(['restorecon'])
+++    except (FileNotFoundError, PermissionError, subprocess.CalledProcessError) as e:
+++        # If we don't have restorecon, failure is ignored quietly.
+++        return
+++
++     with subprocess.Popen(['restorecon', '-F', '-f-', '-0'],
++                           stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
++         out, err = proc.communicate(input=b'\0'.join(os.fsencode(f) for f in selinux_updates) + b'\0')
++-- 
++2.14.1
++
 -- 
-2.16.1
+2.14.1
