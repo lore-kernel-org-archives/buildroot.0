@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 13 Mar 2018 22:05:07 +0100
-Subject: [Buildroot] [PATCH 02/22] package/x11r7/xapp_xbacklight: bump
- version to 1.2.2
+Date: Tue, 13 Mar 2018 22:05:08 +0100
+Subject: [Buildroot] [PATCH 03/22] package/x11r7/xapp_xeyes: bump version to
+ 1.1.2
 In-Reply-To: <20180313210527.309-1-bernd.kuhls@t-online.de>
 References: <20180313210527.309-1-bernd.kuhls@t-online.de>
-Message-ID: <20180313210527.309-2-bernd.kuhls@t-online.de>
+Message-ID: <20180313210527.309-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xbacklight/xapp_xbacklight.hash | 9 +++++++--
- package/x11r7/xapp_xbacklight/xapp_xbacklight.mk   | 2 +-
+ package/x11r7/xapp_xeyes/xapp_xeyes.hash | 9 +++++++--
+ package/x11r7/xapp_xeyes/xapp_xeyes.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash b/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
-index 058c53fca2..b2aa760600 100644
---- a/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
-+++ b/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
+diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.hash b/package/x11r7/xapp_xeyes/xapp_xeyes.hash
+index 02eb26b7b9..bbb6a9b08b 100644
+--- a/package/x11r7/xapp_xeyes/xapp_xeyes.hash
++++ b/package/x11r7/xapp_xeyes/xapp_xeyes.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-October/002331.html
--sha256	17f6cf51a35eaa918abec36b7871d28b712c169312e22a0eaf1ffe8d6468362b	xbacklight-1.2.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002862.html
-+md5 d50cf135af04436b9456a5ab7dcf7971  xbacklight-1.2.2.tar.bz2
-+sha1 8cc84c4b2e23e99bfa72239847af4b42ae89669e  xbacklight-1.2.2.tar.bz2
-+sha256 615a1d13e429ed5a0300b2f4508bc199d7cf21b6b9f088a9d8188d3bc957bf5e  xbacklight-1.2.2.tar.bz2
-+sha512 4dca70ef8e3494b19ea126c46395807cddc007b2b09a133810daeb77ae27fa36ac4eec7813828248fc195abe27f59700cfa58ee65ef3a020a51f73e5107678ec  xbacklight-1.2.2.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2010-November/001552.html
+-sha1	efe6116d31a7f69e4fb6038613e52b0960b9b61c	xeyes-1.1.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002860.html
++md5 6f0543ec84283df5743eeafc173bea4a  xeyes-1.1.2.tar.bz2
++sha1 458987f8accdbd8abf993ee51030391cf584d2e8  xeyes-1.1.2.tar.bz2
++sha256 57bcec0d2d167af9e5d44d0dbd74c6d7c0f0591cd0608952b23c749fdd910553  xeyes-1.1.2.tar.bz2
++sha512 008d76f03ddabd3d86ad9e52a540504553b94cb7a6743b20cf08897549eb27505667365ab9af21956a1b5ec7297acca8903a326536e6195a30e643cd93297ee0  xeyes-1.1.2.tar.bz2
 +# Locally computed
-+sha256 c9fbf1f272215babef31808c1235de8e4f7641ca5edfc4fc615b6556054b2b04 COPYING
-diff --git a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-index 88c4bc5dbe..a2907bb288 100644
---- a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-+++ b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
++sha256 d8de1de40e16227d1eb4b19e95117ce3f990f71f71df096a2259b0bc9931e042 COPYING
+diff --git a/package/x11r7/xapp_xeyes/xapp_xeyes.mk b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
+index 07c12002be..6c7f859d35 100644
+--- a/package/x11r7/xapp_xeyes/xapp_xeyes.mk
++++ b/package/x11r7/xapp_xeyes/xapp_xeyes.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XBACKLIGHT_VERSION = 1.2.1
-+XAPP_XBACKLIGHT_VERSION = 1.2.2
- XAPP_XBACKLIGHT_SOURCE = xbacklight-$(XAPP_XBACKLIGHT_VERSION).tar.bz2
- XAPP_XBACKLIGHT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XBACKLIGHT_LICENSE = MIT
+-XAPP_XEYES_VERSION = 1.1.1
++XAPP_XEYES_VERSION = 1.1.2
+ XAPP_XEYES_SOURCE = xeyes-$(XAPP_XEYES_VERSION).tar.bz2
+ XAPP_XEYES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XEYES_LICENSE = MIT
 -- 
 2.11.0
