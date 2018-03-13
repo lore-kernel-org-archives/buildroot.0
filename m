@@ -1,54 +1,42 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 13 Mar 2018 00:09:45 -0300
-Subject: [Buildroot] [PATCH v3 7/7] .flake8: ignore utils/diffconfig
-In-Reply-To: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
-References: <1520910585-19097-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1520910585-19097-8-git-send-email-ricardo.martincoski@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Mar 2018 07:21:45 +0100
+Subject: [Buildroot] [PATCH] wireguard: bump version to 0.0.20180304
+Message-ID: <20180313062146.5481-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script comes from the kernel source, so ignore any code style
-warnings for it in order to keep it as close as possible to the original
-one, making synchronization between repos easier.
-
-The option --exclude for flake8/pycodestyle is an absolute list and has
-a default, so ideally the default values should be added too.
-But the use cases for flake8 in the tree are:
- - when developing a new script or changing an existing one, the
-   developer calls flake8 only on that script;
- - in the GitLab job, a list of all Python files to be tested is created
-   and then passed to flake8.
-None of these involve calling 'flake8' without parameters, so don't care
-about adding the default value.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v2 -> v3:
-  - no changes
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Changes v1 -> v2:
-  - instead of tweaking even more the script from the kernel source,
-    ignore any warnings for it;  (suggested by Thomas Petazzoni)
-  - move the patch after the one adding the GitLab job so I can
-    reference it in the commit message.
----
- .flake8 | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/.flake8 b/.flake8
-index afdb967..7dd7b54 100644
---- a/.flake8
-+++ b/.flake8
-@@ -1,2 +1,5 @@
- [flake8]
-+exclude=
-+    # copied from the kernel sources
-+    utils/diffconfig
- max-line-length=132
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 4961d4fd14..969b9e1962 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-February/002406.html
+-sha256 4ac4c4e4ad4dc2cf9dcb831b0cf347567ccea675ca524528cf5a4d9dccb2fe52  WireGuard-0.0.20180218.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-March/002446.html
++sha256 efb1652f0da67fb2731040439b6abb820a5e2f1bc177aa15c5dce68ea3327787  WireGuard-0.0.20180304.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index aa86b5782b..7c5e6a3e09 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20180218
++WIREGUARD_VERSION = 0.0.20180304
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
 -- 
-2.7.4
+2.11.0
