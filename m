@@ -1,34 +1,63 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Tue, 13 Mar 2018 15:00:58 +0100
-Subject: [Buildroot] 
- =?iso-8859-1?q?=5BPATCH_00/15_v3=5D_fs=3A_support_pa?=
- =?iso-8859-1?q?rallel_filesystems_build?=
-In-Reply-To: <cover.1520543724.git.yann.morin.1998@free.fr>
-References: <cover.1520543724.git.yann.morin.1998@free.fr>
-Message-ID: <7fff15a6-7724-4af2-a236-27d73b9514b2@cesnet.cz>
+From: Rafal Susz <rafal.susz@gmail.com>
+Date: Tue, 13 Mar 2018 15:26:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/linux: fix custom dts files handling
+In-Reply-To: <20180313113217.27657-1-rafal.susz@gmail.com>
+References: <20180313113217.27657-1-rafal.susz@gmail.com>
+Message-ID: <20180313142635.27423-1-rafal.susz@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On ?tvrtek 8. b?ezna 2018 22:15:35 CET, Yann E. MORIN wrote:
-> TL;DR: filsystems are not parallel-safe, so we generate an intermediate
-> tarball from target/, which then serves as input for the various
-> filesystems; we also run pre-gen hooks under fakeroot, and get rid of
-> post-fs package-provided hooks.
+Custom dts files are still conditionally copied based on non existing
+boolean. So it is currently not possible to use custom dts file(s) at all.
 
-I like this -- it unbreaks a top-level parallel build for me. I no longer 
-have to run `make -j32 target-finalize && make` :).
+List of dts files is now iterated and files are copied into dedicated kernel arch dir.
 
-It also looks like something which will eventually enable genimage.sh to be 
-run as a proper make-level target. That's important for me because I run 
-genimage twice in a row; my second invocation takes the just-built image, 
-puts that into a squashfs archive because of its compression, and uses the 
-result to build another image for re-flashing the system via a USB stick.
+Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
+---
+ configs/s6lx9_microboard_defconfig | 1 -
+ linux/linux.mk                     | 9 +++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Just build-tested for now, but I'll be happy to send a proper Tested-By 
-once I verify that my board still boots with the result.
-
-With kind regards,
-Jan
+diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
+index f77c80ba87..97b2d3fe79 100644
+--- a/configs/s6lx9_microboard_defconfig
++++ b/configs/s6lx9_microboard_defconfig
+@@ -10,5 +10,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/avnet/s6lx9_microboard/lx9_mmu_defconfig"
+-BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/avnet/s6lx9_microboard/lx9_mmu.dts"
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e98b25cb72..94bfb9661a 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -370,8 +370,9 @@ endif
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+-	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+-		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
++	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
++		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ;   \
++	done
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
+ 		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+@@ -482,9 +483,9 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
+ endif
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
++ifeq ($(strip $(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME)),y)
+ $(error No kernel device tree source specified, check your \
+-BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings)
++BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
+ endif
+ 
+ endif # BR_BUILDING
+-- 
+2.16.1
