@@ -1,35 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Mar 2018 22:15:11 +0100
-Subject: [Buildroot] [PATCH] samba4: security bump to version 4.7.6
-In-Reply-To: <7e46c960480c6cbe00fab7113c6adfd7365032ff.1520962259.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 13 Mar 2018 19:30:59 +0200")
-References: <7e46c960480c6cbe00fab7113c6adfd7365032ff.1520962259.git.baruch@tkos.co.il>
-Message-ID: <87muzbk78g.fsf@dell.be.48ers.dk>
+Date: Tue, 13 Mar 2018 22:11:19 +0100
+Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20180304
+Message-ID: <20180313211610.492A7806A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=54e210522faf7dff3e68e22bb802102f891098c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > CVE-2018-1050: Vulnerability to a denial of service attack when the RPC
- > spoolss service is configured to be run as an external daemon.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > https://www.samba.org/samba/security/CVE-2018-1050.html
-
- > CVE-2018-1057: Authenticated users might change any other users'
- > passwords, including administrative users and privileged service
- > accounts (eg Domain Controllers).
-
- > https://www.samba.org/samba/security/CVE-2018-1057.html
-
- > Add clnt_create() test result to cache to fix cross configure breakage.
-
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 4961d4fd14..969b9e1962 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-February/002406.html
+-sha256 4ac4c4e4ad4dc2cf9dcb831b0cf347567ccea675ca524528cf5a4d9dccb2fe52  WireGuard-0.0.20180218.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-March/002446.html
++sha256 efb1652f0da67fb2731040439b6abb820a5e2f1bc177aa15c5dce68ea3327787  WireGuard-0.0.20180304.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index aa86b5782b..7c5e6a3e09 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20180218
++WIREGUARD_VERSION = 0.0.20180304
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
