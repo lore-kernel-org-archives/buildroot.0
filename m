@@ -1,83 +1,75 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 14 Mar 2018 13:24:47 -0400
-Subject: [Buildroot] [PATCH v4 0/4] gobject-introspection: new series
-Message-ID: <20180314172451.22455-1-aduskett@gmail.com>
+Date: Wed, 14 Mar 2018 13:24:49 -0400
+Subject: [Buildroot] [PATCH v4 2/4] gstreamer1 packages: explicitly disable
+ introspection
+In-Reply-To: <20180314172451.22455-1-aduskett@gmail.com>
+References: <20180314172451.22455-1-aduskett@gmail.com>
+Message-ID: <20180314172451.22455-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For official submission to mainline Buildroot:
+To get gstreamer ready for introspection, we must first explicitly
+disable gstreamer1, plugins base and plugins bad from using introspection.
+If not, when gobject-introspection is compiled, these packages will fail to
+build because the _GIR_EXTRA_LIBS_PATH variable is not set.
 
-This new series has the following upgrades:
-  - It now works on all architectures supported by qemu-host.
-  - Gstreamer1 can now use it (for real this time).
-  - General makefile cleanups.
-  - New patches that make cross-compiling a bit nicer (thanks, yocto!)
-  - Removed a patch that was yocto specific and not needed with buildroot.
-  - Added a PKG_GIR_EXTRA_LIBS variable in pkg-autotools.mk
+The other gstreamer1 packages do not need the _GIR_EXTRA_LIBS_PATH variable to
+be set.
 
-What I could use help with:
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v4:
+  - Add patch to series.
+  - Change TARGET_MAKE_ENV += GIR_EXTRA_LIBS_PATH to
+    PACKAGE_GIR_EXTRA_LIBS_PATH.
 
-- Package updates: I will get around to updating python-gobject as it's needed
-  for GStreamer-python (the entire reason I started this venture)
-- Comments on the patches themselves would also be appreciated!.
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 3 ++-
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 3 ++-
+ package/gstreamer1/gstreamer1/gstreamer1.mk               | 1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Adam
-
-Adam Duskett (4):
-  qemu: cleanup for gobject-introspection
-  gstreamer1 packages: explicitly disable introspection
-  gobject-introspection: new package
-  gstreamer1 packages: add support for introspection
-
- DEVELOPERS                                         |   1 +
- Makefile                                           |   2 +
- package/Config.in                                  |   1 +
- ...ncomplete-upstream-attempt-at-cross-compi.patch |  50 +++
- ...c-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch | 203 ++++++++++++
- ...3-giscanner-add-use-binary-wrapper-option.patch |  52 +++
- ...04-giscanner-add-a-use-ldd-wrapper-option.patch |  48 +++
- .../0005-add-PYTHON_INCLUDES-override.patch        |  39 +++
- ...06-giscanner-add-a-lib-dirs-envvar-option.patch |  73 +++++
- .../0007-Add-rpath-links-to-ccompiler.patch        |  29 ++
- .../gobject-introspection/0008-add-Float128.patch  |  28 ++
- package/gobject-introspection/Config.in            |  30 ++
- package/gobject-introspection/cross-ldd            | 362 +++++++++++++++++++++
- package/gobject-introspection/g-ir-compiler.in     |   2 +
- .../g-ir-scanner-lddwrapper.in                     |   2 +
- .../g-ir-scanner-qemuwrapper.in                    |  10 +
- package/gobject-introspection/g-ir-scanner.in      |   3 +
- .../gobject-introspection.hash                     |   4 +
- .../gobject-introspection/gobject-introspection.mk |  90 +++++
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |   8 +-
- ...ncorrect-reference-to-gstreamer-sdp-in-Ma.patch |  28 ++
- .../gst1-plugins-base/gst1-plugins-base.mk         |   8 +-
- package/gstreamer1/gstreamer1/gstreamer1.mk        |   7 +
- package/pkg-autotools.mk                           |   3 +
- package/qemu/Config.in.host                        |  11 +-
- package/qemu/qemu.mk                               |  31 ++
- 26 files changed, 1120 insertions(+), 5 deletions(-)
- create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
- create mode 100644 package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
- create mode 100644 package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0005-add-PYTHON_INCLUDES-override.patch
- create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
- create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
- create mode 100644 package/gobject-introspection/0008-add-Float128.patch
- create mode 100644 package/gobject-introspection/Config.in
- create mode 100644 package/gobject-introspection/cross-ldd
- create mode 100644 package/gobject-introspection/g-ir-compiler.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner.in
- create mode 100644 package/gobject-introspection/gobject-introspection.hash
- create mode 100644 package/gobject-introspection/gobject-introspection.mk
- create mode 100644 package/gstreamer1/gst1-plugins-base/0001-rtsp-drop-incorrect-reference-to-gstreamer-sdp-in-Ma.patch
-
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 83cb94be81..595e62072c 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -21,7 +21,8 @@ GST1_PLUGINS_BAD_CONF_OPTS = \
+ 	--disable-winks \
+ 	--disable-android_media \
+ 	--disable-apple_media \
+-	--disable-acm
++	--disable-acm \
++	--enable-introspection=no
+ 
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_BAD_CONF_OPTS += \
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 10361ee3c6..f492c4a175 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -14,7 +14,8 @@ GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
+ # gio_unix_2_0 is only used for tests
+ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
+-	--disable-valgrind
++	--disable-valgrind \
++	--enable-introspection=no
+ 
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_BASE_CONF_OPTS += \
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index ea9f29a4f3..25a799240d 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -17,6 +17,7 @@ GSTREAMER1_CONF_OPTS = \
+ 	--disable-failing-tests \
+ 	--disable-valgrind \
+ 	--disable-benchmarks \
++	--enable-introspection=no \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
 -- 
 2.14.3
