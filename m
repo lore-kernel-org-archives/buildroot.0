@@ -1,102 +1,83 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 14 Mar 2018 13:24:48 -0400
-Subject: [Buildroot] [PATCH v4 1/4] qemu: cleanup for gobject-introspection
-In-Reply-To: <20180314172451.22455-1-aduskett@gmail.com>
-References: <20180314172451.22455-1-aduskett@gmail.com>
-Message-ID: <20180314172451.22455-2-aduskett@gmail.com>
+Date: Wed, 14 Mar 2018 13:24:47 -0400
+Subject: [Buildroot] [PATCH v4 0/4] gobject-introspection: new series
+Message-ID: <20180314172451.22455-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS which will be referenced by the
-gobject-introspection package. This also has the added benefit of making the
-config file conform to other package standards such as Valgrind.
+For official submission to mainline Buildroot:
 
-Add depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970 to
-Config.in.host as these are not currently supported cpus by qemu.
+This new series has the following upgrades:
+  - It now works on all architectures supported by qemu-host.
+  - Gstreamer1 can now use it (for real this time).
+  - General makefile cleanups.
+  - New patches that make cross-compiling a bit nicer (thanks, yocto!)
+  - Removed a patch that was yocto specific and not needed with buildroot.
+  - Added a PKG_GIR_EXTRA_LIBS variable in pkg-autotools.mk
 
-Add a new variable in qemu.mk: HOST_QEMU_CPU_TUNE. When qemu-$(ARCH) is
-called, some architectures require a -cpu flag to be passed, or else a
-segfault may occure when building .gir files.
-For PowerPC, many of these cpu's need a specific CPU flag to be passed
-via the command line.
+What I could use help with:
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
-Changes v1 -> v4:
-  - Add patch to series.
+- Package updates: I will get around to updating python-gobject as it's needed
+  for GStreamer-python (the entire reason I started this venture)
+- Comments on the patches themselves would also be appreciated!.
 
- package/qemu/Config.in.host | 11 ++++++++---
- package/qemu/qemu.mk        | 31 +++++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+), 3 deletions(-)
+Thanks!
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index f14bcec6d6..0ef4c700b0 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -1,11 +1,16 @@
--config BR2_PACKAGE_HOST_QEMU
--	bool "host qemu"
--	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
-+config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
- 		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
- 		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
- 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
- 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
- 		BR2_sparc        || BR2_x86_64
-+	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
-+
-+config BR2_PACKAGE_HOST_QEMU
-+	bool "host qemu"
-+	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
- 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
- 	help
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 345ef52668..62cb517628 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -70,6 +70,37 @@ endif
- ifeq ($(HOST_QEMU_ARCH),sh4aeb)
- HOST_QEMU_ARCH = sh4eb
- endif
-+
-+# Add cpu specific callouts for qemu.
-+# In some cases (e.g. ppc) simply being arch specific (apparently) isn't good
-+# enough and a PACKAGE_ARCH specific -cpu option is needed 
-+# For others (e.g. arm) a -cpu option is not necessary, since the
-+# qemu-arm default CPU supports all required architecture levels.
-+ifeq ($(BR2_x86_64),y)
-+HOST_QEMU_CPU_TUNE = -cpu Nehalem,check=false
-+endif
-+
-+# PowerPC architecture. Currently, the 620, 630, and 970 are not supported.
-+ifeq ($(BR2_powerpc_e5500),y)
-+HOST_QEMU_CPU_TUNE = -cpu e5500
-+endif
-+
-+ifeq ($(BR2_powerpc_e6500),y)
-+HOST_QEMU_CPU_TUNE = -cpu e6500
-+endif
-+
-+ifeq ($(BR2_powerpc_power7),y)
-+HOST_QEMU_CPU_TUNE = -cpu 7400
-+endif
-+
-+ifeq ($(BR2_powerpc64)$(BR2_powerpc_e5500),yy)
-+HOST_QEMU_CPU_TUNE = -cpu e500mc
-+endif
-+
-+ifeq ($(BR2_powerpc64)$(BR2_powerpc_e6500),yy)
-+HOST_QEMU_CPU_TUNE = -cpu e500mc
-+endif
-+
- HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
- 
- ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
+Adam
+
+Adam Duskett (4):
+  qemu: cleanup for gobject-introspection
+  gstreamer1 packages: explicitly disable introspection
+  gobject-introspection: new package
+  gstreamer1 packages: add support for introspection
+
+ DEVELOPERS                                         |   1 +
+ Makefile                                           |   2 +
+ package/Config.in                                  |   1 +
+ ...ncomplete-upstream-attempt-at-cross-compi.patch |  50 +++
+ ...c-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch | 203 ++++++++++++
+ ...3-giscanner-add-use-binary-wrapper-option.patch |  52 +++
+ ...04-giscanner-add-a-use-ldd-wrapper-option.patch |  48 +++
+ .../0005-add-PYTHON_INCLUDES-override.patch        |  39 +++
+ ...06-giscanner-add-a-lib-dirs-envvar-option.patch |  73 +++++
+ .../0007-Add-rpath-links-to-ccompiler.patch        |  29 ++
+ .../gobject-introspection/0008-add-Float128.patch  |  28 ++
+ package/gobject-introspection/Config.in            |  30 ++
+ package/gobject-introspection/cross-ldd            | 362 +++++++++++++++++++++
+ package/gobject-introspection/g-ir-compiler.in     |   2 +
+ .../g-ir-scanner-lddwrapper.in                     |   2 +
+ .../g-ir-scanner-qemuwrapper.in                    |  10 +
+ package/gobject-introspection/g-ir-scanner.in      |   3 +
+ .../gobject-introspection.hash                     |   4 +
+ .../gobject-introspection/gobject-introspection.mk |  90 +++++
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |   8 +-
+ ...ncorrect-reference-to-gstreamer-sdp-in-Ma.patch |  28 ++
+ .../gst1-plugins-base/gst1-plugins-base.mk         |   8 +-
+ package/gstreamer1/gstreamer1/gstreamer1.mk        |   7 +
+ package/pkg-autotools.mk                           |   3 +
+ package/qemu/Config.in.host                        |  11 +-
+ package/qemu/qemu.mk                               |  31 ++
+ 26 files changed, 1120 insertions(+), 5 deletions(-)
+ create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
+ create mode 100644 package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
+ create mode 100644 package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0005-add-PYTHON_INCLUDES-override.patch
+ create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
+ create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
+ create mode 100644 package/gobject-introspection/0008-add-Float128.patch
+ create mode 100644 package/gobject-introspection/Config.in
+ create mode 100644 package/gobject-introspection/cross-ldd
+ create mode 100644 package/gobject-introspection/g-ir-compiler.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner.in
+ create mode 100644 package/gobject-introspection/gobject-introspection.hash
+ create mode 100644 package/gobject-introspection/gobject-introspection.mk
+ create mode 100644 package/gstreamer1/gst1-plugins-base/0001-rtsp-drop-incorrect-reference-to-gstreamer-sdp-in-Ma.patch
+
 -- 
 2.14.3
