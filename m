@@ -1,44 +1,93 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 14 Mar 2018 07:02:24 -0400
-Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.56.0
-Message-ID: <20180314110224.32587-1-aduskett@gmail.com>
+From: hyfinglists at gmail.com <hyfinglists@gmail.com>
+Date: Wed, 14 Mar 2018 12:15:28 +0100
+Subject: [Buildroot] [PATCH] python-pymodbus: new package
+Message-ID: <1521026128-23638-1-git-send-email-hyfinglists@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: Falco Hyfing <hyfinglists@gmail.com>
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index cf1c9557f8..b957bf4b10 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.54/glib-2.54.2.sha256sum
--sha256  bb89e5c5aad33169a8c7f28b45671c7899c12f74caf707737f784d7102758e6c  glib-2.54.2.tar.xz
-+# https://download.gnome.org/sources/glib/2.56/glib-2.56.0.sha256sum
-+sha256  ecef6e17e97b8d9150d0e8a4b3edee1ac37331213b8a2a87a083deea408a0fc7  glib-2.56.0.tar.xz
- # License files, locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 097c980393..41ec7ee377 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+Add python-pymodbus to be used for Modbus operations
+
+Signed-off-by: Falco Hyfing <hyfinglists@gmail.com>
+---
+ DEVELOPERS                                   |  3 +++
+ package/Config.in                            |  1 +
+ package/python-pymodbus/Config.in            |  5 +++++
+ package/python-pymodbus/python-pymodbus.hash |  3 +++
+ package/python-pymodbus/python-pymodbus.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
+ create mode 100644 package/python-pymodbus/Config.in
+ create mode 100644 package/python-pymodbus/python-pymodbus.hash
+ create mode 100644 package/python-pymodbus/python-pymodbus.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3df820e..48d3426 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -663,6 +663,9 @@ F:	package/safeclib/
+ F:	package/tinycbor/
+ F:	package/tinydtls/
  
--LIBGLIB2_VERSION_MAJOR = 2.54
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
-+LIBGLIB2_VERSION_MAJOR = 2.56
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.0+
++N:	Falco Hyfing <hyfinglists@gmail.com>
++F:	package/python-pymodbus/
++
+ N:	Floris Bos <bos@je-eigen-domein.nl>
+ F:	package/ipmitool/
+ F:	package/odhcploc/
+diff --git a/package/Config.in b/package/Config.in
+index 449ffcc..a6efa1e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -872,6 +872,7 @@ menu "External python modules"
+ 	source "package/python-pyinotify/Config.in"
+ 	source "package/python-pylibftdi/Config.in"
+ 	source "package/python-pylru/Config.in"
++	source "package/python-pymodbus/Config.in"
+ 	source "package/python-pymysql/Config.in"
+ 	source "package/python-pynacl/Config.in"
+ 	source "package/python-pyopenssl/Config.in"
+diff --git a/package/python-pymodbus/Config.in b/package/python-pymodbus/Config.in
+new file mode 100644
+index 0000000..cafab6f
+--- /dev/null
++++ b/package/python-pymodbus/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_PYTHON_PYMODBUS
++	bool "python-pymodbus"
++	select BR2_PACKAGE_PYTHON_SIX
++	help
++		Pymodbus is a full Modbus protocol implementation.
+diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
+new file mode 100644
+index 0000000..c930795
+--- /dev/null
++++ b/package/python-pymodbus/python-pymodbus.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256  e33bd0dfbd2cbd4dbc686ca87f809aebb7d72e940eb5846d5d38bb0f3371b26a  python-pymodbus-v1.4.0.tar.gz
++sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  doc/LICENSE
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+new file mode 100644
+index 0000000..40470fe
+--- /dev/null
++++ b/package/python-pymodbus/python-pymodbus.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-pymodbus
++#
++################################################################################
++
++PYTHON_PYMODBUS_VERSION = v1.4.0
++PYTHON_PYMODBUS_SITE = $(call github,riptideio,pymodbus,$(PYTHON_PYMODBUS_VERSION))
++PYTHON_PYMODBUS_SETUP_TYPE = setuptools
++PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
++PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
++
++$(eval $(python-package))
 -- 
-2.14.3
+2.1.4
