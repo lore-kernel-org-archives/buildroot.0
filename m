@@ -1,175 +1,100 @@
-From: Charles Hardin <charles.hardin@storagecraft.com>
-Date: Wed, 14 Mar 2018 16:48:50 +0000
-Subject: [Buildroot] [RFC] how to deal with a dependency on configure in
- a "Makefile"
-In-Reply-To: <5CB73501-D685-40E5-8ABD-CED015489F81@storagecraft.com>
-References: <5376F4DC-C206-4034-B246-3D77B47B5B81@storagecraft.com>
- <20180313210150.lcwrmxkro7r4er6s@tarshish>
- <MWHPR11MB1582B5873048E10045E084F5FAD20@MWHPR11MB1582.namprd11.prod.outlook.com>
- <20180314051940.bmiadlwd7odn2pre@sapphire.tkos.co.il>
- <5CB73501-D685-40E5-8ABD-CED015489F81@storagecraft.com>
-Message-ID: <E8D4FE31-F784-49BA-9734-4300FAE068BD@storagecraft.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 14 Mar 2018 13:12:18 -0400
+Subject: [Buildroot] [PATCH v4 1/4] qemu: cleanup for gobject-introspection
+Message-ID: <20180314171221.10856-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And finally figured it out - we had incorporated a patch a while back to get the exec_prefix to match
-e2fsprogs and of course the patches and changes configure and configure.ac which triggers the whole
-mess - so, definitely on our end and nothing upstream.
+Add a BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS which will be referenced by the
+gobject-introspection package. This also has the added benefit of making the
+config file conform to other package standards such as Valgrind.
 
-Sorry for the bother, and the patch is below in case in matters.
-Charles
+Add depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970 to
+Config.in.host as these are not currently supported cpus by qemu.
 
+Add a new variable in qemu.mk: HOST_QEMU_CPU_TUNE. When qemu-$(ARCH) is
+called, some architectures require a -cpu flag to be passed, or else a
+segfault may occure when building .gir files.
+For PowerPC, many of these cpu's need a specific CPU flag to be passed
+via the command line.
 
-packages/xfsprogs: patch the exec_prefix to be the same as e2fsprogs
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v4:
+  - Add patch to series.
 
-Since e2fsprogs get installed into /bin to override busybox, so do
-the same thing for xfsprogs.
+ package/qemu/Config.in.host | 11 ++++++++---
+ package/qemu/qemu.mk        | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+), 3 deletions(-)
 
-diff -Naur xfsprogs-3.1.11.orig/configure xfsprogs-3.1.11/configure
---- xfsprogs-3.1.11.orig/configure      2016-01-03 19:27:44.603418507 +0000
-+++ xfsprogs-3.1.11/configure   2016-01-03 19:26:16.029757743 +0000
-@@ -10036,8 +10036,8 @@
- # case.  If the user choses a different prefix assume he just wants
- # a local install for testing and not a system install.
- #
--case $exec_prefix:$prefix in
--NONE:NONE | NONE:/usr | /usr:*)
-+case $cross_compiling:$exec_prefix:$prefix in
-+no:NONE:NONE | no:NONE:/usr | no:/usr:*)
-   root_sbindir='/sbin'
-   root_libdir="/${base_libdir}"
-   ;;
-diff -Naur xfsprogs-3.1.11.orig/configure.ac xfsprogs-3.1.11/configure.ac
---- xfsprogs-3.1.11.orig/configure.ac   2016-01-03 19:28:02.258949863 +0000
-+++ xfsprogs-3.1.11/configure.ac        2016-01-03 19:25:45.918554215 +0000
-@@ -64,8 +64,8 @@
- # case.  If the user choses a different prefix assume he just wants
- # a local install for testing and not a system install.
- #
--case $exec_prefix:$prefix in
--NONE:NONE | NONE:/usr | /usr:*)
-+case $cross_compiling:$exec_prefix:$prefix in
-+no:NONE:NONE | no:NONE:/usr | no:/usr:*)
-   root_sbindir='/sbin'
-   root_libdir="/${base_libdir}"
-   ;;
-
-
-On Mar 13, 2018, at 10:29 PM, Charles Hardin <charles.hardin at storagecraft.com<mailto:charles.hardin@storagecraft.com>> wrote:
-
-Sorry, I checked the tarball the time stamps fit, but something wonky happens during the build I cann?t figure out yet what triggers the make rules ... I?ll drop the configure.ac but this is really just a - I have no clue and was wondering if anyone else has seen this anywhere else.
-
-Assume this is why I never make a circle between the makefiles and the autoconf, it is a headache when it fires.
-
-Sent from my iPhone
-
-On Mar 13, 2018, at 10:19 PM, Baruch Siach <baruch at tkos.co.il<mailto:baruch@tkos.co.il>> wrote:
-
-Hi Charles,
-
-On Tue, Mar 13, 2018 at 11:43:12PM +0000, Charles Hardin wrote:
-I went more by the build output show the make invocation of configure during
-"build" stage in the log.
-
-./configure $$LOCAL_CONFIGURE_OPTIONS
-
-Unfortunately, this was a transient build on a VM and I didn't stat the
-files. In the meantime, we are going to try this for a bit and see if
-anything changes.
-
-You can manually extract the xfsprogs tarball and stat the files directly.
-
-commit d25e2a8f163c8c77055c3c7c8e89d65ec09e0f8e (HEAD -> master)
-Author: Charles Hardin <charles.hardin at storagecraft.com<mailto:charles.hardin@storagecraft.com>>
-Date:   Tue Mar 13 16:39:23 2018 -0700
-
-  xfsprogs: force touch the order of the configuration files
-
-
-  The Makefile can cause a rerun of the autoconf which could
-  occur and use the host tools which is very annoying, so touch
-  the files in the order expected so that the configure scripts
-  hopefully run in the order intended and prevent any trips
-  thru autoconf.
-
-  Signed-off-by: Charles Hardin <charles.hardin at storagecraft.com<mailto:charles.hardin@storagecraft.com>>
-
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index aa5c37ed8d..39fa3821ff 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -22,4 +22,13 @@ XFSPROGS_CONF_OPTS = \
-
-XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
-
-+define XFSPROGS_AVOID_AUTORECONF_HOOK
-+       find $(@D) -name aclocal.m4 -exec touch '{}' \;
-+       find $(@D) -name config-h.in -exec touch '{}' \;
-+       find $(@D) -name configure.ac -exec touch '{}' \;
-
-I don't think want to update the configure.ac timestamp.
-
-baruch
-
-+       find $(@D) -name configure -exec touch '{}' \;
-+       find $(@D) -name Makefile.in -exec touch '{}' \;
-+endef
-+XFSPROGS_PRE_CONFIGURE_HOOKS += XFSPROGS_AVOID_AUTORECONF_HOOK
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index f14bcec6d6..0ef4c700b0 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -1,11 +1,16 @@
+-config BR2_PACKAGE_HOST_QEMU
+-	bool "host qemu"
+-	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
++config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
+ 		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
+ 		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
+ 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+ 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+ 		BR2_sparc        || BR2_x86_64
++	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
 +
-$(eval $(autotools-package))
-________________________________
-From: Baruch Siach <baruch at tkos.co.il<mailto:baruch@tkos.co.il>>
-Sent: Tuesday, March 13, 2018 2:01:50 PM
-To: Charles Hardin
-Cc: buildroot at buildroot.org<mailto:buildroot@buildroot.org>
-Subject: Re: [Buildroot] [RFC] how to deal with a dependency on configure in a "Makefile"
-
-Hi Charles,
-
-On Tue, Mar 13, 2018 at 07:27:30PM +0000, Charles Hardin wrote:
-So, we hit this problem that took me a while to figure out - but, it seems
-to be that
-xfsprogs has this bit in the Makefile when it extracts:
-
-configure: configure.ac
-      $(LIBTOOLIZE_BIN) -c $(LIBTOOLIZE_INSTALL) -f
-      cp include/install-sh .
-      aclocal -I m4
-      autoconf
-
-include/builddefs: configure
-      ./configure $$LOCAL_CONFIGURE_OPTIONS
-
-
-And the timestamps on the tar extraction end up in a race so that this gets invoked
-during the ?build? - so, I tried looking at other packages to deal with this and I can
-just touch configure on a PRE_CONFIGURE hook to get it to bounce forward or
-I could set AUTORECONF on xfsprogs. But, is there a preferred method to deal
-with this?
-
-Which version of xfsprogs do you use?
-
-Here is what I get for the current master branch xfsprogs tarball
-(xfsprogs-4.15.1.tar.xz):
-
-$ stat -c '%n: %y' configure configure.ac
-configure: 2018-02-27 04:05:49.000000000 +0200
-configure.ac: 2018-02-27 04:04:50.000000000 +0200
-
-'configure' is newer than 'configure.ac', so the 'configure' generation rule
-should not trigger.
-
-baruch
-
---
-   http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
- - baruch at tkos.co.il<mailto:baruch@tkos.co.il> - tel: +972.2.679.5364, http://www.tkos.co.il -
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180314/3fbd1b5a/attachment.html>
++config BR2_PACKAGE_HOST_QEMU
++	bool "host qemu"
++	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
+ 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
+ 	help
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 345ef52668..62cb517628 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -70,6 +70,37 @@ endif
+ ifeq ($(HOST_QEMU_ARCH),sh4aeb)
+ HOST_QEMU_ARCH = sh4eb
+ endif
++
++# Add cpu specific callouts for qemu.
++# In some cases (e.g. ppc) simply being arch specific (apparently) isn't good
++# enough and a PACKAGE_ARCH specific -cpu option is needed 
++# For others (e.g. arm) a -cpu option is not necessary, since the
++# qemu-arm default CPU supports all required architecture levels.
++ifeq ($(BR2_x86_64),y)
++HOST_QEMU_CPU_TUNE = -cpu Nehalem,check=false
++endif
++
++# PowerPC architecture. Currently, the 620, 630, and 970 are not supported.
++ifeq ($(BR2_powerpc_e5500),y)
++HOST_QEMU_CPU_TUNE = -cpu e5500
++endif
++
++ifeq ($(BR2_powerpc_e6500),y)
++HOST_QEMU_CPU_TUNE = -cpu e6500
++endif
++
++ifeq ($(BR2_powerpc_power7),y)
++HOST_QEMU_CPU_TUNE = -cpu 7400
++endif
++
++ifeq ($(BR2_powerpc64)$(BR2_powerpc_e5500),yy)
++HOST_QEMU_CPU_TUNE = -cpu e500mc
++endif
++
++ifeq ($(BR2_powerpc64)$(BR2_powerpc_e6500),yy)
++HOST_QEMU_CPU_TUNE = -cpu e500mc
++endif
++
+ HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
+ 
+ ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
+-- 
+2.14.3
