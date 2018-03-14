@@ -1,79 +1,41 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 14 Mar 2018 00:36:12 +0000
-Subject: [Buildroot] [PATCH/next 0/3] Update WebKitGTK+ to 2.20.0
-In-Reply-To: <20180314002949.109236-1-aperez@igalia.com>
-References: <20180314002949.109236-1-aperez@igalia.com>
-Message-ID: <20180314003612.GB23082@momiji>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Mar 2018 02:00:39 +0000
+Subject: [Buildroot] [Bug 10851] New: Patch to handle numpad Enter key
+ properly
+Message-ID: <bug-10851-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Mar 2018 02:29:46 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> Hi everybody,
-> 
-> This patch series adds a new dependency needed by WebKitGTK+: woff. In turn,
-> that depends on brotli, which the patch series adds as well.
+https://bugs.busybox.net/show_bug.cgi?id=10851
 
-It seems that Patchwork also had trouble picking this patch series, I can
-only see one of the patches in there:
+            Bug ID: 10851
+           Summary: Patch to handle numpad Enter key properly
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: igor.liferenko at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-    https://patchwork.ozlabs.org/project/buildroot/list/?series=33620
+Created attachment 7506
+  --> https://bugs.busybox.net/attachment.cgi?id=7506&action=edit
+Patch to handle KEY_ENTER
 
-They patchset has reached the list correctly, so that's nice :-)
+Hello,
 
-Cheers,
+Numpad Enter key is not recognized in application mode.
 
+Please consider applying the attached patch.
 
---
- Adri?n ?
-
-> I am adding myself as maintainer for those two new packages (brotli and woff2)
-> in the DEVELOPERS file and I will be keeping an eye on their releases.
-> 
-> So far I have only tested making an AArch64 build for the Raspberry Pi 3 and
-> the update could use a bit more of testing, but I think it is worth to send
-> the patch series early for review and try making a couple of builds for other
-> architectures in the meantime.
-> 
-> Best regards,
-> 
-> -Adrian
-> 
-> 
-> Adrian Perez de Castro (3):
->   brotli: new package
->   woff2: new package
->   webkitgtk: update to version 2.20.0
-> 
->  DEVELOPERS                       |  2 ++
->  package/Config.in                |  2 ++
->  package/brotli/Config.in         | 12 ++++++++++++
->  package/brotli/brotli.hash       |  5 +++++
->  package/brotli/brotli.mk         | 17 +++++++++++++++++
->  package/webkitgtk/Config.in      |  2 ++
->  package/webkitgtk/webkitgtk.hash |  8 ++++----
->  package/webkitgtk/webkitgtk.mk   |  4 ++--
->  package/woff2/Config.in          |  9 +++++++++
->  package/woff2/woff2.hash         |  5 +++++
->  package/woff2/woff2.mk           | 17 +++++++++++++++++
->  11 files changed, 77 insertions(+), 6 deletions(-)
->  create mode 100644 package/brotli/Config.in
->  create mode 100644 package/brotli/brotli.hash
->  create mode 100644 package/brotli/brotli.mk
->  create mode 100644 package/woff2/Config.in
->  create mode 100644 package/woff2/woff2.hash
->  create mode 100644 package/woff2/woff2.mk
-> 
-> -- 
-> 2.16.2
-> 
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180314/f1c4f94c/attachment.asc>
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
