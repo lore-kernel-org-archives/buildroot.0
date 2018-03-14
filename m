@@ -1,100 +1,74 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 14 Mar 2018 13:12:18 -0400
-Subject: [Buildroot] [PATCH v4 1/4] qemu: cleanup for gobject-introspection
-Message-ID: <20180314171221.10856-1-aduskett@gmail.com>
+Date: Wed, 14 Mar 2018 13:12:19 -0400
+Subject: [Buildroot] [PATCH v4 2/4] gstreamer1 packages: explicitly disable
+ introspection
+In-Reply-To: <20180314171221.10856-1-aduskett@gmail.com>
+References: <20180314171221.10856-1-aduskett@gmail.com>
+Message-ID: <20180314171221.10856-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS which will be referenced by the
-gobject-introspection package. This also has the added benefit of making the
-config file conform to other package standards such as Valgrind.
+To get gstreamer ready for introspection, we must first explicitly
+disable gstreamer1, plugins base and plugins bad from using introspection.
+If not, when gobject-introspection is compiled, these packages will fail to
+build because the _GIR_EXTRA_LIBS_PATH variable is not set.
 
-Add depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970 to
-Config.in.host as these are not currently supported cpus by qemu.
-
-Add a new variable in qemu.mk: HOST_QEMU_CPU_TUNE. When qemu-$(ARCH) is
-called, some architectures require a -cpu flag to be passed, or else a
-segfault may occure when building .gir files.
-For PowerPC, many of these cpu's need a specific CPU flag to be passed
-via the command line.
+The other gstreamer1 packages do not need the _GIR_EXTRA_LIBS_PATH variable to
+be set.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
 Changes v1 -> v4:
   - Add patch to series.
+  - Change TARGET_MAKE_ENV += GIR_EXTRA_LIBS_PATH to
+    PACKAGE_GIR_EXTRA_LIBS_PATH.
 
- package/qemu/Config.in.host | 11 ++++++++---
- package/qemu/qemu.mk        | 31 +++++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+), 3 deletions(-)
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 1 +
+ 3 file changed, 5 insertion(+), 2 deletion(-)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index f14bcec6d6..0ef4c700b0 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -1,11 +1,16 @@
--config BR2_PACKAGE_HOST_QEMU
--	bool "host qemu"
--	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
-+config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
- 		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
- 		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
- 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
- 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
- 		BR2_sparc        || BR2_x86_64
-+	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
-+
-+config BR2_PACKAGE_HOST_QEMU
-+	bool "host qemu"
-+	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
- 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
- 	help
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 345ef52668..62cb517628 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -70,6 +70,37 @@ endif
- ifeq ($(HOST_QEMU_ARCH),sh4aeb)
- HOST_QEMU_ARCH = sh4eb
- endif
-+
-+# Add cpu specific callouts for qemu.
-+# In some cases (e.g. ppc) simply being arch specific (apparently) isn't good
-+# enough and a PACKAGE_ARCH specific -cpu option is needed 
-+# For others (e.g. arm) a -cpu option is not necessary, since the
-+# qemu-arm default CPU supports all required architecture levels.
-+ifeq ($(BR2_x86_64),y)
-+HOST_QEMU_CPU_TUNE = -cpu Nehalem,check=false
-+endif
-+
-+# PowerPC architecture. Currently, the 620, 630, and 970 are not supported.
-+ifeq ($(BR2_powerpc_e5500),y)
-+HOST_QEMU_CPU_TUNE = -cpu e5500
-+endif
-+
-+ifeq ($(BR2_powerpc_e6500),y)
-+HOST_QEMU_CPU_TUNE = -cpu e6500
-+endif
-+
-+ifeq ($(BR2_powerpc_power7),y)
-+HOST_QEMU_CPU_TUNE = -cpu 7400
-+endif
-+
-+ifeq ($(BR2_powerpc64)$(BR2_powerpc_e5500),yy)
-+HOST_QEMU_CPU_TUNE = -cpu e500mc
-+endif
-+
-+ifeq ($(BR2_powerpc64)$(BR2_powerpc_e6500),yy)
-+HOST_QEMU_CPU_TUNE = -cpu e500mc
-+endif
-+
- HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index ea9f29a4f3..25a799240d 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -17,6 +17,7 @@ GSTREAMER1_CONF_OPTS = \
+ 	--disable-failing-tests \
+ 	--disable-valgrind \
+ 	--disable-benchmarks \
++	--enable-introspection=no \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
+
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 10361ee3c6..f492c4a175 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -14,7 +14,8 @@ GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
+ # gio_unix_2_0 is only used for tests
+ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
+-	--disable-valgrind
++	--disable-valgrind \
++	--enable-introspection=no
  
- ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
--- 
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_BASE_CONF_OPTS += \
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 83cb94be81..595e62072c 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -21,7 +21,8 @@ GST1_PLUGINS_BAD_CONF_OPTS = \
+ 	--disable-winks \
+ 	--disable-android_media \
+ 	--disable-apple_media \
+-	--disable-acm
++	--disable-acm \
++	--enable-introspection=no
+ 
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_BAD_CONF_OPTS += \
+--
 2.14.3
