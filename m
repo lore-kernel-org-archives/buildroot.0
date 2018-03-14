@@ -1,47 +1,44 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Wed, 14 Mar 2018 11:11:59 +0100
-Subject: [Buildroot] Start denying fuzz in patches?
-In-Reply-To: <CAFSsvmo-Esz6zXC-qpMJ9Uww=sEbV75Uw7kNNLumWxk83A1kKA@mail.gmail.com>
-References: <CAFSsvmo-Esz6zXC-qpMJ9Uww=sEbV75Uw7kNNLumWxk83A1kKA@mail.gmail.com>
-Message-ID: <ca8bdf6b-fb45-f0c8-9f00-9f2790046af1@green-communications.fr>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 14 Mar 2018 07:02:24 -0400
+Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.56.0
+Message-ID: <20180314110224.32587-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/03/2018 11:06, Adam Duskett wrote:
-> The patch tool will apply patches by default with "fuzz," which is where if the
-> hunk context isn't present but what is there is close enough, it will force the
-> patch to be applied anyways.
-> 
-> While this is useful when there are just whitespace changes, when applied to
-> actual source code, it is possible for a patch applied with fuzz to produce
-> broken code which still compiles.
-> 
-> I propose that Buildroot take the initiative to start cleaning up the current
-> patches, and in the future start denying updates/new packages with patches that
-> apply with fuzz.
-> 
-> Comments would be much appreciated!
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-This may complicate bumping packages with patches (python comes to mind,
-and it has in fact the largest number of patches[1]).
-
-However, for patches coming from the user (e.g. br2_external tree,
-global patch dirs, kernel patches), this can greatly complicate things
-that worked before, so it should be maybe optional.
-
-for example, we have a single buildroot tree for multiple targets with a
-a generic global patch dir that includes patches for the linux kernel.
-The kernel version may be different for each target, even when we try to
-avoid it...
-
-It could be as simple as a Apply-With-Fuzz header in the patch description:
-
-fuzz_factor="$($uncomp "$path/$patch" | sed -nre '1,/^--- /
-s/^Apply-With-Fuzz: (.*)/\1/p')"
-fuzz_factor="${fuzz_factor:-0}"
-
-[1]: cd package; for a in *; do printf "%d: %s\n" "$(ls $a/*.patch
-2>/dev/null | wc -l)" "$a"; done | sort -n
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index cf1c9557f8..b957bf4b10 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.54/glib-2.54.2.sha256sum
+-sha256  bb89e5c5aad33169a8c7f28b45671c7899c12f74caf707737f784d7102758e6c  glib-2.54.2.tar.xz
++# https://download.gnome.org/sources/glib/2.56/glib-2.56.0.sha256sum
++sha256  ecef6e17e97b8d9150d0e8a4b3edee1ac37331213b8a2a87a083deea408a0fc7  glib-2.56.0.tar.xz
+ # License files, locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 097c980393..41ec7ee377 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.54
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
++LIBGLIB2_VERSION_MAJOR = 2.56
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.0+
+-- 
+2.14.3
