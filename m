@@ -1,60 +1,112 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Mar 2018 08:39:12 +0100
-Subject: [Buildroot] [git commit] pkg-virtual.mk: explicitly set
- <pkg>_VERSION / _SOURCE for robustness
-Message-ID: <20180314073925.137D9835D0@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 14 Mar 2018 08:55:33 +0100
+Subject: [Buildroot] [PATCH] Add python-pymodbus
+In-Reply-To: <CAChPQeAwwwuAaqHB4+YbmAfphM_E+2CemmJL-uNZuFAK4DjSHQ@mail.gmail.com>
+References: <CAChPQeAwwwuAaqHB4+YbmAfphM_E+2CemmJL-uNZuFAK4DjSHQ@mail.gmail.com>
+Message-ID: <CAGm1_kuZDHZPUsYVaf7jr2TYpSYsV=GneV0keF6_82J6EDCn+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32d2de2a6fb823a8eacb02d203b260c729522837
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Falco,
 
-Recently a build failure was reported which was traced back to to the fact
-that the user had a TOOLCHAIN_VERSION environment variable set which leads
-to a strange looking error message:
+the patch title should be: "python-pymodbus: new package"
 
-toolchain/toolchain/toolchain.mk:40: *** TOOLCHAIN_SITE cannot be empty when
-TOOLCHAIN_SOURCE is not.  Stop.
+Also please resend the patch via git send-email.
 
-Environment variables automatically gets converted to make variables by GNU
-make - E.G. from the manual
-(https://www.gnu.org/software/make/manual/html_node/Environment.html):
+On Tue, Mar 13, 2018 at 1:26 PM, Falco Hyfing <hyfinglists@gmail.com> wrote:
+> Add python-pymodbus to be used for Modbus operations
+>
+> Signed-off-by: Falco Hyfing <hyfinglists@gmail.com>
+> ---
+>  DEVELOPERS                                 |  3 +++
+>  package/Config.in                          |  1 +
+>  package/python-pymodbus/Config.in          |  5 +++++
+>  package/python-pymodbus/python-pymodbus.mk | 12 ++++++++++++
 
-Variables in make can come from the environment in which make is run.  Every
-environment variable that make sees when it starts up is transformed into a
-make variable with the same name and value
+A hash file for the tarball and license file is missing. See
+http://nightly.buildroot.org/manual.html#adding-packages-hash
 
-So we end up in make with TOOLCHAIN_VERSION set to the value of the
-environment variable.  As virtual packages do not have a version, there is
-no explicit TOOLCHAIN_VERSION = ..  line in toolchain.mk overriding this
-value, and the logic in package/pkg-generic.mk sets a default value for
-TOOLCHAIN_SOURCE when TOOLCHAIN_VERSION is set, and finally errors out as
-TOOLCHAIN_SITE isn't set.
+>  4 files changed, 21 insertions(+)
+>  create mode 100644 package/python-pymodbus/Config.in
+>  create mode 100644 package/python-pymodbus/python-pymodbus.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 3df820e..48d3426 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -663,6 +663,9 @@ F:    package/safeclib/
+>  F:    package/tinycbor/
+>  F:    package/tinydtls/
+>
+> +N:    Falco Hyfing <hyfinglists@gmail.com>
+> +F:    package/python-pymodbus/
+> +
+>  N:    Floris Bos <bos@je-eigen-domein.nl>
+>  F:    package/ipmitool/
+>  F:    package/odhcploc/
+> diff --git a/package/Config.in b/package/Config.in
+> index 449ffcc..a6efa1e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -872,6 +872,7 @@ menu "External python modules"
+>      source "package/python-pyinotify/Config.in"
+>      source "package/python-pylibftdi/Config.in"
+>      source "package/python-pylru/Config.in"
+> +    source "package/python-pymodbus/Config.in"
+>      source "package/python-pymysql/Config.in"
+>      source "package/python-pynacl/Config.in"
+>      source "package/python-pyopenssl/Config.in"
+> diff --git a/package/python-pymodbus/Config.in
+> b/package/python-pymodbus/Config.in
+> new file mode 100644
+> index 0000000..493ed4e
+> --- /dev/null
+> +++ b/package/python-pymodbus/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_PYTHON_PYMODBUS
+> +    bool "python-pymodbus"
+> +    select BR2_PACKAGE_PYTHON_SIX
 
-As a workaround, explicitly set <pkg>_VERSION and <pkg>_SOURCE to the empty
-string in the virtual package infrastructure.
+a "# runtime" is missing after BR2_PACKAGE_PYTHON_SIX
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-virtual.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+> +    help
+> +        Pymodbus is a full Modbus protocol implementation
 
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 0de79d49be..05bd63eb18 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -41,6 +41,11 @@ $$(error No implementation selected for virtual package $(1). Configuration erro
- endif
- endif
- 
-+# explicitly set these so we do not get confused by environment
-+# variables with the same names.
-+$(2)_VERSION =
-+$(2)_SOURCE =
-+
- $(2)_IS_VIRTUAL = YES
- 
- # Add dependency against the provider
+a dot is missing at the end of the description.
+
+> diff --git a/package/python-pymodbus/python-pymodbus.mk
+> b/package/python-pymodbus/python-pymodbus.mk
+> new file mode 100644
+> index 0000000..5af7803
+> --- /dev/null
+> +++ b/package/python-pymodbus/python-pymodbus.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# python-pymodbus
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYMODBUS_VERSION = v1.4.0
+> +PYTHON_PYMODBUS_SITE = $(call
+> github,riptideio,pymodbus,$(PYTHON_PYMODBUS_VERSION))
+> +PYTHON_PYMODBUS_LICENSE = BSD License
+
+The license file is here
+https://github.com/riptideio/pymodbus/blob/master/doc/LICENSE and it
+is a BSD-3-Clause license.
+
+Yegor
+
+> +PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
