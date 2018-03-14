@@ -1,396 +1,146 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Mar 2018 20:15:22 +0100
-Subject: [Buildroot] [git commit] package/busybox: Unbreak the `tar`
- implementation
-Message-ID: <20180314191558.622E9835DF@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 14 Mar 2018 20:43:56 +0100
+Subject: [Buildroot] [PATCH] package/libbsd: enable for non-glibc toolchains
+Message-ID: <20180314194356.15839-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbeb43e97626df988534b9cf62b5618b0b6ccfa1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+libbsd builds now almost fine with a musl or uClibc toolchain, except
+for one issue introduced in the latest version bump. Upstream commit
+22fbd62368c39de8ac5e249d1502d5ac0ffdef30 [1] uses the glibc-only macro
+`__GLIBC_PREREQ`. The issue is fixed by the attached patch from upstream,
+which fixes the use of `__GLIBC_PREREQ` on non-glibc toolchains.
 
-The `tar` implementation in Busybox 1.28.0 and 1.28.1 won't extract a
-rootfs with some symlinks that appear to look "dangerous". This
-completely (and silently!) breaks on-target updates via RAUC for me, for
-example.
+Backported from:
+https://cgit.freedesktop.org/libbsd/patch/?id=1f8a3f7bccfc84b195218ad0086ebd57049c3490
 
-In the meanwhile, upstream already reverted the commit in question
-(in their commit a84db18fc71d09e801df0ebca048d82e90b32c6a), so this
-patch simply applies that revert in Buildroot. The fix has not made it
-to a release, yet.
+netcat-openbsd is the only package selecting libbsd. However, building
+it still needs a glibc toolchain, as it uses `b64_ntop` which is not
+available in musl or uClibc.
 
-Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Bug: https://bugs.busybox.net/show_bug.cgi?id=8411
-Bug: https://github.com/rauc/rauc/issues/249
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Build has been successfully tested with:
+ * armv7-eabihf--glibc--bleeding-edge-2017.11-1
+ * armv7-eabihf--musl--bleeding-edge-2018.02-1
+ * armv7-eabihf--uclibc--bleeding-edge-2018.02-1
+
+[1] https://cgit.freedesktop.org/libbsd/commit/?id=22fbd62368c39de8ac5e249d1502d5ac0ffdef30
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...ostpone-creation-of-symlinks-with-suspici.patch | 358 +++++++++++++++++++++
- 1 file changed, 358 insertions(+)
+ ...n-declaration-protection-for-glibc-alread.patch | 80 ++++++++++++++++++++++
+ package/libbsd/Config.in                           |  5 +-
+ 2 files changed, 82 insertions(+), 3 deletions(-)
+ create mode 100644 package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
 
-diff --git a/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch b/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch
+diff --git a/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch b/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
 new file mode 100644
-index 0000000000..f6f1359654
+index 0000000000..fdf45bdef6
 --- /dev/null
-+++ b/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch
-@@ -0,0 +1,358 @@
-+From a84db18fc71d09e801df0ebca048d82e90b32c6a Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Tue, 20 Feb 2018 15:57:45 +0100
-+Subject: [PATCH] tar,unzip: postpone creation of symlinks with "suspicious"
-+ targets
++++ b/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
+@@ -0,0 +1,80 @@
++From 1f8a3f7bccfc84b195218ad0086ebd57049c3490 Mon Sep 17 00:00:00 2001
++From: Guillem Jover <guillem@hadrons.org>
++Date: Tue, 6 Mar 2018 01:39:45 +0100
++Subject: [PATCH] Fix function declaration protection for glibc already
++ providing them
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+This mostly reverts commit bc9bbeb2b81001e8731cd2ae501c8fccc8d87cc7
-+"libarchive: do not extract unsafe symlinks unless $EXTRACT_UNSAFE_SYMLINKS=1"
++On non-glibc based systems we cannot unconditionally use the
++__GLIBC_PREREQ macro as it gets expanded before evaluation. Instead,
++if it is undefined, define it to 0.
 +
-+Users report that it is somewhat too restrictive. See
-+https://bugs.busybox.net/show_bug.cgi?id=8411
++We should also always declare these functions on non-glibc based
++systems. And on systems with a new enough glibc, which provides these
++functions, we should still provide the declarations if _GNU_SOURCE
++is *not* defined.
 +
-+In particular, this interferes with unpacking of busybox-based
-+filesystems with links like "sbin/applet" -> "../bin/busybox".
++Backported from:
++https://cgit.freedesktop.org/libbsd/patch/?id=1f8a3f7bccfc84b195218ad0086ebd57049c3490
 +
-+The change is made smaller by deleting ARCHIVE_EXTRACT_QUIET flag -
-+it is unused since 2010, and removing conditionals on it
-+allows commonalizing some error message codes.
-+
-+function                                             old     new   delta
-+create_or_remember_symlink                             -      94     +94
-+create_symlinks_from_list                              -      64     +64
-+tar_main                                            1002    1006      +4
-+unzip_main                                          2732    2724      -8
-+data_extract_all                                     984     891     -93
-+unsafe_symlink_target                                147       -    -147
-+------------------------------------------------------------------------------
-+(add/remove: 2/1 grow/shrink: 1/2 up/down: 162/-248)          Total: -86 bytes
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Reported-by: J?rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: Guillem Jover <guillem@hadrons.org>
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 +---
-+ archival/libarchive/data_extract_all.c      | 28 ++++----------
-+ archival/libarchive/unsafe_symlink_target.c | 59 +++++++++++++----------------
-+ archival/tar.c                              |  2 +
-+ archival/unzip.c                            | 25 ++++++------
-+ include/bb_archive.h                        | 23 ++++++-----
-+ testsuite/tar.tests                         | 10 ++---
-+ 6 files changed, 68 insertions(+), 79 deletions(-)
++ include/bsd/stdlib.h    | 3 ++-
++ include/bsd/string.h    | 3 ++-
++ include/bsd/sys/cdefs.h | 8 ++++++++
++ 3 files changed, 12 insertions(+), 2 deletions(-)
 +
-+diff --git a/archival/libarchive/data_extract_all.c b/archival/libarchive/data_extract_all.c
-+index d3a6df5e8..8fa69ffaf 100644
-+--- a/archival/libarchive/data_extract_all.c
-++++ b/archival/libarchive/data_extract_all.c
-+@@ -107,9 +107,7 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 			}
-+ 		}
-+ 		else if (existing_sb.st_mtime >= file_header->mtime) {
-+-			if (!(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-+-			 && !S_ISDIR(file_header->mode)
-+-			) {
-++			if (!S_ISDIR(file_header->mode)) {
-+ 				bb_error_msg("%s not created: newer or "
-+ 					"same age file exists", dst_name);
-+ 			}
-+@@ -125,7 +123,7 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 	/* Handle hard links separately */
-+ 	if (hard_link) {
-+ 		res = link(hard_link, dst_name);
-+-		if (res != 0 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)) {
-++		if (res != 0) {
-+ 			/* shared message */
-+ 			bb_perror_msg("can't create %slink '%s' to '%s'",
-+ 				"hard",	dst_name, hard_link
-+@@ -165,10 +163,9 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 	}
-+ 	case S_IFDIR:
-+ 		res = mkdir(dst_name, file_header->mode);
-+-		if ((res == -1)
-++		if ((res != 0)
-+ 		 && (errno != EISDIR) /* btw, Linux doesn't return this */
-+ 		 && (errno != EEXIST)
-+-		 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-+ 		) {
-+ 			bb_perror_msg("can't make dir %s", dst_name);
-+ 		}
-+@@ -198,27 +195,16 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 		 *
-+ 		 * Untarring bug.tar would otherwise place evil.py in '/tmp'.
-+ 		 */
-+-		if (!unsafe_symlink_target(file_header->link_target)) {
-+-			res = symlink(file_header->link_target, dst_name);
-+-			if (res != 0
-+-			 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-+-			) {
-+-				/* shared message */
-+-				bb_perror_msg("can't create %slink '%s' to '%s'",
-+-					"sym",
-+-					dst_name, file_header->link_target
-+-				);
-+-			}
-+-		}
-++		create_or_remember_symlink(&archive_handle->symlink_placeholders,
-++				file_header->link_target,
-++				dst_name);
-+ 		break;
-+ 	case S_IFSOCK:
-+ 	case S_IFBLK:
-+ 	case S_IFCHR:
-+ 	case S_IFIFO:
-+ 		res = mknod(dst_name, file_header->mode, file_header->device);
-+-		if ((res == -1)
-+-		 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-+-		) {
-++		if (res != 0) {
-+ 			bb_perror_msg("can't create node %s", dst_name);
-+ 		}
-+ 		break;
-+diff --git a/archival/libarchive/unsafe_symlink_target.c b/archival/libarchive/unsafe_symlink_target.c
-+index 441ba8b24..8dcafeaa1 100644
-+--- a/archival/libarchive/unsafe_symlink_target.c
-++++ b/archival/libarchive/unsafe_symlink_target.c
-+@@ -5,44 +5,37 @@
-+ #include "libbb.h"
-+ #include "bb_archive.h"
++diff --git a/include/bsd/stdlib.h b/include/bsd/stdlib.h
++index 8d33d1f..a5b063c 100644
++--- a/include/bsd/stdlib.h
+++++ b/include/bsd/stdlib.h
++@@ -71,7 +71,8 @@ int sradixsort(const unsigned char **base, int nmemb,
++                const unsigned char *table, unsigned endbyte);
 + 
-+-int FAST_FUNC unsafe_symlink_target(const char *target)
-++void FAST_FUNC create_or_remember_symlink(llist_t **symlink_placeholders,
-++		const char *target,
-++		const char *linkname)
-+ {
-+-	const char *dot;
-+-
-+-	if (target[0] == '/') {
-+-		const char *var;
-+- unsafe:
-+-		var = getenv("EXTRACT_UNSAFE_SYMLINKS");
-+-		if (var) {
-+-			if (LONE_CHAR(var, '1'))
-+-				return 0; /* pretend it's safe */
-+-			return 1; /* "UNSAFE!" */
-+-		}
-+-		bb_error_msg("skipping unsafe symlink to '%s' in archive,"
-+-			" set %s=1 to extract",
-+-			target,
-+-			"EXTRACT_UNSAFE_SYMLINKS"
-++	if (target[0] == '/' || strstr(target, "..")) {
-++		llist_add_to(symlink_placeholders,
-++			xasprintf("%s%c%s", linkname, '\0', target)
-++		);
-++		return;
-++	}
-++	if (symlink(target, linkname) != 0) {
-++		/* shared message */
-++		bb_perror_msg_and_die("can't create %slink '%s' to '%s'",
-++			"sym", linkname, target
-+ 		);
-+-		/* Prevent further messages */
-+-		setenv("EXTRACT_UNSAFE_SYMLINKS", "0", 0);
-+-		return 1; /* "UNSAFE!" */
-+ 	}
-++}
-+ 
-+-	dot = target;
-+-	for (;;) {
-+-		dot = strchr(dot, '.');
-+-		if (!dot)
-+-			return 0; /* safe target */
-++void FAST_FUNC create_symlinks_from_list(llist_t *list)
-++{
-++	while (list) {
-++		char *target;
-+ 
-+-		/* Is it a path component starting with ".."? */
-+-		if ((dot[1] == '.')
-+-		 && (dot == target || dot[-1] == '/')
-+-		    /* Is it exactly ".."? */
-+-		 && (dot[2] == '/' || dot[2] == '\0')
-+-		) {
-+-			goto unsafe;
-++		target = list->data + strlen(list->data) + 1;
-++		if (symlink(target, list->data)) {
-++			/* shared message */
-++			bb_error_msg_and_die("can't create %slink '%s' to '%s'",
-++				"sym",
-++				list->data, target
-++			);
-+ 		}
-+-		/* NB: it can even be trailing ".", should only add 1 */
-+-		dot += 1;
-++		list = list->link;
-+ 	}
-+ }
-+diff --git a/archival/tar.c b/archival/tar.c
-+index 9ed3821d5..415ebde0d 100644
-+--- a/archival/tar.c
-++++ b/archival/tar.c
-+@@ -1244,6 +1244,8 @@ int tar_main(int argc UNUSED_PARAM, char **argv)
-+ 	while (get_header_tar(tar_handle) == EXIT_SUCCESS)
-+ 		bb_got_signal = EXIT_SUCCESS; /* saw at least one header, good */
-+ 
-++	create_symlinks_from_list(tar_handle->symlink_placeholders);
-++
-+ 	/* Check that every file that should have been extracted was */
-+ 	while (tar_handle->accept) {
-+ 		if (!find_list_entry(tar_handle->reject, tar_handle->accept->data)
-+diff --git a/archival/unzip.c b/archival/unzip.c
-+index da4b2a544..0d00d8dc9 100644
-+--- a/archival/unzip.c
-++++ b/archival/unzip.c
-+@@ -345,7 +345,9 @@ static void unzip_create_leading_dirs(const char *fn)
-+ }
-+ 
-+ #if ENABLE_FEATURE_UNZIP_CDF
-+-static void unzip_extract_symlink(zip_header_t *zip, const char *dst_fn)
-++static void unzip_extract_symlink(llist_t **symlink_placeholders,
-++		zip_header_t *zip,
-++		const char *dst_fn)
-+ {
-+ 	char *target;
-+ 
-+@@ -370,15 +372,9 @@ static void unzip_extract_symlink(zip_header_t *zip, const char *dst_fn)
-+ 		target[xstate.mem_output_size] = '\0';
++ void *reallocf(void *ptr, size_t size);
++-#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 26)
+++#if !defined(__GLIBC__) || \
+++    (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 26) || !defined(_GNU_SOURCE)))
++ void *reallocarray(void *ptr, size_t nmemb, size_t size);
 + #endif
-+ 	}
-+-	if (!unsafe_symlink_target(target)) {
-+-//TODO: libbb candidate
-+-		if (symlink(target, dst_fn)) {
-+-			/* shared message */
-+-			bb_perror_msg_and_die("can't create %slink '%s' to '%s'",
-+-				"sym", dst_fn, target
-+-			);
-+-		}
-+-	}
-++	create_or_remember_symlink(symlink_placeholders,
-++			target,
-++			dst_fn);
-+ 	free(target);
-+ }
-+ #endif
-+@@ -490,6 +486,9 @@ int unzip_main(int argc, char **argv)
-+ 	llist_t *zaccept = NULL;
-+ 	llist_t *zreject = NULL;
-+ 	char *base_dir = NULL;
-++#if ENABLE_FEATURE_UNZIP_CDF
-++	llist_t *symlink_placeholders = NULL;
-++#endif
-+ 	int i;
-+ 	char key_buf[80]; /* must match size used by my_fgets80 */
 + 
-+@@ -954,7 +953,7 @@ int unzip_main(int argc, char **argv)
-+ #if ENABLE_FEATURE_UNZIP_CDF
-+ 			if (S_ISLNK(file_mode)) {
-+ 				if (dst_fd != STDOUT_FILENO) /* not -p? */
-+-					unzip_extract_symlink(&zip, dst_fn);
-++					unzip_extract_symlink(&symlink_placeholders, &zip, dst_fn);
-+ 			} else
-+ #endif
-+ 			{
-+@@ -990,6 +989,10 @@ int unzip_main(int argc, char **argv)
-+ 		total_entries++;
-+ 	}
++diff --git a/include/bsd/string.h b/include/bsd/string.h
++index 29097f6..f987fee 100644
++--- a/include/bsd/string.h
+++++ b/include/bsd/string.h
++@@ -46,7 +46,8 @@ size_t strlcat(char *dst, const char *src, size_t siz);
++ char *strnstr(const char *str, const char *find, size_t str_len);
++ void strmode(mode_t mode, char *str);
 + 
-++#if ENABLE_FEATURE_UNZIP_CDF
-++	create_symlinks_from_list(symlink_placeholders);
++-#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 25)
+++#if !defined(__GLIBC__) || \
+++    (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 25) || !defined(_GNU_SOURCE)))
++ void explicit_bzero(void *buf, size_t len);
++ #endif
++ __END_DECLS
++diff --git a/include/bsd/sys/cdefs.h b/include/bsd/sys/cdefs.h
++index b4c8f30..d1cc419 100644
++--- a/include/bsd/sys/cdefs.h
+++++ b/include/bsd/sys/cdefs.h
++@@ -58,6 +58,14 @@
++ #endif
++ #endif
++ 
+++/*
+++ * On non-glibc based systems, we cannot unconditionally use the
+++ * __GLIBC_PREREQ macro as it gets expanded before evaluation.
+++ */
+++#ifndef __GLIBC_PREREQ
+++#define __GLIBC_PREREQ(maj, min) 0
 ++#endif
 ++
-+ 	if ((opts & OPT_l) && quiet <= 1) {
-+ 		if (!verbose) {
-+ 			//	"  Length      Date    Time    Name\n"
-+diff --git a/include/bb_archive.h b/include/bb_archive.h
-+index 8ed20d70e..a5c61e95b 100644
-+--- a/include/bb_archive.h
-++++ b/include/bb_archive.h
-+@@ -64,6 +64,9 @@ typedef struct archive_handle_t {
-+ 	/* Currently processed file's header */
-+ 	file_header_t *file_header;
-+ 
-++	/* List of symlink placeholders */
-++	llist_t *symlink_placeholders;
-++
-+ 	/* Process the header component, e.g. tar -t */
-+ 	void FAST_FUNC (*action_header)(const file_header_t *);
-+ 
-+@@ -119,15 +122,14 @@ typedef struct archive_handle_t {
-+ #define ARCHIVE_RESTORE_DATE        (1 << 0)
-+ #define ARCHIVE_CREATE_LEADING_DIRS (1 << 1)
-+ #define ARCHIVE_UNLINK_OLD          (1 << 2)
-+-#define ARCHIVE_EXTRACT_QUIET       (1 << 3)
-+-#define ARCHIVE_EXTRACT_NEWER       (1 << 4)
-+-#define ARCHIVE_DONT_RESTORE_OWNER  (1 << 5)
-+-#define ARCHIVE_DONT_RESTORE_PERM   (1 << 6)
-+-#define ARCHIVE_NUMERIC_OWNER       (1 << 7)
-+-#define ARCHIVE_O_TRUNC             (1 << 8)
-+-#define ARCHIVE_REMEMBER_NAMES      (1 << 9)
-++#define ARCHIVE_EXTRACT_NEWER       (1 << 3)
-++#define ARCHIVE_DONT_RESTORE_OWNER  (1 << 4)
-++#define ARCHIVE_DONT_RESTORE_PERM   (1 << 5)
-++#define ARCHIVE_NUMERIC_OWNER       (1 << 6)
-++#define ARCHIVE_O_TRUNC             (1 << 7)
-++#define ARCHIVE_REMEMBER_NAMES      (1 << 8)
-+ #if ENABLE_RPM
-+-#define ARCHIVE_REPLACE_VIA_RENAME  (1 << 10)
-++#define ARCHIVE_REPLACE_VIA_RENAME  (1 << 9)
-+ #endif
-+ 
-+ 
-+@@ -197,7 +199,10 @@ void seek_by_jump(int fd, off_t amount) FAST_FUNC;
-+ void seek_by_read(int fd, off_t amount) FAST_FUNC;
-+ 
-+ const char *strip_unsafe_prefix(const char *str) FAST_FUNC;
-+-int unsafe_symlink_target(const char *target) FAST_FUNC;
-++void create_or_remember_symlink(llist_t **symlink_placeholders,
-++		const char *target,
-++		const char *linkname) FAST_FUNC;
-++void create_symlinks_from_list(llist_t *list) FAST_FUNC;
-+ 
-+ void data_align(archive_handle_t *archive_handle, unsigned boundary) FAST_FUNC;
-+ const llist_t *find_list_entry(const llist_t *list, const char *filename) FAST_FUNC;
-+diff --git a/testsuite/tar.tests b/testsuite/tar.tests
-+index b7cd74ca5..1675b07b1 100755
-+--- a/testsuite/tar.tests
-++++ b/testsuite/tar.tests
-+@@ -279,7 +279,7 @@ optional UUDECODE FEATURE_TAR_AUTODETECT FEATURE_SEAMLESS_BZ2
-+ testing "tar does not extract into symlinks" "\
-+ >>/tmp/passwd && uudecode -o input && tar xf input 2>&1 && rm passwd; cat /tmp/passwd; echo \$?
-+ " "\
-+-tar: skipping unsafe symlink to '/tmp/passwd' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-++tar: can't create symlink 'passwd' to '/tmp/passwd'
-+ 0
-+ " \
-+ "" "\
-+@@ -299,7 +299,7 @@ optional UUDECODE FEATURE_TAR_AUTODETECT FEATURE_SEAMLESS_BZ2
-+ testing "tar -k does not extract into symlinks" "\
-+ >>/tmp/passwd && uudecode -o input && tar xf input -k 2>&1 && rm passwd; cat /tmp/passwd; echo \$?
-+ " "\
-+-tar: skipping unsafe symlink to '/tmp/passwd' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-++tar: can't create symlink 'passwd' to '/tmp/passwd'
-+ 0
-+ " \
-+ "" "\
-+@@ -324,11 +324,11 @@ rm -rf etc usr
-+ ' "\
-+ etc/ssl/certs/3b2716e5.0
-+ etc/ssl/certs/EBG_Elektronik_Sertifika_Hizmet_Sa??lay??c??s??.pem
-+-tar: skipping unsafe symlink to '/usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa??lay??c??s??.crt' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-+ etc/ssl/certs/f80cc7f6.0
-+ usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa??lay??c??s??.crt
-+ 0
-+ etc/ssl/certs/3b2716e5.0 -> EBG_Elektronik_Sertifika_Hizmet_Sa??lay??c??s??.pem
-++etc/ssl/certs/EBG_Elektronik_Sertifika_Hizmet_Sa??lay??c??s??.pem -> /usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa??lay??c??s??.crt
-+ etc/ssl/certs/f80cc7f6.0 -> EBG_Elektronik_Sertifika_Hizmet_Sa??lay??c??s??.pem
-+ " \
-+ "" ""
-+@@ -346,9 +346,9 @@ ls symlink/bb_test_evilfile
-+ ' "\
-+ anything.txt
-+ symlink
-+-tar: skipping unsafe symlink to '/tmp' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-+ symlink/bb_test_evilfile
-+-0
-++tar: can't create symlink 'symlink' to '/tmp'
-++1
-+ ls: /tmp/bb_test_evilfile: No such file or directory
-+ ls: bb_test_evilfile: No such file or directory
-+ symlink/bb_test_evilfile
++ /*
++  * Some kFreeBSD headers expect those macros to be set for sanity checks.
++  */
 +-- 
 +2.16.2
 +
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 11e4c4d974..f6c2e4be4b 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -9,7 +9,6 @@ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  This library provides useful functions commonly found on BSD
+ 	  systems, and lacking on others like GNU systems, thus making
+@@ -19,6 +18,6 @@ config BR2_PACKAGE_LIBBSD
+ 
+ 	  http://libbsd.freedesktop.org/
+ 
+-comment "libbsd needs a glibc toolchain w/ threads"
++comment "libbsd needs a toolchain w/ threads"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.16.2
