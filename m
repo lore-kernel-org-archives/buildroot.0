@@ -1,395 +1,102 @@
-From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Wed, 14 Mar 2018 17:58:40 +0100
-Subject: [Buildroot] [PATCH] package/busybox: Unbreak the `tar`
- implementation
-Message-ID: <7ef483c1c968c34ed094a3fc883db230a598bc40.1521047794.git.jan.kundrat@cesnet.cz>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 14 Mar 2018 13:24:48 -0400
+Subject: [Buildroot] [PATCH v4 1/4] qemu: cleanup for gobject-introspection
+In-Reply-To: <20180314172451.22455-1-aduskett@gmail.com>
+References: <20180314172451.22455-1-aduskett@gmail.com>
+Message-ID: <20180314172451.22455-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The `tar` implementation in Busybox 1.28.0 and 1.28.1 won't extract a
-rootfs with some symlinks that appear to look "dangerous". This
-completely (and silently!) breaks on-target updates via RAUC for me, for
-example.
+Add a BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS which will be referenced by the
+gobject-introspection package. This also has the added benefit of making the
+config file conform to other package standards such as Valgrind.
 
-In the meanwhile, upstream already reverted the commit in question
-(in their commit a84db18fc71d09e801df0ebca048d82e90b32c6a), so this
-patch simply applies that revert in Buildroot. The fix has not made it
-to a release, yet.
+Add depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970 to
+Config.in.host as these are not currently supported cpus by qemu.
 
-Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-Bug: https://bugs.busybox.net/show_bug.cgi?id=8411
-Bug: https://github.com/rauc/rauc/issues/249
+Add a new variable in qemu.mk: HOST_QEMU_CPU_TUNE. When qemu-$(ARCH) is
+called, some architectures require a -cpu flag to be passed, or else a
+segfault may occure when building .gir files.
+For PowerPC, many of these cpu's need a specific CPU flag to be passed
+via the command line.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- ...ostpone-creation-of-symlinks-with-suspici.patch | 358 +++++++++++++++++++++
- 1 file changed, 358 insertions(+)
- create mode 100644 package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch
+Changes v1 -> v4:
+  - Add patch to series.
 
-diff --git a/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch b/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch
-new file mode 100644
-index 0000000000..f6f1359654
---- /dev/null
-+++ b/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch
-@@ -0,0 +1,358 @@
-+From a84db18fc71d09e801df0ebca048d82e90b32c6a Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Tue, 20 Feb 2018 15:57:45 +0100
-+Subject: [PATCH] tar,unzip: postpone creation of symlinks with "suspicious"
-+ targets
+ package/qemu/Config.in.host | 11 ++++++++---
+ package/qemu/qemu.mk        | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+), 3 deletions(-)
+
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index f14bcec6d6..0ef4c700b0 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -1,11 +1,16 @@
+-config BR2_PACKAGE_HOST_QEMU
+-	bool "host qemu"
+-	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
++config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb       || BR2_aarch64      || \
+ 		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
+ 		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
+ 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+ 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+ 		BR2_sparc        || BR2_x86_64
++	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
 +
-+This mostly reverts commit bc9bbeb2b81001e8731cd2ae501c8fccc8d87cc7
-+"libarchive: do not extract unsafe symlinks unless $EXTRACT_UNSAFE_SYMLINKS=1"
++config BR2_PACKAGE_HOST_QEMU
++	bool "host qemu"
++	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE \
+ 		if !BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE
+ 	help
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 345ef52668..62cb517628 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -70,6 +70,37 @@ endif
+ ifeq ($(HOST_QEMU_ARCH),sh4aeb)
+ HOST_QEMU_ARCH = sh4eb
+ endif
 +
-+Users report that it is somewhat too restrictive. See
-+https://bugs.busybox.net/show_bug.cgi?id=8411
++# Add cpu specific callouts for qemu.
++# In some cases (e.g. ppc) simply being arch specific (apparently) isn't good
++# enough and a PACKAGE_ARCH specific -cpu option is needed 
++# For others (e.g. arm) a -cpu option is not necessary, since the
++# qemu-arm default CPU supports all required architecture levels.
++ifeq ($(BR2_x86_64),y)
++HOST_QEMU_CPU_TUNE = -cpu Nehalem,check=false
++endif
 +
-+In particular, this interferes with unpacking of busybox-based
-+filesystems with links like "sbin/applet" -> "../bin/busybox".
++# PowerPC architecture. Currently, the 620, 630, and 970 are not supported.
++ifeq ($(BR2_powerpc_e5500),y)
++HOST_QEMU_CPU_TUNE = -cpu e5500
++endif
 +
-+The change is made smaller by deleting ARCHIVE_EXTRACT_QUIET flag -
-+it is unused since 2010, and removing conditionals on it
-+allows commonalizing some error message codes.
++ifeq ($(BR2_powerpc_e6500),y)
++HOST_QEMU_CPU_TUNE = -cpu e6500
++endif
 +
-+function                                             old     new   delta
-+create_or_remember_symlink                             -      94     +94
-+create_symlinks_from_list                              -      64     +64
-+tar_main                                            1002    1006      +4
-+unzip_main                                          2732    2724      -8
-+data_extract_all                                     984     891     -93
-+unsafe_symlink_target                                147       -    -147
-+------------------------------------------------------------------------------
-+(add/remove: 2/1 grow/shrink: 1/2 up/down: 162/-248)          Total: -86 bytes
++ifeq ($(BR2_powerpc_power7),y)
++HOST_QEMU_CPU_TUNE = -cpu 7400
++endif
 +
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+---
-+ archival/libarchive/data_extract_all.c      | 28 ++++----------
-+ archival/libarchive/unsafe_symlink_target.c | 59 +++++++++++++----------------
-+ archival/tar.c                              |  2 +
-+ archival/unzip.c                            | 25 ++++++------
-+ include/bb_archive.h                        | 23 ++++++-----
-+ testsuite/tar.tests                         | 10 ++---
-+ 6 files changed, 68 insertions(+), 79 deletions(-)
++ifeq ($(BR2_powerpc64)$(BR2_powerpc_e5500),yy)
++HOST_QEMU_CPU_TUNE = -cpu e500mc
++endif
 +
-+diff --git a/archival/libarchive/data_extract_all.c b/archival/libarchive/data_extract_all.c
-+index d3a6df5e8..8fa69ffaf 100644
-+--- a/archival/libarchive/data_extract_all.c
-++++ b/archival/libarchive/data_extract_all.c
-+@@ -107,9 +107,7 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 			}
-+ 		}
-+ 		else if (existing_sb.st_mtime >= file_header->mtime) {
-+-			if (!(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-+-			 && !S_ISDIR(file_header->mode)
-+-			) {
-++			if (!S_ISDIR(file_header->mode)) {
-+ 				bb_error_msg("%s not created: newer or "
-+ 					"same age file exists", dst_name);
-+ 			}
-+@@ -125,7 +123,7 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 	/* Handle hard links separately */
-+ 	if (hard_link) {
-+ 		res = link(hard_link, dst_name);
-+-		if (res != 0 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)) {
-++		if (res != 0) {
-+ 			/* shared message */
-+ 			bb_perror_msg("can't create %slink '%s' to '%s'",
-+ 				"hard",	dst_name, hard_link
-+@@ -165,10 +163,9 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 	}
-+ 	case S_IFDIR:
-+ 		res = mkdir(dst_name, file_header->mode);
-+-		if ((res == -1)
-++		if ((res != 0)
-+ 		 && (errno != EISDIR) /* btw, Linux doesn't return this */
-+ 		 && (errno != EEXIST)
-+-		 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-+ 		) {
-+ 			bb_perror_msg("can't make dir %s", dst_name);
-+ 		}
-+@@ -198,27 +195,16 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-+ 		 *
-+ 		 * Untarring bug.tar would otherwise place evil.py in '/tmp'.
-+ 		 */
-+-		if (!unsafe_symlink_target(file_header->link_target)) {
-+-			res = symlink(file_header->link_target, dst_name);
-+-			if (res != 0
-+-			 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-+-			) {
-+-				/* shared message */
-+-				bb_perror_msg("can't create %slink '%s' to '%s'",
-+-					"sym",
-+-					dst_name, file_header->link_target
-+-				);
-+-			}
-+-		}
-++		create_or_remember_symlink(&archive_handle->symlink_placeholders,
-++				file_header->link_target,
-++				dst_name);
-+ 		break;
-+ 	case S_IFSOCK:
-+ 	case S_IFBLK:
-+ 	case S_IFCHR:
-+ 	case S_IFIFO:
-+ 		res = mknod(dst_name, file_header->mode, file_header->device);
-+-		if ((res == -1)
-+-		 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-+-		) {
-++		if (res != 0) {
-+ 			bb_perror_msg("can't create node %s", dst_name);
-+ 		}
-+ 		break;
-+diff --git a/archival/libarchive/unsafe_symlink_target.c b/archival/libarchive/unsafe_symlink_target.c
-+index 441ba8b24..8dcafeaa1 100644
-+--- a/archival/libarchive/unsafe_symlink_target.c
-++++ b/archival/libarchive/unsafe_symlink_target.c
-+@@ -5,44 +5,37 @@
-+ #include "libbb.h"
-+ #include "bb_archive.h"
-+ 
-+-int FAST_FUNC unsafe_symlink_target(const char *target)
-++void FAST_FUNC create_or_remember_symlink(llist_t **symlink_placeholders,
-++		const char *target,
-++		const char *linkname)
-+ {
-+-	const char *dot;
-+-
-+-	if (target[0] == '/') {
-+-		const char *var;
-+- unsafe:
-+-		var = getenv("EXTRACT_UNSAFE_SYMLINKS");
-+-		if (var) {
-+-			if (LONE_CHAR(var, '1'))
-+-				return 0; /* pretend it's safe */
-+-			return 1; /* "UNSAFE!" */
-+-		}
-+-		bb_error_msg("skipping unsafe symlink to '%s' in archive,"
-+-			" set %s=1 to extract",
-+-			target,
-+-			"EXTRACT_UNSAFE_SYMLINKS"
-++	if (target[0] == '/' || strstr(target, "..")) {
-++		llist_add_to(symlink_placeholders,
-++			xasprintf("%s%c%s", linkname, '\0', target)
-++		);
-++		return;
-++	}
-++	if (symlink(target, linkname) != 0) {
-++		/* shared message */
-++		bb_perror_msg_and_die("can't create %slink '%s' to '%s'",
-++			"sym", linkname, target
-+ 		);
-+-		/* Prevent further messages */
-+-		setenv("EXTRACT_UNSAFE_SYMLINKS", "0", 0);
-+-		return 1; /* "UNSAFE!" */
-+ 	}
-++}
-+ 
-+-	dot = target;
-+-	for (;;) {
-+-		dot = strchr(dot, '.');
-+-		if (!dot)
-+-			return 0; /* safe target */
-++void FAST_FUNC create_symlinks_from_list(llist_t *list)
-++{
-++	while (list) {
-++		char *target;
-+ 
-+-		/* Is it a path component starting with ".."? */
-+-		if ((dot[1] == '.')
-+-		 && (dot == target || dot[-1] == '/')
-+-		    /* Is it exactly ".."? */
-+-		 && (dot[2] == '/' || dot[2] == '\0')
-+-		) {
-+-			goto unsafe;
-++		target = list->data + strlen(list->data) + 1;
-++		if (symlink(target, list->data)) {
-++			/* shared message */
-++			bb_error_msg_and_die("can't create %slink '%s' to '%s'",
-++				"sym",
-++				list->data, target
-++			);
-+ 		}
-+-		/* NB: it can even be trailing ".", should only add 1 */
-+-		dot += 1;
-++		list = list->link;
-+ 	}
-+ }
-+diff --git a/archival/tar.c b/archival/tar.c
-+index 9ed3821d5..415ebde0d 100644
-+--- a/archival/tar.c
-++++ b/archival/tar.c
-+@@ -1244,6 +1244,8 @@ int tar_main(int argc UNUSED_PARAM, char **argv)
-+ 	while (get_header_tar(tar_handle) == EXIT_SUCCESS)
-+ 		bb_got_signal = EXIT_SUCCESS; /* saw at least one header, good */
-+ 
-++	create_symlinks_from_list(tar_handle->symlink_placeholders);
-++
-+ 	/* Check that every file that should have been extracted was */
-+ 	while (tar_handle->accept) {
-+ 		if (!find_list_entry(tar_handle->reject, tar_handle->accept->data)
-+diff --git a/archival/unzip.c b/archival/unzip.c
-+index da4b2a544..0d00d8dc9 100644
-+--- a/archival/unzip.c
-++++ b/archival/unzip.c
-+@@ -345,7 +345,9 @@ static void unzip_create_leading_dirs(const char *fn)
-+ }
-+ 
-+ #if ENABLE_FEATURE_UNZIP_CDF
-+-static void unzip_extract_symlink(zip_header_t *zip, const char *dst_fn)
-++static void unzip_extract_symlink(llist_t **symlink_placeholders,
-++		zip_header_t *zip,
-++		const char *dst_fn)
-+ {
-+ 	char *target;
-+ 
-+@@ -370,15 +372,9 @@ static void unzip_extract_symlink(zip_header_t *zip, const char *dst_fn)
-+ 		target[xstate.mem_output_size] = '\0';
-+ #endif
-+ 	}
-+-	if (!unsafe_symlink_target(target)) {
-+-//TODO: libbb candidate
-+-		if (symlink(target, dst_fn)) {
-+-			/* shared message */
-+-			bb_perror_msg_and_die("can't create %slink '%s' to '%s'",
-+-				"sym", dst_fn, target
-+-			);
-+-		}
-+-	}
-++	create_or_remember_symlink(symlink_placeholders,
-++			target,
-++			dst_fn);
-+ 	free(target);
-+ }
-+ #endif
-+@@ -490,6 +486,9 @@ int unzip_main(int argc, char **argv)
-+ 	llist_t *zaccept = NULL;
-+ 	llist_t *zreject = NULL;
-+ 	char *base_dir = NULL;
-++#if ENABLE_FEATURE_UNZIP_CDF
-++	llist_t *symlink_placeholders = NULL;
-++#endif
-+ 	int i;
-+ 	char key_buf[80]; /* must match size used by my_fgets80 */
-+ 
-+@@ -954,7 +953,7 @@ int unzip_main(int argc, char **argv)
-+ #if ENABLE_FEATURE_UNZIP_CDF
-+ 			if (S_ISLNK(file_mode)) {
-+ 				if (dst_fd != STDOUT_FILENO) /* not -p? */
-+-					unzip_extract_symlink(&zip, dst_fn);
-++					unzip_extract_symlink(&symlink_placeholders, &zip, dst_fn);
-+ 			} else
-+ #endif
-+ 			{
-+@@ -990,6 +989,10 @@ int unzip_main(int argc, char **argv)
-+ 		total_entries++;
-+ 	}
-+ 
-++#if ENABLE_FEATURE_UNZIP_CDF
-++	create_symlinks_from_list(symlink_placeholders);
-++#endif
-++
-+ 	if ((opts & OPT_l) && quiet <= 1) {
-+ 		if (!verbose) {
-+ 			//	"  Length      Date    Time    Name\n"
-+diff --git a/include/bb_archive.h b/include/bb_archive.h
-+index 8ed20d70e..a5c61e95b 100644
-+--- a/include/bb_archive.h
-++++ b/include/bb_archive.h
-+@@ -64,6 +64,9 @@ typedef struct archive_handle_t {
-+ 	/* Currently processed file's header */
-+ 	file_header_t *file_header;
-+ 
-++	/* List of symlink placeholders */
-++	llist_t *symlink_placeholders;
-++
-+ 	/* Process the header component, e.g. tar -t */
-+ 	void FAST_FUNC (*action_header)(const file_header_t *);
-+ 
-+@@ -119,15 +122,14 @@ typedef struct archive_handle_t {
-+ #define ARCHIVE_RESTORE_DATE        (1 << 0)
-+ #define ARCHIVE_CREATE_LEADING_DIRS (1 << 1)
-+ #define ARCHIVE_UNLINK_OLD          (1 << 2)
-+-#define ARCHIVE_EXTRACT_QUIET       (1 << 3)
-+-#define ARCHIVE_EXTRACT_NEWER       (1 << 4)
-+-#define ARCHIVE_DONT_RESTORE_OWNER  (1 << 5)
-+-#define ARCHIVE_DONT_RESTORE_PERM   (1 << 6)
-+-#define ARCHIVE_NUMERIC_OWNER       (1 << 7)
-+-#define ARCHIVE_O_TRUNC             (1 << 8)
-+-#define ARCHIVE_REMEMBER_NAMES      (1 << 9)
-++#define ARCHIVE_EXTRACT_NEWER       (1 << 3)
-++#define ARCHIVE_DONT_RESTORE_OWNER  (1 << 4)
-++#define ARCHIVE_DONT_RESTORE_PERM   (1 << 5)
-++#define ARCHIVE_NUMERIC_OWNER       (1 << 6)
-++#define ARCHIVE_O_TRUNC             (1 << 7)
-++#define ARCHIVE_REMEMBER_NAMES      (1 << 8)
-+ #if ENABLE_RPM
-+-#define ARCHIVE_REPLACE_VIA_RENAME  (1 << 10)
-++#define ARCHIVE_REPLACE_VIA_RENAME  (1 << 9)
-+ #endif
-+ 
-+ 
-+@@ -197,7 +199,10 @@ void seek_by_jump(int fd, off_t amount) FAST_FUNC;
-+ void seek_by_read(int fd, off_t amount) FAST_FUNC;
-+ 
-+ const char *strip_unsafe_prefix(const char *str) FAST_FUNC;
-+-int unsafe_symlink_target(const char *target) FAST_FUNC;
-++void create_or_remember_symlink(llist_t **symlink_placeholders,
-++		const char *target,
-++		const char *linkname) FAST_FUNC;
-++void create_symlinks_from_list(llist_t *list) FAST_FUNC;
-+ 
-+ void data_align(archive_handle_t *archive_handle, unsigned boundary) FAST_FUNC;
-+ const llist_t *find_list_entry(const llist_t *list, const char *filename) FAST_FUNC;
-+diff --git a/testsuite/tar.tests b/testsuite/tar.tests
-+index b7cd74ca5..1675b07b1 100755
-+--- a/testsuite/tar.tests
-++++ b/testsuite/tar.tests
-+@@ -279,7 +279,7 @@ optional UUDECODE FEATURE_TAR_AUTODETECT FEATURE_SEAMLESS_BZ2
-+ testing "tar does not extract into symlinks" "\
-+ >>/tmp/passwd && uudecode -o input && tar xf input 2>&1 && rm passwd; cat /tmp/passwd; echo \$?
-+ " "\
-+-tar: skipping unsafe symlink to '/tmp/passwd' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-++tar: can't create symlink 'passwd' to '/tmp/passwd'
-+ 0
-+ " \
-+ "" "\
-+@@ -299,7 +299,7 @@ optional UUDECODE FEATURE_TAR_AUTODETECT FEATURE_SEAMLESS_BZ2
-+ testing "tar -k does not extract into symlinks" "\
-+ >>/tmp/passwd && uudecode -o input && tar xf input -k 2>&1 && rm passwd; cat /tmp/passwd; echo \$?
-+ " "\
-+-tar: skipping unsafe symlink to '/tmp/passwd' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-++tar: can't create symlink 'passwd' to '/tmp/passwd'
-+ 0
-+ " \
-+ "" "\
-+@@ -324,11 +324,11 @@ rm -rf etc usr
-+ ' "\
-+ etc/ssl/certs/3b2716e5.0
-+ etc/ssl/certs/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.pem
-+-tar: skipping unsafe symlink to '/usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.crt' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-+ etc/ssl/certs/f80cc7f6.0
-+ usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.crt
-+ 0
-+ etc/ssl/certs/3b2716e5.0 -> EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.pem
-++etc/ssl/certs/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.pem -> /usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.crt
-+ etc/ssl/certs/f80cc7f6.0 -> EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.pem
-+ " \
-+ "" ""
-+@@ -346,9 +346,9 @@ ls symlink/bb_test_evilfile
-+ ' "\
-+ anything.txt
-+ symlink
-+-tar: skipping unsafe symlink to '/tmp' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-+ symlink/bb_test_evilfile
-+-0
-++tar: can't create symlink 'symlink' to '/tmp'
-++1
-+ ls: /tmp/bb_test_evilfile: No such file or directory
-+ ls: bb_test_evilfile: No such file or directory
-+ symlink/bb_test_evilfile
-+-- 
-+2.16.2
++ifeq ($(BR2_powerpc64)$(BR2_powerpc_e6500),yy)
++HOST_QEMU_CPU_TUNE = -cpu e500mc
++endif
 +
+ HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
+ 
+ ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
 -- 
-2.16.2
+2.14.3
