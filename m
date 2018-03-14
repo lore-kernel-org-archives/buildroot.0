@@ -1,31 +1,27 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Wed, 14 Mar 2018 16:20:38 +0100
-Subject: [Buildroot] 
- =?iso-8859-1?q?=5BPATCH_1/2=5D_package/linux=3A_fix_?=
- =?iso-8859-1?q?custom_dts_files_handling?=
-In-Reply-To: <20180313180006.5364-1-rafal.susz@gmail.com>
-References: <20180313142635.27423-1-rafal.susz@gmail.com>
- <20180313180006.5364-1-rafal.susz@gmail.com>
-Message-ID: <094ab561-5131-4824-bd24-e79be76b8851@cesnet.cz>
+From: =?utf-8?B?SsOpcsO0bWU=?= Oufella <jerome.oufella@savoirfairelinux.com>
+Date: Wed, 14 Mar 2018 12:04:44 -0400 (EDT)
+Subject: [Buildroot] [PATCH v3 3/6] package/llvm: enable AMDGPU
+In-Reply-To: <20180309164939.16075-4-valentin.korenblit@smile.fr>
+References: <20180309164939.16075-1-valentin.korenblit@smile.fr>
+ <20180309164939.16075-4-valentin.korenblit@smile.fr>
+Message-ID: <1463844219.140867.1521043484417.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On ?ter? 13. b?ezna 2018 19:00:05 CET, Rafal Susz wrote:
-> Custom dts files are still conditionally copied based on non existing
-> boolean. So it is currently not possible to use custom dts file(s) at all.
->
-> List of dts files is now iterated and files are copied into 
-> dedicated kernel arch dir.
->
-> Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
+----- On Mar 9, 2018, at 11:49 AM, Valentin Korenblit valentin.korenblit at smile.fr wrote:
 
-Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+> The AMDGPU backend provides ISA code generation for AMD GPU's,
+> starting with the R600 family up until the current GCN families.
+> 
+> It should not be confused with the AMDGPU Linux kernel DRM driver.
+> 
+> For more info: https://llvm.org/docs/AMDGPUUsage.html
+> 
+> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 
-Tested on a config which uses two out-of-tree DTS files. Without this 
-patch, the current master fails.
+Tested with an AMD Carrizo GPU, works like a charm.
 
-With kind regards,
-Jan
+Tested-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
