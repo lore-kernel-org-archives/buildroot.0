@@ -1,23 +1,48 @@
-From: =?utf-8?B?SsOpcsO0bWU=?= Oufella <jerome.oufella@savoirfairelinux.com>
-Date: Wed, 14 Mar 2018 12:05:25 -0400 (EDT)
-Subject: [Buildroot] [PATCH v3 4/6] package/mesa3d: enable llvm support
-In-Reply-To: <20180309164939.16075-5-valentin.korenblit@smile.fr>
-References: <20180309164939.16075-1-valentin.korenblit@smile.fr>
- <20180309164939.16075-5-valentin.korenblit@smile.fr>
-Message-ID: <926424479.140878.1521043525947.JavaMail.zimbra@savoirfairelinux.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 14 Mar 2018 13:29:09 -0300 (BRT)
+Subject: [Buildroot] [git commit] tpm2-tss: new package
+In-Reply-To: <87r2oscocc.fsf@dell.be.48ers.dk>
+References: <20180308090237.C2C4582814@busybox.osuosl.org>
+ <1431823865.1093060.1520538814142.JavaMail.zimbra@datacom.ind.br>
+ <878tb1hrf8.fsf@dell.be.48ers.dk>
+ <497594174.1292740.1520644151438.JavaMail.zimbra@datacom.ind.br>
+ <87r2oscocc.fsf@dell.be.48ers.dk>
+Message-ID: <1938724924.1859970.1521044949745.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This patch provides LLVM support for Mesa3D, enabling llvmpipe
-> software rasterizer.
-> 
-> It uses llvm-config (host variant) installed in STAGING_DIR/usr/bin
-> to get LLVM libraries. Assuming that LLVM version 5.0.1 is installed,
-> llvm-config --libs will output -lLLVM-5.0.
-> 
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+> From: "Peter Korsgaard" <peter@korsgaard.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Saturday, March 10, 2018 5:43:47 AM
+> Subject: Re: [git commit] tpm2-tss: new package
 
-Tested-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
+>>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+> 
+> >> Thomas asked on IRC why this was x86 only. Can you explain why?
+> 
+> > Because it needs a hardware TPM, which as far as I know is available
+> > only in some Intel processors (I tested it in a C3000 SOC).
+> 
+> Aren't TPM2 devices still available as small microcontrollers connected
+> to the main processor over i2c/spi? I've seen ARM boards with such
+> TPM1.2 devices, and I think Thomas mentioned an ARM board with a TPM2
+> device connected over SPI.
+> 
+> In general, unless there is a build time dependency on architecture
+> specific files or the package is very specific to a SoC or board I
+> prefer to not hide packages, even if it is unlikely to be used on other
+> architectures.
+> 
+> So I think we should remove the dependencies from tpm2-tss.
+
+I agree.
+
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
