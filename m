@@ -1,93 +1,113 @@
-From: hyfinglists at gmail.com <hyfinglists@gmail.com>
-Date: Wed, 14 Mar 2018 12:15:28 +0100
-Subject: [Buildroot] [PATCH] python-pymodbus: new package
-Message-ID: <1521026128-23638-1-git-send-email-hyfinglists@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Mar 2018 12:08:47 +0000
+Subject: [Buildroot] [Bug 10856] New: openblas on qemu_x86_64_defconfig
+ fails with "sgemm_kernel.o: No such file or directory"
+Message-ID: <bug-10856-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Falco Hyfing <hyfinglists@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=10856
 
-Add python-pymodbus to be used for Modbus operations
+            Bug ID: 10856
+           Summary: openblas on qemu_x86_64_defconfig fails with
+                    "sgemm_kernel.o: No such file or directory"
+           Product: buildroot
+           Version: 2018.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ciro.santilli at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Falco Hyfing <hyfinglists@gmail.com>
----
- DEVELOPERS                                   |  3 +++
- package/Config.in                            |  1 +
- package/python-pymodbus/Config.in            |  5 +++++
- package/python-pymodbus/python-pymodbus.hash |  3 +++
- package/python-pymodbus/python-pymodbus.mk   | 13 +++++++++++++
- 5 files changed, 25 insertions(+)
- create mode 100644 package/python-pymodbus/Config.in
- create mode 100644 package/python-pymodbus/python-pymodbus.hash
- create mode 100644 package/python-pymodbus/python-pymodbus.mk
+7d43534625ac06ae01987113e912ffaf1aec2302 post 2018.02, then:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3df820e..48d3426 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -663,6 +663,9 @@ F:	package/safeclib/
- F:	package/tinycbor/
- F:	package/tinydtls/
- 
-+N:	Falco Hyfing <hyfinglists@gmail.com>
-+F:	package/python-pymodbus/
-+
- N:	Floris Bos <bos@je-eigen-domein.nl>
- F:	package/ipmitool/
- F:	package/odhcploc/
-diff --git a/package/Config.in b/package/Config.in
-index 449ffcc..a6efa1e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -872,6 +872,7 @@ menu "External python modules"
- 	source "package/python-pyinotify/Config.in"
- 	source "package/python-pylibftdi/Config.in"
- 	source "package/python-pylru/Config.in"
-+	source "package/python-pymodbus/Config.in"
- 	source "package/python-pymysql/Config.in"
- 	source "package/python-pynacl/Config.in"
- 	source "package/python-pyopenssl/Config.in"
-diff --git a/package/python-pymodbus/Config.in b/package/python-pymodbus/Config.in
-new file mode 100644
-index 0000000..cafab6f
---- /dev/null
-+++ b/package/python-pymodbus/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_PYTHON_PYMODBUS
-+	bool "python-pymodbus"
-+	select BR2_PACKAGE_PYTHON_SIX
-+	help
-+		Pymodbus is a full Modbus protocol implementation.
-diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
-new file mode 100644
-index 0000000..c930795
---- /dev/null
-+++ b/package/python-pymodbus/python-pymodbus.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256  e33bd0dfbd2cbd4dbc686ca87f809aebb7d72e940eb5846d5d38bb0f3371b26a  python-pymodbus-v1.4.0.tar.gz
-+sha256  796a47993313691ea404d8af7e4c0f9daf1d2760e3900938985b59c9008eee2f  doc/LICENSE
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-new file mode 100644
-index 0000000..40470fe
---- /dev/null
-+++ b/package/python-pymodbus/python-pymodbus.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-pymodbus
-+#
-+################################################################################
-+
-+PYTHON_PYMODBUS_VERSION = v1.4.0
-+PYTHON_PYMODBUS_SITE = $(call github,riptideio,pymodbus,$(PYTHON_PYMODBUS_VERSION))
-+PYTHON_PYMODBUS_SETUP_TYPE = setuptools
-+PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
-+PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
-+
-+$(eval $(python-package))
+     make qemu_x86_64_defconfig
+     printf 'BR2_PACKAGE_OPENBLAS=y\n' >>.config
+     make olddefconfig
+     time make BR2_JLEVEL="$(nproc)"
+
+Fails with:
+
+   
+/home/ciro/bak/git/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-ar:
+sgemm_kernel.o: No such file or directory                                       
+
+The build works however if I set:
+
+    BR2_PACKAGE_OPENBLAS_TARGET="NEHALEM"
+
+while the default was "SSE_GENERIC", and I am able to run a simple test program
+on qemu like that.
+
+There are a few reports on their bug tracker e.g.: 
+https://github.com/xianyi/OpenBLAS/issues/502
+
+Not sure if we should just change the default, or just update the package, or
+something else.
+
+I tried upgrading to master at 2c7392f07bb8023adbc7b85c049d16607ade77e1 but it
+fails with:
+
+```
+>>> openblas 2c7392f07bb8023adbc7b85c049d16607ade77e1 Downloading
+--2018-03-14 12:07:26-- 
+https://github.com/xianyi/OpenBLAS/archive/2c7392f07bb8023adbc7b85c049d16607ade77e1/openblas-2c7392f07bb8023adbc7b85c049d16607ade77e1.tar.gz
+Resolving github.com (github.com)... 192.30.253.113, 192.30.253.112
+Connecting to github.com (github.com)|192.30.253.113|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location:
+https://codeload.github.com/xianyi/OpenBLAS/tar.gz/2c7392f07bb8023adbc7b85c049d16607ade77e1
+[following]
+--2018-03-14 12:07:27-- 
+https://codeload.github.com/xianyi/OpenBLAS/tar.gz/2c7392f07bb8023adbc7b85c049d16607ade77e1
+Resolving codeload.github.com (codeload.github.com)... 192.30.253.120,
+192.30.253.121
+Connecting to codeload.github.com (codeload.github.com)|192.30.253.120|:443...
+connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 11773681 (11M) [application/x-gzip]
+Saving to:
+?/home/ciro/bak/git/buildroot/output/build/.openblas-2c7392f07bb8023adbc7b85c049d16607ade77e1.tar.gz.qhA0S2/output?
+
+/home/ciro/bak/git/buildroot/output/build/.openblas-
+100%[=====================================================================================================================>]
+ 11.23M  3.70MB/s    in 3.0s    
+
+2018-03-14 12:07:30 (3.70 MB/s) -
+?/home/ciro/bak/git/buildroot/output/build/.openblas-2c7392f07bb8023adbc7b85c049d16607ade77e1.tar.gz.qhA0S2/output?
+saved [11773681/11773681]
+
+ERROR: No hash found for
+openblas-2c7392f07bb8023adbc7b85c049d16607ade77e1.tar.gz
+--2018-03-14 12:07:30-- 
+http://sources.buildroot.net/openblas-2c7392f07bb8023adbc7b85c049d16607ade77e1.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.167.48,
+104.27.166.48, 2400:cb00:2048:1::681b:a730, ...
+Connecting to sources.buildroot.net
+(sources.buildroot.net)|104.27.167.48|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2018-03-14 12:07:31 ERROR 404: Not Found.
+
+package/pkg-generic.mk:160: recipe for target
+'/home/ciro/bak/git/buildroot/output/build/openblas-2c7392f07bb8023adbc7b85c049d16607ade77e1/.stamp_downloaded'
+failed
+make[1]: ***
+[/home/ciro/bak/git/buildroot/output/build/openblas-2c7392f07bb8023adbc7b85c049d16607ade77e1/.stamp_downloaded]
+Error 1
+Makefile:79: recipe for target '_all' failed
+make: *** [_all] Error 2
+````
+
+so something with the `source.buildroot.org` cache that I don't understand.
+
 -- 
-2.1.4
+You are receiving this mail because:
+You are on the CC list for the bug.
