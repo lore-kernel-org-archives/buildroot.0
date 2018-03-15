@@ -1,49 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Mar 2018 19:48:44 +0100
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xdriver_xf86-video-amdgpu:
- bump version to 18.0.1
-Message-ID: <20180315184845.26773-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 15 Mar 2018 20:28:56 +0100
+Subject: [Buildroot] [PATCH 1/4] package/rpi-firmware: bump version
+In-Reply-To: <1521120291-15781-1-git-send-email-martin@barkynet.com>
+References: <1521120291-15781-1-git-send-email-martin@barkynet.com>
+Message-ID: <20180315202856.39b87c81@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash   | 10 +++++-----
- .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk     |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Hello Martin,
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-index b03a010f84..d0fae63e61 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002844.html
--md5 24b2c9dc27a6083289bc86023eb3b1fe  xf86-video-amdgpu-18.0.0.tar.bz2
--sha1 360d619de1629913d356c60f1e155553e0e55dbb  xf86-video-amdgpu-18.0.0.tar.bz2
--sha256 e909b9707d2562dfc36d8075a8cbddbc93901aaa8f2522d9a429c3fc5ad66d94  xf86-video-amdgpu-18.0.0.tar.bz2
--sha512 5f9fa173c1b2f90878a9cc961e49abb0ad56db16fd80ec9fe6788fcc90eaa1906f3bff74437cb9afa95b9212ff946e1558736739f27e959a3848e77e4dabbd17  xf86-video-amdgpu-18.0.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002883.html
-+md5 d8368d204cb98d4387c8890562db1143  xf86-video-amdgpu-18.0.1.tar.bz2
-+sha1 a9c7125eae9870f26afa5167d5683f8d5e1b43c0  xf86-video-amdgpu-18.0.1.tar.bz2
-+sha256 7484682ccb403b3ca9e26d1c980572f08cdfa3469e2b2c9a9affc3d51b52691b  xf86-video-amdgpu-18.0.1.tar.bz2
-+sha512 eb3b76240d4e5084d68b5063b5b19ad5f5bb1f93ea9929301d9e17a48ddc1cb713b76529cb93d133b3547fe78ae8a4455f6b15f6ddf88c29349f82bb1a0db1c4  xf86-video-amdgpu-18.0.1.tar.bz2
- # Locally computed
- sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index 2c3986252c..5c1fb3f844 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.0.0
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.0.1
- XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
--- 
-2.11.0
+On Thu, 15 Mar 2018 13:24:48 +0000, Martin Bark <martin@barkynet.com> wrote:
+
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  package/rpi-firmware/rpi-firmware.hash | 2 +-
+>  package/rpi-firmware/rpi-firmware.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+> index 833a7fb..0e09ff5 100644
+> --- a/package/rpi-firmware/rpi-firmware.hash
+> +++ b/package/rpi-firmware/rpi-firmware.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 0451e1a843bf02df81126a1625d9a15dfdf19dcb2f9e95b0613a63e59fd31ca8 rpi-firmware-2067241bc7cdf238fdeab7f5a3c22faa57dd5617.tar.gz
+> +sha256 8fe5ebe14cc900f67242cab0c1c9f8e29bd10369ccbdfc7d004c294a96bad975 rpi-firmware-086a8488de0f485e8879ac14ff505ff1d922eeed.tar.gz
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index 22eaaa2..1ebdd96 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -RPI_FIRMWARE_VERSION = 2067241bc7cdf238fdeab7f5a3c22faa57dd5617
+> +RPI_FIRMWARE_VERSION = 086a8488de0f485e8879ac14ff505ff1d922eeed
+
+This commit (and some more before) have a reference to kernel branch 4.14.x, this one
+with subject 'kernel: Bump to 4.14.26'...
+
+The last commit referencing kernel branch 4.9.x is b1a7f4aea6cbd380319c2849ecc5988f9a4dba70
+'kernel: Bump to 4.9.80', for consistence your should bump the firmware version to this
+commit (or bump the kernel versions to the latest from the 4.14.x branch)...
+
+Regards,
+Peter
+
+>  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+>  RPI_FIRMWARE_LICENSE = BSD-3-Clause
+>  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
