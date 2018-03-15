@@ -1,50 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Mar 2018 21:35:04 +0100
-Subject: [Buildroot] [PATCH 0/2] core/instrumentation: optimisations
-Message-ID: <cover.1521146096.git.yann.morin.1998@free.fr>
+Date: Thu, 15 Mar 2018 21:35:07 +0100
+Subject: [Buildroot] [PATCH 1/2] core/intrumetnation: don't spawn to get
+ seconds-since-EPOCH
+In-Reply-To: <cover.1521146096.git.yann.morin.1998@free.fr>
+References: <cover.1521146096.git.yann.morin.1998@free.fr>
+Message-ID: <ef3b9c4c1ca910423b06f1374ee9461c77aaeed1.1521146096.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+No need to spawn $(date) to get the number of seconds-since-EPOCH, as
+bash's printf can do it as easily.
 
-This series brings in two optimisations to the instrumentation steps.
-The first is very minor (but still), while the second is the most
-important one. See the commit log for the whole explanations.
+This is just a micro-optimisation, though. Probably not noticeable.
 
+Reported-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Trent Piepho <tpiepho@impinj.com>
+---
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit dbeb43e97626df988534b9cf62b5618b0b6ccfa1
-
-  package/busybox: Unbreak the `tar` implementation (2018-03-14 20:15:22 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 6a793a6dba4f052ca8bbc35edd63df601f46478b
-
-  core/instrumentation: shave minutes off the build time (2018-03-15 21:21:36 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      core/intrumetnation: don't spawn to get seconds-since-EPOCH
-      core/instrumentation: shave minutes off the build time
-
- package/pkg-generic.mk | 51 ++++++++++++--------------------------------------
- 1 file changed, 12 insertions(+), 39 deletions(-)
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9eddaeee57..2a82025a04 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -49,8 +49,8 @@ endef
+ 
+ # Time steps
+ define step_time
+-	printf "%s:%-5.5s:%-20.20s: %s\n"           \
+-	       "$$(date +%s)" "$(1)" "$(2)" "$(3)"  \
++	printf "%(%s)T:%-5.5s:%-20.20s: %s\n"           \
++	       -1 "$(1)" "$(2)" "$(3)"  \
+ 	       >>"$(BUILD_DIR)/build-time.log"
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_time
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
