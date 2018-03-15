@@ -1,164 +1,44 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 15 Mar 2018 09:56:01 -0300
-Subject: [Buildroot] [PATCH 4/5] tpm2-tools: new package
+Date: Thu, 15 Mar 2018 09:55:59 -0300
+Subject: [Buildroot] [PATCH 2/5] tmp2-tss: bump to version 1.4.0
 In-Reply-To: <20180315125602.26186-1-casantos@datacom.ind.br>
 References: <20180315125602.26186-1-casantos@datacom.ind.br>
-Message-ID: <20180315125602.26186-4-casantos@datacom.ind.br>
+Message-ID: <20180315125602.26186-2-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TPM (Trusted Platform Module) 2.0 CLI tools based on system API of
-TPM2-TSS. These tools can be used to manage keys, perform
-encryption/decryption/signing/etc crypto operations, and manage
-non-volatile storage through a TPM2.0 HW implementation.
+Improved compliance to the last public review spec and some bug fixes.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/Config.in                                  |  1 +
- .../tpm2-tools/0001-Fix-build-with-LibreSSL.patch  | 64 ++++++++++++++++++++++
- package/tpm2-tools/Config.in                       | 16 ++++++
- package/tpm2-tools/tpm2-tools.hash                 |  3 +
- package/tpm2-tools/tpm2-tools.mk                   | 13 +++++
- 5 files changed, 97 insertions(+)
- create mode 100644 package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch
- create mode 100644 package/tpm2-tools/Config.in
- create mode 100644 package/tpm2-tools/tpm2-tools.hash
- create mode 100644 package/tpm2-tools/tpm2-tools.mk
+ package/tpm2-tss/tpm2-tss.hash | 2 +-
+ package/tpm2-tss/tpm2-tss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index af94c0ad91..58dfd6306d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2013,6 +2013,7 @@ menu "System tools"
- 	source "package/tar/Config.in"
- 	source "package/tpm-tools/Config.in"
- 	source "package/tpm2-abrmd/Config.in"
-+	source "package/tpm2-tools/Config.in"
- 	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
- 	source "package/xen/Config.in"
-diff --git a/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch b/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch
-new file mode 100644
-index 0000000000..0fdd2dc4dd
---- /dev/null
-+++ b/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch
-@@ -0,0 +1,64 @@
-+From 7f8d9359dcf9edbb13bb447f70234397afa4fb05 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.ind.br>
-+Date: Tue, 30 Jan 2018 11:21:14 -0200
-+Subject: [PATCH] Fix build with LibreSSL
-+
-+OPENSSL_VERSION_NUMBER is used to test the version of OpenSSL but this
-+test alone breaks the build with LibreSSL due to implicit declarations
-+of functions 'RSA_set0_key' and 'HMAC_CTX_free'.
-+
-+Test if OpenSSL < 1.1.0 or LIBRESSL_VERSION_NUMBER is defined, instead.
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-+---
-+ lib/conversion.c | 2 +-
-+ lib/tpm_kdfa.c   | 6 +++---
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/lib/conversion.c b/lib/conversion.c
-+index 1d0a0b7..df02de4 100644
-+--- a/lib/conversion.c
-++++ b/lib/conversion.c
-+@@ -133,7 +133,7 @@ static bool tpm2_convert_pubkey_ssl(TPMT_PUBLIC *public, pubkey_format format, c
-+         goto error;
-+     }
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x1010000fL /* OpenSSL 1.1.0 */
-++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER) /* OpenSSL 1.1.0 */
-+     ssl_rsa_key->e = e;
-+     ssl_rsa_key->n = n;
-+ #else
-+diff --git a/lib/tpm_kdfa.c b/lib/tpm_kdfa.c
-+index ee3cf8a..e43bdeb 100644
-+--- a/lib/tpm_kdfa.c
-++++ b/lib/tpm_kdfa.c
-+@@ -54,7 +54,7 @@ static const EVP_MD *tpm_algorithm_to_openssl_digest(TPMI_ALG_HASH algorithm) {
-+ static HMAC_CTX *hmac_alloc()
-+ {
-+     HMAC_CTX *ctx;
-+-#if OPENSSL_VERSION_NUMBER < 0x1010000fL /* OpenSSL 1.1.0 */
-++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER) /* OpenSSL 1.1.0 */
-+     ctx = malloc(sizeof(*ctx));
-+ #else
-+     ctx = HMAC_CTX_new();
-+@@ -62,7 +62,7 @@ static HMAC_CTX *hmac_alloc()
-+     if (!ctx)
-+         return NULL;
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x1010000fL
-++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
-+     HMAC_CTX_init(ctx);
-+ #endif
-+ 
-+@@ -71,7 +71,7 @@ static HMAC_CTX *hmac_alloc()
-+ 
-+ static void hmac_del(HMAC_CTX *ctx)
-+ {
-+-#if OPENSSL_VERSION_NUMBER < 0x1010000fL
-++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
-+     HMAC_CTX_cleanup(ctx);
-+     free(ctx);
-+ #else
-+-- 
-+2.14.3
-+
-diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-new file mode 100644
-index 0000000000..6429b24531
---- /dev/null
-+++ b/package/tpm2-tools/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_TPM2_TOOLS
-+	bool "tpm2-tools"
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_TPM2_ABRMD # run-time
-+	select BR2_PACKAGE_TPM2_TSS
-+	help
-+	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
-+	  API of TPM2-TSS. These tools can be used to manage keys,
-+	  perform encryption/decryption/signing/etc crypto operations,
-+	  and manage non-volatile storage through a TPM2.0 HW
-+	  implementation.
-+
-+	  https://github.com/tpm2-software/tpm2-tools
-diff --git a/package/tpm2-tools/tpm2-tools.hash b/package/tpm2-tools/tpm2-tools.hash
-new file mode 100644
-index 0000000000..e33b3e5945
---- /dev/null
-+++ b/package/tpm2-tools/tpm2-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 c990c0656165afef0fad61e1852a9a189a4b93b43d2a684b151a5dc0b3c6249d  tpm2-tools-3.0.3.tar.gz
-+sha256 3d6b149c8b042bd5f3db678d587fbe55230d071ca084bd38dcae451679c6dd45  LICENSE
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-new file mode 100644
-index 0000000000..0697900d2d
---- /dev/null
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# tpm2-tools
-+#
-+################################################################################
-+
-+TPM2_TOOLS_VERSION = 3.0.3
-+TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
-+TPM2_TOOLS_LICENSE = BSD-2-Clause
-+TPM2_TOOLS_LICENSE_FILES = LICENSE
-+TPM2_TOOLS_DEPENDENCIES = dbus libcurl libglib2 openssl tpm2-tss host-pkgconf
-+
-+$(eval $(autotools-package))
+diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
+index df1c6d8b58..67c5a85842 100644
+--- a/package/tpm2-tss/tpm2-tss.hash
++++ b/package/tpm2-tss/tpm2-tss.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 c7d627de50394e9a02593edb1ce74e1bbac17831be726c54f689507f0c41a78a  tpm2-tss-1.3.0.tar.gz
++sha256 cf8784cc536be16e6fba47f77033e093a6aeaed8420877ac9f42f77fb7b09031  tpm2-tss-1.4.0.tar.gz
+ sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index 709602860f..f5169a2770 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TPM2_TSS_VERSION = 1.3.0
++TPM2_TSS_VERSION = 1.4.0
+ TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
+ TPM2_TSS_LICENSE = BSD-2-Clause
+ TPM2_TSS_LICENSE_FILES = LICENSE
 -- 
 2.14.3
