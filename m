@@ -1,54 +1,88 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 15 Mar 2018 20:28:56 +0100
-Subject: [Buildroot] [PATCH 1/4] package/rpi-firmware: bump version
-In-Reply-To: <1521120291-15781-1-git-send-email-martin@barkynet.com>
-References: <1521120291-15781-1-git-send-email-martin@barkynet.com>
-Message-ID: <20180315202856.39b87c81@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 15 Mar 2018 20:37:11 +0100
+Subject: [Buildroot] [PATCH 1/1] safeclib: fix build without wchar and
+ host-doxygen
+Message-ID: <20180315193711.11437-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Martin,
+Add a patch (sent upstream) to add a --disable-doc option
 
-On Thu, 15 Mar 2018 13:24:48 +0000, Martin Bark <martin@barkynet.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.net/results/e597843f2bb528da01d1e617929c818613b56cec
 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/rpi-firmware/rpi-firmware.hash | 2 +-
->  package/rpi-firmware/rpi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-> index 833a7fb..0e09ff5 100644
-> --- a/package/rpi-firmware/rpi-firmware.hash
-> +++ b/package/rpi-firmware/rpi-firmware.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed
-> -sha256 0451e1a843bf02df81126a1625d9a15dfdf19dcb2f9e95b0613a63e59fd31ca8 rpi-firmware-2067241bc7cdf238fdeab7f5a3c22faa57dd5617.tar.gz
-> +sha256 8fe5ebe14cc900f67242cab0c1c9f8e29bd10369ccbdfc7d004c294a96bad975 rpi-firmware-086a8488de0f485e8879ac14ff505ff1d922eeed.tar.gz
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 22eaaa2..1ebdd96 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -RPI_FIRMWARE_VERSION = 2067241bc7cdf238fdeab7f5a3c22faa57dd5617
-> +RPI_FIRMWARE_VERSION = 086a8488de0f485e8879ac14ff505ff1d922eeed
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/safeclib/0001-Add-disable-doc-option.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/safeclib/0001-Add-disable-doc-option.patch
 
-This commit (and some more before) have a reference to kernel branch 4.14.x, this one
-with subject 'kernel: Bump to 4.14.26'...
-
-The last commit referencing kernel branch 4.9.x is b1a7f4aea6cbd380319c2849ecc5988f9a4dba70
-'kernel: Bump to 4.9.80', for consistence your should bump the firmware version to this
-commit (or bump the kernel versions to the latest from the 4.14.x branch)...
-
-Regards,
-Peter
-
->  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
->  RPI_FIRMWARE_LICENSE = BSD-3-Clause
->  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+diff --git a/package/safeclib/0001-Add-disable-doc-option.patch b/package/safeclib/0001-Add-disable-doc-option.patch
+new file mode 100644
+index 0000000000..67c48906f3
+--- /dev/null
++++ b/package/safeclib/0001-Add-disable-doc-option.patch
+@@ -0,0 +1,58 @@
++From 0d56b6327f6b652511c3e4c72382f4dc4d194e10 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 15 Mar 2018 20:12:28 +0100
++Subject: [PATCH] Add --disable-doc option
++
++This option allows the user to disable man pages even if pod2man and
++doxygen programs are found
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile.am  |  2 ++
++ configure.ac | 10 ++++++++++
++ 2 files changed, 12 insertions(+)
++
++diff --git a/Makefile.am b/Makefile.am
++index 0f65c5c1..ce1424bb 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -104,6 +104,7 @@ LIBTOOL_DISTCLEAN_FILES = \
++ 	build-tools/test-driver
++ DISTCLEANFILES = .version
++ 
+++if ENABLE_DOC
++ MAN1_SOURCES = doc/man/man1/check_for_unsafe_apis.1
++ dist_man_MANS =
++ if HAVE_POD2MAN
++@@ -560,6 +561,7 @@ clean-local:
++ 	rm -rf $(builddir)/doc/html
++ 	rm -rf $(builddir)/doc/man
++ endif
+++endif
++ 
++ if ENABLE_GCOV
++ gcov: check
++diff --git a/configure.ac b/configure.ac
++index 0e4e5eea..33ed7326 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -339,6 +339,16 @@ else
++ 	AC_MSG_RESULT([no (default)])
++ fi
++ 
+++AC_ARG_ENABLE(doc,
+++	AS_HELP_STRING([--disable-doc],
+++	               [disable documentation @<:@default=no@:>@]),
+++	[case "${enableval}" in
+++	yes) enable_doc=true ;;
+++	no)  enable_doc=false ;;
+++	*)   AC_MSG_ERROR([bad value ${enableval} for --enable-doc]) ;;
+++	esac], [enable_doc=true])
+++AM_CONDITIONAL(ENABLE_DOC, test "x$enable_doc" = "xtrue")
+++
++ dnl for windows dllimport. checking pic_flag DLL_EXPORT would be better,
++ dnl but this is only enabled for the shared objs, and we need it in the config
++ dnl for our tests.
++-- 
++2.14.1
++
+-- 
+2.14.1
