@@ -1,182 +1,219 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Mar 2018 21:35:08 +0100
-Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off the
- build time
-In-Reply-To: <cover.1521146096.git.yann.morin.1998@free.fr>
-References: <cover.1521146096.git.yann.morin.1998@free.fr>
-Message-ID: <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
+From: Oleksandr Zhadan <oleks@arcturusnetworks.com>
+Date: Thu, 15 Mar 2018 17:07:49 -0400
+Subject: [Buildroot] [PATCH v2] configs/arcturus_ucls1012a: new defconfig
+Message-ID: <20180315210749.14388-1-oleks@arcturusnetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As part of the build, we run some instrumentation hooks to gather
-statistics about the usage of the target/, staging/ and host/
-directories, so that we can generate reports for the user, that
-shows:
-  - for each file, what package installed it,
-  - for each package,the size that it installed.
+The uCLS1012A-SOM product family (ucls1012a) is an Arcturus Networks Inc.
+64bit ARM Cortex-A53 class System on Module powered by a NXP QorIQ LS1012A
+Low Power Communication Processor.  This 314 pin MXM3.0/SMARC module card
+contains DDR3, QSPI NOR Flash, eMMC NAND Flash, optional Audio CODEC and is
+available with 1 or 2 Gig-Ethernet PHYs.
 
-In so doing, we run a double md5 pass on all files of the affected
-directories. These passes were mostly invisible when we were only
-scanning target/, but has greatly increased in time now that we also
-scan staging/ and host/ (but only in the corresponding _CMDS, of
-course).
+Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
+Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>
 
-This md5 wsa mostly aimed at catching packages that would "cheat" with
-mtime/atime/ctime somehow. They can't really cheat on md5, though [0].
+Changes v1 -> v2:
+    - updated kernel and u-boot source repositories to github
 
-Timings however speak for themselves, with this defconfig (slightly
-biggish-but-still-manageable build) [1].
-
-host/      20965 files    1.2GiB
-staging/    4715 files    333MiB
-target/     1801 files     44MiB
-
-All instrumentation steps, using md5:    19min 27s
-All instrumentation steps, using mtime:  14min 45s
-No instrumentation step at all:          14min 31s
-
-So, using mtime is an almost-5min improvement, i.e. about 25% faster,
-while removing all instrumentation steps does not gain that much more...
-
-So, we switch to using mtime, because in the end that's still good-enough
-for our use-case: generating some graphs. It is not mission-critical, and
-if a graph is slightly off, that's not biggy. It can anyway be attributed
-to a broken package's buildsystem, which should get fixed.
-
-However, we lose the ability to track directories. Non-empty directories
-can be tracked back by a bit of scripting, but empty directories are
-simply not caught. If we were to also look for directories using mtime,
-we would catch parents of installed files:
-
-  - /foo/bar/ exists
-  - a package installs /foo/bar/buz
-  - mtime of /foo/bar/ is changed to account for the nex file in it.
-
-So we do not track directories at all, and we lose empty directories.
-The existing tracking was mostly happenstance, with the original
-submission and comments not really accounting for a real use-case.
-
-Now, we also change the way we handle symlinks. Previously, we would
-hash the file pointed to by the symlink. Now, we only look at the mtime
-of the symlink itself, which still detects modifications.
-
-Eventually, this also means that we now no longer need to establish a
-list before the install step; we can now simply run after the install
-step.
-
-[0] Yeah, md5 is very weak, but we're not guarding against malicious
-attacks, just about careless modifications.
-
-[1] defconfig used for tests:
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_SYSTEMD=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OSMESA=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=y
-BR2_PACKAGE_SYSTEMD_BACKLIGHT=y
-BR2_PACKAGE_SYSTEMD_BINFMT=y
-BR2_PACKAGE_SYSTEMD_COREDUMP=y
-BR2_PACKAGE_SYSTEMD_FIRSTBOOT=y
-BR2_PACKAGE_SYSTEMD_HIBERNATE=y
-BR2_PACKAGE_SYSTEMD_IMPORTD=y
-BR2_PACKAGE_SYSTEMD_LOCALED=y
-BR2_PACKAGE_SYSTEMD_LOGIND=y
-BR2_PACKAGE_SYSTEMD_MACHINED=y
-BR2_PACKAGE_SYSTEMD_POLKIT=y
-BR2_PACKAGE_SYSTEMD_QUOTACHECK=y
-BR2_PACKAGE_SYSTEMD_RANDOMSEED=y
-BR2_PACKAGE_SYSTEMD_RFKILL=y
-BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT=y
-BR2_PACKAGE_SYSTEMD_SYSUSERS=y
-BR2_PACKAGE_SYSTEMD_VCONSOLE=y
-
-Reported-by: Trent Piepho <tpiepho@impinj.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Trent Piepho <tpiepho@impinj.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 47 ++++++++++-------------------------------------
- 1 file changed, 10 insertions(+), 37 deletions(-)
+ DEVELOPERS                                         | 10 +++
+ board/arcturus/aarch64-ucls1012a/post-image.sh     |  6 ++
+ board/arcturus/aarch64-ucls1012a/readme.txt        | 74 ++++++++++++++++++++++
+ .../rootfs_overlay/etc/init.d/S09modload           | 14 ++++
+ configs/arcturus_ucls1012a_defconfig               | 37 +++++++++++
+ 5 files changed, 141 insertions(+)
+ create mode 100755 board/arcturus/aarch64-ucls1012a/post-image.sh
+ create mode 100644 board/arcturus/aarch64-ucls1012a/readme.txt
+ create mode 100755 board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
+ create mode 100644 configs/arcturus_ucls1012a_defconfig
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 2a82025a04..293824c601 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -57,53 +57,26 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3df820e712..f3b8876930 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1284,6 +1284,11 @@ F:	package/tinyxml/
+ N:	Maxime Ripard <maxime.ripard@bootlin.com>
+ F:	package/kmsxx/
  
- # Hooks to collect statistics about installed files
++N:	Michael Durrant <mdurrant@arcturusnetworks.com>
++F:	board/arcturus/
++F:	configs/arcturus_ucp1020_defconfig
++F:	configs/arcturus_ucls1012a_defconfig
++
+ N:	Michael Rommel <rommel@layer-7.net>
+ F:	package/knock/
+ F:	package/python-crc16/
+@@ -1342,6 +1347,11 @@ F:	package/tcf-agent/
+ N:	Olaf Rempel <razzor@kopf-tisch.de>
+ F:	package/ctorrent/
  
--define _step_pkg_size_get_file_list
--	(cd $(2) ; \
--		( \
--			find . -xtype f -print0 | xargs -0 md5sum ; \
--			find . -xtype d -print0 | xargs -0 -I{} printf 'directory  {}\n'; \
--		) \
--	) | sort > $1
--endef
--
--# This hook will be called before the installation of a package. We store in
--# a file named .br_filelist_before the list of files currently installed.
--# Note that the MD5 is also stored, in order to identify if the files are
--# overwritten.
--# $(1): package name (ignored)
--# $(2): base directory to search in
--define step_pkg_size_start
--	$(call _step_pkg_size_get_file_list,$($(PKG)_DIR)/.br_filelist_before,$(2))
--endef
--
--# This hook will be called after the installation of a package. We store in
--# a file named .br_filelist_after the list of files (and their MD5) currently
--# installed. We then do a diff with the .br_filelist_before to compute the
--# list of files installed by this package.
- # The suffix is typically empty for the target variant, for legacy backward
- # compatibility.
--# $(1): package name (ignored)
-+# $(1): package name
- # $(2): base directory to search in
- # $(3): suffix of file  (optional)
--define step_pkg_size_end
--	$(call _step_pkg_size_get_file_list,$($(PKG)_DIR)/.br_filelist_after,$(2))
--	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
--		while read hash file ; do \
--			echo "$(1),$${file}" ; \
--		done >> $(BUILD_DIR)/packages-file-list$(3).txt
--	rm -f $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after
-+define step_pkg_size_inner
-+	cd $(2); \
-+	find . \( -type f -o -type L \) \
-+		-newer $($(PKG)_DIR)/.stamp_built \
-+		-exec printf '$(1),%s\n' {} + \
-+		>> $(BUILD_DIR)/packages-file-list$(3).txt
- endef
- 
- define step_pkg_size
- 	$(if $(filter install-target,$(2)),\
--		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3),$(TARGET_DIR))) \
--		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3),$(TARGET_DIR))))
-+		$(if $(filter end,$(1)),$(call step_pkg_size_inner,$(3),$(TARGET_DIR))))
- 	$(if $(filter install-staging,$(2)),\
--		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3),$(STAGING_DIR),-staging)) \
--		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3),$(STAGING_DIR),-staging)))
-+		$(if $(filter end,$(1)),$(call step_pkg_size_inner,$(3),$(STAGING_DIR),-staging)))
- 	$(if $(filter install-host,$(2)),\
--		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3),$(HOST_DIR),-host)) \
--		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3),$(HOST_DIR),-host)))
-+		$(if $(filter end,$(1)),$(call step_pkg_size_inner,$(3),$(HOST_DIR),-host)))
- endef
- GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
- 
++N:	Oleksandr Zhadan <oleks@arcturusnetworks.com>
++F:	board/arcturus/
++F:	configs/arcturus_ucp1020_defconfig
++F:	configs/arcturus_ucls1012a_defconfig
++
+ N:	Oli Vogt <oli.vogt.pub01@gmail.com>
+ F:	package/python-django/
+ F:	package/python-flup/
+diff --git a/board/arcturus/aarch64-ucls1012a/post-image.sh b/board/arcturus/aarch64-ucls1012a/post-image.sh
+new file mode 100755
+index 0000000000..ccfacd3858
+--- /dev/null
++++ b/board/arcturus/aarch64-ucls1012a/post-image.sh
+@@ -0,0 +1,6 @@
++#!/bin/sh
++
++MKIMAGE=${HOST_DIR}/usr/bin/mkimage
++MKIMAGE_IN=${BINARIES_DIR}/br2-ucls1012a.its
++MKIMAGE_OUT=${BINARIES_DIR}/part0-000000.itb
++${MKIMAGE} -f ${MKIMAGE_IN} ${MKIMAGE_OUT}
+diff --git a/board/arcturus/aarch64-ucls1012a/readme.txt b/board/arcturus/aarch64-ucls1012a/readme.txt
+new file mode 100644
+index 0000000000..483d5e9aef
+--- /dev/null
++++ b/board/arcturus/aarch64-ucls1012a/readme.txt
+@@ -0,0 +1,74 @@
++Arcturus uCLS1012A SoM
++======================
++
++This tutorial describes how to use the predefined Buildroot
++configuration for the Arcturus uCLS101A SoM platform.
++
++Additional information about the uCLS1012A System on Module can be found at
++https://www.arcturusnetworks.com/products/ucls1012a
++and product support for registered users at
++https://www.arcturusnetworks.com/support
++
++Building
++--------
++
++Return to the top directory <buildrootdir> and execute the following commands.
++
++  make arcturus_ucls1012a_defconfig
++  make
++
++Result of the build
++-------------------
++
++After building, you should obtain this tree:
++
++    output/images/
++    +-- arc-ucls1012a.dtb
++    +-- Image
++    +-- part0-000000.itb
++    +-- rootfs.cpio
++    +-- rootfs.cpio.gz
++    +-- rootfs.tar
++    +-- u-boot.bin
++    +-- ucls1012a.its
++
++Flashing
++--------
++
++You'll need to program the image created by buildroot into the SPI NOR flash.
++
++1. Reboot your module and via the serial console press <escape> to enter the B$
++u-boot shell.
++   From the shell you will need to update four environment variables replacing the
++   IPv4 IP Address with ones that will work with your network and tftp server.
++
++   B$ setenv ipaddr 192.168.1.81
++   B$ setenv serverip 192.168.1.80
++   B$ setenv gatewayip 192.168.1.1
++   B$ setenv netmask 255.255.255.0
++   B$ saveenv
++
++2. Enable tftp server to serve the <buildrootdir>/output/images/ folder.
++
++3. Program the new U-Boot binary (optional)
++    If you don't feel confident upgrading your bootloader then don't do it,
++    it's unnecessary most of the time.
++
++    B$ tftp u-boot.bin
++    B$ run program_uboot
++
++4. Program the ITB image (includes Kernel, DTB and Ramdisk)
++
++    B$ tftp part0-000000.itb
++    B$ run iprogram
++
++5. Booting your new system
++
++    Reboot your system by reset command
++    B$ reset
++
++        or
++
++    B$ run bootcmd
++
++Good Luck !
+diff --git a/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload b/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
+new file mode 100755
+index 0000000000..c87ffda14f
+--- /dev/null
++++ b/board/arcturus/aarch64-ucls1012a/rootfs_overlay/etc/init.d/S09modload
+@@ -0,0 +1,14 @@
++#!/bin/sh
++#
++case "$1" in
++       start)
++                modprobe pfe
++                ;;
++        stop)
++                ;;
++        restart|reload)
++                ;;
++        *)
++                echo "Usage: $0 {start|stop|restart}"
++                exit 1
++esac
+diff --git a/configs/arcturus_ucls1012a_defconfig b/configs/arcturus_ucls1012a_defconfig
+new file mode 100644
+index 0000000000..0ce7d1341c
+--- /dev/null
++++ b/configs/arcturus_ucls1012a_defconfig
+@@ -0,0 +1,37 @@
++# Architecture
++BR2_aarch64=y
++
++# Linux headers same as kernel, a 4.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++
++# System settings
++BR2_TARGET_GENERIC_HOSTNAME="ucls1012a"
++BR2_TARGET_GENERIC_ISSUE="Welcome to uCLS1012A-SOM"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_OVERLAY="board/arcturus/aarch64-ucls1012a/rootfs_overlay"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/arcturus/aarch64-ucls1012a/post-image.sh"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/ArcturusNetworks/uCLS1012A-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v0.2.1811"
++BR2_LINUX_KERNEL_DEFCONFIG="ucls1012a"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="arcturus/arc-ucls1012a"
++
++# Filesystem
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++
++# U-boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ArcturusNetworks/uCLS1012A-uboot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v0.2.1811"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="UCLS1012A_QSPI128"
++
++# Tools
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 -- 
-2.14.1
+2.11.0
