@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 15 Mar 2018 19:48:45 +0100
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xdriver_xf86-video-ati: bump
- version to 18.0.1
-In-Reply-To: <20180315184845.26773-1-bernd.kuhls@t-online.de>
-References: <20180315184845.26773-1-bernd.kuhls@t-online.de>
-Message-ID: <20180315184845.26773-2-bernd.kuhls@t-online.de>
+Date: Thu, 15 Mar 2018 19:48:44 +0100
+Subject: [Buildroot] [PATCH 1/2] package/x11r7/xdriver_xf86-video-amdgpu:
+ bump version to 18.0.1
+Message-ID: <20180315184845.26773-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +11,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash   | 10 +++++-----
- package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk |  2 +-
+ .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash   | 10 +++++-----
+ .../xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk     |  2 +-
  2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-index 54c553e6ce..d37096e9e4 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
+index b03a010f84..d0fae63e61 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
 @@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002854.html
--md5 4d41bfe860dc719654cad3f82d00f6f3  xf86-video-ati-18.0.0.tar.bz2
--sha1 da1b89a747264d976d824ddc7b5b4f803d3cf765  xf86-video-ati-18.0.0.tar.bz2
--sha256 2c0368fb620d1fdfa2b435e672d65444c2fb9df21bbaf979298484b89ef83981  xf86-video-ati-18.0.0.tar.bz2
--sha512 a9a634091f208099885039d42433cee061e03968417c0d535691833abcc9162d8d0a46f99bac902f0885beb14dcc9a011d104b535ffe492562fd5bb740ad4721  xf86-video-ati-18.0.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002884.html
-+md5 40e7c0a5a69aba3d84e0958f58705ea7  xf86-video-ati-18.0.1.tar.bz2
-+sha1 b5a0b6a2fa839d668a3fb90280fede95f0bc130d  xf86-video-ati-18.0.1.tar.bz2
-+sha256 72ea3b8127d4550b64f797457f5a7851a541fa4ee2cc3f345b6c1886b81714a0  xf86-video-ati-18.0.1.tar.bz2
-+sha512 b468a78503a596bbf71a1b91b231ce1fa32908f619ff2dfe249352d046696a3641f2a9ff065e32545fff77100134b4b237591215e78ef885b6509d6b16112d14  xf86-video-ati-18.0.1.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002844.html
+-md5 24b2c9dc27a6083289bc86023eb3b1fe  xf86-video-amdgpu-18.0.0.tar.bz2
+-sha1 360d619de1629913d356c60f1e155553e0e55dbb  xf86-video-amdgpu-18.0.0.tar.bz2
+-sha256 e909b9707d2562dfc36d8075a8cbddbc93901aaa8f2522d9a429c3fc5ad66d94  xf86-video-amdgpu-18.0.0.tar.bz2
+-sha512 5f9fa173c1b2f90878a9cc961e49abb0ad56db16fd80ec9fe6788fcc90eaa1906f3bff74437cb9afa95b9212ff946e1558736739f27e959a3848e77e4dabbd17  xf86-video-amdgpu-18.0.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002883.html
++md5 d8368d204cb98d4387c8890562db1143  xf86-video-amdgpu-18.0.1.tar.bz2
++sha1 a9c7125eae9870f26afa5167d5683f8d5e1b43c0  xf86-video-amdgpu-18.0.1.tar.bz2
++sha256 7484682ccb403b3ca9e26d1c980572f08cdfa3469e2b2c9a9affc3d51b52691b  xf86-video-amdgpu-18.0.1.tar.bz2
++sha512 eb3b76240d4e5084d68b5063b5b19ad5f5bb1f93ea9929301d9e17a48ddc1cb713b76529cb93d133b3547fe78ae8a4455f6b15f6ddf88c29349f82bb1a0db1c4  xf86-video-amdgpu-18.0.1.tar.bz2
  # Locally computed
  sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index 0e9d412b75..8726695399 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+index 2c3986252c..5c1fb3f844 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_ATI_VERSION = 18.0.0
-+XDRIVER_XF86_VIDEO_ATI_VERSION = 18.0.1
- XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.0.0
++XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 18.0.1
+ XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
 -- 
 2.11.0
