@@ -1,31 +1,28 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Thu, 15 Mar 2018 20:43:07 +0100
-Subject: [Buildroot] [PATCH] wine: Drop glibc requirement
-In-Reply-To: <87vae25mq7.fsf@dell.be.48ers.dk>
-References: <1520590842-3879-1-git-send-email-nerv@dawncrow.de>
- <87vae25mq7.fsf@dell.be.48ers.dk>
-Message-ID: <e84e201a-45c3-0b48-2cbc-89338953291e@dawncrow.de>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Thu, 15 Mar 2018 20:45:54 +0100
+Subject: [Buildroot] [PATCH] wine: Depend on shared libraries
+Message-ID: <1521143154-19605-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 11.03.2018 um 22:25 schrieb Peter Korsgaard:
->>>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
-> 
->  > I noticed it's not needed anymore, musl went upstream at some point and uClibc is now build with bessel functions:
->  > https://git.buildroot.net/buildroot/commit/package/uclibc?id=de56d58e5d26d78161ca3b7a1a2a4decfe4e89db
-> 
->  > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> 
-> Committed, thanks.
-> 
-> Have you verified that E.G. a static only uClibc configuration works?
-> test-pkg is handy for such checks.
-> 
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/wine/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hi,
-
-Thanks!
-In fact Wine has multiple issues with static only, I'll send a patch
+diff --git a/package/wine/Config.in b/package/wine/Config.in
+index 627a9a7..52d7d2e 100644
+--- a/package/wine/Config.in
++++ b/package/wine/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WINE
+ 	bool "wine"
++	depends on !BR2_STATIC_LIBS
+ 	# Wine only builds on certain architectures
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" || \
+ 	           BR2_HOSTARCH = "powerpc" || BR2_HOSTARCH = "arm" || \
+-- 
+2.7.4
