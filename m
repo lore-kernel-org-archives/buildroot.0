@@ -1,104 +1,81 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Thu, 15 Mar 2018 13:24:49 +0000
-Subject: [Buildroot] [PATCH 2/4] configs/raspberrypi*: bump kernel version
+Date: Thu, 15 Mar 2018 13:24:50 +0000
+Subject: [Buildroot] [PATCH 3/4] board/raspberrypi: add support for rpi3 b+
 In-Reply-To: <1521120291-15781-1-git-send-email-martin@barkynet.com>
 References: <1521120291-15781-1-git-send-email-martin@barkynet.com>
-Message-ID: <1521120291-15781-2-git-send-email-martin@barkynet.com>
+Message-ID: <1521120291-15781-3-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now based on 4.9.80 (from 4.9.79)
-
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- configs/raspberrypi0_defconfig       | 2 +-
- configs/raspberrypi2_defconfig       | 2 +-
- configs/raspberrypi3_64_defconfig    | 2 +-
- configs/raspberrypi3_defconfig       | 2 +-
- configs/raspberrypi3_qt5we_defconfig | 2 +-
- configs/raspberrypi_defconfig        | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ board/raspberrypi/genimage-raspberrypi3.cfg | 1 +
+ board/raspberrypi/readme.txt                | 3 ++-
+ configs/raspberrypi3_defconfig              | 2 +-
+ configs/raspberrypi3_qt5we_defconfig        | 2 +-
+ 4 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 0fb8a99..68448e6 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -10,7 +10,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="33ee56d5927ceff630fbc87e3f5caa409b6ae114"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a00afce9b4231c120c8b007d2c48018547d0156f"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
+index 98ff709..0a54724 100644
+--- a/board/raspberrypi/genimage-raspberrypi3.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3.cfg
+@@ -2,6 +2,7 @@ image boot.vfat {
+   vfat {
+     files = {
+       "bcm2710-rpi-3-b.dtb",
++      "bcm2710-rpi-3-b-plus.dtb",
+       "bcm2710-rpi-cm3.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 9482693..9f91581 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -30,7 +30,7 @@ For model 2 B:
  
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 962a58c..7e7a61a 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -13,7 +13,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="33ee56d5927ceff630fbc87e3f5caa409b6ae114"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a00afce9b4231c120c8b007d2c48018547d0156f"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+   $ make raspberrypi2_defconfig
  
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 6a35ac3..7db5561 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="33ee56d5927ceff630fbc87e3f5caa409b6ae114"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a00afce9b4231c120c8b007d2c48018547d0156f"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+-For model 3 B:
++For model 3 B and B+:
  
- # Build the DTB from the kernel sources
+   $ make raspberrypi3_defconfig
+ 
+@@ -56,6 +56,7 @@ After building, you should obtain this tree:
+     +-- bcm2708-rpi-b-plus.dtb      [1]
+     +-- bcm2709-rpi-2-b.dtb         [1]
+     +-- bcm2710-rpi-3-b.dtb         [1]
++    +-- bcm2710-rpi-3-b-plus.dtb    [1]
+     +-- boot.vfat
+     +-- rootfs.ext4
+     +-- rpi-firmware/
 diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 9304f0c..2fb46d3 100644
+index 2fb46d3..40585da 100644
 --- a/configs/raspberrypi3_defconfig
 +++ b/configs/raspberrypi3_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="33ee56d5927ceff630fbc87e3f5caa409b6ae114"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a00afce9b4231c120c8b007d2c48018547d0156f"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+@@ -17,7 +17,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
  
  # Build the DTB from the kernel sources
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-cm3"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus bcm2710-rpi-cm3"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ 
 diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index d4ada47..dc1bf7f 100644
+index dc1bf7f..7830065 100644
 --- a/configs/raspberrypi3_qt5we_defconfig
 +++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -13,7 +13,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="33ee56d5927ceff630fbc87e3f5caa409b6ae114"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a00afce9b4231c120c8b007d2c48018547d0156f"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+@@ -18,7 +18,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
  
  # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index daca836..85312c4 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -12,7 +12,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="33ee56d5927ceff630fbc87e3f5caa409b6ae114"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a00afce9b4231c120c8b007d2c48018547d0156f"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-cm3"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus bcm2710-rpi-cm3"
  
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+ # Build Qt5 WebEngine
+ BR2_PACKAGE_LIBERATION=y
 -- 
 2.7.4
