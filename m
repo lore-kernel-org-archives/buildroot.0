@@ -1,33 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Mar 2018 03:57:18 +0100
-Subject: [Buildroot] [PATCH] package/libbsd: enable for non-glibc
- toolchains
-In-Reply-To: <1521062029.4311.1.camel@embedded.rocks>
-References: <20180314194356.15839-1-joerg.krause@embedded.rocks>
- <20180314220911.12c69aba@windsurf>
- <1521062029.4311.1.camel@embedded.rocks>
-Message-ID: <20180315035718.47d2b529@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 15 Mar 2018 03:43:13 +0000
+Subject: [Buildroot] [Bug 10851] Patch to handle numpad Enter key properly
+In-Reply-To: <bug-10851-163@https.bugs.busybox.net/>
+References: <bug-10851-163@https.bugs.busybox.net/>
+Message-ID: <bug-10851-163-j5WOreD5Jw@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10851
 
-On Wed, 14 Mar 2018 22:13:49 +0100, J?rg Krause wrote:
+--- Comment #2 from Igor Liferenko <igor.liferenko@gmail.com> ---
+Hi,
 
-> > Does this allows to enable netcat-openbsd on uclibc and musl ?  
-> 
-> No. You find the reason why in the commit log :-)
+I did a quick investigation and created this patch myself, because I could not
+use numpad enter key while configuring openwrt. And as I read on openwrt
+website that they use buildroot, I filed this bug report here. I did not submit
+this patch to anywhere except here.
 
-Gaah sorry, I should have read the commit log entirely instead of just
-looking at the patch. Sorry about that.
+Please help me to figure out if I should post this patch to Linux kconfig or to
+openwrt. Or could you please just add these changes yourself, the way it seems
+more appropriate. Just to make that numpad enter key work the same way as
+ordinary enter key in "make menuconfig".
 
-Thanks!
+Thanks,
+Igor
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-http://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
