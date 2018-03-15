@@ -1,59 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 15 Mar 2018 08:23:06 +0000
-Subject: [Buildroot] [Bug 10861] New: Package batman_adv Makefile is missing
- include header directory
-Message-ID: <bug-10861-163@https.bugs.busybox.net/>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 15 Mar 2018 08:55:35 -0400
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: bump to v2.4.2
+Message-ID: <20180315125535.14667-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10861
+Also add hash for license.
 
-            Bug ID: 10861
-              Host: ARM
-             Build: X86_64
-           Summary: Package batman_adv Makefile is missing include header
-                    directory
-           Product: buildroot
-           Version: 2018.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: miltos.koutsokeras at iccs.gr
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/libwebsockets/libwebsockets.hash | 3 ++-
+ package/libwebsockets/libwebsockets.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Created attachment 7511
-  --> https://bugs.busybox.net/attachment.cgi?id=7511&action=edit
-batman_adv package Makefile fix
-
-Bug found in package/batman-adv/batman-adv.mk leading to compilation error due
-to missing headers:
-
-fatal error: uapi/linux/batman_adv.h: No such file or directory
- #include <uapi/linux/batman_adv.h>
-
-There is an extra include directory (-I$(PWD)/include/) added in batman_adv
-source Makefile in commit:
-
-https://git.open-mesh.org/batman-adv.git/blobdiff/14adbd701dec0717606bff4f0c8c084827bf4735..2b20eb572f271edca0d0fd1abd5350876c315d28:/Makefile
-
-but the extra directory is missing from the Buildroot
-package/batman-adv/batman-adv.mk:
-
-BATMAN_ADV_CFLAGS = \
-        -I$(@D)/compat-include/ \
-        -include $(@D)/compat.h \
-        -DBATADV_SOURCE_VERSION=\"\\\"$(BATMAN_ADV_VERSION)\\\"\"
-
-Patch attached fixes the issue and the build finishes properly.
-
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index 490139746f..ea7c8ca6ba 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256	e7f9eaef258e003c9ada0803a9a5636757a5bc0a58927858834fb38a87d18ad2  libwebsockets-v2.2.1.tar.gz
++sha256	73012d7fcf428dedccc816e83a63a01462e27819d5537b8e0d0c7264bfacfad6    libwebsockets-v2.4.2.tar.gz
++sha256  078fbbbeab357fc6d4f8090e95e9022fa4cb9eac1efd77b2f1387e9ccc51917a    LICENSE
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index b29a2f14c7..28fd183393 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWEBSOCKETS_VERSION = v2.2.1
++LIBWEBSOCKETS_VERSION = v2.4.2
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = LGPL-2.1 with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.3
