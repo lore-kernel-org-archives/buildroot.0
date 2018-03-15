@@ -1,45 +1,73 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 15 Mar 2018 23:50:07 +0100
-Subject: [Buildroot] [PATCH 1/6] package/efl: bump to 1.20.7
-Message-ID: <20180315225012.9845-1-romain.naour@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 15 Mar 2018 23:55:01 +0100
+Subject: [Buildroot] bash: /dev/fd/62: No such file or directory
+Message-ID: <1521154501.16532.15.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://www.enlightenment.org/news/efl-1.20.7
+Hi,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I am facing an issue with busybox init system, bash and mdev. When a
+bash script uses process substitution, bash ends with an error:
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 5507bda3ef..1391d1f707 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
-@@ -1,5 +1,5 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.6.tar.xz.sha256
--sha256	56c67ea77435753a4f324a0a13488ba58f4ed7eb35a97c1a354fdc79c39a32c1	efl-1.20.6.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.20.7.tar.xz.sha256
-+sha256 b0a9b765bcd7b012f1072da1d491fc8671aa089473f746901d93f5807a2c76fe  efl-1.20.7.tar.xz
- sha256 d949e42ca8fd48d275c397c5fc2ac34c9b63ada715dcaf1a670e17bb62964341  COMPLIANCE
- sha256 1f0597d326e2fdb54aa2f0caec6d8bb0afb9941ef32475f017ed02ca214fcf37  COPYING
- sha256 781ee841d15835b393bfe7d4c6497dc1b05217479abd40daceaf7aa102a758e1  licenses/COPYING.BSD
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 7085796756..6ef7d53385 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EFL_VERSION = 1.20.6
-+EFL_VERSION = 1.20.7
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
--- 
-2.14.3
+   """
+   # bash -c 'read x< <(echo 1); echo $x'
+   bash: /dev/fd/62: No such file or directory
+   """
+
+The issue is addressed is some threads, e.g. [1]. The problem is that
+/dev/fd does not exist when using mdev:
+
+   """
+   # ls -l /dev/fd
+   ls: /dev/fd: No such file or directory
+   """
+
+As addressed here [2], the issue can be fixed by adding:
+
+   """
+   ln -snf /proc/self/fd /dev/fd
+   """
+
+... to /etc/inittab or /etc/init.d/S10mdev:
+
+   """
+   # ls -l /dev/fd
+   lrwxrwxrwx    1 root     root            13 Mar 15 22:39 /dev/fd -> /proc/self/fd
+   # ls -l /dev/fd/
+   total 0
+   lrwx------    1 root     root            64 Mar 15 22:40 0 -> /dev/pts/0
+   lrwx------    1 root     root            64 Mar 15 22:40 1 -> /dev/pts/0
+   lrwx------    1 root     root            64 Mar 15 22:40 2 -> /dev/pts/0
+   ls: /dev/fd/3: cannot read link: No such file or directory
+   lr-x------    1 root     root            64 Mar 15 22:40 3
+   """
+
+The process substitution works now as expected:
+
+   """
+   # bash -c 'read x< <(echo 1); echo $x'
+   1
+   """
+
+I found some other threads which additionally add the following lines:
+
+   """
+   ln -snf /proc/self/fd/0 /dev/stdin
+   ln -snf /proc/self/fd/1 /dev/stdout
+   ln -snf /proc/self/fd/2 /dev/stderr
+   """
+
+... as /dev/std{in,out,err} do not exist when using mdev
+
+My question is how to best fix this issue in Buildroot? Any
+suggestions?
+
+[1] http://gnu-bash.2382.n7.nabble.com/dev-fd-62-No-such-file-or-directory-td13233.html
+[2] https://bugs.alpinelinux.org/issues/1465
+
+Best regards
+J?rg Krause
