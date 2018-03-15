@@ -1,35 +1,43 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 15 Mar 2018 14:47:33 -0700
-Subject: [Buildroot] [PATCH] Config.in: Document BR2_CCACHE_DIR override
-Message-ID: <20180315214733.7320-1-tpiepho@impinj.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 15 Mar 2018 22:37:28 +0000
+Subject: [Buildroot] [PATCH v2 1/4] package/rpi-firmware: bump version
+Message-ID: <1521153451-27215-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This variable, like BR2_DL_DIR, is designed to be overridable from the
-environment.  Unlike BR2_DL_DIR, it is not documented as such in the
-Config.in help text.  Do so now.
+Signed-off-by: Martin Bark <martin@barkynet.com>
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+----
+Changes v1 -> v2:
+ - none
 ---
- Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 0002df5176..25f24b9d20 100644
---- a/Config.in
-+++ b/Config.in
-@@ -332,6 +332,9 @@ config BR2_CCACHE_DIR
- 	default "$(HOME)/.buildroot-ccache"
- 	help
- 	  Where ccache should store cached files.
-+	  If the Linux shell environment has defined the BR2_CCACHE_DIR
-+	  environment variable, then this overrides this configuration
-+	  item.
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 833a7fb..0e09ff5 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 0451e1a843bf02df81126a1625d9a15dfdf19dcb2f9e95b0613a63e59fd31ca8 rpi-firmware-2067241bc7cdf238fdeab7f5a3c22faa57dd5617.tar.gz
++sha256 8fe5ebe14cc900f67242cab0c1c9f8e29bd10369ccbdfc7d004c294a96bad975 rpi-firmware-086a8488de0f485e8879ac14ff505ff1d922eeed.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 22eaaa2..1ebdd96 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_CCACHE_INITIAL_SETUP
- 	string "Compiler cache initial setup"
+-RPI_FIRMWARE_VERSION = 2067241bc7cdf238fdeab7f5a3c22faa57dd5617
++RPI_FIRMWARE_VERSION = 086a8488de0f485e8879ac14ff505ff1d922eeed
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-2.14.3
+2.7.4
