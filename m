@@ -1,53 +1,52 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 15 Mar 2018 14:07:20 +0000
-Subject: [Buildroot] [PATCH 3/4] board/raspberrypi: add support for rpi3
- b+
-In-Reply-To: <20180315133334.5fxt65qbjfk24e77@tarshish>
-References: <1521120291-15781-1-git-send-email-martin@barkynet.com>
- <1521120291-15781-3-git-send-email-martin@barkynet.com>
- <20180315133334.5fxt65qbjfk24e77@tarshish>
-Message-ID: <CAFGQKxf=KsaTFLFo3cTZWUXOjdEz0pAo=12cAPTBhzMqjCMj0A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Mar 2018 16:53:13 +0100
+Subject: [Buildroot] Buildroot at ELC 2018
+Message-ID: <20180315165313.78748574@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hello,
 
-On 15 March 2018 at 13:33, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Martin,
->
-> On Thu, Mar 15, 2018 at 01:24:50PM +0000, Martin Bark wrote:
->> diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
->> index 9482693..9f91581 100644
->> --- a/board/raspberrypi/readme.txt
->> +++ b/board/raspberrypi/readme.txt
->> @@ -30,7 +30,7 @@ For model 2 B:
->>
->>    $ make raspberrypi2_defconfig
->>
->> -For model 3 B:
->> +For model 3 B and B+:
->
-> This is quick. Have you tested on hardware?
+The Embedded Linux Conference took place from Monday to Wednesday this
+week, and I gave two Buildroot-related talk/tutorial:
 
-I've testing it builds and runs on the rpi3 but not tested on a
-rpi3b+.  I should get my rpi3b+ soon to verify this.  The current
-kernel includes all the changes needed for the rpi3b+. To add support
-we just need to include the bcm2710-rpi-3-b-plus.dtb.
+ - A "Buildroot: what's new?" talk, very similar to the one given at
+   the Embedded Linux Conference Europe last October, just slightly
+   updated with 2017.11 and 2018.02 changes.
 
-Note that i don't see any updates to the arm64 defconfig for dtb files
-so raspberrypi3_64_defconfig will remain unchanged for now.
+   The slides are available at
+   https://bootlin.com/pub/conferences/2018/elc/petazzoni-buildroot-whats-new/petazzoni-buildroot-whats-new.pdf,
+   and the video is already online at
+   https://www.youtube.com/watch?v=D6zO4nMX9KY
 
-Thanks
+ - A "Getting started with Buildroot" tutorial. For the first time at
+   ELC, a special track called "Embedded Apprentice Linux Engineer" was
+   organized, which consisted in 2-3 hours long tutorials, with a
+   lecture part, followed by hands-on. All hands-on took place on the
+   newly released PocketBeagle platform, to which a special cape was
+   connected.
 
-Martin
+   The slides for my tutorial are available at
+   https://bootlin.com/pub/conferences/2018/elc/petazzoni-e-ale-buildroot-tutorial/petazzoni-buildroot-tutorial.pdf,
+   while the lab instructions are available at
+   https://bootlin.com/pub/conferences/2018/elc/petazzoni-e-ale-buildroot-tutorial/petazzoni-buildroot-tutorial-lab.pdf.
 
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+   The lecture is really just a short introduction to the basics of the
+   Buildroot, while the lab make the participate do their first build,
+   tweak the root filesystem with an overlay and more package, and
+   write their own package for a small application.
+
+Throughout the conference, a good number of people came to talk with me
+about Buildroot, mainly to tell me that they are using it, and that they
+like it a lot!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
