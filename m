@@ -1,47 +1,59 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Thu, 15 Mar 2018 09:00:46 +0100
-Subject: [Buildroot] [Need Assistance]:confused between BUILDROOT and
- OPENWRT ?
-In-Reply-To: <mailman.2297.1520509432.3652.buildroot@busybox.net>
-References: <mailman.2297.1520509432.3652.buildroot@busybox.net>
-Message-ID: <9ab24cef09942aed44f4f983388df1ff@umbiko.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 15 Mar 2018 08:23:06 +0000
+Subject: [Buildroot] [Bug 10861] New: Package batman_adv Makefile is missing
+ include header directory
+Message-ID: <bug-10861-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kishore,
+https://bugs.busybox.net/show_bug.cgi?id=10861
 
-It would help if you supplied some information about what you would like 
-to achieve, and in which context.
+            Bug ID: 10861
+              Host: ARM
+             Build: X86_64
+           Summary: Package batman_adv Makefile is missing include header
+                    directory
+           Product: buildroot
+           Version: 2018.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: miltos.koutsokeras at iccs.gr
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> I?m really Confused between Buildroot and OpenWrt. I mean in which 
-> scenario
-> one will choose OpenWrt over Buildroot.
+Created attachment 7511
+  --> https://bugs.busybox.net/attachment.cgi?id=7511&action=edit
+batman_adv package Makefile fix
 
-The OpenWRT project provides Open Source firmware for routers. If you 
-have one of the supported devices and you would like to continue to use 
-it as a router, choose OpenWRT.
+Bug found in package/batman-adv/batman-adv.mk leading to compilation error due
+to missing headers:
 
-The build system of OpenWRT looks a lot like Buildroot, but was probably 
-branched a long time ago ...
+fatal error: uapi/linux/batman_adv.h: No such file or directory
+ #include <uapi/linux/batman_adv.h>
 
-Buildroot itself is more flexible, but also requires more effort to get 
-a working firmware image for your specific device. Buildroot supplies 
-pre-configured configurations for common devices (check the configs 
-folder), but these cover only bootup sequence and standard hardware, 
-everything else (e.g. firmware or software to be included) you need to 
-configure yourself.
+There is an extra include directory (-I$(PWD)/include/) added in batman_adv
+source Makefile in commit:
 
-Buildroot images are not supposed to be updated from the device itself, 
-the normal procedure is to build and deploy a new image.
+https://git.open-mesh.org/batman-adv.git/blobdiff/14adbd701dec0717606bff4f0c8c084827bf4735..2b20eb572f271edca0d0fd1abd5350876c315d28:/Makefile
 
-If you look for a build system to create your own distribution, take a 
-look at OpenEmbedded /Yocto.
+but the extra directory is missing from the Buildroot
+package/batman-adv/batman-adv.mk:
 
-Regards,
-Andreas
---
-(Running OpenWRT on TP-Link devices, and Buildroot generated images on 
-various media players)
+BATMAN_ADV_CFLAGS = \
+        -I$(@D)/compat-include/ \
+        -include $(@D)/compat.h \
+        -DBATADV_SOURCE_VERSION=\"\\\"$(BATMAN_ADV_VERSION)\\\"\"
+
+Patch attached fixes the issue and the build finishes properly.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
