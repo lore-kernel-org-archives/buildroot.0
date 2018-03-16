@@ -1,84 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Mar 2018 10:00:56 +0200
-Subject: [Buildroot] [PATCH] make: fix build with glibc 2.27
-Message-ID: <1335b4d70acf1aacdc0d4f40fedfa69320debf6a.1521187256.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 Mar 2018 10:34:51 +0100
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.59.0
+In-Reply-To: <7128741177a05a7861260441801d38311867fe0f.1521137179.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 15 Mar 2018 20:06:19 +0200")
+References: <7128741177a05a7861260441801d38311867fe0f.1521137179.git.baruch@tkos.co.il>
+Message-ID: <873710icsk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc 2.27 changed _GNU_GLOB_INTERFACE_VERSION to 2. This triggers build
-of the internal glob implementation in make. This internal
-implementation needs the __alloca symbol that glibc does not define.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Add upstream patch that adds support for _GNU_GLOB_INTERFACE_VERSION 2.
+ > CVE-2018-1000120: curl could be fooled into writing a zero byte out of
+ > bounds when curl is told to work on an FTP URL with the setting to only
+ > issue a single CWD command, if the directory part of the URL contains a
+ > "%00" sequence.
 
-Fixes:
-http://autobuild.buildroot.net/results/8ff/8ff06ad8438cfcac85577b24675dd1d66f7d3d03/
-http://autobuild.buildroot.net/results/5cc/5ccee6bb332e800e81052a3094746edde83403b1/
-http://autobuild.buildroot.net/results/841/8418f5ed56dacd6900946e7d56ad36ad03c7bf7e/
+ > https://curl.haxx.se/docs/adv_2018-9cd6.html
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...ac-Support-GLIBC-glob-interface-version-2.patch | 31 ++++++++++++++++++++++
- package/make/make.mk                               |  4 ++-
- 2 files changed, 34 insertions(+), 1 deletion(-)
- create mode 100644 package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch
+ > CVE-2018-1000121: curl might dereference a near-NULL address when
+ > getting an LDAP URL.
 
-diff --git a/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch b/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch
-new file mode 100644
-index 000000000000..62e67f850a2e
---- /dev/null
-+++ b/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch
-@@ -0,0 +1,31 @@
-+From 48c8a116a914a325a0497721f5d8b58d5bba34d4 Mon Sep 17 00:00:00 2001
-+From: Paul Smith <psmith@gnu.org>
-+Date: Sun, 19 Nov 2017 15:09:16 -0500
-+Subject: [PATCH] * configure.ac: Support GLIBC glob interface version 2
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit 48c8a116a914a3
-+
-+ configure.ac | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 8c72568cf276..4710832ae568 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -404,10 +404,9 @@ AC_CACHE_CHECK([if system libc has GNU glob], [make_cv_sys_gnu_glob],
-+ #include <glob.h>
-+ #include <fnmatch.h>
-+ 
-+-#define GLOB_INTERFACE_VERSION 1
-+ #if !defined _LIBC && defined __GNU_LIBRARY__ && __GNU_LIBRARY__ > 1
-+ # include <gnu-versions.h>
-+-# if _GNU_GLOB_INTERFACE_VERSION == GLOB_INTERFACE_VERSION
-++# if _GNU_GLOB_INTERFACE_VERSION == 1 || _GNU_GLOB_INTERFACE_VERSION == 2
-+    gnu glob
-+ # endif
-+ #endif],
-+-- 
-+2.16.2
-+
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 5717628fa3e9..01cd2eaa18f2 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -7,9 +7,11 @@
- MAKE_VERSION = 4.2.1
- MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE = $(BR2_GNU_MIRROR)/make
--MAKE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+MAKE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-pkgconf
- MAKE_LICENSE = GPL-3.0+
- MAKE_LICENSE_FILES = COPYING
-+# Patching configure.ac
-+MAKE_AUTORECONF = YES
- 
- MAKE_CONF_OPTS = --without-guile
- 
+ > https://curl.haxx.se/docs/adv_2018-97a2.html
+
+ > CVE-2018-1000122: When asked to transfer an RTSP URL, curl could
+ > calculate a wrong data length to copy from the read buffer.
+
+ > https://curl.haxx.se/docs/adv_2018-b047.html
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-2.16.2
+Bye, Peter Korsgaard
