@@ -1,126 +1,57 @@
-From: Connor Rigby <connor@farmbot.io>
-Date: Fri, 16 Mar 2018 09:56:07 -0700
-Subject: [Buildroot] [PATCH] libfreenect: new package.
-Message-ID: <20180316165607.17627-1-connor@farmbot.io>
+From: Martin Bark <martin@barkynet.com>
+Date: Fri, 16 Mar 2018 18:02:25 +0000
+Subject: [Buildroot] [PATCH v3 0/7] Add rpi3 b+ support
+Message-ID: <20180316180232.18829-1-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libfreenect is a userspace driver for the Microsoft Kinect.
+All,
 
-Signed-off-by: Connor Rigby <connor@farmbot.io>
----
- package/Config.in                    |  1 +
- package/libfreenect/Config.in        | 32 +++++++++++++++++++++++++++++++
- package/libfreenect/libfreenect.hash |  2 ++
- package/libfreenect/libfreenect.mk   | 37 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 72 insertions(+)
- create mode 100644 package/libfreenect/Config.in
- create mode 100644 package/libfreenect/libfreenect.hash
- create mode 100644 package/libfreenect/libfreenect.mk
+This is a patch set to add rpi3 b+ support.  It includes:
 
-diff --git a/package/Config.in b/package/Config.in
-index 449ffcc47b..22bd7e9c7d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1203,6 +1203,7 @@ menu "Hardware handling"
- 	source "package/libatasmart/Config.in"
- 	source "package/libcec/Config.in"
- 	source "package/libfreefare/Config.in"
-+	source "package/libfreenect/Config.in"
- 	source "package/libftdi/Config.in"
- 	source "package/libftdi1/Config.in"
- 	source "package/libgphoto2/Config.in"
-diff --git a/package/libfreenect/Config.in b/package/libfreenect/Config.in
-new file mode 100644
-index 0000000000..f0680980fc
---- /dev/null
-+++ b/package/libfreenect/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_LIBFREENECT
-+	bool "Libfreenect"
-+  select BR2_PACKAGE_LIBUSB
-+	help
-+    libfreenect is a userspace driver for the Microsoft Kinect.
-+
-+	  https://openkinect.org/wiki/Main_Page
-+
-+if BR2_PACKAGE_LIBFREENECT
-+
-+config BR2_PACKAGE_LIBFREENECT_PYTHON2
-+  bool "Libfreenect Python Wrapper"
-+  depends on BR2_PACKAGE_LIBFREENECT
-+  depends on BR2_PACKAGE_PYTHON
-+  depends on BR2_PACKAGE_PYTHON_NUMPY
-+  help
-+    build python wrapper for libfreenect.
-+
-+config BR2_PACKAGE_LIBFREENECT_EXAMPLES
-+  bool "Libfreenect examples"
-+  depends on BR2_PACKAGE_LIBFREEGLUT
-+  depends on BR2_PACKAGE_LIBGLU
-+  help
-+    build examples for libfreenect.
-+
-+config BR2_PACKAGE_LIBFREENECT_OPENCV
-+  bool "Libfreenect opencv wrapper"
-+  depends on BR2_PACKAGE_OPENCV
-+  help
-+    build opencv wrapper for Libfreenect.
-+
-+endif
-diff --git a/package/libfreenect/libfreenect.hash b/package/libfreenect/libfreenect.hash
-new file mode 100644
-index 0000000000..d662ac3225
---- /dev/null
-+++ b/package/libfreenect/libfreenect.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 5f22c9a0260efd5a31d8e6465bb06b2b389f61b8f7714e0b42b7b20314e5ef59  libfreenect-v0.5.7.tar.gz
-diff --git a/package/libfreenect/libfreenect.mk b/package/libfreenect/libfreenect.mk
-new file mode 100644
-index 0000000000..53413e1a01
---- /dev/null
-+++ b/package/libfreenect/libfreenect.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# libfreenect
-+#
-+################################################################################
-+LIBFREENECT_VERSION = v0.5.7
-+LIBFREENECT_SITE = $(call github,OpenKinect,libfreenect,$(LIBFREENECT_VERSION))
-+LIBFREENECT_INSTALL_STAGING = YES
-+LIBFREENECT_DEPENDENCIES = libusb host-pkgconf
-+LIBFREENECT_LICENSE = Apache-2.0, GPL-2.0+
-+LIBFREENECT_LICENSE_FILES = APACHE20 GPL2
-+
-+LIBFREENECT_CONF_OPTS  = -DBUILD_REDIST_PACKAGE=OFF -DBUILD_C_SYNC=ON \
-+                         -DBUILD_CPP=ON -DBUILD_OPENNI2_DRIVER=OFF
-+
-+ifeq ($(BR2_PACKAGE_LIBFREENECT_PYTHON2),y)
-+LIBFREENECT_DEPENDENCIES += python python-numpy
-+LIBFREENECT_CONF_OPTS += -DBUILD_PYTHON2=ON
-+else
-+LIBFREENECT_CONF_OPTS += -DBUILD_PYTHON2=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBFREENECT_EXAMPLES),y)
-+LIBFREENECT_DEPENDENCIES += libfreeglut libglu
-+LIBFREENECT_CONF_OPTS += -DBUILD_EXAMPLES=ON
-+else
-+LIBFREENECT_CONF_OPTS += -DBUILD_EXAMPLES=OFF
-+endif
-+
-+ifeq ($(BR2BR2_PACKAGE_LIBFREENECT_OPENCV),y)
-+LIBFREENECT_DEPENDENCIES += opencv
-+LIBFREENECT_CONF_OPTS += -DBUILD_CV=ON
-+else
-+LIBFREENECT_CONF_OPTS += -DBUILD_CV=OFF
-+endif
-+
-+$(eval $(cmake-package))
--- 
+- bump all the rpi configs to the latest 4.14.26 kernel
+- update the rpi-firmware to latest version
+- add the rpi3 b+ dtb files.
+- add the new wifi and bt firmware for the rpi3 b+
+
+I can confirm the basics of wired & wireless networks and serial all work on the rpi3 and rpi3 b+.  The bluetooth device comes up on the rpi3 b+ but i have not tried anything more that scanning.
+
+Note there is no definitive place to download the all the necessary wifi and bt firmware files.  The closest reliable source i have found is the LibreELEC github repo where they have copied the wifi and bt firmware from raspbian into one place.  I have updated to using this repo.  The only issue is it lacks the license files.  I have sent a pull request to add the missing license, once it has been accepted I will update the wifi and bt firmware packages.
+
+Thanks
+
+Martin
+
+Martin Bark (7):
+  package/rpi-firmware: bump version
+  configs/raspberrypi*: bump kernel version
+  board/raspberrypi: add support for rpi3 b+
+  package/rpi-firmware: improve installation of dtb files
+  package/rpi-bt-firmware: change to LibreELEC github repo
+  package/rpi-wifi-firmware: change to LibreELEC github repo
+  DEVELOPERS: add myself for rpi packages
+
+ DEVELOPERS                                       |  5 +++++
+ board/raspberrypi/genimage-raspberrypi3.cfg      |  1 +
+ board/raspberrypi/readme.txt                     |  3 ++-
+ configs/raspberrypi0_defconfig                   |  6 +++---
+ configs/raspberrypi2_defconfig                   |  6 +++---
+ configs/raspberrypi3_64_defconfig                |  6 +++---
+ configs/raspberrypi3_defconfig                   |  8 ++++----
+ configs/raspberrypi3_qt5we_defconfig             |  8 ++++----
+ configs/raspberrypi_defconfig                    |  6 +++---
+ package/rpi-bt-firmware/Config.in                |  5 +++--
+ package/rpi-bt-firmware/rpi-bt-firmware.hash     |  2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.mk       | 13 +++++++------
+ package/rpi-firmware/rpi-firmware.hash           |  2 +-
+ package/rpi-firmware/rpi-firmware.mk             |  9 ++++-----
+ package/rpi-wifi-firmware/Config.in              |  5 +++--
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash |  2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 17 +++++++----------
+ 17 files changed, 55 insertions(+), 49 deletions(-)
+
+--
 2.16.2
