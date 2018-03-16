@@ -1,76 +1,84 @@
-From: Michel Stempin <michel.stempin@wanadoo.fr>
-Date: Fri, 16 Mar 2018 08:06:33 +0100
-Subject: [Buildroot] [PATCH 1/1] rtl8723bs: Wi-Fi driver is now a Linux
- staging driver
-Message-ID: <5ca20c21-0a7f-fb33-8a27-b22988f6b9c3@wanadoo.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 16 Mar 2018 10:00:56 +0200
+Subject: [Buildroot] [PATCH] make: fix build with glibc 2.27
+Message-ID: <1335b4d70acf1aacdc0d4f40fedfa69320debf6a.1521187256.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The rtl8723bs is now a Linux staging driver since kernel 4.12.
+glibc 2.27 changed _GNU_GLOB_INTERFACE_VERSION to 2. This triggers build
+of the internal glob implementation in make. This internal
+implementation needs the __alloca symbol that glibc does not define.
 
-The old git commit is used for kernel < 4.12 with patches applied, but
-for kernel >= 4.12, the newest commit featuring only binary firmwares
-is fetched and only the firmwares are installed into the target
-directory.
+Add upstream patch that adds support for _GNU_GLOB_INTERFACE_VERSION 2.
 
-Getting the kernel version this early in the post-patch hook is only
-possible from the configuration, as the kernel is not yet configured
-and cannot be probed for the actual version.
+Fixes:
+http://autobuild.buildroot.net/results/8ff/8ff06ad8438cfcac85577b24675dd1d66f7d3d03/
+http://autobuild.buildroot.net/results/5cc/5ccee6bb332e800e81052a3094746edde83403b1/
+http://autobuild.buildroot.net/results/841/8418f5ed56dacd6900946e7d56ad36ad03c7bf7e/
 
-Signed-off-by: Michel Stempin <michel.stempin@wanadoo.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-?...3bs-add-debug-level-modparam.patch.conditional} |? 0
-?package/rtl8723bs/rtl8723bs.mk???????????????????? | 22 ++++++++++++++++++++++
-?2 files changed, 22 insertions(+)
-?rename package/rtl8723bs/{0001-rtl8723bs-add-debug-level-modparam.patch => 0001-rtl8723bs-add-debug-level-modparam.patch.conditional} (100%)
+ ...ac-Support-GLIBC-glob-interface-version-2.patch | 31 ++++++++++++++++++++++
+ package/make/make.mk                               |  4 ++-
+ 2 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100644 package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch
 
-diff --git a/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch b/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch.conditional
-similarity index 100%
-rename from package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
-rename to package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch.conditional
-diff --git a/package/rtl8723bs/rtl8723bs.mk b/package/rtl8723bs/rtl8723bs.mk
-index 4c6303c..4076968 100644
---- a/package/rtl8723bs/rtl8723bs.mk
-+++ b/package/rtl8723bs/rtl8723bs.mk
-@@ -4,7 +4,21 @@
-?#
-?################################################################################
-?
-+define check-version
-+$(shell support/scripts/check-version $(1) $(2))
-+endef
+diff --git a/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch b/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch
+new file mode 100644
+index 000000000000..62e67f850a2e
+--- /dev/null
++++ b/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch
+@@ -0,0 +1,31 @@
++From 48c8a116a914a325a0497721f5d8b58d5bba34d4 Mon Sep 17 00:00:00 2001
++From: Paul Smith <psmith@gnu.org>
++Date: Sun, 19 Nov 2017 15:09:16 -0500
++Subject: [PATCH] * configure.ac: Support GLIBC glob interface version 2
 +
-+#RTL8723BS_NEEDS_SOURCES=$(call check-version,$(BR2_LINUX_KERNEL_VERSION),4.12)
-+RTL8723BS_NEEDS_SOURCES=$(shell read -r MAJ MIN \
-+??? <<< $$(echo "$(BR2_LINUX_KERNEL_VERSION)" | \
-+??? sed -nr 's/[^0-9]*([0-9]+)\.([0-9]+).*/\1 \2/p') && \
-+??? [ "0$$MAJ" -lt 4 -o "0$$MAJ" -eq 4 -a "0$$MIN" -lt 12 ] && echo 1 ||echo 0)
-+ifeq ($(RTL8723BS_NEEDS_SOURCES),1)
-?RTL8723BS_VERSION = 11ab92d8ccd71c80f0102828366b14ef6b676fb2
-+else
-+RTL8723BS_VERSION = cc77e7b6092c54500058cd027b679421b9399905
-+endif
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 48c8a116a914a3
 +
-?RTL8723BS_SITE = $(call github,hadess,rtl8723bs,$(RTL8723BS_VERSION))
-?RTL8723BS_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
-?
-@@ -16,6 +30,14 @@ RTL8723BS_MODULE_MAKE_OPTS = \
-?RTL8723BS_BINS = rtl8723bs_ap_wowlan.bin rtl8723bs_wowlan.bin \
-???? rtl8723bs_bt.bin rtl8723bs_nic.bin
-?
-+define RTL8723BS_CONDITIONAL_PATCH
-+??? if [ $(RTL8723BS_NEEDS_SOURCES) -eq 1 ]; then \
-+??? ??? $(APPLY_PATCHES) $(@D) package/rtl8723bs 0001-rtl8723bs-add-debug-level-modparam.patch.conditional; \
-+??? fi;
-+endef
++ configure.ac | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
 +
-+RTL8723BS_POST_PATCH_HOOKS += RTL8723BS_CONDITIONAL_PATCH
++diff --git a/configure.ac b/configure.ac
++index 8c72568cf276..4710832ae568 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -404,10 +404,9 @@ AC_CACHE_CHECK([if system libc has GNU glob], [make_cv_sys_gnu_glob],
++ #include <glob.h>
++ #include <fnmatch.h>
++ 
++-#define GLOB_INTERFACE_VERSION 1
++ #if !defined _LIBC && defined __GNU_LIBRARY__ && __GNU_LIBRARY__ > 1
++ # include <gnu-versions.h>
++-# if _GNU_GLOB_INTERFACE_VERSION == GLOB_INTERFACE_VERSION
+++# if _GNU_GLOB_INTERFACE_VERSION == 1 || _GNU_GLOB_INTERFACE_VERSION == 2
++    gnu glob
++ # endif
++ #endif],
++-- 
++2.16.2
 +
-?define RTL8723BS_INSTALL_FIRMWARE
-???? $(foreach bin, $(RTL8723BS_BINS), \
-???? ??? $(INSTALL) -D -m 644 $(@D)/$(bin) $(TARGET_DIR)/lib/firmware/rtlwifi/$(bin)
+diff --git a/package/make/make.mk b/package/make/make.mk
+index 5717628fa3e9..01cd2eaa18f2 100644
+--- a/package/make/make.mk
++++ b/package/make/make.mk
+@@ -7,9 +7,11 @@
+ MAKE_VERSION = 4.2.1
+ MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
+ MAKE_SITE = $(BR2_GNU_MIRROR)/make
+-MAKE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++MAKE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-pkgconf
+ MAKE_LICENSE = GPL-3.0+
+ MAKE_LICENSE_FILES = COPYING
++# Patching configure.ac
++MAKE_AUTORECONF = YES
+ 
+ MAKE_CONF_OPTS = --without-guile
+ 
 -- 
-2.7.4
+2.16.2
