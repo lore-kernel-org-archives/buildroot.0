@@ -1,61 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 Mar 2018 10:34:28 +0100
-Subject: [Buildroot] [git commit] libcurl: security bump to version 7.59.0
-Message-ID: <20180316094337.9544083628@busybox.osuosl.org>
+Date: Fri, 16 Mar 2018 10:34:42 +0100
+Subject: [Buildroot] [git commit] intel-microcode: bump to version 20180312
+Message-ID: <20180316094337.AB599835DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf3476e5b1527ac91c0a12949be7da5253ea66c1
+commit: https://git.buildroot.net/buildroot/commit/?id=b67b65b3bab01f8dc3b06a3af69bdc8537b55ed8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2018-1000120: curl could be fooled into writing a zero byte out of
-bounds when curl is told to work on an FTP URL with the setting to only
-issue a single CWD command, if the directory part of the URL contains a
-"%00" sequence.
-
-https://curl.haxx.se/docs/adv_2018-9cd6.html
-
-CVE-2018-1000121: curl might dereference a near-NULL address when
-getting an LDAP URL.
-
-https://curl.haxx.se/docs/adv_2018-97a2.html
-
-CVE-2018-1000122: When asked to transfer an RTSP URL, curl could
-calculate a wrong data length to copy from the read buffer.
-
-https://curl.haxx.se/docs/adv_2018-b047.html
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index b1afe1891d..aec61e3f83 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.58.0.tar.xz.asc
--sha256 6a813875243609eb75f37fa72044e4ad618b55ec15a4eafdac2df6a7e800e3e3  curl-7.58.0.tar.xz
-+# https://curl.haxx.se/download/curl-7.59.0.tar.xz.asc
-+sha256 e44eaabdf916407585bf5c7939ff1161e6242b6b015d3f2f5b758b2a330461fc  curl-7.59.0.tar.xz
- sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 39ed3e4da5..c6289e05f4 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 12e1dfbf8f..999b27299d 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 063f1aa3a546cb49323a5e0b516894e4b040007107b8c8ff017aca8a86204130  microcode-20180108.tgz
++sha256 0b381face2df1b0a829dc4fa8fa93f47f39e11b1c9c22ebd44f8614657c1e779  microcode-20180312.tgz
+ sha256 6d4deb65ca688d930e188bf93f78430f134097b161e6df4a2ef00728e14965e3  license.txt
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index d6c35b21c7..e3134b6408 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.58.0
-+LIBCURL_VERSION = 7.59.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-INTEL_MICROCODE_VERSION = 20180108
++INTEL_MICROCODE_VERSION = 20180312
+ INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+-INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/27431/eng
++INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/27591/eng
+ INTEL_MICROCODE_STRIP_COMPONENTS = 0
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license.txt
