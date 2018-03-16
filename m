@@ -1,52 +1,36 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Fri, 16 Mar 2018 18:08:05 +0000
-Subject: [Buildroot] [PATCH 4/4] package/rpi-firmware: improve
- installation of dtb files
-In-Reply-To: <51037E82-F81A-408A-97E7-F5EA9001B9EB@jens-maus.de>
-References: <1521120291-15781-1-git-send-email-martin@barkynet.com>
- <1521120291-15781-4-git-send-email-martin@barkynet.com>
- <20180315204022.58ee68fc@gmx.net>
- <CAFGQKxfa0L=bTWtPQV9HNFOP6Wox3BTX-p_gyp+aF0PQoPK5-Q@mail.gmail.com>
- <20180315215947.GA26659@scaer>
- <CAFGQKxcvdNOy8Fxku3kwhJjMz+T5dnqz3oY3gYEB7er7t8Gc1A@mail.gmail.com>
- <D04562A3-E6F9-44CB-862F-AD1B3D6D9941@jens-maus.de>
- <CAFGQKxdXDVU_yWcrsiawYR2-=a7=FAp34=AOqB4EXXTCCyH7sg@mail.gmail.com>
- <51037E82-F81A-408A-97E7-F5EA9001B9EB@jens-maus.de>
-Message-ID: <CAFGQKxcvhWd2ZkX47ar+v613aC_MhNSoGg8YrmoLC+C6Pp9wBg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 16 Mar 2018 20:41:32 +0100
+Subject: [Buildroot] [PATCH v3 0/7] Add rpi3 b+ support
+In-Reply-To: <20180316180232.18829-1-martin@barkynet.com>
+References: <20180316180232.18829-1-martin@barkynet.com>
+Message-ID: <20180316204132.30aadcfc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jens,
+Hello Martin,
 
-On 16 March 2018 at 13:12, Jens Maus <mail@jens-maus.de> wrote:
-> Hi,
->
->> Am 16.03.2018 um 11:52 schrieb Martin Bark <martin@barkynet.com>:
->>
->> Yes I'm happy to submit a patch to update rpi-wifi-firmware.  I have a
->> rpi3b+ now so i can test this.  I don't use wiringpi so i think it
->> might be better if someone else more familiar with the package updates
->> it.
->
-> My patch for wiringpi is quite straight forward and ?just? updates to the latest 2.46 version recently released including necessary patches to the build process patch. IMHO they are quite a no-brainer and can be integrated without any bigger hassle. Thus, it would be great if someone could generate the necessary patchwork stuff accordingly.
+On Fri, 16 Mar 2018 18:02:25 +0000, Martin Bark wrote:
 
-I've just submitted a v3 patchset that additionally includes the wifi
-and bt firmware updates.  Once this patchset is in buildroot i'll try
-and have a look at wiringpi
+> Martin Bark (7):
+>   package/rpi-firmware: bump version
+>   configs/raspberrypi*: bump kernel version
+>   board/raspberrypi: add support for rpi3 b+
+>   package/rpi-firmware: improve installation of dtb files
+>   package/rpi-bt-firmware: change to LibreELEC github repo
+>   package/rpi-wifi-firmware: change to LibreELEC github repo
+>   DEVELOPERS: add myself for rpi packages
 
-Thanks
+Since you're looking at RPi stuff, could you have a look at
+http://patchwork.ozlabs.org/patch/779105/, which is sitting in
+patchwork since quite a while ?
 
-Martin
+Thanks a lot!
 
->
-> Regards,
-> Jens
-> --
-> Jens Maus, Dresden/Germany
-> http://jens-maus.de/
->
-> *** Content is authentic only with digital signature  ***
->
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
