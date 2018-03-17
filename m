@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Mar 2018 09:38:57 +0100
-Subject: [Buildroot] [git commit] package/enlightenment: fix meson warning
-Message-ID: <20180317085654.1F9D983697@busybox.osuosl.org>
+Date: Sat, 17 Mar 2018 09:39:34 +0100
+Subject: [Buildroot] [git commit] package/enlightenment: bump to 0.22.2
+Message-ID: <20180317085654.3BCC283698@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b582d137a121a456635d29735a27a0144a18b75e
+commit: https://git.buildroot.net/buildroot/commit/?id=13796a1c0a0734683e66815db055b664c368ec30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---disable-rpath was added by m4/lib-link.m4 with autotools based
-buildsystem. Now we use meson, we don't have such option anymore.
-
-The autotools eet-eet and eldbus_codegen options are named respectively
-eet and eldbus-codegen with meson.
-
-Fixes:
-WARNING: Unknown command line options: "eet-eet, eldbus_codegen, rpath"
+See https://www.enlightenment.org/news/e0.22.2_release
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/enlightenment/enlightenment.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index 10e8facf35..686d0ef3be 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,3 +1,3 @@
+-# From https://www.enlightenment.org/news/e0.22.1_release
+-sha256	207b6b88dafc4932ab007a835510823c5a1dd8c191876ac037628176ca77a7e0	enlightenment-0.22.1.tar.xz
++# From https://www.enlightenment.org/news/e0.22.2_release
++sha256	4d581ef85246f0cba003427bb9b3758e3de137babea1cdd2affd70a2cbe1632c	enlightenment-0.22.2.tar.xz
+ sha256	34dbd501ec9d1c8dcc569c01db9cf9a4b7ee5981614cc9f8f613a97463d27350	COPYING
 diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 17309619ad..0d87119bb3 100644
+index 0d87119bb3..6ee983db76 100644
 --- a/package/enlightenment/enlightenment.mk
 +++ b/package/enlightenment/enlightenment.mk
-@@ -22,10 +22,9 @@ ENLIGHTENMENT_MESON_OPTS += \
- 	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
- 	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
- 	-Dedje-cc=$(HOST_DIR)/bin/edje_cc \
--	-Deet-eet=$(HOST_DIR)/bin/eet \
--	-Deldbus_codegen=$(HOST_DIR)/bin/eldbus-codegen \
--	-Dpam=false \
--	-Drpath=false
-+	-Deet=$(HOST_DIR)/bin/eet \
-+	-Deldbus-codegen=$(HOST_DIR)/bin/eldbus-codegen \
-+	-Dpam=false
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- ENLIGHTENMENT_MESON_OPTS += -Dsystemd=true
+-ENLIGHTENMENT_VERSION = 0.22.1
++ENLIGHTENMENT_VERSION = 0.22.2
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause
