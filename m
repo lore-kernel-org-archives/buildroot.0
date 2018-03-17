@@ -1,26 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Mar 2018 11:43:15 +0100
-Subject: [Buildroot] [PATCH] libvorbis: security bump to version 1.3.6
-In-Reply-To: <20180316213529.9732-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 16 Mar 2018 22:35:29 +0100")
-References: <20180316213529.9732-1-peter@korsgaard.com>
-Message-ID: <87vadvf0e4.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 17 Mar 2018 13:05:30 +0100
+Subject: [Buildroot] [PATCH 1/6] package/efl: bump to 1.20.7
+In-Reply-To: <87lgergkrb.fsf@dell.be.48ers.dk>
+References: <20180315225012.9845-1-romain.naour@gmail.com>
+ <87lgergkrb.fsf@dell.be.48ers.dk>
+Message-ID: <873d2442-a32e-608a-18c3-88dde71c6e76@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hi Peter,
 
- > Fixes CVE-2018-5146: Prevent out-of-bounds write in codebook decoding.
- > Drop 0001-CVE-2017-14633-Don-t-allow-for-more-than-256-channel.patch and
- > 0002-CVE-2017-14632-vorbis_analysis_header_out-Don-t-clea.patch as they are
- > now upstream, and add a hash for the license file while we're at it.
+Le 17/03/2018 ? 09:38, Peter Korsgaard a ?crit?:
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+> 
+>  > See https://www.enlightenment.org/news/efl-1.20.7
+>  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> 
+> Sorry, forgot to ask - Would this be a candidate for 2018.02.x as well?
+> 
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Yes probably, this is a bugfix release. Same for enlightenment.
+In the past, such version bump was merged in next during stabilization period
+(see b0dc300b73124b42ea3465973e20b962f064a870 "bump to 1.20.6" in next).
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Romain
