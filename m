@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Mar 2018 09:54:55 +0100
-Subject: [Buildroot] [PATCH 4/6] package/x11r7/xkeyboard-config: install
- to staging
-In-Reply-To: <20180315225012.9845-4-romain.naour@gmail.com> (Romain Naour's
- message of "Thu, 15 Mar 2018 23:50:10 +0100")
+Date: Sat, 17 Mar 2018 09:55:21 +0100
+Subject: [Buildroot] [PATCH 5/6] package/enlightenment: add
+ xkeyboard-config optional dependency
+In-Reply-To: <20180315225012.9845-5-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 15 Mar 2018 23:50:11 +0100")
 References: <20180315225012.9845-1-romain.naour@gmail.com>
- <20180315225012.9845-4-romain.naour@gmail.com>
-Message-ID: <878targjz4.fsf@dell.be.48ers.dk>
+ <20180315225012.9845-5-romain.naour@gmail.com>
+Message-ID: <874llfgjye.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,14 +15,10 @@ To: buildroot@busybox.net
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > enlightenment doesn't detect xkeyboard-config since it's missing
- > from staging.
-
- > Fixes:
- > Dependency xkeyboard-config found: NO
+ > The meson build systemd is checking for xkeyboard-config optional
+ > dependency but there is no option to handle it.
 
  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
