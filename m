@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Mar 2018 23:25:19 +0100
-Subject: [Buildroot] [PATCH 1/2]
- package/x11r7/xdriver_xf86-video-amdgpu: bump version to 18.0.1
-In-Reply-To: <20180315184845.26773-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 15 Mar 2018 19:48:44 +0100")
+Date: Sun, 18 Mar 2018 23:25:25 +0100
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xdriver_xf86-video-ati:
+ bump version to 18.0.1
+In-Reply-To: <20180315184845.26773-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 15 Mar 2018 19:48:45 +0100")
 References: <20180315184845.26773-1-bernd.kuhls@t-online.de>
-Message-ID: <87d101dnsg.fsf@dell.be.48ers.dk>
+ <20180315184845.26773-2-bernd.kuhls@t-online.de>
+Message-ID: <878tapdnsa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
