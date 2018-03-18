@@ -1,79 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Mar 2018 17:33:45 +0100
-Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
- the build time
-In-Reply-To: <20180318161530.GA2478@scaer> (Yann E. MORIN's message of "Sun,
- 18 Mar 2018 17:15:30 +0100")
-References: <cover.1521146096.git.yann.morin.1998@free.fr>
- <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
- <87muz5fp2n.fsf@dell.be.48ers.dk> <20180318161530.GA2478@scaer>
-Message-ID: <87efkhfimu.fsf@dell.be.48ers.dk>
+Date: Sun, 18 Mar 2018 17:44:57 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-03-17
+In-Reply-To: <20180318070012.9EC0A2071E@mail.bootlin.com> (Thomas Petazzoni's
+ message of "Sun, 18 Mar 2018 08:00:12 +0100 (CET)")
+References: <20180318070012.9EC0A2071E@mail.bootlin.com>
+Message-ID: <87a7v5fi46.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Hi,
+ > Hello,
+ > Build statistics for 2018-03-17
+ > ===============================
 
- >> - It doesn't work for packages using rsync to install,
- >> E.G. skeleton-init-common as rsync also sets the mtime to match the
- >> source files
+ >       branch |  OK | NOK | TIM | TOT |
+ >    2018.02.x |  27 |   6 |   0 |  33 |
+ >       master | 195 |  54 |   0 | 249 |
 
- > We could maybe tell rsycn not to do that, then?
+ > Results for branch '2018.02.x'
+ > ==============================
 
-Yes, possibly.
+ > Classification of failures by reason
+ > ------------------------------------
 
- >> - It breaks for <pkg>-reinstall
-
- > Well, we can't guarantee anything except with a clean build from scratch
- > anyway.
-
-True. We could potentionally do a touch on the stamp file before running
-find, but it is somewhat icky.
-
- >> I don't think either of those are really big issues compared to the huge
- >> slowdown, but it is worth noticing.
-
- > Well, the -reinstall was already not working correctly, because the list
- > pf files before/after would be alsmost the same, and the md5-diff would
- > miss all the laready-installed files for the package.
-
- > The rsync issue is new, but we can "fix" it in a later patch, then, for
- > those packages like the skeletons, by using the --no-times option for
- > example.
-
-Yes. I guess we cannot use --no-times unconditionally in SYSTEM_RSYNC,
-as the mtime shouldn't be touched for source files so OVERRIDE_SRCDIR
-doesn't rebuild too much.
-
- > However, if a third-party package internally uses rsync as its install
- > method, we're screwed. But who would be insane enough to do that? ;-]
-
-And even so, the breakage is not so bad.
+ >               sdl_mixer-1.2.12 | 2 
+ >                   cc-tool-0.26 | 1 
+ >                 libcoap-v4.1.2 | 1 
+ >                 libshout-2.4.1 | 1 
+ >                  mplayer-1.3.0 | 1 
 
 
- > Alternatively, we could use ctime instead of mtime, maybe? Or check
- > both?
+ > Detail of failures
+ > ------------------
 
-ctime would presumably miss modifications to existing files, so that is
-no good.
+ >         m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/c1eb516de33cb0a37ecf19f4825bd8b6b34073f0 |     
+ > microblazeel |                 libcoap-v4.1.2 | NOK | http://autobuild.buildroot.net/results/905f122213ad9623ea5dd9d32c352efd151319f3 |     
+ >          arm |                 libshout-2.4.1 | NOK | http://autobuild.buildroot.net/results/de30f2f77f1b7f138a02c082f9fe4d6024bfd491 |     
+ >         i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/6362535455d02c8aeee137981c7294631cd97179 |     
+ >  powerpc64le |               sdl_mixer-1.2.12 | NOK | http://autobuild.buildroot.net/results/905808b5175c58683f8613ad9c3d1c571984e3eb | ORPH
+ >         m68k |               sdl_mixer-1.2.12 | NOK | http://autobuild.buildroot.net/results/4ff7a0c1c8a5d9ce09c41f55dd0120c6d95f8e76 | ORPH
 
- >> > +define step_pkg_size_inner
- >> > +	cd $(2); \
- >> > +	find . \( -type f -o -type L \) \
- >> > +		-newer $($(PKG)_DIR)/.stamp_built \
- >> > +		-exec printf '$(1),%s\n' {} + \
- >> > +		>> $(BUILD_DIR)/packages-file-list$(3).txt
- >> 
- >> What find version are you using? My fileutils find (and the busybox
- >> applet) use 'l' for symlinks, so I've changed it to that.
-
- > Doh, the s/L/l/ is still uncomitted here. Dang...
-
-;)
+Sorry, the gcc20 failures were caused by the machine running out of disk
+space.
 
 -- 
 Bye, Peter Korsgaard
