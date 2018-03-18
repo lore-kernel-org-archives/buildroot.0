@@ -1,96 +1,89 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 18 Mar 2018 13:28:06 +0100
-Subject: [Buildroot] [Resend V4 1/3] prosody: bump to version 0.10.0
-Message-ID: <20180318122808.4291-1-francois.perrad@gadz.org>
+Date: Sun, 18 Mar 2018 13:28:08 +0100
+Subject: [Buildroot] [Resend V4 3/3] prosody: tweak configuration
+In-Reply-To: <20180318122808.4291-1-francois.perrad@gadz.org>
+References: <20180318122808.4291-1-francois.perrad@gadz.org>
+Message-ID: <20180318122808.4291-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this version is not restricted to Lua 5.1
+done by patches:
+  - enable syslog
+  - add pidfile
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/prosody/Config.in    |  4 ++--
- package/prosody/prosody.hash |  8 ++++----
- package/prosody/prosody.mk   | 20 +++++++++-----------
- 3 files changed, 15 insertions(+), 17 deletions(-)
+ package/prosody/0001-enable-syslog.patch | 25 +++++++++++++++++++++++++
+ package/prosody/0002-add-pidfile.patch   | 26 ++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
+ create mode 100644 package/prosody/0001-enable-syslog.patch
+ create mode 100644 package/prosody/0002-add-pidfile.patch
 
-diff --git a/package/prosody/Config.in b/package/prosody/Config.in
-index 77eeb85ab..1bc79b7f2 100644
---- a/package/prosody/Config.in
-+++ b/package/prosody/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PROSODY
- 	bool "prosody"
--	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
- 	select BR2_PACKAGE_LUAEXPAT # runtime
- 	select BR2_PACKAGE_LUASEC # runtime
- 	select BR2_PACKAGE_LUASOCKET # runtime
-@@ -15,4 +15,4 @@ config BR2_PACKAGE_PROSODY
- 	  https://prosody.im
- 
- comment "prosody needs the lua interpreter"
--	depends on !BR2_PACKAGE_LUA_5_1 && !BR2_PACKAGE_LUAJIT
-+	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index 38942ea7f..d56099456 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,5 +1,5 @@
- # Hashes from: https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
--md5    d743adea6cfbaacc3a24cc0c3928bb1b  prosody-0.9.12.tar.gz
--sha1   1ee224263a5b3d67960e12edbbe6b2f16b95d147  prosody-0.9.12.tar.gz
--sha256 1a59a322b71928a21985522aa00d0eab3552208d7bf9ecb318542a1b2fee3e8d  prosody-0.9.12.tar.gz
--sha512 e87b5f3b3e327722cec9d8d0470684e2ec2788a1c5ae623c4f505a00572ef21f65afe84cd5b7de47d6a65fe8872506fe34e5e8886e20979ff84710669857ca76  prosody-0.9.12.tar.gz
-+md5    0eebf7a18ce1fc7dd9954c94ebd85f54  prosody-0.10.0.tar.gz
-+sha1   57c1c5a665e6453bdde06727ef398cd69accd9d7  prosody-0.10.0.tar.gz
-+sha256 7414e447256c60b2645578c4a5913113cd74b419ca5a032b54db90d98a978498  prosody-0.10.0.tar.gz
-+sha512 ee66e240afba6a8cb286623da48d9b535798153fb65e32070cec93aafe360e91f7087eeb49dec0f7d145e24f04339ed0878e50835b52f682130b204e22990ce9  prosody-0.10.0.tar.gz
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index d19653503..3ff891909 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -4,29 +4,27 @@
- #
- ################################################################################
- 
--PROSODY_VERSION = 0.9.12
-+PROSODY_VERSION = 0.10.0
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
--PROSODY_DEPENDENCIES = openssl libidn
--
--ifeq ($(BR2_PACKAGE_LUA_5_1),y)
--PROSODY_DEPENDENCIES += lua
--endif
--
--ifeq ($(BR2_PACKAGE_LUAJIT),y)
--PROSODY_DEPENDENCIES += luajit
--endif
-+PROSODY_DEPENDENCIES = host-luainterpreter luainterpreter libidn openssl
- 
- PROSODY_CONF_OPTS = \
-+	--with-lua-bin=$(HOST_DIR)/usr/bin \
- 	--with-lua=$(STAGING_DIR)/usr \
-+	--lua-version=$(LUAINTERPRETER_ABIVER) \
- 	--c-compiler=$(TARGET_CC) \
--	--cflags="$(TARGET_CFLAGS) -fPIC" \
-+	--cflags="$(TARGET_CFLAGS) -fPIC -std=c99" \
- 	--linker=$(TARGET_CC) \
- 	--ldflags="$(TARGET_LDFLAGS) -shared" \
- 	--sysconfdir=/etc/prosody \
- 	--prefix=/usr
- 
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+PROSODY_CONF_OPTS += --runwith=luajit
-+endif
+diff --git a/package/prosody/0001-enable-syslog.patch b/package/prosody/0001-enable-syslog.patch
+new file mode 100644
+index 000000000..7b6db6fc5
+--- /dev/null
++++ b/package/prosody/0001-enable-syslog.patch
+@@ -0,0 +1,25 @@
++From 267b5d195be0f3a8f00ccf4ccb62e25a9c4e48eb Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sun, 22 Oct 2017 08:44:01 +0200
++Subject: [PATCH 1/2] enable syslog
 +
- define PROSODY_CONFIGURE_CMDS
- 	cd $(@D) && \
- 		$(TARGET_CONFIGURE_OPTS) \
++note: the posix module is auto-loaded by default
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++diff --git a/prosody.cfg.lua.dist b/prosody.cfg.lua.dist
++index a0fc6c9e..af3cc0e4 100644
++--- a/prosody.cfg.lua.dist
+++++ b/prosody.cfg.lua.dist
++@@ -163,7 +163,7 @@ archive_expires_after = "1w" -- Remove archived messages after 1 week
++ log = {
++ 	info = "prosody.log"; -- Change 'info' to 'debug' for verbose logging
++ 	error = "prosody.err";
++-	-- "*syslog"; -- Uncomment this for logging to syslog
+++	"*syslog"; -- Uncomment this for logging to syslog
++ 	-- "*console"; -- Log to the console, useful for debugging with daemonize=false
++ }
++ 
++-- 
++2.11.0
++
+diff --git a/package/prosody/0002-add-pidfile.patch b/package/prosody/0002-add-pidfile.patch
+new file mode 100644
+index 000000000..ca01c4a72
+--- /dev/null
++++ b/package/prosody/0002-add-pidfile.patch
+@@ -0,0 +1,26 @@
++From 124d479195ac8ec1747b5b89fe4860d0e92c2aae Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Sun, 22 Oct 2017 08:58:11 +0200
++Subject: [PATCH 2/2] add pidfile
++
++see https://prosody.im/doc/configure#posix-only_options
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++diff --git a/prosody.cfg.lua.dist b/prosody.cfg.lua.dist
++index af3cc0e4..675db12f 100644
++--- a/prosody.cfg.lua.dist
+++++ b/prosody.cfg.lua.dist
++@@ -181,6 +181,9 @@ log = {
++ -- Location of directory to find certificates in (relative to main config file):
++ certificates = "certs"
++ 
+++-- This must match the PIDFILE used in S50prosody
+++pidfile = "/var/run/prosody/prosody.pid"
+++
++ ----------- Virtual hosts -----------
++ -- You need to add a VirtualHost entry for each domain you wish Prosody to serve.
++ -- Settings under each VirtualHost entry apply *only* to that host.
++-- 
++2.11.0
++
 -- 
 2.11.0
