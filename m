@@ -1,63 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Mar 2018 15:40:08 +0100
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.7
-Message-ID: <20180318144008.13997-1-peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Mar 2018 17:15:30 +0100
+Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
+ the build time
+In-Reply-To: <87muz5fp2n.fsf@dell.be.48ers.dk>
+References: <cover.1521146096.git.yann.morin.1998@free.fr>
+ <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
+ <87muz5fp2n.fsf@dell.be.48ers.dk>
+Message-ID: <20180318161530.GA2478@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Peter, All,
 
-Use after free when server is disconnected during netsplits.  Incomplete fix
-of CVE-2017-7191.  Found by Joseph Bisch.  (CWE-416, CWE-825) -
-CVE-2018-7054 [2] was assigned to this issue.
+On 2018-03-18 15:14 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>  > As part of the build, we run some instrumentation hooks to gather
+>  > statistics about the usage of the target/, staging/ and host/
+>  > directories, so that we can generate reports for the user, that
+>  > shows:
+>  >   - for each file, what package installed it,
+>  >   - for each package,the size that it installed.
+[--SNIP--]
+>  > So, we switch to using mtime, because in the end that's still good-enough
+>  > for our use-case: generating some graphs. It is not mission-critical, and
+>  > if a graph is slightly off, that's not biggy. It can anyway be attributed
+>  > to a broken package's buildsystem, which should get fixed.
+>  >   - /foo/bar/ exists
+>  >   - a package installs /foo/bar/buz
+>  >   - mtime of /foo/bar/ is changed to account for the nex file in it.
+> 
+> Playing around with this, I noticed two other issues:
+> 
+> - It doesn't work for packages using rsync to install,
+>   E.G. skeleton-init-common as rsync also sets the mtime to match the
+>   source files
 
-Use after free when SASL messages are received in unexpected order.  Found
-by Joseph Bisch.  (CWE-416, CWE-691) - CVE-2018-7053 [3] was assigned to
-this issue.
+We could maybe tell rsycn not to do that, then?
 
-Null pointer dereference when an ?empty? nick has been observed by Irssi.
-Found by Joseph Bisch.  (CWE-476, CWE-475) - CVE-2018-7050 [4] was assigned
-to this issue.
+> - It breaks for <pkg>-reinstall
 
-When the number of windows exceed the available space, Irssi would crash due
-to Null pointer dereference.  Found by Joseph Bisch.  (CWE-690) -
-CVE-2018-7052 [5] was assigned to this issue.
+Well, we can't guarantee anything except with a clean build from scratch
+anyway.
 
-Certain nick names could result in out of bounds access when printing theme
-strings.  Found by Oss-Fuzz.  (CWE-126) - CVE-2018-7051 [6] was assigned to
-this issue.
+> I don't think either of those are really big issues compared to the huge
+> slowdown, but it is worth noticing.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Well, the -reinstall was already not working correctly, because the list
+pf files before/after would be alsmost the same, and the md5-diff would
+miss all the laready-installed files for the package.
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 83dde00352..0f298137ba 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
-+sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
- # Locally calculated
- sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index d49b5d7e46..611365f88e 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRSSI_VERSION = 1.0.6
-+IRSSI_VERSION = 1.0.7
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+The rsync issue is new, but we can "fix" it in a later patch, then, for
+those packages like the skeletons, by using the --no-times option for
+example.
+
+However, if a third-party package internally uses rsync as its install
+method, we're screwed. But who would be insane enough to do that? ;-]
+
+Alternatively, we could use ctime instead of mtime, maybe? Or check
+both?
+
+>  > +define step_pkg_size_inner
+>  > +	cd $(2); \
+>  > +	find . \( -type f -o -type L \) \
+>  > +		-newer $($(PKG)_DIR)/.stamp_built \
+>  > +		-exec printf '$(1),%s\n' {} + \
+>  > +		>> $(BUILD_DIR)/packages-file-list$(3).txt
+> 
+> What find version are you using? My fileutils find (and the busybox
+> applet) use 'l' for symlinks, so I've changed it to that.
+
+Doh, the s/L/l/ is still uncomitted here. Dang...
+
+> Committed with that fixed (and a few tweaks to the commit message),
+> thanks.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
