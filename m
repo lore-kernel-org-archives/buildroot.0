@@ -1,56 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Mar 2018 17:16:05 +0100
-Subject: [Buildroot] [PATCH 1/2] core/intrumetnation: don't spawn to get
- seconds-since-EPOCH
-In-Reply-To: <CABa6e=qZfehqQHFAkutn-WaFAw6Gp3Za-3_3ZB6mXd1ukxZq7w@mail.gmail.com>
-References: <cover.1521146096.git.yann.morin.1998@free.fr>
- <ef3b9c4c1ca910423b06f1374ee9461c77aaeed1.1521146096.git.yann.morin.1998@free.fr>
- <CABa6e=qZfehqQHFAkutn-WaFAw6Gp3Za-3_3ZB6mXd1ukxZq7w@mail.gmail.com>
-Message-ID: <20180318161605.GB2478@scaer>
+Date: Sun, 18 Mar 2018 17:25:27 +0100
+Subject: [Buildroot] [PATCH v3 6/7] .gitlab-ci.yml: check flake8
+In-Reply-To: <5aa9ad41d2fec_41fe2ab6b2513450655d5@ultri4.mail>
+References: <20180313181519.GC4317@scaer>
+ <5aa9ad41d2fec_41fe2ab6b2513450655d5@ultri4.mail>
+Message-ID: <20180318162527.GC2478@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cam, All,
+Ricardo, All,
 
-On 2018-03-17 22:54 +1100, Cam Hutchison spake thusly:
-> On 16 March 2018 at 07:35, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > No need to spawn $(date) to get the number of seconds-since-EPOCH, as
-> > bash's printf can do it as easily.
-> >
-> > This is just a micro-optimisation, though. Probably not noticeable.
-> >
-> > Reported-by: Trent Piepho <tpiepho@impinj.com>
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Trent Piepho <tpiepho@impinj.com>
-> > ---
-> >  package/pkg-generic.mk | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 9eddaeee57..2a82025a04 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -49,8 +49,8 @@ endef
-> >
-> >  # Time steps
-> >  define step_time
-> > -       printf "%s:%-5.5s:%-20.20s: %s\n"           \
-> > -              "$$(date +%s)" "$(1)" "$(2)" "$(3)"  \
-> > +       printf "%(%s)T:%-5.5s:%-20.20s: %s\n"           \
-> > +              -1 "$(1)" "$(2)" "$(3)"  \
+On 2018-03-14 20:16 -0300, Ricardo Martincoski spake thusly:
+> On Tue, Mar 13, 2018 at 03:15 PM, Yann E. MORIN wrote:
+> > On 2018-03-13 00:09 -0300, Ricardo Martincoski spake thusly:
+> >> ---
+> >> BEFORE APPLYING, see this note from Yann:
+> >> Note: this can only be applied _after_ we regenerate the docker image.
+> >> Then we'll have to update the version of the image at the top of the
+> >> gitlab-ci.yml file.
+> > 
+> > Indeed, so I've marked this patch as "deferred" in patchwork, so it does
+> > not get accidentally applied.
 > 
-> Should you note somewhere that this needs bash 4.2? I remember some
-> re-working of bash patches in the past to avoid the use of associative arrays
-> as they were not supported in the oldest version of bash supported by
-> buildroot. Is bash 4.2 ok now?
-> 
-> See http://tiswww.case.edu/php/chet/bash/NEWS for when features were
-> added to bash.
+> Could you regenerate the image, please?
+> I don't have the docker push permission.
 
-OK, I'm dropping this change, then. Thanks for noticing. :-)
+Ok, I'm doing it now. Thanks!
 
 Regards,
 Yann E. MORIN.
