@@ -1,52 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Mar 2018 17:44:57 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-03-17
-In-Reply-To: <20180318070012.9EC0A2071E@mail.bootlin.com> (Thomas Petazzoni's
- message of "Sun, 18 Mar 2018 08:00:12 +0100 (CET)")
-References: <20180318070012.9EC0A2071E@mail.bootlin.com>
-Message-ID: <87a7v5fi46.fsf@dell.be.48ers.dk>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 18 Mar 2018 15:01:26 -0400
+Subject: [Buildroot] [PATCH v5 0/5] gobject-introspection: new series
+Message-ID: <20180318190131.21404-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+For official submission to mainline Buildroot:
 
- > Hello,
- > Build statistics for 2018-03-17
- > ===============================
+This new series has the following upgrades:
+  - It now works on all architectures supported by qemu-host.
+  - Gstreamer1 can now compile gir files properly. (for real this time).
+  - General makefile cleanups.
+  - New patches that make cross-compiling a bit nicer (thanks, yocto!)
+  - Removed a patch that was yocto specific and not needed with buildroot.
+  - Added a PKG_GIR_EXTRA_LIBS variable in pkg-autotools.mk
 
- >       branch |  OK | NOK | TIM | TOT |
- >    2018.02.x |  27 |   6 |   0 |  33 |
- >       master | 195 |  54 |   0 | 249 |
+What I could use help with:
 
- > Results for branch '2018.02.x'
- > ==============================
+- Package updates: I will get around to updating python-gobject as it's needed
+  for GStreamer-python (the entire reason I started this venture)
+- Comments on the patches themselves would also be appreciated!.
+- More testing!
 
- > Classification of failures by reason
- > ------------------------------------
+Thanks!
 
- >               sdl_mixer-1.2.12 | 2 
- >                   cc-tool-0.26 | 1 
- >                 libcoap-v4.1.2 | 1 
- >                 libshout-2.4.1 | 1 
- >                  mplayer-1.3.0 | 1 
+Adam Duskett
 
+Adam Duskett (5):
+  qemu-host: remove support for some powerpc processors.
+  qemu: add qemu_user_opts
+  gstreamer1 packages: explicitly disable introspection
+  gobject-introspection: new package
+  gstreamer1 packages: add support for introspection
 
- > Detail of failures
- > ------------------
-
- >         m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/c1eb516de33cb0a37ecf19f4825bd8b6b34073f0 |     
- > microblazeel |                 libcoap-v4.1.2 | NOK | http://autobuild.buildroot.net/results/905f122213ad9623ea5dd9d32c352efd151319f3 |     
- >          arm |                 libshout-2.4.1 | NOK | http://autobuild.buildroot.net/results/de30f2f77f1b7f138a02c082f9fe4d6024bfd491 |     
- >         i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/6362535455d02c8aeee137981c7294631cd97179 |     
- >  powerpc64le |               sdl_mixer-1.2.12 | NOK | http://autobuild.buildroot.net/results/905808b5175c58683f8613ad9c3d1c571984e3eb | ORPH
- >         m68k |               sdl_mixer-1.2.12 | NOK | http://autobuild.buildroot.net/results/4ff7a0c1c8a5d9ce09c41f55dd0120c6d95f8e76 | ORPH
-
-Sorry, the gcc20 failures were caused by the machine running out of disk
-space.
+ DEVELOPERS                                         |   1 +
+ Makefile                                           |   2 +
+ package/Config.in                                  |   1 +
+ ...ncomplete-upstream-attempt-at-cross-compi.patch |  50 +++
+ ...c-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch | 203 ++++++++++++
+ ...3-giscanner-add-use-binary-wrapper-option.patch |  52 +++
+ ...04-giscanner-add-a-use-ldd-wrapper-option.patch |  48 +++
+ .../0005-add-PYTHON_INCLUDES-override.patch        |  39 +++
+ ...06-giscanner-add-a-lib-dirs-envvar-option.patch |  73 +++++
+ .../0007-Add-rpath-links-to-ccompiler.patch        |  29 ++
+ .../gobject-introspection/0008-add-Float128.patch  |  28 ++
+ package/gobject-introspection/Config.in            |  30 ++
+ package/gobject-introspection/cross-ldd            | 362 +++++++++++++++++++++
+ package/gobject-introspection/g-ir-compiler.in     |   2 +
+ .../g-ir-scanner-lddwrapper.in                     |   2 +
+ .../g-ir-scanner-qemuwrapper.in                    |  10 +
+ package/gobject-introspection/g-ir-scanner.in      |   3 +
+ .../gobject-introspection.hash                     |   4 +
+ .../gobject-introspection/gobject-introspection.mk |  90 +++++
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |   8 +-
+ ...ncorrect-reference-to-gstreamer-sdp-in-Ma.patch |  28 ++
+ .../gst1-plugins-base/gst1-plugins-base.mk         |   8 +-
+ package/gstreamer1/gstreamer1/gstreamer1.mk        |   7 +
+ package/pkg-autotools.mk                           |   3 +
+ package/qemu/Config.in.host                        |   1 +
+ package/qemu/qemu.mk                               |  33 +-
+ 26 files changed, 1114 insertions(+), 3 deletions(-)
+ create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
+ create mode 100644 package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
+ create mode 100644 package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0005-add-PYTHON_INCLUDES-override.patch
+ create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
+ create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
+ create mode 100644 package/gobject-introspection/0008-add-Float128.patch
+ create mode 100644 package/gobject-introspection/Config.in
+ create mode 100644 package/gobject-introspection/cross-ldd
+ create mode 100644 package/gobject-introspection/g-ir-compiler.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner.in
+ create mode 100644 package/gobject-introspection/gobject-introspection.hash
+ create mode 100644 package/gobject-introspection/gobject-introspection.mk
+ create mode 100644 package/gstreamer1/gst1-plugins-base/0001-rtsp-drop-incorrect-reference-to-gstreamer-sdp-in-Ma.patch
 
 -- 
-Bye, Peter Korsgaard
+2.14.3
