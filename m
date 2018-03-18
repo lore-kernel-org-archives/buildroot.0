@@ -1,217 +1,160 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Mar 2018 23:16:03 +0100
-Subject: [Buildroot] [git commit] tpm2-abrmd: new package
-Message-ID: <20180318222454.AE542836EE@busybox.osuosl.org>
+Date: Sun, 18 Mar 2018 23:16:58 +0100
+Subject: [Buildroot] [git commit] tpm2-tools: new package
+Message-ID: <20180318222454.C5D6F836EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dab335d901be0b26a1e8ea4e0c3343352d442e35
+commit: https://git.buildroot.net/buildroot/commit/?id=3a10ff51278b917c85e2f8d74559e035cbd7d55f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a system daemon implementing the TPM2 access broker (TAB) &
-Resource Manager (RM) spec from the TCG. The daemon (tpm2-abrmd) is
-implemented using Glib and the GObject system.
+TPM (Trusted Platform Module) 2.0 CLI tools based on system API of
+TPM2-TSS. These tools can be used to manage keys, perform
+encryption/decryption/signing/etc crypto operations, and manage
+non-volatile storage through a TPM2.0 HW implementation.
 
-Communication between the daemon and clients using the TPM is done with
-a combination of DBus and Unix pipes. DBus is used for discovery,
-session management and the 'cancel', 'setLocality', and 'getPollHandles'
-API calls (mostly these aren't yet implemented). Pipes are used to send
-and receive TPM commands and responses (respectively) between client and
-server.
-
-The daemon owns the com.intel.tss2.Tabrmd name on dbus. It can be
-configured to connect to either the system or the session bus.
-
-The package also provides a client library for interacting with the
-daemon via TPM Command Transmission Interface (TCTI). It is intended for
-use with the SAPI library (libsapi) like any other TCTI.
-
-[Peter: drop add default DAEMON_ARGS to init script, drop /etc/default file,
-	drop S30devtpmperms and fix permissions in S80tpm2-abrmd]
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                  |  1 +
- package/tpm2-abrmd/Config.in       | 25 ++++++++++++
- package/tpm2-abrmd/S80tpm2-abrmd   | 78 ++++++++++++++++++++++++++++++++++++++
- package/tpm2-abrmd/tpm2-abrmd.hash |  3 ++
- package/tpm2-abrmd/tpm2-abrmd.mk   | 32 ++++++++++++++++
- 5 files changed, 139 insertions(+)
+ package/Config.in                                  |  1 +
+ .../tpm2-tools/0001-Fix-build-with-LibreSSL.patch  | 64 ++++++++++++++++++++++
+ package/tpm2-tools/Config.in                       | 16 ++++++
+ package/tpm2-tools/tpm2-tools.hash                 |  3 +
+ package/tpm2-tools/tpm2-tools.mk                   | 13 +++++
+ 5 files changed, 97 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 449ffcc47b..af94c0ad91 100644
+index af94c0ad91..58dfd6306d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2012,6 +2012,7 @@ menu "System tools"
- 	source "package/sysvinit/Config.in"
+@@ -2013,6 +2013,7 @@ menu "System tools"
  	source "package/tar/Config.in"
  	source "package/tpm-tools/Config.in"
-+	source "package/tpm2-abrmd/Config.in"
+ 	source "package/tpm2-abrmd/Config.in"
++	source "package/tpm2-tools/Config.in"
  	source "package/unscd/Config.in"
  	source "package/util-linux/Config.in"
  	source "package/xen/Config.in"
-diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
+diff --git a/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch b/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch
 new file mode 100644
-index 0000000000..31c5ae7d6b
+index 0000000000..0fdd2dc4dd
 --- /dev/null
-+++ b/package/tpm2-abrmd/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_TPM2_ABRMD
-+	bool "tpm2-abrmd"
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
-+	depends on BR2_USE_MMU # dbus, libglib2
++++ b/package/tpm2-tools/0001-Fix-build-with-LibreSSL.patch
+@@ -0,0 +1,64 @@
++From 7f8d9359dcf9edbb13bb447f70234397afa4fb05 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.ind.br>
++Date: Tue, 30 Jan 2018 11:21:14 -0200
++Subject: [PATCH] Fix build with LibreSSL
++
++OPENSSL_VERSION_NUMBER is used to test the version of OpenSSL but this
++test alone breaks the build with LibreSSL due to implicit declarations
++of functions 'RSA_set0_key' and 'HMAC_CTX_free'.
++
++Test if OpenSSL < 1.1.0 or LIBRESSL_VERSION_NUMBER is defined, instead.
++
++Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
++---
++ lib/conversion.c | 2 +-
++ lib/tpm_kdfa.c   | 6 +++---
++ 2 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/lib/conversion.c b/lib/conversion.c
++index 1d0a0b7..df02de4 100644
++--- a/lib/conversion.c
+++++ b/lib/conversion.c
++@@ -133,7 +133,7 @@ static bool tpm2_convert_pubkey_ssl(TPMT_PUBLIC *public, pubkey_format format, c
++         goto error;
++     }
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x1010000fL /* OpenSSL 1.1.0 */
+++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER) /* OpenSSL 1.1.0 */
++     ssl_rsa_key->e = e;
++     ssl_rsa_key->n = n;
++ #else
++diff --git a/lib/tpm_kdfa.c b/lib/tpm_kdfa.c
++index ee3cf8a..e43bdeb 100644
++--- a/lib/tpm_kdfa.c
+++++ b/lib/tpm_kdfa.c
++@@ -54,7 +54,7 @@ static const EVP_MD *tpm_algorithm_to_openssl_digest(TPMI_ALG_HASH algorithm) {
++ static HMAC_CTX *hmac_alloc()
++ {
++     HMAC_CTX *ctx;
++-#if OPENSSL_VERSION_NUMBER < 0x1010000fL /* OpenSSL 1.1.0 */
+++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER) /* OpenSSL 1.1.0 */
++     ctx = malloc(sizeof(*ctx));
++ #else
++     ctx = HMAC_CTX_new();
++@@ -62,7 +62,7 @@ static HMAC_CTX *hmac_alloc()
++     if (!ctx)
++         return NULL;
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x1010000fL
+++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
++     HMAC_CTX_init(ctx);
++ #endif
++ 
++@@ -71,7 +71,7 @@ static HMAC_CTX *hmac_alloc()
++ 
++ static void hmac_del(HMAC_CTX *ctx)
++ {
++-#if OPENSSL_VERSION_NUMBER < 0x1010000fL
+++#if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
++     HMAC_CTX_cleanup(ctx);
++     free(ctx);
++ #else
++-- 
++2.14.3
++
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+new file mode 100644
+index 0000000000..6429b24531
+--- /dev/null
++++ b/package/tpm2-tools/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_TPM2_TOOLS
++	bool "tpm2-tools"
 +	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_LIBCURL
 +	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_TPM2_ABRMD # run-time
 +	select BR2_PACKAGE_TPM2_TSS
 +	help
-+	  A system daemon implementing the TPM2 access broker (TAB) &
-+	  Resource Manager (RM) spec from the TCG. It should be started
-+	  during the OS boot process. Communication between the daemon
-+	  and clients using the TPM is done with a combination of DBus
-+	  and Unix pipes.
++	  TPM (Trusted Platform Module) 2.0 CLI tools based on system
++	  API of TPM2-TSS. These tools can be used to manage keys,
++	  perform encryption/decryption/signing/etc crypto operations,
++	  and manage non-volatile storage through a TPM2.0 HW
++	  implementation.
 +
-+	  The package also provides a client library for interacting
-+	  with the daemon via TPM Command Transmission Interface (TCTI).
-+	  It is intended for use with the SAPI library (libsapi) like
-+	  any other TCTI.
-+
-+	  https://github.com/tpm2-software/tpm2-abrmd
-+
-+comment "tpm2-abrmd needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tpm2-abrmd/S80tpm2-abrmd b/package/tpm2-abrmd/S80tpm2-abrmd
-new file mode 100755
-index 0000000000..3db5e6fa1d
---- /dev/null
-+++ b/package/tpm2-abrmd/S80tpm2-abrmd
-@@ -0,0 +1,78 @@
-+#!/bin/sh
-+
-+my_name="$0"
-+
-+check_required_files() {
-+	[ -x "$1" ] || {
-+		echo "$my_name: $1 is missing"
-+		exit 1
-+	}
-+	[ -z "$2" ] || [ -f "$2" ] || {
-+		echo "$my_name: $2 is missing"
-+		exit 1
-+	}
-+}
-+
-+check_device() {
-+	ls -1 /dev/tpm[0-9]* > /dev/null 2>&1 || {
-+		echo "device driver not loaded, skipping."
-+		exit 0
-+	}
-+	chown tss:tss /dev/tpm[0-9]* && chmod 600 /dev/tpm*
-+}
-+
-+rm_stale_pidfile() {
-+	if [ -e "$1" ]; then
-+		exe="/proc/$(cat "$1")/exe"
-+		{ [ -s "$exe" ] && [ "$(readlink -f "$exe")" = "$2" ]; } || rm -f "$1"
-+	fi
-+}
-+
-+start() {
-+	printf "Starting tpm2-abrmd: "
-+	check_device
-+	rm_stale_pidfile /var/run/tpm2-abrmd.pid /usr/sbin/tpm2-abrmd
-+	start-stop-daemon -S -q -o -b -p /var/run/tpm2-abrmd.pid -c tss:tss -x /usr/sbin/tpm2-abrmd -- ${DAEMON_OPTS} || {
-+		echo "FAIL"
-+		exit 1
-+	}
-+	pidof /usr/sbin/tpm2-abrmd > /var/run/tpm2-abrmd.pid
-+	echo "OK"
-+}
-+
-+stop() {
-+	printf "Stopping tpm2-abrmd: "
-+	start-stop-daemon -K -q -o -p /var/run/tpm2-abrmd.pid -u tss -x /usr/sbin/tpm2-abrmd || {
-+		echo "FAIL"
-+		exit 1
-+	}
-+	rm_stale_pidfile /var/run/tpm2-abrmd.pid /usr/sbin/tpm2-abrmd
-+	echo "OK"
-+}
-+
-+check_required_files /usr/sbin/tpm2-abrmd /etc/dbus-1/system.d/tpm2-abrmd.conf
-+
-+# defaults
-+DAEMON_OPTS="--tcti=device --logger=syslog --max-connections=20 --max-transient-objects=20 --fail-on-loaded-trans"
-+
-+# Read configuration variable file if it is present
-+[ -r /etc/default/tpm2-abrmd ] && . /etc/default/tpm2-abrmd
-+
-+case "$1" in
-+	start)
-+		start
-+	       	;;
-+	stop)
-+	   	stop
-+		;;
-+	restart|reload)
-+		stop
-+		sleep 1
-+		start
-+		;;
-+	*)
-+		echo "Usage: tpm2-abrmd {start|stop|restart|reload}" >&2
-+		exit 1
-+esac
-+
-+exit 0
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
++	  https://github.com/tpm2-software/tpm2-tools
+diff --git a/package/tpm2-tools/tpm2-tools.hash b/package/tpm2-tools/tpm2-tools.hash
 new file mode 100644
-index 0000000000..6af991d469
+index 0000000000..e33b3e5945
 --- /dev/null
-+++ b/package/tpm2-abrmd/tpm2-abrmd.hash
++++ b/package/tpm2-tools/tpm2-tools.hash
 @@ -0,0 +1,3 @@
 +# Locally computed:
-+sha256 e32e19de93b539374a485d9df7fe9415ce147ec03c8d9ba6593e50f7a67a7a51  tpm2-abrmd-1.3.0.tar.gz
-+sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
++sha256 c990c0656165afef0fad61e1852a9a189a4b93b43d2a684b151a5dc0b3c6249d  tpm2-tools-3.0.3.tar.gz
++sha256 3d6b149c8b042bd5f3db678d587fbe55230d071ca084bd38dcae451679c6dd45  LICENSE
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
 new file mode 100644
-index 0000000000..0d6a167210
+index 0000000000..0697900d2d
 --- /dev/null
-+++ b/package/tpm2-abrmd/tpm2-abrmd.mk
-@@ -0,0 +1,32 @@
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# tpm2-abrmd
++# tpm2-tools
 +#
 +################################################################################
 +
-+TPM2_ABRMD_VERSION = 1.3.0
-+TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
-+TPM2_ABRMD_LICENSE = BSD-2-Clause
-+TPM2_ABRMD_LICENSE_FILES = LICENSE
-+TPM2_ABRMD_INSTALL_STAGING = YES
-+TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
-+
-+TPM2_ABRMD_CONF_OPTS += \
-+	--with-systemdsystemunitdir=$(if $(BR2_INIT_SYSTEMD),/usr/lib/systemd/system,no) \
-+	--with-udevrulesdir=$(if $(BR2_PACKAGE_HAS_UDEV),/usr/lib/udev/rules.d,no)
-+
-+define TPM2_ABRMD_INSTALL_INIT_SYSTEMD
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) \
-+		install-systemdpresetDATA install-systemdsystemunitDATA
-+endef
-+
-+define TPM2_ABRMD_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 $(TPM2_ABRMD_PKGDIR)/S80tpm2-abrmd \
-+		$(TARGET_DIR)/etc/init.d/S80tpm2-abrmd
-+endef
-+
-+define TPM2_ABRMD_USERS
-+	tss -1 tss -1 * - - - TPM2 Access Broker & Resource Management daemon
-+endef
++TPM2_TOOLS_VERSION = 3.0.3
++TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
++TPM2_TOOLS_LICENSE = BSD-2-Clause
++TPM2_TOOLS_LICENSE_FILES = LICENSE
++TPM2_TOOLS_DEPENDENCIES = dbus libcurl libglib2 openssl tpm2-tss host-pkgconf
 +
 +$(eval $(autotools-package))
