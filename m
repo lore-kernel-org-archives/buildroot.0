@@ -1,83 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Mar 2018 17:15:30 +0100
-Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
- the build time
-In-Reply-To: <87muz5fp2n.fsf@dell.be.48ers.dk>
+Date: Sun, 18 Mar 2018 17:16:05 +0100
+Subject: [Buildroot] [PATCH 1/2] core/intrumetnation: don't spawn to get
+ seconds-since-EPOCH
+In-Reply-To: <CABa6e=qZfehqQHFAkutn-WaFAw6Gp3Za-3_3ZB6mXd1ukxZq7w@mail.gmail.com>
 References: <cover.1521146096.git.yann.morin.1998@free.fr>
- <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
- <87muz5fp2n.fsf@dell.be.48ers.dk>
-Message-ID: <20180318161530.GA2478@scaer>
+ <ef3b9c4c1ca910423b06f1374ee9461c77aaeed1.1521146096.git.yann.morin.1998@free.fr>
+ <CABa6e=qZfehqQHFAkutn-WaFAw6Gp3Za-3_3ZB6mXd1ukxZq7w@mail.gmail.com>
+Message-ID: <20180318161605.GB2478@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Cam, All,
 
-On 2018-03-18 15:14 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  > As part of the build, we run some instrumentation hooks to gather
->  > statistics about the usage of the target/, staging/ and host/
->  > directories, so that we can generate reports for the user, that
->  > shows:
->  >   - for each file, what package installed it,
->  >   - for each package,the size that it installed.
-[--SNIP--]
->  > So, we switch to using mtime, because in the end that's still good-enough
->  > for our use-case: generating some graphs. It is not mission-critical, and
->  > if a graph is slightly off, that's not biggy. It can anyway be attributed
->  > to a broken package's buildsystem, which should get fixed.
->  >   - /foo/bar/ exists
->  >   - a package installs /foo/bar/buz
->  >   - mtime of /foo/bar/ is changed to account for the nex file in it.
+On 2018-03-17 22:54 +1100, Cam Hutchison spake thusly:
+> On 16 March 2018 at 07:35, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > No need to spawn $(date) to get the number of seconds-since-EPOCH, as
+> > bash's printf can do it as easily.
+> >
+> > This is just a micro-optimisation, though. Probably not noticeable.
+> >
+> > Reported-by: Trent Piepho <tpiepho@impinj.com>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Trent Piepho <tpiepho@impinj.com>
+> > ---
+> >  package/pkg-generic.mk | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 9eddaeee57..2a82025a04 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -49,8 +49,8 @@ endef
+> >
+> >  # Time steps
+> >  define step_time
+> > -       printf "%s:%-5.5s:%-20.20s: %s\n"           \
+> > -              "$$(date +%s)" "$(1)" "$(2)" "$(3)"  \
+> > +       printf "%(%s)T:%-5.5s:%-20.20s: %s\n"           \
+> > +              -1 "$(1)" "$(2)" "$(3)"  \
 > 
-> Playing around with this, I noticed two other issues:
+> Should you note somewhere that this needs bash 4.2? I remember some
+> re-working of bash patches in the past to avoid the use of associative arrays
+> as they were not supported in the oldest version of bash supported by
+> buildroot. Is bash 4.2 ok now?
 > 
-> - It doesn't work for packages using rsync to install,
->   E.G. skeleton-init-common as rsync also sets the mtime to match the
->   source files
+> See http://tiswww.case.edu/php/chet/bash/NEWS for when features were
+> added to bash.
 
-We could maybe tell rsycn not to do that, then?
-
-> - It breaks for <pkg>-reinstall
-
-Well, we can't guarantee anything except with a clean build from scratch
-anyway.
-
-> I don't think either of those are really big issues compared to the huge
-> slowdown, but it is worth noticing.
-
-Well, the -reinstall was already not working correctly, because the list
-pf files before/after would be alsmost the same, and the md5-diff would
-miss all the laready-installed files for the package.
-
-The rsync issue is new, but we can "fix" it in a later patch, then, for
-those packages like the skeletons, by using the --no-times option for
-example.
-
-However, if a third-party package internally uses rsync as its install
-method, we're screwed. But who would be insane enough to do that? ;-]
-
-Alternatively, we could use ctime instead of mtime, maybe? Or check
-both?
-
->  > +define step_pkg_size_inner
->  > +	cd $(2); \
->  > +	find . \( -type f -o -type L \) \
->  > +		-newer $($(PKG)_DIR)/.stamp_built \
->  > +		-exec printf '$(1),%s\n' {} + \
->  > +		>> $(BUILD_DIR)/packages-file-list$(3).txt
-> 
-> What find version are you using? My fileutils find (and the busybox
-> applet) use 'l' for symlinks, so I've changed it to that.
-
-Doh, the s/L/l/ is still uncomitted here. Dang...
-
-> Committed with that fixed (and a few tweaks to the commit message),
-> thanks.
-
-Thanks! :-)
+OK, I'm dropping this change, then. Thanks for noticing. :-)
 
 Regards,
 Yann E. MORIN.
