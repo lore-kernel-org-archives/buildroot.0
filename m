@@ -1,81 +1,32 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 18 Mar 2018 22:26:44 +0100
-Subject: [Buildroot] [PATCH] package/htop: open files using binary mode
-Message-ID: <20180318212644.4530-1-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Mar 2018 22:55:51 +0100
+Subject: [Buildroot] no bootloader selected ?
+In-Reply-To: <CAJ2oMhJ8esBWytXGG87yCZGbW9wm5+x6OoO0Ox-+iBCZjydn0A@mail.gmail.com>
+ (Ran Shalit's message of "Sun, 18 Mar 2018 23:07:28 +0200")
+References: <CAJ2oMhJ8esBWytXGG87yCZGbW9wm5+x6OoO0Ox-+iBCZjydn0A@mail.gmail.com>
+Message-ID: <87tvtddp5k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Imlement Arnout's suggestion [1] for MakeHeader script.
+>>>>> "Ran" == Ran Shalit <ranshalit@gmail.com> writes:
 
-[1] http://lists.busybox.net/pipermail/buildroot/2018-February/214373.html
+ > Hello,
+ > Is it possible to deselect any bootloader and boot in x86 directly
+ > from bios to Linux ?
 
-Fixes:
-http://autobuild.buildroot.net/results/9ce/9ce2ef5ef694253b9759016c9702c5c6be7849a1
+On UEFI systems it is, if you enable CONFIG_EFI_STUB in your Linux
+config.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...2-MakeHeader-open-files-using-binary-mode.patch | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
+ > I ask because I see in buildroot functional config that there is no
+ > bootloader selected, which surprised me.
 
-diff --git a/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch b/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
-new file mode 100644
-index 0000000000..bcc3e6564c
---- /dev/null
-+++ b/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
-@@ -0,0 +1,50 @@
-+From 1a83a3e6ae0841a0dc4c7eb08a1a71930e99666c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 18 Mar 2018 21:57:54 +0100
-+Subject: [PATCH] MakeHeader: open files using binary mode
-+
-+By default, open(sys.argv[1]) use Unicode mode.
-+The readlines() will try to convert with the default codec
-+(which depends on the i18n settings, so 'ascii' under
-+LC_ALL=C)
-+
-+Open files using binary mode so no conversion will be done
-+by readlines(). But then, normal strings can't be used in
-+the rest of the code; either all strings have to be prefixed
-+with b'' or (simpler) the read line has to be converted to
-+a unicode string by calling decode() on it.
-+
-+http://lists.busybox.net/pipermail/buildroot/2018-February/214373.html
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/9ce/9ce2ef5ef694253b9759016c9702c5c6be7849a1
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ scripts/MakeHeader.py | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/scripts/MakeHeader.py b/scripts/MakeHeader.py
-+index 4841bda..dd0798c 100755
-+--- a/scripts/MakeHeader.py
-++++ b/scripts/MakeHeader.py
-+@@ -16,7 +16,7 @@ SKIPONE=4
-+ state = ANY
-+ static = 0
-+ 
-+-file = open(sys.argv[1])
-++file = open(sys.argv[1], 'rb')
-+ name = sys.argv[1][:-2]
-+ 
-+ out = StringIO()
-+@@ -31,6 +31,7 @@ out.write( "#define HEADER_" + os.path.basename(name) + "\n")
-+ is_blank = False
-+ for line in file.readlines():
-+    line = line[:-1]
-++   line = line.decode('utf-8')
-+    if state == ANY:
-+       if line == '/*{':
-+          state = COPY
-+-- 
-+2.14.3
-+
+Ehh, what configuration file are you talking about exactly? Buildroot
+does not enforce that you enable a bootloader if that is what you mean -
+This is because there are use cases where you don't need a bootloader /
+don't want to build it in Buildroot.
+
 -- 
-2.14.3
+Bye, Peter Korsgaard
