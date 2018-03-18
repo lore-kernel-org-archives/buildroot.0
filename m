@@ -1,54 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Mar 2018 20:07:44 +0100
-Subject: [Buildroot] [PATCH v3 0/7] Add rpi3 b+ support
-In-Reply-To: <CAFGQKxcg_O2Kr-VmUhgiDW9Q_4nZY8ZsMZhLCEcpTg7SZ+un_g@mail.gmail.com>
-References: <20180316180232.18829-1-martin@barkynet.com>
- <20180316204132.30aadcfc@windsurf>
- <CAFGQKxcg_O2Kr-VmUhgiDW9Q_4nZY8ZsMZhLCEcpTg7SZ+un_g@mail.gmail.com>
-Message-ID: <20180318190744.GE2478@scaer>
+Date: Sun, 18 Mar 2018 20:16:23 +0100
+Subject: [Buildroot] [PATCH v5 1/5] qemu-host: remove support for some
+ powerpc processors.
+In-Reply-To: <20180318190131.21404-2-aduskett@gmail.com>
+References: <20180318190131.21404-1-aduskett@gmail.com>
+ <20180318190131.21404-2-aduskett@gmail.com>
+Message-ID: <20180318191623.GF2478@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+Adma, All,
 
-On 2018-03-16 21:06 +0000, Martin Bark spake thusly:
-> On 16 March 2018 at 19:41, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> > Hello Martin,
-> >
-> > On Fri, 16 Mar 2018 18:02:25 +0000, Martin Bark wrote:
-> >
-> >> Martin Bark (7):
-> >>   package/rpi-firmware: bump version
-> >>   configs/raspberrypi*: bump kernel version
-> >>   board/raspberrypi: add support for rpi3 b+
-> >>   package/rpi-firmware: improve installation of dtb files
-> >>   package/rpi-bt-firmware: change to LibreELEC github repo
-> >>   package/rpi-wifi-firmware: change to LibreELEC github repo
-> >>   DEVELOPERS: add myself for rpi packages
-> >
-> > Since you're looking at RPi stuff, could you have a look at
-> > http://patchwork.ozlabs.org/patch/779105/, which is sitting in
-> > patchwork since quite a while ?
+On 2018-03-18 15:01 -0400, Adam Duskett spake thusly:
+> The 620, 630, and 970 are not supported at this time by qemu.
 > 
-> Yes i can look at this.
-> 
-> The only reason for this seems to be the use of the pi3-miniuart-bt
-> overlay.  Personally i never use this overlay, I set enable_uart=1 in
-> config.txt (the same as raspi-config does).  Is there a reason
-> buildroot favours the pi3-miniuart-bt overlay?
-> 
-> If we switched to using enable_uart=1 there would be no reason to
-> include the overlays and no reason for this separate rpi0w defconifg.
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-I am all iun favour of simplifying and fixing things! Please send a
-patch! ;-)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> Changes v1 -> v4:
+>   - Add patch to series.
+> 
+> Changes v4 -> v5:
+>  - Seperate this patch into it's own patch.
+> 
+>  package/qemu/Config.in.host | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+> index 78fe54a85c..bbc2aa27c5 100644
+> --- a/package/qemu/Config.in.host
+> +++ b/package/qemu/Config.in.host
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+>  		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+>  		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+>  		BR2_sparc        || BR2_x86_64
+> +		depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
+>  
+>  config BR2_PACKAGE_HOST_QEMU
+>  	bool "host qemu"
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
