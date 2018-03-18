@@ -1,33 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Mar 2018 23:29:20 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4,9}.x series
-Message-ID: <20180318222950.8FCF580020@busybox.osuosl.org>
+Date: Sun, 18 Mar 2018 23:29:12 +0100
+Subject: [Buildroot] [git commit] irssi: security bump to version 1.0.7
+Message-ID: <20180318222950.77EE98371F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50cd46b39f4af495a4c9d15f0e5d3df272e33c7c
+commit: https://git.buildroot.net/buildroot/commit/?id=181ef8a1d01ddfa2be0b59ea85eb8902b0ce12c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes the following security issues:
+
+Use after free when server is disconnected during netsplits.  Incomplete fix
+of CVE-2017-7191.  Found by Joseph Bisch.  (CWE-416, CWE-825) -
+CVE-2018-7054 [2] was assigned to this issue.
+
+Use after free when SASL messages are received in unexpected order.  Found
+by Joseph Bisch.  (CWE-416, CWE-691) - CVE-2018-7053 [3] was assigned to
+this issue.
+
+Null pointer dereference when an ???empty??? nick has been observed by Irssi.
+Found by Joseph Bisch.  (CWE-476, CWE-475) - CVE-2018-7050 [4] was assigned
+to this issue.
+
+When the number of windows exceed the available space, Irssi would crash due
+to Null pointer dereference.  Found by Joseph Bisch.  (CWE-690) -
+CVE-2018-7052 [5] was assigned to this issue.
+
+Certain nick names could result in out of bounds access when printing theme
+strings.  Found by Oss-Fuzz.  (CWE-126) - CVE-2018-7051 [6] was assigned to
+this issue.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fd82049fe9..3b0bf84de1 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,8 +242,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.99"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.121"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.87"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.122"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.88"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 83dde00352..0f298137ba 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
++sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
+ # Locally calculated
+ sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index d49b5d7e46..611365f88e 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 1.0.6
++IRSSI_VERSION = 1.0.7
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
