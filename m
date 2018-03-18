@@ -1,64 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Mar 2018 23:29:12 +0100
-Subject: [Buildroot] [git commit] irssi: security bump to version 1.0.7
-Message-ID: <20180318222950.77EE98371F@busybox.osuosl.org>
+Date: Sun, 18 Mar 2018 23:25:17 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ati: bump
+ version to 18.0.1
+Message-ID: <20180318222950.2FC0083745@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=181ef8a1d01ddfa2be0b59ea85eb8902b0ce12c0
+commit: https://git.buildroot.net/buildroot/commit/?id=ba40447fc56e66bc5ba31b7d0be6c99cf8d57d2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
-
-Use after free when server is disconnected during netsplits.  Incomplete fix
-of CVE-2017-7191.  Found by Joseph Bisch.  (CWE-416, CWE-825) -
-CVE-2018-7054 [2] was assigned to this issue.
-
-Use after free when SASL messages are received in unexpected order.  Found
-by Joseph Bisch.  (CWE-416, CWE-691) - CVE-2018-7053 [3] was assigned to
-this issue.
-
-Null pointer dereference when an ???empty??? nick has been observed by Irssi.
-Found by Joseph Bisch.  (CWE-476, CWE-475) - CVE-2018-7050 [4] was assigned
-to this issue.
-
-When the number of windows exceed the available space, Irssi would crash due
-to Null pointer dereference.  Found by Joseph Bisch.  (CWE-690) -
-CVE-2018-7052 [5] was assigned to this issue.
-
-Certain nick names could result in out of bounds access when printing theme
-strings.  Found by Oss-Fuzz.  (CWE-126) - CVE-2018-7051 [6] was assigned to
-this issue.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash   | 10 +++++-----
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 83dde00352..0f298137ba 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
-+sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
- # Locally calculated
- sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index d49b5d7e46..611365f88e 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+index 54c553e6ce..d37096e9e4 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002854.html
+-md5 4d41bfe860dc719654cad3f82d00f6f3  xf86-video-ati-18.0.0.tar.bz2
+-sha1 da1b89a747264d976d824ddc7b5b4f803d3cf765  xf86-video-ati-18.0.0.tar.bz2
+-sha256 2c0368fb620d1fdfa2b435e672d65444c2fb9df21bbaf979298484b89ef83981  xf86-video-ati-18.0.0.tar.bz2
+-sha512 a9a634091f208099885039d42433cee061e03968417c0d535691833abcc9162d8d0a46f99bac902f0885beb14dcc9a011d104b535ffe492562fd5bb740ad4721  xf86-video-ati-18.0.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002884.html
++md5 40e7c0a5a69aba3d84e0958f58705ea7  xf86-video-ati-18.0.1.tar.bz2
++sha1 b5a0b6a2fa839d668a3fb90280fede95f0bc130d  xf86-video-ati-18.0.1.tar.bz2
++sha256 72ea3b8127d4550b64f797457f5a7851a541fa4ee2cc3f345b6c1886b81714a0  xf86-video-ati-18.0.1.tar.bz2
++sha512 b468a78503a596bbf71a1b91b231ce1fa32908f619ff2dfe249352d046696a3641f2a9ff065e32545fff77100134b4b237591215e78ef885b6509d6b16112d14  xf86-video-ati-18.0.1.tar.bz2
+ # Locally computed
+ sha256 58847c8e97190c401afa84b3f0b8b147379c876a184e99af2cb51bfd40ac8936  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index 0e9d412b75..8726695399 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IRSSI_VERSION = 1.0.6
-+IRSSI_VERSION = 1.0.7
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 18.0.0
++XDRIVER_XF86_VIDEO_ATI_VERSION = 18.0.1
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
