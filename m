@@ -1,90 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Mar 2018 15:16:46 +0100
-Subject: [Buildroot] [git commit] make: fix build with glibc 2.27
-Message-ID: <20180318141711.A48FE836EF@busybox.osuosl.org>
+Date: Sun, 18 Mar 2018 15:40:08 +0100
+Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.7
+Message-ID: <20180318144008.13997-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=157231405d219e484aa3829acff23569f6a60d00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes the following security issues:
 
-glibc 2.27 changed _GNU_GLOB_INTERFACE_VERSION to 2. This triggers build
-of the internal glob implementation in make. This internal
-implementation needs the __alloca symbol that glibc does not define.
+Use after free when server is disconnected during netsplits.  Incomplete fix
+of CVE-2017-7191.  Found by Joseph Bisch.  (CWE-416, CWE-825) -
+CVE-2018-7054 [2] was assigned to this issue.
 
-Add upstream patch that adds support for _GNU_GLOB_INTERFACE_VERSION 2.
+Use after free when SASL messages are received in unexpected order.  Found
+by Joseph Bisch.  (CWE-416, CWE-691) - CVE-2018-7053 [3] was assigned to
+this issue.
 
-Add host-pkgconf dependency for the PKG_CHECK_MODULES macro. This macro
-is only used for guile, which we currently disable unconditionally. So
-host-pkgconf is only needed now so that autoreconf generates a valid
-configure script.
+Null pointer dereference when an ?empty? nick has been observed by Irssi.
+Found by Joseph Bisch.  (CWE-476, CWE-475) - CVE-2018-7050 [4] was assigned
+to this issue.
 
-Fixes:
-http://autobuild.buildroot.net/results/8ff/8ff06ad8438cfcac85577b24675dd1d66f7d3d03/
-http://autobuild.buildroot.net/results/5cc/5ccee6bb332e800e81052a3094746edde83403b1/
-http://autobuild.buildroot.net/results/841/8418f5ed56dacd6900946e7d56ad36ad03c7bf7e/
+When the number of windows exceed the available space, Irssi would crash due
+to Null pointer dereference.  Found by Joseph Bisch.  (CWE-690) -
+CVE-2018-7052 [5] was assigned to this issue.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Certain nick names could result in out of bounds access when printing theme
+strings.  Found by Oss-Fuzz.  (CWE-126) - CVE-2018-7051 [6] was assigned to
+this issue.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ac-Support-GLIBC-glob-interface-version-2.patch | 31 ++++++++++++++++++++++
- package/make/make.mk                               |  4 ++-
- 2 files changed, 34 insertions(+), 1 deletion(-)
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch b/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch
-new file mode 100644
-index 0000000000..62e67f850a
---- /dev/null
-+++ b/package/make/0001-configure.ac-Support-GLIBC-glob-interface-version-2.patch
-@@ -0,0 +1,31 @@
-+From 48c8a116a914a325a0497721f5d8b58d5bba34d4 Mon Sep 17 00:00:00 2001
-+From: Paul Smith <psmith@gnu.org>
-+Date: Sun, 19 Nov 2017 15:09:16 -0500
-+Subject: [PATCH] * configure.ac: Support GLIBC glob interface version 2
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit 48c8a116a914a3
-+
-+ configure.ac | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 8c72568cf276..4710832ae568 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -404,10 +404,9 @@ AC_CACHE_CHECK([if system libc has GNU glob], [make_cv_sys_gnu_glob],
-+ #include <glob.h>
-+ #include <fnmatch.h>
-+ 
-+-#define GLOB_INTERFACE_VERSION 1
-+ #if !defined _LIBC && defined __GNU_LIBRARY__ && __GNU_LIBRARY__ > 1
-+ # include <gnu-versions.h>
-+-# if _GNU_GLOB_INTERFACE_VERSION == GLOB_INTERFACE_VERSION
-++# if _GNU_GLOB_INTERFACE_VERSION == 1 || _GNU_GLOB_INTERFACE_VERSION == 2
-+    gnu glob
-+ # endif
-+ #endif],
-+-- 
-+2.16.2
-+
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 5717628fa3..01cd2eaa18 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -7,9 +7,11 @@
- MAKE_VERSION = 4.2.1
- MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE = $(BR2_GNU_MIRROR)/make
--MAKE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+MAKE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-pkgconf
- MAKE_LICENSE = GPL-3.0+
- MAKE_LICENSE_FILES = COPYING
-+# Patching configure.ac
-+MAKE_AUTORECONF = YES
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 83dde00352..0f298137ba 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
++sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
+ # Locally calculated
+ sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index d49b5d7e46..611365f88e 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- MAKE_CONF_OPTS = --without-guile
- 
+-IRSSI_VERSION = 1.0.6
++IRSSI_VERSION = 1.0.7
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
+-- 
+2.11.0
