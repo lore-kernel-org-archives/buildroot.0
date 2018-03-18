@@ -1,121 +1,104 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 18 Mar 2018 15:21:37 -0400
-Subject: [Buildroot] [PATCH v5 2/5] qemu: add qemu_user_opts
-In-Reply-To: <20180318191845.GG2478@scaer>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Mar 2018 20:21:36 +0100
+Subject: [Buildroot] [PATCH v5 3/5] gstreamer1 packages: explicitly
+ disable introspection
+In-Reply-To: <20180318190131.21404-4-aduskett@gmail.com>
 References: <20180318190131.21404-1-aduskett@gmail.com>
- <20180318190131.21404-3-aduskett@gmail.com>
- <20180318191845.GG2478@scaer>
-Message-ID: <CAFSsvmpq9VjRBDFo60+EgSTYM48OnRgGvH-Oj0yX4STWwVo1TQ@mail.gmail.com>
+ <20180318190131.21404-4-aduskett@gmail.com>
+Message-ID: <20180318192136.GH2478@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+Adma, All,
 
-On Sun, Mar 18, 2018 at 3:18 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Adam, all,
->
-> On 2018-03-18 15:01 -0400, Adam Duskett spake thusly:
->> Add a new variable in qemu.mk: QEMU_USER_OPTS. When qemu-$(ARCH) is
->> called, some architectures require a -cpu flag to be passed, or else a
->> segfault may occure when building introspection files.
->> For PowerPC, many of these cpu's need a specific CPU flag to be passed
->> via the command line.
->>
->> Signed-off-by: Adam Duskett <aduskett@gmail.com>
->
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> However, see a little comment below...
->
->> ---
->> Changes v1 -> v4:
->>   - Add patch to series.
->>
->> Changes v4 -> v5:
->>  - Change HOST_QEMU_CPU_TUNE to QEMU_USER_OPTS. (Yann)
->>  - Add $(QEMU_USER_OPTS) to end of QEMU_USER (Yann)
->>
->>  package/qemu/qemu.mk | 33 ++++++++++++++++++++++++++++++++-
->>  1 file changed, 32 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
->> index 345ef52668..6a0fcabbce 100644
->> --- a/package/qemu/qemu.mk
->> +++ b/package/qemu/qemu.mk
->> @@ -70,6 +70,37 @@ endif
->>  ifeq ($(HOST_QEMU_ARCH),sh4aeb)
->>  HOST_QEMU_ARCH = sh4eb
->>  endif
->> +
->> +# Add cpu specific callouts for qemu.
->> +# In some cases (e.g. ppc) simply being arch specific (apparently) isn't good
->> +# enough and a PACKAGE_ARCH specific -cpu option is needed
->
-> What did you meant with "PACKAGE_ARCH"? I guess it's a leftover from the
-> previous iteration, right?
->
-> Just removing it looks like the correct phrasing to me, right?
->
-Correct, sorry about that!
+On 2018-03-18 15:01 -0400, Adam Duskett spake thusly:
+> To get GStreamer ready for introspection, we must first explicitly
+> disable gstreamer1, plugins base and plugins bad from using introspection.
+> If not, adding the gobject-introspection will result in these packages
+> failing to build because setting the _GIR_EXTRA_LIBS_PATH variable is required.
+> 
+> The other gstreamer1 packages do not require setting the _GIR_EXTRA_LIBS_PATH
+> variable.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-Adam
-> Regards,
-> Yann E. MORIN.
->
->> +# For others (e.g. arm) a -cpu option is not necessary, since the
->> +# qemu-arm default CPU supports all required architecture levels.
->> +ifeq ($(BR2_x86_64),y)
->> +QEMU_USER_OPTS = -cpu Nehalem,check=false
->> +endif
->> +
->> +# PowerPC architecture. Currently, the 620, 630, and 970 are not supported.
->> +ifeq ($(BR2_powerpc_e5500),y)
->> +QEMU_USER_OPTS = -cpu e5500
->> +endif
->> +
->> +ifeq ($(BR2_powerpc_e6500),y)
->> +QEMU_USER_OPTS = -cpu e6500
->> +endif
->> +
->> +ifeq ($(BR2_powerpc_power7),y)
->> +QEMU_USER_OPTS = -cpu 7400
->> +endif
->> +
->> +ifeq ($(BR2_powerpc64)$(BR2_powerpc_e5500),yy)
->> +QEMU_USER_OPTS = -cpu e500mc
->> +endif
->> +
->> +ifeq ($(BR2_powerpc64)$(BR2_powerpc_e6500),yy)
->> +QEMU_USER_OPTS = -cpu e500mc
->> +endif
->> +
->>  HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
->>
->>  ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
->> @@ -147,7 +178,7 @@ endef
->>  $(eval $(host-generic-package))
->>
->>  # variable used by other packages
->> -QEMU_USER = $(HOST_DIR)/bin/qemu-$(HOST_QEMU_ARCH)
->> +QEMU_USER = $(HOST_DIR)/bin/qemu-$(HOST_QEMU_ARCH) $(QEMU_USER_OPTS)
->>
->>  #-------------------------------------------------------------
->>  # Target-qemu
->> --
->> 2.14.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+If there are other packages that may support GIR, we can add that option
+later on as we discover them.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v4:
+>   - Add patch to series.
+>   - Change TARGET_MAKE_ENV += GIR_EXTRA_LIBS_PATH to
+>     PACKAGE_GIR_EXTRA_LIBS_PATH.
+> 
+> Changes v4 -> v5:
+>   - Change --enable-introspection=no to --disable-introspection (Yann)
+> 
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 3 ++-
+>  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 3 ++-
+>  package/gstreamer1/gstreamer1/gstreamer1.mk               | 1 +
+>  3 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index 83cb94be81..a4adc0e49e 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -21,7 +21,8 @@ GST1_PLUGINS_BAD_CONF_OPTS = \
+>  	--disable-winks \
+>  	--disable-android_media \
+>  	--disable-apple_media \
+> -	--disable-acm
+> +	--disable-acm \
+> +	--disable-introspection
+>  
+>  # Options which require currently unpackaged libraries
+>  GST1_PLUGINS_BAD_CONF_OPTS += \
+> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> index 10361ee3c6..2d183ce572 100644
+> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> @@ -14,7 +14,8 @@ GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
+>  # gio_unix_2_0 is only used for tests
+>  GST1_PLUGINS_BASE_CONF_OPTS = \
+>  	--disable-examples \
+> -	--disable-valgrind
+> +	--disable-valgrind \
+> +	--disable-introspection
+>  
+>  # Options which require currently unpackaged libraries
+>  GST1_PLUGINS_BASE_CONF_OPTS += \
+> diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+> index ea9f29a4f3..b00057a374 100644
+> --- a/package/gstreamer1/gstreamer1/gstreamer1.mk
+> +++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+> @@ -17,6 +17,7 @@ GSTREAMER1_CONF_OPTS = \
+>  	--disable-failing-tests \
+>  	--disable-valgrind \
+>  	--disable-benchmarks \
+> +	--disable-introspection \
+>  	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
+>  	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
+>  	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
