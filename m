@@ -1,104 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Mar 2018 20:21:36 +0100
-Subject: [Buildroot] [PATCH v5 3/5] gstreamer1 packages: explicitly
- disable introspection
-In-Reply-To: <20180318190131.21404-4-aduskett@gmail.com>
-References: <20180318190131.21404-1-aduskett@gmail.com>
- <20180318190131.21404-4-aduskett@gmail.com>
-Message-ID: <20180318192136.GH2478@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Mar 2018 21:14:49 +0100
+Subject: [Buildroot] [PATCH] linux-headers: bump 4.{4,9}.x series
+Message-ID: <20180318201449.16934-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adma, All,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 2018-03-18 15:01 -0400, Adam Duskett spake thusly:
-> To get GStreamer ready for introspection, we must first explicitly
-> disable gstreamer1, plugins base and plugins bad from using introspection.
-> If not, adding the gobject-introspection will result in these packages
-> failing to build because setting the _GIR_EXTRA_LIBS_PATH variable is required.
-> 
-> The other gstreamer1 packages do not require setting the _GIR_EXTRA_LIBS_PATH
-> variable.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-
-If there are other packages that may support GIR, we can add that option
-later on as we discover them.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v4:
->   - Add patch to series.
->   - Change TARGET_MAKE_ENV += GIR_EXTRA_LIBS_PATH to
->     PACKAGE_GIR_EXTRA_LIBS_PATH.
-> 
-> Changes v4 -> v5:
->   - Change --enable-introspection=no to --disable-introspection (Yann)
-> 
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 3 ++-
->  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 3 ++-
->  package/gstreamer1/gstreamer1/gstreamer1.mk               | 1 +
->  3 files changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> index 83cb94be81..a4adc0e49e 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> @@ -21,7 +21,8 @@ GST1_PLUGINS_BAD_CONF_OPTS = \
->  	--disable-winks \
->  	--disable-android_media \
->  	--disable-apple_media \
-> -	--disable-acm
-> +	--disable-acm \
-> +	--disable-introspection
->  
->  # Options which require currently unpackaged libraries
->  GST1_PLUGINS_BAD_CONF_OPTS += \
-> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> index 10361ee3c6..2d183ce572 100644
-> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> @@ -14,7 +14,8 @@ GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
->  # gio_unix_2_0 is only used for tests
->  GST1_PLUGINS_BASE_CONF_OPTS = \
->  	--disable-examples \
-> -	--disable-valgrind
-> +	--disable-valgrind \
-> +	--disable-introspection
->  
->  # Options which require currently unpackaged libraries
->  GST1_PLUGINS_BASE_CONF_OPTS += \
-> diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-> index ea9f29a4f3..b00057a374 100644
-> --- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-> +++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-> @@ -17,6 +17,7 @@ GSTREAMER1_CONF_OPTS = \
->  	--disable-failing-tests \
->  	--disable-valgrind \
->  	--disable-benchmarks \
-> +	--disable-introspection \
->  	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
->  	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
->  	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
-> -- 
-> 2.14.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index fd82049fe9..3b0bf84de1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -242,8 +242,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.99"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.121"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.87"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.122"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.88"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
