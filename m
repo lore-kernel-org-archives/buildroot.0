@@ -1,55 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Mar 2018 22:32:40 +0100
-Subject: [Buildroot] Unicode problem with check-uniq-files
-In-Reply-To: <3a25e768-759e-e377-fcae-48c8e3e36ddd@jcz.nl>
-References: <3a25e768-759e-e377-fcae-48c8e3e36ddd@jcz.nl>
-Message-ID: <20180319213240.GA340@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Mar 2018 22:40:05 +0100
+Subject: [Buildroot] [PATCH] tremor: security bump to fix CVE-2018-5146
+Message-ID: <20180319214005.5872-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jaap, All,
+Prevent out-of-bounds write in codebook decoding.
 
-On 2018-03-19 21:45 +0100, Jaap Crezee spake thusly:
-> Anybody familiar with the following problem?
-> 
-> >>>   Finalizing target directory
-> # Check files that are touched by more than one package
-> ./support/scripts/check-uniq-files -t target /data/work/jcz/git/jidiot/clients/innr/buildroot/output/build/packages-file-list.txt
+Codebooks that are not an exact divisor of the partition size are now
+truncated to fit within the partition.
 
-Could you please attach this packages-file-list.txt please?
+Upstream has migrated from subversion to git, so change to git and bump the
+version to include the fix for CVE-2018-5146.
 
-Regards,
-Yann E. MORIN.
+While we're at it, also add a hash file.
 
-> Traceback (most recent call last):
->   File "./support/scripts/check-uniq-files", line 42, in <module>
->     sys.exit(main())
->   File "./support/scripts/check-uniq-files", line 31, in main
->     for row in r:
->   File "/usr/lib/python3.6/encodings/ascii.py", line 26, in decode
->     return codecs.ascii_decode(input, self.errors)[0]
-> UnicodeDecodeError: 'ascii' codec can't decode byte 0xc5 in position 6473: ordinal not in range(128)
-> make: *** [Makefile:699: target-finalize] Error 1
-> 
-> 
-> Running on 8a94ff12d232ada68cff5957089a78a1f0b8f192 / 2018.02.x
-> 
-> regards,
-> 
-> 
-> Jaap Crezee
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tremor/tremor.hash | 3 +++
+ package/tremor/tremor.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+ create mode 100644 package/tremor/tremor.hash
 
+diff --git a/package/tremor/tremor.hash b/package/tremor/tremor.hash
+new file mode 100644
+index 0000000000..89661a64cd
+--- /dev/null
++++ b/package/tremor/tremor.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 ba94cfdf886399c550f76908285bfa9e322f24085de6f1810c2abea565c13a15  tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8.tar.gz
++sha256 d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814  COPYING
+diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
+index 05996e2a8a..835fe36172 100644
+--- a/package/tremor/tremor.mk
++++ b/package/tremor/tremor.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-TREMOR_SITE = http://svn.xiph.org/trunk/Tremor
+-TREMOR_SITE_METHOD = svn
+-TREMOR_VERSION = 19427
++TREMOR_VERSION = 7c30a66346199f3f09017a09567c6c8a3a0eedc8
++TREMOR_SITE = https://git.xiph.org/tremor.git
++TREMOR_SITE_METHOD = git
+ TREMOR_LICENSE = BSD-3-Clause
+ TREMOR_LICENSE_FILES = COPYING
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
