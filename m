@@ -1,52 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Mar 2018 13:25:13 +0100
-Subject: [Buildroot] [git commit] linux-firmware: add QCA6174 firmware legal
- notice files
-Message-ID: <20180319122537.8EDFD837C8@busybox.osuosl.org>
+Date: Mon, 19 Mar 2018 13:22:49 +0100
+Subject: [Buildroot] [git commit] package/htop: open files using binary mode
+Message-ID: <20180319122537.5B9A9837C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12b01c98a4b21a8b48034e93029835429abe5cc1
+commit: https://git.buildroot.net/buildroot/commit/?id=16623babdd045374b97ccbca1fe1d61596cfe3bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Erik Larsson <karl.erik.larsson@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Imlement Arnout's suggestion [1] for MakeHeader script.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2018-February/214373.html
+
+Fixes:
+http://autobuild.buildroot.net/results/9ce/9ce2ef5ef694253b9759016c9702c5c6be7849a1
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/linux-firmware.hash | 2 ++
- package/linux-firmware/linux-firmware.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ ...2-MakeHeader-open-files-using-binary-mode.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 1beb1f76da..14c1935b27 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -3,6 +3,8 @@ sha256 d253f7abb32e0407bcc840a5bddba1dc20190bb4a4bb6d40512f279fde384671 linux-fi
- sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
- sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
- sha256 802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2 LICENCE.atheros_firmware
-+sha256 3b5eb392b2d9d8c46d6aae26d06c187e5ea3029b12d13bc2b8deb8b3ce6bfa53 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt
-+sha256 c565861ff7c42f5df98e15239241f1f42614e5e15f362094a2d3e8da724dc842 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
- sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d LICENCE.broadcom_bcm43xx
- sha256 a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061 LICENCE.chelsio_firmware
- sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.fw_sst_0f28
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 3f710a2f09..6f0ba53800 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -149,7 +149,9 @@ LINUX_FIRMWARE_FILES += ath10k/QCA6174/hw3.0/board.bin \
- 			ath10k/QCA6174/hw3.0/board-2.bin \
- 			ath10k/QCA6174/hw3.0/firmware-4.bin \
- 			ath10k/QCA6174/hw3.0/firmware-6.bin
--LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware \
-+				ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt \
-+				ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
- endif
- 
- # sd8686 v8
+diff --git a/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch b/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
+new file mode 100644
+index 0000000000..bcc3e6564c
+--- /dev/null
++++ b/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
+@@ -0,0 +1,50 @@
++From 1a83a3e6ae0841a0dc4c7eb08a1a71930e99666c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 18 Mar 2018 21:57:54 +0100
++Subject: [PATCH] MakeHeader: open files using binary mode
++
++By default, open(sys.argv[1]) use Unicode mode.
++The readlines() will try to convert with the default codec
++(which depends on the i18n settings, so 'ascii' under
++LC_ALL=C)
++
++Open files using binary mode so no conversion will be done
++by readlines(). But then, normal strings can't be used in
++the rest of the code; either all strings have to be prefixed
++with b'' or (simpler) the read line has to be converted to
++a unicode string by calling decode() on it.
++
++http://lists.busybox.net/pipermail/buildroot/2018-February/214373.html
++
++Fixes:
++http://autobuild.buildroot.net/results/9ce/9ce2ef5ef694253b9759016c9702c5c6be7849a1
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ scripts/MakeHeader.py | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/scripts/MakeHeader.py b/scripts/MakeHeader.py
++index 4841bda..dd0798c 100755
++--- a/scripts/MakeHeader.py
+++++ b/scripts/MakeHeader.py
++@@ -16,7 +16,7 @@ SKIPONE=4
++ state = ANY
++ static = 0
++ 
++-file = open(sys.argv[1])
+++file = open(sys.argv[1], 'rb')
++ name = sys.argv[1][:-2]
++ 
++ out = StringIO()
++@@ -31,6 +31,7 @@ out.write( "#define HEADER_" + os.path.basename(name) + "\n")
++ is_blank = False
++ for line in file.readlines():
++    line = line[:-1]
+++   line = line.decode('utf-8')
++    if state == ANY:
++       if line == '/*{':
++          state = COPY
++-- 
++2.14.3
++
