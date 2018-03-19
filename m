@@ -1,9 +1,7 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 19 Mar 2018 22:19:03 +0100
-Subject: [Buildroot] [PATCH 2/2] package/flare-game: new package
-In-Reply-To: <20180319211903.11539-1-romain.naour@gmail.com>
-References: <20180319211903.11539-1-romain.naour@gmail.com>
-Message-ID: <20180319211903.11539-2-romain.naour@gmail.com>
+Date: Mon, 19 Mar 2018 22:19:02 +0100
+Subject: [Buildroot] [PATCH 1/2] package/flare-engine: new package
+Message-ID: <20180319211903.11539-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,89 +10,97 @@ To: buildroot@busybox.net
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/flare-game/Config.in       | 12 ++++++++++++
- package/flare-game/flare-game.hash |  3 +++
- package/flare-game/flare-game.mk   | 18 ++++++++++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/flare-game/Config.in
- create mode 100644 package/flare-game/flare-game.hash
- create mode 100644 package/flare-game/flare-game.mk
+Tested with test-pkg.
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/flare-engine/Config.in         | 19 +++++++++++++++++++
+ package/flare-engine/flare-engine.hash |  3 +++
+ package/flare-engine/flare-engine.mk   | 17 +++++++++++++++++
+ 5 files changed, 41 insertions(+)
+ create mode 100644 package/flare-engine/Config.in
+ create mode 100644 package/flare-engine/flare-engine.hash
+ create mode 100644 package/flare-engine/flare-engine.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 97dd4cc096..843bffd4f6 100644
+index 1faefc45fc..97dd4cc096 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1536,6 +1536,7 @@ F:	package/efl/
+@@ -1535,6 +1535,7 @@ F:	package/bullet/
+ F:	package/efl/
  F:	package/enlightenment/
  F:	package/expedite/
- F:	package/flare-engine/
-+F:	package/flare-game/
++F:	package/flare-engine/
  F:	package/iqvlinux/
  F:	package/irrlicht/
  F:	package/liblinear/
 diff --git a/package/Config.in b/package/Config.in
-index e2ca2802c3..4b946215db 100644
+index 58dfd6306d..e2ca2802c3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -234,6 +234,7 @@ menu "Games"
+@@ -233,6 +233,7 @@ endmenu
+ menu "Games"
  	source "package/chocolate-doom/Config.in"
  	source "package/doom-wad/Config.in"
- 	source "package/flare-engine/Config.in"
-+	source "package/flare-game/Config.in"
++	source "package/flare-engine/Config.in"
  	source "package/gnuchess/Config.in"
  	source "package/lbreakout2/Config.in"
  	source "package/ltris/Config.in"
-diff --git a/package/flare-game/Config.in b/package/flare-game/Config.in
+diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
 new file mode 100644
-index 0000000000..466e765236
+index 0000000000..cdcb018948
 --- /dev/null
-+++ b/package/flare-game/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FLARE_GAME
-+	bool "flare-game"
-+	depends on BR2_PACKAGE_FLARE_ENGINE
++++ b/package/flare-engine/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_FLARE_ENGINE
++	bool "flare-engine"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # SDL2
++	select BR2_PACKAGE_SDL2
++	select BR2_PACKAGE_SDL2_IMAGE
++	select BR2_PACKAGE_SDL2_MIXER
++	select BR2_PACKAGE_SDL2_TTF
 +	help
-+	  Flare is an open source, 2D action RPG licensed under the
-+	  GPL3 license. Its game play can be likened to the games in
-+	  the Diablo series.
-+
-+	  flare-game is a package that requires flare-engine that only
-+	  contains this game data.
++	  Flare (Free Libre Action Roleplaying Engine) is a simple game
++	  engine built to handle a very specific kind of game:
++	  single-player 2D action RPGs.
++	  Flare is not a reimplementation of an existing game or engine.
++	  It is a tribute to and exploration of the action RPG genre.
 +
 +	  http://flarerpg.org
-diff --git a/package/flare-game/flare-game.hash b/package/flare-game/flare-game.hash
++
++comment "flare-engine needs a toolchain w/ C++, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/flare-engine/flare-engine.hash b/package/flare-engine/flare-engine.hash
 new file mode 100644
-index 0000000000..a27c66d9e3
+index 0000000000..8c6fc3ab1b
 --- /dev/null
-+++ b/package/flare-game/flare-game.hash
++++ b/package/flare-engine/flare-engine.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  5c8e9d72fcbe59f1861f79ac7b76ceffe3ec61d1df241c32d9133fe158fba4c1  flare-game-v1.0.tar.gz
-+sha256  9fce5eb663f136449e11293a871ed96db5ba579116a927fc6a70dd20a4a5b9e6  README
-diff --git a/package/flare-game/flare-game.mk b/package/flare-game/flare-game.mk
++sha256  4bbd4674513b643be6294188904665c53f0ef2912e803212c05e8fd22a44d74d  flare-engine-v1.0.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
 new file mode 100644
-index 0000000000..84809eac5c
+index 0000000000..394ddcfa5d
 --- /dev/null
-+++ b/package/flare-game/flare-game.mk
-@@ -0,0 +1,18 @@
++++ b/package/flare-engine/flare-engine.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# flare-game
++# flare-engine
 +#
 +################################################################################
 +
-+FLARE_GAME_VERSION = v1.0
-+FLARE_GAME_SITE =  $(call github,clintbellanger,flare-game,$(FLARE_GAME_VERSION))
-+FLARE_GAME_LICENSE = CC-BY-SA-3.0 (data files), GPL-2.0 (GNU Unifont), \
-+	OFL-1.1 (Liberation Sans)
-+FLARE_GAME_LICENSE_FILES = README
++FLARE_ENGINE_VERSION = v1.0
++FLARE_ENGINE_SITE =  $(call github,clintbellanger,flare-engine,$(FLARE_ENGINE_VERSION))
++FLARE_ENGINE_LICENSE = GPL-3.0
++FLARE_ENGINE_LICENSE_FILES = COPYING
 +
-+FLARE_GAME_DEPENDENCIES += flare-engine
++FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
 +
-+# Don't use /usr/share/games
-+FLARE_GAME_CONF_OPTS += -DDATADIR=share/flare
++# Don't use /usr/games and /usr/share/games
++FLARE_ENGINE_CONF_OPTS += -DBINDIR=bin -DDATADIR=share/flare
 +
 +$(eval $(cmake-package))
 -- 
