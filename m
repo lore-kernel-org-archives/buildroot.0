@@ -1,80 +1,52 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 19 Mar 2018 18:18:39 +0000
-Subject: [Buildroot] [PATCH v3 0/7] Add rpi3 b+ support
-In-Reply-To: <20180319181430.4c264d3d@gmx.net>
-References: <20180316180232.18829-1-martin@barkynet.com>
- <20180316204132.30aadcfc@windsurf>
- <CAFGQKxcg_O2Kr-VmUhgiDW9Q_4nZY8ZsMZhLCEcpTg7SZ+un_g@mail.gmail.com>
- <20180316232824.7a41721f@windsurf> <20180319181430.4c264d3d@gmx.net>
-Message-ID: <CAFGQKxeynSw4=0TkE_qkXX0+=R63BU9gAY0+DNS39K4KiDnP-Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Mar 2018 21:04:58 +0100
+Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
+ the build time
+In-Reply-To: <20180319175010.0c26763b@windsurf> (Thomas Petazzoni's message of
+ "Mon, 19 Mar 2018 17:50:10 +0100")
+References: <cover.1521146096.git.yann.morin.1998@free.fr>
+ <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
+ <1521477052.10662.140.camel@impinj.com>
+ <20180319175010.0c26763b@windsurf>
+Message-ID: <87o9jjltlh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On 19 March 2018 at 17:14, Peter Seiderer <ps.report@gmx.net> wrote:
-> Hello Martin,
->
-> On Fri, 16 Mar 2018 23:35:48 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
->> Hello,
->>
->> On Fri, 16 Mar 2018 21:06:52 +0000, Martin Bark wrote:
->>
->> > The only reason for this seems to be the use of the pi3-miniuart-bt
->> > overlay.  Personally i never use this overlay, I set enable_uart=1 in
->> > config.txt (the same as raspi-config does).  Is there a reason
->> > buildroot favours the pi3-miniuart-bt overlay?
->>
->> I am not familiar with those configuration details of the RPi platform,
->> but I remember they have been discussed in the past. Perhaps you can
->> check the commit log for some details about them.
->>
->> Especially this commit log:
->>
->> commit 1e03cc2290f98fc7434254d2abd9afd504de8360
->> Author: Peter Seiderer <ps.report@gmx.net>
->> Date:   Mon May 2 22:25:44 2016 +0200
->>
->>     raspberrypi3: fix serial console (load pi3-miniuart-bt overlay)
->>
->>     - enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in raspberrypi3_defconfig
->>     - add copy of rpi-firmware/overlays directory to boot partition in genimage-raspberrypi3.cfg
->>     - enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on request
->>     - add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in raspberrypi3_defconfig
->>
->>     Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>
->
-> And the full discussion about the different solutions, see [1]...
->
-> I am still in prefer the overlay solutions ;-)
->
-> Regards,
-> Peter
->
->
-> [1] https://patchwork.ozlabs.org/patch/617683/
+ > Hello,
+ > On Mon, 19 Mar 2018 16:30:52 +0000, Trent Piepho wrote:
 
-Ok i remember this conversation now.
+ >> After fixing s/L/l/, here are the timings for a 15 minute build:
+ >> 
+ >> configure                510.29
+ >> build                    166.12
+ >> extract                   45.53
+ >> other                     43.88
+ >> hostinstall               35.43
+ >> check_host_rpath          33.37
+ >> check_bin_arch            28.30
+ >> targetinstall             23.37
+ >> stageinstall              15.97
+ >> step_pkg_size              9.49
 
-As a matter of interest has anyone actually tried using bluetooth with
-the pi3-miniuart-bt overlay?  I have not.  According to [1]
-pi3-miniuart-bt overlay requires core_freq=250 to work (which makes
-sense) and buildroot does not set this.  I'm not sure the current way
-pi3-miniuart-bt overlay is setup even works.
+ > Thanks for those measurements. I still find it a bit annoying that we
+ > spend 1m10sec on instrumentation related topics on a 15 minutes build.
+ > The use of ccache makes the build time lower than it normally is, and
+ > therefore makes the instrumentation cost even more visible, but using
+ > ccache is a valid use case.
 
-Thanks
+Agreed, Buildroot has always been about low overhead and fast builds.
 
-Martin
+ > Should we move the check_host_rpath and check_bin_arch checks as
+ > finalize hooks, instead of running them at the end of each package
+ > installation ? We can always get the package that installed the "bogus"
+ > file through the package-file-list*.txt files, no ?
 
-[1] https://github.com/raspberrypi/linux/blob/rpi-4.14.y/arch/arm/boot/dts/overlays/README
+I would think so as well. Anybody interested in giving it a shot?
 
->> Best regards,
->>
->> Thomas
->
+-- 
+Bye, Peter Korsgaard
