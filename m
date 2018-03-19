@@ -1,42 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Mar 2018 09:26:58 +0100
-Subject: [Buildroot] [git commit] glibc: install the obsolete libnsl
-Message-ID: <20180319082729.800C7837A4@busybox.osuosl.org>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon, 19 Mar 2018 09:38:01 +0000
+Subject: [Buildroot] [PATCH v3 0/7] Add rpi3 b+ support
+In-Reply-To: <20180318190744.GE2478@scaer>
+References: <20180316180232.18829-1-martin@barkynet.com>
+ <20180316204132.30aadcfc@windsurf>
+ <CAFGQKxcg_O2Kr-VmUhgiDW9Q_4nZY8ZsMZhLCEcpTg7SZ+un_g@mail.gmail.com>
+ <20180318190744.GE2478@scaer>
+Message-ID: <CAFGQKxe3R54KcAZNEuRrOn5uo9mzzp5AdGt3O=TQHpywL=QWKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=398747f5fafca8c07e696612d8eded53d4f935c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 18 March 2018 at 19:07, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Martin, All,
+>
+> On 2018-03-16 21:06 +0000, Martin Bark spake thusly:
+>> On 16 March 2018 at 19:41, Thomas Petazzoni
+>> <thomas.petazzoni@bootlin.com> wrote:
+>> > Hello Martin,
+>> >
+>> > On Fri, 16 Mar 2018 18:02:25 +0000, Martin Bark wrote:
+>> >
+>> >> Martin Bark (7):
+>> >>   package/rpi-firmware: bump version
+>> >>   configs/raspberrypi*: bump kernel version
+>> >>   board/raspberrypi: add support for rpi3 b+
+>> >>   package/rpi-firmware: improve installation of dtb files
+>> >>   package/rpi-bt-firmware: change to LibreELEC github repo
+>> >>   package/rpi-wifi-firmware: change to LibreELEC github repo
+>> >>   DEVELOPERS: add myself for rpi packages
+>> >
+>> > Since you're looking at RPi stuff, could you have a look at
+>> > http://patchwork.ozlabs.org/patch/779105/, which is sitting in
+>> > patchwork since quite a while ?
+>>
+>> Yes i can look at this.
+>>
+>> The only reason for this seems to be the use of the pi3-miniuart-bt
+>> overlay.  Personally i never use this overlay, I set enable_uart=1 in
+>> config.txt (the same as raspi-config does).  Is there a reason
+>> buildroot favours the pi3-miniuart-bt overlay?
+>>
+>> If we switched to using enable_uart=1 there would be no reason to
+>> include the overlays and no reason for this separate rpi0w defconifg.
+>
+> I am all iun favour of simplifying and fixing things! Please send a
+> patch! ;-)
 
-glibc 2.27 stopped installing libnsl by default. Restore libnsl install
-to fix packages, like exim, that use that library.
+Yes i will do
 
-Fixes (exim):
-http://autobuild.buildroot.net/results/a19/a19df43be7d27cf8815e1257122d25aa8285d75b/
-http://autobuild.buildroot.net/results/8ec/8ecfc42a81efec8485784f945e231eb40a087b5b/
-http://autobuild.buildroot.net/results/054/054eb702a9b8c66454970333ef45a0afccb7cc80/
+Thanks
 
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/glibc/glibc.mk | 1 +
- 1 file changed, 1 insertion(+)
+Martin
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 00e114566c..f724ced857 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -100,6 +100,7 @@ define GLIBC_CONFIGURE_CMDS
- 		--disable-profile \
- 		--without-gd \
- 		--enable-obsolete-rpc \
-+		--enable-obsolete-nsl \
- 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
- 		--with-headers=$(STAGING_DIR)/usr/include)
- 	$(GLIBC_ADD_MISSING_STUB_H)
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
