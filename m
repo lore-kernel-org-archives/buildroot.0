@@ -1,38 +1,54 @@
 From: Trent Piepho <tpiepho@impinj.com>
-Date: Mon, 19 Mar 2018 16:15:17 +0000
-Subject: [Buildroot] [PATCH 1/2] core/intrumetnation: don't spawn to get
- seconds-since-EPOCH
-In-Reply-To: <20180318161605.GB2478@scaer>
+Date: Mon, 19 Mar 2018 16:30:52 +0000
+Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
+ the build time
+In-Reply-To: <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
 References: <cover.1521146096.git.yann.morin.1998@free.fr>
- <ef3b9c4c1ca910423b06f1374ee9461c77aaeed1.1521146096.git.yann.morin.1998@free.fr>
- <CABa6e=qZfehqQHFAkutn-WaFAw6Gp3Za-3_3ZB6mXd1ukxZq7w@mail.gmail.com>
- <20180318161605.GB2478@scaer>
-Message-ID: <1521476116.10662.130.camel@impinj.com>
+ <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
+Message-ID: <1521477052.10662.140.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2018-03-18 at 17:16 +0100, Yann E. MORIN wrote:
-> > >  define step_time
-> > > -       printf "%s:%-5.5s:%-20.20s: %s\n"           \
-> > > -              "$$(date +%s)" "$(1)" "$(2)" "$(3)"  \
-> > > +       printf "%(%s)T:%-5.5s:%-20.20s: %s\n"           \
-> > > +              -1 "$(1)" "$(2)" "$(3)"  \
-> > 
-> > Should you note somewhere that this needs bash 4.2? I remember some
-> > re-working of bash patches in the past to avoid the use of associative arrays
-> > as they were not supported in the oldest version of bash supported by
-> > buildroot. Is bash 4.2 ok now?
-> > 
+On Thu, 2018-03-15 at 21:35 +0100, Yann E. MORIN wrote:
+> Timings however speak for themselves, with this defconfig (slightly
+> biggish-but-still-manageable build) [1].
 > 
-> OK, I'm dropping this change, then. Thanks for noticing. :-)
+> host/      20965 files    1.2GiB
+> staging/    4715 files    333MiB
+> target/     1801 files     44MiB
+> 
+> All instrumentation steps, using md5:    19min 27s
+> All instrumentation steps, using mtime:  14min 45s
+> No instrumentation step at all:          14min 31s
+> 
+> So, using mtime is an almost-5min improvement, i.e. about 25% faster,
+> while removing all instrumentation steps does not gain that much more...
 
-If it weren't for the space padding of the fields, you could go the
-other way and avoid the printf call and just use date.
+After fixing s/L/l/, here are the timings for a 15 minute build:
 
-define step_time
-	date +"%s.%N:$(1):$(2):$(3)"
+configure                510.29
+build                    166.12
+extract                   45.53
+other                     43.88
+hostinstall               35.43
+check_host_rpath          33.37
+check_bin_arch            28.30
+targetinstall             23.37
+stageinstall              15.97
+step_pkg_size              9.49
 
-Not as pretty to look at, but just as parsable to a script.
+Without ccache, the build step would be somewhat longer.
+
+
+> Now, we also change the way we handle symlinks. Previously, we would
+> hash the file pointed to by the symlink. Now, we only look at the mtime
+> of the symlink itself, which still detects modifications.
+
+This patch also fixes a problem the previous system had w.r.t. broken
+symlinks.  They did not show up as owned by any packages.  Now they are
+owned by the package that creates the link.  It also means a package
+that replaced a file which was linked to does not also appear,
+incorrectly, to replace all the links as well.
