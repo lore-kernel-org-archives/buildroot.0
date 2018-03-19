@@ -1,68 +1,36 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 19 Mar 2018 09:38:01 +0000
-Subject: [Buildroot] [PATCH v3 0/7] Add rpi3 b+ support
-In-Reply-To: <20180318190744.GE2478@scaer>
-References: <20180316180232.18829-1-martin@barkynet.com>
- <20180316204132.30aadcfc@windsurf>
- <CAFGQKxcg_O2Kr-VmUhgiDW9Q_4nZY8ZsMZhLCEcpTg7SZ+un_g@mail.gmail.com>
- <20180318190744.GE2478@scaer>
-Message-ID: <CAFGQKxe3R54KcAZNEuRrOn5uo9mzzp5AdGt3O=TQHpywL=QWKQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 19 Mar 2018 12:44:04 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-firmware: add QCA6174 multi-board
+ firmware
+Message-ID: <ec8f202185187ea813316c7e6960f64bde714fdb.1521456245.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18 March 2018 at 19:07, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Martin, All,
->
-> On 2018-03-16 21:06 +0000, Martin Bark spake thusly:
->> On 16 March 2018 at 19:41, Thomas Petazzoni
->> <thomas.petazzoni@bootlin.com> wrote:
->> > Hello Martin,
->> >
->> > On Fri, 16 Mar 2018 18:02:25 +0000, Martin Bark wrote:
->> >
->> >> Martin Bark (7):
->> >>   package/rpi-firmware: bump version
->> >>   configs/raspberrypi*: bump kernel version
->> >>   board/raspberrypi: add support for rpi3 b+
->> >>   package/rpi-firmware: improve installation of dtb files
->> >>   package/rpi-bt-firmware: change to LibreELEC github repo
->> >>   package/rpi-wifi-firmware: change to LibreELEC github repo
->> >>   DEVELOPERS: add myself for rpi packages
->> >
->> > Since you're looking at RPi stuff, could you have a look at
->> > http://patchwork.ozlabs.org/patch/779105/, which is sitting in
->> > patchwork since quite a while ?
->>
->> Yes i can look at this.
->>
->> The only reason for this seems to be the use of the pi3-miniuart-bt
->> overlay.  Personally i never use this overlay, I set enable_uart=1 in
->> config.txt (the same as raspi-config does).  Is there a reason
->> buildroot favours the pi3-miniuart-bt overlay?
->>
->> If we switched to using enable_uart=1 there would be no reason to
->> include the overlays and no reason for this separate rpi0w defconifg.
->
-> I am all iun favour of simplifying and fixing things! Please send a
-> patch! ;-)
+The board-2.bin file is a new format that support multiple board files.
+This file is required for for recent QCA6174 modules.
 
-Yes i will do
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Erik Larsson <karl.erik.larsson@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/linux-firmware/linux-firmware.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks
-
-Martin
-
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index a6fd8ebba485..3f710a2f0935 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -146,6 +146,7 @@ endif
+ # ath10k-qca6174
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA6174),y)
+ LINUX_FIRMWARE_FILES += ath10k/QCA6174/hw3.0/board.bin \
++			ath10k/QCA6174/hw3.0/board-2.bin \
+ 			ath10k/QCA6174/hw3.0/firmware-4.bin \
+ 			ath10k/QCA6174/hw3.0/firmware-6.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
+-- 
+2.16.2
