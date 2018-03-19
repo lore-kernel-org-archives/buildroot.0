@@ -1,82 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Mar 2018 13:22:49 +0100
-Subject: [Buildroot] [git commit] package/htop: open files using binary mode
-Message-ID: <20180319122537.5B9A9837C8@busybox.osuosl.org>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Mon, 19 Mar 2018 10:23:10 -0500
+Subject: [Buildroot] [PATCH v1 1/3] python-decorator: Update to add host
+ package
+Message-ID: <1521472992-42812-1-git-send-email-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16623babdd045374b97ccbca1fe1d61596cfe3bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Update to add host package for python decorator
 
-Imlement Arnout's suggestion [1] for MakeHeader script.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2018-February/214373.html
-
-Fixes:
-http://autobuild.buildroot.net/results/9ce/9ce2ef5ef694253b9759016c9702c5c6be7849a1
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 ---
- ...2-MakeHeader-open-files-using-binary-mode.patch | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ package/python-decorator/python-decorator.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch b/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
-new file mode 100644
-index 0000000000..bcc3e6564c
---- /dev/null
-+++ b/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
-@@ -0,0 +1,50 @@
-+From 1a83a3e6ae0841a0dc4c7eb08a1a71930e99666c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 18 Mar 2018 21:57:54 +0100
-+Subject: [PATCH] MakeHeader: open files using binary mode
-+
-+By default, open(sys.argv[1]) use Unicode mode.
-+The readlines() will try to convert with the default codec
-+(which depends on the i18n settings, so 'ascii' under
-+LC_ALL=C)
-+
-+Open files using binary mode so no conversion will be done
-+by readlines(). But then, normal strings can't be used in
-+the rest of the code; either all strings have to be prefixed
-+with b'' or (simpler) the read line has to be converted to
-+a unicode string by calling decode() on it.
-+
-+http://lists.busybox.net/pipermail/buildroot/2018-February/214373.html
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/9ce/9ce2ef5ef694253b9759016c9702c5c6be7849a1
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ scripts/MakeHeader.py | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/scripts/MakeHeader.py b/scripts/MakeHeader.py
-+index 4841bda..dd0798c 100755
-+--- a/scripts/MakeHeader.py
-++++ b/scripts/MakeHeader.py
-+@@ -16,7 +16,7 @@ SKIPONE=4
-+ state = ANY
-+ static = 0
-+ 
-+-file = open(sys.argv[1])
-++file = open(sys.argv[1], 'rb')
-+ name = sys.argv[1][:-2]
-+ 
-+ out = StringIO()
-+@@ -31,6 +31,7 @@ out.write( "#define HEADER_" + os.path.basename(name) + "\n")
-+ is_blank = False
-+ for line in file.readlines():
-+    line = line[:-1]
-++   line = line.decode('utf-8')
-+    if state == ANY:
-+       if line == '/*{':
-+          state = COPY
-+-- 
-+2.14.3
-+
+diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
+index c0c43f6..313ad97 100644
+--- a/package/python-decorator/python-decorator.mk
++++ b/package/python-decorator/python-decorator.mk
+@@ -7,7 +7,9 @@
+ PYTHON_DECORATOR_VERSION = 4.0.11
+ PYTHON_DECORATOR_SITE = https://pypi.python.org/packages/cc/ac/5a16f1fc0506ff72fcc8fd4e858e3a1c231f224ab79bb7c4c9b2094cc570
+ PYTHON_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
++PYTHON_DECORATOR_DEPENDENCIES = python-setuptools
+ PYTHON_DECORATOR_LICENSE = BSD-2-Clause
+ PYTHON_DECORATOR_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
+-- 
+1.9.1
