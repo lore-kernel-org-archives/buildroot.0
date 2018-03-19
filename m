@@ -1,54 +1,52 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Mon, 19 Mar 2018 16:30:52 +0000
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 19 Mar 2018 17:50:10 +0100
 Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
  the build time
-In-Reply-To: <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
+In-Reply-To: <1521477052.10662.140.camel@impinj.com>
 References: <cover.1521146096.git.yann.morin.1998@free.fr>
  <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
-Message-ID: <1521477052.10662.140.camel@impinj.com>
+ <1521477052.10662.140.camel@impinj.com>
+Message-ID: <20180319175010.0c26763b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2018-03-15 at 21:35 +0100, Yann E. MORIN wrote:
-> Timings however speak for themselves, with this defconfig (slightly
-> biggish-but-still-manageable build) [1].
+Hello,
+
+On Mon, 19 Mar 2018 16:30:52 +0000, Trent Piepho wrote:
+
+> After fixing s/L/l/, here are the timings for a 15 minute build:
 > 
-> host/      20965 files    1.2GiB
-> staging/    4715 files    333MiB
-> target/     1801 files     44MiB
-> 
-> All instrumentation steps, using md5:    19min 27s
-> All instrumentation steps, using mtime:  14min 45s
-> No instrumentation step at all:          14min 31s
-> 
-> So, using mtime is an almost-5min improvement, i.e. about 25% faster,
-> while removing all instrumentation steps does not gain that much more...
+> configure                510.29
+> build                    166.12
+> extract                   45.53
+> other                     43.88
+> hostinstall               35.43
+> check_host_rpath          33.37
+> check_bin_arch            28.30
+> targetinstall             23.37
+> stageinstall              15.97
+> step_pkg_size              9.49
 
-After fixing s/L/l/, here are the timings for a 15 minute build:
+Thanks for those measurements. I still find it a bit annoying that we
+spend 1m10sec on instrumentation related topics on a 15 minutes build.
+The use of ccache makes the build time lower than it normally is, and
+therefore makes the instrumentation cost even more visible, but using
+ccache is a valid use case.
 
-configure                510.29
-build                    166.12
-extract                   45.53
-other                     43.88
-hostinstall               35.43
-check_host_rpath          33.37
-check_bin_arch            28.30
-targetinstall             23.37
-stageinstall              15.97
-step_pkg_size              9.49
+Should we move the check_host_rpath and check_bin_arch checks as
+finalize hooks, instead of running them at the end of each package
+installation ? We can always get the package that installed the "bogus"
+file through the package-file-list*.txt files, no ?
 
-Without ccache, the build step would be somewhat longer.
+This would save 1 minute of build time on the above test.
 
+Best regards,
 
-> Now, we also change the way we handle symlinks. Previously, we would
-> hash the file pointed to by the symlink. Now, we only look at the mtime
-> of the symlink itself, which still detects modifications.
-
-This patch also fixes a problem the previous system had w.r.t. broken
-symlinks.  They did not show up as owned by any packages.  Now they are
-owned by the package that creates the link.  It also means a package
-that replaced a file which was linked to does not also appear,
-incorrectly, to replace all the links as well.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+http://bootlin.com
