@@ -1,7 +1,12 @@
-From: Ran Shalit <ranshalit@gmail.com>
-Date: Tue, 20 Mar 2018 17:45:03 +0200
-Subject: [Buildroot] igb initialization time after powerup
-Message-ID: <CAJ2oMhKES2KSYk2U36-70F3e4AX47V6=B4TzDdMLocXT4qUqpg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Mar 2018 16:45:35 +0100
+Subject: [Buildroot] [PATCH v2 2/3] python-networkx: Update to add
+ networkx package
+In-Reply-To: <CAGm1_kuzARgJgQ9OEtrOVzhMrAxj2ORWJ-b=KxTC5PkoBcuQzA@mail.gmail.com>
+References: <1521553662-4115-1-git-send-email-jared.bents@rockwellcollins.com>
+ <1521553662-4115-2-git-send-email-jared.bents@rockwellcollins.com>
+ <CAGm1_kuzARgJgQ9OEtrOVzhMrAxj2ORWJ-b=KxTC5PkoBcuQzA@mail.gmail.com>
+Message-ID: <20180320164535.2a5ed5d4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +15,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-This is not specific buildroot issue, yet I hope someone here will have an idea.
-I have long ethernet boot time till receiving ping after powerup.
-I use igb driver.
+On Tue, 20 Mar 2018 15:28:15 +0100, Yegor Yefremov wrote:
 
-I tried plenty of things, but nothing worked.
-I have printed the function which are called in igb driver.
+> > +# The current version of setools (v4.1.1) does not work with python-networkx past v1.11
+> > +PYTHON_NETWORKX_VERSION = 1.11
+> > +PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
+> > +PYTHON_NETWORKX_SITE = https://pypi.python.org/packages/c2/93/dbb41b03cf7c878a7409c8e92226531f840a423c9309ea534873a83c9192
+> > +PYTHON_NETWORKX_DEPENDENCIES = python-decorator  
+> 
+> remove this dependency and try a clean BR rebuild (make clean && make)
 
-This is the relevant log in dmesg:
+Actually a clean rebuild with "make clean && make" does not allow to
+verify that python-networkx doesn't have a build dependency on
+python-decorator.
 
-[    2.538089] igb: Intel(R) Gigabit Ethernet Network Driver network 5
-- version 5.4.0-k
-[    2.549736] network igb_reset
-[    2.561629] network igb_phy_sw_reset
-[    2.561902] network igb_setup_copper_link
-[    2.561902] network igb_setup_copper_link... in autoneg
-[    2.561903] network igb_copper_link_autoneg
-[    2.561904] network igb_phy_setup_autoneg
-[    2.562311] network igb_phy_has_link
-[    2.563896] network igb_power_down_link
-[    2.563900] network igb_power_down_phy_copper
-[    2.566079] network igb_phy_has_link
-[    3.696797] network igb_set_spd_dplx
-[    3.699341] network ping    <<---   trying to ping host from init.d script
-[    3.710493] network gpio 5
-[    3.975110] network igb_open
-[    3.975113] network __igb_open
-[    3.975197] network igb_phy_hw_reset
-[    3.977192] network igb_power_up_link
-[    3.977198] network igb_power_up_phy_copper
-[    3.977487] network igb_phy_sw_reset
-[    3.977760] network igb_setup_copper_link
-[    3.977901] network igb_phy_sw_reset
-[    3.978038] network igb_phy_has_link
-[    4.020261] network igb_phy_has_link
-[    5.216208] network igb_phy_has_link
-[    7.881180] network igb_phy_has_link
+Indeed, in a plain "make" build, there are high chances that
+python-decorator will be built before python-networkx, even without any
+explicit dependency expressed.
 
-Is there any idea how to minimize igb boot time ?
+If you want to verify this, doing: "make clean && make python-networkx"
+is much better, as it only builds the dependencies that are explicitly
+expressed in python-networkx.mk.
 
-Regards,
-ranran
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
