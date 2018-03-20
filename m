@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 Mar 2018 18:17:58 +0100
-Subject: [Buildroot] [PATCH v2 20/22] package/x11r7/xapp_xwud: bump version
- to 1.0.5
+Date: Tue, 20 Mar 2018 18:17:42 +0100
+Subject: [Buildroot] [PATCH v2 04/22] package/x11r7/xapp_xfontsel: bump
+ version to 1.0.6
 In-Reply-To: <20180320171800.3447-1-bernd.kuhls@t-online.de>
 References: <20180320171800.3447-1-bernd.kuhls@t-online.de>
-Message-ID: <20180320171800.3447-21-bernd.kuhls@t-online.de>
+Message-ID: <20180320171800.3447-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xwud/xapp_xwud.hash | 9 +++++++--
- package/x11r7/xapp_xwud/xapp_xwud.mk   | 2 +-
+ package/x11r7/xapp_xfontsel/xapp_xfontsel.hash | 9 +++++++--
+ package/x11r7/xapp_xfontsel/xapp_xfontsel.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xwud/xapp_xwud.hash b/package/x11r7/xapp_xwud/xapp_xwud.hash
-index 44e9c60753..e42057819d 100644
---- a/package/x11r7/xapp_xwud/xapp_xwud.hash
-+++ b/package/x11r7/xapp_xwud/xapp_xwud.hash
+diff --git a/package/x11r7/xapp_xfontsel/xapp_xfontsel.hash b/package/x11r7/xapp_xfontsel/xapp_xfontsel.hash
+index 40f55236f0..a09df5585b 100644
+--- a/package/x11r7/xapp_xfontsel/xapp_xfontsel.hash
++++ b/package/x11r7/xapp_xfontsel/xapp_xfontsel.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2012-March/001927.html
--sha256	d6b3a09ccfe750868e26bd2384900ab5ff0d434f7f40cd272a50eda8aaa1f8bd	xwud-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002878.html
-+md5 79972093bb0766fcd0223b2bd6d11932  xwud-1.0.5.tar.bz2
-+sha1 a85d84a1b81f8e667ea6ac126d447590c93eb079  xwud-1.0.5.tar.bz2
-+sha256 99997051f8a892313f22edf41dab45864e86e7062ee9012d5dbb6a40fc6b10a9  xwud-1.0.5.tar.bz2
-+sha512 27a0ce7481978ae6cd94b0d94374af72185e270d68f2496620e148bb00945427c4827138d9efc48745e6382e3da3390ed0cdff7dbd02dcf9706e8ecccae97184  xwud-1.0.5.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002213.html
+-sha256	170d8550b96fb47b04db6181b947e6f6b8b97f4df5d691c351a278480cc931bf	xfontsel-1.0.5.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002861.html
++md5 13150ff98846bf6d9a14bee00697fa47  xfontsel-1.0.6.tar.bz2
++sha1 3fd8d78cc270030b41298170c3e5222065dd1cfd  xfontsel-1.0.6.tar.bz2
++sha256 25aa0b7c4262f5e99c07c2b96e00e4eb25b7e53f94fa803942af9d0e8da3001c  xfontsel-1.0.6.tar.bz2
++sha512 2f6bc51549a302404cdaf9a5a825add383953fcbb2a0c7076691cefd4dd7e4a3c772c047be74101c8486f75d03ce0bd3e65ede14e91732cf2a932810441c9099  xfontsel-1.0.6.tar.bz2
 +# Locally computed
-+sha256 be3db9aa060c462490a8c1ed44a4d059b32bba359f4688b1ecf3f794d363539e COPYING
-diff --git a/package/x11r7/xapp_xwud/xapp_xwud.mk b/package/x11r7/xapp_xwud/xapp_xwud.mk
-index 60afd86287..2c2e1ad497 100644
---- a/package/x11r7/xapp_xwud/xapp_xwud.mk
-+++ b/package/x11r7/xapp_xwud/xapp_xwud.mk
++sha256 a27097bcc5cdf4fa5d761dd4e5cea1f41911c51b0a7d9da6e3a48f69d9fd0c09 COPYING
+diff --git a/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk b/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk
+index 781b4d3542..9dea4299b3 100644
+--- a/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk
++++ b/package/x11r7/xapp_xfontsel/xapp_xfontsel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XWUD_VERSION = 1.0.4
-+XAPP_XWUD_VERSION = 1.0.5
- XAPP_XWUD_SOURCE = xwud-$(XAPP_XWUD_VERSION).tar.bz2
- XAPP_XWUD_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XWUD_LICENSE = MIT
+-XAPP_XFONTSEL_VERSION = 1.0.5
++XAPP_XFONTSEL_VERSION = 1.0.6
+ XAPP_XFONTSEL_SOURCE = xfontsel-$(XAPP_XFONTSEL_VERSION).tar.bz2
+ XAPP_XFONTSEL_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFONTSEL_LICENSE = MIT
 -- 
 2.11.0
