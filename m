@@ -1,144 +1,105 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 20 Mar 2018 14:34:57 +0200
-Subject: [Buildroot] [PATCH] xfsprogs: fix build with libunistring
-Message-ID: <06acdda957b792e80ecf80549852bcdf8bf48b19.1521549297.git.baruch@tkos.co.il>
+From: Jens Maus <mail@jens-maus.de>
+Date: Tue, 20 Mar 2018 13:52:59 +0100
+Subject: [Buildroot] [PATCH v3 0/7] Add rpi3 b+ support
+In-Reply-To: <CAFGQKxeynSw4=0TkE_qkXX0+=R63BU9gAY0+DNS39K4KiDnP-Q@mail.gmail.com>
+References: <20180316180232.18829-1-martin@barkynet.com>
+ <20180316204132.30aadcfc@windsurf>
+ <CAFGQKxcg_O2Kr-VmUhgiDW9Q_4nZY8ZsMZhLCEcpTg7SZ+un_g@mail.gmail.com>
+ <20180316232824.7a41721f@windsurf> <20180319181430.4c264d3d@gmx.net>
+ <CAFGQKxeynSw4=0TkE_qkXX0+=R63BU9gAY0+DNS39K4KiDnP-Q@mail.gmail.com>
+Message-ID: <43BEBD2B-1C51-4098-BF4C-CD9D70067729@jens-maus.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The latest xfsprogs bump to version 4.15.1 added an optional dependency
-on libunistring. Make sure we libunistring build before xfsprogs.
+FYI: In one of my buildroot-based projects I am actually using the pi3-miniart-bt + core_freq setting at the same time to free the standard UART for a GPIO HAT that requires the UART. See here:
 
-xfsprogs also added -lunistring to its make dependency. This does not
-work very well with cross compile because make does not know about
-sysroot. Add a patch to remove this dependency.
+https://github.com/jens-maus/RaspberryMatic/blob/master/buildroot-external/board/raspberrypi3/config.txt#L27-L30
 
-To make shared only link with libunistring work, we also need to extend
-the -static-libtool-libs patch to cover xfs_scrub as well.
+Best Regards,
 
-Fixes:
-http://autobuild.buildroot.net/results/66e/66e425b00a06f928be0951ac4196190fe88b0f62/
-http://autobuild.buildroot.net/results/1cd/1cde87d1daf3c6009220ff47512794cef6a2938f/
-http://autobuild.buildroot.net/results/8ba/8ba4e94cfbb8a5cbb166423a671bdbcdf535f86b/
+Jens
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...o-not-do-dynamic-linking-of-libtool-libra.patch | 25 ++++++++++++---
- ...scrub-fix-cross-compile-with-libunistring.patch | 37 ++++++++++++++++++++++
- package/xfsprogs/xfsprogs.mk                       |  4 +++
- 3 files changed, 61 insertions(+), 5 deletions(-)
- create mode 100644 package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
+> Am 19.03.2018 um 19:18 schrieb Martin Bark <martin@barkynet.com>:
+> 
+> Hi,
+> 
+> On 19 March 2018 at 17:14, Peter Seiderer <ps.report@gmx.net> wrote:
+>> Hello Martin,
+>> 
+>> On Fri, 16 Mar 2018 23:35:48 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>> 
+>>> Hello,
+>>> 
+>>> On Fri, 16 Mar 2018 21:06:52 +0000, Martin Bark wrote:
+>>> 
+>>>> The only reason for this seems to be the use of the pi3-miniuart-bt
+>>>> overlay.  Personally i never use this overlay, I set enable_uart=1 in
+>>>> config.txt (the same as raspi-config does).  Is there a reason
+>>>> buildroot favours the pi3-miniuart-bt overlay?
+>>> 
+>>> I am not familiar with those configuration details of the RPi platform,
+>>> but I remember they have been discussed in the past. Perhaps you can
+>>> check the commit log for some details about them.
+>>> 
+>>> Especially this commit log:
+>>> 
+>>> commit 1e03cc2290f98fc7434254d2abd9afd504de8360
+>>> Author: Peter Seiderer <ps.report@gmx.net>
+>>> Date:   Mon May 2 22:25:44 2016 +0200
+>>> 
+>>>    raspberrypi3: fix serial console (load pi3-miniuart-bt overlay)
+>>> 
+>>>    - enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in raspberrypi3_defconfig
+>>>    - add copy of rpi-firmware/overlays directory to boot partition in genimage-raspberrypi3.cfg
+>>>    - enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on request
+>>>    - add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in raspberrypi3_defconfig
+>>> 
+>>>    Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>>>    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> 
+>> 
+>> And the full discussion about the different solutions, see [1]...
+>> 
+>> I am still in prefer the overlay solutions ;-)
+>> 
+>> Regards,
+>> Peter
+>> 
+>> 
+>> [1] https://patchwork.ozlabs.org/patch/617683/
+> 
+> Ok i remember this conversation now.
+> 
+> As a matter of interest has anyone actually tried using bluetooth with
+> the pi3-miniuart-bt overlay?  I have not.  According to [1]
+> pi3-miniuart-bt overlay requires core_freq=250 to work (which makes
+> sense) and buildroot does not set this.  I'm not sure the current way
+> pi3-miniuart-bt overlay is setup even works.
+> 
+> Thanks
+> 
+> Martin
+> 
+> [1] https://github.com/raspberrypi/linux/blob/rpi-4.14.y/arch/arm/boot/dts/overlays/README
+> 
+>>> Best regards,
+>>> 
+>>> Thomas
+>> 
 
-diff --git a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
-index 4eb43480c0d5..74636c2ebbd1 100644
---- a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
-+++ b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
-@@ -1,7 +1,8 @@
--From 770902a0a29fb4ac62358f7eacb3a83d0d9af1c7 Mon Sep 17 00:00:00 2001
-+From d5cbb4f43cc9c30100fbf18a3e0d1fb95e1c1b0a Mon Sep 17 00:00:00 2001
- From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Date: Wed, 25 Nov 2015 10:50:00 +0000
--Subject: [PATCH] mdrestore: do not do dynamic linking of libtool libraries
-+Subject: [PATCH] mdrestore, scrub: do not do dynamic linking of libtool
-+ libraries
- 
- As explained in commit ece49daeff1a3cad765e106d678c608925c9d768, use
- -static-libtool-libs instead of -static to allow fallback to the dynamic
-@@ -11,11 +12,12 @@ ld: attempted static link of dynamic object `/usr/lib/libuuid.so'
- 
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- [Sent upstream: https://www.spinics.net/lists/xfs/msg36149.html]
--[baruch: update for v4.15.1]
-+[baruch: update for v4.15.1; extend to include scrub]
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- ---
-  mdrestore/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+ scrub/Makefile     | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/mdrestore/Makefile b/mdrestore/Makefile
- index 136ae716d691..75ff1bad78e9 100644
-@@ -30,6 +32,19 @@ index 136ae716d691..75ff1bad78e9 100644
-  
-  default: depend $(LTCOMMAND)
-  
-+diff --git a/scrub/Makefile b/scrub/Makefile
-+index 063279400262..949f6fd8ba94 100644
-+--- a/scrub/Makefile
-++++ b/scrub/Makefile
-+@@ -70,7 +70,7 @@ xfs_scrub.c
-+ 
-+ LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBPTHREAD) $(LIBUNISTRING) $(LIBRT)
-+ LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBUNISTRING) $(LIBRT)
-+-LLDFLAGS = -static
-++LLDFLAGS = -static-libtool-libs
-+ 
-+ ifeq ($(HAVE_MALLINFO),yes)
-+ LCFLAGS += -DHAVE_MALLINFO
- -- 
--2.16.1
-+2.16.2
- 
-diff --git a/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch b/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
-new file mode 100644
-index 000000000000..dfb66c663068
---- /dev/null
-+++ b/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
-@@ -0,0 +1,37 @@
-+From 45d9ba0f01cceb75f72d157a9e4d9aaeb753a9c4 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 20 Mar 2018 14:13:28 +0200
-+Subject: [PATCH] xfs_scrub: fix cross compile with libunistring
-+
-+Commit 4bbed4ecc2a (xfs_scrub: warn about normalized Unicode name collisions)
-+added -lunistring to the list of the xfs_scrub dependencies. When cross
-+compiling make fails to find the library on the target sysroot:
-+
-+make[3]: *** No rule to make target `-lunistring', needed by `xfs_scrub'.  Stop.
-+
-+Remove -lunistring from make dependencies of xfs_scrub to fix that.
-+
-+Cc: Darrick J. Wong <darrick.wong@oracle.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://patchwork.kernel.org/patch/10296957/
-+
-+ scrub/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/scrub/Makefile b/scrub/Makefile
-+index 949f6fd8ba94..979603f524ff 100644
-+--- a/scrub/Makefile
-++++ b/scrub/Makefile
-+@@ -69,7 +69,7 @@ vfs.c \
-+ xfs_scrub.c
-+ 
-+ LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBPTHREAD) $(LIBUNISTRING) $(LIBRT)
-+-LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBUNISTRING) $(LIBRT)
-++LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBRT)
-+ LLDFLAGS = -static-libtool-libs
-+ 
-+ ifeq ($(HAVE_MALLINFO),yes)
-+-- 
-+2.16.2
-+
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 7f49e2312f97..dffcc28ab7c2 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -20,6 +20,10 @@ XFSPROGS_CONF_OPTS = \
- 	INSTALL_GROUP=root \
- 	--enable-static
- 
-+ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
-+XFSPROGS_DEPENDENCIES += libunistring
-+endif
-+
- XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
- 
- $(eval $(autotools-package))
 -- 
-2.16.2
+Jens Maus, Dresden/Germany
+http://jens-maus.de/
+
+*** Content is authentic only with digital signature  ***
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 3745 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180320/c14e3cba/attachment.p7s>
