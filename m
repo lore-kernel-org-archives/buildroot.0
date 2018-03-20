@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 20 Mar 2018 10:48:27 -0400
+Date: Tue, 20 Mar 2018 10:48:53 -0400
 Subject: [Buildroot] [PATCH 0/8] gstreamer1: bump series to 1.14
-Message-ID: <20180320144835.8960-1-aduskett@gmail.com>
+Message-ID: <20180320144901.9032-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
