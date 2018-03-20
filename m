@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 Mar 2018 18:17:50 +0100
-Subject: [Buildroot] [PATCH v2 12/22] package/x11r7/xapp_xprop: bump version
- to 1.2.3
+Date: Tue, 20 Mar 2018 18:17:44 +0100
+Subject: [Buildroot] [PATCH v2 06/22] package/x11r7/xapp_xkill: bump version
+ to 1.0.5
 In-Reply-To: <20180320171800.3447-1-bernd.kuhls@t-online.de>
 References: <20180320171800.3447-1-bernd.kuhls@t-online.de>
-Message-ID: <20180320171800.3447-13-bernd.kuhls@t-online.de>
+Message-ID: <20180320171800.3447-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xprop/xapp_xprop.hash | 9 +++++++--
- package/x11r7/xapp_xprop/xapp_xprop.mk   | 2 +-
+ package/x11r7/xapp_xkill/xapp_xkill.hash | 9 +++++++--
+ package/x11r7/xapp_xkill/xapp_xkill.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
-index 4758979c44..a57d375b84 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.hash
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
+diff --git a/package/x11r7/xapp_xkill/xapp_xkill.hash b/package/x11r7/xapp_xkill/xapp_xkill.hash
+index 22c256d49d..0602971705 100644
+--- a/package/x11r7/xapp_xkill/xapp_xkill.hash
++++ b/package/x11r7/xapp_xkill/xapp_xkill.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-August/002290.html
--sha256	9bee88b1025865ad121f72d32576dd3027af1446774aa8300cce3c261d869bc6	xprop-1.2.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002870.html
-+md5 4becb3ddc4674d741487189e4ce3d0b6  xprop-1.2.3.tar.bz2
-+sha1 77062c08a23cfca76824b7e8f9860678255d6b1a  xprop-1.2.3.tar.bz2
-+sha256 d22afb28c86d85fff10a50156a7d0fa930c80ae865d70b26d805fd28a17a521b  xprop-1.2.3.tar.bz2
-+sha512 ad7987fec11ae19b7adc3b0f683fc393e95155f3b6c753d1d8744aedcfb360452eee5735a4c380152b286905931515f3e1a28676b5531001eb8dd93b7249916a  xprop-1.2.3.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002313.html
+-sha256	88ef2a304f32f24b255e879f03c1dcd3a2be3e71d5562205414f267d919f812e	xkill-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002864.html
++md5 938177e4472c346cf031c1aefd8934fc  xkill-1.0.5.tar.bz2
++sha1 c5ee06b33adb252a41e4f737be6bd47651ff582a  xkill-1.0.5.tar.bz2
++sha256 c5f0bb6a95e1ac7c4def8a657496d5d2f21ccd41eb47ef2c9ccb03fb6d6aff6b  xkill-1.0.5.tar.bz2
++sha512 4603a1794f114f5cea2c885020c9d073c8421d1e785c99ff6b936ae97139c8dac8020a187b5bbd0fa6d56ed6fab879441b42ba900cc5f2f5a534dafdc86b9249  xkill-1.0.5.tar.bz2
 +# Locally computed
-+sha256 f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
-index 40a8577304..d8063d94c8 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.mk
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
++sha256 13306c3890e4c8710bc468dee0eba7f9677cd94c7a67d2d81fa932d4f635b21f COPYING
+diff --git a/package/x11r7/xapp_xkill/xapp_xkill.mk b/package/x11r7/xapp_xkill/xapp_xkill.mk
+index 76af1b95cb..64ddbca694 100644
+--- a/package/x11r7/xapp_xkill/xapp_xkill.mk
++++ b/package/x11r7/xapp_xkill/xapp_xkill.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XPROP_VERSION = 1.2.2
-+XAPP_XPROP_VERSION = 1.2.3
- XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
- XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XPROP_LICENSE = MIT
+-XAPP_XKILL_VERSION = 1.0.4
++XAPP_XKILL_VERSION = 1.0.5
+ XAPP_XKILL_SOURCE = xkill-$(XAPP_XKILL_VERSION).tar.bz2
+ XAPP_XKILL_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKILL_LICENSE = MIT
 -- 
 2.11.0
