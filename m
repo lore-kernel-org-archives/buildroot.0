@@ -1,108 +1,85 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 20 Mar 2018 19:47:20 +0000
-Subject: [Buildroot] [Bug 10766] upmpdcli: Segmentation fault
-In-Reply-To: <bug-10766-163@https.bugs.busybox.net/>
-References: <bug-10766-163@https.bugs.busybox.net/>
-Message-ID: <bug-10766-163-46B9cT3oZZ@https.bugs.busybox.net/>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 20 Mar 2018 20:56:48 +0100
+Subject: [Buildroot] [V2 1/2] dropbear: bump to version 2018.76
+Message-ID: <20180320195649.5309-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10766
+with this new version:
+  - "configure --enable-static" should now be used instead of
+    "make STATIC=1"
+  - any customised options should be put in localoptions.h
 
---- Comment #2 from Bin Zhang <yangtze31@gmail.com> ---
-Hello,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/dropbear/dropbear.hash |  2 +-
+ package/dropbear/dropbear.mk   | 24 +++++++++---------------
+ 2 files changed, 10 insertions(+), 16 deletions(-)
 
-Version 1.6.24 of libupnp doesn't work with upmpdcli.
-Back to version 1.6.22 solves the problem.
-I sent a message to the author of upmpdcli.
-
-======================================
-# gdb upmpdcli
-GNU gdb (GDB) 7.11.1
-Copyright (C) 2016 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "arm-buildroot-linux-gnueabihf".
-Type "show configuration" for configuration details.
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>.
-Find the GDB manual and other documentation resources online at:
-<http://www.gnu.org/software/gdb/documentation/>.
-For help, type "help".
-Type "apropos word" to search for commands related to "word"...
-Reading symbols from upmpdcli...(no debugging symbols found)...done.
-(gdb) run -l 4 -c /etc/upmpdcli.conf
-Starting program: /usr/bin/upmpdcli -l 4 -c /etc/upmpdcli.conf
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/libthread_db.so.1".
-:4:src/mpdcli.cxx:129::MPDCLi::openconn: mpd protocol version: 0.20.0
-[New Thread 0xb6864450 (LWP 209)]
-[New Thread 0xb6063450 (LWP 210)]
-[New Thread 0xb5862450 (LWP 211)]
-[New Thread 0xb5061450 (LWP 212)]
-[New Thread 0xb4860450 (LWP 213)]
-[New Thread 0xb405f450 (LWP 214)]
-[New Thread 0xb385e450 (LWP 215)]
-[New Thread 0xb305d450 (LWP 216)]
-:4:libupnpp/upnpplib.cxx:156::LibUPnP: Using IP 192.168.0.16 port 49152
-:4:src/httpfs.cxx:231::Failed reading /usr/share/upmpdcli/icon.png : open/stat:
-errno: 2 :
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:upnp-org:serviceId:AVTransport]
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:upnp-org:serviceId:RenderingControl]
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:upnp-org:serviceId:ConnectionManager]
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:av-openhome-org:serviceId:Info]
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:av-openhome-org:serviceId:Time]
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:av-openhome-org:serviceId:Volume]
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:av-openhome-org:serviceId:Playlist]
-[New Thread 0xb285c450 (LWP 217)]
-:4:src/ohplaylist.cxx:108::ohPlaylist: cache restore done
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:av-openhome-org:serviceId:Radio]
-:4:libupnpp/device/device.cxx:424::UpnpDevice::addService:
-[urn:av-openhome-org:serviceId:Product]
-:4:src/ohproduct.cxx:108::OHProduct::OHProduct: sources: <SourceList>
- <Source>
-  <Name>Playlist</Name>
-  <Type>Playlist</Type>
-  <Visible>1</Visible>
-  </Source>
- <Source>
-  <Name>Radio</Name>
-  <Type>Radio</Type>
-  <Visible>1</Visible>
-  </Source>
-</SourceList>
-
-:4:src/main.cxx:712::Entering event loop
-:4:src/main.cxx:719::Renderer event loop
-:4:src/mpdcli.cxx:830::MPDCli::getQueueData
-:4:src/mpdcli.cxx:815::MPDCli::getQueueSongs: 0 songs
-:4:src/ohplaylist.cxx:147::OHPlaylist::translateIdArray: current ids:
-[Thread 0xb6063450 (LWP 210) exited]
-[Thread 0xb405f450 (LWP 214) exited]
-[New Thread 0xb405f450 (LWP 218)]
-
-Thread 9 "upmpdcli" received signal SIGSEGV, Segmentation fault.
-[Switching to Thread 0xb305d450 (LWP 216)]
-0xb6c9f154 in ?? () from /usr/lib/libupnp.so.6
-(gdb) bt
-#-1 0xb6c9f154 in ?? () from /usr/lib/libupnp.so.6
-Backtrace stopped: Cannot access memory at address 0x25000a04
-(gdb) quit
-==============================================
-
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 98776e717..ef2011d90 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,2 +1,2 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256 6cbc1dcb1c9709d226dff669e5604172a18cf5dbf9a201474d5618ae4465098c dropbear-2017.75.tar.bz2
++sha256 f2fb9167eca8cf93456a5fc1d4faf709902a3ab70dd44e352f3acbc3ffdaea65 dropbear-2018.76.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 01a1a07b7..c6716f90d 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2017.75
++DROPBEAR_VERSION = 2018.76
+ DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
+@@ -23,32 +23,26 @@ DROPBEAR_MAKE = \
+ 	PROGRAMS="$(DROPBEAR_PROGRAMS)"
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-DROPBEAR_MAKE += STATIC=1
++DROPBEAR_CONF_OPTS += --enable-static
+ endif
+ 
+-define DROPBEAR_FIX_XAUTH
+-	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(@D)/options.h
+-endef
+-
+-DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_FIX_XAUTH
+-
+ define DROPBEAR_ENABLE_REVERSE_DNS
+-	$(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
++	echo '#define DO_HOST_LOOKUP 1'         >> $(@D)/localoptions.h
+ endef
+ 
+ define DROPBEAR_BUILD_SMALL
+-	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
++	echo '#define DROPBEAR_SMALL_CODE 1'    >> $(@D)/localoptions.h
+ endef
+ 
+ define DROPBEAR_BUILD_FEATURED
+-	$(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
+-	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
+-	$(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
+-	$(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
++	echo '#define DROPBEAR_SMALL_CODE 0'    >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_BLOWFISH 1'      >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_TWOFISH128 1'    >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_TWOFISH256 1'    >> $(@D)/localoptions.h
+ endef
+ 
+ define DROPBEAR_DISABLE_STANDALONE
+-	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
++	echo '#define NON_INETD_MODE 0'         >> $(@D)/localoptions.h
+ endef
+ 
+ define DROPBEAR_INSTALL_INIT_SYSTEMD
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
