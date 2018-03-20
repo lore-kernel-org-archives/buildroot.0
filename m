@@ -1,38 +1,108 @@
 From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Tue, 20 Mar 2018 08:47:40 -0500
-Subject: [Buildroot] [PATCH v2 1/3] python-decorator: Update to add host
+Date: Tue, 20 Mar 2018 08:47:41 -0500
+Subject: [Buildroot] [PATCH v2 2/3] python-networkx: Update to add networkx
  package
-Message-ID: <1521553662-4115-1-git-send-email-jared.bents@rockwellcollins.com>
+In-Reply-To: <1521553662-4115-1-git-send-email-jared.bents@rockwellcollins.com>
+References: <1521553662-4115-1-git-send-email-jared.bents@rockwellcollins.com>
+Message-ID: <1521553662-4115-2-git-send-email-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to add host package for python decorator
+Update to add python-networkx package to buildroot. While 2.1
+is the latest version, the current version of setools does not
+work with versions past 1.11.
 
 Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 --
-v1 -> v2: No change
+v1 -> v2: Update to add version dependency to networkx mk file
 
 ---
- package/python-decorator/python-decorator.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/Config.in                            |  1 +
+ package/python-decorator/python-decorator.mk |  1 +
+ package/python-networkx/Config.in            | 10 ++++++++++
+ package/python-networkx/python-networkx.hash |  4 ++++
+ package/python-networkx/python-networkx.mk   | 18 ++++++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/python-networkx/Config.in
+ create mode 100644 package/python-networkx/python-networkx.hash
+ create mode 100644 package/python-networkx/python-networkx.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 449ffcc..4d98365 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -837,6 +837,7 @@ menu "External python modules"
+ 	source "package/python-netaddr/Config.in"
+ 	source "package/python-netifaces/Config.in"
+ 	source "package/python-networkmanager/Config.in"
++	source "package/python-networkx/Config.in"
+ 	source "package/python-nfc/Config.in"
+ 	source "package/python-numpy/Config.in"
+ 	source "package/python-oauthlib/Config.in"
 diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
-index c0c43f6..f97365f 100644
+index f97365f..3ea0d7c 100644
 --- a/package/python-decorator/python-decorator.mk
 +++ b/package/python-decorator/python-decorator.mk
-@@ -7,7 +7,10 @@
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# The current version of setools (4.1.1) does not work with versions past 1.11
  PYTHON_DECORATOR_VERSION = 4.0.11
  PYTHON_DECORATOR_SITE = https://pypi.python.org/packages/cc/ac/5a16f1fc0506ff72fcc8fd4e858e3a1c231f224ab79bb7c4c9b2094cc570
  PYTHON_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
-+PYTHON_DECORATOR_DEPENDENCIES = python-setuptools
- PYTHON_DECORATOR_LICENSE = BSD-2-Clause
- PYTHON_DECORATOR_SETUP_TYPE = setuptools
-+HOST_PYTHON_DECORATOR_DEPENDENCIES = host-python-setuptools
- 
- $(eval $(python-package))
+diff --git a/package/python-networkx/Config.in b/package/python-networkx/Config.in
+new file mode 100644
+index 0000000..45c83ab
+--- /dev/null
++++ b/package/python-networkx/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_NETWORKX
++	bool "python-networkx"
++	select BR2_PACKAGE_PYTHON_DECORATOR
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	help
++	  A Python package for the creation, manipulation,
++	  and study of the structure, dynamics, and
++	  functions of complex networks.
++
++	  https://pypi.python.org/pypi/networkx
+diff --git a/package/python-networkx/python-networkx.hash b/package/python-networkx/python-networkx.hash
+new file mode 100644
+index 0000000..92383e7
+--- /dev/null
++++ b/package/python-networkx/python-networkx.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/networks/json, sha256 locally computed
++md5 6ef584a879e9163013e9a762e1cf7cd1 networkx-1.11.tar.gz
++sha256 0d0e70e10dfb47601cbb3425a00e03e2a2e97477be6f80638fef91d54dd1e4b8 networkx-1.11.tar.gz
++sha256 f4c13bf0e83bef45116ebda6c360066df6fd99610efaea9790b998c5441b0c0d LICENSE.txt
+diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
+new file mode 100644
+index 0000000..e5092ce
+--- /dev/null
++++ b/package/python-networkx/python-networkx.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# python-networkx
++#
++################################################################################
++
++# The current version of setools (v4.1.1) does not work with python-networkx past v1.11
++PYTHON_NETWORKX_VERSION = 1.11
++PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
++PYTHON_NETWORKX_SITE = https://pypi.python.org/packages/c2/93/dbb41b03cf7c878a7409c8e92226531f840a423c9309ea534873a83c9192
++PYTHON_NETWORKX_DEPENDENCIES = python-decorator
++PYTHON_NETWORKX_LICENSE = BSD-3-Clause
++PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
++PYTHON_NETWORKX_SETUP_TYPE = setuptools
++HOST_PYTHON_NETWORKX_DEPENDENCIES = host-python-decorator
++
++$(eval $(python-package))
 +$(eval $(host-python-package))
 -- 
 1.9.1
