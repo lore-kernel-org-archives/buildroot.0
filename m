@@ -1,44 +1,144 @@
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Tue, 20 Mar 2018 20:19:01 +0800
-Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
-In-Reply-To: <7a371f6c-1705-dcf6-2ff5-dc5ba46b7114@ozlabs.org>
-References: <20180105214340.6f0cc1f7@windsurf>
- <ced2aeb2-82f6-c836-dd5a-e65c6b49c81a@au1.ibm.com>
- <20180108091044.1141f540@windsurf> <20180205224500.1a34e02a@windsurf>
- <981ecf77-767e-3c90-243f-67251d956c21@au1.ibm.com>
- <20180213231930.26ab0efb@windsurf.lan>
- <16c3e28e-8da0-75f0-1f9a-c1ed86741fc3@au1.ibm.com>
- <20180214090148.5b21f55e@windsurf.lan> <87lgftau6p.fsf@linkitivity.dja.id.au>
- <20180216154959.4db712f5@windsurf.lan> <874llocfch.fsf@dell.be.48ers.dk>
- <20180312015055.3dc9789c@canb.auug.org.au>
- <7a371f6c-1705-dcf6-2ff5-dc5ba46b7114@ozlabs.org>
-Message-ID: <c5bfa3f1-3d33-bfac-5cf3-3de3204bb878@ozlabs.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 20 Mar 2018 14:34:57 +0200
+Subject: [Buildroot] [PATCH] xfsprogs: fix build with libunistring
+Message-ID: <06acdda957b792e80ecf80549852bcdf8bf48b19.1521549297.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+The latest xfsprogs bump to version 4.15.1 added an optional dependency
+on libunistring. Make sure we libunistring build before xfsprogs.
 
-Good news: with the logging we had in place recently (and a fix to
-correct error reporting), it looks like we've found the problem with
-parsing emails from a series. This issue was recently addressed by
-Daniel, so I've updated patchwork.ozlabs.org to run the current
-stable/2.0 branch, which has fixes for these. Hopefully this resolves
-the issue with dropped patches.
+xfsprogs also added -lunistring to its make dependency. This does not
+work very well with cross compile because make does not know about
+sysroot. Add a patch to remove this dependency.
 
-The update should also make the mail parser a little more robust against
-transient failures too.
+To make shared only link with libunistring work, we also need to extend
+the -static-libtool-libs patch to cover xfs_scrub as well.
 
-Let me know how things go over the next few days.
+Fixes:
+http://autobuild.buildroot.net/results/66e/66e425b00a06f928be0951ac4196190fe88b0f62/
+http://autobuild.buildroot.net/results/1cd/1cde87d1daf3c6009220ff47512794cef6a2938f/
+http://autobuild.buildroot.net/results/8ba/8ba4e94cfbb8a5cbb166423a671bdbcdf535f86b/
 
-Thomas and Dave: please keep using the custom addresses you've
-configured for the incoming mail feed; this will allow me to keep an eye
-on things on my side too. Assuming everything goes fine, we can revert
-to the usual address next week.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...o-not-do-dynamic-linking-of-libtool-libra.patch | 25 ++++++++++++---
+ ...scrub-fix-cross-compile-with-libunistring.patch | 37 ++++++++++++++++++++++
+ package/xfsprogs/xfsprogs.mk                       |  4 +++
+ 3 files changed, 61 insertions(+), 5 deletions(-)
+ create mode 100644 package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
 
-Cheers,
-
-
-Jeremy
+diff --git a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
+index 4eb43480c0d5..74636c2ebbd1 100644
+--- a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
++++ b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
+@@ -1,7 +1,8 @@
+-From 770902a0a29fb4ac62358f7eacb3a83d0d9af1c7 Mon Sep 17 00:00:00 2001
++From d5cbb4f43cc9c30100fbf18a3e0d1fb95e1c1b0a Mon Sep 17 00:00:00 2001
+ From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ Date: Wed, 25 Nov 2015 10:50:00 +0000
+-Subject: [PATCH] mdrestore: do not do dynamic linking of libtool libraries
++Subject: [PATCH] mdrestore, scrub: do not do dynamic linking of libtool
++ libraries
+ 
+ As explained in commit ece49daeff1a3cad765e106d678c608925c9d768, use
+ -static-libtool-libs instead of -static to allow fallback to the dynamic
+@@ -11,11 +12,12 @@ ld: attempted static link of dynamic object `/usr/lib/libuuid.so'
+ 
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ [Sent upstream: https://www.spinics.net/lists/xfs/msg36149.html]
+-[baruch: update for v4.15.1]
++[baruch: update for v4.15.1; extend to include scrub]
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ ---
+  mdrestore/Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
++ scrub/Makefile     | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/mdrestore/Makefile b/mdrestore/Makefile
+ index 136ae716d691..75ff1bad78e9 100644
+@@ -30,6 +32,19 @@ index 136ae716d691..75ff1bad78e9 100644
+  
+  default: depend $(LTCOMMAND)
+  
++diff --git a/scrub/Makefile b/scrub/Makefile
++index 063279400262..949f6fd8ba94 100644
++--- a/scrub/Makefile
+++++ b/scrub/Makefile
++@@ -70,7 +70,7 @@ xfs_scrub.c
++ 
++ LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBPTHREAD) $(LIBUNISTRING) $(LIBRT)
++ LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBUNISTRING) $(LIBRT)
++-LLDFLAGS = -static
+++LLDFLAGS = -static-libtool-libs
++ 
++ ifeq ($(HAVE_MALLINFO),yes)
++ LCFLAGS += -DHAVE_MALLINFO
+ -- 
+-2.16.1
++2.16.2
+ 
+diff --git a/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch b/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
+new file mode 100644
+index 000000000000..dfb66c663068
+--- /dev/null
++++ b/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
+@@ -0,0 +1,37 @@
++From 45d9ba0f01cceb75f72d157a9e4d9aaeb753a9c4 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 20 Mar 2018 14:13:28 +0200
++Subject: [PATCH] xfs_scrub: fix cross compile with libunistring
++
++Commit 4bbed4ecc2a (xfs_scrub: warn about normalized Unicode name collisions)
++added -lunistring to the list of the xfs_scrub dependencies. When cross
++compiling make fails to find the library on the target sysroot:
++
++make[3]: *** No rule to make target `-lunistring', needed by `xfs_scrub'.  Stop.
++
++Remove -lunistring from make dependencies of xfs_scrub to fix that.
++
++Cc: Darrick J. Wong <darrick.wong@oracle.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://patchwork.kernel.org/patch/10296957/
++
++ scrub/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/scrub/Makefile b/scrub/Makefile
++index 949f6fd8ba94..979603f524ff 100644
++--- a/scrub/Makefile
+++++ b/scrub/Makefile
++@@ -69,7 +69,7 @@ vfs.c \
++ xfs_scrub.c
++ 
++ LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBPTHREAD) $(LIBUNISTRING) $(LIBRT)
++-LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBUNISTRING) $(LIBRT)
+++LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBRT)
++ LLDFLAGS = -static-libtool-libs
++ 
++ ifeq ($(HAVE_MALLINFO),yes)
++-- 
++2.16.2
++
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index 7f49e2312f97..dffcc28ab7c2 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -20,6 +20,10 @@ XFSPROGS_CONF_OPTS = \
+ 	INSTALL_GROUP=root \
+ 	--enable-static
+ 
++ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
++XFSPROGS_DEPENDENCIES += libunistring
++endif
++
+ XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
+ 
+ $(eval $(autotools-package))
+-- 
+2.16.2
