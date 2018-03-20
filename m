@@ -1,50 +1,53 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Tue, 20 Mar 2018 16:25:37 +0100
-Subject: [Buildroot] [PATCH 2/8] gst-plugins-{base, good, bad,
- ugly}: bump to 1.14
-In-Reply-To: <20180320144901.9032-3-aduskett@gmail.com>
-References: <20180320144901.9032-1-aduskett@gmail.com>
- <20180320144901.9032-3-aduskett@gmail.com>
-Message-ID: <92e79318-9403-ffa6-82b9-933d17267b2f@ginzinger.com>
+From: Ran Shalit <ranshalit@gmail.com>
+Date: Tue, 20 Mar 2018 17:45:03 +0200
+Subject: [Buildroot] igb initialization time after powerup
+Message-ID: <CAJ2oMhKES2KSYk2U36-70F3e4AX47V6=B4TzDdMLocXT4qUqpg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-03-20 15:48, Adam Duskett wrote:
-> These are grouped together because several plugins have been re-arranged and
-> there is no way to individually update each plugin package.
-> 
-> Changes:
-> 
-> Add the following to gst1-plugins-base and remove them from plugins-bad:
->  - opengl
->  - gles2
->  - glx
->  - egl
->  - x11
->  - wayland
->  - dispmanx
->  - audiomixer
-> 
-> Add the following to plugins-good and remove them from plugins-ugly:
->  - lame
->  - mpg123
-> 
+Hello,
 
-Thanks for timely work!
+This is not specific buildroot issue, yet I hope someone here will have an idea.
+I have long ethernet boot time till receiving ping after powerup.
+I use igb driver.
 
---disable-qt has moved from bad to good too (which means it seems to be
-enabled now)
+I tried plenty of things, but nothing worked.
+I have printed the function which are called in igb driver.
 
-It builds for me, but strangely, gst1-plugin-good's HAVE_QT is not set;
-even though I clearly have qt5 built before it.
+This is the relevant log in dmesg:
 
-In short: It would be nice to enable Qt for gstreamer properly, instead
-of moving --disable-qt from bad to good.
+[    2.538089] igb: Intel(R) Gigabit Ethernet Network Driver network 5
+- version 5.4.0-k
+[    2.549736] network igb_reset
+[    2.561629] network igb_phy_sw_reset
+[    2.561902] network igb_setup_copper_link
+[    2.561902] network igb_setup_copper_link... in autoneg
+[    2.561903] network igb_copper_link_autoneg
+[    2.561904] network igb_phy_setup_autoneg
+[    2.562311] network igb_phy_has_link
+[    2.563896] network igb_power_down_link
+[    2.563900] network igb_power_down_phy_copper
+[    2.566079] network igb_phy_has_link
+[    3.696797] network igb_set_spd_dplx
+[    3.699341] network ping    <<---   trying to ping host from init.d script
+[    3.710493] network gpio 5
+[    3.975110] network igb_open
+[    3.975113] network __igb_open
+[    3.975197] network igb_phy_hw_reset
+[    3.977192] network igb_power_up_link
+[    3.977198] network igb_power_up_phy_copper
+[    3.977487] network igb_phy_sw_reset
+[    3.977760] network igb_setup_copper_link
+[    3.977901] network igb_phy_sw_reset
+[    3.978038] network igb_phy_has_link
+[    4.020261] network igb_phy_has_link
+[    5.216208] network igb_phy_has_link
+[    7.881180] network igb_phy_has_link
 
-To be specific, I want to get gstreamer's qmlglsink element to be built.
-Do you have any more insight on how the configuration would look like?
+Is there any idea how to minimize igb boot time ?
 
-                           martin
+Regards,
+ranran
