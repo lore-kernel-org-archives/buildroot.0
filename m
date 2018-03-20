@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 Mar 2018 18:17:52 +0100
-Subject: [Buildroot] [PATCH v2 14/22] package/x11r7/xapp_xrefresh: bump
- version to 1.0.6
+Date: Tue, 20 Mar 2018 18:17:56 +0100
+Subject: [Buildroot] [PATCH v2 18/22] package/x11r7/xapp_xwd: bump version
+ to 1.0.7
 In-Reply-To: <20180320171800.3447-1-bernd.kuhls@t-online.de>
 References: <20180320171800.3447-1-bernd.kuhls@t-online.de>
-Message-ID: <20180320171800.3447-15-bernd.kuhls@t-online.de>
+Message-ID: <20180320171800.3447-19-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added all upstream hashes, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xrefresh/xapp_xrefresh.hash | 9 +++++++--
- package/x11r7/xapp_xrefresh/xapp_xrefresh.mk   | 2 +-
+ package/x11r7/xapp_xwd/xapp_xwd.hash | 9 +++++++--
+ package/x11r7/xapp_xwd/xapp_xwd.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xrefresh/xapp_xrefresh.hash b/package/x11r7/xapp_xrefresh/xapp_xrefresh.hash
-index 6d5a53b009..8eae8ed1bb 100644
---- a/package/x11r7/xapp_xrefresh/xapp_xrefresh.hash
-+++ b/package/x11r7/xapp_xrefresh/xapp_xrefresh.hash
+diff --git a/package/x11r7/xapp_xwd/xapp_xwd.hash b/package/x11r7/xapp_xwd/xapp_xwd.hash
+index 1d9b4d5cff..606618bcc6 100644
+--- a/package/x11r7/xapp_xwd/xapp_xwd.hash
++++ b/package/x11r7/xapp_xwd/xapp_xwd.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002214.html
--sha256	3213671b0a8a9d1e8d1d5d9e3fd86842c894dd9acc1be2560eda50bc1fb791d6	xrefresh-1.0.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002872.html
-+md5 c56fa4adbeed1ee5173f464a4c4a61a6  xrefresh-1.0.6.tar.bz2
-+sha1 11eb5b3f905631281d2cedd86a0b666bab0d9bdc  xrefresh-1.0.6.tar.bz2
-+sha256 287dfb9bb7e8d780d07e672e3252150850869cb550958ed5f8401f0835cd6353  xrefresh-1.0.6.tar.bz2
-+sha512 361e97fecfc2706d5eeab69df0d4dd4baa55b6783cfddabf51d8561b7c930d71ce6c217e0512c6564208d69b04f89c69ea8c0bfb2e4f6cc25b062b55e4db3674  xrefresh-1.0.6.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-August/002292.html
+-sha256	3bb396a2268d78de4b1c3e5237a85f7849d3434e87b3cd1f4d57eef614227d79	xwd-1.0.6.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002876.html
++md5 11794a8eba6d295a192a8975287fd947  xwd-1.0.7.tar.bz2
++sha1 65ce0617be29687cf6082c3a0e85d15a0dcccda9  xwd-1.0.7.tar.bz2
++sha256 cd6815b8b9e0b98e284d3d732fb12162159cb9dcee4f45a7d4c0bd8b308a6794  xwd-1.0.7.tar.bz2
++sha512 6fdb0a115ae505169bbc7fcc45580daf26bced2e26e0bf9a877636016038931a8386e8edcbe015f4024be508d0461906adef4834cf22a445e3c282f0b8fad17e  xwd-1.0.7.tar.bz2
 +# Locally computed
-+sha256 4f51c9a91cd277697cbea6604bf4cb240c1ed14cdba82550cb9cac8f1286f663 COPYING
-diff --git a/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk b/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk
-index 8403762c8e..36a4feaad1 100644
---- a/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk
-+++ b/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk
++sha256 7cfda56afd92a1ecd2f23bd0064e01b5141053390d854785504adfe2c0fbd946 COPYING
+diff --git a/package/x11r7/xapp_xwd/xapp_xwd.mk b/package/x11r7/xapp_xwd/xapp_xwd.mk
+index 0cda34ee26..4d7ed0f877 100644
+--- a/package/x11r7/xapp_xwd/xapp_xwd.mk
++++ b/package/x11r7/xapp_xwd/xapp_xwd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XREFRESH_VERSION = 1.0.5
-+XAPP_XREFRESH_VERSION = 1.0.6
- XAPP_XREFRESH_SOURCE = xrefresh-$(XAPP_XREFRESH_VERSION).tar.bz2
- XAPP_XREFRESH_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XREFRESH_LICENSE = MIT
+-XAPP_XWD_VERSION = 1.0.6
++XAPP_XWD_VERSION = 1.0.7
+ XAPP_XWD_SOURCE = xwd-$(XAPP_XWD_VERSION).tar.bz2
+ XAPP_XWD_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XWD_LICENSE = MIT
 -- 
 2.11.0
