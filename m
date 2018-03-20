@@ -1,92 +1,71 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Tue, 20 Mar 2018 15:39:43 -0500
-Subject: [Buildroot] [PATCH v3 3/3] setools: update to add sedta and
- seinfoflow
-In-Reply-To: <1521578383-56128-1-git-send-email-jared.bents@rockwellcollins.com>
-References: <1521578383-56128-1-git-send-email-jared.bents@rockwellcollins.com>
-Message-ID: <1521578383-56128-3-git-send-email-jared.bents@rockwellcollins.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Tue, 20 Mar 2018 21:47:37 +0000
+Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
+ the build time
+In-Reply-To: <87o9jjltlh.fsf@dell.be.48ers.dk>
+References: <cover.1521146096.git.yann.morin.1998@free.fr>
+ <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
+ <1521477052.10662.140.camel@impinj.com> <20180319175010.0c26763b@windsurf>
+ <87o9jjltlh.fsf@dell.be.48ers.dk>
+Message-ID: <1521582457.10662.196.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to add sedta and seinfoflow to setools
+On Mon, 2018-03-19 at 21:04 +0100, Peter Korsgaard wrote:
+>  >> After fixing s/L/l/, here are the timings for a 15 minute build:
+>  >> 
+>  >> configure                510.29
+>  >> build                    166.12
+>  >> extract                   45.53
+>  >> other                     43.88
+>  >> hostinstall               35.43
+>  >> check_host_rpath          33.37
+>  >> check_bin_arch            28.30
+>  >> targetinstall             23.37
+>  >> stageinstall              15.97
+>  >> step_pkg_size              9.49
+> 
+>  > Thanks for those measurements. I still find it a bit annoying that we
+>  > spend 1m10sec on instrumentation related topics on a 15 minutes build.
+>  > The use of ccache makes the build time lower than it normally is, and
+>  > therefore makes the instrumentation cost even more visible, but using
+>  > ccache is a valid use case.
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
---
-v2 -> v3: Update to remove target dependencies change but kept
-          the host package dependency as it is required for
-          host-python-networkx to be built and thus available
-          at runtime
-v1 -> v2: No change
+Those times were on a decently speced native Linux workstation.  For a
+slightly different build in a dockerized container on a vsphere VM
+acting as a agent for a Bamboo CI process, I get this timings from a
+total build of 33 minutes:
 
----
- package/setools/Config.in  |  2 ++
- package/setools/setools.mk | 16 ++--------------
- 2 files changed, 4 insertions(+), 14 deletions(-)
+configure                786.48
+build                    656.64
+step_pkg_size             94.67
+extract                   90.29
+other                     87.05
+postimage                 47.90
+check_host_rpath          47.21
+hostinstall               42.22
+targetinstall             35.36
+check_bin_arch            31.01
+stageinstall              30.38
+finalize                  20.72
+download                  19.33
 
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index ae0c45f..32a9315 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_SETOOLS
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON_ENUM34 if !BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_NETWORKX
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
- 	select BR2_PACKAGE_LIBSELINUX
- 	help
-@@ -16,6 +17,7 @@ config BR2_PACKAGE_SETOOLS
- 	   * apol - analyze a SELinux policy. (requires python-qt5)
- 	   * sediff - semantic policy difference tool for SELinux.
- 	   * sedta - Perform domain transition analyses
-+	   * seinfoflow - information flow analysis for SELinux
- 	   * sesearch - Search rules (allow, type_transition, etc.)
- 
- 	  https://github.com/TresysTechnology/setools
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index 6748c95..1ed7e97 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -11,7 +11,7 @@ SETOOLS_INSTALL_STAGING = YES
- SETOOLS_LICENSE = GPL-2.0+, LGPL-2.1+
- SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
- SETOOLS_SETUP_TYPE = setuptools
--HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol
-+HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-python-networkx
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- SETOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
-@@ -36,14 +36,6 @@ define HOST_SETOOLS_FIX_SETUP
- endef
- HOST_SETOOLS_POST_PATCH_HOOKS += HOST_SETOOLS_FIX_SETUP
- 
--# sedta and seinfoflow depend on python-networkx. This package is not
--# available in buildroot.
--define SETOOLS_REMOVE_BROKEN_SCRIPTS
--	$(RM) $(TARGET_DIR)/usr/bin/sedta
--	$(RM) $(TARGET_DIR)/usr/bin/seinfoflow
--endef
--SETOOLS_POST_INSTALL_TARGET_HOOKS += SETOOLS_REMOVE_BROKEN_SCRIPTS
--
- # apol requires pyqt5. However, the setools installation
- # process will install apol even if pyqt5 is missing.
- # Remove these scripts from the target it pyqt5 is not selected.
-@@ -55,12 +47,8 @@ endef
- SETOOLS_POST_INSTALL_TARGET_HOOKS += SETOOLS_REMOVE_QT_SCRIPTS
- endif
- 
--# sedta and seinfoflow depend on python-networkx. This package is not
--# available in buildroot. pyqt5 is not a host-package, remove apol
--# from the host directory as well.
-+# pyqt5 is not a host-package, remove apol from the host directory.
- define HOST_SETOOLS_REMOVE_BROKEN_SCRIPTS
--	$(RM) $(HOST_DIR)/bin/sedta
--	$(RM) $(HOST_DIR)/bin/seinfoflow
- 	$(RM) $(HOST_DIR)/bin/apol
- endef
- HOST_SETOOLS_POST_INSTALL_HOOKS += HOST_SETOOLS_REMOVE_BROKEN_SCRIPTS
--- 
-1.9.1
+All sources were already downloaded, so the download time can be mostly
+ attributed to re-checking the file hashes.  ccache hit rate is > 99%,
+yet build time really is that slow even with ccache.  High cost of
+random I/O on a VM I think.  Instrumentation is a bit less than 10% of
+total build time.
+
+I'll also point out the interesting cost of step_pkg_size vs
+hostinstall.  One would think running "find" over the host tree would
+be much faster than copying all those files into the host tree in first
+place.  Yet it's not!  Likely because the hostinstall step copies each
+file once, while step_pkg_size must stat each file about 60 times, once
+for each host package.
+
+If one had per-package install trees, then most of these per-package
+instrumentation steps could be much faster by operating only on the
+package's files instead of all previous packages' files as well.
