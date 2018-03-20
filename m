@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 20 Mar 2018 10:48:56 -0400
-Subject: [Buildroot] [PATCH 3/8] gst-omx: bump to 1.14
+Date: Tue, 20 Mar 2018 10:48:57 -0400
+Subject: [Buildroot] [PATCH 4/8] gst1-rtsp-server: bump to 1.14
 In-Reply-To: <20180320144901.9032-1-aduskett@gmail.com>
 References: <20180320144901.9032-1-aduskett@gmail.com>
-Message-ID: <20180320144901.9032-4-aduskett@gmail.com>
+Message-ID: <20180320144901.9032-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +14,32 @@ Also add hash for license file.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/gstreamer1/gst-omx/gst-omx.hash | 5 +++--
- package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 5 +++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index c4f8b10bce..4df0583b44 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index 95c8eef832..239e44ccd3 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
 @@ -1,2 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.12.4.tar.xz.sha256sum
--sha256 a025fa24242ec868fe0ff1e66d806a1070bcbc7c14a987a89cdc3395d0d56d5f gst-omx-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.14.0.tar.xz.sha256sum
-+sha256 4d43c354087cb77924982943e34e0d47294b5570304db11fd8b268b53bcff693 gst-omx-1.14.0.tar.xz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index 68cb7f6696..81192eeca6 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.12.4.tar.xz.sha256sum
+-sha256 7660112ebd59838f1054796b38109dcbe32f0a040e3a252a68a81055aeaa56a9 gst-rtsp-server-1.12.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.0.tar.xz.sha256sum
++sha256 6b65a077bed815f6d3157ebea503cc9f3c32d289af2756b7ff7e3958744d9756 gst-rtsp-server-1.14.0.tar.xz
++sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index d6a82ee654..5edd8737c1 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST_OMX_VERSION = 1.12.4
-+GST_OMX_VERSION = 1.14.0
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
+-GST1_RTSP_SERVER_VERSION = 1.12.4
++GST1_RTSP_SERVER_VERSION = 1.14.0
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
 -- 
 2.14.3
