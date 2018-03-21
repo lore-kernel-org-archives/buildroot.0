@@ -1,46 +1,132 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 21 Mar 2018 09:44:27 -0400
-Subject: [Buildroot] [PATCH v5 0/5] gobject-introspection: new series
-In-Reply-To: <CANQCQpbBdXSSmZ-9HEbFP7FHj4N=J1+W5wwEFyuGDy9ZtjE_vQ@mail.gmail.com>
-References: <20180318190131.21404-1-aduskett@gmail.com>
- <CANQCQpbBdXSSmZ-9HEbFP7FHj4N=J1+W5wwEFyuGDy9ZtjE_vQ@mail.gmail.com>
-Message-ID: <CAFSsvmpiQ27_m6GSywideXTXWkWAQy5ZkKxt=SGbLdQ06G-XJg@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 21 Mar 2018 14:46:37 +0100
+Subject: [Buildroot] [PATCH v3 3/3] setools: update to add sedta and
+ seinfoflow
+In-Reply-To: <CAM=7fbfDxxtkdSyFGbhR2WpHWi2E+rJuH1uC3cm8EK-dFM1gZg@mail.gmail.com>
+References: <1521578383-56128-1-git-send-email-jared.bents@rockwellcollins.com>
+ <1521578383-56128-3-git-send-email-jared.bents@rockwellcollins.com>
+ <CAGm1_kvah6O6t2gQT8y9AnQjXkGdPeJO23eDVep9scJuy8pDvA@mail.gmail.com>
+ <CAM=7fbfDxxtkdSyFGbhR2WpHWi2E+rJuH1uC3cm8EK-dFM1gZg@mail.gmail.com>
+Message-ID: <CAGm1_ksapsw+WtSZXP7OFFoTMdaXNcq5XfDRqauodxn780O4pA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew;
+Jared,
 
-First off; I want to personally say thank you again for taking the
-time to review this huge patch.
-
-On Tue, Mar 20, 2018 at 12:12 PM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Adam,
+On Wed, Mar 21, 2018 at 2:06 PM, Jared Bents
+<jared.bents@rockwellcollins.com> wrote:
+> Yegor,
 >
-> On Sun, Mar 18, 2018 at 2:01 PM, Adam Duskett <aduskett@gmail.com> wrote:
+> On Wed, Mar 21, 2018 at 5:04 AM, Yegor Yefremov
+> <yegorslists@googlemail.com> wrote:
+>> On Tue, Mar 20, 2018 at 9:39 PM, Jared Bents
+>> <jared.bents@rockwellcollins.com> wrote:
+>>> Update to add sedta and seinfoflow to setools
+>>>
+>>> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 >>
->> For official submission to mainline Buildroot:
+>> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 >>
->> This new series has the following upgrades:
->>   - It now works on all architectures supported by qemu-host.
->>   - Gstreamer1 can now compile gir files properly. (for real this time).
->>   - General makefile cleanups.
->>   - New patches that make cross-compiling a bit nicer (thanks, yocto!)
+>> Just curious what BR package is really uses host-setools with Python
+>> functionality. I've built refpolicy without setools'
+>> host-python-networx dependency and the build was successful.
+>>
+>> Yegor
+>>
 >
-> Suggest updating those patches to all have links to upstream
-> submissions as the string provided with the "Upstream: " comment in
-> the description of the patch.
->
-Can do! I found went and hunted them down.
+> I don't think any package needs host-setools as nothing selects
+> setools from what I can tell.  I can also build and use refpolicy
+> without host-setools but the security team on my project is using
+> host-setools for analysis.  I am assuming host-setools is listed as a
+> host dependency for refpolicy so that if a user selects setools, the
+> host package gets built for the user to use.
 
->>   - Removed a patch that was yocto specific and not needed with buildroot.
->>   - Added a PKG_GIR_EXTRA_LIBS variable in pkg-autotools.mk
->
-> Should the pkg-autotools.mk changes for this option, be a separate
-> patch added before the others that use it?
->
-> Matt
-I can live with that.
+Thanks for clarification. I hope setools would release 4.2 soon so
+that we could bump python-netowrx to the latest version.
+
+Yegor
+
+>>> --
+>>> v2 -> v3: Update to remove target dependencies change but kept
+>>>           the host package dependency as it is required for
+>>>           host-python-networkx to be built and thus available
+>>>           at runtime
+>>> v1 -> v2: No change
+>>>
+>>> ---
+>>>  package/setools/Config.in  |  2 ++
+>>>  package/setools/setools.mk | 16 ++--------------
+>>>  2 files changed, 4 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/package/setools/Config.in b/package/setools/Config.in
+>>> index ae0c45f..32a9315 100644
+>>> --- a/package/setools/Config.in
+>>> +++ b/package/setools/Config.in
+>>> @@ -8,6 +8,7 @@ config BR2_PACKAGE_SETOOLS
+>>>         depends on BR2_USE_MMU
+>>>         select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+>>>         select BR2_PACKAGE_PYTHON_ENUM34 if !BR2_PACKAGE_PYTHON3
+>>> +       select BR2_PACKAGE_PYTHON_NETWORKX
+>>>         select BR2_PACKAGE_PYTHON_SETUPTOOLS
+>>>         select BR2_PACKAGE_LIBSELINUX
+>>>         help
+>>> @@ -16,6 +17,7 @@ config BR2_PACKAGE_SETOOLS
+>>>            * apol - analyze a SELinux policy. (requires python-qt5)
+>>>            * sediff - semantic policy difference tool for SELinux.
+>>>            * sedta - Perform domain transition analyses
+>>> +          * seinfoflow - information flow analysis for SELinux
+>>>            * sesearch - Search rules (allow, type_transition, etc.)
+>>>
+>>>           https://github.com/TresysTechnology/setools
+>>> diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+>>> index 6748c95..1ed7e97 100644
+>>> --- a/package/setools/setools.mk
+>>> +++ b/package/setools/setools.mk
+>>> @@ -11,7 +11,7 @@ SETOOLS_INSTALL_STAGING = YES
+>>>  SETOOLS_LICENSE = GPL-2.0+, LGPL-2.1+
+>>>  SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
+>>>  SETOOLS_SETUP_TYPE = setuptools
+>>> -HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol
+>>> +HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-python-networkx
+>>>
+>>>  ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>>>  SETOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
+>>> @@ -36,14 +36,6 @@ define HOST_SETOOLS_FIX_SETUP
+>>>  endef
+>>>  HOST_SETOOLS_POST_PATCH_HOOKS += HOST_SETOOLS_FIX_SETUP
+>>>
+>>> -# sedta and seinfoflow depend on python-networkx. This package is not
+>>> -# available in buildroot.
+>>> -define SETOOLS_REMOVE_BROKEN_SCRIPTS
+>>> -       $(RM) $(TARGET_DIR)/usr/bin/sedta
+>>> -       $(RM) $(TARGET_DIR)/usr/bin/seinfoflow
+>>> -endef
+>>> -SETOOLS_POST_INSTALL_TARGET_HOOKS += SETOOLS_REMOVE_BROKEN_SCRIPTS
+>>> -
+>>>  # apol requires pyqt5. However, the setools installation
+>>>  # process will install apol even if pyqt5 is missing.
+>>>  # Remove these scripts from the target it pyqt5 is not selected.
+>>> @@ -55,12 +47,8 @@ endef
+>>>  SETOOLS_POST_INSTALL_TARGET_HOOKS += SETOOLS_REMOVE_QT_SCRIPTS
+>>>  endif
+>>>
+>>> -# sedta and seinfoflow depend on python-networkx. This package is not
+>>> -# available in buildroot. pyqt5 is not a host-package, remove apol
+>>> -# from the host directory as well.
+>>> +# pyqt5 is not a host-package, remove apol from the host directory.
+>>>  define HOST_SETOOLS_REMOVE_BROKEN_SCRIPTS
+>>> -       $(RM) $(HOST_DIR)/bin/sedta
+>>> -       $(RM) $(HOST_DIR)/bin/seinfoflow
+>>>         $(RM) $(HOST_DIR)/bin/apol
+>>>  endef
+>>>  HOST_SETOOLS_POST_INSTALL_HOOKS += HOST_SETOOLS_REMOVE_BROKEN_SCRIPTS
+>>> --
+>>> 1.9.1
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
