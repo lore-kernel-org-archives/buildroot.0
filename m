@@ -1,42 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 21 Mar 2018 08:17:07 +0000
-Subject: [Buildroot] [Bug 10886] New: openssl-1.0.2n fails to build
-Message-ID: <bug-10886-163@https.bugs.busybox.net/>
+Date: Wed, 21 Mar 2018 09:04:55 +0000
+Subject: [Buildroot] [Bug 10766] upmpdcli: Segmentation fault
+In-Reply-To: <bug-10766-163@https.bugs.busybox.net/>
+References: <bug-10766-163@https.bugs.busybox.net/>
+Message-ID: <bug-10766-163-AjxUIKXboH@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10886
+https://bugs.busybox.net/show_bug.cgi?id=10766
 
-            Bug ID: 10886
-           Summary: openssl-1.0.2n fails to build
-           Product: buildroot
-           Version: 2018.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: seregajsv at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Bin Zhang <yangtze31@gmail.com> changed:
 
-Created attachment 7551
-  --> https://bugs.busybox.net/attachment.cgi?id=7551&action=edit
-Fixed 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-When applying 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
-occurs error:
-
-patching file Makefile.org
-Hunk #1 FAILED at 527.
-1 out of 1 hunk FAILED -- saving rejects to file Makefile.org.rej
-
-I fixed this problem for myself. Please, see attachment.
+--- Comment #3 from Bin Zhang <yangtze31@gmail.com> ---
+Fixed in version 1.6.25.
+https://sourceforge.net/p/pupnp/code/ci/release-1.6.25/tree/ChangeLog
 
 -- 
 You are receiving this mail because:
