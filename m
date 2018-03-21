@@ -1,9 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 21 Mar 2018 07:39:27 +0200
-Subject: [Buildroot] [V2 1/2] dropbear: bump to version 2018.76
-In-Reply-To: <20180320195649.5309-1-francois.perrad@gadz.org>
+Date: Wed, 21 Mar 2018 08:53:32 +0200
+Subject: [Buildroot] [V2 2/2] dropbear: unbundle libtomath & libtomcrypt
+In-Reply-To: <20180320195649.5309-2-francois.perrad@gadz.org>
 References: <20180320195649.5309-1-francois.perrad@gadz.org>
-Message-ID: <20180321053927.zwtbohigenottppb@tarshish>
+ <20180320195649.5309-2-francois.perrad@gadz.org>
+Message-ID: <20180321065332.en6xpk2bh5czeqhf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +13,41 @@ To: buildroot@busybox.net
 
 Hi Francois,
 
-On Tue, Mar 20, 2018 at 08:56:48PM +0100, Francois Perrad wrote:
-> with this new version:
->   - "configure --enable-static" should now be used instead of
->     "make STATIC=1"
->   - any customised options should be put in localoptions.h
-> 
+On Tue, Mar 20, 2018 at 08:56:49PM +0100, Francois Perrad wrote:
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-
-One small nit below.
-
-[...]
-
->  define DROPBEAR_ENABLE_REVERSE_DNS
-> -	$(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
-> +	echo '#define DO_HOST_LOOKUP 1'         >> $(@D)/localoptions.h
->  endef
+> ---
+>  package/dropbear/Config.in   | 1 +
+>  package/dropbear/dropbear.mk | 2 ++
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+> index 670077816..3fa8473e4 100644
+> --- a/package/dropbear/Config.in
+> +++ b/package/dropbear/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_DROPBEAR
+>  	bool "dropbear"
+>  	select BR2_PACKAGE_ZLIB if !BR2_PACKAGE_DROPBEAR_SMALL
+> +	select BR2_PACKAGE_LIBTOMCRYPT
+>  	help
+>  	  A small SSH 2 server designed for small memory environments.
 >  
->  define DROPBEAR_BUILD_SMALL
-> -	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
-> +	echo '#define DROPBEAR_SMALL_CODE 1'    >> $(@D)/localoptions.h
+> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+> index c6716f90d..b1818ea5e 100644
+> --- a/package/dropbear/dropbear.mk
+> +++ b/package/dropbear/dropbear.mk
+> @@ -9,6 +9,8 @@ DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+>  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+>  DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
+>  DROPBEAR_LICENSE_FILES = LICENSE
+> +DROPBEAR_DEPENDENCIES = libtomcrypt
+> +DROPBEAR_CONF_OPTS = --disable-bundled-libtom
 
-This is the default. Since we already rely on the default in the 
-DO_HOST_LOOKUP case above, maybe we can do the same here.
-
-But that's for another patch, anyway.
-
->  endef
->  
->  define DROPBEAR_BUILD_FEATURED
-> -	$(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
-> -	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
-> -	$(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
-> -	$(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
-> +	echo '#define DROPBEAR_SMALL_CODE 0'    >> $(@D)/localoptions.h
-> +	echo '#define DROPBEAR_BLOWFISH 1'      >> $(@D)/localoptions.h
-> +	echo '#define DROPBEAR_TWOFISH128 1'    >> $(@D)/localoptions.h
-> +	echo '#define DROPBEAR_TWOFISH256 1'    >> $(@D)/localoptions.h
->  endef
->  
->  define DROPBEAR_DISABLE_STANDALONE
-> -	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
-> +	echo '#define NON_INETD_MODE 0'         >> $(@D)/localoptions.h
->  endef
->  
->  define DROPBEAR_INSTALL_INIT_SYSTEMD
+Since both libraries are static only, this does not reduce the binary size. On 
+the other hand, bundled libraries are more likely to work correctly with any 
+give version of dropbear. The only benefit of using external libraries is when 
+there is a security update to the libraries. But unless there is a known issue 
+now, I'm not sure it's worth it.
 
 baruch
 
