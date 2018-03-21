@@ -1,39 +1,51 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 21 Mar 2018 22:13:16 +0200
-Subject: [Buildroot] [PATCH] flashrom: avoid download URL redirect
-Message-ID: <fce71df77b97c82775049f8e7dd00133e859dcf1.1521663196.git.baruch@tkos.co.il>
+Date: Wed, 21 Mar 2018 22:16:08 +0200
+Subject: [Buildroot] [V3 2/2] dropbear: unbundle libtomath & libtomcrypt
+In-Reply-To: <20180321211310.50f6410c@windsurf>
+References: <20180321160329.20768-1-francois.perrad@gadz.org>
+ <20180321160329.20768-2-francois.perrad@gadz.org>
+ <20180321170413.74jd5vq4ygcgbewp@tarshish>
+ <20180321211310.50f6410c@windsurf>
+Message-ID: <20180321201608.jrkkauvpiwcla6js@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the https URL to avoid HTTP 308 redirect. Older wget releases treat
-it as a hard error.
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/ee6/ee66e5ead70e73f1d2dae1c5ba31ccf054fe15a7/
-http://autobuild.buildroot.net/results/fb8/fb8509bf9cf03933e45355fd9a6c3fa53d33c44f/
-http://autobuild.buildroot.net/results/0e1/0e196570207e459c3440d50cecf0032eee6edfc2/
+On Wed, Mar 21, 2018 at 09:13:10PM +0100, Thomas Petazzoni wrote:
+> On Wed, 21 Mar 2018 19:04:13 +0200, Baruch Siach wrote:
+> > >  ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
+> > > -DROPBEAR_CONF_OPTS += --disable-zlib
+> > > +DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
+> > >  else
+> > >  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
+> > > -DROPBEAR_DEPENDENCIES += zlib
+> > > +DROPBEAR_DEPENDENCIES += zlib libtomcrypt
+> > > +DROPBEAR_CONF_OPTS += --disable-bundled-libtom  
+> > 
+> > As I said on v2[1] I think that unbundling static libraries is not worth it.
+> > 
+> > [1] http://patchwork.ozlabs.org/comment/1879448/
+> 
+> I am not sure why you say that. In general, I think unbundling is good.
+> Why should we make an exception here ?
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/flashrom/flashrom.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Here is my full commit on v2:
 
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 95ce86c52ca4..70f47b5a041d 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -6,7 +6,7 @@
- 
- FLASHROM_VERSION = 1.0
- FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
--FLASHROM_SITE = http://download.flashrom.org/releases
-+FLASHROM_SITE = https://download.flashrom.org/releases
- FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi host-pkgconf
- FLASHROM_LICENSE = GPL-2.0+
- FLASHROM_LICENSE_FILES = COPYING
+Since both libraries are static only, this does not reduce the binary size. On
+the other hand, bundled libraries are more likely to work correctly with any
+give version of dropbear. The only benefit of using external libraries is when
+there is a security update to the libraries. But unless there is a known issue
+now, I'm not sure it's worth it.
+
+Do you see other reasons to prefer unbundling?
+
+baruch
+
 -- 
-2.16.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
