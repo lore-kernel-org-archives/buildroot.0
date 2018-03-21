@@ -1,43 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 21 Mar 2018 19:52:38 +0000
-Subject: [Buildroot] [Bug 10846] error in compiling gnutls
-In-Reply-To: <bug-10846-163@https.bugs.busybox.net/>
-References: <bug-10846-163@https.bugs.busybox.net/>
-Message-ID: <bug-10846-163-nfRe6lUl69@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Mar 2018 21:13:10 +0100
+Subject: [Buildroot] [V3 2/2] dropbear: unbundle libtomath & libtomcrypt
+In-Reply-To: <20180321170413.74jd5vq4ygcgbewp@tarshish>
+References: <20180321160329.20768-1-francois.perrad@gadz.org>
+ <20180321160329.20768-2-francois.perrad@gadz.org>
+ <20180321170413.74jd5vq4ygcgbewp@tarshish>
+Message-ID: <20180321211310.50f6410c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10846
+Hello,
 
---- Comment #6 from Peter Seiderer <ps.report@gmx.net> ---
-Yes, this config.log location was the real failure reason.
+On Wed, 21 Mar 2018 19:04:13 +0200, Baruch Siach wrote:
 
-The hints to the solution are:
+> >  ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
+> > -DROPBEAR_CONF_OPTS += --disable-zlib
+> > +DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
+> >  else
+> >  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
+> > -DROPBEAR_DEPENDENCIES += zlib
+> > +DROPBEAR_DEPENDENCIES += zlib libtomcrypt
+> > +DROPBEAR_CONF_OPTS += --disable-bundled-libtom  
+> 
+> As I said on v2[1] I think that unbundling static libraries is not worth it.
+> 
+> [1] http://patchwork.ozlabs.org/comment/1879448/
 
-- checking how to run the C++ preprocessor... cpp
-- configure:49488: result: cpp
+I am not sure why you say that. In general, I think unbundling is good.
+Why should we make an exception here ?
 
-Your toolchain is missing C++ support (and the gnutls packages is missing
-the C++ dependency), the following buildroot config change fixed the
-failure for me:
-
-    $ diff -u .config.old .config
-@@ -299,7 +300,7 @@
- BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
- BR2_GCC_VERSION="6.4.0"
- BR2_EXTRA_GCC_CONFIG_OPTIONS=""
--# BR2_TOOLCHAIN_BUILDROOT_CXX is not set
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
- # BR2_TOOLCHAIN_BUILDROOT_FORTRAN is not set
- # BR2_GCC_ENABLE_LTO is not set
- # BR2_GCC_ENABLE_OPENMP is not set
-
-Regards,
-Peter
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
