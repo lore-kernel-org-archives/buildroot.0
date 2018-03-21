@@ -1,32 +1,68 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 21 Mar 2018 13:00:08 +1030
-Subject: [Buildroot] [PATCH] powerpc-utils: Update URL to new upstream
-Message-ID: <20180321023008.23863-1-joel@jms.id.au>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 21 Mar 2018 07:39:27 +0200
+Subject: [Buildroot] [V2 1/2] dropbear: bump to version 2018.76
+In-Reply-To: <20180320195649.5309-1-francois.perrad@gadz.org>
+References: <20180320195649.5309-1-francois.perrad@gadz.org>
+Message-ID: <20180321053927.zwtbohigenottppb@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-powerpc-utils changed upstream git repositories again.
+Hi Francois,
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- package/powerpc-utils/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Mar 20, 2018 at 08:56:48PM +0100, Francois Perrad wrote:
+> with this new version:
+>   - "configure --enable-static" should now be used instead of
+>     "make STATIC=1"
+>   - any customised options should be put in localoptions.h
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-index b0ca84789e88..d04d81c08acb 100644
---- a/package/powerpc-utils/Config.in
-+++ b/package/powerpc-utils/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_POWERPC_UTILS
- 	help
- 	  System utilities for PowerPC machines.
- 
--	  https://github.com/nfont/powerpc-utils
-+	  https://github.com/ibm-power-utilities/powerpc-utils.git
- 
- if BR2_PACKAGE_POWERPC_UTILS
- 
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+
+One small nit below.
+
+[...]
+
+>  define DROPBEAR_ENABLE_REVERSE_DNS
+> -	$(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
+> +	echo '#define DO_HOST_LOOKUP 1'         >> $(@D)/localoptions.h
+>  endef
+>  
+>  define DROPBEAR_BUILD_SMALL
+> -	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
+> +	echo '#define DROPBEAR_SMALL_CODE 1'    >> $(@D)/localoptions.h
+
+This is the default. Since we already rely on the default in the 
+DO_HOST_LOOKUP case above, maybe we can do the same here.
+
+But that's for another patch, anyway.
+
+>  endef
+>  
+>  define DROPBEAR_BUILD_FEATURED
+> -	$(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
+> -	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
+> -	$(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
+> -	$(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
+> +	echo '#define DROPBEAR_SMALL_CODE 0'    >> $(@D)/localoptions.h
+> +	echo '#define DROPBEAR_BLOWFISH 1'      >> $(@D)/localoptions.h
+> +	echo '#define DROPBEAR_TWOFISH128 1'    >> $(@D)/localoptions.h
+> +	echo '#define DROPBEAR_TWOFISH256 1'    >> $(@D)/localoptions.h
+>  endef
+>  
+>  define DROPBEAR_DISABLE_STANDALONE
+> -	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
+> +	echo '#define NON_INETD_MODE 0'         >> $(@D)/localoptions.h
+>  endef
+>  
+>  define DROPBEAR_INSTALL_INIT_SYSTEMD
+
+baruch
+
 -- 
-2.15.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
