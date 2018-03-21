@@ -1,73 +1,88 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 21 Mar 2018 16:25:03 +0100
-Subject: [Buildroot] bash: /dev/fd/62: No such file or directory
-In-Reply-To: <874llggl14.fsf@dell.be.48ers.dk>
-References: <1521154501.16532.15.camel@embedded.rocks>
- <874llggl14.fsf@dell.be.48ers.dk>
-Message-ID: <1521645903.17352.2.camel@embedded.rocks>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 21 Mar 2018 16:42:21 +0100
+Subject: [Buildroot] [V2 1/2] dropbear: bump to version 2018.76
+In-Reply-To: <20180321053927.zwtbohigenottppb@tarshish>
+References: <20180320195649.5309-1-francois.perrad@gadz.org>
+ <20180321053927.zwtbohigenottppb@tarshish>
+Message-ID: <CAB0FRsvzP073h4OzsfvrgMtn+mskpkB96nJBDsfUgm53dQDzmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+2018-03-21 6:39 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
 
-On Fri, 2018-03-16 at 15:19 +0100, Peter Korsgaard wrote:
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
->  > Hi,
->  > I am facing an issue with busybox init system, bash and mdev. When
-> a
->  > bash script uses process substitution, bash ends with an error:
-> 
->  >    """
->  >    # bash -c 'read x< <(echo 1); echo $x'
->  >    bash: /dev/fd/62: No such file or directory
->  >    """
-> 
->  > The issue is addressed is some threads, e.g. [1]. The problem is
-> that
->  > /dev/fd does not exist when using mdev:
-> 
-> So that is really strictly seen a bug in bash. The /dev/fd
-> convenience
-> symlink is afaik a convention from udev/systemd.
-> 
-> But OK, bash might not be alone and the pragmatic solution would
-> indeed
-> be to create these symlinks ourselves in the busybox and sysvinit
-> inittabs, similar to how we create /dev/pts and /dev/shm.
-> 
-> It is only really needed if (e)udev isn't used, but it doesn't really
-> hurt to create them even if eudev will recreate them afterwards.
-> 
-> Keep in mind that we still support a static /dev, so we should also
-> add
-> them to system/device_table_dev.txt and redirect errors to /dev/null
-> so
-> you don't get a bunch of warnings about these symlinks when booting
-> with
-> a static /dev.
-> 
-> Notice that it isn't only about /dev/fd. From
-> eudev-3.2.5/src/shared/dev-setup.c:
-> 
->         static const char symlinks[] =
->                 "-/proc/kcore\0"     "/dev/core\0"
->                 "/proc/self/fd\0"    "/dev/fd\0"
->                 "/proc/self/fd/0\0"  "/dev/stdin\0"
->                 "/proc/self/fd/1\0"  "/dev/stdout\0"
->                 "/proc/self/fd/2\0"  "/dev/stderr\0";
-> 
-> There is some logic to only create /dev/core if /proc/kcore exists,
-> but
-> I think we can just create it unconditionally.
+> Hi Francois,
+>
+> On Tue, Mar 20, 2018 at 08:56:48PM +0100, Francois Perrad wrote:
+> > with this new version:
+> >   - "configure --enable-static" should now be used instead of
+> >     "make STATIC=1"
+> >   - any customised options should be put in localoptions.h
+> >
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+>
+> One small nit below.
+>
+> [...]
+>
+> >  define DROPBEAR_ENABLE_REVERSE_DNS
+> > -     $(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
+> > +     echo '#define DO_HOST_LOOKUP 1'         >> $(@D)/localoptions.h
+> >  endef
+> >
+> >  define DROPBEAR_BUILD_SMALL
+> > -     $(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
+> > +     echo '#define DROPBEAR_SMALL_CODE 1'    >> $(@D)/localoptions.h
+>
+> This is the default. Since we already rely on the default in the
+> DO_HOST_LOOKUP case above, maybe we can do the same here.
+>
+>
+So, DROPBEAR_BUILD_SMALL could be fully removed.
 
-Thanks for looking into this!
+Fran?ois
 
-> Care to send patches doing this?
 
-Yes, I can do that.
 
-J?rg
+> But that's for another patch, anyway.
+>
+> >  endef
+> >
+> >  define DROPBEAR_BUILD_FEATURED
+> > -     $(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
+> > -     $(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
+> > -     $(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
+> > -     $(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
+> > +     echo '#define DROPBEAR_SMALL_CODE 0'    >> $(@D)/localoptions.h
+> > +     echo '#define DROPBEAR_BLOWFISH 1'      >> $(@D)/localoptions.h
+> > +     echo '#define DROPBEAR_TWOFISH128 1'    >> $(@D)/localoptions.h
+> > +     echo '#define DROPBEAR_TWOFISH256 1'    >> $(@D)/localoptions.h
+> >  endef
+> >
+> >  define DROPBEAR_DISABLE_STANDALONE
+> > -     $(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
+> > +     echo '#define NON_INETD_MODE 0'         >> $(@D)/localoptions.h
+> >  endef
+> >
+> >  define DROPBEAR_INSTALL_INIT_SYSTEMD
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--
+> Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180321/29b7b343/attachment.html>
