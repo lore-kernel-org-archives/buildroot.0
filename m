@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 21 Mar 2018 09:41:16 -0400
-Subject: [Buildroot] [PATCH v2 4/8] gst1-rtsp-server: bump to 1.14
+Date: Wed, 21 Mar 2018 09:41:17 -0400
+Subject: [Buildroot] [PATCH v2 5/8] gst1-vaapi: bump to 1.14
 In-Reply-To: <20180321134120.498-1-aduskett@gmail.com>
 References: <20180321134120.498-1-aduskett@gmail.com>
-Message-ID: <20180321134120.498-4-aduskett@gmail.com>
+Message-ID: <20180321134120.498-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,32 +17,32 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Changes v1 -> v2:
   - none
 
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 5 +++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 5 +++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index 95c8eef832..239e44ccd3 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index 3eebc0afe7..0891ea9a18 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
 @@ -1,2 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.12.4.tar.xz.sha256sum
--sha256 7660112ebd59838f1054796b38109dcbe32f0a040e3a252a68a81055aeaa56a9 gst-rtsp-server-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.0.tar.xz.sha256sum
-+sha256 6b65a077bed815f6d3157ebea503cc9f3c32d289af2756b7ff7e3958744d9756 gst-rtsp-server-1.14.0.tar.xz
-+sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index d6a82ee654..5edd8737c1 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.12.4.tar.xz.sha256sum
+-sha256 1c2d77242e1f30c4d1394636cae9f6877228a017960fca96881e0080d8b6e9c9 gstreamer-vaapi-1.12.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.14.0.tar.xz.sha256sum
++sha256 e4e31f085ef289bf1049398f641345979d20a1b11a80285744bba98504991df2 gstreamer-vaapi-1.14.0.tar.xz
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 6b637416f5..1ee060a578 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_RTSP_SERVER_VERSION = 1.12.4
-+GST1_RTSP_SERVER_VERSION = 1.14.0
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
+-GST1_VAAPI_VERSION = 1.12.4
++GST1_VAAPI_VERSION = 1.14.0
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
 -- 
 2.14.3
