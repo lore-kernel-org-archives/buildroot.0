@@ -1,88 +1,92 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 21 Mar 2018 16:42:21 +0100
-Subject: [Buildroot] [V2 1/2] dropbear: bump to version 2018.76
-In-Reply-To: <20180321053927.zwtbohigenottppb@tarshish>
-References: <20180320195649.5309-1-francois.perrad@gadz.org>
- <20180321053927.zwtbohigenottppb@tarshish>
-Message-ID: <CAB0FRsvzP073h4OzsfvrgMtn+mskpkB96nJBDsfUgm53dQDzmw@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 21 Mar 2018 17:03:28 +0100
+Subject: [Buildroot] [V3 1/2] dropbear: bump to version 2018.76
+Message-ID: <20180321160329.20768-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-03-21 6:39 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
+with this new version:
+  - "configure --enable-static" should now be used instead of
+    "make STATIC=1"
+  - any customised options should be put in localoptions.h
 
-> Hi Francois,
->
-> On Tue, Mar 20, 2018 at 08:56:48PM +0100, Francois Perrad wrote:
-> > with this new version:
-> >   - "configure --enable-static" should now be used instead of
-> >     "make STATIC=1"
-> >   - any customised options should be put in localoptions.h
-> >
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> Reviewed-by: Baruch Siach <baruch@tkos.co.il>
->
-> One small nit below.
->
-> [...]
->
-> >  define DROPBEAR_ENABLE_REVERSE_DNS
-> > -     $(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
-> > +     echo '#define DO_HOST_LOOKUP 1'         >> $(@D)/localoptions.h
-> >  endef
-> >
-> >  define DROPBEAR_BUILD_SMALL
-> > -     $(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
-> > +     echo '#define DROPBEAR_SMALL_CODE 1'    >> $(@D)/localoptions.h
->
-> This is the default. Since we already rely on the default in the
-> DO_HOST_LOOKUP case above, maybe we can do the same here.
->
->
-So, DROPBEAR_BUILD_SMALL could be fully removed.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/dropbear/dropbear.hash |  2 +-
+ package/dropbear/dropbear.mk   | 27 ++++++++-------------------
+ 2 files changed, 9 insertions(+), 20 deletions(-)
 
-Fran?ois
-
-
-
-> But that's for another patch, anyway.
->
-> >  endef
-> >
-> >  define DROPBEAR_BUILD_FEATURED
-> > -     $(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
-> > -     $(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
-> > -     $(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
-> > -     $(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
-> > +     echo '#define DROPBEAR_SMALL_CODE 0'    >> $(@D)/localoptions.h
-> > +     echo '#define DROPBEAR_BLOWFISH 1'      >> $(@D)/localoptions.h
-> > +     echo '#define DROPBEAR_TWOFISH128 1'    >> $(@D)/localoptions.h
-> > +     echo '#define DROPBEAR_TWOFISH256 1'    >> $(@D)/localoptions.h
-> >  endef
-> >
-> >  define DROPBEAR_DISABLE_STANDALONE
-> > -     $(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
-> > +     echo '#define NON_INETD_MODE 0'         >> $(@D)/localoptions.h
-> >  endef
-> >
-> >  define DROPBEAR_INSTALL_INIT_SYSTEMD
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--
-> Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180321/29b7b343/attachment.html>
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 98776e717..ef2011d90 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,2 +1,2 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256 6cbc1dcb1c9709d226dff669e5604172a18cf5dbf9a201474d5618ae4465098c dropbear-2017.75.tar.bz2
++sha256 f2fb9167eca8cf93456a5fc1d4faf709902a3ab70dd44e352f3acbc3ffdaea65 dropbear-2018.76.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 01a1a07b7..634396dc0 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2017.75
++DROPBEAR_VERSION = 2018.76
+ DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
+@@ -23,32 +23,22 @@ DROPBEAR_MAKE = \
+ 	PROGRAMS="$(DROPBEAR_PROGRAMS)"
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-DROPBEAR_MAKE += STATIC=1
++DROPBEAR_CONF_OPTS += --enable-static
+ endif
+ 
+-define DROPBEAR_FIX_XAUTH
+-	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(@D)/options.h
+-endef
+-
+-DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_FIX_XAUTH
+-
+ define DROPBEAR_ENABLE_REVERSE_DNS
+-	$(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
+-endef
+-
+-define DROPBEAR_BUILD_SMALL
+-	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
++	echo '#define DO_HOST_LOOKUP 1'         >> $(@D)/localoptions.h
+ endef
+ 
+ define DROPBEAR_BUILD_FEATURED
+-	$(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
+-	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
+-	$(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
+-	$(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
++	echo '#define DROPBEAR_SMALL_CODE 0'    >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_BLOWFISH 1'      >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_TWOFISH128 1'    >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_TWOFISH256 1'    >> $(@D)/localoptions.h
+ endef
+ 
+ define DROPBEAR_DISABLE_STANDALONE
+-	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
++	echo '#define NON_INETD_MODE 0'         >> $(@D)/localoptions.h
+ endef
+ 
+ define DROPBEAR_INSTALL_INIT_SYSTEMD
+@@ -73,7 +63,6 @@ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
+-DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_SMALL
+ DROPBEAR_CONF_OPTS += --disable-zlib
+ else
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
+-- 
+2.11.0
