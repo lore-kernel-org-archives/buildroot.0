@@ -1,40 +1,44 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Wed, 21 Mar 2018 19:39:30 +0100
-Subject: [Buildroot] [PATCH] libostree: bump to version 2018.3
-Message-ID: <20180321183930.17911-1-marcus.folkesson@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 21 Mar 2018 21:04:59 +0200
+Subject: [Buildroot] [PATCH] tpm2-tools: propagate dependencies of selected
+ packages
+Message-ID: <0bc695b6c1b76b30190ebddff065b6adb5d755f9.1521659099.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes (libglib):
+http://autobuild.buildroot.net/results/786/786859fccc477de1519d85d8a180626bb8ebe062/
+http://autobuild.buildroot.net/results/df6/df6518f331c16b477c6e934914d0e56dc102c228/
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 6ae4824007..096c094300 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 37661de4a0ac73af5d921f494f17dd052ae2844111ba7c5aaeb1cbc4aae94bea  libostree-2018.2.tar.xz
-+sha256 e54d0ac024f718cfa77b93d57c91c574bebcb937c88e1e30c3d1127e9360fd4b  libostree-2018.3.tar.xz
- sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 236657e9fa..ad20d2a593 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Cc: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/tpm2-tools/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
+index 6429b24531b1..3bde934daef5 100644
+--- a/package/tpm2-tools/Config.in
++++ b/package/tpm2-tools/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_TPM2_TOOLS
+ 	bool "tpm2-tools"
++	depends on BR2_USE_MMU # dbus, libglib
++	depends on BR2_USE_WCHAR # libglib -> gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -14,3 +17,7 @@ config BR2_PACKAGE_TPM2_TOOLS
+ 	  implementation.
  
--LIBOSTREE_VERSION = 2018.2
-+LIBOSTREE_VERSION = 2018.3
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+ 	  https://github.com/tpm2-software/tpm2-tools
++
++comment "tpm2-tools need a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.16.2
