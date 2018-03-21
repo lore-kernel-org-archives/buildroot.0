@@ -1,132 +1,167 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 21 Mar 2018 14:46:37 +0100
-Subject: [Buildroot] [PATCH v3 3/3] setools: update to add sedta and
- seinfoflow
-In-Reply-To: <CAM=7fbfDxxtkdSyFGbhR2WpHWi2E+rJuH1uC3cm8EK-dFM1gZg@mail.gmail.com>
-References: <1521578383-56128-1-git-send-email-jared.bents@rockwellcollins.com>
- <1521578383-56128-3-git-send-email-jared.bents@rockwellcollins.com>
- <CAGm1_kvah6O6t2gQT8y9AnQjXkGdPeJO23eDVep9scJuy8pDvA@mail.gmail.com>
- <CAM=7fbfDxxtkdSyFGbhR2WpHWi2E+rJuH1uC3cm8EK-dFM1gZg@mail.gmail.com>
-Message-ID: <CAGm1_ksapsw+WtSZXP7OFFoTMdaXNcq5XfDRqauodxn780O4pA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Mar 2018 15:55:53 +0100
+Subject: [Buildroot] [PATCH 1/1] Add LicheePi Zero support
+In-Reply-To: <866e1f31-97ad-0df3-42e7-521a4a2ad60e@wanadoo.fr>
+References: <866e1f31-97ad-0df3-42e7-521a4a2ad60e@wanadoo.fr>
+Message-ID: <20180321155553.36692b0f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jared,
+Hello,
 
-On Wed, Mar 21, 2018 at 2:06 PM, Jared Bents
-<jared.bents@rockwellcollins.com> wrote:
-> Yegor,
->
-> On Wed, Mar 21, 2018 at 5:04 AM, Yegor Yefremov
-> <yegorslists@googlemail.com> wrote:
->> On Tue, Mar 20, 2018 at 9:39 PM, Jared Bents
->> <jared.bents@rockwellcollins.com> wrote:
->>> Update to add sedta and seinfoflow to setools
->>>
->>> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
->>
->> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Just curious what BR package is really uses host-setools with Python
->> functionality. I've built refpolicy without setools'
->> host-python-networx dependency and the build was successful.
->>
->> Yegor
->>
->
-> I don't think any package needs host-setools as nothing selects
-> setools from what I can tell.  I can also build and use refpolicy
-> without host-setools but the security team on my project is using
-> host-setools for analysis.  I am assuming host-setools is listed as a
-> host dependency for refpolicy so that if a user selects setools, the
-> host package gets built for the user to use.
+Thanks for this contribution!
 
-Thanks for clarification. I hope setools would release 4.2 soon so
-that we could bump python-netowrx to the latest version.
+On Tue, 20 Mar 2018 19:27:35 +0100, Michel Stempin wrote:
+> From b27c30f03f0355f8401ecedacd8f5378c3a6cf02 Mon Sep 17 00:00:00 2001
+> From: Michel Stempin <michel.stempin@wanadoo.fr>
+> Date: Tue, 20 Mar 2018 19:23:13 +0100
+> Subject: [PATCH 1/1] Add LicheePi Zero support
 
-Yegor
+This looks odd. Could you use "git send-email" to send your patches ?
 
->>> --
->>> v2 -> v3: Update to remove target dependencies change but kept
->>>           the host package dependency as it is required for
->>>           host-python-networkx to be built and thus available
->>>           at runtime
->>> v1 -> v2: No change
->>>
->>> ---
->>>  package/setools/Config.in  |  2 ++
->>>  package/setools/setools.mk | 16 ++--------------
->>>  2 files changed, 4 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/package/setools/Config.in b/package/setools/Config.in
->>> index ae0c45f..32a9315 100644
->>> --- a/package/setools/Config.in
->>> +++ b/package/setools/Config.in
->>> @@ -8,6 +8,7 @@ config BR2_PACKAGE_SETOOLS
->>>         depends on BR2_USE_MMU
->>>         select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
->>>         select BR2_PACKAGE_PYTHON_ENUM34 if !BR2_PACKAGE_PYTHON3
->>> +       select BR2_PACKAGE_PYTHON_NETWORKX
->>>         select BR2_PACKAGE_PYTHON_SETUPTOOLS
->>>         select BR2_PACKAGE_LIBSELINUX
->>>         help
->>> @@ -16,6 +17,7 @@ config BR2_PACKAGE_SETOOLS
->>>            * apol - analyze a SELinux policy. (requires python-qt5)
->>>            * sediff - semantic policy difference tool for SELinux.
->>>            * sedta - Perform domain transition analyses
->>> +          * seinfoflow - information flow analysis for SELinux
->>>            * sesearch - Search rules (allow, type_transition, etc.)
->>>
->>>           https://github.com/TresysTechnology/setools
->>> diff --git a/package/setools/setools.mk b/package/setools/setools.mk
->>> index 6748c95..1ed7e97 100644
->>> --- a/package/setools/setools.mk
->>> +++ b/package/setools/setools.mk
->>> @@ -11,7 +11,7 @@ SETOOLS_INSTALL_STAGING = YES
->>>  SETOOLS_LICENSE = GPL-2.0+, LGPL-2.1+
->>>  SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
->>>  SETOOLS_SETUP_TYPE = setuptools
->>> -HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol
->>> +HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-python-networkx
->>>
->>>  ifeq ($(BR2_PACKAGE_PYTHON3),y)
->>>  SETOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
->>> @@ -36,14 +36,6 @@ define HOST_SETOOLS_FIX_SETUP
->>>  endef
->>>  HOST_SETOOLS_POST_PATCH_HOOKS += HOST_SETOOLS_FIX_SETUP
->>>
->>> -# sedta and seinfoflow depend on python-networkx. This package is not
->>> -# available in buildroot.
->>> -define SETOOLS_REMOVE_BROKEN_SCRIPTS
->>> -       $(RM) $(TARGET_DIR)/usr/bin/sedta
->>> -       $(RM) $(TARGET_DIR)/usr/bin/seinfoflow
->>> -endef
->>> -SETOOLS_POST_INSTALL_TARGET_HOOKS += SETOOLS_REMOVE_BROKEN_SCRIPTS
->>> -
->>>  # apol requires pyqt5. However, the setools installation
->>>  # process will install apol even if pyqt5 is missing.
->>>  # Remove these scripts from the target it pyqt5 is not selected.
->>> @@ -55,12 +47,8 @@ endef
->>>  SETOOLS_POST_INSTALL_TARGET_HOOKS += SETOOLS_REMOVE_QT_SCRIPTS
->>>  endif
->>>
->>> -# sedta and seinfoflow depend on python-networkx. This package is not
->>> -# available in buildroot. pyqt5 is not a host-package, remove apol
->>> -# from the host directory as well.
->>> +# pyqt5 is not a host-package, remove apol from the host directory.
->>>  define HOST_SETOOLS_REMOVE_BROKEN_SCRIPTS
->>> -       $(RM) $(HOST_DIR)/bin/sedta
->>> -       $(RM) $(HOST_DIR)/bin/seinfoflow
->>>         $(RM) $(HOST_DIR)/bin/apol
->>>  endef
->>>  HOST_SETOOLS_POST_INSTALL_HOOKS += HOST_SETOOLS_REMOVE_BROKEN_SCRIPTS
->>> --
->>> 1.9.1
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
+More comments below.
+
+
+> diff --git a/board/licheepi/post-build.sh b/board/licheepi/post-build.sh
+> new file mode 100755
+> index 0000000..dda2987
+> --- /dev/null
+> +++ b/board/licheepi/post-build.sh
+> @@ -0,0 +1,13 @@
+> +#!/bin/sh
+> +BOARD_DIR="$( dirname "${0}" )"
+> +MKIMAGE="${HOST_DIR}/bin/mkimage"
+> +MKSWAP="${HOST_DIR}/sbin/mkswap"
+> +BOOT_CMD="${BOARD_DIR}/boot.cmd"
+> +BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
+> +
+> +# U-Boot script
+> +"${MKIMAGE}" -C none -A arm -T script -d "${BOOT_CMD}" "${BOOT_CMD_H}"
+
+This should be done using BR2_TARGET_UBOOT_BOOT_SCRIPT.
+
+> +
+> +# Swap
+> +sed -i '/^\/swap/d' "${TARGET_DIR}/etc/fstab"
+> +echo "/swap		none		swap	defaults	0	0" >> "${TARGET_DIR}/etc/fstab"
+
+Why do you need to tweak this in the fstab ?
+
+> diff --git a/board/licheepi/post-image.sh b/board/licheepi/post-image.sh
+
+You can use support/scripts/genimage.sh instead.
+
+
+> diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
+> new file mode 100644
+> index 0000000..4b7e7ac
+> --- /dev/null
+> +++ b/configs/licheepi_zero_defconfig
+> @@ -0,0 +1,75 @@
+> +# Target options
+> +BR2_arm=y
+> +BR2_cortex_a7=y
+> +BR2_ARM_FPU_VFPV4=y
+> +
+> +# Toolchain
+> +# External Linaro ARM 2017.11 toolchain
+> +BR2_TOOLCHAIN_EXTERNAL=y
+
+Please use the internal toolchain in the defconfig, like we do in all
+other defconfigs.
+
+> +# System configuration
+> +BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
+> +BR2_TARGET_GENERIC_ROOT_PASSWD="licheepi"
+> +# Run a getty (login prompt) after boot on ttyS0 @ 115200 bps
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> +BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+> +# Custom scripts for image creation
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/licheepi/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/licheepi/post-image.sh"
+> +
+> +# Kernel
+> +# Custom 4.14.14 kernel based on stable linux.4.14.y from Lichee-Pi Github repository
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/linux"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="zero-4.14.y"
+
+This looks like a branch and not a tag or commit. You should use a tag
+or commit so that the build is reproducible.
+
+> +# In-tree kernel configuration
+> +BR2_LINUX_KERNEL_DEFCONFIG="licheepi_zero"
+> +# AllWinner V3s-based DTS
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
+> +
+> +# Target packages
+> +
+> +# E2fsprogs package for resize2fs
+> +BR2_PACKAGE_E2FSPROGS=y
+> +BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+
+We don't install this package in most defconfigs, so I think you should
+remove it.
+
+> +
+> +#?Hardware handling
+> +# Firmare
+> +# Linux-firmware
+> +BR2_PACKAGE_LINUX_FIRMWARE=y
+> +# Wifi firmware
+> +# Realtek 87xx for rtl8723bs support
+> +BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
+> +
+> +# Dhcpcd package DHCP client for Wi-Fi
+> +BR2_PACKAGE_DHCPCD=y
+> +
+> +# WPA_supplicant package for Wi-Fi Authentication
+> +BR2_PACKAGE_WPA_SUPPLICANT=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
+> +
+> +# Filesystem images
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +
+> +# Bootloaders
+> +# Custom U-Boot from Lichee-Pi Github repository
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/u-boot"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v3s-current"
+
+Same question: is this a branch or a tag name ?
+
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+> +
+> +#?Host utilities
+> +# Required host utilities for building an SDCard image
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_DTC=y
+
+DTC is not needed. It might be needed by U-Boot, but in this case, you
+should use BR2_TARGET_UBOOT_NEEDS_DTC=y.
+
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+
+This last line will no longer be needed once you use
+BR2_TARGET_UBOOT_BOOT_SCRIPT.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
