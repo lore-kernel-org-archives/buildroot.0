@@ -1,59 +1,67 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 22 Mar 2018 09:22:05 -0300 (BRT)
-Subject: [Buildroot] [PATCH] tpm2-tools: propagate dependencies of
- selected packages
-In-Reply-To: <0bc695b6c1b76b30190ebddff065b6adb5d755f9.1521659099.git.baruch@tkos.co.il>
-References: <0bc695b6c1b76b30190ebddff065b6adb5d755f9.1521659099.git.baruch@tkos.co.il>
-Message-ID: <2128061294.712847.1521721325466.JavaMail.zimbra@datacom.ind.br>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 22 Mar 2018 13:30:23 +0100
+Subject: [Buildroot] [PATCH v2 2/8] gst-plugins-{base, good, bad,
+ ugly}: bump to 1.14
+In-Reply-To: <CAFSsvmo9t+B=ardFmaFSuN3+9PohWjiK5Bm-orcLCG8dUJjZgg@mail.gmail.com>
+References: <20180321134120.498-1-aduskett@gmail.com>
+ <20180321134120.498-2-aduskett@gmail.com>
+ <20180321200952.619ca55e@gmx.net>
+ <CAFSsvmo9t+B=ardFmaFSuN3+9PohWjiK5Bm-orcLCG8dUJjZgg@mail.gmail.com>
+Message-ID: <20180322133023.683b3225@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Baruch Siach" <baruch@tkos.co.il>
-> To: "buildroot" <buildroot@busybox.net>
-> Cc: "Baruch Siach" <baruch@tkos.co.il>, "Carlos Santos" <casantos@datacom.ind.br>
-> Sent: Wednesday, March 21, 2018 4:04:59 PM
-> Subject: [PATCH] tpm2-tools: propagate dependencies of selected packages
+Hello Adam,
 
-> Fixes (libglib):
-> http://autobuild.buildroot.net/results/786/786859fccc477de1519d85d8a180626bb8ebe062/
-> http://autobuild.buildroot.net/results/df6/df6518f331c16b477c6e934914d0e56dc102c228/
-> 
-> Cc: Carlos Santos <casantos@datacom.ind.br>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> package/tpm2-tools/Config.in | 7 +++++++
-> 1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-> index 6429b24531b1..3bde934daef5 100644
-> --- a/package/tpm2-tools/Config.in
-> +++ b/package/tpm2-tools/Config.in
-> @@ -1,5 +1,8 @@
-> config BR2_PACKAGE_TPM2_TOOLS
-> 	bool "tpm2-tools"
-> +	depends on BR2_USE_MMU # dbus, libglib
-> +	depends on BR2_USE_WCHAR # libglib -> gettext
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
-> 	select BR2_PACKAGE_DBUS
-> 	select BR2_PACKAGE_LIBCURL
-> 	select BR2_PACKAGE_LIBGLIB2
-> @@ -14,3 +17,7 @@ config BR2_PACKAGE_TPM2_TOOLS
-> 	  implementation.
-> 
-> 	  https://github.com/tpm2-software/tpm2-tools
-> +
-> +comment "tpm2-tools need a toolchain w/ wchar, threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 
-It needs C++ too, due to tpm2-tss. I'm already working on a patch to
-solve this problem.
+> >>  config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+> >>       bool "wayland"
+> >>       default y  
+> >
+> > ...not enough removed, the wayland part also moved to gst1-plugins-base
+> > (same for Config.in wayland part)...
+> >  
+> Not entirely! There is --enable-wayland now in both base AND bad!
+> 
 
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+So your commit log lies ;-), wayland did not move from bad to base....
+
+> >> Changes:
+> >>
+> >> Add the following to gst1-plugins-base and remove them from plugins-bad:
+> >>  - opengl
+> >>  - gles2
+> >>  - glx
+> >>  - egl
+> >>  - x11
+> >>  - wayland
+
+I think there is a difference, the bad/wayland option enables extra gstreamer
+plugins/elements, the base/wayland opton enables no extra plugins/elements but
+enables wayland support in the qt/gtk plugins (did not look further if it
+results only in wayland support in some elements or extra elements in the same
+plugin library), in case it enables only wayland support, I think no
+user visible option is needed (if a user visible option is needed there is
+definitely a change in option name and help text needed)
+
+> Adam
+> 
+
+Please do not miss the comment/suggestion below:
+
+> >> -config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXER
+> >> -     bool "audiomixer"
+> >> -     help
+> >> -       Audio mixer plugin
+> >> -  
+> >
+> > ..forgot to re-add this one to gst1-plugins-base/Config.in....
+> >
+> > Regards,
+> > Peter
+
+Regards,
+Peter
