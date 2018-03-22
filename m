@@ -1,52 +1,46 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 22 Mar 2018 17:25:47 +0000
-Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
- the build time
-In-Reply-To: <20180322171159.GZ14461@australia>
-References: <cover.1521146096.git.yann.morin.1998@free.fr>
- <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
- <87muz5fp2n.fsf@dell.be.48ers.dk> <20180318161530.GA2478@scaer>
- <87efkhfimu.fsf@dell.be.48ers.dk> <20180322164144.GY14461@australia>
- <20180322175035.2410072a@windsurf> <20180322171159.GZ14461@australia>
-Message-ID: <1521739547.10662.260.camel@impinj.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 22 Mar 2018 13:32:13 -0400
+Subject: [Buildroot] [PATCH v4 1/8] gstreamer1: bump to 1.14.0
+Message-ID: <20180322173220.31791-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2018-03-22 at 18:11 +0100, Thomas De Schampheleire wrote:
-> 
-> > > The current timestamp-based approach not guaranteeing an accurate list is
-> > > problematic for many such uses. And as you already mentioned, since we don't have
-> > > full control over the build steps done in any given package, we don't know which
-> > > timestamps they will use. There may be very good reasons to install certain
-> > > files with their original timestamp and not the one from the build.
-> > 
-> > These are all valid concerns, but what do you suggest ?
-> > 
-> > The current approach of hashing all files clearly doesn't scale, as a
-> > significant amount of build time is now spent on hashing files.
-> > 
+Also add hash for license file.
 
-The hash approach also fails to handle symlinks well.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v4:
+  - none
 
-I think the answer is to install each package into a clean per-package
-install tree, then combine those trees.  It will fix all the these
-problems, allow more parallelism, and quite possible be outright more
-efficient since it will scale with the number of files, while all
-currently presented approaches scale with the number of files
-multiplied by the number of packages.
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 5 +++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-> I can only observe that previously, when we still only listed the target files,
-> the impact did not seem to be that bad, and the concerns about impact on build
-> time arose with the creation of staging and host lists.
-
-That was the big one, but here's a breakdown:
-
-step_pkg_size-stage      143.50
-step_pkg_size-target     267.14
-step_pkg_size-host       419.21
-
-Target alone is still over four minutes.  This was for a 12 minutes
-building + 14 minutes instrumentation build.
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index f8af907562..05b1d9d26c 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.4.tar.xz.sha256sum
+-sha256 5a8704aa4c2eeb04da192c4a9942f94f860ac1a585de90d9f914bac26a970674 gstreamer-1.12.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.14.0.tar.xz.sha256sum
++sha256 fc361367f0d4b780a868a8833f9f30b9c9f4ac9faea4e6b251db8b4b0398466e gstreamer-1.14.0.tar.xz
++sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index ea9f29a4f3..d30f28594b 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.12.4
++GSTREAMER1_VERSION = 1.14.0
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
+-- 
+2.14.3
