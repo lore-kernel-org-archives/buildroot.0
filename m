@@ -1,32 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Mar 2018 23:42:42 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.15.12
-Message-ID: <20180322230316.312D880301@busybox.osuosl.org>
+Date: Thu, 22 Mar 2018 23:41:23 +0100
+Subject: [Buildroot] [git commit] powerpc-utils: Update URL to new upstream
+Message-ID: <20180322230316.22959838A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2fe7b6bc88e89ae26d8ec37a5d190c9359de54b
+commit: https://git.buildroot.net/buildroot/commit/?id=1b383e4bf4151b9232b2e66f0d6ae822546576a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+powerpc-utils changed upstream git repositories again.
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
+ package/powerpc-utils/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ce1e121fde..4aa13cd442 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
+diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
+index b0ca84789e..d04d81c08a 100644
+--- a/package/powerpc-utils/Config.in
++++ b/package/powerpc-utils/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_POWERPC_UTILS
+ 	help
+ 	  System utilities for PowerPC machines.
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.15.11" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.15.12" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	  https://github.com/nfont/powerpc-utils
++	  https://github.com/ibm-power-utilities/powerpc-utils.git
+ 
+ if BR2_PACKAGE_POWERPC_UTILS
+ 
