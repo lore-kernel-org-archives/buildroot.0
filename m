@@ -1,37 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Mar 2018 00:02:11 +0100
-Subject: [Buildroot] [git commit] tpm2-tools: allow building without stack
- smashing protection (SSP)
-Message-ID: <20180322230317.01F9E838A7@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 22 Mar 2018 20:15:07 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <1521760507-21517-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=428dfe71f337a5de4540d57a244442d64b2d8e75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Disable SSP if the toolchain does not support it. This must be done
-explicitly because configure enables hardening by default but doesn't
-contain a link test, so it doesn't detect when libssp is missing.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/tpm2-tools/tpm2-tools.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-index 0697900d2d..13fdb163bb 100644
---- a/package/tpm2-tools/tpm2-tools.mk
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -10,4 +10,8 @@ TPM2_TOOLS_LICENSE = BSD-2-Clause
- TPM2_TOOLS_LICENSE_FILES = LICENSE
- TPM2_TOOLS_DEPENDENCIES = dbus libcurl libglib2 openssl tpm2-tss host-pkgconf
- 
-+# configure.ac doesn't contain a link test, so it doesn't detect when
-+# libssp is missing.
-+TPM2_TOOLS_CONF_OPTS = $(if $(BR2_TOOLCHAIN_HAS_SSP),--enable-hardening,--disable-hardening)
-+
- $(eval $(autotools-package))
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3d94ca9..3a8adfd 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -242,8 +242,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.122"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.88"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.123"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.89"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+-- 
+2.7.4
