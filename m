@@ -1,47 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 22 Mar 2018 14:51:50 +0100
-Subject: [Buildroot] [PATCH v1 1/2] gnutls: needs C++ support
-In-Reply-To: <20180322054912.akgs3lgdfgiiee6s@sapphire.tkos.co.il>
-References: <20180321202312.23021-1-ps.report@gmx.net>
- <20180322054912.akgs3lgdfgiiee6s@sapphire.tkos.co.il>
-Message-ID: <20180322145150.2f72d018@windsurf>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Thu, 22 Mar 2018 09:20:01 -0700
+Subject: [Buildroot] [PATCH] eudev: prevent udev init script nonexistent
+ directory error
+Message-ID: <1521735601-29879-1-git-send-email-joshua.henderson@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The following error occures in the udev init script because the kernel config
+may optionally not include uevent_helper.
 
-On Thu, 22 Mar 2018 07:49:13 +0200, Baruch Siach wrote:
+/etc/init.d/S10udev: line 47: can't create /proc/sys/kernel/hotplug: nonexistent directory
 
-> On Wed, Mar 21, 2018 at 09:23:11PM +0100, Peter Seiderer wrote:
-> > Fixes Bug 10846 ([1]):
-> > 
-> >   checking how to run the C++ preprocessor... cpp
-> >   configure: error: in `.../build/gnutls-3.5.17':
-> >   configure: error: C++ preprocessor "cpp" fails sanity check
-> >   See `config.log' for more details
-> > 
-> > [1] https://bugs.busybox.net/show_bug.cgi?id=10846
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> 
-> This is strange. Do you have idea why the autobuilders didn't catch that?
+Work around this by not trying to access the destination if it's not available.
 
-We don't have any toolchain configuration in the autobuilders that has
-wchar support enabled, but C++ support disabled.
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+---
+ package/eudev/S10udev | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We do have a configuration that is basic (no wchar, no C++), but since
-gnutls already depends on wchar, it was never tested with this
-toolchain.
-
-Hence, this doesn't pop-up in the autobuilders.
-
-Best regards,
-
-Thomas
+diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+index 640fec6..47c715c 100755
+--- a/package/eudev/S10udev
++++ b/package/eudev/S10udev
+@@ -28,7 +28,7 @@ test -r $UDEV_CONFIG || exit 6
+ case "$1" in
+     start)
+         printf "Populating %s using udev: " "${udev_root:-/dev}"
+-        printf '\000\000\000\000' > /proc/sys/kernel/hotplug
++        [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+         $UDEV_BIN -d || { echo "FAIL"; exit 1; }
+         udevadm trigger --type=subsystems --action=add
+         udevadm trigger --type=devices --action=add
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
