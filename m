@@ -1,53 +1,43 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Thu, 22 Mar 2018 11:43:36 +0100
-Subject: [Buildroot] Unicode problem with check-uniq-files
-In-Reply-To: <20180321214436.GA2085@scaer>
-References: <3a25e768-759e-e377-fcae-48c8e3e36ddd@jcz.nl>
- <20180319213240.GA340@scaer> <86fb507f-1fa7-8355-6ec6-7b346e6945e7@jcz.nl>
- <20180321214436.GA2085@scaer>
-Message-ID: <5ffd29df-7b21-122a-2d50-03fc86f29224@jcz.nl>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 22 Mar 2018 13:10:54 +0100
+Subject: [Buildroot] [PATCH v1 1/2] gnutls: needs C++ support
+In-Reply-To: <20180322054912.akgs3lgdfgiiee6s@sapphire.tkos.co.il>
+References: <20180321202312.23021-1-ps.report@gmx.net>
+ <20180322054912.akgs3lgdfgiiee6s@sapphire.tkos.co.il>
+Message-ID: <20180322131054.0f1fa5ca@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello Baruch,
 
-On 03/21/18 22:44, Yann E. MORIN wrote:
-> If you change your LC_ALL et al to an UTF-8 locale, it will work again,
-> I believe.
+On Thu, 22 Mar 2018 07:49:13 +0200, Baruch Siach <baruch@tkos.co.il> wrote:
 
-That is not working for me:
+> Hi Peter,
+> 
+> On Wed, Mar 21, 2018 at 09:23:11PM +0100, Peter Seiderer wrote:
+> > Fixes Bug 10846 ([1]):
+> > 
+> >   checking how to run the C++ preprocessor... cpp
+> >   configure: error: in `.../build/gnutls-3.5.17':
+> >   configure: error: C++ preprocessor "cpp" fails sanity check
+> >   See `config.log' for more details
+> > 
+> > [1] https://bugs.busybox.net/show_bug.cgi?id=10846
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+> 
+> This is strange. Do you have idea why the autobuilders didn't catch that?
 
-/bin/sh: warning: setlocale: LC_ALL: cannot change locale (UTF-8)
-/bin/sh: warning: setlocale: LC_ALL: cannot change locale (UTF-8)
-/bin/sh: warning: setlocale: LC_ALL: cannot change locale (UTF-8)
-/bin/sh: warning: setlocale: LC_ALL: cannot change locale (UTF-8)
-/bin/sh: warning: setlocale: LC_ALL: cannot change locale (UTF-8)
->>>   Finalizing target directory
-# Check files that are touched by more than one package
-/bin/sh: warning: setlocale: LC_ALL: cannot change locale (UTF-8)
-./support/scripts/check-uniq-files -t target /data/work/jcz/git/jidiot/clients/innr/buildroot_development/output/build/packages-file-list.txt
-Traceback (most recent call last):
-  File "./support/scripts/check-uniq-files", line 42, in <module>
-    sys.exit(main())
-  File "./support/scripts/check-uniq-files", line 31, in main
-    for row in r:
-  File "/usr/lib/python3.6/encodings/ascii.py", line 26, in decode
-    return codecs.ascii_decode(input, self.errors)[0]
-UnicodeDecodeError: 'ascii' codec can't decode byte
+No clue...., maybe the missing combination of hard float and no C++?
 
+Maybe worth an test-pkg run?
 
-BTW my LANG is set to "C".
+Regards,
+Peter
 
-> No, because we don't always have a host-python that is built. Besides,
-> python is a requirement for Buildroot, see the manual:
->     https://buildroot.org/downloads/manual/manual.html#requirement-mandatory
-
-Okay, clear.
-
-regards,
-
-
-Jaap
+> 
+> baruch
+> 
