@@ -1,67 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Mar 2018 23:43:54 +0100
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 17.3.7
-Message-ID: <20180322230316.54A06838A7@busybox.osuosl.org>
+Date: Thu, 22 Mar 2018 23:44:33 +0100
+Subject: [Buildroot] [git commit] flashrom: avoid download URL redirect
+Message-ID: <20180322230316.7688B838A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69a2d15d1c5aea9a23564763ba022b1ca572a24e
+commit: https://git.buildroot.net/buildroot/commit/?id=3bc6d100315553b135e1f4131b50229c66046b71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Tested-by: Romain Naour <romain.naour@gmail.com>
+Use the https URL to avoid HTTP 308 redirect. Older wget releases treat
+it as a hard error.
+
+Fixes:
+http://autobuild.buildroot.net/results/ee6/ee66e5ead70e73f1d2dae1c5ba31ccf054fe15a7/
+http://autobuild.buildroot.net/results/fb8/fb8509bf9cf03933e45355fd9a6c3fa53d33c44f/
+http://autobuild.buildroot.net/results/0e1/0e196570207e459c3440d50cecf0032eee6edfc2/
+
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/flashrom/flashrom.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 4eb57b3ad4..50dcb67278 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 95ce86c52c..70f47b5a04 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -6,7 +6,7 @@
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 17.3.6
-+MESA3D_HEADERS_VERSION = 17.3.7
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index a61fe02b6d..4bc4e820b8 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-February/000403.html
--md5 ba66ae0f09b9b84482268608557cd175  mesa-17.3.6.tar.xz
--sha1 eff29cb8c284a813977d4201dd646d949b1d8fc4  mesa-17.3.6.tar.xz
--sha256 e5915680d44ac9d05defdec529db7459ac9edd441c9845266eff2e2d3e57fbf8  mesa-17.3.6.tar.xz
--sha512 5164ed5a1d3d25031b712a9f443f0e467a29b2bca0a1aa11324ed5c10279411979c9c7482825053926a813e76c58b78a3439c7c81fcd51a7808f53977080828f  mesa-17.3.6.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-March/000410.html
-+md5 769137f2538562c300c4b76bcb097377  mesa-17.3.7.tar.xz
-+sha1 c66108a562cc94a9559357ca2b424f99c7f995e8  mesa-17.3.7.tar.xz
-+sha256 0595904a8fba65a8fe853a84ad3c940205503b94af41e8ceed245fada777ac1e  mesa-17.3.7.tar.xz
-+sha512 ec48565556aa4281056cee5dbef140553651fdfbb76ce32397de048db1cf65f5e18787c72b998de7da2de795d27e7040bde84651ade4726fc3a69a23b166ba4e  mesa-17.3.7.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 5f4832c0f0..8e4aa7d5ac 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 17.3.6
-+MESA3D_VERSION = 17.3.7
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+ FLASHROM_VERSION = 1.0
+ FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
+-FLASHROM_SITE = http://download.flashrom.org/releases
++FLASHROM_SITE = https://download.flashrom.org/releases
+ FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi host-pkgconf
+ FLASHROM_LICENSE = GPL-2.0+
+ FLASHROM_LICENSE_FILES = COPYING
