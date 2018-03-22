@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Mar 2018 23:57:28 +0100
-Subject: [Buildroot] [PATCH 3/6] tpm2-abrmd: declare dependency on a
- toolchain with C++
-In-Reply-To: <20180322202752.2562-4-casantos@datacom.ind.br> (Carlos Santos's
- message of "Thu, 22 Mar 2018 17:27:49 -0300")
+Date: Thu, 22 Mar 2018 23:58:48 +0100
+Subject: [Buildroot] [PATCH 4/6] tpm2-abrmd: allow building without
+ stack smashing protection (SSP)
+In-Reply-To: <20180322202752.2562-5-casantos@datacom.ind.br> (Carlos Santos's
+ message of "Thu, 22 Mar 2018 17:27:50 -0300")
 References: <20180322202752.2562-1-casantos@datacom.ind.br>
- <20180322202752.2562-4-casantos@datacom.ind.br>
-Message-ID: <87lgej4t2f.fsf@dell.be.48ers.dk>
+ <20180322202752.2562-5-casantos@datacom.ind.br>
+Message-ID: <87h8p74t07.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,36 @@ To: buildroot@busybox.net
 
 >>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
- > It depends on tpm2-tss, whose current version contains C++ code.
+ > Disable SSP if the toolchain does not support it. This must be done
+ > explicitly because configure.ac passes -fstack-protector-all to the
+ > compiler but doesn't contain a link test, so it doesn't detect when
+ > libssp is missing.
+
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/83ad1f33f523321f841e70d2d8cf5ce861dee217
+ >   http://autobuild.buildroot.net/results/cef047751534fef23d1022e9a276424bc84bf461
+ >   http://autobuild.buildroot.net/results/6048355337804f7841dffa1655f44b9f6db56314
+ >   http://autobuild.buildroot.net/results/d934a2ea90e7bf1c7b93dbb367998abab536daf4
+ >   http://autobuild.buildroot.net/results/c0daaf37b8d1515d62d2441ba6aa57125437e191
+ >   http://autobuild.buildroot.net/results/9482ea5554938865e0061dcbdcf3c2c918b96954
+ >   http://autobuild.buildroot.net/results/282a8b6769f19f0a40089207bc54e7302663751f
+
  > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
  > ---
- >  package/tpm2-abrmd/Config.in | 5 +++--
- >  1 file changed, 3 insertions(+), 2 deletions(-)
+ >  package/tpm2-abrmd/tpm2-abrmd.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
- > diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
- > index 31c5ae7d6b..5c236d1d5c 100644
- > --- a/package/tpm2-abrmd/Config.in
- > +++ b/package/tpm2-abrmd/Config.in
- > @@ -20,6 +20,7 @@ config BR2_PACKAGE_TPM2_ABRMD
+ > diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
+ > index 0d6a167210..69d09a59e4 100644
+ > --- a/package/tpm2-abrmd/tpm2-abrmd.mk
+ > +++ b/package/tpm2-abrmd/tpm2-abrmd.mk
+ > @@ -11,6 +11,10 @@ TPM2_ABRMD_LICENSE_FILES = LICENSE
+ >  TPM2_ABRMD_INSTALL_STAGING = YES
+ >  TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
  
- >  	  https://github.com/tpm2-software/tpm2-abrmd
- 
- > -comment "tpm2-abrmd needs a toolchain w/ wchar, threads"
- > +comment "tpm2-abrmd needs a toolchain w/ C++, wchar, threads"
+ > +# configure.ac doesn't contain a link test, so it doesn't detect when 
 
-You again forgot to add the dependency to the config symbol itself.
-
-Committed with that fixed, thanks.
+You have a trailing space here. Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
