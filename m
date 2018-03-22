@@ -1,28 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Mar 2018 23:44:41 +0100
-Subject: [Buildroot] [PATCH] flashrom: avoid download URL redirect
-In-Reply-To: <fce71df77b97c82775049f8e7dd00133e859dcf1.1521663196.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 21 Mar 2018 22:13:16 +0200")
-References: <fce71df77b97c82775049f8e7dd00133e859dcf1.1521663196.git.baruch@tkos.co.il>
-Message-ID: <87370r6886.fsf@dell.be.48ers.dk>
+Date: Thu, 22 Mar 2018 23:46:44 +0100
+Subject: [Buildroot] [PATCH] efibootmgr: bump version
+In-Reply-To: <20180322125153.28766-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 22 Mar 2018 13:51:53 +0100")
+References: <20180322125153.28766-1-peter@korsgaard.com>
+Message-ID: <87y3ij4tkb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Use the https URL to avoid HTTP 308 redirect. Older wget releases treat
- > it as a hard error.
+ > Drop 0001-dont-use-fshort-wchar-when-building.patch and
+ > 0003-Remove-extra-const-keywords-gcc-7-gripes-about.patch as they are now
+ > upstream.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/ee6/ee66e5ead70e73f1d2dae1c5ba31ccf054fe15a7/
- > http://autobuild.buildroot.net/results/fb8/fb8509bf9cf03933e45355fd9a6c3fa53d33c44f/
- > http://autobuild.buildroot.net/results/0e1/0e196570207e459c3440d50cecf0032eee6edfc2/
+ > The upstream repo moved to the 'rhboot' github project, so adjust upstream
+ > URL in .mk and help text to match.
 
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Version 15 introduces build time configuration of the default EFI directory
+ > (E.G. the subdirectory in the EFI system partition where the loader is
+ > installed).  This used to be hardcoded to redhat, but now a value must be
+ > specified at build time.  Given that, it is unlikely that people relied on
+ > the default value so set it to the more sensible 'buildroot'.
+
+ > While we are at it, also add a hash for the license file.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
