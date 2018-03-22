@@ -1,65 +1,207 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 22 Mar 2018 08:53:21 +0100
-Subject: [Buildroot] [PATCH next v2 4/5] support/scripts/pkg-stats-new:
- add latest upstream version information
-In-Reply-To: <5ab31ecd94bbd_65552b0d8140b8fc5231a@ultri4.mail>
-References: <20180321215824.45a5b5bc@windsurf>
- <5ab31ecd94bbd_65552b0d8140b8fc5231a@ultri4.mail>
-Message-ID: <20180322085321.060cd956@windsurf>
+From: Michel Stempin <michel.stempin@wanadoo.fr>
+Date: Thu, 22 Mar 2018 09:11:32 +0100
+Subject: [Buildroot] [PATCH 1/1] Add LicheePi Zero support
+In-Reply-To: <20180321155553.36692b0f@windsurf>
+References: <866e1f31-97ad-0df3-42e7-521a4a2ad60e@wanadoo.fr>
+ <20180321155553.36692b0f@windsurf>
+Message-ID: <2102427c-a5d8-fcf8-efa3-30bf4b0a9d31@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ricardo,
+Hello Thomas,
 
-On Thu, 22 Mar 2018 00:11:09 -0300, Ricardo Martincoski wrote:
+Thank you for reviewing my patch!
 
-> I dislike the fact we make 2000+ HTTP requests, but as you explained it is a
-> limitation from the current api exposed by the upstream. I even looked at the
-> code hoping the mapping could be easily introduced in api v1... but no, it is
-> not trivial.
+Le 21/03/2018 ? 15:55, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> Thanks for this contribution!
+> 
+> On Tue, 20 Mar 2018 19:27:35 +0100, Michel Stempin wrote:
+>> From b27c30f03f0355f8401ecedacd8f5378c3a6cf02 Mon Sep 17 00:00:00 2001
+>> From: Michel Stempin <michel.stempin@wanadoo.fr>
+>> Date: Tue, 20 Mar 2018 19:23:13 +0100
+>> Subject: [PATCH 1/1] Add LicheePi Zero support
+> 
+> This looks odd. Could you use "git send-email" to send your patches ?
 
-I think it is easy. It should just be a matter of the following patch:
+Ok, I will configure it.
 
-diff --git a/anitya/api.py b/anitya/api.py
-index a53be43..5f0be9e 100644
---- a/anitya/api.py
-+++ b/anitya/api.py
-@@ -156,7 +156,7 @@ def api_projects():
-     else:
-         project_objs = models.Project.all(Session)
- 
--    projects = [project.__json__() for project in project_objs]
-+    projects = [project.__json__(detailed=True) for project in project_objs]
- 
-     output = {
-         'total': len(projects),
+> 
+> More comments below.
+> 
+> 
+>> diff --git a/board/licheepi/post-build.sh b/board/licheepi/post-build.sh
+>> new file mode 100755
+>> index 0000000..dda2987
+>> --- /dev/null
+>> +++ b/board/licheepi/post-build.sh
+>> @@ -0,0 +1,13 @@
+>> +#!/bin/sh
+>> +BOARD_DIR="$( dirname "${0}" )"
+>> +MKIMAGE="${HOST_DIR}/bin/mkimage"
+>> +MKSWAP="${HOST_DIR}/sbin/mkswap"
+>> +BOOT_CMD="${BOARD_DIR}/boot.cmd"
+>> +BOOT_CMD_H="${BINARIES_DIR}/boot.scr"
+>> +
+>> +# U-Boot script
+>> +"${MKIMAGE}" -C none -A arm -T script -d "${BOOT_CMD}" "${BOOT_CMD_H}"
+> 
+> This should be done using BR2_TARGET_UBOOT_BOOT_SCRIPT.
 
-I've asked upstream if they were interested, and the reply I got this
-morning is:
+I didn't know how to use it. I have it working now, thanks.
 
-08:48 < pingou> kos_tom: sounds fine to me, but I know that jcline has been working on a v2 api, so maybe that'll help
-08:49 < kos_tom> pingou: do you think you can apply the patch I provided ?
-08:49 < kos_tom> pingou: alternatively, we could make getting the detailed information optional
-08:49 < pingou> kos_tom: jcline is now the one maintaining it
-08:52 < kos_tom> pingou: ok :)
+> 
+>> +
+>> +# Swap
+>> +sed -i '/^\/swap/d' "${TARGET_DIR}/etc/fstab"
+>> +echo "/swap		none		swap	defaults	0	0" >> "${TARGET_DIR}/etc/fstab"
+> 
+> Why do you need to tweak this in the fstab ?
 
-> So, yes. Let's do this incrementally, first let's make it work using one request
-> per package, then later we improve the script when the api v2 is deployed.
+The LicheePi Zero is booting on SDCard by default, and has only limited (64MiB) SDRAM, so I tried to make it a turnkey solution by providing all the tools to resize the partition and filesystem and add swap.
 
-Right.
+I understand now that you try to keep the defconfig changes to the bare minimum, so I will remove all these extra tools.
 
-> In the meanwhile, we will be able to start creating the mappings based on the
-> daily generated html.
+> 
+>> diff --git a/board/licheepi/post-image.sh b/board/licheepi/post-image.sh
+> 
+> You can use support/scripts/genimage.sh instead.
 
-Indeed.
+Ok, done.
 
-Best regards,
+> 
+> 
+>> diff --git a/configs/licheepi_zero_defconfig b/configs/licheepi_zero_defconfig
+>> new file mode 100644
+>> index 0000000..4b7e7ac
+>> --- /dev/null
+>> +++ b/configs/licheepi_zero_defconfig
+>> @@ -0,0 +1,75 @@
+>> +# Target options
+>> +BR2_arm=y
+>> +BR2_cortex_a7=y
+>> +BR2_ARM_FPU_VFPV4=y
+>> +
+>> +# Toolchain
+>> +# External Linaro ARM 2017.11 toolchain
+>> +BR2_TOOLCHAIN_EXTERNAL=y
+> 
+> Please use the internal toolchain in the defconfig, like we do in all
+> other defconfigs.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Ok, done.
+
+> 
+>> +# System configuration
+>> +BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
+>> +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
+>> +BR2_TARGET_GENERIC_ROOT_PASSWD="licheepi"
+>> +# Run a getty (login prompt) after boot on ttyS0 @ 115200 bps
+>> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>> +BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+>> +# Custom scripts for image creation
+>> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/licheepi/post-build.sh"
+>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/licheepi/post-image.sh"
+>> +
+>> +# Kernel
+>> +# Custom 4.14.14 kernel based on stable linux.4.14.y from Lichee-Pi Github repository
+>> +BR2_LINUX_KERNEL=y
+>> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/linux"
+>> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="zero-4.14.y"
+> 
+> This looks like a branch and not a tag or commit. You should use a tag
+> or commit so that the build is reproducible.
+
+OK, I will take an exact commit hash.
+> 
+>> +# In-tree kernel configuration
+>> +BR2_LINUX_KERNEL_DEFCONFIG="licheepi_zero"
+>> +# AllWinner V3s-based DTS
+>> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
+>> +
+>> +# Target packages
+>> +
+>> +# E2fsprogs package for resize2fs
+>> +BR2_PACKAGE_E2FSPROGS=y
+>> +BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+> 
+> We don't install this package in most defconfigs, so I think you should
+> remove it.
+
+Ok, removed, see above.
+
+> 
+>> +
+>> +#?Hardware handling
+>> +# Firmare
+>> +# Linux-firmware
+>> +BR2_PACKAGE_LINUX_FIRMWARE=y
+>> +# Wifi firmware
+>> +# Realtek 87xx for rtl8723bs support
+>> +BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
+>> +
+>> +# Dhcpcd package DHCP client for Wi-Fi
+>> +BR2_PACKAGE_DHCPCD=y
+>> +
+>> +# WPA_supplicant package for Wi-Fi Authentication
+>> +BR2_PACKAGE_WPA_SUPPLICANT=y
+>> +BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
+>> +
+>> +# Filesystem images
+>> +BR2_TARGET_ROOTFS_EXT2=y
+>> +BR2_TARGET_ROOTFS_EXT2_4=y
+>> +
+>> +# Bootloaders
+>> +# Custom U-Boot from Lichee-Pi Github repository
+>> +BR2_TARGET_UBOOT=y
+>> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Lichee-Pi/u-boot"
+>> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v3s-current"
+> 
+> Same question: is this a branch or a tag name ?
+
+I will take an exact commit hash as above.
+
+> 
+>> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
+>> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+>> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+>> +
+>> +#?Host utilities
+>> +# Required host utilities for building an SDCard image
+>> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>> +BR2_PACKAGE_HOST_DTC=y
+> 
+> DTC is not needed. It might be needed by U-Boot, but in this case, you
+> should use BR2_TARGET_UBOOT_NEEDS_DTC=y.
+
+OK, didn't know about this one, I tested it, it works!
+
+> 
+>> +BR2_PACKAGE_HOST_GENIMAGE=y
+>> +BR2_PACKAGE_HOST_MTOOLS=y
+>> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> 
+> This last line will no longer be needed once you use
+> BR2_TARGET_UBOOT_BOOT_SCRIPT.
+
+Yes, I remove it.
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
+
+I will create a v2 patch and resubmit it for review,
+
+Thanks!
+
+Michel
