@@ -1,43 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Mar 2018 23:32:48 +0100
-Subject: [Buildroot] [PATCH 2/2] fs/squashfs: enable squashfs to
- generate a verity hashtable
-In-Reply-To: <20180322213410.GD4580@scaer> (Yann E. MORIN's message of "Thu,
- 22 Mar 2018 22:34:10 +0100")
-References: <1521752805-17690-1-git-send-email-ben.whitten@gmail.com>
- <1521752805-17690-2-git-send-email-ben.whitten@gmail.com>
- <20180322213410.GD4580@scaer>
-Message-ID: <87woy368rz.fsf@dell.be.48ers.dk>
+Date: Thu, 22 Mar 2018 23:39:20 +0100
+Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
+ the build time
+In-Reply-To: <20180322175035.2410072a@windsurf> (Thomas Petazzoni's message of
+ "Thu, 22 Mar 2018 17:50:35 +0100")
+References: <cover.1521146096.git.yann.morin.1998@free.fr>
+ <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
+ <87muz5fp2n.fsf@dell.be.48ers.dk> <20180318161530.GA2478@scaer>
+ <87efkhfimu.fsf@dell.be.48ers.dk> <20180322164144.GY14461@australia>
+ <20180322175035.2410072a@windsurf>
+Message-ID: <87sh8r68h3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Ben, All,
- > On 2018-03-22 21:06 +0000, Ben Whitten spake thusly:
- >> For those times that you want to verify that your readonly filesystem
- >> hasn't been tampered we can generate a dm-verity hash table.
- >> The root hash is enclosed in .table file and must be secured else where.
+Hi,
 
-Strange, I don't seem to have received the original patch?
+ > These are all valid concerns, but what do you suggest ?
 
- > I don't think this should belong to the squashfs filesystem.
+ > The current approach of hashing all files clearly doesn't scale, as a
+ > significant amount of build time is now spent on hashing files.
 
- > From what I understand, veritysetup is filesystem-agnostic, and can do
- > the hash checksums on any image (even a r/w filesystem as long as it is
- > mounted r/o for example).
-
- > My position is that this should be done in a post-image script.
-
-I agree! It is quite simple to enable the host-cryptsetup package and
-call veritysetup format in a post-image script, but there is quite some
-flexibility in how to use dm-verity (data/hash block size, hashes
-appended to image or in a separate partition, where to store toplevel
-hash and offset, ..) which makes it hard to integrate as kconfig
-options.
+Indeed. If the choice is between huge overhead vs potentially minor
+inaccuracies in these list, then I think the choice is made fast, even
+though the inaccuracies aren't nice - Especially if we have a plan for
+fixing the the inaccuracies going forward (E.G. toplevel parallel
+builds).
 
 -- 
 Bye, Peter Korsgaard
