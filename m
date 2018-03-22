@@ -1,117 +1,88 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 22 Mar 2018 19:45:08 +0000
-Subject: [Buildroot] [PATCH v3 0/7] Add rpi3 b+ support
-In-Reply-To: <43BEBD2B-1C51-4098-BF4C-CD9D70067729@jens-maus.de>
-References: <20180316180232.18829-1-martin@barkynet.com>
- <20180316204132.30aadcfc@windsurf>
- <CAFGQKxcg_O2Kr-VmUhgiDW9Q_4nZY8ZsMZhLCEcpTg7SZ+un_g@mail.gmail.com>
- <20180316232824.7a41721f@windsurf> <20180319181430.4c264d3d@gmx.net>
- <CAFGQKxeynSw4=0TkE_qkXX0+=R63BU9gAY0+DNS39K4KiDnP-Q@mail.gmail.com>
- <43BEBD2B-1C51-4098-BF4C-CD9D70067729@jens-maus.de>
-Message-ID: <CAFGQKxcaVi70jAyPEUCFUU3SYyD-SmQ_ybqadpoHkVOKZWRTrQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 22 Mar 2018 21:25:32 +0100
+Subject: [Buildroot] Unicode problem with check-uniq-files
+In-Reply-To: <5ffd29df-7b21-122a-2d50-03fc86f29224@jcz.nl>
+References: <3a25e768-759e-e377-fcae-48c8e3e36ddd@jcz.nl>
+ <20180319213240.GA340@scaer>
+ <86fb507f-1fa7-8355-6ec6-7b346e6945e7@jcz.nl>
+ <20180321214436.GA2085@scaer>
+ <5ffd29df-7b21-122a-2d50-03fc86f29224@jcz.nl>
+Message-ID: <20180322202532.GA4580@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jens,
+Jaap, All,
 
-On 20 March 2018 at 12:52, Jens Maus <mail@jens-maus.de> wrote:
-> FYI: In one of my buildroot-based projects I am actually using the pi3-miniart-bt + core_freq setting at the same time to free the standard UART for a GPIO HAT that requires the UART. See here:
->
-> https://github.com/jens-maus/RaspberryMatic/blob/master/buildroot-external/board/raspberrypi3/config.txt#L27-L30
+On 2018-03-22 11:43 +0100, Jaap Crezee spake thusly:
+> On 03/21/18 22:44, Yann E. MORIN wrote:
+> > If you change your LC_ALL et al to an UTF-8 locale, it will work again,
+> > I believe.
+> 
+> That is not working for me:
+> 
+> /bin/sh: warning: setlocale: LC_ALL: cannot change locale (UTF-8)
 
-Yes exactly, you need the core_freq=250 for pi3-miniart-bt to work but
-buildroot does not set this.  Using pi3-miniart-bt to free up ttyAMA0
-for other uses, as you do, is a good reason to use it.
+"UTF-8" by itself is not a valid locale definition. A valid locale is
+made of three firelds:
 
-Given enable_uart=1 sets core_freq=250 (see [1]) and using
-pi3-miniart-bt also needs core_freq=250, i can't see the point it
-using pi3-miniart-bt to just enable serial logins.
+  ll_CC[.encoding]
 
-Thanks
+with:
 
-Martin
+  ll: the ISO 639-1 2-letter language name, e.g. fr, en, cs...
 
-[1] https://www.raspberrypi.org/documentation/configuration/uart.md
+  CC: the ISO 3166-1 alpha-2 2letter country code, e.g. FR, CA, UK, US,
+      CS...
 
->
-> Best Regards,
->
-> Jens
->
->> Am 19.03.2018 um 19:18 schrieb Martin Bark <martin@barkynet.com>:
->>
->> Hi,
->>
->> On 19 March 2018 at 17:14, Peter Seiderer <ps.report@gmx.net> wrote:
->>> Hello Martin,
->>>
->>> On Fri, 16 Mar 2018 23:35:48 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->>>
->>>> Hello,
->>>>
->>>> On Fri, 16 Mar 2018 21:06:52 +0000, Martin Bark wrote:
->>>>
->>>>> The only reason for this seems to be the use of the pi3-miniuart-bt
->>>>> overlay.  Personally i never use this overlay, I set enable_uart=1 in
->>>>> config.txt (the same as raspi-config does).  Is there a reason
->>>>> buildroot favours the pi3-miniuart-bt overlay?
->>>>
->>>> I am not familiar with those configuration details of the RPi platform,
->>>> but I remember they have been discussed in the past. Perhaps you can
->>>> check the commit log for some details about them.
->>>>
->>>> Especially this commit log:
->>>>
->>>> commit 1e03cc2290f98fc7434254d2abd9afd504de8360
->>>> Author: Peter Seiderer <ps.report@gmx.net>
->>>> Date:   Mon May 2 22:25:44 2016 +0200
->>>>
->>>>    raspberrypi3: fix serial console (load pi3-miniuart-bt overlay)
->>>>
->>>>    - enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in raspberrypi3_defconfig
->>>>    - add copy of rpi-firmware/overlays directory to boot partition in genimage-raspberrypi3.cfg
->>>>    - enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on request
->>>>    - add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in raspberrypi3_defconfig
->>>>
->>>>    Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->>>>    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>>>
->>>
->>> And the full discussion about the different solutions, see [1]...
->>>
->>> I am still in prefer the overlay solutions ;-)
->>>
->>> Regards,
->>> Peter
->>>
->>>
->>> [1] https://patchwork.ozlabs.org/patch/617683/
->>
->> Ok i remember this conversation now.
->>
->> As a matter of interest has anyone actually tried using bluetooth with
->> the pi3-miniuart-bt overlay?  I have not.  According to [1]
->> pi3-miniuart-bt overlay requires core_freq=250 to work (which makes
->> sense) and buildroot does not set this.  I'm not sure the current way
->> pi3-miniuart-bt overlay is setup even works.
->>
->> Thanks
->>
->> Martin
->>
->> [1] https://github.com/raspberrypi/linux/blob/rpi-4.14.y/arch/arm/boot/dts/overlays/README
->>
->>>> Best regards,
->>>>
->>>> Thomas
->>>
->
-> --
-> Jens Maus, Dresden/Germany
-> http://jens-maus.de/
->
-> *** Content is authentic only with digital signature  ***
->
+  encoding: a relatively-free-form field that defines the character set
+      encoding. In practice, only UTF-8 is ever used AFAICS...
+
+E.g.:
+
+  fr_FR.UTF-8    french, in France, UTF-8 charset
+  fr_CA.UTF-8    french, in Canada (Quebec), UTF-8 charset
+  en_GB.UTF-8    english, Great Britain, UTF-8 charset
+
+Locale can define a large set of representations:
+
+  - number: decimal separator, currency symbol position, negative
+    symbol and its position...
+
+  - address: separator between number and streetname, ZIP code...
+
+  - collation, i.e. ordering rules, like uppercase vs. lowercase...
+
+and a sh!tload other stuff, see:  man 7 locale
+
+> >>>   Finalizing target directory
+> # Check files that are touched by more than one package
+> /bin/sh: warning: setlocale: LC_ALL: cannot change locale (UTF-8)
+
+See what locales are available on your system:
+
+    locale -a
+
+Then use one of those, e.g.:
+
+    LC_ALL=en_US.UTF-8 ./support/scripts/check-uniq-files -t target \
+    /data/work/jcz/git/jidiot/clients/innr/buildroot_development/output/build/packages-file-list.txt
+
+> BTW my LANG is set to "C".
+
+That's OK. ;-) I had been using POSIX for years before I decided to
+enter the 3rd millenai, and switched to a mix of en_GB.UTF-8 and
+fr_FR.UTF-8 a few years ago...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
