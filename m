@@ -1,52 +1,49 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 22 Mar 2018 17:27:51 -0300
-Subject: [Buildroot] [PATCH 5/6] tpm2-tools: propagate dependencies of
- selected packages
+Date: Thu, 22 Mar 2018 17:27:50 -0300
+Subject: [Buildroot] [PATCH 4/6] tpm2-abrmd: allow building without stack
+ smashing protection (SSP)
 In-Reply-To: <20180322202752.2562-1-casantos@datacom.ind.br>
 References: <20180322202752.2562-1-casantos@datacom.ind.br>
-Message-ID: <20180322202752.2562-6-casantos@datacom.ind.br>
+Message-ID: <20180322202752.2562-5-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- C++ (tpm2-tss)
-- MMU (dbus, libglib)
-- threads (libglib)
-- wchar (libglib -> gettext)
+Disable SSP if the toolchain does not support it. This must be done
+explicitly because configure.ac passes -fstack-protector-all to the
+compiler but doesn't contain a link test, so it doesn't detect when
+libssp is missing.
 
-Fixes (libglib):
-  http://autobuild.buildroot.net/results/786859fccc477de1519d85d8a180626bb8ebe062
-  http://autobuild.buildroot.net/results/df6518f331c16b477c6e934914d0e56dc102c228
+Fixes:
+  http://autobuild.buildroot.net/results/83ad1f33f523321f841e70d2d8cf5ce861dee217
+  http://autobuild.buildroot.net/results/cef047751534fef23d1022e9a276424bc84bf461
+  http://autobuild.buildroot.net/results/6048355337804f7841dffa1655f44b9f6db56314
+  http://autobuild.buildroot.net/results/d934a2ea90e7bf1c7b93dbb367998abab536daf4
+  http://autobuild.buildroot.net/results/c0daaf37b8d1515d62d2441ba6aa57125437e191
+  http://autobuild.buildroot.net/results/9482ea5554938865e0061dcbdcf3c2c918b96954
+  http://autobuild.buildroot.net/results/282a8b6769f19f0a40089207bc54e7302663751f
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/tpm2-tools/Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/tpm2-abrmd/tpm2-abrmd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-index 6429b24531..5992cc1174 100644
---- a/package/tpm2-tools/Config.in
-+++ b/package/tpm2-tools/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_TPM2_TOOLS
- 	bool "tpm2-tools"
-+	depends on BR2_USE_MMU # dbus, libglib
-+	depends on BR2_USE_WCHAR # libglib -> gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -14,3 +17,8 @@ config BR2_PACKAGE_TPM2_TOOLS
- 	  implementation.
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
+index 0d6a167210..69d09a59e4 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.mk
++++ b/package/tpm2-abrmd/tpm2-abrmd.mk
+@@ -11,6 +11,10 @@ TPM2_ABRMD_LICENSE_FILES = LICENSE
+ TPM2_ABRMD_INSTALL_STAGING = YES
+ TPM2_ABRMD_DEPENDENCIES = dbus libglib2 tpm2-tss host-pkgconf
  
- 	  https://github.com/tpm2-software/tpm2-tools
++# configure.ac doesn't contain a link test, so it doesn't detect when 
++# libssp is missing.
++TPM2_ABRMD_CONF_ENV = ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
 +
-+comment "tpm2-tools needs a toolchain w/ C++, wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
+ TPM2_ABRMD_CONF_OPTS += \
+ 	--with-systemdsystemunitdir=$(if $(BR2_INIT_SYSTEMD),/usr/lib/systemd/system,no) \
+ 	--with-udevrulesdir=$(if $(BR2_PACKAGE_HAS_UDEV),/usr/lib/udev/rules.d,no)
 -- 
 2.14.3
