@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 22 Mar 2018 00:11:09 -0300
+Date: Thu, 22 Mar 2018 00:17:26 -0300
 Subject: [Buildroot] [PATCH next v2 4/5] support/scripts/pkg-stats-new:
  add latest upstream version information
-References: <20180321215824.45a5b5bc@windsurf>
-Message-ID: <5ab31ecd94bbd_65552b0d8140b8fc5231a@ultri4.mail>
+References: <20180321223559.43b49d2f@windsurf>
+Message-ID: <5ab32046eb66f_65553f823731ae7c5251a@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +12,65 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, Mar 21, 2018 at 05:58 PM, Thomas Petazzoni wrote:
+On Wed, Mar 21, 2018 at 06:35 PM, Thomas Petazzoni wrote:
 
-> I looked more closely into this, and unfortunately, it doesn't work.
-> Indeed, the data returned by the URL:
+> On Wed, 28 Feb 2018 00:03:53 -0300, Ricardo Martincoski wrote:
 > 
->   RELEASE_MONITORING_API/projects/?distro=Buildroot
+>>  [0000] vdr-plugin-vnsiserver => (False, None, None)
+>> [hangs here, I waited 10 minutes]
 > 
-> does not take into account the mapping between Buildroot package names
-> and release-monitoring.org package names, it only contains the
-> release-monitoring.org package names.
+> I should have fixed this, will be in v3. I'm now handling exceptions in
+> all cases, and I've added a timeout on the urllib2.urlopen() calls, that
+> will make it abort after 15 seconds if the HTTP request has not
+> returned.
+> 
+> This will allow to make sure the script terminates properly. However,
+> it means that the result of the script may be different from one run to
+> the other, as the HTTP request for a given package may sometimes take
+> more than 15 seconds, sometimes not.
 
-Indeed. I missed it was missing.
+Do you mean the generated html will be different?
+Will the script retry for a package that timeouts?
+Well... I can wait you send v3 to know this.
 
 > 
-> For example, we have a mapping samba4 -> samba, that allows
-> https://release-monitoring.org/api/project/Buildroot/samba4 to return
-> the expected result. But you won't find anything named "samba4" in
-> https://release-monitoring.org/api/projects/?distro=Buildroot. This
-> makes the entire concept of distro mapping useless.
-> 
-> Therefore, your proposal cannot work with the data that we can
-> currently download from release-monitoring.org. I have asked on the
-> #fedora-apps IRC channel about this.
-> 
-> Perhaps we could go with my v2 version on this aspect (i.e make HTTP
-> requests for each package), and change that later on if a better
-> solution is found ?
+> I guess this is a good enough trade-off, until upstream provides us a
+> better way of retrieving the data.
 
-I dislike the fact we make 2000+ HTTP requests, but as you explained it is a
-limitation from the current api exposed by the upstream. I even looked at the
-code hoping the mapping could be easily introduced in api v1... but no, it is
-not trivial.
+The upstream is working to provide api_v2 that will improve various aspects.
+The main changes in the api are a new field ecosystem (it will contain pypi for
+python packages, upstream url for custom projects, ...) and the paging system in
+the web interface.
+The new api will also provide the mapping:
+url/api/v2/projects?distribution=Buildroot
+I tested this by running a local server with a copy of the production database.
+Sample output:
+...
+{
+    "distribution": "Buildroot", 
+    "ecosystem": "https://download.samba.org/pub/samba/", 
+    "name": "samba4", 
+    "project": "samba"
+}, 
+...
 
-So, yes. Let's do this incrementally, first let's make it work using one request
-per package, then later we improve the script when the api v2 is deployed.
+Most changes in the code look (to me) ready and the upstream is currently
+setting up a staging server.
+Api v2 is *not yet* deployed to release-monitoring. I don't know the upstream
+timeline for this.
 
-In the meanwhile, we will be able to start creating the mappings based on the
-daily generated html.
+In the meanwhile, the solution you propose seems to be the best we can do using
+api v1.
+
+Right now there is a single direct user of the script (the server that
+generates the html), so a time penalty is not critical.
+All the other users (we) will access the already generated pkg-stats html.
+
+
+But I think it is better to upgrade to api v2 before we provide this script as a
+build target to generate a report based on the packages selected by .config .
+I think you mentioned something similar in an e-mail I unfortunately can't find
+right now.
 
 Regards,
 Ricardo
