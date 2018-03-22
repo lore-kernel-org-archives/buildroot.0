@@ -1,40 +1,34 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 22 Mar 2018 17:27:46 -0300
-Subject: [Buildroot] [PATCH 0/6] tpm2-{tss, abrmd,
- tools} fix compilation errors
-Message-ID: <20180322202752.2562-1-casantos@datacom.ind.br>
+Date: Thu, 22 Mar 2018 17:27:47 -0300
+Subject: [Buildroot] [PATCH 1/6] tpm2-tss: declare dependency on a toolchain
+ with C++
+In-Reply-To: <20180322202752.2562-1-casantos@datacom.ind.br>
+References: <20180322202752.2562-1-casantos@datacom.ind.br>
+Message-ID: <20180322202752.2562-2-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Declare dependency on a toolchain with C++ because tpm2-tss 1.4.0 still
-contains some C++ code. This has already changed on upstream, so future
-versions will drop the dependency on a C++ compiler.
+Version 1.4.0 still contains some C++ code. This has already changed on
+upstream, so future versions will drop the dependency on a C++ compiler.
 
-Declare dependencies of tpm2-tools on MMU, threads and wchar (for
-libglib and dbus).
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/tpm2-tss/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Disable stack smashing protection if the toolchain does not support it.
-This must be done explicitly because the configuration scripts attempt
-to enable SSP without proper testing.
-
-Carlos Santos (6):
-  tpm2-tss: declare dependency on a toolchain with C++
-  tpm2-tss: allow building without stack smashing protection (SSP)
-  tpm2-abrmd: declare dependency on a toolchain with C++
-  tpm2-abrmd: allow building without stack smashing protection (SSP)
-  tpm2-tools: propagate dependencies of selected packages
-  tpm2-tools: allow building without stack smashing protection (SSP)
-
- package/tpm2-abrmd/Config.in     | 5 +++--
- package/tpm2-abrmd/tpm2-abrmd.mk | 4 ++++
- package/tpm2-tools/Config.in     | 8 ++++++++
- package/tpm2-tools/tpm2-tools.mk | 4 ++++
- package/tpm2-tss/Config.in       | 3 +++
- package/tpm2-tss/tpm2-tss.mk     | 4 ++++
- 6 files changed, 26 insertions(+), 2 deletions(-)
-
+diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+index ebf0fd262d..f1a9920700 100644
+--- a/package/tpm2-tss/Config.in
++++ b/package/tpm2-tss/Config.in
+@@ -29,3 +29,6 @@ config BR2_PACKAGE_TPM2_TSS
+ 	    Microsoft software TPM2 simulator.
+ 
+ 	  https://github.com/tpm2-software/tpm2-tss
++
++comment "tpm2-tss needs a toolchain w/ C++"
++        depends on !BR2_INSTALL_LIBSTDCPP
 -- 
 2.14.3
