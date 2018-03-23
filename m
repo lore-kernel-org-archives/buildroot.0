@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Mar 2018 18:45:59 +0100
-Subject: [Buildroot] Using grub-bios.cfg
-In-Reply-To: <1521556906599-0.post@n4.nabble.com>
-References: <1521556906599-0.post@n4.nabble.com>
-Message-ID: <19706da9-64e6-cf98-da64-a688ec8ffdf8@mind.be>
+Date: Fri, 23 Mar 2018 19:08:16 +0100
+Subject: [Buildroot] [PATCH v5 1/1] gobject-introspection: new package
+In-Reply-To: <CANQCQparY42yn4WHD_7Ti3Sz9GTmwFQS1FfR40cUvYp7PmsBQg@mail.gmail.com>
+References: <20180318190131.21404-1-aduskett@gmail.com>
+ <20180318190131.21404-5-aduskett@gmail.com>
+ <CANQCQparY42yn4WHD_7Ti3Sz9GTmwFQS1FfR40cUvYp7PmsBQg@mail.gmail.com>
+Message-ID: <2f6b2001-5b26-76c0-e744-e1bea915007d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +14,21 @@ To: buildroot@busybox.net
 
 
 
-On 20-03-18 15:41, AAlex_ wrote:
-> Hi,
-> using a modified grub-bios.cfg dont work. 
-> File located under <BR2_EXTERNAL_MY_PATH>/board/pc
-> But instead, buildroot uses grub-bios.cfg under
-> <BUILDROOT_INSTALL_PATH>/board/pc
-> Doing the same with an pc-efi target works:
-> grub-efi.cfg located in <BR2_EXTERNAL_MY_PATH>/board/pc
-> will be used.
-> Do i need to specify more than an external path in bios defconfig?
+On 20-03-18 18:39, Matthew Weber wrote:
+> However, the sdk make target and the relocate-sdk.sh would
+> need to be updated to handle fixing up the staging directory paths...
+> Unsure if the staging fixup would be a good thing though, as other
+> files in that folder may not like that (nothing else really should
+> have absolute paths, right? so maybe it's transparent).  Another
+> approach would be to make the wrappers relative pathed but that gets
+> tricky with HOST_DIR and STAGING_DIR having the option of being custom
+> locations and not in the same output folder.
 
- It's not entirely clear to me what you mean. However:
+ Only HOST_DIR has the option of being in a custom location. STAGING_DIR is
+always $(HOST_DIR)/$(GNU_TARGET_NAME)/sysroot.
 
- grub-bios.cfg and grub-efi.cfg are only used by the custom post-image script
-board/pc/post-image.sh. The file to use is based on the location of that script.
-In other words, if you refer to board/pc/post-image.sh in your Buildroot
-configuration, then the grub-bios.cfg under <BUILDROOT_INSTALL_PATH>/board/pc
-will be used.
+ And in fact, relocate-sdk.sh is already going through STAGING_DIR: it does a
+grep -r on HOST_DIR so it *will* also recurse into STAGING_DIR.
 
  Regards,
  Arnout
