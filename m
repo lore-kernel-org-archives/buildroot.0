@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 23 Mar 2018 22:48:13 +0100
-Subject: [Buildroot] [PATCH v2 1/3] toolchain-configs.csv: re-organize for
- test-pkg
+Date: Fri, 23 Mar 2018 22:48:14 +0100
+Subject: [Buildroot] [PATCH v2 2/3] test-pkg: test a subset of toolchains by
+ default, add -a and -n options
 In-Reply-To: <20180323214815.19831-1-thomas.petazzoni@bootlin.com>
 References: <20180323214815.19831-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180323214815.19831-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20180323214815.19831-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,78 +13,157 @@ To: buildroot@busybox.net
 
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-This commit reorganizes the toolchain-configs.csv so that the first
-toolchains are a subset of "useful" toolchains to be tested by
-contributors to validate a package. This subset is the one that will
-be used by default by test-pkg.
+During the latest Buildroot Developers meeting, we discussed that
+test-pkg would perhaps be more widely used if it tested a smaller
+subset of toolchains. Indeed, it currently tests 47 toolchains, which
+takes very long to build. Several of the toolchain configurations are
+quite similar, and it is perhaps not necessary for contributors to
+test them all before submitting a package.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Therefore, this commit changes the test-pkg script to only test a
+subset of the toolchain configurations by default. The N first
+configurations of the CSV files are tested, where N is hard-coded in
+the script. The CSV file has therefore been re-organized to have the
+first N toolchains be the most important ones.
+
+A -a/--all option is added to test with all toolchains, while a
+-n/--number option is added to test with the first N toolchains, N
+being passed on the command line.
+
+Note that the list of toolchains (built in the "toolchains" shell
+variable) is no longer sorted. Indeed, when the first N toolchains are
+tested, we want them to be tested in the same order as they are listed
+in the CSV file, as we are careful to order them in an interesting
+order. We only sort when all toolchains are tested.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
 Changes since v1:
-- Add better comments to explain the two "sections" of the toolchain
-  list, as suggested by Yann E. Morin.
+- Keep alphabetic sorting in the definition of the 'o' variable that
+  contains the list of short options. Suggested by Yann E. Morin. 'h'
+  for help remains a special case and therefore remains at the first
+  position.
+- Keep alphabetic sorting when handling options. Here as well, --help
+  remains first, as it already was. Suggested by Yann E. Morin.
+- Use spaces and not tabs for indentation. Suggested by Yann E. Morin.
 ---
- .../autobuild/toolchain-configs.csv                | 32 ++++++++++++++++++----
- 1 file changed, 26 insertions(+), 6 deletions(-)
+ utils/test-pkg | 56 +++++++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 49 insertions(+), 7 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 2010113f44..1bce7ac577 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -1,20 +1,41 @@
-+# This file is sorted by "importance" of toolchains, so that by
-+# default test-pkg tests a useful subset of toolchains
+diff --git a/utils/test-pkg b/utils/test-pkg
+index cd7b9dad7b..2e069b6005 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -5,28 +5,37 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
+ 
+ main() {
+     local o O opts
+-    local cfg dir pkg random toolchains_dir toolchain
++    local cfg dir pkg random toolchains_dir toolchain all number mode
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
+     local -a toolchains
+ 
+-    o='hc:d:p:r:t:'
++    o='hac:d:n:p:r:t:'
+     O='help,config-snippet:build-dir:package:,random:,toolchains-dir:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+     random=0
++    all=0
++    number=0
++    mode=0
+     toolchains_csv="${TOOLCHAINS_CSV}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+         (-h|--help)
+             help; exit 0
+             ;;
++        (-a|--all)
++            all=1; shift 1
++            ;;
+         (-c|--config-snippet)
+             cfg="${2}"; shift 2
+             ;;
+         (-d|--build-dir)
+             dir="${2}"; shift 2
+             ;;
++        (-n|--number)
++            number="${2}"; shift 2
++            ;;
+         (-p|--package)
+             pkg="${2}"; shift 2
+             ;;
+@@ -51,15 +60,37 @@ main() {
+         dir="${HOME}/br-test-pkg"
+     fi
+ 
++    if [ ${random} -gt 0 ]; then
++        mode=$((mode+1))
++    fi
 +
-+# Toolchains used by default by test-pkg:
++    if [ ${number} -gt 0 ]; then
++        mode=$((mode+1))
++    fi
 +
-+# Test a regular uClibc toolchain
-+support/config-fragments/autobuild/br-arm-full.config,x86_64
++    if [ ${all} -eq 1 ]; then
++        mode=$((mode+1))
++    fi
 +
-+# Test a toolchain with glibc and a very recent gcc version
-+support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
++    # Default mode is to test the N first toolchains, which have been
++    # chosen to be a good selection of toolchains.
++    if [ ${mode} -eq 0 ] ; then
++        number=7
++    elif [ ${mode} -gt 1 ] ; then
++        printf "error: --all, --number and --random are mutually exclusive\n" >&2; exit 1
++    fi
 +
-+# Test a noMMU toolchain with no dynamic library support
-+support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
+     # Extract the URLs of the toolchains; drop internal toolchains
+     # E.g.: http://server/path/to/name.config,arch,libc
+     #  -->  http://server/path/to/name.config
+     toolchains=($(sed -r -e 's/,.*//; /internal/d; /^#/d; /^$/d;' "${toolchains_csv}" \
+                   |if [ ${random} -gt 0 ]; then \
+                       sort -R |head -n ${random}
+-                   else
+-                      cat
+-                   fi |sort
++                  elif [ ${number} -gt 0 ]; then \
++                      head -n ${number}
++                  else
++                      sort
++                  fi
+                  )
+                )
+ 
+@@ -154,6 +185,10 @@ toolchain config fragment and the required host architecture, separated by a
+ comma. The config fragments should contain only the toolchain and architecture
+ settings.
+ 
++By default, a useful subset of toolchains is tested. If needed, all
++toolchains can be tested (-a), an arbitrary number of toolchains (-n
++in order, -r for random).
 +
-+# Test a musl toolchain
-+support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
+ Options:
+ 
+     -h, --help
+@@ -170,9 +205,16 @@ Options:
+         Test-build the package PKG, by running 'make PKG'; if not specified,
+         just runs 'make'.
+ 
++    -a, --all
++        Test all toolchains, instead of the default subset defined by
++        Buildroot developers.
 +
-+# Test a noMMU toolchain with dynamic library support
-+support/config-fragments/autobuild/br-bfin-full.config,x86_64
++    -n N, --number N
++        Test N toolchains, in the order defined in the toolchain CSV
++        file.
 +
-+# Test a MMU toolchain without dynamic library support
-+support/config-fragments/autobuild/br-arm-full-static.config,x86_64
-+
-+# Test a toolchain with an old gcc version (gcc 4.8)
- support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86
-+
-+# Toolchains used by test-pkg only when the '-a' option is passed:
- support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86
- support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
- support/config-fragments/autobuild/br-arc-full-internal.config,any
- support/config-fragments/autobuild/br-arc-internal-glibc.config,any
- support/config-fragments/autobuild/br-arcle-hs38.config,x86_64
- support/config-fragments/autobuild/br-arm-basic.config,x86_64
--support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
- support/config-fragments/autobuild/br-arm-cortex-a9-musl.config,x86_64
--support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
--support/config-fragments/autobuild/br-arm-full.config,x86_64
- support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
--support/config-fragments/autobuild/br-arm-full-static.config,x86_64
- support/config-fragments/autobuild/br-arm-internal-full.config,any
- support/config-fragments/autobuild/br-arm-internal-glibc.config,any
- support/config-fragments/autobuild/br-arm-internal-musl.config,any
--support/config-fragments/autobuild/br-bfin-full.config,x86_64
- support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
- support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config,x86_64
- support/config-fragments/autobuild/br-m68k-5208-full.config,x86_64
-@@ -36,7 +57,6 @@ support/config-fragments/autobuild/br-sh4-full.config,x86_64
- support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
- support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64
--support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full-internal.config,any
- support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
+     -r N, --random N
+-        Limit the tests to the N randomly selected toolchains, instead of
+-        building with all toolchains.
++        Limit the tests to the N randomly selected toolchains.
+ 
+     -t CSVFILE, --toolchains-csv CSVFILE
+         CSV file containing the paths to config fragments of toolchains to
 -- 
 2.14.3
