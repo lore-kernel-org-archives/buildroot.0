@@ -1,33 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Mar 2018 16:26:59 +0100
-Subject: [Buildroot] [PATCH] util-linux: bump to version 2.32
-In-Reply-To: <b647177fcbd624bf6c2e489e852612e3962dac39.1521794140.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 23 Mar 2018 11:35:40 +0300")
-References: <b647177fcbd624bf6c2e489e852612e3962dac39.1521794140.git.baruch@tkos.co.il>
-Message-ID: <87k1u23j98.fsf@dell.be.48ers.dk>
+Date: Fri, 23 Mar 2018 16:28:37 +0100
+Subject: [Buildroot] [PATCH 1/2] efibootmgr: explicitly depend on
+ host-pkgconf and popt
+In-Reply-To: <20180323115343.45a24828@windsurf> (Thomas Petazzoni's message of
+ "Fri, 23 Mar 2018 11:53:43 +0100")
+References: <20180323095741.16512-1-peter@korsgaard.com>
+ <20180323115343.45a24828@windsurf>
+Message-ID: <87fu4q3j6i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Leave both _VERSION_MAJOR and _VERSION to reduce churn. We are likely to
- > need _MAJOR on the next bump.
+ > Hello,
+ > On Fri, 23 Mar 2018 10:57:40 +0100, Peter Korsgaard wrote:
+ >> The efibootmgr build system uses host-pkgconf and popt, so explicitly add
+ >> them to _DEPENDENCIES instead of relying on them getting pulled in by
+ >> efivar.
 
- > Drop ac_cv_header_sys_timex_h override; not needed with current
- > uClibc-ng.
+ > Minor nit: if it's the efibootmgr *build system* that uses popt, then
+ > one would expect to see a dependency on host-popt, not popt. I guess
+ > it's not the *build system* that depends on popt, but efibootmgr
+ > itself, no ?
 
- > Drop scanf_cv_type_modifier override; not used in configure script since
- > v2.21.
+Yes, the wording is maybe not super clear. What I meant is that the
+Makefile (E.G. the build system) explicitly refers to pkg-config and
+popt.
 
- > Drop upstream patch.
-
- > Cc: Carlos Santos <casantos@datacom.ind.br>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
+I'll reword and commit, thanks.
 
 -- 
 Bye, Peter Korsgaard
