@@ -1,45 +1,92 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 23 Mar 2018 16:41:44 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-03-22
-In-Reply-To: <CANQCQpYHhR+SF3VH_FB_khp0My6G5gjMPthXB73=qB7kyQbfUw@mail.gmail.com>
-References: <20180323070009.1FD66208B0@mail.bootlin.com>
- <CANQCQpYHhR+SF3VH_FB_khp0My6G5gjMPthXB73=qB7kyQbfUw@mail.gmail.com>
-Message-ID: <20180323134144.d6ou7jz5363a3dz3@tarshish>
+From: =?UTF-8?Q?Rafa=C5=82_Susz?= <rafal.susz@gmail.com>
+Date: Fri, 23 Mar 2018 15:19:37 +0100
+Subject: [Buildroot] "BR2_TARGET_ROOTFS_INITRAMFS" with U-Boot?
+In-Reply-To: <20180323103957.xbnkj6lwwwls7kob@tarshish>
+References: <11934B5C-E5F2-4D66-B522-DC095DFFCA26@jens-maus.de>
+ <20180323103957.xbnkj6lwwwls7kob@tarshish>
+Message-ID: <CANmNbVzyG52=v-5sQ6wUQrXqdzEdpQUp5R8TZTXkXeXJYaJnUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+Hello Jens,
 
-On Fri, Mar 23, 2018 at 08:18:29AM -0500, Matthew Weber wrote:
-> On Fri, Mar 23, 2018 at 2:00 AM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> > Hello,
+I made short test on my at91sam ARM9  based board. After simple
+enabling  BR2_TARGET_ROOTFS_INITRAMFS
+in buildroot  and changing bootargs to contain  root=/dev/ram0
+I also observe stuck on "Starting linux kernel ..."  .
+
+Make sure you have enabled RAMFS support in kernel. On my side it was not
+selected causing the hang:
+
+General Setup
+  [*] Initial RAM filesystem and RAM disk (initramfs/initrd) support
+
+
+With it in I am able to boot up with ramfs.
+
+best regards,
+rafal
+
+
+2018-03-23 11:39 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
+
+> Hi Jens,
+>
+> On Fri, Mar 23, 2018 at 11:05:24AM +0100, Jens Maus wrote:
+> > I am currently developing a buildroot-driven system (for RaspberryPi HW)
+> > which uses U-Boot together with BR2_TARGET_ROOTFS_CPIO and
+> > BR2_TARGET_ROOTFS_CPIO_UIMAGE in buildroot to generate a zImage and
+> initrd
+> > file which I can then boot via
 > >
-> > Build statistics for 2018-03-22
-> 
-> [snip]
-> 
-> >         bfin |                        unknown | NOK | http://autobuild.buildroot.net/results/70e1f78ed1bc49791b70594ba4135a4fb7c61219 |
-> >         bfin |                        unknown | NOK | http://autobuild.buildroot.net/results/75e547c648aa060eb0ffd1c73d98f544968bbab4 |
-> >          arm |                        unknown | NOK | http://autobuild.buildroot.net/results/6c9c695e5e7b5c3bac705be3926a43539b8a3a42 |
-> >          arm |                        unknown | NOK | http://autobuild.buildroot.net/results/2e03eecb0f076f7d516f1389b5d2c492e31295d8 |
-> >         bfin |                        unknown | NOK | http://autobuild.buildroot.net/results/698c6e5d3fa8f2a1dd268bbd0b2ffe83084c4c41 |
-> 
-> These all look like they're related to building TPM2 tools and a new
-> circular dependency?  I noticed a few patchsets that looked related
-> but I don't believe cover this case yet, right?
-
-These configs have tpm2-tools enabled. tpm2-tools used to select libglib 
-without taking its dependencies into account. This should now be fixed in 
-commit 4be409f401c0 (tpm2-tools: propagate dependencies of selected packages).
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> > load mmc 0:1 ${kernel_addr_r} /zImage
+> > load mmc 0:1 ${ramdisk_addr_r} /initrd
+> > setenv bootargs ?root=/dev/ram0?
+> > bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr}
+> >
+> > in U-Boot. This works perfectly fine.
+> >
+> > However, I am currently evaluating the possibilities to directly embed
+> the
+> > initramfs into the kernel by switching to BR2_TARGET_ROOTFS_INITRAMFS.
+> But I
+> > am not able to boot the generated zImage via
+> >
+> > load mmc 0:1 ${kernel_addr_r} /zImage
+> > setenv bootargs ??
+> > bootz ${kernel_addr_r} - ${fdt_addr}
+> >
+> > It simply hangs at ?Starting kernel??
+> >
+> > Unfortunately I don?t have any idea why this kernel with the embedded
+> > initramfs doesn?t boot at all? It doesn?t even output any kernel
+> > information/debug on the console.
+> >
+> > Any idea what might be wrong here or how I could debug the situation to
+> get
+> > that zImage booted?
+>
+> Your bigger kernel image, or its boot-time decompressed image, might be
+> overwriting the DT. See section 4b in Documentation/arm/Booting of the
+> kernel
+> source.
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--
+> Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180323/28b4ead7/attachment.html>
