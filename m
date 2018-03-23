@@ -1,66 +1,107 @@
-From: Ben Whitten <ben.whitten@gmail.com>
-Date: Fri, 23 Mar 2018 18:21:19 +0000
-Subject: [Buildroot] [PATCH RESEND 2/2] fs/squashfs: enable squashfs to
- generate a verity hashtable
-In-Reply-To: <1521829279-5156-1-git-send-email-ben.whitten@gmail.com>
-References: <1521829279-5156-1-git-send-email-ben.whitten@gmail.com>
-Message-ID: <1521829279-5156-3-git-send-email-ben.whitten@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 23 Mar 2018 20:59:39 +0200
+Subject: [Buildroot] [PATCH v2/next 1/4] brotli: new package
+In-Reply-To: <20180323185942.60252-1-aperez@igalia.com>
+References: <20180323185942.60252-1-aperez@igalia.com>
+Message-ID: <20180323185942.60252-2-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For those times that you want to verify that your readonly filesystem
-hasn't been tampered we can generate a dm-verity hash table.
-The root hash is enclosed in .table file and must be secured else where.
+Add the brotli package to Buildroot. This is needed by woff2, which in
+turn is needed by webkitgtk from version 2.20.0 onwards. WebKitGTK+ used
+to bundle a copy of the library, but it stopped doing so now that the
+upstream has started making releases.
 
-Signed-off-by: Ben Whitten <ben.whitten@gmail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- fs/squashfs/Config.in   |  6 ++++++
- fs/squashfs/squashfs.mk | 10 ++++++++++
- 2 files changed, 16 insertions(+)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/brotli/Config.in   | 12 ++++++++++++
+ package/brotli/brotli.hash |  5 +++++
+ package/brotli/brotli.mk   | 17 +++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/brotli/Config.in
+ create mode 100644 package/brotli/brotli.hash
+ create mode 100644 package/brotli/brotli.mk
 
-diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
-index ca9ddb2..d435249 100644
---- a/fs/squashfs/Config.in
-+++ b/fs/squashfs/Config.in
-@@ -28,4 +28,10 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_XZ
- 	bool "xz"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1faefc45fc..2d5f2108a8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -62,6 +62,7 @@ F:	package/setools/
+ F:	package/sngrep/
  
- endchoice
-+
-+config BR2_TARGET_ROOTFS_SQUASHFS_VERITY
-+	bool "Generate verity hashtable"
+ N:	Adrian Perez de Castro <aperez@igalia.com>
++F:	package/brotli/
+ F:	package/libepoxy/
+ F:	package/webkitgtk/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 58dfd6306d..26ded5ebb2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -63,6 +63,7 @@ menu "Audio and video applications"
+ endmenu
+ 
+ menu "Compressors and decompressors"
++	source "package/brotli/Config.in"
+ 	source "package/bzip2/Config.in"
+ 	source "package/gzip/Config.in"
+ 	source "package/lz4/Config.in"
+diff --git a/package/brotli/Config.in b/package/brotli/Config.in
+new file mode 100644
+index 0000000000..e40f5b6b9f
+--- /dev/null
++++ b/package/brotli/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_BROTLI
++	bool "brotli"
 +	help
-+	  As squashfs is readonly it is possible to generate a dm-verity
-+	  hashtable for use in verified boot systems.
- endif
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 51abd5d..8fe09c8 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -5,6 +5,9 @@
- ################################################################################
- 
- ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
-+ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS_VERITY),y)
-+ROOTFS_SQUASHFS_DEPENDENCIES += host-cryptsetup
-+endif
- 
- ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
- 
-@@ -24,4 +27,11 @@ define ROOTFS_SQUASHFS_CMD
- 	$(HOST_DIR)/bin/mksquashfs $(TARGET_DIR) $@ $(ROOTFS_SQUASHFS_ARGS)
- endef
- 
-+ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS_VERITY),y)
-+define ROOTFS_SQUASHFS_VERITY
-+	$(HOST_DIR)/sbin/veritysetup format $@ $@.verity > $@.verity.table
-+endef
-+ROOTFS_SQUASHFS_POST_GEN_HOOKS += ROOTFS_SQUASHFS_VERITY
-+endif
++	  Generic-purpose lossless compression library. The algorithm
++	  compresses data using a combination of a modern variant of
++	  the LZ77 algorithm, Huffman coding and 2nd order context
++	  modeling, with a compression ratio comparable to the best
++	  currently available general-purpose compression methods. It
++	  is similar in speed with deflate but offers more dense
++	  compression.
 +
- $(eval $(rootfs))
++	  https://github.com/google/brotli
+diff --git a/package/brotli/brotli.hash b/package/brotli/brotli.hash
+new file mode 100644
+index 0000000000..7bdefcb7dd
+--- /dev/null
++++ b/package/brotli/brotli.hash
+@@ -0,0 +1,5 @@
++# Locally generated:
++sha512  93adcf437d730ac403e444285ac8aefbb2c8a6b5e1b064e8ee33684c067287a8159e0ee73d2217c167881e87da73fa494792d963a15508fd42b2ac4a5b52823c  v1.0.3.tar.gz
++
++# Hash for license files:
++sha512  16d7a62757f9854cd0ff9750eb0b374a1360deded0ba1646fde430f79a8f7c36a85f4884faaf1ea90db02537cd8d8c314cfcbcf492be25af24e1e77aa5919ebb  LICENSE
+diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
+new file mode 100644
+index 0000000000..cf1e811543
+--- /dev/null
++++ b/package/brotli/brotli.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# brotli
++#
++################################################################################
++
++BROTLI_VERSION = 1.0.3
++BROTLI_SOURCE = v$(BROTLI_VERSION).tar.gz
++BROTLI_SITE = https://github.com/google/brotli/archive
++BROTLI_LICENSE = MIT
++BROTLI_LICENSE_FILES = LICENSE
++BROTLI_INSTALL_STAGING = YES
++BROTLI_CONF_OPTS = \
++	-DBROTLI_DISABLE_TESTS=ON \
++	-DBROTLI_BUNDLED_MODE=OFF
++
++$(eval $(cmake-package))
 -- 
-2.7.4
+2.16.2
