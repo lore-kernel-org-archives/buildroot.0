@@ -1,228 +1,303 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Mar 2018 16:29:22 +0100
-Subject: [Buildroot] [git commit] efivar: bump version
-Message-ID: <20180323152955.E145A815A3@busybox.osuosl.org>
+Date: Fri, 23 Mar 2018 16:23:57 +0100
+Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.79
+Message-ID: <20180323152955.9873D80FB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb7a698001302249abf57762a0483fa2c3edb50a
+commit: https://git.buildroot.net/buildroot/commit/?id=c8dec6271a1c99a57be1a016b14ceb8965a30a7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop 0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch and
-0003-Remove-some-extra-const-that-gcc-complains-about.patch as they are now
-upstream.
+Drop upstream patches.
 
-The upstream repo moved to the 'rhboot' github project, so adjust upstream
-URL in .mk and help text to match.
-
-Drop dependency on !musl as it is now support since e04281e60cf0d
-(makeguids: Ensure compatibility with other libcs).
-
-Drop BINTARGETS workaround as this is fixed since 6c674283697 (Don't build
-static by default).
-
-Drop popt dependency as it is no longer needed since 1aec5e7891 (Replace
-popt usage with getopt_long in efivar.c).
-
-While we are at it, also add a hash for the license file.
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efibootmgr/Config.in                       |  2 -
- ...bc.patch => 0001-Allow-build-with-uClibc.patch} |  2 +-
- ...fs-to-avoid-the-multiple-definitions-bug-.patch | 29 -------------
- ...some-extra-const-that-gcc-complains-about.patch | 47 ----------------------
- package/efivar/Config.in                           |  8 +---
- package/efivar/efivar.hash                         |  3 +-
- package/efivar/efivar.mk                           |  9 +----
- 7 files changed, 7 insertions(+), 93 deletions(-)
+ ...for-wildcard-NSEC-records.-CVE-2017-15107.patch | 212 ---------------------
+ ...validation-errors-introduced-in-4fe6744a2.patch |  29 ---
+ package/dnsmasq/dnsmasq.hash                       |   4 +-
+ package/dnsmasq/dnsmasq.mk                         |   2 +-
+ 4 files changed, 3 insertions(+), 244 deletions(-)
 
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index b87fb53225..d31f9b13ee 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_EFIBOOTMGR
- 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS # efivar
- 	depends on !BR2_STATIC_LIBS # efivar
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
--	depends on !BR2_TOOLCHAIN_USES_MUSL # efivar
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	select BR2_PACKAGE_EFIVAR
-@@ -20,6 +19,5 @@ comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, header
- 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		BR2_TOOLCHAIN_USES_MUSL || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
-diff --git a/package/efivar/0002-Allow-build-with-uClibc.patch b/package/efivar/0001-Allow-build-with-uClibc.patch
-similarity index 96%
-rename from package/efivar/0002-Allow-build-with-uClibc.patch
-rename to package/efivar/0001-Allow-build-with-uClibc.patch
-index 7c195872b0..01fa9dee70 100644
---- a/package/efivar/0002-Allow-build-with-uClibc.patch
-+++ b/package/efivar/0001-Allow-build-with-uClibc.patch
-@@ -20,7 +20,7 @@ index 7f2d4dd..72c02d1 100644
-  #include <stdlib.h>
- -#include <uchar.h>
-  
-- #include <efivar.h>
-+ #include <efivar/efivar.h>
-  #include "lib.h"
-  
- +#ifdef __UCLIBC__
-diff --git a/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch b/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
+diff --git a/package/dnsmasq/0001-DNSSEC-fix-for-wildcard-NSEC-records.-CVE-2017-15107.patch b/package/dnsmasq/0001-DNSSEC-fix-for-wildcard-NSEC-records.-CVE-2017-15107.patch
 deleted file mode 100644
-index 2bc3ff243f..0000000000
---- a/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
+index 7b834e80e2..0000000000
+--- a/package/dnsmasq/0001-DNSSEC-fix-for-wildcard-NSEC-records.-CVE-2017-15107.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--From 314eb67b239e60c2ed3700e2baf9cd0e590465f3 Mon Sep 17 00:00:00 2001
--From: Peter Jones <pjones@redhat.com>
--Date: Thu, 27 Oct 2016 09:19:18 -0400
--Subject: [PATCH] Use -z muldefs to avoid the multiple definitions bug
-- without -flto
+@@ -1,212 +0,0 @@
+-From 4fe6744a220eddd3f1749b40cac3dfc510787de6 Mon Sep 17 00:00:00 2001
+-From: Simon Kelley <simon@thekelleys.org.uk>
+-Date: Fri, 19 Jan 2018 12:26:08 +0000
+-Subject: [PATCH] DNSSEC fix for wildcard NSEC records. CVE-2017-15107 applies.
 -
--This fixes github issue #64
+-It's OK for NSEC records to be expanded from wildcards,
+-but in that case, the proof of non-existence is only valid
+-starting at the wildcard name, *.<domain> NOT the name expanded
+-from the wildcard. Without this check it's possible for an
+-attacker to craft an NSEC which wrongly proves non-existence
+-in a domain which includes a wildcard for NSEC.
 -
--Signed-off-by: Peter Jones <pjones@redhat.com>
--Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-----
-- Make.defaults | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/Make.defaults b/Make.defaults
--index aa974d9..c9d599f 100644
----- a/Make.defaults
--+++ b/Make.defaults
--@@ -32,6 +32,7 @@ cflags	= $(CFLAGS) -I${TOPDIR}/src/include/efivar/ \
-- clang_ccldflags =
-- gcc_ccldflags =
-- ccldflags = $(cflags) -L. $(CCLDFLAGS) $(LDFLAGS) \
--+	-Wl,-z,muldefs \
-- 	$(if $(findstring clang,$(CCLD)),$(clang_ccldflags),) \
-- 	$(if $(findstring gcc,$(CCLD)),$(gcc_ccldflags),) \
-- 	$(call pkg-config-ccldflags)
---- 
--2.10.2
--
-diff --git a/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch b/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
-deleted file mode 100644
-index 6b9f77eb8b..0000000000
---- a/package/efivar/0003-Remove-some-extra-const-that-gcc-complains-about.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 1c7c0f71c9d22efda4156881eb187b8c69d1cca7 Mon Sep 17 00:00:00 2001
--From: Peter Jones <pjones@redhat.com>
--Date: Mon, 6 Feb 2017 14:28:19 -0500
--Subject: [PATCH] Remove some extra "const" that gcc complains about.
--
--One of these days I'll get these right.
--
--Signed-off-by: Peter Jones <pjones@redhat.com>
+-[baruch: drop the CHANGELOG hunk]
 -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
--Upstream commit 1c7c0f71c9d22e.
+-Upstream status: upstream commit 4fe6744a220e
 -
-- src/include/efivar/efiboot-loadopt.h | 4 ++--
-- src/loadopt.c                        | 2 +-
-- 2 files changed, 3 insertions(+), 3 deletions(-)
+- CHANGELOG    |  12 +++++-
+- src/dnssec.c | 117 ++++++++++++++++++++++++++++++++++++++++++++++++++++-------
+- 2 files changed, 114 insertions(+), 15 deletions(-)
 -
--diff --git a/src/include/efivar/efiboot-loadopt.h b/src/include/efivar/efiboot-loadopt.h
--index 07db5c4c53e3..efc29c69d47e 100644
----- a/src/include/efivar/efiboot-loadopt.h
--+++ b/src/include/efivar/efiboot-loadopt.h
--@@ -32,8 +32,8 @@ extern ssize_t efi_loadopt_create(uint8_t *buf, ssize_t size,
-- 
-- extern efidp efi_loadopt_path(efi_load_option *opt, ssize_t limit)
-- 	__attribute__((__nonnull__ (1)));
---extern const unsigned char const * efi_loadopt_desc(efi_load_option *opt,
---						    ssize_t limit)
--+extern const unsigned char * efi_loadopt_desc(efi_load_option *opt,
--+					      ssize_t limit)
-- 	__attribute__((__visibility__ ("default")))
-- 	__attribute__((__nonnull__ (1)));
-- extern uint32_t efi_loadopt_attrs(efi_load_option *opt)
--diff --git a/src/loadopt.c b/src/loadopt.c
--index a63ca792d2dc..ce889867fd29 100644
----- a/src/loadopt.c
--+++ b/src/loadopt.c
--@@ -357,7 +357,7 @@ teardown(void)
-- 
-- __attribute__((__nonnull__ (1)))
-- __attribute__((__visibility__ ("default")))
---const unsigned char const *
--+const unsigned char *
-- efi_loadopt_desc(efi_load_option *opt, ssize_t limit)
+-diff --git a/src/dnssec.c b/src/dnssec.c
+-index eb6c11cbe00f..a54a0b4f14cf 100644
+---- a/src/dnssec.c
+-+++ b/src/dnssec.c
+-@@ -103,15 +103,17 @@ static void from_wire(char *name)
+- static int count_labels(char *name)
 - {
-- 	if (last_desc) {
+-   int i;
+--
+-+  char *p;
+-+  
+-   if (*name == 0)
+-     return 0;
+- 
+--  for (i = 0; *name; name++)
+--    if (*name == '.')
+-+  for (p = name, i = 0; *p; p++)
+-+    if (*p == '.')
+-       i++;
+- 
+--  return i+1;
+-+  /* Don't count empty first label. */
+-+  return *name == '.' ? i : i+1;
+- }
+- 
+- /* Implement RFC1982 wrapped compare for 32-bit numbers */
+-@@ -1094,8 +1096,8 @@ static int hostname_cmp(const char *a, const char *b)
+-     }
+- }
+- 
+--static int prove_non_existence_nsec(struct dns_header *header, size_t plen, unsigned char **nsecs, int nsec_count,
+--				    char *workspace1, char *workspace2, char *name, int type, int *nons)
+-+static int prove_non_existence_nsec(struct dns_header *header, size_t plen, unsigned char **nsecs, unsigned char **labels, int nsec_count,
+-+				    char *workspace1_in, char *workspace2, char *name, int type, int *nons)
+- {
+-   int i, rc, rdlen;
+-   unsigned char *p, *psave;
+-@@ -1108,6 +1110,9 @@ static int prove_non_existence_nsec(struct dns_header *header, size_t plen, unsi
+-   /* Find NSEC record that proves name doesn't exist */
+-   for (i = 0; i < nsec_count; i++)
+-     {
+-+      char *workspace1 = workspace1_in;
+-+      int sig_labels, name_labels;
+-+
+-       p = nsecs[i];
+-       if (!extract_name(header, plen, &p, workspace1, 1, 10))
+- 	return 0;
+-@@ -1116,7 +1121,27 @@ static int prove_non_existence_nsec(struct dns_header *header, size_t plen, unsi
+-       psave = p;
+-       if (!extract_name(header, plen, &p, workspace2, 1, 10))
+- 	return 0;
+--      
+-+
+-+      /* If NSEC comes from wildcard expansion, use original wildcard
+-+	 as name for computation. */
+-+      sig_labels = *labels[i];
+-+      name_labels = count_labels(workspace1);
+-+
+-+      if (sig_labels < name_labels)
+-+	{
+-+	  int k;
+-+	  for (k = name_labels - sig_labels; k != 0; k--)
+-+	    {
+-+	      while (*workspace1 != '.' && *workspace1 != 0)
+-+		workspace1++;
+-+	      if (k != 1 && *workspace1 == '.')
+-+		workspace1++;
+-+	    }
+-+	  
+-+	  workspace1--;
+-+	  *workspace1 = '*';
+-+	}
+-+	  
+-       rc = hostname_cmp(workspace1, name);
+-       
+-       if (rc == 0)
+-@@ -1514,24 +1539,26 @@ static int prove_non_existence_nsec3(struct dns_header *header, size_t plen, uns
+- 
+- static int prove_non_existence(struct dns_header *header, size_t plen, char *keyname, char *name, int qtype, int qclass, char *wildname, int *nons)
+- {
+--  static unsigned char **nsecset = NULL;
+--  static int nsecset_sz = 0;
+-+  static unsigned char **nsecset = NULL, **rrsig_labels = NULL;
+-+  static int nsecset_sz = 0, rrsig_labels_sz = 0;
+-   
+-   int type_found = 0;
+--  unsigned char *p = skip_questions(header, plen);
+-+  unsigned char *auth_start, *p = skip_questions(header, plen);
+-   int type, class, rdlen, i, nsecs_found;
+-   
+-   /* Move to NS section */
+-   if (!p || !(p = skip_section(p, ntohs(header->ancount), header, plen)))
+-     return 0;
+-+
+-+  auth_start = p;
+-   
+-   for (nsecs_found = 0, i = ntohs(header->nscount); i != 0; i--)
+-     {
+-       unsigned char *pstart = p;
+-       
+--      if (!(p = skip_name(p, header, plen, 10)))
+-+      if (!extract_name(header, plen, &p, daemon->workspacename, 1, 10))
+- 	return 0;
+--      
+-+	  
+-       GETSHORT(type, p); 
+-       GETSHORT(class, p);
+-       p += 4; /* TTL */
+-@@ -1548,7 +1575,69 @@ static int prove_non_existence(struct dns_header *header, size_t plen, char *key
+- 	  if (!expand_workspace(&nsecset, &nsecset_sz, nsecs_found))
+- 	    return 0; 
+- 	  
+--	  nsecset[nsecs_found++] = pstart;
+-+	  if (type == T_NSEC)
+-+	    {
+-+	      /* If we're looking for NSECs, find the corresponding SIGs, to 
+-+		 extract the labels value, which we need in case the NSECs
+-+		 are the result of wildcard expansion.
+-+		 Note that the NSEC may not have been validated yet
+-+		 so if there are multiple SIGs, make sure the label value
+-+		 is the same in all, to avoid be duped by a rogue one.
+-+		 If there are no SIGs, that's an error */
+-+	      unsigned char *p1 = auth_start;
+-+	      int res, j, rdlen1, type1, class1;
+-+	      
+-+	      if (!expand_workspace(&rrsig_labels, &rrsig_labels_sz, nsecs_found))
+-+		return 0;
+-+	      
+-+	      rrsig_labels[nsecs_found] = NULL;
+-+	      
+-+	      for (j = ntohs(header->nscount); j != 0; j--)
+-+		{
+-+		  if (!(res = extract_name(header, plen, &p1, daemon->workspacename, 0, 10)))
+-+		    return 0;
+-+
+-+		   GETSHORT(type1, p1); 
+-+		   GETSHORT(class1, p1);
+-+		   p1 += 4; /* TTL */
+-+		   GETSHORT(rdlen1, p1);
+-+
+-+		   if (!CHECK_LEN(header, p1, plen, rdlen1))
+-+		     return 0;
+-+		   
+-+		   if (res == 1 && class1 == qclass && type1 == T_RRSIG)
+-+		     {
+-+		       int type_covered;
+-+		       unsigned char *psav = p1;
+-+		       
+-+		       if (rdlen < 18)
+-+			 return 0; /* bad packet */
+-+
+-+		       GETSHORT(type_covered, p1);
+-+
+-+		       if (type_covered == T_NSEC)
+-+			 {
+-+			   p1++; /* algo */
+-+			   
+-+			   /* labels field must be the same in every SIG we find. */
+-+			   if (!rrsig_labels[nsecs_found])
+-+			     rrsig_labels[nsecs_found] = p1;
+-+			   else if (*rrsig_labels[nsecs_found] != *p1) /* algo */
+-+			     return 0;
+-+			   }
+-+		       p1 = psav;
+-+		     }
+-+		   
+-+		   if (!ADD_RDLEN(header, p1, plen, rdlen1))
+-+		     return 0;
+-+		}
+-+
+-+	      /* Must have found@least one sig. */
+-+	      if (!rrsig_labels[nsecs_found])
+-+		return 0;
+-+	    }
+-+
+-+	  nsecset[nsecs_found++] = pstart;   
+- 	}
+-       
+-       if (!ADD_RDLEN(header, p, plen, rdlen))
+-@@ -1556,7 +1645,7 @@ static int prove_non_existence(struct dns_header *header, size_t plen, char *key
+-     }
+-   
+-   if (type_found == T_NSEC)
+--    return prove_non_existence_nsec(header, plen, nsecset, nsecs_found, daemon->workspacename, keyname, name, qtype, nons);
+-+    return prove_non_existence_nsec(header, plen, nsecset, rrsig_labels, nsecs_found, daemon->workspacename, keyname, name, qtype, nons);
+-   else if (type_found == T_NSEC3)
+-     return prove_non_existence_nsec3(header, plen, nsecset, nsecs_found, daemon->workspacename, keyname, name, qtype, wildname, nons);
+-   else
 --- 
--2.13.2
+-2.15.1
 -
-diff --git a/package/efivar/Config.in b/package/efivar/Config.in
-index 0fa9adf387..74f2bb5abb 100644
---- a/package/efivar/Config.in
-+++ b/package/efivar/Config.in
-@@ -16,19 +16,15 @@ config BR2_PACKAGE_EFIVAR
- 	# failures. So, prevent this package to be built using those
- 	# toolchains.
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
--	# doesn't build with musl due to lack of __bswap_constant_16
--	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--	select BR2_PACKAGE_POPT
- 	help
- 	  Tools and libraries to manipulate EFI variables
- 
--	  https://github.com/rhinstaller/efivar
-+	  https://github.com/rhboot/efivar
- 
--comment "efivar needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
-+comment "efivar needs a toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
- 	depends on BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		BR2_TOOLCHAIN_USES_MUSL || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
-diff --git a/package/efivar/efivar.hash b/package/efivar/efivar.hash
-index e337b96450..e8a65adc4b 100644
---- a/package/efivar/efivar.hash
-+++ b/package/efivar/efivar.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
--sha256 20709c76311f8eb8be92977b7ac008ce62501fa9f7fe885a784321540fc352f9 efivar-30.tar.gz
-+sha256 9691399a424b8e3776b7ed2df1893c4162285a93697d781f387d0f0d258a7f4b  efivar-34.tar.gz
-+sha256 91df770634adc2755e78cae33a0d01e702ce2f69046408ae93d0d934ff29691b  COPYING
-diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
-index d06192ed22..492a4468bf 100644
---- a/package/efivar/efivar.mk
-+++ b/package/efivar/efivar.mk
-@@ -4,21 +4,16 @@
+diff --git a/package/dnsmasq/0002-Fix-DNSSEC-validation-errors-introduced-in-4fe6744a2.patch b/package/dnsmasq/0002-Fix-DNSSEC-validation-errors-introduced-in-4fe6744a2.patch
+deleted file mode 100644
+index ef28b90c58..0000000000
+--- a/package/dnsmasq/0002-Fix-DNSSEC-validation-errors-introduced-in-4fe6744a2.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From cd7df612b14ec1bf831a966ccaf076be0dae7404 Mon Sep 17 00:00:00 2001
+-From: Simon Kelley <simon@thekelleys.org.uk>
+-Date: Sat, 20 Jan 2018 00:10:55 +0000
+-Subject: [PATCH] Fix DNSSEC validation errors introduced in
+- 4fe6744a220eddd3f1749b40cac3dfc510787de6
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: upstream commit cd7df612b14ec
+-
+- src/dnssec.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/dnssec.c b/src/dnssec.c
+-index a54a0b4f14cf..c47e33569f96 100644
+---- a/src/dnssec.c
+-+++ b/src/dnssec.c
+-@@ -1610,7 +1610,7 @@ static int prove_non_existence(struct dns_header *header, size_t plen, char *key
+- 		       int type_covered;
+- 		       unsigned char *psav = p1;
+- 		       
+--		       if (rdlen < 18)
+-+		       if (rdlen1 < 18)
+- 			 return 0; /* bad packet */
+- 
+- 		       GETSHORT(type_covered, p1);
+--- 
+-2.15.1
+-
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 28e2e658e2..322f8df5cc 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.78.tar.xz.asc
+-sha256	89949f438c74b0c7543f06689c319484bd126cc4b1f8c745c742ab397681252b	dnsmasq-2.78.tar.xz
++# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.79.tar.xz.asc
++sha256	78ad74f5ca14fd85a8bac93f764cd9d60b27579e90eabd3687ca7b030e67861f	dnsmasq-2.79.tar.xz
+ # Locally calculated
+ sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 9f96030eb6..f519835828 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EFIVAR_VERSION = 30
--EFIVAR_SITE = $(call github,rhinstaller,efivar,$(EFIVAR_VERSION))
-+EFIVAR_VERSION = 34
-+EFIVAR_SITE = $(call github,rhboot,efivar,$(EFIVAR_VERSION))
- EFIVAR_LICENSE = LGPL-2.1
- EFIVAR_LICENSE_FILES = COPYING
--EFIVAR_DEPENDENCIES = popt
- EFIVAR_INSTALL_STAGING = YES
- 
--# BINTARGETS is set to skip efivar-static which requires static popt,
--# and since we depend on dynamic libraries, efivar will never be built
--# in a static-only environment.
- # -fPIC is needed at least on MIPS, otherwise fails to build shared
- # -library.
- EFIVAR_MAKE_OPTS = \
- 	libdir=/usr/lib \
--	BINTARGETS=efivar \
- 	LDFLAGS="$(TARGET_LDFLAGS) -fPIC"
- 
- define EFIVAR_BUILD_CMDS
+-DNSMASQ_VERSION = 2.78
++DNSMASQ_VERSION = 2.79
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
