@@ -1,60 +1,104 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 23 Mar 2018 20:59:38 +0200
-Subject: [Buildroot] [PATCH v2/next 0/4] Update WebKitGTK+ to 2.20.0
-Message-ID: <20180323185942.60252-1-aperez@igalia.com>
+Date: Fri, 23 Mar 2018 20:59:40 +0200
+Subject: [Buildroot] [PATCH v2/next 2/4] woff2: new package
+In-Reply-To: <20180323185942.60252-1-aperez@igalia.com>
+References: <20180323185942.60252-1-aperez@igalia.com>
+Message-ID: <20180323185942.60252-3-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everybody,
+Add the woff2 package to Builroot. This is needed by webkitgtk from
+version 2.20.0 onwards. WebKitGTK+ used to bundle a copy of the library,
+but it stopped doing so now that the upstream is has been making
+releases.
 
-This patch series adds a new dependency needed by WebKitGTK+: woff. In turn,
-that depends on brotli, which the patch series adds as well.
-
-I am adding myself as maintainer for those two new packages (brotli and woff2)
-in the DEVELOPERS file and I will be keeping an eye on their releases.
-
-This series starts with the same three patches as the previous submission, and
-adds on top three additional commits to make WebKitGTK+ available on AArch64
-(it's a platform we support upstream), and adds a couple of patches which are
-already merged in the upstream repository, but are not in the release and are
-worth applying.
-
-Hopefully Patchwork will pick the series in full :-)
-
-Regards,
-
-
-Adrian Perez de Castro (4):
-  brotli: new package
-  woff2: new package
-  webkitgtk: update to version 2.20.0
-  webkitgtk: Add upstream patch for better memory monitoring
-
- DEVELOPERS                                         |  2 +
- package/Config.in                                  |  2 +
- package/brotli/Config.in                           | 12 +++
- package/brotli/brotli.hash                         |  5 ++
- package/brotli/brotli.mk                           | 17 ++++
- ...memory-monitor-thresholds-should-be-bette.patch | 93 ++++++++++++++++++++++
- ...ld-failure-when-ENABLE_VIDEO-ENABLE_WEB_A.patch | 32 ++++++++
- package/webkitgtk/Config.in                        |  3 +
- package/webkitgtk/webkitgtk.hash                   |  8 +-
- package/webkitgtk/webkitgtk.mk                     |  4 +-
- package/woff2/Config.in                            |  9 +++
- package/woff2/woff2.hash                           |  5 ++
- package/woff2/woff2.mk                             | 17 ++++
- 13 files changed, 203 insertions(+), 6 deletions(-)
- create mode 100644 package/brotli/Config.in
- create mode 100644 package/brotli/brotli.hash
- create mode 100644 package/brotli/brotli.mk
- create mode 100644 package/webkitgtk/0001-WebProcess-memory-monitor-thresholds-should-be-bette.patch
- create mode 100644 package/webkitgtk/0002-WPE-GTK-Build-failure-when-ENABLE_VIDEO-ENABLE_WEB_A.patch
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/woff2/Config.in  |  9 +++++++++
+ package/woff2/woff2.hash |  5 +++++
+ package/woff2/woff2.mk   | 17 +++++++++++++++++
+ 5 files changed, 33 insertions(+)
  create mode 100644 package/woff2/Config.in
  create mode 100644 package/woff2/woff2.hash
  create mode 100644 package/woff2/woff2.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2d5f2108a8..031af3cdd0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -65,6 +65,7 @@ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
+ F:	package/libepoxy/
+ F:	package/webkitgtk/
++F:	package/woff2/
+ 
+ N:	Adrien Gallou?t <adrien@gallouet.fr>
+ F:	package/glorytun/
+diff --git a/package/Config.in b/package/Config.in
+index 26ded5ebb2..ae5a09bd5b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1186,6 +1186,7 @@ menu "Graphics"
+ 	source "package/waylandpp/Config.in"
+ 	source "package/webkitgtk/Config.in"
+ 	source "package/webp/Config.in"
++	source "package/woff2/Config.in"
+ 	source "package/zbar/Config.in"
+ 	source "package/zxing-cpp/Config.in"
+ endmenu
+diff --git a/package/woff2/Config.in b/package/woff2/Config.in
+new file mode 100644
+index 0000000000..48672570dd
+--- /dev/null
++++ b/package/woff2/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_WOFF2
++	bool "woff2"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_BROTLI
++	help
++	  Reference implementation for the WOFF2 font file format,
++	  typically used for Web fonts
++
++	  https://github.com/google/woff2
+diff --git a/package/woff2/woff2.hash b/package/woff2/woff2.hash
+new file mode 100644
+index 0000000000..2e9b62bde1
+--- /dev/null
++++ b/package/woff2/woff2.hash
+@@ -0,0 +1,5 @@
++# Locally generated:
++sha512  c788bba1530aec463e755e901f9342f4b599e3a07f54645fef1dc388ab5d5c30625535e5dd38e9e792e04a640574baa50eeefb6b7338ab403755f4a4e0c3044d  v1.0.2.tar.gz
++
++# Hash for license files:
++sha512  16d7a62757f9854cd0ff9750eb0b374a1360deded0ba1646fde430f79a8f7c36a85f4884faaf1ea90db02537cd8d8c314cfcbcf492be25af24e1e77aa5919ebb  LICENSE
+diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
+new file mode 100644
+index 0000000000..23b88a5e9a
+--- /dev/null
++++ b/package/woff2/woff2.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# woff2
++#
++################################################################################
++
++WOFF2_VERSION = 1.0.2
++WOFF2_SOURCE = v$(WOFF2_VERSION).tar.gz
++WOFF2_SITE = https://github.com/google/woff2/archive
++WOFF2_LICENSE = MIT
++WOFF2_LICENSE_FILES = LICENSE
++WOFF2_INSTALL_STAGING = YES
++WOFF2_DEPENDENCIES = brotli
++WOFF2_CONF_OPTS = \
++	-DNOISY_LOGGING=OFF
++
++$(eval $(cmake-package))
 -- 
 2.16.2
