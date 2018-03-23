@@ -1,104 +1,127 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 23 Mar 2018 20:59:40 +0200
-Subject: [Buildroot] [PATCH v2/next 2/4] woff2: new package
+Date: Fri, 23 Mar 2018 20:59:42 +0200
+Subject: [Buildroot] [PATCH v2/next 4/4] webkitgtk: Add upstream patch for
+ better memory monitoring
 In-Reply-To: <20180323185942.60252-1-aperez@igalia.com>
 References: <20180323185942.60252-1-aperez@igalia.com>
-Message-ID: <20180323185942.60252-3-aperez@igalia.com>
+Message-ID: <20180323185942.60252-5-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the woff2 package to Builroot. This is needed by webkitgtk from
-version 2.20.0 onwards. WebKitGTK+ used to bundle a copy of the library,
-but it stopped doing so now that the upstream is has been making
-releases.
+This imports a patch which has been committed upstream, but is not part
+of the 2.20.0 release which modifies WebKitGTK+'s memory monitor to take
+into account the available memory when calculating the thresholds at
+which the Web engine will try to return memory back to the system. The
+net result is that on constrained systems WebKitGTK+ will try to free
+memory it does not need more often.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/woff2/Config.in  |  9 +++++++++
- package/woff2/woff2.hash |  5 +++++
- package/woff2/woff2.mk   | 17 +++++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/woff2/Config.in
- create mode 100644 package/woff2/woff2.hash
- create mode 100644 package/woff2/woff2.mk
+ ...memory-monitor-thresholds-should-be-bette.patch | 93 ++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100644 package/webkitgtk/0001-WebProcess-memory-monitor-thresholds-should-be-bette.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2d5f2108a8..031af3cdd0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -65,6 +65,7 @@ N:	Adrian Perez de Castro <aperez@igalia.com>
- F:	package/brotli/
- F:	package/libepoxy/
- F:	package/webkitgtk/
-+F:	package/woff2/
- 
- N:	Adrien Gallou?t <adrien@gallouet.fr>
- F:	package/glorytun/
-diff --git a/package/Config.in b/package/Config.in
-index 26ded5ebb2..ae5a09bd5b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1186,6 +1186,7 @@ menu "Graphics"
- 	source "package/waylandpp/Config.in"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
-+	source "package/woff2/Config.in"
- 	source "package/zbar/Config.in"
- 	source "package/zxing-cpp/Config.in"
- endmenu
-diff --git a/package/woff2/Config.in b/package/woff2/Config.in
+diff --git a/package/webkitgtk/0001-WebProcess-memory-monitor-thresholds-should-be-bette.patch b/package/webkitgtk/0001-WebProcess-memory-monitor-thresholds-should-be-bette.patch
 new file mode 100644
-index 0000000000..48672570dd
+index 0000000000..9848ec8526
 --- /dev/null
-+++ b/package/woff2/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_WOFF2
-+	bool "woff2"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_BROTLI
-+	help
-+	  Reference implementation for the WOFF2 font file format,
-+	  typically used for Web fonts
++++ b/package/webkitgtk/0001-WebProcess-memory-monitor-thresholds-should-be-bette.patch
+@@ -0,0 +1,93 @@
++From 25fe9c19e4fb3519e34df7e16b3d761812b921aa Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Wed, 21 Mar 2018 01:05:53 +0200
++Subject: [PATCH xserver 1/2] WebProcess memory monitor thresholds should be
++ better tuned for embedded systems.
++ https://bugs.webkit.org/show_bug.cgi?id=183773
 +
-+	  https://github.com/google/woff2
-diff --git a/package/woff2/woff2.hash b/package/woff2/woff2.hash
-new file mode 100644
-index 0000000000..2e9b62bde1
---- /dev/null
-+++ b/package/woff2/woff2.hash
-@@ -0,0 +1,5 @@
-+# Locally generated:
-+sha512  c788bba1530aec463e755e901f9342f4b599e3a07f54645fef1dc388ab5d5c30625535e5dd38e9e792e04a640574baa50eeefb6b7338ab403755f4a4e0c3044d  v1.0.2.tar.gz
++Patch by Carlos Alberto Lopez Perez <clopez@igalia.com> on 2018-03-20
++Reviewed by NOBODY (OOPS!).
 +
-+# Hash for license files:
-+sha512  16d7a62757f9854cd0ff9750eb0b374a1360deded0ba1646fde430f79a8f7c36a85f4884faaf1ea90db02537cd8d8c314cfcbcf492be25af24e1e77aa5919ebb  LICENSE
-diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
-new file mode 100644
-index 0000000000..23b88a5e9a
---- /dev/null
-+++ b/package/woff2/woff2.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# woff2
-+#
-+################################################################################
++Take into account the total system RAM for the thresholds calculation.
 +
-+WOFF2_VERSION = 1.0.2
-+WOFF2_SOURCE = v$(WOFF2_VERSION).tar.gz
-+WOFF2_SITE = https://github.com/google/woff2/archive
-+WOFF2_LICENSE = MIT
-+WOFF2_LICENSE_FILES = LICENSE
-+WOFF2_INSTALL_STAGING = YES
-+WOFF2_DEPENDENCIES = brotli
-+WOFF2_CONF_OPTS = \
-+	-DNOISY_LOGGING=OFF
++For systems with more than 3GB the conservative and strict thresholds remain as they are,
++but for systems with less RAM the thresholds are dynamically configured as follows:
 +
-+$(eval $(cmake-package))
++- Conservative threshold (release non critical memory) if WebProcess using more than 33% of the total RAM.
++- Strict threshold (release all possible memory) if WebProcess using more than 50% of the total RAM.
++
++The Kill threshold is also modified. Now it is capped at 90% of the total RAM.
++
++* wtf/MemoryPressureHandler.cpp:
++(WTF::thresholdForMemoryKillWithProcessState):
++(WTF::thresholdForPolicy):
++(WTF::MemoryPressureHandler::shrinkOrDie):
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream-Status: Committed
++
++diff --git a/Source/WTF/wtf/MemoryPressureHandler.cpp b/Source/WTF/wtf/MemoryPressureHandler.cpp
++index 0e1d1a60fe0..d31180883eb 100644
++--- a/Source/WTF/wtf/MemoryPressureHandler.cpp
+++++ b/Source/WTF/wtf/MemoryPressureHandler.cpp
++@@ -28,6 +28,7 @@
++ 
++ #include <wtf/MemoryFootprint.h>
++ #include <wtf/NeverDestroyed.h>
+++#include <wtf/RAMSize.h>
++ 
++ #define LOG_CHANNEL_PREFIX Log
++ 
++@@ -84,20 +85,17 @@ static const char* toString(MemoryUsagePolicy policy)
++ 
++ static size_t thresholdForMemoryKillWithProcessState(WebsamProcessState processState, unsigned tabCount)
++ {
+++    size_t baseThreshold = 2 * GB;
++ #if CPU(X86_64) || CPU(ARM64)
++-    size_t baseThreshold;
++     if (processState == WebsamProcessState::Active)
++         baseThreshold = 4 * GB;
++-    else
++-        baseThreshold = 2 * GB;
++-    if (tabCount <= 1)
++-        return baseThreshold;
++-    return baseThreshold + (std::min(tabCount - 1, 4u) * 1 * GB);
+++    if (tabCount > 1)
+++        baseThreshold += std::min(tabCount - 1, 4u) * 1 * GB;
++ #else
++-    UNUSED_PARAM(processState);
++-    UNUSED_PARAM(tabCount);
++-    return 3 * GB;
+++    if ((tabCount > 1) || (processState == WebsamProcessState::Active))
+++        baseThreshold = 3 * GB;
++ #endif
+++    return std::min(baseThreshold, static_cast<size_t>(ramSize() * 0.9));
++ }
++ 
++ void MemoryPressureHandler::setPageCount(unsigned pageCount)
++@@ -114,11 +112,12 @@ size_t MemoryPressureHandler::thresholdForMemoryKill()
++ 
++ static size_t thresholdForPolicy(MemoryUsagePolicy policy)
++ {
+++    const size_t baseThresholdForPolicy = std::min(3 * GB, ramSize());
++     switch (policy) {
++     case MemoryUsagePolicy::Conservative:
++-        return 1 * GB;
+++        return baseThresholdForPolicy / 3;
++     case MemoryUsagePolicy::Strict:
++-        return 1.5 * GB;
+++        return baseThresholdForPolicy / 2;
++     case MemoryUsagePolicy::Unrestricted:
++     default:
++         ASSERT_NOT_REACHED();
++@@ -150,6 +149,7 @@ void MemoryPressureHandler::shrinkOrDie()
++         return;
++     }
++ 
+++    WTFLogAlways("Unable to shrink memory footprint of process (%lu MB) below the kill thresold (%lu MB). Killed\n", footprint.value() / MB, thresholdForMemoryKill() / MB);
++     RELEASE_ASSERT(m_memoryKillCallback);
++     m_memoryKillCallback();
++ }
++-- 
++2.16.2
++
 -- 
 2.16.2
