@@ -1,32 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 23 Mar 2018 14:55:31 +0000
-Subject: [Buildroot] [Bug 10846] error in compiling gnutls
-In-Reply-To: <bug-10846-163@https.bugs.busybox.net/>
-References: <bug-10846-163@https.bugs.busybox.net/>
-Message-ID: <bug-10846-163-ghMJYFNEJC@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 23 Mar 2018 16:23:03 +0100
+Subject: [Buildroot] [PATCH] libostree: bump to version 2018.4
+In-Reply-To: <20180323080033.10160-1-marcus.folkesson@gmail.com> (Marcus
+ Folkesson's message of "Fri, 23 Mar 2018 09:00:33 +0100")
+References: <20180323080033.10160-1-marcus.folkesson@gmail.com>
+Message-ID: <87woy23jfs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10846
+>>>>> "Marcus" == Marcus Folkesson <marcus.folkesson@gmail.com> writes:
 
-tinotom at gmail.com changed:
+ > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+ > ---
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+ > Yep, a quick turnaround after 2018.3.
 
---- Comment #7 from tinotom at gmail.com ---
-Hi Peter,
-
-thank you very much, your solution works and I've been able to generate the
-image.
-Thank you very much again for your time.
-Best,
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
