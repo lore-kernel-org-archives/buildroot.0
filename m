@@ -1,43 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Mar 2018 16:29:29 +0100
-Subject: [Buildroot] [PATCHv2 2/2] efivar: bump version
-In-Reply-To: <20180323095741.16512-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 23 Mar 2018 10:57:41 +0100")
-References: <20180323095741.16512-1-peter@korsgaard.com>
- <20180323095741.16512-2-peter@korsgaard.com>
-Message-ID: <87bmfe3j52.fsf@dell.be.48ers.dk>
+Date: Fri, 23 Mar 2018 16:23:20 +0100
+Subject: [Buildroot] [git commit] dbus: bump to version 1.12.6
+Message-ID: <20180323152955.7830382856@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=83867e47f2557ff60cd9b3896e4ec4a9fddcba6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop 0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch and
- > 0003-Remove-some-extra-const-that-gcc-complains-about.patch as they are now
- > upstream.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > The upstream repo moved to the 'rhboot' github project, so adjust upstream
- > URL in .mk and help text to match.
-
- > Drop dependency on !musl as it is now support since e04281e60cf0d
- > (makeguids: Ensure compatibility with other libcs).
-
- > Drop BINTARGETS workaround as this is fixed since 6c674283697 (Don't build
- > static by default).
-
- > Drop popt dependency as it is no longer needed since 1aec5e7891 (Replace
- > popt usage with getopt_long in efivar.c).
-
- > While we are at it, also add a hash for the license file.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- > Changes since v1:
- > - Drop popt dependency
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 1aa5aa445d..66fce31461 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.2.tar.gz.asc
+-sha256	272bb5091770b047c8188b926d5e6038fa4fe6745488b2add96b23e2d9a83d88  dbus-1.12.2.tar.gz
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.6.tar.gz.asc
++sha256	621b902a07badec16c9e43eda43903cd0e1e69e11b13143da71c1889b062f116  dbus-1.12.6.tar.gz
+ # Locally calculated
+ sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 22ba22e17e..8771412be4 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.12.2
++DBUS_VERSION = 1.12.6
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
