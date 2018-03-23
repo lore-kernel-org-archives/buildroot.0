@@ -1,62 +1,64 @@
-From: Calin Crisan <ccrisan@gmail.com>
-Date: Fri, 23 Mar 2018 23:40:30 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain-external-custom: allow specifying
- relative path to binaries
-Message-ID: <20180323214030.8003-1-ccrisan@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 23 Mar 2018 22:48:12 +0100
+Subject: [Buildroot] [PATCH v2 0/3] test-pkg: by default only test a subset
+ of toolchains
+Message-ID: <20180323214815.19831-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are cases where a downloaded toolchain doesn't have its binaries
-placed directly in a "bin" subfolder (where BuildRoot currently looks
-for them).
+During the Buildroot Developers meeting at ELCE 2017, we discussed how
+to make test-pkg more usable for our contributors. Our idea is that
+test-pkg should not test all toolchains by default, but only a smaller
+subset of "interesting" toolchains, that exhibit the most common
+problems we encounter with new packages.
 
-A common example is the official Raspberry Pi Toolchain
-(https://github.com/raspberrypi/tools), which has its binaries in
-"arm-bcm2708/arm-linux-gnueabihf/bin".
+This series does that by:
 
-This commit introduces BR2_TOOLCHAIN_EXTERNAL_BIN_PATH that defaults
-to "bin" and can be changed as needed.
+ - Adjust the toolchain CSV file to have the interesting toolchains
+   first, adding comments and empty lines along the way to clarify
+   what is going on.
 
-Signed-off-by: Calin Crisan <ccrisan@gmail.com>
----
- toolchain/toolchain-external/pkg-toolchain-external.mk            | 2 +-
- .../toolchain-external-custom/Config.in.options                   | 8 ++++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ - Update test-pkg to test only the first 7 toolchains, add a --all
+   option to test all toolchains, and a --number option to test only
+   the first N toolchains.
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 3bf9fac412..4dfe3815ae 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -77,7 +77,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
- TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
- endif
- else
--TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
-+TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_BIN_PATH))
- endif
- 
- # If this is a buildroot toolchain, it already has a wrapper which we want to
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 70c7d8e3c3..bb199aab85 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -12,6 +12,14 @@ config BR2_TOOLCHAIN_EXTERNAL_URL
- 	help
- 	  URL of the custom toolchain tarball to download and install.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_BIN_PATH
-+    string "Toolchain bin path"
-+    default "bin"
-+    depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
-+    help
-+      Path to where the binaries (e.g. the compiler) can be found,
-+      relative to the downloaded toolchain root directory.
-+
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 	string "Toolchain prefix"
- 	default "$(ARCH)-linux"
+ - Update the Buildroot manual accordingly.
+
+Thanks!
+
+Thomas
+
+Changes since v1:
+
+ - Drop the first two patches, since they have been merged.
+
+ - In the CSV list of toolchains, add better comments to explain the
+   two "sections" of the toolchain list, as suggested by Yann
+   E. Morin.
+
+ - In the test-pkg script changes themselves:
+
+    - Keep alphabetic sorting in the definition of the 'o' variable that
+      contains the list of short options. Suggested by Yann E. Morin. 'h'
+      for help remains a special case and therefore remains at the first
+      position.
+    - Keep alphabetic sorting when handling options. Here as well, --help
+      remains first, as it already was. Suggested by Yann E. Morin.
+    - Use spaces and not tabs for indentation. Suggested by Yann E. Morin.
+
+Thomas Petazzoni (3):
+  toolchain-configs.csv: re-organize for test-pkg
+  test-pkg: test a subset of toolchains by default, add -a and -n
+    options
+  docs/manual: update the documentation about test-pkg
+
+ docs/manual/adding-packages-tips.txt               | 11 +++--
+ .../autobuild/toolchain-configs.csv                | 32 ++++++++++---
+ utils/test-pkg                                     | 56 +++++++++++++++++++---
+ 3 files changed, 83 insertions(+), 16 deletions(-)
+
 -- 
-2.16.2
+2.14.3
