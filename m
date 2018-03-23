@@ -1,59 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 23 Mar 2018 18:22:08 +0100
-Subject: [Buildroot] [PATCH 2/2] fs/squashfs: enable squashfs to
- generate a verity hashtable
-In-Reply-To: <CAF3==itWkWN+u97nMs+RFxq_e6qiZPKxoutQsQ0DsDgexNfy+A@mail.gmail.com>
-References: <1521752805-17690-1-git-send-email-ben.whitten@gmail.com>
- <1521752805-17690-2-git-send-email-ben.whitten@gmail.com>
- <20180322213410.GD4580@scaer> <87woy368rz.fsf@dell.be.48ers.dk>
- <CAF3==itWkWN+u97nMs+RFxq_e6qiZPKxoutQsQ0DsDgexNfy+A@mail.gmail.com>
-Message-ID: <20180323172208.GA7215@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 23 Mar 2018 18:45:59 +0100
+Subject: [Buildroot] Using grub-bios.cfg
+In-Reply-To: <1521556906599-0.post@n4.nabble.com>
+References: <1521556906599-0.post@n4.nabble.com>
+Message-ID: <19706da9-64e6-cf98-da64-a688ec8ffdf8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ben, All,
 
-On 2018-03-23 09:32 +0000, Ben Whitten spake thusly:
-> On Thu, 22 Mar 2018 at 22:32 Peter Korsgaard <peter@korsgaard.com> wrote:
-> > >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> >  > On 2018-03-22 21:06 +0000, Ben Whitten spake thusly:
-> >  >> For those times that you want to verify that your readonly filesystem
-> >  >> hasn't been tampered we can generate a dm-verity hash table.
-> >  >> The root hash is enclosed in .table file and must be secured else where.
-> >
-> > Strange, I don't seem to have received the original patch?
-> I think the mailing list ate it as I was not a subscriber at the time.
-> Only the CC went to Yann.
 
-Did you subscribe now? ;-)
+On 20-03-18 15:41, AAlex_ wrote:
+> Hi,
+> using a modified grub-bios.cfg dont work. 
+> File located under <BR2_EXTERNAL_MY_PATH>/board/pc
+> But instead, buildroot uses grub-bios.cfg under
+> <BUILDROOT_INSTALL_PATH>/board/pc
+> Doing the same with an pc-efi target works:
+> grub-efi.cfg located in <BR2_EXTERNAL_MY_PATH>/board/pc
+> will be used.
+> Do i need to specify more than an external path in bios defconfig?
 
-> >  > My position is that this should be done in a post-image script.
-> > I agree!
-[--SNIP--]
-> Thats fair enough, here is possibly not the right place for it.
-> I guess its a question of how much should be put into post processing.
-> Generating this after the image means that I'd need to roll ubinize manually
-> per device instead of using the settings in KConfig, which seems a bit messy.
+ It's not entirely clear to me what you mean. However:
 
-So, you meant that ubinize can use that .table output from verifysetup
-generates?
+ grub-bios.cfg and grub-efi.cfg are only used by the custom post-image script
+board/pc/post-image.sh. The file to use is based on the location of that script.
+In other words, if you refer to board/pc/post-image.sh in your Buildroot
+configuration, then the grub-bios.cfg under <BUILDROOT_INSTALL_PATH>/board/pc
+will be used.
 
-> The other patch that was eaten decoupled ubi from ubifs to allow this.
-
-Yeah, I still need to have a look at that patch. I already have a few
-comments about it, but please, repost both to the list so that everyone
-can see them and understand the replies...
-
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
