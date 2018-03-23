@@ -1,22 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Mar 2018 16:23:03 +0100
-Subject: [Buildroot] [PATCH] libostree: bump to version 2018.4
-In-Reply-To: <20180323080033.10160-1-marcus.folkesson@gmail.com> (Marcus
- Folkesson's message of "Fri, 23 Mar 2018 09:00:33 +0100")
-References: <20180323080033.10160-1-marcus.folkesson@gmail.com>
-Message-ID: <87woy23jfs.fsf@dell.be.48ers.dk>
+Date: Fri, 23 Mar 2018 16:23:43 +0100
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.6
+In-Reply-To: <3c5c5f470fdccb353d689dd9aae14d9505eb4ddb.1521795306.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 23 Mar 2018 11:55:06 +0300")
+References: <3c5c5f470fdccb353d689dd9aae14d9505eb4ddb.1521795306.git.baruch@tkos.co.il>
+Message-ID: <87sh8q3jeo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcus" == Marcus Folkesson <marcus.folkesson@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
- > ---
-
- > Yep, a quick turnaround after 2018.3.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
