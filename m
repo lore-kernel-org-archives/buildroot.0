@@ -1,9 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 24 Mar 2018 20:30:16 +0100
-Subject: [Buildroot] [PATCH] qemu: fix build with glibc 2.27
-In-Reply-To: <2ea89efb89501dbb6f311d3644efb8d6543f1ba7.1521561417.git.baruch@tkos.co.il>
-References: <2ea89efb89501dbb6f311d3644efb8d6543f1ba7.1521561417.git.baruch@tkos.co.il>
-Message-ID: <bcf195ca-498e-4796-0325-c5b35a888875@gmail.com>
+Date: Sat, 24 Mar 2018 20:41:31 +0100
+Subject: [Buildroot] [PATCH 2/2] qemu: add libssh2 optional dependency
+In-Reply-To: <29cf408194b46abbbb75c15a833197b226477246.1521571596.git.baruch@tkos.co.il>
+References: <85f6746ec9845fe4c5cd366cdd3345d08771165f.1521571596.git.baruch@tkos.co.il>
+ <29cf408194b46abbbb75c15a833197b226477246.1521571596.git.baruch@tkos.co.il>
+Message-ID: <4aa7d7f8-7667-ecea-81f2-7d8b6f75079f@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,97 +13,38 @@ To: buildroot@busybox.net
 
 Hi Baruch,
 
-Le 20/03/2018 ? 16:56, Baruch Siach a ?crit?:
-> glibc version 2.27 added a wrapper for the memfd_create system call. The
-> wrapper prototype collides with a static declaration of memfd_create.
-> Add upstream patch to correctly detect the glibc provided memfd_create
-> definition.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/b82/b825c0cd397424b1fc7fa87c580e1757dc25c588/
-> http://autobuild.buildroot.net/results/9aa/9aa3853d23c0dc72bf3632b4d66ae39f597f5250/
-> http://autobuild.buildroot.net/results/b13/b13039ba602b9d500b939d259816a39ba24e1ba2/
+Le 20/03/2018 ? 19:46, Baruch Siach a ?crit?:
+> Make sure that qemu uses libssh2 when libssh2 is enabled, for build
+> consistency.
 > 
 > Cc: Francois Perrad <francois.perrad@gadz.org>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Romain Naour <romain.naour@gmail.com>
-(Build tested only)
-
-This patch is not present in Qemu 2.11.x stable branch. It must be kept with the
-Qemu version bump to 2.11.1.
 
 Best regards,
 Romain
 
 > ---
->  package/qemu/0002-memfd-fix-configure-test.patch | 58 ++++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 package/qemu/0002-memfd-fix-configure-test.patch
+>  package/qemu/qemu.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/package/qemu/0002-memfd-fix-configure-test.patch b/package/qemu/0002-memfd-fix-configure-test.patch
-> new file mode 100644
-> index 000000000000..3e06c0e93274
-> --- /dev/null
-> +++ b/package/qemu/0002-memfd-fix-configure-test.patch
-> @@ -0,0 +1,58 @@
-> +From 75e5b70e6b5dcc4f2219992d7cffa462aa406af0 Mon Sep 17 00:00:00 2001
-> +From: Paolo Bonzini <pbonzini@redhat.com>
-> +Date: Tue, 28 Nov 2017 11:51:27 +0100
-> +Subject: [PATCH] memfd: fix configure test
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 345ef526681a..c3a7e7738ee6 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -212,6 +212,13 @@ else
+>  QEMU_OPTS += --disable-tools
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+> +QEMU_OPTS += --enable-libssh2
+> +QEMU_DEPENDENCIES += libssh2
+> +else
+> +QEMU_OPTS += --disable-libssh2
+> +endif
 > +
-> +Recent glibc added memfd_create in sys/mman.h.  This conflicts with
-> +the definition in util/memfd.c:
-> +
-> +    /builddir/build/BUILD/qemu-2.11.0-rc1/util/memfd.c:40:12: error: static declaration of memfd_create follows non-static declaration
-> +
-> +Fix the configure test, and remove the sys/memfd.h inclusion since the
-> +file actually does not exist---it is a typo in the memfd_create(2) man
-> +page.
-> +
-> +Cc: Marc-Andr? Lureau <marcandre.lureau@redhat.com>
-> +Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream status: commit 75e5b70e6b5
-> +
-> + configure    | 2 +-
-> + util/memfd.c | 4 +---
-> + 2 files changed, 2 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/configure b/configure
-> +index 9c8aa5a98bd4..99ccc1725ace 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -3923,7 +3923,7 @@ fi
-> + # check if memfd is supported
-> + memfd=no
-> + cat > $TMPC << EOF
-> +-#include <sys/memfd.h>
-> ++#include <sys/mman.h>
-> + 
-> + int main(void)
-> + {
-> +diff --git a/util/memfd.c b/util/memfd.c
-> +index 4571d1aba866..412e94a405fc 100644
-> +--- a/util/memfd.c
-> ++++ b/util/memfd.c
-> +@@ -31,9 +31,7 @@
-> + 
-> + #include "qemu/memfd.h"
-> + 
-> +-#ifdef CONFIG_MEMFD
-> +-#include <sys/memfd.h>
-> +-#elif defined CONFIG_LINUX
-> ++#if defined CONFIG_LINUX && !defined CONFIG_MEMFD
-> + #include <sys/syscall.h>
-> + #include <asm/unistd.h>
-> + 
-> +-- 
-> +2.16.2
-> +
+>  # Override CPP, as it expects to be able to call it like it'd
+>  # call the compiler.
+>  define QEMU_CONFIGURE_CMDS
 > 
