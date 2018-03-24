@@ -1,46 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 24 Mar 2018 08:57:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/imagemagick: security bump version
- to 7.0.7-27
-Message-ID: <20180324075739.2035-1-bernd.kuhls@t-online.de>
+Date: Sat, 24 Mar 2018 09:02:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/icu: bump version to 60.2
+Message-ID: <20180324080244.22367-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-6405 (upstream Github PR 964) and many others:
-http://www.imagemagick.org/script/changelog.php
-
-Added license hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/imagemagick/imagemagick.hash | 3 ++-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/icu/icu.hash | 4 ++--
+ package/icu/icu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 2468bdbc23..170231c4b7 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
-+sha256 723a28f9cbc5c6130f496065fc01c839083e97bf3e4930f940a03c0155046170  7.0.7-27.tar.gz
-+sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index c2171a7564..116543888b 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 8b54e22443..66a0a8dc80 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,3 @@
+-# From http://download.icu-project.org/files/icu4c/60.1/SHASUM512.txt
+-sha512 a6798f70add1b3bac2197a49e09a0bb636279af7019ce572f63a30ab713e09657ee9d9b20aac7ea806fbb84667ca2eca981411e5053b47c3c705aa496a669233  icu4c-60_1-src.tgz
++# From http://download.icu-project.org/files/icu4c/60.2/SHASUM512.txt
++sha512 8e718e66c13e7f25714404c46b91ed6305efff1df70c328be2ec743023a7719016dae72a5fa0a05d6f5599983590a2044ff72d3453a048d987ab546d0416d694  icu4c-60_2-src.tgz
+ sha256 24c771ce37201a3ab604852e47d10d21595d0493269dd6c8a5e567e998e18c00  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 6ac4a25378..a9466c8322 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.7-10
-+IMAGEMAGICK_VERSION = 7.0.7-27
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+-ICU_VERSION = 60.1
++ICU_VERSION = 60.2
+ ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
+ ICU_LICENSE = ICU License
 -- 
 2.11.0
