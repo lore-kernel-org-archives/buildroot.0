@@ -1,134 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Mar 2018 18:31:58 +0100
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.8.0
-Message-ID: <20180324173233.D451A839E6@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 24 Mar 2018 19:25:19 +0100
+Subject: [Buildroot] [PATCH] qemu: bump to 2.11.1
+In-Reply-To: <20180313094457.594-1-aduskett@gmail.com>
+References: <20180313094457.594-1-aduskett@gmail.com>
+Message-ID: <a27ba48e-c9be-1213-3106-2d2b8a3d5bb7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4e8dcc1d51c448a5932e576882ff4901e29463b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Adam,
 
-Changelog: https://www.samba.org/samba/history/samba-4.8.0.html
+Le 13/03/2018 ? 10:44, Adam Duskett a ?crit?:
+> Also refresh patch.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-libreplace-disable-libbsd-support.patch   |  6 ++-
- .../samba4/0004-libgpo-fix-build-without-ads.patch | 49 ++++++++++++++++++++++
- package/samba4/samba4.hash                         |  4 +-
- package/samba4/samba4.mk                           |  2 +-
- 4 files changed, 56 insertions(+), 5 deletions(-)
+Qemu doesn't build with --with-system-pixman option:
 
-diff --git a/package/samba4/0001-libreplace-disable-libbsd-support.patch b/package/samba4/0001-libreplace-disable-libbsd-support.patch
-index ed6accfca1..4794cb02fd 100644
---- a/package/samba4/0001-libreplace-disable-libbsd-support.patch
-+++ b/package/samba4/0001-libreplace-disable-libbsd-support.patch
-@@ -9,7 +9,7 @@ This causes redefinition conflicts for link(2) when both standard
- unistd.h and bsd/unistd.h get included.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--(rebased for version 4.7.3)
-+(rebased for versions 4.7.3 & 4.8.0)
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  lib/replace/wscript | 12 ------------
-@@ -19,7 +19,7 @@ diff --git a/lib/replace/wscript b/lib/replace/wscript
- index 1dfd902..456be9b 100644
- --- a/lib/replace/wscript
- +++ b/lib/replace/wscript
--@@ -253,19 +253,6 @@
-+@@ -296,21 +296,6 @@
-  
-      strlcpy_in_bsd = False
-  
-@@ -32,6 +32,8 @@ index 1dfd902..456be9b 100644
- -        conf.CHECK_FUNCS_IN('getpeereid', 'bsd', headers='sys/types.h bsd/unistd.h')
- -    if not conf.CHECK_FUNCS_IN('setproctitle', 'setproctitle', headers='setproctitle.h'):
- -        conf.CHECK_FUNCS_IN('setproctitle', 'bsd', headers='sys/types.h bsd/unistd.h')
-+-    if not conf.CHECK_FUNCS('setproctitle_init'):
-+-        conf.CHECK_FUNCS_IN('setproctitle_init', 'bsd', headers='sys/types.h bsd/unistd.h')
- -
- -    if not conf.CHECK_FUNCS('closefrom'):
- -        conf.CHECK_FUNCS_IN('closefrom', 'bsd', headers='bsd/unistd.h')
-diff --git a/package/samba4/0004-libgpo-fix-build-without-ads.patch b/package/samba4/0004-libgpo-fix-build-without-ads.patch
-new file mode 100644
-index 0000000000..5e3af3c322
---- /dev/null
-+++ b/package/samba4/0004-libgpo-fix-build-without-ads.patch
-@@ -0,0 +1,49 @@
-+From a222b7506b53e689708834237f18877231dca589 Mon Sep 17 00:00:00 2001
-+From: Volker Lendecke <vl@samba.org>
-+Date: Sat, 3 Feb 2018 07:07:55 +0100
-+Subject: [PATCH] libgpo: Fix the build --without-ads
-+
-+Signed-off-by: Volker Lendecke <vl@samba.org>
-+Reviewed-by: David Disseldorp <ddiss@samba.org>
-+
-+Autobuild-User(master): David Disseldorp <ddiss@samba.org>
-+Autobuild-Date(master): Tue Feb  6 15:36:01 CET 2018 on sn-devel-144
-+
-+Downloaded from upstream commit:
-+https://git.samba.org/samba.git/?p=samba.git;a=commit;h=a222b7506b53e689708834237f18877231dca589
-+
-+Fixes https://bugzilla.samba.org/show_bug.cgi?id=13331
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libgpo/pygpo.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/libgpo/pygpo.c b/libgpo/pygpo.c
-+index 7a02a0dc2aa..b6b53b76212 100644
-+--- a/libgpo/pygpo.c
-++++ b/libgpo/pygpo.c
-+@@ -319,6 +319,7 @@ static PyObject *py_gpo_get_sysvol_gpt_version(PyObject * self,
-+ 	return result;
-+ }
-+ 
-++#ifdef HAVE_ADS
-+ static ADS_STATUS find_samaccount(ADS_STRUCT *ads, TALLOC_CTX *mem_ctx,
-+ 				  const char *samaccountname,
-+ 				  uint32_t *uac_ret, const char **dn_ret)
-+@@ -468,11 +469,15 @@ static PyObject *py_ads_get_gpo_list(ADS *self, PyObject *args, PyObject *kwds)
-+ 	return ret;
-+ }
-+ 
-++#endif
-++
-+ static PyMethodDef ADS_methods[] = {
-+ 	{ "connect", (PyCFunction)py_ads_connect, METH_NOARGS,
-+ 		"Connect to the LDAP server" },
-++#ifdef HAVE_ADS
-+ 	{ "get_gpo_list", (PyCFunction)py_ads_get_gpo_list, METH_KEYWORDS,
-+ 		NULL },
-++#endif
-+ 	{ NULL }
-+ };
-+ 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index dddd132d24..36e2ff79be 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.7.6.tar.asc
--sha256 1eede30fc8ef6504e24602fb72b00baa0a7b73b59f16d25cb0771dc8c7c57d6e  samba-4.7.6.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.8.0.tar.asc
-+sha256 87d9b585dbd8628e79aabb6e621a94bd20a072a00762e78e0899fad22fc18fb7  samba-4.8.0.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index ada03c024f..a5ebe59ef3 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.7.6
-+SAMBA4_VERSION = 4.8.0
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ERROR: unknown option --with-system-pixman
+
+--with-system-pixman has been removed with 2.11 version
+
+https://git.qemu.org/?p=qemu.git;a=commitdiff;h=35c4e86cf3c57fc395891c2bb7573c435ae58ec8
+
+Best regards,
+Romain
+
+> ---
+>  ...-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch | 10 ++++++----
+>  package/qemu/qemu.hash                                         |  2 +-
+>  package/qemu/qemu.mk                                           |  2 +-
+>  3 files changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+> index 6d6d024d9d..98783a38ee 100644
+> --- a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+> +++ b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+> @@ -13,15 +13,17 @@ general case of using uc_mcontext.arm_pc, which works fine with
+>  uClibc.
+>  
+>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> +[aduskett at gmail.com: Update for 2.11.1]
+>  ---
+>   user-exec.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>  
+> -diff --git a/user-exec.c b/user-exec.c
+> +diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
+>  index 6db0758..2b3d116 100644
+> ---- a/user-exec.c
+> -+++ b/user-exec.c
+> -@@ -409,7 +409,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
+> +--- a/accel/tcg/user-exec.c
+> ++++ b/accel/tcg/user-exec.c
+> +@@ -456,7 +456,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
+>   
+>   #if defined(__NetBSD__)
+>       pc = uc->uc_mcontext.__gregs[_REG_R15];
+> diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+> index 1173c1bf3d..dd1ac9a179 100644
+> --- a/package/qemu/qemu.hash
+> +++ b/package/qemu/qemu.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed, tarball verified with GPG signature
+> -sha256 fcfdaa1ecdaac8aead616fe811bfb8fe4a8f2cd59796aa446c5175b5af0e829f  qemu-2.10.2.tar.xz
+> +sha256 8a5145d1f8bd2eadc6776f3e13c68cd28d01349e30639bdbcb26ac588d668686  qemu-2.11.1.tar.xz
+>  sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+>  sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 345ef52668..7762ad73e2 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -QEMU_VERSION = 2.10.2
+> +QEMU_VERSION = 2.11.1
+>  QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+>  QEMU_SITE = http://download.qemu.org
+>  QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+> 
