@@ -1,51 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Mar 2018 11:53:48 +0100
-Subject: [Buildroot] [git commit] package/apache: security bump to version
- 2.4.33
-Message-ID: <20180324105507.9D79D81234@busybox.osuosl.org>
+Date: Sat, 24 Mar 2018 11:47:24 +0100
+Subject: [Buildroot] [git commit] woff2: new package
+Message-ID: <20180324105507.6D14781524@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65193bf3c93ec6922979907ce87fc82a73b25268
+commit: https://git.buildroot.net/buildroot/commit/?id=70afd4afa765183032fd0c335b6855fd02e30745
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.33
+Add the woff2 package to Builroot. This is needed by webkitgtk from
+version 2.20.0 onwards. WebKitGTK+ used to bundle a copy of the library,
+but it stopped doing so now that the upstream is has been making
+releases.
 
-Fixes CVE-2017-15710, CVE-2018-1283, CVE-2018-1303, CVE-2018-1301,
-CVE-2017-15715, CVE-2018-1312, CVE-2018-1302.
-
-Added license hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: fix license hash]
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 5 +++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/woff2/Config.in  |  9 +++++++++
+ package/woff2/woff2.hash |  5 +++++
+ package/woff2/woff2.mk   | 17 +++++++++++++++++
+ 5 files changed, 33 insertions(+)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 6471c38b62..76c7c766cb 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,3 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.29.tar.bz2.sha256
--sha256 777753a5a25568a2a27428b2214980564bc1c38c1abf9ccc7630b639991f7f00 httpd-2.4.29.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.33.tar.bz2.sha256
-+sha256 de02511859b00d17845b9abdd1f975d5ccb5d0b280c567da5bf2ad4b70846f05 httpd-2.4.33.tar.bz2
-+sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index e1b1a209cb..eaf7b9c5bf 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2d5f2108a8..031af3cdd0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -65,6 +65,7 @@ N:	Adrian Perez de Castro <aperez@igalia.com>
+ F:	package/brotli/
+ F:	package/libepoxy/
+ F:	package/webkitgtk/
++F:	package/woff2/
  
--APACHE_VERSION = 2.4.29
-+APACHE_VERSION = 2.4.33
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ N:	Adrien Gallou??t <adrien@gallouet.fr>
+ F:	package/glorytun/
+diff --git a/package/Config.in b/package/Config.in
+index 26ded5ebb2..ae5a09bd5b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1186,6 +1186,7 @@ menu "Graphics"
+ 	source "package/waylandpp/Config.in"
+ 	source "package/webkitgtk/Config.in"
+ 	source "package/webp/Config.in"
++	source "package/woff2/Config.in"
+ 	source "package/zbar/Config.in"
+ 	source "package/zxing-cpp/Config.in"
+ endmenu
+diff --git a/package/woff2/Config.in b/package/woff2/Config.in
+new file mode 100644
+index 0000000000..48672570dd
+--- /dev/null
++++ b/package/woff2/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_WOFF2
++	bool "woff2"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_BROTLI
++	help
++	  Reference implementation for the WOFF2 font file format,
++	  typically used for Web fonts
++
++	  https://github.com/google/woff2
+diff --git a/package/woff2/woff2.hash b/package/woff2/woff2.hash
+new file mode 100644
+index 0000000000..469071e3c2
+--- /dev/null
++++ b/package/woff2/woff2.hash
+@@ -0,0 +1,5 @@
++# Locally generated:
++sha512  c788bba1530aec463e755e901f9342f4b599e3a07f54645fef1dc388ab5d5c30625535e5dd38e9e792e04a640574baa50eeefb6b7338ab403755f4a4e0c3044d  v1.0.2.tar.gz
++
++# Hash for license files:
++sha512  8ee924da3fb5d16135adcf6a8fbe9e2e8f3d2d80468617e72ca4fa059a60f8455c9a5f68a8dc381b1297c8bf39c887a912d0f69246d2604ada74d3da9e8e490b  LICENSE
+diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
+new file mode 100644
+index 0000000000..23b88a5e9a
+--- /dev/null
++++ b/package/woff2/woff2.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# woff2
++#
++################################################################################
++
++WOFF2_VERSION = 1.0.2
++WOFF2_SOURCE = v$(WOFF2_VERSION).tar.gz
++WOFF2_SITE = https://github.com/google/woff2/archive
++WOFF2_LICENSE = MIT
++WOFF2_LICENSE_FILES = LICENSE
++WOFF2_INSTALL_STAGING = YES
++WOFF2_DEPENDENCIES = brotli
++WOFF2_CONF_OPTS = \
++	-DNOISY_LOGGING=OFF
++
++$(eval $(cmake-package))
