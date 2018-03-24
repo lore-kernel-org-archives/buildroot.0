@@ -1,51 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Mar 2018 00:03:32 +0100
-Subject: [Buildroot] [PATCH 2/2] core/instrumentation: shave minutes off
- the build time
-In-Reply-To: <491c4cfa-b468-7208-2e38-690cdcec222f@mind.be>
-References: <cover.1521146096.git.yann.morin.1998@free.fr>
- <6a793a6dba4f052ca8bbc35edd63df601f46478b.1521146096.git.yann.morin.1998@free.fr>
- <87muz5fp2n.fsf@dell.be.48ers.dk> <20180318161530.GA2478@scaer>
- <87efkhfimu.fsf@dell.be.48ers.dk>
- <20180322164144.GY14461@australia>
- <491c4cfa-b468-7208-2e38-690cdcec222f@mind.be>
-Message-ID: <20180324000332.2b6ff7e7@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 23 Mar 2018 21:39:31 -0500
+Subject: [Buildroot] [PATCH v2 2/3] test-pkg: test a subset of
+ toolchains by default, add -a and -n options
+In-Reply-To: <20180323214815.19831-3-thomas.petazzoni@bootlin.com>
+References: <20180323214815.19831-1-thomas.petazzoni@bootlin.com>
+ <20180323214815.19831-3-thomas.petazzoni@bootlin.com>
+Message-ID: <CANQCQpa_H8Qxgm45xapR5JQFXG=vksQn+4HOBncNjbKbYhjeow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Fri, 23 Mar 2018 23:39:47 +0100, Arnout Vandecappelle wrote:
+On Fri, Mar 23, 2018 at 4:48 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> During the latest Buildroot Developers meeting, we discussed that
+> test-pkg would perhaps be more widely used if it tested a smaller
+> subset of toolchains. Indeed, it currently tests 47 toolchains, which
+> takes very long to build. Several of the toolchain configurations are
+> quite similar, and it is perhaps not necessary for contributors to
+> test them all before submitting a package.
+>
+> Therefore, this commit changes the test-pkg script to only test a
+> subset of the toolchain configurations by default. The N first
+> configurations of the CSV files are tested, where N is hard-coded in
+> the script. The CSV file has therefore been re-organized to have the
+> first N toolchains be the most important ones.
+>
+> A -a/--all option is added to test with all toolchains, while a
+> -n/--number option is added to test with the first N toolchains, N
+> being passed on the command line.
+>
+> Note that the list of toolchains (built in the "toolchains" shell
+> variable) is no longer sorted. Indeed, when the first N toolchains are
+> tested, we want them to be tested in the same order as they are listed
+> in the CSV file, as we are careful to order them in an interesting
+> order. We only sort when all toolchains are tested.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> > The current timestamp-based approach not guaranteeing an accurate list is
-> > problematic for many such uses. And as you already mentioned, since we don't have
-> > full control over the build steps done in any given package, we don't know which
-> > timestamps they will use. There may be very good reasons to install certain
-> > files with their original timestamp and not the one from the build.  
-> 
->  We could revert to the original before/after file list approach, and just use
-> something like "stat -c '%N %Y %f'" instead of md5sum.
-> 
->  Though I certainly like Trent's idea of installing each package in a separate
-> directory, too. With PPS we're more or less there anyway. We'd just need to step
-> up the adoption rate of PPS then :-)
+I tested a basic one package build with -a, -n 2 and also the no arg
+(default) number of toolchains.
 
-With the PPS patches I posted, we are not installing each package to a
-separate folder, but to a folder where all the package dependencies
-have already been installed.
-
-Of course, we could change to a model where the per-package staging and
-target folders really only contain what the package has installed, and
-have a separate per-package SDK, in which we do the "accumulation" of
-the dependencies.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
