@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Mar 2018 15:24:35 +0100
-Subject: [Buildroot] [PATCH] configs/qemu_aarch64_virt: needs host-openssl
+Date: Sat, 24 Mar 2018 15:26:02 +0100
+Subject: [Buildroot] [PATCH] configs/freescale_p1025twr: needs host-openssl
  for the Linux kernel build
-Message-ID: <20180324142435.10768-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180324142602.10995-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,21 +11,24 @@ To: buildroot@busybox.net
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/59015465
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/59015355
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/qemu_aarch64_virt_defconfig | 1 +
+ configs/freescale_p1025twr_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 3bafd90e5a..076773302d 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.2"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.15.config"
+diff --git a/configs/freescale_p1025twr_defconfig b/configs/freescale_p1025twr_defconfig
+index f7cc50f093..13ec517fbd 100644
+--- a/configs/freescale_p1025twr_defconfig
++++ b/configs/freescale_p1025twr_defconfig
+@@ -12,6 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx_smp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/p1025twr"
 +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_CPIO=y
 -- 
 2.14.3
