@@ -1,86 +1,108 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 24 Mar 2018 19:25:19 +0100
-Subject: [Buildroot] [PATCH] qemu: bump to 2.11.1
-In-Reply-To: <20180313094457.594-1-aduskett@gmail.com>
-References: <20180313094457.594-1-aduskett@gmail.com>
-Message-ID: <a27ba48e-c9be-1213-3106-2d2b8a3d5bb7@gmail.com>
+Date: Sat, 24 Mar 2018 20:30:16 +0100
+Subject: [Buildroot] [PATCH] qemu: fix build with glibc 2.27
+In-Reply-To: <2ea89efb89501dbb6f311d3644efb8d6543f1ba7.1521561417.git.baruch@tkos.co.il>
+References: <2ea89efb89501dbb6f311d3644efb8d6543f1ba7.1521561417.git.baruch@tkos.co.il>
+Message-ID: <bcf195ca-498e-4796-0325-c5b35a888875@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+Hi Baruch,
 
-Le 13/03/2018 ? 10:44, Adam Duskett a ?crit?:
-> Also refresh patch.
+Le 20/03/2018 ? 16:56, Baruch Siach a ?crit?:
+> glibc version 2.27 added a wrapper for the memfd_create system call. The
+> wrapper prototype collides with a static declaration of memfd_create.
+> Add upstream patch to correctly detect the glibc provided memfd_create
+> definition.
 > 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> Fixes:
+> http://autobuild.buildroot.net/results/b82/b825c0cd397424b1fc7fa87c580e1757dc25c588/
+> http://autobuild.buildroot.net/results/9aa/9aa3853d23c0dc72bf3632b4d66ae39f597f5250/
+> http://autobuild.buildroot.net/results/b13/b13039ba602b9d500b939d259816a39ba24e1ba2/
+> 
+> Cc: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Qemu doesn't build with --with-system-pixman option:
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
+(Build tested only)
 
-ERROR: unknown option --with-system-pixman
-
---with-system-pixman has been removed with 2.11 version
-
-https://git.qemu.org/?p=qemu.git;a=commitdiff;h=35c4e86cf3c57fc395891c2bb7573c435ae58ec8
+This patch is not present in Qemu 2.11.x stable branch. It must be kept with the
+Qemu version bump to 2.11.1.
 
 Best regards,
 Romain
 
 > ---
->  ...-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch | 10 ++++++----
->  package/qemu/qemu.hash                                         |  2 +-
->  package/qemu/qemu.mk                                           |  2 +-
->  3 files changed, 8 insertions(+), 6 deletions(-)
+>  package/qemu/0002-memfd-fix-configure-test.patch | 58 ++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 package/qemu/0002-memfd-fix-configure-test.patch
 > 
-> diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-> index 6d6d024d9d..98783a38ee 100644
-> --- a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-> +++ b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-> @@ -13,15 +13,17 @@ general case of using uc_mcontext.arm_pc, which works fine with
->  uClibc.
->  
->  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +[aduskett at gmail.com: Update for 2.11.1]
->  ---
->   user-exec.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->  
-> -diff --git a/user-exec.c b/user-exec.c
-> +diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
->  index 6db0758..2b3d116 100644
-> ---- a/user-exec.c
-> -+++ b/user-exec.c
-> -@@ -409,7 +409,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
-> +--- a/accel/tcg/user-exec.c
-> ++++ b/accel/tcg/user-exec.c
-> +@@ -456,7 +456,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
->   
->   #if defined(__NetBSD__)
->       pc = uc->uc_mcontext.__gregs[_REG_R15];
-> diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-> index 1173c1bf3d..dd1ac9a179 100644
-> --- a/package/qemu/qemu.hash
-> +++ b/package/qemu/qemu.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed, tarball verified with GPG signature
-> -sha256 fcfdaa1ecdaac8aead616fe811bfb8fe4a8f2cd59796aa446c5175b5af0e829f  qemu-2.10.2.tar.xz
-> +sha256 8a5145d1f8bd2eadc6776f3e13c68cd28d01349e30639bdbcb26ac588d668686  qemu-2.11.1.tar.xz
->  sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
->  sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 345ef52668..7762ad73e2 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -QEMU_VERSION = 2.10.2
-> +QEMU_VERSION = 2.11.1
->  QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
->  QEMU_SITE = http://download.qemu.org
->  QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+> diff --git a/package/qemu/0002-memfd-fix-configure-test.patch b/package/qemu/0002-memfd-fix-configure-test.patch
+> new file mode 100644
+> index 000000000000..3e06c0e93274
+> --- /dev/null
+> +++ b/package/qemu/0002-memfd-fix-configure-test.patch
+> @@ -0,0 +1,58 @@
+> +From 75e5b70e6b5dcc4f2219992d7cffa462aa406af0 Mon Sep 17 00:00:00 2001
+> +From: Paolo Bonzini <pbonzini@redhat.com>
+> +Date: Tue, 28 Nov 2017 11:51:27 +0100
+> +Subject: [PATCH] memfd: fix configure test
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Recent glibc added memfd_create in sys/mman.h.  This conflicts with
+> +the definition in util/memfd.c:
+> +
+> +    /builddir/build/BUILD/qemu-2.11.0-rc1/util/memfd.c:40:12: error: static declaration of memfd_create follows non-static declaration
+> +
+> +Fix the configure test, and remove the sys/memfd.h inclusion since the
+> +file actually does not exist---it is a typo in the memfd_create(2) man
+> +page.
+> +
+> +Cc: Marc-Andr? Lureau <marcandre.lureau@redhat.com>
+> +Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +---
+> +Upstream status: commit 75e5b70e6b5
+> +
+> + configure    | 2 +-
+> + util/memfd.c | 4 +---
+> + 2 files changed, 2 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/configure b/configure
+> +index 9c8aa5a98bd4..99ccc1725ace 100755
+> +--- a/configure
+> ++++ b/configure
+> +@@ -3923,7 +3923,7 @@ fi
+> + # check if memfd is supported
+> + memfd=no
+> + cat > $TMPC << EOF
+> +-#include <sys/memfd.h>
+> ++#include <sys/mman.h>
+> + 
+> + int main(void)
+> + {
+> +diff --git a/util/memfd.c b/util/memfd.c
+> +index 4571d1aba866..412e94a405fc 100644
+> +--- a/util/memfd.c
+> ++++ b/util/memfd.c
+> +@@ -31,9 +31,7 @@
+> + 
+> + #include "qemu/memfd.h"
+> + 
+> +-#ifdef CONFIG_MEMFD
+> +-#include <sys/memfd.h>
+> +-#elif defined CONFIG_LINUX
+> ++#if defined CONFIG_LINUX && !defined CONFIG_MEMFD
+> + #include <sys/syscall.h>
+> + #include <asm/unistd.h>
+> + 
+> +-- 
+> +2.16.2
+> +
 > 
