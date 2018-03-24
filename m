@@ -1,34 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Mar 2018 15:26:02 +0100
-Subject: [Buildroot] [PATCH] configs/freescale_p1025twr: needs host-openssl
- for the Linux kernel build
-Message-ID: <20180324142602.10995-1-thomas.petazzoni@bootlin.com>
+From: Calin Crisan <ccrisan@gmail.com>
+Date: Sat, 24 Mar 2018 17:11:35 +0200
+Subject: [Buildroot] [PATCH v2 1/1] toolchain-external-custom: allow
+ specifying relative path to binaries
+Message-ID: <20180324151135.24751-1-ccrisan@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+There are cases where a downloaded toolchain doesn't have its binaries
+placed directly in a "bin" subfolder (where BuildRoot currently looks
+for them).
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/59015355
+A common example is the official Raspberry Pi Toolchain
+(https://github.com/raspberrypi/tools), which has its binaries in
+"arm-bcm2708/arm-linux-gnueabihf/bin".
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+This commit introduces BR2_TOOLCHAIN_EXTERNAL_REL_BIN_PATH that defaults
+to "bin" and can be changed as needed.
+
+Signed-off-by: Calin Crisan <ccrisan@gmail.com>
 ---
- configs/freescale_p1025twr_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ toolchain/toolchain-external/pkg-toolchain-external.mk            | 8 +++++++-
+ .../toolchain-external-custom/Config.in.options                   | 8 ++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/configs/freescale_p1025twr_defconfig b/configs/freescale_p1025twr_defconfig
-index f7cc50f093..13ec517fbd 100644
---- a/configs/freescale_p1025twr_defconfig
-+++ b/configs/freescale_p1025twr_defconfig
-@@ -12,6 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx_smp"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/p1025twr"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 3bf9fac412..e0a34e1ca9 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -71,13 +71,19 @@ else
+ TOOLCHAIN_EXTERNAL_INSTALL_DIR = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+ endif
  
- # Filesystem
- BR2_TARGET_ROOTFS_CPIO=y
++TOOLCHAIN_EXTERNAL_REL_BIN_PATH = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_REL_BIN_PATH))
++# if binary path unset (non-custom external toolchains), use "bin"
++ifeq ($(TOOLCHAIN_EXTERNAL_REL_BIN_PATH),)
++TOOLCHAIN_EXTERNAL_REL_BIN_PATH = bin
++endif
++
+ ifeq ($(TOOLCHAIN_EXTERNAL_INSTALL_DIR),)
+ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+ # if no path set, figure it out from path
+ TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+ endif
+ else
+-TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
++TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_REL_BIN_PATH)
+ endif
+ 
+ # If this is a buildroot toolchain, it already has a wrapper which we want to
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 70c7d8e3c3..b711d9b81f 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -12,6 +12,14 @@ config BR2_TOOLCHAIN_EXTERNAL_URL
+ 	help
+ 	  URL of the custom toolchain tarball to download and install.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_REL_BIN_PATH
++	string "Toolchain relative bin path"
++	default "bin"
++	depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
++	help
++	  Path to where the binaries (e.g. the compiler) can be found,
++	  relative to the downloaded toolchain root directory.
++
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+ 	string "Toolchain prefix"
+ 	default "$(ARCH)-linux"
 -- 
-2.14.3
+2.16.2
