@@ -1,82 +1,92 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Sat, 24 Mar 2018 14:10:15 +0000
-Subject: [Buildroot] [PATCH v4 5/7] package/rpi-bt-firmware: change to
+Date: Sat, 24 Mar 2018 14:10:16 +0000
+Subject: [Buildroot] [PATCH v4 6/7] package/rpi-wifi-firmware: change to
  LibreELEC github repo
 In-Reply-To: <1521900617-32102-1-git-send-email-martin@barkynet.com>
 References: <1521900617-32102-1-git-send-email-martin@barkynet.com>
-Message-ID: <1521900617-32102-6-git-send-email-martin@barkynet.com>
+Message-ID: <1521900617-32102-7-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Include BCM4345C0.hcd for the rpi3 b+
+Include brcmfmac43455 firmware for the rpi3 b+
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
+Cc: Jens Maus <mail@jens-maus.de>
 
 ---
-Changed v3 -> v4
+Changes v3 -> v4
  - add license file
+ - dont use linux-firmware bcm43XXX because it's out of date
 
-Changed v2 -> v3
- - new in v3
+Changes v2 -> v3
+ - New in v3 (suggested by Jens Maus)
 ---
- package/rpi-bt-firmware/Config.in            |  5 +++--
- package/rpi-bt-firmware/rpi-bt-firmware.hash |  3 ++-
- package/rpi-bt-firmware/rpi-bt-firmware.mk   | 12 +++++++-----
- 3 files changed, 12 insertions(+), 8 deletions(-)
+ package/rpi-wifi-firmware/Config.in              | 11 +++++++----
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash |  3 ++-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 16 +++++-----------
+ 3 files changed, 14 insertions(+), 16 deletions(-)
 
-diff --git a/package/rpi-bt-firmware/Config.in b/package/rpi-bt-firmware/Config.in
-index dfc1cee..45643d6 100644
---- a/package/rpi-bt-firmware/Config.in
-+++ b/package/rpi-bt-firmware/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_RPI_BT_FIRMWARE
+diff --git a/package/rpi-wifi-firmware/Config.in b/package/rpi-wifi-firmware/Config.in
+index 2c87c75..7e81b28 100644
+--- a/package/rpi-wifi-firmware/Config.in
++++ b/package/rpi-wifi-firmware/Config.in
+@@ -1,10 +1,13 @@
+ config BR2_PACKAGE_RPI_WIFI_FIRMWARE
+ 	bool "rpi-wifi-firmware"
  	depends on BR2_arm || BR2_aarch64
+-	select BR2_PACKAGE_LINUX_FIRMWARE
+-	select BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX # runtime
++	depends on !BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
  	help
- 	  Raspberry Pi 3 and Zero W Broadcom BCM43438 Bluetooth module
--	  firmware.
-+	  firmware. Raspberry Pi 3 Model B+ Broadcom BCM4345C0
-+	  Bluetooth module firmware.
+ 	  Raspberry Pi 3 and Zero W Broadcom BCM43430 wifi module
+-	  NVRAM data.
++	  NVRAM data. Raspberry Pi 3 Model B+ Broadcom BCM43455
++	  wifi module NVRAM data.
  
--	  https://aur.archlinux.org/packages/pi-bluetooth
+-	  https://github.com/RPi-Distro/firmware-nonfree/
 +	  https://github.com/LibreELEC/brcmfmac_sdio-firmware-rpi
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-index f1d06e8..553a7e4 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
++
++comment "rpi-wifi-firmware conflicts with linux-firmware Broadcom BRCM bcm43xx"
++	depends on BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+index c205065..bc0d7c8 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
 @@ -1,2 +1,3 @@
- # Locally computed
--sha256 5d9c9364277414ffd67b4a266cdf88e92f28eb937e5a413750e87b7a94161bef  rpi-bt-firmware-a439f892bf549ddfefa9ba7ad1999cc515f233bf.tar.gz
-+sha256 beade89c5c072158b6cf18cf741d2695980fd6a4533dab3897bebf90c0631a30  rpi-bt-firmware-18d7c931aff0a8a78360b9b9eaeb15d1224fb907.tar.gz
+ # Locally calculated
+-sha256  872fde4f9942d9aba805880d6eaddfe050305626fd58ad955bfe77c04f6b75a5  brcmfmac43430-sdio.txt
++sha256 beade89c5c072158b6cf18cf741d2695980fd6a4533dab3897bebf90c0631a30  rpi-wifi-firmware-18d7c931aff0a8a78360b9b9eaeb15d1224fb907.tar.gz
 +sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-index 255da19..689b80e 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-@@ -4,18 +4,20 @@
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+index 6c855a8..32dd3e5 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+@@ -4,20 +4,14 @@
  #
  ################################################################################
  
--RPI_BT_FIRMWARE_VERSION = a439f892bf549ddfefa9ba7ad1999cc515f233bf
--RPI_BT_FIRMWARE_SITE = https://aur.archlinux.org/pi-bluetooth.git
--RPI_BT_FIRMWARE_SITE_METHOD = git
-+RPI_BT_FIRMWARE_VERSION = 18d7c931aff0a8a78360b9b9eaeb15d1224fb907
-+RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
- RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
- RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+-RPI_WIFI_FIRMWARE_VERSION = 54bab3d6a6d43239c71d26464e6e10e5067ffea7
+-# brcmfmac43430-sdio.bin comes from linux-firmware
+-RPI_WIFI_FIRMWARE_SOURCE = brcmfmac43430-sdio.txt
+-# git repo contains a lot of unrelated files
+-RPI_WIFI_FIRMWARE_SITE = https://raw.githubusercontent.com/RPi-Distro/firmware-nonfree/$(RPI_WIFI_FIRMWARE_VERSION)/brcm80211/brcm
++RPI_WIFI_FIRMWARE_VERSION = 18d7c931aff0a8a78360b9b9eaeb15d1224fb907
++RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
+ RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
+-
+-define RPI_WIFI_FIRMWARE_EXTRACT_CMDS
+-	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
+-endef
++RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
  
-+RPI_BT_FIRMWARE_FILES = brcm/BCM43430A1.hcd BCM4345C0.hcd
-+
- # The BlueZ hciattach utility looks for firmware in /etc/firmware. Add a
- # compatibility symlink.
- define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
- 	ln -sf ../lib/firmware $(TARGET_DIR)/etc/firmware
--	$(INSTALL) -D -m 0644 $(@D)/BCM43430A1.hcd \
--		$(TARGET_DIR)/lib/firmware/BCM43430A1.hcd
-+	for file in $(RPI_BT_FIRMWARE_FILES); do \
-+		$(INSTALL) -D -m 0644 $(@D)/firmware/$${file} $(TARGET_DIR)/lib/firmware/$${file##*/}; \
-+	done
+ define RPI_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/$(RPI_WIFI_FIRMWARE_SOURCE) \
+-		$(TARGET_DIR)/lib/firmware/brcm/$(RPI_WIFI_FIRMWARE_SOURCE)
++	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
++	$(INSTALL) -m 0644 $(@D)/firmware/brcm/brcmfmac* $(TARGET_DIR)/lib/firmware/brcm
  endef
  
  $(eval $(generic-package))
