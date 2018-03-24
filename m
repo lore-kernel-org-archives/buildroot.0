@@ -1,114 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Mar 2018 15:20:00 +0100
-Subject: [Buildroot] [PATCH v4 1/9] Makefile,
- skeleton: move the host skeleton logic to host-skeleton package
+Date: Sat, 24 Mar 2018 15:20:03 +0100
+Subject: [Buildroot] [PATCH v4 4/9] package/pkg-generic: handle host-tar as
+ an extract dependency
 In-Reply-To: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
 References: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180324142008.10375-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20180324142008.10375-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As part of the per-package SDK work, we want to avoid having logic
-that installs files to the global HOST_DIR, and instead do it inside
-packages. One thing that gets installed to the global HOST_DIR is the
-minimal "skeleton" that we create in host:
+This moves the host-tar dependency handling from
+DEPENDENCY_HOST_PREREQ to an extract dependency.
 
- - the "usr" symbolic link for backward compatibility
+To achieve that, check-host-tar.mk fills in the
+BR2_TAR_HOST_DEPENDENCY variable with host-tar if building a host-tar
+is needed. The name BR2_TAR_HOST_DEPENDENCY has been chosen because it
+matches the name BR2_CMAKE_HOST_DEPENDENCY already used in
+check-host-cmake.mk.
 
- - the "lib" directory, and its lib64 or lib32 symbolic links
+The BR2_TAR_HOST_DEPENDENCY is added to all packages, except host-tar
+itself (obviously) and host-skeleton, because we depend on
+host-skeleton to install host-tar properly in HOST_DIR.
 
-This commit moves this logic to a new host-skeleton package, and makes
-all packages (except itself) depend on it. We also make sure that this
-host-skeleton package doesn't depend on host-patchelf, because
-host-patchelf depends on host-skeleton.
+In addition, we modify tar.mk to explicitly build host-tar without
+ccache: since ccache source code is available as a tarball, ccache
+will obviously depend on host-tar if the system tar is insufficient.
 
-While at it, use $(Q) instead of @ in the HOST_SKELETON_INSTALL_CMDS.
+Finally, to make things really clean, we also add
+$(BR2_TAR_HOST_DEPENDENCY) to the dependencies of the tar filesystem
+format, since it requires tar, so we'd better make sure we have a
+suitable tar.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 Changes since v3:
- - Use $(Q) instead of @ in the HOST_SKELETON_INSTALL_CMDS
- - Add Reviewed-by from Yann
+ - Add dependency on BR2_TAR_HOST_DEPENDENCY in the tar filesystem
+ - Use = instead of += when defining BR2_TAR_HOST_DEPENDENCY
+ - Fix typo in commit log
+ - Added Reviewed-by from Yann.
+
 Changes since v2:
- - None
-Changes since v1:
  - New patch
 ---
- Makefile                     | 13 +------------
- package/pkg-generic.mk       |  4 ++++
- package/skeleton/skeleton.mk | 12 ++++++++++++
- 3 files changed, 17 insertions(+), 12 deletions(-)
+ fs/tar/tar.mk                          | 2 ++
+ package/pkg-generic.mk                 | 4 ++++
+ package/tar/tar.mk                     | 5 +++++
+ support/dependencies/check-host-tar.mk | 2 +-
+ 4 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 1b34818fc8..33c87b5ebb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -560,7 +560,7 @@ endif
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index e39c2fdbf1..68149e9eb7 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -6,6 +6,8 @@
  
- .PHONY: dirs
- dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
--	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
-+	$(HOST_DIR) $(BINARIES_DIR)
+ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
  
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
- 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-@@ -579,17 +579,6 @@ sdk: world
- 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
- 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
- 
--# Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
--$(HOST_DIR)/usr: $(HOST_DIR)
--	@ln -snf . $@
--
--$(HOST_DIR)/lib: $(HOST_DIR)
--	@mkdir -p $@
--	@case $(HOSTARCH) in \
--		(*64) ln -snf lib $(@D)/lib64;; \
--		(*)   ln -snf lib $(@D)/lib32;; \
--	esac
--
- # Populating the staging with the base directories is handled by the skeleton package
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)
++ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
++
+ define ROOTFS_TAR_CMD
+ 	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
+ 		tar $(TAR_OPTS) -cf $@ --null --no-recursion -T - --numeric-owner)
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 5edb4b0838..3cadb28595 100644
+index 0a404040b0..ae50c5f284 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -551,6 +551,10 @@ $(2)_DEPENDENCIES += toolchain
- endif
+@@ -555,6 +555,10 @@ ifneq ($(1),host-skeleton)
+ $(2)_DEPENDENCIES += host-skeleton
  endif
  
-+ifneq ($(1),host-skeleton)
-+$(2)_DEPENDENCIES += host-skeleton
++ifeq ($(filter host-tar host-skeleton,$(1)),)
++$(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
 +endif
 +
  # Eliminate duplicates in dependencies
  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
- $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index d380f41649..efcf420d72 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -11,4 +11,16 @@
- SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
- SKELETON_ADD_SKELETON_DEPENDENCY = NO
+ $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index a8a15d9518..92b6e9eaa5 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -47,4 +47,9 @@ endef
  
-+# We create a compatibility symlink in case a post-build script still
-+# uses $(HOST_DIR)/usr
-+define HOST_SKELETON_INSTALL_CMDS
-+	$(Q)ln -snf . $(HOST_DIR)/usr
-+	$(Q)mkdir -p $(HOST_DIR)/lib
-+	$(Q)case $(HOSTARCH) in \
-+		(*64) ln -snf lib $(HOST_DIR)/lib64;; \
-+		(*)   ln -snf lib $(HOST_DIR)/lib32;; \
-+	esac
-+endef
+ HOST_TAR_CONF_OPTS = --without-selinux
+ 
++# we are built before ccache
++HOST_TAR_CONF_ENV = \
++	CC="$(HOSTCC_NOCCACHE)" \
++	CXX="$(HOSTCXX_NOCCACHE)"
 +
- $(eval $(virtual-package))
-+$(eval $(host-generic-package))
+ $(eval $(host-autotools-package))
+diff --git a/support/dependencies/check-host-tar.mk b/support/dependencies/check-host-tar.mk
+index ad0b32e277..07d02fd1b1 100644
+--- a/support/dependencies/check-host-tar.mk
++++ b/support/dependencies/check-host-tar.mk
+@@ -1,6 +1,6 @@
+ TAR ?= tar
+ 
+ ifeq (,$(call suitable-host-package,tar,$(TAR)))
+-DEPENDENCIES_HOST_PREREQ += host-tar
+ TAR = $(HOST_DIR)/bin/tar
++BR2_TAR_HOST_DEPENDENCY = host-tar
+ endif
 -- 
 2.14.3
