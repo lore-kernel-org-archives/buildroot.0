@@ -1,111 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Mar 2018 16:58:10 +0100
-Subject: [Buildroot] [git commit] configs/imxsabre: Fix U-Boot parallel
- build issue
-Message-ID: <20180324155828.E7DC6839C6@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 24 Mar 2018 17:24:25 +0100
+Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.22.3
+Message-ID: <20180324162425.11799-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c4bccf9e882ffead426051cfe76764dd2ecaf83
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://www.enlightenment.org/news/e0.22.3_release
 
-Sometimes imximage throws the following error:
-
-MKIMAGE u-boot-dtb.imx
-Error: No BOOT_FROM tag in board/freescale/mx6sxsabresd/imximage.cfg.cfgtmp
-arch/arm/imx-common/Makefile:91: recipe for target 'u-boot-dtb.imx' failed
-
-Later on, when running mkimage for the u-boot.imx it will succeed in
-finding the IVT offset.
-
-Looks like some race condition happening during parallel build when
-processing mkimage for u-boot-dtb.imx and u-boot.imx.
-
-A proper fix still needs to be implemented, but as a workaround let's
-remove the error when the IVT offset is not found.
-
-It is useful to have such message, especially during bring-up phase,
-but the build error that it causes is severe, so better avoid the
-build error for now.
-
-The error checking can be re-implemented later when we have a proper
-fix.
-
-This workaround has already been applied in mainline U-Boot:
-http://git.denx.de/?p=u-boot.git;a=commit;h=b5b0e4e351e20a606de22db6a56ad6bc1e2aa8fd
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/59015347
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...emove-failure-when-no-IVT-offset-is-found.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/freescale/imx6sabre/patches/uboot/0002-imximage-Remove-failure-when-no-IVT-offset-is-found.patch b/board/freescale/imx6sabre/patches/uboot/0002-imximage-Remove-failure-when-no-IVT-offset-is-found.patch
-new file mode 100644
-index 0000000000..92eff7574d
---- /dev/null
-+++ b/board/freescale/imx6sabre/patches/uboot/0002-imximage-Remove-failure-when-no-IVT-offset-is-found.patch
-@@ -0,0 +1,55 @@
-+From 24ba28680abe868e8db3442a9bf523ad3af1febd Mon Sep 17 00:00:00 2001
-+From: Fabio Estevam <fabio.estevam@nxp.com>
-+Date: Fri, 9 Mar 2018 08:25:00 -0300
-+Subject: [PATCH] imximage: Remove failure when no IVT offset is found
-+
-+Sometimes imximage throws the following error:
-+
-+  CFGS    board/freescale/vf610twr/imximage.cfg.cfgtmp
-+  CFGS    board/freescale/vf610twr/imximage.cfg.cfgtmp
-+  MKIMAGE u-boot-dtb.imx
-+Error: No BOOT_FROM tag in board/freescale/vf610twr/imximage.cfg.cfgtmp
-+arch/arm/mach-imx/Makefile:100: recipe for target 'u-boot-dtb.imx' failed
-+
-+Later on, when running mkimage for the u-boot.imx it will succeed in
-+finding the IVT offset.
-+
-+Looks like some race condition happening during parallel build when
-+processing mkimage for u-boot-dtb.imx and u-boot.imx.
-+
-+A proper fix still needs to be implemented, but as a workaround let's
-+remove the error when the IVT offset is not found.
-+
-+It is useful to have such message, especially during bring-up phase,
-+but the build error that it causes is severe, so better avoid the
-+build error for now.
-+
-+The error checking can be re-implemented later when we have a proper
-+fix.
-+
-+Reported-by: Breno Lima <breno.lima@nxp.com>
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-+---
-+ tools/imximage.c | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/tools/imximage.c b/tools/imximage.c
-+index 0c43196..bef56f8 100644
-+--- a/tools/imximage.c
-++++ b/tools/imximage.c
-+@@ -765,11 +765,6 @@ static uint32_t parse_cfg_file(struct imx_header *imxhdr, char *name)
-+ 	(*set_dcd_rst)(imxhdr, dcd_len, name, lineno);
-+ 	fclose(fd);
-+ 
-+-	/* Exit if there is no BOOT_FROM field specifying the flash_offset */
-+-	if (imximage_ivt_offset == FLASH_OFFSET_UNDEFINED) {
-+-		fprintf(stderr, "Error: No BOOT_FROM tag in %s\n", name);
-+-		exit(EXIT_FAILURE);
-+-	}
-+ 	return dcd_len;
-+ }
-+ 
-+-- 
-+2.7.4
-+
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index 686d0ef3be..7a6d3ff8f0 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,3 +1,3 @@
+-# From https://www.enlightenment.org/news/e0.22.2_release
+-sha256	4d581ef85246f0cba003427bb9b3758e3de137babea1cdd2affd70a2cbe1632c	enlightenment-0.22.2.tar.xz
++# From https://www.enlightenment.org/news/e0.22.3_release
++sha256	4d81e583073d74474b7a960b01cb596716a43cca2fadca7d1e5c91f4cf6efe9b	enlightenment-0.22.3.tar.xz
+ sha256	34dbd501ec9d1c8dcc569c01db9cf9a4b7ee5981614cc9f8f613a97463d27350	COPYING
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index ba6b54143e..480e9e9da8 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ENLIGHTENMENT_VERSION = 0.22.2
++ENLIGHTENMENT_VERSION = 0.22.3
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2-Clause
+-- 
+2.14.3
