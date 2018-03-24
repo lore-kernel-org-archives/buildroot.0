@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Mar 2018 22:00:52 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xsetroot: bump version
- to 1.1.2
-Message-ID: <20180324210429.A82BF8135E@busybox.osuosl.org>
+Date: Sat, 24 Mar 2018 22:01:01 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xsm: bump version to
+ 1.0.4
+Message-ID: <20180324210429.CA0628135E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a11e84c79e15499dabd021649d4580087df8d41
+commit: https://git.buildroot.net/buildroot/commit/?id=cd6915df1f89ffecf7732081cce1ec449486d09e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Added all upstream hashes, added license hash.
@@ -17,34 +17,34 @@ Added all upstream hashes, added license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_xsetroot/xapp_xsetroot.hash | 9 +++++++--
- package/x11r7/xapp_xsetroot/xapp_xsetroot.mk   | 2 +-
+ package/x11r7/xapp_xsm/xapp_xsm.hash | 9 +++++++--
+ package/x11r7/xapp_xsm/xapp_xsm.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash b/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
-index 89a1abe454..7cbabb5cef 100644
---- a/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
-+++ b/package/x11r7/xapp_xsetroot/xapp_xsetroot.hash
+diff --git a/package/x11r7/xapp_xsm/xapp_xsm.hash b/package/x11r7/xapp_xsm/xapp_xsm.hash
+index aef9e558ba..eda231fe93 100644
+--- a/package/x11r7/xapp_xsm/xapp_xsm.hash
++++ b/package/x11r7/xapp_xsm/xapp_xsm.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-January/002149.html
--sha256	ba215daaa78c415fce11b9e58c365d03bb602eaa5ea916578d76861a468cc3d9	xsetroot-1.1.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002874.html
-+md5 5fe769c8777a6e873ed1305e4ce2c353  xsetroot-1.1.2.tar.bz2
-+sha1 42ab81761823b44974feab86477007c49dbace50  xsetroot-1.1.2.tar.bz2
-+sha256 10c442ba23591fb5470cea477a0aa5f679371f4f879c8387a1d9d05637ae417c  xsetroot-1.1.2.tar.bz2
-+sha512 0b9df1b72305e5c24f1e1664578aa4411a5ffcdc5d318458117594e641f01c34700205b0d16c08abf4a8106d36128ccdbe1ea1f1035fce9018d6b52801a8b72b  xsetroot-1.1.2.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-February/002163.html
+-sha256	ad9dee2847a683841f73518a83014b0accae60e9eff7e96752a0dbc412867b4a	xsm-1.0.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-March/002875.html
++md5 bd32c14f09d58f46084b6a8f20e6e8f1  xsm-1.0.4.tar.bz2
++sha1 dd41234e276fe8b2d0a853879568f73b6d98812a  xsm-1.0.4.tar.bz2
++sha256 9934b6893a4e52cf7435368fc8d425c371b5e32d96e420ead30166eb82d64425  xsm-1.0.4.tar.bz2
++sha512 d4e4da7c309a4eae126d2b58a13684f4dbc06b09f76dde9c89c707375df2843614f3d83bc44f9cd02f239200db3397abd86796dca0dbafc69f60482b0af5a176  xsm-1.0.4.tar.bz2
 +# Locally computed
-+sha256 48e9c9572e0dc1c14b93b753542f780e7751dd7f035816374d8a8be0211a4520 COPYING
-diff --git a/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk b/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
-index 9000867c84..98ba344cfa 100644
---- a/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
-+++ b/package/x11r7/xapp_xsetroot/xapp_xsetroot.mk
++sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff COPYING
+diff --git a/package/x11r7/xapp_xsm/xapp_xsm.mk b/package/x11r7/xapp_xsm/xapp_xsm.mk
+index d4d240774e..6d752b4d15 100644
+--- a/package/x11r7/xapp_xsm/xapp_xsm.mk
++++ b/package/x11r7/xapp_xsm/xapp_xsm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XSETROOT_VERSION = 1.1.1
-+XAPP_XSETROOT_VERSION = 1.1.2
- XAPP_XSETROOT_SOURCE = xsetroot-$(XAPP_XSETROOT_VERSION).tar.bz2
- XAPP_XSETROOT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XSETROOT_LICENSE = MIT
+-XAPP_XSM_VERSION = 1.0.3
++XAPP_XSM_VERSION = 1.0.4
+ XAPP_XSM_SOURCE = xsm-$(XAPP_XSM_VERSION).tar.bz2
+ XAPP_XSM_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XSM_LICENSE = MIT
