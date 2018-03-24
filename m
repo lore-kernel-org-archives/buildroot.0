@@ -1,82 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Mar 2018 15:20:01 +0100
-Subject: [Buildroot] [PATCH v4 2/9] pkg-cmake: install CMake files as part
- of a package
+Date: Sat, 24 Mar 2018 15:20:04 +0100
+Subject: [Buildroot] [PATCH v4 5/9] package/pkg-generic: handle host-xz as
+ an extract dependency
 In-Reply-To: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
 References: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180324142008.10375-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20180324142008.10375-6-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the toolchainfile.cmake and Buildroot.cmake files are
-installed outside of any package, just triggered by the toolchain
-target.
+This moves the host-xz dependency handling from
+DEPENDENCY_HOST_PREREQ to an extract dependency.
 
-As part of the per-package SDK effort, we are trying to avoid anything
-that installs to the global $(HOST_DIR), and this is one of the
-remaining files installed in $(HOST_DIR) outside of any package. We
-fix this by installing such files as part of the toolchain package
-post-install staging hooks.
+To achieve that, check-host-xz.mk fills in the
+BR2_XZ_HOST_DEPENDENCY with host-tar if building a host-tar is
+needed. The name BR2_XZ_HOST_DEPENDENCY has been chosen because it
+matches the name BR2_CMAKE_HOST_DEPENDENCY already used in
+check-host-cmake.mk.
 
-Yes, a post-install staging hook to install things to $(HOST_DIR) is a
-bit weird, but the toolchain infrastructure is made of target packages
-only, and they all install a lot of stuff to $(HOST_DIR) already.
+The BR2_XZ_HOST_DEPENDENCY is added to all packages, except:
+
+ - host-xz, because we would otherwise depend on ourself.
+
+ - host-tar, because xz itself is delivered as a tarball, so we need
+   to have host-xz depend on host-tar, and not host-tar depend on
+   host-xz
+
+ - host-skeleton, because we need to have host-xz depend on
+   host-skeleton, and not the opposite.
+
+In addition, we modify xz.mk to explicitly build host-xz without
+ccache. We generally took the approach of building host-ccache *after*
+all the extractors have been built.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-Changes since v3:
- - Added Reviewed-by from Yann
+Changes in v3:
+ - Added Reviewed-by from Yann.
+
 Changes since v2:
- - None
-Changes since v1:
  - New patch
 ---
- package/pkg-cmake.mk             | 12 +++++++-----
- toolchain/toolchain/toolchain.mk |  3 ---
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ package/pkg-generic.mk                   | 4 ++++
+ package/xz/xz.mk                         | 5 +++++
+ support/dependencies/check-host-xzcat.mk | 2 +-
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 9b07798a1e..34b49bdbe5 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -253,8 +253,8 @@ endif
- # based on the toolchainfile.cmake file's location: $(HOST_DIR)/share/buildroot
- # In all the other variables, HOST_DIR will be replaced by RELOCATED_HOST_DIR,
- # so we have to strip "$(HOST_DIR)/" from the paths that contain it.
--$(HOST_DIR)/share/buildroot/toolchainfile.cmake:
--	@mkdir -p $(@D)
-+define TOOLCHAIN_CMAKE_INSTALL_FILES
-+	@mkdir -p $(HOST_DIR)/share/buildroot
- 	sed \
- 		-e 's#@@STAGING_SUBDIR@@#$(call qstrip,$(STAGING_SUBDIR))#' \
- 		-e 's#@@TARGET_CFLAGS@@#$(call qstrip,$(TARGET_CFLAGS))#' \
-@@ -268,7 +268,9 @@ $(HOST_DIR)/share/buildroot/toolchainfile.cmake:
- 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
- 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
--		> $@
-+		> $(HOST_DIR)/share/buildroot/toolchainfile.cmake
-+	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake \
-+		$(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake
-+endef
- 
--$(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake:
--	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake $(@)
-+TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_CMAKE_INSTALL_FILES
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 179c09edf1..91c9ca2eff 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -38,6 +38,3 @@ TOOLCHAIN_INSTALL_STAGING = YES
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index ae50c5f284..b03d7263b1 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -559,6 +559,10 @@ ifeq ($(filter host-tar host-skeleton,$(1)),)
+ $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
  endif
  
- $(eval $(virtual-package))
--
--toolchain: $(HOST_DIR)/share/buildroot/toolchainfile.cmake
--toolchain: $(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake
++ifeq ($(filter host-tar host-skeleton host-xz,$(1)),)
++$(2)_EXTRACT_DEPENDENCIES += $(BR2_XZCAT_HOST_DEPENDENCY)
++endif
++
+ # Eliminate duplicates in dependencies
+ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+ $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index e8116f24ae..bcdac13ee3 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -18,5 +18,10 @@ else
+ XZ_CONF_OPTS = --disable-threads
+ endif
+ 
++# we are built before ccache
++HOST_XZ_CONF_ENV = \
++	CC="$(HOSTCC_NOCCACHE)" \
++	CXX="$(HOSTCXX_NOCCACHE)"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
+index 9be75c7311..e5d72f95dd 100644
+--- a/support/dependencies/check-host-xzcat.mk
++++ b/support/dependencies/check-host-xzcat.mk
+@@ -2,7 +2,7 @@
+ # If it is not present, build our own host-xzcat
+ 
+ ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
+-DEPENDENCIES_HOST_PREREQ += host-xz
++BR2_XZCAT_HOST_DEPENDENCY = host-xz
+ EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz .lzma
+ XZCAT = $(HOST_DIR)/bin/xzcat
+ endif
 -- 
 2.14.3
