@@ -1,50 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Mar 2018 22:01:26 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdata_xcursor-themes: bump
- version to 1.0.5
-Message-ID: <20180324210430.56C08832DB@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 25 Mar 2018 00:43:23 +0300
+Subject: [Buildroot] [PATCH] xfsprogs: fix build with older kernel headers
+Message-ID: <6ade51cc420b2cf54f99a21528d1e9a50b276944.1521927803.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b762f7d3e57397858051e7bb6d4b9cbd3f97b346
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+xfsprogs uses a local definition of struct fsxattr when the kernel
+provided one in linux/fs.h is too old. The preprocessor trickery that
+allows to include linux/fs.h without colliding with the local
+definitions breaks when source files include linux/fs.h on their own.
+Add a patch that removes these local includes.
 
-Added all upstream hashes, added license hash.
+Fixes:
+http://autobuild.buildroot.net/results/3aa/3aad812582d94b76d204436d2879bfa732c34da6/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash | 9 +++++++--
- package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ ...scrub-fix-build-with-older-kernel-headers.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/xfsprogs/0006-xfs_scrub-fix-build-with-older-kernel-headers.patch
 
-diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
-index e59c848641..6a8c99599f 100644
---- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
-+++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2013-July/002271.html
--sha256	e3fd2c05b9df0d88a3d1192c02143295744685f4f9a03db116e206698331bb86	xcursor-themes-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002882.html
-+md5 34a93df23e4aa9ee2832a4af33da3ceb  xcursor-themes-1.0.5.tar.bz2
-+sha1 6caae6cdb441003a42305f964c32bac21c34626f  xcursor-themes-1.0.5.tar.bz2
-+sha256 ae8381d39096598f7fe93fbd3ab079d93347a989f29e017f399ffcd20c8e1272  xcursor-themes-1.0.5.tar.bz2
-+sha512 f41e1de0d5deafba33106dcad81576d1888fca052a962c202f2221104aa2d8236b066d8d8fc3dcfbdc166db63f84e60980dfc54059b20a26c7415de71ed07a5b  xcursor-themes-1.0.5.tar.bz2
-+# Locally computed
-+sha256 e437aed89c3440a9fe7e19968a3f2eeb97041ef6c9616837a3fd42d0874fc0e6 COPYING
-diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-index a2987a0ff2..048291008b 100644
---- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-+++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDATA_XCURSOR_THEMES_VERSION = 1.0.4
-+XDATA_XCURSOR_THEMES_VERSION = 1.0.5
- XDATA_XCURSOR_THEMES_SOURCE = xcursor-themes-$(XDATA_XCURSOR_THEMES_VERSION).tar.bz2
- XDATA_XCURSOR_THEMES_SITE = http://xorg.freedesktop.org/releases/individual/data
- XDATA_XCURSOR_THEMES_LICENSE = MIT
+diff --git a/package/xfsprogs/0006-xfs_scrub-fix-build-with-older-kernel-headers.patch b/package/xfsprogs/0006-xfs_scrub-fix-build-with-older-kernel-headers.patch
+new file mode 100644
+index 000000000000..9e1300d0cd94
+--- /dev/null
++++ b/package/xfsprogs/0006-xfs_scrub-fix-build-with-older-kernel-headers.patch
+@@ -0,0 +1,63 @@
++From 7ea1df02d0f2549b6249c8bee1f6ae02bf1251a9 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sun, 25 Mar 2018 00:01:23 +0300
++Subject: [PATCH] xfs_scrub: fix build with older kernel headers
++
++The OVERRIDE_SYSTEM_FSXATTR macro in include/linux.h is meant to
++override the linux/fs.h kernel header provided struct fsxattr for
++kernels older than v4.7. A few source files include linux/fs.h before
++the local linux.h, making this override ineffective. Remove these header
++includes from the source files, and rely on the linux.h include alone.
++
++This fixes the following build failures:
++
++In file included from ../include/xfs.h:37:0,
++                 from disk.c:40:
++../include/xfs/linux.h:185:8: error: redefinition of 'struct fsxattr'
++ struct fsxattr {
++        ^~~~~~~
++
++In file included from ../include/xfs.h:37:0,
++                 from ../include/project.h:22,
++                 from ../include/input.h:24,
++                 from phase1.c:38:
++../include/xfs/linux.h:185:8: error: redefinition of 'struct fsxattr'
++ struct fsxattr {
++        ^~~~~~~
++
++Cc: Darrick J. Wong <darrick.wong@oracle.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://patchwork.kernel.org/patch/10306419/
++
++ scrub/disk.c   | 1 -
++ scrub/phase1.c | 1 -
++ 2 files changed, 2 deletions(-)
++
++diff --git a/scrub/disk.c b/scrub/disk.c
++index e12175c8656c..54d7a2a77c45 100644
++--- a/scrub/disk.c
+++++ b/scrub/disk.c
++@@ -28,7 +28,6 @@
++ #include <sys/ioctl.h>
++ #include <sys/statvfs.h>
++ #include <sys/vfs.h>
++-#include <linux/fs.h>
++ #ifdef HAVE_SG_IO
++ # include <scsi/sg.h>
++ #endif
++diff --git a/scrub/phase1.c b/scrub/phase1.c
++index 6cd544233c94..d15689e1b544 100644
++--- a/scrub/phase1.c
+++++ b/scrub/phase1.c
++@@ -32,7 +32,6 @@
++ #include <stdbool.h>
++ #include <pthread.h>
++ #include <errno.h>
++-#include <linux/fs.h>
++ #include "libfrog.h"
++ #include "workqueue.h"
++ #include "input.h"
++-- 
++2.16.2
++
+-- 
+2.16.2
