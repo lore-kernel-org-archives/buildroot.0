@@ -1,44 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 24 Mar 2018 21:38:33 +0100
-Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.2.35
-Message-ID: <20180324204059.A622F82DCF@busybox.osuosl.org>
+Date: Sat, 24 Mar 2018 21:39:49 +0100
+Subject: [Buildroot] [git commit] libssh2: fix pkg-config info for mbedtls
+ backend
+Message-ID: <20180324204059.D46CB82DCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76101f71efa689034217559b40ebb036251154e7
+commit: https://git.buildroot.net/buildroot/commit/?id=ebbf8746243ee4fa6b51a5a6afa8b14459b4178f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The libssh2.pc file did not contain the needed info for static link with
+libssh2. Add a patch fixing that.
+
+Fixes (qemu):
+http://autobuild.buildroot.net/results/634/6346b25be2844f9ef722e52040ac1b43d9c38899/
+
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0002-acinclude.m4-add-mbedtls-to-LIBS.patch    | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index fef0746089..438c3cccef 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 5e92a4325409e66b343f6aaa67174b8921ce83d0df792c6eeb0b7b7e2c808353  dovecot-2.2.34.tar.gz
-+sha256 cce15db2fc5233386b63a3cf21c465c09e6e55014ed66c4f184b7d221a47180c  dovecot-2.2.35.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index e1b4bb21b8..783ca06a0e 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).34
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).35
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+diff --git a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
+new file mode 100644
+index 0000000000..76e08c51a9
+--- /dev/null
++++ b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
+@@ -0,0 +1,31 @@
++From f4846473f0f0ec313f8ed7ff4cd9f59c1741465d Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 20 Mar 2018 20:21:53 +0200
++Subject: [PATCH] acinclude.m4: add mbedtls to LIBS
++
++This is useful for static builds so that the Libs.private field in
++libssh2.pc contains correct info for the benefit of pkg-config users.
++Static link with libssh2 requires this information.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/libssh2/libssh2/pull/242
++
++ acinclude.m4 | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index c0e89a1a0c98..02c70845d27c 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -441,6 +441,7 @@ m4_case([$1],
++ [mbedtls], [
++   LIBSSH2_LIB_HAVE_LINKFLAGS([mbedcrypto], [], [#include <mbedtls/version.h>], [
++     AC_DEFINE(LIBSSH2_MBEDTLS, 1, [Use $1])
+++    LIBS="$LIBS $LIBMBEDCRYPTO"
++     found_crypto="$1"
++     support_clear_memory=yes
++   ])
++-- 
++2.16.2
++
