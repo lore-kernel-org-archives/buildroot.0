@@ -1,45 +1,82 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sat, 24 Mar 2018 14:10:17 +0000
-Subject: [Buildroot] [PATCH v4 7/7] DEVELOPERS: add myself for rpi packages
-In-Reply-To: <1521900617-32102-1-git-send-email-martin@barkynet.com>
-References: <1521900617-32102-1-git-send-email-martin@barkynet.com>
-Message-ID: <1521900617-32102-8-git-send-email-martin@barkynet.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 24 Mar 2018 15:20:01 +0100
+Subject: [Buildroot] [PATCH v4 2/9] pkg-cmake: install CMake files as part
+ of a package
+In-Reply-To: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
+References: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180324142008.10375-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Currently, the toolchainfile.cmake and Buildroot.cmake files are
+installed outside of any package, just triggered by the toolchain
+target.
 
+As part of the per-package SDK effort, we are trying to avoid anything
+that installs to the global $(HOST_DIR), and this is one of the
+remaining files installed in $(HOST_DIR) outside of any package. We
+fix this by installing such files as part of the toolchain package
+post-install staging hooks.
+
+Yes, a post-install staging hook to install things to $(HOST_DIR) is a
+bit weird, but the toolchain infrastructure is made of target packages
+only, and they all install a lot of stuff to $(HOST_DIR) already.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-Changes v3 -> v4
- - none
-
-Changes v2 -> v3
- - new in v3
+Changes since v3:
+ - Added Reviewed-by from Yann
+Changes since v2:
+ - None
+Changes since v1:
+ - New patch
 ---
- DEVELOPERS | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/pkg-cmake.mk             | 12 +++++++-----
+ toolchain/toolchain/toolchain.mk |  3 ---
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 031af3c..0c4cabe 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1136,9 +1136,14 @@ F:	package/harfbuzz/
- F:	package/libsecret/
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 9b07798a1e..34b49bdbe5 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -253,8 +253,8 @@ endif
+ # based on the toolchainfile.cmake file's location: $(HOST_DIR)/share/buildroot
+ # In all the other variables, HOST_DIR will be replaced by RELOCATED_HOST_DIR,
+ # so we have to strip "$(HOST_DIR)/" from the paths that contain it.
+-$(HOST_DIR)/share/buildroot/toolchainfile.cmake:
+-	@mkdir -p $(@D)
++define TOOLCHAIN_CMAKE_INSTALL_FILES
++	@mkdir -p $(HOST_DIR)/share/buildroot
+ 	sed \
+ 		-e 's#@@STAGING_SUBDIR@@#$(call qstrip,$(STAGING_SUBDIR))#' \
+ 		-e 's#@@TARGET_CFLAGS@@#$(call qstrip,$(TARGET_CFLAGS))#' \
+@@ -268,7 +268,9 @@ $(HOST_DIR)/share/buildroot/toolchainfile.cmake:
+ 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+ 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+-		> $@
++		> $(HOST_DIR)/share/buildroot/toolchainfile.cmake
++	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake \
++		$(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake
++endef
  
- N:	Martin Bark <martin@barkynet.com>
-+F:	board/raspberrypi/
-+F:	configs/raspberrypi3_defconfig
- F:	package/ca-certificates/
- F:	package/connman/
- F:	package/nodejs/
-+F:	package/rpi-bt-firmware/
-+F:	package/rpi-firmware/
-+F:	package/rpi-wifi-firmware/
- F:	package/tzdata/
- F:	package/zic/
+-$(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake:
+-	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake $(@)
++TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_CMAKE_INSTALL_FILES
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index 179c09edf1..91c9ca2eff 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -38,6 +38,3 @@ TOOLCHAIN_INSTALL_STAGING = YES
+ endif
  
+ $(eval $(virtual-package))
+-
+-toolchain: $(HOST_DIR)/share/buildroot/toolchainfile.cmake
+-toolchain: $(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake
 -- 
-2.7.4
+2.14.3
