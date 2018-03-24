@@ -1,98 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Mar 2018 15:20:02 +0100
-Subject: [Buildroot] [PATCH v4 3/9] package/pkg-generic: add the concept of
- extract dependency
+Date: Sat, 24 Mar 2018 15:20:08 +0100
+Subject: [Buildroot] [PATCH v4 9/9] core: kill DEPENDENCIES_HOST_PREREQ
 In-Reply-To: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
 References: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180324142008.10375-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20180324142008.10375-10-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extract dependencies are dependencies that must be ready before the
-extract step of a package, i.e for tools that are needed to extract
-packages themselves. Current examples of such tools are host-tar,
-host-lzip and host-xz.
-
-They are currently handled through DEPENDENCIES_HOST_PREREQ. However,
-this mechanism has a number of drawbacks:
-
- - First and foremost, because host-tar/host-lzip/host-xz are not
-   listed in the dependencies of packages, the package infrastructure
-   does not know it should rsync them in the context of per-package
-   SDK.
-
- - Second, there is no dependency handling *between* them. I.e, we
-   have no mechanism that says host-tar should be built before
-   host-lzip, while it is in fact the case: if you need to build
-   host-lzip, you need to extract a tarball, so you may need host-tar
-   if your system tarball is not capable enough.
-
-For those reasons, it makes sense to add explicit support for "extract
-dependencies" in the package infrastructure, through the
-<pkg>_EXTRACT_DEPENDENCIES variable. It is unlikely this variable will
-ever be used by a package .mk file, but it will be used internally by
-the package infrastructure.
+Now that DEPENDENCIES_HOST_PREREQ is no longer used anywhere, we can
+kill it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 Changes since v3:
- - Fix typo in documentation noticed by Yann (use -> used)
- - Add Reviewed-by from Yann
+ - Added Acked-by from Yann.
+
 Changes since v2:
  - New patch
 ---
- docs/manual/adding-packages-generic.txt | 7 +++++++
- package/pkg-generic.mk                  | 8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ Makefile                             |  2 --
+ package/pkg-generic.mk               |  2 --
+ support/dependencies/dependencies.mk | 10 ++--------
+ 3 files changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 521d6d50c7..194da00e67 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -347,6 +347,13 @@ information is (assuming the package name is +libfoo+) :
-   a similar way, +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for
-   the current host package.
+diff --git a/Makefile b/Makefile
+index 925d6e4aec..a3a9d290d9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -501,8 +501,6 @@ include package/Makefile.in
+ -include $(sort $(wildcard arch/arch.mk.*))
+ include support/dependencies/dependencies.mk
  
-+* +LIBFOO_EXTRACT_DEPENDENCIES+ lists the dependencies (in terms of
-+  package name) that are required for the current target package to be
-+  extracted. These depnedencies are guaranteed to be compiled and
-+  installed before the extract step of the current package
-+  starts. This is only used internally by the package infrastructure,
-+  and should typically not be used directly by packages.
-+
- * +LIBFOO_PATCH_DEPENDENCIES+ lists the dependencies (in terms of
-   package name) that are required for the current package to be
-   patched. These dependencies are guaranteed to be extracted and
+-PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
+-
+ include $(sort $(wildcard toolchain/*.mk))
+ include $(sort $(wildcard toolchain/*/*.mk))
+ 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3cadb28595..0a404040b0 100644
+index 6d1f267328..6d82f7027e 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -557,8 +557,13 @@ endif
+@@ -690,9 +690,7 @@ $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
+ $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
  
- # Eliminate duplicates in dependencies
- $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
-+$(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
- $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
--$(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
-+$(2)_FINAL_ALL_DEPENDENCIES = \
-+	$$(sort \
-+		$$($(2)_FINAL_DEPENDENCIES) \
-+		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
-+		$$($(2)_FINAL_PATCH_DEPENDENCIES))
+ $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
+-ifeq ($$(filter $(1),$$(DEPENDENCIES_HOST_PREREQ)),)
+ $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
+-endif
  
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
-@@ -681,6 +686,7 @@ $$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ # In the normal case (no package override), the sequence of steps is
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index bab064319f..563574d6ad 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -17,19 +17,13 @@ endef
+ include support/dependencies/check-host-tar.mk
+ -include $(sort $(filter-out %-tar.mk,$(wildcard support/dependencies/check-host-*.mk)))
  
- $(1)-extract:			$$($(2)_TARGET_EXTRACT)
- $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
-+$$($(2)_TARGET_EXTRACT): | $$($(2)_FINAL_EXTRACT_DEPENDENCIES)
+-core-dependencies:
++dependencies:
+ 	@MAKE="$(MAKE)" DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
+ 		$(TOPDIR)/support/dependencies/dependencies.sh
  
- $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
- 
+-$(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
+-$(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
+-$(DEPENDENCIES_HOST_PREREQ): core-dependencies
+-
+-dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
+-
+ ################################################################################
+ #
+ # Toplevel Makefile options
+ #
+ ################################################################################
+-.PHONY: dependencies core-dependencies
++.PHONY: dependencies
 -- 
 2.14.3
