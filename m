@@ -1,84 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Mar 2018 15:20:08 +0100
-Subject: [Buildroot] [PATCH v4 9/9] core: kill DEPENDENCIES_HOST_PREREQ
+Date: Sat, 24 Mar 2018 15:20:00 +0100
+Subject: [Buildroot] [PATCH v4 1/9] Makefile,
+ skeleton: move the host skeleton logic to host-skeleton package
 In-Reply-To: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
 References: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180324142008.10375-10-thomas.petazzoni@bootlin.com>
+Message-ID: <20180324142008.10375-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that DEPENDENCIES_HOST_PREREQ is no longer used anywhere, we can
-kill it.
+As part of the per-package SDK work, we want to avoid having logic
+that installs files to the global HOST_DIR, and instead do it inside
+packages. One thing that gets installed to the global HOST_DIR is the
+minimal "skeleton" that we create in host:
+
+ - the "usr" symbolic link for backward compatibility
+
+ - the "lib" directory, and its lib64 or lib32 symbolic links
+
+This commit moves this logic to a new host-skeleton package, and makes
+all packages (except itself) depend on it. We also make sure that this
+host-skeleton package doesn't depend on host-patchelf, because
+host-patchelf depends on host-skeleton.
+
+While at it, use $(Q) instead of @ in the HOST_SKELETON_INSTALL_CMDS.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 Changes since v3:
- - Added Acked-by from Yann.
-
+ - Use $(Q) instead of @ in the HOST_SKELETON_INSTALL_CMDS
+ - Add Reviewed-by from Yann
 Changes since v2:
+ - None
+Changes since v1:
  - New patch
 ---
- Makefile                             |  2 --
- package/pkg-generic.mk               |  2 --
- support/dependencies/dependencies.mk | 10 ++--------
- 3 files changed, 2 insertions(+), 12 deletions(-)
+ Makefile                     | 13 +------------
+ package/pkg-generic.mk       |  4 ++++
+ package/skeleton/skeleton.mk | 12 ++++++++++++
+ 3 files changed, 17 insertions(+), 12 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 925d6e4aec..a3a9d290d9 100644
+index 1b34818fc8..33c87b5ebb 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -501,8 +501,6 @@ include package/Makefile.in
- -include $(sort $(wildcard arch/arch.mk.*))
- include support/dependencies/dependencies.mk
+@@ -560,7 +560,7 @@ endif
  
--PACKAGES += $(DEPENDENCIES_HOST_PREREQ)
+ .PHONY: dirs
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+-	$(HOST_DIR) $(HOST_DIR)/usr $(HOST_DIR)/lib $(BINARIES_DIR)
++	$(HOST_DIR) $(BINARIES_DIR)
+ 
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+@@ -579,17 +579,6 @@ sdk: world
+ 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+ 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+ 
+-# Compatibility symlink in case a post-build script still uses $(HOST_DIR)/usr
+-$(HOST_DIR)/usr: $(HOST_DIR)
+-	@ln -snf . $@
 -
- include $(sort $(wildcard toolchain/*.mk))
- include $(sort $(wildcard toolchain/*/*.mk))
- 
+-$(HOST_DIR)/lib: $(HOST_DIR)
+-	@mkdir -p $@
+-	@case $(HOSTARCH) in \
+-		(*64) ln -snf lib $(@D)/lib64;; \
+-		(*)   ln -snf lib $(@D)/lib32;; \
+-	esac
+-
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6d1f267328..6d82f7027e 100644
+index 5edb4b0838..3cadb28595 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -690,9 +690,7 @@ $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
- $$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
+@@ -551,6 +551,10 @@ $(2)_DEPENDENCIES += toolchain
+ endif
+ endif
  
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
--ifeq ($$(filter $(1),$$(DEPENDENCIES_HOST_PREREQ)),)
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dependencies
--endif
++ifneq ($(1),host-skeleton)
++$(2)_DEPENDENCIES += host-skeleton
++endif
++
+ # Eliminate duplicates in dependencies
+ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+ $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index d380f41649..efcf420d72 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -11,4 +11,16 @@
+ SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
+ SKELETON_ADD_SKELETON_DEPENDENCY = NO
  
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- # In the normal case (no package override), the sequence of steps is
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index bab064319f..563574d6ad 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -17,19 +17,13 @@ endef
- include support/dependencies/check-host-tar.mk
- -include $(sort $(filter-out %-tar.mk,$(wildcard support/dependencies/check-host-*.mk)))
- 
--core-dependencies:
-+dependencies:
- 	@MAKE="$(MAKE)" DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
- 		$(TOPDIR)/support/dependencies/dependencies.sh
- 
--$(DEPENDENCIES_HOST_PREREQ): HOSTCC=$(HOSTCC_NOCCACHE)
--$(DEPENDENCIES_HOST_PREREQ): HOSTCXX=$(HOSTCXX_NOCCACHE)
--$(DEPENDENCIES_HOST_PREREQ): core-dependencies
--
--dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
--
- ################################################################################
- #
- # Toplevel Makefile options
- #
- ################################################################################
--.PHONY: dependencies core-dependencies
-+.PHONY: dependencies
++# We create a compatibility symlink in case a post-build script still
++# uses $(HOST_DIR)/usr
++define HOST_SKELETON_INSTALL_CMDS
++	$(Q)ln -snf . $(HOST_DIR)/usr
++	$(Q)mkdir -p $(HOST_DIR)/lib
++	$(Q)case $(HOSTARCH) in \
++		(*64) ln -snf lib $(HOST_DIR)/lib64;; \
++		(*)   ln -snf lib $(HOST_DIR)/lib32;; \
++	esac
++endef
++
+ $(eval $(virtual-package))
++$(eval $(host-generic-package))
 -- 
 2.14.3
