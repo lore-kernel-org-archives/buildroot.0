@@ -1,50 +1,32 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 24 Mar 2018 20:41:31 +0100
-Subject: [Buildroot] [PATCH 2/2] qemu: add libssh2 optional dependency
-In-Reply-To: <29cf408194b46abbbb75c15a833197b226477246.1521571596.git.baruch@tkos.co.il>
-References: <85f6746ec9845fe4c5cd366cdd3345d08771165f.1521571596.git.baruch@tkos.co.il>
- <29cf408194b46abbbb75c15a833197b226477246.1521571596.git.baruch@tkos.co.il>
-Message-ID: <4aa7d7f8-7667-ecea-81f2-7d8b6f75079f@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 24 Mar 2018 21:37:30 +0100
+Subject: [Buildroot] [PATCH] qemu: fix build with glibc 2.27
+In-Reply-To: <2ea89efb89501dbb6f311d3644efb8d6543f1ba7.1521561417.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 20 Mar 2018 17:56:57 +0200")
+References: <2ea89efb89501dbb6f311d3644efb8d6543f1ba7.1521561417.git.baruch@tkos.co.il>
+Message-ID: <87po3tyzud.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Le 20/03/2018 ? 19:46, Baruch Siach a ?crit?:
-> Make sure that qemu uses libssh2 when libssh2 is enabled, for build
-> consistency.
-> 
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > glibc version 2.27 added a wrapper for the memfd_create system call. The
+ > wrapper prototype collides with a static declaration of memfd_create.
+ > Add upstream patch to correctly detect the glibc provided memfd_create
+ > definition.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b82/b825c0cd397424b1fc7fa87c580e1757dc25c588/
+ > http://autobuild.buildroot.net/results/9aa/9aa3853d23c0dc72bf3632b4d66ae39f597f5250/
+ > http://autobuild.buildroot.net/results/b13/b13039ba602b9d500b939d259816a39ba24e1ba2/
 
-Best regards,
-Romain
+ > Cc: Francois Perrad <francois.perrad@gadz.org>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-> ---
->  package/qemu/qemu.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 345ef526681a..c3a7e7738ee6 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -212,6 +212,13 @@ else
->  QEMU_OPTS += --disable-tools
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBSSH2),y)
-> +QEMU_OPTS += --enable-libssh2
-> +QEMU_DEPENDENCIES += libssh2
-> +else
-> +QEMU_OPTS += --disable-libssh2
-> +endif
-> +
->  # Override CPP, as it expects to be able to call it like it'd
->  # call the compiler.
->  define QEMU_CONFIGURE_CMDS
-> 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
