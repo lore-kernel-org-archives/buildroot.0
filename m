@@ -1,73 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Mar 2018 10:24:34 +0200
-Subject: [Buildroot] [PATCH] Config.in: add -Ofast option
-In-Reply-To: <1521735971-22210-1-git-send-email-joshua.henderson@microchip.com>
-References: <1521735971-22210-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20180325082434.GF2620@scaer>
+Date: Sun, 25 Mar 2018 10:35:35 +0200
+Subject: [Buildroot] [PATCH 1/1] toolchain-external-custom: allow
+ specifying relative path to binaries
+In-Reply-To: <20180323214030.8003-1-ccrisan@gmail.com>
+References: <20180323214030.8003-1-ccrisan@gmail.com>
+Message-ID: <20180325083535.GG2620@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joshua, All,
+Calin, All,
 
-On 2018-03-22 09:26 -0700, Joshua Henderson spake thusly:
-> -Ofast (introduced in GCC 4.6) It combines the existing optimization level -O3
-> with options that can affect standards compliance but result in better optimized
-> code. For example, -Ofast enables -ffast-math.
+On 2018-03-23 23:40 +0200, Calin Crisan spake thusly:
+> There are cases where a downloaded toolchain doesn't have its binaries
+> placed directly in a "bin" subfolder (where BuildRoot currently looks
+> for them).
 > 
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> A common example is the official Raspberry Pi Toolchain
+> (https://github.com/raspberrypi/tools), which has its binaries in
+> "arm-bcm2708/arm-linux-gnueabihf/bin".
+> 
+> This commit introduces BR2_TOOLCHAIN_EXTERNAL_BIN_PATH that defaults
+> to "bin" and can be changed as needed.
+> 
+> Signed-off-by: Calin Crisan <ccrisan@gmail.com>
 > ---
->  Config.in           | 9 +++++++++
->  package/Makefile.in | 3 +++
->  2 files changed, 12 insertions(+)
+>  toolchain/toolchain-external/pkg-toolchain-external.mk            | 2 +-
+>  .../toolchain-external-custom/Config.in.options                   | 8 ++++++++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Config.in b/Config.in
-> index 0002df5..e83ce02 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -527,6 +527,15 @@ config BR2_OPTIMIZE_S
->  	  -ftree-vect-loop-version
->  	  This is the default.
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 3bf9fac412..4dfe3815ae 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -77,7 +77,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+>  TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+>  endif
+>  else
+> -TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
+> +TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_BIN_PATH))
+>  endif
 >  
-> +config BR2_OPTIMIZE_FAST
-> +	bool "optimize for fast"
+>  # If this is a buildroot toolchain, it already has a wrapper which we want to
+> diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> index 70c7d8e3c3..bb199aab85 100644
+> --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> @@ -12,6 +12,14 @@ config BR2_TOOLCHAIN_EXTERNAL_URL
+>  	help
+>  	  URL of the custom toolchain tarball to download and install.
+>  
+> +config BR2_TOOLCHAIN_EXTERNAL_BIN_PATH
+> +    string "Toolchain bin path"
+> +    default "bin"
+> +    depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+> +    help
+> +      Path to where the binaries (e.g. the compiler) can be found,
+> +      relative to the downloaded toolchain root directory.
 
--Ofast was introduced in gcc-4.6, so you need a dependency:
-    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+Indentation is incorrect: it should be a leading TAB for option, and a
+leading TAB and two spaces for the help text.
 
-Otherwise I'm fine with this.
+See:
+    https://buildroot.org/downloads/manual/manual.html#writing-rules-config-in
+
+Otherwise, looks sensible to me...
 
 Regards,
 Yann E. MORIN.
 
-> +	help
-> +	  Optimize for fast. Disregard strict standards compliance. -Ofast
-> +	  enables all -O3 optimizations. It also enables optimizations that are
-> +	  not valid for all standard-compliant programs. It turns on -ffast-math
-> +	  and the Fortran-specific -fstack-arrays, unless -fmax-stack-var-size
-> +	  is specified, and -fno-protect-parens.
-> +
->  endchoice
->  
->  config BR2_GOOGLE_BREAKPAD_ENABLE
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index e387ce6..828e12e 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -128,6 +128,9 @@ endif
->  ifeq ($(BR2_OPTIMIZE_S),y)
->  TARGET_OPTIMIZATION = -Os
->  endif
-> +ifeq ($(BR2_OPTIMIZE_FAST),y)
-> +TARGET_OPTIMIZATION = -Ofast
-> +endif
->  ifeq ($(BR2_DEBUG_1),y)
->  TARGET_DEBUGGING = -g1
->  endif
+>  config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+>  	string "Toolchain prefix"
+>  	default "$(ARCH)-linux"
 > -- 
-> 2.7.4
+> 2.16.2
 > 
 > _______________________________________________
 > buildroot mailing list
