@@ -1,44 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Mar 2018 21:06:22 +0200
-Subject: [Buildroot] [PATCH v2 2/3] test-pkg: test a subset of
- toolchains by default, add -a and -n options
-In-Reply-To: <20180325085018.GH2620@scaer>
-References: <20180323214815.19831-1-thomas.petazzoni@bootlin.com>
- <20180323214815.19831-3-thomas.petazzoni@bootlin.com>
- <20180325085018.GH2620@scaer>
-Message-ID: <20180325210622.31817922@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Mar 2018 21:20:33 +0200
+Subject: [Buildroot] [PATCH] eudev: prevent udev init script nonexistent
+ directory error
+In-Reply-To: <1521735601-29879-1-git-send-email-joshua.henderson@microchip.com>
+References: <1521735601-29879-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20180325192033.GN2620@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Joshua, All,
 
-On Sun, 25 Mar 2018 10:50:18 +0200, Yann E. MORIN wrote:
-
-> > Note that the list of toolchains (built in the "toolchains" shell
-> > variable) is no longer sorted. Indeed, when the first N toolchains are
-> > tested, we want them to be tested in the same order as they are listed
-> > in the CSV file, as we are careful to order them in an interesting
-> > order. We only sort when all toolchains are tested.  
+On 2018-03-22 09:20 -0700, Joshua Henderson spake thusly:
+> The following error occures in the udev init script because the kernel config
+> may optionally not include uevent_helper.
 > 
-> I don't understand why you want to test them in the order they are
-> listed... I understand that you want them to be _selected_ in the order
-> they appear, yes. But tested? See below...
+> /etc/init.d/S10udev: line 47: can't create /proc/sys/kernel/hotplug: nonexistent directory
+> 
+> Work around this by not trying to access the destination if it's not available.
+> 
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 
-Well, the first 7 toolchains are kind of listed in the order of
-importance, so it makes more sense to *test* the most important
-toolchain first, so if it fails, you can abort there, investigate, and
-then restart the test.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-But that's not a strong opinion, so if you disagree with this, I don't
-care that much if the toolchains are tested in alphabetic ordering.
+Regards,
+Yann E. MORIN.
 
-Best regards,
+> ---
+>  package/eudev/S10udev | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+> index 640fec6..47c715c 100755
+> --- a/package/eudev/S10udev
+> +++ b/package/eudev/S10udev
+> @@ -28,7 +28,7 @@ test -r $UDEV_CONFIG || exit 6
+>  case "$1" in
+>      start)
+>          printf "Populating %s using udev: " "${udev_root:-/dev}"
+> -        printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+> +        [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+>          $UDEV_BIN -d || { echo "FAIL"; exit 1; }
+>          udevadm trigger --type=subsystems --action=add
+>          udevadm trigger --type=devices --action=add
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
