@@ -1,83 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 17:49:05 +0200
-Subject: [Buildroot] [git commit] package/pkg-generic: handle host-ccache as
- a regular dependency
-Message-ID: <20180325155336.1673A83AEA@busybox.osuosl.org>
+Date: Sun, 25 Mar 2018 17:43:20 +0200
+Subject: [Buildroot] [git commit] package/pkg-generic: handle host-tar as an
+ extract dependency
+Message-ID: <20180325155335.D71E483AEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0283d7ee3907d1345307c4ee4aab02fdf38780d4
+commit: https://git.buildroot.net/buildroot/commit/?id=e77013a3c4c2306e0c24da37db650d8eaf36ca4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This moves the host-ccache dependency handling from
-DEPENDENCIES_HOST_PREREQ to a proper package dependency. When
-BR2_CCACHE=y, we add host-ccache as a regular dependency of all
-packages except:
+This moves the host-tar dependency handling from
+DEPENDENCY_HOST_PREREQ to an extract dependency.
 
- - The extractor packages host-tar, host-xz and host-lzip
+To achieve that, check-host-tar.mk fills in the
+BR2_TAR_HOST_DEPENDENCY variable with host-tar if building a host-tar
+is needed. The name BR2_TAR_HOST_DEPENDENCY has been chosen because it
+matches the name BR2_CMAKE_HOST_DEPENDENCY already used in
+check-host-cmake.mk.
 
- - host-ccache itself
+The BR2_TAR_HOST_DEPENDENCY is added to all packages, except host-tar
+itself (obviously) and host-skeleton, because we depend on
+host-skeleton to install host-tar properly in HOST_DIR.
 
- - host-skeleton, because all packages depend on it
+In addition, we modify tar.mk to explicitly build host-tar without
+ccache: since ccache source code is available as a tarball, ccache
+will obviously depend on host-tar if the system tar is insufficient.
+
+Finally, to make things really clean, we also add
+$(BR2_TAR_HOST_DEPENDENCY) to the dependencies of the tar filesystem
+format, since it requires tar, so we'd better make sure we have a
+suitable tar.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ccache/ccache.mk             | 5 +++++
- package/pkg-generic.mk               | 6 ++++++
- support/dependencies/dependencies.mk | 4 ----
- 3 files changed, 11 insertions(+), 4 deletions(-)
+ fs/tar/tar.mk                          | 2 ++
+ package/pkg-generic.mk                 | 4 ++++
+ package/tar/tar.mk                     | 5 +++++
+ support/dependencies/check-host-tar.mk | 2 +-
+ 4 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 552a611f42..9a11d46d30 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -21,6 +21,11 @@ CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
- # has zero dependency besides the C library.
- HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index e39c2fdbf1..68149e9eb7 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -6,6 +6,8 @@
  
-+# We are ccache, so we can't use ccache
-+HOST_CCACHE_CONF_ENV = \
-+	CC="$(HOSTCC_NOCCACHE)" \
-+	CXX="$(HOSTCXX_NOCCACHE)"
+ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
+ 
++ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
 +
- # Patch host-ccache as follows:
- #  - Use BR_CACHE_DIR instead of CCACHE_DIR, because CCACHE_DIR
- #    is already used by autotargets for the ccache package.
+ define ROOTFS_TAR_CMD
+ 	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
+ 		tar $(TAR_OPTS) -cf $@ --null --no-recursion -T - --numeric-owner)
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f03f1d930f..bc4882235f 100644
+index 0a404040b0..ae50c5f284 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -567,6 +567,12 @@ ifeq ($(filter host-tar host-skeleton host-xz host-lzip,$(1)),)
- $(2)_EXTRACT_DEPENDENCIES += $(BR2_LZIP_HOST_DEPENDENCY)
+@@ -555,6 +555,10 @@ ifneq ($(1),host-skeleton)
+ $(2)_DEPENDENCIES += host-skeleton
  endif
  
-+ifeq ($(BR2_CCACHE),y)
-+ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-ccache,$(1)),)
-+$(2)_DEPENDENCIES += host-ccache
-+endif
++ifeq ($(filter host-tar host-skeleton,$(1)),)
++$(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
 +endif
 +
  # Eliminate duplicates in dependencies
  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
  $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index 3fc235863c..bab064319f 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -17,10 +17,6 @@ endef
- include support/dependencies/check-host-tar.mk
- -include $(sort $(filter-out %-tar.mk,$(wildcard support/dependencies/check-host-*.mk)))
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index a8a15d9518..92b6e9eaa5 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -47,4 +47,9 @@ endef
  
--ifeq ($(BR2_CCACHE),y)
--DEPENDENCIES_HOST_PREREQ += host-ccache
--endif
--
- core-dependencies:
- 	@MAKE="$(MAKE)" DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
- 		$(TOPDIR)/support/dependencies/dependencies.sh
+ HOST_TAR_CONF_OPTS = --without-selinux
+ 
++# we are built before ccache
++HOST_TAR_CONF_ENV = \
++	CC="$(HOSTCC_NOCCACHE)" \
++	CXX="$(HOSTCXX_NOCCACHE)"
++
+ $(eval $(host-autotools-package))
+diff --git a/support/dependencies/check-host-tar.mk b/support/dependencies/check-host-tar.mk
+index ad0b32e277..07d02fd1b1 100644
+--- a/support/dependencies/check-host-tar.mk
++++ b/support/dependencies/check-host-tar.mk
+@@ -1,6 +1,6 @@
+ TAR ?= tar
+ 
+ ifeq (,$(call suitable-host-package,tar,$(TAR)))
+-DEPENDENCIES_HOST_PREREQ += host-tar
+ TAR = $(HOST_DIR)/bin/tar
++BR2_TAR_HOST_DEPENDENCY = host-tar
+ endif
