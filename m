@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Mar 2018 20:58:35 +0200
-Subject: [Buildroot] Make C and CXX compiler cache in
- toolchainfile.cmake.in
-In-Reply-To: <trinity-81772261-5a5f-4894-87f4-edd212a9650a-1521974573144@3c-app-mailcom-bs04>
-References: <000001d3c425$31ba3fc0$952ebf40$@gmx.de>
- <trinity-81772261-5a5f-4894-87f4-edd212a9650a-1521974573144@3c-app-mailcom-bs04>
-Message-ID: <20180325205835.5f167c1f@windsurf>
+Date: Sun, 25 Mar 2018 21:06:22 +0200
+Subject: [Buildroot] [PATCH v2 2/3] test-pkg: test a subset of
+ toolchains by default, add -a and -n options
+In-Reply-To: <20180325085018.GH2620@scaer>
+References: <20180323214815.19831-1-thomas.petazzoni@bootlin.com>
+ <20180323214815.19831-3-thomas.petazzoni@bootlin.com>
+ <20180325085018.GH2620@scaer>
+Message-ID: <20180325210622.31817922@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +15,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 25 Mar 2018 12:42:53 +0200, daggs wrote:
+On Sun, 25 Mar 2018 10:50:18 +0200, Yann E. MORIN wrote:
 
-> if you are trying to use Buildroot to generate a cross compiler, than
-> you are using the wrong too, look for crosstool-ng
+> > Note that the list of toolchains (built in the "toolchains" shell
+> > variable) is no longer sorted. Indeed, when the first N toolchains are
+> > tested, we want them to be tested in the same order as they are listed
+> > in the CSV file, as we are careful to order them in an interesting
+> > order. We only sort when all toolchains are tested.  
+> 
+> I don't understand why you want to test them in the order they are
+> listed... I understand that you want them to be _selected_ in the order
+> they appear, yes. But tested? See below...
 
-That's not quite correct at all:
+Well, the first 7 toolchains are kind of listed in the order of
+importance, so it makes more sense to *test* the most important
+toolchain first, so if it fails, you can abort there, investigate, and
+then restart the test.
 
- 1. Crosstool-NG generates just a toolchain, with no additional
-    libraries (besides the C library). So if what you're looking for is
-    to build application linked against a number of libraries, you need
-    more than a "pure" toolchain, and Crosstool-NG will not help you
-    with this, while Buildroot will.
-
- 2. Buildroot can perfectly be used to generate toolchains. See
-    http://toolchains.bootlin.com for an illustration.
+But that's not a strong opinion, so if you disagree with this, I don't
+care that much if the toolchains are tested in alphabetic ordering.
 
 Best regards,
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
