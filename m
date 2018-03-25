@@ -1,7 +1,7 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 25 Mar 2018 21:20:59 +0300
-Subject: [Buildroot] [PATCH] strace: bump to version 4.21
-Message-ID: <09291b181183799749bd7af44bf67a16408a4db1.1522002059.git.baruch@tkos.co.il>
+Date: Sun, 25 Mar 2018 21:40:39 +0300
+Subject: [Buildroot] [PATCH v2] strace: bump to version 4.21
+Message-ID: <3767947595017892a56dca09fdd49b609ada0c9e.1522003239.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,16 @@ Download site moved to strace.io. No upstream provided hashes.
 Drop the musl specific autoconf seed values. These values are now
 detected correctly.
 
+Add --enable-mpers=check to fix configure on aarch64 that does not
+support binaries for the compat personality.
+
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
+v2: Fix aarch64
+---
  package/strace/strace.hash |  7 ++-----
- package/strace/strace.mk   | 12 ++----------
- 2 files changed, 4 insertions(+), 15 deletions(-)
+ package/strace/strace.mk   | 13 +++----------
+ 2 files changed, 5 insertions(+), 15 deletions(-)
 
 diff --git a/package/strace/strace.hash b/package/strace/strace.hash
 index 404be3978848..21da83058e9f 100644
@@ -34,10 +39,10 @@ index 404be3978848..21da83058e9f 100644
 +sha256	5c7688db44073e94c59a5627744e5699454419824cc8166e8bcfd7ec58375c37	strace-4.21.tar.xz
  sha256	ea7ff222f36c9df0aa2924a8f7c7d2aec3ea11e752feba4b15ec79b695b6236a	COPYING
 diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index ba57774e5d4a..77434e11bd6b 100644
+index ba57774e5d4a..f27dc4155b43 100644
 --- a/package/strace/strace.mk
 +++ b/package/strace/strace.mk
-@@ -4,20 +4,12 @@
+@@ -4,19 +4,12 @@
  #
  ################################################################################
  
@@ -48,7 +53,7 @@ index ba57774e5d4a..77434e11bd6b 100644
 +STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
  STRACE_LICENSE = BSD-3-Clause
  STRACE_LICENSE_FILES = COPYING
- 
+-
 -# strace bundle some kernel headers to build libmpers, this mixes userspace
 -# headers and kernel headers which break the build with musl.
 -# The stddef.h from gcc is used instead of the one from musl.
@@ -56,9 +61,9 @@ index ba57774e5d4a..77434e11bd6b 100644
 -STRACE_CONF_OPTS += st_cv_m32_mpers=no \
 -	st_cv_mx32_mpers=no
 -endif
--
++STRACE_CONF_OPTS = --enable-mpers=check
+ 
  define STRACE_REMOVE_STRACE_GRAPH
  	rm -f $(TARGET_DIR)/usr/bin/strace-graph
- endef
 -- 
 2.16.2
