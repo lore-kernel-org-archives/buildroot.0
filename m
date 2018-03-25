@@ -1,34 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 17:34:34 +0200
+Date: Sun, 25 Mar 2018 17:36:59 +0200
 Subject: [Buildroot] [PATCH v4 1/9] Makefile,
  skeleton: move the host skeleton logic to host-skeleton package
-In-Reply-To: <20180325132142.GL2620@scaer> (Yann E. MORIN's message of "Sun,
- 25 Mar 2018 15:21:42 +0200")
+In-Reply-To: <20180324142008.10375-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 24 Mar 2018 15:20:00 +0100")
 References: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
  <20180324142008.10375-2-thomas.petazzoni@bootlin.com>
- <87r2o8xqbc.fsf@dell.be.48ers.dk> <20180325132142.GL2620@scaer>
-Message-ID: <871sg8xj79.fsf@dell.be.48ers.dk>
+Message-ID: <87woy0w4is.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Hi,
+ > As part of the per-package SDK work, we want to avoid having logic
+ > that installs files to the global HOST_DIR, and instead do it inside
+ > packages. One thing that gets installed to the global HOST_DIR is the
+ > minimal "skeleton" that we create in host:
 
- >> Ehh, where is that done? Afaik nothing depends on (in the make sense) on
- >> host-patchelf, it is just forcibly enabled in all configs.
+ >  - the "usr" symbolic link for backward compatibility
 
- > That's because this is a leftover from a previous non-itreration:
+ >  - the "lib" directory, and its lib64 or lib32 symbolic links
 
- >     http://lists.busybox.net/pipermail/buildroot/2017-November/207795.html
+ > This commit moves this logic to a new host-skeleton package, and makes
+ > all packages (except itself) depend on it. We also make sure that this
+ > host-skeleton package doesn't depend on host-patchelf, because
+ > host-patchelf depends on host-skeleton.
 
- > I guess Thomas just forgot to amend the commit-log. I won;t blame him on
- > that one, it happens all the time to me as well! ;-)
+ > While at it, use $(Q) instead of @ in the HOST_SKELETON_INSTALL_CMDS.
 
-Ok, I'll drop that when committing.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ > Changes since v3:
+ >  - Use $(Q) instead of @ in the HOST_SKELETON_INSTALL_CMDS
+ >  - Add Reviewed-by from Yann
+ > Changes since v2:
+ >  - None
+ > Changes since v1:
+ >  - New patch
+
+Committed after dropping the host-patchelf reference, thanks.
 
 -- 
 Bye, Peter Korsgaard
