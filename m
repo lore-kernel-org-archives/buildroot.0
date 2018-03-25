@@ -1,69 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 20:53:39 +0200
-Subject: [Buildroot] [git commit] strace: bump to version 4.21
-Message-ID: <20180325185354.3912E83B4C@busybox.osuosl.org>
+Date: Sun, 25 Mar 2018 20:53:47 +0200
+Subject: [Buildroot] [PATCH] strace: bump to version 4.21
+In-Reply-To: <09291b181183799749bd7af44bf67a16408a4db1.1522002059.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 25 Mar 2018 21:20:59 +0300")
+References: <09291b181183799749bd7af44bf67a16408a4db1.1522002059.git.baruch@tkos.co.il>
+Message-ID: <87tvt4uguc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=108837294191db0075aa0d05ce11f7c51a3dca14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Download site moved to strace.io. No upstream provided hashes.
+ > Download site moved to strace.io. No upstream provided hashes.
+ > Drop the musl specific autoconf seed values. These values are now
+ > detected correctly.
 
-Drop the musl specific autoconf seed values. These values are now
-detected correctly.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Add --enable-mpers=check to fix configure on aarch64 that does not
-support binaries for the compat personality.
+Committed, thanks.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/strace/strace.hash |  7 ++-----
- package/strace/strace.mk   | 13 +++----------
- 2 files changed, 5 insertions(+), 15 deletions(-)
-
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 404be39788..21da83058e 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,7 +1,4 @@
--# From https://sourceforge.net/projects/strace/files/strace/4.20/
--md5	f2271ab0fac49ebee9cbd7f3469227cb	strace-4.20.tar.xz
--sha1	9cebc754af3434e4027a07745770892f685c0316	strace-4.20.tar.xz
- # Locally calculated after checking signature
--# https://sourceforge.net/projects/strace/files/strace/4.20/strace-4.20.tar.xz.asc
--sha256	5bf3148dd17306a42566f7da17368fdd781afa147db05ea63a4ca2b50f58c523	strace-4.20.tar.xz
-+# https://strace.io/files/4.21/strace-4.21.tar.xz.asc
-+sha256	5c7688db44073e94c59a5627744e5699454419824cc8166e8bcfd7ec58375c37	strace-4.21.tar.xz
- sha256	ea7ff222f36c9df0aa2924a8f7c7d2aec3ea11e752feba4b15ec79b695b6236a	COPYING
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index ba57774e5d..f27dc4155b 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,19 +4,12 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 4.20
-+STRACE_VERSION = 4.21
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
--STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
-+STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = BSD-3-Clause
- STRACE_LICENSE_FILES = COPYING
--
--# strace bundle some kernel headers to build libmpers, this mixes userspace
--# headers and kernel headers which break the build with musl.
--# The stddef.h from gcc is used instead of the one from musl.
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--STRACE_CONF_OPTS += st_cv_m32_mpers=no \
--	st_cv_mx32_mpers=no
--endif
-+STRACE_CONF_OPTS = --enable-mpers=check
- 
- define STRACE_REMOVE_STRACE_GRAPH
- 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
+-- 
+Bye, Peter Korsgaard
