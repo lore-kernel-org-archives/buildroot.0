@@ -1,12 +1,15 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 25 Mar 2018 21:40:39 +0300
-Subject: [Buildroot] [PATCH v2] strace: bump to version 4.21
-Message-ID: <3767947595017892a56dca09fdd49b609ada0c9e.1522003239.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Mar 2018 20:53:39 +0200
+Subject: [Buildroot] [git commit] strace: bump to version 4.21
+Message-ID: <20180325185354.3912E83B4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=108837294191db0075aa0d05ce11f7c51a3dca14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Download site moved to strace.io. No upstream provided hashes.
 
@@ -17,15 +20,14 @@ Add --enable-mpers=check to fix configure on aarch64 that does not
 support binaries for the compat personality.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: Fix aarch64
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/strace/strace.hash |  7 ++-----
  package/strace/strace.mk   | 13 +++----------
  2 files changed, 5 insertions(+), 15 deletions(-)
 
 diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 404be3978848..21da83058e9f 100644
+index 404be39788..21da83058e 100644
 --- a/package/strace/strace.hash
 +++ b/package/strace/strace.hash
 @@ -1,7 +1,4 @@
@@ -39,7 +41,7 @@ index 404be3978848..21da83058e9f 100644
 +sha256	5c7688db44073e94c59a5627744e5699454419824cc8166e8bcfd7ec58375c37	strace-4.21.tar.xz
  sha256	ea7ff222f36c9df0aa2924a8f7c7d2aec3ea11e752feba4b15ec79b695b6236a	COPYING
 diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index ba57774e5d4a..f27dc4155b43 100644
+index ba57774e5d..f27dc4155b 100644
 --- a/package/strace/strace.mk
 +++ b/package/strace/strace.mk
 @@ -4,19 +4,12 @@
@@ -65,5 +67,3 @@ index ba57774e5d4a..f27dc4155b43 100644
  
  define STRACE_REMOVE_STRACE_GRAPH
  	rm -f $(TARGET_DIR)/usr/bin/strace-graph
--- 
-2.16.2
