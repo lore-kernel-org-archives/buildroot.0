@@ -1,71 +1,62 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 25 Mar 2018 00:59:53 -0300
-Subject: [Buildroot] [PATCH 2/2] tpm2-tools: fix compilation error due to
- uninitialized variable
-In-Reply-To: <20180325035953.25906-1-casantos@datacom.ind.br>
-References: <20180325035953.25906-1-casantos@datacom.ind.br>
-Message-ID: <20180325035953.25906-3-casantos@datacom.ind.br>
+Date: Sun, 25 Mar 2018 01:02:34 -0300 (BRT)
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-03-23
+In-Reply-To: <20180324070008.0BD1B208BA@mail.bootlin.com>
+References: <20180324070008.0BD1B208BA@mail.bootlin.com>
+Message-ID: <835806455.219726.1521950554069.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport a patch alreary submitted upstream, at
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Sent: Saturday, March 24, 2018 4:00:08 AM
+> Subject: [autobuild.buildroot.net] Your build results for 2018-03-23
 
-  https://github.com/tpm2-software/tpm2-tools/pull/954
+> Hello,
+> 
+> This is the list of Buildroot build failures that occured on
+> 2018-03-23, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+> 
+> Results for the 'master' branch
+> ===============================
+> 
+> Build failures related to your packages:
+> 
+>    nios2 | tpm2-abrmd-1.3.0 | http://autobuild.buildroot.net/results/ce8fe8ac9cf0db01ae15d476ea714ff176965cfb
+>    nios2 |   tpm2-tss-1.4.0 | http://autobuild.buildroot.net/results/09ce8f05e28c0219f499ce55130e896cae0c8b45
 
-Fixes:
-  http://autobuild.buildroot.net/results/ae1e151576b365380ab711a1b8ffcd92ad0050e2
-  http://autobuild.buildroot.net/results/ee80c2fe54c89589532efd47eb93bd27637c690f
+The CodeSourcery NIOSII toolchain does not support SSP.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- ...y-fix-type-may-be-used-uninitialized-warn.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/tpm2-tools/0001-tpm2_certify-fix-type-may-be-used-uninitialized-warn.patch
+Fixed by https://patchwork.ozlabs.org/patch/890608
 
-diff --git a/package/tpm2-tools/0001-tpm2_certify-fix-type-may-be-used-uninitialized-warn.patch b/package/tpm2-tools/0001-tpm2_certify-fix-type-may-be-used-uninitialized-warn.patch
-new file mode 100644
-index 0000000000..b472666f46
---- /dev/null
-+++ b/package/tpm2-tools/0001-tpm2_certify-fix-type-may-be-used-uninitialized-warn.patch
-@@ -0,0 +1,36 @@
-+From e15b01a1eb27e31964308892fcaa9c7d4f17f181 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.ind.br>
-+Date: Sat, 24 Mar 2018 22:46:46 -0300
-+Subject: [PATCH] tpm2_certify: fix "'type' may be used uninitialized" warning
-+
-+get_key_type does not assign a value to 'type' on error conditions,
-+which makes the compiler believe that it will be used uninitialized in
-+the LOG_ERR call, in set_scheme. In practice this will never happen
-+because set_scheme returns immediately if get_key_type retuns false but
-+the compiler does not understand that logic and fails because warnings
-+are treated as errors.
-+
-+Adapted for version 3.0.3 from the change submitted upstream:
-+
-+  https://github.com/tpm2-software/tpm2-tools/pull/954
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-+---
-+ tools/tpm2_certify.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/tools/tpm2_certify.c b/tools/tpm2_certify.c
-+index eaac02f..cbc42a9 100644
-+--- a/tools/tpm2_certify.c
-++++ b/tools/tpm2_certify.c
-+@@ -107,6 +107,7 @@ static bool get_key_type(TSS2_SYS_CONTEXT *sapi_context, TPMI_DH_OBJECT object_h
-+             &out_public, &name, &qualified_name, &sessions_data_out));
-+     if (rval != TPM_RC_SUCCESS) {
-+         LOG_ERR("TPM2_ReadPublic failed. Error Code: 0x%x", rval);
-++        *type = TPM_ALG_ERROR;
-+         return false;
-+     }
-+ 
-+-- 
-+2.14.3
-+
+>    nios2 | tpm2-abrmd-1.3.0 | http://autobuild.buildroot.net/results/22c473e36e1d45b33403182384fe738a9cb08dc5
+>    nios2 |   tpm2-tss-1.4.0 | http://autobuild.buildroot.net/results/21bc376184989162a219d0db8973bc58a0866696
+>    nios2 |   tpm2-tss-1.4.0 | http://autobuild.buildroot.net/results/016d251fcdc02e2638d8e084540b0f97ea595615
+>    nios2 |   tpm2-tss-1.4.0 | http://autobuild.buildroot.net/results/33e60b96ec23fe0f2a8f4150cbba3b4ab1e8d3ba
+
+The br-nios2-full-2017.11-rc1.tar.bz2 toolchain does not support SSP but
+the configuration selects BR2_TOOLCHAIN_EXTERNAL_HAS_SSP, which is wrong.
+
+Detected by https://patchwork.ozlabs.org/patch/890608
+
+> mips64el | tpm2-tools-3.0.3 | http://autobuild.buildroot.net/results/ae1e151576b365380ab711a1b8ffcd92ad0050e2
+>     i686 | tpm2-tools-3.0.3 | http://autobuild.buildroot.net/results/ee80c2fe54c89589532efd47eb93bd27637c690f
+
+Fixed by https://patchwork.ozlabs.org/patch/890606
+
+>      arm |   tpm2-tss-1.4.0 | http://autobuild.buildroot.net/results/c35fb61315730e26b1a019fe1a4f41fac50fa0ed
+
+Fixed in commit 86ad2d92070c3024b2cf5de74dede294b56d5fd2.
+
 -- 
-2.14.3
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
