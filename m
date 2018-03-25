@@ -1,41 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 21:37:11 +0200
-Subject: [Buildroot] [git commit] eudev: prevent udev init script
- nonexistent directory error
-Message-ID: <20180325193829.462A583B57@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Mar 2018 21:48:05 +0200
+Subject: [Buildroot] [PATCH] package/eudev: don't forcibly link with -lrt
+Message-ID: <20180325194805.26284-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbe725d755006e41a71180b5786fa9f52104f518
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This was carried over from udev back when it were an separate package,
+but was not even needed by eudev 1.3 when we introduced it back in 2014
+(937a95449ec: eudev: new package).
 
-The following error occures in the udev init script because the kernel config
-may optionally not include uevent_helper.
+Drop it now.
 
-/etc/init.d/S10udev: line 47: can't create /proc/sys/kernel/hotplug: nonexistent directory
-
-Work around this by not trying to access the destination if it's not available.
-
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/eudev/S10udev | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/eudev/eudev.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index 640fec625b..47c715c886 100755
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
-@@ -28,7 +28,7 @@ test -r $UDEV_CONFIG || exit 6
- case "$1" in
-     start)
-         printf "Populating %s using udev: " "${udev_root:-/dev}"
--        printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-+        [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-         $UDEV_BIN -d || { echo "FAIL"; exit 1; }
-         udevadm trigger --type=subsystems --action=add
-         udevadm trigger --type=devices --action=add
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index d08b9bb0c9..11dc93762b 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -10,9 +10,6 @@ EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ EUDEV_LICENSE_FILES = COPYING
+ EUDEV_INSTALL_STAGING = YES
+ 
+-# mq_getattr is in librt
+-EUDEV_CONF_ENV += LIBS=-lrt
+-
+ EUDEV_CONF_OPTS = \
+ 	--disable-manpages \
+ 	--sbindir=/sbin \
+-- 
+2.14.1
