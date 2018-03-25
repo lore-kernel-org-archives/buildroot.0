@@ -1,98 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 15:02:35 +0200
-Subject: [Buildroot] [git commit] xfsprogs: fix build with older kernel
- headers
-Message-ID: <20180325130302.DFA1083A68@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Mar 2018 15:21:42 +0200
+Subject: [Buildroot] [PATCH v4 1/9] Makefile,
+ skeleton: move the host skeleton logic to host-skeleton package
+In-Reply-To: <87r2o8xqbc.fsf@dell.be.48ers.dk>
+References: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
+ <20180324142008.10375-2-thomas.petazzoni@bootlin.com>
+ <87r2o8xqbc.fsf@dell.be.48ers.dk>
+Message-ID: <20180325132142.GL2620@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=add590943d8a3e26865b270392f6294c66cae7fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, Thomas, All,
 
-xfsprogs uses a local definition of struct fsxattr when the kernel
-provided one in linux/fs.h is too old. The preprocessor trickery that
-allows to include linux/fs.h without colliding with the local
-definitions breaks when source files include linux/fs.h on their own.
-Add a patch that removes these local includes.
+On 2018-03-25 15:00 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+> 
+>  > As part of the per-package SDK work, we want to avoid having logic
+>  > that installs files to the global HOST_DIR, and instead do it inside
+>  > packages. One thing that gets installed to the global HOST_DIR is the
+>  > minimal "skeleton" that we create in host:
+> 
+>  >  - the "usr" symbolic link for backward compatibility
+> 
+>  >  - the "lib" directory, and its lib64 or lib32 symbolic links
+> 
+>  > This commit moves this logic to a new host-skeleton package, and makes
+>  > all packages (except itself) depend on it. We also make sure that this
+>  > host-skeleton package doesn't depend on host-patchelf, because
+>  > host-patchelf depends on host-skeleton.
+> 
+> Ehh, where is that done? Afaik nothing depends on (in the make sense) on
+> host-patchelf, it is just forcibly enabled in all configs.
 
-Fixes:
-http://autobuild.buildroot.net/results/3aa/3aad812582d94b76d204436d2879bfa732c34da6/
+That's because this is a leftover from a previous non-itreration:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...scrub-fix-build-with-older-kernel-headers.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+    http://lists.busybox.net/pipermail/buildroot/2017-November/207795.html
 
-diff --git a/package/xfsprogs/0006-xfs_scrub-fix-build-with-older-kernel-headers.patch b/package/xfsprogs/0006-xfs_scrub-fix-build-with-older-kernel-headers.patch
-new file mode 100644
-index 0000000000..9e1300d0cd
---- /dev/null
-+++ b/package/xfsprogs/0006-xfs_scrub-fix-build-with-older-kernel-headers.patch
-@@ -0,0 +1,63 @@
-+From 7ea1df02d0f2549b6249c8bee1f6ae02bf1251a9 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Sun, 25 Mar 2018 00:01:23 +0300
-+Subject: [PATCH] xfs_scrub: fix build with older kernel headers
-+
-+The OVERRIDE_SYSTEM_FSXATTR macro in include/linux.h is meant to
-+override the linux/fs.h kernel header provided struct fsxattr for
-+kernels older than v4.7. A few source files include linux/fs.h before
-+the local linux.h, making this override ineffective. Remove these header
-+includes from the source files, and rely on the linux.h include alone.
-+
-+This fixes the following build failures:
-+
-+In file included from ../include/xfs.h:37:0,
-+                 from disk.c:40:
-+../include/xfs/linux.h:185:8: error: redefinition of 'struct fsxattr'
-+ struct fsxattr {
-+        ^~~~~~~
-+
-+In file included from ../include/xfs.h:37:0,
-+                 from ../include/project.h:22,
-+                 from ../include/input.h:24,
-+                 from phase1.c:38:
-+../include/xfs/linux.h:185:8: error: redefinition of 'struct fsxattr'
-+ struct fsxattr {
-+        ^~~~~~~
-+
-+Cc: Darrick J. Wong <darrick.wong@oracle.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://patchwork.kernel.org/patch/10306419/
-+
-+ scrub/disk.c   | 1 -
-+ scrub/phase1.c | 1 -
-+ 2 files changed, 2 deletions(-)
-+
-+diff --git a/scrub/disk.c b/scrub/disk.c
-+index e12175c8656c..54d7a2a77c45 100644
-+--- a/scrub/disk.c
-++++ b/scrub/disk.c
-+@@ -28,7 +28,6 @@
-+ #include <sys/ioctl.h>
-+ #include <sys/statvfs.h>
-+ #include <sys/vfs.h>
-+-#include <linux/fs.h>
-+ #ifdef HAVE_SG_IO
-+ # include <scsi/sg.h>
-+ #endif
-+diff --git a/scrub/phase1.c b/scrub/phase1.c
-+index 6cd544233c94..d15689e1b544 100644
-+--- a/scrub/phase1.c
-++++ b/scrub/phase1.c
-+@@ -32,7 +32,6 @@
-+ #include <stdbool.h>
-+ #include <pthread.h>
-+ #include <errno.h>
-+-#include <linux/fs.h>
-+ #include "libfrog.h"
-+ #include "workqueue.h"
-+ #include "input.h"
-+-- 
-+2.16.2
-+
+I guess Thomas just forgot to amend the commit-log. I won;t blame him on
+that one, it happens all the time to me as well! ;-)
+
+> Thinking about that, why don't we just make the sdk target depend on
+> host-patchelf instead of always building it just in case somebody will
+> ever run 'make sdk'?
+
+That's probably good for another, unrelated patch, right?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
