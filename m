@@ -1,75 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 17:35:26 +0200
-Subject: [Buildroot] [git commit] pkg-cmake: install CMake files as part of
- a package
-Message-ID: <20180325155335.B1A7183A7F@busybox.osuosl.org>
+Date: Sun, 25 Mar 2018 17:43:07 +0200
+Subject: [Buildroot] [git commit] package/pkg-generic: add the concept of
+ extract dependency
+Message-ID: <20180325155335.C65FB83AEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6729050f3a49dba42d2d881d31dbefd6b82b8dad
+commit: https://git.buildroot.net/buildroot/commit/?id=e15ec4c56b811449047049cba89e178d8ee0fccd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the toolchainfile.cmake and Buildroot.cmake files are
-installed outside of any package, just triggered by the toolchain
-target.
+Extract dependencies are dependencies that must be ready before the
+extract step of a package, i.e for tools that are needed to extract
+packages themselves. Current examples of such tools are host-tar,
+host-lzip and host-xz.
 
-As part of the per-package SDK effort, we are trying to avoid anything
-that installs to the global $(HOST_DIR), and this is one of the
-remaining files installed in $(HOST_DIR) outside of any package. We
-fix this by installing such files as part of the toolchain package
-post-install staging hooks.
+They are currently handled through DEPENDENCIES_HOST_PREREQ. However,
+this mechanism has a number of drawbacks:
 
-Yes, a post-install staging hook to install things to $(HOST_DIR) is a
-bit weird, but the toolchain infrastructure is made of target packages
-only, and they all install a lot of stuff to $(HOST_DIR) already.
+ - First and foremost, because host-tar/host-lzip/host-xz are not
+   listed in the dependencies of packages, the package infrastructure
+   does not know it should rsync them in the context of per-package
+   SDK.
 
+ - Second, there is no dependency handling *between* them. I.e, we
+   have no mechanism that says host-tar should be built before
+   host-lzip, while it is in fact the case: if you need to build
+   host-lzip, you need to extract a tarball, so you may need host-tar
+   if your system tarball is not capable enough.
+
+For those reasons, it makes sense to add explicit support for "extract
+dependencies" in the package infrastructure, through the
+<pkg>_EXTRACT_DEPENDENCIES variable. It is unlikely this variable will
+ever be used by a package .mk file, but it will be used internally by
+the package infrastructure.
+
+[Peter: fix typo in manual]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cmake.mk             | 12 +++++++-----
- toolchain/toolchain/toolchain.mk |  3 ---
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ docs/manual/adding-packages-generic.txt | 7 +++++++
+ package/pkg-generic.mk                  | 8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 9b07798a1e..34b49bdbe5 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -253,8 +253,8 @@ endif
- # based on the toolchainfile.cmake file's location: $(HOST_DIR)/share/buildroot
- # In all the other variables, HOST_DIR will be replaced by RELOCATED_HOST_DIR,
- # so we have to strip "$(HOST_DIR)/" from the paths that contain it.
--$(HOST_DIR)/share/buildroot/toolchainfile.cmake:
--	@mkdir -p $(@D)
-+define TOOLCHAIN_CMAKE_INSTALL_FILES
-+	@mkdir -p $(HOST_DIR)/share/buildroot
- 	sed \
- 		-e 's#@@STAGING_SUBDIR@@#$(call qstrip,$(STAGING_SUBDIR))#' \
- 		-e 's#@@TARGET_CFLAGS@@#$(call qstrip,$(TARGET_CFLAGS))#' \
-@@ -268,7 +268,9 @@ $(HOST_DIR)/share/buildroot/toolchainfile.cmake:
- 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
- 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
--		> $@
-+		> $(HOST_DIR)/share/buildroot/toolchainfile.cmake
-+	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake \
-+		$(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake
-+endef
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 521d6d50c7..9d1428ad40 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -347,6 +347,13 @@ information is (assuming the package name is +libfoo+) :
+   a similar way, +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for
+   the current host package.
  
--$(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake:
--	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake $(@)
-+TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_CMAKE_INSTALL_FILES
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index 179c09edf1..91c9ca2eff 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -38,6 +38,3 @@ TOOLCHAIN_INSTALL_STAGING = YES
- endif
++* +LIBFOO_EXTRACT_DEPENDENCIES+ lists the dependencies (in terms of
++  package name) that are required for the current target package to be
++  extracted. These dependencies are guaranteed to be compiled and
++  installed before the extract step of the current package
++  starts. This is only used internally by the package infrastructure,
++  and should typically not be used directly by packages.
++
+ * +LIBFOO_PATCH_DEPENDENCIES+ lists the dependencies (in terms of
+   package name) that are required for the current package to be
+   patched. These dependencies are guaranteed to be extracted and
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3cadb28595..0a404040b0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -557,8 +557,13 @@ endif
  
- $(eval $(virtual-package))
--
--toolchain: $(HOST_DIR)/share/buildroot/toolchainfile.cmake
--toolchain: $(HOST_DIR)/share/buildroot/Platform/Buildroot.cmake
+ # Eliminate duplicates in dependencies
+ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
++$(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
+ $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
+-$(2)_FINAL_ALL_DEPENDENCIES = $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
++$(2)_FINAL_ALL_DEPENDENCIES = \
++	$$(sort \
++		$$($(2)_FINAL_DEPENDENCIES) \
++		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
++		$$($(2)_FINAL_PATCH_DEPENDENCIES))
+ 
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
+@@ -681,6 +686,7 @@ $$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES
+ 
+ $(1)-extract:			$$($(2)_TARGET_EXTRACT)
+ $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
++$$($(2)_TARGET_EXTRACT): | $$($(2)_FINAL_EXTRACT_DEPENDENCIES)
+ 
+ $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+ 
