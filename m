@@ -1,50 +1,123 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 10:35:56 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xwud: bump version to
- 1.0.5
-Message-ID: <20180325083631.7D0EB8384B@busybox.osuosl.org>
+From: Calin Crisan <ccrisan@gmail.com>
+Date: Sun, 25 Mar 2018 08:46:48 +0000
+Subject: [Buildroot] [PATCH 1/1] toolchain-external-custom: allow
+ specifying relative path to binaries
+In-Reply-To: <20180325083535.GG2620@scaer>
+References: <20180323214030.8003-1-ccrisan@gmail.com>
+ <20180325083535.GG2620@scaer>
+Message-ID: <CAN4QVaCcFDorhAYPRQbfgVOeqzChtdSfxLfv=099hgQZO1PqKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa4c7cbefc2765d27ba95374b184795c7079acf0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yann, I have posted a v2 that fixes this and another issue with supported
+external toolchains. Please let me know if there's anything else that needs
+to be addressed.
 
-Added all upstream hashes, added license hash.
+Thanks,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xapp_xwud/xapp_xwud.hash | 9 +++++++--
- package/x11r7/xapp_xwud/xapp_xwud.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+Calin.
 
-diff --git a/package/x11r7/xapp_xwud/xapp_xwud.hash b/package/x11r7/xapp_xwud/xapp_xwud.hash
-index 44e9c60753..e42057819d 100644
---- a/package/x11r7/xapp_xwud/xapp_xwud.hash
-+++ b/package/x11r7/xapp_xwud/xapp_xwud.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2012-March/001927.html
--sha256	d6b3a09ccfe750868e26bd2384900ab5ff0d434f7f40cd272a50eda8aaa1f8bd	xwud-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-March/002878.html
-+md5 79972093bb0766fcd0223b2bd6d11932  xwud-1.0.5.tar.bz2
-+sha1 a85d84a1b81f8e667ea6ac126d447590c93eb079  xwud-1.0.5.tar.bz2
-+sha256 99997051f8a892313f22edf41dab45864e86e7062ee9012d5dbb6a40fc6b10a9  xwud-1.0.5.tar.bz2
-+sha512 27a0ce7481978ae6cd94b0d94374af72185e270d68f2496620e148bb00945427c4827138d9efc48745e6382e3da3390ed0cdff7dbd02dcf9706e8ecccae97184  xwud-1.0.5.tar.bz2
-+# Locally computed
-+sha256 be3db9aa060c462490a8c1ed44a4d059b32bba359f4688b1ecf3f794d363539e COPYING
-diff --git a/package/x11r7/xapp_xwud/xapp_xwud.mk b/package/x11r7/xapp_xwud/xapp_xwud.mk
-index 60afd86287..2c2e1ad497 100644
---- a/package/x11r7/xapp_xwud/xapp_xwud.mk
-+++ b/package/x11r7/xapp_xwud/xapp_xwud.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAPP_XWUD_VERSION = 1.0.4
-+XAPP_XWUD_VERSION = 1.0.5
- XAPP_XWUD_SOURCE = xwud-$(XAPP_XWUD_VERSION).tar.bz2
- XAPP_XWUD_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XWUD_LICENSE = MIT
+On Sun, Mar 25, 2018, 11:35 Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+
+> Calin, All,
+>
+> On 2018-03-23 23:40 +0200, Calin Crisan spake thusly:
+> > There are cases where a downloaded toolchain doesn't have its binaries
+> > placed directly in a "bin" subfolder (where BuildRoot currently looks
+> > for them).
+> >
+> > A common example is the official Raspberry Pi Toolchain
+> > (https://github.com/raspberrypi/tools), which has its binaries in
+> > "arm-bcm2708/arm-linux-gnueabihf/bin".
+> >
+> > This commit introduces BR2_TOOLCHAIN_EXTERNAL_BIN_PATH that defaults
+> > to "bin" and can be changed as needed.
+> >
+> > Signed-off-by: Calin Crisan <ccrisan@gmail.com>
+> > ---
+> >  toolchain/toolchain-external/pkg-toolchain-external.mk            | 2
+> +-
+> >  .../toolchain-external-custom/Config.in.options                   | 8
+> ++++++++
+> >  2 files changed, 9 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > index 3bf9fac412..4dfe3815ae 100644
+> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> > @@ -77,7 +77,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+> >  TOOLCHAIN_EXTERNAL_BIN := $(dir $(shell which
+> $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+> >  endif
+> >  else
+> > -TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
+> > +TOOLCHAIN_EXTERNAL_BIN = $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(call
+> qstrip,$(BR2_TOOLCHAIN_EXTERNAL_BIN_PATH))
+> >  endif
+> >
+> >  # If this is a buildroot toolchain, it already has a wrapper which we
+> want to
+> > diff --git
+> a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > index 70c7d8e3c3..bb199aab85 100644
+> > ---
+> a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > +++
+> b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > @@ -12,6 +12,14 @@ config BR2_TOOLCHAIN_EXTERNAL_URL
+> >       help
+> >         URL of the custom toolchain tarball to download and install.
+> >
+> > +config BR2_TOOLCHAIN_EXTERNAL_BIN_PATH
+> > +    string "Toolchain bin path"
+> > +    default "bin"
+> > +    depends on BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+> > +    help
+> > +      Path to where the binaries (e.g. the compiler) can be found,
+> > +      relative to the downloaded toolchain root directory.
+>
+> Indentation is incorrect: it should be a leading TAB for option, and a
+> leading TAB and two spaces for the help text.
+>
+> See:
+>
+> https://buildroot.org/downloads/manual/manual.html#writing-rules-config-in
+>
+> Otherwise, looks sensible to me...
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >  config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+> >       string "Toolchain prefix"
+> >       default "$(ARCH)-linux"
+> > --
+> > 2.16.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180325/f80f60e4/attachment.html>
