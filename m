@@ -1,91 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 17:44:04 +0200
-Subject: [Buildroot] [git commit] package/pkg-generic: handle host-xz as an
- extract dependency
-Message-ID: <20180325155335.E84DB83AEB@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 25 Mar 2018 21:20:59 +0300
+Subject: [Buildroot] [PATCH] strace: bump to version 4.21
+Message-ID: <09291b181183799749bd7af44bf67a16408a4db1.1522002059.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f13fdc45e84419fa9152746d7a9218216c93a045
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Download site moved to strace.io. No upstream provided hashes.
 
-This moves the host-xz dependency handling from
-DEPENDENCY_HOST_PREREQ to an extract dependency.
+Drop the musl specific autoconf seed values. These values are now
+detected correctly.
 
-To achieve that, check-host-xz.mk fills in the
-BR2_XZ_HOST_DEPENDENCY with host-xz if building a host-xz is
-needed. The name BR2_XZ_HOST_DEPENDENCY has been chosen because it
-matches the name BR2_CMAKE_HOST_DEPENDENCY already used in
-check-host-cmake.mk.
-
-The BR2_XZ_HOST_DEPENDENCY is added to all packages, except:
-
- - host-xz, because we would otherwise depend on ourself.
-
- - host-tar, because xz itself is delivered as a tarball, so we need
-   to have host-xz depend on host-tar, and not host-tar depend on
-   host-xz
-
- - host-skeleton, because we need to have host-xz depend on
-   host-skeleton, and not the opposite.
-
-In addition, we modify xz.mk to explicitly build host-xz without
-ccache. We generally took the approach of building host-ccache *after*
-all the extractors have been built.
-
-[Peter: fix s/host-tar/host-xz/ typo]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/pkg-generic.mk                   | 4 ++++
- package/xz/xz.mk                         | 5 +++++
- support/dependencies/check-host-xzcat.mk | 2 +-
- 3 files changed, 10 insertions(+), 1 deletion(-)
+ package/strace/strace.hash |  7 ++-----
+ package/strace/strace.mk   | 12 ++----------
+ 2 files changed, 4 insertions(+), 15 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index ae50c5f284..b03d7263b1 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -559,6 +559,10 @@ ifeq ($(filter host-tar host-skeleton,$(1)),)
- $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
- endif
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 404be3978848..21da83058e9f 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,7 +1,4 @@
+-# From https://sourceforge.net/projects/strace/files/strace/4.20/
+-md5	f2271ab0fac49ebee9cbd7f3469227cb	strace-4.20.tar.xz
+-sha1	9cebc754af3434e4027a07745770892f685c0316	strace-4.20.tar.xz
+ # Locally calculated after checking signature
+-# https://sourceforge.net/projects/strace/files/strace/4.20/strace-4.20.tar.xz.asc
+-sha256	5bf3148dd17306a42566f7da17368fdd781afa147db05ea63a4ca2b50f58c523	strace-4.20.tar.xz
++# https://strace.io/files/4.21/strace-4.21.tar.xz.asc
++sha256	5c7688db44073e94c59a5627744e5699454419824cc8166e8bcfd7ec58375c37	strace-4.21.tar.xz
+ sha256	ea7ff222f36c9df0aa2924a8f7c7d2aec3ea11e752feba4b15ec79b695b6236a	COPYING
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index ba57774e5d4a..77434e11bd6b 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,20 +4,12 @@
+ #
+ ################################################################################
  
-+ifeq ($(filter host-tar host-skeleton host-xz,$(1)),)
-+$(2)_EXTRACT_DEPENDENCIES += $(BR2_XZCAT_HOST_DEPENDENCY)
-+endif
-+
- # Eliminate duplicates in dependencies
- $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
- $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index e8116f24ae..bcdac13ee3 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -18,5 +18,10 @@ else
- XZ_CONF_OPTS = --disable-threads
- endif
+-STRACE_VERSION = 4.20
++STRACE_VERSION = 4.21
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+-STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
++STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = BSD-3-Clause
+ STRACE_LICENSE_FILES = COPYING
  
-+# we are built before ccache
-+HOST_XZ_CONF_ENV = \
-+	CC="$(HOSTCC_NOCCACHE)" \
-+	CXX="$(HOSTCXX_NOCCACHE)"
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
-index 9be75c7311..e5d72f95dd 100644
---- a/support/dependencies/check-host-xzcat.mk
-+++ b/support/dependencies/check-host-xzcat.mk
-@@ -2,7 +2,7 @@
- # If it is not present, build our own host-xzcat
- 
- ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
--DEPENDENCIES_HOST_PREREQ += host-xz
-+BR2_XZCAT_HOST_DEPENDENCY = host-xz
- EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz .lzma
- XZCAT = $(HOST_DIR)/bin/xzcat
- endif
+-# strace bundle some kernel headers to build libmpers, this mixes userspace
+-# headers and kernel headers which break the build with musl.
+-# The stddef.h from gcc is used instead of the one from musl.
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-STRACE_CONF_OPTS += st_cv_m32_mpers=no \
+-	st_cv_mx32_mpers=no
+-endif
+-
+ define STRACE_REMOVE_STRACE_GRAPH
+ 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
+ endef
+-- 
+2.16.2
