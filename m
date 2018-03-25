@@ -1,58 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Mar 2018 10:12:14 +0200
-Subject: [Buildroot] [PATCH v2 3/3] docs/manual: update the
- documentation about test-pkg
-In-Reply-To: <20180323214815.19831-4-thomas.petazzoni@bootlin.com>
-References: <20180323214815.19831-1-thomas.petazzoni@bootlin.com>
- <20180323214815.19831-4-thomas.petazzoni@bootlin.com>
-Message-ID: <20180325081214.GE2620@scaer>
+Date: Sun, 25 Mar 2018 10:24:34 +0200
+Subject: [Buildroot] [PATCH] Config.in: add -Ofast option
+In-Reply-To: <1521735971-22210-1-git-send-email-joshua.henderson@microchip.com>
+References: <1521735971-22210-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20180325082434.GF2620@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Joshua, All,
 
-On 2018-03-23 22:48 +0100, Thomas Petazzoni spake thusly:
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 2018-03-22 09:26 -0700, Joshua Henderson spake thusly:
+> -Ofast (introduced in GCC 4.6) It combines the existing optimization level -O3
+> with options that can affect standards compliance but result in better optimized
+> code. For example, -Ofast enables -ffast-math.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> ---
+>  Config.in           | 9 +++++++++
+>  package/Makefile.in | 3 +++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/Config.in b/Config.in
+> index 0002df5..e83ce02 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -527,6 +527,15 @@ config BR2_OPTIMIZE_S
+>  	  -ftree-vect-loop-version
+>  	  This is the default.
+>  
+> +config BR2_OPTIMIZE_FAST
+> +	bool "optimize for fast"
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Ofast was introduced in gcc-4.6, so you need a dependency:
+    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+
+Otherwise I'm fine with this.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  docs/manual/adding-packages-tips.txt | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-> index 19577fa821..f37f9874e7 100644
-> --- a/docs/manual/adding-packages-tips.txt
-> +++ b/docs/manual/adding-packages-tips.txt
-> @@ -77,9 +77,14 @@ and what package to test:
->  $ ./utils/test-pkg -c libcurl.config -p libcurl
->  ----
->  
-> -This will try to build your package against all the toolchains used
-> -by the autobuilders (except for the internal toolchains, because it takes
-> -too long to do so). The output lists all toolchains and the corresponding
-> +By default, +test-pkg+ will build your package against a subset of the
-> +toolchains used by the autobuilders, which has been selected by the
-> +Buildroot developers as being the most useful and representative
-> +subset. If you want to test all toolchains, pass the +-a+ option. Note
-> +that in any case, internal toolchains are excluded as they take too
-> +long to build.
+> +	help
+> +	  Optimize for fast. Disregard strict standards compliance. -Ofast
+> +	  enables all -O3 optimizations. It also enables optimizations that are
+> +	  not valid for all standard-compliant programs. It turns on -ffast-math
+> +	  and the Fortran-specific -fstack-arrays, unless -fmax-stack-var-size
+> +	  is specified, and -fno-protect-parens.
 > +
-> +The output lists all toolchains that are tested and the corresponding
->  result (excerpt, results are fake):
+>  endchoice
 >  
->  ----
+>  config BR2_GOOGLE_BREAKPAD_ENABLE
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index e387ce6..828e12e 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -128,6 +128,9 @@ endif
+>  ifeq ($(BR2_OPTIMIZE_S),y)
+>  TARGET_OPTIMIZATION = -Os
+>  endif
+> +ifeq ($(BR2_OPTIMIZE_FAST),y)
+> +TARGET_OPTIMIZATION = -Ofast
+> +endif
+>  ifeq ($(BR2_DEBUG_1),y)
+>  TARGET_DEBUGGING = -g1
+>  endif
 > -- 
-> 2.14.3
+> 2.7.4
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
