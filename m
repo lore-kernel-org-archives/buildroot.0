@@ -1,52 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Mar 2018 22:23:12 +0200
-Subject: [Buildroot] [git commit] sam-ba: fix sam-ba symbolic link
-Message-ID: <20180325202327.B36B183B60@busybox.osuosl.org>
+Date: Sun, 25 Mar 2018 22:25:19 +0200
+Subject: [Buildroot] [PATCH] sam-ba: use correct host arch binary for
+ sam-ba symlink
+In-Reply-To: <1521735866-15288-1-git-send-email-joshua.henderson@microchip.com>
+References: <1521735866-15288-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20180325222519.2d36d2f4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3b5608b47525799b0601d45939d3bae545fd124
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Joshua,
 
-Following the removal of $(HOST_DIR)/usr, the symbolic link from
-$(HOST_DIR)/bin/sam-ba/ to $(HOST_DIR)/opt/sam-ba/sam-ba was broken,
-so we fix this.
+On Thu, 22 Mar 2018 09:24:26 -0700, Joshua Henderson wrote:
+> Make the symlink created in the host/bin directory point to the right host arch
+> binary.  This takes into account using the 32 bit or 64 bit binary.
+> 
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> ---
+>  package/sam-ba/sam-ba.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
-In addition, sam-ba being prebuilt, it comes in two separates
-binaries, one for x86 and the other for x86_64, so we take this into
-account as well.
+In fact, your commit does much more than fixing the sam-ba symlink
+depending on the host architecture: the sam-ba symlink was *always*
+broken. Indeed, you're changing this:
 
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-[Thomas:
- - add spaces around = signs
- - rework commit log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sam-ba/sam-ba.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-index 244ede3ef1..a7941459c7 100644
---- a/package/sam-ba/sam-ba.mk
-+++ b/package/sam-ba/sam-ba.mk
-@@ -23,10 +23,16 @@ endef
- # then create a symbolic link from $(HOST_DIR)/bin to the
- # application binary, for easier usage.
- 
-+ifeq ($(HOSTARCH),x86_64)
-+SAM_BA_BIN_NAME = sam-ba_64
-+else
-+SAM_BA_BIN_NAME = sam-ba
-+endif
-+
- define HOST_SAM_BA_INSTALL_CMDS
- 	mkdir -p $(HOST_DIR)/opt/sam-ba/
- 	cp -a $(@D)/* $(HOST_DIR)/opt/sam-ba/
 -	ln -sf ../../opt/sam-ba/sam-ba $(HOST_DIR)/bin/sam-ba
 +	ln -sf ../opt/sam-ba/$(SAM_BA_BIN_NAME) $(HOST_DIR)/bin/sam-ba
- endef
- 
- $(eval $(host-generic-package))
+
+I.e you're removing one level of ../ when creating the relative
+symlink. And this is needed since we moved $(HOST_DIR)/usr to
+$(HOST_DIR).
+
+So even on a x86 32 bit system, where the binary is named "sam-ba",
+your commit fixes the symbolic link. I've reworded the commit log
+accordingly, and applied your patch. Thanks!
+
+Peter: this commit qualifies for 2018.02.x.
+
+Joshua: what about updating to 2.17, or even Sam-ba 3.x ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
