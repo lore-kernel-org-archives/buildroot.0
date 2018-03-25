@@ -1,38 +1,40 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 25 Mar 2018 12:42:53 +0200
-Subject: [Buildroot] Make C and CXX compiler cache in
- toolchainfile.cmake.in
-In-Reply-To: <000001d3c425$31ba3fc0$952ebf40$@gmx.de>
-References: <000001d3c425$31ba3fc0$952ebf40$@gmx.de>
-Message-ID: <trinity-81772261-5a5f-4894-87f4-edd212a9650a-1521974573144@3c-app-mailcom-bs04>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Mar 2018 15:00:55 +0200
+Subject: [Buildroot] [PATCH v4 1/9] Makefile,
+ skeleton: move the host skeleton logic to host-skeleton package
+In-Reply-To: <20180324142008.10375-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 24 Mar 2018 15:20:00 +0100")
+References: <20180324142008.10375-1-thomas.petazzoni@bootlin.com>
+ <20180324142008.10375-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87r2o8xqbc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Michael,
-?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
->Sent:?Sunday, March 25, 2018 at 1:36 PM
->From:?"Michael Dick" <mi-dick@gmx.de>
->To:?buildroot at busybox.net
->Subject:?[Buildroot] Make C and CXX compiler cache in toolchainfile.cmake.in
->
->Hello,
->I am using buildroot to create my custom gcc toolchain and sysroot for a raspberry pi.
->?
->Therefore, I call cmake with a script to configure my project. After that, I import the project into qtcreator.
->The problem is, that C and CXX compiler variables are not cached into cmake cache, so when importing the project, qtcreator calling cmake is not aware oft he >configured compiler.
->?
->My suggestion ist o use this patch. Is there any reason why the compilers are not cached?
->?
->?
->Best regards
->
->_______________________________________________ buildroot mailing list buildroot at busybox.net http://lists.busybox.net/mailman/listinfo/buildroot
+ > As part of the per-package SDK work, we want to avoid having logic
+ > that installs files to the global HOST_DIR, and instead do it inside
+ > packages. One thing that gets installed to the global HOST_DIR is the
+ > minimal "skeleton" that we create in host:
 
-if you are trying to use Buildroot to generate a cross compiler, than you are using the wrong too, look for crosstool-ng
+ >  - the "usr" symbolic link for backward compatibility
 
-Dagg.
-?
+ >  - the "lib" directory, and its lib64 or lib32 symbolic links
+
+ > This commit moves this logic to a new host-skeleton package, and makes
+ > all packages (except itself) depend on it. We also make sure that this
+ > host-skeleton package doesn't depend on host-patchelf, because
+ > host-patchelf depends on host-skeleton.
+
+Ehh, where is that done? Afaik nothing depends on (in the make sense) on
+host-patchelf, it is just forcibly enabled in all configs.
+
+Thinking about that, why don't we just make the sdk target depend on
+host-patchelf instead of always building it just in case somebody will
+ever run 'make sdk'?
+
+-- 
+Bye, Peter Korsgaard
