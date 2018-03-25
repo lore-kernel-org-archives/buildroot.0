@@ -1,25 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Mar 2018 20:53:47 +0200
-Subject: [Buildroot] [PATCH] strace: bump to version 4.21
-In-Reply-To: <09291b181183799749bd7af44bf67a16408a4db1.1522002059.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 25 Mar 2018 21:20:59 +0300")
-References: <09291b181183799749bd7af44bf67a16408a4db1.1522002059.git.baruch@tkos.co.il>
-Message-ID: <87tvt4uguc.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Mar 2018 20:58:35 +0200
+Subject: [Buildroot] Make C and CXX compiler cache in
+ toolchainfile.cmake.in
+In-Reply-To: <trinity-81772261-5a5f-4894-87f4-edd212a9650a-1521974573144@3c-app-mailcom-bs04>
+References: <000001d3c425$31ba3fc0$952ebf40$@gmx.de>
+ <trinity-81772261-5a5f-4894-87f4-edd212a9650a-1521974573144@3c-app-mailcom-bs04>
+Message-ID: <20180325205835.5f167c1f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hello,
 
- > Download site moved to strace.io. No upstream provided hashes.
- > Drop the musl specific autoconf seed values. These values are now
- > detected correctly.
+On Sun, 25 Mar 2018 12:42:53 +0200, daggs wrote:
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> if you are trying to use Buildroot to generate a cross compiler, than
+> you are using the wrong too, look for crosstool-ng
 
-Committed, thanks.
+That's not quite correct at all:
 
+ 1. Crosstool-NG generates just a toolchain, with no additional
+    libraries (besides the C library). So if what you're looking for is
+    to build application linked against a number of libraries, you need
+    more than a "pure" toolchain, and Crosstool-NG will not help you
+    with this, while Buildroot will.
+
+ 2. Buildroot can perfectly be used to generate toolchains. See
+    http://toolchains.bootlin.com for an illustration.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
