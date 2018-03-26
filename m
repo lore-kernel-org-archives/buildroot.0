@@ -1,69 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 23:17:01 +0200
-Subject: [Buildroot] [PATCH 2/2] package/exim: bump version to 4.90
-In-Reply-To: <20180129232524.5fadcbd8@windsurf.lan>
-References: <20180127225123.28166-1-bernd.kuhls@t-online.de>
- <20180127225123.28166-2-bernd.kuhls@t-online.de>
- <20180129232524.5fadcbd8@windsurf.lan>
-Message-ID: <20180326231701.3ec7d95d@windsurf.home>
+Date: Mon, 26 Mar 2018 23:18:16 +0200
+Subject: [Buildroot] [git commit] libcdio: bump to version 2.0.0
+Message-ID: <20180326211821.EB3CF83CC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=84835f94713ce4e5a6e06c08576276ae0c0ff21f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ping ? If you don't answer the review comments, we can't really move
-forward with merging this patch :-/
+Add license hash
 
-Thomas
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcdio/libcdio.hash | 5 ++++-
+ package/libcdio/libcdio.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-On Mon, 29 Jan 2018 23:25:24 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat, 27 Jan 2018 23:51:23 +0100, Bernd Kuhls wrote:
-> 
-> >  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> > -EXIM_DEPENDENCIES += openssl
-> > +EXIM_DEPENDENCIES += host-openssl openssl  
-> 
-> This looks suspicious. Why are you bringing host-openssl when target
-> OpenSSL support is enabled ? Is the OpenSSL support in the macro_predef
-> program needed for target SSL support to work ? What does OpenSSL
-> support in macro_predef actually brings ?
-> 
-> >  define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
-> >  	$(call exim-config-change,SUPPORT_TLS,yes)
-> >  	$(call exim-config-change,USE_OPENSSL_PC,openssl)
-> > @@ -120,9 +120,17 @@ ifeq ($(BR2_STATIC_LIBS),y)
-> >  EXIM_STATIC_FLAGS = LFLAGS="-pthread --static"
-> >  endif
-> >  
-> > +# We need the host version of macro_predef during the build, before
-> > +# building it we need to prepare the makefile.
-> >  # "The -j (parallel) flag must not be used with make"
-> >  # (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
-> >  define EXIM_BUILD_CMDS
-> > +	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) makefile
-> > +	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
-> > +		CC=$(HOSTCC) \
-> > +		LNCC=$(HOSTCC) \
-> > +		CFLAGS="$(HOST_CFLAGS)" \
-> > +		LFLAGS="-fPIC $(HOST_LDFLAGS)"  
-> 
-> Meh, this is not nice. Perhaps we could submit a patch upstream that
-> adds support for CC_FOR_BUILD, CFLAGS_FOR_BUILD, LFLAGS_FOR_BUILD, so
-> that we don't need a separate build step. This could be useful for
-> other projects.
-> 
-> Best regards,
-> 
-> Thomas
-
-
-
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcdio/libcdio.hash b/package/libcdio/libcdio.hash
+index 35c632a906..2b6f832cbe 100644
+--- a/package/libcdio/libcdio.hash
++++ b/package/libcdio/libcdio.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking signature
+-sha256 96e2c903f866ae96f9f5b9048fa32db0921464a2286f5b586c0f02699710025a  libcdio-0.94.tar.gz
++sha256 1b481b5da009bea31db875805665974e2fc568e2b2afa516f4036733657cf958  libcdio-2.0.0.tar.gz
++
++# Hash for license file:
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
+index f0fc33527a..f4a5591722 100644
+--- a/package/libcdio/libcdio.mk
++++ b/package/libcdio/libcdio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCDIO_VERSION = 0.94
++LIBCDIO_VERSION = 2.0.0
+ LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
+ LIBCDIO_INSTALL_STAGING = YES
+ LIBCDIO_LICENSE = GPL-3.0+
