@@ -1,28 +1,160 @@
-From: AAlex_ <earthquake.de@freenet.de>
-Date: Mon, 26 Mar 2018 07:20:31 -0700 (MST)
-Subject: [Buildroot] Using grub-bios.cfg
-In-Reply-To: <19706da9-64e6-cf98-da64-a688ec8ffdf8@mind.be>
-References: <1521556906599-0.post@n4.nabble.com>
- <19706da9-64e6-cf98-da64-a688ec8ffdf8@mind.be>
-Message-ID: <1522074031640-0.post@n4.nabble.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Mar 2018 18:07:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add upstream build fix
+In-Reply-To: <20180326095453.14479-1-chemobejk@gmail.com>
+References: <20180326095453.14479-1-chemobejk@gmail.com>
+Message-ID: <20180326160755.GA2736@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-thank you. 
-I adapted the post-image script and linked it to external direktory.
-Now it works and uses my modified grub.cfg from external directory.
+Stefan, All,
 
-Thank you!
+On 2018-03-26 12:54 +0300, Stefan Becker spake thusly:
+> See https://github.com/systemd/systemd/issues/8507
+
+This is *not* an upstream fix. This is just a proposal for a fix. It has
+not been comitted upstream!
+
+The real upstream fix has been applied mere hours ago now, and it is
+different:
+
+    https://github.com/systemd/systemd/pull/8580
+
+So, NAK from me.
+
+Please, update to use the upstream commit. When you do so, please also
+include the pointer to this upstream commit in the patch description,
+see below...
+
+> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+> ---
+>  .../0004-fix-linux-fs-and-mount-collisions.patch   | 97 ++++++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 package/systemd/0004-fix-linux-fs-and-mount-collisions.patch
+> 
+> diff --git a/package/systemd/0004-fix-linux-fs-and-mount-collisions.patch b/package/systemd/0004-fix-linux-fs-and-mount-collisions.patch
+> new file mode 100644
+> index 0000000000..3356c36c13
+> --- /dev/null
+> +++ b/package/systemd/0004-fix-linux-fs-and-mount-collisions.patch
+> @@ -0,0 +1,97 @@
+> +From eb50b6d936c474f5bc2974c059f6432222af4de4 Mon Sep 17 00:00:00 2001
+> +From: Karel Zak <kzak@redhat.com>
+> +Date: Thu, 22 Mar 2018 12:50:45 +0100
+> +Subject: [PATCH] Fix linux/fs.h and sys/mount.h collisions
+> +
+> +* (kernel-headers) linux/fs.h and (glibc) sys/mount.h contains MS_* constants
+> +  and because it's without #ifdefs you cannot include the both files together
+> +  in the same code
+> +
+> +* (systemd) src/basic/missing.h contains another copy of MS_* constants
+> +
+> +The patch removes local systemd MS_* fallbacks, cleanup fs.h and
+> +mount.h include.
+> +
+> +Signed-off-by: Karel Zak <kzak@redhat.com>
+
+Here you would add something like:
+
+    Upstream: https://github.com/systemd/systemd/pull/8580
+    Signed-off-by: Your name <yourmail>
 
 Regards,
-Alex
+Yann E. MORIN.
 
+> +---
+> + src/basic/missing.h        | 40 ----------------------------------------
+> + src/core/load-fragment.c   |  1 -
+> + src/shared/bus-unit-util.c |  2 ++
+> + 3 files changed, 2 insertions(+), 41 deletions(-)
+> +
+> +diff --git a/src/basic/missing.h b/src/basic/missing.h
+> +index 567aea8da9c..6802dd27c7b 100644
+> +--- a/src/basic/missing.h
+> ++++ b/src/basic/missing.h
+> +@@ -524,46 +524,6 @@ struct btrfs_ioctl_quota_ctl_args {
+> + #define OCFS2_SUPER_MAGIC 0x7461636f
+> + #endif
+> + 
+> +-#ifndef MS_MOVE
+> +-#define MS_MOVE 8192
+> +-#endif
+> +-
+> +-#ifndef MS_REC
+> +-#define MS_REC 16384
+> +-#endif
+> +-
+> +-#ifndef MS_PRIVATE
+> +-#define MS_PRIVATE      (1<<18)
+> +-#endif
+> +-
+> +-#ifndef MS_REC
+> +-#define MS_REC          (1<<19)
+> +-#endif
+> +-
+> +-#ifndef MS_SHARED
+> +-#define MS_SHARED       (1<<20)
+> +-#endif
+> +-
+> +-#ifndef MS_RELATIME
+> +-#define MS_RELATIME     (1<<21)
+> +-#endif
+> +-
+> +-#ifndef MS_KERNMOUNT
+> +-#define MS_KERNMOUNT    (1<<22)
+> +-#endif
+> +-
+> +-#ifndef MS_I_VERSION
+> +-#define MS_I_VERSION    (1<<23)
+> +-#endif
+> +-
+> +-#ifndef MS_STRICTATIME
+> +-#define MS_STRICTATIME  (1<<24)
+> +-#endif
+> +-
+> +-#ifndef MS_LAZYTIME
+> +-#define MS_LAZYTIME     (1<<25)
+> +-#endif
+> +-
+> + #ifndef SCM_SECURITY
+> + #define SCM_SECURITY 0x03
+> + #endif
+> +diff --git a/src/core/load-fragment.c b/src/core/load-fragment.c
+> +index 94605ab0d02..49f8a8c6da1 100644
+> +--- a/src/core/load-fragment.c
+> ++++ b/src/core/load-fragment.c
+> +@@ -21,7 +21,6 @@
+> + 
+> + #include <errno.h>
+> + #include <fcntl.h>
+> +-#include <linux/fs.h>
+> + #include <linux/oom.h>
+> + #if HAVE_SECCOMP
+> + #include <seccomp.h>
+> +diff --git a/src/shared/bus-unit-util.c b/src/shared/bus-unit-util.c
+> +index 23e05daf48c..6e7ea10e714 100644
+> +--- a/src/shared/bus-unit-util.c
+> ++++ b/src/shared/bus-unit-util.c
+> +@@ -52,6 +52,8 @@
+> + #include "utf8.h"
+> + #include "util.h"
+> + 
+> ++#include <sys/mount.h>
+> ++
+> + int bus_parse_unit_info(sd_bus_message *message, UnitInfo *u) {
+> +         assert(message);
+> +         assert(u);
+> -- 
+> 2.14.3
+> 
 
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
