@@ -1,50 +1,32 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Mon, 26 Mar 2018 15:08:29 +0300
-Subject: [Buildroot] [PATCH 1/1] Makefile: fix build break in sdk target
-In-Reply-To: <CAOJ2eMcc6TuND32UFt_TLQA1atMNGNrPshqjREWgo4VO71iapg@mail.gmail.com>
-References: <20180326072332.30808-1-chemobejk@gmail.com>
- <20180326111613.002ee281@windsurf>
- <CAOJ2eMcc6TuND32UFt_TLQA1atMNGNrPshqjREWgo4VO71iapg@mail.gmail.com>
-Message-ID: <CAOJ2eMfVN6rr7qNkBr1-FkX2tHu+hAsGnQtOEybr2NZz+OYZTw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Mar 2018 14:38:21 +0200
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake: enable toolchain install
+ staging phase
+In-Reply-To: <20180326120043.25160-1-chemobejk@gmail.com>
+References: <20180326120043.25160-1-chemobejk@gmail.com>
+Message-ID: <20180326143821.41673976@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On Mon, Mar 26, 2018 at 12:21 PM, Stefan Becker <chemobejk@gmail.com> wrote:
+On Mon, 26 Mar 2018 15:00:43 +0300, Stefan Becker wrote:
+> Really fix commit 6729050f3a49dba42d2d881d31dbefd6b82b8dad
+> 
+> That commit added a script to "toolchain" post install staging hooks.
+> This will only be executed if TOOLCHAIN_INSTALL_STAGING is set to YES.
+> 
+> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
 
-> On Mon, Mar 26, 2018 at 12:16 PM, Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> wrote:
->
->> Hello,
->>
->> While this is OK, I am still not sure to understand why you are seeing
->> this problem. My commit 6729050f3a49dba42d2d881d31dbefd6b82b8dad moved
->> the creation of the $(HOST_DIR)/share/buildroot folder from a
->> dependency of the toolchain package, to a post-install staging hook of
->> the toolchain package.
->>
->
-> The top-level buildroot build steps executed are (a) "xyz_deconfig" and
-> (b) "all sdk".
->
-> Could be that you do not see the problem if you execute "all" and then
-> "sdk". But then it would mean that some dependency is missing on the "sdk"
-> target, which I agree would be worse.
->
+Indeed. Thanks for fixing this!
 
-I guess the real problem with commit
-6729050f3a49dba42d2d881d31dbefd6b82b8dad is that it adds a script to
-toolchain install staging hooks, but does not set TOOLCHAIN_INSTALL_STAGING
-to YES. Thus after that change the script is no longer executed during the
-build.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-I've submitted another patch to fix the root cause.
-
-Regards, Stefan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180326/13d47d64/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
