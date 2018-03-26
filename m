@@ -1,101 +1,53 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Mon, 26 Mar 2018 20:19:33 +0300
-Subject: [Buildroot] [PATCH 1/1] package/systemd: add upstream build fix
-In-Reply-To: <20180326160755.GA2736@scaer>
-References: <20180326160755.GA2736@scaer>
-Message-ID: <20180326171933.21219-1-chemobejk@gmail.com>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Mon, 26 Mar 2018 11:10:32 -0700
+Subject: [Buildroot] [PATCH] sam-ba: use correct host arch binary for
+ sam-ba symlink
+In-Reply-To: <20180325222519.2d36d2f4@windsurf>
+References: <1521735866-15288-1-git-send-email-joshua.henderson@microchip.com>
+ <20180325222519.2d36d2f4@windsurf>
+Message-ID: <689868d9-5d05-6fac-f186-c891a1cba705@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Stefan Becker <chemobejk@gmail.com>
----
- ...-dont-include-libmount-h-in-a-header-file.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
+Thomas, Alexandre,
 
-diff --git a/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-new file mode 100644
-index 0000000000..b91d09722b
---- /dev/null
-+++ b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-@@ -0,0 +1,75 @@
-+From 227b8a762fea1458547be2cdf0e6e4aac0079730 Mon Sep 17 00:00:00 2001
-+From: Michael Olbrich <m.olbrich@pengutronix.de>
-+Date: Mon, 26 Mar 2018 17:34:53 +0200
-+Subject: [PATCH] core: don't include libmount.h in a header file (#8580)
-+
-+linux/fs.h sys/mount.h, libmount.h and missing.h all include MS_*
-+definitions.
-+
-+To avoid problems, only one of linux/fs.h, sys/mount.h and libmount.h
-+should be included. And missing.h must be included last.
-+
-+Without this, building systemd may fail with:
-+
-+In file included from [...]/libmount/libmount.h:31:0,
-+                 from ../systemd-238/src/core/manager.h:23,
-+                 from ../systemd-238/src/core/emergency-action.h:37,
-+                 from ../systemd-238/src/core/unit.h:34,
-+                 from ../systemd-238/src/core/dbus-timer.h:25,
-+                 from ../systemd-238/src/core/timer.c:26:
-+[...]/sys/mount.h:57:2: error: expected identifier before numeric constant
-+
-+Upstream: https://github.com/systemd/systemd/pull/8580
-+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-+---
-+ src/core/dbus-execute.c | 1 +
-+ src/core/manager.h      | 3 ++-
-+ src/core/mount.c        | 2 ++
-+ 3 files changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/core/dbus-execute.c b/src/core/dbus-execute.c
-+index 7344623ebf6..c342093bca4 100644
-+--- a/src/core/dbus-execute.c
-++++ b/src/core/dbus-execute.c
-+@@ -18,6 +18,7 @@
-+   along with systemd; If not, see <http://www.gnu.org/licenses/>.
-+ ***/
-+ 
-++#include <sys/mount.h>
-+ #include <sys/prctl.h>
-+ #include <stdio_ext.h>
-+ 
-+diff --git a/src/core/manager.h b/src/core/manager.h
-+index 28c5da225b1..e09e0cdf5e9 100644
-+--- a/src/core/manager.h
-++++ b/src/core/manager.h
-+@@ -20,7 +20,6 @@
-+   along with systemd; If not, see <http://www.gnu.org/licenses/>.
-+ ***/
-+ 
-+-#include <libmount.h>
-+ #include <stdbool.h>
-+ #include <stdio.h>
-+ 
-+@@ -34,6 +33,8 @@
-+ #include "list.h"
-+ #include "ratelimit.h"
-+ 
-++struct libmnt_monitor;
-++
-+ /* Enforce upper limit how many names we allow */
-+ #define MANAGER_MAX_NAMES 131072 /* 128K */
-+ 
-+diff --git a/src/core/mount.c b/src/core/mount.c
-+index 0e755da5c02..0154ebda5d6 100644
-+--- a/src/core/mount.c
-++++ b/src/core/mount.c
-+@@ -23,6 +23,8 @@
-+ #include <stdio.h>
-+ #include <sys/epoll.h>
-+ 
-++#include <libmount.h>
-++
-+ #include "sd-messages.h"
-+ 
-+ #include "alloc-util.h"
--- 
-2.14.3
+On 03/25/2018 01:25 PM, Thomas Petazzoni wrote:
+> Hello Joshua,
+> 
+> On Thu, 22 Mar 2018 09:24:26 -0700, Joshua Henderson wrote:
+>> Make the symlink created in the host/bin directory point to the right host arch
+>> binary.  This takes into account using the 32 bit or 64 bit binary.
+>>
+>> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+>> ---
+>>  package/sam-ba/sam-ba.mk | 8 +++++++-
+>>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> In fact, your commit does much more than fixing the sam-ba symlink
+> depending on the host architecture: the sam-ba symlink was *always*
+> broken. Indeed, you're changing this:
+> 
+> -	ln -sf ../../opt/sam-ba/sam-ba $(HOST_DIR)/bin/sam-ba
+> +	ln -sf ../opt/sam-ba/$(SAM_BA_BIN_NAME) $(HOST_DIR)/bin/sam-ba
+> 
+> I.e you're removing one level of ../ when creating the relative
+> symlink. And this is needed since we moved $(HOST_DIR)/usr to
+> $(HOST_DIR).
+> 
+> So even on a x86 32 bit system, where the binary is named "sam-ba",
+> your commit fixes the symbolic link. I've reworded the commit log
+> accordingly, and applied your patch. Thanks!
+
+That is correct.  Thank you for clarifying.
+
+> 
+> Peter: this commit qualifies for 2018.02.x.
+> 
+> Joshua: what about updating to 2.17, or even Sam-ba 3.x ?
+
+I have something in this direction in progress.  I just have to finish up reconciling the update to sam-ba 3.x with things like board/atmel/flasher.sh.  I'm not sure what that means yet.  Should flasher.sh stick around?
+
+Josh
