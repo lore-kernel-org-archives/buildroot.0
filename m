@@ -1,57 +1,34 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 26 Mar 2018 07:46:04 -0500
-Subject: [Buildroot] [PATCH] configs/freescale_p1025twr: needs
- host-openssl for the Linux kernel build
-In-Reply-To: <a263d2ff-b184-e199-629c-e523ba026a02@mind.be>
-References: <20180324142602.10995-1-thomas.petazzoni@bootlin.com>
- <CANQCQpZz5R1MkBEe2fxr9EsrTzsrzS55WPwbiTDq8W-wJS9snw@mail.gmail.com>
- <20180325212036.06226774@windsurf>
- <a263d2ff-b184-e199-629c-e523ba026a02@mind.be>
-Message-ID: <CANQCQpYqkazq7OWEAKWY0mo_P_RXkhhXVCj4MRx+5xGnF_iaeg@mail.gmail.com>
+Date: Mon, 26 Mar 2018 07:49:42 -0500
+Subject: [Buildroot] [PATCH] busybox: disable PAM in the config if
+ linux-pam is not selected
+In-Reply-To: <20180326120006.24104-1-arnout@mind.be>
+References: <20180326120006.24104-1-arnout@mind.be>
+Message-ID: <CANQCQpbrCtCuXDDxtd07i=+-YE6AbVqVG69EA5j-rf9iC438Xw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Thomas,
+Arnout,
 
-On Mon, Mar 26, 2018 at 6:55 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Mon, Mar 26, 2018 at 7:00 AM, Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+> Currently there is only logic to enable PAM when linux-pam is selected.
+> However, busybox will fail to build with PAM enabled if the linux-pam
+> package has not been built before. So we should forcibly disable PAM in
+> busybox in that case.
 >
->
-> On 25-03-18 21:20, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Sat, 24 Mar 2018 20:15:33 -0500, Matthew Weber wrote:
->>
->>>> Fixes:
->>>>
->>>>   https://gitlab.com/buildroot.org/buildroot/-/jobs/59015355
->>>
->>> Sorry, I didn't realize this failed.  Is there an automated email on
->>> this sort of failure?
->>
->> No, there isn't. Unfortunately, the Gitlab CI infra is not very
->> reliable, and a number of failures are not related to real problems in
->> Buildroot, but to Gitlab CI infrastructure problems.
->
->  Well, to be completely fair, it's not really the Gitlab CI infra which is
-> unreliable. Rather, it's the free runners that are unreliable. I expect that if
-> we would have a dedicated runner, we wouldn't see these problems. At least,
-> that's how it looks to me (I'm not really an expert though).
->
+> Normally this is not an issue since our default busybox config doesn't
+> have PAM enabled. However, if you enable linux-pam, then save the
+> busybox config to a custom configuration file, then disable linux-pam
+> again, and then do a "make clean; make", the build will fail. A more
+> practical situation where this can occur is when the same custom
+> busybox config is used in a Buildroot config with and without
+> linux-pam.
 
-Has anyone setup a Gitlab console/REST client?  We could build a
-script on top of that which monitors the failed builds and does log
-analysis (not sure what output our .gitlab-ci.yml is setup for
-capturing).  Hopefully using that we could discard the bad jobs.  Then
-we should be able to at least get the stage of failure from the API
-too, which if each defconfig is a stage we could then map to
-maintainer.  Similarly for the test cases....
+I've observed that fun behaviour when we've gone between basic builds
+and configurations with STIG/SELinux requirements.
 
-If there isn't a console/REST client setup....
-- Could we generate some test API keys for the Buildroot Gitlab instance?
-- Do we have a spot we could run this script if someone was to develop it?
-
-
-Matt
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
