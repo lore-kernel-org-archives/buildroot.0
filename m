@@ -1,32 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 20:15:50 +0200
-Subject: [Buildroot] [PATCH] sam-ba: use correct host arch binary for
- sam-ba symlink
-In-Reply-To: <689868d9-5d05-6fac-f186-c891a1cba705@microchip.com>
-References: <1521735866-15288-1-git-send-email-joshua.henderson@microchip.com>
- <20180325222519.2d36d2f4@windsurf>
- <689868d9-5d05-6fac-f186-c891a1cba705@microchip.com>
-Message-ID: <20180326201550.05b36bc9@windsurf.home>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Mon, 26 Mar 2018 12:34:05 -0700
+Subject: [Buildroot] [PATCH v2] Config.in: add -Ofast option
+Message-ID: <1522092845-9842-1-git-send-email-joshua.henderson@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+-Ofast (introduced in GCC 4.6) It combines the existing optimization level -O3
+with options that can affect standards compliance but result in better optimized
+code. For example, -Ofast enables -ffast-math.
 
-On Mon, 26 Mar 2018 11:10:32 -0700, Joshua Henderson wrote:
+Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 
-> I have something in this direction in progress.  I just have to
-> finish up reconciling the update to sam-ba 3.x with things like
-> board/atmel/flasher.sh.  I'm not sure what that means yet.  Should
-> flasher.sh stick around?
+---
 
-It doesn't have to, as long as there is some reasonable details in
-board/atmel/readme.txt that explains who to flash the boards.
+v2:
+- Add proper depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+---
+ Config.in           | 10 ++++++++++
+ package/Makefile.in |  3 +++
+ 2 files changed, 13 insertions(+)
 
-Thomas
+diff --git a/Config.in b/Config.in
+index 0002df5..145f915 100644
+--- a/Config.in
++++ b/Config.in
+@@ -527,6 +527,16 @@ config BR2_OPTIMIZE_S
+ 	  -ftree-vect-loop-version
+ 	  This is the default.
+ 
++config BR2_OPTIMIZE_FAST
++	bool "optimize for fast"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	help
++	  Optimize for fast. Disregard strict standards compliance. -Ofast
++	  enables all -O3 optimizations. It also enables optimizations that are
++	  not valid for all standard-compliant programs. It turns on -ffast-math
++	  and the Fortran-specific -fstack-arrays, unless -fmax-stack-var-size
++	  is specified, and -fno-protect-parens.
++
+ endchoice
+ 
+ config BR2_GOOGLE_BREAKPAD_ENABLE
+diff --git a/package/Makefile.in b/package/Makefile.in
+index e387ce6..828e12e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -128,6 +128,9 @@ endif
+ ifeq ($(BR2_OPTIMIZE_S),y)
+ TARGET_OPTIMIZATION = -Os
+ endif
++ifeq ($(BR2_OPTIMIZE_FAST),y)
++TARGET_OPTIMIZATION = -Ofast
++endif
+ ifeq ($(BR2_DEBUG_1),y)
+ TARGET_DEBUGGING = -g1
+ endif
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
