@@ -1,39 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 22:07:06 +0200
-Subject: [Buildroot] [Resend V4 2/3] prosody: remove tweaked
- configuration
-In-Reply-To: <20180318122808.4291-2-francois.perrad@gadz.org>
-References: <20180318122808.4291-1-francois.perrad@gadz.org>
- <20180318122808.4291-2-francois.perrad@gadz.org>
-Message-ID: <20180326220706.1f0c138c@windsurf.home>
+Date: Mon, 26 Mar 2018 22:10:14 +0200
+Subject: [Buildroot] [git commit] package/systemd: add upstream build fix
+Message-ID: <20180326201029.F1EC283C54@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ef3304dabc1aef5c1035359211b1c3ca5d07eb3b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 18 Mar 2018 13:28:07 +0100, Francois Perrad wrote:
-> upgrading a tweaked configuration is painful,
-> so stay with the upstream configuration which is already installed.
-> 
-> everybody could do its own configuration in its rootfs_overlay.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/prosody/prosody.cfg.lua | 184 ----------------------------------------
->  package/prosody/prosody.mk      |  11 ---
->  2 files changed, 195 deletions(-)
->  delete mode 100644 package/prosody/prosody.cfg.lua
+Fixes:
 
-Applied to master after squashing PATCH 2/3 and 3/3, because they
-logically belong together.
+  http://autobuild.buildroot.org/results/4c439ee000354f90b4e59ee4006530f77263db47/
 
-Thanks!
+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-dont-include-libmount-h-in-a-header-file.patch | 75 ++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
+new file mode 100644
+index 0000000000..b91d09722b
+--- /dev/null
++++ b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
+@@ -0,0 +1,75 @@
++From 227b8a762fea1458547be2cdf0e6e4aac0079730 Mon Sep 17 00:00:00 2001
++From: Michael Olbrich <m.olbrich@pengutronix.de>
++Date: Mon, 26 Mar 2018 17:34:53 +0200
++Subject: [PATCH] core: don't include libmount.h in a header file (#8580)
++
++linux/fs.h sys/mount.h, libmount.h and missing.h all include MS_*
++definitions.
++
++To avoid problems, only one of linux/fs.h, sys/mount.h and libmount.h
++should be included. And missing.h must be included last.
++
++Without this, building systemd may fail with:
++
++In file included from [...]/libmount/libmount.h:31:0,
++                 from ../systemd-238/src/core/manager.h:23,
++                 from ../systemd-238/src/core/emergency-action.h:37,
++                 from ../systemd-238/src/core/unit.h:34,
++                 from ../systemd-238/src/core/dbus-timer.h:25,
++                 from ../systemd-238/src/core/timer.c:26:
++[...]/sys/mount.h:57:2: error: expected identifier before numeric constant
++
++Upstream: https://github.com/systemd/systemd/pull/8580
++Signed-off-by: Stefan Becker <chemobejk@gmail.com>
++---
++ src/core/dbus-execute.c | 1 +
++ src/core/manager.h      | 3 ++-
++ src/core/mount.c        | 2 ++
++ 3 files changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/src/core/dbus-execute.c b/src/core/dbus-execute.c
++index 7344623ebf6..c342093bca4 100644
++--- a/src/core/dbus-execute.c
+++++ b/src/core/dbus-execute.c
++@@ -18,6 +18,7 @@
++   along with systemd; If not, see <http://www.gnu.org/licenses/>.
++ ***/
++ 
+++#include <sys/mount.h>
++ #include <sys/prctl.h>
++ #include <stdio_ext.h>
++ 
++diff --git a/src/core/manager.h b/src/core/manager.h
++index 28c5da225b1..e09e0cdf5e9 100644
++--- a/src/core/manager.h
+++++ b/src/core/manager.h
++@@ -20,7 +20,6 @@
++   along with systemd; If not, see <http://www.gnu.org/licenses/>.
++ ***/
++ 
++-#include <libmount.h>
++ #include <stdbool.h>
++ #include <stdio.h>
++ 
++@@ -34,6 +33,8 @@
++ #include "list.h"
++ #include "ratelimit.h"
++ 
+++struct libmnt_monitor;
+++
++ /* Enforce upper limit how many names we allow */
++ #define MANAGER_MAX_NAMES 131072 /* 128K */
++ 
++diff --git a/src/core/mount.c b/src/core/mount.c
++index 0e755da5c02..0154ebda5d6 100644
++--- a/src/core/mount.c
+++++ b/src/core/mount.c
++@@ -23,6 +23,8 @@
++ #include <stdio.h>
++ #include <sys/epoll.h>
++ 
+++#include <libmount.h>
+++
++ #include "sd-messages.h"
++ 
++ #include "alloc-util.h"
