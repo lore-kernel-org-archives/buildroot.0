@@ -1,58 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Mar 2018 18:12:40 +0200
-Subject: [Buildroot] [PATCH] Config.in: add -Ofast option
-In-Reply-To: <20180325224031.55cfb6a8@windsurf>
-References: <1521735971-22210-1-git-send-email-joshua.henderson@microchip.com>
- <20180325082434.GF2620@scaer> <20180325224031.55cfb6a8@windsurf>
-Message-ID: <20180326161240.GB2736@scaer>
+From: Stefan Becker <chemobejk@gmail.com>
+Date: Mon, 26 Mar 2018 20:19:33 +0300
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add upstream build fix
+In-Reply-To: <20180326160755.GA2736@scaer>
+References: <20180326160755.GA2736@scaer>
+Message-ID: <20180326171933.21219-1-chemobejk@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+---
+ ...-dont-include-libmount-h-in-a-header-file.patch | 75 ++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
+ create mode 100644 package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
 
-On 2018-03-25 22:40 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 25 Mar 2018 10:24:34 +0200, Yann E. MORIN wrote:
-> > > +config BR2_OPTIMIZE_FAST
-> > > +	bool "optimize for fast"  
-> > 
-> > -Ofast was introduced in gcc-4.6, so you need a dependency:
-> >     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-> 
-> The "odd" thing being that menuconfig is organized as follows:
-> 
->  Target options --->
->  Build options --->
->  Toolchain --->
-> 
-> The optimization level is selected in "Build options" and the compiler
-> version is basically decided in "Toolchain".
-> 
-> So if you select -Ofast in Build options, and then go in Toolchain
-> chose a < 4.6 compiler, your -Ofast selection would disappear.
-
-Yeah, I know. But, as you ssay:
-
-> But there's no good way around this, and using gcc < 4.6 is anyway very
-
-... there's no good solution around this issue, and the case for gcc
-before 4.6 is rare enough that we don't care abot those poor souls
-anymore... :-/
-
-> rare these days, so I also agree that the "depends on" you suggest is
-> what makes the most sense.
-
-Was that an Acked-by or a Reviewed-by? ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
+new file mode 100644
+index 0000000000..b91d09722b
+--- /dev/null
++++ b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
+@@ -0,0 +1,75 @@
++From 227b8a762fea1458547be2cdf0e6e4aac0079730 Mon Sep 17 00:00:00 2001
++From: Michael Olbrich <m.olbrich@pengutronix.de>
++Date: Mon, 26 Mar 2018 17:34:53 +0200
++Subject: [PATCH] core: don't include libmount.h in a header file (#8580)
++
++linux/fs.h sys/mount.h, libmount.h and missing.h all include MS_*
++definitions.
++
++To avoid problems, only one of linux/fs.h, sys/mount.h and libmount.h
++should be included. And missing.h must be included last.
++
++Without this, building systemd may fail with:
++
++In file included from [...]/libmount/libmount.h:31:0,
++                 from ../systemd-238/src/core/manager.h:23,
++                 from ../systemd-238/src/core/emergency-action.h:37,
++                 from ../systemd-238/src/core/unit.h:34,
++                 from ../systemd-238/src/core/dbus-timer.h:25,
++                 from ../systemd-238/src/core/timer.c:26:
++[...]/sys/mount.h:57:2: error: expected identifier before numeric constant
++
++Upstream: https://github.com/systemd/systemd/pull/8580
++Signed-off-by: Stefan Becker <chemobejk@gmail.com>
++---
++ src/core/dbus-execute.c | 1 +
++ src/core/manager.h      | 3 ++-
++ src/core/mount.c        | 2 ++
++ 3 files changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/src/core/dbus-execute.c b/src/core/dbus-execute.c
++index 7344623ebf6..c342093bca4 100644
++--- a/src/core/dbus-execute.c
+++++ b/src/core/dbus-execute.c
++@@ -18,6 +18,7 @@
++   along with systemd; If not, see <http://www.gnu.org/licenses/>.
++ ***/
++ 
+++#include <sys/mount.h>
++ #include <sys/prctl.h>
++ #include <stdio_ext.h>
++ 
++diff --git a/src/core/manager.h b/src/core/manager.h
++index 28c5da225b1..e09e0cdf5e9 100644
++--- a/src/core/manager.h
+++++ b/src/core/manager.h
++@@ -20,7 +20,6 @@
++   along with systemd; If not, see <http://www.gnu.org/licenses/>.
++ ***/
++ 
++-#include <libmount.h>
++ #include <stdbool.h>
++ #include <stdio.h>
++ 
++@@ -34,6 +33,8 @@
++ #include "list.h"
++ #include "ratelimit.h"
++ 
+++struct libmnt_monitor;
+++
++ /* Enforce upper limit how many names we allow */
++ #define MANAGER_MAX_NAMES 131072 /* 128K */
++ 
++diff --git a/src/core/mount.c b/src/core/mount.c
++index 0e755da5c02..0154ebda5d6 100644
++--- a/src/core/mount.c
+++++ b/src/core/mount.c
++@@ -23,6 +23,8 @@
++ #include <stdio.h>
++ #include <sys/epoll.h>
++ 
+++#include <libmount.h>
+++
++ #include "sd-messages.h"
++ 
++ #include "alloc-util.h"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.3
