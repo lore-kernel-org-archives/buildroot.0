@@ -1,60 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 22:19:11 +0200
-Subject: [Buildroot] [git commit] Config.in: add -Ofast option
-Message-ID: <20180326201918.157AC83C5E@busybox.osuosl.org>
+Date: Mon, 26 Mar 2018 22:19:27 +0200
+Subject: [Buildroot] [PATCH v2] Config.in: add -Ofast option
+In-Reply-To: <1522092845-9842-1-git-send-email-joshua.henderson@microchip.com>
+References: <1522092845-9842-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <20180326221927.010a477c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed6a7e18af8f4dfddee6e6b144f20dfaf6926315
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
--Ofast (introduced in GCC 4.6) It combines the existing optimization level -O3
-with options that can affect standards compliance but result in better optimized
-code. For example, -Ofast enables -ffast-math.
+On Mon, 26 Mar 2018 12:34:05 -0700, Joshua Henderson wrote:
+> -Ofast (introduced in GCC 4.6) It combines the existing optimization level -O3
+> with options that can affect standards compliance but result in better optimized
+> code. For example, -Ofast enables -ffast-math.
+> 
+> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> 
+> ---
 
-Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in           | 11 +++++++++++
- package/Makefile.in |  3 +++
- 2 files changed, 14 insertions(+)
+Applied to master, thanks.
 
-diff --git a/Config.in b/Config.in
-index 0002df5176..037ea2265b 100644
---- a/Config.in
-+++ b/Config.in
-@@ -527,6 +527,17 @@ config BR2_OPTIMIZE_S
- 	  -ftree-vect-loop-version
- 	  This is the default.
- 
-+config BR2_OPTIMIZE_FAST
-+	bool "optimize for fast"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+	help
-+	  Optimize for fast. Disregard strict standards
-+	  compliance. -Ofast enables all -O3 optimizations. It also
-+	  enables optimizations that are not valid for all
-+	  standard-compliant programs. It turns on -ffast-math and the
-+	  Fortran-specific -fstack-arrays, unless -fmax-stack-var-size
-+	  is specified, and -fno-protect-parens.
-+
- endchoice
- 
- config BR2_GOOGLE_BREAKPAD_ENABLE
-diff --git a/package/Makefile.in b/package/Makefile.in
-index e387ce67fe..828e12e7d7 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -128,6 +128,9 @@ endif
- ifeq ($(BR2_OPTIMIZE_S),y)
- TARGET_OPTIMIZATION = -Os
- endif
-+ifeq ($(BR2_OPTIMIZE_FAST),y)
-+TARGET_OPTIMIZATION = -Ofast
-+endif
- ifeq ($(BR2_DEBUG_1),y)
- TARGET_DEBUGGING = -g1
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
