@@ -1,127 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Mar 2018 22:00:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: add upstream build fix
-In-Reply-To: <20180326171933.21219-1-chemobejk@gmail.com>
-References: <20180326160755.GA2736@scaer>
- <20180326171933.21219-1-chemobejk@gmail.com>
-Message-ID: <20180326200012.GC2736@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Mar 2018 21:54:53 +0200
+Subject: [Buildroot] [git commit] prosody: bump to version 0.10.0
+Message-ID: <20180326200626.A272683C52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=cc9c3a9942fecc56d241d6b07683af81ef1bd41c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-03-26 20:19 +0300, Stefan Becker spake thusly:
-> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+this version is not restricted to Lua 5.1
 
-Thanks for the quick respin! :-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/prosody/Config.in    |  4 ++--
+ package/prosody/prosody.hash |  8 ++++----
+ package/prosody/prosody.mk   | 20 +++++++++-----------
+ 3 files changed, 15 insertions(+), 17 deletions(-)
 
-Fixes: http://autobuild.buildroot.org/results/4c4/4c439ee000354f90b4e59ee4006530f77263db47/
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-And sorry if I sounded harsh in my previous review, that was not my
-intention. I do apologise.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...-dont-include-libmount-h-in-a-header-file.patch | 75 ++++++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-> 
-> diff --git a/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-> new file mode 100644
-> index 0000000000..b91d09722b
-> --- /dev/null
-> +++ b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-> @@ -0,0 +1,75 @@
-> +From 227b8a762fea1458547be2cdf0e6e4aac0079730 Mon Sep 17 00:00:00 2001
-> +From: Michael Olbrich <m.olbrich@pengutronix.de>
-> +Date: Mon, 26 Mar 2018 17:34:53 +0200
-> +Subject: [PATCH] core: don't include libmount.h in a header file (#8580)
-> +
-> +linux/fs.h sys/mount.h, libmount.h and missing.h all include MS_*
-> +definitions.
-> +
-> +To avoid problems, only one of linux/fs.h, sys/mount.h and libmount.h
-> +should be included. And missing.h must be included last.
-> +
-> +Without this, building systemd may fail with:
-> +
-> +In file included from [...]/libmount/libmount.h:31:0,
-> +                 from ../systemd-238/src/core/manager.h:23,
-> +                 from ../systemd-238/src/core/emergency-action.h:37,
-> +                 from ../systemd-238/src/core/unit.h:34,
-> +                 from ../systemd-238/src/core/dbus-timer.h:25,
-> +                 from ../systemd-238/src/core/timer.c:26:
-> +[...]/sys/mount.h:57:2: error: expected identifier before numeric constant
-> +
-> +Upstream: https://github.com/systemd/systemd/pull/8580
-> +Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-> +---
-> + src/core/dbus-execute.c | 1 +
-> + src/core/manager.h      | 3 ++-
-> + src/core/mount.c        | 2 ++
-> + 3 files changed, 5 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/core/dbus-execute.c b/src/core/dbus-execute.c
-> +index 7344623ebf6..c342093bca4 100644
-> +--- a/src/core/dbus-execute.c
-> ++++ b/src/core/dbus-execute.c
-> +@@ -18,6 +18,7 @@
-> +   along with systemd; If not, see <http://www.gnu.org/licenses/>.
-> + ***/
-> + 
-> ++#include <sys/mount.h>
-> + #include <sys/prctl.h>
-> + #include <stdio_ext.h>
-> + 
-> +diff --git a/src/core/manager.h b/src/core/manager.h
-> +index 28c5da225b1..e09e0cdf5e9 100644
-> +--- a/src/core/manager.h
-> ++++ b/src/core/manager.h
-> +@@ -20,7 +20,6 @@
-> +   along with systemd; If not, see <http://www.gnu.org/licenses/>.
-> + ***/
-> + 
-> +-#include <libmount.h>
-> + #include <stdbool.h>
-> + #include <stdio.h>
-> + 
-> +@@ -34,6 +33,8 @@
-> + #include "list.h"
-> + #include "ratelimit.h"
-> + 
-> ++struct libmnt_monitor;
-> ++
-> + /* Enforce upper limit how many names we allow */
-> + #define MANAGER_MAX_NAMES 131072 /* 128K */
-> + 
-> +diff --git a/src/core/mount.c b/src/core/mount.c
-> +index 0e755da5c02..0154ebda5d6 100644
-> +--- a/src/core/mount.c
-> ++++ b/src/core/mount.c
-> +@@ -23,6 +23,8 @@
-> + #include <stdio.h>
-> + #include <sys/epoll.h>
-> + 
-> ++#include <libmount.h>
-> ++
-> + #include "sd-messages.h"
-> + 
-> + #include "alloc-util.h"
-> -- 
-> 2.14.3
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index 77eeb85ab1..1bc79b7f2a 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PROSODY
+ 	bool "prosody"
+-	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+ 	select BR2_PACKAGE_LUASEC # runtime
+ 	select BR2_PACKAGE_LUASOCKET # runtime
+@@ -15,4 +15,4 @@ config BR2_PACKAGE_PROSODY
+ 	  https://prosody.im
+ 
+ comment "prosody needs the lua interpreter"
+-	depends on !BR2_PACKAGE_LUA_5_1 && !BR2_PACKAGE_LUAJIT
++	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index 38942ea7ff..d560994566 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://prosody.im/downloads/source/{MD5,SHA1,SHA256,SHA512}SUMS
+-md5    d743adea6cfbaacc3a24cc0c3928bb1b  prosody-0.9.12.tar.gz
+-sha1   1ee224263a5b3d67960e12edbbe6b2f16b95d147  prosody-0.9.12.tar.gz
+-sha256 1a59a322b71928a21985522aa00d0eab3552208d7bf9ecb318542a1b2fee3e8d  prosody-0.9.12.tar.gz
+-sha512 e87b5f3b3e327722cec9d8d0470684e2ec2788a1c5ae623c4f505a00572ef21f65afe84cd5b7de47d6a65fe8872506fe34e5e8886e20979ff84710669857ca76  prosody-0.9.12.tar.gz
++md5    0eebf7a18ce1fc7dd9954c94ebd85f54  prosody-0.10.0.tar.gz
++sha1   57c1c5a665e6453bdde06727ef398cd69accd9d7  prosody-0.10.0.tar.gz
++sha256 7414e447256c60b2645578c4a5913113cd74b419ca5a032b54db90d98a978498  prosody-0.10.0.tar.gz
++sha512 ee66e240afba6a8cb286623da48d9b535798153fb65e32070cec93aafe360e91f7087eeb49dec0f7d145e24f04339ed0878e50835b52f682130b204e22990ce9  prosody-0.10.0.tar.gz
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index d19653503d..3ff891909c 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,29 +4,27 @@
+ #
+ ################################################################################
+ 
+-PROSODY_VERSION = 0.9.12
++PROSODY_VERSION = 0.10.0
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
+-PROSODY_DEPENDENCIES = openssl libidn
+-
+-ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+-PROSODY_DEPENDENCIES += lua
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LUAJIT),y)
+-PROSODY_DEPENDENCIES += luajit
+-endif
++PROSODY_DEPENDENCIES = host-luainterpreter luainterpreter libidn openssl
+ 
+ PROSODY_CONF_OPTS = \
++	--with-lua-bin=$(HOST_DIR)/usr/bin \
+ 	--with-lua=$(STAGING_DIR)/usr \
++	--lua-version=$(LUAINTERPRETER_ABIVER) \
+ 	--c-compiler=$(TARGET_CC) \
+-	--cflags="$(TARGET_CFLAGS) -fPIC" \
++	--cflags="$(TARGET_CFLAGS) -fPIC -std=c99" \
+ 	--linker=$(TARGET_CC) \
+ 	--ldflags="$(TARGET_LDFLAGS) -shared" \
+ 	--sysconfdir=/etc/prosody \
+ 	--prefix=/usr
+ 
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++PROSODY_CONF_OPTS += --runwith=luajit
++endif
++
+ define PROSODY_CONFIGURE_CMDS
+ 	cd $(@D) && \
+ 		$(TARGET_CONFIGURE_OPTS) \
