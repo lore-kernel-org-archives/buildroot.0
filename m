@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 23:33:34 +0200
-Subject: [Buildroot] [git commit] ympd: add optional openssl dependency
-Message-ID: <20180326214021.1E70083C18@busybox.osuosl.org>
+Date: Mon, 26 Mar 2018 23:48:45 +0200
+Subject: [Buildroot] [Patch v3 1/3] ninja: new package
+In-Reply-To: <1466796149-25218-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1466796149-25218-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1466796149-25218-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20180326234845.6049b5ca@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46680c9dc13fdff28f07c3e86fbc1b778d457a31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Eric,
 
-Fixes:
- - http://autobuild.buildroot.net/results/d9b1375f5f8ecde8fef027344a5d5b288f7cee7c
+On Fri, 24 Jun 2016 21:22:27 +0200, Eric Le Bihan wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ympd/ympd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> +NINJA_VERSION = v1.7.1
+> +NINJA_SITE = $(call github,ninja-build,ninja,$(NINJA_VERSION))
+> +NINJA_LICENSE = Apache-2.0
+> +NINJA_LICENSE_FILES = COPYING
+> +
+> +HOST_NINJA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
 
-diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
-index e3f21e9eb0..6c0f3224cc 100644
---- a/package/ympd/ympd.mk
-+++ b/package/ympd/ympd.mk
-@@ -10,4 +10,11 @@ YMPD_LICENSE = GPL-2.0
- YMPD_LICENSE_FILES = LICENSE
- YMPD_DEPENDENCIES = libmpdclient
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+YMPD_DEPENDENCIES += openssl
-+YMPD_CONF_OPTS += -DWITH_SSL=ON
-+else
-+YMPD_CONF_OPTS += -DWITH_SSL=OFF
-+endif
-+
- $(eval $(cmake-package))
+Sorry for reviving such an old thread, but do you remember why you need
+host-python3 or host-python ?
+
+Indeed, this indicates that ninja supports both Python 2.x and Python
+3.x, and Buildroot already guarantees that either Python 2.x or Python
+3.x is available on the system, without the need to build host-python
+or host-python3.
+
+Therefore, why do we have this dependency ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
