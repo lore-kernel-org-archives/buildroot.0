@@ -1,61 +1,62 @@
-From: Ben Whitten <ben.whitten@gmail.com>
-Date: Mon, 26 Mar 2018 22:05:52 +0100
-Subject: [Buildroot] [PATCH RESEND 1/2] fs/ubi: decouple ubi & ubifs
-In-Reply-To: <CANQCQpYPx=ZVSV_1fPK-FSERipL5xPpLBoKNd-kcTJmnQ-deBw@mail.gmail.com>
-References: <1521829279-5156-1-git-send-email-ben.whitten@gmail.com>
- <1521829279-5156-2-git-send-email-ben.whitten@gmail.com>
- <CANQCQpYPx=ZVSV_1fPK-FSERipL5xPpLBoKNd-kcTJmnQ-deBw@mail.gmail.com>
-Message-ID: <CAF3==ivL4e4vT5jxoYWb=VQH9wdG0q-qCGH1FP=EK8OtLR19CA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Mar 2018 23:10:35 +0200
+Subject: [Buildroot] [git commit] lshw: use data files provided by hwdata
+Message-ID: <20180326211513.CD69583CC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24 March 2018 at 03:17, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Ben,
->
-> On Fri, Mar 23, 2018 at 1:21 PM, Ben Whitten <ben.whitten@gmail.com> wrote:
->> As ubi is a container it shouldn't enforce a ubifs rootfs to be built,
->> it is reasonable to have a squashfs ro filesystem within a ubi.
->> If ubifs is selected ubi containing ubifs is automatically selected as
->> to not break existing configs
->
-> What are you thoughts on the usecase of needing the Kernel/DTB FIT (or
-> other firmware) images also in UBI?
->
-> i.e. when online creating the UBI partitions, I can see creating a
-> single UBI and then just treating it like a raw device to store a
-> series of blobs (firmware, rootfs & kernel).  Generation of something
-> like that offline feels like a post image activity.
+commit: https://git.buildroot.net/buildroot/commit/?id=29bccabdebff7b43189b0eed2090dc4858e1afca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So in my context the final 'image' is something I would deliver to our
-factory for
-flashing in production. In this case our UBI needs it all, kernel a/b
-rootfs a/b etc.
-And its the individual artifacts that sw update gets generated from.
+lshw is seldomly released, so its data files become easily
+outdated. Instead, this commit makes use of the data files provided by
+hwdata. This is easily possible because lshw looks for the files in
+several directories, including /usr/share/hwdata, where the hwdata
+collection is installed.
 
-> However, I guess
-> that case could just be a new image containerization option which acts
-> like a general hook to take a series of files (for each create a UBI
-> container).  On target for that option, there would be more MTD
-> devices vs a single (I'd have to revisit the limitations of a single
-> UBI vs one for each image as I'm unsure of which is better).
+We remove the entire /usr/share/lshw directory, where the not very
+up-to-date data files where installed. Four files were installed
+there: pci.ids, usb.ids (which are now provided by hwdata), manuf.txt
+and oui.txt (which are not used at run time).
 
-It makes sense to have the UBI as large as possible to take advantage of wear
-leveling across the full flash, instead of artificially limiting their
-range. Thats what
-the volumes would be for within the UBI.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+[Thomas:
+ - rework commit log
+ - replace patch by a simple removal of the /usr/share/lshw directory
+ - add "runtime" comment in Config.in for the BR2_PACKAGE_LSHW
+   dependency]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lshw/Config.in | 3 +++
+ package/lshw/lshw.mk   | 1 +
+ 2 files changed, 4 insertions(+)
 
-> I wonder how often a design would end up using a combination of a post
-> script and buildroot doing UBI generation where they have to maintain
-> both?  Depending on that,  I think I'd argue for defaulting to a post
-> script
-
-True. I think justing having BR generate artifacts then have genimage assemble
-to what ever format required seems to be the defacto solution.
-Perhaps that could be integrated as an option instead of having to call it in
-numerous boards as a post script.
-
-Ben
+diff --git a/package/lshw/Config.in b/package/lshw/Config.in
+index 3caac66c72..5e0e47b6e2 100644
+--- a/package/lshw/Config.in
++++ b/package/lshw/Config.in
+@@ -2,6 +2,9 @@ config BR2_PACKAGE_LSHW
+ 	bool "lshw"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_HWDATA # runtime
++	select BR2_PACKAGE_HWDATA_PCI_IDS
++	select BR2_PACKAGE_HWDATA_USB_IDS
+ 	help
+ 	  lshw (Hardware Lister) is a small tool to provide
+ 	  detailed information on the hardware configuration of the
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index 9b52b09167..4195c073e2 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -23,6 +23,7 @@ endef
+ define LSHW_INSTALL_TARGET_CMDS
+ 	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) \
+ 		$(LSHW_MAKE_OPTS) install
++	$(RM) -rf $(TARGET_DIR)/usr/share/lshw
+ endef
+ 
+ $(eval $(generic-package))
