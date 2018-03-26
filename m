@@ -1,30 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 22:19:27 +0200
-Subject: [Buildroot] [PATCH v2] Config.in: add -Ofast option
-In-Reply-To: <1522092845-9842-1-git-send-email-joshua.henderson@microchip.com>
-References: <1522092845-9842-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20180326221927.010a477c@windsurf.home>
+Date: Mon, 26 Mar 2018 22:19:53 +0200
+Subject: [Buildroot] [git commit] rpi-bt-firmware: remove compatibility
+ symlink
+Message-ID: <20180326202001.AA89F83C66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=355b87a1ac4626d1df79e5cb7fd4f8d10ac3294d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 26 Mar 2018 12:34:05 -0700, Joshua Henderson wrote:
-> -Ofast (introduced in GCC 4.6) It combines the existing optimization level -O3
-> with options that can affect standards compliance but result in better optimized
-> code. For example, -Ofast enables -ffast-math.
-> 
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> 
-> ---
+Commit 361d1b969ecdba1a8a62613626f90fc025b94660 defines FIRMWARE_DIR for
+bluez5_utils. The compatibility symlink for the firmware is no longer
+needed.
 
-Applied to master, thanks.
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rpi-bt-firmware/rpi-bt-firmware.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+index 255da19262..644fdc6d5f 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+@@ -10,10 +10,7 @@ RPI_BT_FIRMWARE_SITE_METHOD = git
+ RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+ 
+-# The BlueZ hciattach utility looks for firmware in /etc/firmware. Add a
+-# compatibility symlink.
+ define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
+-	ln -sf ../lib/firmware $(TARGET_DIR)/etc/firmware
+ 	$(INSTALL) -D -m 0644 $(@D)/BCM43430A1.hcd \
+ 		$(TARGET_DIR)/lib/firmware/BCM43430A1.hcd
+ endef
