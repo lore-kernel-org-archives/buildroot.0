@@ -1,42 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Mar 2018 14:49:25 +0200
-Subject: [Buildroot] [git commit] package/eudev: don't forcibly link with
- -lrt
-Message-ID: <20180326125143.2987083C1D@busybox.osuosl.org>
+Date: Mon, 26 Mar 2018 14:51:08 +0200
+Subject: [Buildroot] [git commit] busybox: disable PAM in the config if
+ linux-pam is not selected
+Message-ID: <20180326125143.42A9283C1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaa63edbee8b8bfdac3fcbd84573220c607e0662
+commit: https://git.buildroot.net/buildroot/commit/?id=0876b023663377bc3a24c80399f447c1f2afe0c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This was carried over from udev back when it were an separate package,
-but was not even needed by eudev 1.3 when we introduced it back in 2014
-(937a95449ec: eudev: new package).
+Currently there is only logic to enable PAM when linux-pam is selected.
+However, busybox will fail to build with PAM enabled if the linux-pam
+package has not been built before. So we should forcibly disable PAM in
+busybox in that case.
 
-Drop it now.
+Normally this is not an issue since our default busybox config doesn't
+have PAM enabled. However, if you enable linux-pam, then save the
+busybox config to a custom configuration file, then disable linux-pam
+again, and then do a "make clean; make", the build will fail. A more
+practical situation where this can occur is when the same custom
+busybox config is used in a Buildroot config with and without
+linux-pam.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eudev/eudev.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ package/busybox/busybox.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index d08b9bb0c9..11dc93762b 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -10,9 +10,6 @@ EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
- EUDEV_INSTALL_STAGING = YES
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index bc0c661754..7009f6a675 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -248,6 +248,10 @@ define BUSYBOX_LINUX_PAM
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
+ endef
+ BUSYBOX_DEPENDENCIES += linux-pam
++else
++define BUSYBOX_LINUX_PAM
++	$(call KCONFIG_DISABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++endef
+ endif
  
--# mq_getattr is in librt
--EUDEV_CONF_ENV += LIBS=-lrt
--
- EUDEV_CONF_OPTS = \
- 	--disable-manpages \
- 	--sbindir=/sbin \
+ # Telnet support
