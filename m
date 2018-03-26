@@ -1,38 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Mar 2018 10:51:13 +0200
-Subject: [Buildroot] [git commit] libfcgi: Use SPDX license identifier
-Message-ID: <20180326085211.B6BE283BFA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Mar 2018 11:16:13 +0200
+Subject: [Buildroot] [PATCH 1/1] Makefile: fix build break in sdk target
+In-Reply-To: <20180326072332.30808-1-chemobejk@gmail.com>
+References: <20180326072332.30808-1-chemobejk@gmail.com>
+Message-ID: <20180326111613.002ee281@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b13d9ab380704ba4faf1e0295885797cb3341336
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The fcgi license is covered by SPDX, the identifier however is not
-obvious.
+On Mon, 26 Mar 2018 10:23:32 +0300, Stefan Becker wrote:
+> After commit 6729050f3a49dba42d2d881d31dbefd6b82b8dad nothing creates
+> $(HOST_DIR)/share/buildroot anymore, causing sdk to fail with:
+> 
+>  /bin/bash: .../output/host/share/buildroot/sdk-location: No such file or directory
+> 
+> Add creation of that directory to the "sdk" build steps itself.
+> 
+> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index a3a9d290d9..9e2402d7d9 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -574,6 +574,7 @@ sdk: world
+>  	$(TOPDIR)/support/scripts/fix-rpath host
+>  	$(TOPDIR)/support/scripts/fix-rpath staging
+>  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+> +	mkdir -p $(HOST_DIR)/share/buildroot
 
-For details, see https://spdx.org/licenses/OML.html
+While this is OK, I am still not sure to understand why you are seeing
+this problem. My commit 6729050f3a49dba42d2d881d31dbefd6b82b8dad moved
+the creation of the $(HOST_DIR)/share/buildroot folder from a
+dependency of the toolchain package, to a post-install staging hook of
+the toolchain package.
 
-[Peter: add spdx.org link]
-Signed-off-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libfcgi/libfcgi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But in both cases, the logic should be executed way before
+the sdk target is called.
 
-diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-index ced850c153..78da772916 100644
---- a/package/libfcgi/libfcgi.mk
-+++ b/package/libfcgi/libfcgi.mk
-@@ -7,7 +7,7 @@
- LIBFCGI_VERSION = 2.4.0
- LIBFCGI_SOURCE = fcgi-$(LIBFCGI_VERSION).tar.gz
- LIBFCGI_SITE = http://www.fastcgi.com/dist
--LIBFCGI_LICENSE = fcgi license
-+LIBFCGI_LICENSE = OML
- LIBFCGI_LICENSE_FILES = LICENSE.TERMS
- LIBFCGI_INSTALL_STAGING = YES
- LIBFCGI_AUTORECONF = YES
+So, I'm puzzled.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
