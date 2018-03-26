@@ -1,106 +1,138 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 22:10:14 +0200
-Subject: [Buildroot] [git commit] package/systemd: add upstream build fix
-Message-ID: <20180326201029.F1EC283C54@busybox.osuosl.org>
+Date: Mon, 26 Mar 2018 22:18:29 +0200
+Subject: [Buildroot] [V3 1/2] dropbear: bump to version 2018.76
+In-Reply-To: <20180321160329.20768-1-francois.perrad@gadz.org>
+References: <20180321160329.20768-1-francois.perrad@gadz.org>
+Message-ID: <20180326221829.656d3d2a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef3304dabc1aef5c1035359211b1c3ca5d07eb3b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
+On Wed, 21 Mar 2018 17:03:28 +0100, Francois Perrad wrote:
+> with this new version:
+>   - "configure --enable-static" should now be used instead of
+>     "make STATIC=1"
+>   - any customised options should be put in localoptions.h
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-  http://autobuild.buildroot.org/results/4c439ee000354f90b4e59ee4006530f77263db47/
+With this patch applied, the following defconfig:
 
-Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-dont-include-libmount-h-in-a-header-file.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_DROPBEAR=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-diff --git a/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-new file mode 100644
-index 0000000000..b91d09722b
---- /dev/null
-+++ b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-@@ -0,0 +1,75 @@
-+From 227b8a762fea1458547be2cdf0e6e4aac0079730 Mon Sep 17 00:00:00 2001
-+From: Michael Olbrich <m.olbrich@pengutronix.de>
-+Date: Mon, 26 Mar 2018 17:34:53 +0200
-+Subject: [PATCH] core: don't include libmount.h in a header file (#8580)
-+
-+linux/fs.h sys/mount.h, libmount.h and missing.h all include MS_*
-+definitions.
-+
-+To avoid problems, only one of linux/fs.h, sys/mount.h and libmount.h
-+should be included. And missing.h must be included last.
-+
-+Without this, building systemd may fail with:
-+
-+In file included from [...]/libmount/libmount.h:31:0,
-+                 from ../systemd-238/src/core/manager.h:23,
-+                 from ../systemd-238/src/core/emergency-action.h:37,
-+                 from ../systemd-238/src/core/unit.h:34,
-+                 from ../systemd-238/src/core/dbus-timer.h:25,
-+                 from ../systemd-238/src/core/timer.c:26:
-+[...]/sys/mount.h:57:2: error: expected identifier before numeric constant
-+
-+Upstream: https://github.com/systemd/systemd/pull/8580
-+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-+---
-+ src/core/dbus-execute.c | 1 +
-+ src/core/manager.h      | 3 ++-
-+ src/core/mount.c        | 2 ++
-+ 3 files changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/core/dbus-execute.c b/src/core/dbus-execute.c
-+index 7344623ebf6..c342093bca4 100644
-+--- a/src/core/dbus-execute.c
-++++ b/src/core/dbus-execute.c
-+@@ -18,6 +18,7 @@
-+   along with systemd; If not, see <http://www.gnu.org/licenses/>.
-+ ***/
-+ 
-++#include <sys/mount.h>
-+ #include <sys/prctl.h>
-+ #include <stdio_ext.h>
-+ 
-+diff --git a/src/core/manager.h b/src/core/manager.h
-+index 28c5da225b1..e09e0cdf5e9 100644
-+--- a/src/core/manager.h
-++++ b/src/core/manager.h
-+@@ -20,7 +20,6 @@
-+   along with systemd; If not, see <http://www.gnu.org/licenses/>.
-+ ***/
-+ 
-+-#include <libmount.h>
-+ #include <stdbool.h>
-+ #include <stdio.h>
-+ 
-+@@ -34,6 +33,8 @@
-+ #include "list.h"
-+ #include "ratelimit.h"
-+ 
-++struct libmnt_monitor;
-++
-+ /* Enforce upper limit how many names we allow */
-+ #define MANAGER_MAX_NAMES 131072 /* 128K */
-+ 
-+diff --git a/src/core/mount.c b/src/core/mount.c
-+index 0e755da5c02..0154ebda5d6 100644
-+--- a/src/core/mount.c
-++++ b/src/core/mount.c
-+@@ -23,6 +23,8 @@
-+ #include <stdio.h>
-+ #include <sys/epoll.h>
-+ 
-++#include <libmount.h>
-++
-+ #include "sd-messages.h"
-+ 
-+ #include "alloc-util.h"
+fails to build with:
+
+>>> dropbear 2018.76 Building
+PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin"  /usr/bin/make -j5 MULTI=1 SCPPROGRESS=1 PROGRAMS="dropbear dropbearkey dropbearconvert scp dbclient ssh dbclient"  -C /home/thomas/projets/buildroot/output/build/dropbear-2018.76/
+Creating default_options_guard.h
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -c -I./libtomcrypt/src/headers/ -DLOCALOPTIONS_H_EXISTS -I. -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -W -Wall -Wno-pointer-sign -fno-strict-overflow -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2 -DDROPBEAR_SERVER -DDROPBEAR_CLIENT -DPROGRESS_METER -DDBMULTI_dropbear -DDBMULTI_dropbearkey -DDBMULTI_dropbearconvert -DDBMULTI_scp -DDBMULTI_dbclient -DDBMULTI_ssh -DDBMULTI_dbclient -DDROPBEAR_MULTI -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 dbmulti.c -o dbmulti.o
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -c -I./libtomcrypt/src/headers/ -DLOCALOPTIONS_H_EXISTS -I. -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -W -Wall -Wno-pointer-sign -fno-strict-overflow -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2 -DDROPBEAR_SERVER -DDROPBEAR_CLIENT -DPROGRESS_METER -DDBMULTI_dropbear -DDBMULTI_dropbearkey -DDBMULTI_dropbearconvert -DDBMULTI_scp -DDBMULTI_dbclient -DDBMULTI_ssh -DDBMULTI_dbclient -DDROPBEAR_MULTI -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 atomicio.c -o atomicio.o
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -c -I./libtomcrypt/src/headers/ -DLOCALOPTIONS_H_EXISTS -I. -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -W -Wall -Wno-pointer-sign -fno-strict-overflow -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2 -DDROPBEAR_SERVER -DDROPBEAR_CLIENT -DPROGRESS_METER -DDBMULTI_dropbear -DDBMULTI_dropbearkey -DDBMULTI_dropbearconvert -DDBMULTI_scp -DDBMULTI_dbclient -DDBMULTI_ssh -DDBMULTI_dbclient -DDROPBEAR_MULTI -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 bignum.c -o bignum.o
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -c -I./libtomcrypt/src/headers/ -DLOCALOPTIONS_H_EXISTS -I. -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -W -Wall -Wno-pointer-sign -fno-strict-overflow -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2 -DDROPBEAR_SERVER -DDROPBEAR_CLIENT -DPROGRESS_METER -DDBMULTI_dropbear -DDBMULTI_dropbearkey -DDBMULTI_dropbearconvert -DDBMULTI_scp -DDBMULTI_dbclient -DDBMULTI_ssh -DDBMULTI_dbclient -DDROPBEAR_MULTI -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 buffer.c -o buffer.o
+/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -c -I./libtomcrypt/src/headers/ -DLOCALOPTIONS_H_EXISTS -I. -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -W -Wall -Wno-pointer-sign -fno-strict-overflow -fPIE -fstack-protector-strong -D_FORTIFY_SOURCE=2 -DDROPBEAR_SERVER -DDROPBEAR_CLIENT -DPROGRESS_METER -DDBMULTI_dropbear -DDBMULTI_dropbearkey -DDBMULTI_dropbearconvert -DDBMULTI_scp -DDBMULTI_dbclient -DDBMULTI_ssh -DDBMULTI_dbclient -DDROPBEAR_MULTI -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 circbuffer.c -o circbuffer.o
+In file included from options.h:23:0,
+                 from includes.h:29,
+                 from bignum.c:27:
+sysoptions.h:237:3: error: #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+  #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+   ^
+In file included from options.h:23:0,
+                 from includes.h:29,
+                 from buffer.c:27:
+sysoptions.h:237:3: error: #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+  #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+   ^
+In file included from options.h:23:0,
+                 from includes.h:29,
+                 from dbmulti.c:25:
+sysoptions.h:237:3: error: #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+  #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+   ^
+In file included from options.h:23:0,
+                 from includes.h:29,
+                 from circbuffer.c:25:
+sysoptions.h:237:3: error: #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+  #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+   ^
+In file included from options.h:23:0,
+                 from includes.h:29,
+                 from atomicio.c:30:
+sysoptions.h:237:3: error: #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+  #error "DROPBEAR_SVR_PASSWORD_AUTH requires `crypt()'."
+   ^
+In file included from includes.h:119:0,
+                 from buffer.c:27:
+compat.h:43:7: error: conflicting types for ?__xpg_basename?
+ char *basename(const char* path);
+       ^
+/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/libgen.h:34:14: note: previous declaration of ?__xpg_basename? was here
+ extern char *__xpg_basename (char *__path) __THROW;
+              ^
+make[2]: *** [Makefile:128: buffer.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from includes.h:119:0,
+                 from circbuffer.c:25:
+compat.h:43:7: error: conflicting types for ?__xpg_basename?
+ char *basename(const char* path);
+       ^
+/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/libgen.h:34:14: note: previous declaration of ?__xpg_basename? was here
+ extern char *__xpg_basename (char *__path) __THROW;
+              ^
+make[2]: *** [Makefile:128: circbuffer.o] Error 1
+In file included from includes.h:119:0,
+                 from bignum.c:27:
+compat.h:43:7: error: conflicting types for ?__xpg_basename?
+ char *basename(const char* path);
+       ^
+/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/libgen.h:34:14: note: previous declaration of ?__xpg_basename? was here
+ extern char *__xpg_basename (char *__path) __THROW;
+              ^
+In file included from includes.h:119:0,
+                 from dbmulti.c:25:
+compat.h:43:7: error: conflicting types for ?__xpg_basename?
+ char *basename(const char* path);
+       ^
+/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/libgen.h:34:14: note: previous declaration of ?__xpg_basename? was here
+ extern char *__xpg_basename (char *__path) __THROW;
+              ^
+make[2]: *** [Makefile:128: bignum.o] Error 1
+make[2]: *** [Makefile:128: dbmulti.o] Error 1
+In file included from includes.h:119:0,
+                 from atomicio.c:30:
+compat.h:43:7: error: conflicting types for ?__xpg_basename?
+ char *basename(const char* path);
+       ^
+/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/libgen.h:34:14: note: previous declaration of ?__xpg_basename? was here
+ extern char *__xpg_basename (char *__path) __THROW;
+              ^
+make[2]: *** [Makefile:128: atomicio.o] Error 1
+make[1]: *** [package/pkg-generic.mk:224: /home/thomas/projets/buildroot/output/build/dropbear-2018.76/.stamp_built] Error 2
+make: *** [Makefile:79: _all] Error 2
+
+Could you have a look ?
+
+Thanks!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
