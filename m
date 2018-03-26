@@ -1,53 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 11:16:13 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: fix build break in sdk target
-In-Reply-To: <20180326072332.30808-1-chemobejk@gmail.com>
-References: <20180326072332.30808-1-chemobejk@gmail.com>
-Message-ID: <20180326111613.002ee281@windsurf>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon, 26 Mar 2018 12:39:18 +0100
+Subject: [Buildroot] [PATCH 1/1] brotli: disable unneeded check for C++
+ compiler
+Message-ID: <20180326113918.30054-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This adds a local patch, also submitted upstream, which modifies
+CMakeLists.txt to avoid the check for the unneeded C++ compiler.
 
-On Mon, 26 Mar 2018 10:23:32 +0300, Stefan Becker wrote:
-> After commit 6729050f3a49dba42d2d881d31dbefd6b82b8dad nothing creates
-> $(HOST_DIR)/share/buildroot anymore, causing sdk to fail with:
-> 
->  /bin/bash: .../output/host/share/buildroot/sdk-location: No such file or directory
-> 
-> Add creation of that directory to the "sdk" build steps itself.
-> 
-> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index a3a9d290d9..9e2402d7d9 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -574,6 +574,7 @@ sdk: world
->  	$(TOPDIR)/support/scripts/fix-rpath host
->  	$(TOPDIR)/support/scripts/fix-rpath staging
->  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
-> +	mkdir -p $(HOST_DIR)/share/buildroot
+Fixes:
+- http://autobuild.buildroot.net/results/68e05c634e62ba4b6f6eb8dc95eeb16faa58fd60
 
-While this is OK, I am still not sure to understand why you are seeing
-this problem. My commit 6729050f3a49dba42d2d881d31dbefd6b82b8dad moved
-the creation of the $(HOST_DIR)/share/buildroot folder from a
-dependency of the toolchain package, to a post-install staging hook of
-the toolchain package.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...-Tell-CMake-to-not-check-for-a-C-compiler.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/brotli/0001-Tell-CMake-to-not-check-for-a-C-compiler.patch
 
-But in both cases, the logic should be executed way before
-the sdk target is called.
-
-So, I'm puzzled.
-
-Thomas
+diff --git a/package/brotli/0001-Tell-CMake-to-not-check-for-a-C-compiler.patch b/package/brotli/0001-Tell-CMake-to-not-check-for-a-C-compiler.patch
+new file mode 100644
+index 0000000000..410de2830e
+--- /dev/null
++++ b/package/brotli/0001-Tell-CMake-to-not-check-for-a-C-compiler.patch
+@@ -0,0 +1,31 @@
++From fea0b1e46c486225d57e730cc0f94fa06b5b93fc Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Mon, 26 Mar 2018 12:12:00 +0100
++Subject: [PATCH] Tell CMake to not check for a C++ compiler
++
++By default CMake checks both for C and C++ compilers, while the latter
++is not needed. Setting the list of languages to just "C" in the call to
++project() removes the unneeded check.
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream-Status: Submitted [https://github.com/google/brotli/pull/653]
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2dc7232..3fbcbfb 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -4,7 +4,7 @@
++ # support 2.8.7.
++ cmake_minimum_required(VERSION 2.8.6)
++ 
++-project(brotli)
+++project(brotli LANGUAGES C)
++ 
++ # If Brotli is being bundled in another project, we don't want to
++ # install anything.  However, we want to let people override this, so
++-- 
++2.16.3
++
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.16.3
