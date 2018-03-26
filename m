@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Mar 2018 10:48:19 +0200
-Subject: [Buildroot] [git commit] Makefile: fix build break in sdk target
-Message-ID: <20180326085211.9FB7883BFA@busybox.osuosl.org>
+Date: Mon, 26 Mar 2018 10:51:13 +0200
+Subject: [Buildroot] [git commit] libfcgi: Use SPDX license identifier
+Message-ID: <20180326085211.B6BE283BFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6697f3bcdb4ecd6f311125670803933c8f5afb1b
+commit: https://git.buildroot.net/buildroot/commit/?id=b13d9ab380704ba4faf1e0295885797cb3341336
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After commit 6729050f3a49dba42d2d881d31dbefd6b82b8dad nothing creates
-$(HOST_DIR)/share/buildroot anymore, causing sdk to fail with:
+The fcgi license is covered by SPDX, the identifier however is not
+obvious.
 
- /bin/bash: .../output/host/share/buildroot/sdk-location: No such file or directory
+For details, see https://spdx.org/licenses/OML.html
 
-Add creation of that directory to the "sdk" build steps itself.
-
-Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+[Peter: add spdx.org link]
+Signed-off-by: Alexander Dahl <post@lespocky.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ package/libfcgi/libfcgi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index a3a9d290d9..9e2402d7d9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -574,6 +574,7 @@ sdk: world
- 	$(TOPDIR)/support/scripts/fix-rpath host
- 	$(TOPDIR)/support/scripts/fix-rpath staging
- 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
-+	mkdir -p $(HOST_DIR)/share/buildroot
- 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
- 
- # Populating the staging with the base directories is handled by the skeleton package
+diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
+index ced850c153..78da772916 100644
+--- a/package/libfcgi/libfcgi.mk
++++ b/package/libfcgi/libfcgi.mk
+@@ -7,7 +7,7 @@
+ LIBFCGI_VERSION = 2.4.0
+ LIBFCGI_SOURCE = fcgi-$(LIBFCGI_VERSION).tar.gz
+ LIBFCGI_SITE = http://www.fastcgi.com/dist
+-LIBFCGI_LICENSE = fcgi license
++LIBFCGI_LICENSE = OML
+ LIBFCGI_LICENSE_FILES = LICENSE.TERMS
+ LIBFCGI_INSTALL_STAGING = YES
+ LIBFCGI_AUTORECONF = YES
