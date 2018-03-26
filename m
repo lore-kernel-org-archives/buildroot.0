@@ -1,31 +1,127 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Mar 2018 21:54:10 +0200
-Subject: [Buildroot] [PATCH v5 1/5] qemu-host: remove support for some
- powerpc processors.
-In-Reply-To: <20180318190131.21404-2-aduskett@gmail.com>
-References: <20180318190131.21404-1-aduskett@gmail.com>
- <20180318190131.21404-2-aduskett@gmail.com>
-Message-ID: <20180326215410.6b598320@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Mar 2018 22:00:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add upstream build fix
+In-Reply-To: <20180326171933.21219-1-chemobejk@gmail.com>
+References: <20180326160755.GA2736@scaer>
+ <20180326171933.21219-1-chemobejk@gmail.com>
+Message-ID: <20180326200012.GC2736@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Stefan, All,
 
-On Sun, 18 Mar 2018 15:01:27 -0400, Adam Duskett wrote:
-> The 620, 630, and 970 are not supported at this time by qemu.
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+On 2018-03-26 20:19 +0300, Stefan Becker spake thusly:
+> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+
+Thanks for the quick respin! :-)
+
+Fixes: http://autobuild.buildroot.org/results/4c4/4c439ee000354f90b4e59ee4006530f77263db47/
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+And sorry if I sounded harsh in my previous review, that was not my
+intention. I do apologise.
+
+Regards,
+Yann E. MORIN.
+
 > ---
-> Changes v1 -> v4:
->   - Add patch to series.
+>  ...-dont-include-libmount-h-in-a-header-file.patch | 75 ++++++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+>  create mode 100644 package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
+> 
+> diff --git a/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
+> new file mode 100644
+> index 0000000000..b91d09722b
+> --- /dev/null
+> +++ b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
+> @@ -0,0 +1,75 @@
+> +From 227b8a762fea1458547be2cdf0e6e4aac0079730 Mon Sep 17 00:00:00 2001
+> +From: Michael Olbrich <m.olbrich@pengutronix.de>
+> +Date: Mon, 26 Mar 2018 17:34:53 +0200
+> +Subject: [PATCH] core: don't include libmount.h in a header file (#8580)
+> +
+> +linux/fs.h sys/mount.h, libmount.h and missing.h all include MS_*
+> +definitions.
+> +
+> +To avoid problems, only one of linux/fs.h, sys/mount.h and libmount.h
+> +should be included. And missing.h must be included last.
+> +
+> +Without this, building systemd may fail with:
+> +
+> +In file included from [...]/libmount/libmount.h:31:0,
+> +                 from ../systemd-238/src/core/manager.h:23,
+> +                 from ../systemd-238/src/core/emergency-action.h:37,
+> +                 from ../systemd-238/src/core/unit.h:34,
+> +                 from ../systemd-238/src/core/dbus-timer.h:25,
+> +                 from ../systemd-238/src/core/timer.c:26:
+> +[...]/sys/mount.h:57:2: error: expected identifier before numeric constant
+> +
+> +Upstream: https://github.com/systemd/systemd/pull/8580
+> +Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+> +---
+> + src/core/dbus-execute.c | 1 +
+> + src/core/manager.h      | 3 ++-
+> + src/core/mount.c        | 2 ++
+> + 3 files changed, 5 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/src/core/dbus-execute.c b/src/core/dbus-execute.c
+> +index 7344623ebf6..c342093bca4 100644
+> +--- a/src/core/dbus-execute.c
+> ++++ b/src/core/dbus-execute.c
+> +@@ -18,6 +18,7 @@
+> +   along with systemd; If not, see <http://www.gnu.org/licenses/>.
+> + ***/
+> + 
+> ++#include <sys/mount.h>
+> + #include <sys/prctl.h>
+> + #include <stdio_ext.h>
+> + 
+> +diff --git a/src/core/manager.h b/src/core/manager.h
+> +index 28c5da225b1..e09e0cdf5e9 100644
+> +--- a/src/core/manager.h
+> ++++ b/src/core/manager.h
+> +@@ -20,7 +20,6 @@
+> +   along with systemd; If not, see <http://www.gnu.org/licenses/>.
+> + ***/
+> + 
+> +-#include <libmount.h>
+> + #include <stdbool.h>
+> + #include <stdio.h>
+> + 
+> +@@ -34,6 +33,8 @@
+> + #include "list.h"
+> + #include "ratelimit.h"
+> + 
+> ++struct libmnt_monitor;
+> ++
+> + /* Enforce upper limit how many names we allow */
+> + #define MANAGER_MAX_NAMES 131072 /* 128K */
+> + 
+> +diff --git a/src/core/mount.c b/src/core/mount.c
+> +index 0e755da5c02..0154ebda5d6 100644
+> +--- a/src/core/mount.c
+> ++++ b/src/core/mount.c
+> +@@ -23,6 +23,8 @@
+> + #include <stdio.h>
+> + #include <sys/epoll.h>
+> + 
+> ++#include <libmount.h>
+> ++
+> + #include "sd-messages.h"
+> + 
+> + #include "alloc-util.h"
+> -- 
+> 2.14.3
+> 
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
