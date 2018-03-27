@@ -1,29 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Mar 2018 09:48:27 +0200
-Subject: [Buildroot] [PATCH] xerces: add upstream security fix
-In-Reply-To: <a3df0ee99de9a5f3595e657e19b48f004eea13ae.1522095782.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 26 Mar 2018 23:23:02 +0300")
-References: <a3df0ee99de9a5f3595e657e19b48f004eea13ae.1522095782.git.baruch@tkos.co.il>
-Message-ID: <87efk6t0vo.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Mar 2018 09:50:20 +0200
+Subject: [Buildroot] [PATCH v1 2/2] modem-manager: remove wrong gnutls
+ dependency comment
+In-Reply-To: <20180321202312.23021-2-ps.report@gmx.net> (Peter Seiderer's
+ message of "Wed, 21 Mar 2018 21:23:12 +0100")
+References: <20180321202312.23021-1-ps.report@gmx.net>
+ <20180321202312.23021-2-ps.report@gmx.net>
+Message-ID: <87a7uut0sj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > CVE-2017-12627: dereference of a NULL pointer while processing the path
- > to the DTD.
-
- > xerces 3.2.1 includes this patch. But this version also added
- > AC_RUN_IFELSE to its configure script, making cross compilation harder.
-
- > Switching to cmake is also problematic since the minimum required cmake
- > version is 3.2.0. The host dependencies check currently allows minimum
- > cmake version 3.1.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed, thanks.
 
