@@ -1,53 +1,95 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 27 Mar 2018 20:11:59 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-03-25
-In-Reply-To: <20180326060025.8B6EC20729@mail.bootlin.com>
-References: <20180326060025.8B6EC20729@mail.bootlin.com>
-Message-ID: <20180327201159.GD20140@momiji>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 27 Mar 2018 21:40:21 +0200
+Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
+In-Reply-To: <20180327110022.19980-1-yann.morin.1998@free.fr>
+References: <20180327110022.19980-1-yann.morin.1998@free.fr>
+Message-ID: <20180327214021.4d0e7b44@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Yann,
 
-On Mon, 26 Mar 2018 08:00:25 +0200 (CEST), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Tue, 27 Mar 2018 13:00:22 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Build failures related to your packages:
+> Some packages that use libtool really need some love to be able to
+> disable C++ support.
 > 
->          arm |                   brotli-1.0.3 | http://autobuild.buildroot.net/results/74d20ff38766466623cc4a9eb18afcda831bc20b
->          arm |                   brotli-1.0.3 | http://autobuild.buildroot.net/results/f1c4b5aeb12af7b7a3e8ae01c219004ecd9befd6
+> This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
+> is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
+> will want a C++ preprocessor that works on valid input *and* fail on
+> invalid input.
+> 
+> So, providing 'false' as the C++ compiler will then require that we do
+> have a working C++ preprocessor. Which is totally counter-productive
+> since we do not have a C++ compiler to start with...
+> 
+> bd39d11d2e (core/infra: fix build on toolchain without C++) was a
+> previous attempt at fixing this, by using the host's C++ preprocessor.
+> 
+> However, that is very incorrect (that's my code, I can say so!) because
+> the set of defines will most probably be different for the host and the
+> target, thus causign all sorts of trouble. For example, on ARM we'd have
+> to include different headers for soft-float vs hard-float, which is
+> decided based on a macro, which is not defined for x86, and thus may
+> redirect to the wrong (and missing) header.
+> 
+> Instead, we notice that libtool uses the magic value 'no' to decide that
+> a C++ compiler is not available, in which case it skeips the call to
+> AC_PROG_CXXCPP.
+> 
+> Given that 'no' is not provided by any package in Debian and
+> derivatives, as well as in Fedora, we can assume that no system will
+> have an executable called 'no'. Hence, we use that as a magic value to
+> disable C++ detection altogether.
+> 
+> Fixes: #10846 (again)
 
-For those two build failures the issue is that ?BR2_SHARED_LIBS? is unset, so
-Buildroot passes ?-DBUILD_SHARED_LIBS=OFF? to CMake in order to compile only
-static libraries. Unfortunately, the brotli CMake files do not respect the
-?BUILD_SHARED_LIBS? variable and always build both static+shared libraries.
-I have a PR sent upstream, which is being discussed and I'll send soon for
-inclusion in Buildroot:
+Fixes the gnutls configure failure described in Bug-10846...
 
-   https://github.com/google/brotli/pull/655
+Tested-by: Peter Seiderer <ps.report@gmx.net>
 
-Also, I have discovered that the woff2 package won't build after patching
-brotli, for a different reason: It includes a couple of ?FindBrotlidec.cmake?
-and ?FindBrotlienc.cmake? files which assume that pkg-config returns a single
-library name; but a static build of brotli will have both e.g. libbrotlienc
-and libbrotlicommon, so the latter never gets passed to the linker resulting
-in missing symbols. I am also working on a patch for this.
+Regards,
+Peter
 
-If it gets too hairy, I might consider making the brotli package depend on
-?BR2_SHARED_LIBS? until a fix is available.
-
-Cheers,
-
-
---
- Adri?n ?
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180327/e7b8372c/attachment.asc>
+> 
+> Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> ---
+> Changes v1 -> v2:
+>   - add big fat comment...
+> 
+> ---
+>  package/Makefile.in | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index e387ce67fe..57fb47ea2e 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -409,8 +409,16 @@ else
+>  NLS_OPTS = --disable-nls
+>  endif
+>  
+> +# We need anything that is invalid. Traditionally, we'd have used 'false' (and
+> +# we did so in the past). However, that breaks libtool for packages that have
+> +# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
+> +# C++ preprocessor as long as CXX is not 'no'.
+> +# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
+> +# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
+> +# expected and what we want), while at the same time taming libtool into
+> +# silence.
+>  ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+> -TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
+> +TARGET_CONFIGURE_OPTS += CXX=no
+>  endif
+>  
+>  ifeq ($(BR2_STATIC_LIBS),y)
