@@ -1,40 +1,54 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 27 Mar 2018 20:50:13 +0300
-Subject: [Buildroot] [PATCH] picocom: bump to version 3.1
-Message-ID: <9778647eaf3b808e55f736453fd405dfa2603bdb.1522173013.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Mar 2018 21:02:32 +0200
+Subject: [Buildroot] Buildroot 2018.02 Mosquitto v1.4.15 : no
+ CONNECT/CONNACK on libmosquitto
+In-Reply-To: <CALmdmcBazaBmEVUiCL3N6kCV4AgSp2Duqv2=iPzy1uUSTyCYyQ@mail.gmail.com>
+References: <CALmdmcBazaBmEVUiCL3N6kCV4AgSp2Duqv2=iPzy1uUSTyCYyQ@mail.gmail.com>
+Message-ID: <20180327210232.4692d68a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/picocom/picocom.hash | 2 +-
- package/picocom/picocom.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
-index f1558304930d..28f2d9cdc5a8 100644
---- a/package/picocom/picocom.hash
-+++ b/package/picocom/picocom.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a539db95bde3a5ebd52ae58a21f40d00cc2c97bf14b1f50caffc07257989112e  picocom-3.0.tar.gz
-+sha256 e6761ca932ffc6d09bd6b11ff018bdaf70b287ce518b3282d29e0270e88420bb  picocom-3.1.tar.gz
- sha256 9273c6b2c55be95f0f0df292d87e8900e5bfdf5b510a6ea09e80306cf45c10f6  LICENSE.txt
-diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
-index 0fa60f99c3b3..d27c7343766c 100644
---- a/package/picocom/picocom.mk
-+++ b/package/picocom/picocom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PICOCOM_VERSION = 3.0
-+PICOCOM_VERSION = 3.1
- PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
- PICOCOM_LICENSE = GPL-2.0+
- PICOCOM_LICENSE_FILES = LICENSE.txt
+On Tue, 27 Mar 2018 17:46:57 +0200, Alexis Lothor? wrote:
+
+> I have been using libmosquitto in C for quite some time in buildroot (used
+> in an EFL mainloop) and it works well. Here are some quick details about
+> how I currently use it :
+> * C API to create a client
+> * I use callbacks API to set callbacks on logs, connect/disconnect events,
+> publish/susbscribe events and so on
+> * connection uses TLS (certificate provided to API)
+> * once connected, Mosquitto file descriptor is provided and integrated to
+> EFL main loop
+> 
+> I recently switched to buildroot 2018.02 (it has upgraded mosquitto from
+> v1.4.14 to v1.4.15), and I am now encountering a new issue with the lib.
+> Trying to establish a new connection to my broker (using the
+> mosquitto_connect API), I can see that a new TCP connection is opened onto
+> the broker, but it seems that no MQTT data is transfered (i.e. no CONNECT
+> event), so the broker, of course, does not answer the usual CONNACK
+> (observed with tcpdump).
+> I have made sure that the issue only happens in v1.4.15. Quickly taking a
+> look on Eclipse Github, I saw no specific issue directly linked to this
+> problem.
+> Before diving more in depth in this issue on mosquitto code, I would like
+> to ask here : is there anyone encountering the same issue with this new
+> mosquitto version ? I did not see any comment about this in the mailing
+> list, but maybe the release is too young so it has not been detected yet ?
+> Or anyone can confirm that this new version, used as client with C API,
+> works on its side ?
+
+Did you try reverting commit f4df4a18e5dd4702f842e61ee815f13afd93c366,
+to bring back mosquitto to the 1.4.14 version ?
+
+Best regards,
+
+Thomas
 -- 
-2.16.2
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
