@@ -1,95 +1,175 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 27 Mar 2018 21:40:21 +0200
-Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
-In-Reply-To: <20180327110022.19980-1-yann.morin.1998@free.fr>
-References: <20180327110022.19980-1-yann.morin.1998@free.fr>
-Message-ID: <20180327214021.4d0e7b44@gmx.net>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 27 Mar 2018 23:05:54 +0300
+Subject: [Buildroot] [PATCH 1/2] brotli: fix building of static libraries
+Message-ID: <20180327200555.21748-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Include a patch to make CMake honor the BUILD_SHARED_LIBS which
+Buildroot sets t choose the kind of libraries to build.
 
-On Tue, 27 Mar 2018 13:00:22 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Fixes:
+- http://autobuild.buildroot.net/results/f1c4b5aeb12af7b7a3e8ae01c219004ecd9befd6/
+- http://autobuild.buildroot.net/results/74d20ff38766466623cc4a9eb18afcda831bc20b/
 
-> Some packages that use libtool really need some love to be able to
-> disable C++ support.
-> 
-> This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
-> is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
-> will want a C++ preprocessor that works on valid input *and* fail on
-> invalid input.
-> 
-> So, providing 'false' as the C++ compiler will then require that we do
-> have a working C++ preprocessor. Which is totally counter-productive
-> since we do not have a C++ compiler to start with...
-> 
-> bd39d11d2e (core/infra: fix build on toolchain without C++) was a
-> previous attempt at fixing this, by using the host's C++ preprocessor.
-> 
-> However, that is very incorrect (that's my code, I can say so!) because
-> the set of defines will most probably be different for the host and the
-> target, thus causign all sorts of trouble. For example, on ARM we'd have
-> to include different headers for soft-float vs hard-float, which is
-> decided based on a macro, which is not defined for x86, and thus may
-> redirect to the wrong (and missing) header.
-> 
-> Instead, we notice that libtool uses the magic value 'no' to decide that
-> a C++ compiler is not available, in which case it skeips the call to
-> AC_PROG_CXXCPP.
-> 
-> Given that 'no' is not provided by any package in Debian and
-> derivatives, as well as in Fedora, we can assume that no system will
-> have an executable called 'no'. Hence, we use that as a magic value to
-> disable C++ detection altogether.
-> 
-> Fixes: #10846 (again)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ ...-using-BUILD_SHARED_LIBS-to-choose-static.patch | 144 +++++++++++++++++++++
+ 1 file changed, 144 insertions(+)
+ create mode 100644 package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
 
-Fixes the gnutls configure failure described in Bug-10846...
-
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
-
-> 
-> Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - add big fat comment...
-> 
-> ---
->  package/Makefile.in | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index e387ce67fe..57fb47ea2e 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -409,8 +409,16 @@ else
->  NLS_OPTS = --disable-nls
->  endif
->  
-> +# We need anything that is invalid. Traditionally, we'd have used 'false' (and
-> +# we did so in the past). However, that breaks libtool for packages that have
-> +# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
-> +# C++ preprocessor as long as CXX is not 'no'.
-> +# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
-> +# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
-> +# expected and what we want), while at the same time taming libtool into
-> +# silence.
->  ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-> -TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
-> +TARGET_CONFIGURE_OPTS += CXX=no
->  endif
->  
->  ifeq ($(BR2_STATIC_LIBS),y)
+diff --git a/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
+new file mode 100644
+index 0000000000..33b9bb70ce
+--- /dev/null
++++ b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
+@@ -0,0 +1,144 @@
++From b60b613e7c2c9bf7a142c3c486ac6e77ad93f5d1 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Mon, 26 Mar 2018 19:08:31 +0100
++Subject: [PATCH] CMake: Allow using BUILD_SHARED_LIBS to choose static/shared
++ libs
++
++By convention projects using CMake which can build either static or
++shared libraries use a BUILD_SHARED_LIBS flag to allow selecting between
++both: the add_library() command automatically switches between both using
++this variable when the library kind is not passed to add_library(). It
++is also usual to expose the BUILD_SHARED_LIBS as an user-facing setting
++with the option() command.
++
++This way, the following will both work as expected:
++
++   % cmake -DBUILD_SHARED_LIBS=OFF ...
++   % cmake -DBUILS_SHARED_LIBS=ON ...
++
++This is helpful for distributions which need (or want) to build only
++static libraries.
++---
++ CMakeLists.txt        | 42 ++++++++++++++----------------------------
++ c/fuzz/test_fuzzer.sh |  6 +++---
++ 2 files changed, 17 insertions(+), 31 deletions(-)
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream-Status: Submitted [https://github.com/google/brotli/pull/655]
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 99b9258..3867931 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -6,6 +6,8 @@ cmake_minimum_required(VERSION 2.8.6)
++ 
++ project(brotli C)
++ 
+++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+++
++ # If Brotli is being bundled in another project, we don't want to
++ # install anything.  However, we want to let people override this, so
++ # we'll use the BROTLI_BUNDLED_MODE variable to let them do that; just
++@@ -114,10 +116,6 @@ set(BROTLI_LIBRARIES_CORE brotlienc brotlidec brotlicommon)
++ set(BROTLI_LIBRARIES ${BROTLI_LIBRARIES_CORE} ${LIBM_LIBRARY})
++ mark_as_advanced(BROTLI_LIBRARIES)
++ 
++-set(BROTLI_LIBRARIES_CORE_STATIC brotlienc-static brotlidec-static brotlicommon-static)
++-set(BROTLI_LIBRARIES_STATIC ${BROTLI_LIBRARIES_CORE_STATIC} ${LIBM_LIBRARY})
++-mark_as_advanced(BROTLI_LIBRARIES_STATIC)
++-
++ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
++   add_definitions(-DOS_LINUX)
++ elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
++@@ -137,24 +135,22 @@ endfunction()
++ transform_sources_list("scripts/sources.lst" "${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
++ include("${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
++ 
++-add_library(brotlicommon SHARED ${BROTLI_COMMON_C})
++-add_library(brotlidec SHARED ${BROTLI_DEC_C})
++-add_library(brotlienc SHARED ${BROTLI_ENC_C})
++-
++-add_library(brotlicommon-static STATIC ${BROTLI_COMMON_C})
++-add_library(brotlidec-static STATIC ${BROTLI_DEC_C})
++-add_library(brotlienc-static STATIC ${BROTLI_ENC_C})
+++add_library(brotlicommon ${BROTLI_COMMON_C})
+++add_library(brotlidec ${BROTLI_DEC_C})
+++add_library(brotlienc ${BROTLI_ENC_C})
++ 
++ # Older CMake versions does not understand INCLUDE_DIRECTORIES property.
++ include_directories(${BROTLI_INCLUDE_DIRS})
++ 
+++if(BUILD_SHARED_LIBS)
+++  foreach(lib brotlicommon brotlidec brotlienc)
+++    target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
+++    string(TOUPPER "${lib}" LIB)
+++    set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION" )
+++  endforeach()
+++endif()
+++
++ foreach(lib brotlicommon brotlidec brotlienc)
++-  target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
++-  string(TOUPPER "${lib}" LIB)
++-  set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION" )
++-endforeach()
++-
++-foreach(lib brotlicommon brotlidec brotlienc brotlicommon-static brotlidec-static brotlienc-static)
++   target_link_libraries(${lib} ${LIBM_LIBRARY})
++   set_property(TARGET ${lib} APPEND PROPERTY INCLUDE_DIRECTORIES ${BROTLI_INCLUDE_DIRS})
++   set_target_properties(${lib} PROPERTIES
++@@ -167,9 +163,6 @@ endforeach()
++ target_link_libraries(brotlidec brotlicommon)
++ target_link_libraries(brotlienc brotlicommon)
++ 
++-target_link_libraries(brotlidec-static brotlicommon-static)
++-target_link_libraries(brotlienc-static brotlicommon-static)
++-
++ # For projects stuck on older versions of CMake, this will set the
++ # BROTLI_INCLUDE_DIRS and BROTLI_LIBRARIES variables so they still
++ # have a relatively easy way to use Brotli:
++@@ -183,7 +176,7 @@ endif()
++ 
++ # Build the brotli executable
++ add_executable(brotli ${BROTLI_CLI_C})
++-target_link_libraries(brotli ${BROTLI_LIBRARIES_STATIC})
+++target_link_libraries(brotli ${BROTLI_LIBRARIES})
++ 
++ # Installation
++ if(NOT BROTLI_BUNDLED_MODE)
++@@ -199,13 +192,6 @@ if(NOT BROTLI_BUNDLED_MODE)
++     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
++   )
++ 
++-  install(
++-    TARGETS ${BROTLI_LIBRARIES_CORE_STATIC}
++-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
++-  )
++-
++   install(
++     DIRECTORY ${BROTLI_INCLUDE_DIRS}/brotli
++     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
++diff --git a/c/fuzz/test_fuzzer.sh b/c/fuzz/test_fuzzer.sh
++index 5c754e1..e85e12f 100755
++--- a/c/fuzz/test_fuzzer.sh
+++++ b/c/fuzz/test_fuzzer.sh
++@@ -14,12 +14,12 @@ mkdir bin
++ cd bin
++ 
++ cmake $BROTLI -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" \
++-    -DBUILD_TESTING=OFF -DENABLE_SANITIZER=address
++-make -j$(nproc) brotlidec-static
+++    -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DENABLE_SANITIZER=address
+++make -j$(nproc) brotlidec
++ 
++ ${CXX} -o run_decode_fuzzer -std=c++11 -fsanitize=address -I$SRC/include \
++     $SRC/fuzz/decode_fuzzer.cc $SRC/fuzz/run_decode_fuzzer.cc \
++-    ./libbrotlidec-static.a ./libbrotlicommon-static.a
+++    ./libbrotlidec.a ./libbrotlicommon.a
++ 
++ mkdir decode_corpora
++ unzip $BROTLI/java/org/brotli/integration/fuzz_data.zip -d decode_corpora
++-- 
++2.16.3
++
+-- 
+2.16.3
