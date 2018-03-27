@@ -1,7 +1,7 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Mar 2018 12:58:43 +0200
-Subject: [Buildroot] [PATCH] core: alternate solution to disable C++
-Message-ID: <20180327105843.19009-1-yann.morin.1998@free.fr>
+Date: Tue, 27 Mar 2018 13:00:22 +0200
+Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
+Message-ID: <20180327110022.19980-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -48,20 +48,34 @@ Cc: Peter Seiderer <ps.report@gmx.net>
 Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v1 -> v2:
+  - add big fat comment...
+
+---
+ package/Makefile.in | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/package/Makefile.in b/package/Makefile.in
-index e387ce67fe..a1b6c0252f 100644
+index e387ce67fe..57fb47ea2e 100644
 --- a/package/Makefile.in
 +++ b/package/Makefile.in
-@@ -410,7 +410,7 @@ NLS_OPTS = --disable-nls
+@@ -409,8 +409,16 @@ else
+ NLS_OPTS = --disable-nls
  endif
  
++# We need anything that is invalid. Traditionally, we'd have used 'false' (and
++# we did so in the past). However, that breaks libtool for packages that have
++# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
++# C++ preprocessor as long as CXX is not 'no'.
++# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
++# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
++# expected and what we want), while at the same time taming libtool into
++# silence.
  ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
 -TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
-+TARGET_CONFIGURE_OPTS += CXX=no CXXCPP=no
++TARGET_CONFIGURE_OPTS += CXX=no
  endif
  
  ifeq ($(BR2_STATIC_LIBS),y)
