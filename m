@@ -1,96 +1,73 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 27 Mar 2018 15:04:32 +0300
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Mar 2018 14:43:39 +0200
 Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
-In-Reply-To: <20180327110022.19980-1-yann.morin.1998@free.fr>
+In-Reply-To: <20180327111234.kf2qvwnyo5svpfpu@sapphire.tkos.co.il>
 References: <20180327110022.19980-1-yann.morin.1998@free.fr>
-Message-ID: <20180327111234.kf2qvwnyo5svpfpu@sapphire.tkos.co.il>
+ <20180327111234.kf2qvwnyo5svpfpu@sapphire.tkos.co.il>
+Message-ID: <20180327144339.23542eb9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-On Tue, Mar 27, 2018 at 01:00:22PM +0200, Yann E. MORIN wrote:
-> Some packages that use libtool really need some love to be able to
-> disable C++ support.
+On Tue, 27 Mar 2018 15:04:32 +0300, Baruch Siach wrote:
+> Hi Yann,
 > 
-> This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
-> is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
-> will want a C++ preprocessor that works on valid input *and* fail on
-> invalid input.
-> 
-> So, providing 'false' as the C++ compiler will then require that we do
-> have a working C++ preprocessor. Which is totally counter-productive
-> since we do not have a C++ compiler to start with...
-> 
-> bd39d11d2e (core/infra: fix build on toolchain without C++) was a
-> previous attempt at fixing this, by using the host's C++ preprocessor.
-> 
-> However, that is very incorrect (that's my code, I can say so!) because
-> the set of defines will most probably be different for the host and the
-> target, thus causign all sorts of trouble. For example, on ARM we'd have
-> to include different headers for soft-float vs hard-float, which is
-> decided based on a macro, which is not defined for x86, and thus may
-> redirect to the wrong (and missing) header.
-> 
-> Instead, we notice that libtool uses the magic value 'no' to decide that
-> a C++ compiler is not available, in which case it skeips the call to
-> AC_PROG_CXXCPP.
-> 
-> Given that 'no' is not provided by any package in Debian and
-> derivatives, as well as in Fedora, we can assume that no system will
-> have an executable called 'no'. Hence, we use that as a magic value to
-> disable C++ detection altogether.
-> 
-> Fixes: #10846 (again)
-> 
-> Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - add big fat comment...
-> 
-> ---
->  package/Makefile.in | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index e387ce67fe..57fb47ea2e 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -409,8 +409,16 @@ else
->  NLS_OPTS = --disable-nls
->  endif
->  
-> +# We need anything that is invalid. Traditionally, we'd have used 'false' (and
-> +# we did so in the past). However, that breaks libtool for packages that have
-> +# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
-> +# C++ preprocessor as long as CXX is not 'no'.
-> +# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
-> +# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
-> +# expected and what we want), while at the same time taming libtool into
-> +# silence.
->  ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-> -TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
-> +TARGET_CONFIGURE_OPTS += CXX=no
+> On Tue, Mar 27, 2018 at 01:00:22PM +0200, Yann E. MORIN wrote:
+> > Some packages that use libtool really need some love to be able to
+> > disable C++ support.
+> > 
+> > This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
+> > is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
+> > will want a C++ preprocessor that works on valid input *and* fail on
+> > invalid input.
+> > 
+> > So, providing 'false' as the C++ compiler will then require that we do
+> > have a working C++ preprocessor. Which is totally counter-productive
+> > since we do not have a C++ compiler to start with...
+> > 
+> > bd39d11d2e (core/infra: fix build on toolchain without C++) was a
+> > previous attempt at fixing this, by using the host's C++ preprocessor.
+> > 
+> > However, that is very incorrect (that's my code, I can say so!) because
+> > the set of defines will most probably be different for the host and the
+> > target, thus causign all sorts of trouble. For example, on ARM we'd have
+> > to include different headers for soft-float vs hard-float, which is
+> > decided based on a macro, which is not defined for x86, and thus may
+> > redirect to the wrong (and missing) header.
+> > 
+> > Instead, we notice that libtool uses the magic value 'no' to decide that
+> > a C++ compiler is not available, in which case it skeips the call to
 
-What about CXXCPP? Your v1 patch set it to 'no'.
+skeips -> skips
 
->  endif
->  
->  ifeq ($(BR2_STATIC_LIBS),y)
 
-baruch
+> > +# We need anything that is invalid. Traditionally, we'd have used 'false' (and
+> > +# we did so in the past). However, that breaks libtool for packages that have
+> > +# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
+> > +# C++ preprocessor as long as CXX is not 'no'.
+> > +# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
+> > +# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
+> > +# expected and what we want), while at the same time taming libtool into
+> > +# silence.
+> >  ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+> > -TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
+> > +TARGET_CONFIGURE_OPTS += CXX=no  
+> 
+> What about CXXCPP? Your v1 patch set it to 'no'.
 
+I think Yann's commit log explains it: if you specify CXX=no, then
+libtool will not try to search for a C++ pre-processor, hence it is no
+longer necessary to pass CXXCPP. At least that's my understanding of
+Yann's commit log.
+
+Best regards,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
