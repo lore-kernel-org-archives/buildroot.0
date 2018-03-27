@@ -1,103 +1,69 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Tue, 27 Mar 2018 10:57:47 +0200
-Subject: [Buildroot] RFC: gst1-plugins-good 1.14: enable-qt config option
-Message-ID: <484a4f60-327f-12a8-e90e-206c81d60253@ginzinger.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 27 Mar 2018 12:58:43 +0200
+Subject: [Buildroot] [PATCH] core: alternate solution to disable C++
+Message-ID: <20180327105843.19009-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So the goal here is to optionally get gst1-plugins-good's qt module to
-be built (and have the qmlglsink gstreamer element) with Qt and eglfs
-platform.
+Some packages that use libtool really need some love to be able to
+disable C++ support.
 
-(Keep in mind that the qt-module moved from plugins-bad to plugins-good
-during the 1.12 to 1.14 update):
+This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
+is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
+will want a C++ preprocessor that works on valid input *and* fail on
+invalid input.
 
-First, a config option for plugin-good's "qt" would be needed. here's
-some pseudo-code of what I mean, to make it clea:
+So, providing 'false' as the C++ compiler will then require that we do
+have a working C++ preprocessor. Which is totally counter-productive
+since we do not have a C++ compiler to start with...
 
-config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QT
-       bool "qt"
-       help
-         Qt plugin
+bd39d11d2e (core/infra: fix build on toolchain without C++) was a
+previous attempt at fixing this, by using the host's C++ preprocessor.
 
-(...)
+However, that is very incorrect (that's my code, I can say so!) because
+the set of defines will most probably be different for the host and the
+target, thus causign all sorts of trouble. For example, on ARM we'd have
+to include different headers for soft-float vs hard-float, which is
+decided based on a macro, which is not defined for x86, and thus may
+redirect to the wrong (and missing) header.
 
-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QT),y)
-GST1_PLUGINS_GOOD_CONF_OPTS += --enable-qt
-GST1_PLUGINS_GOOD_DEPENDENCIES += qt5
-else
-GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
-endif
+Instead, we notice that libtool uses the magic value 'no' to decide that
+a C++ compiler is not available, in which case it skeips the call to
+AC_PROG_CXXCPP.
 
-------------------
-ok. let's ignore that for a second. instead I simply remove --disable-qt
-(or say --enable-qt) and build it *after* Qt for now. Then I get:
+Given that 'no' is not provided by any package in Debian and
+derivatives, as well as in Fedora, we can assume that no system will
+have an executable called 'no'. Hence, we use that as a magic value to
+disable C++ detection altogether.
 
-configure: *** checking feature: Qt elements ***
+Fixes: #10846 (again)
 
-configure: *** for plug-ins: qt ***
+Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-checking for QT... yes
-
-checking for moc-qt5... no
-
-checking for moc... /home/martin/dev/buildroot-2018.02/output/host/bin/moc
-checking for rcc-qt5... no
-
-checking for rcc... /home/martin/dev/buildroot-2018.02/output/host/bin/rcc
-checking for uic-qt5... no
-
-checking for uic... /home/martin/dev/buildroot-2018.02/output/host/bin/uic
-configure: Cannot find QPA
-
-configure: *** These plugins will not be built: qt
-
-
-
-But the weird thing is that in config.h I don't get HAVE_QT:
-/* Define to enable Qt elements (used by qt). */
-
-/* #undef HAVE_QT */
-
-
-
-/* Define if Qt eglfs integration is installed */
-
-/* #undef HAVE_QT_EGLFS */
-
-
-One relevant path on configure.ac is:
-
-HAVE_QT="yes"
-        HAVE_QT_WINDOWING="no"
-
-        QT_VERSION="`$PKG_CONFIG --define-prefix --modversion Qt5Core`"
-
-        QPA_INCLUDE_PATH=`$PKG_CONFIG --variable=includedir
-Qt5Core`/QtGui/${QT_VERSION}/QtGui
-        AS_IF([test -f
-"$PKG_CONFIG_SYSROOT_DIR/$QPA_INCLUDE_PATH/qpa/qplatformnativeinterface.h"],
-[
-          QT_CFLAGS="$QT_CFLAGS
--I$PKG_CONFIG_SYSROOT_DIR/$QPA_INCLUDE_PATH"
-          HAVE_QT_QPA_HEADER="yes"
-
-        ], [AC_MSG_NOTICE([Cannot find QPA])])
-
-But I have
-output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtGui/5.9.4/QtGui/qpa/qplatformnativeinterface.h
-But if I didn't, I think this shouldn't be the reason this fails...
-
-
-HAVE_QT_WINDOWING should get yes because I should have EGL.
-
-
-Do I get something buildroot-specific wrong? Does anybody have such a
-configuration working locally?
-
-thanks
-
-                                martin
+diff --git a/package/Makefile.in b/package/Makefile.in
+index e387ce67fe..a1b6c0252f 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -410,7 +410,7 @@ NLS_OPTS = --disable-nls
+ endif
+ 
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+-TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
++TARGET_CONFIGURE_OPTS += CXX=no CXXCPP=no
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.14.1
