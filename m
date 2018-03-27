@@ -1,15 +1,17 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 27 Mar 2018 23:05:54 +0300
-Subject: [Buildroot] [PATCH 1/2] brotli: fix building of static libraries
-Message-ID: <20180327200555.21748-1-aperez@igalia.com>
+Date: Tue, 27 Mar 2018 23:05:55 +0300
+Subject: [Buildroot] [PATCH 2/2] woff2: fix static builds
+In-Reply-To: <20180327200555.21748-1-aperez@igalia.com>
+References: <20180327200555.21748-1-aperez@igalia.com>
+Message-ID: <20180327200555.21748-2-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Include a patch to make CMake honor the BUILD_SHARED_LIBS which
-Buildroot sets t choose the kind of libraries to build.
+Include a patch to make CMake correctly find the Brotli libraries when
+they have been built as static libraries.
 
 Fixes:
 - http://autobuild.buildroot.net/results/f1c4b5aeb12af7b7a3e8ae01c219004ecd9befd6/
@@ -17,159 +19,112 @@ Fixes:
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- ...-using-BUILD_SHARED_LIBS-to-choose-static.patch | 144 +++++++++++++++++++++
- 1 file changed, 144 insertions(+)
- create mode 100644 package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
+ ...e-multiple-libraries-being-returned-for-B.patch | 80 ++++++++++++++++++++++
+ package/woff2/woff2.mk                             |  7 ++
+ 2 files changed, 87 insertions(+)
+ create mode 100644 package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch
 
-diff --git a/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
+diff --git a/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch b/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch
 new file mode 100644
-index 0000000000..33b9bb70ce
+index 0000000000..142eab2718
 --- /dev/null
-+++ b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
-@@ -0,0 +1,144 @@
-+From b60b613e7c2c9bf7a142c3c486ac6e77ad93f5d1 Mon Sep 17 00:00:00 2001
++++ b/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch
+@@ -0,0 +1,80 @@
++From 9a6d50b3f355c1e4d72a235aa0bac4856dff1785 Mon Sep 17 00:00:00 2001
 +From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Mon, 26 Mar 2018 19:08:31 +0100
-+Subject: [PATCH] CMake: Allow using BUILD_SHARED_LIBS to choose static/shared
-+ libs
++Date: Tue, 27 Mar 2018 19:59:23 +0100
++Subject: [PATCH] CMake: Handle multiple libraries being returned for Brotli
 +
-+By convention projects using CMake which can build either static or
-+shared libraries use a BUILD_SHARED_LIBS flag to allow selecting between
-+both: the add_library() command automatically switches between both using
-+this variable when the library kind is not passed to add_library(). It
-+is also usual to expose the BUILD_SHARED_LIBS as an user-facing setting
-+with the option() command.
++Brotli is built as three libraries: libbrotlienc, libbrotlidec, and
++libbrotlicommon. When requesting the linker flags using pkg-config for
++e.g. libbrotlidec, it will return both libbrotlidec and libbrotlicommon.
++The FindBrotli*.cmake files ignore the names of the libraries returned
++by pkg-config, and hardcode only the libbrotli{enc,dec} names. While
++this is fine when using shared libraries (they contain an entry for
++libbrotlicommon as required library in their headers), it will cause
++linker errors when Brotli has been built as static libraries, due to
++the missing symbols from libbrotlicommon being unknown to the linker.
 +
-+This way, the following will both work as expected:
-+
-+   % cmake -DBUILD_SHARED_LIBS=OFF ...
-+   % cmake -DBUILS_SHARED_LIBS=ON ...
-+
-+This is helpful for distributions which need (or want) to build only
-+static libraries.
++This fixes FindBrotli*.cmake files by using the library names reported
++by pkg-config (instead of hardcoding them), and applying find_library()
++to each of the libraries to find their absolute paths. If any of the
++libraries is missing, the corresponding BROTLI{ENC,DEC}_LIBRARIES is
++unset to let find_package_handle_standard_args() report an error.
 +---
-+ CMakeLists.txt        | 42 ++++++++++++++----------------------------
-+ c/fuzz/test_fuzzer.sh |  6 +++---
-+ 2 files changed, 17 insertions(+), 31 deletions(-)
++ cmake/FindBrotliDec.cmake | 13 +++++++++----
++ cmake/FindBrotliEnc.cmake | 14 ++++++++++----
++ 2 files changed, 19 insertions(+), 8 deletions(-)
 +
 +Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+Upstream-Status: Submitted [https://github.com/google/brotli/pull/655]
++Upstream-Status: Submitted [https://github.com/google/woff2/pull/112]
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 99b9258..3867931 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -6,6 +6,8 @@ cmake_minimum_required(VERSION 2.8.6)
++diff --git a/cmake/FindBrotliDec.cmake b/cmake/FindBrotliDec.cmake
++index abb06f4..9cbb415 100644
++--- a/cmake/FindBrotliDec.cmake
+++++ b/cmake/FindBrotliDec.cmake
++@@ -18,10 +18,15 @@ find_path(BROTLIDEC_INCLUDE_DIRS
++     HINTS ${PC_BROTLIDEC_INCLUDEDIR}
++ )
 + 
-+ project(brotli C)
++-find_library(BROTLIDEC_LIBRARIES
++-    NAMES brotlidec
++-    HINTS ${PC_BROTLIDEC_LIBDIR}
++-)
+++set(BROTLIDEC_LIBRARIES "")
+++foreach(_lib ${PC_BROTLIDEC_LIBRARIES})
+++	find_library(PC_BROTLIDEC_PATH_${_lib} ${_lib} HINTS ${PC_BROTLIDEC_LIBRARY_DIRS})
+++	if(NOT PC_BROTLIDEC_PATH_${_lib})
+++		unset(BROTLIDEC_LIBRARIES)
+++		break()
+++	endif()
+++	list(APPEND BROTLIDEC_LIBRARIES "${PC_BROTLIDEC_PATH_${_lib}}")
+++endforeach()
 + 
-++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
-++
-+ # If Brotli is being bundled in another project, we don't want to
-+ # install anything.  However, we want to let people override this, so
-+ # we'll use the BROTLI_BUNDLED_MODE variable to let them do that; just
-+@@ -114,10 +116,6 @@ set(BROTLI_LIBRARIES_CORE brotlienc brotlidec brotlicommon)
-+ set(BROTLI_LIBRARIES ${BROTLI_LIBRARIES_CORE} ${LIBM_LIBRARY})
-+ mark_as_advanced(BROTLI_LIBRARIES)
++ include(FindPackageHandleStandardArgs)
++ find_package_handle_standard_args(BrotliDec
++diff --git a/cmake/FindBrotliEnc.cmake b/cmake/FindBrotliEnc.cmake
++index 4be347d..55f3932 100644
++--- a/cmake/FindBrotliEnc.cmake
+++++ b/cmake/FindBrotliEnc.cmake
++@@ -18,10 +18,16 @@ find_path(BROTLIENC_INCLUDE_DIRS
++     HINTS ${PC_BROTLIENC_INCLUDEDIR}
++ )
 + 
-+-set(BROTLI_LIBRARIES_CORE_STATIC brotlienc-static brotlidec-static brotlicommon-static)
-+-set(BROTLI_LIBRARIES_STATIC ${BROTLI_LIBRARIES_CORE_STATIC} ${LIBM_LIBRARY})
-+-mark_as_advanced(BROTLI_LIBRARIES_STATIC)
-+-
-+ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-+   add_definitions(-DOS_LINUX)
-+ elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-+@@ -137,24 +135,22 @@ endfunction()
-+ transform_sources_list("scripts/sources.lst" "${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
-+ include("${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
++-find_library(BROTLIENC_LIBRARIES
++-    NAMES brotlienc
++-    HINTS ${PC_BROTLIENC_LIBDIR}
++-)
+++set(BROTLIENC_LIBRARIES "")
+++foreach(_lib ${PC_BROTLIENC_LIBRARIES})
+++	find_library(PC_BROTLIENC_PATH_${_lib} ${_lib}
+++		HINTS ${PC_BROTLIENC_LIBRARY_DIRS})
+++	if(NOT PC_BROTLIENC_PATH_${_lib})
+++		unset(BROTLIENC_LIBRARIES)
+++		break()
+++	endif()
+++	list(APPEND BROTLIENC_LIBRARIES "${PC_BROTLIENC_PATH_${_lib}}")
+++endforeach()
 + 
-+-add_library(brotlicommon SHARED ${BROTLI_COMMON_C})
-+-add_library(brotlidec SHARED ${BROTLI_DEC_C})
-+-add_library(brotlienc SHARED ${BROTLI_ENC_C})
-+-
-+-add_library(brotlicommon-static STATIC ${BROTLI_COMMON_C})
-+-add_library(brotlidec-static STATIC ${BROTLI_DEC_C})
-+-add_library(brotlienc-static STATIC ${BROTLI_ENC_C})
-++add_library(brotlicommon ${BROTLI_COMMON_C})
-++add_library(brotlidec ${BROTLI_DEC_C})
-++add_library(brotlienc ${BROTLI_ENC_C})
-+ 
-+ # Older CMake versions does not understand INCLUDE_DIRECTORIES property.
-+ include_directories(${BROTLI_INCLUDE_DIRS})
-+ 
-++if(BUILD_SHARED_LIBS)
-++  foreach(lib brotlicommon brotlidec brotlienc)
-++    target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
-++    string(TOUPPER "${lib}" LIB)
-++    set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION" )
-++  endforeach()
-++endif()
-++
-+ foreach(lib brotlicommon brotlidec brotlienc)
-+-  target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
-+-  string(TOUPPER "${lib}" LIB)
-+-  set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION" )
-+-endforeach()
-+-
-+-foreach(lib brotlicommon brotlidec brotlienc brotlicommon-static brotlidec-static brotlienc-static)
-+   target_link_libraries(${lib} ${LIBM_LIBRARY})
-+   set_property(TARGET ${lib} APPEND PROPERTY INCLUDE_DIRECTORIES ${BROTLI_INCLUDE_DIRS})
-+   set_target_properties(${lib} PROPERTIES
-+@@ -167,9 +163,6 @@ endforeach()
-+ target_link_libraries(brotlidec brotlicommon)
-+ target_link_libraries(brotlienc brotlicommon)
-+ 
-+-target_link_libraries(brotlidec-static brotlicommon-static)
-+-target_link_libraries(brotlienc-static brotlicommon-static)
-+-
-+ # For projects stuck on older versions of CMake, this will set the
-+ # BROTLI_INCLUDE_DIRS and BROTLI_LIBRARIES variables so they still
-+ # have a relatively easy way to use Brotli:
-+@@ -183,7 +176,7 @@ endif()
-+ 
-+ # Build the brotli executable
-+ add_executable(brotli ${BROTLI_CLI_C})
-+-target_link_libraries(brotli ${BROTLI_LIBRARIES_STATIC})
-++target_link_libraries(brotli ${BROTLI_LIBRARIES})
-+ 
-+ # Installation
-+ if(NOT BROTLI_BUNDLED_MODE)
-+@@ -199,13 +192,6 @@ if(NOT BROTLI_BUNDLED_MODE)
-+     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-+   )
-+ 
-+-  install(
-+-    TARGETS ${BROTLI_LIBRARIES_CORE_STATIC}
-+-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-+-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-+-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-+-  )
-+-
-+   install(
-+     DIRECTORY ${BROTLI_INCLUDE_DIRS}/brotli
-+     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-+diff --git a/c/fuzz/test_fuzzer.sh b/c/fuzz/test_fuzzer.sh
-+index 5c754e1..e85e12f 100755
-+--- a/c/fuzz/test_fuzzer.sh
-++++ b/c/fuzz/test_fuzzer.sh
-+@@ -14,12 +14,12 @@ mkdir bin
-+ cd bin
-+ 
-+ cmake $BROTLI -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" \
-+-    -DBUILD_TESTING=OFF -DENABLE_SANITIZER=address
-+-make -j$(nproc) brotlidec-static
-++    -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DENABLE_SANITIZER=address
-++make -j$(nproc) brotlidec
-+ 
-+ ${CXX} -o run_decode_fuzzer -std=c++11 -fsanitize=address -I$SRC/include \
-+     $SRC/fuzz/decode_fuzzer.cc $SRC/fuzz/run_decode_fuzzer.cc \
-+-    ./libbrotlidec-static.a ./libbrotlicommon-static.a
-++    ./libbrotlidec.a ./libbrotlicommon.a
-+ 
-+ mkdir decode_corpora
-+ unzip $BROTLI/java/org/brotli/integration/fuzz_data.zip -d decode_corpora
++ include(FindPackageHandleStandardArgs)
++ find_package_handle_standard_args(BrotliEnc
 +-- 
 +2.16.3
 +
+diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
+index 23b88a5e9a..b2ff33fe98 100644
+--- a/package/woff2/woff2.mk
++++ b/package/woff2/woff2.mk
+@@ -14,4 +14,11 @@ WOFF2_DEPENDENCIES = brotli
+ WOFF2_CONF_OPTS = \
+ 	-DNOISY_LOGGING=OFF
+ 
++# The CMake build files for woff2 manually set some RPATH handling options
++# which make the installation steps fail with static builds, so pass this
++# to prevent any attempt of mangling RPATH that CMake would do.
++ifneq ($(BR2_SHARED_LIBS),y)
++WOFF2_CONF_OPTS += -DCMAKE_SKIP_RPATH=ON
++endif
++
+ $(eval $(cmake-package))
 -- 
 2.16.3
