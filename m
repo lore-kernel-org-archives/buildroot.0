@@ -1,41 +1,37 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 27 Mar 2018 09:25:14 +0200
-Subject: [Buildroot] [PATCH v1 2/2] modem-manager: remove wrong gnutls
- dependency comment
-In-Reply-To: <20180321202312.23021-2-ps.report@gmx.net>
-References: <20180321202312.23021-1-ps.report@gmx.net>
- <20180321202312.23021-2-ps.report@gmx.net>
-Message-ID: <20180327072512.GD30827@x230>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Mar 2018 09:44:36 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-03-26
+In-Reply-To: <20180327091525.7e785751@windsurf.home> (Thomas Petazzoni's
+ message of "Tue, 27 Mar 2018 09:15:25 +0200")
+References: <20180327060026.543B0206F3@mail.bootlin.com>
+ <20180327064509.n3kp4rdolibyqwud@sapphire.tkos.co.il>
+ <20180327091525.7e785751@windsurf.home>
+Message-ID: <87in9it123.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/modem-manager/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-> index 8e995b4175..215449a50e 100644
-> --- a/package/modem-manager/Config.in
-> +++ b/package/modem-manager/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_PACKAGE_MODEM_MANAGER
->  	bool "modemmanager"
->  	depends on BR2_PACKAGE_HAS_UDEV
-> -	depends on BR2_USE_WCHAR # libglib2 and gnutls
-> +	depends on BR2_USE_WCHAR # libglib2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
->  	depends on BR2_USE_MMU # dbus
->  	select BR2_PACKAGE_DBUS # runtime dependency
+ > So I see two options:
 
-Thanks for fixing it, ModemManager indeed does not depend on gnutls.
+ >  (1) Re-introduce a "core-dependencies" target, that is the same as the
+ >      "dependencies" target
 
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
+ >  (2) Tweak the autobuild-run script, and make a special case depending
+ >      on the branch name: if we're on 2018.02.x, use "core-dependencies",
+ >      otherwise use "dependencies".
 
-Kind regards,
-Petr
+ > Arnout, Peter, any preference ? I'm leaning towards (2) since that's
+ > the solution that doesn't pollute Buildroot with unnecessary stuff.
+
+I agree. It does mean that we need all autobuilders to update, but that
+shouldn't be a big problem.
+
+-- 
+Bye, Peter Korsgaard
