@@ -1,83 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Mar 2018 13:00:22 +0200
-Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
-Message-ID: <20180327110022.19980-1-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Mar 2018 13:22:18 +0200
+Subject: [Buildroot] [PATCH v1 1/2] gnutls: needs C++ support
+In-Reply-To: <20180327075631.GE30827@x230> (Petr Vorel's message of "Tue, 27
+ Mar 2018 09:56:33 +0200")
+References: <20180321202312.23021-1-ps.report@gmx.net>
+ <20180327075631.GE30827@x230>
+Message-ID: <87woxxsqz9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages that use libtool really need some love to be able to
-disable C++ support.
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
-is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
-will want a C++ preprocessor that works on valid input *and* fail on
-invalid input.
+Hi,
 
-So, providing 'false' as the C++ compiler will then require that we do
-have a working C++ preprocessor. Which is totally counter-productive
-since we do not have a C++ compiler to start with...
+ >> config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+ >> bool "multimedia support"
 
-bd39d11d2e (core/infra: fix build on toolchain without C++) was a
-previous attempt at fixing this, by using the host's C++ preprocessor.
+ > The only thing I can know and can confirm on this issue is that Connman and NetworkManager
+ > depend on GnuTLS (NetworkManager can use NSS, but that IMHO not in buildroot).
 
-However, that is very incorrect (that's my code, I can say so!) because
-the set of defines will most probably be different for the host and the
-target, thus causign all sorts of trouble. For example, on ARM we'd have
-to include different headers for soft-float vs hard-float, which is
-decided based on a macro, which is not defined for x86, and thus may
-redirect to the wrong (and missing) header.
+It is (libnss).
 
-Instead, we notice that libtool uses the magic value 'no' to decide that
-a C++ compiler is not available, in which case it skeips the call to
-AC_PROG_CXXCPP.
+ > Looking at GnuTLS it looks like it includes <cstdlib>, hence really depends on C++
+ > toolchain.
 
-Given that 'no' is not provided by any package in Debian and
-derivatives, as well as in Fedora, we can assume that no system will
-have an executable called 'no'. Hence, we use that as a magic value to
-disable C++ detection altogether.
+Yes, but those are conditionally includes:
 
-Fixes: #10846 (again)
+/* Many header files from the libstdc++ coming with g++ 3.3 or newer include
+   <libintl.h>, which chokes if dcgettext is defined as a macro.  So include
+   it now, to make later inclusions of <libintl.h> a NOP.  */
+#if defined(__cplusplus) && defined(__GNUG__) && (__GNUC__ >= 3)
+# include <cstdlib>
+# if (__GLIBC__ >= 2 && !defined __UCLIBC__) || _GLIBCXX_HAVE_LIBINTL_H
+#  include <libintl.h>
+# endif
+#endif
 
-Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
----
-Changes v1 -> v2:
-  - add big fat comment...
-
----
- package/Makefile.in | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index e387ce67fe..57fb47ea2e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -409,8 +409,16 @@ else
- NLS_OPTS = --disable-nls
- endif
- 
-+# We need anything that is invalid. Traditionally, we'd have used 'false' (and
-+# we did so in the past). However, that breaks libtool for packages that have
-+# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
-+# C++ preprocessor as long as CXX is not 'no'.
-+# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
-+# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
-+# expected and what we want), while at the same time taming libtool into
-+# silence.
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
--TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
-+TARGET_CONFIGURE_OPTS += CXX=no
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
 -- 
-2.14.1
+Bye, Peter Korsgaard
