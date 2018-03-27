@@ -1,240 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Mar 2018 09:54:56 +0200
-Subject: [Buildroot] [PATCH v1 1/2] gnutls: needs C++ support
-In-Reply-To: <20180321202312.23021-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Wed, 21 Mar 2018 21:23:11 +0100")
-References: <20180321202312.23021-1-ps.report@gmx.net>
-Message-ID: <87605it0kv.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Mar 2018 09:46:38 +0200
+Subject: [Buildroot] [git commit] xerces: add upstream security fix
+Message-ID: <20180327075508.6690581055@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=142c8cc8d525f687ce199cc0163d48892e8a81f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes Bug 10846 ([1]):
- >   checking how to run the C++ preprocessor... cpp
- >   configure: error: in `.../build/gnutls-3.5.17':
- >   configure: error: C++ preprocessor "cpp" fails sanity check
- >   See `config.log' for more details
+CVE-2017-12627: dereference of a NULL pointer while processing the path
+to the DTD.
 
- > [1] https://bugs.busybox.net/show_bug.cgi?id=10846
+xerces 3.2.1 includes this patch. But this version also added
+AC_RUN_IFELSE to its configure script, making cross compilation harder.
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- >  package/connman/Config.in         | 5 +++--
- >  package/gnutls/Config.in          | 6 ++++--
- >  package/libmicrohttpd/Config.in   | 6 ++++--
- >  package/libsoup/Config.in         | 5 +++--
- >  package/network-manager/Config.in | 6 ++++--
- >  package/samba4/Config.in          | 4 ++++
- >  package/taskd/Config.in           | 2 +-
- >  package/vpnc/Config.in            | 6 ++++--
- >  package/webkitgtk/Config.in       | 5 +++--
- >  9 files changed, 30 insertions(+), 15 deletions(-)
+Switching to cmake is also problematic since the minimum required cmake
+version is 3.2.0. The host dependencies check currently allows minimum
+cmake version 3.1.
 
-It is a bit stupid that we have pull in C++ support here and in all the
-reverse dependencies just because of a stupid configure check, but I
-guess it is the simplest/best solution.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xerces/0001-fix-CVE-2017-12627.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-Should we then also revert bd39d11d2eaa679f (core/infra: fix build on
-toolchain without C++)?
-
-Yann, Thomas, Arnout - What do you say?
-
-
- > diff --git a/package/connman/Config.in b/package/connman/Config.in
- > index 253c604e88..309a49829a 100644
- > --- a/package/connman/Config.in
- > +++ b/package/connman/Config.in
- > @@ -34,14 +34,15 @@ config BR2_PACKAGE_CONNMAN_WIFI
- >  config BR2_PACKAGE_CONNMAN_WISPR
- >  	bool "enable WISPr support"
- >  	depends on !BR2_STATIC_LIBS # gnutls
- > +	depends on BR2_INSTALL_LIBSTDCPP # gnutls
- >  	select BR2_PACKAGE_GNUTLS
- >  	help
- >  	  Enable support for Wireless Internet Service Provider
- >  	  roaming (WISPr). A RADIUS server is used to authenticate the
- >  	  subscriber's credentials.
- 
- > -comment "connman WISPr needs a toolchain w/ dynamic library"
- > -	depends on BR2_STATIC_LIBS
- > +comment "connman WISPr needs a toolchain w/ C++, dynamic library"
- > +	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
- 
- >  config BR2_PACKAGE_CONNMAN_BLUETOOTH
- >  	bool "enable Bluetooth support"
- > diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
- > index 176951a385..8663788e94 100644
- > --- a/package/gnutls/Config.in
- > +++ b/package/gnutls/Config.in
- > @@ -3,6 +3,7 @@ config BR2_PACKAGE_GNUTLS
- >  	# https://gitlab.com/gnutls/gnutls/issues/203
- >  	depends on !BR2_STATIC_LIBS
- >  	depends on BR2_USE_WCHAR
- > +	depends on BR2_INSTALL_LIBSTDCPP
- >  	select BR2_PACKAGE_LIBTASN1
- >  	select BR2_PACKAGE_LIBUNISTRING
- >  	select BR2_PACKAGE_NETTLE
- > @@ -25,5 +26,6 @@ config BR2_PACKAGE_GNUTLS_TOOLS
- 
- >  endif
- 
- > -comment "gnutls needs a toolchain w/ wchar, dynamic library"
- > -	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
- > +comment "gnutls needs a toolchain w/ wchar, C++, dynamic library"
- > +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS  || \
- > +		!BR2_INSTALL_LIBSTDCPP
- > diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
- > index 7f3c9bb8fd..9f074fb567 100644
- > --- a/package/libmicrohttpd/Config.in
- > +++ b/package/libmicrohttpd/Config.in
- > @@ -13,12 +13,14 @@ config BR2_PACKAGE_LIBMICROHTTPD_SSL
- >  	bool "https support"
- >  	depends on !BR2_STATIC_LIBS # gnutls
- >  	depends on BR2_USE_WCHAR
- > +	depends on BR2_INSTALL_LIBSTDCPP # gnutls
- >  	select BR2_PACKAGE_GNUTLS
- >  	help
- >  	  Enable HTTPS (SSL) support.
- 
- > -comment "libmicrohttpd https support needs a toolchain w/ wchar, dynamic library"
- > -	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
- > +comment "libmicrohttpd https support needs a toolchain w/ wchar, C++, dynamic library"
- > +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS  || \
- > +		!BR2_INSTALL_LIBSTDCPP
- 
- >  endif
- 
- > diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
- > index 236d3c428a..70f7d28b6d 100644
- > --- a/package/libsoup/Config.in
- > +++ b/package/libsoup/Config.in
- > @@ -23,13 +23,14 @@ config BR2_PACKAGE_LIBSOUP_GNOME
- >  config BR2_PACKAGE_LIBSOUP_SSL
- >  	bool "https support"
- >  	depends on !BR2_STATIC_LIBS # gnutls
- > +	depends on BR2_INSTALL_LIBSTDCPP # gnutls
- >  	select BR2_PACKAGE_GLIB_NETWORKING
- >  	select BR2_PACKAGE_GNUTLS
- >  	help
- >  	  Enable HTTPS (SSL) support.
- 
- > -comment "libsoup https support needs a toolchain w/ dynamic library"
- > -	depends on BR2_STATIC_LIBS
- > +comment "libsoup https support needs a toolchain w/ C++, dynamic library"
- > +	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
- 
- >  endif
- 
- > diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
- > index 72658c1278..f480ca2d40 100644
- > --- a/package/network-manager/Config.in
- > +++ b/package/network-manager/Config.in
- > @@ -2,6 +2,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
- >  	bool "networkmanager"
- >  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- >  	depends on !BR2_STATIC_LIBS # gnutls
- > +	depends on BR2_INSTALL_LIBSTDCPP # gnutls
- >  	depends on BR2_USE_MMU # dbus
- >  	depends on BR2_PACKAGE_HAS_UDEV
- >  	# Tested with 3.2, but may even work with earlier versions
- > @@ -64,8 +65,9 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
- 
- >  endif
- 
- > -comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.7, dynamic library"
- > +comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.7, C++, dynamic library"
- >  	depends on BR2_USE_MMU
- >  	depends on !BR2_PACKAGE_HAS_UDEV || \
- >  		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 || \
- > -		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
- > +		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS  || \
- > +		!BR2_INSTALL_LIBSTDCPP
- > diff --git a/package/samba4/Config.in b/package/samba4/Config.in
- > index 298fdc6608..b2d4379c0d 100644
- > --- a/package/samba4/Config.in
- > +++ b/package/samba4/Config.in
- > @@ -29,10 +29,14 @@ if BR2_PACKAGE_SAMBA4
- 
- >  config BR2_PACKAGE_SAMBA4_AD_DC
- >  	bool "AD DC"
- > +	depends on BR2_INSTALL_LIBSTDCPP
- >  	select BR2_PACKAGE_GNUTLS
- >  	help
- >  	  Enable Active Directory Domain Controller functionality.
- 
- > +comment "samba4 AD DC support needs a toolchain w/ C++"
- > +	depends on !BR2_INSTALL_LIBSTDCPP
- > +
- >  config BR2_PACKAGE_SAMBA4_ADS
- >  	bool "ADS"
- >  	select BR2_PACKAGE_OPENLDAP
- > diff --git a/package/taskd/Config.in b/package/taskd/Config.in
- > index 19d123fb59..e4a1dfab4f 100644
- > --- a/package/taskd/Config.in
- > +++ b/package/taskd/Config.in
- > @@ -3,7 +3,7 @@ config BR2_PACKAGE_TASKD
- >  	depends on !BR2_STATIC_LIBS # gnutls
- >  	depends on BR2_USE_WCHAR # gnutls
- >  	depends on BR2_USE_MMU # fork()
- > -	depends on BR2_INSTALL_LIBSTDCPP
- > +	depends on BR2_INSTALL_LIBSTDCPP # gnutls
- >  	select BR2_PACKAGE_GNUTLS
- >  	select BR2_PACKAGE_UTIL_LINUX
- >  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- > diff --git a/package/vpnc/Config.in b/package/vpnc/Config.in
- > index 6455b0d87a..738413961c 100644
- > --- a/package/vpnc/Config.in
- > +++ b/package/vpnc/Config.in
- > @@ -4,6 +4,7 @@ config BR2_PACKAGE_VPNC
- >  	depends on !BR2_STATIC_LIBS # gnutls
- >  	depends on BR2_USE_MMU # fork()
- >  	depends on BR2_USE_WCHAR # gnutls
- > +	depends on BR2_INSTALL_LIBSTDCPP # gnutls
- >  	select BR2_PACKAGE_LIBGCRYPT
- >  	select BR2_PACKAGE_LIBGPG_ERROR
- >  	select BR2_PACKAGE_GNUTLS
- > @@ -16,6 +17,7 @@ config BR2_PACKAGE_VPNC
- 
- >  	  http://www.unix-ag.uni-kl.de/~massar/vpnc
- 
- > -comment "vpnc needs a toolchain w/ wchar, dynamic library"
- > +comment "vpnc needs a toolchain w/ wchar, C++, dynamic library"
- >  	depends on BR2_USE_MMU
- > -	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
- > +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- > +		!BR2_INSTALL_LIBSTDCPP
- > diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
- > index 31794ed2a4..10bd55ebb9 100644
- > --- a/package/webkitgtk/Config.in
- > +++ b/package/webkitgtk/Config.in
- > @@ -56,13 +56,14 @@ if BR2_PACKAGE_WEBKITGTK
- >  config BR2_PACKAGE_WEBKITGTK_HTTPS
- >  	bool "HTTPS support"
- >  	depends on !BR2_STATIC_LIBS # gnutls -> libsoup
- > +	depends on BR2_INSTALL_LIBSTDCPP # gnutls -> libsoup
- >  	select BR2_PACKAGE_CA_CERTIFICATES # runtime
- >  	select BR2_PACKAGE_LIBSOUP_SSL
- >  	help
- >  	  Enable HTTPS protocol support.
- 
- > -comment "webkitgtk https support needs a toolchain w/ dynamic library"
- > -	depends on BR2_STATIC_LIBS
- > +comment "webkitgtk https support needs a toolchain w/ C++, dynamic library"
- > +	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
- 
- >  config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
- >  	bool "multimedia support"
- > -- 
- > 2.16.2
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xerces/0001-fix-CVE-2017-12627.patch b/package/xerces/0001-fix-CVE-2017-12627.patch
+new file mode 100644
+index 0000000000..010be7e3d5
+--- /dev/null
++++ b/package/xerces/0001-fix-CVE-2017-12627.patch
+@@ -0,0 +1,22 @@
++XMLString: Don't call catString if relativePath is null
++
++https://xerces.apache.org/xerces-c/secadv/CVE-2017-12627.txt
++
++Upstream status: svn revision 1819998
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++
++--- trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:58:30	1819997
+++++ trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:59:30	1819998
++@@ -920,7 +920,10 @@
++ 
++     XMLString::subString(tmpBuf, basePath, 0, (basePtr - basePath + 1), manager);
++     tmpBuf[basePtr - basePath + 1] = 0;
++-    XMLString::catString(tmpBuf, relativePath);
+++    if (relativePath)
+++    {
+++        XMLString::catString(tmpBuf, relativePath);
+++    }
++ 
++     removeDotSlash(tmpBuf, manager);
++ 
