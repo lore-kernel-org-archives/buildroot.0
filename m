@@ -1,51 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Mar 2018 08:00:26 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-03-26
-Message-ID: <20180327060026.543B0206F3@mail.bootlin.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 27 Mar 2018 09:45:10 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-03-26
+In-Reply-To: <20180327060026.543B0206F3@mail.bootlin.com>
+References: <20180327060026.543B0206F3@mail.bootlin.com>
+Message-ID: <20180327064509.n3kp4rdolibyqwud@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-Build statistics for 2018-03-26
-===============================
+On Tue, Mar 27, 2018 at 08:00:26AM +0200, Thomas Petazzoni wrote:
+> Build statistics for 2018-03-26
+> ===============================
+> 
+>       branch |  OK | NOK | TIM | TOT |
+>    2018.02.x | 194 |  10 |   0 | 204 |
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x | 194 |  10 |   0 | 204 |
+No reports on master. The web interface is also not showing recent master 
+builds. The last master build report is from 2018-03-25 22:43:51 
+(http://autobuild.buildroot.net/results/990/990732326160144b71f30938beb3f208cb882ea4/).
 
-Results for branch '2018.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-             bluez5_utils-5.48 | 2 
-                     php-7.2.3 | 2 
-                  cc-tool-0.26 | 1 
-           cups-filters-1.17.9 | 1 
-                   jamvm-2.0.0 | 1 
-                 mplayer-1.3.0 | 1 
-uclibc-ng-test-c6d62cbc6050... | 1 
-              wireshark-2.2.12 | 1 
-
-
-Detail of failures
-------------------
-
-     powerpc |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/1f73577da7e801074280b5fc444edd8536f538f5 |     
-        or1k |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/bc6711eb27c156060196be65ef9e8ad75ce8ab04 |     
-        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/eefb4fafd4e3a3bec7aad02f2777b68f91f38347 |     
-         arm |            cups-filters-1.17.9 | NOK | http://autobuild.buildroot.net/results/1c296fa2a28617746fd72a2d54b8fa9e4278a934 |     
-      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/d1cc83a82d85469f3d141f07469d3be3d018d9b6 | ORPH
-        i586 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/e411efdcb04a4be54f97a509093d6955e875ed80 |     
-         arm |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/447311bb9ed2bc1040420672ff7157994ce8cdaf | ORPH
-         arm |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/a6138b36154fc18d956d724ff892e3ac0640208a | ORPH
-        i586 | uclibc-ng-test-c6d62cbc6050... | NOK | http://autobuild.buildroot.net/results/dfa59e9a658c19598c5ba2264eb66b5e9d0daaba |     
-     powerpc |               wireshark-2.2.12 | NOK | http://autobuild.buildroot.net/results/912a867fed30497ed0a6bc563cc6e41e79eca7e0 | ORPH
-
+baruch
 
 -- 
-http://autobuild.buildroot.net
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
