@@ -1,54 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Mar 2018 21:02:32 +0200
-Subject: [Buildroot] Buildroot 2018.02 Mosquitto v1.4.15 : no
- CONNECT/CONNACK on libmosquitto
-In-Reply-To: <CALmdmcBazaBmEVUiCL3N6kCV4AgSp2Duqv2=iPzy1uUSTyCYyQ@mail.gmail.com>
-References: <CALmdmcBazaBmEVUiCL3N6kCV4AgSp2Duqv2=iPzy1uUSTyCYyQ@mail.gmail.com>
-Message-ID: <20180327210232.4692d68a@windsurf.home>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 27 Mar 2018 20:11:59 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-03-25
+In-Reply-To: <20180326060025.8B6EC20729@mail.bootlin.com>
+References: <20180326060025.8B6EC20729@mail.bootlin.com>
+Message-ID: <20180327201159.GD20140@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Tue, 27 Mar 2018 17:46:57 +0200, Alexis Lothor? wrote:
+On Mon, 26 Mar 2018 08:00:25 +0200 (CEST), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> I have been using libmosquitto in C for quite some time in buildroot (used
-> in an EFL mainloop) and it works well. Here are some quick details about
-> how I currently use it :
-> * C API to create a client
-> * I use callbacks API to set callbacks on logs, connect/disconnect events,
-> publish/susbscribe events and so on
-> * connection uses TLS (certificate provided to API)
-> * once connected, Mosquitto file descriptor is provided and integrated to
-> EFL main loop
+> Build failures related to your packages:
 > 
-> I recently switched to buildroot 2018.02 (it has upgraded mosquitto from
-> v1.4.14 to v1.4.15), and I am now encountering a new issue with the lib.
-> Trying to establish a new connection to my broker (using the
-> mosquitto_connect API), I can see that a new TCP connection is opened onto
-> the broker, but it seems that no MQTT data is transfered (i.e. no CONNECT
-> event), so the broker, of course, does not answer the usual CONNACK
-> (observed with tcpdump).
-> I have made sure that the issue only happens in v1.4.15. Quickly taking a
-> look on Eclipse Github, I saw no specific issue directly linked to this
-> problem.
-> Before diving more in depth in this issue on mosquitto code, I would like
-> to ask here : is there anyone encountering the same issue with this new
-> mosquitto version ? I did not see any comment about this in the mailing
-> list, but maybe the release is too young so it has not been detected yet ?
-> Or anyone can confirm that this new version, used as client with C API,
-> works on its side ?
+>          arm |                   brotli-1.0.3 | http://autobuild.buildroot.net/results/74d20ff38766466623cc4a9eb18afcda831bc20b
+>          arm |                   brotli-1.0.3 | http://autobuild.buildroot.net/results/f1c4b5aeb12af7b7a3e8ae01c219004ecd9befd6
 
-Did you try reverting commit f4df4a18e5dd4702f842e61ee815f13afd93c366,
-to bring back mosquitto to the 1.4.14 version ?
+For those two build failures the issue is that ?BR2_SHARED_LIBS? is unset, so
+Buildroot passes ?-DBUILD_SHARED_LIBS=OFF? to CMake in order to compile only
+static libraries. Unfortunately, the brotli CMake files do not respect the
+?BUILD_SHARED_LIBS? variable and always build both static+shared libraries.
+I have a PR sent upstream, which is being discussed and I'll send soon for
+inclusion in Buildroot:
 
-Best regards,
+   https://github.com/google/brotli/pull/655
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Also, I have discovered that the woff2 package won't build after patching
+brotli, for a different reason: It includes a couple of ?FindBrotlidec.cmake?
+and ?FindBrotlienc.cmake? files which assume that pkg-config returns a single
+library name; but a static build of brotli will have both e.g. libbrotlienc
+and libbrotlicommon, so the latter never gets passed to the linker resulting
+in missing symbols. I am also working on a patch for this.
+
+If it gets too hairy, I might consider making the brotli package depend on
+?BR2_SHARED_LIBS? until a fix is available.
+
+Cheers,
+
+
+--
+ Adri?n ?
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180327/e7b8372c/attachment.asc>
