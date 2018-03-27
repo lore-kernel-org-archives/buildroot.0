@@ -1,46 +1,39 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Tue, 27 Mar 2018 09:44:34 +0200
-Subject: [Buildroot] [PATCH] package/xterm: Avoid freetype2 path poisoning
- using imake
-Message-ID: <20180327074434.15306-1-valentin.korenblit@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 27 Mar 2018 09:47:54 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-03-26
+In-Reply-To: <87in9it123.fsf@dell.be.48ers.dk>
+References: <20180327060026.543B0206F3@mail.bootlin.com>
+ <20180327064509.n3kp4rdolibyqwud@sapphire.tkos.co.il>
+ <20180327091525.7e785751@windsurf.home>
+ <87in9it123.fsf@dell.be.48ers.dk>
+Message-ID: <20180327094754.35db48d1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When imake is installed on the host, it tries to include
-freetype headers from host, so we must override ac_cv_path_IMAKE
-to avoid this.
+Hello,
 
-Extract from config.log:
+On Tue, 27 Mar 2018 09:44:36 +0200, Peter Korsgaard wrote:
 
-configure:14803: checking if we should use imake to help
-configure:14820: result: yes
-configure:14829: checking for xmkmf
-configure:14846: found /usr/bin/xmkmf
-configure:14857: result: /usr/bin/xmkmf
-configure:14920: testing Using /usr/bin/xmkmf  ...
-configure:15015: testing IMAKE_CFLAGS  -I. -I/usr/include/freetype2
+>  > Arnout, Peter, any preference ? I'm leaning towards (2) since that's
+>  > the solution that doesn't pollute Buildroot with unnecessary stuff.  
+> 
+> I agree. It does mean that we need all autobuilders to update, but that
+> shouldn't be a big problem.
 
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
----
- package/xterm/xterm.mk | 3 +++
- 1 file changed, 3 insertions(+)
+It also means that if someone uses autobuild-run to test another branch
+than 2018.02.x, master or next, we have no idea whether we should use
+"dependencies" or "core-dependencies".
 
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 645de92e22..ff2b77459e 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -14,6 +14,9 @@ XTERM_CONF_OPTS = --enable-256-color \
- 	--x-includes=$(STAGING_DIR)/usr/include \
- 	--x-libraries=$(STAGING_DIR)/usr/lib
- 
-+# Avoid freetype2 path poisoning using imake
-+XTERM_CONF_ENV = ac_cv_path_IMAKE=
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
- XTERM_DEPENDENCIES += xlib_libXft
- XTERM_CONF_OPTS += --enable-freetype \
+But well, I believe autobuild-run is kind of an internal tool, it's not
+really meant to be used as a generic tool. If people do this, then it's
+up to them to figure out how to tweak it.
+
+Thomas
 -- 
-2.14.3
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
