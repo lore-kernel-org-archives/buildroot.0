@@ -1,130 +1,91 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 27 Mar 2018 23:05:55 +0300
-Subject: [Buildroot] [PATCH 2/2] woff2: fix static builds
-In-Reply-To: <20180327200555.21748-1-aperez@igalia.com>
-References: <20180327200555.21748-1-aperez@igalia.com>
-Message-ID: <20180327200555.21748-2-aperez@igalia.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 27 Mar 2018 23:22:16 +0200
+Subject: [Buildroot] [PATCH 1/1] i2pd: new package
+In-Reply-To: <20180325232759.51802cb4@windsurf>
+References: <20180315195012.12760-1-fontaine.fabrice@gmail.com>
+ <20180325232759.51802cb4@windsurf>
+Message-ID: <CAPi7W81Q3-j-dbzEiLwTcOp0jvcZmyU3OWk_BzcBczVNsAWATg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Include a patch to make CMake correctly find the Brotli libraries when
-they have been built as static libraries.
+Dear Thomas,
 
-Fixes:
-- http://autobuild.buildroot.net/results/f1c4b5aeb12af7b7a3e8ae01c219004ecd9befd6/
-- http://autobuild.buildroot.net/results/74d20ff38766466623cc4a9eb18afcda831bc20b/
+2018-03-25 23:27 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- ...e-multiple-libraries-being-returned-for-B.patch | 80 ++++++++++++++++++++++
- package/woff2/woff2.mk                             |  7 ++
- 2 files changed, 87 insertions(+)
- create mode 100644 package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch
+> Hello,
+>
+> On Thu, 15 Mar 2018 20:50:12 +0100, Fabrice Fontaine wrote:
+> > i2pd (I2P Daemon) is a full-featured C++ implementation of I2P
+> > client.
+> >
+> > I2P (Invisible Internet Protocol) is a universal anonymous
+> > network layer.
+> > All communications over I2P are anonymous and end-to-end
+> > encrypted, participants don't reveal their real IP addresses.
+> >
+> > http://i2pd.website
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Generally looks good. Just a few questions.
+>
+> >  ...ix-cmake-error-when-DBUILD_SHARED_LIBS-ON.patch | 28 +++++++++
+> >  package/i2pd/0002-Install-libi2pdclient.patch      | 69
+> +++++++++++++++++++++
+>
+> Did you send those patches upstream ?
+>
+Yes, both were sent and applied upstream:
+ - https://github.com/PurpleI2P/i2pd/commit/6d15be9a32989b0d00312a5b2589e3
+6ba0ea7836
+ - https://github.com/PurpleI2P/i2pd/commit/1d934bd543360bfdd40e1501d16d8b
+eb2016ccd8
 
-diff --git a/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch b/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch
-new file mode 100644
-index 0000000000..142eab2718
---- /dev/null
-+++ b/package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch
-@@ -0,0 +1,80 @@
-+From 9a6d50b3f355c1e4d72a235aa0bac4856dff1785 Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Tue, 27 Mar 2018 19:59:23 +0100
-+Subject: [PATCH] CMake: Handle multiple libraries being returned for Brotli
-+
-+Brotli is built as three libraries: libbrotlienc, libbrotlidec, and
-+libbrotlicommon. When requesting the linker flags using pkg-config for
-+e.g. libbrotlidec, it will return both libbrotlidec and libbrotlicommon.
-+The FindBrotli*.cmake files ignore the names of the libraries returned
-+by pkg-config, and hardcode only the libbrotli{enc,dec} names. While
-+this is fine when using shared libraries (they contain an entry for
-+libbrotlicommon as required library in their headers), it will cause
-+linker errors when Brotli has been built as static libraries, due to
-+the missing symbols from libbrotlicommon being unknown to the linker.
-+
-+This fixes FindBrotli*.cmake files by using the library names reported
-+by pkg-config (instead of hardcoding them), and applying find_library()
-+to each of the libraries to find their absolute paths. If any of the
-+libraries is missing, the corresponding BROTLI{ENC,DEC}_LIBRARIES is
-+unset to let find_package_handle_standard_args() report an error.
-+---
-+ cmake/FindBrotliDec.cmake | 13 +++++++++----
-+ cmake/FindBrotliEnc.cmake | 14 ++++++++++----
-+ 2 files changed, 19 insertions(+), 8 deletions(-)
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+Upstream-Status: Submitted [https://github.com/google/woff2/pull/112]
-+
-+diff --git a/cmake/FindBrotliDec.cmake b/cmake/FindBrotliDec.cmake
-+index abb06f4..9cbb415 100644
-+--- a/cmake/FindBrotliDec.cmake
-++++ b/cmake/FindBrotliDec.cmake
-+@@ -18,10 +18,15 @@ find_path(BROTLIDEC_INCLUDE_DIRS
-+     HINTS ${PC_BROTLIDEC_INCLUDEDIR}
-+ )
-+ 
-+-find_library(BROTLIDEC_LIBRARIES
-+-    NAMES brotlidec
-+-    HINTS ${PC_BROTLIDEC_LIBDIR}
-+-)
-++set(BROTLIDEC_LIBRARIES "")
-++foreach(_lib ${PC_BROTLIDEC_LIBRARIES})
-++	find_library(PC_BROTLIDEC_PATH_${_lib} ${_lib} HINTS ${PC_BROTLIDEC_LIBRARY_DIRS})
-++	if(NOT PC_BROTLIDEC_PATH_${_lib})
-++		unset(BROTLIDEC_LIBRARIES)
-++		break()
-++	endif()
-++	list(APPEND BROTLIDEC_LIBRARIES "${PC_BROTLIDEC_PATH_${_lib}}")
-++endforeach()
-+ 
-+ include(FindPackageHandleStandardArgs)
-+ find_package_handle_standard_args(BrotliDec
-+diff --git a/cmake/FindBrotliEnc.cmake b/cmake/FindBrotliEnc.cmake
-+index 4be347d..55f3932 100644
-+--- a/cmake/FindBrotliEnc.cmake
-++++ b/cmake/FindBrotliEnc.cmake
-+@@ -18,10 +18,16 @@ find_path(BROTLIENC_INCLUDE_DIRS
-+     HINTS ${PC_BROTLIENC_INCLUDEDIR}
-+ )
-+ 
-+-find_library(BROTLIENC_LIBRARIES
-+-    NAMES brotlienc
-+-    HINTS ${PC_BROTLIENC_LIBDIR}
-+-)
-++set(BROTLIENC_LIBRARIES "")
-++foreach(_lib ${PC_BROTLIENC_LIBRARIES})
-++	find_library(PC_BROTLIENC_PATH_${_lib} ${_lib}
-++		HINTS ${PC_BROTLIENC_LIBRARY_DIRS})
-++	if(NOT PC_BROTLIENC_PATH_${_lib})
-++		unset(BROTLIENC_LIBRARIES)
-++		break()
-++	endif()
-++	list(APPEND BROTLIENC_LIBRARIES "${PC_BROTLIENC_PATH_${_lib}}")
-++endforeach()
-+ 
-+ include(FindPackageHandleStandardArgs)
-+ find_package_handle_standard_args(BrotliEnc
-+-- 
-+2.16.3
-+
-diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
-index 23b88a5e9a..b2ff33fe98 100644
---- a/package/woff2/woff2.mk
-+++ b/package/woff2/woff2.mk
-@@ -14,4 +14,11 @@ WOFF2_DEPENDENCIES = brotli
- WOFF2_CONF_OPTS = \
- 	-DNOISY_LOGGING=OFF
- 
-+# The CMake build files for woff2 manually set some RPATH handling options
-+# which make the installation steps fail with static builds, so pass this
-+# to prevent any attempt of mangling RPATH that CMake would do.
-+ifneq ($(BR2_SHARED_LIBS),y)
-+WOFF2_CONF_OPTS += -DCMAKE_SKIP_RPATH=ON
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.16.3
+>
+>
+> > diff --git a/package/i2pd/S99i2pd b/package/i2pd/S99i2pd
+> > new file mode 100644
+> > index 0000000000..68ba792dd2
+> > --- /dev/null
+> > +++ b/package/i2pd/S99i2pd
+> > @@ -0,0 +1,38 @@
+> > +#!/bin/sh
+> > +
+> > +NAME=i2pd
+> > +PIDFILE=/var/run/$NAME.pid
+> > +DAEMON=/usr/bin/$NAME
+> > +DAEMON_ARGS="--conf=/etc/i2pd/i2pd.conf --tunconf=/etc/i2pd/tunnels.conf
+> --pidfile=/var/run/i2pd.pid --logfile=/var/log/i2pd.log --daemon --service"
+> > +
+> > +start() {
+> > +     printf "Starting $NAME: "
+> > +     $DAEMON $DAEMON_ARGS
+> > +     [ $? = 0 ] && echo "OK" || echo "FAIL"
+> > +}
+> > +stop() {
+> > +     printf "Stopping $NAME: "
+> > +     kill $PIDFILE
+> > +     [ $? = 0 ] && echo "OK" || echo "FAIL"
+>
+> Any reason not to use start-stop-daemon in this init script ?
+>
+Not really, I will update my patch to use it.
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180327/a100d151/attachment.html>
