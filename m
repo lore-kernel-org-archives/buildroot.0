@@ -1,37 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Mar 2018 09:44:36 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-03-26
-In-Reply-To: <20180327091525.7e785751@windsurf.home> (Thomas Petazzoni's
- message of "Tue, 27 Mar 2018 09:15:25 +0200")
-References: <20180327060026.543B0206F3@mail.bootlin.com>
- <20180327064509.n3kp4rdolibyqwud@sapphire.tkos.co.il>
- <20180327091525.7e785751@windsurf.home>
-Message-ID: <87in9it123.fsf@dell.be.48ers.dk>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Tue, 27 Mar 2018 09:44:34 +0200
+Subject: [Buildroot] [PATCH] package/xterm: Avoid freetype2 path poisoning
+ using imake
+Message-ID: <20180327074434.15306-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+When imake is installed on the host, it tries to include
+freetype headers from host, so we must override ac_cv_path_IMAKE
+to avoid this.
 
-Hi,
+Extract from config.log:
 
- > So I see two options:
+configure:14803: checking if we should use imake to help
+configure:14820: result: yes
+configure:14829: checking for xmkmf
+configure:14846: found /usr/bin/xmkmf
+configure:14857: result: /usr/bin/xmkmf
+configure:14920: testing Using /usr/bin/xmkmf  ...
+configure:15015: testing IMAKE_CFLAGS  -I. -I/usr/include/freetype2
 
- >  (1) Re-introduce a "core-dependencies" target, that is the same as the
- >      "dependencies" target
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+---
+ package/xterm/xterm.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- >  (2) Tweak the autobuild-run script, and make a special case depending
- >      on the branch name: if we're on 2018.02.x, use "core-dependencies",
- >      otherwise use "dependencies".
-
- > Arnout, Peter, any preference ? I'm leaning towards (2) since that's
- > the solution that doesn't pollute Buildroot with unnecessary stuff.
-
-I agree. It does mean that we need all autobuilders to update, but that
-shouldn't be a big problem.
-
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 645de92e22..ff2b77459e 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -14,6 +14,9 @@ XTERM_CONF_OPTS = --enable-256-color \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+ 	--x-libraries=$(STAGING_DIR)/usr/lib
+ 
++# Avoid freetype2 path poisoning using imake
++XTERM_CONF_ENV = ac_cv_path_IMAKE=
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
+ XTERM_DEPENDENCIES += xlib_libXft
+ XTERM_CONF_OPTS += --enable-freetype \
 -- 
-Bye, Peter Korsgaard
+2.14.3
