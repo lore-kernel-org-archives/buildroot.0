@@ -1,40 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 27 Mar 2018 23:37:50 +0200
-Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.5
-Message-ID: <20180327213750.7720-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 28 Mar 2018 08:00:19 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-03-27
+Message-ID: <20180328060019.4A3AC2084D@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 2e615ad447..b4a6d00cca 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 c3fc800cf9106db4ef5a5ef1fba7d144b21d73b68ad78234e182ebab12079277  cjson-v1.7.4.tar.gz
-+sha256 a8252abef9c4e0e672fe247cb46318f00a0aa975e455c8d943ae91492249dc3a  cjson-v1.7.5.tar.gz
- sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 7c302abbf5..60bb73945a 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CJSON_VERSION = v1.7.4
-+CJSON_VERSION = v1.7.5
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+Build statistics for 2018-03-27
+===============================
+
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x | 191 |  10 |   0 | 201 |
+
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                     php-7.2.3 | 4 
+             bluez5_utils-5.48 | 3 
+           cups-filters-1.17.9 | 1 
+uclibc-ng-test-c6d62cbc6050... | 1 
+              wireshark-2.2.12 | 1 
+
+
+Detail of failures
+------------------
+
+      xtensa |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/fd645035990c1bc8190dbaccf81643cd328fba97 |     
+         arm |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/ac23cfa90887d1bf9baa52fe4931b8ce24fba5ac |     
+     powerpc |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/a2659afdf2ffe5826ee7dfc49f89fed7c52298e8 |     
+ powerpc64le |            cups-filters-1.17.9 | NOK | http://autobuild.buildroot.net/results/74a7f2103b9b7ef7db8f84d9065ae40198565d7e |     
+      x86_64 |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/4f4b72298861c5b3d3cf0d5c1b0b9ad66ab58e95 | ORPH
+      xtensa |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/e6e6127ce028f93f1de5bae1ea84e778e48227d5 | ORPH
+         arm |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/33027099916dc7a59bc38acc59bfcfdf0a231658 | ORPH
+microblazeel |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/c7e4ec843d15ceaa14683d65071e0f960b3c7e2c | ORPH
+        i586 | uclibc-ng-test-c6d62cbc6050... | NOK | http://autobuild.buildroot.net/results/4165464b39063508cb271b89fa49a84ed3ebf24a |     
+        i686 |               wireshark-2.2.12 | NOK | http://autobuild.buildroot.net/results/d9069fb5cd301482a51bf6ae6e92660ee933791d | ORPH
+
+
 -- 
-2.14.1
+http://autobuild.buildroot.net
