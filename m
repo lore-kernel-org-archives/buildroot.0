@@ -1,46 +1,100 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 28 Mar 2018 20:13:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wayland-protocols: bump version to
- 1.13
-Message-ID: <20180328181350.25188-1-bernd.kuhls@t-online.de>
+Date: Wed, 28 Mar 2018 20:16:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.0.0
+Message-ID: <20180328181643.25623-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Rebased 0002-Fix-endianess-detection-with-musl-based-toolchains.patch
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/wayland-protocols/wayland-protocols.hash | 8 ++++----
- package/wayland-protocols/wayland-protocols.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk                      |  2 +-
+ ...2-Fix-endianess-detection-with-musl-based-toolchains.patch | 11 +++++++----
+ package/mesa3d/mesa3d.hash                                    | 10 +++++-----
+ package/mesa3d/mesa3d.mk                                      |  2 +-
+ 4 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index d1d643caa7..9cbb4fef72 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-December/036037.html
--md5 ac83c4704003323b6bd5a1b91fb1be53  wayland-protocols-1.12.tar.xz
--sha1 ac908e91c6c5e7802c0af48f55725ad683017e72  wayland-protocols-1.12.tar.xz
--sha256 3b19e8a9e1e19474756a7069db23b90ca9b8ebb438448c6063b4a7fc89b7c8b2  wayland-protocols-1.12.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2018-February/036992.html
-+md5 29312149dafcd4a0e739ba94995a574d  wayland-protocols-1.13.tar.xz
-+sha1 1b4b3385e168c361b4d350668d92f3a90ceee189  wayland-protocols-1.13.tar.xz
-+sha256 0758bc8008d5332f431b2a84fea7de64d971ce270ed208206a098ff2ebc68f38  wayland-protocols-1.13.tar.xz
- sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index 0d23e9af32..bba0979934 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 50dcb67278..b48d965d8a 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.3.7
++MESA3D_HEADERS_VERSION = 18.0.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/0002-Fix-endianess-detection-with-musl-based-toolchains.patch b/package/mesa3d/0002-Fix-endianess-detection-with-musl-based-toolchains.patch
+index 4846b34c9d..4c46593456 100644
+--- a/package/mesa3d/0002-Fix-endianess-detection-with-musl-based-toolchains.patch
++++ b/package/mesa3d/0002-Fix-endianess-detection-with-musl-based-toolchains.patch
+@@ -16,6 +16,7 @@ http://autobuild.buildroot.net/results/e27/e27a9a95f72dba3076549beb2a2ccfdbea2fc
+ 
+ Patch sent upstream: https://patchwork.freedesktop.org/patch/119961/
+ 
++[Bernd: rebase on mesa 18.0.0]
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ [Romain: rebase on mesa 17.3.1]
+ Signed-off-by: Romain Naour <romain.naour@gmail.com>
+@@ -41,14 +42,16 @@ diff --git a/src/amd/Makefile.addrlib.am b/src/amd/Makefile.addrlib.am
+ index 46689637f9..508edfd0d5 100644
+ --- a/src/amd/Makefile.addrlib.am
+ +++ b/src/amd/Makefile.addrlib.am
+-@@ -30,6 +30,7 @@ addrlib_libamdgpu_addrlib_la_CPPFLAGS = \
++@@ -29,7 +29,8 @@
++ 	-I$(srcdir)/addrlib/inc/chip/gfx9 \
+  	-I$(srcdir)/addrlib/inc/chip/r800 \
+  	-I$(srcdir)/addrlib/gfx9/chip \
+- 	-I$(srcdir)/addrlib/r800/chip \
+-+	$(DEFINES) \
+- 	-DBRAHMA_BUILD=1
++-	-I$(srcdir)/addrlib/r800/chip
+++	-I$(srcdir)/addrlib/r800/chip \
+++	$(DEFINES)
+  
+  addrlib_libamdgpu_addrlib_la_CXXFLAGS = \
++ 	$(VISIBILITY_CXXFLAGS) $(CXX11_CXXFLAGS)
+ diff --git a/src/util/u_endian.h b/src/util/u_endian.h
+ index 9e09f80181..038a28fac9 100644
+ --- a/src/util/u_endian.h
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 4bc4e820b8..ed88910bab 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2018-March/000410.html
+-md5 769137f2538562c300c4b76bcb097377  mesa-17.3.7.tar.xz
+-sha1 c66108a562cc94a9559357ca2b424f99c7f995e8  mesa-17.3.7.tar.xz
+-sha256 0595904a8fba65a8fe853a84ad3c940205503b94af41e8ceed245fada777ac1e  mesa-17.3.7.tar.xz
+-sha512 ec48565556aa4281056cee5dbef140553651fdfbb76ce32397de048db1cf65f5e18787c72b998de7da2de795d27e7040bde84651ade4726fc3a69a23b166ba4e  mesa-17.3.7.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2018-March/000412.html
++md5 c2a59fc5b56de3e197fa3a6023409e23  mesa-18.0.0.tar.xz
++sha1 361ed565bb7d243c251bfccd4fe2776f54c6d968  mesa-18.0.0.tar.xz
++sha256 694e5c3d37717d23258c1f88bc134223c5d1aac70518d2f9134d6df3ee791eea  mesa-18.0.0.tar.xz
++sha512 1494bb09357896a2505b3dcfec772268e28c765804f21e144948a314f1d79d99ff9f21062ef5860eb5a5a568b305a9c954585924a7ac8890fe1ebd8df3bcc396  mesa-18.0.0.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+ sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 8e4aa7d5ac..1d88fd8480 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--WAYLAND_PROTOCOLS_VERSION = 1.12
-+WAYLAND_PROTOCOLS_VERSION = 1.13
- WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.3.7
++MESA3D_VERSION = 18.0.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.14.2
