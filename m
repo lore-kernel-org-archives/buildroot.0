@@ -1,49 +1,58 @@
-From: James Byrne <james.byrne@origamienergy.com>
-Date: Wed, 28 Mar 2018 13:26:39 +0100
-Subject: [Buildroot] [PATCH 1/1] Makefile: Correctly take source date from
- commit date
-Message-ID: <1522239999-15582-1-git-send-email-james.byrne@origamienergy.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 28 Mar 2018 13:11:32 +0000
+Subject: [Buildroot] [Bug 10896] New: /bin/sh not in /etc/shells
+Message-ID: <bug-10896-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For reproducible builds SOURCE_DATE_EPOCH is supposed to be set to the
-date of the last Buildroot commit if running from a git repository, but
-this doesn't actually work. This corrects this in the following way:
+https://bugs.busybox.net/show_bug.cgi?id=10896
 
-1) Set GIT from BR2_GIT, otherwise it may be undefined.
+            Bug ID: 10896
+           Summary: /bin/sh not in /etc/shells
+           Product: buildroot
+           Version: 2018.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: posted at heine.so
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-2) Use 'git rev-parse --is-inside-work-tree' to see if we are inside a
-Git repository. There is no need to use TOPDIR, because the current
-directory will always be TOPDIR, and in any case the Git repository may
-be at a higher directory level if Buildroot has been imported into a
-larger build system.
+Hi,
 
-Signed-off-by: James Byrne <james.byrne@origamienergy.com>
----
- Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I just updated my buildroot build from 2017.11 to 2018.02. 
+It broke my root ssh login.
 
-diff --git a/Makefile b/Makefile
-index 9e2402d..59af554 100644
---- a/Makefile
-+++ b/Makefile
-@@ -253,8 +253,10 @@ export TZ = UTC
- export LANG = C
- export LC_ALL = C
- export GZIP = -n
--BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
--export SOURCE_DATE_EPOCH ?= $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
-+GIT := $(call qstrip,$(BR2_GIT))
-+BR2_IN_WORK_TREE = $(if $(subst false,,$(shell $(GIT) rev-parse --is-inside-work-tree 2> /dev/null || echo false)),Y,)
-+BR2_VERSION_GIT_EPOCH = $(shell $(GIT) log -1 --format=%at)
-+export SOURCE_DATE_EPOCH ?= $(if $(BR2_IN_WORK_TREE),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
- endif
+I see the following message in my journal: 
 
- # To put more focus on warnings, be less verbose as default
---
-2.7.4
+  dropbear[383]: User 'root' has invalid shell, rejected
 
-The contents of this email and any attachment are confidential to the intended recipient(s). If you are not an intended recipient: (i) do not use, disclose, distribute, copy or publish this email or its contents; (ii) please contact the sender immediately; and (iii) delete this email. Origami Energy Limited (company number 8619644); Origami Storage Limited (company number 10436515) and OSSPV001 Limited (company number 10933403), each registered in England and each with a registered office at: Ashcombe Court, Woolsack Way, Godalming, GU7 1LQ.
+In 2017.11 there was no /etc/shells. Now there is one.
+My /etc/shells contains only /bin/bash. But not /bin/sh. But my root users has
+/bin/sh as shell, so the error makes sense.
+
+Some quick comparison shows that the file /etc/shells was added in this commit:
+
+4d279697afbf8fb2952 package/bash: add /bin/bash to /etc/shells
+
+I see on the mailing list Romain Naour posted a series of commits which would
+also add /bin/sh to shells in the skeleton-init-common. But this is still not
+applied.
+
+So I would suggest to either apply the patch series for the next maintenance
+release or remove the before mentioned commit.
+
+
+Regards,
+Michael
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
