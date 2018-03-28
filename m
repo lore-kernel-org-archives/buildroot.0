@@ -1,76 +1,116 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 29 Mar 2018 00:08:08 +0200
-Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
-In-Reply-To: <20180327214021.4d0e7b44@gmx.net>
-References: <20180327110022.19980-1-yann.morin.1998@free.fr>
- <20180327214021.4d0e7b44@gmx.net>
-Message-ID: <a6c522f3-7744-4863-5d51-400d907080ae@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 29 Mar 2018 01:12:01 +0300
+Subject: [Buildroot] [PATCH v2] gawk: bump to version 4.2.1
+Message-ID: <d4d06a0eadf0455d927974974cae855eb5f1738d.1522275121.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Enable static build. gawk builds statically just fine. The shared
+library check has been removed in 4.1.1.
 
+Remove the symlink force hunk from the no-versioned patch. The only user
+of LN is in the part that this patch disables.
 
-On 27-03-18 21:40, Peter Seiderer wrote:
-> Hello Yann,
-> 
-> On Tue, 27 Mar 2018 13:00:22 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
->> Some packages that use libtool really need some love to be able to
->> disable C++ support.
->>
->> This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
->> is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
->> will want a C++ preprocessor that works on valid input *and* fail on
->> invalid input.
->>
->> So, providing 'false' as the C++ compiler will then require that we do
->> have a working C++ preprocessor. Which is totally counter-productive
->> since we do not have a C++ compiler to start with...
->>
->> bd39d11d2e (core/infra: fix build on toolchain without C++) was a
->> previous attempt at fixing this, by using the host's C++ preprocessor.
->>
->> However, that is very incorrect (that's my code, I can say so!) because
->> the set of defines will most probably be different for the host and the
->> target, thus causign all sorts of trouble. For example, on ARM we'd have
->> to include different headers for soft-float vs hard-float, which is
->> decided based on a macro, which is not defined for x86, and thus may
->> redirect to the wrong (and missing) header.
->>
->> Instead, we notice that libtool uses the magic value 'no' to decide that
->> a C++ compiler is not available, in which case it skeips the call to
->> AC_PROG_CXXCPP.
->>
->> Given that 'no' is not provided by any package in Debian and
->> derivatives, as well as in Fedora, we can assume that no system will
->> have an executable called 'no'. Hence, we use that as a magic value to
->> disable C++ detection altogether.
->>
->> Fixes: #10846 (again)
-> 
-> Fixes the gnutls configure failure described in Bug-10846...
-> 
-> Tested-by: Peter Seiderer <ps.report@gmx.net>
+Add license file hash.
 
- Does that also imply that your earlier patch [1] can be marked as Superseded?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: Update dependency comment text
+---
+ package/gawk/0001-no-versioned.patch | 10 ----------
+ package/gawk/Config.in               |  5 ++---
+ package/gawk/gawk.hash               |  5 ++++-
+ package/gawk/gawk.mk                 | 10 +---------
+ 4 files changed, 7 insertions(+), 23 deletions(-)
 
- Regards,
- Arnout
-
-[1] http://patchwork.ozlabs.org/patch/889057/
-
-> 
-> Regards,
-> Peter
-[snip]
-
+diff --git a/package/gawk/0001-no-versioned.patch b/package/gawk/0001-no-versioned.patch
+index 0c35088e8656..c5bbdddeb5ef 100644
+--- a/package/gawk/0001-no-versioned.patch
++++ b/package/gawk/0001-no-versioned.patch
+@@ -1,5 +1,4 @@
+ Disabled versioned installation of binaries to save space.
+-Also use symlinks where it's appropiate.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for 4.1.2]
+@@ -7,15 +6,6 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ diff -Nura gawk-4.1.2.orig/Makefile.in gawk-4.1.2/Makefile.in
+ --- gawk-4.1.2.orig/Makefile.in	2015-04-29 16:11:09.367925925 -0300
+ +++ gawk-4.1.2/Makefile.in	2015-04-29 16:11:25.308466495 -0300
+-@@ -554,7 +554,7 @@
+- CLEANFILES = core core.*
+- 
+- # We want hard links for install-exec-hook, below
+--LN = ln
+-+LN = $(LN_S)
+- 
+- # For some make's, e.g. OpenBSD, that don't define this
+- RM = rm -f
+ @@ -1173,6 +1173,7 @@
+  # (This is done universally, which may not always be right, but
+  # there's no easy way to distinguish GNU from non-GNU systems.)
+diff --git a/package/gawk/Config.in b/package/gawk/Config.in
+index a065243b7db1..e9cf4c5ff774 100644
+--- a/package/gawk/Config.in
++++ b/package/gawk/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GAWK
+ 	bool "gawk"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU # fork()
+-	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+ 	  A special-purpose programming language which is data driven
+@@ -11,7 +10,7 @@ config BR2_PACKAGE_GAWK
+ 
+ 	  http://www.gnu.org/software/gawk/
+ 
+-comment "gawk needs a toolchain w/ wchar, dynamic library"
++comment "gawk needs a toolchain w/ wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
++	depends on !BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index e2c7806cc5d7..d8dd27c17c37 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	53e184e2d0f90def9207860531802456322be091c7b48f23fdc79cda65adc266	gawk-4.1.4.tar.xz
++# https://ftp.gnu.org/gnu/gawk/gawk-4.2.1.tar.xz.sig
++sha256	d1119785e746d46a8209d28b2de404a57f983aa48670f4e225531d3bdc175551	gawk-4.2.1.tar.xz
++# Locally calculated
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index a3a292737361..0779736882b5 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GAWK_VERSION = 4.1.4
++GAWK_VERSION = 4.2.1
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk
+@@ -44,13 +44,5 @@ endef
+ 
+ GAWK_POST_INSTALL_TARGET_HOOKS += GAWK_CREATE_SYMLINK
+ 
+-# Assume we support shared libs
+-# The check isn't cross-compile friendly and it's mandatory anyway
+-define GAWK_DISABLE_SHARED_CHECK
+-	$(SED) 's/ check-for-shared-lib-support//' $(@D)/extension/Makefile.in
+-endef
+-
+-GAWK_POST_PATCH_HOOKS += GAWK_DISABLE_SHARED_CHECK
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.16.2
