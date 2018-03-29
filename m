@@ -1,41 +1,85 @@
 From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Thu, 29 Mar 2018 13:33:40 +0200
-Subject: [Buildroot] [PATCH v4 05/11] package/llvm: enable ARM
+Date: Thu, 29 Mar 2018 13:33:39 +0200
+Subject: [Buildroot] [PATCH v4 04/11] package/mesa3d: enable llvm support
 In-Reply-To: <20180329113346.10367-1-valentin.korenblit@smile.fr>
 References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
-Message-ID: <20180329113346.10367-6-valentin.korenblit@smile.fr>
+Message-ID: <20180329113346.10367-5-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds LLVM support for ARM
+This patch provides LLVM support for Mesa3D, enabling llvmpipe
+software rasterizer.
+
+It uses llvm-config (host variant) installed in STAGING_DIR/usr/bin
+to get LLVM libraries. Assuming that LLVM version 5.0.1 is installed,
+llvm-config --libs will output -lLLVM-5.0.
 
 Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Tested-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
 ---
 
-Tested llvmpipe running glmark2-es2 on Raspberry Pi 2 and 3(32-bit)
+Once the system has llvm, radeonsi Gallium driver could be added to support
+Southern Islands and newer GPUs. I haven't done it because I don't have the
+hardware to test it yet.
 
- package/llvm/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mesa3d/Config.in |  8 ++++++++
+ package/mesa3d/mesa3d.mk | 17 ++++++++++++++---
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 7f36bc802b..e695017da3 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -1,10 +1,12 @@
- config BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index f141587c4d..e99e737d31 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -25,6 +25,14 @@ menuconfig BR2_PACKAGE_MESA3D
+ 
+ if BR2_PACKAGE_MESA3D
+ 
++config BR2_PACKAGE_MESA3D_LLVM
++	bool "mesa3d w/ llvm"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	select BR2_PACKAGE_LLVM
++
++comment "mesa3d w/ llvm needs llvm"
++	depends on !BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++
+ # inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
  	bool
-+	default y if BR2_arm || BR2_armeb
- 	default y if BR2_i386 || BR2_x86_64
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 8e4aa7d5ac..498ad57eed 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -32,6 +32,20 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ MESA3D_CONF_OPTS += --disable-static
+ endif
  
- config BR2_PACKAGE_LLVM_TARGET_ARCH
- 	string
-+	default "ARM" if BR2_arm || BR2_armeb
- 	default "X86" if BR2_i386 || BR2_x86_64
++ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
++MESA3D_DEPENDENCIES += host-llvm llvm
++MESA3D_CONF_OPTS += \
++	--with-llvm-prefix=$(STAGING_DIR)/usr \
++	--enable-llvm-shared-libs \
++	--enable-llvm
++else
++# Avoid automatic search of llvm-config
++MESA3D_CONF_OPTS += \
++	--with-llvm-prefix=$(STAGING_DIR)/usr \
++	--disable-llvm-shared-libs \
++	--disable-llvm
++endif
++
+ # The Sourcery MIPS toolchain has a special (non-upstream) feature to
+ # have "compact exception handling", which unfortunately breaks with
+ # mesa3d, so we disable it here by passing -mno-compact-eh.
+@@ -219,7 +233,4 @@ else
+ MESA3D_CONF_OPTS += --disable-lmsensors
+ endif
  
- config BR2_PACKAGE_LLVM
+-# Avoid automatic search of llvm-config
+-MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
+-
+ $(eval $(autotools-package))
 -- 
 2.14.3
