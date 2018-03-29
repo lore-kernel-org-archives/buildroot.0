@@ -1,421 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Mar 2018 18:22:51 +0200
-Subject: [Buildroot] [PATCH] busybox: bump version to 1.28.2
-Message-ID: <20180329162251.30655-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 29 Mar 2018 18:25:17 +0200
+Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
+In-Reply-To: <a6c522f3-7744-4863-5d51-400d907080ae@mind.be>
+References: <20180327110022.19980-1-yann.morin.1998@free.fr>
+ <20180327214021.4d0e7b44@gmx.net>
+ <a6c522f3-7744-4863-5d51-400d907080ae@mind.be>
+Message-ID: <20180329182517.6acc1839@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop 0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch now upstream.
+On Thu, 29 Mar 2018 00:08:08 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-From the release notes:
+> On 27-03-18 21:40, Peter Seiderer wrote:
+> > Hello Yann,
+> > 
+> > On Tue, 27 Mar 2018 13:00:22 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> >   
+> >> Some packages that use libtool really need some love to be able to
+> >> disable C++ support.
+> >>
+> >> This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
+> >> is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
+> >> will want a C++ preprocessor that works on valid input *and* fail on
+> >> invalid input.
+> >>
+> >> So, providing 'false' as the C++ compiler will then require that we do
+> >> have a working C++ preprocessor. Which is totally counter-productive
+> >> since we do not have a C++ compiler to start with...
+> >>
+> >> bd39d11d2e (core/infra: fix build on toolchain without C++) was a
+> >> previous attempt at fixing this, by using the host's C++ preprocessor.
+> >>
+> >> However, that is very incorrect (that's my code, I can say so!) because
+> >> the set of defines will most probably be different for the host and the
+> >> target, thus causign all sorts of trouble. For example, on ARM we'd have
+> >> to include different headers for soft-float vs hard-float, which is
+> >> decided based on a macro, which is not defined for x86, and thus may
+> >> redirect to the wrong (and missing) header.
+> >>
+> >> Instead, we notice that libtool uses the magic value 'no' to decide that
+> >> a C++ compiler is not available, in which case it skeips the call to
+> >> AC_PROG_CXXCPP.
+> >>
+> >> Given that 'no' is not provided by any package in Debian and
+> >> derivatives, as well as in Fedora, we can assume that no system will
+> >> have an executable called 'no'. Hence, we use that as a magic value to
+> >> disable C++ detection altogether.
+> >>
+> >> Fixes: #10846 (again)  
+> > 
+> > Fixes the gnutls configure failure described in Bug-10846...
+> > 
+> > Tested-by: Peter Seiderer <ps.report@gmx.net>  
+> 
+>  Does that also imply that your earlier patch [1] can be marked as Superseded?
 
-Bug fix release.  1.28.2 has fixes for tcpsvd (fixed fallout from
-opt_complementary removal), udhcpd (do not ignore SIGTERM), tar and unzip
-(reverted to previous, more permissive symlink handling), ssl_client (fixed
-option parsing).
+Yes...
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ostpone-creation-of-symlinks-with-suspici.patch | 358 ---------------------
- package/busybox/busybox.hash                       |   8 +-
- package/busybox/busybox.mk                         |   2 +-
- 3 files changed, 5 insertions(+), 363 deletions(-)
- delete mode 100644 package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch
+Regards,
+Peter
 
-diff --git a/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch b/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch
-deleted file mode 100644
-index f6f1359654..0000000000
---- a/package/busybox/0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch
-+++ /dev/null
-@@ -1,358 +0,0 @@
--From a84db18fc71d09e801df0ebca048d82e90b32c6a Mon Sep 17 00:00:00 2001
--From: Denys Vlasenko <vda.linux@googlemail.com>
--Date: Tue, 20 Feb 2018 15:57:45 +0100
--Subject: [PATCH] tar,unzip: postpone creation of symlinks with "suspicious"
-- targets
--
--This mostly reverts commit bc9bbeb2b81001e8731cd2ae501c8fccc8d87cc7
--"libarchive: do not extract unsafe symlinks unless $EXTRACT_UNSAFE_SYMLINKS=1"
--
--Users report that it is somewhat too restrictive. See
--https://bugs.busybox.net/show_bug.cgi?id=8411
--
--In particular, this interferes with unpacking of busybox-based
--filesystems with links like "sbin/applet" -> "../bin/busybox".
--
--The change is made smaller by deleting ARCHIVE_EXTRACT_QUIET flag -
--it is unused since 2010, and removing conditionals on it
--allows commonalizing some error message codes.
--
--function                                             old     new   delta
--create_or_remember_symlink                             -      94     +94
--create_symlinks_from_list                              -      64     +64
--tar_main                                            1002    1006      +4
--unzip_main                                          2732    2724      -8
--data_extract_all                                     984     891     -93
--unsafe_symlink_target                                147       -    -147
--------------------------------------------------------------------------------
--(add/remove: 2/1 grow/shrink: 1/2 up/down: 162/-248)          Total: -86 bytes
--
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-----
-- archival/libarchive/data_extract_all.c      | 28 ++++----------
-- archival/libarchive/unsafe_symlink_target.c | 59 +++++++++++++----------------
-- archival/tar.c                              |  2 +
-- archival/unzip.c                            | 25 ++++++------
-- include/bb_archive.h                        | 23 ++++++-----
-- testsuite/tar.tests                         | 10 ++---
-- 6 files changed, 68 insertions(+), 79 deletions(-)
--
--diff --git a/archival/libarchive/data_extract_all.c b/archival/libarchive/data_extract_all.c
--index d3a6df5e8..8fa69ffaf 100644
----- a/archival/libarchive/data_extract_all.c
--+++ b/archival/libarchive/data_extract_all.c
--@@ -107,9 +107,7 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-- 			}
-- 		}
-- 		else if (existing_sb.st_mtime >= file_header->mtime) {
---			if (!(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
---			 && !S_ISDIR(file_header->mode)
---			) {
--+			if (!S_ISDIR(file_header->mode)) {
-- 				bb_error_msg("%s not created: newer or "
-- 					"same age file exists", dst_name);
-- 			}
--@@ -125,7 +123,7 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-- 	/* Handle hard links separately */
-- 	if (hard_link) {
-- 		res = link(hard_link, dst_name);
---		if (res != 0 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)) {
--+		if (res != 0) {
-- 			/* shared message */
-- 			bb_perror_msg("can't create %slink '%s' to '%s'",
-- 				"hard",	dst_name, hard_link
--@@ -165,10 +163,9 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-- 	}
-- 	case S_IFDIR:
-- 		res = mkdir(dst_name, file_header->mode);
---		if ((res == -1)
--+		if ((res != 0)
-- 		 && (errno != EISDIR) /* btw, Linux doesn't return this */
-- 		 && (errno != EEXIST)
---		 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
-- 		) {
-- 			bb_perror_msg("can't make dir %s", dst_name);
-- 		}
--@@ -198,27 +195,16 @@ void FAST_FUNC data_extract_all(archive_handle_t *archive_handle)
-- 		 *
-- 		 * Untarring bug.tar would otherwise place evil.py in '/tmp'.
-- 		 */
---		if (!unsafe_symlink_target(file_header->link_target)) {
---			res = symlink(file_header->link_target, dst_name);
---			if (res != 0
---			 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
---			) {
---				/* shared message */
---				bb_perror_msg("can't create %slink '%s' to '%s'",
---					"sym",
---					dst_name, file_header->link_target
---				);
---			}
---		}
--+		create_or_remember_symlink(&archive_handle->symlink_placeholders,
--+				file_header->link_target,
--+				dst_name);
-- 		break;
-- 	case S_IFSOCK:
-- 	case S_IFBLK:
-- 	case S_IFCHR:
-- 	case S_IFIFO:
-- 		res = mknod(dst_name, file_header->mode, file_header->device);
---		if ((res == -1)
---		 && !(archive_handle->ah_flags & ARCHIVE_EXTRACT_QUIET)
---		) {
--+		if (res != 0) {
-- 			bb_perror_msg("can't create node %s", dst_name);
-- 		}
-- 		break;
--diff --git a/archival/libarchive/unsafe_symlink_target.c b/archival/libarchive/unsafe_symlink_target.c
--index 441ba8b24..8dcafeaa1 100644
----- a/archival/libarchive/unsafe_symlink_target.c
--+++ b/archival/libarchive/unsafe_symlink_target.c
--@@ -5,44 +5,37 @@
-- #include "libbb.h"
-- #include "bb_archive.h"
-- 
---int FAST_FUNC unsafe_symlink_target(const char *target)
--+void FAST_FUNC create_or_remember_symlink(llist_t **symlink_placeholders,
--+		const char *target,
--+		const char *linkname)
-- {
---	const char *dot;
---
---	if (target[0] == '/') {
---		const char *var;
--- unsafe:
---		var = getenv("EXTRACT_UNSAFE_SYMLINKS");
---		if (var) {
---			if (LONE_CHAR(var, '1'))
---				return 0; /* pretend it's safe */
---			return 1; /* "UNSAFE!" */
---		}
---		bb_error_msg("skipping unsafe symlink to '%s' in archive,"
---			" set %s=1 to extract",
---			target,
---			"EXTRACT_UNSAFE_SYMLINKS"
--+	if (target[0] == '/' || strstr(target, "..")) {
--+		llist_add_to(symlink_placeholders,
--+			xasprintf("%s%c%s", linkname, '\0', target)
--+		);
--+		return;
--+	}
--+	if (symlink(target, linkname) != 0) {
--+		/* shared message */
--+		bb_perror_msg_and_die("can't create %slink '%s' to '%s'",
--+			"sym", linkname, target
-- 		);
---		/* Prevent further messages */
---		setenv("EXTRACT_UNSAFE_SYMLINKS", "0", 0);
---		return 1; /* "UNSAFE!" */
-- 	}
--+}
-- 
---	dot = target;
---	for (;;) {
---		dot = strchr(dot, '.');
---		if (!dot)
---			return 0; /* safe target */
--+void FAST_FUNC create_symlinks_from_list(llist_t *list)
--+{
--+	while (list) {
--+		char *target;
-- 
---		/* Is it a path component starting with ".."? */
---		if ((dot[1] == '.')
---		 && (dot == target || dot[-1] == '/')
---		    /* Is it exactly ".."? */
---		 && (dot[2] == '/' || dot[2] == '\0')
---		) {
---			goto unsafe;
--+		target = list->data + strlen(list->data) + 1;
--+		if (symlink(target, list->data)) {
--+			/* shared message */
--+			bb_error_msg_and_die("can't create %slink '%s' to '%s'",
--+				"sym",
--+				list->data, target
--+			);
-- 		}
---		/* NB: it can even be trailing ".", should only add 1 */
---		dot += 1;
--+		list = list->link;
-- 	}
-- }
--diff --git a/archival/tar.c b/archival/tar.c
--index 9ed3821d5..415ebde0d 100644
----- a/archival/tar.c
--+++ b/archival/tar.c
--@@ -1244,6 +1244,8 @@ int tar_main(int argc UNUSED_PARAM, char **argv)
-- 	while (get_header_tar(tar_handle) == EXIT_SUCCESS)
-- 		bb_got_signal = EXIT_SUCCESS; /* saw at least one header, good */
-- 
--+	create_symlinks_from_list(tar_handle->symlink_placeholders);
--+
-- 	/* Check that every file that should have been extracted was */
-- 	while (tar_handle->accept) {
-- 		if (!find_list_entry(tar_handle->reject, tar_handle->accept->data)
--diff --git a/archival/unzip.c b/archival/unzip.c
--index da4b2a544..0d00d8dc9 100644
----- a/archival/unzip.c
--+++ b/archival/unzip.c
--@@ -345,7 +345,9 @@ static void unzip_create_leading_dirs(const char *fn)
-- }
-- 
-- #if ENABLE_FEATURE_UNZIP_CDF
---static void unzip_extract_symlink(zip_header_t *zip, const char *dst_fn)
--+static void unzip_extract_symlink(llist_t **symlink_placeholders,
--+		zip_header_t *zip,
--+		const char *dst_fn)
-- {
-- 	char *target;
-- 
--@@ -370,15 +372,9 @@ static void unzip_extract_symlink(zip_header_t *zip, const char *dst_fn)
-- 		target[xstate.mem_output_size] = '\0';
-- #endif
-- 	}
---	if (!unsafe_symlink_target(target)) {
---//TODO: libbb candidate
---		if (symlink(target, dst_fn)) {
---			/* shared message */
---			bb_perror_msg_and_die("can't create %slink '%s' to '%s'",
---				"sym", dst_fn, target
---			);
---		}
---	}
--+	create_or_remember_symlink(symlink_placeholders,
--+			target,
--+			dst_fn);
-- 	free(target);
-- }
-- #endif
--@@ -490,6 +486,9 @@ int unzip_main(int argc, char **argv)
-- 	llist_t *zaccept = NULL;
-- 	llist_t *zreject = NULL;
-- 	char *base_dir = NULL;
--+#if ENABLE_FEATURE_UNZIP_CDF
--+	llist_t *symlink_placeholders = NULL;
--+#endif
-- 	int i;
-- 	char key_buf[80]; /* must match size used by my_fgets80 */
-- 
--@@ -954,7 +953,7 @@ int unzip_main(int argc, char **argv)
-- #if ENABLE_FEATURE_UNZIP_CDF
-- 			if (S_ISLNK(file_mode)) {
-- 				if (dst_fd != STDOUT_FILENO) /* not -p? */
---					unzip_extract_symlink(&zip, dst_fn);
--+					unzip_extract_symlink(&symlink_placeholders, &zip, dst_fn);
-- 			} else
-- #endif
-- 			{
--@@ -990,6 +989,10 @@ int unzip_main(int argc, char **argv)
-- 		total_entries++;
-- 	}
-- 
--+#if ENABLE_FEATURE_UNZIP_CDF
--+	create_symlinks_from_list(symlink_placeholders);
--+#endif
--+
-- 	if ((opts & OPT_l) && quiet <= 1) {
-- 		if (!verbose) {
-- 			//	"  Length      Date    Time    Name\n"
--diff --git a/include/bb_archive.h b/include/bb_archive.h
--index 8ed20d70e..a5c61e95b 100644
----- a/include/bb_archive.h
--+++ b/include/bb_archive.h
--@@ -64,6 +64,9 @@ typedef struct archive_handle_t {
-- 	/* Currently processed file's header */
-- 	file_header_t *file_header;
-- 
--+	/* List of symlink placeholders */
--+	llist_t *symlink_placeholders;
--+
-- 	/* Process the header component, e.g. tar -t */
-- 	void FAST_FUNC (*action_header)(const file_header_t *);
-- 
--@@ -119,15 +122,14 @@ typedef struct archive_handle_t {
-- #define ARCHIVE_RESTORE_DATE        (1 << 0)
-- #define ARCHIVE_CREATE_LEADING_DIRS (1 << 1)
-- #define ARCHIVE_UNLINK_OLD          (1 << 2)
---#define ARCHIVE_EXTRACT_QUIET       (1 << 3)
---#define ARCHIVE_EXTRACT_NEWER       (1 << 4)
---#define ARCHIVE_DONT_RESTORE_OWNER  (1 << 5)
---#define ARCHIVE_DONT_RESTORE_PERM   (1 << 6)
---#define ARCHIVE_NUMERIC_OWNER       (1 << 7)
---#define ARCHIVE_O_TRUNC             (1 << 8)
---#define ARCHIVE_REMEMBER_NAMES      (1 << 9)
--+#define ARCHIVE_EXTRACT_NEWER       (1 << 3)
--+#define ARCHIVE_DONT_RESTORE_OWNER  (1 << 4)
--+#define ARCHIVE_DONT_RESTORE_PERM   (1 << 5)
--+#define ARCHIVE_NUMERIC_OWNER       (1 << 6)
--+#define ARCHIVE_O_TRUNC             (1 << 7)
--+#define ARCHIVE_REMEMBER_NAMES      (1 << 8)
-- #if ENABLE_RPM
---#define ARCHIVE_REPLACE_VIA_RENAME  (1 << 10)
--+#define ARCHIVE_REPLACE_VIA_RENAME  (1 << 9)
-- #endif
-- 
-- 
--@@ -197,7 +199,10 @@ void seek_by_jump(int fd, off_t amount) FAST_FUNC;
-- void seek_by_read(int fd, off_t amount) FAST_FUNC;
-- 
-- const char *strip_unsafe_prefix(const char *str) FAST_FUNC;
---int unsafe_symlink_target(const char *target) FAST_FUNC;
--+void create_or_remember_symlink(llist_t **symlink_placeholders,
--+		const char *target,
--+		const char *linkname) FAST_FUNC;
--+void create_symlinks_from_list(llist_t *list) FAST_FUNC;
-- 
-- void data_align(archive_handle_t *archive_handle, unsigned boundary) FAST_FUNC;
-- const llist_t *find_list_entry(const llist_t *list, const char *filename) FAST_FUNC;
--diff --git a/testsuite/tar.tests b/testsuite/tar.tests
--index b7cd74ca5..1675b07b1 100755
----- a/testsuite/tar.tests
--+++ b/testsuite/tar.tests
--@@ -279,7 +279,7 @@ optional UUDECODE FEATURE_TAR_AUTODETECT FEATURE_SEAMLESS_BZ2
-- testing "tar does not extract into symlinks" "\
-- >>/tmp/passwd && uudecode -o input && tar xf input 2>&1 && rm passwd; cat /tmp/passwd; echo \$?
-- " "\
---tar: skipping unsafe symlink to '/tmp/passwd' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
--+tar: can't create symlink 'passwd' to '/tmp/passwd'
-- 0
-- " \
-- "" "\
--@@ -299,7 +299,7 @@ optional UUDECODE FEATURE_TAR_AUTODETECT FEATURE_SEAMLESS_BZ2
-- testing "tar -k does not extract into symlinks" "\
-- >>/tmp/passwd && uudecode -o input && tar xf input -k 2>&1 && rm passwd; cat /tmp/passwd; echo \$?
-- " "\
---tar: skipping unsafe symlink to '/tmp/passwd' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
--+tar: can't create symlink 'passwd' to '/tmp/passwd'
-- 0
-- " \
-- "" "\
--@@ -324,11 +324,11 @@ rm -rf etc usr
-- ' "\
-- etc/ssl/certs/3b2716e5.0
-- etc/ssl/certs/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.pem
---tar: skipping unsafe symlink to '/usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.crt' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-- etc/ssl/certs/f80cc7f6.0
-- usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.crt
-- 0
-- etc/ssl/certs/3b2716e5.0 -> EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.pem
--+etc/ssl/certs/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.pem -> /usr/share/ca-certificates/mozilla/EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.crt
-- etc/ssl/certs/f80cc7f6.0 -> EBG_Elektronik_Sertifika_Hizmet_Sa?lay?c?s?.pem
-- " \
-- "" ""
--@@ -346,9 +346,9 @@ ls symlink/bb_test_evilfile
-- ' "\
-- anything.txt
-- symlink
---tar: skipping unsafe symlink to '/tmp' in archive, set EXTRACT_UNSAFE_SYMLINKS=1 to extract
-- symlink/bb_test_evilfile
---0
--+tar: can't create symlink 'symlink' to '/tmp'
--+1
-- ls: /tmp/bb_test_evilfile: No such file or directory
-- ls: bb_test_evilfile: No such file or directory
-- symlink/bb_test_evilfile
---- 
--2.16.2
--
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index b7067b6633..538aa04b9b 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,6 +1,6 @@
--# From https://busybox.net/downloads/busybox-1.28.1.tar.bz2.sign
--md5 928919a21e34d5c5507d872a4fb7b9f4  busybox-1.28.1.tar.bz2
--sha1 932e2a77c3ddaa7f0915ed6fe9232041d261f86b  busybox-1.28.1.tar.bz2
-+# From https://busybox.net/downloads/busybox-1.28.2.tar.bz2.sign
-+md5 5db059384469827ab19dac69d3fcd092  busybox-1.28.2.tar.bz2
-+sha1 5ddba42aa14b875688727f0a3a9973e42fc51c23  busybox-1.28.2.tar.bz2
- # Locally calculated
--sha256 98fe1d3c311156c597cd5cfa7673bb377dc552b6fa20b5d3834579da3b13652e  busybox-1.28.1.tar.bz2
-+sha256 b64a94a60877c96838ee60e75765576ecc8756bf3636485117637604acb84b0d  busybox-1.28.2.tar.bz2
- sha256	bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548	LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 7009f6a675..d2d2e86636 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUSYBOX_VERSION = 1.28.1
-+BUSYBOX_VERSION = 1.28.2
- BUSYBOX_SITE = http://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0
--- 
-2.11.0
+> 
+>  Regards,
+>  Arnout
+> 
+> [1] http://patchwork.ozlabs.org/patch/889057/
+> 
+> > 
+> > Regards,
+> > Peter  
+> [snip]
+> 
