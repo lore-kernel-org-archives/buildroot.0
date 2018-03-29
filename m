@@ -1,115 +1,67 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 29 Mar 2018 17:27:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version 7.2.4
-Message-ID: <20180329152705.16985-1-bernd.kuhls@t-online.de>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 29 Mar 2018 10:41:52 -0500
+Subject: [Buildroot] Build for sama5d3 mmc doesn't boot
+In-Reply-To: <192a79cb-8ed7-291e-c91e-feac05d51453@microchip.com>
+References: <CANQCQpaS8XOo6QsuBG8XhsD8UJFyf8PMyKisNczqaTDygdAVzA@mail.gmail.com>
+ <192a79cb-8ed7-291e-c91e-feac05d51453@microchip.com>
+Message-ID: <CANQCQpaa+wN+2t2ymGUaCy8i9JvC1SD4tFcaoqgTaK8nX0kM2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes https://bugs.php.net/bug.php?id=75605, no CVE-ID yet.
+Joshua,
 
-Removed patch 0008, applied upstream. Re-numbered patch 0009.
+On Wed, Mar 28, 2018 at 6:18 PM, Joshua Henderson
+<joshua.henderson@microchip.com> wrote:
+> Matthew,
+>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...08-ext-sockets-make-AI_IDN-usage-optional.patch | 55 ----------------------
- ....c-build-empty-php_load_zend_extension_c.patch} |  0
- package/php/php.hash                               |  2 +-
- package/php/php.mk                                 |  2 +-
- 4 files changed, 2 insertions(+), 57 deletions(-)
- delete mode 100644 package/php/0008-ext-sockets-make-AI_IDN-usage-optional.patch
- rename package/php/{0009-main-php_ini.c-build-empty-php_load_zend_extension_c.patch => 0008-main-php_ini.c-build-empty-php_load_zend_extension_c.patch} (100%)
+>
+> I can reproduce.  This is fixed in at91bootstrap v3.8.10.  See here [1].
+> Give me a bit to do some more testing and I'll update the defconfigs.
+> In the meantime, if you're trying to get past this, set
+> BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.10" and you should
+> be good to go.
+>
+> [1]: https://github.com/linux4sam/at91bootstrap/commit/fb47cd7e5fddf8b924d92ede1da61d416e7ef81c
 
-diff --git a/package/php/0008-ext-sockets-make-AI_IDN-usage-optional.patch b/package/php/0008-ext-sockets-make-AI_IDN-usage-optional.patch
-deleted file mode 100644
-index 7ab086865e..0000000000
---- a/package/php/0008-ext-sockets-make-AI_IDN-usage-optional.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From 923cab3a5ee112d3de44b5571e73402f1fa3d619 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Mon, 26 Feb 2018 19:06:40 +0100
--Subject: [PATCH] ext/sockets: make AI_IDN usage optional
--
--AI_IDN is not supported by all C libraries (uClibc, musl), so make it
--optional, like AI_ALL.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream-status: https://github.com/php/php-src/pull/3160
-----
-- ext/sockets/config.m4 | 13 +++++++++++++
-- ext/sockets/sockets.c |  2 +-
-- 2 files changed, 14 insertions(+), 1 deletion(-)
--
--diff --git a/ext/sockets/config.m4 b/ext/sockets/config.m4
--index fe7d22a10a..2bf6a2bd11 100644
----- a/ext/sockets/config.m4
--+++ b/ext/sockets/config.m4
--@@ -69,6 +69,19 @@ if test "$PHP_SOCKETS" != "no"; then
--     AC_DEFINE(HAVE_AI_ALL,1,[Whether you have AI_ALL])
--   fi
-- 
--+  dnl Check for AI_IDN flag
--+  AC_CACHE_CHECK([if getaddrinfo supports AI_IDN],[ac_cv_gai_ai_idn],
--+  [
--+    AC_TRY_COMPILE([
--+#include <netdb.h>
--+  ], [int flag = AI_IDN;],
--+     ac_cv_gai_ai_idn=yes, ac_cv_gai_ai_idn=no)
--+  ])
--+
--+  if test "$ac_cv_gai_ai_idn" = yes; then
--+    AC_DEFINE(HAVE_AI_IDN,1,[Whether you have AI_IDN])
--+  fi
--+
--   PHP_NEW_EXTENSION([sockets], [sockets.c multicast.c conversions.c sockaddr_conv.c sendrecvmsg.c], [$ext_shared],, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
--   PHP_INSTALL_HEADERS([ext/sockets/], [php_sockets.h])
-- fi
--diff --git a/ext/sockets/sockets.c b/ext/sockets/sockets.c
--index 6db56c2816..ee9651ce09 100644
----- a/ext/sockets/sockets.c
--+++ b/ext/sockets/sockets.c
--@@ -796,7 +796,7 @@ static PHP_MINIT_FUNCTION(sockets)
-- 	REGISTER_LONG_CONSTANT("AI_ALL",			AI_ALL,				CONST_CS | CONST_PERSISTENT);
-- #endif
-- 	REGISTER_LONG_CONSTANT("AI_ADDRCONFIG",		AI_ADDRCONFIG,		CONST_CS | CONST_PERSISTENT);
---#ifdef __USE_GNU
--+#if defined(HAVE_AI_IDN) && defined(__USE_GNU)
-- 	REGISTER_LONG_CONSTANT("AI_IDN",			AI_IDN,				CONST_CS | CONST_PERSISTENT);
-- 	REGISTER_LONG_CONSTANT("AI_CANONIDN",		AI_CANONIDN,		CONST_CS | CONST_PERSISTENT);
-- 	REGISTER_LONG_CONSTANT("AI_IDN_ALLOW_UNASSIGNED",		AI_IDN_ALLOW_UNASSIGNED, CONST_CS | CONST_PERSISTENT);
---- 
--2.14.3
--
-diff --git a/package/php/0009-main-php_ini.c-build-empty-php_load_zend_extension_c.patch b/package/php/0008-main-php_ini.c-build-empty-php_load_zend_extension_c.patch
-similarity index 100%
-rename from package/php/0009-main-php_ini.c-build-empty-php_load_zend_extension_c.patch
-rename to package/php/0008-main-php_ini.c-build-empty-php_load_zend_extension_c.patch
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 34230df874..4cd5acaef9 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 b3a94f1b562f413c0b96f54bc309706d83b29ac65d9b172bc7ed9fb40a5e651f  php-7.2.3.tar.xz
-+sha256 7916b1bd148ddfd46d7f8f9a517d4b09cd8a8ad9248734e7c8dd91ef17057a88  php-7.2.4.tar.xz
- 
- # License file
- sha256 00e567a8d50359d93ee1f9afdd9511277660c1e70a0cbf3229f84403aa9aebb1  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index dcb89b03d3..bfd25de875 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.2.3
-+PHP_VERSION = 7.2.4
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
--- 
-2.14.2
+I tried that change to the boot strap with a buildroot toolchain GCC6
+with the 3.8.10 and nothing output. Didn't test with GCC7, I'll kick
+that off.
+
+>
+>>
+>>
+>>
+>> I've kicked off another build defaulting back to a buildroot toolchain
+>> (GCC6.x) and glibc.
+>>
+
+***Confirmed GCC6  does work.
+
+RomBOOT
+
+
+AT91Bootstrap 3.8.9 (Thu Mar 29 10:36:02 CDT 2018)
+
+SD/MMC: Image: Read file u-boot.bin to 0x26f00000
+SD: Card Capacity: High or Extended
+SD: Specification Version 3.0X
+SD/MMC: Done to load image
+<debug_uart>
+
+U-Boot 2017.03-linux4sam_5.7 (Mar 29 2018 - 10:36:07 -0500)
+
+CPU: SAMA5D36
+Crystal frequency:       12 MHz
+CPU clock        :      528 MHz
+Master clock     :      132 MHz
+DRAM:  256 MiB
+NAND:  256 MiB
+
+
+
+
+Matt
