@@ -1,42 +1,37 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 29 Mar 2018 21:15:50 +0200
-Subject: [Buildroot] [PATCH] bash: bump to version 4.4.18
-Message-ID: <20180329191550.27152-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 29 Mar 2018 21:21:23 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.44.1
+In-Reply-To: <20180329141515.12399-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 29 Mar 2018 16:15:15 +0200")
+References: <20180329141515.12399-1-peter@korsgaard.com>
+Message-ID: <87a7uq8z7w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/bash/bash.hash | 4 ++--
- package/bash/bash.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/package/bash/bash.hash b/package/bash/bash.hash
-index 4e2e48f363..951bcf5850 100644
---- a/package/bash/bash.hash
-+++ b/package/bash/bash.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# http://ftp.gnu.org/gnu/bash/bash-4.4.12.tar.gz.sig
--sha256 57d8432be54541531a496fd4904fdc08c12542f43605a9202594fa5d5f9f2331	bash-4.4.12.tar.gz
-+# http://ftp.gnu.org/gnu/bash/bash-4.4.18.tar.gz.sig
-+sha256 604d9eec5e4ed5fd2180ee44dd756ddca92e0b6aa4217bbab2b6227380317f23	bash-4.4.18.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index e9384911a0..b162d93188 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BASH_VERSION = 4.4.12
-+BASH_VERSION = 4.4.18
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
- # Build after since bash is better than busybox shells
- BASH_DEPENDENCIES = ncurses readline host-bison \
+ > From the release notes (https://lwn.net/Articles/750103/):
+ > E2fsprogs 1.44.0 introduced a regression introduced which caused e2fsck
+ > to fail to support HTree directories on big-endian systems.  Fix how we
+ > read block numbers for internal htree nodes.
+
+ > Removed a potential memory leak from fsck.
+
+ > E2image now correctly creates e2image files for bigalloc file systems.
+
+ > Dumpe2fs and debugfs now correctly support e2image files for file
+ > systems that have the meta_bg option enabled.
+
+ > E2fsck and debugfs now correctly handle delete inodes (including
+ > processing the orphaned inode list in the case of e2fsck) for bigalloc
+ > file systems.  (Addresses Google Bug: #73795618)
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.16.3
+Bye, Peter Korsgaard
