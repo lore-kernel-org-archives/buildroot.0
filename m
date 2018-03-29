@@ -1,42 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Mar 2018 21:19:54 +0200
-Subject: [Buildroot] [git commit] sngrep: fix libgcrypt handling
-Message-ID: <20180329192147.E1D9D83DE7@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 29 Mar 2018 21:46:27 +0200
+Subject: [Buildroot] bash: /dev/fd/62: No such file or directory
+In-Reply-To: <874llggl14.fsf@dell.be.48ers.dk>
+References: <1521154501.16532.15.camel@embedded.rocks>
+ <874llggl14.fsf@dell.be.48ers.dk>
+Message-ID: <d624af0cde7298851332a2fc009f173562d99d98.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae7d59eaae1c55d707b2a70437a84c280f598572
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-Fixes:
-http://autobuild.buildroot.net/results/f1c6494133806b9fc26ae3ce9e9c6a22fa2eda6f/
+On Fri, 2018-03-16 at 15:19 +0100, Peter Korsgaard wrote:
+> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+> 
+>  > Hi,
+>  > I am facing an issue with busybox init system, bash and mdev. When a
+>  > bash script uses process substitution, bash ends with an error:
+> 
+>  >    """
+>  >    # bash -c 'read x< <(echo 1); echo $x'
+>  >    bash: /dev/fd/62: No such file or directory
+>  >    """
+> 
+>  > The issue is addressed is some threads, e.g. [1]. The problem is that
+>  > /dev/fd does not exist when using mdev:
+> 
+> So that is really strictly seen a bug in bash. The /dev/fd convenience
+> symlink is afaik a convention from udev/systemd.
+> 
+> But OK, bash might not be alone and the pragmatic solution would indeed
+> be to create these symlinks ourselves in the busybox and sysvinit
+> inittabs, similar to how we create /dev/pts and /dev/shm.
+> 
+> It is only really needed if (e)udev isn't used, but it doesn't really
+> hurt to create them even if eudev will recreate them afterwards.
+> 
+> Keep in mind that we still support a static /dev, so we should also add
+> them to system/device_table_dev.txt and redirect errors to /dev/null so
+> you don't get a bunch of warnings about these symlinks when booting with
+> a static /dev.
 
-Commit 6205b75873c (sngrep: gnutls support also needs libgcrypt) ensured
-that --with-gnutls is only used when both gnutls and libgcrypt are enabled,
-but it didn't ensure libgcrypt gets built before sngrep or told the
-configure script where to find libgcrypt-config, breaking the build.
+I am trying to get this working. I managed to add the entries to
+inittab for busybox and sysvinit, but I am unsure how to add those
+symlinks to the static /dev. makedevs does not support symbolic links.
 
-Fix both issues.
+> Notice that it isn't only about /dev/fd. From
+> eudev-3.2.5/src/shared/dev-setup.c:
+> 
+>         static const char symlinks[] =
+>                 "-/proc/kcore\0"     "/dev/core\0"
+>                 "/proc/self/fd\0"    "/dev/fd\0"
+>                 "/proc/self/fd/0\0"  "/dev/stdin\0"
+>                 "/proc/self/fd/1\0"  "/dev/stdout\0"
+>                 "/proc/self/fd/2\0"  "/dev/stderr\0";
+> 
+> There is some logic to only create /dev/core if /proc/kcore exists, but
+> I think we can just create it unconditionally.
+> 
+> Care to send patches doing this?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sngrep/sngrep.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index 4c9958d497..3f1fe989cf 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -22,7 +22,8 @@ SNGREP_DEPENDENCIES += openssl
- SNGREP_CONF_OPTS += --with-openssl --without-gnutls
- # gnutls support also requires libgcrypt
- else ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
--SNGREP_DEPENDENCIES += gnutls
-+SNGREP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-+SNGREP_DEPENDENCIES += gnutls libgcrypt
- SNGREP_CONF_OPTS += --with-gnutls --without-openssl
- else
- SNGREP_CONF_OPTS += --without-gnutls --without-openssl
+Best regards
+J?rg Krause
