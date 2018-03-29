@@ -1,84 +1,103 @@
 From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Thu, 29 Mar 2018 13:33:45 +0200
-Subject: [Buildroot] [PATCH v4 10/11] package/mesa3d: enable OpenCL support
+Date: Thu, 29 Mar 2018 13:33:46 +0200
+Subject: [Buildroot] [PATCH v4 11/11] package/clinfo: new package
 In-Reply-To: <20180329113346.10367-1-valentin.korenblit@smile.fr>
 References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
-Message-ID: <20180329113346.10367-11-valentin.korenblit@smile.fr>
+Message-ID: <20180329113346.10367-12-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides Clover, the OpenCL 1.1 API implementation by Mesa
-for AMD GPUs. It generates libOpenCL.so.
+This tool allows to verify if the OpenCL environment is set up correctly and
+output information related to the supported OpenCL platforms.
 
 Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 ---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/clinfo/Config.in   |  7 +++++++
+ package/clinfo/clinfo.hash |  2 ++
+ package/clinfo/clinfo.mk   | 23 +++++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/clinfo/Config.in
+ create mode 100644 package/clinfo/clinfo.hash
+ create mode 100644 package/clinfo/clinfo.mk
 
-Tested with AMD Radeon Dual (AMD SUMO + AMD CAICOS) using Gallium r600:
-
-Piglit taken from Romain Naour's patch, setting -DPIGLIT_BUILD_CL_TESTS=ON:
-
-http://lists.busybox.net/pipermail/buildroot/2018-February/213601.html
-
-Results from 704 tests:
-skip 94
-pass 541
-fail 60
-crash 9 
-
-Opencl-example (100% pass):
-https://cgit.freedesktop.org/~tstellar/opencl-example/
-
- package/mesa3d/Config.in | 16 ++++++++++++++++
- package/mesa3d/mesa3d.mk |  9 +++++++++
- 2 files changed, 25 insertions(+)
-
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index e99e737d31..bad7ac4339 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -33,6 +33,22 @@ config BR2_PACKAGE_MESA3D_LLVM
- comment "mesa3d w/ llvm needs llvm"
- 	depends on !BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6bcafb6d2a..adedae9219 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1860,6 +1860,7 @@ F:	package/tstools/
  
-+config BR2_PACKAGE_MESA3D_OPENCL
-+	bool "mesa3d OpenCL"
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_USE_WCHAR #elfutils
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_bfin #elfutils
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_LIBCLC
-+
-+comment "mesa3d OpenCL needs a uClibc or glibc toolchain w/ wchar"
-+	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on !BR2_bfin
-+	depends on !BR2_USE_WCHAR \
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+
- # inform the .mk file of gallium, dri or vulkan driver selection
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	bool
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 498ad57eed..1df28c43cb 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -233,4 +233,13 @@ else
- MESA3D_CONF_OPTS += --disable-lmsensors
- endif
+ N:	Valentin Korenblit <valentin.korenblit@smile.fr>
+ F:	package/clang/
++F:	package/clinfo/
+ F:	package/libclc/
+ F:	package/llvm/
  
-+# Clover requires libelf
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
-+MESA3D_DEPENDENCIES += clang elfutils libclc
-+MESA3D_CONF_OPTS += --enable-opencl \
-+	--with-clang-libdir=$(STAGING_DIR)/usr/lib
-+else
-+MESA3D_CONF_OPTS += --disable-opencl
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index bc2228ed17..9d529b4a4e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1478,6 +1478,7 @@ menu "Other"
+ 	source "package/clang/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
++	source "package/clinfo/Config.in"
+ 	source "package/cppcms/Config.in"
+ 	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
+diff --git a/package/clinfo/Config.in b/package/clinfo/Config.in
+new file mode 100644
+index 0000000000..ce6c8bccae
+--- /dev/null
++++ b/package/clinfo/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_CLINFO
++	bool "clinfo"
++	depends on BR2_PACKAGE_MESA3D_OPENCL
++	help
++	  clinfo is a simple command-line application that enumerates
++	  all possible (known) properties of the OpenCL platform and
++	  devices available on the system.
+diff --git a/package/clinfo/clinfo.hash b/package/clinfo/clinfo.hash
+new file mode 100644
+index 0000000000..e1c10afc9e
+--- /dev/null
++++ b/package/clinfo/clinfo.hash
+@@ -0,0 +1,2 @@
++# locally calculated
++sha256 64b02e68ccff3b95437bd0bd70dcb88438c58adec16a7145a5d4e5c26a898ccf clinfo-2.2.18.03.26.tar.gz
+diff --git a/package/clinfo/clinfo.mk b/package/clinfo/clinfo.mk
+new file mode 100644
+index 0000000000..04000247bc
+--- /dev/null
++++ b/package/clinfo/clinfo.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# clinfo
++#
++################################################################################
 +
- $(eval $(autotools-package))
++CLINFO_VERSION = 2.2.18.03.26
++CLINFO_SITE = $(call github,Oblomov,clinfo,$(CLINFO_VERSION))
++CLINFO_LICENSE = CC0-1.0
++CLINFO_LICENSE_FILES = legalcode.txt
++
++#libOpenCL is needed
++CLINFO_DEPENDENCIES = mesa3d
++
++define CLINFO_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++endef
++
++define CLINFO_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/clinfo $(TARGET_DIR)/usr/bin/clinfo
++endef
++
++$(eval $(generic-package))
 -- 
 2.14.3
