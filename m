@@ -1,27 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Mar 2018 16:05:17 +0200
-Subject: [Buildroot] [PATCH] libpciaccess: add dependency on hwdata
-In-Reply-To: <20180128235233.26989-1-casantos@datacom.ind.br> (Carlos Santos's
- message of "Sun, 28 Jan 2018 21:52:33 -0200")
-References: <20180128235233.26989-1-casantos@datacom.ind.br>
-Message-ID: <87zi2r7zaa.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Mar 2018 16:05:56 +0200
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.5
+In-Reply-To: <20180327213750.7720-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 27 Mar 2018 23:37:50 +0200")
+References: <20180327213750.7720-1-fontaine.fabrice@gmail.com>
+Message-ID: <87vadf7z97.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > libpciaccess requires /usr/share/hwdata/pci.ids (or pci.ids.gz, if
- > compiled with zlib support). That file is provided by the hwdata
- > package, so add it as a run-time dependency.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-
-Is this really a hard dependency? Looking at src/common_device_name.c,
-this seems to only be used in populate_vendor(), which just returns
-without error if the file cannot be opened.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
