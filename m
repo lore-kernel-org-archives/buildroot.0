@@ -1,43 +1,99 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 29 Mar 2018 08:31:00 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{1, 4, 9, 14,
- 15}.x series
-In-Reply-To: <1522323060-27916-1-git-send-email-festevam@gmail.com>
-References: <1522323060-27916-1-git-send-email-festevam@gmail.com>
-Message-ID: <1522323060-27916-2-git-send-email-festevam@gmail.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Thu, 29 Mar 2018 13:33:35 +0200
+Subject: [Buildroot] [PATCH v4 00/11] llvm for mesa3d
+Message-ID: <20180329113346.10367-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Hello all,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f4c1427..ec3de2b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -241,13 +241,13 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
--	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.124"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.90"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.125"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.91"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.30"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.13"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.31"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.14"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+This series provides llvm support for Mesa 3D:
+
+
+Changes v1 -> v2:
+
+The series has been simplified:
+
+*Build only backend for target architecture by default.
+*Support for AMDGPU(PATCH 3/4 in v1) was removed because I cannot test
+it currently. 
+*Host: make options modified to build only llvm-config and llvm-tblgen
+(reduces drastically build time for host).
+*Target: support only x86 currently (tested), I will test on ARM soon.
+
+Changes v2 -> v3:
+
+* Full installation of LLVM (tools and libLLVM.so) for the host.
+* Disable Mesa 3D static linking, it now links with shared lib.
+* Options to disable building each tool one by one were removed.
+* Support for AMDGPU.
+* Support for ARM and AArch64.
+*-DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME) added. This fixes the error:
+"No available targets are compatible with this triple" for llvmpipe.
+
+Changes v3 -> v4:
+
+This series is focused on OpenCL support
+
+* Add Clang for host (needed to build libclc)
+* Add Clang for target (libOpenCL needs libclang and libLLVM)
+* Add libclc
+* Add OpenCL support in Mesa3D
+* Add package clinfo
+
+Regards,
+
+Valent?n
+
+
+Valentin Korenblit (11):
+  package/llvm: new host package
+  package/llvm: enable target variant
+  package/llvm: enable AMDGPU
+  package/mesa3d: enable llvm support
+  package/llvm: enable ARM
+  package/llvm: enable AArch64
+  package/clang: new host package
+  package/clang: enable target variant
+  package/libclc: new package
+  package/mesa3d: enable OpenCL support
+  package/clinfo: new package
+
+ DEVELOPERS                   |   6 +
+ package/Config.in            |   4 +
+ package/Config.in.host       |   2 +
+ package/clang/Config.in      |   8 ++
+ package/clang/Config.in.host |   8 ++
+ package/clang/clang.hash     |   3 +
+ package/clang/clang.mk       |  70 ++++++++++
+ package/clinfo/Config.in     |   7 +
+ package/clinfo/clinfo.hash   |   2 +
+ package/clinfo/clinfo.mk     |  23 ++++
+ package/libclc/Config.in     |   9 ++
+ package/libclc/libclc.mk     |  38 ++++++
+ package/llvm/Config.in       |  29 +++++
+ package/llvm/Config.in.host  |   8 ++
+ package/llvm/llvm.hash       |   3 +
+ package/llvm/llvm.mk         | 302 +++++++++++++++++++++++++++++++++++++++++++
+ package/mesa3d/Config.in     |  24 ++++
+ package/mesa3d/mesa3d.mk     |  24 +++-
+ 18 files changed, 568 insertions(+), 2 deletions(-)
+ create mode 100644 package/clang/Config.in
+ create mode 100644 package/clang/Config.in.host
+ create mode 100644 package/clang/clang.hash
+ create mode 100644 package/clang/clang.mk
+ create mode 100644 package/clinfo/Config.in
+ create mode 100644 package/clinfo/clinfo.hash
+ create mode 100644 package/clinfo/clinfo.mk
+ create mode 100644 package/libclc/Config.in
+ create mode 100644 package/libclc/libclc.mk
+ create mode 100644 package/llvm/Config.in
+ create mode 100644 package/llvm/Config.in.host
+ create mode 100644 package/llvm/llvm.hash
+ create mode 100644 package/llvm/llvm.mk
+
 -- 
-2.7.4
+2.14.3
