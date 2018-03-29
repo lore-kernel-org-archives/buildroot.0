@@ -1,121 +1,124 @@
 From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Thu, 29 Mar 2018 13:33:44 +0200
-Subject: [Buildroot] [PATCH v4 09/11] package/libclc: new package
+Date: Thu, 29 Mar 2018 13:33:42 +0200
+Subject: [Buildroot] [PATCH v4 07/11] package/clang: new host package
 In-Reply-To: <20180329113346.10367-1-valentin.korenblit@smile.fr>
 References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
-Message-ID: <20180329113346.10367-10-valentin.korenblit@smile.fr>
+Message-ID: <20180329113346.10367-8-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides libclc, an open source implementation of the
-library requirements of the OpenCL C programming language, as
-specified by the OpenCL 1.1 Specification. It is intended to be used
-with Mesa Clover.
+This patch provides Clang for the host, tools and libraries.
 
-It needs to be compiled with Clang, as it generates LLVM IR bitcode
-files containing device builtin functions for each target.
-
-Currently, libclc supports AMDGCN, R600 and NVPTX targets.
-
-As OpenCL kernels are built dynamically on the target using libClang and
-libLLVM, it is necessary to copy /usr/include/clc from STAGING_DIR to the
-target manually, as Buildroot doesn't include this directory.
+Clang is needed to build libclc, which is also provided in this
+series.
 
 Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/libclc/Config.in |  9 +++++++++
- package/libclc/libclc.mk | 38 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 49 insertions(+)
- create mode 100644 package/libclc/Config.in
- create mode 100644 package/libclc/libclc.mk
+ DEVELOPERS                   |  1 +
+ package/Config.in.host       |  1 +
+ package/clang/Config.in.host |  8 ++++++++
+ package/clang/clang.hash     |  3 +++
+ package/clang/clang.mk       | 40 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 53 insertions(+)
+ create mode 100644 package/clang/Config.in.host
+ create mode 100644 package/clang/clang.hash
+ create mode 100644 package/clang/clang.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 47aa2dd82a..6bcafb6d2a 100644
+index 3ed9407670..47aa2dd82a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1860,6 +1860,7 @@ F:	package/tstools/
+@@ -1859,6 +1859,7 @@ F:	package/dropwatch/
+ F:	package/tstools/
  
  N:	Valentin Korenblit <valentin.korenblit@smile.fr>
- F:	package/clang/
-+F:	package/libclc/
++F:	package/clang/
  F:	package/llvm/
  
  N:	Vanya Sergeev <vsergeev@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 4d32d749fb..bc2228ed17 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -281,6 +281,7 @@ comment "Graphic libraries"
- 	source "package/fbv/Config.in"
- 	source "package/freerdp/Config.in"
- 	source "package/imagemagick/Config.in"
-+	source "package/libclc/Config.in"
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
- 	source "package/mesa3d/Config.in"
-diff --git a/package/libclc/Config.in b/package/libclc/Config.in
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 9a6227174b..09e00a2b45 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -5,6 +5,7 @@ menu "Host utilities"
+ 	source "package/cargo/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
++	source "package/clang/Config.in.host"
+ 	source "package/cmake/Config.in.host"
+ 	source "package/cramfs/Config.in.host"
+ 	source "package/cryptsetup/Config.in.host"
+diff --git a/package/clang/Config.in.host b/package/clang/Config.in.host
 new file mode 100644
-index 0000000000..797f090bfc
+index 0000000000..61a7ed59f0
 --- /dev/null
-+++ b/package/libclc/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBCLC
-+	bool "libclc"
++++ b/package/clang/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_CLANG
++	bool "host clang"
 +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
 +	help
-+	  libclc is an open source, BSD licensed implementation of
-+	  the library requirements of the OpenCL C programming language,
-+	  as specified by the OpenCL 1.1 Specification.
++	  Clang is a C/C++, Objective C/C++ and OpenCL C front-end
++	  for the LLVM compiler.
 +
-+	  http://libclc.llvm.org/
-diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
++	  http://clang.llvm.org/
+diff --git a/package/clang/clang.hash b/package/clang/clang.hash
 new file mode 100644
-index 0000000000..b8b4dca273
+index 0000000000..7e7584ced7
 --- /dev/null
-+++ b/package/libclc/libclc.mk
-@@ -0,0 +1,38 @@
++++ b/package/clang/clang.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256 135f6c9b0cd2da1aff2250e065946258eb699777888df39ca5a5b4fe5e23d0ff cfe-5.0.1.src.tar.xz
++sha256 de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6 LICENSE.txt
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+new file mode 100644
+index 0000000000..5ea0bb05f9
+--- /dev/null
++++ b/package/clang/clang.mk
+@@ -0,0 +1,40 @@
 +################################################################################
 +#
-+# libclc
++# clang
 +#
 +################################################################################
 +
-+LIBCLC_VERSION = 00236279a293b3737dee08c14f25923a889d2795
-+LIBCLC_SITE = https://git.llvm.org/git/libclc
-+LIBCLC_SITE_METHOD = git
++CLANG_VERSION = 5.0.1
++CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
++CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
++CLANG_LICENSE = NCSA
++CLANG_LICENSE_FILES = LICENSE.TXT
++CLANG_SUPPORTS_IN_SOURCE_BUILD = NO
 +
-+LIBCLC_DEPENDENCIES = host-clang host-llvm
-+LIBCLC_INSTALL_STAGING = YES
++HOST_CLANG_DEPENDENCIES = host-llvm host-libxml2
 +
-+# C++ compiler is used to build a small tool (prepare-builtins) for the host.
-+# It must be built with the C++ compiler from the host, simply use
-+# HOSTCXX_NOCCACHE.
-+LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
-+	--prefix="/usr" \
-+	--pkgconfigdir="/usr/lib/pkgconfig" \
-+	--with-cxx-compiler='$(HOSTCXX_NOCCACHE)'
++# Use "Unix Makefiles" generator for generating make-compatible parallel makefiles.
++HOST_CLANG_CONF_OPTS += -G "Unix Makefiles"
 +
-+define LIBCLC_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
-+endef
++# Select Release build
++HOST_CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
 +
-+define LIBCLC_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
++# Build tools enabled
++HOST_CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
 +
-+define LIBCLC_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
++# Don't build examples
++HOST_CLANG_CONF_OPTS += -DCLANG_BUILD_EXAMPLES=OFF
 +
-+define LIBCLC_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+endef
++# Don't build doc
++HOST_CLANG_CONF_OPTS += -DCLANG_INCLUDE_DOCS=OFF
 +
-+$(eval $(generic-package))
++# Don't build tests
++HOST_CLANG_CONF_OPTS += -DCLANG_INCLUDE_TESTS=OFF
++
++# Specify path to host's llvm-config
++HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
++
++# Install clang in  HOST_DIR/usr
++HOST_CLANG_CONF_OPTS += -DCMAKE_INSTALL_PREFIX=$(HOST_DIR)/usr
++
++$(eval $(host-cmake-package))
 -- 
 2.14.3
