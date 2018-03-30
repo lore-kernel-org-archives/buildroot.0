@@ -1,100 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 21:29:50 +0200
-Subject: [Buildroot] [PATCH 00/23] Fix numerous defconfig build failures
-In-Reply-To: <20180304213137.24681-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 4 Mar 2018 22:31:14 +0100")
-References: <20180304213137.24681-1-thomas.petazzoni@bootlin.com>
-Message-ID: <871sg14b0x.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 21:30:21 +0200
+Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p11
+In-Reply-To: <6be4748599ab638473e99b71ed5343181787ede0.1520355647.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 6 Mar 2018 19:00:47 +0200")
+References: <6be4748599ab638473e99b71ed5343181787ede0.1520355647.git.baruch@tkos.co.il>
+Message-ID: <87woxt2wfm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hello,
- > This commit fixes a significant number of defconfig build failures:
+ > Fixed or improved security issues:
+ >   CVE-2016-1549 (fixed in 4.2.8p7; this release adds protection): A
+ >   malicious authenticated peer can create arbitrarily-many ephemeral
+ >   associations in order to win the clock selection algorithm
 
- >  - Some defconfigs have a Linux kernel that needs openssl on the
- >    host. This requires adding a mechanism to add host-openssl as a
- >    dependency of the linux package. This is done by introducing
- >    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL in patch 1.
+ >   CVE-2018-7182: Buffer read overrun leads to undefined behavior and
+ >   information leak
 
- >    Then, numerous defconfigs are fixed to use
- >    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL: patches 6 to 13.
+ >   CVE-2018-7170: Multiple authenticated ephemeral associations
 
- >    The qemu_x86_defconfig and qemu_x86_64_defconfig are however
- >    changed in a different way: by removing wireless support, which is
- >    the reason why host-openssl becomes necessary in recent kernel
- >    versions. Since Qemu doesn't emulate a wireless interface, it
- >    didn't make much sense to have this additional dependency. See
- >    patch 4 and 5.
+ >   CVE-2018-7184: Interleaved symmetric mode cannot recover from bad
+ >   state
 
- >    For all other defconfigs, we erred on the safe side, and kept the
- >    configuration as-is, and simply added
- >    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL.
+ >   CVE-2018-7185: Unauthenticated packet can reset authenticated
+ >   interleaved association
 
- >  - Some defconfigs have a Linux kernel that needs libelf on the
- >    host. Like host-openssl, we added a new option
- >    BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF. See patch 2.
+ >   CVE-2018-7183: ntpq:decodearr() can write beyond its buffer limit
 
- >    In practice, only qemu_x86_64_defconfig needed libelf and the host,
- >    and instead of bringing this dependency, we have disabled the ORC
- >    Unwinder from the kernel defconfig. See patch 4.
+ > Drop patch #3. libntpq_a_CFLAGS now includes NTP_HARD_CFLAGS via
+ > AM_CFLAGS.
 
- >    Therefore, there are no in-tree defconfig that uses
- >    BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF.
+ > Add license file hash.
 
- >  - In order to make the host openssl and host libelf usable by the
- >    Linux kernel build system, we had to ensure that HOST_CFLAGS and
- >    HOST_LDFLAGS were properly taken into account. This is done in
- >    patch 3.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- >  - Some defconfigs have a U-Boot that needs dtc on the host. For
- >    these, the fix is simple: add BR2_TARGET_UBOOT_NEEDS_DTC=y in the
- >    defconfig. Patches 14 to 22.
-
- >  - Finally, one defconfig, ts4900_defconfig, had a separate issue: it
- >    wasn't explicitly specifying a kernel version, causing a mismatch
- >    with the selected kernel headers version.
-
- > Best regards,
-
- > Thomas
-
- > Thomas Petazzoni (23):
- >   linux: add BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL
- >   linux: add BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF
- >   linux: fix passing of host CFLAGS and LDFLAGS
- >   configs/qemu_x86_64_defconfig: remove kernel options that need
- >     openssl/libelf
- >   configs/qemu_x86_defconfig: remove kernel options that need openssl
- >   configs/orangepi_zero: needs host-openssl for the Linux kernel build
- >   configs/orangepi_pc_plus: needs host-openssl for the Linux kernel
- >     build
- >   configs/snps_archs38_axs103: needs host-openssl for the Linux kernel
- >     build
- >   configs/snps_archs38_vdk: needs host-openssl for the Linux kernel
- >     build
- >   configs/mx53loco: needs host-openssl for the Linux kernel build
- >   configs/imx6-sabresd: needs host-openssl for the Linux kernel build
- >   configs/snps_arc700_axs101: needs host-openssl for the Linux kernel
- >     build
- >   configs/solidrun_macchiatobin_mainline: needs host-openssl for the
- >     Linux kernel build
- >   configs/freescale_imx6qsabreauto: U-Boot needs host-dtc
- >   configs/solidrun_macchiatobin_marvell: U-Boot needs host-dtc
- >   configs/freescale_imx6sololiteevk: U-Boot needs host-dtc
- >   configs/freescale_imx6dlsabresd: U-Boot needs host-dtc
- >   configs/freescale_imx6dlsabreauto: U-Boot needs host-dtc
- >   configs/freescale_imx7dsabresd: U-Boot needs host-dtc
- >   configs/imx6ulevk: U-Boot needs host-dtc
- >   configs/freescale_imx6qsabresd: U-Boot needs host-dtc
- >   configs/freescale_imx6sxsabresd: U-Boot needs host-dtc
- >   configs/ts4900: explicitly specify Linux kernel version
-
-Committed all of these to 2018.02.x, thanks.
+Committed to 2018.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
