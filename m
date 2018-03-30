@@ -1,45 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 14:03:43 +0200
-Subject: [Buildroot] [PATCH 1/2] python-docker: bump version to 3.1.4
-Message-ID: <20180330120344.16589-1-peter@korsgaard.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Fri, 30 Mar 2018 14:16:00 +0200
+Subject: [Buildroot] [PATCH v4 08/11] package/clang: enable target
+ variant
+In-Reply-To: <20180330110753.2c1d1415@windsurf>
+References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
+ <20180329113346.10367-9-valentin.korenblit@smile.fr>
+ <20180330110753.2c1d1415@windsurf>
+Message-ID: <1a63ff29-d9ac-316d-f91f-cd9eec06dae5@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-docker/python-docker.hash | 4 ++--
- package/python-docker/python-docker.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
-index c09ccc3859..e811d3a8ac 100644
---- a/package/python-docker/python-docker.hash
-+++ b/package/python-docker/python-docker.hash
-@@ -1,4 +1,4 @@
- # md5 from https://pypi.python.org/pypi/docker/json, sha256 locally computed
--md5	71e97726a8bdc56effa7df8321c47af1  docker-3.1.1.tar.gz
--sha256	462165ca6367f802280684ab44e581cd2efba8995d78d07ea994e42194927c3b  docker-3.1.1.tar.gz
-+md5	981b23b41fd2346efcae977244b7188e  docker-3.1.4.tar.gz
-+sha256	753251b142d56f243fba53ba321a37740a6b6583c528437f45df4d28ba3d4d5d  docker-3.1.4.tar.gz
- sha256	f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
-diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
-index fb9b32a603..6a818ebaed 100644
---- a/package/python-docker/python-docker.mk
-+++ b/package/python-docker/python-docker.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DOCKER_VERSION = 3.1.1
-+PYTHON_DOCKER_VERSION = 3.1.4
- PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
--PYTHON_DOCKER_SITE = https://pypi.python.org/packages/0d/17/ad98e025e5528337c4dc5835a5874898eb226da17e4ffed732c894cb1938
-+PYTHON_DOCKER_SITE = https://pypi.python.org/packages/7f/22/fd6e97c99a512f74d46dab2b450fe370eb2f83404ef790298e3fd012cd5c
- PYTHON_DOCKER_SETUP_TYPE = setuptools
- PYTHON_DOCKER_LICENSE = Apache-2.0
- PYTHON_DOCKER_LICENSE_FILES = LICENSE
--- 
-2.11.0
+Hello Thomas,
+
+On 30/03/2018 11:07, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Thu, 29 Mar 2018 13:33:43 +0200, Valentin Korenblit wrote:
+>> This patch provides Clang for the target, tools and libraries.
+>>
+>> In this package we have to deal with the same kind of problem we encountered
+>> when building mesa3d with llvm support: llvm-config (host-version) had to be
+>> copied to STAGING_DIR/usr/bin. In this case, we need llvm-tblgen from host
+>> to be installed in STAGING_DIR/usr/bin for cross-compiling clang.
+>>
+>> We need libclang for the target because it is used by all OpenCL implementations.
+>> In this series, Clover is provided.
+> I'm not sure to understand why you need Clang on the target, and what
+> Clover is. Maybe I missed it, but I don't see where the target Clang is
+> used in the rest of your series.
+
+What we need is libclang, we don't need the binaries. But as libclang is a tool,
+I need to set CLANG_BUILD_TOOLS to ON, what will build everything.
+
+Clover is the OpenCL implementation provided with Mesa. It uses libclang as a frontend
+for OpenCL C and libLLVM for code generation.
+
+> In addition, we don't support gcc on the target, so having clang on the
+> target raises a red flag for me.
+>
+> Could you explain a bit more why this is needed/useful ?
+
+As explained above, we don't need it. I could add a hook to erase all unnecessary
+binaries from the target if that is ok.
+
+>
+> Thanks!
+>
+> Thomas
+
+Best regards,
+
+Valentin
