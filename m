@@ -1,21 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 21:30:56 +0200
-Subject: [Buildroot] [PATCH] linux: Config.in: correct typo in kernel
- compression format help text
-In-Reply-To: <20180306154651.30399-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 6 Mar 2018 16:46:51 +0100")
-References: <20180306154651.30399-1-peter@korsgaard.com>
-Message-ID: <87o9j52wen.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 21:31:15 +0200
+Subject: [Buildroot] [PATCH 1/1] libminiupnpc: add license hash
+In-Reply-To: <20180307193439.6914-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 7 Mar 2018 20:34:39 +0100")
+References: <20180307193439.6914-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k1tt2we4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > s/build/built/.
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2018.02.x, thanks.
 
