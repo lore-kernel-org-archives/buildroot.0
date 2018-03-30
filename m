@@ -1,40 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Mar 2018 08:00:30 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-03-29
-Message-ID: <20180330060030.1FBE320711@mail.bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Mar 2018 08:27:28 +0200
+Subject: [Buildroot] [PATCH] libopenssl: security bump to version 1.0.2o
+In-Reply-To: <20180329145209.7878-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 29 Mar 2018 16:52:09 +0200")
+References: <20180329145209.7878-1-peter@korsgaard.com>
+Message-ID: <87605e84dr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Build statistics for 2018-03-29
-===============================
+ > Fixes the following security issues:
+ > Constructed ASN.1 types with a recursive definition could exceed the stack
+ > (CVE-2018-0739)
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x | 149 |   4 |   0 | 153 |
+ > Constructed ASN.1 types with a recursive definition (such as can be found in
+ > PKCS7) could eventually exceed the stack given malicious input with
+ > excessive recursion.  This could result in a Denial Of Service attack.
+ > There are no such structures used within SSL/TLS that come from untrusted
+ > sources so this is considered safe.
 
-Results for branch '2018.02.x'
-==============================
+ > Incorrect CRYPTO_memcmp on HP-UX PA-RISC (CVE-2018-0733)
 
-Classification of failures by reason
-------------------------------------
+ > Because of an implementation bug the PA-RISC CRYPTO_memcmp function is
+ > effectively reduced to only comparing the least significant bit of each
+ > byte.  This allows an attacker to forge messages that would be considered as
+ > authenticated in an amount of tries lower than that guaranteed by the
+ > security claims of the scheme.  The module can only be compiled by the HP-UX
+ > assembler, so that only HP-UX PA-RISC targets are affected.
 
-                     php-7.2.3 | 2 
-             bluez5_utils-5.48 | 1 
-    trace-cmd-trace-cmd-v2.6.1 | 1 
+ > rsaz_1024_mul_avx2 overflow bug on x86_64 (CVE-2017-3738)
 
+ > This issue has been reported in a previous OpenSSL security advisory and a
+ > fix was provided for OpenSSL 1.0.2.  Due to the low severity no fix was
+ > released at that time for OpenSSL 1.1.0.  The fix is now available in
+ > OpenSSL 1.1.0h.
 
-Detail of failures
-------------------
+ > There is an overflow bug in the AVX2 Montgomery multiplication procedure
+ > used in exponentiation with 1024-bit moduli.  No EC algorithms are affected.
+ > Analysis suggests that attacks against RSA and DSA as a result of this
+ > defect would be very difficult to perform and are not believed likely.
+ > Attacks against DH1024 are considered just feasible, because most of the
+ > work necessary to deduce information about a private key may be performed
+ > offline.  The amount of resources required for such an attack would be
+ > significant.  However, for an attack on TLS to be meaningful, the server
+ > would have to share the DH1024 private key among multiple clients, which is
+ > no longer an option since CVE-2016-0701.
 
-     sparc64 |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/640efa40fbe19f9116b5c2af3b08e0429dd7820d |     
-microblazeel |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/98b8efa4a42b84ae351ed5e31657fca56c6e712d | ORPH
-     aarch64 |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/c0d7e19d7d17cc5346f69dad75520eb26489067b | ORPH
-     sparc64 |     trace-cmd-trace-cmd-v2.6.1 | NOK | http://autobuild.buildroot.net/results/9986f9460404727bbe860bacbc2d841a631233dc |     
+ > This only affects processors that support the AVX2 but not ADX extensions
+ > like Intel Haswell (4th generation).
 
+ > For more details, see https://www.openssl.org/news/secadv/20180327.txt
+
+ > The copyright year changed in LICENSE, so adjust the hash to match.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
-http://autobuild.buildroot.net
+Bye, Peter Korsgaard
