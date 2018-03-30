@@ -1,24 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:28:53 +0200
-Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add myself as the ts5500
- maintainer
-In-Reply-To: <20180305171505.4003-4-vivien.didelot@savoirfairelinux.com>
- (Vivien Didelot's message of "Mon, 5 Mar 2018 12:15:05 -0500")
-References: <20180305171505.4003-1-vivien.didelot@savoirfairelinux.com>
- <20180305171505.4003-4-vivien.didelot@savoirfairelinux.com>
-Message-ID: <877eptxnfu.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 23:30:15 +0200
+Subject: [Buildroot] [PATCH v2 5/9] docker-proxy: new package
+In-Reply-To: <20180301072012.25884-6-christian@paral.in> (Christian Stewart's
+ message of "Thu, 1 Mar 2018 02:20:08 -0500")
+References: <20180301072012.25884-1-christian@paral.in>
+ <20180301072012.25884-6-christian@paral.in>
+Message-ID: <87370hxndk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vivien" == Vivien Didelot <vivien.didelot@savoirfairelinux.com> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > Add a new entry for myself listing the TS-5500 board directory and
- > defconfig file.
+ > Add docker-proxy package to Buildroot. Needed by docker-engine at
+ > runtime, and previously not included. This leads to the following error
+ > when attempting to port-map ports to a container:
 
- > Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+ >   $ docker run -p 8080:8080 nginx
+ >   docker: Error response from daemon: driver failed programming external
+ >   connectivity on endpoint:
+ >   exec: "docker-proxy": executable file not found in $PATH.
+
+ > Docker expects the docker-proxy binary to exist in the PATH.
+
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
 Committed to 2018.02.x, thanks.
 
