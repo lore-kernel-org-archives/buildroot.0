@@ -1,35 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:04:57 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{14,
- 15}.x series
-Message-ID: <20180330213159.1B76083EBB@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 22:58:02 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] DEVELOPERS: Add myself as
+ a maintainer of fbgrab
+Message-ID: <20180330213158.F0AEE83EBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b76f2b3dd27fb7f6421adc69497e5b461303be9
+commit: https://git.buildroot.net/buildroot/commit/?id=7298952ec3a378cbe7a7d05f342d1a2d38fd5d25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Daniel's address is bouncing and my touch on fbgrab is now the most
+recent one.
+
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 324cc39ba13a3cbdd1f146cf59d0f145661830bc)
+(cherry picked from commit 8ea3dd2d6258cabecaa5796d58bce31d94abe056)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d74f267a2e..3723e8edec 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -248,6 +248,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.24"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.7"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.25"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.8"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/DEVELOPERS b/DEVELOPERS
+index dfb3203882..240f52ecac 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -466,7 +466,6 @@ F:	package/log4cpp/
+ 
+ N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
+ F:	package/e2tools/
+-F:	package/fbgrab/
+ 
+ N:	Daniel Price <daniel.price@gmail.com>
+ F:	package/nodejs/
+@@ -1800,6 +1799,9 @@ F:	toolchain/
+ N:	Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+ F:	package/aer-inject/
+ 
++N:	Timo Ketola <timo.ketola@exertus.fi>
++F:	package/fbgrab/
++
+ N:	Tzu-Jung Lee <roylee17@gmail.com>
+ F:	package/dropwatch/
+ F:	package/tstools/
