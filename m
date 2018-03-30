@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 08:32:13 +0200
-Subject: [Buildroot] [PATCH] bash: bump to version 4.4.18
-In-Reply-To: <20180329191550.27152-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Thu, 29 Mar 2018 21:15:50 +0200")
-References: <20180329191550.27152-1-joerg.krause@embedded.rocks>
-Message-ID: <87sh8i6ple.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 08:32:32 +0200
+Subject: [Buildroot] [PATCH] libsigsegv: bump to version 2.12
+In-Reply-To: <e08489c37b39780eb20a2fb5ad0bb530cd8a1ac2.1522388682.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 30 Mar 2018 08:44:42 +0300")
+References: <e08489c37b39780eb20a2fb5ad0bb530cd8a1ac2.1522388682.git.baruch@tkos.co.il>
+Message-ID: <87o9j66pkv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Add license file hash.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
