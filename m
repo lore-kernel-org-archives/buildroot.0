@@ -1,40 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Mar 2018 21:06:41 +0200
-Subject: [Buildroot] [PATCH v4 03/11] package/llvm: enable AMDGPU
-In-Reply-To: <b5a9d228-d7e1-7330-b5f6-52ad7ea443b9@mind.be>
-References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-4-valentin.korenblit@smile.fr>
- <20180330110241.792a6607@windsurf>
- <b5a9d228-d7e1-7330-b5f6-52ad7ea443b9@mind.be>
-Message-ID: <20180330210641.334407b0@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 30 Mar 2018 20:18:40 +0200
+Subject: [Buildroot] RFC: gst1-plugins-good 1.14: enable-qt config option
+In-Reply-To: <484a4f60-327f-12a8-e90e-206c81d60253@ginzinger.com>
+References: <484a4f60-327f-12a8-e90e-206c81d60253@ginzinger.com>
+Message-ID: <9c4fb7d7-3c9a-4a80-9b96-fcf546e6b880@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Fri, 30 Mar 2018 20:08:28 +0200, Arnout Vandecappelle wrote:
 
->  Or maybe
-> 
-> LLVM_TARGETS_TO_BUILD = $(HOST_LLVM_TARGET_ARCH)
-> 
-> ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
-> LLVM_TARGETS_TO_BUILD += AMDGPU
-> endif
-> 
-> LLVM_CONF_OPTS = -DLLVM_TARGETS_TO_BUILD=$(subst
-> $(space),;,$(LLVM_TARGETS_TO_BUILD))
-> 
-> 
->  Or is that too much GNUmake black magic?
+On 27-03-18 10:57, Martin Kepplinger wrote:
+>         QPA_INCLUDE_PATH=`$PKG_CONFIG --variable=includedir Qt5Core`/QtGui/${QT_VERSION}/QtGui
+>         AS_IF([test -f "$PKG_CONFIG_SYSROOT_DIR/$QPA_INCLUDE_PATH/qpa/qplatformnativeinterface.h"], [
 
-No, that's good.
+ This seems wrong. The includedir variable should already contain
+PKG_CONFIG_SYSROOT_DIR, so if you prepend it again, it will never work... I
+think this needs to be patched upstream.
 
-Thomas
+ Regards,
+ Arnout
+
+>           QT_CFLAGS="$QT_CFLAGS -I$PKG_CONFIG_SYSROOT_DIR/$QPA_INCLUDE_PATH"
+>           HAVE_QT_QPA_HEADER="yes"
+>         ], [AC_MSG_NOTICE([Cannot find QPA])])
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
