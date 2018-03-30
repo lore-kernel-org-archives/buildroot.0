@@ -1,91 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:17:00 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] board/technologic/ts5x00:
- rename to ts5500
-Message-ID: <20180330213159.A901F8398F@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 23:19:13 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump default to
+ version 4.15.9
+Message-ID: <20180330213159.EEFD483EBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=497b75717d8b5d3e7b7b23b71e0a68d8fcb5e69b
+commit: https://git.buildroot.net/buildroot/commit/?id=6e5767560e1d7e5a2255926cbf3a2d4d25a90ea9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Rename the confusing and misleading ts5x00 directory to a real reference
-platform name, ts5500. The readme.txt file already states the support
-for both TS-5500 and TS-5400 platforms.
-
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9f17540b170395d5c29eb111bfcacdb2540a2fb0)
+(cherry picked from commit b076e05950fcd1efad46e2ffebf378f8973dde0a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .gitlab-ci.yml                                                        | 2 +-
- .../{ts5x00 => ts5500}/fs-overlay/boot/syslinux/syslinux.cfg          | 0
- board/technologic/{ts5x00 => ts5500}/linux-4.14.config                | 0
- board/technologic/{ts5x00 => ts5500}/readme.txt                       | 2 +-
- configs/{ts5x00_defconfig => ts5500_defconfig}                        | 4 ++--
- 5 files changed, 4 insertions(+), 4 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 6edd2fbfd3..027c1c6053 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -228,7 +228,7 @@ stm32f469_disco_defconfig: *defconfig
- toradex_apalis_imx6_defconfig: *defconfig
- ts4800_defconfig: *defconfig
- ts4900_defconfig: *defconfig
--ts5x00_defconfig: *defconfig
-+ts5500_defconfig: *defconfig
- ts7680_defconfig: *defconfig
- wandboard_defconfig: *defconfig
- warp7_defconfig: *defconfig
-diff --git a/board/technologic/ts5x00/fs-overlay/boot/syslinux/syslinux.cfg b/board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg
-similarity index 100%
-rename from board/technologic/ts5x00/fs-overlay/boot/syslinux/syslinux.cfg
-rename to board/technologic/ts5500/fs-overlay/boot/syslinux/syslinux.cfg
-diff --git a/board/technologic/ts5x00/linux-4.14.config b/board/technologic/ts5500/linux-4.14.config
-similarity index 100%
-rename from board/technologic/ts5x00/linux-4.14.config
-rename to board/technologic/ts5500/linux-4.14.config
-diff --git a/board/technologic/ts5x00/readme.txt b/board/technologic/ts5500/readme.txt
-similarity index 98%
-rename from board/technologic/ts5x00/readme.txt
-rename to board/technologic/ts5500/readme.txt
-index 1e50682980..1e73ab3ea1 100644
---- a/board/technologic/ts5x00/readme.txt
-+++ b/board/technologic/ts5500/readme.txt
-@@ -13,7 +13,7 @@ and additional sysfs attributes under /sys/devices/platform/).
+diff --git a/linux/Config.in b/linux/Config.in
+index 3e039c5549..02c39b3e89 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
  
- To build the default configuration you only have to:
- 
--    $ make ts5x00_defconfig
-+    $ make ts5500_defconfig
-     $ make
- 
- You will need a Compact Flash card of sufficient size and the first or only
-diff --git a/configs/ts5x00_defconfig b/configs/ts5500_defconfig
-similarity index 80%
-rename from configs/ts5x00_defconfig
-rename to configs/ts5500_defconfig
-index 19259260b7..871c02e95f 100644
---- a/configs/ts5x00_defconfig
-+++ b/configs/ts5500_defconfig
-@@ -7,14 +7,14 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
--BR2_ROOTFS_OVERLAY="board/technologic/ts5x00/fs-overlay"
-+BR2_ROOTFS_OVERLAY="board/technologic/ts5500/fs-overlay"
- 
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/technologic/ts5x00/linux-4.14.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/technologic/ts5500/linux-4.14.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # rootfs
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.15.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.15.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
