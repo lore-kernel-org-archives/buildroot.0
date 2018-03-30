@@ -1,36 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 22:02:03 +0200
-Subject: [Buildroot] [git commit] zstd: fix legal info
-Message-ID: <20180330200216.B51A083EFD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 30 Mar 2018 22:04:08 +0200
+Subject: [Buildroot] [PATCH 1/1] ncmpc: bump to version 0.29
+In-Reply-To: <20180308164252.10577-1-fontaine.fabrice@gmail.com>
+References: <20180308164252.10577-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180330220408.4ce0b1ae@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b2f6548f8d2cad52fd3a5f81febf4818ee66304
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-zstd is dual licensed under BSD-3-Clause or GPL-2.0 as per README.md
-and source files license header.
+On Thu,  8 Mar 2018 17:42:52 +0100, Fabrice Fontaine wrote:
+> Since version 0.28 ncmpc only supports the meson build.
+> Therefore, adapt to package infrastructure according to the user manual.
+> 
+> Add a hash for the license file.
+> 
+> Add a nmpc entry for myself in DEVELOPERS
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  DEVELOPERS               |  1 +
+>  package/ncmpc/ncmpc.hash |  5 ++++-
+>  package/ncmpc/ncmpc.mk   | 28 +++++++++++++++++++++++++---
+>  3 files changed, 30 insertions(+), 4 deletions(-)
 
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zstd/zstd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index d5459f99dd..c0fa88026c 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -6,7 +6,7 @@
- 
- ZSTD_VERSION = v1.3.3
- ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
--ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
-+ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
- ZSTD_LICENSE_FILES = LICENSE COPYING
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
