@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 21:23:42 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: allow both in-tree and custom
- dts files
-In-Reply-To: <20180221195316.8496-1-simon.vanderveldt@gmail.com> (Simon van
- der Veldt's message of "Wed, 21 Feb 2018 20:53:16 +0100")
-References: <20180221195316.8496-1-simon.vanderveldt@gmail.com>
-Message-ID: <87zi2p4bb5.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 21:24:29 +0200
+Subject: [Buildroot] [PATCH RFC next] package/linux: drop useless
+ intermediate DTS booleans
+In-Reply-To: <20180226174721.5785-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Mon, 26 Feb 2018 18:47:21 +0100")
+References: <20180226174721.5785-1-yann.morin.1998@free.fr>
+Message-ID: <87vadd4b9u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon van der Veldt <simon.vanderveldt@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > For some boards, for example the Raspberry Pi, it's necessary to build in-tree dts files as well
- > as custom/out of tree dts-files (dt-blob.bin).
- > The existing logic made these two options exclusive, this commit changes that to allow both
- > in-tree as well as custom sources for dts files.
+ > Just use whatever the user specified in the list. An empty list means no
+ > DTS was specified.
 
- > Signed-off-by: Simon van der Veldt <simon.vanderveldt@gmail.com>
+ > No need to add legacy option, as the behaviour does not change.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Simon van der Veldt <simon.vanderveldt@gmail.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.02.x, thanks.
 
