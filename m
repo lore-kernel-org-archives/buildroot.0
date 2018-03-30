@@ -1,81 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 14:22:49 +0200
-Subject: [Buildroot] [git commit] core: alternate solution to disable C++
-Message-ID: <20180330122524.9E65E83EA3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 30 Mar 2018 14:37:55 +0200
+Subject: [Buildroot] [PATCH v4 08/11] package/clang: enable target
+ variant
+In-Reply-To: <1a63ff29-d9ac-316d-f91f-cd9eec06dae5@smile.fr>
+References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
+ <20180329113346.10367-9-valentin.korenblit@smile.fr>
+ <20180330110753.2c1d1415@windsurf>
+ <1a63ff29-d9ac-316d-f91f-cd9eec06dae5@smile.fr>
+Message-ID: <20180330143755.5d6ff8ce@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cd1ab15886a408b897104709ff87f15cc88ba16
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Some packages that use libtool really need some love to be able to
-disable C++ support.
+On Fri, 30 Mar 2018 14:16:00 +0200, Valentin Korenblit wrote:
 
-This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
-is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
-will want a C++ preprocessor that works on valid input *and* fail on
-invalid input.
+> What we need is libclang, we don't need the binaries. But as libclang is a tool,
+> I need to set CLANG_BUILD_TOOLS to ON, what will build everything.
+> 
+> Clover is the OpenCL implementation provided with Mesa. It uses libclang as a frontend
+> for OpenCL C and libLLVM for code generation.
 
-So, providing 'false' as the C++ compiler will then require that we do
-have a working C++ preprocessor. Which is totally counter-productive
-since we do not have a C++ compiler to start with...
+OK.
 
-bd39d11d2e (core/infra: fix build on toolchain without C++) was a
-previous attempt at fixing this, by using the host's C++ preprocessor.
+> > In addition, we don't support gcc on the target, so having clang on the
+> > target raises a red flag for me.
+> >
+> > Could you explain a bit more why this is needed/useful ?  
+> 
+> As explained above, we don't need it. I could add a hook to erase all unnecessary
+> binaries from the target if that is ok.
 
-However, that is very incorrect (that's my code, I can say so!) because
-the set of defines will most probably be different for the host and the
-target, thus causing all sorts of trouble. For example, on ARM we'd have
-to include different headers for soft-float vs hard-float, which is
-decided based on a macro, which is not defined for x86, and thus may
-redirect to the wrong (and missing) header.
+That's indeed a possibility.
 
-Instead, we notice that libtool uses the magic value 'no' to decide that
-a C++ compiler is not available, in which case it skips the call to
-AC_PROG_CXXCPP.
+I was a bit confused, because I missed which patch was actually using
+the target clang package, but I didn't read PATCH 10/11 carefully
+enough, and it does use the target clang, so it makes perfect sense.
 
-Given that 'no' is not provided by any package in Debian and
-derivatives, as well as in Fedora, we can assume that no system will
-have an executable called 'no'. Hence, we use that as a magic value to
-disable C++ detection altogether.
+Adjusting the target clang package to remove stuff that is not used is
+indeed a good idea.
 
-Fixes: #10846 (again)
+Thanks!
 
-Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Makefile.in | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 828e12e7d7..0af79dfb63 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -412,8 +412,16 @@ else
- NLS_OPTS = --disable-nls
- endif
- 
-+# We need anything that is invalid. Traditionally, we'd have used 'false' (and
-+# we did so in the past). However, that breaks libtool for packages that have
-+# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
-+# C++ preprocessor as long as CXX is not 'no'.
-+# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
-+# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
-+# expected and what we want), while at the same time taming libtool into
-+# silence.
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
--TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
-+TARGET_CONFIGURE_OPTS += CXX=no
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
