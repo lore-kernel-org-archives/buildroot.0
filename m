@@ -1,39 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 19:05:21 +0200
+Date: Fri, 30 Mar 2018 19:06:53 +0200
 Subject: [Buildroot] [git commit branch/2018.02.x]
- configs/solidrun_macchiatobin_mainline: needs host-openssl for the Linux
- kernel build
-Message-ID: <20180330193202.601877FF3E@busybox.osuosl.org>
+ configs/freescale_imx6dlsabresd: U-Boot needs host-dtc
+Message-ID: <20180330193202.9878C816A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c22be4afd42998571b029f80fc6011729509740
+commit: https://git.buildroot.net/buildroot/commit/?id=ea63e98581b6b8562af7251d36a2353f894d93ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306948
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306819
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ddbfee735e9bf13ebe6bec28790d18579ec37837)
+(cherry picked from commit 3575f84c4e53964fc0ffb53ec7eca362c1c3973e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/solidrun_macchiatobin_mainline_defconfig | 1 +
+ configs/freescale_imx6dlsabresd_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/solidrun_macchiatobin_mainline_defconfig b/configs/solidrun_macchiatobin_mainline_defconfig
-index 526c021fe7..dd797d709c 100644
---- a/configs/solidrun_macchiatobin_mainline_defconfig
-+++ b/configs/solidrun_macchiatobin_mainline_defconfig
-@@ -31,6 +31,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/linux-extras.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
- # rootfs
- BR2_TARGET_ROOTFS_TAR=y
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index a5c0aa6090..dc9b498aa4 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -39,3 +39,4 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
