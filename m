@@ -1,34 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:20:48 +0200
-Subject: [Buildroot] [PATCH] configs/teliv_evk_pro3: remove defconfig
-In-Reply-To: <20180307205323.14440-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 7 Mar 2018 21:53:23 +0100")
-References: <20180307205323.14440-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87lge91cr3.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 23:21:13 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] spport/check-bin-arch: accept
+ arbitrary ignore paths
+In-Reply-To: <161df6edb84bab2b76a3b9ae0527e479674b1be8.1520459473.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Wed, 7 Mar 2018 22:51:23 +0100")
+References: <cover.1520459473.git.yann.morin.1998@free.fr>
+ <161df6edb84bab2b76a3b9ae0527e479674b1be8.1520459473.git.yann.morin.1998@free.fr>
+Message-ID: <87h8ox1cqe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > This defconfig fails to build with gcc 6.x, even though we switched to
- > using gcc 6.x as the default gcc version in May 2017.
+ > Some packages (mostly, out-of-tree) may want to install binary blobs for
+ > another architecture,  outside the locations we currently exclude, like
+ > in /opt or whatever...
 
- > It hasn't been updated since April 2017, and the original submitter,
- > Fabio Porcedda said:
+ > Add support in check-bin-arch to accept any arbitrary location, that
+ > individual package can each request to excude from the check, when they
+ > are installed.
 
- >   Unfortunately a newer kernel doesn't boot and I don't have the time
- >   to fix the issue. If having a defconfig that doesn't build on gcc
- >   6.x is unacceptable feel free to remove it.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > So, let's get rid of this defconfig, which will remove the following
- > build error:
-
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/55306952
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - typoes and rephrasing  (Peter)
+ >   - use intermediate variable to cleanup the ignore option  (Thomas)
 
 Committed to 2018.02.x, thanks.
 
