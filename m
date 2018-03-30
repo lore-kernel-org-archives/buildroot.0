@@ -1,44 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 30 Mar 2018 11:17:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.1
-Message-ID: <20180330091739.27675-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Mar 2018 12:25:52 +0200
+Subject: [Buildroot] [PATCH] itop: new package
+In-Reply-To: <20180329195247.24360-1-alexandre.belloni@bootlin.com> (Alexandre
+ Belloni's message of "Thu, 29 Mar 2018 21:52:47 +0200")
+References: <20180329195247.24360-1-alexandre.belloni@bootlin.com>
+Message-ID: <87bmf57tcf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@bootlin.com> writes:
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 438c3cccef..cd2a0809fe 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 cce15db2fc5233386b63a3cf21c465c09e6e55014ed66c4f184b7d221a47180c  dovecot-2.2.35.tar.gz
-+sha256 0883821b97fd02a084a84b9469a681f7e6edc56541d854b5419d98891c51fb93  dovecot-2.3.1.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 783ca06a0e..8e775be5f7 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).35
-+DOVECOT_VERSION_MAJOR = 2.3
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).1
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+ > itop is a simple top-like interrupt load monitor. It can be useful to
+ > debug interrupt issues.
+
+ > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+ > +++ b/package/itop/Config.in
+ > @@ -0,0 +1,4 @@
+ > +config BR2_PACKAGE_ITOP
+ > +	bool "itop"
+ > +	help
+ > +	  itop is a simple top-like interrupt load monitor
+
+No upstream URL? The Debian package refers to hunz.org, which seems to
+have expired.
+
+https://github.com/kargig/itop looks similar, but is written in perl.
+
+ > +++ b/package/itop/itop.mk
+ > @@ -0,0 +1,21 @@
+ > +################################################################################
+ > +#
+ > +# itop
+ > +#
+ > +################################################################################
+ > +
+ > +ITOP_VERSION = 0.1
+ > +ITOP_SITE = http://http.debian.net/debian/pool/main/i/itop
+ > +ITOP_SOURCE = itop_$(ITOP_VERSION).orig.tar.gz
+
+For packages in Debian we normally use snapshot.debian.org - E.G. see
+sysvinit.mk. Looking at the changelog, it sounds like we should parhaps
+include the Debian patches (the .diff.gz) for those fixes:
+
+http://metadata.ftp-master.debian.org/changelogs/main/i/itop/itop_0.1-4_changelog
+
+
+> +ITOP_LICENSE = GPL-2.0
+ > +ITOP_LICENSE_FILES = COPYING
+ > +
+ > +define ITOP_BUILD_CMDS
+ > +	(cd $(@D) && $(TARGET_CC) -o itop src/itop.c)
+
+Please also add TARGET_CFLAGS and TARGET_LDFLAGS.
+
+> +endef
+ > +
+ > +define ITOP_INSTALL_TARGET_CMDS
+ > +	$(INSTALL) -m 0755 -D $(@D)/itop $(TARGET_DIR)/bin/itop
+
+The Debian package installs into /usr/bin, any reason to put it in /bin?
+
 -- 
-2.14.2
+Bye, Peter Korsgaard
