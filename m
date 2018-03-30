@@ -1,43 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:10:25 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] fbgrab: Fix some problems
- in the patch metadata
-Message-ID: <20180330213159.2E01883EBB@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 22:14:29 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] fbgrab: add patch fixing
+ pixel format report
+Message-ID: <20180330213158.D968983EBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f98b6dcec9374bd5e9c4b0622b7413840150f27
+commit: https://git.buildroot.net/buildroot/commit/?id=cd0318b020b2d747747e2b9806ce6ebd6fb77d48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The patch description was missing Upstream-Status tag. It was given in the
-commit which added this patch but not in the patch itself as should be.
+When verbosive, fbgrab reports pixel format. Green and blue offset and
+msb_right fields are accidentally swapped there. This commit adds a patch
+which straightens them up.
 
-Signed-off-by tag accidentally didn't follow the usual format.
+Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
 
 Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1a0b4b2be2c76b836f4461fcf59f5e95dcd8549b)
+(cherry picked from commit 5be0b3440e81aa364fb337b5e981f3396bdf8e02)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbgrab/0100-fix-pixfmt-report.patch | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/fbgrab/0100-fix-pixfmt-report.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
-index 18bcf96df2..8cff7ef8c3 100644
---- a/package/fbgrab/0100-fix-pixfmt-report.patch
+new file mode 100644
+index 0000000000..18bcf96df2
+--- /dev/null
 +++ b/package/fbgrab/0100-fix-pixfmt-report.patch
-@@ -4,7 +4,9 @@ When fbgrab tells about the framebuffer pixel format, blue and green
- are accidentally swapped in 'length' and 'msb_right' columns. Let's
- order everything as RGB.
- 
--Signed-off-by timo.ketola at exertus.fi
-+Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
+@@ -0,0 +1,22 @@
++Fix pixel format report
 +
-+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
- 
- diff -u a/fbgrab.c b/fbgrab.c
- --- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
++When fbgrab tells about the framebuffer pixel format, blue and green
++are accidentally swapped in 'length' and 'msb_right' columns. Let's
++order everything as RGB.
++
++Signed-off-by timo.ketola at exertus.fi
++
++diff -u a/fbgrab.c b/fbgrab.c
++--- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
+++++ b/fbgrab.c	2018-03-07 11:43:26.128043877 +0200
++@@ -169,8 +169,8 @@
++         fprintf(stderr, "bits_per_pixel: %i\n", fb_varinfo_p->bits_per_pixel);
++         fprintf(stderr, "grayscale: %s\n", fb_varinfo_p->grayscale ? "true" : "false");
++         fprintf(stderr, "red:   offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->red.offset, fb_varinfo_p->red.length, fb_varinfo_p->red.msb_right);
++-        fprintf(stderr, "blue:  offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->blue.offset, fb_varinfo_p->green.length, fb_varinfo_p->green.msb_right);
++-        fprintf(stderr, "green: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->green.offset, fb_varinfo_p->blue.length, fb_varinfo_p->blue.msb_right);
+++        fprintf(stderr, "green: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->green.offset, fb_varinfo_p->green.length, fb_varinfo_p->green.msb_right);
+++        fprintf(stderr, "blue:  offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->blue.offset, fb_varinfo_p->blue.length, fb_varinfo_p->blue.msb_right);
++         fprintf(stderr, "alpha: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->transp.offset, fb_varinfo_p->transp.length, fb_varinfo_p->transp.msb_right);
++         fprintf(stderr, "pixel format: %s\n", fb_varinfo_p->nonstd == 0 ? "standard" : "non-standard");
++     }
