@@ -1,35 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 19:06:36 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x]
- configs/freescale_imx6sololiteevk: U-Boot needs host-dtc
-Message-ID: <20180330193202.8ABC5816A8@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 19:00:21 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] configs/orangepi_zero:
+ needs host-openssl for the Linux kernel build
+Message-ID: <20180330193201.AA84683D1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60c40e84e2b4e1e3e23e379e776eff8de4641e6f
+commit: https://git.buildroot.net/buildroot/commit/?id=c38cbb1e25df99dce76a8ed30277c04f2188ebd9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306822
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/55306889
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3982d28cfbdcaf34a844fdce63ef68634adcf79f)
+(cherry picked from commit a645de1362a16e89430b39f6a31049a3fdbc9f57)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/freescale_imx6sololiteevk_defconfig | 1 +
+ configs/orangepi_zero_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index 1b3546255a..b840f2f185 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -36,3 +36,4 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
+index 2efccc0ced..fcf9b325cd 100644
+--- a/configs/orangepi_zero_defconfig
++++ b/configs/orangepi_zero_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero/linux-extras.config"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
