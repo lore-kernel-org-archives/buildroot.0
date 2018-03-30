@@ -1,34 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 21:26:09 +0200
-Subject: [Buildroot] [PATCH] configs/freescale_mpc8315erdb: remove
- defconfig
-In-Reply-To: <20180304220039.25832-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 4 Mar 2018 23:00:39 +0100")
-References: <20180304220039.25832-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87in9d4b72.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 30 Mar 2018 21:27:37 +0200
+Subject: [Buildroot] Buildroot hackathon on Mar 31 - Apr 2
+In-Reply-To: <20180308093957.297efb49@windsurf>
+References: <20180308093957.297efb49@windsurf>
+Message-ID: <20180330212737.2d4b5d7b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello,
 
- > This defconfig currently fails to build the Linux kernel:
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/55306826
+On Thu, 8 Mar 2018 09:39:57 +0100, Thomas Petazzoni wrote:
 
- > In addition, the U-Boot build had already been removed in commit
- > 12c01e4a05c8e4f4e0c4e8b74fac7824efdc8b41
- > ("configs/freescale_mpc8315erdb: remove U-Boot build"), back in
- > October 2016, and nobody bothered fixing it.
+> If you have any question on how to participate remotely, do not
+> hesitate to ask!
 
- > This defconfig was originally contributed and maintained by Gustavo
- > Zacarias, but he is no longer active in Buildroot, and nobody
- > expressed interest in this defconfig, so let's get rid of it.
+A quick reminder about this hackathon: it takes places this WE. Most of
+us have already arrived, and we invite you to join us on IRC if you
+want to participate to the effort.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+If you're available and willing to help, don't hesitate to ask on IRC
+for things to do, we're certainly find useful things you can do to help
+the Buildroot project during this WE.
 
-Committed to 2018.02.x, thanks.
+Thanks for your participation!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
