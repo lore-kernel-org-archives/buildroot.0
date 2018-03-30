@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 21:16:17 +0200
+Date: Fri, 30 Mar 2018 21:16:33 +0200
 Subject: [Buildroot] [git commit branch/next] support/config-fragments:
- remove bogus BR2_JLEVEL option
-In-Reply-To: <20180205214818.86C2C872BE@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Mon, 5 Feb 2018 22:46:59 +0100")
-References: <20180205214818.86C2C872BE@busybox.osuosl.org>
-Message-ID: <87lge95q7y.fsf@dell.be.48ers.dk>
+ add internal defconfigs for glibc and musl
+In-Reply-To: <20180205214818.7A8A98845F@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 5 Feb 2018 22:45:17 +0100")
+References: <20180205214818.7A8A98845F@busybox.osuosl.org>
+Message-ID: <87h8ox5q7i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=14fdb63804f1548b5d1ab9598100c7f103d4512d
+ > commit: https://git.buildroot.net/buildroot/commit/?id=6030986311434d554635761925925bfd351b836b
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > There is no reason to have a BR2_JLEVEL option in such toolchain
- > defconfigs.
+ > While we have several defconfigs building internal toolchains with
+ > uClibc, we don't have any building internal toolchain with glibc and
+ > musl. However, having such defconfigs is nice when we bump the C
+ > library version, in order to immediately get feedback on build
+ > failures.
+
+ > Note that while the ARC internal defconfig uses glibc, it uses the
+ > special ARC glibc version, so it doesn't test version bumps of the
+ > upstream glibc C library.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Committed to 2017.08.x, thanks.
+Committed to 2018.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
