@@ -1,47 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 22:58:02 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] DEVELOPERS: Add myself as
- a maintainer of fbgrab
-Message-ID: <20180330213158.F0AEE83EBB@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 23:10:25 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] fbgrab: Fix some problems
+ in the patch metadata
+Message-ID: <20180330213159.2E01883EBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7298952ec3a378cbe7a7d05f342d1a2d38fd5d25
+commit: https://git.buildroot.net/buildroot/commit/?id=4f98b6dcec9374bd5e9c4b0622b7413840150f27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Daniel's address is bouncing and my touch on fbgrab is now the most
-recent one.
+The patch description was missing Upstream-Status tag. It was given in the
+commit which added this patch but not in the patch itself as should be.
+
+Signed-off-by tag accidentally didn't follow the usual format.
 
 Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8ea3dd2d6258cabecaa5796d58bce31d94abe056)
+(cherry picked from commit 1a0b4b2be2c76b836f4461fcf59f5e95dcd8549b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 4 +++-
+ package/fbgrab/0100-fix-pixfmt-report.patch | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index dfb3203882..240f52ecac 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -466,7 +466,6 @@ F:	package/log4cpp/
+diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
+index 18bcf96df2..8cff7ef8c3 100644
+--- a/package/fbgrab/0100-fix-pixfmt-report.patch
++++ b/package/fbgrab/0100-fix-pixfmt-report.patch
+@@ -4,7 +4,9 @@ When fbgrab tells about the framebuffer pixel format, blue and green
+ are accidentally swapped in 'length' and 'msb_right' columns. Let's
+ order everything as RGB.
  
- N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
- F:	package/e2tools/
--F:	package/fbgrab/
- 
- N:	Daniel Price <daniel.price@gmail.com>
- F:	package/nodejs/
-@@ -1800,6 +1799,9 @@ F:	toolchain/
- N:	Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
- F:	package/aer-inject/
- 
-+N:	Timo Ketola <timo.ketola@exertus.fi>
-+F:	package/fbgrab/
+-Signed-off-by timo.ketola at exertus.fi
++Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
 +
- N:	Tzu-Jung Lee <roylee17@gmail.com>
- F:	package/dropwatch/
- F:	package/tstools/
++Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+ 
+ diff -u a/fbgrab.c b/fbgrab.c
+ --- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
