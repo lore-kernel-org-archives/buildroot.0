@@ -1,31 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:31:52 +0200
-Subject: [Buildroot] [git commit] uboot: fix build for older uboot
- source trees
-In-Reply-To: <20180312225038.E70DE8346A@busybox.osuosl.org> (Peter Korsgaard's
- message of "Mon, 12 Mar 2018 23:50:17 +0100")
-References: <20180312225038.E70DE8346A@busybox.osuosl.org>
-Message-ID: <87lge9w8qf.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 22:11:20 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] support/check-bin-arch:
+ exclude kernel modules for merged /usr
+Message-ID: <20180330213158.87E9E83EBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ac076f59de92cbea22bc26e5c83bbbdf75e9c70f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=f437bf547ca44849db4578c31707afdd96b85018
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When using a merged /usr, the kernel module path is really
+/usr/lib/modules, as /lib is a symlink to usr/lib .
 
- > The change in commit bf733342324b414a1142b57781504111f81c97ea only works
- > for newer uboot source trees. Add a check that scripts/dtc/libfdt
- > directory exists before making this change.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1b9a57442d0a234b03585235f516d755372f29b3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/adding-packages-generic.txt | 4 ++--
+ support/scripts/check-bin-arch          | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
- > [Peter: add comment explaining why]
- > Signed-off-by: Stefan Becker <chemobejk@gmail.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index eecf6e2ec0..521d6d50c7 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -457,8 +457,8 @@ information is (assuming the package name is +libfoo+) :
+   to the target directory) to ignore when checking that the package
+   installs correctly cross-compiled binaries. You seldom need to set this
+   variable, unless the package installs binary blobs outside the default
+-  locations, `/lib/firmware`, `/usr/lib/firmware`, `/lib/modules`, and
+-  `/usr/share`, which are automatically excluded.
++  locations, `/lib/firmware`, `/usr/lib/firmware`, `/lib/modules`,
++  `/usr/lib/modules`, and `/usr/share`, which are automatically excluded.
+ 
+ The recommended way to define these variables is to use the following
+ syntax:
+diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+index d8385b4fcf..7f97696735 100755
+--- a/support/scripts/check-bin-arch
++++ b/support/scripts/check-bin-arch
+@@ -14,6 +14,7 @@ declare -a IGNORES=(
+ 	# and its modules may still be 64-bit. To keep the basic
+ 	# check-bin-arch logic simple, just skip this directory.
+ 	"/lib/modules"
++	"/usr/lib/modules"
+ 
+ 	# Skip files in /usr/share, several packages (qemu,
+ 	# pru-software-support) legitimately install ELF binaries that
