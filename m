@@ -1,61 +1,65 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Fri, 30 Mar 2018 22:33:49 +0200
-Subject: [Buildroot] [PATCH v4 03/11] package/llvm: enable AMDGPU
-In-Reply-To: <20180330210641.334407b0@windsurf>
-References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-4-valentin.korenblit@smile.fr>
- <20180330110241.792a6607@windsurf>
- <b5a9d228-d7e1-7330-b5f6-52ad7ea443b9@mind.be>
- <20180330210641.334407b0@windsurf>
-Message-ID: <18c4a3ac-db52-5542-e8c6-fc17e3e5251c@smile.fr>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri, 30 Mar 2018 23:01:16 +0200
+Subject: [Buildroot] [PATCH] package/xterm: Avoid freetype2 path
+ poisoning using imake
+In-Reply-To: <20180327074434.15306-1-valentin.korenblit@smile.fr>
+References: <20180327074434.15306-1-valentin.korenblit@smile.fr>
+Message-ID: <c8ccba59-28d3-b495-b111-3c684f084a7b@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hi Valentin, All,
 
-On 30/03/2018 21:06, Thomas Petazzoni wrote:
-> Hello,
->
-> On Fri, 30 Mar 2018 20:08:28 +0200, Arnout Vandecappelle wrote:
->
->>   Or maybe
->>
->> LLVM_TARGETS_TO_BUILD = $(HOST_LLVM_TARGET_ARCH)
->>
->> ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
->> LLVM_TARGETS_TO_BUILD += AMDGPU
->> endif
->>
->> LLVM_CONF_OPTS = -DLLVM_TARGETS_TO_BUILD=$(subst
->> $(space),;,$(LLVM_TARGETS_TO_BUILD))
->>
->>
->>   Or is that too much GNUmake black magic?
+Le 27/03/2018 ? 09:44, Valentin Korenblit a ?crit?:
+> When imake is installed on the host, it tries to include
+> freetype headers from host, so we must override ac_cv_path_IMAKE
+> to avoid this.
+> 
+> Extract from config.log:
+> 
+> configure:14803: checking if we should use imake to help
+> configure:14820: result: yes
+> configure:14829: checking for xmkmf
+> configure:14846: found /usr/bin/xmkmf
+> configure:14857: result: /usr/bin/xmkmf
+> configure:14920: testing Using /usr/bin/xmkmf  ...
+> configure:15015: testing IMAKE_CFLAGS  -I. -I/usr/include/freetype2
+> 
+> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+> ---
+>  package/xterm/xterm.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+> index 645de92e22..ff2b77459e 100644
+> --- a/package/xterm/xterm.mk
+> +++ b/package/xterm/xterm.mk
+> @@ -14,6 +14,9 @@ XTERM_CONF_OPTS = --enable-256-color \
+>  	--x-includes=$(STAGING_DIR)/usr/include \
+>  	--x-libraries=$(STAGING_DIR)/usr/lib
+>  
+> +# Avoid freetype2 path poisoning using imake
+> +XTERM_CONF_ENV = ac_cv_path_IMAKE=
+> +
 
-I've just tested your suggestions, but finally we also need to build amdgpu target for host. The reason is that
-llvm-config (host version installed in STAGING) will output only x86 when executing llvm-config --targets-built.
-This is because it stores information related to the build where it comes from.
+If you look at other ac_cv_path_* override on other packages, the syntax should be:
+XTERM_CONF_ENV = ac_cv_path_IMAKE=""
 
-This fails when Mesa looks for amdgpu backend:
+This can be fixed while commiting.
 
-llvm_add_target() {
-     new_llvm_target=$1
-     driver_name=$2
+With that fixed:
 
-     if $LLVM_CONFIG --targets-built | grep -iqw $new_llvm_target ; then
-         llvm_add_component $new_llvm_target $driver_name
-     else
-         AC_MSG_ERROR([LLVM target '$new_llvm_target' not enabled in your LLVM build. Required by $driver_name.])
-     fi
-}
+    Reviewed-by: Romain Naour <romain.naour@smile.fr>
 
-> No, that's good.
->
-> Thomas
 
 Best regards,
+Romain
 
-Valentin
+
+>  ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
+>  XTERM_DEPENDENCIES += xlib_libXft
+>  XTERM_CONF_OPTS += --enable-freetype \
+> 
