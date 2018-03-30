@@ -1,50 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 18:33:06 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/rauc: Version
- bump to 0.3
-Message-ID: <20180330193200.908D083EC5@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 18:49:15 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] pkgconf: pkg-config.in:
+ double quote $@
+Message-ID: <20180330193200.EE3F681495@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=354eb7fb8934e3f1d11904999349647697c55080
+commit: https://git.buildroot.net/buildroot/commit/?id=36718c0f99be2709ee8cc52f24dcafed4f5cc36a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-There's a bug in 0.2 which prevents proper operation when activated via
-D-Bus, which is why I'm bumping this.
+The shell expands "$@" as "$1" "$2" "$3"... while it expands $@ as $1 $2
+$3. With the second form, we loses spaces in positional parameters.
 
-Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Link: https://github.com/rauc/rauc/issues/125
+As example, the following call
+
+        pkg-config --cflags "one two" three
+
+is wrapped as
+
+        pkgconf --cflags one two three
+
+while we are expecting
+
+        pkgconf --cflags "one two" three
+
+"$@" is really useful when writing wrappers. It passes the positional
+arguments *as* they are given.
+
+Double quote $@ to prevent from splitting elements.
+
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ab863898812a926f0ee687269c2e2ed61bc7adc7)
+(cherry picked from commit cc526b428bb6f1e35ce9165f94e6f2fd306a37c7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkgconf/pkg-config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index 649d19571e..91d7c1d62e 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v0.2/rauc-0.2.tar.xz.asc
--sha256 83aa3ac3716e1c29315162e3cbf5d4db79f26dd95efe1bc634bbce364b95491a rauc-0.2.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v0.3/rauc-0.3.tar.xz.asc
-+sha256 dc01bfb08b1830376782f9a51cfec290171519267ab97cc909435da9ac6d6d98 rauc-0.3.tar.xz
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 4909062cf5..63fbc53022 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RAUC_VERSION = 0.2
-+RAUC_VERSION = 0.3
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+index b9ce0935cc..9387931ff2 100644
+--- a/package/pkgconf/pkg-config.in
++++ b/package/pkgconf/pkg-config.in
+@@ -2,4 +2,4 @@
+ PKGCONFDIR=$(dirname $0)
+ DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
+ DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
+-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ $@
++PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
