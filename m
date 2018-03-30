@@ -1,44 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 08:30:51 +0200
-Subject: [Buildroot] [git commit] bash: bump to version 4.4.18
-Message-ID: <20180330063308.6752083E31@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 08:32:28 +0200
+Subject: [Buildroot] [git commit] libsigsegv: bump to version 2.12
+Message-ID: <20180330063308.803BF7FA52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6aa2bfd87fed698fa1d14cde21360cf2a187fff1
+commit: https://git.buildroot.net/buildroot/commit/?id=be824409c4bc83cf0b61816bdf2c4edf8cd15da3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Add license file hash.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bash/bash.hash | 4 ++--
- package/bash/bash.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libsigsegv/libsigsegv.hash | 5 ++++-
+ package/libsigsegv/libsigsegv.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/bash/bash.hash b/package/bash/bash.hash
-index 4e2e48f363..951bcf5850 100644
---- a/package/bash/bash.hash
-+++ b/package/bash/bash.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# http://ftp.gnu.org/gnu/bash/bash-4.4.12.tar.gz.sig
--sha256 57d8432be54541531a496fd4904fdc08c12542f43605a9202594fa5d5f9f2331	bash-4.4.12.tar.gz
-+# http://ftp.gnu.org/gnu/bash/bash-4.4.18.tar.gz.sig
-+sha256 604d9eec5e4ed5fd2180ee44dd756ddca92e0b6aa4217bbab2b6227380317f23	bash-4.4.18.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index e9384911a0..b162d93188 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
+diff --git a/package/libsigsegv/libsigsegv.hash b/package/libsigsegv/libsigsegv.hash
+index e937259ece..47ba356821 100644
+--- a/package/libsigsegv/libsigsegv.hash
++++ b/package/libsigsegv/libsigsegv.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	dd7c2eb2ef6c47189406d562c1dc0f96f2fc808036834d596075d58377e37a18	libsigsegv-2.11.tar.gz
++# https://ftp.gnu.org/gnu/libsigsegv/libsigsegv-2.12.tar.gz.sig
++sha256	3ae1af359eebaa4ffc5896a1aee3568c052c99879316a1ab57f8fe1789c390b6	libsigsegv-2.12.tar.gz
++# Locally calculated
++sha256	8f2983e9a940367f48999881c14775db725ee643bce1e2f1ba195eb629a33cde	COPYING
+diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
+index d2524977a4..6fa0929bba 100644
+--- a/package/libsigsegv/libsigsegv.mk
++++ b/package/libsigsegv/libsigsegv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BASH_VERSION = 4.4.12
-+BASH_VERSION = 4.4.18
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
- # Build after since bash is better than busybox shells
- BASH_DEPENDENCIES = ncurses readline host-bison \
+-LIBSIGSEGV_VERSION = 2.11
++LIBSIGSEGV_VERSION = 2.12
+ LIBSIGSEGV_SITE = $(BR2_GNU_MIRROR)/libsigsegv
+ LIBSIGSEGV_INSTALL_STAGING = YES
+ LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
