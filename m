@@ -1,30 +1,111 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 21:07:34 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libminiupnpc: add license
- hash
-Message-ID: <20180330193203.261E3816A8@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 21:05:55 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] ntp: security bump to
+ version 4.2.8p11
+Message-ID: <20180330193202.F2059816A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aa5a4dd46308cdce993e0c37c614c06910453d3
+commit: https://git.buildroot.net/buildroot/commit/?id=6fae0a55e62994e25c04b90844d6c2e1f552c9b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixed or improved security issues:
+
+  CVE-2016-1549 (fixed in 4.2.8p7; this release adds protection): A
+  malicious authenticated peer can create arbitrarily-many ephemeral
+  associations in order to win the clock selection algorithm
+
+  CVE-2018-7182: Buffer read overrun leads to undefined behavior and
+  information leak
+
+  CVE-2018-7170: Multiple authenticated ephemeral associations
+
+  CVE-2018-7184: Interleaved symmetric mode cannot recover from bad
+  state
+
+  CVE-2018-7185: Unauthenticated packet can reset authenticated
+  interleaved association
+
+  CVE-2018-7183: ntpq:decodearr() can write beyond its buffer limit
+
+Drop patch #3. libntpq_a_CFLAGS now includes NTP_HARD_CFLAGS via
+AM_CFLAGS.
+
+Add license file hash.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 452339abd6f8cbaebd00840ff4464f6f16182601)
+(cherry picked from commit da05d748057a98254a9c4fbd6afbc8ebf7e08afd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libminiupnpc/libminiupnpc.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/ntp/0003-ntpq-fpic.patch | 23 -----------------------
+ package/ntp/ntp.hash             |  7 ++++---
+ package/ntp/ntp.mk               |  3 +--
+ 3 files changed, 5 insertions(+), 28 deletions(-)
 
-diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
-index 985d69d45f..c83b38aa60 100644
---- a/package/libminiupnpc/libminiupnpc.hash
-+++ b/package/libminiupnpc/libminiupnpc.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 d434ceb8986efbe199c5ca53f90ed53eab290b1e6d0530b717eb6fa49d61f93b  miniupnpc-2.0.tar.gz
-+sha256 4025f2214fa46ad40c156605b83d66e8faf45823e67eb3337af3869716e6d7dd  LICENSE
+diff --git a/package/ntp/0003-ntpq-fpic.patch b/package/ntp/0003-ntpq-fpic.patch
+deleted file mode 100644
+index 6e05a677c5..0000000000
+--- a/package/ntp/0003-ntpq-fpic.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-ntpq/Makefile.am: add NTP_HARD_CFLAGS
+-
+-Pass NTP_HARD_CFLAGS when building ntpq, like in all other ntp
+-modules, to make sure -fPIC is passed.
+-
+-Originally taken from
+-https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=494143c3b4921a5c8b8596d58f2c8b98296bf688.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/ntpq/Makefile.am
+-===================================================================
+---- a/ntpq/Makefile.am
+-+++ b/ntpq/Makefile.am
+-@@ -23,7 +23,7 @@
+- ntpq_LDADD += $(LDADD_NTP)
+- noinst_HEADERS=	ntpq.h
+- noinst_LIBRARIES=	libntpq.a
+--libntpq_a_CFLAGS=	-DNO_MAIN_ALLOWED -DBUILD_AS_LIB
+-+libntpq_a_CFLAGS=	$(NTP_HARD_CFLAGS) -DNO_MAIN_ALLOWED -DBUILD_AS_LIB
+- CLEANFILES=
+- DISTCLEANFILES=	.version version.c config.log $(man_MANS)
+- ETAGS_ARGS=	Makefile.am
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index d8b7083c47..ea86c1586f 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,4 +1,5 @@
+-# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p10.tar.gz.md5
+-md5 745384ed0dedb3f66b33fe84d66466f9  ntp-4.2.8p10.tar.gz
++# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p11.tar.gz.md5
++md5 00950ca2855579541896513e78295361  ntp-4.2.8p11.tar.gz
+ # Calculated based on the hash above
+-sha256 ddd2366e64219b9efa0f7438e06800d0db394ac5c88e13c17b70d0dcdf99b99f  ntp-4.2.8p10.tar.gz
++sha256 f14a39f753688252d683ff907035ffff106ba8d3db21309b742e09b5c3cd278e  ntp-4.2.8p11.tar.gz
++sha256 62c87b269365b38b55359b16dfde7ec28c683c722ef489db90afd0f2e478e4a1  COPYRIGHT
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index cc363269c3..1f66ad996b 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p10
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p11
+ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = NTP
+@@ -20,7 +20,6 @@ NTP_CONF_OPTS = \
+ 	--disable-local-libevent
+ 
+ # 0002-ntp-syscalls-fallback.patch
+-# 0003-ntpq-fpic.patch
+ NTP_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
