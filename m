@@ -1,36 +1,45 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Fri, 30 Mar 2018 16:01:16 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/piglit: new package
-In-Reply-To: <20180211162136.15605-3-romain.naour@gmail.com>
-References: <20180211162136.15605-1-romain.naour@gmail.com>
- <20180211162136.15605-3-romain.naour@gmail.com>
-Message-ID: <739caac0-526a-12b6-1934-bf0e9ebe52d8@smile.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 30 Mar 2018 18:50:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: add optional support for lua
+Message-ID: <20180330165036.15754-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/apache/apache.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-
-On 11/02/2018 17:21, Romain Naour wrote:
-> Piglit is an open-source test suite for OpenGL implementations.
-> It's an python3 script based around several tools like glxinfo,
-> wflinfo, dmesg.
->
-> Even though waffle support can be replaced by freeglut,
-> using pliglit with waffle is recommended since freeglut
-> will be replaced by waffle.
->
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> Bernd, I'm Cc you since you're probably interested by piglit to
-> test new mesa3d version.
->
-> v2: bump version
-> ---
-
-Tested on AMD SUMO with Gallium r600 driver.
-
-Tested-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index eaf7b9c5bf..3b39be4a40 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -40,7 +40,6 @@ APACHE_CONF_OPTS = \
+ 	--without-suexec-bin \
+ 	--enable-mods-shared=all \
+ 	--with-mpm=$(APACHE_MPM) \
+-	--disable-lua \
+ 	--disable-luajit
+ 
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+@@ -57,6 +56,15 @@ APACHE_CONF_OPTS += \
+ 	--disable-proxy-html
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LUA),y)
++APACHE_CONF_OPTS += \
++	--enable-lua \
++	--with-lua=$(STAGING_DIR)/usr
++APACHE_DEPENDENCIES += lua
++else
++APACHE_CONF_OPTS += --disable-lua
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ APACHE_DEPENDENCIES += openssl
+ APACHE_CONF_OPTS += \
+-- 
+2.14.2
