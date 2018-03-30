@@ -1,44 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:28:09 +0200
-Subject: [Buildroot] [PATCH 2/2] uboot-tools: backport patch fixing
- build failure with libfdt-devel installed
-In-Reply-To: <20180308095846.7618-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 8 Mar 2018 10:58:46 +0100")
-References: <20180308095846.7618-1-thomas.petazzoni@bootlin.com>
- <20180308095846.7618-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87k1ttxnh2.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 23:28:38 +0200
+Subject: [Buildroot] [PATCH 1/3] board/technologic/ts5x00: bump kernel
+ to 4.14
+In-Reply-To: <20180305171505.4003-2-vivien.didelot@savoirfairelinux.com>
+ (Vivien Didelot's message of "Mon, 5 Mar 2018 12:15:03 -0500")
+References: <20180305171505.4003-1-vivien.didelot@savoirfairelinux.com>
+ <20180305171505.4003-2-vivien.didelot@savoirfairelinux.com>
+Message-ID: <87fu4hxng9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Vivien" == Vivien Didelot <vivien.didelot@savoirfairelinux.com> writes:
 
- > U-Boot host programs fail to build when libfdt-devel is installed
- > system-wide, with errors like this:
+ > Bump the 3.17 kernel used for the Technologic Systems TS-5500 platform
+ > to the latest LTS kernel 4.14.
 
- >       HOSTCC  tools/aisimage.o
- >     In file included from tools/../include/../lib/libfdt/libfdt.h:10:0,
- >                      from tools/../include/libfdt.h:1,
- >                      from tools/fdt_host.h:11,
- >                      from tools/imagetool.h:24,
- >                      from tools/aisimage.c:8:
- >     /usr/include/libfdt_env.h:70:30: error: conflicting types for ?fdt64_t?
- >      typedef uint64_t FDT_BITWISE fdt64_t;
- >                                   ^~~~~~~
- >     In file included from <command-line>:0:0:
- >     ././include/libfdt_env.h:19:16: note: previous declaration of ?fdt64_t? was here
- >      typedef __be64 fdt64_t;
- >                     ^~~~~~~
- >     In file included from ././include/libfdt_env.h:12:0,
- >                      from <command-line>:0:
- >     /usr/include/libfdt_env.h:90:24: error: expected ?)? before ?x?
- >      static inline uint32_t fdt32_to_cpu(fdt32_t x)
- >                             ^
- > This commit backports an upstream patch that fixes this problem.
+ > This fixes the ts5x00_defconfig build with GCC 6.x.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > The linux-3.17.config file has been renamed to linux-4.14.config to
+ > match the new kernel version, and its changes are the result of make
+ > linux-update-defconfig. However only comments are affected.
+
+ > Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
 Committed to 2018.02.x, thanks.
 
