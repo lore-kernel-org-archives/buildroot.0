@@ -1,70 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Mar 2018 23:05:27 +0200
-Subject: [Buildroot] Make C and CXX compiler cache in
- toolchainfile.cmake.in
-In-Reply-To: <8fa283f1-a304-5f8f-54a2-24fc103afc8c@mind.be>
-References: <000001d3c425$31ba3fc0$952ebf40$@gmx.de>
- <8fa283f1-a304-5f8f-54a2-24fc103afc8c@mind.be>
-Message-ID: <20180330210527.GA8894@scaer>
+Date: Fri, 30 Mar 2018 23:12:04 +0200
+Subject: [Buildroot] [PATCH v3 6/7] .gitlab-ci.yml: check flake8
+In-Reply-To: <5aa9ad41d2fec_41fe2ab6b2513450655d5@ultri4.mail>
+References: <20180313181519.GC4317@scaer>
+ <5aa9ad41d2fec_41fe2ab6b2513450655d5@ultri4.mail>
+Message-ID: <20180330211204.GB8894@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Ricardo, All,
 
-On 2018-03-30 21:57 +0200, Arnout Vandecappelle spake thusly:
-> On 25-03-18 12:36, Michael Dick wrote:
-> > My suggestion ist o use this patch. Is there any reason why the compilers are
-> > not cached?
-> 
->  Sounds to me like a good idea.
-> 
->  Let's add Yann, Samuel and Luca in Cc as CMake experts :-P
+On 2018-03-14 20:16 -0300, Ricardo Martincoski spake thusly:
+> On Tue, Mar 13, 2018 at 03:15 PM, Yann E. MORIN wrote:
+> > On 2018-03-13 00:09 -0300, Ricardo Martincoski spake thusly:
+> >> ---
+> >> BEFORE APPLYING, see this note from Yann:
+> >> Note: this can only be applied _after_ we regenerate the docker image.
+> >> Then we'll have to update the version of the image at the top of the
+> >> gitlab-ci.yml file.
+> > Indeed, so I've marked this patch as "deferred" in patchwork, so it does
+> > not get accidentally applied.
+> Could you regenerate the image, please?
+> I don't have the docker push permission.
 
-I wonder at what time I gained this expertise level in a tool I rarely
-use... ;-)
-
-> For their
-> convenience, here is the patch inline:
-> 
-> > --- /tmp/toolchainfile.cmake.in.orig    2018-03-25 12:32:03.353000419 +0200
-> > +++ /tmp/toolchainfile.cmake.in 2018-03-25 12:32:52.647000419 +0200
-> > @@ -58,8 +58,8 @@
-> >  set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
-> >  
-> >  # This toolchain file can be used both inside and outside Buildroot.
-> > -set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
-> > -set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
-> > +set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@" CACHE STRING "C Compiler")
-> > +set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@" CACHE STRING "CXX Compiler")
-
-I have absolutely no clue what this means...
+Not sure if you were aware of it, but this has been done a little while
+ago now. Tag 20180318.1724 is available:
+    https://hub.docker.com/r/buildroot/base/tags/
 
 Regards,
 Yann E. MORIN.
-
-> >  if(@@TOOLCHAIN_HAS_FORTRAN@@)
-> >    set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
-> >    set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
-> 
-> 
->  Michael, could you resubmit as a proper patch with commit log and
-> Signed-off-by? See [1].
-> 
->  Regards,
->  Arnout
-> 
-> [1] https://buildroot.org/downloads/manual/manual.html#submitting-patches
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
