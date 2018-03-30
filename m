@@ -1,65 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 30 Mar 2018 21:49:08 +0200
-Subject: [Buildroot] libopenssl in buildroot-2018.02
-In-Reply-To: <b06bcfe21263864b9b35fdea9f15e99f@sw-optimization.com>
-References: <b06bcfe21263864b9b35fdea9f15e99f@sw-optimization.com>
-Message-ID: <cb163c18-c5c9-ed5d-d3df-27511d1ac9ba@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Mar 2018 21:43:31 +0200
+Subject: [Buildroot] [git commit] opus: add hash for license file
+Message-ID: <20180330194951.5270E83EF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=6911750391b07a5fdda0fdaf43409941858318d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/opus/opus.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 27-03-18 15:38, Eric Schwarz wrote:
-> Hello,
-> 
-> the patches to be downloaded for the openssl-1.0.2n.tar.gz package are
-> defined in
-> ??? ./package/libopenssl/libopenssl.mk
-> by
-> ??? LIBOPENSSL_PATCH
-> 
-> The patches are stored with some suffix after the "patch" extension.
-> When those are checked-in using SVN and checked-out under Windows it
-> won't work since there are "?" in the filename.
-> 
-> *
-> openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-
- There is a trick possible by adding something after the URL:
-
-openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d&br2_filename=/openssl-1.0.2a-parallel-install-dirs.patch
-
-But it becomes really ugly...
-
- I wouldn't mind putting those patches directly in Buildroot instead of
-downloading them from Gentoo.
-
-> 
-> *
-> openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-> 
-> *
-> openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-> 
-> * openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-> 
-> Apart, why have not those patches yet been applied to openssl master?
-
- Because nobody did the effort of upstreaming them? Since the patches come from
-Gentoo, it's supposedly not our problem... But feel free to send those patches
-(and also the ones we have in Buildroot, though I think patches 0001 and 0002
-are both a bit iffy).
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/opus/opus.hash b/package/opus/opus.hash
+index 32fe2e245b..c1a92d6b94 100644
+--- a/package/opus/opus.hash
++++ b/package/opus/opus.hash
+@@ -1,2 +1,5 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+ sha256 cfafd339ccd9c5ef8d6ab15d7e1a412c054bf4cb4ecbbbcc78c12ef2def70732  opus-1.2.1.tar.gz
++
++# Hash for license file
++sha256 8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682  COPYING
