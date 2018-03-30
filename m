@@ -1,38 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 30 Mar 2018 10:59:51 +0300
-Subject: [Buildroot] [PATCH] busybox: bump version to 1.28.2
-In-Reply-To: <871sg284dc.fsf@dell.be.48ers.dk>
-References: <20180329162251.30655-1-peter@korsgaard.com>
- <871sg284dc.fsf@dell.be.48ers.dk>
-Message-ID: <20180330075951.m56kpqepvkkp5nij@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Mar 2018 10:47:08 +0200
+Subject: [Buildroot] [PATCH 1/2] libnspr: bump version to 4.19
+Message-ID: <20180330084709.30893-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libnspr/libnspr.hash | 4 ++--
+ package/libnspr/libnspr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, Mar 30, 2018 at 08:27:43AM +0200, Peter Korsgaard wrote:
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-> 
->  > Drop 0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch now upstream.
->  > From the release notes:
-> 
->  > Bug fix release.  1.28.2 has fixes for tcpsvd (fixed fallout from
->  > opt_complementary removal), udhcpd (do not ignore SIGTERM), tar and unzip
->  > (reverted to previous, more permissive symlink handling), ssl_client (fixed
->  > option parsing).
-> 
->  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> 
-> Committed, thanks.
-
-Not in master as of be824409c4.
-
-baruch
-
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 46c091e0da..3067afd720 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/nspr/releases/v4.17/src/SHA256SUMS
+-sha256	590a0aea29412ae22d7728038c21ef2ab42646e48172a47d2e4bb782846d1095  nspr-4.17.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.19/src/SHA256SUMS
++sha256	2ed95917fa2277910d1d1cf36030607dccc0ba522bba08e2af13c113dcd8f729  nspr-4.19.tar.gz
+ # Locally calculated
+ sha256	fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 0c782ae309..14381bb5e8 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.17
++LIBNSPR_VERSION = 4.19
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
