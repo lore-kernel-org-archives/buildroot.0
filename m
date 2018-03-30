@@ -1,95 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:16:44 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] board/technologic/ts5x00:
- bump kernel to 4.14
-Message-ID: <20180330213159.97A3B83EBB@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 23:13:35 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package: add
+ python-functools32
+Message-ID: <20180330213159.5EFF183EBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66c14b5429e9ac71ef9de692231823c6e1e1ce58
+commit: https://git.buildroot.net/buildroot/commit/?id=2a18954aaaffc0e0eb4a55abe07016ba88ce5dc6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Bump the 3.17 kernel used for the Technologic Systems TS-5500 platform
-to the latest LTS kernel 4.14.
+Backport of the functools module from Python 3.2.3 for use on 2.7 and PyPy.
 
-This fixes the ts5x00_defconfig build with GCC 6.x.
-
-The linux-3.17.config file has been renamed to linux-4.14.config to
-match the new kernel version, and its changes are the result of make
-linux-update-defconfig. However only comments are affected.
-
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6461d76992ec2ceffabd7a5ccb59bb707ea2cb0a)
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 146b8d31ea9d96212eb2e6458b3bc69b5a391e73)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/technologic/ts5x00/{linux-3.17.config => linux-4.14.config} | 4 +---
- configs/ts5x00_defconfig                                          | 8 ++++----
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-functools32/Config.in               |  8 ++++++++
+ package/python-functools32/python-functools32.hash |  4 ++++
+ package/python-functools32/python-functools32.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
-diff --git a/board/technologic/ts5x00/linux-3.17.config b/board/technologic/ts5x00/linux-4.14.config
-similarity index 98%
-rename from board/technologic/ts5x00/linux-3.17.config
-rename to board/technologic/ts5x00/linux-4.14.config
-index 60cd8a0fe3..eb81596e25 100644
---- a/board/technologic/ts5x00/linux-3.17.config
-+++ b/board/technologic/ts5x00/linux-4.14.config
-@@ -1,3 +1,4 @@
-+# CONFIG_CROSS_MEMORY_ATTACH is not set
- CONFIG_PARTITION_ADVANCED=y
- # CONFIG_X86_EXTENDED_PLATFORM is not set
- CONFIG_MELAN=y
-@@ -6,7 +7,6 @@ CONFIG_X86_REBOOTFIXUPS=y
- CONFIG_NOHIGHMEM=y
- # CONFIG_COMPACTION is not set
- # CONFIG_BOUNCE is not set
--# CONFIG_CROSS_MEMORY_ATTACH is not set
- # CONFIG_RELOCATABLE is not set
- # CONFIG_SUSPEND is not set
- # CONFIG_ACPI is not set
-@@ -19,7 +19,6 @@ CONFIG_INET=y
- # CONFIG_INET_XFRM_MODE_TRANSPORT is not set
- # CONFIG_INET_XFRM_MODE_TUNNEL is not set
- # CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_LRO is not set
- # CONFIG_INET_DIAG is not set
- # CONFIG_IPV6 is not set
- # CONFIG_WIRELESS is not set
-@@ -76,7 +75,6 @@ CONFIG_DM9102=y
- CONFIG_PHYLIB=y
- CONFIG_DAVICOM_PHY=y
- # CONFIG_WLAN is not set
--# CONFIG_INPUT_MOUSEDEV is not set
- # CONFIG_INPUT_KEYBOARD is not set
- # CONFIG_INPUT_MOUSE is not set
- # CONFIG_SERIO is not set
-diff --git a/configs/ts5x00_defconfig b/configs/ts5x00_defconfig
-index 531088661c..19259260b7 100644
---- a/configs/ts5x00_defconfig
-+++ b/configs/ts5x00_defconfig
-@@ -2,8 +2,8 @@
- BR2_i386=y
- BR2_x86_i586=y
- 
--# Linux headers same as kernel, a 3.17 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
-@@ -12,9 +12,9 @@ BR2_ROOTFS_OVERLAY="board/technologic/ts5x00/fs-overlay"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/technologic/ts5x00/linux-3.17.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/technologic/ts5x00/linux-4.14.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # rootfs
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 240f52ecac..d1a4483940 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1368,6 +1368,7 @@ F:	package/mosquitto/
+ F:	package/python-alsaaudio/
+ F:	package/python-enum/
+ F:	package/python-enum34/
++F:	package/python-functools32/
+ F:	package/python-ipaddr/
+ F:	package/python-pam/
+ F:	package/python-psutil/
+diff --git a/package/Config.in b/package/Config.in
+index 9cd5d9c087..bd2f30852b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -775,6 +775,7 @@ menu "External python modules"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flup/Config.in"
++	source "package/python-functools32/Config.in"
+ 	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-gunicorn/Config.in"
+diff --git a/package/python-functools32/Config.in b/package/python-functools32/Config.in
+new file mode 100644
+index 0000000000..cc12557edc
+--- /dev/null
++++ b/package/python-functools32/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_FUNCTOOLS32
++	bool "python-functools32"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Backport of the functools module from Python 3.2.3 for use on 2.7
++	  and PyPy.
++
++	  https://github.com/MiCHiLU/python-functools32
+diff --git a/package/python-functools32/python-functools32.hash b/package/python-functools32/python-functools32.hash
+new file mode 100644
+index 0000000000..606de81774
+--- /dev/null
++++ b/package/python-functools32/python-functools32.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/functools32/json, sha256 locally computed
++md5	09f24ffd9af9f6cd0f63cb9f4e23d4b2  functools32-3.2.3-2.tar.gz
++sha256	f6253dfbe0538ad2e387bd8fdfd9293c925d63553f5813c4e587745416501e6d  functools32-3.2.3-2.tar.gz
++sha256	3f9ea6b89abe1556b72aff67b987d64c8272564815cd6a2832e6c4f6abdfe3b1  LICENSE
+diff --git a/package/python-functools32/python-functools32.mk b/package/python-functools32/python-functools32.mk
+new file mode 100644
+index 0000000000..8a88bb2a7f
+--- /dev/null
++++ b/package/python-functools32/python-functools32.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-functools32
++#
++################################################################################
++
++PYTHON_FUNCTOOLS32_VERSION = 3.2.3-2
++PYTHON_FUNCTOOLS32_SOURCE = functools32-$(PYTHON_FUNCTOOLS32_VERSION).tar.gz
++PYTHON_FUNCTOOLS32_SITE = https://pypi.python.org/packages/c5/60/6ac26ad05857c601308d8fb9e87fa36d0ebf889423f47c3502ef034365db
++PYTHON_FUNCTOOLS32_SETUP_TYPE = distutils
++PYTHON_FUNCTOOLS32_LICENSE = Python-2.0
++PYTHON_FUNCTOOLS32_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
