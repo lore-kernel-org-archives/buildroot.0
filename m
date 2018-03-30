@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 23:21:44 +0200
-Subject: [Buildroot] [PATCH 1/1] libcoap: add licenses hash
-In-Reply-To: <20180307225615.6650-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 7 Mar 2018 23:56:15 +0100")
-References: <20180307225615.6650-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zi2pz2c7.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 23:21:51 +0200
+Subject: [Buildroot] [PATCH 1/1] gtest: add license hash
+In-Reply-To: <20180307225629.6700-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 7 Mar 2018 23:56:29 +0100")
+References: <20180307225629.6700-1-fontaine.fabrice@gmail.com>
+Message-ID: <87vaddz2c0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
