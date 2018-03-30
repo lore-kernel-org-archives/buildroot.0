@@ -1,107 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 18:41:12 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] musl: add more kernel
- headers guards
-Message-ID: <20180330193200.A0AE483EC5@busybox.osuosl.org>
+Date: Fri, 30 Mar 2018 18:46:55 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/linux: drop
+ useless intermediate DTS booleans
+Message-ID: <20180330193200.DEB8381495@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdf1952b3d8a53a84b6d8ef63c0fce73ed350eca
+commit: https://git.buildroot.net/buildroot/commit/?id=fe8c2831239eae57dc2fb9223fed6158c581979c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Kernel version 4.15 (not 4.16 as the musl commit log claims) allows
-disabling of more parts of the kernel headers definitions. Add upstream
-musl patch that defines the relevant macros. This solves issues of
-networking related symbols redefinition in kernel headers that cause
-headers conflicts. With that in place a subsequent commit will limit the
-musl/kernel headers conflict avoidance workaround in Buildroot to kernel
-headers older than 4.15. This workaround has been introduced in commit
-196932cd91 (toolchain: workaround musl/kernel headers conflict).
+Just use whatever the user specified in the list. An empty list means no
+DTS was specified.
 
+No need to add legacy option, as the behaviour does not change.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Simon van der Veldt <simon.vanderveldt@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b99ca5ce3243cf06c45917bd07872aaf00d25e0a)
+Tested-by: Joshua Henderson <joshua.henderson@microchip.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f142f23ecf9ee69326fd6a4387133443513afdd2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...nal-uapi-guards-for-Linux-kernel-header-f.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ linux/Config.in | 28 ++++++----------------------
+ linux/linux.mk  |  4 ----
+ 2 files changed, 6 insertions(+), 26 deletions(-)
 
-diff --git a/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch b/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
-new file mode 100644
-index 0000000000..cbfc9b668f
---- /dev/null
-+++ b/package/musl/0002-add-additional-uapi-guards-for-Linux-kernel-header-f.patch
-@@ -0,0 +1,69 @@
-+From b583c5d3b4cc2c54c68eef5eb7855ecfacee8bfc Mon Sep 17 00:00:00 2001
-+From: Hauke Mehrtens <hauke@hauke-m.de>
-+Date: Sat, 6 Jan 2018 23:32:52 +0100
-+Subject: [PATCH] add additional uapi guards for Linux kernel header files
-+
-+With Linux kernel 4.16 it will be possible to guard more parts of the
-+Linux header files from a libc. Make use of this in musl to guard all
-+the structures and other definitions from the Linux header files which
-+are also defined by the header files provided by musl. This will make
-+it possible to compile source files which include both the libc
-+headers and the kernel userspace headers.
-+
-+This extends the definitions done in commit 04983f227238 ("make
-+netinet/in.h suppress clashing definitions from kernel headers")
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit b583c5d3b4cc
-+
-+ include/net/if.h           | 7 +++++++
-+ include/netinet/if_ether.h | 1 +
-+ include/sys/xattr.h        | 2 ++
-+ 3 files changed, 10 insertions(+)
-+
-+diff --git a/include/net/if.h b/include/net/if.h
-+index 2f2fcc10e484..774cbff0b506 100644
-+--- a/include/net/if.h
-++++ b/include/net/if.h
-+@@ -125,6 +125,13 @@ struct ifconf {
-+ #define ifc_req		ifc_ifcu.ifcu_req
-+ #define _IOT_ifconf _IOT(_IOTS(struct ifconf),1,0,0,0,0)
-+ 
-++#define __UAPI_DEF_IF_IFCONF                                    0
-++#define __UAPI_DEF_IF_IFMAP                                     0
-++#define __UAPI_DEF_IF_IFNAMSIZ                                  0
-++#define __UAPI_DEF_IF_IFREQ                                     0
-++#define __UAPI_DEF_IF_NET_DEVICE_FLAGS                          0
-++#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO    0
-++
-+ #endif
-+ 
-+ #ifdef __cplusplus
-+diff --git a/include/netinet/if_ether.h b/include/netinet/if_ether.h
-+index d9a131aa2d1d..97134d75b480 100644
-+--- a/include/netinet/if_ether.h
-++++ b/include/netinet/if_ether.h
-+@@ -133,5 +133,6 @@ do { \
-+ 	(enaddr)[5] = ((uint8_t *)ipaddr)[3]; \
-+ } while(0)
-+ 
-++#define __UAPI_DEF_ETHHDR       0
-+ 
-+ #endif
-+diff --git a/include/sys/xattr.h b/include/sys/xattr.h
-+index 6479fcc62e5f..eeeaafc44f09 100644
-+--- a/include/sys/xattr.h
-++++ b/include/sys/xattr.h
-+@@ -24,6 +24,8 @@ int removexattr(const char *, const char *);
-+ int lremovexattr(const char *, const char *);
-+ int fremovexattr(int, const char *);
-+ 
-++#define __UAPI_DEF_XATTR        0
-++
-+ #ifdef __cplusplus
-+ }
-+ #endif
-+-- 
-+2.15.1
-+
+diff --git a/linux/Config.in b/linux/Config.in
+index bc6cd1b5f7..7aed6f8075 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -363,35 +363,19 @@ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
+ config BR2_LINUX_KERNEL_APPENDED_DTB
+ 	bool
+ 
+-config BR2_LINUX_KERNEL_USE_INTREE_DTS
+-	bool "Use a device tree present in the kernel"
+-	help
+-	  Use a device tree source distributed with
+-	  the kernel sources. The dts files are located
+-	  in the arch/<arch>/boot/dts folder.
+-
+ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+-	string "Device Tree Source file names"
+-	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
++	string "In-tree Device Tree Source file names"
+ 	help
+-	  Name of the device tree source file, without
++	  Name of in-tree device tree source file, without
+ 	  the trailing .dts. You can provide a list of
+ 	  dts files to build, separated by spaces.
+ 
+-config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+-	bool "Use a custom device tree file"
+-	help
+-	  Use a custom device tree file, i.e, a device
+-	  tree file that does not belong to the kernel
+-	  source tree.
+-
+ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+-	string "Device Tree Source file paths"
+-	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
++	string "Out-of-tree Device Tree Source file paths"
+ 	help
+-	  Path to the device tree source files. You can
+-	  provide a list of dts paths to copy and build,
+-	  separated by spaces.
++	  Path to to out-of-tree device tree source files.
++	  You can provide a list of dts paths to copy and
++	  build, separated by spaces.
+ 
+ endif
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index a14a07a485..f24255747f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -118,17 +118,13 @@ endif
+ # going to be installed in the target filesystem.
+ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+ 
+-ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
+ KERNEL_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+-endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+ # We keep only the .dts files, so that the user can specify both .dts
+ # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+ # copied to arch/<arch>/boot/dts, but only the .dts files will
+ # actually be generated as .dtb.
+ KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+-endif
+ 
+ KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+ 
