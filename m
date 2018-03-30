@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 10:54:54 +0200
-Subject: [Buildroot] [PATCH] busybox: bump version to 1.28.2
-In-Reply-To: <20180330075951.m56kpqepvkkp5nij@tarshish> (Baruch Siach's
- message of "Fri, 30 Mar 2018 10:59:51 +0300")
-References: <20180329162251.30655-1-peter@korsgaard.com>
- <871sg284dc.fsf@dell.be.48ers.dk>
- <20180330075951.m56kpqepvkkp5nij@tarshish>
-Message-ID: <87k1tu6izl.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Mar 2018 10:59:31 +0200
+Subject: [Buildroot] [PATCH] libunistring: bump to version 0.9.9
+In-Reply-To: <f4e7a79ad539740d5d57f80b7ee87a527f621c25.1522396634.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 30 Mar 2018 10:57:14 +0300")
+References: <f4e7a79ad539740d5d57f80b7ee87a527f621c25.1522396634.git.baruch@tkos.co.il>
+Message-ID: <87fu4i6irw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +13,17 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hi Peter,
- > On Fri, Mar 30, 2018 at 08:27:43AM +0200, Peter Korsgaard wrote:
- >> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
- >> 
- >> > Drop 0003-tar-unzip-postpone-creation-of-symlinks-with-suspici.patch now upstream.
- >> > From the release notes:
- >> 
- >> > Bug fix release.  1.28.2 has fixes for tcpsvd (fixed fallout from
- >> > opt_complementary removal), udhcpd (do not ignore SIGTERM), tar and unzip
- >> > (reverted to previous, more permissive symlink handling), ssl_client (fixed
- >> > option parsing).
- >> 
- >> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> 
- >> Committed, thanks.
+ > Drop --{enable,disable}-threads; threading support is detected
+ > automatically.
 
- > Not in master as of be824409c4.
+ > Add GPLv3 license file.
 
-It is now, thanks.
+ >  LIBUNISTRING_LICENSE = LGPL-3.0+ or GPL-2.0
+
+I get it that LGPL-3.0 refers to the GPL-3.0 license, but it is a bit
+odd that upstream doesn't ship a GPL-2.0 license file.
+
+Oh well, committed - Thanks.
 
 -- 
 Bye, Peter Korsgaard
