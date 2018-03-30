@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 30 Mar 2018 20:08:28 +0200
-Subject: [Buildroot] [PATCH v4 03/11] package/llvm: enable AMDGPU
-In-Reply-To: <20180330110241.792a6607@windsurf>
-References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-4-valentin.korenblit@smile.fr>
- <20180330110241.792a6607@windsurf>
-Message-ID: <b5a9d228-d7e1-7330-b5f6-52ad7ea443b9@mind.be>
+Date: Fri, 30 Mar 2018 21:09:19 +0200
+Subject: [Buildroot] RFC: gst1-plugins-good 1.14: enable-qt config option
+In-Reply-To: <f148b224-5d1d-de86-91fe-13379549cd6a@ginzinger.com>
+References: <484a4f60-327f-12a8-e90e-206c81d60253@ginzinger.com>
+ <f148b224-5d1d-de86-91fe-13379549cd6a@ginzinger.com>
+Message-ID: <d156a4f7-16d3-bc44-ed3d-dc3de048e3ce@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,71 +13,41 @@ To: buildroot@busybox.net
 
 
 
-On 30-03-18 11:02, Thomas Petazzoni wrote:
-> Hello Valentin,
+On 28-03-18 16:22, Martin Kepplinger wrote:
+> TL;DR so far: How to configure in gstreamer-gl-1.0 ? see below.
 > 
-> On Thu, 29 Mar 2018 13:33:38 +0200, Valentin Korenblit wrote:
+> On 2018-03-27 10:57, Martin Kepplinger wrote:
+>> So the goal here is to optionally get gst1-plugins-good's qt module to
+>> be built (and have the qmlglsink gstreamer element) with Qt and eglfs
+>> platform.
+[snip]
+> So HAVE_QT_WINDOWING is never set to yes, which means
+> GST_GL_HAVE_PLATFORM_EGL is not set to 1 :(
 > 
->> +config BR2_PACKAGE_LLVM_AMDGPU
->> +	bool "AMDGPU backend"
->> +	depends on BR2_PACKAGE_LLVM
->> +	help
->> +	  Build AMDGPU target. Select this option if you are going
->> +	  to install mesa3d with llvm and use Gallium Radeon driver.
->> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
->> index 4e58c96e0f..c819487bdf 100644
->> --- a/package/llvm/llvm.mk
->> +++ b/package/llvm/llvm.mk
->> @@ -226,9 +226,15 @@ LLVM_CONF_OPTS += -DLLVM_BUILD_EXTERNAL_COMPILER_RT=OFF
->>  # Get target architecture
->>  HOST_LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
->>  
->> +# Build AMDGPU backend
->> +ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
->> +HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH);AMDGPU"
->> +LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH);AMDGPU"
+> Well, this is set to 1, if the following string contains "egl":
+>  GST_GL_PLATFORMS=`$PKG_CONFIG --variable=gl_platforms gstreamer-gl-1.0`
 > 
-> It feels non-natural that a target Config.in option
-> (BR2_PACKAGE_LLVM_AMDGPU) affect the build of the host variant of the
-> LLVM package. Is this really intended and necessary ? I.e do you need
-> AMDGPU support in the host LLVM variant for it to work in the target
-> LLVM ?
+> So I indeed also find:
 > 
->> +else
->>  # Build backend for target architecture
->>  HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH)"
->>  LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(HOST_LLVM_TARGET_ARCH)"
->> +endif
+> checking for GST_GL... no
 > 
-> This doesn't look like a very extensible solution.
+> configure: Package gstreamer-gl-1.0 was not found in the pkg-config
+> search path.
+> Perhaps you should add the directory containing `gstreamer-gl-1.0.pc'
 > 
-> What about instead:
+> to the PKG_CONFIG_PATH environment variable
 > 
-> LLVM_TARGETS_TO_BUILD = $(HOST_LLVM_TARGET_ARCH)
+> Package 'gstreamer-gl-1.0', required by 'world', not found
 > 
-> ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
-> LLVM_TARGETS_TO_BUILD := $(LLVM_TARGETS_TO_BUILD);AMDGPU
-> endif
 > 
-> and then use LLVM_TARGETS_TO_BUILD to pass -DLLVM_TARGETS_TO_BUILD.
+> So: How can I build this gstreamer-gl-1.0 library?
+> https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-libs/html/gl.html
 
- Or maybe
-
-LLVM_TARGETS_TO_BUILD = $(HOST_LLVM_TARGET_ARCH)
-
-ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
-LLVM_TARGETS_TO_BUILD += AMDGPU
-endif
-
-LLVM_CONF_OPTS = -DLLVM_TARGETS_TO_BUILD=$(subst
-$(space),;,$(LLVM_TARGETS_TO_BUILD))
-
-
- Or is that too much GNUmake black magic?
+ I don't have good internet access now to check, but my guess is that there is a
+(new?) --enable-gl option in gst1-plugins-base that we should add.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
