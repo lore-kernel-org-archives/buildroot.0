@@ -1,7 +1,9 @@
 From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Sat, 31 Mar 2018 00:29:12 +0530
-Subject: [Buildroot] [PATCH 1/4] opus: add hash for license file
-Message-ID: <1522436355-5697-1-git-send-email-rahulbedarkar89@gmail.com>
+Date: Sat, 31 Mar 2018 00:29:13 +0530
+Subject: [Buildroot] [PATCH 2/4] opusfile: add hash for license file
+In-Reply-To: <1522436355-5697-1-git-send-email-rahulbedarkar89@gmail.com>
+References: <1522436355-5697-1-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <1522436355-5697-2-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,18 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- package/opus/opus.hash | 3 +++
+ package/opusfile/opusfile.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/opus/opus.hash b/package/opus/opus.hash
-index 32fe2e2..c1a92d6 100644
---- a/package/opus/opus.hash
-+++ b/package/opus/opus.hash
+diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
+index 528ded2..59e0819 100644
+--- a/package/opusfile/opusfile.hash
++++ b/package/opusfile/opusfile.hash
 @@ -1,2 +1,5 @@
  # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
- sha256 cfafd339ccd9c5ef8d6ab15d7e1a412c054bf4cb4ecbbbcc78c12ef2def70732  opus-1.2.1.tar.gz
+ sha256 f75fb500e40b122775ac1a71ad80c4477698842a8fe9da4a1b4a1a9f16e4e979  opusfile-0.9.tar.gz
 +
 +# Hash for license file
-+sha256 8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682  COPYING
++sha256 0267ae795ab744c4e0f9c45e249440fdf2e75dac8c804f36066b28649bf74aaf  COPYING
 -- 
 2.7.4
