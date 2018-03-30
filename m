@@ -1,36 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Mar 2018 21:06:51 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux: Config.in: correct
- typo in kernel compression format help text
-Message-ID: <20180330193203.18B8B816A8@busybox.osuosl.org>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Sat, 31 Mar 2018 01:02:08 +0530
+Subject: [Buildroot] [PATCH] zstd: fix legal info
+Message-ID: <1522438328-7638-1-git-send-email-rahulbedarkar89@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36c973353e06ce2f90e628a62a7ea015ac9f1746
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+zstd is dual licensed under BSD-3-Clause or GPL-2.0 as per README.md
+and source files license header.
 
-s/build/built/.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d233cc72c4b901f1ea0ae4ce895ff665bd0b78d9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 ---
- linux/Config.in | 2 +-
+ package/zstd/zstd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9024f73f53..3447290a69 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -284,7 +284,7 @@ endchoice
- choice
- 	prompt "Kernel compression format"
- 	help
--	  This selection will just ensure that the correct host tools are build.
-+	  This selection will just ensure that the correct host tools are built.
- 	  The actual compression for the kernel should be selected in the
- 	  kernel configuration menu.
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index d5459f9..c0fa880 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -6,7 +6,7 @@
  
+ ZSTD_VERSION = v1.3.3
+ ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+-ZSTD_LICENSE = BSD-3-Clause, GPL-2.0
++ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+ ZSTD_LICENSE_FILES = LICENSE COPYING
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-- 
+2.7.4
