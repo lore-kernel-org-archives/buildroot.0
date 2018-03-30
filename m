@@ -1,34 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 30 Mar 2018 21:27:37 +0200
-Subject: [Buildroot] Buildroot hackathon on Mar 31 - Apr 2
-In-Reply-To: <20180308093957.297efb49@windsurf>
-References: <20180308093957.297efb49@windsurf>
-Message-ID: <20180330212737.2d4b5d7b@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Mar 2018 21:28:01 +0200
+Subject: [Buildroot] [PATCH] configs/ci40: remove defconfig
+In-Reply-To: <20180305082515.2565-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 5 Mar 2018 09:25:15 +0100")
+References: <20180305082515.2565-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87efk14b3y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Thu, 8 Mar 2018 09:39:57 +0100, Thomas Petazzoni wrote:
+ > From the original submitter of this defconfig:
+ > """
+ > I no longer have access to ci40 board. It would be difficult for me to
+ > maintain it.
+ > """
 
-> If you have any question on how to participate remotely, do not
-> hesitate to ask!
+ > And this defconfig currently fails to build with gcc 6.x. Therefore,
+ > drop it.
 
-A quick reminder about this hackathon: it takes places this WE. Most of
-us have already arrived, and we invite you to join us on IRC if you
-want to participate to the effort.
+ > Fixes:
 
-If you're available and willing to help, don't hesitate to ask on IRC
-for things to do, we're certainly find useful things you can do to help
-the Buildroot project during this WE.
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/55306806
 
-Thanks for your participation!
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Thomas
+Committed to 2018.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
