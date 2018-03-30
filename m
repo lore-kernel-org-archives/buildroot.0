@@ -1,34 +1,40 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Sat, 31 Mar 2018 00:29:15 +0530
-Subject: [Buildroot] [PATCH 4/4] opus-tools: update license
-In-Reply-To: <1522436355-5697-1-git-send-email-rahulbedarkar89@gmail.com>
-References: <1522436355-5697-1-git-send-email-rahulbedarkar89@gmail.com>
-Message-ID: <1522436355-5697-4-git-send-email-rahulbedarkar89@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 30 Mar 2018 21:06:41 +0200
+Subject: [Buildroot] [PATCH v4 03/11] package/llvm: enable AMDGPU
+In-Reply-To: <b5a9d228-d7e1-7330-b5f6-52ad7ea443b9@mind.be>
+References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
+ <20180329113346.10367-4-valentin.korenblit@smile.fr>
+ <20180330110241.792a6607@windsurf>
+ <b5a9d228-d7e1-7330-b5f6-52ad7ea443b9@mind.be>
+Message-ID: <20180330210641.334407b0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As per COPYING file, opusinfo is licensed under GPL version 2.
+Hello,
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
----
- package/opus-tools/opus-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 30 Mar 2018 20:08:28 +0200, Arnout Vandecappelle wrote:
 
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index a81e75e..ab00ced 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
-@@ -6,7 +6,7 @@
- 
- OPUS_TOOLS_VERSION = 0.1.10
- OPUS_TOOLS_SITE = https://downloads.xiph.org/releases/opus
--OPUS_TOOLS_LICENSE = BSD-2-Clause
-+OPUS_TOOLS_LICENSE = BSD-2-Clause, GPL-2.0 (opusinfo)
- OPUS_TOOLS_LICENSE_FILES = COPYING
- OPUS_TOOLS_CONF_OPTS = --disable-oggtest --disable-opustest
- OPUS_TOOLS_DEPENDENCIES = opus libogg host-pkgconf
+>  Or maybe
+> 
+> LLVM_TARGETS_TO_BUILD = $(HOST_LLVM_TARGET_ARCH)
+> 
+> ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+> LLVM_TARGETS_TO_BUILD += AMDGPU
+> endif
+> 
+> LLVM_CONF_OPTS = -DLLVM_TARGETS_TO_BUILD=$(subst
+> $(space),;,$(LLVM_TARGETS_TO_BUILD))
+> 
+> 
+>  Or is that too much GNUmake black magic?
+
+No, that's good.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
