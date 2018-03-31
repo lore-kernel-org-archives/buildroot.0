@@ -1,98 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 16:56:25 +0200
-Subject: [Buildroot] [PATCH v4 5/8] package/runc: convert to golang
- infrastructure
-In-Reply-To: <20180331132736.21105-6-thomas.petazzoni@bootlin.com>
-References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
- <20180331132736.21105-6-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331145625.GI25161@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 31 Mar 2018 16:57:23 +0200
+Subject: [Buildroot] [PATCH 3/5] arch/mips: add DSP support
+In-Reply-To: <20170721170635.41202-3-Vincent.Riera@imgtec.com>
+References: <20170721170635.41202-1-Vincent.Riera@imgtec.com>
+ <20170721170635.41202-3-Vincent.Riera@imgtec.com>
+Message-ID: <7bbdd4b4-e275-7a1f-b15d-26629814eb65@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Angelo, All,
+ Hi all,
 
-On 2018-03-31 15:27 +0200, Thomas Petazzoni spake thusly:
-> From: Angelo Compagnucci <angelo@amarulasolutions.com>
+On 21-07-17 19:06, Vicente Olivert Riera wrote:
+> This patch adds support for the MIPS DSP ASE. They come in three
+> versions, DSP (r1), DSPr2 and DSPr3. Each one of them is a superset of
+> the other, so selecting DSPr2 will imply DSP (r1) as well, and selecting
+> DSPr3 will imply both DSP (r1) and DSPr2 as well.
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> For generic target architecture variants we let the user choose between
+> the different compatible versions. For well known cores the user can
+> only choose the DSP version that specific core would implement, or none,
+> since implementing the DSP module in a core may be optional.
+> 
+> DSP (r1) and DSPr2 are available since MIPS release version 2.
+> DSPr3 is only available since MIPS release version 6.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ This and the following patches are pretty complicated. Given that interest in
+MIPS in general seems to be declining, and given that Vicente is no longer
+contributing to Buildroot, we feel that there is a big risk that this stuff is
+just going to bitrot and little chance that anybody will actually ever use this.
 
-Regards,
-Yann E. MORIN.
+ Therefore, I've marked these patches as Rejected in patchwork.
 
+ If anybody feels they need this, feel free to resend. For your convenience,
+here are the patchwork URLs:
+
+http://patchwork.ozlabs.org/patch/792228/
+http://patchwork.ozlabs.org/patch/792227/
+http://patchwork.ozlabs.org/patch/792226/
+
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/runc/runc.mk | 37 +++++--------------------------------
->  1 file changed, 5 insertions(+), 32 deletions(-)
-> 
-> diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-> index fb3fec20f5..f1586f32b2 100644
-> --- a/package/runc/runc.mk
-> +++ b/package/runc/runc.mk
-> @@ -9,42 +9,15 @@ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
->  RUNC_LICENSE = Apache-2.0
->  RUNC_LICENSE_FILES = LICENSE
->  
-> -RUNC_DEPENDENCIES = host-go
-> +RUNC_WORKSPACE = Godeps/_workspace
->  
-> -RUNC_GOPATH = "$(@D)/Godeps/_workspace"
-> -RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-> -	CGO_ENABLED=1 \
-> -	GOBIN="$(@D)/bin" \
-> -	GOPATH="$(RUNC_GOPATH)" \
-> -	PATH=$(BR_PATH)
-> +RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
->  
-> -RUNC_GLDFLAGS = \
-> -	-X main.gitCommit=$(RUNC_VERSION)
-> -
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -RUNC_GLDFLAGS += -extldflags '-static'
-> -endif
-> -
-> -RUNC_GOTAGS = cgo static_build
-> +RUNC_TAGS = cgo static_build
->  
->  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-> -RUNC_GOTAGS += seccomp
-> +RUNC_TAGS += seccomp
->  RUNC_DEPENDENCIES += libseccomp host-pkgconf
->  endif
->  
-> -define RUNC_CONFIGURE_CMDS
-> -	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
-> -	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
-> -endef
-> -
-> -define RUNC_BUILD_CMDS
-> -	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
-> -		build -v -o $(@D)/bin/runc \
-> -		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
-> -endef
-> -
-> -define RUNC_INSTALL_TARGET_CMDS
-> -	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
-> -endef
-> -
-> -$(eval $(generic-package))
-> +$(eval $(golang-package))
-> -- 
-> 2.14.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  arch/Config.in                                     |  3 +
+>  arch/Config.in.mips                                | 71 ++++++++++++++++++++++
+>  toolchain/toolchain-common.in                      |  3 +
+>  .../toolchain-external/pkg-toolchain-external.mk   |  5 ++
+>  toolchain/toolchain-wrapper.c                      |  3 +
+>  5 files changed, 85 insertions(+)
+[snip]
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
