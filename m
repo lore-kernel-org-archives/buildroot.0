@@ -1,68 +1,180 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 31 Mar 2018 16:24:04 +0200
-Subject: [Buildroot] [v3 10/13] package: share downloaded files for big
- packages
-In-Reply-To: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
-References: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180331142407.9522-10-maxime.hadjinlian@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Mar 2018 16:28:08 +0200
+Subject: [Buildroot] [PATCH v4 3/8] docs/manual: add documentation for
+ the golang infrastructure
+In-Reply-To: <20180331132736.21105-4-thomas.petazzoni@bootlin.com>
+References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
+ <20180331132736.21105-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331142808.GG25161@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thomas, Angelo, All,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/gcc-initial/gcc-initial.mk   | 5 +++++
- package/linux-headers/linux-headers.mk   | 3 +++
- package/mesa3d-headers/mesa3d-headers.mk | 1 +
- 3 files changed, 9 insertions(+)
+On 2018-03-31 15:27 +0200, Thomas Petazzoni spake thusly:
+> From: Angelo Compagnucci <angelo@amarulasolutions.com>
+> 
+> This patch adds the documentation for the golang infrastructure.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index c476b2faeb..07da50afa8 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -8,6 +8,11 @@ GCC_INITIAL_VERSION = $(GCC_VERSION)
- GCC_INITIAL_SITE = $(GCC_SITE)
- GCC_INITIAL_SOURCE = $(GCC_SOURCE)
- 
-+# We do not have a 'gcc' package per-se; we only have two incarnations,
-+# gcc-initial and gcc-final. gcc-initial is just am internal step that
-+# users should not care about, while gcc-final is the one they shall see.
-+HOST_GCC_INITIAL_SAME_SOURCE_AS = host-gcc-final
-+
- HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
- 
- HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index f1e3790608..6f4071c61a 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -82,6 +82,9 @@ endif
- 
- endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
- 
-+# linux-headers really is the same as the linux package
-+LINUX_HEADERS_SAME_SOURCE_AS = linux
-+
- LINUX_HEADERS_LICENSE = GPL-2.0
- LINUX_HEADERS_LICENSE_FILES = COPYING
- 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index b48d965d8a..39a25270db 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -15,6 +15,7 @@ endif
- MESA3D_HEADERS_VERSION = 18.0.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
-+MESA3D_HEADERS_SAME_SOURCE_AS = mesa3d
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
- MESA3D_HEADERS_LICENSE_FILES = docs/license.html
- 
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  docs/manual/adding-packages-golang.txt | 110 +++++++++++++++++++++++++++++++++
+>  docs/manual/adding-packages.txt        |   2 +
+>  2 files changed, 112 insertions(+)
+>  create mode 100644 docs/manual/adding-packages-golang.txt
+> 
+> diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+> new file mode 100644
+> index 0000000000..418da5fa4f
+> --- /dev/null
+> +++ b/docs/manual/adding-packages-golang.txt
+> @@ -0,0 +1,110 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +=== Infrastructure for Go packages
+> +
+> +This infrastructure applies to Go packages that use the standard
+> +build system and use bundled dependencies.
+> +
+> +[[golang-package-tutorial]]
+> +
+> +==== +golang-package+ tutorial
+> +
+> +First, let's see how to write a +.mk+ file for a go package,
+> +with an example :
+> +
+> +------------------------
+> +01: ################################################################################
+> +02: #
+> +03: # foo
+> +04: #
+> +05: ################################################################################
+> +06:
+> +07: FOO_VERSION = 1.0
+> +08: FOO_SITE = $(call github,bar,foo,$(FOO_VERSION))
+> +09: FOO_LICENSE = BSD-3-Clause
+> +10: FOO_LICENSE_FILES = LICENSE
+> +11:
+> +12: $(eval $(golang-package))
+> +------------------------
+> +
+> +On line 7, we declare the version of the package.
+> +
+> +On line 8, we declare the upstream location of the package, here
+> +fetched from Github, since a large number of Go packages are hosted on
+> +Github.
+> +
+> +On line 9 and 10, we give licensing details about the package.
+> +
+> +Finally, on line 12, we invoke the +golang-package+ macro that
+> +generates all the Makefile rules that actually allow the package to be
+> +built.
+> +
+> +[[golang-package-reference]]
+> +
+> +==== +golang-package+ reference
+> +
+> +In their +Config.in+ file, packages using the +golang-package+
+> +infrastructure should depend on +BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS+
+> +and +BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ because Buildroot will
+> +automatically add a dependency on +host-go+ to such packages.
+> +
+> +The main macro of the Go package infrastructure is
+> ++golang-package+. It is similar to the +generic-package+ macro. Only
+> +target packages are supported with +golang-package+.
+> +
+> +Just like the generic infrastructure, the Go infrastructure works
+> +by defining a number of variables before calling the +golang-package+.
+> +
+> +All the package metadata information variables that exist in the
+> +xref:generic-package-reference[generic package infrastructure] also
+> +exist in the Go infrastructure: +FOO_VERSION+, +FOO_SOURCE+,
+> ++FOO_PATCH+, +FOO_SITE+, +FOO_SUBDIR+, +FOO_DEPENDENCIES+,
+> ++FOO_LICENSE+, +FOO_LICENSE_FILES+, +FOO_INSTALL_STAGING+, etc.
+> +
+> +Note that:
+> +
+> + * It is not necessary to add +go+ or +host-go+ in the
+> +   +FOO_DEPENDENCIES+ variable of a package, since these basic
+> +   dependencies are automatically added as needed by the Go package
+> +   infrastructure.
+> +
+> +A few additional variables, specific to the Go infrastructure, can
+> +optionally be defined, depending on the package's needs. Many of them
+> +are only useful in very specific cases, typical packages will
+> +therefore only use a few of them, or none.
+> +
+> +* If your package need a custom +GOPATH+ to be compiled in, you can
+> +  use the +FOO_WORKSPACE+ variable. The +GOPATH+ being used will be
+> +  +<package-srcdir>/<FOO_WORKSPACE>+. If +FOO_WORKSPACE+ is not
+> +  specified, it defaults to +_gopath+.
+> +
+> +* +FOO_SRC_SUBDIR+ is the sub-directory where your source will be
+> +  compiled relatively to the +GOPATH+. An example value is
+> +  +github.com/bar/foo+. If +FOO_SRC_SUBDIR+ is not specified, it
+> +  defaults to a value infered from the +FOO_SITE+ variable.
+> +
+> +* +FOO_LDFLAGS+ and +FOO_TAGS+ can be used to pass respectively the
+> +  +LDFLAGS+ or the +TAGS+ to the +go+ build command.
+> +
+> +* +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
+> +  should be built. If +FOO_BUILD_TARGETS+ is not specified, it
+> +  defaults to +.+.
+> +
+> +* +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
+> +  should be installed +/usr/bin+ on the target. If +FOO_INSTALL_BINS+
+> +  is not specified, it defaults to the lower-case name of package.
+> +
+> +With the Go infrastructure, all the steps required to build and
+> +install the packages are already defined, and they generally work well
+> +for most Go-based packages. However, when required, it is still
+> +possible to customize what is done in any particular step:
+> +
+> +* By adding a post-operation hook (after extract, patch, configure,
+> +  build or install). See xref:hooks[] for details.
+> +
+> +* By overriding one of the steps. For example, even if the Go
+> +  infrastructure is used, if the package +.mk+ file defines its own
+> +  +FOO_BUILD_CMDS+ variable, it will be used instead of the default Go
+> +  one. However, using this method should be restricted to very
+> +  specific cases. Do not use it in the general case.
+> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+> index e8d40daee4..c642146287 100644
+> --- a/docs/manual/adding-packages.txt
+> +++ b/docs/manual/adding-packages.txt
+> @@ -38,6 +38,8 @@ include::adding-packages-meson.txt[]
+>  
+>  include::adding-packages-cargo.txt[]
+>  
+> +include::adding-packages-golang.txt[]
+> +
+>  include::adding-packages-kernel-module.txt[]
+>  
+>  include::adding-packages-asciidoc.txt[]
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.16.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
