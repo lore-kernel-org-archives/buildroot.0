@@ -1,169 +1,126 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 31 Mar 2018 11:50:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uwebsockets: new package
-In-Reply-To: <1504992570-8893-1-git-send-email-brain@jikos.cz>
-References: <1504992570-8893-1-git-send-email-brain@jikos.cz>
-Message-ID: <0ab3919b-ae2e-871e-6e7d-d52a355eb090@smile.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 31 Mar 2018 12:09:01 +0200
+Subject: [Buildroot] bacnet-stack: new package
+In-Reply-To: <ac72cf65-4a1e-260b-4b0c-ca773e528594@visionsystems.de>
+References: <ac72cf65-4a1e-260b-4b0c-ca773e528594@visionsystems.de>
+Message-ID: <7955a7c7-2968-c5e4-99df-9479a9d14996@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+Hi Yegor,
 
-Le 09/09/2017 ? 23:29, Petr Kulhavy a ?crit?:
-> Add uWebSockets, a lightweight, efficient and scalable WebSocket library.
-> https://github.com/uNetworking/uWebSockets
-> 
-> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
-> ---
->  DEVELOPERS                           |  1 +
->  package/Config.in                    |  1 +
->  package/uwebsockets/Config.in        | 20 ++++++++++++++++++++
->  package/uwebsockets/uwebsockets.hash |  2 ++
->  package/uwebsockets/uwebsockets.mk   | 36 ++++++++++++++++++++++++++++++++++++
->  5 files changed, 60 insertions(+)
->  create mode 100644 package/uwebsockets/Config.in
->  create mode 100644 package/uwebsockets/uwebsockets.hash
->  create mode 100644 package/uwebsockets/uwebsockets.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 2bd3aca..8737384 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1368,6 +1368,7 @@ F:	package/sdl2_ttf/
->  
->  N:	Petr Kulhavy <brain@jikos.cz>
->  F:	package/linuxptp/
-> +F:	package/uwebsockets/
->  
->  N:	Petr Vorel <petr.vorel@gmail.com>
->  F:	package/linux-backports/
-> diff --git a/package/Config.in b/package/Config.in
-> index d926f7e..0afae7a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1384,6 +1384,7 @@ menu "Networking"
->  	source "package/sofia-sip/Config.in"
->  	source "package/thrift/Config.in"
->  	source "package/usbredir/Config.in"
-> +	source "package/uwebsockets/Config.in"
->  	source "package/zeromq/Config.in"
->  	source "package/zmqpp/Config.in"
->  	source "package/zyre/Config.in"
-> diff --git a/package/uwebsockets/Config.in b/package/uwebsockets/Config.in
-> new file mode 100644
-> index 0000000..fff5d7a
-> --- /dev/null
-> +++ b/package/uwebsockets/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_UWEBSOCKETS
-> +	bool "uWebSockets"
-
-The package name should be "uwebsockets" in lowercase.
-
-> +	depends on BR2_INSTALL_LIBSTDCPP
-
-missing depends on !BR2_STATIC_LIBS since the package build unconditionally a
-shared library (libuWS.so).
-
-> +	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  uWebSockets is one of the most lightweight, efficient and
-> +	  scalable WebSocket and HTTP server implementations available.
-> +	  It features an easy-to-use, fully async object-oriented
-> +	  interface and scales to millions of connections using only
-> +	  a fraction of memory compared to the competition. While
-> +	  performance and scalability are two of our top priorities,
-> +	  we consider security, stability and standards compliance
-> +	  paramount. License is zlib/libpng (very permissive & suits
-> +	  commercial applications).
-> +
-> +	  https://github.com/uNetworking/uWebSockets
-> +
-> +comment "uWebSockets needs a toolchain with C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/uwebsockets/uwebsockets.hash b/package/uwebsockets/uwebsockets.hash
-> new file mode 100644
-> index 0000000..b07c48c
-> --- /dev/null
-> +++ b/package/uwebsockets/uwebsockets.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 9d7854fe3b8c43903957ccd9001e954e210e14a0545549515a9f020bf275c4fc  uwebsockets-v0.14.4.tar.gz
-
-Recently Buildroot added a support to check the license file hash which should
-be listed here.
-
-> diff --git a/package/uwebsockets/uwebsockets.mk b/package/uwebsockets/uwebsockets.mk
-> new file mode 100644
-> index 0000000..084385e
-> --- /dev/null
-> +++ b/package/uwebsockets/uwebsockets.mk
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# uWebSockets
-> +#
-> +################################################################################
-> +
-> +UWEBSOCKETS_VERSION = v0.14.4
-> +UWEBSOCKETS_SITE = $(call github,uNetworking,uWebSockets,$(UWEBSOCKETS_VERSION))
-> +UWEBSOCKETS_LICENSE = Zlib
-> +UWEBSOCKETS_LICENSE_FILES = LICENSE
-> +UWEBSOCKETS_DEPENDENCIES = zlib openssl
-> +
-> +UWEBSOCKETS_INSTALL_STAGING = YES
-> +UWEBSOCKETS_CFLAGS = $(TARGET_CFLAGS)
-> +
-> +ifeq ($(BR2_PACKAGE_BOOST),y)
-> +UWEBSOCKETS_CFLAGS += -DUSE_ASIO
-
-missing dependency on Boost
-Boost must be build before uwebsockets
-
-> +else ifeq ($(BR2_PACKAGE_LIBUV),y)
-> +UWEBSOCKETS_CFLAGS += -DUSE_LIBUV
-
-same here for libuv
-
-> +endif
-> +
-> +define UWEBSOCKETS_BUILD_CMDS
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) CXXFLAGS="$(UWEBSOCKETS_CFLAGS)" -C $(@D) Linux
-> +endef
-
-Here you are using TARGET_CFLAGS for CXXFLAGS.
-CXXFLAGS is not used by the build system so the -DUSE_ADIO and -DUSE_LIBUV
-
-In the build log you have CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -DUSE_LIBUV"
-
-But -DUSE_LIBUV is missing from the g++ command line
-
-armv5-ctng-linux-gnueabi-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -std=c++11 -O3 -I src -shared -fPIC
-src/Extensions.cpp src/Group.cpp src/Networking.cpp src/Hub.cpp src/Node.cpp
-src/WebSocket.cpp src/HTTPSocket.cpp src/Socket.cpp src/Epoll.cpp -s -o libuWS.so
-
-Can you send an updated version with those fixes.
+This patch seems corrupted by your email client.
+It doesn't apply correctly, can you send an updated version?
 
 Best regards,
 Romain
 
+
+Le 29/09/2017 ? 08:38, Yegor Yefremov a ?crit?:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> ?DEVELOPERS???????????????????????????? |? 1 +
+> ?package/Config.in????????????????????? |? 1 +
+> ?package/bacnet-stack/Config.in???????? |? 8 ++++++++
+> ?package/bacnet-stack/bacnet-stack.hash |? 3 +++
+> ?package/bacnet-stack/bacnet-stack.mk?? | 28 ++++++++++++++++++++++++++++
+> ?5 files changed, 41 insertions(+)
+> ?create mode 100644 package/bacnet-stack/Config.in
+> ?create mode 100644 package/bacnet-stack/bacnet-stack.hash
+> ?create mode 100644 package/bacnet-stack/bacnet-stack.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index e34802f..594fc88 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1844,6 +1844,7 @@ N:??????? Yegor Yefremov <yegorslists@googlemail.com>
+> ?F:???? package/acl/
+> ?F:???? package/attr/
+> ?F:???? package/bluez_utils/
+> +F:???? package/bacnet-stack/
+> ?F:???? package/boost/
+> ?F:???? package/bootstrap/
+> ?F:???? package/cannelloni/
+> diff --git a/package/Config.in b/package/Config.in
+> index 6acd0c4..3c5647f 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1305,6 +1305,7 @@ menu "Networking"
+> ??????? source "package/alljoyn-tcl-base/Config.in"
+> ??????? source "package/azmq/Config.in"
+> ??????? source "package/azure-iot-sdk-c/Config.in"
+> +?????? source "package/bacnet-stack/Config.in"
+> ??????? source "package/batman-adv/Config.in"
+> ??????? source "package/c-ares/Config.in"
+> ??????? source "package/canfestival/Config.in"
+> diff --git a/package/bacnet-stack/Config.in b/package/bacnet-stack/Config.in
+> new file mode 100644
+> index 0000000..bbbbc2d
+> --- /dev/null
+> +++ b/package/bacnet-stack/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_BACNET_STACK
+> +?????? bool "bacnet-stack"
+> +?????? help
+> +???????? This BACnet library provides an application layer, network
+> +???????? layer and MAC layer communications services for Win32, Linux,
+> +???????? RTOS, or microcontroller.
 > +
-> +define UWEBSOCKETS_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/uWS/
-> +	$(INSTALL) -D -m 0644 $(@D)/src/*.h $(STAGING_DIR)/usr/include/uWS/
+> +???????? http://bacnet.sourceforge.net/
+> diff --git a/package/bacnet-stack/bacnet-stack.hash b/package/bacnet-stack/bacnet-stack.hash
+> new file mode 100644
+> index 0000000..824e5db
+> --- /dev/null
+> +++ b/package/bacnet-stack/bacnet-stack.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256? 4b80e2909162082e6b0025319ff8b360472a0eee41593ef4fb40fbe27a098217? bacnet-stack-0.8.5.tgz
+> +sha256? f123d969f4e4f9d235116fc943d931e33ea80c58e96b8de886f4d1259c2fb836? license/gpl-2.txt
+> diff --git a/package/bacnet-stack/bacnet-stack.mk b/package/bacnet-stack/bacnet-stack.mk
+> new file mode 100644
+> index 0000000..6ff5330
+> --- /dev/null
+> +++ b/package/bacnet-stack/bacnet-stack.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# bacnet-stack
+> +#
+> +################################################################################
+> +
+> +BACNET_STACK_VERSION = 0.8.5
+> +BACNET_STACK_SITE = https://sourceforge.net/projects/bacnet/files/bacnet-stack/bacnet-stack-$(BACNET_STACK_VERSION)
+> +BACNET_STACK_SOURCE = bacnet-stack-$(BACNET_STACK_VERSION).tgz
+> +BACNET_STACK_LICENSE = GPL-2.0+ with exception
+> +BACNET_STACK_LICENSE_FILES = license/gpl-2.txt
+> +BACNET_STACK_INSTALL_STAGING = YES
+> +# bacnet-stack produced only a static library,
+> +# so don't install no target installation is
+> +# necessary
+> +BACNET_STACK_INSTALL_TARGET = NO
+> +
+> +define BACNET_STACK_BUILD_CMDS
+> +?????? $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+> +?????????????? -C $(@D) all
 > +endef
 > +
-> +define UWEBSOCKETS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/
-> +	$(INSTALL) -D -m 0755 $(@D)/libuWS.so* $(TARGET_DIR)/usr/lib/
+> +define BACNET_STACK_INSTALL_STAGING_CMDS
+> +?????? $(INSTALL) -m 0644 $(@D)/lib/libbacnet.a \
+> +?????????????? $(STAGING_DIR)/usr/lib/
+
+You don't need to deploy any header file ?
+
 > +endef
 > +
 > +$(eval $(generic-package))
+> --
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
