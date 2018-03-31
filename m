@@ -1,55 +1,53 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 30 Mar 2018 23:23:00 -0300
-Subject: [Buildroot] [PATCH 35/36] utils/checkpackagelib: exclude four files
- from Config.in indentation check
+Date: Fri, 30 Mar 2018 23:23:01 -0300
+Subject: [Buildroot] [PATCH 36/36] .gitlab-ci.yml: extend check-package test
+ to Config.* files
 In-Reply-To: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
 References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180331022301.27501-36-ricardo.martincoski@gmail.com>
+Message-ID: <20180331022301.27501-37-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Now that all issues in Config.in files have been fixed, let's try to
+make sure we don't introduce new ones by checking regularly these files
+issues in Gitlab CI.
 
-package/Config.in, package/Config.in.host, package/x11r7/Config.in and
-package/kodi/Config.in do not comply with the normal Config.in
-indentation rules. However, this violation of the rule is legitimate, so
-let's skip them in check-package for this specific indentation check.
-
-This removes the last 2197 remaining warnings on Config.in files.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[Ricardo: rebase patch to use relative paths passed by the main script,
-          fix flake8 warnings, add package/Config.* to the list]
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-NOTE: this patch depends on the first one that introduces the use of
-relative paths by the main script when testing intree files.
+ .gitlab-ci.yml    | 3 ++-
+ .gitlab-ci.yml.in | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-original patch: http://patchwork.ozlabs.org/patch/849882/
----
- utils/checkpackagelib/lib_config.py | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 11d885f8c7..1d273f1c5f 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -132,6 +132,12 @@ class Indent(_CheckFunction):
-                         text]
-         elif entry in entries_that_should_not_be_indented:
-             if not text.startswith(entry):
-+                # four Config.in files have a special but legitimate indentation rule
-+                if self.filename in ["package/Config.in",
-+                                     "package/Config.in.host",
-+                                     "package/kodi/Config.in",
-+                                     "package/x11r7/Config.in"]:
-+                    return
-                 return ["{}:{}: should not be indented"
-                         .format(self.filename, lineno),
-                         text]
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 952fffaf88..8489f8c45c 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -32,7 +32,8 @@ check-DEVELOPERS:
+ 
+ check-package:
+     script:
+-        - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
++        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name 'toolchain-common.in' \)
++            -exec ./utils/check-package {} +
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index cb3eb715f2..578e13f532 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -32,7 +32,8 @@ check-DEVELOPERS:
+ 
+ check-package:
+     script:
+-        - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
++        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name 'toolchain-common.in' \)
++            -exec ./utils/check-package {} +
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
 -- 
 2.14.1
