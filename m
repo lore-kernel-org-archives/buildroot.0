@@ -1,90 +1,94 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 30 Mar 2018 23:22:33 -0300
-Subject: [Buildroot] [PATCH 08/36] check-package: enable for fs/
+Date: Fri, 30 Mar 2018 23:22:34 -0300
+Subject: [Buildroot] [PATCH 09/36] linux/linux-ext-*.mk: fit file header
+ into one line
 In-Reply-To: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
 References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180331022301.27501-9-ricardo.martincoski@gmail.com>
+Message-ID: <20180331022301.27501-10-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The filesystem types can benefit from this script to prevent common
-mistakes when submitting patches.
-
-In order to accomplish this:
-Do not ignore anymore files from the fs/ directory.
-Ignore fs/common.mk as it declares a package infra and not a package itself.
-Register the ROOTFS_ as a valid prefix for variables.
-Ignore these symbols:
- - PACKAGES_PERMISSIONS_TABLE: defined either by packages through
-   pkg-generic or by filesystem types, used by fs/common.mk;
- - SUMTOOL: defined by package mtd, used by filesystem jffs2;
- - TARGETS_ROOTFS: defined by filesystem types, used in the main
-   Makefile.
-But do not ignore this symbol:
- - UBINIZE_CONFIG_FILE_PATH: it is used only inside the file that
-   defines it.
-
-Keep using loose checks that warn about common mistakes while keep the
-code simple.
-As a consequence the check functions do not differentiate between
-packages and filesystems so the symbol PACKAGE_UBI would not generate a
-warning for the ubi filesystem neither the symbol ROOTFS_MTD would
-generate a warning for the mtd package. But those kind of mistakes are
-not common and are obvious in the code review, unlike typos i.e.
-ROOTFS_UBl or PACKAGE_MID that would be hard to see in the code review.
+Make it follow the package coding style by removing redundant info.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Christian Stewart <christian@paral.in>
+Cc: David Lechner <david@lechnology.com>
 ---
- utils/check-package             | 2 ++
- utils/checkpackagelib/lib_mk.py | 5 ++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ linux/linux-ext-aufs.mk                 | 2 +-
+ linux/linux-ext-ev3dev-linux-drivers.mk | 2 +-
+ linux/linux-ext-fbtft.mk                | 2 +-
+ linux/linux-ext-rtai.mk                 | 2 +-
+ linux/linux-ext-xenomai.mk              | 4 ++--
+ 5 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 48ce956443..4c9eea0534 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -48,11 +48,13 @@ CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
- DO_CHECK_INTREE = re.compile("|".join([
-     "arch/",
-     "boot/",
-+    "fs/",
-     "package/",
-     "system/",
-     ]))
- DO_NOT_CHECK_INTREE = re.compile("|".join([
-     "boot/barebox/barebox\.mk$",
-+    "fs/common\.mk$",
-     "package/doc-asciidoc\.mk$",
-     "package/pkg-\S*\.mk$",
-     ]))
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 2df2e1a884..1bec67bc2b 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -165,8 +165,11 @@ class TypoInPackageVariable(_CheckFunction):
-         "LUA_RUN",
-         "MKFS_JFFS2",
-         "MKIMAGE_ARCH",
-+        "PACKAGES_PERMISSIONS_TABLE",
-         "PKG_CONFIG_HOST_BINARY",
-+        "SUMTOOL",
-         "TARGET_FINALIZE_HOOKS",
-+        "TARGETS_ROOTFS",
-         "XTENSA_CORE_NAME"]))
-     PACKAGE_NAME = re.compile("/([^/]+)\.mk")
-     VARIABLE = re.compile("^([A-Z0-9_]+_[A-Z0-9_]+)\s*(\+|)=")
-@@ -177,7 +180,7 @@ class TypoInPackageVariable(_CheckFunction):
-         # linux tools do not use LINUX_TOOL_ prefix for variables
-         package = package.replace("LINUX_TOOL_", "")
-         self.package = package
--        self.REGEX = re.compile("^(HOST_)?({}_[A-Z0-9_]+)".format(package))
-+        self.REGEX = re.compile("^(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
-         self.FIND_VIRTUAL = re.compile(
-             "^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
-         self.virtual = []
+diff --git a/linux/linux-ext-aufs.mk b/linux/linux-ext-aufs.mk
+index fb2f3560a7..d4bbb07196 100644
+--- a/linux/linux-ext-aufs.mk
++++ b/linux/linux-ext-aufs.mk
+@@ -1,7 +1,7 @@
+ ################################################################################
+-# Linux Aufs extensions
+ #
+ # Patch the linux kernel with aufs extension
++#
+ ################################################################################
+ 
+ LINUX_EXTENSIONS += aufs
+diff --git a/linux/linux-ext-ev3dev-linux-drivers.mk b/linux/linux-ext-ev3dev-linux-drivers.mk
+index c8afeeb1d5..3bb12db38d 100644
+--- a/linux/linux-ext-ev3dev-linux-drivers.mk
++++ b/linux/linux-ext-ev3dev-linux-drivers.mk
+@@ -1,7 +1,7 @@
+ ################################################################################
+-# Linux ev3dev extensions
+ #
+ # Patch the linux kernel with ev3dev extension
++#
+ ################################################################################
+ 
+ LINUX_EXTENSIONS += ev3dev-linux-drivers
+diff --git a/linux/linux-ext-fbtft.mk b/linux/linux-ext-fbtft.mk
+index 5eb3d944e8..cbc9c58ed3 100644
+--- a/linux/linux-ext-fbtft.mk
++++ b/linux/linux-ext-fbtft.mk
+@@ -1,7 +1,7 @@
+ ################################################################################
+-# Linux fbtft extensions
+ #
+ # Patch the linux kernel with fbtft extension
++#
+ ################################################################################
+ 
+ LINUX_EXTENSIONS += fbtft
+diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
+index fb483aa80b..46e3dae3a7 100644
+--- a/linux/linux-ext-rtai.mk
++++ b/linux/linux-ext-rtai.mk
+@@ -1,7 +1,7 @@
+ ################################################################################
+-# Linux RTAI extensions
+ #
+ # Patch the linux kernel with RTAI extension
++#
+ ################################################################################
+ 
+ LINUX_EXTENSIONS += rtai
+diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
+index 76a9786e4d..d066bb32ac 100644
+--- a/linux/linux-ext-xenomai.mk
++++ b/linux/linux-ext-xenomai.mk
+@@ -1,7 +1,7 @@
+ ################################################################################
+-# Linux Adeos/Xenomai extensions
+ #
+-# Patch the linux kernel with xenomai extension
++# Patch the linux kernel with Adeos/Xenomai extension
++#
+ ################################################################################
+ 
+ LINUX_EXTENSIONS += xenomai
 -- 
 2.14.1
