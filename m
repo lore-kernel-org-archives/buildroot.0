@@ -1,56 +1,67 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 31 Mar 2018 12:34:12 +0200
-Subject: [Buildroot] [PATCH v2] board: added support for Raspberry Pi
- Zero W
-In-Reply-To: <20170622222900.6ec535ed@gmx.net>
-References: <1498077584-19344-1-git-send-email-yves.deweerdt.linux@gmail.com>
- <20170621224648.44373a00@windsurf> <20170622222900.6ec535ed@gmx.net>
-Message-ID: <e93fbd33-3994-7542-5ca5-bd84d98efa75@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 31 Mar 2018 12:34:22 +0200
+Subject: [Buildroot] [PATCH] netcat: add forced dependence on BusyBox
+In-Reply-To: <20171012151418.3523-2-casantos@datacom.ind.br>
+References: <20171012151418.3523-1-casantos@datacom.ind.br>
+ <20171012151418.3523-2-casantos@datacom.ind.br>
+Message-ID: <00cfde34-7006-40de-ecb5-307418aa97b8@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22-06-17 22:29, Peter Seiderer wrote:
-> Hello Thomas, Yves,
->
-> On Wed, 21 Jun 2017 22:46:48 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->
->> Hello,
->>
->> On Wed, 21 Jun 2017 22:39:44 +0200, Yves Deweerdt wrote:
->>> added a new config file for the Raspberry Pi Zero W (rpi0w)
->>> - added new folder for raspberrypi0w
->>> - included the overlays in the genimage config
->>> - add pi3-miniuart-bt overlay to the config
->>> - remove rpi0w device tree from the raspberrypi0_defconfig and genimage
->>>
->>> Signed-off-by: Yves Deweerdt <yves.deweerdt.linux@gmail.com>
->> I'd like a review/ack from Peter Seiderer, or other RPi folks of the
->> Buildroot community. I think the commit log should summarize why the
->> Zero W support is removed from raspberrypi0_defconfig, and why a
->> separate defconfig is needed.
->>
-> The remaining difference between raspberrypi0_defconfig raspberrypi0w_defconfig
-> wil be the usage of the pi3-miniuart-bt overlay. As there is no possibility to
-> enable/disable this on demand I think this is enough to justify a second
-> configuration (and keep the 'better' ttyAMA0 usage for serial console for
-> the basic raspberrypi0)...
+Hi Carlos,
 
-?Since indeed there is no convenient way to support two similar-but-different
-boards with a single defconfigs, I've applied to master, thanks. I did make the
-following changes though:
-???? - Bump to same kernel version as raspberrypi0.
-???? - Remove redundant comment.
-???? - Remove redundant default BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y.
-???? - Improve commit log.
-???? - Refresh .gitlab-ci.yml.
+Le 12/10/2017 ? 17:14, Carlos Santos a ?crit?:
+> It may be necessary if packages become built in parallel, leading to a
+> race condition on the creation of the "nc" link. Moreover, netcat is as
+> shy as BusyBox and would not override an existing file/link, so we must
+> remove $(TARGET_DIR)/usr/bin/nc in advance.
+> 
+> Of course this still leaves a race conditon if other netcat competitors
+> but we must assume thet the user is a grown-up person who knows what is
+> doing.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+It seems you are using a custom busybox config file because the netcat applet is
+disabled by default.
+
+I'm agree, the dependency on busybox is missing but the TARGET_HOOKS doesn't
+seems necessary. I removed it and netcat package is able to override the busybox
+symlink.
+
+ /usr/bin/install -c netcat output/target/usr/bin/netcat
+
+Maybe we should check if other packages depending on
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS have a dependency on busybox.
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  package/netcat/netcat.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
+> index eb7ddcac27..c032eea56d 100644
+> --- a/package/netcat/netcat.mk
+> +++ b/package/netcat/netcat.mk
+> @@ -9,4 +9,15 @@ NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VE
+>  NETCAT_LICENSE = GPL-2.0+
+>  NETCAT_LICENSE_FILES = COPYING
+>  
+> +# Ensure Busybox gets built/installed before, so that this package
+> +# overrides Busybox nc. We must remove an existing file/link because
+> +# netcat is as shy as Busybox and would not override existing files.
+> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> +NETCAT_DEPENDENCIES += busybox
+> +define NETCAT_RMOVE_NC_LINK
+> +	rm -f $(TARGET_DIR)/usr/bin/nc
+> +endef
+> +NETCAT_PRE_INSTALL_TARGET_HOOKS += NETCAT_RMOVE_NC_LINK
+> +endif
+> +
+>  $(eval $(autotools-package))
+> 
