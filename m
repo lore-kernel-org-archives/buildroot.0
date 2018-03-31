@@ -1,43 +1,57 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 1 Apr 2018 00:18:06 +0200
-Subject: [Buildroot] [git commit] netcat: add forced dependence on BusyBox
-Message-ID: <20180331221914.09682817AA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 1 Apr 2018 00:25:02 +0200
+Subject: [Buildroot] [PATCH] netcat: add forced dependence on BusyBox
+In-Reply-To: <00cfde34-7006-40de-ecb5-307418aa97b8@smile.fr>
+References: <20171012151418.3523-1-casantos@datacom.ind.br>
+ <20171012151418.3523-2-casantos@datacom.ind.br>
+ <00cfde34-7006-40de-ecb5-307418aa97b8@smile.fr>
+Message-ID: <598357b1-0a95-a38d-9704-bfe7adae0f20@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2da613a7d94a4bd34e9f70533cf0d8b2803be5bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It may be necessary if packages become built in parallel, leading to a
-race condition on the creation of the "nc" link.
 
-Of course this still leaves a race conditon if other netcat competitors
-but we must assume thet the user is a grown-up person who knows what is
-doing.
+On 31-03-18 12:34, Romain Naour wrote:
+> Hi Carlos,
+> 
+> Le 12/10/2017 ? 17:14, Carlos Santos a ?crit?:
+>> It may be necessary if packages become built in parallel, leading to a
+>> race condition on the creation of the "nc" link. Moreover, netcat is as
+>> shy as BusyBox and would not override an existing file/link, so we must
+>> remove $(TARGET_DIR)/usr/bin/nc in advance.
+>>
+>> Of course this still leaves a race conditon if other netcat competitors
+>> but we must assume thet the user is a grown-up person who knows what is
+>> doing.
+> 
+> It seems you are using a custom busybox config file because the netcat applet is
+> disabled by default.
+> 
+> I'm agree, the dependency on busybox is missing but the TARGET_HOOKS doesn't
+> seems necessary. I removed it and netcat package is able to override the busybox
+> symlink.
+> 
+>  /usr/bin/install -c netcat output/target/usr/bin/netcat
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-[Arnout: Don't force-remove the existing nc, not needed according to
-         Romain.]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/netcat/netcat.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ I've applied, after removing the unneeded removal of nc.
 
-diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
-index eb7ddcac27..6c7c4b8f29 100644
---- a/package/netcat/netcat.mk
-+++ b/package/netcat/netcat.mk
-@@ -9,4 +9,10 @@ NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VE
- NETCAT_LICENSE = GPL-2.0+
- NETCAT_LICENSE_FILES = COPYING
- 
-+# Ensure Busybox gets built/installed before, so that this package overrides
-+# Busybox nc.
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+NETCAT_DEPENDENCIES += busybox
-+endif
-+
- $(eval $(autotools-package))
+ If it turns out to be needed after all, please submit a follow-up patch.
+
+ Regards,
+ Arnout
+
+> 
+> Maybe we should check if other packages depending on
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS have a dependency on busybox.
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
