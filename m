@@ -1,68 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 15:27:32 +0200
-Subject: [Buildroot] [PATCH v4 4/8] package/flannel: convert to golang
- infrastructure
-In-Reply-To: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Mar 2018 15:34:34 +0200
+Subject: [Buildroot] [PATCH v4 1/8] docker-containerd: remove symlink to
+ $(RUNC_SRCDIR)
+In-Reply-To: <20180331132736.21105-2-thomas.petazzoni@bootlin.com>
 References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331132736.21105-5-thomas.petazzoni@bootlin.com>
+ <20180331132736.21105-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331133434.GE25161@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Thomas, All,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/flannel/flannel.mk | 32 ++++----------------------------
- 1 file changed, 4 insertions(+), 28 deletions(-)
+On 2018-03-31 15:27 +0200, Thomas Petazzoni spake thusly:
+> The DOCKER_CONTAINERD_CONFIGURE_CMDS creates a symlink to runc's
+> source directory, but it does not build depend on runc, which means
+> that the runc package may not have been extracted/built before
+> docker-containerd.
+> 
+> Therefore, when doing a build with "make docker-containerd", this
+> symbolic link is broken, but it doesn't prevent docker-containerd from
+> building.
+> 
+> Therefore, this symlink is not necessary and be dropped.
 
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index bbb2c72a72..07d5d0dfd6 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -11,36 +11,12 @@ FLANNEL_SOURCE = $(FLANNEL_VERSION).tar.gz
- FLANNEL_LICENSE = Apache-2.0
- FLANNEL_LICENSE_FILES = LICENSE
- 
--FLANNEL_DEPENDENCIES = host-go
--
--FLANNEL_MAKE_ENV = \
--	$(HOST_GO_TARGET_ENV) \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(@D)/gopath" \
--	CGO_ENABLED=1
--
--FLANNEL_GLDFLAGS = \
--	-X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
--
--ifeq ($(BR2_STATIC_LIBS),y)
--FLANNEL_GLDFLAGS += -extldflags '-static'
--endif
--
--define FLANNEL_CONFIGURE_CMDS
--	# Put sources at prescribed GOPATH location.
--	mkdir -p $(@D)/gopath/src/github.com/coreos
--	ln -s $(@D) $(@D)/gopath/src/github.com/coreos/flannel
--endef
--
--define FLANNEL_BUILD_CMDS
--	cd $(@D) && $(FLANNEL_MAKE_ENV) $(HOST_DIR)/bin/go \
--		build -v -o $(@D)/bin/flanneld -ldflags "$(FLANNEL_GLDFLAGS)" .
--endef
-+FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
- 
-+# Install flannel to its well known location.
- define FLANNEL_INSTALL_TARGET_CMDS
--	# Install flannel to its well known location.
--	$(INSTALL) -D -m 0755 $(@D)/bin/flanneld $(TARGET_DIR)/opt/bin/flanneld
-+	$(INSTALL) -D -m 0755 $(@D)/$(FLANNEL_BINDIR)/flannel $(TARGET_DIR)/opt/bin/flanneld
- 	$(INSTALL) -D -m 0755 $(@D)/dist/mk-docker-opts.sh $(TARGET_DIR)/opt/bin/mk-docker-opts.sh
- endef
- 
--$(eval $(generic-package))
-+$(eval $(golang-package))
+*can be dropped
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/docker-containerd/docker-containerd.mk | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+> index ffbadb0c3f..8f0822b77f 100644
+> --- a/package/docker-containerd/docker-containerd.mk
+> +++ b/package/docker-containerd/docker-containerd.mk
+> @@ -27,8 +27,6 @@ endif
+>  define DOCKER_CONTAINERD_CONFIGURE_CMDS
+>  	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
+>  	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
+> -	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
+> -	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
+>  endef
+>  
+>  define DOCKER_CONTAINERD_BUILD_CMDS
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
