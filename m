@@ -1,36 +1,93 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 31 Mar 2018 18:34:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dovecot: add optional support for
- libsodium
-Message-ID: <20180331163458.11893-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 18:35:40 +0200
+Subject: [Buildroot] [PATCH v2 2/5] support/scripts/graph-depends: use
+ colors instead of colours
+In-Reply-To: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
+References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331163543.6278-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dovecot/dovecot.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+The graph-depends was not very consistent in colors vs. colours: some
+parts were using colours, some parts were using colors.
 
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 8e775be5f7..1a10b30e16 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -57,6 +57,13 @@ else
- DOVECOT_CONF_OPTS += --without-libcap
- endif
+Let's settle on the US spelling, colors.
+
+This change the user-visble option --colours to --colors, but it is
+unlikely that a lot of users customize the colors through
+BR2_GRAPH_DEPS_OPTS, so this user interface change is considered
+reasonable.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/common-usage.txt  |  4 ++--
+ support/scripts/graph-depends | 16 ++++++++--------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index a22da20188..e3d7578c85 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -224,12 +224,12 @@ The +graph-depends+ behaviour can be controlled by setting options in the
+ * +--transitive+, +--no-transitive+, to draw (or not) the transitive
+   dependencies. The default is to not draw transitive dependencies.
  
-+ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
-+DOVECOT_CONF_OPTS += --with-sodium
-+DOVECOT_DEPENDENCIES += libsodium
-+else
-+DOVECOT_CONF_OPTS += --without-sodium
-+endif
-+
- ifeq ($(BR2_PACKAGE_DOVECOT_MYSQL),y)
- DOVECOT_CONF_ENV += MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
- DOVECOT_CONF_OPTS += --with-mysql
+-* +--colours R,T,H+, the comma-separated list of colours to draw the
++* +--colors R,T,H+, the comma-separated list of colors to draw the
+   root package (+R+), the target packages (+T+) and the host packages
+   (+H+). Defaults to: +lightblue,grey,gainsboro+
+ 
+ --------------------------------
+-BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colours=red,green,blue' make graph-depends
++BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colors=red,green,blue' make graph-depends
+ --------------------------------
+ 
+ === Graphing the build duration
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index d86d506f6f..dc265ae28c 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -297,9 +297,9 @@ def parse_args():
+                         "'host' to stop on host packages.")
+     parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
+                         help="Like --stop-on, but do not add PACKAGE to the graph.")
+-    parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
++    parser.add_argument("--colors", "-c", metavar="COLOR_LIST", dest="colors",
+                         default="lightblue,grey,gainsboro",
+-                        help="Comma-separated list of the three colours to use" +
++                        help="Comma-separated list of the three colors to use" +
+                         " to draw the top-level package, the target" +
+                         " packages, and the host packages, in this order." +
+                         " Defaults to: 'lightblue,grey,gainsboro'")
+@@ -353,12 +353,12 @@ def main():
+         get_depends_func = brpkgutil.get_rdepends
+         arrow_dir = "back"
+ 
+-    # Get the colours: we need exactly three colours,
++    # Get the colors: we need exactly three colors,
+     # so no need not split more than 4
+-    # We'll let 'dot' validate the colours...
+-    colours = args.colours.split(',', 4)
+-    if len(colours) != 3:
+-        sys.stderr.write("Error: incorrect colour list '%s'\n" % args.colours)
++    # We'll let 'dot' validate the colors...
++    colors = args.colors.split(',', 4)
++    if len(colors) != 3:
++        sys.stderr.write("Error: incorrect color list '%s'\n" % args.colors)
+         sys.exit(1)
+ 
+     # In full mode, start with the result of get_targets() to get the main
+@@ -403,7 +403,7 @@ def main():
+     outfile.write("digraph G {\n")
+ 
+     print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+-                   arrow_dir, 0, args.depth, rootpkg, colours)
++                   arrow_dir, 0, args.depth, rootpkg, colors)
+ 
+     outfile.write("}\n")
+ 
 -- 
-2.14.2
+2.14.3
