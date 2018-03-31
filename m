@@ -1,67 +1,83 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 30 Mar 2018 23:22:37 -0300
-Subject: [Buildroot] [PATCH 12/36] check-package: enable for linux/
+Date: Fri, 30 Mar 2018 23:22:39 -0300
+Subject: [Buildroot] [PATCH 14/36] toolchain/toolchain.mk: fix code style
 In-Reply-To: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
 References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180331022301.27501-13-ricardo.martincoski@gmail.com>
+Message-ID: <20180331022301.27501-15-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This directory can benefit from this script to prevent common mistakes
-when submitting patches.
+Rearrange the header of the .mk file so it to be similar to a header
+from a package. It doesn't fit in one line, so split the details to a
+comment below the header.
 
-In order to accomplish this:
-Do not ignore anymore files from the linux/ directory.
-Ignore missing LINUX_EXT_ prefix as the variables for linux extensions
-do not use it.
-Ignore this symbol:
- - LINUX_EXTENSIONS: defined by each linux extension, used by
-   linux/linux.mk.
-But do not ignore these symbols:
- - KERNEL_ARCH_PATH, KERNEL_DTBS, KERNEL_DTS_NAME: they are used only
-   inside the file that defines them.
+GCONV_LIBS is only used inside this file, so rename it to start with
+TOOLCHAIN_, following the namespace convention already used by packages.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/check-package             | 1 +
- utils/checkpackagelib/lib_mk.py | 3 +++
- 2 files changed, 4 insertions(+)
+ toolchain/toolchain.mk | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 4c9eea0534..a5f5dc44c0 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -49,6 +49,7 @@ DO_CHECK_INTREE = re.compile("|".join([
-     "arch/",
-     "boot/",
-     "fs/",
-+    "linux/",
-     "package/",
-     "system/",
-     ]))
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 1bec67bc2b..1248457ef2 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -160,6 +160,7 @@ class TypoInPackageVariable(_CheckFunction):
-         "ACLOCAL_HOST_DIR",
-         "BR_CCACHE_INITIAL_SETUP",
-         "BR_NO_CHECK_HASH_FOR",
-+        "LINUX_EXTENSIONS",
-         "LINUX_POST_PATCH_HOOKS",
-         "LINUX_TOOLS",
-         "LUA_RUN",
-@@ -179,6 +180,8 @@ class TypoInPackageVariable(_CheckFunction):
-         package = package.replace("-", "_").upper()
-         # linux tools do not use LINUX_TOOL_ prefix for variables
-         package = package.replace("LINUX_TOOL_", "")
-+        # linux extensions do not use LINUX_EXT_ prefix for variables
-+        package = package.replace("LINUX_EXT_", "")
-         self.package = package
-         self.REGEX = re.compile("^(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
-         self.FIND_VIRTUAL = re.compile(
+diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
+index 59fc905caf..6b2c93ced0 100644
+--- a/toolchain/toolchain.mk
++++ b/toolchain/toolchain.mk
+@@ -1,7 +1,11 @@
+-# This file contains toolchain-related customisation of the content
+-# of the target/ directory. Those customisations are added to the
+-# TARGET_FINALIZE_HOOKS, to be applied just after all packages
+-# have been built.
++################################################################################
++#
++# toolchain-related customisation of the content of the target/ directory
++#
++################################################################################
++
++# Those customisations are added to the TARGET_FINALIZE_HOOKS, to be applied
++# just after all packages have been built.
+ 
+ # Install default nsswitch.conf file if the skeleton doesn't provide it
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+@@ -15,7 +19,7 @@ endif
+ 
+ # Install the gconv modules
+ ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
+-GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
++TOOLCHAIN_GLIBC_GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
+ define COPY_GCONV_LIBS
+ 	$(Q)found_gconv=no; \
+ 	for d in $(TOOLCHAIN_EXTERNAL_PREFIX) ''; do \
+@@ -27,14 +31,14 @@ define COPY_GCONV_LIBS
+ 		printf "Unable to find gconv modules\n" >&2; \
+ 		exit 1; \
+ 	fi; \
+-	if [ -z "$(GCONV_LIBS)" ]; then \
++	if [ -z "$(TOOLCHAIN_GLIBC_GCONV_LIBS)" ]; then \
+ 		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
+ 				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules && \
+ 		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/$${d}/gconv/*.so \
+ 				   $(TARGET_DIR)/usr/lib/gconv \
+ 		|| exit 1; \
+ 	else \
+-		for l in $(GCONV_LIBS); do \
++		for l in $(TOOLCHAIN_GLIBC_GCONV_LIBS); do \
+ 			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so \
+ 					      $(TARGET_DIR)/usr/lib/gconv/$${l}.so \
+ 			|| exit 1; \
+@@ -47,7 +51,7 @@ define COPY_GCONV_LIBS
+ 				 || exit 1; \
+ 			done; \
+ 		done; \
+-		./support/scripts/expunge-gconv-modules "$(GCONV_LIBS)" \
++		./support/scripts/expunge-gconv-modules "$(TOOLCHAIN_GLIBC_GCONV_LIBS)" \
+ 			<$(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
+ 			>$(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+ 	fi
 -- 
 2.14.1
