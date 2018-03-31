@@ -1,53 +1,34 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 30 Mar 2018 23:23:01 -0300
-Subject: [Buildroot] [PATCH 36/36] .gitlab-ci.yml: extend check-package test
- to Config.* files
-In-Reply-To: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180331022301.27501-37-ricardo.martincoski@gmail.com>
+Date: Fri, 30 Mar 2018 23:40:48 -0300
+Subject: [Buildroot] [PATCH 32/36] qemu/Config.in.host: fix overindented
+ depends on
+Message-ID: <20180331024048.14703-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that all issues in Config.in files have been fixed, let's try to
-make sure we don't introduce new ones by checking regularly these files
-issues in Gitlab CI.
+Do the same as used in all other Config.in files and use only one tab.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
 ---
- .gitlab-ci.yml    | 3 ++-
- .gitlab-ci.yml.in | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/qemu/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 952fffaf88..8489f8c45c 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -32,7 +32,8 @@ check-DEVELOPERS:
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index bbc2aa27c5..0ef4c700b0 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+ 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+ 		BR2_sparc        || BR2_x86_64
+-		depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
++	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
  
- check-package:
-     script:
--        - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
-+        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name 'toolchain-common.in' \)
-+            -exec ./utils/check-package {} +
- 
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index cb3eb715f2..578e13f532 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -32,7 +32,8 @@ check-DEVELOPERS:
- 
- check-package:
-     script:
--        - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
-+        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name 'toolchain-common.in' \)
-+            -exec ./utils/check-package {} +
- 
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
+ config BR2_PACKAGE_HOST_QEMU
+ 	bool "host qemu"
 -- 
 2.14.1
