@@ -1,35 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 22:58:05 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] meson: fix error when restorecon unavailable
-In-Reply-To: <20180313211825.25745-1-fontaine.fabrice@gmail.com>
-References: <20180313211825.25745-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180331225805.70d6b20e@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 31 Mar 2018 22:59:20 +0200
+Subject: [Buildroot] [PATCH 1/2] package/linux: fix custom dts files
+ handling
+In-Reply-To: <20180313180006.5364-1-rafal.susz@gmail.com> (Rafal Susz's
+ message of "Tue, 13 Mar 2018 19:00:05 +0100")
+References: <20180313142635.27423-1-rafal.susz@gmail.com>
+ <20180313180006.5364-1-rafal.susz@gmail.com>
+Message-ID: <87370gt107.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Rafal" == Rafal Susz <rafal.susz@gmail.com> writes:
 
-On Tue, 13 Mar 2018 22:18:25 +0100, Fabrice Fontaine wrote:
-> host-meson is used by some packages such as libmpdclient.
-> If selinuxenabled is installed on host but restorecon is unavailable
-> (for an "unknwown" reason), install will crash.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/d5dcdfdfab3503fdc387f99e68267972a38c417d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1->v2:
->  - Update patch following upstream review: https://github.com/mesonbuild/meson/pull/3236#pullrequestreview-103570704
+ > Custom dts files are still conditionally copied based on non existing
+ > boolean. So it is currently not possible to use custom dts file(s) at all.
 
-Applied to master, thanks.
+ > List of dts files is now iterated and files are copied into dedicated kernel arch dir.
 
-Thomas
+ > Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
