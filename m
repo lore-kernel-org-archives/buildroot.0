@@ -1,46 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 20:56:46 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add myself for a number of
- unmaintained boards
-Message-ID: <20180331185756.96A3484B62@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 21:01:03 +0200
+Subject: [Buildroot] [git commit] lua: always use host-lua for
+ host-luainterpreter
+Message-ID: <20180331190105.2061E81E48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf6b55268fdd78a441f99b9b0ca45b81939f8334
+commit: https://git.buildroot.net/buildroot/commit/?id=0bd23f0603954c6a1d3d6c6e6d25bd2511fd472b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These boards I own and currently have no entries in DEVELOPERS, so add them.
+Similar to how we do for openssl.
+
+host-luainterpreter is only used by the luarocks infrastructure, and there
+is afaik no specific reason why the host lua variant must match the target one.
+
+Luajit only supports a limited number of architectures, so building it for
+the host limits the architectures Buildroot can be used on (E.G. powerpc64
+autobuilders).
+
+To fix this, always use host-lua.  Slightly rework lua.mk to ensure
+host-lua-5.1 is used when luajit is selected, and drop the logic for using
+host-luajit.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/lua/lua.mk                       | 6 +++---
+ package/luainterpreter/Config.in         | 4 ++++
+ package/luainterpreter/luainterpreter.mk | 2 +-
+ package/luarocks/luarocks.mk             | 4 ----
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ac7a47fc7a..ee66cdd6c1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1399,8 +1399,20 @@ N:	Pedro Aguilar <paguilar@paguilar.org>
- F:	package/libunistring/
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 0ac2e0e25d..851dc8f734 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -16,10 +16,10 @@ endif
+ LUA_SITE = http://www.lua.org/ftp
+ LUA_INSTALL_STAGING = YES
+ LUA_LICENSE = MIT
+-ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+-LUA_LICENSE_FILES = COPYRIGHT
+-else
++ifeq ($(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUA_5_3),y)
+ LUA_LICENSE_FILES = doc/readme.html
++else
++LUA_LICENSE_FILES = COPYRIGHT
+ endif
  
- N:	Peter Korsgaard <peter@korsgaard.com>
-+F:	board/minnowboard/
-+F:	board/nexbox/a95x/
-+F:	board/openblocks/a6/
- F:	board/orangepi/
-+F:	board/pandaboard/
-+F:	board/roseapplepi/
-+F:	configs/minnowboard_max-graphical_defconfig
-+F:	configs/minnowboard_max_defconfig
-+F:	configs/nexbox_a95x_defconfig
-+F:	configs/openblocks_a6_defconfig
- F:	configs/orangepi_pc_defconfig
-+F:	configs/pandaboard_defconfig
-+F:	configs/roseapplepi_defconfig
-+F:	configs/sheevaplug_defconfig
- F:	package/docker-compose/
- F:	package/dump1090/
- F:	package/flickcurl/
+ LUA_PROVIDES = luainterpreter
+diff --git a/package/luainterpreter/Config.in b/package/luainterpreter/Config.in
+index e89a9b84d2..7bc54d862f 100644
+--- a/package/luainterpreter/Config.in
++++ b/package/luainterpreter/Config.in
+@@ -7,3 +7,7 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
+ 
+ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ 	string
++
++config BR2_PACKAGE_PROVIDES_HOST_LUAINTERPRETER
++	string
++	default "host-lua"
+diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
+index cb1d5dde18..58d421b183 100644
+--- a/package/luainterpreter/luainterpreter.mk
++++ b/package/luainterpreter/luainterpreter.mk
+@@ -20,4 +20,4 @@ endif
+ $(eval $(virtual-package))
+ $(eval $(host-virtual-package))
+ 
+-LUA_RUN = $(HOST_DIR)/bin/$(call qstrip,$(BR2_PACKAGE_PROVIDES_LUAINTERPRETER))
++LUA_RUN = $(HOST_DIR)/bin/lua
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 389d521832..63d908a416 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -23,10 +23,6 @@ HOST_LUAROCKS_CONF_OPTS = \
+ 	--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
+ 	--with-lua=$(HOST_DIR)
+ 
+-ifeq ($(BR2_PACKAGE_LUAJIT),y)
+-HOST_LUAROCKS_CONF_OPTS += --lua-suffix=jit
+-endif
+-
+ define HOST_LUAROCKS_CONFIGURE_CMDS
+ 	cd $(@D) && ./configure $(HOST_LUAROCKS_CONF_OPTS)
+ endef
