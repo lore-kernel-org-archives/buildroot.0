@@ -1,96 +1,97 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 30 Mar 2018 23:22:42 -0300
-Subject: [Buildroot] [PATCH 17/36] docs/manual: add check-package to "Tips
- and tricks"
+Date: Fri, 30 Mar 2018 23:22:43 -0300
+Subject: [Buildroot] [PATCH 18/36] */Config.in*: remove consecutive empty
+ lines
 In-Reply-To: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
 References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180331022301.27501-18-ricardo.martincoski@gmail.com>
+Message-ID: <20180331022301.27501-19-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And add two references to it: in "Submitting patches" and in "Adding new
-packages to Buildroot" sections.
-
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- docs/manual/adding-packages-tips.txt | 31 +++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt      |  2 ++
- docs/manual/contribute.txt           |  4 ++++
- 3 files changed, 37 insertions(+)
+ Config.in                      | 1 -
+ Config.in.legacy               | 1 -
+ arch/Config.in.mips            | 1 -
+ boot/barebox/barebox/Config.in | 1 -
+ boot/syslinux/Config.in        | 1 -
+ fs/jffs2/Config.in             | 1 -
+ 6 files changed, 6 deletions(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 19577fa821..b13a7bef80 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -32,6 +32,37 @@ using the following rules:
-   with `.` and `-` characters substituted with `_` (e.g.:
-   +FOO_BAR_BOO_VERSION+).
+diff --git a/Config.in b/Config.in
+index a74b24ae45..852c61ef3a 100644
+--- a/Config.in
++++ b/Config.in
+@@ -620,7 +620,6 @@ config BR2_SHARED_STATIC_LIBS
  
-+[[check-package]]
-+==== How to check the coding style
-+
-+Buildroot provides a script in +utils/check-package+ that checks new or
-+changed files for coding style. It is not a complete language validator,
-+but it catches many common mistakes. It is meant to run in the actual
-+files you created or modified, before creating the patch for submission.
-+
-+This script can be used for packages and also for package-like files:
-+boot, fs, toolchain, ... ; but it does not check package infra types.
-+
-+To use it, run the +check-package+ script, by telling which files you
-+created or changed:
-+
-+----
-+$ ./utils/check-package package/new-package/*
-+----
-+
-+If you have the +utils+ directory in your path you can also run:
-+
-+----
-+$ cd package/new-package/
-+$ check-package *
-+----
-+
-+The tool can also be used for proprietary packages in a br2-external:
-+
-+----
-+$ check-package -b /path/to/br2-ext-tree/package/my-package/*
-+----
-+
- [[testing-package]]
- ==== How to test your package
+ endchoice
  
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index e8d40daee4..42870a8682 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -12,6 +12,8 @@ tuning their configuration.
- When you add a new package, be sure to test it in various conditions;
- see xref:testing-package[]
+-
+ config BR2_PACKAGE_OVERRIDE_FILE
+ 	string "location of a package override file"
+ 	default "$(CONFIG_DIR)/local.mk"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 60f9148234..b1dca97e5e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -1164,7 +1164,6 @@ config BR2_PACKAGE_OPENVPN_CRYPTO_POLARSSL
+ 	  version provided in buildroot. And both can't coexist.
+ 	  It now uses OpenSSL as the only option.
  
-+Also check the new package for coding style; see xref:check-package[]
-+
- include::adding-packages-directory.txt[]
+-
+ config BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE
+ 	bool "nginx http spdy module removed"
+ 	select BR2_LEGACY
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index f8e57bab33..5513edb180 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -115,7 +115,6 @@ config BR2_mips_p6600
+ 	select BR2_MIPS_CPU_MIPS64R6
+ endchoice
  
- include::adding-packages-generic.txt[]
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 8bbc2b9eb7..b531ea987e 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -264,6 +264,10 @@ yourself to the DEVELOPERS file. This should be done in the same patch
- creating or modifying the package. See xref:DEVELOPERS[the DEVELOPERS file]
- for more information.
+-
+ choice
+ 	prompt "Target ABI"
+ 	depends on BR2_mips64 || BR2_mips64el
+diff --git a/boot/barebox/barebox/Config.in b/boot/barebox/barebox/Config.in
+index 0be26adf93..958e294e40 100644
+--- a/boot/barebox/barebox/Config.in
++++ b/boot/barebox/barebox/Config.in
+@@ -17,7 +17,6 @@ config BR2_TARGET_BAREBOX_BOARD_DEFCONFIG
+ 	  Name of the board for which Barebox should be built, without
+ 	  the _defconfig suffix.
  
-+Buildroot provides a handy tool to check for common coding style
-+mistakes on files you created or modified, called +check-package+ (see
-+xref:check-package[] for more information).
-+
- ==== Preparing a patch series
+-
+ config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
+ 	string "Configuration file path"
+ 	depends on BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index da035498de..e969d53fd0 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -48,7 +48,6 @@ config BR2_TARGET_SYSLINUX_EFI
+ 	help
+ 	  Install the 'efi' image, to boot from an EFI environment.
  
- Starting from the changes committed in your local git view, _rebase_
+-
+ if BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 
+ config BR2_TARGET_SYSLINUX_C32
+diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
+index 1010216bd1..f1703f4edd 100644
+--- a/fs/jffs2/Config.in
++++ b/fs/jffs2/Config.in
+@@ -98,7 +98,6 @@ config BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	  the flash memory page size.  Using this option is only needed if Linux is
+ 	  configured to use a page size different than 4kB.
+ 
+-
+ config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE
+ 	hex "Virtual memory page size"
+ 	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
 -- 
 2.14.1
