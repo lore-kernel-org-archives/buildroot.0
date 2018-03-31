@@ -1,50 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 22:52:10 +0200
-Subject: [Buildroot] [PATCH] package/libbsd: enable for non-glibc
- toolchains
-In-Reply-To: <20180314194356.15839-1-joerg.krause@embedded.rocks>
-References: <20180314194356.15839-1-joerg.krause@embedded.rocks>
-Message-ID: <20180331225210.3082b688@windsurf>
+Date: Sat, 31 Mar 2018 22:52:18 +0200
+Subject: [Buildroot] [git commit] meson: fix error when restorecon
+ unavailable
+Message-ID: <20180331205701.D8A5C815A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8cbb08d8e59d56e5d86a85fc8730c9c604d77d27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Mar 2018 20:43:56 +0100, J?rg Krause wrote:
-> libbsd builds now almost fine with a musl or uClibc toolchain, except
-> for one issue introduced in the latest version bump. Upstream commit
-> 22fbd62368c39de8ac5e249d1502d5ac0ffdef30 [1] uses the glibc-only macro
-> `__GLIBC_PREREQ`. The issue is fixed by the attached patch from upstream,
-> which fixes the use of `__GLIBC_PREREQ` on non-glibc toolchains.
-> 
-> Backported from:
-> https://cgit.freedesktop.org/libbsd/patch/?id=1f8a3f7bccfc84b195218ad0086ebd57049c3490
-> 
-> netcat-openbsd is the only package selecting libbsd. However, building
-> it still needs a glibc toolchain, as it uses `b64_ntop` which is not
-> available in musl or uClibc.
-> 
-> Build has been successfully tested with:
->  * armv7-eabihf--glibc--bleeding-edge-2017.11-1
->  * armv7-eabihf--musl--bleeding-edge-2018.02-1
->  * armv7-eabihf--uclibc--bleeding-edge-2018.02-1
-> 
-> [1] https://cgit.freedesktop.org/libbsd/commit/?id=22fbd62368c39de8ac5e249d1502d5ac0ffdef30
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...n-declaration-protection-for-glibc-alread.patch | 80 ++++++++++++++++++++++
->  package/libbsd/Config.in                           |  5 +-
->  2 files changed, 82 insertions(+), 3 deletions(-)
->  create mode 100644 package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
+host-meson is used by some packages such as libmpdclient.
+If selinuxenabled is installed on host but restorecon is unavailable
+(for an "unknwown" reason), install will crash.
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.net/results/d5dcdfdfab3503fdc387f99e68267972a38c417d
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...NotFoundError-when-restorecon-unavailable.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/package/meson/0001-Fix-FileNotFoundError-when-restorecon-unavailable.patch b/package/meson/0001-Fix-FileNotFoundError-when-restorecon-unavailable.patch
+new file mode 100644
+index 0000000000..3f1ca68dfc
+--- /dev/null
++++ b/package/meson/0001-Fix-FileNotFoundError-when-restorecon-unavailable.patch
+@@ -0,0 +1,31 @@
++From 8edc477b7d7b160004eb700a1b7523237333d9ec Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 13 Mar 2018 18:52:36 +0100
++Subject: [PATCH] Fix FileNotFoundError when restorecon unavailable
++
++Fixes:
++ - http://autobuild.buildroot.net/results/d5dcdfdfab3503fdc387f99e68267972a38c417d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ mesonbuild/scripts/meson_install.py | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
++index f895f17d..1414ace2 100644
++--- a/mesonbuild/scripts/meson_install.py
+++++ b/mesonbuild/scripts/meson_install.py
++@@ -97,6 +97,10 @@ def restore_selinux_contexts():
++         # is ignored quietly.
++         return
++ 
+++    if not shutil.which('restorecon'):
+++        # If we don't have restorecon, failure is ignored quietly.
+++        return
+++
++     with subprocess.Popen(['restorecon', '-F', '-f-', '-0'],
++                           stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
++         out, err = proc.communicate(input=b'\0'.join(os.fsencode(f) for f in selinux_updates) + b'\0')
++-- 
++2.14.1
++
