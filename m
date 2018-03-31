@@ -1,62 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 19:43:00 +0200
-Subject: [Buildroot] [PATCH 02/15 v4] fs/cpio: don't extend packages'
- permissions table
-In-Reply-To: <1303a4223d2e0a14e009f7585829aef10de66682.1522487149.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 31 Mar 2018 11:05:48 +0200")
-References: <cover.1522487149.git.yann.morin.1998@free.fr>
- <1303a4223d2e0a14e009f7585829aef10de66682.1522487149.git.yann.morin.1998@free.fr>
-Message-ID: <871sg0uonv.fsf@dell.be.48ers.dk>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 31 Mar 2018 17:42:34 +0000
+Subject: [Buildroot] [PATCH v3 2/8] dumb-init: new package
+In-Reply-To: <8e3b124c-2961-bd82-f788-9c94eddb84ab@smile.fr>
+References: <20180304004346.331-1-christian@paral.in>
+ <20180304004346.331-3-christian@paral.in>
+ <8e3b124c-2961-bd82-f788-9c94eddb84ab@smile.fr>
+Message-ID: <CA+h8R2pyAoT_7Z3i+zgpzZEdLhf+ZBQtzRXJkkMMxYVh-DSjTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi Romain,
 
- > Currently, when we build a cpio filesystem without static devices, we
- > shoehorn the /dev/console node as if it were specified by a package.
+On Sat, Mar 31, 2018, 11:42 AM Romain Naour <romain.naour@smile.fr> wrote:
 
- > This means that this device is added for all filesystems as well, not
- > just the cpio. But if we disable cpio, that device is not created for
- > other filesystems.
+> Le 04/03/2018 ? 01:43, Christian Stewart a ?crit :
+> > Static compilation is used, as dumb-init will typically be executed
+> inside a
+> > container.
+>
 
- > This is not very clean, and may break expectations.
+See above.
 
- > Instead, use an explicit mknod as part of the _CMD, as we know it's
- > going to run under fakeroot.
+> +config BR2_PACKAGE_DUMB_INIT
+>
+> The code use fork(), so a depends on BR2_USE_MMU must be added here.
+>
 
- > This is still visible to all filesystems built after cpio, and not to
- > those built before it, though.
+Noted.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
- > ---
- >  fs/cpio/cpio.mk | 5 +++--
- >  1 file changed, 3 insertions(+), 2 deletions(-)
+Also $(TARGET_CFLAGS) may be used here.
+>
 
- > diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
- > index aa4d947fa5..505976512b 100644
- > --- a/fs/cpio/cpio.mk
- > +++ b/fs/cpio/cpio.mk
- > @@ -15,14 +15,15 @@ endef
- >  else
- >  # devtmpfs does not get automounted when initramfs is used.
- >  # Add a pre-init script to mount it before running init
- > +# We must have /dev/console very early, even before /init runs, so
- > +# that it can at least open its stdin/stdout/stderr filedescriptors.
- >  define ROOTFS_CPIO_ADD_INIT
- >  	if [ ! -e $(TARGET_DIR)/init ]; then \
- >  		$(INSTALL) -m 0755 fs/cpio/init $(TARGET_DIR)/init; \
- >  	fi
- > +	mknod -m 0622 $(TARGET_DIR)/dev/console c 5 1
+Also noted :)
 
-This is executed before makedevs, so we cannot be sure /dev exists (our
-default skeleton has it, but a custom one might not).
-
-I've fixed that by adding a mkdir -p $(TARGET_DIR)/dev before mknod.
-
--- 
-Bye, Peter Korsgaard
+Best,
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180331/4d717afa/attachment.html>
