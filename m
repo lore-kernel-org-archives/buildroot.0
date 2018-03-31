@@ -1,54 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 31 Mar 2018 22:34:55 +0200
-Subject: [Buildroot] [git commit] infra/pkg-kconfig: do not
- update-(def)config to a directory
-Message-ID: <20180331203457.CA74681556@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] infra/pkg-config: hide away non-critical
+ commands
+Message-ID: <20180331203457.BA66D81555@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=725ea68913cf6369a40180a70d94fadb06ca6491
+commit: https://git.buildroot.net/buildroot/commit/?id=152f58e2092158cfd243934f577430badd619637
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, if the user specifies the path to an existing directory as
-the path to the custom (def)config file (FOO_KCONFIG_FILE), then we
-happily create a file in there, either 'defconfig' or '.config' (or
-whatever the .config is named for that package), depending on whether
-we're saving a defconfig or a full config.
+When updating back the (def)config file, the touch command is not very
+useful by default, so hide it away.
 
-So, we could save the file, but then the Buildroot defconfig file that
-contains that path would no longer be reusable as-is, because we
-interpret that path as a path to a file.
+We do not hide away the cp command, as that could confuse the user under
+some circunmstances. For example, when the toolchain does not yet exist,
+the uClibc buildsystem will complain multiple times about gcc not being
+found, like so:
 
-Furthermore, if the directory-portion of FOO_KCONFIG_FILE does not
-exist yet, the update would fail, because cp does not create missing
-directory components.
+    make[2]: /home/ymorin/dev/buildroot/O/host/bin/i686-buildroot-linux-uclibc-gcc: Command not found
 
-So we fix that by adding an explicit test for the directory-ness of the
-target file, and then an explicit mkdir to create missing directory
-components.
+(Note that we can not suppress those warnings, as they are on stderr,
+and we still want to see stderr in case of real errors).
+
+So, if we were to hide the cp command, the user could be left confused,
+even though we were sucessful in updating back the (def)config file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-kconfig.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/pkg-kconfig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 0da6d0ab4e..81bba5220c 100644
+index 4bd7161b1a..0da6d0ab4e 100644
 --- a/package/pkg-kconfig.mk
 +++ b/package/pkg-kconfig.mk
-@@ -18,6 +18,11 @@ define kconfig-package-update-config
- 		echo "Unable to perform $(@) when fragment files are set"; exit 1)
+@@ -19,7 +19,7 @@ define kconfig-package-update-config
  	@$(if $($(PKG)_KCONFIG_DEFCONFIG), \
  		echo "Unable to perform $(@) when using a defconfig rule"; exit 1)
-+	$(Q)if [ -d $($(PKG)_KCONFIG_FILE) ]; then \
-+		echo "Unable to perform $(@) when $($(PKG)_KCONFIG_FILE) is a directory"; \
-+		exit 1; \
-+	fi
-+	$(Q)mkdir -p $(dir $($(PKG)_KCONFIG_FILE))
  	cp -f $($(PKG)_DIR)/$(1) $($(PKG)_KCONFIG_FILE)
- 	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
+-	touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
++	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
  endef
+ 
+ ################################################################################
