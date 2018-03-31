@@ -1,118 +1,86 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 11:05:49 +0200
-Subject: [Buildroot] [PATCH 03/15 v4] fs/iso9660: rename internal variable
+Date: Sat, 31 Mar 2018 11:05:50 +0200
+Subject: [Buildroot] [PATCH 04/15 v4] core: introduce intermediate
+ BASE_TARGET_DIR variable
 In-Reply-To: <cover.1522487149.git.yann.morin.1998@free.fr>
 References: <cover.1522487149.git.yann.morin.1998@free.fr>
-Message-ID: <dfdf1a96985e90817dda9b5fe86608460c0011df.1522487149.git.yann.morin.1998@free.fr>
+Message-ID: <0b3d90c6c6fc42bf69538ecc56ddb278f93e0d8d.1522487149.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We're soon to introduce a generic variable with that name, i.e.
-$(FS_NAME)_TARGET_DIR, so our internal, temporary variable would
-clash with it.
+This new BASE_TARGET_DIR variable is set in stone to point to the real
+location where packages will be installed. Its name is modelled after
+its definition: it is located in $(BASE_DIR), and it is named 'target/',
+hence BASE_TARGET_DIR.
 
-Just rename it.
+The already-existing TARGET_DIR variable now simply points to the same
+location, except that it is recursively expanded, so that we can later
+change it depending on the context.
+
+All locations that really need to reference the existing target/
+directory, are changed to use BASE_TARGET_DIR; surprinsigly enough, they
+all seem to be located in the main Makefile. :-) The rest is left with
+using good-old TARGET_DIR.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- fs/iso9660/iso9660.mk | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ Makefile | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 207c6aa39f..b33cf4cd8a 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -35,47 +35,47 @@ ROOTFS_ISO9660_USE_INITRD = YES
+diff --git a/Makefile b/Makefile
+index 9e2402d7d9..41624b859e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -215,7 +215,8 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+ 
+ BUILD_DIR := $(BASE_DIR)/build
+ BINARIES_DIR := $(BASE_DIR)/images
+-TARGET_DIR := $(BASE_DIR)/target
++BASE_TARGET_DIR := $(BASE_DIR)/target
++TARGET_DIR = $(BASE_TARGET_DIR)
+ # initial definition so that 'make clean' works for most users, even without
+ # .config. HOST_DIR will be overwritten later when .config is included.
+ HOST_DIR := $(BASE_DIR)/host
+@@ -237,7 +238,7 @@ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
+ # dependencies anywhere else
+ #
+ ################################################################################
+-$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
++$(BUILD_DIR) $(BASE_TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
+ 	@mkdir -p $@
+ 
+ BR2_CONFIG = $(CONFIG_DIR)/.config
+@@ -459,7 +460,7 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+ 
+ # Location of a file giving a big fat warning that output/target
+ # should not be used as the root filesystem.
+-TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
++TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+ 
+ ifeq ($(BR2_CCACHE),y)
+ CCACHE := $(HOST_DIR)/bin/ccache
+@@ -556,7 +557,7 @@ $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
  endif
  
- ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
--ROOTFS_ISO9660_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
-+ROOTFS_ISO9660_TMP_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
- define ROOTFS_ISO9660_CREATE_TEMPDIR
--	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
--	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
-+	$(RM) -rf $(ROOTFS_ISO9660_TMP_TARGET_DIR)
-+	mkdir -p $(ROOTFS_ISO9660_TMP_TARGET_DIR)
- endef
- ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_CREATE_TEMPDIR
- else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_TRANSPARENT_COMPRESSION),y)
- ROOTFS_ISO9660_DEPENDENCIES += host-zisofs-tools
--ROOTFS_ISO9660_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
-+ROOTFS_ISO9660_TMP_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
- # This must be early, before we copy the bootloader files.
- define ROOTFS_ISO9660_MKZFTREE
--	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
-+	$(RM) -rf $(ROOTFS_ISO9660_TMP_TARGET_DIR)
- 	$(HOST_DIR)/bin/mkzftree -X -z 9 -p $(PARALLEL_JOBS) \
- 		$(TARGET_DIR) \
--		$(ROOTFS_ISO9660_TARGET_DIR)
-+		$(ROOTFS_ISO9660_TMP_TARGET_DIR)
- endef
- ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_MKZFTREE
- ROOTFS_ISO9660_GENISOIMAGE_OPTS += -z
- else
--ROOTFS_ISO9660_TARGET_DIR = $(TARGET_DIR)
-+ROOTFS_ISO9660_TMP_TARGET_DIR = $(TARGET_DIR)
- endif
+ .PHONY: dirs
+-dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
++dirs: $(BUILD_DIR) $(STAGING_DIR) $(BASE_TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR)
  
- ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2),y)
- ROOTFS_ISO9660_DEPENDENCIES += grub2
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
--	$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub.cfg
-+	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub.cfg
- ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
- define ROOTFS_ISO9660_INSTALL_BOOTLOADER
- 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
--		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub-eltorito.img
-+		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub-eltorito.img
- endef
- else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
- ROOTFS_ISO9660_DEPENDENCIES += syslinux
- ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
--	$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.cfg
-+	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/isolinux.cfg
- ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
- define ROOTFS_ISO9660_INSTALL_BOOTLOADER
- 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/* \
--		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/
-+		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/
- 	$(INSTALL) -D -m 0644 $(HOST_DIR)/share/syslinux/ldlinux.c32 \
--		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
-+		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/ldlinux.c32
- endef
- endif
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+@@ -972,7 +973,7 @@ printvars:
  
-@@ -96,7 +96,7 @@ endef
- # Copy the kernel to temporary filesystem
- define ROOTFS_ISO9660_COPY_KERNEL
- 	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) \
--		$(ROOTFS_ISO9660_TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
-+		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
- endef
+ .PHONY: clean
+ clean:
+-	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
++	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+ 		$(BUILD_DIR) $(BASE_DIR)/staging \
+ 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
  
- ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
-@@ -111,7 +111,7 @@ else
- ROOTFS_ISO9660_DEPENDENCIES += rootfs-cpio
- define ROOTFS_ISO9660_COPY_INITRD
- 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
--		$(ROOTFS_ISO9660_TARGET_DIR)/boot/initrd
-+		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/initrd
- 	$(SED) "s%__INITRD_PATH__%/boot/initrd%" \
- 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
- endef
-@@ -133,7 +133,7 @@ define ROOTFS_ISO9660_CMD
- 	$(HOST_DIR)/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
- 		-no-emul-boot -boot-load-size 4 -boot-info-table \
- 		$(ROOTFS_ISO9660_GENISOIMAGE_OPTS) \
--		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
-+		-o $@ $(ROOTFS_ISO9660_TMP_TARGET_DIR)
- endef
- 
- ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
 -- 
 2.14.1
