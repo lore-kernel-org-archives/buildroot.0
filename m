@@ -1,27 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 20:45:53 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.15.15
-In-Reply-To: <1522521298-25062-1-git-send-email-festevam@gmail.com>
-References: <1522521298-25062-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180331204553.297ca51d@windsurf>
+Date: Sat, 31 Mar 2018 20:46:14 +0200
+Subject: [Buildroot] [git commit] package/dovecot: add optional support for
+ libsodium
+Message-ID: <20180331184625.11AEB843DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=14d43aea0a6a18878416bb4c5aa4d870d8377f5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 31 Mar 2018 15:34:57 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dovecot/dovecot.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Both applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 8e775be5f7..1a10b30e16 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -57,6 +57,13 @@ else
+ DOVECOT_CONF_OPTS += --without-libcap
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
++DOVECOT_CONF_OPTS += --with-sodium
++DOVECOT_DEPENDENCIES += libsodium
++else
++DOVECOT_CONF_OPTS += --without-sodium
++endif
++
+ ifeq ($(BR2_PACKAGE_DOVECOT_MYSQL),y)
+ DOVECOT_CONF_ENV += MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
+ DOVECOT_CONF_OPTS += --with-mysql
