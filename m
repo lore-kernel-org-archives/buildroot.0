@@ -1,42 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 17:09:31 +0200
-Subject: [Buildroot] [git commit] package/zsh: remove busybox show others
- dependency
-Message-ID: <20180331151016.3D16B83FDA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 31 Mar 2018 17:12:50 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mplayer: disable inline sse on
+ i386
+In-Reply-To: <XnsA776E64284194berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <20170513150918.25427-1-bernd.kuhls@t-online.de>
+ <20170514160855.2dea324b@free-electrons.com>
+ <XnsA776E64284194berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <5b884a7c-9147-12e0-e6e7-c6f71d82f089@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c03d5395a12dc3d1d3b7619491e8108d7b5f7c49
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hi Bernd,
 
-Back in 2013, zsh was added to Buildroot [1] with the dependency on
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS. This dependency was keept with the
-refactoring [2].
-But Busybox doesn't provide a zsh shell in the firt place.
-This dependency can be removed.
+ Coming back to this ancient series...
 
-[1] 3d19b7ef598f3534b46cf0746a81bc437579127c
-[2] 1dbd7b991025a8bf39ab5d25c2fd97f47f084bac
+On 15-05-17 22:38, Bernd Kuhls wrote:
+> [posted and mailed]
+> 
+> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+> @public.gmane.org> wrote in news:20170514160855.2dea324b at free-electrons.com:
+> 
+>> All of this is very messy. Why isn't the ffmpeg code building properly
+>> on x86 ? It's a major platform, shouldn't x86 just work ?
+> 
+> Hi Thomas,
+> 
+> honestly I have no idea what causes the problem. Maybe activating inline asm 
+> on x86 at all is a problem due to hardware constraints as described here: 
+> http://stackoverflow.com/questions/8275859/error-cant-find-a-register-in-
+> class-general-regs-while-reloading-asm ?
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Phil Eichinger <phil.eichinger@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zsh/Config.in | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/package/zsh/Config.in b/package/zsh/Config.in
-index 2e9daac6ef..2319477979 100644
---- a/package/zsh/Config.in
-+++ b/package/zsh/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_ZSH
- 	bool "zsh"
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  zsh is a shell designed for interactive use, although it is
+ Looking at current mplayer build failures, they seem slightly different than
+the errors you report in the three patches here.
+
+ With all the fixes we need for mplayer's bundled ffmpeg, why don't we just
+switch to ffmpeg itself? mplayer upstream doesn't seem to advise against it,
+Debian doesn't use the bundled one, so why not? OK, it will probably be some
+effort to unbundle it, but I think it's more future-safe that way.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
