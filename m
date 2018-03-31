@@ -1,78 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 31 Mar 2018 20:53:06 +0200
-Subject: [Buildroot] [git commit] fs: new intermediate rootfs-common to
- gather common dependencies
-Message-ID: <20180331185352.3BDE384BBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs: run packages' filesystem hooks in a
+ copy of target/
+Message-ID: <20180331185352.7B9E083836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98d1e7f9287405cd8848300932555c176eae6423
+commit: https://git.buildroot.net/buildroot/commit/?id=bb2a57a17a71a53f823e2609ba08fa8c6bebe24a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Before we can create an intermediate tarball for all filesystems, we
-nedd to move the common dependencies needed to generate that
-intermediate tarball, rather than leave those dependencies to each
-filesystem.
+Currently, some packages may register hooks to be run just before and
+just after the generic tarball image is generated, because they need to
+prepare the filesystem for read-only or read-write operation.
 
-So, we introduce rootfs-common, which gathers all those common
-dependencies.
+However, this means that, if any of the hooks or the image generation
+fails, the target directory is left in a dangling, inconsistent state.
+
+We fix that by doing a copy of target/, run the hooks on that copy,
+generate the generic tarball image out of that, and get rid of the copy.
+
+This way, we can guarantee consistency of the target directory, and we
+can even ditch support for post-fs hooks (those that restore target/).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+ fs/common.mk                                    |  7 +++++--
+ support/testing/tests/core/test_post_scripts.py | 23 +++++++++++++----------
+ 2 files changed, 18 insertions(+), 12 deletions(-)
 
 diff --git a/fs/common.mk b/fs/common.mk
-index 22e18d1eff..a6ab6c6795 100644
+index 224ea5ab69..1d7c78dd45 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -34,6 +34,24 @@ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
- USERS_TABLE = $(FS_DIR)/users_table.txt
- ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+@@ -58,17 +58,20 @@ endef
+ .PHONY: rootfs-common
+ rootfs-common: $(ROOTFS_COMMON_TAR)
  
-+ROOTFS_COMMON_TAR = $(FS_DIR)/rootfs.common.tar
++# Emulate being in a filesystem, so that we can have our own TARGET_DIR.
++ROOTFS_COMMON_TARGET_DIR = $(FS_DIR)/target
 +
-+.PHONY: rootfs-common
-+rootfs-common: $(ROOTFS_COMMON_TAR)
-+
-+ROOTFS_COMMON_DEPENDENCIES = \
-+	host-fakeroot host-makedevs \
-+	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
-+
-+.PHONY: $(ROOTFS_COMMON_TAR)
-+# When doing the common tarball, we're not really doing a rootfs.
-+$(ROOTFS_COMMON_TAR): ROOTFS=
-+$(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
-+	@:
-+
-+rootfs-common-show-depends:
-+	@echo $(ROOTFS_COMMON_DEPENDENCIES)
-+
- # Since this function will be called from within an $(eval ...)
- # all variable references except the arguments must be $$-quoted.
- define inner-rootfs
-@@ -41,9 +59,7 @@ define inner-rootfs
- ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
- ROOTFS_$(2)_TARGET_DIR = $$(BASE_TARGET_DIR)
+ ROOTFS_COMMON_DEPENDENCIES = \
+ 	host-fakeroot host-makedevs \
+ 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
  
--# extra deps
--ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
--	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
-+ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+-# When doing the common tarball, we're not really doing a rootfs.
+-$(ROOTFS_COMMON_TAR): ROOTFS=
++$(ROOTFS_COMMON_TAR): ROOTFS=COMMON
+ $(ROOTFS_COMMON_TAR): FAKEROOT_SCRIPT=$(FS_DIR)/fakeroot.fs
+ $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+ 	@$(call MESSAGE,"Generating common rootfs tarball")
+ 	rm -rf $(FS_DIR)
+ 	mkdir -p $(FS_DIR)
++	rsync -au $(BASE_TARGET_DIR)/ $(TARGET_DIR)
+ 	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $(FAKEROOT_SCRIPT)
+ 	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+diff --git a/support/testing/tests/core/test_post_scripts.py b/support/testing/tests/core/test_post_scripts.py
+index edb339d8c4..a0e5b6b454 100644
+--- a/support/testing/tests/core/test_post_scripts.py
++++ b/support/testing/tests/core/test_post_scripts.py
+@@ -18,17 +18,17 @@ class TestPostScripts(infra.basetest.BRTest):
+                    infra.filepath("tests/core/post-fakeroot.sh"),
+                    infra.filepath("tests/core/post-image.sh"))
  
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- ROOTFS_$(2)_COMPRESS_EXT = .gz
-@@ -76,7 +92,6 @@ endif
+-    def check_post_log_file(self, path, what):
++    def check_post_log_file(self, f, what, target_dir):
+         lines = {}
+-        with open(path, 'rb') as csvfile:
++        with open(os.path.join(self.builddir, "build", f), 'rb') as csvfile:
+             r = csv.reader(csvfile, delimiter=',')
+             for row in r:
+                 lines[row[0]] = row[1]
  
- $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
- $$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
--$$(BINARIES_DIR)/rootfs.$(1): target-finalize
- $$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	rm -rf $(FS_DIR) $$(ROOTFS_$(2)_DIR)
+-        self.assertEqual(lines["arg1"], os.path.join(self.builddir, what))
++        self.assertEqual(lines["arg1"], what)
+         self.assertEqual(lines["arg2"], "foobar")
+         self.assertEqual(lines["arg3"], "baz")
+-        self.assertEqual(lines["TARGET_DIR"], os.path.join(self.builddir, "target"))
++        self.assertEqual(lines["TARGET_DIR"], target_dir)
+         self.assertEqual(lines["BUILD_DIR"], os.path.join(self.builddir, "build"))
+         self.assertEqual(lines["HOST_DIR"], os.path.join(self.builddir, "host"))
+         staging = os.readlink(os.path.join(self.builddir, "staging"))
+@@ -37,9 +37,12 @@ class TestPostScripts(infra.basetest.BRTest):
+         self.assertEqual(lines["BR2_CONFIG"], os.path.join(self.builddir, ".config"))
+ 
+     def test_run(self):
+-        f = os.path.join(self.builddir, "build", "post-build.log")
+-        self.check_post_log_file(f, "target")
+-        f = os.path.join(self.builddir, "build", "post-fakeroot.log")
+-        self.check_post_log_file(f, "target")
+-        f = os.path.join(self.builddir, "build", "post-image.log")
+-        self.check_post_log_file(f, "images")
++        self.check_post_log_file("post-build.log",
++                                 os.path.join(self.builddir, "target"),
++                                 os.path.join(self.builddir, "target"))
++        self.check_post_log_file("post-fakeroot.log",
++                                 os.path.join(self.builddir, "build/buildroot-fs/target"),
++                                 os.path.join(self.builddir, "build/buildroot-fs/target"))
++        self.check_post_log_file("post-image.log",
++                                 os.path.join(self.builddir, "images"),
++                                 os.path.join(self.builddir, "target"))
