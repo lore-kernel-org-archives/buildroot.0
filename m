@@ -1,93 +1,44 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 30 Mar 2018 23:22:28 -0300
-Subject: [Buildroot] [PATCH 03/36] boot/*/*.mk: fix code style
+Date: Fri, 30 Mar 2018 23:22:29 -0300
+Subject: [Buildroot] [PATCH 04/36] check-package: enable for boot/
 In-Reply-To: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
 References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180331022301.27501-4-ricardo.martincoski@gmail.com>
+Message-ID: <20180331022301.27501-5-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use only one space before backslash.
-Indent with tabs.
+This directory can benefit from this script to prevent common mistakes
+when submitting patches.
+
+In order to accomplish this:
+Do not ignore anymore files from the boot/ directory.
+Ignore boot/barebox/barebox.mk as it declares a package infra and not a
+package itself.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- boot/lpc32xxcdl/lpc32xxcdl.mk |  8 ++++----
- boot/syslinux/syslinux.mk     |  2 +-
- boot/uboot/uboot.mk           | 14 +++++++-------
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ utils/check-package | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/boot/lpc32xxcdl/lpc32xxcdl.mk b/boot/lpc32xxcdl/lpc32xxcdl.mk
-index 04c1c7f060..30afed050b 100644
---- a/boot/lpc32xxcdl/lpc32xxcdl.mk
-+++ b/boot/lpc32xxcdl/lpc32xxcdl.mk
-@@ -33,10 +33,10 @@ LPC32XXCDL_S1L_BURNER = nand/s1lapp_jtag
- endif
- 
- LPC32XXCDL_BUILD_FLAGS = \
--	CROSS_COMPILE=$(TARGET_CROSS)           \
--	NXPMCU_WINBASE=$(@D)                    \
--	NXPMCU_SOFTWARE=$(@D)                   \
--	BSP=$(BR2_TARGET_LPC32XXCDL_BOARDNAME)  \
-+	CROSS_COMPILE=$(TARGET_CROSS) \
-+	NXPMCU_WINBASE=$(@D) \
-+	NXPMCU_SOFTWARE=$(@D) \
-+	BSP=$(BR2_TARGET_LPC32XXCDL_BOARDNAME) \
- 	CSP=lpc32xx TOOL=gnu GEN=lpc
- 
- LPC32XXCDL_BOARD_STARTUP_DIR = \
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 13496414dd..67bc69254e 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -59,7 +59,7 @@ define SYSLINUX_BUILD_CMDS
- 		CC_FOR_BUILD="$(HOSTCC)" \
- 		CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
- 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
--            $(SYSLINUX_EFI_ARGS) -C $(@D) $(SYSLINUX_TARGET)
-+		$(SYSLINUX_EFI_ARGS) -C $(@D) $(SYSLINUX_TARGET)
- endef
- 
- # While the actual bootloader is compiled for the target, several
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index b7032d5901..24d3e4ef54 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -202,8 +202,8 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
- 
- ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
- define UBOOT_CONFIGURE_CMDS
--	$(TARGET_CONFIGURE_OPTS) 	\
--		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
-+	$(TARGET_CONFIGURE_OPTS) \
-+		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_BOARD_NAME)_config
- endef
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-@@ -230,16 +230,16 @@ define UBOOT_BUILD_CMDS
- 	$(if $(UBOOT_CUSTOM_DTS_PATH),
- 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- 	)
--	$(TARGET_CONFIGURE_OPTS) 	\
--		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
-+	$(TARGET_CONFIGURE_OPTS) \
-+		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_MAKE_TARGET)
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
- 		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
- 		$(@D)/tools/mxsboot \
--			-w $(BR2_TARGET_UBOOT_FORMAT_NAND_PAGE_SIZE)	\
--			-o $(BR2_TARGET_UBOOT_FORMAT_NAND_OOB_SIZE)	\
--			-e $(BR2_TARGET_UBOOT_FORMAT_NAND_ERASE_SIZE)	\
-+			-w $(BR2_TARGET_UBOOT_FORMAT_NAND_PAGE_SIZE) \
-+			-o $(BR2_TARGET_UBOOT_FORMAT_NAND_OOB_SIZE) \
-+			-e $(BR2_TARGET_UBOOT_FORMAT_NAND_ERASE_SIZE) \
- 			nand $(@D)/u-boot.sb $(@D)/u-boot.nand)
- endef
- 
+diff --git a/utils/check-package b/utils/check-package
+index 8d10affabd..48ce956443 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -47,10 +47,12 @@ def parse_args():
+ CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
+ DO_CHECK_INTREE = re.compile("|".join([
+     "arch/",
++    "boot/",
+     "package/",
+     "system/",
+     ]))
+ DO_NOT_CHECK_INTREE = re.compile("|".join([
++    "boot/barebox/barebox\.mk$",
+     "package/doc-asciidoc\.mk$",
+     "package/pkg-\S*\.mk$",
+     ]))
 -- 
 2.14.1
