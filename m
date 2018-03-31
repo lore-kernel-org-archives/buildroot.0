@@ -1,130 +1,186 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 16:17:22 +0200
-Subject: [Buildroot] [PATCH v4 2/8] package/pkg-golang: new package
- infrastructure
-In-Reply-To: <20180331132736.21105-3-thomas.petazzoni@bootlin.com>
-References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
- <20180331132736.21105-3-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331141722.GF25161@scaer>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 31 Mar 2018 16:20:45 +0200
+Subject: [Buildroot] [PATCH] linux-tools: add usbip (USB/IP userspace
+ tools)
+In-Reply-To: <7727bdc1-a70c-28f9-8d58-39209af25c53@free.fr>
+References: <1512566955-4712-1-git-send-email-julien.boibessot@free.fr>
+ <20171214095614.5e99e0a0@windsurf.png.is.keysight.com>
+ <20171214215930.GA3389@scaer> <7727bdc1-a70c-28f9-8d58-39209af25c53@free.fr>
+Message-ID: <bc121957-86ce-363f-5260-591493ed1898@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Angelo, All,
+Hi Julien;
 
-On 2018-03-31 15:27 +0200, Thomas Petazzoni spake thusly:
-> From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Le 22/12/2017 ? 10:44, Julien Boibessot a ?crit?:
+> Hello,
 > 
-> This patch adds a new infrastructure for golang based packages.
+> Yann, Thomas, Peter,
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/Makefile.in   |   1 +
->  package/pkg-golang.mk | 136 ++++++++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 137 insertions(+)
->  create mode 100644 package/pkg-golang.mk
-[--SNIP--]
-> +#
-> +# The go build/install command installs the binaries inside
-> +# gopath/bin/linux_GOARCH/ when cross compilation is enabled. We set
-> +# this variable here to be used by packages if needed.
-> +#
-> +$(2)_BINDIR = $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH)
-> +
-> +#
-> +# Source files in Go should be uncompressed in a precise folder in the
-
-s/uncompressed/extracted/
-
-> +# hierarchy of GOPATH. It usually resolves around
-> +# domain/vendor/software. By default, we derive domain/vendor/software
-> +# from the upstream URL of the project, but we allow $(2)_SRC_SUBDIR
-> +# to be overridden if needed.
-> +#
-> +$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
-
-I was a bit surprised not to see the definition of 'domain' here, but it
-is infact a generic macro, from the download infra...
-
-OK, so:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> +$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
-> +$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
-> +
-> +$(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
-> +$(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
-> +
-> +#
-> +# Configure step. Only define it if not already defined by the package
-> +# .mk file.
-> +#
-> +ifndef $(2)_CONFIGURE_CMDS
-> +define $(2)_CONFIGURE_CMDS
-> +	mkdir -p $$(@D)/$$($(2)_WORKSPACE)/bin
-> +	mkdir -p $$(dir $$($(2)_SRC_PATH))
-> +	ln -sf $$(@D) $$($(2)_SRC_PATH)
-> +endef
-> +endif
-> +
-> +#
-> +# Build step. Only define it if not already defined by the package .mk
-> +# file. We use the install command instead of build command here
-> +# because the install command also moves the package binaries in
-> +# <workspace>/bin/linux_GOARCH/. Using the install command also
-> +# leverages the go build infrastructure for building and installing
-> +# multiple binaries.
-> +#
-> +ifndef $(2)_BUILD_CMDS
-> +define $(2)_BUILD_CMDS
-> +	$$(foreach d,$$($(2)_BUILD_TARGETS),\
-> +		cd $$($(2)_SRC_PATH) && $$($(2)_GO_ENV) $$(GO_BIN) install -v $$($(2)_BUILD_OPTS) ./$$(d)
-> +	)
-> +endef
-> +endif
-> +
-> +#
-> +# Target installation step. Only define it if not already defined by
-> +# the package .mk file.
-> +#
-> +ifndef $(2)_INSTALL_TARGET_CMDS
-> +define $(2)_INSTALL_TARGET_CMDS
-> +	$$(foreach d,$$($(2)_INSTALL_BINS),\
-> +		$(INSTALL) -D -m 0755 $$(@D)/$$($(2)_BINDIR)/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
-> +	)
-> +endef
-> +endif
-> +
-> +# Call the generic package infrastructure to generate the necessary
-> +# make targets
-> +$(call inner-generic-package,$(1),$(2),$(3),$(4))
-> +
-> +endef # inner-golang-package
-> +
-> +################################################################################
-> +# golang-package -- the target generator macro for Go packages
-> +################################################################################
-> +
-> +golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-> -- 
-> 2.14.3
+> thanks for review !
 > 
+> On 14/12/2017 22:59, Yann E. MORIN wrote:
+>> Julien, All,
+>>
+>> On 2017-12-14 09:56 +0100, Thomas Petazzoni spake thusly:
+>>> +Yann in Cc, as I'd really like to have his feedback on this patch.
+>> Ah, yep, I'd have expected to be in Cc: for the patch. ;-)
+> 
+> Yeap sorry, next version, I promise.
+> 
+>>
+>>> Title should be just:
+>>>
+>>> 	"linux-tools: add support for usbip"
+>>>
+>>> On Wed,  6 Dec 2017 14:29:15 +0100, julien.boibessot at free.fr wrote:
+>>>> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+>>>>
+>>>> I did this work before knowing the existence of previous attempts:
+>>> Please don't use first person sentences in commit logs.
+>> Usually, use 'we' instead, like;
+>>
+>>     We use the git version becasue blabla...
+>>     Autoreconf does not work, so we trick it into believing it
+>>     has been autoreconf by blabla...
+>>
+>> However, if you have a "personal" message (like what you write), you can
+>> keep speaking with 'I' but put it below the --- line (which marks the
+>> end of the commit message, and that git-am will ignore when the patch is
+>> applied). See for example:
+>>     https://patchwork.ozlabs.org/patch/843728/
+>>
+>>>> * 12/2012: http://lists.busybox.net/pipermail/buildroot/2012-December/064070.html
+>>>> * 12/2016: http://buildroot-busybox.2317881.n4.nabble.com/PATCH-usbip-add-a-new-package-td152317.html
+>> I find it interesting that your referenced the prior art on this, and it
+>> is defeintely something that I'd like to see below the ---.
+>>
+>> [--SNIP--]
+>>>> 47 builds, 19 skipped, 0 build failed, 0 legal-info failed
+>>> Does it makes sense to include the test-pkg details in the commit log?
+>>> This is a real open question. We don't do it today, but I might see
+>>> some value in having it. What do others think ?
+>> If everything is workih as expected, then no, except maybe a note like
+>> "the defconfig below builds with test-pkg with no error".
+>>
+>>>> diff --git a/linux/0002-tools-usbip-fixes-potential-minor-buffer-overflow-de.patch.conditional b/linux/0002-tools-usbip-fixes-potential-minor-buffer-overflow-de.patch.conditional
+>>> I'm wondering if those two patches should be in linux/ or in
+>>> package/linux-tools/. Not sure.
+>> If they go into linux-tools, they won;t be applied because linux-tools
+>> does not have a source. Rather, they piggyback onto hte kernel
+>> sources and build directly in $(LINUX_DIR).
+>>
+>> Yes, that's is ugly and a special case I'm investigating for OOT. And
+>> maybe something you'll also want to keep an eye on for TLPB as well...
+>>
+>>>> diff --git a/linux/linux.mk b/linux/linux.mk
+>>>> index bd5589b..8877a7b 100644
+>>>> --- a/linux/linux.mk
+>>>> +++ b/linux/linux.mk
+>>>> @@ -221,6 +221,24 @@ define LINUX_TRY_PATCH_TIMECONST
+>>>>  endef
+>>>>  LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+>>>>  
+>>>> +# Fixes tools/usbip build with recent gcc when -Werror is used
+>>>> +# Try a dry-run patch to see if this applies, if it does go ahead
+>>>> +define LINUX_TRY_PATCH_USBIP_GCC
+>>>> +	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0002-tools-usbip-fixes-potential-minor-buffer-overflow-de.patch.conditional >/dev/null ; then \
+>>>> +		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0002-tools-usbip-fixes-potential-minor-buffer-overflow-de.patch.conditional ; \
+>>>> +	fi
+>>>> +endef
+>>>> +LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_USBIP_GCC
+>>>> +
+>>>> +# Fixes tools/usbip build with musl toolchains
+>>>> +# Try a dry-run patch to see if this applies, if it does go ahead
+>>>> +define LINUX_TRY_PATCH_USBIP_MUSL
+>>>> +	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0003-tools-usbip-fixes-build-with-musl-libc-toolchain.patch.conditional >/dev/null ; then \
+>>>> +		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0003-tools-usbip-fixes-build-with-musl-libc-toolchain.patch.conditional ; \
+>>>> +	fi
+>>>> +endef
+>>>> +LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_USBIP_MUSL
+>>> Should we have this logic in linux/linux.mk, or in
+>>> package/linux-tools/linux-tool-usbip.mk.in, possibly via some
+>>> additional extension of the linux-tools infrastructure to register some
+>>> patches to be applied ?
+>> One would argue that those are the source of the kernel tree, so the
+>> tweaks belong to linux.mk.
+>>
+>> OTOH, we are fixing usbip, which is built by the linux-tools package.
+> 
+> For your information, my patches have been accepted by Greg KH for next
+> Linux version.
+
+Ok great :)
+
+> 
+>>
+>>> Again, not sure, I'm just thinking out loud.
+>> I'm not covinced either way, but to be pragmatic, I'd keep those in
+>> linux.mk.
+>>
+>>> Since this "let's try to apply a patch, but it fails don't error out"
+>>> logic is now duplicated three times, perhaps it calls for a
+>>> TRY_APPLY_PATCHES function, or something like that ?
+>> Yep. Julien, would you volunteer? ;-)
+> 
+> I will have a look at it between turkey and foie gras ;-)
+
+So, in the mean time I'll mark this patch "Changes requested" in patchwork.
+
+Best regards,
+Romain
+
+
+> 
+>>
+>>>> +	  This (usbip) is the set of userspace tools used to handle connection
+>>>> +	  and management.
+>>>> +
+>>>> +	  You can optionally add hwdata package to your BR config to have
+>>>> +	  better runtime experience.
+>>> BR -> Buildroot
+>>> config -> configuration
+>>>
+>>> "better runtime experience" is somewhat fuzzy. Can we have a better
+>>> description ?
+>> If the exprience is "so much better", why don't we forcibly select it?
+>> Is it only because hwdata is big?
+> 
+> yes, hwdata is big. "better experience" means you see vendors/devices
+> real names and not USB VID/PID. Moreover hwdata install PCI and USB
+> infos and PCI is not needed in that case.
+> 
+>>
+>> [--SNIP--]
+>>>> +	cd $(LINUX_DIR)/tools/usb/usbip && rm -rf config.cache && \
+>>>> +		$(TARGET_CONFIGURE_OPTS) \
+>>>> +		$(TARGET_CONFIGURE_ARGS) \
+>>>> +		$(USBIP_CONF_ENV) \
+>>>> +		CONFIG_SITE=/dev/null \
+>>>> +		./configure \
+>>>> +			--target=$(GNU_TARGET_NAME) \
+>>>> +			--host=$(GNU_TARGET_NAME) \
+>>>> +			--build=$(GNU_HOST_NAME) \
+>>>> +			--prefix=/usr \
+>>>> +			--exec-prefix=/usr \
+>>>> +			--sysconfdir=/etc \
+>>>> +			--localstatedir=/var \
+>>>> +			--program-prefix="" \
+>>>> +			$(QUIET) $(USBIP_CONF_OPTS)
+>>> Shouldn't we add a configure step for linux-tools ?
+>> Yes. That does not need to be a separate patch, but that'd be better if
+>> it were.
+> 
+> Understood.
+> 
+> Thanks and regards, and merry Christmas ;-)
+> 
+> Julien
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
