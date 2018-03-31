@@ -1,47 +1,44 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 31 Mar 2018 16:24:02 +0200
-Subject: [Buildroot] [v3 08/13] pkg-download: support new subdir for mirrors
+Date: Sat, 31 Mar 2018 16:24:01 +0200
+Subject: [Buildroot] [v3 07/13] pkg-generic: add a subdirectory to the DL_DIR
 In-Reply-To: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
 References: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180331142407.9522-8-maxime.hadjinlian@gmail.com>
+Message-ID: <20180331142407.9522-7-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we introduced subdirectory to the DL_DIR, we need to support them
-in the PRIMARY and BACKUP mirror as they evolve to the new tree
-structure.
+With all the previous changes, we are now ready to add a subdirectory to
+the DL_DIR.
+The structure will now be DL_DIR/PKG_NAME/{FILE1,FILE2}
 
-We check first the new URI (with the subdir), and in case of failure, we
-go check without.
-By checking both URIs, we ensure that old mirror are usable.
+This is needed for multiple reasons:
+    - Avoid patches with name like SHA1.patch laying flat in DL_DIR,
+    which makes it hard to know to which packages they apply
+    - Avoid possible collisions if two releases have the same name
+    (e.g: v01.tar)
+    - Allow the possibility to handle a git cache per package in the
+    newly created subdirectory.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/pkg-download.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 0717943bb0..23f3403098 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -75,6 +75,7 @@ export BR_NO_CHECK_HASH_FOR =
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 7587324368..b1342228c8 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -428,7 +428,7 @@ endif
  
- ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
- DOWNLOAD_URIS += \
-+	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE)/$(notdir $($(PKG)_DL_DIR)),urlencode) \
- 	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE),urlencode)
- endif
+ $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+ $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+-$(2)_DL_DIR	=  $$(DL_DIR)
++$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
  
-@@ -83,6 +84,7 @@ DOWNLOAD_URIS += \
- 	-u $($(PKG)_SITE_METHOD)+$(dir $(1))
- ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
- DOWNLOAD_URIS += \
-+	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE)/$(notdir $($(PKG)_DL_DIR)),urlencode) \
- 	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE),urlencode)
- endif
- endif
+ ifndef $(2)_SUBDIR
 -- 
 2.16.2
