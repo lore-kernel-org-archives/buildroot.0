@@ -1,71 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 21:02:53 +0200
-Subject: [Buildroot] [RFC] lua: always use host-lua for
- host-luainterpreter
-In-Reply-To: <20171021205457.18687-1-peter@korsgaard.com>
-References: <20171021205457.18687-1-peter@korsgaard.com>
-Message-ID: <20180331210253.255c6034@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 31 Mar 2018 21:04:23 +0200
+Subject: [Buildroot] [PATCH 13/15 v4] fs: run packages' filesystem hooks
+ in a copy of target/
+In-Reply-To: <193b195e0bb305f01ccedd565a517635a975b154.1522487149.git.yann.morin.1998@free.fr>
+References: <cover.1522487149.git.yann.morin.1998@free.fr>
+ <193b195e0bb305f01ccedd565a517635a975b154.1522487149.git.yann.morin.1998@free.fr>
+Message-ID: <cbd0a228-12b8-9a72-f4bc-311f4c95d001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sat, 21 Oct 2017 22:54:57 +0200, Peter Korsgaard wrote:
-> Similar to how we do for openssl.
+
+On 31-03-18 11:05, Yann E. MORIN wrote:
+> Currently, some packages may regigter hooks to be run just before and
+> judt after the generic tarball image is generated, because they need to
+> prepare the filesystem for read-only or read-write operation.
 > 
-> host-luainterpreter is only used by the luarocks infrastructure, and there
-> is afaik no specific reason why the host lua variant must match the target one.
+> However, this means that, if any of the hooks or the image generation
+> fails, the target directory is left in a dangling, inconsistent state.
 > 
-> Luajit only supports a limited number of architectures, so building it for
-> the host limits the architectures Buildroot can be used on (E.G. powerpc64
-> autobuilders).
+> We fix that by doing a copy of target/, run the hooks on that copy,
+> generate the generic tarball image out of that, and get rid of the copy.
 > 
-> To fix this, always use host-lua.  Slightly rework lua.mk to ensure
-> host-lua-5.1 is used when luajit is selected, and drop the logic for using
-> host-luajit.
+> This way, we can guarantee consistency of the target directory, and we
+> can even ditch support for post-fs hooks (those that restore target/).
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  fs/common.mk                                    |  7 +++++--
+>  support/testing/tests/core/test_post_scripts.py | 23 +++++++++++++----------
+>  2 files changed, 18 insertions(+), 12 deletions(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index f3d42519f6..8bb26f1146 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -58,17 +58,20 @@ endef
+>  .PHONY: rootfs-common
+>  rootfs-common: $(ROOTFS_COMMON_TAR)
+>  
+> +# Emulate being in a filesystem, so that we can have our own TARGET_DIR.
+> +ROOTFS_COMMON_TARGET_DIR = $(FS_DIR)/target
+> +
+>  ROOTFS_COMMON_DEPENDENCIES = \
+>  	host-fakeroot host-makedevs \
+>  	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
+>  
+> -# When doing the common tarball, we're not really doing a rootfs.
+> -$(ROOTFS_COMMON_TAR): ROOTFS=
+> +$(ROOTFS_COMMON_TAR): ROOTFS=COMMON
+>  $(ROOTFS_COMMON_TAR): FAKEROOT_SCRIPT=$(FS_DIR)/fakeroot.fs
+>  $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+>  	@$(call MESSAGE,"Generating common rootfs tarball")
+>  	rm -rf $(FS_DIR)
+>  	mkdir -p $(FS_DIR)
+> +	rsync -au $(BASE_TARGET_DIR)/ $(TARGET_DIR)
 
-This patch was from October 2017, I pinged Fran?ois on January 2018,
-and got no feedback. I did a final test with the following defconfig:
+ This would benefit a lot from using the --link-dest= that we will also use in
+PPS, in my opinion.
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.11-rc1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LUAJIT=y
-BR2_PACKAGE_COXPCALL=y
-BR2_PACKAGE_LUA_DATAFILE=y
-BR2_PACKAGE_LUAJSON=y
-BR2_PACKAGE_RINGS=y
-BR2_PACKAGE_PROSODY=y
-# BR2_TARGET_ROOTFS_TAR is not set
+ Regards,
+ Arnout
 
-Which exercises the two places where host-luainterpreter is used:
+>  	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
+>  	echo "set -e" >> $(FAKEROOT_SCRIPT)
+>  	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+[snip]
 
- - The prosody package
- - The luarocks package infrastructure
-
-And the build was successful.
-
-So I've applied this patch.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
