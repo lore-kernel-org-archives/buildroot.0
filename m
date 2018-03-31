@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 19:50:15 +0200
-Subject: [Buildroot] [PATCH 07/15 v4] fs: use a per-rootfs fakeroot
- script
-In-Reply-To: <c296e87bd778b9c2ef610a772adbd3d41bcb54a3.1522487149.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 31 Mar 2018 11:05:53 +0200")
+Date: Sat, 31 Mar 2018 19:53:36 +0200
+Subject: [Buildroot] [PATCH 15/15 v4] fs: remove intermediate artefacts
+In-Reply-To: <aa32fec260607f3c9e3a436873b8ef72802078e7.1522487149.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 31 Mar 2018 11:06:01 +0200")
 References: <cover.1522487149.git.yann.morin.1998@free.fr>
- <c296e87bd778b9c2ef610a772adbd3d41bcb54a3.1522487149.git.yann.morin.1998@free.fr>
-Message-ID: <87woxst9rc.fsf@dell.be.48ers.dk>
+ <aa32fec260607f3c9e3a436873b8ef72802078e7.1522487149.git.yann.morin.1998@free.fr>
+Message-ID: <87sh8gt9lr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,35 +14,52 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > ... and locate that script in a per-rootfs directory.
+ > Each of the intermediate, per-rootfs target directories, as well as the
+ > intermediate tarball, can take quite some place, and is mostly a
+ > duplication of what's already in target/. The only delta, if any, would
+ > be the tweaks made by the filesystem image generations, but those tweaks
+ > are most probably only meaningfull when seen as root.
+
+ > We normally do not remove intermediate files, but those can be quite
+ > large, and are not directly usable by, nor accessible to the user.
+ > So, get rid of them once the filesystem has been generated.
+
+ > This does not need to be done in fakeroot.
+
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
  > ---
- >  fs/common.mk | 6 +++---
- >  1 file changed, 3 insertions(+), 3 deletions(-)
+ >  Makefile     | 1 +
+ >  fs/common.mk | 2 ++
+ >  2 files changed, 3 insertions(+)
 
+ > diff --git a/Makefile b/Makefile
+ > index 9fba7a3ed8..96c2d200a3 100644
+ > --- a/Makefile
+ > +++ b/Makefile
+ > @@ -756,6 +756,7 @@ endif
+ 
+ >  .PHONY: target-post-image
+ >  target-post-image: $(TARGETS_ROOTFS) target-finalize
+ > +	@rm -f $(ROOTFS_COMMON_TAR)
+ >  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ >  		$(call MESSAGE,"Executing post-image script $(s)"); \
+ >  		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
  > diff --git a/fs/common.mk b/fs/common.mk
- > index eebe83d6e5..db4f8c23ad 100644
+ > index bacc98ec68..2ee130ee08 100644
  > --- a/fs/common.mk
  > +++ b/fs/common.mk
- > @@ -28,7 +28,6 @@
- >  # macro will automatically generate a compressed filesystem image.
- 
- >  FS_DIR = $(BUILD_DIR)/buildroot-fs
- > -FAKEROOT_SCRIPT = $(FS_DIR)/fakeroot.fs
- >  FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
- >  ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
- >  	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
- > @@ -76,10 +75,11 @@ ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
- >  endif
- 
- >  $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
- > +$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+ > @@ -96,6 +96,7 @@ endif
+ >  	$(call PRINTF,$(ROOTFS_COMMON_TAR_CMD)) >> $(FAKEROOT_SCRIPT)
+ >  	chmod a+x $(FAKEROOT_SCRIPT)
+ >  	PATH=$(BR_PATH) $(HOST_DIR)/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+ > +	$(Q)rm -rf $(TARGET_DIR)
 
-It wasn't quite clear to me why we had to go through the hoops to ensure
-ROOTFS didn't leak but we don't do it for FAKEROOT_SCRIPT, so I've
-extended the commit message a bit.
+This throws away the output/target copy on each invocation, so there is
+not much sense in using rsync to create it and we could just use cp -a,
+but OK, that can be done later.
 
 -- 
 Bye, Peter Korsgaard
