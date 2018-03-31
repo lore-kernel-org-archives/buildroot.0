@@ -1,153 +1,176 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 31 Mar 2018 19:57:31 +0200
-Subject: [Buildroot] [git commit] docs/manual: add documentation for the
- golang infrastructure
-Message-ID: <20180331175811.61F4E80137@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-golang: new package
+ infrastructure
+Message-ID: <20180331175811.3E31E84045@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12ae882bf66ed19bed0e9e127f4d6833aed453e2
+commit: https://git.buildroot.net/buildroot/commit/?id=048b06ed3e59d5d2268bea1de95560b80e4d3f8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds the documentation for the golang infrastructure.
+This patch adds a new infrastructure for golang based packages.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Arnout:
+ - Rewrap comments to 80 columns.
+ - Create a global definition of GO_TARGET_ENV.
+ - <PKG>_GO_ENV is appended to the default env instead of replacing it.
+ - Add a note to inner-golang-package that only target is supported.
+]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- docs/manual/adding-packages-golang.txt | 108 +++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt        |   2 +
- 2 files changed, 110 insertions(+)
+ package/Makefile.in   |   1 +
+ package/pkg-golang.mk | 130 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 131 insertions(+)
 
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0af79dfb63..be7a48f647 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -452,3 +452,4 @@ include package/pkg-kconfig.mk
+ include package/pkg-rebar.mk
+ include package/pkg-kernel-module.mk
+ include package/pkg-waf.mk
++include package/pkg-golang.mk
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
 new file mode 100644
-index 0000000000..b6d1f5e6b4
+index 0000000000..f51b2ee2e0
 --- /dev/null
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -0,0 +1,108 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/package/pkg-golang.mk
+@@ -0,0 +1,130 @@
++################################################################################
++# Golang package infrastructure
++#
++# This file implements an infrastructure that eases development of package .mk
++# files for Go packages. It should be used for all packages that are written in
++# go.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++#
++# In terms of implementation, this golang infrastructure requires the .mk file
++# to only specify metadata information about the package: name, version,
++# download URL, etc.
++#
++# We still allow the package .mk file to override what the different steps are
++# doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined, it is
++# used as the list of commands to perform to build the package, instead of the
++# default golang behavior. The package can also define some post operation
++# hooks.
++#
++################################################################################
 +
-+=== Infrastructure for Go packages
++GO_BIN = $(HOST_DIR)/bin/go
 +
-+This infrastructure applies to Go packages that use the standard
-+build system and use bundled dependencies.
++# We pass an empty GOBIN, otherwise "go install: cannot install
++# cross-compiled binaries when GOBIN is set"
++GO_TARGET_ENV = \
++	$(HOST_GO_TARGET_ENV) \
++	GOBIN= \
++	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
 +
-+[[golang-package-tutorial]]
++################################################################################
++# inner-golang-package -- defines how the configuration, compilation and
++# installation of a Go package should be done, implements a few hooks to tune
++# the build process for Go specificities and calls the generic package
++# infrastructure to generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix for host
++#             packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix for host
++#             packages
++#  argument 4 is the type (target or host)
++#
++# NOTE Only type target is supported at the moment
++################################################################################
 +
-+==== +golang-package+ tutorial
++define inner-golang-package
 +
-+First, let's see how to write a +.mk+ file for a go package,
-+with an example :
++$(2)_WORKSPACE ?= _gopath
 +
-+------------------------
-+01: ################################################################################
-+02: #
-+03: # foo
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_VERSION = 1.0
-+08: FOO_SITE = $(call github,bar,foo,$(FOO_VERSION))
-+09: FOO_LICENSE = BSD-3-Clause
-+10: FOO_LICENSE_FILES = LICENSE
-+11:
-+12: $(eval $(golang-package))
-+------------------------
++ifeq ($(BR2_STATIC_LIBS),y)
++$(2)_LDFLAGS += -extldflags '-static'
++endif
 +
-+On line 7, we declare the version of the package.
++$(2)_BUILD_OPTS += -ldflags "$$($(2)_LDFLAGS)"
++$(2)_BUILD_OPTS += -tags "$$($(2)_TAGS)"
 +
-+On line 8, we declare the upstream location of the package, here
-+fetched from Github, since a large number of Go packages are hosted on
-+Github.
++# Target packages need the Go compiler on the host.
++$(2)_DEPENDENCIES += host-go
 +
-+On line 9 and 10, we give licensing details about the package.
++$(2)_BUILD_TARGETS ?= .
 +
-+Finally, on line 12, we invoke the +golang-package+ macro that
-+generates all the Makefile rules that actually allow the package to be
-+built.
++$(2)_INSTALL_BINS ?= $(1)
 +
-+[[golang-package-reference]]
++# The go build/install command installs the binaries inside
++# gopath/bin/linux_GOARCH/ when cross compilation is enabled. We set this
++# variable here to be used by packages if needed.
++$(2)_BINDIR = $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH)
 +
-+==== +golang-package+ reference
++# Source files in Go should be extracted in a precise folder in the hierarchy
++# of GOPATH. It usually resolves around domain/vendor/software. By default, we
++# derive domain/vendor/software from the upstream URL of the project, but we
++# allow $(2)_SRC_SUBDIR to be overridden if needed.
++$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
++$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
++$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
 +
-+In their +Config.in+ file, packages using the +golang-package+
-+infrastructure should depend on +BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS+
-+and +BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ because Buildroot will
-+automatically add a dependency on +host-go+ to such packages.
++$(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
++$(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
 +
-+The main macro of the Go package infrastructure is
-++golang-package+. It is similar to the +generic-package+ macro. Only
-+target packages are supported with +golang-package+.
++# Configure step. Only define it if not already defined by the package .mk
++# file.
++ifndef $(2)_CONFIGURE_CMDS
++define $(2)_CONFIGURE_CMDS
++	mkdir -p $$(@D)/$$($(2)_WORKSPACE)/bin
++	mkdir -p $$(dir $$($(2)_SRC_PATH))
++	ln -sf $$(@D) $$($(2)_SRC_PATH)
++endef
++endif
 +
-+Just like the generic infrastructure, the Go infrastructure works
-+by defining a number of variables before calling the +golang-package+.
++# Build step. Only define it if not already defined by the package .mk file. We
++# use the install command instead of build command here because the install
++# command just moves the package binaries into <workspace>/bin/linux_GOARCH/.
++# This leverages the go build infrastructure for building and installing
++# multiple binaries.
++ifndef $(2)_BUILD_CMDS
++define $(2)_BUILD_CMDS
++	$$(foreach d,$$($(2)_BUILD_TARGETS),\
++		cd $$($(2)_SRC_PATH); \
++		$$(GO_TARGET_ENV) \
++			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
++			$$($(2)_GO_ENV) \
++			$$(GO_BIN) install -v $$($(2)_BUILD_OPTS) ./$$(d)
++	)
++endef
++endif
 +
-+All the package metadata information variables that exist in the
-+xref:generic-package-reference[generic package infrastructure] also
-+exist in the Go infrastructure: +FOO_VERSION+, +FOO_SOURCE+,
-++FOO_PATCH+, +FOO_SITE+, +FOO_SUBDIR+, +FOO_DEPENDENCIES+,
-++FOO_LICENSE+, +FOO_LICENSE_FILES+, +FOO_INSTALL_STAGING+, etc.
++# Target installation step. Only define it if not already defined by the
++# package .mk file.
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$$(foreach d,$$($(2)_INSTALL_BINS),\
++		$(INSTALL) -D -m 0755 $$(@D)/$$($(2)_BINDIR)/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
++	)
++endef
++endif
 +
-+Note that it is not necessary to add +host-go+ in the
-++FOO_DEPENDENCIES+ variable of a package, since this basic dependency
-+is automatically added as needed by the Go package infrastructure.
++# Call the generic package infrastructure to generate the necessary make
++# targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
 +
-+A few additional variables, specific to the Go infrastructure, can
-+optionally be defined, depending on the package's needs. Many of them
-+are only useful in very specific cases, typical packages will
-+therefore only use a few of them, or none.
++endef # inner-golang-package
 +
-+* If your package need a custom +GOPATH+ to be compiled in, you can
-+  use the +FOO_WORKSPACE+ variable. The +GOPATH+ being used will be
-+  +<package-srcdir>/<FOO_WORKSPACE>+. If +FOO_WORKSPACE+ is not
-+  specified, it defaults to +_gopath+.
++################################################################################
++# golang-package -- the target generator macro for Go packages
++################################################################################
 +
-+* +FOO_SRC_SUBDIR+ is the sub-directory where your source will be
-+  compiled relatively to the +GOPATH+. An example value is
-+  +github.com/bar/foo+. If +FOO_SRC_SUBDIR+ is not specified, it
-+  defaults to a value infered from the +FOO_SITE+ variable.
-+
-+* +FOO_LDFLAGS+ and +FOO_TAGS+ can be used to pass respectively the
-+  +LDFLAGS+ or the +TAGS+ to the +go+ build command.
-+
-+* +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
-+  should be built. If +FOO_BUILD_TARGETS+ is not specified, it
-+  defaults to +.+.
-+
-+* +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
-+  should be installed in +/usr/bin+ on the target. If
-+  +FOO_INSTALL_BINS+ is not specified, it defaults to the lower-case
-+  name of package.
-+
-+With the Go infrastructure, all the steps required to build and
-+install the packages are already defined, and they generally work well
-+for most Go-based packages. However, when required, it is still
-+possible to customize what is done in any particular step:
-+
-+* By adding a post-operation hook (after extract, patch, configure,
-+  build or install). See xref:hooks[] for details.
-+
-+* By overriding one of the steps. For example, even if the Go
-+  infrastructure is used, if the package +.mk+ file defines its own
-+  +FOO_BUILD_CMDS+ variable, it will be used instead of the default Go
-+  one. However, using this method should be restricted to very
-+  specific cases. Do not use it in the general case.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index e8d40daee4..c642146287 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -38,6 +38,8 @@ include::adding-packages-meson.txt[]
- 
- include::adding-packages-cargo.txt[]
- 
-+include::adding-packages-golang.txt[]
-+
- include::adding-packages-kernel-module.txt[]
- 
- include::adding-packages-asciidoc.txt[]
++golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
