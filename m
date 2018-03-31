@@ -1,115 +1,189 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 31 Mar 2018 15:57:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: add
- sysv init script
-In-Reply-To: <20170429205643.24646-1-bernd.kuhls@t-online.de>
-References: <20170429205643.24646-1-bernd.kuhls@t-online.de>
-Message-ID: <a5a51608-dccb-64bb-fe7d-ba38f61bfee3@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 31 Mar 2018 16:04:39 +0200
+Subject: [Buildroot] [git commit] board: add support for ARC HS Development
+ Kit (HSDK)
+Message-ID: <20180331140657.E1AAE832D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=7f430a4e87970d275af087d4fefcf15fa92778f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Synopsys DesignWare HSDK (which stands for ARC HS
+Development Kit) is the latest and greatest development
+platform that sports quad-core ARC HS38 in real silicon.
 
-On 29-04-17 22:56, Bernd Kuhls wrote:
-> We need ":0.0 vt01" to make sure Xorg finds the correct terminal.
-> 
-> Quoting https://www.x.org/archive/X11R6.8.0/doc/Xorg.1.html
-> 
-> -allowMouseOpenFail
->     Allow the server to start up even if the mouse device can't be
->     opened or initialised.
-> 
-> We need this option in case BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE was
-> not enabled.
-> 
-> -noreset
->     prevents a server reset when the last client connection is closed.
-> 
-> We need this option to prevent auto-close of Xorg.
-> 
-> Tested with a qemu image and Kodi.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Most noticeable features of the board are:
+ * Quad-core ARC HS38 CPU running at 1GHz
+ * 4Gb of DDR
+ * Built-in Vivante GPU (well supported via open source
+   Etnaviv drivers)
+ * Built-in Wi-Fi/Bluetooth module (RedPine RS-9113)
 
- Applied to master with a few comments in the script, thanks.
+And as usual we have:
+ * [micro] SD-card slot
+ * 2 USB 2.0 ports
+ * 1Gbit Ethernet port
+ * Built-in Digilent JTAG probe
+ * Serial port accessible via micro-USB port
 
- Regards,
- Arnout
+Writing sdcard.img on SDcard creates two partitions:
+ * FAT32 with uImage and uboot.env
+ * EXT4 with root filesystem
 
-> ---
->  package/x11r7/xserver_xorg-server/S40xorg          | 39 ++++++++++++++++++++++
->  .../xserver_xorg-server/xserver_xorg-server.mk     |  5 +++
->  2 files changed, 44 insertions(+)
->  create mode 100755 package/x11r7/xserver_xorg-server/S40xorg
-> 
-> diff --git a/package/x11r7/xserver_xorg-server/S40xorg b/package/x11r7/xserver_xorg-server/S40xorg
-> new file mode 100755
-> index 000000000..4299ed4cd
-> --- /dev/null
-> +++ b/package/x11r7/xserver_xorg-server/S40xorg
-> @@ -0,0 +1,39 @@
-> +#!/bin/sh
-> +#
-> +# Starts Xorg
-> +#
-> +
-> +BIN=/usr/bin/Xorg
-> +XORG_ARGS=":0.0 vt01 -s 0 -noreset -allowMouseOpenFail"
-> +PIDFILE=/var/run/xorg.pid
-> +
-> +start() {
-> +	printf "Starting Xorg: "
-> +	start-stop-daemon -S -q -b -m -p $PIDFILE --exec $BIN -- $XORG_ARGS
-> +	[ $? = 0 ] && sleep 3 && echo "OK" || echo "FAIL"
-> +}
-> +stop() {
-> +	printf "Stopping Xorg: "
-> +	start-stop-daemon -K -q -p $PIDFILE
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +}
-> +restart() {
-> +	stop
-> +	sleep 2
-> +	start
-> +}
-> +
-> +case "$1" in
-> +	start)
-> +		start
-> +	;;
-> +	stop)
-> +		stop
-> +	;;
-> +	restart|reload)
-> +		restart
-> +	;;
-> +	*)
-> +		echo "Usage: $0 {start|stop|restart}"
-> +	exit 1
-> +esac
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index 306e9d03e..072819cb9 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -258,4 +258,9 @@ XSERVER_XORG_SERVER_CONF_OPTS += --with-sha1=libsha1
->  XSERVER_XORG_SERVER_DEPENDENCIES += libsha1
->  endif
->  
-> +define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 755 package/x11r7/xserver_xorg-server/S40xorg \
-> +		$(TARGET_DIR)/etc/init.d/S40xorg
-> +endef
-> +
->  $(eval $(autotools-package))
-> 
+We modify kernel config because in default hsdk kernel config
+CONFIG_INITRAMFS_SOURCE parameter is set and when we build
+rootfs separately (BR2_TARGET_ROOTFS_INITRAMFS is not set)
+error appears. Also we set up CONFIG_ARC_UBOOT_SUPPORT which
+enables usage of uboot variables in the boot process.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+[Peter: Fix comments and rename defconfig to snps_archs38_hsdk_defconfig,
+	Add defconfig to DEVELOPERS and fixup board/synopsys entry,
+	Drop postimage script, rename env file in genimage.cfg and drop size
+	setting for rootfs partition,
+	Add "" for CONFIG_INITRAMFS_SOURCE in linux fragment]
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: arc-buildroot at synopsys.com
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .gitlab-ci.yml                      |  1 +
+ DEVELOPERS                          |  2 ++
+ board/synopsys/hsdk/genimage.cfg    | 27 +++++++++++++++++++++++++
+ board/synopsys/hsdk/linux.fragment  |  2 ++
+ board/synopsys/hsdk/uboot.env.txt   |  9 +++++++++
+ configs/snps_archs38_hsdk_defconfig | 40 +++++++++++++++++++++++++++++++++++++
+ 6 files changed, 81 insertions(+)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 20a5a6521a..ab0feac292 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -225,6 +225,7 @@ snps_aarch64_vdk_defconfig: *defconfig
+ snps_arc700_axs101_defconfig: *defconfig
+ snps_archs38_axs103_defconfig: *defconfig
+ snps_archs38_haps_defconfig: *defconfig
++snps_archs38_hsdk_defconfig: *defconfig
+ snps_archs38_vdk_defconfig: *defconfig
+ socrates_cyclone5_defconfig: *defconfig
+ solidrun_macchiatobin_mainline_defconfig: *defconfig
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ef6589e37d..10e6220694 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -161,6 +161,8 @@ F:	package/wf111/
+ 
+ N:	ARC Maintainers <arc-buildroot@synopsys.com>
+ F:	arch/Config.in.arc
++F:	board/synopsys/
++F:	configs/snps_archs38_hsdk_defconfig
+ 
+ N:	Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+ F:	package/axfsutils/
+diff --git a/board/synopsys/hsdk/genimage.cfg b/board/synopsys/hsdk/genimage.cfg
+new file mode 100644
+index 0000000000..87282fcb79
+--- /dev/null
++++ b/board/synopsys/hsdk/genimage.cfg
+@@ -0,0 +1,27 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "uImage"
++    }
++    file uboot.env {
++      image = "uboot-env.bin"
++    }
++  }
++  size = 100M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/synopsys/hsdk/linux.fragment b/board/synopsys/hsdk/linux.fragment
+new file mode 100644
+index 0000000000..45d6c69af5
+--- /dev/null
++++ b/board/synopsys/hsdk/linux.fragment
+@@ -0,0 +1,2 @@
++CONFIG_INITRAMFS_SOURCE=""
++CONFIG_ARC_UBOOT_SUPPORT=y
+diff --git a/board/synopsys/hsdk/uboot.env.txt b/board/synopsys/hsdk/uboot.env.txt
+new file mode 100644
+index 0000000000..6bcfb56a77
+--- /dev/null
++++ b/board/synopsys/hsdk/uboot.env.txt
+@@ -0,0 +1,9 @@
++baudrate=115200
++bootargs=console=ttyS3,115200n8 root=/dev/mmcblk0p2 rootwait
++bootcmd=fatload mmc 0:1; bootm
++bootdelay=2
++bootfile=uImage
++loadaddr=0x82000000
++stderr=serial0 at f0005000
++stdin=serial0 at f0005000
++stdout=serial0 at f0005000
+diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+new file mode 100644
+index 0000000000..125063b444
+--- /dev/null
++++ b/configs/snps_archs38_hsdk_defconfig
+@@ -0,0 +1,40 @@
++# Architecture
++BR2_arcle=y
++BR2_archs38=y
++
++# Linux headers
++BR2_KERNEL_HEADERS_4_14=y
++
++# System
++BR2_TARGET_GENERIC_HOSTNAME="hsdk"
++BR2_TARGET_GENERIC_ISSUE="Welcome to the HSDK Platform"
++BR2_SYSTEM_DHCP="eth0"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.4"
++BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/synopsys/hsdk/genimage.cfg"
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="hsdk"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_ELF=y
++BR2_TARGET_UBOOT_ENVIMAGE=y
++BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/synopsys/hsdk/uboot.env.txt"
++BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x4000"
