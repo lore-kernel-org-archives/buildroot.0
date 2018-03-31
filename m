@@ -1,176 +1,69 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 31 Mar 2018 19:57:31 +0200
-Subject: [Buildroot] [git commit] package/pkg-golang: new package
+Subject: [Buildroot] [git commit] package/docker-proxy: convert to golang
  infrastructure
-Message-ID: <20180331175811.3E31E84045@busybox.osuosl.org>
+Message-ID: <20180331175811.DD11F810D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=048b06ed3e59d5d2268bea1de95560b80e4d3f8c
+commit: https://git.buildroot.net/buildroot/commit/?id=53e1b222533fd110ab9472480ded126a4762db5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds a new infrastructure for golang based packages.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Arnout:
- - Rewrap comments to 80 columns.
- - Create a global definition of GO_TARGET_ENV.
- - <PKG>_GO_ENV is appended to the default env instead of replacing it.
- - Add a note to inner-golang-package that only target is supported.
-]
+[Arnout: remove automatically added host-go dependency]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in   |   1 +
- package/pkg-golang.mk | 130 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 131 insertions(+)
+ package/docker-proxy/docker-proxy.mk | 33 +++++----------------------------
+ 1 file changed, 5 insertions(+), 28 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 0af79dfb63..be7a48f647 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -452,3 +452,4 @@ include package/pkg-kconfig.mk
- include package/pkg-rebar.mk
- include package/pkg-kernel-module.mk
- include package/pkg-waf.mk
-+include package/pkg-golang.mk
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-new file mode 100644
-index 0000000000..f51b2ee2e0
---- /dev/null
-+++ b/package/pkg-golang.mk
-@@ -0,0 +1,130 @@
-+################################################################################
-+# Golang package infrastructure
-+#
-+# This file implements an infrastructure that eases development of package .mk
-+# files for Go packages. It should be used for all packages that are written in
-+# go.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+#
-+# In terms of implementation, this golang infrastructure requires the .mk file
-+# to only specify metadata information about the package: name, version,
-+# download URL, etc.
-+#
-+# We still allow the package .mk file to override what the different steps are
-+# doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined, it is
-+# used as the list of commands to perform to build the package, instead of the
-+# default golang behavior. The package can also define some post operation
-+# hooks.
-+#
-+################################################################################
-+
-+GO_BIN = $(HOST_DIR)/bin/go
-+
-+# We pass an empty GOBIN, otherwise "go install: cannot install
-+# cross-compiled binaries when GOBIN is set"
-+GO_TARGET_ENV = \
-+	$(HOST_GO_TARGET_ENV) \
-+	GOBIN= \
-+	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
-+
-+################################################################################
-+# inner-golang-package -- defines how the configuration, compilation and
-+# installation of a Go package should be done, implements a few hooks to tune
-+# the build process for Go specificities and calls the generic package
-+# infrastructure to generate the necessary make targets
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including a HOST_ prefix for host
-+#             packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix for host
-+#             packages
-+#  argument 4 is the type (target or host)
-+#
-+# NOTE Only type target is supported at the moment
-+################################################################################
-+
-+define inner-golang-package
-+
-+$(2)_WORKSPACE ?= _gopath
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+$(2)_LDFLAGS += -extldflags '-static'
-+endif
-+
-+$(2)_BUILD_OPTS += -ldflags "$$($(2)_LDFLAGS)"
-+$(2)_BUILD_OPTS += -tags "$$($(2)_TAGS)"
-+
-+# Target packages need the Go compiler on the host.
-+$(2)_DEPENDENCIES += host-go
-+
-+$(2)_BUILD_TARGETS ?= .
-+
-+$(2)_INSTALL_BINS ?= $(1)
-+
-+# The go build/install command installs the binaries inside
-+# gopath/bin/linux_GOARCH/ when cross compilation is enabled. We set this
-+# variable here to be used by packages if needed.
-+$(2)_BINDIR = $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH)
-+
-+# Source files in Go should be extracted in a precise folder in the hierarchy
-+# of GOPATH. It usually resolves around domain/vendor/software. By default, we
-+# derive domain/vendor/software from the upstream URL of the project, but we
-+# allow $(2)_SRC_SUBDIR to be overridden if needed.
-+$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
-+$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
-+$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
-+
-+$(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
-+$(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
-+
-+# Configure step. Only define it if not already defined by the package .mk
-+# file.
-+ifndef $(2)_CONFIGURE_CMDS
-+define $(2)_CONFIGURE_CMDS
-+	mkdir -p $$(@D)/$$($(2)_WORKSPACE)/bin
-+	mkdir -p $$(dir $$($(2)_SRC_PATH))
-+	ln -sf $$(@D) $$($(2)_SRC_PATH)
-+endef
-+endif
-+
-+# Build step. Only define it if not already defined by the package .mk file. We
-+# use the install command instead of build command here because the install
-+# command just moves the package binaries into <workspace>/bin/linux_GOARCH/.
-+# This leverages the go build infrastructure for building and installing
-+# multiple binaries.
-+ifndef $(2)_BUILD_CMDS
-+define $(2)_BUILD_CMDS
-+	$$(foreach d,$$($(2)_BUILD_TARGETS),\
-+		cd $$($(2)_SRC_PATH); \
-+		$$(GO_TARGET_ENV) \
-+			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
-+			$$($(2)_GO_ENV) \
-+			$$(GO_BIN) install -v $$($(2)_BUILD_OPTS) ./$$(d)
-+	)
-+endef
-+endif
-+
-+# Target installation step. Only define it if not already defined by the
-+# package .mk file.
-+ifndef $(2)_INSTALL_TARGET_CMDS
-+define $(2)_INSTALL_TARGET_CMDS
-+	$$(foreach d,$$($(2)_INSTALL_BINS),\
-+		$(INSTALL) -D -m 0755 $$(@D)/$$($(2)_BINDIR)/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
-+	)
-+endef
-+endif
-+
-+# Call the generic package infrastructure to generate the necessary make
-+# targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
-+
-+endef # inner-golang-package
-+
-+################################################################################
-+# golang-package -- the target generator macro for Go packages
-+################################################################################
-+
-+golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
+index 3bf6546d26..a90271fc35 100644
+--- a/package/docker-proxy/docker-proxy.mk
++++ b/package/docker-proxy/docker-proxy.mk
+@@ -10,37 +10,14 @@ DOCKER_PROXY_SITE = $(call github,docker,libnetwork,$(DOCKER_PROXY_VERSION))
+ DOCKER_PROXY_LICENSE = Apache-2.0
+ DOCKER_PROXY_LICENSE_FILES = LICENSE
+ 
+-DOCKER_PROXY_DEPENDENCIES = host-go host-pkgconf
++DOCKER_PROXY_DEPENDENCIES = host-pkgconf
+ 
+-DOCKER_PROXY_GOPATH = "$(@D)/gopath"
+-DOCKER_PROXY_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+-	CGO_ENABLED=1 \
+-	CGO_NO_EMULATION=1 \
+-	GOBIN="$(@D)/bin" \
+-	GOPATH="$(DOCKER_PROXY_GOPATH)" \
+-	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-	$(TARGET_MAKE_ENV)
++DOCKER_PROXY_WORKSPACE = gopath
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-DOCKER_PROXY_GLDFLAGS += -extldflags '-static'
+-endif
+-
+-define DOCKER_PROXY_CONFIGURE_CMDS
+-	mkdir -p $(DOCKER_PROXY_GOPATH)/src/github.com/docker
+-	ln -fs $(@D) $(DOCKER_PROXY_GOPATH)/src/github.com/docker/libnetwork
+-endef
+-
+-define DOCKER_PROXY_BUILD_CMDS
+-	cd $(@D)/gopath/src/github.com/docker/libnetwork; \
+-	$(DOCKER_PROXY_MAKE_ENV) \
+-	$(HOST_DIR)/usr/bin/go build -v \
+-		-o $(@D)/bin/docker-proxy \
+-		-ldflags "$(DOCKER_PROXY_GLDFLAGS)" \
+-		github.com/docker/libnetwork/cmd/proxy
+-endef
++DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
+ 
+ define DOCKER_PROXY_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/bin/docker-proxy $(TARGET_DIR)/usr/bin/docker-proxy
++	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_PROXY_BINDIR)/proxy $(TARGET_DIR)/usr/bin/docker-proxy
+ endef
+ 
+-$(eval $(generic-package))
++$(eval $(golang-package))
