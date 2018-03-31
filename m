@@ -1,77 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 20:52:52 +0200
-Subject: [Buildroot] [git commit] fs: set per-rootfs variable name
-Message-ID: <20180331185351.C3BE684BF6@busybox.osuosl.org>
+Date: Sat, 31 Mar 2018 20:53:05 +0200
+Subject: [Buildroot] [git commit] fs: define per-rootfs directory
+Message-ID: <20180331185351.DAAAD84BF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2765973e01b386131d9f2ebb8a89a403a381d5e7
+commit: https://git.buildroot.net/buildroot/commit/?id=0c7adf75d2220a1a762cf3b031e9efa7e5b431cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Like we do for packages with the PKG variable, set ROOTFS to contain the
-upper-case name of the rootfs currently being generated.
-
-This will be useful in later patches, when we need more per-rootfs
-variables, like a per-rootfs TARGET_DIR for example.
-
-In Makefiles, per-rule variables trickle down the dependency chain, to
-all dependencies of that rule, so we have to stop ROOTFS as soon as
-we're not in a rootfs. This means we have to stop it at target-finalize
-(which is a dependency of all filesystems), and for each package
-individually, since some packages (host or target) can be direct
-dependencies of filesystems as well.
+This will serve in future commits to store pre-rootfs files, like
+fakeroot script...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile               | 3 +++
- fs/common.mk           | 1 +
- package/pkg-generic.mk | 4 ++++
- 3 files changed, 8 insertions(+)
+ fs/common.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 6eca3c9ec6..6cfe83072e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -677,6 +677,9 @@ endif
- 
- $(TARGETS_ROOTFS): target-finalize
- 
-+# Avoid the rootfs name leaking down the dependency chain
-+target-finalize: ROOTFS=
-+
- .PHONY: target-finalize
- target-finalize: $(PACKAGES)
- 	@$(call MESSAGE,"Finalizing target directory")
 diff --git a/fs/common.mk b/fs/common.mk
-index 274a3e9c7b..19a975aa47 100644
+index 19a975aa47..1915fbbe9b 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -72,6 +72,7 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
- ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
- endif
+@@ -39,6 +39,8 @@ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ # all variable references except the arguments must be $$-quoted.
+ define inner-rootfs
  
-+$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
- $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	rm -rf $(FS_DIR)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6d82f7027e..152e1d0c67 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -384,6 +384,10 @@ endef
- 
- define inner-generic-package
- 
-+# When doing a package, we're definitely not doing a rootfs, but we
-+# may inherit it via the dependency chain, so we reset it.
-+$(1): ROOTFS=
++ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
 +
- # Ensure the package is only declared once, i.e. do not accept that a
- # package be re-defined by a br2-external tree
- ifneq ($(call strip,$(filter $(1),$(PACKAGES_ALL))),)
+ # extra deps
+ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+ 	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
