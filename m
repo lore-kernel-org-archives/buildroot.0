@@ -1,44 +1,156 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 15:27:29 +0200
-Subject: [Buildroot] [PATCH v4 1/8] docker-containerd: remove symlink to
- $(RUNC_SRCDIR)
+Date: Sat, 31 Mar 2018 15:27:31 +0200
+Subject: [Buildroot] [PATCH v4 3/8] docs/manual: add documentation for the
+ golang infrastructure
 In-Reply-To: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
 References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331132736.21105-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331132736.21105-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The DOCKER_CONTAINERD_CONFIGURE_CMDS creates a symlink to runc's
-source directory, but it does not build depend on runc, which means
-that the runc package may not have been extracted/built before
-docker-containerd.
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Therefore, when doing a build with "make docker-containerd", this
-symbolic link is broken, but it doesn't prevent docker-containerd from
-building.
+This patch adds the documentation for the golang infrastructure.
 
-Therefore, this symlink is not necessary and be dropped.
-
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-containerd/docker-containerd.mk | 2 --
- 1 file changed, 2 deletions(-)
+ docs/manual/adding-packages-golang.txt | 110 +++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt        |   2 +
+ 2 files changed, 112 insertions(+)
+ create mode 100644 docs/manual/adding-packages-golang.txt
 
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index ffbadb0c3f..8f0822b77f 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -27,8 +27,6 @@ endif
- define DOCKER_CONTAINERD_CONFIGURE_CMDS
- 	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
- 	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
--	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
--	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
- endef
+diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+new file mode 100644
+index 0000000000..418da5fa4f
+--- /dev/null
++++ b/docs/manual/adding-packages-golang.txt
+@@ -0,0 +1,110 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++=== Infrastructure for Go packages
++
++This infrastructure applies to Go packages that use the standard
++build system and use bundled dependencies.
++
++[[golang-package-tutorial]]
++
++==== +golang-package+ tutorial
++
++First, let's see how to write a +.mk+ file for a go package,
++with an example :
++
++------------------------
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06:
++07: FOO_VERSION = 1.0
++08: FOO_SITE = $(call github,bar,foo,$(FOO_VERSION))
++09: FOO_LICENSE = BSD-3-Clause
++10: FOO_LICENSE_FILES = LICENSE
++11:
++12: $(eval $(golang-package))
++------------------------
++
++On line 7, we declare the version of the package.
++
++On line 8, we declare the upstream location of the package, here
++fetched from Github, since a large number of Go packages are hosted on
++Github.
++
++On line 9 and 10, we give licensing details about the package.
++
++Finally, on line 12, we invoke the +golang-package+ macro that
++generates all the Makefile rules that actually allow the package to be
++built.
++
++[[golang-package-reference]]
++
++==== +golang-package+ reference
++
++In their +Config.in+ file, packages using the +golang-package+
++infrastructure should depend on +BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS+
++and +BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ because Buildroot will
++automatically add a dependency on +host-go+ to such packages.
++
++The main macro of the Go package infrastructure is
+++golang-package+. It is similar to the +generic-package+ macro. Only
++target packages are supported with +golang-package+.
++
++Just like the generic infrastructure, the Go infrastructure works
++by defining a number of variables before calling the +golang-package+.
++
++All the package metadata information variables that exist in the
++xref:generic-package-reference[generic package infrastructure] also
++exist in the Go infrastructure: +FOO_VERSION+, +FOO_SOURCE+,
+++FOO_PATCH+, +FOO_SITE+, +FOO_SUBDIR+, +FOO_DEPENDENCIES+,
+++FOO_LICENSE+, +FOO_LICENSE_FILES+, +FOO_INSTALL_STAGING+, etc.
++
++Note that:
++
++ * It is not necessary to add +go+ or +host-go+ in the
++   +FOO_DEPENDENCIES+ variable of a package, since these basic
++   dependencies are automatically added as needed by the Go package
++   infrastructure.
++
++A few additional variables, specific to the Go infrastructure, can
++optionally be defined, depending on the package's needs. Many of them
++are only useful in very specific cases, typical packages will
++therefore only use a few of them, or none.
++
++* If your package need a custom +GOPATH+ to be compiled in, you can
++  use the +FOO_WORKSPACE+ variable. The +GOPATH+ being used will be
++  +<package-srcdir>/<FOO_WORKSPACE>+. If +FOO_WORKSPACE+ is not
++  specified, it defaults to +_gopath+.
++
++* +FOO_SRC_SUBDIR+ is the sub-directory where your source will be
++  compiled relatively to the +GOPATH+. An example value is
++  +github.com/bar/foo+. If +FOO_SRC_SUBDIR+ is not specified, it
++  defaults to a value infered from the +FOO_SITE+ variable.
++
++* +FOO_LDFLAGS+ and +FOO_TAGS+ can be used to pass respectively the
++  +LDFLAGS+ or the +TAGS+ to the +go+ build command.
++
++* +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
++  should be built. If +FOO_BUILD_TARGETS+ is not specified, it
++  defaults to +.+.
++
++* +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
++  should be installed +/usr/bin+ on the target. If +FOO_INSTALL_BINS+
++  is not specified, it defaults to the lower-case name of package.
++
++With the Go infrastructure, all the steps required to build and
++install the packages are already defined, and they generally work well
++for most Go-based packages. However, when required, it is still
++possible to customize what is done in any particular step:
++
++* By adding a post-operation hook (after extract, patch, configure,
++  build or install). See xref:hooks[] for details.
++
++* By overriding one of the steps. For example, even if the Go
++  infrastructure is used, if the package +.mk+ file defines its own
++  +FOO_BUILD_CMDS+ variable, it will be used instead of the default Go
++  one. However, using this method should be restricted to very
++  specific cases. Do not use it in the general case.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index e8d40daee4..c642146287 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -38,6 +38,8 @@ include::adding-packages-meson.txt[]
  
- define DOCKER_CONTAINERD_BUILD_CMDS
+ include::adding-packages-cargo.txt[]
+ 
++include::adding-packages-golang.txt[]
++
+ include::adding-packages-kernel-module.txt[]
+ 
+ include::adding-packages-asciidoc.txt[]
 -- 
 2.14.3
