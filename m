@@ -1,98 +1,213 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 31 Mar 2018 15:37:11 +0200
-Subject: [Buildroot] [PATCH] support/check-uniq-files: support weird
- locales and filenames
-In-Reply-To: <20180331125250.19374-1-yann.morin.1998@free.fr>
-References: <20180331125250.19374-1-yann.morin.1998@free.fr>
-Message-ID: <3de992aa-48b0-e4ae-1122-fc4e3f409aed@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 31 Mar 2018 15:56:30 +0200
+Subject: [Buildroot] [PATCH v3] snort: new package
+In-Reply-To: <1515868839-25930-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1515868839-25930-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <697c7a58-b824-6eac-74ca-dc73eff9cb79@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Sergio,
 
+Le 13/01/2018 ? 19:40, Sergio Prado a ?crit?:
+> Tested on Beaglebone Black.
+> 
+> Build-tested with test-pkg.
+> 
+> Patch to fix cross-compilation errors submitted upstream [1].
+> 
+> [1] https://lists.snort.org/pipermail/snort-devel/2018-January/011025.html
 
-On 31-03-18 14:52, Yann E. MORIN wrote:
-> Currently, when a filename contains characters not representable in the
-> user's locale, we fail hard, especially when the host python is python3.
-> 
-> This is because python2 and python3 handle encoding/decoding strings
-> differently, with python3 presumable doing the right thing, but it
-> breaks on some systems, while python2 presumable does the wrong thing,
-> but it works everywhere. (Just joking, obviously...)
-> 
-> Part of the issue being that the csv reader in python2 is broken with
-> UTF8.
-> 
-> We fix the issue by ditching the csv reader, and simply read the file in
-> binary mode, manually partitionning the lines on the first comma.
-> 
-> Then, we use the binary-encoded (really, un-encoded) package names and
-> filenames as values and keys, respectively.
-> 
-> Finally, for each filename of package we need to print, we try to decode
-> them with the default s for the usser settings, but catch any decoding
-> exception and fallback to dumping the raw, binary values. in that case.
-> 
-> Thanks a lot to Arnout for the live help doing this patch. :-)
-> 
-> Reported-by: Jaap Crezee <jaap@jcz.nl>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Jaap Crezee <jaap@jcz.nl>
+Do you have any feed-back ?
 
-
- Applied to master, thanks. But I couldn't resist extended the commit log a
-little more - it really was too short :-P
-
- Regards,
- Arnout
-
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 > ---
->  support/scripts/check-uniq-files | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+> Changes v2 -> v3
+>   - using AC_CACHE_CHECK() in configure.in to preseed the variable value
+>   from the environment and avoid the AC_TRY_RUN() when cross compiling (as
+>   suggested by Thomas Petazzoni)
+>   - since now daq has an optional dependency on libdnet, snort must depend
+>   on it.
 > 
-> diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
-> index be808cce03..f110176274 100755
-> --- a/support/scripts/check-uniq-files
-> +++ b/support/scripts/check-uniq-files
-> @@ -26,16 +26,23 @@ def main():
->          return False
->  
->      file_to_pkg = defaultdict(list)
-> -    with open(args.packages_file_list[0], 'r') as pkg_file_list:
-> -        r = csv.reader(pkg_file_list, delimiter=',')
-> -        for row in r:
-> -            pkg = row[0]
-> -            file = row[1]
-> +    with open(args.packages_file_list[0], 'rb') as pkg_file_list:
-> +        for line in pkg_file_list.readlines():
-> +            pkg, _, file = line.rstrip(b'\n').partition(b',')
->              file_to_pkg[file].append(pkg)
->  
->      for file in file_to_pkg:
->          if len(file_to_pkg[file]) > 1:
-> -            sys.stderr.write(warn.format(args.type, file, file_to_pkg[file]))
-> +            # If possible, try to decode the binary strings with
-> +            # the default user's locale
-> +            try:
-> +                sys.stderr.write(warn.format(args.type, file.decode(),
-> +                                             [p.decode() for p in file_to_pkg[file]]))
-> +            except UnicodeDecodeError:
-> +                # ... but fallback to just dumping them raw if they
-> +                # contain non-representable chars
-> +                sys.stderr.write(warn.format(args.type, file,
-> +                                             file_to_pkg[file]))
->  
->  
->  if __name__ == "__main__":
+> Changes v1 -> v2 (as reviewed by Thomas Petazzoni):
+>   - patching configure.in instead of configure
+>   - using STAGING_DIR to pass libpcap headers location to configure
+> ---
+>  DEVELOPERS                                         |   1 +
+>  package/Config.in                                  |   1 +
+>  .../snort/0001-Fix-cross-compilation-errors.patch  | 267 +++++++++++++++++++++
+>  package/snort/Config.in                            |  25 ++
+>  package/snort/snort.hash                           |   6 +
+>  package/snort/snort.mk                             |  45 ++++
+>  6 files changed, 345 insertions(+)
+>  create mode 100644 package/snort/0001-Fix-cross-compilation-errors.patch
+>  create mode 100644 package/snort/Config.in
+>  create mode 100644 package/snort/snort.hash
+>  create mode 100644 package/snort/snort.mk
 > 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 2f7d051e8a98..0c744a94b03c 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1588,6 +1588,7 @@ F:	package/daq/
+>  F:	package/libgdiplus/
+>  F:	package/mongodb/
+>  F:	package/pimd/
+> +F:	package/snort/
+>  F:	package/stella/
+>  F:	package/traceroute/
+>  F:	package/tunctl/
+> diff --git a/package/Config.in b/package/Config.in
+> index 01f4095be5aa..ee3377918e66 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1800,6 +1800,7 @@ endif
+>  	source "package/shellinabox/Config.in"
+>  	source "package/smcroute/Config.in"
+>  	source "package/sngrep/Config.in"
+> +	source "package/snort/Config.in"
+>  	source "package/socat/Config.in"
+>  	source "package/socketcand/Config.in"
+>  	source "package/softether/Config.in"
+> diff --git a/package/snort/0001-Fix-cross-compilation-errors.patch b/package/snort/0001-Fix-cross-compilation-errors.patch
+> new file mode 100644
+> index 000000000000..799c0182961b
+> --- /dev/null
+> +++ b/package/snort/0001-Fix-cross-compilation-errors.patch
+> @@ -0,0 +1,267 @@
+> +From f95f7f02a1646a91e9f3fadf4de2c264c65782f2 Mon Sep 17 00:00:00 2001
+> +From: Sergio Prado <sergio.prado@e-labworks.com>
+> +Date: Sat, 13 Jan 2018 11:07:41 -0200
+> +Subject: [PATCH] Fix cross compilation errors
+> +
+> +Prevent configure script from trying to run programs in a cross
+> +compilation environment.
+> +
+> +Also prevent usage of unsafe libpcap header path when cross compiling.
+> +
+> +Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> +---
+> + configure.in | 58 ++++++++++++++++++++++++++++++----------------------------
+> + 1 file changed, 30 insertions(+), 28 deletions(-)
+> +
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+The build system looks very fragile for cross-compiling, we may expect some
+failures in autobuilder. Hopefully you already caught most of issues with test-pkg.
+
+[...]
+
+> diff --git a/package/snort/Config.in b/package/snort/Config.in
+> new file mode 100644
+> index 000000000000..d1a59d505004
+> --- /dev/null
+> +++ b/package/snort/Config.in
+> @@ -0,0 +1,25 @@
+> +config BR2_PACKAGE_SNORT
+> +	bool "snort"
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on !BR2_STATIC_LIBS # daq
+> +	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
+> +	select BR2_PACKAGE_LIBPCAP
+> +	select BR2_PACKAGE_DAQ
+> +	select BR2_PACKAGE_PCRE
+> +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	help
+> +	  Snort is a free and open source network intrusion
+> +	  prevention system (IPS) and network intrusion detection
+> +	  system (IDS). It can perform protocol analysis, content
+> +	  searching/matching, and can be used to detect a variety
+> +	  of attacks and probes, such as buffer overflows, stealth
+> +	  port scans, CGI attacks, SMB probes, OS fingerprinting
+> +	  attempts, and much more.
+> +
+> +	  https://www.snort.org
+> +
+> +comment "snort needs a toolchain w/ wchar, threads, dynamic library"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+> +		!(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
+> diff --git a/package/snort/snort.hash b/package/snort/snort.hash
+> new file mode 100644
+> index 000000000000..211e862b7fc0
+> --- /dev/null
+> +++ b/package/snort/snort.hash
+> @@ -0,0 +1,6 @@
+> +# Locally computed:
+> +sha256 9f6b3aeac5a109f55504bd370564ac431cb1773507929dc461626898f33f46cd  snort-2.9.11.1.tar.gz
+> +
+> +# Hash for license files:
+> +sha256 f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
+> +sha256 3f1cbfb20bb2c608e1a474421880d08b8cba6abb00ab7736d22c481d71656a6d  COPYING
+> diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+> new file mode 100644
+> index 000000000000..3b79c325fbe7
+> --- /dev/null
+> +++ b/package/snort/snort.mk
+> @@ -0,0 +1,45 @@
+> +################################################################################
+> +#
+> +# snort
+> +#
+> +################################################################################
+> +
+> +SNORT_VERSION = 2.9.11.1
+> +SNORT_SOURCE = snort-$(SNORT_VERSION).tar.gz
+
+This is the default value, you can check with check-package script
+
+$ ./utils/check-package package/snort/*
+package/snort/snort.mk:8: remove default value of _SOURCE variable
+(http://nightly.buildroot.org/#generic-package-reference)
+343 lines processed
+1 warnings generated
+
+> +SNORT_SITE = https://www.snort.org/downloads/snort
+> +SNORT_LICENSE = GPL-2.0
+> +SNORT_LICENSE_FILES = LICENSE COPYING
+> +
+> +SNORT_DEPENDENCIES = libpcap libdnet daq pcre
+> +
+> +# patching configure.in
+> +SNORT_AUTORECONF = YES
+> +
+> +SNORT_CONF_OPTS = \
+> +	--with-libpcap-includes=$(STAGING_DIR)/usr/include/pcap \
+> +	--disable-static-daq
+> +
+> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+> +SNORT_DEPENDENCIES += libtirpc host-pkgconf
+
+PKG_CHECK_MODULES is used in configure.in, so host-pkgconf must be listed in
+SNORT_DEPENDENCIES unconditionally.
+
+Best regards,
+Romain
+
+> +SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+> +SNORT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
+> +endif
+> +
+> +SNORT_CONF_ENV = \
+> +	CFLAGS="$(TARGET_CFLAGS) $(SNORT_CFLAGS)" \
+> +	LIBS="$(SNORT_LIBS)" \
+> +	have_inaddr_none=yes \
+> +	have_pcap_lex_destroy=yes \
+> +	have_daq_real_addresses=no \
+> +	have_daq_address_space_id=yes \
+> +	have_daq_flow_id=yes \
+> +	have_daq_ext_modflow=no \
+> +	have_daq_queryflow=no \
+> +	have_daq_data_channel_flags=no \
+> +	have_daq_data_channel_separate_ip_versions=no \
+> +	have_daq_verdict_retry=yes \
+> +	have_daq_packet_trace=no \
+> +	have_daq_verdict_reason=no \
+> +	sparcv9=no
+> +
+> +$(eval $(autotools-package))
+> 
