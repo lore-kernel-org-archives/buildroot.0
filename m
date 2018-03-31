@@ -1,84 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 31 Mar 2018 20:53:06 +0200
-Subject: [Buildroot] [git commit] fs: get rid of package-provided post-fs
- hooks
-Message-ID: <20180331185352.90AC884B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs: introduce per-rootfs TARGET_DIR
+ variable
+Message-ID: <20180331185352.280FF84BBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcdf58cad101528345b88529763f430af5ee94dd
+commit: https://git.buildroot.net/buildroot/commit/?id=c6e425729e5db04676df4e81cf4d48bafefb0942
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that the pre-fs ones are run on a transient copy of target/, the
-post-fs hooks are no longer needed because we no longer need to restore
-the target/ directory as it is only a internal copy.
-
-Remove support for the post-fs hooks, and update the sole package using
-them.
-
-We do not add a legacy check because this was mostly a purely-internal
-detail that was never really exposed nor documented.
+... which for now still points to the base target directory, but this is
+a step forward.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk                                           | 2 --
- package/pkg-generic.mk                                 | 2 --
- package/skeleton-init-systemd/skeleton-init-systemd.mk | 6 ------
- 3 files changed, 10 deletions(-)
+ Makefile     | 4 +++-
+ fs/common.mk | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
+diff --git a/Makefile b/Makefile
+index 6cfe83072e..b34dd78c73 100644
+--- a/Makefile
++++ b/Makefile
+@@ -215,8 +215,10 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+ 
+ BUILD_DIR := $(BASE_DIR)/build
+ BINARIES_DIR := $(BASE_DIR)/images
++# The target directory is common to all packages,
++# but there is one that is specific to each filesystem.
+ BASE_TARGET_DIR := $(BASE_DIR)/target
+-TARGET_DIR = $(BASE_TARGET_DIR)
++TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
+ # initial definition so that 'make clean' works for most users, even without
+ # .config. HOST_DIR will be overwritten later when .config is included.
+ HOST_DIR := $(BASE_DIR)/host
 diff --git a/fs/common.mk b/fs/common.mk
-index 1d7c78dd45..ba2faa7759 100644
+index ab42beb7be..22e18d1eff 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -94,8 +94,6 @@ endif
- 	$(foreach hook,$(ROOTFS_PRE_CMD_HOOKS),\
- 		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
- 	$(call PRINTF,$(ROOTFS_COMMON_TAR_CMD)) >> $(FAKEROOT_SCRIPT)
--	$(foreach hook,$(ROOTFS_POST_CMD_HOOKS),\
--		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
- 	chmod a+x $(FAKEROOT_SCRIPT)
- 	PATH=$(BR_PATH) $(HOST_DIR)/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+@@ -39,6 +39,7 @@ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+ define inner-rootfs
  
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 152e1d0c67..88375916fd 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -644,7 +644,6 @@ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
- $(2)_TARGET_FINALIZE_HOOKS      ?=
- $(2)_ROOTFS_PRE_CMD_HOOKS       ?=
--$(2)_ROOTFS_POST_CMD_HOOKS      ?=
+ ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
++ROOTFS_$(2)_TARGET_DIR = $$(BASE_TARGET_DIR)
  
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -954,7 +953,6 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
- endif
- TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
- ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
--ROOTFS_POST_CMD_HOOKS += $$($(2)_ROOTFS_POST_CMD_HOOKS)
- 
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
-diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-index ff64205cbe..5d6b716f7a 100644
---- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-+++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-@@ -55,12 +55,6 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- endef
- SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
- 
--define SKELETON_INIT_SYSTEMD_POST_ROOTFS_VAR
--	rm -rf $(TARGET_DIR)/var
--	mv $(TARGET_DIR)/usr/share/factory/var $(TARGET_DIR)/var
--endef
--SKELETON_INIT_SYSTEMD_ROOTFS_POST_CMD_HOOKS += SKELETON_INIT_SYSTEMD_POST_ROOTFS_VAR
--
- endif
- 
- define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
+ # extra deps
+ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
