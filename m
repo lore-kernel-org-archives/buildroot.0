@@ -1,41 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 31 Mar 2018 08:49:14 +0200
-Subject: [Buildroot] [git commit] support/config-fragments/autobuild: fix
- SSP in br-nios2-glibc
-Message-ID: <20180331064928.C784F83EC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] ncmpc: bump to version 0.29
+Message-ID: <20180331064928.B5D1D83EC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e4de0f2db5f7a252d4b8a4cac752fac9ca2deb3
+commit: https://git.buildroot.net/buildroot/commit/?id=9b224e6c209c2eb6188731ebad65fa97515580e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit c8680956819fae8776d7bd6d1f0e67a7b6436672 ("toolchain: fix
-detection of SSP support") fixed the SSP check so that it does the
-correct thing for nios2 toolchains. While this commit fixed the
-description of the Sourcery NIOSII toolchain, it didn't fix the
-description for the autobuilders of the br-nios2-glibc toolchain,
-causing some build failures. This commit adjusts br-nios2-glibc.config
-to indicate that the toolchain doesn't have SSP support.
+Since version 0.28 ncmpc only supports the meson build.
+Therefore, adapt to package infrastructure according to the user manual.
 
-Fixes:
+Add a hash for the license file.
 
-  http://autobuild.buildroot.net/results/6c44e328b7bffd8474d29d5bdf1ea109ec15f4ad/
+Add a nmpc entry for myself in DEVELOPERS
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/config-fragments/autobuild/br-nios2-glibc.config | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS               |  1 +
+ package/ncmpc/ncmpc.hash |  5 ++++-
+ package/ncmpc/ncmpc.mk   | 28 +++++++++++++++++++++++++---
+ 3 files changed, 30 insertions(+), 4 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/br-nios2-glibc.config b/support/config-fragments/autobuild/br-nios2-glibc.config
-index 62f2665e44..52b9f7f9f5 100644
---- a/support/config-fragments/autobuild/br-nios2-glibc.config
-+++ b/support/config-fragments/autobuild/br-nios2-glibc.config
-@@ -6,4 +6,5 @@ BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/b
- BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_13=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+# BR2_TOOLCHAIN_EXTERNAL_HAS_SSP is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 40fda40bda..ef6589e37d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -663,6 +663,7 @@ F:	package/libupnp/
+ F:	package/libupnp18/
+ F:	package/minissdpd/
+ F:	package/motion/
++F:	package/ncmpc/
+ F:	package/rygel/
+ F:	package/safeclib/
+ F:	package/tinycbor/
+diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
+index 82fae1d78c..0e9a4a903c 100644
+--- a/package/ncmpc/ncmpc.hash
++++ b/package/ncmpc/ncmpc.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 f9a26a3fc869cfdf0a16b0ea3e6512c2fe28a031bbc71b1d24a2bf0bbd3e15d9  ncmpc-0.27.tar.xz
++sha256 ef68a9b67172383ea80ee46579015109433fa058728812d2b0ebede660d85f12  ncmpc-0.29.tar.xz
++
++# Hash for license file:
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 31b4f08d14..0c9dfd4658 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -5,11 +5,33 @@
+ ################################################################################
+ 
+ NCMPC_VERSION_MAJOR = 0
+-NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).27
++NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).29
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+-NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
++NCMPC_DEPENDENCIES = host-meson host-pkgconf libglib2 libmpdclient ncurses
+ NCMPC_LICENSE = GPL-2.0+
+ NCMPC_LICENSE_FILES = COPYING
+ 
+-$(eval $(autotools-package))
++NCMPC_CONF_OPTS += \
++	--prefix=/usr \
++	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
++	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
++
++NCMPC_NINJA_OPTS = $(if $(VERBOSE),-v)
++
++define NCMPC_CONFIGURE_CMDS
++	rm -rf $(@D)/build
++	mkdir -p $(@D)/build
++	$(TARGET_MAKE_ENV) meson $(NCMPC_CONF_OPTS) $(@D) $(@D)/build
++endef
++
++define NCMPC_BUILD_CMDS
++	$(TARGET_MAKE_ENV) ninja $(NCMPC_NINJA_OPTS) -C $(@D)/build
++endef
++
++define NCMPC_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
++		ninja $(NCMPC_NINJA_OPTS) -C $(@D)/build install
++endef
++
++$(eval $(generic-package))
