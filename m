@@ -1,87 +1,56 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 31 Mar 2018 17:33:34 +0200
-Subject: [Buildroot] [git commit] python-libusb1: new package
-Message-ID: <20180331153347.64D5A83FF6@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 31 Mar 2018 17:35:34 +0200
+Subject: [Buildroot] PATCH python-libusb1: new package
+In-Reply-To: <986c8b52-a53f-f7ab-7706-f41ad73b8e6c@jcz.nl>
+References: <20170904151954.9550-1-jaap@jcz.nl>
+ <CAGm1_ku+ASG+cBqfrdEphqTxQ_vOhDj8p=_dp0TGoFu2NeEjyg@mail.gmail.com>
+ <986c8b52-a53f-f7ab-7706-f41ad73b8e6c@jcz.nl>
+Message-ID: <bc646f99-5a10-52fb-8804-80833cadb6eb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34b62af1e05a9510f707eceb63e9b8c285035dc1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License info from PyPI is wrong: it is LGPL-2.1+, not GPL-2.0. The
-package includes a COPYING file with GPL-2.0, but since it is really
-LGPL-2.1+ only the COPYING.LESSER file is relevant.
 
-Signed-off-by: Jaap Crezee <jaap@jcz.nl>
-[Arnout: regenerate with scanpypi, fix legal info]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/Config.in                          |  1 +
- package/python-libusb1/Config.in           | 11 +++++++++++
- package/python-libusb1/python-libusb1.hash |  4 ++++
- package/python-libusb1/python-libusb1.mk   | 15 +++++++++++++++
- 4 files changed, 31 insertions(+)
+On 04-09-17 21:28, Jaap Crezee wrote:
+> Hi Yegor, all,
+> 
+> 
+> On 09/04/17 19:21, Yegor Yefremov wrote:
+>> DEVELOPERS file entry missing.
+>>
+>> Homepage link missing. https://github.com/vpelletier/python-libusb1
+>>
+>> Comment about checksum origins missing. See
+>> package/python-tornado/python-tornado.hash for the reference.
+>>
+>>> +md5     9c2eb6032deda59f287a443091d38cb4 libusb1-1.6.4.tar.gz
+>>> +sha256  8c930d9c1d037d9c83924c82608aa6a1adcaa01ca0e4a23ee0e8e18d7eee670d  libusb1-1.6.4.tar.gz
+>>> +PYTHON_LIBUSB1_SETUP_TYPE = distutils
+>>
+>> Should be setuptools
+> 
+> Agree on all; hashes calculated locally after download.
+> 
+> Can anybody else make those corrections? I will not be able to do that within short notice.
+> 
+> I saw about the PyPI scanner in the BR documentation. Would that have generated some of
+> the missing points above? I assebled the patch manually.
 
-diff --git a/package/Config.in b/package/Config.in
-index 3bff349905..de10dd0613 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -817,6 +817,7 @@ menu "External python modules"
- 	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-keyring/Config.in"
- 	source "package/python-libconfig/Config.in"
-+	source "package/python-libusb1/Config.in"
- 	source "package/python-lmdb/Config.in"
- 	source "package/python-logbook/Config.in"
- 	source "package/python-lxml/Config.in"
-diff --git a/package/python-libusb1/Config.in b/package/python-libusb1/Config.in
-new file mode 100644
-index 0000000000..1c4a72edae
---- /dev/null
-+++ b/package/python-libusb1/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_LIBUSB1
-+	bool "python-libusb1"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+	  Pure-python wrapper for libusb-1.0.
-+
-+	  http://github.com/vpelletier/python-libusb1
-+
-+comment "python-libusb1 needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
-new file mode 100644
-index 0000000000..3649872eca
---- /dev/null
-+++ b/package/python-libusb1/python-libusb1.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/libusb1/json, sha256 locally computed
-+md5	9c2eb6032deda59f287a443091d38cb4  libusb1-1.6.4.tar.gz
-+sha256	8c930d9c1d037d9c83924c82608aa6a1adcaa01ca0e4a23ee0e8e18d7eee670d  libusb1-1.6.4.tar.gz
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
-new file mode 100644
-index 0000000000..3329764fef
---- /dev/null
-+++ b/package/python-libusb1/python-libusb1.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-libusb1
-+#
-+################################################################################
-+
-+PYTHON_LIBUSB1_VERSION = 1.6.4
-+PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
-+PYTHON_LIBUSB1_SITE = https://pypi.python.org/packages/ec/5d/4fdac6c53525786fe35cff035c3345452e24e2bee5627893be65d12555cb
-+PYTHON_LIBUSB1_SETUP_TYPE = setuptools
-+PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
-+PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
-+PYTHON_LIBUSB1_DEPENDENCIES = libusb
-+
-+$(eval $(python-package))
+ I have regenerated it with scanpypi and indeed it fixes all these issues.
+However, it does put the wrong license: GPL-2.0 instead of LGPL-2.1+.
+
+ So I've fixed all that and applied to master, thanks.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
