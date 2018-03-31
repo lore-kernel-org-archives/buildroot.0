@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 16:59:13 +0200
-Subject: [Buildroot] [PATCH v4 6/8] package/docker-containerd: convert
- to golang infrastructure
-In-Reply-To: <20180331132736.21105-7-thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 17:04:05 +0200
+Subject: [Buildroot] [PATCH v4 7/8] package/docker-engine: convert to
+ golang infrastructure
+In-Reply-To: <20180331132736.21105-8-thomas.petazzoni@bootlin.com>
 References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
- <20180331132736.21105-7-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331145913.GJ25161@scaer>
+ <20180331132736.21105-8-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331150405.GK25161@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,65 +19,137 @@ On 2018-03-31 15:27 +0200, Thomas Petazzoni spake thusly:
 > 
 > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/docker-engine/docker-engine.mk | 67 +++++++++-------------------------
+>  1 file changed, 17 insertions(+), 50 deletions(-)
+> 
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> index 8928f072e7..feb47d4994 100644
+> --- a/package/docker-engine/docker-engine.mk
+> +++ b/package/docker-engine/docker-engine.mk
+> @@ -13,70 +13,53 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
+>  
+>  DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
+>  
+> -DOCKER_ENGINE_GOPATH = "$(@D)/gopath"
+> -DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+> -	CGO_ENABLED=1 \
+> -	CGO_NO_EMULATION=1 \
+> -	GOBIN="$(@D)/bin" \
+> -	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
+> -	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+> -	$(TARGET_MAKE_ENV)
+> -
+> -DOCKER_ENGINE_GLDFLAGS = \
+> +DOCKER_ENGINE_LDFLAGS = \
+>  	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
+>  	-X main.Version=$(DOCKER_ENGINE_VERSION)
+>  
+> -ifeq ($(BR2_STATIC_LIBS),y)
+> -DOCKER_ENGINE_GLDFLAGS += -extldflags '-static'
+> -else
+> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
+> -DOCKER_ENGINE_GLDFLAGS_DOCKER += -extldflags '-static'
+> -endif
+> -endif
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+So, where do you now enforce a static build when
+BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT is set?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/docker-containerd/docker-containerd.mk | 33 +++++++-------------------
->  1 file changed, 8 insertions(+), 25 deletions(-)
-> 
-> diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-> index 8f0822b77f..88e27b5ed4 100644
-> --- a/package/docker-containerd/docker-containerd.mk
-> +++ b/package/docker-containerd/docker-containerd.mk
-> @@ -9,37 +9,20 @@ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VER
->  DOCKER_CONTAINERD_LICENSE = Apache-2.0
->  DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+> -DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
+> -DOCKER_ENGINE_BUILD_TARGETS = docker
+> +DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
+> +DOCKER_ENGINE_BUILD_TARGETS = cmd/docker
 >  
-> -DOCKER_CONTAINERD_DEPENDENCIES = host-go
-> +DOCKER_CONTAINERD_WORKSPACE = vendor
+>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+> -DOCKER_ENGINE_BUILD_TAGS += seccomp
+> +DOCKER_ENGINE_TAGS += seccomp
+>  DOCKER_ENGINE_DEPENDENCIES += libseccomp
+>  endif
 >  
-> -DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
-> -DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-> -	CGO_ENABLED=1 \
-> -	GOBIN="$(@D)/bin" \
-> -	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
-> -
-> -DOCKER_CONTAINERD_GLDFLAGS = \
-> +DOCKER_CONTAINERD_LDFLAGS = \
->  	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+>  ifeq ($(BR2_INIT_SYSTEMD),y)
+> -DOCKER_ENGINE_BUILD_TAGS += journald
+> +DOCKER_ENGINE_TAGS += journald
+>  DOCKER_ENGINE_DEPENDENCIES += systemd
+>  endif
 >  
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
-> -endif
-> +DOCKER_CONTAINERD_BUILD_TARGETS = ctr containerd containerd-shim
+>  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+> -DOCKER_ENGINE_BUILD_TAGS += daemon
+> -DOCKER_ENGINE_BUILD_TARGETS += dockerd
+> +DOCKER_ENGINE_TAGS += daemon
+> +DOCKER_ENGINE_BUILD_TARGETS += cmd/dockerd
+>  endif
 >  
-> -define DOCKER_CONTAINERD_CONFIGURE_CMDS
-> -	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
-> -	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
-> -endef
-> +DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+>  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
+> -DOCKER_ENGINE_BUILD_TAGS += experimental
+> +DOCKER_ENGINE_TAGS += experimental
+>  endif
 >  
-> -define DOCKER_CONTAINERD_BUILD_CMDS
-> -	$(foreach d,ctr containerd containerd-shim,\
-> -		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
-> -			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
-> -endef
-> -
-> -define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
-> +define DOCKER_CONTAINERD_INSTALL_SYMLINKS
->  	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
-> -	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
-> -	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
->  	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
+>  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
+>  DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
+>  else
+> -DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
+> +DOCKER_ENGINE_TAGS += exclude_graphdriver_btrfs
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
+>  DOCKER_ENGINE_DEPENDENCIES += lvm2
+>  else
+> -DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
+> +DOCKER_ENGINE_TAGS += exclude_graphdriver_devicemapper
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
+>  DOCKER_ENGINE_DEPENDENCIES += gvfs
+>  else
+> -DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
+> +DOCKER_ENGINE_TAGS += exclude_graphdriver_vfs
+>  endif
+>  
+> -define DOCKER_ENGINE_CONFIGURE_CMDS
+> -	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
+> -	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
+> +DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
+> +
+> +define DOCKER_ENGINE_RUN_AUTOGEN
+>  	cd $(@D) && \
+>  		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
+>  		BUILDTIME="$$(date)" \
+> @@ -85,6 +68,8 @@ define DOCKER_ENGINE_CONFIGURE_CMDS
+>  		bash ./hack/make/.go-autogen
 >  endef
 >  
-> -$(eval $(generic-package))
-> +DOCKER_CONTAINERD_POST_INSTALL_TARGET_HOOKS += DOCKER_CONTAINERD_INSTALL_SYMLINKS
+> +DOCKER_ENGINE_POST_CONFIGURE_HOOKS += DOCKER_ENGINE_RUN_AUTOGEN
 > +
+>  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+>  
+>  define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+> @@ -103,22 +88,4 @@ endef
+>  
+>  endif
+>  
+> -define DOCKER_ENGINE_BUILD_CMDS
+> -	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+> -		cd $(@D)/gopath/src/github.com/docker/docker; \
+> -		$(DOCKER_ENGINE_MAKE_ENV) \
+> -		$(HOST_DIR)/bin/go build -v \
+> -			-o $(@D)/bin/$(target) \
+> -			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
+> -			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
+> -			github.com/docker/docker/cmd/$(target)
+> -	)
+> -endef
+> -
+> -define DOCKER_ENGINE_INSTALL_TARGET_CMDS
+> -	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
+> -		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
+> -	)
+> -endef
+> -
+> -$(eval $(generic-package))
 > +$(eval $(golang-package))
 > -- 
 > 2.14.3
