@@ -1,102 +1,104 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 31 Mar 2018 11:10:21 +0200
-Subject: [Buildroot] [PATCH 1/1] NetworkManager: allow to wait on boot
-In-Reply-To: <CACvFaDdBTOiSQw9V7PHOff5_p5U-S-MvD0gWb6suKF4Cq=kEVg@mail.gmail.com>
-References: <CACvFaDdBTOiSQw9V7PHOff5_p5U-S-MvD0gWb6suKF4Cq=kEVg@mail.gmail.com>
-Message-ID: <f34ec8b4-5851-7710-b17b-c649f04d4b99@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Mar 2018 11:13:27 +0200
+Subject: [Buildroot] [PATCH 1/3] systemd: Ensure /run and /var/run are
+ the same on R/O rootfs
+In-Reply-To: <45c17d05433e7bb40ff6e2b30c5cb41fed04ec76.1518089469.git.jan.kundrat@cesnet.cz>
+References: <45c17d05433e7bb40ff6e2b30c5cb41fed04ec76.1518089469.git.jan.kundrat@cesnet.cz>
+Message-ID: <20180331091327.GC25161@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Pascal,
+Jan, All,
 
- Thank you for your contribution.
+On 2018-02-08 12:22 +0100, Jan Kundr?t spake thusly:
+> When I updated systemd from 234 to 237 and D-Bus from 1.12.0 to 1.12.2
+> on my system with a read-only rootfs (buildroot 1c0c55c028 to buildroot
+> 27d2229692), my D-Bus-activated services stopped working. Checking the
+> logs, it turned out that systemd PID 1 was not able to connect the D-Bus
+> socket at all. There were some recent changes in systemd where upstream
+> refactored code which waits for sockets to appear. However, the real
+> problem is that systemd is configured to look for the D-Bus socket in
+> /run/dbus, while D-Bus creates it at /var/run/dbus/. D-Bus upstream
+> explains in a bugreport [1] that this "traditional" /var/run/dbus is
+> going to stay because it's hardcoded in other independent
+> implementations of the D-Bus APIs.
+> 
+> As is also said in that bugreport, the root cause is that /run and
+> /var/run are effectively two separate directories on Buildroot -- at
+> least when configured for a R/O rootfs. Furthermore, systemd actually
+> actively warns about this:
+> 
+>   systemd[1]: System is tainted: var-run-bad
+> 
+> Looking further, systemd-tmpfiles also detects breakage:
+> 
+>   systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:12] Duplicate line for path "/var/run", ignoring.
+>   systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:14] Duplicate line for path "/var/log", ignoring.
+>   systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:21] Duplicate line for path "/var/lib", ignoring.
+> 
+> This change simply skips /var/run from being copied from the
+> /usr/share/factory. The symlink is still created by another tmpfiles.d
+> entry which belongs to systemd.
 
-On 30-03-18 23:48, Pascal Vizeli wrote:
-> From 9bb88ee15c3b603c39b6140c040b4a5b17c8a86a Mon Sep 17 00:00:00 2001
-> From: Pascal Vizeli <pvizeli@syshack.ch>
-> Date: Fri, 30 Mar 2018 22:25:57 +0200
-> Subject: [PATCH 1/1] NetworkManager: allow to wait on boot
+We believe this issue has been fixed in antoher way with that patch:
+
+    6e5df928539 package/skeleton-systemd: invert factory logic
+
+As thus, I've marked this patch as rejected.
+
+If your use-case is still not fixed, please re-send it.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> The other warnings are still in present:
 > 
-> This patch allow a system to wait for network card on boot time.
+>   systemd-tmpfiles[174]: [/usr/lib/tmpfiles.d/var.conf:14] Duplicate line for path "/var/log", ignoring.
+>   systemd-tmpfiles[174]: [/usr/lib/tmpfiles.d/var.conf:21] Duplicate line for path "/var/lib", ignoring.
 > 
-> Signed-off-by: Pascal Vizeli <pvizeli@syshack.ch>
+> I'm leaving that one to someone who is more familiar with systemd and
+> buildroot conventions. My box now boots again, so I'm happy :).
+> 
+> [1] https://bugs.freedesktop.org/show_bug.cgi?id=101628
+> 
+> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
 > ---
->  package/network-manager/Config.in          | 6 ++++++
->  package/network-manager/network-manager.mk | 6 ++++++
->  2 files changed, 12 insertions(+)
+>  package/skeleton-init-systemd/skeleton-init-systemd.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/network-manager/Config.in
-> b/package/network-manager/Config.in
-> index 72658c1..1bdb225 100644
-> --- a/package/network-manager/Config.in
-> +++ b/package/network-manager/Config.in
-> @@ -62,6 +62,12 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
->   help
->    This option enables support for OpenVSwitch
+> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> index a2d4e8c4b3..95142904f5 100644
+> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> @@ -42,7 +42,9 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+>  	mkdir $(TARGET_DIR)/var
+>  	for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
+>  		j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
+> -		if [ -L "$${i}" ]; then \
+> +		if [ "$${j}" = "/var/run" ]; then \
+> +			echo "# $${j} is being handled by systemd"
+> +		elif [ -L "$${i}" ]; then \
+>  			printf "L+! %s - - - - %s\n" \
+>  				"$${j}" "../usr/share/factory/$${j}" \
+>  			|| exit 1; \
+> -- 
+> 2.14.3
 > 
-> +config BR2_PACKAGE_NETWORK_MANAGER_WAIT_BOOT
-> + bool "Wait on boot support"
-> + depends on BR2_INIT_SYSTEMD
-
- Indentation is not correct. Please use the utils/check-package script to
-validate your changes.
-
- Or perhaps it's your mailer that destroyed the whitespace. In that case (or
-actually, in any case) please use git send-email to send your patch.
-
-
-> + help
-> +  This option allow NetworkManager to wait on boot
-> +
->  endif
 > 
->  comment "NetworkManager needs udev /dev management and a glibc
-> toolchain w/ headers >= 3.7, dynamic library"
-> diff --git a/package/network-manager/network-manager.mk
-> b/package/network-manager/network-manager.mk
-> index a520aad..d48ffe9 100644
-> --- a/package/network-manager/network-manager.mk
-> +++ b/package/network-manager/network-manager.mk
-> @@ -102,6 +102,12 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
-> 
->   ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
->   $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-> +
-> + if [ $(BR2_PACKAGE_NETWORK_MANAGER_WAIT_BOOT) == y ]; \
-> + then \
-> + ln -sf /usr/lib/systemd/system/NetworkManager-wait-online.service \
-> + $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager-wait-online.service;
-
- Is there any reason to do this conditionally? As far as I can see, this service
-does nothing except block other services that need networking until you get an
-IP address. Why would you ever NOT want this?
-
- In other words, I think you should remove the Config.in option, and instead
-create the symlink unconditionally.
-
-
- I have marked your patch as Changes Requested in patchwork, so unless you
-resend it (with the fixes mentioned above), we will forget about it.
-
- Thank you!
-
- Regards,
- Arnout
-
-> \
-> + fi
->  endef
-> 
->  $(eval $(autotools-package))
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
