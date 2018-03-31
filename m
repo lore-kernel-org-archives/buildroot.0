@@ -1,126 +1,96 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 31 Mar 2018 12:09:01 +0200
-Subject: [Buildroot] bacnet-stack: new package
-In-Reply-To: <ac72cf65-4a1e-260b-4b0c-ca773e528594@visionsystems.de>
-References: <ac72cf65-4a1e-260b-4b0c-ca773e528594@visionsystems.de>
-Message-ID: <7955a7c7-2968-c5e4-99df-9479a9d14996@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 31 Mar 2018 12:25:37 +0200
+Subject: [Buildroot] [PATCH] ktap: bump version for linux-4.8 support
+Message-ID: <20180331102537.11557-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Fixes #10776
 
-This patch seems corrupted by your email client.
-It doesn't apply correctly, can you send an updated version?
+The upstream git repo contains a number of fixes for building against newer
+kernel versions, so bump the version.
 
-Best regards,
-Romain
+git shortlog eb66d40310c93dc82bc8eac889744c1ed1f01f7b..                                                                                                                                     ?????master?
+Alain Kalker (2):
+      uprobe: Print the symbol, not the matching pattern
+      uprobe: Blacklist uretprobes on _start
 
+Aleksa Sarai (2):
+      runtime: update GFP_WAIT to GFP_RECLAIM
+      userspace: fix up argument parsing NULL dereference
 
-Le 29/09/2017 ? 08:38, Yegor Yefremov a ?crit?:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> ?DEVELOPERS???????????????????????????? |? 1 +
-> ?package/Config.in????????????????????? |? 1 +
-> ?package/bacnet-stack/Config.in???????? |? 8 ++++++++
-> ?package/bacnet-stack/bacnet-stack.hash |? 3 +++
-> ?package/bacnet-stack/bacnet-stack.mk?? | 28 ++++++++++++++++++++++++++++
-> ?5 files changed, 41 insertions(+)
-> ?create mode 100644 package/bacnet-stack/Config.in
-> ?create mode 100644 package/bacnet-stack/bacnet-stack.hash
-> ?create mode 100644 package/bacnet-stack/bacnet-stack.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index e34802f..594fc88 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1844,6 +1844,7 @@ N:??????? Yegor Yefremov <yegorslists@googlemail.com>
-> ?F:???? package/acl/
-> ?F:???? package/attr/
-> ?F:???? package/bluez_utils/
-> +F:???? package/bacnet-stack/
-> ?F:???? package/boost/
-> ?F:???? package/bootstrap/
-> ?F:???? package/cannelloni/
-> diff --git a/package/Config.in b/package/Config.in
-> index 6acd0c4..3c5647f 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1305,6 +1305,7 @@ menu "Networking"
-> ??????? source "package/alljoyn-tcl-base/Config.in"
-> ??????? source "package/azmq/Config.in"
-> ??????? source "package/azure-iot-sdk-c/Config.in"
-> +?????? source "package/bacnet-stack/Config.in"
-> ??????? source "package/batman-adv/Config.in"
-> ??????? source "package/c-ares/Config.in"
-> ??????? source "package/canfestival/Config.in"
-> diff --git a/package/bacnet-stack/Config.in b/package/bacnet-stack/Config.in
-> new file mode 100644
-> index 0000000..bbbbc2d
-> --- /dev/null
-> +++ b/package/bacnet-stack/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_BACNET_STACK
-> +?????? bool "bacnet-stack"
-> +?????? help
-> +???????? This BACnet library provides an application layer, network
-> +???????? layer and MAC layer communications services for Win32, Linux,
-> +???????? RTOS, or microcontroller.
-> +
-> +???????? http://bacnet.sourceforge.net/
-> diff --git a/package/bacnet-stack/bacnet-stack.hash b/package/bacnet-stack/bacnet-stack.hash
-> new file mode 100644
-> index 0000000..824e5db
-> --- /dev/null
-> +++ b/package/bacnet-stack/bacnet-stack.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256? 4b80e2909162082e6b0025319ff8b360472a0eee41593ef4fb40fbe27a098217? bacnet-stack-0.8.5.tgz
-> +sha256? f123d969f4e4f9d235116fc943d931e33ea80c58e96b8de886f4d1259c2fb836? license/gpl-2.txt
-> diff --git a/package/bacnet-stack/bacnet-stack.mk b/package/bacnet-stack/bacnet-stack.mk
-> new file mode 100644
-> index 0000000..6ff5330
-> --- /dev/null
-> +++ b/package/bacnet-stack/bacnet-stack.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# bacnet-stack
-> +#
-> +################################################################################
-> +
-> +BACNET_STACK_VERSION = 0.8.5
-> +BACNET_STACK_SITE = https://sourceforge.net/projects/bacnet/files/bacnet-stack/bacnet-stack-$(BACNET_STACK_VERSION)
-> +BACNET_STACK_SOURCE = bacnet-stack-$(BACNET_STACK_VERSION).tgz
-> +BACNET_STACK_LICENSE = GPL-2.0+ with exception
-> +BACNET_STACK_LICENSE_FILES = license/gpl-2.txt
-> +BACNET_STACK_INSTALL_STAGING = YES
-> +# bacnet-stack produced only a static library,
-> +# so don't install no target installation is
-> +# necessary
-> +BACNET_STACK_INSTALL_TARGET = NO
-> +
-> +define BACNET_STACK_BUILD_CMDS
-> +?????? $(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-> +?????????????? -C $(@D) all
-> +endef
-> +
-> +define BACNET_STACK_INSTALL_STAGING_CMDS
-> +?????? $(INSTALL) -m 0644 $(@D)/lib/libbacnet.a \
-> +?????????????? $(STAGING_DIR)/usr/lib/
+Alexey Makhalov (1):
+      Fix building for v4.8 kernel
 
-You don't need to deploy any header file ?
+Azat Khuzhin (12):
+      Use get_unused_fd_flags(0) instead of get_unused_fd()
+      Support trace_seq::seq
+      Ignore separate debug files (*.dwo)
+      Use trace_seq_has_overflowed()
+      makefile: split vim plugins installing into separate target
+      makefile: use DESTDIR for install (allow to change install dir)
+      makefile: install: create dirs
+      makefile: use ldflags for linking ktap
+      makefile: add CPPFLAGS to KTAPC_CFLAGS, to allow change default flags
+      ignore: exclude /debian
+      Support compilation for 4.2 (ftrace_events cleanup)
+      runtime: fix building on 4.3
 
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Jovi Zhangwei (11):
+      Merge pull request #84 from azat/linux-3.19-fixes-v3
+      Merge pull request #85 from azat/debian-preparations-v2
+      Merge pull request #88 from NanXiao/master
+      Merge pull request #89 from NanXiao/patch-1
+      Merge pull request #91 from NanXiao/patch-1
+      Merge pull request #90 from azat/linux-4.2-compilation-fixes
+      Merge pull request #99 from cyphar/fix-null-deref
+      Merge pull request #98 from cyphar/fix-gfp-reclaim
+      Merge pull request #97 from azat/fix-building-4.3-__GFP_RECLAIM
+      Merge pull request #103 from ackalker/blacklist
+      Merge pull request #104 from YustasSwamp/master
+
+Nan Xiao (3):
+      Update tutorial.md
+      Update Makefile
+      Fix memory leak issue in main function.
+
+WEI ZHANG (1):
+      ktap: Change the copyright to Huawei Technologies
+
+While we are at it, also add a hash for the license file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+NOTICE: Ktap seems pretty dead upstream, so perhaps we should deprecate it?
+
+ package/ktap/ktap.hash | 2 ++
+ package/ktap/ktap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/ktap/ktap.hash b/package/ktap/ktap.hash
+index d58bd85b43..319dbb4e53 100644
+--- a/package/ktap/ktap.hash
++++ b/package/ktap/ktap.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+ sha256 bc8b03a53c430ae4fcf594ffdf31e2b2ed47a8fee25dd8fea60aa34f75441707  ktap-eb66d40310c93dc82bc8eac889744c1ed1f01f7b.tar.gz
++sha256 44a0808d57175cf9d15466f720e1e10d5ed1abc3497aedf9ddd6469545552345  ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f.tar.gz
++e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE-GPL
+diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
+index b9b3dbcc53..3b9134da65 100644
+--- a/package/ktap/ktap.mk
++++ b/package/ktap/ktap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KTAP_VERSION = eb66d40310c93dc82bc8eac889744c1ed1f01f7b
++KTAP_VERSION = 23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f
+ KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
+ KTAP_LICENSE = GPL-2.0
+ KTAP_LICENSE_FILES = LICENSE-GPL
+-- 
+2.11.0
