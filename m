@@ -1,50 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 09:20:20 +0200
-Subject: [Buildroot] [PATCH 2/2] package/openocd: fix fallout after no-C++
- fixups
-In-Reply-To: <cover.1522480811.git.yann.morin.1998@free.fr>
-References: <cover.1522480811.git.yann.morin.1998@free.fr>
-Message-ID: <8162669309357bfbd684960e225b215ccd2abec1.1522480811.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 31 Mar 2018 09:22:51 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add myself for a number of
+ unmaintained boards
+Message-ID: <20180331072251.32255-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 4cd1ab158 (core: alternate solution to disable C++) made use of a
-non-existent 'no' binary when C++ is not available in the toolchain.
+These boards I own and currently have no entries in DEVELOPERS, so add them.
 
-However, some packages, like jimtcl as bundled in opeocd, really want to
-find the binary that $CXX contains.
-
-Revert openocd to use 'false' instead of 'no'.
-
-Fixes:
-    http://autobuild.buildroot.org/results/cbd/cbd5ab97fb0659968ff628461130627cf1745955/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openocd/openocd.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ DEVELOPERS | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 9d2576ceeb..548d8b81a0 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -11,7 +11,12 @@ OPENOCD_LICENSE = GPL-2.0+
- OPENOCD_LICENSE_FILES = COPYING
- # 0002-configure-enable-build-on-uclinux.patch patches configure.ac
- OPENOCD_AUTORECONF = YES
--OPENOCD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+
-+# The bundled jimtcl really wants to find a existing $CXX, so feed it
-+# false when we do not have one.
-+OPENOCD_CONF_ENV = \
-+	$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
-+	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ef6589e37d..74477e9b9b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1396,8 +1396,20 @@ N:	Pedro Aguilar <paguilar@paguilar.org>
+ F:	package/libunistring/
  
- OPENOCD_CONF_OPTS = \
- 	--oldincludedir=$(STAGING_DIR)/usr/include \
+ N:	Peter Korsgaard <peter@korsgaard.com>
++F:	board/minnowboard/
++F:	board/nexbox/a95x/
++F:	board/openblocks/a6/
+ F:	board/orangepi/
++F:	board/pandaboard/
++F:	board/roseapplepi/
++F:	configs/minnowboard_max-graphical_defconfig
++F:	configs/minnowboard_max_defconfig
++F:	configs/nexbox_a95x_defconfig
++F:	configs/openblocks_a6_defconfig
+ F:	configs/orangepi_pc_defconfig
++F:	configs/pandaboard_defconfig
++F:	configs/roseapplepi_defconfig
++F:	configs/sheevaplug_defconfig
+ F:	package/docker-compose/
+ F:	package/dump1090/
+ F:	package/flickcurl/
 -- 
-2.14.1
+2.11.0
