@@ -1,57 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 08:25:43 +0200
-Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
-In-Reply-To: <20180327110022.19980-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Tue, 27 Mar 2018 13:00:22 +0200")
-References: <20180327110022.19980-1-yann.morin.1998@free.fr>
-Message-ID: <878ta8wyl4.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 08:38:21 +0200
+Subject: [Buildroot] [PATCH 15/36] check-package: enable for toolchain/
+In-Reply-To: <20180331022301.27501-16-ricardo.martincoski@gmail.com>
+References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
+ <20180331022301.27501-16-ricardo.martincoski@gmail.com>
+Message-ID: <20180331083821.37eb87bd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
- > Some packages that use libtool really need some love to be able to
- > disable C++ support.
+On Fri, 30 Mar 2018 23:22:40 -0300, Ricardo Martincoski wrote:
+> The toolchain directory can benefit from this script to prevent common
+> mistakes when submitting patches.
+> 
+> In order to accomplish this:
+> Do not ignore anymore files from the toolchain/ directory.
+> Accept toolchain-common.in as a valid Config.in name.
+> Ignore this symbol:
+>  - BR_LIBC: defined by the buildroot toolchain, used by gcc-final.mk.
+> But do not ignore this symbol:
+>  - GCONV_LIBS: it is used only inside the file that defines it.
 
- > This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
- > is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
- > will want a C++ preprocessor that works on valid input *and* fail on
- > invalid input.
+You're not actually ignoring this variable in this patch, and you
+instead fixed it in PATCH 14/36 to have a TOOLCHAIN_ prefix.
 
- > So, providing 'false' as the C++ compiler will then require that we do
- > have a working C++ preprocessor. Which is totally counter-productive
- > since we do not have a C++ compiler to start with...
+> Ignore toolchain/toolchain-external/pkg-toolchain-external.mk as it
+> declares a package infra and not a package itself.
+> Ignore toolchain/helpers.mk as it contains only helper functions.
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> ---
+>  utils/check-package             | 5 ++++-
+>  utils/checkpackagelib/lib_mk.py | 1 +
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/utils/check-package b/utils/check-package
+> index a5f5dc44c0..35a4a70858 100755
+> --- a/utils/check-package
+> +++ b/utils/check-package
+> @@ -44,7 +44,7 @@ def parse_args():
+>      return parser.parse_args()
+>  
+>  
+> -CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
+> +CONFIG_IN_FILENAME = re.compile("/Config\.\S*$|/toolchain-common.in$")
 
- > bd39d11d2e (core/infra: fix build on toolchain without C++) was a
- > previous attempt at fixing this, by using the host's C++ preprocessor.
+Not directly related to your series, but I believe this
+toolchain-common.in file is silly. It is just included by
+toolchain/Config.in, and toolchain/Config.in is not that long. We
+should bring back the toolchain-common.in contents in
+toolchain/Config.in, and stop having this odd toolchain-common.in.
 
- > However, that is very incorrect (that's my code, I can say so!) because
- > the set of defines will most probably be different for the host and the
- > target, thus causign all sorts of trouble. For example, on ARM we'd have
- > to include different headers for soft-float vs hard-float, which is
- > decided based on a macro, which is not defined for x86, and thus may
- > redirect to the wrong (and missing) header.
+Best regards,
 
- > Instead, we notice that libtool uses the magic value 'no' to decide that
- > a C++ compiler is not available, in which case it skeips the call to
- > AC_PROG_CXXCPP.
-
- > Given that 'no' is not provided by any package in Debian and
- > derivatives, as well as in Fedora, we can assume that no system will
- > have an executable called 'no'. Hence, we use that as a magic value to
- > disable C++ detection altogether.
-
-This unfortunately broke jimtcl (and openocd which includes a copy of
-jimtcl):
-
-http://autobuild.buildroot.net/results/54f/54f3df03551fbdf293d33dc1e3f08005faa15321/
-
-http://autobuild.buildroot.net/results/cbd/cbd5ab97fb0659968ff628461130627cf1745955/
-
-Care to take a look?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
