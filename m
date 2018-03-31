@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 15:27:33 +0200
-Subject: [Buildroot] [PATCH v4 5/8] package/runc: convert to golang
+Date: Sat, 31 Mar 2018 15:27:30 +0200
+Subject: [Buildroot] [PATCH v4 2/8] package/pkg-golang: new package
  infrastructure
 In-Reply-To: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
 References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331132736.21105-6-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331132736.21105-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,166 @@ To: buildroot@busybox.net
 
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
 
+This patch adds a new infrastructure for golang based packages.
+
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/runc/runc.mk | 37 +++++--------------------------------
- 1 file changed, 5 insertions(+), 32 deletions(-)
+ package/Makefile.in   |   1 +
+ package/pkg-golang.mk | 136 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 137 insertions(+)
+ create mode 100644 package/pkg-golang.mk
 
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index fb3fec20f5..f1586f32b2 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -9,42 +9,15 @@ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
- 
--RUNC_DEPENDENCIES = host-go
-+RUNC_WORKSPACE = Godeps/_workspace
- 
--RUNC_GOPATH = "$(@D)/Godeps/_workspace"
--RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
--	CGO_ENABLED=1 \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(RUNC_GOPATH)" \
--	PATH=$(BR_PATH)
-+RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
- 
--RUNC_GLDFLAGS = \
--	-X main.gitCommit=$(RUNC_VERSION)
--
--ifeq ($(BR2_STATIC_LIBS),y)
--RUNC_GLDFLAGS += -extldflags '-static'
--endif
--
--RUNC_GOTAGS = cgo static_build
-+RUNC_TAGS = cgo static_build
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
--RUNC_GOTAGS += seccomp
-+RUNC_TAGS += seccomp
- RUNC_DEPENDENCIES += libseccomp host-pkgconf
- endif
- 
--define RUNC_CONFIGURE_CMDS
--	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
--	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
--endef
--
--define RUNC_BUILD_CMDS
--	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
--		build -v -o $(@D)/bin/runc \
--		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
--endef
--
--define RUNC_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
--endef
--
--$(eval $(generic-package))
-+$(eval $(golang-package))
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0af79dfb63..be7a48f647 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -452,3 +452,4 @@ include package/pkg-kconfig.mk
+ include package/pkg-rebar.mk
+ include package/pkg-kernel-module.mk
+ include package/pkg-waf.mk
++include package/pkg-golang.mk
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+new file mode 100644
+index 0000000000..a11e7e9e3f
+--- /dev/null
++++ b/package/pkg-golang.mk
+@@ -0,0 +1,136 @@
++################################################################################
++# Golang package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for Go packages. It should be used for all
++# packages that are written in go.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++#
++# In terms of implementation, this golang infrastructure requires
++# the .mk file to only specify metadata information about the
++# package: name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default golang behavior. The
++# package can also define some post operation hooks.
++#
++################################################################################
++
++GO_BIN = $(HOST_DIR)/bin/go
++
++################################################################################
++# inner-golang-package -- defines how the configuration, compilation and
++# installation of a Go package should be done, implements a few hooks to
++# tune the build process for Go specificities and calls the generic package
++# infrastructure to generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
++
++define inner-golang-package
++
++$(2)_WORKSPACE ?= _gopath
++
++# We pass an empty GOBIN, otherwise "go install: cannot install
++# cross-compiled binaries when GOBIN is set"
++$(2)_GO_ENV ?= $$(HOST_GO_TARGET_ENV) \
++	GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
++	GOBIN= \
++	CGO_ENABLED=$$(HOST_GO_CGO_ENABLED)
++
++ifeq ($(BR2_STATIC_LIBS),y)
++$(2)_LDFLAGS += -extldflags '-static'
++endif
++
++$(2)_BUILD_OPTS += -ldflags "$$($(2)_LDFLAGS)"
++$(2)_BUILD_OPTS += -tags "$$($(2)_TAGS)"
++
++# Target packages need the Go compiler on the host.
++$(2)_DEPENDENCIES += host-go
++
++$(2)_BUILD_TARGETS ?= .
++
++$(2)_INSTALL_BINS ?= $(1)
++
++#
++# The go build/install command installs the binaries inside
++# gopath/bin/linux_GOARCH/ when cross compilation is enabled. We set
++# this variable here to be used by packages if needed.
++#
++$(2)_BINDIR = $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH)
++
++#
++# Source files in Go should be uncompressed in a precise folder in the
++# hierarchy of GOPATH. It usually resolves around
++# domain/vendor/software. By default, we derive domain/vendor/software
++# from the upstream URL of the project, but we allow $(2)_SRC_SUBDIR
++# to be overridden if needed.
++#
++$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
++$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
++$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
++
++$(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
++$(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
++
++#
++# Configure step. Only define it if not already defined by the package
++# .mk file.
++#
++ifndef $(2)_CONFIGURE_CMDS
++define $(2)_CONFIGURE_CMDS
++	mkdir -p $$(@D)/$$($(2)_WORKSPACE)/bin
++	mkdir -p $$(dir $$($(2)_SRC_PATH))
++	ln -sf $$(@D) $$($(2)_SRC_PATH)
++endef
++endif
++
++#
++# Build step. Only define it if not already defined by the package .mk
++# file. We use the install command instead of build command here
++# because the install command also moves the package binaries in
++# <workspace>/bin/linux_GOARCH/. Using the install command also
++# leverages the go build infrastructure for building and installing
++# multiple binaries.
++#
++ifndef $(2)_BUILD_CMDS
++define $(2)_BUILD_CMDS
++	$$(foreach d,$$($(2)_BUILD_TARGETS),\
++		cd $$($(2)_SRC_PATH) && $$($(2)_GO_ENV) $$(GO_BIN) install -v $$($(2)_BUILD_OPTS) ./$$(d)
++	)
++endef
++endif
++
++#
++# Target installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$$(foreach d,$$($(2)_INSTALL_BINS),\
++		$(INSTALL) -D -m 0755 $$(@D)/$$($(2)_BINDIR)/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
++	)
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef # inner-golang-package
++
++################################################################################
++# golang-package -- the target generator macro for Go packages
++################################################################################
++
++golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
 -- 
 2.14.3
