@@ -1,116 +1,214 @@
-From: Pascal Vizeli <pvizeli@syshack.ch>
-Date: Sat, 31 Mar 2018 19:04:02 +0200
-Subject: [Buildroot] [PATCH 1/1] NetworkManager: allow to wait on boot
-In-Reply-To: <f34ec8b4-5851-7710-b17b-c649f04d4b99@mind.be>
-References: <CACvFaDdBTOiSQw9V7PHOff5_p5U-S-MvD0gWb6suKF4Cq=kEVg@mail.gmail.com>
- <f34ec8b4-5851-7710-b17b-c649f04d4b99@mind.be>
-Message-ID: <CACvFaDeiW09GTyqy-71seqQ4_Cb-KNDiMU79pkRRMDzaziOG8w@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 31 Mar 2018 19:06:50 +0200
+Subject: [Buildroot] [PATCH] libfreenect: new package.
+In-Reply-To: <20180316165607.17627-1-connor@farmbot.io>
+References: <20180316165607.17627-1-connor@farmbot.io>
+Message-ID: <8490618c-5b4b-04b4-76b2-b71869648767@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm was wrong, it is the wrong unit, it need to be in network-online.target
+Hi Connor,
 
-Greets
-Pascal
+Thanks for your contribution!
 
-2018-03-31 11:10 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->  Hi Pascal,
->
->  Thank you for your contribution.
->
-> On 30-03-18 23:48, Pascal Vizeli wrote:
->> From 9bb88ee15c3b603c39b6140c040b4a5b17c8a86a Mon Sep 17 00:00:00 2001
->> From: Pascal Vizeli <pvizeli@syshack.ch>
->> Date: Fri, 30 Mar 2018 22:25:57 +0200
->> Subject: [PATCH 1/1] NetworkManager: allow to wait on boot
->>
->> This patch allow a system to wait for network card on boot time.
->>
->> Signed-off-by: Pascal Vizeli <pvizeli@syshack.ch>
->> ---
->>  package/network-manager/Config.in          | 6 ++++++
->>  package/network-manager/network-manager.mk | 6 ++++++
->>  2 files changed, 12 insertions(+)
->>
->> diff --git a/package/network-manager/Config.in
->> b/package/network-manager/Config.in
->> index 72658c1..1bdb225 100644
->> --- a/package/network-manager/Config.in
->> +++ b/package/network-manager/Config.in
->> @@ -62,6 +62,12 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
->>   help
->>    This option enables support for OpenVSwitch
->>
->> +config BR2_PACKAGE_NETWORK_MANAGER_WAIT_BOOT
->> + bool "Wait on boot support"
->> + depends on BR2_INIT_SYSTEMD
->
->  Indentation is not correct. Please use the utils/check-package script to
-> validate your changes.
->
->  Or perhaps it's your mailer that destroyed the whitespace. In that case (or
-> actually, in any case) please use git send-email to send your patch.
->
->
->> + help
->> +  This option allow NetworkManager to wait on boot
->> +
->>  endif
->>
->>  comment "NetworkManager needs udev /dev management and a glibc
->> toolchain w/ headers >= 3.7, dynamic library"
->> diff --git a/package/network-manager/network-manager.mk
->> b/package/network-manager/network-manager.mk
->> index a520aad..d48ffe9 100644
->> --- a/package/network-manager/network-manager.mk
->> +++ b/package/network-manager/network-manager.mk
->> @@ -102,6 +102,12 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
->>
->>   ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
->>   $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
->> +
->> + if [ $(BR2_PACKAGE_NETWORK_MANAGER_WAIT_BOOT) == y ]; \
->> + then \
->> + ln -sf /usr/lib/systemd/system/NetworkManager-wait-online.service \
->> + $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager-wait-online.service;
->
->  Is there any reason to do this conditionally? As far as I can see, this service
-> does nothing except block other services that need networking until you get an
-> IP address. Why would you ever NOT want this?
->
->  In other words, I think you should remove the Config.in option, and instead
-> create the symlink unconditionally.
->
->
->  I have marked your patch as Changes Requested in patchwork, so unless you
-> resend it (with the fixes mentioned above), we will forget about it.
->
->  Thank you!
->
->  Regards,
->  Arnout
->
->> \
->> + fi
->>  endef
->>
->>  $(eval $(autotools-package))
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-NetworkManager-allow-to-wait-on-boot.patch
-Type: application/octet-stream
-Size: 1475 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180331/a1f8c873/attachment.obj>
+Le 16/03/2018 ? 17:56, Connor Rigby a ?crit?:
+> libfreenect is a userspace driver for the Microsoft Kinect.
+> 
+> Signed-off-by: Connor Rigby <connor@farmbot.io>
+> ---
+
+Can you add a DEVELOPERS file entry for libfreenect ?
+
+>  package/Config.in                    |  1 +
+>  package/libfreenect/Config.in        | 32 +++++++++++++++++++++++++++++++
+>  package/libfreenect/libfreenect.hash |  2 ++
+>  package/libfreenect/libfreenect.mk   | 37 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 72 insertions(+)
+>  create mode 100644 package/libfreenect/Config.in
+>  create mode 100644 package/libfreenect/libfreenect.hash
+>  create mode 100644 package/libfreenect/libfreenect.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 449ffcc47b..22bd7e9c7d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1203,6 +1203,7 @@ menu "Hardware handling"
+>  	source "package/libatasmart/Config.in"
+>  	source "package/libcec/Config.in"
+>  	source "package/libfreefare/Config.in"
+> +	source "package/libfreenect/Config.in"
+>  	source "package/libftdi/Config.in"
+>  	source "package/libftdi1/Config.in"
+>  	source "package/libgphoto2/Config.in"
+> diff --git a/package/libfreenect/Config.in b/package/libfreenect/Config.in
+> new file mode 100644
+> index 0000000000..f0680980fc
+> --- /dev/null
+> +++ b/package/libfreenect/Config.in
+> @@ -0,0 +1,32 @@
+> +config BR2_PACKAGE_LIBFREENECT
+> +	bool "Libfreenect"
+> +  select BR2_PACKAGE_LIBUSB
+> +	help
+> +    libfreenect is a userspace driver for the Microsoft Kinect.
+> +
+> +	  https://openkinect.org/wiki/Main_Page
+
+There are several coding style issue with Config.in and libfreenect.mk
+
+$ ./utils/check-package package/libfreenect/*
+package/libfreenect/Config.in:3: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:5: help text: <tab><2 spaces><62 chars>
+(http://nightly.buildroot.org/#writing-rules-config-in)
+package/libfreenect/Config.in:12: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:13: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:14: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:15: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:16: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:17: help text: <tab><2 spaces><62 chars>
+(http://nightly.buildroot.org/#writing-rules-config-in)
+package/libfreenect/Config.in:20: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:21: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:22: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:23: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:24: help text: <tab><2 spaces><62 chars>
+(http://nightly.buildroot.org/#writing-rules-config-in)
+package/libfreenect/Config.in:27: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:28: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:29: should be indented with one tab
+(http://nightly.buildroot.org/#_config_files)
+package/libfreenect/Config.in:30: help text: <tab><2 spaces><62 chars>
+(http://nightly.buildroot.org/#writing-rules-config-in)
+package/libfreenect/libfreenect.mk:6: should be a blank line
+(http://nightly.buildroot.org/#writing-rules-mk)
+package/libfreenect/libfreenect.mk:14: expected indent with tabs
+
+
+> +
+> +if BR2_PACKAGE_LIBFREENECT
+> +
+> +config BR2_PACKAGE_LIBFREENECT_PYTHON2
+> +  bool "Libfreenect Python Wrapper"
+
+Use lower case.
+
+> +  depends on BR2_PACKAGE_LIBFREENECT
+
+This is not needed since this option is available if libreenect is selected.
+
+> +  depends on BR2_PACKAGE_PYTHON
+
+Do you know if the Python wrapper is really python 2 only ?
+
+> +  depends on BR2_PACKAGE_PYTHON_NUMPY
+
+Since this option depends on python, you can select python-numpy here.
+
+> +  help
+> +    build python wrapper for libfreenect.
+> +
+> +config BR2_PACKAGE_LIBFREENECT_EXAMPLES
+> +  bool "Libfreenect examples"
+> +  depends on BR2_PACKAGE_LIBFREEGLUT
+
+Same here, remove the dependency
+
+> +  depends on BR2_PACKAGE_LIBGLU
+> +  help
+> +    build examples for libfreenect.
+
+Usually, we don't build tests and examples.
+If there is a good reason to build libfreenect examples, select libglu package
+and add libglut reverse dependencies.
+
+> +
+> +config BR2_PACKAGE_LIBFREENECT_OPENCV
+> +  bool "Libfreenect opencv wrapper"
+> +  depends on BR2_PACKAGE_OPENCV
+
+Same here, select opencv and add reverse dependencies.
+
+> +  help
+> +    build opencv wrapper for Libfreenect.
+> +
+> +endif
+> diff --git a/package/libfreenect/libfreenect.hash b/package/libfreenect/libfreenect.hash
+> new file mode 100644
+> index 0000000000..d662ac3225
+> --- /dev/null
+> +++ b/package/libfreenect/libfreenect.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 5f22c9a0260efd5a31d8e6465bb06b2b389f61b8f7714e0b42b7b20314e5ef59  libfreenect-v0.5.7.tar.gz
+
+Recently Buildroot added support for license file hash check.
+This hash should be listed here.
+
+> diff --git a/package/libfreenect/libfreenect.mk b/package/libfreenect/libfreenect.mk
+> new file mode 100644
+> index 0000000000..53413e1a01
+> --- /dev/null
+> +++ b/package/libfreenect/libfreenect.mk
+> @@ -0,0 +1,37 @@
+> +################################################################################
+> +#
+> +# libfreenect
+> +#
+> +################################################################################
+
+Add a new line
+
+Otherwise it look good, can you send an updated version?
+I'll mark this version "Changes requested" in patchwork.
+
+Best regards,
+Romain
+
+
+> +LIBFREENECT_VERSION = v0.5.7
+> +LIBFREENECT_SITE = $(call github,OpenKinect,libfreenect,$(LIBFREENECT_VERSION))
+> +LIBFREENECT_INSTALL_STAGING = YES
+> +LIBFREENECT_DEPENDENCIES = libusb host-pkgconf
+> +LIBFREENECT_LICENSE = Apache-2.0, GPL-2.0+
+> +LIBFREENECT_LICENSE_FILES = APACHE20 GPL2> +
+> +LIBFREENECT_CONF_OPTS  = -DBUILD_REDIST_PACKAGE=OFF -DBUILD_C_SYNC=ON \
+> +                         -DBUILD_CPP=ON -DBUILD_OPENNI2_DRIVER=OFF
+> +
+> +ifeq ($(BR2_PACKAGE_LIBFREENECT_PYTHON2),y)
+> +LIBFREENECT_DEPENDENCIES += python python-numpy
+> +LIBFREENECT_CONF_OPTS += -DBUILD_PYTHON2=ON
+> +else
+> +LIBFREENECT_CONF_OPTS += -DBUILD_PYTHON2=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBFREENECT_EXAMPLES),y)
+> +LIBFREENECT_DEPENDENCIES += libfreeglut libglu
+> +LIBFREENECT_CONF_OPTS += -DBUILD_EXAMPLES=ON
+> +else
+> +LIBFREENECT_CONF_OPTS += -DBUILD_EXAMPLES=OFF
+> +endif
+> +
+> +ifeq ($(BR2BR2_PACKAGE_LIBFREENECT_OPENCV),y)
+> +LIBFREENECT_DEPENDENCIES += opencv
+> +LIBFREENECT_CONF_OPTS += -DBUILD_CV=ON
+> +else
+> +LIBFREENECT_CONF_OPTS += -DBUILD_CV=OFF
+> +endif
+> +
+> +$(eval $(cmake-package))
+> 
