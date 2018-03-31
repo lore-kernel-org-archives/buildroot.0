@@ -1,86 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 20:51:38 +0200
-Subject: [Buildroot] [PATCH v2 1/3] docker-containerd: bump to version
- 1.0.1
-In-Reply-To: <20180311221741.11346-1-charles.hardin@storagecraft.com>
-References: <20180311221741.11346-1-charles.hardin@storagecraft.com>
-Message-ID: <20180331205138.6568882d@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Mar 2018 20:51:51 +0200
+Subject: [Buildroot] [PATCH 09/15 v4] fs: introduce per-rootfs
+ TARGET_DIR variable
+In-Reply-To: <eb507e0a-581e-d037-4a10-a151356fbc80@mind.be>
+References: <cover.1522487149.git.yann.morin.1998@free.fr>
+ <98f2dfa3b5a89f108b51cc567c41665628a01bc3.1522487149.git.yann.morin.1998@free.fr>
+ <eb507e0a-581e-d037-4a10-a151356fbc80@mind.be>
+Message-ID: <20180331185151.GO25161@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Charles,
+Arnout, All,
 
-On Sun, 11 Mar 2018 15:17:39 -0700, charles.hardin at storagecraft.com
-wrote:
+On 2018-03-31 20:30 +0200, Arnout Vandecappelle spake thusly:
+> On 31-03-18 11:05, Yann E. MORIN wrote:
+> > ... which for now still points to the base target directory, but this is
+> > a step forward.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > ---
+> >  Makefile     | 4 +++-
+> >  fs/common.mk | 1 +
+> >  2 files changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index e17675be9b..9fba7a3ed8 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -215,8 +215,10 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+> >  
+> >  BUILD_DIR := $(BASE_DIR)/build
+> >  BINARIES_DIR := $(BASE_DIR)/images
+> > +# The target directory is common to all packages,
+> > +# but there is one that is specific to each filesystem.
+> >  BASE_TARGET_DIR := $(BASE_DIR)/target
+> > -TARGET_DIR = $(BASE_TARGET_DIR)
+> > +TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
+> 
+>  OK for now, but I think when PPS happens we should s/ROOTFS/PKG/ and simply use
+> $($(PKG)_TARGET_DIR) here.
 
-> -DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
-> -DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
-> +DOCKER_CONTAINERD_VERSION = v1.0.1
-> +DOCKET_CONTAINERD_COMMIT = 9b55aab90508bd389d7654c4baf173a981477d55
+Why so? After PPS, each rootfs will still get their own private copy of
+target, which is what we will want them to use...
 
-Do we still need the DOCKET_CONTAINERD_COMMIT variable ?
+So, with PPS, this would evetually be something like:
 
-> +DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
->  DOCKER_CONTAINERD_LICENSE = Apache-2.0
->  DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
->  
-> @@ -18,15 +19,25 @@ DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
->  	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
->  
->  DOCKER_CONTAINERD_GLDFLAGS = \
-> -	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
-> +	-X github.com/containerd/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
-> +
-> +DOCKER_CONTAINERD_BUILD_TAGS =
-> +
-> +# XXX - Reusing the "docker-engine" config for now
+    TARGET_DIR = \
+        $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),\
+            $(if $(PKG),$($(PKG)_TARGET_DIR),\
+                $(BASE_TARGET_DIR)))
 
-What does that mean ?
+Regards,
+Yann E. MORIN.
 
-> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
-> +DOCKER_CONTAINERD_DEPENDENCIES += btrfs-progs
-> +else
-> +DOCKER_CONTAINERD_BUILD_TAGS = no_btrfs
-> +endif
-> +
->  
->  ifeq ($(BR2_STATIC_LIBS),y)
->  DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
->  endif
->  
->  define DOCKER_CONTAINERD_CONFIGURE_CMDS
-> -	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
-> -	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
-> +	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd
-> +	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/containerd/containerd
->  	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
->  	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
->  endef
-> @@ -34,7 +45,9 @@ endef
->  define DOCKER_CONTAINERD_BUILD_CMDS
->  	$(foreach d,ctr containerd containerd-shim,\
->  		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
-> -			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
-> +			-tags "$(DOCKER_CONTAINERD_BUILD_TAGS)" \
-> +			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" \
-> +			github.com/containerd/containerd/cmd/$(d)$(sep))
->  endef
+>  Regards,
+>  Arnout
+> 
+> >  # initial definition so that 'make clean' works for most users, even without
+> >  # .config. HOST_DIR will be overwritten later when .config is included.
+> >  HOST_DIR := $(BASE_DIR)/host
+> > diff --git a/fs/common.mk b/fs/common.mk
+> > index cd132cdbc7..363798bb20 100644
+> > --- a/fs/common.mk
+> > +++ b/fs/common.mk
+> > @@ -40,6 +40,7 @@ define inner-rootfs
+> >  
+> >  ROOTFS_$(2)_NAME = $(1)
+> >  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+> > +ROOTFS_$(2)_TARGET_DIR = $$(BASE_TARGET_DIR)
+> >  
+> >  # extra deps
+> >  ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+> > 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
-All of this no longer applies really well on the current
-docker-containerd, which has been converted to the golang-package
-infrastructure.
-
-Could you respin your patch series, rebased on master, where
-docker-containerd, docker-engine and runc have been converted to the
-golang-package infrastructure ?
-
-Thanks a lot!
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
