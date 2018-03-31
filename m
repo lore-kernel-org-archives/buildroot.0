@@ -1,61 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 20:47:25 +0200
-Subject: [Buildroot] [git commit] fs/cpio: don't extend packages'
- permissions table
-Message-ID: <20180331185351.7F40383836@busybox.osuosl.org>
+Date: Sat, 31 Mar 2018 20:52:52 +0200
+Subject: [Buildroot] [git commit] fs: set per-rootfs variable name
+Message-ID: <20180331185351.C3BE684BF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dec061adce133111460ecf29dbb8a0da36dad772
+commit: https://git.buildroot.net/buildroot/commit/?id=2765973e01b386131d9f2ebb8a89a403a381d5e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, when we build a cpio filesystem without static devices, we
-shoehorn the /dev/console node as if it were specified by a package.
+Like we do for packages with the PKG variable, set ROOTFS to contain the
+upper-case name of the rootfs currently being generated.
 
-This means that this device is added for all filesystems as well, not
-just the cpio. But if we disable cpio, that device is not created for
-other filesystems.
+This will be useful in later patches, when we need more per-rootfs
+variables, like a per-rootfs TARGET_DIR for example.
 
-This is not very clean, and may break expectations.
+In Makefiles, per-rule variables trickle down the dependency chain, to
+all dependencies of that rule, so we have to stop ROOTFS as soon as
+we're not in a rootfs. This means we have to stop it at target-finalize
+(which is a dependency of all filesystems), and for each package
+individually, since some packages (host or target) can be direct
+dependencies of filesystems as well.
 
-Instead, use an explicit mknod as part of the _CMD, as we know it's
-going to run under fakeroot.
-
-This is still visible to all filesystems built after cpio, and not to
-those built before it, though.
-
-[Peter: ensure /dev exists, simplify comment]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/cpio/cpio.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ Makefile               | 3 +++
+ fs/common.mk           | 1 +
+ package/pkg-generic.mk | 4 ++++
+ 3 files changed, 8 insertions(+)
 
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index aa4d947fa5..1f0cafe62f 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -15,14 +15,16 @@ endef
- else
- # devtmpfs does not get automounted when initramfs is used.
- # Add a pre-init script to mount it before running init
-+# We must have /dev/console very early, even before /init runs,
-+# for stdin/stdout/stderr
- define ROOTFS_CPIO_ADD_INIT
- 	if [ ! -e $(TARGET_DIR)/init ]; then \
- 		$(INSTALL) -m 0755 fs/cpio/init $(TARGET_DIR)/init; \
- 	fi
-+	mkdir -p $(TARGET_DIR)/dev
-+	mknod -m 0622 $(TARGET_DIR)/dev/console c 5 1
- endef
+diff --git a/Makefile b/Makefile
+index 6eca3c9ec6..6cfe83072e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -677,6 +677,9 @@ endif
  
--PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1 - - -$(sep)
--
- endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+ $(TARGETS_ROOTFS): target-finalize
  
- ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
++# Avoid the rootfs name leaking down the dependency chain
++target-finalize: ROOTFS=
++
+ .PHONY: target-finalize
+ target-finalize: $(PACKAGES)
+ 	@$(call MESSAGE,"Finalizing target directory")
+diff --git a/fs/common.mk b/fs/common.mk
+index 274a3e9c7b..19a975aa47 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -72,6 +72,7 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
+ ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+ endif
+ 
++$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	rm -rf $(FS_DIR)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6d82f7027e..152e1d0c67 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -384,6 +384,10 @@ endef
+ 
+ define inner-generic-package
+ 
++# When doing a package, we're definitely not doing a rootfs, but we
++# may inherit it via the dependency chain, so we reset it.
++$(1): ROOTFS=
++
+ # Ensure the package is only declared once, i.e. do not accept that a
+ # package be re-defined by a br2-external tree
+ ifneq ($(call strip,$(filter $(1),$(PACKAGES_ALL))),)
