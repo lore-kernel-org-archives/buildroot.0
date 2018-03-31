@@ -1,33 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 23:03:44 +0200
-Subject: [Buildroot] [PATCH 1/1] check-package: Flag usage of '\t \\$'.
-In-Reply-To: <20180307094812.11293-1-nicolas.cavallari@green-communications.fr>
-References: <20180307094812.11293-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20180331230344.34ad43de@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 31 Mar 2018 21:06:01 +0000
+Subject: [Buildroot] [Bug 10851] Patch to handle numpad Enter key properly
+In-Reply-To: <bug-10851-163@https.bugs.busybox.net/>
+References: <bug-10851-163@https.bugs.busybox.net/>
+Message-ID: <bug-10851-163-b1wHCe7eGO@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10851
 
-On Wed,  7 Mar 2018 10:48:12 +0100, Nicolas Cavallari wrote:
-> check-package would flag tabs before a backslash ('\t\\'),
-> two spaces before a backslash ('  \\') but would not flag a tab before space
-> before backslash ('\t \\'), allowing someone to bypass the check.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> 
-> ---
-> There is no occurence of this in buildroot.
->  utils/checkpackagelib/lib_mk.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+Openwrt is not directly related to Buildroot, so openwrt patches should be
+submitted to openwrt and not here.
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
