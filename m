@@ -1,30 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 15:06:05 +0200
-Subject: [Buildroot] [PATCH RESEND 2/2] fs/squashfs: enable squashfs to
- generate a verity hashtable
-In-Reply-To: <1521829279-5156-3-git-send-email-ben.whitten@gmail.com> (Ben
- Whitten's message of "Fri, 23 Mar 2018 18:21:19 +0000")
-References: <1521829279-5156-1-git-send-email-ben.whitten@gmail.com>
- <1521829279-5156-3-git-send-email-ben.whitten@gmail.com>
-Message-ID: <87in9cv1he.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 15:10:39 +0200
+Subject: [Buildroot] [PATCH v2] board: add support for ARC HS
+ Development Kit (HSDK)
+In-Reply-To: <20171219145554.17718-1-didin@synopsys.com>
+References: <20171219145554.17718-1-didin@synopsys.com>
+Message-ID: <20180331151039.40c7dce2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ben" == Ben Whitten <ben.whitten@gmail.com> writes:
+Hello,
 
- > For those times that you want to verify that your readonly filesystem
- > hasn't been tampered we can generate a dm-verity hash table.
- > The root hash is enclosed in .table file and must be secured else where.
+On Tue, 19 Dec 2017 17:55:54 +0300, Evgeniy Didin wrote:
 
- > Signed-off-by: Ben Whitten <ben.whitten@gmail.com>
+> index 0000000000..e99a4a0b96
+> --- /dev/null
+> +++ b/board/synopsys/hsdk/post-image.sh
+> @@ -0,0 +1,18 @@
+> +#!/bin/bash
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +BOARD_NAME="$(basename ${BOARD_DIR})"
+> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +rm -rf "${GENIMAGE_TMP}"
+> +
+> +mv ${BINARIES_DIR}/uboot-env.bin ${BINARIES_DIR}/uboot.env
 
-Like we discussed earlier, this is too simplistic/specific, and should
-be handled in a post-image script.
+This rename can be done by the genimage.cfg file.
 
-I've marked this patch as rejected in patchwork.
+> +
+> +genimage                           \
+> +        --rootpath "${TARGET_DIR}"     \
+> +        --tmppath "${GENIMAGE_TMP}"    \
+> +        --inputpath "${BINARIES_DIR}"  \
+> +        --outputpath "${BINARIES_DIR}" \
+> +        --config "${GENIMAGE_CFG}"
+> +gzip < ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/sdcard.img.gz
 
+And we don't need to generate a compressed SD card image.
+
+With those two changes, the common support/scripts/genimage.sh script
+can be used.
+
+I think Peter will fix this up when applying.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
