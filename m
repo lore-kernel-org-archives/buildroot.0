@@ -1,54 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 09:20:17 +0200
-Subject: [Buildroot] [PATCH 0/2] Fix fallout after hack to disable C++
-Message-ID: <cover.1522480811.git.yann.morin.1998@free.fr>
+Date: Sat, 31 Mar 2018 09:20:19 +0200
+Subject: [Buildroot] [PATCH 1/2] package/jimtcl: fix fallout after no-C++
+ fixups
+In-Reply-To: <cover.1522480811.git.yann.morin.1998@free.fr>
+References: <cover.1522480811.git.yann.morin.1998@free.fr>
+Message-ID: <386fedf0af053ab538b5b4d805a007c6349154d5.1522480811.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Commit 4cd1ab158 (core: alternate solution to disable C++) made use of a
+non-existent 'no' binary when C++ is not available in the toolchain.
 
-This small series fixes the fallout in the two identified packages that
-suffered from the switch CXX from 'false' to 'no'.
+However, some packages, like jimtcl, really want to find the binary that
+$CXX contains.
 
-Those packages (really, just jimtcl, but standalone and bundled in
-openocd), really wnat that the executable exists. So we point it back to
-'false'.
+Revert jimtcl to use 'false' instead of 'no'.
 
+Fixes:
+    http://autobuild.buildroot.org/results/54f/54f3df03551fbdf293d33dc1e3f08005faa15321/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ package/jimtcl/jimtcl.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-
-The following changes since commit 9b2f6548f8d2cad52fd3a5f81febf4818ee66304
-
-  zstd: fix legal info (2018-03-30 22:02:03 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 8162669309357bfbd684960e225b215ccd2abec1
-
-  package/openocd: fix fallout after no-C++ fixups (2018-03-31 09:17:25 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/jimtcl: fix fallout after no-C++ fixups
-      package/openocd: fix fallout after no-C++ fixups
-
- package/jimtcl/jimtcl.mk   | 6 +++++-
- package/openocd/openocd.mk | 7 ++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
-
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 68c8a914db..389a72ab83 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -44,9 +44,13 @@ endif
+ # pkg-autotools.mk
+ JIMTCL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+ 
++# jimtcl really wants to find a existing $CXX, so feed it false
++# when we do not have one.
+ define JIMTCL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) CCACHE=none \
++		$(TARGET_CONFIGURE_OPTS) \
++		CCACHE=none \
++		$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
+ 		./configure --prefix=/usr \
+ 		--host=$(GNU_TARGET_NAME) \
+ 		--build=$(GNU_HOST_NAME) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
