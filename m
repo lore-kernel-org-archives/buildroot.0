@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 18:35:42 +0200
-Subject: [Buildroot] [PATCH v2 4/5] support/scripts/graph-depends: add
- --flat-list option
+Date: Sat, 31 Mar 2018 18:35:43 +0200
+Subject: [Buildroot] [PATCH v2 5/5] package/pkg-generic: add
+ <pkg>-show-recursive-(r)depends targets
 In-Reply-To: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
 References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331163543.6278-5-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331163543.6278-6-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,95 +13,67 @@ To: buildroot@busybox.net
 
 From: George Redivo <george.redivo@datacom.ind.br>
 
-graph-depends currently spits out a graph in .dot format. However, as
-part of the upcoming introduction of <pkg>-show-recursive-depends and
-<pkg>-show-recursive-rdepends, we need graph-depends to be able to
-display a flat list.
+This commit adds the support for <pkg>-show-recursive-depends and
+<pkg>-show-recursive-rdepends which respectively show the list of all
+dependencies or reverse dependencies for a given package. The existing
+show-depends and show-rdepends only show the first-level dependencies,
+while show-recursive-depends and show-recursive-rdepends show
+recursively the dependencies.
+
+It is worth mentioning that while show-recursive-depends really shows
+all dependencies, show-recursive-rdepends is a bit limited because the
+reverse dependencies of host packages are not properly accounted
+for. But that's a limitation that already exists in show-rdepends, and
+that cannot easily be solved.
 
 Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
 [Thomas:
- - Rebase on top of graph-depends changes
- - Do not display the package name itself in the list, only its
-   dependencies (or reverse dependencies)
- - Display the result on a single line, instead of one package per
-   line, in order to match what <pkg>-show-depends and
-   <pkg>-show-rdepends are doing today.]
+ - split from the patch that was also changing graph-depends
+ - rename show-rrdepends to show-recursive-rdepends
+ - add show-recursive-depends
+ - don't create GRAPHS_DIR.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/graph-depends | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+ Makefile               | 4 ++++
+ package/pkg-generic.mk | 8 ++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 3a60e478d4..a177296da2 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -248,11 +248,14 @@ done_deps = []
+diff --git a/Makefile b/Makefile
+index 9e2402d7d9..60a83932c8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1024,6 +1024,10 @@ help:
+ 	@echo '  <pkg>-build            - Build <pkg> up to the build step'
+ 	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
+ 	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
++	@echo '  <pkg>-show-recursive-depends'
++	@echo '                         - Recursively list packages on which <pkg> depends'
++	@echo '  <pkg>-show-recursive-rdepends'
++	@echo '                         - Recursively list packages which have <pkg> as a dependency'
+ 	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
+ 	@echo '  <pkg>-graph-rdepends   - Generate a graph of <pkg>'\''s reverse dependencies'
+ 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6d82f7027e..24b55b9555 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -759,9 +759,17 @@ $(1)-show-version:
+ $(1)-show-depends:
+ 			@echo $$($(2)_FINAL_ALL_DEPENDENCIES)
  
- # Print the dependency graph of a package
- def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
--                   arrow_dir, depth, max_depth, pkg, colors):
-+                   arrow_dir, draw_graph, depth, max_depth, pkg, colors):
-     if pkg in done_deps:
-         return
-     done_deps.append(pkg)
--    print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
-+    if draw_graph:
-+        print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
-+    elif depth != 0:
-+        outfile.write("%s " % pkg)
-     if pkg not in dict_deps:
-         return
-     for p in stop_list:
-@@ -276,9 +279,10 @@ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
-                     add = False
-                     break
-             if add:
--                outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
-+                if draw_graph:
-+                    outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
-                 print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
--                               arrow_dir, depth + 1, max_depth, d, colors)
-+                               arrow_dir, draw_graph, depth + 1, max_depth, d, colors)
- 
- 
- def parse_args():
-@@ -314,6 +318,8 @@ def parse_args():
-                         help="Draw reverse dependencies")
-     parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
-                         help="Quiet")
-+    parser.add_argument("--flat-list", '-f', dest="flat_list", action='store_true', default=False,
-+                        help="Do not draw graph, just print a flat list")
-     return parser.parse_args()
- 
- 
-@@ -356,6 +362,8 @@ def main():
-         get_depends_func = brpkgutil.get_rdepends
-         arrow_dir = "back"
- 
-+    draw_graph = not args.flat_list
++$(1)-show-recursive-depends:
++			@cd "$$(CONFIG_DIR)" && \
++			$$(TOPDIR)/support/scripts/graph-depends -p $(1) -f -q
 +
-     # Get the colors: we need exactly three colors,
-     # so no need not split more than 4
-     # We'll let 'dot' validate the colors...
-@@ -404,12 +412,16 @@ def main():
-                                          args.quiet)
+ $(1)-show-rdepends:
+ 			@echo $$($(2)_RDEPENDENCIES)
  
-     # Start printing the graph data
--    outfile.write("digraph G {\n")
-+    if draw_graph:
-+        outfile.write("digraph G {\n")
++$(1)-show-recursive-rdepends:
++			@cd "$$(CONFIG_DIR)" && \
++			$$(TOPDIR)/support/scripts/graph-depends -p $(1) --reverse -f -q
++
+ $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPENDENCIES))
+ 	$$(info $(1))
  
-     print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
--                   arrow_dir, 0, args.depth, rootpkg, colors)
-+                   arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
- 
--    outfile.write("}\n")
-+    if draw_graph:
-+        outfile.write("}\n")
-+    else:
-+        outfile.write("\n")
- 
- 
- if __name__ == "__main__":
 -- 
 2.14.3
