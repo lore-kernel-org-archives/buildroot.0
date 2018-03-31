@@ -1,176 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 08:58:26 +0200
-Subject: [Buildroot] [git commit] brotli: fix building of static libraries
-Message-ID: <20180331070614.C4B4383EFC@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Mar 2018 09:20:17 +0200
+Subject: [Buildroot] [PATCH 0/2] Fix fallout after hack to disable C++
+Message-ID: <cover.1522480811.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=557cd845b216de8bfe7bb8d2ebf61bf020026f90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Include a patch to make CMake honor the BUILD_SHARED_LIBS which
-Buildroot sets to choose the kind of libraries to build.
+This small series fixes the fallout in the two identified packages that
+suffered from the switch CXX from 'false' to 'no'.
 
-Fixes:
-- http://autobuild.buildroot.net/results/f1c4b5aeb12af7b7a3e8ae01c219004ecd9befd6/
-- http://autobuild.buildroot.net/results/74d20ff38766466623cc4a9eb18afcda831bc20b/
+Those packages (really, just jimtcl, but standalone and bundled in
+openocd), really wnat that the executable exists. So we point it back to
+'false'.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-using-BUILD_SHARED_LIBS-to-choose-static.patch | 144 +++++++++++++++++++++
- 1 file changed, 144 insertions(+)
 
-diff --git a/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
-new file mode 100644
-index 0000000000..33b9bb70ce
---- /dev/null
-+++ b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
-@@ -0,0 +1,144 @@
-+From b60b613e7c2c9bf7a142c3c486ac6e77ad93f5d1 Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Mon, 26 Mar 2018 19:08:31 +0100
-+Subject: [PATCH] CMake: Allow using BUILD_SHARED_LIBS to choose static/shared
-+ libs
-+
-+By convention projects using CMake which can build either static or
-+shared libraries use a BUILD_SHARED_LIBS flag to allow selecting between
-+both: the add_library() command automatically switches between both using
-+this variable when the library kind is not passed to add_library(). It
-+is also usual to expose the BUILD_SHARED_LIBS as an user-facing setting
-+with the option() command.
-+
-+This way, the following will both work as expected:
-+
-+   % cmake -DBUILD_SHARED_LIBS=OFF ...
-+   % cmake -DBUILS_SHARED_LIBS=ON ...
-+
-+This is helpful for distributions which need (or want) to build only
-+static libraries.
-+---
-+ CMakeLists.txt        | 42 ++++++++++++++----------------------------
-+ c/fuzz/test_fuzzer.sh |  6 +++---
-+ 2 files changed, 17 insertions(+), 31 deletions(-)
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+Upstream-Status: Submitted [https://github.com/google/brotli/pull/655]
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 99b9258..3867931 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -6,6 +6,8 @@ cmake_minimum_required(VERSION 2.8.6)
-+ 
-+ project(brotli C)
-+ 
-++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
-++
-+ # If Brotli is being bundled in another project, we don't want to
-+ # install anything.  However, we want to let people override this, so
-+ # we'll use the BROTLI_BUNDLED_MODE variable to let them do that; just
-+@@ -114,10 +116,6 @@ set(BROTLI_LIBRARIES_CORE brotlienc brotlidec brotlicommon)
-+ set(BROTLI_LIBRARIES ${BROTLI_LIBRARIES_CORE} ${LIBM_LIBRARY})
-+ mark_as_advanced(BROTLI_LIBRARIES)
-+ 
-+-set(BROTLI_LIBRARIES_CORE_STATIC brotlienc-static brotlidec-static brotlicommon-static)
-+-set(BROTLI_LIBRARIES_STATIC ${BROTLI_LIBRARIES_CORE_STATIC} ${LIBM_LIBRARY})
-+-mark_as_advanced(BROTLI_LIBRARIES_STATIC)
-+-
-+ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-+   add_definitions(-DOS_LINUX)
-+ elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-+@@ -137,24 +135,22 @@ endfunction()
-+ transform_sources_list("scripts/sources.lst" "${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
-+ include("${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
-+ 
-+-add_library(brotlicommon SHARED ${BROTLI_COMMON_C})
-+-add_library(brotlidec SHARED ${BROTLI_DEC_C})
-+-add_library(brotlienc SHARED ${BROTLI_ENC_C})
-+-
-+-add_library(brotlicommon-static STATIC ${BROTLI_COMMON_C})
-+-add_library(brotlidec-static STATIC ${BROTLI_DEC_C})
-+-add_library(brotlienc-static STATIC ${BROTLI_ENC_C})
-++add_library(brotlicommon ${BROTLI_COMMON_C})
-++add_library(brotlidec ${BROTLI_DEC_C})
-++add_library(brotlienc ${BROTLI_ENC_C})
-+ 
-+ # Older CMake versions does not understand INCLUDE_DIRECTORIES property.
-+ include_directories(${BROTLI_INCLUDE_DIRS})
-+ 
-++if(BUILD_SHARED_LIBS)
-++  foreach(lib brotlicommon brotlidec brotlienc)
-++    target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
-++    string(TOUPPER "${lib}" LIB)
-++    set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION" )
-++  endforeach()
-++endif()
-++
-+ foreach(lib brotlicommon brotlidec brotlienc)
-+-  target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
-+-  string(TOUPPER "${lib}" LIB)
-+-  set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION" )
-+-endforeach()
-+-
-+-foreach(lib brotlicommon brotlidec brotlienc brotlicommon-static brotlidec-static brotlienc-static)
-+   target_link_libraries(${lib} ${LIBM_LIBRARY})
-+   set_property(TARGET ${lib} APPEND PROPERTY INCLUDE_DIRECTORIES ${BROTLI_INCLUDE_DIRS})
-+   set_target_properties(${lib} PROPERTIES
-+@@ -167,9 +163,6 @@ endforeach()
-+ target_link_libraries(brotlidec brotlicommon)
-+ target_link_libraries(brotlienc brotlicommon)
-+ 
-+-target_link_libraries(brotlidec-static brotlicommon-static)
-+-target_link_libraries(brotlienc-static brotlicommon-static)
-+-
-+ # For projects stuck on older versions of CMake, this will set the
-+ # BROTLI_INCLUDE_DIRS and BROTLI_LIBRARIES variables so they still
-+ # have a relatively easy way to use Brotli:
-+@@ -183,7 +176,7 @@ endif()
-+ 
-+ # Build the brotli executable
-+ add_executable(brotli ${BROTLI_CLI_C})
-+-target_link_libraries(brotli ${BROTLI_LIBRARIES_STATIC})
-++target_link_libraries(brotli ${BROTLI_LIBRARIES})
-+ 
-+ # Installation
-+ if(NOT BROTLI_BUNDLED_MODE)
-+@@ -199,13 +192,6 @@ if(NOT BROTLI_BUNDLED_MODE)
-+     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-+   )
-+ 
-+-  install(
-+-    TARGETS ${BROTLI_LIBRARIES_CORE_STATIC}
-+-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-+-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-+-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-+-  )
-+-
-+   install(
-+     DIRECTORY ${BROTLI_INCLUDE_DIRS}/brotli
-+     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-+diff --git a/c/fuzz/test_fuzzer.sh b/c/fuzz/test_fuzzer.sh
-+index 5c754e1..e85e12f 100755
-+--- a/c/fuzz/test_fuzzer.sh
-++++ b/c/fuzz/test_fuzzer.sh
-+@@ -14,12 +14,12 @@ mkdir bin
-+ cd bin
-+ 
-+ cmake $BROTLI -DCMAKE_C_COMPILER="$CC" -DCMAKE_CXX_COMPILER="$CXX" \
-+-    -DBUILD_TESTING=OFF -DENABLE_SANITIZER=address
-+-make -j$(nproc) brotlidec-static
-++    -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DENABLE_SANITIZER=address
-++make -j$(nproc) brotlidec
-+ 
-+ ${CXX} -o run_decode_fuzzer -std=c++11 -fsanitize=address -I$SRC/include \
-+     $SRC/fuzz/decode_fuzzer.cc $SRC/fuzz/run_decode_fuzzer.cc \
-+-    ./libbrotlidec-static.a ./libbrotlicommon-static.a
-++    ./libbrotlidec.a ./libbrotlicommon.a
-+ 
-+ mkdir decode_corpora
-+ unzip $BROTLI/java/org/brotli/integration/fuzz_data.zip -d decode_corpora
-+-- 
-+2.16.3
-+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 9b2f6548f8d2cad52fd3a5f81febf4818ee66304
+
+  zstd: fix legal info (2018-03-30 22:02:03 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 8162669309357bfbd684960e225b215ccd2abec1
+
+  package/openocd: fix fallout after no-C++ fixups (2018-03-31 09:17:25 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/jimtcl: fix fallout after no-C++ fixups
+      package/openocd: fix fallout after no-C++ fixups
+
+ package/jimtcl/jimtcl.mk   | 6 +++++-
+ package/openocd/openocd.mk | 7 ++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
