@@ -1,39 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 22:47:44 +0200
-Subject: [Buildroot] [PATCH 2/3] package/strace: add missing libunwind
- optional dependency
-In-Reply-To: <CAAXf6LWD8d24hEY2UJAJckCYfrTsTA5pDgN7YrFBwDngU7xcxw@mail.gmail.com>
- (Thomas De Schampheleire's message of "Sun, 25 Feb 2018 22:58:39
- +0100")
-References: <20180225183415.8362-1-romain.naour@gmail.com>
- <20180225183415.8362-2-romain.naour@gmail.com>
- <CAAXf6LXnevwOqgTb7yV5AraDkHsauEfhJNoQr8rNgWFLQKp15Q@mail.gmail.com>
- <20180225223438.42357172@windsurf.home>
- <CAAXf6LWD8d24hEY2UJAJckCYfrTsTA5pDgN7YrFBwDngU7xcxw@mail.gmail.com>
-Message-ID: <877epst1jj.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 22:48:29 +0200
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: check flake8
+Message-ID: <20180331204834.A64C781565@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1960eda2f681c16c22ab613fbd54a2aaa2a5e7dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Add a test to check Python code style in the whole buildroot tree.
 
- >>> In our local tree, I had added a config option to strace for that, but
- >>> perhaps that is overkill?
- >> 
- >> Are you saying that you have changes in your local tree on packages
- >> available in upstream Buildroot, and you did not submit such
- >> changes ? :-)
- >> 
+Search files by type in order to help flake8 to find the Python scripts
+without .py extension. But don't rely only in the output of 'file' as it
+uses heuristics and sometimes it is wrong (specially identifying Python
+files as C++ source for the 'file' version currently in the Docker
+image).
 
- > Haha, yes indeed :-) But you may be glad to hear that I already made a
- > list of such changes that should be upstreamable, and plan to tackle
- > the upstreaming after merging 2018.02!
+Include in the output:
+ - the list of Python files processed;
+ - statistics for each kind of warning;
+ - the total number of warnings;
+ - the number of Python files processed.
 
-Did you already get 2018.02 merged? ;)
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml    | 11 +++++++++++
+ .gitlab-ci.yml.in | 11 +++++++++++
+ 2 files changed, 22 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 1f4d506196..fd1aeb3408 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -30,6 +30,17 @@ check-DEVELOPERS:
+     script:
+         - "! utils/get-developers | grep -v 'No action specified'"
+ 
++check-flake8:
++    before_script:
++        # Help flake8 to find the Python files without .py extension.
++        - find * -type f -name '*.py' > files.txt
++        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
++        - sort -u files.txt | tee files.processed
++    script:
++        - python -m flake8 --statistics --count $(cat files.processed)
++    after_script:
++        - wc -l files.processed
++
+ check-package:
+     script:
+         - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index c0e9563f2f..bffcb02be1 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -30,6 +30,17 @@ check-DEVELOPERS:
+     script:
+         - "! utils/get-developers | grep -v 'No action specified'"
+ 
++check-flake8:
++    before_script:
++        # Help flake8 to find the Python files without .py extension.
++        - find * -type f -name '*.py' > files.txt
++        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
++        - sort -u files.txt | tee files.processed
++    script:
++        - python -m flake8 --statistics --count $(cat files.processed)
++    after_script:
++        - wc -l files.processed
++
+ check-package:
+     script:
+         - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
