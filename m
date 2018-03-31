@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 30 Mar 2018 23:22:52 -0300
-Subject: [Buildroot] [PATCH 27/36] boot/*/Config.in: re-wrap help text
+Date: Fri, 30 Mar 2018 23:22:53 -0300
+Subject: [Buildroot] [PATCH 28/36] fs/*/Config.in: re-wrap help text
 In-Reply-To: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
 References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180331022301.27501-28-ricardo.martincoski@gmail.com>
+Message-ID: <20180331022301.27501-29-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,151 +14,156 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- boot/at91bootstrap/Config.in  |  6 ++++--
- boot/at91bootstrap3/Config.in | 10 ++++++----
- boot/uboot/Config.in          | 43 ++++++++++++++++++++++---------------------
- 3 files changed, 32 insertions(+), 27 deletions(-)
+ fs/cpio/Config.in      |  6 +++---
+ fs/ext2/Config.in      | 22 ++++++++++++----------
+ fs/initramfs/Config.in |  3 ++-
+ fs/jffs2/Config.in     | 16 +++++++++-------
+ fs/ubi/Config.in       | 11 ++++++-----
+ 5 files changed, 32 insertions(+), 26 deletions(-)
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 96cfdbc7e9..0f6430fd8d 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -4,9 +4,11 @@ config BR2_TARGET_AT91BOOTSTRAP
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index 679959d222..83a7fa5824 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_TARGET_ROOTFS_CPIO
+ 	bool "cpio the root filesystem (for use as an initial RAM filesystem)"
  	help
- 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
- 	  devices. It integrates algorithms for:
--	  - Device initialization such as clock configuration, PIO settings...
-+	  - Device initialization such as clock configuration, PIO
-+	    settings...
- 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
--	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
-+	  - Physical media algorithm such as DataFlash, NandFlash, NOR
-+	    Flash...
+-	  Build a cpio archive of the root filesystem.  This is typically
+-	  used for an initial RAM filesystem that is passed to the kernel
+-	  by the bootloader.
++	  Build a cpio archive of the root filesystem. This is typically
++	  used for an initial RAM filesystem that is passed to the
++	  kernel by the bootloader.
  
- if	BR2_TARGET_AT91BOOTSTRAP
+ if BR2_TARGET_ROOTFS_CPIO
  
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index bdc1e775a8..614363c9a6 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -4,9 +4,11 @@ config BR2_TARGET_AT91BOOTSTRAP3
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 27ad69fde9..74bacc1141 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -49,11 +49,11 @@ config BR2_TARGET_ROOTFS_EXT2_SIZE
+ 	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP # legacy 2017.08
+ 	default "60M"
  	help
- 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
- 	  devices. It integrates algorithms for:
--	  - Device initialization such as clock configuration, PIO settings...
-+	  - Device initialization such as clock configuration, PIO
-+	    settings...
- 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
--	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
-+	  - Physical media algorithm such as DataFlash, NandFlash, NOR
-+	    Flash...
+-	  The size of the filesystem image. If it does not have a suffix,
+-	  it is interpreted as power-of-two kilobytes. If it is suffixed
+-	  by 'k', 'm', 'g', 't' (either upper-case or lower-case), then
+-	  it is interpreted in power-of-two kilobytes, megabytes,
+-	  gigabytes, terabytes, etc.
++	  The size of the filesystem image. If it does not have a
++	  suffix, it is interpreted as power-of-two kilobytes. If it is
++	  suffixed by 'k', 'm', 'g', 't' (either upper-case or
++	  lower-case), then it is interpreted in power-of-two kilobytes,
++	  megabytes, gigabytes, terabytes, etc.
  
- if BR2_TARGET_AT91BOOTSTRAP3
- 
-@@ -20,8 +22,8 @@ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "exact number of inodes (leave at 0 for auto calculation)"
+@@ -65,15 +65,16 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
  	help
--	  This option allows Buildroot to get the AT91 Bootstrap 3 source
--	  code from a Git repository.
-+	  This option allows Buildroot to get the AT91 Bootstrap 3
-+	  source code from a Git repository.
+ 	  The number of blocks on the filesystem (as a percentage of the
+ 	  total number of blocks), that are reserved for use by root.
+-	  Traditionally, this has been 5%, and all ext-related tools still
+-	  default to reserving 5% when creating a new ext filesystem.
++	  Traditionally, this has been 5%, and all ext-related tools
++	  still default to reserving 5% when creating a new ext
++	  filesystem.
  
- endchoice
- 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index d96e7f687f..19cf12a073 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -11,14 +11,14 @@ choice
- config BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- 	bool "Legacy"
+ config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
+ 	string "additional mke2fs options"
+ 	default "-O ^64bit"
  	help
--	  Select this option if you use an old U-Boot (older than 2015.04),
--	  so that we use the old build system.
-+	  Select this option if you use an old U-Boot (older than
-+	  2015.04), so that we use the old build system.
+-	  Specify a space-separated list of mke2fs options, including any
+-	  ext2/3/4 filesystem features.
++	  Specify a space-separated list of mke2fs options, including
++	  any ext2/3/4 filesystem features.
  
- config BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
- 	bool "Kconfig"
+ 	  For more information about the mke2fs options, see the manual
+ 	  page mke2fs(8).
+@@ -91,7 +92,8 @@ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_EXT2_NONE
  	help
--	  Select this option if you use a recent U-Boot version (2015.04 or
--	  newer), so that we use the Kconfig build system.
-+	  Select this option if you use a recent U-Boot version (2015.04
-+	  or newer), so that we use the Kconfig build system.
+-	  Select compressor for ext2/3/4 filesystem of the root filesystem
++	  Select compressor for ext2/3/4 filesystem of the root
++	  filesystem
  
- endchoice
+ config BR2_TARGET_ROOTFS_EXT2_NONE
+ 	bool "no compression"
+diff --git a/fs/initramfs/Config.in b/fs/initramfs/Config.in
+index 8ed9f7ebb5..9d5a3f92e6 100644
+--- a/fs/initramfs/Config.in
++++ b/fs/initramfs/Config.in
+@@ -10,7 +10,8 @@ config BR2_TARGET_ROOTFS_INITRAMFS
+ 	  A rootfs.cpio file will be generated in the images/ directory.
+ 	  This is the archive that will be included in the kernel image.
+ 	  The default rootfs compression set in the kernel configuration
+-	  is used, regardless of how buildroot's cpio archive is configured.
++	  is used, regardless of how buildroot's cpio archive is
++	  configured.
  
-@@ -27,9 +27,9 @@ config BR2_TARGET_UBOOT_BOARDNAME
- 	string "U-Boot board name"
+ 	  Note that enabling initramfs together with another filesystem
+ 	  formats doesn't make sense: you would end up having two
+diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
+index 208cabaa52..44c0b10446 100644
+--- a/fs/jffs2/Config.in
++++ b/fs/jffs2/Config.in
+@@ -94,18 +94,20 @@ config BR2_TARGET_ROOTFS_JFFS2_SUMMARY
+ config BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	bool "Select custom virtual memory page size"
  	help
- 	  One of U-Boot supported boards to be built.
--	  This will be suffixed with _config to meet U-Boot standard naming.
--	  See boards.cfg in U-Boot source code for the list of available
--	  configurations.
-+	  This will be suffixed with _config to meet U-Boot standard
-+	  naming. See boards.cfg in U-Boot source code for the list of
-+	  available configurations.
+-	  Use a custom virtual memory page size.  Note that this is not related to
+-	  the flash memory page size.  Using this option is only needed if Linux is
+-	  configured to use a page size different than 4kB.
++	  Use a custom virtual memory page size. Note that this is not
++	  related to the flash memory page size. Using this option is
++	  only needed if Linux is configured to use a page size
++	  different than 4kB.
+ 
+ config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE
+ 	hex "Virtual memory page size"
+ 	default 0x1000
+ 	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	help
+-	  Set to virtual memory page size of target system (in bytes).  This value
+-	  should match the virtual page size in Linux (i.e. this should have the
+-	  same value as the value of the PAGE_SIZE macro in Linux).  It is not
+-	  related to the flash memory page size.
++	  Set to virtual memory page size of target system (in bytes).
++	  This value should match the virtual page size in Linux (i.e.
++	  this should have the same value as the value of the PAGE_SIZE
++	  macro in Linux). It is not related to the flash memory page
++	  size.
+ 
  endif
- 
- choice
-@@ -79,8 +79,8 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
- 		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
+diff --git a/fs/ubi/Config.in b/fs/ubi/Config.in
+index 5fa2f1f61d..85b1c56bb0 100644
+--- a/fs/ubi/Config.in
++++ b/fs/ubi/Config.in
+@@ -18,8 +18,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	int "sub-page size"
+ 	default 512
  	help
--	  Revision to use in the typical format used by Git/Mercurial/Subversion
--	  E.G. a sha id, a tag, branch, ..
-+	  Revision to use in the typical format used by
-+	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
+-	  Tells ubinize that the flash supports sub-pages and the sub-page
+-	  size. Use 0 if sub-pages are not supported on flash chip.
++	  Tells ubinize that the flash supports sub-pages and the
++	  sub-page size. Use 0 if sub-pages are not supported on flash
++	  chip.
+ 	  The value provided here is passed to the -s/--sub-page-size
+ 	  option of ubinize.
  
- endif
- 
-@@ -229,25 +229,25 @@ config BR2_TARGET_UBOOT_FORMAT_NAND
- 	bool "u-boot.nand (Freescale i.MX28)"
- 	depends on BR2_arm
+@@ -28,9 +29,9 @@ config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
  	help
--	  This is Freescale i.MX28 BootStream format (.sb), with a header
--	  for booting from a NAND flash.
-+	  This is Freescale i.MX28 BootStream format (.sb), with a
-+	  header for booting from a NAND flash.
+ 	  Select this option to use a custom ubinize configuration file,
+ 	  rather than the default configuration used by Buildroot (which
+-	  defines a single dynamic volume marked as auto-resize).  Passing
+-	  a custom ubinize configuration file allows you to create several
+-	  volumes, specify volume types, etc.
++	  defines a single dynamic volume marked as auto-resize).
++	  Passing a custom ubinize configuration file allows you to
++	  create several volumes, specify volume types, etc.
  
- 	  U-boot includes an mxsboot tool to generate this format,
- 	  starting from 2011.12.
- 
--	  There are two possibilities when preparing an image writable to
--	  NAND flash:
--	  1) The NAND was not written at all yet or the BCB (Boot Control
--	  Blocks) is broken. In this case, the NAND image 'u-boot.nand'
--	  needs to written.
-+	  There are two possibilities when preparing an image writable
-+	  to NAND flash:
-+	  1) The NAND was not written at all yet or the BCB (Boot
-+	  Control Blocks) is broken. In this case, the NAND image
-+	  'u-boot.nand' needs to written.
- 	  2) The NAND flash was already written with a good BCB. This
- 	  applies after 'u-boot.nand' was correctly written. There is no
--	  need to write the BCB again. In this case, the bootloader can be
--	  upgraded by writing 'u-boot.sb'.
-+	  need to write the BCB again. In this case, the bootloader can
-+	  be upgraded by writing 'u-boot.sb'.
- 
- 	  To satisfy both cases, the 'u-boot.nand' image obtained from
--	  mxsboot as well as the U-Boot make target 'u-boot.sb' are copied
--	  to the binaries directory.
-+	  mxsboot as well as the U-Boot make target 'u-boot.sb' are
-+	  copied to the binaries directory.
- 
- 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
- 
-@@ -295,7 +295,8 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
- 	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM
- 	help
- 	  In case the U-Boot binary for the target platform is not among
--	  the default names, one or more custom names can be listed here.
-+	  the default names, one or more custom names can be listed
-+	  here.
- 	  Use space to separate multiple names.
- 	  Example:
- 	  u-boot_magic.bin
+ 	  As a convenience, buildroot replaces the string
+ 	  "BR2_ROOTFS_UBIFS_PATH" with the path to the built ubifs file.
 -- 
 2.14.1
