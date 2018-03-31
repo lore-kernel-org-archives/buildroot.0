@@ -1,7 +1,7 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 12:25:37 +0200
-Subject: [Buildroot] [PATCH] ktap: bump version for linux-4.8 support
-Message-ID: <20180331102537.11557-1-peter@korsgaard.com>
+Date: Sat, 31 Mar 2018 12:27:11 +0200
+Subject: [Buildroot] [PATCHv2] ktap: bump version for linux-4.8 support
+Message-ID: <20180331102711.12328-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -66,19 +66,22 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
 NOTICE: Ktap seems pretty dead upstream, so perhaps we should deprecate it?
 
- package/ktap/ktap.hash | 2 ++
+Changes since v1:
+- Fix .hash file
+
+ package/ktap/ktap.hash | 3 ++-
  package/ktap/ktap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/ktap/ktap.hash b/package/ktap/ktap.hash
-index d58bd85b43..319dbb4e53 100644
+index d58bd85b43..1eff712501 100644
 --- a/package/ktap/ktap.hash
 +++ b/package/ktap/ktap.hash
-@@ -1,2 +1,4 @@
+@@ -1,2 +1,3 @@
  # Locally calculated
- sha256 bc8b03a53c430ae4fcf594ffdf31e2b2ed47a8fee25dd8fea60aa34f75441707  ktap-eb66d40310c93dc82bc8eac889744c1ed1f01f7b.tar.gz
+-sha256 bc8b03a53c430ae4fcf594ffdf31e2b2ed47a8fee25dd8fea60aa34f75441707  ktap-eb66d40310c93dc82bc8eac889744c1ed1f01f7b.tar.gz
 +sha256 44a0808d57175cf9d15466f720e1e10d5ed1abc3497aedf9ddd6469545552345  ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f.tar.gz
-+e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE-GPL
++sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE-GPL
 diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
 index b9b3dbcc53..3b9134da65 100644
 --- a/package/ktap/ktap.mk
