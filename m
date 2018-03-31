@@ -1,30 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 17:09:47 +0200
-Subject: [Buildroot] [PATCH] package/zsh: remove busybox show others
- dependency
-In-Reply-To: <20180331105530.30668-1-romain.naour@smile.fr> (Romain Naour's
- message of "Sat, 31 Mar 2018 12:55:30 +0200")
-References: <20180331105530.30668-1-romain.naour@smile.fr>
-Message-ID: <87a7uouvr8.fsf@dell.be.48ers.dk>
+Date: Sat, 31 Mar 2018 17:10:02 +0200
+Subject: [Buildroot] [PATCH] nodejs: security bump to version 8.11.1
+In-Reply-To: <20180331061155.22458-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 31 Mar 2018 08:11:55 +0200")
+References: <20180331061155.22458-1-peter@korsgaard.com>
+Message-ID: <87605cuvqt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Back in 2013, zsh was added to Buildroot [1] with the dependency on
- > BR2_PACKAGE_BUSYBOX_SHOW_OTHERS. This dependency was keept with the
- > refactoring [2].
- > But Busybox doesn't provide a zsh shell in the firt place.
- > This dependency can be removed.
+ > Fixes the following security issues:
+ > - Fix for inspector DNS rebinding vulnerability (CVE-2018-7160): A malicious
+ >   website could use a DNS rebinding attack to trick a web browser to bypass
+ >   same-origin-policy checks and allow HTTP connections to localhost or to
+ >   hosts on the local network, potentially to an open inspector port as a
+ >   debugger, therefore gaining full code execution access.  The inspector now
+ >   only allows connections that have a browser Host value of localhost or
+ >   localhost6.
 
- > [1] 3d19b7ef598f3534b46cf0746a81bc437579127c
- > [2] 1dbd7b991025a8bf39ab5d25c2fd97f47f084bac
+ > - Fix for 'path' module regular expression denial of service
+ >   (CVE-2018-7158): A regular expression used for parsing POSIX paths could
+ >   be used to cause a denial of service if an attacker were able to have a
+ >   specially crafted path string passed through one of the impacted 'path'
+ >   module functions.
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
- > Cc: Phil Eichinger <phil.eichinger@gmail.com>
+ > - Reject spaces in HTTP Content-Length header values (CVE-2018-7159): The
+ >   Node.js HTTP parser allowed for spaces inside Content-Length header
+ >   values.  Such values now lead to rejected connections in the same way as
+ >   non-numeric values.
+
+ > While we are at it, also add a hash for the license file.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
