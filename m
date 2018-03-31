@@ -1,48 +1,118 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 11:05:47 +0200
-Subject: [Buildroot] [PATCH 01/15 v4] fs: run filesystem hooks under fakeroot
+Date: Sat, 31 Mar 2018 11:05:49 +0200
+Subject: [Buildroot] [PATCH 03/15 v4] fs/iso9660: rename internal variable
 In-Reply-To: <cover.1522487149.git.yann.morin.1998@free.fr>
 References: <cover.1522487149.git.yann.morin.1998@free.fr>
-Message-ID: <f9ed6f6b9d7a01a9383a099409d5be222943d677.1522487149.git.yann.morin.1998@free.fr>
+Message-ID: <dfdf1a96985e90817dda9b5fe86608460c0011df.1522487149.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the pre-gen hooks of the various filesystems are run before
-we enter the fakeroot.
+We're soon to introduce a generic variable with that name, i.e.
+$(FS_NAME)_TARGET_DIR, so our internal, temporary variable would
+clash with it.
 
-However, this precludes those hooks from doing actions that require
-root, like creating a pseudo-device or the likes.
-
-So, move those pre-gen hooks under fakeroot.
-
-This has currently no side-effect, as they are still called before
-everything else in the fakeroot script, even the system-wide chown call.
+Just rename it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- fs/common.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/iso9660/iso9660.mk | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 6d579db810..274a3e9c7b 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -76,9 +76,10 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	rm -rf $(FS_DIR)
- 	mkdir -p $(FS_DIR)
--	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
- 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
- ifneq ($$(ROOTFS_USERS_TABLES),)
- 	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 207c6aa39f..b33cf4cd8a 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -35,47 +35,47 @@ ROOTFS_ISO9660_USE_INITRD = YES
+ endif
+ 
+ ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
+-ROOTFS_ISO9660_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
++ROOTFS_ISO9660_TMP_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
+ define ROOTFS_ISO9660_CREATE_TEMPDIR
+-	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
+-	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
++	$(RM) -rf $(ROOTFS_ISO9660_TMP_TARGET_DIR)
++	mkdir -p $(ROOTFS_ISO9660_TMP_TARGET_DIR)
+ endef
+ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_CREATE_TEMPDIR
+ else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_TRANSPARENT_COMPRESSION),y)
+ ROOTFS_ISO9660_DEPENDENCIES += host-zisofs-tools
+-ROOTFS_ISO9660_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
++ROOTFS_ISO9660_TMP_TARGET_DIR = $(FS_DIR)/rootfs.iso9660.tmp
+ # This must be early, before we copy the bootloader files.
+ define ROOTFS_ISO9660_MKZFTREE
+-	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
++	$(RM) -rf $(ROOTFS_ISO9660_TMP_TARGET_DIR)
+ 	$(HOST_DIR)/bin/mkzftree -X -z 9 -p $(PARALLEL_JOBS) \
+ 		$(TARGET_DIR) \
+-		$(ROOTFS_ISO9660_TARGET_DIR)
++		$(ROOTFS_ISO9660_TMP_TARGET_DIR)
+ endef
+ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_MKZFTREE
+ ROOTFS_ISO9660_GENISOIMAGE_OPTS += -z
+ else
+-ROOTFS_ISO9660_TARGET_DIR = $(TARGET_DIR)
++ROOTFS_ISO9660_TMP_TARGET_DIR = $(TARGET_DIR)
+ endif
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2),y)
+ ROOTFS_ISO9660_DEPENDENCIES += grub2
+ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+-	$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub.cfg
++	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub.cfg
+ ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
+ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+ 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub-eltorito.img
++		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/grub/grub-eltorito.img
+ endef
+ else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
+ ROOTFS_ISO9660_DEPENDENCIES += syslinux
+ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+-	$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.cfg
++	$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/isolinux.cfg
+ ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
+ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+ 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/* \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/
++		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/
+ 	$(INSTALL) -D -m 0644 $(HOST_DIR)/share/syslinux/ldlinux.c32 \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
++		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/isolinux/ldlinux.c32
+ endef
+ endif
+ 
+@@ -96,7 +96,7 @@ endef
+ # Copy the kernel to temporary filesystem
+ define ROOTFS_ISO9660_COPY_KERNEL
+ 	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
++		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
+ endef
+ 
+ ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
+@@ -111,7 +111,7 @@ else
+ ROOTFS_ISO9660_DEPENDENCIES += rootfs-cpio
+ define ROOTFS_ISO9660_COPY_INITRD
+ 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/boot/initrd
++		$(ROOTFS_ISO9660_TMP_TARGET_DIR)/boot/initrd
+ 	$(SED) "s%__INITRD_PATH__%/boot/initrd%" \
+ 		$(ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH)
+ endef
+@@ -133,7 +133,7 @@ define ROOTFS_ISO9660_CMD
+ 	$(HOST_DIR)/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+ 		-no-emul-boot -boot-load-size 4 -boot-info-table \
+ 		$(ROOTFS_ISO9660_GENISOIMAGE_OPTS) \
+-		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
++		-o $@ $(ROOTFS_ISO9660_TMP_TARGET_DIR)
+ endef
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
 -- 
 2.14.1
