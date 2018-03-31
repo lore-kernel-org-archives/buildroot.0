@@ -1,96 +1,102 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 11:10:22 +0200
-Subject: [Buildroot] [PATCH] skeleton-init-systemd: Work around for RO
- root /var/lib not populating
-In-Reply-To: <20180227221628.8283-1-tpiepho@impinj.com>
-References: <20180227221628.8283-1-tpiepho@impinj.com>
-Message-ID: <20180331091022.GB25161@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 31 Mar 2018 11:10:21 +0200
+Subject: [Buildroot] [PATCH 1/1] NetworkManager: allow to wait on boot
+In-Reply-To: <CACvFaDdBTOiSQw9V7PHOff5_p5U-S-MvD0gWb6suKF4Cq=kEVg@mail.gmail.com>
+References: <CACvFaDdBTOiSQw9V7PHOff5_p5U-S-MvD0gWb6suKF4Cq=kEVg@mail.gmail.com>
+Message-ID: <f34ec8b4-5851-7710-b17b-c649f04d4b99@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Trent, All,
+ Hi Pascal,
 
-On 2018-02-27 14:16 -0800, Trent Piepho spake thusly:
-> When using a RO root with systemd, it is intended that /var/lib should be
-> populated at boot time by tmpfiles system mirroring it from
-> /usr/share/factory/var/lib.
+ Thank you for your contribution.
+
+On 30-03-18 23:48, Pascal Vizeli wrote:
+> From 9bb88ee15c3b603c39b6140c040b4a5b17c8a86a Mon Sep 17 00:00:00 2001
+> From: Pascal Vizeli <pvizeli@syshack.ch>
+> Date: Fri, 30 Mar 2018 22:25:57 +0200
+> Subject: [PATCH 1/1] NetworkManager: allow to wait on boot
 > 
-> However, this will only happen if /var/lib does not already exist at the
-> time systemd-tmpfiles runs.  If it does exist, then tmpfiles will
-> (silently) skip it and do nothing.
+> This patch allow a system to wait for network card on boot time.
 > 
-> It turns out /var/lib will exist, because some part of systemd creates
-> /var/lib/systemd/catalog on boot before tmpfiles runs.
-> 
-> The fix used here is to also create tmpfiles entries for the contents of
-> /var/lib/* and /var/lib/systemd/*.  This way, when those directories
-> already exist, the entire tree is not skipped and instead the
-> not-yet-existing contents of /var/lib and /var/lib/systemd will be still
-> be mirrored from the factory dir.
-> 
-> And if /var/lib/systemd, or a prefix of that, stops getting created and
-> does not exist, it'll still mirror properly.
-
-I believe that we fixed that in another way with that commit:
-
-    6e5df928539 package/skeleton-systemd: invert factory logic
-
-As thus, I've marked this patch as rejected.
-
-If your use-case is still not fixed, please re-send it.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> It does cause some warnings from systemd:
-> systemd[1]: Starting Create Volatile Files and Directories...
-> systemd-tmpfiles[148]: [/etc/tmpfiles.d/var-factory.conf:7] Duplicate line for path "/var/lib/systemd", ignoring.
-> systemd-tmpfiles[148]: [/etc/tmpfiles.d/var-factory.conf:8] Duplicate line for path "/var/lib/systemd/coredump", ignoring.
-> 
-> But they can be ignored.
-> 
-> IMHO, I think a better solution would be for systemd-tmpfiles to gain a
-> "merge tree" operation that is like "C" but doesn't abort if the
-> destination exists, but rather merges the source into it.
-> 
-> Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+> Signed-off-by: Pascal Vizeli <pvizeli@syshack.ch>
 > ---
->  package/skeleton-init-systemd/skeleton-init-systemd.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  package/network-manager/Config.in          | 6 ++++++
+>  package/network-manager/network-manager.mk | 6 ++++++
+>  2 files changed, 12 insertions(+)
 > 
-> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> index 93bff9d27b..0ff3c774ba 100644
-> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> @@ -42,7 +42,10 @@ endef
->  define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
->  	rm -f $(TARGET_DIR)/var
->  	mkdir $(TARGET_DIR)/var
-> -	for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
-> +	for i in $(TARGET_DIR)/usr/share/factory/var/* \
-> +		 $(TARGET_DIR)/usr/share/factory/var/lib/* \
-> +		 $(TARGET_DIR)/usr/share/factory/var/lib/systemd/*; do \
-> +		[ -e "$${i}" ] || continue; \
->  		j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
->  		if [ -L "$${i}" ]; then \
->  			printf "L+! %s - - - - %s\n" \
-> -- 
-> 2.14.3
+> diff --git a/package/network-manager/Config.in
+> b/package/network-manager/Config.in
+> index 72658c1..1bdb225 100644
+> --- a/package/network-manager/Config.in
+> +++ b/package/network-manager/Config.in
+> @@ -62,6 +62,12 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
+>   help
+>    This option enables support for OpenVSwitch
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +config BR2_PACKAGE_NETWORK_MANAGER_WAIT_BOOT
+> + bool "Wait on boot support"
+> + depends on BR2_INIT_SYSTEMD
+
+ Indentation is not correct. Please use the utils/check-package script to
+validate your changes.
+
+ Or perhaps it's your mailer that destroyed the whitespace. In that case (or
+actually, in any case) please use git send-email to send your patch.
+
+
+> + help
+> +  This option allow NetworkManager to wait on boot
+> +
+>  endif
+> 
+>  comment "NetworkManager needs udev /dev management and a glibc
+> toolchain w/ headers >= 3.7, dynamic library"
+> diff --git a/package/network-manager/network-manager.mk
+> b/package/network-manager/network-manager.mk
+> index a520aad..d48ffe9 100644
+> --- a/package/network-manager/network-manager.mk
+> +++ b/package/network-manager/network-manager.mk
+> @@ -102,6 +102,12 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
+> 
+>   ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
+>   $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+> +
+> + if [ $(BR2_PACKAGE_NETWORK_MANAGER_WAIT_BOOT) == y ]; \
+> + then \
+> + ln -sf /usr/lib/systemd/system/NetworkManager-wait-online.service \
+> + $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager-wait-online.service;
+
+ Is there any reason to do this conditionally? As far as I can see, this service
+does nothing except block other services that need networking until you get an
+IP address. Why would you ever NOT want this?
+
+ In other words, I think you should remove the Config.in option, and instead
+create the symlink unconditionally.
+
+
+ I have marked your patch as Changes Requested in patchwork, so unless you
+resend it (with the fixes mentioned above), we will forget about it.
+
+ Thank you!
+
+ Regards,
+ Arnout
+
+> \
+> + fi
+>  endef
+> 
+>  $(eval $(autotools-package))
+> 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
