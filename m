@@ -1,49 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 08:00:12 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-03-30
-Message-ID: <20180331060012.892B920723@mail.bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 31 Mar 2018 08:11:55 +0200
+Subject: [Buildroot] [PATCH] nodejs: security bump to version 8.11.1
+Message-ID: <20180331061155.22458-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes the following security issues:
 
-Build statistics for 2018-03-30
-===============================
+- Fix for inspector DNS rebinding vulnerability (CVE-2018-7160): A malicious
+  website could use a DNS rebinding attack to trick a web browser to bypass
+  same-origin-policy checks and allow HTTP connections to localhost or to
+  hosts on the local network, potentially to an open inspector port as a
+  debugger, therefore gaining full code execution access.  The inspector now
+  only allows connections that have a browser Host value of localhost or
+  localhost6.
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x | 168 |   9 |   0 | 177 |
-      master |   6 |   0 |   0 |   6 |
+- Fix for 'path' module regular expression denial of service
+  (CVE-2018-7158): A regular expression used for parsing POSIX paths could
+  be used to cause a denial of service if an attacker were able to have a
+  specially crafted path string passed through one of the impacted 'path'
+  module functions.
 
-Results for branch '2018.02.x'
-==============================
+- Reject spaces in HTTP Content-Length header values (CVE-2018-7159): The
+  Node.js HTTP parser allowed for spaces inside Content-Length header
+  values.  Such values now lead to rejected connections in the same way as
+  non-numeric values.
 
-Classification of failures by reason
-------------------------------------
+While we are at it, also add a hash for the license file.
 
-             bluez5_utils-5.48 | 3 
-                   jamvm-2.0.0 | 2 
-                     php-7.2.3 | 1 
-               qt5webkit-5.9.1 | 1 
-                   systemd-237 | 1 
-uclibc-ng-test-c6d62cbc6050... | 1 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.hash | 7 +++++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-
-Detail of failures
-------------------
-
-      xtensa |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/482947487b2989aabe59b61e7fe1cde1b4d5fed1 |     
-         arm |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/d879bff6431bb0595705d42c20319812119b423b |     
-         arm |              bluez5_utils-5.48 | NOK | http://autobuild.buildroot.net/results/a5c202d0fa46ab44f01a398a4dd101d9eff4e9b1 |     
-      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/f23a66f658860a81fb7bb1ecfd32c87af075e0e7 | ORPH
-      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/ce0aceebefd80dbe37ed344c2fd19626833ef5c5 | ORPH
-    mips64el |                      php-7.2.3 | NOK | http://autobuild.buildroot.net/results/43dd4dbdb32d3074c93f277ef9e2bdad239952f8 | ORPH
-      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/83f1889dcf9dc5c07b3d44ad3e2f31ebc0c4b1fe |     
-     powerpc |                    systemd-237 | NOK | http://autobuild.buildroot.net/results/47d163759fafac990f2f3af5b5fbf261a8cf89e5 |     
-        i586 | uclibc-ng-test-c6d62cbc6050... | NOK | http://autobuild.buildroot.net/results/19b6d20c1e2985d637791b6c6499823d9d982b1f |     
-
-
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 4adef79dca..b3900f6a7d 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,5 @@
+-# From http://nodejs.org/dist/v8.10.0/SHASUMS256.txt
+-sha256 b72d4e71618d6bcbd039b487b51fa7543631a4ac3331d7caf69bdf55b5b2901a  node-v8.10.0.tar.xz
++# From http://nodejs.org/dist/v8.11.1/SHASUMS256.txt
++sha256 40a6eb51ea37fafcf0cfb58786b15b99152bec672cccf861c14d1cca0ad4758a  node-v8.11.1.tar.xz
++
++# Hash for license file
++sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index e1dd11cef5..2642525c47 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.10.0
++NODEJS_VERSION = 8.11.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
-http://autobuild.buildroot.net
+2.11.0
