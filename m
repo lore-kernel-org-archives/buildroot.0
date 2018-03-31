@@ -1,48 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 20:47:25 +0200
-Subject: [Buildroot] [git commit] fs: run filesystem hooks under fakeroot
-Message-ID: <20180331185351.6D11C84B9E@busybox.osuosl.org>
+Date: Sat, 31 Mar 2018 20:53:06 +0200
+Subject: [Buildroot] [git commit] fs: get rid of package-provided post-fs
+ hooks
+Message-ID: <20180331185352.90AC884B9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=405f91200488dc8f4648acbdff5114d0af20b6b0
+commit: https://git.buildroot.net/buildroot/commit/?id=fcdf58cad101528345b88529763f430af5ee94dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the pre-gen hooks of the various filesystems are run before
-we enter the fakeroot.
+Now that the pre-fs ones are run on a transient copy of target/, the
+post-fs hooks are no longer needed because we no longer need to restore
+the target/ directory as it is only a internal copy.
 
-However, this precludes those hooks from doing actions that require
-root, like creating a pseudo-device or the likes.
+Remove support for the post-fs hooks, and update the sole package using
+them.
 
-So, move those pre-gen hooks under fakeroot.
-
-This has currently no side-effect, as they are still called before
-everything else in the fakeroot script, even the system-wide chown call.
+We do not add a legacy check because this was mostly a purely-internal
+detail that was never really exposed nor documented.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/common.mk                                           | 2 --
+ package/pkg-generic.mk                                 | 2 --
+ package/skeleton-init-systemd/skeleton-init-systemd.mk | 6 ------
+ 3 files changed, 10 deletions(-)
 
 diff --git a/fs/common.mk b/fs/common.mk
-index 6d579db810..274a3e9c7b 100644
+index 1d7c78dd45..ba2faa7759 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -76,9 +76,10 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	rm -rf $(FS_DIR)
- 	mkdir -p $(FS_DIR)
--	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
- 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
- ifneq ($$(ROOTFS_USERS_TABLES),)
- 	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
+@@ -94,8 +94,6 @@ endif
+ 	$(foreach hook,$(ROOTFS_PRE_CMD_HOOKS),\
+ 		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
+ 	$(call PRINTF,$(ROOTFS_COMMON_TAR_CMD)) >> $(FAKEROOT_SCRIPT)
+-	$(foreach hook,$(ROOTFS_POST_CMD_HOOKS),\
+-		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
+ 	chmod a+x $(FAKEROOT_SCRIPT)
+ 	PATH=$(BR_PATH) $(HOST_DIR)/bin/fakeroot -- $(FAKEROOT_SCRIPT)
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 152e1d0c67..88375916fd 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -644,7 +644,6 @@ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+ $(2)_POST_LEGAL_INFO_HOOKS      ?=
+ $(2)_TARGET_FINALIZE_HOOKS      ?=
+ $(2)_ROOTFS_PRE_CMD_HOOKS       ?=
+-$(2)_ROOTFS_POST_CMD_HOOKS      ?=
+ 
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+@@ -954,7 +953,6 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
+ TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+ ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
+-ROOTFS_POST_CMD_HOOKS += $$($(2)_ROOTFS_POST_CMD_HOOKS)
+ 
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index ff64205cbe..5d6b716f7a 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -55,12 +55,6 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ endef
+ SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ 
+-define SKELETON_INIT_SYSTEMD_POST_ROOTFS_VAR
+-	rm -rf $(TARGET_DIR)/var
+-	mv $(TARGET_DIR)/usr/share/factory/var $(TARGET_DIR)/var
+-endef
+-SKELETON_INIT_SYSTEMD_ROOTFS_POST_CMD_HOOKS += SKELETON_INIT_SYSTEMD_POST_ROOTFS_VAR
+-
+ endif
+ 
+ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
