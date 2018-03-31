@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 31 Mar 2018 20:28:04 +0200
-Subject: [Buildroot] [PATCH 05/15 v4] fs: set per-rootfs variable name
-In-Reply-To: <2c9871505f740e5fec41247211aa86aa47feef6b.1522487149.git.yann.morin.1998@free.fr>
+Date: Sat, 31 Mar 2018 20:30:21 +0200
+Subject: [Buildroot] [PATCH 09/15 v4] fs: introduce per-rootfs
+ TARGET_DIR variable
+In-Reply-To: <98f2dfa3b5a89f108b51cc567c41665628a01bc3.1522487149.git.yann.morin.1998@free.fr>
 References: <cover.1522487149.git.yann.morin.1998@free.fr>
- <2c9871505f740e5fec41247211aa86aa47feef6b.1522487149.git.yann.morin.1998@free.fr>
-Message-ID: <43657eb8-1da4-de1f-8ce1-3ce4dcd73439@mind.be>
+ <98f2dfa3b5a89f108b51cc567c41665628a01bc3.1522487149.git.yann.morin.1998@free.fr>
+Message-ID: <eb507e0a-581e-d037-4a10-a151356fbc80@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,84 +15,52 @@ To: buildroot@busybox.net
 
 
 On 31-03-18 11:05, Yann E. MORIN wrote:
-> Like we do for packages with the PKG variable, set ROOTFS to contain the
-> upper-case name of the rootfs currently being generated.
-> 
-> This will be usefull in later patches, when we need more per-rootfs
-> variables, like a per-rootfs TARGET_DIR for example.
-> 
-> In Makefiles, per-rule variables trickle down the dependency chain, to
-> all dependencies of that rule, so we have to stop ROOTFS as soone as
-> we're not in a rootfs. This means we have to stop it at target-finalize
-> (which is a dependency of all filesystems), and for each package
-> individually, since some packages (host or target) can be direct
-> dependencies of filesystems as well.
+> ... which for now still points to the base target directory, but this is
+> a step forward.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  Makefile               | 3 +++
->  fs/common.mk           | 3 +++
->  package/pkg-generic.mk | 4 ++++
->  3 files changed, 10 insertions(+)
+>  Makefile     | 4 +++-
+>  fs/common.mk | 1 +
+>  2 files changed, 4 insertions(+), 1 deletion(-)
 > 
 > diff --git a/Makefile b/Makefile
-> index 41624b859e..e17675be9b 100644
+> index e17675be9b..9fba7a3ed8 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -680,6 +680,9 @@ endif
+> @@ -215,8 +215,10 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
 >  
->  $(TARGETS_ROOTFS): target-finalize
->  
-> +# Avoid the rootfs name leaking down the dependency chain
-> +target-finalize: ROOTFS=
-> +
->  .PHONY: target-finalize
->  target-finalize: $(PACKAGES)
->  	@$(call MESSAGE,"Finalizing target directory")
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 274a3e9c7b..af6799bb83 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -39,6 +39,8 @@ ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
->  # all variable references except the arguments must be $$-quoted.
->  define inner-rootfs
->  
-> +ROOTFS_$(2)_NAME = $(1)
+>  BUILD_DIR := $(BASE_DIR)/build
+>  BINARIES_DIR := $(BASE_DIR)/images
+> +# The target directory is common to all packages,
+> +# but there is one that is specific to each filesystem.
+>  BASE_TARGET_DIR := $(BASE_DIR)/target
+> -TARGET_DIR = $(BASE_TARGET_DIR)
+> +TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
 
- This variable is not used anywhere...
+ OK for now, but I think when PPS happens we should s/ROOTFS/PKG/ and simply use
+$($(PKG)_TARGET_DIR) here.
 
  Regards,
  Arnout
 
-> +
+>  # initial definition so that 'make clean' works for most users, even without
+>  # .config. HOST_DIR will be overwritten later when .config is included.
+>  HOST_DIR := $(BASE_DIR)/host
+> diff --git a/fs/common.mk b/fs/common.mk
+> index cd132cdbc7..363798bb20 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -40,6 +40,7 @@ define inner-rootfs
+>  
+>  ROOTFS_$(2)_NAME = $(1)
+>  ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
+> +ROOTFS_$(2)_TARGET_DIR = $$(BASE_TARGET_DIR)
+>  
 >  # extra deps
 >  ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
->  	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
-> @@ -72,6 +74,7 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
->  ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
->  endif
->  
-> +$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
->  $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
->  	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
->  	rm -rf $(FS_DIR)
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 6d82f7027e..152e1d0c67 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -384,6 +384,10 @@ endef
->  
->  define inner-generic-package
->  
-> +# When doing a package, we're definitely not doing a rootfs, but we
-> +# may inherit it via the dependency chain, so we reset it.
-> +$(1): ROOTFS=
-> +
->  # Ensure the package is only declared once, i.e. do not accept that a
->  # package be re-defined by a br2-external tree
->  ifneq ($(call strip,$(filter $(1),$(PACKAGES_ALL))),)
 > 
 
 -- 
