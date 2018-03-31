@@ -1,116 +1,87 @@
-From: Pascal Vizeli <pvizeli@syshack.ch>
-Date: Sat, 31 Mar 2018 17:28:40 +0200
-Subject: [Buildroot] [PATCH 1/1] NetworkManager: allow to wait on boot
-In-Reply-To: <f34ec8b4-5851-7710-b17b-c649f04d4b99@mind.be>
-References: <CACvFaDdBTOiSQw9V7PHOff5_p5U-S-MvD0gWb6suKF4Cq=kEVg@mail.gmail.com>
- <f34ec8b4-5851-7710-b17b-c649f04d4b99@mind.be>
-Message-ID: <CACvFaDezuh2GxOSnoRVYQPUEvR7Q0HMJ1sPMXB2yn4YCdXUP=g@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 31 Mar 2018 17:33:34 +0200
+Subject: [Buildroot] [git commit] python-libusb1: new package
+Message-ID: <20180331153347.64D5A83FF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I try it agen :) git send-email was never running on my dev system :(
-There are a lot of people with problems on that and no solution have
-relay work...
+commit: https://git.buildroot.net/buildroot/commit/?id=34b62af1e05a9510f707eceb63e9b8c285035dc1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+License info from PyPI is wrong: it is LGPL-2.1+, not GPL-2.0. The
+package includes a COPYING file with GPL-2.0, but since it is really
+LGPL-2.1+ only the COPYING.LESSER file is relevant.
 
-2018-03-31 11:10 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->  Hi Pascal,
->
->  Thank you for your contribution.
->
-> On 30-03-18 23:48, Pascal Vizeli wrote:
->> From 9bb88ee15c3b603c39b6140c040b4a5b17c8a86a Mon Sep 17 00:00:00 2001
->> From: Pascal Vizeli <pvizeli@syshack.ch>
->> Date: Fri, 30 Mar 2018 22:25:57 +0200
->> Subject: [PATCH 1/1] NetworkManager: allow to wait on boot
->>
->> This patch allow a system to wait for network card on boot time.
->>
->> Signed-off-by: Pascal Vizeli <pvizeli@syshack.ch>
->> ---
->>  package/network-manager/Config.in          | 6 ++++++
->>  package/network-manager/network-manager.mk | 6 ++++++
->>  2 files changed, 12 insertions(+)
->>
->> diff --git a/package/network-manager/Config.in
->> b/package/network-manager/Config.in
->> index 72658c1..1bdb225 100644
->> --- a/package/network-manager/Config.in
->> +++ b/package/network-manager/Config.in
->> @@ -62,6 +62,12 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
->>   help
->>    This option enables support for OpenVSwitch
->>
->> +config BR2_PACKAGE_NETWORK_MANAGER_WAIT_BOOT
->> + bool "Wait on boot support"
->> + depends on BR2_INIT_SYSTEMD
->
->  Indentation is not correct. Please use the utils/check-package script to
-> validate your changes.
->
->  Or perhaps it's your mailer that destroyed the whitespace. In that case (or
-> actually, in any case) please use git send-email to send your patch.
->
->
->> + help
->> +  This option allow NetworkManager to wait on boot
->> +
->>  endif
->>
->>  comment "NetworkManager needs udev /dev management and a glibc
->> toolchain w/ headers >= 3.7, dynamic library"
->> diff --git a/package/network-manager/network-manager.mk
->> b/package/network-manager/network-manager.mk
->> index a520aad..d48ffe9 100644
->> --- a/package/network-manager/network-manager.mk
->> +++ b/package/network-manager/network-manager.mk
->> @@ -102,6 +102,12 @@ define NETWORK_MANAGER_INSTALL_INIT_SYSTEMD
->>
->>   ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service \
->>   $(TARGET_DIR)/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
->> +
->> + if [ $(BR2_PACKAGE_NETWORK_MANAGER_WAIT_BOOT) == y ]; \
->> + then \
->> + ln -sf /usr/lib/systemd/system/NetworkManager-wait-online.service \
->> + $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/NetworkManager-wait-online.service;
->
->  Is there any reason to do this conditionally? As far as I can see, this service
-> does nothing except block other services that need networking until you get an
-> IP address. Why would you ever NOT want this?
->
->  In other words, I think you should remove the Config.in option, and instead
-> create the symlink unconditionally.
->
->
->  I have marked your patch as Changes Requested in patchwork, so unless you
-> resend it (with the fixes mentioned above), we will forget about it.
->
->  Thank you!
->
->  Regards,
->  Arnout
->
->> \
->> + fi
->>  endef
->>
->>  $(eval $(autotools-package))
->>
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-NetworkManager-allow-to-wait-on-boot.patch
-Type: application/octet-stream
-Size: 1119 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180331/5709e9b1/attachment.obj>
+Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+[Arnout: regenerate with scanpypi, fix legal info]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/Config.in                          |  1 +
+ package/python-libusb1/Config.in           | 11 +++++++++++
+ package/python-libusb1/python-libusb1.hash |  4 ++++
+ package/python-libusb1/python-libusb1.mk   | 15 +++++++++++++++
+ 4 files changed, 31 insertions(+)
+
+diff --git a/package/Config.in b/package/Config.in
+index 3bff349905..de10dd0613 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -817,6 +817,7 @@ menu "External python modules"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
++	source "package/python-libusb1/Config.in"
+ 	source "package/python-lmdb/Config.in"
+ 	source "package/python-logbook/Config.in"
+ 	source "package/python-lxml/Config.in"
+diff --git a/package/python-libusb1/Config.in b/package/python-libusb1/Config.in
+new file mode 100644
+index 0000000000..1c4a72edae
+--- /dev/null
++++ b/package/python-libusb1/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_LIBUSB1
++	bool "python-libusb1"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Pure-python wrapper for libusb-1.0.
++
++	  http://github.com/vpelletier/python-libusb1
++
++comment "python-libusb1 needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
+new file mode 100644
+index 0000000000..3649872eca
+--- /dev/null
++++ b/package/python-libusb1/python-libusb1.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/libusb1/json, sha256 locally computed
++md5	9c2eb6032deda59f287a443091d38cb4  libusb1-1.6.4.tar.gz
++sha256	8c930d9c1d037d9c83924c82608aa6a1adcaa01ca0e4a23ee0e8e18d7eee670d  libusb1-1.6.4.tar.gz
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
+new file mode 100644
+index 0000000000..3329764fef
+--- /dev/null
++++ b/package/python-libusb1/python-libusb1.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-libusb1
++#
++################################################################################
++
++PYTHON_LIBUSB1_VERSION = 1.6.4
++PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
++PYTHON_LIBUSB1_SITE = https://pypi.python.org/packages/ec/5d/4fdac6c53525786fe35cff035c3345452e24e2bee5627893be65d12555cb
++PYTHON_LIBUSB1_SETUP_TYPE = setuptools
++PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
++PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
++PYTHON_LIBUSB1_DEPENDENCIES = libusb
++
++$(eval $(python-package))
