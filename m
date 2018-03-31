@@ -1,69 +1,74 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 31 Mar 2018 19:57:31 +0200
-Subject: [Buildroot] [git commit] package/docker-proxy: convert to golang
+Subject: [Buildroot] [git commit] package/runc: convert to golang
  infrastructure
-Message-ID: <20180331175811.DD11F810D5@busybox.osuosl.org>
+Message-ID: <20180331175811.ACB1F832DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53e1b222533fd110ab9472480ded126a4762db5e
+commit: https://git.buildroot.net/buildroot/commit/?id=30063d57d35c61cddff3047e7f55c221cf1d2709
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Arnout: remove automatically added host-go dependency]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/docker-proxy/docker-proxy.mk | 33 +++++----------------------------
- 1 file changed, 5 insertions(+), 28 deletions(-)
+ package/runc/runc.mk | 37 +++++--------------------------------
+ 1 file changed, 5 insertions(+), 32 deletions(-)
 
-diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
-index 3bf6546d26..a90271fc35 100644
---- a/package/docker-proxy/docker-proxy.mk
-+++ b/package/docker-proxy/docker-proxy.mk
-@@ -10,37 +10,14 @@ DOCKER_PROXY_SITE = $(call github,docker,libnetwork,$(DOCKER_PROXY_VERSION))
- DOCKER_PROXY_LICENSE = Apache-2.0
- DOCKER_PROXY_LICENSE_FILES = LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index fb3fec20f5..f1586f32b2 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -9,42 +9,15 @@ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
  
--DOCKER_PROXY_DEPENDENCIES = host-go host-pkgconf
-+DOCKER_PROXY_DEPENDENCIES = host-pkgconf
+-RUNC_DEPENDENCIES = host-go
++RUNC_WORKSPACE = Godeps/_workspace
  
--DOCKER_PROXY_GOPATH = "$(@D)/gopath"
--DOCKER_PROXY_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+-RUNC_GOPATH = "$(@D)/Godeps/_workspace"
+-RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
 -	CGO_ENABLED=1 \
--	CGO_NO_EMULATION=1 \
 -	GOBIN="$(@D)/bin" \
--	GOPATH="$(DOCKER_PROXY_GOPATH)" \
--	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--	$(TARGET_MAKE_ENV)
-+DOCKER_PROXY_WORKSPACE = gopath
+-	GOPATH="$(RUNC_GOPATH)" \
+-	PATH=$(BR_PATH)
++RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
  
+-RUNC_GLDFLAGS = \
+-	-X main.gitCommit=$(RUNC_VERSION)
+-
 -ifeq ($(BR2_STATIC_LIBS),y)
--DOCKER_PROXY_GLDFLAGS += -extldflags '-static'
+-RUNC_GLDFLAGS += -extldflags '-static'
 -endif
 -
--define DOCKER_PROXY_CONFIGURE_CMDS
--	mkdir -p $(DOCKER_PROXY_GOPATH)/src/github.com/docker
--	ln -fs $(@D) $(DOCKER_PROXY_GOPATH)/src/github.com/docker/libnetwork
+-RUNC_GOTAGS = cgo static_build
++RUNC_TAGS = cgo static_build
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+-RUNC_GOTAGS += seccomp
++RUNC_TAGS += seccomp
+ RUNC_DEPENDENCIES += libseccomp host-pkgconf
+ endif
+ 
+-define RUNC_CONFIGURE_CMDS
+-	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
+-	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
 -endef
 -
--define DOCKER_PROXY_BUILD_CMDS
--	cd $(@D)/gopath/src/github.com/docker/libnetwork; \
--	$(DOCKER_PROXY_MAKE_ENV) \
--	$(HOST_DIR)/usr/bin/go build -v \
--		-o $(@D)/bin/docker-proxy \
--		-ldflags "$(DOCKER_PROXY_GLDFLAGS)" \
--		github.com/docker/libnetwork/cmd/proxy
+-define RUNC_BUILD_CMDS
+-	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/bin/go \
+-		build -v -o $(@D)/bin/runc \
+-		-tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
 -endef
-+DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
- 
- define DOCKER_PROXY_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/bin/docker-proxy $(TARGET_DIR)/usr/bin/docker-proxy
-+	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_PROXY_BINDIR)/proxy $(TARGET_DIR)/usr/bin/docker-proxy
- endef
- 
+-
+-define RUNC_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
+-endef
+-
 -$(eval $(generic-package))
 +$(eval $(golang-package))
