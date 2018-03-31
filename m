@@ -1,108 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 11:05:59 +0200
-Subject: [Buildroot] [PATCH 13/15 v4] fs: run packages' filesystem hooks in
- a copy of target/
+Date: Sat, 31 Mar 2018 11:06:00 +0200
+Subject: [Buildroot] [PATCH 14/15 v4] fs: get rid of package-provided
+ post-fs hooks
 In-Reply-To: <cover.1522487149.git.yann.morin.1998@free.fr>
 References: <cover.1522487149.git.yann.morin.1998@free.fr>
-Message-ID: <193b195e0bb305f01ccedd565a517635a975b154.1522487149.git.yann.morin.1998@free.fr>
+Message-ID: <787ad63d8daaadfaee2cbe6beb14dab63ef4d673.1522487149.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, some packages may regigter hooks to be run just before and
-judt after the generic tarball image is generated, because they need to
-prepare the filesystem for read-only or read-write operation.
+Now that the pre-fs ones are run on a transient copy of target/, the
+post-fs hooks are no longer needed because we no longer need to restore
+the target/ directory as it is only a internal copy.
 
-However, this means that, if any of the hooks or the image generation
-fails, the target directory is left in a dangling, inconsistent state.
+Remove support for the post-fs hooks, and update the sole package using
+them.
 
-We fix that by doing a copy of target/, run the hooks on that copy,
-generate the generic tarball image out of that, and get rid of the copy.
-
-This way, we can guarantee consistency of the target directory, and we
-can even ditch support for post-fs hooks (those that restore target/).
+Unlike for the pre-/post-gen hooks, we do not add a legacy check because
+this was mostly a purely-internal detail that was never really exposed
+nor documented.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- fs/common.mk                                    |  7 +++++--
- support/testing/tests/core/test_post_scripts.py | 23 +++++++++++++----------
- 2 files changed, 18 insertions(+), 12 deletions(-)
+ fs/common.mk                                           | 2 --
+ package/pkg-generic.mk                                 | 2 --
+ package/skeleton-init-systemd/skeleton-init-systemd.mk | 6 ------
+ 3 files changed, 10 deletions(-)
 
 diff --git a/fs/common.mk b/fs/common.mk
-index f3d42519f6..8bb26f1146 100644
+index 8bb26f1146..bacc98ec68 100644
 --- a/fs/common.mk
 +++ b/fs/common.mk
-@@ -58,17 +58,20 @@ endef
- .PHONY: rootfs-common
- rootfs-common: $(ROOTFS_COMMON_TAR)
+@@ -94,8 +94,6 @@ endif
+ 	$(foreach hook,$(ROOTFS_PRE_CMD_HOOKS),\
+ 		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
+ 	$(call PRINTF,$(ROOTFS_COMMON_TAR_CMD)) >> $(FAKEROOT_SCRIPT)
+-	$(foreach hook,$(ROOTFS_POST_CMD_HOOKS),\
+-		$(call PRINTF,$($(hook))) >> $(FAKEROOT_SCRIPT)$(sep))
+ 	chmod a+x $(FAKEROOT_SCRIPT)
+ 	PATH=$(BR_PATH) $(HOST_DIR)/bin/fakeroot -- $(FAKEROOT_SCRIPT)
  
-+# Emulate being in a filesystem, so that we can have our own TARGET_DIR.
-+ROOTFS_COMMON_TARGET_DIR = $(FS_DIR)/target
-+
- ROOTFS_COMMON_DEPENDENCIES = \
- 	host-fakeroot host-makedevs \
- 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 152e1d0c67..88375916fd 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -644,7 +644,6 @@ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+ $(2)_POST_LEGAL_INFO_HOOKS      ?=
+ $(2)_TARGET_FINALIZE_HOOKS      ?=
+ $(2)_ROOTFS_PRE_CMD_HOOKS       ?=
+-$(2)_ROOTFS_POST_CMD_HOOKS      ?=
  
--# When doing the common tarball, we're not really doing a rootfs.
--$(ROOTFS_COMMON_TAR): ROOTFS=
-+$(ROOTFS_COMMON_TAR): ROOTFS=COMMON
- $(ROOTFS_COMMON_TAR): FAKEROOT_SCRIPT=$(FS_DIR)/fakeroot.fs
- $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
- 	@$(call MESSAGE,"Generating common rootfs tarball")
- 	rm -rf $(FS_DIR)
- 	mkdir -p $(FS_DIR)
-+	rsync -au $(BASE_TARGET_DIR)/ $(TARGET_DIR)
- 	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
- 	echo "set -e" >> $(FAKEROOT_SCRIPT)
- 	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-diff --git a/support/testing/tests/core/test_post_scripts.py b/support/testing/tests/core/test_post_scripts.py
-index edb339d8c4..a0e5b6b454 100644
---- a/support/testing/tests/core/test_post_scripts.py
-+++ b/support/testing/tests/core/test_post_scripts.py
-@@ -18,17 +18,17 @@ class TestPostScripts(infra.basetest.BRTest):
-                    infra.filepath("tests/core/post-fakeroot.sh"),
-                    infra.filepath("tests/core/post-image.sh"))
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+@@ -954,7 +953,6 @@ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
+ TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+ ROOTFS_PRE_CMD_HOOKS += $$($(2)_ROOTFS_PRE_CMD_HOOKS)
+-ROOTFS_POST_CMD_HOOKS += $$($(2)_ROOTFS_POST_CMD_HOOKS)
  
--    def check_post_log_file(self, path, what):
-+    def check_post_log_file(self, f, what, target_dir):
-         lines = {}
--        with open(path, 'rb') as csvfile:
-+        with open(os.path.join(self.builddir, "build", f), 'rb') as csvfile:
-             r = csv.reader(csvfile, delimiter=',')
-             for row in r:
-                 lines[row[0]] = row[1]
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
+diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+index ff64205cbe..5d6b716f7a 100644
+--- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
++++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+@@ -55,12 +55,6 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
+ endef
+ SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
  
--        self.assertEqual(lines["arg1"], os.path.join(self.builddir, what))
-+        self.assertEqual(lines["arg1"], what)
-         self.assertEqual(lines["arg2"], "foobar")
-         self.assertEqual(lines["arg3"], "baz")
--        self.assertEqual(lines["TARGET_DIR"], os.path.join(self.builddir, "target"))
-+        self.assertEqual(lines["TARGET_DIR"], target_dir)
-         self.assertEqual(lines["BUILD_DIR"], os.path.join(self.builddir, "build"))
-         self.assertEqual(lines["HOST_DIR"], os.path.join(self.builddir, "host"))
-         staging = os.readlink(os.path.join(self.builddir, "staging"))
-@@ -37,9 +37,12 @@ class TestPostScripts(infra.basetest.BRTest):
-         self.assertEqual(lines["BR2_CONFIG"], os.path.join(self.builddir, ".config"))
+-define SKELETON_INIT_SYSTEMD_POST_ROOTFS_VAR
+-	rm -rf $(TARGET_DIR)/var
+-	mv $(TARGET_DIR)/usr/share/factory/var $(TARGET_DIR)/var
+-endef
+-SKELETON_INIT_SYSTEMD_ROOTFS_POST_CMD_HOOKS += SKELETON_INIT_SYSTEMD_POST_ROOTFS_VAR
+-
+ endif
  
-     def test_run(self):
--        f = os.path.join(self.builddir, "build", "post-build.log")
--        self.check_post_log_file(f, "target")
--        f = os.path.join(self.builddir, "build", "post-fakeroot.log")
--        self.check_post_log_file(f, "target")
--        f = os.path.join(self.builddir, "build", "post-image.log")
--        self.check_post_log_file(f, "images")
-+        self.check_post_log_file("post-build.log",
-+                                 os.path.join(self.builddir, "target"),
-+                                 os.path.join(self.builddir, "target"))
-+        self.check_post_log_file("post-fakeroot.log",
-+                                 os.path.join(self.builddir, "build/buildroot-fs/target"),
-+                                 os.path.join(self.builddir, "build/buildroot-fs/target"))
-+        self.check_post_log_file("post-image.log",
-+                                 os.path.join(self.builddir, "images"),
-+                                 os.path.join(self.builddir, "target"))
+ define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
 -- 
 2.14.1
