@@ -1,93 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 18:35:40 +0200
-Subject: [Buildroot] [PATCH v2 2/5] support/scripts/graph-depends: use
- colors instead of colours
+Date: Sat, 31 Mar 2018 18:35:42 +0200
+Subject: [Buildroot] [PATCH v2 4/5] support/scripts/graph-depends: add
+ --flat-list option
 In-Reply-To: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
 References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331163543.6278-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331163543.6278-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The graph-depends was not very consistent in colors vs. colours: some
-parts were using colours, some parts were using colors.
+From: George Redivo <george.redivo@datacom.ind.br>
 
-Let's settle on the US spelling, colors.
+graph-depends currently spits out a graph in .dot format. However, as
+part of the upcoming introduction of <pkg>-show-recursive-depends and
+<pkg>-show-recursive-rdepends, we need graph-depends to be able to
+display a flat list.
 
-This change the user-visble option --colours to --colors, but it is
-unlikely that a lot of users customize the colors through
-BR2_GRAPH_DEPS_OPTS, so this user interface change is considered
-reasonable.
-
+Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
+[Thomas:
+ - Rebase on top of graph-depends changes
+ - Do not display the package name itself in the list, only its
+   dependencies (or reverse dependencies)
+ - Display the result on a single line, instead of one package per
+   line, in order to match what <pkg>-show-depends and
+   <pkg>-show-rdepends are doing today.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/common-usage.txt  |  4 ++--
- support/scripts/graph-depends | 16 ++++++++--------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ support/scripts/graph-depends | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index a22da20188..e3d7578c85 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -224,12 +224,12 @@ The +graph-depends+ behaviour can be controlled by setting options in the
- * +--transitive+, +--no-transitive+, to draw (or not) the transitive
-   dependencies. The default is to not draw transitive dependencies.
- 
--* +--colours R,T,H+, the comma-separated list of colours to draw the
-+* +--colors R,T,H+, the comma-separated list of colors to draw the
-   root package (+R+), the target packages (+T+) and the host packages
-   (+H+). Defaults to: +lightblue,grey,gainsboro+
- 
- --------------------------------
--BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colours=red,green,blue' make graph-depends
-+BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colors=red,green,blue' make graph-depends
- --------------------------------
- 
- === Graphing the build duration
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index d86d506f6f..dc265ae28c 100755
+index 3a60e478d4..a177296da2 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -297,9 +297,9 @@ def parse_args():
-                         "'host' to stop on host packages.")
-     parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
-                         help="Like --stop-on, but do not add PACKAGE to the graph.")
--    parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
-+    parser.add_argument("--colors", "-c", metavar="COLOR_LIST", dest="colors",
-                         default="lightblue,grey,gainsboro",
--                        help="Comma-separated list of the three colours to use" +
-+                        help="Comma-separated list of the three colors to use" +
-                         " to draw the top-level package, the target" +
-                         " packages, and the host packages, in this order." +
-                         " Defaults to: 'lightblue,grey,gainsboro'")
-@@ -353,12 +353,12 @@ def main():
+@@ -248,11 +248,14 @@ done_deps = []
+ 
+ # Print the dependency graph of a package
+ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+-                   arrow_dir, depth, max_depth, pkg, colors):
++                   arrow_dir, draw_graph, depth, max_depth, pkg, colors):
+     if pkg in done_deps:
+         return
+     done_deps.append(pkg)
+-    print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
++    if draw_graph:
++        print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
++    elif depth != 0:
++        outfile.write("%s " % pkg)
+     if pkg not in dict_deps:
+         return
+     for p in stop_list:
+@@ -276,9 +279,10 @@ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+                     add = False
+                     break
+             if add:
+-                outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
++                if draw_graph:
++                    outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
+                 print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+-                               arrow_dir, depth + 1, max_depth, d, colors)
++                               arrow_dir, draw_graph, depth + 1, max_depth, d, colors)
+ 
+ 
+ def parse_args():
+@@ -314,6 +318,8 @@ def parse_args():
+                         help="Draw reverse dependencies")
+     parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
+                         help="Quiet")
++    parser.add_argument("--flat-list", '-f', dest="flat_list", action='store_true', default=False,
++                        help="Do not draw graph, just print a flat list")
+     return parser.parse_args()
+ 
+ 
+@@ -356,6 +362,8 @@ def main():
          get_depends_func = brpkgutil.get_rdepends
          arrow_dir = "back"
  
--    # Get the colours: we need exactly three colours,
-+    # Get the colors: we need exactly three colors,
++    draw_graph = not args.flat_list
++
+     # Get the colors: we need exactly three colors,
      # so no need not split more than 4
--    # We'll let 'dot' validate the colours...
--    colours = args.colours.split(',', 4)
--    if len(colours) != 3:
--        sys.stderr.write("Error: incorrect colour list '%s'\n" % args.colours)
-+    # We'll let 'dot' validate the colors...
-+    colors = args.colors.split(',', 4)
-+    if len(colors) != 3:
-+        sys.stderr.write("Error: incorrect color list '%s'\n" % args.colors)
-         sys.exit(1)
+     # We'll let 'dot' validate the colors...
+@@ -404,12 +412,16 @@ def main():
+                                          args.quiet)
  
-     # In full mode, start with the result of get_targets() to get the main
-@@ -403,7 +403,7 @@ def main():
-     outfile.write("digraph G {\n")
+     # Start printing the graph data
+-    outfile.write("digraph G {\n")
++    if draw_graph:
++        outfile.write("digraph G {\n")
  
      print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
--                   arrow_dir, 0, args.depth, rootpkg, colours)
-+                   arrow_dir, 0, args.depth, rootpkg, colors)
+-                   arrow_dir, 0, args.depth, rootpkg, colors)
++                   arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
  
-     outfile.write("}\n")
+-    outfile.write("}\n")
++    if draw_graph:
++        outfile.write("}\n")
++    else:
++        outfile.write("\n")
  
+ 
+ if __name__ == "__main__":
 -- 
 2.14.3
