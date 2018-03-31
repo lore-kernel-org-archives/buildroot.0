@@ -1,59 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 18:35:38 +0200
-Subject: [Buildroot] [PATCH v2 0/5] Recursive show-depends and show-rdepends
-Message-ID: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 18:57:21 +0200
+Subject: [Buildroot] [git commit] Makefile: create symlink to non-default
+ HOST_DIR
+Message-ID: <20180331165724.90ACF83FF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=91b4a4525bf30a03c1f2542b3c4d340e5e4ca42a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a new iteration of the patch from George Redivo [1] that added
-the <pkg>-show-rrdepends target. This series pushes this much further:
+If BR2_HOST_DIR is not the default, it can be difficult to find the
+host directory (i.e., HOST_DIR always has to be passed explicitly in
+addition to the output directory). For example, the Eclipse plugin
+assumes that HOST_DIR=BASE_DIR/host.
 
- - It starts by doing a cleanup pass on graph-depends, moving all
-   global code into proper functions, and removing most global
-   variables.
+Create a symlink from $(BASE_DIR)/host to $(HOST_DIR) if it is not the
+default. Also remove it in the clean target.
 
- - It adds a --quiet option to ask graph-depends to not display its
-   debugging messages, which are not really meaningful for
-   show-recursive-depends/show-recursive-rdepend.
+When BR2_HOST_DIR is the default, HOST_DIR_SYMLINK will be empty so
+there will be no additional dependency to dirs and nothing to remove
+in clean.
 
- - We have chosen to name the target <pkg>-show-recursive-rdepends
-   instead of <pkg>-show-rrdepends, as it is more explicitly, and
-   allows us to also introduce <pkg>-show-recursive-depends.
+Fixes https://bugs.busybox.net/show_bug.cgi?id=10151
 
- - The change in graph-depends (introducing the --flat-list feature)
-   and in the package infrastructure are in separate patches.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
- - The output of show-recursive-(r)depends is now on a single line
-   (instead of one package by line), to match the output of the
-   existing show-depends and show-rdepends targets.
-
-[1] http://patchwork.ozlabs.org/patch/756075/
-
-Thanks!
-
-Thomas
-
-George Redivo (2):
-  support/scripts/graph-depends: add --flat-list option
-  package/pkg-generic: add <pkg>-show-recursive-(r)depends targets
-
-Thomas Petazzoni (3):
-  support/scripts/graph-depends: remove global code and most global
-    variables
-  support/scripts/graph-depends: use colors instead of colours
-  support/scripts/graph-depends: add --quiet option
-
- Makefile                      |   4 +
- docs/manual/common-usage.txt  |   4 +-
- package/pkg-generic.mk        |   8 ++
- support/scripts/brpkgutil.py  |  18 +--
- support/scripts/graph-depends | 313 ++++++++++++++++++++++--------------------
- 5 files changed, 188 insertions(+), 159 deletions(-)
-
--- 
-2.14.3
+diff --git a/Makefile b/Makefile
+index 377737fb28..d7826b67d9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -445,6 +445,12 @@ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ # packages compiled for the host go here
+ HOST_DIR := $(call qstrip,$(BR2_HOST_DIR))
+ 
++ifneq ($(HOST_DIR),$(BASE_DIR)/host)
++HOST_DIR_SYMLINK = $(BASE_DIR)/host
++$(HOST_DIR_SYMLINK): $(BASE_DIR)
++	ln -snf $(HOST_DIR) $(BASE_DIR)/host
++endif
++
+ # Quotes are needed for spaces and all in the original PATH content.
+ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+ 
+@@ -548,7 +554,7 @@ endif
+ 
+ .PHONY: dirs
+ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+-	$(HOST_DIR) $(BINARIES_DIR)
++	$(HOST_DIR) $(HOST_DIR_SYMLINK) $(BINARIES_DIR)
+ 
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+@@ -968,7 +974,7 @@ printvars:
+ 
+ .PHONY: clean
+ clean:
+-	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
++	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
+ 		$(BUILD_DIR) $(BASE_DIR)/staging \
+ 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
+ 
