@@ -1,73 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 15:27:34 +0200
-Subject: [Buildroot] [PATCH v4 6/8] package/docker-containerd: convert to
- golang infrastructure
-In-Reply-To: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
-References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331132736.21105-7-thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 15:27:28 +0200
+Subject: [Buildroot] [PATCH v4 0/8] Introduce a golang-package infrastructure
+Message-ID: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Hello,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/docker-containerd/docker-containerd.mk | 33 +++++++-------------------
- 1 file changed, 8 insertions(+), 25 deletions(-)
+This v4 is a new iteration of the work done by Angelo Compagnucci to
+introduce a golang package infrastructure. Note that in its v3 of the
+series, Angelo had a PATCH 7/7 that was adding 'mender' as a new
+package, but this specific patch is not part of this series.
 
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 8f0822b77f..88e27b5ed4 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -9,37 +9,20 @@ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VER
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
- 
--DOCKER_CONTAINERD_DEPENDENCIES = host-go
-+DOCKER_CONTAINERD_WORKSPACE = vendor
- 
--DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
--DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
--	CGO_ENABLED=1 \
--	GOBIN="$(@D)/bin" \
--	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
--
--DOCKER_CONTAINERD_GLDFLAGS = \
-+DOCKER_CONTAINERD_LDFLAGS = \
- 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--DOCKER_CONTAINERD_GLDFLAGS += -extldflags '-static'
--endif
-+DOCKER_CONTAINERD_BUILD_TARGETS = ctr containerd containerd-shim
- 
--define DOCKER_CONTAINERD_CONFIGURE_CMDS
--	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
--	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
--endef
-+DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
- 
--define DOCKER_CONTAINERD_BUILD_CMDS
--	$(foreach d,ctr containerd containerd-shim,\
--		cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/bin/go build \
--			-v -o $(@D)/bin/$(d) -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./$(d)$(sep))
--endef
--
--define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
-+define DOCKER_CONTAINERD_INSTALL_SYMLINKS
- 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
--	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
--	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
- 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
- endef
- 
--$(eval $(generic-package))
-+DOCKER_CONTAINERD_POST_INSTALL_TARGET_HOOKS += DOCKER_CONTAINERD_INSTALL_SYMLINKS
-+
-+$(eval $(golang-package))
+Changes since v3:
+
+ - Removed the "unexport GOBIN" and instead pass an empty GOBIN in
+   <foo>_GO_ENV.
+
+ - Renamed <foo>_GOPATH to <foo>_WORKSPACE, because the variable
+   didn't contain a path, but just a sub-directory, and this
+   sub-directory in the Go terminology is called the "workspace"
+
+ - Rename <foo>_GO_LDFLAGS and <foo>_GO_TAGS to just <foo>_LDFLAGS and
+   <foo>_TAGS.
+
+ - Generally speaking the _GO_ component of the variables has been
+   removed, to be more consistent with what other infrastructures
+   do. It has been kept for <foo>_GO_ENV because it is really what we
+   pass in the environment when calling "go".
+
+ - Rename <foo>_GO_SRC_PATH to <foo>_SRC_SUBDIR, because it's actually
+   a sub-directory and not a path. Also, the way it's calculated has
+   been changed to use the second component of the URL instead of the
+   package name, as it matches more often with the value that is
+   needed. In addition, to make its definition clearer, some
+   intermediate variable were introduced: <foo>_SRC_DOMAIN,
+   <foo>_SRC_VENDOR and <foo>_SRC_SOFTWARE.
+
+ - Introduce <foo>_BUILD_TARGETS as a list of targets to be built,
+   which allows to support packages that need to build several
+   targets.
+
+ - Introduce <foo>_INSTALL_BINS as a list of binaries to be installed,
+   which allows to support packages that need to install several
+   binaries.
+
+ - All packages and the documentation were adjusted according to the
+   changes made to the infrastructure.
+
+ - The docker-proxy package was converted to the golang package
+   infrastructure (this package didn't exist back when Angelo sent his
+   v3).
+
+ - An initial preparation patch cleaning up some useless step in the
+   docker-containerd package was introduced. Details in the commit
+   log.
+
+Thanks!
+
+Thomas
+
+Angelo Compagnucci (6):
+  package/pkg-golang: new package infrastructure
+  docs/manual: add documentation for the golang infrastructure
+  package/flannel: convert to golang infrastructure
+  package/runc: convert to golang infrastructure
+  package/docker-containerd: convert to golang infrastructure
+  package/docker-engine: convert to golang infrastructure
+
+Thomas Petazzoni (2):
+  docker-containerd: remove symlink to $(RUNC_SRCDIR)
+  package/docker-proxy: convert to golang infrastructure
+
+ docs/manual/adding-packages-golang.txt         | 110 ++++++++++++++++++++
+ docs/manual/adding-packages.txt                |   2 +
+ package/Makefile.in                            |   1 +
+ package/docker-containerd/docker-containerd.mk |  35 ++-----
+ package/docker-engine/docker-engine.mk         |  67 ++++--------
+ package/docker-proxy/docker-proxy.mk           |  31 +-----
+ package/flannel/flannel.mk                     |  32 +-----
+ package/pkg-golang.mk                          | 136 +++++++++++++++++++++++++
+ package/runc/runc.mk                           |  37 +------
+ 9 files changed, 287 insertions(+), 164 deletions(-)
+ create mode 100644 docs/manual/adding-packages-golang.txt
+ create mode 100644 package/pkg-golang.mk
+
 -- 
 2.14.3
