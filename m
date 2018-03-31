@@ -1,33 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Mar 2018 23:09:46 +0200
-Subject: [Buildroot] amd-gpu-bin-mx51 cannot be fetched
-In-Reply-To: <20180315174831.GA24143@t450s.lan> (Gary Bisson's message of
- "Thu, 15 Mar 2018 18:48:31 +0100")
-References: <20180315174831.GA24143@t450s.lan>
-Message-ID: <87tvswrlyd.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 31 Mar 2018 23:09:43 +0200
+Subject: [Buildroot] [PATCH 13/15 v4] fs: run packages' filesystem hooks
+ in a copy of target/
+In-Reply-To: <87bmf4t2go.fsf@dell.be.48ers.dk>
+References: <cover.1522487149.git.yann.morin.1998@free.fr>
+ <193b195e0bb305f01ccedd565a517635a975b154.1522487149.git.yann.morin.1998@free.fr>
+ <cbd0a228-12b8-9a72-f4bc-311f4c95d001@mind.be>
+ <87bmf4t2go.fsf@dell.be.48ers.dk>
+Message-ID: <ac9b3e12-1746-40fa-5a11-39b0672ab32a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
 
- > Hi all,
- > Today a customer of ours wanted to build a rootfs for i.MX51 and
- > reported that amd-gpu-bin-mx51 binary cannot be fetched.
 
- > Indeed it seems that Freescale/NXP removed it from their server.
+On 31-03-18 22:27, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  >> mkdir -p $(FS_DIR)
+>  >> +	rsync -au $(BASE_TARGET_DIR)/ $(TARGET_DIR)
+> 
+>  >  This would benefit a lot from using the --link-dest= that we will also use in
+>  > PPS, in my opinion.
+> 
+> Wouldn't hard links be potentially dangerous - E.G. in case a script
+> appends to a file.
 
- > Fortunately, some people mirrored it:
- > http://support.garz-fricke.com/mirror/amd-gpu-bin-mx51-11.09.01.bin
+ If this is a script that runs in the context of building a package, then the
+hard link does exactly what we want.
 
- > What would be your preferred approach? Adding that binary to
- > http://sources.buildroot.net/?
+ If it is a script that runs in the context of rootfs generation, you have a point.
 
-The best solution would naturally be if we can get Freescale/NXP to
-re-add the file, but in the mean time I have manually put the file on
-sources.buildroot.net.
+ If your target is a bit large and you have several filesystems to support, I
+expect that making all these copies is really going to hit you in build time for
+a simple package rebuild. Of course, we can fix that problem when it happens.
+
+ Regards,
+ Arnout
+
+
+> As I mentioned in my comments to patch 15, we could as well use cp
+> instead of rsync as we throw away the copy after each build.
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
