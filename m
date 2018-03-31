@@ -1,180 +1,126 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 16:28:08 +0200
-Subject: [Buildroot] [PATCH v4 3/8] docs/manual: add documentation for
- the golang infrastructure
-In-Reply-To: <20180331132736.21105-4-thomas.petazzoni@bootlin.com>
-References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
- <20180331132736.21105-4-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331142808.GG25161@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 31 Mar 2018 16:38:55 +0200
+Subject: [Buildroot] [PATCH] ARC: Add support for ARC HS38 with Hardware
+ Floating Point
+In-Reply-To: <1499695556.6394.30.camel@synopsys.com>
+References: <20170710133650.8692-1-abrodkin@synopsys.com>
+ <20170710154629.442a4411@windsurf.lan>
+ <1499695556.6394.30.camel@synopsys.com>
+Message-ID: <cc3196e6-19db-04e0-6c21-01a3cd1b5fd2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Angelo, All,
+ Finally coming back to this old patch...
 
-On 2018-03-31 15:27 +0200, Thomas Petazzoni spake thusly:
-> From: Angelo Compagnucci <angelo@amarulasolutions.com>
+On 10-07-17 16:05, Alexey Brodkin wrote:
+> Hi Thomas,
 > 
-> This patch adds the documentation for the golang infrastructure.
+> On Mon, 2017-07-10 at 15:46 +0200, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Mon, 10 Jul 2017 16:36:50 +0300, Alexey Brodkin wrote:
+>>>
+>>> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+>>> ---
+>>> ?arch/Config.in.arc???????| 10 +++++++---
+>>> ?package/uclibc/Config.in |??1 +
+>>> ?2 files changed, 8 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+>>> index 7d341f3136..d0e2286557 100644
+>>> --- a/arch/Config.in.arc
+>>> +++ b/arch/Config.in.arc
+>>> @@ -14,12 +14,15 @@ config BR2_arc770d
+>>> ?config BR2_archs38
+>>> ?	bool "ARC HS38"
+>>> ?
+>>> +config BR2_archs38_hf
+>>> +	bool "ARC HS38 with hard floating-point"
+>>
+>> Does it need to be a separate CPU type, or an option when HS38 is
+>> selected ?
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Well this is a real "-mcpu" value understood by GCC for ARC
+> ------------------------------>8-------------------------------
+> arc-linux-gcc --target-help
+> ...
+> ARC-specific assembler options:
+> ? -mcpu=<cpu name>	??(default: hs38), assemble for CPU <cpu name>, one of:
+> ??????????????????????????arc700, nps400, arcem, em, em4, em4_dmips, em4_fpus,?
+> ??????????????????????????em4_fpuda, quarkse_em, archs, hs, hs34, hs38,?
+> ??????????????????????????hs38_linux, arc600, arc600_norm, arc600_mul64,?
+> ??????????????????????????arc600_mul32x16, arc601, arc601_norm, arc601_mul64,?
+> ??????????????????????????arc601_mul32x16
+> ------------------------------>8-------------------------------
+> 
+> And in itself this is pretty much an alias to a set of HW features
+> selected by default in the same ARC HS38 "template" in CPU configuration
+> utility. In fact it is "-mcpu=hs38 -mfpu=fpud_all". But when we configure GCC
+> with "-mcpu" option it then is used by default, i.e. even if we later build
+> a random application with a simple "arc-linux-gcc test.c" it implicitly gets
+> optimized for that same "-mcpu"... i.e. there's no need in adding stuff in
+> TARGET_ABI variable in Buildroot etc.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ As such, I don't think this is a sufficient reason to make it a separate CPU
+option. Rather, I think we should consider what are the likely future
+architectures that are going to be added. We now have 750d, 770d and hs38. I
+guess there is no floating point option for the 750d and 770d? If there is, then
+clearly it would be better to have a separate hf option so it can be used for
+the 750d and 770d as well. If not, we should consider a future hs42: is it
+likely to have an optional fpu? Or is it likely to always have an fpu?
 
-Regards,
-Yann E. MORIN.
+ Basically, what we want to avoid in the long run is to have many different
+subarches which are basically different combinations of options.
 
-> ---
->  docs/manual/adding-packages-golang.txt | 110 +++++++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt        |   2 +
->  2 files changed, 112 insertions(+)
->  create mode 100644 docs/manual/adding-packages-golang.txt
+ So, in short: making a separate subarch for it is only warranted if you expect
+this will be the only one with an optional FPU (or rather, where in practice an
+FPU is always there, because obviously on ARC anything is possible).
+
+
+ Regards,
+ Arnout
+
 > 
-> diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-> new file mode 100644
-> index 0000000000..418da5fa4f
-> --- /dev/null
-> +++ b/docs/manual/adding-packages-golang.txt
-> @@ -0,0 +1,110 @@
-> +// -*- mode:doc; -*-
-> +// vim: set syntax=asciidoc:
-> +
-> +=== Infrastructure for Go packages
-> +
-> +This infrastructure applies to Go packages that use the standard
-> +build system and use bundled dependencies.
-> +
-> +[[golang-package-tutorial]]
-> +
-> +==== +golang-package+ tutorial
-> +
-> +First, let's see how to write a +.mk+ file for a go package,
-> +with an example :
-> +
-> +------------------------
-> +01: ################################################################################
-> +02: #
-> +03: # foo
-> +04: #
-> +05: ################################################################################
-> +06:
-> +07: FOO_VERSION = 1.0
-> +08: FOO_SITE = $(call github,bar,foo,$(FOO_VERSION))
-> +09: FOO_LICENSE = BSD-3-Clause
-> +10: FOO_LICENSE_FILES = LICENSE
-> +11:
-> +12: $(eval $(golang-package))
-> +------------------------
-> +
-> +On line 7, we declare the version of the package.
-> +
-> +On line 8, we declare the upstream location of the package, here
-> +fetched from Github, since a large number of Go packages are hosted on
-> +Github.
-> +
-> +On line 9 and 10, we give licensing details about the package.
-> +
-> +Finally, on line 12, we invoke the +golang-package+ macro that
-> +generates all the Makefile rules that actually allow the package to be
-> +built.
-> +
-> +[[golang-package-reference]]
-> +
-> +==== +golang-package+ reference
-> +
-> +In their +Config.in+ file, packages using the +golang-package+
-> +infrastructure should depend on +BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS+
-> +and +BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ because Buildroot will
-> +automatically add a dependency on +host-go+ to such packages.
-> +
-> +The main macro of the Go package infrastructure is
-> ++golang-package+. It is similar to the +generic-package+ macro. Only
-> +target packages are supported with +golang-package+.
-> +
-> +Just like the generic infrastructure, the Go infrastructure works
-> +by defining a number of variables before calling the +golang-package+.
-> +
-> +All the package metadata information variables that exist in the
-> +xref:generic-package-reference[generic package infrastructure] also
-> +exist in the Go infrastructure: +FOO_VERSION+, +FOO_SOURCE+,
-> ++FOO_PATCH+, +FOO_SITE+, +FOO_SUBDIR+, +FOO_DEPENDENCIES+,
-> ++FOO_LICENSE+, +FOO_LICENSE_FILES+, +FOO_INSTALL_STAGING+, etc.
-> +
-> +Note that:
-> +
-> + * It is not necessary to add +go+ or +host-go+ in the
-> +   +FOO_DEPENDENCIES+ variable of a package, since these basic
-> +   dependencies are automatically added as needed by the Go package
-> +   infrastructure.
-> +
-> +A few additional variables, specific to the Go infrastructure, can
-> +optionally be defined, depending on the package's needs. Many of them
-> +are only useful in very specific cases, typical packages will
-> +therefore only use a few of them, or none.
-> +
-> +* If your package need a custom +GOPATH+ to be compiled in, you can
-> +  use the +FOO_WORKSPACE+ variable. The +GOPATH+ being used will be
-> +  +<package-srcdir>/<FOO_WORKSPACE>+. If +FOO_WORKSPACE+ is not
-> +  specified, it defaults to +_gopath+.
-> +
-> +* +FOO_SRC_SUBDIR+ is the sub-directory where your source will be
-> +  compiled relatively to the +GOPATH+. An example value is
-> +  +github.com/bar/foo+. If +FOO_SRC_SUBDIR+ is not specified, it
-> +  defaults to a value infered from the +FOO_SITE+ variable.
-> +
-> +* +FOO_LDFLAGS+ and +FOO_TAGS+ can be used to pass respectively the
-> +  +LDFLAGS+ or the +TAGS+ to the +go+ build command.
-> +
-> +* +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
-> +  should be built. If +FOO_BUILD_TARGETS+ is not specified, it
-> +  defaults to +.+.
-> +
-> +* +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
-> +  should be installed +/usr/bin+ on the target. If +FOO_INSTALL_BINS+
-> +  is not specified, it defaults to the lower-case name of package.
-> +
-> +With the Go infrastructure, all the steps required to build and
-> +install the packages are already defined, and they generally work well
-> +for most Go-based packages. However, when required, it is still
-> +possible to customize what is done in any particular step:
-> +
-> +* By adding a post-operation hook (after extract, patch, configure,
-> +  build or install). See xref:hooks[] for details.
-> +
-> +* By overriding one of the steps. For example, even if the Go
-> +  infrastructure is used, if the package +.mk+ file defines its own
-> +  +FOO_BUILD_CMDS+ variable, it will be used instead of the default Go
-> +  one. However, using this method should be restricted to very
-> +  specific cases. Do not use it in the general case.
-> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-> index e8d40daee4..c642146287 100644
-> --- a/docs/manual/adding-packages.txt
-> +++ b/docs/manual/adding-packages.txt
-> @@ -38,6 +38,8 @@ include::adding-packages-meson.txt[]
->  
->  include::adding-packages-cargo.txt[]
->  
-> +include::adding-packages-golang.txt[]
-> +
->  include::adding-packages-kernel-module.txt[]
->  
->  include::adding-packages-asciidoc.txt[]
-> -- 
-> 2.14.3
+> For example in OpenEmbedded we went via separate options instead of those
+> "templates" as the same toolchain is reused between different builds which
+> differs from Buildroot where we build everything for just one HW configuration.
+> So IMHO templates approach in Buildroot is more convenient.
 > 
+>> ?config BR2_ARCH
+>>> ?	default "arc"	if BR2_arcle
+>>> @@ -37,6 +40,7 @@ config BR2_GCC_TARGET_CPU
+>>> ?	default "arc700" if BR2_arc750d
+>>> ?	default "arc700" if BR2_arc770d
+>>> ?	default "archs"	?if BR2_archs38
+>>> +	default "hs38_linux"	?if BR2_archs38_hf
+>>
+>> gcc really understands -mcpu=hs38_linux ?
+>>
+>> It seems odd to have the operating system name encoded in the CPU name.
+> 
+> The rationale behind that naming was to highlight a template which is
+> the best option for Linux use-case. I.e. if you want to build a system that
+> runs
+> Linux on top of ARC HS38 core please consider usage of that "template"
+> which has HW features that [may significantly] improve performance of the
+> system.
+> 
+> Still not sure if now you feel more comfortable with that stuff :))
+> 
+> -Alexey
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
