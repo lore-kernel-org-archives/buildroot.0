@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 30 Mar 2018 23:22:51 -0300
-Subject: [Buildroot] [PATCH 26/36] arch/Config.in*: re-wrap help text
+Date: Fri, 30 Mar 2018 23:22:52 -0300
+Subject: [Buildroot] [PATCH 27/36] boot/*/Config.in: re-wrap help text
 In-Reply-To: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
 References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180331022301.27501-27-ricardo.martincoski@gmail.com>
+Message-ID: <20180331022301.27501-28-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,290 +14,151 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- arch/Config.in        | 97 ++++++++++++++++++++++++++++-----------------------
- arch/Config.in.mips   |  4 +--
- arch/Config.in.xtensa | 12 +++----
- 3 files changed, 61 insertions(+), 52 deletions(-)
+ boot/at91bootstrap/Config.in  |  6 ++++--
+ boot/at91bootstrap3/Config.in | 10 ++++++----
+ boot/uboot/Config.in          | 43 ++++++++++++++++++++++---------------------
+ 3 files changed, 32 insertions(+), 27 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index dd972bc0ee..65448e9339 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -28,24 +28,25 @@ config BR2_arcle
- 	bool "ARC (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index 96cfdbc7e9..0f6430fd8d 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -4,9 +4,11 @@ config BR2_TARGET_AT91BOOTSTRAP
  	help
--	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
--	  that can be used from deeply embedded to high performance host
--	  applications. Little endian.
-+	  Synopsys' DesignWare ARC Processor Cores are a family of
-+	  32-bit CPUs that can be used from deeply embedded to high
-+	  performance host applications. Little endian.
+ 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
+ 	  devices. It integrates algorithms for:
+-	  - Device initialization such as clock configuration, PIO settings...
++	  - Device initialization such as clock configuration, PIO
++	    settings...
+ 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
+-	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
++	  - Physical media algorithm such as DataFlash, NandFlash, NOR
++	    Flash...
  
- config BR2_arceb
- 	bool "ARC (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
--	  that can be used from deeply embedded to high performance host
--	  applications. Big endian.
-+	  Synopsys' DesignWare ARC Processor Cores are a family of
-+	  32-bit CPUs that can be used from deeply embedded to high
-+	  performance host applications. Big endian.
+ if	BR2_TARGET_AT91BOOTSTRAP
  
- config BR2_arm
- 	bool "ARM (little endian)"
- 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index bdc1e775a8..614363c9a6 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -4,9 +4,11 @@ config BR2_TARGET_AT91BOOTSTRAP3
  	help
--	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
--	  set architecture (ISA) developed by ARM Holdings. Little endian.
-+	  ARM is a 32-bit reduced instruction set computer (RISC)
-+	  instruction set architecture (ISA) developed by ARM Holdings.
-+	  Little endian.
- 	  http://www.arm.com/
- 	  http://en.wikipedia.org/wiki/ARM
+ 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
+ 	  devices. It integrates algorithms for:
+-	  - Device initialization such as clock configuration, PIO settings...
++	  - Device initialization such as clock configuration, PIO
++	    settings...
+ 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
+-	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
++	  - Physical media algorithm such as DataFlash, NandFlash, NOR
++	    Flash...
  
-@@ -53,8 +54,9 @@ config BR2_armeb
- 	bool "ARM (big endian)"
- 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
- 	help
--	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
--	  set architecture (ISA) developed by ARM Holdings. Big endian.
-+	  ARM is a 32-bit reduced instruction set computer (RISC)
-+	  instruction set architecture (ISA) developed by ARM Holdings.
-+	  Big endian.
- 	  http://www.arm.com/
- 	  http://en.wikipedia.org/wiki/ARM
+ if BR2_TARGET_AT91BOOTSTRAP3
  
-@@ -81,8 +83,8 @@ config BR2_bfin
- 	select BR2_ARCH_HAS_FDPIC_SUPPORT
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+@@ -20,8 +22,8 @@ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
  	help
--	  The Blackfin is a family of 16 or 32-bit microprocessors developed,
--	  manufactured and marketed by Analog Devices.
-+	  The Blackfin is a family of 16 or 32-bit microprocessors
-+	  developed, manufactured and marketed by Analog Devices.
- 	  http://www.analog.com/
- 	  http://en.wikipedia.org/wiki/Blackfin
- 
-@@ -113,8 +115,8 @@ config BR2_microblazeel
- 	bool "Microblaze AXI (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI bus
--	  based architecture (little endian)
-+	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI
-+	  bus based architecture (little endian)
- 	  http://www.xilinx.com
- 	  http://en.wikipedia.org/wiki/Microblaze
- 
-@@ -122,8 +124,8 @@ config BR2_microblazebe
- 	bool "Microblaze non-AXI (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB bus
--	  based architecture (non-AXI, big endian)
-+	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB
-+	  bus based architecture (non-AXI, big endian)
- 	  http://www.xilinx.com
- 	  http://en.wikipedia.org/wiki/Microblaze
- 
-@@ -131,7 +133,8 @@ config BR2_mips
- 	bool "MIPS (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Big
-+	  endian.
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
-@@ -139,7 +142,8 @@ config BR2_mipsel
- 	bool "MIPS (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Little
-+	  endian.
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
-@@ -148,7 +152,8 @@ config BR2_mips64
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Big
-+	  endian.
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
-@@ -157,7 +162,8 @@ config BR2_mips64el
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Little
-+	  endian.
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
-@@ -180,8 +186,8 @@ config BR2_powerpc
- 	bool "PowerPC"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
--	  Big endian.
-+	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
-+	  alliance. Big endian.
- 	  http://www.power.org/
- 	  http://en.wikipedia.org/wiki/Powerpc
- 
-@@ -190,8 +196,8 @@ config BR2_powerpc64
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
--	  Big endian.
-+	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
-+	  alliance. Big endian.
- 	  http://www.power.org/
- 	  http://en.wikipedia.org/wiki/Powerpc
- 
-@@ -200,8 +206,8 @@ config BR2_powerpc64le
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
--	  Little endian.
-+	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
-+	  alliance. Little endian.
- 	  http://www.power.org/
- 	  http://en.wikipedia.org/wiki/Powerpc
- 
-@@ -209,8 +215,9 @@ config BR2_sh
- 	bool "SuperH"
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	help
--	  SuperH (or SH) is a 32-bit reduced instruction set computer (RISC)
--	  instruction set architecture (ISA) developed by Hitachi.
-+	  SuperH (or SH) is a 32-bit reduced instruction set computer
-+	  (RISC) instruction set architecture (ISA) developed by
-+	  Hitachi.
- 	  http://www.hitachi.com/
- 	  http://en.wikipedia.org/wiki/SuperH
- 
-@@ -218,8 +225,9 @@ config BR2_sparc
- 	bool "SPARC"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  SPARC (from Scalable Processor Architecture) is a RISC instruction
--	  set architecture (ISA) developed by Sun Microsystems.
-+	  SPARC (from Scalable Processor Architecture) is a RISC
-+	  instruction set architecture (ISA) developed by Sun
-+	  Microsystems.
- 	  http://www.oracle.com/sun
- 	  http://en.wikipedia.org/wiki/Sparc
- 
-@@ -228,8 +236,9 @@ config BR2_sparc64
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  SPARC (from Scalable Processor Architecture) is a RISC instruction
--	  set architecture (ISA) developed by Sun Microsystems.
-+	  SPARC (from Scalable Processor Architecture) is a RISC
-+	  instruction set architecture (ISA) developed by Sun
-+	  Microsystems.
- 	  http://www.oracle.com/sun
- 	  http://en.wikipedia.org/wiki/Sparc
- 
-@@ -349,27 +358,27 @@ config BR2_BINFMT_ELF
- 	depends on BR2_USE_MMU
- 	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
--	  ELF (Executable and Linkable Format) is a format for libraries and
--	  executables used across different architectures and operating
--	  systems.
-+	  ELF (Executable and Linkable Format) is a format for libraries
-+	  and executables used across different architectures and
-+	  operating systems.
- 
- config BR2_BINFMT_FDPIC
- 	bool "FDPIC"
- 	depends on BR2_ARCH_HAS_FDPIC_SUPPORT
- 	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
--	  ELF FDPIC binaries are based on ELF, but allow the individual load
--	  segments of a binary to be located in memory independently of each
--	  other. This makes this format ideal for use in environments where no
--	  MMU is available.
-+	  ELF FDPIC binaries are based on ELF, but allow the individual
-+	  load segments of a binary to be located in memory
-+	  independently of each other. This makes this format ideal for
-+	  use in environments where no MMU is available.
- 
- config BR2_BINFMT_FLAT
- 	bool "FLAT"
- 	depends on !BR2_USE_MMU
- 	help
--	  FLAT binary is a relatively simple and lightweight executable format
--	  based on the original a.out format. It is widely used in environment
--	  where no MMU is available.
-+	  FLAT binary is a relatively simple and lightweight executable
-+	  format based on the original a.out format. It is widely used
-+	  in environment where no MMU is available.
+-	  This option allows Buildroot to get the AT91 Bootstrap 3 source
+-	  code from a Git repository.
++	  This option allows Buildroot to get the AT91 Bootstrap 3
++	  source code from a Git repository.
  
  endchoice
  
-@@ -393,8 +402,8 @@ config BR2_BINFMT_FLAT_SEP_DATA
- 	# absolute jump" or "error: value -yyyyy out of range".
- 	depends on BR2_bfin
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index d96e7f687f..19cf12a073 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -11,14 +11,14 @@ choice
+ config BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+ 	bool "Legacy"
  	help
--	  Allow for the data and text segments to be separated and placed in
--	  different regions of memory.
-+	  Allow for the data and text segments to be separated and
-+	  placed in different regions of memory.
+-	  Select this option if you use an old U-Boot (older than 2015.04),
+-	  so that we use the old build system.
++	  Select this option if you use an old U-Boot (older than
++	  2015.04), so that we use the old build system.
  
- config BR2_BINFMT_FLAT_SHARED
- 	bool "Shared binary"
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index cc11744f04..e45299f818 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -147,8 +147,8 @@ choice
- 	default BR2_MIPS_FP32_MODE_XX
- 	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
+ config BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+ 	bool "Kconfig"
  	help
--	  MIPS32 supports different FP modes (32,xx,64). Information about FP
--	  modes can be found here:
-+	  MIPS32 supports different FP modes (32,xx,64). Information
-+	  about FP modes can be found here:
- 	  https://sourceware.org/binutils/docs/as/MIPS-Options.html
- 	  https://dmz-portal.imgtec.com/wiki/MIPS_O32_ABI_-_FR0_and_FR1_Interlinking#5._Generating_modeless_code
+-	  Select this option if you use a recent U-Boot version (2015.04 or
+-	  newer), so that we use the Kconfig build system.
++	  Select this option if you use a recent U-Boot version (2015.04
++	  or newer), so that we use the Kconfig build system.
  
-diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-index 49e93a4774..14049480ec 100644
---- a/arch/Config.in.xtensa
-+++ b/arch/Config.in.xtensa
-@@ -20,13 +20,13 @@ config BR2_XTENSA_OVERLAY_FILE
- 	  Enter the path to the overlay tarball for a custom processor
- 	  configuration.
+ endchoice
  
--	  These overlay files are tar packages with updated configuration
--	  files for various toolchain packages and Xtensa processor
--	  configurations. They are provided by the processor vendor or
--	  directly from Tensilica.
-+	  These overlay files are tar packages with updated
-+	  configuration files for various toolchain packages and Xtensa
-+	  processor configurations. They are provided by the processor
-+	  vendor or directly from Tensilica.
- 
--	  The path can be either absolute, or relative to the top directory
--	  of buildroot.
-+	  The path can be either absolute, or relative to the top
-+	  directory of buildroot.
+@@ -27,9 +27,9 @@ config BR2_TARGET_UBOOT_BOARDNAME
+ 	string "U-Boot board name"
+ 	help
+ 	  One of U-Boot supported boards to be built.
+-	  This will be suffixed with _config to meet U-Boot standard naming.
+-	  See boards.cfg in U-Boot source code for the list of available
+-	  configurations.
++	  This will be suffixed with _config to meet U-Boot standard
++	  naming. See boards.cfg in U-Boot source code for the list of
++	  available configurations.
+ endif
  
  choice
- 	prompt "Target Architecture Endianness"
+@@ -79,8 +79,8 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
+ 		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
+ 	help
+-	  Revision to use in the typical format used by Git/Mercurial/Subversion
+-	  E.G. a sha id, a tag, branch, ..
++	  Revision to use in the typical format used by
++	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
+ 
+ endif
+ 
+@@ -229,25 +229,25 @@ config BR2_TARGET_UBOOT_FORMAT_NAND
+ 	bool "u-boot.nand (Freescale i.MX28)"
+ 	depends on BR2_arm
+ 	help
+-	  This is Freescale i.MX28 BootStream format (.sb), with a header
+-	  for booting from a NAND flash.
++	  This is Freescale i.MX28 BootStream format (.sb), with a
++	  header for booting from a NAND flash.
+ 
+ 	  U-boot includes an mxsboot tool to generate this format,
+ 	  starting from 2011.12.
+ 
+-	  There are two possibilities when preparing an image writable to
+-	  NAND flash:
+-	  1) The NAND was not written at all yet or the BCB (Boot Control
+-	  Blocks) is broken. In this case, the NAND image 'u-boot.nand'
+-	  needs to written.
++	  There are two possibilities when preparing an image writable
++	  to NAND flash:
++	  1) The NAND was not written at all yet or the BCB (Boot
++	  Control Blocks) is broken. In this case, the NAND image
++	  'u-boot.nand' needs to written.
+ 	  2) The NAND flash was already written with a good BCB. This
+ 	  applies after 'u-boot.nand' was correctly written. There is no
+-	  need to write the BCB again. In this case, the bootloader can be
+-	  upgraded by writing 'u-boot.sb'.
++	  need to write the BCB again. In this case, the bootloader can
++	  be upgraded by writing 'u-boot.sb'.
+ 
+ 	  To satisfy both cases, the 'u-boot.nand' image obtained from
+-	  mxsboot as well as the U-Boot make target 'u-boot.sb' are copied
+-	  to the binaries directory.
++	  mxsboot as well as the U-Boot make target 'u-boot.sb' are
++	  copied to the binaries directory.
+ 
+ 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+ 
+@@ -295,7 +295,8 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
+ 	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM
+ 	help
+ 	  In case the U-Boot binary for the target platform is not among
+-	  the default names, one or more custom names can be listed here.
++	  the default names, one or more custom names can be listed
++	  here.
+ 	  Use space to separate multiple names.
+ 	  Example:
+ 	  u-boot_magic.bin
 -- 
 2.14.1
