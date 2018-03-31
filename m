@@ -1,168 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 17:04:05 +0200
-Subject: [Buildroot] [PATCH v4 7/8] package/docker-engine: convert to
- golang infrastructure
-In-Reply-To: <20180331132736.21105-8-thomas.petazzoni@bootlin.com>
-References: <20180331132736.21105-1-thomas.petazzoni@bootlin.com>
- <20180331132736.21105-8-thomas.petazzoni@bootlin.com>
-Message-ID: <20180331150405.GK25161@scaer>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 31 Mar 2018 17:08:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: Fix ffmpeg build on
+ aarch64
+In-Reply-To: <20180128152024.6994-1-bernd.kuhls@t-online.de>
+References: <20180128152024.6994-1-bernd.kuhls@t-online.de>
+Message-ID: <be59172d-0d96-371f-6eee-302ce73e8823@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Angelo, All,
+Hi Bernd,
 
-On 2018-03-31 15:27 +0200, Thomas Petazzoni spake thusly:
-> From: Angelo Compagnucci <angelo@amarulasolutions.com>
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Le 28/01/2018 ? 16:20, Bernd Kuhls a ?crit?:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/docker-engine/docker-engine.mk | 67 +++++++++-------------------------
->  1 file changed, 17 insertions(+), 50 deletions(-)
+>  ...-sys-ucontext.h-include-bits-sigcontext.h.patch | 49 ++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch
 > 
-> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-> index 8928f072e7..feb47d4994 100644
-> --- a/package/docker-engine/docker-engine.mk
-> +++ b/package/docker-engine/docker-engine.mk
-> @@ -13,70 +13,53 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
->  
->  DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
->  
-> -DOCKER_ENGINE_GOPATH = "$(@D)/gopath"
-> -DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-> -	CGO_ENABLED=1 \
-> -	CGO_NO_EMULATION=1 \
-> -	GOBIN="$(@D)/bin" \
-> -	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
-> -	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-> -	$(TARGET_MAKE_ENV)
-> -
-> -DOCKER_ENGINE_GLDFLAGS = \
-> +DOCKER_ENGINE_LDFLAGS = \
->  	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
->  	-X main.Version=$(DOCKER_ENGINE_VERSION)
->  
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -DOCKER_ENGINE_GLDFLAGS += -extldflags '-static'
-> -else
-> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
-> -DOCKER_ENGINE_GLDFLAGS_DOCKER += -extldflags '-static'
-> -endif
-> -endif
-
-So, where do you now enforce a static build when
-BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT is set?
-
-Regards,
-Yann E. MORIN.
-
-> -DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
-> -DOCKER_ENGINE_BUILD_TARGETS = docker
-> +DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
-> +DOCKER_ENGINE_BUILD_TARGETS = cmd/docker
->  
->  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-> -DOCKER_ENGINE_BUILD_TAGS += seccomp
-> +DOCKER_ENGINE_TAGS += seccomp
->  DOCKER_ENGINE_DEPENDENCIES += libseccomp
->  endif
->  
->  ifeq ($(BR2_INIT_SYSTEMD),y)
-> -DOCKER_ENGINE_BUILD_TAGS += journald
-> +DOCKER_ENGINE_TAGS += journald
->  DOCKER_ENGINE_DEPENDENCIES += systemd
->  endif
->  
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-> -DOCKER_ENGINE_BUILD_TAGS += daemon
-> -DOCKER_ENGINE_BUILD_TARGETS += dockerd
-> +DOCKER_ENGINE_TAGS += daemon
-> +DOCKER_ENGINE_BUILD_TARGETS += cmd/dockerd
->  endif
->  
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-> -DOCKER_ENGINE_BUILD_TAGS += experimental
-> +DOCKER_ENGINE_TAGS += experimental
->  endif
->  
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
->  DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
->  else
-> -DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
-> +DOCKER_ENGINE_TAGS += exclude_graphdriver_btrfs
->  endif
->  
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
->  DOCKER_ENGINE_DEPENDENCIES += lvm2
->  else
-> -DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
-> +DOCKER_ENGINE_TAGS += exclude_graphdriver_devicemapper
->  endif
->  
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
->  DOCKER_ENGINE_DEPENDENCIES += gvfs
->  else
-> -DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
-> +DOCKER_ENGINE_TAGS += exclude_graphdriver_vfs
->  endif
->  
-> -define DOCKER_ENGINE_CONFIGURE_CMDS
-> -	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
-> -	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
-> +DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
+> diff --git a/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch b/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch
+> new file mode 100644
+> index 0000000000..0a1fdf6cb8
+> --- /dev/null
+> +++ b/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch
+> @@ -0,0 +1,49 @@
+> +From 1c27982bb8a007bb1a6a29db8e6efb1f40975879 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sun, 28 Jan 2018 13:59:30 +0100
+> +Subject: [PATCH 1/1] aarch64/sys/ucontext.h: include bits/sigcontext.h
 > +
-> +define DOCKER_ENGINE_RUN_AUTOGEN
->  	cd $(@D) && \
->  		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
->  		BUILDTIME="$$(date)" \
-> @@ -85,6 +68,8 @@ define DOCKER_ENGINE_CONFIGURE_CMDS
->  		bash ./hack/make/.go-autogen
->  endef
->  
-> +DOCKER_ENGINE_POST_CONFIGURE_HOOKS += DOCKER_ENGINE_RUN_AUTOGEN
+> +Fixes a buildroot build error with ffmpeg
 > +
->  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
->  
->  define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
-> @@ -103,22 +88,4 @@ endef
->  
->  endif
->  
-> -define DOCKER_ENGINE_BUILD_CMDS
-> -	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
-> -		cd $(@D)/gopath/src/github.com/docker/docker; \
-> -		$(DOCKER_ENGINE_MAKE_ENV) \
-> -		$(HOST_DIR)/bin/go build -v \
-> -			-o $(@D)/bin/$(target) \
-> -			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
-> -			-ldflags "$(DOCKER_ENGINE_GLDFLAGS) $(DOCKER_ENGINE_GLDFLAGS_$(call UPPERCASE,$(target)))" \
-> -			github.com/docker/docker/cmd/$(target)
-> -	)
-> -endef
-> -
-> -define DOCKER_ENGINE_INSTALL_TARGET_CMDS
-> -	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
-> -		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
-> -	)
-> -endef
-> -
-> -$(eval $(generic-package))
-> +$(eval $(golang-package))
-> -- 
-> 2.14.3
+> +In file included from /home/bernd/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/include/signal.h:329:0,
+> +                 from fftools/ffmpeg.h:26,
+> +                 from fftools/ffmpeg_opt.c:23:
+> +/home/bernd/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/include/sys/ucontext.h:52:16:
+> + error: field 'uc_mcontext' has incomplete type
+> +     mcontext_t uc_mcontext;
+> +                ^~~~~~~~~~~
+> +
+> +using this defconfig:
+> +
+> +BR2_aarch64=y
+> +BR2_PACKAGE_FFMPEG=y
+> +
+> +sys/ucontext.h for other archs already include bits/sigcontext.h,
+> +on aarch64 this is needed as well.
+> +
+> +Patch sent upstream:
+> +https://mailman.uclibc-ng.org/pipermail/devel/2018-January/001622.html
+
+Just a small update on this patch.
+It was accepted upstream and a new uClibc-ng release is available (1.0.29).
+
+This patch is necessary for the 2018.02.x stable branch (which use uClibc-ng 1.0.28)
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + libc/sysdeps/linux/aarch64/sys/ucontext.h | 4 ++++
+> + 1 file changed, 4 insertions(+)
+> +
+> +diff --git a/libc/sysdeps/linux/aarch64/sys/ucontext.h b/libc/sysdeps/linux/aarch64/sys/ucontext.h
+> +index d17458896..dc7303b54 100644
+> +--- a/libc/sysdeps/linux/aarch64/sys/ucontext.h
+> ++++ b/libc/sysdeps/linux/aarch64/sys/ucontext.h
+> +@@ -26,6 +26,10 @@
+> + 
+> + #include <sys/procfs.h>
+> + 
+> ++/* We need the signal context definitions even if they are not used
+> ++   included in <signal.h>.  */
+> ++#include <bits/sigcontext.h>
+> ++
+> + typedef elf_greg_t greg_t;
+> + 
+> + /* Container for all general registers.  */
+> +-- 
+> +2.11.0
+> +
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
