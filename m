@@ -1,84 +1,169 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 31 Mar 2018 11:35:15 +0200
-Subject: [Buildroot] [PATCH RESEND 1/2] fs/ubi: decouple ubi & ubifs
-In-Reply-To: <CAF3==ivL4e4vT5jxoYWb=VQH9wdG0q-qCGH1FP=EK8OtLR19CA@mail.gmail.com>
-References: <1521829279-5156-1-git-send-email-ben.whitten@gmail.com>
- <1521829279-5156-2-git-send-email-ben.whitten@gmail.com>
- <CANQCQpYPx=ZVSV_1fPK-FSERipL5xPpLBoKNd-kcTJmnQ-deBw@mail.gmail.com>
- <CAF3==ivL4e4vT5jxoYWb=VQH9wdG0q-qCGH1FP=EK8OtLR19CA@mail.gmail.com>
-Message-ID: <ee361b37-469b-0202-a8af-768da7108b28@mind.be>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 31 Mar 2018 11:50:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uwebsockets: new package
+In-Reply-To: <1504992570-8893-1-git-send-email-brain@jikos.cz>
+References: <1504992570-8893-1-git-send-email-brain@jikos.cz>
+Message-ID: <0ab3919b-ae2e-871e-6e7d-d52a355eb090@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Ben,
+Hi Petr,
 
-On 26-03-18 23:05, Ben Whitten wrote:
-> On 24 March 2018 at 03:17, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->> Ben,
->>
->> On Fri, Mar 23, 2018 at 1:21 PM, Ben Whitten <ben.whitten@gmail.com> wrote:
->>> As ubi is a container it shouldn't enforce a ubifs rootfs to be built,
->>> it is reasonable to have a squashfs ro filesystem within a ubi.
->>> If ubifs is selected ubi containing ubifs is automatically selected as
->>> to not break existing configs
->>
->> What are you thoughts on the usecase of needing the Kernel/DTB FIT (or
->> other firmware) images also in UBI?
->>
->> i.e. when online creating the UBI partitions, I can see creating a
->> single UBI and then just treating it like a raw device to store a
->> series of blobs (firmware, rootfs & kernel).  Generation of something
->> like that offline feels like a post image activity.
+Le 09/09/2017 ? 23:29, Petr Kulhavy a ?crit?:
+> Add uWebSockets, a lightweight, efficient and scalable WebSocket library.
+> https://github.com/uNetworking/uWebSockets
 > 
-> So in my context the final 'image' is something I would deliver to our
-> factory for
-> flashing in production. In this case our UBI needs it all, kernel a/b
-> rootfs a/b etc.
-
- I generally find it easier in practice to format the UBI partition "online" in
-a production script, and then add the UBI(FS) volumes to it one by one. That
-makes it easier to make sure the UBI extends to the full partition. Otherwise,
-it depends a bit on your flasher what is done with bad blocks in your image.
-
-> And its the individual artifacts that sw update gets generated from.
+> Signed-off-by: Petr Kulhavy <brain@jikos.cz>
+> ---
+>  DEVELOPERS                           |  1 +
+>  package/Config.in                    |  1 +
+>  package/uwebsockets/Config.in        | 20 ++++++++++++++++++++
+>  package/uwebsockets/uwebsockets.hash |  2 ++
+>  package/uwebsockets/uwebsockets.mk   | 36 ++++++++++++++++++++++++++++++++++++
+>  5 files changed, 60 insertions(+)
+>  create mode 100644 package/uwebsockets/Config.in
+>  create mode 100644 package/uwebsockets/uwebsockets.hash
+>  create mode 100644 package/uwebsockets/uwebsockets.mk
 > 
->> However, I guess
->> that case could just be a new image containerization option which acts
->> like a general hook to take a series of files (for each create a UBI
->> container).  On target for that option, there would be more MTD
->> devices vs a single (I'd have to revisit the limitations of a single
->> UBI vs one for each image as I'm unsure of which is better).
-> 
-> It makes sense to have the UBI as large as possible to take advantage of wear
-> leveling across the full flash, instead of artificially limiting their
-> range. Thats what
-> the volumes would be for within the UBI.
-> 
->> I wonder how often a design would end up using a combination of a post
->> script and buildroot doing UBI generation where they have to maintain
->> both?  Depending on that,  I think I'd argue for defaulting to a post
->> script
-> 
-> True. I think justing having BR generate artifacts then have genimage assemble
-> to what ever format required seems to be the defacto solution.
-> Perhaps that could be integrated as an option instead of having to call it in
-> numerous boards as a post script.
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 2bd3aca..8737384 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1368,6 +1368,7 @@ F:	package/sdl2_ttf/
+>  
+>  N:	Petr Kulhavy <brain@jikos.cz>
+>  F:	package/linuxptp/
+> +F:	package/uwebsockets/
+>  
+>  N:	Petr Vorel <petr.vorel@gmail.com>
+>  F:	package/linux-backports/
+> diff --git a/package/Config.in b/package/Config.in
+> index d926f7e..0afae7a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1384,6 +1384,7 @@ menu "Networking"
+>  	source "package/sofia-sip/Config.in"
+>  	source "package/thrift/Config.in"
+>  	source "package/usbredir/Config.in"
+> +	source "package/uwebsockets/Config.in"
+>  	source "package/zeromq/Config.in"
+>  	source "package/zmqpp/Config.in"
+>  	source "package/zyre/Config.in"
+> diff --git a/package/uwebsockets/Config.in b/package/uwebsockets/Config.in
+> new file mode 100644
+> index 0000000..fff5d7a
+> --- /dev/null
+> +++ b/package/uwebsockets/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_UWEBSOCKETS
+> +	bool "uWebSockets"
 
- Well, you can usually use support/scripts/genimage.sh directly as the
-post-image script and just set the appropriate options in
-BR2_ROOTFS_POST_SCRIPT_ARGS. Like is done in numerous defconfigs.
+The package name should be "uwebsockets" in lowercase.
 
- Regards,
- Arnout
+> +	depends on BR2_INSTALL_LIBSTDCPP
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+missing depends on !BR2_STATIC_LIBS since the package build unconditionally a
+shared library (libuWS.so).
+
+> +	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_OPENSSL
+> +	help
+> +	  uWebSockets is one of the most lightweight, efficient and
+> +	  scalable WebSocket and HTTP server implementations available.
+> +	  It features an easy-to-use, fully async object-oriented
+> +	  interface and scales to millions of connections using only
+> +	  a fraction of memory compared to the competition. While
+> +	  performance and scalability are two of our top priorities,
+> +	  we consider security, stability and standards compliance
+> +	  paramount. License is zlib/libpng (very permissive & suits
+> +	  commercial applications).
+> +
+> +	  https://github.com/uNetworking/uWebSockets
+> +
+> +comment "uWebSockets needs a toolchain with C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/uwebsockets/uwebsockets.hash b/package/uwebsockets/uwebsockets.hash
+> new file mode 100644
+> index 0000000..b07c48c
+> --- /dev/null
+> +++ b/package/uwebsockets/uwebsockets.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 9d7854fe3b8c43903957ccd9001e954e210e14a0545549515a9f020bf275c4fc  uwebsockets-v0.14.4.tar.gz
+
+Recently Buildroot added a support to check the license file hash which should
+be listed here.
+
+> diff --git a/package/uwebsockets/uwebsockets.mk b/package/uwebsockets/uwebsockets.mk
+> new file mode 100644
+> index 0000000..084385e
+> --- /dev/null
+> +++ b/package/uwebsockets/uwebsockets.mk
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# uWebSockets
+> +#
+> +################################################################################
+> +
+> +UWEBSOCKETS_VERSION = v0.14.4
+> +UWEBSOCKETS_SITE = $(call github,uNetworking,uWebSockets,$(UWEBSOCKETS_VERSION))
+> +UWEBSOCKETS_LICENSE = Zlib
+> +UWEBSOCKETS_LICENSE_FILES = LICENSE
+> +UWEBSOCKETS_DEPENDENCIES = zlib openssl
+> +
+> +UWEBSOCKETS_INSTALL_STAGING = YES
+> +UWEBSOCKETS_CFLAGS = $(TARGET_CFLAGS)
+> +
+> +ifeq ($(BR2_PACKAGE_BOOST),y)
+> +UWEBSOCKETS_CFLAGS += -DUSE_ASIO
+
+missing dependency on Boost
+Boost must be build before uwebsockets
+
+> +else ifeq ($(BR2_PACKAGE_LIBUV),y)
+> +UWEBSOCKETS_CFLAGS += -DUSE_LIBUV
+
+same here for libuv
+
+> +endif
+> +
+> +define UWEBSOCKETS_BUILD_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) CXXFLAGS="$(UWEBSOCKETS_CFLAGS)" -C $(@D) Linux
+> +endef
+
+Here you are using TARGET_CFLAGS for CXXFLAGS.
+CXXFLAGS is not used by the build system so the -DUSE_ADIO and -DUSE_LIBUV
+
+In the build log you have CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -DUSE_LIBUV"
+
+But -DUSE_LIBUV is missing from the g++ command line
+
+armv5-ctng-linux-gnueabi-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -std=c++11 -O3 -I src -shared -fPIC
+src/Extensions.cpp src/Group.cpp src/Networking.cpp src/Hub.cpp src/Node.cpp
+src/WebSocket.cpp src/HTTPSocket.cpp src/Socket.cpp src/Epoll.cpp -s -o libuWS.so
+
+Can you send an updated version with those fixes.
+
+Best regards,
+Romain
+
+> +
+> +define UWEBSOCKETS_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/uWS/
+> +	$(INSTALL) -D -m 0644 $(@D)/src/*.h $(STAGING_DIR)/usr/include/uWS/
+> +endef
+> +
+> +define UWEBSOCKETS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/
+> +	$(INSTALL) -D -m 0755 $(@D)/libuWS.so* $(TARGET_DIR)/usr/lib/
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
