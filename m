@@ -1,61 +1,46 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 31 Mar 2018 16:24:06 +0200
-Subject: [Buildroot] [v3 12/13] download: add flock call before dl-wrapper
+Date: Sat, 31 Mar 2018 16:24:03 +0200
+Subject: [Buildroot] [v3 09/13] pkg-generic: introduce _SAME_SOURCE_AS
 In-Reply-To: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
 References: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180331142407.9522-12-maxime.hadjinlian@gmail.com>
+Message-ID: <20180331142407.9522-9-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to introduce the cache mechanisms, we need to have a lock on
-the $(LIBFOO_DL_DIR), otherwise it would be impossible to do parallel
-download (a shared DL_DIR for two buildroot instances).
+This per package variable can be used to specify that a package shares
+the same sources as another package.
 
-To make sure the directory exists, the mkdir call has been removed from
-the dl-wrapper and put in the infrastructure.
+The use case here is for example linux-headers and linux, which share
+the same sources (because they are the same upstream project), so we
+don't want to download twice the kernel, nor store it multiple times
+either.
+
+Make will automatically try to help by introducing leading and trailing
+spaces when replacing a line-continuation '\', so we need to call
+$(strip) on the variable.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/pkg-download.mk     | 4 +++-
- support/download/dl-wrapper | 1 -
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 23f3403098..dff52007e6 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -19,6 +19,7 @@ SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b1342228c8..f3829e9912 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -428,7 +428,9 @@ endif
  
- DL_WRAPPER = support/download/dl-wrapper
-+FLOCK = flock $($(PKG)_DL_DIR)/
+ $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+ $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+-$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
++$(2)_DL_DIR	= $$(strip $$(if $$($(2)_SAME_SOURCE_AS), \
++        $$($$(call UPPERCASE,$$($(2)_SAME_SOURCE_AS))_DL_DIR), \
++        $$(DL_DIR)/$$($(2)_RAWNAME)))
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
  
- # DL_DIR may have been set already from the environment
- ifeq ($(origin DL_DIR),undefined)
-@@ -91,7 +92,8 @@ endif
- 
- define DOWNLOAD
- 	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),BR_NO_CHECK_HASH_FOR=$(notdir $(1));) \
--	$(EXTRA_ENV) $(DL_WRAPPER) \
-+	$(Q)mkdir -p $($(PKG)_DL_DIR)/
-+	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
- 		-c $($(PKG)_DL_VERSION) \
- 		-f $(notdir $(1)) \
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 49caf3717b..67e9742767 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -50,7 +50,6 @@ main() {
-     if [ -z "${output}" ]; then
-         error "no output specified, use -o\n"
-     fi
--    mkdir -p "$(dirname "${output}")"
- 
-     # If the output file already exists and:
-     # - there's no .hash file: do not download it again and exit promptly
+ ifndef $(2)_SUBDIR
 -- 
 2.16.2
