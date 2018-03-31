@@ -1,65 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 08:38:21 +0200
-Subject: [Buildroot] [PATCH 15/36] check-package: enable for toolchain/
-In-Reply-To: <20180331022301.27501-16-ricardo.martincoski@gmail.com>
-References: <20180331022301.27501-1-ricardo.martincoski@gmail.com>
- <20180331022301.27501-16-ricardo.martincoski@gmail.com>
-Message-ID: <20180331083821.37eb87bd@windsurf>
+Date: Sat, 31 Mar 2018 08:49:14 +0200
+Subject: [Buildroot] [git commit] support/config-fragments/autobuild: fix
+ SSP in br-nios2-glibc
+Message-ID: <20180331064928.C784F83EC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0e4de0f2db5f7a252d4b8a4cac752fac9ca2deb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 30 Mar 2018 23:22:40 -0300, Ricardo Martincoski wrote:
-> The toolchain directory can benefit from this script to prevent common
-> mistakes when submitting patches.
-> 
-> In order to accomplish this:
-> Do not ignore anymore files from the toolchain/ directory.
-> Accept toolchain-common.in as a valid Config.in name.
-> Ignore this symbol:
->  - BR_LIBC: defined by the buildroot toolchain, used by gcc-final.mk.
-> But do not ignore this symbol:
->  - GCONV_LIBS: it is used only inside the file that defines it.
+Commit c8680956819fae8776d7bd6d1f0e67a7b6436672 ("toolchain: fix
+detection of SSP support") fixed the SSP check so that it does the
+correct thing for nios2 toolchains. While this commit fixed the
+description of the Sourcery NIOSII toolchain, it didn't fix the
+description for the autobuilders of the br-nios2-glibc toolchain,
+causing some build failures. This commit adjusts br-nios2-glibc.config
+to indicate that the toolchain doesn't have SSP support.
 
-You're not actually ignoring this variable in this patch, and you
-instead fixed it in PATCH 14/36 to have a TOOLCHAIN_ prefix.
+Fixes:
 
-> Ignore toolchain/toolchain-external/pkg-toolchain-external.mk as it
-> declares a package infra and not a package itself.
-> Ignore toolchain/helpers.mk as it contains only helper functions.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> ---
->  utils/check-package             | 5 ++++-
->  utils/checkpackagelib/lib_mk.py | 1 +
->  2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/utils/check-package b/utils/check-package
-> index a5f5dc44c0..35a4a70858 100755
-> --- a/utils/check-package
-> +++ b/utils/check-package
-> @@ -44,7 +44,7 @@ def parse_args():
->      return parser.parse_args()
->  
->  
-> -CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
-> +CONFIG_IN_FILENAME = re.compile("/Config\.\S*$|/toolchain-common.in$")
+  http://autobuild.buildroot.net/results/6c44e328b7bffd8474d29d5bdf1ea109ec15f4ad/
 
-Not directly related to your series, but I believe this
-toolchain-common.in file is silly. It is just included by
-toolchain/Config.in, and toolchain/Config.in is not that long. We
-should bring back the toolchain-common.in contents in
-toolchain/Config.in, and stop having this odd toolchain-common.in.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/config-fragments/autobuild/br-nios2-glibc.config | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/config-fragments/autobuild/br-nios2-glibc.config b/support/config-fragments/autobuild/br-nios2-glibc.config
+index 62f2665e44..52b9f7f9f5 100644
+--- a/support/config-fragments/autobuild/br-nios2-glibc.config
++++ b/support/config-fragments/autobuild/br-nios2-glibc.config
+@@ -6,4 +6,5 @@ BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/b
+ BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+ BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_13=y
+ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++# BR2_TOOLCHAIN_EXTERNAL_HAS_SSP is not set
+ BR2_TOOLCHAIN_EXTERNAL_CXX=y
