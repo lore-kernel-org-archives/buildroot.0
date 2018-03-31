@@ -1,104 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 11:13:27 +0200
-Subject: [Buildroot] [PATCH 1/3] systemd: Ensure /run and /var/run are
- the same on R/O rootfs
-In-Reply-To: <45c17d05433e7bb40ff6e2b30c5cb41fed04ec76.1518089469.git.jan.kundrat@cesnet.cz>
-References: <45c17d05433e7bb40ff6e2b30c5cb41fed04ec76.1518089469.git.jan.kundrat@cesnet.cz>
-Message-ID: <20180331091327.GC25161@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 31 Mar 2018 11:35:15 +0200
+Subject: [Buildroot] [PATCH RESEND 1/2] fs/ubi: decouple ubi & ubifs
+In-Reply-To: <CAF3==ivL4e4vT5jxoYWb=VQH9wdG0q-qCGH1FP=EK8OtLR19CA@mail.gmail.com>
+References: <1521829279-5156-1-git-send-email-ben.whitten@gmail.com>
+ <1521829279-5156-2-git-send-email-ben.whitten@gmail.com>
+ <CANQCQpYPx=ZVSV_1fPK-FSERipL5xPpLBoKNd-kcTJmnQ-deBw@mail.gmail.com>
+ <CAF3==ivL4e4vT5jxoYWb=VQH9wdG0q-qCGH1FP=EK8OtLR19CA@mail.gmail.com>
+Message-ID: <ee361b37-469b-0202-a8af-768da7108b28@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan, All,
+ Hi Ben,
 
-On 2018-02-08 12:22 +0100, Jan Kundr?t spake thusly:
-> When I updated systemd from 234 to 237 and D-Bus from 1.12.0 to 1.12.2
-> on my system with a read-only rootfs (buildroot 1c0c55c028 to buildroot
-> 27d2229692), my D-Bus-activated services stopped working. Checking the
-> logs, it turned out that systemd PID 1 was not able to connect the D-Bus
-> socket at all. There were some recent changes in systemd where upstream
-> refactored code which waits for sockets to appear. However, the real
-> problem is that systemd is configured to look for the D-Bus socket in
-> /run/dbus, while D-Bus creates it at /var/run/dbus/. D-Bus upstream
-> explains in a bugreport [1] that this "traditional" /var/run/dbus is
-> going to stay because it's hardcoded in other independent
-> implementations of the D-Bus APIs.
+On 26-03-18 23:05, Ben Whitten wrote:
+> On 24 March 2018 at 03:17, Matthew Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+>> Ben,
+>>
+>> On Fri, Mar 23, 2018 at 1:21 PM, Ben Whitten <ben.whitten@gmail.com> wrote:
+>>> As ubi is a container it shouldn't enforce a ubifs rootfs to be built,
+>>> it is reasonable to have a squashfs ro filesystem within a ubi.
+>>> If ubifs is selected ubi containing ubifs is automatically selected as
+>>> to not break existing configs
+>>
+>> What are you thoughts on the usecase of needing the Kernel/DTB FIT (or
+>> other firmware) images also in UBI?
+>>
+>> i.e. when online creating the UBI partitions, I can see creating a
+>> single UBI and then just treating it like a raw device to store a
+>> series of blobs (firmware, rootfs & kernel).  Generation of something
+>> like that offline feels like a post image activity.
 > 
-> As is also said in that bugreport, the root cause is that /run and
-> /var/run are effectively two separate directories on Buildroot -- at
-> least when configured for a R/O rootfs. Furthermore, systemd actually
-> actively warns about this:
-> 
->   systemd[1]: System is tainted: var-run-bad
-> 
-> Looking further, systemd-tmpfiles also detects breakage:
-> 
->   systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:12] Duplicate line for path "/var/run", ignoring.
->   systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:14] Duplicate line for path "/var/log", ignoring.
->   systemd-tmpfiles[172]: [/usr/lib/tmpfiles.d/var.conf:21] Duplicate line for path "/var/lib", ignoring.
-> 
-> This change simply skips /var/run from being copied from the
-> /usr/share/factory. The symlink is still created by another tmpfiles.d
-> entry which belongs to systemd.
+> So in my context the final 'image' is something I would deliver to our
+> factory for
+> flashing in production. In this case our UBI needs it all, kernel a/b
+> rootfs a/b etc.
 
-We believe this issue has been fixed in antoher way with that patch:
+ I generally find it easier in practice to format the UBI partition "online" in
+a production script, and then add the UBI(FS) volumes to it one by one. That
+makes it easier to make sure the UBI extends to the full partition. Otherwise,
+it depends a bit on your flasher what is done with bad blocks in your image.
 
-    6e5df928539 package/skeleton-systemd: invert factory logic
+> And its the individual artifacts that sw update gets generated from.
+> 
+>> However, I guess
+>> that case could just be a new image containerization option which acts
+>> like a general hook to take a series of files (for each create a UBI
+>> container).  On target for that option, there would be more MTD
+>> devices vs a single (I'd have to revisit the limitations of a single
+>> UBI vs one for each image as I'm unsure of which is better).
+> 
+> It makes sense to have the UBI as large as possible to take advantage of wear
+> leveling across the full flash, instead of artificially limiting their
+> range. Thats what
+> the volumes would be for within the UBI.
+> 
+>> I wonder how often a design would end up using a combination of a post
+>> script and buildroot doing UBI generation where they have to maintain
+>> both?  Depending on that,  I think I'd argue for defaulting to a post
+>> script
+> 
+> True. I think justing having BR generate artifacts then have genimage assemble
+> to what ever format required seems to be the defacto solution.
+> Perhaps that could be integrated as an option instead of having to call it in
+> numerous boards as a post script.
 
-As thus, I've marked this patch as rejected.
+ Well, you can usually use support/scripts/genimage.sh directly as the
+post-image script and just set the appropriate options in
+BR2_ROOTFS_POST_SCRIPT_ARGS. Like is done in numerous defconfigs.
 
-If your use-case is still not fixed, please re-send it.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> The other warnings are still in present:
-> 
->   systemd-tmpfiles[174]: [/usr/lib/tmpfiles.d/var.conf:14] Duplicate line for path "/var/log", ignoring.
->   systemd-tmpfiles[174]: [/usr/lib/tmpfiles.d/var.conf:21] Duplicate line for path "/var/lib", ignoring.
-> 
-> I'm leaving that one to someone who is more familiar with systemd and
-> buildroot conventions. My box now boots again, so I'm happy :).
-> 
-> [1] https://bugs.freedesktop.org/show_bug.cgi?id=101628
-> 
-> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-> ---
->  package/skeleton-init-systemd/skeleton-init-systemd.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> index a2d4e8c4b3..95142904f5 100644
-> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
-> @@ -42,7 +42,9 @@ define SKELETON_INIT_SYSTEMD_PRE_ROOTFS_VAR
->  	mkdir $(TARGET_DIR)/var
->  	for i in $(TARGET_DIR)/usr/share/factory/var/*; do \
->  		j="$${i#$(TARGET_DIR)/usr/share/factory}"; \
-> -		if [ -L "$${i}" ]; then \
-> +		if [ "$${j}" = "/var/run" ]; then \
-> +			echo "# $${j} is being handled by systemd"
-> +		elif [ -L "$${i}" ]; then \
->  			printf "L+! %s - - - - %s\n" \
->  				"$${j}" "../usr/share/factory/$${j}" \
->  			|| exit 1; \
-> -- 
-> 2.14.3
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
