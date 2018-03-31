@@ -1,90 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 31 Mar 2018 20:43:09 +0200
-Subject: [Buildroot] [PATCH 07/15 v4] fs: use a per-rootfs fakeroot
- script
-In-Reply-To: <e39375ef-2546-2b16-1b41-b9663d460fb0@mind.be>
-References: <cover.1522487149.git.yann.morin.1998@free.fr>
- <c296e87bd778b9c2ef610a772adbd3d41bcb54a3.1522487149.git.yann.morin.1998@free.fr>
- <e39375ef-2546-2b16-1b41-b9663d460fb0@mind.be>
-Message-ID: <6b438cb6-714a-fc52-5b60-6fb59f2fe014@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Mar 2018 20:38:35 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.15.15
+Message-ID: <20180331184442.04B54842CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=03cdfea134bb74e32795b3cbc9689e70a78d61a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 31-03-18 20:26, Arnout Vandecappelle wrote:
-> 
-> 
-> On 31-03-18 11:05, Yann E. MORIN wrote:
->> ... and locate that script in a per-rootfs directory.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> ---
->>  fs/common.mk | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/fs/common.mk b/fs/common.mk
->> index eebe83d6e5..db4f8c23ad 100644
->> --- a/fs/common.mk
->> +++ b/fs/common.mk
->> @@ -28,7 +28,6 @@
->>  # macro will automatically generate a compressed filesystem image.
->>  
->>  FS_DIR = $(BUILD_DIR)/buildroot-fs
->> -FAKEROOT_SCRIPT = $(FS_DIR)/fakeroot.fs
->>  FULL_DEVICE_TABLE = $(FS_DIR)/device_table.txt
->>  ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
->>  	$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
->> @@ -76,10 +75,11 @@ ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
->>  endif
->>  
->>  $$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
->> +$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-> 
->  I don't agree with this bit. We want to avoid this kind of per-target override
-> whenever possible.
-> 
->  So IMO we should define the global FAKEROOT_SCRIPT as
-> 
-> -FAKEROOT_SCRIPT = $(FS_DIR)/fakeroot.fs
-> +FAKEROOT_SCRIPT = $(ROOTFS_$(ROOTFS)_DIR)/fakeroot.fs
-
- As Yann pointed out to me, if we do this, then patch 12/15 should also add a
-definition of ROOTFS_COMMON_DIR = $(FS_DIR). And then probably FS_DIR should be
-renamed to ROOTFS_COMMON_DIR (which it is, in the end...).
-
-
- Given that this is getting a little complicated, I'm OK to do this in a
-follow-up patch instead.
-
- Regards,
- Arnout
-
-> 
->  Regards,
->  Arnout
-> 
->>  $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
->>  	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
->> -	rm -rf $(FS_DIR)
->> -	mkdir -p $(FS_DIR)
->> +	rm -rf $(FS_DIR) $$(ROOTFS_$(2)_DIR)
->> +	mkdir -p $(FS_DIR) $$(ROOTFS_$(2)_DIR)
->>  	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
->>  	echo "set -e" >> $$(FAKEROOT_SCRIPT)
->>  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
->>
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/linux/Config.in b/linux/Config.in
+index 040a2341f9..934142c535 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.15.14" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.15.15" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
