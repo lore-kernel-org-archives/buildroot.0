@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Mar 2018 16:13:46 +0200
-Subject: [Buildroot] [PATCH next v8 1/2] libkrb5: New package
-In-Reply-To: <1520453758-27666-1-git-send-email-nerv@dawncrow.de>
+Date: Sat, 31 Mar 2018 16:13:49 +0200
+Subject: [Buildroot] [PATCH next v8 2/2] squid: Add optional dependency
+ on libkrb5
+In-Reply-To: <1520453758-27666-2-git-send-email-nerv@dawncrow.de>
 References: <1520453758-27666-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <20180331161346.73ec1275@windsurf>
+ <1520453758-27666-2-git-send-email-nerv@dawncrow.de>
+Message-ID: <20180331161349.52cd715f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +14,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  7 Mar 2018 21:15:57 +0100, Andr? Hentschel wrote:
+On Wed,  7 Mar 2018 21:15:58 +0100, Andr? Hentschel wrote:
 > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 > ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/libkrb5/Config.in    | 13 ++++++++++
->  package/libkrb5/libkrb5.hash |  2 ++
->  package/libkrb5/libkrb5.mk   | 56 ++++++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 73 insertions(+)
->  create mode 100644 package/libkrb5/Config.in
->  create mode 100644 package/libkrb5/libkrb5.hash
->  create mode 100644 package/libkrb5/libkrb5.mk
+>  package/squid/squid.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
-Applied to master after making the following changes:
-
-    [Thomas:
-     - remove LIBKRB5_VERSION_MAJOR
-     - minor tweaks to commit title and Config.in help text]
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
