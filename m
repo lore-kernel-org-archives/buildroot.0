@@ -1,81 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 Mar 2018 23:14:37 +0200
-Subject: [Buildroot] [PATCH 1/1] get-developers: explicitly set devs
- document encoding
-In-Reply-To: <BN6PR2001MB094879FCCDB0C266DE027DFFA0D90@BN6PR2001MB0948.namprd20.prod.outlook.com>
-References: <BN6PR2001MB094879FCCDB0C266DE027DFFA0D90@BN6PR2001MB0948.namprd20.prod.outlook.com>
-Message-ID: <20180331211437.GQ25161@scaer>
+Date: Sat, 31 Mar 2018 23:22:20 +0200
+Subject: [Buildroot] [PATCH v2 2/5] support/scripts/graph-depends: use
+ colors instead of colours
+In-Reply-To: <20180331163543.6278-3-thomas.petazzoni@bootlin.com>
+References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
+ <20180331163543.6278-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20180331212220.GR25161@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Thomas, All,
 
-On 2018-03-06 02:39 +0000, James Knight spake thusly:
-> Explicitly indicate the file encoding (to UTF-8) for the DEVELOPERS
-> document. This prevents Unicode decoding errors where some systems
-> assume an alternative default encoding (ex. 'CP1252').
+On 2018-03-31 18:35 +0200, Thomas Petazzoni spake thusly:
+> The graph-depends was not very consistent in colors vs. colours: some
+> parts were using colours, some parts were using colors.
 > 
-> This corrects the following observed error:
+> Let's settle on the US spelling, colors.
+
+I would have gone with the superior, historical, better, cleaner, nicer,
+and correct englih spelling instead... ;-]
+
+> This change the user-visble option --colours to --colors, but it is
+> unlikely that a lot of users customize the colors through
+> BR2_GRAPH_DEPS_OPTS, so this user interface change is considered
+> reasonable.
 > 
->     $ ./utils/get-developers outgoing/*
->     Traceback (most recent call last):
->       File "./utils/get-developers", line 101, in <module>
->         __main__()
->       File "./utils/get-developers", line 25, in __main__
->         devs = getdeveloperlib.parse_developers()
->       File "...\buildroot\utils\getdeveloperlib.py", line 164, in parse_developers
->         for line in f:
->       File "...\Python36\lib\encodings\cp1252.py", line 23, in decode
->         return codecs.charmap_decode(input,self.errors,decoding_table)[0]
->     UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 7087: character maps to <undefined>
-> 
-> Signed-off-by: James Knight <james.d.knight@live.com>
-> ---
->  utils/getdeveloperlib.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-> index 2c8d477583..30374d77f8 100644
-> --- a/utils/getdeveloperlib.py
-> +++ b/utils/getdeveloperlib.py
-> @@ -158,7 +158,7 @@ def parse_developers(basepath=None):
->      linen = 0
->      if basepath is None:
->          basepath = os.getcwd()
-> -    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
-> +    with open(os.path.join(basepath, "DEVELOPERS"), "r", encoding="utf8") as f:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-This does not work with oython2:
-
-    $ python2
-    Python 2.7.14 (default, Sep 23 2017, 22:06:14)
-    [GCC 7.2.0] on linux2
-    Type "help", "copyright", "credits" or "license" for more information.
-    >>> with open("DEVELOPPERS", "r", encoding="utf8") as f:
-    ...     lines= f.readlines()
-    ...
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    TypeError: 'encoding' is an invalid keyword argument for this function
-
-Recentyl, we had to do a similar encoding/decoding issue:
-
-    5563a1c6a4 support/check-uniq-files: support weird locales and filenames
-
-Do you think you could have a look at it and do a similar tweak to
-get-developper instead, please?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->          files = []
->          name = None
->          for line in f:
+> ---
+>  docs/manual/common-usage.txt  |  4 ++--
+>  support/scripts/graph-depends | 16 ++++++++--------
+>  2 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+> index a22da20188..e3d7578c85 100644
+> --- a/docs/manual/common-usage.txt
+> +++ b/docs/manual/common-usage.txt
+> @@ -224,12 +224,12 @@ The +graph-depends+ behaviour can be controlled by setting options in the
+>  * +--transitive+, +--no-transitive+, to draw (or not) the transitive
+>    dependencies. The default is to not draw transitive dependencies.
+>  
+> -* +--colours R,T,H+, the comma-separated list of colours to draw the
+> +* +--colors R,T,H+, the comma-separated list of colors to draw the
+>    root package (+R+), the target packages (+T+) and the host packages
+>    (+H+). Defaults to: +lightblue,grey,gainsboro+
+>  
+>  --------------------------------
+> -BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colours=red,green,blue' make graph-depends
+> +BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colors=red,green,blue' make graph-depends
+>  --------------------------------
+>  
+>  === Graphing the build duration
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index d86d506f6f..dc265ae28c 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -297,9 +297,9 @@ def parse_args():
+>                          "'host' to stop on host packages.")
+>      parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
+>                          help="Like --stop-on, but do not add PACKAGE to the graph.")
+> -    parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
+> +    parser.add_argument("--colors", "-c", metavar="COLOR_LIST", dest="colors",
+>                          default="lightblue,grey,gainsboro",
+> -                        help="Comma-separated list of the three colours to use" +
+> +                        help="Comma-separated list of the three colors to use" +
+>                          " to draw the top-level package, the target" +
+>                          " packages, and the host packages, in this order." +
+>                          " Defaults to: 'lightblue,grey,gainsboro'")
+> @@ -353,12 +353,12 @@ def main():
+>          get_depends_func = brpkgutil.get_rdepends
+>          arrow_dir = "back"
+>  
+> -    # Get the colours: we need exactly three colours,
+> +    # Get the colors: we need exactly three colors,
+>      # so no need not split more than 4
+> -    # We'll let 'dot' validate the colours...
+> -    colours = args.colours.split(',', 4)
+> -    if len(colours) != 3:
+> -        sys.stderr.write("Error: incorrect colour list '%s'\n" % args.colours)
+> +    # We'll let 'dot' validate the colors...
+> +    colors = args.colors.split(',', 4)
+> +    if len(colors) != 3:
+> +        sys.stderr.write("Error: incorrect color list '%s'\n" % args.colors)
+>          sys.exit(1)
+>  
+>      # In full mode, start with the result of get_targets() to get the main
+> @@ -403,7 +403,7 @@ def main():
+>      outfile.write("digraph G {\n")
+>  
+>      print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+> -                   arrow_dir, 0, args.depth, rootpkg, colours)
+> +                   arrow_dir, 0, args.depth, rootpkg, colors)
+>  
+>      outfile.write("}\n")
+>  
 > -- 
-> 2.16.2.windows.1
+> 2.14.3
 > 
 > _______________________________________________
 > buildroot mailing list
