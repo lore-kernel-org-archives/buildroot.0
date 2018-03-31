@@ -1,77 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 31 Mar 2018 20:47:25 +0200
-Subject: [Buildroot] [git commit] core: introduce intermediate
- BASE_TARGET_DIR variable
-Message-ID: <20180331185351.AC1A584BF6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs: run filesystem hooks under fakeroot
+Message-ID: <20180331185351.6D11C84B9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e9870ce32d6329d9e3d602247fbe1709a2275a4
+commit: https://git.buildroot.net/buildroot/commit/?id=405f91200488dc8f4648acbdff5114d0af20b6b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new BASE_TARGET_DIR variable is set in stone to point to the real
-location where packages will be installed. Its name is modelled after
-its definition: it is located in $(BASE_DIR), and it is named 'target/',
-hence BASE_TARGET_DIR.
+Currently, the pre-gen hooks of the various filesystems are run before
+we enter the fakeroot.
 
-The already-existing TARGET_DIR variable now simply points to the same
-location, except that it is recursively expanded, so that we can later
-change it depending on the context.
+However, this precludes those hooks from doing actions that require
+root, like creating a pseudo-device or the likes.
 
-All locations that really need to reference the existing target/
-directory, are changed to use BASE_TARGET_DIR; surprinsigly enough, they
-all seem to be located in the main Makefile. :-) The rest is left with
-using good-old TARGET_DIR.
+So, move those pre-gen hooks under fakeroot.
+
+This has currently no side-effect, as they are still called before
+everything else in the fakeroot script, even the system-wide chown call.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ fs/common.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index d7826b67d9..6eca3c9ec6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -215,7 +215,8 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
- 
- BUILD_DIR := $(BASE_DIR)/build
- BINARIES_DIR := $(BASE_DIR)/images
--TARGET_DIR := $(BASE_DIR)/target
-+BASE_TARGET_DIR := $(BASE_DIR)/target
-+TARGET_DIR = $(BASE_TARGET_DIR)
- # initial definition so that 'make clean' works for most users, even without
- # .config. HOST_DIR will be overwritten later when .config is included.
- HOST_DIR := $(BASE_DIR)/host
-@@ -456,7 +457,7 @@ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
- 
- # Location of a file giving a big fat warning that output/target
- # should not be used as the root filesystem.
--TARGET_DIR_WARNING_FILE = $(TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
-+TARGET_DIR_WARNING_FILE = $(BASE_TARGET_DIR)/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
- 
- ifeq ($(BR2_CCACHE),y)
- CCACHE := $(HOST_DIR)/bin/ccache
-@@ -553,7 +554,7 @@ $(foreach pkg,$(call UPPERCASE,$(PACKAGES)),\
- endif
- 
- .PHONY: dirs
--dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-+dirs: $(BUILD_DIR) $(STAGING_DIR) $(BASE_TARGET_DIR) \
- 	$(HOST_DIR) $(HOST_DIR_SYMLINK) $(BINARIES_DIR)
- 
- $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
-@@ -974,7 +975,7 @@ printvars:
- 
- .PHONY: clean
- clean:
--	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
-+	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
- 		$(BUILD_DIR) $(BASE_DIR)/staging \
- 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
- 
+diff --git a/fs/common.mk b/fs/common.mk
+index 6d579db810..274a3e9c7b 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -76,9 +76,10 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	rm -rf $(FS_DIR)
+ 	mkdir -p $(FS_DIR)
+-	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
++	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
++		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ ifneq ($$(ROOTFS_USERS_TABLES),)
+ 	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
