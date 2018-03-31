@@ -1,223 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 23:40:42 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] sdl2: bump version to
- 2.0.8
-Message-ID: <20180501073419.45C478271A@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 1 Apr 2018 00:18:06 +0200
+Subject: [Buildroot] [git commit] netcat: add forced dependence on BusyBox
+Message-ID: <20180331221914.09682817AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecf3badf604cf4e4a8e1682ecb9e1124916f3f55
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2da613a7d94a4bd34e9f70533cf0d8b2803be5bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop now upstreamed patch.
+It may be necessary if packages become built in parallel, leading to a
+race condition on the creation of the "nc" link.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f26654596ecfe40963cb51ba939c00de458fa82e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Of course this still leaves a race conditon if other netcat competitors
+but we must assume thet the user is a grown-up person who knows what is
+doing.
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+[Arnout: Don't force-remove the existing nc, not needed according to
+         Romain.]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../sdl2/0001-make-cross-compiler-friendly.patch   | 167 ---------------------
- package/sdl2/sdl2.hash                             |   4 +-
- package/sdl2/sdl2.mk                               |   2 +-
- 3 files changed, 3 insertions(+), 170 deletions(-)
+ package/netcat/netcat.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/sdl2/0001-make-cross-compiler-friendly.patch b/package/sdl2/0001-make-cross-compiler-friendly.patch
-deleted file mode 100644
-index 10dcf74656..0000000000
---- a/package/sdl2/0001-make-cross-compiler-friendly.patch
-+++ /dev/null
-@@ -1,167 +0,0 @@
--From 4cbd2fbfcbfe94b5826907f59ee963c69860e522 Mon Sep 17 00:00:00 2001
--From: "Guillermo A. Amaral" <g@maral.me>
--Date: Thu, 18 Jan 2018 09:23:58 -0800
--Subject: [PATCH] Make rpi video cross-compiler friendly.
--
--* Stops using fixed path to find GLES/EGL libs.
--* Tries pkg-config to locate bcm_host.
--
--Signed-off-by: Guillermo A. Amaral <g@maral.me>
-----
-- cmake/sdlchecks.cmake | 15 ++++++++++-----
-- configure             | 48 ++++++++++++++++++++++++++++++++++++++++++++++--
-- configure.in          |  8 ++++++--
-- src/video/SDL_egl.c   | 12 ++++++------
-- 4 files changed, 68 insertions(+), 15 deletions(-)
--
--diff --git a/cmake/sdlchecks.cmake b/cmake/sdlchecks.cmake
--index e2e89a2..fc715f1 100644
----- a/cmake/sdlchecks.cmake
--+++ b/cmake/sdlchecks.cmake
--@@ -1127,15 +1127,19 @@ endmacro()
-- # - n/a
-- macro(CheckRPI)
--   if(VIDEO_RPI)
---    set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
---    set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
---    set(VIDEO_RPI_LIBS bcm_host )
--+    pkg_check_modules(VIDEO_RPI bcm_host brcmegl)
--+    if (NOT VIDEO_RPI_FOUND)
--+      set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
--+      set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
--+      set(VIDEO_RPI_LIBRARIES bcm_host )
--+      set(VIDEO_RPI_LDFLAGS "-Wl,-rpath,/opt/vc/lib")
--+    endif()
--     listtostr(VIDEO_RPI_INCLUDE_DIRS VIDEO_RPI_INCLUDE_FLAGS "-I")
--     listtostr(VIDEO_RPI_LIBRARY_DIRS VIDEO_RPI_LIBRARY_FLAGS "-L")
-- 
--     set(ORIG_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
--     set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
---    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBS}")
--+    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBRARIES}")
--     check_c_source_compiles("
--         #include <bcm_host.h>
--         int main(int argc, char **argv) {}" HAVE_VIDEO_RPI)
--@@ -1147,8 +1151,9 @@ macro(CheckRPI)
--       set(SDL_VIDEO_DRIVER_RPI 1)
--       file(GLOB VIDEO_RPI_SOURCES ${SDL2_SOURCE_DIR}/src/video/raspberry/*.c)
--       set(SOURCE_FILES ${SOURCE_FILES} ${VIDEO_RPI_SOURCES})
---      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBS})
--+      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBRARIES})
--       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
--+      list(APPEND EXTRA_LDFLAGS ${VIDEO_RPI_LDFLAGS})
--     endif(SDL_VIDEO AND HAVE_VIDEO_RPI)
--   endif(VIDEO_RPI)
-- endmacro(CheckRPI)
--diff --git a/configure b/configure
--index b622085..d42a22a 100755
----- a/configure
--+++ b/configure
--@@ -19485,12 +19485,56 @@ else
-- fi
-- 
--     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
---        if test x$ARCH = xnetbsd; then
--+        # Extract the first word of "pkg-config", so it can be a program name with args.
--+set dummy pkg-config; ac_word=$2
--+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
--+$as_echo_n "checking for $ac_word... " >&6; }
--+if ${ac_cv_path_PKG_CONFIG+:} false; then :
--+  $as_echo_n "(cached) " >&6
--+else
--+  case $PKG_CONFIG in
--+  [\\/]* | ?:[\\/]*)
--+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
--+  ;;
--+  *)
--+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
--+for as_dir in $PATH
--+do
--+  IFS=$as_save_IFS
--+  test -z "$as_dir" && as_dir=.
--+    for ac_exec_ext in '' $ac_executable_extensions; do
--+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
--+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
--+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
--+    break 2
--+  fi
--+done
--+  done
--+IFS=$as_save_IFS
--+
--+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
--+  ;;
--+esac
--+fi
--+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
--+if test -n "$PKG_CONFIG"; then
--+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
--+$as_echo "$PKG_CONFIG" >&6; }
--+else
--+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
--+$as_echo "no" >&6; }
--+fi
--+
--+
--+        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
--+            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
--+            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
--+        elif test x$ARCH = xnetbsd; then
--             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
--             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
--         else
--             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
---            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
--+            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host"
--         fi
-- 
--         # Save the original compiler flags and libraries
--diff --git a/configure.in b/configure.in
--index 5ac2130..450bf62 100644
----- a/configure.in
--+++ b/configure.in
--@@ -1563,12 +1563,16 @@ CheckRPI()
-- AC_HELP_STRING([--enable-video-rpi], [use Raspberry Pi video driver [[default=yes]]]),
--                   , enable_video_rpi=yes)
--     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
---        if test x$ARCH = xnetbsd; then
--+        AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
--+        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
--+            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
--+            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
--+        elif test x$ARCH = xnetbsd; then
--             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
--             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
--         else
--             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
---            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
--+            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host"
--         fi
-- 
--         # Save the original compiler flags and libraries
--diff --git a/src/video/SDL_egl.c b/src/video/SDL_egl.c
--index 9ccc2c3..23a7f2d 100644
----- a/src/video/SDL_egl.c
--+++ b/src/video/SDL_egl.c
--@@ -44,12 +44,12 @@
-- 
-- #if SDL_VIDEO_DRIVER_RPI
-- /* Raspbian places the OpenGL ES/EGL binaries in a non standard path */
---#define DEFAULT_EGL "/opt/vc/lib/libbrcmEGL.so"
---#define DEFAULT_OGL_ES2 "/opt/vc/lib/libbrcmGLESv2.so"
---#define ALT_EGL "/opt/vc/lib/libEGL.so"
---#define ALT_OGL_ES2 "/opt/vc/lib/libGLESv2.so"
---#define DEFAULT_OGL_ES_PVR "/opt/vc/lib/libGLES_CM.so"
---#define DEFAULT_OGL_ES "/opt/vc/lib/libGLESv1_CM.so"
--+#define DEFAULT_EGL "libbrcmEGL.so"
--+#define DEFAULT_OGL_ES2 "libbrcmGLESv2.so"
--+#define ALT_EGL "libEGL.so"
--+#define ALT_OGL_ES2 "libGLESv2.so"
--+#define DEFAULT_OGL_ES_PVR "libGLES_CM.so"
--+#define DEFAULT_OGL_ES "libGLESv1_CM.so"
-- 
-- #elif SDL_VIDEO_DRIVER_ANDROID || SDL_VIDEO_DRIVER_VIVANTE
-- /* Android */
---- 
--2.13.6
--
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 588f8f49ef..9cf2c41788 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.7.tar.gz.sig
--sha256 ee35c74c4313e2eda104b14b1b86f7db84a04eeab9430d56e001cea268bf4d5e  SDL2-2.0.7.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.8.tar.gz.sig
-+sha256 edc77c57308661d576e843344d8638e025a7818bff73f8fbfab09c3c5fd092ec  SDL2-2.0.8.tar.gz
- # Locally calculated
- sha256 bbd2edb1789c33de29bb9f8d1dbe2774584a9ce8c4e3162944b7a3a447f5e85d  COPYING.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 6508e6b962..bd71485f18 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
+index eb7ddcac27..6c7c4b8f29 100644
+--- a/package/netcat/netcat.mk
++++ b/package/netcat/netcat.mk
+@@ -9,4 +9,10 @@ NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VE
+ NETCAT_LICENSE = GPL-2.0+
+ NETCAT_LICENSE_FILES = COPYING
  
--SDL2_VERSION = 2.0.7
-+SDL2_VERSION = 2.0.8
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
++# Ensure Busybox gets built/installed before, so that this package overrides
++# Busybox nc.
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++NETCAT_DEPENDENCIES += busybox
++endif
++
+ $(eval $(autotools-package))
