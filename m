@@ -1,33 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 31 Mar 2018 22:59:47 +0200
-Subject: [Buildroot] [git commit] configs/s6lx9_microboard_defconfig: purge
- custom dts boolean
-Message-ID: <20180331205954.24870815A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux: fix custom dts files
+ handling
+Message-ID: <20180331205954.093DD815A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5899a8326f0fd46283732f07dea888907b763919
+commit: https://git.buildroot.net/buildroot/commit/?id=54157c6c2d9fba5ad230294ae1c7dfc0032b1ede
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since custom dts files are unconditionally handled *KERNEL_USE_CUSTOM_DTS
-is no longer available/needed.
+Custom dts files are still conditionally copied based on non existing
+boolean. So it is currently not possible to use custom dts file(s) at all.
+
+List of dts files is now iterated and files are copied into dedicated kernel arch dir.
 
 Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
+Tested-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/s6lx9_microboard_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ linux/linux.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
-index f77c80ba87..97b2d3fe79 100644
---- a/configs/s6lx9_microboard_defconfig
-+++ b/configs/s6lx9_microboard_defconfig
-@@ -10,5 +10,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/avnet/s6lx9_microboard/lx9_mmu_defconfig"
--BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/avnet/s6lx9_microboard/lx9_mmu.dts"
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e98b25cb72..cf1cae7cc0 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -370,8 +370,9 @@ endif
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+-	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+-		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
++	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
++		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ;   \
++	done
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
+ 		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+@@ -482,9 +483,9 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
+ endif
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
++ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(KERNEL_DTS_NAME)),y:)
+ $(error No kernel device tree source specified, check your \
+-BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings)
++BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
+ endif
+ 
+ endif # BR_BUILDING
