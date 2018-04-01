@@ -1,56 +1,81 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 01 Apr 2018 11:45:20 +0200
-Subject: [Buildroot] bash: /dev/fd/62: No such file or directory
-In-Reply-To: <877ept7r7w.fsf@dell.be.48ers.dk>
-References: <1521154501.16532.15.camel@embedded.rocks>
- <874llggl14.fsf@dell.be.48ers.dk>
- <d624af0cde7298851332a2fc009f173562d99d98.camel@embedded.rocks>
- <877ept7r7w.fsf@dell.be.48ers.dk>
-Message-ID: <d437caa3ff89a6c3f29997a008ce74ab2f495940.camel@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 1 Apr 2018 11:51:52 +0200
+Subject: [Buildroot] [PATCH 1/2] openblass: drop SSE_GENERIC target
+In-Reply-To: <20180401084642.15199-1-peter@korsgaard.com>
+References: <20180401084642.15199-1-peter@korsgaard.com>
+Message-ID: <8e50e37d-589f-6ae7-5bd3-feef97bf05d7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-On Fri, 2018-03-30 at 13:11 +0200, Peter Korsgaard wrote:
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
-> Hi,
-> 
->  >> Keep in mind that we still support a static /dev, so we should also add
->  >> them to system/device_table_dev.txt and redirect errors to /dev/null so
->  >> you don't get a bunch of warnings about these symlinks when booting with
->  >> a static /dev.
-> 
->  > I am trying to get this working. I managed to add the entries to
->  > inittab for busybox and sysvinit
-> 
-> Great!
-> 
->  > but I am unsure how to add those symlinks to the static
->  > /dev. makedevs does not support symbolic links.
-> 
-> Heh, you are right. We can either:
-> 
-> - Add a BASH_ROOTFS_PRE_CMD_HOOKS hook in bash.mk if static /dev is used
->   to create these symlinks
-> 
-> - Extend the makedevs code to also support symlinks
-> 
-> - Completely ignore this issue for static /dev
-> 
-> The first option is probably the easiest/nicest.
 
-On second thought, bash might not be the only application using
-/dev/fd. Maybe fs/common.mk is the better place?
+On 01-04-18 10:46, Peter Korsgaard wrote:
+> Fixes #10856
+> 
+> The SSE_GENERIC target fails to build with a "sgemm_kernel.o: No such file
+> or directory" error. Several upstream bug reports exist for this:
+> 
+> https://github.com/xianyi/OpenBLAS/issues/502
+> https://github.com/xianyi/OpenBLAS/issues/685
+> 
+> In both cases, upstream suggests using a different target definition
+> instead.  E.G.  from issue 685:
+> 
+> You may use NORTHWOOD on x86: make TARGET=NORTHWOOD that uses SSE2
+> instructions.  It's very hard to find non-SSE2 x86 CPUs today.  For x86-64
+> use the PRESCOTT target
+> 
+> So drop the SSE_GENERIC target.  The only x86_64 variant we support not
+> covered by a more specific openblas target is the default variant, nocona.
 
-There is one issue about /proc/kcore. It is not available on ARM
-systems, and maybe others. Apparently, this feature is not much
-appreciated [1], so I'm gonna skip this symlink.
+ Actually, I think BR2_x86_corei7_avx is not covered either. And BR2_x86_jaguar.
 
-[1] https://lwn.net/Articles/45315/
+ These openblas targets really are an unmaintainable mess...
 
-J?rg
+ Regards,
+ Arnout
+
+> 
+> Nocona was a Xeon variant of the P4 "Prescott" architecture, so use the
+> PRESCOTT openblas target:
+> 
+> https://en.wikipedia.org/wiki/Xeon#Nocona_and_Irwindale
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/openblas/Config.in | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+> index eb93e319e4..8f514685a1 100644
+> --- a/package/openblas/Config.in
+> +++ b/package/openblas/Config.in
+> @@ -3,7 +3,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+>  	default "P2"           if BR2_x86_pentium2
+>  	default "KATMAI"       if BR2_x86_pentium3
+>  	default "NORTHWOOD"    if BR2_x86_pentium4
+> -	default "PRESCOTT"     if BR2_x86_prescott
+> +	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
+>  	default "BANIAS"       if BR2_x86_pentium_m
+>  	default "CORE2"        if BR2_x86_core2
+>  	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont
+> @@ -16,7 +16,6 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+>  	default "BARCELONA"    if BR2_x86_barcelona
+>  	default "STEAMROLLER"  if BR2_x86_steamroller
+>  	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
+> -	default "SSE_GENERIC"  if BR2_X86_CPU_HAS_SSE
+>  	default "POWER4"       if BR2_powerpc_power4
+>  	default "POWER5"       if BR2_powerpc_power5
+>  	default "POWER6"       if BR2_powerpc_power6
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
