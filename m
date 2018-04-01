@@ -1,10 +1,10 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:37 -0300
-Subject: [Buildroot] [PATCH v2 24/37] package/*/Config.in: fix attributes
+Date: Sun,  1 Apr 2018 02:08:38 -0300
+Subject: [Buildroot] [PATCH v2 25/37] toolchain/*/Config.in: fix attributes
  order
 In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
 References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-25-ricardo.martincoski@gmail.com>
+Message-ID: <20180401050850.5701-26-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,73 +18,100 @@ Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Changes v1 -> v2:
   - no changes
 ---
- package/mono/Config.in    | 2 +-
- package/php/Config.in     | 8 ++++----
- package/systemd/Config.in | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ toolchain/Config.in                                          |  2 +-
+ toolchain/toolchain-buildroot/Config.in                      |  2 +-
+ .../toolchain-external-custom/Config.in.options              | 12 ++++++------
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/mono/Config.in b/package/mono/Config.in
-index d162237086..63208fef49 100644
---- a/package/mono/Config.in
-+++ b/package/mono/Config.in
-@@ -5,9 +5,9 @@ config BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 91035c71d7..212fbbd300 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -42,8 +42,8 @@ choice
  
- config BR2_PACKAGE_MONO_ARCH_SUPPORTS
- 	bool
--	depends on BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
- 	default y if (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
- 		      BR2_mipsel || BR2_powerpc || BR2_x86_64)
-+	depends on BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+-	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
++	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
  
- config BR2_PACKAGE_MONO
- 	bool "mono"
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 11514e04b1..2469573541 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -1,15 +1,15 @@
- config BR2_PACKAGE_PHP
- 	bool "php"
-+	# PHP uses -export-dynamic, which breaks with elf2flt with a
-+	# message like "ld.real: section .junk LMA [...,...] overlaps
-+	# section .text LMA [...,...]"
-+	depends on !BR2_BINFMT_FLAT
- 	select BR2_PACKAGE_PHP_SAPI_CGI if \
- 	       !BR2_PACKAGE_PHP_SAPI_APACHE && \
- 	       !BR2_PACKAGE_PHP_SAPI_CLI && \
- 	       !BR2_PACKAGE_PHP_SAPI_FPM &&  \
- 	       BR2_USE_MMU
- 	select BR2_PACKAGE_PHP_SAPI_CLI if !BR2_USE_MMU
--	# PHP uses -export-dynamic, which breaks with elf2flt with a
--	# message like "ld.real: section .junk LMA [...,...] overlaps
--	# section .text LMA [...,...]"
--	depends on !BR2_BINFMT_FLAT
+ config BR2_TOOLCHAIN_EXTERNAL
+ 	bool "External toolchain"
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 9668f8d41a..0ab7e8db97 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -27,13 +27,13 @@ choice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	bool "uClibc-ng"
+-	select BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
+ 		   BR2_arm     || BR2_armeb    || \
+ 		   BR2_bfin    || BR2_i386   || BR2_m68k   || BR2_microblaze || \
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
+ 		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
++	select BR2_TOOLCHAIN_USES_UCLIBC
  	help
- 	  PHP  is a widely-used general-purpose scripting
- 	  language that is especially suited for Web development
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 420c78493d..c5a109675c 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -191,8 +191,8 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
+ 	  This option selects uClibc-ng as the C library for the
+ 	  cross-compilation toolchain.
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 70c7d8e3c3..6c12b1619c 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -320,8 +320,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LOCALE
  
- config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 	bool "enable myhostname NSS plugin"
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
+ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+ 	bool "Toolchain has threads support?"
+-	select BR2_TOOLCHAIN_HAS_THREADS
  	default y
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
++	select BR2_TOOLCHAIN_HAS_THREADS
  	help
- 	  nss-myhostname is a plug-in module for the GNU Name Service
- 	  Switch (NSS) functionality of the GNU C Library (glibc),
-@@ -247,8 +247,8 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
+ 	  Select this option if your external toolchain has thread
+ 	  support. If you don't know, leave the default value,
+@@ -331,8 +331,8 @@ if BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
  
- config BR2_PACKAGE_SYSTEMD_RESOLVED
- 	bool "enable resolve daemon"
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
+ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
+ 	bool "Toolchain has threads debugging support?"
+-	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
  	default y
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
  	help
- 	  systemd-resolved is a system service that provides network
- 	  name resolution to local applications. It implements a
+ 	  Select this option if your external toolchain has thread
+ 	  debugging support. If you don't know, leave the default
+@@ -340,8 +340,8 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
+ 	bool "Toolchain has NPTL threads support?"
+-	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	default y
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+ 	  Select this option if your external toolchain uses the NPTL
+ 	  (Native Posix Thread Library) implementation of Posix
+@@ -354,9 +354,9 @@ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
+ 	bool "Toolchain has SSP support?"
+-	select BR2_TOOLCHAIN_HAS_SSP
+ 	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
++	select BR2_TOOLCHAIN_HAS_SSP
+ 	help
+ 	  Selection this option if your external toolchain has Stack
+ 	  Smashing Protection support enabled. If you don't know,
+@@ -365,9 +365,9 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+ 	bool "Toolchain has RPC support?"
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Select this option if your external toolchain supports
+ 	  RPC. If you don't know, leave the default value, Buildroot
 -- 
 2.14.1
