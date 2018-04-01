@@ -1,53 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 09:10:09 +0200
-Subject: [Buildroot] [PATCH v2 16/37] check-package: enable for
- toolchain/
-In-Reply-To: <20180401050850.5701-17-ricardo.martincoski@gmail.com>
-References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
- <20180401050850.5701-17-ricardo.martincoski@gmail.com>
-Message-ID: <20180401091009.3c80a574@windsurf>
+Date: Sun, 1 Apr 2018 09:10:44 +0200
+Subject: [Buildroot] [git commit] qemu/Config.in.host: fix overindented
+ depends on
+Message-ID: <20180401071046.5DFD97FCF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f9b9ad206a3d3afaae90cf5dab9f909432645aff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  1 Apr 2018 02:08:29 -0300, Ricardo Martincoski wrote:
-> The toolchain directory can benefit from this script to prevent common
-> mistakes when submitting patches.
-> 
-> In order to accomplish this:
-> Do not ignore anymore files from the toolchain/ directory.
-> Ignore this symbol:
->  - BR_LIBC: defined by the buildroot toolchain, used by gcc-final.mk.
-> 
-> Ignore toolchain/toolchain-external/pkg-toolchain-external.mk as it
-> declares a package infra and not a package itself.
-> Ignore toolchain/helpers.mk as it contains only helper functions.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Changes v1 -> v2:
->   - rebase after toolchain-common.in was merged to Config.in;
->   - remove spurious info from commit log (I first created the series
->     changing the check-package and then fixing the package files; when I
->     rebased to allow partial apply of the series, the info "do not
->     ignore this symbol" became obsolete since it is fixed in a previous
->     patch);
-> ---
->  utils/check-package             | 3 +++
->  utils/checkpackagelib/lib_mk.py | 1 +
->  2 files changed, 4 insertions(+)
+Do the same as used in all other Config.in files and use only one tab.
 
-Applied to master, thanks.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qemu/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index bbc2aa27c5..0ef4c700b0 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+ 		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+ 		BR2_sparc        || BR2_x86_64
+-		depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
++	depends on !BR2_powerpc_620 && !BR2_powerpc_630 && !BR2_powerpc_970
+ 
+ config BR2_PACKAGE_HOST_QEMU
+ 	bool "host qemu"
