@@ -1,97 +1,161 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:22 -0300
-Subject: [Buildroot] [PATCH v2 09/37] linux/linux-ext-*.mk: fit file header
- into one line
+Date: Sun,  1 Apr 2018 02:08:24 -0300
+Subject: [Buildroot] [PATCH v2 11/37] linux/linux.mk: use namespace for
+ internal variables
 In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
 References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-10-ricardo.martincoski@gmail.com>
+Message-ID: <20180401050850.5701-12-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make it follow the package coding style by removing redundant info.
+These three symbols:
+KERNEL_ARCH_PATH
+KERNEL_DTBS
+KERNEL_DTS_NAME
+are defined and used only inside this file, so use the LINUX_ namespace
+for them instead of KERNEL_.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Christian Stewart <christian@paral.in>
-Cc: David Lechner <david@lechnology.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
 Changes v1 -> v2:
-  - no changes
+  - use prefix LINUX_ instead of LINUX_KERNEL_  (suggested by Thomas
+    Petazzoni);
+  - rebased;
 ---
- linux/linux-ext-aufs.mk                 | 2 +-
- linux/linux-ext-ev3dev-linux-drivers.mk | 2 +-
- linux/linux-ext-fbtft.mk                | 2 +-
- linux/linux-ext-rtai.mk                 | 2 +-
- linux/linux-ext-xenomai.mk              | 4 ++--
- 5 files changed, 6 insertions(+), 6 deletions(-)
+ linux/linux.mk | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/linux/linux-ext-aufs.mk b/linux/linux-ext-aufs.mk
-index fb2f3560a7..d4bbb07196 100644
---- a/linux/linux-ext-aufs.mk
-+++ b/linux/linux-ext-aufs.mk
-@@ -1,7 +1,7 @@
- ################################################################################
--# Linux Aufs extensions
- #
- # Patch the linux kernel with aufs extension
-+#
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 02796d8bb2..7609a15f23 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -125,15 +125,15 @@ endif
+ # going to be installed in the target filesystem.
+ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
  
- LINUX_EXTENSIONS += aufs
-diff --git a/linux/linux-ext-ev3dev-linux-drivers.mk b/linux/linux-ext-ev3dev-linux-drivers.mk
-index c8afeeb1d5..3bb12db38d 100644
---- a/linux/linux-ext-ev3dev-linux-drivers.mk
-+++ b/linux/linux-ext-ev3dev-linux-drivers.mk
-@@ -1,7 +1,7 @@
- ################################################################################
--# Linux ev3dev extensions
- #
- # Patch the linux kernel with ev3dev extension
-+#
- ################################################################################
+-KERNEL_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
++LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
  
- LINUX_EXTENSIONS += ev3dev-linux-drivers
-diff --git a/linux/linux-ext-fbtft.mk b/linux/linux-ext-fbtft.mk
-index 5eb3d944e8..cbc9c58ed3 100644
---- a/linux/linux-ext-fbtft.mk
-+++ b/linux/linux-ext-fbtft.mk
-@@ -1,7 +1,7 @@
- ################################################################################
--# Linux fbtft extensions
- #
- # Patch the linux kernel with fbtft extension
-+#
- ################################################################################
+ # We keep only the .dts files, so that the user can specify both .dts
+ # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+ # copied to arch/<arch>/boot/dts, but only the .dts files will
+ # actually be generated as .dtb.
+-KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
++LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
  
- LINUX_EXTENSIONS += fbtft
-diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-index fb483aa80b..46e3dae3a7 100644
---- a/linux/linux-ext-rtai.mk
-+++ b/linux/linux-ext-rtai.mk
-@@ -1,7 +1,7 @@
- ################################################################################
--# Linux RTAI extensions
- #
- # Patch the linux kernel with RTAI extension
-+#
- ################################################################################
+-KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
++LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME))
  
- LINUX_EXTENSIONS += rtai
-diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
-index 76a9786e4d..d066bb32ac 100644
---- a/linux/linux-ext-xenomai.mk
-+++ b/linux/linux-ext-xenomai.mk
-@@ -1,7 +1,7 @@
- ################################################################################
--# Linux Adeos/Xenomai extensions
- #
--# Patch the linux kernel with xenomai extension
-+# Patch the linux kernel with Adeos/Xenomai extension
-+#
- ################################################################################
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+ LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
+@@ -155,9 +155,9 @@ LINUX_IMAGE_NAME = zImage.epapr
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
+ LINUX_IMAGE_NAME = zImage
+ else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
+-LINUX_IMAGE_NAME = cuImage.$(KERNEL_DTS_NAME)
++LINUX_IMAGE_NAME = cuImage.$(LINUX_DTS_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
+-LINUX_IMAGE_NAME = simpleImage.$(KERNEL_DTS_NAME)
++LINUX_IMAGE_NAME = simpleImage.$(LINUX_DTS_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
+ LINUX_IMAGE_NAME = Image
+ else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
+@@ -187,11 +187,11 @@ endif
+ # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
+ # defconfig file.
+ ifeq ($(KERNEL_ARCH),i386)
+-KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
++LINUX_ARCH_PATH = $(LINUX_DIR)/arch/x86
+ else ifeq ($(KERNEL_ARCH),x86_64)
+-KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
++LINUX_ARCH_PATH = $(LINUX_DIR)/arch/x86
+ else
+-KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
++LINUX_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
+ endif
  
- LINUX_EXTENSIONS += xenomai
+ ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+@@ -201,7 +201,7 @@ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ_BIN),y)
+ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else
+-LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
++LINUX_IMAGE_PATH = $(LINUX_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
+ endif # BR2_LINUX_KERNEL_VMLINUX
+ 
+ define LINUX_APPLY_LOCAL_PATCHES
+@@ -323,14 +323,14 @@ endef
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+ ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
+ define LINUX_BUILD_DTB
+-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
+ endef
+ ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),)
+ define LINUX_INSTALL_DTB
+ 	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
+ 	cp $(addprefix \
+-		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
+-		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
++		$(LINUX_ARCH_PATH)/boot/$(if $(wildcard \
++		$(addprefix $(LINUX_ARCH_PATH)/boot/dts/,$(LINUX_DTBS))),dts/),$(LINUX_DTBS)) \
+ 		$(1)
+ endef
+ endif # BR2_LINUX_KERNEL_APPENDED_DTB
+@@ -340,8 +340,8 @@ endif # BR2_LINUX_KERNEL_DTS_SUPPORT
+ ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+ # dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+ define LINUX_APPEND_DTB
+-	(cd $(KERNEL_ARCH_PATH)/boot; \
+-		for dtb in $(KERNEL_DTS_NAME); do \
++	(cd $(LINUX_ARCH_PATH)/boot; \
++		for dtb in $(LINUX_DTS_NAME); do \
+ 			if test -e $${dtb}.dtb ; then \
+ 				dtbpath=$${dtb}.dtb ; \
+ 			else \
+@@ -359,10 +359,10 @@ ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+ LINUX_APPEND_DTB += ; \
+ 	MKIMAGE_ARGS=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) |\
+ 	sed -n -e 's/Image Name:[ ]*\(.*\)/-n \1/p' -e 's/Load Address:/-a/p' -e 's/Entry Point:/-e/p'`; \
+-	for dtb in $(KERNEL_DTS_NAME); do \
++	for dtb in $(LINUX_DTS_NAME); do \
+ 		$(MKIMAGE) -A $(MKIMAGE_ARCH) -O linux \
+ 			-T kernel -C none $${MKIMAGE_ARGS} \
+-			-d $(KERNEL_ARCH_PATH)/boot/zImage.$${dtb} $(LINUX_IMAGE_PATH).$${dtb}; \
++			-d $(LINUX_ARCH_PATH)/boot/zImage.$${dtb} $(LINUX_IMAGE_PATH).$${dtb}; \
+ 	done
+ endif
+ endif
+@@ -371,7 +371,7 @@ endif
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+ 	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
+-		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ; \
++		cp -f $${dts} $(LINUX_ARCH_PATH)/boot/dts/ ; \
+ 	done
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
+@@ -386,7 +386,7 @@ ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+ # appended DTBs.
+ define LINUX_INSTALL_IMAGE
+ 	mkdir -p $(1)
+-	cp $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME).* $(1)
++	cp $(LINUX_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME).* $(1)
+ endef
+ else
+ # Otherwise, just install the unique image generated by the kernel
+@@ -482,7 +482,7 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
+ endif
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(KERNEL_DTS_NAME)),y:)
++ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(LINUX_DTS_NAME)),y:)
+ $(error No kernel device tree source specified, check your \
+ 	BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
+ endif
 -- 
 2.14.1
