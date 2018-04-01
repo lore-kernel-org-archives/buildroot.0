@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 00:38:29 +0200
-Subject: [Buildroot] [PATCH] uboot: add option customizing the name of
- environment image
-In-Reply-To: <20171218145557.19360-1-didin@synopsys.com>
-References: <20171218145557.19360-1-didin@synopsys.com>
-Message-ID: <20180402003829.77272238@windsurf>
+Date: Mon, 2 Apr 2018 00:42:26 +0200
+Subject: [Buildroot] [PATCH] board/ci20: Fix U-Boot build failure
+In-Reply-To: <1522621901.1665.1.camel@collabora.com>
+References: <20180401135035.29655-1-ezequiel@collabora.com>
+ <20180401160555.36587bd1@windsurf>
+ <1522621901.1665.1.camel@collabora.com>
+Message-ID: <20180402004226.71aa48eb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +14,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 18 Dec 2017 17:55:57 +0300, Evgeniy Didin wrote:
-> Historically, in buildroot the name of binary environment image
-> file is "uboot-env.bin". But in upstream u-boot default name
-> for this file is "uboot.env":
+On Sun, 01 Apr 2018 19:31:41 -0300, Ezequiel Garcia wrote:
+
+> I was testing on top of a recent master:
 > 
-> http://git.denx.de/?p=u-boot.git;a=blob;f=env/Kconfig#l394
+> commit 53e1b222533fd110ab9472480ded126a4762db5e (origin/master,
+> origin/HEAD)
+> Author: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Date:   Sat Mar 31 15:27:36 2018 +0200
 > 
-> For some boards U-Boot environment is stored in FAT partition, not as
-> a raw blob on SD-card, so the name of environment file must be correct.
-> For customizing name of envimage file option BR2_TARGET_UBOOT_ENVIMAGE_FILENAME
-> has been added. For backward compatibility by default value of this
-> option is set to "uboot-env.bin".
+>     package/docker-proxy: convert to golang infrastructure
 > 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  boot/uboot/Config.in | 8 ++++++++
->  boot/uboot/uboot.mk  | 2 +-
->  2 files changed, 9 insertions(+), 1 deletion(-)
+> ... just tested on top of current master, same error is thrown if there
+>  are no output/host/include/libfdt* files.
+> 
+> Can you point me at the recent fixes?
 
-In the mean time, we merged the ARC HS Development Kit development kit,
-and the rename of the u-boot environment image is done directly by
-genimage:
+I was thinking about:
 
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "uImage"
-+    }
-+    file uboot.env {
-+      image = "uboot-env.bin"
-+    }
-+  }
-+  size = 100M
-+}
+f437bf547ca44849db4578c31707afdd96b85018 uboot: fix build for older uboot source trees
+bf733342324b414a1142b57781504111f81c97ea uboot: fix build when libfdt-devel is installed system-wide
+0bf80e4bcd5277e3ad935e03c632deba4c7316f2 uboot: ensure host includes are searched before system default includes
+b15a7a62d3f992af3fa8eca1e358735c47b64390 uboot: revert "uboot: use local libfdt.h"
+baae5156ce37e8b2775f04710f7d1c8e97e4114c uboot: use local fdt headers
 
-This makes this patch no longer useful, so I've marked it as Rejected
-in our patch tracking system. Let me know if you disagree for some
-reason. Thanks!
-
-Best regards,
+But you have all of these. So we have another issue, it seems.
 
 Thomas
 -- 
