@@ -1,146 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 08:53:57 +0200
-Subject: [Buildroot] [git commit] linux/Config.*: re-wrap help text
-Message-ID: <20180401070907.D3F1F817E3@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 09:08:47 +0200
+Subject: [Buildroot] [git commit] toolchain/*/Config.in: re-wrap help text
+Message-ID: <20180401070908.09CB4814E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b95cf8dd413c6773b2aadc30157ad00e2fc7d94
+commit: https://git.buildroot.net/buildroot/commit/?id=6d4f66f9b95b002310b60d0743c96fb66442e004
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 ... to follow the convention <tab><2 spaces><62 chars>.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.ext.in | 15 +++++++++------
- linux/Config.in     | 43 +++++++++++++++++++++++--------------------
- 2 files changed, 32 insertions(+), 26 deletions(-)
+ toolchain/Config.in                                           | 10 ++++++----
+ toolchain/toolchain-external/Config.in                        | 11 ++++++-----
+ .../toolchain-external-codescape-img-mips/Config.in           |  6 ++++--
+ .../toolchain-external-codescape-mti-mips/Config.in           |  6 ++++--
+ 4 files changed, 20 insertions(+), 13 deletions(-)
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 011dffb0b1..acc8a04742 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -117,14 +117,17 @@ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
- 	string "aufs-standalone version"
- 	default ""
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 212fbbd300..b33eaffd52 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -124,7 +124,8 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY
+ 	  The gconv libraries are used to convert between different
+ 	  character sets (charsets).
+ 
+-	  Say 'y' if you need to store and/or display different charsets.
++	  Say 'y' if you need to store and/or display different
++	  charsets.
+ 
+ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
+ 	string "Gconv libraries to copy"
+@@ -162,10 +163,11 @@ config BR2_TARGET_OPTIMIZATION
+ config BR2_TARGET_LDFLAGS
+ 	string "Target linker options"
  	help
--	  The version you choose must match that of your kernel. Usually,
--	  the sha1 of the cset you want to use; avoid using a branch name
--	  as this yields non-reproducible builds.
-+	  The version you choose must match that of your kernel.
-+	  Usually, the sha1 of the cset you want to use; avoid using a
-+	  branch name as this yields non-reproducible builds.
+-	  Extra options to pass to the linker when building for the target.
++	  Extra options to pass to the linker when building for the
++	  target.
  
--	  See the following resources to see what versions are available:
-+	  See the following resources to see what versions are
-+	  available:
+-	  Note that options with a '$' sign (eg. -Wl,-rpath='$ORIGIN/../lib')
+-	  are not supported.
++	  Note that options with a '$' sign (eg.
++	  -Wl,-rpath='$ORIGIN/../lib') are not supported.
  
--	  For aufs3.x: https://sourceforge.net/p/aufs/aufs3-standalone/ref/master/branches/
--	  For aufs4.x: https://github.com/sfjro/aufs4-standalone/branches/all
-+	  For aufs3.x:
-+	  https://sourceforge.net/p/aufs/aufs3-standalone/ref/master/branches/
-+	  For aufs4.x:
-+	  https://github.com/sfjro/aufs4-standalone/branches/all
- 
- endif # aufs
- 
-diff --git a/linux/Config.in b/linux/Config.in
-index 934142c535..d9c5b62863 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -61,13 +61,13 @@ config BR2_LINUX_KERNEL_CUSTOM_VERSION
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	bool "Custom tarball"
+ config BR2_ECLIPSE_REGISTER
+ 	bool "Register toolchain within Eclipse Buildroot plug-in"
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index c4063b177b..6759e5cefa 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -53,15 +53,16 @@ choice
+ config BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+ 	bool "Toolchain to be downloaded and installed"
  	help
--	  This option allows to specify a URL pointing to a kernel source
--	  tarball. This URL can use any protocol recognized by Buildroot,
--	  like http://, ftp://, file:// or scp://.
-+	  This option allows to specify a URL pointing to a kernel
-+	  source tarball. This URL can use any protocol recognized by
-+	  Buildroot, like http://, ftp://, file:// or scp://.
+-	  Select this option if you want Buildroot to download and install the
+-	  toolchain. If you have selected a custom toolchain, specify the URL
+-	  in BR2_TOOLCHAIN_EXTERNAL_URL.
++	  Select this option if you want Buildroot to download and
++	  install the toolchain. If you have selected a custom
++	  toolchain, specify the URL in BR2_TOOLCHAIN_EXTERNAL_URL.
  
--	  When pointing to a local tarball using file://, you may want to
--	  use a make variable like $(TOPDIR) to reference the root of the
--	  Buildroot tree.
-+	  When pointing to a local tarball using file://, you may want
-+	  to use a make variable like $(TOPDIR) to reference the root of
-+	  the Buildroot tree.
- 
- config BR2_LINUX_KERNEL_CUSTOM_GIT
- 	bool "Custom Git repository"
-@@ -109,8 +109,8 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION \
- 		if BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION != ""  # legacy
+ config BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED
+ 	bool "Pre-installed toolchain"
  	help
--	  Revision to use in the typical format used by Git/Mercurial/Subversion
--	  E.G. a sha id, a tag, branch, ..
-+	  Revision to use in the typical format used by
-+	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
+-	  Select this option if you want to use a pre-installed toolchain.
+-	  Specify the path to this toolchain in BR2_TOOLCHAIN_EXTERNAL_PATH.
++	  Select this option if you want to use a pre-installed
++	  toolchain. Specify the path to this toolchain in
++	  BR2_TOOLCHAIN_EXTERNAL_PATH.
  
- endif
+ endchoice
  
-@@ -175,7 +175,8 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	  Path to the kernel configuration file
- 
- 	  Note: this can be a defconfig file or a complete .config file,
--	  which can later be saved back with make linux-update-(def)config.
-+	  which can later be saved back with make
-+	  linux-update-(def)config.
- 
- config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
- 	string "Additional configuration fragment files"
-@@ -284,9 +285,9 @@ endchoice
- choice
- 	prompt "Kernel compression format"
- 	help
--	  This selection will just ensure that the correct host tools are built.
--	  The actual compression for the kernel should be selected in the
--	  kernel configuration menu.
-+	  This selection will just ensure that the correct host tools
-+	  are built. The actual compression for the kernel should be
-+	  selected in the kernel configuration menu.
- 
- config BR2_LINUX_KERNEL_GZIP
- 	bool "gzip compression"
-@@ -317,8 +318,9 @@ config BR2_LINUX_KERNEL_IMAGE_NAME
- 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 	help
- 	  The filename of the kernel image, if it is different from the
--	  make target (above). Only Xtensa uses a filename different from
--	  the make target. Defaults to BR2_LINUX_KERNEL_IMAGE_TARGET_NAME.
-+	  make target (above). Only Xtensa uses a filename different
-+	  from the make target. Defaults to
-+	  BR2_LINUX_KERNEL_IMAGE_TARGET_NAME.
- 
- 	  If unsure, leave it empty.
- 
-@@ -327,18 +329,19 @@ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
- 	depends on BR2_arm || BR2_armeb
- 	depends on BR2_LINUX_KERNEL_UIMAGE || BR2_LINUX_KERNEL_APPENDED_UIMAGE
- 	help
--	  If your ARM system's Linux kernel is configured with the new (3.7+)
--	  multi-architecture support (CONFIG_ARCH_MULTIPLATFORM=y in your
--	  kernel config), then it is necessary to specify a kernel load address
--	  when building the uImage. This should be a hexadecimal string
--	  beginning with 0x, for example: 0x00008000.
-+	  If your ARM system's Linux kernel is configured with the new
-+	  (3.7+) multi-architecture support (CONFIG_ARCH_MULTIPLATFORM=y
-+	  in your kernel config), then it is necessary to specify a
-+	  kernel load address when building the uImage. This should be a
-+	  hexadecimal string beginning with 0x, for example: 0x00008000.
- 
- 	  If unsure, let this option empty.
- 
- config BR2_LINUX_KERNEL_DTS_SUPPORT
- 	bool "Build a Device Tree Blob (DTB)"
- 	help
--	  Compile one or more device tree sources into device tree blobs.
-+	  Compile one or more device tree sources into device tree
-+	  blobs.
- 	  Select the dts files to compile in the options below.
- 
- if BR2_LINUX_KERNEL_DTS_SUPPORT
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+index 8b2eab0ad2..2bfa567672 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+@@ -30,12 +30,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+ 	      Select 'MIPS (little endian)' Target Architecture
+ 	      Select 'mips 32r6' Target Architecture Variant
+ 	      Enable 'Use soft-float'
+-	    - MIPS32r6 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
++	    - MIPS32r6 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI,
++	      microMIPS
+ 	      Select 'MIPS (little endian)' Target Architecture
+ 	      Select 'mips 32r6' Target Architecture Variant
+ 	      Disable 'Use soft-float'
+ 	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
+-	    - MIPS32r6 - Little-Endian, Soft-Float, 2008 NaN, o32 ABI, microMIPS
++	    - MIPS32r6 - Little-Endian, Soft-Float, 2008 NaN, o32 ABI,
++	      microMIPS
+ 	      Select 'MIPS (little endian)' Target Architecture
+ 	      Select 'mips 32r6' Target Architecture Variant
+ 	      Enable 'Use soft-float'
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+index db191fd1be..5d466a58f4 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+@@ -41,12 +41,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+ 	      Select 'MIPS (little endian)' Target Architecture
+ 	      Select 'mips 32r2' Target Architecture Variant
+ 	      Enable 'Use soft-float'
+-	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
++	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI,
++	      microMIPS
+ 	      Select 'MIPS (little endian)' Target Architecture
+ 	      Select 'mips 32r2' Target Architecture Variant
+ 	      Enable 'Use soft-float'
+ 	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
+-	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI, microMIPS
++	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI,
++	      microMIPS
+ 	      Select 'MIPS (little endian)' Target Architecture
+ 	      Select 'mips 32r2' Target Architecture Variant
+ 	      Disable 'Use soft-float'
