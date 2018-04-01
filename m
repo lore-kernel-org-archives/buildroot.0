@@ -1,100 +1,88 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:32 -0300
-Subject: [Buildroot] [PATCH v2 19/37] */Config.in*: remove consecutive empty
- lines
+Date: Sun,  1 Apr 2018 02:08:33 -0300
+Subject: [Buildroot] [PATCH v2 20/37] Config.in*: fix attributes order
 In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
 References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-20-ricardo.martincoski@gmail.com>
+Message-ID: <20180401050850.5701-21-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+... to follow the convention: type, default, depends on, select, help.
+
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
 Changes v1 -> v2:
   - no changes
 ---
- Config.in                      | 1 -
- Config.in.legacy               | 1 -
- arch/Config.in.mips            | 1 -
- boot/barebox/barebox/Config.in | 1 -
- boot/syslinux/Config.in        | 1 -
- fs/jffs2/Config.in             | 1 -
- 6 files changed, 6 deletions(-)
+ Config.in        | 8 ++++----
+ Config.in.legacy | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index a74b24ae45..852c61ef3a 100644
+index 852c61ef3a..ca6010fd30 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -620,7 +620,6 @@ config BR2_SHARED_STATIC_LIBS
+@@ -424,8 +424,8 @@ endif
  
- endchoice
+ config BR2_STRIP_strip
+ 	bool "strip target binaries"
+-	depends on !BR2_PACKAGE_HOST_ELF2FLT
+ 	default y
++	depends on !BR2_PACKAGE_HOST_ELF2FLT
+ 	help
+ 	  Binaries and libraries in the target filesystem will be
+ 	  stripped using the normal 'strip' command. This allows to save
+@@ -435,16 +435,16 @@ config BR2_STRIP_strip
  
--
- config BR2_PACKAGE_OVERRIDE_FILE
- 	string "location of a package override file"
- 	default "$(CONFIG_DIR)/local.mk"
+ config BR2_STRIP_EXCLUDE_FILES
+ 	string "executables that should not be stripped"
+-	depends on BR2_STRIP_strip
+ 	default ""
++	depends on BR2_STRIP_strip
+ 	help
+ 	  You may specify a space-separated list of binaries and
+ 	  libraries here that should not be stripped on the target.
+ 
+ config BR2_STRIP_EXCLUDE_DIRS
+ 	string "directories that should be skipped when stripping"
+-	depends on BR2_STRIP_strip
+ 	default ""
++	depends on BR2_STRIP_strip
+ 	help
+ 	  You may specify a space-separated list of directories that
+ 	  should be skipped when stripping. Binaries and libraries in
+@@ -545,7 +545,6 @@ endchoice
+ 
+ config BR2_GOOGLE_BREAKPAD_ENABLE
+ 	bool "Enable google-breakpad support"
+-	select BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+@@ -554,6 +553,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
+ 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	select BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	help
+ 	  This option will enable the use of google breakpad, a library
+ 	  and tool suite that allows you to distribute an application to
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 60f9148234..b1dca97e5e 100644
+index b1dca97e5e..08a129106c 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -1164,7 +1164,6 @@ config BR2_PACKAGE_OPENVPN_CRYPTO_POLARSSL
- 	  version provided in buildroot. And both can't coexist.
- 	  It now uses OpenSSL as the only option.
+@@ -1970,8 +1970,8 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ 	  name.
  
--
- config BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE
- 	bool "nginx http spdy module removed"
+ config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
+-	depends on BR2_PACKAGE_PYTHON
+ 	bool "libsemanage python bindings removed"
++	depends on BR2_PACKAGE_PYTHON
  	select BR2_LEGACY
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index f8e57bab33..5513edb180 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -115,7 +115,6 @@ config BR2_mips_p6600
- 	select BR2_MIPS_CPU_MIPS64R6
- endchoice
- 
--
- choice
- 	prompt "Target ABI"
- 	depends on BR2_mips64 || BR2_mips64el
-diff --git a/boot/barebox/barebox/Config.in b/boot/barebox/barebox/Config.in
-index 0be26adf93..958e294e40 100644
---- a/boot/barebox/barebox/Config.in
-+++ b/boot/barebox/barebox/Config.in
-@@ -17,7 +17,6 @@ config BR2_TARGET_BAREBOX_BOARD_DEFCONFIG
- 	  Name of the board for which Barebox should be built, without
- 	  the _defconfig suffix.
- 
--
- config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
- 	string "Configuration file path"
- 	depends on BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index da035498de..e969d53fd0 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -48,7 +48,6 @@ config BR2_TARGET_SYSLINUX_EFI
  	help
- 	  Install the 'efi' image, to boot from an EFI environment.
- 
--
- if BR2_TARGET_SYSLINUX_LEGACY_BIOS
- 
- config BR2_TARGET_SYSLINUX_C32
-diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
-index 1010216bd1..f1703f4edd 100644
---- a/fs/jffs2/Config.in
-+++ b/fs/jffs2/Config.in
-@@ -98,7 +98,6 @@ config BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
- 	  the flash memory page size.  Using this option is only needed if Linux is
- 	  configured to use a page size different than 4kB.
- 
--
- config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE
- 	hex "Virtual memory page size"
- 	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	  This option has been removed, since the libsemanage Python
 -- 
 2.14.1
