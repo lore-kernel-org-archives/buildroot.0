@@ -1,117 +1,167 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:38 -0300
-Subject: [Buildroot] [PATCH v2 25/37] toolchain/*/Config.in: fix attributes
- order
+Date: Sun,  1 Apr 2018 02:08:41 -0300
+Subject: [Buildroot] [PATCH v2 28/37] boot/*/Config.in: re-wrap help text
 In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
 References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-26-ricardo.martincoski@gmail.com>
+Message-ID: <20180401050850.5701-29-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... to follow the convention: type, default, depends on, select, help.
+... to follow the convention <tab><2 spaces><62 chars>.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
 Changes v1 -> v2:
   - no changes
 ---
- toolchain/Config.in                                          |  2 +-
- toolchain/toolchain-buildroot/Config.in                      |  2 +-
- .../toolchain-external-custom/Config.in.options              | 12 ++++++------
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ boot/at91bootstrap/Config.in  |  6 ++++--
+ boot/at91bootstrap3/Config.in | 10 ++++++----
+ boot/uboot/Config.in          | 43 ++++++++++++++++++++++---------------------
+ 3 files changed, 32 insertions(+), 27 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 91035c71d7..212fbbd300 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -42,8 +42,8 @@ choice
- 
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
--	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 	depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
-+	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 
- config BR2_TOOLCHAIN_EXTERNAL
- 	bool "External toolchain"
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 9668f8d41a..0ab7e8db97 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -27,13 +27,13 @@ choice
- 
- config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	bool "uClibc-ng"
--	select BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
- 		   BR2_arm     || BR2_armeb    || \
- 		   BR2_bfin    || BR2_i386   || BR2_m68k   || BR2_microblaze || \
- 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
- 		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
-+	select BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index 96cfdbc7e9..0f6430fd8d 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -4,9 +4,11 @@ config BR2_TARGET_AT91BOOTSTRAP
  	help
- 	  This option selects uClibc-ng as the C library for the
- 	  cross-compilation toolchain.
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 70c7d8e3c3..6c12b1619c 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -320,8 +320,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LOCALE
+ 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
+ 	  devices. It integrates algorithms for:
+-	  - Device initialization such as clock configuration, PIO settings...
++	  - Device initialization such as clock configuration, PIO
++	    settings...
+ 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
+-	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
++	  - Physical media algorithm such as DataFlash, NandFlash, NOR
++	    Flash...
  
- config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
- 	bool "Toolchain has threads support?"
--	select BR2_TOOLCHAIN_HAS_THREADS
- 	default y
-+	select BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Select this option if your external toolchain has thread
- 	  support. If you don't know, leave the default value,
-@@ -331,8 +331,8 @@ if BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+ if	BR2_TARGET_AT91BOOTSTRAP
  
- config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
- 	bool "Toolchain has threads debugging support?"
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	default y
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index bdc1e775a8..614363c9a6 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -4,9 +4,11 @@ config BR2_TARGET_AT91BOOTSTRAP3
  	help
- 	  Select this option if your external toolchain has thread
- 	  debugging support. If you don't know, leave the default
-@@ -340,8 +340,8 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
+ 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
+ 	  devices. It integrates algorithms for:
+-	  - Device initialization such as clock configuration, PIO settings...
++	  - Device initialization such as clock configuration, PIO
++	    settings...
+ 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
+-	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
++	  - Physical media algorithm such as DataFlash, NandFlash, NOR
++	    Flash...
  
- config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
- 	bool "Toolchain has NPTL threads support?"
--	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	default y
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	help
- 	  Select this option if your external toolchain uses the NPTL
- 	  (Native Posix Thread Library) implementation of Posix
-@@ -354,9 +354,9 @@ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ if BR2_TARGET_AT91BOOTSTRAP3
  
- config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
- 	bool "Toolchain has SSP support?"
--	select BR2_TOOLCHAIN_HAS_SSP
- 	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	select BR2_TOOLCHAIN_HAS_SSP
+@@ -20,8 +22,8 @@ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
  	help
- 	  Selection this option if your external toolchain has Stack
- 	  Smashing Protection support enabled. If you don't know,
-@@ -365,9 +365,9 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
+-	  This option allows Buildroot to get the AT91 Bootstrap 3 source
+-	  code from a Git repository.
++	  This option allows Buildroot to get the AT91 Bootstrap 3
++	  source code from a Git repository.
  
- config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
- 	bool "Toolchain has RPC support?"
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
- 	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ endchoice
+ 
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index d96e7f687f..19cf12a073 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -11,14 +11,14 @@ choice
+ config BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+ 	bool "Legacy"
  	help
- 	  Select this option if your external toolchain supports
- 	  RPC. If you don't know, leave the default value, Buildroot
+-	  Select this option if you use an old U-Boot (older than 2015.04),
+-	  so that we use the old build system.
++	  Select this option if you use an old U-Boot (older than
++	  2015.04), so that we use the old build system.
+ 
+ config BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+ 	bool "Kconfig"
+ 	help
+-	  Select this option if you use a recent U-Boot version (2015.04 or
+-	  newer), so that we use the Kconfig build system.
++	  Select this option if you use a recent U-Boot version (2015.04
++	  or newer), so that we use the Kconfig build system.
+ 
+ endchoice
+ 
+@@ -27,9 +27,9 @@ config BR2_TARGET_UBOOT_BOARDNAME
+ 	string "U-Boot board name"
+ 	help
+ 	  One of U-Boot supported boards to be built.
+-	  This will be suffixed with _config to meet U-Boot standard naming.
+-	  See boards.cfg in U-Boot source code for the list of available
+-	  configurations.
++	  This will be suffixed with _config to meet U-Boot standard
++	  naming. See boards.cfg in U-Boot source code for the list of
++	  available configurations.
+ endif
+ 
+ choice
+@@ -79,8 +79,8 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
+ 		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
+ 	help
+-	  Revision to use in the typical format used by Git/Mercurial/Subversion
+-	  E.G. a sha id, a tag, branch, ..
++	  Revision to use in the typical format used by
++	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
+ 
+ endif
+ 
+@@ -229,25 +229,25 @@ config BR2_TARGET_UBOOT_FORMAT_NAND
+ 	bool "u-boot.nand (Freescale i.MX28)"
+ 	depends on BR2_arm
+ 	help
+-	  This is Freescale i.MX28 BootStream format (.sb), with a header
+-	  for booting from a NAND flash.
++	  This is Freescale i.MX28 BootStream format (.sb), with a
++	  header for booting from a NAND flash.
+ 
+ 	  U-boot includes an mxsboot tool to generate this format,
+ 	  starting from 2011.12.
+ 
+-	  There are two possibilities when preparing an image writable to
+-	  NAND flash:
+-	  1) The NAND was not written at all yet or the BCB (Boot Control
+-	  Blocks) is broken. In this case, the NAND image 'u-boot.nand'
+-	  needs to written.
++	  There are two possibilities when preparing an image writable
++	  to NAND flash:
++	  1) The NAND was not written at all yet or the BCB (Boot
++	  Control Blocks) is broken. In this case, the NAND image
++	  'u-boot.nand' needs to written.
+ 	  2) The NAND flash was already written with a good BCB. This
+ 	  applies after 'u-boot.nand' was correctly written. There is no
+-	  need to write the BCB again. In this case, the bootloader can be
+-	  upgraded by writing 'u-boot.sb'.
++	  need to write the BCB again. In this case, the bootloader can
++	  be upgraded by writing 'u-boot.sb'.
+ 
+ 	  To satisfy both cases, the 'u-boot.nand' image obtained from
+-	  mxsboot as well as the U-Boot make target 'u-boot.sb' are copied
+-	  to the binaries directory.
++	  mxsboot as well as the U-Boot make target 'u-boot.sb' are
++	  copied to the binaries directory.
+ 
+ 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+ 
+@@ -295,7 +295,8 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
+ 	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM
+ 	help
+ 	  In case the U-Boot binary for the target platform is not among
+-	  the default names, one or more custom names can be listed here.
++	  the default names, one or more custom names can be listed
++	  here.
+ 	  Use space to separate multiple names.
+ 	  Example:
+ 	  u-boot_magic.bin
 -- 
 2.14.1
