@@ -1,15 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 00:52:43 +0200
-Subject: [Buildroot] [PATCH v2 2/2] modem-manager: Update to version
- 1.7.990
-In-Reply-To: <2137381520.124019.1519075425250.JavaMail.zimbra@datacom.ind.br>
-References: <1518799091-845-1-git-send-email-jared.bents@rockwellcollins.com>
- <1518799091-845-2-git-send-email-jared.bents@rockwellcollins.com>
- <20180216215334.7385e898@windsurf.lan>
- <361202886.84859.1518998584797.JavaMail.zimbra@datacom.ind.br>
- <20180219090504.745c4841@windsurf.lan>
- <2137381520.124019.1519075425250.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20180402005243.00aea819@windsurf>
+Date: Mon, 2 Apr 2018 00:57:38 +0200
+Subject: [Buildroot] [PATCH 1/1] rust: make sure the cxx compiler is
+ also set for the target
+In-Reply-To: <F8479AD1-B731-4235-A6C6-A517165DD553@storagecraft.com>
+References: <20180228173852.66069-1-charles.hardin@storagecraft.com>
+ <20180402004857.7e7e46c1@windsurf>
+ <F8479AD1-B731-4235-A6C6-A517165DD553@storagecraft.com>
+Message-ID: <20180402005738.1d603538@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,24 +15,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 19 Feb 2018 18:23:45 -0300 (BRT), Carlos Santos wrote:
+Thanks for the quick feedback!
 
-> The announcement message[1], from Sun Jan 21, informs that 1.7.990
-> corresponds to 1.8-rc1. From the list of 1.5.99x releases, which spans
-> several months, I believe that 1.8 will unlikely be released before
-> the end of February.
+On Sun, 1 Apr 2018 22:52:42 +0000, Charles Hardin wrote:
+> We have a problem where we build on a HOST with x86_64 and RUST
+> doesn?t realize the difference between the host tool chain and the buildroot
+> toolchain.
+> 
+> In the old days - we had to patch rust to make a ?x86_64-buildroot-linux-gnu?
+> target that would be recognized, but the latest patches removed that around
+> rust 1.9 or so.
+> 
+> This was literally just looking at the logs and seeing the ?cc? was the buildroot
+> cc and the the cxx was ?c++?, so it is just what we hacked together to get
+> things to work.
+> 
+> But - definitely need to set ?cxx? in some appropriate fashion for rust to get
+> compiled correctly.
 
-Then we'll wait for the final 1.8 release to be made before bumping. We
-don't typically package release candidate versions in Buildroot.
+Setting cxx looks definitely OK in your patch. It's the
+RUSTC_HOST_NAME != RUSTC_TARGET_NAME that looks wrong.
 
-If people are unhappy with this, I would suggest to work with upstream
-so that they adopt a more regular release schedule, so that
-modem-manager users can get new features on a more regular basis,
-without having to use release candidates.
+Could you provide some specific examples (with defconfigs to reproduce)
+for the two problems:
 
-I've marked the patch as Rejected in patchwork.
+ - Lack of cxx variable
 
-Best regards,
+ - Case of RUSTC_HOST_NAME == RUSTC_TARGET_NAME
+
+Thanks!
 
 Thomas
 -- 
