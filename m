@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 22:21:45 +0200
-Subject: [Buildroot] [PATCH v2 4/5] support/scripts/graph-depends: add
- --flat-list option
-In-Reply-To: <20180331163543.6278-5-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sat, 31 Mar 2018 18:35:42 +0200")
+Date: Sun, 01 Apr 2018 22:21:52 +0200
+Subject: [Buildroot] [PATCH v2 5/5] package/pkg-generic: add
+ <pkg>-show-recursive-(r)depends targets
+In-Reply-To: <20180331163543.6278-6-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 31 Mar 2018 18:35:43 +0200")
 References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
- <20180331163543.6278-5-thomas.petazzoni@bootlin.com>
-Message-ID: <87sh8eptie.fsf@dell.be.48ers.dk>
+ <20180331163543.6278-6-thomas.petazzoni@bootlin.com>
+Message-ID: <87o9j2pti7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,25 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
  > From: George Redivo <george.redivo@datacom.ind.br>
- > graph-depends currently spits out a graph in .dot format. However, as
- > part of the upcoming introduction of <pkg>-show-recursive-depends and
- > <pkg>-show-recursive-rdepends, we need graph-depends to be able to
- > display a flat list.
+ > This commit adds the support for <pkg>-show-recursive-depends and
+ > <pkg>-show-recursive-rdepends which respectively show the list of all
+ > dependencies or reverse dependencies for a given package. The existing
+ > show-depends and show-rdepends only show the first-level dependencies,
+ > while show-recursive-depends and show-recursive-rdepends show
+ > recursively the dependencies.
+
+ > It is worth mentioning that while show-recursive-depends really shows
+ > all dependencies, show-recursive-rdepends is a bit limited because the
+ > reverse dependencies of host packages are not properly accounted
+ > for. But that's a limitation that already exists in show-rdepends, and
+ > that cannot easily be solved.
 
  > Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
  > [Thomas:
- >  - Rebase on top of graph-depends changes
- >  - Do not display the package name itself in the list, only its
- >    dependencies (or reverse dependencies)
- >  - Display the result on a single line, instead of one package per
- >    line, in order to match what <pkg>-show-depends and
- >    <pkg>-show-rdepends are doing today.]
+ >  - split from the patch that was also changing graph-depends
+ >  - rename show-rrdepends to show-recursive-rdepends
+ >  - add show-recursive-depends
+ >  - don't create GRAPHS_DIR.]
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed, thanks.
