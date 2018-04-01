@@ -1,45 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 18:44:02 +0200
-Subject: [Buildroot] [PATCH v5] package/snort: new package
-In-Reply-To: <20180401151636.12399-1-romain.naour@gmail.com>
-References: <20180401151636.12399-1-romain.naour@gmail.com>
-Message-ID: <20180401184402.2a19952e@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 01 Apr 2018 18:45:53 +0200
+Subject: [Buildroot] [PATCH v2 2/2] gst1-interpipe: new package
+In-Reply-To: <20171027171622.16050-2-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 27 Oct 2017 19:16:22 +0200")
+References: <20171027171622.16050-1-ps.report@gmx.net>
+ <20171027171622.16050-2-ps.report@gmx.net>
+Message-ID: <87po3iri2m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On Sun,  1 Apr 2018 17:16:36 +0200, Romain Naour wrote:
-> From: Sergio Prado <sergio.prado@e-labworks.com>
-> 
-> Tested on Beaglebone Black.
-> 
-> Build-tested with test-pkg.
-> 
-> Patch to fix cross-compilation errors submitted upstream [1].
-> 
-> [1] https://lists.snort.org/pipermail/snort-devel/2018-January/011025.html
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> [Romain:
->  - split patch by build issues
->  - convert AC_RUN_IFELSE to AC_CHECK_MEMBERS (ThomasP)
->  - convert AC_RUN_IFELSE to AC_COMPILE_IFELSE (ThomasP)
->  - remove most make variable from SNORT_CONF_ENV
->  - remove SNORT_SOURCE default value]
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Sergio, snort install some shared libraries and a snort.pc file.
-> Does it make sens to add "SNORT_INSTALL_STAGING = YES"?
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Changes v1 -> v2:
+ >   - add hash for the license file
+ > ---
+ >  package/gstreamer1/Config.in                       |  1 +
+ >  package/gstreamer1/gst1-interpipe/Config.in        | 10 +++++++++
+ >  .../gstreamer1/gst1-interpipe/gst1-interpipe.hash  |  5 +++++
+ >  .../gstreamer1/gst1-interpipe/gst1-interpipe.mk    | 24 ++++++++++++++++++++++
 
-Applied to master, thanks Romain for finishing this patch!
+Sorry, I forgot to mention that I also added an entry in DEVELOPERS for
+this.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
