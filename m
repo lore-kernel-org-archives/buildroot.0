@@ -1,93 +1,162 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Apr 2018 14:19:14 +0200
-Subject: [Buildroot] [git commit] package/erlang: bump version to 20.3
-Message-ID: <20180401122226.7A1F082A0E@busybox.osuosl.org>
+From: daggs <daggs@gmx.com>
+Date: Sun, 1 Apr 2018 14:25:11 +0200
+Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+In-Reply-To: <45t6pexo6d.ln2@ID-313208.user.individual.net>
+References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
+ <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
+ <trinity-8edc1929-b40d-4afa-85a8-e152cef642fb-1522567556973@3c-app-mailcom-bs16>
+ <1je6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-550783d4-570b-41d5-937b-f66aa367d27f-1522568580265@3c-app-mailcom-bs16>
+ <4sf6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-8096f0c8-32ae-4d0a-ad74-d40b12f0f8ff-1522569777353@3c-app-mailcom-bs16>
+ <e4h6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-6f4e61bd-29a2-4eda-99e3-7f78e881ab04-1522571242948@3c-app-mailcom-bs16>
+ <45t6pexo6d.ln2@ID-313208.user.individual.net>
+Message-ID: <trinity-22e97573-5741-4217-9e6c-d668449e004b-1522585511151@3c-app-mailcom-bs11>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25cc88079459beba0827e95733f54ecad0bf995c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Greetings Bernd,
 
-Removed patch 0001, not needed anymore after upstream commit
-https://github.com/erlang/otp/commit/aa9054e0ea48a127f2aeafcdce1df4d1aec09574
+> Sent: Sunday, April 01, 2018 at 2:41 PM
+> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> To: buildroot at uclibc.org
+> Subject: Re: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+>
+> Am Sun, 01 Apr 2018 10:27:22 +0200 schrieb daggs:
+> 
+> > as said by Thomas in another mail, there shouldn't be any dependency,
+> > what is the exact issue? compilation failure? what kodi version are you
+> > using?
+> 
+> Hi daggs,
+> 
+> the following builds were all made with unpatched buildroot master branch.
+> 
+> The only successful kodi build including libamcodec was made with odroid-
+> mali using this defconfig:
+> 
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_KODI=y
+> BR2_PACKAGE_ODROID_MALI=y
+> BR2_PACKAGE_PYTHON=y
+> BR2_PACKAGE_PYTHON_PY_ONLY=y
+> BR2_PACKAGE_LIBAMCODEC=y
+> 
+> -- Found OpenGLES: /home/buildroot/br2/output/host/aarch64-buildroot-
+> linux-gnu/sysroot/usr/lib/libGLESv2.so  
+> -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-gnu/
+> sysroot/usr/lib/libEGL.so (found version "r4p0") 
+> -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-gnu/
+> sysroot/usr/include/amcodec  
+> 
+> -- OPENGL enabled: No
+> -- OPENGLES enabled: Yes
+> -- X enabled: No
+> -- LIBDRM enabled: No
+> -- AML enabled: Yes
+> 
+> Then I tried two builds with mesa3d & libamcodec, one where mesa3d 
+> provides opengl, in the second build mesa3d provides opengles, both 
+> failed:
+> 
+> ------------------------------------------------------------------
+> 
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_KODI=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_PYTHON=y
+> BR2_PACKAGE_PYTHON_PY_ONLY=y
+> BR2_PACKAGE_LIBAMCODEC=y
+> 
+> -- Found OpenGl: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> uclibc/sysroot/usr/lib/libGL.so  
+> -- Found X: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> uclibc/sysroot/usr/lib/libX11.so (found version "1.6.5") 
+> -- Found LibDRM: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> uclibc/sysroot/usr/lib/libdrm.so (found version "2.4.91") 
+> -- Found XRandR: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> uclibc/sysroot/usr/lib/libXrandr.so (found version "1.5.1") 
+> -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> uclibc/sysroot/usr/lib/libEGL.so (found version "18.0.0") 
+> -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> uclibc/sysroot/usr/include/amcodec  
+> 
+> -- OPENGL enabled: Yes
+> -- X enabled: Yes
+> -- LIBDRM enabled: Yes
+> -- XRANDR enabled: Yes
+> -- AML enabled: Yes
+> 
+> [ 94%] Building CXX object build/cores/VideoPlayer/videorenderers/
+> CMakeFiles/videorenderers.dir/RenderManager.cpp.o
+> /home/bernd/buildroot/br2/output/build/kodi-17.6-Krypton/xbmc/cores/
+> VideoPlayer/VideoRenderers/RenderManager.cpp: In member function 'void 
+> CRenderManager::CreateRenderer()':
+> /home/bernd/buildroot/br2/output/build/kodi-17.6-Krypton/xbmc/cores/
+> VideoPlayer/VideoRenderers/RenderManager.cpp:582:25: error: 
+> 'CRendererAML' does not name a type
+>        m_pRenderer = new CRendererAML;
+>                          ^~~~~~~~~~~~
+> ------------------------------------------------------------------
+> 
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_KODI=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> BR2_PACKAGE_PYTHON=y
+> BR2_PACKAGE_PYTHON_PY_ONLY=y
+> BR2_PACKAGE_LIBAMCODEC=y
+> 
+> -- Found OpenGLES: /home/buildroot/br2/output/host/aarch64-buildroot-
+> linux-uclibc/sysroot/usr/lib/libGLESv2.so  
+> -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> uclibc/sysroot/usr/lib/libEGL.so (found version "18.0.0") 
+> -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> uclibc/sysroot/usr/include/amcodec  
+> 
+> -- OPENGL enabled: No
+> -- OPENGLES enabled: Yes
+> -- X enabled: No
+> -- LIBDRM enabled: No
+> -- AML enabled: Yes
+> 
+> /bin/grep: /usr/lib/libgbm.la: No such file or directory
+> /bin/sed: can't read /usr/lib/libgbm.la: No such file or directory
+> libtool:   error: '/usr/lib/libgbm.la' is not a valid libtool archive
+> 
+> ------------------------------------------------------------------
+> 
+> Buildroot should not allow to use non-working combinations and here I 
+> think hardware-wise we should in some way connect libamcodec and odroid-
+> mail to be used by Kodi. Besides the build errors it makes no sense to 
+> have software rendering provided by mesa3d when you have vendor-provided 
+> opengl libs.
+> 
+> What do you think?
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-Renumbered remaining patches, added license hash.
+I have an idea that can address this issue but first I'd like to get confirmation from the vendor's support team especially since libreelec doesn't seems to libamlogic compiled, ok?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/erlang/0001-build-fix.patch                         | 13 -------------
- ...s-ethread-instruct-libatomic_ops-we-do-require-CA.patch} |  0
- ... 0002-erts-emulator-reorder-inclued-headers-paths.patch} |  0
- ... => 0003-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch} |  0
- package/erlang/erlang.hash                                  |  5 +++--
- package/erlang/erlang.mk                                    |  4 ++--
- 6 files changed, 5 insertions(+), 17 deletions(-)
-
-diff --git a/package/erlang/0001-build-fix.patch b/package/erlang/0001-build-fix.patch
-deleted file mode 100644
-index ff821c9fc0..0000000000
---- a/package/erlang/0001-build-fix.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
--apply-patches.sh deletes this file from the source directory.
--
----- erlang-R15B01.old/lib/tools/emacs/Makefile	2012-04-04
--+++ erlang-R15B01/lib/tools/emacs/Makefile	2012-04-04 15:55:16.978957307 +0100
--@@ -51,7 +51,7 @@
--
-- ELC_FILES = $(EMACS_FILES:%=%.elc)
--
---TEST_FILES = test.erl.indented test.erl.orig
--+TEST_FILES = test.erl.indented
--
-- # ----------------------------------------------------
-- # Targets
-diff --git a/package/erlang/0002-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch b/package/erlang/0001-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch
-similarity index 100%
-rename from package/erlang/0002-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch
-rename to package/erlang/0001-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch
-diff --git a/package/erlang/0003-erts-emulator-reorder-inclued-headers-paths.patch b/package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch
-similarity index 100%
-rename from package/erlang/0003-erts-emulator-reorder-inclued-headers-paths.patch
-rename to package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch
-diff --git a/package/erlang/0004-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch b/package/erlang/0003-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch
-similarity index 100%
-rename from package/erlang/0004-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch
-rename to package/erlang/0003-Link-with-LDLIBS-instead-of-LIBS-for-DED.patch
-diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
-index cf820cec1b..f5ff74022c 100644
---- a/package/erlang/erlang.hash
-+++ b/package/erlang/erlang.hash
-@@ -1,3 +1,4 @@
- # md5 from http://www.erlang.org/download/MD5, sha256 locally computed
--md5     2faed2c3519353e6bc2501ed4d8e6ae7        otp_src_20.0.tar.gz
--sha256  fe80e1e14a2772901be717694bb30ac4e9a07eee0cc7a28988724cbd21476811        otp_src_20.0.tar.gz
-+md5 a683c8c0aacfe0305c4bf47b3abfde6a  otp_src_20.3.tar.gz
-+sha256 4e19e6c403d5255531c0b870f19511c8b8e3b080618e4f9efcb44d905935b2a1  otp_src_20.3.tar.gz
-+sha256 809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0  LICENSE.txt
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 5705b98d8e..b7fdb6b9ce 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # See note below when updating Erlang
--ERLANG_VERSION = 20.0
-+ERLANG_VERSION = 20.3
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
-@@ -19,7 +19,7 @@ ERLANG_AUTORECONF = YES
- 
- # Whenever updating Erlang, this value should be updated as well, to the
- # value of EI_VSN in the file lib/erl_interface/vsn.mk
--ERLANG_EI_VSN = 3.10
-+ERLANG_EI_VSN = 3.10.1
- 
- # The configure checks for these functions fail incorrectly
- ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+Dagg
