@@ -1,51 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 19:59:13 +0200
-Subject: [Buildroot] [PATCH v2 1/5] support/scripts/graph-depends:
- remove global code and most global variables
-In-Reply-To: <20180331163543.6278-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sat, 31 Mar 2018 18:35:39 +0200")
-References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
- <20180331163543.6278-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87d0zireoe.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 19:59:16 +0200
+Subject: [Buildroot] [PATCH v3 2/9] testing/infra/builder: split
+ configure() from build()
+In-Reply-To: <20171029140608.26200-3-ricardo.martincoski@datacom.ind.br>
+References: <20171029140608.26200-1-ricardo.martincoski@datacom.ind.br>
+ <20171029140608.26200-3-ricardo.martincoski@datacom.ind.br>
+Message-ID: <20180401195916.29aac7e1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello,
 
- > The graph-depends script had no main() function, and the main code was
- > actually spread between the function definitions, which was a real
- > mess.
+On Sun, 29 Oct 2017 12:06:01 -0200, Ricardo Martincoski wrote:
+> Some test cases don't use a full build as setup, so split the build()
+> method into configure() and build().
+> It allows a test case to perform configuration at the setup stage and
+> the build inside the test itself.
+> 
+> Call this new method just before build in the BRTest base class, to keep
+> the current behavior for existing test cases.
+> 
+> This change will be needed when adding a common class to test the git
+> download infra.
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > This commit moves the global code into a main() function, which allows
- > to more easily follow the flow of the script. The argument parsing
- > code is moved into a parse_args() function.
+I've applied, but I have a comment, see below.
 
- > Most of the global variables are removed, and are instead passed as
- > argument when appropriate. This has the side-effect that the
- > print_pkg_deps() function takes a lot of argument, but this is
- > considered better than tons of global variables.
 
- > The global variables that are removed are: max_depth, transitive,
- > mode, root_colour, target_colour, host_colour, outfile, dict_deps,
- > dict_version, stop_list, exclude_list, arrow_dir.
+> +    def build(self):
+> +        env = {"PATH": os.environ["PATH"]}
 
- > The root_colour/target_colour/host_colour variables are entirely
- > removed, and instead a single colours array is passed, and it's the
- > function using the colors that actually uses the different entries in
- > the array.
+So now, we have the same local "env" variable in configure() and
+build(). Would it make sense to do:
 
- > The way the print_attrs() function determines if we're display the
- > root node is not is changed. Instead of relying on the package name
- > and the mode (which requires passing the root package name, and the
- > mode), it relies on the depth: when the depth is 0, we're at the root
- > node.
+	self.env = ...
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+in the constructor, and then use it in configure() and build() ?
 
-Committed, thanks.
+Thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
