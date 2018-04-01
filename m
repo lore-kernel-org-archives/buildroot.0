@@ -1,137 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Apr 2018 16:36:28 +0200
-Subject: [Buildroot] [git commit] package/pkg-golang: use 'build' instead of
- 'install'
-Message-ID: <20180401150524.24CD582CC6@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 1 Apr 2018 17:05:29 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Allow adding per-package override
+ rsync exclusions
+In-Reply-To: <20171108132641.8234-1-aperez@igalia.com>
+References: <20171108132641.8234-1-aperez@igalia.com>
+Message-ID: <87b1e91e-f24b-87ae-ee09-17a4464191a5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4c85c12eb7f39d2faf54f080de973f7d69224f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So far, we were using the 'go install' mechanism to build a package
-and have its binary installed in
-$$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH). This worked fine when
-building on x86-64 for ARM, but failed when building on x86-64 for
-x86-64 because the binaries were installed in $$($(2)_WORKSPACE)/bin/.
 
-Instead of doing some complicated logic to guess whether Go is going
-to put our binaries in $$($(2)_WORKSPACE)/bin/ or in
-$$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH), we revert back to using
-"go build", as it was done before the introduction of the golang
-package infrastructure. "go build" lets us pass explicitly the
-destination path of the binary to be generated.
+On 08-11-17 14:26, Adrian Perez de Castro wrote:
+> This allows using <PKG>_SRCDIR_OVERRIDE_RSYNC_EXCLUSIONS in local.mk to
+> skip copying parts of source trees unneeded for building. For example,
+> when developing WebKitGTK+, it's handy to skip copying all the tests and
+> other build directories, which are huge:
+> 
+>     WEBKITGTK_OVERRIDE_SRCDIR = /home/aperez/WebKit
+>     WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+>         --exclude JSTests --exclude ManualTests \
+> 	--exclude PerformanceTests --exclude WebDriverTests \
+> 	--exclude WebKitBuild --exclude WebKitLibraries \
+> 	--exclude WebKit.xcworkspace --exclude Websites \
+> 	--exclude Examples
+> 
+> This saves a good chunk of time when rsync is used for the first time to
+> copy the source tree over before building.
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-There's just one complexity with how to decide on the name of the
-binary that should be produced, and we have two cases:
+ Applied to master, thanks.
 
- - <pkg>_BUILD_TARGETS is the default, i.e ".". In this case we assume
-   a single binary is produced by "go build", and we name if after the
-   lower case package name. We allow this to be overridden thanks to
-   <pkg>_BIN_NAME.
+ I've moved the documentation to the end of the section, otherwise it breaks the
+flow IMO.
 
- - <pkg>_BUILD_TARGETS is non-default, and typically contains
-   something like "foo bar" or "cmd/foo cmd/bar". In this case, we
-   assume the binaries to be produced are "foo" and "bar", i.e we take
-   the non-directory part of the build target to name the binaries.
+ Regards,
+ Arnout
 
-Because we're using this -o option, we no longer need to explicitly
-create the binary directory, it is done by "go build".
+> ---
+>  docs/manual/using-buildroot-development.txt | 16 ++++++++++++++++
+>  package/pkg-generic.mk                      |  2 +-
+>  2 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
+> index 1071de5132..d16dc482f3 100644
+> --- a/docs/manual/using-buildroot-development.txt
+> +++ b/docs/manual/using-buildroot-development.txt
+> @@ -64,6 +64,22 @@ This mechanism is best used in conjunction with the +make
+>  _rsync_, only the modified files are copied), and restart the build
+>  process of just this package.
+>  
+> +Source trees for big projects often contain hundreds or thousands of
+> +files which are not needed for building, but will slow down the process
+> +of copying the sources with _rsync_. Optionally, it is possible define
+> ++<pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS+ to skip syncing certain files
+> +from the source tree. For example, when working on the +webkitgtk+
+> +package, the following will exclude the tests and in-tree builds from
+> +a local WebKit source tree:
+> +
+> +------------------
+> +WEBKITGTK_OVERRIDE_SRCDIR = /home/bob/WebKit
+> +WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+> +	--exclude JSTests --exclude ManualTests --exclude PerformanceTests \
+> +	--exclude WebDriverTests --exclude WebKitBuild --exclude WebKitLibraries \
+> +	--exclude WebKit.xcworkspace --exclude Websites --exclude Examples
+> +------------------
+> +
+>  In the example of the +linux+ package above, the developer can then
+>  make a source code change in +/home/bob/linux+ and then run:
+>  
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 0e28675fbe..c895afc498 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -181,7 +181,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+>  	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+>  	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+>  	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+> -	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+> +	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+>  	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+>  	$(Q)touch $@
+>  
+> 
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/1f9cd7c48e8c8f41326632a9c0de83915d72c45b/
-
-[Peter: use $(or instead of $(if as suggested by Arnout]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-golang.txt | 13 ++++++++++++-
- package/pkg-golang.mk                  | 26 ++++++++++++++------------
- 2 files changed, 26 insertions(+), 13 deletions(-)
-
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-index b6d1f5e6b4..efcf696867 100644
---- a/docs/manual/adding-packages-golang.txt
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -86,7 +86,18 @@ therefore only use a few of them, or none.
- 
- * +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
-   should be built. If +FOO_BUILD_TARGETS+ is not specified, it
--  defaults to +.+.
-+  defaults to +.+. We then have two cases:
-+
-+** +FOO_BUILD_TARGETS+ is +.+. In this case, we assume only one binary
-+   will be produced, and that by default we name it after the package
-+   name. If that is not appropriate, the name of the produced binary
-+   can be overridden using +FOO_BIN_NAME+.
-+
-+** +FOO_BUILD_TARGETS+ is not +.+. In this case, we iterate over the
-+   values to build each target, and for each produced a binary that is
-+   the non-directory component of the target. For example if
-+   +FOO_BUILD_TARGETS = cmd/docker cmd/dockerd+ the binaries produced
-+   are +docker+ and +dockerd+.
- 
- * +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
-   should be installed in +/usr/bin+ on the target. If
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index f51b2ee2e0..342d17fbd9 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -62,12 +62,16 @@ $(2)_DEPENDENCIES += host-go
- 
- $(2)_BUILD_TARGETS ?= .
- 
--$(2)_INSTALL_BINS ?= $(1)
-+# If the build target is just ".", then we assume the binary to be
-+# produced is named after the package. If however, a build target has
-+# been specified, we assume that the binaries to be produced are named
-+# after each build target building them (below in <pkg>_BUILD_CMDS).
-+ifeq ($$($(2)_BUILD_TARGETS),.)
-+$(2)_BIN_NAME ?= $(1)
-+endif
- 
--# The go build/install command installs the binaries inside
--# gopath/bin/linux_GOARCH/ when cross compilation is enabled. We set this
--# variable here to be used by packages if needed.
--$(2)_BINDIR = $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH)
-+$(2)_BINDIR = bin
-+$(2)_INSTALL_BINS ?= $(1)
- 
- # Source files in Go should be extracted in a precise folder in the hierarchy
- # of GOPATH. It usually resolves around domain/vendor/software. By default, we
-@@ -84,17 +88,13 @@ $(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
- # file.
- ifndef $(2)_CONFIGURE_CMDS
- define $(2)_CONFIGURE_CMDS
--	mkdir -p $$(@D)/$$($(2)_WORKSPACE)/bin
- 	mkdir -p $$(dir $$($(2)_SRC_PATH))
- 	ln -sf $$(@D) $$($(2)_SRC_PATH)
- endef
- endif
- 
--# Build step. Only define it if not already defined by the package .mk file. We
--# use the install command instead of build command here because the install
--# command just moves the package binaries into <workspace>/bin/linux_GOARCH/.
--# This leverages the go build infrastructure for building and installing
--# multiple binaries.
-+# Build step. Only define it if not already defined by the package .mk
-+# file.
- ifndef $(2)_BUILD_CMDS
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
-@@ -102,7 +102,9 @@ define $(2)_BUILD_CMDS
- 		$$(GO_TARGET_ENV) \
- 			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
- 			$$($(2)_GO_ENV) \
--			$$(GO_BIN) install -v $$($(2)_BUILD_OPTS) ./$$(d)
-+			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
-+			-o $$(@D)/$$($(2)_BINDIR)/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
-+			./$$(d)
- 	)
- endef
- endif
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
