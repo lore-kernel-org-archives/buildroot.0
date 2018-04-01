@@ -1,56 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 16:36:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/pkg-golang: use 'build' instead
- of 'install'
-In-Reply-To: <20180401115136.1345-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 1 Apr 2018 13:51:35 +0200")
-References: <20180401115136.1345-1-thomas.petazzoni@bootlin.com>
-Message-ID: <877eprro2r.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 16:39:06 +0200
+Subject: [Buildroot] [PATCH] ppc64 e5500 arch: new qemu target
+In-Reply-To: <CANQCQpZu=s0ovBMLsQYLhAk8kPB3AfN_qCDutkSyV_+K0MAAPQ@mail.gmail.com>
+References: <1522592130-25157-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <CANQCQpZu=s0ovBMLsQYLhAk8kPB3AfN_qCDutkSyV_+K0MAAPQ@mail.gmail.com>
+Message-ID: <20180401163906.0de5ab39@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello,
 
- > So far, we were using the 'go install' mechanism to build a package
- > and have its binary installed in
- > $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH). This worked fine when
- > building on x86-64 for ARM, but failed when building on x86-64 for
- > x86-64 because the binaries were installed in $$($(2)_WORKSPACE)/bin/.
+On Sun, 1 Apr 2018 09:25:47 -0500, Matthew Weber wrote:
 
- > Instead of doing some complicated logic to guess whether Go is going
- > to put our binaries in $$($(2)_WORKSPACE)/bin/ or in
- > $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH), we revert back to using
- > "go build", as it was done before the introduction of the golang
- > package infrastructure. "go build" lets us pass explicitly the
- > destination path of the binary to be generated.
+> > diff --git a/board/qemu/ppc64-e5500/linux.fragment b/board/qemu/ppc64-e5500/linux.fragment
+> > new file mode 100644
+> > index 0000000..81993d2
+> > --- /dev/null
+> > +++ b/board/qemu/ppc64-e5500/linux.fragment
+> > @@ -0,0 +1,2 @@
+> > +# Enables generic e500 arch support for QEMU
+> > +CONFIG_PPC_QEMU_E500=y
+> > diff --git a/board/qemu/ppc64-e5500/readme.txt b/board/qemu/ppc64-e5500/readme.txt
+> > new file mode 100644
+> > index 0000000..8da23f9
+> > --- /dev/null
+> > +++ b/board/qemu/ppc64-e5500/readme.txt
+> > @@ -0,0 +1,7 @@
+> > +Run the emulation with:
+> > +
+> > + qemu-system-ppc64 -M ppce500 -cpu e5500 -m 256 -kernel output/images/uImage -append 'console=ttyS0 root=/dev/ram' -initrd output/images/rootfs.cpio.gz -serial mon:stdio -nographic
+> > +  
+> 
+> This arch seems like it had good support back to QEMU 2.0.0.  However,
+> I'll be submitting a bootlin e6500 arch variant toolchain but I'm
+> still working out what version of QEMU can even boot that arch.  As of
+> 2.11.x support hasn't been merged.
 
- > There's just one complexity with how to decide on the name of the
- > binary that should be produced, and we have two cases:
+I don't get it. In the same paragraph you say "it had good support back
+to Qemu 2.0.0" and  "as of 2.11.x support hasn't been merged".
 
- >  - <pkg>_BUILD_TARGETS is the default, i.e ".". In this case we assume
- >    a single binary is produced by "go build", and we name if after the
- >    lower case package name. We allow this to be overridden thanks to
- >    <pkg>_BIN_NAME.
+Could you clarify ?
 
- >  - <pkg>_BUILD_TARGETS is non-default, and typically contains
- >    something like "foo bar" or "cmd/foo cmd/bar". In this case, we
- >    assume the binaries to be produced are "foo" and "bar", i.e we take
- >    the non-directory part of the build target to name the binaries.
+Best regards,
 
- > Because we're using this -o option, we no longer need to explicitly
- > create the binary directory, it is done by "go build".
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/1f9cd7c48e8c8f41326632a9c0de83915d72c45b/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed after changing the logic to use $(if as suggested by Arnout,
-thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
