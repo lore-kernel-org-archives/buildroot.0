@@ -1,64 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 09:16:49 +0200
-Subject: [Buildroot] [PATCH v2 18/37] docs/manual: add check-package to
- "Tips and tricks"
-In-Reply-To: <20180401050850.5701-19-ricardo.martincoski@gmail.com>
-References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
- <20180401050850.5701-19-ricardo.martincoski@gmail.com>
-Message-ID: <20180401091649.217db6e8@windsurf>
+From: daggs <daggs@gmx.com>
+Date: Sun, 1 Apr 2018 09:17:59 +0200
+Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+In-Reply-To: <20180401070337.18301-1-bernd.kuhls@t-online.de>
+References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
+Message-ID: <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Greetings Bernd,
 
-On Sun,  1 Apr 2018 02:08:31 -0300, Ricardo Martincoski wrote:
-
-> +[[check-package]]
-> +==== How to check the coding style
-> +
-> +Buildroot provides a script in +utils/check-package+ that checks new or
-> +changed files for coding style. It is not a complete language validator,
-> +but it catches many common mistakes. It is meant to run in the actual
-> +files you created or modified, before creating the patch for submission.
-> +
-> +This script can be used for packages and also for package-like files:
-> +boot, fs, toolchain, ... ; but it does not check package infra types.
-
-I'm not sure to understand what you mean by "does not check package
-infra types". Do you mean that the code in package/pkg-*.mk is not
-checked ? Or that it doesn't check the $(eval $(autotools-package))
-line at the end of every package ?
-
-> +The tool can also be used for proprietary packages in a br2-external:
-
-I would say "external packages" or just "packages", because packages in
-a br2-external are not necessarily proprietary.
-
-> +
-> +----
-> +$ check-package -b /path/to/br2-ext-tree/package/my-package/*
-> +----
-> +
->  [[testing-package]]
->  ==== How to test your package
+> Sent: Sunday, April 01, 2018 at 10:03 AM
+> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> To: buildroot at buildroot.org
+> Cc: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+> Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+>
+> Using the libamcodec package (-DENABLE_AML=ON) is not enough:
+> 
+> -- Could NOT find OpenGLES (missing:  OPENGLES_gl_LIBRARY OPENGLES_egl_LIBRARY OPENGLES_INCLUDE_DIR)
+> CMake Error at /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:138 (message):
+>   Could NOT find EGL (missing: EGL_LIBRARY EGL_INCLUDE_DIR)
+> Call Stack (most recent call first):
+>   /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+>   modules/FindEGL.cmake:30 (find_package_handle_standard_args)
+>   scripts/common/Macros.cmake:354 (find_package)
+>   CMakeLists.txt:208 (core_require_dep)
+> 
+> Libreelec provides pre-compiled OpenGL ES libraries for AML which are
+> not provided by buildroot:
+> https://github.com/LibreELEC/LibreELEC.tv/tree/master/packages/graphics/opengl-meson
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi/kodi.mk | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 9d3b65ae91..5af9fe180d 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -72,6 +72,7 @@ KODI_CONF_OPTS += \
+>  	-DLIBDVDCSS_URL=$(DL_DIR)/$(KODI_LIBDVDCSS_VERSION).tar.gz \
+>  	-DLIBDVDNAV_URL=$(DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
+>  	-DLIBDVDREAD_URL=$(DL_DIR)/$(KODI_LIBDVDREAD_VERSION).tar.gz \
+> +	-DENABLE_AML=OFF \
+>  	-DENABLE_IMX=OFF
 >  
-> diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-> index c642146287..76fca6bf8c 100644
-> --- a/docs/manual/adding-packages.txt
-> +++ b/docs/manual/adding-packages.txt
-> @@ -12,6 +12,8 @@ tuning their configuration.
->  When you add a new package, be sure to test it in various conditions;
->  see xref:testing-package[]
+>  ifeq ($(BR2_ENABLE_LOCALE),)
+> @@ -186,12 +187,6 @@ else
+>  # "linux" platforms. The "rpbi" platform has a different set of
+>  # options, defined in project/cmake/scripts/rbpi/
+>  KODI_CONF_OPTS += -DENABLE_LDGOLD=OFF
+> -ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
+> -KODI_CONF_OPTS += -DENABLE_AML=ON
+> -KODI_DEPENDENCIES += libamcodec
+> -else
+> -KODI_CONF_OPTS += -DENABLE_AML=OFF
+> -endif
+>  endif
 >  
-> +Also check the new package for coding style; see xref:check-package[]
+>  ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+> -- 
+> 2.14.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Final dot ?
+I'm trying to understand this change, does this means libamlogic is missing something or kodi doesn't supports gles anymore?
+also, can you explain how Libreelec provided pre-compiled OpenGL ES libraries for AML are related to this? the link you've added points to a systemd script
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Dagg.
