@@ -1,348 +1,303 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 07:59:45 +0200
-Subject: [Buildroot] [git commit] arch/Config.in*: fix attributes order
-Message-ID: <20180401060117.89CB981560@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 08:00:13 +0200
+Subject: [Buildroot] [git commit] arch/Config.in*: re-wrap help text
+Message-ID: <20180401060117.A652781560@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e26b8886bc3833db7d073497920519648b45b68
+commit: https://git.buildroot.net/buildroot/commit/?id=b2b8a3c3e45adcac6ec0103fc115798a2c799cca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... to follow the convention: type, default, depends on, select, help.
+... to follow the convention <tab><2 spaces><62 chars>.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in         |  2 +-
- arch/Config.in.arc     |  2 +-
- arch/Config.in.arm     |  4 ++--
- arch/Config.in.bfin    |  2 +-
- arch/Config.in.m68k    |  2 +-
- arch/Config.in.mips    |  8 ++++----
- arch/Config.in.powerpc |  4 ++--
- arch/Config.in.sh      |  2 +-
- arch/Config.in.sparc   |  2 +-
- arch/Config.in.x86     | 30 +++++++++++++++---------------
- arch/Config.in.xtensa  |  8 ++++----
- 11 files changed, 33 insertions(+), 33 deletions(-)
+ arch/Config.in        | 97 ++++++++++++++++++++++++++++-----------------------
+ arch/Config.in.mips   |  4 +--
+ arch/Config.in.xtensa | 12 +++----
+ 3 files changed, 61 insertions(+), 52 deletions(-)
 
 diff --git a/arch/Config.in b/arch/Config.in
-index d3f63da34f..dd972bc0ee 100644
+index dd972bc0ee..65448e9339 100644
 --- a/arch/Config.in
 +++ b/arch/Config.in
-@@ -376,8 +376,8 @@ endchoice
- # Set up flat binary type
- choice
- 	prompt "FLAT Binary type"
--	depends on BR2_BINFMT_FLAT
- 	default BR2_BINFMT_FLAT_ONE
-+	depends on BR2_BINFMT_FLAT
- 
- config BR2_BINFMT_FLAT_ONE
- 	bool "One memory region"
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index 92503a0140..156384b9a5 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -1,7 +1,7 @@
- choice
- 	prompt "Target CPU"
--	depends on BR2_arc
- 	default BR2_arc770d
-+	depends on BR2_arc
+@@ -28,24 +28,25 @@ config BR2_arcle
+ 	bool "ARC (little endian)"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
  	help
- 	    Specific CPU to use
+-	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
+-	  that can be used from deeply embedded to high performance host
+-	  applications. Little endian.
++	  Synopsys' DesignWare ARC Processor Cores are a family of
++	  32-bit CPUs that can be used from deeply embedded to high
++	  performance host applications. Little endian.
  
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index b05e83e33c..c99a995db2 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -456,9 +456,9 @@ config BR2_ARM_ENABLE_VFP
- 
- choice
- 	prompt "Target ABI"
--	depends on BR2_arm || BR2_armeb
- 	default BR2_ARM_EABIHF if BR2_ARM_CPU_HAS_VFPV2
- 	default BR2_ARM_EABI
-+	depends on BR2_arm || BR2_armeb
+ config BR2_arceb
+ 	bool "ARC (big endian)"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
  	help
- 	  Application Binary Interface to use. The Application Binary
- 	  Interface describes the calling conventions (how arguments
-@@ -746,7 +746,6 @@ config BR2_GCC_TARGET_ABI
- 	default "lp64"		if BR2_aarch64 || BR2_aarch64_be
+-	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
+-	  that can be used from deeply embedded to high performance host
+-	  applications. Big endian.
++	  Synopsys' DesignWare ARC Processor Cores are a family of
++	  32-bit CPUs that can be used from deeply embedded to high
++	  performance host applications. Big endian.
  
- config BR2_GCC_TARGET_FPU
--	depends on BR2_arm || BR2_armeb
- 	default "vfp"		if BR2_ARM_FPU_VFPV2
- 	default "vfpv3"		if BR2_ARM_FPU_VFPV3
- 	default "vfpv3-d16"	if BR2_ARM_FPU_VFPV3D16
-@@ -756,6 +755,7 @@ config BR2_GCC_TARGET_FPU
- 	default "neon-vfpv4"	if BR2_ARM_FPU_NEON_VFPV4
- 	default "fp-armv8"	if BR2_ARM_FPU_FP_ARMV8
- 	default "neon-fp-armv8"	if BR2_ARM_FPU_NEON_FP_ARMV8
-+	depends on BR2_arm || BR2_armeb
- 
- config BR2_GCC_TARGET_FLOAT_ABI
- 	default "soft"		if BR2_ARM_SOFT_FLOAT
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index bd9589c71d..b570d388fd 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -1,7 +1,7 @@
- choice
- 	prompt "Target CPU"
--	depends on BR2_bfin
- 	default BR2_bf532
-+	depends on BR2_bfin
+ config BR2_arm
+ 	bool "ARM (little endian)"
+ 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
  	help
- 	  Specify target CPU
- config BR2_bf512
-diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
-index c56031cb78..c134df2f14 100644
---- a/arch/Config.in.m68k
-+++ b/arch/Config.in.m68k
-@@ -15,8 +15,8 @@ config BR2_m68k_cf
- # coldfire variants will be added later
- choice
- 	prompt "Target CPU"
--	depends on BR2_m68k
- 	default BR2_m68k_68040
-+	depends on BR2_m68k
- 	help
- 	  Specific CPU variant to use
+-	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
+-	  set architecture (ISA) developed by ARM Holdings. Little endian.
++	  ARM is a 32-bit reduced instruction set computer (RISC)
++	  instruction set architecture (ISA) developed by ARM Holdings.
++	  Little endian.
+ 	  http://www.arm.com/
+ 	  http://en.wikipedia.org/wiki/ARM
  
+@@ -53,8 +54,9 @@ config BR2_armeb
+ 	bool "ARM (big endian)"
+ 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
+ 	help
+-	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
+-	  set architecture (ISA) developed by ARM Holdings. Big endian.
++	  ARM is a 32-bit reduced instruction set computer (RISC)
++	  instruction set architecture (ISA) developed by ARM Holdings.
++	  Big endian.
+ 	  http://www.arm.com/
+ 	  http://en.wikipedia.org/wiki/ARM
+ 
+@@ -81,8 +83,8 @@ config BR2_bfin
+ 	select BR2_ARCH_HAS_FDPIC_SUPPORT
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	help
+-	  The Blackfin is a family of 16 or 32-bit microprocessors developed,
+-	  manufactured and marketed by Analog Devices.
++	  The Blackfin is a family of 16 or 32-bit microprocessors
++	  developed, manufactured and marketed by Analog Devices.
+ 	  http://www.analog.com/
+ 	  http://en.wikipedia.org/wiki/Blackfin
+ 
+@@ -113,8 +115,8 @@ config BR2_microblazeel
+ 	bool "Microblaze AXI (little endian)"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI bus
+-	  based architecture (little endian)
++	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI
++	  bus based architecture (little endian)
+ 	  http://www.xilinx.com
+ 	  http://en.wikipedia.org/wiki/Microblaze
+ 
+@@ -122,8 +124,8 @@ config BR2_microblazebe
+ 	bool "Microblaze non-AXI (big endian)"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB bus
+-	  based architecture (non-AXI, big endian)
++	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB
++	  bus based architecture (non-AXI, big endian)
+ 	  http://www.xilinx.com
+ 	  http://en.wikipedia.org/wiki/Microblaze
+ 
+@@ -131,7 +133,8 @@ config BR2_mips
+ 	bool "MIPS (big endian)"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
++	  MIPS is a RISC microprocessor from MIPS Technologies. Big
++	  endian.
+ 	  http://www.mips.com/
+ 	  http://en.wikipedia.org/wiki/MIPS_Technologies
+ 
+@@ -139,7 +142,8 @@ config BR2_mipsel
+ 	bool "MIPS (little endian)"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
++	  MIPS is a RISC microprocessor from MIPS Technologies. Little
++	  endian.
+ 	  http://www.mips.com/
+ 	  http://en.wikipedia.org/wiki/MIPS_Technologies
+ 
+@@ -148,7 +152,8 @@ config BR2_mips64
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
++	  MIPS is a RISC microprocessor from MIPS Technologies. Big
++	  endian.
+ 	  http://www.mips.com/
+ 	  http://en.wikipedia.org/wiki/MIPS_Technologies
+ 
+@@ -157,7 +162,8 @@ config BR2_mips64el
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
++	  MIPS is a RISC microprocessor from MIPS Technologies. Little
++	  endian.
+ 	  http://www.mips.com/
+ 	  http://en.wikipedia.org/wiki/MIPS_Technologies
+ 
+@@ -180,8 +186,8 @@ config BR2_powerpc
+ 	bool "PowerPC"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
+-	  Big endian.
++	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
++	  alliance. Big endian.
+ 	  http://www.power.org/
+ 	  http://en.wikipedia.org/wiki/Powerpc
+ 
+@@ -190,8 +196,8 @@ config BR2_powerpc64
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
+-	  Big endian.
++	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
++	  alliance. Big endian.
+ 	  http://www.power.org/
+ 	  http://en.wikipedia.org/wiki/Powerpc
+ 
+@@ -200,8 +206,8 @@ config BR2_powerpc64le
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
+-	  Little endian.
++	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
++	  alliance. Little endian.
+ 	  http://www.power.org/
+ 	  http://en.wikipedia.org/wiki/Powerpc
+ 
+@@ -209,8 +215,9 @@ config BR2_sh
+ 	bool "SuperH"
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	help
+-	  SuperH (or SH) is a 32-bit reduced instruction set computer (RISC)
+-	  instruction set architecture (ISA) developed by Hitachi.
++	  SuperH (or SH) is a 32-bit reduced instruction set computer
++	  (RISC) instruction set architecture (ISA) developed by
++	  Hitachi.
+ 	  http://www.hitachi.com/
+ 	  http://en.wikipedia.org/wiki/SuperH
+ 
+@@ -218,8 +225,9 @@ config BR2_sparc
+ 	bool "SPARC"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  SPARC (from Scalable Processor Architecture) is a RISC instruction
+-	  set architecture (ISA) developed by Sun Microsystems.
++	  SPARC (from Scalable Processor Architecture) is a RISC
++	  instruction set architecture (ISA) developed by Sun
++	  Microsystems.
+ 	  http://www.oracle.com/sun
+ 	  http://en.wikipedia.org/wiki/Sparc
+ 
+@@ -228,8 +236,9 @@ config BR2_sparc64
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+-	  SPARC (from Scalable Processor Architecture) is a RISC instruction
+-	  set architecture (ISA) developed by Sun Microsystems.
++	  SPARC (from Scalable Processor Architecture) is a RISC
++	  instruction set architecture (ISA) developed by Sun
++	  Microsystems.
+ 	  http://www.oracle.com/sun
+ 	  http://en.wikipedia.org/wiki/Sparc
+ 
+@@ -349,27 +358,27 @@ config BR2_BINFMT_ELF
+ 	depends on BR2_USE_MMU
+ 	select BR2_BINFMT_SUPPORTS_SHARED
+ 	help
+-	  ELF (Executable and Linkable Format) is a format for libraries and
+-	  executables used across different architectures and operating
+-	  systems.
++	  ELF (Executable and Linkable Format) is a format for libraries
++	  and executables used across different architectures and
++	  operating systems.
+ 
+ config BR2_BINFMT_FDPIC
+ 	bool "FDPIC"
+ 	depends on BR2_ARCH_HAS_FDPIC_SUPPORT
+ 	select BR2_BINFMT_SUPPORTS_SHARED
+ 	help
+-	  ELF FDPIC binaries are based on ELF, but allow the individual load
+-	  segments of a binary to be located in memory independently of each
+-	  other. This makes this format ideal for use in environments where no
+-	  MMU is available.
++	  ELF FDPIC binaries are based on ELF, but allow the individual
++	  load segments of a binary to be located in memory
++	  independently of each other. This makes this format ideal for
++	  use in environments where no MMU is available.
+ 
+ config BR2_BINFMT_FLAT
+ 	bool "FLAT"
+ 	depends on !BR2_USE_MMU
+ 	help
+-	  FLAT binary is a relatively simple and lightweight executable format
+-	  based on the original a.out format. It is widely used in environment
+-	  where no MMU is available.
++	  FLAT binary is a relatively simple and lightweight executable
++	  format based on the original a.out format. It is widely used
++	  in environment where no MMU is available.
+ 
+ endchoice
+ 
+@@ -393,8 +402,8 @@ config BR2_BINFMT_FLAT_SEP_DATA
+ 	# absolute jump" or "error: value -yyyyy out of range".
+ 	depends on BR2_bfin
+ 	help
+-	  Allow for the data and text segments to be separated and placed in
+-	  different regions of memory.
++	  Allow for the data and text segments to be separated and
++	  placed in different regions of memory.
+ 
+ config BR2_BINFMT_FLAT_SHARED
+ 	bool "Shared binary"
 diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index f8e57bab33..eaabb625cc 100644
+index eaabb625cc..8bb8d126e6 100644
 --- a/arch/Config.in.mips
 +++ b/arch/Config.in.mips
-@@ -28,9 +28,9 @@ config BR2_MIPS_CPU_MIPS64R6
- 
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	default BR2_mips_32 if BR2_mips || BR2_mipsel
- 	default BR2_mips_64 if BR2_mips64 || BR2_mips64el
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	help
- 	  Specific CPU variant to use
- 
-@@ -118,8 +118,8 @@ endchoice
- 
- choice
- 	prompt "Target ABI"
--	depends on BR2_mips64 || BR2_mips64el
- 	default BR2_MIPS_NABI32
-+	depends on BR2_mips64 || BR2_mips64el
- 
- 	help
- 	  Application Binary Interface to use
-@@ -145,8 +145,8 @@ config BR2_MIPS_SOFT_FLOAT
- 
- choice
- 	prompt "FP mode"
--	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
+@@ -148,8 +148,8 @@ choice
  	default BR2_MIPS_FP32_MODE_XX
-+	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
+ 	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
  	help
- 	  MIPS32 supports different FP modes (32,xx,64). Information about FP
- 	  modes can be found here:
-@@ -180,8 +180,8 @@ config BR2_MIPS_NAN_2008
+-	  MIPS32 supports different FP modes (32,xx,64). Information about FP
+-	  modes can be found here:
++	  MIPS32 supports different FP modes (32,xx,64). Information
++	  about FP modes can be found here:
+ 	  https://sourceware.org/binutils/docs/as/MIPS-Options.html
+ 	  https://dmz-portal.imgtec.com/wiki/MIPS_O32_ABI_-_FR0_and_FR1_Interlinking#5._Generating_modeless_code
  
- choice
- 	prompt "Target NaN"
--	depends on BR2_mips_32r5 || BR2_mips_64r5
- 	default BR2_MIPS_ENABLE_NAN_2008
-+	depends on BR2_mips_32r5 || BR2_mips_64r5
- 	help
- 	  MIPS supports two different NaN encodings, legacy and 2008.
- 	  Information about MIPS NaN encodings can be found here:
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 0968412647..7a452a630a 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -71,12 +71,12 @@ config BR2_powerpc_740
- 	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_7400
- 	bool "7400"
--	select BR2_POWERPC_CPU_HAS_ALTIVEC
- 	depends on !BR2_ARCH_IS_64
-+	select BR2_POWERPC_CPU_HAS_ALTIVEC
- config BR2_powerpc_7450
- 	bool "7450"
--	select BR2_POWERPC_CPU_HAS_ALTIVEC
- 	depends on !BR2_ARCH_IS_64
-+	select BR2_POWERPC_CPU_HAS_ALTIVEC
- config BR2_powerpc_750
- 	bool "750"
- 	depends on !BR2_ARCH_IS_64
-diff --git a/arch/Config.in.sh b/arch/Config.in.sh
-index deb7244f29..1cb2db90ad 100644
---- a/arch/Config.in.sh
-+++ b/arch/Config.in.sh
-@@ -1,7 +1,7 @@
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_sh
- 	default BR2_sh4
-+	depends on BR2_sh
- 	help
- 	  Specific CPU variant to use
- 
-diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-index 9b6a6aa21a..b22b55142e 100644
---- a/arch/Config.in.sparc
-+++ b/arch/Config.in.sparc
-@@ -1,8 +1,8 @@
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_sparc || BR2_sparc64
- 	default BR2_sparc_v8 if BR2_sparc
- 	default BR2_sparc_v9 if BR2_sparc64
-+	depends on BR2_sparc || BR2_sparc64
- 	help
- 	  Specific CPU variant to use
- 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 8e623b3c2b..f7c53a0fae 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -20,8 +20,8 @@ config BR2_X86_CPU_HAS_AVX2
- 
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_i386 || BR2_x86_64
- 	default BR2_x86_i586 if BR2_i386
-+	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  Specific CPU variant to use
- 
-@@ -50,35 +50,35 @@ config BR2_x86_pentiumpro
- 	depends on !BR2_x86_64
- config BR2_x86_pentium_mmx
- 	bool "pentium MMX"
--	select BR2_X86_CPU_HAS_MMX
- 	depends on !BR2_x86_64
-+	select BR2_X86_CPU_HAS_MMX
- config BR2_x86_pentium_m
- 	bool "pentium mobile"
-+	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
--	depends on !BR2_x86_64
- config BR2_x86_pentium2
- 	bool "pentium2"
--	select BR2_X86_CPU_HAS_MMX
- 	depends on !BR2_x86_64
-+	select BR2_X86_CPU_HAS_MMX
- config BR2_x86_pentium3
- 	bool "pentium3"
-+	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
--	depends on !BR2_x86_64
- config BR2_x86_pentium4
- 	bool "pentium4"
-+	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
- 	select BR2_X86_CPU_HAS_SSE2
--	depends on !BR2_x86_64
- config BR2_x86_prescott
- 	bool "prescott"
-+	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
- 	select BR2_X86_CPU_HAS_SSE2
- 	select BR2_X86_CPU_HAS_SSE3
--	depends on !BR2_x86_64
- config BR2_x86_nocona
- 	bool "nocona"
- 	select BR2_X86_CPU_HAS_MMX
-@@ -140,21 +140,21 @@ config BR2_x86_silvermont
- 	select BR2_X86_CPU_HAS_SSE42
- config BR2_x86_k6
- 	bool "k6"
--	select BR2_X86_CPU_HAS_MMX
- 	depends on !BR2_x86_64
-+	select BR2_X86_CPU_HAS_MMX
- config BR2_x86_k6_2
- 	bool "k6-2"
--	select BR2_X86_CPU_HAS_MMX
- 	depends on !BR2_x86_64
-+	select BR2_X86_CPU_HAS_MMX
- config BR2_x86_athlon
- 	bool "athlon"
--	select BR2_X86_CPU_HAS_MMX
- 	depends on !BR2_x86_64
-+	select BR2_X86_CPU_HAS_MMX
- config BR2_x86_athlon_4
- 	bool "athlon-4"
-+	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
--	depends on !BR2_x86_64
- config BR2_x86_opteron
- 	bool "opteron"
- 	select BR2_X86_CPU_HAS_MMX
-@@ -198,21 +198,21 @@ config BR2_x86_geode
- 	depends on !BR2_x86_64
- config BR2_x86_c3
- 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
--	select BR2_X86_CPU_HAS_MMX
- 	depends on !BR2_x86_64
-+	select BR2_X86_CPU_HAS_MMX
- config BR2_x86_c32
- 	bool "Via C3-2 (Nehemiah cores)"
-+	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
--	depends on !BR2_x86_64
- config BR2_x86_winchip_c6
- 	bool "IDT Winchip C6"
--	select BR2_X86_CPU_HAS_MMX
- 	depends on !BR2_x86_64
-+	select BR2_X86_CPU_HAS_MMX
- config BR2_x86_winchip2
- 	bool "IDT Winchip 2"
--	select BR2_X86_CPU_HAS_MMX
- 	depends on !BR2_x86_64
-+	select BR2_X86_CPU_HAS_MMX
- endchoice
- 
- config BR2_ARCH
 diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-index 5d5bcb48f9..49e93a4774 100644
+index 49e93a4774..14049480ec 100644
 --- a/arch/Config.in.xtensa
 +++ b/arch/Config.in.xtensa
-@@ -1,15 +1,15 @@
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_xtensa
- 	default BR2_xtensa_fsf
-+	depends on BR2_xtensa
+@@ -20,13 +20,13 @@ config BR2_XTENSA_OVERLAY_FILE
+ 	  Enter the path to the overlay tarball for a custom processor
+ 	  configuration.
  
- config BR2_XTENSA_CUSTOM
--	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	bool "Custom Xtensa processor configuration"
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
+-	  These overlay files are tar packages with updated configuration
+-	  files for various toolchain packages and Xtensa processor
+-	  configurations. They are provided by the processor vendor or
+-	  directly from Tensilica.
++	  These overlay files are tar packages with updated
++	  configuration files for various toolchain packages and Xtensa
++	  processor configurations. They are provided by the processor
++	  vendor or directly from Tensilica.
  
- config BR2_xtensa_fsf
--	select BR2_ARCH_HAS_MMU_MANDATORY
- 	bool "fsf - Default configuration"
-+	select BR2_ARCH_HAS_MMU_MANDATORY
- 
- endchoice
- 
-@@ -30,8 +30,8 @@ config BR2_XTENSA_OVERLAY_FILE
+-	  The path can be either absolute, or relative to the top directory
+-	  of buildroot.
++	  The path can be either absolute, or relative to the top
++	  directory of buildroot.
  
  choice
  	prompt "Target Architecture Endianness"
--	depends on BR2_XTENSA_CUSTOM
- 	default BR2_XTENSA_LITTLE_ENDIAN
-+	depends on BR2_XTENSA_CUSTOM
- 
- config BR2_XTENSA_LITTLE_ENDIAN
- 	bool "Little endian"
