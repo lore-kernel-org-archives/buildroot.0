@@ -1,36 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 10:16:53 +0200
-Subject: [Buildroot] [PATCH v2 35/37] scanpypi: generate help text
- compliant to check-package
-In-Reply-To: <20180401050850.5701-36-ricardo.martincoski@gmail.com>
-References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
- <20180401050850.5701-36-ricardo.martincoski@gmail.com>
-Message-ID: <20180401101653.0d9fd9b6@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 01 Apr 2018 10:16:46 +0200
+Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
+ <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
+ <trinity-8edc1929-b40d-4afa-85a8-e152cef642fb-1522567556973@3c-app-mailcom-bs16>
+ <1je6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-550783d4-570b-41d5-937b-f66aa367d27f-1522568580265@3c-app-mailcom-bs16>
+ <4sf6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-8096f0c8-32ae-4d0a-ad74-d40b12f0f8ff-1522569777353@3c-app-mailcom-bs16>
+Message-ID: <e4h6pexo6d.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Sun, 01 Apr 2018 10:02:57 +0200 schrieb daggs:
 
-On Sun,  1 Apr 2018 02:08:48 -0300, Ricardo Martincoski wrote:
-> Each line must fit in <tab><2 spaces><62 chars>.
-> The default width for textwrap.wrap() is 70, so explicit set it to 62.
+> Greetings Bernd,
 > 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v1 -> v2:
->   - no changes
-> ---
->  utils/scanpypi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>> Sent: Sunday, April 01, 2018 at 10:55 AM From: "Bernd Kuhls"
+>> <bernd.kuhls@t-online.de> To:
+>> buildroot at uclibc.org Subject: Re:
+>> [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+>>
+>> Am Sun, 01 Apr 2018 09:43:00 +0200 schrieb daggs:
+>> 
+>> > odroidc2 boards use amlogic libs, infact I'm the maintainer of the
+>> > libamlogic pkg and I've added the support to kodi.
+>> 
+>> Hi daggs,
+>> 
+>> should the buildroot package libamcodec depend on odroid-mali?
+>> 
+> from what I understand, no.
 
-Applied to master, thanks.
+Hi daggs,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+so you think it is possible to use libamcodec support in Kodi with OpenGL 
+ES provided by, let's say, mesa3d with the DRI swrast driver? And even if 
+there is no direct dependency between the libamcodoc and odroid-mali 
+packages what about extending the
+
+	ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
+
+check in kodi.mk to
+
+	ifeq ($(BR2_PACKAGE_LIBAMCODEC)$(BR2_PACKAGE_ODROID_MALI),yy)
+
+to fix the build error?
+
+Regards, Bernd
