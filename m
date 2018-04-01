@@ -1,46 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 01 Apr 2018 08:04:30 +0000
-Subject: [Buildroot] [PATCH 2/3] package/strace: add missing libunwind
- optional dependency
-In-Reply-To: <877epst1jj.fsf@dell.be.48ers.dk>
-References: <20180225183415.8362-1-romain.naour@gmail.com>
- <20180225183415.8362-2-romain.naour@gmail.com>
- <CAAXf6LXnevwOqgTb7yV5AraDkHsauEfhJNoQr8rNgWFLQKp15Q@mail.gmail.com>
- <20180225223438.42357172@windsurf.home>
- <CAAXf6LWD8d24hEY2UJAJckCYfrTsTA5pDgN7YrFBwDngU7xcxw@mail.gmail.com>
- <877epst1jj.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LWySp-5rUwLKruCAsgN=S0jO4o5UCtdmxnWbRF7X08EKA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 10:09:52 +0200
+Subject: [Buildroot] [git commit] package/*/Config.in: re-wrap help text
+Message-ID: <20180401081003.48CB3827E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 31, 2018, 22:47 Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=73f77570076db97ba2bdcf93fb84d348d278389a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> writes:
->
-> Hi,
->
->  >>> In our local tree, I had added a config option to strace for that, but
->  >>> perhaps that is overkill?
->  >>
->  >> Are you saying that you have changes in your local tree on packages
->  >> available in upstream Buildroot, and you did not submit such
->  >> changes ? :-)
->  >>
->
->  > Haha, yes indeed :-) But you may be glad to hear that I already made a
->  > list of such changes that should be upstreamable, and plan to tackle
->  > the upstreaming after merging 2018.02!
->
-> Did you already get 2018.02 merged? ;)
->
+... to follow the convention <tab><2 spaces><62 chars>.
 
-The code is ready, but the drop was postponed due to other issues...
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-functools32/Config.in | 4 ++--
+ package/python-jsonmodels/Config.in  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I'll get to it, don't worry :)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180401/ee2d53a1/attachment.html>
+diff --git a/package/python-functools32/Config.in b/package/python-functools32/Config.in
+index cc12557edc..606341d828 100644
+--- a/package/python-functools32/Config.in
++++ b/package/python-functools32/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_FUNCTOOLS32
+ 	bool "python-functools32"
+ 	depends on BR2_PACKAGE_PYTHON
+ 	help
+-	  Backport of the functools module from Python 3.2.3 for use on 2.7
+-	  and PyPy.
++	  Backport of the functools module from Python 3.2.3 for use on
++	  2.7 and PyPy.
+ 
+ 	  https://github.com/MiCHiLU/python-functools32
+diff --git a/package/python-jsonmodels/Config.in b/package/python-jsonmodels/Config.in
+index d840e2acfe..f66982874a 100644
+--- a/package/python-jsonmodels/Config.in
++++ b/package/python-jsonmodels/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_JSONMODELS
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+-	  Models to make easier to deal with structures that are converted
+-	  to, or read from JSON.
++	  Models to make easier to deal with structures that are
++	  converted to, or read from JSON.
+ 
+ 	  https://github.com/beregond/jsonmodels
