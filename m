@@ -1,46 +1,46 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 1 Apr 2018 10:02:57 +0200
-Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
-In-Reply-To: <4sf6pexo6d.ln2@ID-313208.user.individual.net>
-References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
- <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
- <trinity-8edc1929-b40d-4afa-85a8-e152cef642fb-1522567556973@3c-app-mailcom-bs16>
- <1je6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-550783d4-570b-41d5-937b-f66aa367d27f-1522568580265@3c-app-mailcom-bs16>
- <4sf6pexo6d.ln2@ID-313208.user.individual.net>
-Message-ID: <trinity-8096f0c8-32ae-4d0a-ad74-d40b12f0f8ff-1522569777353@3c-app-mailcom-bs16>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 01 Apr 2018 08:04:30 +0000
+Subject: [Buildroot] [PATCH 2/3] package/strace: add missing libunwind
+ optional dependency
+In-Reply-To: <877epst1jj.fsf@dell.be.48ers.dk>
+References: <20180225183415.8362-1-romain.naour@gmail.com>
+ <20180225183415.8362-2-romain.naour@gmail.com>
+ <CAAXf6LXnevwOqgTb7yV5AraDkHsauEfhJNoQr8rNgWFLQKp15Q@mail.gmail.com>
+ <20180225223438.42357172@windsurf.home>
+ <CAAXf6LWD8d24hEY2UJAJckCYfrTsTA5pDgN7YrFBwDngU7xcxw@mail.gmail.com>
+ <877epst1jj.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LWySp-5rUwLKruCAsgN=S0jO4o5UCtdmxnWbRF7X08EKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Bernd,
+On Sat, Mar 31, 2018, 22:47 Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Sent: Sunday, April 01, 2018 at 10:55 AM
-> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
-> To: buildroot at uclibc.org
-> Subject: Re: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> writes:
 >
-> Am Sun, 01 Apr 2018 09:43:00 +0200 schrieb daggs:
-> 
-> > odroidc2 boards use amlogic libs, infact I'm the maintainer of the
-> > libamlogic pkg and I've added the support to kodi.
-> 
-> Hi daggs,
-> 
-> should the buildroot package libamcodec depend on odroid-mali?
-> 
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> Hi,
+>
+>  >>> In our local tree, I had added a config option to strace for that, but
+>  >>> perhaps that is overkill?
+>  >>
+>  >> Are you saying that you have changes in your local tree on packages
+>  >> available in upstream Buildroot, and you did not submit such
+>  >> changes ? :-)
+>  >>
+>
+>  > Haha, yes indeed :-) But you may be glad to hear that I already made a
+>  > list of such changes that should be upstreamable, and plan to tackle
+>  > the upstreaming after merging 2018.02!
+>
+> Did you already get 2018.02 merged? ;)
+>
 
-from what I understand, no.
-I'll try to ask in the vendor's forums to get a clearer layout on the matter, I'd be happy if you can put this patch on hold until they answer me.
-maybe it lib isn't needed and all what is needed is the mali lib.
+The code is ready, but the drop was postponed due to other issues...
 
-Dagg.
+I'll get to it, don't worry :)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180401/ee2d53a1/attachment.html>
