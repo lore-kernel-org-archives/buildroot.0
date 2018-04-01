@@ -1,9 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 01 Apr 2018 01:12:00 -0300
-Subject: [Buildroot] [PATCH 11/36] linux/linux.mk: use namespace for
- internal variables
-References: <20180331082016.18291f11@windsurf>
-Message-ID: <5ac05c10c1ac5_7cbc2abf3128184019e9@ultri4.mail>
+Date: Sun, 01 Apr 2018 01:13:10 -0300
+Subject: [Buildroot] [PATCH 14/36] toolchain/toolchain.mk: fix code style
+References: <20180331082152.62797621@windsurf>
+Message-ID: <5ac05c56bd3e1_7cbc3fbe8f3f00d821de@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +11,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, Mar 31, 2018 at 03:20 AM, Thomas Petazzoni wrote:
+On Sat, Mar 31, 2018 at 03:21 AM, Thomas Petazzoni wrote:
 
-> Should we name them just LINUX_ARCH_PATH, LINUX_DTBS and
-> LINUX_DTS_NAME, instead of LINUX_KERNEL_ARCH_PATH, LINUX_KERNEL_DTBS,
-> etc. ? This would make them more consistent with the other variables
-> that already exist: LINUX_VERSION_PROBE, LINUX_IMAGE_NAME, etc.
+>>  define COPY_GCONV_LIBS
 > 
-> I.e, the prefix should be just LINUX_ and not LINUX_KERNEL_.
+> Perhaps the name of this variable should also be name-spaced:
+> TOOLCHAIN_GLIBC_COPY_GCONV_LIBS or something like that.
 
-Sure, I will do.
+Indeed. Other packages already use namespace for hooks, i.e.:
+PYTHON3_CREATE_PYC_FILES
+SKELETON_INIT_COMMON_SET_HOSTNAME
+I will do.
 
 
 Regards,
