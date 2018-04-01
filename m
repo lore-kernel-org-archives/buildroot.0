@@ -1,54 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 23:37:44 +0200
-Subject: [Buildroot] [PATCH v3 2/9] testing/infra/builder: split
- configure() from build()
-In-Reply-To: <5ac14fd11a596_e002ac6eaeaec8891974@ultri4.mail>
-References: <20180401195916.29aac7e1@windsurf>
- <5ac14fd11a596_e002ac6eaeaec8891974@ultri4.mail>
-Message-ID: <20180401233744.70b453d7@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Apr 2018 23:40:01 +0200
+Subject: [Buildroot] [PATCH] support/check-uniq-files: support weird
+ locales and filenames
+In-Reply-To: <687416b0-f536-d0cc-6761-503180faad2e@jcz.nl>
+References: <20180331125250.19374-1-yann.morin.1998@free.fr>
+ <3de992aa-48b0-e4ae-1122-fc4e3f409aed@mind.be>
+ <687416b0-f536-d0cc-6761-503180faad2e@jcz.nl>
+Message-ID: <20180401214001.GQ2613@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Jaap, All,
 
-On Sun, 01 Apr 2018 18:32:01 -0300, Ricardo Martincoski wrote:
+On 2018-04-01 23:25 +0200, Jaap Crezee spake thusly:
+> On 03/31/18 15:37, Arnout Vandecappelle wrote:
+> >> Reported-by: Jaap Crezee <jaap@jcz.nl>
+> >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >> Cc: Arnout Vandecappelle <arnout@mind.be>
+> >> Cc: Jaap Crezee <jaap@jcz.nl>
+> >  Applied to master, thanks. But I couldn't resist extended the commit log a
+> > little more - it really was too short :-P
+> Excellent guys, thank you.
+> I can confirm it works for me.
 
-> It is possible to do that.
-> 
-> The next patch on the same series uses .update() so the local "env" is changed.
->         env = {"PATH": os.environ["PATH"]}
->         env.update(make_extra_env)
-> 
-> Note: I did not tested the code below.
-> 
-> In order to always have a clean environment, we could do in the constructor:
->         self.env = {"PATH": os.environ["PATH"]}
-> And change the methods to:
->         env = self.env.copy()
->         env.update(make_extra_env)
-> 
-> Or we assume we will need only PATH from env in the future, and do in the
-> constructor:
->         self.env_path = os.environ["PATH"]
-> And change the methods to:
->         env = self.make_extra_env.copy()
->         env.update({"PATH": self.env_path})
-> 
-> The access to os.environ should be inexpensive (I did not measured it), so I am
-> not sure it needs to be done. I am not against it either.
-> At first glance, it seems just more code to me.
-> Maybe I am missing something.
+OK, good to know, thanks for the feedback. :-)
 
-Hum, indeed. Let's see what it gives with the next patches, and we can
-always adjust that kind of details later.
+> Are such patches expected to be applied to/merged on 2018.02.x as well?
 
-Thanks for your feedback!
+Yeah, they will eventually trickle down to the LTS branch. But we
+presumably want to test-bench them a bit in master before doing the
+backport...
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
