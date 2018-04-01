@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 23:32:26 +0200
-Subject: [Buildroot] [PATCH v4 10/11] package/mesa3d: enable OpenCL
- support
-In-Reply-To: <20180329113346.10367-11-valentin.korenblit@smile.fr>
-References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-11-valentin.korenblit@smile.fr>
-Message-ID: <20180401233226.76803d73@windsurf>
+Date: Sun, 1 Apr 2018 23:37:44 +0200
+Subject: [Buildroot] [PATCH v3 2/9] testing/infra/builder: split
+ configure() from build()
+In-Reply-To: <5ac14fd11a596_e002ac6eaeaec8891974@ultri4.mail>
+References: <20180401195916.29aac7e1@windsurf>
+ <5ac14fd11a596_e002ac6eaeaec8891974@ultri4.mail>
+Message-ID: <20180401233744.70b453d7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +14,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 29 Mar 2018 13:33:45 +0200, Valentin Korenblit wrote:
+On Sun, 01 Apr 2018 18:32:01 -0300, Ricardo Martincoski wrote:
 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index e99e737d31..bad7ac4339 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -33,6 +33,22 @@ config BR2_PACKAGE_MESA3D_LLVM
->  comment "mesa3d w/ llvm needs llvm"
->  	depends on !BR2_PACKAGE_LLVM_ARCH_SUPPORTS
->  
-> +config BR2_PACKAGE_MESA3D_OPENCL
-> +	bool "mesa3d OpenCL"
+> It is possible to do that.
+> 
+> The next patch on the same series uses .update() so the local "env" is changed.
+>         env = {"PATH": os.environ["PATH"]}
+>         env.update(make_extra_env)
+> 
+> Note: I did not tested the code below.
+> 
+> In order to always have a clean environment, we could do in the constructor:
+>         self.env = {"PATH": os.environ["PATH"]}
+> And change the methods to:
+>         env = self.env.copy()
+>         env.update(make_extra_env)
+> 
+> Or we assume we will need only PATH from env in the future, and do in the
+> constructor:
+>         self.env_path = os.environ["PATH"]
+> And change the methods to:
+>         env = self.make_extra_env.copy()
+>         env.update({"PATH": self.env_path})
+> 
+> The access to os.environ should be inexpensive (I did not measured it), so I am
+> not sure it needs to be done. I am not against it either.
+> At first glance, it seems just more code to me.
+> Maybe I am missing something.
 
-Just:
+Hum, indeed. Let's see what it gives with the next patches, and we can
+always adjust that kind of details later.
 
-	bool "OpenCL"
-
-> +	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-
-This is certainly not really understanding how OpenCL works, but why do
-you need this Gallium driver compiled in? Does the result only works on
-a system with an AMD GPU ?
-
-> +	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on BR2_USE_WCHAR #elfutils
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on !BR2_bfin #elfutils
-> +	select BR2_PACKAGE_ELFUTILS
-
-Interesting that elfutils is needed here.
-
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 498ad57eed..1df28c43cb 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -233,4 +233,13 @@ else
->  MESA3D_CONF_OPTS += --disable-lmsensors
->  endif
->  
-> +# Clover requires libelf
-
-Comment not really useful, it's obvious from the code below.
-
-> +ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
-> +MESA3D_DEPENDENCIES += clang elfutils libclc
-> +MESA3D_CONF_OPTS += --enable-opencl \
-> +	--with-clang-libdir=$(STAGING_DIR)/usr/lib
-> +else
-> +MESA3D_CONF_OPTS += --disable-opencl
-> +endif
-> +
->  $(eval $(autotools-package))
-
-Thanks!
+Thanks for your feedback!
 
 Thomas
 -- 
