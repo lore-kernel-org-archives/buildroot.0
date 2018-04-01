@@ -1,86 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 10:09:44 +0200
-Subject: [Buildroot] [git commit] package/*/Config.in: fix attributes order
-Message-ID: <20180401081003.312BA827E1@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 10:11:49 +0200
+Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+In-Reply-To: <4sf6pexo6d.ln2@ID-313208.user.individual.net>
+References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
+ <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
+ <trinity-8edc1929-b40d-4afa-85a8-e152cef642fb-1522567556973@3c-app-mailcom-bs16>
+ <1je6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-550783d4-570b-41d5-937b-f66aa367d27f-1522568580265@3c-app-mailcom-bs16>
+ <4sf6pexo6d.ln2@ID-313208.user.individual.net>
+Message-ID: <20180401101149.773b5a83@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15b1b632d51ece85d7f2b08966db2bb2edbdde5e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-... to follow the convention: type, default, depends on, select, help.
+On Sun, 01 Apr 2018 09:55:16 +0200, Bernd Kuhls wrote:
+> Am Sun, 01 Apr 2018 09:43:00 +0200 schrieb daggs:
+> 
+> > odroidc2 boards use amlogic libs, infact I'm the maintainer of the
+> > libamlogic pkg and I've added the support to kodi.  
+> 
+> Hi daggs,
+> 
+> should the buildroot package libamcodec depend on odroid-mali?
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mono/Config.in    | 2 +-
- package/php/Config.in     | 8 ++++----
- package/systemd/Config.in | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+libamcodec is for the video decoding, odroid-mali is for the GPU. I
+don't think there's a reason for libamcodec to depend on odroid-mali.
 
-diff --git a/package/mono/Config.in b/package/mono/Config.in
-index d162237086..63208fef49 100644
---- a/package/mono/Config.in
-+++ b/package/mono/Config.in
-@@ -5,9 +5,9 @@ config BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_MONO_ARCH_SUPPORTS
- 	bool
--	depends on BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
- 	default y if (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
- 		      BR2_mipsel || BR2_powerpc || BR2_x86_64)
-+	depends on BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_MONO
- 	bool "mono"
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 11514e04b1..2469573541 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -1,15 +1,15 @@
- config BR2_PACKAGE_PHP
- 	bool "php"
-+	# PHP uses -export-dynamic, which breaks with elf2flt with a
-+	# message like "ld.real: section .junk LMA [...,...] overlaps
-+	# section .text LMA [...,...]"
-+	depends on !BR2_BINFMT_FLAT
- 	select BR2_PACKAGE_PHP_SAPI_CGI if \
- 	       !BR2_PACKAGE_PHP_SAPI_APACHE && \
- 	       !BR2_PACKAGE_PHP_SAPI_CLI && \
- 	       !BR2_PACKAGE_PHP_SAPI_FPM &&  \
- 	       BR2_USE_MMU
- 	select BR2_PACKAGE_PHP_SAPI_CLI if !BR2_USE_MMU
--	# PHP uses -export-dynamic, which breaks with elf2flt with a
--	# message like "ld.real: section .junk LMA [...,...] overlaps
--	# section .text LMA [...,...]"
--	depends on !BR2_BINFMT_FLAT
- 	help
- 	  PHP  is a widely-used general-purpose scripting
- 	  language that is especially suited for Web development
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 420c78493d..c5a109675c 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -191,8 +191,8 @@ config BR2_PACKAGE_SYSTEMD_MACHINED
- 
- config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 	bool "enable myhostname NSS plugin"
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	default y
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	help
- 	  nss-myhostname is a plug-in module for the GNU Name Service
- 	  Switch (NSS) functionality of the GNU C Library (glibc),
-@@ -247,8 +247,8 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
- 
- config BR2_PACKAGE_SYSTEMD_RESOLVED
- 	bool "enable resolve daemon"
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	default y
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # needs nss.h
- 	help
- 	  systemd-resolved is a system service that provides network
- 	  name resolution to local applications. It implements a
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
