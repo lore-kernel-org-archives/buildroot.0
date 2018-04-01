@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 23:25:43 +0200
-Subject: [Buildroot] [PATCH v4 08/11] package/clang: enable target
- variant
-In-Reply-To: <20180329113346.10367-9-valentin.korenblit@smile.fr>
+Date: Sun, 1 Apr 2018 23:29:53 +0200
+Subject: [Buildroot] [PATCH v4 09/11] package/libclc: new package
+In-Reply-To: <20180329113346.10367-10-valentin.korenblit@smile.fr>
 References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-9-valentin.korenblit@smile.fr>
-Message-ID: <20180401232543.3fca4303@windsurf>
+ <20180329113346.10367-10-valentin.korenblit@smile.fr>
+Message-ID: <20180401232953.5277ede2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,104 +13,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 29 Mar 2018 13:33:43 +0200, Valentin Korenblit wrote:
-> This patch provides Clang for the target, tools and libraries.
+On Thu, 29 Mar 2018 13:33:44 +0200, Valentin Korenblit wrote:
+> This patch provides libclc, an open source implementation of the
+> library requirements of the OpenCL C programming language, as
+> specified by the OpenCL 1.1 Specification. It is intended to be used
+> with Mesa Clover.
 > 
-> In this package we have to deal with the same kind of problem we encountered
-> when building mesa3d with llvm support: llvm-config (host-version) had to be
-> copied to STAGING_DIR/usr/bin.
+> It needs to be compiled with Clang, as it generates LLVM IR bitcode
+> files containing device builtin functions for each target.
+> 
+> Currently, libclc supports AMDGCN, R600 and NVPTX targets.
+> 
+> As OpenCL kernels are built dynamically on the target using libClang and
+> libLLVM, it is necessary to copy /usr/include/clc from STAGING_DIR to the
+> target manually, as Buildroot doesn't include this directory.
 
-I don't see why it's a problem in mesa3d and in this package. Having
-the <foo>-config stuff in $(STAGING_DIR) is the standard thing in
-Buildroot, so there's nothing crazy or unusual about it.
+I don't see where your .mk file is doing this. And it wouldn't work
+because Buildroot removes $(TARGET_DIR)/usr/include entirely in its
+target-finalize step.
 
-> In this case, we need llvm-tblgen from host
-> to be installed in STAGING_DIR/usr/bin for cross-compiling clang.
+When you say "manually", do you mean that you have to
+copy /usr/include/clc from your build machine to your target once the
+target has booted ? If that's the case, then we really have a problem
+here, the target should just work.
 
-This is however a bit unusual, and perhaps we should keep llvm-tlbgen
-only in $(HOST_DIR).
+> +LIBCLC_VERSION = 00236279a293b3737dee08c14f25923a889d2795
+> +LIBCLC_SITE = https://git.llvm.org/git/libclc
+> +LIBCLC_SITE_METHOD = git
 
-> We need libclang for the target because it is used by all OpenCL implementations.
+I assume they don't have a stable release you could use ?
 
-I find this assertion a bit affirmative. Do *all* OpenCL
-implementations in the world need clang ? Probably not.
+This lacks LICENSE and LICENSE_FILES.
 
-> In this series, Clover is provided.
-
-Perhaps a better wording is needed:
-
-We need libclang to build a number of OpenCL implementations. A later
-patch in this series will enable Clover, the OpenCL implementation part
-of Mesa3D, which requires libclang.
-
-> diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-> index 5ea0bb05f9..c2b83a8e60 100644
-> --- a/package/clang/clang.mk
-> +++ b/package/clang/clang.mk
-> @@ -10,31 +10,61 @@ CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
->  CLANG_LICENSE = NCSA
->  CLANG_LICENSE_FILES = LICENSE.TXT
->  CLANG_SUPPORTS_IN_SOURCE_BUILD = NO
-> +CLANG_INSTALL_STAGING = YES
->  
->  HOST_CLANG_DEPENDENCIES = host-llvm host-libxml2
-> +CLANG_DEPENDENCIES = host-clang llvm
->  
->  # Use "Unix Makefiles" generator for generating make-compatible parallel makefiles.
->  HOST_CLANG_CONF_OPTS += -G "Unix Makefiles"
-> +CLANG_CONF_OPTS += -G "Unix Makefiles"
+> +LIBCLC_DEPENDENCIES = host-clang host-llvm
+> +LIBCLC_INSTALL_STAGING = YES
 > +
-> +# This option is needed. Otherwise multiple shared libs (libclangAST.so,
-> +# libclangBasic.so, libclangFrontend.so, etc.) will generated. As a final
+> +# C++ compiler is used to build a small tool (prepare-builtins) for the host.
+> +# It must be built with the C++ compiler from the host, simply use
+> +# HOSTCXX_NOCCACHE.
 
-will *be* generated
+Why not HOSTCXX ?
 
-> +# shared lib containing all these components (libclang.so) is also generated, this
-> +# resulted in the following error when trying to use tools that use libclang:
-> +# $ CommandLine Error: Option 'track-memory' registered more than once!
-> +# $ LLVM ERROR: inconsistency in registered CommandLine options
-> +# By setting BUILD_SHARED_LIBS to OFF, we generate multiple static libraries
-> +# (the same way as host's clang build) and finally libclang.so to be installed on the
-> +# target.
-> +CLANG_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
-> +
-> +# Copy llvm-tblgen (host variant) to STAGING_DIR
-> +define CLANG_COPY_LLVM_TBLGEN_TO_STAGING_DIR
-> +	$(INSTALL) -D -m 0755 $(HOST_DIR)/bin/llvm-tblgen $(STAGING_DIR)/usr/bin/llvm-tblgen
-> +endef
-> +CLANG_PRE_CONFIGURE_HOOKS = CLANG_COPY_LLVM_TBLGEN_TO_STAGING_DIR
+> +LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
 
-Why does llvm-tblgen *has* to be in STAGING_DIR ?
+Why are you using the version in HOST_DIR, and not the one in
+STAGING_DIR ?
 
->  # Select Release build
->  HOST_CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-> +CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-
-Not needed, it's passed by the package infrastructure.
-
-> +
-> +# Make it explicit that we are cross-compiling
-> +CLANG_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
->  
->  # Build tools enabled
->  HOST_CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
-> +CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
->  
->  # Don't build examples
->  HOST_CLANG_CONF_OPTS += -DCLANG_BUILD_EXAMPLES=OFF
-> +CLANG_CONF_OPTS += -DCLANG_BUILD_EXAMPLES=OFF
->  
->  # Don't build doc
->  HOST_CLANG_CONF_OPTS += -DCLANG_INCLUDE_DOCS=OFF
-> +CLANG_CONF_OPTS += -DCLANG_INCLUDE_DOCS=OFF
->  
->  # Don't build tests
->  HOST_CLANG_CONF_OPTS += -DCLANG_INCLUDE_TESTS=OFF
-> +CLANG_CONF_OPTS += -DCLANG_INCLUDE_TESTS=OFF
-
-This is also too verbose.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
