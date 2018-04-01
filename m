@@ -1,37 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 12:27:36 +0200
-Subject: [Buildroot] bash: /dev/fd/62: No such file or directory
-In-Reply-To: <d437caa3ff89a6c3f29997a008ce74ab2f495940.camel@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Sun, 01 Apr 2018 11:45:20
- +0200")
-References: <1521154501.16532.15.camel@embedded.rocks>
- <874llggl14.fsf@dell.be.48ers.dk>
- <d624af0cde7298851332a2fc009f173562d99d98.camel@embedded.rocks>
- <877ept7r7w.fsf@dell.be.48ers.dk>
- <d437caa3ff89a6c3f29997a008ce74ab2f495940.camel@embedded.rocks>
-Message-ID: <87h8ovrzl3.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Apr 2018 12:28:28 +0200
+Subject: [Buildroot] [PATCH 2/2] openblas: bump version to v0.2.20
+In-Reply-To: <20180401120401.3c0c6cbb@windsurf> (Thomas Petazzoni's message of
+ "Sun, 1 Apr 2018 12:04:01 +0200")
+References: <20180401084642.15199-1-peter@korsgaard.com>
+ <20180401084642.15199-2-peter@korsgaard.com>
+ <20180401120401.3c0c6cbb@windsurf>
+Message-ID: <87d0zjrzjn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Hi,
+ > Hello,
+ > On Sun,  1 Apr 2018 10:46:42 +0200, Peter Korsgaard wrote:
 
- >> The first option is probably the easiest/nicest.
+ >> +The other flags, such as -mfpu=vfp or -mfloat-abi=hard are kept, as they
+ >> +are actually required for the build to proceed (OpenBLAS uses VFP
+ >> +instructions, and assume an EABIhf ABI).
+ >> +
+ >> +[Peter: update for v0.2.20
 
- > On second thought, bash might not be the only application using
- > /dev/fd. Maybe fs/common.mk is the better place?
+ > This is going to be the most useless e-mail, but here is a minor nit:
+ > missing closing bracket.
 
-Possible, yes. I'm not aware of any other tools needing it though.
+ > I'm just going to add a few more sentences here, just to pretend this
+ > e-mail is not just about this small nit. But I don't have much else to
+ > say about this patch. Oh well, the length of this text starts to justify
+ > this e-mail. I can probably stop here, and put my usual closing Best
+ > regards, so let's do this.
 
- > There is one issue about /proc/kcore. It is not available on ARM
- > systems, and maybe others. Apparently, this feature is not much
- > appreciated [1], so I'm gonna skip this symlink.
-
-Yes, lets just skip it.
+Heh, I'll take that as a Review-by ;)
 
 -- 
 Bye, Peter Korsgaard
