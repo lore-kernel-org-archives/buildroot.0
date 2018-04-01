@@ -1,236 +1,348 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 08:01:05 +0200
-Subject: [Buildroot] [git commit] system/Config.in: re-wrap help text
-Message-ID: <20180401060117.C0F438039E@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 07:59:45 +0200
+Subject: [Buildroot] [git commit] arch/Config.in*: fix attributes order
+Message-ID: <20180401060117.89CB981560@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3de010481fdb0aa9719d4ae64e413ea7c59c400
+commit: https://git.buildroot.net/buildroot/commit/?id=7e26b8886bc3833db7d073497920519648b45b68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... to follow the convention <tab><2 spaces><62 chars>.
+... to follow the convention: type, default, depends on, select, help.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- system/Config.in | 122 +++++++++++++++++++++++++++++--------------------------
- 1 file changed, 64 insertions(+), 58 deletions(-)
+ arch/Config.in         |  2 +-
+ arch/Config.in.arc     |  2 +-
+ arch/Config.in.arm     |  4 ++--
+ arch/Config.in.bfin    |  2 +-
+ arch/Config.in.m68k    |  2 +-
+ arch/Config.in.mips    |  8 ++++----
+ arch/Config.in.powerpc |  4 ++--
+ arch/Config.in.sh      |  2 +-
+ arch/Config.in.sparc   |  2 +-
+ arch/Config.in.x86     | 30 +++++++++++++++---------------
+ arch/Config.in.xtensa  |  8 ++++----
+ 11 files changed, 33 insertions(+), 33 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 7b36516cc7..d14a864ca5 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -92,9 +92,9 @@ config BR2_TARGET_GENERIC_PASSWD_SHA512
+diff --git a/arch/Config.in b/arch/Config.in
+index d3f63da34f..dd972bc0ee 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -376,8 +376,8 @@ endchoice
+ # Set up flat binary type
+ choice
+ 	prompt "FLAT Binary type"
+-	depends on BR2_BINFMT_FLAT
+ 	default BR2_BINFMT_FLAT_ONE
++	depends on BR2_BINFMT_FLAT
+ 
+ config BR2_BINFMT_FLAT_ONE
+ 	bool "One memory region"
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 92503a0140..156384b9a5 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -1,7 +1,7 @@
+ choice
+ 	prompt "Target CPU"
+-	depends on BR2_arc
+ 	default BR2_arc770d
++	depends on BR2_arc
  	help
- 	  Use SHA512 to encode passwords.
+ 	    Specific CPU to use
  
--	  Extremely strong, but not ubiquitous, although available in glibc
--	  for some time now. Choose only if you are sure your C library
--	  understands SHA512 passwords.
-+	  Extremely strong, but not ubiquitous, although available in
-+	  glibc for some time now. Choose only if you are sure your C
-+	  library understands SHA512 passwords.
- 
- endchoice # Passwd encoding
- 
-@@ -219,9 +219,9 @@ config BR2_ROOTFS_MERGED_USR
- 	  is the historical UNIX way. In this case, /usr can be a
- 	  filesystem on a partition separate from / .
- 
--	  If you say 'y' here, then /bin, /sbin and /lib will be symlinks
--	  to their counterparts in /usr. In this case, /usr can not be a
--	  separate filesystem.
-+	  If you say 'y' here, then /bin, /sbin and /lib will be
-+	  symlinks to their counterparts in /usr. In this case, /usr can
-+	  not be a separate filesystem.
- 
- config BR2_TARGET_ENABLE_ROOT_LOGIN
- 	bool "Enable root login with password"
-@@ -230,10 +230,10 @@ config BR2_TARGET_ENABLE_ROOT_LOGIN
- 	help
- 	  Allow root to log in with a password.
- 
--	  If not enabled, root will not be able to log in with a password.
--	  However, if you have an ssh server and you add an ssh key, you
--	  can still allow root to log in. Alternatively, you can use sudo
--	  to become root.
-+	  If not enabled, root will not be able to log in with a
-+	  password. However, if you have an ssh server and you add an
-+	  ssh key, you can still allow root to log in. Alternatively,
-+	  you can use sudo to become root.
- 
- config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	string "Root password"
-@@ -242,25 +242,28 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	help
- 	  Set the initial root password.
- 
--	  If set to empty (the default), then no root password will be set,
--	  and root will need no password to log in.
-+	  If set to empty (the default), then no root password will be
-+	  set, and root will need no password to log in.
- 
--	  If the password starts with any of $1$, $5$ or $6$, it is considered
--	  to be already crypt-encoded with respectively md5, sha256 or sha512.
--	  Any other value is taken to be a clear-text value, and is crypt-encoded
--	  as per the "Passwords encoding" scheme, above.
-+	  If the password starts with any of $1$, $5$ or $6$, it is
-+	  considered to be already crypt-encoded with respectively md5,
-+	  sha256 or sha512.  Any other value is taken to be a clear-text
-+	  value, and is crypt-encoded as per the "Passwords encoding"
-+	  scheme, above.
- 
--	  Note: "$" signs in the hashed password must be doubled. For example,
--	  if the hashed password is "$1$longsalt$v35DIIeMo4yUfI23yditq0",
--	  then you must enter it as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0"
--	  (this is necessary otherwise make would attempt to interpret the $
--	  as a variable expansion).
-+	  Note: "$" signs in the hashed password must be doubled. For
-+	  example, if the hashed password is
-+	  "$1$longsalt$v35DIIeMo4yUfI23yditq0", then you must enter it
-+	  as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0" (this is necessary
-+	  otherwise make would attempt to interpret the $ as a variable
-+	  expansion).
- 
- 	  WARNING! WARNING!
- 	  The password appears as-is in the .config file, and may appear
--	  in the build log! Avoid using a valuable password if either the
--	  .config file or the build log may be distributed, or at the
--	  very least use a strong cryptographic hash for your password!
-+	  in the build log! Avoid using a valuable password if either
-+	  the .config file or the build log may be distributed, or at
-+	  the very least use a strong cryptographic hash for your
-+	  password!
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index b05e83e33c..c99a995db2 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -456,9 +456,9 @@ config BR2_ARM_ENABLE_VFP
  
  choice
- 	bool "/bin/sh"
-@@ -375,10 +378,10 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- 	default y
+ 	prompt "Target ABI"
+-	depends on BR2_arm || BR2_armeb
+ 	default BR2_ARM_EABIHF if BR2_ARM_CPU_HAS_VFPV2
+ 	default BR2_ARM_EABI
++	depends on BR2_arm || BR2_armeb
  	help
- 	  The root filesystem is typically mounted read-only at boot.
--	  By default, buildroot remounts it in read-write mode early during the
--	  boot process.
--	  Say no here if you would rather like your root filesystem to remain
--	  read-only.
-+	  By default, buildroot remounts it in read-write mode early
-+	  during the boot process.
-+	  Say no here if you would rather like your root filesystem to
-+	  remain read-only.
- 	  If unsure, say Y.
+ 	  Application Binary Interface to use. The Application Binary
+ 	  Interface describes the calling conventions (how arguments
+@@ -746,7 +746,6 @@ config BR2_GCC_TARGET_ABI
+ 	default "lp64"		if BR2_aarch64 || BR2_aarch64_be
  
- config BR2_SYSTEM_DHCP
-@@ -391,8 +394,9 @@ config BR2_SYSTEM_DHCP
+ config BR2_GCC_TARGET_FPU
+-	depends on BR2_arm || BR2_armeb
+ 	default "vfp"		if BR2_ARM_FPU_VFPV2
+ 	default "vfpv3"		if BR2_ARM_FPU_VFPV3
+ 	default "vfpv3-d16"	if BR2_ARM_FPU_VFPV3D16
+@@ -756,6 +755,7 @@ config BR2_GCC_TARGET_FPU
+ 	default "neon-vfpv4"	if BR2_ARM_FPU_NEON_VFPV4
+ 	default "fp-armv8"	if BR2_ARM_FPU_FP_ARMV8
+ 	default "neon-fp-armv8"	if BR2_ARM_FPU_NEON_FP_ARMV8
++	depends on BR2_arm || BR2_armeb
  
- 	  If left empty, no automatic DHCP requests will take place.
- 
--	  For more complicated network setups use an overlay to overwrite
--	  /etc/network/interfaces or add a networkd configuration file.
-+	  For more complicated network setups use an overlay to
-+	  overwrite /etc/network/interfaces or add a networkd
-+	  configuration file.
- 
- comment "automatic network configuration via DHCP needs ifupdown or busybox or networkd"
- 	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || BR2_PACKAGE_SYSTEMD_NETWORKD)
-@@ -468,18 +472,19 @@ config BR2_TARGET_TZ_ZONELIST
+ config BR2_GCC_TARGET_FLOAT_ABI
+ 	default "soft"		if BR2_ARM_SOFT_FLOAT
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index bd9589c71d..b570d388fd 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -1,7 +1,7 @@
+ choice
+ 	prompt "Target CPU"
+-	depends on BR2_bfin
+ 	default BR2_bf532
++	depends on BR2_bfin
  	help
- 	  Space-separated list of time zones to compile.
- 
--	  The value "default" includes all commonly used time zones. Note
--	  that this set consumes around 5.5M for glibc and 2.1M for uClibc.
-+	  The value "default" includes all commonly used time zones.
-+	  Note that this set consumes around 5.5M for glibc and 2.1M for
-+	  uClibc.
- 
--	  The full list is the list of files in the time zone database source,
--	  not including the build and .tab files.
-+	  The full list is the list of files in the time zone database
-+	  source, not including the build and .tab files.
- 
- config BR2_TARGET_LOCALTIME
- 	string "default local time"
- 	default "Etc/UTC"
+ 	  Specify target CPU
+ config BR2_bf512
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index c56031cb78..c134df2f14 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -15,8 +15,8 @@ config BR2_m68k_cf
+ # coldfire variants will be added later
+ choice
+ 	prompt "Target CPU"
+-	depends on BR2_m68k
+ 	default BR2_m68k_68040
++	depends on BR2_m68k
  	help
--	  The time zone to install as the default local time, expressed as a
--	  tzdata location, such as:
-+	  The time zone to install as the default local time, expressed
-+	  as a tzdata location, such as:
- 	    Etc/UTC             (the default)
- 	    GMT
- 	    Europe/Paris
-@@ -506,24 +511,24 @@ config BR2_ROOTFS_OVERLAY
- 	  root filesystem after the build has finished and before it is
- 	  packed into the selected filesystem images.
+ 	  Specific CPU variant to use
  
--	  They are copied as-is into the rootfs, excluding files ending with
--	  ~ and .git, .svn and .hg directories.
-+	  They are copied as-is into the rootfs, excluding files ending
-+	  with ~ and .git, .svn and .hg directories.
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index f8e57bab33..eaabb625cc 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -28,9 +28,9 @@ config BR2_MIPS_CPU_MIPS64R6
  
- config BR2_ROOTFS_POST_BUILD_SCRIPT
- 	string "Custom scripts to run before creating filesystem images"
- 	default ""
+ choice
+ 	prompt "Target Architecture Variant"
+-	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	default BR2_mips_32 if BR2_mips || BR2_mipsel
+ 	default BR2_mips_64 if BR2_mips64 || BR2_mips64el
++	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
  	help
--	  Specify a space-separated list of scripts to be run after the build
--	  has finished and before Buildroot starts packing the files into
--	  selected filesystem images.
-+	  Specify a space-separated list of scripts to be run after the
-+	  build has finished and before Buildroot starts packing the
-+	  files into selected filesystem images.
+ 	  Specific CPU variant to use
  
--	  This gives users the opportunity to do board-specific cleanups,
--	  add-ons and the like, so the generated files can be used directly
--	  without further processing.
-+	  This gives users the opportunity to do board-specific
-+	  cleanups, add-ons and the like, so the generated files can be
-+	  used directly without further processing.
+@@ -118,8 +118,8 @@ endchoice
  
--	  These scripts are called with the target directory name as first
--	  argument. Make sure the exit code of those scripts are 0, otherwise
--	  make will stop after calling them.
-+	  These scripts are called with the target directory name as
-+	  first argument. Make sure the exit code of those scripts are
-+	  0, otherwise make will stop after calling them.
+ choice
+ 	prompt "Target ABI"
+-	depends on BR2_mips64 || BR2_mips64el
+ 	default BR2_MIPS_NABI32
++	depends on BR2_mips64 || BR2_mips64el
  
- config BR2_ROOTFS_POST_FAKEROOT_SCRIPT
- 	string "Custom scripts to run inside the fakeroot environment"
-@@ -548,8 +553,9 @@ config BR2_ROOTFS_POST_FAKEROOT_SCRIPT
- 	        to create arbitrary entries statically in /dev
- 
- 	    - BR2_ROOTFS_DEVICE_TABLE
--	        to set arbitrary permissions as well as extended attributes
--	        (such as capabilities) on files and directories,
-+	        to set arbitrary permissions as well as extended
-+	        attributes (such as capabilities) on files and
-+	        directories,
- 
- 	    - BR2_ROOTFS_USERS_TABLES:
- 	        to create arbitrary users and their home directories
-@@ -581,16 +587,16 @@ config BR2_ROOTFS_POST_SCRIPT_ARGS
- 		|| BR2_ROOTFS_POST_FAKEROOT_SCRIPT != "" \
- 		|| BR2_ROOTFS_POST_IMAGE_SCRIPT != ""
  	help
--	  Pass these additional arguments to each post-build or post-image
--	  scripts.
-+	  Pass these additional arguments to each post-build or
-+	  post-image scripts.
+ 	  Application Binary Interface to use
+@@ -145,8 +145,8 @@ config BR2_MIPS_SOFT_FLOAT
  
--	  Note that all the post-build and post-image scripts will be passed
--	  the same set of arguments, you can not pass different arguments to
--	  each script.
-+	  Note that all the post-build and post-image scripts will be
-+	  passed the same set of arguments, you can not pass different
-+	  arguments to each script.
+ choice
+ 	prompt "FP mode"
+-	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
+ 	default BR2_MIPS_FP32_MODE_XX
++	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
+ 	help
+ 	  MIPS32 supports different FP modes (32,xx,64). Information about FP
+ 	  modes can be found here:
+@@ -180,8 +180,8 @@ config BR2_MIPS_NAN_2008
  
--	  Note also, as stated in their respective help text, that the first
--	  argument to each post-build or post-image script is the target
--	  directory / images directory. The arguments in this option will be
--	  passed *after* those.
-+	  Note also, as stated in their respective help text, that the
-+	  first argument to each post-build or post-image script is the
-+	  target directory / images directory. The arguments in this
-+	  option will be passed *after* those.
+ choice
+ 	prompt "Target NaN"
+-	depends on BR2_mips_32r5 || BR2_mips_64r5
+ 	default BR2_MIPS_ENABLE_NAN_2008
++	depends on BR2_mips_32r5 || BR2_mips_64r5
+ 	help
+ 	  MIPS supports two different NaN encodings, legacy and 2008.
+ 	  Information about MIPS NaN encodings can be found here:
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 0968412647..7a452a630a 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -71,12 +71,12 @@ config BR2_powerpc_740
+ 	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_7400
+ 	bool "7400"
+-	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	depends on !BR2_ARCH_IS_64
++	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ config BR2_powerpc_7450
+ 	bool "7450"
+-	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	depends on !BR2_ARCH_IS_64
++	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ config BR2_powerpc_750
+ 	bool "750"
+ 	depends on !BR2_ARCH_IS_64
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index deb7244f29..1cb2db90ad 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -1,7 +1,7 @@
+ choice
+ 	prompt "Target Architecture Variant"
+-	depends on BR2_sh
+ 	default BR2_sh4
++	depends on BR2_sh
+ 	help
+ 	  Specific CPU variant to use
  
- endmenu
+diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+index 9b6a6aa21a..b22b55142e 100644
+--- a/arch/Config.in.sparc
++++ b/arch/Config.in.sparc
+@@ -1,8 +1,8 @@
+ choice
+ 	prompt "Target Architecture Variant"
+-	depends on BR2_sparc || BR2_sparc64
+ 	default BR2_sparc_v8 if BR2_sparc
+ 	default BR2_sparc_v9 if BR2_sparc64
++	depends on BR2_sparc || BR2_sparc64
+ 	help
+ 	  Specific CPU variant to use
+ 
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 8e623b3c2b..f7c53a0fae 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -20,8 +20,8 @@ config BR2_X86_CPU_HAS_AVX2
+ 
+ choice
+ 	prompt "Target Architecture Variant"
+-	depends on BR2_i386 || BR2_x86_64
+ 	default BR2_x86_i586 if BR2_i386
++	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  Specific CPU variant to use
+ 
+@@ -50,35 +50,35 @@ config BR2_x86_pentiumpro
+ 	depends on !BR2_x86_64
+ config BR2_x86_pentium_mmx
+ 	bool "pentium MMX"
+-	select BR2_X86_CPU_HAS_MMX
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_pentium_m
+ 	bool "pentium mobile"
++	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
+ 	select BR2_X86_CPU_HAS_SSE
+-	depends on !BR2_x86_64
+ config BR2_x86_pentium2
+ 	bool "pentium2"
+-	select BR2_X86_CPU_HAS_MMX
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_pentium3
+ 	bool "pentium3"
++	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
+ 	select BR2_X86_CPU_HAS_SSE
+-	depends on !BR2_x86_64
+ config BR2_x86_pentium4
+ 	bool "pentium4"
++	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
+ 	select BR2_X86_CPU_HAS_SSE
+ 	select BR2_X86_CPU_HAS_SSE2
+-	depends on !BR2_x86_64
+ config BR2_x86_prescott
+ 	bool "prescott"
++	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
+ 	select BR2_X86_CPU_HAS_SSE
+ 	select BR2_X86_CPU_HAS_SSE2
+ 	select BR2_X86_CPU_HAS_SSE3
+-	depends on !BR2_x86_64
+ config BR2_x86_nocona
+ 	bool "nocona"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -140,21 +140,21 @@ config BR2_x86_silvermont
+ 	select BR2_X86_CPU_HAS_SSE42
+ config BR2_x86_k6
+ 	bool "k6"
+-	select BR2_X86_CPU_HAS_MMX
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_k6_2
+ 	bool "k6-2"
+-	select BR2_X86_CPU_HAS_MMX
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_athlon
+ 	bool "athlon"
+-	select BR2_X86_CPU_HAS_MMX
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_athlon_4
+ 	bool "athlon-4"
++	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
+ 	select BR2_X86_CPU_HAS_SSE
+-	depends on !BR2_x86_64
+ config BR2_x86_opteron
+ 	bool "opteron"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -198,21 +198,21 @@ config BR2_x86_geode
+ 	depends on !BR2_x86_64
+ config BR2_x86_c3
+ 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
+-	select BR2_X86_CPU_HAS_MMX
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_c32
+ 	bool "Via C3-2 (Nehemiah cores)"
++	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
+ 	select BR2_X86_CPU_HAS_SSE
+-	depends on !BR2_x86_64
+ config BR2_x86_winchip_c6
+ 	bool "IDT Winchip C6"
+-	select BR2_X86_CPU_HAS_MMX
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_winchip2
+ 	bool "IDT Winchip 2"
+-	select BR2_X86_CPU_HAS_MMX
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ endchoice
+ 
+ config BR2_ARCH
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index 5d5bcb48f9..49e93a4774 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -1,15 +1,15 @@
+ choice
+ 	prompt "Target Architecture Variant"
+-	depends on BR2_xtensa
+ 	default BR2_xtensa_fsf
++	depends on BR2_xtensa
+ 
+ config BR2_XTENSA_CUSTOM
+-	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	bool "Custom Xtensa processor configuration"
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 
+ config BR2_xtensa_fsf
+-	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	bool "fsf - Default configuration"
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 
+ endchoice
+ 
+@@ -30,8 +30,8 @@ config BR2_XTENSA_OVERLAY_FILE
+ 
+ choice
+ 	prompt "Target Architecture Endianness"
+-	depends on BR2_XTENSA_CUSTOM
+ 	default BR2_XTENSA_LITTLE_ENDIAN
++	depends on BR2_XTENSA_CUSTOM
+ 
+ config BR2_XTENSA_LITTLE_ENDIAN
+ 	bool "Little endian"
