@@ -1,172 +1,140 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Apr 2018 14:10:53 +0200
-Subject: [Buildroot] [git commit] core: rename FOO_BASE_NAME to FOO_BASENAME
- to avoid clashes
-Message-ID: <20180401121103.8A0E982970@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 14:16:50 +0200
+Subject: [Buildroot] [git commit] quotatool: new package
+Message-ID: <20180401121653.01BEF82982@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83d2644b1197564358b6cd87b2f221d79671b5cc
+commit: https://git.buildroot.net/buildroot/commit/?id=4553fea6478f745f3237a095dcd1942e8850615f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In current Buildroot, clashes occur between the variables _NAME and
-_BASE_NAME for two packages called foo and foo-base, i.e.
-
-Package foo:
-FOO_NAME = foo
-FOO_BASE_NAME = foo-1.2.3
-
-Package foo-base:
-FOO_BASE_NAME = foo-base
-FOO_BASE_BASE_NAME = foo-base-4.5.6
-
-where variable FOO_BASE_NAME is clashing between these two packages.
-Specific cases where this clash is already existing are:
-- alljoyn-base
-- alljoyn-tcl-base
-- perl-xml-sax-base
-
-The problem is generic and can occur for a number of variables in Buildroot.
-A non-exhaustive list:
-    <pkg>_BASE and <pkg>_BASE_NAME
-    <pkg>_BASE_NAME and <pkg>_RAW_BASE_NAME
-    <pkg>_DIR and <pkg>_DL_DIR
-    <pkg>_VERSION and <pkg>_DL_VERSION
-    <pkg>_SOURCE and <pkg>_TARGET_SOURCE
-    <pkg>_INSTALL_IMAGES and <pkg>_TARGET_INSTALL_IMAGES  (same for _STAGING and _TARGET)
-    <pkg>_LICENSE_FILES and <pkg>_MANIFEST_LICENSE_FILES
-    <pkg>_DEPENDENCIES and <pkg>_FINAL_DEPENDENCIES
-
-One solution is to use another separator than '_' to separate the
-package name from the rest of the variable name. For example, a double
-underscore:
-FOO__NAME
-FOO__BASE_NAME
-FOO_BASE__NAME
-FOO_BASE__BASE_NAME
-
-However, making that change for only this case means that the variable
-naming is no longer consistent. And making the change for all variables has
-a large impact, also on certain user scripts.
-
-For now, keep it simple, and rename FOO_BASE_NAME into FOO_BASENAME, so that
-the variables become:
-FOO_NAME
-FOO_BASENAME
-FOO_BASE_NAME
-FOO_BASE_BASENAME
-
-For consistency, also adapt FOO_RAW_BASE_NAME. Since FOO_RAW_BASENAME would
-still pose a conflict with a package called 'foo-raw', take the opportunity
-to rename it into FOO_BASENAME_RAW instead, which does not pose a conflict
-as we have no variable called FOO_RAW.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Sam Voss <sam.voss@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[Thomas: as suggested by Romain Naour, use
+QUOTATOOL_INSTALL_TARGET_OPTS to avoid installing man pages, as it
+fails due to a bug in the upstream package Makefile]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-download.mk | 10 +++++-----
- package/pkg-generic.mk  | 14 +++++++-------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...x-missing-__P-definition-for-musl-compile.patch | 36 ++++++++++++++++++++++
+ package/quotatool/Config.in                        |  7 +++++
+ package/quotatool/quotatool.hash                   |  5 +++
+ package/quotatool/quotatool.mk                     | 17 ++++++++++
+ 6 files changed, 67 insertions(+)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 3712b9ccc6..6f15deba28 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -79,7 +79,7 @@ define DOWNLOAD_GIT
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_RAW_BASE_NAME) \
-+		$($(PKG)_BASENAME_RAW) \
- 		$($(PKG)_DL_OPTS)
- endef
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 45c13d39eb..035376eca8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1459,6 +1459,7 @@ F:	package/libevdev/
+ F:	package/log4cplus/
+ F:	package/postgresql/
+ F:	package/qt5/
++F:	package/quotatool/
+ F:	package/racehound/
+ F:	package/wiringpi/
  
-@@ -90,7 +90,7 @@ define DOWNLOAD_BZR
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_RAW_BASE_NAME) \
-+		$($(PKG)_BASENAME_RAW) \
- 		$($(PKG)_DL_OPTS)
- endef
- 
-@@ -102,7 +102,7 @@ define DOWNLOAD_CVS
- 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
- 		$($(PKG)_DL_VERSION) \
- 		$($(PKG)_RAWNAME) \
--		$($(PKG)_RAW_BASE_NAME) \
-+		$($(PKG)_BASENAME_RAW) \
- 		$($(PKG)_DL_OPTS)
- endef
- 
-@@ -113,7 +113,7 @@ define DOWNLOAD_SVN
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_RAW_BASE_NAME) \
-+		$($(PKG)_BASENAME_RAW) \
- 		$($(PKG)_DL_OPTS)
- endef
- 
-@@ -137,7 +137,7 @@ define DOWNLOAD_HG
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_RAW_BASE_NAME) \
-+		$($(PKG)_BASENAME_RAW) \
- 		$($(PKG)_DL_OPTS)
- endef
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 88375916fd..d870921def 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -430,10 +430,10 @@ ifdef $(3)_OVERRIDE_SRCDIR
-   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
- endif
- 
--$(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
--$(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
-+$(2)_BASENAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
-+$(2)_BASENAME_RAW = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
- $(2)_DL_DIR	=  $$(DL_DIR)
--$(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
-+$(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASENAME)
- 
- ifndef $(2)_SUBDIR
-  ifdef $(3)_SUBDIR
-@@ -462,7 +462,7 @@ ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
-  else ifdef $(2)_VERSION
--  $(2)_SOURCE			?= $$($(2)_RAW_BASE_NAME).tar.gz
-+  $(2)_SOURCE			?= $$($(2)_BASENAME_RAW).tar.gz
-  endif
- endif
- 
-@@ -536,7 +536,7 @@ endif
- 
- $(2)_REDISTRIBUTE		?= YES
- 
--$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
-+$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_BASENAME_RAW)
- 
- # When a target package is a toolchain dependency set this variable to
- # 'NO' so the 'toolchain' dependency is not added to prevent a circular
-@@ -873,9 +873,9 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- # is that the license still applies to the files distributed as part
- # of the rootfs, even if the sources are not themselves redistributed.
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
--	$(Q)$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
-+	$(Q)$$(call legal-warning-pkg,$$($(2)_BASENAME_RAW),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_RAW_BASE_NAME),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
- 
- ifeq ($$($(2)_SITE_METHOD),local)
+diff --git a/package/Config.in b/package/Config.in
+index de10dd0613..3481598646 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1997,6 +1997,7 @@ menu "System tools"
+ 	source "package/psmisc/Config.in"
+ 	source "package/pwgen/Config.in"
+ 	source "package/quota/Config.in"
++	source "package/quotatool/Config.in"
+ 	source "package/rauc/Config.in"
+ 	source "package/rsyslog/Config.in"
+ 	source "package/runc/Config.in"
+diff --git a/package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch b/package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch
+new file mode 100644
+index 0000000000..927e62ba8c
+--- /dev/null
++++ b/package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch
+@@ -0,0 +1,36 @@
++From 0e096badc901f755f3bcefabdc57091725a5a0c5 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 1 Feb 2018 23:50:43 +0100
++Subject: [PATCH] fix missing __P definition for musl compile
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  In file included from src/quota.h:40:0,
++                   from src/parse.c:26:
++  src/linux/linux_quota.h:120:15: error: expected ???=???, ???,???, ???;???, ???asm??? or ???__attribute__??? before ???__P???
++   long quotactl __P((int, const char *, qid_t, caddr_t));
++                 ^~~
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/linux/linux_quota.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/linux/linux_quota.h b/src/linux/linux_quota.h
++index 11f9871..2b29a89 100644
++--- a/src/linux/linux_quota.h
+++++ b/src/linux/linux_quota.h
++@@ -14,6 +14,7 @@
++ #ifndef LINUX_QUOTA_H
++ #define LINUX_QUOTA_H
++ 
+++#include <sys/cdefs.h>
++ #include <sys/types.h>
++ #include "system.h"
++ 
++-- 
++2.16.1
++
+diff --git a/package/quotatool/Config.in b/package/quotatool/Config.in
+new file mode 100644
+index 0000000000..4015cef6c8
+--- /dev/null
++++ b/package/quotatool/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QUOTATOOL
++	bool "quotatool"
++	help
++	  Quotatool is a utility to manipulate filesystem quotas from
++	  the commandline.
++
++	  http://quotatool.ekenberg.se/
+diff --git a/package/quotatool/quotatool.hash b/package/quotatool/quotatool.hash
+new file mode 100644
+index 0000000000..45b477830e
+--- /dev/null
++++ b/package/quotatool/quotatool.hash
+@@ -0,0 +1,5 @@
++# Locally computed
++sha256 e53adc480d54ae873d160dc0e88d78095f95d9131e528749fd982245513ea090 quotatool-1.6.2.tar.gz
++
++# Hash for license files:
++sha256 94686eeb98a40edc64106c6f8644068d8a08816a510a3cde75e50f1bf470564d COPYING
+diff --git a/package/quotatool/quotatool.mk b/package/quotatool/quotatool.mk
+new file mode 100644
+index 0000000000..7b63c01316
+--- /dev/null
++++ b/package/quotatool/quotatool.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# quotatool
++#
++################################################################################
++
++QUOTATOOL_VERSION = 1.6.2
++QUOTATOOL_SITE = http://quotatool.ekenberg.se
++QUOTATOOL_LICENSE = GPL-2.0
++QUOTATOOL_LICENSE_FILES = COPYING
++
++# men="" allows to disable installing the man pages, which fails
++# because the package Makefile doesn't create the appropriate
++# directory.
++QUOTATOOL_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install men=""
++
++$(eval $(autotools-package))
