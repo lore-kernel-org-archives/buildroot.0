@@ -1,88 +1,169 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 1 Apr 2018 08:52:45 +0200
-Subject: [Buildroot] [git commit] check-package: enable for fs/
-Message-ID: <20180401065253.AE45E815C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs/*/Config.in: re-wrap help text
+Message-ID: <20180401065253.9E5B3817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c8367363821c2417443082f076198f02afcdb4e
+commit: https://git.buildroot.net/buildroot/commit/?id=4a417b75091ac3d6136bc942ab54003c5299671d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The filesystem types can benefit from this script to prevent common
-mistakes when submitting patches.
-
-In order to accomplish this:
-Do not ignore anymore files from the fs/ directory.
-Ignore fs/common.mk as it declares a package infra and not a package itself.
-Register the ROOTFS_ as a valid prefix for variables.
-Ignore these symbols:
- - PACKAGES_PERMISSIONS_TABLE: defined either by packages through
-   pkg-generic or by filesystem types, used by fs/common.mk;
- - SUMTOOL: defined by package mtd, used by filesystem jffs2;
- - TARGETS_ROOTFS: defined by filesystem types, used in the main
-   Makefile.
-
-Keep using loose checks that warn about common mistakes while keep the
-code simple.
-As a consequence the check functions do not differentiate between
-packages and filesystems so the symbol PACKAGE_UBI would not generate a
-warning for the ubi filesystem neither the symbol ROOTFS_MTD would
-generate a warning for the mtd package. But those kind of mistakes are
-not common and are obvious in the code review, unlike typos i.e.
-ROOTFS_UBl or PACKAGE_MID that would be hard to see in the code review.
+... to follow the convention <tab><2 spaces><62 chars>.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/check-package             | 2 ++
- utils/checkpackagelib/lib_mk.py | 5 ++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ fs/cpio/Config.in      |  6 +++---
+ fs/ext2/Config.in      | 22 ++++++++++++----------
+ fs/initramfs/Config.in |  3 ++-
+ fs/jffs2/Config.in     | 16 +++++++++-------
+ fs/ubi/Config.in       | 11 ++++++-----
+ 5 files changed, 32 insertions(+), 26 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 48ce956443..4c9eea0534 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -48,11 +48,13 @@ CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
- DO_CHECK_INTREE = re.compile("|".join([
-     "arch/",
-     "boot/",
-+    "fs/",
-     "package/",
-     "system/",
-     ]))
- DO_NOT_CHECK_INTREE = re.compile("|".join([
-     "boot/barebox/barebox\.mk$",
-+    "fs/common\.mk$",
-     "package/doc-asciidoc\.mk$",
-     "package/pkg-\S*\.mk$",
-     ]))
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index cfd4d05117..58de4fd3cb 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -165,8 +165,11 @@ class TypoInPackageVariable(_CheckFunction):
-         "LUA_RUN",
-         "MKFS_JFFS2",
-         "MKIMAGE_ARCH",
-+        "PACKAGES_PERMISSIONS_TABLE",
-         "PKG_CONFIG_HOST_BINARY",
-+        "SUMTOOL",
-         "TARGET_FINALIZE_HOOKS",
-+        "TARGETS_ROOTFS",
-         "XTENSA_CORE_NAME"]))
-     PACKAGE_NAME = re.compile("/([^/]+)\.mk")
-     VARIABLE = re.compile("^([A-Z0-9_]+_[A-Z0-9_]+)\s*(\+|)=")
-@@ -177,7 +180,7 @@ class TypoInPackageVariable(_CheckFunction):
-         # linux tools do not use LINUX_TOOL_ prefix for variables
-         package = package.replace("LINUX_TOOL_", "")
-         self.package = package
--        self.REGEX = re.compile("^(HOST_)?({}_[A-Z0-9_]+)".format(package))
-+        self.REGEX = re.compile("^(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
-         self.FIND_VIRTUAL = re.compile(
-             "^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
-         self.virtual = []
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index 679959d222..83a7fa5824 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_TARGET_ROOTFS_CPIO
+ 	bool "cpio the root filesystem (for use as an initial RAM filesystem)"
+ 	help
+-	  Build a cpio archive of the root filesystem.  This is typically
+-	  used for an initial RAM filesystem that is passed to the kernel
+-	  by the bootloader.
++	  Build a cpio archive of the root filesystem. This is typically
++	  used for an initial RAM filesystem that is passed to the
++	  kernel by the bootloader.
+ 
+ if BR2_TARGET_ROOTFS_CPIO
+ 
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 27ad69fde9..74bacc1141 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -49,11 +49,11 @@ config BR2_TARGET_ROOTFS_EXT2_SIZE
+ 	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP # legacy 2017.08
+ 	default "60M"
+ 	help
+-	  The size of the filesystem image. If it does not have a suffix,
+-	  it is interpreted as power-of-two kilobytes. If it is suffixed
+-	  by 'k', 'm', 'g', 't' (either upper-case or lower-case), then
+-	  it is interpreted in power-of-two kilobytes, megabytes,
+-	  gigabytes, terabytes, etc.
++	  The size of the filesystem image. If it does not have a
++	  suffix, it is interpreted as power-of-two kilobytes. If it is
++	  suffixed by 'k', 'm', 'g', 't' (either upper-case or
++	  lower-case), then it is interpreted in power-of-two kilobytes,
++	  megabytes, gigabytes, terabytes, etc.
+ 
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "exact number of inodes (leave at 0 for auto calculation)"
+@@ -65,15 +65,16 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
+ 	help
+ 	  The number of blocks on the filesystem (as a percentage of the
+ 	  total number of blocks), that are reserved for use by root.
+-	  Traditionally, this has been 5%, and all ext-related tools still
+-	  default to reserving 5% when creating a new ext filesystem.
++	  Traditionally, this has been 5%, and all ext-related tools
++	  still default to reserving 5% when creating a new ext
++	  filesystem.
+ 
+ config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
+ 	string "additional mke2fs options"
+ 	default "-O ^64bit"
+ 	help
+-	  Specify a space-separated list of mke2fs options, including any
+-	  ext2/3/4 filesystem features.
++	  Specify a space-separated list of mke2fs options, including
++	  any ext2/3/4 filesystem features.
+ 
+ 	  For more information about the mke2fs options, see the manual
+ 	  page mke2fs(8).
+@@ -91,7 +92,8 @@ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_EXT2_NONE
+ 	help
+-	  Select compressor for ext2/3/4 filesystem of the root filesystem
++	  Select compressor for ext2/3/4 filesystem of the root
++	  filesystem
+ 
+ config BR2_TARGET_ROOTFS_EXT2_NONE
+ 	bool "no compression"
+diff --git a/fs/initramfs/Config.in b/fs/initramfs/Config.in
+index 8ed9f7ebb5..9d5a3f92e6 100644
+--- a/fs/initramfs/Config.in
++++ b/fs/initramfs/Config.in
+@@ -10,7 +10,8 @@ config BR2_TARGET_ROOTFS_INITRAMFS
+ 	  A rootfs.cpio file will be generated in the images/ directory.
+ 	  This is the archive that will be included in the kernel image.
+ 	  The default rootfs compression set in the kernel configuration
+-	  is used, regardless of how buildroot's cpio archive is configured.
++	  is used, regardless of how buildroot's cpio archive is
++	  configured.
+ 
+ 	  Note that enabling initramfs together with another filesystem
+ 	  formats doesn't make sense: you would end up having two
+diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
+index 208cabaa52..44c0b10446 100644
+--- a/fs/jffs2/Config.in
++++ b/fs/jffs2/Config.in
+@@ -94,18 +94,20 @@ config BR2_TARGET_ROOTFS_JFFS2_SUMMARY
+ config BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	bool "Select custom virtual memory page size"
+ 	help
+-	  Use a custom virtual memory page size.  Note that this is not related to
+-	  the flash memory page size.  Using this option is only needed if Linux is
+-	  configured to use a page size different than 4kB.
++	  Use a custom virtual memory page size. Note that this is not
++	  related to the flash memory page size. Using this option is
++	  only needed if Linux is configured to use a page size
++	  different than 4kB.
+ 
+ config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE
+ 	hex "Virtual memory page size"
+ 	default 0x1000
+ 	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	help
+-	  Set to virtual memory page size of target system (in bytes).  This value
+-	  should match the virtual page size in Linux (i.e. this should have the
+-	  same value as the value of the PAGE_SIZE macro in Linux).  It is not
+-	  related to the flash memory page size.
++	  Set to virtual memory page size of target system (in bytes).
++	  This value should match the virtual page size in Linux (i.e.
++	  this should have the same value as the value of the PAGE_SIZE
++	  macro in Linux). It is not related to the flash memory page
++	  size.
+ 
+ endif
+diff --git a/fs/ubi/Config.in b/fs/ubi/Config.in
+index 5fa2f1f61d..85b1c56bb0 100644
+--- a/fs/ubi/Config.in
++++ b/fs/ubi/Config.in
+@@ -18,8 +18,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	int "sub-page size"
+ 	default 512
+ 	help
+-	  Tells ubinize that the flash supports sub-pages and the sub-page
+-	  size. Use 0 if sub-pages are not supported on flash chip.
++	  Tells ubinize that the flash supports sub-pages and the
++	  sub-page size. Use 0 if sub-pages are not supported on flash
++	  chip.
+ 	  The value provided here is passed to the -s/--sub-page-size
+ 	  option of ubinize.
+ 
+@@ -28,9 +29,9 @@ config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
+ 	help
+ 	  Select this option to use a custom ubinize configuration file,
+ 	  rather than the default configuration used by Buildroot (which
+-	  defines a single dynamic volume marked as auto-resize).  Passing
+-	  a custom ubinize configuration file allows you to create several
+-	  volumes, specify volume types, etc.
++	  defines a single dynamic volume marked as auto-resize).
++	  Passing a custom ubinize configuration file allows you to
++	  create several volumes, specify volume types, etc.
+ 
+ 	  As a convenience, buildroot replaces the string
+ 	  "BR2_ROOTFS_UBIFS_PATH" with the path to the built ubifs file.
