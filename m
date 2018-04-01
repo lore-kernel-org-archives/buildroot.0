@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 00:37:02 +0200
-Subject: [Buildroot] [PATCH v2 1/2] iqvlinux: bump to version 1.2.0.3
-In-Reply-To: <20171215153830.4864-1-casantos@datacom.ind.br>
-References: <20171215153830.4864-1-casantos@datacom.ind.br>
-Message-ID: <20180402003702.06275b9b@windsurf>
+Date: Mon, 2 Apr 2018 00:38:29 +0200
+Subject: [Buildroot] [PATCH] uboot: add option customizing the name of
+ environment image
+In-Reply-To: <20171218145557.19360-1-didin@synopsys.com>
+References: <20171218145557.19360-1-didin@synopsys.com>
+Message-ID: <20180402003829.77272238@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +13,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 15 Dec 2017 13:38:29 -0200, Carlos Santos wrote:
-> This package is really annoying since the archive name doesn't contain
-> the version. Use a small trick to save it with a better name. Also add
-> hashes for license files.
+On Mon, 18 Dec 2017 17:55:57 +0300, Evgeniy Didin wrote:
+> Historically, in buildroot the name of binary environment image
+> file is "uboot-env.bin". But in upstream u-boot default name
+> for this file is "uboot.env":
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> http://git.denx.de/?p=u-boot.git;a=blob;f=env/Kconfig#l394
+> 
+> For some boards U-Boot environment is stored in FAT partition, not as
+> a raw blob on SD-card, so the name of environment file must be correct.
+> For customizing name of envimage file option BR2_TARGET_UBOOT_ENVIMAGE_FILENAME
+> has been added. For backward compatibility by default value of this
+> option is set to "uboot-env.bin".
+> 
+> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> Cc: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: arc-buildroot at synopsys.com
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  boot/uboot/Config.in | 8 ++++++++
+>  boot/uboot/uboot.mk  | 2 +-
+>  2 files changed, 9 insertions(+), 1 deletion(-)
 
-So back on this driver. We looked at it with Arnout and Peter, and
-actually had a lot of fun reading the code. It is ugly as hell, uses
-copy_from/to_user inside spinlocks, and does lots of horrible things.
+In the mean time, we merged the ARC HS Development Kit development kit,
+and the rename of the u-boot environment image is done directly by
+genimage:
 
-But more importantly, this driver does nothing, except provide a weird
-custom ioctl() interface, with no user-space program to use them.
++image boot.vfat {
++  vfat {
++    files = {
++      "uImage"
++    }
++    file uboot.env {
++      image = "uboot-env.bin"
++    }
++  }
++  size = 100M
++}
 
-How is this kernel driver meant to be used? Is it used with some
-non-public, closed-source, Intel utilities ?
+This makes this patch no longer useful, so I've marked it as Rejected
+in our patch tracking system. Let me know if you disagree for some
+reason. Thanks!
 
-Also, in the bug tracker at https://sourceforge.net/p/e1000/bugs/589/,
-the person from Intel said: "I'm not really sure why you're trying to
-build this as it's only published here to conform with GPLv2. There's
-really no use for it.". So why are you using it ? Why do we have it in
-Buildroot ?
-
-Romain, since you originally contributed this driver, perhaps you can
-give some details about how you used it ?
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
