@@ -1,39 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 12:04:01 +0200
-Subject: [Buildroot] [PATCH 2/2] openblas: bump version to v0.2.20
-In-Reply-To: <20180401084642.15199-2-peter@korsgaard.com>
-References: <20180401084642.15199-1-peter@korsgaard.com>
- <20180401084642.15199-2-peter@korsgaard.com>
-Message-ID: <20180401120401.3c0c6cbb@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 01 Apr 2018 10:16:49 +0000
+Subject: [Buildroot] [Bug 10151] toolchain eclipse register : fails with a
+ custom BR2_HOST_DIR
+In-Reply-To: <bug-10151-163@https.bugs.busybox.net/>
+References: <bug-10151-163@https.bugs.busybox.net/>
+Message-ID: <bug-10151-163-OHje58G845@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10151
 
-On Sun,  1 Apr 2018 10:46:42 +0200, Peter Korsgaard wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> +The other flags, such as -mfpu=vfp or -mfloat-abi=hard are kept, as they
-> +are actually required for the build to proceed (OpenBLAS uses VFP
-> +instructions, and assume an EABIhf ABI).
-> +
-> +[Peter: update for v0.2.20
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
-This is going to be the most useless e-mail, but here is a minor nit:
-missing closing bracket.
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by commit
+https://git.buildroot.org/buildroot/commit/Makefile?id=91b4a4525bf30a03c1f2542b3c4d340e5e4ca42a.
+Thanks!
 
-I'm just going to add a few more sentences here, just to pretend this
-e-mail is not just about this small nit. But I don't have much else to
-say about this patch. Oh well, the length of this text starts to justify
-this e-mail. I can probably stop here, and put my usual closing Best
-regards, so let's do this.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
