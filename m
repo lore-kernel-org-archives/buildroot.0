@@ -1,48 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Apr 2018 19:55:03 +0200
-Subject: [Buildroot] [git commit] package/wayland-protocols: bump version to
- 1.13
-Message-ID: <20180401175634.9CCD583493@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  1 Apr 2018 19:56:51 +0200
+Subject: [Buildroot] [PATCH 1/1] ncmpc: fix build with ncursesw
+Message-ID: <20180401175651.2010-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7785f47ba7c00dcaa9676d77fa1fffabe628837
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Set curses to ncurses as ncurses and ncursesw are the same package in
+buildroot. Otherwise, build will fail when trying to find
+ncursesw/curses.h or ncursesw.h.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/c5bb5f978602896179ff9c58ecf4ced40bb96b57
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wayland-protocols/wayland-protocols.hash | 8 ++++----
- package/wayland-protocols/wayland-protocols.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/ncmpc/ncmpc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
-index d1d643caa7..9cbb4fef72 100644
---- a/package/wayland-protocols/wayland-protocols.hash
-+++ b/package/wayland-protocols/wayland-protocols.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-December/036037.html
--md5 ac83c4704003323b6bd5a1b91fb1be53  wayland-protocols-1.12.tar.xz
--sha1 ac908e91c6c5e7802c0af48f55725ad683017e72  wayland-protocols-1.12.tar.xz
--sha256 3b19e8a9e1e19474756a7069db23b90ca9b8ebb438448c6063b4a7fc89b7c8b2  wayland-protocols-1.12.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2018-February/036992.html
-+md5 29312149dafcd4a0e739ba94995a574d  wayland-protocols-1.13.tar.xz
-+sha1 1b4b3385e168c361b4d350668d92f3a90ceee189  wayland-protocols-1.13.tar.xz
-+sha256 0758bc8008d5332f431b2a84fea7de64d971ce270ed208206a098ff2ebc68f38  wayland-protocols-1.13.tar.xz
- sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
-diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
-index 0d23e9af32..bba0979934 100644
---- a/package/wayland-protocols/wayland-protocols.mk
-+++ b/package/wayland-protocols/wayland-protocols.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 0c9dfd4658..6bce627562 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -14,6 +14,7 @@ NCMPC_LICENSE_FILES = COPYING
  
--WAYLAND_PROTOCOLS_VERSION = 1.12
-+WAYLAND_PROTOCOLS_VERSION = 1.13
- WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
- WAYLAND_PROTOCOLS_LICENSE = MIT
+ NCMPC_CONF_OPTS += \
+ 	--prefix=/usr \
++	-Dcurses=ncurses \
+ 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
+ 
+-- 
+2.14.1
