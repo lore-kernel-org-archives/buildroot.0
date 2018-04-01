@@ -1,58 +1,40 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:50 -0300
-Subject: [Buildroot] [PATCH v2 37/37] .gitlab-ci.yml: extend check-package
- test to Config.* files
-In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-38-ricardo.martincoski@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 1 Apr 2018 07:37:08 +0200
+Subject: [Buildroot] [PATCH] utils/scanpypi: don't hardcode python2
+In-Reply-To: <20180330214807.6135-1-peter@korsgaard.com>
+References: <20180330214807.6135-1-peter@korsgaard.com>
+Message-ID: <CAGm1_ku-S_3RSa2x=Qj0R83iDJXYDwsMDUKtTqvuYoCuq=vgsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that all issues in Config.in files have been fixed, let's try to
-make sure we don't introduce new ones by checking regularly these files
-issues in Gitlab CI.
+On Fri, Mar 30, 2018 at 11:48 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> Commit 3a0c20c5309b (scanpypi: add support for Python3) adapted the script
+> to work with python 3.x, but the shebang still said python2 making it
+> unlikely to work on systems without python 2.x.
+>
+> Change it to just 'python' instead.
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-Changes v1 -> v2:
-  - rebase after toolchain-common.in was merged to Config.in
----
- .gitlab-ci.yml    | 3 ++-
- .gitlab-ci.yml.in | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index fd1aeb3408..fcb53d6451 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -43,7 +43,8 @@ check-flake8:
- 
- check-package:
-     script:
--        - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
-+        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
-+            -exec ./utils/check-package {} +
- 
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index bffcb02be1..fb2650c5ce 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -43,7 +43,8 @@ check-flake8:
- 
- check-package:
-     script:
--        - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
-+        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
-+            -exec ./utils/check-package {} +
- 
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
--- 
-2.14.1
+> ---
+>  utils/scanpypi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/utils/scanpypi b/utils/scanpypi
+> index 505ba0a246..df8939b82e 100755
+> --- a/utils/scanpypi
+> +++ b/utils/scanpypi
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/env python2
+> +#!/usr/bin/env python
+>  """
+>
+>  Utility for building Buildroot packages for existing PyPI packages
+> --
+> 2.11.0
+>
