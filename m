@@ -1,164 +1,159 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 1 Apr 2018 08:06:37 +0200
-Subject: [Buildroot] [git commit] boot/*/Config.in: re-wrap help text
-Message-ID: <20180401060642.A84D87FC5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/*/Config.in: fix attributes order
+Message-ID: <20180401060642.8F0FA814F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f65a435e4595f1f6c9a1ff2715d2241d20f9213b
+commit: https://git.buildroot.net/buildroot/commit/?id=f96b4b9e5716a3ebbcaa239020aabc865603746b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... to follow the convention <tab><2 spaces><62 chars>.
+... to follow the convention: type, default, depends on, select, help.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/at91bootstrap/Config.in  |  6 ++++--
- boot/at91bootstrap3/Config.in | 10 ++++++----
- boot/uboot/Config.in          | 43 ++++++++++++++++++++++---------------------
- 3 files changed, 32 insertions(+), 27 deletions(-)
+ boot/at91bootstrap/Config.in     |  2 +-
+ boot/at91bootstrap3/Config.in    |  2 +-
+ boot/at91dataflashboot/Config.in |  2 +-
+ boot/lpc32xxcdl/Config.in        |  2 +-
+ boot/mxs-bootlets/Config.in      |  8 ++++----
+ boot/uboot/Config.in             | 12 ++++++------
+ 6 files changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 96cfdbc7e9..0f6430fd8d 100644
+index 57fdeda946..96cfdbc7e9 100644
 --- a/boot/at91bootstrap/Config.in
 +++ b/boot/at91bootstrap/Config.in
-@@ -4,9 +4,11 @@ config BR2_TARGET_AT91BOOTSTRAP
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_AT91BOOTSTRAP
+-	depends on BR2_arm926t
+ 	bool "AT91 Bootstrap"
++	depends on BR2_arm926t
  	help
  	  AT91Bootstrap is a first level bootloader for the Atmel AT91
  	  devices. It integrates algorithms for:
--	  - Device initialization such as clock configuration, PIO settings...
-+	  - Device initialization such as clock configuration, PIO
-+	    settings...
- 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
--	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
-+	  - Physical media algorithm such as DataFlash, NandFlash, NOR
-+	    Flash...
- 
- if	BR2_TARGET_AT91BOOTSTRAP
- 
 diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index bdc1e775a8..614363c9a6 100644
+index 237deb929c..bdc1e775a8 100644
 --- a/boot/at91bootstrap3/Config.in
 +++ b/boot/at91bootstrap3/Config.in
-@@ -4,9 +4,11 @@ config BR2_TARGET_AT91BOOTSTRAP3
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_AT91BOOTSTRAP3
+-	depends on BR2_arm926t || BR2_cortex_a5
+ 	bool "AT91 Bootstrap 3"
++	depends on BR2_arm926t || BR2_cortex_a5
  	help
  	  AT91Bootstrap is a first level bootloader for the Atmel AT91
  	  devices. It integrates algorithms for:
--	  - Device initialization such as clock configuration, PIO settings...
-+	  - Device initialization such as clock configuration, PIO
-+	    settings...
- 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
--	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
-+	  - Physical media algorithm such as DataFlash, NandFlash, NOR
-+	    Flash...
+diff --git a/boot/at91dataflashboot/Config.in b/boot/at91dataflashboot/Config.in
+index 80b57a4ad0..4055f96410 100644
+--- a/boot/at91dataflashboot/Config.in
++++ b/boot/at91dataflashboot/Config.in
+@@ -1,3 +1,3 @@
+ config BR2_TARGET_AT91DATAFLASHBOOT
+-	depends on BR2_arm926t
+ 	bool "AT91 DataFlashBoot"
++	depends on BR2_arm926t
+diff --git a/boot/lpc32xxcdl/Config.in b/boot/lpc32xxcdl/Config.in
+index ce7589c35c..97137aa7d4 100644
+--- a/boot/lpc32xxcdl/Config.in
++++ b/boot/lpc32xxcdl/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_LPC32XXCDL
+-	depends on BR2_arm926t
+ 	bool "LPC32XX CDL (kickstart and S1L)"
++	depends on BR2_arm926t
  
- if BR2_TARGET_AT91BOOTSTRAP3
+ if BR2_TARGET_LPC32XXCDL
  
-@@ -20,8 +22,8 @@ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
- 	help
--	  This option allows Buildroot to get the AT91 Bootstrap 3 source
--	  code from a Git repository.
-+	  This option allows Buildroot to get the AT91 Bootstrap 3
-+	  source code from a Git repository.
+diff --git a/boot/mxs-bootlets/Config.in b/boot/mxs-bootlets/Config.in
+index 4bb07a06f5..b3e392afa8 100644
+--- a/boot/mxs-bootlets/Config.in
++++ b/boot/mxs-bootlets/Config.in
+@@ -24,8 +24,8 @@ config BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT
+ endchoice
+ 
+ config BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL_URL
+-	depends on BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL
+ 	string "URL of custom bootlets tarball"
++	depends on BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL
+ 
+ if BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT
+ 
+@@ -43,16 +43,16 @@ choice
+ 	  Select which bootstream to generate
+ 
+ config BR2_TARGET_MXS_BOOTLETS_BAREBOX
+-	depends on BR2_TARGET_BAREBOX
+ 	bool "Barebox Bootloader"
++	depends on BR2_TARGET_BAREBOX
+ 
+ config BR2_TARGET_MXS_BOOTLETS_LINUX
+-	depends on BR2_LINUX_KERNEL
+ 	bool "Linux Kernel"
++	depends on BR2_LINUX_KERNEL
+ 
+ config BR2_TARGET_MXS_BOOTLETS_UBOOT
+-	depends on BR2_TARGET_UBOOT
+ 	bool "U-boot bootloader"
++	depends on BR2_TARGET_UBOOT
  
  endchoice
  
 diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index d96e7f687f..19cf12a073 100644
+index 264f343767..d96e7f687f 100644
 --- a/boot/uboot/Config.in
 +++ b/boot/uboot/Config.in
-@@ -11,14 +11,14 @@ choice
- config BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- 	bool "Legacy"
+@@ -199,23 +199,23 @@ config BR2_TARGET_UBOOT_FORMAT_NAND_BIN
+ 	bool "u-boot-nand.bin"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_KWB
+-	depends on BR2_arm
+ 	bool "u-boot.kwb (Marvell)"
++	depends on BR2_arm
+ 
+ config BR2_TARGET_UBOOT_FORMAT_LDR
+-	depends on BR2_bfin
+ 	bool "u-boot.ldr"
++	depends on BR2_bfin
+ 
+ config BR2_TARGET_UBOOT_FORMAT_ELF
+ 	bool "u-boot.elf"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_SB
+-	depends on BR2_arm
+ 	bool "u-boot.sb (Freescale i.MX28)"
++	depends on BR2_arm
+ 
+ config BR2_TARGET_UBOOT_FORMAT_SD
+-	depends on BR2_arm
+ 	bool "u-boot.sd (Freescale i.MX28)"
++	depends on BR2_arm
  	help
--	  Select this option if you use an old U-Boot (older than 2015.04),
--	  so that we use the old build system.
-+	  Select this option if you use an old U-Boot (older than
-+	  2015.04), so that we use the old build system.
- 
- config BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
- 	bool "Kconfig"
- 	help
--	  Select this option if you use a recent U-Boot version (2015.04 or
--	  newer), so that we use the Kconfig build system.
-+	  Select this option if you use a recent U-Boot version (2015.04
-+	  or newer), so that we use the Kconfig build system.
- 
- endchoice
- 
-@@ -27,9 +27,9 @@ config BR2_TARGET_UBOOT_BOARDNAME
- 	string "U-Boot board name"
- 	help
- 	  One of U-Boot supported boards to be built.
--	  This will be suffixed with _config to meet U-Boot standard naming.
--	  See boards.cfg in U-Boot source code for the list of available
--	  configurations.
-+	  This will be suffixed with _config to meet U-Boot standard
-+	  naming. See boards.cfg in U-Boot source code for the list of
-+	  available configurations.
- endif
- 
- choice
-@@ -79,8 +79,8 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
- 		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
- 	help
--	  Revision to use in the typical format used by Git/Mercurial/Subversion
--	  E.G. a sha id, a tag, branch, ..
-+	  Revision to use in the typical format used by
-+	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
- 
- endif
- 
-@@ -229,25 +229,25 @@ config BR2_TARGET_UBOOT_FORMAT_NAND
- 	bool "u-boot.nand (Freescale i.MX28)"
- 	depends on BR2_arm
- 	help
--	  This is Freescale i.MX28 BootStream format (.sb), with a header
--	  for booting from a NAND flash.
-+	  This is Freescale i.MX28 BootStream format (.sb), with a
-+	  header for booting from a NAND flash.
- 
- 	  U-boot includes an mxsboot tool to generate this format,
- 	  starting from 2011.12.
- 
--	  There are two possibilities when preparing an image writable to
--	  NAND flash:
--	  1) The NAND was not written at all yet or the BCB (Boot Control
--	  Blocks) is broken. In this case, the NAND image 'u-boot.nand'
--	  needs to written.
-+	  There are two possibilities when preparing an image writable
-+	  to NAND flash:
-+	  1) The NAND was not written at all yet or the BCB (Boot
-+	  Control Blocks) is broken. In this case, the NAND image
-+	  'u-boot.nand' needs to written.
- 	  2) The NAND flash was already written with a good BCB. This
- 	  applies after 'u-boot.nand' was correctly written. There is no
--	  need to write the BCB again. In this case, the bootloader can be
--	  upgraded by writing 'u-boot.sb'.
-+	  need to write the BCB again. In this case, the bootloader can
-+	  be upgraded by writing 'u-boot.sb'.
- 
- 	  To satisfy both cases, the 'u-boot.nand' image obtained from
--	  mxsboot as well as the U-Boot make target 'u-boot.sb' are copied
--	  to the binaries directory.
-+	  mxsboot as well as the U-Boot make target 'u-boot.sb' are
-+	  copied to the binaries directory.
- 
+ 	  This is Freescale i.MX28 SB format, with a header for booting
+ 	  from an SD card.
+@@ -226,8 +226,8 @@ config BR2_TARGET_UBOOT_FORMAT_SD
  	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
  
-@@ -295,7 +295,8 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
- 	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM
+ config BR2_TARGET_UBOOT_FORMAT_NAND
+-	depends on BR2_arm
+ 	bool "u-boot.nand (Freescale i.MX28)"
++	depends on BR2_arm
  	help
- 	  In case the U-Boot binary for the target platform is not among
--	  the default names, one or more custom names can be listed here.
-+	  the default names, one or more custom names can be listed
-+	  here.
- 	  Use space to separate multiple names.
- 	  Example:
- 	  u-boot_magic.bin
+ 	  This is Freescale i.MX28 BootStream format (.sb), with a header
+ 	  for booting from a NAND flash.
+@@ -303,10 +303,10 @@ config BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME
+ endmenu
+ 
+ config BR2_TARGET_UBOOT_OMAP_IFT
++	bool "produce a .ift signed image (OMAP)"
+ 	depends on BR2_TARGET_UBOOT_FORMAT_BIN
+ 	depends on BR2_arm || BR2_armeb
+ 	select BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
+-	bool "produce a .ift signed image (OMAP)"
+ 	help
+ 	  Use gpsign to produce an image of u-boot.bin signed with
+ 	  a Configuration Header for booting on OMAP processors.
