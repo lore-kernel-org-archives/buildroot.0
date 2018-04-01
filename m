@@ -1,55 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 10:16:35 +0200
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: extend check-package test
- to Config.* files
-Message-ID: <20180401081638.B821C827DF@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 10:16:53 +0200
+Subject: [Buildroot] [PATCH v2 35/37] scanpypi: generate help text
+ compliant to check-package
+In-Reply-To: <20180401050850.5701-36-ricardo.martincoski@gmail.com>
+References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
+ <20180401050850.5701-36-ricardo.martincoski@gmail.com>
+Message-ID: <20180401101653.0d9fd9b6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b757f9aca356824e47ce2de27deb91b1992c0313
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Now that all issues in Config.in files have been fixed, let's try to
-make sure we don't introduce new ones by checking regularly these files
-issues in Gitlab CI.
+On Sun,  1 Apr 2018 02:08:48 -0300, Ricardo Martincoski wrote:
+> Each line must fit in <tab><2 spaces><62 chars>.
+> The default width for textwrap.wrap() is 70, so explicit set it to 62.
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> Changes v1 -> v2:
+>   - no changes
+> ---
+>  utils/scanpypi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .gitlab-ci.yml    | 3 ++-
- .gitlab-ci.yml.in | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index fd1aeb3408..fcb53d6451 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -43,7 +43,8 @@ check-flake8:
- 
- check-package:
-     script:
--        - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
-+        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
-+            -exec ./utils/check-package {} +
- 
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index bffcb02be1..fb2650c5ce 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -43,7 +43,8 @@ check-flake8:
- 
- check-package:
-     script:
--        - find . -type f \( -name '*.mk' -o -name '*.hash' \) -exec ./utils/check-package {} +
-+        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
-+            -exec ./utils/check-package {} +
- 
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
