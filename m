@@ -1,123 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 09:08:47 +0200
-Subject: [Buildroot] [git commit] toolchain/*/Config.in: re-wrap help text
-Message-ID: <20180401070908.09CB4814E6@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 09:09:01 +0200
+Subject: [Buildroot] [git commit] check-package: enable for toolchain/
+Message-ID: <20180401070908.15835814E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d4f66f9b95b002310b60d0743c96fb66442e004
+commit: https://git.buildroot.net/buildroot/commit/?id=bfc8dce467bd12e43317d5dd0f180b1bb11c0cc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... to follow the convention <tab><2 spaces><62 chars>.
+The toolchain directory can benefit from this script to prevent common
+mistakes when submitting patches.
+
+In order to accomplish this:
+Do not ignore anymore files from the toolchain/ directory.
+Ignore this symbol:
+ - BR_LIBC: defined by the buildroot toolchain, used by gcc-final.mk.
+
+Ignore toolchain/toolchain-external/pkg-toolchain-external.mk as it
+declares a package infra and not a package itself.
+Ignore toolchain/helpers.mk as it contains only helper functions.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/Config.in                                           | 10 ++++++----
- toolchain/toolchain-external/Config.in                        | 11 ++++++-----
- .../toolchain-external-codescape-img-mips/Config.in           |  6 ++++--
- .../toolchain-external-codescape-mti-mips/Config.in           |  6 ++++--
- 4 files changed, 20 insertions(+), 13 deletions(-)
+ utils/check-package             | 3 +++
+ utils/checkpackagelib/lib_mk.py | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 212fbbd300..b33eaffd52 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -124,7 +124,8 @@ config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY
- 	  The gconv libraries are used to convert between different
- 	  character sets (charsets).
+diff --git a/utils/check-package b/utils/check-package
+index a5f5dc44c0..dd3a4bb7e8 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -52,12 +52,15 @@ DO_CHECK_INTREE = re.compile("|".join([
+     "linux/",
+     "package/",
+     "system/",
++    "toolchain/",
+     ]))
+ DO_NOT_CHECK_INTREE = re.compile("|".join([
+     "boot/barebox/barebox\.mk$",
+     "fs/common\.mk$",
+     "package/doc-asciidoc\.mk$",
+     "package/pkg-\S*\.mk$",
++    "toolchain/helpers\.mk$",
++    "toolchain/toolchain-external/pkg-toolchain-external\.mk$",
+     ]))
  
--	  Say 'y' if you need to store and/or display different charsets.
-+	  Say 'y' if you need to store and/or display different
-+	  charsets.
  
- config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
- 	string "Gconv libraries to copy"
-@@ -162,10 +163,11 @@ config BR2_TARGET_OPTIMIZATION
- config BR2_TARGET_LDFLAGS
- 	string "Target linker options"
- 	help
--	  Extra options to pass to the linker when building for the target.
-+	  Extra options to pass to the linker when building for the
-+	  target.
- 
--	  Note that options with a '$' sign (eg. -Wl,-rpath='$ORIGIN/../lib')
--	  are not supported.
-+	  Note that options with a '$' sign (eg.
-+	  -Wl,-rpath='$ORIGIN/../lib') are not supported.
- 
- config BR2_ECLIPSE_REGISTER
- 	bool "Register toolchain within Eclipse Buildroot plug-in"
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c4063b177b..6759e5cefa 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -53,15 +53,16 @@ choice
- config BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
- 	bool "Toolchain to be downloaded and installed"
- 	help
--	  Select this option if you want Buildroot to download and install the
--	  toolchain. If you have selected a custom toolchain, specify the URL
--	  in BR2_TOOLCHAIN_EXTERNAL_URL.
-+	  Select this option if you want Buildroot to download and
-+	  install the toolchain. If you have selected a custom
-+	  toolchain, specify the URL in BR2_TOOLCHAIN_EXTERNAL_URL.
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED
- 	bool "Pre-installed toolchain"
- 	help
--	  Select this option if you want to use a pre-installed toolchain.
--	  Specify the path to this toolchain in BR2_TOOLCHAIN_EXTERNAL_PATH.
-+	  Select this option if you want to use a pre-installed
-+	  toolchain. Specify the path to this toolchain in
-+	  BR2_TOOLCHAIN_EXTERNAL_PATH.
- 
- endchoice
- 
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-index 8b2eab0ad2..2bfa567672 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-@@ -30,12 +30,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
- 	      Select 'MIPS (little endian)' Target Architecture
- 	      Select 'mips 32r6' Target Architecture Variant
- 	      Enable 'Use soft-float'
--	    - MIPS32r6 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
-+	    - MIPS32r6 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI,
-+	      microMIPS
- 	      Select 'MIPS (little endian)' Target Architecture
- 	      Select 'mips 32r6' Target Architecture Variant
- 	      Disable 'Use soft-float'
- 	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
--	    - MIPS32r6 - Little-Endian, Soft-Float, 2008 NaN, o32 ABI, microMIPS
-+	    - MIPS32r6 - Little-Endian, Soft-Float, 2008 NaN, o32 ABI,
-+	      microMIPS
- 	      Select 'MIPS (little endian)' Target Architecture
- 	      Select 'mips 32r6' Target Architecture Variant
- 	      Enable 'Use soft-float'
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-index db191fd1be..5d466a58f4 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-@@ -41,12 +41,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
- 	      Select 'MIPS (little endian)' Target Architecture
- 	      Select 'mips 32r2' Target Architecture Variant
- 	      Enable 'Use soft-float'
--	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI, microMIPS
-+	    - MIPS32r2 - Little-Endian, Hard-Float, 2008 NaN, o32 ABI,
-+	      microMIPS
- 	      Select 'MIPS (little endian)' Target Architecture
- 	      Select 'mips 32r2' Target Architecture Variant
- 	      Enable 'Use soft-float'
- 	      Set BR2_TARGET_OPTIMIZATION to '-mmicromips'
--	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI, microMIPS
-+	    - MIPS32r2 - Little-Endian, Soft-Float, Legacy NaN, o32 ABI,
-+	      microMIPS
- 	      Select 'MIPS (little endian)' Target Architecture
- 	      Select 'mips 32r2' Target Architecture Variant
- 	      Disable 'Use soft-float'
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index 9989556e95..86e9aa2d97 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -159,6 +159,7 @@ class TypoInPackageVariable(_CheckFunction):
+         "ACLOCAL_DIR",
+         "ACLOCAL_HOST_DIR",
+         "BR_CCACHE_INITIAL_SETUP",
++        "BR_LIBC",
+         "BR_NO_CHECK_HASH_FOR",
+         "LINUX_EXTENSIONS",
+         "LINUX_POST_PATCH_HOOKS",
