@@ -1,63 +1,88 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 1 Apr 2018 21:03:50 +0200
-Subject: [Buildroot] [git commit] sqlite: add option for meta-data about
- tables/queries
-Message-ID: <20180401190354.C996883666@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 21:07:16 +0200
+Subject: [Buildroot] [PATCH v2,1/1] i2pd: new package
+In-Reply-To: <20180327212401.5173-1-fontaine.fabrice@gmail.com>
+References: <20180327212401.5173-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180401210716.6170808e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b02fed5a00f02ed303133d975ad9fcaf2d95b73
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Enables SQLITE_ENABLE_COLUMN_METADATA to gain access to:
+On Tue, 27 Mar 2018 23:24:01 +0200, Fabrice Fontaine wrote:
+> i2pd (I2P Daemon) is a full-featured C++ implementation of I2P
+> client.
+> 
+> I2P (Invisible Internet Protocol) is a universal anonymous
+> network layer.
+> All communications over I2P are anonymous and end-to-end
+> encrypted, participants don't reveal their real IP addresses.
+> 
+> http://i2pd.website
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  - sqlite3_column_database_name()
-  - sqlite3_column_database_name16()
-  - sqlite3_column_table_name()
-  - sqlite3_column_table_name16()
-  - sqlite3_column_origin_name()
-  - sqlite3_column_origin_name16()
+I've applied, after fixing a few things.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/sqlite/Config.in | 7 +++++++
- package/sqlite/sqlite.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+> +comment "i2pd needs a toolchain w/ C++, NPTL, wchar"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+> +	depends on !BR2_INSTALL_LIBSTDCPP || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
+> +
+> +comment "i2pd needs exception_ptr"
 
-diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-index ec7396860c..517af50e67 100644
---- a/package/sqlite/Config.in
-+++ b/package/sqlite/Config.in
-@@ -16,6 +16,13 @@ config BR2_PACKAGE_SQLITE_STAT3
- 	  query planner that can help SQLite to choose a better query
- 	  plan under certain situations.
- 
-+config BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA
-+	bool "Enable convenient access to meta-data about tables and queries"
-+	help
-+	  When this option is defined there are some additional APIs
-+	  enabled to acces meta-data about tables and queries (see
-+	  https://sqlite.org/compile.html).
-+
- config BR2_PACKAGE_SQLITE_ENABLE_FTS3
- 	bool "Enable version 3 of the full-text search engine"
- 	help
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index e8ce92df56..d0030d43ab 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -15,6 +15,10 @@ ifeq ($(BR2_PACKAGE_SQLITE_STAT3),y)
- SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT3
- endif
- 
-+ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA),y)
-+SQLITE_CFLAGS += -DSQLITE_ENABLE_COLUMN_METADATA
-+endif
-+
- ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_FTS3),y)
- SQLITE_CFLAGS += -DSQLITE_ENABLE_FTS3
- endif
+I've propagated the BR2_USE_MMU and BR2_TOOLCHAIN_HAS_ATOMIC
+dependencies here so that this comment doesn't show up in situation
+where anyway the package cannot be enabled.
+
+> +	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+> diff --git a/package/i2pd/S99i2pd b/package/i2pd/S99i2pd
+> new file mode 100644
+> index 0000000000..32775cdb97
+> --- /dev/null
+> +++ b/package/i2pd/S99i2pd
+> @@ -0,0 +1,38 @@
+> +#!/bin/sh
+> +
+> +NAME=i2pd
+> +PIDFILE=/var/run/$NAME.pid
+> +DAEMON=/usr/bin/$NAME
+> +DAEMON_ARGS="--conf=/etc/i2pd/i2pd.conf --tunconf=/etc/i2pd/tunnels.conf --pidfile=/var/run/i2pd.pid --logfile=/var/log/i2pd.log --daemon --service"
+
+I haven't implemented that, but it would be nice to make this
+configurable through a file in /etc/default that would be sourced here.
+See other init scripts in Buildroot for examples.
+
+> +# The following CMake variable disables a TRY_RUN call in the -pthread
+> +# test which is not allowed when cross-compiling.
+> +I2PD_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+
+As Romain reported, this causes a warning with recent versions of
+CMake. This is only needed folder older (< 3.10) version of CMake. I've
+added a comment that explains this, so that we are not surprised in the
+future by this assignment.
+
+> +define I2PD_REMOVE_SOURCE_FILES
+> +	rm -f $(TARGET_DIR)/usr/LICENSE
+> +	rm -rf $(TARGET_DIR)/usr/src
+> +endef
+> +
+> +I2PD_POST_INSTALL_TARGET_HOOKS += \
+> +	I2PD_INSTALL_CONFIGURATION_FILES \
+> +	I2PD_REMOVE_SOURCE_FILES
+
+As Romain pointed out it's a bit not nice to remove /usr/src entirely
+here. So instead, I've added a patch that drops the logic in
+CMakeLists.txt that was installing the LICENSE file and the source code.
+
+Applied with those changes. Thanks!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
