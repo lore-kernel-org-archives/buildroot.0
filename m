@@ -1,56 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 18:43:44 +0200
-Subject: [Buildroot] [PATCH v2 2/2] gst1-interpipe: new package
-In-Reply-To: <20171027171622.16050-2-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 27 Oct 2017 19:16:22 +0200")
-References: <20171027171622.16050-1-ps.report@gmx.net>
- <20171027171622.16050-2-ps.report@gmx.net>
-Message-ID: <87tvsuri67.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 18:44:02 +0200
+Subject: [Buildroot] [PATCH v5] package/snort: new package
+In-Reply-To: <20180401151636.12399-1-romain.naour@gmail.com>
+References: <20180401151636.12399-1-romain.naour@gmail.com>
+Message-ID: <20180401184402.2a19952e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Hello,
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- > Changes v1 -> v2:
- >   - add hash for the license file
- > ---
- >  package/gstreamer1/Config.in                       |  1 +
- >  package/gstreamer1/gst1-interpipe/Config.in        | 10 +++++++++
- >  .../gstreamer1/gst1-interpipe/gst1-interpipe.hash  |  5 +++++
- >  .../gstreamer1/gst1-interpipe/gst1-interpipe.mk    | 24 ++++++++++++++++++++++
- >  4 files changed, 40 insertions(+)
- >  create mode 100644 package/gstreamer1/gst1-interpipe/Config.in
- >  create mode 100644 package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
- >  create mode 100644 package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+On Sun,  1 Apr 2018 17:16:36 +0200, Romain Naour wrote:
+> From: Sergio Prado <sergio.prado@e-labworks.com>
+> 
+> Tested on Beaglebone Black.
+> 
+> Build-tested with test-pkg.
+> 
+> Patch to fix cross-compilation errors submitted upstream [1].
+> 
+> [1] https://lists.snort.org/pipermail/snort-devel/2018-January/011025.html
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> [Romain:
+>  - split patch by build issues
+>  - convert AC_RUN_IFELSE to AC_CHECK_MEMBERS (ThomasP)
+>  - convert AC_RUN_IFELSE to AC_COMPILE_IFELSE (ThomasP)
+>  - remove most make variable from SNORT_CONF_ENV
+>  - remove SNORT_SOURCE default value]
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Sergio, snort install some shared libraries and a snort.pc file.
+> Does it make sens to add "SNORT_INSTALL_STAGING = YES"?
 
- > diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
- > index aef75b55bf..ae7b982bf3 100644
- > --- a/package/gstreamer1/Config.in
- > +++ b/package/gstreamer1/Config.in
- > @@ -7,6 +7,7 @@ source "package/gstreamer1/gst1-plugins-good/Config.in"
- >  source "package/gstreamer1/gst1-plugins-bad/Config.in"
- >  source "package/gstreamer1/gst1-plugins-ugly/Config.in"
- >  source "package/gstreamer1/gst1-imx/Config.in"
- > +source "package/gstreamer1/gst1-interpipe/Config.in"
- >  source "package/gstreamer1/gst1-libav/Config.in"
- >  source "package/gstreamer1/gst1-rtsp-server/Config.in"
- >  source "package/gstreamer1/gst1-validate/Config.in"
- > diff --git a/package/gstreamer1/gst1-interpipe/Config.in b/package/gstreamer1/gst1-interpipe/Config.in
- > new file mode 100644
- > index 0000000000..0a169e8d4f
- > --- /dev/null
- > +++ b/package/gstreamer1/gst1-interpipe/Config.in
- > @@ -0,0 +1,10 @@
- > +menuconfig BR2_PACKAGE_GST1_INTERPIPE
- > +	bool "gst1-interpipe"
+Applied to master, thanks Romain for finishing this patch!
 
-It is a bit strange to use a menuconfig when there aren't any sub
-options, so I've changed this to a normal config and applied, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
