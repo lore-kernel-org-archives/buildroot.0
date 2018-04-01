@@ -1,93 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Apr 2018 16:18:39 +0200
-Subject: [Buildroot] [v3 10/13] package: share downloaded files for big
- packages
-In-Reply-To: <20180331142407.9522-10-maxime.hadjinlian@gmail.com>
-References: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
- <20180331142407.9522-10-maxime.hadjinlian@gmail.com>
-Message-ID: <20180401141839.GG2613@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 1 Apr 2018 15:02:53 +0200
+Subject: [Buildroot] [git commit] support/download: keep files downloaded
+ without hash
+Message-ID: <20180401141924.AE825813FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf9bf7d28b8a6c55e639b17c90f35ea11cae88ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-03-31 16:24 +0200, Maxime Hadjinlian spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+In the situation where the hash is missing from the hash file, the
+dl-wrapper downloads the file again and again until the developer
+specifies the hash to complete the download step.
 
-You also modified the patch, and you carried it, so you should also have
-added your own SoB line. ;-)
+To avoid this situation, the freshly-downloaded file is not removed
+anymore after a successful download.
 
-I would also note that I only cjhanged those three packages, just as an
-example and tentative for the _SAME_SOURCE_AS feature. There might be
-other packages that share the same sources, and we'd need to convert
-them of the _SAME_SOURCE_AS feature is accepted.
+After this change, the behaviour is as follows:
 
-Regards,
-Yann E. MORIN.
+- Hash file doesn't exist, or file is in BR_NO_CHECK_HASH_FOR
+  => always succeeds.
 
-> ---
->  package/gcc/gcc-initial/gcc-initial.mk   | 5 +++++
->  package/linux-headers/linux-headers.mk   | 3 +++
->  package/mesa3d-headers/mesa3d-headers.mk | 1 +
->  3 files changed, 9 insertions(+)
-> 
-> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-> index c476b2faeb..07da50afa8 100644
-> --- a/package/gcc/gcc-initial/gcc-initial.mk
-> +++ b/package/gcc/gcc-initial/gcc-initial.mk
-> @@ -8,6 +8,11 @@ GCC_INITIAL_VERSION = $(GCC_VERSION)
->  GCC_INITIAL_SITE = $(GCC_SITE)
->  GCC_INITIAL_SOURCE = $(GCC_SOURCE)
->  
-> +# We do not have a 'gcc' package per-se; we only have two incarnations,
-> +# gcc-initial and gcc-final. gcc-initial is just am internal step that
-> +# users should not care about, while gcc-final is the one they shall see.
-> +HOST_GCC_INITIAL_SAME_SOURCE_AS = host-gcc-final
-> +
->  HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
->  
->  HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index f1e3790608..6f4071c61a 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -82,6 +82,9 @@ endif
->  
->  endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
->  
-> +# linux-headers really is the same as the linux package
-> +LINUX_HEADERS_SAME_SOURCE_AS = linux
-> +
->  LINUX_HEADERS_LICENSE = GPL-2.0
->  LINUX_HEADERS_LICENSE_FILES = COPYING
->  
-> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-> index b48d965d8a..39a25270db 100644
-> --- a/package/mesa3d-headers/mesa3d-headers.mk
-> +++ b/package/mesa3d-headers/mesa3d-headers.mk
-> @@ -15,6 +15,7 @@ endif
->  MESA3D_HEADERS_VERSION = 18.0.0
->  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
->  MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
-> +MESA3D_HEADERS_SAME_SOURCE_AS = mesa3d
->  MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
->  MESA3D_HEADERS_LICENSE_FILES = docs/license.html
->  
-> -- 
-> 2.16.2
-> 
+- Hash file exists, but file is not present
+  => file is NOT removed, build is terminated immediately (i.e.
+     secondary site is not tried).
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+- Hash file exists, file is present, but hash mismatch
+  => file is removed, secondary site is tried.
+  => If all primary/secondary site downloads or hash checks fail, the
+     build is terminated.
+
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+[Arnout: extend commit log]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ support/download/dl-wrapper | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index f944b71db5..b018819833 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -21,7 +21,7 @@ set -e
+ 
+ main() {
+     local OPT OPTARG
+-    local backend output hfile recurse quiet
++    local backend output hfile recurse quiet rc
+ 
+     # Parse our options; anything after '--' is for the backend
+     while getopts :hb:o:H:rq OPT; do
+@@ -93,9 +93,16 @@ main() {
+ 
+     # Check if the downloaded file is sane, and matches the stored hashes
+     # for that file
+-    if ! support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
+-        rm -rf "${tmpd}"
+-        exit 1
++    if support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
++        rc=0
++    else
++        if [ ${?} -ne 3 ]; then
++            rm -rf "${tmpd}"
++            exit 1
++        fi
++
++        # the hash file exists and there was no hash to check the file against
++        rc=1
+     fi
+ 
+     # tmp_output is in the same directory as the final output, so we can
+@@ -141,6 +148,8 @@ main() {
+         rm -f "${tmp_output}"
+         exit 1
+     fi
++
++    return ${rc}
+ }
+ 
+ help() {
