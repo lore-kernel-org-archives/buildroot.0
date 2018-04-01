@@ -1,26 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 01 Apr 2018 11:56:05 +0000
-Subject: [Buildroot] [Bug 10096] SH4 toolchain does not build Linux kernel
- magicpanelr2_defconfig
-In-Reply-To: <bug-10096-163@https.bugs.busybox.net/>
-References: <bug-10096-163@https.bugs.busybox.net/>
-Message-ID: <bug-10096-163-64XXZ8zv1I@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 13:58:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freetype: bump version to 2.9
+In-Reply-To: <20180401074822.15607-1-bernd.kuhls@t-online.de>
+References: <20180401074822.15607-1-bernd.kuhls@t-online.de>
+Message-ID: <20180401135815.7a389997@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10096
+Hello,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-This problem can be reproduced with the following defconfig:
+On Sun,  1 Apr 2018 09:48:22 +0200, Bernd Kuhls wrote:
+> Changelog:
+> https://sourceforge.net/projects/freetype/files/freetype2/2.9/
+> 
+> Upstream changed its project URL to https in docs/FTL.TXT. We do the
+> same in Config.in and update the license hash for docs/FTL.TXT.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/freetype/Config.in     |  2 +-
+>  package/freetype/freetype.hash | 10 +++++-----
+>  package/freetype/freetype.mk   |  2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
-BR2_sh=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_DEFCONFIG="magicpanelr2"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+Applied to master, thanks.
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
