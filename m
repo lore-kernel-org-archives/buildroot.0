@@ -1,40 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 21:10:41 +0200
-Subject: [Buildroot] [PATCH-next] poco: add new options
-In-Reply-To: <1518701555-16065-1-git-send-email-yegorslists@googlemail.com>
-References: <1518701555-16065-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20180401211041.5aa76982@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun,  1 Apr 2018 21:14:49 +0200
+Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-depends: add --quiet
+ option
+In-Reply-To: <20180401191449.802-1-peter@korsgaard.com>
+References: <20180401191449.802-1-peter@korsgaard.com>
+Message-ID: <20180401191449.802-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This will be useful for the upcoming recursive show-depends and
+show-rdepends features.
 
-On Thu, 15 Feb 2018 14:32:35 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> New options allow to build following components:
-> 
-> * Redis
-> * MongoDB
-> * CppParser
-> * PDF
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/poco/Config.in | 17 +++++++++++++++++
->  package/poco/poco.mk   |  5 +++++
->  2 files changed, 22 insertions(+)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/graph-depends | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Applied to master after extending the commit title a bit, and adding
-some details about backward compatibility concerns in the commit log.
-
-Thanks!
-
-Thomas
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 17bfaa0cf5..4ec0e46f7b 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -312,6 +312,8 @@ def parse_args():
+                         help="Draw direct dependencies (the default)")
+     parser.add_argument("--reverse", dest="direct", action='store_false',
+                         help="Draw reverse dependencies")
++    parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
++                        help="Quiet")
+     return parser.parse_args()
+ 
+ 
+@@ -321,7 +323,7 @@ def main():
+     check_only = args.check_only
+ 
+     logging.basicConfig(stream=sys.stderr, format='%(message)s',
+-                        level=logging.INFO)
++                        level=logging.WARNING if args.quiet else logging.INFO)
+ 
+     if args.outfile is None:
+         outfile = sys.stdout
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
