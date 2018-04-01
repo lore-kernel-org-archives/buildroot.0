@@ -1,97 +1,83 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 1 Apr 2018 10:00:42 -0500
-Subject: [Buildroot] [PATCH] ppc64 e5500 arch: new qemu target
-In-Reply-To: <20180401164047.68f5ed75@windsurf>
-References: <1522592130-25157-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20180401164047.68f5ed75@windsurf>
-Message-ID: <CANQCQpYkjKxsAPVE5mFe3rWPTctNFd4bDHS_RxN_nCdwm5N=cg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 1 Apr 2018 16:39:28 +0200
+Subject: [Buildroot] [git commit] package/pkg-golang: drop the fixed
+ <pkg>_BINDIR variable
+Message-ID: <20180401150524.3C28082CC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=888404d7fb940afef28ac368a84117da987ea59c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Apr 1, 2018 at 9:40 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> Commit title should be:
->
->         configs/qemu_ppc64_e5500: new defconfig
->
-> On Sun,  1 Apr 2018 09:15:30 -0500, Matt Weber wrote:
->
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index ac7a47f..dd7e389 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -1165,6 +1165,7 @@ F:      package/ts4900-fpga/
->>  N:   Matt Weber <matthew.weber@rockwellcollins.com>
->>  F:   board/freescale/p*
->>  F:   board/freescale/t*
->> +F:   board/qemu/ppc64-e5500/
->>  F:   configs/freescale_p*
->>  F:   configs/freescale_t*
->
-> As you mentioned, missing entry for the defconfig file itself.
+Now that <pkg>_BINDIR is always "bin", having it as a package variable
+doesn't make much sense, so get rid of this variable completely, and
+use "bin".
 
-Yep.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-proxy/docker-proxy.mk | 2 +-
+ package/flannel/flannel.mk           | 2 +-
+ package/pkg-golang.mk                | 5 ++---
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
->
->>  F:   package/argp-standalone/
->> diff --git a/board/qemu/ppc64-e5500/linux.fragment b/board/qemu/ppc64-e5500/linux.fragment
->> new file mode 100644
->> index 0000000..81993d2
->> --- /dev/null
->> +++ b/board/qemu/ppc64-e5500/linux.fragment
->> @@ -0,0 +1,2 @@
->> +# Enables generic e500 arch support for QEMU
->> +CONFIG_PPC_QEMU_E500=y
->
-> E500, while it's E5500 ?
-
-e5500 is a variant of e500 base architecture.  I can add to my comment
-to express that.
-
->
->> diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
->> new file mode 100644
->> index 0000000..55c5644
->> --- /dev/null
->> +++ b/configs/qemu_ppc64_e5500_defconfig
->> @@ -0,0 +1,18 @@
->> +# Architecture
->> +BR2_powerpc64=y
->> +BR2_powerpc_e5500=y
->
-> You need an option here to specify the version of the kernel headers
-> being used.
-
-Ok.
-
->
->> +
->> +# Serial port config
->> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
->> +
->> +# Kernel
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
->> +BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
->> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
->> +
->> +# Filesystem
->> +BR2_TARGET_ROOTFS_CPIO=y
->> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
->
-> The Qemu emulation doesn't support emulating some hard drive, to use a
-> more regular ext4 setup ?
-
-I debated on this.  I'll have to add more support to the kernel
-fragment to enable the options so I can mount it.  I'm good either
-way.
-
-Matt
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
+index a90271fc35..dfa9d4347d 100644
+--- a/package/docker-proxy/docker-proxy.mk
++++ b/package/docker-proxy/docker-proxy.mk
+@@ -17,7 +17,7 @@ DOCKER_PROXY_WORKSPACE = gopath
+ DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
+ 
+ define DOCKER_PROXY_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_PROXY_BINDIR)/proxy $(TARGET_DIR)/usr/bin/docker-proxy
++	$(INSTALL) -D -m 0755 $(@D)/bin/proxy $(TARGET_DIR)/usr/bin/docker-proxy
+ endef
+ 
+ $(eval $(golang-package))
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index 07d5d0dfd6..d00d2df92c 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -15,7 +15,7 @@ FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION
+ 
+ # Install flannel to its well known location.
+ define FLANNEL_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/$(FLANNEL_BINDIR)/flannel $(TARGET_DIR)/opt/bin/flanneld
++	$(INSTALL) -D -m 0755 $(@D)/bin/flannel $(TARGET_DIR)/opt/bin/flanneld
+ 	$(INSTALL) -D -m 0755 $(@D)/dist/mk-docker-opts.sh $(TARGET_DIR)/opt/bin/mk-docker-opts.sh
+ endef
+ 
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 342d17fbd9..f23bda390d 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -70,7 +70,6 @@ ifeq ($$($(2)_BUILD_TARGETS),.)
+ $(2)_BIN_NAME ?= $(1)
+ endif
+ 
+-$(2)_BINDIR = bin
+ $(2)_INSTALL_BINS ?= $(1)
+ 
+ # Source files in Go should be extracted in a precise folder in the hierarchy
+@@ -103,7 +102,7 @@ define $(2)_BUILD_CMDS
+ 			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+-			-o $$(@D)/$$($(2)_BINDIR)/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
++			-o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
+ 			./$$(d)
+ 	)
+ endef
+@@ -114,7 +113,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	$$(foreach d,$$($(2)_INSTALL_BINS),\
+-		$(INSTALL) -D -m 0755 $$(@D)/$$($(2)_BINDIR)/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
+ 	)
+ endef
+ endif
