@@ -1,168 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Apr 2018 15:58:08 +0200
-Subject: [Buildroot] [PATCH 1/1] Remove Kodi ADSP packages
-Message-ID: <20180401135808.8643-1-bernd.kuhls@t-online.de>
+Date: Sun,  1 Apr 2018 16:00:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: bump
+ version
+Message-ID: <20180401140045.15854-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-They are unmaintained and not in a working state, for details see
-Kodi PR 13723.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                                          | 15 +++++++++++++++
- package/kodi-adsp-basic/Config.in                         | 12 ------------
- package/kodi-adsp-basic/kodi-adsp-basic.hash              |  2 --
- package/kodi-adsp-basic/kodi-adsp-basic.mk                | 15 ---------------
- package/kodi-adsp-freesurround/Config.in                  | 11 -----------
- .../kodi-adsp-freesurround/kodi-adsp-freesurround.hash    |  2 --
- package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk  | 15 ---------------
- package/kodi/Config.in                                    |  5 -----
- 8 files changed, 15 insertions(+), 62 deletions(-)
- delete mode 100644 package/kodi-adsp-basic/Config.in
- delete mode 100644 package/kodi-adsp-basic/kodi-adsp-basic.hash
- delete mode 100644 package/kodi-adsp-basic/kodi-adsp-basic.mk
- delete mode 100644 package/kodi-adsp-freesurround/Config.in
- delete mode 100644 package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
- delete mode 100644 package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index fa083eaf79..2e3b1b6001 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -142,6 +142,21 @@ comment "unpredictable ways.                                 "
- comment "----------------------------------------------------"
- endif
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 78b48c16b6..15ecf494f1 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 572b2e898484a5ada74c4095539cebf43c198a3147f0f24fe350bc79db053695  kodi-inputstream-adaptive-9af21218a87572bd4ab8d8d660c11f6295144f97.tar.gz
++sha256 872a6ffefb90b6201a1e01fe5a52e05877e2040737e052b2f249725b9a8a44ff  kodi-inputstream-adaptive-c51b9a9b58a645f820883e6d99982277fc58aac5.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index f7a4c66e8c..ab810d3248 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -6,7 +6,7 @@
  
-+###############################################################################
-+comment "Legacy options removed in 2018.05"
-+
-+config BR2_PACKAGE_KODI_ADSP_BASIC
-+	bool "kodi-adsp-basic package removed"
-+	select BR2_LEGACY
-+	help
-+	  kodi-adsp-basic is unmaintained
-+
-+config BR2_PACKAGE_KODI_ADSP_FREESURROUND
-+	bool "kodi-adsp-freesurround package removed"
-+	select BR2_LEGACY
-+	help
-+	  kodi-adsp-freesurround is unmaintained
-+
- ###############################################################################
- comment "Legacy options removed in 2018.02"
- 
-diff --git a/package/kodi-adsp-basic/Config.in b/package/kodi-adsp-basic/Config.in
-deleted file mode 100644
-index 87bdd1973c..0000000000
---- a/package/kodi-adsp-basic/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_KODI_ADSP_BASIC
--	bool "kodi-adsp-basic"
--	select BR2_PACKAGE_LIBPLATFORM
--	select BR2_PACKAGE_KODI_PLATFORM
--	help
--	  This add-on contains basic dsp related parts to handle
--	  speaker delays, channel related volume amplification. As
--	  mode it supports a Dolby Pro Logic II compatible
--	  multichannel downmix to stereo, which becomes available if
--	  only 2 channel output on Kodi is selected.
--
--	  https://github.com/kodi-adsp/adsp.basic
-diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.hash b/package/kodi-adsp-basic/kodi-adsp-basic.hash
-deleted file mode 100644
-index 10dd773c1e..0000000000
---- a/package/kodi-adsp-basic/kodi-adsp-basic.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256 d6ef031157ceb825a6e6ba114fb20c622ef7f396ddd17ae8bf1954aab25bc2af  kodi-adsp-basic-2ae604e591346741324663260696cfa231931870.tar.gz
-diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.mk b/package/kodi-adsp-basic/kodi-adsp-basic.mk
-deleted file mode 100644
-index bb114a41ea..0000000000
---- a/package/kodi-adsp-basic/kodi-adsp-basic.mk
-+++ /dev/null
-@@ -1,15 +0,0 @@
--################################################################################
--#
--# kodi-adsp-basic
--#
--################################################################################
--
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_ADSP_BASIC_VERSION = 2ae604e591346741324663260696cfa231931870
--KODI_ADSP_BASIC_SITE = $(call github,kodi-adsp,adsp.basic,$(KODI_ADSP_BASIC_VERSION))
--KODI_ADSP_BASIC_LICENSE = GPL-3.0+
--KODI_ADSP_BASIC_LICENSE_FILES = LICENSE.md
--KODI_ADSP_BASIC_DEPENDENCIES = libplatform kodi-platform
--
--$(eval $(cmake-package))
-diff --git a/package/kodi-adsp-freesurround/Config.in b/package/kodi-adsp-freesurround/Config.in
-deleted file mode 100644
-index 80aadf1d40..0000000000
---- a/package/kodi-adsp-freesurround/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_KODI_ADSP_FREESURROUND
--	bool "kodi-adsp-freesurround"
--	select BR2_PACKAGE_LIBPLATFORM
--	select BR2_PACKAGE_KODI_PLATFORM
--	help
--	  FreeSurround is meant to be the KODI equivalent of your
--	  hi-fi receiver's Dolby ProLogic II button. It's purpose is
--	  to decode surround information from your stereo music and to
--	  produce multichannel output from it.
--
--	  https://github.com/kodi-adsp/adsp.freesurround
-diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
-deleted file mode 100644
-index 2649bbdcbf..0000000000
---- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256 cf6985be6839530027861b54e2146693d05e802363281ef6f8c1f352dbf94b5c  kodi-adsp-freesurround-34f50406bcba22e364711562e5b9205e57ae844b.tar.gz
-diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-deleted file mode 100644
-index 927af74da7..0000000000
---- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-+++ /dev/null
-@@ -1,15 +0,0 @@
--################################################################################
--#
--# kodi-adsp-freesurround
--#
--################################################################################
--
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_ADSP_FREESURROUND_VERSION = 34f50406bcba22e364711562e5b9205e57ae844b
--KODI_ADSP_FREESURROUND_SITE = $(call github,kodi-adsp,adsp.freesurround,$(KODI_ADSP_FREESURROUND_VERSION))
--KODI_ADSP_FREESURROUND_LICENSE = GPL-3.0+
--KODI_ADSP_FREESURROUND_LICENSE_FILES = LICENSE.md
--KODI_ADSP_FREESURROUND_DEPENDENCIES = libplatform kodi-platform
--
--$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 071c03d640..d96d546bf9 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -280,11 +280,6 @@ menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-vgmstream/Config.in"
- endmenu
- 
--menu "Audio DSP addons"
--	source "package/kodi-adsp-basic/Config.in"
--	source "package/kodi-adsp-freesurround/Config.in"
--endmenu
--
- menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-flac/Config.in"
- 	source "package/kodi-audioencoder-lame/Config.in"
+ # This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 9af21218a87572bd4ab8d8d660c11f6295144f97
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = c51b9a9b58a645f820883e6d99982277fc58aac5
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
 -- 
 2.14.2
