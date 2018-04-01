@@ -1,27 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 16:42:15 +0200
-Subject: [Buildroot] [PATCH 2/2] package/pkg-golang: drop the fixed
- <pkg>_BINDIR variable
-In-Reply-To: <20180401115136.1345-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 1 Apr 2018 13:51:36 +0200")
-References: <20180401115136.1345-1-thomas.petazzoni@bootlin.com>
- <20180401115136.1345-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87370frnso.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 16:42:24 +0200
+Subject: [Buildroot] [PATCH 1/1] Remove Kodi ADSP packages
+In-Reply-To: <2377pexo6d.ln2@ID-313208.user.individual.net>
+References: <20180401135808.8643-1-bernd.kuhls@t-online.de>
+ <20180401162114.46a3bf3d@windsurf>
+ <2377pexo6d.ln2@ID-313208.user.individual.net>
+Message-ID: <20180401164224.36b967c6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello,
 
- > Now that <pkg>_BINDIR is always "bin", having it as a package variable
- > doesn't make much sense, so get rid of this variable completely, and
- > use "bin".
+On Sun, 01 Apr 2018 16:31:30 +0200, Bernd Kuhls wrote:
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> I did not post a link on purpose because it will spam the original pull 
+> request ( https://github.com/xbmc/xbmc/pull/13723 ), like you did right 
+> now ;)
 
-Committed, thanks.
+Meh. Links are really much, much more practical. I think in this case,
+what Github does is really a mis-feature, it should be normal for
+projects to reference PRs from other projects by link.
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
