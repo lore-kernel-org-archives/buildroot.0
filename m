@@ -1,161 +1,95 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:24 -0300
-Subject: [Buildroot] [PATCH v2 11/37] linux/linux.mk: use namespace for
- internal variables
+Date: Sun,  1 Apr 2018 02:08:21 -0300
+Subject: [Buildroot] [PATCH v2 08/37] check-package: enable for fs/
 In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
 References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-12-ricardo.martincoski@gmail.com>
+Message-ID: <20180401050850.5701-9-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These three symbols:
-KERNEL_ARCH_PATH
-KERNEL_DTBS
-KERNEL_DTS_NAME
-are defined and used only inside this file, so use the LINUX_ namespace
-for them instead of KERNEL_.
+The filesystem types can benefit from this script to prevent common
+mistakes when submitting patches.
+
+In order to accomplish this:
+Do not ignore anymore files from the fs/ directory.
+Ignore fs/common.mk as it declares a package infra and not a package itself.
+Register the ROOTFS_ as a valid prefix for variables.
+Ignore these symbols:
+ - PACKAGES_PERMISSIONS_TABLE: defined either by packages through
+   pkg-generic or by filesystem types, used by fs/common.mk;
+ - SUMTOOL: defined by package mtd, used by filesystem jffs2;
+ - TARGETS_ROOTFS: defined by filesystem types, used in the main
+   Makefile.
+
+Keep using loose checks that warn about common mistakes while keep the
+code simple.
+As a consequence the check functions do not differentiate between
+packages and filesystems so the symbol PACKAGE_UBI would not generate a
+warning for the ubi filesystem neither the symbol ROOTFS_MTD would
+generate a warning for the mtd package. But those kind of mistakes are
+not common and are obvious in the code review, unlike typos i.e.
+ROOTFS_UBl or PACKAGE_MID that would be hard to see in the code review.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
 Changes v1 -> v2:
-  - use prefix LINUX_ instead of LINUX_KERNEL_  (suggested by Thomas
-    Petazzoni);
-  - rebased;
+  - remove spurious info from commit log (I first created the series
+    changing the check-package and then fixing the package files; when I
+    rebased to allow partial apply of the series, the info "do not
+    ignore this symbol" became obsolete since it is fixed in a previous
+    patch);
 ---
- linux/linux.mk | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ utils/check-package             | 2 ++
+ utils/checkpackagelib/lib_mk.py | 5 ++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 02796d8bb2..7609a15f23 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -125,15 +125,15 @@ endif
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
- 
--KERNEL_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
-+LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
- 
- # We keep only the .dts files, so that the user can specify both .dts
- # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
- # copied to arch/<arch>/boot/dts, but only the .dts files will
- # actually be generated as .dtb.
--KERNEL_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
-+LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
- 
--KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
-+LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME))
- 
- ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
- LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
-@@ -155,9 +155,9 @@ LINUX_IMAGE_NAME = zImage.epapr
- else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
- LINUX_IMAGE_NAME = zImage
- else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
--LINUX_IMAGE_NAME = cuImage.$(KERNEL_DTS_NAME)
-+LINUX_IMAGE_NAME = cuImage.$(LINUX_DTS_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
--LINUX_IMAGE_NAME = simpleImage.$(KERNEL_DTS_NAME)
-+LINUX_IMAGE_NAME = simpleImage.$(LINUX_DTS_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
- LINUX_IMAGE_NAME = Image
- else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
-@@ -187,11 +187,11 @@ endif
- # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
- # defconfig file.
- ifeq ($(KERNEL_ARCH),i386)
--KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
-+LINUX_ARCH_PATH = $(LINUX_DIR)/arch/x86
- else ifeq ($(KERNEL_ARCH),x86_64)
--KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
-+LINUX_ARCH_PATH = $(LINUX_DIR)/arch/x86
- else
--KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
-+LINUX_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
- endif
- 
- ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
-@@ -201,7 +201,7 @@ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ_BIN),y)
- LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else
--LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
-+LINUX_IMAGE_PATH = $(LINUX_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
- endif # BR2_LINUX_KERNEL_VMLINUX
- 
- define LINUX_APPLY_LOCAL_PATCHES
-@@ -323,14 +323,14 @@ endef
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
--	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
- endef
- ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),)
- define LINUX_INSTALL_DTB
- 	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
- 	cp $(addprefix \
--		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
--		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
-+		$(LINUX_ARCH_PATH)/boot/$(if $(wildcard \
-+		$(addprefix $(LINUX_ARCH_PATH)/boot/dts/,$(LINUX_DTBS))),dts/),$(LINUX_DTBS)) \
- 		$(1)
- endef
- endif # BR2_LINUX_KERNEL_APPENDED_DTB
-@@ -340,8 +340,8 @@ endif # BR2_LINUX_KERNEL_DTS_SUPPORT
- ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
- # dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
- define LINUX_APPEND_DTB
--	(cd $(KERNEL_ARCH_PATH)/boot; \
--		for dtb in $(KERNEL_DTS_NAME); do \
-+	(cd $(LINUX_ARCH_PATH)/boot; \
-+		for dtb in $(LINUX_DTS_NAME); do \
- 			if test -e $${dtb}.dtb ; then \
- 				dtbpath=$${dtb}.dtb ; \
- 			else \
-@@ -359,10 +359,10 @@ ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
- LINUX_APPEND_DTB += ; \
- 	MKIMAGE_ARGS=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) |\
- 	sed -n -e 's/Image Name:[ ]*\(.*\)/-n \1/p' -e 's/Load Address:/-a/p' -e 's/Entry Point:/-e/p'`; \
--	for dtb in $(KERNEL_DTS_NAME); do \
-+	for dtb in $(LINUX_DTS_NAME); do \
- 		$(MKIMAGE) -A $(MKIMAGE_ARCH) -O linux \
- 			-T kernel -C none $${MKIMAGE_ARGS} \
--			-d $(KERNEL_ARCH_PATH)/boot/zImage.$${dtb} $(LINUX_IMAGE_PATH).$${dtb}; \
-+			-d $(LINUX_ARCH_PATH)/boot/zImage.$${dtb} $(LINUX_IMAGE_PATH).$${dtb}; \
- 	done
- endif
- endif
-@@ -371,7 +371,7 @@ endif
- # configuration has changed.
- define LINUX_BUILD_CMDS
- 	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
--		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ; \
-+		cp -f $${dts} $(LINUX_ARCH_PATH)/boot/dts/ ; \
- 	done
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
-@@ -386,7 +386,7 @@ ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
- # appended DTBs.
- define LINUX_INSTALL_IMAGE
- 	mkdir -p $(1)
--	cp $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME).* $(1)
-+	cp $(LINUX_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME).* $(1)
- endef
- else
- # Otherwise, just install the unique image generated by the kernel
-@@ -482,7 +482,7 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
- endif
- endif
- 
--ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(KERNEL_DTS_NAME)),y:)
-+ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(LINUX_DTS_NAME)),y:)
- $(error No kernel device tree source specified, check your \
- 	BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
- endif
+diff --git a/utils/check-package b/utils/check-package
+index 48ce956443..4c9eea0534 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -48,11 +48,13 @@ CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
+ DO_CHECK_INTREE = re.compile("|".join([
+     "arch/",
+     "boot/",
++    "fs/",
+     "package/",
+     "system/",
+     ]))
+ DO_NOT_CHECK_INTREE = re.compile("|".join([
+     "boot/barebox/barebox\.mk$",
++    "fs/common\.mk$",
+     "package/doc-asciidoc\.mk$",
+     "package/pkg-\S*\.mk$",
+     ]))
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index cfd4d05117..58de4fd3cb 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -165,8 +165,11 @@ class TypoInPackageVariable(_CheckFunction):
+         "LUA_RUN",
+         "MKFS_JFFS2",
+         "MKIMAGE_ARCH",
++        "PACKAGES_PERMISSIONS_TABLE",
+         "PKG_CONFIG_HOST_BINARY",
++        "SUMTOOL",
+         "TARGET_FINALIZE_HOOKS",
++        "TARGETS_ROOTFS",
+         "XTENSA_CORE_NAME"]))
+     PACKAGE_NAME = re.compile("/([^/]+)\.mk")
+     VARIABLE = re.compile("^([A-Z0-9_]+_[A-Z0-9_]+)\s*(\+|)=")
+@@ -177,7 +180,7 @@ class TypoInPackageVariable(_CheckFunction):
+         # linux tools do not use LINUX_TOOL_ prefix for variables
+         package = package.replace("LINUX_TOOL_", "")
+         self.package = package
+-        self.REGEX = re.compile("^(HOST_)?({}_[A-Z0-9_]+)".format(package))
++        self.REGEX = re.compile("^(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
+         self.FIND_VIRTUAL = re.compile(
+             "^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
+         self.virtual = []
 -- 
 2.14.1
