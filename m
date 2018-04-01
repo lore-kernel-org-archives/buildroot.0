@@ -1,50 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 00:43:53 +0200
-Subject: [Buildroot] [PATCH v2] configs/qemu_ppc64_e5500: new defconfig
-In-Reply-To: <1522612873-3708-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1522612873-3708-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180402004353.778a61d5@windsurf>
+Date: Mon, 2 Apr 2018 00:44:24 +0200
+Subject: [Buildroot] [git commit] mpv: enable cdda support through
+ libcdio-paranoia
+Message-ID: <20180401224437.C3E4F83832@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cc22fb65c3942b40c165ad7a2e1ec4796fa08a8d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  1 Apr 2018 15:01:13 -0500, Matt Weber wrote:
-> Adding basic support modeled after the Freescale/NXP T1040RDBD4
-> board.
-> 
-> This target is used to support testing of the bootlin e5500
-> toolchain.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> --
-> v1 -> v2
-> [Thomas P
->  - Fixed title
->  - Added defconfig to DEVELOPERS
->  - Updated linux config to have more clarification on e500
->  - Option to set kernel headers default (missed this in orig as
->    4.15 is default)
->  - Adjusted linux cfg to support virtio block device and mount
->    a ext fs as the rootfs.  Also setup config to support a net
->    virtio device(assuming this would come up as a bug eventually)
-> ---
->  DEVELOPERS                            |  2 ++
->  board/qemu/ppc64-e5500/linux.fragment | 10 ++++++++++
->  board/qemu/ppc64-e5500/readme.txt     |  7 +++++++
->  configs/qemu_ppc64_e5500_defconfig    | 20 ++++++++++++++++++++
->  4 files changed, 39 insertions(+)
->  create mode 100644 board/qemu/ppc64-e5500/linux.fragment
->  create mode 100644 board/qemu/ppc64-e5500/readme.txt
->  create mode 100644 configs/qemu_ppc64_e5500_defconfig
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpv/mpv.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Applied to master after updating the .gitlab-ci.yml file. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index f38a6b916f..b8260213b7 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -20,7 +20,6 @@ MPV_CONF_OPTS = \
+ 	--prefix=/usr \
+ 	--disable-android \
+ 	--disable-caca \
+-	--disable-cdda \
+ 	--disable-cocoa \
+ 	--disable-coreaudio \
+ 	--disable-cuda-hwaccel \
+@@ -99,6 +98,14 @@ else
+ MPV_CONF_OPTS += --disable-libbluray
+ endif
+ 
++# libcdio-paranoia
++ifeq ($(BR2_PACKAGE_LIBCDIO_PARANOIA),y)
++MPV_CONF_OPTS += --enable-cdda
++MPV_DEPENDENCIES += libcdio-paranoia
++else
++MPV_CONF_OPTS += --disable-cdda
++endif
++
+ # libdvdnav
+ ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
+ MPV_CONF_OPTS += --enable-dvdnav
