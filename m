@@ -1,62 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 10:45:28 +0200
-Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
-In-Reply-To: <trinity-6f4e61bd-29a2-4eda-99e3-7f78e881ab04-1522571242948@3c-app-mailcom-bs16>
-References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
- <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
- <trinity-8edc1929-b40d-4afa-85a8-e152cef642fb-1522567556973@3c-app-mailcom-bs16>
- <1je6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-550783d4-570b-41d5-937b-f66aa367d27f-1522568580265@3c-app-mailcom-bs16>
- <4sf6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-8096f0c8-32ae-4d0a-ad74-d40b12f0f8ff-1522569777353@3c-app-mailcom-bs16>
- <e4h6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-6f4e61bd-29a2-4eda-99e3-7f78e881ab04-1522571242948@3c-app-mailcom-bs16>
-Message-ID: <20180401104528.415486a7@windsurf>
+Date: Sun, 1 Apr 2018 10:46:16 +0200
+Subject: [Buildroot] [git commit] opencv3: fix Python module build for
+ Python 3.x
+Message-ID: <20180401084641.735B480239@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8ba80282c3bb580c6a45ea114e70acac98fe1690
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 1 Apr 2018 10:27:22 +0200, daggs wrote:
+When the OpenCV3 Python support is enabled with Python 3.x, it builds
+properly, and the resulting .so file is built for the target
+architecture, but its name is wrong:
 
-> > so you think it is possible to use libamcodec support in Kodi with OpenGL 
-> > ES provided by, let's say, mesa3d with the DRI swrast driver? And even if 
-> > there is no direct dependency between the libamcodoc and odroid-mali 
-> > packages what about extending the
-> > 
-> > 	ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
-> > 
-> > check in kodi.mk to
-> > 
-> > 	ifeq ($(BR2_PACKAGE_LIBAMCODEC)$(BR2_PACKAGE_ODROID_MALI),yy)
-> > 
-> > to fix the build error?
-> > 
-> > Regards, Bernd
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >   
-> 
-> as said by Thomas in another mail, there shouldn't be any dependency, what is the exact issue? compilation failure? what kodi version are you using?
-> the answers for the two questions above will give me a lead on where to start looking.
+  output/target/usr/lib/python3.6/site-packages/cv2.cpython-36m-x86_64-linux-gnu.so
 
-Well, even though there is no dependency between libamcodec and
-odroid-mali, it is possible that Kodi needs both to enable the AML
-platform support.
+This prevents Python 3.x from importing the module:
 
-But indeed, it would be easier if Bernd could provide a .config file
-that allows to reproduce the build failure.
+>>> import cv2
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ModuleNotFoundError: No module named 'cv2'
 
-Best regards,
+In order to fix this, we simply need to pass PKG_PYTHON_DISTUTILS_ENV
+in the environment. The Python module then gets named:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  output/target/usr/lib/python3.6/site-packages/cv2.cpython-36m-arm-linux-gnueabi.so
+
+And can be imported properly:
+
+>>> import cv2
+>>>
+
+This solution was suggested by Arnout Vandecappelle in
+https://stackoverflow.com/questions/49059035/buildroot-opencv3-python-package-builds-for-the-wrong-target.
+
+With Python 2.x, the module is named just cv2.so so this problem isn't
+visible. However, for consistency, we also pass
+PKG_PYTHON_DISTUTILS_ENV when building against Python 2.x, by putting
+the OPENCV3_CONF_ENV assignment inside the
+BR2_PACKAGE_OPENCV3_LIB_PYTHON condition, but outside the
+BR2_PACKAGE_PYTHON3/BR2_PACKAGE_PYTHON condition.
+
+Signed-off-by: Sasha Shyrokov <alexander-shyrokov@idexx.com>
+[Thomas: extend the commit log, apply the solution to Python 2.x.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/opencv3/opencv3.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index cffe66b892..15e4eadfe3 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -327,6 +327,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+ OPENCV3_DEPENDENCIES += python3
+ endif
++OPENCV3_CONF_ENV += $(PKG_PYTHON_DISTUTILS_ENV)
+ OPENCV3_DEPENDENCIES += python-numpy
+ else
+ OPENCV3_CONF_OPTS += \
