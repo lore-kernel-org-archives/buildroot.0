@@ -1,10 +1,9 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 23:29:53 +0200
-Subject: [Buildroot] [PATCH v4 09/11] package/libclc: new package
-In-Reply-To: <20180329113346.10367-10-valentin.korenblit@smile.fr>
-References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-10-valentin.korenblit@smile.fr>
-Message-ID: <20180401232953.5277ede2@windsurf>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 01 Apr 2018 18:32:01 -0300
+Subject: [Buildroot] [PATCH v3 2/9] testing/infra/builder: split
+ configure() from build()
+References: <20180401195916.29aac7e1@windsurf>
+Message-ID: <5ac14fd11a596_e002ac6eaeaec8891974@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +12,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 29 Mar 2018 13:33:44 +0200, Valentin Korenblit wrote:
-> This patch provides libclc, an open source implementation of the
-> library requirements of the OpenCL C programming language, as
-> specified by the OpenCL 1.1 Specification. It is intended to be used
-> with Mesa Clover.
+On Sun, Apr 01, 2018 at 02:59 PM, Thomas Petazzoni wrote:
+
+> On Sun, 29 Oct 2017 12:06:01 -0200, Ricardo Martincoski wrote:
+> I've applied, but I have a comment, see below.
 > 
-> It needs to be compiled with Clang, as it generates LLVM IR bitcode
-> files containing device builtin functions for each target.
 > 
-> Currently, libclc supports AMDGCN, R600 and NVPTX targets.
+>> +    def build(self):
+>> +        env = {"PATH": os.environ["PATH"]}
 > 
-> As OpenCL kernels are built dynamically on the target using libClang and
-> libLLVM, it is necessary to copy /usr/include/clc from STAGING_DIR to the
-> target manually, as Buildroot doesn't include this directory.
+> So now, we have the same local "env" variable in configure() and
+> build(). Would it make sense to do:
+> 
+> 	self.env = ...
+> 
+> in the constructor, and then use it in configure() and build() ?
 
-I don't see where your .mk file is doing this. And it wouldn't work
-because Buildroot removes $(TARGET_DIR)/usr/include entirely in its
-target-finalize step.
+It is possible to do that.
 
-When you say "manually", do you mean that you have to
-copy /usr/include/clc from your build machine to your target once the
-target has booted ? If that's the case, then we really have a problem
-here, the target should just work.
+The next patch on the same series uses .update() so the local "env" is changed.
+        env = {"PATH": os.environ["PATH"]}
+        env.update(make_extra_env)
 
-> +LIBCLC_VERSION = 00236279a293b3737dee08c14f25923a889d2795
-> +LIBCLC_SITE = https://git.llvm.org/git/libclc
-> +LIBCLC_SITE_METHOD = git
+Note: I did not tested the code below.
 
-I assume they don't have a stable release you could use ?
+In order to always have a clean environment, we could do in the constructor:
+        self.env = {"PATH": os.environ["PATH"]}
+And change the methods to:
+        env = self.env.copy()
+        env.update(make_extra_env)
 
-This lacks LICENSE and LICENSE_FILES.
+Or we assume we will need only PATH from env in the future, and do in the
+constructor:
+        self.env_path = os.environ["PATH"]
+And change the methods to:
+        env = self.make_extra_env.copy()
+        env.update({"PATH": self.env_path})
 
-> +LIBCLC_DEPENDENCIES = host-clang host-llvm
-> +LIBCLC_INSTALL_STAGING = YES
-> +
-> +# C++ compiler is used to build a small tool (prepare-builtins) for the host.
-> +# It must be built with the C++ compiler from the host, simply use
-> +# HOSTCXX_NOCCACHE.
+The access to os.environ should be inexpensive (I did not measured it), so I am
+not sure it needs to be done. I am not against it either.
+At first glance, it seems just more code to me.
+Maybe I am missing something.
 
-Why not HOSTCXX ?
 
-> +LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
-
-Why are you using the version in HOST_DIR, and not the one in
-STAGING_DIR ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Ricardo
