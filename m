@@ -1,162 +1,157 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 1 Apr 2018 14:25:11 +0200
-Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
-In-Reply-To: <45t6pexo6d.ln2@ID-313208.user.individual.net>
-References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
- <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
- <trinity-8edc1929-b40d-4afa-85a8-e152cef642fb-1522567556973@3c-app-mailcom-bs16>
- <1je6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-550783d4-570b-41d5-937b-f66aa367d27f-1522568580265@3c-app-mailcom-bs16>
- <4sf6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-8096f0c8-32ae-4d0a-ad74-d40b12f0f8ff-1522569777353@3c-app-mailcom-bs16>
- <e4h6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-6f4e61bd-29a2-4eda-99e3-7f78e881ab04-1522571242948@3c-app-mailcom-bs16>
- <45t6pexo6d.ln2@ID-313208.user.individual.net>
-Message-ID: <trinity-22e97573-5741-4217-9e6c-d668449e004b-1522585511151@3c-app-mailcom-bs11>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Apr 2018 14:25:58 +0200
+Subject: [Buildroot] [PATCH 1/2] package/pkg-golang: use 'build' instead
+ of 'install'
+In-Reply-To: <20180401115136.1345-1-thomas.petazzoni@bootlin.com>
+References: <20180401115136.1345-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180401122558.GB2613@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings Bernd,
+Thomas, All,
 
-> Sent: Sunday, April 01, 2018 at 2:41 PM
-> From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
-> To: buildroot at uclibc.org
-> Subject: Re: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
->
-> Am Sun, 01 Apr 2018 10:27:22 +0200 schrieb daggs:
+On 2018-04-01 13:51 +0200, Thomas Petazzoni spake thusly:
+> So far, we were using the 'go install' mechanism to build a package
+> and have its binary installed in
+> $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH). This worked fine when
+> building on x86-64 for ARM, but failed when building on x86-64 for
+> x86-64 because the binaries were installed in $$($(2)_WORKSPACE)/bin/.
 > 
-> > as said by Thomas in another mail, there shouldn't be any dependency,
-> > what is the exact issue? compilation failure? what kodi version are you
-> > using?
+> Instead of doing some complicated logic to guess whether Go is going
+> to put our binaries in $$($(2)_WORKSPACE)/bin/ or in
+> $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH), we revert back to using
+> "go build", as it was done before the introduction of the golang
+> package infrastructure. "go build" lets us pass explicitly the
+> destination path of the binary to be generated.
 > 
-> Hi daggs,
+> There's just one complexity with how to decide on the name of the
+> binary that should be produced, and we have two cases:
 > 
-> the following builds were all made with unpatched buildroot master branch.
+>  - <pkg>_BUILD_TARGETS is the default, i.e ".". In this case we assume
+>    a single binary is produced by "go build", and we name if after the
+>    lower case package name. We allow this to be overridden thanks to
+>    <pkg>_BIN_NAME.
 > 
-> The only successful kodi build including libamcodec was made with odroid-
-> mali using this defconfig:
+>  - <pkg>_BUILD_TARGETS is non-default, and typically contains
+>    something like "foo bar" or "cmd/foo cmd/bar". In this case, we
+>    assume the binaries to be produced are "foo" and "bar", i.e we take
+>    the non-directory part of the build target to name the binaries.
 > 
-> BR2_aarch64=y
-> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_ODROID_MALI=y
-> BR2_PACKAGE_PYTHON=y
-> BR2_PACKAGE_PYTHON_PY_ONLY=y
-> BR2_PACKAGE_LIBAMCODEC=y
+> Because we're using this -o option, we no longer need to explicitly
+> create the binary directory, it is done by "go build".
 > 
-> -- Found OpenGLES: /home/buildroot/br2/output/host/aarch64-buildroot-
-> linux-gnu/sysroot/usr/lib/libGLESv2.so  
-> -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-gnu/
-> sysroot/usr/lib/libEGL.so (found version "r4p0") 
-> -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-gnu/
-> sysroot/usr/include/amcodec  
+> Fixes:
 > 
-> -- OPENGL enabled: No
-> -- OPENGLES enabled: Yes
-> -- X enabled: No
-> -- LIBDRM enabled: No
-> -- AML enabled: Yes
+>   http://autobuild.buildroot.net/results/1f9cd7c48e8c8f41326632a9c0de83915d72c45b/
 > 
-> Then I tried two builds with mesa3d & libamcodec, one where mesa3d 
-> provides opengl, in the second build mesa3d provides opengles, both 
-> failed:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  docs/manual/adding-packages-golang.txt | 13 ++++++++++++-
+>  package/pkg-golang.mk                  | 26 ++++++++++++++------------
+>  2 files changed, 26 insertions(+), 13 deletions(-)
 > 
-> ------------------------------------------------------------------
-> 
-> BR2_aarch64=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_PYTHON=y
-> BR2_PACKAGE_PYTHON_PY_ONLY=y
-> BR2_PACKAGE_LIBAMCODEC=y
-> 
-> -- Found OpenGl: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
-> uclibc/sysroot/usr/lib/libGL.so  
-> -- Found X: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
-> uclibc/sysroot/usr/lib/libX11.so (found version "1.6.5") 
-> -- Found LibDRM: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
-> uclibc/sysroot/usr/lib/libdrm.so (found version "2.4.91") 
-> -- Found XRandR: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
-> uclibc/sysroot/usr/lib/libXrandr.so (found version "1.5.1") 
-> -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
-> uclibc/sysroot/usr/lib/libEGL.so (found version "18.0.0") 
-> -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
-> uclibc/sysroot/usr/include/amcodec  
-> 
-> -- OPENGL enabled: Yes
-> -- X enabled: Yes
-> -- LIBDRM enabled: Yes
-> -- XRANDR enabled: Yes
-> -- AML enabled: Yes
-> 
-> [ 94%] Building CXX object build/cores/VideoPlayer/videorenderers/
-> CMakeFiles/videorenderers.dir/RenderManager.cpp.o
-> /home/bernd/buildroot/br2/output/build/kodi-17.6-Krypton/xbmc/cores/
-> VideoPlayer/VideoRenderers/RenderManager.cpp: In member function 'void 
-> CRenderManager::CreateRenderer()':
-> /home/bernd/buildroot/br2/output/build/kodi-17.6-Krypton/xbmc/cores/
-> VideoPlayer/VideoRenderers/RenderManager.cpp:582:25: error: 
-> 'CRendererAML' does not name a type
->        m_pRenderer = new CRendererAML;
->                          ^~~~~~~~~~~~
-> ------------------------------------------------------------------
-> 
-> BR2_aarch64=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_MESA3D_OPENGL_ES=y
-> BR2_PACKAGE_PYTHON=y
-> BR2_PACKAGE_PYTHON_PY_ONLY=y
-> BR2_PACKAGE_LIBAMCODEC=y
-> 
-> -- Found OpenGLES: /home/buildroot/br2/output/host/aarch64-buildroot-
-> linux-uclibc/sysroot/usr/lib/libGLESv2.so  
-> -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
-> uclibc/sysroot/usr/lib/libEGL.so (found version "18.0.0") 
-> -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
-> uclibc/sysroot/usr/include/amcodec  
-> 
-> -- OPENGL enabled: No
-> -- OPENGLES enabled: Yes
-> -- X enabled: No
-> -- LIBDRM enabled: No
-> -- AML enabled: Yes
-> 
-> /bin/grep: /usr/lib/libgbm.la: No such file or directory
-> /bin/sed: can't read /usr/lib/libgbm.la: No such file or directory
-> libtool:   error: '/usr/lib/libgbm.la' is not a valid libtool archive
-> 
-> ------------------------------------------------------------------
-> 
-> Buildroot should not allow to use non-working combinations and here I 
-> think hardware-wise we should in some way connect libamcodec and odroid-
-> mail to be used by Kodi. Besides the build errors it makes no sense to 
-> have software rendering provided by mesa3d when you have vendor-provided 
-> opengl libs.
-> 
-> What do you think?
-> 
-> Regards, Bernd
+> diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+> index b6d1f5e6b4..efcf696867 100644
+> --- a/docs/manual/adding-packages-golang.txt
+> +++ b/docs/manual/adding-packages-golang.txt
+> @@ -86,7 +86,18 @@ therefore only use a few of them, or none.
+>  
+>  * +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
+>    should be built. If +FOO_BUILD_TARGETS+ is not specified, it
+> -  defaults to +.+.
+> +  defaults to +.+. We then have two cases:
+> +
+> +** +FOO_BUILD_TARGETS+ is +.+. In this case, we assume only one binary
+> +   will be produced, and that by default we name it after the package
+> +   name. If that is not appropriate, the name of the produced binary
+> +   can be overridden using +FOO_BIN_NAME+.
+> +
+> +** +FOO_BUILD_TARGETS+ is not +.+. In this case, we iterate over the
+> +   values to build each target, and for each produced a binary that is
+> +   the non-directory component of the target. For example if
+> +   +FOO_BUILD_TARGETS = cmd/docker cmd/dockerd+ the binaries produced
+> +   are +docker+ and +dockerd+.
+>  
+>  * +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
+>    should be installed in +/usr/bin+ on the target. If
+> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+> index f51b2ee2e0..c21be86a55 100644
+> --- a/package/pkg-golang.mk
+> +++ b/package/pkg-golang.mk
+> @@ -62,12 +62,16 @@ $(2)_DEPENDENCIES += host-go
+>  
+>  $(2)_BUILD_TARGETS ?= .
+>  
+> -$(2)_INSTALL_BINS ?= $(1)
+> +# If the build target is just ".", then we assume the binary to be
+> +# produced is named after the package. If however, a build target has
+> +# been specified, we assume that the binaries to be produced are named
+> +# after each build target building them (below in <pkg>_BUILD_CMDS).
+> +ifeq ($$($(2)_BUILD_TARGETS),.)
+> +$(2)_BIN_NAME ?= $(1)
+> +endif
+>  
+> -# The go build/install command installs the binaries inside
+> -# gopath/bin/linux_GOARCH/ when cross compilation is enabled. We set this
+> -# variable here to be used by packages if needed.
+> -$(2)_BINDIR = $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH)
+> +$(2)_BINDIR = bin
+> +$(2)_INSTALL_BINS ?= $(1)
+>  
+>  # Source files in Go should be extracted in a precise folder in the hierarchy
+>  # of GOPATH. It usually resolves around domain/vendor/software. By default, we
+> @@ -84,17 +88,13 @@ $(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
+>  # file.
+>  ifndef $(2)_CONFIGURE_CMDS
+>  define $(2)_CONFIGURE_CMDS
+> -	mkdir -p $$(@D)/$$($(2)_WORKSPACE)/bin
+>  	mkdir -p $$(dir $$($(2)_SRC_PATH))
+>  	ln -sf $$(@D) $$($(2)_SRC_PATH)
+>  endef
+>  endif
+>  
+> -# Build step. Only define it if not already defined by the package .mk file. We
+> -# use the install command instead of build command here because the install
+> -# command just moves the package binaries into <workspace>/bin/linux_GOARCH/.
+> -# This leverages the go build infrastructure for building and installing
+> -# multiple binaries.
+> +# Build step. Only define it if not already defined by the package .mk
+> +# file.
+>  ifndef $(2)_BUILD_CMDS
+>  define $(2)_BUILD_CMDS
+>  	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+> @@ -102,7 +102,9 @@ define $(2)_BUILD_CMDS
+>  		$$(GO_TARGET_ENV) \
+>  			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
+>  			$$($(2)_GO_ENV) \
+> -			$$(GO_BIN) install -v $$($(2)_BUILD_OPTS) ./$$(d)
+> +			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+> +			-o $$(@D)/$$($(2)_BINDIR)/$$(if $$($(2)_BIN_NAME),$$($(2)_BIN_NAME),$$(notdir $$(d))) \
+> +			./$$(d)
+>  	)
+>  endef
+>  endif
+> -- 
+> 2.14.3
 > 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
-I have an idea that can address this issue but first I'd like to get confirmation from the vendor's support team especially since libreelec doesn't seems to libamlogic compiled, ok?
-
-Dagg
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
