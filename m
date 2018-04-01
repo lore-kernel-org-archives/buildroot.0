@@ -1,64 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Apr 2018 22:24:29 +0200
-Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-depends: add
- --quiet option
-In-Reply-To: <20180401191449.802-2-peter@korsgaard.com>
-References: <20180401191449.802-1-peter@korsgaard.com>
- <20180401191449.802-2-peter@korsgaard.com>
-Message-ID: <20180401202429.GP2613@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 1 Apr 2018 22:25:57 +0200
+Subject: [Buildroot] [git commit] support/scripts/graph-depends: add
+ --flat-list option
+Message-ID: <20180401202618.D0ABD813A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3146ba76331690fb693de3ff2fcebbaec43ca54e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-04-01 21:14 +0200, Peter Korsgaard spake thusly:
-> This will be useful for the upcoming recursive show-depends and
-> show-rdepends features.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+graph-depends currently spits out a graph in .dot format. However, as
+part of the upcoming introduction of <pkg>-show-recursive-depends and
+<pkg>-show-recursive-rdepends, we need graph-depends to be able to
+display a flat list.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
+[Thomas:
+ - Rebase on top of graph-depends changes
+ - Do not display the package name itself in the list, only its
+   dependencies (or reverse dependencies)
+ - Display the result on a single line, instead of one package per
+   line, in order to match what <pkg>-show-depends and
+   <pkg>-show-rdepends are doing today.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/graph-depends | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/scripts/graph-depends | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index 17bfaa0cf5..4ec0e46f7b 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -312,6 +312,8 @@ def parse_args():
->                          help="Draw direct dependencies (the default)")
->      parser.add_argument("--reverse", dest="direct", action='store_false',
->                          help="Draw reverse dependencies")
-> +    parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
-> +                        help="Quiet")
->      return parser.parse_args()
->  
->  
-> @@ -321,7 +323,7 @@ def main():
->      check_only = args.check_only
->  
->      logging.basicConfig(stream=sys.stderr, format='%(message)s',
-> -                        level=logging.INFO)
-> +                        level=logging.WARNING if args.quiet else logging.INFO)
->  
->      if args.outfile is None:
->          outfile = sys.stdout
-> -- 
-> 2.11.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 4ec0e46f7b..621e603278 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -248,11 +248,14 @@ done_deps = []
+ 
+ # Print the dependency graph of a package
+ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+-                   arrow_dir, depth, max_depth, pkg, colors):
++                   arrow_dir, draw_graph, depth, max_depth, pkg, colors):
+     if pkg in done_deps:
+         return
+     done_deps.append(pkg)
+-    print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
++    if draw_graph:
++        print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
++    elif depth != 0:
++        outfile.write("%s " % pkg)
+     if pkg not in dict_deps:
+         return
+     for p in stop_list:
+@@ -276,9 +279,10 @@ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+                     add = False
+                     break
+             if add:
+-                outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
++                if draw_graph:
++                    outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
+                 print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+-                               arrow_dir, depth + 1, max_depth, d, colors)
++                               arrow_dir, draw_graph, depth + 1, max_depth, d, colors)
+ 
+ 
+ def parse_args():
+@@ -314,6 +318,8 @@ def parse_args():
+                         help="Draw reverse dependencies")
+     parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
+                         help="Quiet")
++    parser.add_argument("--flat-list", '-f', dest="flat_list", action='store_true', default=False,
++                        help="Do not draw graph, just print a flat list")
+     return parser.parse_args()
+ 
+ 
+@@ -359,6 +365,8 @@ def main():
+         get_depends_func = brpkgutil.get_rdepends
+         arrow_dir = "back"
+ 
++    draw_graph = not args.flat_list
++
+     # Get the colors: we need exactly three colors,
+     # so no need not split more than 4
+     # We'll let 'dot' validate the colors...
+@@ -406,12 +414,16 @@ def main():
+                                           if pkg != "all" and not pkg.startswith("root")])
+ 
+     # Start printing the graph data
+-    outfile.write("digraph G {\n")
++    if draw_graph:
++        outfile.write("digraph G {\n")
+ 
+     print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+-                   arrow_dir, 0, args.depth, rootpkg, colors)
++                   arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
+ 
+-    outfile.write("}\n")
++    if draw_graph:
++        outfile.write("}\n")
++    else:
++        outfile.write("\n")
+ 
+ 
+ if __name__ == "__main__":
