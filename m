@@ -1,52 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 12:38:57 +0200
-Subject: [Buildroot] [PATCH 1/2] openblass: drop SSE_GENERIC target
-In-Reply-To: <8e50e37d-589f-6ae7-5bd3-feef97bf05d7@mind.be> (Arnout
- Vandecappelle's message of "Sun, 1 Apr 2018 11:51:52 +0200")
-References: <20180401084642.15199-1-peter@korsgaard.com>
- <8e50e37d-589f-6ae7-5bd3-feef97bf05d7@mind.be>
-Message-ID: <878ta7rz26.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 01 Apr 2018 10:42:55 +0000
+Subject: [Buildroot] [Bug 10776] ktap fails to build
+In-Reply-To: <bug-10776-163@https.bugs.busybox.net/>
+References: <bug-10776-163@https.bugs.busybox.net/>
+Message-ID: <bug-10776-163-w3WCtNeiau@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=10776
 
- > On 01-04-18 10:46, Peter Korsgaard wrote:
- >> Fixes #10856
- >> 
- >> The SSE_GENERIC target fails to build with a "sgemm_kernel.o: No such file
- >> or directory" error. Several upstream bug reports exist for this:
- >> 
- >> https://github.com/xianyi/OpenBLAS/issues/502
- >> https://github.com/xianyi/OpenBLAS/issues/685
- >> 
- >> In both cases, upstream suggests using a different target definition
- >> instead.  E.G.  from issue 685:
- >> 
- >> You may use NORTHWOOD on x86: make TARGET=NORTHWOOD that uses SSE2
- >> instructions.  It's very hard to find non-SSE2 x86 CPUs today.  For x86-64
- >> use the PRESCOTT target
- >> 
- >> So drop the SSE_GENERIC target.  The only x86_64 variant we support not
- >> covered by a more specific openblas target is the default variant, nocona.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
- >  Actually, I think BR2_x86_corei7_avx is not covered either. And BR2_x86_jaguar.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
-corei7_avx is:
-
-default "SANDYBRIDGE"  if BR2_x86_corei7_avx
-
-But jaguar indeed isn't. Jaguar is in the bobcat family so I'll add a
-default "BOBCAT" entry for it:
-
-https://en.wikipedia.org/wiki/List_of_AMD_microprocessors#Bobcat_core_architecture_(APU)
-
->  These openblas targets really are an unmaintainable mess...
-
-Indeed :/
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed in
+https://git.buildroot.org/buildroot/commit/?id=8a612c9ed9d7fde40a4e5bfe851e9a8ee7228bf2.
+Thanks!
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
