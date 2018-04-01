@@ -1,43 +1,167 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 22:21:52 +0200
-Subject: [Buildroot] [PATCH v2 5/5] package/pkg-generic: add
- <pkg>-show-recursive-(r)depends targets
-In-Reply-To: <20180331163543.6278-6-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sat, 31 Mar 2018 18:35:43 +0200")
-References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
- <20180331163543.6278-6-thomas.petazzoni@bootlin.com>
-Message-ID: <87o9j2pti7.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Apr 2018 22:24:04 +0200
+Subject: [Buildroot] [PATCH 1/2] support/scripts/graph-depends: use the
+ standard python logging module
+In-Reply-To: <20180401191449.802-1-peter@korsgaard.com>
+References: <20180401191449.802-1-peter@korsgaard.com>
+Message-ID: <20180401202404.GO2613@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Peter, All,
 
- > From: George Redivo <george.redivo@datacom.ind.br>
- > This commit adds the support for <pkg>-show-recursive-depends and
- > <pkg>-show-recursive-rdepends which respectively show the list of all
- > dependencies or reverse dependencies for a given package. The existing
- > show-depends and show-rdepends only show the first-level dependencies,
- > while show-recursive-depends and show-recursive-rdepends show
- > recursively the dependencies.
+On 2018-04-01 21:14 +0200, Peter Korsgaard spake thusly:
+> Instead of hardcoded sys.stderr.write() calls.  No functional change, but
+> allows us to easily implement a quiet option.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > It is worth mentioning that while show-recursive-depends really shows
- > all dependencies, show-recursive-rdepends is a bit limited because the
- > reverse dependencies of host packages are not properly accounted
- > for. But that's a limitation that already exists in show-rdepends, and
- > that cannot easily be solved.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
- > [Thomas:
- >  - split from the patch that was also changing graph-depends
- >  - rename show-rrdepends to show-recursive-rdepends
- >  - add show-recursive-depends
- >  - don't create GRAPHS_DIR.]
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thank you! :-)
 
-Committed, thanks.
+Regards,
+Yann E. MORIN.
+
+> ---
+>  support/scripts/brpkgutil.py  | 13 +++++++------
+>  support/scripts/graph-depends | 16 ++++++++++------
+>  2 files changed, 17 insertions(+), 12 deletions(-)
+> 
+> diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+> index 4c99ae9110..e70d525353 100644
+> --- a/support/scripts/brpkgutil.py
+> +++ b/support/scripts/brpkgutil.py
+> @@ -1,5 +1,6 @@
+>  # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  
+> +import logging
+>  import sys
+>  import subprocess
+>  
+> @@ -7,18 +8,18 @@ import subprocess
+>  # Execute the "make <pkg>-show-version" command to get the version of a given
+>  # list of packages, and return the version formatted as a Python dictionary.
+>  def get_version(pkgs):
+> -    sys.stderr.write("Getting version for %s\n" % pkgs)
+> +    logging.info("Getting version for %s" % pkgs)
+>      cmd = ["make", "-s", "--no-print-directory"]
+>      for pkg in pkgs:
+>          cmd.append("%s-show-version" % pkg)
+>      p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+>      output = p.communicate()[0]
+>      if p.returncode != 0:
+> -        sys.stderr.write("Error getting version %s\n" % pkgs)
+> +        logging.error("Error getting version %s" % pkgs)
+>          sys.exit(1)
+>      output = output.split("\n")
+>      if len(output) != len(pkgs) + 1:
+> -        sys.stderr.write("Error getting version\n")
+> +        logging.error("Error getting version")
+>          sys.exit(1)
+>      version = {}
+>      for i in range(0, len(pkgs)):
+> @@ -28,18 +29,18 @@ def get_version(pkgs):
+>  
+>  
+>  def _get_depends(pkgs, rule):
+> -    sys.stderr.write("Getting dependencies for %s\n" % pkgs)
+> +    logging.info("Getting dependencies for %s" % pkgs)
+>      cmd = ["make", "-s", "--no-print-directory"]
+>      for pkg in pkgs:
+>          cmd.append("%s-%s" % (pkg, rule))
+>      p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+>      output = p.communicate()[0]
+>      if p.returncode != 0:
+> -        sys.stderr.write("Error getting dependencies %s\n" % pkgs)
+> +        logging.error("Error getting dependencies %s\n" % pkgs)
+>          sys.exit(1)
+>      output = output.split("\n")
+>      if len(output) != len(pkgs) + 1:
+> -        sys.stderr.write("Error getting dependencies\n")
+> +        logging.error("Error getting dependencies")
+>          sys.exit(1)
+>      deps = {}
+>      for i in range(0, len(pkgs)):
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index dc265ae28c..17bfaa0cf5 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -21,6 +21,7 @@
+>  #
+>  # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  
+> +import logging
+>  import sys
+>  import subprocess
+>  import argparse
+> @@ -39,7 +40,7 @@ allpkgs = []
+>  # Buildroot PACKAGES and return it formatted as a Python list. This
+>  # list is used as the starting point for full dependency graphs
+>  def get_targets():
+> -    sys.stderr.write("Getting targets\n")
+> +    logging.info("Getting targets")
+>      cmd = ["make", "-s", "--no-print-directory", "show-targets"]
+>      p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+>      output = p.communicate()[0].strip()
+> @@ -192,10 +193,10 @@ def check_circular_deps(deps):
+>          chain.append(pkg)
+>          for p in deps[pkg]:
+>              if p in chain:
+> -                sys.stderr.write("\nRecursion detected for  : %s\n" % (p))
+> +                logging.warning("\nRecursion detected for  : %s" % (p))
+>                  while True:
+>                      _p = chain.pop()
+> -                    sys.stderr.write("which is a dependency of: %s\n" % (_p))
+> +                    logging.warning("which is a dependency of: %s" % (_p))
+>                      if p == _p:
+>                          sys.exit(1)
+>              recurse(p)
+> @@ -319,11 +320,14 @@ def main():
+>  
+>      check_only = args.check_only
+>  
+> +    logging.basicConfig(stream=sys.stderr, format='%(message)s',
+> +                        level=logging.INFO)
+> +
+>      if args.outfile is None:
+>          outfile = sys.stdout
+>      else:
+>          if check_only:
+> -            sys.stderr.write("don't specify outfile and check-only at the same time\n")
+> +            logging.error("don't specify outfile and check-only at the same time")
+>              sys.exit(1)
+>          outfile = open(args.outfile, "w")
+>  
+> @@ -348,7 +352,7 @@ def main():
+>          arrow_dir = "forward"
+>      else:
+>          if mode == MODE_FULL:
+> -            sys.stderr.write("--reverse needs a package\n")
+> +            logging.error("--reverse needs a package")
+>              sys.exit(1)
+>          get_depends_func = brpkgutil.get_rdepends
+>          arrow_dir = "back"
+> @@ -358,7 +362,7 @@ def main():
+>      # We'll let 'dot' validate the colors...
+>      colors = args.colors.split(',', 4)
+>      if len(colors) != 3:
+> -        sys.stderr.write("Error: incorrect color list '%s'\n" % args.colors)
+> +        logging.error("Error: incorrect color list '%s'" % args.colors)
+>          sys.exit(1)
+>  
+>      # In full mode, start with the result of get_targets() to get the main
+> -- 
+> 2.11.0
+> 
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
