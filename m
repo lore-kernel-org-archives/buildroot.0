@@ -1,72 +1,105 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:25 -0300
-Subject: [Buildroot] [PATCH v2 12/37] check-package: enable for linux/
+Date: Sun,  1 Apr 2018 02:08:23 -0300
+Subject: [Buildroot] [PATCH v2 10/37] linux/linux*.mk: fix code style
 In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
 References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-13-ricardo.martincoski@gmail.com>
+Message-ID: <20180401050850.5701-11-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This directory can benefit from this script to prevent common mistakes
-when submitting patches.
-
-In order to accomplish this:
-Do not ignore anymore files from the linux/ directory.
-Ignore missing LINUX_EXT_ prefix as the variables for linux extensions
-do not use it.
-Ignore this symbol:
- - LINUX_EXTENSIONS: defined by each linux extension, used by
-   linux/linux.mk.
+Use only one space before backslash.
+Remove consecutive empty line.
+Indent with tabs.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
 Changes v1 -> v2:
-  - remove spurious info from commit log (I first created the series
-    changing the check-package and then fixing the package files; when I
-    rebased to allow partial apply of the series, the info "do not
-    ignore this symbol" became obsolete since it is fixed in a previous
-    patch);
+  - rebased
 ---
- utils/check-package             | 1 +
- utils/checkpackagelib/lib_mk.py | 3 +++
- 2 files changed, 4 insertions(+)
+ linux/linux-ext-rtai.mk |  4 ++--
+ linux/linux.mk          | 25 ++++++++++++-------------
+ 2 files changed, 14 insertions(+), 15 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 4c9eea0534..a5f5dc44c0 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -49,6 +49,7 @@ DO_CHECK_INTREE = re.compile("|".join([
-     "arch/",
-     "boot/",
-     "fs/",
-+    "linux/",
-     "package/",
-     "system/",
-     ]))
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 58de4fd3cb..9989556e95 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -160,6 +160,7 @@ class TypoInPackageVariable(_CheckFunction):
-         "ACLOCAL_HOST_DIR",
-         "BR_CCACHE_INITIAL_SETUP",
-         "BR_NO_CHECK_HASH_FOR",
-+        "LINUX_EXTENSIONS",
-         "LINUX_POST_PATCH_HOOKS",
-         "LINUX_TOOLS",
-         "LUA_RUN",
-@@ -179,6 +180,8 @@ class TypoInPackageVariable(_CheckFunction):
-         package = package.replace("-", "_").upper()
-         # linux tools do not use LINUX_TOOL_ prefix for variables
-         package = package.replace("LINUX_TOOL_", "")
-+        # linux extensions do not use LINUX_EXT_ prefix for variables
-+        package = package.replace("LINUX_EXT_", "")
-         self.package = package
-         self.REGEX = re.compile("^(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
-         self.FIND_VIRTUAL = re.compile(
+diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
+index 46e3dae3a7..50f79f8d50 100644
+--- a/linux/linux-ext-rtai.mk
++++ b/linux/linux-ext-rtai.mk
+@@ -20,8 +20,8 @@ endif
+ define RTAI_PREPARE_KERNEL
+ 	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
+ 	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
+-		$(APPLY_PATCHES) $(LINUX_DIR)				\
+-			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/	\
++		$(APPLY_PATCHES) $(LINUX_DIR) \
++			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ \
+ 			hal-linux-$${kver}-*patch ; \
+ 	else \
+ 		echo "No RTAI patch for your kernel version" ; \
+diff --git a/linux/linux.mk b/linux/linux.mk
+index cf1cae7cc0..02796d8bb2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -371,11 +371,11 @@ endif
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+ 	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
+-		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ;   \
++		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ; \
+ 	done
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+-	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
+-		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
++	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
++		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ; \
+ 	fi
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
+@@ -405,15 +405,14 @@ endif
+ 
+ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+-	if grep -q "CONFIG_DTC=y" $(@D)/.config; then	\
+-		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/bin/linux-dtc ;	\
+-		if [ ! -e $(HOST_DIR)/bin/dtc ]; then	\
+-			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ;	\
+-		fi	\
++	if grep -q "CONFIG_DTC=y" $(@D)/.config; then \
++		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/bin/linux-dtc ; \
++		if [ ! -e $(HOST_DIR)/bin/dtc ]; then \
++			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ; \
++		fi \
+ 	fi
+ endef
+ 
+-
+ define LINUX_INSTALL_IMAGES_CMDS
+ 	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
+ 	$(call LINUX_INSTALL_DTB,$(BINARIES_DIR))
+@@ -427,10 +426,10 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+-	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
++	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
+ 		$(LINUX_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
+-		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
+-		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
++		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ; \
++		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ; \
+ 	fi
+ 	$(LINUX_INSTALL_HOST_TOOLS)
+ endef
+@@ -485,7 +484,7 @@ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(KERNEL_DTS_NAME)),y:)
+ $(error No kernel device tree source specified, check your \
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
++	BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
+ endif
+ 
+ endif # BR_BUILDING
 -- 
 2.14.1
