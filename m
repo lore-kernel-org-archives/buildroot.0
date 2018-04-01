@@ -1,54 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Apr 2018 22:50:09 +0200
-Subject: [Buildroot] [git commit] coreutils: use single binary in symlink
- method
-Message-ID: <20180401205752.E4C2083757@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 22:49:57 +0200
+Subject: [Buildroot] [git commit] coreutils: rewrite for loop with foreach
+Message-ID: <20180401205752.D72C983762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=256bb383fb7d30ea0df81c65550eef4aac9a9215
+commit: https://git.buildroot.net/buildroot/commit/?id=225c8aaf27af908ce8a9ef5fb3fde4eb9d0cdc94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The symlink method is faster, since there is no shell fork/exec, and
-provides extra space savings.
+This brings up error checking at each iteration of the loop for free,
+which removes the need for "|| exit 1".
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-[Thomas: use the symlinks method not only for the merged /usr case,
-but also in the non-merged case to be consistent, and therefore adjust
-the logic that was moving the shell wrappers to a logic that recreates
-the symlinks.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/coreutils/coreutils.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 8880e77dcc..4ef888829f 100644
+index 8259f42f4a..8880e77dcc 100644
 --- a/package/coreutils/coreutils.mk
 +++ b/package/coreutils/coreutils.mk
-@@ -14,7 +14,7 @@ COREUTILS_LICENSE_FILES = COPYING
- COREUTILS_AUTORECONF = YES
- COREUTILS_GETTEXTIZE = YES
- 
--COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=shebangs \
-+COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=symlinks \
- 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
- COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 	ac_cv_func_chown_works=yes \
-@@ -103,9 +103,10 @@ endif
- 
+@@ -104,9 +104,9 @@ endif
  ifeq ($(BR2_ROOTFS_MERGED_USR),)
  define COREUTILS_CLEANUP_BIN
--	# some things go in root rather than usr
-+	# some things go in /bin rather than /usr/bin
- 	$(foreach f,$(COREUTILS_BIN_PROGS), \
--		mv -f $(TARGET_DIR)/usr/bin/$(f) $(TARGET_DIR)/bin/$(f)
-+		rm -f $(TARGET_DIR)/usr/bin/$(f) && \
-+		ln -sf ../usr/bin/coreutils $(TARGET_DIR)/bin/$(f)
- 	)
+ 	# some things go in root rather than usr
+-	for f in $(COREUTILS_BIN_PROGS); do \
+-		mv -f $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f || exit 1; \
+-	done
++	$(foreach f,$(COREUTILS_BIN_PROGS), \
++		mv -f $(TARGET_DIR)/usr/bin/$(f) $(TARGET_DIR)/bin/$(f)
++	)
  endef
  COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
+ endif
