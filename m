@@ -1,70 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Apr 2018 16:26:41 +0200
-Subject: [Buildroot] [v3 09/13] pkg-generic: introduce _SAME_SOURCE_AS
-In-Reply-To: <20180331142407.9522-9-maxime.hadjinlian@gmail.com>
-References: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
- <20180331142407.9522-9-maxime.hadjinlian@gmail.com>
-Message-ID: <20180401142641.GH2613@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 16:30:30 +0200
+Subject: [Buildroot] [git commit] toolchain-configs.csv: re-organize for
+ test-pkg
+Message-ID: <20180401143040.2060582BC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-03-31 16:24 +0200, Maxime Hadjinlian spake thusly:
-> This per package variable can be used to specify that a package shares
-> the same sources as another package.
-> 
-> The use case here is for example linux-headers and linux, which share
-> the same sources (because they are the same upstream project), so we
-> don't want to download twice the kernel, nor store it multiple times
-> either.
-> 
-> Make will automatically try to help by introducing leading and trailing
-> spaces when replacing a line-continuation '\', so we need to call
-> $(strip) on the variable.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/pkg-generic.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index b1342228c8..f3829e9912 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -428,7 +428,9 @@ endif
->  
->  $(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
->  $(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
-> -$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
-> +$(2)_DL_DIR	= $$(strip $$(if $$($(2)_SAME_SOURCE_AS), \
-> +        $$($$(call UPPERCASE,$$($(2)_SAME_SOURCE_AS))_DL_DIR), \
-> +        $$(DL_DIR)/$$($(2)_RAWNAME)))
+commit: https://git.buildroot.net/buildroot/commit/?id=1fdd63ad372d7af555c71ae42e0a471c86a0cec9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Indentation with TABs, please.
+This commit reorganizes the toolchain-configs.csv so that the first
+toolchains are a subset of "useful" toolchains to be tested by
+contributors to validate a package. This subset is the one that will
+be used by default by test-pkg.
 
-May I suggest an alternate indentation (spaces here for easy display):
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../autobuild/toolchain-configs.csv                | 32 ++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 6 deletions(-)
 
-$(2)_DL_DIR = $$(strip $$(if $$($(2)_SAME_SOURCE_AS), \
-                                $$($$(call UPPERCASE,$$($(2)_SAME_SOURCE_AS))_DL_DIR), \
-                                $$(DL_DIR)/$$($(2)_RAWNAME)) \
-                )
-
-Regards,
-Yann E. MORIN.
-
->  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
->  
->  ifndef $(2)_SUBDIR
-> -- 
-> 2.16.2
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 2010113f44..1bce7ac577 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -1,20 +1,41 @@
++# This file is sorted by "importance" of toolchains, so that by
++# default test-pkg tests a useful subset of toolchains
++
++# Toolchains used by default by test-pkg:
++
++# Test a regular uClibc toolchain
++support/config-fragments/autobuild/br-arm-full.config,x86_64
++
++# Test a toolchain with glibc and a very recent gcc version
++support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
++
++# Test a noMMU toolchain with no dynamic library support
++support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
++
++# Test a musl toolchain
++support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
++
++# Test a noMMU toolchain with dynamic library support
++support/config-fragments/autobuild/br-bfin-full.config,x86_64
++
++# Test a MMU toolchain without dynamic library support
++support/config-fragments/autobuild/br-arm-full-static.config,x86_64
++
++# Test a toolchain with an old gcc version (gcc 4.8)
+ support/config-fragments/autobuild/armv5-ctng-linux-gnueabi.config,x86
++
++# Toolchains used by test-pkg only when the '-a' option is passed:
+ support/config-fragments/autobuild/armv7-ctng-linux-gnueabihf.config,x86
+ support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
+ support/config-fragments/autobuild/br-arc-full-internal.config,any
+ support/config-fragments/autobuild/br-arc-internal-glibc.config,any
+ support/config-fragments/autobuild/br-arcle-hs38.config,x86_64
+ support/config-fragments/autobuild/br-arm-basic.config,x86_64
+-support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config,x86_64
+ support/config-fragments/autobuild/br-arm-cortex-a9-musl.config,x86_64
+-support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
+-support/config-fragments/autobuild/br-arm-full.config,x86_64
+ support/config-fragments/autobuild/br-arm-full-nothread.config,x86_64
+-support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+ support/config-fragments/autobuild/br-arm-internal-full.config,any
+ support/config-fragments/autobuild/br-arm-internal-glibc.config,any
+ support/config-fragments/autobuild/br-arm-internal-musl.config,any
+-support/config-fragments/autobuild/br-bfin-full.config,x86_64
+ support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
+ support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config,x86_64
+ support/config-fragments/autobuild/br-m68k-5208-full.config,x86_64
+@@ -36,7 +57,6 @@ support/config-fragments/autobuild/br-sh4-full.config,x86_64
+ support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
+ support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
+ support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64
+-support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
+ support/config-fragments/autobuild/br-xtensa-full.config,x86_64
+ support/config-fragments/autobuild/br-xtensa-full-internal.config,any
+ support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
