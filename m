@@ -1,47 +1,51 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:17 -0300
-Subject: [Buildroot] [PATCH v2 04/37] check-package: enable for boot/
+Date: Sun,  1 Apr 2018 02:08:19 -0300
+Subject: [Buildroot] [PATCH v2 06/37] fs/ubi: use namespace for internal
+ variable
 In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
 References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-5-ricardo.martincoski@gmail.com>
+Message-ID: <20180401050850.5701-7-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This directory can benefit from this script to prevent common mistakes
-when submitting patches.
-
-In order to accomplish this:
-Do not ignore anymore files from the boot/ directory.
-Ignore boot/barebox/barebox.mk as it declares a package infra and not a
-package itself.
+UBINIZE_CONFIG_FILE_PATH is only used inside this file, so rename it to
+start with UBI_, following the namespace convention already used by
+common packages.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
 Changes v1 -> v2:
   - no changes
 ---
- utils/check-package | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/ubi/ubi.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 8d10affabd..48ce956443 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -47,10 +47,12 @@ def parse_args():
- CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
- DO_CHECK_INTREE = re.compile("|".join([
-     "arch/",
-+    "boot/",
-     "package/",
-     "system/",
-     ]))
- DO_NOT_CHECK_INTREE = re.compile("|".join([
-+    "boot/barebox/barebox\.mk$",
-     "package/doc-asciidoc\.mk$",
-     "package/pkg-\S*\.mk$",
-     ]))
+diff --git a/fs/ubi/ubi.mk b/fs/ubi/ubi.mk
+index c78feda5a3..9874e73ff6 100644
+--- a/fs/ubi/ubi.mk
++++ b/fs/ubi/ubi.mk
+@@ -15,16 +15,16 @@ UBI_UBINIZE_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_OPTS))
+ ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG),y)
+-UBINIZE_CONFIG_FILE_PATH = $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE))
++UBI_UBINIZE_CONFIG_FILE_PATH = $(call qstrip,$(BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE))
+ else
+-UBINIZE_CONFIG_FILE_PATH = fs/ubi/ubinize.cfg
++UBI_UBINIZE_CONFIG_FILE_PATH = fs/ubi/ubinize.cfg
+ endif
+ 
+ # don't use sed -i as it misbehaves on systems with SELinux enabled when this is
+ # executed through fakeroot (see #9386)
+ define ROOTFS_UBI_CMD
+ 	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
+-		$(UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
++		$(UBI_UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
+ 	$(HOST_DIR)/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
+ 	rm $(BUILD_DIR)/ubinize.cfg
+ endef
 -- 
 2.14.1
