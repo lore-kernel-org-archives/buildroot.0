@@ -1,39 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 08:49:44 +0200
-Subject: [Buildroot] [PATCH v2 04/37] check-package: enable for boot/
-In-Reply-To: <20180401050850.5701-5-ricardo.martincoski@gmail.com>
-References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
- <20180401050850.5701-5-ricardo.martincoski@gmail.com>
-Message-ID: <20180401084944.29a512be@windsurf>
+Date: Sun, 1 Apr 2018 08:52:45 +0200
+Subject: [Buildroot] [git commit] fs/*/Config.in: fix attributes order
+Message-ID: <20180401065253.8AAED815C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b205420e6ad1f773d8444c4c279ab38fca0012e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  1 Apr 2018 02:08:17 -0300, Ricardo Martincoski wrote:
-> This directory can benefit from this script to prevent common mistakes
-> when submitting patches.
-> 
-> In order to accomplish this:
-> Do not ignore anymore files from the boot/ directory.
-> Ignore boot/barebox/barebox.mk as it declares a package infra and not a
-> package itself.
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - no changes
-> ---
->  utils/check-package | 2 ++
->  1 file changed, 2 insertions(+)
+... to follow the convention: type, default, depends on, select, help.
 
-Applied to master, thanks.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ fs/jffs2/Config.in | 6 +++---
+ fs/tar/Config.in   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
+index f1703f4edd..208cabaa52 100644
+--- a/fs/jffs2/Config.in
++++ b/fs/jffs2/Config.in
+@@ -38,8 +38,8 @@ endchoice
+ 
+ config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE
+ 	hex "Erase block size"
+-	depends on BR2_TARGET_ROOTFS_JFFS2_CUSTOM
+ 	default 0x20000
++	depends on BR2_TARGET_ROOTFS_JFFS2_CUSTOM
+ 	help
+ 	  Set to erase size of memory
+ 
+@@ -68,8 +68,8 @@ config BR2_TARGET_ROOTFS_JFFS2_PAD
+ 
+ config BR2_TARGET_ROOTFS_JFFS2_PADSIZE
+ 	hex "Pad output size (0x0 = to end of EB)"
+-	depends on BR2_TARGET_ROOTFS_JFFS2_PAD
+ 	default 0x0
++	depends on BR2_TARGET_ROOTFS_JFFS2_PAD
+ 	help
+ 	  Set to 0x0 to pad to end of erase block.
+ 
+@@ -100,8 +100,8 @@ config BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 
+ config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE
+ 	hex "Virtual memory page size"
+-	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	default 0x1000
++	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	help
+ 	  Set to virtual memory page size of target system (in bytes).  This value
+ 	  should match the virtual page size in Linux (i.e. this should have the
+diff --git a/fs/tar/Config.in b/fs/tar/Config.in
+index 2116edf143..a4e375c68b 100644
+--- a/fs/tar/Config.in
++++ b/fs/tar/Config.in
+@@ -50,8 +50,8 @@ endchoice
+ 
+ config BR2_TARGET_ROOTFS_TAR_OPTIONS
+ 	string "other random options to pass to tar"
+-	depends on BR2_TARGET_ROOTFS_TAR
+ 	default ""
++	depends on BR2_TARGET_ROOTFS_TAR
+ 	help
+ 	  Any other flags you want to pass to tar
+ 	  Refer to tar --help for details
