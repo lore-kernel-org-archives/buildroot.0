@@ -1,58 +1,51 @@
-From: Ezequiel Garcia <ezequiel@collabora.com>
-Date: Sun, 01 Apr 2018 19:44:28 -0300
-Subject: [Buildroot] [PATCH] board/ci20: Fix U-Boot build failure
-In-Reply-To: <1522621901.1665.1.camel@collabora.com>
-References: <20180401135035.29655-1-ezequiel@collabora.com>
- <20180401160555.36587bd1@windsurf> <1522621901.1665.1.camel@collabora.com>
-Message-ID: <1522622668.1665.2.camel@collabora.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Apr 2018 00:45:39 +0200
+Subject: [Buildroot] [git commit] mpd: add support for libupnp18
+Message-ID: <20180401224540.EE05B83830@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2018-04-01 at 19:31 -0300, Ezequiel Garcia wrote:
-> On Sun, 2018-04-01 at 16:05 +0200, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > On Sun,  1 Apr 2018 10:50:35 -0300, Ezequiel Garcia wrote:
-> > > Given there is no upstream U-Boot for CI20, the defconfig
-> > > sets an ancient version, with old libfdt headers.
-> > > 
-> > > Enable DTC, so U-Boot can pick Buildroot's libfdt headers
-> > > instead of those installed by the host.
-> > > 
-> > > Fixes multiple errors looking like this:
-> > > 
-> > > In file included from ../include/libfdt.h:54:0,
-> > >                  from fdt_host.h:11,
-> > >                  from mkimage.h:22,
-> > >                  from aisimage.c:8:
-> > > /usr/include/libfdt_env.h:70:30: error: conflicting types for
-> > > ?fdt64_t?
-> > >  typedef uint64_t FDT_BITWISE fdt64_t;
-> > 
-> > Which Buildroot version are you using ? We fixed errors like that
-> > recently, and I built ci20_defconfig yesterday, and it worked fine
-> > for
-> > me.
-> > 
-> 
-> I was testing on top of a recent master:
-> 
-> commit 53e1b222533fd110ab9472480ded126a4762db5e (origin/master,
-> origin/HEAD)
-> Author: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Date:   Sat Mar 31 15:27:36 2018 +0200
-> 
->     package/docker-proxy: convert to golang infrastructure
-> 
-> ... just tested on top of current master, same error is thrown if
-> there
->  are no output/host/include/libfdt* files.
-> 
-> Can you point me at the recent fixes?
-> 
+commit: https://git.buildroot.net/buildroot/commit/?id=252218881b1e807ca4d625f457675f01d1158f99
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I guess you mean bf733342324b414a1142b57781504111f81c97ea.
-Let me take a look at it.
+Instead of selecting BR2_PACKAGE_LIBUPNP, select BR2_PACKAGE_LIBUPNP18
+if BR2_PACKAGE_LIBUPNP is not enabled
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpd/Config.in | 2 +-
+ package/mpd/mpd.mk    | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 5991b6f4bb..bad32f8440 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -309,7 +309,7 @@ config BR2_PACKAGE_MPD_TCP
+ config BR2_PACKAGE_MPD_UPNP
+ 	bool "UPnP"
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
+ 	help
+ 	  Enable MPD UPnP client support.
+ 
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 26e82af0a8..f50e3d90c7 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -236,7 +236,9 @@ MPD_CONF_OPTS += --disable-twolame-encoder
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MPD_UPNP),y)
+-MPD_DEPENDENCIES += expat libupnp
++MPD_DEPENDENCIES += \
++	expat \
++	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
+ MPD_CONF_OPTS += --enable-upnp
+ else
+ MPD_CONF_OPTS += --disable-upnp
