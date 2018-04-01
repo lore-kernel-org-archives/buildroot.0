@@ -1,84 +1,164 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 1 Apr 2018 15:02:53 +0200
-Subject: [Buildroot] [git commit] support/download: keep files downloaded
- without hash
-Message-ID: <20180401141924.AE825813FC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 16:20:11 +0200
+Subject: [Buildroot] [git commit] package/kodi-adsp-*: remove packages
+Message-ID: <20180401142013.5B8A982ADB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf9bf7d28b8a6c55e639b17c90f35ea11cae88ac
+commit: https://git.buildroot.net/buildroot/commit/?id=9657e964f08033c1c71a8d94968fdc997360af4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In the situation where the hash is missing from the hash file, the
-dl-wrapper downloads the file again and again until the developer
-specifies the hash to complete the download step.
+Those packages are unmaintained and not in a working state, for
+details see https://github.com/xbmc/xbmc/pull/13723
 
-To avoid this situation, the freshly-downloaded file is not removed
-anymore after a successful download.
-
-After this change, the behaviour is as follows:
-
-- Hash file doesn't exist, or file is in BR_NO_CHECK_HASH_FOR
-  => always succeeds.
-
-- Hash file exists, but file is not present
-  => file is NOT removed, build is terminated immediately (i.e.
-     secondary site is not tried).
-
-- Hash file exists, file is present, but hash mismatch
-  => file is removed, secondary site is tried.
-  => If all primary/secondary site downloads or hash checks fail, the
-     build is terminated.
-
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-[Arnout: extend commit log]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/dl-wrapper | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ Config.in.legacy                                          | 15 +++++++++++++++
+ package/kodi-adsp-basic/Config.in                         | 12 ------------
+ package/kodi-adsp-basic/kodi-adsp-basic.hash              |  2 --
+ package/kodi-adsp-basic/kodi-adsp-basic.mk                | 15 ---------------
+ package/kodi-adsp-freesurround/Config.in                  | 11 -----------
+ .../kodi-adsp-freesurround/kodi-adsp-freesurround.hash    |  2 --
+ package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk  | 15 ---------------
+ package/kodi/Config.in                                    |  5 -----
+ 8 files changed, 15 insertions(+), 62 deletions(-)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index f944b71db5..b018819833 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -21,7 +21,7 @@ set -e
+diff --git a/Config.in.legacy b/Config.in.legacy
+index fa083eaf79..2e3b1b6001 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -143,6 +143,21 @@ comment "----------------------------------------------------"
+ endif
  
- main() {
-     local OPT OPTARG
--    local backend output hfile recurse quiet
-+    local backend output hfile recurse quiet rc
- 
-     # Parse our options; anything after '--' is for the backend
-     while getopts :hb:o:H:rq OPT; do
-@@ -93,9 +93,16 @@ main() {
- 
-     # Check if the downloaded file is sane, and matches the stored hashes
-     # for that file
--    if ! support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
--        rm -rf "${tmpd}"
--        exit 1
-+    if support/download/check-hash ${quiet} "${hfile}" "${tmpf}" "${output##*/}"; then
-+        rc=0
-+    else
-+        if [ ${?} -ne 3 ]; then
-+            rm -rf "${tmpd}"
-+            exit 1
-+        fi
+ ###############################################################################
++comment "Legacy options removed in 2018.05"
 +
-+        # the hash file exists and there was no hash to check the file against
-+        rc=1
-     fi
- 
-     # tmp_output is in the same directory as the final output, so we can
-@@ -141,6 +148,8 @@ main() {
-         rm -f "${tmp_output}"
-         exit 1
-     fi
++config BR2_PACKAGE_KODI_ADSP_BASIC
++	bool "kodi-adsp-basic package removed"
++	select BR2_LEGACY
++	help
++	  kodi-adsp-basic is unmaintained
 +
-+    return ${rc}
- }
++config BR2_PACKAGE_KODI_ADSP_FREESURROUND
++	bool "kodi-adsp-freesurround package removed"
++	select BR2_LEGACY
++	help
++	  kodi-adsp-freesurround is unmaintained
++
++###############################################################################
+ comment "Legacy options removed in 2018.02"
  
- help() {
+ config BR2_KERNEL_HEADERS_3_4
+diff --git a/package/kodi-adsp-basic/Config.in b/package/kodi-adsp-basic/Config.in
+deleted file mode 100644
+index 87bdd1973c..0000000000
+--- a/package/kodi-adsp-basic/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_KODI_ADSP_BASIC
+-	bool "kodi-adsp-basic"
+-	select BR2_PACKAGE_LIBPLATFORM
+-	select BR2_PACKAGE_KODI_PLATFORM
+-	help
+-	  This add-on contains basic dsp related parts to handle
+-	  speaker delays, channel related volume amplification. As
+-	  mode it supports a Dolby Pro Logic II compatible
+-	  multichannel downmix to stereo, which becomes available if
+-	  only 2 channel output on Kodi is selected.
+-
+-	  https://github.com/kodi-adsp/adsp.basic
+diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.hash b/package/kodi-adsp-basic/kodi-adsp-basic.hash
+deleted file mode 100644
+index 10dd773c1e..0000000000
+--- a/package/kodi-adsp-basic/kodi-adsp-basic.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 d6ef031157ceb825a6e6ba114fb20c622ef7f396ddd17ae8bf1954aab25bc2af  kodi-adsp-basic-2ae604e591346741324663260696cfa231931870.tar.gz
+diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.mk b/package/kodi-adsp-basic/kodi-adsp-basic.mk
+deleted file mode 100644
+index bb114a41ea..0000000000
+--- a/package/kodi-adsp-basic/kodi-adsp-basic.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# kodi-adsp-basic
+-#
+-################################################################################
+-
+-# This cset is on the branch 'Krypton'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_ADSP_BASIC_VERSION = 2ae604e591346741324663260696cfa231931870
+-KODI_ADSP_BASIC_SITE = $(call github,kodi-adsp,adsp.basic,$(KODI_ADSP_BASIC_VERSION))
+-KODI_ADSP_BASIC_LICENSE = GPL-3.0+
+-KODI_ADSP_BASIC_LICENSE_FILES = LICENSE.md
+-KODI_ADSP_BASIC_DEPENDENCIES = libplatform kodi-platform
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi-adsp-freesurround/Config.in b/package/kodi-adsp-freesurround/Config.in
+deleted file mode 100644
+index 80aadf1d40..0000000000
+--- a/package/kodi-adsp-freesurround/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_KODI_ADSP_FREESURROUND
+-	bool "kodi-adsp-freesurround"
+-	select BR2_PACKAGE_LIBPLATFORM
+-	select BR2_PACKAGE_KODI_PLATFORM
+-	help
+-	  FreeSurround is meant to be the KODI equivalent of your
+-	  hi-fi receiver's Dolby ProLogic II button. It's purpose is
+-	  to decode surround information from your stereo music and to
+-	  produce multichannel output from it.
+-
+-	  https://github.com/kodi-adsp/adsp.freesurround
+diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
+deleted file mode 100644
+index 2649bbdcbf..0000000000
+--- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 cf6985be6839530027861b54e2146693d05e802363281ef6f8c1f352dbf94b5c  kodi-adsp-freesurround-34f50406bcba22e364711562e5b9205e57ae844b.tar.gz
+diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
+deleted file mode 100644
+index 927af74da7..0000000000
+--- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# kodi-adsp-freesurround
+-#
+-################################################################################
+-
+-# This cset is on the branch 'Krypton'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_ADSP_FREESURROUND_VERSION = 34f50406bcba22e364711562e5b9205e57ae844b
+-KODI_ADSP_FREESURROUND_SITE = $(call github,kodi-adsp,adsp.freesurround,$(KODI_ADSP_FREESURROUND_VERSION))
+-KODI_ADSP_FREESURROUND_LICENSE = GPL-3.0+
+-KODI_ADSP_FREESURROUND_LICENSE_FILES = LICENSE.md
+-KODI_ADSP_FREESURROUND_DEPENDENCIES = libplatform kodi-platform
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 071c03d640..d96d546bf9 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -280,11 +280,6 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-vgmstream/Config.in"
+ endmenu
+ 
+-menu "Audio DSP addons"
+-	source "package/kodi-adsp-basic/Config.in"
+-	source "package/kodi-adsp-freesurround/Config.in"
+-endmenu
+-
+ menu "Audio encoder addons"
+ 	source "package/kodi-audioencoder-flac/Config.in"
+ 	source "package/kodi-audioencoder-lame/Config.in"
