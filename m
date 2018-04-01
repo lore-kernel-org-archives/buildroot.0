@@ -1,105 +1,148 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 1 Apr 2018 22:25:57 +0200
-Subject: [Buildroot] [git commit] support/scripts/graph-depends: add
- --flat-list option
-Message-ID: <20180401202618.D0ABD813A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/graph-depends: use the
+ standard python logging module
+Message-ID: <20180401202618.ABEE0836E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3146ba76331690fb693de3ff2fcebbaec43ca54e
+commit: https://git.buildroot.net/buildroot/commit/?id=3543d174410567707737f0c8a219c0654428e08a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-graph-depends currently spits out a graph in .dot format. However, as
-part of the upcoming introduction of <pkg>-show-recursive-depends and
-<pkg>-show-recursive-rdepends, we need graph-depends to be able to
-display a flat list.
+Instead of hardcoded sys.stderr.write() calls.  No functional change, but
+allows us to easily implement a quiet option.
 
-Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
-[Thomas:
- - Rebase on top of graph-depends changes
- - Do not display the package name itself in the list, only its
-   dependencies (or reverse dependencies)
- - Display the result on a single line, instead of one package per
-   line, in order to match what <pkg>-show-depends and
-   <pkg>-show-rdepends are doing today.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/graph-depends | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+ support/scripts/brpkgutil.py  | 13 +++++++------
+ support/scripts/graph-depends | 16 ++++++++++------
+ 2 files changed, 17 insertions(+), 12 deletions(-)
 
+diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+index 4c99ae9110..e70d525353 100644
+--- a/support/scripts/brpkgutil.py
++++ b/support/scripts/brpkgutil.py
+@@ -1,5 +1,6 @@
+ # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
++import logging
+ import sys
+ import subprocess
+ 
+@@ -7,18 +8,18 @@ import subprocess
+ # Execute the "make <pkg>-show-version" command to get the version of a given
+ # list of packages, and return the version formatted as a Python dictionary.
+ def get_version(pkgs):
+-    sys.stderr.write("Getting version for %s\n" % pkgs)
++    logging.info("Getting version for %s" % pkgs)
+     cmd = ["make", "-s", "--no-print-directory"]
+     for pkg in pkgs:
+         cmd.append("%s-show-version" % pkg)
+     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0]
+     if p.returncode != 0:
+-        sys.stderr.write("Error getting version %s\n" % pkgs)
++        logging.error("Error getting version %s" % pkgs)
+         sys.exit(1)
+     output = output.split("\n")
+     if len(output) != len(pkgs) + 1:
+-        sys.stderr.write("Error getting version\n")
++        logging.error("Error getting version")
+         sys.exit(1)
+     version = {}
+     for i in range(0, len(pkgs)):
+@@ -28,18 +29,18 @@ def get_version(pkgs):
+ 
+ 
+ def _get_depends(pkgs, rule):
+-    sys.stderr.write("Getting dependencies for %s\n" % pkgs)
++    logging.info("Getting dependencies for %s" % pkgs)
+     cmd = ["make", "-s", "--no-print-directory"]
+     for pkg in pkgs:
+         cmd.append("%s-%s" % (pkg, rule))
+     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0]
+     if p.returncode != 0:
+-        sys.stderr.write("Error getting dependencies %s\n" % pkgs)
++        logging.error("Error getting dependencies %s\n" % pkgs)
+         sys.exit(1)
+     output = output.split("\n")
+     if len(output) != len(pkgs) + 1:
+-        sys.stderr.write("Error getting dependencies\n")
++        logging.error("Error getting dependencies")
+         sys.exit(1)
+     deps = {}
+     for i in range(0, len(pkgs)):
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 4ec0e46f7b..621e603278 100755
+index dc265ae28c..17bfaa0cf5 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -248,11 +248,14 @@ done_deps = []
+@@ -21,6 +21,7 @@
+ #
+ # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  
- # Print the dependency graph of a package
- def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
--                   arrow_dir, depth, max_depth, pkg, colors):
-+                   arrow_dir, draw_graph, depth, max_depth, pkg, colors):
-     if pkg in done_deps:
-         return
-     done_deps.append(pkg)
--    print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
-+    if draw_graph:
-+        print_attrs(outfile, pkg, dict_version.get(pkg), depth, colors)
-+    elif depth != 0:
-+        outfile.write("%s " % pkg)
-     if pkg not in dict_deps:
-         return
-     for p in stop_list:
-@@ -276,9 +279,10 @@ def print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
-                     add = False
-                     break
-             if add:
--                outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
-+                if draw_graph:
-+                    outfile.write("%s -> %s [dir=%s]\n" % (pkg_node_name(pkg), pkg_node_name(d), arrow_dir))
-                 print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
--                               arrow_dir, depth + 1, max_depth, d, colors)
-+                               arrow_dir, draw_graph, depth + 1, max_depth, d, colors)
++import logging
+ import sys
+ import subprocess
+ import argparse
+@@ -39,7 +40,7 @@ allpkgs = []
+ # Buildroot PACKAGES and return it formatted as a Python list. This
+ # list is used as the starting point for full dependency graphs
+ def get_targets():
+-    sys.stderr.write("Getting targets\n")
++    logging.info("Getting targets")
+     cmd = ["make", "-s", "--no-print-directory", "show-targets"]
+     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0].strip()
+@@ -192,10 +193,10 @@ def check_circular_deps(deps):
+         chain.append(pkg)
+         for p in deps[pkg]:
+             if p in chain:
+-                sys.stderr.write("\nRecursion detected for  : %s\n" % (p))
++                logging.warning("\nRecursion detected for  : %s" % (p))
+                 while True:
+                     _p = chain.pop()
+-                    sys.stderr.write("which is a dependency of: %s\n" % (_p))
++                    logging.warning("which is a dependency of: %s" % (_p))
+                     if p == _p:
+                         sys.exit(1)
+             recurse(p)
+@@ -319,11 +320,14 @@ def main():
  
+     check_only = args.check_only
  
- def parse_args():
-@@ -314,6 +318,8 @@ def parse_args():
-                         help="Draw reverse dependencies")
-     parser.add_argument("--quiet", '-q', dest="quiet", action='store_true',
-                         help="Quiet")
-+    parser.add_argument("--flat-list", '-f', dest="flat_list", action='store_true', default=False,
-+                        help="Do not draw graph, just print a flat list")
-     return parser.parse_args()
++    logging.basicConfig(stream=sys.stderr, format='%(message)s',
++                        level=logging.INFO)
++
+     if args.outfile is None:
+         outfile = sys.stdout
+     else:
+         if check_only:
+-            sys.stderr.write("don't specify outfile and check-only at the same time\n")
++            logging.error("don't specify outfile and check-only at the same time")
+             sys.exit(1)
+         outfile = open(args.outfile, "w")
  
- 
-@@ -359,6 +365,8 @@ def main():
+@@ -348,7 +352,7 @@ def main():
+         arrow_dir = "forward"
+     else:
+         if mode == MODE_FULL:
+-            sys.stderr.write("--reverse needs a package\n")
++            logging.error("--reverse needs a package")
+             sys.exit(1)
          get_depends_func = brpkgutil.get_rdepends
          arrow_dir = "back"
- 
-+    draw_graph = not args.flat_list
-+
-     # Get the colors: we need exactly three colors,
-     # so no need not split more than 4
+@@ -358,7 +362,7 @@ def main():
      # We'll let 'dot' validate the colors...
-@@ -406,12 +414,16 @@ def main():
-                                           if pkg != "all" and not pkg.startswith("root")])
+     colors = args.colors.split(',', 4)
+     if len(colors) != 3:
+-        sys.stderr.write("Error: incorrect color list '%s'\n" % args.colors)
++        logging.error("Error: incorrect color list '%s'" % args.colors)
+         sys.exit(1)
  
-     # Start printing the graph data
--    outfile.write("digraph G {\n")
-+    if draw_graph:
-+        outfile.write("digraph G {\n")
- 
-     print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
--                   arrow_dir, 0, args.depth, rootpkg, colors)
-+                   arrow_dir, draw_graph, 0, args.depth, rootpkg, colors)
- 
--    outfile.write("}\n")
-+    if draw_graph:
-+        outfile.write("}\n")
-+    else:
-+        outfile.write("\n")
- 
- 
- if __name__ == "__main__":
+     # In full mode, start with the result of get_targets() to get the main
