@@ -1,34 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 14:17:48 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mplayer: disable inline sse on
- i386
-In-Reply-To: <5b884a7c-9147-12e0-e6e7-c6f71d82f089@mind.be> (Arnout
- Vandecappelle's message of "Sat, 31 Mar 2018 17:12:50 +0200")
-References: <20170513150918.25427-1-bernd.kuhls@t-online.de>
- <20170514160855.2dea324b@free-electrons.com>
- <XnsA776E64284194berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <5b884a7c-9147-12e0-e6e7-c6f71d82f089@mind.be>
-Message-ID: <87woxrruhf.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 14:18:33 +0200
+Subject: [Buildroot] [PATCH v1] quotatool: new package
+In-Reply-To: <20180203220733.15255-1-ps.report@gmx.net>
+References: <20180203220733.15255-1-ps.report@gmx.net>
+Message-ID: <20180401141833.6f0306c2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hello,
 
-Hi,
+On Sat,  3 Feb 2018 23:07:33 +0100, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  ...x-missing-__P-definition-for-musl-compile.patch | 36 ++++++++++++++++++++++
+>  package/quotatool/Config.in                        |  7 +++++
+>  package/quotatool/quotatool.hash                   |  5 +++
+>  package/quotatool/quotatool.mk                     | 18 +++++++++++
+>  6 files changed, 68 insertions(+)
+>  create mode 100644 package/quotatool/0001-fix-missing-__P-definition-for-musl-compile.patch
+>  create mode 100644 package/quotatool/Config.in
+>  create mode 100644 package/quotatool/quotatool.hash
+>  create mode 100644 package/quotatool/quotatool.mk
 
- >  Looking at current mplayer build failures, they seem slightly different than
- > the errors you report in the three patches here.
+Applied to master with the change to use QUOTATOOL_INSTALL_TARGET_OPTS,
+as suggested by Romain.
 
- >  With all the fixes we need for mplayer's bundled ffmpeg, why don't we just
- > switch to ffmpeg itself? mplayer upstream doesn't seem to advise against it,
- > Debian doesn't use the bundled one, so why not? OK, it will probably be some
- > effort to unbundle it, but I think it's more future-safe that way.
+Romain also suggested to remove __P instead of using <sys/cdefs.h>, but
+since it would result in a patch of the same size, I was too lazy to
+change to removing __P. The fact that upstream hasn't committed
+anything since 2013 is also not very encouraging in terms of getting
+patches accepted. So I've kept your patch as-is.
 
-Or alternatively drop mplayer now that we have mpv. Mplayer upstream
-seems pretty dead with no releases in the last two years.
+Thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
