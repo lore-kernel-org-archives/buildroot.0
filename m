@@ -1,210 +1,107 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 1 Apr 2018 20:24:01 +0200
-Subject: [Buildroot] [PATCH v3] qt5webkit: fix build issue with 32-bits
- armv8-a
-In-Reply-To: <20180302162812.17475-1-gael.portay@savoirfairelinux.com>
-References: <20180302162812.17475-1-gael.portay@savoirfairelinux.com>
-Message-ID: <e8989962-69ae-ca6e-f45f-0b276f970b20@mind.be>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Sun, 1 Apr 2018 19:37:27 +0100
+Subject: [Buildroot] [PATCH v2 1/1] Allow adding per-package override
+ rsync exclusions
+In-Reply-To: <87b1e91e-f24b-87ae-ee09-17a4464191a5@mind.be>
+References: <20171108132641.8234-1-aperez@igalia.com>
+ <87b1e91e-f24b-87ae-ee09-17a4464191a5@mind.be>
+Message-ID: <20180401193727.GB29590@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
+On Sun, 1 Apr 2018 17:05:29 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+ 
+> On 08-11-17 14:26, Adrian Perez de Castro wrote:
+> > This allows using <PKG>_SRCDIR_OVERRIDE_RSYNC_EXCLUSIONS in local.mk to
+> > skip copying parts of source trees unneeded for building. For example,
+> > when developing WebKitGTK+, it's handy to skip copying all the tests and
+> > other build directories, which are huge:
+> > 
+> >     WEBKITGTK_OVERRIDE_SRCDIR = /home/aperez/WebKit
+> >     WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+> >         --exclude JSTests --exclude ManualTests \
+> > 	--exclude PerformanceTests --exclude WebDriverTests \
+> > 	--exclude WebKitBuild --exclude WebKitLibraries \
+> > 	--exclude WebKit.xcworkspace --exclude Websites \
+> > 	--exclude Examples
+> > 
+> > This saves a good chunk of time when rsync is used for the first time to
+> > copy the source tree over before building.
+> > 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> 
+>  Applied to master, thanks.
+> 
+>  I've moved the documentation to the end of the section, otherwise it breaks the
+> flow IMO.
 
-On 02-03-18 17:28, Ga?l PORTAY wrote:
-> Adds WTF platform support for the 32-bits armv8-a architectures.
-> 
-> Fixes:
-> 
-> 	In file included from ./config.h:30:0,
-> 	                 from ...
-> 	./wtf/Platform.h:323:6: error: #error "Not supported ARM architecture"
-> 	 #    error "Not supported ARM architecture"
-> 	      ^~~~~
-> 
-> The patch is an adaptation of an upstream fix in version 5.212 of
-> qtwebkit[1].
-> 
-> Unfortunately, the commit cannot be backported and has to be fixed since
-> the toolchain does not define __ARM_ARCH_8__ but __ARM_ARCH_8A__.
-> 
-> 	$ host/bin/arm-buildroot-linux-gnueabihf-g++ -dM -E - < /dev/null | grep -i ARM
-> 	#define __ARM_SIZEOF_WCHAR_T 4
-> 	#define __ARM_FEATURE_SAT 1
-> 	#define __ARM_ARCH_ISA_ARM 1
-> 	#define __ARMEL__ 1
-> 	#define __ARM_FEATURE_UNALIGNED 1
-> 	#define __ARM_FEATURE_IDIV 1
-> 	#define __ARM_FP 14
-> 	#define __ARM_ARCH_8A__ 1
-> 	#define __ARM_NEON_FP 6
-> 	#define __ARM_SIZEOF_MINIMAL_ENUM 4
-> 	#define __ARM_PCS_VFP 1
-> 	#define __ARM_FEATURE_LDREX 15
-> 	#define __ARM_FEATURE_QBIT 1
-> 	#define __ARM_FEATURE_FMA 1
-> 	#define __ARM_NEON__ 1
-> 	#define __ARM_ARCH_PROFILE 65
-> 	#define __ARM_32BIT_STATE 1
-> 	#define __ARM_FEATURE_CLZ 1
-> 	#define __ARM_ARCH_ISA_THUMB 2
-> 	#define __ARM_ARCH 8
-> 	#define __arm__ 1
-> 	#define __ARM_FEATURE_SIMD32 1
-> 	#define __ARM_FEATURE_CRC32 1
-> 	#define __ARM_NEON 1
-> 	#define __ARM_ARCH_EXT_IDIV__ 1
-> 	#define __ARM_EABI__ 1
-> 	#define __ARM_FEATURE_DSP 1
+Awesome! Thanks a ton for merging this one patch, it will save me (and some
+colleagues at work) from having to carry it around in our local checkouts \o/
 
-
- Applied to master, thanks. I've abbreviated the long blob above a bit, and
-added a defconfig to reproduce (please do that in the future, even if it is not
-minimal. It's sometimes difficult to find the exact options that trigger the issue).
-
- Regards,
- Arnout
-
+> > ---
+> >  docs/manual/using-buildroot-development.txt | 16 ++++++++++++++++
+> >  package/pkg-generic.mk                      |  2 +-
+> >  2 files changed, 17 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
+> > index 1071de5132..d16dc482f3 100644
+> > --- a/docs/manual/using-buildroot-development.txt
+> > +++ b/docs/manual/using-buildroot-development.txt
+> > @@ -64,6 +64,22 @@ This mechanism is best used in conjunction with the +make
+> >  _rsync_, only the modified files are copied), and restart the build
+> >  process of just this package.
+> >  
+> > +Source trees for big projects often contain hundreds or thousands of
+> > +files which are not needed for building, but will slow down the process
+> > +of copying the sources with _rsync_. Optionally, it is possible define
+> > ++<pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS+ to skip syncing certain files
+> > +from the source tree. For example, when working on the +webkitgtk+
+> > +package, the following will exclude the tests and in-tree builds from
+> > +a local WebKit source tree:
+> > +
+> > +------------------
+> > +WEBKITGTK_OVERRIDE_SRCDIR = /home/bob/WebKit
+> > +WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+> > +	--exclude JSTests --exclude ManualTests --exclude PerformanceTests \
+> > +	--exclude WebDriverTests --exclude WebKitBuild --exclude WebKitLibraries \
+> > +	--exclude WebKit.xcworkspace --exclude Websites --exclude Examples
+> > +------------------
+> > +
+> >  In the example of the +linux+ package above, the developer can then
+> >  make a source code change in +/home/bob/linux+ and then run:
+> >  
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 0e28675fbe..c895afc498 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -181,7 +181,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+> >  	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+> >  	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+> >  	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+> > -	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+> > +	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+> >  	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+> >  	$(Q)touch $@
+> >  
+> > 
 > 
-> [1]: https://github.com/qt/qtwebkit/blob/35655d5f4bad248ead1700b59c381cc568b4e98b/Source/WTF/wtf/Platform.h#L241-L242
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 > 
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Reported-by: Brock Williams <brock@cottonwoodcomputer.com>
-> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
-> 
-> Changes since v1:
->  - double check for __ARM_ARCH_8__ and __ARM_ARCH_8A__
->  - add Reviewed-by Adrian Perez de Castro
-> 
-> Changes since v2:
->  - join two lines in error log from commit message
->  - reformat patch using -N
->  - fix Upstream-Status 
-> 
->  .../0005-Detect-32-bits-armv8-a-architecture.patch | 48 ++++++++++++++++++++++
->  .../0003-Detect-32-bits-armv8-a-architecture.patch | 48 ++++++++++++++++++++++
->  2 files changed, 96 insertions(+)
->  create mode 100644 package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
->  create mode 100644 package/qt5/qt5webkit/5.9.1/0003-Detect-32-bits-armv8-a-architecture.patch
-> 
-> diff --git a/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
-> new file mode 100644
-> index 0000000000..9c2205dd94
-> --- /dev/null
-> +++ b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
-> @@ -0,0 +1,48 @@
-> +From 068bf2d2d91382ea0d8ec24a142a30ea429704db Mon Sep 17 00:00:00 2001
-> +From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-> +Date: Tue, 15 Aug 2017 18:28:49 -0400
-> +Subject: [PATCH] Detect 32-bits armv8-a architecture
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=utf-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Adds WTF platform support for the 32-bits armv8-a architectures.
-> +
-> +Theses toolchains define __ARM_ARCH_8A__ (for ARM architecture version)
-> +and __arm__ (for 32-bits word-size; __aarch64__ for 64-bits).
-> +
-> +This commit catches this new architecture (armv8a) within a #ifdef/#endif
-> +inside the if statement dedicated for 32-bits ARM detection.
-> +
-> +Fixes:
-> +
-> +	In file included from ./config.h:30:0,
-> +	                 from ...
-> +	./wtf/Platform.h:323:6: error: #error "Not supported ARM architecture"
-> +	 #    error "Not supported ARM architecture"
-> +	      ^~~~~
-> +
-> +Upstream-Status: Backport [with adaptations]
-> +Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> +---
-> + Source/WTF/wtf/Platform.h | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
-> +index 562840cf7..9cf656845 100644
-> +--- a/Source/WTF/wtf/Platform.h
-> ++++ b/Source/WTF/wtf/Platform.h
-> +@@ -243,6 +243,10 @@
-> +     || defined(__ARM_ARCH_7S__)
-> + #define WTF_ARM_ARCH_VERSION 7
-> + 
-> ++#elif defined(__ARM_ARCH_8__) \
-> ++    || defined(__ARM_ARCH_8A__)
-> ++#define WTF_ARM_ARCH_VERSION 8
-> ++
-> + /* MSVC sets _M_ARM */
-> + #elif defined(_M_ARM)
-> + #define WTF_ARM_ARCH_VERSION _M_ARM
-> +-- 
-> +2.16.1
-> +
-> diff --git a/package/qt5/qt5webkit/5.9.1/0003-Detect-32-bits-armv8-a-architecture.patch b/package/qt5/qt5webkit/5.9.1/0003-Detect-32-bits-armv8-a-architecture.patch
-> new file mode 100644
-> index 0000000000..9c2205dd94
-> --- /dev/null
-> +++ b/package/qt5/qt5webkit/5.9.1/0003-Detect-32-bits-armv8-a-architecture.patch
-> @@ -0,0 +1,48 @@
-> +From 068bf2d2d91382ea0d8ec24a142a30ea429704db Mon Sep 17 00:00:00 2001
-> +From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-> +Date: Tue, 15 Aug 2017 18:28:49 -0400
-> +Subject: [PATCH] Detect 32-bits armv8-a architecture
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=utf-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Adds WTF platform support for the 32-bits armv8-a architectures.
-> +
-> +Theses toolchains define __ARM_ARCH_8A__ (for ARM architecture version)
-> +and __arm__ (for 32-bits word-size; __aarch64__ for 64-bits).
-> +
-> +This commit catches this new architecture (armv8a) within a #ifdef/#endif
-> +inside the if statement dedicated for 32-bits ARM detection.
-> +
-> +Fixes:
-> +
-> +	In file included from ./config.h:30:0,
-> +	                 from ...
-> +	./wtf/Platform.h:323:6: error: #error "Not supported ARM architecture"
-> +	 #    error "Not supported ARM architecture"
-> +	      ^~~~~
-> +
-> +Upstream-Status: Backport [with adaptations]
-> +Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> +---
-> + Source/WTF/wtf/Platform.h | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
-> +index 562840cf7..9cf656845 100644
-> +--- a/Source/WTF/wtf/Platform.h
-> ++++ b/Source/WTF/wtf/Platform.h
-> +@@ -243,6 +243,10 @@
-> +     || defined(__ARM_ARCH_7S__)
-> + #define WTF_ARM_ARCH_VERSION 7
-> + 
-> ++#elif defined(__ARM_ARCH_8__) \
-> ++    || defined(__ARM_ARCH_8A__)
-> ++#define WTF_ARM_ARCH_VERSION 8
-> ++
-> + /* MSVC sets _M_ARM */
-> + #elif defined(_M_ARM)
-> + #define WTF_ARM_ARCH_VERSION _M_ARM
-> +-- 
-> +2.16.1
-> +
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180401/3e656454/attachment.asc>
