@@ -1,86 +1,77 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Sun,  1 Apr 2018 09:15:30 -0500
-Subject: [Buildroot] [PATCH] ppc64 e5500 arch: new qemu target
-Message-ID: <1522592130-25157-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Apr 2018 16:15:41 +0200
+Subject: [Buildroot] [v3 11/13] help/manual: update help about the new
+ $(LIBFOO_DL_DIR)
+In-Reply-To: <20180331142407.9522-11-maxime.hadjinlian@gmail.com>
+References: <20180331142407.9522-1-maxime.hadjinlian@gmail.com>
+ <20180331142407.9522-11-maxime.hadjinlian@gmail.com>
+Message-ID: <20180401141541.GF2613@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding basic support modeled after the Freescale/NXP
-T1040RDBD4 board.
+Maxime, All,
 
-This target is used to support testing of the bootlin e5500
-toolchain.
+On 2018-03-31 16:24 +0200, Maxime Hadjinlian spake thusly:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  Config.in                               | 3 +++
+>  docs/manual/adding-packages-generic.txt | 6 +++---
+>  2 files changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index a74b24ae45..55b6e5e2a1 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -200,6 +200,9 @@ config BR2_DL_DIR
+>  	  If the Linux shell environment has defined the BR2_DL_DIR
+>  	  environment variable, then this overrides this configuration
+>  	  item.
+> +	  The directory is organized with a subdirectory for each package.
+> +	  Each package has its own $(LIBFOO_DL_DIR) variable that can be used
+> +	  to find the correct path.
+>  
+>  	  The default is $(TOPDIR)/dl
+>  
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 9d1428ad40..a7578a782d 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -263,7 +263,7 @@ information is (assuming the package name is +libfoo+) :
+>    the file using this URL. Otherwise, Buildroot will assume the file
+>    to be downloaded is located at +LIBFOO_SITE+. Buildroot will not do
+>    anything with those additional files, except download them: it will
+> -  be up to the package recipe to use them from +$(DL_DIR)+.
+> +  be up to the package recipe to use them from +$(LIBFOO_DL_DIR)+.
+>  
+>  * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
+>    package source code. In many cases, Buildroot guesses the method
+> @@ -554,8 +554,8 @@ In the action definitions, you can use the following variables:
+>  * +$(@D)+, which contains the directory in which the package source
+>    code has been uncompressed.
+>  
+> -* +$(DL_DIR)+ contains the path to the directory where all the downloads made
+> -  by Buildroot are stored.
+> +* +$(LIBFOO_DL_DIR)+ contains the path to the directory where all the downloads
+> +  made by Buildroot are stored.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- DEVELOPERS                            |  1 +
- board/qemu/ppc64-e5500/linux.fragment |  2 ++
- board/qemu/ppc64-e5500/readme.txt     |  7 +++++++
- configs/qemu_ppc64_e5500_defconfig    | 18 ++++++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 board/qemu/ppc64-e5500/linux.fragment
- create mode 100644 board/qemu/ppc64-e5500/readme.txt
- create mode 100644 configs/qemu_ppc64_e5500_defconfig
+... where all the downloads made by Buildroot for +libfoo+ are stored in.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ac7a47f..dd7e389 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1165,6 +1165,7 @@ F:	package/ts4900-fpga/
- N:	Matt Weber <matthew.weber@rockwellcollins.com>
- F:	board/freescale/p*
- F:	board/freescale/t*
-+F:	board/qemu/ppc64-e5500/
- F:	configs/freescale_p*
- F:	configs/freescale_t*
- F:	package/argp-standalone/
-diff --git a/board/qemu/ppc64-e5500/linux.fragment b/board/qemu/ppc64-e5500/linux.fragment
-new file mode 100644
-index 0000000..81993d2
---- /dev/null
-+++ b/board/qemu/ppc64-e5500/linux.fragment
-@@ -0,0 +1,2 @@
-+# Enables generic e500 arch support for QEMU
-+CONFIG_PPC_QEMU_E500=y
-diff --git a/board/qemu/ppc64-e5500/readme.txt b/board/qemu/ppc64-e5500/readme.txt
-new file mode 100644
-index 0000000..8da23f9
---- /dev/null
-+++ b/board/qemu/ppc64-e5500/readme.txt
-@@ -0,0 +1,7 @@
-+Run the emulation with:
-+
-+ qemu-system-ppc64 -M ppce500 -cpu e5500 -m 256 -kernel output/images/uImage -append 'console=ttyS0 root=/dev/ram' -initrd output/images/rootfs.cpio.gz -serial mon:stdio -nographic
-+
-+The login prompt will appear in the terminal that started Qemu.
-+
-+Tested with QEMU 2.0.0
-diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
-new file mode 100644
-index 0000000..55c5644
---- /dev/null
-+++ b/configs/qemu_ppc64_e5500_defconfig
-@@ -0,0 +1,18 @@
-+# Architecture
-+BR2_powerpc64=y
-+BR2_powerpc_e5500=y
-+
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
-+BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+# BR2_TARGET_ROOTFS_TAR is not set
+Regards,
+Yann E. MORIN.
+
+>  * +$(TARGET_CC)+, +$(TARGET_LD)+, etc. to get the target
+>    cross-compilation utilities
+> -- 
+> 2.16.2
+> 
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
