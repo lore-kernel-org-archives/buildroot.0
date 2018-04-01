@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun,  1 Apr 2018 02:08:40 -0300
-Subject: [Buildroot] [PATCH v2 27/37] arch/Config.in*: re-wrap help text
+Date: Sun,  1 Apr 2018 02:08:42 -0300
+Subject: [Buildroot] [PATCH v2 29/37] fs/*/Config.in: re-wrap help text
 In-Reply-To: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
 References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180401050850.5701-28-ricardo.martincoski@gmail.com>
+Message-ID: <20180401050850.5701-30-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,290 +17,156 @@ Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Changes v1 -> v2:
   - no changes
 ---
- arch/Config.in        | 97 ++++++++++++++++++++++++++++-----------------------
- arch/Config.in.mips   |  4 +--
- arch/Config.in.xtensa | 12 +++----
- 3 files changed, 61 insertions(+), 52 deletions(-)
+ fs/cpio/Config.in      |  6 +++---
+ fs/ext2/Config.in      | 22 ++++++++++++----------
+ fs/initramfs/Config.in |  3 ++-
+ fs/jffs2/Config.in     | 16 +++++++++-------
+ fs/ubi/Config.in       | 11 ++++++-----
+ 5 files changed, 32 insertions(+), 26 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index dd972bc0ee..65448e9339 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -28,24 +28,25 @@ config BR2_arcle
- 	bool "ARC (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index 679959d222..83a7fa5824 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_TARGET_ROOTFS_CPIO
+ 	bool "cpio the root filesystem (for use as an initial RAM filesystem)"
  	help
--	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
--	  that can be used from deeply embedded to high performance host
--	  applications. Little endian.
-+	  Synopsys' DesignWare ARC Processor Cores are a family of
-+	  32-bit CPUs that can be used from deeply embedded to high
-+	  performance host applications. Little endian.
+-	  Build a cpio archive of the root filesystem.  This is typically
+-	  used for an initial RAM filesystem that is passed to the kernel
+-	  by the bootloader.
++	  Build a cpio archive of the root filesystem. This is typically
++	  used for an initial RAM filesystem that is passed to the
++	  kernel by the bootloader.
  
- config BR2_arceb
- 	bool "ARC (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
+ if BR2_TARGET_ROOTFS_CPIO
+ 
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 27ad69fde9..74bacc1141 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -49,11 +49,11 @@ config BR2_TARGET_ROOTFS_EXT2_SIZE
+ 	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP # legacy 2017.08
+ 	default "60M"
  	help
--	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
--	  that can be used from deeply embedded to high performance host
--	  applications. Big endian.
-+	  Synopsys' DesignWare ARC Processor Cores are a family of
-+	  32-bit CPUs that can be used from deeply embedded to high
-+	  performance host applications. Big endian.
+-	  The size of the filesystem image. If it does not have a suffix,
+-	  it is interpreted as power-of-two kilobytes. If it is suffixed
+-	  by 'k', 'm', 'g', 't' (either upper-case or lower-case), then
+-	  it is interpreted in power-of-two kilobytes, megabytes,
+-	  gigabytes, terabytes, etc.
++	  The size of the filesystem image. If it does not have a
++	  suffix, it is interpreted as power-of-two kilobytes. If it is
++	  suffixed by 'k', 'm', 'g', 't' (either upper-case or
++	  lower-case), then it is interpreted in power-of-two kilobytes,
++	  megabytes, gigabytes, terabytes, etc.
  
- config BR2_arm
- 	bool "ARM (little endian)"
- 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
+ config BR2_TARGET_ROOTFS_EXT2_INODES
+ 	int "exact number of inodes (leave at 0 for auto calculation)"
+@@ -65,15 +65,16 @@ config BR2_TARGET_ROOTFS_EXT2_RESBLKS
  	help
--	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
--	  set architecture (ISA) developed by ARM Holdings. Little endian.
-+	  ARM is a 32-bit reduced instruction set computer (RISC)
-+	  instruction set architecture (ISA) developed by ARM Holdings.
-+	  Little endian.
- 	  http://www.arm.com/
- 	  http://en.wikipedia.org/wiki/ARM
+ 	  The number of blocks on the filesystem (as a percentage of the
+ 	  total number of blocks), that are reserved for use by root.
+-	  Traditionally, this has been 5%, and all ext-related tools still
+-	  default to reserving 5% when creating a new ext filesystem.
++	  Traditionally, this has been 5%, and all ext-related tools
++	  still default to reserving 5% when creating a new ext
++	  filesystem.
  
-@@ -53,8 +54,9 @@ config BR2_armeb
- 	bool "ARM (big endian)"
- 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
+ config BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS
+ 	string "additional mke2fs options"
+ 	default "-O ^64bit"
  	help
--	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
--	  set architecture (ISA) developed by ARM Holdings. Big endian.
-+	  ARM is a 32-bit reduced instruction set computer (RISC)
-+	  instruction set architecture (ISA) developed by ARM Holdings.
-+	  Big endian.
- 	  http://www.arm.com/
- 	  http://en.wikipedia.org/wiki/ARM
+-	  Specify a space-separated list of mke2fs options, including any
+-	  ext2/3/4 filesystem features.
++	  Specify a space-separated list of mke2fs options, including
++	  any ext2/3/4 filesystem features.
  
-@@ -81,8 +83,8 @@ config BR2_bfin
- 	select BR2_ARCH_HAS_FDPIC_SUPPORT
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	  For more information about the mke2fs options, see the manual
+ 	  page mke2fs(8).
+@@ -91,7 +92,8 @@ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_EXT2_NONE
  	help
--	  The Blackfin is a family of 16 or 32-bit microprocessors developed,
--	  manufactured and marketed by Analog Devices.
-+	  The Blackfin is a family of 16 or 32-bit microprocessors
-+	  developed, manufactured and marketed by Analog Devices.
- 	  http://www.analog.com/
- 	  http://en.wikipedia.org/wiki/Blackfin
+-	  Select compressor for ext2/3/4 filesystem of the root filesystem
++	  Select compressor for ext2/3/4 filesystem of the root
++	  filesystem
  
-@@ -113,8 +115,8 @@ config BR2_microblazeel
- 	bool "Microblaze AXI (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
+ config BR2_TARGET_ROOTFS_EXT2_NONE
+ 	bool "no compression"
+diff --git a/fs/initramfs/Config.in b/fs/initramfs/Config.in
+index 8ed9f7ebb5..9d5a3f92e6 100644
+--- a/fs/initramfs/Config.in
++++ b/fs/initramfs/Config.in
+@@ -10,7 +10,8 @@ config BR2_TARGET_ROOTFS_INITRAMFS
+ 	  A rootfs.cpio file will be generated in the images/ directory.
+ 	  This is the archive that will be included in the kernel image.
+ 	  The default rootfs compression set in the kernel configuration
+-	  is used, regardless of how buildroot's cpio archive is configured.
++	  is used, regardless of how buildroot's cpio archive is
++	  configured.
+ 
+ 	  Note that enabling initramfs together with another filesystem
+ 	  formats doesn't make sense: you would end up having two
+diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
+index 208cabaa52..44c0b10446 100644
+--- a/fs/jffs2/Config.in
++++ b/fs/jffs2/Config.in
+@@ -94,18 +94,20 @@ config BR2_TARGET_ROOTFS_JFFS2_SUMMARY
+ config BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
+ 	bool "Select custom virtual memory page size"
  	help
--	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI bus
--	  based architecture (little endian)
-+	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI
-+	  bus based architecture (little endian)
- 	  http://www.xilinx.com
- 	  http://en.wikipedia.org/wiki/Microblaze
+-	  Use a custom virtual memory page size.  Note that this is not related to
+-	  the flash memory page size.  Using this option is only needed if Linux is
+-	  configured to use a page size different than 4kB.
++	  Use a custom virtual memory page size. Note that this is not
++	  related to the flash memory page size. Using this option is
++	  only needed if Linux is configured to use a page size
++	  different than 4kB.
  
-@@ -122,8 +124,8 @@ config BR2_microblazebe
- 	bool "Microblaze non-AXI (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
+ config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE
+ 	hex "Virtual memory page size"
+ 	default 0x1000
+ 	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
  	help
--	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB bus
--	  based architecture (non-AXI, big endian)
-+	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB
-+	  bus based architecture (non-AXI, big endian)
- 	  http://www.xilinx.com
- 	  http://en.wikipedia.org/wiki/Microblaze
+-	  Set to virtual memory page size of target system (in bytes).  This value
+-	  should match the virtual page size in Linux (i.e. this should have the
+-	  same value as the value of the PAGE_SIZE macro in Linux).  It is not
+-	  related to the flash memory page size.
++	  Set to virtual memory page size of target system (in bytes).
++	  This value should match the virtual page size in Linux (i.e.
++	  this should have the same value as the value of the PAGE_SIZE
++	  macro in Linux). It is not related to the flash memory page
++	  size.
  
-@@ -131,7 +133,8 @@ config BR2_mips
- 	bool "MIPS (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
+ endif
+diff --git a/fs/ubi/Config.in b/fs/ubi/Config.in
+index 5fa2f1f61d..85b1c56bb0 100644
+--- a/fs/ubi/Config.in
++++ b/fs/ubi/Config.in
+@@ -18,8 +18,9 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	int "sub-page size"
+ 	default 512
  	help
--	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Big
-+	  endian.
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
+-	  Tells ubinize that the flash supports sub-pages and the sub-page
+-	  size. Use 0 if sub-pages are not supported on flash chip.
++	  Tells ubinize that the flash supports sub-pages and the
++	  sub-page size. Use 0 if sub-pages are not supported on flash
++	  chip.
+ 	  The value provided here is passed to the -s/--sub-page-size
+ 	  option of ubinize.
  
-@@ -139,7 +142,8 @@ config BR2_mipsel
- 	bool "MIPS (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
+@@ -28,9 +29,9 @@ config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
  	help
--	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Little
-+	  endian.
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
+ 	  Select this option to use a custom ubinize configuration file,
+ 	  rather than the default configuration used by Buildroot (which
+-	  defines a single dynamic volume marked as auto-resize).  Passing
+-	  a custom ubinize configuration file allows you to create several
+-	  volumes, specify volume types, etc.
++	  defines a single dynamic volume marked as auto-resize).
++	  Passing a custom ubinize configuration file allows you to
++	  create several volumes, specify volume types, etc.
  
-@@ -148,7 +152,8 @@ config BR2_mips64
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Big
-+	  endian.
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
-@@ -157,7 +162,8 @@ config BR2_mips64el
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Little
-+	  endian.
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
-@@ -180,8 +186,8 @@ config BR2_powerpc
- 	bool "PowerPC"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
--	  Big endian.
-+	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
-+	  alliance. Big endian.
- 	  http://www.power.org/
- 	  http://en.wikipedia.org/wiki/Powerpc
- 
-@@ -190,8 +196,8 @@ config BR2_powerpc64
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
--	  Big endian.
-+	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
-+	  alliance. Big endian.
- 	  http://www.power.org/
- 	  http://en.wikipedia.org/wiki/Powerpc
- 
-@@ -200,8 +206,8 @@ config BR2_powerpc64le
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
--	  Little endian.
-+	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
-+	  alliance. Little endian.
- 	  http://www.power.org/
- 	  http://en.wikipedia.org/wiki/Powerpc
- 
-@@ -209,8 +215,9 @@ config BR2_sh
- 	bool "SuperH"
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	help
--	  SuperH (or SH) is a 32-bit reduced instruction set computer (RISC)
--	  instruction set architecture (ISA) developed by Hitachi.
-+	  SuperH (or SH) is a 32-bit reduced instruction set computer
-+	  (RISC) instruction set architecture (ISA) developed by
-+	  Hitachi.
- 	  http://www.hitachi.com/
- 	  http://en.wikipedia.org/wiki/SuperH
- 
-@@ -218,8 +225,9 @@ config BR2_sparc
- 	bool "SPARC"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  SPARC (from Scalable Processor Architecture) is a RISC instruction
--	  set architecture (ISA) developed by Sun Microsystems.
-+	  SPARC (from Scalable Processor Architecture) is a RISC
-+	  instruction set architecture (ISA) developed by Sun
-+	  Microsystems.
- 	  http://www.oracle.com/sun
- 	  http://en.wikipedia.org/wiki/Sparc
- 
-@@ -228,8 +236,9 @@ config BR2_sparc64
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
--	  SPARC (from Scalable Processor Architecture) is a RISC instruction
--	  set architecture (ISA) developed by Sun Microsystems.
-+	  SPARC (from Scalable Processor Architecture) is a RISC
-+	  instruction set architecture (ISA) developed by Sun
-+	  Microsystems.
- 	  http://www.oracle.com/sun
- 	  http://en.wikipedia.org/wiki/Sparc
- 
-@@ -349,27 +358,27 @@ config BR2_BINFMT_ELF
- 	depends on BR2_USE_MMU
- 	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
--	  ELF (Executable and Linkable Format) is a format for libraries and
--	  executables used across different architectures and operating
--	  systems.
-+	  ELF (Executable and Linkable Format) is a format for libraries
-+	  and executables used across different architectures and
-+	  operating systems.
- 
- config BR2_BINFMT_FDPIC
- 	bool "FDPIC"
- 	depends on BR2_ARCH_HAS_FDPIC_SUPPORT
- 	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
--	  ELF FDPIC binaries are based on ELF, but allow the individual load
--	  segments of a binary to be located in memory independently of each
--	  other. This makes this format ideal for use in environments where no
--	  MMU is available.
-+	  ELF FDPIC binaries are based on ELF, but allow the individual
-+	  load segments of a binary to be located in memory
-+	  independently of each other. This makes this format ideal for
-+	  use in environments where no MMU is available.
- 
- config BR2_BINFMT_FLAT
- 	bool "FLAT"
- 	depends on !BR2_USE_MMU
- 	help
--	  FLAT binary is a relatively simple and lightweight executable format
--	  based on the original a.out format. It is widely used in environment
--	  where no MMU is available.
-+	  FLAT binary is a relatively simple and lightweight executable
-+	  format based on the original a.out format. It is widely used
-+	  in environment where no MMU is available.
- 
- endchoice
- 
-@@ -393,8 +402,8 @@ config BR2_BINFMT_FLAT_SEP_DATA
- 	# absolute jump" or "error: value -yyyyy out of range".
- 	depends on BR2_bfin
- 	help
--	  Allow for the data and text segments to be separated and placed in
--	  different regions of memory.
-+	  Allow for the data and text segments to be separated and
-+	  placed in different regions of memory.
- 
- config BR2_BINFMT_FLAT_SHARED
- 	bool "Shared binary"
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index cc11744f04..e45299f818 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -147,8 +147,8 @@ choice
- 	default BR2_MIPS_FP32_MODE_XX
- 	depends on !BR2_ARCH_IS_64 && !BR2_MIPS_SOFT_FLOAT
- 	help
--	  MIPS32 supports different FP modes (32,xx,64). Information about FP
--	  modes can be found here:
-+	  MIPS32 supports different FP modes (32,xx,64). Information
-+	  about FP modes can be found here:
- 	  https://sourceware.org/binutils/docs/as/MIPS-Options.html
- 	  https://dmz-portal.imgtec.com/wiki/MIPS_O32_ABI_-_FR0_and_FR1_Interlinking#5._Generating_modeless_code
- 
-diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-index 49e93a4774..14049480ec 100644
---- a/arch/Config.in.xtensa
-+++ b/arch/Config.in.xtensa
-@@ -20,13 +20,13 @@ config BR2_XTENSA_OVERLAY_FILE
- 	  Enter the path to the overlay tarball for a custom processor
- 	  configuration.
- 
--	  These overlay files are tar packages with updated configuration
--	  files for various toolchain packages and Xtensa processor
--	  configurations. They are provided by the processor vendor or
--	  directly from Tensilica.
-+	  These overlay files are tar packages with updated
-+	  configuration files for various toolchain packages and Xtensa
-+	  processor configurations. They are provided by the processor
-+	  vendor or directly from Tensilica.
- 
--	  The path can be either absolute, or relative to the top directory
--	  of buildroot.
-+	  The path can be either absolute, or relative to the top
-+	  directory of buildroot.
- 
- choice
- 	prompt "Target Architecture Endianness"
+ 	  As a convenience, buildroot replaces the string
+ 	  "BR2_ROOTFS_UBIFS_PATH" with the path to the built ubifs file.
 -- 
 2.14.1
