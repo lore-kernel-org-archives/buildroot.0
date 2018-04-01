@@ -1,36 +1,32 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 01 Apr 2018 17:40:42 -0300
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 01 Apr 2018 22:42:05 +0200
 Subject: [Buildroot] [PATCH] check-package: support symlinks to the
  script
+In-Reply-To: <20180401200516.21064-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Sun, 1 Apr 2018 22:05:16 +0200")
 References: <20180401200516.21064-1-arnout@mind.be>
-Message-ID: <5ac143ca7881c_68702ad20ef91810867b9@ultri4.mail>
+Message-ID: <87fu4epski.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-On Sun, Apr 01, 2018 at 05:05 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
+ > The check-package script finds base_dir (= the Buildroot directory) and
+ > cd's into it. To be able to support relative paths as arguments, it
+ > first recalculates the arguments relative to base_dir.
 
-> The check-package script finds base_dir (= the Buildroot directory) and
-> cd's into it. To be able to support relative paths as arguments, it
-> first recalculates the arguments relative to base_dir.
-> 
-> However, if there is a symlink anywhere on the path to the
-> check-package script, the relative paths will be wrong. To solve this,
-> use realpath() instead of abspath(), so symlinks are resolved before
-> calculating the relative path.
-> 
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > However, if there is a symlink anywhere on the path to the
+ > check-package script, the relative paths will be wrong. To solve this,
+ > use realpath() instead of abspath(), so symlinks are resolved before
+ > calculating the relative path.
 
-Acked-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Sorry. I forgot about this use case.
-Thank you for fixing it.
+Committed, thanks.
 
-
-Regards,
-Ricardo
+-- 
+Bye, Peter Korsgaard
