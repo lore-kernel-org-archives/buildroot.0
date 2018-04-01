@@ -1,67 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 19:59:36 +0200
-Subject: [Buildroot] [git commit] testing/infra/builder: split configure()
- from build()
-Message-ID: <20180401175938.5720B83524@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 1 Apr 2018 20:01:38 +0200
+Subject: [Buildroot] [git commit] support/scripts/graph-depends: use colors
+ instead of colours
+Message-ID: <20180401180149.6AC5583543@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=998300c5f55f61e928acfd352bc4cc24f36f8f7d
+commit: https://git.buildroot.net/buildroot/commit/?id=3cd92ac71199de25837af7ff4f7ab190c677ea66
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some test cases don't use a full build as setup, so split the build()
-method into configure() and build().
-It allows a test case to perform configuration at the setup stage and
-the build inside the test itself.
+The graph-depends was not very consistent in colors vs. colours: some
+parts were using colours, some parts were using colors.
 
-Call this new method just before build in the BRTest base class, to keep
-the current behavior for existing test cases.
+Let's settle on the US spelling, colors.
 
-This change will be needed when adding a common class to test the git
-download infra.
+This change the user-visble option --colours to --colors, but it is
+unlikely that a lot of users customize the colors through
+BR2_GRAPH_DEPS_OPTS, so this user interface change is considered
+reasonable.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/infra/basetest.py | 1 +
- support/testing/infra/builder.py  | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ docs/manual/common-usage.txt  |  4 ++--
+ support/scripts/graph-depends | 16 ++++++++--------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index b85e8627fd..f3f13ad97f 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -58,6 +58,7 @@ class BRTest(unittest.TestCase):
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index a22da20188..e3d7578c85 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -224,12 +224,12 @@ The +graph-depends+ behaviour can be controlled by setting options in the
+ * +--transitive+, +--no-transitive+, to draw (or not) the transitive
+   dependencies. The default is to not draw transitive dependencies.
  
-         if not self.b.is_finished():
-             self.show_msg("Building")
-+            self.b.configure()
-             self.b.build()
-             self.show_msg("Building done")
+-* +--colours R,T,H+, the comma-separated list of colours to draw the
++* +--colors R,T,H+, the comma-separated list of colors to draw the
+   root package (+R+), the target packages (+T+) and the host packages
+   (+H+). Defaults to: +lightblue,grey,gainsboro+
  
-diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-index 36f4801a2d..faf1eb1494 100644
---- a/support/testing/infra/builder.py
-+++ b/support/testing/infra/builder.py
-@@ -12,7 +12,7 @@ class Builder(object):
-         self.builddir = builddir
-         self.logfile = infra.open_log_file(builddir, "build", logtofile)
+ --------------------------------
+-BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colours=red,green,blue' make graph-depends
++BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colors=red,green,blue' make graph-depends
+ --------------------------------
  
--    def build(self):
-+    def configure(self):
-         if not os.path.isdir(self.builddir):
-             os.makedirs(self.builddir)
+ === Graphing the build duration
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index d86d506f6f..dc265ae28c 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -297,9 +297,9 @@ def parse_args():
+                         "'host' to stop on host packages.")
+     parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
+                         help="Like --stop-on, but do not add PACKAGE to the graph.")
+-    parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
++    parser.add_argument("--colors", "-c", metavar="COLOR_LIST", dest="colors",
+                         default="lightblue,grey,gainsboro",
+-                        help="Comma-separated list of the three colours to use" +
++                        help="Comma-separated list of the three colors to use" +
+                         " to draw the top-level package, the target" +
+                         " packages, and the host packages, in this order." +
+                         " Defaults to: 'lightblue,grey,gainsboro'")
+@@ -353,12 +353,12 @@ def main():
+         get_depends_func = brpkgutil.get_rdepends
+         arrow_dir = "back"
  
-@@ -33,6 +33,8 @@ class Builder(object):
-         if ret != 0:
-             raise SystemError("Cannot olddefconfig")
+-    # Get the colours: we need exactly three colours,
++    # Get the colors: we need exactly three colors,
+     # so no need not split more than 4
+-    # We'll let 'dot' validate the colours...
+-    colours = args.colours.split(',', 4)
+-    if len(colours) != 3:
+-        sys.stderr.write("Error: incorrect colour list '%s'\n" % args.colours)
++    # We'll let 'dot' validate the colors...
++    colors = args.colors.split(',', 4)
++    if len(colors) != 3:
++        sys.stderr.write("Error: incorrect color list '%s'\n" % args.colors)
+         sys.exit(1)
  
-+    def build(self):
-+        env = {"PATH": os.environ["PATH"]}
-         cmd = ["make", "-C", self.builddir]
-         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
-                               env=env)
+     # In full mode, start with the result of get_targets() to get the main
+@@ -403,7 +403,7 @@ def main():
+     outfile.write("digraph G {\n")
+ 
+     print_pkg_deps(outfile, dict_deps, dict_version, stop_list, exclude_list,
+-                   arrow_dir, 0, args.depth, rootpkg, colours)
++                   arrow_dir, 0, args.depth, rootpkg, colors)
+ 
+     outfile.write("}\n")
+ 
