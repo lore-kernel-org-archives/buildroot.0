@@ -1,53 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 01 Apr 2018 10:16:46 +0200
-Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
-References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
- <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
- <trinity-8edc1929-b40d-4afa-85a8-e152cef642fb-1522567556973@3c-app-mailcom-bs16>
- <1je6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-550783d4-570b-41d5-937b-f66aa367d27f-1522568580265@3c-app-mailcom-bs16>
- <4sf6pexo6d.ln2@ID-313208.user.individual.net>
- <trinity-8096f0c8-32ae-4d0a-ad74-d40b12f0f8ff-1522569777353@3c-app-mailcom-bs16>
-Message-ID: <e4h6pexo6d.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Apr 2018 10:16:58 +0200
+Subject: [Buildroot] [PATCH v2 36/37] utils/checkpackagelib: exclude
+ four files from Config.in indentation check
+In-Reply-To: <20180401050850.5701-37-ricardo.martincoski@gmail.com>
+References: <20180401050850.5701-1-ricardo.martincoski@gmail.com>
+ <20180401050850.5701-37-ricardo.martincoski@gmail.com>
+Message-ID: <20180401101658.741292b1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 01 Apr 2018 10:02:57 +0200 schrieb daggs:
+Hello,
 
-> Greetings Bernd,
+On Sun,  1 Apr 2018 02:08:49 -0300, Ricardo Martincoski wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
->> Sent: Sunday, April 01, 2018 at 10:55 AM From: "Bernd Kuhls"
->> <bernd.kuhls@t-online.de> To:
->> buildroot at uclibc.org Subject: Re:
->> [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
->>
->> Am Sun, 01 Apr 2018 09:43:00 +0200 schrieb daggs:
->> 
->> > odroidc2 boards use amlogic libs, infact I'm the maintainer of the
->> > libamlogic pkg and I've added the support to kodi.
->> 
->> Hi daggs,
->> 
->> should the buildroot package libamcodec depend on odroid-mali?
->> 
-> from what I understand, no.
+> package/Config.in, package/Config.in.host, package/x11r7/Config.in and
+> package/kodi/Config.in do not comply with the normal Config.in
+> indentation rules. However, this violation of the rule is legitimate, so
+> let's skip them in check-package for this specific indentation check.
+> 
+> This removes the last 2197 remaining warnings on Config.in files.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> [Ricardo: rebase patch to use relative paths passed by the main script,
+>           fix flake8 warnings, add package/Config.* to the list]
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+> NOTE: this patch depends on the first one that introduces the use of
+> relative paths by the main script when testing intree files.
 
-Hi daggs,
+Applied to master, thanks.
 
-so you think it is possible to use libamcodec support in Kodi with OpenGL 
-ES provided by, let's say, mesa3d with the DRI swrast driver? And even if 
-there is no direct dependency between the libamcodoc and odroid-mali 
-packages what about extending the
-
-	ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
-
-check in kodi.mk to
-
-	ifeq ($(BR2_PACKAGE_LIBAMCODEC)$(BR2_PACKAGE_ODROID_MALI),yy)
-
-to fix the build error?
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
