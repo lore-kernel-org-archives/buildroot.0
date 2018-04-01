@@ -1,70 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 1 Apr 2018 08:52:45 +0200
-Subject: [Buildroot] [git commit] fs/*/Config.in: fix attributes order
-Message-ID: <20180401065253.8AAED815C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] check-package: enable for fs/
+Message-ID: <20180401065253.AE45E815C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b205420e6ad1f773d8444c4c279ab38fca0012e9
+commit: https://git.buildroot.net/buildroot/commit/?id=0c8367363821c2417443082f076198f02afcdb4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-... to follow the convention: type, default, depends on, select, help.
+The filesystem types can benefit from this script to prevent common
+mistakes when submitting patches.
+
+In order to accomplish this:
+Do not ignore anymore files from the fs/ directory.
+Ignore fs/common.mk as it declares a package infra and not a package itself.
+Register the ROOTFS_ as a valid prefix for variables.
+Ignore these symbols:
+ - PACKAGES_PERMISSIONS_TABLE: defined either by packages through
+   pkg-generic or by filesystem types, used by fs/common.mk;
+ - SUMTOOL: defined by package mtd, used by filesystem jffs2;
+ - TARGETS_ROOTFS: defined by filesystem types, used in the main
+   Makefile.
+
+Keep using loose checks that warn about common mistakes while keep the
+code simple.
+As a consequence the check functions do not differentiate between
+packages and filesystems so the symbol PACKAGE_UBI would not generate a
+warning for the ubi filesystem neither the symbol ROOTFS_MTD would
+generate a warning for the mtd package. But those kind of mistakes are
+not common and are obvious in the code review, unlike typos i.e.
+ROOTFS_UBl or PACKAGE_MID that would be hard to see in the code review.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- fs/jffs2/Config.in | 6 +++---
- fs/tar/Config.in   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ utils/check-package             | 2 ++
+ utils/checkpackagelib/lib_mk.py | 5 ++++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
-index f1703f4edd..208cabaa52 100644
---- a/fs/jffs2/Config.in
-+++ b/fs/jffs2/Config.in
-@@ -38,8 +38,8 @@ endchoice
- 
- config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE
- 	hex "Erase block size"
--	depends on BR2_TARGET_ROOTFS_JFFS2_CUSTOM
- 	default 0x20000
-+	depends on BR2_TARGET_ROOTFS_JFFS2_CUSTOM
- 	help
- 	  Set to erase size of memory
- 
-@@ -68,8 +68,8 @@ config BR2_TARGET_ROOTFS_JFFS2_PAD
- 
- config BR2_TARGET_ROOTFS_JFFS2_PADSIZE
- 	hex "Pad output size (0x0 = to end of EB)"
--	depends on BR2_TARGET_ROOTFS_JFFS2_PAD
- 	default 0x0
-+	depends on BR2_TARGET_ROOTFS_JFFS2_PAD
- 	help
- 	  Set to 0x0 to pad to end of erase block.
- 
-@@ -100,8 +100,8 @@ config BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
- 
- config BR2_TARGET_ROOTFS_JFFS2_CUSTOM_PAGESIZE
- 	hex "Virtual memory page size"
--	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
- 	default 0x1000
-+	depends on BR2_TARGET_ROOTFS_JFFS2_USE_CUSTOM_PAGESIZE
- 	help
- 	  Set to virtual memory page size of target system (in bytes).  This value
- 	  should match the virtual page size in Linux (i.e. this should have the
-diff --git a/fs/tar/Config.in b/fs/tar/Config.in
-index 2116edf143..a4e375c68b 100644
---- a/fs/tar/Config.in
-+++ b/fs/tar/Config.in
-@@ -50,8 +50,8 @@ endchoice
- 
- config BR2_TARGET_ROOTFS_TAR_OPTIONS
- 	string "other random options to pass to tar"
--	depends on BR2_TARGET_ROOTFS_TAR
- 	default ""
-+	depends on BR2_TARGET_ROOTFS_TAR
- 	help
- 	  Any other flags you want to pass to tar
- 	  Refer to tar --help for details
+diff --git a/utils/check-package b/utils/check-package
+index 48ce956443..4c9eea0534 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -48,11 +48,13 @@ CONFIG_IN_FILENAME = re.compile("/Config\.\S*$")
+ DO_CHECK_INTREE = re.compile("|".join([
+     "arch/",
+     "boot/",
++    "fs/",
+     "package/",
+     "system/",
+     ]))
+ DO_NOT_CHECK_INTREE = re.compile("|".join([
+     "boot/barebox/barebox\.mk$",
++    "fs/common\.mk$",
+     "package/doc-asciidoc\.mk$",
+     "package/pkg-\S*\.mk$",
+     ]))
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index cfd4d05117..58de4fd3cb 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -165,8 +165,11 @@ class TypoInPackageVariable(_CheckFunction):
+         "LUA_RUN",
+         "MKFS_JFFS2",
+         "MKIMAGE_ARCH",
++        "PACKAGES_PERMISSIONS_TABLE",
+         "PKG_CONFIG_HOST_BINARY",
++        "SUMTOOL",
+         "TARGET_FINALIZE_HOOKS",
++        "TARGETS_ROOTFS",
+         "XTENSA_CORE_NAME"]))
+     PACKAGE_NAME = re.compile("/([^/]+)\.mk")
+     VARIABLE = re.compile("^([A-Z0-9_]+_[A-Z0-9_]+)\s*(\+|)=")
+@@ -177,7 +180,7 @@ class TypoInPackageVariable(_CheckFunction):
+         # linux tools do not use LINUX_TOOL_ prefix for variables
+         package = package.replace("LINUX_TOOL_", "")
+         self.package = package
+-        self.REGEX = re.compile("^(HOST_)?({}_[A-Z0-9_]+)".format(package))
++        self.REGEX = re.compile("^(HOST_|ROOTFS_)?({}_[A-Z0-9_]+)".format(package))
+         self.FIND_VIRTUAL = re.compile(
+             "^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
+         self.virtual = []
