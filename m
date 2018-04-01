@@ -1,34 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 22:47:39 +0200
-Subject: [Buildroot] [PATCH v4 03/11] package/llvm: enable AMDGPU
-In-Reply-To: <18c4a3ac-db52-5542-e8c6-fc17e3e5251c@smile.fr>
-References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-4-valentin.korenblit@smile.fr>
- <20180330110241.792a6607@windsurf>
- <b5a9d228-d7e1-7330-b5f6-52ad7ea443b9@mind.be>
- <20180330210641.334407b0@windsurf>
- <18c4a3ac-db52-5542-e8c6-fc17e3e5251c@smile.fr>
-Message-ID: <20180401224739.2c6f7e04@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 01 Apr 2018 22:52:25 +0200
+Subject: [Buildroot] [PATCH v2 1/2] coreutils: rewrite for loop with
+ foreach
+In-Reply-To: <20180401153905.14483-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 1 Apr 2018 17:39:04 +0200")
+References: <20180401153905.14483-1-thomas.petazzoni@bootlin.com>
+ <20180401153905.14483-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87bmf2ps3a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Fri, 30 Mar 2018 22:33:49 +0200, Valentin Korenblit wrote:
+ > This brings up error checking at each iteration of the loop for free,
+ > which removes the need for "|| exit 1".
 
-> I've just tested your suggestions, but finally we also need to build amdgpu target for host. The reason is that
-> llvm-config (host version installed in STAGING) will output only x86 when executing llvm-config --targets-built.
-> This is because it stores information related to the build where it comes from.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-OK. Then just add a comment in the .mk file that explains this.
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
