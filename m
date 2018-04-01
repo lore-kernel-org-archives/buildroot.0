@@ -1,24 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Apr 2018 22:21:20 +0200
-Subject: [Buildroot] [PATCH 2/2] support/scripts/graph-depends: add
- --quiet option
-In-Reply-To: <20180401191449.802-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 1 Apr 2018 21:14:49 +0200")
-References: <20180401191449.802-1-peter@korsgaard.com>
- <20180401191449.802-2-peter@korsgaard.com>
-Message-ID: <87woxqptj3.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Apr 2018 22:21:45 +0200
+Subject: [Buildroot] [PATCH v2 4/5] support/scripts/graph-depends: add
+ --flat-list option
+In-Reply-To: <20180331163543.6278-5-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 31 Mar 2018 18:35:42 +0200")
+References: <20180331163543.6278-1-thomas.petazzoni@bootlin.com>
+ <20180331163543.6278-5-thomas.petazzoni@bootlin.com>
+Message-ID: <87sh8eptie.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > This will be useful for the upcoming recursive show-depends and
- > show-rdepends features.
+ > From: George Redivo <george.redivo@datacom.ind.br>
+ > graph-depends currently spits out a graph in .dot format. However, as
+ > part of the upcoming introduction of <pkg>-show-recursive-depends and
+ > <pkg>-show-recursive-rdepends, we need graph-depends to be able to
+ > display a flat list.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: George Redivo <george.redivo@datacom.ind.br>
+ > [Thomas:
+ >  - Rebase on top of graph-depends changes
+ >  - Do not display the package name itself in the list, only its
+ >    dependencies (or reverse dependencies)
+ >  - Display the result on a single line, instead of one package per
+ >    line, in order to match what <pkg>-show-depends and
+ >    <pkg>-show-rdepends are doing today.]
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed, thanks.
 
