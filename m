@@ -1,92 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Apr 2018 08:47:18 +0200
-Subject: [Buildroot] [git commit] toolchain/toolchain.mk: fix code style
-Message-ID: <20180401064726.3C175818D7@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 08:43:42 +0200
+Subject: [Buildroot] [git commit] linux/linux*.mk: fix code style
+Message-ID: <20180401064725.D7AEE818D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0837c0a149c53aa49eca6d9efc29b0214457d74
+commit: https://git.buildroot.net/buildroot/commit/?id=0b0d93fe7037654f26d760293d9b061e0648c43b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rearrange the header of the .mk file so it becomes similar to a header
-from a package. It doesn't fit in one line, so split the details to a
-comment below the header.
-
-GCONV_LIBS is only used inside this file, so rename it to start with
-TOOLCHAIN_, following the namespace convention already used by packages.
-
-Rename the hook COPY_GCONV_LIBS to TOOLCHAIN_GLIBC_COPY_GCONV_LIBS
-following the convention used for hooks in packages.
+Use only one space before backslash.
+Remove consecutive empty line.
+Indent with tabs.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/toolchain.mk | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+ linux/linux-ext-rtai.mk |  4 ++--
+ linux/linux.mk          | 25 ++++++++++++-------------
+ 2 files changed, 14 insertions(+), 15 deletions(-)
 
-diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-index 59fc905caf..e7451e2643 100644
---- a/toolchain/toolchain.mk
-+++ b/toolchain/toolchain.mk
-@@ -1,7 +1,11 @@
--# This file contains toolchain-related customisation of the content
--# of the target/ directory. Those customisations are added to the
--# TARGET_FINALIZE_HOOKS, to be applied just after all packages
--# have been built.
-+################################################################################
-+#
-+# toolchain-related customisation of the content of the target/ directory
-+#
-+################################################################################
-+
-+# Those customisations are added to the TARGET_FINALIZE_HOOKS, to be applied
-+# just after all packages have been built.
- 
- # Install default nsswitch.conf file if the skeleton doesn't provide it
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-@@ -15,8 +19,8 @@ endif
- 
- # Install the gconv modules
- ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
--GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
--define COPY_GCONV_LIBS
-+TOOLCHAIN_GLIBC_GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
-+define TOOLCHAIN_GLIBC_COPY_GCONV_LIBS
- 	$(Q)found_gconv=no; \
- 	for d in $(TOOLCHAIN_EXTERNAL_PREFIX) ''; do \
- 		[ -d "$(STAGING_DIR)/usr/lib/$${d}/gconv" ] || continue; \
-@@ -27,14 +31,14 @@ define COPY_GCONV_LIBS
- 		printf "Unable to find gconv modules\n" >&2; \
- 		exit 1; \
- 	fi; \
--	if [ -z "$(GCONV_LIBS)" ]; then \
-+	if [ -z "$(TOOLCHAIN_GLIBC_GCONV_LIBS)" ]; then \
- 		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
- 				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules && \
- 		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/$${d}/gconv/*.so \
- 				   $(TARGET_DIR)/usr/lib/gconv \
- 		|| exit 1; \
+diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
+index 46e3dae3a7..50f79f8d50 100644
+--- a/linux/linux-ext-rtai.mk
++++ b/linux/linux-ext-rtai.mk
+@@ -20,8 +20,8 @@ endif
+ define RTAI_PREPARE_KERNEL
+ 	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
+ 	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
+-		$(APPLY_PATCHES) $(LINUX_DIR)				\
+-			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/	\
++		$(APPLY_PATCHES) $(LINUX_DIR) \
++			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ \
+ 			hal-linux-$${kver}-*patch ; \
  	else \
--		for l in $(GCONV_LIBS); do \
-+		for l in $(TOOLCHAIN_GLIBC_GCONV_LIBS); do \
- 			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so \
- 					      $(TARGET_DIR)/usr/lib/gconv/$${l}.so \
- 			|| exit 1; \
-@@ -47,10 +51,10 @@ define COPY_GCONV_LIBS
- 				 || exit 1; \
- 			done; \
- 		done; \
--		./support/scripts/expunge-gconv-modules "$(GCONV_LIBS)" \
-+		./support/scripts/expunge-gconv-modules "$(TOOLCHAIN_GLIBC_GCONV_LIBS)" \
- 			<$(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
- 			>$(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+ 		echo "No RTAI patch for your kernel version" ; \
+diff --git a/linux/linux.mk b/linux/linux.mk
+index cf1cae7cc0..02796d8bb2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -371,11 +371,11 @@ endif
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+ 	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
+-		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ;   \
++		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ; \
+ 	done
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+-	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
+-		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
++	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
++		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ; \
+ 	fi
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
+@@ -405,15 +405,14 @@ endif
+ 
+ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+-	if grep -q "CONFIG_DTC=y" $(@D)/.config; then	\
+-		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/bin/linux-dtc ;	\
+-		if [ ! -e $(HOST_DIR)/bin/dtc ]; then	\
+-			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ;	\
+-		fi	\
++	if grep -q "CONFIG_DTC=y" $(@D)/.config; then \
++		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/bin/linux-dtc ; \
++		if [ ! -e $(HOST_DIR)/bin/dtc ]; then \
++			ln -sf linux-dtc $(HOST_DIR)/bin/dtc ; \
++		fi \
  	fi
  endef
--TOOLCHAIN_TARGET_FINALIZE_HOOKS += COPY_GCONV_LIBS
-+TOOLCHAIN_TARGET_FINALIZE_HOOKS += TOOLCHAIN_GLIBC_COPY_GCONV_LIBS
+ 
+-
+ define LINUX_INSTALL_IMAGES_CMDS
+ 	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
+ 	$(call LINUX_INSTALL_DTB,$(BINARIES_DIR))
+@@ -427,10 +426,10 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+-	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
++	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
+ 		$(LINUX_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
+-		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
+-		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
++		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ; \
++		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ; \
+ 	fi
+ 	$(LINUX_INSTALL_HOST_TOOLS)
+ endef
+@@ -485,7 +484,7 @@ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(KERNEL_DTS_NAME)),y:)
+ $(error No kernel device tree source specified, check your \
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
++	BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
  endif
+ 
+ endif # BR_BUILDING
