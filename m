@@ -1,83 +1,137 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Apr 2018 16:39:28 +0200
-Subject: [Buildroot] [git commit] package/pkg-golang: drop the fixed
- <pkg>_BINDIR variable
-Message-ID: <20180401150524.3C28082CC6@busybox.osuosl.org>
+Date: Sun, 1 Apr 2018 16:36:28 +0200
+Subject: [Buildroot] [git commit] package/pkg-golang: use 'build' instead of
+ 'install'
+Message-ID: <20180401150524.24CD582CC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=888404d7fb940afef28ac368a84117da987ea59c
+commit: https://git.buildroot.net/buildroot/commit/?id=c4c85c12eb7f39d2faf54f080de973f7d69224f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that <pkg>_BINDIR is always "bin", having it as a package variable
-doesn't make much sense, so get rid of this variable completely, and
-use "bin".
+So far, we were using the 'go install' mechanism to build a package
+and have its binary installed in
+$$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH). This worked fine when
+building on x86-64 for ARM, but failed when building on x86-64 for
+x86-64 because the binaries were installed in $$($(2)_WORKSPACE)/bin/.
 
+Instead of doing some complicated logic to guess whether Go is going
+to put our binaries in $$($(2)_WORKSPACE)/bin/ or in
+$$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH), we revert back to using
+"go build", as it was done before the introduction of the golang
+package infrastructure. "go build" lets us pass explicitly the
+destination path of the binary to be generated.
+
+There's just one complexity with how to decide on the name of the
+binary that should be produced, and we have two cases:
+
+ - <pkg>_BUILD_TARGETS is the default, i.e ".". In this case we assume
+   a single binary is produced by "go build", and we name if after the
+   lower case package name. We allow this to be overridden thanks to
+   <pkg>_BIN_NAME.
+
+ - <pkg>_BUILD_TARGETS is non-default, and typically contains
+   something like "foo bar" or "cmd/foo cmd/bar". In this case, we
+   assume the binaries to be produced are "foo" and "bar", i.e we take
+   the non-directory part of the build target to name the binaries.
+
+Because we're using this -o option, we no longer need to explicitly
+create the binary directory, it is done by "go build".
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/1f9cd7c48e8c8f41326632a9c0de83915d72c45b/
+
+[Peter: use $(or instead of $(if as suggested by Arnout]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-proxy/docker-proxy.mk | 2 +-
- package/flannel/flannel.mk           | 2 +-
- package/pkg-golang.mk                | 5 ++---
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ docs/manual/adding-packages-golang.txt | 13 ++++++++++++-
+ package/pkg-golang.mk                  | 26 ++++++++++++++------------
+ 2 files changed, 26 insertions(+), 13 deletions(-)
 
-diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
-index a90271fc35..dfa9d4347d 100644
---- a/package/docker-proxy/docker-proxy.mk
-+++ b/package/docker-proxy/docker-proxy.mk
-@@ -17,7 +17,7 @@ DOCKER_PROXY_WORKSPACE = gopath
- DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
+diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+index b6d1f5e6b4..efcf696867 100644
+--- a/docs/manual/adding-packages-golang.txt
++++ b/docs/manual/adding-packages-golang.txt
+@@ -86,7 +86,18 @@ therefore only use a few of them, or none.
  
- define DOCKER_PROXY_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/$(DOCKER_PROXY_BINDIR)/proxy $(TARGET_DIR)/usr/bin/docker-proxy
-+	$(INSTALL) -D -m 0755 $(@D)/bin/proxy $(TARGET_DIR)/usr/bin/docker-proxy
- endef
+ * +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
+   should be built. If +FOO_BUILD_TARGETS+ is not specified, it
+-  defaults to +.+.
++  defaults to +.+. We then have two cases:
++
++** +FOO_BUILD_TARGETS+ is +.+. In this case, we assume only one binary
++   will be produced, and that by default we name it after the package
++   name. If that is not appropriate, the name of the produced binary
++   can be overridden using +FOO_BIN_NAME+.
++
++** +FOO_BUILD_TARGETS+ is not +.+. In this case, we iterate over the
++   values to build each target, and for each produced a binary that is
++   the non-directory component of the target. For example if
++   +FOO_BUILD_TARGETS = cmd/docker cmd/dockerd+ the binaries produced
++   are +docker+ and +dockerd+.
  
- $(eval $(golang-package))
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index 07d5d0dfd6..d00d2df92c 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -15,7 +15,7 @@ FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION
- 
- # Install flannel to its well known location.
- define FLANNEL_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/$(FLANNEL_BINDIR)/flannel $(TARGET_DIR)/opt/bin/flanneld
-+	$(INSTALL) -D -m 0755 $(@D)/bin/flannel $(TARGET_DIR)/opt/bin/flanneld
- 	$(INSTALL) -D -m 0755 $(@D)/dist/mk-docker-opts.sh $(TARGET_DIR)/opt/bin/mk-docker-opts.sh
- endef
- 
+ * +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
+   should be installed in +/usr/bin+ on the target. If
 diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 342d17fbd9..f23bda390d 100644
+index f51b2ee2e0..342d17fbd9 100644
 --- a/package/pkg-golang.mk
 +++ b/package/pkg-golang.mk
-@@ -70,7 +70,6 @@ ifeq ($$($(2)_BUILD_TARGETS),.)
- $(2)_BIN_NAME ?= $(1)
- endif
+@@ -62,12 +62,16 @@ $(2)_DEPENDENCIES += host-go
  
--$(2)_BINDIR = bin
- $(2)_INSTALL_BINS ?= $(1)
+ $(2)_BUILD_TARGETS ?= .
+ 
+-$(2)_INSTALL_BINS ?= $(1)
++# If the build target is just ".", then we assume the binary to be
++# produced is named after the package. If however, a build target has
++# been specified, we assume that the binaries to be produced are named
++# after each build target building them (below in <pkg>_BUILD_CMDS).
++ifeq ($$($(2)_BUILD_TARGETS),.)
++$(2)_BIN_NAME ?= $(1)
++endif
+ 
+-# The go build/install command installs the binaries inside
+-# gopath/bin/linux_GOARCH/ when cross compilation is enabled. We set this
+-# variable here to be used by packages if needed.
+-$(2)_BINDIR = $$($(2)_WORKSPACE)/bin/linux_$$(GO_GOARCH)
++$(2)_BINDIR = bin
++$(2)_INSTALL_BINS ?= $(1)
  
  # Source files in Go should be extracted in a precise folder in the hierarchy
-@@ -103,7 +102,7 @@ define $(2)_BUILD_CMDS
+ # of GOPATH. It usually resolves around domain/vendor/software. By default, we
+@@ -84,17 +88,13 @@ $(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
+ # file.
+ ifndef $(2)_CONFIGURE_CMDS
+ define $(2)_CONFIGURE_CMDS
+-	mkdir -p $$(@D)/$$($(2)_WORKSPACE)/bin
+ 	mkdir -p $$(dir $$($(2)_SRC_PATH))
+ 	ln -sf $$(@D) $$($(2)_SRC_PATH)
+ endef
+ endif
+ 
+-# Build step. Only define it if not already defined by the package .mk file. We
+-# use the install command instead of build command here because the install
+-# command just moves the package binaries into <workspace>/bin/linux_GOARCH/.
+-# This leverages the go build infrastructure for building and installing
+-# multiple binaries.
++# Build step. Only define it if not already defined by the package .mk
++# file.
+ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+@@ -102,7 +102,9 @@ define $(2)_BUILD_CMDS
+ 		$$(GO_TARGET_ENV) \
  			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
  			$$($(2)_GO_ENV) \
- 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
--			-o $$(@D)/$$($(2)_BINDIR)/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
-+			-o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
- 			./$$(d)
- 	)
- endef
-@@ -114,7 +113,7 @@ endif
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	$$(foreach d,$$($(2)_INSTALL_BINS),\
--		$(INSTALL) -D -m 0755 $$(@D)/$$($(2)_BINDIR)/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
-+		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
+-			$$(GO_BIN) install -v $$($(2)_BUILD_OPTS) ./$$(d)
++			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
++			-o $$(@D)/$$($(2)_BINDIR)/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
++			./$$(d)
  	)
  endef
  endif
