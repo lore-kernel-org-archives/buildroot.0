@@ -1,37 +1,39 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 20:36:24 +0200
-Subject: [Buildroot] [PATCH 3/5] rust-bin: use HOST_RUST_BIN_DL_DIR instead
- of RUST_BIN_DL_DIR
+Date: Mon,  2 Apr 2018 20:36:25 +0200
+Subject: [Buildroot] [PATCH 4/5] ti-cgt-pru: use HOST_TI_CGT_PRU_DL_DIR
+ instead of TI_CGT_PRU_DL_DIR
 In-Reply-To: <20180402183626.7769-1-maxime.hadjinlian@gmail.com>
 References: <20180402183626.7769-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402183626.7769-3-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402183626.7769-4-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The infrastructure only provides HOST_RUST_BIN_DL_DIR, because this
-package is host only. Ideally the infra should provide RUST_BIN_DL_DIR,
+The infrastructure only provides HOST_TI_CGT_PRU_DL_DIR, because this
+package is host only. Ideally the infra should provide TI_CGT_PRU_DL_DIR,
 but it doesn't currently, and that requires more significant changes.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/rust-bin/rust-bin.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ti-cgt-pru/ti-cgt-pru.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-index 759d468304..b57849093d 100644
---- a/package/rust-bin/rust-bin.mk
-+++ b/package/rust-bin/rust-bin.mk
-@@ -22,7 +22,7 @@ HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAM
- define HOST_RUST_BIN_LIBSTD_EXTRACT
- 	mkdir -p $(@D)/std
- 	$(foreach f,$(HOST_RUST_BIN_EXTRA_DOWNLOADS), \
--		$(call suitable-extractor,$(f)) $(RUST_BIN_DL_DIR)/$(f) | \
-+		$(call suitable-extractor,$(f)) $(HOST_RUST_BIN_DL_DIR)/$(f) | \
- 			$(TAR) -C $(@D)/std $(TAR_OPTIONS) -
- 	)
- 	cd $(@D)/rustc/lib/rustlib; \
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+index df3b97bef5..3665d2cec8 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.mk
++++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+@@ -13,8 +13,8 @@ TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.2.x_manifest.html \
+ 	pru_rts_2_2_0_82167478-F8C9-49b2-82BD-12F8550770F9.spdx
+ 
+ define HOST_TI_CGT_PRU_EXTRACT_CMDS
+-	chmod +x $(TI_CGT_PRU_DL_DIR)/$(TI_CGT_PRU_SOURCE)
+-	$(TI_CGT_PRU_DL_DIR)/$(TI_CGT_PRU_SOURCE) --prefix $(@D) --mode unattended
++	chmod +x $(HOST_TI_CGT_PRU_DL_DIR)/$(TI_CGT_PRU_SOURCE)
++	$(HOST_TI_CGT_PRU_DL_DIR)/$(TI_CGT_PRU_SOURCE) --prefix $(@D) --mode unattended
+ 	mv $(@D)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)/* $(@D)
+ 	rmdir $(@D)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)/
+ endef
 -- 
 2.16.2
