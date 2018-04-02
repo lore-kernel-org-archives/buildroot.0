@@ -1,46 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 11:34:32 +0200
-Subject: [Buildroot] [git commit] ffmpeg: libcdio support through
- libcdio-paranoia
-Message-ID: <20180402093433.A337C8397D@busybox.osuosl.org>
+Date: Mon, 2 Apr 2018 11:34:22 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libressl: bump version to 2.7.2
+In-Reply-To: <20180402083708.21199-1-bernd.kuhls@t-online.de>
+References: <20180402083708.21199-1-bernd.kuhls@t-online.de>
+Message-ID: <20180402113422.439d2839@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f66bd4805d34e898781e5aca6e7d429cbc2265d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ffmpeg/ffmpeg.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On Mon,  2 Apr 2018 10:37:07 +0200, Bernd Kuhls wrote:
+> Removed patch 0001, a different version was applied upstream, please
+> see upstream PR 82 for details. Added license hash.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...ix-build-with-musl-and-older-Linux-kernel.patch | 38 ----------------------
+>  package/libressl/libressl.hash                     |  4 ++-
+>  package/libressl/libressl.mk                       |  2 +-
+>  3 files changed, 4 insertions(+), 40 deletions(-)
+>  delete mode 100644 package/libressl/0002-Fix-build-with-musl-and-older-Linux-kernel.patch
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 5d2f89fb43..71d642cf4c 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -49,7 +49,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-frei0r \
- 	--disable-libopencore-amrnb \
- 	--disable-libopencore-amrwb \
--	--disable-libcdio \
- 	--disable-libdc1394 \
- 	--disable-libgsm \
- 	--disable-libilbc \
-@@ -203,6 +202,13 @@ else
- FFMPEG_CONF_OPTS += --disable-libfdk-aac
- endif
- 
-+ifeq ($(BR2_PACKAGE_FFMPEG_GPL)$(BR2_PACKAGE_LIBCDIO_PARANOIA),yy)
-+FFMPEG_CONF_OPTS += --enable-libcdio
-+FFMPEG_DEPENDENCIES += libcdio-paranoia
-+else
-+FFMPEG_CONF_OPTS += --disable-libcdio
-+endif
-+
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- FFMPEG_CONF_OPTS += --enable-gnutls --disable-openssl
- FFMPEG_DEPENDENCIES += gnutls
+Both applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
