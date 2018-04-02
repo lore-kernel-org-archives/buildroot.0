@@ -1,107 +1,189 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 2 Apr 2018 16:31:39 +0200
-Subject: [Buildroot] [PATCH] qt5script: correct license information
-In-Reply-To: <20180402141508.10278-1-arnout@mind.be>
-References: <20180402141508.10278-1-arnout@mind.be>
-Message-ID: <0a31441f-b28f-4916-4964-aff1ca8abb24@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Apr 2018 16:42:33 +0200
+Subject: [Buildroot] [PATCH 2/3] netcf: new package
+In-Reply-To: <20171127104131.27975-3-casantos@datacom.ind.br>
+References: <20171127104131.27975-1-casantos@datacom.ind.br>
+ <20171127104131.27975-3-casantos@datacom.ind.br>
+Message-ID: <20180402164233.76d04a17@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Carlos,
+
+On Mon, 27 Nov 2017 08:41:30 -0200, Carlos Santos wrote:
+> diff --git a/package/netcf/0001-fix-misplaced-empty.patch b/package/netcf/0001-fix-misplaced-empty.patch
+> new file mode 100644
+> index 0000000000..74a3a63d7a
+> --- /dev/null
+> +++ b/package/netcf/0001-fix-misplaced-empty.patch
+> @@ -0,0 +1,36 @@
+> +From 8e00e9c0ba6b66035defc94470ac863f04eba4b5 Mon Sep 17 00:00:00 2001
+> +From: Laine Stump <laine@laine.org>
+> +Date: Thu, 21 May 2015 11:40:53 -0400
+> +Subject: [PATCH 1/9] fix misplaced <empty/>
+
+Could you generate the patches with "git format-patch -N", to avoid the
+numbering inside the patches ?
+
+> +When transcribing the link-speed-state bits from libvirt's
+> +interface.rng to netcf's, I accidentally added an "<empty/>" in the
+> +wrong place. It should have gone inside the definition of the <link>
+> +element, rather than just after <link> in the <interface> element.
+
+All the patches that are not authored by you lack your Signed-off-by.
+
+This patches come from upstream, this should be mentioned in the
+patches themselves, possibly with a link, such as:
+
+https://pagure.io/netcf/c/8e00e9c0ba6b66035defc94470ac863f04eba4b5?branch=master
+
+> diff --git a/package/netcf/0006-netcf-transaction.sh-remove-bash-isms.patch b/package/netcf/0006-netcf-transaction.sh-remove-bash-isms.patch
+> new file mode 100644
+> index 0000000000..c25cc779af
+> --- /dev/null
+> +++ b/package/netcf/0006-netcf-transaction.sh-remove-bash-isms.patch
+> @@ -0,0 +1,50 @@
+> +From 91cdbd05a82be014f43d549ddcf5a67471a5f029 Mon Sep 17 00:00:00 2001
+> +From: Carlos Santos <casantos@datacom.ind.br>
+> +Date: Sun, 8 Oct 2017 09:36:42 -0300
+> +Subject: [PATCH 6/9] netcf-transaction.sh: remove bash-isms
+> +
+> +echo $"..." -> echo "..."
+> +echo -n $"...$a $b" -> printf "... %s %s" "$a" "$b"
+> +
+> +Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+
+All the init script machinery is not very Buildroot-looking. Should we
+use their init script, or have our own ?
 
 
-On 02-04-18 16:15, Arnout Vandecappelle (Essensium/Mind) wrote:
-> The license information in qt5script was just copied from all the other
-> qt5 modules, but it is different (and complicated).
-> 
-> - libQt5Script itself contains the third-party JavaScriptCore source.
->   JavaScriptCore has a number of licenses: BSD-2-Clause, BSD-3-Clause,
->   LGPL-2.0+, LGPL-2.1+. Since it is all linked together, the end
->   result will be BSD-3-Clause or LGPL-2.1+.
-> 
->   The different BSD licenses are all slightly different (different
->   authors, which affects the third clause in particular). Only one
->   separate license file is provided, so let's use that one.
-> 
->   There is an LGPL-2.0 license file, which is slightly different from
->   the top-level LICENSE.LGPLv21, so let's add that one as well.
-> 
-> - libQt5Script also contains Qt-specific code which is all licensed
->   under LGPL-2.1 only. This is covered by the LICENSE.LGPLv21 file.
->   It merges with the LGPL-2.1+ from JavaScriptCore but limits it to
->   2.1 only.
-> 
-> - libQt5ScriptTools is a separate libary containing just the script
->   debugger. It is covered by the usual Qt license:
->   * LGPL-2.1 or LGPL-3.0 with exception for Qt 5.6;
->   * LGPL-3.0 or GPL-2.0+ for Qt 5.9 (actually it is GPL-2.0 or GPL-3.0
->     or any later version approved by the KDE Qt foundation, but let's
->     keep it simple :-). Note that there is no LICENSE.GPLv2 provided,
->     only LICENSE.GPLv3. Also, there is no mention of the exception in
->     the Qt 5.9 sources, even though the LGPL_EXCEPTION.txt is still
->     present.
-> 
-> Update the license information with all of the above. Also add hashes
-> for the new license files from JavaScriptCore.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> diff --git a/package/netcf/0008-configure.ac-fix-AM_INIT_AUTOMAKE-call.patch b/package/netcf/0008-configure.ac-fix-AM_INIT_AUTOMAKE-call.patch
+> new file mode 100644
+> index 0000000000..4331d84b55
+> --- /dev/null
+> +++ b/package/netcf/0008-configure.ac-fix-AM_INIT_AUTOMAKE-call.patch
+> @@ -0,0 +1,29 @@
+> +From 6daa25084b553351255e8f3e6b252a446e5f88fc Mon Sep 17 00:00:00 2001
+> +From: Carlos Santos <casantos@datacom.ind.br>
+> +Date: Sun, 8 Oct 2017 13:16:41 -0300
+> +Subject: [PATCH 8/9] configure.ac: fix AM_INIT_AUTOMAKE call
 
- Applied to master with some minor changes suggested by Thomas IRL, thanks.
+Patches 8 and 9 definitely make sense for upstream, could you submit
+them ?
 
- Regards,
- Arnout
+> diff --git a/package/netcf/Config.in b/package/netcf/Config.in
+> new file mode 100644
+> index 0000000000..d38c2dcef0
+> --- /dev/null
+> +++ b/package/netcf/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_NETCF
+> +	bool "netcf"
+> +	depends on !BR2_arc # augeas
+> +	depends on !BR2_STATIC_LIBS # libnl
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_USE_WCHAR # augeas
+> +	select BR2_PACKAGE_AUGEAS
+> +	select BR2_PACKAGE_LIBNL
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_LIBXSLT
+> +	select BR2_PACKAGE_READLINE
+> +	help
+> +	  netcf is a cross-platform network configuration library.
+> +
+> +	  It takes the description of a network interface in its own
+> +	  platform-independent format and adapts the local system's
+> +	  network configuration to provide that interface.
+> +
+> +	  Both the ncftool utility and libnetcf are installed.
+> +
+> +comment "netcf needs a toolchain w/ wchar"
+> +	depends on !BR2_arc
+> +	depends on !BR2_USE_WCHAR
 
-> ---
->  package/qt5/qt5script/qt5script.hash |  2 ++
->  package/qt5/qt5script/qt5script.mk   | 17 +++++++++++++++--
->  2 files changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/qt5/qt5script/qt5script.hash b/package/qt5/qt5script/qt5script.hash
-> index bcb37801a8..9b43e5fd65 100644
-> --- a/package/qt5/qt5script/qt5script.hash
-> +++ b/package/qt5/qt5script/qt5script.hash
-> @@ -10,3 +10,5 @@ sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.
->  sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
->  sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
->  sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-> +sha256 5094ecb9c9dcd0eadc34f3c11511d9b5535063032bc150164ecd1a5d5a445547 src/3rdparty/javascriptcore/JavaScriptCore/COPYING.LIB
-> +sha256 43b007cd3ac7b7ea5284b13e9580334028e6f42e859059605d57558f39374197 src/3rdparty/javascriptcore/JavaScriptCore/pcre/COPYING
-> diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
-> index b6c02d0d1c..9539f56df6 100644
-> --- a/package/qt5/qt5script/qt5script.mk
-> +++ b/package/qt5/qt5script/qt5script.mk
-> @@ -10,8 +10,21 @@ QT5SCRIPT_SOURCE = qtscript-opensource-src-$(QT5SCRIPT_VERSION).tar.xz
->  QT5SCRIPT_DEPENDENCIES = qt5base
->  QT5SCRIPT_INSTALL_STAGING = YES
->  
-> -QT5SCRIPT_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
-> -QT5SCRIPT_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
-> +# JavaScriptCore contains files under BSD-2-Clause, BSD-3-Clause, and LGPL-2+.
-> +# This is linked into libQt5Script, which also contains Qt sources under
-> +# LGPL-2.1 (only). Therefore, the library is  LGPL-2.1 and BSD-3-Clause.
-> +# libQt5ScriptTools is under the normal Qt opensource license.
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +QT5SCRIPT_LICENSE = LGPL-2.1, BSD-3-Clause, LGPL-3.0 or GPL-2.0+ (libQt5ScriptTools), GFDL-1.3 (docs)
-> +QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv3 LICENSE.FDL
-> +else
-> +QT5SCRIPT_LICENSE = LGPL-2.1, BSD-3-Clause, LGPL-2.1 with exception or LGPL-3.0 with exception (libQt5ScriptTools), GFDL-1.3 (docs)
-> +QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LGPL_EXCEPTION.txt LICENSE.FDL
-> +endif
-> +# License files from JavaScriptCore
-> +QT5SCRIPT_LICENSE_FILES += \
-> +	src/3rdparty/javascriptcore/JavaScriptCore/COPYING.LIB \
-> +	src/3rdparty/javascriptcore/JavaScriptCore/pcre/COPYING
->  
->  define QT5SCRIPT_CONFIGURE_CMDS
->  	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
-> 
+This Config.in comment is not complete.
 
+> diff --git a/package/netcf/S30netcf-transaction b/package/netcf/S30netcf-transaction
+> new file mode 100644
+> index 0000000000..ad67123916
+> --- /dev/null
+> +++ b/package/netcf/S30netcf-transaction
+> @@ -0,0 +1,9 @@
+> +#!/bin/sh
+> +#
+> +# This script can save the current state of network config, and later
+> +# revert to that config, or commit the new config (by deleting the
+> +# snapshot). At boot time, if there are uncommitted changes to the
+> +# network config, they are reverted (and the discarded changes are
+> +# archived in /var/lib/netcf/network-rollback-*).
+> +
+> +exec /usr/libexec/netcf-transaction.sh "$@"
+
+This init script is not installed anywhere.
+
+> diff --git a/package/netcf/netcf.hash b/package/netcf/netcf.hash
+> new file mode 100644
+> index 0000000000..2ba2a5c204
+> --- /dev/null
+> +++ b/package/netcf/netcf.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256 fd81d607795547807150dfdb82bd164ab2569369ab48a30cb6b0d010d17b127c  netcf_0.2.8.orig.tar.gz
+> diff --git a/package/netcf/netcf.mk b/package/netcf/netcf.mk
+> new file mode 100644
+> index 0000000000..bd2bc8715d
+> --- /dev/null
+> +++ b/package/netcf/netcf.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# netcf
+> +#
+> +################################################################################
+> +
+> +NETCF_VERSION = 0.2.8
+> +NETCF_SITE = http://snapshot.debian.org/archive/debian/20171007T103908Z/pool/main/n/netcf
+> +NETCF_SOURCE = netcf_$(NETCF_VERSION).orig.tar.gz
+
+Why don't you fetch from the upstream Git repository ? Possibly you
+could fetch the appropriate Git commit, avoiding the need to have a
+number of patches in Buildroot itself ? Of course, a comment on top of
+the VERSION variable would explain why we pick a seemingly random
+version.
+
+> +NETCF_INSTALL_STAGING = YES
+> +NETCF_LICENSE = LGPL-2.1+
+> +NETCF_LICENSE_FILES = COPYING
+> +NETCF_DEPENDENCIES = augeas libnl libxml2 libxslt readline
+> +NETCF_INSTALL_STAGING = YES
+> +
+> +# 0007-Install-init-script-as-etc-init.d-S30netcf-transacti.patch
+
+This is not the only patch that requires autoreconf
+
+> +NETCF_AUTORECONF = YES
+> +
+> +NETCF_CONF_OPTS = \
+> +	--with-sysinit=$(if $(BR2_INIT_SYSTEMD),systemd,$(if $(BR2_INIT_NONE),none,initscripts))
+
+This is a bit hard to read.
+
+ifeq ($(BR2_INIT_SYSTEMD),y)
+NETCF_CONF_OPTS += --with-sysinit=systemd
+else ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
+NETCF_CONF_OPTS += --with-sysinit=sysv
+else
+NETCF_CONF_OPTS += --with-sysinit=none
+endif
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
