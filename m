@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Apr 2018 17:45:23 +0200
-Subject: [Buildroot] [PATCH 3/8] pkg-download: support new subdir for
- mirrors
-In-Reply-To: <20180402145802.17611-3-maxime.hadjinlian@gmail.com> (Maxime
- Hadjinlian's message of "Mon, 2 Apr 2018 16:57:57 +0200")
+Date: Mon, 02 Apr 2018 17:45:37 +0200
+Subject: [Buildroot] [PATCH 4/8] package: share downloaded files for big
+ packages
+In-Reply-To: <20180402145802.17611-4-maxime.hadjinlian@gmail.com> (Maxime
+ Hadjinlian's message of "Mon, 2 Apr 2018 16:57:58 +0200")
 References: <20180402145802.17611-1-maxime.hadjinlian@gmail.com>
- <20180402145802.17611-3-maxime.hadjinlian@gmail.com>
-Message-ID: <871sfxmx2k.fsf@dell.be.48ers.dk>
+ <20180402145802.17611-4-maxime.hadjinlian@gmail.com>
+Message-ID: <87woxplihq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +15,18 @@ To: buildroot@busybox.net
 
 >>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
- > Since we introduced subdirectory to the DL_DIR, we need to support them
- > in the PRIMARY and BACKUP mirror as they evolve to the new tree
- > structure.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Theses packages are given as an example of the use of the *_DL_SUBDIR feature.
+ > There maybe other packages that would benefit from that feature, they
+ > would need to be added on a case by case basis.
 
- > We check first the new URI (with the subdir), and in case of failure, we
- > go check without.
- > By checking both URIs, we ensure that old mirror are usable.
-
- > Also, add a missing qstrip call for BR2_BACKUP_SITE.
-
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  > ---
  > v4 -> v5:
- >    - Use new DL_SUBDIR
- >    - Add missing qstrip
+ >     - Change SAME_SOURCE_AS into DL_SUBDIR
 
 Committed, thanks.
 
