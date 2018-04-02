@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Apr 2018 23:47:05 +0200
-Subject: [Buildroot] [PATCH 8/8] download: git: introduce cache feature
-In-Reply-To: <20180402145802.17611-8-maxime.hadjinlian@gmail.com> (Maxime
- Hadjinlian's message of "Mon, 2 Apr 2018 16:58:02 +0200")
-References: <20180402145802.17611-1-maxime.hadjinlian@gmail.com>
- <20180402145802.17611-8-maxime.hadjinlian@gmail.com>
-Message-ID: <877eppl1ra.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Apr 2018 23:48:54 +0200
+Subject: [Buildroot] [PATCH 1/1] mpd: add optional libmpdclient
+ dependency
+In-Reply-To: <CAPi7W80xVMC0BuVvYLKwXJnMTcHV2Zpo7w_gnnAihBhhBpwvDQ@mail.gmail.com>
+ (Fabrice Fontaine's message of "Mon, 2 Apr 2018 18:41:41 +0200")
+References: <20180402111134.23776-1-fontaine.fabrice@gmail.com>
+ <874lktois3.fsf@dell.be.48ers.dk>
+ <CAPi7W80xVMC0BuVvYLKwXJnMTcHV2Zpo7w_gnnAihBhhBpwvDQ@mail.gmail.com>
+Message-ID: <87370dl1o9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Now we keep the git clone that we download and generates our tarball
- > from there.
- > The main goal here is that if you change the version of a package (say
- > Linux), instead of cloning all over again, you will simply 'git fetch'
- > from the repo the missing objects, then generates the tarball again.
+Hi,
 
- > This should speed the 'source' part of the build significantly.
+ >> All other optional dependencies are handled by a BR2_PACKAGE_MPD_<foo>
+ >> suboption. Any specific reason why you are not doing that here?
+ >> 
+ > Yes, you're right that all dependencies except icu have an option.
+ > I'll add also it for libmpdclient, I was just thinking that the best
+ > practice was to avoid adding an option.
 
- > The drawback is that the DL_DIR will grow much larger; but time is more
- > important than disk space nowadays.
+Normally yes, but we also try to keep some consistency between the
+various options in a package.
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > ---
- > v4 -> v5:
- >     - Fix comments's content
-
-Committed, thanks.
+I believe the sub options have been added for mpd because it isn't
+really obvious what other packages you need to enable to get a specific
+feature enabled.
 
 -- 
 Bye, Peter Korsgaard
