@@ -1,67 +1,41 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 2 Apr 2018 13:01:32 +0000
-Subject: [Buildroot] Fwd: [PATCH] hackrf: new package
-In-Reply-To: <4717c3cb-2c10-5e7b-bc3a-3e36dcc963e4@mind.be>
-References: <20180331205758.9652-1-arnout@mind.be>
- <4717c3cb-2c10-5e7b-bc3a-3e36dcc963e4@mind.be>
-Message-ID: <1522674091.3989.5.camel@synopsys.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  2 Apr 2018 15:06:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/git: bump version to 2.16.3
+Message-ID: <20180402130634.14967-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, 2018-03-31 at 23:05 +0200, Arnout Vandecappelle wrote:
->  Hi Alexey,
-> 
->  Sorry, I forgot to put you in Cc.
-> 
->  Regards,
->  Arnout
-> 
-> 
-> -------- Forwarded Message --------
-> Subject: [PATCH] hackrf: new package
-> Date: Sat, 31 Mar 2018 22:57:58 +0200
-> From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> To: buildroot at buildroot.org
-> CC: Jason Pruitt <jrspruitt@gmail.com>, Arnout Vandecappelle <arnout@mind.be>
-> 
-> From: Jason Pruitt <jrspruitt@gmail.com>
-> 
-> This patch adds hackrf/host tools for HackRF, a low cost, open source
-> Software Defined Radio platform.
-> 
-> Sources of host tools are available on GitHub here:
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_mossmann_hackrf_tree_master_host&d=DwICaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=OtZvQ4lNHIbjtyy
-> sXrNW8RbX6WFkigcev-xByzJ_fLk&m=3fPnQrE4rSy5zQsDX4KiuyrN0_yo_bx7cMjSZbnpQ9Y&s=JvoE14lAkMAbq6U9--tXF7zDwrs3YxMuCP2i7XieViA&e=
-> 
-> Signed-off-by: Jason Pruitt <jrspruitt@gmail.com>
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> [Arnout:
->  - Rename package to hackrf to match upstream name;
->  - Reorder dependencies and remove empty line (check-package);
->  - Use only sha256 hash;
->  - Add hash for license file;
->  - Bump to 2018.01.1;
->  - Use uploaded tarball rather than github-generated one;
->  - Fix dependencies of comment (|| instead of &&)
->  - Add UDEV_RULES_GROUP=plugdev in case the build host doesn't have
->    this group;
->  - Add patch fixing build without C++ compiler.
-> ]
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> v2: Changes by Arnout, see above
-> 
-> Alexey and/or Jason, can you re-test with this version?
-
-I made a quick build test and it's all OK.
-Unfortunately I don't have access to HackRF hardware ATM so
-cannot run-test it.
-
-Thanks for taking care of this one.
-
--Alexey
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 504f7d993a..fea1a1e904 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,4 +1,4 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 cfad4337f2fdbfc1e2c8abce5e17e1dd4e1718a34ac2cbe3238fbe2426f2ea19  git-2.16.1.tar.xz
++sha256 d65d99e9e5b081c1f14ea018973806e942a2eb7d0da2ebc01bd2525adee62d48  git-2.16.3.tar.xz
+ sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 1109f7a8a2..2115e04e31 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.16.1
++GIT_VERSION = 2.16.3
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-- 
+2.14.2
