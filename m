@@ -1,49 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 08:38:28 +0200
-Subject: [Buildroot] [PATCH 1/1] rust: make sure the cxx compiler is
- also set for the target
-In-Reply-To: <7E1DAB3C-F973-4E41-8E6F-E603021DCFF9@storagecraft.com>
-References: <20180228173852.66069-1-charles.hardin@storagecraft.com>
- <20180402004857.7e7e46c1@windsurf>
- <F8479AD1-B731-4235-A6C6-A517165DD553@storagecraft.com>
- <20180402005738.1d603538@windsurf>
- <1B48158D-B250-46BC-A4B8-7A2816D2573A@storagecraft.com>
- <7E1DAB3C-F973-4E41-8E6F-E603021DCFF9@storagecraft.com>
-Message-ID: <20180402083828.54d43b63@windsurf>
+Date: Mon, 2 Apr 2018 08:51:15 +0200
+Subject: [Buildroot] [PATCH v4 10/11] package/mesa3d: enable OpenCL
+ support
+In-Reply-To: <CAPP7BN2mqQ1kV9_hkn2K7FgY3T0OWFrsvrJcZzSMi0Pj9OMg1Q@mail.gmail.com>
+References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
+ <20180329113346.10367-11-valentin.korenblit@smile.fr>
+ <20180401233226.76803d73@windsurf>
+ <CAPP7BN2mqQ1kV9_hkn2K7FgY3T0OWFrsvrJcZzSMi0Pj9OMg1Q@mail.gmail.com>
+Message-ID: <20180402085115.350f9b6b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Erik,
 
-[Side note: it is customary on open-source mailing list to avoid
- top-posting, and instead reply below the text you are replying to.
- Thanks!]
+On Mon, 2 Apr 2018 07:23:23 +0200, Erik Larsson wrote:
 
-On Sun, 1 Apr 2018 23:05:11 +0000, Charles Hardin wrote:
+> > This is certainly not really understanding how OpenCL works, but why do
+> > you need this Gallium driver compiled in? Does the result only works on
+> > a system with an AMD GPU ?  
+> 
+> What about creating a virtual package for OpenCL just as with OpenVG?
 
-> Oh, I think I might remember the problem on TARGET - HOST, notice the core_avx2
-> is our target and our buildslaves don?t have avx2 and rust has some stage where it
-> built a local tool and it didn?t run on the buildslave because it used the cross compiler
+We will certainly need something like this at some point. Though I
+believe it can be handled separately from Valentin's series. I think in
+Valentin's series the only package that will need to be reworked to
+make use of an opencl virtual package is clinfo, and it will be
+trivial to convert it to use the opencl virtual package instead of
+directly mesa3d.
 
-Well, that's a severe bug. If Rust uses the cross-compiler to build a
-program that it then runs on the host, this is not going to work on a
-number of situations. Your defconfig uses glibc for the target, and
-your host most likely uses glibc as well, so there are some chances
-that a tool built with the cross-compiler will also run on the host.
-But if the CPU optimization options are different (like you had with
-AVX2) or the C library is different than glibc, then the tool built
-with the cross-compiler will definitely not run on the host.
+> I've started to work on patch series were OpenCL is a virtual package
+> but I'm not 100% finished. I still need more testing and add some
+> packages that do not use the new virtual package of OpenCL. I also
+> need to add more platforms that provide OpenCL. I've pushed some
+> patches to GitHub that is my draft/work-in-progress branch,
+> https://github.com/ortogonal/buildroot/commits/wip/opencl. If you like
+> it I can speed up the work with it!
 
-However, we do have a x86-64 uClibc configuration in our autobuilders,
-which is built on a x86-64 machine, and I don't think we have seen any
-issue. So, I'm a bit puzzled.
+This definitely looks nice to have. You forgot to update the
+<pkg>_PROVIDES line in the OpenCL providers. For example:
 
-Which specific internal tool was causing the problem ?
+IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
 
-Thanks,
+must be updated to:
+
+IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg libopencl
+
+Your tesseract-ocr change doesn't look good:
+
++config BR2_PACKAGE_TESSERACT_OCR_OPENCL_SUPPORT
++	bool "tesseract-ocr with OpenCL support"
++	depends on BR2_PACKAGE_HAS_LIBOPENVG
+
+The last line should be about BR2_PACKAGE_HAS_LIBOPENCL.
+
+Also, in all packages, we want to pass an explicit --enable-<foo> to
+enable the feature, instead of letting the autodetection do its work.
+So typically, we want:
+
+ifeq ($(BR2_<pkg>_FEATURE),y)
+<pkg>_DEPENDENCIES += libfeature
+<pkg>_CONF_OPTS += --enable-feature
+else
+<pkg>_CONF_OPTS += disable-feature
+endif
+
+There are a few other nits here and there that will be either to point
+when the series gets posted. But generally, it looks simple and
+straightforward, so it's on the right track!
+
+Best regards,
 
 Thomas
 -- 
