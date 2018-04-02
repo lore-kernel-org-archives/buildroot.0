@@ -1,53 +1,35 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Mon, 2 Apr 2018 12:05:51 +0200
-Subject: [Buildroot] [PATCH v4 04/11] package/mesa3d: enable llvm support
-In-Reply-To: <20180401225302.3a4284cd@windsurf>
-References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-5-valentin.korenblit@smile.fr>
- <20180401225302.3a4284cd@windsurf>
-Message-ID: <6cbae11f-1fc3-e46e-dddc-5bdbcb8a0ce0@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Apr 2018 12:07:55 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libressl: bump version to 2.7.2
+In-Reply-To: <20180402083708.21199-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 2 Apr 2018 10:37:07 +0200")
+References: <20180402083708.21199-1-bernd.kuhls@t-online.de>
+Message-ID: <87tvstor9g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Hello Thomas,
+ > Removed patch 0001, a different version was applied upstream, please
+ > see upstream PR 82 for details. Added license hash.
 
-On 01/04/2018 22:53, Thomas Petazzoni wrote:
-> Hello,
->
-> On Thu, 29 Mar 2018 13:33:39 +0200, Valentin Korenblit wrote:
->
->> +config BR2_PACKAGE_MESA3D_LLVM
->> +	bool "mesa3d w/ llvm"
-> We're already under the mesa3d option, so repeating mesa3d in the
-> prompt is not useless. Just "llvm support" is enough.
->
-> Should the option be: bool "llvmpipe" ? Or is LLVM used by mesa3d for
-> something else ?
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-We could leave "LLVM" because llvmpipe is not the only feature, r600 needs
-llvm AMDGPU backend when llvm is selected, and then we could add radeonsi
-Gallium Driver for newer GPUs.
+According to the release notes:
 
->> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
->> +	select BR2_PACKAGE_LLVM
->> +
->> +comment "mesa3d w/ llvm needs llvm"
->> +	depends on !BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-> This comment doesn't make sense: BR2_PACKAGE_LLVM_ARCH_SUPPORTS is an
-> architecture limitation, and therefore that the user can do about it.
-> Just drop this comment.
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.7.2-relnotes.txt
 
-Ok, perfect.
+* Added support for many OpenSSL 1.0.2 and 1.1 APIs, based on
+  observations of real-world usage in applications. These are
+  implemented in parallel with existing OpenSSL 1.0.1 APIs - visibility
+  changes have not been made to existing structs, allowing code written
+  for older OpenSSL APIs to continue working.
 
->
-> Thanks,
->
-> Thomas
+So a number of packages earlier not compatible with libressl may now
+work.
 
-Thanks,
-
-Valentin
+-- 
+Bye, Peter Korsgaard
