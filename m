@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  2 Apr 2018 13:10:18 +0200
-Subject: [Buildroot] [PATCH 1/1] ncmpc: add optional dependency to lirc-tools
-Message-ID: <20180402111018.23661-1-fontaine.fabrice@gmail.com>
+Date: Mon,  2 Apr 2018 13:11:34 +0200
+Subject: [Buildroot] [PATCH 1/1] mpd: add optional libmpdclient dependency
+Message-ID: <20180402111134.23776-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +10,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ncmpc/ncmpc.mk | 7 +++++++
+ package/mpd/mpd.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index 6bce627562..1d464b72de 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -18,6 +18,13 @@ NCMPC_CONF_OPTS += \
- 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
- 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index f50e3d90c7..e1569b64cf 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -31,6 +31,13 @@ else
+ MPD_CONF_OPTS += --disable-icu
+ endif
  
-+ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
-+NCMPC_DEPENDENCIES += lirc-tools
-+NCMPC_CONF_OPTS += -Dlirc=true
++ifeq ($(BR2_PACKAGE_LIBMPDCLIENT),y)
++MPD_DEPENDENCIES += libmpdclient
++MPD_CONF_OPTS += --enable-libmpdclient
 +else
-+NCMPC_CONF_OPTS += -Dlirc=false
++MPD_CONF_OPTS += --disable-libmpdclient
 +endif
 +
- NCMPC_NINJA_OPTS = $(if $(VERBOSE),-v)
- 
- define NCMPC_CONFIGURE_CMDS
+ ifeq ($(BR2_PACKAGE_MPD_ALSA),y)
+ MPD_DEPENDENCIES += alsa-lib
+ MPD_CONF_OPTS += --enable-alsa
 -- 
 2.14.1
