@@ -1,56 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 2 Apr 2018 17:39:45 +0200
-Subject: [Buildroot] [PATCH 2/3] netcf: new package
-In-Reply-To: <20180402164233.76d04a17@windsurf>
-References: <20171127104131.27975-1-casantos@datacom.ind.br>
- <20171127104131.27975-3-casantos@datacom.ind.br>
- <20180402164233.76d04a17@windsurf>
-Message-ID: <3f89f95b-661c-86d8-18c9-49f0d6736dd7@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 Apr 2018 15:39:57 +0000
+Subject: [Buildroot] [Bug 10511] Packages get downloaded uncompressed with
+ wget
+In-Reply-To: <bug-10511-163@https.bugs.busybox.net/>
+References: <bug-10511-163@https.bugs.busybox.net/>
+Message-ID: <bug-10511-163-CEhMLgKpJi@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=10511
 
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-On 02-04-18 16:42, Thomas Petazzoni wrote:
-> Hello Carlos,
-> 
-> On Mon, 27 Nov 2017 08:41:30 -0200, Carlos Santos wrote:
-[snip]
->> +NETCF_CONF_OPTS = \
->> +	--with-sysinit=$(if $(BR2_INIT_SYSTEMD),systemd,$(if $(BR2_INIT_NONE),none,initscripts))
-> 
-> This is a bit hard to read.
-> 
-> ifeq ($(BR2_INIT_SYSTEMD),y)
-> NETCF_CONF_OPTS += --with-sysinit=systemd
-> else ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
-> NETCF_CONF_OPTS += --with-sysinit=sysv
-> else
-> NETCF_CONF_OPTS += --with-sysinit=none
-> endif
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WONTFIX
+             Status|NEW                         |RESOLVED
 
- However, since the upstream sysv init script is pretty complicated and must be
-patched anyway, it would make sense to always use our own, and in that case it
-would be
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+This problem only affects wget 1.19.2. In 1.19.3, a patch was merged that
+disables auto-decompression for files ending in .gz and .tgz, and then in
+1.19.4, the auto-decompression was disabled entirely, as it was causing too
+many problems.
 
-ifeq ($(BR2_INIT_SYSTEMD),y)
-NETCF_CONF_OPTS += --with-sysinit=systemd
-else
-# For SysV init we use our own init script
-NETCF_CONF_OPTS += --with-sysinit=none
-endif
+Since the problem has been fixed in dot-releases of wget, most reasonable
+distributions that were using 1.19.2 have probably upgraded to 1.19.3 or later.
 
-
- Regards,
- Arnout
+In addition, for those stuck with wget 1.19.2, the fallback to
+sources.buildroot.net works (even if admittedly the bogus hashes can be scary).
+But considering all of this, we don't want to introduce extra complexity in
+Buildroot just to workaround a problem affecting only wget 1.19.2 when
+downloading files only from HTTP servers having a specific configuration.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
