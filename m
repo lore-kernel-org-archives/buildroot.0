@@ -1,36 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 18:29:46 +0200
-Subject: [Buildroot] [git commit] package/libevent: add support for libressl
-Message-ID: <20180402162949.5A80281502@busybox.osuosl.org>
+Date: Mon, 2 Apr 2018 18:30:41 +0200
+Subject: [Buildroot] [git commit] hostapd: select driver support
+Message-ID: <20180402163238.5AEC4812F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46a14966b65a1de7538b350ce22163dc0eca16c2
+commit: https://git.buildroot.net/buildroot/commit/?id=90d73e5f66ccae2f1571762bef1f5ab4bae8e775
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libevent builds fine with current libressl 2.7.2.
+Add support for the wired driver. Add configuration options to select
+which drivers to build. Select DRIVER_NONE if no other drivers enabled
+(this may be the case when building hostapd as a standalone RADIUS
+server).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Update makefile logic and apply wireless-specific options only if at
+least one wireless driver enabled. Otherwise, an attempt to build a
+wired-only or RADIUS-only hostapd will fail.
+
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Reviewed-by: Sam Voss <sam.voss@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libevent/libevent.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/hostapd/Config.in  | 31 +++++++++++++++++++++++++++++++
+ package/hostapd/hostapd.mk | 31 ++++++++++++++++++++++++++-----
+ 2 files changed, 57 insertions(+), 5 deletions(-)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index 65bf1c2b7b..f0c989afa1 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -24,8 +24,8 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
- LIBEVENT_POST_INSTALL_TARGET_HOOKS += LIBEVENT_REMOVE_PYSCRIPT
+diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+index 84156e8f11..f6182a9268 100644
+--- a/package/hostapd/Config.in
++++ b/package/hostapd/Config.in
+@@ -14,11 +14,42 @@ config BR2_PACKAGE_HOSTAPD
+ 
+ if BR2_PACKAGE_HOSTAPD
+ 
++config BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP
++	bool "Enable hostap driver"
++	default y
++	select BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS
++	help
++	  Enable support for Host AP driver.
++
++config BR2_PACKAGE_HOSTAPD_DRIVER_NL80211
++	bool "Enable nl80211 driver"
++	default y
++	select BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS
++	help
++	  Enable support for drivers using the nl80211 kernel interface.
++
+ config BR2_PACKAGE_HOSTAPD_DRIVER_RTW
+ 	bool "Enable rtl871xdrv driver"
++	select BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS
+ 	help
+ 	  Enable support for Realtek wireless chips.
+ 
++config BR2_PACKAGE_HOSTAPD_DRIVER_WIRED
++	bool "Enable wired driver"
++	help
++	  Enable support for wired authenticator.
++
++config BR2_PACKAGE_HOSTAPD_DRIVER_NONE
++	bool
++	default y
++	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP
++	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_NL80211
++	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_RTW
++	depends on !BR2_PACKAGE_HOSTAPD_DRIVER_WIRED
++
++config BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS
++	bool
++
+ config BR2_PACKAGE_HOSTAPD_ACS
+ 	bool "Enable ACS"
+ 	default y
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 1696670383..f9072784eb 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -18,12 +18,7 @@ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CONFIG_SET =
+ 
+ HOSTAPD_CONFIG_ENABLE = \
+-	CONFIG_HS20 \
+-	CONFIG_IEEE80211AC \
+-	CONFIG_IEEE80211N \
+-	CONFIG_IEEE80211R \
+ 	CONFIG_INTERNAL_LIBTOMMATH \
+-	CONFIG_INTERWORKING \
+ 	CONFIG_LIBNL32
+ 
+ HOSTAPD_CONFIG_DISABLE =
+@@ -45,11 +40,37 @@ HOSTAPD_CONFIG_DISABLE += CONFIG_EAP_PWD
+ HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
  endif
  
--ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
--LIBEVENT_DEPENDENCIES += host-pkgconf libopenssl
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBEVENT_DEPENDENCIES += host-pkgconf openssl
- LIBEVENT_CONF_OPTS += --enable-openssl
- else
- LIBEVENT_CONF_OPTS += --disable-openssl
++ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_HOSTAP),)
++HOSTAPD_CONFIG_DISABLE += CONFIG_DRIVER_HOSTAP
++endif
++
++ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_NL80211),)
++HOSTAPD_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
++endif
++
+ ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_RTW),y)
+ HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rtlxdrv.patch
+ HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_WIRED),y)
++HOSTAPD_CONFIG_ENABLE += CONFIG_DRIVER_WIRED
++endif
++
++ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_NONE),y)
++HOSTAPD_CONFIG_ENABLE += CONFIG_DRIVER_NONE
++endif
++
++# Add options for wireless drivers
++ifeq ($(BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS),y)
++HOSTAPD_CONFIG_ENABLE += \
++	CONFIG_HS20 \
++	CONFIG_IEEE80211AC \
++	CONFIG_IEEE80211N \
++	CONFIG_IEEE80211R \
++	CONFIG_INTERWORKING
++endif
++
+ ifeq ($(BR2_PACKAGE_HOSTAPD_ACS),y)
+ HOSTAPD_CONFIG_ENABLE += CONFIG_ACS
+ endif
