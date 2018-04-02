@@ -1,19 +1,23 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 15:33:53 +0200
-Subject: [Buildroot] [PATCH] core/pkg-download: fixes autobuilder fallout
-Message-ID: <20180402133353.24586-1-maxime.hadjinlian@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 2 Apr 2018 15:41:05 +0200
+Subject: [Buildroot] [git commit] core/pkg-download: fix autobuilder fallout
+Message-ID: <20180402134109.1CC90817B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some arguments can be empty, so we need to add simple quote around them
-But since they are simple quote; double quote inside them are now not
+commit: https://git.buildroot.net/buildroot/commit/?id=765e94ea4d585ddf03a76cdc57cb593201e61ed4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Some arguments can be empty, so we need to add single quote around them
+But since they are sinple quote; double quote inside them are now not
 interpreted by the shell and as such must be removed; hence the use of
 qstrip.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/pkg-download.mk | 19 ++++++++++---------
  1 file changed, 10 insertions(+), 9 deletions(-)
@@ -60,5 +64,3 @@ index 2847a99d2f..2d5f26bfc5 100644
  		$(if $($(PKG)_GIT_SUBMODULES),-r) \
  		$(DOWNLOAD_URIS) \
  		$(QUIET) \
--- 
-2.16.2
