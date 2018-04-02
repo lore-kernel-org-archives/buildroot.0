@@ -1,33 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 17:36:54 +0200
-Subject: [Buildroot] [PATCH v3 1/1] configs: beaglebone: bump kernel and
- uboot version
-In-Reply-To: <20180215113718.27952-1-lothar.felten@gmail.com>
-References: <20180215113718.27952-1-lothar.felten@gmail.com>
-Message-ID: <20180402173654.384bf487@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 2 Apr 2018 17:39:45 +0200
+Subject: [Buildroot] [PATCH 2/3] netcf: new package
+In-Reply-To: <20180402164233.76d04a17@windsurf>
+References: <20171127104131.27975-1-casantos@datacom.ind.br>
+ <20171127104131.27975-3-casantos@datacom.ind.br>
+ <20180402164233.76d04a17@windsurf>
+Message-ID: <3f89f95b-661c-86d8-18c9-49f0d6736dd7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Thu, 15 Feb 2018 12:37:18 +0100, Lothar Felten wrote:
-> Switch to Linux kernel version 4.9.59 from the TI SDK 04.02.00.09
-> (TI SDK release date: 23.12.2017)
-> Updated uboot to version 2018.01
-> uEnv.txt corrected to boot from sd card on the ti-am335x-evm
+
+On 02-04-18 16:42, Thomas Petazzoni wrote:
+> Hello Carlos,
 > 
-> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+> On Mon, 27 Nov 2017 08:41:30 -0200, Carlos Santos wrote:
+[snip]
+>> +NETCF_CONF_OPTS = \
+>> +	--with-sysinit=$(if $(BR2_INIT_SYSTEMD),systemd,$(if $(BR2_INIT_NONE),none,initscripts))
+> 
+> This is a bit hard to read.
+> 
+> ifeq ($(BR2_INIT_SYSTEMD),y)
+> NETCF_CONF_OPTS += --with-sysinit=systemd
+> else ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
+> NETCF_CONF_OPTS += --with-sysinit=sysv
+> else
+> NETCF_CONF_OPTS += --with-sysinit=none
+> endif
 
-Applied to master, thanks. What about beaglebone_qt5_defconfig ? This
-one is getting a bit outdated :/
+ However, since the upstream sysv init script is pretty complicated and must be
+patched anyway, it would make sense to always use our own, and in that case it
+would be
 
-Best regards,
+ifeq ($(BR2_INIT_SYSTEMD),y)
+NETCF_CONF_OPTS += --with-sysinit=systemd
+else
+# For SysV init we use our own init script
+NETCF_CONF_OPTS += --with-sysinit=none
+endif
 
-Thomas
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
