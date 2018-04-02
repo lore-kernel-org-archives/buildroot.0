@@ -1,89 +1,150 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon,  2 Apr 2018 16:15:08 +0200
-Subject: [Buildroot] [PATCH] qt5script: correct license information
-Message-ID: <20180402141508.10278-1-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 Apr 2018 16:18:12 +0200
+Subject: [Buildroot] [PATCH v2] linux-tool-perf: permit TUI build
+In-Reply-To: <20180402150249.7f4e70f1.john@metanate.com>
+References: <20180402125145.13431-1-john@metanate.com>
+ <20180402130716.GM3625@scaer>
+ <20180402150249.7f4e70f1.john@metanate.com>
+Message-ID: <20180402141812.GO3625@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The license information in qt5script was just copied from all the other
-qt5 modules, but it is different (and complicated).
+John, All,
 
-- libQt5Script itself contains the third-party JavaScriptCore source.
-  JavaScriptCore has a number of licenses: BSD-2-Clause, BSD-3-Clause,
-  LGPL-2.0+, LGPL-2.1+. Since it is all linked together, the end
-  result will be BSD-3-Clause or LGPL-2.1+.
+On 2018-04-02 15:02 +0100, John Keeping spake thusly:
+> Since Linux 3.10, perf's NO_NEWT configuration option simply sets
+> NO_SLANG=1 and there is no dependency on libnewt.
+> 
+> We already handle NO_SLANG correctly based on whether or not
+> BR2_PACKAGE_SLANG is selected, so all we accomplish by setting NO_NEWT=1
+> is disabling perf's TUI when all of the dependencies are available.
+> 
+> To simplify all of this, introduce a new config option to enable the
+> perf TUI which depends on slang and add a check to prevent building the
+> TUI on versions which are too old.  The check for NO_SLANG is equivalent
+> to checking if NO_NEWT is required as NO_SLANG was added in the same
+> commit that removed the libnewt dependency and deprecated NO_NEWT
+> (6692c262df4f, "perf tools: Remove dependency on libnewt", 2013-03-28).
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+> On Mon, 2 Apr 2018 15:07:16 +0200, Yann E. MORIN wrote:
+> 
+> > On 2018-04-02 13:51 +0100, John Keeping spake thusly:
+> > > Since Linux 3.10, perf's NO_NEWT configuration option simply sets
+> > > NO_SLANG=1 and there is no dependency on libnewt.
+> > > 
+> > > We already handle NO_SLANG correctly based on whether or not
+> > > BR2_PACKAGE_SLANG is selected, so all we accomplish by setting NO_NEWT=1
+> > > is disabling perf's TUI when all of the dependencies are available.
+> > > 
+> > > Linux 3.10 is almost 5 years old now, so there doesn't seem to be any
+> > > point in jumping through additional hoops to make perf from older kernel
+> > > versions build when the newt package is not available.  
+> > 
+> > But we still support kernels back to 3.0...
+> > 
+> > I would instead suggest you add an option in
+> > package/linux-tools/Config.in:
+> > 
+> >     config BR2_PACKAGE_LINUX_TOOLS_PERF_TUI
+> > 
+> > And do a check in package/linux-tools/linux-tool-perf.mk.in whether it
+> > is valid o not, if needed.
+> 
+> Something like this?  I can't see a neater way of checking the version
+> dependency and this matches the existing handling of the elfutils
+> dependency.
 
-  The different BSD licenses are all slightly different (different
-  authors, which affects the third clause in particular). Only one
-  separate license file is provided, so let's use that one.
+Yes, that is exactly what I had in mind. :-)
 
-  There is an LGPL-2.0 license file, which is slightly different from
-  the top-level LICENSE.LGPLv21, so let's add that one as well.
+>  package/linux-tools/Config.in             | 12 ++++++++++++
+>  package/linux-tools/linux-tool-perf.mk.in | 12 +++++++++---
+>  2 files changed, 21 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+> index e3ccd850f9..1d31ce84f1 100644
+> --- a/package/linux-tools/Config.in
+> +++ b/package/linux-tools/Config.in
+> @@ -54,6 +54,18 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF
+>  
+>  	  https://perf.wiki.kernel.org/
+>  
+> +if BR2_PACKAGE_LINUX_TOOLS_PERF
+> +
+> +config BR2_PACKAGE_LINUX_TOOLS_PERF_TUI
+> +	bool "enable perf TUI"
+> +	select BR2_PACKAGE_SLANG
 
-- libQt5Script also contains Qt-specific code which is all licensed
-  under LGPL-2.1 only. This is covered by the LICENSE.LGPLv21 file.
-  It merges with the LGPL-2.1+ from JavaScriptCore but limits it to
-  2.1 only.
+You forgot to propagate the dependency from slang:
 
-- libQt5ScriptTools is a separate libary containing just the script
-  debugger. It is covered by the usual Qt license:
-  * LGPL-2.1 or LGPL-3.0 with exception for Qt 5.6;
-  * LGPL-3.0 or GPL-2.0+ for Qt 5.9 (actually it is GPL-2.0 or GPL-3.0
-    or any later version approved by the KDE Qt foundation, but let's
-    keep it simple :-). Note that there is no LICENSE.GPLv2 provided,
-    only LICENSE.GPLv3. Also, there is no mention of the exception in
-    the Qt 5.9 sources, even though the LGPL_EXCEPTION.txt is still
-    present.
+    depends on BR2_USE_MMU # slang
 
-Update the license information with all of the above. Also add hashes
-for the new license files from JavaScriptCore.
+Otherwise, looks fine.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/qt5/qt5script/qt5script.hash |  2 ++
- package/qt5/qt5script/qt5script.mk   | 17 +++++++++++++++--
- 2 files changed, 17 insertions(+), 2 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/qt5/qt5script/qt5script.hash b/package/qt5/qt5script/qt5script.hash
-index bcb37801a8..9b43e5fd65 100644
---- a/package/qt5/qt5script/qt5script.hash
-+++ b/package/qt5/qt5script/qt5script.hash
-@@ -10,3 +10,5 @@ sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.
- sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
- sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
- sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-+sha256 5094ecb9c9dcd0eadc34f3c11511d9b5535063032bc150164ecd1a5d5a445547 src/3rdparty/javascriptcore/JavaScriptCore/COPYING.LIB
-+sha256 43b007cd3ac7b7ea5284b13e9580334028e6f42e859059605d57558f39374197 src/3rdparty/javascriptcore/JavaScriptCore/pcre/COPYING
-diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
-index b6c02d0d1c..9539f56df6 100644
---- a/package/qt5/qt5script/qt5script.mk
-+++ b/package/qt5/qt5script/qt5script.mk
-@@ -10,8 +10,21 @@ QT5SCRIPT_SOURCE = qtscript-opensource-src-$(QT5SCRIPT_VERSION).tar.xz
- QT5SCRIPT_DEPENDENCIES = qt5base
- QT5SCRIPT_INSTALL_STAGING = YES
- 
--QT5SCRIPT_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5SCRIPT_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
-+# JavaScriptCore contains files under BSD-2-Clause, BSD-3-Clause, and LGPL-2+.
-+# This is linked into libQt5Script, which also contains Qt sources under
-+# LGPL-2.1 (only). Therefore, the library is  LGPL-2.1 and BSD-3-Clause.
-+# libQt5ScriptTools is under the normal Qt opensource license.
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5SCRIPT_LICENSE = LGPL-2.1, BSD-3-Clause, LGPL-3.0 or GPL-2.0+ (libQt5ScriptTools), GFDL-1.3 (docs)
-+QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv3 LICENSE.FDL
-+else
-+QT5SCRIPT_LICENSE = LGPL-2.1, BSD-3-Clause, LGPL-2.1 with exception or LGPL-3.0 with exception (libQt5ScriptTools), GFDL-1.3 (docs)
-+QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LGPL_EXCEPTION.txt LICENSE.FDL
-+endif
-+# License files from JavaScriptCore
-+QT5SCRIPT_LICENSE_FILES += \
-+	src/3rdparty/javascriptcore/JavaScriptCore/COPYING.LIB \
-+	src/3rdparty/javascriptcore/JavaScriptCore/pcre/COPYING
- 
- define QT5SCRIPT_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+> +	help
+> +	  Enable the TUI interface for perf which requires a TTY and
+> +	  enables zooming into DSOs and threads as well as other
+> +	  features.
+> +
+> +endif
+> +
+>  config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
+>  	bool"selftests"
+>  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
+> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+> index 69492ba8da..80e00c3c56 100644
+> --- a/package/linux-tools/linux-tool-perf.mk.in
+> +++ b/package/linux-tools/linux-tool-perf.mk.in
+> @@ -22,7 +22,6 @@ PERF_MAKE_FLAGS = \
+>  	prefix=/usr \
+>  	WERROR=0 \
+>  	NO_LIBAUDIT=1 \
+> -	NO_NEWT=1 \
+>  	NO_GTK2=1 \
+>  	NO_LIBPERL=1 \
+>  	NO_LIBPYTHON=1 \
+> @@ -59,10 +58,10 @@ ifeq ($(BR2_arc),y)
+>  PERF_MAKE_FLAGS += NO_BACKTRACE=1
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_SLANG),y)
+> +ifeq ($(BR2_PACKAGE_LINUX_TOOLS_PERF_TUI),y)
+>  PERF_DEPENDENCIES += slang
+>  else
+> -PERF_MAKE_FLAGS += NO_SLANG=1
+> +PERF_MAKE_FLAGS += NO_NEWT=1 NO_SLANG=1
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+> @@ -128,6 +127,13 @@ define PERF_BUILD_CMDS
+>  			fi \
+>  		fi \
+>  	fi
+> +	$(Q)if test "$(BR2_PACKAGE_LINUX_TOOLS_PERF_TUI)" = "y" ; then \
+> +		if ! grep -q NO_SLANG $(LINUX_DIR)/tools/perf/Makefile* ; then \
+> +			echo "The perf tool in your kernel cannot be build with the TUI." ; \
+> +			echo "Either upgrade your kernel to >= 3.10, or disable the TUI." ; \
+> +			exit 1 ; \
+> +		fi \
+> +	fi
+>  	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
+>  		-C $(LINUX_DIR)/tools/perf O=$(LINUX_DIR)/tools/perf/
+>  endef
+> -- 
+> 2.16.3
+> 
+
 -- 
-2.16.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
