@@ -1,51 +1,70 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  2 Apr 2018 13:27:06 +0200
-Subject: [Buildroot] [PATCH 1/2] package/openldap: bump version to 2.4.46
-Message-ID: <20180402112707.19855-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 Apr 2018 13:57:54 +0200
+Subject: [Buildroot] [v4 09/13] pkg-generic: introduce _SAME_SOURCE_AS
+In-Reply-To: <20180402081434.4411-9-maxime.hadjinlian@gmail.com>
+References: <20180402081434.4411-1-maxime.hadjinlian@gmail.com>
+ <20180402081434.4411-9-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402115754.GF3625@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://www.openldap.org/software/release/changes.html
+Maxime, All,
 
-Added sha256 hashes for tarball and license.
+On 2018-04-02 10:14 +0200, Maxime Hadjinlian spake thusly:
+> This per package variable can be used to specify that a package shares
+> the same sources as another package.
+> 
+> The use case here is for example linux-headers and linux, which share
+> the same sources (because they are the same upstream project), so we
+> don't want to download twice the kernel, nor store it multiple times
+> either.
+> 
+> Make will automatically try to help by introducing leading and trailing
+> spaces when replacing a line-continuation '\', so we need to call
+> $(strip) on the variable.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/openldap/openldap.hash | 11 +++++++----
- package/openldap/openldap.mk   |  2 +-
- 2 files changed, 8 insertions(+), 5 deletions(-)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index aec4aaebfd..37e2673c4b 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,4 +1,7 @@
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.md5
--md5 00ff8301277cdfd0af728a6927042a13  openldap-2.4.45.tgz
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.sha1
--sha1 c98437385d3eaee80c9e2c09f3f0d4b7c140233d  openldap-2.4.45.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.md5
-+md5 829016c5a9f45c51adc50073ac6f9fd7  openldap-2.4.46.tgz
-+# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.sha1
-+sha1 a9ae2273eb9bdd70090dafe0d018a3132606bef6  openldap-2.4.46.tgz
-+# Locally computed
-+sha256 9a90dcb86b99ae790ccab93b7585a31fbcbeec8c94bf0f7ab0ca0a87ea0c4b2d  openldap-2.4.46.tgz
-+sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 2bf6fc3f27..6dd2390923 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENLDAP_VERSION = 2.4.45
-+OPENLDAP_VERSION = 2.4.46
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
- OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/pkg-generic.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index c84b1eb4a2..a034c7ea02 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -432,7 +432,10 @@ endif
+>  
+>  $(2)_BASENAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+>  $(2)_BASENAME_RAW = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+> -$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
+> +$(2)_DL_DIR = $$(strip $$(if $$($(2)_SAME_SOURCE_AS), \
+> +		$$($$(call UPPERCASE,$$($(2)_SAME_SOURCE_AS))_DL_DIR), \
+> +		$$(DL_DIR)/$$($(2)_RAWNAME)) \
+> +	)
+>  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASENAME)
+>  
+>  ifndef $(2)_SUBDIR
+> -- 
+> 2.16.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
