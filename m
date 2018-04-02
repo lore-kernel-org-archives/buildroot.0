@@ -1,52 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 2 Apr 2018 22:18:58 +0200
-Subject: [Buildroot] [PATCH 3/3] libvirt: new package
-In-Reply-To: <20180402171955.0d091a53@windsurf>
-References: <20171127104131.27975-1-casantos@datacom.ind.br>
- <20171127104131.27975-4-casantos@datacom.ind.br>
- <20180402171955.0d091a53@windsurf>
-Message-ID: <7a127622-4281-479a-edb6-a7062c0d09a4@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Apr 2018 22:23:57 +0200
+Subject: [Buildroot] [git commit] lxc: bump to version 3.0.0
+In-Reply-To: <20180402085924.CBD128393F@busybox.osuosl.org>
+References: <20180402085924.CBD128393F@busybox.osuosl.org>
+Message-ID: <20180402222357.7188b46f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 02-04-18 17:19, Thomas Petazzoni wrote:
-> Hello,
+On Mon, 2 Apr 2018 10:13:14 +0200, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=af26608c65cfbc544787ff86c666e2af064844a1
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> On Mon, 27 Nov 2017 08:41:31 -0200, Carlos Santos wrote:
-[snip]
->> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
->> new file mode 100644
->> index 0000000000..8e64c85188
->> --- /dev/null
->> +++ b/package/libvirt/Config.in
->> @@ -0,0 +1,44 @@
->> +config BR2_PACKAGE_LIBVIRT
->> +	bool "libvirt"
->> +	depends on !BR2_PACKAGE_NETCAT
+> - Remove both patches (applied upstream), and therefore remove
+>   AUTORECONF = YES.
+> - Remove --disable-python as python support has been removed
+>  (https://github.com/lxc/lxc/commit/e144a06bd792f99c96395a9d4c16cf7c656fb99d)
+> - Remove lua optional dependency as lua support has been removed
+>  (https://github.com/lxc/lxc/commit/b52a5bef6fa56481a6d817f4c73cb91ed012fe2c)
 > 
-> Why do we need this if you select nmap-ncat below ?
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- Because libvirt calls the 'nc' executable with the ncat command line arguments,
-so it needs the nc -> ncat symlink, which is not created when netcat is installed.
+This update causes some build failures:
+http://autobuild.buildroot.net/?reason=lxc-3.0.0
 
- However, this makes me think: wouldn't it be easier to patch libvirt to call
-ncat instead of nc?
+Could you have a look ?
 
+Thanks!
 
- Regards,
- Arnout
-
-[snip]
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
