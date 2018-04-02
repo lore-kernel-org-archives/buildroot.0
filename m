@@ -1,39 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Apr 2018 16:10:32 +0200
-Subject: [Buildroot] [v5 04/11] support/download: make sure the download
- folder is created
-In-Reply-To: <20180402130934.19274-4-maxime.hadjinlian@gmail.com> (Maxime
- Hadjinlian's message of "Mon, 2 Apr 2018 15:09:27 +0200")
-References: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
- <20180402130934.19274-4-maxime.hadjinlian@gmail.com>
-Message-ID: <87in99n1gn.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Apr 2018 15:59:30 +0200
+Subject: [Buildroot] [git commit] arc/xtensa: store the Xtensa overlay in
+ the per-package DL_DIR
+Message-ID: <20180402141058.3227482586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=01c1889f9f641f6f8adc0345e17b70e80026554d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > At the moment, it means that we make sure that BR2_DL_DIR is created, in
- > the future, it will make sure that BR2_DL_DIR/PKG_NAME/ is created.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ arch/arch.mk.xtensa | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > ---
- >  package/pkg-download.mk | 1 +
- >  1 file changed, 1 insertion(+)
-
- > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
- > index d309f7612c..e88d3f9fda 100644
- > --- a/package/pkg-download.mk
- > +++ b/package/pkg-download.mk
- > @@ -88,6 +88,7 @@ endif
- >  endif
- 
- >  define DOWNLOAD
- > +	$(Q)mkdir -p $($(PKG)_DL_DIR)/
-
-Committed after dropping the trailing /, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+index 2b6cd26d03..fd410f6bfa 100644
+--- a/arch/arch.mk.xtensa
++++ b/arch/arch.mk.xtensa
+@@ -12,7 +12,7 @@
+ BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
+ ifneq ($(filter http://% https://% ftp://% scp://%,$(BR_ARCH_XTENSA_OVERLAY_FILE)),)
+ ARCH_XTENSA_OVERLAY_URL = $(BR_ARCH_XTENSA_OVERLAY_FILE)
+-ARCH_XTENSA_OVERLAY_FILE = $(DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
++ARCH_XTENSA_OVERLAY_FILE = $($(PKG)_DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
+ # Do not check that file, we can't know its hash
+ BR_NO_CHECK_HASH_FOR += $(notdir $(ARCH_XTENSA_OVERLAY_URL))
+ else
