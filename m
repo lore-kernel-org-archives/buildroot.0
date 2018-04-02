@@ -1,59 +1,171 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Apr 2018 14:29:49 +0200
-Subject: [Buildroot] [v4 08/13] pkg-download: support new subdir for
- mirrors
-In-Reply-To: <20180402141327.328775df@windsurf>
-References: <20180402081434.4411-1-maxime.hadjinlian@gmail.com>
- <20180402081434.4411-8-maxime.hadjinlian@gmail.com>
- <20180402141327.328775df@windsurf>
-Message-ID: <20180402122949.GJ3625@scaer>
+Date: Mon, 2 Apr 2018 14:34:25 +0200
+Subject: [Buildroot] [PATCH] package/libbsd: enable for non-glibc
+ toolchains
+In-Reply-To: <20180314194356.15839-1-joerg.krause@embedded.rocks>
+References: <20180314194356.15839-1-joerg.krause@embedded.rocks>
+Message-ID: <20180402123425.GK3625@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Maxime, All,
+J?rg, All,
 
-On 2018-04-02 14:13 +0200, Thomas Petazzoni spake thusly:
-> On Mon,  2 Apr 2018 10:14:29 +0200, Maxime Hadjinlian wrote:
-> > Since we introduced subdirectory to the DL_DIR, we need to support them
-> > in the PRIMARY and BACKUP mirror as they evolve to the new tree
-> > structure.
-> > 
-> > We check first the new URI (with the subdir), and in case of failure, we
-> > go check without.
-> > By checking both URIs, we ensure that old mirror are usable.
-> > 
-> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Shouldn't this be squashed into the previous patch ?
+On 2018-03-14 20:43 +0100, J?rg Krause spake thusly:
+> libbsd builds now almost fine with a musl or uClibc toolchain, except
 
-Or rather, the order should be inverted: this patch first, then the
-previous one.
+"almost" being the right word to use, as it it is still broken:
 
-That way, we start with looking in sub-dirs (we do not yet exist), then
-fallback to plain dir. Then sub-dirs are introduced and pushed to the
-mirror.
+        bfin |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/46deb0a042c63430f539cd52e6210aeb69bd625d
+        bfin |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/2a86e978d071a22075f8d5c4dcc614dc65f71cf3
+     powerpc |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/ee3ad5172d6a218dfde4cf3e9fecf1906b0fc642
+     powerpc |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/2e6f144f875d873001ba4fd61951f7f213ab5c10
+      xtensa |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/626d7c0237594052e40f81f8969169bfeba96bcf
+      xtensa |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/cc87f1c8b0b1c5872df92c4653dbeccaa5e5de13
+
+Could have a look?
 
 Regards,
 Yann E. MORIN.
 
-> Indeed, as soon as PATCH 07/13 is merged, the sources.buildroot.net
-> mirror will start storing new tarballs in sources.buildroot.net/<pkg>/
-> and not directly in sources.buildroot.net/. So we should at the same
-> time start storing tarballs in the per-package sub-folder *and* start
-> querying primary/backup site inside their sub-folder.
+> for one issue introduced in the latest version bump. Upstream commit
+> 22fbd62368c39de8ac5e249d1502d5ac0ffdef30 [1] uses the glibc-only macro
+> `__GLIBC_PREREQ`. The issue is fixed by the attached patch from upstream,
+> which fixes the use of `__GLIBC_PREREQ` on non-glibc toolchains.
 > 
-> Thomas
+> Backported from:
+> https://cgit.freedesktop.org/libbsd/patch/?id=1f8a3f7bccfc84b195218ad0086ebd57049c3490
+> 
+> netcat-openbsd is the only package selecting libbsd. However, building
+> it still needs a glibc toolchain, as it uses `b64_ntop` which is not
+> available in musl or uClibc.
+> 
+> Build has been successfully tested with:
+>  * armv7-eabihf--glibc--bleeding-edge-2017.11-1
+>  * armv7-eabihf--musl--bleeding-edge-2018.02-1
+>  * armv7-eabihf--uclibc--bleeding-edge-2018.02-1
+> 
+> [1] https://cgit.freedesktop.org/libbsd/commit/?id=22fbd62368c39de8ac5e249d1502d5ac0ffdef30
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  ...n-declaration-protection-for-glibc-alread.patch | 80 ++++++++++++++++++++++
+>  package/libbsd/Config.in                           |  5 +-
+>  2 files changed, 82 insertions(+), 3 deletions(-)
+>  create mode 100644 package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
+> 
+> diff --git a/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch b/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
+> new file mode 100644
+> index 0000000000..fdf45bdef6
+> --- /dev/null
+> +++ b/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
+> @@ -0,0 +1,80 @@
+> +From 1f8a3f7bccfc84b195218ad0086ebd57049c3490 Mon Sep 17 00:00:00 2001
+> +From: Guillem Jover <guillem@hadrons.org>
+> +Date: Tue, 6 Mar 2018 01:39:45 +0100
+> +Subject: [PATCH] Fix function declaration protection for glibc already
+> + providing them
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +On non-glibc based systems we cannot unconditionally use the
+> +__GLIBC_PREREQ macro as it gets expanded before evaluation. Instead,
+> +if it is undefined, define it to 0.
+> +
+> +We should also always declare these functions on non-glibc based
+> +systems. And on systems with a new enough glibc, which provides these
+> +functions, we should still provide the declarations if _GNU_SOURCE
+> +is *not* defined.
+> +
+> +Backported from:
+> +https://cgit.freedesktop.org/libbsd/patch/?id=1f8a3f7bccfc84b195218ad0086ebd57049c3490
+> +
+> +Reported-by: J?rg Krause <joerg.krause@embedded.rocks>
+> +Signed-off-by: Guillem Jover <guillem@hadrons.org>
+> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> +---
+> + include/bsd/stdlib.h    | 3 ++-
+> + include/bsd/string.h    | 3 ++-
+> + include/bsd/sys/cdefs.h | 8 ++++++++
+> + 3 files changed, 12 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/include/bsd/stdlib.h b/include/bsd/stdlib.h
+> +index 8d33d1f..a5b063c 100644
+> +--- a/include/bsd/stdlib.h
+> ++++ b/include/bsd/stdlib.h
+> +@@ -71,7 +71,8 @@ int sradixsort(const unsigned char **base, int nmemb,
+> +                const unsigned char *table, unsigned endbyte);
+> + 
+> + void *reallocf(void *ptr, size_t size);
+> +-#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 26)
+> ++#if !defined(__GLIBC__) || \
+> ++    (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 26) || !defined(_GNU_SOURCE)))
+> + void *reallocarray(void *ptr, size_t nmemb, size_t size);
+> + #endif
+> + 
+> +diff --git a/include/bsd/string.h b/include/bsd/string.h
+> +index 29097f6..f987fee 100644
+> +--- a/include/bsd/string.h
+> ++++ b/include/bsd/string.h
+> +@@ -46,7 +46,8 @@ size_t strlcat(char *dst, const char *src, size_t siz);
+> + char *strnstr(const char *str, const char *find, size_t str_len);
+> + void strmode(mode_t mode, char *str);
+> + 
+> +-#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 25)
+> ++#if !defined(__GLIBC__) || \
+> ++    (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 25) || !defined(_GNU_SOURCE)))
+> + void explicit_bzero(void *buf, size_t len);
+> + #endif
+> + __END_DECLS
+> +diff --git a/include/bsd/sys/cdefs.h b/include/bsd/sys/cdefs.h
+> +index b4c8f30..d1cc419 100644
+> +--- a/include/bsd/sys/cdefs.h
+> ++++ b/include/bsd/sys/cdefs.h
+> +@@ -58,6 +58,14 @@
+> + #endif
+> + #endif
+> + 
+> ++/*
+> ++ * On non-glibc based systems, we cannot unconditionally use the
+> ++ * __GLIBC_PREREQ macro as it gets expanded before evaluation.
+> ++ */
+> ++#ifndef __GLIBC_PREREQ
+> ++#define __GLIBC_PREREQ(maj, min) 0
+> ++#endif
+> ++
+> + /*
+> +  * Some kFreeBSD headers expect those macros to be set for sanity checks.
+> +  */
+> +-- 
+> +2.16.2
+> +
+> diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+> index 11e4c4d974..f6c2e4be4b 100644
+> --- a/package/libbsd/Config.in
+> +++ b/package/libbsd/Config.in
+> @@ -9,7 +9,6 @@ config BR2_PACKAGE_LIBBSD
+>  	bool "libbsd"
+>  	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	help
+>  	  This library provides useful functions commonly found on BSD
+>  	  systems, and lacking on others like GNU systems, thus making
+> @@ -19,6 +18,6 @@ config BR2_PACKAGE_LIBBSD
+>  
+>  	  http://libbsd.freedesktop.org/
+>  
+> -comment "libbsd needs a glibc toolchain w/ threads"
+> +comment "libbsd needs a toolchain w/ threads"
+>  	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 > -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 2.16.2
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
