@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 14:01:09 +0200
-Subject: [Buildroot] [PATCH v4 04/11] package/mesa3d: enable llvm support
-In-Reply-To: <6cbae11f-1fc3-e46e-dddc-5bdbcb8a0ce0@smile.fr>
+Date: Mon, 2 Apr 2018 14:03:01 +0200
+Subject: [Buildroot] [PATCH v4 10/11] package/mesa3d: enable OpenCL
+ support
+In-Reply-To: <e0869b48-09ec-54f4-5b77-3f086d9e636d@smile.fr>
 References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-5-valentin.korenblit@smile.fr>
- <20180401225302.3a4284cd@windsurf>
- <6cbae11f-1fc3-e46e-dddc-5bdbcb8a0ce0@smile.fr>
-Message-ID: <20180402140109.0d625231@windsurf>
+ <20180329113346.10367-11-valentin.korenblit@smile.fr>
+ <20180401233226.76803d73@windsurf>
+ <e0869b48-09ec-54f4-5b77-3f086d9e636d@smile.fr>
+Message-ID: <20180402140301.4fc4945f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +16,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 2 Apr 2018 12:05:51 +0200, Valentin Korenblit wrote:
+On Mon, 2 Apr 2018 12:36:05 +0200, Valentin Korenblit wrote:
 
-> > Should the option be: bool "llvmpipe" ? Or is LLVM used by mesa3d for
-> > something else ?  
+> > 	bool "OpenCL"
+> >  
+> >> +	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600  
+> > This is certainly not really understanding how OpenCL works, but why do
+> > you need this Gallium driver compiled in? Does the result only works on
+> > a system with an AMD GPU ?  
 > 
-> We could leave "LLVM" because llvmpipe is not the only feature, r600 needs
-> llvm AMDGPU backend when llvm is selected, and then we could add radeonsi
-> Gallium Driver for newer GPUs.
+> Mesa's OpenCL implementation works only on AMD GPUs using Gallium Drivers.
 
-OK, so "llvm support" would be appropriate.
+OK. Maybe a comment on top of this dependency would make sense then,
+and perhaps the commit title should be "enable OpenCL on AMD GPUs" or
+something like that.
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
