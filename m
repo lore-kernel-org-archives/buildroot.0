@@ -1,87 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 11:38:23 +0200
-Subject: [Buildroot] [PATCHv2] configs: switch to a wget download for
- kernels on github
-In-Reply-To: <20180401090455.30889-1-yann.morin.1998@free.fr>
-References: <20180401090455.30889-1-yann.morin.1998@free.fr>
-Message-ID: <20180402113823.5279322c@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  2 Apr 2018 11:39:05 +0200
+Subject: [Buildroot] [PATCH 2/4] toolchain: add 4.16.x choice for headers
+In-Reply-To: <20180402093907.23274-1-bernd.kuhls@t-online.de>
+References: <20180402093907.23274-1-bernd.kuhls@t-online.de>
+Message-ID: <20180402093907.23274-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ toolchain/Config.in                                                  | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-On Sun,  1 Apr 2018 11:04:55 +0200, Yann E. MORIN wrote:
-> The linux git trees on github can be huge, and takes a long time to
-> download, which is not very nice nor convenient for newcomers.
-> 
-> Switch them to using a wget, with the github macro.
-> 
-> A nice side effect of this conversion, is that we no longer need to wait
-> for the git clone to finish to notice that the ref is gone; doing a wget
-> will instantly fail in that case.
-> 
-> Mechanical patch, obtained by running (hang-on tight):
-> 
-> $ sed -r -i -e 's/BR2_LINUX_KERNEL_CUSTOM_GIT/BR2_LINUX_KERNEL_CUSTOM_TARBALL/; /BR2_LINUX_KERNEL_CUSTOM_REPO_URL/N; s:BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https\://github.com/([^/]+)/(.+)"\nBR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="(.+)":BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,\1,\2,\3)/linux-\3.tar.gz":; s/(call github.*)\.git/\1/;' $(grep -l 'BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com' configs/*)
-> 
-> olimex_a20_olinuxino_lime_mali had a comment in between, so it was
-> manually fixed thereafter; that comment was also moved.
-> 
-> Except for socrates_cyclone5 which did not work previously (missing tag
-> in git tree?), all the affected defconfigs still download their sources.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> ---
-> Changes v1 -> v2:
->   - correctly catch and drop the trailing .git
->   - fix the two incorrectly-converted defconfigs
-> ---
->  configs/amarula_vyasa_rk3288_defconfig           | 5 ++---
->  configs/arcturus_ucls1012a_defconfig             | 5 ++---
->  configs/at91sam9x5ek_defconfig                   | 5 ++---
->  configs/at91sam9x5ek_dev_defconfig               | 5 ++---
->  configs/at91sam9x5ek_mmc_defconfig               | 5 ++---
->  configs/at91sam9x5ek_mmc_dev_defconfig           | 5 ++---
->  configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 5 ++---
->  configs/atmel_sama5d2_xplained_mmc_defconfig     | 5 ++---
->  configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 5 ++---
->  configs/atmel_sama5d3_xplained_defconfig         | 5 ++---
->  configs/atmel_sama5d3_xplained_dev_defconfig     | 5 ++---
->  configs/atmel_sama5d3_xplained_mmc_defconfig     | 5 ++---
->  configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 5 ++---
->  configs/atmel_sama5d3xek_defconfig               | 5 ++---
->  configs/atmel_sama5d4_xplained_defconfig         | 5 ++---
->  configs/atmel_sama5d4_xplained_dev_defconfig     | 5 ++---
->  configs/atmel_sama5d4_xplained_mmc_defconfig     | 5 ++---
->  configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 5 ++---
->  configs/ci20_defconfig                           | 5 ++---
->  configs/galileo_defconfig                        | 5 ++---
->  configs/odroidc2_defconfig                       | 5 ++---
->  configs/olimex_a20_olinuxino_lime_mali_defconfig | 8 +++-----
->  configs/raspberrypi0_defconfig                   | 5 ++---
->  configs/raspberrypi0w_defconfig                  | 5 ++---
->  configs/raspberrypi2_defconfig                   | 5 ++---
->  configs/raspberrypi3_64_defconfig                | 5 ++---
->  configs/raspberrypi3_defconfig                   | 5 ++---
->  configs/raspberrypi3_qt5we_defconfig             | 5 ++---
->  configs/raspberrypi_defconfig                    | 5 ++---
->  configs/roseapplepi_defconfig                    | 5 ++---
->  configs/socrates_cyclone5_defconfig              | 5 ++---
->  configs/solidrun_macchiatobin_marvell_defconfig  | 5 ++---
->  configs/ts7680_defconfig                         | 5 ++---
->  configs/zynq_microzed_defconfig                  | 5 ++---
->  configs/zynq_zc706_defconfig                     | 5 ++---
->  configs/zynq_zed_defconfig                       | 5 ++---
->  36 files changed, 73 insertions(+), 110 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index b33eaffd52..e2ef1e7ef3 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -323,10 +323,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+ 	default "4.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 	default "4.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+ 	default "4.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 6c12b1619c..8cc9db6841 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -108,6 +108,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16
++	bool "4.16.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_15
+ 	bool "4.15.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.2
