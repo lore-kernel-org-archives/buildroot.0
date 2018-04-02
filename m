@@ -1,67 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Apr 2018 15:07:16 +0200
-Subject: [Buildroot] [PATCH] linux-tool-perf: permit TUI build
-In-Reply-To: <20180402125145.13431-1-john@metanate.com>
-References: <20180402125145.13431-1-john@metanate.com>
-Message-ID: <20180402130716.GM3625@scaer>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon,  2 Apr 2018 15:09:25 +0200
+Subject: [Buildroot] [v5 02/11] arc/xtensa: store the Xtensa overlay in the
+ per-package DL_DIR
+In-Reply-To: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
+References: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402130934.19274-2-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-John, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2018-04-02 13:51 +0100, John Keeping spake thusly:
-> Since Linux 3.10, perf's NO_NEWT configuration option simply sets
-> NO_SLANG=1 and there is no dependency on libnewt.
-> 
-> We already handle NO_SLANG correctly based on whether or not
-> BR2_PACKAGE_SLANG is selected, so all we accomplish by setting NO_NEWT=1
-> is disabling perf's TUI when all of the dependencies are available.
-> 
-> Linux 3.10 is almost 5 years old now, so there doesn't seem to be any
-> point in jumping through additional hoops to make perf from older kernel
-> versions build when the newt package is not available.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ arch/arch.mk.xtensa | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But we still support kernels back to 3.0...
-
-I would instead suggest you add an option in
-package/linux-tools/Config.in:
-
-    config BR2_PACKAGE_LINUX_TOOLS_PERF_TUI
-
-And do a check in package/linux-tools/linux-tool-perf.mk.in whether it
-is valid o not, if needed.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
->  package/linux-tools/linux-tool-perf.mk.in | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-> index 69492ba8da..bb9d1655e6 100644
-> --- a/package/linux-tools/linux-tool-perf.mk.in
-> +++ b/package/linux-tools/linux-tool-perf.mk.in
-> @@ -22,7 +22,6 @@ PERF_MAKE_FLAGS = \
->  	prefix=/usr \
->  	WERROR=0 \
->  	NO_LIBAUDIT=1 \
-> -	NO_NEWT=1 \
->  	NO_GTK2=1 \
->  	NO_LIBPERL=1 \
->  	NO_LIBPYTHON=1 \
-> -- 
-> 2.16.3
-> 
-
+diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+index 2b6cd26d03..fd410f6bfa 100644
+--- a/arch/arch.mk.xtensa
++++ b/arch/arch.mk.xtensa
+@@ -12,7 +12,7 @@
+ BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
+ ifneq ($(filter http://% https://% ftp://% scp://%,$(BR_ARCH_XTENSA_OVERLAY_FILE)),)
+ ARCH_XTENSA_OVERLAY_URL = $(BR_ARCH_XTENSA_OVERLAY_FILE)
+-ARCH_XTENSA_OVERLAY_FILE = $(DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
++ARCH_XTENSA_OVERLAY_FILE = $($(PKG)_DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
+ # Do not check that file, we can't know its hash
+ BR_NO_CHECK_HASH_FOR += $(notdir $(ARCH_XTENSA_OVERLAY_URL))
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.16.2
