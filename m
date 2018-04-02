@@ -1,60 +1,45 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 16:57:59 +0200
-Subject: [Buildroot] [PATCH 5/8] help/manual: update help about the new
- $(LIBFOO_DL_DIR)
+Date: Mon,  2 Apr 2018 16:58:00 +0200
+Subject: [Buildroot] [PATCH 6/8] download: add flock call before dl-wrapper
 In-Reply-To: <20180402145802.17611-1-maxime.hadjinlian@gmail.com>
 References: <20180402145802.17611-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402145802.17611-5-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402145802.17611-6-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In order to introduce the cache mechanisms, we need to have a lock on
+the $(LIBFOO_DL_DIR), otherwise it would be impossible to do parallel
+download (a shared DL_DIR for two buildroot instances).
+
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Config.in                               | 3 +++
- docs/manual/adding-packages-generic.txt | 6 +++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/pkg-download.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index 71b9f60e5b..c2a1925088 100644
---- a/Config.in
-+++ b/Config.in
-@@ -200,6 +200,9 @@ config BR2_DL_DIR
- 	  If the Linux shell environment has defined the BR2_DL_DIR
- 	  environment variable, then this overrides this configuration
- 	  item.
-+	  The directory is organized with a subdirectory for each package.
-+	  Each package has its own $(LIBFOO_DL_DIR) variable that can be used
-+	  to find the correct path.
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 7ca6fcc757..4fdb283acc 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -19,6 +19,7 @@ SSH := $(call qstrip,$(BR2_SSH))
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- 	  The default is $(TOPDIR)/dl
+ DL_WRAPPER = support/download/dl-wrapper
++FLOCK = flock $($(PKG)_DL_DIR)/
  
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 9d1428ad40..62906d92bb 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -263,7 +263,7 @@ information is (assuming the package name is +libfoo+) :
-   the file using this URL. Otherwise, Buildroot will assume the file
-   to be downloaded is located at +LIBFOO_SITE+. Buildroot will not do
-   anything with those additional files, except download them: it will
--  be up to the package recipe to use them from +$(DL_DIR)+.
-+  be up to the package recipe to use them from +$(LIBFOO_DL_DIR)+.
- 
- * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
-   package source code. In many cases, Buildroot guesses the method
-@@ -554,8 +554,8 @@ In the action definitions, you can use the following variables:
- * +$(@D)+, which contains the directory in which the package source
-   code has been uncompressed.
- 
--* +$(DL_DIR)+ contains the path to the directory where all the downloads made
--  by Buildroot are stored.
-+* +$(LIBFOO_DL_DIR)+ contains the path to the directory where all the downloads
-+  made by Buildroot for +libfoo+ are stored in.
- 
- * +$(TARGET_CC)+, +$(TARGET_LD)+, etc. to get the target
-   cross-compilation utilities
+ # DL_DIR may have been set already from the environment
+ ifeq ($(origin DL_DIR),undefined)
+@@ -93,7 +94,7 @@ define DOWNLOAD
+ 	$(Q)mkdir -p $($(PKG)_DL_DIR)
+ 	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),
+ 		BR_NO_CHECK_HASH_FOR=$(notdir $(call qstrip,$(1)))) \
+-	$(EXTRA_ENV) $(DL_WRAPPER) \
++	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
+ 		-c '$($(PKG)_DL_VERSION)' \
+ 		-f '$(notdir $(1))' \
+ 		-H '$(PKGDIR)/$($(PKG)_RAWNAME).hash' \
 -- 
 2.16.2
