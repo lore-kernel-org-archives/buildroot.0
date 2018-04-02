@@ -1,48 +1,47 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 10:14:29 +0200
-Subject: [Buildroot] [v4 08/13] pkg-download: support new subdir for mirrors
+Date: Mon,  2 Apr 2018 10:14:30 +0200
+Subject: [Buildroot] [v4 09/13] pkg-generic: introduce _SAME_SOURCE_AS
 In-Reply-To: <20180402081434.4411-1-maxime.hadjinlian@gmail.com>
 References: <20180402081434.4411-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402081434.4411-8-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402081434.4411-9-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we introduced subdirectory to the DL_DIR, we need to support them
-in the PRIMARY and BACKUP mirror as they evolve to the new tree
-structure.
+This per package variable can be used to specify that a package shares
+the same sources as another package.
 
-We check first the new URI (with the subdir), and in case of failure, we
-go check without.
-By checking both URIs, we ensure that old mirror are usable.
+The use case here is for example linux-headers and linux, which share
+the same sources (because they are the same upstream project), so we
+don't want to download twice the kernel, nor store it multiple times
+either.
+
+Make will automatically try to help by introducing leading and trailing
+spaces when replacing a line-continuation '\', so we need to call
+$(strip) on the variable.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-download.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pkg-generic.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index e88d3f9fda..54edbae29a 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -75,6 +75,7 @@ export BR_NO_CHECK_HASH_FOR =
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c84b1eb4a2..a034c7ea02 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -432,7 +432,10 @@ endif
  
- ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
- DOWNLOAD_URIS += \
-+	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE)/$(notdir $($(PKG)_DL_DIR)),urlencode) \
- 	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE),urlencode)
- endif
+ $(2)_BASENAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+ $(2)_BASENAME_RAW = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
+-$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
++$(2)_DL_DIR = $$(strip $$(if $$($(2)_SAME_SOURCE_AS), \
++		$$($$(call UPPERCASE,$$($(2)_SAME_SOURCE_AS))_DL_DIR), \
++		$$(DL_DIR)/$$($(2)_RAWNAME)) \
++	)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASENAME)
  
-@@ -83,6 +84,7 @@ DOWNLOAD_URIS += \
- 	-u $($(PKG)_SITE_METHOD)+$(dir $(1))
- ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
- DOWNLOAD_URIS += \
-+	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE)/$(notdir $($(PKG)_DL_DIR)),urlencode) \
- 	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE),urlencode)
- endif
- endif
+ ifndef $(2)_SUBDIR
 -- 
 2.16.2
