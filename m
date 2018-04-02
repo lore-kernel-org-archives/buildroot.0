@@ -1,62 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 15:32:41 +0200
-Subject: [Buildroot] [PATCH v4] nmap: add option to build/install ncat
-In-Reply-To: <20171012151418.3523-1-casantos@datacom.ind.br>
-References: <20171012151418.3523-1-casantos@datacom.ind.br>
-Message-ID: <20180402153241.1b48a199@windsurf>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon,  2 Apr 2018 15:33:53 +0200
+Subject: [Buildroot] [PATCH] core/pkg-download: fixes autobuilder fallout
+Message-ID: <20180402133353.24586-1-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Some arguments can be empty, so we need to add simple quote around them
+But since they are simple quote; double quote inside them are now not
+interpreted by the shell and as such must be removed; hence the use of
+qstrip.
 
-On Thu, 12 Oct 2017 12:14:17 -0300, Carlos Santos wrote:
-> Ncat is a much-improved reimplementation of the venerable Netcat and is
-> compatible with uClibc and musl. It provides features not available in
-> the ancient GNU netcat and its Busybox double like IPv6, proxies, and
-> Unix sockets.
-> 
-> Tha nmap package now installs ncat if the BR2_PACKAGE_NMAP_NCAT option
-> is selected. The other programs (nmap, ndiff, etc.) are chosen via the
-> BR2_PACKAGE_NMAP_NMAP option.
-> 
-> We symlink 'nc' to ncat if neiter netcat nor netcat-openbsd is selected,
-> even though ncat does not have the same interface as netcat-openbsd.
-> However, since Fedora/RHEL install nmap-ncat as 'nc', it can be assumed
-> that packages that depend on 'nc' know how to deal with this diversity.
-> For example, the virt-manager package does that. Also user-supplied
-> scripts can be assumed to do the right thing, since the user also
-> selects whether nmap-ncat, netcat or netcat-openbsd is installed.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/pkg-download.mk | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-We looked at this in further details with Arnout, and we still didn't
-like the special casing for the ncat-only case. In addition, it is
-weird to have suboptions for nmap and ncat, while the package also
-installs nping and ndiff.
-
-So instead, I've added sub-options for nmap, ncat, ndiff and nping, and
-then I've played with make targets to only build/install what's needed.
-The nmap Makefile.in conveniently offers the following make targets:
-
- nmap, build-ncat, build-nping, build-ndiff
-
-to build the respective programs, and:
-
- install-nmap, install-ncat, install-nping, install-ndiff
-
-to install the respective programs.
-
-I've used this solution, which makes the package a lot cleaner and
-easier to read I believe. See the final commit at
-https://git.buildroot.org/buildroot/commit/?id=55ec9b4e40b08a11cb9c1662c427c8d58351924a.
-
-Best regards,
-
-Thomas
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 2847a99d2f..2d5f26bfc5 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -75,12 +75,12 @@ export BR_NO_CHECK_HASH_FOR =
+ 
+ ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
+ DOWNLOAD_URIS += \
+-	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE),urlencode)
++	-u $(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
+ endif
+ 
+ ifeq ($(BR2_PRIMARY_SITE_ONLY),)
+ DOWNLOAD_URIS += \
+-	-u $($(PKG)_SITE_METHOD)+$(dir $(1))
++	-u $($(PKG)_SITE_METHOD)+$(dir $(call qstrip,$(1)))
+ ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+ DOWNLOAD_URIS += \
+ 	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE),urlencode)
+@@ -88,14 +88,15 @@ endif
+ endif
+ 
+ define DOWNLOAD
+-	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),BR_NO_CHECK_HASH_FOR=$(notdir $(1))) \
++	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),
++		BR_NO_CHECK_HASH_FOR=$(notdir $(call qstrip,$(1)))) \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) \
+-		-c $($(PKG)_DL_VERSION) \
+-		-f $(notdir $(1)) \
+-		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+-		-n $($(PKG)_BASENAME_RAW) \
+-		-N $($(PKG)_RAWNAME) \
+-		-o $(DL_DIR)/$(notdir $(1)) \
++		-c '$($(PKG)_DL_VERSION)' \
++		-f '$(notdir $(1))' \
++		-H '$(PKGDIR)/$($(PKG)_RAWNAME).hash' \
++		-n '$($(PKG)_BASENAME_RAW)' \
++		-N '$($(PKG)_RAWNAME)' \
++		-o '$(DL_DIR)/$(notdir $(1))' \
+ 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
+ 		$(DOWNLOAD_URIS) \
+ 		$(QUIET) \
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.16.2
