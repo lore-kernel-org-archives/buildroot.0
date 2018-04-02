@@ -1,45 +1,51 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 15:09:29 +0200
-Subject: [Buildroot] [v5 06/11] pkg-generic: introduce _DL_SUBDIR
+Date: Mon,  2 Apr 2018 15:09:30 +0200
+Subject: [Buildroot] [v5 07/11] pkg-download: support new subdir for mirrors
 In-Reply-To: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
 References: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402130934.19274-6-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402130934.19274-7-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This per package variable can be used to specify the download
-subdirectory used by that package.
+Since we introduced subdirectory to the DL_DIR, we need to support them
+in the PRIMARY and BACKUP mirror as they evolve to the new tree
+structure.
 
-The use case here is for example linux-headers and linux, which share
-the same sources (because they are the same upstream project), so we
-don't want to download twice the kernel, nor store it multiple times
-either.
+We check first the new URI (with the subdir), and in case of failure, we
+go check without.
+By checking both URIs, we ensure that old mirror are usable.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 v4 -> v5:
-    - Change SAME_SOURCE_AS into DL_SUBDIR (Thomas Petazzonni)
+   - Use new DL_SUBDIR
 ---
- package/pkg-generic.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/pkg-download.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 20ee73d438..3c6a1839ff 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -432,7 +432,8 @@ endif
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index e88d3f9fda..85b75cc3e6 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -75,6 +75,7 @@ export BR_NO_CHECK_HASH_FOR =
  
- $(2)_BASENAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
- $(2)_BASENAME_RAW = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
--$(2)_DL_DIR 	=  $$(DL_DIR)/$$($(2)_RAWNAME)
-+$(2)_DL_SUBDIR ?= $$($(2)_RAWNAME)
-+$(2)_DL_DIR = $$(DL_DIR)/$$($(2)_DL_SUBDIR)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASENAME)
+ ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
+ DOWNLOAD_URIS += \
++	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR),urlencode) \
+ 	-u $(call getschemeplusuri,$(BR2_PRIMARY_SITE),urlencode)
+ endif
  
- ifndef $(2)_SUBDIR
+@@ -83,6 +84,7 @@ DOWNLOAD_URIS += \
+ 	-u $($(PKG)_SITE_METHOD)+$(dir $(1))
+ ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+ DOWNLOAD_URIS += \
++	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR),urlencode) \
+ 	-u $(call getschemeplusuri,$(BR2_BACKUP_SITE),urlencode)
+ endif
+ endif
 -- 
 2.16.2
