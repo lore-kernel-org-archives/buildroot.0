@@ -1,39 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 2 Apr 2018 17:23:36 +0200
-Subject: [Buildroot] [git commit] package/pkg-golang: add PATH in
- GO_TARGET_ENV
-Message-ID: <20180402152809.270E282568@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs: beaglebone: bump kernel and uboot
+ version
+Message-ID: <20180402152809.3B2A981481@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbe32d364a5ff44c6d0bb086626ceb8cd76dee18
+commit: https://git.buildroot.net/buildroot/commit/?id=23df65e10eca34359945028ee10c2267de8d435d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some Go packages use pkg-config to detect native libraries, so we must
-have $(BR_PATH) in the PATH so that our pkg-config in HOST_DIR gets
-used.
+Switch to Linux kernel version 4.9.59 from the TI SDK 04.02.00.09
+(TI SDK release date: 23.12.2017)
+Updated uboot to version 2018.01
+uEnv.txt corrected to boot from sd card on the ti-am335x-evm
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/f85414244c25aba07a05109b5cd7658ae44a64ea/
-
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-golang.mk | 1 +
- 1 file changed, 1 insertion(+)
+ board/beaglebone/uEnv.txt    | 8 ++++++--
+ configs/beaglebone_defconfig | 8 +++-----
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index f23bda390d..bf178622b5 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -27,6 +27,7 @@ GO_BIN = $(HOST_DIR)/bin/go
- # cross-compiled binaries when GOBIN is set"
- GO_TARGET_ENV = \
- 	$(HOST_GO_TARGET_ENV) \
-+	PATH=$(BR_PATH) \
- 	GOBIN= \
- 	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
- 
+diff --git a/board/beaglebone/uEnv.txt b/board/beaglebone/uEnv.txt
+index 70b3b72146..a665f20889 100644
+--- a/board/beaglebone/uEnv.txt
++++ b/board/beaglebone/uEnv.txt
+@@ -1,4 +1,8 @@
+ bootpart=0:1
++devtype=mmc
+ bootdir=
+-bootargs=console=ttyO0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait
+-uenvcmd=run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr};
++bootfile=zImage
++bootpartition=mmcblk0p2
++set_mmc1=if test $board_name = A33515BB; then setenv bootpartition mmcblk1p2; fi
++set_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/${bootpartition} rw rootfstype=ext4 rootwait
++uenvcmd=run set_mmc1; run set_bootargs;run loadimage;run loadfdt;printenv bootargs;bootz ${loadaddr} - ${fdtaddr}
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 611b694137..80b271475e 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -1,13 +1,13 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f9f6f0db2d5e4f9d2ff46eb31a5a05276a92ed7d"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a75d8e93056181d512f6c818e8627bd4554aaf92"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
+@@ -16,13 +16,11 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="spl/u-boot-spl.bin"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
