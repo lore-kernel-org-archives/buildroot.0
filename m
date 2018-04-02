@@ -1,35 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Apr 2018 12:07:55 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libressl: bump version to 2.7.2
-In-Reply-To: <20180402083708.21199-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 2 Apr 2018 10:37:07 +0200")
-References: <20180402083708.21199-1-bernd.kuhls@t-online.de>
-Message-ID: <87tvstor9g.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Apr 2018 12:19:56 +0200
+Subject: [Buildroot] Buildroot 2018.02 Mosquitto v1.4.15 : no
+ CONNECT/CONNACK on libmosquitto
+In-Reply-To: <20180327210232.4692d68a@windsurf.home> (Thomas Petazzoni's
+ message of "Tue, 27 Mar 2018 21:02:32 +0200")
+References: <CALmdmcBazaBmEVUiCL3N6kCV4AgSp2Duqv2=iPzy1uUSTyCYyQ@mail.gmail.com>
+ <20180327210232.4692d68a@windsurf.home>
+Message-ID: <87po3hoqpf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Removed patch 0001, a different version was applied upstream, please
- > see upstream PR 82 for details. Added license hash.
+Hi,
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> Before diving more in depth in this issue on mosquitto code, I would like
+ >> to ask here : is there anyone encountering the same issue with this new
+ >> mosquitto version ? I did not see any comment about this in the mailing
+ >> list, but maybe the release is too young so it has not been detected yet ?
+ >> Or anyone can confirm that this new version, used as client with C API,
+ >> works on its side ?
 
-According to the release notes:
+ > Did you try reverting commit f4df4a18e5dd4702f842e61ee815f13afd93c366,
+ > to bring back mosquitto to the 1.4.14 version ?
 
-https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.7.2-relnotes.txt
-
-* Added support for many OpenSSL 1.0.2 and 1.1 APIs, based on
-  observations of real-world usage in applications. These are
-  implemented in parallel with existing OpenSSL 1.0.1 APIs - visibility
-  changes have not been made to existing structs, allowing code written
-  for older OpenSSL APIs to continue working.
-
-So a number of packages earlier not compatible with libressl may now
-work.
+Did that solve your problem?
 
 -- 
 Bye, Peter Korsgaard
