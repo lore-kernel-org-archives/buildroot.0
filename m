@@ -1,32 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 17:40:58 +0200
-Subject: [Buildroot] [PATCH 1/2] package/openldap: bump version to 2.4.46
-In-Reply-To: <20180402112707.19855-1-bernd.kuhls@t-online.de>
-References: <20180402112707.19855-1-bernd.kuhls@t-online.de>
-Message-ID: <20180402174058.49e39aed@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Apr 2018 17:45:09 +0200
+Subject: [Buildroot] [PATCH 2/8] pkg-generic: introduce _DL_SUBDIR
+In-Reply-To: <20180402145802.17611-2-maxime.hadjinlian@gmail.com> (Maxime
+ Hadjinlian's message of "Mon, 2 Apr 2018 16:57:56 +0200")
+References: <20180402145802.17611-1-maxime.hadjinlian@gmail.com>
+ <20180402145802.17611-2-maxime.hadjinlian@gmail.com>
+Message-ID: <876059mx2y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-On Mon,  2 Apr 2018 13:27:06 +0200, Bernd Kuhls wrote:
-> Changelog: https://www.openldap.org/software/release/changes.html
-> 
-> Added sha256 hashes for tarball and license.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/openldap/openldap.hash | 11 +++++++----
->  package/openldap/openldap.mk   |  2 +-
->  2 files changed, 8 insertions(+), 5 deletions(-)
+ > This per package variable can be used to specify the download
+ > subdirectory used by that package.
 
-Both applied. Thanks!
+ > The use case here is for example linux-headers and linux, which share
+ > the same sources (because they are the same upstream project), so we
+ > don't want to download twice the kernel, nor store it multiple times
+ > either.
 
-Thomas
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ > v4 -> v5:
+ >     - Change SAME_SOURCE_AS into DL_SUBDIR (Thomas Petazzonni)
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
