@@ -1,124 +1,37 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 10:14:34 +0200
-Subject: [Buildroot] [v4 13/13] download: git: introduce cache feature
-In-Reply-To: <20180402081434.4411-1-maxime.hadjinlian@gmail.com>
-References: <20180402081434.4411-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402081434.4411-13-maxime.hadjinlian@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  2 Apr 2018 10:21:51 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libupnp18: add optional
+ dependency to openssl/libressl
+Message-ID: <20180402082151.20662-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now we keep the git clone that we download and generates our tarball
-from there.
-The main goal here is that if you change the version of a package (say
-Linux), instead of cloning all over again, you will simply 'git fetch'
-from the repo the missing objects, then generates the tarball again.
-
-This should speed the 'source' part of the build significantly.
-
-The drawback is that the DL_DIR will grow much larger; but time is more
-important than disk space nowadays.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- support/download/git | 63 ++++++++++++++++++++++++++++++++--------------------
- 1 file changed, 39 insertions(+), 24 deletions(-)
+v2: Added and build-tested support for LibreSSL (Thomas)
 
-diff --git a/support/download/git b/support/download/git
-index 58a2c6ad9d..c6b0f81f13 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -39,29 +39,40 @@ _git() {
-     eval ${GIT} "${@}"
- }
+ package/libupnp18/libupnp18.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index a75558e92b..07ef4382f0 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -12,4 +12,12 @@ LIBUPNP18_INSTALL_STAGING = YES
+ LIBUPNP18_LICENSE = BSD-3-Clause
+ LIBUPNP18_LICENSE_FILES = LICENSE
  
--# Try a shallow clone, since it is faster than a full clone - but that only
--# works if the version is a ref (tag or branch). Before trying to do a shallow
--# clone we check if ${cset} is in the list provided by git ls-remote. If not
--# we fall back on a full clone.
-+# We want to check if a cache of the git clone of this repo already exists.
-+git_cache="${BR2_DL_DIR}/${basename%%-*}/git"
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBUPNP18_CONF_OPTS += --enable-open-ssl
++LIBUPNP18_DEPENDENCIES += host-pkgconf openssl
++LIBUPNP18_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
++else
++LIBUPNP18_CONF_OPTS += --disable-open-ssl
++endif
 +
-+# If the cache directory already exists, don't try to clone.
-+if [ ! -d "${git_cache}" ]; then
-+    _git init "'${git_cache}'"
-+    _git -C "'${git_cache}'" remote add origin "'${uri}'"
-+fi
-+
-+pushd "${git_cache}" >/dev/null
-+
-+_git remote set-url origin "'${uri}'"
-+
-+# Try to fetch with limited depth, since it is faster than a full clone - but
-+# that only works if the version is a ref (tag or branch). Before trying to do
-+# a shallow clone we check if ${cset} is in the list provided by git ls-remote.
-+# If not we fall back on a full fetch.
- #
--# Messages for the type of clone used are provided to ease debugging in case of
--# problems
-+# Messages for the type of clone used are provided to ease debugging in
-+# case of problems
- git_done=0
--if [ -n "$(_git ls-remote "'${uri}'" "'${cset}'" 2>&1)" ]; then
--    printf "Doing shallow clone\n"
--    if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${uri}'" "'${basename}'"; then
-+if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
-+    printf "Doing fetch with limited depth\n"
-+    if _git fetch "${@}" --depth 1 origin "'${cset}'"; then
-         git_done=1
-     else
--        printf "Shallow clone failed, falling back to doing a full clone\n"
-+        printf "Fetching ref failed, falling back to fetching all refs\n"
-     fi
- fi
- if [ ${git_done} -eq 0 ]; then
--    printf "Doing full clone\n"
--    _git clone ${verbose} "${@}" "'${uri}'" "'${basename}'"
-+    printf "Fetching all references\n"
-+    _git fetch origin -t
- fi
- 
--pushd "${basename}" >/dev/null
--
- # Try to get the special refs exposed by some forges (pull-requests for
- # github, changes for gerrit...). There is no easy way to know whether
- # the cset the user passed us is such a special ref or a tag or a sha1
-@@ -86,20 +97,24 @@ if [ ${recurse} -eq 1 ]; then
-     _git submodule update --init --recursive
- fi
- 
--# We do not want the .git dir; we keep other .git files, in case they
--# are the only files in their directory.
-+# Generate the archive, sort with the C locale so that it is reproducible
-+# We do not want the .git dir; we keep other .git
-+# files, in case they are the only files in their directory.
- # The .git dir would generate non reproducible tarballs as it depends on
- # the state of the remote server. It also would generate large tarballs
- # (gigabytes for some linux trees) when a full clone took place.
--rm -rf .git
-+find . -not -type d \
-+	-and -not -path "./.git/*" >"${output}.list"
-+LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
- 
--popd >/dev/null
--
--# Generate the archive, sort with the C locale so that it is reproducible
--find "${basename}" -not -type d >"${basename}.list"
--LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
- # Create GNU-format tarballs, since that's the format of the tarballs on
- # sources.buildroot.org and used in the *.hash files
--tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
--         -T "${basename}.list.sorted" >"${output}.tar"
-+tar cf - --transform="s/^\.$/${basename}/" \
-+	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-+         -T "${output}.list.sorted" >"${output}.tar"
- gzip -6 -n <"${output}.tar" >"${output}"
-+
-+rm -f "${output}.list"
-+rm -f "${output}.list.sorted"
-+
-+popd >/dev/null
+ $(eval $(autotools-package))
 -- 
-2.16.2
+2.14.2
