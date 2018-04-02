@@ -1,45 +1,70 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 16:58:00 +0200
-Subject: [Buildroot] [PATCH 6/8] download: add flock call before dl-wrapper
+Date: Mon,  2 Apr 2018 16:58:01 +0200
+Subject: [Buildroot] [PATCH 7/8] download: add missing '-d' option
 In-Reply-To: <20180402145802.17611-1-maxime.hadjinlian@gmail.com>
 References: <20180402145802.17611-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402145802.17611-6-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402145802.17611-7-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to introduce the cache mechanisms, we need to have a lock on
-the $(LIBFOO_DL_DIR), otherwise it would be impossible to do parallel
-download (a shared DL_DIR for two buildroot instances).
+The infrastructure needs to give the 'dl_dir' to the dl-wrappe which in
+its turn needs to give it to the helper.
+It will only be used by the 'git' helper as of now.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-download.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/pkg-download.mk     | 1 +
+ support/download/dl-wrapper | 6 ++++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7ca6fcc757..4fdb283acc 100644
+index 4fdb283acc..b7f1d43920 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -19,6 +19,7 @@ SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
- DL_WRAPPER = support/download/dl-wrapper
-+FLOCK = flock $($(PKG)_DL_DIR)/
- 
- # DL_DIR may have been set already from the environment
- ifeq ($(origin DL_DIR),undefined)
-@@ -93,7 +94,7 @@ define DOWNLOAD
- 	$(Q)mkdir -p $($(PKG)_DL_DIR)
- 	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),
+@@ -96,6 +96,7 @@ define DOWNLOAD
  		BR_NO_CHECK_HASH_FOR=$(notdir $(call qstrip,$(1)))) \
--	$(EXTRA_ENV) $(DL_WRAPPER) \
-+	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
+ 	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
  		-c '$($(PKG)_DL_VERSION)' \
++		-d '$($(PKG)_DL_DIR)' \
  		-f '$(notdir $(1))' \
  		-H '$(PKGDIR)/$($(PKG)_RAWNAME).hash' \
+ 		-n '$($(PKG)_BASENAME_RAW)' \
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index cd903f92d9..af2950ac3b 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -19,7 +19,7 @@
+ # We want to catch any unexpected failure, and exit immediately.
+ set -e
+ 
+-export BR_BACKEND_DL_GETOPTS=":hc:o:n:N:H:ru:qf:e"
++export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:ru:qf:e"
+ 
+ main() {
+     local OPT OPTARG
+@@ -27,10 +27,11 @@ main() {
+     local -a uris
+ 
+     # Parse our options; anything after '--' is for the backend
+-    while getopts ":hc:o:n:N:H:rf:u:q" OPT; do
++    while getopts ":hc:d:o:n:N:H:rf:u:q" OPT; do
+         case "${OPT}" in
+         h)  help; exit 0;;
+         c)  cset="${OPTARG}";;
++        d)  dl_dir="${OPTARG}";;
+         o)  output="${OPTARG}";;
+         n)  raw_base_name="${OPTARG}";;
+         N)  base_name="${OPTARG}";;
+@@ -109,6 +110,7 @@ main() {
+         if ! "${OLDPWD}/support/download/${backend}" \
+                 $([ -n "${urlencode}" ] && printf %s '-e') \
+                 -c "${cset}" \
++                -d "${dl_dir}" \
+                 -n "${raw_base_name}" \
+                 -N "${raw_name}" \
+                 -f "${filename}" \
 -- 
 2.16.2
