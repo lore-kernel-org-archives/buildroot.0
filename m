@@ -1,97 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Apr 2018 14:35:45 +0200
-Subject: [Buildroot] [PATCH] check-host-tar.sh: bump minimum tar version
- to 1.27 for reproducible tar files with long paths
-In-Reply-To: <20180402094808.6973-1-peter@korsgaard.com>
-References: <20180402094808.6973-1-peter@korsgaard.com>
-Message-ID: <20180402123545.GL3625@scaer>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon,  2 Apr 2018 15:36:58 +0300
+Subject: [Buildroot] [PATCH 1/1] czmq: bump to version 4.1.1
+Message-ID: <20180402123658.15028-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/czmq/czmq.hash | 6 +++---
+ package/czmq/czmq.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2018-04-02 11:48 +0200, Peter Korsgaard spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/b18/b187e64a61918f17f69588e2355a03286bc5808e
-> 
-> tar 1.27 subtly changed the tar format when a GNU long link entry is added
-> (which is done for path elements > 100 characters).  The code used to set
-> the permission mode of the link entry to 0:
-> 
->   header = start_private_header ("././@LongLink", size, time (NULL));
->   FILL (header->header.mtime, '0');
->   FILL (header->header.mode, '0');
->   FILL (header->header.uid, '0');
->   FILL (header->header.gid, '0');
->   FILL (header->header.devmajor, 0);
->   FILL (header->header.devminor, 0);
-> 
-> This got dropped in 1.27 by commit df7b55a8f6354e3 (Fix some problems with
-> negative and out-of-range integers), so the settings from
-> start_private_header() are used directly - Which are:
-> 
->   TIME_TO_CHARS (t < 0 ? 0 : min (t, MAX_OCTAL_VAL (header->header.mtime)),
-> 		 header->header.mtime);
->   MODE_TO_CHARS (S_IFREG|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, header->header.mode);
->   UID_TO_CHARS (0, header->header.uid);
->   GID_TO_CHARS (0, header->header.gid);
-> 
-> The end result is that tar >= 1.27 sets mode to 644.
-> 
-> The consequence of this is that we create different tar files when long path
-> names are encountered (which often happens when a package downloads a
-> specific sha1 from a git repo) depending on the host tar version used,
-> causing hash mismatches.
-> 
-> As a workaround, bump our minimum tar version to 1.27.  It would be nicer to
-> only do this if we have packages from bzr/git/hg enabled, but that is an
-> exercise for later.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/dependencies/check-host-tar.sh | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
-> index 2143877524..0857307396 100755
-> --- a/support/dependencies/check-host-tar.sh
-> +++ b/support/dependencies/check-host-tar.sh
-> @@ -26,10 +26,11 @@ if [ ! -z "${version_bsd}" ] ; then
->    minor=0
->  fi
->  
-> -# Minimal version = 1.17 (previous versions do not correctly unpack archives
-> -# containing hard-links if the --strip-components option is used).
-> +# Minimal version = 1.27 (previous versions do not correctly unpack archives
-> +# containing hard-links if the --strip-components option is used or create
-> +# different gnu long link headers for path elements > 100 characters).
->  major_min=1
-> -minor_min=17
-> +minor_min=27
->  
->  # Maximal version = 1.29 (1.30 changed --numeric-owner output for
->  # filenames > 100 characters). This is really a fix for a bug in
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
+index c0a7176f8d..c42525c78d 100644
+--- a/package/czmq/czmq.hash
++++ b/package/czmq/czmq.hash
+@@ -1,6 +1,6 @@
+ # From https://github.com/zeromq/czmq/releases
+-md5 d29baef1079f19a2c6a360eb6be984f8 czmq-4.1.0.tar.gz
+-sha1 1d201a87205811367f7c92cbbd36a899edda68bf czmq-4.1.0.tar.gz
++md5 6d3a6fdd25c2bb29897c53670dce97bf czmq-4.1.1.tar.gz
++sha1 629d34e8b5c1f2dd88689350f71f9917a8d76f23 czmq-4.1.1.tar.gz
+ # Locally calculated
+-sha256 3befa35b4886b5298e8329b4f0aa5bb9bde0e7439bd3c5c53295cb988371fc11 czmq-4.1.0.tar.gz
++sha256 f00ff419881dc2a05d0686c8467cd89b4882677fc56f31c0e2cc81c134cbb0c0 czmq-4.1.1.tar.gz
+ sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5 LICENCE
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index aef552415e..6eb9314200 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CZMQ_VERSION = 4.1.0
++CZMQ_VERSION = 4.1.1
+ CZMQ_SITE = https://github.com/zeromq/czmq/releases/download/v$(CZMQ_VERSION)
+ 
+ # 0001-configure.ac-remove-Werror.patch touches configure.ac
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
