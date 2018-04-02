@@ -1,78 +1,175 @@
-From: Charles Hardin <charles.hardin@storagecraft.com>
-Date: Sun, 1 Apr 2018 22:52:42 +0000
-Subject: [Buildroot] [PATCH 1/1] rust: make sure the cxx compiler is
- also set for the target
-In-Reply-To: <20180402004857.7e7e46c1@windsurf>
-References: <20180228173852.66069-1-charles.hardin@storagecraft.com>
- <20180402004857.7e7e46c1@windsurf>
-Message-ID: <F8479AD1-B731-4235-A6C6-A517165DD553@storagecraft.com>
+From: daggs <daggs@gmx.com>
+Date: Mon, 2 Apr 2018 06:49:41 +0200
+Subject: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+In-Reply-To: <trinity-22e97573-5741-4217-9e6c-d668449e004b-1522585511151@3c-app-mailcom-bs11>
+References: <20180401070337.18301-1-bernd.kuhls@t-online.de>
+ <trinity-60c51855-aef6-4353-90a8-2e1f048863e2-1522567079284@3c-app-mailcom-bs16>
+ <trinity-8edc1929-b40d-4afa-85a8-e152cef642fb-1522567556973@3c-app-mailcom-bs16>
+ <1je6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-550783d4-570b-41d5-937b-f66aa367d27f-1522568580265@3c-app-mailcom-bs16>
+ <4sf6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-8096f0c8-32ae-4d0a-ad74-d40b12f0f8ff-1522569777353@3c-app-mailcom-bs16>
+ <e4h6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-6f4e61bd-29a2-4eda-99e3-7f78e881ab04-1522571242948@3c-app-mailcom-bs16>
+ <45t6pexo6d.ln2@ID-313208.user.individual.net>
+ <trinity-22e97573-5741-4217-9e6c-d668449e004b-1522585511151@3c-app-mailcom-bs11>
+Message-ID: <trinity-ae0b8766-b1d6-4823-b31b-df9d6a2b674f-1522644581641@3c-app-mailcom-bs04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have a problem where we build on a HOST with x86_64 and RUST
-doesn?t realize the difference between the host tool chain and the buildroot
-toolchain.
+Greetings Bernd,
 
-In the old days - we had to patch rust to make a ?x86_64-buildroot-linux-gnu?
-target that would be recognized, but the latest patches removed that around
-rust 1.9 or so.
+> Sent: Sunday, April 01, 2018 at 3:25 PM
+> From: daggs <daggs@gmx.com>
+> To: "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> Cc: buildroot at uclibc.org
+> Subject: Re: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+>
+> Greetings Bernd,
+> 
+> > Sent: Sunday, April 01, 2018 at 2:41 PM
+> > From: "Bernd Kuhls" <bernd.kuhls@t-online.de>
+> > To: buildroot at uclibc.org
+> > Subject: Re: [Buildroot] [PATCH 1/4] package/kodi: remove libamcodec support
+> >
+> > Am Sun, 01 Apr 2018 10:27:22 +0200 schrieb daggs:
+> > 
+> > > as said by Thomas in another mail, there shouldn't be any dependency,
+> > > what is the exact issue? compilation failure? what kodi version are you
+> > > using?
+> > 
+> > Hi daggs,
+> > 
+> > the following builds were all made with unpatched buildroot master branch.
+> > 
+> > The only successful kodi build including libamcodec was made with odroid-
+> > mali using this defconfig:
+> > 
+> > BR2_aarch64=y
+> > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > BR2_PACKAGE_KODI=y
+> > BR2_PACKAGE_ODROID_MALI=y
+> > BR2_PACKAGE_PYTHON=y
+> > BR2_PACKAGE_PYTHON_PY_ONLY=y
+> > BR2_PACKAGE_LIBAMCODEC=y
+> > 
+> > -- Found OpenGLES: /home/buildroot/br2/output/host/aarch64-buildroot-
+> > linux-gnu/sysroot/usr/lib/libGLESv2.so  
+> > -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-gnu/
+> > sysroot/usr/lib/libEGL.so (found version "r4p0") 
+> > -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-gnu/
+> > sysroot/usr/include/amcodec  
+> > 
+> > -- OPENGL enabled: No
+> > -- OPENGLES enabled: Yes
+> > -- X enabled: No
+> > -- LIBDRM enabled: No
+> > -- AML enabled: Yes
+> > 
+> > Then I tried two builds with mesa3d & libamcodec, one where mesa3d 
+> > provides opengl, in the second build mesa3d provides opengles, both 
+> > failed:
+> > 
+> > ------------------------------------------------------------------
+> > 
+> > BR2_aarch64=y
+> > BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > BR2_PACKAGE_KODI=y
+> > BR2_PACKAGE_MESA3D=y
+> > BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+> > BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> > BR2_PACKAGE_XORG7=y
+> > BR2_PACKAGE_PYTHON=y
+> > BR2_PACKAGE_PYTHON_PY_ONLY=y
+> > BR2_PACKAGE_LIBAMCODEC=y
+> > 
+> > -- Found OpenGl: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> > uclibc/sysroot/usr/lib/libGL.so  
+> > -- Found X: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> > uclibc/sysroot/usr/lib/libX11.so (found version "1.6.5") 
+> > -- Found LibDRM: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> > uclibc/sysroot/usr/lib/libdrm.so (found version "2.4.91") 
+> > -- Found XRandR: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> > uclibc/sysroot/usr/lib/libXrandr.so (found version "1.5.1") 
+> > -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> > uclibc/sysroot/usr/lib/libEGL.so (found version "18.0.0") 
+> > -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> > uclibc/sysroot/usr/include/amcodec  
+> > 
+> > -- OPENGL enabled: Yes
+> > -- X enabled: Yes
+> > -- LIBDRM enabled: Yes
+> > -- XRANDR enabled: Yes
+> > -- AML enabled: Yes
+> > 
+> > [ 94%] Building CXX object build/cores/VideoPlayer/videorenderers/
+> > CMakeFiles/videorenderers.dir/RenderManager.cpp.o
+> > /home/bernd/buildroot/br2/output/build/kodi-17.6-Krypton/xbmc/cores/
+> > VideoPlayer/VideoRenderers/RenderManager.cpp: In member function 'void 
+> > CRenderManager::CreateRenderer()':
+> > /home/bernd/buildroot/br2/output/build/kodi-17.6-Krypton/xbmc/cores/
+> > VideoPlayer/VideoRenderers/RenderManager.cpp:582:25: error: 
+> > 'CRendererAML' does not name a type
+> >        m_pRenderer = new CRendererAML;
+> >                          ^~~~~~~~~~~~
+> > ------------------------------------------------------------------
+> > 
+> > BR2_aarch64=y
+> > BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > BR2_PACKAGE_KODI=y
+> > BR2_PACKAGE_MESA3D=y
+> > BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+> > BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> > BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> > BR2_PACKAGE_PYTHON=y
+> > BR2_PACKAGE_PYTHON_PY_ONLY=y
+> > BR2_PACKAGE_LIBAMCODEC=y
+> > 
+> > -- Found OpenGLES: /home/buildroot/br2/output/host/aarch64-buildroot-
+> > linux-uclibc/sysroot/usr/lib/libGLESv2.so  
+> > -- Found EGL: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> > uclibc/sysroot/usr/lib/libEGL.so (found version "18.0.0") 
+> > -- Found AML: /home/buildroot/br2/output/host/aarch64-buildroot-linux-
+> > uclibc/sysroot/usr/include/amcodec  
+> > 
+> > -- OPENGL enabled: No
+> > -- OPENGLES enabled: Yes
+> > -- X enabled: No
+> > -- LIBDRM enabled: No
+> > -- AML enabled: Yes
+> > 
+> > /bin/grep: /usr/lib/libgbm.la: No such file or directory
+> > /bin/sed: can't read /usr/lib/libgbm.la: No such file or directory
+> > libtool:   error: '/usr/lib/libgbm.la' is not a valid libtool archive
+> > 
+> > ------------------------------------------------------------------
+> > 
+> > Buildroot should not allow to use non-working combinations and here I 
+> > think hardware-wise we should in some way connect libamcodec and odroid-
+> > mail to be used by Kodi. Besides the build errors it makes no sense to 
+> > have software rendering provided by mesa3d when you have vendor-provided 
+> > opengl libs.
+> > 
+> > What do you think?
+> > 
+> > Regards, Bernd
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> > 
+> 
+> I have an idea that can address this issue but first I'd like to get confirmation from the vendor's support team especially since libreelec doesn't seems to libamlogic compiled, ok?
+> 
+> Dagg
 
-This was literally just looking at the logs and seeing the ?cc? was the buildroot
-cc and the the cxx was ?c++?, so it is just what we hacked together to get
-things to work.
+I have the answer, I'll submit a patch after your latest changes will be committed to the repo.
 
-But - definitely need to set ?cxx? in some appropriate fashion for rust to get
-compiled correctly.
-
-> On Apr 1, 2018, at 3:48 PM, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> Hello Charles,
-> 
-> Eric: could you review the patch below ?
-> 
-> On Wed, 28 Feb 2018 09:38:52 -0800, charles.hardin at storagecraft.com
-> wrote:
->> From: Charles Hardin <charles.hardin@storagecraft.com>
->> 
->> Noticed that building the LLVM build -DCMAKE_CXX_COMPILER=c++
->> during the rust build which the C compiler was set to the
->> expected buildroot compiler.
-> 
-> I am sorry, but I don't understand this sentence. Could you explain in
-> more details what is going on ?
-> 
->> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
->> index ff2634b996..9ea4c79af5 100644
->> --- a/package/rust/rust.mk
->> +++ b/package/rust/rust.mk
->> @@ -62,7 +62,10 @@ define HOST_RUST_CONFIGURE_CMDS
->> 		echo '[rust]'; \
->> 		echo 'use-jemalloc = $(HOST_RUST_JEMALLOC_ENABLED)'; \
->> 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
->> -		echo 'cc = "$(TARGET_CROSS)gcc"'; \
->> +		if [ "x$(RUSTC_HOST_NAME)" != "x$(RUSTC_TARGET_NAME)" ]; then \
->> +			echo 'cc = "$(TARGET_CROSS)gcc"'; \
->> +			echo 'cxx = "$(TARGET_CROSS)g++"'; \
->> +		fi; \
-> 
-> This is doing two things:
-> 
-> 1. Defining cxx, like the commit title says
-> 
-> 2. Only defining cc and cxx when RUSTC_HOST_NAME and
->    RUSTC_TARGET_NAME, which is not explained anywhere.
-> 
-> Could you clarify what this patch does, and why it is needed, with a
-> better commit log ?
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
+Dagg.
