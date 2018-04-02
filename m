@@ -1,41 +1,58 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  2 Apr 2018 11:39:06 +0200
-Subject: [Buildroot] [PATCH 3/4] linux: bump default to version 4.16
-In-Reply-To: <20180402093907.23274-1-bernd.kuhls@t-online.de>
-References: <20180402093907.23274-1-bernd.kuhls@t-online.de>
-Message-ID: <20180402093907.23274-3-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Apr 2018 11:41:27 +0200
+Subject: [Buildroot] [git commit] memcached: bump to version 1.5.6
+Message-ID: <20180402094144.39E65839CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=f03cf639cfba961ca4cbfb73435f23b951941685
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 487863875f..94d9e005a0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+From ReleaseNotes156:
+
+"""
+This is a bugfix release, but it primarily disables the UDP protocol by
+default.
+
+In the last few days reports of UDP amplification attacks utilizing
+inesure memcached instances have surfaced. Attackers are able to set
+large values into memcached, then send requests via spoofed UDP packets.
+Memcached will then send a very large number of very large UDP packets
+back in response.
+"""
+
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/memcached/memcached.hash | 7 +++----
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 204590d27c..8278933827 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,4 +1,3 @@
+-# From http://www.memcached.org/files/memcached-1.5.0.tar.gz.sha1
+-sha1 e12af93e63c05ab7e89398e4cfd0bfc7b7bff1c5  memcached-1.5.0.tar.gz
+-# Calculated based on the hash above
+-sha256 c001f812024bb461b5e4d7d0506daab63dff9614eea26f46536c3b7e1e601c32  memcached-1.5.0.tar.gz
++# From http://www.memcached.org/files/memcached-1.5.6.tar.gz.sha1
++sha1 ca35929e74b132c2495a6957cfdc80556337fb90  memcached-1.5.6.tar.gz
++sha256 9675ee859d7d81f7a950f190a6812720b26f08228d356044ec517d4d5af25f03  memcached-1.5.6.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index d0e3bc01d9..c15abc79bf 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.15)"
-+	bool "Latest version (4.16)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.112-cip18)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.15.15" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.16" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-2.14.2
+-MEMCACHED_VERSION = 1.5.0
++MEMCACHED_VERSION = 1.5.6
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
