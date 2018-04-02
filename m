@@ -1,171 +1,92 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Apr 2018 14:34:25 +0200
-Subject: [Buildroot] [PATCH] package/libbsd: enable for non-glibc
- toolchains
-In-Reply-To: <20180314194356.15839-1-joerg.krause@embedded.rocks>
-References: <20180314194356.15839-1-joerg.krause@embedded.rocks>
-Message-ID: <20180402123425.GK3625@scaer>
+Date: Mon, 2 Apr 2018 14:35:45 +0200
+Subject: [Buildroot] [PATCH] check-host-tar.sh: bump minimum tar version
+ to 1.27 for reproducible tar files with long paths
+In-Reply-To: <20180402094808.6973-1-peter@korsgaard.com>
+References: <20180402094808.6973-1-peter@korsgaard.com>
+Message-ID: <20180402123545.GL3625@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Peter, All,
 
-On 2018-03-14 20:43 +0100, J?rg Krause spake thusly:
-> libbsd builds now almost fine with a musl or uClibc toolchain, except
+On 2018-04-02 11:48 +0200, Peter Korsgaard spake thusly:
+> Fixes:
+> http://autobuild.buildroot.net/results/b18/b187e64a61918f17f69588e2355a03286bc5808e
+> 
+> tar 1.27 subtly changed the tar format when a GNU long link entry is added
+> (which is done for path elements > 100 characters).  The code used to set
+> the permission mode of the link entry to 0:
+> 
+>   header = start_private_header ("././@LongLink", size, time (NULL));
+>   FILL (header->header.mtime, '0');
+>   FILL (header->header.mode, '0');
+>   FILL (header->header.uid, '0');
+>   FILL (header->header.gid, '0');
+>   FILL (header->header.devmajor, 0);
+>   FILL (header->header.devminor, 0);
+> 
+> This got dropped in 1.27 by commit df7b55a8f6354e3 (Fix some problems with
+> negative and out-of-range integers), so the settings from
+> start_private_header() are used directly - Which are:
+> 
+>   TIME_TO_CHARS (t < 0 ? 0 : min (t, MAX_OCTAL_VAL (header->header.mtime)),
+> 		 header->header.mtime);
+>   MODE_TO_CHARS (S_IFREG|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, header->header.mode);
+>   UID_TO_CHARS (0, header->header.uid);
+>   GID_TO_CHARS (0, header->header.gid);
+> 
+> The end result is that tar >= 1.27 sets mode to 644.
+> 
+> The consequence of this is that we create different tar files when long path
+> names are encountered (which often happens when a package downloads a
+> specific sha1 from a git repo) depending on the host tar version used,
+> causing hash mismatches.
+> 
+> As a workaround, bump our minimum tar version to 1.27.  It would be nicer to
+> only do this if we have packages from bzr/git/hg enabled, but that is an
+> exercise for later.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-"almost" being the right word to use, as it it is still broken:
-
-        bfin |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/46deb0a042c63430f539cd52e6210aeb69bd625d
-        bfin |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/2a86e978d071a22075f8d5c4dcc614dc65f71cf3
-     powerpc |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/ee3ad5172d6a218dfde4cf3e9fecf1906b0fc642
-     powerpc |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/2e6f144f875d873001ba4fd61951f7f213ab5c10
-      xtensa |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/626d7c0237594052e40f81f8969169bfeba96bcf
-      xtensa |                   libbsd-0.8.7 | http://autobuild.buildroot.net/results/cc87f1c8b0b1c5872df92c4653dbeccaa5e5de13
-
-Could have a look?
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> for one issue introduced in the latest version bump. Upstream commit
-> 22fbd62368c39de8ac5e249d1502d5ac0ffdef30 [1] uses the glibc-only macro
-> `__GLIBC_PREREQ`. The issue is fixed by the attached patch from upstream,
-> which fixes the use of `__GLIBC_PREREQ` on non-glibc toolchains.
-> 
-> Backported from:
-> https://cgit.freedesktop.org/libbsd/patch/?id=1f8a3f7bccfc84b195218ad0086ebd57049c3490
-> 
-> netcat-openbsd is the only package selecting libbsd. However, building
-> it still needs a glibc toolchain, as it uses `b64_ntop` which is not
-> available in musl or uClibc.
-> 
-> Build has been successfully tested with:
->  * armv7-eabihf--glibc--bleeding-edge-2017.11-1
->  * armv7-eabihf--musl--bleeding-edge-2018.02-1
->  * armv7-eabihf--uclibc--bleeding-edge-2018.02-1
-> 
-> [1] https://cgit.freedesktop.org/libbsd/commit/?id=22fbd62368c39de8ac5e249d1502d5ac0ffdef30
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  ...n-declaration-protection-for-glibc-alread.patch | 80 ++++++++++++++++++++++
->  package/libbsd/Config.in                           |  5 +-
->  2 files changed, 82 insertions(+), 3 deletions(-)
->  create mode 100644 package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
+>  support/dependencies/check-host-tar.sh | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch b/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
-> new file mode 100644
-> index 0000000000..fdf45bdef6
-> --- /dev/null
-> +++ b/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
-> @@ -0,0 +1,80 @@
-> +From 1f8a3f7bccfc84b195218ad0086ebd57049c3490 Mon Sep 17 00:00:00 2001
-> +From: Guillem Jover <guillem@hadrons.org>
-> +Date: Tue, 6 Mar 2018 01:39:45 +0100
-> +Subject: [PATCH] Fix function declaration protection for glibc already
-> + providing them
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +On non-glibc based systems we cannot unconditionally use the
-> +__GLIBC_PREREQ macro as it gets expanded before evaluation. Instead,
-> +if it is undefined, define it to 0.
-> +
-> +We should also always declare these functions on non-glibc based
-> +systems. And on systems with a new enough glibc, which provides these
-> +functions, we should still provide the declarations if _GNU_SOURCE
-> +is *not* defined.
-> +
-> +Backported from:
-> +https://cgit.freedesktop.org/libbsd/patch/?id=1f8a3f7bccfc84b195218ad0086ebd57049c3490
-> +
-> +Reported-by: J?rg Krause <joerg.krause@embedded.rocks>
-> +Signed-off-by: Guillem Jover <guillem@hadrons.org>
-> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> +---
-> + include/bsd/stdlib.h    | 3 ++-
-> + include/bsd/string.h    | 3 ++-
-> + include/bsd/sys/cdefs.h | 8 ++++++++
-> + 3 files changed, 12 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/include/bsd/stdlib.h b/include/bsd/stdlib.h
-> +index 8d33d1f..a5b063c 100644
-> +--- a/include/bsd/stdlib.h
-> ++++ b/include/bsd/stdlib.h
-> +@@ -71,7 +71,8 @@ int sradixsort(const unsigned char **base, int nmemb,
-> +                const unsigned char *table, unsigned endbyte);
-> + 
-> + void *reallocf(void *ptr, size_t size);
-> +-#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 26)
-> ++#if !defined(__GLIBC__) || \
-> ++    (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 26) || !defined(_GNU_SOURCE)))
-> + void *reallocarray(void *ptr, size_t nmemb, size_t size);
-> + #endif
-> + 
-> +diff --git a/include/bsd/string.h b/include/bsd/string.h
-> +index 29097f6..f987fee 100644
-> +--- a/include/bsd/string.h
-> ++++ b/include/bsd/string.h
-> +@@ -46,7 +46,8 @@ size_t strlcat(char *dst, const char *src, size_t siz);
-> + char *strnstr(const char *str, const char *find, size_t str_len);
-> + void strmode(mode_t mode, char *str);
-> + 
-> +-#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 25)
-> ++#if !defined(__GLIBC__) || \
-> ++    (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 25) || !defined(_GNU_SOURCE)))
-> + void explicit_bzero(void *buf, size_t len);
-> + #endif
-> + __END_DECLS
-> +diff --git a/include/bsd/sys/cdefs.h b/include/bsd/sys/cdefs.h
-> +index b4c8f30..d1cc419 100644
-> +--- a/include/bsd/sys/cdefs.h
-> ++++ b/include/bsd/sys/cdefs.h
-> +@@ -58,6 +58,14 @@
-> + #endif
-> + #endif
-> + 
-> ++/*
-> ++ * On non-glibc based systems, we cannot unconditionally use the
-> ++ * __GLIBC_PREREQ macro as it gets expanded before evaluation.
-> ++ */
-> ++#ifndef __GLIBC_PREREQ
-> ++#define __GLIBC_PREREQ(maj, min) 0
-> ++#endif
-> ++
-> + /*
-> +  * Some kFreeBSD headers expect those macros to be set for sanity checks.
-> +  */
-> +-- 
-> +2.16.2
-> +
-> diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-> index 11e4c4d974..f6c2e4be4b 100644
-> --- a/package/libbsd/Config.in
-> +++ b/package/libbsd/Config.in
-> @@ -9,7 +9,6 @@ config BR2_PACKAGE_LIBBSD
->  	bool "libbsd"
->  	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	help
->  	  This library provides useful functions commonly found on BSD
->  	  systems, and lacking on others like GNU systems, thus making
-> @@ -19,6 +18,6 @@ config BR2_PACKAGE_LIBBSD
+> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+> index 2143877524..0857307396 100755
+> --- a/support/dependencies/check-host-tar.sh
+> +++ b/support/dependencies/check-host-tar.sh
+> @@ -26,10 +26,11 @@ if [ ! -z "${version_bsd}" ] ; then
+>    minor=0
+>  fi
 >  
->  	  http://libbsd.freedesktop.org/
+> -# Minimal version = 1.17 (previous versions do not correctly unpack archives
+> -# containing hard-links if the --strip-components option is used).
+> +# Minimal version = 1.27 (previous versions do not correctly unpack archives
+> +# containing hard-links if the --strip-components option is used or create
+> +# different gnu long link headers for path elements > 100 characters).
+>  major_min=1
+> -minor_min=17
+> +minor_min=27
 >  
-> -comment "libbsd needs a glibc toolchain w/ threads"
-> +comment "libbsd needs a toolchain w/ threads"
->  	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+>  # Maximal version = 1.29 (1.30 changed --numeric-owner output for
+>  # filenames > 100 characters). This is really a fix for a bug in
 > -- 
-> 2.16.2
+> 2.11.0
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
