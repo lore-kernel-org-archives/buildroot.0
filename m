@@ -1,95 +1,35 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 15:09:26 +0200
-Subject: [Buildroot] [v5 03/11] pkg-{download, generic,
- luarocks}: use existing $($(PKG)_DL_DIR)
+Date: Mon,  2 Apr 2018 15:09:27 +0200
+Subject: [Buildroot] [v5 04/11] support/download: make sure the download
+ folder is created
 In-Reply-To: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
 References: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402130934.19274-3-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402130934.19274-4-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Let the infrastructure use the already existing variable $(PKG)_DL_DIR
+At the moment, it means that we make sure that BR2_DL_DIR is created, in
+the future, it will make sure that BR2_DL_DIR/PKG_NAME/ is created.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v4 -> v5:
-    - Add missing luarocks infra
-    - Add few spots in generics that were missed (patch; legal-info)
----
- package/pkg-download.mk | 2 +-
- package/pkg-generic.mk  | 8 ++++----
- package/pkg-luarocks.mk | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/pkg-download.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 2847a99d2f..d309f7612c 100644
+index d309f7612c..e88d3f9fda 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -95,7 +95,7 @@ define DOWNLOAD
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		-n $($(PKG)_BASENAME_RAW) \
- 		-N $($(PKG)_RAWNAME) \
--		-o $(DL_DIR)/$(notdir $(1)) \
-+		-o $($(PKG)_DL_DIR)/$(notdir $(1)) \
- 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
- 		$(DOWNLOAD_URIS) \
- 		$(QUIET) \
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 25a34e6ca2..01d61ac0ad 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -133,7 +133,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
- 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- # Only show the download message if it isn't already downloaded
- 	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
--		if test ! -e $(DL_DIR)/`basename $$p` ; then \
-+		if test ! -e $($(PKG)_DL_DIR)/`basename $$p` ; then \
- 			$(call MESSAGE,"Downloading") ; \
- 			break ; \
- 		fi ; \
-@@ -185,7 +185,7 @@ $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call step_start,patch)
- 	@$(call MESSAGE,"Patching")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
--	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $(DL_DIR) $(notdir $(p))$(sep))
-+	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $($(PKG)_DL_DIR) $(notdir $(p))$(sep))
- 	$(Q)( \
- 	for D in $(PATCH_BASE_DIRS); do \
- 	  if test -d $${D}; then \
-@@ -613,7 +613,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
- 
- # default extract command
- $(2)_EXTRACT_CMDS ?= \
--	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
-+	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$($(2)_DL_DIR)/$$($(2)_SOURCE) | \
- 	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
- 		-C $$($(2)_DIR) \
- 		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
-@@ -901,7 +901,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- # patches, as they are handled specially afterwards.
- 	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
- 		$$(Q)support/scripts/hardlink-or-copy \
--			$$(DL_DIR)/$$(e) \
-+			$$($(2)_DL_DIR)/$$(e) \
- 			$$($(2)_REDIST_SOURCES_DIR)$$(sep))
- # Save patches and generate the series file
- 	$$(Q)while read f; do \
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-index d762867111..e2b48cfb4c 100644
---- a/package/pkg-luarocks.mk
-+++ b/package/pkg-luarocks.mk
-@@ -52,7 +52,7 @@ ifndef $(2)_EXTRACT_CMDS
- define $(2)_EXTRACT_CMDS
- 	mkdir -p $$($(2)_DIR)/luarocks-extract
- 	cd $$($(2)_DIR)/luarocks-extract && \
--		$$(LUAROCKS_RUN_ENV) $$(LUAROCKS_RUN_CMD) unpack --force $$(DL_DIR)/$$($(2)_SOURCE)
-+		$$(LUAROCKS_RUN_ENV) $$(LUAROCKS_RUN_CMD) unpack --force $$($(2)_DL_DIR)/$$($(2)_SOURCE)
- 	mv $$($(2)_DIR)/luarocks-extract/*/* $$($(2)_DIR)
- endef
+@@ -88,6 +88,7 @@ endif
  endif
+ 
+ define DOWNLOAD
++	$(Q)mkdir -p $($(PKG)_DL_DIR)/
+ 	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),BR_NO_CHECK_HASH_FOR=$(notdir $(1))) \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) \
+ 		-c $($(PKG)_DL_VERSION) \
 -- 
 2.16.2
