@@ -1,86 +1,50 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 2 Apr 2018 09:12:49 +0200
-Subject: [Buildroot] Make C and CXX compiler cache in
- toolchainfile.cmake.in
-In-Reply-To: <8fa283f1-a304-5f8f-54a2-24fc103afc8c@mind.be>
-References: <000001d3c425$31ba3fc0$952ebf40$@gmx.de>
- <8fa283f1-a304-5f8f-54a2-24fc103afc8c@mind.be>
-Message-ID: <6f5067a1-44b3-3e4e-7161-223616580912@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Apr 2018 09:16:22 +0200
+Subject: [Buildroot] [git commit] snort: avoid detecting the host pcre
+Message-ID: <20180402071628.5895F838E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=f6d28852ab36ddcacfd37368f6b2c07d437cbc6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 30/03/2018 21:57, Arnout Vandecappelle wrote:
-> 
-> 
-> On 25-03-18 12:36, Michael Dick wrote:
->> Hello,
->>
->> I am using buildroot to create my custom gcc toolchain and sysroot for a
->> raspberry pi.
->>
->> ?
->>
->> Therefore, I call cmake with a script to configure my project. After that, I
->> import the project into qtcreator.
->>
->> The problem is, that C and CXX compiler variables are not cached into cmake
->> cache, so when importing the project, qtcreator calling cmake is not aware oft
->> he configured compiler.
->>
->> ?
->>
->> My suggestion ist o use this patch. Is there any reason why the compilers are
->> not cached?
-> 
->  Sounds to me like a good idea.
-> 
->  Let's add Yann, Samuel and Luca in Cc as CMake experts :-P For their
-> convenience, here is the patch inline:
-> 
->> --- /tmp/toolchainfile.cmake.in.orig    2018-03-25 12:32:03.353000419 +0200
->> +++ /tmp/toolchainfile.cmake.in 2018-03-25 12:32:52.647000419 +0200
->> @@ -58,8 +58,8 @@
->>  set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
->>  
->>  # This toolchain file can be used both inside and outside Buildroot.
->> -set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
->> -set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
->> +set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@" CACHE STRING "C Compiler")
->> +set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@" CACHE STRING "CXX Compiler")
+The pcre configure script does this:
 
-Although my cmake wisdom is definitely overrated here, I *do* have a
-kind of clue of what this means! :-)
+if test "x$with_libpcre_libraries" != "xno"; then
+    LDFLAGS="${LDFLAGS}  -L${with_libpcre_libraries}"
+else
+    LDFLAGS="${LDFLAGS} `pcre-config --libs`"
+fi
 
-I think this change makes sense, and this is confirmed by the fact that
-CMake does it as well by default. I tested with a minimal project:
+So if you don't pass --with-libpcre-libraries, it calls pcre-config as
+available in the PATH. So it picks up pcre-config from $(HOST_DIR) or
+the system, which return results inappropriate for cross-compilation.
 
-$ cat CMakeLists.txt
-cmake_minimum_required(VERSION 2.6)
-project(hello)
-add_executable(hello hello.c utils.c)
-$ cmake .
-[...]
-$ grep COMPILER CMakeCache.txt
-CMAKE_CXX_COMPILER:FILEPATH=/usr/lib/ccache/c++
-CMAKE_C_COMPILER:FILEPATH=/usr/lib/ccache/cc
-[...]
-$
+So, let's explicitly pass --with-libpcre-includes and
+--with-libpcre-libraries to avoid those issues.
 
->>  if(@@TOOLCHAIN_HAS_FORTRAN@@)
->>    set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
->>    set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
-> 
-> 
->  Michael, could you resubmit as a proper patch with commit log and
-> Signed-off-by? See [1].
+Fixes:
 
-And keep me Cc:.
+  http://autobuild.buildroot.net/results/3df11c48c8e2f795f478d1ee666dda9de19133d0/
 
-Bye,
--- 
-Luca
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/snort/snort.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 13f16b3b0f..568393468b 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -15,6 +15,8 @@ SNORT_DEPENDENCIES = libpcap libdnet daq pcre
+ SNORT_AUTORECONF = YES
+ 
+ SNORT_CONF_OPTS = \
++	--with-libpcre-includes=$(STAGING_DIR)/usr/include \
++	--with-libpcre-libraries=$(STAGING_DIR)/usr/lib \
+ 	--with-libpcap-includes=$(STAGING_DIR)/usr/include/pcap \
+ 	--disable-static-daq
+ 
