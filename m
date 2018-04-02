@@ -1,49 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  3 Apr 2018 00:41:44 +0300
-Subject: [Buildroot] [PATCH] libcurl: add brotli optional dependency
-Message-ID: <13524327ea113de73f2201143641c0dfcaa50d30.1522705304.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Apr 2018 23:47:05 +0200
+Subject: [Buildroot] [PATCH 8/8] download: git: introduce cache feature
+In-Reply-To: <20180402145802.17611-8-maxime.hadjinlian@gmail.com> (Maxime
+ Hadjinlian's message of "Mon, 2 Apr 2018 16:58:02 +0200")
+References: <20180402145802.17611-1-maxime.hadjinlian@gmail.com>
+ <20180402145802.17611-8-maxime.hadjinlian@gmail.com>
+Message-ID: <877eppl1ra.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The brotli package has recently been added to Buildroot. Add brotli an
-an optional dependency to libcurl to make the build consistent.
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-It turns out that libcurl configure script users pkg-config to figure
-out link libraries only when --with-brotli is explicitly set. So this
-also fixes static build failure.
+ > Now we keep the git clone that we download and generates our tarball
+ > from there.
+ > The main goal here is that if you change the version of a package (say
+ > Linux), instead of cloning all over again, you will simply 'git fetch'
+ > from the repo the missing objects, then generates the tarball again.
 
-Fixes:
-http://autobuild.buildroot.net/results/64b/64bc0dfe284206390ae0680b94c0876863a3c0f3/
-http://autobuild.buildroot.net/results/233/23376d8653dea6361e42b0f17b6aaab3c14d99cf/
-http://autobuild.buildroot.net/results/b19/b198db4b69e18e6d01ec95aae9c6096c1912dd9c/
+ > This should speed the 'source' part of the build significantly.
 
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libcurl/libcurl.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ > The drawback is that the DL_DIR will grow much larger; but time is more
+ > important than disk space nowadays.
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index c6289e05f4cb..a3e66d094cf3 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -76,6 +76,13 @@ else
- LIBCURL_CONF_OPTS += --without-libssh2
- endif
- 
-+ifeq ($(BR2_PACKAGE_BROTLI),y)
-+LIBCURL_DEPENDENCIES += brotli
-+LIBCURL_CONF_OPTS += --with-brotli
-+else
-+LIBCURL_CONF_OPTS += --without-brotli
-+endif
-+
- define LIBCURL_FIX_DOT_PC
- 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
- endef
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > ---
+ > v4 -> v5:
+ >     - Fix comments's content
+
+Committed, thanks.
+
 -- 
-2.16.2
+Bye, Peter Korsgaard
