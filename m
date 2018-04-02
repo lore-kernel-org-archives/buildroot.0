@@ -1,34 +1,82 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  2 Apr 2018 13:58:29 +0200
-Subject: [Buildroot] [PATCH 4/4] package/ntp: add support for libressl
-In-Reply-To: <20180402115829.16778-1-bernd.kuhls@t-online.de>
-References: <20180402115829.16778-1-bernd.kuhls@t-online.de>
-Message-ID: <20180402115829.16778-4-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 Apr 2018 13:59:39 +0200
+Subject: [Buildroot] [v4 11/13] help/manual: update help about the new
+ $(LIBFOO_DL_DIR)
+In-Reply-To: <20180402081434.4411-11-maxime.hadjinlian@gmail.com>
+References: <20180402081434.4411-1-maxime.hadjinlian@gmail.com>
+ <20180402081434.4411-11-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402115939.GG3625@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ntp builds fine with current libressl 2.7.2.
+Maxime, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ntp/ntp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2018-04-02 10:14 +0200, Maxime Hadjinlian spake thusly:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index b5e2c1e026..77bb33a42f 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -22,7 +22,7 @@ NTP_CONF_OPTS = \
- # 0002-ntp-syscalls-fallback.patch
- NTP_AUTORECONF = YES
- 
--ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NTP_CONF_OPTS += --with-crypto --enable-openssl-random
- NTP_DEPENDENCIES += openssl
- else
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  Config.in                               | 3 +++
+>  docs/manual/adding-packages-generic.txt | 6 +++---
+>  2 files changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index 71b9f60e5b..c2a1925088 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -200,6 +200,9 @@ config BR2_DL_DIR
+>  	  If the Linux shell environment has defined the BR2_DL_DIR
+>  	  environment variable, then this overrides this configuration
+>  	  item.
+> +	  The directory is organized with a subdirectory for each package.
+> +	  Each package has its own $(LIBFOO_DL_DIR) variable that can be used
+> +	  to find the correct path.
+>  
+>  	  The default is $(TOPDIR)/dl
+>  
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 9d1428ad40..62906d92bb 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -263,7 +263,7 @@ information is (assuming the package name is +libfoo+) :
+>    the file using this URL. Otherwise, Buildroot will assume the file
+>    to be downloaded is located at +LIBFOO_SITE+. Buildroot will not do
+>    anything with those additional files, except download them: it will
+> -  be up to the package recipe to use them from +$(DL_DIR)+.
+> +  be up to the package recipe to use them from +$(LIBFOO_DL_DIR)+.
+>  
+>  * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
+>    package source code. In many cases, Buildroot guesses the method
+> @@ -554,8 +554,8 @@ In the action definitions, you can use the following variables:
+>  * +$(@D)+, which contains the directory in which the package source
+>    code has been uncompressed.
+>  
+> -* +$(DL_DIR)+ contains the path to the directory where all the downloads made
+> -  by Buildroot are stored.
+> +* +$(LIBFOO_DL_DIR)+ contains the path to the directory where all the downloads
+> +  made by Buildroot for +libfoo+ are stored in.
+>  
+>  * +$(TARGET_CC)+, +$(TARGET_LD)+, etc. to get the target
+>    cross-compilation utilities
+> -- 
+> 2.16.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
