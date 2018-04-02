@@ -1,40 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 02 Apr 2018 15:39:57 +0000
-Subject: [Buildroot] [Bug 10511] Packages get downloaded uncompressed with
- wget
-In-Reply-To: <bug-10511-163@https.bugs.busybox.net/>
-References: <bug-10511-163@https.bugs.busybox.net/>
-Message-ID: <bug-10511-163-CEhMLgKpJi@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Apr 2018 17:40:36 +0200
+Subject: [Buildroot] [git commit] package/openldap: add support for libressl
+Message-ID: <20180402154039.51B3F81096@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10511
+commit: https://git.buildroot.net/buildroot/commit/?id=da41a058e662cb98290c21441b5aebedab7d37c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Openldap builds fine with current libressl 2.7.2.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openldap/openldap.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-This problem only affects wget 1.19.2. In 1.19.3, a patch was merged that
-disables auto-decompression for files ending in .gz and .tgz, and then in
-1.19.4, the auto-decompression was disabled entirely, as it was causing too
-many problems.
-
-Since the problem has been fixed in dot-releases of wget, most reasonable
-distributions that were using 1.19.2 have probably upgraded to 1.19.3 or later.
-
-In addition, for those stuck with wget 1.19.2, the fallback to
-sources.buildroot.net works (even if admittedly the bogus hashes can be scary).
-But considering all of this, we don't want to introduce extra complexity in
-Buildroot just to workaround a problem affecting only wget 1.19.2 when
-downloading files only from HTTP servers having a specific configuration.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 6dd2390923..3f00f2b7df 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -12,9 +12,9 @@ OPENLDAP_LICENSE_FILES = LICENSE
+ OPENLDAP_INSTALL_STAGING = YES
+ OPENLDAP_DEPENDENCIES = host-pkgconf
+ 
+-ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_TLS = openssl
+-OPENLDAP_DEPENDENCIES += libopenssl
++OPENLDAP_DEPENDENCIES += openssl
+ else ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ OPENLDAP_TLS = gnutls
+ OPENLDAP_DEPENDENCIES += gnutls
