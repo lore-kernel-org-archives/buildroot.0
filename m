@@ -1,55 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  2 Apr 2018 11:39:05 +0200
-Subject: [Buildroot] [PATCH 2/4] toolchain: add 4.16.x choice for headers
-In-Reply-To: <20180402093907.23274-1-bernd.kuhls@t-online.de>
-References: <20180402093907.23274-1-bernd.kuhls@t-online.de>
-Message-ID: <20180402093907.23274-2-bernd.kuhls@t-online.de>
+Date: Mon,  2 Apr 2018 11:39:04 +0200
+Subject: [Buildroot] [PATCH 1/4] linux: add
+ BR2_LINUX_KERNEL_NEEDS_HOST_BISON & BR2_LINUX_KERNEL_NEEDS_HOST_FLEX
+Message-ID: <20180402093907.23274-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Upstream removed pre-generated files and switched over to build-time
+generation, for details see
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=033dba2ec06c47a9fe1b190bc3281058fb20738d
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29c833061c1d8c2d1d23a62e7061561eadd76cdb
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- toolchain/Config.in                                                  | 5 +++++
- .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
- 2 files changed, 9 insertions(+)
+ linux/Config.in | 14 ++++++++++++++
+ linux/linux.mk  |  8 ++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index b33eaffd52..e2ef1e7ef3 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -323,10 +323,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+diff --git a/linux/Config.in b/linux/Config.in
+index d9c5b62863..487863875f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -420,6 +420,20 @@ config BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF
+ 	  CONFIG_UNWINDER_ORC=y, please install libelf-dev,
+ 	  libelf-devel or elfutils-libelf-devel".
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
++config BR2_LINUX_KERNEL_NEEDS_HOST_BISON
++	bool "Needs host bison"
++	help
++	  Linux kernel versions >= 4.16 need host-bison.
 +
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
- 	default "4.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
- 	default "4.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
- 	default "4.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 6c12b1619c..8cc9db6841 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -108,6 +108,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
++	  Enable this option if you want to build a Linux kernel >= 4.16
++
++config BR2_LINUX_KERNEL_NEEDS_HOST_FLEX
++	bool "Needs host flex"
++	help
++	  Linux kernel versions >= 4.16 need host-flex.
++
++	  Enable this option if you want to build a Linux kernel >= 4.16
++
+ # Linux extensions
+ source "linux/Config.ext.in"
  
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16
-+	bool "4.16.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7609a15f23..f1bed1eb09 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -88,6 +88,14 @@ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF),y)
+ LINUX_DEPENDENCIES += host-elfutils
+ endif
+ 
++ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_BISON),y)
++LINUX_DEPENDENCIES += host-bison
++endif
 +
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_15
- 	bool "4.15.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
++ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_FLEX),y)
++LINUX_DEPENDENCIES += host-flex
++endif
++
+ # If host-uboot-tools is selected by the user, assume it is needed to
+ # create a custom image
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS),y)
 -- 
 2.14.2
