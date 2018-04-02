@@ -1,52 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Apr 2018 00:28:45 +0200
-Subject: [Buildroot] [git commit] libcurl: add brotli optional dependency
-Message-ID: <20180402222935.E56E683B17@busybox.osuosl.org>
+Date: Tue, 03 Apr 2018 00:30:16 +0200
+Subject: [Buildroot] [PATCH v2/next 1/4] brotli: new package
+In-Reply-To: <20180402230718.GB16681@momiji> (Adrian Perez de Castro's message
+ of "Mon, 2 Apr 2018 23:07:18 +0100")
+References: <20180323185942.60252-1-aperez@igalia.com>
+ <20180323185942.60252-2-aperez@igalia.com>
+ <20180402222509.6afc6ec4@windsurf> <20180402230718.GB16681@momiji>
+Message-ID: <87tvstjl6v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7d658e0291b78553bf4eca704f0d0202bcf031f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-The brotli package has recently been added to Buildroot. Add brotli an
-an optional dependency to libcurl to make the build consistent.
+Hi,
 
-It turns out that libcurl configure script uses pkg-config to figure
-out link libraries only when --with-brotli is explicitly set. So this
-also fixes static build failure.
+ >> Brotli is detected by libcurl, and it causes a build failure, at least
+ >> in some situations:
+ >> 
+ >> http://autobuild.buildroot.net/results/64b/64bc0dfe284206390ae0680b94c0876863a3c0f3/build-end.log
+ >> 
+ >> Could you have a look ?
 
-Fixes:
-http://autobuild.buildroot.net/results/64b/64bc0dfe284206390ae0680b94c0876863a3c0f3/
-http://autobuild.buildroot.net/results/233/23376d8653dea6361e42b0f17b6aaab3c14d99cf/
-http://autobuild.buildroot.net/results/b19/b198db4b69e18e6d01ec95aae9c6096c1912dd9c/
+ > Sure, from the looks of it the curl config scripts are not adding
+ > -lbrotlicommon when doing static builds, hence the missing symbols. I'll
+ > see what I can come up with, likely this will end up with a patch sent to
+ > curl upstream.
 
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ > Now it's a bit late for me, so I'll continue with it tomorrow.
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index c6289e05f4..a3e66d094c 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -76,6 +76,13 @@ else
- LIBCURL_CONF_OPTS += --without-libssh2
- endif
- 
-+ifeq ($(BR2_PACKAGE_BROTLI),y)
-+LIBCURL_DEPENDENCIES += brotli
-+LIBCURL_CONF_OPTS += --with-brotli
-+else
-+LIBCURL_CONF_OPTS += --without-brotli
-+endif
-+
- define LIBCURL_FIX_DOT_PC
- 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
- endef
+I already committed Baruch' fix:
+
+https://git.buildroot.net/buildroot/commit/?id=e7d658e0291b78553bf4eca704f0d0202bcf031f
+
+-- 
+Bye, Peter Korsgaard
