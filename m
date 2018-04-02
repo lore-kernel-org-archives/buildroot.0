@@ -1,133 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Apr 2018 17:52:53 +0200
-Subject: [Buildroot] [git commit] download: git: introduce cache feature
-Message-ID: <20180402155911.5342D82541@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon,  2 Apr 2018 19:12:33 +0300
+Subject: [Buildroot] [PATCH 1/1] python-yieldfrom: new package
+Message-ID: <20180402161233.28440-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d938bcb524987f3e4a56fc311692ba9127417d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+A backport of the `yield from` semantic from Python 3.x to Python 2.7.
+Can be useful for both host and target packages.
 
-Now we keep the git clone that we download and generates our tarball
-from there.
-The main goal here is that if you change the version of a package (say
-Linux), instead of cloning all over again, you will simply 'git fetch'
-from the repo the missing objects, then generates the tarball again.
-
-This should speed the 'source' part of the build significantly.
-
-The drawback is that the DL_DIR will grow much larger; but time is more
-important than disk space nowadays.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- support/download/git | 65 +++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 41 insertions(+), 24 deletions(-)
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-yieldfrom/Config.in             |  8 ++++++++
+ package/python-yieldfrom/python-yieldfrom.hash |  4 ++++
+ package/python-yieldfrom/python-yieldfrom.mk   | 15 +++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-yieldfrom/Config.in
+ create mode 100644 package/python-yieldfrom/python-yieldfrom.hash
+ create mode 100644 package/python-yieldfrom/python-yieldfrom.mk
 
-diff --git a/support/download/git b/support/download/git
-index 58a2c6ad9d..58dbcd211c 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -25,6 +25,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-     o)  output="${OPTARG}";;
-     u)  uri="${OPTARG}";;
-     c)  cset="${OPTARG}";;
-+    d)  dl_dir="${OPTARG}";;
-     n)  basename="${OPTARG}";;
-     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
-     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
-@@ -39,29 +40,41 @@ _git() {
-     eval ${GIT} "${@}"
- }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d6eb24a1fe..38e727ecc3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -185,6 +185,7 @@ F:	package/stress/
  
--# Try a shallow clone, since it is faster than a full clone - but that only
--# works if the version is a ref (tag or branch). Before trying to do a shallow
--# clone we check if ${cset} is in the list provided by git ls-remote. If not
--# we fall back on a full clone.
-+# We want to check if a cache of the git clone of this repo already exists.
-+git_cache="${dl_dir}/git"
-+
-+# If the cache directory doesn't exists, init a new repo, which will be
-+# fetch'ed later.
-+if [ ! -d "${git_cache}" ]; then
-+    _git init "'${git_cache}'"
-+    _git -C "'${git_cache}'" remote add origin "'${uri}'"
-+fi
-+
-+pushd "${git_cache}" >/dev/null
-+
-+_git remote set-url origin "'${uri}'"
-+
-+# Try to fetch with limited depth, since it is faster than a full clone - but
-+# that only works if the version is a ref (tag or branch). Before trying to do
-+# a shallow clone we check if ${cset} is in the list provided by git ls-remote.
-+# If not we fallback to a full fetch.
- #
--# Messages for the type of clone used are provided to ease debugging in case of
--# problems
-+# Messages for the type of clone used are provided to ease debugging in
-+# case of problems
- git_done=0
--if [ -n "$(_git ls-remote "'${uri}'" "'${cset}'" 2>&1)" ]; then
--    printf "Doing shallow clone\n"
--    if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${uri}'" "'${basename}'"; then
-+if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
-+    printf "Doing a shallow fetch\n"
-+    if _git fetch "${@}" --depth 1 origin "'${cset}'"; then
-         git_done=1
-     else
--        printf "Shallow clone failed, falling back to doing a full clone\n"
-+        printf "Shallow fetch failed, falling back to fetching all refs\n"
-     fi
- fi
- if [ ${git_done} -eq 0 ]; then
--    printf "Doing full clone\n"
--    _git clone ${verbose} "${@}" "'${uri}'" "'${basename}'"
-+    printf "Fetching all references\n"
-+    _git fetch origin -t
- fi
+ N:	Asaf Kahlon <asafka7@gmail.com>
+ F:	package/python-jsonmodels/
++F:	package/python-yieldfrom/
  
--pushd "${basename}" >/dev/null
--
- # Try to get the special refs exposed by some forges (pull-requests for
- # github, changes for gerrit...). There is no easy way to know whether
- # the cset the user passed us is such a special ref or a tag or a sha1
-@@ -86,20 +99,24 @@ if [ ${recurse} -eq 1 ]; then
-     _git submodule update --init --recursive
- fi
- 
--# We do not want the .git dir; we keep other .git files, in case they
--# are the only files in their directory.
-+# Generate the archive, sort with the C locale so that it is reproducible.
-+# We do not want the .git dir; we keep other .git files, in case they are the
-+# only files in their directory.
- # The .git dir would generate non reproducible tarballs as it depends on
- # the state of the remote server. It also would generate large tarballs
- # (gigabytes for some linux trees) when a full clone took place.
--rm -rf .git
-+find . -not -type d \
-+	-and -not -path "./.git/*" >"${output}.list"
-+LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
- 
--popd >/dev/null
--
--# Generate the archive, sort with the C locale so that it is reproducible
--find "${basename}" -not -type d >"${basename}.list"
--LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
- # Create GNU-format tarballs, since that's the format of the tarballs on
- # sources.buildroot.org and used in the *.hash files
--tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
--         -T "${basename}.list.sorted" >"${output}.tar"
-+tar cf - --transform="s/^\.$/${basename}/" \
-+	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-+         -T "${output}.list.sorted" >"${output}.tar"
- gzip -6 -n <"${output}.tar" >"${output}"
+ N:	Ash Charles <ash.charles@savoirfairelinux.com>
+ F:	package/pru-software-support/
+diff --git a/package/Config.in b/package/Config.in
+index 5fef0a2b26..d883909094 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -971,6 +971,7 @@ menu "External python modules"
+ 	source "package/python-xlutils/Config.in"
+ 	source "package/python-xlwt/Config.in"
+ 	source "package/python-xmltodict/Config.in"
++	source "package/python-yieldfrom/Config.in"
+ 	source "package/python-zope-interface/Config.in"
+ endmenu
+ endif
+diff --git a/package/python-yieldfrom/Config.in b/package/python-yieldfrom/Config.in
+new file mode 100644
+index 0000000000..1a063d3128
+--- /dev/null
++++ b/package/python-yieldfrom/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_YIELDFROM
++	bool "python-yieldfrom"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  A backport of the `yield from` semantic from Python 3.x to
++	  Python 2.7.
 +
-+rm -f "${output}.list"
-+rm -f "${output}.list.sorted"
++	  https://github.com/Nurdok/yieldfrom/
+diff --git a/package/python-yieldfrom/python-yieldfrom.hash b/package/python-yieldfrom/python-yieldfrom.hash
+new file mode 100644
+index 0000000000..cee4aaf96b
+--- /dev/null
++++ b/package/python-yieldfrom/python-yieldfrom.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/yieldfrom/json, sha256 locally computed
++md5	1a1c6fd152032d49ccd4ac250aad7746  yieldfrom-1.0.3.tar.gz
++sha256	388004d0ee8854c2ed7a2c87e664aad13acd70c9b33d7f3c441182d37357739b  yieldfrom-1.0.3.tar.gz
++sha256	99da56b23b254ccd2ec6f2e82aea731a86d29a916002b3b3bcd801453edab74e  LICENSE
+diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
+new file mode 100644
+index 0000000000..2e775b3133
+--- /dev/null
++++ b/package/python-yieldfrom/python-yieldfrom.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-yieldfrom
++#
++################################################################################
 +
-+popd >/dev/null
++PYTHON_YIELDFROM_VERSION = 1.0.3
++PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
++PYTHON_YIELDFROM_SITE = https://pypi.python.org/packages/de/2d/05524f368e691846824d962b64f983e3fde9b8c10839e7efbc1b51d42de3
++PYTHON_YIELDFROM_SETUP_TYPE = setuptools
++PYTHON_JSONMODELS_LICENSE = MIT
++PYTHON_JSONMODELS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+-- 
+2.16.2
