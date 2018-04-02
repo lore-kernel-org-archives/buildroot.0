@@ -1,45 +1,111 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Mon, 2 Apr 2018 11:54:56 -0300
-Subject: [Buildroot] [PATCH v3] snort: new package
-In-Reply-To: <697c7a58-b824-6eac-74ca-dc73eff9cb79@smile.fr>
-References: <1515868839-25930-1-git-send-email-sergio.prado@e-labworks.com>
- <697c7a58-b824-6eac-74ca-dc73eff9cb79@smile.fr>
-Message-ID: <CANu7NGu64i79svqARCrZKCXMupTNc2L8UQGaw6YW12pC_ktTGw@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 2 Apr 2018 17:03:54 +0200
+Subject: [Buildroot] [PATCH 1/1] python-yieldfrom: new package
+In-Reply-To: <20180402123923.15244-1-asafka7@gmail.com>
+References: <20180402123923.15244-1-asafka7@gmail.com>
+Message-ID: <CAGm1_ks00ZHnDmpmMTAoYF71FWregSP9rDCo=tvf+gS8vWjGnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain,
-
-Thanks for reviewing the patch.
-
-I was preparing to work on the changes and realized you have already done
-that, so thanks again.
-
-2018-03-31 10:56 GMT-03:00 Romain Naour <romain.naour@smile.fr>:
+On Mon, Apr 2, 2018 at 2:39 PM, Asaf Kahlon <asafka7@gmail.com> wrote:
+> A backport of the `yield from` semantic from Python 3.x to Python 2.7.
+> Can be useful for both host and target packages.
 >
-> Hi Sergio,
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  DEVELOPERS                                     |  1 +
+>  package/Config.in                              |  1 +
+>  package/python-yieldfrom/Config.in             |  7 +++++++
+>  package/python-yieldfrom/python-yieldfrom.hash |  4 ++++
+>  package/python-yieldfrom/python-yieldfrom.mk   | 15 +++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/python-yieldfrom/Config.in
+>  create mode 100644 package/python-yieldfrom/python-yieldfrom.hash
+>  create mode 100644 package/python-yieldfrom/python-yieldfrom.mk
 >
-> Le 13/01/2018 ? 19:40, Sergio Prado a ?crit :
-> > Tested on Beaglebone Black.
-> >
-> > Build-tested with test-pkg.
-> >
-> > Patch to fix cross-compilation errors submitted upstream [1].
-> >
-> > [1] https://lists.snort.org/pipermail/snort-devel/2018-January/
-011025.html
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d6eb24a1fe..38e727ecc3 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -185,6 +185,7 @@ F:  package/stress/
 >
-> Do you have any feed-back ?
+>  N:     Asaf Kahlon <asafka7@gmail.com>
+>  F:     package/python-jsonmodels/
+> +F:     package/python-yieldfrom/
+>
+>  N:     Ash Charles <ash.charles@savoirfairelinux.com>
+>  F:     package/pru-software-support/
+> diff --git a/package/Config.in b/package/Config.in
+> index 5fef0a2b26..d883909094 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -971,6 +971,7 @@ menu "External python modules"
+>         source "package/python-xlutils/Config.in"
+>         source "package/python-xlwt/Config.in"
+>         source "package/python-xmltodict/Config.in"
+> +       source "package/python-yieldfrom/Config.in"
+>         source "package/python-zope-interface/Config.in"
+>  endmenu
+>  endif
+> diff --git a/package/python-yieldfrom/Config.in b/package/python-yieldfrom/Config.in
+> new file mode 100644
+> index 0000000000..6726e2fdb5
+> --- /dev/null
+> +++ b/package/python-yieldfrom/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_YIELDFROM
+> +       bool "python-yieldfrom"
 
-Not yet. I'll ping the snort development list.
+depends on BR2_PACKAGE_PYTHON
 
-Best regards,
+is missing.
 
-Sergio Prado
-https://e-labworks.com/en
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180402/691b1f65/attachment.html>
+Yegor
+
+
+> +       help
+> +         A backport of the `yield from` semantic from Python 3.x to
+> +         Python 2.7.
+> +
+> +         https://github.com/Nurdok/yieldfrom/
+> diff --git a/package/python-yieldfrom/python-yieldfrom.hash b/package/python-yieldfrom/python-yieldfrom.hash
+> new file mode 100644
+> index 0000000000..cee4aaf96b
+> --- /dev/null
+> +++ b/package/python-yieldfrom/python-yieldfrom.hash
+> @@ -0,0 +1,4 @@
+> +# md5 from https://pypi.python.org/pypi/yieldfrom/json, sha256 locally computed
+> +md5    1a1c6fd152032d49ccd4ac250aad7746  yieldfrom-1.0.3.tar.gz
+> +sha256 388004d0ee8854c2ed7a2c87e664aad13acd70c9b33d7f3c441182d37357739b  yieldfrom-1.0.3.tar.gz
+> +sha256 99da56b23b254ccd2ec6f2e82aea731a86d29a916002b3b3bcd801453edab74e  LICENSE
+> diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
+> new file mode 100644
+> index 0000000000..2e775b3133
+> --- /dev/null
+> +++ b/package/python-yieldfrom/python-yieldfrom.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-yieldfrom
+> +#
+> +################################################################################
+> +
+> +PYTHON_YIELDFROM_VERSION = 1.0.3
+> +PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
+> +PYTHON_YIELDFROM_SITE = https://pypi.python.org/packages/de/2d/05524f368e691846824d962b64f983e3fde9b8c10839e7efbc1b51d42de3
+> +PYTHON_YIELDFROM_SETUP_TYPE = setuptools
+> +PYTHON_JSONMODELS_LICENSE = MIT
+> +PYTHON_JSONMODELS_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> +$(eval $(host-python-package))
+> --
+> 2.14.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
