@@ -1,36 +1,95 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  2 Apr 2018 15:09:25 +0200
-Subject: [Buildroot] [v5 02/11] arc/xtensa: store the Xtensa overlay in the
- per-package DL_DIR
+Date: Mon,  2 Apr 2018 15:09:26 +0200
+Subject: [Buildroot] [v5 03/11] pkg-{download, generic,
+ luarocks}: use existing $($(PKG)_DL_DIR)
 In-Reply-To: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
 References: <20180402130934.19274-1-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402130934.19274-2-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402130934.19274-3-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Let the infrastructure use the already existing variable $(PKG)_DL_DIR
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- arch/arch.mk.xtensa | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v4 -> v5:
+    - Add missing luarocks infra
+    - Add few spots in generics that were missed (patch; legal-info)
+---
+ package/pkg-download.mk | 2 +-
+ package/pkg-generic.mk  | 8 ++++----
+ package/pkg-luarocks.mk | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
-index 2b6cd26d03..fd410f6bfa 100644
---- a/arch/arch.mk.xtensa
-+++ b/arch/arch.mk.xtensa
-@@ -12,7 +12,7 @@
- BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
- ifneq ($(filter http://% https://% ftp://% scp://%,$(BR_ARCH_XTENSA_OVERLAY_FILE)),)
- ARCH_XTENSA_OVERLAY_URL = $(BR_ARCH_XTENSA_OVERLAY_FILE)
--ARCH_XTENSA_OVERLAY_FILE = $(DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
-+ARCH_XTENSA_OVERLAY_FILE = $($(PKG)_DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
- # Do not check that file, we can't know its hash
- BR_NO_CHECK_HASH_FOR += $(notdir $(ARCH_XTENSA_OVERLAY_URL))
- else
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 2847a99d2f..d309f7612c 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -95,7 +95,7 @@ define DOWNLOAD
+ 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-n $($(PKG)_BASENAME_RAW) \
+ 		-N $($(PKG)_RAWNAME) \
+-		-o $(DL_DIR)/$(notdir $(1)) \
++		-o $($(PKG)_DL_DIR)/$(notdir $(1)) \
+ 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
+ 		$(DOWNLOAD_URIS) \
+ 		$(QUIET) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 25a34e6ca2..01d61ac0ad 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -133,7 +133,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ # Only show the download message if it isn't already downloaded
+ 	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+-		if test ! -e $(DL_DIR)/`basename $$p` ; then \
++		if test ! -e $($(PKG)_DL_DIR)/`basename $$p` ; then \
+ 			$(call MESSAGE,"Downloading") ; \
+ 			break ; \
+ 		fi ; \
+@@ -185,7 +185,7 @@ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call step_start,patch)
+ 	@$(call MESSAGE,"Patching")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+-	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $(DL_DIR) $(notdir $(p))$(sep))
++	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $($(PKG)_DL_DIR) $(notdir $(p))$(sep))
+ 	$(Q)( \
+ 	for D in $(PATCH_BASE_DIRS); do \
+ 	  if test -d $${D}; then \
+@@ -613,7 +613,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ 
+ # default extract command
+ $(2)_EXTRACT_CMDS ?= \
+-	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
++	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$($(2)_DL_DIR)/$$($(2)_SOURCE) | \
+ 	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
+ 		-C $$($(2)_DIR) \
+ 		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
+@@ -901,7 +901,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ # patches, as they are handled specially afterwards.
+ 	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
+ 		$$(Q)support/scripts/hardlink-or-copy \
+-			$$(DL_DIR)/$$(e) \
++			$$($(2)_DL_DIR)/$$(e) \
+ 			$$($(2)_REDIST_SOURCES_DIR)$$(sep))
+ # Save patches and generate the series file
+ 	$$(Q)while read f; do \
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+index d762867111..e2b48cfb4c 100644
+--- a/package/pkg-luarocks.mk
++++ b/package/pkg-luarocks.mk
+@@ -52,7 +52,7 @@ ifndef $(2)_EXTRACT_CMDS
+ define $(2)_EXTRACT_CMDS
+ 	mkdir -p $$($(2)_DIR)/luarocks-extract
+ 	cd $$($(2)_DIR)/luarocks-extract && \
+-		$$(LUAROCKS_RUN_ENV) $$(LUAROCKS_RUN_CMD) unpack --force $$(DL_DIR)/$$($(2)_SOURCE)
++		$$(LUAROCKS_RUN_ENV) $$(LUAROCKS_RUN_CMD) unpack --force $$($(2)_DL_DIR)/$$($(2)_SOURCE)
+ 	mv $$($(2)_DIR)/luarocks-extract/*/* $$($(2)_DIR)
+ endef
+ endif
 -- 
 2.16.2
