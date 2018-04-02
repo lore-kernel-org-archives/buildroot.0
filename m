@@ -1,40 +1,63 @@
-From: John Keeping <john@metanate.com>
-Date: Mon,  2 Apr 2018 13:51:45 +0100
-Subject: [Buildroot] [PATCH] linux-tool-perf: permit TUI build
-Message-ID: <20180402125145.13431-1-john@metanate.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  2 Apr 2018 15:00:28 +0200
+Subject: [Buildroot] [PATCH 3/3] linux: bump default to version 4.16
+In-Reply-To: <20180402130028.4518-1-bernd.kuhls@t-online.de>
+References: <20180402130028.4518-1-bernd.kuhls@t-online.de>
+Message-ID: <20180402130028.4518-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since Linux 3.10, perf's NO_NEWT configuration option simply sets
-NO_SLANG=1 and there is no dependency on libnewt.
+Added host-bison and host-flex as dependencies after upstream removed
+pre-generated files and switched over to build-time generation, for
+details see
 
-We already handle NO_SLANG correctly based on whether or not
-BR2_PACKAGE_SLANG is selected, so all we accomplish by setting NO_NEWT=1
-is disabling perf's TUI when all of the dependencies are available.
-
-Linux 3.10 is almost 5 years old now, so there doesn't seem to be any
-point in jumping through additional hoops to make perf from older kernel
-versions build when the newt package is not available.
-
-Signed-off-by: John Keeping <john@metanate.com>
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=033dba2ec06c47a9fe1b190bc3281058fb20738d
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29c833061c1d8c2d1d23a62e7061561eadd76cdb
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linux-tools/linux-tool-perf.mk.in | 1 -
- 1 file changed, 1 deletion(-)
+v2: added host-bison and host-flex as mandatory dependencies (Thomas)
 
-diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-index 69492ba8da..bb9d1655e6 100644
---- a/package/linux-tools/linux-tool-perf.mk.in
-+++ b/package/linux-tools/linux-tool-perf.mk.in
-@@ -22,7 +22,6 @@ PERF_MAKE_FLAGS = \
- 	prefix=/usr \
- 	WERROR=0 \
- 	NO_LIBAUDIT=1 \
--	NO_NEWT=1 \
- 	NO_GTK2=1 \
- 	NO_LIBPERL=1 \
- 	NO_LIBPYTHON=1 \
+ linux/Config.in | 4 ++--
+ linux/linux.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index d9c5b62863..d52af66e5c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.15)"
++	bool "Latest version (4.16)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (v4.4.112-cip18)"
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.15.15" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.16" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7609a15f23..9e646baffc 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -62,7 +62,7 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
+ 
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES += host-kmod
++LINUX_DEPENDENCIES += host-bison host-flex host-kmod
+ 
+ # host tools needed for kernel compression
+ ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
 -- 
-2.16.3
+2.14.2
