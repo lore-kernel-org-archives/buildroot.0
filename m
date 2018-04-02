@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Apr 2018 14:10:09 +0200
-Subject: [Buildroot] [v4 06/13] support/download: make sure the download
- folder is created
-In-Reply-To: <20180402081434.4411-6-maxime.hadjinlian@gmail.com>
+Date: Mon, 2 Apr 2018 14:13:27 +0200
+Subject: [Buildroot] [v4 08/13] pkg-download: support new subdir for
+ mirrors
+In-Reply-To: <20180402081434.4411-8-maxime.hadjinlian@gmail.com>
 References: <20180402081434.4411-1-maxime.hadjinlian@gmail.com>
- <20180402081434.4411-6-maxime.hadjinlian@gmail.com>
-Message-ID: <20180402141009.34a1011c@windsurf>
+ <20180402081434.4411-8-maxime.hadjinlian@gmail.com>
+Message-ID: <20180402141327.328775df@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  2 Apr 2018 10:14:27 +0200, Maxime Hadjinlian wrote:
-> At the moment, it means that we make sure that BR2_DL_DIR is created, in
-> the future, it will make sure that BR2_DL_DIR/PKG_NAME/ is created.
+On Mon,  2 Apr 2018 10:14:29 +0200, Maxime Hadjinlian wrote:
+> Since we introduced subdirectory to the DL_DIR, we need to support them
+> in the PRIMARY and BACKUP mirror as they evolve to the new tree
+> structure.
+> 
+> We check first the new URI (with the subdir), and in case of failure, we
+> go check without.
+> By checking both URIs, we ensure that old mirror are usable.
 > 
 > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/pkg-download.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 151b2e5423..e88d3f9fda 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -88,7 +88,8 @@ endif
->  endif
->  
->  define DOWNLOAD
-> -	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),BR_NO_CHECK_HASH_FOR=$(notdir $(1));) \
-> +	$(Q)mkdir -p $($(PKG)_DL_DIR)/
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Why is the trailing slash needed ?
+Shouldn't this be squashed into the previous patch ?
 
-> +	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),BR_NO_CHECK_HASH_FOR=$(notdir $(1))) \
-
-Why is this semi-colon removed ? Is this related to creating the
-download folder ?
+Indeed, as soon as PATCH 07/13 is merged, the sources.buildroot.net
+mirror will start storing new tarballs in sources.buildroot.net/<pkg>/
+and not directly in sources.buildroot.net/. So we should at the same
+time start storing tarballs in the per-package sub-folder *and* start
+querying primary/backup site inside their sub-folder.
 
 Thomas
 -- 
