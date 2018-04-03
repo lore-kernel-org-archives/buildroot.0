@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Apr 2018 15:50:29 +0200
-Subject: [Buildroot] [PATCH 1/2] prosody: fix build with musl libc
-In-Reply-To: <a4acccee1aac11202402728b64d23a3f0f7128be.1522730725.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 3 Apr 2018 07:45:24 +0300")
+Date: Tue, 03 Apr 2018 15:51:30 +0200
+Subject: [Buildroot] [PATCH 2/2] prosody: needs MMU
+In-Reply-To: <e7d3af9b986c98c2e11b0a60789401b7e49687c6.1522730725.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 3 Apr 2018 07:45:25 +0300")
 References: <a4acccee1aac11202402728b64d23a3f0f7128be.1522730725.git.baruch@tkos.co.il>
-Message-ID: <87woxopffe.fsf@dell.be.48ers.dk>
+ <e7d3af9b986c98c2e11b0a60789401b7e49687c6.1522730725.git.baruch@tkos.co.il>
+Message-ID: <87sh8cpfdp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > musl libc does not provide the mallinfo() API. Define WITHOUT_MALLINFO
- > to skip the code using it.
+ > prosody POSIX support code calls fork() unconditionally.
+ > prosody also uses the mallinfo() API, but uClibc does not provide that
+ > for no-MMU targets.
 
  > Fixes:
- > http://autobuild.buildroot.net/results/42c/42cd6e3be761d1cb358bc50acd7fa58c8aa1c750/
- > http://autobuild.buildroot.net/results/29d/29d8dcbe013e549a865c0c5953272dab1fe5f777/
- > http://autobuild.buildroot.net/results/a6d/a6deb7440f80b072432c0f9c048e59abe4edf1c0/
+ > http://autobuild.buildroot.net/results/2d0/2d0f97e41cc1d4c9c7a0eacd4eec8bad6f00bcff/
+ > http://autobuild.buildroot.net/results/f69/f69dfb1a7d1163b402b1f9bef045891c229539e5/
 
  > Cc: Dushara Jayasinghe <nidujay@gmail.com>
  > Cc: Francois Perrad <francois.perrad@gadz.org>
