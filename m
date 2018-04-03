@@ -1,95 +1,50 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Tue,  3 Apr 2018 20:48:17 +0300
-Subject: [Buildroot] [PATCH] Synopsys: Cleanup files related to Synopsys
-Message-ID: <20180403174817.44145-1-Evgeniy.Didin@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Apr 2018 19:49:04 +0200
+Subject: [Buildroot] Per-package download folders and Git caching
+In-Reply-To: <87k1top74p.fsf@dell.be.48ers.dk>
+References: <20180403141703.21cd24fe@windsurf>
+ <041a5a2a-3f9d-c76e-4c6d-d22ef11cad43@mind.be>
+ <876058qvi4.fsf@dell.be.48ers.dk> <20180403162324.GB2335@scaer>
+ <87k1top74p.fsf@dell.be.48ers.dk>
+Message-ID: <20180403174904.GE2335@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missing entries in DEVELOPERS file for synopsys boards.
-Add missing readme.txt for recently introduced synopsys/hsdk board.
-Reduce size of FAT partition for HSDK image.
+Peter, All,
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
----
- DEVELOPERS                       |  4 ++++
- board/synopsys/hsdk/genimage.cfg |  2 +-
- board/synopsys/hsdk/readme.txt   | 33 +++++++++++++++++++++++++++++++++
- 3 files changed, 38 insertions(+), 1 deletion(-)
- create mode 100644 board/synopsys/hsdk/readme.txt
+On 2018-04-03 18:49 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>  > Should we do a cp if ln fails, then?
+> That sounds like a sensible fallback, yes.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d6eb24a1fe..61b0588faa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -163,7 +163,11 @@ F:	package/wf111/
- N:	ARC Maintainers <arc-buildroot@synopsys.com>
- F:	arch/Config.in.arc
- F:	board/synopsys/
-+F:	configs/snps_arc700_axs101_defconfig
-+F:	configs/snps_archs38_axs103_defconfig
-+F:	configs/snps_archs38_haps_defconfig
- F:	configs/snps_archs38_hsdk_defconfig
-+F:	configs/snps_archs38_vdk_defconfig
- 
- N:	Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
- F:	package/axfsutils/
-diff --git a/board/synopsys/hsdk/genimage.cfg b/board/synopsys/hsdk/genimage.cfg
-index 87282fcb79..9103b20299 100644
---- a/board/synopsys/hsdk/genimage.cfg
-+++ b/board/synopsys/hsdk/genimage.cfg
-@@ -7,7 +7,7 @@ image boot.vfat {
-       image = "uboot-env.bin"
-     }
-   }
--  size = 100M
-+  size = 20M
- }
- 
- image sdcard.img {
-diff --git a/board/synopsys/hsdk/readme.txt b/board/synopsys/hsdk/readme.txt
-new file mode 100644
-index 0000000000..f4c6501111
---- /dev/null
-+++ b/board/synopsys/hsdk/readme.txt
-@@ -0,0 +1,33 @@
-+Synopsys, Inc.
-+ARC HS Development Kit (HSDK)
-+
-+https://embarc.org/platforms.html
-+
-+How to build it
-+===============
-+
-+Select the default configuration for the target:
-+$ make snps_archs38_hsdk_defconfig
-+
-+Optional: modify the configuration:
-+$ make menuconfig
-+
-+Build:
-+$ make
-+
-+Result of the build
-+===================
-+output/images/
-+??? boot.vfat
-+??? rootfs.ext2
-+??? sdcard.img
-+??? u-boot
-+??? u-boot.bin
-+??? uboot-env.bin
-+??? uImage
-+
-+To copy the image file to the sdcard use dd:
-+$ dd if=output/images/sdcard.img of=/dev/XXX
-+
-+2018, Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-+
+I was about to do so, but then we're back to a situation where we have
+to guarantee the atomicity.
+
+This is currently possible, because the dl-wrapper now runs under flock.
+But we are going to optimise the locking with a more fine-grained
+solution soonish.
+
+To be noted: the current code is not atomic-safe either, because we do
+have a TOCTTOU situation...
+
+So, we'll have to again play tricks with atomicity...
+
+We can't use flock again, because the destination directory is already
+locked, and there is not destination file to lock to start with...
+
+So, maybe the full solution will in fact to really implement the more
+fine-grained solution... I'll see to it.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.16.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
