@@ -1,57 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Apr 2018 22:45:00 +0200
-Subject: [Buildroot] [git commit] core/download: fix when the BR2_DL_DIR
- does not accept hardlinks
-Message-ID: <20180403204608.D743581100@busybox.osuosl.org>
+Date: Tue, 3 Apr 2018 22:43:55 +0200
+Subject: [Buildroot] [git commit] openal: Bump to version 1.18.2
+Message-ID: <20180403204608.C37C983D95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d19fcf6c24f7dcf585ad3423518068b5789f3b0
+commit: https://git.buildroot.net/buildroot/commit/?id=7f4deda135c23e83f255340fd3620b83eea81b8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the BR2_DL_DIR is a mountpoint (presumably shared between various
-machine, or mounted from the local host when running in a VM), it is
-possible that it does not support hardlinks (e.g. samba, or the VMWare
-VMFS, etc...).
-
-If the hardlink fails, fallback to copying the file. As a last resort,
-if that also fails, eventually fallback to doing the download.
-
-Note: this means that the dl-wrapper is no longer atomic-safe: the code
-suffers of a TOCTTOU condition: the file may be created in-between the
-check and the moment we try to ln/cp it. Fortunately, the dl-wrapper is
-now run under an flock, so we're still safe. If we eventually go for a
-more fine-grained implementation, we'll have to be careful then.
-
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/dl-wrapper | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index ce44752df0..38430738eb 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -56,8 +56,13 @@ main() {
-     # Legacy handling: check if the file already exists in the global
-     # download directory. If it does, hard-link it. If it turns out it
-     # was an incorrect download, we'd still check it below anyway.
-+    # If we can neither link nor copy, fallback to doing a download.
-+    # NOTE! This is not atomic, is subject to TOCTTOU, but the whole
-+    # dl-wrapper runs under an flock, so we're safe.
-     if [ ! -e "${output}" -a -e "${old_dl_dir}/${filename}" ]; then
--        ln "${old_dl_dir}/${filename}" "${output}"
-+        ln "${old_dl_dir}/${filename}" "${output}" || \
-+        cp "${old_dl_dir}/${filename}" "${output}" || \
-+        true
-     fi
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index aead6e15b8..cb41dc4e12 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 2d51a6529526ef22484f51567e31a5c346a599767991a3dc9d4dcd9d9cec71dd  openal-soft-1.18.1.tar.bz2
++sha256 9f8ac1e27fba15a59758a13f0c7f6540a0605b6c3a691def9d420570506d7e82  openal-soft-1.18.2.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index 439f5f109d..c687c08be1 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     # If the output file already exists and:
+-OPENAL_VERSION = 1.18.1
++OPENAL_VERSION = 1.18.2
+ OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+ OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+ OPENAL_LICENSE = LGPL-2.0+
