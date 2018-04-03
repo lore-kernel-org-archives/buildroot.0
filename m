@@ -1,39 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Apr 2018 11:50:11 +0200
-Subject: [Buildroot] [PATCH] pkg-generic.mk: fix
- FOO_ACTUAL_SOURCE_TARBALL handling after DOWNLOAD rework
-In-Reply-To: <20180403065616.9640-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 3 Apr 2018 08:56:16 +0200")
-References: <20180403065616.9640-1-peter@korsgaard.com>
-Message-ID: <87efjwk4a4.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Apr 2018 12:14:30 +0200
+Subject: [Buildroot] [PATCH] skeleton-init-systemd: Work around for RO
+ root /var/lib not populating
+In-Reply-To: <1522693433.10662.300.camel@impinj.com>
+References: <20180227221628.8283-1-tpiepho@impinj.com>
+ <20180331091022.GB25161@scaer>
+ <1522693433.10662.300.camel@impinj.com>
+Message-ID: <20180403101430.GA2923@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Trent, All,
 
- > Fixes:
- > http://autobuild.buildroot.net/results/b4a/b4af0de4ae9630ccbe7890f69047f216f2ff5119/
+On 2018-04-02 18:23 +0000, Trent Piepho spake thusly:
+> On Sat, 2018-03-31 at 11:10 +0200, Yann E. MORIN wrote:
+> > On 2018-02-27 14:16 -0800, Trent Piepho spake thusly:
+> > > When using a RO root with systemd, it is intended that /var/lib should be
+> > > populated at boot time by tmpfiles system mirroring it from
+> > > /usr/share/factory/var/lib.
+> > > 
+> > > However, this will only happen if /var/lib does not already exist at the
+> > > time systemd-tmpfiles runs.  If it does exist, then tmpfiles will
+> > > (silently) skip it and do nothing.
+> > > 
+> > > It turns out /var/lib will exist, because some part of systemd creates
+> > > /var/lib/systemd/catalog on boot before tmpfiles runs.
+> > > 
+> > > The fix used here is to also create tmpfiles entries for the contents of
+> > > /var/lib/* and /var/lib/systemd/*.  This way, when those directories
+> > > already exist, the entire tree is not skipped and instead the
+> > > not-yet-existing contents of /var/lib and /var/lib/systemd will be still
+> > > be mirrored from the factory dir.
+> > > 
+> > > And if /var/lib/systemd, or a prefix of that, stops getting created and
+> > > does not exist, it'll still mirror properly.
+> > 
+> > I believe that we fixed that in another way with that commit:
+> > 
+> >     6e5df928539 package/skeleton-systemd: invert factory logic
+> > 
+> > As thus, I've marked this patch as rejected.
+> > 
+> > If your use-case is still not fixed, please re-send it.
+> 
+> This patch is already in master, do you intend to revert it?
 
- > With the change to the DOWNLOAD macro, packages using FOO_ACTUAL_SOURCE_TARBALL fails:
+Ah, right. It was still dangling in Patchwork, and I had forgotten it got
+applied.
 
- >>>> skeleton-init-common  Collecting legal info
- > sourceryg++-2017.05-4-nios2-linux-gnu.src.tar.bz2: OK (md5: 529a7fecf33d0d113a446413b9d1e173)
- > sourceryg++-2017.05-4-nios2-linux-gnu.src.tar.bz2: OK (sha256: 6e65878d0453708ee19098d3d68985bda244938d35999f3859915a2f5574fa08)
- > /bin/bash: line 1: @mkdir: command not found
- > package/pkg-generic.mk:148: recipe for target '/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-1/output/build/toolchain-external-codesourcery-niosII-2017.05-4/.stamp_actual_downloaded' failed
+No, we're not gonna revert it.
 
- > Which is caused by the continuation character '\'.  This has been present
- > since the make target was introduced in commit eace9d6133b9
- > (core/legal-info: ensure legal-info works in off-line mode).  It isn't clear
- > to me why it was done like that, but it fails with the DOWNLOAD macro
- > rework, so drop it.
+Sorry for the confusion.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
