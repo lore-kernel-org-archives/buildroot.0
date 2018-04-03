@@ -1,228 +1,121 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Apr 2018 23:17:46 +0200
-Subject: [Buildroot] [git commit] package/systemd: add upstream build fix
- #8456
-Message-ID: <20180403211845.BFE7883DBD@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 4 Apr 2018 00:01:32 +0200
+Subject: [Buildroot] [PATCH 1/1] rust: make sure the cxx compiler is
+ also set for the target
+In-Reply-To: <911E1AE2-32AB-4DE4-89B2-49F68BFE20BF@storagecraft.com>
+References: <20180228173852.66069-1-charles.hardin@storagecraft.com>
+ <20180402004857.7e7e46c1@windsurf>
+ <F8479AD1-B731-4235-A6C6-A517165DD553@storagecraft.com>
+ <20180402005738.1d603538@windsurf>
+ <1B48158D-B250-46BC-A4B8-7A2816D2573A@storagecraft.com>
+ <7E1DAB3C-F973-4E41-8E6F-E603021DCFF9@storagecraft.com>
+ <20180402083828.54d43b63@windsurf>
+ <911E1AE2-32AB-4DE4-89B2-49F68BFE20BF@storagecraft.com>
+Message-ID: <20180403220132.GA20271@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=794d16fcacfc5c8e041452da67ee12aaab36f441
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi!
 
-Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-Tested-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0005-basic-macros-rename-noreturn.patch        | 201 +++++++++++++++++++++
- 1 file changed, 201 insertions(+)
+On 2018-04-02 19:54, Charles Hardin wrote:
+> so? hopefully the following makes sense...
+>
+> When you fix the CXX linking you will see this in the stage0 - notice the target is unknown - not buildroot, and
+> so what happens is the tools use the ?same? compiler as the target for the host side, which means that I ended
+> up getting ?target? compiled with avx2 on a host that doesn?t support it
+>
+> Copying stage0 std from stage0 (x86_64-unknown-linux-gnu -> x86_64-unknown-linux-gnu / x86_64-unknown-linux-gnu)
+> Building stage0 test artifacts (x86_64-unknown-linux-gnu -> x86_64-unknown-linux-gnu)
+>
+> ? snip snip ?
+>
+> Building LLVM for x86_64-unknown-linux-gnu
+> running: "cmake" "/home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/build/host-rust-1.23.0/src/llvm" "-DLLVM_ENABLE_ASSERTIONS=OFF" "-DLLVM_TARGETS_TO_BUILD=X86;ARM;AArch64;Mips;PowerPC;SystemZ;JSBackend;MSP430;Sparc;NVPTX;Hexagon" "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=" "-DLLVM_INCLUDE_EXAMPLES=OFF" "-DLLVM_INCLUDE_TESTS=OFF" "-DLLVM_INCLUDE_DOCS=OFF" "-DLLVM_ENABLE_ZLIB=OFF" "-DWITH_POLLY=OFF" "-DLLVM_ENABLE_TERMINFO=OFF" "-DLLVM_ENABLE_LIBEDIT=OFF" "-DLLVM_PARALLEL_COMPILE_JOBS=2" "-DLLVM_TARGET_ARCH=x86_64" "-DLLVM_DEFAULT_TARGET_TRIPLE=x86_64-unknown-linux-gnu" "-DLLVM_LINK_LLVM_DYLIB=ON" "-DCMAKE_C_COMPILER=/home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/host/bin/x86_64-buildroot-linux-gnu-gcc" "-DCMAKE_CXX_COMPILER=/home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/host/bin/x86_64-buildroot-linux-gnu-g++" "-DCMAKE_C_FLAGS=-ffunction-sections -fdata-sections -fPIC -m64" "-DCMAKE_CXX_FLAGS=-ffunction-sections -fdata-sections -fPIC -m64" "-DCMAKE_AR=/home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/host/bin/x86_64-buildroot-linux-gnu-ar" "-DCMAKE_INSTALL_PREFIX=/home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/build/host-rust-1.23.0/build/x86_64-unknown-linux-gnu/llvm" "-DCMAKE_BUILD_TYPE=Release"
+> -- The C compiler identification is GNU 7.3.0
+> -- The CXX compiler identification is GNU 7.3.0
+> -- The ASM compiler identification is GNU
+> -- Found assembler: /home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/host/bin/x86_64-buildroot-linux-gnu-gcc
+> -- Check for working C compiler: /home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/host/bin/x86_64-buildroot-linux-gnu-gcc
+> -- Check for working C compiler: /home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/host/bin/x86_64-buildroot-linux-gnu-gcc -- works
+> -- Detecting C compiler ABI info
+> -- Detecting C compiler ABI info - done
+> -- Detecting C compile features
+> -- Detecting C compile features - done
+> -- Check for working CXX compiler: /home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/host/bin/x86_64-buildroot-linux-gnu-g++
+> -- Check for working CXX compiler: /home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/host/bin/x86_64-buildroot-linux-gnu-g++ -- works
+> -- Detecting CXX compiler ABI info
+> -- Detecting CXX compiler ABI info - done
+> -- Detecting CXX compile features
+> -- Detecting CXX compile features - done
+> CMake Warning at CMakeLists.txt:140 (message):
+>   Job pooling is only available with Ninja generators.
+>
+> leads to building this ?host? tool
+>
+> [  2%] Built target LLVMTableGen
+>
+> which cann?t run on that host because the compiler it used was the ?buildroot? compiler
+>
+> [ 19%] Linking CXX static library ../../libLLVMDebugInfoPDB.a
+> [ 19%] Built target LLVMDebugInfoPDB
+> Makefile:151: recipe for target 'all' failed
+> make[3]: *** [all] Error 2
+> thread 'main' panicked at '
+> command did not execute successfully, got: exit code: 2
+>
+> build script failed, must exit now', src/vendor/cmake/src/lib.rs:631<http://lib.rs:631>:4
+> note: Run with `RUST_BACKTRACE=1` for a backtrace.
+> finished in 267.033
+> failed to run: /home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/build/host-rust-1.23.0/build/bootstrap/debug/bootstrap build
+> Build completed unsuccessfully in 0:06:22
+> package/pkg-generic.mk:247: recipe for target '/home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/build/host-rust-1.23.0/.stamp_built' failed
+> make[2]: *** [/home/vagrant/oneblox-buildroot/toolchains/br-x86_64-core_avx2-glibc_toolchains.build/build/host-rust-1.23.0/.stamp_built] Error 1
+> Makefile:79: recipe for target '_all' failed
+> make[1]: *** [_all] Error 2
+> make[1]: Leaving directory '/home/vagrant/oneblox-buildroot/repos/buildroot'
+> Makefile:93: recipe for target 'br-x86_64-core_avx2-glibc-tmp.tar.bz2' failed
+> make: *** [br-x86_64-core_avx2-glibc-tmp.tar.bz2] Error 2
 
-diff --git a/package/systemd/0005-basic-macros-rename-noreturn.patch b/package/systemd/0005-basic-macros-rename-noreturn.patch
-new file mode 100644
-index 0000000000..6cd847098e
---- /dev/null
-+++ b/package/systemd/0005-basic-macros-rename-noreturn.patch
-@@ -0,0 +1,201 @@
-+From 848e863acc51ecfb0f3955c498874588201d9130 Mon Sep 17 00:00:00 2001
-+From: Franck Bui <fbui@suse.com>
-+Date: Thu, 15 Mar 2018 06:23:46 +0100
-+Subject: [PATCH] basic/macros: rename noreturn into _noreturn_ (#8456)
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+"noreturn" is reserved and can be used in other header files we include:
-+
-+  [   16s] In file included from /usr/include/gcrypt.h:30:0,
-+  [   16s]                  from ../src/journal/journal-file.h:26,
-+  [   16s]                  from ../src/journal/journal-vacuum.c:31:
-+  [   16s] /usr/include/gpg-error.h:1544:46: error: expected ???,??? or ???;??? before ???)??? token
-+  [   16s]  void gpgrt_log_bug (const char *fmt, ...)    GPGRT_ATTR_NR_PRINTF(1,2);
-+
-+Here we include grcrypt.h (which in turns include gpg-error.h) *after* we
-+"noreturn" was defined in macro.h.
-+
-+Upstream: https://github.com/systemd/systemd/pull/8456
-+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-+---
-+ src/basic/log.c                         |  4 ++--
-+ src/basic/log.h                         |  4 ++--
-+ src/basic/macro.h                       | 19 +++++++++----------
-+ src/basic/process-util.c                |  2 +-
-+ src/basic/process-util.h                |  2 +-
-+ src/core/main.c                         |  4 ++--
-+ src/journal/test-journal-interleaving.c |  2 +-
-+ src/shared/pager.c                      |  2 +-
-+ src/udev/collect/collect.c              |  2 +-
-+ 9 files changed, 20 insertions(+), 21 deletions(-)
-+
-+diff --git a/src/basic/log.c b/src/basic/log.c
-+index 7a7f2cbec13..16a2431c548 100644
-+--- a/src/basic/log.c
-++++ b/src/basic/log.c
-+@@ -814,7 +814,7 @@ static void log_assert(
-+         log_dispatch_internal(level, 0, file, line, func, NULL, NULL, NULL, NULL, buffer);
-+ }
-+ 
-+-noreturn void log_assert_failed_realm(
-++_noreturn_ void log_assert_failed_realm(
-+                 LogRealm realm,
-+                 const char *text,
-+                 const char *file,
-+@@ -826,7 +826,7 @@ noreturn void log_assert_failed_realm(
-+         abort();
-+ }
-+ 
-+-noreturn void log_assert_failed_unreachable_realm(
-++_noreturn_ void log_assert_failed_unreachable_realm(
-+                 LogRealm realm,
-+                 const char *text,
-+                 const char *file,
-+diff --git a/src/basic/log.h b/src/basic/log.h
-+index efcf0f1bfc1..314be128a23 100644
-+--- a/src/basic/log.h
-++++ b/src/basic/log.h
-+@@ -186,7 +186,7 @@ int log_dump_internal(
-+                 char *buffer);
-+ 
-+ /* Logging for various assertions */
-+-noreturn void log_assert_failed_realm(
-++_noreturn_ void log_assert_failed_realm(
-+                 LogRealm realm,
-+                 const char *text,
-+                 const char *file,
-+@@ -195,7 +195,7 @@ noreturn void log_assert_failed_realm(
-+ #define log_assert_failed(text, ...) \
-+         log_assert_failed_realm(LOG_REALM, (text), __VA_ARGS__)
-+ 
-+-noreturn void log_assert_failed_unreachable_realm(
-++_noreturn_ void log_assert_failed_unreachable_realm(
-+                 LogRealm realm,
-+                 const char *text,
-+                 const char *file,
-+diff --git a/src/basic/macro.h b/src/basic/macro.h
-+index 95be63a2040..8911edfc4be 100644
-+--- a/src/basic/macro.h
-++++ b/src/basic/macro.h
-+@@ -53,6 +53,15 @@
-+ #else
-+ #define _fallthrough_
-+ #endif
-++/* Define C11 noreturn without <stdnoreturn.h> and even on older gcc
-++ * compiler versions */
-++#ifndef _noreturn_
-++#if __STDC_VERSION__ >= 201112L
-++#define _noreturn_ _Noreturn
-++#else
-++#define _noreturn_ __attribute__((noreturn))
-++#endif
-++#endif
-+ 
-+ /* Temporarily disable some warnings */
-+ #define DISABLE_WARNING_DECLARATION_AFTER_STATEMENT                     \
-+@@ -414,16 +423,6 @@ static inline unsigned long ALIGN_POWER2(unsigned long u) {
-+ #endif
-+ #endif
-+ 
-+-/* Define C11 noreturn without <stdnoreturn.h> and even on older gcc
-+- * compiler versions */
-+-#ifndef noreturn
-+-#if __STDC_VERSION__ >= 201112L
-+-#define noreturn _Noreturn
-+-#else
-+-#define noreturn __attribute__((noreturn))
-+-#endif
-+-#endif
-+-
-+ #define DEFINE_TRIVIAL_CLEANUP_FUNC(type, func)                 \
-+         static inline void func##p(type *p) {                   \
-+                 if (*p)                                         \
-+diff --git a/src/basic/process-util.c b/src/basic/process-util.c
-+index aa9846db5dc..e6120af5b68 100644
-+--- a/src/basic/process-util.c
-++++ b/src/basic/process-util.c
-+@@ -987,7 +987,7 @@ bool is_main_thread(void) {
-+         return cached > 0;
-+ }
-+ 
-+-noreturn void freeze(void) {
-++_noreturn_ void freeze(void) {
-+ 
-+         log_close();
-+ 
-+diff --git a/src/basic/process-util.h b/src/basic/process-util.h
-+index 93029e36e5f..5170adec7bb 100644
-+--- a/src/basic/process-util.h
-++++ b/src/basic/process-util.h
-+@@ -91,7 +91,7 @@ int pid_from_same_root_fs(pid_t pid);
-+ 
-+ bool is_main_thread(void);
-+ 
-+-noreturn void freeze(void);
-++_noreturn_ void freeze(void);
-+ 
-+ bool oom_score_adjust_is_valid(int oa);
-+ 
-+diff --git a/src/core/main.c b/src/core/main.c
-+index 076846a41c0..4b2d1492373 100644
-+--- a/src/core/main.c
-++++ b/src/core/main.c
-+@@ -141,7 +141,7 @@ static uint64_t arg_default_tasks_max = UINT64_MAX;
-+ static sd_id128_t arg_machine_id = {};
-+ static EmergencyAction arg_cad_burst_action = EMERGENCY_ACTION_REBOOT_FORCE;
-+ 
-+-noreturn static void freeze_or_reboot(void) {
-++_noreturn_ static void freeze_or_reboot(void) {
-+ 
-+         if (arg_crash_reboot) {
-+                 log_notice("Rebooting in 10s...");
-+@@ -156,7 +156,7 @@ noreturn static void freeze_or_reboot(void) {
-+         freeze();
-+ }
-+ 
-+-noreturn static void crash(int sig) {
-++_noreturn_ static void crash(int sig) {
-+         struct sigaction sa;
-+         pid_t pid;
-+ 
-+diff --git a/src/journal/test-journal-interleaving.c b/src/journal/test-journal-interleaving.c
-+index 5a88b2774fa..d87bdbdd32a 100644
-+--- a/src/journal/test-journal-interleaving.c
-++++ b/src/journal/test-journal-interleaving.c
-+@@ -37,7 +37,7 @@
-+ 
-+ static bool arg_keep = false;
-+ 
-+-noreturn static void log_assert_errno(const char *text, int error, const char *file, int line, const char *func) {
-++_noreturn_ static void log_assert_errno(const char *text, int error, const char *file, int line, const char *func) {
-+         log_internal(LOG_CRIT, error, file, line, func,
-+                      "'%s' failed at %s:%u (%s): %m", text, file, line, func);
-+         abort();
-+diff --git a/src/shared/pager.c b/src/shared/pager.c
-+index 75db3c985bd..681af9c40e3 100644
-+--- a/src/shared/pager.c
-++++ b/src/shared/pager.c
-+@@ -47,7 +47,7 @@ static int stored_stderr = -1;
-+ static bool stdout_redirected = false;
-+ static bool stderr_redirected = false;
-+ 
-+-noreturn static void pager_fallback(void) {
-++_noreturn_ static void pager_fallback(void) {
-+         int r;
-+ 
-+         r = copy_bytes(STDIN_FILENO, STDOUT_FILENO, (uint64_t) -1, 0);
-+diff --git a/src/udev/collect/collect.c b/src/udev/collect/collect.c
-+index 2821640e93b..c8fa47b3d7d 100644
-+--- a/src/udev/collect/collect.c
-++++ b/src/udev/collect/collect.c
-+@@ -58,7 +58,7 @@ static inline struct _mate *node_to_mate(struct udev_list_node *node)
-+         return container_of(node, struct _mate, node);
-+ }
-+ 
-+-noreturn static void sig_alrm(int signo)
-++_noreturn_ static void sig_alrm(int signo)
-+ {
-+         exit(4);
-+ }
+Building Rust for x86_64 on a x86_64 is indeed tricky!
+
+As seen in the build section of src/bootstrap/config.toml.example, Rust
+manages "build", "host" and "target" parameters, which all default to
+"x86_64-unknown-linux-gnu".
+
+When building, the compiler is built for the host and the standard
+library for the host and the target.
+
+So when the target is the same as the host, only the compiler and the
+standard library for the host should be built.
+
+As the compiler is built on LLVM, coded in C++, a C++ compiler for the
+host is indeed required. It happens that in the build of LLVM, a host
+tool named FileCheck is built and run for test.
+
+IIUC, the C compiler is only used for building the standard library
+(this is what I've seen when cross-compiling for ARM).
+
+So when the target is the same as the host, it might be sensible to
+avoid defining c and cxx in the target configuration file, as suggested
+by your patch.
+
+I'll poke upstream for clarifications on this special case, though.
+
+The first versions of the patch series did try to work with new targets
+using triples with "buildroot" instead of "unknown", but defining new
+targets instead of using the available ones turned out to be
+difficult/cumbersome.
+
+But maybe it would have avoided the issue raised here where the target
+is the same as the host.
+
+Out of curiosity, does using the pre-built toolchain may be of use in
+your situation?
+
+Regards,
+
+--
+ELB
