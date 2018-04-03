@@ -1,37 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Apr 2018 18:49:42 +0200
-Subject: [Buildroot] Per-package download folders and Git caching
-In-Reply-To: <20180403162324.GB2335@scaer> (Yann E. MORIN's message of "Tue, 3
- Apr 2018 18:23:24 +0200")
-References: <20180403141703.21cd24fe@windsurf>
- <041a5a2a-3f9d-c76e-4c6d-d22ef11cad43@mind.be>
- <876058qvi4.fsf@dell.be.48ers.dk> <20180403162324.GB2335@scaer>
-Message-ID: <87k1top74p.fsf@dell.be.48ers.dk>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Tue, 3 Apr 2018 18:57:57 +0200
+Subject: [Buildroot] [PATCH] wine: Depend on shared libraries
+In-Reply-To: <20180331224300.78d89111@windsurf>
+References: <1521143154-19605-1-git-send-email-nerv@dawncrow.de>
+ <20180331224300.78d89111@windsurf>
+Message-ID: <b69b9c19-bafe-7681-5f77-4df02fc3e209@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Am 31.03.2018 um 22:43 schrieb Thomas Petazzoni:
+> Hello,
+> 
+> On Thu, 15 Mar 2018 20:45:54 +0100, Andr? Hentschel wrote:
+>> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> 
+> I did a test build, and indeed discovered that wine tries to
+> unconditionally build a shared library.
+> 
+> I've added a Config.in comment, which required adding a
+> BR2_PACKAGE_WINE_ARCH_SUPPORTS hidden boolean, and extended the commit
+> log significantly to explain why we do this change.
+> 
+> And then I've applied.
+> 
+> Thanks,
+> 
+> Thomas
+> 
 
-Hi,
-
->> >  I know a few users that put their download directory on a samba share or a
- >> > virtualbox/vmware share which has NTFS as underlying filesystem. Although NTFS
- >> > does support hardlinks, I'm not sure that Samba and virtualbox/vmware do. Any
- >> > idea what will happen in such a case?
- >> 
- >> Then presumably the ln call will fail and we download the tarball again
- >> in the new location?
-
- > No, the script would fail, because the script runs with 'set -e'.
-
-Ahh yes :/
-
- > Should we do a cp if ln fails, then?
-
-That sounds like a sensible fallback, yes.
-
--- 
-Bye, Peter Korsgaard
+Thanks for that! Had no time for it yet
