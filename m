@@ -1,36 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Apr 2018 15:45:16 +0200
-Subject: [Buildroot] [PATCH] tpm2-abrmd: disable for musl
-In-Reply-To: <20180402165357.8188-1-casantos@datacom.ind.br> (Carlos Santos's
- message of "Mon, 2 Apr 2018 13:53:57 -0300")
-References: <20180402165357.8188-1-casantos@datacom.ind.br>
-Message-ID: <871sfwqu8j.fsf@dell.be.48ers.dk>
+Date: Tue, 03 Apr 2018 15:50:29 +0200
+Subject: [Buildroot] [PATCH 1/2] prosody: fix build with musl libc
+In-Reply-To: <a4acccee1aac11202402728b64d23a3f0f7128be.1522730725.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 3 Apr 2018 07:45:24 +0300")
+References: <a4acccee1aac11202402728b64d23a3f0f7128be.1522730725.git.baruch@tkos.co.il>
+Message-ID: <87woxopffe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The current version requires macros and funtions not availabe on musl
- > (TEMP_FAILURE_RETRY, srand48_r, etc). We could try to circumvent the
- > problem by means of local patches but for the moment let's disable the
- > package for musl toolchains and watch the issue reported upstream at
-
- >   https://github.com/tpm2-software/tpm2-abrmd/issues/237
-
- > Propagate the change to tpm2-tools, which has a run-time dependency on
- > tpm2-abrmd.
+ > musl libc does not provide the mallinfo() API. Define WITHOUT_MALLINFO
+ > to skip the code using it.
 
  > Fixes:
- >   http://autobuild.buildroot.net/results/d2fa916613d835f856d14747dc03ef9847ad6396
- >   http://autobuild.buildroot.net/results/e82ff1f7f8a4a930fbabd38353da2149cc54fd9d
- >   http://autobuild.buildroot.net/results/7aaf6a7cc384b2e52109c0c31792c0d3888bcefd
- >   http://autobuild.buildroot.net/results/a56e55fb4791a90c00906698676656969484383d
- >   http://autobuild.buildroot.net/results/7aa020d115a0a3308fee1f3528554e40076ff28d
+ > http://autobuild.buildroot.net/results/42c/42cd6e3be761d1cb358bc50acd7fa58c8aa1c750/
+ > http://autobuild.buildroot.net/results/29d/29d8dcbe013e549a865c0c5953272dab1fe5f777/
+ > http://autobuild.buildroot.net/results/a6d/a6deb7440f80b072432c0f9c048e59abe4edf1c0/
 
- > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+ > Cc: Dushara Jayasinghe <nidujay@gmail.com>
+ > Cc: Francois Perrad <francois.perrad@gadz.org>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
