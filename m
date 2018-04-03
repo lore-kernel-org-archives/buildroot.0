@@ -1,55 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Apr 2018 22:51:51 +0200
-Subject: [Buildroot] [git commit] mpd: add optional libmpdclient dependency
-Message-ID: <20180403205247.98A2C83DBF@busybox.osuosl.org>
+Date: Tue, 3 Apr 2018 22:52:19 +0200
+Subject: [Buildroot] [git commit] libbsd: needs wide character support
+Message-ID: <20180403205247.B24F483DBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20adc2a9fb8be47187b919f6fa0a048567d6ee0c
+commit: https://git.buildroot.net/buildroot/commit/?id=61ae04b87a700762995d39f3347817cadfc8716b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Commit d879be30495 (package/libbsd: enable for non-glibc toolchains)
+enabled build of libbsd with uClibc. libbsd requires wchar support.
+Disable libbsd when uClibc does not provide wchar support.
+
+Fixes:
+http://autobuild.buildroot.net/results/4fb/4fb576c644a7322730658ed585bcc4a353a42e85/
+http://autobuild.buildroot.net/results/459/45946f11524c57ffa59bf88d4a2ea0d4933fa851/
+http://autobuild.buildroot.net/results/ee3/ee3ad5172d6a218dfde4cf3e9fecf1906b0fc642/
+
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpd/Config.in | 6 ++++++
- package/mpd/mpd.mk    | 7 +++++++
- 2 files changed, 13 insertions(+)
+ package/libbsd/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index bad32f8440..6c7468e173 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -285,6 +285,12 @@ config BR2_PACKAGE_MPD_AVAHI_SUPPORT
- comment "avahi support needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index e80e9ea824..47fce04fef 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  This library provides useful functions commonly found on BSD
+ 	  systems, and lacking on others like GNU systems, thus making
+@@ -20,6 +21,6 @@ config BR2_PACKAGE_LIBBSD
  
-+config BR2_PACKAGE_MPD_LIBMPDCLIENT
-+	bool "libmpdclient"
-+	select BR2_PACKAGE_LIBMPDCLIENT
-+	help
-+	  Enable libmpdclient support.
-+
- config BR2_PACKAGE_MPD_NEIGHBOR_DISCOVERY_SUPPORT
- 	bool "neighbor discovery support"
- 	depends on BR2_PACKAGE_MPD_LIBSMBCLIENT || BR2_PACKAGE_MPD_UPNP
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index f50e3d90c7..639c8c1981 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -113,6 +113,13 @@ else
- MPD_CONF_OPTS += --disable-lame-encoder
- endif
+ 	  http://libbsd.freedesktop.org/
  
-+ifeq ($(BR2_PACKAGE_MPD_LIBMPDCLIENT),y)
-+MPD_DEPENDENCIES += libmpdclient
-+MPD_CONF_OPTS += --enable-libmpdclient
-+else
-+MPD_CONF_OPTS += --disable-libmpdclient
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPD_LIBNFS),y)
- MPD_DEPENDENCIES += libnfs
- MPD_CONF_OPTS += --enable-nfs
+-comment "libbsd needs a toolchain w/ threads"
++comment "libbsd needs a toolchain w/ threads, wchar"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
