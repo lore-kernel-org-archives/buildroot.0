@@ -1,40 +1,48 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue,  3 Apr 2018 09:52:03 +0300
-Subject: [Buildroot] [PATCH 1/1] libuv: bump to version v1.20.0
-Message-ID: <20180403065203.23665-1-asafka7@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  3 Apr 2018 08:56:16 +0200
+Subject: [Buildroot] [PATCH] pkg-generic.mk: fix FOO_ACTUAL_SOURCE_TARBALL
+ handling after DOWNLOAD rework
+Message-ID: <20180403065616.9640-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/b4a/b4af0de4ae9630ccbe7890f69047f216f2ff5119/
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 1a2833e786..c14b2d4971 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ccc5f3b43ed171640513786e5e809508cb6308279b4d71a016e4550ad62f1686  libuv-v1.19.2.tar.gz
-+sha256  6d36f18f556cc288813032a168fd9181b45d9e66e3e18e54a8dbdfd8ea3c3dba  libuv-v1.20.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 2e07d3a0fa..54ce6bdaa6 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+With the change to the DOWNLOAD macro, packages using FOO_ACTUAL_SOURCE_TARBALL fails:
+
+>>> skeleton-init-common  Collecting legal info
+sourceryg++-2017.05-4-nios2-linux-gnu.src.tar.bz2: OK (md5: 529a7fecf33d0d113a446413b9d1e173)
+sourceryg++-2017.05-4-nios2-linux-gnu.src.tar.bz2: OK (sha256: 6e65878d0453708ee19098d3d68985bda244938d35999f3859915a2f5574fa08)
+/bin/bash: line 1: @mkdir: command not found
+package/pkg-generic.mk:148: recipe for target '/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-1/output/build/toolchain-external-codesourcery-niosII-2017.05-4/.stamp_actual_downloaded' failed
+
+Which is caused by the continuation character '\'.  This has been present
+since the make target was introduced in commit eace9d6133b9
+(core/legal-info: ensure legal-info works in off-line mode).  It isn't clear
+to me why it was done like that, but it fails with the DOWNLOAD macro
+rework, so drop it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3c6a1839ff..1c9dd1d734 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -145,7 +145,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
  
--LIBUV_VERSION = v1.19.2
-+LIBUV_VERSION = v1.20.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+ # Retrieve actual source archive, e.g. for prebuilt external toolchains
+ $(BUILD_DIR)/%/.stamp_actual_downloaded:
+-	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL)); \
++	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL))
+ 	$(Q)mkdir -p $(@D)
+ 	$(Q)touch $@
+ 
 -- 
-2.16.2
+2.11.0
