@@ -1,38 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Apr 2018 16:50:12 +0200
-Subject: [Buildroot] [PATCH 1/1] core: enhance printvars for variables
- with newlines
-In-Reply-To: <20180403143151.13372-1-chemobejk@gmail.com>
-References: <20180403143151.13372-1-chemobejk@gmail.com>
-Message-ID: <20180403165012.0d0e173a@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 03 Apr 2018 17:01:30 +0200
+Subject: [Buildroot] [PATCH] libnss: add upstream patch fixing build on
+ aarch64
+In-Reply-To: <20180403121339.31699-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 3 Apr 2018 14:13:39 +0200")
+References: <20180403121339.31699-1-peter@korsgaard.com>
+Message-ID: <87o9j0pc51.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Tue,  3 Apr 2018 17:31:51 +0300, Stefan Becker wrote:
-> If the variable content has newlines in it then the currently dumped
-> content can't be fed again to GNU make. Add the option DEFINE_VARS which
-> causes the variables to be dumped using
-> 
->    define VAR
->    ... line 1 ...
->    ... line 2 ...
->    ...
->    endef
-> 
-> Updated the manual accordingly.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/037/037c772a36762df8febd529b329743d18ffbf66a/
 
-Just curious, what is the use case for feeding the printvars output
-back into GNU Make ?
+ > Build system forgets to compile a file on aarch64, breaking the build.
 
-Thanks!
+ > For details, see the upstream bugreport:
+ > https://bugzilla.mozilla.org/show_bug.cgi?id=1432455
 
-Thomas
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
