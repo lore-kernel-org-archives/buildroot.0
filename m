@@ -1,61 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  3 Apr 2018 20:54:56 +0200
-Subject: [Buildroot] [PATCH] [RFC] core/download: fix when the BR2_DL_DIR
- does not accept hardlinks
-Message-ID: <20180403185456.29938-1-yann.morin.1998@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  3 Apr 2018 22:05:02 +0300
+Subject: [Buildroot] [PATCH] libbsd: fix build for openrisc with uClibc
+Message-ID: <399872a6c84372d78d1ed93e337d2e858456610b.1522782302.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the BR2_DL_DIR is a mountpoint (presumably shared between various
-machine, or mounted from the local host when running in a VM), it is
-possible that it does not support hardlinks (e.g. samba, or the VMWare
-VMFS, etc...).
+Commit d879be30495 (package/libbsd: enable for non-glibc toolchains)
+enabled libbsd for openrisc. Unfortunately uClibc does not define the
+EM_OPENRISC macro that libbsd expects for ELF e_machine ID. Add patch
+making libbsd fallback to the equivalent EM_OR1K macro that uClibc does
+provide.
 
-If the hardlink fails, fallback to copying the file. As a last resort,
-if that also fails, eventually fallback to doing the download.
+Fixes:
+http://autobuild.buildroot.net/results/2f5/2f51eebe5964e8f1be3ecd2032e7d7837bf98b84/
 
-Note: this means that the dl-wrapper is no longer atomic-safe: the code
-suffers of a TOCTTOU condition: the file may be created in-between the
-check and the moment we try to ln/cp it. Fortnately, the dl-wrapper is
-now run under an flock, so we're still safe. If we eventually go for a
-more fine-grained implementation, we'll have to be careful then.
-
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Note: the TOCTTOU condition has been introduced e80d1d0af448.
+ .../0002-Fix-build-for-openrisc-with-uClibc.patch  | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/libbsd/0002-Fix-build-for-openrisc-with-uClibc.patch
 
-Note: RFC, because I didn't test it...
-
----
- support/download/dl-wrapper | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index ce44752df0..38430738eb 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -56,8 +56,13 @@ main() {
-     # Legacy handling: check if the file already exists in the global
-     # download directory. If it does, hard-link it. If it turns out it
-     # was an incorrect download, we'd still check it below anyway.
-+    # If we can neither link nor copy, fallback to doing a download.
-+    # NOTE! This is not atomic, is subject to TOCTTOU, but the whole
-+    # dl-wrapper runs under an flock, so we're safe.
-     if [ ! -e "${output}" -a -e "${old_dl_dir}/${filename}" ]; then
--        ln "${old_dl_dir}/${filename}" "${output}"
-+        ln "${old_dl_dir}/${filename}" "${output}" || \
-+        cp "${old_dl_dir}/${filename}" "${output}" || \
-+        true
-     fi
- 
-     # If the output file already exists and:
+diff --git a/package/libbsd/0002-Fix-build-for-openrisc-with-uClibc.patch b/package/libbsd/0002-Fix-build-for-openrisc-with-uClibc.patch
+new file mode 100644
+index 000000000000..1b28df5a8beb
+--- /dev/null
++++ b/package/libbsd/0002-Fix-build-for-openrisc-with-uClibc.patch
+@@ -0,0 +1,48 @@
++From aa902671bf1e0e808fd994bd6b403d70af7ab6dd Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 3 Apr 2018 20:02:14 +0300
++Subject: [PATCH] Fix build for openrisc with uClibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++uClibc defines EM_OR1K instead of EM_OPENRISC for the OpenRISC ELF
++e_machine ID. Use EM_OR1K when EM_OPENRISC is not defined.
++
++This fixes the following build failure:
++
++In file included from nlist.c:44:0:
++nlist.c: In function ?__elf_is_okay__?:
++local-elf.h:224:23: error: ?EM_OPENRISC? undeclared (first use in this function)
++ #define ELF_TARG_MACH EM_OPENRISC
++                       ^
++nlist.c:77:26: note: in expansion of macro ?ELF_TARG_MACH?
++   if (ehdr->e_machine == ELF_TARG_MACH &&
++                          ^
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: sent to libbsd at lists.freedesktop.org
++
++ src/local-elf.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/local-elf.h b/src/local-elf.h
++index 1faf182f87d7..79f7d026f6c9 100644
++--- a/src/local-elf.h
+++++ b/src/local-elf.h
++@@ -221,7 +221,11 @@
++ 
++ #elif defined(__or1k__)
++ 
+++#if defined(EM_OPENRISC)
++ #define ELF_TARG_MACH	EM_OPENRISC
+++#else
+++#define ELF_TARG_MACH	EM_OR1K
+++#endif
++ #define ELF_TARG_CLASS	ELFCLASS32
++ #define ELF_TARG_DATA	ELFDATA2MSB
++ 
++-- 
++2.16.3
++
 -- 
-2.14.1
+2.16.3
