@@ -1,45 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Apr 2018 12:52:09 +0200
-Subject: [Buildroot] [git commit] libbsd: disable for xtensa and blackfin
-Message-ID: <20180403105357.516778349B@busybox.osuosl.org>
+Date: Tue, 3 Apr 2018 13:20:36 +0200
+Subject: [Buildroot] [git commit] python-keyring: unbreak after download
+ rework
+Message-ID: <20180403112153.B007382DC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c810ef1ac425f043872653637a4f0fd5f2792bf
+commit: https://git.buildroot.net/buildroot/commit/?id=b23da4fe46b9ed284440c707a2d540b3e3bd6508
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit d879be30495 (package/libbsd: enable for non-glibc toolchains)
-implicitly enabled libbsd for the uClibc only architectures xtensa and
-blackfin. But libbsd does not support these architectures, since its
-local-elf.h header lacks the required target specific definitions.
+commit 514291f39ef06 (packages: use new $($PKG)_DL_DIR) variable) strangely
+enough removed the PYTHON_KEYRING_SITE line, breaking the build.
 
-Fixes:
-http://autobuild.buildroot.net/results/ff1/ff1a52a53bed43cda9e235081a61b352e6e07aa1/
-http://autobuild.buildroot.net/results/b13/b13c2f248f277c72b5d266208f991f34474cea14/
-http://autobuild.buildroot.net/results/182/182356701c2110a014c9d6c8d9f18a6efeb26e70/
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbsd/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-keyring/python-keyring.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index f6c2e4be4b..e80e9ea824 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	# libbsd does not support those architectures (see src/local-elf.h)
- 	depends on !BR2_microblaze
- 	depends on !BR2_arc
-+	depends on !BR2_xtensa
-+	depends on !BR2_bfin
+diff --git a/package/python-keyring/python-keyring.mk b/package/python-keyring/python-keyring.mk
+index 8ac18ae052..27db2802ed 100644
+--- a/package/python-keyring/python-keyring.mk
++++ b/package/python-keyring/python-keyring.mk
+@@ -6,6 +6,7 @@
  
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
+ PYTHON_KEYRING_VERSION = 10.5.0
+ PYTHON_KEYRING_SOURCE = keyring-$(PYTHON_KEYRING_VERSION).tar.gz
++PYTHON_KEYRING_SITE = https://pypi.python.org/packages/42/2e/51bd1739fe335095a2174db3f2f230346762e7e572471059540146a521f6
+ PYTHON_KEYRING_SETUP_TYPE = setuptools
+ PYTHON_KEYRING_LICENSE = MIT
+ PYTHON_KEYRING_LICENSE_FILES = LICENSE
