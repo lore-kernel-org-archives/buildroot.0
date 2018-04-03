@@ -1,85 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Apr 2018 14:21:39 +0200
-Subject: [Buildroot] [PATCH 3/3] libvirt: new package
-In-Reply-To: <1161707464.1293262.1522727390996.JavaMail.zimbra@datacom.ind.br>
-References: <20171127104131.27975-1-casantos@datacom.ind.br>
- <20171127104131.27975-4-casantos@datacom.ind.br>
- <20180402171955.0d091a53@windsurf>
- <7a127622-4281-479a-edb6-a7062c0d09a4@mind.be>
- <1161707464.1293262.1522727390996.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <f2ec92c2-da52-5532-05a9-35e89737427b@mind.be>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Tue, 3 Apr 2018 14:27:16 +0200
+Subject: [Buildroot] [PATCH v4 09/11] package/libclc: new package
+In-Reply-To: <20180401232953.5277ede2@windsurf>
+References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
+ <20180329113346.10367-10-valentin.korenblit@smile.fr>
+ <20180401232953.5277ede2@windsurf>
+Message-ID: <1d61763d-41c6-351e-c2f1-d57dbe657ccf@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Thomas,
 
-
-On 03-04-18 05:49, Carlos Santos wrote:
->> From: "Arnout Vandecappelle" <arnout@mind.be>
->> To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Carlos Santos" <casantos@datacom.ind.br>
->> Cc: "buildroot" <buildroot@buildroot.org>
->> Sent: Monday, April 2, 2018 5:18:58 PM
->> Subject: Re: [Buildroot] [PATCH 3/3] libvirt: new package
-> 
->> On 02-04-18 17:19, Thomas Petazzoni wrote:
->>> Hello,
->>>
->>> On Mon, 27 Nov 2017 08:41:31 -0200, Carlos Santos wrote:
->> [snip]
->>>> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
->>>> new file mode 100644
->>>> index 0000000000..8e64c85188
->>>> --- /dev/null
->>>> +++ b/package/libvirt/Config.in
->>>> @@ -0,0 +1,44 @@
->>>> +config BR2_PACKAGE_LIBVIRT
->>>> +	bool "libvirt"
->>>> +	depends on !BR2_PACKAGE_NETCAT
->>>
->>> Why do we need this if you select nmap-ncat below ?
+On 01/04/2018 23:29, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Thu, 29 Mar 2018 13:33:44 +0200, Valentin Korenblit wrote:
+>> This patch provides libclc, an open source implementation of the
+>> library requirements of the OpenCL C programming language, as
+>> specified by the OpenCL 1.1 Specification. It is intended to be used
+>> with Mesa Clover.
 >>
->> Because libvirt calls the 'nc' executable with the ncat command line arguments,
->> so it needs the nc -> ncat symlink, which is not created when netcat is
->> installed.
+>> It needs to be compiled with Clang, as it generates LLVM IR bitcode
+>> files containing device builtin functions for each target.
 >>
->> However, this makes me think: wouldn't it be easier to patch libvirt to call
->> ncat instead of nc?
-> 
-> No, because it would be necessary to modify virt-manager, which runs
-> on a separate machine. It accesses the KVM host (built with Buildroot)
-> via ssh, and invokes nc to communicate with libvirtd by means of a
-> unix domain socket.
-> 
-> Notice that virt-manager is smarter than the ordinary bear: it checks
-> which syntax the "nc" command on the remote machine recognizes and
-> invokes it with the suitable parameters. So forcing it to use ncat
-> would prevent it from managing KVM hosts running Debian/Ubuntu.
+>> Currently, libclc supports AMDGCN, R600 and NVPTX targets.
+>>
+>> As OpenCL kernels are built dynamically on the target using libClang and
+>> libLLVM, it is necessary to copy /usr/include/clc from STAGING_DIR to the
+>> target manually, as Buildroot doesn't include this directory.
+> I don't see where your .mk file is doing this. And it wouldn't work
+> because Buildroot removes $(TARGET_DIR)/usr/include entirely in its
+> target-finalize step.
+>
+> When you say "manually", do you mean that you have to
+> copy /usr/include/clc from your build machine to your target once the
+> target has booted ? If that's the case, then we really have a problem
+> here, the target should just work.
 
- OK, but if virt-manager supports both GNU netcat and nmap-ncat, then why does
-libvirt depend on nmap-ncat and not netcat? In other words: why not
+Exactly, I was doing it manually after booting. Mesa uses pkg-config to
+get the includedir of libclc: https://pastebin.com/adzL8vd4
 
-	select BR2_PACKAGE_NMAP if !BR2_PACKAGE_NETCAT
-	select BR2_PACKAGE_NMAP_NCAT if !BR2_PACKAGE_NETCAT
+Do you think it is ok to override configure.ac from Mesa to specify
+another path? And in that case, where should I place all these headers?
 
-(We could even use busybox nc, but it's not very likely that virt-manager is OK
-with that, and even so it's impossible to detect in Buildroot if busybox nc is
-enabled or not.)
+>
+>> +LIBCLC_VERSION = 00236279a293b3737dee08c14f25923a889d2795
+>> +LIBCLC_SITE = https://git.llvm.org/git/libclc
+>> +LIBCLC_SITE_METHOD = git
+> I assume they don't have a stable release you could use ?
 
- Regards,
- Arnout
+There is release_38, but the last commit is from 2 years ago. Master
+has some recent activity.
 
-> 
-> Notice also that the libvirt package noes not even build/install
-> virt-manager, since it is a GUI tool. Such improvement is left
-> as an exercise for the reader. :-)
-> 
+>
+> This lacks LICENSE and LICENSE_FILES.
+>
+>> +LIBCLC_DEPENDENCIES = host-clang host-llvm
+>> +LIBCLC_INSTALL_STAGING = YES
+>> +
+>> +# C++ compiler is used to build a small tool (prepare-builtins) for the host.
+>> +# It must be built with the C++ compiler from the host, simply use
+>> +# HOSTCXX_NOCCACHE.
+> Why not HOSTCXX ?
+>
+>> +LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
+> Why are you using the version in HOST_DIR, and not the one in
+> STAGING_DIR ?
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+I will check this.
+
+>
+> Best regards,
+>
+> Thomas
+
+Best regards,
+
+Valentin
