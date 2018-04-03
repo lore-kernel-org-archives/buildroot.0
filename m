@@ -1,64 +1,48 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Tue, 3 Apr 2018 00:49:51 -0300 (BRT)
-Subject: [Buildroot] [PATCH 3/3] libvirt: new package
-In-Reply-To: <7a127622-4281-479a-edb6-a7062c0d09a4@mind.be>
-References: <20171127104131.27975-1-casantos@datacom.ind.br>
- <20171127104131.27975-4-casantos@datacom.ind.br>
- <20180402171955.0d091a53@windsurf>
- <7a127622-4281-479a-edb6-a7062c0d09a4@mind.be>
-Message-ID: <1161707464.1293262.1522727390996.JavaMail.zimbra@datacom.ind.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  3 Apr 2018 07:45:24 +0300
+Subject: [Buildroot] [PATCH 1/2] prosody: fix build with musl libc
+Message-ID: <a4acccee1aac11202402728b64d23a3f0f7128be.1522730725.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "buildroot" <buildroot@buildroot.org>
-> Sent: Monday, April 2, 2018 5:18:58 PM
-> Subject: Re: [Buildroot] [PATCH 3/3] libvirt: new package
+musl libc does not provide the mallinfo() API. Define WITHOUT_MALLINFO
+to skip the code using it.
 
-> On 02-04-18 17:19, Thomas Petazzoni wrote:
->> Hello,
->> 
->> On Mon, 27 Nov 2017 08:41:31 -0200, Carlos Santos wrote:
-> [snip]
->>> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
->>> new file mode 100644
->>> index 0000000000..8e64c85188
->>> --- /dev/null
->>> +++ b/package/libvirt/Config.in
->>> @@ -0,0 +1,44 @@
->>> +config BR2_PACKAGE_LIBVIRT
->>> +	bool "libvirt"
->>> +	depends on !BR2_PACKAGE_NETCAT
->> 
->> Why do we need this if you select nmap-ncat below ?
-> 
-> Because libvirt calls the 'nc' executable with the ncat command line arguments,
-> so it needs the nc -> ncat symlink, which is not created when netcat is
-> installed.
-> 
-> However, this makes me think: wouldn't it be easier to patch libvirt to call
-> ncat instead of nc?
+Fixes:
+http://autobuild.buildroot.net/results/42c/42cd6e3be761d1cb358bc50acd7fa58c8aa1c750/
+http://autobuild.buildroot.net/results/29d/29d8dcbe013e549a865c0c5953272dab1fe5f777/
+http://autobuild.buildroot.net/results/a6d/a6deb7440f80b072432c0f9c048e59abe4edf1c0/
 
-No, because it would be necessary to modify virt-manager, which runs
-on a separate machine. It accesses the KVM host (built with Buildroot)
-via ssh, and invokes nc to communicate with libvirtd by means of a
-unix domain socket.
+Cc: Dushara Jayasinghe <nidujay@gmail.com>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/prosody/prosody.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Notice that virt-manager is smarter than the ordinary bear: it checks
-which syntax the "nc" command on the remote machine recognizes and
-invokes it with the suitable parameters. So forcing it to use ncat
-would prevent it from managing KVM hosts running Debian/Ubuntu.
-
-Notice also that the libvirt package noes not even build/install
-virt-manager, since it is a GUI tool. Such improvement is left
-as an exercise for the reader. :-)
-
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index c5a83081dcfa..d95578253d6d 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -10,12 +10,15 @@ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
+ PROSODY_DEPENDENCIES = host-luainterpreter luainterpreter libidn openssl
+ 
++PROSODY_CFLAGS = $(TARGET_CFLAGS) -fPIC -std=c99 \
++	$(if BR2_TOOLCHAIN_USES_MUSL,-DWITHOUT_MALLINFO)
++
+ PROSODY_CONF_OPTS = \
+ 	--with-lua-bin=$(HOST_DIR)/usr/bin \
+ 	--with-lua=$(STAGING_DIR)/usr \
+ 	--lua-version=$(LUAINTERPRETER_ABIVER) \
+ 	--c-compiler=$(TARGET_CC) \
+-	--cflags="$(TARGET_CFLAGS) -fPIC -std=c99" \
++	--cflags="$(PROSODY_CFLAGS)" \
+ 	--linker=$(TARGET_CC) \
+ 	--ldflags="$(TARGET_LDFLAGS) -shared" \
+ 	--sysconfdir=/etc/prosody \
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+2.16.2
