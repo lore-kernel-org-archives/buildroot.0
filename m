@@ -1,36 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Apr 2018 20:10:37 +0200
-Subject: [Buildroot] Per-package download folders and Git caching
-In-Reply-To: <20180403174904.GE2335@scaer> (Yann E. MORIN's message of "Tue, 3
- Apr 2018 19:49:04 +0200")
-References: <20180403141703.21cd24fe@windsurf>
- <041a5a2a-3f9d-c76e-4c6d-d22ef11cad43@mind.be>
- <876058qvi4.fsf@dell.be.48ers.dk> <20180403162324.GB2335@scaer>
- <87k1top74p.fsf@dell.be.48ers.dk> <20180403174904.GE2335@scaer>
-Message-ID: <87fu4cp3du.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Tue,  3 Apr 2018 20:30:07 +0200
+Subject: [Buildroot] [PATCH] openal: Bump to version 1.18.2
+Message-ID: <1522780207-2069-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Peter, All,
- > On 2018-04-03 18:49 +0200, Peter Korsgaard spake thusly:
- >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
- >> > Should we do a cp if ln fails, then?
- >> That sounds like a sensible fallback, yes.
-
- > I was about to do so, but then we're back to a situation where we have
- > to guarantee the atomicity.
-
- > This is currently possible, because the dl-wrapper now runs under flock.
- > But we are going to optimise the locking with a more fine-grained
- > solution soonish.
-
-Presumably we could copy to a temporary file and then rename like the
-dl-wrapper already does?
-
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index aead6e1..cb41dc4 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 2d51a6529526ef22484f51567e31a5c346a599767991a3dc9d4dcd9d9cec71dd  openal-soft-1.18.1.tar.bz2
++sha256 9f8ac1e27fba15a59758a13f0c7f6540a0605b6c3a691def9d420570506d7e82  openal-soft-1.18.2.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index 439f5f1..c687c08 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENAL_VERSION = 1.18.1
++OPENAL_VERSION = 1.18.2
+ OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+ OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+ OPENAL_LICENSE = LGPL-2.0+
 -- 
-Bye, Peter Korsgaard
+2.7.4
