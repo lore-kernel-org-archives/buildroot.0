@@ -1,81 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Apr 2018 15:44:16 +0200
-Subject: [Buildroot] [git commit] tpm2-abrmd: disable for musl
-Message-ID: <20180403135146.7A6767FFCC@busybox.osuosl.org>
+From: Stefan Becker <chemobejk@gmail.com>
+Date: Tue,  3 Apr 2018 17:31:51 +0300
+Subject: [Buildroot] [PATCH 1/1] core: enhance printvars for variables with
+ newlines
+Message-ID: <20180403143151.13372-1-chemobejk@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aa99ad004968484c1968ca1b57a78397d1e037f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+If the variable content has newlines in it then the currently dumped
+content can't be fed again to GNU make. Add the option DEFINE_VARS which
+causes the variables to be dumped using
 
-The current version requires macros and funtions not availabe on musl
-(TEMP_FAILURE_RETRY, srand48_r, etc). We could try to circumvent the
-problem by means of local patches but for the moment let's disable the
-package for musl toolchains and watch the issue reported upstream at
+   define VAR
+   ... line 1 ...
+   ... line 2 ...
+   ...
+   endef
 
-  https://github.com/tpm2-software/tpm2-abrmd/issues/237
+Updated the manual accordingly.
 
-Propagate the change to tpm2-tools, which has a run-time dependency on
-tpm2-abrmd.
-
-Fixes:
-  http://autobuild.buildroot.net/results/d2fa916613d835f856d14747dc03ef9847ad6396
-  http://autobuild.buildroot.net/results/e82ff1f7f8a4a930fbabd38353da2149cc54fd9d
-  http://autobuild.buildroot.net/results/7aaf6a7cc384b2e52109c0c31792c0d3888bcefd
-  http://autobuild.buildroot.net/results/a56e55fb4791a90c00906698676656969484383d
-  http://autobuild.buildroot.net/results/7aa020d115a0a3308fee1f3528554e40076ff28d
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
 ---
- package/tpm2-abrmd/Config.in | 5 +++--
- package/tpm2-tools/Config.in | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ Makefile                  | 10 +++++++---
+ docs/manual/make-tips.txt | 20 ++++++++++++++++++++
+ 2 files changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/package/tpm2-abrmd/Config.in b/package/tpm2-abrmd/Config.in
-index 25c27c0abb..0cac754b3c 100644
---- a/package/tpm2-abrmd/Config.in
-+++ b/package/tpm2-abrmd/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_TPM2_ABRMD
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # TEMP_FAILURE_RETRY(), etc
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_TPM2_TSS
-@@ -21,7 +22,7 @@ config BR2_PACKAGE_TPM2_ABRMD
+diff --git a/Makefile b/Makefile
+index 0724f28f45..3e27195de0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -974,9 +974,13 @@ printvars:
+ 		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
+-		$(if $(QUOTED_VARS),\
+-			$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
+-			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
++		$(if $(DEFINE_VARS), \
++			$(info define $V) \
++			$(info $(if $(RAW_VARS),$(value $V),$($V))) \
++			$(info endef), \
++			$(if $(QUOTED_VARS),\
++				$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
++				$(info $V=$(if $(RAW_VARS),$(value $V),$($V)))))))
+ # ' Syntax colouring...
  
- 	  https://github.com/tpm2-software/tpm2-abrmd
+ .PHONY: clean
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index ea1d825bef..ba87e5d873 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -92,6 +92,8 @@ It is possible to tweak the output using some variables:
  
--comment "tpm2-abrmd needs a toolchain w/ C++, wchar, threads"
-+comment "tpm2-abrmd needs a uClibc or glibc toolchain w/ C++, wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_HAS_THREADS
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/tpm2-tools/Config.in b/package/tpm2-tools/Config.in
-index 685b75c475..e5feb18786 100644
---- a/package/tpm2-tools/Config.in
-+++ b/package/tpm2-tools/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_TPM2_TOOLS
- 	depends on BR2_USE_MMU # dbus, libglib
- 	depends on BR2_USE_WCHAR # libglib -> gettext
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # tpm2-abrmd
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -19,7 +20,7 @@ config BR2_PACKAGE_TPM2_TOOLS
+ - +VARS+ will limit the listing to variables which names match the
+   specified make-pattern
++- +DEFINE_VARS+, if set to +YES+, will use define...endef to preserve
++  newlines in the value
+ - +QUOTED_VARS+, if set to +YES+, will single-quote the value
+ - +RAW_VARS+, if set to +YES+, will print the unexpanded value
  
- 	  https://github.com/tpm2-software/tpm2-tools
+@@ -106,6 +108,24 @@ For example:
+  BUSYBOX_RDEPENDENCIES=ncurses util-linux
+ ----
  
--comment "tpm2-tools needs a toolchain w/ C++, wchar, threads"
-+comment "tpm2-tools needs a uClibc or glibc toolchain w/ C++, wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_HAS_THREADS
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
++----
++ $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES DEFINE_VARS=YES
++ define BUSYBOX_DEPENDENCIES
++ skeleton toolchain
++ endef
++ define BUSYBOX_FINAL_ALL_DEPENDENCIES
++ skeleton toolchain
++ endef
++ define BUSYBOX_FINAL_DEPENDENCIES
++ skeleton toolchain
++ endef
++ define BUSYBOX_FINAL_PATCH_DEPENDENCIES
++ endef
++ define BUSYBOX_RDEPENDENCIES
++ ncurses util-linux'linux-pam skeleton toolchain host-skeleton host-ccache
++ endef
++----
++
+ ----
+  $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES QUOTED_VARS=YES
+  BUSYBOX_DEPENDENCIES='skeleton toolchain'
+-- 
+2.14.3
