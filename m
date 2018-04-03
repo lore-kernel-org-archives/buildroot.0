@@ -1,40 +1,75 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Tue, 3 Apr 2018 18:15:06 +0300
-Subject: [Buildroot] [PATCH 1/1] core: enhance printvars for variables
- with newlines
-In-Reply-To: <20180403165012.0d0e173a@windsurf>
-References: <20180403143151.13372-1-chemobejk@gmail.com>
- <20180403165012.0d0e173a@windsurf>
-Message-ID: <CAOJ2eMeFDWoG4Xj5tESgxNxxW0PefLHu1+o+ccV+0Nx9H_3yOg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Apr 2018 17:17:08 +0200
+Subject: [Buildroot] [PATCH v4 09/11] package/libclc: new package
+In-Reply-To: <1d61763d-41c6-351e-c2f1-d57dbe657ccf@smile.fr>
+References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
+ <20180329113346.10367-10-valentin.korenblit@smile.fr>
+ <20180401232953.5277ede2@windsurf>
+ <1d61763d-41c6-351e-c2f1-d57dbe657ccf@smile.fr>
+Message-ID: <20180403171708.759fe73a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On Tue, Apr 3, 2018 at 5:50 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Just curious, what is the use case for feeding the printvars output
-> back into GNU Make ?
+On Tue, 3 Apr 2018 14:27:16 +0200, Valentin Korenblit wrote:
 
-Short answer: because we have factored out buildroot image creation
-step to a separate build.
+> >> As OpenCL kernels are built dynamically on the target using libClang and
+> >> libLLVM, it is necessary to copy /usr/include/clc from STAGING_DIR to the
+> >> target manually, as Buildroot doesn't include this directory.  
+> > I don't see where your .mk file is doing this. And it wouldn't work
+> > because Buildroot removes $(TARGET_DIR)/usr/include entirely in its
+> > target-finalize step.
+> >
+> > When you say "manually", do you mean that you have to
+> > copy /usr/include/clc from your build machine to your target once the
+> > target has booted ? If that's the case, then we really have a problem
+> > here, the target should just work.  
+> 
+> Exactly, I was doing it manually after booting. Mesa uses pkg-config to
+> get the includedir of libclc: https://pastebin.com/adzL8vd4
+> 
+> Do you think it is ok to override configure.ac from Mesa to specify
+> another path? And in that case, where should I place all these headers?
 
-Previously it was enough to provide the SDK, output/target/ and a
-selected list of source *.mk file s from the "upstream" buildroot
-build to be able to do that. With todays @master update the root fs
-creation requires internal variables, like PACKAGES_USERS, to be set
-correctly to create a valid, bootable image. Which took me a while to
-root cause...
+Most likely yes, they should be in another folder, but I would need to
+have a look. Could you push to some public Git repository the latest
+status of your LLVM patch series, so that I can do a build, and see
+what it looks like ?
 
-Hence we need to use "printvars" to extract the content of those
-internal variables from the "upstream" buildroot build into a .mk file
-that is passed down to the "downstream" image build, which include's
-it in its top-level Makefile (a stripped-down version of buildroot
-top-level Makefile). The variables we are interested in unfortunately
-contain newlines.
+> >> +LIBCLC_VERSION = 00236279a293b3737dee08c14f25923a889d2795
+> >> +LIBCLC_SITE = https://git.llvm.org/git/libclc
+> >> +LIBCLC_SITE_METHOD = git  
+> > I assume they don't have a stable release you could use ?  
+> 
+> There is release_38, but the last commit is from 2 years ago. Master
+> has some recent activity.
 
-Regards, Stefan
+OK. Then just add a comment above that says exactly this.
+
+> >> +LIBCLC_DEPENDENCIES = host-clang host-llvm
+> >> +LIBCLC_INSTALL_STAGING = YES
+> >> +
+> >> +# C++ compiler is used to build a small tool (prepare-builtins) for the host.
+> >> +# It must be built with the C++ compiler from the host, simply use
+> >> +# HOSTCXX_NOCCACHE.  
+> > Why not HOSTCXX ?
+
+Did you notice this comment as well ? :-)
+
+> >> +LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \  
+> > Why are you using the version in HOST_DIR, and not the one in
+> > STAGING_DIR ?  
+> 
+> I will check this.
+
+OK. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
