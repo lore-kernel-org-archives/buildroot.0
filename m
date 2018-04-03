@@ -1,49 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  3 Apr 2018 22:31:15 +0200
-Subject: [Buildroot] [PATCH] busybox: bump to version 1.28.3
-Message-ID: <20180403203115.31813-1-peter@korsgaard.com>
+Date: Tue, 03 Apr 2018 22:43:57 +0200
+Subject: [Buildroot] [PATCH] openal: Bump to version 1.18.2
+In-Reply-To: <1522780207-2069-1-git-send-email-nerv@dawncrow.de>
+ (=?utf-8?Q?=22Andr=C3=A9?=
+ Hentschel"'s message of "Tue, 3 Apr 2018 20:30:07 +0200")
+References: <1522780207-2069-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <87bmf0owaa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Includes fixes for ash, cpio, grep and hush.
+>>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/busybox/busybox.hash | 9 +++++----
- package/busybox/busybox.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 538aa04b9b..8537ceb4b7 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,6 +1,7 @@
--# From https://busybox.net/downloads/busybox-1.28.2.tar.bz2.sign
--md5 5db059384469827ab19dac69d3fcd092  busybox-1.28.2.tar.bz2
--sha1 5ddba42aa14b875688727f0a3a9973e42fc51c23  busybox-1.28.2.tar.bz2
-+# From https://busybox.net/downloads/busybox-1.28.3.tar.bz2.sign
-+md5 82e5ad09ae4a07c266fc179492b51757  busybox-1.28.3.tar.bz2
-+sha1 64b47e83dccc5db7fe4ca596b28c9b901a136fe3  busybox-1.28.3.tar.bz2
-+
- # Locally calculated
--sha256 b64a94a60877c96838ee60e75765576ecc8756bf3636485117637604acb84b0d  busybox-1.28.2.tar.bz2
-+sha256 ad0d22033f23e696f9a71a4c2f9210194dda39b024a79151f4ac278995332a6e  busybox-1.28.3.tar.bz2
- sha256	bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548	LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d2d2e86636..fd4ac600c2 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUSYBOX_VERSION = 1.28.2
-+BUSYBOX_VERSION = 1.28.3
- BUSYBOX_SITE = http://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
