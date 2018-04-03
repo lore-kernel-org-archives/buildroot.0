@@ -1,82 +1,46 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Tue, 3 Apr 2018 14:27:16 +0200
-Subject: [Buildroot] [PATCH v4 09/11] package/libclc: new package
-In-Reply-To: <20180401232953.5277ede2@windsurf>
-References: <20180329113346.10367-1-valentin.korenblit@smile.fr>
- <20180329113346.10367-10-valentin.korenblit@smile.fr>
- <20180401232953.5277ede2@windsurf>
-Message-ID: <1d61763d-41c6-351e-c2f1-d57dbe657ccf@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 3 Apr 2018 14:55:12 +0200
+Subject: [Buildroot] Per-package download folders and Git caching
+In-Reply-To: <20180403141703.21cd24fe@windsurf>
+References: <20180403141703.21cd24fe@windsurf>
+Message-ID: <041a5a2a-3f9d-c76e-4c6d-d22ef11cad43@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+ Hi Thomas,
 
-On 01/04/2018 23:29, Thomas Petazzoni wrote:
-> Hello,
->
-> On Thu, 29 Mar 2018 13:33:44 +0200, Valentin Korenblit wrote:
->> This patch provides libclc, an open source implementation of the
->> library requirements of the OpenCL C programming language, as
->> specified by the OpenCL 1.1 Specification. It is intended to be used
->> with Mesa Clover.
->>
->> It needs to be compiled with Clang, as it generates LLVM IR bitcode
->> files containing device builtin functions for each target.
->>
->> Currently, libclc supports AMDGCN, R600 and NVPTX targets.
->>
->> As OpenCL kernels are built dynamically on the target using libClang and
->> libLLVM, it is necessary to copy /usr/include/clc from STAGING_DIR to the
->> target manually, as Buildroot doesn't include this directory.
-> I don't see where your .mk file is doing this. And it wouldn't work
-> because Buildroot removes $(TARGET_DIR)/usr/include entirely in its
-> target-finalize step.
->
-> When you say "manually", do you mean that you have to
-> copy /usr/include/clc from your build machine to your target once the
-> target has booted ? If that's the case, then we really have a problem
-> here, the target should just work.
+ Excellent write-up!
 
-Exactly, I was doing it manually after booting. Mesa uses pkg-config to
-get the includedir of libclc: https://pastebin.com/adzL8vd4
+On 03-04-18 14:17, Thomas Petazzoni wrote:
+> However, it is likely that many users already have a DL_DIR with a
+> number of files. What the new Buildroot will do is that it will first
+> check if the requested file is in the per-package sub-folder. If it is
+> not found there, it will then try to see if it is in the main DL_DIR,
+> and if that's the case, it will create a hard link of this file into
+> the per-package sub-folder. Therefore, you will see something like:
+> 
+>  + dl/
+>    + linux-v4.16.tar.bz2
+>    + linux/
+>      + linux-v4.16.tar.bz2
+> 
+> But the Linux tarball is not duplicated, it is only hard-linked.
 
-Do you think it is ok to override configure.ac from Mesa to specify
-another path? And in that case, where should I place all these headers?
+ I know a few users that put their download directory on a samba share or a
+virtualbox/vmware share which has NTFS as underlying filesystem. Although NTFS
+does support hardlinks, I'm not sure that Samba and virtualbox/vmware do. Any
+idea what will happen in such a case?
 
->
->> +LIBCLC_VERSION = 00236279a293b3737dee08c14f25923a889d2795
->> +LIBCLC_SITE = https://git.llvm.org/git/libclc
->> +LIBCLC_SITE_METHOD = git
-> I assume they don't have a stable release you could use ?
+ Regards,
+ Arnout
 
-There is release_38, but the last commit is from 2 years ago. Master
-has some recent activity.
-
->
-> This lacks LICENSE and LICENSE_FILES.
->
->> +LIBCLC_DEPENDENCIES = host-clang host-llvm
->> +LIBCLC_INSTALL_STAGING = YES
->> +
->> +# C++ compiler is used to build a small tool (prepare-builtins) for the host.
->> +# It must be built with the C++ compiler from the host, simply use
->> +# HOSTCXX_NOCCACHE.
-> Why not HOSTCXX ?
->
->> +LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
-> Why are you using the version in HOST_DIR, and not the one in
-> STAGING_DIR ?
-
-I will check this.
-
->
-> Best regards,
->
-> Thomas
-
-Best regards,
-
-Valentin
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
