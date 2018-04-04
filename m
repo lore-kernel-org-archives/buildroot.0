@@ -1,90 +1,105 @@
 From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Wed,  4 Apr 2018 18:31:20 +0200
-Subject: [Buildroot] [PATCH v5 3/7] package/mesa3d: enable llvm support
+Date: Wed,  4 Apr 2018 18:31:24 +0200
+Subject: [Buildroot] [PATCH v5 7/7] package/clinfo: new package
 In-Reply-To: <20180404163124.27934-1-valentin.korenblit@smile.fr>
 References: <20180404163124.27934-1-valentin.korenblit@smile.fr>
-Message-ID: <20180404163124.27934-4-valentin.korenblit@smile.fr>
+Message-ID: <20180404163124.27934-8-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides LLVM support for Mesa3D, enabling llvmpipe
-software rasterizer if Gallium swrast is selected.
-
-In case Gallium r600 is selected, llvm AMDGPU backend is built.
-
-Having llvm installed also enables radeonsi Gallium driver, but
-it is not provided with this patch as it hasn't been tested.
-
-It uses llvm-config (host variant) installed in STAGING_DIR/usr/bin
-to get LLVM libraries. Assuming that LLVM version 5.0.1 is installed,
-llvm-config --libs will output -lLLVM-5.0.
+This tool allows to verify if the OpenCL environment is set up correctly and
+output information related to the supported OpenCL platforms.
 
 Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-Tested-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
 ---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/clinfo/Config.in   |  9 +++++++++
+ package/clinfo/clinfo.hash |  2 ++
+ package/clinfo/clinfo.mk   | 23 +++++++++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/clinfo/Config.in
+ create mode 100644 package/clinfo/clinfo.hash
+ create mode 100644 package/clinfo/clinfo.mk
 
-llvmpipe tested running glmark2-es2 on x86, ARM and Aarch64
-
- package/mesa3d/Config.in |  6 ++++++
- package/mesa3d/mesa3d.mk | 14 +++++++++++---
- 2 files changed, 17 insertions(+), 3 deletions(-)
-
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index f141587c4d..ffe0287ac5 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -25,6 +25,11 @@ menuconfig BR2_PACKAGE_MESA3D
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ec8f73681a..3312233fc3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1889,6 +1889,7 @@ F:	package/tstools/
  
- if BR2_PACKAGE_MESA3D
+ N:	Valentin Korenblit <valentin.korenblit@smile.fr>
+ F:	package/clang/
++F:	package/clinfo/
+ F:	package/libclc/
+ F:	package/llvm/
  
-+config BR2_PACKAGE_MESA3D_LLVM
-+	bool "llvm support"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	select BR2_PACKAGE_LLVM
+diff --git a/package/Config.in b/package/Config.in
+index 3cd979661f..69af4aa15e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1483,6 +1483,7 @@ menu "Other"
+ 	source "package/clang/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
++	source "package/clinfo/Config.in"
+ 	source "package/cppcms/Config.in"
+ 	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
+diff --git a/package/clinfo/Config.in b/package/clinfo/Config.in
+new file mode 100644
+index 0000000000..279b5acbfb
+--- /dev/null
++++ b/package/clinfo/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_CLINFO
++	bool "clinfo"
++	depends on BR2_PACKAGE_MESA3D_OPENCL
++	help
++	  clinfo is a simple command-line application that enumerates
++	  all possible (known) properties of the OpenCL platform and
++	  devices available on the system.
 +
- # inform the .mk file of gallium, dri or vulkan driver selection
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	bool
-@@ -77,6 +82,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_RADEON
-+	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1d88fd8480..506f84274f 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -32,6 +32,17 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- MESA3D_CONF_OPTS += --disable-static
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
-+MESA3D_DEPENDENCIES += host-llvm llvm
-+MESA3D_CONF_OPTS += \
-+	--with-llvm-prefix=$(STAGING_DIR)/usr \
-+	--enable-llvm-shared-libs \
-+	--enable-llvm
-+else
-+# Avoid automatic search of llvm-config
-+MESA3D_CONF_OPTS += --disable-llvm
-+endif
++	  https://github.com/Oblomov/clinfo
+diff --git a/package/clinfo/clinfo.hash b/package/clinfo/clinfo.hash
+new file mode 100644
+index 0000000000..e1c10afc9e
+--- /dev/null
++++ b/package/clinfo/clinfo.hash
+@@ -0,0 +1,2 @@
++# locally calculated
++sha256 64b02e68ccff3b95437bd0bd70dcb88438c58adec16a7145a5d4e5c26a898ccf clinfo-2.2.18.03.26.tar.gz
+diff --git a/package/clinfo/clinfo.mk b/package/clinfo/clinfo.mk
+new file mode 100644
+index 0000000000..1477b76946
+--- /dev/null
++++ b/package/clinfo/clinfo.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# clinfo
++#
++################################################################################
 +
- # The Sourcery MIPS toolchain has a special (non-upstream) feature to
- # have "compact exception handling", which unfortunately breaks with
- # mesa3d, so we disable it here by passing -mno-compact-eh.
-@@ -219,7 +230,4 @@ else
- MESA3D_CONF_OPTS += --disable-lmsensors
- endif
- 
--# Avoid automatic search of llvm-config
--MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
--
- $(eval $(autotools-package))
++CLINFO_VERSION = 2.2.18.03.26
++CLINFO_SITE = $(call github,Oblomov,clinfo,$(CLINFO_VERSION))
++CLINFO_LICENSE = CC0-1.0
++CLINFO_LICENSE_FILES = legalcode.txt
++
++# libOpenCL is needed
++CLINFO_DEPENDENCIES = mesa3d
++
++define CLINFO_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++endef
++
++define CLINFO_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/clinfo $(TARGET_DIR)/usr/bin/clinfo
++endef
++
++$(eval $(generic-package))
 -- 
 2.14.3
