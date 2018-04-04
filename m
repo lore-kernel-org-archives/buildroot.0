@@ -1,47 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 04 Apr 2018 08:40:47 +0200
-Subject: [Buildroot] [PATCH] pkg-download.mk: do not add a trailing
- slash to <PKG>_SITE
-In-Reply-To: <20180404063051.12111-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 4 Apr 2018 08:30:51 +0200")
-References: <20180404063051.12111-1-peter@korsgaard.com>
-Message-ID: <878ta3o4nk.fsf@dell.be.48ers.dk>
+Date: Wed,  4 Apr 2018 09:07:28 +0200
+Subject: [Buildroot] [PATCH] autobuild-run: prepare_build(): ignore
+ directories in dldir
+Message-ID: <20180404070728.18851-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+With the change to use subdirs in dldir, prepare_build may end up trying to
+remove a non-empty subdir, causing an exception:
 
- > Fixes
- > http://autobuild.buildroot.net/results/734/7342b25f01d60cafc4a5422a5a1c282629f361c5/
+Process Process-1:
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/usr/lib64/python2.7/multiprocessing/process.py", line 114, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/peko/buildroot-test/scripts/autobuild-run", line 627, in run_instance
+    ret = prepare_build(**kwargs)
+  File "/home/peko/buildroot-test/scripts/autobuild-run", line 301, in prepare_build
+    os.remove(os.path.join(dldir, f))
+OSError: [Errno 21] Is a directory: 'instance-0/dl/mtools'
 
- > $(dir does not strip last path separator and the wget wrapper adds a '/'
- > between the -u argument and the filename when it reconstructs the URL,
- > leading us to have two slashes before the filename when accessing the
- > upstream location.
+We only want to delete individual download files, so drop directories from
+the list of removal candidates.
 
- > Most upstream servers ignores this, but not all - Leading to download issues
- > from pypi.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ scripts/autobuild-run | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- >  package/pkg-download.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
-
- > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
- > index 7ed95f2b2c..2c4ad3ba2c 100644
- > --- a/package/pkg-download.mk
- > +++ b/package/pkg-download.mk
- > @@ -82,7 +82,7 @@ endif
- 
- >  ifeq ($(BR2_PRIMARY_SITE_ONLY),)
- >  DOWNLOAD_URIS += \
- > -	-u $($(PKG)_SITE_METHOD)+$(dir $(call qstrip,$(1)))
- > +	-u $($(PKG)_SITE_METHOD)+$(patsubst %/,%,$(dir $(call qstrip,$(1))))
-
-Alternatively I *THINK* we can just use $($(PKG)_SITE) here.
-
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 0f1c7d7..d2eb8a6 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -293,7 +293,9 @@ def prepare_build(**kwargs):
+     # regularly re-download files to check that their upstream
+     # location is still correct.
+     for i in range(0, 5):
+-        flist = os.listdir(dldir)
++        # ignore directories
++        flist = [f for f in os.listdir(dldir)
++                 if os.path.isfile(os.path.join(dldir, f))]
+         if not flist:
+             break
+         f = flist[randint(0, len(flist) - 1)]
 -- 
-Bye, Peter Korsgaard
+2.11.0
