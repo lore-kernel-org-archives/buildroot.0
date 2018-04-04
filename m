@@ -1,75 +1,44 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Wed, 4 Apr 2018 23:35:22 +0200
-Subject: [Buildroot] [git commit] qt5base: correct eglfs support in
- qmake.conf.in
-Message-ID: <20180404213959.A267084076@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qt5base: add support for sunxi-mali{,
+ -mainline} eglfs backend
+Message-ID: <20180404213959.B45AF83FE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81fb33af2a6e4f4d379da3372b2a607b7ae1a21f
+commit: https://git.buildroot.net/buildroot/commit/?id=8252118c5a1e208e3a62b47647bad78833a7b94c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Setting EGLFS_DEVICE_INTEGRATION at the end of qmake.conf like is done
-by commit 0c219ddb8a doesn't work correctly: it has to be set before the
-include(../common/linux_device_post.conf)
-
-Instead of appending to the file, change it into a qmake.conf.in
-template file that contains a placeholder for the
-EGLFS_DEVICE_INTEGRATION assignment and update it with sed. Since the
-sed always has to be executed, this removes the need for a separate
-QT5BASE_CONFIGURE_QMAKE_CONFIG definition.
+Only one of the two can be selected (they are conflicting virtual
+packages) so testing against a single 'y' is enough.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[Arnout: simplify the replacement, move sunxi-mali support to a
- separate patch]
+[Arnout: add sunxi-mali and sunxi-mali-mainline in a single patch]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/qt5/qt5base/{qmake.conf => qmake.conf.in} | 2 ++
- package/qt5/qt5base/qt5base.mk                    | 9 ++++-----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qmake.conf b/package/qt5/qt5base/qmake.conf.in
-similarity index 98%
-rename from package/qt5/qt5base/qmake.conf
-rename to package/qt5/qt5base/qmake.conf.in
-index 8b6debe583..d62ee7cebe 100644
---- a/package/qt5/qt5base/qmake.conf
-+++ b/package/qt5/qt5base/qmake.conf.in
-@@ -24,5 +24,7 @@ QMAKE_CFLAGS_ISYSTEM   =
- # Architecturespecific configuration
- include(arch.conf)
- 
-+ at EGLFS_DEVICE@
-+
- include(../common/linux_device_post.conf)
- load(qt_config)
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 76c129d2e4..a9a79ba087 100644
+index a9a79ba087..e6307fb3fe 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -242,10 +242,7 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+@@ -240,9 +240,14 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
  
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_IMX_GPU_VIV),yy)
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+ 
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_IMX_GPU_VIV),yy)
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
  # use vivante backend
--define QT5BASE_CONFIGURE_QMAKE_CONFIG
--	echo "EGLFS_DEVICE_INTEGRATION = eglfs_viv" >> \
--		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
--endef
-+QT5BASE_EGLFS_DEVICE = EGLFS_DEVICE_INTEGRATION = eglfs_viv
+ QT5BASE_EGLFS_DEVICE = EGLFS_DEVICE_INTEGRATION = eglfs_viv
++else ifeq ($(BR2_PACKAGE_SUNXI_MALI)$(BR2_PACKAGE_SUNXI_MALI_MAINLINE),y)
++# use mali backend
++QT5BASE_EGLFS_DEVICE = EGLFS_DEVICE_INTEGRATION = eglfs_mali
++endif
  endif
  
  ifneq ($(QT5BASE_CONFIG_FILE),)
-@@ -263,7 +260,9 @@ endef
- endif
- 
- define QT5BASE_CONFIGURE_CMDS
--	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
-+	mkdir -p $(@D)/mkspecs/devices/linux-buildroot-g++/
-+	sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
-+		$(QT5BASE_PKGDIR)/qmake.conf.in > \
- 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
- 	$(QT5BASE_CONFIGURE_QMAKE_CONFIG)
- 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
