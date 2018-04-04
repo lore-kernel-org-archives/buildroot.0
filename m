@@ -1,53 +1,43 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 04 Apr 2018 20:12:08 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 04 Apr 2018 20:58:41 +0200
 Subject: [Buildroot] bash: /dev/fd/62: No such file or directory
-In-Reply-To: <877ept7r7w.fsf@dell.be.48ers.dk>
+In-Reply-To: <3dd2f190fef3d71e1b2f1f5ec6f4323e8ee8c745.camel@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Wed, 04 Apr 2018 20:12:08
+ +0200")
 References: <1521154501.16532.15.camel@embedded.rocks>
  <874llggl14.fsf@dell.be.48ers.dk>
  <d624af0cde7298851332a2fc009f173562d99d98.camel@embedded.rocks>
  <877ept7r7w.fsf@dell.be.48ers.dk>
-Message-ID: <3dd2f190fef3d71e1b2f1f5ec6f4323e8ee8c745.camel@embedded.rocks>
+ <3dd2f190fef3d71e1b2f1f5ec6f4323e8ee8c745.camel@embedded.rocks>
+Message-ID: <87d0zeol26.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-On Fri, 2018-03-30 at 13:11 +0200, Peter Korsgaard wrote:
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
-> Hi,
-> 
->  >> Keep in mind that we still support a static /dev, so we should also add
->  >> them to system/device_table_dev.txt and redirect errors to /dev/null so
->  >> you don't get a bunch of warnings about these symlinks when booting with
->  >> a static /dev.
-> 
->  > I am trying to get this working. I managed to add the entries to
->  > inittab for busybox and sysvinit
-> 
-> Great!
+Hi,
 
-I just proposed the patches...
+ >> > but I am unsure how to add those symlinks to the static
+ >> > /dev. makedevs does not support symbolic links.
+ >> 
+ >> Heh, you are right. We can either:
+ >> 
+ >> - Add a BASH_ROOTFS_PRE_CMD_HOOKS hook in bash.mk if static /dev is used
+ >> to create these symlinks
+ >> 
+ >> - Extend the makedevs code to also support symlinks
+ >> 
+ >> - Completely ignore this issue for static /dev
+ >> 
+ >> The first option is probably the easiest/nicest.
 
->  > but I am unsure how to add those symlinks to the static
->  > /dev. makedevs does not support symbolic links.
-> 
-> Heh, you are right. We can either:
-> 
-> - Add a BASH_ROOTFS_PRE_CMD_HOOKS hook in bash.mk if static /dev is used
->   to create these symlinks
-> 
-> - Extend the makedevs code to also support symlinks
-> 
-> - Completely ignore this issue for static /dev
-> 
-> The first option is probably the easiest/nicest.
+ > It turned out that nothing needs to be done for static /dev as the
+ > symlinks are created now by the init system.
 
-It turned out that nothing needs to be done for static /dev as the
-symlinks are created now by the init system.
+But how can that work? static /dev normally means readonly /dev.
 
-Best regards
-J?rg Krause
+-- 
+Bye, Peter Korsgaard
