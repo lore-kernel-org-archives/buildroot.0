@@ -1,66 +1,111 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 04 Apr 2018 22:39:21 +0200
-Subject: [Buildroot] bash: /dev/fd/62: No such file or directory
-In-Reply-To: <878ta2oh5g.fsf@dell.be.48ers.dk>
-References: <1521154501.16532.15.camel@embedded.rocks>
- <874llggl14.fsf@dell.be.48ers.dk>
- <d624af0cde7298851332a2fc009f173562d99d98.camel@embedded.rocks>
- <877ept7r7w.fsf@dell.be.48ers.dk>
- <3dd2f190fef3d71e1b2f1f5ec6f4323e8ee8c745.camel@embedded.rocks>
- <87d0zeol26.fsf@dell.be.48ers.dk> <878ta2oh5g.fsf@dell.be.48ers.dk>
-Message-ID: <cb3062d59adc88e5a9549c769bf499c76528511c.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  4 Apr 2018 22:42:45 +0200
+Subject: [Buildroot] [PATCH 1/2] keepalived: bump to 1.4.2
+Message-ID: <20180404204246.30442-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2018-04-04 at 22:23 +0200, Peter Korsgaard wrote:
-> > > > > > "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-> 
-> Hi,
-> 
->  >> It turned out that nothing needs to be done for static /dev as the
->  >> symlinks are created now by the init system.
-> 
->  > But how can that work? static /dev normally means readonly /dev.
-> 
-> That didn't come out very clear. What I wanted to say is that static
-> /dev should also work on a readonly fs, so these symlinks should be made
-> at build time, not at runtime.
+We can drop 0001-Fix-build-with-Linux-kernel-headers-v4.15.patch as it
+has been merged upstream, as of commit
+https://github.com/acassen/keepalived/commit/a5457d3a1f579fef5825ffe841f1613b0014ff19.
 
-I see!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...Fix-build-with-Linux-kernel-headers-v4.15.patch | 59 ----------------------
+ package/keepalived/keepalived.hash                 |  2 +-
+ package/keepalived/keepalived.mk                   |  2 +-
+ 3 files changed, 2 insertions(+), 61 deletions(-)
+ delete mode 100644 package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
 
-I've rebuild the system with BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=n.
-
-Snippet of the inittab file:
-
-   # Startup the system
-   ::sysinit:/bin/mount -t proc proc /proc
-   #::sysinit:/bin/mount -o remount,rw /
-   ::sysinit:/bin/mkdir -p /dev/pts
-   ::sysinit:/bin/mkdir -p /dev/shm
-   ::sysinit:/bin/mount -a
-   ::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
-   ::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
-   ::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
-   ::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
-   ::sysinit:/bin/hostname -F /etc/hostname
-
-On the system /dev is still writable:
-
-   # echo 1 > /dev/1.txt
-   # echo 1 > /root/1.txt
-   -sh: /root/1.txt: Read-only file system
-
-   # ls -l /dev/fd/*
-   ls: /dev/fd/255: No such file or directory
-   ls: /dev/fd/3: No such file or directory
-   lrwx------    1 root     root            64 Jan  1 00:09 /dev/fd/0 -> /dev/ttyS0
-   lrwx------    1 root     root            64 Jan  1 00:09 /dev/fd/1 -> /dev/ttyS0
-   lrwx------    1 root     root            64 Jan  1 00:09 /dev/fd/2 -> /dev/ttyS0
-
-   # bash -c "cat <(date)"
-   Thu Jan  1 00:10:07 UTC 1970
-
-J?rg
+diff --git a/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch b/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
+deleted file mode 100644
+index b5f21cb40a..0000000000
+--- a/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 15f93dd90484532e25c8f3e43fb34a361a79d7f2 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Fri, 9 Feb 2018 11:55:19 +0200
+-Subject: [PATCH] Fix build with Linux kernel headers v4.15
+-
+-Linux kernel version 4.15 changed the libc/kernel headers suppression
+-logic in a way that introduces collisions:
+-
+-In file included from ./../include/vrrp_ipaddress.h:32:0,
+-                 from ./../include/vrrp_arp.h:31,
+-                 from vrrp.c:29:
+-/home/peko/autobuild/instance-1/output/host/arc-buildroot-linux-uclibc/sysroot/usr/include/linux/in.h:29:3: error: redeclaration of enumerator 'IPPROTO_IP'
+-   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
+-   ^
+-/home/peko/autobuild/instance-1/output/host/arc-buildroot-linux-uclibc/sysroot/usr/include/netinet/in.h:33:5: note: previous definition of 'IPPROTO_IP' was here
+-     IPPROTO_IP = 0,    /* Dummy protocol for TCP.  */
+-     ^~~~~~~~~~
+-
+-Include the libc netinet/in.h header first to suppress the kernel
+-header.
+-
+-In addition, add _GNU_SOURCE to vrrp.c for the libc provided in6_pktinfo
+-definition.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/acassen/keepalived/pull/777
+-
+- keepalived/include/vrrp_arp.h | 1 +
+- keepalived/vrrp/vrrp.c        | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/keepalived/include/vrrp_arp.h b/keepalived/include/vrrp_arp.h
+-index 77a26c450b12..a103ab075c1d 100644
+---- a/keepalived/include/vrrp_arp.h
+-+++ b/keepalived/include/vrrp_arp.h
+-@@ -24,6 +24,7 @@
+- #define _VRRP_ARP_H
+- 
+- /* system includes */
+-+#include <netinet/in.h>
+- #include <net/ethernet.h>
+- #include <net/if_arp.h>
+- 
+-diff --git a/keepalived/vrrp/vrrp.c b/keepalived/vrrp/vrrp.c
+-index 3d2bfe41ab4f..435a4b54b2a9 100644
+---- a/keepalived/vrrp/vrrp.c
+-+++ b/keepalived/vrrp/vrrp.c
+-@@ -26,6 +26,7 @@
+- #include "config.h"
+- 
+- /* local include */
+-+#define _GNU_SOURCE
+- #include "vrrp_arp.h"
+- #include "vrrp_ndisc.h"
+- #include "vrrp_scheduler.h"
+--- 
+-2.15.1
+-
+diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
+index 4590c33ef9..ed7d2fb0a0 100644
+--- a/package/keepalived/keepalived.hash
++++ b/package/keepalived/keepalived.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	220407517ccad822d1ffa80f7bc37582abaf97da6f7bda2326fa6904b1855bd0  keepalived-1.4.1.tar.gz
++sha256	4e2d7cc01a6ee29a3955f5c622d47704ba7d9dd758189f15e9def016a2d1faa3  keepalived-1.4.2.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index 6d3d8e7cc6..0fa1b79e3a 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEEPALIVED_VERSION = 1.4.1
++KEEPALIVED_VERSION = 1.4.2
+ KEEPALIVED_SITE = http://www.keepalived.org/software
+ KEEPALIVED_DEPENDENCIES = host-pkgconf openssl popt
+ KEEPALIVED_LICENSE = GPL-2.0+
+-- 
+2.14.3
