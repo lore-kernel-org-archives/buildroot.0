@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Apr 2018 22:55:05 +0200
-Subject: [Buildroot] [PATCH 1/2] python-webpy: needs hashlib support in
- python
-In-Reply-To: <20180404155132.17500-1-peter@korsgaard.com>
-References: <20180404155132.17500-1-peter@korsgaard.com>
-Message-ID: <20180404225505.3e3f448f@windsurf>
+Date: Wed, 4 Apr 2018 22:55:52 +0200
+Subject: [Buildroot] [PATCH 1/1] tinycbor: bump to version 0.5.1
+In-Reply-To: <20180402170753.30930-1-fontaine.fabrice@gmail.com>
+References: <20180402170753.30930-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180404225552.66030b46@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  4 Apr 2018 17:51:31 +0200, Peter Korsgaard wrote:
-> webpy uses hashlib for session handling, so ensure it is available:
-> 
-> web/session.py:    import hashlib
-> web/session.py:    sha1 = hashlib.sha1
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Mon,  2 Apr 2018 19:07:53 +0200, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-webpy/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/tinycbor/tinycbor.hash | 2 +-
+>  package/tinycbor/tinycbor.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
