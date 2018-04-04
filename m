@@ -1,43 +1,44 @@
-From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-Date: Wed, 4 Apr 2018 14:49:39 -0300 (BRT)
-Subject: [Buildroot] [PATCH] iqvlinux: remove package
-In-Reply-To: <20180404160009.16337-1-thomas.petazzoni@bootlin.com>
-References: <20180404160009.16337-1-thomas.petazzoni@bootlin.com>
-Message-ID: <1528136664.1654633.1522864179308.JavaMail.zimbra@datacom.ind.br>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed,  4 Apr 2018 20:09:33 +0200
+Subject: [Buildroot] [PATCH 0/2] Add /dev/std{in, out,
+ err} symlinks to inittabs
+Message-ID: <20180404180935.15185-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Some applications, e.g. bashs process subsitution feature, rely on the
+convention of `/dev/fd` being a symbolic link to `/proc/self/fd`.
 
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,24 @@ endif
-> ###############################################################################
-> comment "Legacy options removed in 2018.05"
-> 
-> +config BR2_PACKAGE_IQVLINUX
-> +	bool "iqvlinux packaged removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  This package contained a kernel module from Intel, which
-> +	  could only be used together with Intel userspace tools
-> +	  provided under NDA, which also come with the same kernel
-> +	  module. The copy of the kernel module available on
-> +	  SourceForge is only provided only to comply with the GPLv2
-> +	  requirement. Intel engineers were even surprised it even
-> +	  built and were not willing to make any effort to fix their
-> +	  tarball naming to contain a version number. Therefore, it
-> +	  does not make sense for Buildroot to provide such a package.
-> +
-> +	  See https://sourceforge.net/p/e1000/bugs/589/ for the
-> +	  discussion.
-> +
-> +
+This symbolic link and his companions `/dev/std*` are created by (e)udev [1],
+but not by mdev, resulting in the following error when using the following
+expression:
+   
+```
+bash: /dev/fd/62: No such file or directory
+```
+    
+For the sake of simplicity, lets fix this by creating the symlinks in busybox'
+and sysvinits inittab file. It is only really needed if eudev isn't used, but
+it doesn't really hurt to create them even if eudev will recreate them
+afterwards.
 
-Could you fix the warning from check-package?
-It can be done when applying.
+Note, that we do not create the symlink `/dev/core` as `/proc/kcore` is
+not available on all platforms, e.g. ARM, and the feature is not much
+appreciated [2].
 
-Thanks,
-Ricardo
+[1] https://github.com/gentoo/eudev/blob/8943501993322c59a6eb5be456b0d716aafff21e/src/shared/dev-setup.c#L35-L40
+[2] https://lwn.net/Articles/45315/
+
+J?rg Krause (2):
+  busybox: add /dev/std{in,out,err} symlinks to inittab
+  sysvinit: add /dev/std{in,out,err} symlinks to inittab
+
+ package/busybox/inittab  | 4 ++++
+ package/sysvinit/inittab | 6 +++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+-- 
+2.16.3
