@@ -1,49 +1,45 @@
 From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 4 Apr 2018 18:28:35 +0200
-Subject: [Buildroot] [PATCH] libkrb5: needs dynamic library support
-In-Reply-To: <57d1b0676093d283f22717d1c822643dc44bcf1a.1522828164.git.baruch@tkos.co.il>
-References: <57d1b0676093d283f22717d1c822643dc44bcf1a.1522828164.git.baruch@tkos.co.il>
-Message-ID: <baaca571-99ae-5db7-300f-8c0204cf3cfc@dawncrow.de>
+Date: Wed, 4 Apr 2018 18:29:52 +0200
+Subject: [Buildroot] [PATCH] libkrb5: disable optional tcl support
+In-Reply-To: <a0b74eef15ffe6a08bfe1182ab429214799ffcd1.1522828746.git.baruch@tkos.co.il>
+References: <a0b74eef15ffe6a08bfe1182ab429214799ffcd1.1522828746.git.baruch@tkos.co.il>
+Message-ID: <69a7a9be-cb5b-5006-b824-8c5f45611cef@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 04.04.2018 um 09:49 schrieb Baruch Siach:
-> Even though the configure script checks for the presence of dlfcn.h, the
-> code includes this header unconditionally.
+Am 04.04.2018 um 09:59 schrieb Baruch Siach:
+> Avoid detection of host tcl headers.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/0e1/0e19af38d74aa74919a11ff1ebdb3b8c1a494b33/
+> The tcl package in Buildroot is not cross-compile safe. The generated
+> tclConfig.sh script has -L/usr/lib in TCL_LIB_SPEC.
+> 
+> Should fix:
+> http://autobuild.buildroot.net/results/d11/d118c3c09f6fc1de26491f2ed480ef28b091dba8/
+> http://autobuild.buildroot.net/results/035/0353e1443125da1e544d1a98348716bfe67c8726/
 > 
 > Cc: Andr? Hentschel <nerv@dawncrow.de>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/libkrb5/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/libkrb5/libkrb5.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/libkrb5/Config.in b/package/libkrb5/Config.in
-> index 9147c9048924..f6af7130f0f2 100644
-> --- a/package/libkrb5/Config.in
-> +++ b/package/libkrb5/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBKRB5
->  	bool "libkrb5"
->  	# needs fork()
->  	depends on BR2_USE_MMU
-> +	depends on !BR2_STATIC_LIBS
->  	help
->  	  Kerberos is a system for authenticating users and services
->  	  on a network. Kerberos is a trusted third-party service.
-> @@ -11,3 +12,7 @@ config BR2_PACKAGE_LIBKRB5
->  	  reference implementation of Kerberos V5.
+> diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+> index 88cfc61a19fd..03905073049b 100644
+> --- a/package/libkrb5/libkrb5.mk
+> +++ b/package/libkrb5/libkrb5.mk
+> @@ -25,7 +25,8 @@ LIBKRB5_CONF_OPTS = \
+>  	--without-system-db \
+>  	--without-system-et \
+>  	--without-system-ss \
+> -	--without-system-verto
+> +	--without-system-verto \
+> +	--without-tcl
 >  
->  	  https://web.mit.edu/kerberos/
-> +
-> +comment "apache needs a toolchain w/ dynamic library"
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_STATIC_LIBS
+>  ifeq ($(BR2_PACKAGE_OPENLDAP),y)
+>  LIBKRB5_CONF_OPTS += --with-ldap
 > 
 
-Thanks!
-apache is wrong though :)
+Thank you!
