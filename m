@@ -1,66 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Apr 2018 09:30:03 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: prepare_build(): ignore
- directories in dldir
-In-Reply-To: <20180404070728.18851-1-peter@korsgaard.com>
-References: <20180404070728.18851-1-peter@korsgaard.com>
-Message-ID: <20180404093003.296b33dc@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  4 Apr 2018 10:49:24 +0300
+Subject: [Buildroot] [PATCH] libkrb5: needs dynamic library support
+Message-ID: <57d1b0676093d283f22717d1c822643dc44bcf1a.1522828164.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Even though the configure script checks for the presence of dlfcn.h, the
+code includes this header unconditionally.
 
-On Wed,  4 Apr 2018 09:07:28 +0200, Peter Korsgaard wrote:
-> With the change to use subdirs in dldir, prepare_build may end up trying to
-> remove a non-empty subdir, causing an exception:
-> 
-> Process Process-1:
-> Traceback (most recent call last):
->   File "/usr/lib64/python2.7/multiprocessing/process.py", line 258, in _bootstrap
->     self.run()
->   File "/usr/lib64/python2.7/multiprocessing/process.py", line 114, in run
->     self._target(*self._args, **self._kwargs)
->   File "/home/peko/buildroot-test/scripts/autobuild-run", line 627, in run_instance
->     ret = prepare_build(**kwargs)
->   File "/home/peko/buildroot-test/scripts/autobuild-run", line 301, in prepare_build
->     os.remove(os.path.join(dldir, f))
-> OSError: [Errno 21] Is a directory: 'instance-0/dl/mtools'
-> 
-> We only want to delete individual download files, so drop directories from
-> the list of removal candidates.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  scripts/autobuild-run | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 0f1c7d7..d2eb8a6 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -293,7 +293,9 @@ def prepare_build(**kwargs):
->      # regularly re-download files to check that their upstream
->      # location is still correct.
->      for i in range(0, 5):
-> -        flist = os.listdir(dldir)
-> +        # ignore directories
-> +        flist = [f for f in os.listdir(dldir)
-> +                 if os.path.isfile(os.path.join(dldir, f))]
->          if not flist:
->              break
->          f = flist[randint(0, len(flist) - 1)]
+Fixes:
+http://autobuild.buildroot.net/results/0e1/0e19af38d74aa74919a11ff1ebdb3b8c1a494b33/
 
-But this is not going to remove files in sub-directories I believe, and
-therefore it no longer does the job it is supposed to do. I believe we
-need to switch to os.walk() to walk down in the sub-directories, no ?
+Cc: Andr? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libkrb5/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Best regards,
-
-Thomas
+diff --git a/package/libkrb5/Config.in b/package/libkrb5/Config.in
+index 9147c9048924..f6af7130f0f2 100644
+--- a/package/libkrb5/Config.in
++++ b/package/libkrb5/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBKRB5
+ 	bool "libkrb5"
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Kerberos is a system for authenticating users and services
+ 	  on a network. Kerberos is a trusted third-party service.
+@@ -11,3 +12,7 @@ config BR2_PACKAGE_LIBKRB5
+ 	  reference implementation of Kerberos V5.
+ 
+ 	  https://web.mit.edu/kerberos/
++
++comment "apache needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.16.3
