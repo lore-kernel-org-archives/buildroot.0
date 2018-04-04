@@ -1,73 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Apr 2018 22:50:41 +0200
-Subject: [Buildroot] [PATCH v5 1/7] package/llvm: new package
-In-Reply-To: <20180404163124.27934-2-valentin.korenblit@smile.fr>
-References: <20180404163124.27934-1-valentin.korenblit@smile.fr>
- <20180404163124.27934-2-valentin.korenblit@smile.fr>
-Message-ID: <20180404225041.2281a856@windsurf>
+Date: Wed, 4 Apr 2018 22:52:14 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: enable llvm support
+Message-ID: <20180404205246.AD07883FB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3b5c24af38a53750af9f8d8dffb1a9523835e6e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  4 Apr 2018 18:31:18 +0200, Valentin Korenblit wrote:
-> This patch installs LLVM tools and libraries for the host and
-> libLLVM.so for the target.
+This patch provides LLVM support for Mesa3D, enabling llvmpipe
+software rasterizer if Gallium swrast is selected.
 
-I've applied to master, after doing the following changes:
+In case Gallium r600 is selected, llvm AMDGPU backend is built.
 
-    [Thomas:
-     - add dependency on thread and C++ and update the Config.in comment
-       accordingly.
-     - make the Config.in comment depend on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-       so that it isn't disabled on architectures where LLVM is anyway not
-       supported.]
+Having llvm installed also enables radeonsi Gallium driver, but
+it is not provided with this patch as it hasn't been tested.
 
-Also, I noticed it doesn't build on the Cortex-M4 configuration, i.e
-the following defconfig doesn't build:
+It uses llvm-config (host variant) installed in STAGING_DIR/usr/bin
+to get LLVM libraries. Assuming that LLVM version 5.0.1 is installed,
+llvm-config --libs will output -lLLVM-5.0.
 
-BR2_arm=y
-BR2_cortex_m4=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-m4-full-2017.11-rc1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_13=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_LLVM=y
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Tested-by: J??r??me Oufella <jerome.oufella@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/Config.in |  6 ++++++
+ package/mesa3d/mesa3d.mk | 14 +++++++++++---
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
-Even though I don't think it makes sense to support Cortex-M4 (and is
-probably not possible anyway), the error is interesting:
-
--- Looking for __atomic_load_8 in atomic
--- Looking for __atomic_load_8 in atomic - not found
-CMake Error at cmake/modules/CheckAtomic.cmake:74 (message):
-  Host compiler appears to require libatomic, but cannot find it.
-Call Stack (most recent call first):
-  cmake/config-ix.cmake:326 (include)
-  CMakeLists.txt:580 (include)
-
-So LLVM uses atomic built-ins, so probably it needs to "depends on
-BR2_TOOLCHAIN_HAS_ATOMIC", and link against libatomic if
-BR2_TOOLCHAIN_HAS_LIBATOMIC is defined.
-
-Please watch for the autobuilders in the next few days, and look at the
-LLVM build failures. You will anyway be notified every day of such
-failures by e-mail, now that you are listed in the DEVELOPERS file.
-
-Thanks a lot Valentin for your persistence on this LLVM work. I'm sure
-it will be very useful in the future, and it was a major endeavor!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index f141587c4d..ffe0287ac5 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -25,6 +25,11 @@ menuconfig BR2_PACKAGE_MESA3D
+ 
+ if BR2_PACKAGE_MESA3D
+ 
++config BR2_PACKAGE_MESA3D_LLVM
++	bool "llvm support"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	select BR2_PACKAGE_LLVM
++
+ # inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	bool
+@@ -77,6 +82,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_RADEON
++	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1d88fd8480..506f84274f 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -32,6 +32,17 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ MESA3D_CONF_OPTS += --disable-static
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
++MESA3D_DEPENDENCIES += host-llvm llvm
++MESA3D_CONF_OPTS += \
++	--with-llvm-prefix=$(STAGING_DIR)/usr \
++	--enable-llvm-shared-libs \
++	--enable-llvm
++else
++# Avoid automatic search of llvm-config
++MESA3D_CONF_OPTS += --disable-llvm
++endif
++
+ # The Sourcery MIPS toolchain has a special (non-upstream) feature to
+ # have "compact exception handling", which unfortunately breaks with
+ # mesa3d, so we disable it here by passing -mno-compact-eh.
+@@ -219,7 +230,4 @@ else
+ MESA3D_CONF_OPTS += --disable-lmsensors
+ endif
+ 
+-# Avoid automatic search of llvm-config
+-MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
+-
+ $(eval $(autotools-package))
