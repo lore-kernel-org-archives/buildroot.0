@@ -1,41 +1,73 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  4 Apr 2018 10:59:06 +0300
-Subject: [Buildroot] [PATCH] libkrb5: disable optional tcl support
-Message-ID: <a0b74eef15ffe6a08bfe1182ab429214799ffcd1.1522828746.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 04 Apr 2018 11:06:58 +0200
+Subject: [Buildroot] [PATCH] autobuild-run: prepare_build(): ignore
+ directories in dldir
+In-Reply-To: <20180404093003.296b33dc@windsurf> (Thomas Petazzoni's message of
+ "Wed, 4 Apr 2018 09:30:03 +0200")
+References: <20180404070728.18851-1-peter@korsgaard.com>
+ <20180404093003.296b33dc@windsurf>
+Message-ID: <874lkrnxvx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avoid detection of host tcl headers.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-The tcl package in Buildroot is not cross-compile safe. The generated
-tclConfig.sh script has -L/usr/lib in TCL_LIB_SPEC.
+ > Hello,
+ > On Wed,  4 Apr 2018 09:07:28 +0200, Peter Korsgaard wrote:
+ >> With the change to use subdirs in dldir, prepare_build may end up trying to
+ >> remove a non-empty subdir, causing an exception:
+ >> 
+ >> Process Process-1:
+ >> Traceback (most recent call last):
+ >> File "/usr/lib64/python2.7/multiprocessing/process.py", line 258, in _bootstrap
+ >> self.run()
+ >> File "/usr/lib64/python2.7/multiprocessing/process.py", line 114, in run
+ >> self._target(*self._args, **self._kwargs)
+ >> File "/home/peko/buildroot-test/scripts/autobuild-run", line 627, in run_instance
+ >> ret = prepare_build(**kwargs)
+ >> File "/home/peko/buildroot-test/scripts/autobuild-run", line 301, in prepare_build
+ >> os.remove(os.path.join(dldir, f))
+ >> OSError: [Errno 21] Is a directory: 'instance-0/dl/mtools'
+ >> 
+ >> We only want to delete individual download files, so drop directories from
+ >> the list of removal candidates.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> scripts/autobuild-run | 4 +++-
+ >> 1 file changed, 3 insertions(+), 1 deletion(-)
+ >> 
+ >> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+ >> index 0f1c7d7..d2eb8a6 100755
+ >> --- a/scripts/autobuild-run
+ >> +++ b/scripts/autobuild-run
+ >> @@ -293,7 +293,9 @@ def prepare_build(**kwargs):
+ >> # regularly re-download files to check that their upstream
+ >> # location is still correct.
+ >> for i in range(0, 5):
+ >> -        flist = os.listdir(dldir)
+ >> +        # ignore directories
+ >> +        flist = [f for f in os.listdir(dldir)
+ >> +                 if os.path.isfile(os.path.join(dldir, f))]
+ >> if not flist:
+ >> break
+ >> f = flist[randint(0, len(flist) - 1)]
 
-Should fix:
-http://autobuild.buildroot.net/results/d11/d118c3c09f6fc1de26491f2ed480ef28b091dba8/
-http://autobuild.buildroot.net/results/035/0353e1443125da1e544d1a98348716bfe67c8726/
+ > But this is not going to remove files in sub-directories I believe, and
+ > therefore it no longer does the job it is supposed to do. I believe we
+ > need to switch to os.walk() to walk down in the sub-directories, no ?
 
-Cc: Andr? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libkrb5/libkrb5.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Ehh, you're right. For some reason I was convinced listdir would
+recurse.
 
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index 88cfc61a19fd..03905073049b 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -25,7 +25,8 @@ LIBKRB5_CONF_OPTS = \
- 	--without-system-db \
- 	--without-system-et \
- 	--without-system-ss \
--	--without-system-verto
-+	--without-system-verto \
-+	--without-tcl
- 
- ifeq ($(BR2_PACKAGE_OPENLDAP),y)
- LIBKRB5_CONF_OPTS += --with-ldap
+So something like:
+
+flist = [map(lambda f: os.path.join(r, f), f) for (r, d, f) in os.walk(dldir)]
+
+I'll do a test and resend.
+
 -- 
-2.16.3
+Bye, Peter Korsgaard
