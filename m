@@ -1,125 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Apr 2018 22:04:58 +0200
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats-new: add current
- version information
-Message-ID: <20180404200817.4E63A83F4C@busybox.osuosl.org>
+Date: Wed, 4 Apr 2018 22:04:44 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats-new: add -n and
+ -p options
+Message-ID: <20180404200817.391DB83F4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=338c7b5e6288a20080d0715408eeb5596c6d2b7f
+commit: https://git.buildroot.net/buildroot/commit/?id=df8a39468b1f89ab82aad47b95524abe75339458
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a new column in the HTML output containing the
-current version of a package in Buildroot. As such, it isn't terribly
-useful, but combined with the latest upstream version added in a
-follow-up commit, it will become very useful.
+This commit adds the following options to the pkg-stats-new script:
+
+ -n, to specify a number of packages to parse instead of all packages
+
+ -p, to specify a list of packages (comma-separated) to parse instead
+     of all packages
+
+These options are basically only useful when debugging/developing
+this script, but they are very useful, because the script is rather
+slow to run completely with all 2000+ packages, especially once
+upstream versions will be fetched from release-monitoring.org.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats-new | 46 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ support/scripts/pkg-stats-new | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats-new b/support/scripts/pkg-stats-new
-index 5dc70f1671..43f7e8d543 100755
+index 955d3ce990..5dc70f1671 100755
 --- a/support/scripts/pkg-stats-new
 +++ b/support/scripts/pkg-stats-new
-@@ -31,6 +31,7 @@ INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
- class Package:
-     all_licenses = list()
-     all_license_files = list()
-+    all_versions = dict()
+@@ -23,6 +23,7 @@ import os
+ from collections import defaultdict
+ import re
+ import subprocess
++import sys
  
-     def __init__(self, name, path):
-         self.name = name
-@@ -41,6 +42,7 @@ class Package:
-         self.has_hash = False
-         self.patch_count = 0
-         self.warnings = 0
-+        self.current_version = None
+ INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
  
-     def pkgvar(self):
-         return self.name.upper().replace("-", "_")
-@@ -88,6 +90,14 @@ class Package:
-         for subdir, _, _ in os.walk(pkgdir):
-             self.patch_count += len(fnmatch.filter(os.listdir(subdir), '*.patch'))
+@@ -116,11 +117,14 @@ class Package:
+             (self.name, self.path, self.has_license, self.has_license_files, self.has_hash, self.patch_count)
  
-+    def set_current_version(self):
-+        """
-+        Fills in the .current_version field
-+        """
-+        var = self.pkgvar()
-+        if var in self.all_versions:
-+            self.current_version = self.all_versions[var]
-+
-     def set_check_package_warnings(self):
-         """
-         Fills in the .warnings field
-@@ -217,6 +227,33 @@ def package_init_make_info():
  
-         Package.all_license_files.append(pkgvar)
+-def get_pkglist():
++def get_pkglist(npackages, package_list):
+     """
+     Builds the list of Buildroot packages, returning a list of Package
+     objects. Only the .name and .path fields of the Package object are
+     initialized.
++
++    npackages: limit to N packages
++    package_list: limit to those packages in this list
+     """
+     WALK_USEFUL_SUBDIRS = ["boot", "linux", "package", "toolchain"]
+     WALK_EXCLUDES = ["boot/common.mk",
+@@ -143,6 +147,7 @@ def get_pkglist():
+                      "toolchain/helpers.mk",
+                      "toolchain/toolchain-wrapper.mk"]
+     packages = list()
++    count = 0
+     for root, dirs, files in os.walk("."):
+         rootdir = root.split("/")
+         if len(rootdir) < 2:
+@@ -154,6 +159,8 @@ def get_pkglist():
+                 continue
+             # Strip ending ".mk"
+             pkgname = f[:-3]
++            if package_list and pkgname not in package_list:
++                continue
+             pkgpath = os.path.join(root, f)
+             skip = False
+             for exclude in WALK_EXCLUDES:
+@@ -165,6 +172,9 @@ def get_pkglist():
+                 continue
+             p = Package(pkgname, pkgpath)
+             packages.append(p)
++            count += 1
++            if npackages and count == npackages:
++                return packages
+     return packages
  
-+    # Version
-+    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
-+                                 "-s", "printvars", "VARS=%_VERSION"])
-+
-+    # We process first the host package VERSION, and then the target
-+    # package VERSION. This means that if a package exists in both
-+    # target and host variants, with different version numbers
-+    # (unlikely), we'll report the target version number.
-+    version_list = o.splitlines()
-+    version_list = [x for x in version_list if x.startswith("HOST_")] + \
-+                   [x for x in version_list if not x.startswith("HOST_")]
-+    for l in version_list:
-+        # Get variable name and value
-+        pkgvar, value = l.split("=")
-+
-+        # If present, strip HOST_ from variable name
-+        if pkgvar.startswith("HOST_"):
-+            pkgvar = pkgvar[5:]
-+
-+        if pkgvar.endswith("_DL_VERSION"):
-+            continue
-+
-+        # Strip _VERSION
-+        pkgvar = pkgvar[:-8]
-+
-+        Package.all_versions[pkgvar] = value
-+
  
- def calculate_stats(packages):
-     stats = defaultdict(int)
-@@ -369,6 +406,13 @@ def dump_html_pkg(f, pkg):
-     f.write("  <td class=\"%s\">%s</td>\n" %
-             (" ".join(td_class), boolean_str(pkg.has_hash)))
+@@ -434,13 +444,24 @@ def parse_args():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('-o', dest='output', action='store', required=True,
+                         help='HTML output file')
++    parser.add_argument('-n', dest='npackages', type=int, action='store',
++                        help='Number of packages')
++    parser.add_argument('-p', dest='packages', action='store',
++                        help='List of packages (comma separated)')
+     return parser.parse_args()
  
-+    # Current version
-+    if len(pkg.current_version) > 20:
-+        current_version = pkg.current_version[:20] + "..."
+ 
+ def __main__():
+     args = parse_args()
++    if args.npackages and args.packages:
++        print "ERROR: -n and -p are mutually exclusive"
++        sys.exit(1)
++    if args.packages:
++        package_list = args.packages.split(",")
 +    else:
-+        current_version = pkg.current_version
-+    f.write("  <td class=\"centered\">%s</td>\n" % current_version)
-+
-     # Warnings
-     td_class = ["centered"]
-     if pkg.warnings == 0:
-@@ -391,6 +435,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">License</td>
- <td class=\"centered\">License files</td>
- <td class=\"centered\">Hash file</td>
-+<td class=\"centered\">Current version</td>
- <td class=\"centered\">Warnings</td>
- </tr>
- """)
-@@ -471,6 +516,7 @@ def __main__():
-         pkg.set_hash_info()
-         pkg.set_patch_count()
-         pkg.set_check_package_warnings()
-+        pkg.set_current_version()
-     print "Calculate stats"
-     stats = calculate_stats(packages)
-     print "Write HTML"
++        package_list = None
+     print "Build package list ..."
+-    packages = get_pkglist()
++    packages = get_pkglist(args.npackages, package_list)
+     print "Getting package make info ..."
+     package_init_make_info()
+     print "Getting package details ..."
