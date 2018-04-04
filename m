@@ -1,9 +1,9 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Wed,  4 Apr 2018 12:34:27 -0300
-Subject: [Buildroot] [PATCH 3/4] linux: bump default to version 4.16
+Date: Wed,  4 Apr 2018 12:34:28 -0300
+Subject: [Buildroot] [PATCH 4/4] configs/wandboard: Bump to kernel 4.16
 In-Reply-To: <1522856068-17209-1-git-send-email-festevam@gmail.com>
 References: <1522856068-17209-1-git-send-email-festevam@gmail.com>
-Message-ID: <1522856068-17209-3-git-send-email-festevam@gmail.com>
+Message-ID: <1522856068-17209-4-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ configs/wandboard_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d9c5b62863..d52af66e5c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.15)"
-+	bool "Latest version (4.16)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (v4.4.112-cip18)"
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.15.15" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.16" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index b43c0c0e13..1d249c4cb2 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/wandboard/post-image.sh"
+@@ -19,7 +19,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
 -- 
 2.14.1
