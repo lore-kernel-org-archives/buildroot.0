@@ -1,45 +1,102 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 4 Apr 2018 18:29:52 +0200
-Subject: [Buildroot] [PATCH] libkrb5: disable optional tcl support
-In-Reply-To: <a0b74eef15ffe6a08bfe1182ab429214799ffcd1.1522828746.git.baruch@tkos.co.il>
-References: <a0b74eef15ffe6a08bfe1182ab429214799ffcd1.1522828746.git.baruch@tkos.co.il>
-Message-ID: <69a7a9be-cb5b-5006-b824-8c5f45611cef@dawncrow.de>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Wed,  4 Apr 2018 18:31:17 +0200
+Subject: [Buildroot] [PATCH v5 0/7] llvm for mesa3d
+Message-ID: <20180404163124.27934-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 04.04.2018 um 09:59 schrieb Baruch Siach:
-> Avoid detection of host tcl headers.
-> 
-> The tcl package in Buildroot is not cross-compile safe. The generated
-> tclConfig.sh script has -L/usr/lib in TCL_LIB_SPEC.
-> 
-> Should fix:
-> http://autobuild.buildroot.net/results/d11/d118c3c09f6fc1de26491f2ed480ef28b091dba8/
-> http://autobuild.buildroot.net/results/035/0353e1443125da1e544d1a98348716bfe67c8726/
-> 
-> Cc: Andr? Hentschel <nerv@dawncrow.de>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libkrb5/libkrb5.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-> index 88cfc61a19fd..03905073049b 100644
-> --- a/package/libkrb5/libkrb5.mk
-> +++ b/package/libkrb5/libkrb5.mk
-> @@ -25,7 +25,8 @@ LIBKRB5_CONF_OPTS = \
->  	--without-system-db \
->  	--without-system-et \
->  	--without-system-ss \
-> -	--without-system-verto
-> +	--without-system-verto \
-> +	--without-tcl
->  
->  ifeq ($(BR2_PACKAGE_OPENLDAP),y)
->  LIBKRB5_CONF_OPTS += --with-ldap
-> 
+Hello all,
 
-Thank you!
+This series provides llvm support for Mesa 3D:
+
+
+Changes v1 -> v2:
+
+The series has been simplified:
+
+*Build only backend for target architecture by default.
+*Support for AMDGPU(PATCH 3/4 in v1) was removed because I cannot test
+it currently. 
+*Host: make options modified to build only llvm-config and llvm-tblgen
+(reduces drastically build time for host).
+*Target: support only x86 currently (tested), I will test on ARM soon.
+
+Changes v2 -> v3:
+
+* Full installation of LLVM (tools and libLLVM.so) for the host.
+* Disable Mesa 3D static linking, it now links with shared lib.
+* Options to disable building each tool one by one were removed.
+* Support for AMDGPU.
+* Support for ARM and AArch64.
+*-DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME) added. This fixes the error:
+"No available targets are compatible with this triple" for llvmpipe.
+
+Changes v3 -> v4:
+
+This series is focused on OpenCL support
+
+* Add Clang for host (needed to build libclc)
+* Add Clang for target (libOpenCL needs libclang and libLLVM)
+* Add libclc
+* Add OpenCL support in Mesa3D
+* Add package clinfo
+
+Changes v4 -> v5:
+
+The changes suggested after the Buildroot hackathon were applied:
+
+* No Config.in.host for llvm and clang.
+* ARM and Aarch64 now in PATCH 1
+* Unnecessary comments were removed
+* clang-tblgen wasn't being installed in HOST_DIR, now solved
+* LLVM_TARGETS_TO_BUILD is now easily extensible for new backends
+* llvm-tblgen was being installed on the target, now removed
+
+Regards,
+
+Valent?n
+
+Valentin Korenblit (7):
+  package/llvm: new package
+  package/llvm: enable AMDGPU
+  package/mesa3d: enable llvm support
+  package/clang: new package
+  package/libclc: new package
+  package/mesa3d: enable OpenCL support
+  package/clinfo: new package
+
+ DEVELOPERS                 |   6 +
+ package/Config.in          |   4 +
+ package/clang/Config.in    |   9 ++
+ package/clang/clang.hash   |   3 +
+ package/clang/clang.mk     |  71 ++++++++++++
+ package/clinfo/Config.in   |   9 ++
+ package/clinfo/clinfo.hash |   2 +
+ package/clinfo/clinfo.mk   |  23 ++++
+ package/libclc/Config.in   |   9 ++
+ package/libclc/libclc.hash |   3 +
+ package/libclc/libclc.mk   |  41 +++++++
+ package/llvm/Config.in     |  37 ++++++
+ package/llvm/llvm.hash     |   3 +
+ package/llvm/llvm.mk       | 272 +++++++++++++++++++++++++++++++++++++++++++++
+ package/mesa3d/Config.in   |  23 ++++
+ package/mesa3d/mesa3d.mk   |  22 +++-
+ 16 files changed, 535 insertions(+), 2 deletions(-)
+ create mode 100644 package/clang/Config.in
+ create mode 100644 package/clang/clang.hash
+ create mode 100644 package/clang/clang.mk
+ create mode 100644 package/clinfo/Config.in
+ create mode 100644 package/clinfo/clinfo.hash
+ create mode 100644 package/clinfo/clinfo.mk
+ create mode 100644 package/libclc/Config.in
+ create mode 100644 package/libclc/libclc.hash
+ create mode 100644 package/libclc/libclc.mk
+ create mode 100644 package/llvm/Config.in
+ create mode 100644 package/llvm/llvm.hash
+ create mode 100644 package/llvm/llvm.mk
+
+-- 
+2.14.3
