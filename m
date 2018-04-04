@@ -1,49 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Apr 2018 08:15:58 +0200
-Subject: [Buildroot] [PATCH] core/download fix local backend
-In-Reply-To: <20180404061049.23054-1-yann.morin.1998@free.fr>
-References: <20180404061049.23054-1-yann.morin.1998@free.fr>
-Message-ID: <20180404061558.GA3855@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed,  4 Apr 2018 08:30:51 +0200
+Subject: [Buildroot] [PATCH] pkg-download.mk: do not add a trailing slash to
+ <PKG>_SITE
+Message-ID: <20180404063051.12111-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Fixes
+http://autobuild.buildroot.net/results/734/7342b25f01d60cafc4a5422a5a1c282629f361c5/
 
-On 2018-04-04 08:10 +0200, Yann E. MORIN spake thusly:
-> The backend is now named after the scheme, which is 'file' for a local
-> file.
+$(dir does not strip last path separator and the wget wrapper adds a '/'
+between the -u argument and the filename when it reconstructs the URL,
+leading us to have two slashes before the filename when accessing the
+upstream location.
 
-Hold-on on that one, I missed a proper test (it was falling back to the
-backup mirror...)
+Most upstream servers ignores this, but not all - Leading to download issues
+from pypi.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  support/download/{cp => file} | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename support/download/{cp => file} (100%)
-> 
-> diff --git a/support/download/cp b/support/download/file
-> similarity index 100%
-> rename from support/download/cp
-> rename to support/download/file
-> -- 
-> 2.14.1
-> 
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 7ed95f2b2c..2c4ad3ba2c 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -82,7 +82,7 @@ endif
+ 
+ ifeq ($(BR2_PRIMARY_SITE_ONLY),)
+ DOWNLOAD_URIS += \
+-	-u $($(PKG)_SITE_METHOD)+$(dir $(call qstrip,$(1)))
++	-u $($(PKG)_SITE_METHOD)+$(patsubst %/,%,$(dir $(call qstrip,$(1))))
+ ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+ DOWNLOAD_URIS += \
+ 	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
