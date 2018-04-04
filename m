@@ -1,164 +1,90 @@
 From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Wed,  4 Apr 2018 18:31:21 +0200
-Subject: [Buildroot] [PATCH v5 4/7] package/clang: new package
+Date: Wed,  4 Apr 2018 18:31:20 +0200
+Subject: [Buildroot] [PATCH v5 3/7] package/mesa3d: enable llvm support
 In-Reply-To: <20180404163124.27934-1-valentin.korenblit@smile.fr>
 References: <20180404163124.27934-1-valentin.korenblit@smile.fr>
-Message-ID: <20180404163124.27934-5-valentin.korenblit@smile.fr>
+Message-ID: <20180404163124.27934-4-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides Clang tools and libraries for the host and libclang
-for the target.
+This patch provides LLVM support for Mesa3D, enabling llvmpipe
+software rasterizer if Gallium swrast is selected.
 
-Clang is needed to build libclc, which is also provided in a follup patch.
+In case Gallium r600 is selected, llvm AMDGPU backend is built.
 
-We need libclang for the target because it is used by most of OpenCL implementations.
+Having llvm installed also enables radeonsi Gallium driver, but
+it is not provided with this patch as it hasn't been tested.
 
-A later patch in this series will enable Clover, the OpenCl implementation part
-of Mesa3D, which requires libclang.
-
-clang-tblgen must be copied to HOST_DIR as it is not installed by default but is needed
-for cross-compilation: http://lists.llvm.org/pipermail/cfe-dev/2015-June/043318.html
+It uses llvm-config (host variant) installed in STAGING_DIR/usr/bin
+to get LLVM libraries. Assuming that LLVM version 5.0.1 is installed,
+llvm-config --libs will output -lLLVM-5.0.
 
 Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Tested-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/clang/Config.in  |  9 ++++++
- package/clang/clang.hash |  3 ++
- package/clang/clang.mk   | 71 ++++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 85 insertions(+)
- create mode 100644 package/clang/Config.in
- create mode 100644 package/clang/clang.hash
- create mode 100644 package/clang/clang.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 78be8256bc..72303992c2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1888,6 +1888,7 @@ F:	package/dropwatch/
- F:	package/tstools/
+llvmpipe tested running glmark2-es2 on x86, ARM and Aarch64
+
+ package/mesa3d/Config.in |  6 ++++++
+ package/mesa3d/mesa3d.mk | 14 +++++++++++---
+ 2 files changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index f141587c4d..ffe0287ac5 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -25,6 +25,11 @@ menuconfig BR2_PACKAGE_MESA3D
  
- N:	Valentin Korenblit <valentin.korenblit@smile.fr>
-+F:	package/clang/
- F:	package/llvm/
+ if BR2_PACKAGE_MESA3D
  
- N:	Vanya Sergeev <vsergeev@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 82c5c40531..b358e39c3f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1479,6 +1479,7 @@ menu "Other"
- 	source "package/bctoolbox/Config.in"
- 	source "package/bdwgc/Config.in"
- 	source "package/boost/Config.in"
-+	source "package/clang/Config.in"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cppcms/Config.in"
-diff --git a/package/clang/Config.in b/package/clang/Config.in
-new file mode 100644
-index 0000000000..269766da1e
---- /dev/null
-+++ b/package/clang/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_CLANG
-+	bool "clang"
++config BR2_PACKAGE_MESA3D_LLVM
++	bool "llvm support"
 +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
 +	select BR2_PACKAGE_LLVM
-+	help
-+	  Clang is a C/C++, Objective C/C++ and OpenCL C front-end
-+	  for the LLVM compiler.
 +
-+	  http://clang.llvm.org
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
-new file mode 100644
-index 0000000000..a5bf909814
---- /dev/null
-+++ b/package/clang/clang.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 135f6c9b0cd2da1aff2250e065946258eb699777888df39ca5a5b4fe5e23d0ff cfe-5.0.1.src.tar.xz
-+sha256 de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6 LICENSE.TXT
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-new file mode 100644
-index 0000000000..7535782436
---- /dev/null
-+++ b/package/clang/clang.mk
-@@ -0,0 +1,71 @@
-+################################################################################
-+#
-+# clang
-+#
-+################################################################################
+ # inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	bool
+@@ -77,6 +82,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_RADEON
++	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1d88fd8480..506f84274f 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -32,6 +32,17 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ MESA3D_CONF_OPTS += --disable-static
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
++MESA3D_DEPENDENCIES += host-llvm llvm
++MESA3D_CONF_OPTS += \
++	--with-llvm-prefix=$(STAGING_DIR)/usr \
++	--enable-llvm-shared-libs \
++	--enable-llvm
++else
++# Avoid automatic search of llvm-config
++MESA3D_CONF_OPTS += --disable-llvm
++endif
 +
-+CLANG_VERSION = 5.0.1
-+CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
-+CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
-+CLANG_LICENSE = NCSA
-+CLANG_LICENSE_FILES = LICENSE.TXT
-+CLANG_SUPPORTS_IN_SOURCE_BUILD = NO
-+CLANG_INSTALL_STAGING = YES
-+
-+HOST_CLANG_DEPENDENCIES = host-llvm host-libxml2
-+CLANG_DEPENDENCIES = llvm host-clang
-+
-+# This option is needed. Otherwise multiple shared libs (libclangAST.so,
-+# libclangBasic.so, libclangFrontend.so, etc.) will be generated. As a final
-+# shared lib containing all these components (libclang.so) is also generated, this
-+# resulted in the following error when trying to use tools that use libclang:
-+# $ CommandLine Error: Option 'track-memory' registered more than once!
-+# $ LLVM ERROR: inconsistency in registered CommandLine options
-+# By setting BUILD_SHARED_LIBS to OFF, we generate multiple static libraries
-+# (the same way as host's clang build) and finally libclang.so to be installed on the
-+# target.
-+CLANG_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
-+
-+# Default is Debug build, which requires considerably more disk space and
-+# build time. Release build is selected for host and target because the linker
-+# can run out of memory in Debug mode.
-+HOST_CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-+CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-+
-+CLANG_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
-+
-+# We need to build tools because libclang is a tool
-+HOST_CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
-+CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
-+
-+HOST_CLANG_CONF_OPTS += \
-+	-DCLANG_BUILD_EXAMPLES=OFF \
-+	-DCLANG_INCLUDE_DOCS=OFF \
-+	-DCLANG_INCLUDE_TESTS=OFF
-+
-+CLANG_CONF_OPTS += \
-+	-DCLANG_BUILD_EXAMPLES=OFF \
-+	-DCLANG_INCLUDE_DOCS=OFF \
-+	-DCLANG_INCLUDE_TESTS=OFF
-+
-+HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
-+CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(STAGING_DIR)/usr/bin/llvm-config \
-+	-DCLANG_TABLEGEN:FILEPATH=$(HOST_DIR)/usr/bin/clang-tblgen
-+
-+# Clang can't be used as compiler on the target since there are no development files
-+# (headers) and other build tools. So remove clang binaries from target.
-+define CLANG_DELETE_BINARIES_FROM_TARGET
-+	rm -f $(TARGET_DIR)/usr/bin/clang*
-+endef
-+CLANG_POST_INSTALL_TARGET_HOOKS += CLANG_DELETE_BINARIES_FROM_TARGET
-+
-+# clang-tblgen is not installed by default, however it is necessary for
-+# cross-compiling clang
-+define HOST_CLANG_INSTALL_CLANG_TBLGEN
-+	$(INSTALL) -D -m 0755 $(HOST_CLANG_BUILDDIR)/bin/clang-tblgen \
-+		$(HOST_DIR)/usr/bin/clang-tblgen
-+endef
-+HOST_CLANG_POST_INSTALL_HOOKS = HOST_CLANG_INSTALL_CLANG_TBLGEN
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+ # The Sourcery MIPS toolchain has a special (non-upstream) feature to
+ # have "compact exception handling", which unfortunately breaks with
+ # mesa3d, so we disable it here by passing -mno-compact-eh.
+@@ -219,7 +230,4 @@ else
+ MESA3D_CONF_OPTS += --disable-lmsensors
+ endif
+ 
+-# Avoid automatic search of llvm-config
+-MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
+-
+ $(eval $(autotools-package))
 -- 
 2.14.3
