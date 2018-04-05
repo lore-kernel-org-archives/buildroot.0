@@ -1,81 +1,430 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  5 Apr 2018 21:50:32 +0200
-Subject: [Buildroot] [PATCH 18/23] libpng: remove Blackfin patch
+Date: Thu,  5 Apr 2018 21:50:28 +0200
+Subject: [Buildroot] [PATCH 14/23] gdb/7.10: remove Blackfin patch
 In-Reply-To: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
 References: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180405195037.32641-19-thomas.petazzoni@bootlin.com>
+Message-ID: <20180405195037.32641-15-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+And renumber remaining patches
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-prefix-to-symbol-names-in-version-script.patch | 55 ----------------------
- 1 file changed, 55 deletions(-)
- delete mode 100644 package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
+ .../0006-Revert-sim-unify-SIM_CPU-definition.patch | 372 ---------------------
+ ...-Sync-proc_service-definition-with-GLIBC.patch} |   0
+ ...efine-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch} |   0
+ ...fine-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch} |   0
+ ...0009-Fix-gdbserver-build-on-uClibc-noMMU.patch} |   0
+ ...gidefs.h.patch => 0010-use-asm-sgidefs.h.patch} |   0
+ 6 files changed, 372 deletions(-)
+ delete mode 100644 package/gdb/7.10.1/0006-Revert-sim-unify-SIM_CPU-definition.patch
+ rename package/gdb/7.10.1/{0007-Sync-proc_service-definition-with-GLIBC.patch => 0006-Sync-proc_service-definition-with-GLIBC.patch} (100%)
+ rename package/gdb/7.10.1/{0008-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch => 0007-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch} (100%)
+ rename package/gdb/7.10.1/{0009-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch => 0008-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch} (100%)
+ rename package/gdb/7.10.1/{0010-Fix-gdbserver-build-on-uClibc-noMMU.patch => 0009-Fix-gdbserver-build-on-uClibc-noMMU.patch} (100%)
+ rename package/gdb/7.10.1/{0011-use-asm-sgidefs.h.patch => 0010-use-asm-sgidefs.h.patch} (100%)
 
-diff --git a/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch b/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
+diff --git a/package/gdb/7.10.1/0006-Revert-sim-unify-SIM_CPU-definition.patch b/package/gdb/7.10.1/0006-Revert-sim-unify-SIM_CPU-definition.patch
 deleted file mode 100644
-index de772225ba..0000000000
---- a/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
+index 20b7fb2341..0000000000
+--- a/package/gdb/7.10.1/0006-Revert-sim-unify-SIM_CPU-definition.patch
 +++ /dev/null
-@@ -1,55 +0,0 @@
--From 473fdecd9a580b45251480b8ccbbb1927c598310 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Thu, 26 May 2016 16:27:13 -0300
--Subject: [PATCH] Don't append prefix to symbol names in version script
+@@ -1,372 +0,0 @@
+-From 4d913bb73965fdb9c756e8d5916a829b60aa3a44 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Thu, 4 Aug 2016 23:44:24 +0200
+-Subject: [PATCH] Revert "sim: unify SIM_CPU definition"
 -
--Even if Blackfin GNU toolchain add prefix '_' to all symbols,
--symbol prefix is not accepted in the link flag --version-script.
--Don't append prefix in the symbols in the version script file.
+-This reverts commit 20bca71d82598a015de0991196e45f0b5f7ead81.
 -
--Original patch by: Sonic Zhang <sonic.zhang@analog.com>
+-This change causes a redefinition of SIM_CPU on the Blackfin
+-architecture, as it is defined in both the common sim/common/sim-base.h
+-and the architecture specific sim/bfin/sim-main.h.
 -
--[Gustavo: update for 1.6.22]
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--[Julien: update for 1.6.25]
--Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
--
--[Bernd: update for 1.6.29]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- Makefile.am | 2 +-
-- Makefile.in | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
+- sim/arm/sim-main.h        |  3 +++
+- sim/avr/sim-main.h        |  2 ++
+- sim/bfin/sim-main.h       |  2 --
+- sim/common/sim-base.h     |  2 --
+- sim/cr16/sim-main.h       |  2 ++
+- sim/cris/sim-main.h       |  5 +++++
+- sim/d10v/sim-main.h       |  2 ++
+- sim/frv/sim-main.h        | 10 ++++++++++
+- sim/ft32/sim-main.h       |  2 ++
+- sim/h8300/sim-main.h      |  3 +++
+- sim/iq2000/sim-main.h     |  5 +++++
+- sim/lm32/sim-main.h       |  5 +++++
+- sim/m32r/sim-main.h       |  5 +++++
+- sim/m68hc11/sim-main.h    |  3 +++
+- sim/mcore/sim-main.h      |  2 ++
+- sim/microblaze/sim-main.h |  3 +++
+- sim/mips/sim-main.h       |  3 +++
+- sim/mn10300/sim-main.h    |  2 ++
+- sim/moxie/sim-main.h      |  3 +++
+- sim/msp430/sim-main.h     |  3 +++
+- sim/sh/sim-main.h         |  3 +++
+- sim/sh64/sim-main.h       |  5 +++++
+- sim/v850/sim-main.h       |  3 +++
+- 23 files changed, 74 insertions(+), 4 deletions(-)
 -
--diff --git a/Makefile.am b/Makefile.am
--index 3430dca..db6a7a2 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -245,7 +245,7 @@ contrib/tools/pngfix.o: pnglibconf.h
-- # interfering with the symbol file format.
-- SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0'\
-- 		-DPNGLIB_VERSION='@PNGLIB_VERSION@'\
---		-DSYMBOL_PREFIX='$(SYMBOL_PREFIX)'\
--+		-DSYMBOL_PREFIX=''\
-- 		-DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE
+-diff --git a/sim/arm/sim-main.h b/sim/arm/sim-main.h
+-index 9a37b98..ae622bd 100644
+---- a/sim/arm/sim-main.h
+-+++ b/sim/arm/sim-main.h
+-@@ -20,6 +20,9 @@
+- #define SIM_MAIN_H
 - 
-- if DO_PNG_PREFIX
--diff --git a/Makefile.in b/Makefile.in
--index 4e67782..5f468d9 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -766,7 +766,7 @@ SUFFIXES = .chk .out
-- # interfering with the symbol file format.
-- SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0' \
-- 	-DPNGLIB_VERSION='@PNGLIB_VERSION@' \
---	-DSYMBOL_PREFIX='$(SYMBOL_PREFIX)' -DPNG_NO_USE_READ_MACROS \
--+	-DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS \
-- 	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_9)
+- #include "sim-basics.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- #include "bfd.h"
 - 
-- # EXT_LIST is a list of the possibly library directory extensions, this exists
+-diff --git a/sim/avr/sim-main.h b/sim/avr/sim-main.h
+-index e0cac22..52904e3 100644
+---- a/sim/avr/sim-main.h
+-+++ b/sim/avr/sim-main.h
+-@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- 
+- extern unsigned int pc;
+- 
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- 
+- struct _sim_cpu {
+-diff --git a/sim/bfin/sim-main.h b/sim/bfin/sim-main.h
+-index 806fe15..53e1774 100644
+---- a/sim/bfin/sim-main.h
+-+++ b/sim/bfin/sim-main.h
+-@@ -24,8 +24,6 @@
+- #include "sim-basics.h"
+- #include "sim-signal.h"
+- 
+--/* TODO: Delete this.  Need to convert bu32/etc... to common sim types
+--         and unwind the bfin-sim.h/machs.h include below first though.  */
+- typedef struct _sim_cpu SIM_CPU;
+- 
+- #include "bfin-sim.h"
+-diff --git a/sim/common/sim-base.h b/sim/common/sim-base.h
+-index 21f61f4..e90e07c 100644
+---- a/sim/common/sim-base.h
+-+++ b/sim/common/sim-base.h
+-@@ -72,8 +72,6 @@ typedef address_word sim_cia;
+- #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
+- #endif
+- 
+--/* TODO: Probably should just delete SIM_CPU.  */
+--typedef struct _sim_cpu SIM_CPU;
+- typedef struct _sim_cpu sim_cpu;
+- 
+- #include "sim-module.h"
+-diff --git a/sim/cr16/sim-main.h b/sim/cr16/sim-main.h
+-index a63b93e..1a80229 100644
+---- a/sim/cr16/sim-main.h
+-+++ b/sim/cr16/sim-main.h
+-@@ -24,6 +24,8 @@
+- typedef long int           word;
+- typedef unsigned long int  uword;
+- 
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- #include "bfd.h"
+- 
+-diff --git a/sim/cris/sim-main.h b/sim/cris/sim-main.h
+-index 4dc04a2..fec0039 100644
+---- a/sim/cris/sim-main.h
+-+++ b/sim/cris/sim-main.h
+-@@ -24,6 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- #ifndef SIM_MAIN_H
+- #define SIM_MAIN_H
+- 
+-+#define USING_SIM_BASE_H
+-+
+-+struct _sim_cpu;
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "symcat.h"
+- #include "sim-basics.h"
+- #include "cgen-types.h"
+-diff --git a/sim/d10v/sim-main.h b/sim/d10v/sim-main.h
+-index 0b87811..a7d59dd 100644
+---- a/sim/d10v/sim-main.h
+-+++ b/sim/d10v/sim-main.h
+-@@ -24,6 +24,8 @@
+- typedef long int           word;
+- typedef unsigned long int  uword;
+- 
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- #include "bfd.h"
+- 
+-diff --git a/sim/frv/sim-main.h b/sim/frv/sim-main.h
+-index d5a67cb..fd12c4f 100644
+---- a/sim/frv/sim-main.h
+-+++ b/sim/frv/sim-main.h
+-@@ -19,6 +19,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- 
+- /* Main header for the frv.  */
+- 
+-+#define USING_SIM_BASE_H /* FIXME: quick hack */
+-+
+-+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+-+/* Set the mask of unsupported traces.  */
+-+#define WITH_TRACE \
+-+  (~(TRACE_alu | TRACE_decode | TRACE_memory | TRACE_model | TRACE_fpu \
+-+     | TRACE_branch | TRACE_debug))
+-+
+- /* sim-basics.h includes config.h but cgen-types.h must be included before
+-    sim-basics.h and cgen-types.h needs config.h.  */
+- #include "config.h"
+-diff --git a/sim/ft32/sim-main.h b/sim/ft32/sim-main.h
+-index b27a690..a270a5d 100644
+---- a/sim/ft32/sim-main.h
+-+++ b/sim/ft32/sim-main.h
+-@@ -25,6 +25,8 @@
+- #include "sim-base.h"
+- #include "bfd.h"
+- 
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "ft32-sim.h"
+- 
+- struct _sim_cpu {
+-diff --git a/sim/h8300/sim-main.h b/sim/h8300/sim-main.h
+-index 6dbc1ac..e95c4d9 100644
+---- a/sim/h8300/sim-main.h
+-+++ b/sim/h8300/sim-main.h
+-@@ -87,6 +87,9 @@ enum h8_typecodes {
+- };
+- 
+- #include "sim-basics.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- 
+- /* Structure used to describe addressing */
+-diff --git a/sim/iq2000/sim-main.h b/sim/iq2000/sim-main.h
+-index 992520a..ce3baba 100644
+---- a/sim/iq2000/sim-main.h
+-+++ b/sim/iq2000/sim-main.h
+-@@ -4,6 +4,11 @@
+- #ifndef SIM_MAIN_H
+- #define SIM_MAIN_H
+- 
+-+#define USING_SIM_BASE_H /* FIXME: quick hack */
+-+
+-+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- /* sim-basics.h includes config.h but cgen-types.h must be included before
+-    sim-basics.h and cgen-types.h needs config.h.  */
+- #include "config.h"
+-diff --git a/sim/lm32/sim-main.h b/sim/lm32/sim-main.h
+-index 4894e8d..210bb8b 100644
+---- a/sim/lm32/sim-main.h
+-+++ b/sim/lm32/sim-main.h
+-@@ -23,6 +23,11 @@
+- #ifndef SIM_MAIN_H
+- #define SIM_MAIN_H
+- 
+-+#define USING_SIM_BASE_H	/* FIXME: quick hack */
+-+
+-+struct _sim_cpu;		/* FIXME: should be in sim-basics.h */
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "symcat.h"
+- #include "sim-basics.h"
+- #include "cgen-types.h"
+-diff --git a/sim/m32r/sim-main.h b/sim/m32r/sim-main.h
+-index cd39e98..74bb513 100644
+---- a/sim/m32r/sim-main.h
+-+++ b/sim/m32r/sim-main.h
+-@@ -3,6 +3,11 @@
+- #ifndef SIM_MAIN_H
+- #define SIM_MAIN_H
+- 
+-+#define USING_SIM_BASE_H /* FIXME: quick hack */
+-+
+-+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "symcat.h"
+- #include "sim-basics.h"
+- #include "cgen-types.h"
+-diff --git a/sim/m68hc11/sim-main.h b/sim/m68hc11/sim-main.h
+-index d1fc582..4f41db9 100644
+---- a/sim/m68hc11/sim-main.h
+-+++ b/sim/m68hc11/sim-main.h
+-@@ -25,6 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- #define SIM_HANDLES_LMA 1
+- 
+- #include "sim-basics.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-signal.h"
+- #include "sim-base.h"
+- 
+-diff --git a/sim/mcore/sim-main.h b/sim/mcore/sim-main.h
+-index be50ec1..25698c1 100644
+---- a/sim/mcore/sim-main.h
+-+++ b/sim/mcore/sim-main.h
+-@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- typedef long int           word;
+- typedef unsigned long int  uword;
+- 
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- #include "bfd.h"
+- 
+-diff --git a/sim/microblaze/sim-main.h b/sim/microblaze/sim-main.h
+-index 6781374..6b7b776 100644
+---- a/sim/microblaze/sim-main.h
+-+++ b/sim/microblaze/sim-main.h
+-@@ -20,6 +20,9 @@
+- 
+- #include "microblaze.h"
+- #include "sim-basics.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- 
+- /* The machine state.
+-diff --git a/sim/mips/sim-main.h b/sim/mips/sim-main.h
+-index 8d698ad..9729804 100644
+---- a/sim/mips/sim-main.h
+-+++ b/sim/mips/sim-main.h
+-@@ -29,6 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- mips_core_signal ((SD), (CPU), (CIA), (MAP), (NR_BYTES), (ADDR), (TRANSFER), (ERROR))
+- 
+- #include "sim-basics.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- #include "bfd.h"
+- 
+-diff --git a/sim/mn10300/sim-main.h b/sim/mn10300/sim-main.h
+-index 847506e..2ddbfb9 100644
+---- a/sim/mn10300/sim-main.h
+-+++ b/sim/mn10300/sim-main.h
+-@@ -42,6 +42,8 @@
+- #include "itable.h"
+- #include "idecode.h"
+- 
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #define WITH_WATCHPOINTS 1
+- 
+- #define SIM_CORE_SIGNAL(SD,CPU,CIA,MAP,NR_BYTES,ADDR,TRANSFER,ERROR)  \
+-diff --git a/sim/moxie/sim-main.h b/sim/moxie/sim-main.h
+-index b1a64fc..c60437e 100644
+---- a/sim/moxie/sim-main.h
+-+++ b/sim/moxie/sim-main.h
+-@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- #define SIM_MAIN_H
+- 
+- #include "sim-basics.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- #include "bfd.h"
+- 
+-diff --git a/sim/msp430/sim-main.h b/sim/msp430/sim-main.h
+-index 19c8cca..37bb42d 100644
+---- a/sim/msp430/sim-main.h
+-+++ b/sim/msp430/sim-main.h
+-@@ -23,6 +23,9 @@
+- 
+- #include "sim-basics.h"
+- #include "sim-signal.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "msp430-sim.h"
+- #include "sim-base.h"
+- 
+-diff --git a/sim/sh/sim-main.h b/sim/sh/sim-main.h
+-index e67df28..e2e17d7 100644
+---- a/sim/sh/sim-main.h
+-+++ b/sim/sh/sim-main.h
+-@@ -20,6 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- #define SIM_MAIN_H
+- 
+- #include "sim-basics.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- 
+- typedef struct
+-diff --git a/sim/sh64/sim-main.h b/sim/sh64/sim-main.h
+-index 7b24ab0..8fb595e 100644
+---- a/sim/sh64/sim-main.h
+-+++ b/sim/sh64/sim-main.h
+-@@ -3,6 +3,11 @@
+- #ifndef SIM_MAIN_H
+- #define SIM_MAIN_H
+- 
+-+#define USING_SIM_BASE_H /* FIXME: quick hack */
+-+
+-+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- /* sim-basics.h includes config.h but cgen-types.h must be included before
+-    sim-basics.h and cgen-types.h needs config.h.  */
+- #include "config.h"
+-diff --git a/sim/v850/sim-main.h b/sim/v850/sim-main.h
+-index 5127d28..16cbd97 100644
+---- a/sim/v850/sim-main.h
+-+++ b/sim/v850/sim-main.h
+-@@ -16,6 +16,9 @@
+- #include "sim-basics.h"
+- #include "sim-signal.h"
+- #include "sim-fpu.h"
+-+
+-+typedef struct _sim_cpu SIM_CPU;
+-+
+- #include "sim-base.h"
+- 
+- #include "simops.h"
 --- 
--2.7.3
+-2.7.4
 -
+diff --git a/package/gdb/7.10.1/0007-Sync-proc_service-definition-with-GLIBC.patch b/package/gdb/7.10.1/0006-Sync-proc_service-definition-with-GLIBC.patch
+similarity index 100%
+rename from package/gdb/7.10.1/0007-Sync-proc_service-definition-with-GLIBC.patch
+rename to package/gdb/7.10.1/0006-Sync-proc_service-definition-with-GLIBC.patch
+diff --git a/package/gdb/7.10.1/0008-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/7.10.1/0007-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+similarity index 100%
+rename from package/gdb/7.10.1/0008-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+rename to package/gdb/7.10.1/0007-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+diff --git a/package/gdb/7.10.1/0009-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/7.10.1/0008-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+similarity index 100%
+rename from package/gdb/7.10.1/0009-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+rename to package/gdb/7.10.1/0008-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+diff --git a/package/gdb/7.10.1/0010-Fix-gdbserver-build-on-uClibc-noMMU.patch b/package/gdb/7.10.1/0009-Fix-gdbserver-build-on-uClibc-noMMU.patch
+similarity index 100%
+rename from package/gdb/7.10.1/0010-Fix-gdbserver-build-on-uClibc-noMMU.patch
+rename to package/gdb/7.10.1/0009-Fix-gdbserver-build-on-uClibc-noMMU.patch
+diff --git a/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch b/package/gdb/7.10.1/0010-use-asm-sgidefs.h.patch
+similarity index 100%
+rename from package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
+rename to package/gdb/7.10.1/0010-use-asm-sgidefs.h.patch
 -- 
 2.14.3
