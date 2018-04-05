@@ -1,100 +1,129 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Thu, 5 Apr 2018 09:20:51 +0300
-Subject: [Buildroot] [PATCH 1/1] core: enhance printvars for variables
- with newlines
-In-Reply-To: <20180403143151.13372-1-chemobejk@gmail.com>
-References: <20180403143151.13372-1-chemobejk@gmail.com>
-Message-ID: <CAOJ2eMdEHvZeJ6rECyRkzMZN0UYJ2CYK4yMgR9d89P+-tWYJYw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 Apr 2018 08:30:39 +0200
+Subject: [Buildroot] [RFC PATCH] download/git: fix basename for files
+ inside tarballs
+In-Reply-To: <20180405031600.18831-1-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Thu, 5 Apr 2018 00:16:00 -0300")
+References: <20180405031600.18831-1-ricardo.martincoski@gmail.com>
+Message-ID: <87zi2imagg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ping?
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
-Is there anything left which prevents this from getting merged to master?
+ > Commit "6d938bcb52 download: git: introduce cache feature" introduced a
+ > typo that makes the tarball to contain files without the package
+ > basename:
+ > $ tar -tvf good-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
+ > -rw-r--r-- 0/0               8 2017-10-14 02:10 ./file
 
-Regards, Stefan
+ > Historically, all tarballs are generated with the basename:
+ > $ tar -tvf good-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
+ > -rw-r--r-- 0/0               8 2017-10-14 02:10 good-a238b1dfcd825d47d834af3c5223417c8411d90d/file
 
-On Tue, Apr 3, 2018 at 5:31 PM, Stefan Becker <chemobejk@gmail.com> wrote:
-> If the variable content has newlines in it then the currently dumped
-> content can't be fed again to GNU make. Add the option DEFINE_VARS which
-> causes the variables to be dumped using
->
->    define VAR
->    ... line 1 ...
->    ... line 2 ...
->    ...
->    endef
->
-> Updated the manual accordingly.
->
-> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-> ---
->  Makefile                  | 10 +++++++---
->  docs/manual/make-tips.txt | 20 ++++++++++++++++++++
->  2 files changed, 27 insertions(+), 3 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 0724f28f45..3e27195de0 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -974,9 +974,13 @@ printvars:
->                 $(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
->                 $(if $(filter-out environment% default automatic, \
->                                 $(origin $V)), \
-> -               $(if $(QUOTED_VARS),\
-> -                       $(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
-> -                       $(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
-> +               $(if $(DEFINE_VARS), \
-> +                       $(info define $V) \
-> +                       $(info $(if $(RAW_VARS),$(value $V),$($V))) \
-> +                       $(info endef), \
-> +                       $(if $(QUOTED_VARS),\
-> +                               $(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
-> +                               $(info $V=$(if $(RAW_VARS),$(value $V),$($V)))))))
->  # ' Syntax colouring...
->
->  .PHONY: clean
-> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-> index ea1d825bef..ba87e5d873 100644
-> --- a/docs/manual/make-tips.txt
-> +++ b/docs/manual/make-tips.txt
-> @@ -92,6 +92,8 @@ It is possible to tweak the output using some variables:
->
->  - +VARS+ will limit the listing to variables which names match the
->    specified make-pattern
-> +- +DEFINE_VARS+, if set to +YES+, will use define...endef to preserve
-> +  newlines in the value
->  - +QUOTED_VARS+, if set to +YES+, will single-quote the value
->  - +RAW_VARS+, if set to +YES+, will print the unexpanded value
->
-> @@ -106,6 +108,24 @@ For example:
->   BUSYBOX_RDEPENDENCIES=ncurses util-linux
->  ----
->
-> +----
-> + $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES DEFINE_VARS=YES
-> + define BUSYBOX_DEPENDENCIES
-> + skeleton toolchain
-> + endef
-> + define BUSYBOX_FINAL_ALL_DEPENDENCIES
-> + skeleton toolchain
-> + endef
-> + define BUSYBOX_FINAL_DEPENDENCIES
-> + skeleton toolchain
-> + endef
-> + define BUSYBOX_FINAL_PATCH_DEPENDENCIES
-> + endef
-> + define BUSYBOX_RDEPENDENCIES
-> + ncurses util-linux'linux-pam skeleton toolchain host-skeleton host-ccache
-> + endef
-> +----
-> +
->  ----
->   $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES QUOTED_VARS=YES
->   BUSYBOX_DEPENDENCIES='skeleton toolchain'
-> --
-> 2.14.3
->
+ > The hashes in the tree were calculated with the basename.
+
+ > In the most common scenario, after the download ends the tarball is
+ > generated, the hash mismatches and the download mechanism falls back to
+ > use the tarball from http://sources.buildroot.net .
+
+ > The problem can be reproduced by forcing the download of any git package
+ > PKG that has a hash file to check against:
+ > $ make defconfig
+ > $ ./utils/config --set-str BR2_BACKUP_SITE ""
+ > $ BR2_DL_DIR=$(mktemp -d) make PKG-dirclean PKG-source
+
+ > Fix the typo so the basename is really added to the files, that was
+ > clearly the intention of the code.
+
+Argh, indeed. Verified on the tremor package by moving the .hash file
+and my old tarball. Without the patch I get:
+
+tar -tvf tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8.tar.gz | head
+-rw-r--r-- 0/0             467 2018-03-19 21:08 ./CHANGELOG
+-rw-r--r-- 0/0            1466 2018-03-19 21:08 ./COPYING
+-rw-r--r-- 0/0            1553 2018-03-19 21:08 ./Makefile.am
+-rw-r--r-- 0/0            1941 2018-03-19 21:08 ./README
+-rw-r--r-- 0/0            1186 2018-03-19 21:08 ./Version_script.in
+-rw-r--r-- 0/0            6534 2018-03-19 21:08 ./asm_arm.h
+-rwxr-xr-x 0/0            3657 2018-03-19 21:08 ./autogen.sh
+-rw-r--r-- 0/0            4639 2018-03-19 21:08 ./backends.h
+-rw-r--r-- 0/0           14547 2018-03-19 21:08 ./block.c
+-rw-r--r-- 0/0            1109 2018-03-19 21:08 ./block.h
+
+And with the patch:
+
+tar -tvf tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8.tar.gz | head
+-rw-r--r-- 0/0             467 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/CHANGELOG
+-rw-r--r-- 0/0            1466 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/COPYING
+-rw-r--r-- 0/0            1553 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/Makefile.am
+-rw-r--r-- 0/0            1941 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/README
+-rw-r--r-- 0/0            1186 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/Version_script.in
+-rw-r--r-- 0/0            6534 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/asm_arm.h
+-rwxr-xr-x 0/0            3657 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/autogen.sh
+-rw-r--r-- 0/0            4639 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/backends.h
+-rw-r--r-- 0/0           14547 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/block.c
+-rw-r--r-- 0/0            1109 2018-03-19 21:08 tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8/block.h
+
+And the sha256sum matches our hash file.
+
+Committed, thanks.
+
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > ---
+ > NOTICE: linux-firmware is NOT fixed by this. I don't know why.
+ > I tried in my local computer a few other (other than the ones tested in
+ > Gitlab CI) git packages and they are fixed by this patch as well:
+ > libuci
+ > squashfs
+ > ubus
+ > x264
+ > Could it be related to my setup?
+ > tar (GNU tar) 1.29
+ > git version 2.14.1
+
+Hmm, it works here. I again moved my old tarball and .hash file:
+
+
+>>> linux-firmware 65b1c68c63f974d72610db38dfae49861117cae2 Downloading
+Initialized empty Git repository in /var/lib/downloads/linux-firmware/git/.git/
+Fetching all references
+remote: Counting objects: 6321, done.
+remote: Compressing objects: 100% (23/23), done.
+remote: Total 6321 (delta 13), reused 0 (delta 0)
+Receiving objects: 100% (6321/6321), 167.76 MiB | 1.80 MiB/s, done.
+Resolving deltas: 100% (3925/3925), done.
+From http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware
+ * [new branch]      master     -> origin/master
+warning: refname '65b1c68c63f974d72610db38dfae49861117cae2' is ambiguous.
+Git normally never creates a ref that ends with 40 hex characters
+because it will be ignored when you just specify 40-hex. These refs
+may be created by mistake. For example,
+
+  git checkout -b $br $(git rev-parse ...)
+
+where "$br" is somehow empty and a 40-hex ref is created. Please
+examine these refs and maybe delete them. Turn this message off by
+running "git config advice.objectNameWarning false"
+WARNING: no hash file for linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz
+
+>>> linux-firmware 65b1c68c63f974d72610db38dfae49861117cae2 Extracting
+gzip -d -c /var/lib/downloads/linux-firmware/linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz | tar --strip-components=1 -C /home/peko/source/buildroot/output-git/build/linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2   -xf -
+
+sha256sum ~download/linux-firmware/linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz
+246a0de9ef9de5076e7695c9e9399b5358bb77278ef375ed9360466d00a1a39b  /var/lib/downloads/linux-firmware/linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz
+
+Which matches the .hash file and my old tarball.
+
+So I guess there is something else going on. I'm using tar 1.29 and git 2.11.0.
+
+-- 
+Bye, Peter Korsgaard
