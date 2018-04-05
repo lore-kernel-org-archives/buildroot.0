@@ -1,35 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Apr 2018 08:35:55 +0200
-Subject: [Buildroot] [PATCH] pkg-download.mk: do not add a trailing
+Date: Thu, 5 Apr 2018 08:34:36 +0200
+Subject: [Buildroot] [git commit] pkg-download.mk: do not add a trailing
  slash to <PKG>_SITE
-In-Reply-To: <45c0681b-d3a9-99b0-555b-9dd3d6e305ff@mind.be> (Arnout
- Vandecappelle's message of "Thu, 5 Apr 2018 00:33:03 +0200")
-References: <20180404063051.12111-1-peter@korsgaard.com>
- <878ta3o4nk.fsf@dell.be.48ers.dk>
- <45c0681b-d3a9-99b0-555b-9dd3d6e305ff@mind.be>
-Message-ID: <87vad6ma7o.fsf@dell.be.48ers.dk>
+Message-ID: <20180405063600.E838A84BFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fc49c92afc8478ed32ff4770d88b97081c7193d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes
+http://autobuild.buildroot.net/results/734/7342b25f01d60cafc4a5422a5a1c282629f361c5/
 
- >> >  ifeq ($(BR2_PRIMARY_SITE_ONLY),)
- >> >  DOWNLOAD_URIS += \
- >> > -	-u $($(PKG)_SITE_METHOD)+$(dir $(call qstrip,$(1)))
- >> > +	-u $($(PKG)_SITE_METHOD)+$(patsubst %/,%,$(dir $(call qstrip,$(1))))
- >> 
- >> Alternatively I *THINK* we can just use $($(PKG)_SITE) here.
+$(dir does not strip last path separator and the wget wrapper adds a '/'
+between the -u argument and the filename when it reconstructs the URL,
+leading us to have two slashes before the filename when accessing the
+upstream location.
 
- >  No, the <PKG>_PATCH and <PKG>_EXTRA_DOWNLOADS variables may contain full URLs.
+Most upstream servers ignores this, but not all - Leading to download issues
+from pypi.
 
-Ahh, yes. It did seem too easy ;)
+Notice: As pointed out by Arnout, we cannot simply use $(PKG)_SITE here as
+_PATCH and _EXTRA_DOWNLOADS may contain full URLs.
 
-I'll add a note about this and commit, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 7ed95f2b2c..2c4ad3ba2c 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -82,7 +82,7 @@ endif
+ 
+ ifeq ($(BR2_PRIMARY_SITE_ONLY),)
+ DOWNLOAD_URIS += \
+-	-u $($(PKG)_SITE_METHOD)+$(dir $(call qstrip,$(1)))
++	-u $($(PKG)_SITE_METHOD)+$(patsubst %/,%,$(dir $(call qstrip,$(1))))
+ ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+ DOWNLOAD_URIS += \
+ 	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
