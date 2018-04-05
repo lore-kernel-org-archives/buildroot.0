@@ -1,12 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Apr 2018 21:08:38 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/bananapro: bump Linux to
- version 4.14.32
-In-Reply-To: <20180405082249.22327-1-joerg.krause@embedded.rocks>
+Date: Thu, 05 Apr 2018 21:08:44 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/bananapro: bump U-Boot to
+ version 2018.03
+In-Reply-To: <20180405082249.22327-2-joerg.krause@embedded.rocks>
  (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Thu, 5 Apr 2018 10:22:48 +0200")
+ Krause"'s message of "Thu, 5 Apr 2018 10:22:49 +0200")
 References: <20180405082249.22327-1-joerg.krause@embedded.rocks>
-Message-ID: <873709mpxl.fsf@dell.be.48ers.dk>
+ <20180405082249.22327-2-joerg.krause@embedded.rocks>
+Message-ID: <87y3i1lbcz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
