@@ -1,49 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  5 Apr 2018 21:50:29 +0200
-Subject: [Buildroot] [PATCH 15/23] graphite2: remove Blackfin related patch
+Date: Thu,  5 Apr 2018 21:50:25 +0200
+Subject: [Buildroot] [PATCH 11/23] cairo: remove Blackfin related patch
 In-Reply-To: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
 References: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180405195037.32641-16-thomas.petazzoni@bootlin.com>
+Message-ID: <20180405195037.32641-12-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+And renumber the remaining patches.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../graphite2/0001-disable-double-promotion.patch  | 23 ----------------------
- 1 file changed, 23 deletions(-)
- delete mode 100644 package/graphite2/0001-disable-double-promotion.patch
+ package/cairo/0001-blackfin-build-fix.patch        | 55 ----------------------
+ ...ork-build.patch => 0001-fix-nofork-build.patch} |  0
+ ...-49-build.patch => 0002-fix-gcc-49-build.patch} |  0
+ 3 files changed, 55 deletions(-)
+ delete mode 100644 package/cairo/0001-blackfin-build-fix.patch
+ rename package/cairo/{0003-fix-nofork-build.patch => 0001-fix-nofork-build.patch} (100%)
+ rename package/cairo/{0005-fix-gcc-49-build.patch => 0002-fix-gcc-49-build.patch} (100%)
 
-diff --git a/package/graphite2/0001-disable-double-promotion.patch b/package/graphite2/0001-disable-double-promotion.patch
+diff --git a/package/cairo/0001-blackfin-build-fix.patch b/package/cairo/0001-blackfin-build-fix.patch
 deleted file mode 100644
-index 888d862341..0000000000
---- a/package/graphite2/0001-disable-double-promotion.patch
+index 0e8dd3ad65..0000000000
+--- a/package/cairo/0001-blackfin-build-fix.patch
 +++ /dev/null
-@@ -1,23 +0,0 @@
--Don't use -Wdouble-promotion gcc option
+@@ -1,55 +0,0 @@
+-Fix build on platforms where __USER_LABEL_PREFIX__ is not empty
 -
--The warning flag isn't recognized for older GCC versions (blackfin),
--so just disable it.
+-On most platforms, a C language symbol and its assembly equivalent are
+-identical. However, on the Blackfin architecture, this isn't the case,
+-the corresponding C language symbol in assembly is prepended with a
+-"_". Blackfin therefore has __USER_LABEL_PREFIX__ defined to "_".
 -
--Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
--[Gustavo: update for 1.3.5]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: update for 1.3.10]
+-Cairo already has some code to cope with __USER_LABEL_PREFIX__, but
+-this code isn't completely correct: it prepends both assembly symbols
+-and C symbols with __USER_LABEL_PREFIX__, which cannot work.
 -
--diff -Nura graphite2-1.3.5.orig/src/CMakeLists.txt graphite2-1.3.5/src/CMakeLists.txt
----- graphite2-1.3.5.orig/src/CMakeLists.txt	2016-02-15 11:46:45.941906112 -0300
--+++ graphite2-1.3.5/src/CMakeLists.txt	2016-02-15 11:46:54.237194222 -0300
--@@ -111,9 +111,6 @@
--     if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86|i.86")
--         add_definitions(-mfpmath=sse -msse2)
--     endif (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86|i.86")
---    if (CMAKE_COMPILER_IS_GNUCXX)
---        add_definitions(-Wdouble-promotion)
---    endif (CMAKE_COMPILER_IS_GNUCXX)
--     message(STATUS "Compiler ID is: ${CMAKE_CXX_COMPILER_ID}")
--     if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
--         add_definitions(-Wimplicit-fallthrough)
+-This patch fixes that by using the existing slim_hidden_asmname() to
+-define assembly symbols, and introduce a new slim_hidden_realname()
+-for C symbols.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/src/cairo-compiler-private.h
+-===================================================================
+---- a/src/cairo-compiler-private.h
+-+++ b/src/cairo-compiler-private.h
+-@@ -93,12 +93,13 @@
+- 	__asm__ (slim_hidden_asmname (internal))
+- # define slim_hidden_def1(name, internal)				\
+-   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
+--	__attribute__((__alias__(slim_hidden_asmname(internal))))
+-+	__attribute__((__alias__(slim_hidden_realname(internal))))
+- # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
+- # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
+- # define slim_hidden_ulp2(x)		#x
+- # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
+- # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
+-+# define slim_hidden_realname(name)     #name
+- #else
+- # define slim_hidden_proto(name)		int _cairo_dummy_prototype(void)
+- # define slim_hidden_proto_no_warn(name)	int _cairo_dummy_prototype(void)
+-Index: b/util/cairo-script/cairo-script-private.h
+-===================================================================
+---- a/util/cairo-script/cairo-script-private.h
+-+++ b/util/cairo-script/cairo-script-private.h
+-@@ -109,12 +109,13 @@
+- 	__asm__ (slim_hidden_asmname (internal))
+- # define slim_hidden_def1(name, internal)				\
+-   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
+--	__attribute__((__alias__(slim_hidden_asmname(internal))))
+-+	__attribute__((__alias__(slim_hidden_realname(internal))))
+- # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
+- # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
+- # define slim_hidden_ulp2(x)		#x
+- # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
+- # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
+-+# define slim_hidden_realname(name)     #name
+- #else
+- # define slim_hidden_proto(name)		int _csi_dummy_prototype(void)
+- # define slim_hidden_proto_no_warn(name)	int _csi_dummy_prototype(void)
+diff --git a/package/cairo/0003-fix-nofork-build.patch b/package/cairo/0001-fix-nofork-build.patch
+similarity index 100%
+rename from package/cairo/0003-fix-nofork-build.patch
+rename to package/cairo/0001-fix-nofork-build.patch
+diff --git a/package/cairo/0005-fix-gcc-49-build.patch b/package/cairo/0002-fix-gcc-49-build.patch
+similarity index 100%
+rename from package/cairo/0005-fix-gcc-49-build.patch
+rename to package/cairo/0002-fix-gcc-49-build.patch
 -- 
 2.14.3
