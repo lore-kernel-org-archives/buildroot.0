@@ -1,105 +1,130 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Apr 2018 19:09:17 +0200
-Subject: [Buildroot] [RFC PATCH] download/git: fix basename for files
- inside tarballs
-In-Reply-To: <20180405031600.18831-1-ricardo.martincoski@gmail.com>
-References: <20180405031600.18831-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180405170917.GA13990@scaer>
+From: Sjoerd Venema <srg.venema@gmail.com>
+Date: Thu, 5 Apr 2018 19:18:55 +0200
+Subject: [Buildroot] ws281x library, scons, fails
+Message-ID: <CAPzckP6sMQYU6cmsYv30P+CJsmvg=KHrvpVb+gC6BDOwHdqSwg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Hi all,
 
-On 2018-04-05 00:16 -0300, Ricardo Martincoski spake thusly:
-> Commit "6d938bcb52 download: git: introduce cache feature" introduced a
-> typo that makes the tarball to contain files without the package
-> basename:
-> $ tar -tvf good-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
-> -rw-r--r-- 0/0               8 2017-10-14 02:10 ./file
-> 
-> Historically, all tarballs are generated with the basename:
-> $ tar -tvf good-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
-> -rw-r--r-- 0/0               8 2017-10-14 02:10 good-a238b1dfcd825d47d834af3c5223417c8411d90d/file
-> 
-> The hashes in the tree were calculated with the basename.
-> 
-> In the most common scenario, after the download ends the tarball is
-> generated, the hash mismatches and the download mechanism falls back to
-> use the tarball from http://sources.buildroot.net .
-> 
-> The problem can be reproduced by forcing the download of any git package
-> PKG that has a hash file to check against:
-> $ make defconfig
-> $ ./utils/config --set-str BR2_BACKUP_SITE ""
-> $ BR2_DL_DIR=$(mktemp -d) make PKG-dirclean PKG-source
-> 
-> Fix the typo so the basename is really added to the files, that was
-> clearly the intention of the code.
+I have a custom package which uses "scons", but I can't get it to compile.
+I get the following error:
 
-Yes, definitely the intention.
+>>> rpi_ws281x e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6 Building
+(cd
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6;
+ PATH="/home/buildroot/buildroot-2018.02-rc3/output/host/bin:/home/buildroot/buildroot-2018.02-rc3/output/host/sbin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/buildroot/.local/bin:/home/buildroot/bin"
+ AR="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ar"
+ AS="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-as"
+ LD="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ld"
+ NM="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-nm"
+ CC="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc"
+ GCC="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc"
+ CPP="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-cpp"
+ CXX="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-g++"
+ FC="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gfortran"
+ F77="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gfortran"
+ RANLIB="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ranlib"
+ READELF="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-readelf"
+ STRIP="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-strip"
+ OBJCOPY="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-objcopy"
+ OBJDUMP="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-objdump"
+ AR_FOR_BUILD="/usr/bin/ar"
+ AS_FOR_BUILD="/usr/bin/as"
+ CC_FOR_BUILD="/usr/bin/gcc"
+ GCC_FOR_BUILD="/usr/bin/gcc"
+ CXX_FOR_BUILD="/usr/bin/g++"
+ LD_FOR_BUILD="/usr/bin/ld"
+ CPPFLAGS_FOR_BUILD="-I/home/buildroot/buildroot-2018.02-rc3/output/host/include"
+ CFLAGS_FOR_BUILD="-O2
+-I/home/buildroot/buildroot-2018.02-rc3/output/host/include"
+ CXXFLAGS_FOR_BUILD="-O2
+-I/home/buildroot/buildroot-2018.02-rc3/output/host/include"
+ LDFLAGS_FOR_BUILD="-L/home/buildroot/buildroot-2018.02-rc3/output/host/lib
+-Wl,-rpath,/home/buildroot/buildroot-2018.02-rc3/output/host/lib"
+FCFLAGS_FOR_BUILD=""
+ DEFAULT_ASSEMBLER="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-as"
+DEFAULT_LINKER="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ld"
+ CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+ CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-Os "
+ CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os "
+ LDFLAGS=""
+ FCFLAGS=" -Os " FFLAGS=" -Os "
+ PKG_CONFIG="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/pkg-config"
+ STAGING_DIR="/home/buildroot/buildroot-2018.02-rc3/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot"
+ INTLTOOL_PERL=/usr/bin/perl
+ CROSS=/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-
+/home/buildroot/buildroot-2018.02-rc3/output/host/bin/python2
+/home/buildroot/buildroot-2018.02-rc3/output/host/bin/scons )
 
-I had that one fix pending locally and did not have time to send it
-yesterday evenong, so thinaks for fixing it faster! :-)
+scons: Reading SConscript files ...
+scons: done reading SConscript files.
+scons: Building targets ...
+Version version.h
+CC      main.o
+CC      mailbox.o
+CC      ws2811.o
+CC      pwm.o
+CC      pcm.o
+CC      dma.o
+CC      rpihw.o
+AR      libws2811.a
+RANLIB  libws2811.a
+LINK    test
+scons: done building targets.
+(cd
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/python;
+PATH="/home/buildroot/buildroot-2018.02-rc3/output/host/bin:/home/buildroot/buildroot-2018.02-rc3/output/host/sbin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/buildroot/.local/bin:/home/buildroot/bin"
+PYTHONNOUSERSITE=1 python setup.py build)
+running build
+running build_py
+creating build
+creating build/lib.linux-x86_64-2.7
+copying neopixel.py -> build/lib.linux-x86_64-2.7
+running build_ext
+building '_rpi_ws281x' extension
+swigging rpi_ws281x.i to rpi_ws281x_wrap.c
+swig -python -o rpi_ws281x_wrap.c rpi_ws281x.i
+creating build/temp.linux-x86_64-2.7
+/bin/gcc -pthread -fno-strict-aliasing -O2
+-I/home/buildroot/buildroot-2018.02-rc3/output/host/include -DNDEBUG -g
+-fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
+-I/home/buildroot/buildroot-2018.02-rc3/output/host/include/python2.7 -c
+rpi_ws281x_wrap.c -o build/temp.linux-x86_64-2.7/rpi_ws281x_wrap.o
+/bin/gcc -pthread -shared
+-L/home/buildroot/buildroot-2018.02-rc3/output/host/lib
+-Wl,-rpath,/home/buildroot/buildroot-2018.02-rc3/output/host/lib
+-Wl,--enable-new-dtags build/temp.linux-x86_64-2.7/rpi_ws281x_wrap.o -L../.
+-L/home/buildroot/buildroot-2018.02-rc3/output/host/lib -lws2811 -lrt
+-lpython2.7 -o build/lib.linux-x86_64-2.7/_rpi_ws281x.so
+*/usr/bin/ld: skipping incompatible .././libws2811.a when searching for
+-lws2811*
+*/usr/bin/ld: cannot find -lws2811*
+collect2: error: ld returned 1 exit status
+error: command '/bin/gcc' failed with exit status 1
+make[1]: ***
+[/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/.stamp_built]
+Error 1
+make: *** [_all] Error 2
 
-It's already been applied, otherwise I'd have given my ACK.
 
-Regards,
-Yann E. MORIN.
+Doing a 'file' on ws2811.o yields:
+ws2811.o: ELF 32-bit LSB relocatable, ARM, version 1 (SYSV), not stripped
 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> NOTICE: linux-firmware is NOT fixed by this. I don't know why.
-> I tried in my local computer a few other (other than the ones tested in
-> Gitlab CI) git packages and they are fixed by this patch as well:
-> libuci
-> squashfs
-> ubus
-> x264
-> Could it be related to my setup?
-> tar (GNU tar) 1.29
-> git version 2.14.1
-> 
-> I detected this while debugging why this automated test now fails:
-> http://patchwork.ozlabs.org/patch/831742/
-> 
-> Before this patch:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/19997839
-> 
-> After this patch:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/19998472
-> ---
->  support/download/git | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/download/git b/support/download/git
-> index 58dbcd211c..f07195b0d1 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -111,7 +111,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
->  
->  # Create GNU-format tarballs, since that's the format of the tarballs on
->  # sources.buildroot.org and used in the *.hash files
-> -tar cf - --transform="s/^\.$/${basename}/" \
-> +tar cf - --transform="s/^\./${basename}/" \
->  	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
->           -T "${output}.list.sorted" >"${output}.tar"
->  gzip -6 -n <"${output}.tar" >"${output}"
-> -- 
-> 2.14.1
-> 
+I'm building for the Raspberry Pi, so ARM, 32bit looks good..
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Config.in, Makefile and Patch:
+https://github.com/Sjoerd82/buildroot/tree/master/buildroot-2018.02-rc3/package/arctura/rpi_ws281x
+
+Any idea??
+
+kind regards,
+Sjoerd
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180405/8eb9492e/attachment.html>
