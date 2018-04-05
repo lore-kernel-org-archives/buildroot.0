@@ -1,156 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  5 Apr 2018 21:50:30 +0200
-Subject: [Buildroot] [PATCH 16/23] icu: remove Blackfin patch
+Date: Thu,  5 Apr 2018 21:50:33 +0200
+Subject: [Buildroot] [PATCH 19/23] libsemanage: remove Blackfin patch
 In-Reply-To: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
 References: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180405195037.32641-17-thomas.petazzoni@bootlin.com>
+Message-ID: <20180405195037.32641-20-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And renumber remaining patches.
+And renumber the remaining patch.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../icu/0003-detect-compiler-symbol-prefix.patch   | 116 ---------------------
- ....patch => 0003-link-icudata-as-data-only.patch} |   0
- ...h => 0004-fix-static-linking-with-icu-uc.patch} |   0
- 3 files changed, 116 deletions(-)
- delete mode 100644 package/icu/0003-detect-compiler-symbol-prefix.patch
- rename package/icu/{0004-link-icudata-as-data-only.patch => 0003-link-icudata-as-data-only.patch} (100%)
- rename package/icu/{0005-fix-static-linking-with-icu-uc.patch => 0004-fix-static-linking-with-icu-uc.patch} (100%)
+ ...uild-follow-standard-semantics-for-DESTD.patch} |  0
+ .../0001-workaround-blackfin-issue.patch           | 25 ----------------------
+ 2 files changed, 25 deletions(-)
+ rename package/libsemanage/{0002-libsemanage-build-follow-standard-semantics-for-DESTD.patch => 0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch} (100%)
+ delete mode 100644 package/libsemanage/0001-workaround-blackfin-issue.patch
 
-diff --git a/package/icu/0003-detect-compiler-symbol-prefix.patch b/package/icu/0003-detect-compiler-symbol-prefix.patch
+diff --git a/package/libsemanage/0002-libsemanage-build-follow-standard-semantics-for-DESTD.patch b/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
+similarity index 100%
+rename from package/libsemanage/0002-libsemanage-build-follow-standard-semantics-for-DESTD.patch
+rename to package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
+diff --git a/package/libsemanage/0001-workaround-blackfin-issue.patch b/package/libsemanage/0001-workaround-blackfin-issue.patch
 deleted file mode 100644
-index 1e9537503b..0000000000
---- a/package/icu/0003-detect-compiler-symbol-prefix.patch
+index 7ce960665c..0000000000
+--- a/package/libsemanage/0001-workaround-blackfin-issue.patch
 +++ /dev/null
-@@ -1,116 +0,0 @@
--detect and add compiler symbol prefix to the assembly code
+@@ -1,25 +0,0 @@
+-Do not make symbols hidden on Blackfin
 -
--Some compiler, such as Blackfin GNU compiler, prefix a charater to any
--C symbol in generated assembly code. If any assembly symbol is invoked
--from C code, it needs to be prefixed as well.
+-The libselinux logic to hide internal symbols from the DSO doesn't
+-work properly on Blackfin due to the USER_LABEL_PREFIX not being
+-handled properly. A real fix is not that simple, so this patch simply
+-disables the internal symbol hiding mechanism. This means that those
+-symbols are visible in the final DSO, which is not a problem for
+-proper execution, it just isn't as clean.
 -
--Note: since autoreconf doesn't work with this package because automake
--isn't support
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 -
--[Ryan: add information about why patching configure is ok]
--[Gustavo: update for ICU4C 54.1]
--
--Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
--Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura icu.orig/source/configure icu/source/configure
----- icu.orig/source/configure	2014-12-18 15:49:43.038628644 -0300
--+++ icu/source/configure	2014-12-18 15:56:05.793832186 -0300
--@@ -637,6 +637,7 @@
-- ICUDATA_CHAR
-- SAMPLES_TRUE
-- TESTS_TRUE
--+SYMBOL_PREFIX
-- ICULIBSUFFIXCNAME
-- U_HAVE_LIB_SUFFIX
-- ICULIBSUFFIX
--@@ -7414,6 +7415,17 @@
-- { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CHECK_UTF16_STRING_RESULT" >&5
-- $as_echo "$CHECK_UTF16_STRING_RESULT" >&6; }
+-Index: b/src/dso.h
+-===================================================================
+---- a/src/dso.h
+-+++ b/src/dso.h
+-@@ -1,7 +1,7 @@
+- #ifndef _SEPOL_DSO_H
+- #define _SEPOL_DSO_H	1
 - 
--+# Check compiler generated symbol profix
--+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for symbol prefix" >&5
--+$as_echo "checking for symbol prefix... " >&6; }
--+   SYMBOL_PREFIX=`echo "PREFIX=__USER_LABEL_PREFIX__" \
--+                  | ${CPP-${CC-gcc} -E} - 2>&1 \
--+                  | ${EGREP-grep} "^PREFIX=" \
--+                  | sed -e "s:^PREFIX=::" -e "s:__USER_LABEL_PREFIX__::"`
--+
--+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMBOL_PREFIX" >&5
--+$as_echo "$SYMBOL_PREFIX" >&6; }
--+
-- # Enable/disable extras
-- # Check whether --enable-extras was given.
-- if test "${enable_extras+set}" = set; then :
--diff -Nura icu.orig/source/data/Makefile.in icu/source/data/Makefile.in
----- icu.orig/source/data/Makefile.in	2014-12-18 15:49:42.908624160 -0300
--+++ icu/source/data/Makefile.in	2014-12-18 16:01:32.751110913 -0300
--@@ -182,11 +182,11 @@
-- packagedata: icupkg.inc $(PKGDATA_LIST) build-local
-- ifneq ($(ENABLE_STATIC),)
-- ifeq ($(PKGDATA_MODE),dll)
---	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
--+	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
-- endif
-- endif
-- ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
---	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
--+	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
-- else
-- 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
-- endif
--@@ -209,11 +209,11 @@
-- endif
-- ifneq ($(ENABLE_STATIC),)
-- ifeq ($(PKGDATA_MODE),dll)
---	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
--+	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
-- endif
-- endif
-- ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
---	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
--+	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
-- else
-- 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(DESTDIR)$(ICUPKGDATA_DIR)
-- endif
--@@ -224,7 +224,7 @@
-- #### 390 support
-- install390: package390
-- 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
---	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
--+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
-- ifeq ($(PKGDATA_MODE),dll)
-- 	$(INSTALL-L) $(ICUPKGDATA_OUTDIR)/$(FINAL_IMPORT_LIB) $(DESTDIR)$(ICUPKGDATA_DIR)/$(FINAL_IMPORT_LIB)
-- endif
--@@ -232,7 +232,7 @@
-- #### $(LIB_ICUDATA_NAME)$(STUB_SUFFIX) is the subset data for batch mode
-- package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
-- 	ln -s $(ICUDATA_NAME) $(OUTDIR)/build/$(ICUDATA_NAME)$(STUB_SUFFIX)
---	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
--+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
-- 	cp $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
-- 
-- 
--diff -Nura icu.orig/source/extra/uconv/Makefile.in icu/source/extra/uconv/Makefile.in
----- icu.orig/source/extra/uconv/Makefile.in	2014-12-18 15:49:42.986626850 -0300
--+++ icu/source/extra/uconv/Makefile.in	2014-12-18 15:57:40.558101179 -0300
--@@ -58,7 +58,8 @@
-- ## Static mode
-- ifeq ($(UCONVMSG_MODE),static)
-- DEFS += -DUCONVMSG_LINK=$(MSGNAME)
---UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
--+UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)@SYMBOL_PREFIX@$(MSGNAME).$(A)
--+
-- LIBS += $(UCONVMSG_LIB)
-- PKGMODE=static
-- INSTALLTO=$(libdir)
--@@ -152,7 +153,7 @@
-- endif
-- 
-- $(UCONVMSG_LIB): $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
---	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
--+	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p @SYMBOL_PREFIX@$(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
-- 
-- $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
-- 	@-$(RMV) $@
-diff --git a/package/icu/0004-link-icudata-as-data-only.patch b/package/icu/0003-link-icudata-as-data-only.patch
-similarity index 100%
-rename from package/icu/0004-link-icudata-as-data-only.patch
-rename to package/icu/0003-link-icudata-as-data-only.patch
-diff --git a/package/icu/0005-fix-static-linking-with-icu-uc.patch b/package/icu/0004-fix-static-linking-with-icu-uc.patch
-similarity index 100%
-rename from package/icu/0005-fix-static-linking-with-icu-uc.patch
-rename to package/icu/0004-fix-static-linking-with-icu-uc.patch
+--#ifdef SHARED
+-+#if defined(SHARED) && !defined(__bfin__)
+- # define hidden __attribute__ ((visibility ("hidden")))
+- # define hidden_proto(fct) __hidden_proto (fct, fct##_internal)
+- # define __hidden_proto(fct, internal)	\
 -- 
 2.14.3
