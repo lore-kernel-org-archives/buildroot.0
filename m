@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  5 Apr 2018 21:50:33 +0200
-Subject: [Buildroot] [PATCH 19/23] libsemanage: remove Blackfin patch
+Date: Thu,  5 Apr 2018 21:50:34 +0200
+Subject: [Buildroot] [PATCH 20/23] libsepol: remove Blackfin patch
 In-Reply-To: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
 References: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180405195037.32641-20-thomas.petazzoni@bootlin.com>
+Message-ID: <20180405195037.32641-21-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And renumber the remaining patch.
+And renumber remaining patches.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...uild-follow-standard-semantics-for-DESTD.patch} |  0
- .../0001-workaround-blackfin-issue.patch           | 25 ----------------------
- 2 files changed, 25 deletions(-)
- rename package/libsemanage/{0002-libsemanage-build-follow-standard-semantics-for-DESTD.patch => 0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch} (100%)
- delete mode 100644 package/libsemanage/0001-workaround-blackfin-issue.patch
+ ...c-only.patch => 0002-support-static-only.patch} |  0
+ .../libsepol/0002-workaround-blackfin-issue.patch  | 26 ----------------------
+ ...elative.patch => 0003-revert-ln-relative.patch} |  0
+ 3 files changed, 26 deletions(-)
+ rename package/libsepol/{0003-support-static-only.patch => 0002-support-static-only.patch} (100%)
+ delete mode 100644 package/libsepol/0002-workaround-blackfin-issue.patch
+ rename package/libsepol/{0004-revert-ln-relative.patch => 0003-revert-ln-relative.patch} (100%)
 
-diff --git a/package/libsemanage/0002-libsemanage-build-follow-standard-semantics-for-DESTD.patch b/package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
+diff --git a/package/libsepol/0003-support-static-only.patch b/package/libsepol/0002-support-static-only.patch
 similarity index 100%
-rename from package/libsemanage/0002-libsemanage-build-follow-standard-semantics-for-DESTD.patch
-rename to package/libsemanage/0001-libsemanage-build-follow-standard-semantics-for-DESTD.patch
-diff --git a/package/libsemanage/0001-workaround-blackfin-issue.patch b/package/libsemanage/0001-workaround-blackfin-issue.patch
+rename from package/libsepol/0003-support-static-only.patch
+rename to package/libsepol/0002-support-static-only.patch
+diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
 deleted file mode 100644
-index 7ce960665c..0000000000
---- a/package/libsemanage/0001-workaround-blackfin-issue.patch
+index 3c3bd4827f..0000000000
+--- a/package/libsepol/0002-workaround-blackfin-issue.patch
 +++ /dev/null
-@@ -1,25 +0,0 @@
+@@ -1,26 +0,0 @@
 -Do not make symbols hidden on Blackfin
 -
 -The libselinux logic to hide internal symbols from the DSO doesn't
@@ -46,14 +48,19 @@ index 7ce960665c..0000000000
 -===================================================================
 ---- a/src/dso.h
 -+++ b/src/dso.h
--@@ -1,7 +1,7 @@
-- #ifndef _SEPOL_DSO_H
-- #define _SEPOL_DSO_H	1
+-@@ -5,7 +5,7 @@
+-     #define DISABLE_SYMVER 1
+- #endif
 - 
 --#ifdef SHARED
 -+#if defined(SHARED) && !defined(__bfin__)
 - # define hidden __attribute__ ((visibility ("hidden")))
 - # define hidden_proto(fct) __hidden_proto (fct, fct##_internal)
 - # define __hidden_proto(fct, internal)	\
+-
+diff --git a/package/libsepol/0004-revert-ln-relative.patch b/package/libsepol/0003-revert-ln-relative.patch
+similarity index 100%
+rename from package/libsepol/0004-revert-ln-relative.patch
+rename to package/libsepol/0003-revert-ln-relative.patch
 -- 
 2.14.3
