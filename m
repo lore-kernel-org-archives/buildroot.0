@@ -1,66 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  5 Apr 2018 21:50:34 +0200
-Subject: [Buildroot] [PATCH 20/23] libsepol: remove Blackfin patch
+Date: Thu,  5 Apr 2018 21:50:35 +0200
+Subject: [Buildroot] [PATCH 21/23] p7zip: remove Blackfin patch
 In-Reply-To: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
 References: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180405195037.32641-21-thomas.petazzoni@bootlin.com>
+Message-ID: <20180405195037.32641-22-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And renumber remaining patches.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...c-only.patch => 0002-support-static-only.patch} |  0
- .../libsepol/0002-workaround-blackfin-issue.patch  | 26 ----------------------
- ...elative.patch => 0003-revert-ln-relative.patch} |  0
- 3 files changed, 26 deletions(-)
- rename package/libsepol/{0003-support-static-only.patch => 0002-support-static-only.patch} (100%)
- delete mode 100644 package/libsepol/0002-workaround-blackfin-issue.patch
- rename package/libsepol/{0004-revert-ln-relative.patch => 0003-revert-ln-relative.patch} (100%)
+ package/p7zip/0001-bfin.patch | 19 -------------------
+ 1 file changed, 19 deletions(-)
+ delete mode 100644 package/p7zip/0001-bfin.patch
 
-diff --git a/package/libsepol/0003-support-static-only.patch b/package/libsepol/0002-support-static-only.patch
-similarity index 100%
-rename from package/libsepol/0003-support-static-only.patch
-rename to package/libsepol/0002-support-static-only.patch
-diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
+diff --git a/package/p7zip/0001-bfin.patch b/package/p7zip/0001-bfin.patch
 deleted file mode 100644
-index 3c3bd4827f..0000000000
---- a/package/libsepol/0002-workaround-blackfin-issue.patch
+index 76addb652f..0000000000
+--- a/package/p7zip/0001-bfin.patch
 +++ /dev/null
-@@ -1,26 +0,0 @@
--Do not make symbols hidden on Blackfin
+@@ -1,19 +0,0 @@
+-Add support for blackfin arch.
 -
--The libselinux logic to hide internal symbols from the DSO doesn't
--work properly on Blackfin due to the USER_LABEL_PREFIX not being
--handled properly. A real fix is not that simple, so this patch simply
--disables the internal symbol hiding mechanism. This means that those
--symbols are visible in the final DSO, which is not a problem for
--proper execution, it just isn't as clean.
+-Fixes compilation error:
+-../../../../CPP/myWindows/mySplitCommandLine.cpp:99:8: error: #error ENDIANNESS
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-(Patch sent upstream: https://sourceforge.net/p/p7zip/patches/33/
 -
--Index: b/src/dso.h
--===================================================================
----- a/src/dso.h
--+++ b/src/dso.h
--@@ -5,7 +5,7 @@
--     #define DISABLE_SYMVER 1
+-diff -uNr p7zip_15.14.1.org/C/CpuArch.h p7zip_15.14.1/C/CpuArch.h
+---- p7zip_15.14.1.org/C/CpuArch.h	2016-02-17 07:27:16.000000000 +0100
+-+++ p7zip_15.14.1/C/CpuArch.h	2016-06-08 19:47:49.000000000 +0200
+-@@ -66,6 +66,7 @@
+-     || defined(__MIPSEL__) \
+-     || defined(__MIPSEL) \
+-     || defined(_MIPSEL) \
+-+    || defined(__BFIN__) \
+-     || (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__))
+-   #define MY_CPU_LE
 - #endif
-- 
---#ifdef SHARED
--+#if defined(SHARED) && !defined(__bfin__)
-- # define hidden __attribute__ ((visibility ("hidden")))
-- # define hidden_proto(fct) __hidden_proto (fct, fct##_internal)
-- # define __hidden_proto(fct, internal)	\
--
-diff --git a/package/libsepol/0004-revert-ln-relative.patch b/package/libsepol/0003-revert-ln-relative.patch
-similarity index 100%
-rename from package/libsepol/0004-revert-ln-relative.patch
-rename to package/libsepol/0003-revert-ln-relative.patch
 -- 
 2.14.3
