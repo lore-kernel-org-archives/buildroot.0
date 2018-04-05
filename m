@@ -1,46 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Apr 2018 21:53:13 +0200
-Subject: [Buildroot] ws281x library, scons, fails
-In-Reply-To: <CAPzckP6sMQYU6cmsYv30P+CJsmvg=KHrvpVb+gC6BDOwHdqSwg@mail.gmail.com>
-References: <CAPzckP6sMQYU6cmsYv30P+CJsmvg=KHrvpVb+gC6BDOwHdqSwg@mail.gmail.com>
-Message-ID: <20180405215313.35c300e9@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 5 Apr 2018 22:29:33 +0200
+Subject: [Buildroot] [PATCH 01/23] support/config-fragments/autobuild:
+ remove Blackfin configuration
+In-Reply-To: <20180405195037.32641-2-thomas.petazzoni@bootlin.com>
+References: <20180405195037.32641-1-thomas.petazzoni@bootlin.com>
+ <20180405195037.32641-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20180405202933.GB22364@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Thu, 5 Apr 2018 19:18:55 +0200, Sjoerd Venema wrote:
+On 2018-04-05 21:50 +0200, Thomas Petazzoni spake thusly:
+> In preparation for the removal of the Blackfin architecture, drop the
+> autobuilder toolchain configuration that was testing Blackfin.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[--SNIP--]
+> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+> index 1bce7ac577..64abfb3fd4 100644
+> --- a/support/config-fragments/autobuild/toolchain-configs.csv
+> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
+> @@ -15,9 +15,6 @@ support/config-fragments/autobuild/br-arm-cortex-m4-full.config,x86_64
+>  # Test a musl toolchain
+>  support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
+>  
+> -# Test a noMMU toolchain with dynamic library support
+> -support/config-fragments/autobuild/br-bfin-full.config,x86_64
 
-> creating build/temp.linux-x86_64-2.7
-> /bin/gcc -pthread -fno-strict-aliasing -O2
-> -I/home/buildroot/buildroot-2018.02-rc3/output/host/include -DNDEBUG -g
-> -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
-> -I/home/buildroot/buildroot-2018.02-rc3/output/host/include/python2.7 -c
-> rpi_ws281x_wrap.c -o build/temp.linux-x86_64-2.7/rpi_ws281x_wrap.o
-> /bin/gcc -pthread -shared
-> -L/home/buildroot/buildroot-2018.02-rc3/output/host/lib
-> -Wl,-rpath,/home/buildroot/buildroot-2018.02-rc3/output/host/lib
-> -Wl,--enable-new-dtags build/temp.linux-x86_64-2.7/rpi_ws281x_wrap.o -L../.
-> -L/home/buildroot/buildroot-2018.02-rc3/output/host/lib -lws2811 -lrt
-> -lpython2.7 -o build/lib.linux-x86_64-2.7/_rpi_ws281x.so
-> */usr/bin/ld: skipping incompatible .././libws2811.a when searching for
-> -lws2811*
-> */usr/bin/ld: cannot find -lws2811*
-> collect2: error: ld returned 1 exit status
-> error: command '/bin/gcc' failed with exit status 1
+Do we plan on adding back another noMMU target with dynamic library
+support instead of that one?
 
-This is using the host compiler to build target code, it can't work.
-Seems like your package has a Python module, you need to pass special
-variables to make it cross-compile properly. Look at
-package/pkg-python.mk to get an idea of the variables you have to pass.
+>  # Test a MMU toolchain without dynamic library support
+>  support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+>  
+> diff --git a/utils/test-pkg b/utils/test-pkg
+> index 2e069b6005..54951276fa 100755
+> --- a/utils/test-pkg
+> +++ b/utils/test-pkg
+> @@ -75,7 +75,7 @@ main() {
+>      # Default mode is to test the N first toolchains, which have been
+>      # chosen to be a good selection of toolchains.
+>      if [ ${mode} -eq 0 ] ; then
+> -        number=7
+> +        number=6
 
-Best regards,
+Otherwise, toolchain-configs.csv is only used in genrandconfig, and that
+one does not care about the number of "default" toolchains.
 
-Thomas
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>      elif [ ${mode} -gt 1 ] ; then
+>          printf "error: --all, --number and --random are mutually exclusive\n" >&2; exit 1
+>      fi
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
