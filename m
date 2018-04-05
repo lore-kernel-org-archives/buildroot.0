@@ -1,46 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Apr 2018 08:34:36 +0200
-Subject: [Buildroot] [git commit] pkg-download.mk: do not add a trailing
- slash to <PKG>_SITE
-Message-ID: <20180405063600.E838A84BFB@busybox.osuosl.org>
+Date: Thu,  5 Apr 2018 08:42:15 +0200
+Subject: [Buildroot] [PATCH] python-webpy: use webpy-0.39 tag
+Message-ID: <20180405064215.19299-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc49c92afc8478ed32ff4770d88b97081c7193d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+No functional change, but upstream has now tagged the release, so use the
+tag instead of the sha1.
 
-Fixes
-http://autobuild.buildroot.net/results/734/7342b25f01d60cafc4a5422a5a1c282629f361c5/
-
-$(dir does not strip last path separator and the wget wrapper adds a '/'
-between the -u argument and the filename when it reconstructs the URL,
-leading us to have two slashes before the filename when accessing the
-upstream location.
-
-Most upstream servers ignores this, but not all - Leading to download issues
-from pypi.
-
-Notice: As pointed out by Arnout, we cannot simply use $(PKG)_SITE here as
-_PATCH and _EXTRA_DOWNLOADS may contain full URLs.
+https://github.com/webpy/webpy/issues/449
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-download.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-webpy/python-webpy.hash | 2 +-
+ package/python-webpy/python-webpy.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7ed95f2b2c..2c4ad3ba2c 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -82,7 +82,7 @@ endif
+diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
+index 30a14f4705..70981e0cb4 100644
+--- a/package/python-webpy/python-webpy.hash
++++ b/package/python-webpy/python-webpy.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  e17ac483846fb15629c76c43cf64c0b65eac3c870dca2251801b459b1e4e12b8  python-webpy-6df75fe581e0e838d28334d5c53f52421560d38b.tar.gz
++sha256  f074241a0b839408a0b9840ade1198e16fbd6aa6393a48a0e84f73b545baab9a  python-webpy-webpy-0.39.tar.gz
+ sha256  3826fd531a9b904841f5e3560fcda7e93f2ab8d11ef124ec65e10625efa26c34  LICENSE.txt
+ sha256  7347fd17bfd33c4093c31dc77076733e1e0150ce8c13296c56dc042bbecede84  web/wsgiserver/LICENSE.txt
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+index 1e67cd6fd8..192ba5727f 100644
+--- a/package/python-webpy/python-webpy.mk
++++ b/package/python-webpy/python-webpy.mk
+@@ -4,8 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PRIMARY_SITE_ONLY),)
- DOWNLOAD_URIS += \
--	-u $($(PKG)_SITE_METHOD)+$(dir $(call qstrip,$(1)))
-+	-u $($(PKG)_SITE_METHOD)+$(patsubst %/,%,$(dir $(call qstrip,$(1))))
- ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
- DOWNLOAD_URIS += \
- 	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
+-# corresponds to 0.39
+-PYTHON_WEBPY_VERSION = 6df75fe581e0e838d28334d5c53f52421560d38b
++PYTHON_WEBPY_VERSION = webpy-0.39
+ PYTHON_WEBPY_SITE = $(call github,webpy,webpy,$(PYTHON_WEBPY_VERSION))
+ PYTHON_WEBPY_SETUP_TYPE = setuptools
+ PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
+-- 
+2.11.0
