@@ -1,26 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Apr 2018 21:09:15 +0200
-Subject: [Buildroot] [PATCH] python-webpy: use webpy-0.39 tag
-In-Reply-To: <20180405064215.19299-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 5 Apr 2018 08:42:15 +0200")
-References: <20180405064215.19299-1-peter@korsgaard.com>
-Message-ID: <87tvsplbc4.fsf@dell.be.48ers.dk>
+Date: Thu, 5 Apr 2018 21:08:07 +0200
+Subject: [Buildroot] [git commit] configs/bananapro: bump Linux to version
+ 4.14.32
+Message-ID: <20180405190928.65078860B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7d6ed21396ed251aac7be030bae4bddfcb849e83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > No functional change, but upstream has now tagged the release, so use the
- > tag instead of the sha1.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/bananapro_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > https://github.com/webpy/webpy/issues/449
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index 5a71d757e4..c6473be3ae 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.32"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
