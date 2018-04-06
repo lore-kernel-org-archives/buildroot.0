@@ -1,48 +1,46 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 6 Apr 2018 13:22:10 +0200
-Subject: [Buildroot] [PATCH] package/llvm: add dependency on shared
- libraries
-In-Reply-To: <20180406093958.9392-1-valentin.korenblit@smile.fr>
-References: <20180406093958.9392-1-valentin.korenblit@smile.fr>
-Message-ID: <e478cdf9-9852-4649-b282-15737de819d0@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 6 Apr 2018 13:37:44 +0200
+Subject: [Buildroot] [PATCH 1/2] llvm: add dependency on
+ !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+In-Reply-To: <a8703b32-9442-95d3-4ea6-b008cd791cf8@smile.fr>
+References: <20180406090013.20187-1-thomas.petazzoni@bootlin.com>
+ <a8703b32-9442-95d3-4ea6-b008cd791cf8@smile.fr>
+Message-ID: <20180406133744.43c8f225@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Valentin,
+Hello,
 
-Le 06/04/2018 ? 11:39, Valentin Korenblit a ?crit?:
-> llvm generates libLLVM.so, so it won't work if BR2_STATIC_LIBS is set
+On Fri, 6 Apr 2018 11:36:26 +0200, Valentin Korenblit wrote:
+
+> The three autotests crashed because of std::shared_future,
 > 
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-> ---
->  package/llvm/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+> I've found the following in: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=820535
 > 
-> diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-> index 70f73f4858..d507acbef1 100644
-> --- a/package/llvm/Config.in
-> +++ b/package/llvm/Config.in
-> @@ -18,6 +18,7 @@ config BR2_PACKAGE_LLVM
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on !BR2_STATIC_LIBS
-
-This new dependency must be propagated to the comment below and other options
-selecting llvm:
-
-comment "llvm needs a toolchain w/ threads, C++, dynamic library, gcc >= 4.8,
-host gcc >= 4.8"
-	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-                !BR2_STATIC_LIBS \
-		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-
-
->  	help
->  	  The LLVM Project is a collection of modular and reusable
->  	  compiler and toolchain technologies.
+> "This looks like the kind of failure you get when your host toolchain
+> doesn't support C++11 properly (specifically lock-free atomics in this
+> case).  When I've seen it before GCC was defaulting to a CPU that's
+> too old to do atomics properly, and that configuration is very
+> unlikely to be supported by LLVM ever (any more)."
 > 
+> I was about to send a patch to blacklist ARMv4 and ARMv5 but this should
+> be a more appropriate solution (I was not aware of BUG_64735).
+
+Note: I didn't test building LLVM for ARMv4/ARMv5, with a gcc 7.x
+compiler. But the build error itself clearly points to this gcc
+limitation, which has been solved in gcc 7.x.
+
+> I'll try to build with the defconfigs from the autobuilder applying the
+> patch and adding a dependency on !BR2_STATIC_LIBS.
+
+So far, there hasn't been any failure to build LLVM in static only
+configurations, so let's see if any shows up.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
