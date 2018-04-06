@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Apr 2018 18:57:51 +0200
-Subject: [Buildroot] [PATCH] qemu: fix build with glibc 2.27
-In-Reply-To: <2ea89efb89501dbb6f311d3644efb8d6543f1ba7.1521561417.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 20 Mar 2018 17:56:57 +0200")
-References: <2ea89efb89501dbb6f311d3644efb8d6543f1ba7.1521561417.git.baruch@tkos.co.il>
-Message-ID: <87y3i0gtm8.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Apr 2018 18:58:02 +0200
+Subject: [Buildroot] [PATCH 1/2] libssh2: fix pkg-config info for
+ mbedtls backend
+In-Reply-To: <85f6746ec9845fe4c5cd366cdd3345d08771165f.1521571596.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 20 Mar 2018 20:46:35 +0200")
+References: <85f6746ec9845fe4c5cd366cdd3345d08771165f.1521571596.git.baruch@tkos.co.il>
+Message-ID: <87tvsogtlx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > glibc version 2.27 added a wrapper for the memfd_create system call. The
- > wrapper prototype collides with a static declaration of memfd_create.
- > Add upstream patch to correctly detect the glibc provided memfd_create
- > definition.
+ > The libssh2.pc file did not contain the needed info for static link with
+ > libssh2. Add a patch fixing that.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/b82/b825c0cd397424b1fc7fa87c580e1757dc25c588/
- > http://autobuild.buildroot.net/results/9aa/9aa3853d23c0dc72bf3632b4d66ae39f597f5250/
- > http://autobuild.buildroot.net/results/b13/b13039ba602b9d500b939d259816a39ba24e1ba2/
+ > Fixes (qemu):
+ > http://autobuild.buildroot.net/results/634/6346b25be2844f9ef722e52040ac1b43d9c38899/
 
- > Cc: Francois Perrad <francois.perrad@gadz.org>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Committed to 2018.02.x as this is also a host package, thanks.
+Committed to 2018.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
