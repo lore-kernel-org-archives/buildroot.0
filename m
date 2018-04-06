@@ -1,40 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Apr 2018 18:55:39 +0200
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.7
-In-Reply-To: <20180318144008.13997-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 18 Mar 2018 15:40:08 +0100")
-References: <20180318144008.13997-1-peter@korsgaard.com>
-Message-ID: <87sh88i8ac.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Apr 2018 18:56:11 +0200
+Subject: [Buildroot] [PATCH 1/3] docs/manual: pass PARALLEL_JOBS to
+ NINJA_OPTS
+In-Reply-To: <20180314201837.21398-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Wed, 14 Mar 2018 21:18:35 +0100")
+References: <20180314201837.21398-1-joerg.krause@embedded.rocks>
+Message-ID: <87o9iwi89g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Fixes the following security issues:
- > Use after free when server is disconnected during netsplits.  Incomplete fix
- > of CVE-2017-7191.  Found by Joseph Bisch.  (CWE-416, CWE-825) -
- > CVE-2018-7054 [2] was assigned to this issue.
+ > Ninja understands the `-j` option which defines how many jobs are
+ > run in parallel.
 
- > Use after free when SASL messages are received in unexpected order.  Found
- > by Joseph Bisch.  (CWE-416, CWE-691) - CVE-2018-7053 [3] was assigned to
- > this issue.
-
- > Null pointer dereference when an ?empty? nick has been observed by Irssi.
- > Found by Joseph Bisch.  (CWE-476, CWE-475) - CVE-2018-7050 [4] was assigned
- > to this issue.
-
- > When the number of windows exceed the available space, Irssi would crash due
- > to Null pointer dereference.  Found by Joseph Bisch.  (CWE-690) -
- > CVE-2018-7052 [5] was assigned to this issue.
-
- > Certain nick names could result in out of bounds access when printing theme
- > strings.  Found by Oss-Fuzz.  (CWE-126) - CVE-2018-7051 [6] was assigned to
- > this issue.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed to 2018.02.x, thanks.
 
