@@ -1,67 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:38:43 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] irssi: security bump to
- version 1.0.7
-Message-ID: <20180406165912.E88FC83E91@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 16:43:51 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] tremor: security bump to
+ fix CVE-2018-5146
+Message-ID: <20180406165913.3B93083B4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbfe123f104c028723d1eb1b5d8d2fdccf727eac
+commit: https://git.buildroot.net/buildroot/commit/?id=e1a6f840f1ebc44d3d60e32c443ba9eef8dfa9bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes the following security issues:
+Prevent out-of-bounds write in codebook decoding.
 
-Use after free when server is disconnected during netsplits.  Incomplete fix
-of CVE-2017-7191.  Found by Joseph Bisch.  (CWE-416, CWE-825) -
-CVE-2018-7054 [2] was assigned to this issue.
+Codebooks that are not an exact divisor of the partition size are now
+truncated to fit within the partition.
 
-Use after free when SASL messages are received in unexpected order.  Found
-by Joseph Bisch.  (CWE-416, CWE-691) - CVE-2018-7053 [3] was assigned to
-this issue.
+Upstream has migrated from subversion to git, so change to git and bump the
+version to include the fix for CVE-2018-5146.
 
-Null pointer dereference when an ???empty??? nick has been observed by Irssi.
-Found by Joseph Bisch.  (CWE-476, CWE-475) - CVE-2018-7050 [4] was assigned
-to this issue.
-
-When the number of windows exceed the available space, Irssi would crash due
-to Null pointer dereference.  Found by Joseph Bisch.  (CWE-690) -
-CVE-2018-7052 [5] was assigned to this issue.
-
-Certain nick names could result in out of bounds access when printing theme
-strings.  Found by Oss-Fuzz.  (CWE-126) - CVE-2018-7051 [6] was assigned to
-this issue.
+While we're at it, also add a hash file.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 181ef8a1d01ddfa2be0b59ea85eb8902b0ce12c0)
+(cherry picked from commit 80266c95052024381898cada4c51d44207fddd80)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tremor/tremor.hash | 3 +++
+ package/tremor/tremor.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 83dde00352..0f298137ba 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
-+sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
- # Locally calculated
- sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index d49b5d7e46..611365f88e 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/tremor/tremor.hash b/package/tremor/tremor.hash
+new file mode 100644
+index 0000000000..89661a64cd
+--- /dev/null
++++ b/package/tremor/tremor.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 ba94cfdf886399c550f76908285bfa9e322f24085de6f1810c2abea565c13a15  tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8.tar.gz
++sha256 d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814  COPYING
+diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
+index 05996e2a8a..835fe36172 100644
+--- a/package/tremor/tremor.mk
++++ b/package/tremor/tremor.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--IRSSI_VERSION = 1.0.6
-+IRSSI_VERSION = 1.0.7
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+-TREMOR_SITE = http://svn.xiph.org/trunk/Tremor
+-TREMOR_SITE_METHOD = svn
+-TREMOR_VERSION = 19427
++TREMOR_VERSION = 7c30a66346199f3f09017a09567c6c8a3a0eedc8
++TREMOR_SITE = https://git.xiph.org/tremor.git
++TREMOR_SITE_METHOD = git
+ TREMOR_LICENSE = BSD-3-Clause
+ TREMOR_LICENSE_FILES = COPYING
+ 
