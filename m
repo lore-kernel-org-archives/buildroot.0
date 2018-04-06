@@ -1,39 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Apr 2018 21:02:54 +0200
-Subject: [Buildroot] Using a bootlin toolchain with buildroot
-In-Reply-To: <48d440f7-3bdc-4fa8-a7c9-8c3618cd8099@cesnet.cz>
-References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
- <48d440f7-3bdc-4fa8-a7c9-8c3618cd8099@cesnet.cz>
-Message-ID: <20180406210254.76ea686f@windsurf.home>
+From: Chris Brandt <Chris.Brandt@renesas.com>
+Date: Fri, 6 Apr 2018 19:07:24 +0000
+Subject: [Buildroot] [PATCH 1/2] cramfs: change to new site location
+In-Reply-To: <nycvar.YSQ.7.76.1804061446470.28462@knanqh.ubzr>
+References: <20180213195449.51516-1-chris.brandt@renesas.com>
+ <20180213195449.51516-2-chris.brandt@renesas.com>
+ <20180213211453.519b65eb@windsurf.lan>
+ <SG2PR06MB1165EA4292BE78ADF8D3A1678AF60@SG2PR06MB1165.apcprd06.prod.outlook.com>
+ <CANQCQpZgjJqSpY9Pma9wsB=QtPL5onLYLb5pdteTSUULOcMF-A@mail.gmail.com>
+ <TY1PR01MB1562ADDDE3949C2BC35FC4408ABA0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <CANQCQpZZMp8MXMRDMHg6vOr4f-GRYvBBeZB1MSNQvMk9BnfBzQ@mail.gmail.com>
+ <nycvar.YSQ.7.76.1804061138320.28462@knanqh.ubzr>
+ <CANQCQpZnN_q0OsPoYZc+nE6-=xSGtmk1SxgOQ4U_tFd84AbvkA@mail.gmail.com>
+ <nycvar.YSQ.7.76.1804061305080.28462@knanqh.ubzr>
+ <CANQCQpaUvOFQJG=8Suv7qNDnj2wT53R8JNCGSLNfXfhL5o2NqA@mail.gmail.com>
+ <nycvar.YSQ.7.76.1804061446470.28462@knanqh.ubzr>
+Message-ID: <TY1PR01MB1562D0608CCEC563067F9E008ABA0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Friday, April 06, 2018, Nicolas Pitre wrote:
+> On Fri, 6 Apr 2018, Matthew Weber wrote:
+> > On Fri, Apr 6, 2018 at 12:06 PM, Nicolas Pitre
+> <nicolas.pitre@linaro.org> wrote:
+> > > On Fri, 6 Apr 2018, Matthew Weber wrote:
+> > > > On Fri, Apr 6, 2018 at 10:41 AM, Nicolas Pitre
+> <nicolas.pitre@linaro.org> wrote:
+> > > > > I don't like the original patch at all and would like a completely
+> > > > > different approach to keep the code saner. I'll commit it in a
+> moment
+> > > > > but I will need someone to test it.
+> > > > >
+> > > >
+> > > > Perfect, I can do a test when you're ready.
+> > >
+> > > Please test the cross-endian branch and let me know how it works.
+> > > If it works then I'll move it to the main branch.
+> >
+> > Tested successfully on a big endian powerpc target.
+> 
+> Good!  I moved it to the master branch.
 
-On Fri, 06 Apr 2018 16:53:13 +0200, Jan Kundr?t wrote:
 
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.02-1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="i686-buildroot-linux-gnu"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+So, it looks like the ball is back in my court to update the hash and 
+put the endian command line options back in.
 
-Or also:
+Except, looks like they changed from lower case "-b, -l" in the original
+patch to upper case "-B, -L".
 
-https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/fragments/x86-i686--glibc--bleeding-edge-2018.02-1.frag
+I'll update the original patch series and re-post to the Buildroot 
+mailing list.
 
- :-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Chris
