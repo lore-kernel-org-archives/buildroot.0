@@ -1,59 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 19:55:25 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] toolchain: fix detection
- of SSP support
-Message-ID: <20180407175148.43C2087BDD@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:03:44 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{1,
+ 4, 9, 14, 15}.x series
+Message-ID: <20180407175149.513358183A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92b066b7cea8ac6fa3f8232cfe4cf36cf6a0d7f0
+commit: https://git.buildroot.net/buildroot/commit/?id=380e9599de34f28607c73b73bb9fad2eb1406863
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-GCC issues a warning message if -fstack-protector is passed but SSP is
-not available, so in order to force the compilation to fail we must also
-pass -Werror.
-
-All external toolchains were verified. The only one whose configuration
-incorrectly selected BR2_TOOLCHAIN_HAS_SSP was CodeSourcery NIOSII.
-
-Fixes:
-  http://autobuild.buildroot.net/results/ce8fe8ac9cf0db01ae15d476ea714ff176965cfb
-  http://autobuild.buildroot.net/results/09ce8f05e28c0219f499ce55130e896cae0c8b45
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c8680956819fae8776d7bd6d1f0e67a7b6436672)
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9ef8f6b061b552012b767b83c7b21e5e3fb9fff7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/helpers.mk                                                    | 2 +-
- .../toolchain-external/toolchain-external-codesourcery-niosII/Config.in | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 63ef6fb4b0..1792286add 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -421,7 +421,7 @@ check_unusable_toolchain = \
- #
- check_toolchain_ssp = \
- 	__CROSS_CC=$(strip $1) ; \
--	__HAS_SSP=`echo 'void main(){}' | $${__CROSS_CC} -fstack-protector -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 && echo y` ; \
-+	__HAS_SSP=`echo 'void main(){}' | $${__CROSS_CC} -Werror -fstack-protector -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 && echo y` ; \
- 	if [ "$(BR2_TOOLCHAIN_HAS_SSP)" != "y" -a "$${__HAS_SSP}" = "y" ] ; then \
- 		echo "SSP support available in this toolchain, please enable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
- 		exit 1 ; \
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-index 7563995eb6..4ac9c95c86 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-@@ -5,7 +5,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f4c1427f29..ec3de2b215 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -241,13 +241,13 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+-	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.124"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.90"	if BR2_KERNEL_HEADERS_4_9
++	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
++	default "4.4.125"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.91"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.30"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.15.13"	if BR2_KERNEL_HEADERS_4_15
++	default "4.14.31"	if BR2_KERNEL_HEADERS_4_14
++	default "4.15.14"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
