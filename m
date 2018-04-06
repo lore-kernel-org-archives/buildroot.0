@@ -1,51 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri,  6 Apr 2018 11:00:12 +0200
-Subject: [Buildroot] [PATCH 1/2] llvm: add dependency on
- !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-Message-ID: <20180406090013.20187-1-thomas.petazzoni@bootlin.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Fri, 6 Apr 2018 11:17:58 +0200
+Subject: [Buildroot] [PATCH 2/2] mesa3d: properly propagate the
+ dependencies of BR2_PACKAGE_LLVM
+In-Reply-To: <20180406090013.20187-2-thomas.petazzoni@bootlin.com>
+References: <20180406090013.20187-1-thomas.petazzoni@bootlin.com>
+ <20180406090013.20187-2-thomas.petazzoni@bootlin.com>
+Message-ID: <09dae62e-235d-9744-7bbd-b45ed6a3d9a0@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LLVM uses std::shared_future, which until gcc 7.x isn't available on
-architectures that don't provide lock-free atomics, see
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735.
 
-Buildroot already has a BR2_TOOLCHAIN_HAS_GCC_BUG_64735 option to
-handle such a case, so simply add this new dependency to LLVM. It will
-make sure LLVM doesn't get built on ARMv5 platforms using a gcc older
-than 7.x.
+Hello Thomas,
 
-Fixes:
+On 06/04/2018 11:00, Thomas Petazzoni wrote:
+> We cannot simply select BR2_PACKAGE_LLVM, we need to take into account
+> all its dependencies. BR2_PACKAGE_LLVM_ARCH_SUPPORTS was already taken
+> into account, but not the other dependencies.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-  http://autobuild.buildroot.net/results/ada497f6a8d20fa1a9adb2b17a138d7b726a6cdc/
+I was preparing that, I did the same for Clang too. I think I'll send
+a new version next week.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/llvm/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+Acked-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 70f73f4858..15f2507ef2 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_LLVM
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
- 	help
- 	  The LLVM Project is a collection of modular and reusable
- 	  compiler and toolchain technologies.
-@@ -38,3 +39,7 @@ comment "llvm needs a toolchain w/ threads, C++, gcc >= 4.8, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
-+comment "llvm needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--- 
-2.14.3
+> ---
+>   package/mesa3d/Config.in | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
+>
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index ffe0287ac5..8f347ffe0c 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -28,8 +28,22 @@ if BR2_PACKAGE_MESA3D
+>   config BR2_PACKAGE_MESA3D_LLVM
+>   	bool "llvm support"
+>   	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_8
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
+>   	select BR2_PACKAGE_LLVM
+>   
+> +comment "llvm support needs a toolchain w/ threads, C++, gcc >= 4.8, host gcc >= 4.8"
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+> +		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +
+> +comment "llvm support needs a toolchain not affected by GCC bug 64735"
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+> +
+>   # inform the .mk file of gallium, dri or vulkan driver selection
+>   config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>   	bool
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180406/950076bf/attachment.html>
