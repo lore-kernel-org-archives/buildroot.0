@@ -1,49 +1,63 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 06 Apr 2018 12:21:39 +0200
-Subject: [Buildroot] [PATCH] libbsd: add upstream patch to fix musl
- build issue
-In-Reply-To: <20180406105210.749689ba@windsurf>
-References: <20180406081835.4239-1-joerg.krause@embedded.rocks>
- <20180406105210.749689ba@windsurf>
-Message-ID: <c343c0eb2cd977c79a32be06138a532d99fd0c61.camel@embedded.rocks>
+From: James Byrne <james.byrne@origamienergy.com>
+Date: Fri,  6 Apr 2018 11:26:23 +0100
+Subject: [Buildroot] [PATCH v2] Makefile: Avoid executing 'git log' each
+ time SOURCE_DATE_EPOCH is used
+In-Reply-To: <1522239999-15582-1-git-send-email-james.byrne@origamienergy.com>
+References: <1522239999-15582-1-git-send-email-james.byrne@origamienergy.com>
+Message-ID: <1523010383-27024-1-git-send-email-james.byrne@origamienergy.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+If SOURCE_DATE_EPOCH is not defined it was given a definition that
+caused 'git log' to be executed each time the variable is referenced,
+which is not very efficient given that the answer cannot change.
 
-On Fri, 2018-04-06 at 10:52 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri,  6 Apr 2018 10:18:35 +0200, J?rg Krause wrote:
-> > Commit d879be3049598f35d7b959784e1a6c2811ba2036 enabled the build for non-glibc
-> > toolchains and added a  patch from upstream to fix one remaining build issue
-> > with musl.
-> > 
-> > The upstream patch defines the glibc specific macro `__GLIBC_PREREQ` in
-> > `include/bsd/sys/cdefs.h`, but the patch does not include this header
-> > file in `include/bsd/stdlib.h` which uses the macro.
-> > 
-> > Upstream did committed an earlier patch which adds this header inclusion
-> > to `include/bsd/stdlib.h`. So, add this upstream patch as well to fix a
-> > build error when building the hcitop tool from the not yet added package
-> > bluez-alsa.
-> > 
-> > Note, that the upstream patch address the issue that `<sys/cdefs.h>` is
-> > a non-portable header. However, this is not the issue which needs to be
-> > fixed by this patch, but solely the needed inclusion of the
-> > `include/bsd/stdlib.h` header file, to see the definition of
-> > `__GLIBC_PREREQ`.
-> > 
-> > Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> Is this fixing an issue reported by the autobuilders ?
+This commit moves the definition of BR2_VERSION_GIT_EPOCH after the
+inclusion of Makefile.in (so that GIT is defined) and makes it a simply
+expanded variable so that it is only evaluated once.
 
-No, it does not. It fixes an issue I found when adding the new package
-bluez-alsa.
+In addition, the git directory is no longer explicitly set to be TOPDIR
+meaning that the default date will come from the commit date of whatever
+repository the code is commited within instead of only doing so if the
+repository is at the same level as the Buildroot tree.
 
-J?rg
+Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+---
+ Makefile | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 0724f28..3b846b9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -247,8 +247,6 @@ export TZ = UTC
+ export LANG = C
+ export LC_ALL = C
+ export GZIP = -n
+-BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+-export SOURCE_DATE_EPOCH ?= $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
+ endif
+
+ # To put more focus on warnings, be less verbose as default
+@@ -504,6 +502,14 @@ include support/dependencies/dependencies.mk
+ include $(sort $(wildcard toolchain/*.mk))
+ include $(sort $(wildcard toolchain/*/*.mk))
+
++ifeq ($(BR2_REPRODUCIBLE),y)
++# If SOURCE_DATE_EPOCH has not been set then use the commit date, or the last
++# release date if the source tree is not within a Git repository.
++# See: https://reproducible-builds.org/specs/source-date-epoch/
++BR2_VERSION_GIT_EPOCH := $(shell $(GIT) log -1 --format=%at 2> /dev/null)
++export SOURCE_DATE_EPOCH ?= $(or $(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
++endif
++
+ # Include the package override file if one has been provided in the
+ # configuration.
+ PACKAGE_OVERRIDE_FILE = $(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
+--
+2.7.4
+
+The contents of this email and any attachment are confidential to the intended recipient(s). If you are not an intended recipient: (i) do not use, disclose, distribute, copy or publish this email or its contents; (ii) please contact the sender immediately; and (iii) delete this email. Origami Energy Limited (company number 8619644); Origami Storage Limited (company number 10436515) and OSSPV001 Limited (company number 10933403), each registered in England and each with a registered office at: Ashcombe Court, Woolsack Way, Godalming, GU7 1LQ.
