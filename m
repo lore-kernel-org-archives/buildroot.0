@@ -1,36 +1,49 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  6 Apr 2018 13:20:03 +0300
-Subject: [Buildroot] [PATCH 1/1] python-yieldfrom: fix wrong package name in
- license
-Message-ID: <20180406102003.10572-1-asafka7@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 06 Apr 2018 12:21:39 +0200
+Subject: [Buildroot] [PATCH] libbsd: add upstream patch to fix musl
+ build issue
+In-Reply-To: <20180406105210.749689ba@windsurf>
+References: <20180406081835.4239-1-joerg.krause@embedded.rocks>
+ <20180406105210.749689ba@windsurf>
+Message-ID: <c343c0eb2cd977c79a32be06138a532d99fd0c61.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix the _LICENSE and _LICENSE_FILES variables, that were mistakenly
-created with PYTHON_JSONMODELS instead of PYTHON_YIELDFROM
+Hi Thomas,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-yieldfrom/python-yieldfrom.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, 2018-04-06 at 10:52 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri,  6 Apr 2018 10:18:35 +0200, J?rg Krause wrote:
+> > Commit d879be3049598f35d7b959784e1a6c2811ba2036 enabled the build for non-glibc
+> > toolchains and added a  patch from upstream to fix one remaining build issue
+> > with musl.
+> > 
+> > The upstream patch defines the glibc specific macro `__GLIBC_PREREQ` in
+> > `include/bsd/sys/cdefs.h`, but the patch does not include this header
+> > file in `include/bsd/stdlib.h` which uses the macro.
+> > 
+> > Upstream did committed an earlier patch which adds this header inclusion
+> > to `include/bsd/stdlib.h`. So, add this upstream patch as well to fix a
+> > build error when building the hcitop tool from the not yet added package
+> > bluez-alsa.
+> > 
+> > Note, that the upstream patch address the issue that `<sys/cdefs.h>` is
+> > a non-portable header. However, this is not the issue which needs to be
+> > fixed by this patch, but solely the needed inclusion of the
+> > `include/bsd/stdlib.h` header file, to see the definition of
+> > `__GLIBC_PREREQ`.
+> > 
+> > Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> 
+> Is this fixing an issue reported by the autobuilders ?
 
-diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
-index 2e775b3133..cb4a05d83a 100644
---- a/package/python-yieldfrom/python-yieldfrom.mk
-+++ b/package/python-yieldfrom/python-yieldfrom.mk
-@@ -8,8 +8,8 @@ PYTHON_YIELDFROM_VERSION = 1.0.3
- PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
- PYTHON_YIELDFROM_SITE = https://pypi.python.org/packages/de/2d/05524f368e691846824d962b64f983e3fde9b8c10839e7efbc1b51d42de3
- PYTHON_YIELDFROM_SETUP_TYPE = setuptools
--PYTHON_JSONMODELS_LICENSE = MIT
--PYTHON_JSONMODELS_LICENSE_FILES = LICENSE
-+PYTHON_YIELDFROM_LICENSE = MIT
-+PYTHON_YIELDFROM_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
--- 
-2.16.2
+No, it does not. It fixes an issue I found when adding the new package
+bluez-alsa.
+
+J?rg
