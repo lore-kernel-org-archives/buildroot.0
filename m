@@ -1,34 +1,47 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 6 Apr 2018 10:43:40 -0500
-Subject: [Buildroot] [PATCH 1/2] cramfs: change to new site location
-In-Reply-To: <nycvar.YSQ.7.76.1804061138320.28462@knanqh.ubzr>
-References: <20180213195449.51516-1-chris.brandt@renesas.com>
- <20180213195449.51516-2-chris.brandt@renesas.com>
- <20180213211453.519b65eb@windsurf.lan>
- <SG2PR06MB1165EA4292BE78ADF8D3A1678AF60@SG2PR06MB1165.apcprd06.prod.outlook.com>
- <CANQCQpZgjJqSpY9Pma9wsB=QtPL5onLYLb5pdteTSUULOcMF-A@mail.gmail.com>
- <TY1PR01MB1562ADDDE3949C2BC35FC4408ABA0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <CANQCQpZZMp8MXMRDMHg6vOr4f-GRYvBBeZB1MSNQvMk9BnfBzQ@mail.gmail.com>
- <nycvar.YSQ.7.76.1804061138320.28462@knanqh.ubzr>
-Message-ID: <CANQCQpZnN_q0OsPoYZc+nE6-=xSGtmk1SxgOQ4U_tFd84AbvkA@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri,  6 Apr 2018 18:34:16 +0200
+Subject: [Buildroot] [PATCH v2-RESEND 1/6] arm-trusted-firmware: simplify
+ release dir path
+In-Reply-To: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
+References: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1523032461-3295-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicolas,
+The path to the binary images is very long. Since we are about to make
+a larger use of it, let's use a variable to make it somewhat shorter.
 
-On Fri, Apr 6, 2018 at 10:41 AM, Nicolas Pitre <nicolas.pitre@linaro.org> wrote:
-> On Fri, 6 Apr 2018, Matthew Weber wrote:
->
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
->
-> Please hold off for the moment.
->
-> I don't like the original patch at all and would like a completely
-> different approach to keep the code saner. I'll commit it in a moment
-> but I will need someone to test it.
->
+---
+Changes v1 -> v2: none.
+---
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Perfect, I can do a test when you're ready.
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 4bac916e3108..212bb5049f2b 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -25,6 +25,7 @@ endif
+ ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES = YES
+ 
+ ARM_TRUSTED_FIRMWARE_PLATFORM = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM))
++ARM_TRUSTED_FIRMWARE_IMG_DIR = $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release
+ 
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+@@ -82,7 +83,7 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+ endef
+ 
+ define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+-	cp -dpf $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release/*.bin $(BINARIES_DIR)/
++	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
+ endef
+ 
+ # Configuration check
+-- 
+2.7.4
