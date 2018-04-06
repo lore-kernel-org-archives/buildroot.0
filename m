@@ -1,36 +1,25 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Fri, 6 Apr 2018 10:44:24 -0400
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Fri, 06 Apr 2018 16:53:13 +0200
 Subject: [Buildroot] Using a bootlin toolchain with buildroot
-Message-ID: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
+In-Reply-To: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
+References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
+Message-ID: <48d440f7-3bdc-4fa8-a7c9-8c3618cd8099@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Are there any tips or tricks to using a bootlin toolchain with
-buildroot(.2018.02)?
+Here's what works well for us:
 
-I have downloaded armv7-eabihf--musl--stable-2018.02-2.tar.bz2
-unpacket it into /opt.
-I have selected BR2_TOOLCHAIN_EXTERNAL
-I have selected BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-I have selected BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED
-I have specified /opt/armv7-eabihf--musl--stable-2018.02-2/bin for
-BR2_TOOLCHAIN_EXTERNAL_PATH
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.02-1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="i686-buildroot-linux-gnu"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
 
-I could keep listing all of these settings, but I'm not sure how
-useful that would be.
-
-Basically, I'm asking: If I want to use a bootline toolchain, do I
-just go through and choose the options that best seem to match the
-toolchain options, or is there more documentation about doing this
-someplace?
-
-I don't know that I have run into any problems choosing the options
-myself, but it would be nice not to have to reinvent any wheels.
-
-(Oh yeah, something just failed in my build... but I'll dig into that
-myself before I waste your time asking about it.)
-
---wpd
+Cheers,
+Jan
