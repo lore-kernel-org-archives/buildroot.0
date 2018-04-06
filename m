@@ -1,57 +1,53 @@
-From: Chris Brandt <Chris.Brandt@renesas.com>
-Date: Fri, 6 Apr 2018 19:07:24 +0000
-Subject: [Buildroot] [PATCH 1/2] cramfs: change to new site location
-In-Reply-To: <nycvar.YSQ.7.76.1804061446470.28462@knanqh.ubzr>
-References: <20180213195449.51516-1-chris.brandt@renesas.com>
- <20180213195449.51516-2-chris.brandt@renesas.com>
- <20180213211453.519b65eb@windsurf.lan>
- <SG2PR06MB1165EA4292BE78ADF8D3A1678AF60@SG2PR06MB1165.apcprd06.prod.outlook.com>
- <CANQCQpZgjJqSpY9Pma9wsB=QtPL5onLYLb5pdteTSUULOcMF-A@mail.gmail.com>
- <TY1PR01MB1562ADDDE3949C2BC35FC4408ABA0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <CANQCQpZZMp8MXMRDMHg6vOr4f-GRYvBBeZB1MSNQvMk9BnfBzQ@mail.gmail.com>
- <nycvar.YSQ.7.76.1804061138320.28462@knanqh.ubzr>
- <CANQCQpZnN_q0OsPoYZc+nE6-=xSGtmk1SxgOQ4U_tFd84AbvkA@mail.gmail.com>
- <nycvar.YSQ.7.76.1804061305080.28462@knanqh.ubzr>
- <CANQCQpaUvOFQJG=8Suv7qNDnj2wT53R8JNCGSLNfXfhL5o2NqA@mail.gmail.com>
- <nycvar.YSQ.7.76.1804061446470.28462@knanqh.ubzr>
-Message-ID: <TY1PR01MB1562D0608CCEC563067F9E008ABA0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 6 Apr 2018 21:24:30 +0200
+Subject: [Buildroot] [git commit] mesa3d: properly propagate the
+ dependencies of BR2_PACKAGE_LLVM
+Message-ID: <20180406193104.18C7286897@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday, April 06, 2018, Nicolas Pitre wrote:
-> On Fri, 6 Apr 2018, Matthew Weber wrote:
-> > On Fri, Apr 6, 2018 at 12:06 PM, Nicolas Pitre
-> <nicolas.pitre@linaro.org> wrote:
-> > > On Fri, 6 Apr 2018, Matthew Weber wrote:
-> > > > On Fri, Apr 6, 2018 at 10:41 AM, Nicolas Pitre
-> <nicolas.pitre@linaro.org> wrote:
-> > > > > I don't like the original patch at all and would like a completely
-> > > > > different approach to keep the code saner. I'll commit it in a
-> moment
-> > > > > but I will need someone to test it.
-> > > > >
-> > > >
-> > > > Perfect, I can do a test when you're ready.
-> > >
-> > > Please test the cross-endian branch and let me know how it works.
-> > > If it works then I'll move it to the main branch.
-> >
-> > Tested successfully on a big endian powerpc target.
-> 
-> Good!  I moved it to the master branch.
+commit: https://git.buildroot.net/buildroot/commit/?id=e841af11085a55b4785b2b67e8509f5fa0987e1b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+We cannot simply select BR2_PACKAGE_LLVM, we need to take into account
+all its dependencies. BR2_PACKAGE_LLVM_ARCH_SUPPORTS was already taken
+into account, but not the other dependencies.
 
-So, it looks like the ball is back in my court to update the hash and 
-put the endian command line options back in.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Thomas Petazzoni <a class="moz-txt-link-rfc2396E" href="mailto:thomas.petazzoni@bootlin.com">&lt;thomas.petazzoni at bootlin.com&gt;</a></pre>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/Config.in | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Except, looks like they changed from lower case "-b, -l" in the original
-patch to upper case "-B, -L".
-
-I'll update the original patch series and re-post to the Buildroot 
-mailing list.
-
-
-Chris
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index ffe0287ac5..8f347ffe0c 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -28,8 +28,22 @@ if BR2_PACKAGE_MESA3D
+ config BR2_PACKAGE_MESA3D_LLVM
+ 	bool "llvm support"
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
+ 	select BR2_PACKAGE_LLVM
+ 
++comment "llvm support needs a toolchain w/ threads, C++, gcc >= 4.8, host gcc >= 4.8"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++comment "llvm support needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
+ # inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	bool
