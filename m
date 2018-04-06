@@ -1,86 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:09:19 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] support/check-uniq-files:
- support weird locales and filenames
-Message-ID: <20180407175150.9D46F81199@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:10:02 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] nodejs: security bump to
+ version 8.11.1
+Message-ID: <20180407175150.B807181199@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b6c090749e31701bab7254d7ebb3cd121ef3d34
+commit: https://git.buildroot.net/buildroot/commit/?id=560b1d374e15046567ed7c866aa1aebbaf3d6e7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Currently, when a filename contains characters not representable in the
-user's locale, we fail hard, especially when the host python is python3.
+Fixes the following security issues:
 
-This is because python2 and python3 handle encoding/decoding strings
-differently, with python3 presumable doing the right thing, but it
-breaks on some systems, while python2 presumable does the wrong thing,
-but it works everywhere. (Just joking, obviously...)
+- Fix for inspector DNS rebinding vulnerability (CVE-2018-7160): A malicious
+  website could use a DNS rebinding attack to trick a web browser to bypass
+  same-origin-policy checks and allow HTTP connections to localhost or to
+  hosts on the local network, potentially to an open inspector port as a
+  debugger, therefore gaining full code execution access.  The inspector now
+  only allows connections that have a browser Host value of localhost or
+  localhost6.
 
-Part of the issue being that the csv reader in python2 is broken with
-UTF8.
+- Fix for 'path' module regular expression denial of service
+  (CVE-2018-7158): A regular expression used for parsing POSIX paths could
+  be used to cause a denial of service if an attacker were able to have a
+  specially crafted path string passed through one of the impacted 'path'
+  module functions.
 
-We fix the issue by ditching the csv reader, and simply read the file in
-binary mode, manually partitioning the lines on the first comma.
+- Reject spaces in HTTP Content-Length header values (CVE-2018-7159): The
+  Node.js HTTP parser allowed for spaces inside Content-Length header
+  values.  Such values now lead to rejected connections in the same way as
+  non-numeric values.
 
-Then, we use the binary-encoded (really, un-encoded) package names and
-filenames as values and keys, respectively.
+While we are at it, also add a hash for the license file.
 
-Finally, for each filename or package we need to print, we try to decode
-them with the defaults for the user settings, but catch any decoding
-exception and fall back to dumping the raw, binary values. Which codec
-is used by default differs between Python version, but in all cases
-something sane is printed at least.
-
-Thanks a lot to Arnout for the live help doing this patch. :-)
-
-Reported-by: Jaap Crezee <jaap@jcz.nl>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Jaap Crezee <jaap@jcz.nl>
-[Arnout: commit log improvement]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(cherry picked from commit 5563a1c6a48716debe2983869ddb757318094dce)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7f02604553bc3c8449d6a112818f038e99abbdaf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/check-uniq-files | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ package/nodejs/nodejs.hash | 7 +++++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
-index be808cce03..f110176274 100755
---- a/support/scripts/check-uniq-files
-+++ b/support/scripts/check-uniq-files
-@@ -26,16 +26,23 @@ def main():
-         return False
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 4adef79dca..b3900f6a7d 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,5 @@
+-# From http://nodejs.org/dist/v8.10.0/SHASUMS256.txt
+-sha256 b72d4e71618d6bcbd039b487b51fa7543631a4ac3331d7caf69bdf55b5b2901a  node-v8.10.0.tar.xz
++# From http://nodejs.org/dist/v8.11.1/SHASUMS256.txt
++sha256 40a6eb51ea37fafcf0cfb58786b15b99152bec672cccf861c14d1cca0ad4758a  node-v8.11.1.tar.xz
++
++# Hash for license file
++sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index e1dd11cef5..2642525c47 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     file_to_pkg = defaultdict(list)
--    with open(args.packages_file_list[0], 'r') as pkg_file_list:
--        r = csv.reader(pkg_file_list, delimiter=',')
--        for row in r:
--            pkg = row[0]
--            file = row[1]
-+    with open(args.packages_file_list[0], 'rb') as pkg_file_list:
-+        for line in pkg_file_list.readlines():
-+            pkg, _, file = line.rstrip(b'\n').partition(b',')
-             file_to_pkg[file].append(pkg)
- 
-     for file in file_to_pkg:
-         if len(file_to_pkg[file]) > 1:
--            sys.stderr.write(warn.format(args.type, file, file_to_pkg[file]))
-+            # If possible, try to decode the binary strings with
-+            # the default user's locale
-+            try:
-+                sys.stderr.write(warn.format(args.type, file.decode(),
-+                                             [p.decode() for p in file_to_pkg[file]]))
-+            except UnicodeDecodeError:
-+                # ... but fallback to just dumping them raw if they
-+                # contain non-representable chars
-+                sys.stderr.write(warn.format(args.type, file,
-+                                             file_to_pkg[file]))
- 
- 
- if __name__ == "__main__":
+-NODEJS_VERSION = 8.10.0
++NODEJS_VERSION = 8.11.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
