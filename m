@@ -1,86 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Apr 2018 22:09:32 +0200
-Subject: [Buildroot] [git commit] package/rpi-wifi-firmware: change to
- LibreELEC github repo
-Message-ID: <20180406201114.3020581272@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 22:14:18 +0200
+Subject: [Buildroot] [PATCH v4 0/7] Add rpi3 b+ support
+In-Reply-To: <1521900617-32102-1-git-send-email-martin@barkynet.com>
+References: <1521900617-32102-1-git-send-email-martin@barkynet.com>
+Message-ID: <20180406221418.49582c2a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a10ffcdcbf208ab09b49c25a77cafc8cece2e3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Martin,
 
-Include brcmfmac43455 firmware for the rpi3 b+
+On Sat, 24 Mar 2018 14:10:10 +0000, Martin Bark wrote:
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Cc: Jens Maus <mail@jens-maus.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rpi-wifi-firmware/Config.in              | 11 +++++++----
- package/rpi-wifi-firmware/rpi-wifi-firmware.hash |  3 ++-
- package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 16 +++++-----------
- 3 files changed, 14 insertions(+), 16 deletions(-)
+> Martin Bark (7):
+>   package/rpi-firmware: bump version
+>   configs/raspberrypi*: bump kernel version
+>   board/raspberrypi: add support for rpi3 b+
+>   package/rpi-firmware: improve installation of dtb files
+>   package/rpi-bt-firmware: change to LibreELEC github repo
+>   package/rpi-wifi-firmware: change to LibreELEC github repo
+>   DEVELOPERS: add myself for rpi packages
 
-diff --git a/package/rpi-wifi-firmware/Config.in b/package/rpi-wifi-firmware/Config.in
-index 2c87c75842..7e81b286c0 100644
---- a/package/rpi-wifi-firmware/Config.in
-+++ b/package/rpi-wifi-firmware/Config.in
-@@ -1,10 +1,13 @@
- config BR2_PACKAGE_RPI_WIFI_FIRMWARE
- 	bool "rpi-wifi-firmware"
- 	depends on BR2_arm || BR2_aarch64
--	select BR2_PACKAGE_LINUX_FIRMWARE
--	select BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX # runtime
-+	depends on !BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
- 	help
- 	  Raspberry Pi 3 and Zero W Broadcom BCM43430 wifi module
--	  NVRAM data.
-+	  NVRAM data. Raspberry Pi 3 Model B+ Broadcom BCM43455
-+	  wifi module NVRAM data.
- 
--	  https://github.com/RPi-Distro/firmware-nonfree/
-+	  https://github.com/LibreELEC/brcmfmac_sdio-firmware-rpi
-+
-+comment "rpi-wifi-firmware conflicts with linux-firmware Broadcom BRCM bcm43xx"
-+	depends on BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-index c20506536f..bc0d7c8b02 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256  872fde4f9942d9aba805880d6eaddfe050305626fd58ad955bfe77c04f6b75a5  brcmfmac43430-sdio.txt
-+sha256 beade89c5c072158b6cf18cf741d2695980fd6a4533dab3897bebf90c0631a30  rpi-wifi-firmware-18d7c931aff0a8a78360b9b9eaeb15d1224fb907.tar.gz
-+sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-index 83473d5bb9..32dd3e519b 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-@@ -4,20 +4,14 @@
- #
- ################################################################################
- 
--RPI_WIFI_FIRMWARE_VERSION = 54bab3d6a6d43239c71d26464e6e10e5067ffea7
--# brcmfmac43430-sdio.bin comes from linux-firmware
--RPI_WIFI_FIRMWARE_SOURCE = brcmfmac43430-sdio.txt
--# git repo contains a lot of unrelated files
--RPI_WIFI_FIRMWARE_SITE = https://raw.githubusercontent.com/RPi-Distro/firmware-nonfree/$(RPI_WIFI_FIRMWARE_VERSION)/brcm80211/brcm
-+RPI_WIFI_FIRMWARE_VERSION = 18d7c931aff0a8a78360b9b9eaeb15d1224fb907
-+RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
- RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
--
--define RPI_WIFI_FIRMWARE_EXTRACT_CMDS
--	cp $(RPI_WIFI_FIRMWARE_DL_DIR)/$($(PKG)_SOURCE) $(@D)/
--endef
-+RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
- 
- define RPI_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/$(RPI_WIFI_FIRMWARE_SOURCE) \
--		$(TARGET_DIR)/lib/firmware/brcm/$(RPI_WIFI_FIRMWARE_SOURCE)
-+	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
-+	$(INSTALL) -m 0644 $(@D)/firmware/brcm/brcmfmac* $(TARGET_DIR)/lib/firmware/brcm
- endef
- 
- $(eval $(generic-package))
+I've applied the entire series. Two comments:
+
+ - Use exactly "---" below your SoB to add the changelog or additional
+   comments. If you don't do this, it doesn't get recognized as a
+   separator, and the changelog becomes part of the commit log.
+
+ - Use "foreach" make loops instead of "for" shell loops. It is more
+   Buildroot-ish, and the "foreach" make loops do the error checking
+   automatically at each iteration of the loop. Due to the usage of a
+   "for" shell loop, error checking was missing in the rpi-bt-firmware
+   change you made. There is a remaining "for" shell loop in the
+   rpi-firmware package, it would be good to get rid of it as well.
+
+Thanks a lot for this contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
