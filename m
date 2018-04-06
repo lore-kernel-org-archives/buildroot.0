@@ -1,96 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:05:27 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libopenssl: security bump
- to version 1.0.2o
-Message-ID: <20180407175149.B5F388183A@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:06:02 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] core: alternate solution
+ to disable C++
+Message-ID: <20180407175149.D63AA8183A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48d789970e20bd16583d4f455d0efd4b60ad31d8
+commit: https://git.buildroot.net/buildroot/commit/?id=ae854d015e4005592c9de05182285a2847d8b546
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes the following security issues:
+Some packages that use libtool really need some love to be able to
+disable C++ support.
 
-Constructed ASN.1 types with a recursive definition could exceed the stack
-(CVE-2018-0739)
+This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
+is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
+will want a C++ preprocessor that works on valid input *and* fail on
+invalid input.
 
-Constructed ASN.1 types with a recursive definition (such as can be found in
-PKCS7) could eventually exceed the stack given malicious input with
-excessive recursion.  This could result in a Denial Of Service attack.
-There are no such structures used within SSL/TLS that come from untrusted
-sources so this is considered safe.
+So, providing 'false' as the C++ compiler will then require that we do
+have a working C++ preprocessor. Which is totally counter-productive
+since we do not have a C++ compiler to start with...
 
-Incorrect CRYPTO_memcmp on HP-UX PA-RISC (CVE-2018-0733)
+bd39d11d2e (core/infra: fix build on toolchain without C++) was a
+previous attempt at fixing this, by using the host's C++ preprocessor.
 
-Because of an implementation bug the PA-RISC CRYPTO_memcmp function is
-effectively reduced to only comparing the least significant bit of each
-byte.  This allows an attacker to forge messages that would be considered as
-authenticated in an amount of tries lower than that guaranteed by the
-security claims of the scheme.  The module can only be compiled by the HP-UX
-assembler, so that only HP-UX PA-RISC targets are affected.
+However, that is very incorrect (that's my code, I can say so!) because
+the set of defines will most probably be different for the host and the
+target, thus causing all sorts of trouble. For example, on ARM we'd have
+to include different headers for soft-float vs hard-float, which is
+decided based on a macro, which is not defined for x86, and thus may
+redirect to the wrong (and missing) header.
 
-rsaz_1024_mul_avx2 overflow bug on x86_64 (CVE-2017-3738)
+Instead, we notice that libtool uses the magic value 'no' to decide that
+a C++ compiler is not available, in which case it skips the call to
+AC_PROG_CXXCPP.
 
-This issue has been reported in a previous OpenSSL security advisory and a
-fix was provided for OpenSSL 1.0.2.  Due to the low severity no fix was
-released at that time for OpenSSL 1.1.0.  The fix is now available in
-OpenSSL 1.1.0h.
+Given that 'no' is not provided by any package in Debian and
+derivatives, as well as in Fedora, we can assume that no system will
+have an executable called 'no'. Hence, we use that as a magic value to
+disable C++ detection altogether.
 
-There is an overflow bug in the AVX2 Montgomery multiplication procedure
-used in exponentiation with 1024-bit moduli.  No EC algorithms are affected.
-Analysis suggests that attacks against RSA and DSA as a result of this
-defect would be very difficult to perform and are not believed likely.
-Attacks against DH1024 are considered just feasible, because most of the
-work necessary to deduce information about a private key may be performed
-offline.  The amount of resources required for such an attack would be
-significant.  However, for an attack on TLS to be meaningful, the server
-would have to share the DH1024 private key among multiple clients, which is
-no longer an option since CVE-2016-0701.
+Fixes: #10846 (again)
 
-This only affects processors that support the AVX2 but not ADX extensions
-like Intel Haswell (4th generation).
-
-For more details, see https://www.openssl.org/news/secadv/20180327.txt
-
-The copyright year changed in LICENSE, so adjust the hash to match.
-
+Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6938c219d80e2267f8e25f3fc37f955ab723cc55)
+(cherry picked from commit 4cd1ab15886a408b897104709ff87f15cc88ba16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.hash | 6 +++---
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Makefile.in | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index e3d3da757d..48b7471c20 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,8 +1,8 @@
--# From https://www.openssl.org/source/openssl-1.0.2n.tar.gz.sha256
--sha256	370babb75f278c39e0c50e8c4e7493bc0f18db6867478341a832a982fd15a8fe	openssl-1.0.2n.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2o.tar.gz.sha256
-+sha256	ec3f5c9714ba0fd45cb4e087301eb1336c317e0d20b575a125050470e8089e4d	openssl-1.0.2o.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	30cb49489de5041841a74da9155cd4fabfbce33237262ba7cd23974314ae2956	openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
--sha256	9ee37d72966bb4a841343f0606ce44d41b3eae4df4285200c5a8ddc2b935992a	LICENSE
-+sha256	c8f60f4842bbad0353f5d81620e72b168b5638ca3a0a999f5da113b22491612e	LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 5a78676c64..16a9c2e9d2 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/Makefile.in b/package/Makefile.in
+index e387ce67fe..57fb47ea2e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -409,8 +409,16 @@ else
+ NLS_OPTS = --disable-nls
+ endif
  
--LIBOPENSSL_VERSION = 1.0.2n
-+LIBOPENSSL_VERSION = 1.0.2o
- LIBOPENSSL_SITE = http://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
++# We need anything that is invalid. Traditionally, we'd have used 'false' (and
++# we did so in the past). However, that breaks libtool for packages that have
++# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
++# C++ preprocessor as long as CXX is not 'no'.
++# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
++# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
++# expected and what we want), while at the same time taming libtool into
++# silence.
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+-TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
++TARGET_CONFIGURE_OPTS += CXX=no
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
