@@ -1,54 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Apr 2018 21:24:28 +0200
-Subject: [Buildroot] [git commit] llvm: add dependency on
- !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-Message-ID: <20180406193104.0AAF486897@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 21:24:26 +0200
+Subject: [Buildroot] [git commit] php: fix how PCRE JIT is disabled
+Message-ID: <20180406193103.EA4D286897@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f921700b7b16393ae8d6d15990974c26a168c37
+commit: https://git.buildroot.net/buildroot/commit/?id=9850612ea5e9fc9c377d11ec9c2930bfd812754a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LLVM uses std::shared_future, which until gcc 7.x isn't available on
-architectures that don't provide lock-free atomics, see
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735.
+When the internal PCRE library of PHP is used, it tries to use a JIT
+engine, which is only available on some architectures.
 
-Buildroot already has a BR2_TOOLCHAIN_HAS_GCC_BUG_64735 option to
-handle such a case, so simply add this new dependency to LLVM. It will
-make sure LLVM doesn't get built on ARMv5 platforms using a gcc older
-than 7.x.
+However, the mechanism used to disable JIT has changed in recent PHP
+versions, and it now has a proper --without-pcre-jit option. Switch
+over to that to properly disable JIT on unsupported platforms.
+
+It has been tested to fix the build of PHP on ARC and Microblaze.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/ada497f6a8d20fa1a9adb2b17a138d7b726a6cdc/
+  http://autobuild.buildroot.net/results/e1359fcad7bc57e3c5a7ecc37abaa2cf6a6a9ffa/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/llvm/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/php/php.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 70f73f4858..15f2507ef2 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_LLVM
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
- 	help
- 	  The LLVM Project is a collection of modular and reusable
- 	  compiler and toolchain technologies.
-@@ -38,3 +39,7 @@ comment "llvm needs a toolchain w/ threads, C++, gcc >= 4.8, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
-+comment "llvm needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/php/php.mk b/package/php/php.mk
+index bfd25de875..91756794ee 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -228,10 +228,6 @@ ifneq ($(BR2_PACKAGE_PHP_EXT_MYSQLI)$(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),)
+ PHP_CONF_OPTS += --with-mysql-sock=$(MYSQL_SOCKET)
+ endif
+ 
+-define PHP_DISABLE_PCRE_JIT
+-	$(SED) '/^#define SUPPORT_JIT/d' $(@D)/ext/pcre/pcrelib/config.h
+-endef
+-
+ define PHP_DISABLE_VALGRIND
+ 	$(SED) '/^#define HAVE_VALGRIND/d' $(@D)/main/php_config.h
+ endef
+@@ -249,8 +245,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ PHP_CFLAGS += -DSLJIT_SINGLE_THREADED=1
+ endif
+ # check ext/pcre/pcrelib/sljit/sljitConfigInternal.h for supported archs
+-ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),)
+-PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_PCRE_JIT
++ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
++PHP_CONF_OPTS += --with-pcre-jit
++else
++PHP_CONF_OPTS += --without-pcre-jit
+ endif
+ endif
+ 
