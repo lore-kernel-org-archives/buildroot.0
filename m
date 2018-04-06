@@ -1,50 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:47:30 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/imagemagick:
- security bump version to 7.0.7-27
-Message-ID: <20180406165913.8DC218027E@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 16:52:35 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libssh2: fix pkg-config
+ info for mbedtls backend
+Message-ID: <20180406165913.CB3F9810CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f840f80b3ade9b8faf9727410cbf4ccd553b040f
+commit: https://git.buildroot.net/buildroot/commit/?id=2c4fbb7a642bc3e96523d58f12bda21963c1dedd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes CVE-2018-6405 (upstream Github PR 964) and many others:
-http://www.imagemagick.org/script/changelog.php
+The libssh2.pc file did not contain the needed info for static link with
+libssh2. Add a patch fixing that.
 
-Added license hash.
+Fixes (qemu):
+http://autobuild.buildroot.net/results/634/6346b25be2844f9ef722e52040ac1b43d9c38899/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 31086ea1de511b57e8377d9fa6b0fe7350b1e753)
+(cherry picked from commit ebbf8746243ee4fa6b51a5a6afa8b14459b4178f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 3 ++-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ .../0002-acinclude.m4-add-mbedtls-to-LIBS.patch    | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 2468bdbc23..170231c4b7 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
-+sha256 723a28f9cbc5c6130f496065fc01c839083e97bf3e4930f940a03c0155046170  7.0.7-27.tar.gz
-+sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index c2171a7564..116543888b 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.7-10
-+IMAGEMAGICK_VERSION = 7.0.7-27
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+diff --git a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
+new file mode 100644
+index 0000000000..76e08c51a9
+--- /dev/null
++++ b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
+@@ -0,0 +1,31 @@
++From f4846473f0f0ec313f8ed7ff4cd9f59c1741465d Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 20 Mar 2018 20:21:53 +0200
++Subject: [PATCH] acinclude.m4: add mbedtls to LIBS
++
++This is useful for static builds so that the Libs.private field in
++libssh2.pc contains correct info for the benefit of pkg-config users.
++Static link with libssh2 requires this information.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/libssh2/libssh2/pull/242
++
++ acinclude.m4 | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index c0e89a1a0c98..02c70845d27c 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -441,6 +441,7 @@ m4_case([$1],
++ [mbedtls], [
++   LIBSSH2_LIB_HAVE_LINKFLAGS([mbedcrypto], [], [#include <mbedtls/version.h>], [
++     AC_DEFINE(LIBSSH2_MBEDTLS, 1, [Use $1])
+++    LIBS="$LIBS $LIBMBEDCRYPTO"
++     found_crypto="$1"
++     support_clear_memory=yes
++   ])
++-- 
++2.16.2
++
