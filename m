@@ -1,41 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Apr 2018 21:46:12 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump version
-Message-ID: <20180406201113.A295D80400@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 21:49:18 +0200
+Subject: [Buildroot] [git commit] board/raspberrypi: add support for rpi3 b+
+Message-ID: <20180406201113.D36C3875BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c90e76734a97a6ff31a29e4955c9f668b20c0a1b
+commit: https://git.buildroot.net/buildroot/commit/?id=012c400f9d5eef2fb04dcde931d08852cc19ffdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/raspberrypi/genimage-raspberrypi3.cfg | 1 +
+ board/raspberrypi/readme.txt                | 3 ++-
+ configs/raspberrypi3_defconfig              | 2 +-
+ configs/raspberrypi3_qt5we_defconfig        | 2 +-
+ 4 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 833a7fbe37..4854deae03 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 0451e1a843bf02df81126a1625d9a15dfdf19dcb2f9e95b0613a63e59fd31ca8 rpi-firmware-2067241bc7cdf238fdeab7f5a3c22faa57dd5617.tar.gz
-+sha256 ea451834e20136d249661e0ed7d1fdfa309249d233a387f44dd6c3b746a454c6 rpi-firmware-36f991382326907419f64917624427e59fd8e4a0.tar.gz
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 22eaaa2886..1f4a168996 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
+index 98ff709035..0a547241f4 100644
+--- a/board/raspberrypi/genimage-raspberrypi3.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3.cfg
+@@ -2,6 +2,7 @@ image boot.vfat {
+   vfat {
+     files = {
+       "bcm2710-rpi-3-b.dtb",
++      "bcm2710-rpi-3-b-plus.dtb",
+       "bcm2710-rpi-cm3.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 948269347b..9f91581054 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -30,7 +30,7 @@ For model 2 B:
  
--RPI_FIRMWARE_VERSION = 2067241bc7cdf238fdeab7f5a3c22faa57dd5617
-+RPI_FIRMWARE_VERSION = 36f991382326907419f64917624427e59fd8e4a0
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+   $ make raspberrypi2_defconfig
+ 
+-For model 3 B:
++For model 3 B and B+:
+ 
+   $ make raspberrypi3_defconfig
+ 
+@@ -56,6 +56,7 @@ After building, you should obtain this tree:
+     +-- bcm2708-rpi-b-plus.dtb      [1]
+     +-- bcm2709-rpi-2-b.dtb         [1]
+     +-- bcm2710-rpi-3-b.dtb         [1]
++    +-- bcm2710-rpi-3-b-plus.dtb    [1]
+     +-- boot.vfat
+     +-- rootfs.ext4
+     +-- rpi-firmware/
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 88e78a98b5..45a76beb6a 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -16,7 +16,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-cm3"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus bcm2710-rpi-cm3"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ 
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index bbf5f210d7..ee76f2b682 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -17,7 +17,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-cm3"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus bcm2710-rpi-cm3"
+ 
+ # Build Qt5 WebEngine
+ BR2_PACKAGE_LIBERATION=y
