@@ -1,44 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Apr 2018 12:44:52 +0200
-Subject: [Buildroot] [PATCHv3] core/download fix local backend
-In-Reply-To: <20180404162239.22682-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Wed, 4 Apr 2018 18:22:39 +0200")
-References: <20180404162239.22682-1-yann.morin.1998@free.fr>
-Message-ID: <87d0zclil7.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Apr 2018 12:45:41 +0200
+Subject: [Buildroot] [PATCH] azure-iot-sdk-c: Bump to version 2018-03-16
+In-Reply-To: <1522860238-29448-1-git-send-email-nerv@dawncrow.de>
+ (=?utf-8?Q?=22Andr=C3=A9?=
+ Hentschel"'s message of "Wed, 4 Apr 2018 18:43:58 +0200")
+References: <1522860238-29448-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <878ta0liju.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
 
- > Since c8ef0c03b0b (download: put most of the infra in dl-wrapper), the
- > backend for local files is now named after the scheme, which is 'file'
- > for a local file.
-
- > From the same commit on, the directory part and the basename are now
- > passed separately, to let the backend reconstruct the full path when it
- > needs to do so, which is the case for the 'file' backend too.
-
- > Finaly, ff559846fdc1 (support/download: Add support to pass options
- > directly to downloaders) introduced a nasty error, as it made use of
- > "${@}" when calling its internal function. Revert that mess now...
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
-
- > ---
- > Changes v2 -> v3:
- >   - drop spurious "${@}"
-
- > Changes v1 -> v2:
- >   - really fix it now: filename passed as other option
+ > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 
 Committed, thanks.
+
+> ---
+ >  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+ > index 18c3e24..504929a 100644
+ > --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+ > +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -AZURE_IOT_SDK_C_VERSION = 2017-06-30
+ > +AZURE_IOT_SDK_C_VERSION = 2018-03-16
+ >  AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
+ >  AZURE_IOT_SDK_C_SITE_METHOD = git
+ >  AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
+ > -- 
+ > 2.7.4
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
