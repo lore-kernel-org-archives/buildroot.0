@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:00:41 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] systemd: do not use host
- system-uid/gid ranges
-Message-ID: <20180407175148.AA0517F9CD@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:07:44 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x]
+ support/config-fragments/autobuild: fix SSP in br-nios2-glibc
+Message-ID: <20180407175150.40E7A8183A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bc97aa935631fca0e4d0c3b53648516ea577c79
+commit: https://git.buildroot.net/buildroot/commit/?id=abbaecf5d8ae8945f5604b96043fa3e40c249643
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-systemd meson.build uses values from host /etc/login.defs if
-system-uid-max and system-gid-max build options are not explicitly
-specified.
+Commit c8680956819fae8776d7bd6d1f0e67a7b6436672 ("toolchain: fix
+detection of SSP support") fixed the SSP check so that it does the
+correct thing for nios2 toolchains. While this commit fixed the
+description of the Sourcery NIOSII toolchain, it didn't fix the
+description for the autobuilders of the br-nios2-glibc toolchain,
+causing some build failures. This commit adjusts br-nios2-glibc.config
+to indicate that the toolchain doesn't have SSP support.
 
-Avoid that by setting system-uid-max and system-gid-max to 999 which is
-the systemd default if SYSTEM_UID_MAX and SYSTEM_GID_MAX are not set in
-/etc/login.defs.
+Fixes:
 
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 183d2097ffef5d8d7e1ac07d3b613ecacdd8c876)
+  http://autobuild.buildroot.net/results/6c44e328b7bffd8474d29d5bdf1ea109ec15f4ad/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0e4de0f2db5f7a252d4b8a4cac752fac9ca2deb3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ support/config-fragments/autobuild/br-nios2-glibc.config | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 8c22c08dd1..3bc322cd51 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -40,6 +40,8 @@ SYSTEMD_CONF_OPTS += \
- 	-Dldconfig=false \
- 	-Ddefault-dnssec=no \
- 	-Dtests=false \
-+	-Dsystem-uid-max=999 \
-+	-Dsystem-gid-max=999 \
- 	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
- 	-Dkill-path=/usr/bin/kill \
- 	-Dkmod-path=/usr/bin/kmod \
+diff --git a/support/config-fragments/autobuild/br-nios2-glibc.config b/support/config-fragments/autobuild/br-nios2-glibc.config
+index 62f2665e44..52b9f7f9f5 100644
+--- a/support/config-fragments/autobuild/br-nios2-glibc.config
++++ b/support/config-fragments/autobuild/br-nios2-glibc.config
+@@ -6,4 +6,5 @@ BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/b
+ BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+ BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_13=y
+ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++# BR2_TOOLCHAIN_EXTERNAL_HAS_SSP is not set
+ BR2_TOOLCHAIN_EXTERNAL_CXX=y
