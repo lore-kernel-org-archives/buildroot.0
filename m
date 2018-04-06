@@ -1,53 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:27:05 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] cmake: Fix RPATH for host
- libraries built by CMake
-Message-ID: <20180406165912.44185867C0@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 16:30:12 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] samba4: security bump to
+ version 4.7.6
+Message-ID: <20180406165912.61374867C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e11d0ef9bc2b3bde948844fbe1331f9caef97ee
+commit: https://git.buildroot.net/buildroot/commit/?id=e5383981e5456a6742f7ca2deb0a253142016e18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The host shared libraries produced by CMake were missing a proper
-DT_RPATH. That became a problem because the DT_RPATH handling is not
-transitive by design.
+CVE-2018-1050: Vulnerability to a denial of service attack when the RPC
+spoolss service is configured to be run as an external daemon.
 
-Consider the following scenario:
+https://www.samba.org/samba/security/CVE-2018-1050.html
 
-- pkg-a provides a library (`liba`) which links to `libpcre`
-- pkg-b provides a binary (`foo`) and a shared library (`libb`) which is
-needed by that binary
-- `libb` links to `liba`
-- pkg-a and pkg-b are both built by CMake
+CVE-2018-1057: Authenticated users might change any other users'
+passwords, including administrative users and privileged service
+accounts (eg Domain Controllers).
 
-In this scenario, `foo` is correctly marked with DT_RPATH pointing to
-host/lib/, but that path is not used when (recursively) resolving PCRE's
-symbols in `liba`. When attempting to run the `foo` binary, the linker
-correctly finds both `liba` and `libb`, but it cannot find the
-libpcre.so as built by Buildroot for host.
+https://www.samba.org/samba/security/CVE-2018-1057.html
 
-Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Add clnt_create() test result to cache to fix cross configure breakage.
+
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7d43534625ac06ae01987113e912ffaf1aec2302)
+(cherry picked from commit 40275643432c974dca8d4b6ba1886bba19fe6317)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cmake.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/samba4/samba4-cache.txt | 1 +
+ package/samba4/samba4.hash      | 5 +++--
+ package/samba4/samba4.mk        | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 14ffe4a88f..9b07798a1e 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -132,6 +132,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
-+		-DCMAKE_SHARED_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
- 		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
- 		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
- 		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
+diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
+index 4a6471dd7a..0485f0dbb1 100644
+--- a/package/samba4/samba4-cache.txt
++++ b/package/samba4/samba4-cache.txt
+@@ -38,3 +38,4 @@ Checking value of _NSIG: "65"
+ Checking value of SIGRTMAX: "64"
+ Checking value of SIGRTMIN: "34"
+ Checking errno of iconv for illegal multibyte sequence: "0"
++checking for clnt_create(): OK
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 28765440d1..dddd132d24 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,3 +1,4 @@
+-# Locally calculated
+-sha256 fb12d0c4452f85b67b78bbeabd4c762d8feb8ff83e39d044d285120c2c488247  samba-4.7.4.tar.gz
++# Locally calculated after checking pgp signature
++# https://download.samba.org/pub/samba/stable/samba-4.7.6.tar.asc
++sha256 1eede30fc8ef6504e24602fb72b00baa0a7b73b59f16d25cb0771dc8c7c57d6e  samba-4.7.6.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 6f3207fb64..ada03c024f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.7.4
++SAMBA4_VERSION = 4.7.6
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
