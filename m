@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Apr 2018 18:52:39 +0200
-Subject: [Buildroot] [PATCH] uclibc-ng-test: fix build with musl and
- older kernel headers
-In-Reply-To: <dc0715acbc8fffc5fe66d2d81e205e31bf1ba6dd.1520945641.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 13 Mar 2018 14:54:01 +0200")
-References: <dc0715acbc8fffc5fe66d2d81e205e31bf1ba6dd.1520945641.git.baruch@tkos.co.il>
-Message-ID: <87vad4jmzs.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Apr 2018 18:52:51 +0200
+Subject: [Buildroot] [PATCH] samba4: security bump to version 4.7.6
+In-Reply-To: <7e46c960480c6cbe00fab7113c6adfd7365032ff.1520962259.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 13 Mar 2018 19:30:59 +0200")
+References: <7e46c960480c6cbe00fab7113c6adfd7365032ff.1520962259.git.baruch@tkos.co.il>
+Message-ID: <87r2nsjmzg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,20 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > musl libc provides its own system call macros, including
- > preadv2/pwritev2. Having these macros defined is not enough to determine
- > availability of other related macros in kernel headers.
+ > CVE-2018-1050: Vulnerability to a denial of service attack when the RPC
+ > spoolss service is configured to be run as an external daemon.
 
- > Add a patch to check these macros directly.
+ > https://www.samba.org/samba/security/CVE-2018-1050.html
 
- > Fixes:
- > http://autobuild.buildroot.net/results/7e9/7e9945f46ef9e0f6de7e1c85b0ca1104df6c86f5/
- > http://autobuild.buildroot.net/results/782/782652193bb6770ae68d509b3a7087667622d627/
- > http://autobuild.buildroot.net/results/582/5827a724c7f24218010f4cdd24924dca457b0361/
+ > CVE-2018-1057: Authenticated users might change any other users'
+ > passwords, including administrative users and privileged service
+ > accounts (eg Domain Controllers).
 
- > Cc: Waldemar Brodkorb <wbx@openadk.org>
+ > https://www.samba.org/samba/security/CVE-2018-1057.html
+
+ > Add clnt_create() test result to cache to fix cross configure breakage.
+
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x, thanks.
