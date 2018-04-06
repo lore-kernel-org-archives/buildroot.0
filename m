@@ -1,34 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:06:45 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] opus-tools: update license
-Message-ID: <20180407175150.03A288183A@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 19:57:45 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] busybox: disable PAM in
+ the config if linux-pam is not selected
+Message-ID: <20180407175148.8A1BC87BDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcfc10141a1b06445d731348028cfac086348193
+commit: https://git.buildroot.net/buildroot/commit/?id=cf92451acbaf8adfa8b01763713b6403394a60c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-As per COPYING file, opusinfo is licensed under GPL version 2.
+Currently there is only logic to enable PAM when linux-pam is selected.
+However, busybox will fail to build with PAM enabled if the linux-pam
+package has not been built before. So we should forcibly disable PAM in
+busybox in that case.
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Normally this is not an issue since our default busybox config doesn't
+have PAM enabled. However, if you enable linux-pam, then save the
+busybox config to a custom configuration file, then disable linux-pam
+again, and then do a "make clean; make", the build will fail. A more
+practical situation where this can occur is when the same custom
+busybox config is used in a Buildroot config with and without
+linux-pam.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0876b023663377bc3a24c80399f447c1f2afe0c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opus-tools/opus-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/busybox/busybox.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index a81e75eb0e..ab00ced705 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index d0bbd3fd6e..f17c20bf54 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -248,6 +248,10 @@ define BUSYBOX_LINUX_PAM
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
+ endef
+ BUSYBOX_DEPENDENCIES += linux-pam
++else
++define BUSYBOX_LINUX_PAM
++	$(call KCONFIG_DISABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++endef
+ endif
  
- OPUS_TOOLS_VERSION = 0.1.10
- OPUS_TOOLS_SITE = https://downloads.xiph.org/releases/opus
--OPUS_TOOLS_LICENSE = BSD-2-Clause
-+OPUS_TOOLS_LICENSE = BSD-2-Clause, GPL-2.0 (opusinfo)
- OPUS_TOOLS_LICENSE_FILES = COPYING
- OPUS_TOOLS_CONF_OPTS = --disable-oggtest --disable-opustest
- OPUS_TOOLS_DEPENDENCIES = opus libogg host-pkgconf
+ # Telnet support
