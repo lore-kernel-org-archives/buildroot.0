@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Apr 2018 22:14:18 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Add rpi3 b+ support
-In-Reply-To: <1521900617-32102-1-git-send-email-martin@barkynet.com>
-References: <1521900617-32102-1-git-send-email-martin@barkynet.com>
-Message-ID: <20180406221418.49582c2a@windsurf.home>
+Date: Fri, 6 Apr 2018 22:18:57 +0200
+Subject: [Buildroot] [git commit] libupnpp: bump to version 0.16.1
+Message-ID: <20180406201907.7CF5381348@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Martin,
+commit: https://git.buildroot.net/buildroot/commit/?id=f73d2162855877624ef592fe02a42121b1f00b9b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 24 Mar 2018 14:10:10 +0000, Martin Bark wrote:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Martin Bark (7):
->   package/rpi-firmware: bump version
->   configs/raspberrypi*: bump kernel version
->   board/raspberrypi: add support for rpi3 b+
->   package/rpi-firmware: improve installation of dtb files
->   package/rpi-bt-firmware: change to LibreELEC github repo
->   package/rpi-wifi-firmware: change to LibreELEC github repo
->   DEVELOPERS: add myself for rpi packages
-
-I've applied the entire series. Two comments:
-
- - Use exactly "---" below your SoB to add the changelog or additional
-   comments. If you don't do this, it doesn't get recognized as a
-   separator, and the changelog becomes part of the commit log.
-
- - Use "foreach" make loops instead of "for" shell loops. It is more
-   Buildroot-ish, and the "foreach" make loops do the error checking
-   automatically at each iteration of the loop. Due to the usage of a
-   "for" shell loop, error checking was missing in the rpi-bt-firmware
-   change you made. There is a remaining "for" shell loop in the
-   rpi-firmware package, it would be good to get rid of it as well.
-
-Thanks a lot for this contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index fe67987c4e..742a0c7f62 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.16.0.tar.gz.sha256
+-sha256  b34b179e69c46993cf360da9e85db646b03c15ab2927b19eb70e27bf3c359017  libupnpp-0.16.0.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.16.1.tar.gz.sha256
++sha256  d2ab5a4bb6df035ddddd11542bd4631ab7031354259145f07fbc3c56a8f50fac  libupnpp-0.16.1.tar.gz
+ 
+ # Hash for license file:
+ sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 98cb515fe2..b4e9e88fa9 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNPP_VERSION = 0.16.0
++LIBUPNPP_VERSION = 0.16.1
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
