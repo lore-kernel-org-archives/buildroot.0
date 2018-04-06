@@ -1,66 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:52:35 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libssh2: fix pkg-config
- info for mbedtls backend
-Message-ID: <20180406165913.CB3F9810CE@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 16:53:58 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump default to
+ version 4.15.13
+Message-ID: <20180406165913.EBF3A8104E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c4fbb7a642bc3e96523d58f12bda21963c1dedd
+commit: https://git.buildroot.net/buildroot/commit/?id=0d1a82b7506b4bc99ce101c2ac0b3facb22d2472
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The libssh2.pc file did not contain the needed info for static link with
-libssh2. Add a patch fixing that.
-
-Fixes (qemu):
-http://autobuild.buildroot.net/results/634/6346b25be2844f9ef722e52040ac1b43d9c38899/
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ebbf8746243ee4fa6b51a5a6afa8b14459b4178f)
+(cherry picked from commit 988e4c827c0f3d33a018c7309e675b139980a4e5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-acinclude.m4-add-mbedtls-to-LIBS.patch    | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
-new file mode 100644
-index 0000000000..76e08c51a9
---- /dev/null
-+++ b/package/libssh2/0002-acinclude.m4-add-mbedtls-to-LIBS.patch
-@@ -0,0 +1,31 @@
-+From f4846473f0f0ec313f8ed7ff4cd9f59c1741465d Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 20 Mar 2018 20:21:53 +0200
-+Subject: [PATCH] acinclude.m4: add mbedtls to LIBS
-+
-+This is useful for static builds so that the Libs.private field in
-+libssh2.pc contains correct info for the benefit of pkg-config users.
-+Static link with libssh2 requires this information.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/libssh2/libssh2/pull/242
-+
-+ acinclude.m4 | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index c0e89a1a0c98..02c70845d27c 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -441,6 +441,7 @@ m4_case([$1],
-+ [mbedtls], [
-+   LIBSSH2_LIB_HAVE_LINKFLAGS([mbedcrypto], [], [#include <mbedtls/version.h>], [
-+     AC_DEFINE(LIBSSH2_MBEDTLS, 1, [Use $1])
-++    LIBS="$LIBS $LIBMBEDCRYPTO"
-+     found_crypto="$1"
-+     support_clear_memory=yes
-+   ])
-+-- 
-+2.16.2
-+
+diff --git a/linux/Config.in b/linux/Config.in
+index 4aa13cd442..9361adca55 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.15.12" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.15.13" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
