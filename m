@@ -1,109 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:01:10 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/systemd: add
- upstream build fix
-Message-ID: <20180407175148.C52438106F@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:01:36 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] Config.in: Document
+ BR2_CCACHE_DIR override
+Message-ID: <20180407175148.E641F8106F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74f9b181a6784f9c095f1907352011f3398e5cd5
+commit: https://git.buildroot.net/buildroot/commit/?id=1d780f2514ff194d0f6bed12f1b92a6fc69ba7c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes:
+This variable, like BR2_DL_DIR, is designed to be overridable from the
+environment.  Unlike BR2_DL_DIR, it is not documented as such in the
+Config.in help text.  Do so now.
 
-  http://autobuild.buildroot.org/results/4c439ee000354f90b4e59ee4006530f77263db47/
-
-Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ef3304dabc1aef5c1035359211b1c3ca5d07eb3b)
+(cherry picked from commit ad980ccc3639baa2e517c4d36e836b71ab9f5b8f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-dont-include-libmount-h-in-a-header-file.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-new file mode 100644
-index 0000000000..b91d09722b
---- /dev/null
-+++ b/package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
-@@ -0,0 +1,75 @@
-+From 227b8a762fea1458547be2cdf0e6e4aac0079730 Mon Sep 17 00:00:00 2001
-+From: Michael Olbrich <m.olbrich@pengutronix.de>
-+Date: Mon, 26 Mar 2018 17:34:53 +0200
-+Subject: [PATCH] core: don't include libmount.h in a header file (#8580)
-+
-+linux/fs.h sys/mount.h, libmount.h and missing.h all include MS_*
-+definitions.
-+
-+To avoid problems, only one of linux/fs.h, sys/mount.h and libmount.h
-+should be included. And missing.h must be included last.
-+
-+Without this, building systemd may fail with:
-+
-+In file included from [...]/libmount/libmount.h:31:0,
-+                 from ../systemd-238/src/core/manager.h:23,
-+                 from ../systemd-238/src/core/emergency-action.h:37,
-+                 from ../systemd-238/src/core/unit.h:34,
-+                 from ../systemd-238/src/core/dbus-timer.h:25,
-+                 from ../systemd-238/src/core/timer.c:26:
-+[...]/sys/mount.h:57:2: error: expected identifier before numeric constant
-+
-+Upstream: https://github.com/systemd/systemd/pull/8580
-+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-+---
-+ src/core/dbus-execute.c | 1 +
-+ src/core/manager.h      | 3 ++-
-+ src/core/mount.c        | 2 ++
-+ 3 files changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/core/dbus-execute.c b/src/core/dbus-execute.c
-+index 7344623ebf6..c342093bca4 100644
-+--- a/src/core/dbus-execute.c
-++++ b/src/core/dbus-execute.c
-+@@ -18,6 +18,7 @@
-+   along with systemd; If not, see <http://www.gnu.org/licenses/>.
-+ ***/
-+ 
-++#include <sys/mount.h>
-+ #include <sys/prctl.h>
-+ #include <stdio_ext.h>
-+ 
-+diff --git a/src/core/manager.h b/src/core/manager.h
-+index 28c5da225b1..e09e0cdf5e9 100644
-+--- a/src/core/manager.h
-++++ b/src/core/manager.h
-+@@ -20,7 +20,6 @@
-+   along with systemd; If not, see <http://www.gnu.org/licenses/>.
-+ ***/
-+ 
-+-#include <libmount.h>
-+ #include <stdbool.h>
-+ #include <stdio.h>
-+ 
-+@@ -34,6 +33,8 @@
-+ #include "list.h"
-+ #include "ratelimit.h"
-+ 
-++struct libmnt_monitor;
-++
-+ /* Enforce upper limit how many names we allow */
-+ #define MANAGER_MAX_NAMES 131072 /* 128K */
-+ 
-+diff --git a/src/core/mount.c b/src/core/mount.c
-+index 0e755da5c02..0154ebda5d6 100644
-+--- a/src/core/mount.c
-++++ b/src/core/mount.c
-+@@ -23,6 +23,8 @@
-+ #include <stdio.h>
-+ #include <sys/epoll.h>
-+ 
-++#include <libmount.h>
-++
-+ #include "sd-messages.h"
-+ 
-+ #include "alloc-util.h"
+diff --git a/Config.in b/Config.in
+index 0002df5176..25f24b9d20 100644
+--- a/Config.in
++++ b/Config.in
+@@ -332,6 +332,9 @@ config BR2_CCACHE_DIR
+ 	default "$(HOME)/.buildroot-ccache"
+ 	help
+ 	  Where ccache should store cached files.
++	  If the Linux shell environment has defined the BR2_CCACHE_DIR
++	  environment variable, then this overrides this configuration
++	  item.
+ 
+ config BR2_CCACHE_INITIAL_SETUP
+ 	string "Compiler cache initial setup"
