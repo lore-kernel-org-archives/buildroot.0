@@ -1,44 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:45:36 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 3.2.x
- and 4.{14, 15}.x series
-Message-ID: <20180406165913.6B4DA8033D@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 16:44:23 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] powerpc-utils: Update URL
+ to new upstream
+Message-ID: <20180406165913.4A24183B4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=116a501e7bfbc010e995c05c277320f58fd94343
+commit: https://git.buildroot.net/buildroot/commit/?id=5e63590fe2e36816e947fee781b99aa6ffba7787
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+powerpc-utils changed upstream git repositories again.
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b83a4d3d69d5daa871812bd4c4803acef789e318)
+(cherry picked from commit 1b383e4bf4151b9232b2e66f0d6ae822546576a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/powerpc-utils/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a99f0fa137..3d94ca986d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -240,7 +240,7 @@ endchoice
+diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
+index b0ca84789e..d04d81c08a 100644
+--- a/package/powerpc-utils/Config.in
++++ b/package/powerpc-utils/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_POWERPC_UTILS
+ 	help
+ 	  System utilities for PowerPC machines.
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.100"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.122"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.88"	if BR2_KERNEL_HEADERS_4_9
-@@ -248,6 +248,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.28"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.11"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.29"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.12"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-	  https://github.com/nfont/powerpc-utils
++	  https://github.com/ibm-power-utilities/powerpc-utils.git
+ 
+ if BR2_PACKAGE_POWERPC_UTILS
+ 
