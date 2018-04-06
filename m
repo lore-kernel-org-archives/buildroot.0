@@ -1,314 +1,120 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri,  6 Apr 2018 18:34:21 +0200
-Subject: [Buildroot] [PATCH v2-RESEND 6/6] configs: add Xilinx ZCU106 board
- (ZynqMP SoC)
+Date: Fri,  6 Apr 2018 18:34:18 +0200
+Subject: [Buildroot] [PATCH v2-RESEND 3/6] zynqmp-pmufw-binaries: new package
 In-Reply-To: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
 References: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1523032461-3295-7-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1523032461-3295-4-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds support the Xilinx ZCU106 development board.
+Downloads pre-built binary firmwares for the Xilinx ZynqMP SoCs PMU.
 
-Mainline U-Boot does not have a zcu106 defconfig, so iet's use U-Boot
-from the Xilinx master branch, which has one. But since that defconfig
-does not boot from SD card, add two patches to fix that.
-
-[Tested on the ES2 (Engineering Sample 2) version of the board]
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 ---
-Changes v1 -> v2:
- - don't provide psu_init files: the xilinx master branch has a
-   defconfig that works (with 2 patches)
+Changes v1 -> v2: none.
 ---
- DEVELOPERS                                         |  2 +
- board/zynqmp/genimage.cfg                          | 28 +++++++++++
- ...1-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch | 56 ++++++++++++++++++++++
- ...arm64-zynqmp-zcu106-enable-booting-to-ATF.patch | 39 +++++++++++++++
- board/zynqmp/post-image.sh                         | 13 +++++
- board/zynqmp/readme.txt                            | 52 ++++++++++++++++++++
- configs/zynqmp_zcu106_defconfig                    | 31 ++++++++++++
- 7 files changed, 221 insertions(+)
- create mode 100644 board/zynqmp/genimage.cfg
- create mode 100644 board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
- create mode 100644 board/zynqmp/patches/uboot/0002-arm64-zynqmp-zcu106-enable-booting-to-ATF.patch
- create mode 100755 board/zynqmp/post-image.sh
- create mode 100644 board/zynqmp/readme.txt
- create mode 100644 configs/zynqmp_zcu106_defconfig
+ DEVELOPERS                                         |  1 +
+ boot/Config.in                                     |  1 +
+ boot/zynqmp-pmufw-binaries/Config.in               | 19 ++++++++++++++++
+ .../zynqmp-pmufw-binaries.hash                     |  3 +++
+ .../zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk | 26 ++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
+ create mode 100644 boot/zynqmp-pmufw-binaries/Config.in
+ create mode 100644 boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.hash
+ create mode 100644 boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index eb4781c1e3cd..228a731a9de6 100644
+index 9d23fa51b876..eb4781c1e3cd 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1070,8 +1070,10 @@ F:	package/ti-sgx-um/
+@@ -1070,6 +1070,7 @@ F:	package/ti-sgx-um/
  
  N:	Luca Ceresoli <luca@lucaceresoli.net>
  F:	board/olimex/a20_olinuxino/
-+F:	board/zynqmp/
- F:	boot/zynqmp-pmufw-binaries/
++F:	boot/zynqmp-pmufw-binaries/
  F:	configs/olimex_a20_olinuxino_*
-+F:	configs/zynqmp_zcu106_defconfig
  F:	package/agentpp/
  F:	package/exim/
- F:	package/libpjsip/
-diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg
+diff --git a/boot/Config.in b/boot/Config.in
+index 3687c41a2c00..a23886997c9f 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -19,5 +19,6 @@ source "boot/ts4800-mbrboot/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/vexpress-firmware/Config.in"
+ source "boot/xloader/Config.in"
++source "boot/zynqmp-pmufw-binaries/Config.in"
+ 
+ endmenu
+diff --git a/boot/zynqmp-pmufw-binaries/Config.in b/boot/zynqmp-pmufw-binaries/Config.in
 new file mode 100644
-index 000000000000..30be086d7d42
+index 000000000000..e39561cbf91e
 --- /dev/null
-+++ b/board/zynqmp/genimage.cfg
-@@ -0,0 +1,28 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"boot.bin",
-+			"u-boot.bin",
-+			"atf-uboot.ub",
-+			"system.dtb",
-+			"Image"
-+		}
-+	}
-+	size = 32M
-+}
++++ b/boot/zynqmp-pmufw-binaries/Config.in
+@@ -0,0 +1,19 @@
++config BR2_TARGET_ZYNQMP_PMUFW_BINARIES
++	bool "Zynqmp PMU firmware"
++	depends on BR2_aarch64
++	help
++	  This package provides precompiled firmwares for the Platform
++	  Management Unit (PMU) of the Xilinx ZynqMP family of SoCs.
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++	  https://github.com/lucaceresoli/zynqmp-pmufw-binaries
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
++if BR2_TARGET_ZYNQMP_PMUFW_BINARIES
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch b/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
++config BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE
++	string "PMU firmware image file"
++	help
++	  Enter the path to the PMU firmware file for your board and
++	  configuration, relative to the repository top directory.
++	  Example: "zcu106-default/pmufw.bin".
++
++endif
+diff --git a/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.hash b/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.hash
 new file mode 100644
-index 000000000000..a3c7b6265616
+index 000000000000..a60566445290
 --- /dev/null
-+++ b/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
-@@ -0,0 +1,56 @@
-+From e5d72ed8339eb05285448aad3c89d21e4d18fd29 Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Mon, 26 Feb 2018 09:40:34 +0100
-+Subject: [PATCH 1/2] arm64: zynqmp: zcu106: fix SPL MMC booting
-+
-+The U-Boot SPL generated with the current zcu106 defconfig cannot boot
-+from MMC:
-+
-+  [...]
-+  U-Boot SPL 2018.01 (Feb 21 2018 - 17:47:14)
-+  EL Level:  EL3
-+  Trying to boot from MMC1
-+  sdhci_transfer_data: Error detected in status(0x408020)!
-+  spl_load_image_fat_os: error reading image u-boot.bin, err - -2
-+  spl_load_image_fat: error reading image u-boot.img, err - -6
-+  SPL: failed to boot from all boot devices
-+  ### ERROR ### Please RESET the board ###
-+
-+Fix by lowering the rpll value. The new value for the RPLL_CTRL
-+register comes from the current psu_init_gpl.c from the HDF file at
-+https://github.com/xilinx/hdf-examples/tree/01ad8ea5fd1989abf4ea5a072d019a16cb2bc546/zcu106-zynqmp
-+(generated by Vivado v2017.4).
-+
-+RPLL and sdio1_ref clocks before and after this change:
-+
-+ - Old values: RPLL 1.36 GHz, sdio1_ref 272 MHz
-+ - New values: RPLL 1.16 GHz, sdio1_ref 233 MHz
-+
-+Patch submitted upstream.
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+Cc: Michal Simek <michal.simek@xilinx.com>
-+
-+---
-+Changes v1 -> v2:
-+ - add old/new clocks to commit message (Michal).
-+---
-+ board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
-+index 4d18abe000ca..e6fa477e53e7 100644
-+--- a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
-++++ b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
-+@@ -10,7 +10,7 @@
-+ static unsigned long psu_pll_init_data(void)
-+ {
-+ 	psu_mask_write(0xFF5E0034, 0xFE7FEDEFU, 0x7E4E2C62U);
-+-	psu_mask_write(0xFF5E0030, 0x00717F00U, 0x00013C00U);
-++	psu_mask_write(0xFF5E0030, 0x00717F00U, 0x00014600U);
-+ 	psu_mask_write(0xFF5E0030, 0x00000008U, 0x00000008U);
-+ 	psu_mask_write(0xFF5E0030, 0x00000001U, 0x00000001U);
-+ 	psu_mask_write(0xFF5E0030, 0x00000001U, 0x00000000U);
-+-- 
-+2.7.4
-+
-diff --git a/board/zynqmp/patches/uboot/0002-arm64-zynqmp-zcu106-enable-booting-to-ATF.patch b/board/zynqmp/patches/uboot/0002-arm64-zynqmp-zcu106-enable-booting-to-ATF.patch
++++ b/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  b74808c93522a39bedecd64bd5a75fd766f267e1d540f45dbfe868694f49b1d7  zynqmp-pmufw-binaries-ec64e06b836a0841f40bd52434f6919c5dafb133.tar.gz
++sha256  235b467980655706d5fded5baf3d8b52ddb102a9e0c26804a67c0ec719042d38  license.txt
+diff --git a/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk b/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk
 new file mode 100644
-index 000000000000..df6a57eb1667
+index 000000000000..91aec04f907a
 --- /dev/null
-+++ b/board/zynqmp/patches/uboot/0002-arm64-zynqmp-zcu106-enable-booting-to-ATF.patch
-@@ -0,0 +1,39 @@
-+From 2e3b94597550501a58488504ad506ba50074aecd Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Wed, 7 Mar 2018 18:29:26 +0100
-+Subject: [PATCH 2/2] arm64: zynqmp: zcu106: enable booting to ATF
++++ b/boot/zynqmp-pmufw-binaries/zynqmp-pmufw-binaries.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# zynqmp-pmufw-binaries
++#
++################################################################################
 +
-+U-Boot is now able to boot to ARM Trusted Firmware (ATF). The boot
-+flow is SPL(EL3) loads ATF and full u-boot and jump to ATF(EL3) which
-+pass control to full u-boot(EL2). This has been tested on zcu106, so
-+enable it in this defconfig.
++ZYNQMP_PMUFW_BINARIES_VERSION = ec64e06b836a0841f40bd52434f6919c5dafb133
++ZYNQMP_PMUFW_BINARIES_SITE = $(call github,lucaceresoli,zynqmp-pmufw-binaries,$(ZYNQMP_PMUFW_BINARIES_VERSION))
 +
-+To generate an image that triggers this booting flow, you need to pass
-+'-O arm-trusted-firmware' to mkimage.
++ZYNQMP_PMUFW_BINARIES_LICENSE = X11 with Xilinx exception
++ZYNQMP_PMUFW_BINARIES_LICENSE_FILES = license.txt
 +
-+Patch submitted upstream.
++ZYNQMP_PMUFW_BINARIES_IMAGE = $(call qstrip,$(BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE))
++ZYNQMP_PMUFW_BINARIES_INSTALL_IMAGES = YES
 +
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+Cc: Michal Simek <michal.simek@xilinx.com>
++define ZYNQMP_PMUFW_BINARIES_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/$(ZYNQMP_PMUFW_BINARIES_IMAGE) $(BINARIES_DIR)/pmufw.bin
++endef
 +
-+---
-+Changes v1 -> v2: none.
-+---
-+ configs/xilinx_zynqmp_zcu106_revA_defconfig | 1 +
-+ 1 file changed, 1 insertion(+)
++ifeq ($(ZYNQMP_PMUFW_BINARIES),y)
++ifeq ($(ZYNQMP_PMUFW_BINARIES_IMAGE),)
++$(error No PMU firmware image file name set. Check your BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE setting)
++endif
++endif
 +
-+diff --git a/configs/xilinx_zynqmp_zcu106_revA_defconfig b/configs/xilinx_zynqmp_zcu106_revA_defconfig
-+index 71da160cd78b..0575ee00fd8b 100644
-+--- a/configs/xilinx_zynqmp_zcu106_revA_defconfig
-++++ b/configs/xilinx_zynqmp_zcu106_revA_defconfig
-+@@ -27,6 +27,7 @@ CONFIG_SPL=y
-+ CONFIG_SPL_OS_BOOT=y
-+ CONFIG_SPL_RAM_SUPPORT=y
-+ CONFIG_SPL_RAM_DEVICE=y
-++CONFIG_SPL_ATF=y
-+ CONFIG_SYS_PROMPT="ZynqMP> "
-+ CONFIG_FASTBOOT=y
-+ CONFIG_FASTBOOT_FLASH=y
-+-- 
-+2.7.4
-+
-diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
-new file mode 100755
-index 000000000000..2e7bcbaab60f
---- /dev/null
-+++ b/board/zynqmp/post-image.sh
-@@ -0,0 +1,13 @@
-+#!/bin/sh
-+
-+# By default U-Boot loads DTB from a file named "system.dtb", so
-+# let's use a symlink with that name that points to the *first*
-+# devicetree listed in the config.
-+
-+FIRST_DT=$(sed -nr \
-+               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]]*).*"$|\1|p' \
-+               ${BR2_CONFIG})
-+
-+[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
-+
-+support/scripts/genimage.sh -c board/zynqmp/genimage.cfg
-diff --git a/board/zynqmp/readme.txt b/board/zynqmp/readme.txt
-new file mode 100644
-index 000000000000..18d0491add21
---- /dev/null
-+++ b/board/zynqmp/readme.txt
-@@ -0,0 +1,52 @@
-+********************************
-+Xilinx ZCU106 board - ZynqMP SoC
-+********************************
-+
-+This document describes the Buildroot support for the ZCU106 board by
-+Xilinx, based on the Zynq UltraScale+ MPSoC (aka ZynqMP). It has been
-+tested with the EK-U1-ZCU106-ES2 pre-production board.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot:
-+
-+    $ make zynqmp_zcu106_defconfig
-+
-+Compile everything and build the rootfs image:
-+
-+    $ make
-+
-+Result of the build
-+-------------------
-+
-+After building, you should get a tree like this:
-+
-+    output/images/
-+    +-- atf-uboot.ub
-+    +-- bl31.bin
-+    +-- boot.bin
-+    +-- boot.vfat
-+    +-- Image
-+    +-- pmufw.bin
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4 -> rootfs.ext2
-+    +-- sdcard.img
-+    +-- system.dtb -> zynqmp-zcu106-revA.dtb
-+    +-- u-boot.bin
-+    `-- zynqmp-zcu106-revA.dtb
-+
-+How to write the SD card
-+========================
-+
-+WARNING! This will destroy all the card content. Use with care!
-+
-+The sdcard.img file is a complete bootable image ready to be written
-+on the boot medium. To install it, simply copy the image to an SD
-+card:
-+
-+    # dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Where 'sdX' is the device node of the SD.
-+
-+Eject the SD card, insert it in the board, and power it up.
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-new file mode 100644
-index 000000000000..cf8f2b14a971
---- /dev/null
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -0,0 +1,31 @@
-+BR2_aarch64=y
-+BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2017.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/xilinx/u-boot-xlnx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="228801a215909365ae1dcdd799034195ad7264f7"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_zcu106_revA"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
-+BR2_TARGET_UBOOT_ZYNQMP=y
-+BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE="zcu106-default/pmufw.bin"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++$(eval $(generic-package))
 -- 
 2.7.4
