@@ -1,35 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:11:00 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump default to
- version 4.15.15
-Message-ID: <20180407175150.F06EF8100D@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:10:17 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] utils/genrandconfig: use
+ --no-check-certificate in wget by default
+Message-ID: <20180407175150.D167781199@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17e3b9adb81fd8b9b506dcbe6ac7e27b51cb918e
+commit: https://git.buildroot.net/buildroot/commit/?id=4a1a806d486402323e7b3ce6c1b457183d71bb4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 03cdfea134bb74e32795b3cbc9689e70a78d61a8)
+A number of autobuilder failures are due to the fact that autobuilder
+instances use old distributions, with old SSL certificates, and
+therefore wget aborts with an error "The certificate of `xyz.org' is
+not trusted.".
+
+In order to avoid such failures that are not very interesting in the
+context of the autobuilders, we pass --no-check-certificate to
+wget. The integrity of the downloaded files is anyway verified by the
+hashes, and this is only meant to be used in the context of
+testing/CI, not in production.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 0866a280e40a7a2c7d7d50cc7e87c3f4652aff0a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/genrandconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 040a2341f9..934142c535 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 0d08570bc5..8a6bdb6a0c 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -347,6 +347,9 @@ def gen_config(args):
+     with open(minimalconfigfile) as minimalf:
+         configlines += minimalf.readlines()
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.15.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.15.15" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
++    # Allow hosts with old certificates to download over https
++    configlines.append("BR2_WGET=\"wget --passive-ftp -nd -t 3 --no-check-certificate\"")
++
+     # Amend the configuration with a few things.
+     if randint(0, 20) == 0:
+         configlines.append("BR2_ENABLE_DEBUG=y\n")
