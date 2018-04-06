@@ -1,50 +1,64 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 6 Apr 2018 13:29:59 -0500
-Subject: [Buildroot] [PATCH 1/2] cramfs: change to new site location
-In-Reply-To: <nycvar.YSQ.7.76.1804061305080.28462@knanqh.ubzr>
-References: <20180213195449.51516-1-chris.brandt@renesas.com>
- <20180213195449.51516-2-chris.brandt@renesas.com>
- <20180213211453.519b65eb@windsurf.lan>
- <SG2PR06MB1165EA4292BE78ADF8D3A1678AF60@SG2PR06MB1165.apcprd06.prod.outlook.com>
- <CANQCQpZgjJqSpY9Pma9wsB=QtPL5onLYLb5pdteTSUULOcMF-A@mail.gmail.com>
- <TY1PR01MB1562ADDDE3949C2BC35FC4408ABA0@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <CANQCQpZZMp8MXMRDMHg6vOr4f-GRYvBBeZB1MSNQvMk9BnfBzQ@mail.gmail.com>
- <nycvar.YSQ.7.76.1804061138320.28462@knanqh.ubzr>
- <CANQCQpZnN_q0OsPoYZc+nE6-=xSGtmk1SxgOQ4U_tFd84AbvkA@mail.gmail.com>
- <nycvar.YSQ.7.76.1804061305080.28462@knanqh.ubzr>
-Message-ID: <CANQCQpaUvOFQJG=8Suv7qNDnj2wT53R8JNCGSLNfXfhL5o2NqA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 6 Apr 2018 21:02:15 +0200
+Subject: [Buildroot] Using a bootlin toolchain with buildroot
+In-Reply-To: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
+References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
+Message-ID: <20180406210215.6c276c4f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicolas,
+Hello Patrick,
 
-On Fri, Apr 6, 2018 at 12:06 PM, Nicolas Pitre <nicolas.pitre@linaro.org> wrote:
->
-> On Fri, 6 Apr 2018, Matthew Weber wrote:
->
-> > Nicolas,
-> >
-> > On Fri, Apr 6, 2018 at 10:41 AM, Nicolas Pitre <nicolas.pitre@linaro.org> wrote:
-> > > On Fri, 6 Apr 2018, Matthew Weber wrote:
-> > >
-> >
-> > >
-> > > Please hold off for the moment.
-> > >
-> > > I don't like the original patch at all and would like a completely
-> > > different approach to keep the code saner. I'll commit it in a moment
-> > > but I will need someone to test it.
-> > >
-> >
-> > Perfect, I can do a test when you're ready.
->
-> Please test the cross-endian branch and let me know how it works.
-> If it works then I'll move it to the main branch.
+On Fri, 6 Apr 2018 10:44:24 -0400, Patrick Doyle wrote:
+> Are there any tips or tricks to using a bootlin toolchain with
+> buildroot(.2018.02)?
+> 
+> I have downloaded armv7-eabihf--musl--stable-2018.02-2.tar.bz2
+> unpacket it into /opt.
+> I have selected BR2_TOOLCHAIN_EXTERNAL
+> I have selected BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+> I have selected BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED
+> I have specified /opt/armv7-eabihf--musl--stable-2018.02-2/bin for
+> BR2_TOOLCHAIN_EXTERNAL_PATH
+> 
+> I could keep listing all of these settings, but I'm not sure how
+> useful that would be.
+> 
+> Basically, I'm asking: If I want to use a bootline toolchain, do I
+> just go through and choose the options that best seem to match the
+> toolchain options, or is there more documentation about doing this
+> someplace?
 
-Tested successfully on a big endian powerpc target.  Chris, I can
-retest if you like when you rev your hash?
+There are two things that will help you :)
 
-Matt
+First thing, that is currently hidden is that the
+toolchains.bootlin.com website has a defconfig fragment for each
+toolchain, that is ready to use with Buildroot.
+
+For example, for the toolchain you tried to use, you can simply use the
+defconfig at
+https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/fragments/armv7-eabihf--musl--stable-2018.02-2.frag.
+
+In general, for any toolchain, you can go to:
+
+https://toolchains.bootlin.com/downloads/releases/toolchains/<ARCH-TUPLE>/fragments/
+
+and find defconfig files for Buildroot.
+
+The second thing that should help is that I'm working on adding the
+Bootlin toolchains as "pre-defined" external toolchains in Buildroot,
+very much like the Linaro/Sourcery toolchains we already have. I've
+started a patch doing that, but it needs more work, especially because
+we have so many Bootlin toolchains for various architectures/C
+libraries.
+
+Hope this helps,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
