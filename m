@@ -1,61 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Apr 2018 21:02:15 +0200
+Date: Fri, 6 Apr 2018 21:02:54 +0200
 Subject: [Buildroot] Using a bootlin toolchain with buildroot
-In-Reply-To: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
+In-Reply-To: <48d440f7-3bdc-4fa8-a7c9-8c3618cd8099@cesnet.cz>
 References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
-Message-ID: <20180406210215.6c276c4f@windsurf.home>
+ <48d440f7-3bdc-4fa8-a7c9-8c3618cd8099@cesnet.cz>
+Message-ID: <20180406210254.76ea686f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Patrick,
+Hello,
 
-On Fri, 6 Apr 2018 10:44:24 -0400, Patrick Doyle wrote:
-> Are there any tips or tricks to using a bootlin toolchain with
-> buildroot(.2018.02)?
-> 
-> I have downloaded armv7-eabihf--musl--stable-2018.02-2.tar.bz2
-> unpacket it into /opt.
-> I have selected BR2_TOOLCHAIN_EXTERNAL
-> I have selected BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-> I have selected BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED
-> I have specified /opt/armv7-eabihf--musl--stable-2018.02-2/bin for
-> BR2_TOOLCHAIN_EXTERNAL_PATH
-> 
-> I could keep listing all of these settings, but I'm not sure how
-> useful that would be.
-> 
-> Basically, I'm asking: If I want to use a bootline toolchain, do I
-> just go through and choose the options that best seem to match the
-> toolchain options, or is there more documentation about doing this
-> someplace?
+On Fri, 06 Apr 2018 16:53:13 +0200, Jan Kundr?t wrote:
 
-There are two things that will help you :)
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.02-1.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="i686-buildroot-linux-gnu"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
 
-First thing, that is currently hidden is that the
-toolchains.bootlin.com website has a defconfig fragment for each
-toolchain, that is ready to use with Buildroot.
+Or also:
 
-For example, for the toolchain you tried to use, you can simply use the
-defconfig at
-https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/fragments/armv7-eabihf--musl--stable-2018.02-2.frag.
+https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/fragments/x86-i686--glibc--bleeding-edge-2018.02-1.frag
 
-In general, for any toolchain, you can go to:
+ :-)
 
-https://toolchains.bootlin.com/downloads/releases/toolchains/<ARCH-TUPLE>/fragments/
-
-and find defconfig files for Buildroot.
-
-The second thing that should help is that I'm working on adding the
-Bootlin toolchains as "pre-defined" external toolchains in Buildroot,
-very much like the Linaro/Sourcery toolchains we already have. I've
-started a patch doing that, but it needs more work, especially because
-we have so many Bootlin toolchains for various architectures/C
-libraries.
-
-Hope this helps,
+Best regards,
 
 Thomas
 -- 
