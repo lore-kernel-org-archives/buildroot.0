@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:53:58 +0200
+Date: Fri, 6 Apr 2018 16:45:29 +0200
 Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump default to
- version 4.15.13
-Message-ID: <20180406165913.EBF3A8104E@busybox.osuosl.org>
+ version 4.15.12
+Message-ID: <20180406165913.5B85983B4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d1a82b7506b4bc99ce101c2ac0b3facb22d2472
+commit: https://git.buildroot.net/buildroot/commit/?id=086ddf1de2149257e4077322f568e2e01142e819
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 988e4c827c0f3d33a018c7309e675b139980a4e5)
+(cherry picked from commit c2fe7b6bc88e89ae26d8ec37a5d190c9359de54b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  linux/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index 4aa13cd442..9361adca55 100644
+index ce1e121fde..4aa13cd442 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
 @@ -116,7 +116,7 @@ endif
  
  config BR2_LINUX_KERNEL_VERSION
  	string
--	default "4.15.12" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.15.13" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "4.15.11" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.15.12" if BR2_LINUX_KERNEL_LATEST_VERSION
  	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
  		if BR2_LINUX_KERNEL_CUSTOM_VERSION
