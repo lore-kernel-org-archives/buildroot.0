@@ -1,84 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:06:02 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] core: alternate solution
- to disable C++
-Message-ID: <20180407175149.D63AA8183A@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:04:53 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] sngrep: fix libgcrypt
+ handling
+Message-ID: <20180407175149.911A58183A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae854d015e4005592c9de05182285a2847d8b546
+commit: https://git.buildroot.net/buildroot/commit/?id=d56fdb17f0a81e8e8e30c93cc038736363d1b3c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Some packages that use libtool really need some love to be able to
-disable C++ support.
+Fixes:
+http://autobuild.buildroot.net/results/f1c6494133806b9fc26ae3ce9e9c6a22fa2eda6f/
 
-This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
-is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
-will want a C++ preprocessor that works on valid input *and* fail on
-invalid input.
+Commit 6205b75873c (sngrep: gnutls support also needs libgcrypt) ensured
+that --with-gnutls is only used when both gnutls and libgcrypt are enabled,
+but it didn't ensure libgcrypt gets built before sngrep or told the
+configure script where to find libgcrypt-config, breaking the build.
 
-So, providing 'false' as the C++ compiler will then require that we do
-have a working C++ preprocessor. Which is totally counter-productive
-since we do not have a C++ compiler to start with...
+Fix both issues.
 
-bd39d11d2e (core/infra: fix build on toolchain without C++) was a
-previous attempt at fixing this, by using the host's C++ preprocessor.
-
-However, that is very incorrect (that's my code, I can say so!) because
-the set of defines will most probably be different for the host and the
-target, thus causing all sorts of trouble. For example, on ARM we'd have
-to include different headers for soft-float vs hard-float, which is
-decided based on a macro, which is not defined for x86, and thus may
-redirect to the wrong (and missing) header.
-
-Instead, we notice that libtool uses the magic value 'no' to decide that
-a C++ compiler is not available, in which case it skips the call to
-AC_PROG_CXXCPP.
-
-Given that 'no' is not provided by any package in Debian and
-derivatives, as well as in Fedora, we can assume that no system will
-have an executable called 'no'. Hence, we use that as a magic value to
-disable C++ detection altogether.
-
-Fixes: #10846 (again)
-
-Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4cd1ab15886a408b897104709ff87f15cc88ba16)
+(cherry picked from commit ae7d59eaae1c55d707b2a70437a84c280f598572)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/sngrep/sngrep.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index e387ce67fe..57fb47ea2e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -409,8 +409,16 @@ else
- NLS_OPTS = --disable-nls
- endif
- 
-+# We need anything that is invalid. Traditionally, we'd have used 'false' (and
-+# we did so in the past). However, that breaks libtool for packages that have
-+# optional C++ support (e.g. gnutls), because libtool will *require* a *valid*
-+# C++ preprocessor as long as CXX is not 'no'.
-+# Now, whether we use 'no' or 'false' for CXX as the same side effect: it is an
-+# invalid C++ compiler, and thus will cause detection of C++ to fail (which is
-+# expected and what we want), while at the same time taming libtool into
-+# silence.
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
--TARGET_CONFIGURE_OPTS += CXX=false CXXCPP=cpp
-+TARGET_CONFIGURE_OPTS += CXX=no
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index 7442cef529..93a0c3f13e 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -22,7 +22,8 @@ SNGREP_DEPENDENCIES += openssl
+ SNGREP_CONF_OPTS += --with-openssl --without-gnutls
+ # gnutls support also requires libgcrypt
+ else ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
+-SNGREP_DEPENDENCIES += gnutls
++SNGREP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
++SNGREP_DEPENDENCIES += gnutls libgcrypt
+ SNGREP_CONF_OPTS += --with-gnutls --without-openssl
+ else
+ SNGREP_CONF_OPTS += --without-gnutls --without-openssl
