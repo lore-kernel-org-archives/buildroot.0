@@ -1,54 +1,76 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 06 Apr 2018 17:50:30 -0400
-Subject: [Buildroot] [PATCH v3 2/8] dumb-init: new package
-In-Reply-To: <20180401144325.52bc543f@windsurf>
-References: <20180304004346.331-1-christian@paral.in>
- <20180304004346.331-3-christian@paral.in> <20180401144325.52bc543f@windsurf>
-Message-ID: <87o9iw57ix.fsf@paral.in>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri, 06 Apr 2018 20:58:03 -0300
+Subject: [Buildroot] make linux-menuconfig
+References: <a0288febbc3c4ff89997c83587592e20@SVR-ORW-MBX-04.mgc.mentorg.com>
+Message-ID: <5ac8098b6ec7d_10912b11f9905ee4726db@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Revisiting this now.
+On Fri, Apr 06, 2018 at 05:57 PM, Bradley, Mike wrote:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> On Sat,  3 Mar 2018 19:43:40 -0500, Christian Stewart wrote:
->> dumb-init is a minimal init process to act as PID 1 for containers.
->> 
->> Static compilation is used, as dumb-init will typically be executed inside a
->> container.
+[snip]
+> But, it fails with:
+> 
+> Initialized empty Git repository in ...../buildroot-2016.11.3/output/build/.linux-zynq-soc-for-4.3.tar.gz.xSOjlD/linux-zynq-soc-for-4.3/.git/
+> remote: Counting objects: 812346, done.
+> remote: Compressing objects: 100% (317542/317542), done.
+> remote: Total 812346 (delta 664056), reused 602764 (delta 488026), pack-reused 0
+> Receiving objects: 100% (812346/812346), 639.34 MiB | 676 KiB/s, done.
+> Resolving deltas: 100% (664056/664056), done.
+> warning: Remote branch zynq-soc-for-4.3 not found in upstream origin, using HEAD instead
+> Could not fetch special ref 'zynq-soc-for-4.3'; assuming it is not special.
 
-> So maybe what's happening is that dumb-init is *executed* inside the
-> container but is actually provided by the host environment outside the
-> container, and you want to be able to use the same dumb-init binary
-> regardless of what the container contains. Is that the use case ?
+It succeeds here:
 
-The dumb-init process is executed inside the container and has no access
-to the host environment. If it is compiled dynamically, the container
-environment must match the target environment in terms of dynamically
-linked parts.
+Buildroot 2016.11.3
+git version 2.14.1
 
-> The next issue is that your package assumes that static linking is
-> possible. But Buildroot defaults to BR2_SHARED_LIBS, which means that
-> the toolchain may not necessarily provide libc.a and allow static
-> linking.
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx"
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="zynq-soc-for-4.3"
 
-I'm able to compile with BR2_SHARED_LIBS and still produce a static
-output with -static. Why is this possible? I remember seeing an email
-about this at some point, where it was stated that glibc.a or so was not
-produced with BR2_SHARED_LIBS. Why can I then compile this package in
-this way?
+>>> linux zynq-soc-for-4.3 Downloading
+Doing shallow clone
+Cloning into 'linux-zynq-soc-for-4.3'...
+remote: Counting objects: 53876, done.
+remote: Compressing objects: 100% (51004/51004), done.
+remote: Total 53876 (delta 4351), reused 16173 (delta 2119), pack-reused 0
+Receiving objects: 100% (53876/53876), 144.75 MiB | 972.00 KiB/s, done.
+Resolving deltas: 100% (4351/4351), done.
+Note: checking out 'e4a9288942392965bd5cfad93d9996b83c0dc4a6'.
 
-> Alternatively, you could decide to build dumb-init statically only
-> if !BR2_SHARED_LIBS, but that means that in the default Buildroot
-> configurations, dumb-init would be linked dynamically.
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
 
-This wouldn't work unfortunately in 95% of the intended cases where
-dumb-init would be used.
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
 
-Best,
-Christian Stewart
+  git checkout -b <new-branch-name>
+
+Checking out files: 100% (50821/50821), done.
+Could not fetch special ref 'zynq-soc-for-4.3'; assuming it is not special.
+>>> linux zynq-soc-for-4.3 Extracting
+
+
+[snip]
+> Alternatively, I already have the kernel I need downloaded.  So, if I could just point to that somehow, it may suffice.  But, I'm trying to create a generic method I can pass to others, so, would be nice to do it from one area (e.g. have buildroot do it all).
+[Side note: It is usual in mailing lists to use text only messages, with lines
+wrapped at a reasonable column when it makes sense, i.e. around 80.]
+
+Is this alternative method good for you?
+
+[*] Linux Kernel
+      Kernel version (Custom tarball)  --->
+($(call github,Xilinx,linux-xlnx,zynq-soc-for-4.3)/linux-zynq-soc-for-4.3.tar.gz) URL
+
+Inspired by: http://patchwork.ozlabs.org/patch/893965/
+
+
+Regards,
+Ricardo
