@@ -1,276 +1,140 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri,  6 Apr 2018 10:18:35 +0200
-Subject: [Buildroot] [PATCH] libbsd: add upstream patch to fix musl build
- issue
-Message-ID: <20180406081835.4239-1-joerg.krause@embedded.rocks>
+Date: Fri,  6 Apr 2018 10:19:24 +0200
+Subject: [Buildroot] [PATCH] bluez-alsa: new package
+Message-ID: <20180406081924.4473-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit d879be3049598f35d7b959784e1a6c2811ba2036 enabled the build for non-glibc
-toolchains and added a  patch from upstream to fix one remaining build issue
-with musl.
+bluez-alsa is a Bluetooth Audio ALSA Backend.
 
-The upstream patch defines the glibc specific macro `__GLIBC_PREREQ` in
-`include/bsd/sys/cdefs.h`, but the patch does not include this header
-file in `include/bsd/stdlib.h` which uses the macro.
-
-Upstream did committed an earlier patch which adds this header inclusion
-to `include/bsd/stdlib.h`. So, add this upstream patch as well to fix a
-build error when building the hcitop tool from the not yet added package
-bluez-alsa.
-
-Note, that the upstream patch address the issue that `<sys/cdefs.h>` is
-a non-portable header. However, this is not the issue which needs to be
-fixed by this patch, but solely the needed inclusion of the
-`include/bsd/stdlib.h` header file, to see the definition of
-`__GLIBC_PREREQ`.
-
-Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
+Note that we are using the latest commit from git master branch instead
+of the latest version tag v1.2.0 which is almost a year old and is 64
+commits behind master.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...3-Handle-systems-missing-sys-cdefs.h.patch | 230 ++++++++++++++++++
- 1 file changed, 230 insertions(+)
- create mode 100644 package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch
+ package/Config.in                  |  1 +
+ package/bluez-alsa/Config.in       | 35 ++++++++++++++++++++++++
+ package/bluez-alsa/bluez-alsa.hash |  3 +++
+ package/bluez-alsa/bluez-alsa.mk   | 43 ++++++++++++++++++++++++++++++
+ 4 files changed, 82 insertions(+)
+ create mode 100644 package/bluez-alsa/Config.in
+ create mode 100644 package/bluez-alsa/bluez-alsa.hash
+ create mode 100644 package/bluez-alsa/bluez-alsa.mk
 
-diff --git a/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch b/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch
+diff --git a/package/Config.in b/package/Config.in
+index 53d7cb2cfa..035f90c8c8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -13,6 +13,7 @@ menu "Audio and video applications"
+ 	source "package/atest/Config.in"
+ 	source "package/aumix/Config.in"
+ 	source "package/bellagio/Config.in"
++	source "package/bluez-alsa/Config.in"
+ 	source "package/dvblast/Config.in"
+ 	source "package/dvdauthor/Config.in"
+ 	source "package/dvdrw-tools/Config.in"
+diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
 new file mode 100644
-index 0000000000..2cf7a5f09f
+index 0000000000..6713c089a2
 --- /dev/null
-+++ b/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch
-@@ -0,0 +1,230 @@
-+From 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd Mon Sep 17 00:00:00 2001
-+From: Guillem Jover <guillem@hadrons.org>
-+Date: Tue, 6 Mar 2018 01:41:35 +0100
-+Subject: [PATCH] Handle systems missing <sys/cdefs.h>
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/bluez-alsa/Config.in
+@@ -0,0 +1,35 @@
++config BR2_PACKAGE_BLUEZ_ALSA
++	bool "bluez-alsa"
++	depends on !BR2_STATIC_LIBS # bluez5 uses dlfcn
++	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with bluez4 version
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5
++	depends on BR2_USE_MMU # bluez5 -> dbus
++	depends on BR2_USE_WCHAR # libglib2
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_BLUEZ5_UTILS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_SBC
++	help
++	  Bluetooth Audio ALSA Backend.
 +
-+This is a non-portable header, and we cannot expect it to be provided by
-+the system libc (e.g. musl). We just need and rely on declaration that
-+we have defined ourselves in our own <bsd/sys/cdefs.h>. So we switch to
-+only ever assume that.
++	  https://github.com/Arkq/bluez-alsa
 +
-+Fixes: https://bugs.freedesktop.org/105281
++comment "bluez-alsa needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_USE_MMU
 +
-+Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
++if BR2_PACKAGE_BLUEZ_ALSA
 +
-+Signed-off-by: Guillem Jover <guillem@hadrons.org>
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ include/bsd/libutil.h        | 4 ++++
-+ include/bsd/md5.h            | 4 ++++
-+ include/bsd/nlist.h          | 4 ++++
-+ include/bsd/readpassphrase.h | 4 ++++
-+ include/bsd/stdlib.h         | 4 ++++
-+ include/bsd/string.h         | 4 ++++
-+ include/bsd/stringlist.h     | 5 +++++
-+ include/bsd/sys/queue.h      | 4 ++++
-+ include/bsd/sys/tree.h       | 4 ++++
-+ include/bsd/timeconv.h       | 4 ++++
-+ include/bsd/vis.h            | 4 ++++
-+ include/bsd/wchar.h          | 4 ++++
-+ 12 files changed, 49 insertions(+)
++config BR2_PACKAGE_BLUEZ_ALSA_HCITOP
++	bool "hcitop"
++	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
++	select BR2_PACKAGE_BSD
++	select BR2_PACKAGE_NCURSES
++	help
++	  Enable top-like monitoring tool for HCI.
 +
-+diff --git a/include/bsd/libutil.h b/include/bsd/libutil.h
-+index 45b3b15..ccca29a 100644
-+--- a/include/bsd/libutil.h
-++++ b/include/bsd/libutil.h
-+@@ -40,7 +40,11 @@
-+ #define LIBBSD_LIBUTIL_H
-+ 
-+ #include <features.h>
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ #include <stdint.h>
-+ #include <stdio.h>
-+diff --git a/include/bsd/md5.h b/include/bsd/md5.h
-+index 5f3ae46..bf36a30 100644
-+--- a/include/bsd/md5.h
-++++ b/include/bsd/md5.h
-+@@ -27,7 +27,11 @@ typedef struct MD5Context {
-+ 	uint8_t buffer[MD5_BLOCK_LENGTH];	/* input buffer */
-+ } MD5_CTX;
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ __BEGIN_DECLS
-+diff --git a/include/bsd/nlist.h b/include/bsd/nlist.h
-+index cb297e8..8767117 100644
-+--- a/include/bsd/nlist.h
-++++ b/include/bsd/nlist.h
-+@@ -27,7 +27,11 @@
-+ #ifndef LIBBSD_NLIST_H
-+ #define LIBBSD_NLIST_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ 
-+ struct nlist {
-+ 	union {
-+diff --git a/include/bsd/readpassphrase.h b/include/bsd/readpassphrase.h
-+index 14744b8..5eb8021 100644
-+--- a/include/bsd/readpassphrase.h
-++++ b/include/bsd/readpassphrase.h
-+@@ -31,7 +31,11 @@
-+ #define RPP_SEVENBIT    0x10		/* Strip the high bit from input. */
-+ #define RPP_STDIN       0x20		/* Read from stdin, not /dev/tty */
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ __BEGIN_DECLS
-+diff --git a/include/bsd/stdlib.h b/include/bsd/stdlib.h
-+index ebc9638..8d33d1f 100644
-+--- a/include/bsd/stdlib.h
-++++ b/include/bsd/stdlib.h
-+@@ -42,7 +42,11 @@
-+ #ifndef LIBBSD_STDLIB_H
-+ #define LIBBSD_STDLIB_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/stat.h>
-+ #include <stdint.h>
-+ 
-+diff --git a/include/bsd/string.h b/include/bsd/string.h
-+index 6798bf6..29097f6 100644
-+--- a/include/bsd/string.h
-++++ b/include/bsd/string.h
-+@@ -33,7 +33,11 @@
-+ #ifndef LIBBSD_STRING_H
-+ #define LIBBSD_STRING_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ __BEGIN_DECLS
-+diff --git a/include/bsd/stringlist.h b/include/bsd/stringlist.h
-+index ff30cac..dd71496 100644
-+--- a/include/bsd/stringlist.h
-++++ b/include/bsd/stringlist.h
-+@@ -31,7 +31,12 @@
-+ 
-+ #ifndef LIBBSD_STRINGLIST_H
-+ #define LIBBSD_STRINGLIST_H
-++
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ /*
-+diff --git a/include/bsd/sys/queue.h b/include/bsd/sys/queue.h
-+index 4a94ea7..ac00026 100644
-+--- a/include/bsd/sys/queue.h
-++++ b/include/bsd/sys/queue.h
-+@@ -33,7 +33,11 @@
-+ #ifndef LIBBSD_SYS_QUEUE_H
-+ #define LIBBSD_SYS_QUEUE_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ 
-+ /*
-+  * This file defines four types of data structures: singly-linked lists,
-+diff --git a/include/bsd/sys/tree.h b/include/bsd/sys/tree.h
-+index 628bec0..325b382 100644
-+--- a/include/bsd/sys/tree.h
-++++ b/include/bsd/sys/tree.h
-+@@ -30,7 +30,11 @@
-+ #ifndef LIBBSD_SYS_TREE_H
-+ #define LIBBSD_SYS_TREE_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ 
-+ /*
-+  * This file defines data structures for different types of trees:
-+diff --git a/include/bsd/timeconv.h b/include/bsd/timeconv.h
-+index e2a2c55..a426bd3 100644
-+--- a/include/bsd/timeconv.h
-++++ b/include/bsd/timeconv.h
-+@@ -41,7 +41,11 @@
-+ #ifndef LIBBSD_TIMECONV_H
-+ #define LIBBSD_TIMECONV_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <stdint.h>
-+ #include <time.h>
-+ 
-+diff --git a/include/bsd/vis.h b/include/bsd/vis.h
-+index 970dfdd..ab5430c 100644
-+--- a/include/bsd/vis.h
-++++ b/include/bsd/vis.h
-+@@ -72,7 +72,11 @@
-+  */
-+ #define	UNVIS_END	1	/* no more characters */
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ 
-+ __BEGIN_DECLS
-+ char	*vis(char *, int, int, int);
-+diff --git a/include/bsd/wchar.h b/include/bsd/wchar.h
-+index 33a500e..7216503 100644
-+--- a/include/bsd/wchar.h
-++++ b/include/bsd/wchar.h
-+@@ -40,7 +40,11 @@
-+ #define LIBBSD_WCHAR_H
-+ 
-+ #include <stddef.h>
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ __BEGIN_DECLS
-+-- 
-+2.17.0
++endif
+diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
+new file mode 100644
+index 0000000000..b96c37cc46
+--- /dev/null
++++ b/package/bluez-alsa/bluez-alsa.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256  dfa48e991a6bbb194a9161deb949371155150dabd5cfc1453a8df754b7cbdc84  bluez-alsa-9045edb436ea755f395a2e09e4525b5defad286a.tar.gz
++sha256  c90a0081b0526834f700d084e48819b18d11453ecb030c9b7de0d2cc3e3711a5  LICENSE.txt
+diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
+new file mode 100644
+index 0000000000..3ba237a6b7
+--- /dev/null
++++ b/package/bluez-alsa/bluez-alsa.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# bluez-alsa
++#
++################################################################################
 +
++BLUEZ_ALSA_VERSION = 9045edb436ea755f395a2e09e4525b5defad286a
++BLUEZ_ALSA_SITE = $(call github,Arkq,bluez-alsa,$(BLUEZ_ALSA_VERSION))
++BLUEZ_ALSA_LICENSE = MIT
++BLUEZ_ALSA_LICENSE_FILES = LICENSE.txt
++BLUEZ_ALSA_DEPENDENCIES = alsa-lib bluez5_utils libglib2 sbc host-pkgconf
++
++# git repo, no configure
++BLUEZ_ALSA_AUTORECONF = YES
++
++# Autoreconf requires an existing m4 directory
++define BLUEZ_ALSA_MKDIR_M4
++	mkdir -p $(@D)/m4
++endef
++BLUEZ_ALSA_POST_PATCH_HOOKS += BLUEZ_ALSA_MKDIR_M4
++
++BLUEZ_ALSA_CONF_OPTS = \
++	--enable-aplay \
++	--disable-debug-time \
++	--disable-pcm-test \
++	--with-alsaplugindir=/usr/lib/alsa-lib \
++	--with-alsadatadir=/usr/share/alsa
++
++ifeq ($(BR2_PACKAGE_FDK_AAC),y)
++BLUEZ_ALSA_DEPENDENCIES += fdk-aac
++BLUEZ_ALSA_CONF_OPTS += --enable-aac
++else
++BLUEZ_ALSA_CONF_OPTS += --disable-aac
++endif
++
++ifeq ($(BR2_PACKAGE_BLUEZ_ALSA_HCITOP),y)
++BLUEZ_ALSA_DEPENDENCIES += libbsd ncurses
++BLUEZ_ALSA_CONF_OPTS += --enable-hcitop
++else
++BLUEZ_ALSA_CONF_OPTS += --disable-hcitop
++endif
++
++$(eval $(autotools-package))
 -- 
 2.17.0
