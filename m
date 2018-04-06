@@ -1,51 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 19:57:45 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] busybox: disable PAM in
- the config if linux-pam is not selected
-Message-ID: <20180407175148.8A1BC87BDD@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:03:09 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] xerces: add upstream
+ security fix
+Message-ID: <20180407175149.1245C7FCAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf92451acbaf8adfa8b01763713b6403394a60c8
+commit: https://git.buildroot.net/buildroot/commit/?id=0b601f4c8f1d56577ce5032f70fd7d67026a5aeb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Currently there is only logic to enable PAM when linux-pam is selected.
-However, busybox will fail to build with PAM enabled if the linux-pam
-package has not been built before. So we should forcibly disable PAM in
-busybox in that case.
+CVE-2017-12627: dereference of a NULL pointer while processing the path
+to the DTD.
 
-Normally this is not an issue since our default busybox config doesn't
-have PAM enabled. However, if you enable linux-pam, then save the
-busybox config to a custom configuration file, then disable linux-pam
-again, and then do a "make clean; make", the build will fail. A more
-practical situation where this can occur is when the same custom
-busybox config is used in a Buildroot config with and without
-linux-pam.
+xerces 3.2.1 includes this patch. But this version also added
+AC_RUN_IFELSE to its configure script, making cross compilation harder.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Switching to cmake is also problematic since the minimum required cmake
+version is 3.2.0. The host dependencies check currently allows minimum
+cmake version 3.1.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0876b023663377bc3a24c80399f447c1f2afe0c1)
+(cherry picked from commit 142c8cc8d525f687ce199cc0163d48892e8a81f7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/xerces/0001-fix-CVE-2017-12627.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d0bbd3fd6e..f17c20bf54 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -248,6 +248,10 @@ define BUSYBOX_LINUX_PAM
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
- endef
- BUSYBOX_DEPENDENCIES += linux-pam
-+else
-+define BUSYBOX_LINUX_PAM
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
-+endef
- endif
- 
- # Telnet support
+diff --git a/package/xerces/0001-fix-CVE-2017-12627.patch b/package/xerces/0001-fix-CVE-2017-12627.patch
+new file mode 100644
+index 0000000000..010be7e3d5
+--- /dev/null
++++ b/package/xerces/0001-fix-CVE-2017-12627.patch
+@@ -0,0 +1,22 @@
++XMLString: Don't call catString if relativePath is null
++
++https://xerces.apache.org/xerces-c/secadv/CVE-2017-12627.txt
++
++Upstream status: svn revision 1819998
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++
++--- trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:58:30	1819997
+++++ trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:59:30	1819998
++@@ -920,7 +920,10 @@
++ 
++     XMLString::subString(tmpBuf, basePath, 0, (basePtr - basePath + 1), manager);
++     tmpBuf[basePtr - basePath + 1] = 0;
++-    XMLString::catString(tmpBuf, relativePath);
+++    if (relativePath)
+++    {
+++        XMLString::catString(tmpBuf, relativePath);
+++    }
++ 
++     removeDotSlash(tmpBuf, manager);
++ 
