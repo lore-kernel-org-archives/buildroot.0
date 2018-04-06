@@ -1,58 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri,  6 Apr 2018 10:54:03 +0200
-Subject: [Buildroot] [PATCH] php: fix how PCRE JIT is disabled
-Message-ID: <20180406085403.19096-1-thomas.petazzoni@bootlin.com>
+Date: Fri,  6 Apr 2018 11:00:13 +0200
+Subject: [Buildroot] [PATCH 2/2] mesa3d: properly propagate the dependencies
+ of BR2_PACKAGE_LLVM
+In-Reply-To: <20180406090013.20187-1-thomas.petazzoni@bootlin.com>
+References: <20180406090013.20187-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180406090013.20187-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the internal PCRE library of PHP is used, it tries to use a JIT
-engine, which is only available on some architectures.
-
-However, the mechanism used to disable JIT has changed in recent PHP
-versions, and it now has a proper --without-pcre-jit option. Switch
-over to that to properly disable JIT on unsupported platforms.
-
-It has been tested to fix the build of PHP on ARC and Microblaze.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/e1359fcad7bc57e3c5a7ecc37abaa2cf6a6a9ffa/
+We cannot simply select BR2_PACKAGE_LLVM, we need to take into account
+all its dependencies. BR2_PACKAGE_LLVM_ARCH_SUPPORTS was already taken
+into account, but not the other dependencies.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php/php.mk | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ package/mesa3d/Config.in | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index bfd25de875..91756794ee 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -228,10 +228,6 @@ ifneq ($(BR2_PACKAGE_PHP_EXT_MYSQLI)$(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),)
- PHP_CONF_OPTS += --with-mysql-sock=$(MYSQL_SOCKET)
- endif
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index ffe0287ac5..8f347ffe0c 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -28,8 +28,22 @@ if BR2_PACKAGE_MESA3D
+ config BR2_PACKAGE_MESA3D_LLVM
+ 	bool "llvm support"
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on BR2_HOST_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
+ 	select BR2_PACKAGE_LLVM
  
--define PHP_DISABLE_PCRE_JIT
--	$(SED) '/^#define SUPPORT_JIT/d' $(@D)/ext/pcre/pcrelib/config.h
--endef
--
- define PHP_DISABLE_VALGRIND
- 	$(SED) '/^#define HAVE_VALGRIND/d' $(@D)/main/php_config.h
- endef
-@@ -249,8 +245,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
- PHP_CFLAGS += -DSLJIT_SINGLE_THREADED=1
- endif
- # check ext/pcre/pcrelib/sljit/sljitConfigInternal.h for supported archs
--ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),)
--PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_PCRE_JIT
-+ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
-+PHP_CONF_OPTS += --with-pcre-jit
-+else
-+PHP_CONF_OPTS += --without-pcre-jit
- endif
- endif
- 
++comment "llvm support needs a toolchain w/ threads, C++, gcc >= 4.8, host gcc >= 4.8"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++comment "llvm support needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
+ # inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	bool
 -- 
 2.14.3
