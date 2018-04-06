@@ -1,81 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Apr 2018 22:21:15 +0200
-Subject: [Buildroot] [PATCH] package/llvm: add dependency on shared
- libraries
-In-Reply-To: <a05eea9c-d124-84b5-2a75-903f4748f06f@smile.fr>
-References: <20180406093958.9392-1-valentin.korenblit@smile.fr>
- <20180406164141.53fbe576@windsurf>
- <a05eea9c-d124-84b5-2a75-903f4748f06f@smile.fr>
-Message-ID: <20180406222115.14f6cc2c@windsurf.home>
+Date: Fri, 6 Apr 2018 22:21:42 +0200
+Subject: [Buildroot] [git commit] libglib2: bump to 2.56.0
+Message-ID: <20180406202239.54D4187767@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6637ee635ead33c4672551be843d35464bc9e544
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 6 Apr 2018 17:03:04 +0200, Valentin Korenblit wrote:
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> >> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>  
-> > Interestingly, I haven't seen any failure of LLVM related to static
-> > libraries reported by the autobuilders.  
-> 
-> I think llvm should compile correctly but mesa3d has --enable-llvm-shared-libs.
-> We can disable that option if BR2_STATIC_ONLY.
-
-LLVM doesn't build properly with BR2_STATIC_LIBS. The following defconfig:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_STATIC_LIBS=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_LLVM=y
-
-fails to build with:
-
-[ 60%] Linking CXX shared module ../../LLVMHello.so
-/home/thomas/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: /home/thomas/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/6.4.0/../../../
-../arm-buildroot-linux-uclibcgnueabihf/lib/libstdc++.a(eh_globals.o)(.text.__cxa_get_globals_fast+0x10): R_ARM_TLS_LE32 relocation not permitted in shared object
-/home/thomas/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabihf/lib/libstdc++.a(eh_globals.o): In function `__cxa_get_globals_fast':
-eh_globals.cc:(.text.__cxa_get_globals_fast+0x10): dangerous relocation: unsupported relocation
-/home/thomas/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: /home/thomas/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/6.4.0/../../../
-../arm-buildroot-linux-uclibcgnueabihf/lib/libstdc++.a(eh_globals.o)(.text.__cxa_get_globals+0x10): R_ARM_TLS_LE32 relocation not permitted in shared object
-/home/thomas/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabihf/lib/libstdc++.a(eh_globals.o): In function `__cxa_get_globals':
-eh_globals.cc:(.text.__cxa_get_globals+0x10): dangerous relocation: unsupported relocation
-/home/thomas/buildroot/buildroot/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libc.a(__uClibc_main.os): In function `__uClibc_fini':
-__uClibc_main.c:(.text+0x164): undefined reference to `__fini_array_end'
-__uClibc_main.c:(.text+0x168): undefined reference to `__fini_array_start'
-__uClibc_main.c:(.text+0x16c): undefined reference to `__fini_array_start'
-/home/thomas/buildroot/buildroot/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libc.a(__uClibc_main.os): In function `__uClibc_main':
-__uClibc_main.c:(.text+0x580): undefined reference to `__preinit_array_start'
-__uClibc_main.c:(.text+0x584): undefined reference to `__preinit_array_start'
-__uClibc_main.c:(.text+0x588): undefined reference to `__preinit_array_end'
-__uClibc_main.c:(.text+0x58c): undefined reference to `__init_array_start'
-__uClibc_main.c:(.text+0x590): undefined reference to `__init_array_end'
-__uClibc_main.c:(.text+0x594): undefined reference to `__init_array_start'
-/home/thomas/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: ../../LLVMHello.so: hidden symbol `__fini_array_end' isn't defined
-/home/thomas/buildroot/buildroot/output/host/lib/gcc/arm-buildroot-linux-uclibcgnueabihf/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: final link failed: Bad value
-collect2: error: ld returned 1 exit status
-lib/Transforms/Hello/CMakeFiles/LLVMHello.dir/build.make:94: recipe for target 'lib/LLVMHello.so' failed
-make[4]: *** [lib/LLVMHello.so] Error 1
-
-So basically, it's trying to build a shared library.
-
-Could you fix up your patch to propagate the !BR2_STATIC_LIBS
-dependency to:
-
- 1. The Config.in comment in package/llvm/Config.in
-
- 2. The mesa3d package that selects BR2_PACKAGE_LLVM
-
-And send an updated version ?
-
-Thanks!
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index cf1c9557f8..b957bf4b10 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.54/glib-2.54.2.sha256sum
+-sha256  bb89e5c5aad33169a8c7f28b45671c7899c12f74caf707737f784d7102758e6c  glib-2.54.2.tar.xz
++# https://download.gnome.org/sources/glib/2.56/glib-2.56.0.sha256sum
++sha256  ecef6e17e97b8d9150d0e8a4b3edee1ac37331213b8a2a87a083deea408a0fc7  glib-2.56.0.tar.xz
+ # License files, locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 097c980393..41ec7ee377 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.54
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
++LIBGLIB2_VERSION_MAJOR = 2.56
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.0+
