@@ -1,43 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Apr 2018 19:51:20 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
- 9, 14, 15}.x series
-Message-ID: <20180407175151.183AD8100D@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:08:10 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/openocd: fix
+ fallout after no-C++ fixups
+Message-ID: <20180407175150.8276981199@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f06aed143e886cc44850a09b1032f11239afc95
+commit: https://git.buildroot.net/buildroot/commit/?id=0787fee6947bcf374464ab1d0d48feda3d0106ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6e17a16dc728845bcfad48230b8db9c375acd31e)
+Commit 4cd1ab158 (core: alternate solution to disable C++) made use of a
+non-existent 'no' binary when C++ is not available in the toolchain.
+
+However, some packages, like jimtcl as bundled in opeocd, really want to
+find the binary that $CXX contains.
+
+Revert openocd to use 'false' instead of 'no'.
+
+Fixes:
+    http://autobuild.buildroot.org/results/cbd/cbd5ab97fb0659968ff628461130627cf1745955/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5966e2dc54dfb19c5fde3a09d72f3abc6125c202)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/openocd/openocd.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ec3de2b215..2a59e2902a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.125"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.91"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.126"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.92"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.31"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.14"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.32"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.15"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 9d2576ceeb..548d8b81a0 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -11,7 +11,12 @@ OPENOCD_LICENSE = GPL-2.0+
+ OPENOCD_LICENSE_FILES = COPYING
+ # 0002-configure-enable-build-on-uclinux.patch patches configure.ac
+ OPENOCD_AUTORECONF = YES
+-OPENOCD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++
++# The bundled jimtcl really wants to find a existing $CXX, so feed it
++# false when we do not have one.
++OPENOCD_CONF_ENV = \
++	$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
++	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+ 
+ OPENOCD_CONF_OPTS = \
+ 	--oldincludedir=$(STAGING_DIR)/usr/include \
