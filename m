@@ -1,113 +1,174 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:49:45 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] configs/imxsabre: Fix
- U-Boot parallel build issue
-Message-ID: <20180406165913.AAB1C7FA39@busybox.osuosl.org>
+From: Sjoerd Venema <srg.venema@gmail.com>
+Date: Fri, 6 Apr 2018 19:33:18 +0200
+Subject: [Buildroot] ws281x library, scons, fails
+In-Reply-To: <20180405215313.35c300e9@windsurf>
+References: <CAPzckP6sMQYU6cmsYv30P+CJsmvg=KHrvpVb+gC6BDOwHdqSwg@mail.gmail.com>
+ <20180405215313.35c300e9@windsurf>
+Message-ID: <CAPzckP7YiGe5LY3YcLsH-tpMcE29SVQaToLt6bPTBXCZzzeo1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f8ef1371de1fa0329c38f5698e00e05cff6f68b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+I've tried replacing the tools in xx_FOR_BUILD variables to point to the
+ARM toolchain, this somewhat worked....
+I did need to remove the -Wall, -Werror and -Wextra flags for some
+reason... But after that it went ahead and built, this is what I executed:
 
-Sometimes imximage throws the following error:
+(cd
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6;
+PATH="/home/buildroot/buildroot-2018.02-rc3/output/host/bin:/home/buildroot/buildroot-2018.02-rc3/output/host/sbin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/buildroot/.local/bin:/home/buildroot/bin"
+AR="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ar"
+AS="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-as"
+LD="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ld"
+NM="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-nm"
+CC="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc"
+GCC="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc"
+CPP="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-cpp"
+CXX="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-g++"
+FC="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gfortran"
+F77="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gfortran"
+RANLIB="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ranlib"
+READELF="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-readelf"
+STRIP="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-strip"
+OBJCOPY="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-objcopy"
+OBJDUMP="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-objdump"
+AR_FOR_BUILD="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ar"
+AS_FOR_BUILD="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-as"
+CC_FOR_BUILD="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc"
+GCC_FOR_BUILD="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc"
+CXX_FOR_BUILD="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-g++"
+LD_FOR_BUILD="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ld"
+CPPFLAGS_FOR_BUILD="-I/home/buildroot/buildroot-2018.02-rc3/output/host/include"
+CFLAGS_FOR_BUILD="-O2
+-I/home/buildroot/buildroot-2018.02-rc3/output/host/include"
+CXXFLAGS_FOR_BUILD="-O2
+-I/home/buildroot/buildroot-2018.02-rc3/output/host/include"
+LDFLAGS_FOR_BUILD="-L/home/buildroot/buildroot-2018.02-rc3/output/host/lib
+-Wl,-rpath,/home/buildroot/buildroot-2018.02-rc3/output/host/lib"
+FCFLAGS_FOR_BUILD=""
+DEFAULT_ASSEMBLER="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-as"
+DEFAULT_LINKER="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-ld"
+CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-Os " CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os " LDFLAGS="" FCFLAGS=" -Os " FFLAGS=" -Os "
+PKG_CONFIG="/home/buildroot/buildroot-2018.02-rc3/output/host/bin/pkg-config"
+STAGING_DIR="/home/buildroot/buildroot-2018.02-rc3/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot"
+INTLTOOL_PERL=/usr/bin/perl
+CROSS=/home/buildroot/buildroot-2018.02-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-
+/home/buildroot/buildroot-2018.02-rc3/output/host/bin/python2
+/home/buildroot/buildroot-2018.02-rc3/output/host/bin/scons )
 
-MKIMAGE u-boot-dtb.imx
-Error: No BOOT_FROM tag in board/freescale/mx6sxsabresd/imximage.cfg.cfgtmp
-arch/arm/imx-common/Makefile:91: recipe for target 'u-boot-dtb.imx' failed
+(cd
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6;
+/home/buildroot/buildroot-2018.02-rc3/output/host/bin/python2
+/home/buildroot/buildroot-2018.02-rc3/output/host/bin/scons )
 
-Later on, when running mkimage for the u-boot.imx it will succeed in
-finding the IVT offset.
 
-Looks like some race condition happening during parallel build when
-processing mkimage for u-boot-dtb.imx and u-boot.imx.
+But it then failed at the installation step saying:
 
-A proper fix still needs to be implemented, but as a workaround let's
-remove the error when the IVT offset is not found.
+>>> rpi_ws281x e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6 Installing to target
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/libws2811.a
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/lib
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/test
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/bin
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/rpihw.o
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/lib
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/dma.o
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/lib
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/pcm.o
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/lib
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/pwm.o
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/lib
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/ws2811.o
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/lib
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/mailbox.o
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/lib
+/usr/bin/install -D -m 0755
+/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/main.o
+/home/buildroot/buildroot-2018.02-rc3/output/target/usr/lib
+ERROR: architecture for "/usr/lib/pcm.o" is "Advanced Micro Devices
+X86-64", should be "ARM"
+ERROR: architecture for "/usr/bin/test" is "Advanced Micro Devices X86-64",
+should be "ARM"
+ERROR: architecture for "/usr/lib/mailbox.o" is "Advanced Micro Devices
+X86-64", should be "ARM"
+ERROR: architecture for "/usr/lib/libws2811.a" is "Advanced Micro Devices
+X86-64", should be "ARM"
+ERROR: architecture for "/usr/lib/ws2811.o" is "Advanced Micro Devices
+X86-64", should be "ARM"
+ERROR: architecture for "/usr/lib/dma.o" is "Advanced Micro Devices
+X86-64", should be "ARM"
+ERROR: architecture for "/usr/lib/rpihw.o" is "Advanced Micro Devices
+X86-64", should be "ARM"
+ERROR: architecture for "/usr/lib/main.o" is "Advanced Micro Devices
+X86-64", should be "ARM"
+ERROR: architecture for "/usr/lib/pwm.o" is "Advanced Micro Devices
+X86-64", should be "ARM"
+make[1]: ***
+[/home/buildroot/buildroot-2018.02-rc3/output/build/rpi_ws281x-e4a05d6538c02bb9714f2efc6630f2bfdcf35bf6/.stamp_target_installed]
+Error 1
+make: *** [_all] Error 2
 
-It is useful to have such message, especially during bring-up phase,
-but the build error that it causes is severe, so better avoid the
-build error for now.
+So, I'm clearly using a wrong compiler again.. How and where do you specify
+that the bloody thing needs to use the Buildroot compiler???
+Or shouldn't i be calling $(INSTALL) ?
 
-The error checking can be re-implemented later when we have a proper
-fix.
+thanks,
+Sjoerd
 
-This workaround has already been applied in mainline U-Boot:
-http://git.denx.de/?p=u-boot.git;a=commit;h=b5b0e4e351e20a606de22db6a56ad6bc1e2aa8fd
 
-Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/59015347
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0c4bccf9e882ffead426051cfe76764dd2ecaf83)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...emove-failure-when-no-IVT-offset-is-found.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+On 5 April 2018 at 21:53, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-diff --git a/board/freescale/imx6sabre/patches/uboot/0002-imximage-Remove-failure-when-no-IVT-offset-is-found.patch b/board/freescale/imx6sabre/patches/uboot/0002-imximage-Remove-failure-when-no-IVT-offset-is-found.patch
-new file mode 100644
-index 0000000000..92eff7574d
---- /dev/null
-+++ b/board/freescale/imx6sabre/patches/uboot/0002-imximage-Remove-failure-when-no-IVT-offset-is-found.patch
-@@ -0,0 +1,55 @@
-+From 24ba28680abe868e8db3442a9bf523ad3af1febd Mon Sep 17 00:00:00 2001
-+From: Fabio Estevam <fabio.estevam@nxp.com>
-+Date: Fri, 9 Mar 2018 08:25:00 -0300
-+Subject: [PATCH] imximage: Remove failure when no IVT offset is found
-+
-+Sometimes imximage throws the following error:
-+
-+  CFGS    board/freescale/vf610twr/imximage.cfg.cfgtmp
-+  CFGS    board/freescale/vf610twr/imximage.cfg.cfgtmp
-+  MKIMAGE u-boot-dtb.imx
-+Error: No BOOT_FROM tag in board/freescale/vf610twr/imximage.cfg.cfgtmp
-+arch/arm/mach-imx/Makefile:100: recipe for target 'u-boot-dtb.imx' failed
-+
-+Later on, when running mkimage for the u-boot.imx it will succeed in
-+finding the IVT offset.
-+
-+Looks like some race condition happening during parallel build when
-+processing mkimage for u-boot-dtb.imx and u-boot.imx.
-+
-+A proper fix still needs to be implemented, but as a workaround let's
-+remove the error when the IVT offset is not found.
-+
-+It is useful to have such message, especially during bring-up phase,
-+but the build error that it causes is severe, so better avoid the
-+build error for now.
-+
-+The error checking can be re-implemented later when we have a proper
-+fix.
-+
-+Reported-by: Breno Lima <breno.lima@nxp.com>
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-+---
-+ tools/imximage.c | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/tools/imximage.c b/tools/imximage.c
-+index 0c43196..bef56f8 100644
-+--- a/tools/imximage.c
-++++ b/tools/imximage.c
-+@@ -765,11 +765,6 @@ static uint32_t parse_cfg_file(struct imx_header *imxhdr, char *name)
-+ 	(*set_dcd_rst)(imxhdr, dcd_len, name, lineno);
-+ 	fclose(fd);
-+ 
-+-	/* Exit if there is no BOOT_FROM field specifying the flash_offset */
-+-	if (imximage_ivt_offset == FLASH_OFFSET_UNDEFINED) {
-+-		fprintf(stderr, "Error: No BOOT_FROM tag in %s\n", name);
-+-		exit(EXIT_FAILURE);
-+-	}
-+ 	return dcd_len;
-+ }
-+ 
-+-- 
-+2.7.4
-+
+> Hello,
+>
+> On Thu, 5 Apr 2018 19:18:55 +0200, Sjoerd Venema wrote:
+>
+> > creating build/temp.linux-x86_64-2.7
+> > /bin/gcc -pthread -fno-strict-aliasing -O2
+> > -I/home/buildroot/buildroot-2018.02-rc3/output/host/include -DNDEBUG -g
+> > -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
+> > -I/home/buildroot/buildroot-2018.02-rc3/output/host/include/python2.7 -c
+> > rpi_ws281x_wrap.c -o build/temp.linux-x86_64-2.7/rpi_ws281x_wrap.o
+> > /bin/gcc -pthread -shared
+> > -L/home/buildroot/buildroot-2018.02-rc3/output/host/lib
+> > -Wl,-rpath,/home/buildroot/buildroot-2018.02-rc3/output/host/lib
+> > -Wl,--enable-new-dtags build/temp.linux-x86_64-2.7/rpi_ws281x_wrap.o
+> -L../.
+> > -L/home/buildroot/buildroot-2018.02-rc3/output/host/lib -lws2811 -lrt
+> > -lpython2.7 -o build/lib.linux-x86_64-2.7/_rpi_ws281x.so
+> > */usr/bin/ld: skipping incompatible .././libws2811.a when searching for
+> > -lws2811*
+> > */usr/bin/ld: cannot find -lws2811*
+> > collect2: error: ld returned 1 exit status
+> > error: command '/bin/gcc' failed with exit status 1
+>
+> This is using the host compiler to build target code, it can't work.
+> Seems like your package has a Python module, you need to pass special
+> variables to make it cross-compile properly. Look at
+> package/pkg-python.mk to get an idea of the variables you have to pass.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180406/56842930/attachment.html>
