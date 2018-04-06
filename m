@@ -1,53 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:47:46 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/apache: security
- bump to version 2.4.33
-Message-ID: <20180406165913.9B0098027E@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 16:53:01 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qemu: add libssh2
+ optional dependency
+Message-ID: <20180406165913.DA76E8104E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1775f53f83e3bf121783f890fe93017312d30fe3
+commit: https://git.buildroot.net/buildroot/commit/?id=176a2d048f595532c69557a758638401eda6c191
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.33
+Make sure that qemu uses libssh2 when libssh2 is enabled, for build
+consistency.
 
-Fixes CVE-2017-15710, CVE-2018-1283, CVE-2018-1303, CVE-2018-1301,
-CVE-2017-15715, CVE-2018-1312, CVE-2018-1302.
-
-Added license hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 65193bf3c93ec6922979907ce87fc82a73b25268)
+(cherry picked from commit d769377a41e172e1963351c168c97a1212561133)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 5 +++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/qemu/qemu.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 6471c38b62..76c7c766cb 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,3 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.29.tar.bz2.sha256
--sha256 777753a5a25568a2a27428b2214980564bc1c38c1abf9ccc7630b639991f7f00 httpd-2.4.29.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.33.tar.bz2.sha256
-+sha256 de02511859b00d17845b9abdd1f975d5ccb5d0b280c567da5bf2ad4b70846f05 httpd-2.4.33.tar.bz2
-+sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index e1b1a209cb..eaf7b9c5bf 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 345ef52668..c3a7e7738e 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -212,6 +212,13 @@ else
+ QEMU_OPTS += --disable-tools
+ endif
  
--APACHE_VERSION = 2.4.29
-+APACHE_VERSION = 2.4.33
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
++ifeq ($(BR2_PACKAGE_LIBSSH2),y)
++QEMU_OPTS += --enable-libssh2
++QEMU_DEPENDENCIES += libssh2
++else
++QEMU_OPTS += --disable-libssh2
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define QEMU_CONFIGURE_CMDS
