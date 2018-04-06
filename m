@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Apr 2018 18:54:31 +0200
-Subject: [Buildroot] [git commit] package/enlightenment: fix meson
- warning
-In-Reply-To: <20180317085654.1F9D983697@busybox.osuosl.org> (Peter Korsgaard's
- message of "Sat, 17 Mar 2018 09:38:57 +0100")
-References: <20180317085654.1F9D983697@busybox.osuosl.org>
-Message-ID: <876054jmwo.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Apr 2018 18:54:45 +0200
+Subject: [Buildroot] [PATCH] libvorbis: security bump to version 1.3.6
+In-Reply-To: <20180316213529.9732-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 16 Mar 2018 22:35:29 +0100")
+References: <20180316213529.9732-1-peter@korsgaard.com>
+Message-ID: <871sfsjmwa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=b582d137a121a456635d29735a27a0144a18b75e
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fixes CVE-2018-5146: Prevent out-of-bounds write in codebook decoding.
+ > Drop 0001-CVE-2017-14633-Don-t-allow-for-more-than-256-channel.patch and
+ > 0002-CVE-2017-14632-vorbis_analysis_header_out-Don-t-clea.patch as they are
+ > now upstream, and add a hash for the license file while we're at it.
 
- > --disable-rpath was added by m4/lib-link.m4 with autotools based
- > buildsystem. Now we use meson, we don't have such option anymore.
-
- > The autotools eet-eet and eldbus_codegen options are named respectively
- > eet and eldbus-codegen with meson.
-
- > Fixes:
- > WARNING: Unknown command line options: "eet-eet, eldbus_codegen, rpath"
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x, thanks.
