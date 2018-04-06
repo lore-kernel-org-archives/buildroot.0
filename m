@@ -1,60 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:03:09 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] xerces: add upstream
- security fix
-Message-ID: <20180407175149.1245C7FCAF@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 20:00:41 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] systemd: do not use host
+ system-uid/gid ranges
+Message-ID: <20180407175148.AA0517F9CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b601f4c8f1d56577ce5032f70fd7d67026a5aeb
+commit: https://git.buildroot.net/buildroot/commit/?id=7bc97aa935631fca0e4d0c3b53648516ea577c79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-CVE-2017-12627: dereference of a NULL pointer while processing the path
-to the DTD.
+systemd meson.build uses values from host /etc/login.defs if
+system-uid-max and system-gid-max build options are not explicitly
+specified.
 
-xerces 3.2.1 includes this patch. But this version also added
-AC_RUN_IFELSE to its configure script, making cross compilation harder.
+Avoid that by setting system-uid-max and system-gid-max to 999 which is
+the systemd default if SYSTEM_UID_MAX and SYSTEM_GID_MAX are not set in
+/etc/login.defs.
 
-Switching to cmake is also problematic since the minimum required cmake
-version is 3.2.0. The host dependencies check currently allows minimum
-cmake version 3.1.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 142c8cc8d525f687ce199cc0163d48892e8a81f7)
+(cherry picked from commit 183d2097ffef5d8d7e1ac07d3b613ecacdd8c876)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xerces/0001-fix-CVE-2017-12627.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/systemd/systemd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/xerces/0001-fix-CVE-2017-12627.patch b/package/xerces/0001-fix-CVE-2017-12627.patch
-new file mode 100644
-index 0000000000..010be7e3d5
---- /dev/null
-+++ b/package/xerces/0001-fix-CVE-2017-12627.patch
-@@ -0,0 +1,22 @@
-+XMLString: Don't call catString if relativePath is null
-+
-+https://xerces.apache.org/xerces-c/secadv/CVE-2017-12627.txt
-+
-+Upstream status: svn revision 1819998
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+
-+--- trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:58:30	1819997
-++++ trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:59:30	1819998
-+@@ -920,7 +920,10 @@
-+ 
-+     XMLString::subString(tmpBuf, basePath, 0, (basePtr - basePath + 1), manager);
-+     tmpBuf[basePtr - basePath + 1] = 0;
-+-    XMLString::catString(tmpBuf, relativePath);
-++    if (relativePath)
-++    {
-++        XMLString::catString(tmpBuf, relativePath);
-++    }
-+ 
-+     removeDotSlash(tmpBuf, manager);
-+ 
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 8c22c08dd1..3bc322cd51 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -40,6 +40,8 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dldconfig=false \
+ 	-Ddefault-dnssec=no \
+ 	-Dtests=false \
++	-Dsystem-uid-max=999 \
++	-Dsystem-gid-max=999 \
+ 	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
+ 	-Dkill-path=/usr/bin/kill \
+ 	-Dkmod-path=/usr/bin/kmod \
