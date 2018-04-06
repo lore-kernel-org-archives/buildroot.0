@@ -1,48 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Apr 2018 10:52:10 +0200
-Subject: [Buildroot] [PATCH] libbsd: add upstream patch to fix musl
- build issue
-In-Reply-To: <20180406081835.4239-1-joerg.krause@embedded.rocks>
-References: <20180406081835.4239-1-joerg.krause@embedded.rocks>
-Message-ID: <20180406105210.749689ba@windsurf>
+Date: Fri,  6 Apr 2018 10:54:03 +0200
+Subject: [Buildroot] [PATCH] php: fix how PCRE JIT is disabled
+Message-ID: <20180406085403.19096-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When the internal PCRE library of PHP is used, it tries to use a JIT
+engine, which is only available on some architectures.
 
-On Fri,  6 Apr 2018 10:18:35 +0200, J?rg Krause wrote:
-> Commit d879be3049598f35d7b959784e1a6c2811ba2036 enabled the build for non-glibc
-> toolchains and added a  patch from upstream to fix one remaining build issue
-> with musl.
-> 
-> The upstream patch defines the glibc specific macro `__GLIBC_PREREQ` in
-> `include/bsd/sys/cdefs.h`, but the patch does not include this header
-> file in `include/bsd/stdlib.h` which uses the macro.
-> 
-> Upstream did committed an earlier patch which adds this header inclusion
-> to `include/bsd/stdlib.h`. So, add this upstream patch as well to fix a
-> build error when building the hcitop tool from the not yet added package
-> bluez-alsa.
-> 
-> Note, that the upstream patch address the issue that `<sys/cdefs.h>` is
-> a non-portable header. However, this is not the issue which needs to be
-> fixed by this patch, but solely the needed inclusion of the
-> `include/bsd/stdlib.h` header file, to see the definition of
-> `__GLIBC_PREREQ`.
-> 
-> Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+However, the mechanism used to disable JIT has changed in recent PHP
+versions, and it now has a proper --without-pcre-jit option. Switch
+over to that to properly disable JIT on unsupported platforms.
 
-Is this fixing an issue reported by the autobuilders ?
+It has been tested to fix the build of PHP on ARC and Microblaze.
 
-Best regards,
+Fixes:
 
-Thomas
+  http://autobuild.buildroot.net/results/e1359fcad7bc57e3c5a7ecc37abaa2cf6a6a9ffa/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/php.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/package/php/php.mk b/package/php/php.mk
+index bfd25de875..91756794ee 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -228,10 +228,6 @@ ifneq ($(BR2_PACKAGE_PHP_EXT_MYSQLI)$(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),)
+ PHP_CONF_OPTS += --with-mysql-sock=$(MYSQL_SOCKET)
+ endif
+ 
+-define PHP_DISABLE_PCRE_JIT
+-	$(SED) '/^#define SUPPORT_JIT/d' $(@D)/ext/pcre/pcrelib/config.h
+-endef
+-
+ define PHP_DISABLE_VALGRIND
+ 	$(SED) '/^#define HAVE_VALGRIND/d' $(@D)/main/php_config.h
+ endef
+@@ -249,8 +245,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ PHP_CFLAGS += -DSLJIT_SINGLE_THREADED=1
+ endif
+ # check ext/pcre/pcrelib/sljit/sljitConfigInternal.h for supported archs
+-ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),)
+-PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_PCRE_JIT
++ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
++PHP_CONF_OPTS += --with-pcre-jit
++else
++PHP_CONF_OPTS += --without-pcre-jit
+ endif
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.3
