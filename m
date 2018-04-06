@@ -1,38 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Apr 2018 18:50:41 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/nodejs: bump
- version to 8.10.0
-In-Reply-To: <CAFGQKxfiSJiQgFLu2VYQNG5KM8t_XuZaGJeDcLJbOu_n4YgzQg@mail.gmail.com>
- (Martin Bark's message of "Mon, 2 Apr 2018 20:20:01 +0100")
-References: <20180330213159.4E1C283EBB@busybox.osuosl.org>
- <CAFGQKxfiSJiQgFLu2VYQNG5KM8t_XuZaGJeDcLJbOu_n4YgzQg@mail.gmail.com>
-Message-ID: <874lkol1ni.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Apr 2018 18:51:31 +0200
+Subject: [Buildroot] [PATCH] cmake: Fix RPATH for host libraries built
+ by CMake
+In-Reply-To: <ef04ec321632c14eb54ccc7bbd3638d60f602d3e.1520880682.git.jan.kundrat@cesnet.cz>
+ ("Jan =?utf-8?Q?Kundr=C3=A1t=22's?= message of "Mon, 12 Mar 2018 19:41:00
+ +0100")
+References: <ef04ec321632c14eb54ccc7bbd3638d60f602d3e.1520880682.git.jan.kundrat@cesnet.cz>
+Message-ID: <87zi2gjn1o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+>>>>> "Jan" == Jan Kundr?t <jan.kundrat@cesnet.cz> writes:
 
- > Peter,
- > On 30 March 2018 at 22:12, Peter Korsgaard <peter@korsgaard.com> wrote:
- >> commit: https://git.buildroot.net/buildroot/commit/?id=444201fd1c286f722cbd1182a17bc090d8532222
- >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
- >> 
- >> See https://nodejs.org/en/blog/release/v8.10.0/
- >> 
- >> Signed-off-by: Martin Bark <martin@barkynet.com>
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> (cherry picked from commit df33aae5f59eaaf40e800acdfefc83e57216ffe8)
+ > The host shared libraries produced by CMake were missing a proper
+ > DT_RPATH. That became a problem because the DT_RPATH handling is not
+ > transitive by design.
 
- > c-ares, libhttpparser and libuv are bundled with nodejs but we don't
- > use them, we use the 3 libraries instead. So you also need to cherry
- > pick the other 3 patches for onto 2018.02.x so these libraries are up
- > to date too.
+ > Consider the following scenario:
 
-Ok. I wasn't sure as the patch bumping nodejs came before these other
-version bumps, but I've added them all now.
+ > - pkg-a provides a library (`liba`) which links to `libpcre`
+ > - pkg-b provides a binary (`foo`) and a shared library (`libb`) which is
+ > needed by that binary
+ > - `libb` links to `liba`
+ > - pkg-a and pkg-b are both built by CMake
+
+ > In this scenario, `foo` is correctly marked with DT_RPATH pointing to
+ > host/lib/, but that path is not used when (recursively) resolving PCRE's
+ > symbols in `liba`. When attempting to run the `foo` binary, the linker
+ > correctly finds both `liba` and `libb`, but it cannot find the
+ > libpcre.so as built by Buildroot for host.
+
+ > Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+
+Committed to 2018.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
