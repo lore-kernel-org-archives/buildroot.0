@@ -1,37 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 16:44:23 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] powerpc-utils: Update URL
- to new upstream
-Message-ID: <20180406165913.4A24183B4E@busybox.osuosl.org>
+Date: Fri, 6 Apr 2018 16:42:50 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: pass
+ PARALLEL_JOBS to NINJA_OPTS
+Message-ID: <20180406165913.2712686821@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e63590fe2e36816e947fee781b99aa6ffba7787
+commit: https://git.buildroot.net/buildroot/commit/?id=1c83518cd65de98baed5c4733b93f876df0a34ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-powerpc-utils changed upstream git repositories again.
+Ninja understands the `-j` option which defines how many jobs are
+run in parallel.
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1b383e4bf4151b9232b2e66f0d6ae822546576a5)
+(cherry picked from commit f7479b538a3e1548172ba256001ebd96f1e7076c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/powerpc-utils/Config.in | 2 +-
+ docs/manual/adding-packages-meson.txt | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-index b0ca84789e..d04d81c08a 100644
---- a/package/powerpc-utils/Config.in
-+++ b/package/powerpc-utils/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_POWERPC_UTILS
- 	help
- 	  System utilities for PowerPC machines.
- 
--	  https://github.com/nfont/powerpc-utils
-+	  https://github.com/ibm-power-utilities/powerpc-utils.git
- 
- if BR2_PACKAGE_POWERPC_UTILS
- 
+diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
+index 65a0f6a962..f3b4b30e48 100644
+--- a/docs/manual/adding-packages-meson.txt
++++ b/docs/manual/adding-packages-meson.txt
+@@ -35,7 +35,7 @@ package. Let's start with an example:
+ 18: 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 19: 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
+ 20:
+-21: FOO_NINJA_OPTS = $(if $(VERBOSE),-v)
++21: FOO_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+ 22:
+ 23: ifeq ($(BR2_PACKAGE_BAZ),y)
+ 24: FOO_CONF_OPTS += -Dbaz
