@@ -1,45 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Apr 2018 18:53:17 +0200
-Subject: [Buildroot] [PATCH] pkg-virtual.mk: explicitly set
- <pkg>_VERSION / _SOURCE for robustness
-In-Reply-To: <20180312223603.21788-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 12 Mar 2018 23:36:03 +0100")
-References: <20180312223603.21788-1-peter@korsgaard.com>
-Message-ID: <87in94jmyq.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Apr 2018 18:53:29 +0200
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.59.0
+In-Reply-To: <7128741177a05a7861260441801d38311867fe0f.1521137179.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 15 Mar 2018 20:06:19 +0200")
+References: <7128741177a05a7861260441801d38311867fe0f.1521137179.git.baruch@tkos.co.il>
+Message-ID: <87efjsjmye.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Recently a build failure was reported which was traced back to to the fact
- > that the user had a TOOLCHAIN_VERSION environment variable set which leads
- > to a strange looking error message:
+ > CVE-2018-1000120: curl could be fooled into writing a zero byte out of
+ > bounds when curl is told to work on an FTP URL with the setting to only
+ > issue a single CWD command, if the directory part of the URL contains a
+ > "%00" sequence.
 
- > toolchain/toolchain/toolchain.mk:40: *** TOOLCHAIN_SITE cannot be empty when
- > TOOLCHAIN_SOURCE is not.  Stop.
+ > https://curl.haxx.se/docs/adv_2018-9cd6.html
 
- > Environment variables automatically gets converted to make variables by GNU
- > make - E.G. from the manual
- > (https://www.gnu.org/software/make/manual/html_node/Environment.html):
+ > CVE-2018-1000121: curl might dereference a near-NULL address when
+ > getting an LDAP URL.
 
- > Variables in make can come from the environment in which make is run.  Every
- > environment variable that make sees when it starts up is transformed into a
- > make variable with the same name and value
+ > https://curl.haxx.se/docs/adv_2018-97a2.html
 
- > So we end up in make with TOOLCHAIN_VERSION set to the value of the
- > environment variable.  As virtual packages do not have a version, there is
- > no explicit TOOLCHAIN_VERSION = ..  line in toolchain.mk overriding this
- > value, and the logic in package/pkg-generic.mk sets a default value for
- > TOOLCHAIN_SOURCE when TOOLCHAIN_VERSION is set, and finally errors out as
- > TOOLCHAIN_SITE isn't set.
+ > CVE-2018-1000122: When asked to transfer an RTSP URL, curl could
+ > calculate a wrong data length to copy from the read buffer.
 
- > As a workaround, explicitly set <pkg>_VERSION and <pkg>_SOURCE to the empty
- > string in the virtual package infrastructure.
+ > https://curl.haxx.se/docs/adv_2018-b047.html
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x, thanks.
 
