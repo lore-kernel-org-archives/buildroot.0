@@ -1,7 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  7 Apr 2018 20:19:49 +0200
-Subject: [Buildroot] [PATCH v1 1/3] zstd: enable host/taget libzstd support
-Message-ID: <20180407181951.22037-1-ps.report@gmx.net>
+Date: Sat,  7 Apr 2018 20:19:51 +0200
+Subject: [Buildroot] [PATCH v1 3/3] fs/squashfs: add zstd support
+In-Reply-To: <20180407181951.22037-1-ps.report@gmx.net>
+References: <20180407181951.22037-1-ps.report@gmx.net>
+Message-ID: <20180407181951.22037-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,54 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/zstd/zstd.mk | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ fs/squashfs/Config.in   | 3 +++
+ fs/squashfs/squashfs.mk | 2 ++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index c0fa88026c..0c489014be 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -6,6 +6,7 @@
+diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+index ca9ddb2218..dde2097cb7 100644
+--- a/fs/squashfs/Config.in
++++ b/fs/squashfs/Config.in
+@@ -27,5 +27,8 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_LZO
+ config BR2_TARGET_ROOTFS_SQUASHFS4_XZ
+ 	bool "xz"
  
- ZSTD_VERSION = v1.3.3
- ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
-+ZSTD_INSTALL_STAGING = YES
- ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
- ZSTD_LICENSE_FILES = LICENSE COPYING
- 
-@@ -36,14 +37,32 @@ else
- ZSTD_OPTS += HAVE_LZ4=0
++config BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
++	bool "zstd"
++
+ endchoice
  endif
- 
-+define HOST_ZSTD_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		-C $(@D) lib
-+endef
-+
- define ZSTD_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
--		-C $(@D) zstd
-+		-C $(@D) lib zstd
-+endef
-+
-+define HOST_ZSTD_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
-+endef
-+
-+define ZSTD_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib install
- endef
- 
- define ZSTD_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
- 		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
-+		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib install
- endef
- 
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index 51abd5d7d0..34ab048603 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -16,6 +16,8 @@ else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
+ ROOTFS_SQUASHFS_ARGS += -comp lzma
+ else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_XZ),y)
+ ROOTFS_SQUASHFS_ARGS += -comp xz
++else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD),y)
++ROOTFS_SQUASHFS_ARGS += -comp zstd
+ else
+ ROOTFS_SQUASHFS_ARGS += -comp gzip
+ endif
 -- 
 2.16.3
