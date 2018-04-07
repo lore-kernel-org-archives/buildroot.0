@@ -1,23 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Apr 2018 17:41:45 +0200
-Subject: [Buildroot] [git commit] opus-tools: add hash for license file
-In-Reply-To: <20180330194951.7E3DB83EF3@busybox.osuosl.org> (Peter Korsgaard's
- message of "Fri, 30 Mar 2018 21:47:38 +0200")
-References: <20180330194951.7E3DB83EF3@busybox.osuosl.org>
-Message-ID: <87woxjdnwm.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Apr 2018 17:42:01 +0200
+Subject: [Buildroot] [PATCH] zstd: fix legal info
+In-Reply-To: <1522438328-7638-1-git-send-email-rahulbedarkar89@gmail.com>
+ (Rahul Bedarkar's message of "Sat, 31 Mar 2018 01:02:08 +0530")
+References: <1522438328-7638-1-git-send-email-rahulbedarkar89@gmail.com>
+Message-ID: <87sh87dnw6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Rahul" == Rahul Bedarkar <rahulbedarkar89@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=5ccd6958d54d194a623f23debeefce15c6aaccc7
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > zstd is dual licensed under BSD-3-Clause or GPL-2.0 as per README.md
+ > and source files license header.
 
+ > Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
  > Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x, thanks.
 
