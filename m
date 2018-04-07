@@ -1,35 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Apr 2018 17:38:53 +0200
-Subject: [Buildroot] [PATCH] busybox: disable PAM in the config if
- linux-pam is not selected
-In-Reply-To: <20180326120006.24104-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Mon, 26 Mar 2018 14:00:06 +0200")
-References: <20180326120006.24104-1-arnout@mind.be>
-Message-ID: <87zi2ff2lu.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Apr 2018 17:39:14 +0200
+Subject: [Buildroot] [PATCH] systemd: do not use host system-uid/gid
+ ranges
+In-Reply-To: <20180308142509.26795-1-anssi.hannula@bitwise.fi> (Anssi
+ Hannula's message of "Thu, 8 Mar 2018 16:25:09 +0200")
+References: <20180308142509.26795-1-anssi.hannula@bitwise.fi>
+Message-ID: <87vad3f2l9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Anssi" == Anssi Hannula <anssi.hannula@bitwise.fi> writes:
 
- > Currently there is only logic to enable PAM when linux-pam is selected.
- > However, busybox will fail to build with PAM enabled if the linux-pam
- > package has not been built before. So we should forcibly disable PAM in
- > busybox in that case.
+ > systemd meson.build uses values from host /etc/login.defs if
+ > system-uid-max and system-gid-max build options are not explicitly
+ > specified.
 
- > Normally this is not an issue since our default busybox config doesn't
- > have PAM enabled. However, if you enable linux-pam, then save the
- > busybox config to a custom configuration file, then disable linux-pam
- > again, and then do a "make clean; make", the build will fail. A more
- > practical situation where this can occur is when the same custom
- > busybox config is used in a Buildroot config with and without
- > linux-pam.
+ > Avoid that by setting system-uid-max and system-gid-max to 999 which is
+ > the systemd default if SYSTEM_UID_MAX and SYSTEM_GID_MAX are not set in
+ > /etc/login.defs.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- > Resend, patchwork missed the first send.
+ > Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
 
 Committed to 2018.02.x, thanks.
 
