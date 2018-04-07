@@ -1,45 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  7 Apr 2018 23:26:14 +0200
-Subject: [Buildroot] [PATCH] download/git: fix trasnform-name
-Message-ID: <20180407212614.15639-1-yann.morin.1998@free.fr>
+Date: Sat, 7 Apr 2018 23:27:40 +0200
+Subject: [Buildroot] [RFC PATCH] download/git: fix basename for files
+ inside tarballs
+In-Reply-To: <5ac6d9ad67156_74562ac455ee4c30280aa@ultri4.mail>
+References: <87zi2imagg.fsf@dell.be.48ers.dk>
+ <5ac6d9ad67156_74562ac455ee4c30280aa@ultri4.mail>
+Message-ID: <20180407212740.GE2341@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a package contains a relative symlink which first component is '..'
-(thus pointing one directory higher), for example package 'meh' contains
-this symlink:
+Ricardo, All,
 
-    foo/bar -> ../buz
+On 2018-04-05 23:21 -0300, Ricardo Martincoski spake thusly:
+[--SNIP--]
+> Inspecting the tarball, what makes linux-firmware uncommon is that it has
+> symlinks to upper directories.
+> Based on my tests, it seems '--transform=' operates on the symlink destination
+> as well. See at the end:
+> ..."bin -> linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2./mrvl/"...
 
-then it would be stored as 'meh-version./buz' because of the
-transform-name pattern replacement.
+I sent a simple fix:
 
-Fix it to only match the leading './'.
+    https://patchwork.ozlabs.org/patch/895967/
 
-Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Care to give it a spin? ;-)
 
-diff --git a/support/download/git b/support/download/git
-index f07195b0d1..787b6bcca0 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -111,7 +111,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
- 
- # Create GNU-format tarballs, since that's the format of the tarballs on
- # sources.buildroot.org and used in the *.hash files
--tar cf - --transform="s/^\./${basename}/" \
-+tar cf - --transform="s/^\.\//${basename}\//" \
- 	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-          -T "${output}.list.sorted" >"${output}.tar"
- gzip -6 -n <"${output}.tar" >"${output}"
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
