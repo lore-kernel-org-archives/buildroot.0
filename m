@@ -1,37 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Apr 2018 17:42:21 +0200
-Subject: [Buildroot] [git commit] support/config-fragments/autobuild:
- fix SSP in br-nios2-glibc
-In-Reply-To: <20180331064928.C784F83EC4@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 31 Mar 2018 08:49:14 +0200")
-References: <20180331064928.C784F83EC4@busybox.osuosl.org>
-Message-ID: <87o9ivdnvm.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Apr 2018 18:22:34 +0200
+Subject: [Buildroot] [PATCH 1/1] lxc: fix build with static libcap and
+ shared gnutls
+Message-ID: <20180407162234.12848-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Fixes:
+ - http://autobuild.buildroot.net/results/b655d6853c25a195df28d91512b3ffb6c654fc90
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=0e4de0f2db5f7a252d4b8a4cac752fac9ca2deb3
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...tion-with-static-libcap-and-shared-gnutls.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
 
- > Commit c8680956819fae8776d7bd6d1f0e67a7b6436672 ("toolchain: fix
- > detection of SSP support") fixed the SSP check so that it does the
- > correct thing for nios2 toolchains. While this commit fixed the
- > description of the Sourcery NIOSII toolchain, it didn't fix the
- > description for the autobuilders of the br-nios2-glibc toolchain,
- > causing some build failures. This commit adjusts br-nios2-glibc.config
- > to indicate that the toolchain doesn't have SSP support.
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/6c44e328b7bffd8474d29d5bdf1ea109ec15f4ad/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.02.x, thanks.
-
+diff --git a/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch b/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
+new file mode 100644
+index 0000000000..9a0dcbe55a
+--- /dev/null
++++ b/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
+@@ -0,0 +1,72 @@
++From 49bc916b1daa79cffe38fae32059bcdd985c8c8e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 7 Apr 2018 15:48:46 +0200
++Subject: [PATCH] Fix compilation with static libcap and shared gnutls
++
++Commit c06ed219c47098f34485d408410b6ecc94a40877 has broken
++compilation with a static libcap and a shared gnutls.
++This results in a build failure on init_lxc_static if gnutls is
++a shared library as init_lxc_static is built with -all-static option
++(see src/lxc/Makefile.am) and AC_CHECK_LIB adds gnutls to LIBS.
++
++This commit fix the issue by removing default behavior of AC_CHECK_LIB
++and handling manually GNUTLS_LIBS and HAVE_LIBGNUTLS
++
++Fixes:
++ - http://autobuild.buildroot.net/results/b655d6853c25a195df28d91512b3ffb6c654fc90
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac        | 2 +-
++ src/lxc/Makefile.am | 8 ++++++--
++ 2 files changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 50c99836..2467bb54 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -263,7 +263,7 @@ AM_CONDITIONAL([ENABLE_GNUTLS], [test "x$enable_gnutls" = "xyes"])
++ 
++ AM_COND_IF([ENABLE_GNUTLS],
++ 	[AC_CHECK_HEADER([gnutls/gnutls.h],[],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
++-	AC_CHECK_LIB([gnutls], [gnutls_hash_fast],[],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
+++	AC_CHECK_LIB([gnutls], [gnutls_hash_fast],[true],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
++ 	AC_SUBST([GNUTLS_LIBS], [-lgnutls])])
++ 
++ # SELinux
++diff --git a/src/lxc/Makefile.am b/src/lxc/Makefile.am
++index c8d76836..0662d83d 100644
++--- a/src/lxc/Makefile.am
+++++ b/src/lxc/Makefile.am
++@@ -175,6 +175,10 @@ if ENABLE_APPARMOR
++ AM_CFLAGS += -DHAVE_APPARMOR
++ endif
++ 
+++if ENABLE_GNUTLS
+++AM_CFLAGS += -DHAVE_LIBGNUTLS
+++endif
+++
++ if ENABLE_SELINUX
++ AM_CFLAGS += -DHAVE_SELINUX
++ endif
++@@ -196,7 +200,7 @@ liblxc_la_LDFLAGS = \
++ 	-Wl,-soname,liblxc.so.$(firstword $(subst ., , at LXC_ABI@)) \
++ 	-version-info @LXC_ABI_MAJOR@
++ 
++-liblxc_la_LIBADD = $(CAP_LIBS) $(SELINUX_LIBS) $(SECCOMP_LIBS)
+++liblxc_la_LIBADD = $(CAP_LIBS) $(GNUTLS_LIBS) $(SELINUX_LIBS) $(SECCOMP_LIBS)
++ 
++ bin_SCRIPTS=
++ 
++@@ -243,7 +247,7 @@ AM_LDFLAGS = -Wl,-E
++ if ENABLE_RPATH
++ AM_LDFLAGS += -Wl,-rpath -Wl,$(libdir)
++ endif
++-LDADD=liblxc.la @CAP_LIBS@ @SELINUX_LIBS@ @SECCOMP_LIBS@
+++LDADD=liblxc.la @CAP_LIBS@ @GNUTLS_LIBS@ @SELINUX_LIBS@ @SECCOMP_LIBS@
++ 
++ if ENABLE_TOOLS
++ lxc_attach_SOURCES = tools/lxc_attach.c tools/arguments.c tools/tool_utils.c
++-- 
++2.14.1
++
 -- 
-Bye, Peter Korsgaard
+2.14.1
