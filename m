@@ -1,29 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  7 Apr 2018 14:04:21 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for libglib2
-Message-ID: <20180407120421.17508-1-fontaine.fabrice@gmail.com>
+From: Chris Brandt <chris.brandt@renesas.com>
+Date: Sat,  7 Apr 2018 07:06:59 -0500
+Subject: [Buildroot] [PATCH v2 0/2] cramfs: new maintainer,
+ repo and XIP feature
+Message-ID: <20180407120701.89259-1-chris.brandt@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+As of linux-4.15, cramfs is maintained again and the source
+repository has moved. Additionaly, there is a new XIP option.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 10b20c259b..b797087191 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -669,6 +669,7 @@ F:	package/hiredis/
- F:	package/i2pd/
- F:	package/igd2-for-linux/
- F:	package/libcdio-paranoia/
-+F:	package/libglib2/
- F:	package/libmpdclient/
- F:	package/libupnp/
- F:	package/libupnp18/
+v2:
+ * Update hash to include new endian support
+
+Chris Brandt (2):
+  cramfs: change to new site location
+  cramfs: add xip option
+
+ fs/cramfs/Config.in                         |  19 +-
+ fs/cramfs/cramfs.mk                         |  12 +-
+ package/cramfs/0001-endian.patch            | 288 ----------------------------
+ package/cramfs/0002-cygwin_IO.patch         |  15 --
+ package/cramfs/0003-fix-missing-types.patch |  17 --
+ package/cramfs/Config.in                    |   2 +-
+ package/cramfs/Config.in.host               |   2 +-
+ package/cramfs/cramfs.hash                  |   2 +-
+ package/cramfs/cramfs.mk                    |   4 +-
+ 9 files changed, 33 insertions(+), 328 deletions(-)
+ delete mode 100644 package/cramfs/0001-endian.patch
+ delete mode 100644 package/cramfs/0002-cygwin_IO.patch
+ delete mode 100644 package/cramfs/0003-fix-missing-types.patch
+
 -- 
-2.14.1
+2.16.1
