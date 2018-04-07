@@ -1,42 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  7 Apr 2018 13:41:56 +0200
-Subject: [Buildroot] [PATCH 1/1] libmms: bump to version 0.6.4
-Message-ID: <20180407114156.16120-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Apr 2018 13:43:10 +0200
+Subject: [Buildroot] [PATCH 09/10] libglib2: bump to version 2.56.1
+In-Reply-To: <20180407113838.13220-1-fontaine.fabrice@gmail.com>
+References: <20180407113838.13220-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180407134310.540aba8e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add license hash
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmms/libmms.hash | 3 ++-
- package/libmms/libmms.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+On Sat,  7 Apr 2018 13:38:38 +0200, Fabrice Fontaine wrote:
+> Add myself to DEVELOPERS
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/58d98c26ca0214e195d5de193b82445a856b9b7e (see https://github.com/GNOME/glib/commit/e2c16df4b5e6d31b6513bebb4a2bc1c5075fff47#diff-cd235eb1f377a526e7e78471ff2d4d6a)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/libmms/libmms.hash b/package/libmms/libmms.hash
-index 69865f7c3e..f424e3afbb 100644
---- a/package/libmms/libmms.hash
-+++ b/package/libmms/libmms.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256  01931b62172d7d7050fc9ef9b1b64162f3b6e9f6cc4415170192a32a0b7ea432  libmms-0.6.2.tar.gz
-+sha256  3c05e05aebcbfcc044d9e8c2d4646cd8359be39a3f0ba8ce4e72a9094bee704f  libmms-0.6.4.tar.gz
-+sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING.LIB
-diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
-index dd0b1df538..236fe1376e 100644
---- a/package/libmms/libmms.mk
-+++ b/package/libmms/libmms.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMMS_VERSION = 0.6.2
-+LIBMMS_VERSION = 0.6.4
- LIBMMS_SITE = http://downloads.sourceforge.net/project/libmms/libmms/$(LIBMMS_VERSION)
- LIBMMS_INSTALL_STAGING = YES
- LIBMMS_DEPENDENCIES = host-pkgconf libglib2
+Thanks for this patch! However, I just pushed a commit that backports
+the fix, I hadn't noticed a 2.56.1 had been released with it.
+
+Could you rebase on top of the latest master ? Also, having the
+DEVELOPERS change has part of a separate commit would be better.
+
+Finally, your patch is labeled PATCH 09/10, but we haven't seen any of
+the other 9 patches in the series. Is this expected ?
+
+Thanks!
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
