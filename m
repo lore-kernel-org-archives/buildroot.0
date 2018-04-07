@@ -1,60 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  7 Apr 2018 13:38:38 +0200
-Subject: [Buildroot] [PATCH 09/10] libglib2: bump to version 2.56.1
-Message-ID: <20180407113838.13220-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Apr 2018 13:40:54 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.56.0
+In-Reply-To: <20180406222253.308a2ffd@windsurf.home>
+References: <20180314110224.32587-1-aduskett@gmail.com>
+ <20180406222253.308a2ffd@windsurf.home>
+Message-ID: <20180407134054.2ccf1bcd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add myself to DEVELOPERS
+Hello Adam,
 
-Fixes:
- - http://autobuild.buildroot.net/results/58d98c26ca0214e195d5de193b82445a856b9b7e (see https://github.com/GNOME/glib/commit/e2c16df4b5e6d31b6513bebb4a2bc1c5075fff47#diff-cd235eb1f377a526e7e78471ff2d4d6a)
+On Fri, 6 Apr 2018 22:22:53 +0200, Thomas Petazzoni wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- DEVELOPERS                     | 1 +
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+> On Wed, 14 Mar 2018 07:02:24 -0400, Adam Duskett wrote:
+> > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> > ---
+> >  package/libglib2/libglib2.hash | 4 ++--
+> >  package/libglib2/libglib2.mk   | 4 ++--
+> >  2 files changed, 4 insertions(+), 4 deletions(-)  
+> 
+> Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 10b20c259b..b797087191 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -669,6 +669,7 @@ F:	package/hiredis/
- F:	package/i2pd/
- F:	package/igd2-for-linux/
- F:	package/libcdio-paranoia/
-+F:	package/libglib2/
- F:	package/libmpdclient/
- F:	package/libupnp/
- F:	package/libupnp18/
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index b957bf4b10..7ce031aa89 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.56/glib-2.56.0.sha256sum
--sha256  ecef6e17e97b8d9150d0e8a4b3edee1ac37331213b8a2a87a083deea408a0fc7  glib-2.56.0.tar.xz
-+# https://download.gnome.org/sources/glib/2.56/glib-2.56.1.sha256sum
-+sha256  40ef3f44f2c651c7a31aedee44259809b6f03d3d20be44545cd7d177221c0b8d  glib-2.56.1.tar.xz
- # License files, locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 41ec7ee377..a32a9bab52 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGLIB2_VERSION_MAJOR = 2.56
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.0+
+So I have to say I am not happy. At all.
+
+Once again, you have contributed a package update without even testing
+it with what is the default Buildroot situation: a uClibc toolchain.
+This has turned the autobuilders all red since I pushed your commit.
+
+You asked on IRC the other day why your libglib2 update hadn't been
+applied. Now you know why: because you regularly break the build in a
+way that shows that the testing has clearly been insufficient.
+
+I don't require anyone to test all the reverse dependencies of a
+package being updated, especially for a package such as libglib2 that
+has gazillions of reverse dependencies. But here you didn't even test
+building libglib2 itself with a regular uClibc toolchain. I'm not
+talking about a weird case, on a weird CPU architecture, but I'm
+talking about the very basic case of building libglib2 with uClibc.
+
+So for me, things are clear: from now, I will no longer merge any
+new package or version bump from you if it doesn't come with a
+test-pkg output that shows it has been tested with the 6 "main"
+configurations that we test by default in test-pkg.
+
+In the mean time, I have fixed the libglib2 by backporting an upstream
+commit:
+
+  https://git.buildroot.org/buildroot/commit/?id=bd90def0ded4b71dbc40b78b8b4dacba32687885
+
+Best regards,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
