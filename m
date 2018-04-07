@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Apr 2018 09:05:26 +0200
-Subject: [Buildroot] [git commit] configs/at91sam9g20dfc: add ubifs target
- filesystem
-Message-ID: <20180407070541.C880881007@busybox.osuosl.org>
+Date: Sat, 7 Apr 2018 09:05:32 +0200
+Subject: [Buildroot] [git commit] atmel: add support for at91sam9g20ek to
+ flasher.sh
+Message-ID: <20180407070541.D76ED81007@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c15873e020dd48ea71f55ac36a0e6639add223b5
+commit: https://git.buildroot.net/buildroot/commit/?id=b7c885ea3ff4883a7e33d4604b2d057814d0ca32
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a required component to complete the configuration. It also makes sense
-to add ubifs so that this board can be flashed with the board/atmel/flasher.sh
-script.
+Adds support for the at91sam9g20-ek board to the flasher.sh script.
 
+Signed-off-by: Prasanthi Chellakumar <prasanthi.chellakumar@microchip.com>
 Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/at91sam9g20dfc_defconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
+ board/atmel/flasher.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
-index 0824868f1c..7511c96fe9 100644
---- a/configs/at91sam9g20dfc_defconfig
-+++ b/configs/at91sam9g20dfc_defconfig
-@@ -15,6 +15,13 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9g20ek"
+diff --git a/board/atmel/flasher.sh b/board/atmel/flasher.sh
+index 8cae6af906..a7409ce880 100755
+--- a/board/atmel/flasher.sh
++++ b/board/atmel/flasher.sh
+@@ -20,6 +20,10 @@ family_at91sam9g15ek="at91sam9x5ek"
+ mach_at91sam9g15ek="at91sam9g15-ek"
+ dtb_at91sam9g15ek="at91sam9g15ek.dtb"
  
- # Filesystem
- BR2_TARGET_ROOTFS_TAR=y
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x20000
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=512
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f800
-+BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x800
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
- 
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
++family_at91sam9g20ek="at91sam9g20ek"
++mach_at91sam9g20ek="at91sam9g20-ek"
++dtb_at91sam9g20ek="at91sam9g20ek.dtb"
++
+ family_at91sam9g25ek="at91sam9x5ek"
+ mach_at91sam9g25ek="at91sam9g25-ek"
+ dtb_at91sam9g25ek="at91sam9g25ek.dtb"
+@@ -98,6 +102,7 @@ Available boards:
+   at91sam9g45m10ek
+   at91sam9rlek
+   at91sam9g15ek
++  at91sam9g20ek
+   at91sam9g25ek
+   at91sam9x25ek
+   at91sam9g35ek
