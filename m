@@ -1,46 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Apr 2018 19:50:03 +0200
-Subject: [Buildroot] [PATCH] support/check-uniq-files: support weird
- locales and filenames
-In-Reply-To: <20180331125250.19374-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sat, 31 Mar 2018 14:52:50 +0200")
-References: <20180331125250.19374-1-yann.morin.1998@free.fr>
-Message-ID: <87bmeuewj8.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Apr 2018 19:50:44 +0200
+Subject: [Buildroot] [PATCH] nodejs: security bump to version 8.11.1
+In-Reply-To: <20180331061155.22458-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 31 Mar 2018 08:11:55 +0200")
+References: <20180331061155.22458-1-peter@korsgaard.com>
+Message-ID: <877epiewi3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Currently, when a filename contains characters not representable in the
- > user's locale, we fail hard, especially when the host python is python3.
+ > Fixes the following security issues:
+ > - Fix for inspector DNS rebinding vulnerability (CVE-2018-7160): A malicious
+ >   website could use a DNS rebinding attack to trick a web browser to bypass
+ >   same-origin-policy checks and allow HTTP connections to localhost or to
+ >   hosts on the local network, potentially to an open inspector port as a
+ >   debugger, therefore gaining full code execution access.  The inspector now
+ >   only allows connections that have a browser Host value of localhost or
+ >   localhost6.
 
- > This is because python2 and python3 handle encoding/decoding strings
- > differently, with python3 presumable doing the right thing, but it
- > breaks on some systems, while python2 presumable does the wrong thing,
- > but it works everywhere. (Just joking, obviously...)
+ > - Fix for 'path' module regular expression denial of service
+ >   (CVE-2018-7158): A regular expression used for parsing POSIX paths could
+ >   be used to cause a denial of service if an attacker were able to have a
+ >   specially crafted path string passed through one of the impacted 'path'
+ >   module functions.
 
- > Part of the issue being that the csv reader in python2 is broken with
- > UTF8.
+ > - Reject spaces in HTTP Content-Length header values (CVE-2018-7159): The
+ >   Node.js HTTP parser allowed for spaces inside Content-Length header
+ >   values.  Such values now lead to rejected connections in the same way as
+ >   non-numeric values.
 
- > We fix the issue by ditching the csv reader, and simply read the file in
- > binary mode, manually partitionning the lines on the first comma.
+ > While we are at it, also add a hash for the license file.
 
- > Then, we use the binary-encoded (really, un-encoded) package names and
- > filenames as values and keys, respectively.
-
- > Finally, for each filename of package we need to print, we try to decode
- > them with the default s for the usser settings, but catch any decoding
- > exception and fallback to dumping the raw, binary values. in that case.
-
- > Thanks a lot to Arnout for the live help doing this patch. :-)
-
- > Reported-by: Jaap Crezee <jaap@jcz.nl>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
- > Cc: Jaap Crezee <jaap@jcz.nl>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x, thanks.
 
