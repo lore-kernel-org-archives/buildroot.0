@@ -1,36 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Apr 2018 13:46:10 +0200
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.2.5
-In-Reply-To: <20180407072909.25962-1-asafka7@gmail.com>
-References: <20180407072909.25962-1-asafka7@gmail.com>
-Message-ID: <20180407134610.559ddfb2@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Apr 2018 13:52:30 +0200
+Subject: [Buildroot] [PATCH 1/1] mpd: add mms support
+Message-ID: <20180407115230.22559-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mpd/Config.in | 6 ++++++
+ package/mpd/mpd.mk    | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-On Sat,  7 Apr 2018 10:29:09 +0300, Asaf Kahlon wrote:
-> Update the ZEROMQ_SITE with the active repository.
-> Remove the two patches because they were both applied on zeromq.
-> As a result, the ZEROMQ_AUTORECONF was removed.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  ...e.m4-make-kernel-specific-flags-cacheable.patch | 199 ---------------------
->  ...q-Fix-pkg-config-files-for-static-linking.patch |  29 ---
->  package/zeromq/zeromq.hash                         |   9 +-
->  package/zeromq/zeromq.mk                           |   6 +-
->  4 files changed, 7 insertions(+), 236 deletions(-)
->  delete mode 100644 package/zeromq/0001-acinclude.m4-make-kernel-specific-flags-cacheable.patch
->  delete mode 100644 package/zeromq/0002-libzmq-Fix-pkg-config-files-for-static-linking.patch
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 6c7468e173..831e4ab0d7 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -180,6 +180,12 @@ config BR2_PACKAGE_MPD_CURL
+ 	help
+ 	  Enable curl streaming (http) support.
+ 
++config BR2_PACKAGE_MPD_LIBMMS
++	bool "mms"
++	select BR2_PACKAGE_LIBMMS
++	help
++	  Enable MMS support.
++
+ config BR2_PACKAGE_MPD_LIBNFS
+ 	bool "nfs"
+ 	# libnfs -> libtirpc
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 639c8c1981..64471d4da5 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -120,6 +120,13 @@ else
+ MPD_CONF_OPTS += --disable-libmpdclient
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_LIBMMS),y)
++MPD_DEPENDENCIES += libmms
++MPD_CONF_OPTS += --enable-mms
++else
++MPD_CONF_OPTS += --disable-mms
++endif
++
+ ifeq ($(BR2_PACKAGE_MPD_LIBNFS),y)
+ MPD_DEPENDENCIES += libnfs
+ MPD_CONF_OPTS += --enable-nfs
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
