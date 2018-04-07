@@ -1,37 +1,27 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 7 Apr 2018 08:04:43 -0500
-Subject: [Buildroot] [PATCH v2 1/2] cramfs: change to new site location
-In-Reply-To: <20180407120701.89259-2-chris.brandt@renesas.com>
-References: <20180407120701.89259-1-chris.brandt@renesas.com>
- <20180407120701.89259-2-chris.brandt@renesas.com>
-Message-ID: <CANQCQpaeUmq6S44HK4T=Rnosq4SKKb44k-ASVqgeT+KDwdHJKQ@mail.gmail.com>
+Date: Sat, 7 Apr 2018 08:08:45 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-04-06
+In-Reply-To: <20180407060014.442812075D@mail.bootlin.com>
+References: <20180407060014.442812075D@mail.bootlin.com>
+Message-ID: <CANQCQpYgpF5c1KQMjZfa3mkcoX05nx7ZtttvErPB+Z78Mr=S2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris,
+Baruch / All,
 
-On Sat, Apr 7, 2018 at 7:07 AM, Chris Brandt <chris.brandt@renesas.com> wrote:
-> As of Linux-4.15, cramfs now has a official maintainer again.
-> Additionally, that person is hosting and maintaining a new version of
-> cramfs-tools.
+On Sat, Apr 7, 2018 at 1:00 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
 >
-> Patches 0001-endian.patch and 0003-fix-missing-types.patch are no longer
-> needed because they have been upstreamed.
->
-> However, since patch 0002-cygwin_IO.patch is so old, it is being
-> removed until someone that needs it can reapply and test it. At
-> that point, they should submit the changes to the new cramfs-tools
-> maintainer instead of adding the patches back here.
->
+> Build statistics for 2018-04-06
+> ===============================
 
-You may want to add to this commit message to mention the new upstream
-took an action to add endian support to cramfsck but this patchset
-actually removes support.
+>         i586 |                    picocom-3.1 | NOK | http://autobuild.buildroot.net/results/3d874d1bc838f69b6411d018065015f851caf1e9 |
 
-For v1, I've tested a modified version which matches this patchset on
-a big endian target.
-
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+New musl failure with 3.1 (they added a new custom baud option).  I
+started a issue upstream.
+https://github.com/npat-efault/picocom/issues/100
