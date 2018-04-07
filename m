@@ -1,108 +1,77 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Apr 2018 16:33:58 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: Avoid executing 'git log' each
- time SOURCE_DATE_EPOCH is used
-In-Reply-To: <1523010383-27024-1-git-send-email-james.byrne@origamienergy.com>
-References: <1522239999-15582-1-git-send-email-james.byrne@origamienergy.com>
- <1523010383-27024-1-git-send-email-james.byrne@origamienergy.com>
-Message-ID: <20180407143358.GA2341@scaer>
+Date: Sat, 7 Apr 2018 16:37:55 +0200
+Subject: [Buildroot] [git commit] Config.in: add -Ofast option
+In-Reply-To: <3fafe5de-1c7b-801c-9c14-291ebcfdc264@microchip.com>
+References: <20180326201918.157AC83C5E@busybox.osuosl.org>
+ <3fafe5de-1c7b-801c-9c14-291ebcfdc264@microchip.com>
+Message-ID: <20180407143755.GB2341@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Joshua, All,
 
-On 2018-04-06 11:26 +0100, James Byrne spake thusly:
-> If SOURCE_DATE_EPOCH is not defined it was given a definition that
-> caused 'git log' to be executed each time the variable is referenced,
-> which is not very efficient given that the answer cannot change.
+On 2018-04-05 14:46 -0700, Joshua Henderson spake thusly:
+> On 03/26/2018 01:19 PM, Thomas Petazzoni wrote:
+> > commit: https://git.buildroot.net/buildroot/commit/?id=ed6a7e18af8f4dfddee6e6b144f20dfaf6926315
+> > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > 
+> > -Ofast (introduced in GCC 4.6) It combines the existing optimization level -O3
+> > with options that can affect standards compliance but result in better optimized
+> > code. For example, -Ofast enables -ffast-math.
+> > 
+> > Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > ---
+> >  Config.in           | 11 +++++++++++
+> >  package/Makefile.in |  3 +++
+> >  2 files changed, 14 insertions(+)
+> > 
+> > diff --git a/Config.in b/Config.in
+> > index 0002df5176..037ea2265b 100644
+> > --- a/Config.in
+> > +++ b/Config.in
+> > @@ -527,6 +527,17 @@ config BR2_OPTIMIZE_S
+> >  	  -ftree-vect-loop-version
+> >  	  This is the default.
+> >  
+> > +config BR2_OPTIMIZE_FAST
+> > +	bool "optimize for fast"
+> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+> > +	help
+> > +	  Optimize for fast. Disregard strict standards
+> > +	  compliance. -Ofast enables all -O3 optimizations. It also
+> > +	  enables optimizations that are not valid for all
+> > +	  standard-compliant programs. It turns on -ffast-math and the
+> > +	  Fortran-specific -fstack-arrays, unless -fmax-stack-var-size
+> > +	  is specified, and -fno-protect-parens.
+> > +
+> >  endchoice
+> For reference, I just found an unfriendly package with this option.
+> sqlite3.c: In function ?sqlite3IsNaN?:
+> sqlite3.c:28554:3: error: #error SQLite will not work correctly with the -ffast-math option of GCC.
+>  # error SQLite will not work correctly with the -ffast-math option of GCC.
+>    ^
+> Makefile:541: recipe for target 'sqlite3.lo' failed
 > 
-> This commit moves the definition of BR2_VERSION_GIT_EPOCH after the
-> inclusion of Makefile.in (so that GIT is defined) and makes it a simply
-> expanded variable so that it is only evaluated once.
-> 
-> In addition, the git directory is no longer explicitly set to be TOPDIR
-> meaning that the default date will come from the commit date of whatever
-> repository the code is commited within instead of only doing so if the
-> repository is at the same level as the Buildroot tree.
+> sqlite3 refuses to be built with -ffast-math (a side effect of -Ofast) when it
+> falls back to implementing its own isnan() function.  From what I can see,
+> SQLITE_HAVE_ISNAN can be defined [1] to make it use the system library isnan().
+> But, how to tell if the system library supports a proper isnan() seems to open
+> up a whole new can of worms.  Thoughts?
 
-Since your are saying "in addition", it smells like this should have
-been two seaparate commits:
+Assuming those packages are not too many, I'd say we go to overriding
+the CFLAGS for those, with code something like:
 
-  - one to change the variable to being simply expanded
+    SQLITE_CFLAGS = $(subst -Ofast,-O3,$(TARGET_CFLAGS))
 
-  - a second one to not enforce the git directory.
-
-I am totally OK with the first change, while I am still not convinced by
-the second. As I already said, if Buildroot is used from a higher-level
-buildsystem, it is the responsibility of that higher-level buildsystem
-to appropriately set SOURCE_DATE_EPOCH in the environment.
-
-Also, bear in mind that, even without a higher-level buildsystem, it is
-possible to call Buildroot without actualy being in Buildroot's tree,
-e.g.:
-
-    $ make -C /path/to/buildroot O=/path/to/build-dir
-
-Or even:
-
-    $ cd /path/to/build-dir
-    $ make -C /path/to/buildroot O=$(pwd) foo_defconfig
-    $ make
-
-And then you would lose the git info that is present in the Buildroot
-tree in /path/to/buildroot. I actually use either forms quite a lot,
-especially the second one. In fact, I even never build in the Buildroot
-tree, except when people report it is broken and I need to investigate.
-
-So, I am still opposed to the second change.
+If it turns out that the number of broken packages is too high, then we
+can come up with an alternate solution...
 
 Regards,
 Yann E. MORIN.
-
-> Signed-off-by: James Byrne <james.byrne@origamienergy.com>
-> ---
->  Makefile | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 0724f28..3b846b9 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -247,8 +247,6 @@ export TZ = UTC
->  export LANG = C
->  export LC_ALL = C
->  export GZIP = -n
-> -BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
-> -export SOURCE_DATE_EPOCH ?= $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
->  endif
-> 
->  # To put more focus on warnings, be less verbose as default
-> @@ -504,6 +502,14 @@ include support/dependencies/dependencies.mk
->  include $(sort $(wildcard toolchain/*.mk))
->  include $(sort $(wildcard toolchain/*/*.mk))
-> 
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +# If SOURCE_DATE_EPOCH has not been set then use the commit date, or the last
-> +# release date if the source tree is not within a Git repository.
-> +# See: https://reproducible-builds.org/specs/source-date-epoch/
-> +BR2_VERSION_GIT_EPOCH := $(shell $(GIT) log -1 --format=%at 2> /dev/null)
-> +export SOURCE_DATE_EPOCH ?= $(or $(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
-> +endif
-> +
->  # Include the package override file if one has been provided in the
->  # configuration.
->  PACKAGE_OVERRIDE_FILE = $(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
-> --
-> 2.7.4
-> 
-> The contents of this email and any attachment are confidential to the intended recipient(s). If you are not an intended recipient: (i) do not use, disclose, distribute, copy or publish this email or its contents; (ii) please contact the sender immediately; and (iii) delete this email. Origami Energy Limited (company number 8619644); Origami Storage Limited (company number 10436515) and OSSPV001 Limited (company number 10933403), each registered in England and each with a registered office at: Ashcombe Court, Woolsack Way, Godalming, GU7 1LQ.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
