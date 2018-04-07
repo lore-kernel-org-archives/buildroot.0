@@ -1,52 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Apr 2018 20:08:10 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/openocd: fix
- fallout after no-C++ fixups
-Message-ID: <20180407175150.8276981199@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Apr 2018 19:55:45 +0200
+Subject: [Buildroot] [PATCH 1/1] libcap-ng: bump to version 0.7.9
+Message-ID: <20180407175545.32225-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0787fee6947bcf374464ab1d0d48feda3d0106ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
-
-Commit 4cd1ab158 (core: alternate solution to disable C++) made use of a
-non-existent 'no' binary when C++ is not available in the toolchain.
-
-However, some packages, like jimtcl as bundled in opeocd, really want to
-find the binary that $CXX contains.
-
-Revert openocd to use 'false' instead of 'no'.
-
-Fixes:
-    http://autobuild.buildroot.org/results/cbd/cbd5ab97fb0659968ff628461130627cf1745955/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5966e2dc54dfb19c5fde3a09d72f3abc6125c202)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openocd/openocd.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/libcap-ng/libcap-ng.hash | 2 +-
+ package/libcap-ng/libcap-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 9d2576ceeb..548d8b81a0 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -11,7 +11,12 @@ OPENOCD_LICENSE = GPL-2.0+
- OPENOCD_LICENSE_FILES = COPYING
- # 0002-configure-enable-build-on-uclinux.patch patches configure.ac
- OPENOCD_AUTORECONF = YES
--OPENOCD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+
-+# The bundled jimtcl really wants to find a existing $CXX, so feed it
-+# false when we do not have one.
-+OPENOCD_CONF_ENV = \
-+	$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
-+	CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
+index b433b75063..8058ed9e97 100644
+--- a/package/libcap-ng/libcap-ng.hash
++++ b/package/libcap-ng/libcap-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 c21af997445cd4107a55d386f955c5ea6f6e96ead693e9151277c0ab5f97d05f libcap-ng-0.7.8.tar.gz
++sha256 4a1532bcf3731aade40936f6d6a586ed5a66ca4c7455e1338d1f6c3e09221328 libcap-ng-0.7.9.tar.gz
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index 568f167b48..990c675018 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- OPENOCD_CONF_OPTS = \
- 	--oldincludedir=$(STAGING_DIR)/usr/include \
+-LIBCAP_NG_VERSION = 0.7.8
++LIBCAP_NG_VERSION = 0.7.9
+ LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
+ LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
+-- 
+2.14.1
