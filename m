@@ -1,81 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Apr 2018 13:32:17 +0200
-Subject: [Buildroot] [git commit] libglib2: add upstream patch to fix build
- issue
-Message-ID: <20180407113233.0F2907F88C@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Apr 2018 13:38:38 +0200
+Subject: [Buildroot] [PATCH 09/10] libglib2: bump to version 2.56.1
+Message-ID: <20180407113838.13220-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd90def0ded4b71dbc40b78b8b4dacba32687885
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since the bump of libglib2 to 2.56.0, it fails to build on uClibc with:
-
-gthreadedresolver.c: In function 'do_lookup_records':
-gthreadedresolver.c:875:16: error: 'res' undeclared (first use in this function); did you mean '_res'?
-   res_nclose (&res);
-                ^~~
-                _res
-
-This commit adds an upstream patch that fixes this problem.
+Add myself to DEVELOPERS
 
 Fixes:
+ - http://autobuild.buildroot.net/results/58d98c26ca0214e195d5de193b82445a856b9b7e (see https://github.com/GNOME/glib/commit/e2c16df4b5e6d31b6513bebb4a2bc1c5075fff47#diff-cd235eb1f377a526e7e78471ff2d4d6a)
 
-  http://autobuild.buildroot.net/results/990e19e3500986263f99354215e33214a2e89116/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...solver-Fix-compilation-with-res_nclose-bu.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ DEVELOPERS                     | 1 +
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libglib2/0003-gthreadedresolver-Fix-compilation-with-res_nclose-bu.patch b/package/libglib2/0003-gthreadedresolver-Fix-compilation-with-res_nclose-bu.patch
-new file mode 100644
-index 0000000000..a195b8fda1
---- /dev/null
-+++ b/package/libglib2/0003-gthreadedresolver-Fix-compilation-with-res_nclose-bu.patch
-@@ -0,0 +1,42 @@
-+From fe939d2b704c0b7ea3f0c429528d29441f780fb8 Mon Sep 17 00:00:00 2001
-+From: Sebastian <sebastian_ml@gmx.net>
-+Date: Thu, 22 Mar 2018 19:41:00 +0000
-+Subject: [PATCH] gthreadedresolver: Fix compilation with res_nclose() but no
-+ res_nquery()
-+
-+Some very odd systems have the functions to initialise and destroy a
-+struct __res_state, but apparently not to do a DNS query using it. Fix
-+the compilation on those systems.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=794606
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ gio/gthreadedresolver.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/gio/gthreadedresolver.c b/gio/gthreadedresolver.c
-+index fc5c1bb77..e89dc156c 100644
-+--- a/gio/gthreadedresolver.c
-++++ b/gio/gthreadedresolver.c
-+@@ -869,6 +869,8 @@ do_lookup_records (GTask         *task,
-+   records = g_resolver_records_from_res_query (lrd->rrname, rrtype, answer->data, len, herr, &error);
-+   g_byte_array_free (answer, TRUE);
-+ 
-++#ifdef HAVE_RES_NQUERY
-++
-+ #if defined(HAVE_RES_NDESTROY)
-+   res_ndestroy (&res);
-+ #elif defined(HAVE_RES_NCLOSE)
-+@@ -877,6 +879,8 @@ do_lookup_records (GTask         *task,
-+ #error "Your platform has res_ninit() but not res_nclose() or res_ndestroy(). Please file a bug at https://bugzilla.gnome.org/enter_bug.cgi?product=glib"
-+ #endif
-+ 
-++#endif  /* HAVE_RES_NQUERY */
-++
-+ #else
-+ 
-+   DNS_STATUS status;
-+-- 
-+2.14.3
-+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 10b20c259b..b797087191 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -669,6 +669,7 @@ F:	package/hiredis/
+ F:	package/i2pd/
+ F:	package/igd2-for-linux/
+ F:	package/libcdio-paranoia/
++F:	package/libglib2/
+ F:	package/libmpdclient/
+ F:	package/libupnp/
+ F:	package/libupnp18/
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index b957bf4b10..7ce031aa89 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.56/glib-2.56.0.sha256sum
+-sha256  ecef6e17e97b8d9150d0e8a4b3edee1ac37331213b8a2a87a083deea408a0fc7  glib-2.56.0.tar.xz
++# https://download.gnome.org/sources/glib/2.56/glib-2.56.1.sha256sum
++sha256  40ef3f44f2c651c7a31aedee44259809b6f03d3d20be44545cd7d177221c0b8d  glib-2.56.1.tar.xz
+ # License files, locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 41ec7ee377..a32a9bab52 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLIB2_VERSION_MAJOR = 2.56
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.0+
+-- 
+2.14.1
