@@ -1,36 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Apr 2018 19:49:26 +0200
-Subject: [Buildroot] [git commit] package/openocd: fix fallout after
- no-C++ fixups
-In-Reply-To: <20180331072728.BFB9683F19@busybox.osuosl.org> (Peter Korsgaard's
- message of "Sat, 31 Mar 2018 09:26:19 +0200")
-References: <20180331072728.BFB9683F19@busybox.osuosl.org>
-Message-ID: <87fu46ewk9.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Apr 2018 19:50:03 +0200
+Subject: [Buildroot] [PATCH] support/check-uniq-files: support weird
+ locales and filenames
+In-Reply-To: <20180331125250.19374-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 31 Mar 2018 14:52:50 +0200")
+References: <20180331125250.19374-1-yann.morin.1998@free.fr>
+Message-ID: <87bmeuewj8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=5966e2dc54dfb19c5fde3a09d72f3abc6125c202
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Currently, when a filename contains characters not representable in the
+ > user's locale, we fail hard, especially when the host python is python3.
 
- > Commit 4cd1ab158 (core: alternate solution to disable C++) made use of a
- > non-existent 'no' binary when C++ is not available in the toolchain.
+ > This is because python2 and python3 handle encoding/decoding strings
+ > differently, with python3 presumable doing the right thing, but it
+ > breaks on some systems, while python2 presumable does the wrong thing,
+ > but it works everywhere. (Just joking, obviously...)
 
- > However, some packages, like jimtcl as bundled in opeocd, really want to
- > find the binary that $CXX contains.
+ > Part of the issue being that the csv reader in python2 is broken with
+ > UTF8.
 
- > Revert openocd to use 'false' instead of 'no'.
+ > We fix the issue by ditching the csv reader, and simply read the file in
+ > binary mode, manually partitionning the lines on the first comma.
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/cbd/cbd5ab97fb0659968ff628461130627cf1745955/
+ > Then, we use the binary-encoded (really, un-encoded) package names and
+ > filenames as values and keys, respectively.
 
+ > Finally, for each filename of package we need to print, we try to decode
+ > them with the default s for the usser settings, but catch any decoding
+ > exception and fallback to dumping the raw, binary values. in that case.
+
+ > Thanks a lot to Arnout for the live help doing this patch. :-)
+
+ > Reported-by: Jaap Crezee <jaap@jcz.nl>
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Jaap Crezee <jaap@jcz.nl>
 
 Committed to 2018.02.x, thanks.
 
