@@ -1,27 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 7 Apr 2018 08:08:45 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-06
-In-Reply-To: <20180407060014.442812075D@mail.bootlin.com>
-References: <20180407060014.442812075D@mail.bootlin.com>
-Message-ID: <CANQCQpYgpF5c1KQMjZfa3mkcoX05nx7ZtttvErPB+Z78Mr=S2A@mail.gmail.com>
+From: Chris Brandt <chris.brandt@renesas.com>
+Date: Sat,  7 Apr 2018 08:35:41 -0500
+Subject: [Buildroot] [PATCH v3 0/2] cramfs: new maintainer,
+ repo and XIP feature
+Message-ID: <20180407133543.90767-1-chris.brandt@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch / All,
+As of linux-4.15, cramfs is maintained again and the source
+repository has moved. Additionaly, there is a new XIP option.
 
-On Sat, Apr 7, 2018 at 1:00 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> Build statistics for 2018-04-06
-> ===============================
+v3:
+ - Added note about cramfsck not supporting endian swap
+ - Added Reviewed-by
+v2:
+ - Update hash to include new endian support
 
->         i586 |                    picocom-3.1 | NOK | http://autobuild.buildroot.net/results/3d874d1bc838f69b6411d018065015f851caf1e9 |
 
-New musl failure with 3.1 (they added a new custom baud option).  I
-started a issue upstream.
-https://github.com/npat-efault/picocom/issues/100
+Chris Brandt (2):
+  cramfs: change to new site location
+  cramfs: add xip option
+
+ fs/cramfs/Config.in                         |  19 +-
+ fs/cramfs/cramfs.mk                         |  12 +-
+ package/cramfs/0001-endian.patch            | 288 ----------------------------
+ package/cramfs/0002-cygwin_IO.patch         |  15 --
+ package/cramfs/0003-fix-missing-types.patch |  17 --
+ package/cramfs/Config.in                    |   2 +-
+ package/cramfs/Config.in.host               |   2 +-
+ package/cramfs/cramfs.hash                  |   2 +-
+ package/cramfs/cramfs.mk                    |   4 +-
+ 9 files changed, 33 insertions(+), 328 deletions(-)
+ delete mode 100644 package/cramfs/0001-endian.patch
+ delete mode 100644 package/cramfs/0002-cygwin_IO.patch
+ delete mode 100644 package/cramfs/0003-fix-missing-types.patch
+
+-- 
+2.16.1
