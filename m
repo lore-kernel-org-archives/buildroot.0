@@ -1,60 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Apr 2018 13:40:54 +0200
-Subject: [Buildroot] [PATCH 1/1] libglib2: bump to 2.56.0
-In-Reply-To: <20180406222253.308a2ffd@windsurf.home>
-References: <20180314110224.32587-1-aduskett@gmail.com>
- <20180406222253.308a2ffd@windsurf.home>
-Message-ID: <20180407134054.2ccf1bcd@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Apr 2018 13:41:56 +0200
+Subject: [Buildroot] [PATCH 1/1] libmms: bump to version 0.6.4
+Message-ID: <20180407114156.16120-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+Add license hash
 
-On Fri, 6 Apr 2018 22:22:53 +0200, Thomas Petazzoni wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libmms/libmms.hash | 3 ++-
+ package/libmms/libmms.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-> On Wed, 14 Mar 2018 07:02:24 -0400, Adam Duskett wrote:
-> > Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> > ---
-> >  package/libglib2/libglib2.hash | 4 ++--
-> >  package/libglib2/libglib2.mk   | 4 ++--
-> >  2 files changed, 4 insertions(+), 4 deletions(-)  
-> 
-> Applied to master, thanks.
-
-So I have to say I am not happy. At all.
-
-Once again, you have contributed a package update without even testing
-it with what is the default Buildroot situation: a uClibc toolchain.
-This has turned the autobuilders all red since I pushed your commit.
-
-You asked on IRC the other day why your libglib2 update hadn't been
-applied. Now you know why: because you regularly break the build in a
-way that shows that the testing has clearly been insufficient.
-
-I don't require anyone to test all the reverse dependencies of a
-package being updated, especially for a package such as libglib2 that
-has gazillions of reverse dependencies. But here you didn't even test
-building libglib2 itself with a regular uClibc toolchain. I'm not
-talking about a weird case, on a weird CPU architecture, but I'm
-talking about the very basic case of building libglib2 with uClibc.
-
-So for me, things are clear: from now, I will no longer merge any
-new package or version bump from you if it doesn't come with a
-test-pkg output that shows it has been tested with the 6 "main"
-configurations that we test by default in test-pkg.
-
-In the mean time, I have fixed the libglib2 by backporting an upstream
-commit:
-
-  https://git.buildroot.org/buildroot/commit/?id=bd90def0ded4b71dbc40b78b8b4dacba32687885
-
-Best regards,
-
-Thomas
+diff --git a/package/libmms/libmms.hash b/package/libmms/libmms.hash
+index 69865f7c3e..f424e3afbb 100644
+--- a/package/libmms/libmms.hash
++++ b/package/libmms/libmms.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256  01931b62172d7d7050fc9ef9b1b64162f3b6e9f6cc4415170192a32a0b7ea432  libmms-0.6.2.tar.gz
++sha256  3c05e05aebcbfcc044d9e8c2d4646cd8359be39a3f0ba8ce4e72a9094bee704f  libmms-0.6.4.tar.gz
++sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING.LIB
+diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
+index dd0b1df538..236fe1376e 100644
+--- a/package/libmms/libmms.mk
++++ b/package/libmms/libmms.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMMS_VERSION = 0.6.2
++LIBMMS_VERSION = 0.6.4
+ LIBMMS_SITE = http://downloads.sourceforge.net/project/libmms/libmms/$(LIBMMS_VERSION)
+ LIBMMS_INSTALL_STAGING = YES
+ LIBMMS_DEPENDENCIES = host-pkgconf libglib2
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
