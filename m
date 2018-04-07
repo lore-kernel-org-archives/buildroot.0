@@ -1,43 +1,29 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sat,  7 Apr 2018 13:57:52 +0200
-Subject: [Buildroot] [PATCH] wine: Add optional dependency on libkrb5
-Message-ID: <1523102272-30239-1-git-send-email-nerv@dawncrow.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Apr 2018 14:04:21 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for libglib2
+Message-ID: <20180407120421.17508-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wine/wine.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 02c4c0f..b6b3aae 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -23,7 +23,6 @@ WINE_CONF_OPTS = \
- 	--without-gphoto \
- 	--without-gsm \
- 	--without-hal \
--	--without-krb5 \
- 	--without-opencl \
- 	--without-oss
- 
-@@ -121,6 +120,13 @@ else
- WINE_CONF_OPTS += --without-glu
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBKRB5),y)
-+WINE_CONF_OPTS += --with-krb5
-+WINE_DEPENDENCIES += libkrb5
-+else
-+WINE_CONF_OPTS += --without-krb5
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPCAP),y)
- WINE_CONF_OPTS += --with-pcap
- WINE_DEPENDENCIES += libpcap
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 10b20c259b..b797087191 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -669,6 +669,7 @@ F:	package/hiredis/
+ F:	package/i2pd/
+ F:	package/igd2-for-linux/
+ F:	package/libcdio-paranoia/
++F:	package/libglib2/
+ F:	package/libmpdclient/
+ F:	package/libupnp/
+ F:	package/libupnp18/
 -- 
-2.7.4
+2.14.1
