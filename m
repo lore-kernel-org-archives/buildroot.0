@@ -1,65 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Apr 2018 23:05:39 +0200
-Subject: [Buildroot] [PATCH v1 3/3] fs/squashfs: add zstd support
-In-Reply-To: <20180407181951.22037-3-ps.report@gmx.net>
-References: <20180407181951.22037-1-ps.report@gmx.net>
- <20180407181951.22037-3-ps.report@gmx.net>
-Message-ID: <20180407210539.GD2341@scaer>
+Date: Sat,  7 Apr 2018 23:26:14 +0200
+Subject: [Buildroot] [PATCH] download/git: fix trasnform-name
+Message-ID: <20180407212614.15639-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+When a package contains a relative symlink which first component is '..'
+(thus pointing one directory higher), for example package 'meh' contains
+this symlink:
 
-On 2018-04-07 20:19 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+    foo/bar -> ../buz
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+then it would be stored as 'meh-version./buz' because of the
+transform-name pattern replacement.
 
-Regards,
-Yann E. MORIN.
+Fix it to only match the leading './'.
 
-> ---
->  fs/squashfs/Config.in   | 3 +++
->  fs/squashfs/squashfs.mk | 2 ++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
-> index ca9ddb2218..dde2097cb7 100644
-> --- a/fs/squashfs/Config.in
-> +++ b/fs/squashfs/Config.in
-> @@ -27,5 +27,8 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_LZO
->  config BR2_TARGET_ROOTFS_SQUASHFS4_XZ
->  	bool "xz"
->  
-> +config BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
-> +	bool "zstd"
-> +
->  endchoice
->  endif
-> diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-> index 51abd5d7d0..34ab048603 100644
-> --- a/fs/squashfs/squashfs.mk
-> +++ b/fs/squashfs/squashfs.mk
-> @@ -16,6 +16,8 @@ else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
->  ROOTFS_SQUASHFS_ARGS += -comp lzma
->  else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_XZ),y)
->  ROOTFS_SQUASHFS_ARGS += -comp xz
-> +else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD),y)
-> +ROOTFS_SQUASHFS_ARGS += -comp zstd
->  else
->  ROOTFS_SQUASHFS_ARGS += -comp gzip
->  endif
-> -- 
-> 2.16.3
-> 
+Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/support/download/git b/support/download/git
+index f07195b0d1..787b6bcca0 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -111,7 +111,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
+ 
+ # Create GNU-format tarballs, since that's the format of the tarballs on
+ # sources.buildroot.org and used in the *.hash files
+-tar cf - --transform="s/^\./${basename}/" \
++tar cf - --transform="s/^\.\//${basename}\//" \
+ 	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+          -T "${output}.list.sorted" >"${output}.tar"
+ gzip -6 -n <"${output}.tar" >"${output}"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
