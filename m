@@ -1,63 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Apr 2018 17:41:05 +0200
-Subject: [Buildroot] [PATCH] libopenssl: security bump to version 1.0.2o
-In-Reply-To: <20180329145209.7878-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 29 Mar 2018 16:52:09 +0200")
-References: <20180329145209.7878-1-peter@korsgaard.com>
-Message-ID: <876053f2i6.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Apr 2018 17:41:25 +0200
+Subject: [Buildroot] [PATCHv2] core: alternate solution to disable C++
+In-Reply-To: <20180327110022.19980-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 27 Mar 2018 13:00:22 +0200")
+References: <20180327110022.19980-1-yann.morin.1998@free.fr>
+Message-ID: <871sfrf2hm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes the following security issues:
- > Constructed ASN.1 types with a recursive definition could exceed the stack
- > (CVE-2018-0739)
+ > Some packages that use libtool really need some love to be able to
+ > disable C++ support.
 
- > Constructed ASN.1 types with a recursive definition (such as can be found in
- > PKCS7) could eventually exceed the stack given malicious input with
- > excessive recursion.  This could result in a Denial Of Service attack.
- > There are no such structures used within SSL/TLS that come from untrusted
- > sources so this is considered safe.
+ > This is because libtool will want to call AC_PROG_CXXCPP as soon as CXX
+ > is set non-empty to something different from 'no'. Then, AC_PROG_CXXCPP
+ > will want a C++ preprocessor that works on valid input *and* fail on
+ > invalid input.
 
- > Incorrect CRYPTO_memcmp on HP-UX PA-RISC (CVE-2018-0733)
+ > So, providing 'false' as the C++ compiler will then require that we do
+ > have a working C++ preprocessor. Which is totally counter-productive
+ > since we do not have a C++ compiler to start with...
 
- > Because of an implementation bug the PA-RISC CRYPTO_memcmp function is
- > effectively reduced to only comparing the least significant bit of each
- > byte.  This allows an attacker to forge messages that would be considered as
- > authenticated in an amount of tries lower than that guaranteed by the
- > security claims of the scheme.  The module can only be compiled by the HP-UX
- > assembler, so that only HP-UX PA-RISC targets are affected.
+ > bd39d11d2e (core/infra: fix build on toolchain without C++) was a
+ > previous attempt at fixing this, by using the host's C++ preprocessor.
 
- > rsaz_1024_mul_avx2 overflow bug on x86_64 (CVE-2017-3738)
+ > However, that is very incorrect (that's my code, I can say so!) because
+ > the set of defines will most probably be different for the host and the
+ > target, thus causign all sorts of trouble. For example, on ARM we'd have
+ > to include different headers for soft-float vs hard-float, which is
+ > decided based on a macro, which is not defined for x86, and thus may
+ > redirect to the wrong (and missing) header.
 
- > This issue has been reported in a previous OpenSSL security advisory and a
- > fix was provided for OpenSSL 1.0.2.  Due to the low severity no fix was
- > released at that time for OpenSSL 1.1.0.  The fix is now available in
- > OpenSSL 1.1.0h.
+ > Instead, we notice that libtool uses the magic value 'no' to decide that
+ > a C++ compiler is not available, in which case it skeips the call to
+ > AC_PROG_CXXCPP.
 
- > There is an overflow bug in the AVX2 Montgomery multiplication procedure
- > used in exponentiation with 1024-bit moduli.  No EC algorithms are affected.
- > Analysis suggests that attacks against RSA and DSA as a result of this
- > defect would be very difficult to perform and are not believed likely.
- > Attacks against DH1024 are considered just feasible, because most of the
- > work necessary to deduce information about a private key may be performed
- > offline.  The amount of resources required for such an attack would be
- > significant.  However, for an attack on TLS to be meaningful, the server
- > would have to share the DH1024 private key among multiple clients, which is
- > no longer an option since CVE-2016-0701.
+ > Given that 'no' is not provided by any package in Debian and
+ > derivatives, as well as in Fedora, we can assume that no system will
+ > have an executable called 'no'. Hence, we use that as a magic value to
+ > disable C++ detection altogether.
 
- > This only affects processors that support the AVX2 but not ADX extensions
- > like Intel Haswell (4th generation).
+ > Fixes: #10846 (again)
 
- > For more details, see https://www.openssl.org/news/secadv/20180327.txt
+ > Reported-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Damien Riegel <damien.riegel@savoirfairelinux.com>
+ > Cc: Peter Seiderer <ps.report@gmx.net>
+ > Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > The copyright year changed in LICENSE, so adjust the hash to match.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - add big fat comment...
 
 Committed to 2018.02.x, thanks.
 
