@@ -1,81 +1,37 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sat,  7 Apr 2018 14:59:03 +0200
-Subject: [Buildroot] [PATCH] wireshark: bump version to 2.2.14 (security)
-Message-ID: <1523105943-2483-1-git-send-email-nerv@dawncrow.de>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 7 Apr 2018 08:04:43 -0500
+Subject: [Buildroot] [PATCH v2 1/2] cramfs: change to new site location
+In-Reply-To: <20180407120701.89259-2-chris.brandt@renesas.com>
+References: <20180407120701.89259-1-chris.brandt@renesas.com>
+ <20180407120701.89259-2-chris.brandt@renesas.com>
+Message-ID: <CANQCQpaeUmq6S44HK4T=Rnosq4SKKb44k-ASVqgeT+KDwdHJKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Security fixes since 2.2.12:
+Chris,
 
-- wnpa-sec-2018-15
-  The MP4 dissector could crash. (Bug 13777)
-- wnpa-sec-2018-16
-  The ADB dissector could crash. (Bug 14460)
-- wnpa-sec-2018-17
-  The IEEE 802.15.4 dissector could crash. (Bug 14468)
-- wnpa-sec-2018-18
-  The NBAP dissector could crash. (Bug 14471)
-- wnpa-sec-2018-19
-  The VLAN dissector could crash. (Bug 14469)
-- wnpa-sec-2018-20
-  The LWAPP dissector could crash. (Bug 14467)
-- wnpa-sec-2018-23
-  The Kerberos dissector could crash. (Bug 14576)
-- wnpa-sec-2018-05
-  The IEEE 802.11 dissector could crash. Bug 14442, CVE-2018-7335
-- wnpa-sec-2018-06
-  Multiple dissectors could go into large infinite loops. All ASN.1 BER dissectors (Bug 14444), along with the DICOM (Bug 14411), DMP (Bug 14408), LLTD (Bug 14419), OpenFlow (Bug 14420), RELOAD (Bug 14445), RPCoRDMA (Bug 14449), RPKI-Router (Bug 14414), S7COMM (Bug 14423), SCCP (Bug 14413), Thread (Bug 14428), Thrift (Bug 14379), USB (Bug 14421), and WCCP (Bug 14412) dissectors were susceptible.
-- wnpa-sec-2018-07
-  The UMTS MAC dissector could crash. Bug 14339, CVE-2018-7334
-- wnpa-sec-2018-09
-  The FCP dissector could crash. Bug 14374, CVE-2018-7336
-- wnpa-sec-2018-10
-  The SIGCOMP dissector could crash. Bug 14398, CVE-2018-7320
-- wnpa-sec-2018-11
-  The pcapng file parser could crash. Bug 14403, CVE-2018-7420
-- wnpa-sec-2018-12
-  The IPMI dissector could crash. Bug 14409, CVE-2018-7417
-- wnpa-sec-2018-13
-  The SIGCOMP dissector could crash. Bug 14410, CVE-2018-7418
--  wnpa-sec-2018-14
-  The NBAP disssector could crash. Bug 14443, CVE-2018-7419
+On Sat, Apr 7, 2018 at 7:07 AM, Chris Brandt <chris.brandt@renesas.com> wrote:
+> As of Linux-4.15, cramfs now has a official maintainer again.
+> Additionally, that person is hosting and maintaining a new version of
+> cramfs-tools.
+>
+> Patches 0001-endian.patch and 0003-fix-missing-types.patch are no longer
+> needed because they have been upstreamed.
+>
+> However, since patch 0002-cygwin_IO.patch is so old, it is being
+> removed until someone that needs it can reapply and test it. At
+> that point, they should submit the changes to the new cramfs-tools
+> maintainer instead of adding the patches back here.
+>
 
-Full release notes:
+You may want to add to this commit message to mention the new upstream
+took an action to add endian support to cramfsck but this patchset
+actually removes support.
 
-  https://www.wireshark.org/docs/relnotes/wireshark-2.2.14.html
+For v1, I've tested a modified version which matches this patchset on
+a big endian target.
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 93421c6..2b44cc0 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.12.txt
--sha256 3274458d1bb1658a5001465ecb07c7cbfc709571ef36bd062897570d4bab3ebc  wireshark-2.2.12.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.14.txt
-+sha256 e7a3d4f9bbde20ea5ee09103f9f6dba38e3666dfe1d6a6a1c004602b5fac378b  wireshark-2.2.14.tar.bz2
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 93c6da0..ad47580 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.2.12
-+WIRESHARK_VERSION = 2.2.14
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
--- 
-2.7.4
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
