@@ -1,25 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Apr 2018 17:08:39 +0200
-Subject: [Buildroot] [git commit] gnupg: fix prompt of Config.in.host
-In-Reply-To: <20180401115436.5199B82965@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 1 Apr 2018 13:53:59 +0200")
-References: <20180401115436.5199B82965@busybox.osuosl.org>
-Message-ID: <878t9xd9c8.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Apr 2018 17:09:00 +0200
+Subject: [Buildroot] [PATCH v2 1/1] core: rename FOO_BASE_NAME to
+ FOO_BASENAME to avoid clashes
+In-Reply-To: <871sfzt9dg.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 01 Apr 2018 14:10:51 +0200")
+References: <20180206125923.GB20598@australia.be.alcatel-lucent.com>
+ <871sfzt9dg.fsf@dell.be.48ers.dk>
+Message-ID: <874lkld9bn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=083716cdfbc42ac5cd53d3d10ac76a57427c11af
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> In current Buildroot, clashes occur between the variables _NAME and
+ >> _BASE_NAME for two packages called foo and foo-base, i.e.
 
- > It should be "host gnupg" and not "host-gnupg" to be consistent with
- > all other Config.in.host options.
+ >> Package foo:
+ >> FOO_NAME = foo
+ >> FOO_BASE_NAME = foo-1.2.3
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ >> Package foo-base:
+ >> FOO_BASE_NAME = foo-base
+ >> FOO_BASE_BASE_NAME = foo-base-4.5.6
+
+ >> where variable FOO_BASE_NAME is clashing between these two packages.
+ >> Specific cases where this clash is already existing are:
+ >> - alljoyn-base
+ >> - alljoyn-tcl-base
+ >> - perl-xml-sax-base
+
+ >> The problem is generic and can occur for a number of variables in Buildroot.
+ >> A non-exhaustive list:
+ >> <pkg>_BASE and <pkg>_BASE_NAME
+ >> <pkg>_BASE_NAME and <pkg>_RAW_BASE_NAME
+ >> <pkg>_DIR and <pkg>_DL_DIR
+ >> <pkg>_VERSION and <pkg>_DL_VERSION
+ >> <pkg>_SOURCE and <pkg>_TARGET_SOURCE
+ >> <pkg>_INSTALL_IMAGES and <pkg>_TARGET_INSTALL_IMAGES  (same for _STAGING and _TARGET)
+ >> <pkg>_LICENSE_FILES and <pkg>_MANIFEST_LICENSE_FILES
+ >> <pkg>_DEPENDENCIES and <pkg>_FINAL_DEPENDENCIES
+
+ >> One solution is to use another separator than '_' to separate the
+ >> package name from the rest of the variable name. For example, a double
+ >> underscore:
+ >> FOO__NAME
+ >> FOO__BASE_NAME
+ >> FOO_BASE__NAME
+ >> FOO_BASE__BASE_NAME
+
+ >> However, making that change for only this case means that the variable
+ >> naming is no longer consistent. And making the change for all variables has
+ >> a large impact, also on certain user scripts.
+
+ >> For now, keep it simple, and rename FOO_BASE_NAME into FOO_BASENAME, so that
+ >> the variables become:
+ >> FOO_NAME
+ >> FOO_BASENAME
+ >> FOO_BASE_NAME
+ >> FOO_BASE_BASENAME
+
+ >> For consistency, also adapt FOO_RAW_BASE_NAME. Since FOO_RAW_BASENAME would
+ >> still pose a conflict with a package called 'foo-raw', take the opportunity
+ >> to rename it into FOO_BASENAME_RAW instead, which does not pose a conflict
+ >> as we have no variable called FOO_RAW.
+
+ >> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
 Committed to 2018.02.x, thanks.
 
