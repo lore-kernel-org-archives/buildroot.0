@@ -1,26 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Apr 2018 21:44:58 +0200
-Subject: [Buildroot] [PATCH] board/atmel: use correct sam-ba binary in
- flasher.sh script
-In-Reply-To: <1522964081-1235-1-git-send-email-joshua.henderson@microchip.com>
- (Joshua Henderson's message of "Thu, 5 Apr 2018 14:34:41 -0700")
-References: <1522964081-1235-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <87y3hx8oud.fsf@dell.be.48ers.dk>
+Date: Sun, 8 Apr 2018 18:10:29 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] check-host-tar.sh: bump
+ minimum tar version to 1.27 for reproducible tar files with long paths
+Message-ID: <20180408194522.D2BAC88064@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joshua" == Joshua Henderson <joshua.henderson@microchip.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=22bcdafc4267539a56a96c57d8eb982c90a104d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Instead of using the install of sam-ba under host/opt directly, use the symlink
- > created in host/bin.  The side effect of doing this instead allows the correct
- > sam-ba binary to be used based on the host arch being 32 bit or 64 bit.
+Fixes:
+http://autobuild.buildroot.net/results/b18/b187e64a61918f17f69588e2355a03286bc5808e
 
- > Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+tar 1.27 subtly changed the tar format when a GNU long link entry is added
+(which is done for path elements > 100 characters).  The code used to set
+the permission mode of the link entry to 0:
 
-Committed to 2018.02.x, thanks.
+  header = start_private_header ("././@LongLink", size, time (NULL));
+  FILL (header->header.mtime, '0');
+  FILL (header->header.mode, '0');
+  FILL (header->header.uid, '0');
+  FILL (header->header.gid, '0');
+  FILL (header->header.devmajor, 0);
+  FILL (header->header.devminor, 0);
 
--- 
-Bye, Peter Korsgaard
+This got dropped in 1.27 by commit df7b55a8f6354e3 (Fix some problems with
+negative and out-of-range integers), so the settings from
+start_private_header() are used directly - Which are:
+
+  TIME_TO_CHARS (t < 0 ? 0 : min (t, MAX_OCTAL_VAL (header->header.mtime)),
+		 header->header.mtime);
+  MODE_TO_CHARS (S_IFREG|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, header->header.mode);
+  UID_TO_CHARS (0, header->header.uid);
+  GID_TO_CHARS (0, header->header.gid);
+
+The end result is that tar >= 1.27 sets mode to 644.
+
+The consequence of this is that we create different tar files when long path
+names are encountered (which often happens when a package downloads a
+specific sha1 from a git repo) depending on the host tar version used,
+causing hash mismatches.
+
+As a workaround, bump our minimum tar version to 1.27.  It would be nicer to
+only do this if we have packages from bzr/git/hg enabled, but that is an
+exercise for later.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit cdac332d20d2d1326dee0111e188fa214549122b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/dependencies/check-host-tar.sh | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+index 2143877524..0857307396 100755
+--- a/support/dependencies/check-host-tar.sh
++++ b/support/dependencies/check-host-tar.sh
+@@ -26,10 +26,11 @@ if [ ! -z "${version_bsd}" ] ; then
+   minor=0
+ fi
+ 
+-# Minimal version = 1.17 (previous versions do not correctly unpack archives
+-# containing hard-links if the --strip-components option is used).
++# Minimal version = 1.27 (previous versions do not correctly unpack archives
++# containing hard-links if the --strip-components option is used or create
++# different gnu long link headers for path elements > 100 characters).
+ major_min=1
+-minor_min=17
++minor_min=27
+ 
+ # Maximal version = 1.29 (1.30 changed --numeric-owner output for
+ # filenames > 100 characters). This is really a fix for a bug in
