@@ -1,51 +1,96 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Apr 2018 10:40:00 +0200
-Subject: [Buildroot] [PATCH] package/python-yieldfrom: fix licensing info
-Message-ID: <20180408084000.9379-1-yann.morin.1998@free.fr>
+Date: Sun,  8 Apr 2018 11:37:06 +0200
+Subject: [Buildroot] [PATCH] package/liblo: fix build with musl
+Message-ID: <20180408093706.1082-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no file containing the license text. The closest we can use is
-the PKG-INFO file, which contains the license name...
+Commit 2759ba03979 (liblo: disable werror to fix build issues) tried to
+fix the issue by passing --disable-werror, but this is not a recognised
+option.
+
+Instead, just fix the code for good.
 
 Fixes:
-    http://autobuild.buildroot.net/results/dff21d63845d3d6a5f78c1000301cdd2104595f4
-    http://autobuild.buildroot.net/results/220e82f555ce6c98b89605bab72c7ea3eea61c66
+    http://autobuild.buildroot.org/results/000a46954d0c6d3dbc4b4634a0d3a3c955fac679
+    http://autobuild.buildroot.org/results/58cb834bbd69bafc5cb0f23c236919c609648c05
+    http://autobuild.buildroot.org/results/9de1c2007818082e88d77572abf8ff8a72e01930
     ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Alex Baldwin <alexbaldwinmusic@gmail.com>
 ---
- package/python-yieldfrom/python-yieldfrom.hash | 2 +-
- package/python-yieldfrom/python-yieldfrom.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Result of test-pkg with BR2_PACKAGE_LIBLO=y:
+                             br-arm-full [1/7]: OK
+                  br-arm-cortex-a9-glibc [2/7]: OK
+                   br-arm-cortex-m4-full [3/7]: OK
+                          br-x86-64-musl [4/7]: OK
+                            br-bfin-full [5/7]: OK
+                      br-arm-full-static [6/7]: OK
+                armv5-ctng-linux-gnueabi [7/7]: OK
+7 builds, 0 skipped, 0 build failed, 0 legal-info failed
+---
+ .../0001-server-use-correct-poll.h-header.patch    | 32 ++++++++++++++++++++++
+ package/liblo/liblo.mk                             |  5 +---
+ 2 files changed, 33 insertions(+), 4 deletions(-)
+ create mode 100644 package/liblo/0001-server-use-correct-poll.h-header.patch
 
-diff --git a/package/python-yieldfrom/python-yieldfrom.hash b/package/python-yieldfrom/python-yieldfrom.hash
-index cee4aaf96b..2df8085327 100644
---- a/package/python-yieldfrom/python-yieldfrom.hash
-+++ b/package/python-yieldfrom/python-yieldfrom.hash
-@@ -1,4 +1,4 @@
- # md5 from https://pypi.python.org/pypi/yieldfrom/json, sha256 locally computed
- md5	1a1c6fd152032d49ccd4ac250aad7746  yieldfrom-1.0.3.tar.gz
- sha256	388004d0ee8854c2ed7a2c87e664aad13acd70c9b33d7f3c441182d37357739b  yieldfrom-1.0.3.tar.gz
--sha256	99da56b23b254ccd2ec6f2e82aea731a86d29a916002b3b3bcd801453edab74e  LICENSE
-+sha256	3695faeb17a2507f445b7e0a454043671f646591795477ced20e29de2359d666  PKG-INFO
-diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
-index cb4a05d83a..b1137cdbb4 100644
---- a/package/python-yieldfrom/python-yieldfrom.mk
-+++ b/package/python-yieldfrom/python-yieldfrom.mk
-@@ -9,7 +9,7 @@ PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
- PYTHON_YIELDFROM_SITE = https://pypi.python.org/packages/de/2d/05524f368e691846824d962b64f983e3fde9b8c10839e7efbc1b51d42de3
- PYTHON_YIELDFROM_SETUP_TYPE = setuptools
- PYTHON_YIELDFROM_LICENSE = MIT
--PYTHON_YIELDFROM_LICENSE_FILES = LICENSE
-+PYTHON_YIELDFROM_LICENSE_FILES = PKG-INFO
+diff --git a/package/liblo/0001-server-use-correct-poll.h-header.patch b/package/liblo/0001-server-use-correct-poll.h-header.patch
+new file mode 100644
+index 0000000000..04c0445534
+--- /dev/null
++++ b/package/liblo/0001-server-use-correct-poll.h-header.patch
+@@ -0,0 +1,32 @@
++From d59f2e6f42a9e4f8a9184d7ed75546f47dc50123 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 8 Apr 2018 11:09:02 +0200
++Subject: [PATCH] server: use correct poll.h header
++
++Fixes build with the musl C library:
++    http://autobuild.buildroot.net/results/000a46954d0c6d3dbc4b4634a0d3a3c955fac679
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Upstream status:
++  PR sent: https://github.com/radarsat1/liblo/pull/66
++---
++ src/server.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/server.c b/src/server.c
++index 01fa08f..11c62d2 100644
++--- a/src/server.c
+++++ b/src/server.c
++@@ -51,7 +51,7 @@
++ #include <netdb.h>
++ #include <sys/socket.h>
++ #ifdef HAVE_POLL
++-#include <sys/poll.h>
+++#include <poll.h>
++ #endif
++ #include <sys/un.h>
++ #include <arpa/inet.h>
++-- 
++2.14.1
++
+diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
+index 7845c68ff2..e28e52803a 100644
+--- a/package/liblo/liblo.mk
++++ b/package/liblo/liblo.mk
+@@ -12,10 +12,7 @@ LIBLO_LICENSE_FILES = COPYING
+ LIBLO_INSTALL_STAGING = YES
  
- $(eval $(python-package))
- $(eval $(host-python-package))
+ # IPv6 support broken, issue known upstream
+-# werror - not needed for release.
+-LIBLO_CONF_OPTS += \
+-	--disable-ipv6 \
+-	--disable-werror
++LIBLO_CONF_OPTS = --disable-ipv6
+ 
+ # Liblo uses atomic builtins, so we need to link with libatomic for
+ # the architectures who explicitly need libatomic.
 -- 
 2.14.1
