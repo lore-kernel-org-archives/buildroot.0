@@ -1,32 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Apr 2018 21:44:39 +0200
-Subject: [Buildroot] [PATCH] php: fix how PCRE JIT is disabled
-In-Reply-To: <20180406085403.19096-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 6 Apr 2018 10:54:03 +0200")
-References: <20180406085403.19096-1-thomas.petazzoni@bootlin.com>
-Message-ID: <873705a3fc.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Apr 2018 21:44:58 +0200
+Subject: [Buildroot] [PATCH] board/atmel: use correct sam-ba binary in
+ flasher.sh script
+In-Reply-To: <1522964081-1235-1-git-send-email-joshua.henderson@microchip.com>
+ (Joshua Henderson's message of "Thu, 5 Apr 2018 14:34:41 -0700")
+References: <1522964081-1235-1-git-send-email-joshua.henderson@microchip.com>
+Message-ID: <87y3hx8oud.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Joshua" == Joshua Henderson <joshua.henderson@microchip.com> writes:
 
- > When the internal PCRE library of PHP is used, it tries to use a JIT
- > engine, which is only available on some architectures.
+ > Instead of using the install of sam-ba under host/opt directly, use the symlink
+ > created in host/bin.  The side effect of doing this instead allows the correct
+ > sam-ba binary to be used based on the host arch being 32 bit or 64 bit.
 
- > However, the mechanism used to disable JIT has changed in recent PHP
- > versions, and it now has a proper --without-pcre-jit option. Switch
- > over to that to properly disable JIT on unsupported platforms.
-
- > It has been tested to fix the build of PHP on ARC and Microblaze.
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/e1359fcad7bc57e3c5a7ecc37abaa2cf6a6a9ffa/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
 
 Committed to 2018.02.x, thanks.
 
