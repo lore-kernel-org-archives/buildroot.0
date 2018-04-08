@@ -1,48 +1,71 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 8 Apr 2018 17:09:05 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-04-07
-In-Reply-To: <20180408060016.A832E207F1@mail.bootlin.com>
-References: <20180408060016.A832E207F1@mail.bootlin.com>
-Message-ID: <0b0ee2f6-734d-0e39-c0d1-0a5c4592e556@dawncrow.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 08 Apr 2018 17:09:26 +0200
+Subject: [Buildroot] [git commit] toolchain-wrapper: use
+ -ffp-contract=off on MIPS Xburst for gcc >= 4.6
+In-Reply-To: <20180401142335.80FCF8296B@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 1 Apr 2018 16:23:33 +0200")
+References: <20180401142335.80FCF8296B@busybox.osuosl.org>
+Message-ID: <87zi2dbuqh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 08.04.2018 um 08:00 schrieb Thomas Petazzoni:
-> Hello,
-> 
-> This is the list of Buildroot build failures that occured on
-> 2018-04-07, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Results for the 'master' branch
-> ===============================
-> 
-> Build failures related to your packages:
-> 
->          arc |     azure-iot-sdk-c-2018-03-16 | http://autobuild.buildroot.net/results/35f9f7a4adc6c2cad741079e4afdf1408c94703b
->          arc |     azure-iot-sdk-c-2018-03-16 | http://autobuild.buildroot.net/results/258a0d3e7d40ed2d558127d9d201a8d21c219f0d
->  powerpc64le |     azure-iot-sdk-c-2018-03-16 | http://autobuild.buildroot.net/results/3197c847eb12aebc3509a7e11741530df57d2f14
->         i686 |     azure-iot-sdk-c-2018-03-16 | http://autobuild.buildroot.net/results/70c9a898a5ef148acc92fb505a8d2608b8ac485a
-> 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Hi,
+ > commit: https://git.buildroot.net/buildroot/commit/?id=5e58509bfe497c5e85db58f8213b0a44ac79dd3f
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I already have another mail with one failure of this kind.
-It all comes down to a broken setup it seems to me:
+ > Since gcc 4.6, GCC deprecated -mfused-madd, -ffp-contract=off should
+ > be used for the Xburst workaround.
 
-> [3m>>> azure-iot-sdk-c 2018-03-16 Downloading[23m
-> Initialized empty Git repository in /home/peko/autobuild/instance-0/dl/azure-iot-sdk-c/git/.git/
-> Unknown option: -C
-> usage: git [--version] [--help] [-c name=value]
->            [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
->            [-p|--paginate|--no-pager] [--no-replace-objects] [--bare]
->            [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
->            <command> [<args>]
+ > Tested with the MIPS Sourcery 2011.03 toolchain (based on gcc 4.5),
+ > the toolchain wrapper uses -mno-fused-madd, as expected:
 
-...
+ > $ BR2_DEBUG_WRAPPER=2 ./output/host/bin/mips-linux-gnu-gcc -o toto toto.c
+ > Toolchain wrapper executing:
+ >     '/home/thomas/toolchains/mips-2011.03/bin/mips-linux-gnu-gcc'
+ >     '--sysroot'
+ >     '/home/thomas/projets/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot'
+ >     '-mabi=32'
+ >     '-msoft-float'
+ >     '-mno-fused-madd'
+ >     '-EL'
+ >     '-march=mips32r2'
+ >     '-o'
+ >     'toto'
+ >     'toto.c'
 
-> [3m>>> azure-iot-sdk-c 2018-03-16 Downloading[23m
-> fatal: No such remote 'origin'
+ > And with the MIPS Sourcery 2012.09 toolchain (based on gcc 4.7), the
+ > toolchain wrapper uses -ffp-contract=off, as expected:
+
+ > $ BR2_DEBUG_WRAPPER=2 ./output/host/bin/mips-linux-gnu-gcc -o toto toto.c
+ > Toolchain wrapper executing:
+ >     '/home/thomas/toolchains/mips-2012.09/bin/mips-linux-gnu-gcc'
+ >     '--sysroot'
+ >     '/home/thomas/projets/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot'
+ >     '-mabi=32'
+ >     '-msoft-float'
+ >     '-ffp-contract=off'
+ >     '-EL'
+ >     '-march=mips32r2'
+ >     '-o'
+ >     'toto'
+ >     'toto.c'
+
+ > Fixes the ci20_defconfig build:
+
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/60303132
+
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > [Thomas: rework to continue supporting pre-gcc-4.6 toolchains, extend
+ > the commit log after doing more testing.]
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2018.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
