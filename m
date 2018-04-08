@@ -1,45 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Apr 2018 21:46:36 +0200
-Subject: [Buildroot] [git commit] download/git: don't require too-recent git
-Message-ID: <20180408194801.603B588076@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 8 Apr 2018 21:53:14 +0200
+Subject: [Buildroot] Make C and CXX compiler cache in
+ toolchainfile.cmake.in
+In-Reply-To: <6f5067a1-44b3-3e4e-7161-223616580912@lucaceresoli.net>
+References: <000001d3c425$31ba3fc0$952ebf40$@gmx.de>
+ <8fa283f1-a304-5f8f-54a2-24fc103afc8c@mind.be>
+ <6f5067a1-44b3-3e4e-7161-223616580912@lucaceresoli.net>
+Message-ID: <CAHXCMM+Dc7tQ9zZVF8PH1g=qR1MUjo8GoFvXXpMwrtLJZqEbzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e17719264b5df0400442f02366cc16201ab3a25c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-git has supported -C only since 1.8.5, and some distros have not yet
-caught up after more than 4 years...
+Apologies for the late response.
 
-Fall back to entering the directory.
+On Mon, Apr 2, 2018 at 9:12 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Hi,
+>
+> On 30/03/2018 21:57, Arnout Vandecappelle wrote:
+>>
+>>
+>> On 25-03-18 12:36, Michael Dick wrote:
+>>> Hello,
+>>>
+>>> I am using buildroot to create my custom gcc toolchain and sysroot for a
+>>> raspberry pi.
+>>>
+>>>
+>>>
+>>> Therefore, I call cmake with a script to configure my project. After that, I
+>>> import the project into qtcreator.
+>>>
+>>> The problem is, that C and CXX compiler variables are not cached into cmake
+>>> cache, so when importing the project, qtcreator calling cmake is not aware oft
+>>> he configured compiler.
+>>>
+>>>
+>>>
+>>> My suggestion ist o use this patch. Is there any reason why the compilers are
+>>> not cached?
+>>
+>>  Sounds to me like a good idea.
+>>
+>>  Let's add Yann, Samuel and Luca in Cc as CMake experts :-P For their
+>> convenience, here is the patch inline:
+>>
+>>> --- /tmp/toolchainfile.cmake.in.orig    2018-03-25 12:32:03.353000419 +0200
+>>> +++ /tmp/toolchainfile.cmake.in 2018-03-25 12:32:52.647000419 +0200
+>>> @@ -58,8 +58,8 @@
+>>>  set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+>>>
+>>>  # This toolchain file can be used both inside and outside Buildroot.
+>>> -set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
+>>> -set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
+>>> +set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@" CACHE STRING "C Compiler")
+>>> +set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@" CACHE STRING "CXX Compiler")
+>
+> Although my cmake wisdom is definitely overrated here, I *do* have a
+> kind of clue of what this means! :-)
+>
+> I think this change makes sense, and this is confirmed by the fact that
+> CMake does it as well by default. I tested with a minimal project:
 
-Fixes:
-    http://autobuild.buildroot.net/results/35f9f7a4adc6c2cad741079e4afdf1408c94703b
+I second, I even wonder why I did not add it for the complers paths in
+the first place whereas I did add it to the various compiler flags
+variables... :-/
 
-Reported-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/download/git | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> $ cat CMakeLists.txt
+> cmake_minimum_required(VERSION 2.6)
+> project(hello)
+> add_executable(hello hello.c utils.c)
+> $ cmake .
+> [...]
+> $ grep COMPILER CMakeCache.txt
+> CMAKE_CXX_COMPILER:FILEPATH=/usr/lib/ccache/c++
+> CMAKE_C_COMPILER:FILEPATH=/usr/lib/ccache/cc
+> [...]
+> $
+>
+>>>  if(@@TOOLCHAIN_HAS_FORTRAN@@)
+>>>    set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
+>>>    set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
+>>
+>>
+>>  Michael, could you resubmit as a proper patch with commit log and
+>> Signed-off-by? See [1].
+>
+> And keep me Cc:.
+>
+> Bye,
+> --
+> Luca
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/support/download/git b/support/download/git
-index 787b6bcca0..868dfad0dd 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -47,7 +47,9 @@ git_cache="${dl_dir}/git"
- # fetch'ed later.
- if [ ! -d "${git_cache}" ]; then
-     _git init "'${git_cache}'"
--    _git -C "'${git_cache}'" remote add origin "'${uri}'"
-+    pushd "${git_cache}" >/dev/null
-+    _git remote add origin "'${uri}'"
-+    popd >/dev/null
- fi
- 
- pushd "${git_cache}" >/dev/null
+Regards,
+
+-- 
+Samuel
