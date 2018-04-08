@@ -1,92 +1,98 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun,  8 Apr 2018 20:48:59 +0300
-Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: new package
-Message-ID: <20180408174859.19679-1-asafka7@gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Sun,  8 Apr 2018 11:25:15 -0700
+Subject: [Buildroot] [PATCH] package/xen: Fix qemu-xen memfd build failure
+Message-ID: <1523211915-680-1-git-send-email-alistair@alistair23.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-package that is able to shorten the load time of entry_points declared
-in setup.py of python packages.
+Fix the QEMU memfd compile error:
+tools/qemu-xen/util/memfd.c:40:12: error: static declaration of 'memfd_create' follows non-static declaration
+ static int memfd_create(const char *name, unsigned int flags)
+            ^~~~~~~~~~~~
 
-Unfortunately, license file was not found.
+that has been introduced since the Glibc 2.27 upgrade.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+This just involves porting the upstream QEMU patch to the Xen QEMU tree.
+
+This fixes:
+http://autobuild.buildroot.net/results/ec7cda00e07b0c98a9a366244b67611e042e0d4b/
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
 ---
- DEVELOPERS                                           |  1 +
- package/Config.in                                    |  1 +
- package/python-fastentrypoints/Config.in             |  6 ++++++
- .../python-fastentrypoints.hash                      |  3 +++
- .../python-fastentrypoints/python-fastentrypoints.mk | 12 ++++++++++++
- 5 files changed, 23 insertions(+)
- create mode 100644 package/python-fastentrypoints/Config.in
- create mode 100644 package/python-fastentrypoints/python-fastentrypoints.hash
- create mode 100644 package/python-fastentrypoints/python-fastentrypoints.mk
+ package/xen/0003-memfd-fix-configure-test.patch | 62 +++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/xen/0003-memfd-fix-configure-test.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 10b20c259b..ea33d5e730 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -189,6 +189,7 @@ F:	package/sqlcipher/
- F:	package/stress/
- 
- N:	Asaf Kahlon <asafka7@gmail.com>
-+F:	package/python-fastentrypoints/
- F:	package/python-jsonmodels/
- F:	package/python-yieldfrom/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 5e798a4f14..d7e51b203c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -778,6 +778,7 @@ menu "External python modules"
- 	source "package/python-engineio/Config.in"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
-+	source "package/python-fastentrypoints/Config.in"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flask-cors/Config.in"
- 	source "package/python-flask-babel/Config.in"
-diff --git a/package/python-fastentrypoints/Config.in b/package/python-fastentrypoints/Config.in
+diff --git a/package/xen/0003-memfd-fix-configure-test.patch b/package/xen/0003-memfd-fix-configure-test.patch
 new file mode 100644
-index 0000000000..d2c86dbc5e
+index 0000000..95cb49b
 --- /dev/null
-+++ b/package/python-fastentrypoints/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_FASTENTRYPOINTS
-+	bool "python-fastentrypoints"
-+	help
-+	  Makes entry_points specified in setup.py load more quickly.
++++ b/package/xen/0003-memfd-fix-configure-test.patch
+@@ -0,0 +1,62 @@
++From 75e5b70e6b5dcc4f2219992d7cffa462aa406af0 Mon Sep 17 00:00:00 2001
++From: Paolo Bonzini <pbonzini@redhat.com>
++Date: Tue, 28 Nov 2017 11:51:27 +0100
++Subject: [PATCH] memfd: fix configure test
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+	  https://github.com/ninjaaron/fast-entry_points
-diff --git a/package/python-fastentrypoints/python-fastentrypoints.hash b/package/python-fastentrypoints/python-fastentrypoints.hash
-new file mode 100644
-index 0000000000..da6e2ae9d8
---- /dev/null
-+++ b/package/python-fastentrypoints/python-fastentrypoints.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/fastentrypoints/json, sha256 locally computed
-+md5	9bd2a34697eb8279d87e7b927f4f7e85  fastentrypoints-0.10.tar.gz
-+sha256	ed418146ed87230694ec2d8890b9b3e2967e95d857e5ce933cafecb1067cca82  fastentrypoints-0.10.tar.gz
-diff --git a/package/python-fastentrypoints/python-fastentrypoints.mk b/package/python-fastentrypoints/python-fastentrypoints.mk
-new file mode 100644
-index 0000000000..455cfe8319
---- /dev/null
-+++ b/package/python-fastentrypoints/python-fastentrypoints.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# python-fastentrypoints
-+#
-+################################################################################
++Recent glibc added memfd_create in sys/mman.h.  This conflicts with
++the definition in util/memfd.c:
 +
-+PYTHON_FASTENTRYPOINTS_VERSION = 0.10
-+PYTHON_FASTENTRYPOINTS_SOURCE = fastentrypoints-$(PYTHON_FASTENTRYPOINTS_VERSION).tar.gz
-+PYTHON_FASTENTRYPOINTS_SITE = https://pypi.python.org/packages/e8/c8/c2902c9c9da43d8be8c75a730f15f0c51933c42c39b91d1d7b605a88e907
-+PYTHON_FASTENTRYPOINTS_SETUP_TYPE = setuptools
++    /builddir/build/BUILD/qemu-2.11.0-rc1/util/memfd.c:40:12: error: static declaration of memfd_create follows non-static declaration
 +
-+$(eval $(host-python-package))
++Fix the configure test, and remove the sys/memfd.h inclusion since the
++file actually does not exist---it is a typo in the memfd_create(2) man
++page.
++
++Cc: Marc-Andr? Lureau <marcandre.lureau@redhat.com>
++Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++[ Changes by AF:
++ - Port the patch to the qemu-xen tree
++]
++Signed-off-by: Alistair Francis <alistair@alistair23.me>
++---
++Upstream status: commit 75e5b70e6b5
++
++ configure    | 2 +-
++ util/memfd.c | 4 +---
++ 2 files changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/configure b/configure
++index 9c8aa5a98bd4..99ccc1725ace 100755
++--- a/tools/qemu-xen/configure
+++++ b/tools/qemu-xen/configure
++@@ -3923,7 +3923,7 @@ fi
++ # check if memfd is supported
++ memfd=no
++ cat > $TMPC << EOF
++-#include <sys/memfd.h>
+++#include <sys/mman.h>
++ 
++ int main(void)
++ {
++diff --git a/util/memfd.c b/util/memfd.c
++index 4571d1aba866..412e94a405fc 100644
++--- a/tools/qemu-xen/util/memfd.c
+++++ b/tools/qemu-xen/util/memfd.c
++@@ -31,9 +31,7 @@
++ 
++ #include "qemu/memfd.h"
++ 
++-#ifdef CONFIG_MEMFD
++-#include <sys/memfd.h>
++-#elif defined CONFIG_LINUX
+++#if defined CONFIG_LINUX && !defined CONFIG_MEMFD
++ #include <sys/syscall.h>
++ #include <asm/unistd.h>
++ 
++-- 
++2.16.2
++
 -- 
-2.17.0
+2.7.4
