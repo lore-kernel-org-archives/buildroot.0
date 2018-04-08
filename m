@@ -1,43 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Apr 2018 17:48:11 +0200
-Subject: [Buildroot] [PATCH] download/git: don't require too-recent git
-Message-ID: <20180408154811.27234-1-yann.morin.1998@free.fr>
+Date: Sun, 8 Apr 2018 17:48:22 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-04-07
+In-Reply-To: <0b0ee2f6-734d-0e39-c0d1-0a5c4592e556@dawncrow.de>
+References: <20180408060016.A832E207F1@mail.bootlin.com>
+ <0b0ee2f6-734d-0e39-c0d1-0a5c4592e556@dawncrow.de>
+Message-ID: <20180408154822.GB21158@scaer>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-git has supported -C only since 1.8.5, and some distros have not yet
-caught up after moe than 4 years...
+Andr?, All,
 
-Fall back to entering the directory.
+On 2018-04-08 17:09 +0200, Andr? Hentschel spake thusly:
+> Am 08.04.2018 um 08:00 schrieb Thomas Petazzoni:
+> > Hello,
+> > 
+> > This is the list of Buildroot build failures that occured on
+> > 2018-04-07, and for which you are a registered architecture developer
+> > or package developer. Please help us improving the quality of
+> > Buildroot by investigating those build failures and sending patches to
+> > fix them. Thanks!
+> > 
+> > Results for the 'master' branch
+> > ===============================
+> > 
+> > Build failures related to your packages:
+> > 
+> >          arc |     azure-iot-sdk-c-2018-03-16 | http://autobuild.buildroot.net/results/35f9f7a4adc6c2cad741079e4afdf1408c94703b
+> >          arc |     azure-iot-sdk-c-2018-03-16 | http://autobuild.buildroot.net/results/258a0d3e7d40ed2d558127d9d201a8d21c219f0d
+> >  powerpc64le |     azure-iot-sdk-c-2018-03-16 | http://autobuild.buildroot.net/results/3197c847eb12aebc3509a7e11741530df57d2f14
+> >         i686 |     azure-iot-sdk-c-2018-03-16 | http://autobuild.buildroot.net/results/70c9a898a5ef148acc92fb505a8d2608b8ac485a
+> > 
+> 
+> Hi,
+> 
+> I already have another mail with one failure of this kind.
+> It all comes down to a broken setup it seems to me:
+> 
+> > [3m>>> azure-iot-sdk-c 2018-03-16 Downloading[23m
+> > Initialized empty Git repository in /home/peko/autobuild/instance-0/dl/azure-iot-sdk-c/git/.git/
+> > Unknown option: -C
+> > usage: git [--version] [--help] [-c name=value]
+> >            [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+> >            [-p|--paginate|--no-pager] [--no-replace-objects] [--bare]
+> >            [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+> >            <command> [<args>]
 
-Fixes:
-    http://autobuild.buildroot.net/results/35f9f7a4adc6c2cad741079e4afdf1408c94703b
+OK, so old git versions do not have the -C option. This is a fall-out of
+the big download changes we've made last week-end to supoprt git caching.
 
-Reported-by: Andr? Hentschel <nerv@dawncrow.de>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Andr? Hentschel <nerv@dawncrow.de>
----
- support/download/git | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Thanks for the investigations, I'll fix the issue.
 
-diff --git a/support/download/git b/support/download/git
-index 787b6bcca0..868dfad0dd 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -47,7 +47,9 @@ git_cache="${dl_dir}/git"
- # fetch'ed later.
- if [ ! -d "${git_cache}" ]; then
-     _git init "'${git_cache}'"
--    _git -C "'${git_cache}'" remote add origin "'${uri}'"
-+    pushd "${git_cache}" >/dev/null
-+    _git remote add origin "'${uri}'"
-+    popd >/dev/null
- fi
- 
- pushd "${git_cache}" >/dev/null
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
