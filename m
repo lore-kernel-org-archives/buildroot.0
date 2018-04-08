@@ -1,53 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Apr 2018 16:45:08 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/xterm: Avoid
- freetype2 path poisoning using imake
-Message-ID: <20180408151036.65AD7813AB@busybox.osuosl.org>
+Date: Sun, 8 Apr 2018 16:47:04 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/freescale-imx:
+ Remove imx6s from has_vpu list
+Message-ID: <20180408151036.7CA19813AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32bd96b7acc9c9b374f54df749a59fb2a71c4b64
+commit: https://git.buildroot.net/buildroot/commit/?id=b86b227fda97ef439a3cc0da03da0ebcad5c203a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-When imake is installed on the host, it tries to include
-freetype headers from host, so we must override ac_cv_path_IMAKE
-to avoid this.
+According to imx-vpu-5.4.37/Makefile, line 6:
 
-Extract from config.log:
+	INCLUDE_LIST:= IMX27ADS IMX51 IMX53 IMX6Q
 
-configure:14803: checking if we should use imake to help
-configure:14820: result: yes
-configure:14829: checking for xmkmf
-configure:14846: found /usr/bin/xmkmf
-configure:14857: result: /usr/bin/xmkmf
-configure:14920: testing Using /usr/bin/xmkmf  ...
-configure:15015: testing IMAKE_CFLAGS  -I. -I/usr/include/freetype2
+imx6s is not supported by the imx-vpu package. Its install target,
+guarded by
 
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-[Thomas: pass ac_cv_path_IMAKE="" as suggested by Romain Naour.]
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
+	ifeq ($(PLATFORM), $(findstring $(PLATFORM), $(INCLUDE_LIST)))
+
+does nothing, causing a build error later on in the imx-vpuwrap package
+
+checking for vpu_lib.h... no
+configure: error: lib_vpu is required, consider installing imx-lib
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit 6d0316dc7b14f6cd2d44e92c6ab581a6ab385234)
+(cherry picked from commit e42a65bdcd76018dbe2d4fd4459a7ca216e99e32)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xterm/xterm.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/freescale-imx/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 645de92e22..201280fd46 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -14,6 +14,9 @@ XTERM_CONF_OPTS = --enable-256-color \
- 	--x-includes=$(STAGING_DIR)/usr/include \
- 	--x-libraries=$(STAGING_DIR)/usr/lib
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index b5e5ab23dc..e33a90d912 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -60,8 +60,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53 || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
  
-+# Avoid freetype2 path poisoning by imake
-+XTERM_CONF_ENV = ac_cv_path_IMAKE=""
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
- XTERM_DEPENDENCIES += xlib_libXft
- XTERM_CONF_OPTS += --enable-freetype \
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 	bool
