@@ -1,79 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Apr 2018 10:24:51 +0200
-Subject: [Buildroot] [PATCH] download/git: fix trasnform-name
-In-Reply-To: <5ac9c6165105e_7b0e2af9278483201172d@ultri4.mail>
-References: <20180407212614.15639-1-yann.morin.1998@free.fr>
- <5ac9c6165105e_7b0e2af9278483201172d@ultri4.mail>
-Message-ID: <20180408082451.GA2327@scaer>
+Date: Sun,  8 Apr 2018 10:40:00 +0200
+Subject: [Buildroot] [PATCH] package/python-yieldfrom: fix licensing info
+Message-ID: <20180408084000.9379-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+There is no file containing the license text. The closest we can use is
+the PKG-INFO file, which contains the license name...
 
-On 2018-04-08 04:34 -0300, Ricardo Martincoski spake thusly:
-> > download/git: fix trasnform-name
-> trasnform -> transform
+Fixes:
+    http://autobuild.buildroot.net/results/dff21d63845d3d6a5f78c1000301cdd2104595f4
+    http://autobuild.buildroot.net/results/220e82f555ce6c98b89605bab72c7ea3eea61c66
+    ...
 
-Meh, that is my signature. A mail from me with no typo is not from me...
-;-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-yieldfrom/python-yieldfrom.hash | 2 +-
+ package/python-yieldfrom/python-yieldfrom.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> On Sat, Apr 07, 2018 at 06:26 PM, Yann E. MORIN wrote:
-> > When a package contains a relative symlink which first component is '..'
-> > (thus pointing one directory higher), for example package 'meh' contains
-> > this symlink:
-> > 
-> >     foo/bar -> ../buz
-> > 
-> > then it would be stored as 'meh-version./buz' because of the
-> > transform-name pattern replacement.
-> > 
-> > Fix it to only match the leading './'.
-> > 
-> > Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> > Cc: Peter Korsgaard <peter@korsgaard.com>
-> > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> 
-> With the typo in the subject fixed:
-> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> [tarball generation fixed for 18xx-ti-utils and linux-firmware, see the test
->  script at http://patchwork.ozlabs.org/patch/896012/ ]
-> Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> 
-> 2 packages are fixed by this patch:
-> 18xx-ti-utils
-> before: https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/61769469
-> after: https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/61769909
-> linux-firmware
-> before: https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/61769511
-> after: https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/61769952
-> 
-> All failures with this patch:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/20146714/failures
-> at91bootstrap3 v3.8.6, gummiboot, kvm-unit-tests, kvmtool, mcelog, trace-cmd,
-> uemacs, xloader
-> also occured for 2018.02:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/20146633/failures
-
-Sorry, but I'm not following. You mean that 18xx-ti-utils and
-linux-firmware are already broken on 2018.02? That is strange, because
-we haven't backported those git download changes in the LTS branch...
-
-And indeed, I can't reproduce the issue locally, using tar-1.29. What
-version of tar are you using? We've recently black-listed 1.26 and
-below, and now require 1.27 <= tar <= 1.29
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/python-yieldfrom/python-yieldfrom.hash b/package/python-yieldfrom/python-yieldfrom.hash
+index cee4aaf96b..2df8085327 100644
+--- a/package/python-yieldfrom/python-yieldfrom.hash
++++ b/package/python-yieldfrom/python-yieldfrom.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/yieldfrom/json, sha256 locally computed
+ md5	1a1c6fd152032d49ccd4ac250aad7746  yieldfrom-1.0.3.tar.gz
+ sha256	388004d0ee8854c2ed7a2c87e664aad13acd70c9b33d7f3c441182d37357739b  yieldfrom-1.0.3.tar.gz
+-sha256	99da56b23b254ccd2ec6f2e82aea731a86d29a916002b3b3bcd801453edab74e  LICENSE
++sha256	3695faeb17a2507f445b7e0a454043671f646591795477ced20e29de2359d666  PKG-INFO
+diff --git a/package/python-yieldfrom/python-yieldfrom.mk b/package/python-yieldfrom/python-yieldfrom.mk
+index cb4a05d83a..b1137cdbb4 100644
+--- a/package/python-yieldfrom/python-yieldfrom.mk
++++ b/package/python-yieldfrom/python-yieldfrom.mk
+@@ -9,7 +9,7 @@ PYTHON_YIELDFROM_SOURCE = yieldfrom-$(PYTHON_YIELDFROM_VERSION).tar.gz
+ PYTHON_YIELDFROM_SITE = https://pypi.python.org/packages/de/2d/05524f368e691846824d962b64f983e3fde9b8c10839e7efbc1b51d42de3
+ PYTHON_YIELDFROM_SETUP_TYPE = setuptools
+ PYTHON_YIELDFROM_LICENSE = MIT
+-PYTHON_YIELDFROM_LICENSE_FILES = LICENSE
++PYTHON_YIELDFROM_LICENSE_FILES = PKG-INFO
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
