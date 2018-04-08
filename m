@@ -1,61 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Apr 2018 17:07:40 +0200
-Subject: [Buildroot] [PATCH 2/2] package/kodi: remove imx support
-In-Reply-To: <20180304150606.32748-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 4 Mar 2018 16:06:06 +0100")
-References: <20180304150606.32748-1-bernd.kuhls@t-online.de>
- <20180304150606.32748-2-bernd.kuhls@t-online.de>
-Message-ID: <87lgdxd9dv.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Apr 2018 17:07:58 +0200
+Subject: [Buildroot] Patch for opencv3: python module was built for the
+ host instead of target.
+In-Reply-To: <MW2PR02MB3724CAF4A9F9EF9FEBF4C35E95D90@MW2PR02MB3724.namprd02.prod.outlook.com>
+ (Sasha Shyrokov's message of "Tue, 6 Mar 2018 17:19:18 +0000")
+References: <MW2PR02MB3724CAF4A9F9EF9FEBF4C35E95D90@MW2PR02MB3724.namprd02.prod.outlook.com>
+Message-ID: <87h8old9dd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Shyrokov," == Shyrokov, Sasha <Sasha-Shyrokov@idexx.com> writes:
 
- > https://git.buildroot.net/buildroot/commit/?id=266208972192f1e0869f89d7be941de6294a810a
- > broke imx support in Kodi because previously the G2D libraries were
- > part of the imx-gpu-viv package:
+ > From 9b211fb5ec49879d10d32d22ed3608ffca944e2d Mon Sep 17 00:00:00 2001
+ > From: Sasha Shyrokov <alexander-shyrokov@idexx.com>
+ > Date: Tue, 6 Mar 2018 10:58:10 -0500
+ > Subject: [PATCH 1/1] opencv3: python module was built for the host instead of target.
 
- > CMake Error at /usr/share/cmake-3.7/Modules/FindPackageHandleStandardArgs.cmake:138 (message):
- >   Could NOT find IMX (missing: G2D_LIBRARY)
+ > distutils environment variables must be set.
+ > OPENCV3_CONF_ENV = $(PKG_PYTHON_DISTUTILS_ENV) All credit goes to Arnout:
+ > https://stackoverflow.com/questions/49059035/buildroot-opencv3-python-package-builds-for-the-wrong-target
 
- > Adjusting the Kodi package to use the imx-gpu-g2d as well still does
- > not provide a working build:
-
- > /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'void CIMX::Deinitialize()':
- > /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:79:21: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
- >      ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
- >                      ^~~~~~~~~~~~~~~~~~~
- > /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'bool CIMX::UpdateDCIC()':
- > /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:109:19: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
- >    ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
- >                    ^~~~~~~~~~~~~~~~~~~
- > /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:115:21: error: 'DCIC_IOC_START_VSYNC' was not declared in this scope
- >      ioctl(m_fddcic, DCIC_IOC_START_VSYNC, 0);
- >                      ^~~~~~~~~~~~~~~~~~~~
- > /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp: In member function 'virtual void CIMX::Process()':
- > /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:125:19: error: 'DCIC_IOC_START_VSYNC' was not declared in this scope
- >    ioctl(m_fddcic, DCIC_IOC_START_VSYNC, 0);
- >                    ^~~~~~~~~~~~~~~~~~~~
- > /home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/linux/imx/IMX.cpp:131:19: error: 'DCIC_IOC_STOP_VSYNC' was not declared in this scope
- >    ioctl(m_fddcic, DCIC_IOC_STOP_VSYNC, 0);
- >                    ^~~~~~~~~~~~~~~~~~~
-
- > Although it might be possible to fix these bugs with something like
-
- > 	#define DCIC_IOC_CONFIG_DCIC    _IO('D', 12)
- > 	#define DCIC_IOC_START_VSYNC    _IO('D', 15)
- > 	#define DCIC_IOC_STOP_VSYNC     _IO('D', 16)
-
- > as done in
- > https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/libreelec-7.0/projects/imx6/patches/kodi/imx6-jarvis.patch
-
- > we would still try to ride a dead horse. The upcoming Kodi version
- > 18.0-Leia will remove imx support completely, see upstream PR 12990.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Sasha Shyrokov <alexander-shyrokov@idexx.com>
 
 Committed to 2018.02.x, thanks.
 
