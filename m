@@ -1,10 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  8 Apr 2018 20:26:44 +0200
-Subject: [Buildroot] [PATCH v3 2/3] linux-headers: bump to 4.16 kernel
- version
-In-Reply-To: <20180408182645.2677-1-bernd.kuhls@t-online.de>
-References: <20180408182645.2677-1-bernd.kuhls@t-online.de>
-Message-ID: <20180408182645.2677-2-bernd.kuhls@t-online.de>
+Date: Sun,  8 Apr 2018 20:26:43 +0200
+Subject: [Buildroot] [PATCH v3 1/3] toolchain: add 4.16.x choice for headers
+Message-ID: <20180408182645.2677-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +10,47 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: rebased
+v3: no changes
 v2: no changes
 
- package/linux-headers/Config.in.host | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ toolchain/Config.in                                                  | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3bd3e779b0..3dcc401eb4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_4_15
-+	default BR2_KERNEL_HEADERS_4_16
- 	help
- 	  Select the kernel version to get headers from.
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index b33eaffd52..e2ef1e7ef3 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -323,10 +323,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
  
-@@ -67,6 +67,10 @@ config BR2_KERNEL_HEADERS_4_15
- 	bool "Linux 4.15.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
- 
-+config BR2_KERNEL_HEADERS_4_16
-+	bool "Linux 4.16.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
 +
- config BR2_KERNEL_HEADERS_VERSION
- 	bool "Manually specified Linux version"
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+ 	default "4.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 	default "4.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+ 	default "4.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 6c12b1619c..8cc9db6841 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -108,6 +108,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
  
-@@ -89,6 +93,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16
 +	bool "4.16.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
 +
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_15
  	bool "4.15.x"
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-@@ -250,4 +258,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
- 	default "4.14.33"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.16"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.16"		if BR2_KERNEL_HEADERS_4_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 2.14.2
