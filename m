@@ -1,29 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Apr 2018 17:07:58 +0200
-Subject: [Buildroot] Patch for opencv3: python module was built for the
- host instead of target.
-In-Reply-To: <MW2PR02MB3724CAF4A9F9EF9FEBF4C35E95D90@MW2PR02MB3724.namprd02.prod.outlook.com>
- (Sasha Shyrokov's message of "Tue, 6 Mar 2018 17:19:18 +0000")
-References: <MW2PR02MB3724CAF4A9F9EF9FEBF4C35E95D90@MW2PR02MB3724.namprd02.prod.outlook.com>
-Message-ID: <87h8old9dd.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Apr 2018 17:08:26 +0200
+Subject: [Buildroot] [PATCH 1/2] openblass: drop SSE_GENERIC target
+In-Reply-To: <20180401084642.15199-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 1 Apr 2018 10:46:41 +0200")
+References: <20180401084642.15199-1-peter@korsgaard.com>
+Message-ID: <87d0z9d9cl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Shyrokov," == Shyrokov, Sasha <Sasha-Shyrokov@idexx.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > From 9b211fb5ec49879d10d32d22ed3608ffca944e2d Mon Sep 17 00:00:00 2001
- > From: Sasha Shyrokov <alexander-shyrokov@idexx.com>
- > Date: Tue, 6 Mar 2018 10:58:10 -0500
- > Subject: [PATCH 1/1] opencv3: python module was built for the host instead of target.
+ > Fixes #10856
+ > The SSE_GENERIC target fails to build with a "sgemm_kernel.o: No such file
+ > or directory" error. Several upstream bug reports exist for this:
 
- > distutils environment variables must be set.
- > OPENCV3_CONF_ENV = $(PKG_PYTHON_DISTUTILS_ENV) All credit goes to Arnout:
- > https://stackoverflow.com/questions/49059035/buildroot-opencv3-python-package-builds-for-the-wrong-target
+ > https://github.com/xianyi/OpenBLAS/issues/502
+ > https://github.com/xianyi/OpenBLAS/issues/685
 
- > Signed-off-by: Sasha Shyrokov <alexander-shyrokov@idexx.com>
+ > In both cases, upstream suggests using a different target definition
+ > instead.  E.G.  from issue 685:
+
+ > You may use NORTHWOOD on x86: make TARGET=NORTHWOOD that uses SSE2
+ > instructions.  It's very hard to find non-SSE2 x86 CPUs today.  For x86-64
+ > use the PRESCOTT target
+
+ > So drop the SSE_GENERIC target.  The only x86_64 variant we support not
+ > covered by a more specific openblas target is the default variant, nocona.
+
+ > Nocona was a Xeon variant of the P4 "Prescott" architecture, so use the
+ > PRESCOTT openblas target:
+
+ > https://en.wikipedia.org/wiki/Xeon#Nocona_and_Irwindale
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x, thanks.
 
