@@ -1,51 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Apr 2018 16:47:04 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/freescale-imx:
- Remove imx6s from has_vpu list
-Message-ID: <20180408151036.7CA19813AB@busybox.osuosl.org>
+Date: Sun, 8 Apr 2018 16:52:53 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] openblas: drop
+ SSE_GENERIC target
+Message-ID: <20180408151036.C36E9814DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b86b227fda97ef439a3cc0da03da0ebcad5c203a
+commit: https://git.buildroot.net/buildroot/commit/?id=8a596e0d38c1586991be4b0ac9edd0e8942df8ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-According to imx-vpu-5.4.37/Makefile, line 6:
+Fixes #10856
 
-	INCLUDE_LIST:= IMX27ADS IMX51 IMX53 IMX6Q
+The SSE_GENERIC target fails to build with a "sgemm_kernel.o: No such file
+or directory" error. Several upstream bug reports exist for this:
 
-imx6s is not supported by the imx-vpu package. Its install target,
-guarded by
+https://github.com/xianyi/OpenBLAS/issues/502
+https://github.com/xianyi/OpenBLAS/issues/685
 
-	ifeq ($(PLATFORM), $(findstring $(PLATFORM), $(INCLUDE_LIST)))
+In both cases, upstream suggests using a different target definition
+instead.  E.G.  from issue 685:
 
-does nothing, causing a build error later on in the imx-vpuwrap package
+You may use NORTHWOOD on x86: make TARGET=NORTHWOOD that uses SSE2
+instructions.  It's very hard to find non-SSE2 x86 CPUs today.  For x86-64
+use the PRESCOTT target
 
-checking for vpu_lib.h... no
-configure: error: lib_vpu is required, consider installing imx-lib
+So drop the SSE_GENERIC target.  The only x86_64 variant we support not
+covered by a more specific openblas target is the default variant, nocona
+and jaguar.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e42a65bdcd76018dbe2d4fd4459a7ca216e99e32)
+Nocona was a Xeon variant of the P4 "Prescott" architecture, so use the
+PRESCOTT openblas target:
+
+https://en.wikipedia.org/wiki/Xeon#Nocona_and_Irwindale
+
+Jaguar is from the Bobcat family, so use the BOBCAT openblas target:
+
+https://en.wikipedia.org/wiki/List_of_AMD_microprocessors#Bobcat_core_architecture_(APU)
+
+[Peter: add Jaguar as pointed out by Arnout]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+(cherry picked from commit 5e6fa93483caac317ab8844feb2ae9c07078a6c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/openblas/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index b5e5ab23dc..e33a90d912 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -60,8 +60,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53 || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- 
- config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 	bool
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index eb93e319e4..8e71a43f98 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	default "P2"           if BR2_x86_pentium2
+ 	default "KATMAI"       if BR2_x86_pentium3
+ 	default "NORTHWOOD"    if BR2_x86_pentium4
+-	default "PRESCOTT"     if BR2_x86_prescott
++	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
+ 	default "BANIAS"       if BR2_x86_pentium_m
+ 	default "CORE2"        if BR2_x86_core2
+ 	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont
+@@ -14,9 +14,9 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	default "OPTERON"      if BR2_x86_opteron
+ 	default "OPTERON_SSE3" if BR2_x86_opteron_sse3
+ 	default "BARCELONA"    if BR2_x86_barcelona
++	default "JAGUAR"       if BR2_x86_jaguar
+ 	default "STEAMROLLER"  if BR2_x86_steamroller
+ 	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
+-	default "SSE_GENERIC"  if BR2_X86_CPU_HAS_SSE
+ 	default "POWER4"       if BR2_powerpc_power4
+ 	default "POWER5"       if BR2_powerpc_power5
+ 	default "POWER6"       if BR2_powerpc_power6
