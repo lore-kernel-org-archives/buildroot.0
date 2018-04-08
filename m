@@ -1,49 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Apr 2018 21:30:21 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: use SPDX
- short identifier for license
-Message-ID: <20180408194523.9CDF180428@busybox.osuosl.org>
+Date: Sun, 8 Apr 2018 21:26:12 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] python-webpy: security
+ bump to version 0.39
+Message-ID: <20180408194523.431BC80428@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce8dd8eec7979658e1b07f6f7e38231595579a3c
+commit: https://git.buildroot.net/buildroot/commit/?id=dec4e2d0e8416533343284366e816fa418b33d94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+From the changelog:
+
+2018-02-28 0.39
+* Fixed a security issue with the form module (tx Orange Tsai)
+* Fixed a security issue with the db module (tx Adri??n Brav and Orange Tsai)
+
+2016-07-08 0.38
+..
+* Fixed a potential remote exeution risk in `reparam` (tx Adri??n Brav)
+
+License files are still not included on pypi, so continue to use the git
+repo. Upstream has unfortunately not tagged 0.39, so use the latest commit
+on the 0.39 branch.  A request to fix this has been submitted:
+
+https://github.com/webpy/webpy/issues/449
+
+0.39 now uses setuptools, so change the _SETUP_TYPE.
+
+Add hashes for the license files.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 08bbbe73af0d60ffac4f4476d0583764b81fdfac)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ce559162fca39c273583bea0dbed643229769d8c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-cargo.txt | 2 +-
- docs/manual/adding-packages-meson.txt | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-webpy/python-webpy.hash | 4 +++-
+ package/python-webpy/python-webpy.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
-index b78163e6a1..b7fc09acfe 100644
---- a/docs/manual/adding-packages-cargo.txt
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -41,7 +41,7 @@ package. Let's start with an example:
- 07: FOO_VERSION = 1.0
- 08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
- 09: FOO_SITE = http://www.foosoftware.org/download
--10: FOO_LICENSE = GPLv3+
-+10: FOO_LICENSE = GPL-3.0+
- 11: FOO_LICENSE_FILES = COPYING
- 12:
- 13: FOO_DEPENDENCIES = host-cargo
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-index f3b4b30e48..f8aa08fa91 100644
---- a/docs/manual/adding-packages-meson.txt
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -24,7 +24,7 @@ package. Let's start with an example:
- 07: FOO_VERSION = 1.0
- 08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
- 09: FOO_SITE = http://www.foosoftware.org/download
--10: FOO_LICENSE = GPLv3+
-+10: FOO_LICENSE = GPL-3.0+
- 11: FOO_LICENSE_FILES = COPYING
- 12: FOO_INSTALL_STAGING = YES
- 13:
+diff --git a/package/python-webpy/python-webpy.hash b/package/python-webpy/python-webpy.hash
+index 0e0a8d0fb8..30a14f4705 100644
+--- a/package/python-webpy/python-webpy.hash
++++ b/package/python-webpy/python-webpy.hash
+@@ -1,2 +1,4 @@
+ # Locally computed
+-sha256  c3cb8930739294103b1ad109e5fd1d0efae67c06d5b6d59fce5b5a2ee6b21624  python-webpy-webpy-0.37.tar.gz
++sha256  e17ac483846fb15629c76c43cf64c0b65eac3c870dca2251801b459b1e4e12b8  python-webpy-6df75fe581e0e838d28334d5c53f52421560d38b.tar.gz
++sha256  3826fd531a9b904841f5e3560fcda7e93f2ab8d11ef124ec65e10625efa26c34  LICENSE.txt
++sha256  7347fd17bfd33c4093c31dc77076733e1e0150ce8c13296c56dc042bbecede84  web/wsgiserver/LICENSE.txt
+diff --git a/package/python-webpy/python-webpy.mk b/package/python-webpy/python-webpy.mk
+index 8bcc8ec37f..1e67cd6fd8 100644
+--- a/package/python-webpy/python-webpy.mk
++++ b/package/python-webpy/python-webpy.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEBPY_VERSION = webpy-0.37
++# corresponds to 0.39
++PYTHON_WEBPY_VERSION = 6df75fe581e0e838d28334d5c53f52421560d38b
+ PYTHON_WEBPY_SITE = $(call github,webpy,webpy,$(PYTHON_WEBPY_VERSION))
+-PYTHON_WEBPY_SETUP_TYPE = distutils
++PYTHON_WEBPY_SETUP_TYPE = setuptools
+ PYTHON_WEBPY_LICENSE = Public Domain, CherryPy License
+ PYTHON_WEBPY_LICENSE_FILES = LICENSE.txt web/wsgiserver/LICENSE.txt
+ 
