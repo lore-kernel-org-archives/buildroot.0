@@ -1,81 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Apr 2018 17:05:44 +0200
-Subject: [Buildroot] [PATCHv2] ktap: bump version for linux-4.8 support
-In-Reply-To: <20180331102711.12328-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 31 Mar 2018 12:27:11 +0200")
-References: <20180331102711.12328-1-peter@korsgaard.com>
-Message-ID: <87y3hxd9h3.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Apr 2018 17:06:02 +0200
+Subject: [Buildroot] [git commit] package/xterm: Avoid freetype2 path
+ poisoning using imake
+In-Reply-To: <20180331205701.EC1E5815A5@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 31 Mar 2018 22:56:46 +0200")
+References: <20180331205701.EC1E5815A5@busybox.osuosl.org>
+Message-ID: <87tvsld9gl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes #10776
- > The upstream git repo contains a number of fixes for building against newer
- > kernel versions, so bump the version.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=6d0316dc7b14f6cd2d44e92c6ab581a6ab385234
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > git shortlog eb66d40310c93dc82bc8eac889744c1ed1f01f7b..                                                                                                                                     ?????master?
- > Alain Kalker (2):
- >       uprobe: Print the symbol, not the matching pattern
- >       uprobe: Blacklist uretprobes on _start
+ > When imake is installed on the host, it tries to include
+ > freetype headers from host, so we must override ac_cv_path_IMAKE
+ > to avoid this.
 
- > Aleksa Sarai (2):
- >       runtime: update GFP_WAIT to GFP_RECLAIM
- >       userspace: fix up argument parsing NULL dereference
+ > Extract from config.log:
 
- > Alexey Makhalov (1):
- >       Fix building for v4.8 kernel
+ > configure:14803: checking if we should use imake to help
+ > configure:14820: result: yes
+ > configure:14829: checking for xmkmf
+ > configure:14846: found /usr/bin/xmkmf
+ > configure:14857: result: /usr/bin/xmkmf
+ > configure:14920: testing Using /usr/bin/xmkmf  ...
+ > configure:15015: testing IMAKE_CFLAGS  -I. -I/usr/include/freetype2
 
- > Azat Khuzhin (12):
- >       Use get_unused_fd_flags(0) instead of get_unused_fd()
- >       Support trace_seq::seq
- >       Ignore separate debug files (*.dwo)
- >       Use trace_seq_has_overflowed()
- >       makefile: split vim plugins installing into separate target
- >       makefile: use DESTDIR for install (allow to change install dir)
- >       makefile: install: create dirs
- >       makefile: use ldflags for linking ktap
- >       makefile: add CPPFLAGS to KTAPC_CFLAGS, to allow change default flags
- >       ignore: exclude /debian
- >       Support compilation for 4.2 (ftrace_events cleanup)
- >       runtime: fix building on 4.3
-
- > Jovi Zhangwei (11):
- >       Merge pull request #84 from azat/linux-3.19-fixes-v3
- >       Merge pull request #85 from azat/debian-preparations-v2
- >       Merge pull request #88 from NanXiao/master
- >       Merge pull request #89 from NanXiao/patch-1
- >       Merge pull request #91 from NanXiao/patch-1
- >       Merge pull request #90 from azat/linux-4.2-compilation-fixes
- >       Merge pull request #99 from cyphar/fix-null-deref
- >       Merge pull request #98 from cyphar/fix-gfp-reclaim
- >       Merge pull request #97 from azat/fix-building-4.3-__GFP_RECLAIM
- >       Merge pull request #103 from ackalker/blacklist
- >       Merge pull request #104 from YustasSwamp/master
-
- > Nan Xiao (3):
- >       Update tutorial.md
- >       Update Makefile
- >       Fix memory leak issue in main function.
-
- > WEI ZHANG (1):
- >       ktap: Change the copyright to Huawei Technologies
-
- > While we are at it, also add a hash for the license file.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- > NOTICE: Ktap seems pretty dead upstream, so perhaps we should deprecate it?
-
- > Changes since v1:
- > - Fix .hash file
-
- >  package/ktap/ktap.hash | 3 ++-
- >  package/ktap/ktap.mk   | 2 +-
- >  2 files changed, 3 insertions(+), 2 deletions(-)
+ > Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+ > [Thomas: pass ac_cv_path_IMAKE="" as suggested by Romain Naour.]
+ > Reviewed-by: Romain Naour <romain.naour@smile.fr>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.02.x, thanks.
 
