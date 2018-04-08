@@ -1,41 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Apr 2018 17:41:30 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
- 15}.x series
-Message-ID: <20180408154229.3061F8172E@busybox.osuosl.org>
+Date: Sun, 8 Apr 2018 17:40:16 +0200
+Subject: [Buildroot] [git commit] download/git: fix transform-name
+Message-ID: <20180408154229.226AF85CBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2661d47425f866cf56617d2928b6b96566db8de4
+commit: https://git.buildroot.net/buildroot/commit/?id=54785851eeb775720aac8a0b6b423fda26ac8f27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+When a package contains a relative symlink which first component is '..'
+(thus pointing one directory higher), for example package 'meh' contains
+this symlink:
+
+    foo/bar -> ../buz
+
+then it would be stored as 'meh-version./buz' because of the
+transform-name pattern replacement.
+
+Fix it to only match the leading './'.
+
+Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2a59e2902a..3bd3e779b0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.126"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.92"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.127"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.93"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.32"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.15"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.14.33"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.16"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/support/download/git b/support/download/git
+index f07195b0d1..787b6bcca0 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -111,7 +111,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
+ 
+ # Create GNU-format tarballs, since that's the format of the tarballs on
+ # sources.buildroot.org and used in the *.hash files
+-tar cf - --transform="s/^\./${basename}/" \
++tar cf - --transform="s/^\.\//${basename}\//" \
+ 	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+          -T "${output}.list.sorted" >"${output}.tar"
+ gzip -6 -n <"${output}.tar" >"${output}"
