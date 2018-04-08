@@ -1,56 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Apr 2018 21:40:31 +0200
-Subject: [Buildroot] [PATCH] check-host-tar.sh: bump minimum tar version
- to 1.27 for reproducible tar files with long paths
-In-Reply-To: <20180402094808.6973-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 2 Apr 2018 11:48:08 +0200")
-References: <20180402094808.6973-1-peter@korsgaard.com>
-Message-ID: <876051bi6o.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Apr 2018 21:41:01 +0200
+Subject: [Buildroot] [PATCH] qt5script: correct license information
+In-Reply-To: <20180402141508.10278-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Mon, 2 Apr 2018 16:15:08 +0200")
+References: <20180402141508.10278-1-arnout@mind.be>
+Message-ID: <871sfpbi5u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/b18/b187e64a61918f17f69588e2355a03286bc5808e
+ > The license information in qt5script was just copied from all the other
+ > qt5 modules, but it is different (and complicated).
 
- > tar 1.27 subtly changed the tar format when a GNU long link entry is added
- > (which is done for path elements > 100 characters).  The code used to set
- > the permission mode of the link entry to 0:
+ > - libQt5Script itself contains the third-party JavaScriptCore source.
+ >   JavaScriptCore has a number of licenses: BSD-2-Clause, BSD-3-Clause,
+ >   LGPL-2.0+, LGPL-2.1+. Since it is all linked together, the end
+ >   result will be BSD-3-Clause or LGPL-2.1+.
 
- >   header = start_private_header ("././@LongLink", size, time (NULL));
- >   FILL (header->header.mtime, '0');
- >   FILL (header->header.mode, '0');
- >   FILL (header->header.uid, '0');
- >   FILL (header->header.gid, '0');
- >   FILL (header->header.devmajor, 0);
- >   FILL (header->header.devminor, 0);
+ >   The different BSD licenses are all slightly different (different
+ >   authors, which affects the third clause in particular). Only one
+ >   separate license file is provided, so let's use that one.
 
- > This got dropped in 1.27 by commit df7b55a8f6354e3 (Fix some problems with
- > negative and out-of-range integers), so the settings from
- > start_private_header() are used directly - Which are:
+ >   There is an LGPL-2.0 license file, which is slightly different from
+ >   the top-level LICENSE.LGPLv21, so let's add that one as well.
 
- >   TIME_TO_CHARS (t < 0 ? 0 : min (t, MAX_OCTAL_VAL (header->header.mtime)),
- header-> header.mtime);
- >   MODE_TO_CHARS (S_IFREG|S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, header->header.mode);
- >   UID_TO_CHARS (0, header->header.uid);
- >   GID_TO_CHARS (0, header->header.gid);
+ > - libQt5Script also contains Qt-specific code which is all licensed
+ >   under LGPL-2.1 only. This is covered by the LICENSE.LGPLv21 file.
+ >   It merges with the LGPL-2.1+ from JavaScriptCore but limits it to
+ >   2.1 only.
 
- > The end result is that tar >= 1.27 sets mode to 644.
+ > - libQt5ScriptTools is a separate libary containing just the script
+ >   debugger. It is covered by the usual Qt license:
+ >   * LGPL-2.1 or LGPL-3.0 with exception for Qt 5.6;
+ >   * LGPL-3.0 or GPL-2.0+ for Qt 5.9 (actually it is GPL-2.0 or GPL-3.0
+ >     or any later version approved by the KDE Qt foundation, but let's
+ >     keep it simple :-). Note that there is no LICENSE.GPLv2 provided,
+ >     only LICENSE.GPLv3. Also, there is no mention of the exception in
+ >     the Qt 5.9 sources, even though the LGPL_EXCEPTION.txt is still
+ >     present.
 
- > The consequence of this is that we create different tar files when long path
- > names are encountered (which often happens when a package downloads a
- > specific sha1 from a git repo) depending on the host tar version used,
- > causing hash mismatches.
+ > Update the license information with all of the above. Also add hashes
+ > for the new license files from JavaScriptCore.
 
- > As a workaround, bump our minimum tar version to 1.27.  It would be nicer to
- > only do this if we have packages from bzr/git/hg enabled, but that is an
- > exercise for later.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2018.02.x, thanks.
 
