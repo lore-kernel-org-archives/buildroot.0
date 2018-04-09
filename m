@@ -1,58 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Apr 2018 17:39:49 +0200
-Subject: [Buildroot] [PATCH] wireshark: bump version to 2.2.14 (security)
-In-Reply-To: <1523105943-2483-1-git-send-email-nerv@dawncrow.de>
- (=?utf-8?Q?=22Andr=C3=A9?=
- Hentschel"'s message of "Sat, 7 Apr 2018 14:59:03 +0200")
-References: <1523105943-2483-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <87lgdw8k3e.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Apr 2018 17:50:05 +0200
+Subject: [Buildroot] [PATCH] php: fix emalloc/efree/estrdup/...
+ undefined references
+In-Reply-To: <20180405210622.27836-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 5 Apr 2018 23:06:22 +0200")
+References: <20180405210622.27836-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87h8ok8jma.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Security fixes since 2.2.12:
- > - wnpa-sec-2018-15
- >   The MP4 dissector could crash. (Bug 13777)
- > - wnpa-sec-2018-16
- >   The ADB dissector could crash. (Bug 14460)
- > - wnpa-sec-2018-17
- >   The IEEE 802.15.4 dissector could crash. (Bug 14468)
- > - wnpa-sec-2018-18
- >   The NBAP dissector could crash. (Bug 14471)
- > - wnpa-sec-2018-19
- >   The VLAN dissector could crash. (Bug 14469)
- > - wnpa-sec-2018-20
- >   The LWAPP dissector could crash. (Bug 14467)
- > - wnpa-sec-2018-23
- >   The Kerberos dissector could crash. (Bug 14576)
- > - wnpa-sec-2018-05
- >   The IEEE 802.11 dissector could crash. Bug 14442, CVE-2018-7335
- > - wnpa-sec-2018-06
- >   Multiple dissectors could go into large infinite loops. All ASN.1 BER dissectors (Bug 14444), along with the DICOM (Bug 14411), DMP (Bug 14408), LLTD (Bug 14419), OpenFlow (Bug 14420), RELOAD (Bug 14445), RPCoRDMA (Bug 14449), RPKI-Router (Bug 14414), S7COMM (Bug 14423), SCCP (Bug 14413), Thread (Bug 14428), Thrift (Bug 14379), USB (Bug 14421), and WCCP (Bug 14412) dissectors were susceptible.
- > - wnpa-sec-2018-07
- >   The UMTS MAC dissector could crash. Bug 14339, CVE-2018-7334
- > - wnpa-sec-2018-09
- >   The FCP dissector could crash. Bug 14374, CVE-2018-7336
- > - wnpa-sec-2018-10
- >   The SIGCOMP dissector could crash. Bug 14398, CVE-2018-7320
- > - wnpa-sec-2018-11
- >   The pcapng file parser could crash. Bug 14403, CVE-2018-7420
- > - wnpa-sec-2018-12
- >   The IPMI dissector could crash. Bug 14409, CVE-2018-7417
- > - wnpa-sec-2018-13
- >   The SIGCOMP dissector could crash. Bug 14410, CVE-2018-7418
- > -  wnpa-sec-2018-14
- >   The NBAP disssector could crash. Bug 14443, CVE-2018-7419
+ > zend_alloc.h defines some macros such as:
 
- > Full release notes:
+ > Where _estrdup is the actual function implemented by the PHP core. If
 
- >   https://www.wireshark.org/docs/relnotes/wireshark-2.2.14.html
+Lines starting with # are automatically dropped by git ;)
 
- > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+ > +++ b/package/php/0009-ext-xml-expat_compat.h-add-missing-php.h-include.patch
+ > @@ -0,0 +1,71 @@
+ > +From fb1f0e17eed729204a6d5caf590715d6257dceb3 Mon Sep 17 00:00:00 2001
+ > +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > +Date: Thu, 5 Apr 2018 22:50:00 +0200
+ > +Subject: [PATCH] ext/xml/expat_compat.h: add missing php.h include
+ > +
+ > +When expat support is disabled and libxml support is enabled, the
+ > +following part of the code in expat_compat.h gets used:
+ > +
+
+Here as well ;)
 
 Committed to 2018.02.x, thanks.
 
