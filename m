@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 11:26:44 +0200
-Subject: [Buildroot] [git commit] uclibc: simplify UCLIBC_EXTRA_CFLAGS
-Message-ID: <20180409092647.6B96483C36@busybox.osuosl.org>
+Date: Mon, 9 Apr 2018 11:26:55 +0200
+Subject: [Buildroot] [PATCH 1/2] gcc: fix
+ HOST_GCC_COMMON_WRAPPER_TARGET_FLOAT_ABI typos
+In-Reply-To: <20180404155451.15258-1-thomas.petazzoni@bootlin.com>
+References: <20180404155451.15258-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180409112655.23b03770@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0908b8ecada61454bf8b223777ef4970d74a1370
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Since commit f66952197b41452b77dfa065adc7172137e4c243 ("package/gcc:
-remove gcc 4.8"), UCLIBC_EXTRA_CFLAGS no longer exists, and is
-therefore always empty.
+On Wed,  4 Apr 2018 17:54:50 +0200, Thomas Petazzoni wrote:
+> The HOST_GCC_COMMON_WRAPPER_TARGET_FLOAT_ABI variable was incorrectly
+> used as HOST_GCC_COMMON_WRAPPER_TARGET_FLOATABI_, which would always
+> be empty.
+> 
+> In practice, this block of code is only used on Blackfin (which has
+> BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS unset) and Blackfin doesn't use
+> float-abi, so this block of code is in fact useless. But even if it's
+> useless, it's better to have it without typos.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/gcc/gcc.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Passing the Buildroot make variable UCLIBC_EXTRA_CFLAGS into the
-UCLIBC_EXTRA_CFLAGS fed into uClibc's make environment therefore no
-longer makes sense. Therefore, just pass $(TARGET_ABI).
+Both patches applied.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/uclibc/uclibc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 8d198f669a..25e86534fd 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -382,7 +382,7 @@ endif
- UCLIBC_MAKE_FLAGS = \
- 	ARCH="$(UCLIBC_TARGET_ARCH)" \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
-+	UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
- 	HOSTCC="$(HOSTCC)"
- 
- define UCLIBC_KCONFIG_FIXUP_CMDS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
