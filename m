@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 11:14:07 +0200
-Subject: [Buildroot] [PATCH 1/1] libmms: bump to version 0.6.4
-In-Reply-To: <20180407114156.16120-1-fontaine.fabrice@gmail.com>
-References: <20180407114156.16120-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180409111407.2f846d89@windsurf>
+Date: Mon, 9 Apr 2018 11:15:15 +0200
+Subject: [Buildroot] [PATCH 1/1] mpd: add mms support
+In-Reply-To: <20180407115230.22559-1-fontaine.fabrice@gmail.com>
+References: <20180407115230.22559-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180409111515.7669d88c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  7 Apr 2018 13:41:56 +0200, Fabrice Fontaine wrote:
-> Add license hash
-> 
+On Sat,  7 Apr 2018 13:52:30 +0200, Fabrice Fontaine wrote:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libmms/libmms.hash | 3 ++-
->  package/libmms/libmms.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  package/mpd/Config.in | 6 ++++++
+>  package/mpd/mpd.mk    | 7 +++++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+> index 6c7468e173..831e4ab0d7 100644
+> --- a/package/mpd/Config.in
+> +++ b/package/mpd/Config.in
+> @@ -180,6 +180,12 @@ config BR2_PACKAGE_MPD_CURL
+>  	help
+>  	  Enable curl streaming (http) support.
+>  
+> +config BR2_PACKAGE_MPD_LIBMMS
+> +	bool "mms"
+> +	select BR2_PACKAGE_LIBMMS
+> +	help
+> +	  Enable MMS support.
 
-Applied to master, thanks.
+Shouldn't we propagate the dependencies of the libmms package ?
+
+I suppose most (all ?) of them are already covered by the
+BR2_PACKAGE_MPD option, but shouldn't we propagate them anyway, in case
+we change the dependencies of BR2_PACKAGE_MPD in the future ?
+
+Do we a clear policy on this ?
 
 Thomas
 -- 
