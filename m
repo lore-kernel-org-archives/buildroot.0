@@ -1,60 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 9 Apr 2018 18:47:31 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: Avoid executing 'git log' each
- time SOURCE_DATE_EPOCH is used
-In-Reply-To: <4cda6a08-dab5-0901-802c-4ea2d7818cea@origamienergy.com>
-References: <1522239999-15582-1-git-send-email-james.byrne@origamienergy.com>
- <1523010383-27024-1-git-send-email-james.byrne@origamienergy.com>
- <20180407143358.GA2341@scaer>
- <4cda6a08-dab5-0901-802c-4ea2d7818cea@origamienergy.com>
-Message-ID: <20180409164731.GB2312@scaer>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 9 Apr 2018 18:47:44 +0200
+Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: new package
+In-Reply-To: <CALFsTFXN44UNogyWwaYOGO-v7AHdOxhLgELH6w2jiDFrCc3yXw@mail.gmail.com>
+References: <20180408174859.19679-1-asafka7@gmail.com>
+ <CAGm1_kvpoR7by7W_UtNuSeBGGcNedBrdU+VQaqM82J-CVfk7sA@mail.gmail.com>
+ <20180409091406.70f4fd06@windsurf>
+ <CALFsTFXN44UNogyWwaYOGO-v7AHdOxhLgELH6w2jiDFrCc3yXw@mail.gmail.com>
+Message-ID: <CAGm1_kvM_j0Vz87ZLCO4ekFcv02vwPrYh2V7=sDvdjuYe0qSrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Hi Asaf,
 
-On 2018-04-09 16:50 +0100, James Byrne spake thusly:
-> On 07/04/18 15:33, Yann E. MORIN wrote:
-[--SNIP--]
-> >So, I am still opposed to the second change.
-> In both of your examples it will still work as expected since the
-> buildroot makefile is always invoked with "-C /path/to/buildroot", which
-> means that when the 'git log' command is executed the current directory
-> is always '/path/to/buildroot' and so the commit date will be the date
-> of the tree that the Buildroot makefile is in.
+On Mon, Apr 9, 2018 at 5:54 PM, Asaf Kahlon <asafka7@gmail.com> wrote:
+> Yegor, Thomas,
+>
+> Indeed this is a host package. After you compile it, it can be used to speed
+> up entry points.
+> I now see Buildroot uses Config.in.host for this kind of packages, so I can
+> fix this on a new patch.
+>
+> About the license - I saw the license file on the Github repository, but
+> this license is not provided on the tar.gz archive downloaded from pypi, so
+> how can I add the licence information?
 
-Indeed, you are absolutely right. I was  totally oblivious to that
-fact, even though I moderately participated in that...
+Just use fastentrypoints.py as license file. I've asked maintainer to
+add license file to the PyPI's archive. So perhaps the new version
+would already have it.
 
-> If you think you might change your mind I will submit that change as a
-> new patch, as I still think it makes a better default, but if you don't
-> agree then I won't bother as it's a very minor thing, and as you say it
-> can easily be overridden by setting SOURCE_DATE_EPOCH in the environment.
+Yegor
 
-So, with your explanations above, I am no longer opposed to that second
-change.
-
-Be sure to provide adequate explanations in the commit log, though.
-Maybe something that list the two cases:
-
-  - if Buildroot is a git tree on its own, then the 'git log' will act
-    on that tree because we always cd into Buildroot's tree;
-
-  - if Buildroot is just a sub-directory in a upper-layer git tree, then
-    the git log would act on that directory.
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> On Mon, Apr 9, 2018, 10:14 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> wrote:
+>>
+>> Hello,
+>>
+>> On Sun, 8 Apr 2018 22:59:32 +0200, Yegor Yefremov wrote:
+>>
+>> > On Sun, Apr 8, 2018 at 7:48 PM, Asaf Kahlon <asafka7@gmail.com> wrote:
+>> > > host-package that is able to shorten the load time of entry_points
+>> > > declared
+>> > > in setup.py of python packages.
+>> > >
+>> > > Unfortunately, license file was not found.
+>> >
+>> > This comment shouldn't be part of the commit log.
+>>
+>> I disagree, this comment makes sense in a commit log.
+>>
+>>
+>> > > diff --git a/package/python-fastentrypoints/Config.in
+>> > > b/package/python-fastentrypoints/Config.in
+>> > > new file mode 100644
+>> > > index 0000000000..d2c86dbc5e
+>> > > --- /dev/null
+>> > > +++ b/package/python-fastentrypoints/Config.in
+>> > > @@ -0,0 +1,6 @@
+>> > > +config BR2_PACKAGE_PYTHON_FASTENTRYPOINTS
+>> > > +       bool "python-fastentrypoints"
+>> > > +       help
+>> > > +         Makes entry_points specified in setup.py load more quickly.
+>> > > +
+>> > > +         https://github.com/ninjaaron/fast-entry_points
+>>
+>> So we have a Config.in option for a target package.
+>>
+>> > > +PYTHON_FASTENTRYPOINTS_VERSION = 0.10
+>> > > +PYTHON_FASTENTRYPOINTS_SOURCE =
+>> > > fastentrypoints-$(PYTHON_FASTENTRYPOINTS_VERSION).tar.gz
+>> > > +PYTHON_FASTENTRYPOINTS_SITE =
+>> > > https://pypi.python.org/packages/e8/c8/c2902c9c9da43d8be8c75a730f15f0c51933c42c39b91d1d7b605a88e907
+>> > > +PYTHON_FASTENTRYPOINTS_SETUP_TYPE = setuptools
+>> >
+>> > The license file can be found on github and seems to be BSD-2c [1]
+>> >
+>> > With these changes applied you can add my: Reviewed-by: Yegor Yefremov
+>> > <yegorslists@googlemail.com>
+>> >
+>> > [1] https://github.com/ninjaaron/fast-entry_points/blob/master/LICENSE
+>> >
+>> > Yegor
+>> >
+>> > > +
+>> > > +$(eval $(host-python-package))
+>>
+>> But this is a host only package ?
+>>
+>> I don't see how this can work. Am I missing something ?
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
