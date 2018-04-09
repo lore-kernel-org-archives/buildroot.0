@@ -1,36 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 21:42:53 +0200
-Subject: [Buildroot] [git commit] package/flare-engine: fix license
-Message-ID: <20180409194333.8F01B8134D@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 9 Apr 2018 22:47:24 +0300
+Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: new package
+In-Reply-To: <20180409210122.12173e62@windsurf>
+References: <20180409180403.11728-1-asafka7@gmail.com>
+ <20180409210122.12173e62@windsurf>
+Message-ID: <CALFsTFWyq9tYd+qS+YG3KJ1smzkcNhMTO_D4-2QCVoyR1qUiDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4316cad63dc971535160388f040d551536cabd17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yes, of course.
 
-The license is GPL-3.0+, not GPL-3.0. Indeed all source files have the
-mention:
+After the compilation of this package, you'll have an executable called
+fastep under $(HOST_DIR)/usr/bin.
+Then you can run fastep on a directory of a python package, and it'll speed
+up the console_scripts declared on your setup.py.
+What it really does is copying fastentrypoints,py to the directory, adding
+it to MANIFEST.in, and adding an import on setup.py, which is actually a
+monkey-patch.
 
-"either version 3 of the License, or (at your option) any later version"
+It can be very useful on systems with limited resources where importing
+pkg_resources can take a long time.
+If you want, you can even take it further and write pkg-fastep.mk. Then you
+can use it for the relevant python packages. It will add the needed
+dependency and run fastep on the package directory.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/flare-engine/flare-engine.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Asaf.
 
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index 394ddcfa5d..0aac3bd33c 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
-@@ -6,7 +6,7 @@
- 
- FLARE_ENGINE_VERSION = v1.0
- FLARE_ENGINE_SITE =  $(call github,clintbellanger,flare-engine,$(FLARE_ENGINE_VERSION))
--FLARE_ENGINE_LICENSE = GPL-3.0
-+FLARE_ENGINE_LICENSE = GPL-3.0+
- FLARE_ENGINE_LICENSE_FILES = COPYING
- 
- FLARE_ENGINE_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
+On Mon, Apr 9, 2018 at 10:01 PM, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello,
+>
+> On Mon,  9 Apr 2018 21:04:03 +0300, Asaf Kahlon wrote:
+> > host-package that is able to shorten the load time of entry_points
+> declared
+> > in setup.py of python packages.
+> >
+> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+>
+> Thanks for this new version. Could you give some details on how you're
+> using this host package ? I.e what you are doing with it exactly ?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180409/231ac644/attachment.html>
