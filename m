@@ -1,37 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 21:01:56 +0200
-Subject: [Buildroot] [PATCH v3] Makefile: Avoid executing 'git log' each
- time SOURCE_DATE_EPOCH is used
-In-Reply-To: <1523290081-35341-1-git-send-email-james.byrne@origamienergy.com>
-References: <1523010383-27024-1-git-send-email-james.byrne@origamienergy.com>
- <1523290081-35341-1-git-send-email-james.byrne@origamienergy.com>
-Message-ID: <20180409210156.748a2959@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Apr 2018 21:07:02 +0200
+Subject: [Buildroot] [PATCH] patch: add upstream security fix
+In-Reply-To: <653d97fd8ac542e3eac3c0a78dc701a7033ba39a.1523290836.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 9 Apr 2018 19:20:36 +0300")
+References: <653d97fd8ac542e3eac3c0a78dc701a7033ba39a.1523290836.git.baruch@tkos.co.il>
+Message-ID: <878t9w8ai1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Mon,  9 Apr 2018 17:08:01 +0100, James Byrne wrote:
-> If SOURCE_DATE_EPOCH is not defined it was given a definition that
-> caused 'git log' to be executed each time the variable is referenced,
-> which is not very efficient given that the answer cannot change.
-> 
-> This commit moves the definition of BR2_VERSION_GIT_EPOCH after the
-> inclusion of Makefile.in (so that GIT is defined) and makes it a simply
-> expanded variable so that it is only evaluated once.
-> 
-> Signed-off-by: James Byrne <james.byrne@origamienergy.com>
-> ---
->  Makefile | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+ > Fixes CVE-2018-1000156: arbitrary command execution in ed-style patches.
+ > Depend on MMU for now, because the patch adds a fork() call. Upstream
+ > later switched to gnulib provided execute(), so this dependency can be
+ > dropped on the next version bump.
 
-Applied to master, thanks.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Thomas
+Committed to 2018.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
