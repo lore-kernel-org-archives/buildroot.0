@@ -1,105 +1,106 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  9 Apr 2018 23:03:29 +0200
-Subject: [Buildroot] [PATCH v2,1/1] cryptopp: bump to version 7.0.0
-Message-ID: <20180409210329.8592-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 9 Apr 2018 23:08:05 +0200
+Subject: [Buildroot] [PATCH v2-RESEND 2/6] arm-trusted-firmware:
+ generate atf-uboot.ub for ZynqMP booting
+In-Reply-To: <1523032461-3295-3-git-send-email-luca@lucaceresoli.net>
+References: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
+ <1523032461-3295-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20180409230805.66ab7dc5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch (applied upstream)
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Rebase/fix patch (remove deletion of uncommited patches)
+On Fri,  6 Apr 2018 18:34:17 +0200, Luca Ceresoli wrote:
+> U-Boot SPL for the Xilinx ZynqMP SoCs needs ATF in this format to load
+> it.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> Changes v1 -> v2: none.
+> ---
+>  boot/arm-trusted-firmware/Config.in               |  9 +++++++++
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 21 +++++++++++++++++++++
+>  2 files changed, 30 insertions(+)
+> 
+> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+> index 7aef87cb746c..dca9958423b9 100644
+> --- a/boot/arm-trusted-firmware/Config.in
+> +++ b/boot/arm-trusted-firmware/Config.in
+> @@ -71,6 +71,15 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+>  	  typically used on platforms where another bootloader (e.g
+>  	  U-Boot) encapsulates ATF BL31.
+>  
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
+> +	bool "Generate a U-Boot image (for Xilinx ZynqMP U-Boot)"
+> +	depends on BR2_cortex_a53
+> +	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+> +	help
+> +	  Uses mkimage from uboot-tools to encapsulate bl31.bin into
+> +	  a U-Boot image named atf-uboot.ub. This is needed by the
+> +	  Xilinx version of U-Boot SPL to load ATF on the ZynqMP SoC.
 
- ...0001-Fix-GCC-version-for-RDSEED-intrinsic.patch | 49 ----------------------
- package/cryptopp/cryptopp.hash                     |  4 +-
- package/cryptopp/cryptopp.mk                       |  2 +-
- 3 files changed, 3 insertions(+), 52 deletions(-)
- delete mode 100644 package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
+In fact this doesn't look like very Xilinx-specific. It just
+encapsulates the bl31 image in a U-Boot image format. This could
+potentially be used by other platforms as well.
 
-diff --git a/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch b/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
-deleted file mode 100644
-index e0596017ad..0000000000
---- a/package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 31465400675c75d8ea0556d708a7efbf915bc366 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 10 Mar 2018 12:14:23 +0100
--Subject: [PATCH] Fix GCC version for RDSEED intrinsic
--
--rdseed is only available on gcc 4.8.x, not on gcc 4.7.x
--
--Fixes:
-- - http://autobuild.buildroot.org/results/9ab386124e4a09b50598c6f95ad40b25a83d227e
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- rdrand.cpp | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/rdrand.cpp b/rdrand.cpp
--index 900fcd96..64b12208 100644
----- a/rdrand.cpp
--+++ b/rdrand.cpp
--@@ -74,7 +74,7 @@
-- #  else
-- #    define GCC_RDRAND_ASM_AVAILABLE 1
-- #  endif
---#  if defined(__RDSEED__) && (CRYPTOPP_GCC_VERSION >= 40700) && !defined(__OPTIMIZE__)
--+#  if defined(__RDSEED__) && (CRYPTOPP_GCC_VERSION >= 40800) && !defined(__OPTIMIZE__)
-- #    define ALL_RDSEED_INTRIN_AVAILABLE 1
-- #  else
-- #    define GCC_RDSEED_ASM_AVAILABLE 1
--@@ -291,7 +291,7 @@ inline void RDSEED32(void* output)
--         : "=a" (*reinterpret_cast<word32*>(output))
--         : : "cc"
--     );
---#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40700)
--+#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40800)
--     __asm__ __volatile__
--     (
--         INTEL_NOPREFIX
--@@ -333,7 +333,7 @@ inline void RDSEED64(void* output)
--         : "=a" (*reinterpret_cast<word64*>(output))
--         : : "cc"
--     );
---#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40700)
--+#elif defined(GCC_RDSEED_ASM_AVAILABLE) && (CRYPTOPP_GCC_VERSION >= 40800)
--     __asm__ __volatile__
--     (
--         INTEL_NOPREFIX
---- 
--2.11.0
--
-diff --git a/package/cryptopp/cryptopp.hash b/package/cryptopp/cryptopp.hash
-index d124e11a81..389f05f654 100644
---- a/package/cryptopp/cryptopp.hash
-+++ b/package/cryptopp/cryptopp.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://www.cryptopp.com/release610.html:
--sha256  21289d2511101a9350c87c8eb1f4982d4a266e8037b19dab79a32cc13ea108c7  cryptopp610.zip
-+# Hash from: https://www.cryptopp.com/release700.html:
-+sha256  a4bc939910edd3d29fb819a6fc0dfdc293f686fa62326f61c56d72d0a366ceb0  cryptopp700.zip
- 
- # Hash for license file:
- sha256  fe5f5f187e6e38ac2f833956fc5c4cab2df08797cff07f540e4ee74f12f7ee5b  License.txt
-diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-index b4997aba9d..08b18f2fbc 100644
---- a/package/cryptopp/cryptopp.mk
-+++ b/package/cryptopp/cryptopp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CRYPTOPP_VERSION = 6.1.0
-+CRYPTOPP_VERSION = 7.0.0
- CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
- CRYPTOPP_SITE = http://cryptopp.com/
- CRYPTOPP_LICENSE = BSL-1.0
+So, perhaps we could make this:
+
+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT
+	bool "Build BL31 U-Boot image"
+	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+	help
+	  This option will generate a bl31.bin that is encapsulates
+	  into a U-Boot image named atf-uboot.ub. This is for example
+	  used by the Xilinx version of U-Boot SPL to load ATF on the
+	  ZynqMP SoC.
+
+> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE),y)
+> +define ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
+> +# Get the entry point address from the elf.
+> +	BASE_ADDR=$$($(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | \
+> +	             grep -E -m 1 -i "entry point.*?0x" | \
+> +	             sed -r 's/.*?(0x.*?)/\1/g') && \
+
+Meh, what a mess to get the entry point address :-/ Could this be
+simplified with:
+
+$(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | sed '/^  Entry point address: *\(.*\)/!d; s//\1/'
+
+(Thanks Yann!)
+
+> +	$(HOST_DIR)/bin/mkimage \
+> +		-A arm64 -O arm-trusted-firmware -C none \
+> +		-a $${BASE_ADDR} -e $${BASE_ADDR} \
+> +		-d $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31.bin \
+> +		$(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub
+> +endef
+> +define ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL
+> +	install $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub $(BINARIES_DIR)
+
+Should be:
+
+	$(INSTALL) -m 0644 -D $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub $(BINARIES_DIR)/atf-uboot.ub
+
+> +endef
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RESET_TO_BL31=1
+> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
+> +ARM_TRUSTED_FIRMWARE_POST_BUILD_HOOKS += ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
+> +ARM_TRUSTED_FIRMWARE_POST_INSTALL_IMAGES_HOOKS += ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL
+
+Rather than hooks, just use directly
+ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE and
+ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL in the BUILD_CMDS and
+INSTALL_IMAGES_CMDS. Of course, remove the ZYNQMP part of the variable
+names if you agree with my proposal above.
+
+Thanks!
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
