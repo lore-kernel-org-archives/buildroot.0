@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 22:48:25 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.16.1
-In-Reply-To: <1523306368-28027-1-git-send-email-festevam@gmail.com>
-References: <1523306368-28027-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180409224825.29386d6a@windsurf>
+Date: Mon, 9 Apr 2018 22:49:18 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself for libcap-ng
+Message-ID: <20180409205023.57259882E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=68e7a2a7dcf822018531b3520fc34a3da12bc496
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  9 Apr 2018 17:39:27 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Both applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a942b77939..85e22c2e71 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -671,6 +671,7 @@ F:	package/gupnp-tools/
+ F:	package/hiredis/
+ F:	package/i2pd/
+ F:	package/igd2-for-linux/
++F:	package/libcap-ng/
+ F:	package/libcdio-paranoia/
+ F:	package/libglib2/
+ F:	package/libmpdclient/
