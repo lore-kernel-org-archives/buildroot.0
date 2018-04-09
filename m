@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 11:15:41 +0200
-Subject: [Buildroot] [PATCH] wine: Add optional dependency on libkrb5
-In-Reply-To: <1523102272-30239-1-git-send-email-nerv@dawncrow.de>
-References: <1523102272-30239-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <20180409111541.03e03380@windsurf>
+Date: Mon, 9 Apr 2018 11:15:50 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself for libglib2
+Message-ID: <20180409091551.CDEE080641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dee9ff010834555f88d079f188ac102f5b3cef6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  7 Apr 2018 13:57:52 +0200, Andr? Hentschel wrote:
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/wine/wine.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 10b20c259b..b797087191 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -669,6 +669,7 @@ F:	package/hiredis/
+ F:	package/i2pd/
+ F:	package/igd2-for-linux/
+ F:	package/libcdio-paranoia/
++F:	package/libglib2/
+ F:	package/libmpdclient/
+ F:	package/libupnp/
+ F:	package/libupnp18/
