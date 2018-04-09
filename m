@@ -1,41 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 11:22:44 +0200
-Subject: [Buildroot] [PATCH] package/xen: Fix qemu-xen memfd build
- failure
-In-Reply-To: <1523211915-680-1-git-send-email-alistair@alistair23.me>
-References: <1523211915-680-1-git-send-email-alistair@alistair23.me>
-Message-ID: <20180409112244.4936e731@windsurf>
+Date: Mon, 9 Apr 2018 11:23:11 +0200
+Subject: [Buildroot] [git commit] package/liblo: fix build with musl
+Message-ID: <20180409092312.C378481316@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b07245e5b748f73d17b2d612148f792f5d248106
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  8 Apr 2018 11:25:15 -0700, Alistair Francis wrote:
-> Fix the QEMU memfd compile error:
-> tools/qemu-xen/util/memfd.c:40:12: error: static declaration of 'memfd_create' follows non-static declaration
->  static int memfd_create(const char *name, unsigned int flags)
->             ^~~~~~~~~~~~
-> 
-> that has been introduced since the Glibc 2.27 upgrade.
-> 
-> This just involves porting the upstream QEMU patch to the Xen QEMU tree.
-> 
-> This fixes:
-> http://autobuild.buildroot.net/results/ec7cda00e07b0c98a9a366244b67611e042e0d4b/
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> ---
->  package/xen/0003-memfd-fix-configure-test.patch | 62 +++++++++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 package/xen/0003-memfd-fix-configure-test.patch
+Commit 2759ba03979 (liblo: disable werror to fix build issues) tried to
+fix the issue by passing --disable-werror, but this is not a recognised
+option.
 
-Applied to master, thanks.
+Instead, just fix the code for good.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+    http://autobuild.buildroot.org/results/000a46954d0c6d3dbc4b4634a0d3a3c955fac679
+    http://autobuild.buildroot.org/results/58cb834bbd69bafc5cb0f23c236919c609648c05
+    http://autobuild.buildroot.org/results/9de1c2007818082e88d77572abf8ff8a72e01930
+    ...
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Alex Baldwin <alexbaldwinmusic@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-server-use-correct-poll.h-header.patch    | 32 ++++++++++++++++++++++
+ package/liblo/liblo.mk                             |  5 +---
+ 2 files changed, 33 insertions(+), 4 deletions(-)
+
+diff --git a/package/liblo/0001-server-use-correct-poll.h-header.patch b/package/liblo/0001-server-use-correct-poll.h-header.patch
+new file mode 100644
+index 0000000000..04c0445534
+--- /dev/null
++++ b/package/liblo/0001-server-use-correct-poll.h-header.patch
+@@ -0,0 +1,32 @@
++From d59f2e6f42a9e4f8a9184d7ed75546f47dc50123 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 8 Apr 2018 11:09:02 +0200
++Subject: [PATCH] server: use correct poll.h header
++
++Fixes build with the musl C library:
++    http://autobuild.buildroot.net/results/000a46954d0c6d3dbc4b4634a0d3a3c955fac679
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Upstream status:
++  PR sent: https://github.com/radarsat1/liblo/pull/66
++---
++ src/server.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/server.c b/src/server.c
++index 01fa08f..11c62d2 100644
++--- a/src/server.c
+++++ b/src/server.c
++@@ -51,7 +51,7 @@
++ #include <netdb.h>
++ #include <sys/socket.h>
++ #ifdef HAVE_POLL
++-#include <sys/poll.h>
+++#include <poll.h>
++ #endif
++ #include <sys/un.h>
++ #include <arpa/inet.h>
++-- 
++2.14.1
++
+diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
+index 7845c68ff2..e28e52803a 100644
+--- a/package/liblo/liblo.mk
++++ b/package/liblo/liblo.mk
+@@ -12,10 +12,7 @@ LIBLO_LICENSE_FILES = COPYING
+ LIBLO_INSTALL_STAGING = YES
+ 
+ # IPv6 support broken, issue known upstream
+-# werror - not needed for release.
+-LIBLO_CONF_OPTS += \
+-	--disable-ipv6 \
+-	--disable-werror
++LIBLO_CONF_OPTS = --disable-ipv6
+ 
+ # Liblo uses atomic builtins, so we need to link with libatomic for
+ # the architectures who explicitly need libatomic.
