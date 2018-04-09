@@ -1,11 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 9 Apr 2018 18:35:49 +0200
-Subject: [Buildroot] [PATCH v3] Makefile: Avoid executing 'git log' each
+Date: Mon, 9 Apr 2018 18:47:31 +0200
+Subject: [Buildroot] [PATCH v2] Makefile: Avoid executing 'git log' each
  time SOURCE_DATE_EPOCH is used
-In-Reply-To: <1523290081-35341-1-git-send-email-james.byrne@origamienergy.com>
-References: <1523010383-27024-1-git-send-email-james.byrne@origamienergy.com>
- <1523290081-35341-1-git-send-email-james.byrne@origamienergy.com>
-Message-ID: <20180409163549.GA2312@scaer>
+In-Reply-To: <4cda6a08-dab5-0901-802c-4ea2d7818cea@origamienergy.com>
+References: <1522239999-15582-1-git-send-email-james.byrne@origamienergy.com>
+ <1523010383-27024-1-git-send-email-james.byrne@origamienergy.com>
+ <20180407143358.GA2341@scaer>
+ <4cda6a08-dab5-0901-802c-4ea2d7818cea@origamienergy.com>
+Message-ID: <20180409164731.GB2312@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +16,40 @@ To: buildroot@busybox.net
 
 James, All,
 
-On 2018-04-09 17:08 +0100, James Byrne spake thusly:
-> If SOURCE_DATE_EPOCH is not defined it was given a definition that
-> caused 'git log' to be executed each time the variable is referenced,
-> which is not very efficient given that the answer cannot change.
-> 
-> This commit moves the definition of BR2_VERSION_GIT_EPOCH after the
-> inclusion of Makefile.in (so that GIT is defined) and makes it a simply
-> expanded variable so that it is only evaluated once.
-> 
-> Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+On 2018-04-09 16:50 +0100, James Byrne spake thusly:
+> On 07/04/18 15:33, Yann E. MORIN wrote:
+[--SNIP--]
+> >So, I am still opposed to the second change.
+> In both of your examples it will still work as expected since the
+> buildroot makefile is always invoked with "-C /path/to/buildroot", which
+> means that when the 'git log' command is executed the current directory
+> is always '/path/to/buildroot' and so the commit date will be the date
+> of the tree that the Buildroot makefile is in.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Indeed, you are absolutely right. I was  totally oblivious to that
+fact, even though I moderately participated in that...
 
-Thanks for the respin! :-)
+> If you think you might change your mind I will submit that change as a
+> new patch, as I still think it makes a better default, but if you don't
+> agree then I won't bother as it's a very minor thing, and as you say it
+> can easily be overridden by setting SOURCE_DATE_EPOCH in the environment.
+
+So, with your explanations above, I am no longer opposed to that second
+change.
+
+Be sure to provide adequate explanations in the commit log, though.
+Maybe something that list the two cases:
+
+  - if Buildroot is a git tree on its own, then the 'git log' will act
+    on that tree because we always cd into Buildroot's tree;
+
+  - if Buildroot is just a sub-directory in a upper-layer git tree, then
+    the git log would act on that directory.
+
+Thank you!
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  Makefile | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 0724f28..cd53362 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -247,8 +247,6 @@ export TZ = UTC
->  export LANG = C
->  export LC_ALL = C
->  export GZIP = -n
-> -BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
-> -export SOURCE_DATE_EPOCH ?= $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
->  endif
-> 
->  # To put more focus on warnings, be less verbose as default
-> @@ -504,6 +502,14 @@ include support/dependencies/dependencies.mk
->  include $(sort $(wildcard toolchain/*.mk))
->  include $(sort $(wildcard toolchain/*/*.mk))
-> 
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +# If SOURCE_DATE_EPOCH has not been set then use the commit date, or the last
-> +# release date if the source tree is not within a Git repository.
-> +# See: https://reproducible-builds.org/specs/source-date-epoch/
-> +BR2_VERSION_GIT_EPOCH := $(shell $(GIT) --git-dir=$(TOPDIR)/.git log -1 --format=%at 2> /dev/null)
-> +export SOURCE_DATE_EPOCH ?= $(or $(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
-> +endif
-> +
->  # Include the package override file if one has been provided in the
->  # configuration.
->  PACKAGE_OVERRIDE_FILE = $(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
-> --
-> 2.7.4
-> 
-> The contents of this email and any attachment are confidential to the intended recipient(s). If you are not an intended recipient: (i) do not use, disclose, distribute, copy or publish this email or its contents; (ii) please contact the sender immediately; and (iii) delete this email. Origami Energy Limited (company number 8619644); Origami Storage Limited (company number 10436515) and OSSPV001 Limited (company number 10933403), each registered in England and each with a registered office at: Ashcombe Court, Woolsack Way, Godalming, GU7 1LQ.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
