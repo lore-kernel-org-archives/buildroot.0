@@ -1,110 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Apr 2018 17:49:03 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] php: fix
- emalloc/efree/estrdup/... undefined references
-Message-ID: <20180409155222.EB04388062@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 09 Apr 2018 15:54:50 +0000
+Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: new package
+In-Reply-To: <20180409091406.70f4fd06@windsurf>
+References: <20180408174859.19679-1-asafka7@gmail.com>
+ <CAGm1_kvpoR7by7W_UtNuSeBGGcNedBrdU+VQaqM82J-CVfk7sA@mail.gmail.com>
+ <20180409091406.70f4fd06@windsurf>
+Message-ID: <CALFsTFXN44UNogyWwaYOGO-v7AHdOxhLgELH6w2jiDFrCc3yXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d44357175bd7c711c54fd6c2df5637a181c1d03b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Yegor, Thomas,
 
-zend_alloc.h defines some macros such as:
+Indeed this is a host package. After you compile it, it can be used to
+speed up entry points.
+I now see Buildroot uses Config.in.host for this kind of packages, so I can
+fix this on a new patch.
 
-Where _estrdup is the actual function implemented by the PHP core. If
-this header file is not included, and some code uses estrdup, one ends
-up with an undefined reference. This happens when libexpat support is
-enabled. This commit adds a PHP patch that fixes this issue. The patch
-has been submitted upstream through a Github pull request.
+About the license - I saw the license file on the Github repository, but
+this license is not provided on the tar.gz archive downloaded from pypi, so
+how can I add the licence information?
 
-Fixes:
+Regards,
+Asaf.
 
-  http://autobuild.buildroot.net/results/889d2c1f509c035cd506e36061939bfddc8f1500/
+On Mon, Apr 9, 2018, 10:14 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fc4b66dbc1b71e871129ce14b289fcda6eb3ea10)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-expat_compat.h-add-missing-php.h-include.patch | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
-
-diff --git a/package/php/0009-ext-xml-expat_compat.h-add-missing-php.h-include.patch b/package/php/0009-ext-xml-expat_compat.h-add-missing-php.h-include.patch
-new file mode 100644
-index 0000000000..daf004dcf7
---- /dev/null
-+++ b/package/php/0009-ext-xml-expat_compat.h-add-missing-php.h-include.patch
-@@ -0,0 +1,71 @@
-+From fb1f0e17eed729204a6d5caf590715d6257dceb3 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 5 Apr 2018 22:50:00 +0200
-+Subject: [PATCH] ext/xml/expat_compat.h: add missing php.h include
-+
-+When expat support is disabled and libxml support is enabled, the
-+following part of the code in expat_compat.h gets used:
-+
-+and therefore "php".h" is included. However, when libexpat support is
-+enabled, HAVE_LIBEXPAT is defined, and therefore the following part of
-+the code is used:
-+
-+In this case, "php.h" is not included. Due to this, zend_alloc.h is
-+never included when building the ext/xmlrpc/libxmlrpc/xml_element.c
-+file, and therefore the estrdup -> _estrdup macros are never defined,
-+causing the following link time failure:
-+
-+ext/xmlrpc/libxmlrpc/xml_element.o: In function `xml_element_serialize':
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:462: undefined reference to `efree'
-+ext/xmlrpc/libxmlrpc/xml_element.o: In function `xml_elem_entity_escape':
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:347: undefined reference to `emalloc'
-+ext/xmlrpc/libxmlrpc/xml_element.o: In function `_xmlrpc_charHandler':
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:646: undefined reference to `efree'
-+ext/xmlrpc/libxmlrpc/xml_element.o: In function `xml_elem_free_non_recurse':
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:198: undefined reference to `efree'
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:199: undefined reference to `efree'
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:200: undefined reference to `efree'
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:207: undefined reference to `efree'
-+ext/xmlrpc/libxmlrpc/xml_element.o: In function `xml_elem_new':
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:263: undefined reference to `ecalloc'
-+ext/xmlrpc/libxmlrpc/xml_element.o: In function `_xmlrpc_startElement':
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:602: undefined reference to `estrdup'
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:607: undefined reference to `emalloc'
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:609: undefined reference to `estrdup'
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:610: undefined reference to `estrdup'
-+ext/xmlrpc/libxmlrpc/xml_element.o: In function `xml_elem_free_non_recurse':
-+/home/thomas/projets/php/ext/xmlrpc/libxmlrpc/xml_element.c:211: undefined reference to `efree'
-+collect2: error: ld returned 1 exit status
-+make: *** [Makefile:248: sapi/cgi/php-cgi] Error 1
-+
-+This link time failure can be produced with:
-+
-+./configure --prefix=/usr --with-libdir=/usr/lib64 --disable-all \
-+	    --without-pear --with-config-file-path=/etc --disable-phpdbg \
-+	    --disable-cli --enable-cgi --disable-fpm --enable-xmlreader \
-+	    --enable-xmlwriter --enable-libxml --enable-wddx --with-xmlrpc \
-+	    --with-libexpat-dir=/
-+
-+We fix it by including "php.h" in the HAVE_LIBEXPAT case.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream-status: https://github.com/php/php-src/pull/3212
-+---
-+ ext/xml/expat_compat.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/ext/xml/expat_compat.h b/ext/xml/expat_compat.h
-+index ed621ab53d..29fe48a7dd 100644
-+--- a/ext/xml/expat_compat.h
-++++ b/ext/xml/expat_compat.h
-+@@ -154,6 +154,7 @@ PHP_XML_API const XML_Char *XML_ExpatVersion(void);
-+ PHP_XML_API void XML_ParserFree(XML_Parser);
-+ 
-+ #elif defined(HAVE_LIBEXPAT)
-++#include "php.h"
-+ #include <expat.h>
-+ #endif /* HAVE_LIBEXPAT */
-+ 
-+-- 
-+2.14.3
-+
+> Hello,
+>
+> On Sun, 8 Apr 2018 22:59:32 +0200, Yegor Yefremov wrote:
+>
+> > On Sun, Apr 8, 2018 at 7:48 PM, Asaf Kahlon <asafka7@gmail.com> wrote:
+> > > host-package that is able to shorten the load time of entry_points
+> declared
+> > > in setup.py of python packages.
+> > >
+> > > Unfortunately, license file was not found.
+> >
+> > This comment shouldn't be part of the commit log.
+>
+> I disagree, this comment makes sense in a commit log.
+>
+>
+> > > diff --git a/package/python-fastentrypoints/Config.in
+> b/package/python-fastentrypoints/Config.in
+> > > new file mode 100644
+> > > index 0000000000..d2c86dbc5e
+> > > --- /dev/null
+> > > +++ b/package/python-fastentrypoints/Config.in
+> > > @@ -0,0 +1,6 @@
+> > > +config BR2_PACKAGE_PYTHON_FASTENTRYPOINTS
+> > > +       bool "python-fastentrypoints"
+> > > +       help
+> > > +         Makes entry_points specified in setup.py load more quickly.
+> > > +
+> > > +         https://github.com/ninjaaron/fast-entry_points
+>
+> So we have a Config.in option for a target package.
+>
+> > > +PYTHON_FASTENTRYPOINTS_VERSION = 0.10
+> > > +PYTHON_FASTENTRYPOINTS_SOURCE =
+> fastentrypoints-$(PYTHON_FASTENTRYPOINTS_VERSION).tar.gz
+> > > +PYTHON_FASTENTRYPOINTS_SITE =
+> https://pypi.python.org/packages/e8/c8/c2902c9c9da43d8be8c75a730f15f0c51933c42c39b91d1d7b605a88e907
+> > > +PYTHON_FASTENTRYPOINTS_SETUP_TYPE = setuptools
+> >
+> > The license file can be found on github and seems to be BSD-2c [1]
+> >
+> > With these changes applied you can add my: Reviewed-by: Yegor Yefremov
+> > <yegorslists@googlemail.com>
+> >
+> > [1] https://github.com/ninjaaron/fast-entry_points/blob/master/LICENSE
+> >
+> > Yegor
+> >
+> > > +
+> > > +$(eval $(host-python-package))
+>
+> But this is a host only package ?
+>
+> I don't see how this can work. Am I missing something ?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180409/0bf6f86f/attachment.html>
