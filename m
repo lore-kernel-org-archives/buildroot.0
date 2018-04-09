@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 11:15:15 +0200
-Subject: [Buildroot] [PATCH 1/1] mpd: add mms support
-In-Reply-To: <20180407115230.22559-1-fontaine.fabrice@gmail.com>
-References: <20180407115230.22559-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180409111515.7669d88c@windsurf>
+Date: Mon, 9 Apr 2018 11:15:30 +0200
+Subject: [Buildroot] [git commit] wine: add optional dependency on libkrb5
+Message-ID: <20180409091534.0AD4284C70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=93481c4f287b6578bc2685803937628785dafa9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  7 Apr 2018 13:52:30 +0200, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mpd/Config.in | 6 ++++++
->  package/mpd/mpd.mk    | 7 +++++++
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index 6c7468e173..831e4ab0d7 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -180,6 +180,12 @@ config BR2_PACKAGE_MPD_CURL
->  	help
->  	  Enable curl streaming (http) support.
->  
-> +config BR2_PACKAGE_MPD_LIBMMS
-> +	bool "mms"
-> +	select BR2_PACKAGE_LIBMMS
-> +	help
-> +	  Enable MMS support.
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wine/wine.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Shouldn't we propagate the dependencies of the libmms package ?
-
-I suppose most (all ?) of them are already covered by the
-BR2_PACKAGE_MPD option, but shouldn't we propagate them anyway, in case
-we change the dependencies of BR2_PACKAGE_MPD in the future ?
-
-Do we a clear policy on this ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 02c4c0f155..b6b3aae504 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -23,7 +23,6 @@ WINE_CONF_OPTS = \
+ 	--without-gphoto \
+ 	--without-gsm \
+ 	--without-hal \
+-	--without-krb5 \
+ 	--without-opencl \
+ 	--without-oss
+ 
+@@ -121,6 +120,13 @@ else
+ WINE_CONF_OPTS += --without-glu
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBKRB5),y)
++WINE_CONF_OPTS += --with-krb5
++WINE_DEPENDENCIES += libkrb5
++else
++WINE_CONF_OPTS += --without-krb5
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+ WINE_CONF_OPTS += --with-pcap
+ WINE_DEPENDENCIES += libpcap
