@@ -1,24 +1,30 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Sun, 8 Apr 2018 18:34:19 -0400
-Subject: [Buildroot] Using a bootlin toolchain with buildroot
-In-Reply-To: <20180407084321.1e68cc90@windsurf.home>
-References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
- <20180406210215.6c276c4f@windsurf.home>
- <CAF_dkJBUm=iYA_WPm3eJ1KGN6aKJKVS+PoYdJnnWax-xivKJWw@mail.gmail.com>
- <20180407084321.1e68cc90@windsurf.home>
-Message-ID: <CAF_dkJDwfTvVHmSVgi4mo=2u=-Yj-__3e7rqsOyUXppLPeysEQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sun, 8 Apr 2018 22:04:04 -0500
+Subject: [Buildroot] [PATCH] package/xen: Fix qemu-xen memfd build
+ failure
+In-Reply-To: <1523211915-680-1-git-send-email-alistair@alistair23.me>
+References: <1523211915-680-1-git-send-email-alistair@alistair23.me>
+Message-ID: <CANQCQpbfKVDL9+5sFjPOPdcZ5_dDOtLLvgtodr=_-sAk65E-NQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 7, 2018 at 2:43 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> And that's it. The resulting SDK in output/host is the combination of
-> the Bootlin toolchain and the libraries defined in your Buildroot
-> configuration.
->
-Thank you Thomas.  That sounds great.
+Alistair,
 
---wpd
+On Sun, Apr 8, 2018 at 1:25 PM, Alistair Francis <alistair23@gmail.com> wrote:
+> Fix the QEMU memfd compile error:
+> tools/qemu-xen/util/memfd.c:40:12: error: static declaration of 'memfd_create' follows non-static declaration
+>  static int memfd_create(const char *name, unsigned int flags)
+>             ^~~~~~~~~~~~
+>
+> that has been introduced since the Glibc 2.27 upgrade.
+>
+> This just involves porting the upstream QEMU patch to the Xen QEMU tree.
+>
+> This fixes:
+> http://autobuild.buildroot.net/results/ec7cda00e07b0c98a9a366244b67611e042e0d4b/
+>
+
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
