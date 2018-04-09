@@ -1,277 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 11:25:17 +0200
-Subject: [Buildroot] [git commit] libbsd: add upstream patch to fix musl
+Date: Mon, 9 Apr 2018 11:25:30 +0200
+Subject: [Buildroot] [PATCH] libbsd: add upstream patch to fix musl
  build issue
-Message-ID: <20180409092521.04F427FE27@busybox.osuosl.org>
+In-Reply-To: <20180406081835.4239-1-joerg.krause@embedded.rocks>
+References: <20180406081835.4239-1-joerg.krause@embedded.rocks>
+Message-ID: <20180409112530.10683cf4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cce98cbbb031c0e9960b9e98df413e87b15ca1ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Commit d879be3049598f35d7b959784e1a6c2811ba2036 enabled the build for non-glibc
-toolchains and added a  patch from upstream to fix one remaining build issue
-with musl.
+On Fri,  6 Apr 2018 10:18:35 +0200, J?rg Krause wrote:
+> Commit d879be3049598f35d7b959784e1a6c2811ba2036 enabled the build for non-glibc
+> toolchains and added a  patch from upstream to fix one remaining build issue
+> with musl.
+> 
+> The upstream patch defines the glibc specific macro `__GLIBC_PREREQ` in
+> `include/bsd/sys/cdefs.h`, but the patch does not include this header
+> file in `include/bsd/stdlib.h` which uses the macro.
+> 
+> Upstream did committed an earlier patch which adds this header inclusion
+> to `include/bsd/stdlib.h`. So, add this upstream patch as well to fix a
+> build error when building the hcitop tool from the not yet added package
+> bluez-alsa.
+> 
+> Note, that the upstream patch address the issue that `<sys/cdefs.h>` is
+> a non-portable header. However, this is not the issue which needs to be
+> fixed by this patch, but solely the needed inclusion of the
+> `include/bsd/stdlib.h` header file, to see the definition of
+> `__GLIBC_PREREQ`.
+> 
+> Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  ...3-Handle-systems-missing-sys-cdefs.h.patch | 230 ++++++++++++++++++
+>  1 file changed, 230 insertions(+)
+>  create mode 100644 package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch
 
-The upstream patch defines the glibc specific macro `__GLIBC_PREREQ` in
-`include/bsd/sys/cdefs.h`, but the patch does not include this header
-file in `include/bsd/stdlib.h` which uses the macro.
+Applied to master, thanks.
 
-Upstream did committed an earlier patch which adds this header inclusion
-to `include/bsd/stdlib.h`. So, add this upstream patch as well to fix a
-build error when building the hcitop tool from the not yet added package
-bluez-alsa.
-
-Note, that the upstream patch address the issue that `<sys/cdefs.h>` is
-a non-portable header. However, this is not the issue which needs to be
-fixed by this patch, but solely the needed inclusion of the
-`include/bsd/stdlib.h` header file, to see the definition of
-`__GLIBC_PREREQ`.
-
-Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0003-Handle-systems-missing-sys-cdefs.h.patch  | 230 +++++++++++++++++++++
- 1 file changed, 230 insertions(+)
-
-diff --git a/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch b/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch
-new file mode 100644
-index 0000000000..2cf7a5f09f
---- /dev/null
-+++ b/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch
-@@ -0,0 +1,230 @@
-+From 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd Mon Sep 17 00:00:00 2001
-+From: Guillem Jover <guillem@hadrons.org>
-+Date: Tue, 6 Mar 2018 01:41:35 +0100
-+Subject: [PATCH] Handle systems missing <sys/cdefs.h>
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This is a non-portable header, and we cannot expect it to be provided by
-+the system libc (e.g. musl). We just need and rely on declaration that
-+we have defined ourselves in our own <bsd/sys/cdefs.h>. So we switch to
-+only ever assume that.
-+
-+Fixes: https://bugs.freedesktop.org/105281
-+
-+Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
-+
-+Signed-off-by: Guillem Jover <guillem@hadrons.org>
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ include/bsd/libutil.h        | 4 ++++
-+ include/bsd/md5.h            | 4 ++++
-+ include/bsd/nlist.h          | 4 ++++
-+ include/bsd/readpassphrase.h | 4 ++++
-+ include/bsd/stdlib.h         | 4 ++++
-+ include/bsd/string.h         | 4 ++++
-+ include/bsd/stringlist.h     | 5 +++++
-+ include/bsd/sys/queue.h      | 4 ++++
-+ include/bsd/sys/tree.h       | 4 ++++
-+ include/bsd/timeconv.h       | 4 ++++
-+ include/bsd/vis.h            | 4 ++++
-+ include/bsd/wchar.h          | 4 ++++
-+ 12 files changed, 49 insertions(+)
-+
-+diff --git a/include/bsd/libutil.h b/include/bsd/libutil.h
-+index 45b3b15..ccca29a 100644
-+--- a/include/bsd/libutil.h
-++++ b/include/bsd/libutil.h
-+@@ -40,7 +40,11 @@
-+ #define LIBBSD_LIBUTIL_H
-+ 
-+ #include <features.h>
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ #include <stdint.h>
-+ #include <stdio.h>
-+diff --git a/include/bsd/md5.h b/include/bsd/md5.h
-+index 5f3ae46..bf36a30 100644
-+--- a/include/bsd/md5.h
-++++ b/include/bsd/md5.h
-+@@ -27,7 +27,11 @@ typedef struct MD5Context {
-+ 	uint8_t buffer[MD5_BLOCK_LENGTH];	/* input buffer */
-+ } MD5_CTX;
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ __BEGIN_DECLS
-+diff --git a/include/bsd/nlist.h b/include/bsd/nlist.h
-+index cb297e8..8767117 100644
-+--- a/include/bsd/nlist.h
-++++ b/include/bsd/nlist.h
-+@@ -27,7 +27,11 @@
-+ #ifndef LIBBSD_NLIST_H
-+ #define LIBBSD_NLIST_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ 
-+ struct nlist {
-+ 	union {
-+diff --git a/include/bsd/readpassphrase.h b/include/bsd/readpassphrase.h
-+index 14744b8..5eb8021 100644
-+--- a/include/bsd/readpassphrase.h
-++++ b/include/bsd/readpassphrase.h
-+@@ -31,7 +31,11 @@
-+ #define RPP_SEVENBIT    0x10		/* Strip the high bit from input. */
-+ #define RPP_STDIN       0x20		/* Read from stdin, not /dev/tty */
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ __BEGIN_DECLS
-+diff --git a/include/bsd/stdlib.h b/include/bsd/stdlib.h
-+index ebc9638..8d33d1f 100644
-+--- a/include/bsd/stdlib.h
-++++ b/include/bsd/stdlib.h
-+@@ -42,7 +42,11 @@
-+ #ifndef LIBBSD_STDLIB_H
-+ #define LIBBSD_STDLIB_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/stat.h>
-+ #include <stdint.h>
-+ 
-+diff --git a/include/bsd/string.h b/include/bsd/string.h
-+index 6798bf6..29097f6 100644
-+--- a/include/bsd/string.h
-++++ b/include/bsd/string.h
-+@@ -33,7 +33,11 @@
-+ #ifndef LIBBSD_STRING_H
-+ #define LIBBSD_STRING_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ __BEGIN_DECLS
-+diff --git a/include/bsd/stringlist.h b/include/bsd/stringlist.h
-+index ff30cac..dd71496 100644
-+--- a/include/bsd/stringlist.h
-++++ b/include/bsd/stringlist.h
-+@@ -31,7 +31,12 @@
-+ 
-+ #ifndef LIBBSD_STRINGLIST_H
-+ #define LIBBSD_STRINGLIST_H
-++
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ /*
-+diff --git a/include/bsd/sys/queue.h b/include/bsd/sys/queue.h
-+index 4a94ea7..ac00026 100644
-+--- a/include/bsd/sys/queue.h
-++++ b/include/bsd/sys/queue.h
-+@@ -33,7 +33,11 @@
-+ #ifndef LIBBSD_SYS_QUEUE_H
-+ #define LIBBSD_SYS_QUEUE_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ 
-+ /*
-+  * This file defines four types of data structures: singly-linked lists,
-+diff --git a/include/bsd/sys/tree.h b/include/bsd/sys/tree.h
-+index 628bec0..325b382 100644
-+--- a/include/bsd/sys/tree.h
-++++ b/include/bsd/sys/tree.h
-+@@ -30,7 +30,11 @@
-+ #ifndef LIBBSD_SYS_TREE_H
-+ #define LIBBSD_SYS_TREE_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ 
-+ /*
-+  * This file defines data structures for different types of trees:
-+diff --git a/include/bsd/timeconv.h b/include/bsd/timeconv.h
-+index e2a2c55..a426bd3 100644
-+--- a/include/bsd/timeconv.h
-++++ b/include/bsd/timeconv.h
-+@@ -41,7 +41,11 @@
-+ #ifndef LIBBSD_TIMECONV_H
-+ #define LIBBSD_TIMECONV_H
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <stdint.h>
-+ #include <time.h>
-+ 
-+diff --git a/include/bsd/vis.h b/include/bsd/vis.h
-+index 970dfdd..ab5430c 100644
-+--- a/include/bsd/vis.h
-++++ b/include/bsd/vis.h
-+@@ -72,7 +72,11 @@
-+  */
-+ #define	UNVIS_END	1	/* no more characters */
-+ 
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ 
-+ __BEGIN_DECLS
-+ char	*vis(char *, int, int, int);
-+diff --git a/include/bsd/wchar.h b/include/bsd/wchar.h
-+index 33a500e..7216503 100644
-+--- a/include/bsd/wchar.h
-++++ b/include/bsd/wchar.h
-+@@ -40,7 +40,11 @@
-+ #define LIBBSD_WCHAR_H
-+ 
-+ #include <stddef.h>
-++#ifdef LIBBSD_OVERLAY
-+ #include <sys/cdefs.h>
-++#else
-++#include <bsd/sys/cdefs.h>
-++#endif
-+ #include <sys/types.h>
-+ 
-+ __BEGIN_DECLS
-+-- 
-+2.17.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
