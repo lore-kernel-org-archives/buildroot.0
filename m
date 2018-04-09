@@ -1,67 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 11:12:35 +0200
-Subject: [Buildroot] [PATCH] wireshark: bump version to 2.2.14 (security)
-In-Reply-To: <1523105943-2483-1-git-send-email-nerv@dawncrow.de>
-References: <1523105943-2483-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <20180409111235.2cf90f42@windsurf>
+Date: Mon, 9 Apr 2018 11:12:54 +0200
+Subject: [Buildroot] [git commit] libmms: bump to version 0.6.4
+Message-ID: <20180409091401.58D0980E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8aaf954ab924c3354b8e93478c8cba53a9d9b3d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  7 Apr 2018 14:59:03 +0200, Andr? Hentschel wrote:
-> Security fixes since 2.2.12:
-> 
-> - wnpa-sec-2018-15
->   The MP4 dissector could crash. (Bug 13777)
-> - wnpa-sec-2018-16
->   The ADB dissector could crash. (Bug 14460)
-> - wnpa-sec-2018-17
->   The IEEE 802.15.4 dissector could crash. (Bug 14468)
-> - wnpa-sec-2018-18
->   The NBAP dissector could crash. (Bug 14471)
-> - wnpa-sec-2018-19
->   The VLAN dissector could crash. (Bug 14469)
-> - wnpa-sec-2018-20
->   The LWAPP dissector could crash. (Bug 14467)
-> - wnpa-sec-2018-23
->   The Kerberos dissector could crash. (Bug 14576)
-> - wnpa-sec-2018-05
->   The IEEE 802.11 dissector could crash. Bug 14442, CVE-2018-7335
-> - wnpa-sec-2018-06
->   Multiple dissectors could go into large infinite loops. All ASN.1 BER dissectors (Bug 14444), along with the DICOM (Bug 14411), DMP (Bug 14408), LLTD (Bug 14419), OpenFlow (Bug 14420), RELOAD (Bug 14445), RPCoRDMA (Bug 14449), RPKI-Router (Bug 14414), S7COMM (Bug 14423), SCCP (Bug 14413), Thread (Bug 14428), Thrift (Bug 14379), USB (Bug 14421), and WCCP (Bug 14412) dissectors were susceptible.
-> - wnpa-sec-2018-07
->   The UMTS MAC dissector could crash. Bug 14339, CVE-2018-7334
-> - wnpa-sec-2018-09
->   The FCP dissector could crash. Bug 14374, CVE-2018-7336
-> - wnpa-sec-2018-10
->   The SIGCOMP dissector could crash. Bug 14398, CVE-2018-7320
-> - wnpa-sec-2018-11
->   The pcapng file parser could crash. Bug 14403, CVE-2018-7420
-> - wnpa-sec-2018-12
->   The IPMI dissector could crash. Bug 14409, CVE-2018-7417
-> - wnpa-sec-2018-13
->   The SIGCOMP dissector could crash. Bug 14410, CVE-2018-7418
-> -  wnpa-sec-2018-14
->   The NBAP disssector could crash. Bug 14443, CVE-2018-7419
-> 
-> Full release notes:
-> 
->   https://www.wireshark.org/docs/relnotes/wireshark-2.2.14.html
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/wireshark/wireshark.hash | 4 ++--
->  package/wireshark/wireshark.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Add license hash
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmms/libmms.hash | 3 ++-
+ package/libmms/libmms.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libmms/libmms.hash b/package/libmms/libmms.hash
+index 69865f7c3e..f424e3afbb 100644
+--- a/package/libmms/libmms.hash
++++ b/package/libmms/libmms.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256  01931b62172d7d7050fc9ef9b1b64162f3b6e9f6cc4415170192a32a0b7ea432  libmms-0.6.2.tar.gz
++sha256  3c05e05aebcbfcc044d9e8c2d4646cd8359be39a3f0ba8ce4e72a9094bee704f  libmms-0.6.4.tar.gz
++sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING.LIB
+diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
+index dd0b1df538..236fe1376e 100644
+--- a/package/libmms/libmms.mk
++++ b/package/libmms/libmms.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMMS_VERSION = 0.6.2
++LIBMMS_VERSION = 0.6.4
+ LIBMMS_SITE = http://downloads.sourceforge.net/project/libmms/libmms/$(LIBMMS_VERSION)
+ LIBMMS_INSTALL_STAGING = YES
+ LIBMMS_DEPENDENCIES = host-pkgconf libglib2
