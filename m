@@ -1,57 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 20:59:49 +0200
-Subject: [Buildroot] [git commit] Makefile: avoid executing 'git log' each
- time SOURCE_DATE_EPOCH is used
-Message-ID: <20180409185958.3FCC8881D6@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 9 Apr 2018 18:01:27 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/linux: fix custom
+ dts files handling
+Message-ID: <20180409190017.9C139881DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b47146eb2c33bd83d494a76b1186c3948e0d3ff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=014dbd4855fa0d52a32d2e2d15b425c64b2e7c95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-If SOURCE_DATE_EPOCH is not defined it was given a definition that
-caused 'git log' to be executed each time the variable is referenced,
-which is not very efficient given that the answer cannot change.
+Custom dts files are still conditionally copied based on non existing
+boolean. So it is currently not possible to use custom dts file(s) at all.
 
-This commit moves the definition of BR2_VERSION_GIT_EPOCH after the
-inclusion of Makefile.in (so that GIT is defined) and makes it a
-simply expanded variable so that it is only evaluated once.
+List of dts files is now iterated and files are copied into dedicated kernel arch dir.
 
-Signed-off-by: James Byrne <james.byrne@origamienergy.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Rafal Susz <rafal.susz@gmail.com>
+Tested-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 54157c6c2d9fba5ad230294ae1c7dfc0032b1ede)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ linux/linux.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 0724f28f45..cd533624ec 100644
---- a/Makefile
-+++ b/Makefile
-@@ -247,8 +247,6 @@ export TZ = UTC
- export LANG = C
- export LC_ALL = C
- export GZIP = -n
--BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
--export SOURCE_DATE_EPOCH ?= $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8ef2b03445..8d14f41c6b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -367,8 +367,9 @@ endif
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+-	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+-		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
++	@for dts in $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)); do \
++		cp -f $${dts} $(KERNEL_ARCH_PATH)/boot/dts/ ;   \
++	done
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then	\
+ 		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+@@ -479,9 +480,9 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
+ endif
  endif
  
- # To put more focus on warnings, be less verbose as default
-@@ -504,6 +502,14 @@ include support/dependencies/dependencies.mk
- include $(sort $(wildcard toolchain/*.mk))
- include $(sort $(wildcard toolchain/*/*.mk))
+-ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
++ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(KERNEL_DTS_NAME)),y:)
+ $(error No kernel device tree source specified, check your \
+-BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings)
++BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
+ endif
  
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+# If SOURCE_DATE_EPOCH has not been set then use the commit date, or the last
-+# release date if the source tree is not within a Git repository.
-+# See: https://reproducible-builds.org/specs/source-date-epoch/
-+BR2_VERSION_GIT_EPOCH := $(shell $(GIT) --git-dir=$(TOPDIR)/.git log -1 --format=%at 2> /dev/null)
-+export SOURCE_DATE_EPOCH ?= $(or $(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
-+endif
-+
- # Include the package override file if one has been provided in the
- # configuration.
- PACKAGE_OVERRIDE_FILE = $(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
+ endif # BR_BUILDING
