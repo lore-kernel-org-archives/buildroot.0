@@ -1,63 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 23:47:33 +0200
-Subject: [Buildroot] [PATCH v2,1/1] cryptopp: bump to version 7.0.0
-In-Reply-To: <20180409210329.8592-1-fontaine.fabrice@gmail.com>
-References: <20180409210329.8592-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180409234733.1f7435eb@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 9 Apr 2018 23:51:05 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.1
+Message-ID: <20180409215129.C930F8830E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9565a37e0d2aa3c5fb9a4148760c490f2e5226d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On Mon,  9 Apr 2018 23:03:29 +0200, Fabrice Fontaine wrote:
-> Remove patch (applied upstream)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Rebase/fix patch (remove deletion of uncommited patches)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 63 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 65 insertions(+), 2 deletions(-)
 
-Your patch still didn't apply cleanly:
-
-thomas at windsurf:~/projets/buildroot (master)$ git status
-On branch master
-Your branch is ahead of 'origin/master' by 20 commits.
-  (use "git push" to publish your local commits)
-
-nothing to commit, working tree clean
-thomas at windsurf:~/projets/buildroot (master)$ git pwam 896414
-Applying patch #896414 using 'git am -s'
-Description: [v2,1/1] cryptopp: bump to version 7.0.0
-Applying: cryptopp: bump to version 7.0.0
-error: patch failed: package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch:1
-error: package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch: patch does not apply
-Patch failed at 0001 cryptopp: bump to version 7.0.0
-The copy of the patch that failed is found in: .git/rebase-apply/patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
-To restore the original branch and stop patching, run "git am --abort".
-'git am' failed with exit status 128
-
-So, this time around, I fixed it up locally, and applied. Perhaps it's
-a line ending issue.
-
-Yeah, that's it:
-
-$ file package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch
-package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch: unified diff output, ASCII text, with CRLF, LF line terminators
-
-CRLF line endings. They get removed when the patch is sent over e-mail.
-Mystery solved :)
-
-Thanks, applied!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/CHANGES b/CHANGES
+index c7925bdedc..09cf7c3f85 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,66 @@
++2018.02.1, Released April 9th, 2018
++
++	Important / security related fixes.
++
++	Removed unmaintained defconfigs: Creator Ci40, Firefly rk3288,
++	Freescale mpc8315erdb / p1010rdb_pa, Riotboard, Teliv EVK
++	Pro3.
++
++	Infrastructure: Speed up instrumentation for package size by
++	comparing timestamps instead of md5 checksums, as doing
++	checksums could lead to up to 25% longer build time for big
++	configurations.
++
++	Rename the internal <pkg>_BASE_NAME variable to <pkg>_NASENAME
++	to avoid name clashes with packages ending on '-base'.
++
++	Add a better fix for build issues for autotools based packages
++	checking for C++ support on toolchains without C++ support.
++
++	Build host-tar if tar is older than 1.27 on the build machine
++	to work around reproducibility issues with git archives
++	containing long paths.
++
++	check-unique-files: Fix for filenames not representable in the
++	users' locale.
++
++	Check-bin-arch: Add support for per-package ignore paths
++	(<pkg>_BIN_ARCH_EXCLUDE).
++
++	Toolchain: Fix SSP support detection for external toolchains.
++
++	linux: Add _NEEDS_HOST_OPENSSL / LIBELF options to ensure
++	these dependencies are available for Linux configurations
++	needed these dependencies, similar to how it is done for
++	U-Boot.
++
++	Support custom (not in tree) device tree files in addition to
++	in-tree ones.
++
++	U-Boot / uboot-tools: Fix header conflict with libfdt-devel
++	installed on host.
++
++	Updated/fixed packages: apache, busybox, c-ares, cmake,
++	docker-engine, enlightenment, eudev, fbgrab, freescale-imx,
++	gtest, imagemagick, intel-microcode, irssi, jimtcl, kmod,
++	kodi, ktap, libcoap, libcurl, libfcgi, libhttpparser,
++	libminiupnpc, libopenssl, libpjsip, libss7, libssh2, libupnp
++	libupnpp, libuv, libvorbis, memcached, motion, musl, nodejs,
++	ntp, openblas, opencv3, openocd, opus-tools, patch, php,
++	pkgconf, postgresql, powerpc-utils, python-jsonschema,
++	python-webpy, qemu, qt5bsae, qt5script, qt5webkit, rapidjson,
++	rauc, sam-ba, samba4, sngrep, systemd, tremor, uboot-tools,
++	uclibc-ng-test, upmpdcli, wireshark, xerces, xterm, zstd
++
++	New packages: docker-proxy, python-functools32
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10766: upmpdcli: Segmentation fault
++	#10776: ktap fails to build
++	#10846: error in compiling gnutls
++	#10856: openblas on qemu_x86_64_defconfig fails with "sgemm_..
++
+ 2018.02, Released March 4th, 2018
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 957ba6634a..8004cc2925 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.02
++export BR2_VERSION := 2018.02.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1520198000
++BR2_VERSION_EPOCH = 1523310000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
