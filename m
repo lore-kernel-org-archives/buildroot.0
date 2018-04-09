@@ -1,57 +1,99 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 9 Apr 2018 22:47:24 +0300
-Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: new package
-In-Reply-To: <20180409210122.12173e62@windsurf>
-References: <20180409180403.11728-1-asafka7@gmail.com>
- <20180409210122.12173e62@windsurf>
-Message-ID: <CALFsTFWyq9tYd+qS+YG3KJ1smzkcNhMTO_D4-2QCVoyR1qUiDA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 9 Apr 2018 21:56:48 +0200
+Subject: [Buildroot] [git commit] package/flare-game: new package
+Message-ID: <20180409195703.A75688259E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, of course.
+commit: https://git.buildroot.net/buildroot/commit/?id=e930a61c21f4d7e4fd0c648c382c54ff3b02a03f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After the compilation of this package, you'll have an executable called
-fastep under $(HOST_DIR)/usr/bin.
-Then you can run fastep on a directory of a python package, and it'll speed
-up the console_scripts declared on your setup.py.
-What it really does is copying fastentrypoints,py to the directory, adding
-it to MANIFEST.in, and adding an import on setup.py, which is actually a
-monkey-patch.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/flare-game/Config.in       | 13 +++++++++++++
+ package/flare-game/flare-game.hash |  3 +++
+ package/flare-game/flare-game.mk   | 18 ++++++++++++++++++
+ 5 files changed, 36 insertions(+)
 
-It can be very useful on systems with limited resources where importing
-pkg_resources can take a long time.
-If you want, you can even take it further and write pkg-fastep.mk. Then you
-can use it for the relevant python packages. It will add the needed
-dependency and run fastep on the package directory.
-
-Asaf.
-
-On Mon, Apr 9, 2018 at 10:01 PM, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello,
->
-> On Mon,  9 Apr 2018 21:04:03 +0300, Asaf Kahlon wrote:
-> > host-package that is able to shorten the load time of entry_points
-> declared
-> > in setup.py of python packages.
-> >
-> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
->
-> Thanks for this new version. Could you give some details on how you're
-> using this host package ? I.e what you are doing with it exactly ?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180409/231ac644/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3353ee0f89..14d872996b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1592,6 +1592,7 @@ F:	package/efl/
+ F:	package/enlightenment/
+ F:	package/expedite/
+ F:	package/flare-engine/
++F:	package/flare-game/
+ F:	package/irrlicht/
+ F:	package/liblinear/
+ F:	package/lensfun/
+diff --git a/package/Config.in b/package/Config.in
+index 71c186613e..e48d0b4c64 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -235,6 +235,7 @@ menu "Games"
+ 	source "package/chocolate-doom/Config.in"
+ 	source "package/doom-wad/Config.in"
+ 	source "package/flare-engine/Config.in"
++	source "package/flare-game/Config.in"
+ 	source "package/gnuchess/Config.in"
+ 	source "package/lbreakout2/Config.in"
+ 	source "package/ltris/Config.in"
+diff --git a/package/flare-game/Config.in b/package/flare-game/Config.in
+new file mode 100644
+index 0000000000..ca68d19a69
+--- /dev/null
++++ b/package/flare-game/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_FLARE_GAME
++	bool "flare-game"
++	depends on BR2_PACKAGE_FLARE_ENGINE
++	help
++	  Flare is an open source, 2D action RPG licensed under the
++	  GPL3 license. Its game play can be likened to the games in
++	  the Diablo series.
++
++	  This package, flare-game, only contains the game data. The
++	  game engine itself is part of a separate package,
++	  flame-engine.
++
++	  http://flarerpg.org
+diff --git a/package/flare-game/flare-game.hash b/package/flare-game/flare-game.hash
+new file mode 100644
+index 0000000000..a27c66d9e3
+--- /dev/null
++++ b/package/flare-game/flare-game.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  5c8e9d72fcbe59f1861f79ac7b76ceffe3ec61d1df241c32d9133fe158fba4c1  flare-game-v1.0.tar.gz
++sha256  9fce5eb663f136449e11293a871ed96db5ba579116a927fc6a70dd20a4a5b9e6  README
+diff --git a/package/flare-game/flare-game.mk b/package/flare-game/flare-game.mk
+new file mode 100644
+index 0000000000..89750d99b1
+--- /dev/null
++++ b/package/flare-game/flare-game.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# flare-game
++#
++################################################################################
++
++FLARE_GAME_VERSION = v1.0
++FLARE_GAME_SITE =  $(call github,clintbellanger,flare-game,$(FLARE_GAME_VERSION))
++FLARE_GAME_LICENSE = CC-BY-SA-3.0 (data files), GPL-2.0 (GNU Unifont), \
++	OFL-1.1 (Liberation Sans)
++FLARE_GAME_LICENSE_FILES = README
++
++FLARE_GAME_DEPENDENCIES = flare-engine
++
++# Don't use /usr/share/games
++FLARE_GAME_CONF_OPTS += -DDATADIR=share/flare
++
++$(eval $(cmake-package))
