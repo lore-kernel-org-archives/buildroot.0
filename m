@@ -1,36 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 21:11:40 +0200
-Subject: [Buildroot] [PATCH 1/2] package/llvm: add dependency on shared
- libraries
-In-Reply-To: <20180409094607.11677-1-valentin.korenblit@smile.fr>
-References: <20180409094607.11677-1-valentin.korenblit@smile.fr>
-Message-ID: <20180409211140.45702eb7@windsurf>
+Date: Mon, 9 Apr 2018 21:15:21 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump to 4.16 kernel version
+Message-ID: <20180409191938.CE89E8820B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7a813d7cc6b4c15f0f1e463943ed8679c90c7f34
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  9 Apr 2018 11:46:06 +0200, Valentin Korenblit wrote:
-> llvm generates libLLVM.so, so it won't work if BR2_STATIC_LIBS is set
-> 
-> Also propagate llvm dependency to mesa3d.
-> 
-> Link to report from autobuilders:
-> http://lists.busybox.net/pipermail/buildroot/2018-April/218296.html
-> 
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-> ---
->  package/llvm/Config.in   | 6 ++++--
->  package/mesa3d/Config.in | 6 ++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3bd3e779b0..3dcc401eb4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_15
++	default BR2_KERNEL_HEADERS_4_16
+ 	help
+ 	  Select the kernel version to get headers from.
+ 
+@@ -67,6 +67,10 @@ config BR2_KERNEL_HEADERS_4_15
+ 	bool "Linux 4.15.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 
++config BR2_KERNEL_HEADERS_4_16
++	bool "Linux 4.16.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
++
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
+ 
+@@ -89,6 +93,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16
++	bool "4.16.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15
+ 	bool "4.15.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+@@ -250,4 +258,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+ 	default "4.14.33"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.16"	if BR2_KERNEL_HEADERS_4_15
++	default "4.16"		if BR2_KERNEL_HEADERS_4_16
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
