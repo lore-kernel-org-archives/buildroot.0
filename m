@@ -1,32 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Apr 2018 22:46:03 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.16.1
-Message-ID: <20180409204644.CFAEE882D4@busybox.osuosl.org>
+Date: Mon, 9 Apr 2018 22:47:57 +0200
+Subject: [Buildroot] [PATCH 1/1] cryptopp: bump to version 7.0.0
+In-Reply-To: <20180409204156.5626-1-fontaine.fabrice@gmail.com>
+References: <20180409204156.5626-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180409224757.5fb35210@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8df2c47b9c9def06e76b0291b57b294135a040b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon,  9 Apr 2018 22:41:56 +0200, Fabrice Fontaine wrote:
+> Remove all patches (applied upstream)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d52af66e5c..81bc651ad2 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.16" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.16.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On which Buildroot version is this based? It doesn't apply here:
+
+thomas at windsurf:~/projets/buildroot (master)$ git pwam 896410
+Applying patch #896410 using 'git am -s'
+Description: [1/1] cryptopp: bump to version 7.0.0
+Applying: cryptopp: bump to version 7.0.0
+error: patch failed: package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch:1
+error: package/cryptopp/0001-Fix-GCC-version-for-RDSEED-intrinsic.patch: patch does not apply
+error: package/cryptopp/0002-Define-AT_HWCAP-AT_HWCAP2-if-getauxval-unavailable.patch: does not exist in index
+error: package/cryptopp/0003-Allow-user-to-set-DCRYPTOPP_ARM_NEON_AVAILABLE-0.patch: does not exist in index
+error: patch failed: package/cryptopp/cryptopp.mk:4
+error: package/cryptopp/cryptopp.mk: patch does not apply
+Patch failed at 0001 cryptopp: bump to version 7.0.0
+The copy of the patch that failed is found in: .git/rebase-apply/patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+'git am' failed with exit status 128
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
