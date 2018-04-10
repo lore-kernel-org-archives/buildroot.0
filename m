@@ -1,28 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:42:53 +0200
-Subject: [Buildroot] [git commit] ntp: explicitly enable openssl-random
- when crypto is enabled
-In-Reply-To: <20180204152403.ABC8388351@busybox.osuosl.org> (Peter Korsgaard's
- message of "Sun, 4 Feb 2018 16:20:38 +0100")
-References: <20180204152403.ABC8388351@busybox.osuosl.org>
-Message-ID: <87o9iq7pyq.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:43:10 +0200
+Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p11
+In-Reply-To: <6be4748599ab638473e99b71ed5343181787ede0.1520355647.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 6 Mar 2018 19:00:47 +0200")
+References: <6be4748599ab638473e99b71ed5343181787ede0.1520355647.git.baruch@tkos.co.il>
+Message-ID: <87k1te7py9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=905677cbd59fb0f9f56f207b63e1fa6e7c9167d5
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fixed or improved security issues:
+ >   CVE-2016-1549 (fixed in 4.2.8p7; this release adds protection): A
+ >   malicious authenticated peer can create arbitrarily-many ephemeral
+ >   associations in order to win the clock selection algorithm
 
- > If OpenSSL is selected, --enable-openssl-random should be explicitly
- > enabled for consistency with the disable case.
+ >   CVE-2018-7182: Buffer read overrun leads to undefined behavior and
+ >   information leak
 
- > [Peter: tweak commit text]
- > Signed-off-by: Adam Duskett <aduskett@gmail.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >   CVE-2018-7170: Multiple authenticated ephemeral associations
+
+ >   CVE-2018-7184: Interleaved symmetric mode cannot recover from bad
+ >   state
+
+ >   CVE-2018-7185: Unauthenticated packet can reset authenticated
+ >   interleaved association
+
+ >   CVE-2018-7183: ntpq:decodearr() can write beyond its buffer limit
+
+ > Drop patch #3. libntpq_a_CFLAGS now includes NTP_HARD_CFLAGS via
+ > AM_CFLAGS.
+
+ > Add license file hash.
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.02.x, thanks.
 
