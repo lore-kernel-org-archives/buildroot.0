@@ -1,26 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:50:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dovecot: security bump to
- version 2.3.4
-In-Reply-To: <20180301194151.7078-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 1 Mar 2018 20:41:51 +0100")
-References: <20180301194151.7078-1-bernd.kuhls@t-online.de>
-Message-ID: <87woxe3hwb.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:51:15 +0200
+Subject: [Buildroot] [PATCH] mosquitto: security bump to version 1.4.15
+In-Reply-To: <20180228231140.7660-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 1 Mar 2018 00:11:40 +0100")
+References: <20180228231140.7660-1-peter@korsgaard.com>
+Message-ID: <87sh823hvg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2017-15130, CVE-2017-14461 & CVE-2017-15132:
- > https://www.dovecot.org/list/dovecot-news/2018-February/000370.html
+ > Fixes CVE-2017-7651: Unauthenticated clients can send a crafted CONNECT
+ > packet which causes large amounts of memory use in the broker.  If multiple
+ > clients do this, an out of memory situation can occur and the system may
+ > become unresponsive or the broker will be killed by the operating system.
 
- > Removed patch applied upstream:
- > https://github.com/dovecot/core/commit/a008617e811673064fd657acf517dc4a12493d29
+ > The fix addresses the problem by limiting the permissible size for CONNECT
+ > packet, and by adding a memory_limit configuration option that allows the
+ > broker to self limit the amount of memory it uses.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > The hash of new tarball is not (yet) available through download.php, so use
+ > a locally calculated hash.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x, thanks.
 
