@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:47:38 +0200
-Subject: [Buildroot] [PATCH] exim: add upstream security fix
-In-Reply-To: <20180219161435.20547-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 19 Feb 2018 17:14:35 +0100")
-References: <20180219161435.20547-1-peter@korsgaard.com>
-Message-ID: <87vacy4wlx.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:47:52 +0200
+Subject: [Buildroot] [PATCH] mbedtls: security bump to version 2.7.0
+In-Reply-To: <e096f49c1c72f1bbd299136397eac58fe385618f.1519361771.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 23 Feb 2018 06:56:11 +0200")
+References: <e096f49c1c72f1bbd299136397eac58fe385618f.1519361771.git.baruch@tkos.co.il>
+Message-ID: <87r2nm4wlj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes the following security issue:
- > CVE-2018-6789: Meh Chang discovered a buffer overflow flaw in a utility
- > function used in the SMTP listener of Exim, a mail transport agent.  A
- > remote attacker can take advantage of this flaw to cause a denial of
- > service, or potentially the execution of arbitrary code via a specially
- > crafted message.
+ > CVE-2018-0487: Remote attackers can execute arbitrary code or cause a
+ > denial of service (buffer overflow) via a crafted certificate chain that
+ > is mishandled during RSASSA-PSS signature verification within a TLS or
+ > DTLS session.
 
- > Dropped ChangeLog hunk and adjusted file path of upstream commit so it
- > applies to tarball.
+ > CVE-2018-0488: When the truncated HMAC extension and CBC are used,
+ > allows remote attackers to execute arbitrary code or cause a denial of
+ > service (heap corruption) via a crafted application packet within a TLS
+ > or DTLS session.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.02.x, thanks.
 
