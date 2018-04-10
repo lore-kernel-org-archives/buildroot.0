@@ -1,37 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:54:42 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
- 9, 14, 15}.x series
-Message-ID: <20180410205257.0F11E807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:49:09 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] exim: add upstream
+ security fix
+Message-ID: <20180410205256.A161A807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a06507a2f2fa989264cb9e16b958f78459f124f5
+commit: https://git.buildroot.net/buildroot/commit/?id=14ee40d989a670a792bf0cea93b862effd939c76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.14.x / 4.15.x bump]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Fixes the following security issue:
+
+CVE-2018-6789: Meh Chang discovered a buffer overflow flaw in a utility
+function used in the SMTP listener of Exim, a mail transport agent.  A
+remote attacker can take advantage of this flaw to cause a denial of
+service, or potentially the execution of arbitrary code via a specially
+crafted message.
+
+Dropped ChangeLog hunk and adjusted file path of upstream commit so it
+applies to tarball.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1e7ee5a686dc74f18242a9c07623cf12065505c1)
+(cherry picked from commit 8343069e2c3cc79ad14600816a772fcd7592e291)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...005-Fix-base64d-buffer-size-CVE-2018-6789.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8f96285116..db21859021 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.117"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.118"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.83"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.84"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
+new file mode 100644
+index 0000000000..1811a7ff98
+--- /dev/null
++++ b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
+@@ -0,0 +1,37 @@
++From 062990cc1b2f9e5d82a413b53c8f0569075de700 Mon Sep 17 00:00:00 2001
++From: "Heiko Schlittermann (HS12-RIPE)" <hs@schlittermann.de>
++Date: Mon, 5 Feb 2018 22:23:32 +0100
++Subject: [PATCH] Fix base64d() buffer size (CVE-2018-6789)
++
++Credits for discovering this bug: Meh Chang <meh@devco.re>
++
++[Peter: Drop ChangeLog change, fix path]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/base64.c      | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/base64.c b/src/base64.c
++index f6f187f0..e58ca6c7 100644
++--- a/src/base64.c
+++++ b/src/base64.c
++@@ -152,10 +152,14 @@ static uschar dec64table[] = {
++ int
++ b64decode(const uschar *code, uschar **ptr)
++ {
+++
++ int x, y;
++-uschar *result = store_get(3*(Ustrlen(code)/4) + 1);
+++uschar *result;
++ 
++-*ptr = result;
+++{
+++  int l = Ustrlen(code);
+++  *ptr = result = store_get(1 + l/4 * 3 + l%4);
+++}
++ 
++ /* Each cycle of the loop handles a quantum of 4 input bytes. For the last
++ quantum this may decode to 1, 2, or 3 output bytes. */
++-- 
++2.11.0
++
