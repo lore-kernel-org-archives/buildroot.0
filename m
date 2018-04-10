@@ -1,229 +1,142 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Apr 2018 08:44:42 +0300
-Subject: [Buildroot] [PATCH] openssh: bump to version 7.7p1
-Message-ID: <30912a4d4e35df034e4874505dafef48853b16b6.1523339082.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 10 Apr 2018 08:00:22 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-04-09
+Message-ID: <20180410060022.4CF112071F@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patches, renumber the rest.
+Hello,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0001-configure-ac-detect-mips-abi.patch        | 44 ---------------
- ...ch => 0001-fix-pam-uclibc-pthreads-clash.patch} |  0
- ...roperly-set-seccomp-audit-arch-for-mips64.patch | 63 ----------------------
- ...nclude.patch => 0002-fix-howmany-include.patch} |  0
- ...pat-bsd-getpagesize.c-include-includes.h-.patch | 35 ------------
- package/openssh/openssh.hash                       |  4 +-
- package/openssh/openssh.mk                         |  6 +--
- 7 files changed, 3 insertions(+), 149 deletions(-)
- delete mode 100644 package/openssh/0001-configure-ac-detect-mips-abi.patch
- rename package/openssh/{0003-fix-pam-uclibc-pthreads-clash.patch => 0001-fix-pam-uclibc-pthreads-clash.patch} (100%)
- delete mode 100644 package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
- rename package/openssh/{0004-fix-howmany-include.patch => 0002-fix-howmany-include.patch} (100%)
- delete mode 100644 package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
+Build statistics for 2018-04-09
+===============================
 
-diff --git a/package/openssh/0001-configure-ac-detect-mips-abi.patch b/package/openssh/0001-configure-ac-detect-mips-abi.patch
-deleted file mode 100644
-index 0d43e6baf0f7..000000000000
---- a/package/openssh/0001-configure-ac-detect-mips-abi.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From f4fcd8c788a4854d4ebae400cf55e3957f906835 Mon Sep 17 00:00:00 2001
--From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Date: Tue, 20 Jun 2017 16:42:11 +0100
--Subject: [PATCH] configure.ac: detect MIPS ABI
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--[Upstream commit: ttps://github.com/openssh/openssh-portable/commit/f4fcd8c788a4854d4ebae400cf55e3957f906835]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- configure.ac | 21 +++++++++++++++++++++
-- 1 file changed, 21 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index 18079acba..f990cfe08 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -746,6 +746,27 @@ main() { if (NSVersionOfRunTimeLibrary("System") >= (60 << 16))
-- 	fi
-- 	AC_CHECK_HEADERS([linux/seccomp.h linux/filter.h linux/audit.h], [],
-- 	    [], [#include <linux/types.h>])
--+	# Obtain MIPS ABI
--+	case "$host" in
--+	mips*)
--+		AC_COMPILE_IFELSE([
--+#if _MIPS_SIM != _ABIO32
--+#error
--+#endif
--+			],[mips_abi="o32"],[AC_COMPILE_IFELSE([
--+#if _MIPS_SIM != _ABIN32
--+#error
--+#endif
--+				],[mips_abi="n32"],[AC_COMPILE_IFELSE([
--+#if _MIPS_SIM != _ABI64
--+#error
--+#endif
--+					],[mips_abi="n64"],[AC_MSG_ERROR([unknown MIPS ABI])
--+				])
--+			])
--+		])
--+		;;
--+	esac
-- 	AC_MSG_CHECKING([for seccomp architecture])
-- 	seccomp_audit_arch=
-- 	case "$host" in
-diff --git a/package/openssh/0003-fix-pam-uclibc-pthreads-clash.patch b/package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch
-similarity index 100%
-rename from package/openssh/0003-fix-pam-uclibc-pthreads-clash.patch
-rename to package/openssh/0001-fix-pam-uclibc-pthreads-clash.patch
-diff --git a/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch b/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
-deleted file mode 100644
-index 879af5e3d57c..000000000000
---- a/package/openssh/0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From afc3e31b637db9dae106d4fad78f7b481c8c24e3 Mon Sep 17 00:00:00 2001
--From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Date: Tue, 20 Jun 2017 16:42:28 +0100
--Subject: [PATCH] configure.ac: properly set seccomp_audit_arch for MIPS64
--
--Currently seccomp_audit_arch is set to AUDIT_ARCH_MIPS64 or
--AUDIT_ARCH_MIPSEL64 (depending on the endinness) when openssh is built
--for MIPS64. However, that's only valid for n64 ABI. The right macros for
--n32 ABI defined in seccomp.h are AUDIT_ARCH_MIPS64N32 and
--AUDIT_ARCH_MIPSEL64N32, for big and little endian respectively.
--
--Because of that an sshd built for MIPS64 n32 rejects connection attempts
--and the output of strace reveals that the problem is related to seccomp
--audit:
--
--[pid   194] prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, {len=57,
--filter=0x555d5da0}) = 0
--[pid   194] write(7, "\0\0\0]\0\0\0\5\0\0\0Ulist_hostkey_types: "..., 97) = ?
--[pid   193] <... poll resumed> )        = 2 ([{fd=5, revents=POLLIN|POLLHUP},
--{fd=6, revents=POLLHUP}])
--[pid   194] +++ killed by SIGSYS +++
--
--This patch fixes that problem by setting the right value to
--seccomp_audit_arch taking into account the MIPS64 ABI.
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--[Upstream commit: https://github.com/openssh/openssh-portable/commit/afc3e31b637db9dae106d4fad78f7b481c8c24e3]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- configure.ac | 18 ++++++++++++++++--
-- 1 file changed, 16 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index f990cfe08..5d640f679 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -801,10 +801,24 @@ main() { if (NSVersionOfRunTimeLibrary("System") >= (60 << 16))
-- 		seccomp_audit_arch=AUDIT_ARCH_MIPSEL
-- 		;;
-- 	mips64-*)
---		seccomp_audit_arch=AUDIT_ARCH_MIPS64
--+		case "$mips_abi" in
--+		"n32")
--+			seccomp_audit_arch=AUDIT_ARCH_MIPS64N32
--+			;;
--+		"n64")
--+			seccomp_audit_arch=AUDIT_ARCH_MIPS64
--+			;;
--+		esac
-- 		;;
-- 	mips64el-*)
---		seccomp_audit_arch=AUDIT_ARCH_MIPSEL64
--+		case "$mips_abi" in
--+		"n32")
--+			seccomp_audit_arch=AUDIT_ARCH_MIPSEL64N32
--+			;;
--+		"n64")
--+			seccomp_audit_arch=AUDIT_ARCH_MIPSEL64
--+			;;
--+		esac
-- 		;;
-- 	esac
-- 	if test "x$seccomp_audit_arch" != "x" ; then
-diff --git a/package/openssh/0004-fix-howmany-include.patch b/package/openssh/0002-fix-howmany-include.patch
-similarity index 100%
-rename from package/openssh/0004-fix-howmany-include.patch
-rename to package/openssh/0002-fix-howmany-include.patch
-diff --git a/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch b/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
-deleted file mode 100644
-index ce600729345e..000000000000
---- a/package/openssh/0005-openbsd-compat-bsd-getpagesize.c-include-includes.h-.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 9a43657a3dcb868b4f36ade3aba5dcf0871fb412 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Mon, 30 Oct 2017 23:36:56 +0100
--Subject: [PATCH] openbsd-compat/bsd-getpagesize.c: include includes.h for
-- config.h defines
--
--The configure script checks for getpagesize() and sets HAVE_GETPAGESIZE in
--config.h, but bsd-getpagesize.c forgot to include includes.h (which
--indirectly includes config.h) so the checks always fails, causing linker
--issues when linking statically on systems with getpagesize():
--
--http://autobuild.buildroot.net/results/8cc/8cc30818a400c7a392a3de787cabc9cd8425495f/build-end.log
--
--Fix it by including includes.h
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- openbsd-compat/bsd-getpagesize.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/openbsd-compat/bsd-getpagesize.c b/openbsd-compat/bsd-getpagesize.c
--index 9daddfbd..416a8d4c 100644
----- a/openbsd-compat/bsd-getpagesize.c
--+++ b/openbsd-compat/bsd-getpagesize.c
--@@ -1,5 +1,7 @@
-- /* Placed in the public domain */
-- 
--+#include "includes.h"
--+
-- #ifndef HAVE_GETPAGESIZE
-- 
-- #include <unistd.h>
---- 
--2.11.0
--
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index d8a4da32ad15..69d34ba65ec9 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,4 @@
--# From http://www.openssh.com/txt/release-7.6 (base64 encoded)
--sha256 a323caeeddfe145baaa0db16e98d784b1fbc7dd436a6bf1f479dfd5cd1d21723  openssh-7.6p1.tar.gz
-+# From http://www.openssh.com/txt/release-7.7 (base64 encoded)
-+sha256 d73be7e684e99efcd024be15a30bffcbe41b012b2f7b3c9084aed621775e6b8f  openssh-7.7p1.tar.gz
- # Locally calculated
- sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 986bab413d36..b28429e1bb29 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,14 +4,10 @@
- #
- ################################################################################
- 
--OPENSSH_VERSION = 7.6p1
-+OPENSSH_VERSION = 7.7p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
--# Autoreconf needed due to the following patches modifying configure.ac:
--# 0001-configure-ac-detect-mips-abi.patch
--# 0002-configure-ac-properly-set-seccomp-audit-arch-for-mips64.patch
--OPENSSH_AUTORECONF = YES
- OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
- OPENSSH_CONF_OPTS = \
- 	--sysconfdir=/etc/ssh \
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  23 |   0 |   0 |  23 |
+      master | 158 |  81 |   0 | 239 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  zeromq-4.2.5 | 18
+    azure-iot-sdk-c-2018-03-16 | 10
+                     lxc-3.0.0 | 8 
+                  host-go-1.10 | 5 
+               libglib2-2.56.0 | 4 
+                    liblo-0.29 | 4 
+qt-webkit-kiosk-34efddb0bf0... | 3 
+                  udftools-2.0 | 3 
+             bluez5_utils-5.49 | 2 
+             expect-2014-05-02 | 2 
+                   flann-1.9.1 | 2 
+gst1-interpipe-10dba89eecc2... | 2 
+               libglib2-2.56.1 | 2 
+                   picocom-3.1 | 2 
+   python-yieldfrom-legal-info | 2 
+               asterisk-14.7.6 | 1 
+     docker-engine-v17.05.0-ce | 1 
+                    llvm-5.0.1 | 1 
+                 mesa3d-18.0.0 | 1 
+                     php-7.2.4 | 1 
+                      qt-4.8.7 | 1 
+             qt5location-5.6.3 | 1 
+               qt5webkit-5.9.1 | 1 
+                snort-2.9.11.1 | 1 
+          usb_modeswitch-2.5.2 | 1 
+              wireshark-2.2.12 | 1 
+                   woff2-1.0.2 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                asterisk-14.7.6 | NOK | http://autobuild.buildroot.net/results/7b4bc90fdacf872a78f81664bba0135723f3a889 |     
+      xtensa |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/461eafc0e4ae78131e24384305f41ed318c33a97 |     
+     powerpc |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/f9c2c0bf2ddb95831d154de3046f159d0dd4d186 |     
+      xtensa |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/e3381c9263283f629d1948b41c5791abfff32a9a |     
+     aarch64 |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/d8b70efd1110e17a3fba4e870aa8afd283e652d1 |     
+ powerpc64le |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/bcb4448f380060c552b12e75d8a26e1dfaad1bd5 |     
+    mips64el |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/333ea0e44b7b9f84713de1c240ba164e06dd425d |     
+         arm |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/25aae054634368fadb265b97ebe4dda809deff6f |     
+         arm |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/14b4fcd442aff364339530ddcf879e2aa7428c36 |     
+         arc |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/60b60a0b5a7dd02b25a1223aa7c66eb8df122834 |     
+     powerpc |     azure-iot-sdk-c-2018-03-16 | NOK | http://autobuild.buildroot.net/results/bb64207f3b28ae971810c13d04ec44f4df1ebb3d |     
+         arm |              bluez5_utils-5.49 | NOK | http://autobuild.buildroot.net/results/2b521f1954389dca3b52d3013c35ebfebcbccf75 |     
+         arm |              bluez5_utils-5.49 | NOK | http://autobuild.buildroot.net/results/9ea3084be07e86ba60c848cb99587f375d2a5c47 |     
+     aarch64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/7b1c00518d36d2301608aff3b5010175ecd8256b |     
+ powerpc64le |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/effdaafbaf09e9eeb05debd7b7ff116878617d73 | ORPH
+      mipsel |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/3198daf050ce7de4b9afafb1ea3ecf979a2b1a00 | ORPH
+     powerpc |                    flann-1.9.1 | NOK | http://autobuild.buildroot.net/results/132036fbe23310258d195fb2b917b4fbfc34ca0a |     
+         arm |                    flann-1.9.1 | NOK | http://autobuild.buildroot.net/results/78502dbd16458358877549082551b6687cbd5d51 |     
+    mips64el | gst1-interpipe-10dba89eecc2... | NOK | http://autobuild.buildroot.net/results/b552773cb79389abe2e9ce2876bc3b86ddddd0b4 |     
+         sh4 | gst1-interpipe-10dba89eecc2... | NOK | http://autobuild.buildroot.net/results/61b9b5a416de0aa850f54c01e606671472e1f4bc |     
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/78d307376997f5f7fd2102c44417ba97c178e418 | ORPH
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/a55e708263b4ceb8db143a583a62bd7772a0e28c | ORPH
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/8214e2aa871d4774022e656634419d52ffeef50b | ORPH
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/8cf2e6995991dc319cb90fab6bc8f2732c931dbe | ORPH
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/ddc2caa833c4a06988a461f9c15ba5f0a8549a93 | ORPH
+        or1k |                libglib2-2.56.0 | NOK | http://autobuild.buildroot.net/results/398490e07343a931b25ca6ab5c90a75d7a073e9f |     
+        or1k |                libglib2-2.56.0 | NOK | http://autobuild.buildroot.net/results/0db2011d4dcca33105cc3e98657dab0c057773cd |     
+        or1k |                libglib2-2.56.0 | NOK | http://autobuild.buildroot.net/results/10636fba5c16df8c56de9f27cb24431c17f78e34 |     
+        or1k |                libglib2-2.56.0 | NOK | http://autobuild.buildroot.net/results/661e79cdd9ab87853e5f714006ec8fe7bf906a4f |     
+        or1k |                libglib2-2.56.1 | NOK | http://autobuild.buildroot.net/results/13f3e792407dd6757939d63ae3c7a9549e1025a1 |     
+        or1k |                libglib2-2.56.1 | NOK | http://autobuild.buildroot.net/results/9199c8f84c5d32670eb905cba38f2b33a8bf7de8 |     
+        i586 |                     liblo-0.29 | NOK | http://autobuild.buildroot.net/results/029ae3a108a5ab0835355f194e49907be98857b0 | ORPH
+      x86_64 |                     liblo-0.29 | NOK | http://autobuild.buildroot.net/results/7ceafdc2c46ff4d7ae8ad696be9aea5b339fb716 | ORPH
+      x86_64 |                     liblo-0.29 | NOK | http://autobuild.buildroot.net/results/34edae2ed0a42d295abcf0d4f92af4725de6943b | ORPH
+         arm |                     liblo-0.29 | NOK | http://autobuild.buildroot.net/results/6f97f11f8dc1d408bd988daf7b76513557ca070d | ORPH
+         arm |                     llvm-5.0.1 | NOK | http://autobuild.buildroot.net/results/301c454c6eab802405a268f4713a574d1c366892 |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/fdf464a6679adf68739c50458f39857a230c287f |     
+ powerpc64le |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/c7f11ccaf795573093b47108d0d2ca9d807a26ea |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/c89d544d159feb529ad6e02ce736ea98e87ee792 |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/dffeb98c3a52efe2a3cbaf83b2a6fb4d238561d9 |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/7c50a397db2aff4fe6bcfe6440966fcc624ee166 |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/9cc4331010b106182a0fdcc3143a1f8650a4d1ac |     
+      x86_64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/778f378b9a17f4bb2bae5007a73204e23d1b6b53 |     
+      xtensa |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/2a1a2137f7dd2a12b5f929f384bfdd69a3115602 |     
+      x86_64 |                  mesa3d-18.0.0 | NOK | http://autobuild.buildroot.net/results/b81c12d529c66a028e2297ea5ce1d6930324fa69 |     
+    mips64el |                      php-7.2.4 | NOK | http://autobuild.buildroot.net/results/2a822b7cd07027e964bd04d4cb97fad156d52254 | ORPH
+        i586 |                    picocom-3.1 | NOK | http://autobuild.buildroot.net/results/28ec584484dedfd6ef473dfd9dd24481e27ce2b3 |     
+        i586 |                    picocom-3.1 | NOK | http://autobuild.buildroot.net/results/912493a8f99416524a5897634ae62604436e9b51 |     
+    mips64el |    python-yieldfrom-legal-info | NOK | http://autobuild.buildroot.net/results/1672e19233316dffcc591ec467e9e43e07a066ca |     
+         arc |    python-yieldfrom-legal-info | NOK | http://autobuild.buildroot.net/results/9b2e078c92f330261691513438128626e3e024b7 |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/a277dd5b15b78671597357775282ee761593d237 | ORPH
+     aarch64 | qt-webkit-kiosk-34efddb0bf0... | NOK | http://autobuild.buildroot.net/results/a1fa248bff809cf4283d50023d2984aacd868f6a |     
+     aarch64 | qt-webkit-kiosk-34efddb0bf0... | NOK | http://autobuild.buildroot.net/results/faf8e56e01f983dddc252529377ffe9353ffc03e |     
+         arm | qt-webkit-kiosk-34efddb0bf0... | NOK | http://autobuild.buildroot.net/results/e59e18b12fe4a2a15f1a54e06f199d6eca3e760c |     
+     powerpc |              qt5location-5.6.3 | NOK | http://autobuild.buildroot.net/results/3210988f69d68c2146dd813c3cd7b5297bda6336 |     
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/7bc8e2db13fed9b9348c950a98c6cc80893579b0 |     
+       sparc |                 snort-2.9.11.1 | NOK | http://autobuild.buildroot.net/results/c364a9460ba0c20f5da5558ffadc854f1b595f7a |     
+       sparc |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/184c59b34376df72d591baac343d49a3103031bd |     
+         arm |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/f883d641f0c241cc999634e9ddd02b605ebe96cc |     
+         arm |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/88db3684eeb02527708f2c3cc1903d5cee5cae6f |     
+microblazeel |           usb_modeswitch-2.5.2 | NOK | http://autobuild.buildroot.net/results/d2721890403ebc803aa3a9d0e6fbb80d111b8fde | ORPH
+ powerpc64le |               wireshark-2.2.12 | NOK | http://autobuild.buildroot.net/results/8bf26fa9e483f48b3071d5a9a6e3998e8efce1e9 | ORPH
+        m68k |                    woff2-1.0.2 | NOK | http://autobuild.buildroot.net/results/c8bd6d9177ec1f6175b8ff7a048556b3b2a43ec4 |     
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/6c53d8048d5ad6190314c39e6e9c9c6b34792932 | ORPH
+        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/05b97a07c6a67a750dec52aa9cffa128d2ad0fdc | ORPH
+microblazeel |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/4ba07f105246321f560c9c393aaee038c23c26e5 | ORPH
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/b8f29fefe27186cf646685dd01fabc5f6c210baf | ORPH
+microblazeel |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/ba00d3a23827dacaf2a80dc6c80a81f0aae64c7e | ORPH
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/23dfa3f277de151501abda807f43a7b9a92d9d90 | ORPH
+        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/a986b77c56b974c730789c008ac2654e5357cd83 | ORPH
+microblazeel |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/8ea02a07b9591536368304cb3e54975c9d6a7408 | ORPH
+microblazeel |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/f7dde86af79d90c9785db6065a1ad38169e930ce | ORPH
+         arm |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/e229979060fcfadd1bd6beddc5d47faaaf579d69 | ORPH
+         arm |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/ab680546222a5059b42cf2120d97bccc24a2c055 | ORPH
+        bfin |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/3fbf59d8dea36dad00ed268995a586862748f3a2 | ORPH
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/9b968acde36dfb9431e36bd59897ae25426c39ca | ORPH
+        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/303cf5c680c71511b105b8b23f3b3156a1d02d7c | ORPH
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/cb361fdddf65a88c918938909c373f202f50e905 | ORPH
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/45785c96a1bc8cfdb9f29c31eaa41c3e0773a654 | ORPH
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/652f0087cdfe714e81b14a9d63869189e39fad50 | ORPH
+         arm |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/f69df6d23c50f3f65593d298d7bd97462ccaa555 | ORPH
+
+
 -- 
-2.16.3
+http://autobuild.buildroot.net
