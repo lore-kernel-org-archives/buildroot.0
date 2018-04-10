@@ -1,35 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Apr 2018 14:54:23 +0200
-Subject: [Buildroot] [PATCH] nmap: bump to version 7.70
-In-Reply-To: <dd8327325d3bb6fb24bfb2acaa0d3ec65c031b84.1523360545.git.baruch@tkos.co.il>
-References: <dd8327325d3bb6fb24bfb2acaa0d3ec65c031b84.1523360545.git.baruch@tkos.co.il>
-Message-ID: <20180410145423.37b327b7@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 10 Apr 2018 08:07:20 -0500
+Subject: [Buildroot] [PATCH] picocom: disable custom baud rate for musl
+ libc
+In-Reply-To: <04f165bfdd9c1e98e3e8485e392e77b003c92ace.1523354385.git.baruch@tkos.co.il>
+References: <04f165bfdd9c1e98e3e8485e392e77b003c92ace.1523354385.git.baruch@tkos.co.il>
+Message-ID: <CANQCQpbT_0ccGwWzkV8Dj+CA1XWtZwX64uj2BfTsKNAHQG_=zw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
 
-On Tue, 10 Apr 2018 14:42:25 +0300, Baruch Siach wrote:
-> Drop libssh2 configure test fix; the issue is fixed upstream.
-> 
-> Add license file hash.
-> 
-> Cc: Carlos Santos <casantos@datacom.ind.br>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...c-fix-AC_CHECK_HEADER-call-to-test-for-li.patch | 30 ----------------------
->  package/nmap/nmap.hash                             |  6 +++--
->  package/nmap/nmap.mk                               | 12 ++-------
->  3 files changed, 6 insertions(+), 42 deletions(-)
->  delete mode 100644 package/nmap/0002-configure.ac-fix-AC_CHECK_HEADER-call-to-test-for-li.patch
+On Tue, Apr 10, 2018 at 4:59 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Since version 3.1 picocom enabled custom baud rate support for x86
+> targets. This requires the c_ispeed and c_opseed field in struct termios
+> that musl libc does not provide. Disable this feature to fix the build.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/28e/28ec584484dedfd6ef473dfd9dd24481e27ce2b3/
+> http://autobuild.buildroot.net/results/912/912493a8f99416524a5897634ae62604436e9b51/
+> http://autobuild.buildroot.net/results/65d/65d0f449822f296dfe6b9be0e03a5a855f700a9e/
+>
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Baruch, thanks for also posting an update on the github picocom issue
+ticket.  We'll see if they plan to add MUSL coexistence/support but
+that obviously really doesn't matter for this patch-set.
+https://github.com/npat-efault/picocom/issues/100
