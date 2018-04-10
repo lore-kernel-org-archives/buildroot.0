@@ -1,34 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Apr 2018 09:53:27 +0200
-Subject: [Buildroot] [PATCH v2/next 3/4] webkitgtk: update to version
- 2.20.0
-In-Reply-To: <87po3t21cy.fsf@dell.be.48ers.dk>
-References: <20180323185942.60252-1-aperez@igalia.com>
- <20180323185942.60252-4-aperez@igalia.com>
- <87po3t21cy.fsf@dell.be.48ers.dk>
-Message-ID: <20180410095327.59c0e9d8@windsurf>
+Date: Tue, 10 Apr 2018 10:07:36 +0200
+Subject: [Buildroot] [PATCH v4 2/8] gst-plugins-${base, good, bad,
+ ugly}: bump to 1.14.0
+In-Reply-To: <20180322235537.261ea603@gmx.net>
+References: <20180322173220.31791-1-aduskett@gmail.com>
+ <20180322173220.31791-2-aduskett@gmail.com>
+ <20180322235537.261ea603@gmx.net>
+Message-ID: <20180410100736.2e6f8f7b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian,
+Hello Peter,
 
-On Sat, 24 Mar 2018 11:51:09 +0100, Peter Korsgaard wrote:
+I talked with Adam about this gstreamer1 patch series, and apparently
+your comment below isn't clear to Adam, and this explains why he hasn't
+resent the patch series.
 
->  >  ...ld-failure-when-ENABLE_VIDEO-ENABLE_WEB_A.patch | 32 ++++++++++++++++++++++
->  >  package/webkitgtk/Config.in                        |  3 ++
->  >  package/webkitgtk/webkitgtk.hash                   |  8 +++---
->  >  package/webkitgtk/webkitgtk.mk                     |  4 +--  
+On Thu, 22 Mar 2018 23:55:37 +0100, Peter Seiderer wrote:
+
+> > Add the following to gst1-plugins-base and remove them from plugins-bad:
+> >  - opengl
+> >  - gles2
+> >  - glx
+> >  - egl
+> >  - x11
+> >  - wayland  
 > 
-> Your introductory mail talked about 3 additional patches needed for
-> aarch64 support, but I don't see them here?
+> This still contradicts your own statement [1]:
+> 
+>   Not entirely! There is --enable-wayland now in both base AND bad!
 
-Could you give some feedback on this question, so that we can move
-forward with applying the webkitgtk bump ?
+Indeed, the gst1-plugins-bad package still has a
+--enable-wayland/--disable-wayland option:
 
-Thanks!
+output/build/gst1-plugins-bad-1.14.0 $ ./configure --help | grep wayland
+  --disable-wayland            disable wayland sink: wayland
+
+And in base:
+
+output/build/gst1-plugins-base-1.14.0 $ ./configure --help | grep wayland
+  --enable-wayland        Enable Wayland support (requires EGL) [default=auto]
+
+> > Changes v2 -> v3:
+> >   - Removed wayland references from plugins-bad (Peter)  
+> 
+> No, see suggestion from [2]:
+> 
+>   I think there is a difference, the bad/wayland option enables extra gstreamer
+>   plugins/elements, the base/wayland opton enables no extra plugins/elements but
+>   enables wayland support in the qt/gtk plugins (did not look further if it
+>   results only in wayland support in some elements or extra elements in the same
+>   plugin library), in case it enables only wayland support, I think no
+>   user visible option is needed (if a user visible option is needed there is
+>   definitely a change in option name and help text needed)
+
+It's not entirely clear to me what are the two options doing.
+
+In gst1-plugins-base, the --enable-wayland option requires EGL support,
+and will enable some wayland related code in gst-libs/gl/. Peter, do
+you understand what this does, compared to the wayland sink provided in
+gst1-plugins-bad ?
+
+In gst1-plugins-bad, the --enable-wayland option enables the build of a
+wayland sink.
+
+Best regards,
 
 Thomas
 -- 
