@@ -1,103 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:47:30 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mariadb: security bump
- version to 10.1.31
-Message-ID: <20180410205256.81664807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:51:38 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mbedtls: fix API
+ compatibility
+Message-ID: <20180410205256.D30BB807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0cd24fafa44b4314f27b54590a7aa63b7a86ca3
+commit: https://git.buildroot.net/buildroot/commit/?id=e1f2e885e67003be7ba71b871118d6d6acc8dee7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Release notes: https://mariadb.com/kb/en/mariadb-10131-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10131-changelog/
+Add upstream patch fixing API compatibility with previous releases.
 
-Fixes the following security vulnerabilities:
+Fixes (hiawatha):
+http://autobuild.buildroot.net/results/ce6/ce6b4a50e6aafd06f82eaae688dd8720b982e9c2/
+http://autobuild.buildroot.net/results/cde/cdec7ae3565d5b76a9bc50156c6244b44197534e/
+http://autobuild.buildroot.net/results/9c1/9c1aec09c03f60bee9dc134da5a29e2671fc3b5e/
 
-CVE-2018-2562 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server : Partition). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.19 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server as well as unauthorized update, insert or
-delete access to some of MySQL Server accessible data.
-
-CVE-2018-2622 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL). Supported versions that are affected are 5.5.58
-and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
-
-CVE-2018-2640 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
-
-CVE-2018-2665 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
-
-CVE-2018-2668 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer). Supported versions that are affected are
-5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
-vulnerability allows low privileged attacker with network access via multiple
-protocols to compromise MySQL Server. Successful attacks of this vulnerability
-can result in unauthorized ability to cause a hang or frequently repeatable
-crash (complete DOS) of MySQL Server.
-
-CVE-2018-2612 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB). Supported versions that are affected are 5.6.38 and
-prior and 5.7.20 and prior. Easily exploitable vulnerability allows high
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server. Successful attacks of this vulnerability can result in
-unauthorized creation, deletion or modification access to critical data or all
-MySQL Server accessible data and unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fcdaab19bb564af01016b6632736f98baecbd22c)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7bb17b10af531749192e067efd67a117f2bc8053)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-dhm-Fix-typo-in-RFC-5114-constants.patch  | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index f8e1c6ce10..cc1e353ab7 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.30/
--sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.31/
-+sha256 ab7641c2fe4e5289da6141766a9c3350e013def56fafd6f1377080bc8048b2e6  mariadb-10.1.31.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index dc88696e34..18dfece377 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.30
-+MARIADB_VERSION = 10.1.31
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
- # Tarball no longer contains LGPL license text
+diff --git a/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
+new file mode 100644
+index 0000000000..effaf3d931
+--- /dev/null
++++ b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
+@@ -0,0 +1,33 @@
++From 129f50838bf14f4e1319f06f41c827fae9cc4b73 Mon Sep 17 00:00:00 2001
++From: Jaeden Amero <jaeden.amero@arm.com>
++Date: Thu, 8 Feb 2018 14:25:36 +0000
++Subject: [PATCH] dhm: Fix typo in RFC 5114 constants
++
++We accidentally named the constant MBEDTLS_DHM_RFC5114_MODP_P instead of
++MBEDTLS_DHM_RFC5114_MODP_2048_P.
++
++Fixes #1358
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 129f50838bf
++
++ include/mbedtls/dhm.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/mbedtls/dhm.h b/include/mbedtls/dhm.h
++index da2e66b111b6..00fafd8d16f4 100644
++--- a/include/mbedtls/dhm.h
+++++ b/include/mbedtls/dhm.h
++@@ -372,7 +372,7 @@ MBEDTLS_DEPRECATED typedef char const * mbedtls_deprecated_constant_t;
++  * in <em>RFC-5114: Additional Diffie-Hellman Groups for Use with
++  * IETF Standards</em>.
++  */
++-#define MBEDTLS_DHM_RFC5114_MODP_P                              \
+++#define MBEDTLS_DHM_RFC5114_MODP_2048_P                         \
++     MBEDTLS_DEPRECATED_STRING_CONSTANT(                         \
++         "AD107E1E9123A9D0D660FAA79559C51FA20D64E5683B9FD1"      \
++         "B54B1597B61D0A75E6FA141DF95A56DBAF9A3C407BA1DF15"      \
++-- 
++2.16.1
++
