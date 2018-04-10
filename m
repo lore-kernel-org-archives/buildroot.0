@@ -1,62 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  9 Apr 2018 23:56:51 +0200
-Subject: [Buildroot] [PATCHv2] download/git: more resilient in case of kill
-Message-ID: <20180409215651.549-1-yann.morin.1998@free.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 9 Apr 2018 23:50:27 -0300 (BRT)
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-04-07
+In-Reply-To: <20180408060016.70C472084F@mail.bootlin.com>
+References: <20180408060016.70C472084F@mail.bootlin.com>
+Message-ID: <147906727.2330850.1523328627127.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In case the git backend gets killed right in-between it finished
-initialising the repository, but before it could add the remote,
-we'd end up with a repository without the 'origin' remote, so we
-would not be able to change its URL.
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Sent: Sunday, April 8, 2018 3:00:16 AM
+> Subject: [autobuild.buildroot.net] Your build results for 2018-04-07
 
-Another case that may happen (like in the build failure, below),
-is that the repository was initialised with a previous version
-of Buildroot, before the commit e17719264b (download/git: don't
-require too-recent git) was applied, and that trepository was
-still lying around...
+> Hello,
+> 
+> This is the list of Buildroot build failures that occured on
+> 2018-04-07, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+> 
+> Results for the 'master' branch
+> ===============================
+> 
+> Build failures related to your packages:
+> 
+>     powerpc |               tpm2-abrmd-1.3.0 |
+>     http://autobuild.buildroot.net/results/b29a2f868438a2210873ea72f491db63175848be
+> 
+> --
+> http://autobuild.buildroot.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/25a/25aae054634368fadb265b97ebe4dda809deff6f/
+The it's a problem libglib2, not in tpm2-abrmd:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+$ echo -e '#include <gio/gio.h>\nint main(){return 0;}' | host/bin/powerpc-ctng_e500v2-linux-gnuspe-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
+In file included from staging/usr/include/glib-2.0/gobject/gbinding.h:29:0,
+                 from staging/usr/include/glib-2.0/glib-object.h:23,
+                 from staging/usr/include/glib-2.0/gio/gioenums.h:28,
+                 from staging/usr/include/glib-2.0/gio/giotypes.h:28,
+                 from staging/usr/include/glib-2.0/gio/gio.h:26,
+                 from <stdin>:1:
+staging/usr/include/glib-2.0/gobject/gobject.h: In function 'g_set_object':
+staging/usr/include/glib-2.0/gobject/gobject.h:725:5: error: value computed is not used [-Werror=unused-value]
+cc1: all warnings being treated as errors
 
----
-Changes v1 -> v2:
-  - remove extraneous pushd/popd  (Thomas)
-  - fix if-block condition
----
- support/download/git | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+This was after commit 4dcfcd17c09b5684e95943de119b95a34c93ad63, so the
+bump to libglig2 v2.56.1 did not solve the problem.
 
-diff --git a/support/download/git b/support/download/git
-index 868dfad0dd..381f3ceeb3 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -47,13 +47,15 @@ git_cache="${dl_dir}/git"
- # fetch'ed later.
- if [ ! -d "${git_cache}" ]; then
-     _git init "'${git_cache}'"
--    pushd "${git_cache}" >/dev/null
--    _git remote add origin "'${uri}'"
--    popd >/dev/null
- fi
- 
- pushd "${git_cache}" >/dev/null
- 
-+# Ensure the repo has an origin (in case a previous run was killed).
-+if ! git remote |grep -q -E '^origin$'; then
-+    _git remote add origin "'${uri}'"
-+fi
-+
- _git remote set-url origin "'${uri}'"
- 
- # Try to fetch with limited depth, since it is faster than a full clone - but
 -- 
-2.14.1
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
