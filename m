@@ -1,42 +1,57 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 10 Apr 2018 16:50:12 +0200
-Subject: [Buildroot] Direct rendering with XORG and AMDGPU
-In-Reply-To: <162E260C-3293-4AEE-9519-0D0E030168C6@gamecodehq.com>
-References: <162E260C-3293-4AEE-9519-0D0E030168C6@gamecodehq.com>
-Message-ID: <9b4d6bf4-0b92-f277-df89-bb841e35c501@smile.fr>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Tue, 10 Apr 2018 17:19:59 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: add dependency on elfutils to
+ r600 with llvm
+Message-ID: <20180410151959.18713-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michal,
+Gallium R600 needs libelf when mesa is built with llvm support.
 
-Le 10/04/2018 ? 16:31, Micha? Kalbarczyk a ?crit?:
-> Hi,
-> 
-> I?m trying to build a firmware that support xorg and amdgpu with hardware acceleration. The build is made within nerves. I can?t get software rendering work.
-> 
-> Figured out that xorg driver reports empty list of supported cards.
-> 
-> If you want to look at configs please check GitHub repo: https://github.com/fazibear/nerves_system_xorg_x86_64 <https://github.com/fazibear/nerves_system_xorg_x86_64>
-> 
-> There is some dependencies that I missing?
+As elfutils must be selected only if BR2_PACKAGE_MESA3D_LLVM is set,
+create a new option BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600_LLVM.
 
-Are you sure that your graphic card support is enabled in mesa3d package ?
-Maybe you need radeonsi gallium driver which is not available currently.
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+---
+ package/mesa3d/Config.in | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-Best regards,
-Romain
-
-> 
-> Thanks for your help.
-> Micha?.
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1476b39acc..391a1cbaed 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -97,13 +97,28 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+ 	bool "Gallium Radeon R600 driver"
+ 	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+-	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600_LLVM
++	bool "Gallium Radeon R600 driver with LLVM support"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		BR2_TOOLCHAIN_USES_GLIBC # elfutils
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_RADEON
++	select BR2_PACKAGE_LLVM_AMDGPU
++	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
++	help
++	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs
++	  with LLVM support.
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+ 	bool "Gallium vmware svga driver"
+ 	depends on BR2_i386 || BR2_x86_64
+-- 
+2.14.3
