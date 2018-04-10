@@ -1,93 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:02:38 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/dovecot: security
- bump to version 2.3.4
-Message-ID: <20180410205257.7A45D807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 22:06:15 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mosquitto: unbreak build
+ with websockets and !libopenssl
+Message-ID: <20180410205257.B957D807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b598d76affcacf0241dd5f4c725f1f1a15178959
+commit: https://git.buildroot.net/buildroot/commit/?id=b93a04a51a839dfd43a078029292348e58bb1c0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-15130, CVE-2017-14461 & CVE-2017-15132:
-https://www.dovecot.org/list/dovecot-news/2018-February/000370.html
+Fixes:
+http://autobuild.buildroot.net/results/d69/d693f3e3f1c73ccf54ac7076623e436355a9d901/b
 
-Removed patch applied upstream:
-https://github.com/dovecot/core/commit/a008617e811673064fd657acf517dc4a12493d29
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7c970b06ea4cfc235eefedd967551d165c1dd7ca)
+(cherry picked from commit 63dfbca2c3ad509504e9118a49d396210917b079)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...x-memory-leak-in-auth_client_request_abor.patch | 33 ----------------------
- package/dovecot/dovecot.hash                       |  2 +-
- package/dovecot/dovecot.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 35 deletions(-)
+ ...01-websockets.c-unbreak-build-without-TLS.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
-deleted file mode 100644
-index babccd3acf..0000000000
---- a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 1a29ed2f96da1be22fa5a4d96c7583aa81b8b060 Mon Sep 17 00:00:00 2001
--From: Timo Sirainen <timo.sirainen@dovecot.fi>
--Date: Mon, 18 Dec 2017 16:50:51 +0200
--Subject: [PATCH] lib-auth: Fix memory leak in auth_client_request_abort()
--
--This caused memory leaks when authentication was aborted. For example
--with IMAP:
--
--a AUTHENTICATE PLAIN
--*
--
--Broken by 9137c55411aa39d41c1e705ddc34d5bd26c65021
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/lib-auth/auth-client-request.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/lib-auth/auth-client-request.c b/src/lib-auth/auth-client-request.c
--index 480fb42b3..046f7c307 100644
----- a/src/lib-auth/auth-client-request.c
--+++ b/src/lib-auth/auth-client-request.c
--@@ -186,6 +186,7 @@ void auth_client_request_abort(struct auth_client_request **_request)
-- 
-- 	auth_client_send_cancel(request->conn->client, request->id);
-- 	call_callback(request, AUTH_REQUEST_STATUS_ABORT, NULL, NULL);
--+	pool_unref(&request->pool);
-- }
-- 
-- unsigned int auth_client_request_get_id(struct auth_client_request *request)
---- 
--2.11.0
--
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 33163d6d8c..fef0746089 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 fe1e3b78609a56ee22fc209077e4b75348fa1bbd54c46f52bde2472a4c4cee84  dovecot-2.2.33.2.tar.gz
-+sha256 5e92a4325409e66b343f6aaa67174b8921ce83d0df792c6eeb0b7b7e2c808353  dovecot-2.2.34.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index f8fbaaab65..d9703a6171 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).34
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPLv2.1
+diff --git a/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
+new file mode 100644
+index 0000000000..e977fae56c
+--- /dev/null
++++ b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
+@@ -0,0 +1,49 @@
++From 4822aa97da80a86033ec6e4a8b2f4ad0911235cf Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sat, 3 Mar 2018 11:04:47 +0100
++Subject: [PATCH] websockets.c: unbreak build without TLS
++
++Commit 7943072b1f3b (Fix use_identity_as_username not working on websockets
++clients) added code which unconditionally accesses mosq-ssl, breaking the
++build when TLS support is disabled.
++
++Fix it by guarding this logic inside #ifdef WITH_TLS.
++
++[Upstream: https://dev.eclipse.org/mhonarc/lists/mosquitto-dev/msg01813.html]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/websockets.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/websockets.c b/src/websockets.c
++index d4d7961..a796f0a 100644
++--- a/src/websockets.c
+++++ b/src/websockets.c
++@@ -201,12 +201,14 @@ static int callback_mqtt(struct libwebsocket_context *context,
++ 				mosq->ws_context = context;
++ #endif
++ 				mosq->wsi = wsi;
+++#ifdef WITH_TLS
++ 				if(in){
++ 					mosq->ssl = (SSL *)in;
++ 					if(!mosq->listener->ssl_ctx){
++ 						mosq->listener->ssl_ctx = SSL_get_SSL_CTX(mosq->ssl);
++ 					}
++ 				}
+++#endif
++ 				u->mosq = mosq;
++ 			}else{
++ 				return -1;
++@@ -240,7 +242,9 @@ static int callback_mqtt(struct libwebsocket_context *context,
++ 					mosq->pollfd_index = -1;
++ 				}
++ 				mosq->wsi = NULL;
+++#ifdef WITH_TLS
++ 				mosq->ssl = NULL;
+++#endif
++ 				do_disconnect(db, mosq);
++ 			}
++ 			break;
++-- 
++2.11.0
++
