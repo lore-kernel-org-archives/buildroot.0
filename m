@@ -1,51 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:56:31 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] dependencies.mk: check
- for valid host-tar before other host dependencies
-Message-ID: <20180410205257.20A42882EA@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:51:25 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mbedtls: security bump to
+ version 2.7.0
+Message-ID: <20180410205256.C3A35807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=119ab097e442e8a87ebd05beb478ade5b638a1ca
+commit: https://git.buildroot.net/buildroot/commit/?id=d226954543a06682cacf5dab5048c66f7364dfb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-host-{cmake,lzip,xz} needs host-tar to extract their source code tarball, so
-we need to ensure that host-tar gets added to DEPENDENCIES_HOST_PREREQ
-before these in case they are both needed, otherwise the tools will fail to
-extract.
+CVE-2018-0487: Remote attackers can execute arbitrary code or cause a
+denial of service (buffer overflow) via a crafted certificate chain that
+is mishandled during RSASSA-PSS signature verification within a TLS or
+DTLS session.
 
-With the upcoming change to blacklist modern tar versions this situation is
-likely to trigger more often.
+CVE-2018-0488: When the truncated HMAC extension and CBC are used,
+allows remote attackers to execute arbitrary code or cause a denial of
+service (heap corruption) via a crafted application packet within a TLS
+or DTLS session.
 
-The real solution to this issue is the <foo>_EXTRACT_DEPENDENCIES rework,
-but that series is a bit too intrusive to add this close to 2018.02, so
-therefore this hack.
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7c09cb82b75f30eba7a9daaae5e77a604f6e49c1)
+(cherry picked from commit 3b7a59304a9c377b9aec1303d85a60d019b4b9b2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/mbedtls/mbedtls.hash | 6 +++---
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-index ef2ae9b7e1..e81745d04f 100644
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -12,7 +12,10 @@
- define suitable-host-package
- $(shell support/dependencies/check-host-$(1).sh $(2))
- endef
---include $(sort $(wildcard support/dependencies/check-host-*.mk))
-+# host utilities needs host-tar to extract the source code tarballs, so
-+# ensure check-host-tar.mk is included before the rest
-+include support/dependencies/check-host-tar.mk
-+-include $(sort $(filter-out %-tar.mk,$(wildcard support/dependencies/check-host-*.mk)))
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index d04b867754..a62c0f58de 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.6.0-2.1.9-and-1.3.21-released
+-sha1	e914288da50977f541773f9d36e26f14926594a5	mbedtls-2.6.0-apache.tgz
+-sha256	99bc9d4212d3d885eeb96273bcde8ecc649a481404b8d7ea7bb26397c9909687	mbedtls-2.6.0-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.7.0-2.1.10-and-1.3.22-released
++sha1	01ffebf679c8696cc941c41224fa73d8944d2c85	mbedtls-2.7.0-apache.tgz
++sha256	aeb66d6cd43aa1c79c145d15845c655627a7fc30d624148aaafbb6c36d7f55ef	mbedtls-2.7.0-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 64ce18cf6f..7c26ea95ee 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- ifeq ($(BR2_CCACHE),y)
- DEPENDENCIES_HOST_PREREQ += host-ccache
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.6.0
++MBEDTLS_VERSION = 2.7.0
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
