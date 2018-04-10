@@ -1,50 +1,111 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:41:31 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] librsvg: security bump to
- version 2.40.20
-Message-ID: <20180410205256.1DB75807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:29:14 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] ntp: security bump to
+ version 4.2.8p11
+Message-ID: <20180410205255.537AE88398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0cd7e646642ffa946e7af5978feaa99161c42ae
+commit: https://git.buildroot.net/buildroot/commit/?id=e912d4c9d55c14cb28c6e1eec369b30200c48924
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2018-1000041: information disclosure via a crafted SVG file.
+Fixed or improved security issues:
 
-Bump to the latest (maybe last) release in the 2.40.x series. Newer
-versions require a Rust compiler.
+  CVE-2016-1549 (fixed in 4.2.8p7; this release adds protection): A
+  malicious authenticated peer can create arbitrarily-many ephemeral
+  associations in order to win the clock selection algorithm
+
+  CVE-2018-7182: Buffer read overrun leads to undefined behavior and
+  information leak
+
+  CVE-2018-7170: Multiple authenticated ephemeral associations
+
+  CVE-2018-7184: Interleaved symmetric mode cannot recover from bad
+  state
+
+  CVE-2018-7185: Unauthenticated packet can reset authenticated
+  interleaved association
+
+  CVE-2018-7183: ntpq:decodearr() can write beyond its buffer limit
+
+Drop patch #3. libntpq_a_CFLAGS now includes NTP_HARD_CFLAGS via
+AM_CFLAGS.
+
+Add license file hash.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4020c5a7b330613f7bccbc91a466c129bf8e40c5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit da05d748057a98254a9c4fbd6afbc8ebf7e08afd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/librsvg/librsvg.hash | 4 ++--
- package/librsvg/librsvg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ntp/0003-ntpq-fpic.patch | 23 -----------------------
+ package/ntp/ntp.hash             |  7 ++++---
+ package/ntp/ntp.mk               |  3 +--
+ 3 files changed, 5 insertions(+), 28 deletions(-)
 
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-index 9ab798120f..6f4b07423a 100644
---- a/package/librsvg/librsvg.hash
-+++ b/package/librsvg/librsvg.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.18.sha256sum
--sha256	bfc8c488c89c1e7212c478beb95c41b44701636125a3e6dab41187f1485b564c	librsvg-2.40.18.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.20.sha256sum
-+sha256	cff4dd3c3b78bfe99d8fcfad3b8ba1eee3289a0823c0e118d78106be6b84c92b	librsvg-2.40.20.tar.xz
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 16375d5205..285f663558 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
+diff --git a/package/ntp/0003-ntpq-fpic.patch b/package/ntp/0003-ntpq-fpic.patch
+deleted file mode 100644
+index 6e05a677c5..0000000000
+--- a/package/ntp/0003-ntpq-fpic.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-ntpq/Makefile.am: add NTP_HARD_CFLAGS
+-
+-Pass NTP_HARD_CFLAGS when building ntpq, like in all other ntp
+-modules, to make sure -fPIC is passed.
+-
+-Originally taken from
+-https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=494143c3b4921a5c8b8596d58f2c8b98296bf688.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/ntpq/Makefile.am
+-===================================================================
+---- a/ntpq/Makefile.am
+-+++ b/ntpq/Makefile.am
+-@@ -23,7 +23,7 @@
+- ntpq_LDADD += $(LDADD_NTP)
+- noinst_HEADERS=	ntpq.h
+- noinst_LIBRARIES=	libntpq.a
+--libntpq_a_CFLAGS=	-DNO_MAIN_ALLOWED -DBUILD_AS_LIB
+-+libntpq_a_CFLAGS=	$(NTP_HARD_CFLAGS) -DNO_MAIN_ALLOWED -DBUILD_AS_LIB
+- CLEANFILES=
+- DISTCLEANFILES=	.version version.c config.log $(man_MANS)
+- ETAGS_ARGS=	Makefile.am
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index d8b7083c47..ea86c1586f 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,4 +1,5 @@
+-# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p10.tar.gz.md5
+-md5 745384ed0dedb3f66b33fe84d66466f9  ntp-4.2.8p10.tar.gz
++# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p11.tar.gz.md5
++md5 00950ca2855579541896513e78295361  ntp-4.2.8p11.tar.gz
+ # Calculated based on the hash above
+-sha256 ddd2366e64219b9efa0f7438e06800d0db394ac5c88e13c17b70d0dcdf99b99f  ntp-4.2.8p10.tar.gz
++sha256 f14a39f753688252d683ff907035ffff106ba8d3db21309b742e09b5c3cd278e  ntp-4.2.8p11.tar.gz
++sha256 62c87b269365b38b55359b16dfde7ec28c683c722ef489db90afd0f2e478e4a1  COPYRIGHT
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 535e89ff72..dca8008eeb 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- LIBRSVG_VERSION_MAJOR = 2.40
--LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).18
-+LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).20
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p10
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p11
+ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
+@@ -20,7 +20,6 @@ NTP_CONF_OPTS = \
+ 	--disable-local-libevent \
+ 
+ # 0002-ntp-syscalls-fallback.patch
+-# 0003-ntpq-fpic.patch
+ NTP_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
