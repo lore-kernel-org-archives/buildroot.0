@@ -1,35 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:57:42 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.2.x
- series
-Message-ID: <20180410205257.40983882EA@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:56:47 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] check-host-tar.sh:
+ blacklist tar 1.30+
+Message-ID: <20180410205257.2EB1D882EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3738909ce96014bffd7726303051aaaf9a962746
+commit: https://git.buildroot.net/buildroot/commit/?id=c1c3a7913a943756ac53430cba2a30c97dee488a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tar 1.30 changed the --numeric-owner output for filenames > 100 characters,
+leading to hash mismatches for the tar archives we create ourselves from
+git.  This is really a fix for a bug in earlier tar versions regarding
+deterministic output, so it is unlikely to be reverted in later versions.
+
+For more details, see:
+http://lists.busybox.net/pipermail/buildroot/2018-January/211222.html
+
+To work around this issue, blacklist tar 1.30+ similar to how we do it for
+pre-1.17 versions so Buildroot falls back to building host-tar.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e8e9bb3267930fd053add7b9eef85749362a1d0a)
+(cherry picked from commit b8fa273d500b44153e9939f0a100e97db2ff63ed)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/dependencies/check-host-tar.sh | 33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index db21859021..73ffc10c58 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -214,7 +214,7 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.98"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.99"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+index 932d3c4fb2..2143877524 100755
+--- a/support/dependencies/check-host-tar.sh
++++ b/support/dependencies/check-host-tar.sh
+@@ -30,13 +30,28 @@ fi
+ # containing hard-links if the --strip-components option is used).
+ major_min=1
+ minor_min=17
+-if [ $major -gt $major_min ]; then
+-	echo $tar
+-else
+-	if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
+-		echo $tar
+-	else
+-		# echo nothing: no suitable tar found
+-		exit 1
+-	fi
++
++# Maximal version = 1.29 (1.30 changed --numeric-owner output for
++# filenames > 100 characters). This is really a fix for a bug in
++# earlier tar versions regarding deterministic output so it is
++# unlikely to be reverted in later versions.
++major_max=1
++minor_max=29
++
++if [ $major -lt $major_min -o $major -gt $major_max ]; then
++	# echo nothing: no suitable tar found
++	exit 1
+ fi
++
++if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
++	# echo nothing: no suitable tar found
++	exit 1
++fi
++
++if [ $major -eq $major_max -a $minor -gt $minor_max ]; then
++	# echo nothing: no suitable tar found
++	exit 1
++fi
++
++# valid
++echo $tar
