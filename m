@@ -1,69 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:51:38 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mbedtls: fix API
- compatibility
-Message-ID: <20180410205256.D30BB807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:54:42 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+ 9, 14, 15}.x series
+Message-ID: <20180410205257.0F11E807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1f2e885e67003be7ba71b871118d6d6acc8dee7
+commit: https://git.buildroot.net/buildroot/commit/?id=a06507a2f2fa989264cb9e16b958f78459f124f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Add upstream patch fixing API compatibility with previous releases.
-
-Fixes (hiawatha):
-http://autobuild.buildroot.net/results/ce6/ce6b4a50e6aafd06f82eaae688dd8720b982e9c2/
-http://autobuild.buildroot.net/results/cde/cdec7ae3565d5b76a9bc50156c6244b44197534e/
-http://autobuild.buildroot.net/results/9c1/9c1aec09c03f60bee9dc134da5a29e2671fc3b5e/
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7bb17b10af531749192e067efd67a117f2bc8053)
+[Peter: drop 4.14.x / 4.15.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1e7ee5a686dc74f18242a9c07623cf12065505c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-dhm-Fix-typo-in-RFC-5114-constants.patch  | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
-new file mode 100644
-index 0000000000..effaf3d931
---- /dev/null
-+++ b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
-@@ -0,0 +1,33 @@
-+From 129f50838bf14f4e1319f06f41c827fae9cc4b73 Mon Sep 17 00:00:00 2001
-+From: Jaeden Amero <jaeden.amero@arm.com>
-+Date: Thu, 8 Feb 2018 14:25:36 +0000
-+Subject: [PATCH] dhm: Fix typo in RFC 5114 constants
-+
-+We accidentally named the constant MBEDTLS_DHM_RFC5114_MODP_P instead of
-+MBEDTLS_DHM_RFC5114_MODP_2048_P.
-+
-+Fixes #1358
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 129f50838bf
-+
-+ include/mbedtls/dhm.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/mbedtls/dhm.h b/include/mbedtls/dhm.h
-+index da2e66b111b6..00fafd8d16f4 100644
-+--- a/include/mbedtls/dhm.h
-++++ b/include/mbedtls/dhm.h
-+@@ -372,7 +372,7 @@ MBEDTLS_DEPRECATED typedef char const * mbedtls_deprecated_constant_t;
-+  * in <em>RFC-5114: Additional Diffie-Hellman Groups for Use with
-+  * IETF Standards</em>.
-+  */
-+-#define MBEDTLS_DHM_RFC5114_MODP_P                              \
-++#define MBEDTLS_DHM_RFC5114_MODP_2048_P                         \
-+     MBEDTLS_DEPRECATED_STRING_CONSTANT(                         \
-+         "AD107E1E9123A9D0D660FAA79559C51FA20D64E5683B9FD1"      \
-+         "B54B1597B61D0A75E6FA141DF95A56DBAF9A3C407BA1DF15"      \
-+-- 
-+2.16.1
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8f96285116..db21859021 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.117"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.118"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.83"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.84"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
