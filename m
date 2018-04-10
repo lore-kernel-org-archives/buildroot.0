@@ -1,35 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:50:28 +0200
-Subject: [Buildroot] [PATCH] wavpack: add upstream security fixes
-In-Reply-To: <20180227212652.18759-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 27 Feb 2018 22:26:52 +0100")
-References: <20180227212652.18759-1-peter@korsgaard.com>
-Message-ID: <871sfm4wh7.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:50:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: security bump to
+ version 2.3.4
+In-Reply-To: <20180301194151.7078-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 1 Mar 2018 20:41:51 +0100")
+References: <20180301194151.7078-1-bernd.kuhls@t-online.de>
+Message-ID: <87woxe3hwb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes the following security issues:
- > CVE-2018-6767: A stack-based buffer over-read in the ParseRiffHeaderConfig
- > function of cli/riff.c file of WavPack 5.1.0 allows a remote attacker to
- > cause a denial-of-service attack or possibly have unspecified other impact
- > via a maliciously crafted RF64 file.
+ > Fixes CVE-2017-15130, CVE-2017-14461 & CVE-2017-15132:
+ > https://www.dovecot.org/list/dovecot-news/2018-February/000370.html
 
- > CVE-2018-7253: The ParseDsdiffHeaderConfig function of the cli/dsdiff.c file
- > of WavPack 5.1.0 allows a remote attacker to cause a denial-of-service
- > (heap-based buffer over-read) or possibly overwrite the heap via a
- > maliciously crafted DSDIFF file.
+ > Removed patch applied upstream:
+ > https://github.com/dovecot/core/commit/a008617e811673064fd657acf517dc4a12493d29
 
- > CVE-2018-7254: The ParseCaffHeaderConfig function of the cli/caff.c file of
- > WavPack 5.1.0 allows a remote attacker to cause a denial-of-service (global
- > buffer over-read), or possibly trigger a buffer overflow or incorrect memory
- > allocation, via a maliciously crafted CAF file.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.02.x, thanks.
 
