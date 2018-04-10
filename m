@@ -1,100 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 15:36:32 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2018.02.1
-Message-ID: <20180410133649.B02D688398@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 15:31:41 +0200
+Subject: [Buildroot] [git commit] Update for 2018.02.1
+Message-ID: <20180410133649.94AED88398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f682bcb145ce7e0952ff49087879fee1933e1356
+commit: https://git.buildroot.net/buildroot/commit/?id=f3cea9d8685cf3ec2e8223adca08147ea815f338
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9565a37e0d2aa3c5fb9a4148760c490f2e5226d4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 63 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index cf99b22cd1..a34b799b01 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2018.02</b></h3>
-+      <h3 style="text-align: center;">Latest stable / long term support release: <b>2018.02.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2018.02.tar.gz">buildroot-2018.02.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.1.tar.gz">buildroot-2018.02.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2018.02.tar.bz2">buildroot-2018.02.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.1.tar.bz2">buildroot-2018.02.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 980b0cc83c..e7f291d323 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.02.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 April 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.02.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.02 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-April/218642.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.02.1.tar.bz2">2018.02.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/CHANGES b/CHANGES
+index c7925bdedc..09cf7c3f85 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,66 @@
++2018.02.1, Released April 9th, 2018
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Removed unmaintained defconfigs: Creator Ci40, Firefly rk3288,
++	Freescale mpc8315erdb / p1010rdb_pa, Riotboard, Teliv EVK
++	Pro3.
++
++	Infrastructure: Speed up instrumentation for package size by
++	comparing timestamps instead of md5 checksums, as doing
++	checksums could lead to up to 25% longer build time for big
++	configurations.
++
++	Rename the internal <pkg>_BASE_NAME variable to <pkg>_NASENAME
++	to avoid name clashes with packages ending on '-base'.
++
++	Add a better fix for build issues for autotools based packages
++	checking for C++ support on toolchains without C++ support.
++
++	Build host-tar if tar is older than 1.27 on the build machine
++	to work around reproducibility issues with git archives
++	containing long paths.
++
++	check-unique-files: Fix for filenames not representable in the
++	users' locale.
++
++	Check-bin-arch: Add support for per-package ignore paths
++	(<pkg>_BIN_ARCH_EXCLUDE).
++
++	Toolchain: Fix SSP support detection for external toolchains.
++
++	linux: Add _NEEDS_HOST_OPENSSL / LIBELF options to ensure
++	these dependencies are available for Linux configurations
++	needed these dependencies, similar to how it is done for
++	U-Boot.
++
++	Support custom (not in tree) device tree files in addition to
++	in-tree ones.
++
++	U-Boot / uboot-tools: Fix header conflict with libfdt-devel
++	installed on host.
++
++	Updated/fixed packages: apache, busybox, c-ares, cmake,
++	docker-engine, enlightenment, eudev, fbgrab, freescale-imx,
++	gtest, imagemagick, intel-microcode, irssi, jimtcl, kmod,
++	kodi, ktap, libcoap, libcurl, libfcgi, libhttpparser,
++	libminiupnpc, libopenssl, libpjsip, libss7, libssh2, libupnp
++	libupnpp, libuv, libvorbis, memcached, motion, musl, nodejs,
++	ntp, openblas, opencv3, openocd, opus-tools, patch, php,
++	pkgconf, postgresql, powerpc-utils, python-jsonschema,
++	python-webpy, qemu, qt5bsae, qt5script, qt5webkit, rapidjson,
++	rauc, sam-ba, samba4, sngrep, systemd, tremor, uboot-tools,
++	uclibc-ng-test, upmpdcli, wireshark, xerces, xterm, zstd
++
++	New packages: docker-proxy, python-functools32
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10766: upmpdcli: Segmentation fault
++	#10776: ktap fails to build
++	#10846: error in compiling gnutls
++	#10856: openblas on qemu_x86_64_defconfig fails with "sgemm_..
++
+ 2018.02, Released March 4th, 2018
+ 
+ 	Fixes all over the tree.
