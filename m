@@ -1,67 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Apr 2018 20:55:16 +0200
-Subject: [Buildroot] [PATCH v2/next 3/4] webkitgtk: update to version
- 2.20.0
-In-Reply-To: <20180410171826.GF19381@momiji>
-References: <20180323185942.60252-1-aperez@igalia.com>
- <20180323185942.60252-4-aperez@igalia.com>
- <87po3t21cy.fsf@dell.be.48ers.dk>
- <20180410095327.59c0e9d8@windsurf> <20180410165409.GD19381@momiji>
- <20180410175738.40345498@windsurf> <20180410171826.GF19381@momiji>
-Message-ID: <20180410205516.0b7958bd@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 10 Apr 2018 21:09:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtv-scan-tables: bump version
+Message-ID: <20180410190936.19222-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Removed DTV_SCAN_TABLES_FIX_NONASCII_FILENAMES, not needed anymore
+after upstream commit
+https://git.linuxtv.org/dtv-scan-tables.git/commit/?id=9481e7c283d3bad69a0440b26a75ab0d16ccdf68
 
-On Tue, 10 Apr 2018 17:18:26 +0100, Adrian Perez de Castro wrote:
+Added license hashes.
 
-> > Then the following paragraph that you wrote:
-> > 
-> >    This series starts with the same three patches as the previous
-> >    submission, and adds on top three additional commits to make
-> >    WebKitGTK+ available on AArch64 (it's a platform we support
-> >    upstream), and adds a couple of patches which are already merged in
-> >    the upstream repository, but are not in the release and are worth
-> >    applying.
-> > 
-> > is a bit unclear. You're saying "adds on top three additional commits
-> > to make WebKitGTK+ available on AArch6". What those three additional
-> > commits ?
-> > 
-> > For the record, your patch series was:
-> > 
-> >   brotli: new package
-> >   woff2: new package
-> >   webkitgtk: update to version 2.20.0
-> >   webkitgtk: Add upstream patch for better memory monitoring  
-> 
-> Ah, right: first I thought of making a separate patch for the small change
-> of marking as available on AArch64. That, plus one commit for the upstream
-> build fix, plus one commit for the upstream memory monitor patch. The first
-> I ended up stashing with ?webkitgtk: update to version 2.20.0?, and the other
-> two are not going to be needed for 2.20.1 (they were merged upstream).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/dtv-scan-tables/dtv-scan-tables.hash |  4 +++-
+ package/dtv-scan-tables/dtv-scan-tables.mk   | 11 +----------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
 
-OK, thanks for the clarification.
-
-> Sorry if I wasn't being very clear here O:-)
-> 
-> If you think enabling the package for AArch64 deserves its own separate
-> commit, let me know and I'll split it back. FWIW, I've been trying AArch64
-> builds for the RaspberryPi 3, and they work fine; we also use them at work
-> for a couple of clients as well without issues.
-
-I think it's OK to enable on AArch64 at the same time as you do the
-bump. It could be done in separate commits (each change stands on its
-own), but I'm fine with those changes being in the same commit.
-
-Best regards,
-
-Thomas
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.hash b/package/dtv-scan-tables/dtv-scan-tables.hash
+index 02f086dc5b..1aa6bd59fa 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.hash
++++ b/package/dtv-scan-tables/dtv-scan-tables.hash
+@@ -1,2 +1,4 @@
+ # Locally computed
+-sha256 ec64aa81a207372340a04d3e9e950ff2f8b4f404580f21480cdbf06019057a9f  dtv-scan-tables-ceb11833b35f05813b1f0397a60e0f3b99430aab.tar.gz
++sha256 7ded9b437fc3345bbd13a6c1c446c54d0e24d2d337e5abda223adb6362916d8c  dtv-scan-tables-07b18ecef17493ac0908a2e112eae3fe269da7fa.tar.gz
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256 4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index 3c546ed84f..b7f82562f2 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DTV_SCAN_TABLES_VERSION = ceb11833b35f05813b1f0397a60e0f3b99430aab
++DTV_SCAN_TABLES_VERSION = 07b18ecef17493ac0908a2e112eae3fe269da7fa
+ DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
+ 
+@@ -17,15 +17,6 @@ DTV_SCAN_TABLES_SITE_METHOD = git
+ DTV_SCAN_TABLES_LICENSE = GPL-2.0, LGPL-2.1
+ DTV_SCAN_TABLES_LICENSE_FILES = COPYING COPYING.LGPL
+ 
+-# In order to avoid issues with file name encodings, we rename the
+-# only dtv-scan-tables file that has non-ASCII characters to have a
+-# name using only ASCII characters (pl-Krosno_Sucha_Gora)
+-define DTV_SCAN_TABLES_FIX_NONASCII_FILENAMES
+-	mv $(@D)/dvb-t/pl-Krosno_Sucha* $(@D)/dvb-t/pl-Krosno_Sucha_Gora
+-endef
+-
+-DTV_SCAN_TABLES_POST_PATCH_HOOKS += DTV_SCAN_TABLES_FIX_NONASCII_FILENAMES
+-
+ define DTV_SCAN_TABLES_INSTALL_TARGET_CMDS
+ 	for f in atsc dvb-c dvb-s dvb-t; do \
+ 		$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/dvb/$$f; \
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.2
