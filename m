@@ -1,255 +1,425 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:52:31 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] patch: add upstream
- security fix
-Message-ID: <20180410205256.F3561807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:48:43 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] quagga: add upstream
+ security fixes
+Message-ID: <20180410205256.916FD807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85e08f871972c883ea49aaf6b9116c84db4af222
+commit: https://git.buildroot.net/buildroot/commit/?id=0a5fcdfe0b411d30bcc4f40d075a6566bdb1943e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2018-1000156: arbitrary command execution in ed-style patches.
+Fixes the following security issues:
 
-Depend on MMU for now, because the patch adds a fork() call. Upstream
-later switched to gnulib provided execute(), so this dependency can be
-dropped on the next version bump.
+CVE-2018-5378
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f4a4df2084b923f29eca2130976ca10a7aa6b719)
+    It was discovered that the Quagga BGP daemon, bgpd, does not
+    properly bounds check data sent with a NOTIFY to a peer, if an
+    attribute length is invalid. A configured BGP peer can take
+    advantage of this bug to read memory from the bgpd process or cause
+    a denial of service (daemon crash).
+
+    https://www.quagga.net/security/Quagga-2018-0543.txt
+
+CVE-2018-5379
+
+    It was discovered that the Quagga BGP daemon, bgpd, can double-free
+    memory when processing certain forms of UPDATE message, containing
+    cluster-list and/or unknown attributes, resulting in a denial of
+    service (bgpd daemon crash).
+
+    https://www.quagga.net/security/Quagga-2018-1114.txt
+
+CVE-2018-5380
+
+    It was discovered that the Quagga BGP daemon, bgpd, does not
+    properly handle internal BGP code-to-string conversion tables.
+
+    https://www.quagga.net/security/Quagga-2018-1550.txt
+
+CVE-2018-5381
+
+    It was discovered that the Quagga BGP daemon, bgpd, can enter an
+    infinite loop if sent an invalid OPEN message by a configured peer.
+    A configured peer can take advantage of this flaw to cause a denial
+    of service (bgpd daemon not responding to any other events; BGP
+    sessions will drop and not be reestablished; unresponsive CLI
+    interface).
+
+    https://www.quagga.net/security/Quagga-2018-1975.txt
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c3e1d9849a72495f799b007260bbcdc61fc78da3)
+(cherry picked from commit 157a198d304224c12fa0d91d977a6619d021f5c6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-files-to-be-missing-for-ed-style-patches.patch |  37 +++++
- ...ry-command-execution-in-ed-style-patches-.patch | 157 +++++++++++++++++++++
- package/patch/Config.in                            |   2 +
- 3 files changed, 196 insertions(+)
+ ...ty-invalid-attr-length-sends-NOTIFY-with-.patch |  69 +++++++++++++
+ ...rity-Fix-double-free-of-unknown-attribute.patch | 112 ++++++++++++++++++++
+ ...ty-debug-print-of-received-NOTIFY-data-ca.patch | 114 +++++++++++++++++++++
+ ...ty-fix-infinite-loop-on-certain-invalid-O.patch |  43 ++++++++
+ 4 files changed, 338 insertions(+)
 
-diff --git a/package/patch/0002-Allow-input-files-to-be-missing-for-ed-style-patches.patch b/package/patch/0002-Allow-input-files-to-be-missing-for-ed-style-patches.patch
+diff --git a/package/quagga/0005-bgpd-security-invalid-attr-length-sends-NOTIFY-with-.patch b/package/quagga/0005-bgpd-security-invalid-attr-length-sends-NOTIFY-with-.patch
 new file mode 100644
-index 0000000000..7d5757d1af
+index 0000000000..b64109d0f7
 --- /dev/null
-+++ b/package/patch/0002-Allow-input-files-to-be-missing-for-ed-style-patches.patch
-@@ -0,0 +1,37 @@
-+From b5a91a01e5d0897facdd0f49d64b76b0f02b43e1 Mon Sep 17 00:00:00 2001
-+From: Andreas Gruenbacher <agruen@gnu.org>
-+Date: Fri, 6 Apr 2018 11:34:51 +0200
-+Subject: [PATCH] Allow input files to be missing for ed-style patches
++++ b/package/quagga/0005-bgpd-security-invalid-attr-length-sends-NOTIFY-with-.patch
+@@ -0,0 +1,69 @@
++From cc2e6770697e343f4af534114ab7e633d5beabec Mon Sep 17 00:00:00 2001
++From: Paul Jakma <paul@jakma.org>
++Date: Wed, 3 Jan 2018 23:57:33 +0000
++Subject: [PATCH] bgpd/security: invalid attr length sends NOTIFY with data
++ overrun
 +
-+* src/pch.c (do_ed_script): Allow input files to be missing so that new
-+files will be created as with non-ed-style patches.
++Security issue: Quagga-2018-0543
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++See: https://www.quagga.net/security/Quagga-2018-0543.txt
++
++* bgpd/bgp_attr.c: (bgp_attr_parse) An invalid attribute length is correctly
++  checked, and a NOTIFY prepared.  The NOTIFY can include the incorrect
++  received data with the NOTIFY, for debug purposes.  Commit
++  c69698704806a9ac5 modified the code to do that just, and also send the
++  malformed attr with the NOTIFY.  However, the invalid attribute length was
++  used as the length of the data to send back.
++
++  The result is a read past the end of data, which is then written to the
++  NOTIFY message and sent to the peer.
++
++  A configured BGP peer can use this bug to read up to 64 KiB of memory from
++  the bgpd process, or crash the process if the invalid read is caught by
++  some means (unmapped page and SEGV, or other mechanism) resulting in a DoS.
++
++  This bug _ought_ /not/ be exploitable by anything other than the connected
++  BGP peer, assuming the underlying TCP transport is secure.  For no BGP
++  peer should send on an UPDATE with this attribute.  Quagga will not, as
++  Quagga always validates the attr header length, regardless of type.
++
++  However, it is possible that there are BGP implementations that do not
++  check lengths on some attributes (e.g.  optional/transitive ones of a type
++  they do not recognise), and might pass such malformed attrs on.  If such
++  implementations exists and are common, then this bug might be triggerable
++  by BGP speakers further hops away.  Those peers will not receive the
++  NOTIFY (unless they sit on a shared medium), however they might then be
++  able to trigger a DoS.
++
++  Fix: use the valid bound to calculate the length.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+Upstream status: commit b5a91a01e5d0
++ bgpd/bgp_attr.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+ src/pch.c | 8 +++++---
-+ 1 file changed, 5 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/pch.c b/src/pch.c
-+index bc6278c4032c..0c5cc2623079 100644
-+--- a/src/pch.c
-++++ b/src/pch.c
-+@@ -2394,9 +2394,11 @@ do_ed_script (char const *inname, char const *outname,
++diff --git a/bgpd/bgp_attr.c b/bgpd/bgp_attr.c
++index ef58beb1..9564637e 100644
++--- a/bgpd/bgp_attr.c
+++++ b/bgpd/bgp_attr.c
++@@ -2147,6 +2147,8 @@ bgp_attr_parse (struct peer *peer, struct attr *attr, bgp_size_t size,
++   memset (seen, 0, BGP_ATTR_BITMAP_SIZE);
 + 
-+     if (! dry_run && ! skip_rest_of_patch) {
-+ 	int exclusive = *outname_needs_removal ? 0 : O_EXCL;
-+-	assert (! inerrno);
-+-	*outname_needs_removal = true;
-+-	copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
-++	if (inerrno != ENOENT)
-++	  {
-++	    *outname_needs_removal = true;
-++	    copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
-++	  }
-+ 	sprintf (buf, "%s %s%s", editor_program,
-+ 		 verbosity == VERBOSE ? "" : "- ",
-+ 		 outname);
++   /* End pointer of BGP attribute. */
+++  assert (size <= stream_get_size (BGP_INPUT (peer)));
+++  assert (size <= stream_get_endp (BGP_INPUT (peer)));
++   endp = BGP_INPUT_PNT (peer) + size;
++   
++   /* Get attributes to the end of attribute length. */
++@@ -2228,7 +2230,7 @@ bgp_attr_parse (struct peer *peer, struct attr *attr, bgp_size_t size,
++           bgp_notify_send_with_data (peer,
++                                      BGP_NOTIFY_UPDATE_ERR,
++                                      BGP_NOTIFY_UPDATE_ATTR_LENG_ERR,
++-                                     startp, attr_endp - startp);
+++                                     startp, endp - startp);
++ 	  return BGP_ATTR_PARSE_ERROR;
++ 	}
++ 	
 +-- 
-+2.16.3
++2.11.0
 +
-diff --git a/package/patch/0003-Fix-arbitrary-command-execution-in-ed-style-patches-.patch b/package/patch/0003-Fix-arbitrary-command-execution-in-ed-style-patches-.patch
+diff --git a/package/quagga/0006-bgpd-security-Fix-double-free-of-unknown-attribute.patch b/package/quagga/0006-bgpd-security-Fix-double-free-of-unknown-attribute.patch
 new file mode 100644
-index 0000000000..b44bdd0fac
+index 0000000000..0e32817f06
 --- /dev/null
-+++ b/package/patch/0003-Fix-arbitrary-command-execution-in-ed-style-patches-.patch
-@@ -0,0 +1,157 @@
-+From 123eaff0d5d1aebe128295959435b9ca5909c26d Mon Sep 17 00:00:00 2001
-+From: Andreas Gruenbacher <agruen@gnu.org>
-+Date: Fri, 6 Apr 2018 12:14:49 +0200
-+Subject: [PATCH] Fix arbitrary command execution in ed-style patches
-+ (CVE-2018-1000156)
++++ b/package/quagga/0006-bgpd-security-Fix-double-free-of-unknown-attribute.patch
+@@ -0,0 +1,112 @@
++From e69b535f92eafb599329bf725d9b4c6fd5d7fded Mon Sep 17 00:00:00 2001
++From: Paul Jakma <paul@jakma.org>
++Date: Sat, 6 Jan 2018 19:52:10 +0000
++Subject: [PATCH] bgpd/security: Fix double free of unknown attribute
 +
-+* src/pch.c (do_ed_script): Write ed script to a temporary file instead
-+of piping it to ed: this will cause ed to abort on invalid commands
-+instead of rejecting them and carrying on.
-+* tests/ed-style: New test case.
-+* tests/Makefile.am (TESTS): Add test case.
++Security issue: Quagga-2018-1114
++See: https://www.quagga.net/security/Quagga-2018-1114.txt
 +
-+[baruch: drop test hunks to avoid autoreconf]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++It is possible for bgpd to double-free an unknown attribute. This can happen
++via bgp_update_receive receiving an UPDATE with an invalid unknown attribute.
++bgp_update_receive then will call bgp_attr_unintern_sub and bgp_attr_flush,
++and the latter may try free an already freed unknown attr.
++
++* bgpd/bgp_attr.c: (transit_unintern) Take a pointer to the caller's storage
++  for the (struct transit *), so that transit_unintern can NULL out the
++  caller's reference if the (struct transit) is freed.
++  (cluster_unintern) By inspection, appears to have a similar issue.
++  (bgp_attr_unintern_sub) adjust for above.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+Upstream status: commit 123eaff0d5d1
++ bgpd/bgp_attr.c | 33 +++++++++++++++++++--------------
++ bgpd/bgp_attr.h |  4 ++--
++ 2 files changed, 21 insertions(+), 16 deletions(-)
 +
-+ src/pch.c         | 91 ++++++++++++++++++++++++++++++++++++++++---------------
-+ tests/Makefile.am |  1 +
-+ tests/ed-style    | 41 +++++++++++++++++++++++++
-+ 3 files changed, 108 insertions(+), 25 deletions(-)
-+ create mode 100644 tests/ed-style
-+
-+diff --git a/src/pch.c b/src/pch.c
-+index 0c5cc2623079..4fd5a05a6f5c 100644
-+--- a/src/pch.c
-++++ b/src/pch.c
-+@@ -33,6 +33,7 @@
-+ # include <io.h>
-+ #endif
-+ #include <safe.h>
-++#include <sys/wait.h>
++diff --git a/bgpd/bgp_attr.c b/bgpd/bgp_attr.c
++index 9564637e..0c2806b5 100644
++--- a/bgpd/bgp_attr.c
+++++ b/bgpd/bgp_attr.c
++@@ -199,15 +199,17 @@ cluster_intern (struct cluster_list *cluster)
++ }
 + 
-+ #define INITHUNKMAX 125			/* initial dynamic allocation size */
++ void
++-cluster_unintern (struct cluster_list *cluster)
+++cluster_unintern (struct cluster_list **cluster)
++ {
++-  if (cluster->refcnt)
++-    cluster->refcnt--;
+++  struct cluster_list *c = *cluster;
+++  if (c->refcnt)
+++    c->refcnt--;
 + 
-+@@ -2389,24 +2390,28 @@ do_ed_script (char const *inname, char const *outname,
-+     static char const editor_program[] = EDITOR_PROGRAM;
-+ 
-+     file_offset beginning_of_this_line;
-+-    FILE *pipefp = 0;
-+     size_t chars_read;
-++    FILE *tmpfp = 0;
-++    char const *tmpname;
-++    int tmpfd;
-++    pid_t pid;
-++
-++    if (! dry_run && ! skip_rest_of_patch)
-++      {
-++	/* Write ed script to a temporary file.  This causes ed to abort on
-++	   invalid commands such as when line numbers or ranges exceed the
-++	   number of available lines.  When ed reads from a pipe, it rejects
-++	   invalid commands and treats the next line as a new command, which
-++	   can lead to arbitrary command execution.  */
-++
-++	tmpfd = make_tempfile (&tmpname, 'e', NULL, O_RDWR | O_BINARY, 0);
-++	if (tmpfd == -1)
-++	  pfatal ("Can't create temporary file %s", quotearg (tmpname));
-++	tmpfp = fdopen (tmpfd, "w+b");
-++	if (! tmpfp)
-++	  pfatal ("Can't open stream for file %s", quotearg (tmpname));
-++      }
-+ 
-+-    if (! dry_run && ! skip_rest_of_patch) {
-+-	int exclusive = *outname_needs_removal ? 0 : O_EXCL;
-+-	if (inerrno != ENOENT)
-+-	  {
-+-	    *outname_needs_removal = true;
-+-	    copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
-+-	  }
-+-	sprintf (buf, "%s %s%s", editor_program,
-+-		 verbosity == VERBOSE ? "" : "- ",
-+-		 outname);
-+-	fflush (stdout);
-+-	pipefp = popen(buf, binary_transput ? "wb" : "w");
-+-	if (!pipefp)
-+-	  pfatal ("Can't open pipe to %s", quotearg (buf));
-+-    }
-+     for (;;) {
-+ 	char ed_command_letter;
-+ 	beginning_of_this_line = file_tell (pfp);
-+@@ -2417,14 +2422,14 @@ do_ed_script (char const *inname, char const *outname,
-+ 	}
-+ 	ed_command_letter = get_ed_command_letter (buf);
-+ 	if (ed_command_letter) {
-+-	    if (pipefp)
-+-		if (! fwrite (buf, sizeof *buf, chars_read, pipefp))
-++	    if (tmpfp)
-++		if (! fwrite (buf, sizeof *buf, chars_read, tmpfp))
-+ 		    write_fatal ();
-+ 	    if (ed_command_letter != 'd' && ed_command_letter != 's') {
-+ 	        p_pass_comments_through = true;
-+ 		while ((chars_read = get_line ()) != 0) {
-+-		    if (pipefp)
-+-			if (! fwrite (buf, sizeof *buf, chars_read, pipefp))
-++		    if (tmpfp)
-++			if (! fwrite (buf, sizeof *buf, chars_read, tmpfp))
-+ 			    write_fatal ();
-+ 		    if (chars_read == 2  &&  strEQ (buf, ".\n"))
-+ 			break;
-+@@ -2437,13 +2442,49 @@ do_ed_script (char const *inname, char const *outname,
-+ 	    break;
-+ 	}
++-  if (cluster->refcnt == 0)
+++  if (c->refcnt == 0)
++     {
++-      hash_release (cluster_hash, cluster);
++-      cluster_free (cluster);
+++      hash_release (cluster_hash, c);
+++      cluster_free (c);
+++      *cluster = NULL;
 +     }
-+-    if (!pipefp)
-++    if (!tmpfp)
-+       return;
-+-    if (fwrite ("w\nq\n", sizeof (char), (size_t) 4, pipefp) == 0
-+-	|| fflush (pipefp) != 0)
-++    if (fwrite ("w\nq\n", sizeof (char), (size_t) 4, tmpfp) == 0
-++	|| fflush (tmpfp) != 0)
-+       write_fatal ();
-+-    if (pclose (pipefp) != 0)
-+-      fatal ("%s FAILED", editor_program);
-++
-++    if (lseek (tmpfd, 0, SEEK_SET) == -1)
-++      pfatal ("Can't rewind to the beginning of file %s", quotearg (tmpname));
-++
-++    if (! dry_run && ! skip_rest_of_patch) {
-++	int exclusive = *outname_needs_removal ? 0 : O_EXCL;
-++	*outname_needs_removal = true;
-++	if (inerrno != ENOENT)
-++	  {
-++	    *outname_needs_removal = true;
-++	    copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
-++	  }
-++	sprintf (buf, "%s %s%s", editor_program,
-++		 verbosity == VERBOSE ? "" : "- ",
-++		 outname);
-++	fflush (stdout);
-++
-++	pid = fork();
-++	if (pid == -1)
-++	  pfatal ("Can't fork");
-++	else if (pid == 0)
-++	  {
-++	    dup2 (tmpfd, 0);
-++	    execl ("/bin/sh", "sh", "-c", buf, (char *) 0);
-++	    _exit (2);
-++	  }
-++	else
-++	  {
-++	    int wstatus;
-++	    if (waitpid (pid, &wstatus, 0) == -1
-++	        || ! WIFEXITED (wstatus)
-++		|| WEXITSTATUS (wstatus) != 0)
-++	      fatal ("%s FAILED", editor_program);
-++	  }
-++    }
-++
-++    fclose (tmpfp);
-++    safe_unlink (tmpname);
++ }
 + 
-+     if (ofp)
-+       {
++@@ -357,15 +359,18 @@ transit_intern (struct transit *transit)
++ }
++ 
++ void
++-transit_unintern (struct transit *transit)
+++transit_unintern (struct transit **transit)
++ {
++-  if (transit->refcnt)
++-    transit->refcnt--;
+++  struct transit *t = *transit;
+++  
+++  if (t->refcnt)
+++    t->refcnt--;
++ 
++-  if (transit->refcnt == 0)
+++  if (t->refcnt == 0)
++     {
++-      hash_release (transit_hash, transit);
++-      transit_free (transit);
+++      hash_release (transit_hash, t);
+++      transit_free (t);
+++      *transit = NULL;
++     }
++ }
++ 
++@@ -820,11 +825,11 @@ bgp_attr_unintern_sub (struct attr *attr)
++       UNSET_FLAG(attr->flag, ATTR_FLAG_BIT (BGP_ATTR_LARGE_COMMUNITIES));
++       
++       if (attr->extra->cluster)
++-        cluster_unintern (attr->extra->cluster);
+++        cluster_unintern (&attr->extra->cluster);
++       UNSET_FLAG(attr->flag, ATTR_FLAG_BIT (BGP_ATTR_CLUSTER_LIST));
++       
++       if (attr->extra->transit)
++-        transit_unintern (attr->extra->transit);
+++        transit_unintern (&attr->extra->transit);
++     }
++ }
++ 
++diff --git a/bgpd/bgp_attr.h b/bgpd/bgp_attr.h
++index 9ff074b2..052acc7d 100644
++--- a/bgpd/bgp_attr.h
+++++ b/bgpd/bgp_attr.h
++@@ -187,10 +187,10 @@ extern unsigned long int attr_unknown_count (void);
++ 
++ /* Cluster list prototypes. */
++ extern int cluster_loop_check (struct cluster_list *, struct in_addr);
++-extern void cluster_unintern (struct cluster_list *);
+++extern void cluster_unintern (struct cluster_list **);
++ 
++ /* Transit attribute prototypes. */
++-void transit_unintern (struct transit *);
+++void transit_unintern (struct transit **);
++ 
++ /* Below exported for unit-test purposes only */
++ struct bgp_attr_parser_args {
 +-- 
-+2.16.3
++2.11.0
 +
-diff --git a/package/patch/Config.in b/package/patch/Config.in
-index c5b93e9fd5..1f84ec6230 100644
---- a/package/patch/Config.in
-+++ b/package/patch/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PATCH
- 	bool "patch"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
-@@ -10,4 +11,5 @@ config BR2_PACKAGE_PATCH
- 
- comment "patch needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/quagga/0007-bgpd-security-debug-print-of-received-NOTIFY-data-ca.patch b/package/quagga/0007-bgpd-security-debug-print-of-received-NOTIFY-data-ca.patch
+new file mode 100644
+index 0000000000..aeb50ae559
+--- /dev/null
++++ b/package/quagga/0007-bgpd-security-debug-print-of-received-NOTIFY-data-ca.patch
+@@ -0,0 +1,114 @@
++From 9e5251151894aefdf8e9392a2371615222119ad8 Mon Sep 17 00:00:00 2001
++From: Paul Jakma <paul@jakma.org>
++Date: Sat, 6 Jan 2018 22:31:52 +0000
++Subject: [PATCH] bgpd/security: debug print of received NOTIFY data can
++ over-read msg array
++
++Security issue: Quagga-2018-1550
++See: https://www.quagga.net/security/Quagga-2018-1550.txt
++
++* bgpd/bgp_debug.c: (struct message) Nearly every one of the NOTIFY
++  code/subcode message arrays has their corresponding size variables off
++  by one, as most have 1 as first index.
++
++  This means (bgp_notify_print) can cause mes_lookup to overread the (struct
++  message) by 1 pointer value if given an unknown index.
++
++  Fix the bgp_notify_..._msg_max variables to use the compiler to calculate
++  the correct sizes.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ bgpd/bgp_debug.c | 21 ++++++++++++---------
++ 1 file changed, 12 insertions(+), 9 deletions(-)
++
++diff --git a/bgpd/bgp_debug.c b/bgpd/bgp_debug.c
++index ba797228..43faee7c 100644
++--- a/bgpd/bgp_debug.c
+++++ b/bgpd/bgp_debug.c
++@@ -29,6 +29,7 @@ Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
++ #include "log.h"
++ #include "sockunion.h"
++ #include "filter.h"
+++#include "memory.h"
++ 
++ #include "bgpd/bgpd.h"
++ #include "bgpd/bgp_aspath.h"
++@@ -73,7 +74,8 @@ const struct message bgp_status_msg[] =
++   { Clearing,    "Clearing"    },
++   { Deleted,     "Deleted"     },
++ };
++-const int bgp_status_msg_max = BGP_STATUS_MAX;
+++#define BGP_DEBUG_MSG_MAX(msg) const int msg ## _max = array_size (msg)
+++BGP_DEBUG_MSG_MAX (bgp_status_msg);
++ 
++ /* BGP message type string. */
++ const char *bgp_type_str[] =
++@@ -84,7 +86,8 @@ const char *bgp_type_str[] =
++   "NOTIFICATION",
++   "KEEPALIVE",
++   "ROUTE-REFRESH",
++-  "CAPABILITY"
+++  "CAPABILITY",
+++  NULL,
++ };
++ 
++ /* message for BGP-4 Notify */
++@@ -98,15 +101,15 @@ static const struct message bgp_notify_msg[] =
++   { BGP_NOTIFY_CEASE, "Cease"},
++   { BGP_NOTIFY_CAPABILITY_ERR, "CAPABILITY Message Error"},
++ };
++-static const int bgp_notify_msg_max = BGP_NOTIFY_MAX;
+++BGP_DEBUG_MSG_MAX (bgp_notify_msg);
++ 
++ static const struct message bgp_notify_head_msg[] = 
++ {
++   { BGP_NOTIFY_HEADER_NOT_SYNC, "/Connection Not Synchronized"},
++   { BGP_NOTIFY_HEADER_BAD_MESLEN, "/Bad Message Length"},
++-  { BGP_NOTIFY_HEADER_BAD_MESTYPE, "/Bad Message Type"}
+++  { BGP_NOTIFY_HEADER_BAD_MESTYPE, "/Bad Message Type"},
++ };
++-static const int bgp_notify_head_msg_max = BGP_NOTIFY_HEADER_MAX;
+++BGP_DEBUG_MSG_MAX (bgp_notify_head_msg);
++ 
++ static const struct message bgp_notify_open_msg[] = 
++ {
++@@ -119,7 +122,7 @@ static const struct message bgp_notify_open_msg[] =
++   { BGP_NOTIFY_OPEN_UNACEP_HOLDTIME, "/Unacceptable Hold Time"}, 
++   { BGP_NOTIFY_OPEN_UNSUP_CAPBL, "/Unsupported Capability"},
++ };
++-static const int bgp_notify_open_msg_max = BGP_NOTIFY_OPEN_MAX;
+++BGP_DEBUG_MSG_MAX (bgp_notify_open_msg);
++ 
++ static const struct message bgp_notify_update_msg[] = 
++ {
++@@ -136,7 +139,7 @@ static const struct message bgp_notify_update_msg[] =
++   { BGP_NOTIFY_UPDATE_INVAL_NETWORK, "/Invalid Network Field"},
++   { BGP_NOTIFY_UPDATE_MAL_AS_PATH, "/Malformed AS_PATH"},
++ };
++-static const int bgp_notify_update_msg_max = BGP_NOTIFY_UPDATE_MAX;
+++BGP_DEBUG_MSG_MAX (bgp_notify_update_msg);
++ 
++ static const struct message bgp_notify_cease_msg[] =
++ {
++@@ -150,7 +153,7 @@ static const struct message bgp_notify_cease_msg[] =
++   { BGP_NOTIFY_CEASE_COLLISION_RESOLUTION, "/Connection collision resolution"},
++   { BGP_NOTIFY_CEASE_OUT_OF_RESOURCE, "/Out of Resource"},
++ };
++-static const int bgp_notify_cease_msg_max = BGP_NOTIFY_CEASE_MAX;
+++BGP_DEBUG_MSG_MAX (bgp_notify_cease_msg);
++ 
++ static const struct message bgp_notify_capability_msg[] = 
++ {
++@@ -159,7 +162,7 @@ static const struct message bgp_notify_capability_msg[] =
++   { BGP_NOTIFY_CAPABILITY_INVALID_LENGTH, "/Invalid Capability Length"},
++   { BGP_NOTIFY_CAPABILITY_MALFORMED_CODE, "/Malformed Capability Value"},
++ };
++-static const int bgp_notify_capability_msg_max = BGP_NOTIFY_CAPABILITY_MAX;
+++BGP_DEBUG_MSG_MAX (bgp_notify_capability_msg);
++ 
++ /* Origin strings. */
++ const char *bgp_origin_str[] = {"i","e","?"};
++-- 
++2.11.0
++
+diff --git a/package/quagga/0008-bgpd-security-fix-infinite-loop-on-certain-invalid-O.patch b/package/quagga/0008-bgpd-security-fix-infinite-loop-on-certain-invalid-O.patch
+new file mode 100644
+index 0000000000..0a06da9330
+--- /dev/null
++++ b/package/quagga/0008-bgpd-security-fix-infinite-loop-on-certain-invalid-O.patch
+@@ -0,0 +1,43 @@
++From ce07207c50a3d1f05d6dd49b5294282e59749787 Mon Sep 17 00:00:00 2001
++From: Paul Jakma <paul@jakma.org>
++Date: Sat, 6 Jan 2018 21:20:51 +0000
++Subject: [PATCH] bgpd/security: fix infinite loop on certain invalid OPEN
++ messages
++
++Security issue: Quagga-2018-1975
++See: https://www.quagga.net/security/Quagga-2018-1975.txt
++
++* bgpd/bgp_packet.c: (bgp_capability_msg_parse) capability parser can infinite
++  loop due to checks that issue 'continue' without bumping the input
++  pointer.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ bgpd/bgp_packet.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/bgpd/bgp_packet.c b/bgpd/bgp_packet.c
++index b3d601fc..f9338d8d 100644
++--- a/bgpd/bgp_packet.c
+++++ b/bgpd/bgp_packet.c
++@@ -2328,7 +2328,8 @@ bgp_capability_msg_parse (struct peer *peer, u_char *pnt, bgp_size_t length)
++ 
++   end = pnt + length;
++ 
++-  while (pnt < end)
+++  /* XXX: Streamify this */
+++  for (; pnt < end; pnt += hdr->length + 3)
++     {      
++       /* We need at least action, capability code and capability length. */
++       if (pnt + 3 > end)
++@@ -2416,7 +2417,6 @@ bgp_capability_msg_parse (struct peer *peer, u_char *pnt, bgp_size_t length)
++           zlog_warn ("%s unrecognized capability code: %d - ignored",
++                      peer->host, hdr->code);
++         }
++-      pnt += hdr->length + 3;
++     }
++   return 0;
++ }
++-- 
++2.11.0
++
