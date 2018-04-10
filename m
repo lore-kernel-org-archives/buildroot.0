@@ -1,66 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Apr 2018 14:36:30 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: Take default
- SOURCE_DATE_EPOCH from repo containing Makefile
-In-Reply-To: <1523356092-16037-1-git-send-email-james.byrne@origamienergy.com>
-References: <1523356092-16037-1-git-send-email-james.byrne@origamienergy.com>
-Message-ID: <20180410143630.22646b86@windsurf>
+Date: Tue, 10 Apr 2018 14:53:32 +0200
+Subject: [Buildroot] [git commit] zsh: bump to version 5.5
+Message-ID: <20180410125347.A80A988379@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=02fe101688132e0dd8d3ad6bc152db066880653f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 10 Apr 2018 11:28:12 +0100, James Byrne wrote:
-> For reproducible builds, SOURCE_DATE_EPOCH will be set to the git commit
-> date if it is not defined in the environment, but this was done by
-> explicitly using $(TOPDIR)/.git as the git repository, which would not
-> give the expected result if Buildroot had been put into a subdirectory
-> of another repository.
-> 
-> This commit removes that restriction, meaning that the default date will
-> now be the date of the git commit that contains Makefile, regardless of
-> what level above Makefile the repository is at. This works because the
-> current directory when the 'git log' command is executed will always be
-> the directory containing Makefile (it must be, since TOPDIR is set from
-> CURDIR).
-> 
-> In general this should be a sensible default, and in cases where a
-> different date is required SOURCE_DATE_EPOCH can be defined in the
-> environment before invoking make.
-> 
-> Signed-off-by: James Byrne <james.byrne@origamienergy.com>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index cd53362..3b846b9 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -506,7 +506,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
->  # If SOURCE_DATE_EPOCH has not been set then use the commit date, or the last
->  # release date if the source tree is not within a Git repository.
->  # See: https://reproducible-builds.org/specs/source-date-epoch/
-> -BR2_VERSION_GIT_EPOCH := $(shell $(GIT) --git-dir=$(TOPDIR)/.git log -1 --format=%at 2> /dev/null)
-> +BR2_VERSION_GIT_EPOCH := $(shell $(GIT) log -1 --format=%at 2> /dev/null)
+We now have tar.xz archive again, use that.
 
-Was there a reason to have this --git-dir/GIT_DIR option/variable
-passed in the first place ?
+Cc: Phil Eichinger <phil.eichinger@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zsh/zsh.hash | 6 +++---
+ package/zsh/zsh.mk   | 3 ++-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-I don't immediately see any problem with the change you're proposing,
-but I'm wondering why we were passing --git-dir (previously GIT_DIR).
-
-It has been done this way since commit
-9befe94baf990ee6331e77edb40e286e9dc4df8d, where SOURCE_DATE_EPOCH was
-introduced in Buildroot.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
+index 0770d8e247..5931e4d465 100644
+--- a/package/zsh/zsh.hash
++++ b/package/zsh/zsh.hash
+@@ -1,7 +1,7 @@
+ # From http://www.zsh.org/pub/MD5SUM
+-md5	dfe156fd69b0d8d1745ecf6d6e02e047	zsh-5.4.2.tar.gz
++md5	5c3b294e63b6cc8da8bcc364c72d954b	zsh-5.5.tar.xz
+ # Calculated based on the hash above and after checking signature
+-# http://www.zsh.org/pub/zsh-5.4.2.tar.gz.asc
+-sha256	957bcdb2c57f64c02f673693ea5a7518ef24b6557aeb3a4ce222cefa6d74acc9	zsh-5.4.2.tar.gz
++# http://www.zsh.org/pub/zsh-5.5.tar.xz.asc
++sha256	a8359b81d090425d497c6f3c724a7c21a81c614b03e7662ed347705d86958e53	zsh-5.5.tar.xz
+ # Locally calculated
+ sha256	d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index bfd0a1a30f..a45c61b931 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-ZSH_VERSION = 5.4.2
++ZSH_VERSION = 5.5
+ ZSH_SITE = http://www.zsh.org/pub
++ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
+ ZSH_DEPENDENCIES = ncurses
+ ZSH_CONF_OPTS = --bindir=/bin
+ ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
