@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:48:32 +0200
-Subject: [Buildroot] [PATCH] patch: add upstream security fix
-In-Reply-To: <653d97fd8ac542e3eac3c0a78dc701a7033ba39a.1523290836.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 9 Apr 2018 19:20:36 +0300")
-References: <653d97fd8ac542e3eac3c0a78dc701a7033ba39a.1523290836.git.baruch@tkos.co.il>
-Message-ID: <87in8y4wkf.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:48:55 +0200
+Subject: [Buildroot] [PATCH] patch: security bump to version 2.7.6
+In-Reply-To: <e16723b54e63c62981c659f83eb6991853bf529a.1519363351.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 23 Feb 2018 07:22:31 +0200")
+References: <e16723b54e63c62981c659f83eb6991853bf529a.1519363351.git.baruch@tkos.co.il>
+Message-ID: <87efjm4wjs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,18 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes CVE-2018-1000156: arbitrary command execution in ed-style patches.
- > Depend on MMU for now, because the patch adds a fork() call. Upstream
- > later switched to gnulib provided execute(), so this dependency can be
- > dropped on the next version bump.
+ > Fixes CVE-2016-10713: Out-of-bounds access within pch_write_line() in
+ > pch.c can possibly lead to DoS via a crafted input file.
+
+ > Add upstream patch fixing CVE-2018-6951: There is a segmentation fault,
+ > associated with a NULL pointer dereference, leading to a denial of
+ > service in the intuit_diff_type function in pch.c, aka a "mangled
+ > rename" issue.
+
+ > This bump does NOT fix CVE-2018-6952. See upstream bug #53133
+ > (https://savannah.gnu.org/bugs/index.php?53133).
+
+ > Add license file hash.
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
