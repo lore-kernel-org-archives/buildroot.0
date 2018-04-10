@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:47:52 +0200
-Subject: [Buildroot] [PATCH] mbedtls: security bump to version 2.7.0
-In-Reply-To: <e096f49c1c72f1bbd299136397eac58fe385618f.1519361771.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 23 Feb 2018 06:56:11 +0200")
-References: <e096f49c1c72f1bbd299136397eac58fe385618f.1519361771.git.baruch@tkos.co.il>
-Message-ID: <87r2nm4wlj.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:48:07 +0200
+Subject: [Buildroot] [PATCH master] mbedtls: fix API compatibility
+In-Reply-To: <df116322c8e36b017055d6be9f5af3c1631fdf89.1519505340.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 24 Feb 2018 22:49:00 +0200")
+References: <df116322c8e36b017055d6be9f5af3c1631fdf89.1519505340.git.baruch@tkos.co.il>
+Message-ID: <87muya4wl4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > CVE-2018-0487: Remote attackers can execute arbitrary code or cause a
- > denial of service (buffer overflow) via a crafted certificate chain that
- > is mishandled during RSASSA-PSS signature verification within a TLS or
- > DTLS session.
+ > Add upstream patch fixing API compatibility with previous releases.
+ > Fixes (hiawatha):
+ > http://autobuild.buildroot.net/results/ce6/ce6b4a50e6aafd06f82eaae688dd8720b982e9c2/
+ > http://autobuild.buildroot.net/results/cde/cdec7ae3565d5b76a9bc50156c6244b44197534e/
+ > http://autobuild.buildroot.net/results/9c1/9c1aec09c03f60bee9dc134da5a29e2671fc3b5e/
 
- > CVE-2018-0488: When the truncated HMAC extension and CBC are used,
- > allows remote attackers to execute arbitrary code or cause a denial of
- > service (heap corruption) via a crafted application packet within a TLS
- > or DTLS session.
-
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2017.02.x, thanks.
