@@ -1,59 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:06:08 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mosquitto: security bump
- to version 1.4.15
-Message-ID: <20180410205257.ACFEB807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 22:01:23 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+ 9, 14, 15}.x series
+Message-ID: <20180410205257.6D6F97FEA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6758d727502ac73de5f8879f544fc6d9660e5061
+commit: https://git.buildroot.net/buildroot/commit/?id=d0a4f95570bf29ee05a1aa680f9e434cdafada8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes CVE-2017-7651: Unauthenticated clients can send a crafted CONNECT
-packet which causes large amounts of memory use in the broker.  If multiple
-clients do this, an out of memory situation can occur and the system may
-become unresponsive or the broker will be killed by the operating system.
-
-The fix addresses the problem by limiting the permissible size for CONNECT
-packet, and by adding a memory_limit configuration option that allows the
-broker to self limit the amount of memory it uses.
-
-The hash of new tarball is not (yet) available through download.php, so use
-a locally calculated hash.
-
+[Peter: drop 4.14.x / 4.15.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f4df4a18e5dd4702f842e61ee815f13afd93c366)
+(cherry picked from commit fcf28ee36115003254ec671fde3fcc219f7c0a0d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index f6f17aa5ef..91c855cb4e 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
--# From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.14.tar.gz
--sha512 dc75a971354f87deeb79f32435acfae9bc561a1a24a75ee4940a35176ff91758071930d2105d8dee2a090e07527dbfaa5692bece67e03cc87e8b4b8b46f846c2  mosquitto-1.4.14.tar.gz
-+# Locally calculated after checking gpg signature
-+sha256 7d3b3e245a3b4ec94b05678c8199c806359737949f4cfe0bf936184f6ca89a83  mosquitto-1.4.15.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 3eb677eb1b..dc50339077 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.4.14
-+MOSQUITTO_VERSION = 1.4.15
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 73ffc10c58..0b434be267 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.118"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.119"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.84"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.85"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
