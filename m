@@ -1,72 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Apr 2018 23:33:36 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: add dependency on elfutils
- to r600 with llvm
-In-Reply-To: <542b2d70-23ed-2d85-ba62-82c85118a7f3@smile.fr>
-References: <20180410151959.18713-1-valentin.korenblit@smile.fr>
- <20180410175148.71878897@windsurf>
- <542b2d70-23ed-2d85-ba62-82c85118a7f3@smile.fr>
-Message-ID: <20180410233336.6f7a0e07@windsurf>
+Date: Tue, 10 Apr 2018 23:40:19 +0200
+Subject: [Buildroot] [PATCH v4 2/8] gst-plugins-${base, good, bad,
+ ugly}: bump to 1.14.0
+In-Reply-To: <20180410182813.691be3ff@gmx.net>
+References: <20180322173220.31791-1-aduskett@gmail.com>
+ <20180322173220.31791-2-aduskett@gmail.com>
+ <20180322235537.261ea603@gmx.net>
+ <20180410100736.2e6f8f7b@windsurf>
+ <20180410182813.691be3ff@gmx.net>
+Message-ID: <20180410234019.2fc5516d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Peter,
 
-On Tue, 10 Apr 2018 18:21:26 +0200, Valentin Korenblit wrote:
+Thanks for your feedback!
 
-> > I don't understand why you have two mutually exclusive options here.
-> > Why not instead have a sub-option ?  
+On Tue, 10 Apr 2018 18:28:13 +0200, Peter Seiderer wrote:
+
+> > Indeed, the gst1-plugins-bad package still has a
+> > --enable-wayland/--disable-wayland option:
+> > 
+> > output/build/gst1-plugins-bad-1.14.0 $ ./configure --help | grep wayland
+> >   --disable-wayland            disable wayland sink: wayland  
 > 
-> I did this because once you have activated llvm support for Mesa, if
-> you select Gallium R600 drivers, they will also need to be compiled
-> with llvm support, which requires elfutils and AMDGPU backend as dependencies.
+> This is the 'old' one in gstreamer and buildroot and should be kept (NOT moved from bad to base)....
 
-Aah, OK, I understand. This is really crappy (in Mesa3D).
+Not sure to understand what you say here. Do you say: "This option
+already exists in the current version of GStreamer packaged by
+Buildroot, and continues to exist in 1.14.0 and therefore should be
+kept in Buildroot, i.e BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+should stay.
 
-> radeon_llvm_check() in configure.ac from Mesa adds these dependencies.
+Is that what you meant ?
+
+> > And in base:
+> > 
+> > output/build/gst1-plugins-base-1.14.0 $ ./configure --help | grep wayland
+> >   --enable-wayland        Enable Wayland support (requires EGL) [default=auto]  
 > 
-> Another possibility without creating a new option would be:
+> This is the 'new' one in gstreamer, yet without handling in buildroot, enables
+> wayland support in libgstgl (which is used by some plugins, but I believe not
+> by the waylandsink plugin from bad)...
+
+For this one, do you think we need an explicit
+BR2_PACKAGE_GST1_PLUGINS_BASE_WAYLAND option, or should we just pass
+--enable-wayland as soon as Wayland+EGL are available, in
+gst1-plugins-base.mk ?
+
+
+> > In gst1-plugins-base, the --enable-wayland option requires EGL support,
+> > and will enable some wayland related code in gst-libs/gl/. Peter, do
+> > you understand what this does, compared to the wayland sink provided in
+> > gst1-plugins-bad ?  
 > 
-> config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
->      bool "Gallium Radeon R600 driver"
->      depends on BR2_i386 || BR2_x86_64
->      depends on (!BR2_PACKAGE_MESA3D_LLVM || \
->                  (BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
-> 		BR2_TOOLCHAIN_USES_GLIBC))  # elfutils
->      select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->      select BR2_PACKAGE_LIBDRM_RADEON
->      select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
->      select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
->      select BR2_PACKAGE_MESA3D_NEEDS_XA
->      help
->        Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
->   
-> comment "R600 driver needs a uClibc or glibc toolchain w/ llvm support"
->          depends on BR2_PACKAGE_MESA3D_LLVM
-> 
->          depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+> Yes, your short analysis is right (and sorry, I can add no more details what
+> is enabled/disabled in the resulting libgstgl library)....
 
-This seems like the good solution to me.
-
-Note that there is some work going on to make elfutils compatible with
-musl: https://sourceware.org/bugzilla/show_bug.cgi?id=21002, but it
-doesn't seem to be ready yet, so in the mean time what you propose
-looks good to me.
-
-I think the Config.in comment should be:
-
-comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
-
-I think the "w/ llvm support" that you proposed can be confusing: to me
-it means "you need a toolchain with LLVM support". But it's not what's
-happening. What's happening is: "if you have enabled LLVM support, then
-your toolchain must be using glibc or uClibc".
-
-In addition to the Config.in comment itself, a regular comment would be
-good to explain what's going on, because it's really weird.
+You *can* add more details, or you *can't* ? :-)
 
 Best regards,
 
