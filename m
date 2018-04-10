@@ -1,32 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:48:55 +0200
-Subject: [Buildroot] [PATCH] patch: security bump to version 2.7.6
-In-Reply-To: <e16723b54e63c62981c659f83eb6991853bf529a.1519363351.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 23 Feb 2018 07:22:31 +0200")
-References: <e16723b54e63c62981c659f83eb6991853bf529a.1519363351.git.baruch@tkos.co.il>
-Message-ID: <87efjm4wjs.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:49:49 +0200
+Subject: [Buildroot] [PATCH v2 1/2] dependencies.mk: check for valid
+ host-tar before other host dependencies
+In-Reply-To: <20180227085541.11318-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 27 Feb 2018 09:55:40 +0100")
+References: <20180227085541.11318-1-peter@korsgaard.com>
+Message-ID: <87a7ua4wia.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2016-10713: Out-of-bounds access within pch_write_line() in
- > pch.c can possibly lead to DoS via a crafted input file.
+ > host-{cmake,lzip,xz} needs host-tar to extract their source code tarball, so
+ > we need to ensure that host-tar gets added to DEPENDENCIES_HOST_PREREQ
+ > before these in case they are both needed, otherwise the tools will fail to
+ > extract.
 
- > Add upstream patch fixing CVE-2018-6951: There is a segmentation fault,
- > associated with a NULL pointer dereference, leading to a denial of
- > service in the intuit_diff_type function in pch.c, aka a "mangled
- > rename" issue.
+ > With the upcoming change to blacklist modern tar versions this situation is
+ > likely to trigger more often.
 
- > This bump does NOT fix CVE-2018-6952. See upstream bug #53133
- > (https://savannah.gnu.org/bugs/index.php?53133).
+ > The real solution to this issue is the <foo>_EXTRACT_DEPENDENCIES rework,
+ > but that series is a bit too intrusive to add this close to 2018.02, so
+ > therefore this hack.
 
- > Add license file hash.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes since v1:
+ >  - Issue not specific to lzip, so put tar in front of everything else
 
 Committed to 2017.02.x, thanks.
 
