@@ -1,79 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:06:15 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mosquitto: unbreak build
- with websockets and !libopenssl
-Message-ID: <20180410205257.B957D807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 22:12:38 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{9,
+ 14}.x series
+Message-ID: <20180410205257.DD82881259@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b93a04a51a839dfd43a078029292348e58bb1c0d
+commit: https://git.buildroot.net/buildroot/commit/?id=ac80ff09f95618abb525895e765cb0e9660a39fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/d69/d693f3e3f1c73ccf54ac7076623e436355a9d901/b
-
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 63dfbca2c3ad509504e9118a49d396210917b079)
+(cherry picked from commit 59e8b056ab1ed0e32b1913a9eee7d66a3c39ff0b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-websockets.c-unbreak-build-without-TLS.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
-new file mode 100644
-index 0000000000..e977fae56c
---- /dev/null
-+++ b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
-@@ -0,0 +1,49 @@
-+From 4822aa97da80a86033ec6e4a8b2f4ad0911235cf Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Sat, 3 Mar 2018 11:04:47 +0100
-+Subject: [PATCH] websockets.c: unbreak build without TLS
-+
-+Commit 7943072b1f3b (Fix use_identity_as_username not working on websockets
-+clients) added code which unconditionally accesses mosq-ssl, breaking the
-+build when TLS support is disabled.
-+
-+Fix it by guarding this logic inside #ifdef WITH_TLS.
-+
-+[Upstream: https://dev.eclipse.org/mhonarc/lists/mosquitto-dev/msg01813.html]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/websockets.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/websockets.c b/src/websockets.c
-+index d4d7961..a796f0a 100644
-+--- a/src/websockets.c
-++++ b/src/websockets.c
-+@@ -201,12 +201,14 @@ static int callback_mqtt(struct libwebsocket_context *context,
-+ 				mosq->ws_context = context;
-+ #endif
-+ 				mosq->wsi = wsi;
-++#ifdef WITH_TLS
-+ 				if(in){
-+ 					mosq->ssl = (SSL *)in;
-+ 					if(!mosq->listener->ssl_ctx){
-+ 						mosq->listener->ssl_ctx = SSL_get_SSL_CTX(mosq->ssl);
-+ 					}
-+ 				}
-++#endif
-+ 				u->mosq = mosq;
-+ 			}else{
-+ 				return -1;
-+@@ -240,7 +242,9 @@ static int callback_mqtt(struct libwebsocket_context *context,
-+ 					mosq->pollfd_index = -1;
-+ 				}
-+ 				mosq->wsi = NULL;
-++#ifdef WITH_TLS
-+ 				mosq->ssl = NULL;
-++#endif
-+ 				do_disconnect(db, mosq);
-+ 			}
-+ 			break;
-+-- 
-+2.11.0
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0b434be267..d1c366cb08 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -224,5 +224,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.119"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.85"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.86"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
