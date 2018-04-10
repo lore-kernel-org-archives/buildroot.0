@@ -1,39 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:19:45 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] dnsmasq: update homepage
- link
-Message-ID: <20180410205254.F342F883A3@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:20:19 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] Makefile, manual,
+ website: Bump copyright year
+Message-ID: <20180410205255.11AE288398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9de753fcbd2390a4e1f20d43d0039f46ccc4e057
+commit: https://git.buildroot.net/buildroot/commit/?id=9a31eb5f2c30991045b5877e142c1e1c3340f52f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The doc.html seems like a better choice for a homepage link than the
-list of files in the containing directory listing.
+Happy 2018!
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f9da847d93c061b2242547343cb4a707e8f1179d)
+(cherry picked from commit 676400379abfdb7d1346c12ab592a88012b2fd5b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dnsmasq/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile                   | 2 +-
+ docs/manual/manual.txt     | 2 +-
+ docs/website/copyright.txt | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
-index b4f34b8d2b..960a495ff7 100644
---- a/package/dnsmasq/Config.in
-+++ b/package/dnsmasq/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_DNSMASQ
- 	  A lightweight DNS and DHCP server. It is intended to provide
- 	  coupled DNS and DHCP service to a LAN.
+diff --git a/Makefile b/Makefile
+index 7d609ed8d9..56dd82b108 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
+-# Copyright (C) 2014-2017 by the Buildroot developers <buildroot@buildroot.org>
++# Copyright (C) 2014-2018 by the Buildroot developers <buildroot@buildroot.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 490ed031e9..afb53d0482 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -12,7 +12,7 @@ It is licensed under the GNU General Public License, version 2. Refer to the
+ http://git.buildroot.org/buildroot/tree/COPYING[COPYING] file in the Buildroot
+ sources for the full text of this license.
  
--	  http://www.thekelleys.org.uk/dnsmasq/
-+	  http://www.thekelleys.org.uk/dnsmasq/doc.html
+-Copyright (C) 2004-2017 The Buildroot developers
++Copyright (C) 2004-2018 The Buildroot developers
  
- if BR2_PACKAGE_DNSMASQ
+ image::logo.png[]
  
+diff --git a/docs/website/copyright.txt b/docs/website/copyright.txt
+index 0939b748d2..b8ad36af99 100644
+--- a/docs/website/copyright.txt
++++ b/docs/website/copyright.txt
+@@ -1,6 +1,6 @@
+ 
+ The code and graphics on this website (and it's mirror sites, if any) are
+-Copyright (c) 1999-2005 by Erik Andersen, 2006-2014 The Buildroot
++Copyright (c) 1999-2005 by Erik Andersen, 2006-2018 The Buildroot
+ developers. All rights reserved.
+ 
+ Documents on this Web site including their graphical elements, design, and
