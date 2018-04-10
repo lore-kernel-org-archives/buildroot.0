@@ -1,72 +1,47 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Tue, 10 Apr 2018 11:02:17 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-09
-In-Reply-To: <20180410104114.3745c5d9@windsurf>
-References: <20180410060022.4CF112071F@mail.bootlin.com>
- <c4f7202a-5609-9c3d-81b8-9209fe7497e4@smile.fr>
- <20180410102329.3109623f@windsurf>
- <2631847c-0767-a123-beb7-465c74843b21@smile.fr>
- <20180410104114.3745c5d9@windsurf>
-Message-ID: <b896dfc6-27a3-8158-83aa-0e2d128d23ac@smile.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 10 Apr 2018 12:59:45 +0300
+Subject: [Buildroot] [PATCH] picocom: disable custom baud rate for musl libc
+Message-ID: <04f165bfdd9c1e98e3e8485e392e77b003c92ace.1523354385.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since version 3.1 picocom enabled custom baud rate support for x86
+targets. This requires the c_ispeed and c_opseed field in struct termios
+that musl libc does not provide. Disable this feature to fix the build.
 
-On 10/04/2018 10:41, Thomas Petazzoni wrote:
-> Hello,
->
-> On Tue, 10 Apr 2018 10:35:34 +0200, Valentin Korenblit wrote:
->
->>> So while this will indeed cause a problem for llvm-config in the SDK
->>> situation, I don't quite understand how you get this $ORIGIN/../lib
->>> today, without running "make sdk".
->> To be more precise, this is the RPATH:
->>
->> (RPATH) Library rpath: [/home/vakor/buildroot/output/host/lib:$ORIGIN/../lib]
->>
->> I haven't run make sdk.
-> Meh. Then either I no longer understand how Buildroot works, or it's
-> the LLVM build system that adds $ORIGIN/../lib in the RPATH.
+Fixes:
+http://autobuild.buildroot.net/results/28e/28ec584484dedfd6ef473dfd9dd24481e27ce2b3/
+http://autobuild.buildroot.net/results/912/912493a8f99416524a5897634ae62604436e9b51/
+http://autobuild.buildroot.net/results/65d/65d0f449822f296dfe6b9be0e03a5a855f700a9e/
 
-It is effectively LLVM that modifies the RPATH in AddLLVM.cmake:
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/picocom/picocom.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-https://pastebin.com/JGWrsLsi
-
-I'll try to patch this file to see if we can get it working.
-
-> But I believe your situation highlights a larger problem: we currently
-> use all <foo>-config scripts in STAGING_DIR because that's where
-> libraries install them, but that only works because all those programs
-> are scripts, and not compiled programs.
-
-Yes, we were discussing this yesterday with Romain, in general they are scripts.
-
-> With compiled programs, it indeed doesn't work well to have host
-> binaries in STAGING_DIR, due to the RPATH issues. I'm not sure how to
-> solve this. Should we have all those <foo>-config programs in a
-> separate location ? But apparently, this llvm-config program behaves
-> different depending on its location, so if we move it elsewhere, it
-> won't return the right results anymore.
-
-At least for llvm-config, we cannot move it to other place. I don't know
-if there are any other packages that deal with the same kind of problem.
-
->>> One possibility is to do like we do for postgresql: provide our own
->>> minimal -config script. See package/postgresql/pg_config for an example.
->> I'll take a look.
-> If the output returned by llvm-config is relatively simple, and it
-> doesn't have gazillion of options, then it is probably the easiest
-> solution.
->
-> Best regards,
->
-> Thomas
-
-Thanks,
-
-Valentin
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index d27c7343766c..4889115ad631 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -9,8 +9,14 @@ PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
+ PICOCOM_LICENSE = GPL-2.0+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
+ 
++# musl libc has no c_{i,o}speed field in struct termios
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++PICOCOM_CPPFLAGS += -DNO_CUSTOM_BAUD
++endif
++
+ define PICOCOM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++		CPPFLAGS="$(TARGET_CPPFLAGS) $(PICOCOM_CPPFLAGS)" $(MAKE) -C $(@D)
+ endef
+ 
+ define PICOCOM_INSTALL_TARGET_CMDS
+-- 
+2.16.3
