@@ -1,44 +1,107 @@
 From: Erik Larsson <karl.erik.larsson@gmail.com>
-Date: Tue, 10 Apr 2018 07:34:32 +0200
-Subject: [Buildroot] [PATCH 1/1] imx-mkimage: bump to version
- rel_imx_4.9.51_8mq_ga
-Message-ID: <1523338472-13733-1-git-send-email-karl.erik.larsson@gmail.com>
+Date: Tue, 10 Apr 2018 07:37:01 +0200
+Subject: [Buildroot] [PATCH v6 4/4] configs/freescale_imx8mqevk: new
+ defconfig
+In-Reply-To: <20180409224224.7ba2379a@windsurf>
+References: <1520682702-10035-1-git-send-email-karl.erik.larsson@gmail.com>
+ <1520682702-10035-5-git-send-email-karl.erik.larsson@gmail.com>
+ <20180409224224.7ba2379a@windsurf>
+Message-ID: <CAPP7BN0YJKXP03ZTPb9Of95rOQRCCfgf5wsG19tOqX2oXaj+Rw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
----
-Sorry to say but I just realized that this package used a branch to build from.
-This is now updated which makes the package build again.
----
- package/imx-mkimage/imx-mkimage.hash | 2 +-
- package/imx-mkimage/imx-mkimage.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi
 
-diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
-index 08d31ce..5ecb92d 100644
---- a/package/imx-mkimage/imx-mkimage.hash
-+++ b/package/imx-mkimage/imx-mkimage.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 4ddb144520001c33baa24493f68ef2ea9434ac36bf3ae223f78d7ec581aa484c  imx-mkimage-imx_4.9.51_imx8m_beta.tar.gz
-+sha256 17e8285a346eb19d00780b13916dc281421c5b955707b9f2a662a6734142f1fb  imx-mkimage-rel_imx_4.9.51_8mq_ga.tar.gz
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  iMX8dv/COPYING
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index fd1d90b..cfb9e1a 100644
---- a/package/imx-mkimage/imx-mkimage.mk
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_MKIMAGE_VERSION = imx_4.9.51_imx8m_beta
-+IMX_MKIMAGE_VERSION = rel_imx_4.9.51_8mq_ga
- IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
- IMX_MKIMAGE_SITE_METHOD = git
- IMX_MKIMAGE_LICENSE = GPL-2.0+
--- 
-2.7.4
+2018-04-09 22:42 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+> Hello Erik,
+>
+> On Sat, 10 Mar 2018 12:51:42 +0100, Erik Larsson wrote:
+>
+>> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+>> index b239743..4c77ae2 100755
+>> --- a/board/freescale/common/imx/post-image.sh
+>> +++ b/board/freescale/common/imx/post-image.sh
+>> @@ -7,10 +7,10 @@
+>>  #
+>>  dtb_list()
+>>  {
+>> -     local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
+>> +     local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([\/a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
+>>
+>>       for dt in $DTB_LIST; do
+>> -             echo -n "\"$dt.dtb\", "
+>> +             echo -n "\"`basename $dt`.dtb\", "
+>>       done
+>>  }
+>>
+>> @@ -23,6 +23,8 @@ linux_image()
+>>  {
+>>       if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
+>>               echo "\"uImage\""
+>> +     elif grep -Eq "^BR2_LINUX_KERNEL_IMAGE=y$" ${BR2_CONFIG}; then
+>> +             echo "\"Image\""
+>>       else
+>>               echo "\"zImage\""
+>>       fi
+>
+> Those two changes could be in a patch reworking post-image.sh to be
+> compatible with arm64.
+>
+>> @@ -30,19 +32,39 @@ linux_image()
+>>
+>>  genimage_type()
+>>  {
+>> -     if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+>> +     if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+>> +             echo "genimage.cfg.template_imx8"
+>> +     elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+>>               echo "genimage.cfg.template_spl"
+>>       else
+>>               echo "genimage.cfg.template"
+>>       fi
+>>  }
+>>
+>> +gen_imx8_boot()
+>> +{
+>> +     cat ${BINARIES_DIR}/lpddr4_pmu_train_1d_imem_pad.bin ${BINARIES_DIR}/lpddr4_pmu_train_1d_dmem_pad.bin > ${BINARIES_DIR}/lpddr4_pmu_train_1d_fw.bin
+>> +     cat ${BINARIES_DIR}/lpddr4_pmu_train_2d_imem_pad.bin ${BINARIES_DIR}/lpddr4_pmu_train_2d_dmem.bin > ${BINARIES_DIR}/lpddr4_pmu_train_2d_fw.bin
+>> +     cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_1d_fw.bin ${BINARIES_DIR}/lpddr4_pmu_train_2d_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+>> +     rm -f ${BINARIES_DIR}/lpddr4_pmu_train_1d_fw.bin ${BINARIES_DIR}/lpddr4_pmu_train_2d_fw.bin
+>> +
+>> +     BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${BINARIES_DIR}/fsl-imx8mq-evk.dtb > ${BINARIES_DIR}/u-boot.its
+>> +     ${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+>> +     rm -f ${BINARIES_DIR}/u-boot.its
+>> +
+>> +     ${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx-boot-imx8mqevk-sd.bin
+>> +}
+>
+> Shouldn't this logic be moved to a specialized post-image script ? And
+> then you do:
+>
+> BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+>
+> or something like that ? Fabio, what do you think ?
+>
+> Also, could you split the i.MX8 stuff from the support of the i.MX8 EVK board itself ?
+>
+> I.e adding the genimage.cfg file, and adding imx8-bootloader.prepare.sh
+> should be one patch, and then adding the i.MX8 EVK defconfig and
+> readme.txt should be another patch.
+>
+> Could you rework the last two patches according to those comments ?
+
+Yes, I'll do! Thanks for all the support and feedback!
+
+>
+> Thanks a lot!
+>
+> Thomas Petazzoni
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+/Erik
