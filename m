@@ -1,37 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:50:27 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
- 9, 14, 15}.x series
-Message-ID: <20180410205256.B2954807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:47:30 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] mariadb: security bump
+ version to 10.1.31
+Message-ID: <20180410205256.81664807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a60c8ecf3846daa11eac3902f1697234870f5f13
+commit: https://git.buildroot.net/buildroot/commit/?id=a0cd24fafa44b4314f27b54590a7aa63b7a86ca3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.14.x / 4.15.x bump]
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Release notes: https://mariadb.com/kb/en/mariadb-10131-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10131-changelog/
+
+Fixes the following security vulnerabilities:
+
+CVE-2018-2562 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server : Partition). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.19 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server as well as unauthorized update, insert or
+delete access to some of MySQL Server accessible data.
+
+CVE-2018-2622 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL). Supported versions that are affected are 5.5.58
+and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2640 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2665 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2668 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer). Supported versions that are affected are
+5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+vulnerability allows low privileged attacker with network access via multiple
+protocols to compromise MySQL Server. Successful attacks of this vulnerability
+can result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+CVE-2018-2612 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB). Supported versions that are affected are 5.6.38 and
+prior and 5.7.20 and prior. Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server. Successful attacks of this vulnerability can result in
+unauthorized creation, deletion or modification access to critical data or all
+MySQL Server accessible data and unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3733907f673427205288645a078691f930898333)
+(cherry picked from commit fcdaab19bb564af01016b6632736f98baecbd22c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8932aca75f..8f96285116 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.116"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.117"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.82"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.83"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index f8e1c6ce10..cc1e353ab7 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.30/
+-sha256 173a5e5a24819e0a469c3bd09b5c98491676c37c6095882a2ea34c5af0996c88  mariadb-10.1.30.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.31/
++sha256 ab7641c2fe4e5289da6141766a9c3350e013def56fafd6f1377080bc8048b2e6  mariadb-10.1.31.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index dc88696e34..18dfece377 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.30
++MARIADB_VERSION = 10.1.31
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
+ # Tarball no longer contains LGPL license text
