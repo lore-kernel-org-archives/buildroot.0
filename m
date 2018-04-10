@@ -1,75 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:49:09 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] exim: add upstream
- security fix
-Message-ID: <20180410205256.A161A807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:56:31 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] dependencies.mk: check
+ for valid host-tar before other host dependencies
+Message-ID: <20180410205257.20A42882EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14ee40d989a670a792bf0cea93b862effd939c76
+commit: https://git.buildroot.net/buildroot/commit/?id=119ab097e442e8a87ebd05beb478ade5b638a1ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes the following security issue:
+host-{cmake,lzip,xz} needs host-tar to extract their source code tarball, so
+we need to ensure that host-tar gets added to DEPENDENCIES_HOST_PREREQ
+before these in case they are both needed, otherwise the tools will fail to
+extract.
 
-CVE-2018-6789: Meh Chang discovered a buffer overflow flaw in a utility
-function used in the SMTP listener of Exim, a mail transport agent.  A
-remote attacker can take advantage of this flaw to cause a denial of
-service, or potentially the execution of arbitrary code via a specially
-crafted message.
+With the upcoming change to blacklist modern tar versions this situation is
+likely to trigger more often.
 
-Dropped ChangeLog hunk and adjusted file path of upstream commit so it
-applies to tarball.
+The real solution to this issue is the <foo>_EXTRACT_DEPENDENCIES rework,
+but that series is a bit too intrusive to add this close to 2018.02, so
+therefore this hack.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8343069e2c3cc79ad14600816a772fcd7592e291)
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7c09cb82b75f30eba7a9daaae5e77a604f6e49c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...005-Fix-base64d-buffer-size-CVE-2018-6789.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ support/dependencies/dependencies.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
-new file mode 100644
-index 0000000000..1811a7ff98
---- /dev/null
-+++ b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
-@@ -0,0 +1,37 @@
-+From 062990cc1b2f9e5d82a413b53c8f0569075de700 Mon Sep 17 00:00:00 2001
-+From: "Heiko Schlittermann (HS12-RIPE)" <hs@schlittermann.de>
-+Date: Mon, 5 Feb 2018 22:23:32 +0100
-+Subject: [PATCH] Fix base64d() buffer size (CVE-2018-6789)
-+
-+Credits for discovering this bug: Meh Chang <meh@devco.re>
-+
-+[Peter: Drop ChangeLog change, fix path]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/base64.c      | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/base64.c b/src/base64.c
-+index f6f187f0..e58ca6c7 100644
-+--- a/src/base64.c
-++++ b/src/base64.c
-+@@ -152,10 +152,14 @@ static uschar dec64table[] = {
-+ int
-+ b64decode(const uschar *code, uschar **ptr)
-+ {
-++
-+ int x, y;
-+-uschar *result = store_get(3*(Ustrlen(code)/4) + 1);
-++uschar *result;
-+ 
-+-*ptr = result;
-++{
-++  int l = Ustrlen(code);
-++  *ptr = result = store_get(1 + l/4 * 3 + l%4);
-++}
-+ 
-+ /* Each cycle of the loop handles a quantum of 4 input bytes. For the last
-+ quantum this may decode to 1, 2, or 3 output bytes. */
-+-- 
-+2.11.0
-+
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+index ef2ae9b7e1..e81745d04f 100644
+--- a/support/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -12,7 +12,10 @@
+ define suitable-host-package
+ $(shell support/dependencies/check-host-$(1).sh $(2))
+ endef
+--include $(sort $(wildcard support/dependencies/check-host-*.mk))
++# host utilities needs host-tar to extract the source code tarballs, so
++# ensure check-host-tar.mk is included before the rest
++include support/dependencies/check-host-tar.mk
++-include $(sort $(filter-out %-tar.mk,$(wildcard support/dependencies/check-host-*.mk)))
+ 
+ ifeq ($(BR2_CCACHE),y)
+ DEPENDENCIES_HOST_PREREQ += host-ccache
