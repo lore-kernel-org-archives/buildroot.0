@@ -1,34 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:04:05 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] mosquitto: clarify that
- patch hash is locally calculated
-Message-ID: <20180410205257.929A3807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 22:02:38 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/dovecot: security
+ bump to version 2.3.4
+Message-ID: <20180410205257.7A45D807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=932d6d028dd2256dd1050c8f06e5533bde4deb24
+commit: https://git.buildroot.net/buildroot/commit/?id=b598d76affcacf0241dd5f4c725f1f1a15178959
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Commit e51d69a3b (mosquitto: specify that hash is taken from upstream)
-changed the .hash description header, but the upstream hash only applies
-to the tarball, not the patch.
+Fixes CVE-2017-15130, CVE-2017-14461 & CVE-2017-15132:
+https://www.dovecot.org/list/dovecot-news/2018-February/000370.html
 
+Removed patch applied upstream:
+https://github.com/dovecot/core/commit/a008617e811673064fd657acf517dc4a12493d29
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1ef8c2239339f52e35572e485db306df9012d500)
+(cherry picked from commit 7c970b06ea4cfc235eefedd967551d165c1dd7ca)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 1 +
- 1 file changed, 1 insertion(+)
+ ...x-memory-leak-in-auth_client_request_abor.patch | 33 ----------------------
+ package/dovecot/dovecot.hash                       |  2 +-
+ package/dovecot/dovecot.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 35 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 60538f4943..4ef174300e 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,3 +1,4 @@
- # From http://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.12.tar.gz
- sha512  75e6105498869ab13265df7a0bea6052c014d59d0c0efb61162d8257d34c0153fce32130e84c28e99fd494f374949aac5e01c19f7439c2eea575b52ef1179c3c  mosquitto-1.4.12.tar.gz
-+# Locally computed:
- sha256  06abd1206e548ac2378dd96f5434cb3e40ed77cecb6a9c37fbabab0b0f1360e5  mosquitto-1.4.x_cve-2017-9868.patch
+diff --git a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch b/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
+deleted file mode 100644
+index babccd3acf..0000000000
+--- a/package/dovecot/0002-lib-auth-Fix-memory-leak-in-auth_client_request_abor.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 1a29ed2f96da1be22fa5a4d96c7583aa81b8b060 Mon Sep 17 00:00:00 2001
+-From: Timo Sirainen <timo.sirainen@dovecot.fi>
+-Date: Mon, 18 Dec 2017 16:50:51 +0200
+-Subject: [PATCH] lib-auth: Fix memory leak in auth_client_request_abort()
+-
+-This caused memory leaks when authentication was aborted. For example
+-with IMAP:
+-
+-a AUTHENTICATE PLAIN
+-*
+-
+-Broken by 9137c55411aa39d41c1e705ddc34d5bd26c65021
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/lib-auth/auth-client-request.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/lib-auth/auth-client-request.c b/src/lib-auth/auth-client-request.c
+-index 480fb42b3..046f7c307 100644
+---- a/src/lib-auth/auth-client-request.c
+-+++ b/src/lib-auth/auth-client-request.c
+-@@ -186,6 +186,7 @@ void auth_client_request_abort(struct auth_client_request **_request)
+- 
+- 	auth_client_send_cancel(request->conn->client, request->id);
+- 	call_callback(request, AUTH_REQUEST_STATUS_ABORT, NULL, NULL);
+-+	pool_unref(&request->pool);
+- }
+- 
+- unsigned int auth_client_request_get_id(struct auth_client_request *request)
+--- 
+-2.11.0
+-
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 33163d6d8c..fef0746089 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 fe1e3b78609a56ee22fc209077e4b75348fa1bbd54c46f52bde2472a4c4cee84  dovecot-2.2.33.2.tar.gz
++sha256 5e92a4325409e66b343f6aaa67174b8921ce83d0df792c6eeb0b7b7e2c808353  dovecot-2.2.34.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index f8fbaaab65..d9703a6171 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).33.2
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).34
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPLv2.1
