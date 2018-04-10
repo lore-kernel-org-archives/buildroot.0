@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Apr 2018 14:54:20 +0200
-Subject: [Buildroot] [PATCH] zsh: bump to version 5.5
-In-Reply-To: <8a79657339c26ba0171b8c336e552904ed89975c.1523357721.git.baruch@tkos.co.il>
-References: <8a79657339c26ba0171b8c336e552904ed89975c.1523357721.git.baruch@tkos.co.il>
-Message-ID: <20180410145420.3569c744@windsurf>
+Date: Tue, 10 Apr 2018 14:54:23 +0200
+Subject: [Buildroot] [PATCH] nmap: bump to version 7.70
+In-Reply-To: <dd8327325d3bb6fb24bfb2acaa0d3ec65c031b84.1523360545.git.baruch@tkos.co.il>
+References: <dd8327325d3bb6fb24bfb2acaa0d3ec65c031b84.1523360545.git.baruch@tkos.co.il>
+Message-ID: <20180410145423.37b327b7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 10 Apr 2018 13:55:21 +0300, Baruch Siach wrote:
-> We now have tar.xz archive again, use that.
+On Tue, 10 Apr 2018 14:42:25 +0300, Baruch Siach wrote:
+> Drop libssh2 configure test fix; the issue is fixed upstream.
 > 
-> Cc: Phil Eichinger <phil.eichinger@gmail.com>
+> Add license file hash.
+> 
+> Cc: Carlos Santos <casantos@datacom.ind.br>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/zsh/zsh.hash | 6 +++---
->  package/zsh/zsh.mk   | 3 ++-
->  2 files changed, 5 insertions(+), 4 deletions(-)
+>  ...c-fix-AC_CHECK_HEADER-call-to-test-for-li.patch | 30 ----------------------
+>  package/nmap/nmap.hash                             |  6 +++--
+>  package/nmap/nmap.mk                               | 12 ++-------
+>  3 files changed, 6 insertions(+), 42 deletions(-)
+>  delete mode 100644 package/nmap/0002-configure.ac-fix-AC_CHECK_HEADER-call-to-test-for-li.patch
 
 Applied to master, thanks.
 
