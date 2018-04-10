@@ -1,26 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:44:51 +0200
-Subject: [Buildroot] [PATCH] rsync: security bump to version 3.1.3
-In-Reply-To: <958696d988eecdc48bea09ad76234933706a7e0a.1518153988.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 9 Feb 2018 07:26:28 +0200")
-References: <958696d988eecdc48bea09ad76234933706a7e0a.1518153988.git.baruch@tkos.co.il>
-Message-ID: <87y3hu6bb0.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:45:10 +0200
+Subject: [Buildroot] [PATCH 1/1] qt53d: fix typo in <pkg>_SOURCES
+In-Reply-To: <20180210123800.7707-1-gael.portay@savoirfairelinux.com>
+ (=?utf-8?Q?=22Ga=C3=ABl?=
+ PORTAY"'s message of "Sat, 10 Feb 2018 07:38:00 -0500")
+References: <20180210123800.7707-1-gael.portay@savoirfairelinux.com>
+Message-ID: <87tvsi6bah.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Ga?l" == Ga?l PORTAY <gael.portay@savoirfairelinux.com> writes:
 
- > Fixes CVE-2018-5764: remote attackers can bypass an
- > argument-sanitization protection mechanism
+ > The QT53D_SOURCE variable uses mismatch QT5SVG_VERSION variable.
+ > This commit fixes the typo by using the appropriate QT53D_VERSION
+ > variable.
 
- > Drop upstream patches.
-
- > Add license file hash.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 
 Committed to 2017.02.x, thanks.
 
