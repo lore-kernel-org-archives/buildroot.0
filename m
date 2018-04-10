@@ -1,286 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:00:45 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] wavpack: add upstream
- security fixes
-Message-ID: <20180410205257.60694882EA@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 22:09:13 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/clamav: security
+ bump to version 0.99.4
+Message-ID: <20180410205257.C55B8807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10a941a5617436753ed93d609cf3b91319be4a34
+commit: https://git.buildroot.net/buildroot/commit/?id=ac20047cfeee20ac1760b89dcdbb76146f3ff633
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes the following security issues:
+Fixes CVE-2012-6706, CVE-2017-6419, CVE-2017-11423, CVE-2018-1000085 &
+CVE-2018-0202.
 
-CVE-2018-6767: A stack-based buffer over-read in the ParseRiffHeaderConfig
-function of cli/riff.c file of WavPack 5.1.0 allows a remote attacker to
-cause a denial-of-service attack or possibly have unspecified other impact
-via a maliciously crafted RF64 file.
+For details see upstream announcement:
+http://lists.clamav.net/pipermail/clamav-announce/2018/000029.html
 
-CVE-2018-7253: The ParseDsdiffHeaderConfig function of the cli/dsdiff.c file
-of WavPack 5.1.0 allows a remote attacker to cause a denial-of-service
-(heap-based buffer over-read) or possibly overwrite the heap via a
-maliciously crafted DSDIFF file.
-
-CVE-2018-7254: The ParseCaffHeaderConfig function of the cli/caff.c file of
-WavPack 5.1.0 allows a remote attacker to cause a denial-of-service (global
-buffer over-read), or possibly trigger a buffer overflow or incorrect memory
-allocation, via a maliciously crafted CAF file.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4de7e07e6efba7dae79a7f61f397864873272fd3)
+(cherry picked from commit d02cbe22dab7f2f0424d7a4f3274ea2459269dbe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-not-overwrite-stack-on-corrupt-RF64-file.patch | 118 +++++++++++++++++++++
- ...-not-overwrite-heap-on-corrupt-DSDIFF-fil.patch |  38 +++++++
- ...x-buffer-overflows-and-bad-allocs-on-corr.patch |  72 +++++++++++++
- 3 files changed, 228 insertions(+)
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wavpack/0002-issue-27-do-not-overwrite-stack-on-corrupt-RF64-file.patch b/package/wavpack/0002-issue-27-do-not-overwrite-stack-on-corrupt-RF64-file.patch
-new file mode 100644
-index 0000000000..bda00999b9
---- /dev/null
-+++ b/package/wavpack/0002-issue-27-do-not-overwrite-stack-on-corrupt-RF64-file.patch
-@@ -0,0 +1,118 @@
-+From d5bf76b5a88d044a1be1d5656698e3ba737167e5 Mon Sep 17 00:00:00 2001
-+From: David Bryant <david@wavpack.com>
-+Date: Sun, 4 Feb 2018 11:28:15 -0800
-+Subject: [PATCH] issue #27, do not overwrite stack on corrupt RF64 file
-+
-+Fixes CVE-2018-6767
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cli/riff.c | 39 ++++++++++++++++++++++++++++++++-------
-+ 1 file changed, 32 insertions(+), 7 deletions(-)
-+
-+diff --git a/cli/riff.c b/cli/riff.c
-+index 8b1af45..de98c1e 100644
-+--- a/cli/riff.c
-++++ b/cli/riff.c
-+@@ -42,6 +42,7 @@ typedef struct {
-+ 
-+ #pragma pack(pop)
-+ 
-++#define CS64ChunkFormat "4D"
-+ #define DS64ChunkFormat "DDDL"
-+ 
-+ #define WAVPACK_NO_ERROR    0
-+@@ -101,13 +102,13 @@ int ParseRiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpack
-+ 
-+         if (!strncmp (chunk_header.ckID, "ds64", 4)) {
-+             if (chunk_header.ckSize < sizeof (DS64Chunk) ||
-+-                !DoReadFile (infile, &ds64_chunk, chunk_header.ckSize, &bcount) ||
-+-                bcount != chunk_header.ckSize) {
-++                !DoReadFile (infile, &ds64_chunk, sizeof (DS64Chunk), &bcount) ||
-++                bcount != sizeof (DS64Chunk)) {
-+                     error_line ("%s is not a valid .WAV file!", infilename);
-+                     return WAVPACK_SOFT_ERROR;
-+             }
-+             else if (!(config->qmode & QMODE_NO_STORE_WRAPPER) &&
-+-                !WavpackAddWrapper (wpc, &ds64_chunk, chunk_header.ckSize)) {
-++                !WavpackAddWrapper (wpc, &ds64_chunk, sizeof (DS64Chunk))) {
-+                     error_line ("%s", WavpackGetErrorMessage (wpc));
-+                     return WAVPACK_SOFT_ERROR;
-+             }
-+@@ -315,10 +316,11 @@ int ParseRiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpack
-+ 
-+ int WriteRiffHeader (FILE *outfile, WavpackContext *wpc, int64_t total_samples, int qmode)
-+ {
-+-    int do_rf64 = 0, write_junk = 1;
-++    int do_rf64 = 0, write_junk = 1, table_length = 0;
-+     ChunkHeader ds64hdr, datahdr, fmthdr;
-+     RiffChunkHeader riffhdr;
-+     DS64Chunk ds64_chunk;
-++    CS64Chunk cs64_chunk;
-+     JunkChunk junkchunk;
-+     WaveHeader wavhdr;
-+     uint32_t bcount;
-+@@ -380,6 +382,7 @@ int WriteRiffHeader (FILE *outfile, WavpackContext *wpc, int64_t total_samples,
-+     strncpy (riffhdr.formType, "WAVE", sizeof (riffhdr.formType));
-+     total_riff_bytes = sizeof (riffhdr) + wavhdrsize + sizeof (datahdr) + ((total_data_bytes + 1) & ~(int64_t)1);
-+     if (do_rf64) total_riff_bytes += sizeof (ds64hdr) + sizeof (ds64_chunk);
-++    total_riff_bytes += table_length * sizeof (CS64Chunk);
-+     if (write_junk) total_riff_bytes += sizeof (junkchunk);
-+     strncpy (fmthdr.ckID, "fmt ", sizeof (fmthdr.ckID));
-+     strncpy (datahdr.ckID, "data", sizeof (datahdr.ckID));
-+@@ -394,11 +397,12 @@ int WriteRiffHeader (FILE *outfile, WavpackContext *wpc, int64_t total_samples,
-+ 
-+     if (do_rf64) {
-+         strncpy (ds64hdr.ckID, "ds64", sizeof (ds64hdr.ckID));
-+-        ds64hdr.ckSize = sizeof (ds64_chunk);
-++        ds64hdr.ckSize = sizeof (ds64_chunk) + (table_length * sizeof (CS64Chunk));
-+         CLEAR (ds64_chunk);
-+         ds64_chunk.riffSize64 = total_riff_bytes;
-+         ds64_chunk.dataSize64 = total_data_bytes;
-+         ds64_chunk.sampleCount64 = total_samples;
-++        ds64_chunk.tableLength = table_length;
-+         riffhdr.ckSize = (uint32_t) -1;
-+         datahdr.ckSize = (uint32_t) -1;
-+         WavpackNativeToLittleEndian (&ds64hdr, ChunkHeaderFormat);
-+@@ -409,6 +413,14 @@ int WriteRiffHeader (FILE *outfile, WavpackContext *wpc, int64_t total_samples,
-+         datahdr.ckSize = (uint32_t) total_data_bytes;
-+     }
-+ 
-++    // this "table" is just a dummy placeholder for testing (normally not written)
-++
-++    if (table_length) {
-++        strncpy (cs64_chunk.ckID, "dmmy", sizeof (cs64_chunk.ckID));
-++        cs64_chunk.chunkSize64 = 12345678;
-++        WavpackNativeToLittleEndian (&cs64_chunk, CS64ChunkFormat);
-++    }
-++
-+     // write the RIFF chunks up to just before the data starts
-+ 
-+     WavpackNativeToLittleEndian (&riffhdr, ChunkHeaderFormat);
-+@@ -418,8 +430,21 @@ int WriteRiffHeader (FILE *outfile, WavpackContext *wpc, int64_t total_samples,
-+ 
-+     if (!DoWriteFile (outfile, &riffhdr, sizeof (riffhdr), &bcount) || bcount != sizeof (riffhdr) ||
-+         (do_rf64 && (!DoWriteFile (outfile, &ds64hdr, sizeof (ds64hdr), &bcount) || bcount != sizeof (ds64hdr))) ||
-+-        (do_rf64 && (!DoWriteFile (outfile, &ds64_chunk, sizeof (ds64_chunk), &bcount) || bcount != sizeof (ds64_chunk))) ||
-+-        (write_junk && (!DoWriteFile (outfile, &junkchunk, sizeof (junkchunk), &bcount) || bcount != sizeof (junkchunk))) ||
-++        (do_rf64 && (!DoWriteFile (outfile, &ds64_chunk, sizeof (ds64_chunk), &bcount) || bcount != sizeof (ds64_chunk)))) {
-++            error_line ("can't write .WAV data, disk probably full!");
-++            return FALSE;
-++    }
-++
-++    // again, this is normally not written except for testing
-++
-++    while (table_length--)
-++        if (!DoWriteFile (outfile, &cs64_chunk, sizeof (cs64_chunk), &bcount) || bcount != sizeof (cs64_chunk)) {
-++            error_line ("can't write .WAV data, disk probably full!");
-++            return FALSE;
-++        }
-++
-++
-++    if ((write_junk && (!DoWriteFile (outfile, &junkchunk, sizeof (junkchunk), &bcount) || bcount != sizeof (junkchunk))) ||
-+         !DoWriteFile (outfile, &fmthdr, sizeof (fmthdr), &bcount) || bcount != sizeof (fmthdr) ||
-+         !DoWriteFile (outfile, &wavhdr, wavhdrsize, &bcount) || bcount != wavhdrsize ||
-+         !DoWriteFile (outfile, &datahdr, sizeof (datahdr), &bcount) || bcount != sizeof (datahdr)) {
-+-- 
-+2.11.0
-+
-diff --git a/package/wavpack/0003-issue-28-do-not-overwrite-heap-on-corrupt-DSDIFF-fil.patch b/package/wavpack/0003-issue-28-do-not-overwrite-heap-on-corrupt-DSDIFF-fil.patch
-new file mode 100644
-index 0000000000..950877b03c
---- /dev/null
-+++ b/package/wavpack/0003-issue-28-do-not-overwrite-heap-on-corrupt-DSDIFF-fil.patch
-@@ -0,0 +1,38 @@
-+From 36a24c7881427d2e1e4dc1cef58f19eee0d13aec Mon Sep 17 00:00:00 2001
-+From: David Bryant <david@wavpack.com>
-+Date: Sat, 10 Feb 2018 16:01:39 -0800
-+Subject: [PATCH] issue #28, do not overwrite heap on corrupt DSDIFF file
-+
-+Fixes CVE-2018-7253
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cli/dsdiff.c | 12 +++++++++++-
-+ 1 file changed, 11 insertions(+), 1 deletion(-)
-+
-+diff --git a/cli/dsdiff.c b/cli/dsdiff.c
-+index 410dc1c..c016df9 100644
-+--- a/cli/dsdiff.c
-++++ b/cli/dsdiff.c
-+@@ -153,7 +153,17 @@ int ParseDsdiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpa
-+                 error_line ("dsdiff file version = 0x%08x", version);
-+         }
-+         else if (!strncmp (dff_chunk_header.ckID, "PROP", 4)) {
-+-            char *prop_chunk = malloc ((size_t) dff_chunk_header.ckDataSize);
-++            char *prop_chunk;
-++
-++            if (dff_chunk_header.ckDataSize < 4 || dff_chunk_header.ckDataSize > 1024) {
-++                error_line ("%s is not a valid .DFF file!", infilename);
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-++            if (debug_logging_mode)
-++                error_line ("got PROP chunk of %d bytes total", (int) dff_chunk_header.ckDataSize);
-++
-++            prop_chunk = malloc ((size_t) dff_chunk_header.ckDataSize);
-+ 
-+             if (!DoReadFile (infile, prop_chunk, (uint32_t) dff_chunk_header.ckDataSize, &bcount) ||
-+                 bcount != dff_chunk_header.ckDataSize) {
-+-- 
-+2.11.0
-+
-diff --git a/package/wavpack/0004-issue-28-fix-buffer-overflows-and-bad-allocs-on-corr.patch b/package/wavpack/0004-issue-28-fix-buffer-overflows-and-bad-allocs-on-corr.patch
-new file mode 100644
-index 0000000000..142e81ff7a
---- /dev/null
-+++ b/package/wavpack/0004-issue-28-fix-buffer-overflows-and-bad-allocs-on-corr.patch
-@@ -0,0 +1,72 @@
-+From 8e3fe45a7bac31d9a3b558ae0079e2d92a04799e Mon Sep 17 00:00:00 2001
-+From: David Bryant <david@wavpack.com>
-+Date: Sun, 11 Feb 2018 16:37:47 -0800
-+Subject: [PATCH] issue #28, fix buffer overflows and bad allocs on corrupt CAF
-+ files
-+
-+Fixes CVE-2018-7254
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cli/caff.c | 30 +++++++++++++++++++++++-------
-+ 1 file changed, 23 insertions(+), 7 deletions(-)
-+
-+diff --git a/cli/caff.c b/cli/caff.c
-+index ae57c4b..6248a71 100644
-+--- a/cli/caff.c
-++++ b/cli/caff.c
-+@@ -89,8 +89,8 @@ typedef struct
-+ 
-+ #define CAFChannelDescriptionFormat "LLLLL"
-+ 
-+-static const char TMH_full [] = { 1,2,3,13,9,10,5,6,12,14,15,16,17,9,4,18,7,8,19,20,21 };
-+-static const char TMH_std [] = { 1,2,3,11,8,9,5,6,10,12,13,14,15,7,4,16 };
-++static const char TMH_full [] = { 1,2,3,13,9,10,5,6,12,14,15,16,17,9,4,18,7,8,19,20,21,0 };
-++static const char TMH_std [] = { 1,2,3,11,8,9,5,6,10,12,13,14,15,7,4,16,0 };
-+ 
-+ static struct {
-+     uint32_t mChannelLayoutTag;     // Core Audio layout, 100 - 146 in high word, num channels in low word
-+@@ -274,10 +274,19 @@ int ParseCaffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpack
-+             }
-+         }
-+         else if (!strncmp (caf_chunk_header.mChunkType, "chan", 4)) {
-+-            CAFChannelLayout *caf_channel_layout = malloc ((size_t) caf_chunk_header.mChunkSize);
-++            CAFChannelLayout *caf_channel_layout;
-+ 
-+-            if (caf_chunk_header.mChunkSize < sizeof (CAFChannelLayout) ||
-+-                !DoReadFile (infile, caf_channel_layout, (uint32_t) caf_chunk_header.mChunkSize, &bcount) ||
-++            if (caf_chunk_header.mChunkSize < sizeof (CAFChannelLayout) || caf_chunk_header.mChunkSize > 1024) {
-++                error_line ("this .CAF file has an invalid 'chan' chunk!");
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-++            if (debug_logging_mode)
-++                error_line ("'chan' chunk is %d bytes", (int) caf_chunk_header.mChunkSize);
-++
-++            caf_channel_layout = malloc ((size_t) caf_chunk_header.mChunkSize);
-++
-++            if (!DoReadFile (infile, caf_channel_layout, (uint32_t) caf_chunk_header.mChunkSize, &bcount) ||
-+                 bcount != caf_chunk_header.mChunkSize) {
-+                     error_line ("%s is not a valid .CAF file!", infilename);
-+                     free (caf_channel_layout);
-+@@ -495,8 +504,15 @@ int ParseCaffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpack
-+         }
-+         else {          // just copy unknown chunks to output file
-+ 
-+-            int bytes_to_copy = (uint32_t) caf_chunk_header.mChunkSize;
-+-            char *buff = malloc (bytes_to_copy);
-++            uint32_t bytes_to_copy = (uint32_t) caf_chunk_header.mChunkSize;
-++            char *buff;
-++
-++            if (caf_chunk_header.mChunkSize < 0 || caf_chunk_header.mChunkSize > 1048576) {
-++                error_line ("%s is not a valid .CAF file!", infilename);
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-++            buff = malloc (bytes_to_copy);
-+ 
-+             if (debug_logging_mode)
-+                 error_line ("extra unknown chunk \"%c%c%c%c\" of %d bytes",
-+-- 
-+2.11.0
-+
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index fe873bddfc..76c633f979 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 00fa5292a6e00a3a4035b826267748965d5d2c4943d8ff417d740238263e8e84  clamav-0.99.3.tar.gz
++sha256 d72ac3273bde8d2e5e28ec9978373ee3ab4529fd868bc3fc4d2d2671228f2461  clamav-0.99.4.tar.gz
+ sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index e7e782dc06..4caff12379 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 0.99.3
++CLAMAV_VERSION = 0.99.4
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPLv2
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
