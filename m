@@ -1,23 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:51:33 +0200
-Subject: [Buildroot] [PATCH] mosquitto: unbreak build with websockets
- and !libopenssl
-In-Reply-To: <20180303101545.11446-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 3 Mar 2018 11:15:45 +0100")
-References: <20180303101545.11446-1-peter@korsgaard.com>
-Message-ID: <87o9iq3huy.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:51:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump to
+ version 0.99.4
+In-Reply-To: <20180302060657.9454-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 2 Mar 2018 07:06:57 +0100")
+References: <20180302060657.9454-1-bernd.kuhls@t-online.de>
+Message-ID: <87k1te3hu8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/d69/d693f3e3f1c73ccf54ac7076623e436355a9d901/b
+ > Fixes CVE-2012-6706, CVE-2017-6419, CVE-2017-11423, CVE-2018-1000085 &
+ > CVE-2018-0202.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > For details see upstream announcement:
+ > http://lists.clamav.net/pipermail/clamav-announce/2018/000029.html
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2017.02.x, thanks.
 
