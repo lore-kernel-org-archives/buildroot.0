@@ -1,425 +1,125 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:48:43 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] quagga: add upstream
- security fixes
-Message-ID: <20180410205256.916FD807C8@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 22:00:21 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] wavpack: don't download
+ patch from Github
+Message-ID: <20180410205257.52DB9882EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a5fcdfe0b411d30bcc4f40d075a6566bdb1943e
+commit: https://git.buildroot.net/buildroot/commit/?id=b08d5c0fe527f51b196782d1d21d815dfaef03c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes the following security issues:
+Patches downloaded from Github are not stable, so bring them in the
+tree.
 
-CVE-2018-5378
-
-    It was discovered that the Quagga BGP daemon, bgpd, does not
-    properly bounds check data sent with a NOTIFY to a peer, if an
-    attribute length is invalid. A configured BGP peer can take
-    advantage of this bug to read memory from the bgpd process or cause
-    a denial of service (daemon crash).
-
-    https://www.quagga.net/security/Quagga-2018-0543.txt
-
-CVE-2018-5379
-
-    It was discovered that the Quagga BGP daemon, bgpd, can double-free
-    memory when processing certain forms of UPDATE message, containing
-    cluster-list and/or unknown attributes, resulting in a denial of
-    service (bgpd daemon crash).
-
-    https://www.quagga.net/security/Quagga-2018-1114.txt
-
-CVE-2018-5380
-
-    It was discovered that the Quagga BGP daemon, bgpd, does not
-    properly handle internal BGP code-to-string conversion tables.
-
-    https://www.quagga.net/security/Quagga-2018-1550.txt
-
-CVE-2018-5381
-
-    It was discovered that the Quagga BGP daemon, bgpd, can enter an
-    infinite loop if sent an invalid OPEN message by a configured peer.
-    A configured peer can take advantage of this flaw to cause a denial
-    of service (bgpd daemon not responding to any other events; BGP
-    sessions will drop and not be reestablished; unresponsive CLI
-    interface).
-
-    https://www.quagga.net/security/Quagga-2018-1975.txt
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 157a198d304224c12fa0d91d977a6619d021f5c6)
+(cherry picked from commit 0a2576d37ebb4175aea1daf3c14c947df39cdcaa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ty-invalid-attr-length-sends-NOTIFY-with-.patch |  69 +++++++++++++
- ...rity-Fix-double-free-of-unknown-attribute.patch | 112 ++++++++++++++++++++
- ...ty-debug-print-of-received-NOTIFY-data-ca.patch | 114 +++++++++++++++++++++
- ...ty-fix-infinite-loop-on-certain-invalid-O.patch |  43 ++++++++
- 4 files changed, 338 insertions(+)
+ ...-19-new-dependency-on-wchar-t-by-removing.patch | 70 ++++++++++++++++++++++
+ package/wavpack/wavpack.hash                       |  1 -
+ package/wavpack/wavpack.mk                         |  3 -
+ 3 files changed, 70 insertions(+), 4 deletions(-)
 
-diff --git a/package/quagga/0005-bgpd-security-invalid-attr-length-sends-NOTIFY-with-.patch b/package/quagga/0005-bgpd-security-invalid-attr-length-sends-NOTIFY-with-.patch
+diff --git a/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch b/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
 new file mode 100644
-index 0000000000..b64109d0f7
+index 0000000000..e5faf91221
 --- /dev/null
-+++ b/package/quagga/0005-bgpd-security-invalid-attr-length-sends-NOTIFY-with-.patch
-@@ -0,0 +1,69 @@
-+From cc2e6770697e343f4af534114ab7e633d5beabec Mon Sep 17 00:00:00 2001
-+From: Paul Jakma <paul@jakma.org>
-+Date: Wed, 3 Jan 2018 23:57:33 +0000
-+Subject: [PATCH] bgpd/security: invalid attr length sends NOTIFY with data
-+ overrun
++++ b/package/wavpack/0001-fix-Github-issue-19-new-dependency-on-wchar-t-by-removing.patch
+@@ -0,0 +1,70 @@
++From 876fc3f3907e871d0938ac6c8c5252f5f31abd1f Mon Sep 17 00:00:00 2001
++From: David Bryant <david@wavpack.com>
++Date: Thu, 16 Feb 2017 17:11:12 -0800
++Subject: [PATCH] fix GitHub issue #19 (new dependency on wchar_t) by removing
++ dependency
 +
-+Security issue: Quagga-2018-0543
-+
-+See: https://www.quagga.net/security/Quagga-2018-0543.txt
-+
-+* bgpd/bgp_attr.c: (bgp_attr_parse) An invalid attribute length is correctly
-+  checked, and a NOTIFY prepared.  The NOTIFY can include the incorrect
-+  received data with the NOTIFY, for debug purposes.  Commit
-+  c69698704806a9ac5 modified the code to do that just, and also send the
-+  malformed attr with the NOTIFY.  However, the invalid attribute length was
-+  used as the length of the data to send back.
-+
-+  The result is a read past the end of data, which is then written to the
-+  NOTIFY message and sent to the peer.
-+
-+  A configured BGP peer can use this bug to read up to 64 KiB of memory from
-+  the bgpd process, or crash the process if the invalid read is caught by
-+  some means (unmapped page and SEGV, or other mechanism) resulting in a DoS.
-+
-+  This bug _ought_ /not/ be exploitable by anything other than the connected
-+  BGP peer, assuming the underlying TCP transport is secure.  For no BGP
-+  peer should send on an UPDATE with this attribute.  Quagga will not, as
-+  Quagga always validates the attr header length, regardless of type.
-+
-+  However, it is possible that there are BGP implementations that do not
-+  check lengths on some attributes (e.g.  optional/transitive ones of a type
-+  they do not recognise), and might pass such malformed attrs on.  If such
-+  implementations exists and are common, then this bug might be triggerable
-+  by BGP speakers further hops away.  Those peers will not receive the
-+  NOTIFY (unless they sit on a shared medium), however they might then be
-+  able to trigger a DoS.
-+
-+  Fix: use the valid bound to calculate the length.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Upstream commit: https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ bgpd/bgp_attr.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++ cli/import_id3.c | 10 +++++-----
++ cli/wvtag.c      |  2 ++
++ 2 files changed, 7 insertions(+), 5 deletions(-)
 +
-+diff --git a/bgpd/bgp_attr.c b/bgpd/bgp_attr.c
-+index ef58beb1..9564637e 100644
-+--- a/bgpd/bgp_attr.c
-++++ b/bgpd/bgp_attr.c
-+@@ -2147,6 +2147,8 @@ bgp_attr_parse (struct peer *peer, struct attr *attr, bgp_size_t size,
-+   memset (seen, 0, BGP_ATTR_BITMAP_SIZE);
++diff --git a/cli/import_id3.c b/cli/import_id3.c
++index 51e54ee..fc30aeb 100644
++--- a/cli/import_id3.c
+++++ b/cli/import_id3.c
++@@ -34,7 +34,7 @@ static struct {
 + 
-+   /* End pointer of BGP attribute. */
-++  assert (size <= stream_get_size (BGP_INPUT (peer)));
-++  assert (size <= stream_get_endp (BGP_INPUT (peer)));
-+   endp = BGP_INPUT_PNT (peer) + size;
-+   
-+   /* Get attributes to the end of attribute length. */
-+@@ -2228,7 +2230,7 @@ bgp_attr_parse (struct peer *peer, struct attr *attr, bgp_size_t size,
-+           bgp_notify_send_with_data (peer,
-+                                      BGP_NOTIFY_UPDATE_ERR,
-+                                      BGP_NOTIFY_UPDATE_ATTR_LENG_ERR,
-+-                                     startp, attr_endp - startp);
-++                                     startp, endp - startp);
-+ 	  return BGP_ATTR_PARSE_ERROR;
-+ 	}
-+ 	
-+-- 
-+2.11.0
-+
-diff --git a/package/quagga/0006-bgpd-security-Fix-double-free-of-unknown-attribute.patch b/package/quagga/0006-bgpd-security-Fix-double-free-of-unknown-attribute.patch
-new file mode 100644
-index 0000000000..0e32817f06
---- /dev/null
-+++ b/package/quagga/0006-bgpd-security-Fix-double-free-of-unknown-attribute.patch
-@@ -0,0 +1,112 @@
-+From e69b535f92eafb599329bf725d9b4c6fd5d7fded Mon Sep 17 00:00:00 2001
-+From: Paul Jakma <paul@jakma.org>
-+Date: Sat, 6 Jan 2018 19:52:10 +0000
-+Subject: [PATCH] bgpd/security: Fix double free of unknown attribute
-+
-+Security issue: Quagga-2018-1114
-+See: https://www.quagga.net/security/Quagga-2018-1114.txt
-+
-+It is possible for bgpd to double-free an unknown attribute. This can happen
-+via bgp_update_receive receiving an UPDATE with an invalid unknown attribute.
-+bgp_update_receive then will call bgp_attr_unintern_sub and bgp_attr_flush,
-+and the latter may try free an already freed unknown attr.
-+
-+* bgpd/bgp_attr.c: (transit_unintern) Take a pointer to the caller's storage
-+  for the (struct transit *), so that transit_unintern can NULL out the
-+  caller's reference if the (struct transit) is freed.
-+  (cluster_unintern) By inspection, appears to have a similar issue.
-+  (bgp_attr_unintern_sub) adjust for above.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bgpd/bgp_attr.c | 33 +++++++++++++++++++--------------
-+ bgpd/bgp_attr.h |  4 ++--
-+ 2 files changed, 21 insertions(+), 16 deletions(-)
-+
-+diff --git a/bgpd/bgp_attr.c b/bgpd/bgp_attr.c
-+index 9564637e..0c2806b5 100644
-+--- a/bgpd/bgp_attr.c
-++++ b/bgpd/bgp_attr.c
-+@@ -199,15 +199,17 @@ cluster_intern (struct cluster_list *cluster)
-+ }
++ #define NUM_TEXT_TAG_ITEMS (sizeof (text_tag_table) / sizeof (text_tag_table [0]))
 + 
-+ void
-+-cluster_unintern (struct cluster_list *cluster)
-++cluster_unintern (struct cluster_list **cluster)
++-static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len);
+++static int WideCharToUTF8 (const uint16_t *Wide, unsigned char *pUTF8, int len);
++ static void Latin1ToUTF8 (void *string, int len);
++ 
++ // Import specified ID3v2.3 tag. The WavPack context accepts the tag items, and can be
++@@ -163,7 +163,7 @@ int ImportID3v2 (WavpackContext *wpc, unsigned char *tag_data, int tag_size, cha
++             }
++             else if (frame_body [0] == 1 && frame_size > 2 && frame_body [1] == 0xFF && frame_body [2] == 0xFE) {
++                 int nchars = (frame_size - 3) / 2;
++-                wchar_t *wide_string = malloc ((nchars + 1) * sizeof (wchar_t));
+++                uint16_t *wide_string = malloc ((nchars + 1) * sizeof (uint16_t));
++                 unsigned char *fp = frame_body + 3;
++ 
++                 utf8_string = malloc ((nchars + 1) * 3);
++@@ -297,9 +297,9 @@ int ImportID3v2 (WavpackContext *wpc, unsigned char *tag_data, int tag_size, cha
++ // may be less than the number of characters in the wide string if the buffer
++ // length is exceeded.
++ 
++-static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len)
+++static int WideCharToUTF8 (const uint16_t *Wide, unsigned char *pUTF8, int len)
 + {
-+-  if (cluster->refcnt)
-+-    cluster->refcnt--;
-++  struct cluster_list *c = *cluster;
-++  if (c->refcnt)
-++    c->refcnt--;
++-    const wchar_t *pWide = Wide;
+++    const uint16_t *pWide = Wide;
++     int outndx = 0;
 + 
-+-  if (cluster->refcnt == 0)
-++  if (c->refcnt == 0)
-+     {
-+-      hash_release (cluster_hash, cluster);
-+-      cluster_free (cluster);
-++      hash_release (cluster_hash, c);
-++      cluster_free (c);
-++      *cluster = NULL;
-+     }
-+ }
-+ 
-+@@ -357,15 +359,18 @@ transit_intern (struct transit *transit)
-+ }
-+ 
-+ void
-+-transit_unintern (struct transit *transit)
-++transit_unintern (struct transit **transit)
++     while (*pWide) {
++@@ -335,7 +335,7 @@ static int WideCharToUTF8 (const wchar_t *Wide, unsigned char *pUTF8, int len)
++ static void Latin1ToUTF8 (void *string, int len)
 + {
-+-  if (transit->refcnt)
-+-    transit->refcnt--;
-++  struct transit *t = *transit;
-++  
-++  if (t->refcnt)
-++    t->refcnt--;
++     int max_chars = (int) strlen (string);
++-    wchar_t *temp = (wchar_t *) malloc ((max_chars + 1) * 2);
+++    uint16_t *temp = (uint16_t *) malloc ((max_chars + 1) * sizeof (uint16_t));
 + 
-+-  if (transit->refcnt == 0)
-++  if (t->refcnt == 0)
-+     {
-+-      hash_release (transit_hash, transit);
-+-      transit_free (transit);
-++      hash_release (transit_hash, t);
-++      transit_free (t);
-++      *transit = NULL;
-+     }
-+ }
++     MultiByteToWideChar (28591, 0, string, -1, temp, max_chars + 1);
++     WideCharToUTF8 (temp, (unsigned char *) string, len);
++diff --git a/cli/wvtag.c b/cli/wvtag.c
++index 6e6512a..45e621e 100644
++--- a/cli/wvtag.c
+++++ b/cli/wvtag.c
++@@ -1344,7 +1344,9 @@ static void dump_UTF8_string (char *string, FILE *dst)
++ // resulting string will not fit in the specified buffer size then it is
++ // truncated.
 + 
-+@@ -820,11 +825,11 @@ bgp_attr_unintern_sub (struct attr *attr)
-+       UNSET_FLAG(attr->flag, ATTR_FLAG_BIT (BGP_ATTR_LARGE_COMMUNITIES));
-+       
-+       if (attr->extra->cluster)
-+-        cluster_unintern (attr->extra->cluster);
-++        cluster_unintern (&attr->extra->cluster);
-+       UNSET_FLAG(attr->flag, ATTR_FLAG_BIT (BGP_ATTR_CLUSTER_LIST));
-+       
-+       if (attr->extra->transit)
-+-        transit_unintern (attr->extra->transit);
-++        transit_unintern (&attr->extra->transit);
-+     }
-+ }
+++#if defined (_WIN32)
++ static int UTF8ToWideChar (const unsigned char *pUTF8, wchar_t *pWide);
+++#endif
 + 
-+diff --git a/bgpd/bgp_attr.h b/bgpd/bgp_attr.h
-+index 9ff074b2..052acc7d 100644
-+--- a/bgpd/bgp_attr.h
-++++ b/bgpd/bgp_attr.h
-+@@ -187,10 +187,10 @@ extern unsigned long int attr_unknown_count (void);
-+ 
-+ /* Cluster list prototypes. */
-+ extern int cluster_loop_check (struct cluster_list *, struct in_addr);
-+-extern void cluster_unintern (struct cluster_list *);
-++extern void cluster_unintern (struct cluster_list **);
-+ 
-+ /* Transit attribute prototypes. */
-+-void transit_unintern (struct transit *);
-++void transit_unintern (struct transit **);
-+ 
-+ /* Below exported for unit-test purposes only */
-+ struct bgp_attr_parser_args {
-+-- 
-+2.11.0
-+
-diff --git a/package/quagga/0007-bgpd-security-debug-print-of-received-NOTIFY-data-ca.patch b/package/quagga/0007-bgpd-security-debug-print-of-received-NOTIFY-data-ca.patch
-new file mode 100644
-index 0000000000..aeb50ae559
---- /dev/null
-+++ b/package/quagga/0007-bgpd-security-debug-print-of-received-NOTIFY-data-ca.patch
-@@ -0,0 +1,114 @@
-+From 9e5251151894aefdf8e9392a2371615222119ad8 Mon Sep 17 00:00:00 2001
-+From: Paul Jakma <paul@jakma.org>
-+Date: Sat, 6 Jan 2018 22:31:52 +0000
-+Subject: [PATCH] bgpd/security: debug print of received NOTIFY data can
-+ over-read msg array
-+
-+Security issue: Quagga-2018-1550
-+See: https://www.quagga.net/security/Quagga-2018-1550.txt
-+
-+* bgpd/bgp_debug.c: (struct message) Nearly every one of the NOTIFY
-+  code/subcode message arrays has their corresponding size variables off
-+  by one, as most have 1 as first index.
-+
-+  This means (bgp_notify_print) can cause mes_lookup to overread the (struct
-+  message) by 1 pointer value if given an unknown index.
-+
-+  Fix the bgp_notify_..._msg_max variables to use the compiler to calculate
-+  the correct sizes.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bgpd/bgp_debug.c | 21 ++++++++++++---------
-+ 1 file changed, 12 insertions(+), 9 deletions(-)
-+
-+diff --git a/bgpd/bgp_debug.c b/bgpd/bgp_debug.c
-+index ba797228..43faee7c 100644
-+--- a/bgpd/bgp_debug.c
-++++ b/bgpd/bgp_debug.c
-+@@ -29,6 +29,7 @@ Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-+ #include "log.h"
-+ #include "sockunion.h"
-+ #include "filter.h"
-++#include "memory.h"
-+ 
-+ #include "bgpd/bgpd.h"
-+ #include "bgpd/bgp_aspath.h"
-+@@ -73,7 +74,8 @@ const struct message bgp_status_msg[] =
-+   { Clearing,    "Clearing"    },
-+   { Deleted,     "Deleted"     },
-+ };
-+-const int bgp_status_msg_max = BGP_STATUS_MAX;
-++#define BGP_DEBUG_MSG_MAX(msg) const int msg ## _max = array_size (msg)
-++BGP_DEBUG_MSG_MAX (bgp_status_msg);
-+ 
-+ /* BGP message type string. */
-+ const char *bgp_type_str[] =
-+@@ -84,7 +86,8 @@ const char *bgp_type_str[] =
-+   "NOTIFICATION",
-+   "KEEPALIVE",
-+   "ROUTE-REFRESH",
-+-  "CAPABILITY"
-++  "CAPABILITY",
-++  NULL,
-+ };
-+ 
-+ /* message for BGP-4 Notify */
-+@@ -98,15 +101,15 @@ static const struct message bgp_notify_msg[] =
-+   { BGP_NOTIFY_CEASE, "Cease"},
-+   { BGP_NOTIFY_CAPABILITY_ERR, "CAPABILITY Message Error"},
-+ };
-+-static const int bgp_notify_msg_max = BGP_NOTIFY_MAX;
-++BGP_DEBUG_MSG_MAX (bgp_notify_msg);
-+ 
-+ static const struct message bgp_notify_head_msg[] = 
++ static void UTF8ToAnsi (char *string, int len)
 + {
-+   { BGP_NOTIFY_HEADER_NOT_SYNC, "/Connection Not Synchronized"},
-+   { BGP_NOTIFY_HEADER_BAD_MESLEN, "/Bad Message Length"},
-+-  { BGP_NOTIFY_HEADER_BAD_MESTYPE, "/Bad Message Type"}
-++  { BGP_NOTIFY_HEADER_BAD_MESTYPE, "/Bad Message Type"},
-+ };
-+-static const int bgp_notify_head_msg_max = BGP_NOTIFY_HEADER_MAX;
-++BGP_DEBUG_MSG_MAX (bgp_notify_head_msg);
-+ 
-+ static const struct message bgp_notify_open_msg[] = 
-+ {
-+@@ -119,7 +122,7 @@ static const struct message bgp_notify_open_msg[] =
-+   { BGP_NOTIFY_OPEN_UNACEP_HOLDTIME, "/Unacceptable Hold Time"}, 
-+   { BGP_NOTIFY_OPEN_UNSUP_CAPBL, "/Unsupported Capability"},
-+ };
-+-static const int bgp_notify_open_msg_max = BGP_NOTIFY_OPEN_MAX;
-++BGP_DEBUG_MSG_MAX (bgp_notify_open_msg);
-+ 
-+ static const struct message bgp_notify_update_msg[] = 
-+ {
-+@@ -136,7 +139,7 @@ static const struct message bgp_notify_update_msg[] =
-+   { BGP_NOTIFY_UPDATE_INVAL_NETWORK, "/Invalid Network Field"},
-+   { BGP_NOTIFY_UPDATE_MAL_AS_PATH, "/Malformed AS_PATH"},
-+ };
-+-static const int bgp_notify_update_msg_max = BGP_NOTIFY_UPDATE_MAX;
-++BGP_DEBUG_MSG_MAX (bgp_notify_update_msg);
-+ 
-+ static const struct message bgp_notify_cease_msg[] =
-+ {
-+@@ -150,7 +153,7 @@ static const struct message bgp_notify_cease_msg[] =
-+   { BGP_NOTIFY_CEASE_COLLISION_RESOLUTION, "/Connection collision resolution"},
-+   { BGP_NOTIFY_CEASE_OUT_OF_RESOURCE, "/Out of Resource"},
-+ };
-+-static const int bgp_notify_cease_msg_max = BGP_NOTIFY_CEASE_MAX;
-++BGP_DEBUG_MSG_MAX (bgp_notify_cease_msg);
-+ 
-+ static const struct message bgp_notify_capability_msg[] = 
-+ {
-+@@ -159,7 +162,7 @@ static const struct message bgp_notify_capability_msg[] =
-+   { BGP_NOTIFY_CAPABILITY_INVALID_LENGTH, "/Invalid Capability Length"},
-+   { BGP_NOTIFY_CAPABILITY_MALFORMED_CODE, "/Malformed Capability Value"},
-+ };
-+-static const int bgp_notify_capability_msg_max = BGP_NOTIFY_CAPABILITY_MAX;
-++BGP_DEBUG_MSG_MAX (bgp_notify_capability_msg);
-+ 
-+ /* Origin strings. */
-+ const char *bgp_origin_str[] = {"i","e","?"};
-+-- 
-+2.11.0
-+
-diff --git a/package/quagga/0008-bgpd-security-fix-infinite-loop-on-certain-invalid-O.patch b/package/quagga/0008-bgpd-security-fix-infinite-loop-on-certain-invalid-O.patch
-new file mode 100644
-index 0000000000..0a06da9330
---- /dev/null
-+++ b/package/quagga/0008-bgpd-security-fix-infinite-loop-on-certain-invalid-O.patch
-@@ -0,0 +1,43 @@
-+From ce07207c50a3d1f05d6dd49b5294282e59749787 Mon Sep 17 00:00:00 2001
-+From: Paul Jakma <paul@jakma.org>
-+Date: Sat, 6 Jan 2018 21:20:51 +0000
-+Subject: [PATCH] bgpd/security: fix infinite loop on certain invalid OPEN
-+ messages
-+
-+Security issue: Quagga-2018-1975
-+See: https://www.quagga.net/security/Quagga-2018-1975.txt
-+
-+* bgpd/bgp_packet.c: (bgp_capability_msg_parse) capability parser can infinite
-+  loop due to checks that issue 'continue' without bumping the input
-+  pointer.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bgpd/bgp_packet.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/bgpd/bgp_packet.c b/bgpd/bgp_packet.c
-+index b3d601fc..f9338d8d 100644
-+--- a/bgpd/bgp_packet.c
-++++ b/bgpd/bgp_packet.c
-+@@ -2328,7 +2328,8 @@ bgp_capability_msg_parse (struct peer *peer, u_char *pnt, bgp_size_t length)
-+ 
-+   end = pnt + length;
-+ 
-+-  while (pnt < end)
-++  /* XXX: Streamify this */
-++  for (; pnt < end; pnt += hdr->length + 3)
-+     {      
-+       /* We need at least action, capability code and capability length. */
-+       if (pnt + 3 > end)
-+@@ -2416,7 +2417,6 @@ bgp_capability_msg_parse (struct peer *peer, u_char *pnt, bgp_size_t length)
-+           zlog_warn ("%s unrecognized capability code: %d - ignored",
-+                      peer->host, hdr->code);
-+         }
-+-      pnt += hdr->length + 3;
-+     }
-+   return 0;
-+ }
-+-- 
-+2.11.0
-+
+diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
+index 16ff08cc6c..56ba7d839c 100644
+--- a/package/wavpack/wavpack.hash
++++ b/package/wavpack/wavpack.hash
+@@ -1,3 +1,2 @@
+ # locally computed hash
+ sha256  1939627d5358d1da62bc6158d63f7ed12905552f3a799c799ee90296a7612944  wavpack-5.1.0.tar.bz2
+-sha256  3890ab081dc6f8ee02161ace180381327031cc24cc6c3d71668367b7e5f6e4be  876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
+diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
+index a613506234..daa0888dfb 100644
+--- a/package/wavpack/wavpack.mk
++++ b/package/wavpack/wavpack.mk
+@@ -12,9 +12,6 @@ WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ WAVPACK_LICENSE = BSD-3c
+ WAVPACK_LICENSE_FILES = COPYING
+ 
+-# Fetch patch from upstream to remove wchar dependency
+-WAVPACK_PATCH = https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
+-
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ WAVPACK_CONF_OPTS += LIBS=-liconv
+ endif
