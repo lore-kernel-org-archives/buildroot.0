@@ -1,71 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Apr 2018 10:07:36 +0200
+Date: Tue, 10 Apr 2018 10:08:21 +0200
 Subject: [Buildroot] [PATCH v4 2/8] gst-plugins-${base, good, bad,
  ugly}: bump to 1.14.0
-In-Reply-To: <20180322235537.261ea603@gmx.net>
+In-Reply-To: <20180322173220.31791-2-aduskett@gmail.com>
 References: <20180322173220.31791-1-aduskett@gmail.com>
  <20180322173220.31791-2-aduskett@gmail.com>
- <20180322235537.261ea603@gmx.net>
-Message-ID: <20180410100736.2e6f8f7b@windsurf>
+Message-ID: <20180410100821.632c7fd9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello,
 
-I talked with Adam about this gstreamer1 patch series, and apparently
-your comment below isn't clear to Adam, and this explains why he hasn't
-resent the patch series.
+On Thu, 22 Mar 2018 13:32:14 -0400, Adam Duskett wrote:
+> These are grouped together because several plugins have been re-arranged and
+> there is no way to individually update each plugin package.
 
-On Thu, 22 Mar 2018 23:55:37 +0100, Peter Seiderer wrote:
+The title of this commit should be:
 
-> > Add the following to gst1-plugins-base and remove them from plugins-bad:
-> >  - opengl
-> >  - gles2
-> >  - glx
-> >  - egl
-> >  - x11
-> >  - wayland  
-> 
-> This still contradicts your own statement [1]:
-> 
->   Not entirely! There is --enable-wayland now in both base AND bad!
+  gst1-plugins-${base, good, bad, ugly}: bump to 1.14.0
 
-Indeed, the gst1-plugins-bad package still has a
---enable-wayland/--disable-wayland option:
-
-output/build/gst1-plugins-bad-1.14.0 $ ./configure --help | grep wayland
-  --disable-wayland            disable wayland sink: wayland
-
-And in base:
-
-output/build/gst1-plugins-base-1.14.0 $ ./configure --help | grep wayland
-  --enable-wayland        Enable Wayland support (requires EGL) [default=auto]
-
-> > Changes v2 -> v3:
-> >   - Removed wayland references from plugins-bad (Peter)  
-> 
-> No, see suggestion from [2]:
-> 
->   I think there is a difference, the bad/wayland option enables extra gstreamer
->   plugins/elements, the base/wayland opton enables no extra plugins/elements but
->   enables wayland support in the qt/gtk plugins (did not look further if it
->   results only in wayland support in some elements or extra elements in the same
->   plugin library), in case it enables only wayland support, I think no
->   user visible option is needed (if a user visible option is needed there is
->   definitely a change in option name and help text needed)
-
-It's not entirely clear to me what are the two options doing.
-
-In gst1-plugins-base, the --enable-wayland option requires EGL support,
-and will enable some wayland related code in gst-libs/gl/. Peter, do
-you understand what this does, compared to the wayland sink provided in
-gst1-plugins-bad ?
-
-In gst1-plugins-bad, the --enable-wayland option enables the build of a
-wayland sink.
+i.e notice the gst1- prefix vs. gst-
 
 Best regards,
 
