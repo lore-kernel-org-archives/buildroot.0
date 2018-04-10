@@ -1,29 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:46:30 +0200
-Subject: [Buildroot] [PATCH master 1/1] jq: compile as _GNU_SOURCE to
- fix segfault after compilation with gcc 6
-In-Reply-To: <20180219155734.31427-1-thomas.de_schampheleire@nokia.com>
- (Thomas De Schampheleire's message of "Mon, 19 Feb 2018 16:57:34
- +0100")
-References: <20180219155734.31427-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <878t9u6b89.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:47:03 +0200
+Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to
+ 10.1.31
+In-Reply-To: <20180219142339.2372-1-bluemrp9@gmail.com> (Ryan Coe's message of
+ "Mon, 19 Feb 2018 06:23:39 -0800")
+References: <20180219142339.2372-1-bluemrp9@gmail.com>
+Message-ID: <874lki6b7c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <thomas.de_schampheleire@nokia.com> writes:
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
- > When compiling host-jq with gcc 6+, running it gives an immediate segfault.
- > Reported upstream: https://github.com/stedolan/jq/issues/1598
+ > Release notes: https://mariadb.com/kb/en/mariadb-10131-release-notes/
+ > Changelog: https://mariadb.com/kb/en/mariadb-10131-changelog/
 
- > The issue can be solved by compiling with _GNU_SOURCE as extra preprocessor
- > define. Once the issue is solved upstream, this change can be reverted.
+ > Fixes the following security vulnerabilities:
 
- > As the issue will normally be the same for target, apply the same fix there.
+ > CVE-2018-2562 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: Server : Partition). Supported versions that are affected are
+ > 5.5.58 and prior, 5.6.38 and prior and 5.7.19 and prior. Easily exploitable
+ > vulnerability allows low privileged attacker with network access via multiple
+ > protocols to compromise MySQL Server. Successful attacks of this vulnerability
+ > can result in unauthorized ability to cause a hang or frequently repeatable
+ > crash (complete DOS) of MySQL Server as well as unauthorized update, insert or
+ > delete access to some of MySQL Server accessible data.
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > CVE-2018-2622 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: Server: DDL). Supported versions that are affected are 5.5.58
+ > and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+ > vulnerability allows low privileged attacker with network access via multiple
+ > protocols to compromise MySQL Server. Successful attacks of this vulnerability
+ > can result in unauthorized ability to cause a hang or frequently repeatable
+ > crash (complete DOS) of MySQL Server.
+
+ > CVE-2018-2640 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: Server: Optimizer). Supported versions that are affected are
+ > 5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+ > vulnerability allows low privileged attacker with network access via multiple
+ > protocols to compromise MySQL Server. Successful attacks of this vulnerability
+ > can result in unauthorized ability to cause a hang or frequently repeatable
+ > crash (complete DOS) of MySQL Server.
+
+ > CVE-2018-2665 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: Server: Optimizer). Supported versions that are affected are
+ > 5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+ > vulnerability allows low privileged attacker with network access via multiple
+ > protocols to compromise MySQL Server. Successful attacks of this vulnerability
+ > can result in unauthorized ability to cause a hang or frequently repeatable
+ > crash (complete DOS) of MySQL Server.
+
+ > CVE-2018-2668 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: Server: Optimizer). Supported versions that are affected are
+ > 5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
+ > vulnerability allows low privileged attacker with network access via multiple
+ > protocols to compromise MySQL Server. Successful attacks of this vulnerability
+ > can result in unauthorized ability to cause a hang or frequently repeatable
+ > crash (complete DOS) of MySQL Server.
+
+ > CVE-2018-2612 - Vulnerability in the MySQL Server component of Oracle MySQL
+ > (subcomponent: InnoDB). Supported versions that are affected are 5.6.38 and
+ > prior and 5.7.20 and prior. Easily exploitable vulnerability allows high
+ > privileged attacker with network access via multiple protocols to compromise
+ > MySQL Server. Successful attacks of this vulnerability can result in
+ > unauthorized creation, deletion or modification access to critical data or all
+ > MySQL Server accessible data and unauthorized ability to cause a hang or
+ > frequently repeatable crash (complete DOS) of MySQL Server.
+
+ > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 
 Committed to 2017.02.x, thanks.
 
