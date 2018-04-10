@@ -1,177 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:40:52 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] busybox: add upstream
- security fixes
-Message-ID: <20180410205256.0AD74815B9@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:41:31 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] librsvg: security bump to
+ version 2.40.20
+Message-ID: <20180410205256.1DB75807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cff27a6b9281ab608940396a454572d6ad3a57ca
+commit: https://git.buildroot.net/buildroot/commit/?id=a0cd7e646642ffa946e7af5978feaa99161c42ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-CVE-2017-15873: Integer overflow in decompress_bunzip2.c leads to a read
-access violation
+Fixes CVE-2018-1000041: information disclosure via a crafted SVG file.
 
-CVE-2017-15874: Integer overflow in decompress_unlzma.c leads to a read
-access violation
+Bump to the latest (maybe last) release in the 2.40.x series. Newer
+versions require a Rust compiler.
 
-Cc: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6665360b6dc9fce02381f20a3e0088974538b19f)
+(cherry picked from commit 4020c5a7b330613f7bccbc91a466c129bf8e40c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...unzip2-fix-runCnt-overflow-from-bug-10431.patch | 101 +++++++++++++++++++++
- .../0007-unlzma-fix-SEGV-closes-10436.patch        |  34 +++++++
- 2 files changed, 135 insertions(+)
+ package/librsvg/librsvg.hash | 4 ++--
+ package/librsvg/librsvg.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch b/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch
-new file mode 100644
-index 0000000000..e8fd2e027d
---- /dev/null
-+++ b/package/busybox/0006-bunzip2-fix-runCnt-overflow-from-bug-10431.patch
-@@ -0,0 +1,101 @@
-+From 0402cb32df015d9372578e3db27db47b33d5c7b0 Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Sun, 22 Oct 2017 18:23:23 +0200
-+Subject: [PATCH] bunzip2: fix runCnt overflow from bug 10431
-+
-+This particular corrupted file can be dealth with by using "unsigned".
-+If there will be cases where it genuinely overflows, there is a disabled
-+code to deal with that too.
-+
-+function                                             old     new   delta
-+get_next_block                                      1678    1667     -11
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 0402cb32df0
-+
-+ archival/libarchive/decompress_bunzip2.c | 30 +++++++++++++++++++-----------
-+ 1 file changed, 19 insertions(+), 11 deletions(-)
-+
-+diff --git a/archival/libarchive/decompress_bunzip2.c b/archival/libarchive/decompress_bunzip2.c
-+index 7cd18f5ed4cf..bec89edd3a4d 100644
-+--- a/archival/libarchive/decompress_bunzip2.c
-++++ b/archival/libarchive/decompress_bunzip2.c
-+@@ -156,15 +156,15 @@ static unsigned get_bits(bunzip_data *bd, int bits_wanted)
-+ static int get_next_block(bunzip_data *bd)
-+ {
-+ 	struct group_data *hufGroup;
-+-	int dbufCount, dbufSize, groupCount, *base, *limit, selector,
-+-		i, j, runPos, symCount, symTotal, nSelectors, byteCount[256];
-+-	int runCnt = runCnt; /* for compiler */
-++	int groupCount, *base, *limit, selector,
-++		i, j, symCount, symTotal, nSelectors, byteCount[256];
-+ 	uint8_t uc, symToByte[256], mtfSymbol[256], *selectors;
-+ 	uint32_t *dbuf;
-+ 	unsigned origPtr, t;
-++	unsigned dbufCount, runPos;
-++	unsigned runCnt = runCnt; /* for compiler */
-+ 
-+ 	dbuf = bd->dbuf;
-+-	dbufSize = bd->dbufSize;
-+ 	selectors = bd->selectors;
-+ 
-+ /* In bbox, we are ok with aborting through setjmp which is set up in start_bunzip */
-+@@ -187,7 +187,7 @@ static int get_next_block(bunzip_data *bd)
-+ 	   it didn't actually work. */
-+ 	if (get_bits(bd, 1)) return RETVAL_OBSOLETE_INPUT;
-+ 	origPtr = get_bits(bd, 24);
-+-	if ((int)origPtr > dbufSize) return RETVAL_DATA_ERROR;
-++	if (origPtr > bd->dbufSize) return RETVAL_DATA_ERROR;
-+ 
-+ 	/* mapping table: if some byte values are never used (encoding things
-+ 	   like ascii text), the compression code removes the gaps to have fewer
-+@@ -435,7 +435,14 @@ static int get_next_block(bunzip_data *bd)
-+ 			   symbols, but a run of length 0 doesn't mean anything in this
-+ 			   context).  Thus space is saved. */
-+ 			runCnt += (runPos << nextSym); /* +runPos if RUNA; +2*runPos if RUNB */
-+-			if (runPos < dbufSize) runPos <<= 1;
-++//The 32-bit overflow of runCnt wasn't yet seen, but probably can happen.
-++//This would be the fix (catches too large count way before it can overflow):
-++//			if (runCnt > bd->dbufSize) {
-++//				dbg("runCnt:%u > dbufSize:%u RETVAL_DATA_ERROR",
-++//						runCnt, bd->dbufSize);
-++//				return RETVAL_DATA_ERROR;
-++//			}
-++			if (runPos < bd->dbufSize) runPos <<= 1;
-+ 			goto end_of_huffman_loop;
-+ 		}
-+ 
-+@@ -445,14 +452,15 @@ static int get_next_block(bunzip_data *bd)
-+ 		   literal used is the one@the head of the mtfSymbol array.) */
-+ 		if (runPos != 0) {
-+ 			uint8_t tmp_byte;
-+-			if (dbufCount + runCnt > dbufSize) {
-+-				dbg("dbufCount:%d+runCnt:%d %d > dbufSize:%d RETVAL_DATA_ERROR",
-+-						dbufCount, runCnt, dbufCount + runCnt, dbufSize);
-++			if (dbufCount + runCnt > bd->dbufSize) {
-++				dbg("dbufCount:%u+runCnt:%u %u > dbufSize:%u RETVAL_DATA_ERROR",
-++						dbufCount, runCnt, dbufCount + runCnt, bd->dbufSize);
-+ 				return RETVAL_DATA_ERROR;
-+ 			}
-+ 			tmp_byte = symToByte[mtfSymbol[0]];
-+ 			byteCount[tmp_byte] += runCnt;
-+-			while (--runCnt >= 0) dbuf[dbufCount++] = (uint32_t)tmp_byte;
-++			while ((int)--runCnt >= 0)
-++				dbuf[dbufCount++] = (uint32_t)tmp_byte;
-+ 			runPos = 0;
-+ 		}
-+ 
-+@@ -466,7 +474,7 @@ static int get_next_block(bunzip_data *bd)
-+ 		   first symbol in the mtf array, position 0, would have been handled
-+ 		   as part of a run above.  Therefore 1 unused mtf position minus
-+ 		   2 non-literal nextSym values equals -1.) */
-+-		if (dbufCount >= dbufSize) return RETVAL_DATA_ERROR;
-++		if (dbufCount >= bd->dbufSize) return RETVAL_DATA_ERROR;
-+ 		i = nextSym - 1;
-+ 		uc = mtfSymbol[i];
-+ 
-+-- 
-+2.15.1
-+
-diff --git a/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch b/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch
-new file mode 100644
-index 0000000000..c8d875010e
---- /dev/null
-+++ b/package/busybox/0007-unlzma-fix-SEGV-closes-10436.patch
-@@ -0,0 +1,34 @@
-+From 9ac42c500586fa5f10a1f6d22c3f797df11b1f6b Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Fri, 27 Oct 2017 15:37:03 +0200
-+Subject: [PATCH] unlzma: fix SEGV, closes 10436
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 9ac42c500586f
-+
-+ archival/libarchive/decompress_unlzma.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/archival/libarchive/decompress_unlzma.c b/archival/libarchive/decompress_unlzma.c
-+index a9040877efa0..be4342414435 100644
-+--- a/archival/libarchive/decompress_unlzma.c
-++++ b/archival/libarchive/decompress_unlzma.c
-+@@ -450,8 +450,12 @@ unpack_lzma_stream(transformer_state_t *xstate)
-+  IF_NOT_FEATURE_LZMA_FAST(string:)
-+ 			do {
-+ 				uint32_t pos = buffer_pos - rep0;
-+-				if ((int32_t)pos < 0)
-++				if ((int32_t)pos < 0) {
-+ 					pos += header.dict_size;
-++					/* bug 10436 has an example file where this triggers: */
-++					if ((int32_t)pos < 0)
-++						goto bad;
-++				}
-+ 				previous_byte = buffer[pos];
-+  IF_NOT_FEATURE_LZMA_FAST(one_byte2:)
-+ 				buffer[buffer_pos++] = previous_byte;
-+-- 
-+2.15.1
-+
+diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
+index 9ab798120f..6f4b07423a 100644
+--- a/package/librsvg/librsvg.hash
++++ b/package/librsvg/librsvg.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.18.sha256sum
+-sha256	bfc8c488c89c1e7212c478beb95c41b44701636125a3e6dab41187f1485b564c	librsvg-2.40.18.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.20.sha256sum
++sha256	cff4dd3c3b78bfe99d8fcfad3b8ba1eee3289a0823c0e118d78106be6b84c92b	librsvg-2.40.20.tar.xz
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 16375d5205..285f663558 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBRSVG_VERSION_MAJOR = 2.40
+-LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).18
++LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).20
+ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
