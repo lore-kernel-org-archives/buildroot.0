@@ -1,42 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 10 Apr 2018 21:10:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x264: bump version
-Message-ID: <20180410191044.19425-1-bernd.kuhls@t-online.de>
+Date: Tue, 10 Apr 2018 21:13:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-intel:
+ bump version
+Message-ID: <20180410191326.19938-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Added tarball and license hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x264/x264.hash | 3 ++-
- package/x264/x264.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash | 3 +++
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index f0e9f1b827..920f3b74eb 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 986863122b0b3ac2c1fa27c6e3932c3490b84287335fa162bca020aa815aa695  x264-ba24899b0bf23345921da022f7a51e0c57dbe73d.tar.gz
-+sha256 cdae4489e0306938a46429824aa3511e7ec2a43f71fee8b4aa46ceea46d15888  x264-7d0ff22e8c96de126be9d3de4952edd6d1b75a8c.tar.gz
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index e14077a2f4..f2fb10c41c 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+new file mode 100644
+index 0000000000..1852540cb3
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 e3a107fadcdeef35830a12a305b09dfa793a33a54930a0ecd5e84a6156f546eb  xdriver_xf86-video-intel-84eaaba2737b2765f3fe843a138002ad0056a52b.tar.gz
++sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 6debdd0964..fa0f650dbe 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X264_VERSION = ba24899b0bf23345921da022f7a51e0c57dbe73d
-+X264_VERSION = 7d0ff22e8c96de126be9d3de4952edd6d1b75a8c
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPL-2.0+
- X264_DEPENDENCIES = host-pkgconf
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = b57abe20e81f4b8e4dd203b6a9eda7ff441bc8ce
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 84eaaba2737b2765f3fe843a138002ad0056a52b
+ XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
 -- 
 2.14.2
