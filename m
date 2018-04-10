@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Apr 2018 09:32:24 +0200
-Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.2.5
-In-Reply-To: <20180407072909.25962-1-asafka7@gmail.com>
-References: <20180407072909.25962-1-asafka7@gmail.com>
-Message-ID: <20180410093224.5a003151@windsurf>
+Date: Tue, 10 Apr 2018 09:36:40 +0200
+Subject: [Buildroot] [PATCHv2] download/git: more resilient in case of
+ kill
+In-Reply-To: <20180409215651.549-1-yann.morin.1998@free.fr>
+References: <20180409215651.549-1-yann.morin.1998@free.fr>
+Message-ID: <20180410093640.0ffcaab1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +13,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  7 Apr 2018 10:29:09 +0300, Asaf Kahlon wrote:
-> Update the ZEROMQ_SITE with the active repository.
-> Remove the two patches because they were both applied on zeromq.
-> As a result, the ZEROMQ_AUTORECONF was removed.
+On Mon,  9 Apr 2018 23:56:51 +0200, Yann E. MORIN wrote:
+> In case the git backend gets killed right in-between it finished
+> initialising the repository, but before it could add the remote,
+> we'd end up with a repository without the 'origin' remote, so we
+> would not be able to change its URL.
 > 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> Another case that may happen (like in the build failure, below),
+> is that the repository was initialised with a previous version
+> of Buildroot, before the commit e17719264b (download/git: don't
+> require too-recent git) was applied, and that trepository was
+> still lying around...
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/25a/25aae054634368fadb265b97ebe4dda809deff6f/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> 
+> ---
+> Changes v1 -> v2:
+>   - remove extraneous pushd/popd  (Thomas)
+>   - fix if-block condition
+> ---
+>  support/download/git | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 
-This update causes a large number of build failures:
-
-  http://autobuild.buildroot.net/?reason=zeromq-4.2.5
-
-Apparently, there are two problems:
-
-http://autobuild.buildroot.net/results/e4a/e4af0a1b47aacd3ec8fe678641fb8abae84aa4b6/build-end.log
-
-src/condition_variable.hpp: In constructor 'zmq::condition_variable_t::condition_variable_t()':
-src/condition_variable.hpp:278:58: error: 'pthread_condattr_setclock' was not declared in this scope
-         pthread_condattr_setclock (&attr, CLOCK_MONOTONIC);
-                                                          ^
-
-I think that in uClibc, pthread_condattr_setclock() requires NPTL
-support. Perhaps Waldemar (in Cc) can confirm.
-
-The other problem is:
-
-http://autobuild.buildroot.net/results/384/3841ce5fecf6fcdc52048123094ad61a14287c52/build-end.log
-
-checking for library containing dladdr... no
-configure: error: unable to find the dladdr() function
-
-So apparently it now needs dynamic library support.
-
-BTW Asaf, we don't have anyone listed in the DEVELOPERS file to take
-care of the zeromq package. If you're using it, would you be willing to
-take care of it ?
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
