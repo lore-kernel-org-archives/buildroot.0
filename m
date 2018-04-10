@@ -1,40 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 21:39:26 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] qt5tools: fix typo in
- <pkg>_SOURCE
-Message-ID: <20180410205255.EF794815B9@busybox.osuosl.org>
+Date: Tue, 10 Apr 2018 21:43:00 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{9,
+ 14}.x series
+Message-ID: <20180410205256.2D096807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=996105619fe1c863f760a84a691ce557bd748bd1
+commit: https://git.buildroot.net/buildroot/commit/?id=9c908557caf467f78042f008912420f7729089ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The QT5TOOLS_SOURCE variable uses mismatch QT5BASE_VERSION variable.
-
-This commit fixes the typo by using the appropriate QT5TOOLS_VERSION
-variable.
-
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+[Peter: drop 4.14.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7c384c3b0f292413c3364f5113b340e22efa76f4)
+(cherry picked from commit 7c084582701542e7a5b87561c4e142cf86ec8873)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5tools/qt5tools.mk | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
-index 0395f96bab..51d9cf3145 100644
---- a/package/qt5/qt5tools/qt5tools.mk
-+++ b/package/qt5/qt5tools/qt5tools.mk
-@@ -6,7 +6,7 @@
- 
- QT5TOOLS_VERSION = $(QT5_VERSION)
- QT5TOOLS_SITE = $(QT5_SITE)
--QT5TOOLS_SOURCE = qttools-opensource-src-$(QT5BASE_VERSION).tar.xz
-+QT5TOOLS_SOURCE = qttools-opensource-src-$(QT5TOOLS_VERSION).tar.xz
- 
- QT5TOOLS_DEPENDENCIES = qt5base
- QT5TOOLS_INSTALL_STAGING = YES
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2f14fceb48..ecd474a0a5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -224,5 +224,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.115"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.80"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.81"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
