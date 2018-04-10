@@ -1,50 +1,51 @@
-From: James Byrne <james.byrne@origamienergy.com>
-Date: Tue, 10 Apr 2018 11:28:12 +0100
-Subject: [Buildroot] [PATCH 1/1] Makefile: Take default SOURCE_DATE_EPOCH
- from repo containing Makefile
-Message-ID: <1523356092-16037-1-git-send-email-james.byrne@origamienergy.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 10 Apr 2018 13:55:21 +0300
+Subject: [Buildroot] [PATCH] zsh: bump to version 5.5
+Message-ID: <8a79657339c26ba0171b8c336e552904ed89975c.1523357721.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For reproducible builds, SOURCE_DATE_EPOCH will be set to the git commit
-date if it is not defined in the environment, but this was done by
-explicitly using $(TOPDIR)/.git as the git repository, which would not
-give the expected result if Buildroot had been put into a subdirectory
-of another repository.
+We now have tar.xz archive again, use that.
 
-This commit removes that restriction, meaning that the default date will
-now be the date of the git commit that contains Makefile, regardless of
-what level above Makefile the repository is at. This works because the
-current directory when the 'git log' command is executed will always be
-the directory containing Makefile (it must be, since TOPDIR is set from
-CURDIR).
-
-In general this should be a sensible default, and in cases where a
-different date is required SOURCE_DATE_EPOCH can be defined in the
-environment before invoking make.
-
-Signed-off-by: James Byrne <james.byrne@origamienergy.com>
+Cc: Phil Eichinger <phil.eichinger@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/zsh/zsh.hash | 6 +++---
+ package/zsh/zsh.mk   | 3 ++-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index cd53362..3b846b9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -506,7 +506,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
- # If SOURCE_DATE_EPOCH has not been set then use the commit date, or the last
- # release date if the source tree is not within a Git repository.
- # See: https://reproducible-builds.org/specs/source-date-epoch/
--BR2_VERSION_GIT_EPOCH := $(shell $(GIT) --git-dir=$(TOPDIR)/.git log -1 --format=%at 2> /dev/null)
-+BR2_VERSION_GIT_EPOCH := $(shell $(GIT) log -1 --format=%at 2> /dev/null)
- export SOURCE_DATE_EPOCH ?= $(or $(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
- endif
-
---
-2.7.4
-
-The contents of this email and any attachment are confidential to the intended recipient(s). If you are not an intended recipient: (i) do not use, disclose, distribute, copy or publish this email or its contents; (ii) please contact the sender immediately; and (iii) delete this email. Origami Energy Limited (company number 8619644); Origami Storage Limited (company number 10436515) and OSSPV001 Limited (company number 10933403), each registered in England and each with a registered office at: Ashcombe Court, Woolsack Way, Godalming, GU7 1LQ.
+diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
+index 0770d8e2475a..5931e4d46560 100644
+--- a/package/zsh/zsh.hash
++++ b/package/zsh/zsh.hash
+@@ -1,7 +1,7 @@
+ # From http://www.zsh.org/pub/MD5SUM
+-md5	dfe156fd69b0d8d1745ecf6d6e02e047	zsh-5.4.2.tar.gz
++md5	5c3b294e63b6cc8da8bcc364c72d954b	zsh-5.5.tar.xz
+ # Calculated based on the hash above and after checking signature
+-# http://www.zsh.org/pub/zsh-5.4.2.tar.gz.asc
+-sha256	957bcdb2c57f64c02f673693ea5a7518ef24b6557aeb3a4ce222cefa6d74acc9	zsh-5.4.2.tar.gz
++# http://www.zsh.org/pub/zsh-5.5.tar.xz.asc
++sha256	a8359b81d090425d497c6f3c724a7c21a81c614b03e7662ed347705d86958e53	zsh-5.5.tar.xz
+ # Locally calculated
+ sha256	d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index bfd0a1a30ff2..a45c61b9313d 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-ZSH_VERSION = 5.4.2
++ZSH_VERSION = 5.5
+ ZSH_SITE = http://www.zsh.org/pub
++ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
+ ZSH_DEPENDENCIES = ncurses
+ ZSH_CONF_OPTS = --bindir=/bin
+ ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
+-- 
+2.16.3
