@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:45:44 +0200
-Subject: [Buildroot] [PATCH master] busybox: add upstream security fixes
-In-Reply-To: <cf05d959586b416bbae83f437fd84e66b3243776.1518540701.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 13 Feb 2018 18:51:41 +0200")
-References: <cf05d959586b416bbae83f437fd84e66b3243776.1518540701.git.baruch@tkos.co.il>
-Message-ID: <87lgdu6b9j.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:46:00 +0200
+Subject: [Buildroot] [PATCH] librsvg: security bump to version 2.40.20
+In-Reply-To: <aaf6ad8dfb35b1dee1bcfaa1f00bb50f19fbcbf9.1518465751.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 12 Feb 2018 22:02:31 +0200")
+References: <aaf6ad8dfb35b1dee1bcfaa1f00bb50f19fbcbf9.1518465751.git.baruch@tkos.co.il>
+Message-ID: <87h8oi6b93.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > CVE-2017-15873: Integer overflow in decompress_bunzip2.c leads to a read
- > access violation
+ > Fixes CVE-2018-1000041: information disclosure via a crafted SVG file.
+ > Bump to the latest (maybe last) release in the 2.40.x series. Newer
+ > versions require a Rust compiler.
 
- > CVE-2017-15874: Integer overflow in decompress_unlzma.c leads to a read
- > access violation
-
- > Cc: Adam Duskett <aduskett@gmail.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
-
- > This is only applicable to master. These fixes are already in version
- > 1.28.0 that is now in next.
-
- > Care should be take to remove these patches when next is merged into
- > master.
 
 Committed to 2017.02.x, thanks.
 
