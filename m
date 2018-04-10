@@ -1,94 +1,49 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 10 Apr 2018 17:18:26 +0100
-Subject: [Buildroot] [PATCH v2/next 3/4] webkitgtk: update to version
- 2.20.0
-In-Reply-To: <20180410175738.40345498@windsurf>
-References: <20180323185942.60252-1-aperez@igalia.com>
- <20180323185942.60252-4-aperez@igalia.com>	<87po3t21cy.fsf@dell.be.48ers.dk>
- <20180410095327.59c0e9d8@windsurf>	<20180410165409.GD19381@momiji>
- <20180410175738.40345498@windsurf>
-Message-ID: <20180410171826.GF19381@momiji>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 10 Apr 2018 18:20:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-input-libinput:
+ bump version to 0.27.1
+Message-ID: <20180410162040.14730-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../xdriver_xf86-input-libinput.hash                           | 10 +++++-----
+ .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-On Tue, 10 Apr 2018 17:57:38 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index 0c24f82880..1c260d0b43 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002885.html
+-md5 efc5ea72070411ef077a9dd096cfd41b  xf86-input-libinput-0.27.0.tar.bz2
+-sha1 127dba35576296d1800b7a29344c13da90141d4c  xf86-input-libinput-0.27.0.tar.bz2
+-sha256 77b0516cb0bff616f491faed7f7794fef9dc496edc2dc7d6197324727cc668a3  xf86-input-libinput-0.27.0.tar.bz2
+-sha512 716a9b43438acd6b7c6a834a08ecec244fecdc31e77241998414bf1748781026cd6c6e85947155c44400e0192769a714dfbfa0ed42ba3677347cd89ac1081743  xf86-input-libinput-0.27.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-April/002889.html
++md5 bdad198a7a9f2ce2c1f90d5e6760462b  xf86-input-libinput-0.27.1.tar.bz2
++sha1 70ba045975b6484f16d11b32fbbb7e7194d2e0fd  xf86-input-libinput-0.27.1.tar.bz2
++sha256 d4ad8dc5ad6f962a3f15f61ba9e9f8e37fa0b57eee9f484e2bd721d60ca72ee6  xf86-input-libinput-0.27.1.tar.bz2
++sha512 01379f5d71bf39214c4dff428173512df57fd12e782f3fcde757be923aa0dbf4e010a0395a81bd8e4fb518edc7e05ca1ee64b1e313eb4df5d4990315580609a1  xf86-input-libinput-0.27.1.tar.bz2
+ # Locally computed
+ sha256 b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index cf195ffa10..1723b3fcf8 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-> On Tue, 10 Apr 2018 16:54:09 +0100, Adrian Perez de Castro wrote:
-> 
-> > The change for AArch64 is just listing BR2_aarch64 in WEBKITGTK_ARCH_SUPPORTS,
-> > the addition is in the first patch.
-> 
-> Then the following paragraph that you wrote:
-> 
->    This series starts with the same three patches as the previous
->    submission, and adds on top three additional commits to make
->    WebKitGTK+ available on AArch64 (it's a platform we support
->    upstream), and adds a couple of patches which are already merged in
->    the upstream repository, but are not in the release and are worth
->    applying.
-> 
-> is a bit unclear. You're saying "adds on top three additional commits
-> to make WebKitGTK+ available on AArch6". What those three additional
-> commits ?
-> 
-> For the record, your patch series was:
-> 
->   brotli: new package
->   woff2: new package
->   webkitgtk: update to version 2.20.0
->   webkitgtk: Add upstream patch for better memory monitoring
-
-Ah, right: first I thought of making a separate patch for the small change
-of marking as available on AArch64. That, plus one commit for the upstream
-build fix, plus one commit for the upstream memory monitor patch. The first
-I ended up stashing with ?webkitgtk: update to version 2.20.0?, and the other
-two are not going to be needed for 2.20.1 (they were merged upstream).
-
-Sorry if I wasn't being very clear here O:-)
-
-If you think enabling the package for AArch64 deserves its own separate
-commit, let me know and I'll split it back. FWIW, I've been trying AArch64
-builds for the RaspberryPi 3, and they work fine; we also use them at work
-for a couple of clients as well without issues.
-
-Cheers,
-
-
---
- Adri?n ?
-
-> > Anyway, I was waiting a bit until the 2.20.1 release, which just happened:
-> > 
-> >   https://webkitgtk.org/2018/04/10/webkitgtk2.20.1-released.html
-> > 
-> > Updating to 2.20.1 directly is IMHO better because it includes the fix for
-> > building with multimedia disabled, and a fix to improve memory consumption
-> > on devices with smaller amounts of memory ? which is particularly welcome
-> > for embedded :-)
-> > 
-> > I'm making a test build with 2.20.1 as I wrote this mail, if all goes well
-> > the new patch set will supersede this one.
-> 
-> OK, thanks. Some clarification about the above would be nice. Perhaps
-> it was just a mistake in your cover letter ?
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180410/506c727b/attachment.asc>
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.27.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.27.1
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+-- 
+2.14.2
