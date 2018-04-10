@@ -1,75 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Apr 2018 22:47:03 +0200
-Subject: [Buildroot] [PATCH 1/1] mariadb: security bump version to
- 10.1.31
-In-Reply-To: <20180219142339.2372-1-bluemrp9@gmail.com> (Ryan Coe's message of
- "Mon, 19 Feb 2018 06:23:39 -0800")
-References: <20180219142339.2372-1-bluemrp9@gmail.com>
-Message-ID: <874lki6b7c.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Apr 2018 22:47:22 +0200
+Subject: [Buildroot] [PATCH] quagga: add upstream security fixes
+In-Reply-To: <20180219155059.25120-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 19 Feb 2018 16:50:59 +0100")
+References: <20180219155059.25120-1-peter@korsgaard.com>
+Message-ID: <87zi2a4wmd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Release notes: https://mariadb.com/kb/en/mariadb-10131-release-notes/
- > Changelog: https://mariadb.com/kb/en/mariadb-10131-changelog/
+ > Fixes the following security issues:
+ > CVE-2018-5378
 
- > Fixes the following security vulnerabilities:
+ >     It was discovered that the Quagga BGP daemon, bgpd, does not
+ >     properly bounds check data sent with a NOTIFY to a peer, if an
+ >     attribute length is invalid. A configured BGP peer can take
+ >     advantage of this bug to read memory from the bgpd process or cause
+ >     a denial of service (daemon crash).
 
- > CVE-2018-2562 - Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Server : Partition). Supported versions that are affected are
- > 5.5.58 and prior, 5.6.38 and prior and 5.7.19 and prior. Easily exploitable
- > vulnerability allows low privileged attacker with network access via multiple
- > protocols to compromise MySQL Server. Successful attacks of this vulnerability
- > can result in unauthorized ability to cause a hang or frequently repeatable
- > crash (complete DOS) of MySQL Server as well as unauthorized update, insert or
- > delete access to some of MySQL Server accessible data.
+ >     https://www.quagga.net/security/Quagga-2018-0543.txt
 
- > CVE-2018-2622 - Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Server: DDL). Supported versions that are affected are 5.5.58
- > and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
- > vulnerability allows low privileged attacker with network access via multiple
- > protocols to compromise MySQL Server. Successful attacks of this vulnerability
- > can result in unauthorized ability to cause a hang or frequently repeatable
- > crash (complete DOS) of MySQL Server.
+ > CVE-2018-5379
 
- > CVE-2018-2640 - Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Server: Optimizer). Supported versions that are affected are
- > 5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
- > vulnerability allows low privileged attacker with network access via multiple
- > protocols to compromise MySQL Server. Successful attacks of this vulnerability
- > can result in unauthorized ability to cause a hang or frequently repeatable
- > crash (complete DOS) of MySQL Server.
+ >     It was discovered that the Quagga BGP daemon, bgpd, can double-free
+ >     memory when processing certain forms of UPDATE message, containing
+ >     cluster-list and/or unknown attributes, resulting in a denial of
+ >     service (bgpd daemon crash).
 
- > CVE-2018-2665 - Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Server: Optimizer). Supported versions that are affected are
- > 5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
- > vulnerability allows low privileged attacker with network access via multiple
- > protocols to compromise MySQL Server. Successful attacks of this vulnerability
- > can result in unauthorized ability to cause a hang or frequently repeatable
- > crash (complete DOS) of MySQL Server.
+ >     https://www.quagga.net/security/Quagga-2018-1114.txt
 
- > CVE-2018-2668 - Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: Server: Optimizer). Supported versions that are affected are
- > 5.5.58 and prior, 5.6.38 and prior and 5.7.20 and prior. Easily exploitable
- > vulnerability allows low privileged attacker with network access via multiple
- > protocols to compromise MySQL Server. Successful attacks of this vulnerability
- > can result in unauthorized ability to cause a hang or frequently repeatable
- > crash (complete DOS) of MySQL Server.
+ > CVE-2018-5380
 
- > CVE-2018-2612 - Vulnerability in the MySQL Server component of Oracle MySQL
- > (subcomponent: InnoDB). Supported versions that are affected are 5.6.38 and
- > prior and 5.7.20 and prior. Easily exploitable vulnerability allows high
- > privileged attacker with network access via multiple protocols to compromise
- > MySQL Server. Successful attacks of this vulnerability can result in
- > unauthorized creation, deletion or modification access to critical data or all
- > MySQL Server accessible data and unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Server.
+ >     It was discovered that the Quagga BGP daemon, bgpd, does not
+ >     properly handle internal BGP code-to-string conversion tables.
 
- > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+ >     https://www.quagga.net/security/Quagga-2018-1550.txt
+
+ > CVE-2018-5381
+
+ >     It was discovered that the Quagga BGP daemon, bgpd, can enter an
+ >     infinite loop if sent an invalid OPEN message by a configured peer.
+ >     A configured peer can take advantage of this flaw to cause a denial
+ >     of service (bgpd daemon not responding to any other events; BGP
+ >     sessions will drop and not be reestablished; unresponsive CLI
+ >     interface).
+
+ >     https://www.quagga.net/security/Quagga-2018-1975.txt
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x, thanks.
 
