@@ -1,36 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:15:30 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.2.x
- and 4.{14, 15}.x series
-Message-ID: <20180411154834.AF5F088454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:11:04 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] tremor: security bump to
+ fix CVE-2018-5146
+Message-ID: <20180411154834.98E7488454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91d1863955789bfad46e101a8a82d372f6eed70f
+commit: https://git.buildroot.net/buildroot/commit/?id=0112c2647ad29d272c512d9925e608fd8d23d781
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.14.x / 4.15.x bump]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Prevent out-of-bounds write in codebook decoding.
+
+Codebooks that are not an exact divisor of the partition size are now
+truncated to fit within the partition.
+
+Upstream has migrated from subversion to git, so change to git and bump the
+version to include the fix for CVE-2018-5146.
+
+While we're at it, also add a hash file.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b83a4d3d69d5daa871812bd4c4803acef789e318)
+(cherry picked from commit 80266c95052024381898cada4c51d44207fddd80)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tremor/tremor.hash | 3 +++
+ package/tremor/tremor.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e77d7a7b8b..491fa08f31 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -214,7 +214,7 @@ endchoice
+diff --git a/package/tremor/tremor.hash b/package/tremor/tremor.hash
+new file mode 100644
+index 0000000000..89661a64cd
+--- /dev/null
++++ b/package/tremor/tremor.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 ba94cfdf886399c550f76908285bfa9e322f24085de6f1810c2abea565c13a15  tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8.tar.gz
++sha256 d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814  COPYING
+diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
+index 2a791b6729..827662806f 100644
+--- a/package/tremor/tremor.mk
++++ b/package/tremor/tremor.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.100"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+-TREMOR_SITE = http://svn.xiph.org/trunk/Tremor
+-TREMOR_SITE_METHOD = svn
+-TREMOR_VERSION = 19427
++TREMOR_VERSION = 7c30a66346199f3f09017a09567c6c8a3a0eedc8
++TREMOR_SITE = https://git.xiph.org/tremor.git
++TREMOR_SITE_METHOD = git
+ TREMOR_LICENSE = BSD-3c
+ TREMOR_LICENSE_FILES = COPYING
+ 
