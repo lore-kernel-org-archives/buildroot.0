@@ -1,61 +1,74 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Wed, 11 Apr 2018 15:07:31 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: add dependency on elfutils
- for R600 with LLVM
-In-Reply-To: <20180411125701.8259-1-valentin.korenblit@smile.fr>
-References: <20180411125701.8259-1-valentin.korenblit@smile.fr>
-Message-ID: <d4c1f75c-e65e-abfe-692a-1bb7e6e51940@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 11 Apr 2018 15:19:10 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-04-07
+In-Reply-To: <345647775.2610070.1523450364355.JavaMail.zimbra@datacom.ind.br>
+References: <20180408060016.70C472084F@mail.bootlin.com>
+ <147906727.2330850.1523328627127.JavaMail.zimbra@datacom.ind.br>
+ <2112768662.2330896.1523329207650.JavaMail.zimbra@datacom.ind.br>
+ <CAPi7W83rzsiFvM45AmafAP=TaF_xUqgjNY+crLNWBcbJbnb1Nw@mail.gmail.com>
+ <CAPi7W80owYpotaCzQDA+dVuFxVGQtEdDuPe=zpFHdf0LZpoRdQ@mail.gmail.com>
+ <345647775.2610070.1523450364355.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20180411151910.21a71a99@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Wed, 11 Apr 2018 09:39:24 -0300 (BRT), Carlos Santos wrote:
 
-On 11/04/2018 14:57, Valentin Korenblit wrote:
-> Gallium R600 needs libelf when mesa is built with llvm support.
-> Because of this, toolchain must use either uClibc or glibc, as
-> musl is not currently compatible with elfutils.
->
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+> I investigated it a little bit more and it seems to be restricted to
+> the rather old GCC used in that build.
+> 
+> $ host/bin/powerpc-ctng_e500v2-linux-gnuspe-gcc --version
+> powerpc-ctng_e500v2-linux-gnuspe-gcc (crosstool-NG hg+-c65fcf8a34b7) 4.7.3
+> $ echo -e '#include <glib-object.h>\n' | host/bin/powerpc-ctng_e500v2-linux-gnuspe-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
+> In file included from staging/usr/include/glib-2.0/gobject/gbinding.h:29:0,
+>                  from staging/usr/include/glib-2.0/glib-object.h:23,
+>                  from <stdin>:1:
+> staging/usr/include/glib-2.0/gobject/gobject.h: In function 'g_set_object':
+> staging/usr/include/glib-2.0/gobject/gobject.h:725:5: error: value computed is not used [-Werror=unused-value]
+> cc1: all warnings being treated as errors
+> 
+> Using newer GCC versions:
+> 
+> $ host/bin/powerpc-e500v2-linux-gnuspe-gcc --version
+> powerpc-e500v2-linux-gnuspe-gcc (crosstool-NG 1.20.0) 4.8.2
+> $ echo -e '#include <glib-object.h>\n' | host/bin/powerpc-e500v2-linux-gnuspe-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
+> [success]
+> 
+> $ host/bin/powerpc-buildroot-linux-uclibc-gcc --version
+> powerpc-buildroot-linux-uclibc-gcc.br_real (Buildroot 2016.08-git-01162-g94c7298) 4.9.3
+> echo -e '#include <glib-object.h>\n' | host/bin/powerpc-buildroot-linux-uclibc-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
+> [success]
+> 
+> $ host/bin/powerpc-e500v2-linux-gnuspe-gcc --version
+> powerpc-e500v2-linux-gnuspe-gcc (crosstool-NG bf52f9a) 5.3.0
+> $ echo -e '#include <glib-object.h>\n' | host/bin/powerpc-e500v2-linux-gnuspe-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
+> [success]
+> 
+> $ host/bin/powerpc-linux-gcc --version
+> powerpc-linux-gcc.br_real (Buildroot 2017.08-git-01078-g95b1dae) 6.3.0
+> echo -e '#include <glib-object.h>\n' | host/bin/powerpc-linux-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
+> [success]
+> 
+> So I think we should make libglib2 depend on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 if
+> the target architecture is PowerPC. Do you agree?
 
-This patch solves:
-configure: error: r600 requires libelf when using llvm
+Is this problem really PowerPC specific ? Did you try other gcc 4.7
+toolchains for other architectures ?
 
-Link to the autobuild log:
+Also, adding new dependencies on libglib2 is an absolute nightmare: you
+have to propagate those new dependencies to gazillions of packages (all
+reverse dependencies of libglib2) :-/
 
-http://autobuild.buildroot.org/results/884/8845ff0f28d3273ebe884126b85cd7c4a905d81b/build-end.log
+Best regards,
 
-> ---
->   package/mesa3d/Config.in | 10 ++++++++++
->   1 file changed, 10 insertions(+)
->
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 1476b39acc..bd3d050e29 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -97,13 +97,23 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
->   config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
->   	bool "Gallium Radeon R600 driver"
->   	depends on BR2_i386 || BR2_x86_64
-> +	depends on !BR2_PACKAGE_MESA3D_LLVM || \
-> +		(BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
-> +			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
->   	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->   	select BR2_PACKAGE_LIBDRM_RADEON
->   	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
-> +	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
->   	select BR2_PACKAGE_MESA3D_NEEDS_XA
->   	help
->   	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
->   
-> +# R600 needs libelf when Mesa3D is built with LLVM support
-> +# musl is not currently compatible with elfutils
-> +comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
-> +	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-> +
->   config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
->   	bool "Gallium vmware svga driver"
->   	depends on BR2_i386 || BR2_x86_64
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
