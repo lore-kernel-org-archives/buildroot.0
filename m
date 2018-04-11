@@ -1,58 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 16:42:00 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libpjsip: security bump
- to 2.7.2
-Message-ID: <20180411154834.27EE888454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:09:14 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.2.x
+ and 4.{1, 14, 15}.x series
+Message-ID: <20180411154834.827CC88454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=122211e827096b26f93baced923250a387a4829b
+commit: https://git.buildroot.net/buildroot/commit/?id=48a3c64c05ba8dd57ee5bb4a12fffea926920407
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes the following vulnerabilities:
-
-- CVE-2018-1000098: Crash when parsing SDP with an invalid media format
-  description
-
-- CVE-2018-1000099: Crash when receiving SDP with invalid fmtp attribute
-
-[Peter: add CVE info]
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+[Peter: drop 4.14.x / 4.15.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ed0d9d6f36dfc3e99ee70cc34de0c380925e871f)
+(cherry picked from commit cd0fd093523b558cdcf282c1d1497bc2a494f4e0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.hash | 6 +++---
- package/libpjsip/libpjsip.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index edac3d578f..36c2ea1289 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,6 +1,6 @@
--# From http://www.pjsip.org/release/2.7.1/MD5SUM.TXT
--md5	99a64110fa5c2debff40e0e8d4676380  pjproject-2.7.1.tar.bz2
-+# From http://www.pjsip.org/release/2.7.2/MD5SUM.TXT
-+md5	fa3f0bc098c4bff48ddd92db1c016a7a  pjproject-2.7.2.tar.bz2
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e6f5ce3160..e77d7a7b8b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,14 +214,14 @@ endchoice
  
- # Locally computed
--sha256	59fabc62a02b2b80857297cfb10e2c68c473f4a0acc6e848cfefe8421f2c3126	pjproject-2.7.1.tar.bz2
-+sha256	9c2c828abab7626edf18e04b041ef274bfaa86f99adf2c25ff56f1509e813772	pjproject-2.7.2.tar.bz2
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 86c99386d7..5fa6bbfddc 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPJSIP_VERSION = 2.7.1
-+LIBPJSIP_VERSION = 2.7.2
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
- LIBPJSIP_DEPENDENCIES = libsrtp
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.99"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.100"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.18.72"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.122"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+ 	default "4.9.88"	if BR2_KERNEL_HEADERS_4_9
