@@ -1,49 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Apr 2018 19:25:27 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-04-10
-In-Reply-To: <d400ac41-7777-5497-14cc-0c5ebb623496@dawncrow.de>
-References: <20180411060023.A1DEA21984@mail.bootlin.com>
- <d400ac41-7777-5497-14cc-0c5ebb623496@dawncrow.de>
-Message-ID: <20180411172527.GB2328@scaer>
+Date: Wed, 11 Apr 2018 19:39:18 +0200
+Subject: [Buildroot] [PATCH] support/download/dl-wrapper: pass the
+ correct -N option
+In-Reply-To: <20180411081024.15097-1-thomas.petazzoni@bootlin.com>
+References: <20180411081024.15097-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180411173918.GC2328@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andr?, All,
-
-On 2018-04-11 19:15 +0200, Andr? Hentschel spake thusly:
-> Am 11.04.2018 um 08:00 schrieb Thomas Petazzoni:
-> > Hello,
-> > 
-> > This is the list of Buildroot build failures that occured on
-> > 2018-04-10, and for which you are a registered architecture developer
-> > or package developer. Please help us improving the quality of
-> > Buildroot by investigating those build failures and sending patches to
-> > fix them. Thanks!
-> > 
-> > Results for the 'master' branch
-> > ===============================
-> > 
-> > Build failures related to your packages:
-> > 
-> > microblazeel |                   libkrb5-1.16 | http://autobuild.buildroot.net/results/3111ee83b06f4dfb82eea23244dbba5444c13fe7
-> > 
+On 2018-04-11 10:10 +0200, Thomas Petazzoni spake thusly:
+> ${raw_name} is never defined in dl-wrapper, and therefore the value
+> passed to the -N option is always empty. This causes a problem for the
+> 'cvs' backend, which uses the value of this option as the CVS module
+> to be downloaded.
 > 
-> Hi,
+> If the name of the CVS module is omitted, all the CVS modules from
+> that CVS repository are downloaded, which creates a tarball with a lot
+> more contents, and the actual useful contents in a sub-directory,
+> obviously breaking patches that should be applied, and the entire
+> build process that follows.
 > 
-> Sadly the configure output here is missing, but as far as I understand it bison/yacc is expected to be installed on the host.
-> And configure of libkrb5 searches for yacc in this order: "bison -y, byacc, yacc"
-> So I'm not sure how it comes to "yacc: Command not found"
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/fcee0e3d7eeeb373313b1794092c729b1b052348/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Because it is not always installed on all autobuilders.
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-You need to add host-flex and host-bison to the dependencies of libkrb5.
+When can we eventually drop this cvs backend for good, now? ;-)
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  support/download/dl-wrapper | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+> index 3d2118a4ef..8d6365e08d 100755
+> --- a/support/download/dl-wrapper
+> +++ b/support/download/dl-wrapper
+> @@ -125,7 +125,7 @@ main() {
+>                  -c "${cset}" \
+>                  -d "${dl_dir}" \
+>                  -n "${raw_base_name}" \
+> -                -N "${raw_name}" \
+> +                -N "${base_name}" \
+>                  -f "${filename}" \
+>                  -u "${uri}" \
+>                  -o "${tmpf}" \
+> -- 
+> 2.14.3
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
