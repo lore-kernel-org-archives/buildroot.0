@@ -1,50 +1,80 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Wed, 11 Apr 2018 11:11:10 +0200
-Subject: [Buildroot] [PATCH] chipmunk: new package
-In-Reply-To: <20180411072911.17098-1-francois.perrad@gadz.org>
-References: <20180411072911.17098-1-francois.perrad@gadz.org>
-Message-ID: <20180411091110.GA24267@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 11 Apr 2018 11:35:56 +0200
+Subject: [Buildroot] [PATCH v4 2/8] gst-plugins-${base, good, bad,
+ ugly}: bump to 1.14.0
+In-Reply-To: <trinity-8ea23f05-4e8a-43dd-81ad-c664a98e1d11-1523429816183@3c-app-gmx-bs59>
+References: <20180322173220.31791-1-aduskett@gmail.com>
+ <20180322173220.31791-2-aduskett@gmail.com>
+ <20180322235537.261ea603@gmx.net>
+ <20180410100736.2e6f8f7b@windsurf>
+ <20180410182813.691be3ff@gmx.net>
+ <20180410234019.2fc5516d@windsurf>
+ <trinity-8ea23f05-4e8a-43dd-81ad-c664a98e1d11-1523429816183@3c-app-gmx-bs59>
+Message-ID: <20180411113556.79d7aa32@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Francois,
+Hello,
 
-On Wed, Apr 11, 2018 at 09:29:11AM +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/chipmunk/Config.in     | 12 ++++++++++++
->  package/chipmunk/chipmunk.hash |  2 ++
->  package/chipmunk/chipmunk.mk   | 16 ++++++++++++++++
->  5 files changed, 32 insertions(+)
->  create mode 100644 package/chipmunk/Config.in
->  create mode 100644 package/chipmunk/chipmunk.hash
->  create mode 100644 package/chipmunk/chipmunk.mk
+On Wed, 11 Apr 2018 08:56:56 +0200, Peter Seiderer wrote:
+
+> > Not sure to understand what you say here. Do you say: "This option
+> > already exists in the current version of GStreamer packaged by
+> > Buildroot, and continues to exist in 1.14.0 and therefore should be
+> > kept in Buildroot, i.e BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+> > should stay.  
 > 
-> diff --git a/package/chipmunk/chipmunk.hash b/package/chipmunk/chipmunk.hash
-> new file mode 100644
-> index 000000000..53e13c38d
-> --- /dev/null
-> +++ b/package/chipmunk/chipmunk.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256	6b6d8d5d910c4442fb9c8c4c46a178126d8c21d075cdb3ce439a7f8d8757b0ca  Chipmunk-7.0.2.tar.gz
+> I think the BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND could/should
+> move to base, but the waylandsink enabling BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
+> should stay in bad....(maybe the confusion comes from the double use of
+> --enable-wayland option in gst1-plugins-bad enabling wayland support in
+> libGstGl and/or enabling the waylandsink element)...
+> 
+> From package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk:
+> 
+> ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND)$(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
+> GST1_PLUGINS_BAD_CONF_OPTS += --enable-wayland
+> GST1_PLUGINS_BAD_DEPENDENCIES += wayland wayland-protocols
+> else
+> GST1_PLUGINS_BAD_CONF_OPTS += --disable-wayland
+> endif
+> 
+> 
+> From package/gstreamer1/gst1-plugins-bad/Config.in:
+> 
+> config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+>         bool "wayland"
+>         default y
+>         depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
+>         depends on BR2_PACKAGE_WAYLAND
+>         select BR2_PACKAGE_WAYLAND_PROTOCOLS
+>         select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
+> [...]
+> config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
+>         bool "wayland"
+>         default y
+>         depends on BR2_PACKAGE_WAYLAND
+>         select BR2_PACKAGE_WAYLAND_PROTOCOLS
+>         help
+>           Wayland Video Sink
+> 
+> I get a running waylandsink with:
+> 
+> # BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_WAYLAND is not set
+> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND=y
 
-Please add hash for LICENSE.txt as well.
+Still not sure to fully understand what you're proposing. Do you think
+you could take over this series, make the changes that you think are
+necessary and resubmit ? This would be useful to help the discussion
+move forward.
 
-Otherwise I think it looks good.
+Thanks!
 
-Best regards
-Marcus Folkesson
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180411/2d922064/attachment.asc>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
