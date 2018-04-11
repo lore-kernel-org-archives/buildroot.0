@@ -1,69 +1,61 @@
-From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Date: Wed, 11 Apr 2018 15:04:06 +0200
-Subject: [Buildroot] [PATCH 1/1] adding new package: pixiewps
-Message-ID: <1523451846-29555-1-git-send-email-guillaume.bressaix@gmail.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Wed, 11 Apr 2018 15:07:31 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: add dependency on elfutils
+ for R600 with LLVM
+In-Reply-To: <20180411125701.8259-1-valentin.korenblit@smile.fr>
+References: <20180411125701.8259-1-valentin.korenblit@smile.fr>
+Message-ID: <d4c1f75c-e65e-abfe-692a-1bb7e6e51940@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pixie WPS is a generic C package to perform 'pixie dust attack' against WPS pins.
-Easy to cross-compile, tested on RPI1 & RPI3.
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- package/Config.in            |  1 +
- package/pixiewps/Config.in   |  6 ++++++
- package/pixiewps/pixiewps.mk | 15 +++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/pixiewps/Config.in
- create mode 100644 package/pixiewps/pixiewps.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index e48d0b4..132372c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1809,6 +1809,7 @@ endif
- 	source "package/phidgetwebservice/Config.in"
- 	source "package/phytool/Config.in"
- 	source "package/pimd/Config.in"
-+	source "package/pixiewps/Config.in"
- 	source "package/pound/Config.in"
- 	source "package/pppd/Config.in"
- 	source "package/pptp-linux/Config.in"
-diff --git a/package/pixiewps/Config.in b/package/pixiewps/Config.in
-new file mode 100644
-index 0000000..93b3a20
---- /dev/null
-+++ b/package/pixiewps/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PIXIEWPS
-+	bool "pixiewps"
-+	
-+	help
-+	  Pixiewps is a tool written in C 
-+	  used to bruteforce the WPS PIN using the so-called "pixie-dust attack".
-diff --git a/package/pixiewps/pixiewps.mk b/package/pixiewps/pixiewps.mk
-new file mode 100644
-index 0000000..8235195
---- /dev/null
-+++ b/package/pixiewps/pixiewps.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# pixiewps 
-+#
-+################################################################################
-+
-+PIXIEWPS_VERSION = 9e5bdc6c86c8487b2a6107d5ab3559ed5c738c59 
-+PIXIEWPS_SITE = $(call github,wiire-a,pixiewps,$(PIXIEWPS_VERSION))
-+PIXIEWPS_LICENSE = GPL-3.0+
-+PIXIEWPS_LICENSE_FILES = LICENSE.md
-+
-+PIXIEWPS_SUBDIR = src
-+PIXIEWPS_INSTALL_TARGET = YES
-+
-+$(eval $(generic-package))
--- 
-2.7.4
+On 11/04/2018 14:57, Valentin Korenblit wrote:
+> Gallium R600 needs libelf when mesa is built with llvm support.
+> Because of this, toolchain must use either uClibc or glibc, as
+> musl is not currently compatible with elfutils.
+>
+> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+
+This patch solves:
+configure: error: r600 requires libelf when using llvm
+
+Link to the autobuild log:
+
+http://autobuild.buildroot.org/results/884/8845ff0f28d3273ebe884126b85cd7c4a905d81b/build-end.log
+
+> ---
+>   package/mesa3d/Config.in | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+>
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 1476b39acc..bd3d050e29 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -97,13 +97,23 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+>   config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+>   	bool "Gallium Radeon R600 driver"
+>   	depends on BR2_i386 || BR2_x86_64
+> +	depends on !BR2_PACKAGE_MESA3D_LLVM || \
+> +		(BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
+> +			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
+>   	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>   	select BR2_PACKAGE_LIBDRM_RADEON
+>   	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
+> +	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
+>   	select BR2_PACKAGE_MESA3D_NEEDS_XA
+>   	help
+>   	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
+>   
+> +# R600 needs libelf when Mesa3D is built with LLVM support
+> +# musl is not currently compatible with elfutils
+> +comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
+> +	depends on BR2_PACKAGE_MESA3D_LLVM
+> +	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+> +
+>   config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+>   	bool "Gallium vmware svga driver"
+>   	depends on BR2_i386 || BR2_x86_64
