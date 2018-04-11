@@ -1,75 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:36:56 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] openblas: drop
- SSE_GENERIC target
-Message-ID: <20180411154835.DABE788454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:34:57 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/xterm: Avoid
+ freetype2 path poisoning using imake
+Message-ID: <20180411154835.AE50B88454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bdc177bea3d3431a74b5e1a6be1ece9de8a5cee
+commit: https://git.buildroot.net/buildroot/commit/?id=02aaa39a14df35afc0d9ea5db3ff88ee1431441d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes #10856
+When imake is installed on the host, it tries to include
+freetype headers from host, so we must override ac_cv_path_IMAKE
+to avoid this.
 
-The SSE_GENERIC target fails to build with a "sgemm_kernel.o: No such file
-or directory" error. Several upstream bug reports exist for this:
+Extract from config.log:
 
-https://github.com/xianyi/OpenBLAS/issues/502
-https://github.com/xianyi/OpenBLAS/issues/685
+configure:14803: checking if we should use imake to help
+configure:14820: result: yes
+configure:14829: checking for xmkmf
+configure:14846: found /usr/bin/xmkmf
+configure:14857: result: /usr/bin/xmkmf
+configure:14920: testing Using /usr/bin/xmkmf  ...
+configure:15015: testing IMAKE_CFLAGS  -I. -I/usr/include/freetype2
 
-In both cases, upstream suggests using a different target definition
-instead.  E.G.  from issue 685:
-
-You may use NORTHWOOD on x86: make TARGET=NORTHWOOD that uses SSE2
-instructions.  It's very hard to find non-SSE2 x86 CPUs today.  For x86-64
-use the PRESCOTT target
-
-So drop the SSE_GENERIC target.  The only x86_64 variant we support not
-covered by a more specific openblas target is the default variant, nocona
-and jaguar.
-
-Nocona was a Xeon variant of the P4 "Prescott" architecture, so use the
-PRESCOTT openblas target:
-
-https://en.wikipedia.org/wiki/Xeon#Nocona_and_Irwindale
-
-Jaguar is from the Bobcat family, so use the BOBCAT openblas target:
-
-https://en.wikipedia.org/wiki/List_of_AMD_microprocessors#Bobcat_core_architecture_(APU)
-
-[Peter: add Jaguar as pointed out by Arnout]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-(cherry picked from commit 5e6fa93483caac317ab8844feb2ae9c07078a6c8)
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+[Thomas: pass ac_cv_path_IMAKE="" as suggested by Romain Naour.]
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6d0316dc7b14f6cd2d44e92c6ab581a6ab385234)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openblas/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/xterm/xterm.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index bc628960f5..353e9f8acb 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 	default "P2"           if BR2_x86_pentium2
- 	default "KATMAI"       if BR2_x86_pentium3
- 	default "NORTHWOOD"    if BR2_x86_pentium4
--	default "PRESCOTT"     if BR2_x86_prescott
-+	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
- 	default "BANIAS"       if BR2_x86_pentium_m
- 	default "CORE2"        if BR2_x86_core2
- 	default "NEHALEM"      if BR2_x86_corei7
-@@ -14,9 +14,9 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 	default "OPTERON"      if BR2_x86_opteron
- 	default "OPTERON_SSE3" if BR2_x86_opteron_sse3
- 	default "BARCELONA"    if BR2_x86_barcelona
-+	default "JAGUAR"       if BR2_x86_jaguar
- 	default "STEAMROLLER"  if BR2_x86_steamroller
- 	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
--	default "SSE_GENERIC"  if BR2_X86_CPU_HAS_SSE
- 	default "POWER4"       if BR2_powerpc_power4
- 	default "POWER5"       if BR2_powerpc_power5
- 	default "POWER6"       if BR2_powerpc_power6
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 645de92e22..201280fd46 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -14,6 +14,9 @@ XTERM_CONF_OPTS = --enable-256-color \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+ 	--x-libraries=$(STAGING_DIR)/usr/lib
+ 
++# Avoid freetype2 path poisoning by imake
++XTERM_CONF_ENV = ac_cv_path_IMAKE=""
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
+ XTERM_DEPENDENCIES += xlib_libXft
+ XTERM_CONF_OPTS += --enable-freetype \
