@@ -1,37 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:19:01 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
- 9, 14, 15}.x series
-Message-ID: <20180411154835.2C05088454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:17:09 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/apache: bump to
+ version 2.4.28
+Message-ID: <20180411154834.DCDB888454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8666d431c2e4e8912e91f38d82b5e969f3da847e
+commit: https://git.buildroot.net/buildroot/commit/?id=bb047db6e6c11cbeec67f708d2e9c42a2495ec4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.14.x / 4.15.x bump]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d9534c816383ac45e75ae042b7c668406d9e8b1f)
+Fix for CVE-2017-9798 is included in this release, so this patch is
+removed.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Update commit log: not a security bump]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+(cherry picked from commit 1cff68251e6cd2fe8ed421d7b07813256342a150)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/apache/0003-CVS-2017-9798.patch | 30 ------------------------------
+ package/apache/apache.hash              |  4 ++--
+ package/apache/apache.mk                |  2 +-
+ 3 files changed, 3 insertions(+), 33 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 491fa08f31..db7a436e04 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.122"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.124"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.88"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.90"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
+deleted file mode 100644
+index dc0a67a1b7..0000000000
+--- a/package/apache/0003-CVS-2017-9798.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-core: Disallow Methods' registration at run time (.htaccess), they may
+-be used only if registered at init time (httpd.conf).
+-
+-Calling ap_method_register() in children processes is not the right scope
+-since it won't be shared for all requests.
+-
+-git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
+-
+-Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
+-
+-Downloaded from upstream repo:
+-https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+---- a/server/core.c	2017/08/16 16:50:29	1805223
+-+++ b/server/core.c	2017/09/08 13:13:11	1807754
+-@@ -2266,6 +2266,12 @@
+-             /* method has not been registered yet, but resource restriction
+-              * is always checked before method handling, so register it.
+-              */
+-+            if (cmd->pool == cmd->temp_pool) {
+-+                /* In .htaccess, we can't globally register new methods. */
+-+                return apr_psprintf(cmd->pool, "Could not register method '%s' "
+-+                                   "for %s from .htaccess configuration",
+-+                                    method, cmd->cmd->name);
+-+            }
+-             methnum = ap_method_register(cmd->pool,
+-                                          apr_pstrdup(cmd->pool, method));
+-         }
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index f29ae45187..d5e985f678 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,2 +1,2 @@
+-# From http://www.apache.org/dist/httpd/httpd-2.4.27.tar.bz2.sha256
+-sha256 71fcc128238a690515bd8174d5330a5309161ef314a326ae45c7c15ed139c13a httpd-2.4.27.tar.bz2
++# From http://www.apache.org/dist/httpd/httpd-2.4.28.tar.bz2.sha256
++sha256 c1197a3a62a4ab5c584ab89b249af38cf28b4adee9c0106b62999fd29f920666 httpd-2.4.28.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 857e538346..d8f8580036 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.27
++APACHE_VERSION = 2.4.28
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
