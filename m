@@ -1,64 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 16:42:39 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] libcurl: security bump to
- version 7.59.0
-Message-ID: <20180411154834.3D78388454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 16:40:42 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] samba4: security bump to
+ version 4.5.16
+Message-ID: <20180411154834.0FF3F88454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abb750fc229bc8adc571c65f161108bce6cb3c89
+commit: https://git.buildroot.net/buildroot/commit/?id=933b01bde6c194ccd1c5019af057bcbba452c588
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-CVE-2018-1000120: curl could be fooled into writing a zero byte out of
-bounds when curl is told to work on an FTP URL with the setting to only
-issue a single CWD command, if the directory part of the URL contains a
-"%00" sequence.
+CVE-2018-1050: Vulnerability to a denial of service attack when the RPC
+spoolss service is configured to be run as an external daemon.
 
-https://curl.haxx.se/docs/adv_2018-9cd6.html
+https://www.samba.org/samba/security/CVE-2018-1050.html
 
-CVE-2018-1000121: curl might dereference a near-NULL address when
-getting an LDAP URL.
+CVE-2018-1057: Authenticated users might change any other users'
+passwords, including administrative users and privileged service
+accounts (eg Domain Controllers).
 
-https://curl.haxx.se/docs/adv_2018-97a2.html
+https://www.samba.org/samba/security/CVE-2018-1057.html
 
-CVE-2018-1000122: When asked to transfer an RTSP URL, curl could
-calculate a wrong data length to copy from the read buffer.
-
-https://curl.haxx.se/docs/adv_2018-b047.html
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bf3476e5b1527ac91c0a12949be7da5253ea66c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index b1afe1891d..aec61e3f83 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.58.0.tar.xz.asc
--sha256 6a813875243609eb75f37fa72044e4ad618b55ec15a4eafdac2df6a7e800e3e3  curl-7.58.0.tar.xz
-+# https://curl.haxx.se/download/curl-7.59.0.tar.xz.asc
-+sha256 e44eaabdf916407585bf5c7939ff1161e6242b6b015d3f2f5b758b2a330461fc  curl-7.59.0.tar.xz
- sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index a1d2aa7a60..59210dd8fc 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index cddecd9f48..65d8d68ddf 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  811bf727892a1e1e3d170eb72eb39c43d06ed8ff557e5e036a41aabc19008e94 samba-4.5.15.tar.gz
++sha256  3a3356faab1694680e2ccd7fdf051ab1bbd3b0d058fc1f671e135dd2d1eae1aa samba-4.5.16.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 4e7dc5b7da..bb77b23fb1 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.58.0
-+LIBCURL_VERSION = 7.59.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-SAMBA4_VERSION = 4.5.15
++SAMBA4_VERSION = 4.5.16
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
