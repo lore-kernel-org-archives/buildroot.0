@@ -1,36 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 16:07:38 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux: Config.in: correct
- typo in kernel compression format help text
-Message-ID: <20180411154833.D2C7888454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 16:08:06 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+ 9, 14, 15}.x series
+Message-ID: <20180411154833.EB18F88454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1c1d929ebe4afa2b0ca5869140dd3fbec38e985
+commit: https://git.buildroot.net/buildroot/commit/?id=88b7f14300cc6aaaaa148402e71f811a8762bccd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-s/build/built/.
-
+[Peter: drop 4.14.x / 4.15.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d233cc72c4b901f1ea0ae4ce895ff665bd0b78d9)
+(cherry picked from commit 03b5b444f155ead9c73c2ed2596948de671c5fb9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1967dcca84..fe9445a093 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -267,7 +267,7 @@ endchoice
- choice
- 	prompt "Kernel compression format"
- 	help
--	  This selection will just ensure that the correct host tools are build.
-+	  This selection will just ensure that the correct host tools are built.
- 	  The actual compression for the kernel should be selected in the
- 	  kernel configuration menu.
- 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d1c366cb08..342d45afd1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.119"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.121"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.86"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.87"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
