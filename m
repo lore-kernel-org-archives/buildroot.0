@@ -1,87 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:17:09 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/apache: bump to
- version 2.4.28
-Message-ID: <20180411154834.DCDB888454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:20:04 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] xerces: add upstream
+ security fix
+Message-ID: <20180411154835.4154E88454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb047db6e6c11cbeec67f708d2e9c42a2495ec4c
+commit: https://git.buildroot.net/buildroot/commit/?id=f7b941d3f5ea067fd1066127fbbc10a7796a7c64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fix for CVE-2017-9798 is included in this release, so this patch is
-removed.
+CVE-2017-12627: dereference of a NULL pointer while processing the path
+to the DTD.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Update commit log: not a security bump]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+xerces 3.2.1 includes this patch. But this version also added
+AC_RUN_IFELSE to its configure script, making cross compilation harder.
 
-(cherry picked from commit 1cff68251e6cd2fe8ed421d7b07813256342a150)
+Switching to cmake is also problematic since the minimum required cmake
+version is 3.2.0. The host dependencies check currently allows minimum
+cmake version 3.1.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 142c8cc8d525f687ce199cc0163d48892e8a81f7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/0003-CVS-2017-9798.patch | 30 ------------------------------
- package/apache/apache.hash              |  4 ++--
- package/apache/apache.mk                |  2 +-
- 3 files changed, 3 insertions(+), 33 deletions(-)
+ package/xerces/0001-fix-CVE-2017-12627.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/apache/0003-CVS-2017-9798.patch b/package/apache/0003-CVS-2017-9798.patch
-deleted file mode 100644
-index dc0a67a1b7..0000000000
---- a/package/apache/0003-CVS-2017-9798.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--core: Disallow Methods' registration at run time (.htaccess), they may
--be used only if registered at init time (httpd.conf).
--
--Calling ap_method_register() in children processes is not the right scope
--since it won't be shared for all requests.
--
--git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1807655 13f79535-47bb-0310-9956-ffa450edef68
--
--Fixes CVE-2017-9798: https://nvd.nist.gov/vuln/detail/CVE-2017-9798
--
--Downloaded from upstream repo:
--https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- a/server/core.c	2017/08/16 16:50:29	1805223
--+++ b/server/core.c	2017/09/08 13:13:11	1807754
--@@ -2266,6 +2266,12 @@
--             /* method has not been registered yet, but resource restriction
--              * is always checked before method handling, so register it.
--              */
--+            if (cmd->pool == cmd->temp_pool) {
--+                /* In .htaccess, we can't globally register new methods. */
--+                return apr_psprintf(cmd->pool, "Could not register method '%s' "
--+                                   "for %s from .htaccess configuration",
--+                                    method, cmd->cmd->name);
--+            }
--             methnum = ap_method_register(cmd->pool,
--                                          apr_pstrdup(cmd->pool, method));
--         }
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index f29ae45187..d5e985f678 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.27.tar.bz2.sha256
--sha256 71fcc128238a690515bd8174d5330a5309161ef314a326ae45c7c15ed139c13a httpd-2.4.27.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.28.tar.bz2.sha256
-+sha256 c1197a3a62a4ab5c584ab89b249af38cf28b4adee9c0106b62999fd29f920666 httpd-2.4.28.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 857e538346..d8f8580036 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.27
-+APACHE_VERSION = 2.4.28
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+diff --git a/package/xerces/0001-fix-CVE-2017-12627.patch b/package/xerces/0001-fix-CVE-2017-12627.patch
+new file mode 100644
+index 0000000000..010be7e3d5
+--- /dev/null
++++ b/package/xerces/0001-fix-CVE-2017-12627.patch
+@@ -0,0 +1,22 @@
++XMLString: Don't call catString if relativePath is null
++
++https://xerces.apache.org/xerces-c/secadv/CVE-2017-12627.txt
++
++Upstream status: svn revision 1819998
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++
++--- trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:58:30	1819997
+++++ trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:59:30	1819998
++@@ -920,7 +920,10 @@
++ 
++     XMLString::subString(tmpBuf, basePath, 0, (basePtr - basePath + 1), manager);
++     tmpBuf[basePtr - basePath + 1] = 0;
++-    XMLString::catString(tmpBuf, relativePath);
+++    if (relativePath)
+++    {
+++        XMLString::catString(tmpBuf, relativePath);
+++    }
++ 
++     removeDotSlash(tmpBuf, manager);
++ 
