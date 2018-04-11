@@ -1,60 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:20:04 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] xerces: add upstream
- security fix
-Message-ID: <20180411154835.4154E88454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:20:51 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{1,
+ 4, 9, 14, 15}.x series
+Message-ID: <20180411154835.56EF688454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7b941d3f5ea067fd1066127fbbc10a7796a7c64
+commit: https://git.buildroot.net/buildroot/commit/?id=3d5be0c7152f679c3577a994a79b384999133658
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-CVE-2017-12627: dereference of a NULL pointer while processing the path
-to the DTD.
-
-xerces 3.2.1 includes this patch. But this version also added
-AC_RUN_IFELSE to its configure script, making cross compilation harder.
-
-Switching to cmake is also problematic since the minimum required cmake
-version is 3.2.0. The host dependencies check currently allows minimum
-cmake version 3.1.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Peter: drop 4.14.x / 4.15.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 142c8cc8d525f687ce199cc0163d48892e8a81f7)
+(cherry picked from commit 9ef8f6b061b552012b767b83c7b21e5e3fb9fff7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xerces/0001-fix-CVE-2017-12627.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xerces/0001-fix-CVE-2017-12627.patch b/package/xerces/0001-fix-CVE-2017-12627.patch
-new file mode 100644
-index 0000000000..010be7e3d5
---- /dev/null
-+++ b/package/xerces/0001-fix-CVE-2017-12627.patch
-@@ -0,0 +1,22 @@
-+XMLString: Don't call catString if relativePath is null
-+
-+https://xerces.apache.org/xerces-c/secadv/CVE-2017-12627.txt
-+
-+Upstream status: svn revision 1819998
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+
-+--- trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:58:30	1819997
-++++ trunk/src/xercesc/util/PlatformUtils.cpp	2018/01/03 18:59:30	1819998
-+@@ -920,7 +920,10 @@
-+ 
-+     XMLString::subString(tmpBuf, basePath, 0, (basePtr - basePath + 1), manager);
-+     tmpBuf[basePtr - basePath + 1] = 0;
-+-    XMLString::catString(tmpBuf, relativePath);
-++    if (relativePath)
-++    {
-++        XMLString::catString(tmpBuf, relativePath);
-++    }
-+ 
-+     removeDotSlash(tmpBuf, manager);
-+ 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index db7a436e04..410e21cb23 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -221,8 +221,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.18.72"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.124"	if BR2_KERNEL_HEADERS_4_4
++	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
++	default "4.4.125"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.90"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.91"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
