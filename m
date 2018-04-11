@@ -1,84 +1,202 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 11 Apr 2018 20:08:30 +0200
-Subject: [Buildroot] Direct rendering with XORG and AMDGPU
-In-Reply-To: <CAGbXN6J-oX8y07doUA1qjag7WN9kcai7V+nRGycY+rD7PAR2eA@mail.gmail.com>
-References: <162E260C-3293-4AEE-9519-0D0E030168C6@gamecodehq.com>
- <9b4d6bf4-0b92-f277-df89-bb841e35c501@smile.fr>
- <CAGbXN6J-oX8y07doUA1qjag7WN9kcai7V+nRGycY+rD7PAR2eA@mail.gmail.com>
-Message-ID: <57bd5934-82c0-20a6-0b3c-19a4d1f47008@smile.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 11 Apr 2018 21:38:00 +0300
+Subject: [Buildroot] [PATCH 1/1] zeromq packages: added dynamic library
+ check
+In-Reply-To: <20180411155544.18395-1-asafka7@gmail.com>
+References: <20180411155544.18395-1-asafka7@gmail.com>
+Message-ID: <20180411183800.fgtsbp2ypgsb5ajk@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michal,
+Hi Adaf,
 
-Le 11/04/2018 ? 18:36, Micha? Kalbarczyk a ?crit?:
-> Hi Romain,
+On Wed, Apr 11, 2018 at 06:55:44PM +0300, Asaf Kahlon wrote:
+> The zeromq package now needs dynamic library support.
+> Therefore the check was added to it, and to it's bindings.
 
-Please, keep the mailing list in Cc.
+Please add a link an autobuilder build that this patch fixes.
 
-> 
-> You're right, the mea3d?radeonsi drivers missing.
-> 
-> Is there any way to try make it work at this time? Some kind of master branch?
-> Any patches?
+You also need to propagate this added dependency to reverse dependencies 
+recursively. So, for example, filemq also needs to depend on !static because 
+it selects czmq.
 
-As far I know, there is no patch pending adding radeonsi support in Buildroot.
-But this should be easy:
-- add a new BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI option in Config.in
-- add a new MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI)
-   += radeonsi in mesa3d.mk
+But I think there is a way to avoid all that. The code that needs dladdr() in 
+src/err.cpp depends on libunwind. The configure.ac section that checks for 
+libunwind checks also dladdr(). So this configure failure is unnecessary. Just 
+add libdld to the list of libraries, and remove the configure failing check.
 
-If you're able to test radeonsi support it would be great to add this change in
-Buildroot.
+Can you suggest upstream something along this line?
 
-Best regards,
-Romain
+Thanks,
+baruch
 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  DEVELOPERS                     |  1 +
+>  package/cppzmq/Config.in       |  6 ++++--
+>  package/czmq/Config.in         |  6 ++++--
+>  package/php-zmq/Config.in      | 10 ++++++----
+>  package/python-pyzmq/Config.in |  6 ++++--
+>  package/zeromq/Config.in       | 10 ++++------
+>  package/zmqpp/Config.in        |  5 +++--
+>  7 files changed, 26 insertions(+), 18 deletions(-)
 > 
-> thanks for your help.
-> best reards,
-> Micha?
-> 
-> On Tue, Apr 10, 2018 at 4:50 PM, Romain Naour <romain.naour@smile.fr
-> <mailto:romain.naour@smile.fr>> wrote:
-> 
->     Hi Michal,
-> 
->     Le 10/04/2018 ? 16:31, Micha? Kalbarczyk a ?crit?:
->     > Hi,
->     >
->     > I?m trying to build a firmware that support xorg and amdgpu with hardware acceleration. The build is made within nerves. I can?t get software rendering work.
->     >
->     > Figured out that xorg driver reports empty list of supported cards.
->     >
->     > If you want to look at configs please check GitHub repo:
->     https://github.com/fazibear/nerves_system_xorg_x86_64
->     <https://github.com/fazibear/nerves_system_xorg_x86_64>
->     <https://github.com/fazibear/nerves_system_xorg_x86_64
->     <https://github.com/fazibear/nerves_system_xorg_x86_64>>
->     >
->     > There is some dependencies that I missing?
-> 
->     Are you sure that your graphic card support is enabled in mesa3d package ?
->     Maybe you need radeonsi gallium driver which is not available currently.
-> 
->     Best regards,
->     Romain
-> 
->     >
->     > Thanks for your help.
->     > Micha?.
->     >
->     >
->     >
->     > _______________________________________________
->     > buildroot mailing list
->     > buildroot at busybox.net <mailto:buildroot@busybox.net>
->     > http://lists.busybox.net/mailman/listinfo/buildroot
->     <http://lists.busybox.net/mailman/listinfo/buildroot>
->     >
-> 
-> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 00cbaeff37..bf7716316c 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -191,6 +191,7 @@ F:	package/stress/
+>  N:	Asaf Kahlon <asafka7@gmail.com>
+>  F:	package/python-jsonmodels/
+>  F:	package/python-yieldfrom/
+> +F:	package/zeromq
+>  
+>  N:	Ash Charles <ash.charles@savoirfairelinux.com>
+>  F:	package/pru-software-support/
+> diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
+> index c984c15c96..33fe7b6bca 100644
+> --- a/package/cppzmq/Config.in
+> +++ b/package/cppzmq/Config.in
+> @@ -2,11 +2,13 @@ config BR2_PACKAGE_CPPZMQ
+>  	bool "cppzmq"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> +	depends on !BR2_STATIC_LIBS # zeromq
+>  	select BR2_PACKAGE_ZEROMQ
+>  	help
+>  	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
+>  
+>  	  http://github.com/zeromq/cppzmq
+>  
+> -comment "cppzmq needs a toolchain w/ C++, threads"
+> -	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+> +comment "cppzmq needs a toolchain w/ dynamic library, C++, threads"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		BR2_STATIC_LIBS
+> diff --git a/package/czmq/Config.in b/package/czmq/Config.in
+> index 71389fce51..3cfe61ce42 100644
+> --- a/package/czmq/Config.in
+> +++ b/package/czmq/Config.in
+> @@ -3,12 +3,14 @@ config BR2_PACKAGE_CZMQ
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> +	depends on !BR2_STATIC_LIBS # zeromq
+>  	select BR2_PACKAGE_ZEROMQ
+>  	help
+>  	  High-level C Binding for 0MQ
+>  
+>  	  http://czmq.zeromq.org/
+>  
+> -comment "czmq needs a toolchain w/ C++, threads"
+> +comment "czmq needs a toolchain w/ dynamic library, C++, threads"
+>  	depends on BR2_USE_MMU
+> -	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		BR2_STATIC_LIBS
+> diff --git a/package/php-zmq/Config.in b/package/php-zmq/Config.in
+> index 058f93d9a8..3ba0096e43 100644
+> --- a/package/php-zmq/Config.in
+> +++ b/package/php-zmq/Config.in
+> @@ -1,11 +1,13 @@
+> -comment "php-zmq needs a toolchain w/ C++, threads"
+> -	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+> +comment "php-zmq needs a toolchain w/ dynamic library C++, threads"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		BR2_STATIC_LIBS
+>  
+>  config BR2_PACKAGE_PHP_ZMQ
+>  	bool "php-zmq"
+>  	depends on BR2_PACKAGE_PHP
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> +	depends on !BR2_STATIC_LIBS # zeromq
+>  	select BR2_PACKAGE_ZEROMQ
+>  	help
+>  	  ZeroMQ messaging bindings for PHP
+> diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
+> index 8f33a635c8..306fa02bcb 100644
+> --- a/package/python-pyzmq/Config.in
+> +++ b/package/python-pyzmq/Config.in
+> @@ -2,12 +2,14 @@ config BR2_PACKAGE_PYTHON_PYZMQ
+>  	bool "python-pyzmq"
+>  	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> +	depends on !BR2_STATIC_LIBS # zeromq
+>  	select BR2_PACKAGE_ZEROMQ
+>  	help
+>  	  This package contains the python language binding for zeromq.
+>  
+>  	  http://zeromq.org/bindings:python
+>  
+> -comment "python-pyzmq needs a toolchain w/ C++, threads"
+> +comment "python-pyzmq needs a toolchain w/ dynamic library C++, threads"
+>  	depends on BR2_PACKAGE_PYTHON
+> -	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		BR2_STATIC_LIBS
+> diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+> index 69be9f002c..038ff61912 100644
+> --- a/package/zeromq/Config.in
+> +++ b/package/zeromq/Config.in
+> @@ -1,10 +1,12 @@
+> -comment "zeromq needs a toolchain w/ C++, threads"
+> -	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+> +comment "zeromq needs a toolchain w/ dynamic library, C++, threads"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		BR2_STATIC_LIBS
+>  
+>  config BR2_PACKAGE_ZEROMQ
+>  	bool "zeromq"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_STATIC_LIBS
+>  	select BR2_PACKAGE_UTIL_LINUX
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+> @@ -25,12 +27,8 @@ config BR2_PACKAGE_ZEROMQ
+>  
+>  if BR2_PACKAGE_ZEROMQ
+>  
+> -comment "norm support needs a toolchain w/ dynamic library"
+> -	depends on BR2_STATIC_LIBS
+> -
+>  config BR2_PACKAGE_ZEROMQ_NORM
+>  	bool "NORM support"
+> -	depends on !BR2_STATIC_LIBS
+>  	select BR2_PACKAGE_NORM
+>  	help
+>  	  Add support for NACK-Oriented Reliable Multicast (RFC 5740)
+> diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+> index 8dad80e451..3bb427cc5b 100644
+> --- a/package/zmqpp/Config.in
+> +++ b/package/zmqpp/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_ZMQPP
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> +	depends on !BR2_STATIC_LIBS # zeromq
+>  	select BR2_PACKAGE_ZEROMQ
+>  	help
+>  	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
+> @@ -13,9 +14,9 @@ config BR2_PACKAGE_ZMQPP
+>  
+>  	  http://github.com/benjamg/zmqpp
+>  
+> -comment "zmqpp needs a toolchain w/ C++, threads, gcc >= 4.7"
+> +comment "zmqpp needs a toolchain w/ dynamic library, C++, threads"
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> +		BR2_STATIC_LIBS
+>  
+>  if BR2_PACKAGE_ZMQPP
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
