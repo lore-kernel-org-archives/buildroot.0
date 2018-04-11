@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Apr 2018 23:20:16 +0200
-Subject: [Buildroot] [PATCH v2 3/6] squashfs: add host zstd support
-In-Reply-To: <20180409200429.22650-3-ps.report@gmx.net>
+Date: Wed, 11 Apr 2018 23:24:20 +0200
+Subject: [Buildroot] [PATCH v2 5/6] zstd: add libzstd support
+In-Reply-To: <20180409200429.22650-5-ps.report@gmx.net>
 References: <20180409200429.22650-1-ps.report@gmx.net>
- <20180409200429.22650-3-ps.report@gmx.net>
-Message-ID: <20180411212016.GF2328@scaer>
+ <20180409200429.22650-5-ps.report@gmx.net>
+Message-ID: <20180411212420.GG2328@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,60 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On 2018-04-09 22:04 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+I think the commit title should rather be something like:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    zstd: build and install the library
+
+Have you tried building it in:
+  - a shared-only library configuration (the default for Buildroot),
+  - a static-only configuration,
+  - a dual shared+static configuration?
+
+And of course, checked that the corresponding libs are installed?
 
 Regards,
 Yann E. MORIN.
 
+On 2018-04-09 22:04 +0200, Peter Seiderer spake thusly:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
 > Changes v1 -> v2:
->   - split off host zstd support (suggested by Yann E. MORIN)
+>   - split off target libzstd support (suggested by Yann E. MORIN)
 > ---
->  package/squashfs/squashfs.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/zstd/zstd.mk | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-> index e656218f97..67025ac68a 100644
-> --- a/package/squashfs/squashfs.mk
-> +++ b/package/squashfs/squashfs.mk
-> @@ -46,7 +46,7 @@ else
->  SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0
->  endif
+> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> index 1b76b0164c..cccec3a313 100644
+> --- a/package/zstd/zstd.mk
+> +++ b/package/zstd/zstd.mk
+> @@ -6,6 +6,7 @@
 >  
-> -HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
-> +HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz host-zstd
+>  ZSTD_VERSION = v1.3.3
+>  ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+> +ZSTD_INSTALL_STAGING = YES
+>  ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+>  ZSTD_LICENSE_FILES = LICENSE COPYING
 >  
->  HOST_SQUASHFS_MAKE_ARGS = \
->  	XATTR_SUPPORT=1 \
-> @@ -55,7 +55,7 @@ HOST_SQUASHFS_MAKE_ARGS = \
->  	LZ4_SUPPORT=1 \
->  	LZO_SUPPORT=1 \
->  	LZMA_XZ_SUPPORT=1 \
-> -	ZSTD_SUPPORT=0
-> +	ZSTD_SUPPORT=1
+> @@ -38,10 +39,17 @@ endif
 >  
->  define SQUASHFS_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) \
+>  define ZSTD_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> -		-C $(@D) zstd
+> +		-C $(@D) lib zstd
+> +endef
+> +
+> +define ZSTD_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> +		DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib install
+>  endef
+>  
+>  define ZSTD_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> +		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib install
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+>  		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
+>  endef
 > -- 
 > 2.16.3
 > 
