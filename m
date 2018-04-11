@@ -1,58 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:11:04 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] tremor: security bump to
- fix CVE-2018-5146
-Message-ID: <20180411154834.98E7488454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:16:08 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] package/imagemagick:
+ security bump version to 7.0.7-27
+Message-ID: <20180411154834.C60E288454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0112c2647ad29d272c512d9925e608fd8d23d781
+commit: https://git.buildroot.net/buildroot/commit/?id=2801e075c77c792a5f7a4b6780d94ab5a08bfd7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Prevent out-of-bounds write in codebook decoding.
+Fixes CVE-2018-6405 (upstream Github PR 964) and many others:
+http://www.imagemagick.org/script/changelog.php
 
-Codebooks that are not an exact divisor of the partition size are now
-truncated to fit within the partition.
+Added license hash.
 
-Upstream has migrated from subversion to git, so change to git and bump the
-version to include the fix for CVE-2018-5146.
-
-While we're at it, also add a hash file.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 80266c95052024381898cada4c51d44207fddd80)
+(cherry picked from commit 31086ea1de511b57e8377d9fa6b0fe7350b1e753)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tremor/tremor.hash | 3 +++
- package/tremor/tremor.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 3 ++-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/tremor/tremor.hash b/package/tremor/tremor.hash
-new file mode 100644
-index 0000000000..89661a64cd
---- /dev/null
-+++ b/package/tremor/tremor.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 ba94cfdf886399c550f76908285bfa9e322f24085de6f1810c2abea565c13a15  tremor-7c30a66346199f3f09017a09567c6c8a3a0eedc8.tar.gz
-+sha256 d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814  COPYING
-diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
-index 2a791b6729..827662806f 100644
---- a/package/tremor/tremor.mk
-+++ b/package/tremor/tremor.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 2468bdbc23..170231c4b7 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 924d1161ed2399bcb72f98419072b3130a466e07d9a6fce43d27458ffa907ffa  7.0.7-10.tar.gz
++sha256 723a28f9cbc5c6130f496065fc01c839083e97bf3e4930f940a03c0155046170  7.0.7-27.tar.gz
++sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index c2171a7564..116543888b 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TREMOR_SITE = http://svn.xiph.org/trunk/Tremor
--TREMOR_SITE_METHOD = svn
--TREMOR_VERSION = 19427
-+TREMOR_VERSION = 7c30a66346199f3f09017a09567c6c8a3a0eedc8
-+TREMOR_SITE = https://git.xiph.org/tremor.git
-+TREMOR_SITE_METHOD = git
- TREMOR_LICENSE = BSD-3c
- TREMOR_LICENSE_FILES = COPYING
- 
+-IMAGEMAGICK_VERSION = 7.0.7-10
++IMAGEMAGICK_VERSION = 7.0.7-27
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
