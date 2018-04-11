@@ -1,53 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:17:27 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] package/apache: security
- bump to version 2.4.33
-Message-ID: <20180411154835.163DB88454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:19:01 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
+ 9, 14, 15}.x series
+Message-ID: <20180411154835.2C05088454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06c77a5062d5a0a55ca6a6ffda6562a75b2706b8
+commit: https://git.buildroot.net/buildroot/commit/?id=8666d431c2e4e8912e91f38d82b5e969f3da847e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.33
-
-Fixes CVE-2017-15710, CVE-2018-1283, CVE-2018-1303, CVE-2018-1301,
-CVE-2017-15715, CVE-2018-1312, CVE-2018-1302.
-
-Added license hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: drop 4.14.x / 4.15.x bump]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 65193bf3c93ec6922979907ce87fc82a73b25268)
+(cherry picked from commit d9534c816383ac45e75ae042b7c668406d9e8b1f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 5 +++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 6471c38b62..76c7c766cb 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,3 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.29.tar.bz2.sha256
--sha256 777753a5a25568a2a27428b2214980564bc1c38c1abf9ccc7630b639991f7f00 httpd-2.4.29.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.33.tar.bz2.sha256
-+sha256 de02511859b00d17845b9abdd1f975d5ccb5d0b280c567da5bf2ad4b70846f05 httpd-2.4.33.tar.bz2
-+sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index e1b1a209cb..eaf7b9c5bf 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.29
-+APACHE_VERSION = 2.4.33
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 491fa08f31..db7a436e04 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.122"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.124"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.88"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.90"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
