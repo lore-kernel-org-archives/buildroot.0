@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:44:28 +0200
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.59.0
-In-Reply-To: <7128741177a05a7861260441801d38311867fe0f.1521137179.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 15 Mar 2018 20:06:19 +0200")
-References: <7128741177a05a7861260441801d38311867fe0f.1521137179.git.baruch@tkos.co.il>
-Message-ID: <8737013fz7.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Apr 2018 17:44:43 +0200
+Subject: [Buildroot] [PATCH] xerces: add upstream security fix
+In-Reply-To: <a3df0ee99de9a5f3595e657e19b48f004eea13ae.1522095782.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 26 Mar 2018 23:23:02 +0300")
+References: <a3df0ee99de9a5f3595e657e19b48f004eea13ae.1522095782.git.baruch@tkos.co.il>
+Message-ID: <87y3ht21ec.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,15 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > CVE-2018-1000120: curl could be fooled into writing a zero byte out of
- > bounds when curl is told to work on an FTP URL with the setting to only
- > issue a single CWD command, if the directory part of the URL contains a
- > "%00" sequence.
+ > CVE-2017-12627: dereference of a NULL pointer while processing the path
+ > to the DTD.
 
- > https://curl.haxx.se/docs/adv_2018-9cd6.html
+ > xerces 3.2.1 includes this patch. But this version also added
+ > AC_RUN_IFELSE to its configure script, making cross compilation harder.
 
- > CVE-2018-1000121: curl might dereference a near-NULL address when
- > getting an LDAP URL.
-
- > https://curl.haxx.se/docs/adv_2018-97a2.html
-
- > CVE-2018-1000122: When asked to transfer an RTSP URL, curl could
- > calculate a wrong data length to copy from the read buffer.
-
- > https://curl.haxx.se/docs/adv_2018-b047.html
+ > Switching to cmake is also problematic since the minimum required cmake
+ > version is 3.2.0. The host dependencies check currently allows minimum
+ > cmake version 3.1.
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
