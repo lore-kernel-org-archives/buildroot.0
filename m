@@ -1,44 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:09:14 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 3.2.x
- and 4.{1, 14, 15}.x series
-Message-ID: <20180411154834.827CC88454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 16:43:20 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] irssi: security bump to
+ version 1.0.7
+Message-ID: <20180411154834.535DE88454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48a3c64c05ba8dd57ee5bb4a12fffea926920407
+commit: https://git.buildroot.net/buildroot/commit/?id=9dcd7e340b21d9d8b693ff0566ec862f41872123
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.14.x / 4.15.x bump]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Fixes the following security issues:
+
+Use after free when server is disconnected during netsplits.  Incomplete fix
+of CVE-2017-7191.  Found by Joseph Bisch.  (CWE-416, CWE-825) -
+CVE-2018-7054 [2] was assigned to this issue.
+
+Use after free when SASL messages are received in unexpected order.  Found
+by Joseph Bisch.  (CWE-416, CWE-691) - CVE-2018-7053 [3] was assigned to
+this issue.
+
+Null pointer dereference when an ???empty??? nick has been observed by Irssi.
+Found by Joseph Bisch.  (CWE-476, CWE-475) - CVE-2018-7050 [4] was assigned
+to this issue.
+
+When the number of windows exceed the available space, Irssi would crash due
+to Null pointer dereference.  Found by Joseph Bisch.  (CWE-690) -
+CVE-2018-7052 [5] was assigned to this issue.
+
+Certain nick names could result in out of bounds access when printing theme
+strings.  Found by Oss-Fuzz.  (CWE-126) - CVE-2018-7051 [6] was assigned to
+this issue.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cd0fd093523b558cdcf282c1d1497bc2a494f4e0)
+(cherry picked from commit 181ef8a1d01ddfa2be0b59ea85eb8902b0ce12c0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e6f5ce3160..e77d7a7b8b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -214,14 +214,14 @@ endchoice
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 83dde00352..0f298137ba 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	029e884f3ebf337f7266d8ed4e1a035ca56d9f85015d74c868b488f279de8585  irssi-1.0.6.tar.xz
++sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
+ # Locally calculated
+ sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index d29d4f0e9b..ba425da0f2 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.99"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.100"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.108"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.74"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.18.72"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.49"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.50"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.122"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
- 	default "4.9.88"	if BR2_KERNEL_HEADERS_4_9
+-IRSSI_VERSION = 1.0.6
++IRSSI_VERSION = 1.0.7
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
