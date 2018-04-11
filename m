@@ -1,49 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Apr 2018 09:31:21 +0200
-Subject: [Buildroot] [PATCH] support/download/dl-wrapper: fix passing
- remaining options to helper scripts
-Message-ID: <20180411073121.4621-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 11 Apr 2018 09:31:54 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: added Eugene Tarassov as
+ developer of tcf-agent
+Message-ID: <20180411073156.6F0E7883E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When calling the backend-specific helper scripts, the remaining
-options are in ${@}. However, in order to let the helper script know
-that those remaining options should not be parsed, but instead passed
-as-is to the download tool, they must be separated from the main
-options by "--".
+commit: https://git.buildroot.net/buildroot/commit/?id=20c1647f8313a8405be02c568390f93a765fcc6a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Without this, packages that use <pkg>_DL_OPTS, such as the
-amd-catalyst package, cannot download their tarball anymore.
+Eugene is project lead of Eclipse TCF project
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/de818f6e4c8e63d5e8a49c445d10c34eccc40410/
-
+Signed-off-by: Eugene Tarassov <eugene@largest.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Note: please review carefully. I am not sure this is the right
-fix. Looking at the history of dl-wrapper, I don't see where this --
-was passed before the recent rework, so I'm not sure my solution is
-correct.
----
- support/download/dl-wrapper | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 38430738eb..3d2118a4ef 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -129,7 +129,7 @@ main() {
-                 -f "${filename}" \
-                 -u "${uri}" \
-                 -o "${tmpf}" \
--                ${quiet} ${recurse} "${@}"
-+                ${quiet} ${recurse} -- "${@}"
-         then
-             # cd back to keep path coherence
-             cd "${OLDPWD}"
--- 
-2.14.3
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 85e22c2e71..00cbaeff37 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -610,6 +610,9 @@ F:	package/mxsldr/
+ N:	Ernesto L. Williams Jr <realcontrols@gmail.com>
+ F:	package/szip/
+ 
++N:	Eugene Tarassov <eugene@largest.net>
++F:	package/tcf-agent/
++
+ N:	Evan Zelkowitz <evan.zelkowitz@gmail.com>
+ F:	package/sdl_gfx/
+ 
