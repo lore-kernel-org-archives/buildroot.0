@@ -1,50 +1,73 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Wed, 11 Apr 2018 14:57:01 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: add dependency on elfutils for
- R600 with LLVM
-Message-ID: <20180411125701.8259-1-valentin.korenblit@smile.fr>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Wed, 11 Apr 2018 15:02:51 +0200
+Subject: [Buildroot] [PATCH 1/1] adding new package: reaver
+Message-ID: <1523451771-29353-1-git-send-email-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gallium R600 needs libelf when mesa is built with llvm support.
-Because of this, toolchain must use either uClibc or glibc, as
-musl is not currently compatible with elfutils.
+Generic autotools package, easy to cross-compile but it is mandatory
+to use the t6x github fork (latest Makefiles set).
 
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Tested and used on RPI1 & RPI3.
+
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
- package/mesa3d/Config.in | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/Config.in        |  1 +
+ package/reaver/Config.in |  8 ++++++++
+ package/reaver/reaver.mk | 15 +++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/reaver/Config.in
+ create mode 100644 package/reaver/reaver.mk
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 1476b39acc..bd3d050e29 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -97,13 +97,23 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
- 	bool "Gallium Radeon R600 driver"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_PACKAGE_MESA3D_LLVM || \
-+		(BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
-+			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_RADEON
- 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
-+	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
- 
-+# R600 needs libelf when Mesa3D is built with LLVM support
-+# musl is not currently compatible with elfutils
-+comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
-+	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+diff --git a/package/Config.in b/package/Config.in
+index e48d0b4..2da8605 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1823,6 +1823,7 @@ endif
+ 	source "package/quagga/Config.in"
+ 	source "package/rabbitmq-server/Config.in"
+ 	source "package/radvd/Config.in"
++	source "package/reaver/Config.in"
+ 	source "package/rp-pppoe/Config.in"
+ 	source "package/rpcbind/Config.in"
+ 	source "package/rsh-redone/Config.in"
+diff --git a/package/reaver/Config.in b/package/reaver/Config.in
+new file mode 100644
+index 0000000..703fa28
+--- /dev/null
++++ b/package/reaver/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_REAVER
++	bool "reaver"
++	
++	select BR2_PACKAGE_LIBPCAP
 +
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 	bool "Gallium vmware svga driver"
- 	depends on BR2_i386 || BR2_x86_64
++	help
++		Reaver performs brute force attacks against WPS pin numbers.
++		It is recommended to use "Aircrack-ng" along reaver, but not necessary.
+diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
+new file mode 100644
+index 0000000..8e4e3c6
+--- /dev/null
++++ b/package/reaver/reaver.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# reaver
++#
++################################################################################
++
++REAVER_VERSION = 9bae55bd30b6d46b42da3a09dc23c8b0f9341996
++REAVER_SITE = $(call github,t6x,reaver-wps-fork-t6x,$(REAVER_VERSION))
++REAVER_LICENSE = GPL-2.0+
++REAVER_LICENSE_FILES = docs/LICENSE
++
++REAVER_SUBDIR = src
++REAVER_INSTALL_TARGET = YES
++
++$(eval $(autotools-package))
 -- 
-2.14.3
+2.7.4
