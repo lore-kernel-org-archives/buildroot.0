@@ -1,37 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:34:10 +0200
-Subject: [Buildroot] [git commit branch/2017.02.x] linux-headers: bump 4.{4,
- 9, 14, 15}.x series
-Message-ID: <20180411154835.99DFE88454@busybox.osuosl.org>
+Date: Wed, 11 Apr 2018 17:36:56 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] openblas: drop
+ SSE_GENERIC target
+Message-ID: <20180411154835.DABE788454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fbc20fd2680f260e723303e17f7fe449708bcce
+commit: https://git.buildroot.net/buildroot/commit/?id=9bdc177bea3d3431a74b5e1a6be1ece9de8a5cee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-[Peter: drop 4.14.x / 4.15.x bump]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6e17a16dc728845bcfad48230b8db9c375acd31e)
+Fixes #10856
+
+The SSE_GENERIC target fails to build with a "sgemm_kernel.o: No such file
+or directory" error. Several upstream bug reports exist for this:
+
+https://github.com/xianyi/OpenBLAS/issues/502
+https://github.com/xianyi/OpenBLAS/issues/685
+
+In both cases, upstream suggests using a different target definition
+instead.  E.G.  from issue 685:
+
+You may use NORTHWOOD on x86: make TARGET=NORTHWOOD that uses SSE2
+instructions.  It's very hard to find non-SSE2 x86 CPUs today.  For x86-64
+use the PRESCOTT target
+
+So drop the SSE_GENERIC target.  The only x86_64 variant we support not
+covered by a more specific openblas target is the default variant, nocona
+and jaguar.
+
+Nocona was a Xeon variant of the P4 "Prescott" architecture, so use the
+PRESCOTT openblas target:
+
+https://en.wikipedia.org/wiki/Xeon#Nocona_and_Irwindale
+
+Jaguar is from the Bobcat family, so use the BOBCAT openblas target:
+
+https://en.wikipedia.org/wiki/List_of_AMD_microprocessors#Bobcat_core_architecture_(APU)
+
+[Peter: add Jaguar as pointed out by Arnout]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+(cherry picked from commit 5e6fa93483caac317ab8844feb2ae9c07078a6c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
+ package/openblas/Config.in | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 410e21cb23..b06ba77344 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.125"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.126"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.91"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.92"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index bc628960f5..353e9f8acb 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	default "P2"           if BR2_x86_pentium2
+ 	default "KATMAI"       if BR2_x86_pentium3
+ 	default "NORTHWOOD"    if BR2_x86_pentium4
+-	default "PRESCOTT"     if BR2_x86_prescott
++	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
+ 	default "BANIAS"       if BR2_x86_pentium_m
+ 	default "CORE2"        if BR2_x86_core2
+ 	default "NEHALEM"      if BR2_x86_corei7
+@@ -14,9 +14,9 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	default "OPTERON"      if BR2_x86_opteron
+ 	default "OPTERON_SSE3" if BR2_x86_opteron_sse3
+ 	default "BARCELONA"    if BR2_x86_barcelona
++	default "JAGUAR"       if BR2_x86_jaguar
+ 	default "STEAMROLLER"  if BR2_x86_steamroller
+ 	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
+-	default "SSE_GENERIC"  if BR2_X86_CPU_HAS_SSE
+ 	default "POWER4"       if BR2_powerpc_power4
+ 	default "POWER5"       if BR2_powerpc_power5
+ 	default "POWER6"       if BR2_powerpc_power6
