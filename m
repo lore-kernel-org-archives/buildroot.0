@@ -1,233 +1,125 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 11 Apr 2018 22:35:56 +0300
-Subject: [Buildroot] [PATCH 1/1] zeromq packages: added dynamic library
- check
-In-Reply-To: <20180411183800.fgtsbp2ypgsb5ajk@tarshish>
-References: <20180411155544.18395-1-asafka7@gmail.com>
- <20180411183800.fgtsbp2ypgsb5ajk@tarshish>
-Message-ID: <CALFsTFW8txRWfd_O8289+wLT2-Nexh-r4B3i5zp4EyXbs+MFUQ@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 11 Apr 2018 23:03:17 +0200
+Subject: [Buildroot] [PATCH v2-RESEND 3/6] zynqmp-pmufw-binaries: new
+ package
+In-Reply-To: <20180409231327.28e2b2e4@windsurf>
+References: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
+ <1523032461-3295-4-git-send-email-luca@lucaceresoli.net>
+ <20180409231327.28e2b2e4@windsurf>
+Message-ID: <538f8047-1a56-0335-9d3f-912ebc9914a0@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I want to make sure I understand.
+Hi Thomas,
 
-Are we going to patch the configure.ac file and add something like
-AC_CHECK_LIB([dl], [function]), and remove the dladdr check?
-If yes, can you please elaborate why it's going to solve the problem? When
-I think about it after you brought up libunwind, I'm asking myself if
-zeromq should select this package too...
+On 09/04/2018 23:13, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri,  6 Apr 2018 18:34:18 +0200, Luca Ceresoli wrote:
+> 
+>> diff --git a/boot/zynqmp-pmufw-binaries/Config.in b/boot/zynqmp-pmufw-binaries/Config.in
+>> new file mode 100644
+>> index 000000000000..e39561cbf91e
+>> --- /dev/null
+>> +++ b/boot/zynqmp-pmufw-binaries/Config.in
+>> @@ -0,0 +1,19 @@
+>> +config BR2_TARGET_ZYNQMP_PMUFW_BINARIES
+>> +	bool "Zynqmp PMU firmware"
+>> +	depends on BR2_aarch64
+>> +	help
+>> +	  This package provides precompiled firmwares for the Platform
+>> +	  Management Unit (PMU) of the Xilinx ZynqMP family of SoCs.
+>> +
+>> +	  https://github.com/lucaceresoli/zynqmp-pmufw-binaries
+>> +
+>> +if BR2_TARGET_ZYNQMP_PMUFW_BINARIES
+>> +
+>> +config BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE
+>> +	string "PMU firmware image file"
+>> +	help
+>> +	  Enter the path to the PMU firmware file for your board and
+>> +	  configuration, relative to the repository top directory.
+>> +	  Example: "zcu106-default/pmufw.bin".
+> 
+> So this hints at the fact that this firmware is board specific. Is that
+> correct ? If so, shouldn't we plan on making the Git repo and its
+> version configurable ?
 
-Thanks,
-Asaf.
+The firmware is board-specific and configuration-specific. The plan for
+that repo, however, is to have all supported board+config combinations
+supported in all versions, thus the lack of a version selection knob.
 
-On Wed, Apr 11, 2018 at 9:38 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+But maybe we can reconsider this topic later, when the repo contains at
+least 2 versions, or at least 2 boards, or at least 2 configs... :)
 
-> Hi Adaf,
->
-> On Wed, Apr 11, 2018 at 06:55:44PM +0300, Asaf Kahlon wrote:
-> > The zeromq package now needs dynamic library support.
-> > Therefore the check was added to it, and to it's bindings.
->
-> Please add a link an autobuilder build that this patch fixes.
->
-> You also need to propagate this added dependency to reverse dependencies
-> recursively. So, for example, filemq also needs to depend on !static
-> because
-> it selects czmq.
->
-> But I think there is a way to avoid all that. The code that needs dladdr()
-> in
-> src/err.cpp depends on libunwind. The configure.ac section that checks for
-> libunwind checks also dladdr(). So this configure failure is unnecessary.
-> Just
-> add libdld to the list of libraries, and remove the configure failing
-> check.
->
-> Can you suggest upstream something along this line?
->
-> Thanks,
-> baruch
->
-> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> > ---
-> >  DEVELOPERS                     |  1 +
-> >  package/cppzmq/Config.in       |  6 ++++--
-> >  package/czmq/Config.in         |  6 ++++--
-> >  package/php-zmq/Config.in      | 10 ++++++----
-> >  package/python-pyzmq/Config.in |  6 ++++--
-> >  package/zeromq/Config.in       | 10 ++++------
-> >  package/zmqpp/Config.in        |  5 +++--
-> >  7 files changed, 26 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 00cbaeff37..bf7716316c 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -191,6 +191,7 @@ F:        package/stress/
-> >  N:   Asaf Kahlon <asafka7@gmail.com>
-> >  F:   package/python-jsonmodels/
-> >  F:   package/python-yieldfrom/
-> > +F:   package/zeromq
-> >
-> >  N:   Ash Charles <ash.charles@savoirfairelinux.com>
-> >  F:   package/pru-software-support/
-> > diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
-> > index c984c15c96..33fe7b6bca 100644
-> > --- a/package/cppzmq/Config.in
-> > +++ b/package/cppzmq/Config.in
-> > @@ -2,11 +2,13 @@ config BR2_PACKAGE_CPPZMQ
-> >       bool "cppzmq"
-> >       depends on BR2_INSTALL_LIBSTDCPP
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-> > +     depends on !BR2_STATIC_LIBS # zeromq
-> >       select BR2_PACKAGE_ZEROMQ
-> >       help
-> >         C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
-> >
-> >         http://github.com/zeromq/cppzmq
-> >
-> > -comment "cppzmq needs a toolchain w/ C++, threads"
-> > -     depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-> > +comment "cppzmq needs a toolchain w/ dynamic library, C++, threads"
-> > +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS ||
-> \
-> > +             BR2_STATIC_LIBS
-> > diff --git a/package/czmq/Config.in b/package/czmq/Config.in
-> > index 71389fce51..3cfe61ce42 100644
-> > --- a/package/czmq/Config.in
-> > +++ b/package/czmq/Config.in
-> > @@ -3,12 +3,14 @@ config BR2_PACKAGE_CZMQ
-> >       depends on BR2_USE_MMU # fork()
-> >       depends on BR2_INSTALL_LIBSTDCPP # zeromq
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-> > +     depends on !BR2_STATIC_LIBS # zeromq
-> >       select BR2_PACKAGE_ZEROMQ
-> >       help
-> >         High-level C Binding for 0MQ
-> >
-> >         http://czmq.zeromq.org/
-> >
-> > -comment "czmq needs a toolchain w/ C++, threads"
-> > +comment "czmq needs a toolchain w/ dynamic library, C++, threads"
-> >       depends on BR2_USE_MMU
-> > -     depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-> > +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS ||
-> \
-> > +             BR2_STATIC_LIBS
-> > diff --git a/package/php-zmq/Config.in b/package/php-zmq/Config.in
-> > index 058f93d9a8..3ba0096e43 100644
-> > --- a/package/php-zmq/Config.in
-> > +++ b/package/php-zmq/Config.in
-> > @@ -1,11 +1,13 @@
-> > -comment "php-zmq needs a toolchain w/ C++, threads"
-> > -     depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-> > +comment "php-zmq needs a toolchain w/ dynamic library C++, threads"
-> > +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS ||
-> \
-> > +             BR2_STATIC_LIBS
-> >
-> >  config BR2_PACKAGE_PHP_ZMQ
-> >       bool "php-zmq"
-> >       depends on BR2_PACKAGE_PHP
-> > -     depends on BR2_INSTALL_LIBSTDCPP
-> > -     depends on BR2_TOOLCHAIN_HAS_THREADS
-> > +     depends on BR2_INSTALL_LIBSTDCPP # zeromq
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-> > +     depends on !BR2_STATIC_LIBS # zeromq
-> >       select BR2_PACKAGE_ZEROMQ
-> >       help
-> >         ZeroMQ messaging bindings for PHP
-> > diff --git a/package/python-pyzmq/Config.in
-> b/package/python-pyzmq/Config.in
-> > index 8f33a635c8..306fa02bcb 100644
-> > --- a/package/python-pyzmq/Config.in
-> > +++ b/package/python-pyzmq/Config.in
-> > @@ -2,12 +2,14 @@ config BR2_PACKAGE_PYTHON_PYZMQ
-> >       bool "python-pyzmq"
-> >       depends on BR2_INSTALL_LIBSTDCPP # zeromq
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-> > +     depends on !BR2_STATIC_LIBS # zeromq
-> >       select BR2_PACKAGE_ZEROMQ
-> >       help
-> >         This package contains the python language binding for zeromq.
-> >
-> >         http://zeromq.org/bindings:python
-> >
-> > -comment "python-pyzmq needs a toolchain w/ C++, threads"
-> > +comment "python-pyzmq needs a toolchain w/ dynamic library C++, threads"
-> >       depends on BR2_PACKAGE_PYTHON
-> > -     depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-> > +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS ||
-> \
-> > +             BR2_STATIC_LIBS
-> > diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-> > index 69be9f002c..038ff61912 100644
-> > --- a/package/zeromq/Config.in
-> > +++ b/package/zeromq/Config.in
-> > @@ -1,10 +1,12 @@
-> > -comment "zeromq needs a toolchain w/ C++, threads"
-> > -     depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-> > +comment "zeromq needs a toolchain w/ dynamic library, C++, threads"
-> > +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS ||
-> \
-> > +             BR2_STATIC_LIBS
-> >
-> >  config BR2_PACKAGE_ZEROMQ
-> >       bool "zeromq"
-> >       depends on BR2_INSTALL_LIBSTDCPP
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS
-> > +     depends on !BR2_STATIC_LIBS
-> >       select BR2_PACKAGE_UTIL_LINUX
-> >       select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> >       help
-> > @@ -25,12 +27,8 @@ config BR2_PACKAGE_ZEROMQ
-> >
-> >  if BR2_PACKAGE_ZEROMQ
-> >
-> > -comment "norm support needs a toolchain w/ dynamic library"
-> > -     depends on BR2_STATIC_LIBS
-> > -
-> >  config BR2_PACKAGE_ZEROMQ_NORM
-> >       bool "NORM support"
-> > -     depends on !BR2_STATIC_LIBS
-> >       select BR2_PACKAGE_NORM
-> >       help
-> >         Add support for NACK-Oriented Reliable Multicast (RFC 5740)
-> > diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
-> > index 8dad80e451..3bb427cc5b 100644
-> > --- a/package/zmqpp/Config.in
-> > +++ b/package/zmqpp/Config.in
-> > @@ -4,6 +4,7 @@ config BR2_PACKAGE_ZMQPP
-> >       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> >       depends on BR2_INSTALL_LIBSTDCPP
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-> > +     depends on !BR2_STATIC_LIBS # zeromq
-> >       select BR2_PACKAGE_ZEROMQ
-> >       help
-> >         C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
-> > @@ -13,9 +14,9 @@ config BR2_PACKAGE_ZMQPP
-> >
-> >         http://github.com/benjamg/zmqpp
-> >
-> > -comment "zmqpp needs a toolchain w/ C++, threads, gcc >= 4.7"
-> > +comment "zmqpp needs a toolchain w/ dynamic library, C++, threads"
-> >       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS ||
-> \
-> > -             !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> > +             BR2_STATIC_LIBS
-> >
-> >  if BR2_PACKAGE_ZMQPP
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--
-> Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180411/df5bd9b3/attachment.html>
+> I mean, what are the chances that for some random ZynqMP board, your
+> Github repo will contain the appropriate firmware file ?
+
+Good point. My repo there is ready to hold any possible board+config
+combination that is interesting for known boards. I would love to host
+more boards there (contributilns would be welcome). However I don't
+think we'll ever see any custom board, which reduces its usefulness.
+
+Thus a simpler, but more flexible, option might be to nuke the
+zynqmp-pmufw-binaries BR package and let uboot fetch the pmufw.bin from
+a plain URL (https:// or file://). For standard devboards the URL could
+point to my repo, but it can be anywhere else (for custom boards).
+
+> Generally speaking, it's a bit annoying that we can't build this from
+> source. I understand it needs a Microblaze toolchain, so it's very
+> difficult to integrate in Buildroot :-/
+
+Indeed, and this is *the* big topic.
+
+There are several variations that could be considered, but none have
+been attempted AFAIK. Here they are, simplest to hardest:
+
+1. Build the PMUFW in Buildroot (kind of)
+
+Add a script (e.g. board/zynqmp/build-pmufw.sh) that builds a microblaze
+toolchain and the PMUFW with a given config. The commands are already
+there: [0].
+
+The script would then be called manually before Buildroot runs, or it
+could be wrapped in a Buildroot package that uboot depends on. Takes ~8
+minutes on a modern quad core machine.
+
+* Simple to do, not well integrated, longer build time.
+
+2. Let SPL install the PMUFW config
+
+This is what the Xilinx workflow does (in the Xilinx FSBL, which is more
+or less equivalent to U-Boot SPL). This allows The PMUFW can be a unique
+blob for all boards.
+
+This moves the configuration object from a piece of early firmware
+(PMUFW) to another piece of early firmware (SPL). Both pieces are
+residing in the same BOOT.BIN file, so there's no added flexibility for
+the "user": upon a config change, you still have to update the BOOT.BIN
+file in the boot medium.
+
+There are also licensing issues preventing this, since the configuration
+object file license is not compatible with the U-Boot license. Xilinx
+_might_ be willing to fix this, however.
+
+* Could be doable, perhaps tricky.
+
+3. Don't have any config object...
+
+...and change the PMUFW source code to assign dynamically peripherals to
+cores at runtime, based on requests from cores! :->
+
+* Maybe doable, potentially dangerous, definitely hard to do.
+
+[0]
+https://github.com/lucaceresoli/zynqmp-pmufw-builder/blob/master/build.sh
+
+Any idea or suggestion is very welcome, although I think we cannot do
+much more than looking for the least evil solution...
+
+Bye,
+-- 
+Luca
