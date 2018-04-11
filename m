@@ -1,62 +1,178 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Apr 2018 17:49:33 +0200
-Subject: [Buildroot] [PATCH] package/llvm: remove $ORIGIN/../lib from
- RPATH
-In-Reply-To: <20180411153022.13335-1-valentin.korenblit@smile.fr>
-References: <20180411153022.13335-1-valentin.korenblit@smile.fr>
-Message-ID: <20180411174933.490f56ad@windsurf>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 11 Apr 2018 18:55:44 +0300
+Subject: [Buildroot] [PATCH 1/1] zeromq packages: added dynamic library check
+Message-ID: <20180411155544.18395-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Valentin,
+The zeromq package now needs dynamic library support.
+Therefore the check was added to it, and to it's bindings.
 
-On Wed, 11 Apr 2018 17:30:22 +0200, Valentin Korenblit wrote:
-> AddLLVM.cmake adds $ORIGIN/../lib to the RPATH of llvm binaries.
-> This causes a problem when llvm-config from host installed in
-> STAGING_DIR is executed under the following conditions:
-> 
-> *Target architecture same as host architecture (normally x86_64)
-> *Target's libc different from host's libc (normally glibc)
-> 
-> llvm-config will try to link with the target's libc, resulting in:
-> 
-> ./llvm-config: error while loading shared libraries: libc.so.0:
-> cannot open shared object file: No such file or directory.
-> 
-> Link to autobuild error:
-> http://autobuild.buildroot.net/results/b81c12d529c66a028e2297ea5ce1d6930324fa69/
-> 
-> To avoid this, remove the code from llvm_setup_rpath in AddLLVM.cmake
-> 
-> Link to discussion:
-> http://lists.busybox.net/pipermail/buildroot/2018-April/218627.html
-> 
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ DEVELOPERS                     |  1 +
+ package/cppzmq/Config.in       |  6 ++++--
+ package/czmq/Config.in         |  6 ++++--
+ package/php-zmq/Config.in      | 10 ++++++----
+ package/python-pyzmq/Config.in |  6 ++++--
+ package/zeromq/Config.in       | 10 ++++------
+ package/zmqpp/Config.in        |  5 +++--
+ 7 files changed, 26 insertions(+), 18 deletions(-)
 
-Thanks for this work. However, while this is going to work for the
-Buildroot build (thanks to the hardcoded absolute RPATH encoded into
-the binaries), I believe it will fail once "make sdk" is executed,
-because "make sdk" will change the RPATH of binaries in STAGING_DIR to
-be relative RPATHs.
-
-Could you try after applying your patch:
-
-$ make [.... do the normal build ...]
-$ ./output/staging/usr/bin/llvm-config --the-flags-that-are-important
-$ readelf -d output/staging/usr/bin/llvm-config
-$ make sdk
-$ ./output/staging/usr/bin/llvm-config --the-flags-that-are-important
-$ readelf -d output/staging/usr/bin/llvm-config
-
-Is there any difference before/after the "make sdk" ?
-
-Best regards,
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 00cbaeff37..bf7716316c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -191,6 +191,7 @@ F:	package/stress/
+ N:	Asaf Kahlon <asafka7@gmail.com>
+ F:	package/python-jsonmodels/
+ F:	package/python-yieldfrom/
++F:	package/zeromq
+ 
+ N:	Ash Charles <ash.charles@savoirfairelinux.com>
+ F:	package/pru-software-support/
+diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
+index c984c15c96..33fe7b6bca 100644
+--- a/package/cppzmq/Config.in
++++ b/package/cppzmq/Config.in
+@@ -2,11 +2,13 @@ config BR2_PACKAGE_CPPZMQ
+ 	bool "cppzmq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on !BR2_STATIC_LIBS # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
+ 
+ 	  http://github.com/zeromq/cppzmq
+ 
+-comment "cppzmq needs a toolchain w/ C++, threads"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++comment "cppzmq needs a toolchain w/ dynamic library, C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/czmq/Config.in b/package/czmq/Config.in
+index 71389fce51..3cfe61ce42 100644
+--- a/package/czmq/Config.in
++++ b/package/czmq/Config.in
+@@ -3,12 +3,14 @@ config BR2_PACKAGE_CZMQ
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on !BR2_STATIC_LIBS # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  High-level C Binding for 0MQ
+ 
+ 	  http://czmq.zeromq.org/
+ 
+-comment "czmq needs a toolchain w/ C++, threads"
++comment "czmq needs a toolchain w/ dynamic library, C++, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/php-zmq/Config.in b/package/php-zmq/Config.in
+index 058f93d9a8..3ba0096e43 100644
+--- a/package/php-zmq/Config.in
++++ b/package/php-zmq/Config.in
+@@ -1,11 +1,13 @@
+-comment "php-zmq needs a toolchain w/ C++, threads"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++comment "php-zmq needs a toolchain w/ dynamic library C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_PHP_ZMQ
+ 	bool "php-zmq"
+ 	depends on BR2_PACKAGE_PHP
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on !BR2_STATIC_LIBS # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  ZeroMQ messaging bindings for PHP
+diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
+index 8f33a635c8..306fa02bcb 100644
+--- a/package/python-pyzmq/Config.in
++++ b/package/python-pyzmq/Config.in
+@@ -2,12 +2,14 @@ config BR2_PACKAGE_PYTHON_PYZMQ
+ 	bool "python-pyzmq"
+ 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on !BR2_STATIC_LIBS # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  This package contains the python language binding for zeromq.
+ 
+ 	  http://zeromq.org/bindings:python
+ 
+-comment "python-pyzmq needs a toolchain w/ C++, threads"
++comment "python-pyzmq needs a toolchain w/ dynamic library C++, threads"
+ 	depends on BR2_PACKAGE_PYTHON
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index 69be9f002c..038ff61912 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -1,10 +1,12 @@
+-comment "zeromq needs a toolchain w/ C++, threads"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++comment "zeromq needs a toolchain w/ dynamic library, C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_ZEROMQ
+ 	bool "zeromq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+@@ -25,12 +27,8 @@ config BR2_PACKAGE_ZEROMQ
+ 
+ if BR2_PACKAGE_ZEROMQ
+ 
+-comment "norm support needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_ZEROMQ_NORM
+ 	bool "NORM support"
+-	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_NORM
+ 	help
+ 	  Add support for NACK-Oriented Reliable Multicast (RFC 5740)
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+index 8dad80e451..3bb427cc5b 100644
+--- a/package/zmqpp/Config.in
++++ b/package/zmqpp/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_ZMQPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on !BR2_STATIC_LIBS # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
+@@ -13,9 +14,9 @@ config BR2_PACKAGE_ZMQPP
+ 
+ 	  http://github.com/benjamg/zmqpp
+ 
+-comment "zmqpp needs a toolchain w/ C++, threads, gcc >= 4.7"
++comment "zmqpp needs a toolchain w/ dynamic library, C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		BR2_STATIC_LIBS
+ 
+ if BR2_PACKAGE_ZMQPP
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.0
