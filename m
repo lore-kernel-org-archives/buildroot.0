@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Apr 2018 16:16:06 +0200
-Subject: [Buildroot] [PATCH] configs/mx6cubox: Bump U-Boot and kernel
- versions
-In-Reply-To: <1523390663-12302-1-git-send-email-festevam@gmail.com>
-References: <1523390663-12302-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180411161606.6d197eba@windsurf>
+Date: Wed, 11 Apr 2018 16:16:31 +0200
+Subject: [Buildroot] [PATCH 1/1]
+ package/x11r7/xdriver_xf86-input-libinput: bump version to 0.27.1
+In-Reply-To: <20180410162040.14730-1-bernd.kuhls@t-online.de>
+References: <20180410162040.14730-1-bernd.kuhls@t-online.de>
+Message-ID: <20180411161631.12ae9d2e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 10 Apr 2018 17:04:23 -0300, Fabio Estevam wrote:
-> Bump U-Boot version to 2018.03 and kernel to 4.16.1.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+On Tue, 10 Apr 2018 18:20:40 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  configs/mx6cubox_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  .../xdriver_xf86-input-libinput.hash                           | 10 +++++-----
+>  .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
