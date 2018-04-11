@@ -1,46 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Apr 2018 10:10:24 +0200
-Subject: [Buildroot] [PATCH] support/download/dl-wrapper: pass the correct
- -N option
-Message-ID: <20180411081024.15097-1-thomas.petazzoni@bootlin.com>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Wed, 11 Apr 2018 11:11:10 +0200
+Subject: [Buildroot] [PATCH] chipmunk: new package
+In-Reply-To: <20180411072911.17098-1-francois.perrad@gadz.org>
+References: <20180411072911.17098-1-francois.perrad@gadz.org>
+Message-ID: <20180411091110.GA24267@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-${raw_name} is never defined in dl-wrapper, and therefore the value
-passed to the -N option is always empty. This causes a problem for the
-'cvs' backend, which uses the value of this option as the CVS module
-to be downloaded.
+Hello Francois,
 
-If the name of the CVS module is omitted, all the CVS modules from
-that CVS repository are downloaded, which creates a tarball with a lot
-more contents, and the actual useful contents in a sub-directory,
-obviously breaking patches that should be applied, and the entire
-build process that follows.
+On Wed, Apr 11, 2018 at 09:29:11AM +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  DEVELOPERS                     |  1 +
+>  package/Config.in              |  1 +
+>  package/chipmunk/Config.in     | 12 ++++++++++++
+>  package/chipmunk/chipmunk.hash |  2 ++
+>  package/chipmunk/chipmunk.mk   | 16 ++++++++++++++++
+>  5 files changed, 32 insertions(+)
+>  create mode 100644 package/chipmunk/Config.in
+>  create mode 100644 package/chipmunk/chipmunk.hash
+>  create mode 100644 package/chipmunk/chipmunk.mk
+> 
+> diff --git a/package/chipmunk/chipmunk.hash b/package/chipmunk/chipmunk.hash
+> new file mode 100644
+> index 000000000..53e13c38d
+> --- /dev/null
+> +++ b/package/chipmunk/chipmunk.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256	6b6d8d5d910c4442fb9c8c4c46a178126d8c21d075cdb3ce439a7f8d8757b0ca  Chipmunk-7.0.2.tar.gz
 
-Fixes:
+Please add hash for LICENSE.txt as well.
 
-  http://autobuild.buildroot.net/results/fcee0e3d7eeeb373313b1794092c729b1b052348/
+Otherwise I think it looks good.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/download/dl-wrapper | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Best regards
+Marcus Folkesson
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 3d2118a4ef..8d6365e08d 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -125,7 +125,7 @@ main() {
-                 -c "${cset}" \
-                 -d "${dl_dir}" \
-                 -n "${raw_base_name}" \
--                -N "${raw_name}" \
-+                -N "${base_name}" \
-                 -f "${filename}" \
-                 -u "${uri}" \
-                 -o "${tmpf}" \
--- 
-2.14.3
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180411/2d922064/attachment.asc>
