@@ -1,38 +1,50 @@
-From: Manfred Schlaegl <manfred.schlaegl@ginzinger.com>
-Date: Wed, 11 Apr 2018 14:40:37 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5: qt5websockets: install missing qml
- modules
-Message-ID: <3fc9a546-61c8-d7bf-f0eb-b757cae0dfe2@ginzinger.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Wed, 11 Apr 2018 14:57:01 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: add dependency on elfutils for
+ R600 with LLVM
+Message-ID: <20180411125701.8259-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-QML modules for QtWebSockets are located in /usr/qml/QtWebSockets since
-Qt 5.5.
+Gallium R600 needs libelf when mesa is built with llvm support.
+Because of this, toolchain must use either uClibc or glibc, as
+musl is not currently compatible with elfutils.
 
-/usr/qml/Qt/WebSockets still exists for compatibility reasons, but
-it contains only a qmldir file which points to ../../QtWebSockets/.
-
-see also: http://doc.qt.io/qt-5.6/qtwebsockets-qmlmodule.html
-
-Signed-off-by: Manfred Schlaegl <manfred.schlaegl@ginzinger.com>
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 ---
- package/qt5/qt5websockets/qt5websockets.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/mesa3d/Config.in | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
-index 4d9df9257b..c67db198db 100644
---- a/package/qt5/qt5websockets/qt5websockets.mk
-+++ b/package/qt5/qt5websockets/qt5websockets.mk
-@@ -41,6 +41,7 @@ endef
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
- define QT5WEBSOCKETS_INSTALL_TARGET_QMLS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/WebSockets $(TARGET_DIR)/usr/qml/Qt/
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebSockets $(TARGET_DIR)/usr/qml/
- endef
- endif
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1476b39acc..bd3d050e29 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -97,13 +97,23 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+ 	bool "Gallium Radeon R600 driver"
+ 	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_PACKAGE_MESA3D_LLVM || \
++		(BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
++			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+ 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
++	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
  
++# R600 needs libelf when Mesa3D is built with LLVM support
++# musl is not currently compatible with elfutils
++comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
++	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+ 	bool "Gallium vmware svga driver"
+ 	depends on BR2_i386 || BR2_x86_64
 -- 
-2.11.0
+2.14.3
