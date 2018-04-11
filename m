@@ -1,124 +1,107 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 11 Apr 2018 23:03:17 +0200
-Subject: [Buildroot] [PATCH v2-RESEND 3/6] zynqmp-pmufw-binaries: new
- package
-In-Reply-To: <20180409231327.28e2b2e4@windsurf>
+Date: Wed, 11 Apr 2018 23:12:33 +0200
+Subject: [Buildroot] [PATCH v2-RESEND 2/6] arm-trusted-firmware:
+ generate atf-uboot.ub for ZynqMP booting
+In-Reply-To: <20180409230805.66ab7dc5@windsurf>
 References: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
- <1523032461-3295-4-git-send-email-luca@lucaceresoli.net>
- <20180409231327.28e2b2e4@windsurf>
-Message-ID: <538f8047-1a56-0335-9d3f-912ebc9914a0@lucaceresoli.net>
+ <1523032461-3295-3-git-send-email-luca@lucaceresoli.net>
+ <20180409230805.66ab7dc5@windsurf>
+Message-ID: <67d945ab-9e10-8de4-c595-222d3b4e9049@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-On 09/04/2018 23:13, Thomas Petazzoni wrote:
+On 09/04/2018 23:08, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Fri,  6 Apr 2018 18:34:18 +0200, Luca Ceresoli wrote:
-> 
->> diff --git a/boot/zynqmp-pmufw-binaries/Config.in b/boot/zynqmp-pmufw-binaries/Config.in
->> new file mode 100644
->> index 000000000000..e39561cbf91e
->> --- /dev/null
->> +++ b/boot/zynqmp-pmufw-binaries/Config.in
->> @@ -0,0 +1,19 @@
->> +config BR2_TARGET_ZYNQMP_PMUFW_BINARIES
->> +	bool "Zynqmp PMU firmware"
->> +	depends on BR2_aarch64
+> On Fri,  6 Apr 2018 18:34:17 +0200, Luca Ceresoli wrote:
+>> U-Boot SPL for the Xilinx ZynqMP SoCs needs ATF in this format to load
+>> it.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>>
+>> Changes v1 -> v2: none.
+>> ---
+>>  boot/arm-trusted-firmware/Config.in               |  9 +++++++++
+>>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 21 +++++++++++++++++++++
+>>  2 files changed, 30 insertions(+)
+>>
+>> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+>> index 7aef87cb746c..dca9958423b9 100644
+>> --- a/boot/arm-trusted-firmware/Config.in
+>> +++ b/boot/arm-trusted-firmware/Config.in
+>> @@ -71,6 +71,15 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+>>  	  typically used on platforms where another bootloader (e.g
+>>  	  U-Boot) encapsulates ATF BL31.
+>>  
+>> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
+>> +	bool "Generate a U-Boot image (for Xilinx ZynqMP U-Boot)"
+>> +	depends on BR2_cortex_a53
+>> +	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
 >> +	help
->> +	  This package provides precompiled firmwares for the Platform
->> +	  Management Unit (PMU) of the Xilinx ZynqMP family of SoCs.
->> +
->> +	  https://github.com/lucaceresoli/zynqmp-pmufw-binaries
->> +
->> +if BR2_TARGET_ZYNQMP_PMUFW_BINARIES
->> +
->> +config BR2_TARGET_ZYNQMP_PMUFW_BINARIES_IMAGE
->> +	string "PMU firmware image file"
->> +	help
->> +	  Enter the path to the PMU firmware file for your board and
->> +	  configuration, relative to the repository top directory.
->> +	  Example: "zcu106-default/pmufw.bin".
+>> +	  Uses mkimage from uboot-tools to encapsulate bl31.bin into
+>> +	  a U-Boot image named atf-uboot.ub. This is needed by the
+>> +	  Xilinx version of U-Boot SPL to load ATF on the ZynqMP SoC.
 > 
-> So this hints at the fact that this firmware is board specific. Is that
-> correct ? If so, shouldn't we plan on making the Git repo and its
-> version configurable ?
+> In fact this doesn't look like very Xilinx-specific. It just
+> encapsulates the bl31 image in a U-Boot image format. This could
+> potentially be used by other platforms as well.
+> 
+> So, perhaps we could make this:
+> 
+> config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT
+> 	bool "Build BL31 U-Boot image"
+> 	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+> 	help
+> 	  This option will generate a bl31.bin that is encapsulates
+> 	  into a U-Boot image named atf-uboot.ub. This is for example
+> 	  used by the Xilinx version of U-Boot SPL to load ATF on the
+> 	  ZynqMP SoC.
+> 
+>> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE),y)
+>> +define ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
+>> +# Get the entry point address from the elf.
+>> +	BASE_ADDR=$$($(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | \
+>> +	             grep -E -m 1 -i "entry point.*?0x" | \
+>> +	             sed -r 's/.*?(0x.*?)/\1/g') && \
+> 
+> Meh, what a mess to get the entry point address :-/ Could this be
+> simplified with:
+> 
+> $(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | sed '/^  Entry point address: *\(.*\)/!d; s//\1/'
+> 
+> (Thanks Yann!)
+> 
+>> +	$(HOST_DIR)/bin/mkimage \
+>> +		-A arm64 -O arm-trusted-firmware -C none \
+>> +		-a $${BASE_ADDR} -e $${BASE_ADDR} \
+>> +		-d $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31.bin \
+>> +		$(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub
+>> +endef
+>> +define ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL
+>> +	install $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub $(BINARIES_DIR)
+> 
+> Should be:
+> 
+> 	$(INSTALL) -m 0644 -D $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub $(BINARIES_DIR)/atf-uboot.ub
+> 
+>> +endef
+>> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RESET_TO_BL31=1
+>> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
+>> +ARM_TRUSTED_FIRMWARE_POST_BUILD_HOOKS += ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
+>> +ARM_TRUSTED_FIRMWARE_POST_INSTALL_IMAGES_HOOKS += ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL
+> 
+> Rather than hooks, just use directly
+> ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE and
+> ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL in the BUILD_CMDS and
+> INSTALL_IMAGES_CMDS. Of course, remove the ZYNQMP part of the variable
+> names if you agree with my proposal above.
 
-The firmware is board-specific and configuration-specific. The plan for
-that repo, however, is to have all supported board+config combinations
-supported in all versions, thus the lack of a version selection knob.
-
-But maybe we can reconsider this topic later, when the repo contains at
-least 2 versions, or at least 2 boards, or at least 2 configs... :)
-
-> I mean, what are the chances that for some random ZynqMP board, your
-> Github repo will contain the appropriate firmware file ?
-
-Good point. My repo there is ready to hold any possible board+config
-combination that is interesting for known boards. I would love to host
-more boards there (contributilns would be welcome). However I don't
-think we'll ever see any custom board, which reduces its usefulness.
-
-Thus a simpler, but more flexible, option might be to nuke the
-zynqmp-pmufw-binaries BR package and let uboot fetch the pmufw.bin from
-a plain URL (https:// or file://). For standard devboards the URL could
-point to my repo, but it can be anywhere else (for custom boards).
-
-> Generally speaking, it's a bit annoying that we can't build this from
-> source. I understand it needs a Microblaze toolchain, so it's very
-> difficult to integrate in Buildroot :-/
-
-Indeed, and this is *the* big topic.
-
-There are several variations that could be considered, but none have
-been attempted AFAIK. Here they are, simplest to hardest:
-
-1. Build the PMUFW in Buildroot (kind of)
-
-Add a script (e.g. board/zynqmp/build-pmufw.sh) that builds a microblaze
-toolchain and the PMUFW with a given config. The commands are already
-there: [0].
-
-The script would then be called manually before Buildroot runs, or it
-could be wrapped in a Buildroot package that uboot depends on. Takes ~8
-minutes on a modern quad core machine.
-
-* Simple to do, not well integrated, longer build time.
-
-2. Let SPL install the PMUFW config
-
-This is what the Xilinx workflow does (in the Xilinx FSBL, which is more
-or less equivalent to U-Boot SPL). This allows The PMUFW can be a unique
-blob for all boards.
-
-This moves the configuration object from a piece of early firmware
-(PMUFW) to another piece of early firmware (SPL). Both pieces are
-residing in the same BOOT.BIN file, so there's no added flexibility for
-the "user": upon a config change, you still have to update the BOOT.BIN
-file in the boot medium.
-
-There are also licensing issues preventing this, since the configuration
-object file license is not compatible with the U-Boot license. Xilinx
-_might_ be willing to fix this, however.
-
-* Could be doable, perhaps tricky.
-
-3. Don't have any config object...
-
-...and change the PMUFW source code to assign dynamically peripherals to
-cores at runtime, based on requests from cores! :->
-
-* Maybe doable, potentially dangerous, definitely hard to do.
-
-[0]
-https://github.com/lucaceresoli/zynqmp-pmufw-builder/blob/master/build.sh
-
-Any idea or suggestion is very welcome, although I think we cannot do
-much more than looking for the least evil solution...
+Thanks for the review. These changes will be in v3.
 
 Bye,
 -- 
