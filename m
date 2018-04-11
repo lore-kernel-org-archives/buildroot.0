@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:48:26 +0200
-Subject: [Buildroot] [PATCH] package/xterm: Avoid freetype2 path
- poisoning using imake
-In-Reply-To: <20180327074434.15306-1-valentin.korenblit@smile.fr> (Valentin
- Korenblit's message of "Tue, 27 Mar 2018 09:44:34 +0200")
-References: <20180327074434.15306-1-valentin.korenblit@smile.fr>
-Message-ID: <87in8xzqut.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Apr 2018 16:07:38 +0200
+Subject: [Buildroot] [git commit branch/2017.02.x] linux: Config.in: correct
+ typo in kernel compression format help text
+Message-ID: <20180411154833.D2C7888454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Valentin" == Valentin Korenblit <valentin.korenblit@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d1c1d929ebe4afa2b0ca5869140dd3fbec38e985
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > When imake is installed on the host, it tries to include
- > freetype headers from host, so we must override ac_cv_path_IMAKE
- > to avoid this.
+s/build/built/.
 
- > Extract from config.log:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d233cc72c4b901f1ea0ae4ce895ff665bd0b78d9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > configure:14803: checking if we should use imake to help
- > configure:14820: result: yes
- > configure:14829: checking for xmkmf
- > configure:14846: found /usr/bin/xmkmf
- > configure:14857: result: /usr/bin/xmkmf
- > configure:14920: testing Using /usr/bin/xmkmf  ...
- > configure:15015: testing IMAKE_CFLAGS  -I. -I/usr/include/freetype2
-
- > Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 1967dcca84..fe9445a093 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -267,7 +267,7 @@ endchoice
+ choice
+ 	prompt "Kernel compression format"
+ 	help
+-	  This selection will just ensure that the correct host tools are build.
++	  This selection will just ensure that the correct host tools are built.
+ 	  The actual compression for the kernel should be selected in the
+ 	  kernel configuration menu.
+ 
