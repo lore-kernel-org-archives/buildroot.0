@@ -1,15 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Apr 2018 15:19:10 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-04-07
-In-Reply-To: <345647775.2610070.1523450364355.JavaMail.zimbra@datacom.ind.br>
-References: <20180408060016.70C472084F@mail.bootlin.com>
- <147906727.2330850.1523328627127.JavaMail.zimbra@datacom.ind.br>
- <2112768662.2330896.1523329207650.JavaMail.zimbra@datacom.ind.br>
- <CAPi7W83rzsiFvM45AmafAP=TaF_xUqgjNY+crLNWBcbJbnb1Nw@mail.gmail.com>
- <CAPi7W80owYpotaCzQDA+dVuFxVGQtEdDuPe=zpFHdf0LZpoRdQ@mail.gmail.com>
- <345647775.2610070.1523450364355.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20180411151910.21a71a99@windsurf>
+Date: Wed, 11 Apr 2018 15:54:31 +0200
+Subject: [Buildroot] [PATCH 1/1] adding new package: reaver
+In-Reply-To: <1523451771-29353-1-git-send-email-guillaume.bressaix@gmail.com>
+References: <1523451771-29353-1-git-send-email-guillaume.bressaix@gmail.com>
+Message-ID: <20180411155431.305335a9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,56 +12,83 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 11 Apr 2018 09:39:24 -0300 (BRT), Carlos Santos wrote:
+Thanks for this contribution. See below for some comments.
 
-> I investigated it a little bit more and it seems to be restricted to
-> the rather old GCC used in that build.
-> 
-> $ host/bin/powerpc-ctng_e500v2-linux-gnuspe-gcc --version
-> powerpc-ctng_e500v2-linux-gnuspe-gcc (crosstool-NG hg+-c65fcf8a34b7) 4.7.3
-> $ echo -e '#include <glib-object.h>\n' | host/bin/powerpc-ctng_e500v2-linux-gnuspe-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
-> In file included from staging/usr/include/glib-2.0/gobject/gbinding.h:29:0,
->                  from staging/usr/include/glib-2.0/glib-object.h:23,
->                  from <stdin>:1:
-> staging/usr/include/glib-2.0/gobject/gobject.h: In function 'g_set_object':
-> staging/usr/include/glib-2.0/gobject/gobject.h:725:5: error: value computed is not used [-Werror=unused-value]
-> cc1: all warnings being treated as errors
-> 
-> Using newer GCC versions:
-> 
-> $ host/bin/powerpc-e500v2-linux-gnuspe-gcc --version
-> powerpc-e500v2-linux-gnuspe-gcc (crosstool-NG 1.20.0) 4.8.2
-> $ echo -e '#include <glib-object.h>\n' | host/bin/powerpc-e500v2-linux-gnuspe-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
-> [success]
-> 
-> $ host/bin/powerpc-buildroot-linux-uclibc-gcc --version
-> powerpc-buildroot-linux-uclibc-gcc.br_real (Buildroot 2016.08-git-01162-g94c7298) 4.9.3
-> echo -e '#include <glib-object.h>\n' | host/bin/powerpc-buildroot-linux-uclibc-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
-> [success]
-> 
-> $ host/bin/powerpc-e500v2-linux-gnuspe-gcc --version
-> powerpc-e500v2-linux-gnuspe-gcc (crosstool-NG bf52f9a) 5.3.0
-> $ echo -e '#include <glib-object.h>\n' | host/bin/powerpc-e500v2-linux-gnuspe-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
-> [success]
-> 
-> $ host/bin/powerpc-linux-gcc --version
-> powerpc-linux-gcc.br_real (Buildroot 2017.08-git-01078-g95b1dae) 6.3.0
-> echo -e '#include <glib-object.h>\n' | host/bin/powerpc-linux-gcc -x c -I staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall -Werror -c - -o /tmp/foo.o
-> [success]
-> 
-> So I think we should make libglib2 depend on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 if
-> the target architecture is PowerPC. Do you agree?
+First, the commit title should be "reaver: new package"
 
-Is this problem really PowerPC specific ? Did you try other gcc 4.7
-toolchains for other architectures ?
+On Wed, 11 Apr 2018 15:02:51 +0200, Guillaume W. Bres wrote:
+> Generic autotools package, easy to cross-compile but it is mandatory
+> to use the t6x github fork (latest Makefiles set).
 
-Also, adding new dependencies on libglib2 is an absolute nightmare: you
-have to propagate those new dependencies to gazillions of packages (all
-reverse dependencies of libglib2) :-/
+What is the "t6x github fork" ?
 
-Best regards,
+>  package/Config.in        |  1 +
+>  package/reaver/Config.in |  8 ++++++++
+>  package/reaver/reaver.mk | 15 +++++++++++++++
 
-Thomas
+Addition of an entry in the DEVELOPERS file is missing, and also the
+hash file is missing. Could you add these ?
+
+> diff --git a/package/reaver/Config.in b/package/reaver/Config.in
+> new file mode 100644
+> index 0000000..703fa28
+> --- /dev/null
+> +++ b/package/reaver/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_REAVER
+> +	bool "reaver"
+> +	
+
+Unneeded empty new line.
+
+> +	select BR2_PACKAGE_LIBPCAP
+> +
+
+Ditto.
+
+Also, could you test your package with ./utils/test-pkg, to make sure
+it builds properly with some basic toolchain configurations ?
+
+> +	help
+> +		Reaver performs brute force attacks against WPS pin numbers.
+> +		It is recommended to use "Aircrack-ng" along reaver, but not necessary.
+
+Lines are too long, they should be wrapped at 72 characters. If you
+run ./utils/check-package package/reaver/* you will see a number of
+warnings about your package. They should be fixed before submission.
+
+Also, please add the URL of the upstream project in the Config.in help
+text. See how it's done in other packages.
+
+> diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
+> new file mode 100644
+> index 0000000..8e4e3c6
+> --- /dev/null
+> +++ b/package/reaver/reaver.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# reaver
+> +#
+> +################################################################################
+> +
+> +REAVER_VERSION = 9bae55bd30b6d46b42da3a09dc23c8b0f9341996
+> +REAVER_SITE = $(call github,t6x,reaver-wps-fork-t6x,$(REAVER_VERSION))
+> +REAVER_LICENSE = GPL-2.0+
+> +REAVER_LICENSE_FILES = docs/LICENSE
+> +
+> +REAVER_SUBDIR = src
+> +REAVER_INSTALL_TARGET = YES
+
+This last line is not needed.
+
+If you could fix those issues and submit an updated version, it would
+be nice. Don't forget to use "git format-patch -v2" for the new
+version, and add a changelog of what has been changed.
+
+Thanks!
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
