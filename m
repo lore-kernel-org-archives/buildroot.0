@@ -1,108 +1,170 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 11 Apr 2018 23:12:33 +0200
-Subject: [Buildroot] [PATCH v2-RESEND 2/6] arm-trusted-firmware:
- generate atf-uboot.ub for ZynqMP booting
-In-Reply-To: <20180409230805.66ab7dc5@windsurf>
-References: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
- <1523032461-3295-3-git-send-email-luca@lucaceresoli.net>
- <20180409230805.66ab7dc5@windsurf>
-Message-ID: <67d945ab-9e10-8de4-c595-222d3b4e9049@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Apr 2018 23:12:54 +0200
+Subject: [Buildroot] [PATCH v2 1/6] squashfs: bump version to
+ e38956b92f738518c29734399629e7cdb33072d3
+In-Reply-To: <20180409200429.22650-1-ps.report@gmx.net>
+References: <20180409200429.22650-1-ps.report@gmx.net>
+Message-ID: <20180411211254.GD2328@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Peter, All,
 
-On 09/04/2018 23:08, Thomas Petazzoni wrote:
-> Hello,
+On 2018-04-09 22:04 +0200, Peter Seiderer spake thusly:
+> - delete patch 0001-musl.patch (superseeded by upstream commit [1])
+> - disable new zstd support for host/target
 > 
-> On Fri,  6 Apr 2018 18:34:17 +0200, Luca Ceresoli wrote:
->> U-Boot SPL for the Xilinx ZynqMP SoCs needs ATF in this format to load
->> it.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>
->> Changes v1 -> v2: none.
->> ---
->>  boot/arm-trusted-firmware/Config.in               |  9 +++++++++
->>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 21 +++++++++++++++++++++
->>  2 files changed, 30 insertions(+)
->>
->> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
->> index 7aef87cb746c..dca9958423b9 100644
->> --- a/boot/arm-trusted-firmware/Config.in
->> +++ b/boot/arm-trusted-firmware/Config.in
->> @@ -71,6 +71,15 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
->>  	  typically used on platforms where another bootloader (e.g
->>  	  U-Boot) encapsulates ATF BL31.
->>  
->> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
->> +	bool "Generate a U-Boot image (for Xilinx ZynqMP U-Boot)"
->> +	depends on BR2_cortex_a53
->> +	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
->> +	help
->> +	  Uses mkimage from uboot-tools to encapsulate bl31.bin into
->> +	  a U-Boot image named atf-uboot.ub. This is needed by the
->> +	  Xilinx version of U-Boot SPL to load ATF on the ZynqMP SoC.
+> [1] https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git/commit/?id=a81678d6a698b8a016f9abac9f3d981281cc52eb
 > 
-> In fact this doesn't look like very Xilinx-specific. It just
-> encapsulates the bl31 image in a U-Boot image format. This could
-> potentially be used by other platforms as well.
-> 
-> So, perhaps we could make this:
-> 
-> config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT
-> 	bool "Build BL31 U-Boot image"
-> 	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
-> 	help
-> 	  This option will generate a bl31.bin that is encapsulates
-> 	  into a U-Boot image named atf-uboot.ub. This is for example
-> 	  used by the Xilinx version of U-Boot SPL to load ATF on the
-> 	  ZynqMP SoC.
-> 
->> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE),y)
->> +define ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
->> +# Get the entry point address from the elf.
->> +	BASE_ADDR=$$($(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | \
->> +	             grep -E -m 1 -i "entry point.*?0x" | \
->> +	             sed -r 's/.*?(0x.*?)/\1/g') && \
-> 
-> Meh, what a mess to get the entry point address :-/ Could this be
-> simplified with:
-> 
-> $(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | sed '/^  Entry point address: *\(.*\)/!d; s//\1/'
-> 
-> (Thanks Yann!)
-> 
->> +	$(HOST_DIR)/bin/mkimage \
->> +		-A arm64 -O arm-trusted-firmware -C none \
->> +		-a $${BASE_ADDR} -e $${BASE_ADDR} \
->> +		-d $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31.bin \
->> +		$(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub
->> +endef
->> +define ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL
->> +	install $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub $(BINARIES_DIR)
-> 
-> Should be:
-> 
-> 	$(INSTALL) -m 0644 -D $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub $(BINARIES_DIR)/atf-uboot.ub
-> 
->> +endef
->> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RESET_TO_BL31=1
->> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
->> +ARM_TRUSTED_FIRMWARE_POST_BUILD_HOOKS += ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE
->> +ARM_TRUSTED_FIRMWARE_POST_INSTALL_IMAGES_HOOKS += ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL
-> 
-> Rather than hooks, just use directly
-> ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_MKIMAGE and
-> ARM_TRUSTED_FIRMWARE_ZYNQMP_UB_INSTALL in the BUILD_CMDS and
-> INSTALL_IMAGES_CMDS. Of course, remove the ZYNQMP part of the variable
-> names if you agree with my proposal above.
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Thanks for the review. These changes will be in v3.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Bye,
+However, I don't think it is interesting to have the new version
+(especially as it is a sha1) in the commit title. Having the title
+read just "squashfs: bump version" is IMHO enough. My rev-by still
+stands, though.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2:
+>   - split off zstd support to extra patches (suggested by Yann E. MORIN)
+> ---
+>  package/squashfs/0001-musl.patch | 71 ----------------------------------------
+>  package/squashfs/squashfs.hash   |  2 +-
+>  package/squashfs/squashfs.mk     |  7 ++--
+>  3 files changed, 5 insertions(+), 75 deletions(-)
+>  delete mode 100644 package/squashfs/0001-musl.patch
+> 
+> diff --git a/package/squashfs/0001-musl.patch b/package/squashfs/0001-musl.patch
+> deleted file mode 100644
+> index 891b1717a2..0000000000
+> --- a/package/squashfs/0001-musl.patch
+> +++ /dev/null
+> @@ -1,71 +0,0 @@
+> -Fix musl build
+> -
+> -Downloaded from
+> -http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-devtools/squashfs-tools/squashfs-tools/fix-compat.patch
+> -and adjusted paths.
+> -
+> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> -
+> -Define FNM_EXTMATCH if not defined its glibc specific define
+> -include missing sys/stat.h for stat* function declarations
+> -
+> -Upstream-Status: Pending
+> -Signed-off-by: Khem Raj <raj.khem@gmail.com>
+> -
+> -Index: squashfs-tools/action.c
+> -===================================================================
+> ---- a/squashfs-tools.orig/action.c
+> -+++ b/squashfs-tools/action.c
+> -@@ -44,6 +44,10 @@
+> - #include "action.h"
+> - #include "error.h"
+> - 
+> -+#if !defined(FNM_EXTMATCH)
+> -+#define FNM_EXTMATCH 0
+> -+#endif
+> -+
+> - /*
+> -  * code to parse actions
+> -  */
+> -Index: squashfs-tools/mksquashfs.c
+> -===================================================================
+> ---- a/squashfs-tools.orig/mksquashfs.c
+> -+++ b/squashfs-tools/mksquashfs.c
+> -@@ -1286,6 +1286,10 @@ void write_dir(squashfs_inode *inode, st
+> - 		dir_size + 3, directory_block, directory_offset, NULL, NULL,
+> - 		dir, 0);
+> - 
+> -+#if !defined(FNM_EXTMATCH)
+> -+#define FNM_EXTMATCH 0
+> -+#endif
+> -+
+> - #ifdef SQUASHFS_TRACE
+> - 	{
+> - 		unsigned char *dirp;
+> -Index: squashfs-tools/pseudo.c
+> -===================================================================
+> ---- a/squashfs-tools.orig/pseudo.c
+> -+++ b/squashfs-tools/pseudo.c
+> -@@ -32,6 +32,7 @@
+> - #include <stdlib.h>
+> - #include <sys/types.h>
+> - #include <sys/wait.h>
+> -+#include <sys/stat.h>
+> - #include <ctype.h>
+> - 
+> - #include "pseudo.h"
+> -Index: squashfs-tools/unsquashfs.c
+> -===================================================================
+> ---- a/squashfs-tools.orig/unsquashfs.c
+> -+++ b/squashfs-tools/unsquashfs.c
+> -@@ -38,6 +38,10 @@
+> - #include <limits.h>
+> - #include <ctype.h>
+> - 
+> -+#ifndef FNM_EXTMATCH
+> -+#define FNM_EXTMATCH 0
+> -+#endif
+> -+
+> - struct cache *fragment_cache, *data_cache;
+> - struct queue *to_reader, *to_inflate, *to_writer, *from_writer;
+> - pthread_t *thread, *inflator_thread;
+> diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+> index 74fdb44354..82a650022c 100644
+> --- a/package/squashfs/squashfs.hash
+> +++ b/package/squashfs/squashfs.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256	2c49392816615b73bf5d6cdce9776cb66a01f5a1494b1d9af580667e32bab001  squashfs-3de1687d7432ea9b302c2db9521996f506c140a3.tar.gz
+> +sha256 bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779 squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
+> diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+> index 9599d892b2..e656218f97 100644
+> --- a/package/squashfs/squashfs.mk
+> +++ b/package/squashfs/squashfs.mk
+> @@ -4,12 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -SQUASHFS_VERSION = 3de1687d7432ea9b302c2db9521996f506c140a3
+> +SQUASHFS_VERSION = e38956b92f738518c29734399629e7cdb33072d3
+>  SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
+>  SQUASHFS_SITE_METHOD = git
+>  SQUASHFS_LICENSE = GPL-2.0+
+>  SQUASHFS_LICENSE_FILES = COPYING
+> -SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
+> +SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1 ZSTD_SUPPORT=0
+>  
+>  ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
+>  SQUASHFS_DEPENDENCIES += lz4
+> @@ -54,7 +54,8 @@ HOST_SQUASHFS_MAKE_ARGS = \
+>  	GZIP_SUPPORT=1 \
+>  	LZ4_SUPPORT=1 \
+>  	LZO_SUPPORT=1 \
+> -	LZMA_XZ_SUPPORT=1
+> +	LZMA_XZ_SUPPORT=1 \
+> +	ZSTD_SUPPORT=0
+>  
+>  define SQUASHFS_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) \
+> -- 
+> 2.16.3
+> 
+
 -- 
-Luca
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
