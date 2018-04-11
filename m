@@ -1,62 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Apr 2018 23:27:54 +0200
-Subject: [Buildroot] [PATCH v2 6/6] squashfs: add zstd support
-In-Reply-To: <20180409200429.22650-6-ps.report@gmx.net>
-References: <20180409200429.22650-1-ps.report@gmx.net>
- <20180409200429.22650-6-ps.report@gmx.net>
-Message-ID: <20180411212754.GH2328@scaer>
+From: Andre Renaud <andre@ignavus.net>
+Date: Thu, 12 Apr 2018 09:27:41 +1200
+Subject: [Buildroot] [PATCH] Added option to enable Freedreno gallium driver
+ in mesa3d
+Message-ID: <20180411212741.16489-1-andre@ignavus.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+From: Andre Renaud <arenaud@designa-electronics.com>
 
-On 2018-04-09 22:04 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[--SNIP--]
-> diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-> index 67025ac68a..bec867d676 100644
-> --- a/package/squashfs/squashfs.mk
-> +++ b/package/squashfs/squashfs.mk
-> @@ -9,7 +9,7 @@ SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
->  SQUASHFS_SITE_METHOD = git
->  SQUASHFS_LICENSE = GPL-2.0+
->  SQUASHFS_LICENSE_FILES = COPYING
-> -SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1 ZSTD_SUPPORT=0
-> +SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
->  
->  ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
->  SQUASHFS_DEPENDENCIES += lz4
-> @@ -46,6 +46,13 @@ else
->  SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SQUASHFS_ZSTD),y)
-> +SQUASHFS_DEPENDENCIES += zstd
-> +SQUASHFS_MAKE_ARGS += ZSTD_SUPPORT=1 COMP_DEFAULT=zstd
-> +else
-> +SQUASHFS_MAKE_ARGS += ZSTD_SUPPORT=0
-> +endif
+---
+ package/mesa3d/Config.in | 7 +++++++
+ package/mesa3d/mesa3d.mk | 1 +
+ 2 files changed, 8 insertions(+)
 
-Please, keep the gzip case last, so that it stays the default. Add the
-zstd case first.
-
-Regards,
-Yann E. MORIN.
-
->  HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz host-zstd
->  
->  HOST_SQUASHFS_MAKE_ARGS = \
-> -- 
-> 2.16.3
-> 
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1476b39acc..5005c98cee 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -85,6 +85,13 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	help
+ 	  Mesa driver for Vivante GPUs.
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
++	bool "Gallium freedreno driver"
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_FREEDRENO
++	help
++	  Mesa driver for Freedreno GPUs.
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	bool "Gallium nouveau driver"
+ 	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 506f84274f..bf177591c7 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -78,6 +78,7 @@ endif
+ 
+ #Gallium Drivers
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv imx
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO)  += freedreno
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.15.1
