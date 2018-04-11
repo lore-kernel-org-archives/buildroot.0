@@ -1,64 +1,96 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 11 Apr 2018 10:17:29 +0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.16
-In-Reply-To: <20180411091004.6486eda3@windsurf>
-References: <c92f59e6efd59c9f887a81c2007d7d2962d45064.1523421916.git.baruch@tkos.co.il>
- <20180411091004.6486eda3@windsurf>
-Message-ID: <20180411071729.qgirg3dnbsgh2hu5@sapphire.tkos.co.il>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 11 Apr 2018 09:29:11 +0200
+Subject: [Buildroot] [PATCH] chipmunk: new package
+Message-ID: <20180411072911.17098-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/chipmunk/Config.in     | 12 ++++++++++++
+ package/chipmunk/chipmunk.hash |  2 ++
+ package/chipmunk/chipmunk.mk   | 16 ++++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/chipmunk/Config.in
+ create mode 100644 package/chipmunk/chipmunk.hash
+ create mode 100644 package/chipmunk/chipmunk.mk
 
-On Wed, Apr 11, 2018 at 09:10:04AM +0200, Thomas Petazzoni wrote:
-> On Wed, 11 Apr 2018 07:45:16 +0300, Baruch Siach wrote:
-> > Drop upstream patch.
-> > 
-> > Add a patch for fixing static build.
-> > 
-> > Add license information about the newly introduced libbtrfsutil.
-> > 
-> > Disable the libbtrfsutil python binding. It does not cross compile
-> > nicely.
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> Thanks for this update. One question below.
-> 
-> > -BTRFS_PROGS_VERSION = 4.15.1
-> > +BTRFS_PROGS_VERSION = 4.16
-> >  BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
-> >  BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
-> >  BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
-> > -BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd
-> > -BTRFS_PROGS_LICENSE = GPL-2.0
-> > -BTRFS_PROGS_LICENSE_FILES = COPYING
-> > +BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd --disable-python
-> > +BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-3.0+ (libbtrfsutil)
-> 
-> Does this means that using the btrfs utilities now requires having a
-> LGPLv3 library on the target ?
-
-So it seems. The v4.16 announcement[1] reads:
-
-  * libbtrfsutil - new LGPL library to wrap userspace functionality
-    * several 'btrfs' commands converted to use it:
-      * properties
-      * filesystem sync
-      * subvolume set-default/get-default/delete/show/sync
-    * python bindings, tests
-
-Maybe not all btrfs utilities require this library in this release, but it 
-looks like the plan is to increase its usage over time.
-
-[1] https://www.spinics.net/lists/linux-btrfs/msg76613.html
-
-baruch
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 41e1b54d9..c978a5601 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -657,6 +657,7 @@ F:	board/olimex/a20_olinuxino
+ F:	configs/olimex_a20_olinuxino_*
+ F:	package/4th/
+ F:	package/botan/
++F:	pacakge/chipmunk/
+ F:	package/dado/
+ F:	package/ficl/
+ F:	package/gdbm/
+diff --git a/package/Config.in b/package/Config.in
+index 9cd5d9c08..94347edbb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1097,6 +1097,7 @@ menu "Graphics"
+ 	source "package/bullet/Config.in"
+ 	source "package/cairo/Config.in"
+ 	source "package/cairomm/Config.in"
++	source "package/chipmunk/Config.in"
+ 	source "package/exiv2/Config.in"
+ 	source "package/fltk/Config.in"
+ 	source "package/fontconfig/Config.in"
+diff --git a/package/chipmunk/Config.in b/package/chipmunk/Config.in
+new file mode 100644
+index 000000000..7275d684a
+--- /dev/null
++++ b/package/chipmunk/Config.in
+@@ -0,0 +1,12 @@
++
++comment "chipmunk needs an OpenGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBGL
++
++config BR2_PACKAGE_CHIPMUNK
++	bool "chipmunk"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	help
++	  Chipmunk2D is a simple, lightweight, fast and portable 2D
++	  rigid body physics library written in C.
++
++	  http://chipmunk-physics.net/
+diff --git a/package/chipmunk/chipmunk.hash b/package/chipmunk/chipmunk.hash
+new file mode 100644
+index 000000000..53e13c38d
+--- /dev/null
++++ b/package/chipmunk/chipmunk.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	6b6d8d5d910c4442fb9c8c4c46a178126d8c21d075cdb3ce439a7f8d8757b0ca  Chipmunk-7.0.2.tar.gz
+diff --git a/package/chipmunk/chipmunk.mk b/package/chipmunk/chipmunk.mk
+new file mode 100644
+index 000000000..61b7a2e7b
+--- /dev/null
++++ b/package/chipmunk/chipmunk.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# chipmunk
++#
++################################################################################
++
++CHIPMUNK_VERSION = 7.0.2
++CHIPMUNK_SITE = https://github.com/slembcke/Chipmunk2D/archive
++CHIPMUNK_SOURCE = Chipmunk-$(CHIPMUNK_VERSION).tar.gz
++CHIPMUNK_INSTALL_STAGING = YES
++CHIPMUNK_LICENSE = MIT
++CHIPMUNK_LICENSE_FILES = LICENSE.txt
++CHIPMUNK_DEPENDENCIES = libgl
++CHIPMUNK_CONF_OPTS = -DBUILD_DEMOS=OFF
++
++$(eval $(cmake-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.11.0
