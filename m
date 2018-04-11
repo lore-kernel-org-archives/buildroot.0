@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:46:25 +0200
-Subject: [Buildroot] [PATCH] libopenssl: security bump to version 1.0.2o
-In-Reply-To: <20180329145209.7878-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 29 Mar 2018 16:52:09 +0200")
-References: <20180329145209.7878-1-peter@korsgaard.com>
-Message-ID: <87d0z521bi.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Apr 2018 17:46:41 +0200
+Subject: [Buildroot] [PATCH 1/2] openblass: drop SSE_GENERIC target
+In-Reply-To: <20180401084642.15199-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 1 Apr 2018 10:46:41 +0200")
+References: <20180401084642.15199-1-peter@korsgaard.com>
+Message-ID: <878t9t21b2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +13,27 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > Constructed ASN.1 types with a recursive definition could exceed the stack
- > (CVE-2018-0739)
+ > Fixes #10856
+ > The SSE_GENERIC target fails to build with a "sgemm_kernel.o: No such file
+ > or directory" error. Several upstream bug reports exist for this:
 
- > Constructed ASN.1 types with a recursive definition (such as can be found in
- > PKCS7) could eventually exceed the stack given malicious input with
- > excessive recursion.  This could result in a Denial Of Service attack.
- > There are no such structures used within SSL/TLS that come from untrusted
- > sources so this is considered safe.
+ > https://github.com/xianyi/OpenBLAS/issues/502
+ > https://github.com/xianyi/OpenBLAS/issues/685
 
- > Incorrect CRYPTO_memcmp on HP-UX PA-RISC (CVE-2018-0733)
+ > In both cases, upstream suggests using a different target definition
+ > instead.  E.G.  from issue 685:
 
- > Because of an implementation bug the PA-RISC CRYPTO_memcmp function is
- > effectively reduced to only comparing the least significant bit of each
- > byte.  This allows an attacker to forge messages that would be considered as
- > authenticated in an amount of tries lower than that guaranteed by the
- > security claims of the scheme.  The module can only be compiled by the HP-UX
- > assembler, so that only HP-UX PA-RISC targets are affected.
+ > You may use NORTHWOOD on x86: make TARGET=NORTHWOOD that uses SSE2
+ > instructions.  It's very hard to find non-SSE2 x86 CPUs today.  For x86-64
+ > use the PRESCOTT target
 
- > rsaz_1024_mul_avx2 overflow bug on x86_64 (CVE-2017-3738)
+ > So drop the SSE_GENERIC target.  The only x86_64 variant we support not
+ > covered by a more specific openblas target is the default variant, nocona.
 
- > This issue has been reported in a previous OpenSSL security advisory and a
- > fix was provided for OpenSSL 1.0.2.  Due to the low severity no fix was
- > released at that time for OpenSSL 1.1.0.  The fix is now available in
- > OpenSSL 1.1.0h.
+ > Nocona was a Xeon variant of the P4 "Prescott" architecture, so use the
+ > PRESCOTT openblas target:
 
- > There is an overflow bug in the AVX2 Montgomery multiplication procedure
- > used in exponentiation with 1024-bit moduli.  No EC algorithms are affected.
- > Analysis suggests that attacks against RSA and DSA as a result of this
- > defect would be very difficult to perform and are not believed likely.
- > Attacks against DH1024 are considered just feasible, because most of the
- > work necessary to deduce information about a private key may be performed
- > offline.  The amount of resources required for such an attack would be
- > significant.  However, for an attack on TLS to be meaningful, the server
- > would have to share the DH1024 private key among multiple clients, which is
- > no longer an option since CVE-2016-0701.
-
- > This only affects processors that support the AVX2 but not ADX extensions
- > like Intel Haswell (4th generation).
-
- > For more details, see https://www.openssl.org/news/secadv/20180327.txt
-
- > The copyright year changed in LICENSE, so adjust the hash to match.
+ > https://en.wikipedia.org/wiki/Xeon#Nocona_and_Irwindale
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
