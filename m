@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Apr 2018 17:45:42 +0200
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.7
-In-Reply-To: <20180318144008.13997-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 18 Mar 2018 15:40:08 +0100")
-References: <20180318144008.13997-1-peter@korsgaard.com>
-Message-ID: <87lgdt21cp.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Apr 2018 17:46:03 +0200
+Subject: [Buildroot] [PATCH] tremor: security bump to fix CVE-2018-5146
+In-Reply-To: <20180319214005.5872-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 19 Mar 2018 22:40:05 +0100")
+References: <20180319214005.5872-1-peter@korsgaard.com>
+Message-ID: <87h8oh21c4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issues:
- > Use after free when server is disconnected during netsplits.  Incomplete fix
- > of CVE-2017-7191.  Found by Joseph Bisch.  (CWE-416, CWE-825) -
- > CVE-2018-7054 [2] was assigned to this issue.
+ > Prevent out-of-bounds write in codebook decoding.
+ > Codebooks that are not an exact divisor of the partition size are now
+ > truncated to fit within the partition.
 
- > Use after free when SASL messages are received in unexpected order.  Found
- > by Joseph Bisch.  (CWE-416, CWE-691) - CVE-2018-7053 [3] was assigned to
- > this issue.
+ > Upstream has migrated from subversion to git, so change to git and bump the
+ > version to include the fix for CVE-2018-5146.
 
- > Null pointer dereference when an ?empty? nick has been observed by Irssi.
- > Found by Joseph Bisch.  (CWE-476, CWE-475) - CVE-2018-7050 [4] was assigned
- > to this issue.
-
- > When the number of windows exceed the available space, Irssi would crash due
- > to Null pointer dereference.  Found by Joseph Bisch.  (CWE-690) -
- > CVE-2018-7052 [5] was assigned to this issue.
-
- > Certain nick names could result in out of bounds access when printing theme
- > strings.  Found by Oss-Fuzz.  (CWE-126) - CVE-2018-7051 [6] was assigned to
- > this issue.
+ > While we're at it, also add a hash file.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
