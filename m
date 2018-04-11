@@ -1,67 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Apr 2018 15:57:36 +0200
-Subject: [Buildroot] [PATCH 1/1] adding new package: pixiewps
-In-Reply-To: <1523451846-29555-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <1523451846-29555-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <20180411155736.397d96ac@windsurf>
+Date: Wed, 11 Apr 2018 16:15:45 +0200
+Subject: [Buildroot] [git commit] configs/mx6cubox: Bump U-Boot and kernel
+ versions
+Message-ID: <20180411141552.C801D8840B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guillaume,
+commit: https://git.buildroot.net/buildroot/commit/?id=e1bb27d72b569790322dedf93cefd12e78ff63ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 11 Apr 2018 15:04:06 +0200, Guillaume W. Bres wrote:
-> Pixie WPS is a generic C package to perform 'pixie dust attack' against WPS pins.
-> Easy to cross-compile, tested on RPI1 & RPI3.
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Bump U-Boot version to 2018.03 and kernel to 4.16.1.
 
-Thanks also for this package. I have pretty much the same comments as
-the ones for the reaver package: commit title, missing entry in
-DEVELOPERS file, missing hash file, unneeded empty new line in
-Config.in, lines too long in Config.in help text, and missing upstream
-URL in Config.in help text.
-> diff --git a/package/pixiewps/pixiewps.mk b/package/pixiewps/pixiewps.mk
-> new file mode 100644
-> index 0000000..8235195
-> --- /dev/null
-> +++ b/package/pixiewps/pixiewps.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# pixiewps 
-> +#
-> +################################################################################
-> +
-> +PIXIEWPS_VERSION = 9e5bdc6c86c8487b2a6107d5ab3559ed5c738c59 
-> +PIXIEWPS_SITE = $(call github,wiire-a,pixiewps,$(PIXIEWPS_VERSION))
-> +PIXIEWPS_LICENSE = GPL-3.0+
-> +PIXIEWPS_LICENSE_FILES = LICENSE.md
-> +
-> +PIXIEWPS_SUBDIR = src
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/mx6cubox_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-This line is useless, the Makefile is at the top-level.
-
-> +PIXIEWPS_INSTALL_TARGET = YES
-
-This line is useless.
-
-> +
-> +$(eval $(generic-package))
-
-I don't see how this can build anything. A generic-package without any
-BUILD_CMDS and INSTALL_TARGET_CMDS will do not anything useful. So I
-think some fundamental part of the package is missing.
-
-Here as well, please remember to use ./utils/check-package
-and ./utils/test-pkg to validate your package. Thanks!
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index 5cb44fd45b..6357720aa4 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/mx6cubox/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
+@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
