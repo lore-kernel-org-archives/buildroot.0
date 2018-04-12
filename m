@@ -1,66 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 23:30:49 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2018.03-rc1
-In-Reply-To: <20180410160604.34435-1-Evgeniy.Didin@synopsys.com>
-References: <20180410160604.34435-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20180412233049.69e96e71@windsurf>
+Date: Thu, 12 Apr 2018 23:31:32 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: add dependency on elfutils
+ for R600 with LLVM
+Message-ID: <20180412213200.3553280F77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=92fda8761aa8024be53a8edb8c102d1ba6401bce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 10 Apr 2018 19:06:04 +0300, Evgeniy Didin wrote:
-> This commit bumps ARC toolchain to arc-2018.03-rc1.
-> We want to test how new toolchain-rc1 builds packages,
-> so we can make fixes before release of toolcain.
-> 
-> ARC GNU tools of version arc-2018.03-rc1 bring some quite significant changes like:
->  * Binutils v2.29.51 with additional ARC patches
->  * GCC 7.3.1 with additional ARC patches
-> 
-> Please note that it is a release candidate
-> and it might contain some breakages,
-> please don't use it for production builds.
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
-> ---
->  package/binutils/Config.in.host                    |  2 +-
->  .../0002-ld-makefile.patch                         |  0
->  .../0003-check-ldrunpath-length.patch              |  0
->  .../0004-add-sysroot-fix-from-bug-3049.patch       |  0
->  .../0005-poison-system-directories.patch           |  0
->  package/binutils/binutils.hash                     |  2 +-
->  package/binutils/binutils.mk                       |  4 +-
->  package/gcc/Config.in.host                         |  2 +-
->  .../0001-fix-checking-for-jumps.patch              | 49 ----------------------
->  .../0100-uclibc-conf.patch                         |  0
->  .../0860-cilk-fix-build-without-wchar.patch        |  0
->  .../0900-remove-selftests.patch                    |  0
->  package/gcc/gcc.hash                               |  2 +-
->  package/gdb/Config.in.host                         |  2 +-
->  package/gdb/gdb.hash                               |  2 +-
->  package/glibc/glibc.hash                           |  2 +-
->  package/glibc/glibc.mk                             |  2 +-
->  17 files changed, 10 insertions(+), 59 deletions(-)
->  rename package/binutils/{arc-2017.09-release => arc-2018.03-rc1}/0002-ld-makefile.patch (100%)
->  rename package/binutils/{arc-2017.09-release => arc-2018.03-rc1}/0003-check-ldrunpath-length.patch (100%)
->  rename package/binutils/{arc-2017.09-release => arc-2018.03-rc1}/0004-add-sysroot-fix-from-bug-3049.patch (100%)
->  rename package/binutils/{arc-2017.09-release => arc-2018.03-rc1}/0005-poison-system-directories.patch (100%)
->  delete mode 100644 package/gcc/arc-2017.09-release/0001-fix-checking-for-jumps.patch
->  rename package/gcc/{arc-2017.09-release => arc-2018.03-rc1}/0100-uclibc-conf.patch (100%)
->  rename package/gcc/{arc-2017.09-release => arc-2018.03-rc1}/0860-cilk-fix-build-without-wchar.patch (100%)
->  rename package/gcc/{arc-2017.09-release => arc-2018.03-rc1}/0900-remove-selftests.patch (100%)
+Gallium R600 needs libelf when mesa is built with llvm support.
+Because of this, toolchain must use either uClibc or glibc, as
+musl is not currently compatible with elfutils.
 
-Applied to master, thanks.
+This patch solves:
+configure: error: r600 requires libelf when using llvm
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+
+  http://autobuild.buildroot.org/results/8845ff0f28d3273ebe884126b85cd7c4a905d81b/
+
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/Config.in | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1476b39acc..bd3d050e29 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -97,13 +97,23 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
+ 	bool "Gallium Radeon R600 driver"
+ 	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_PACKAGE_MESA3D_LLVM || \
++		(BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
++			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+ 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
++	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
+ 
++# R600 needs libelf when Mesa3D is built with LLVM support
++# musl is not currently compatible with elfutils
++comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
++	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+ 	bool "Gallium vmware svga driver"
+ 	depends on BR2_i386 || BR2_x86_64
