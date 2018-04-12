@@ -1,89 +1,76 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 12 Apr 2018 19:43:52 +0300
-Subject: [Buildroot] [PATCH v3] picocom: fix build for x86 with musl libc
-Message-ID: <b7ca878a2b67c3891d8e7bbaad91b6ecb00de9c8.1523551432.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 12 Apr 2018 19:04:25 +0200
+Subject: [Buildroot] [PATCH] support/scripts/fix-rpath: exclude
+ /lib/firmware in the target
+In-Reply-To: <20180412115009.8432-1-thomas.petazzoni@bootlin.com>
+References: <20180412115009.8432-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180412170425.GA4221@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 3.1 picocom enabled by default custom baud rate support
-for x86 targets. This requires the c_ispeed and c_opseed field in struct
-termios that musl libc does not provide. Add an upstream patch that
-restricts custom baud rates to C libraries that provide the needed
-termios fields.
+Thomas, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/28e/28ec584484dedfd6ef473dfd9dd24481e27ce2b3/
-http://autobuild.buildroot.net/results/912/912493a8f99416524a5897634ae62604436e9b51/
-http://autobuild.buildroot.net/results/65d/65d0f449822f296dfe6b9be0e03a5a855f700a9e/
+On 2018-04-12 13:50 +0200, Thomas Petazzoni spake thusly:
+> The /lib/firmware directory contains random firmware for various
+> devices. It happens that some of them might be or appear to be ELF
+> files, but they shouldn't be checked by fix-rpath. For example, one of
+> the Qualcomm VPU firmware file appears to be an ELF file, but patchelf
+> isn't happy about it:
+> 
+> $ ./output/host/bin/patchelf --print-rpath output/target/lib/firmware/qcom/venus-4.2/venus.b00
+> patchelf: patchelf.cc:387: void ElfFile<Elf_Ehdr, Elf_Phdr, Elf_Shdr, Elf_Addr, Elf_Off, Elf_Dyn, Elf_Sym>::parse() [with Elf_Ehdr = Elf32_Ehdr; Elf_Phdr = Elf32_Phdr; Elf_Shdr = Elf32_Shdr; Elf_Addr = unsigned int; Elf_Off = unsigned int; Elf_Dyn = Elf32_Dyn; Elf_Sym = Elf32_Sym]: Assertion `shstrtabIndex < shdrs.size()' failed.
+> Aborted (core dumped)
+> 
+> Even though patchelf definitely shouldn't crash, it anyway doesn't
+> make sense to check ELF files in /lib/firmware, so let's exclude this
+> directory from our check.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v3: Correct upstream commit ID
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-v2: Use upstream patch instead of local build time disable
----
- ...mpile-with-libc-s-without-cispeed-cospeed.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch b/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
-new file mode 100644
-index 000000000000..5143e311020a
---- /dev/null
-+++ b/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
-@@ -0,0 +1,49 @@
-+From 30c712c5f14306460c44bea70e24419db9d44f8c Mon Sep 17 00:00:00 2001
-+From: Nick Patavalis <npat@efault.net>
-+Date: Thu, 12 Apr 2018 15:16:04 +0300
-+Subject: [PATCH] Compile with libc's without cispeed / cospeed
-+
-+Some libc implementations (e.g. musl) do not define the cispeed and
-+cospeed struct termios fields. So we have to check the
-+_HAVE_STRUCT_TERMIOS_C_ISPEED and _HAVE_STRUCT_TERMIOS_C_OSPEED
-+macros. If not defined, we disable custom baudrate support.
-+
-+[baruch: backported from upstream master to 3.1]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit 1acf1ddabaf3
-+
-+ custbaud.h | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/custbaud.h b/custbaud.h
-+index 48151a4a4e84..ae4ae8daf49e 100644
-+--- a/custbaud.h
-++++ b/custbaud.h
-+@@ -26,6 +26,8 @@
-+ #ifndef CUSTBAUD_H
-+ #define CUSTBAUD_H
-+ 
-++#include <termios.h>
-++
-+ #ifndef NO_CUSTOM_BAUD
-+ 
-+ #if defined (__linux__)
-+@@ -33,7 +35,13 @@
-+ /* Enable by-default for kernels > 2.6.0 on x86 and x86_64 only */
-+ #include <linux/version.h>
-+ #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,0)
-+-#if defined (__i386__) || defined (__x86_64__) || defined (USE_CUSTOM_BAUD)
-++/* Some libc implementations (e.g. musl) do not define the cispeed and
-++   cospeed struct termios fields. We do not support custom baudrates
-++   on them. */
-++#if ( (defined (__i386__) || defined (__x86_64__))  \
-++      && defined (_HAVE_STRUCT_TERMIOS_C_ISPEED)    \
-++      && defined (_HAVE_STRUCT_TERMIOS_C_OSPEED) )  \
-++    || defined (USE_CUSTOM_BAUD)
-+ #ifndef USE_CUSTOM_BAUD
-+ #define USE_CUSTOM_BAUD
-+ #endif
-+-- 
-+2.16.3
-+
+> ---
+>  support/scripts/fix-rpath | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+> index 15705a3b0d..fa138ca15a 100755
+> --- a/support/scripts/fix-rpath
+> +++ b/support/scripts/fix-rpath
+> @@ -56,6 +56,7 @@ EOF
+>  # ELF files should not be in these sub-directories
+>  HOST_EXCLUDEPATHS="/share/terminfo"
+>  STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
+> +TARGET_EXCLUDEPATHS="/lib/firmware"
+>  
+>  main() {
+>      local rootdir
+> @@ -106,6 +107,11 @@ main() {
+>  
+>          target)
+>              rootdir="${TARGET_DIR}"
+> +
+> +            for excludepath in ${TARGET_EXCLUDEPATHS}; do
+> +                find_args+=( "-path" "${TARGET_DIR}""${excludepath}" "-prune" "-o" )
+> +            done
+> +
+>              # we don't want $ORIGIN-based rpaths but absolute paths without rootdir.
+>              # we also want to remove rpaths pointing to /lib or /usr/lib.
+>              sanitize_extra_args+=( "--no-standard-lib-dirs" )
+> -- 
+> 2.14.3
+> 
+
 -- 
-2.16.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
