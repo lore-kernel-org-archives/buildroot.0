@@ -1,108 +1,56 @@
-From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Date: Thu, 12 Apr 2018 13:44:33 +0200
-Subject: [Buildroot] [PATCH 1/1] reaver: new package
-Message-ID: <1523533473-20081-1-git-send-email-guillaume.bressaix@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Apr 2018 13:50:09 +0200
+Subject: [Buildroot] [PATCH] support/scripts/fix-rpath: exclude
+ /lib/firmware in the target
+Message-ID: <20180412115009.8432-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reaver is a tool to audit networks against brute WPS pins attacks.
+The /lib/firmware directory contains random firmware for various
+devices. It happens that some of them might be or appear to be ELF
+files, but they shouldn't be checked by fix-rpath. For example, one of
+the Qualcomm VPU firmware file appears to be an ELF file, but patchelf
+isn't happy about it:
 
-It is a generic autotools package, easy to build. Tests passed for the 7 default
-toolchains. 
+$ ./output/host/bin/patchelf --print-rpath output/target/lib/firmware/qcom/venus-4.2/venus.b00
+patchelf: patchelf.cc:387: void ElfFile<Elf_Ehdr, Elf_Phdr, Elf_Shdr, Elf_Addr, Elf_Off, Elf_Dyn, Elf_Sym>::parse() [with Elf_Ehdr = Elf32_Ehdr; Elf_Phdr = Elf32_Phdr; Elf_Shdr = Elf32_Shdr; Elf_Addr = unsigned int; Elf_Off = unsigned int; Elf_Dyn = Elf32_Dyn; Elf_Sym = Elf32_Sym]: Assertion `shstrtabIndex < shdrs.size()' failed.
+Aborted (core dumped)
 
-It is mandantory to use the github.com/t6x fork that I set in reaver.mk
-at the moment because other versions/repos of this project won't cross-compile.
-Their makefiles are pretty outdated. It is the only updated and regularly maintained
-repo that I found for this project at the moment.
+Even though patchelf definitely shouldn't crash, it anyway doesn't
+make sense to check ELF files in /lib/firmware, so let's exclude this
+directory from our check.
 
-I added an extra mention about this in package/reaver/reaver.mk
-as suggested by Thomas. I also removed other non related modifications.
-
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/reaver/Config.in   |  9 +++++++++
- package/reaver/reaver.hash |  3 +++
- package/reaver/reaver.mk   | 17 +++++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/reaver/Config.in
- create mode 100644 package/reaver/reaver.hash
- create mode 100644 package/reaver/reaver.mk
+ support/scripts/fix-rpath | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 00cbaef..f52cb88 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -794,6 +794,7 @@ F:	package/sdl2/
+diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+index 15705a3b0d..fa138ca15a 100755
+--- a/support/scripts/fix-rpath
++++ b/support/scripts/fix-rpath
+@@ -56,6 +56,7 @@ EOF
+ # ELF files should not be in these sub-directories
+ HOST_EXCLUDEPATHS="/share/terminfo"
+ STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
++TARGET_EXCLUDEPATHS="/lib/firmware"
  
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/liquid-dsp/
-+F:	package/reaver/
+ main() {
+     local rootdir
+@@ -106,6 +107,11 @@ main() {
  
- N:	Guo Ren <ren_guo@c-sky.com>
- F:	arch/Config.in.csky
-diff --git a/package/Config.in b/package/Config.in
-index e48d0b4..2da8605 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1823,6 +1823,7 @@ endif
- 	source "package/quagga/Config.in"
- 	source "package/rabbitmq-server/Config.in"
- 	source "package/radvd/Config.in"
-+	source "package/reaver/Config.in"
- 	source "package/rp-pppoe/Config.in"
- 	source "package/rpcbind/Config.in"
- 	source "package/rsh-redone/Config.in"
-diff --git a/package/reaver/Config.in b/package/reaver/Config.in
-new file mode 100644
-index 0000000..8c2e8c4
---- /dev/null
-+++ b/package/reaver/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_REAVER
-+	bool "reaver"
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  Reaver is a tool to audit networks against
-+	  brute WPS pins attacks. It is complementary
-+	  to "Aircrack-ng".
+         target)
+             rootdir="${TARGET_DIR}"
 +
-+	  https://code.google.com/archive/p/reaver-wps/wikis/README.wiki
-diff --git a/package/reaver/reaver.hash b/package/reaver/reaver.hash
-new file mode 100644
-index 0000000..6d2bacc
---- /dev/null
-+++ b/package/reaver/reaver.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256 350a89b068f8b461e6459b739d4f5f301db01f115d75f4d698a1f2830149c412 reaver-9bae55bd30b6d46b42da3a09dc23c8b0f9341996.tar.gz
-+sha256 bb40cfd5e9ca6e8465ea3c236f3f2293e8300af1bfe87e72fabe482ae6cc995a docs/LICENSE
-diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
-new file mode 100644
-index 0000000..90d1727
---- /dev/null
-+++ b/package/reaver/reaver.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# reaver
-+#
-+################################################################################
++            for excludepath in ${TARGET_EXCLUDEPATHS}; do
++                find_args+=( "-path" "${TARGET_DIR}""${excludepath}" "-prune" "-o" )
++            done
 +
-+# Older repos for this project will not cross-compile easily
-+#??while this one works right away
-+REAVER_VERSION = 9bae55bd30b6d46b42da3a09dc23c8b0f9341996
-+REAVER_SITE = $(call github,t6x,reaver-wps-fork-t6x,$(REAVER_VERSION))
-+REAVER_LICENSE = GPL-2.0+
-+REAVER_LICENSE_FILES = docs/LICENSE
-+
-+REAVER_SUBDIR = src
-+REAVER_DEPENDENCIES = libpcap
-+
-+$(eval $(autotools-package))
+             # we don't want $ORIGIN-based rpaths but absolute paths without rootdir.
+             # we also want to remove rpaths pointing to /lib or /usr/lib.
+             sanitize_extra_args+=( "--no-standard-lib-dirs" )
 -- 
-2.7.4
+2.14.3
