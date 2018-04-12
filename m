@@ -1,116 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 11:09:35 +0200
-Subject: [Buildroot] [PATCH v2-RESEND 3/6] zynqmp-pmufw-binaries: new
- package
-In-Reply-To: <538f8047-1a56-0335-9d3f-912ebc9914a0@lucaceresoli.net>
-References: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
- <1523032461-3295-4-git-send-email-luca@lucaceresoli.net>
- <20180409231327.28e2b2e4@windsurf>
- <538f8047-1a56-0335-9d3f-912ebc9914a0@lucaceresoli.net>
-Message-ID: <20180412110935.7366ab58@windsurf>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Thu, 12 Apr 2018 11:16:59 +0200
+Subject: [Buildroot] [PATCH 1/1] reaver: new package
+Message-ID: <1523524619-25036-1-git-send-email-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Luca,
+Reaver is a tool to audit networks against brute WPS pins attacks.
 
-On Wed, 11 Apr 2018 23:03:17 +0200, Luca Ceresoli wrote:
+It is a generic autotools package, easy to build. Tests passed for the 7 default
+toolchains. 
 
-> > So this hints at the fact that this firmware is board specific. Is that
-> > correct ? If so, shouldn't we plan on making the Git repo and its
-> > version configurable ?  
-> 
-> The firmware is board-specific and configuration-specific. The plan for
-> that repo, however, is to have all supported board+config combinations
-> supported in all versions, thus the lack of a version selection knob.
+It is mandantory to use the github.com/t6x fork that I set in reaver.mk
+at the moment because other versions/repos of this project won't cross-compile.
+Their makefiles are pretty outdated. It is the only updated and regularly maintained
+repo that I found for this project at the moment.
 
-"all" ? I'm pretty sure a lot of people will be doing custom designs,
-and will not be willing to push their firmware binary to your public
-repository.
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ DEVELOPERS                 |  3 ++-
+ package/Config.in          |  1 +
+ package/reaver/Config.in   | 10 ++++++++++
+ package/reaver/reaver.hash |  3 +++
+ package/reaver/reaver.mk   | 15 +++++++++++++++
+ 5 files changed, 31 insertions(+), 1 deletion(-)
+ create mode 100644 package/reaver/Config.in
+ create mode 100644 package/reaver/reaver.hash
+ create mode 100644 package/reaver/reaver.mk
 
-> > I mean, what are the chances that for some random ZynqMP board, your
-> > Github repo will contain the appropriate firmware file ?  
-> 
-> Good point. My repo there is ready to hold any possible board+config
-> combination that is interesting for known boards. I would love to host
-> more boards there (contributilns would be welcome). However I don't
-> think we'll ever see any custom board, which reduces its usefulness.
-> 
-> Thus a simpler, but more flexible, option might be to nuke the
-> zynqmp-pmufw-binaries BR package and let uboot fetch the pmufw.bin from
-> a plain URL (https:// or file://). For standard devboards the URL could
-> point to my repo, but it can be anywhere else (for custom boards).
-
-Ah, this seems like a better option indeed, especially since the
-firmware is a single file. It could be locally available, or downloaded
-from HTTP. Sounds like a good plan.
-
-> > Generally speaking, it's a bit annoying that we can't build this from
-> > source. I understand it needs a Microblaze toolchain, so it's very
-> > difficult to integrate in Buildroot :-/  
-> 
-> Indeed, and this is *the* big topic.
-> 
-> There are several variations that could be considered, but none have
-> been attempted AFAIK. Here they are, simplest to hardest:
-> 
-> 1. Build the PMUFW in Buildroot (kind of)
-> 
-> Add a script (e.g. board/zynqmp/build-pmufw.sh) that builds a microblaze
-> toolchain and the PMUFW with a given config. The commands are already
-> there: [0].
-> 
-> The script would then be called manually before Buildroot runs, or it
-> could be wrapped in a Buildroot package that uboot depends on. Takes ~8
-> minutes on a modern quad core machine.
-> 
-> * Simple to do, not well integrated, longer build time.
-
-Yeah, the integration with Buildroot here is really not great, because
-Crosstool-NG will do its own downloading, etc.
-
-> 2. Let SPL install the PMUFW config
-> 
-> This is what the Xilinx workflow does (in the Xilinx FSBL, which is more
-> or less equivalent to U-Boot SPL). This allows The PMUFW can be a unique
-> blob for all boards.
-> 
-> This moves the configuration object from a piece of early firmware
-> (PMUFW) to another piece of early firmware (SPL). Both pieces are
-> residing in the same BOOT.BIN file, so there's no added flexibility for
-> the "user": upon a config change, you still have to update the BOOT.BIN
-> file in the boot medium.
-> 
-> There are also licensing issues preventing this, since the configuration
-> object file license is not compatible with the U-Boot license. Xilinx
-> _might_ be willing to fix this, however.
-> 
-> * Could be doable, perhaps tricky.
-> 
-> 3. Don't have any config object...
-> 
-> ...and change the PMUFW source code to assign dynamically peripherals to
-> cores at runtime, based on requests from cores! :->
-> 
-> * Maybe doable, potentially dangerous, definitely hard to do.
-
-Not sure I understand enough of what the PMUFW is doing to understand
-(2) and (3). And yes, I did attend your talk at FOSDEM about
-ZynqMP ! :-)
-
-> Any idea or suggestion is very welcome, although I think we cannot do
-> much more than looking for the least evil solution...
-
-I think for now the solution you propose to add an option in U-Boot to
-indicate the path/URL to the PMUFW binary is the easiest one. It can
-always be improved later if better solutions emerge.
-
-Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 00cbaef..390d7f8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -792,8 +792,9 @@ F:	package/c-icap/
+ F:	package/c-icap-modules/
+ F:	package/sdl2/
+ 
+-N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
++N:	Guillaume W. Bres <guillaume.bressaix@gmail.com>
+ F:	package/liquid-dsp/
++F: package/reaver/
+ 
+ N:	Guo Ren <ren_guo@c-sky.com>
+ F:	arch/Config.in.csky
+diff --git a/package/Config.in b/package/Config.in
+index e48d0b4..2da8605 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1823,6 +1823,7 @@ endif
+ 	source "package/quagga/Config.in"
+ 	source "package/rabbitmq-server/Config.in"
+ 	source "package/radvd/Config.in"
++	source "package/reaver/Config.in"
+ 	source "package/rp-pppoe/Config.in"
+ 	source "package/rpcbind/Config.in"
+ 	source "package/rsh-redone/Config.in"
+diff --git a/package/reaver/Config.in b/package/reaver/Config.in
+new file mode 100644
+index 0000000..fed433b
+--- /dev/null
++++ b/package/reaver/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_REAVER
++	bool "reaver"
++	select BR2_PACKAGE_LIBPCAP
++
++	help
++	  Reaver is a tool to audit networks against
++	  brute WPS pins attacks. It is complementary
++	  to "Aircrack-ng".
++
++	  https://code.google.com/archive/p/reaver-wps/wikis/README.wiki
+diff --git a/package/reaver/reaver.hash b/package/reaver/reaver.hash
+new file mode 100644
+index 0000000..6d2bacc
+--- /dev/null
++++ b/package/reaver/reaver.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256 350a89b068f8b461e6459b739d4f5f301db01f115d75f4d698a1f2830149c412 reaver-9bae55bd30b6d46b42da3a09dc23c8b0f9341996.tar.gz
++sha256 bb40cfd5e9ca6e8465ea3c236f3f2293e8300af1bfe87e72fabe482ae6cc995a docs/LICENSE
+diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
+new file mode 100644
+index 0000000..77dc3ab
+--- /dev/null
++++ b/package/reaver/reaver.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# reaver
++#
++################################################################################
++
++REAVER_VERSION = 9bae55bd30b6d46b42da3a09dc23c8b0f9341996
++REAVER_SITE = $(call github,t6x,reaver-wps-fork-t6x,$(REAVER_VERSION))
++REAVER_LICENSE = GPL-2.0+
++REAVER_LICENSE_FILES = docs/LICENSE
++
++REAVER_SUBDIR = src
++REAVER_DEPENDENCIES = libpcap
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
