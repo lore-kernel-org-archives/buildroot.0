@@ -1,42 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 23:06:12 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.16
-In-Reply-To: <c92f59e6efd59c9f887a81c2007d7d2962d45064.1523421916.git.baruch@tkos.co.il>
-References: <c92f59e6efd59c9f887a81c2007d7d2962d45064.1523421916.git.baruch@tkos.co.il>
-Message-ID: <20180412230612.38fcabf0@windsurf>
+From: Vincent Stehle <vincent.stehle@laposte.net>
+Date: Thu, 12 Apr 2018 23:26:06 +0200
+Subject: [Buildroot] [PATCH] configs/freescale_{p1025twr,
+ t1040d4rdb}: headers version
+Message-ID: <20180412212606.1428-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Vincent Stehl? <vincent.stehle@laposte.net>
 
-On Wed, 11 Apr 2018 07:45:16 +0300, Baruch Siach wrote:
-> Drop upstream patch.
-> 
-> Add a patch for fixing static build.
-> 
-> Add license information about the newly introduced libbtrfsutil.
-> 
-> Disable the libbtrfsutil python binding. It does not cross compile
-> nicely.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...stall-static-library-and-headers-in-insta.patch |  4 ++-
->  ...-convert-ext2-Remove-check-for-ext2_ext_a.patch | 38 ---------------------
->  .../0003-btrfs.static-needs-libbtrfsutil.patch     | 39 ++++++++++++++++++++++
->  package/btrfs-progs/btrfs-progs.hash               |  4 ++-
->  package/btrfs-progs/btrfs-progs.mk                 |  9 ++---
->  5 files changed, 50 insertions(+), 44 deletions(-)
->  delete mode 100644 package/btrfs-progs/0003-btrfs-progs-convert-ext2-Remove-check-for-ext2_ext_a.patch
->  create mode 100644 package/btrfs-progs/0003-btrfs.static-needs-libbtrfsutil.patch
+The freescale p1025twr and t1040d4rdb defconfigs use a 4.15 series kernel;
+specify BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15 accordingly.
 
-Applied to master, thanks.
+This fixes the following build error:
 
-Thomas
+  Incorrect selection of kernel headers: expected 4.16.x, got 4.15.x
+
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ configs/freescale_p1025twr_defconfig   | 3 +++
+ configs/freescale_t1040d4rdb_defconfig | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/configs/freescale_p1025twr_defconfig b/configs/freescale_p1025twr_defconfig
+index 13ec517fbd..f476d92706 100644
+--- a/configs/freescale_p1025twr_defconfig
++++ b/configs/freescale_p1025twr_defconfig
+@@ -2,6 +2,9 @@
+ BR2_powerpc=y
+ BR2_powerpc_8548=y
+ 
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ 
+diff --git a/configs/freescale_t1040d4rdb_defconfig b/configs/freescale_t1040d4rdb_defconfig
+index 6b09e69646..b8d162736c 100644
+--- a/configs/freescale_t1040d4rdb_defconfig
++++ b/configs/freescale_t1040d4rdb_defconfig
+@@ -2,6 +2,9 @@
+ BR2_powerpc64=y
+ BR2_powerpc_e5500=y
+ 
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.16.3
