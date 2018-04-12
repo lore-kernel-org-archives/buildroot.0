@@ -1,50 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Apr 2018 18:42:04 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2017.02.11
-Message-ID: <20180412164240.40DCE8848D@busybox.osuosl.org>
+Date: Thu, 12 Apr 2018 18:37:41 +0200
+Subject: [Buildroot] [git commit] Update for 2017.02.11
+Message-ID: <20180412164240.2FA8B884A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=517502370ce933afd6b8645638b33a858ca7dcd9
+commit: https://git.buildroot.net/buildroot/commit/?id=4f00d03a68117a16faacac0b2227a2a83985e37b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8a0e4e865add1079e7cf8336def4f7aab00b2e0c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ CHANGES | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index e7f291d323..1dd2b4a4f4 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index 09cf7c3f85..29a4937a9d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -907,6 +907,26 @@
+ 	#9846: musl libc not installed correctly in target folder
+ 	#9856: build libubox failed on ubuntu 17.04 64bit
  
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.02.11 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>11 April 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2017.02.11 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2017.02.10 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.11">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-April/218919.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.02.11.tar.bz2">2017.02.11 release</a>.</p>
-+	<p>Notice that the 2017.02 series is now end of life, so please consider
-+	  updating to 2018.02 instead.</p>
-+      </div>
-+    </div>
-+  </li>
++2017.02.11, Released April 11th, 2018
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	dependencies: Blacklist tar 1.30+ and build our own host-tar
++	if needed as tar 1.30+ changed the --numeric-owner output for
++	long path names. Build host-tar before other host-dependencies
++	as they need it to extract their source tarballs.
++
++	Updated/fixed packages: apache, busybox, clamav, dhcp,
++	dnsmasq, dovecot, exim, imagemagick, irssi, jq, libcurl,
++	libpjsip, librsvg, libtasn1, libvorbis, libxml2, lz4, mariadb,
++	mbedtls, mosquitto, ntp, openblas, opencv3, openssl, patch,
++	postgresql, python-webpy, qt53d, qt5tools, quagga, rsync,
++	samba4, sngrep, tremor, wavpack, wireshark, xerces, xterm
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10856: openblas on qemu_x86_64_defconfig fails with "sgemm_..
++
+ 2017.02.10, Released January 31st, 2018
+ 
+ 	Important / security related fixes.
