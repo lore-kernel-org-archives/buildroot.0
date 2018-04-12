@@ -1,49 +1,50 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 12 Apr 2018 17:25:40 +0200
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.0.1
-Message-ID: <20180412152540.32447-1-brgl@bgdev.pl>
+From: James Byrne <james.byrne@origamienergy.com>
+Date: Thu, 12 Apr 2018 16:40:46 +0100
+Subject: [Buildroot] [PATCH 1/1] Makefile: Take default
+ SOURCE_DATE_EPOCH from repo containing Makefile
+In-Reply-To: <20180410143630.22646b86@windsurf>
+References: <1523356092-16037-1-git-send-email-james.byrne@origamienergy.com>
+ <20180410143630.22646b86@windsurf>
+Message-ID: <e872ea7b-0202-d77a-6620-8e6113570e33@origamienergy.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a bugfix release. It contains the following changes since v1.0:
+Hi Thomas,
 
-- include Doxyfile in the release tarball
-- fix the implicit-fallthrough warnings
-- make tests work together with gpio-mockup post v4.16 linux kernel
-- use reference counting for line file descriptors to avoid calling
-  close() on the same descriptors multiple times
+On 10/04/18 13:36, Thomas Petazzoni wrote:
+ > On Tue, 10 Apr 2018 11:28:12 +0100, James Byrne wrote:
+ >> diff --git a/Makefile b/Makefile
+ >> index cd53362..3b846b9 100644
+ >> --- a/Makefile
+ >> +++ b/Makefile
+ >> @@ -506,7 +506,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
+ >>   # If SOURCE_DATE_EPOCH has not been set then use the commit date,
+or the last
+ >>   # release date if the source tree is not within a Git repository.
+ >>   # See: https://reproducible-builds.org/specs/source-date-epoch/
+ >> -BR2_VERSION_GIT_EPOCH := $(shell $(GIT) --git-dir=$(TOPDIR)/.git
+log -1 --format=%at 2> /dev/null)
+ >> +BR2_VERSION_GIT_EPOCH := $(shell $(GIT) log -1 --format=%at 2>
+/dev/null)
+ >
+ > Was there a reason to have this --git-dir/GIT_DIR option/variable
+ > passed in the first place ?
+ >
+ > I don't immediately see any problem with the change you're proposing,
+ > but I'm wondering why we were passing --git-dir (previously GIT_DIR).
+ >
+ > It has been done this way since commit
+ > 9befe94baf990ee6331e77edb40e286e9dc4df8d, where SOURCE_DATE_EPOCH was
+ > introduced in Buildroot.
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I don't know, but my guess would be that the original author thought
+that if you were building out of tree then the current directory might
+be somewhere else, so they wanted to ensure it would use the right one,
+but in fact the current directory can only be the one containing Makefile.
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index b29e12ebd2..9ed4b59ab9 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 34c76b3730b9d4a1159bcb14000f78b1e890251b8a3823b794fa930654eabdd0  libgpiod-1.0.tar.xz
-+sha256 972924195367f5fb045c023d65340c4b7dfc8764499516be446553865208dedc  libgpiod-1.0.1.tar.xz
- # Hash for license file
- sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index 598adcc599..7f8fa4b7dd 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = 1.0
-+LIBGPIOD_VERSION = 1.0.1
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
--- 
-2.17.0
+James
+--
+The contents of this email and any attachment are confidential to the intended recipient(s). If you are not an intended recipient: (i) do not use, disclose, distribute, copy or publish this email or its contents; (ii) please contact the sender immediately; and (iii) delete this email. Origami Energy Limited (company number 8619644); Origami Storage Limited (company number 10436515) and OSSPV001 Limited (company number 10933403), each registered in England and each with a registered office at: Ashcombe Court, Woolsack Way, Godalming, GU7 1LQ.
