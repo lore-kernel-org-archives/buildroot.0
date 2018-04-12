@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 23:43:05 +0200
-Subject: [Buildroot] [PATCH v2 1/6] squashfs: bump version to
- e38956b92f738518c29734399629e7cdb33072d3
-In-Reply-To: <20180409200429.22650-1-ps.report@gmx.net>
-References: <20180409200429.22650-1-ps.report@gmx.net>
-Message-ID: <20180412234305.378033ae@windsurf>
+Date: Thu, 12 Apr 2018 23:49:35 +0200
+Subject: [Buildroot] [PATCH 1/1] tcf-agent: bump to version 1.7.0
+In-Reply-To: <20180412151310.15252-1-eugene@largest.net>
+References: <20180412151310.15252-1-eugene@largest.net>
+Message-ID: <20180412234935.3ae48694@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  9 Apr 2018 22:04:24 +0200, Peter Seiderer wrote:
-> - delete patch 0001-musl.patch (superseeded by upstream commit [1])
-> - disable new zstd support for host/target
+On Thu, 12 Apr 2018 08:13:10 -0700, Eugene Tarassov wrote:
+> Build issues with MicroBlaze and PPC64 targets are fixed
 > 
-> [1] https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git/commit/?id=a81678d6a698b8a016f9abac9f3d981281cc52eb
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - split off zstd support to extra patches (suggested by Yann E. MORIN)
-> ---
->  package/squashfs/0001-musl.patch | 71 ----------------------------------------
->  package/squashfs/squashfs.hash   |  2 +-
->  package/squashfs/squashfs.mk     |  7 ++--
->  3 files changed, 5 insertions(+), 75 deletions(-)
->  delete mode 100644 package/squashfs/0001-musl.patch
+> Signed-off-by: Eugene Tarassov <eugene@largest.net>
 
-Applied to master, thanks.
+Thanks Eugene for this patch. However, Norbert had already sent a patch
+to bump to 1.7.0, and his patch raised a number of questions that
+haven't been answered:
+
+  http://patchwork.ozlabs.org/patch/880414/
+
+In particular, Norbert submission was adding two patches to fix build
+issues, and doing a lot more changes in tcf-agent.mk. I'm wondering why
+your patch is so different, and doesn't include Norbert changes.
+
+Thanks,
 
 Thomas
 -- 
