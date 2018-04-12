@@ -1,52 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 13:54:28 +0200
-Subject: [Buildroot] [PATCH] Added Qualcomm video accelerator and GPU
- firmware option.
-In-Reply-To: <20180411213938.5888-1-andre@ignavus.net>
-References: <20180411213938.5888-1-andre@ignavus.net>
-Message-ID: <20180412135428.6c4cdf50@windsurf>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Thu, 12 Apr 2018 14:02:36 +0200
+Subject: [Buildroot] [PATCH] package/llvm: fix typo in llvm.mk
+Message-ID: <20180412120236.1499-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andre,
+"+=" was missing in -DLLVM_TARGETS_TO_BUILD, so LLVM_CONF_OPTS and
+HOST_LLVM_CONF_OPTS before this option weren't being considered.
 
-On Thu, 12 Apr 2018 09:39:38 +1200, Andre Renaud wrote:
-> From: Andre Renaud <arenaud@designa-electronics.com>
-> 
-> Signed-off-by: Andre Renaud <andre@ignavus.net>
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+---
+ package/llvm/llvm.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I fixed up the title to be:
-
-	linux-firmware: add Qualcomm video accelerator and GPU firmware options
-
-but then I tested it, and your patch triggers an issue in our fix-rpath
-script: the patchelf program doesn't like the ELF files that act as
-firmware files for the Qualcomm VPU:
-
-/home/thomas/projets/buildroot/support/scripts/fix-rpath target
-/home/thomas/projets/buildroot/support/scripts/fix-rpath: line 60:  5156 Aborted                 (core dumped) ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1
-/home/thomas/projets/buildroot/support/scripts/fix-rpath: line 60:  5163 Aborted                 (core dumped) ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1
-/home/thomas/projets/buildroot/support/scripts/fix-rpath: line 60:  5174 Aborted                 (core dumped) ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1
-/home/thomas/projets/buildroot/support/scripts/fix-rpath: line 60:  5209 Aborted                 (core dumped) ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1
-/home/thomas/projets/buildroot/support/scripts/fix-rpath: line 60:  5229 Aborted                 (core dumped) ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1
-/home/thomas/projets/buildroot/support/scripts/fix-rpath: line 60:  5258 Aborted                 (core dumped) ${PATCHELF} --print-rpath "${file}" > /dev/null 2>&1
-
-So, I've submitted a patch that adjusts our fix-rpath script to
-ignore /lib/firmware: http://patchwork.ozlabs.org/patch/897624/
-
-I'll wait a bit to see if anyone has some comments about this patch
-(and potentially give some Acked-by), as I need to apply such a fix
-before applying your patch.
-
-I'm surprised that you haven't see the issue, though.
-
-Best regards,
-
-Thomas
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 4b4f96e5f1..d19f8a0b87 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -42,8 +42,8 @@ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+ 
+ # Build backend for target architecture. This include backends like AMDGPU.
+ LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+-HOST_LLVM_CONF_OPTS = -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
+-LLVM_CONF_OPTS = -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
++HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
++LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
+ 
+ # LLVM target to use for native code generation. This is required for JIT generation.
+ # It must be set to LLVM_TARGET_ARCH for host and target, otherwise we get
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.3
