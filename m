@@ -1,46 +1,86 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 12 Apr 2018 22:45:43 +0200
-Subject: [Buildroot] [PATCH v4 11/11] gstreamer1-editing-services: bump to
- 1.14.0
-In-Reply-To: <20180412204543.25535-1-ps.report@gmx.net>
-References: <20180412204543.25535-1-ps.report@gmx.net>
-Message-ID: <20180412204543.25535-4-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Apr 2018 22:39:43 +0200
+Subject: [Buildroot] [git commit] board/freescale/common/imx: add i.MX8
+ genimage template
+Message-ID: <20180412204905.D69968855D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=7f50b000e741a135293aef642e680987cf516b3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index ddf9cecaed..78d1eea6c6 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.12.4.tar.xz.sha256sum
--sha256 bd7eaa2c9572db9e7e535064024b6f69250de864fe8a5d5be86fa8c7edacca0c  gstreamer-editing-services-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.14.0.tar.xz.sha256sum
-+sha256 8d5f90eb532f4cf4aa1466807ef92b05bd1705970d7aabe10066929bbc698d91 gstreamer-editing-services-1.14.0.tar.xz
+This commit adds a genimage template file that is used for i.MX8
+platforms in the common i.MX post-image script.
+
+Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../common/imx/genimage.cfg.template_imx8          | 40 ++++++++++++++++++++++
+ board/freescale/common/imx/post-image.sh           |  4 ++-
+ 2 files changed, 43 insertions(+), 1 deletion(-)
+
+diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
+new file mode 100644
+index 0000000000..fdb645014a
+--- /dev/null
++++ b/board/freescale/common/imx/genimage.cfg.template_imx8
+@@ -0,0 +1,40 @@
++# Minimal SD card image for the Freescale iMX8 boards
++#
++# We mimic the .sdcard Freescale's image format:
++# * the SD card must have 33 kB free space at the beginning,
++# * U-Boot is integrated into imx8-boot-sd.bin and is dumped as is,
++# * a FAT partition at offset 32MB is containing Image and DTB files
++# * a single root filesystem partition is required (ext2, ext3 or ext4)
++#
++
++image boot.vfat {
++  vfat {
++    files = {
++      %FILES%
++    }
++  }
++  size = 32M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition imx-boot {
++    in-partition-table = "no"
++    image = "imx8-boot-sd.bin"
++    offset = 33K
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++    offset = 8M
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index 70d2c9c600..264c8a4bcb 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -32,7 +32,9 @@ linux_image()
  
- # Hashes for license files:
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 9b5a93eb75..f5930d989e 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.12.4
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.14.0
- GSTREAMER1_EDITING_SERVICES_SOURCE = gstreamer-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = http://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
--- 
-2.16.3
+ genimage_type()
+ {
+-	if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
++	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
++		echo "genimage.cfg.template_imx8"
++	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+ 		echo "genimage.cfg.template_spl"
+ 	else
+ 		echo "genimage.cfg.template"
