@@ -1,60 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 12 Apr 2018 19:33:26 +0200
-Subject: [Buildroot] [RFC PATCH 3/3] download/git: unshallow when
- fetching all refs
-In-Reply-To: <20180412132815.7307e923@windsurf>
+Date: Thu, 12 Apr 2018 19:42:37 +0200
+Subject: [Buildroot] [RFC PATCH 1/3] download/git: fix fetch all refs
+ for old git
+In-Reply-To: <20180412092855.30621-2-ricardo.martincoski@gmail.com>
 References: <20180412092855.30621-1-ricardo.martincoski@gmail.com>
- <20180412092855.30621-4-ricardo.martincoski@gmail.com>
- <20180412132815.7307e923@windsurf>
-Message-ID: <20180412173326.GD4221@scaer>
+ <20180412092855.30621-2-ricardo.martincoski@gmail.com>
+Message-ID: <20180412174237.GE4221@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Ricardo, All,
+Ricardo, All,
 
-On 2018-04-12 13:28 +0200, Thomas Petazzoni spake thusly:
-> Thanks a lot Ricardo for all this work on the download issues, much
-> appreciated.
-
-Indeed, thanks!
-
-> One question on this specific commit.
+On 2018-04-12 06:28 -0300, Ricardo Martincoski spake thusly:
+> With old versions of git, when the shallow fetch was not enough, the
+> download fails like this:
+>  Fetching all references
+>  Could not fetch special ref 'sha1'; assuming it is not special.
+>  fatal: reference is not a tree: sha1
 > 
-> On Thu, 12 Apr 2018 06:28:55 -0300, Ricardo Martincoski wrote:
-> > With any version of git, after the git cache was once populated using a
-> > shallow fetch, a full fetch succeeds but doesn't download the commits
-> > behind the reference that was fetched with --depth 1. In this case the
-> > download fails like this:
-> >  Fetching all references
-> >  Could not fetch special ref 'sha1'; assuming it is not special.
-> >  fatal: reference is not a tree: sha1
-> > 
-> > One scenario in buildroot development that would trigger this sequence
-> > is for example when a package is bumped on master branch, some users
-> > create the git cache at this time, then the bump is reverted.
-> > 
-> > Another scenario is when giving maintenance to a product version that
-> > uses one version of buildroot using the same build farm that uses a
-> > newer version of buildroot.
+> At git version 1.9.0, the semantics of the option -t for git fetch
+> changed, see upstream commit [1]:
+> < 1.9.0: "fetch tags without also fetching other references";
+> >=1.9.0: "fetch tags *in addition to* other stuff".
 > 
-> In the light of this, wouldn't it be simpler to stop doing shallow
-> clones at all ? A shallow clone did make a lot of sense back when we
-> didn't cache the Git repositories. But now that we are caching the
-> results, does it make sense to keep the complexity of the code to use
-> shallow clones ?
-> 
-> Note that this is really an open question, there are possibly some
-> convincing argument for us to keep a shallow clone strategy.
+> Fall back to explicit refspec to support distros that use ancient
+> versions of git.
+[--SNIP--]
+> diff --git a/support/download/git b/support/download/git
+> index 381f3ceeb3..1b09e5c750 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -76,7 +76,7 @@ if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
+>  fi
+>  if [ ${git_done} -eq 0 ]; then
+>      printf "Fetching all references\n"
+> -    _git fetch origin -t
+> +    _git fetch origin -u "'+refs/tags/*:refs/tags/*'" "'+refs/heads/*:refs/remotes/origin/*'"
 
-Indeed, I don't think it makes sense anymore...
+Why don't we just run:
 
-So, intead of fixing it, let's just do full clones now.
+    git fetch origin
+    git fetch origin -t
+
+As I understand it:
+
+                    ancient git         | new git
+--------------------------------------------------------------------
+git fetch     | fetch all refs but tags | fetches all refs but tags
+git fetch -t  | fetches only tags       | fetch all refs and tags
+
+Right?
 
 Regards,
 Yann E. MORIN.
+
+>  fi
+>  
+>  # Try to get the special refs exposed by some forges (pull-requests for
+> -- 
+> 2.14.1
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
