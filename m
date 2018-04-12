@@ -1,62 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 13:32:21 +0200
-Subject: [Buildroot] [PATCH 1/1] reaver: new package
-In-Reply-To: <1523524619-25036-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <1523524619-25036-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <20180412133221.2beb022e@windsurf>
+Date: Thu, 12 Apr 2018 13:34:11 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.16.2
+Message-ID: <20180412113421.630548848E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8039073c7a1883d6a97018e80afe736dd041fdbf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this new version, looks much better. A few more comments
-below, nothing major.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 12 Apr 2018 11:16:59 +0200, Guillaume W. Bres wrote:
-> Reaver is a tool to audit networks against brute WPS pins attacks.
-> 
-> It is a generic autotools package, easy to build. Tests passed for the 7 default
-> toolchains. 
-> 
-> It is mandantory to use the github.com/t6x fork that I set in reaver.mk
-> at the moment because other versions/repos of this project won't cross-compile.
-> Their makefiles are pretty outdated. It is the only updated and regularly maintained
-> repo that I found for this project at the moment.
-
-I think it would make sense to have this explanation before the
-REAVER_SITE variable in the .mk file.
-
-> -N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
-> +N:	Guillaume W. Bres <guillaume.bressaix@gmail.com>
-
-This change is not really related. Is it an intended change? It should
-preferably be part of a separate patch.
-
->  F:	package/liquid-dsp/
-> +F: package/reaver/
-
-Indentation is wrong.
-
-> diff --git a/package/reaver/Config.in b/package/reaver/Config.in
-> new file mode 100644
-> index 0000000..fed433b
-> --- /dev/null
-> +++ b/package/reaver/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_REAVER
-> +	bool "reaver"
-> +	select BR2_PACKAGE_LIBPCAP
-> +
-
-This empty line is not needed.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 81bc651ad2..ac1727d859 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.16.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.16.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
