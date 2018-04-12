@@ -1,52 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Apr 2018 18:37:41 +0200
-Subject: [Buildroot] [git commit] Update for 2017.02.11
-Message-ID: <20180412164240.2FA8B884A2@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 12 Apr 2018 19:43:52 +0300
+Subject: [Buildroot] [PATCH v3] picocom: fix build for x86 with musl libc
+Message-ID: <b7ca878a2b67c3891d8e7bbaad91b6ecb00de9c8.1523551432.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f00d03a68117a16faacac0b2227a2a83985e37b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since version 3.1 picocom enabled by default custom baud rate support
+for x86 targets. This requires the c_ispeed and c_opseed field in struct
+termios that musl libc does not provide. Add an upstream patch that
+restricts custom baud rates to C libraries that provide the needed
+termios fields.
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8a0e4e865add1079e7cf8336def4f7aab00b2e0c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+http://autobuild.buildroot.net/results/28e/28ec584484dedfd6ef473dfd9dd24481e27ce2b3/
+http://autobuild.buildroot.net/results/912/912493a8f99416524a5897634ae62604436e9b51/
+http://autobuild.buildroot.net/results/65d/65d0f449822f296dfe6b9be0e03a5a855f700a9e/
+
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- CHANGES | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+v3: Correct upstream commit ID
 
-diff --git a/CHANGES b/CHANGES
-index 09cf7c3f85..29a4937a9d 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -907,6 +907,26 @@
- 	#9846: musl libc not installed correctly in target folder
- 	#9856: build libubox failed on ubuntu 17.04 64bit
- 
-+2017.02.11, Released April 11th, 2018
+v2: Use upstream patch instead of local build time disable
+---
+ ...mpile-with-libc-s-without-cispeed-cospeed.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+
+diff --git a/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch b/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+new file mode 100644
+index 000000000000..5143e311020a
+--- /dev/null
++++ b/package/picocom/0001-Compile-with-libc-s-without-cispeed-cospeed.patch
+@@ -0,0 +1,49 @@
++From 30c712c5f14306460c44bea70e24419db9d44f8c Mon Sep 17 00:00:00 2001
++From: Nick Patavalis <npat@efault.net>
++Date: Thu, 12 Apr 2018 15:16:04 +0300
++Subject: [PATCH] Compile with libc's without cispeed / cospeed
 +
-+	Important / security related fixes.
++Some libc implementations (e.g. musl) do not define the cispeed and
++cospeed struct termios fields. So we have to check the
++_HAVE_STRUCT_TERMIOS_C_ISPEED and _HAVE_STRUCT_TERMIOS_C_OSPEED
++macros. If not defined, we disable custom baudrate support.
 +
-+	dependencies: Blacklist tar 1.30+ and build our own host-tar
-+	if needed as tar 1.30+ changed the --numeric-owner output for
-+	long path names. Build host-tar before other host-dependencies
-+	as they need it to extract their source tarballs.
++[baruch: backported from upstream master to 3.1]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 1acf1ddabaf3
 +
-+	Updated/fixed packages: apache, busybox, clamav, dhcp,
-+	dnsmasq, dovecot, exim, imagemagick, irssi, jq, libcurl,
-+	libpjsip, librsvg, libtasn1, libvorbis, libxml2, lz4, mariadb,
-+	mbedtls, mosquitto, ntp, openblas, opencv3, openssl, patch,
-+	postgresql, python-webpy, qt53d, qt5tools, quagga, rsync,
-+	samba4, sngrep, tremor, wavpack, wireshark, xerces, xterm
++ custbaud.h | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
 +
-+	Issues resolved (http://bugs.uclibc.org):
++diff --git a/custbaud.h b/custbaud.h
++index 48151a4a4e84..ae4ae8daf49e 100644
++--- a/custbaud.h
+++++ b/custbaud.h
++@@ -26,6 +26,8 @@
++ #ifndef CUSTBAUD_H
++ #define CUSTBAUD_H
++ 
+++#include <termios.h>
+++
++ #ifndef NO_CUSTOM_BAUD
++ 
++ #if defined (__linux__)
++@@ -33,7 +35,13 @@
++ /* Enable by-default for kernels > 2.6.0 on x86 and x86_64 only */
++ #include <linux/version.h>
++ #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,0)
++-#if defined (__i386__) || defined (__x86_64__) || defined (USE_CUSTOM_BAUD)
+++/* Some libc implementations (e.g. musl) do not define the cispeed and
+++   cospeed struct termios fields. We do not support custom baudrates
+++   on them. */
+++#if ( (defined (__i386__) || defined (__x86_64__))  \
+++      && defined (_HAVE_STRUCT_TERMIOS_C_ISPEED)    \
+++      && defined (_HAVE_STRUCT_TERMIOS_C_OSPEED) )  \
+++    || defined (USE_CUSTOM_BAUD)
++ #ifndef USE_CUSTOM_BAUD
++ #define USE_CUSTOM_BAUD
++ #endif
++-- 
++2.16.3
 +
-+	#10856: openblas on qemu_x86_64_defconfig fails with "sgemm_..
-+
- 2017.02.10, Released January 31st, 2018
- 
- 	Important / security related fixes.
+-- 
+2.16.3
