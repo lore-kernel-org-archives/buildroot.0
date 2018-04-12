@@ -1,51 +1,72 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 11 Apr 2018 23:02:10 -0400
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: conditionally add gpl
- license
-Message-ID: <1523502130-21870-1-git-send-email-danomimanchego123@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 12 Apr 2018 06:33:17 +0300
+Subject: [Buildroot] [PATCH v2 2/6] zstd: add host libzstd support
+In-Reply-To: <20180411211907.GE2328@scaer>
+References: <20180409200429.22650-1-ps.report@gmx.net>
+ <20180409200429.22650-2-ps.report@gmx.net>
+ <20180411211907.GE2328@scaer>
+Message-ID: <20180412033317.kqov7kpfw5svfbpy@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, GST1_PLUGINS_BAD_LICENSE_FILES starts out set to
-both the GPL COPYING file and the LGPL COPYING.LIB file, but
-the GST1_PLUGINS_BAD_LICENSE handling only claims LGPL, and
-then intelligently adds GPL if needed.  This change moves the
-GPL file addition to the same conditional clause so that the
-GPL file is included in the legal-info location only if GPL
-code is actually used.
+Hi Yann,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+On Wed, Apr 11, 2018 at 11:19:07PM +0200, Yann E. MORIN wrote:
+> On 2018-04-09 22:04 +0200, Peter Seiderer spake thusly:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - split off host libzstd support (suggested by Yann E. MORIN)
+> >   - no ZSTD_OPTS for host libarary build
+> > ---
+> >  package/zstd/zstd.mk | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> > 
+> > diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> > index c0fa88026c..1b76b0164c 100644
+> > --- a/package/zstd/zstd.mk
+> > +++ b/package/zstd/zstd.mk
+> > @@ -46,4 +46,16 @@ define ZSTD_INSTALL_TARGET_CMDS
+> >  		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
+> >  endef
+> >  
+> > +# note: no 'HAVE_...' options for host library build only 
+> > +define HOST_ZSTD_BUILD_CMDS
+> > +	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+> > +		-C $(@D) lib
+> > +endef
+> > +
+> > +define HOST_ZSTD_INSTALL_CMDS
+> > +	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+> > +		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
+> > +endef
+> > +
+> >  $(eval $(generic-package))
+> > +$(eval $(host-generic-package))
+> 
+> The target variant has optional dependencies on zlib, xz, and lz4, which
+> all have host variants.
+> 
+> So, if you don;t specify the dependency in the host-zstd, you get a
+> host-zstd that may or may not have support for zlib, xz, or lz4,
+> depending on hether another package a dependency on them.
+> 
+> We don't have spport for optional host dependencies (because there are
+> not config options for those host packages), so I don't see a solution
+> but to always depend on all three. So:
+> 
+>     HOST_ZSTD_DEPENDENCIES = host-lz4 host-xz host-zlib
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 83cb94b..9f7cd97 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -8,9 +8,9 @@ GST1_PLUGINS_BAD_VERSION = 1.12.4
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
--GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
--# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE if
--# enabled.
-+# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE and
-+# GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
-+GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
- GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
- 
- GST1_PLUGINS_BAD_CONF_OPTS = \
-@@ -772,6 +772,7 @@ endif
- # Add GPL license if GPL licensed plugins enabled.
- ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
- GST1_PLUGINS_BAD_LICENSE += GPL
-+GST1_PLUGINS_BAD_LICENSE_FILES += COPYING
- endif
- 
- # Add Unknown license if Unknown licensed plugins enabled.
+Why? The build should still consistent for a given config. If you add/remove 
+other packages you might get host-zstd build with different dependencies. This 
+is normal. Target packages behave the same way.
+
+baruch
+
 -- 
-2.7.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
