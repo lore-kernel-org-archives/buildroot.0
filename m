@@ -1,24 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 13:34:36 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.16.2
-In-Reply-To: <1523531488-573-1-git-send-email-festevam@gmail.com>
-References: <1523531488-573-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180412133436.6ef1a38d@windsurf>
+Date: Thu, 12 Apr 2018 13:38:05 +0200
+Subject: [Buildroot] [PATCH] Added option to enable Freedreno gallium
+ driver in mesa3d
+In-Reply-To: <20180411212741.16489-1-andre@ignavus.net>
+References: <20180411212741.16489-1-andre@ignavus.net>
+Message-ID: <20180412133805.5f97f451@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Andre,
 
-On Thu, 12 Apr 2018 08:11:27 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for this new version, this is almost good, but not yet :)
 
-Both applied. Thanks!
+On Thu, 12 Apr 2018 09:27:41 +1200, Andre Renaud wrote:
+> From: Andre Renaud <arenaud@designa-electronics.com>
+> 
+
+Your Signed-off-by line is missing here, could you resend with this
+Signed-off-by line added ?
+
+Also, please change the commit title to:
+
+	mesa3d: add option to enable Freedreno gallium driver
+
+Indeed:
+
+ - We also want the commit log to have the format "<package>:
+   <description>"
+
+ - Using a past tense "Added" doesn't make a lot of sense. Your commit
+   has not "added" something, it is adding something. So using just
+   "add" makes a lot more sense
+
+Could you resend after fixing those minor issues? I had fixed myself
+the commit title issue and was about to push your patch, but the
+missing Signed-off-by requires you to resend a new version.
+
+Thanks!
 
 Thomas
 -- 
