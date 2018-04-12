@@ -1,11 +1,11 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 12 Apr 2018 20:31:49 +0200
-Subject: [Buildroot] [PATCH v2 6/6] squashfs: add zstd support
-In-Reply-To: <20180411212754.GH2328@scaer>
+Date: Thu, 12 Apr 2018 20:45:11 +0200
+Subject: [Buildroot] [PATCH v2 5/6] zstd: add libzstd support
+In-Reply-To: <20180411212420.GG2328@scaer>
 References: <20180409200429.22650-1-ps.report@gmx.net>
- <20180409200429.22650-6-ps.report@gmx.net>
- <20180411212754.GH2328@scaer>
-Message-ID: <20180412203149.2bc59bc9@gmx.net>
+ <20180409200429.22650-5-ps.report@gmx.net>
+ <20180411212420.GG2328@scaer>
+Message-ID: <20180412204511.48fd9fcc@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,32 @@ To: buildroot@busybox.net
 
 Hello Yann,
 
-On Wed, 11 Apr 2018 23:27:54 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Wed, 11 Apr 2018 23:24:20 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
 > Peter, All,
 > 
-> On 2018-04-09 22:04 +0200, Peter Seiderer spake thusly:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> [--SNIP--]
-> > diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-> > index 67025ac68a..bec867d676 100644
-> > --- a/package/squashfs/squashfs.mk
-> > +++ b/package/squashfs/squashfs.mk
-> > @@ -9,7 +9,7 @@ SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
-> >  SQUASHFS_SITE_METHOD = git
-> >  SQUASHFS_LICENSE = GPL-2.0+
-> >  SQUASHFS_LICENSE_FILES = COPYING
-> > -SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1 ZSTD_SUPPORT=0
-> > +SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
-> >  
-> >  ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
-> >  SQUASHFS_DEPENDENCIES += lz4
-> > @@ -46,6 +46,13 @@ else
-> >  SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0
-> >  endif
-> >  
-> > +ifeq ($(BR2_PACKAGE_SQUASHFS_ZSTD),y)
-> > +SQUASHFS_DEPENDENCIES += zstd
-> > +SQUASHFS_MAKE_ARGS += ZSTD_SUPPORT=1 COMP_DEFAULT=zstd
-> > +else
-> > +SQUASHFS_MAKE_ARGS += ZSTD_SUPPORT=0
-> > +endif  
+> I think the commit title should rather be something like:
 > 
-> Please, keep the gzip case last, so that it stays the default. Add the
-> zstd case first.
+>     zstd: build and install the library
 
-O.k, will fix it on the next patch iteration....
+Mhh, a matter of taste ;-)
+
+> 
+> Have you tried building it in:
+>   - a shared-only library configuration (the default for Buildroot),
+>   - a static-only configuration,
+>   - a dual shared+static configuration?
+
+Not yet....
+
+> 
+> And of course, checked that the corresponding libs are installed?
+
+Good point, looking at the zstd-v1.3.3/lib/Makefile there are
+separate build targets for the shared/static libs but the
+install target builds/installs both...
+
+Will fix it on the next patch iteration...
 
 Regards,
 Peter
@@ -57,9 +48,46 @@ Peter
 > Regards,
 > Yann E. MORIN.
 > 
-> >  HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz host-zstd
+> On 2018-04-09 22:04 +0200, Peter Seiderer spake thusly:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - split off target libzstd support (suggested by Yann E. MORIN)
+> > ---
+> >  package/zstd/zstd.mk | 10 +++++++++-
+> >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> > index 1b76b0164c..cccec3a313 100644
+> > --- a/package/zstd/zstd.mk
+> > +++ b/package/zstd/zstd.mk
+> > @@ -6,6 +6,7 @@
 > >  
-> >  HOST_SQUASHFS_MAKE_ARGS = \
+> >  ZSTD_VERSION = v1.3.3
+> >  ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+> > +ZSTD_INSTALL_STAGING = YES
+> >  ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+> >  ZSTD_LICENSE_FILES = LICENSE COPYING
+> >  
+> > @@ -38,10 +39,17 @@ endif
+> >  
+> >  define ZSTD_BUILD_CMDS
+> >  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > -		-C $(@D) zstd
+> > +		-C $(@D) lib zstd
+> > +endef
+> > +
+> > +define ZSTD_INSTALL_STAGING_CMDS
+> > +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > +		DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib install
+> >  endef
+> >  
+> >  define ZSTD_INSTALL_TARGET_CMDS
+> > +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> > +		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib install
+> >  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+> >  		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
+> >  endef
 > > -- 
 > > 2.16.3
 > >   
