@@ -1,73 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 12 Apr 2018 19:42:37 +0200
-Subject: [Buildroot] [RFC PATCH 1/3] download/git: fix fetch all refs
- for old git
-In-Reply-To: <20180412092855.30621-2-ricardo.martincoski@gmail.com>
-References: <20180412092855.30621-1-ricardo.martincoski@gmail.com>
- <20180412092855.30621-2-ricardo.martincoski@gmail.com>
-Message-ID: <20180412174237.GE4221@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 12 Apr 2018 20:47:42 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-04-11
+In-Reply-To: <CAPP7BN3Ji2+tfo7SzWr0W2T7vY=nbJ0s7NLZuYAZyEKNVmGggg@mail.gmail.com>
+References: <20180412060058.042A020894@mail.bootlin.com>
+ <CAPP7BN3Ji2+tfo7SzWr0W2T7vY=nbJ0s7NLZuYAZyEKNVmGggg@mail.gmail.com>
+Message-ID: <20180412174742.zh2jq7i2grckm3uh@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Hi Erik,
 
-On 2018-04-12 06:28 -0300, Ricardo Martincoski spake thusly:
-> With old versions of git, when the shallow fetch was not enough, the
-> download fails like this:
->  Fetching all references
->  Could not fetch special ref 'sha1'; assuming it is not special.
->  fatal: reference is not a tree: sha1
+On Thu, Apr 12, 2018 at 07:18:33PM +0200, Erik Larsson wrote:
+> > host-imx-mkimage-rel_imx_4.... | 1
 > 
-> At git version 1.9.0, the semantics of the option -t for git fetch
-> changed, see upstream commit [1]:
-> < 1.9.0: "fetch tags without also fetching other references";
-> >=1.9.0: "fetch tags *in addition to* other stuff".
-> 
-> Fall back to explicit refspec to support distros that use ancient
-> versions of git.
-[--SNIP--]
-> diff --git a/support/download/git b/support/download/git
-> index 381f3ceeb3..1b09e5c750 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -76,7 +76,7 @@ if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
->  fi
->  if [ ${git_done} -eq 0 ]; then
->      printf "Fetching all references\n"
-> -    _git fetch origin -t
-> +    _git fetch origin -u "'+refs/tags/*:refs/tags/*'" "'+refs/heads/*:refs/remotes/origin/*'"
+> This error is due to a missing host dependency to zlib. So a simple
+> HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib  solves it.
+> But before I send in the patch I have a question. I can't figure out
+> if I need to add anything about libz in Config.in.host for package
+> imx-mkimage. If I add "selects BR_PACKAGE_ZLIB" it will select zlib
+> and build it for target as well, which is not really needed. How do I
+> handle this in a correct way?
 
-Why don't we just run:
+Listing host dependencies listing in _DEPENDENCIES is enough. No need to 
+change anything in Config.in{,.host}.
 
-    git fetch origin
-    git fetch origin -t
-
-As I understand it:
-
-                    ancient git         | new git
---------------------------------------------------------------------
-git fetch     | fetch all refs but tags | fetches all refs but tags
-git fetch -t  | fetches only tags       | fetch all refs and tags
-
-Right?
-
-Regards,
-Yann E. MORIN.
-
->  fi
->  
->  # Try to get the special refs exposed by some forges (pull-requests for
-> -- 
-> 2.14.1
-> 
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
