@@ -1,73 +1,52 @@
-From: Andre Renaud <andre@ignavus.net>
-Date: Thu, 12 Apr 2018 09:39:38 +1200
-Subject: [Buildroot] [PATCH] Added Qualcomm video accelerator and GPU
- firmware option.
-Message-ID: <20180411213938.5888-1-andre@ignavus.net>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 11 Apr 2018 22:23:45 -0400
+Subject: [Buildroot] [PATCH 1/1] xcb-util: bump to version 0.4.0
+Message-ID: <1523499825-28310-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Andre Renaud <arenaud@designa-electronics.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Signed-off-by: Andre Renaud <andre@ignavus.net>
 ---
- package/linux-firmware/Config.in           | 10 ++++++++++
- package/linux-firmware/linux-firmware.hash |  1 +
- package/linux-firmware/linux-firmware.mk   | 10 ++++++++++
- 3 files changed, 21 insertions(+)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 4e77a3f9a3..fb64c527f9 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -29,6 +29,16 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RADEON
- 	help
- 	  Firmware files for AMD Radeon video cards.
+The code itself is hardly changed, but the updated package now
+has a license file, so it is nice to clear the legal-info warning,
+---
+ package/x11r7/xcb-util/xcb-util.hash | 3 ++-
+ package/x11r7/xcb-util/xcb-util.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/x11r7/xcb-util/xcb-util.hash b/package/x11r7/xcb-util/xcb-util.hash
+index a9b8be2..c088a62 100644
+--- a/package/x11r7/xcb-util/xcb-util.hash
++++ b/package/x11r7/xcb-util/xcb-util.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+-sha256  c611259c0ab20fd76f79f48f4684843c18ea9c967eba78a45e8b3636315c18c4  xcb-util-0.3.9.tar.bz2
++sha256  46e49469cb3b594af1d33176cd7565def2be3fa8be4371d62271fabb5eae50e9  xcb-util-0.4.0.tar.bz2
++sha256  325b64f0b0284e08bbb7a78ae3e55c1edc2a7cd77f603225ae4b8ffc35423e37  COPYING
+diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
+index 7b913e2..bb73530 100644
+--- a/package/x11r7/xcb-util/xcb-util.mk
++++ b/package/x11r7/xcb-util/xcb-util.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_QCOM_VENUS
-+	bool "Qualcomm Venus video codec accelerator"
-+	help
-+	  Firmware files for Qualcomm Venus video codec accelerator
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO
-+	bool "Qualcomm Adreno GPU firmware"
-+	help
-+	  Firmware files for Qualcomm Adreno GPU firmware
-+
- endmenu # Video
+-XCB_UTIL_VERSION = 0.3.9
++XCB_UTIL_VERSION = 0.4.0
+ XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.bz2
+ XCB_UTIL_SITE = http://xcb.freedesktop.org/dist
+-
+-# unfortunately, no license file
+ XCB_UTIL_LICENSE = MIT
+-
++XCB_UTIL_LICENSE_FILES = COPYING
+ XCB_UTIL_INSTALL_STAGING = YES
+ XCB_UTIL_DEPENDENCIES = libxcb
  
- menu "Bluetooth firmware"
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 14c1935b27..c766689fc1 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -27,3 +27,4 @@ sha256 be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc LICENSE.
- sha256 fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f LICENSE.radeon
- sha256 2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9 LICENSE.sdma_firmware
- sha256 9703115e298649dfad003d7d3d55f4b2bd417e28f19e9cf6d5c6f9a906a2c4d9 WHENCE
-+sha256 fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a qcom/NOTICE.txt
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 6f0ba53800..efe5cdd7dd 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -24,6 +24,16 @@ LINUX_FIRMWARE_DIRS += radeon
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.radeon
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QCOM_VENUS),y)
-+LINUX_FIRMWARE_DIRS += qcom/venus-1.8 qcom/venus-4.2
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom qcom/NOTICE.txt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO),y)
-+LINUX_FIRMWARE_FILES += qcom/a*
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom qcom/NOTICE.txt
-+endif
-+
- # Intel Wireless Bluetooth
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IBT),y)
- LINUX_FIRMWARE_FILES += intel/ibt-*
 -- 
-2.15.1
+2.7.4
