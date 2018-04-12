@@ -1,51 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 09:06:41 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-04-07
-In-Reply-To: <1873592662.2762704.1523500837920.JavaMail.zimbra@datacom.ind.br>
-References: <20180408060016.70C472084F@mail.bootlin.com>
- <147906727.2330850.1523328627127.JavaMail.zimbra@datacom.ind.br>
- <2112768662.2330896.1523329207650.JavaMail.zimbra@datacom.ind.br>
- <CAPi7W83rzsiFvM45AmafAP=TaF_xUqgjNY+crLNWBcbJbnb1Nw@mail.gmail.com>
- <CAPi7W80owYpotaCzQDA+dVuFxVGQtEdDuPe=zpFHdf0LZpoRdQ@mail.gmail.com>
- <345647775.2610070.1523450364355.JavaMail.zimbra@datacom.ind.br>
- <20180411151910.21a71a99@windsurf>
- <1873592662.2762704.1523500837920.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20180412090641.0bda08c5@windsurf>
+Date: Thu, 12 Apr 2018 11:09:35 +0200
+Subject: [Buildroot] [PATCH v2-RESEND 3/6] zynqmp-pmufw-binaries: new
+ package
+In-Reply-To: <538f8047-1a56-0335-9d3f-912ebc9914a0@lucaceresoli.net>
+References: <1523032461-3295-1-git-send-email-luca@lucaceresoli.net>
+ <1523032461-3295-4-git-send-email-luca@lucaceresoli.net>
+ <20180409231327.28e2b2e4@windsurf>
+ <538f8047-1a56-0335-9d3f-912ebc9914a0@lucaceresoli.net>
+Message-ID: <20180412110935.7366ab58@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Luca,
 
-On Wed, 11 Apr 2018 23:40:37 -0300 (BRT), Carlos Santos wrote:
+On Wed, 11 Apr 2018 23:03:17 +0200, Luca Ceresoli wrote:
 
-> > Is this problem really PowerPC specific ? Did you try other gcc 4.7
-> > toolchains for other architectures ?  
+> > So this hints at the fact that this firmware is board specific. Is that
+> > correct ? If so, shouldn't we plan on making the Git repo and its
+> > version configurable ?  
 > 
-> I will try to find a museum from which I can get such toolchains.
+> The firmware is board-specific and configuration-specific. The plan for
+> that repo, however, is to have all supported board+config combinations
+> supported in all versions, thus the lack of a version selection knob.
 
-Old Sourcery toolchains can typically be used for that, and
-http://sources.buildroot.net/ is a good museum to find them. For
-example:
+"all" ? I'm pretty sure a lot of people will be doing custom designs,
+and will not be willing to push their firmware binary to your public
+repository.
 
-http://sources.buildroot.net/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-http://sources.buildroot.net/arm-2009q3-67-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-http://sources.buildroot.net/arm-2010.09-50-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-http://sources.buildroot.net/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-etc.
-
-> > Also, adding new dependencies on libglib2 is an absolute nightmare: you
-> > have to propagate those new dependencies to gazillions of packages (all
-> > reverse dependencies of libglib2) :-/  
+> > I mean, what are the chances that for some random ZynqMP board, your
+> > Github repo will contain the appropriate firmware file ?  
 > 
-> Indeed it is. :-(
+> Good point. My repo there is ready to hold any possible board+config
+> combination that is interesting for known boards. I would love to host
+> more boards there (contributilns would be welcome). However I don't
+> think we'll ever see any custom board, which reduces its usefulness.
+> 
+> Thus a simpler, but more flexible, option might be to nuke the
+> zynqmp-pmufw-binaries BR package and let uboot fetch the pmufw.bin from
+> a plain URL (https:// or file://). For standard devboards the URL could
+> point to my repo, but it can be anywhere else (for custom boards).
 
-Hence we should try to avoid this if possible :-)
+Ah, this seems like a better option indeed, especially since the
+firmware is a single file. It could be locally available, or downloaded
+from HTTP. Sounds like a good plan.
 
-Best regards,
+> > Generally speaking, it's a bit annoying that we can't build this from
+> > source. I understand it needs a Microblaze toolchain, so it's very
+> > difficult to integrate in Buildroot :-/  
+> 
+> Indeed, and this is *the* big topic.
+> 
+> There are several variations that could be considered, but none have
+> been attempted AFAIK. Here they are, simplest to hardest:
+> 
+> 1. Build the PMUFW in Buildroot (kind of)
+> 
+> Add a script (e.g. board/zynqmp/build-pmufw.sh) that builds a microblaze
+> toolchain and the PMUFW with a given config. The commands are already
+> there: [0].
+> 
+> The script would then be called manually before Buildroot runs, or it
+> could be wrapped in a Buildroot package that uboot depends on. Takes ~8
+> minutes on a modern quad core machine.
+> 
+> * Simple to do, not well integrated, longer build time.
+
+Yeah, the integration with Buildroot here is really not great, because
+Crosstool-NG will do its own downloading, etc.
+
+> 2. Let SPL install the PMUFW config
+> 
+> This is what the Xilinx workflow does (in the Xilinx FSBL, which is more
+> or less equivalent to U-Boot SPL). This allows The PMUFW can be a unique
+> blob for all boards.
+> 
+> This moves the configuration object from a piece of early firmware
+> (PMUFW) to another piece of early firmware (SPL). Both pieces are
+> residing in the same BOOT.BIN file, so there's no added flexibility for
+> the "user": upon a config change, you still have to update the BOOT.BIN
+> file in the boot medium.
+> 
+> There are also licensing issues preventing this, since the configuration
+> object file license is not compatible with the U-Boot license. Xilinx
+> _might_ be willing to fix this, however.
+> 
+> * Could be doable, perhaps tricky.
+> 
+> 3. Don't have any config object...
+> 
+> ...and change the PMUFW source code to assign dynamically peripherals to
+> cores at runtime, based on requests from cores! :->
+> 
+> * Maybe doable, potentially dangerous, definitely hard to do.
+
+Not sure I understand enough of what the PMUFW is doing to understand
+(2) and (3). And yes, I did attend your talk at FOSDEM about
+ZynqMP ! :-)
+
+> Any idea or suggestion is very welcome, although I think we cannot do
+> much more than looking for the least evil solution...
+
+I think for now the solution you propose to add an option in U-Boot to
+indicate the path/URL to the PMUFW binary is the easiest one. It can
+always be improved later if better solutions emerge.
+
+Thanks!
 
 Thomas
 -- 
