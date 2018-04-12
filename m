@@ -1,50 +1,79 @@
-From: James Byrne <james.byrne@origamienergy.com>
-Date: Thu, 12 Apr 2018 16:40:46 +0100
-Subject: [Buildroot] [PATCH 1/1] Makefile: Take default
- SOURCE_DATE_EPOCH from repo containing Makefile
-In-Reply-To: <20180410143630.22646b86@windsurf>
-References: <1523356092-16037-1-git-send-email-james.byrne@origamienergy.com>
- <20180410143630.22646b86@windsurf>
-Message-ID: <e872ea7b-0202-d77a-6620-8e6113570e33@origamienergy.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Apr 2018 18:03:00 +0200
+Subject: [Buildroot] Buildroot 2017.02.11 released
+Message-ID: <87a7u8za2z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-On 10/04/18 13:36, Thomas Petazzoni wrote:
- > On Tue, 10 Apr 2018 11:28:12 +0100, James Byrne wrote:
- >> diff --git a/Makefile b/Makefile
- >> index cd53362..3b846b9 100644
- >> --- a/Makefile
- >> +++ b/Makefile
- >> @@ -506,7 +506,7 @@ ifeq ($(BR2_REPRODUCIBLE),y)
- >>   # If SOURCE_DATE_EPOCH has not been set then use the commit date,
-or the last
- >>   # release date if the source tree is not within a Git repository.
- >>   # See: https://reproducible-builds.org/specs/source-date-epoch/
- >> -BR2_VERSION_GIT_EPOCH := $(shell $(GIT) --git-dir=$(TOPDIR)/.git
-log -1 --format=%at 2> /dev/null)
- >> +BR2_VERSION_GIT_EPOCH := $(shell $(GIT) log -1 --format=%at 2>
-/dev/null)
- >
- > Was there a reason to have this --git-dir/GIT_DIR option/variable
- > passed in the first place ?
- >
- > I don't immediately see any problem with the change you're proposing,
- > but I'm wondering why we were passing --git-dir (previously GIT_DIR).
- >
- > It has been done this way since commit
- > 9befe94baf990ee6331e77edb40e286e9dc4df8d, where SOURCE_DATE_EPOCH was
- > introduced in Buildroot.
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-I don't know, but my guess would be that the original author thought
-that if you were building out of tree then the current directory might
-be somewhere else, so they wanted to ensure it would use the right one,
-but in fact the current directory can only be the one containing Makefile.
+Buildroot 2017.02.11 is released - Go download it at:
 
-James
---
-The contents of this email and any attachment are confidential to the intended recipient(s). If you are not an intended recipient: (i) do not use, disclose, distribute, copy or publish this email or its contents; (ii) please contact the sender immediately; and (iii) delete this email. Origami Energy Limited (company number 8619644); Origami Storage Limited (company number 10436515) and OSSPV001 Limited (company number 10933403), each registered in England and each with a registered office at: Ashcombe Court, Woolsack Way, Godalming, GU7 1LQ.
+http://buildroot.org/downloads/buildroot-2017.02.11.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2017.02.11.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2017.02.11 is the 11th bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2017.02.10 release.
+
+- Dependencies: Blacklist tar 1.30+ and build our own host-tar
+  if needed as tar 1.30+ changed the --numeric-owner output for
+  long path names. Build host-tar before other host-dependencies
+  as they need it to extract their source tarballs.
+
+- Security fixes for apache, busybox, clamav, dnsmasq, dovecot, exim,
+  imagemagick, irssi, libcurl, libpjsip, librsvg, libtasn1, libvorbis,
+  libxml2, mariadb, mbedtls, ntp, mosquitto, openssl, patch, postgresql,
+  python-webpy, quagga, rsync, samba4, tremor, wavpack, wireshark,
+  xerces
+
+- Fixes for download/compilation/runtime issues in busybox, dhcp,
+  dnsmasq, jq, lz4, ntp, openblas, opencv3, python-webpy, qt53d,
+  qt5tools, sngrep, xterm
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02.11
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Notice that the 2017.02 series is now end of life. No more updates are
+planned as 2018.02 is the new long term support release. Please consider
+migrating to the 2018.02 series!
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2017.02.10..
+
+    26  Peter Korsgaard
+    17  Baruch Siach
+    13  Fabio Estevam
+     8  Adam Duskett
+     8  Bernd Kuhls
+     2  Ga?l PORTAY
+     2  Thomas Petazzoni
+     1  Andr? Hentschel
+     1  Jeroen Roovers
+     1  Peter Seiderer
+     1  Ryan Coe
+     1  Samuel Martin
+     1  Sasha Shyrokov
+     1  Thomas De Schampheleire
+     1  Valentin Korenblit
+     1  Vicente Olivert Riera
+
+-- 
+Bye, Peter Korsgaard
