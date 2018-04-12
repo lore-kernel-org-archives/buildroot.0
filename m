@@ -1,66 +1,67 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 12 Apr 2018 06:28:54 -0300
-Subject: [Buildroot] [RFC PATCH 2/3] download/git: recover dirty cache
+Date: Thu, 12 Apr 2018 06:28:55 -0300
+Subject: [Buildroot] [RFC PATCH 3/3] download/git: unshallow when fetching
+ all refs
 In-Reply-To: <20180412092855.30621-1-ricardo.martincoski@gmail.com>
 References: <20180412092855.30621-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180412092855.30621-3-ricardo.martincoski@gmail.com>
+Message-ID: <20180412092855.30621-4-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the case a previous operation in the git cache was abruptly
-interrupted the git cache can be in a dirty state (removed files,
-untracked files). This can lead to download failures during the
-checkout, like this:
- error: The following untracked working tree files would be overwritten by checkout:
-and/or this:
- error: The following untracked working tree files would be removed by checkout:
+With any version of git, after the git cache was once populated using a
+shallow fetch, a full fetch succeeds but doesn't download the commits
+behind the reference that was fetched with --depth 1. In this case the
+download fails like this:
+ Fetching all references
+ Could not fetch special ref 'sha1'; assuming it is not special.
+ fatal: reference is not a tree: sha1
 
-If an untracked file, directory or submodule is present after the
-checkout, the tarball will have additional content, leading to a hash
-mismatch.
+One scenario in buildroot development that would trigger this sequence
+is for example when a package is bumped on master branch, some users
+create the git cache at this time, then the bump is reverted.
 
-When performing the checkout, use -f to allow it to occur even if there
-are untracked files that would be overwritten or removed.
-
-Use git clean to remove any untracked files before generating the
-tarball. Use the second -f to ensure the repo is pristine even if
-previous checked out ref contained a submodule that is not present in
-the ref just checked out.
-
-Fixes:
-http://autobuild.buildroot.net/results/b418394f679ad269d587753302c540036793334c
-Possibly fixes:
-http://autobuild.buildroot.net/results/9b584a624bb08c5ab6d977b93f4b92ed4bd1d40f
+Another scenario is when giving maintenance to a product version that
+uses one version of buildroot using the same build farm that uses a
+newer version of buildroot.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-I did not split this into 2 patches (the first one adding -f to checkout
-and the second one adding git reset) because only adding -f to checkout
-would make the git checkout command to succeed but the download would
-still fails when checking the hash if any untracked file was left. In
-this case the git cache also would still be dirty, so it is not really a
-fix to a dirty cache.
+WARNING: this patch is in early stage, really RFC. I tested it in a
+short period of time.
+
+I tested it by first creating the cache for dt-utils in its current
+version, then I changed dt-utils version to the commit immediately
+before it (ea1d08e26b73a4855165ed56043fa439ff9948cb). Without this patch
+the fetch of all refs succeeds but does not bring the desired commit and
+the checkout fails.
 ---
- support/download/git | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ support/download/git | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/support/download/git b/support/download/git
-index 1b09e5c750..68b5d920a1 100755
+index 68b5d920a1..8216da0a71 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -92,7 +92,8 @@ fi
+@@ -76,7 +76,15 @@ if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
+ fi
+ if [ ${git_done} -eq 0 ]; then
+     printf "Fetching all references\n"
+-    _git fetch origin -u "'+refs/tags/*:refs/tags/*'" "'+refs/heads/*:refs/remotes/origin/*'"
++    # After a shallow fetch was once sucessful in this repo, the only way to
++    # ensure the commits behind its current depth are available is to unshallow.
++    # Git versions older than 2.15.0 do not have a command to know if a repo is
++    # shallow, so test for the actual file.
++    if [ -f "$(git rev-parse --git-dir)/shallow" ]; then
++        unshallow=--unshallow
++    fi
++    _git fetch origin -u ${unshallow} \
++               "'+refs/tags/*:refs/tags/*'" "'+refs/heads/*:refs/remotes/origin/*'"
+ fi
  
- # Checkout the required changeset, so that we can update the required
- # submodules.
--_git checkout -q "'${cset}'"
-+_git checkout -f -q "'${cset}'"
-+_git clean -ffdx
- 
- # Get date of commit to generate a reproducible archive.
- # %cD is RFC2822, so it's fully qualified, with TZ and all.
+ # Try to get the special refs exposed by some forges (pull-requests for
 -- 
 2.14.1
