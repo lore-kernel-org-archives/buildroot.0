@@ -1,54 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 21:01:37 +0200
-Subject: [Buildroot] [PATCH v2 1/6] squashfs: bump version to
- e38956b92f738518c29734399629e7cdb33072d3
-In-Reply-To: <20180412205157.3cb10c44@gmx.net>
-References: <20180409200429.22650-1-ps.report@gmx.net>
- <20180411211254.GD2328@scaer> <20180412205157.3cb10c44@gmx.net>
-Message-ID: <20180412210137.0db909ac@windsurf>
+Date: Thu, 12 Apr 2018 21:12:51 +0200
+Subject: [Buildroot] [git commit] package/llvm: remove $ORIGIN/../lib from
+ RPATH
+Message-ID: <20180412191255.B097E884B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4f9e3989f3c736d9792e942fcf0f22b2e8210d00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 12 Apr 2018 20:51:57 +0200, Peter Seiderer wrote:
+AddLLVM.cmake adds $ORIGIN/../lib to the RPATH of llvm binaries.  This
+causes a problem when llvm-config built for the host, installed in
+STAGING_DIR, is executed under the following conditions:
 
-> > However, I don't think it is interesting to have the new version
-> > (especially as it is a sha1) in the commit title. Having the title
-> > read just "squashfs: bump version" is IMHO enough. My rev-by still
-> > stands, though.  
-> 
-> Matter of taste....and looking at a packet history of e.g.:
-> 
-> 	squashfs: bump version
-> 	squashfs: bump version
-> 	squashfs: bump version
-> 	[...]
-> 
-> is a little boring and makes every patch search or patch reference
-> more difficult....
+* Target architecture same as host architecture (normally x86_64)
+* Target's libc different from host's libc (normally glibc)
 
-We normally like to have the version number in the commit title indeed,
-like "foo: bump to version 1.2.0". For Git SHA1s, it is a bit more
-questionable whether it is really useful or not. Indeed, while with
-"bump to version 1.2.0" you can easily say "ah, yes good, they bumped
-to that one", with "bump to version
-e38956b92f738518c29734399629e7cdb33072d3", you're unlikely to be able
-to say "aah very good, they are up to this commit, so they must have
-this great new feature". Or if you are, and now all the SHA1s of a
-project Git repository, you really have a *very* good memory.
+llvm-config will try to link with the target's libc, resulting in:
 
-That being said, it doesn't hurt, and we could say that for the sake of
-consistency, we should do it for all packages, regardless of whether
-they have human-readable version numbers or random SHA1s.
+./llvm-config: error while loading shared libraries: libc.so.0: cannot open shared object file: No such file or directory.
 
-Best regards,
+To avoid this, we simply add pass
+-DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib" in HOST_LLVM_CONF_OPTS.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Link to discussion:
+
+  http://lists.busybox.net/pipermail/buildroot/2018-April/218627.html
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/b81c12d529c66a028e2297ea5ce1d6930324fa69/
+
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/llvm/llvm.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 9c8bf5c820..de2ca38da1 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -25,6 +25,11 @@ LLVM_CONF_OPTS += -DLLVM_ENABLE_PROJECTS=""
+ HOST_LLVM_CONF_OPTS += -DLLVM_CCACHE_BUILD=$(if $(BR2_CCACHE),ON,OFF)
+ LLVM_CONF_OPTS += -DLLVM_CCACHE_BUILD=$(if $(BR2_CCACHE),ON,OFF)
+ 
++# This option prevents AddLLVM.cmake from adding $ORIGIN/../lib to
++# binaries. Otherwise, llvm-config (host variant installed in STAGING)
++# will try to use target's libc.
++HOST_LLVM_CONF_OPTS += -DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
++
+ # Disable experimental Global Instruction Selection support.
+ # https://llvm.org/docs/GlobalISel.html
+ HOST_LLVM_CONF_OPTS += -DLLVM_BUILD_GLOBAL_ISEL=OFF
