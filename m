@@ -1,46 +1,170 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 22:38:50 +0200
-Subject: [Buildroot] [git commit] board/freescale/common/imx: add
- imx8-bootloader-prepare script
-Message-ID: <20180412204905.BF5388855D@busybox.osuosl.org>
+Date: Thu, 12 Apr 2018 22:48:40 +0200
+Subject: [Buildroot] [git commit] configs/freescale_imx8mqevk: new defconfig
+Message-ID: <20180412204905.EE1798855D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a1ad1d135e38f01ba8dd13f713667a071ad3f2e
+commit: https://git.buildroot.net/buildroot/commit/?id=84f15dc00e1d03d619b9c229df55870b02c82761
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit adds an imx8-bootloader-prepare.sh script that will be
-used by i.MX8 platforms to prepare their bootloader image.
 
 Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
 Signed-off-by: Christopher Dahlberg <crille.dahlberg@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/freescale/common/imx/imx8-bootloader-prepare.sh | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ .gitlab-ci.yml                        |  1 +
+ board/freescale/imx8mqevk/readme.txt  | 83 +++++++++++++++++++++++++++++++++++
+ configs/freescale_imx8mqevk_defconfig | 41 +++++++++++++++++
+ 3 files changed, 125 insertions(+)
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-new file mode 100755
-index 0000000000..2648147ab0
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 3229fcf12c..2c991f2e75 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -134,6 +134,7 @@ freescale_imx6sololiteevk_defconfig: *defconfig
+ freescale_imx6sxsabresd_defconfig: *defconfig
+ freescale_imx6ulevk_defconfig: *defconfig
+ freescale_imx7dsabresd_defconfig: *defconfig
++freescale_imx8mqevk_defconfig: *defconfig
+ freescale_p1025twr_defconfig: *defconfig
+ freescale_t1040d4rdb_defconfig: *defconfig
+ friendlyarm_nanopi_a64_defconfig: *defconfig
+diff --git a/board/freescale/imx8mqevk/readme.txt b/board/freescale/imx8mqevk/readme.txt
+new file mode 100644
+index 0000000000..d50dd6e203
 --- /dev/null
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -0,0 +1,16 @@
-+#!/usr/bin/env bash
++++ b/board/freescale/imx8mqevk/readme.txt
+@@ -0,0 +1,83 @@
++***************************
++Freescale i.MX8mq EVK board
++***************************
 +
-+main ()
-+{
-+	# Currently we support imx8mqevk.
-+	cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+	BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${BINARIES_DIR}/fsl-imx8mq-evk.dtb > ${BINARIES_DIR}/u-boot.its
-+	${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
-+	rm -f ${BINARIES_DIR}/u-boot.its
++This file documents the Buildroot support for the Freescale i.MX8mq
++EVK board.
 +
-+	${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
++Hardware support
++================
 +
-+	exit $?
-+}
++Currently only basic support for hardware is available, currently no
++support for GPU, VPU and other HW features.
 +
-+main $@
++Build
++=====
++
++First, configure Buildroot for the i.MX8mq EVK board:
++
++  make freescale_imx8mqevk_defconfig
++
++Build all components:
++
++  make
++
++You will find in output/images/ the following files:
++  - bl31.bin
++  - boot.vfat
++  - fsl-imx8mq-evk.dtb
++  - Image
++  - imx-boot-imx8mqevk-sd.bin
++  - lpddr4_pmu_train_fw.bin
++  - rootfs.ext2
++  - rootfs.ext4
++  - rootfs.tar
++  - sdcard.img
++  - signed_hdmi_imx8m.bin
++  - u-boot.bin
++  - u-boot.imx
++  - u-boot-nodtb.bin
++  - u-boot-spl-ddr.bin
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a SD card. Launch the following
++command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/common/imx/genimage.cfg.template_imx8.
++
++Boot the i.MX8mq EVK board
++==========================
++
++To boot your newly created system:
++- insert the SD card in the SD slot of the board;
++- put a micro USB cable into the Debug USB Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enable HDMI output
++==================
++
++To enable HDMI output at boot you must provide the video kernel boot
++argument.  To set the video boot argument from U-Boot run after
++stoping in U-Boot prompt:
++
++setenv mmcargs 'setenv bootargs console=${console} root=${mmcroot} video=HDMI-A-1:1920x1080-32 at 60'
++saveenv
++reset
++
++Change screen resolution to suit your connected display.
++
++Enjoy!
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+new file mode 100644
+index 0000000000..f48e4f78e4
+--- /dev/null
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -0,0 +1,41 @@
++BR2_aarch64=y
++BR2_ARM_FPU_VFPV3=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mq-evk"
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.51_8mq_ga"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
++BR2_TARGET_UBOOT_SPL=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_IMX_MKIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
