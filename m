@@ -1,60 +1,106 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Thu, 12 Apr 2018 14:36:28 +0200
-Subject: [Buildroot] [PATCH v2] package/llvm: remove $ORIGIN/../lib from
- RPATH
-Message-ID: <20180412123628.26076-1-valentin.korenblit@smile.fr>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Thu, 12 Apr 2018 15:18:51 +0200
+Subject: [Buildroot] [PATCH 1/1] pixiewps: new package
+Message-ID: <1523539131-9053-1-git-send-email-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AddLLVM.cmake adds $ORIGIN/../lib to the RPATH of llvm binaries.
-This causes a problem when llvm-config from host installed in
-STAGING_DIR is executed under the following conditions:
+Pixie WPS is a C based tool to audit networks
+against so called "Pixie Dust" attacks.
 
-*Target architecture same as host architecture (normally x86_64)
-*Target's libc different from host's libc (normally glibc)
+Generic C package, easy to cross-compile,
+build tests passed for the 7 default toolchains.
 
-llvm-config will try to link with the target's libc, resulting in:
+Sorry my previous submission was somehow corrupted.
+Tested on RPI1 & RPI3.
 
-./llvm-config: error while loading shared libraries: libc.so.0:
-cannot open shared object file: No such file or directory.
-
-Link to autobuild error:
-http://autobuild.buildroot.net/results/b81c12d529c66a028e2297ea5ce1d6930324fa69/
-
-To avoid this, add HOST_LLVM_CONF_OPTS += -DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
-
-Link to discussion:
-http://lists.busybox.net/pipermail/buildroot/2018-April/218627.html
-
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
-Changes v1 -> v2:
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/pixiewps/Config.in     |  7 +++++++
+ package/pixiewps/pixiewps.hash |  3 +++
+ package/pixiewps/pixiewps.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/pixiewps/Config.in
+ create mode 100644 package/pixiewps/pixiewps.hash
+ create mode 100644 package/pixiewps/pixiewps.mk
 
-Instead of patching AddLLVM.cmake, use CMAKE_INSTALL_RPATH option
-for host in llvm.mk
-
- package/llvm/llvm.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 8b88957203..3587b8af9d 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -25,6 +25,12 @@ LLVM_CONF_OPTS += -DLLVM_ENABLE_PROJECTS=""
- HOST_LLVM_CONF_OPTS += -DLLVM_CCACHE_BUILD=$(if $(BR2_CCACHE),ON,OFF)
- LLVM_CONF_OPTS += -DLLVM_CCACHE_BUILD=$(if $(BR2_CCACHE),ON,OFF)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 00cbaef..054ed09 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -794,6 +794,7 @@ F:	package/sdl2/
  
-+# This option avoids AddLLVM.cmake from adding $ORIGIN/../lib
-+# to binaries. Otherwise, llvm-config (host variant installed
-+# in STAGING) will try to link with target's libc:
-+# http://autobuild.buildroot.net/results/b81c12d529c66a028e2297ea5ce1d6930324fa69/
-+HOST_LLVM_CONF_OPTS += -DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+ F:	package/liquid-dsp/
++F:	package/pixiewps/
+ 
+ N:	Guo Ren <ren_guo@c-sky.com>
+ F:	arch/Config.in.csky
+diff --git a/package/Config.in b/package/Config.in
+index e48d0b4..132372c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1809,6 +1809,7 @@ endif
+ 	source "package/phidgetwebservice/Config.in"
+ 	source "package/phytool/Config.in"
+ 	source "package/pimd/Config.in"
++	source "package/pixiewps/Config.in"
+ 	source "package/pound/Config.in"
+ 	source "package/pppd/Config.in"
+ 	source "package/pptp-linux/Config.in"
+diff --git a/package/pixiewps/Config.in b/package/pixiewps/Config.in
+new file mode 100644
+index 0000000..d0b9b99
+--- /dev/null
++++ b/package/pixiewps/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PIXIEWPS
++	bool "pixiewps"
++	help
++	  Pixie WPS is a C based tool to audit networks
++	  against the so called "Pixie Dust" attack.
 +
- # Disable experimental Global Instruction Selection support.
- # https://llvm.org/docs/GlobalISel.html
- HOST_LLVM_CONF_OPTS += -DLLVM_BUILD_GLOBAL_ISEL=OFF
++	  https://github.com/wiire-a/pixiewps/wiki
+diff --git a/package/pixiewps/pixiewps.hash b/package/pixiewps/pixiewps.hash
+new file mode 100644
+index 0000000..bb56630
+--- /dev/null
++++ b/package/pixiewps/pixiewps.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256 d3d3cf57851e3e734fb1797aa078239ef161d1cbeffc4438497d58a425ef22a2  pixiewps-9e5bdc6c86c8487b2a6107d5ab3559ed5c738c59.tar.gz
++sha256 ccb349b4132ed7737f25e5adebfe61f3d52dca33708df1e50352320438d1d4c2  LICENSE.md
+diff --git a/package/pixiewps/pixiewps.mk b/package/pixiewps/pixiewps.mk
+new file mode 100644
+index 0000000..746fa71
+--- /dev/null
++++ b/package/pixiewps/pixiewps.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# pixiewps
++#
++################################################################################
++
++PIXIEWPS_VERSION = 9e5bdc6c86c8487b2a6107d5ab3559ed5c738c59
++PIXIEWPS_SITE = $(call github,wiire-a,pixiewps,$(PIXIEWPS_VERSION))
++PIXIEWPS_LICENSE = GPL-2.0+
++PIXIEWPS_LICENSE_FILES = LICENSE.md
++
++define PIXIEWPS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
++endef
++
++define PIXIEWPS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) \
++		prefix=/usr -C $(@D)/$(PIXIEWPS_SUBDIR) install
++endef
++
++$(eval $(generic-package))
 -- 
-2.14.3
+2.7.4
