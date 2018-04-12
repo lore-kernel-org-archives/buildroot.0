@@ -1,46 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 21:42:18 +0200
-Subject: [Buildroot] [PATCH 1/1] reaver: new package
-In-Reply-To: <1523533473-20081-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <1523533473-20081-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <20180412214218.3dea90d7@windsurf>
+Date: Thu, 12 Apr 2018 21:42:57 +0200
+Subject: [Buildroot] [git commit] package/imx-mkimage: add dependency to
+ host-zlib
+Message-ID: <20180412194321.42D4883F0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f593067b5cd807a8899ba401825b8d0180155cb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 12 Apr 2018 13:44:33 +0200, Guillaume W. Bres wrote:
-> Reaver is a tool to audit networks against brute WPS pins attacks.
-> 
-> It is a generic autotools package, easy to build. Tests passed for the 7 default
-> toolchains. 
-> 
-> It is mandantory to use the github.com/t6x fork that I set in reaver.mk
-> at the moment because other versions/repos of this project won't cross-compile.
-> Their makefiles are pretty outdated. It is the only updated and regularly maintained
-> repo that I found for this project at the moment.
-> 
-> I added an extra mention about this in package/reaver/reaver.mk
-> as suggested by Thomas. I also removed other non related modifications.
+Fixes:
 
-You shouldn't put the changelog inside the commit log... but rather
+  http://autobuild.buildroot.net/results/00d284b4841c7ec89475d509d5b8a8df8437ee3a/
 
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
+Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/imx-mkimage/imx-mkimage.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-here, below the "---" mark.
-
-So, I've adjusted a bit the commit log, rewrapped the Config.in help
-text where the lines were too short, and applied to master.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+index cfb9e1ae8c..6fd6aa39b0 100644
+--- a/package/imx-mkimage/imx-mkimage.mk
++++ b/package/imx-mkimage/imx-mkimage.mk
+@@ -9,6 +9,7 @@ IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
+ IMX_MKIMAGE_SITE_METHOD = git
+ IMX_MKIMAGE_LICENSE = GPL-2.0+
+ IMX_MKIMAGE_LICENSE_FILES = iMX8dv/COPYING
++HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
+ 
+ define HOST_IMX_MKIMAGE_BUILD_CMDS
+ 	# Currently this only supports iMX8M. When more hardware is available
