@@ -1,36 +1,17 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Apr 2018 23:49:35 +0200
-Subject: [Buildroot] [PATCH 1/1] tcf-agent: bump to version 1.7.0
-In-Reply-To: <20180412151310.15252-1-eugene@largest.net>
-References: <20180412151310.15252-1-eugene@largest.net>
-Message-ID: <20180412234935.3ae48694@windsurf>
+From: scsijon <scsijon@lamiaworks.com.au>
+Date: Fri, 13 Apr 2018 10:09:59 +1000
+Subject: [Buildroot] Building for a Qualcomm Snapdragon 835 Kryo 280?
+Message-ID: <5ACFF557.7050500@lamiaworks.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I was wondering if anyone has any idea on which Buildroot I should try 
+to use with one of these beasties now their starting to appear in the 
+laptop market with windows 10S, such as this one for example 
+(https://www.harveynorman.com.au/hp-envy-x2-12-e001tu-2-in-1-connected-laptop.html).
 
-On Thu, 12 Apr 2018 08:13:10 -0700, Eugene Tarassov wrote:
-> Build issues with MicroBlaze and PPC64 targets are fixed
-> 
-> Signed-off-by: Eugene Tarassov <eugene@largest.net>
-
-Thanks Eugene for this patch. However, Norbert had already sent a patch
-to bump to 1.7.0, and his patch raised a number of questions that
-haven't been answered:
-
-  http://patchwork.ozlabs.org/patch/880414/
-
-In particular, Norbert submission was adding two patches to fix build
-issues, and doing a lot more changes in tcf-agent.mk. I'm wondering why
-your patch is so different, and doesn't include Norbert changes.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+thanks
+scsijon
