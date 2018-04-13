@@ -1,38 +1,52 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri, 13 Apr 2018 12:09:29 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/liteboard: Bump Linux to 4.16.2
-In-Reply-To: <20180413100929.15212-1-m.niestroj@grinn-global.com>
-References: <20180413100929.15212-1-m.niestroj@grinn-global.com>
-Message-ID: <20180413100929.15212-2-m.niestroj@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 13 Apr 2018 13:18:52 +0200
+Subject: [Buildroot] [PATCH 1/1] tcf-agent: bump to version 1.7.0
+In-Reply-To: <CADYdroNbVjuEk-4e_=WDs30v6sm9ZTvOb2_DtJdA9XLKQXZRBQ@mail.gmail.com>
+References: <20180412151310.15252-1-eugene@largest.net>
+ <20180413101341.52d0031e@windsurf>
+ <CADYdroNbVjuEk-4e_=WDs30v6sm9ZTvOb2_DtJdA9XLKQXZRBQ@mail.gmail.com>
+Message-ID: <20180413131852.6df79113@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- configs/grinn_liteboard_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
-index de48abc18a..f644d36f06 100644
---- a/configs/grinn_liteboard_defconfig
-+++ b/configs/grinn_liteboard_defconfig
-@@ -1,12 +1,12 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/grinn/liteboard/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.2"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-liteboard"
+On Fri, 13 Apr 2018 11:32:52 +0200, Norbert Lange wrote:
+
+> There aren't any features of CMake used,
+> not for detecting libraries, not for detecting headers, not for getting flags,
+> all of this is missing compared to the Makefile. All that's there is a
+> subset of the fixed flags + logic from other buildsystems.
+> If that's an improvement for you, then there's not much left to discuss.
+> 
+> Proper CMake support would need all that (at which point it is surely
+> better than make),
+> and I expect you will get alot of warnings now in builds, since some
+> feature detection macros are missing.
+
+I build tcf-agent 1.7.0, using the patch provided by Eugene, and it
+built without warnings.
+
+> I wont add proper CMake support myself (as I first considered it), as
+> I would have to dissect the information form other build-systems,
+> and keep it current every new version.
+
+Maybe we should just ask Eugene was is the official and
+upstream-supported build system for tcf-agent. Using CMake instead of
+hand-written Makefiles definitely makes a lot of sense. It does work
+today, and if there are some issues with it, they can be fixed.
+
+Look at your patch that was fixing the static linking issue with
+OpenSSL. CMake has built-in support for detecting libraries using
+pkg-config, automatically solving such static linking issues.
+
+Best regards,
+
+Thomas
 -- 
-2.17.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
