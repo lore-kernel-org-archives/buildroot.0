@@ -1,35 +1,30 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Fri, 13 Apr 2018 11:32:52 +0200
-Subject: [Buildroot] [PATCH 1/1] tcf-agent: bump to version 1.7.0
-In-Reply-To: <20180413101341.52d0031e@windsurf>
-References: <20180412151310.15252-1-eugene@largest.net>
- <20180413101341.52d0031e@windsurf>
-Message-ID: <CADYdroNbVjuEk-4e_=WDs30v6sm9ZTvOb2_DtJdA9XLKQXZRBQ@mail.gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri, 13 Apr 2018 12:09:28 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/liteboard: Bump U-Boot to 2018.03
+Message-ID: <20180413100929.15212-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-04-13 10:13 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
->
-> Please send follow-up patches to further improve things if needed.
-> Moving from CMake to plain Makefiles is not really considered an
-> improvement, unless it's the decision from upstream to move away from
-> CMake.
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ configs/grinn_liteboard_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-There aren't any features of CMake used,
-not for detecting libraries, not for detecting headers, not for getting flags,
-all of this is missing compared to the Makefile. All that's there is a
-subset of the fixed flags + logic from other buildsystems.
-If that's an improvement for you, then there's not much left to discuss.
-
-Proper CMake support would need all that (at which point it is surely
-better than make),
-and I expect you will get alot of warnings now in builds, since some
-feature detection macros are missing.
-I wont add proper CMake support myself (as I first considered it), as
-I would have to dissect the information form other build-systems,
-and keep it current every new version.
-
-Norbert
+diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
+index 70ec296492..de48abc18a 100644
+--- a/configs/grinn_liteboard_defconfig
++++ b/configs/grinn_liteboard_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="liteboard"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+-- 
+2.17.0
