@@ -1,65 +1,85 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 13 Apr 2018 15:32:09 -0300
-Subject: [Buildroot] [RFC PATCH 3/3] download/git: unshallow when
- fetching all refs
-References: <20180412173326.GD4221@scaer>
-Message-ID: <5ad0f7a9dc541_19073fa45f48c644591ea@ultri4.mail>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Fri, 13 Apr 2018 13:22:07 -0700
+Subject: [Buildroot] [git commit] Config.in: add -Ofast option
+In-Reply-To: <20180407143755.GB2341@scaer>
+References: <20180326201918.157AC83C5E@busybox.osuosl.org>
+ <3fafe5de-1c7b-801c-9c14-291ebcfdc264@microchip.com>
+ <20180407143755.GB2341@scaer>
+Message-ID: <90fc9566-76a8-9d6f-f251-16bc7bfe8534@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Yann, All,
 
-On Thu, Apr 12, 2018 at 02:33 PM, Yann E. MORIN wrote:
-
-> On 2018-04-12 13:28 +0200, Thomas Petazzoni spake thusly:
-
->> > One scenario in buildroot development that would trigger this sequence
->> > is for example when a package is bumped on master branch, some users
->> > create the git cache at this time, then the bump is reverted.
->> > 
->> > Another scenario is when giving maintenance to a product version that
->> > uses one version of buildroot using the same build farm that uses a
->> > newer version of buildroot.
->> 
->> In the light of this, wouldn't it be simpler to stop doing shallow
->> clones at all ? A shallow clone did make a lot of sense back when we
->> didn't cache the Git repositories. But now that we are caching the
->> results, does it make sense to keep the complexity of the code to use
->> shallow clones ?
->> 
->> Note that this is really an open question, there are possibly some
->> convincing argument for us to keep a shallow clone strategy.
+On 04/07/2018 07:37 AM, Yann E. MORIN wrote:
+> Joshua, All,
 > 
-> Indeed, I don't think it makes sense anymore...
+> On 2018-04-05 14:46 -0700, Joshua Henderson spake thusly:
+>> On 03/26/2018 01:19 PM, Thomas Petazzoni wrote:
+>>> commit: https://git.buildroot.net/buildroot/commit/?id=ed6a7e18af8f4dfddee6e6b144f20dfaf6926315
+>>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>
+>>> -Ofast (introduced in GCC 4.6) It combines the existing optimization level -O3
+>>> with options that can affect standards compliance but result in better optimized
+>>> code. For example, -Ofast enables -ffast-math.
+>>>
+>>> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
+>>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>>> ---
+>>>  Config.in           | 11 +++++++++++
+>>>  package/Makefile.in |  3 +++
+>>>  2 files changed, 14 insertions(+)
+>>>
+>>> diff --git a/Config.in b/Config.in
+>>> index 0002df5176..037ea2265b 100644
+>>> --- a/Config.in
+>>> +++ b/Config.in
+>>> @@ -527,6 +527,17 @@ config BR2_OPTIMIZE_S
+>>>  	  -ftree-vect-loop-version
+>>>  	  This is the default.
+>>>  
+>>> +config BR2_OPTIMIZE_FAST
+>>> +	bool "optimize for fast"
+>>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+>>> +	help
+>>> +	  Optimize for fast. Disregard strict standards
+>>> +	  compliance. -Ofast enables all -O3 optimizations. It also
+>>> +	  enables optimizations that are not valid for all
+>>> +	  standard-compliant programs. It turns on -ffast-math and the
+>>> +	  Fortran-specific -fstack-arrays, unless -fmax-stack-var-size
+>>> +	  is specified, and -fno-protect-parens.
+>>> +
+>>>  endchoice
+>> For reference, I just found an unfriendly package with this option.
+>> sqlite3.c: In function ?sqlite3IsNaN?:
+>> sqlite3.c:28554:3: error: #error SQLite will not work correctly with the -ffast-math option of GCC.
+>>  # error SQLite will not work correctly with the -ffast-math option of GCC.
+>>    ^
+>> Makefile:541: recipe for target 'sqlite3.lo' failed
+>>
+>> sqlite3 refuses to be built with -ffast-math (a side effect of -Ofast) when it
+>> falls back to implementing its own isnan() function.  From what I can see,
+>> SQLITE_HAVE_ISNAN can be defined [1] to make it use the system library isnan().
+>> But, how to tell if the system library supports a proper isnan() seems to open
+>> up a whole new can of worms.  Thoughts?
 > 
-> So, intead of fixing it, let's just do full clones now.
+> Assuming those packages are not too many, I'd say we go to overriding
+> the CFLAGS for those, with code something like:
+> 
+>     SQLITE_CFLAGS = $(subst -Ofast,-O3,$(TARGET_CFLAGS))
 
-I agree it is less needed now than before.
+Something like this gets the job done.  The -Ofast still hangs around in other
+*_ENV flags because it's still in TARGET_CFLAGS, but not where I can find it
+matters.  Patch to follow.
 
-The worst scenario (linux trees) is covered by:
-- the use of tarballs from GitHub in the defconfigs, for newcomers who sometimes
-  just want to use a defconfig, add few packages and use the image in a new
-  board;
-- in the long run, due to the git cache feature.
+> 
+> If it turns out that the number of broken packages is too high, then we
+> can come up with an alternate solution...
 
-But I think people will miss this feature. At least I will.
+This is the only one I have found so far.  sqlite3 was diligent enough to make
+this a build time issue.  Other packages may not.
 
-In the case of someone always using tags from a linux repo, this person
-would never need to download the full repo if the shallow fetch remains.
-
-When someone wants just to try a package, for example, a debug tool, which
-maybe will never be used again, this person would need to do a full clone,
-instead of potentially do a shallow fetch.
-
-The repo for some packages can be located on slow servers (not necessarily a
-package in the tree, it can be on a br2-external).
-
-And the least appealing argument: I was willing to recreate
-http://patchwork.ozlabs.org/patch/702006/ on top of the new infra.
-
-
-Regards,
-Ricardo
+Josh
