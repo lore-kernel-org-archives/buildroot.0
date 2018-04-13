@@ -1,85 +1,35 @@
-From: =?UTF-8?Q?Micha=C5=82_Kalbarczyk?= <michal@gamecodehq.com>
-Date: Fri, 13 Apr 2018 10:16:19 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: add dependency on
- elfutils for R600 with LLVM
-In-Reply-To: <20180412213200.3553280F77@busybox.osuosl.org>
-References: <20180412213200.3553280F77@busybox.osuosl.org>
-Message-ID: <CAGbXN6KP1_EoY+q0_y7OrE4kuuEmPOVA=G2BNSn_8NyqxbJtpA@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Fri, 13 Apr 2018 11:32:52 +0200
+Subject: [Buildroot] [PATCH 1/1] tcf-agent: bump to version 1.7.0
+In-Reply-To: <20180413101341.52d0031e@windsurf>
+References: <20180412151310.15252-1-eugene@largest.net>
+ <20180413101341.52d0031e@windsurf>
+Message-ID: <CADYdroNbVjuEk-4e_=WDs30v6sm9ZTvOb2_DtJdA9XLKQXZRBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Just figured out that you're creating a PR with gallium R600 driver. I'm
-trying do the same thing with RADEONSI driver.
-Can you add radeonsi driver to your PR, or should I create separate PR for
-that ?
+2018-04-13 10:13 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+>
+> Please send follow-up patches to further improve things if needed.
+> Moving from CMake to plain Makefiles is not really considered an
+> improvement, unless it's the decision from upstream to move away from
+> CMake.
 
-thanks for your help
-Micha?.
+There aren't any features of CMake used,
+not for detecting libraries, not for detecting headers, not for getting flags,
+all of this is missing compared to the Makefile. All that's there is a
+subset of the fixed flags + logic from other buildsystems.
+If that's an improvement for you, then there's not much left to discuss.
 
+Proper CMake support would need all that (at which point it is surely
+better than make),
+and I expect you will get alot of warnings now in builds, since some
+feature detection macros are missing.
+I wont add proper CMake support myself (as I first considered it), as
+I would have to dissect the information form other build-systems,
+and keep it current every new version.
 
-On Thu, Apr 12, 2018 at 11:31 PM, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> commit: https://git.buildroot.net/buildroot/commit/?id=
-> 92fda8761aa8024be53a8edb8c102d1ba6401bce
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Gallium R600 needs libelf when mesa is built with llvm support.
-> Because of this, toolchain must use either uClibc or glibc, as
-> musl is not currently compatible with elfutils.
->
-> This patch solves:
-> configure: error: r600 requires libelf when using llvm
->
-> Fixes:
->
->   http://autobuild.buildroot.org/results/8845ff0f28d3273ebe884126b85cd7
-> c4a905d81b/
->
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/mesa3d/Config.in | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 1476b39acc..bd3d050e29 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -97,13 +97,23 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
->         bool "Gallium Radeon R600 driver"
->         depends on BR2_i386 || BR2_x86_64
-> +       depends on !BR2_PACKAGE_MESA3D_LLVM || \
-> +               (BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
-> +                       BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
->         select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->         select BR2_PACKAGE_LIBDRM_RADEON
->         select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
-> +       select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
->         select BR2_PACKAGE_MESA3D_NEEDS_XA
->         help
->           Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
->
-> +# R600 needs libelf when Mesa3D is built with LLVM support
-> +# musl is not currently compatible with elfutils
-> +comment "R600 driver needs a uClibc or glibc toolchain when llvm is
-> enabled"
-> +       depends on BR2_PACKAGE_MESA3D_LLVM
-> +       depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-> +
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
->         bool "Gallium vmware svga driver"
->         depends on BR2_i386 || BR2_x86_64
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180413/d89ab868/attachment.html>
+Norbert
