@@ -1,84 +1,125 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 13 Apr 2018 09:45:14 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-11
-References: <20180412171132.GB4221@scaer>
-Message-ID: <5ad0a65a3149f_1b742afe2b8b9f6c345ae@ultri4.mail>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Fri, 13 Apr 2018 15:00:00 +0200
+Subject: [Buildroot] [PATCH 1/1] cowpatty: new package
+Message-ID: <1523624400-3162-1-git-send-email-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+CowPatty is a C based tool to identify weak WPA passphrases
+contained in a pcap file.
 
-On Thu, Apr 12, 2018 at 02:11 PM, Yann E. MORIN wrote:
+Use the github.com/gwbres/cowpatty fork at the moment because Makefile in the mainstream is faulty.
+(-lssl flag is missing and some recipes had to be reordered).
+I will have the buildroot configuration eventually point to the original mainstrean as soon as
+Makefile is corrected.
 
-> On 2018-04-12 12:02 +0200, Thomas Petazzoni spake thusly:
->> Ah, interesting. I talked (privately) with Yann about the
->> dtv-scan-tables issue early today. We didn't spend much time analyzing
->> the issue, but there is one side thing that I thought could be causing
->> issues in the autobuilders:
->>   https://git.buildroot.org/buildroot-test/commit/scripts/autobuild-run?id=c47d9bf2080e33fa3a87223afd93f46363e36447
-> 
-> Indeed, I don;t see that ending up nicely in the end.
+The package is easy to build, it requires the -lssl -lpcap and -lcrypto flags.
+Build tests passed for the 7 default toolchains with a simple
+config snippet made of "BR2_PACKAGE_COWPATTY=y". But please
+double check the proposed dependencies & package selections.
+I set the package to select libpcap & libopenssl at the moment.
 
-Agreed.
+Tested & used on RPI 1 & 3 here:
 
-> 
-> Even if we can run some 'git fsck' or the like, at one point we may end
-> up removing a file that *is* critical and without which we could not
-> even do an fsck...
+	/usr/bin/cowpatty -r eap-test.dump -f dict -s somethingclever
+	[...]
+	1079 passphrases tested in 97.18 seconds:  11.10 passphrases/second
 
-Indeed, I removed .git/HEAD from a git cache and the download script (or any git
-command) fails like this:
-fatal: Not a git repository (or any of the parent directories): .git
+I put the package in network apps. but this is more of a util. tool
+than anything, so you might want to change that to.
+	
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/cowpatty/Config.in     |  9 +++++++++
+ package/cowpatty/cowpatty.hash |  3 +++
+ package/cowpatty/cowpatty.mk   | 24 ++++++++++++++++++++++++
+ 5 files changed, 38 insertions(+)
+ create mode 100644 package/cowpatty/Config.in
+ create mode 100644 package/cowpatty/cowpatty.hash
+ create mode 100644 package/cowpatty/cowpatty.mk
 
-> 
->> This change from Peter Korsgaard adapts the logic in autobuild-run that
->> removes 5 random tarballs between every build. This exists to force
->> autobuilder instances to regularly re-download stuff, which allows to
->> test our download infrastructure.
->> 
->> Originally, DL_DIR was flat, so we were just picking up 5 random files
->> from that folder. Now that DL_DIR has sub-directories, Peter changed
->> the logic to be recursive, and pick 5 random files recursively....
->> except that DL_DIR/<package>/git/ contains a Git repo, and I'm not sure
->> deleting random files from a Git repo is really recommended.
->> 
->> So I have no idea if the download problems are related to this
->> autobuild-run issue, or if there are actual issues in the git download
->> helper, but we should probably fix autobuild-run anyway.
-
-When a file that was checked out in a git cache is removed, the next 'git
-checkout' succeeds but does not checkout that file. The repo remains with
-'Changes not staged for commit', the tarball is generated and the hash
-mismatches.
-So yes, at least the hash mismatches can be caused by this autobuild-run issue.
-
-> 
-> Yes, we do need to fix the autobuilder script.
-
-I agree.
-I have a patch that I will send after my tests finish.
-
-The fix to autobuilder script will not stop the current build (download)
-failures. It will only stop causing new failures.
-We will need also either the manual removal of the broken 'dl/package/git' from
-the autobuilder instances or a change to the download infra to automatically
-recover from a broken git cache.
-
-> 
-> But now, I don't think we should try to repare a broken git repository.
-> If it is broken, we can just remove it and re-clone from scratch (from
-> the current remote).
-
-For a broken git repo, I agree.
-
-But there is another possible scenario: a sane git repo that is not clean (in
-the sense of 'git clean'). Maybe we use the same solution for both, maybe not.
-I will reply in the series about this.
-
-
-Regards,
-Ricardo
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 05693d3..560494b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -793,6 +793,7 @@ F:	package/c-icap-modules/
+ F:	package/sdl2/
+ 
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
++F:	package/cowpatty/
+ F:	package/liquid-dsp/
+ F:	package/pixiewps/
+ F:	package/reaver/
+diff --git a/package/Config.in b/package/Config.in
+index ddbbcff..162280f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1683,6 +1683,7 @@ menu "Networking applications"
+ 	source "package/connman/Config.in"
+ 	source "package/connman-gtk/Config.in"
+ 	source "package/conntrack-tools/Config.in"
++	source "package/cowpatty/Config.in"
+ 	source "package/crda/Config.in"
+ 	source "package/ctorrent/Config.in"
+ 	source "package/cups/Config.in"
+diff --git a/package/cowpatty/Config.in b/package/cowpatty/Config.in
+new file mode 100644
+index 0000000..7fb6814
+--- /dev/null
++++ b/package/cowpatty/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_COWPATTY
++	bool "cowpatty"
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_OPENSSL
++	help
++	  CowPatty is a C based tool to identify
++	  weak WPA passphrases.
++
++	  https://wifinetnews.com/archives/2003/11/weakness_in_passphrase_choice_in_wpa_interface.html
+diff --git a/package/cowpatty/cowpatty.hash b/package/cowpatty/cowpatty.hash
+new file mode 100644
+index 0000000..0725c11
+--- /dev/null
++++ b/package/cowpatty/cowpatty.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256 131d5285fa64c072b80f87a5be5914828fc2c2816157d6dc40b8749ba02d69fa cowpatty-83fd1589c142676d26cabe1d56e9ff8bb288683a.tar.gz
++sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa COPYING
+diff --git a/package/cowpatty/cowpatty.mk b/package/cowpatty/cowpatty.mk
+new file mode 100644
+index 0000000..8c7ec23
+--- /dev/null
++++ b/package/cowpatty/cowpatty.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# cowpatty
++#
++################################################################################
++
++COWPATTY_VERSION = 83fd1589c142676d26cabe1d56e9ff8bb288683a
++COWPATTY_SITE = $(call github,gwbres,cowpatty,$(COWPATTY_VERSION))
++COWPATTY_LICENSE = GPL-2.0+
++COWPATTY_LICENSE_FILES = COPYING
++
++COWPATTY_DEPENDENCIES = libpcap
++COWPATTY_DEPENDENCIES += libopenssl
++
++define COWPATTY_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
++endef
++
++define COWPATTY_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) \
++		PREFIX=/usr -C $(@D) install
++endef
++
++$(eval $(generic-package))
+-- 
+2.7.4
