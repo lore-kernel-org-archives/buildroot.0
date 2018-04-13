@@ -1,125 +1,66 @@
-From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Date: Fri, 13 Apr 2018 15:00:00 +0200
-Subject: [Buildroot] [PATCH 1/1] cowpatty: new package
-Message-ID: <1523624400-3162-1-git-send-email-guillaume.bressaix@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri, 13 Apr 2018 10:34:31 -0300
+Subject: [Buildroot] [PATCH] autobuild-run: remove only tarballs from
+ download dir
+Message-ID: <20180413133431.19449-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CowPatty is a C based tool to identify weak WPA passphrases
-contained in a pcap file.
+The current logic that removes 5 files at random to force the download
+to be tested eventually ends up removing files from the git
+repositories used as cache by the download infra.
 
-Use the github.com/gwbres/cowpatty fork at the moment because Makefile in the mainstream is faulty.
-(-lssl flag is missing and some recipes had to be reordered).
-I will have the buildroot configuration eventually point to the original mainstrean as soon as
-Makefile is corrected.
+When a file that was previously checked out in a git cache is removed,
+the next 'git checkout' succeeds but does not checkout that file. The
+repo remains with 'Changes not staged for commit', the tarball is
+generated and the hash mismatches, causing a build failure.
 
-The package is easy to build, it requires the -lssl -lpcap and -lcrypto flags.
-Build tests passed for the 7 default toolchains with a simple
-config snippet made of "BR2_PACKAGE_COWPATTY=y". But please
-double check the proposed dependencies & package selections.
-I set the package to select libpcap & libopenssl at the moment.
+Ensure only the tarballs are removed by excluding any file inside a git
+repository from the list of potential files to remove.
+The download infra for git method uses 'git fetch' when regenerating the
+tarball, this command fails as expected if the upstream location
+changed.
 
-Tested & used on RPI 1 & 3 here:
-
-	/usr/bin/cowpatty -r eap-test.dump -f dict -s somethingclever
-	[...]
-	1079 passphrases tested in 97.18 seconds:  11.10 passphrases/second
-
-I put the package in network apps. but this is more of a util. tool
-than anything, so you might want to change that to.
-	
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/cowpatty/Config.in     |  9 +++++++++
- package/cowpatty/cowpatty.hash |  3 +++
- package/cowpatty/cowpatty.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 38 insertions(+)
- create mode 100644 package/cowpatty/Config.in
- create mode 100644 package/cowpatty/cowpatty.hash
- create mode 100644 package/cowpatty/cowpatty.mk
+NOTICE: This fix to autobuilder script will not stop the current build
+(download) failures. It will only stop causing new failures.
+We will need also either the manual removal of the broken
+'dl/package/git' from the autobuilder instances or a change to the
+download infra to automatically recover from a broken git cache.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 05693d3..560494b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -793,6 +793,7 @@ F:	package/c-icap-modules/
- F:	package/sdl2/
+I tested this by first populating the instance-0/dl/ with 19GB of
+tarballs that I have locally, then I added 'continue' in the main loop
+of the script just after prepare_build() returned.
+After the script removed all tarballs from instance-0/dl/, I manually
+checked there are git repositories and that they are sane (using git
+fsck) and clean in the sense of git clean (using git status).
+Tested with Python 2.7.14
+---
+ scripts/autobuild-run | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 33d0ae9..6a01151 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -291,6 +291,9 @@ def prepare_build(**kwargs):
+     # recursively find files under root
+     def find_files(root):
+         for r, d, f in os.walk(root):
++            if '.git' in d:
++                d[:] = list()
++                continue
+             for i in f:
+                 yield os.path.join(r, i)
  
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
-+F:	package/cowpatty/
- F:	package/liquid-dsp/
- F:	package/pixiewps/
- F:	package/reaver/
-diff --git a/package/Config.in b/package/Config.in
-index ddbbcff..162280f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1683,6 +1683,7 @@ menu "Networking applications"
- 	source "package/connman/Config.in"
- 	source "package/connman-gtk/Config.in"
- 	source "package/conntrack-tools/Config.in"
-+	source "package/cowpatty/Config.in"
- 	source "package/crda/Config.in"
- 	source "package/ctorrent/Config.in"
- 	source "package/cups/Config.in"
-diff --git a/package/cowpatty/Config.in b/package/cowpatty/Config.in
-new file mode 100644
-index 0000000..7fb6814
---- /dev/null
-+++ b/package/cowpatty/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_COWPATTY
-+	bool "cowpatty"
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  CowPatty is a C based tool to identify
-+	  weak WPA passphrases.
-+
-+	  https://wifinetnews.com/archives/2003/11/weakness_in_passphrase_choice_in_wpa_interface.html
-diff --git a/package/cowpatty/cowpatty.hash b/package/cowpatty/cowpatty.hash
-new file mode 100644
-index 0000000..0725c11
---- /dev/null
-+++ b/package/cowpatty/cowpatty.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256 131d5285fa64c072b80f87a5be5914828fc2c2816157d6dc40b8749ba02d69fa cowpatty-83fd1589c142676d26cabe1d56e9ff8bb288683a.tar.gz
-+sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa COPYING
-diff --git a/package/cowpatty/cowpatty.mk b/package/cowpatty/cowpatty.mk
-new file mode 100644
-index 0000000..8c7ec23
---- /dev/null
-+++ b/package/cowpatty/cowpatty.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# cowpatty
-+#
-+################################################################################
-+
-+COWPATTY_VERSION = 83fd1589c142676d26cabe1d56e9ff8bb288683a
-+COWPATTY_SITE = $(call github,gwbres,cowpatty,$(COWPATTY_VERSION))
-+COWPATTY_LICENSE = GPL-2.0+
-+COWPATTY_LICENSE_FILES = COPYING
-+
-+COWPATTY_DEPENDENCIES = libpcap
-+COWPATTY_DEPENDENCIES += libopenssl
-+
-+define COWPATTY_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
-+endef
-+
-+define COWPATTY_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) \
-+		PREFIX=/usr -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
 -- 
-2.7.4
+2.14.1
