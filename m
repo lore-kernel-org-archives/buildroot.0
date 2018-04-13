@@ -1,122 +1,84 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 13 Apr 2018 08:39:31 -0400
-Subject: [Buildroot] [PATCH 1/1] libcurl: fix building against libressl
-Message-ID: <20180413123931.7604-1-aduskett@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri, 13 Apr 2018 09:45:14 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-04-11
+References: <20180412171132.GB4221@scaer>
+Message-ID: <5ad0a65a3149f_1b742afe2b8b9f6c345ae@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LibreSSL 2.7.x breaks libcurl 7.59.0 with the error:
-error: static declaration of ?OpenSSL_version_num? follows non-static
-declaration
+Hello,
 
-This failure has since been fixed upstream with commit:
-https://github.com/curl/curl/commit/7c90c93c0b061da81f69fabdd57125b2783c15fb
+On Thu, Apr 12, 2018 at 02:11 PM, Yann E. MORIN wrote:
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- ...-curl-fix-building-against-libressl-2.7.2.patch | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
+> On 2018-04-12 12:02 +0200, Thomas Petazzoni spake thusly:
+>> Ah, interesting. I talked (privately) with Yann about the
+>> dtv-scan-tables issue early today. We didn't spend much time analyzing
+>> the issue, but there is one side thing that I thought could be causing
+>> issues in the autobuilders:
+>>   https://git.buildroot.org/buildroot-test/commit/scripts/autobuild-run?id=c47d9bf2080e33fa3a87223afd93f46363e36447
+> 
+> Indeed, I don;t see that ending up nicely in the end.
 
-diff --git a/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch b/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
-new file mode 100644
-index 0000000000..e5d6f686e8
---- /dev/null
-+++ b/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
-@@ -0,0 +1,91 @@
-+From 7a67b6561da8e42505e09014a5c97b19e1a93532 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Fri, 13 Apr 2018 08:31:37 -0400
-+Subject: [PATCH] curl: fix building against libressl 2.7.2
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+LibreSSL 2.7.x breaks libcurl 7.59.0 with the error:
-+error: static declaration of ?OpenSSL_version_num? follows non-static
-+declaration
-+
-+This failure has since been fixed upstream with commit:
-+https://github.com/curl/curl/commit/7c90c93c0b061da81f69fabdd57125b2783c15fb
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ lib/vtls/openssl.c | 23 +++++++++++++++++------
-+ 1 file changed, 17 insertions(+), 6 deletions(-)
-+
-+diff --git a/lib/vtls/openssl.c b/lib/vtls/openssl.c
-+index 2a6b3cf..09b4ea6 100644
-+--- a/lib/vtls/openssl.c
-++++ b/lib/vtls/openssl.c
-+@@ -104,13 +104,22 @@
-+ #endif
-+ 
-+ #if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && /* OpenSSL 1.1.0+ */ \
-+-  !defined(LIBRESSL_VERSION_NUMBER)
-++    !(defined(LIBRESSL_VERSION_NUMBER) && \
-++      LIBRESSL_VERSION_NUMBER < 0x20700000L)
-+ #define SSLEAY_VERSION_NUMBER OPENSSL_VERSION_NUMBER
-+ #define HAVE_X509_GET0_EXTENSIONS 1 /* added in 1.1.0 -pre1 */
-+ #define HAVE_OPAQUE_EVP_PKEY 1 /* since 1.1.0 -pre3 */
-+ #define HAVE_OPAQUE_RSA_DSA_DH 1 /* since 1.1.0 -pre5 */
-+ #define CONST_EXTS const
-+ #define HAVE_ERR_REMOVE_THREAD_STATE_DEPRECATED 1
-++
-++/* funny typecast define due to difference in API */
-++#ifdef LIBRESSL_VERSION_NUMBER
-++#define ARG2_X509_signature_print (X509_ALGOR *)
-++#else
-++#define ARG2_X509_signature_print
-++#endif
-++
-+ #else
-+ /* For OpenSSL before 1.1.0 */
-+ #define ASN1_STRING_get0_data(x) ASN1_STRING_data(x)
-+@@ -128,7 +137,8 @@ static unsigned long OpenSSL_version_num(void)
-+ #endif
-+ 
-+ #if (OPENSSL_VERSION_NUMBER >= 0x1000200fL) && /* 1.0.2 or later */ \
-+-  !defined(LIBRESSL_VERSION_NUMBER)
-++    !(defined(LIBRESSL_VERSION_NUMBER) && \
-++      LIBRESSL_VERSION_NUMBER < 0x20700000L)
-+ #define HAVE_X509_GET0_SIGNATURE 1
-+ #endif
-+ 
-+@@ -147,7 +157,7 @@ static unsigned long OpenSSL_version_num(void)
-+  * Whether SSL_CTX_set_keylog_callback is available.
-+  * OpenSSL: supported since 1.1.1 https://github.com/openssl/openssl/pull/2287
-+  * BoringSSL: supported since d28f59c27bac (committed 2015-11-19)
-+- * LibreSSL: unsupported in at least 2.5.1 (explicitly check for it since it
-++ * LibreSSL: unsupported in@least 2.7.2 (explicitly check for it since it
-+  *           lies and pretends to be OpenSSL 2.0.0).
-+  */
-+ #if (OPENSSL_VERSION_NUMBER >= 0x10101000L && \
-+@@ -259,7 +269,9 @@ static void tap_ssl_key(const SSL *ssl, ssl_tap_state_t *state)
-+   if(!session || !keylog_file_fp)
-+     return;
-+ 
-+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L && \
-++    !(defined(LIBRESSL_VERSION_NUMBER) && \
-++      LIBRESSL_VERSION_NUMBER < 0x20700000L)
-+   /* ssl->s3 is not checked in openssl 1.1.0-pre6, but let's assume that
-+    * we have a valid SSL context if we have a non-NULL session. */
-+   SSL_get_client_random(ssl, client_random, SSL3_RANDOM_SIZE);
-+@@ -2082,8 +2094,7 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
-+   case CURL_SSLVERSION_TLSv1_2:
-+   case CURL_SSLVERSION_TLSv1_3:
-+     /* it will be handled later with the context options */
-+-#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && \
-+-    !defined(LIBRESSL_VERSION_NUMBER)
-++#if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
-+     req_method = TLS_client_method();
-+ #else
-+     req_method = SSLv23_client_method();
-+-- 
-+2.14.3
-+
--- 
-2.14.3
+Agreed.
+
+> 
+> Even if we can run some 'git fsck' or the like, at one point we may end
+> up removing a file that *is* critical and without which we could not
+> even do an fsck...
+
+Indeed, I removed .git/HEAD from a git cache and the download script (or any git
+command) fails like this:
+fatal: Not a git repository (or any of the parent directories): .git
+
+> 
+>> This change from Peter Korsgaard adapts the logic in autobuild-run that
+>> removes 5 random tarballs between every build. This exists to force
+>> autobuilder instances to regularly re-download stuff, which allows to
+>> test our download infrastructure.
+>> 
+>> Originally, DL_DIR was flat, so we were just picking up 5 random files
+>> from that folder. Now that DL_DIR has sub-directories, Peter changed
+>> the logic to be recursive, and pick 5 random files recursively....
+>> except that DL_DIR/<package>/git/ contains a Git repo, and I'm not sure
+>> deleting random files from a Git repo is really recommended.
+>> 
+>> So I have no idea if the download problems are related to this
+>> autobuild-run issue, or if there are actual issues in the git download
+>> helper, but we should probably fix autobuild-run anyway.
+
+When a file that was checked out in a git cache is removed, the next 'git
+checkout' succeeds but does not checkout that file. The repo remains with
+'Changes not staged for commit', the tarball is generated and the hash
+mismatches.
+So yes, at least the hash mismatches can be caused by this autobuild-run issue.
+
+> 
+> Yes, we do need to fix the autobuilder script.
+
+I agree.
+I have a patch that I will send after my tests finish.
+
+The fix to autobuilder script will not stop the current build (download)
+failures. It will only stop causing new failures.
+We will need also either the manual removal of the broken 'dl/package/git' from
+the autobuilder instances or a change to the download infra to automatically
+recover from a broken git cache.
+
+> 
+> But now, I don't think we should try to repare a broken git repository.
+> If it is broken, we can just remove it and re-clone from scratch (from
+> the current remote).
+
+For a broken git repo, I agree.
+
+But there is another possible scenario: a sane git repo that is not clean (in
+the sense of 'git clean'). Maybe we use the same solution for both, maybe not.
+I will reply in the series about this.
+
+
+Regards,
+Ricardo
