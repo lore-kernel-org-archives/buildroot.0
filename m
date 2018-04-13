@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 13 Apr 2018 10:13:41 +0200
-Subject: [Buildroot] [PATCH 1/1] tcf-agent: bump to version 1.7.0
-In-Reply-To: <20180412151310.15252-1-eugene@largest.net>
-References: <20180412151310.15252-1-eugene@largest.net>
-Message-ID: <20180413101341.52d0031e@windsurf>
+Date: Fri, 13 Apr 2018 10:17:34 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: add dependency on
+ elfutils for R600 with LLVM
+In-Reply-To: <CAGbXN6KP1_EoY+q0_y7OrE4kuuEmPOVA=G2BNSn_8NyqxbJtpA@mail.gmail.com>
+References: <20180412213200.3553280F77@busybox.osuosl.org>
+ <CAGbXN6KP1_EoY+q0_y7OrE4kuuEmPOVA=G2BNSn_8NyqxbJtpA@mail.gmail.com>
+Message-ID: <20180413101734.0ebdb28d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +14,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 12 Apr 2018 08:13:10 -0700, Eugene Tarassov wrote:
-> Build issues with MicroBlaze and PPC64 targets are fixed
-> 
-> Signed-off-by: Eugene Tarassov <eugene@largest.net>
-> ---
->  ...gent-add-install-target-to-the-CMakeLists.patch |  48 ----------
->  ...-remove-explicit-uses-of-__ptrace_request.patch | 103 ---------------------
->  ...de-canonicalize_file_name-for-all-c-libs-.patch |  46 ---------
->  package/tcf-agent/Config.in                        |   5 +-
->  package/tcf-agent/tcf-agent.hash                   |   2 +-
->  package/tcf-agent/tcf-agent.mk                     |   2 +-
->  6 files changed, 4 insertions(+), 202 deletions(-)
->  delete mode 100644 package/tcf-agent/0001-agent-add-install-target-to-the-CMakeLists.patch
->  delete mode 100644 package/tcf-agent/0002-linux-remove-explicit-uses-of-__ptrace_request.patch
->  delete mode 100644 package/tcf-agent/0003-linux-provide-canonicalize_file_name-for-all-c-libs-.patch
+On Fri, 13 Apr 2018 10:16:19 +0200, Micha? Kalbarczyk wrote:
 
-Applied to master, thanks.
+> Just figured out that you're creating a PR with gallium R600 driver. I'm
+> trying do the same thing with RADEONSI driver.
+> Can you add radeonsi driver to your PR, or should I create separate PR for
+> that ?
 
-Please send follow-up patches to further improve things if needed.
-Moving from CMake to plain Makefiles is not really considered an
-improvement, unless it's the decision from upstream to move away from
-CMake.
+We don't do "PR" in Buildroot, we send patches over e-mail. I'm not
+sure Valentin has the hardware to test RadeonSI, so if you're
+interested by RadeonSI, please send your patches :-)
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
