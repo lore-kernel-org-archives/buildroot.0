@@ -1,55 +1,141 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Apr 2018 18:07:25 +0200
-Subject: [Buildroot] [PATCH 1/2] modem-manager: fix test of unset
- variable in init script
-In-Reply-To: <20180413162521.7078-2-casantos@datacom.ind.br>
-References: <20180413162521.7078-1-casantos@datacom.ind.br>
- <20180413162521.7078-2-casantos@datacom.ind.br>
-Message-ID: <20180414180725.4964d59d@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 14 Apr 2018 21:48:28 +0300
+Subject: [Buildroot] [PATCH 1/1] zeromq: patch configure.ac to check for
+ ldaddr on when checking libunwind
+In-Reply-To: <20180413115740.23425-1-asafka7@gmail.com>
+References: <20180413115740.23425-1-asafka7@gmail.com>
+Message-ID: <20180414184828.gxwr6pvcyyzmmxtj@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Asaf,
 
-On Fri, 13 Apr 2018 13:25:20 -0300, Carlos Santos wrote:
-> MODEMMANAGER_BIN was never set. Fortunately it did not break the script
-> execution due to the permissive behavior of "test":
+On Fri, Apr 13, 2018 at 02:57:40PM +0300, Asaf Kahlon wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/2b1aaf7e35651f04a9e9d0269e49c1b0bd87ae29/
 > 
->     $ test -x non-existing || echo error
->     error
->     $ test -x  || echo error
->     test -x && echo success
->     success
+> configure.ac can fail the build when there's no dynamic library support,
+> since it cannot find dladdr which is needed only when we have libunwind.
+> Therefore, configure.ac was patched to check for dladdr only in the libunwind
+> check section. As a consequence of the patch, libunwind was added as an optional
+> dependency, and ZEROMQ_AUTORECONF was set.
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/modem-manager/S44modem-manager | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  DEVELOPERS                                    |  1 +
+>  ...-serach-for-dladdr-only-on-libunwind.patch | 44 +++++++++++++++++++
+>  package/zeromq/zeromq.mk                      | 10 +++++
+>  3 files changed, 55 insertions(+)
+>  create mode 100644 package/zeromq/0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch
 > 
-> diff --git a/package/modem-manager/S44modem-manager b/package/modem-manager/S44modem-manager
-> index cf6d89601d..05803fe198 100755
-> --- a/package/modem-manager/S44modem-manager
-> +++ b/package/modem-manager/S44modem-manager
-> @@ -3,6 +3,7 @@
->  # Starts ModemManager
->  #
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 05693d3024..f269b79dd4 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -191,6 +191,7 @@ F:	package/stress/
+>  N:	Asaf Kahlon <asafka7@gmail.com>
+>  F:	package/python-jsonmodels/
+>  F:	package/python-yieldfrom/
+> +F:	package/zeromq
 >  
-> +MODEMMANAGER_BIN=/usr/sbin/ModemManager
->  PIDFILE=/var/run/ModemManager.pid
+>  N:	Ash Charles <ash.charles@savoirfairelinux.com>
+>  F:	package/pru-software-support/
+> diff --git a/package/zeromq/0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch b/package/zeromq/0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch
+> new file mode 100644
+> index 0000000000..36092447ca
+> --- /dev/null
+> +++ b/package/zeromq/0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch
+> @@ -0,0 +1,44 @@
+> +From 194b3836c87f77aca34581656ff99da49813d8c3 Mon Sep 17 00:00:00 2001
+> +From: Asaf Kahlon <asafka7@gmail.com>
+> +Date: Fri, 13 Apr 2018 11:56:46 +0300
+> +Subject: [PATCH 1/1] configure.ac: serach for dladdr only on libunwind
+> +
+> +The original configure.ac tries to check for dladdr, but it actually needs
+> +it only in case we have libunwind (which has a another section and checks for it
+> +too).
+> +This can fail the build on systems without dynamic linking support.
+> +Therefore, the dladdr check has to be preformed only when checking libunwind.
+> +
+> +Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+
+Have you sent this patch upstream? If so, please add a link to your 
+submission.
+
+> +---
+> + configure.ac | 7 +------
+> + 1 file changed, 1 insertion(+), 6 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 216b2bc4..0858a6c1 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -174,11 +174,6 @@ case "${host_os}" in
+> +         AC_DEFINE(ZMQ_HAVE_LINUX, 1, [Have Linux OS])
+> +         libzmq_on_linux="yes"
+> + 
+> +-        # dladdr/dlopen is in libdl on glibc
+> +-        AC_SEARCH_LIBS([dladdr], [dl dld], [], [
+> +-          AC_MSG_ERROR([unable to find the dladdr() function])
+> +-        ])
+> +-
+> +         if test "x$libzmq_tipc_support" = "xyes"; then
+> +             AC_DEFINE(ZMQ_HAVE_TIPC, 1, [Have TIPC support])
+> +         fi
+> +@@ -783,7 +778,7 @@ if test "x$enable_libunwind" != "xno"; then
+> +             AC_DEFINE(HAVE_LIBUNWIND, 1, [The libunwind library is to be used])
+> +             AC_SUBST([LIBUNWIND_CFLAGS])
+> +             AC_SUBST([LIBUNWIND_LIBS])
+> +-            AC_CHECK_LIB([dl], [dladdr])
+> ++            AC_SEARCH_LIBS([dladdr], [dl dld])
+> +         ],
+> +         [
+> +             if test "x$enable_libunwind" = "xyes"; then
+> +-- 
+> +2.17.0
+> +
+> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+> index debaf413b4..ac9cc4aa80 100644
+> --- a/package/zeromq/zeromq.mk
+> +++ b/package/zeromq/zeromq.mk
+> @@ -11,6 +11,8 @@ ZEROMQ_DEPENDENCIES = util-linux
+>  ZEROMQ_CONF_OPTS = --without-documentation
+>  ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
+>  ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
+> +# 0001-configure.ac-serach-for-dladdr-only-on-libunwind.patch touches configure.ac
+> +ZEROMQ_AUTORECONF = YES
 >  
->  [ -x $MODEMMANAGER_BIN ] || exit 0
+>  # Assume these flags are always available. It is true, at least for
+>  # SOCK_CLOEXEC, since linux v2.6.27.
+> @@ -49,4 +51,12 @@ else
+>  ZEROMQ_CONF_OPTS += --without-libsodium
+>  endif
+>  
+> +# ZeroMQ uses libunwind if it's available
 
-In fact, I think this test doesn't make sense. It just exits without
-any error if the binary doesn't exists, which is silly.
+This comment is not needed.
 
-I'm advocating for removing such tests altogether, which would make the
-MODEMMANAGER_BIN variable unnecessary.
+> +ifeq ($(BR2_PACKAGE_LIBUNWIND), y)
 
-Thomas
+Please remove the space before 'y'.
+
+> +ZEROMQ_DEPENDENCIES += libunwind
+> +ZEROMQ_CONF_OPTS += --enable-libunwind
+> +else
+> +ZEROMQ_CONF_OPTS += --disable-libunwind
+> +endif
+
+This hunk belongs in a separate patch since it is unrelated to the build fix.
+
+> +
+>  $(eval $(autotools-package))
+
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
