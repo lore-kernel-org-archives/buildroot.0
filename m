@@ -1,206 +1,225 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 22:05:33 +0200
-Subject: [Buildroot] [git commit] gdb: remove Blackfin patch
-Message-ID: <20180415200629.AB444886C4@busybox.osuosl.org>
+Date: Sun, 15 Apr 2018 22:05:14 +0200
+Subject: [Buildroot] [git commit] toolchain, gcc, gdb, binutils,
+ uclibc: remove Blackfin code
+Message-ID: <20180415200629.310AE886C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3142e7a8ea67774a9103240bb93461645832f51f
+commit: https://git.buildroot.net/buildroot/commit/?id=0cd6d15a208d37bc2c98f236c34afa64ff8b7588
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And renumber remaining patches.
+This commit removes Blackfin related code from all toolchain code and
+components.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-Sync-proc_service-definition-with-GLIBC.patch} |   0
- ...lit-out-common-mach-model-defines-into-ar.patch | 155 ---------------------
- ...efine-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch} |   0
- ...fine-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch} |   0
- ...0004-Fix-gdbserver-build-on-uClibc-noMMU.patch} |   0
- ...gidefs.h.patch => 0005-use-asm-sgidefs.h.patch} |   0
- 6 files changed, 155 deletions(-)
+ package/binutils/binutils.mk            |  6 -----
+ package/gcc/Config.in.host              |  7 ------
+ package/gcc/gcc-final/gcc-final.mk      |  4 ----
+ package/gcc/gcc.mk                      | 41 ---------------------------------
+ package/gdb/Config.in                   |  1 -
+ package/gdb/gdb.mk                      |  8 -------
+ package/uclibc/Config.in                |  3 +--
+ toolchain/Config.in                     |  1 -
+ toolchain/toolchain-buildroot/Config.in |  2 +-
+ 9 files changed, 2 insertions(+), 71 deletions(-)
 
-diff --git a/package/gdb/7.11.1/0002-Sync-proc_service-definition-with-GLIBC.patch b/package/gdb/7.11.1/0001-Sync-proc_service-definition-with-GLIBC.patch
-similarity index 100%
-rename from package/gdb/7.11.1/0002-Sync-proc_service-definition-with-GLIBC.patch
-rename to package/gdb/7.11.1/0001-Sync-proc_service-definition-with-GLIBC.patch
-diff --git a/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch b/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
-deleted file mode 100644
-index 5841cfd4d1..0000000000
---- a/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
-+++ /dev/null
-@@ -1,155 +0,0 @@
--From 7a09ed68e203a813d88fb7fc6eeb1e92209561a5 Mon Sep 17 00:00:00 2001
--From: Mike Frysinger <vapier@gentoo.org>
--Date: Mon, 8 Aug 2016 13:06:49 +0800
--Subject: [PATCH] sim: bfin: split out common mach/model defines into arch.h
-- [PR sim/20438]
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 9817cf6e77..13cd02b491 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -65,12 +65,6 @@ HOST_BINUTILS_CONF_ENV += MAKEINFO=true
+ HOST_BINUTILS_MAKE_OPTS += MAKEINFO=true
+ HOST_BINUTILS_INSTALL_OPTS += MAKEINFO=true install
+ 
+-# gcc bug with Os/O1/O2/O3, PR77311
+-# error: unable to find a register to spill in class 'CCREGS'
+-ifeq ($(BR2_bfin),y)
+-BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
+-endif
 -
--The current machs.h mixes common enums with Blackfin-specific defines.
--This causes us troubles with header inclusion order such that we can't
--drop the old SIM_CPU typedef (which is duplicated in common code).  By
--splitting the two up, we can unwind this dependency chain, and drop the
--old typedef.  It also fixes building with older gcc versions.
+ # Workaround a build issue with -Os for ARM Cortex-M cpus.
+ # (Binutils 2.25.1 and 2.26.1)
+ # https://sourceware.org/bugzilla/show_bug.cgi?id=20552
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index bdefc511f2..7c08fb3596 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -63,13 +63,6 @@ config BR2_GCC_VERSION_7_X
+ 
+ endchoice
+ 
+-# Indicates if GCC for architecture supports --with-{arch,cpu,..}  to
+-# set default CFLAGS, otherwise values will be used by toolchain
+-# wrapper.
+-config BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS
+-	bool
+-	default y if !BR2_bfin
 -
--[Romain: backport from gdb 7.12]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+ 	bool
+ 	default y
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index b7b27aec13..9897d18682 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -76,10 +76,6 @@ HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4a,m4a-nofpu"
+ HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib/!m4*
+ endif
+ 
+-ifeq ($(BR2_bfin),y)
+-HOST_GCC_FINAL_CONF_OPTS += --disable-symvers
+-endif
 -
-----
-- sim/bfin/ChangeLog  |  9 +++++++++
-- sim/bfin/arch.h     | 44 ++++++++++++++++++++++++++++++++++++++++++++
-- sim/bfin/machs.h    | 20 --------------------
-- sim/bfin/sim-main.h |  8 ++------
-- 4 files changed, 55 insertions(+), 26 deletions(-)
-- create mode 100644 sim/bfin/arch.h
+ # libcilkrts does not support v8
+ ifeq ($(BR2_sparc),y)
+ HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5a1e3d5b0c..0afb06a57e 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -200,7 +200,6 @@ HOST_GCC_COMMON_CONF_OPTS += --disable-decimal-float
+ endif
+ 
+ # Determine arch/tune/abi/cpu options
+-ifeq ($(BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS),y)
+ ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
+ endif
+@@ -237,7 +236,6 @@ GCC_TARGET_MODE = $(call qstrip,$(BR2_GCC_TARGET_MODE))
+ ifneq ($(GCC_TARGET_MODE),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
+ endif
+-endif # BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS
+ 
+ # Enable proper double/long double for SPE ABI
+ ifeq ($(BR2_powerpc_SPE),y)
+@@ -265,45 +263,6 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ endif
+ 
+ HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
+-ifeq ($(BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS),)
+-ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
+-HOST_GCC_COMMON_WRAPPER_TARGET_CPU := $(call qstrip,$(BR2_GCC_TARGET_CPU))
+-else
+-HOST_GCC_COMMON_WRAPPER_TARGET_CPU := $(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
+-endif
+-HOST_GCC_COMMON_WRAPPER_TARGET_ARCH := $(call qstrip,$(BR2_GCC_TARGET_ARCH))
+-HOST_GCC_COMMON_WRAPPER_TARGET_ABI := $(call qstrip,$(BR2_GCC_TARGET_ABI))
+-HOST_GCC_COMMON_WRAPPER_TARGET_NAN := $(call qstrip,$(BR2_GCC_TARGET_NAN))
+-HOST_GCC_COMMON_WRAPPER_TARGET_FP32_MODE := $(call qstrip,$(BR2_GCC_TARGET_FP32_MODE))
+-HOST_GCC_COMMON_WRAPPER_TARGET_FPU := $(call qstrip,$(BR2_GCC_TARGET_FPU))
+-HOST_GCC_COMMON_WRAPPER_TARGET_FLOAT_ABI := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
+-HOST_GCC_COMMON_WRAPPER_TARGET_MODE := $(call qstrip,$(BR2_GCC_TARGET_MODE))
 -
--diff --git a/sim/bfin/ChangeLog b/sim/bfin/ChangeLog
--index 3dea7c9..a995436 100644
----- a/sim/bfin/ChangeLog
--+++ b/sim/bfin/ChangeLog
--@@ -1,3 +1,12 @@
--+2016-08-13  Mike Frysinger  <vapier@gentoo.org>
--+
--+	PR sim/20438
--+	* machs.h (MODEL_TYPE, MACH_ATTR, BFIN_INSN_*): Move ...
--+	* arch.h: ... to this new header file.
--+	* sim-main.h (SIM_CPU): Delete.
--+	Include arch.h before sim-base.h, and move sim-base.h before
--+	bfin-sim.h.
--+
-- 2016-01-10  Mike Frysinger  <vapier@gentoo.org>
-- 
-- 	* config.in, configure: Regenerate.
--diff --git a/sim/bfin/arch.h b/sim/bfin/arch.h
--new file mode 100644
--index 0000000..b86d3e9
----- /dev/null
--+++ b/sim/bfin/arch.h
--@@ -0,0 +1,44 @@
--+/* Simulator for Analog Devices Blackfin processors.
--+
--+   Copyright (C) 2005-2016 Free Software Foundation, Inc.
--+   Contributed by Analog Devices, Inc.
--+
--+   This file is part of simulators.
--+
--+   This program is free software; you can redistribute it and/or modify
--+   it under the terms of the GNU General Public License as published by
--+   the Free Software Foundation; either version 3 of the License, or
--+   (at your option) any later version.
--+
--+   This program is distributed in the hope that it will be useful,
--+   but WITHOUT ANY WARRANTY; without even the implied warranty of
--+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--+   GNU General Public License for more details.
--+
--+   You should have received a copy of the GNU General Public License
--+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
--+
--+#ifndef BFIN_ARCH_H
--+#define BFIN_ARCH_H
--+
--+typedef enum model_type {
--+#define P(n) MODEL_BF##n,
--+#include "proc_list.def"
--+#undef P
--+  MODEL_MAX
--+} MODEL_TYPE;
--+
--+typedef enum mach_attr {
--+  MACH_BASE,
--+  MACH_BFIN,
--+  MACH_MAX
--+} MACH_ATTR;
--+
--+enum {
--+#define I(insn) BFIN_INSN_##insn,
--+#include "insn_list.def"
--+#undef I
--+  BFIN_INSN_MAX
--+};
--+
--+#endif
--diff --git a/sim/bfin/machs.h b/sim/bfin/machs.h
--index 0372982..36819ae 100644
----- a/sim/bfin/machs.h
--+++ b/sim/bfin/machs.h
--@@ -21,19 +21,6 @@
-- #ifndef _BFIN_MACHS_H_
-- #define _BFIN_MACHS_H_
-- 
---typedef enum model_type {
---#define P(n) MODEL_BF##n,
---#include "proc_list.def"
---#undef P
---  MODEL_MAX
---} MODEL_TYPE;
---
---typedef enum mach_attr {
---  MACH_BASE,
---  MACH_BFIN,
---  MACH_MAX
---} MACH_ATTR;
---
-- #define CPU_MODEL_NUM(cpu) MODEL_NUM (CPU_MODEL (cpu))
-- 
-- /* XXX: Some of this probably belongs in CPU_MODEL.  */
--@@ -46,13 +33,6 @@ void bfin_model_cpu_init (SIM_DESC, SIM_CPU *);
-- bu32 bfin_model_get_chipid (SIM_DESC);
-- bu32 bfin_model_get_dspid (SIM_DESC);
-- 
---enum {
---#define I(insn) BFIN_INSN_##insn,
---#include "insn_list.def"
---#undef I
---  BFIN_INSN_MAX
---};
---
-- #define BFIN_COREMMR_CEC_BASE		0xFFE02100
-- #define BFIN_COREMMR_CEC_SIZE		(4 * 5)
-- #define BFIN_COREMMR_CTIMER_BASE	0xFFE03000
--diff --git a/sim/bfin/sim-main.h b/sim/bfin/sim-main.h
--index 51fb87e..34fd153 100644
----- a/sim/bfin/sim-main.h
--+++ b/sim/bfin/sim-main.h
--@@ -23,17 +23,13 @@
-- 
-- #include "sim-basics.h"
-- #include "sim-signal.h"
---
---/* TODO: Delete this.  Need to convert bu32/etc... to common sim types
---         and unwind the bfin-sim.h/machs.h include below first though.  */
---typedef struct _sim_cpu SIM_CPU;
--+#include "arch.h"
--+#include "sim-base.h"
-- 
-- #include "bfin-sim.h"
-- 
-- #include "machs.h"
-- 
---#include "sim-base.h"
---
-- struct _sim_cpu {
--   /* ... simulator specific members ... */
--   struct bfin_cpu_state state;
---- 
--2.9.3
+-ifneq ($(HOST_GCC_COMMON_WRAPPER_TARGET_ARCH),)
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(HOST_GCC_COMMON_WRAPPER_TARGET_ARCH)"'
+-endif
+-ifneq ($(HOST_GCC_COMMON_WRAPPER_TARGET_CPU),)
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(HOST_GCC_COMMON_WRAPPER_TARGET_CPU)"'
+-endif
+-ifneq ($(HOST_GCC_COMMON_WRAPPER_TARGET_ABI),)
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(HOST_GCC_COMMON_WRAPPER_TARGET_ABI)"'
+-endif
+-ifneq ($(HOST_GCC_COMMON_WRAPPER_TARGET_NAN),)
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_NAN='"$(HOST_GCC_COMMON_WRAPPER_TARGET_NAN)"'
+-endif
+-ifneq ($(HOST_GCC_COMMON_WRAPPER_TARGET_FP32_MODE),)
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_FP32_MODE='"$(HOST_GCC_COMMON_WRAPPER_TARGET_FP32_MODE)"'
+-endif
+-ifneq ($(HOST_GCC_COMMON_WRAPPER_TARGET_FPU),)
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(HOST_GCC_COMMON_WRAPPER_TARGET_FPU)"'
+-endif
+-ifneq ($(HOST_GCC_COMMON_WRAPPER_TARGET_FLOAT_ABI),)
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(HOST_GCC_COMMON_WRAPPER_TARGET_FLOAT_ABI)"'
+-endif
+-ifneq ($(HOST_GCC_COMMON_WRAPPER_TARGET_MODE),)
+-HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(HOST_GCC_COMMON_WRAPPER_TARGET_MODE)"'
+-endif
+-endif # !BR2_GCC_ARCH_HAS_CONFIGURABLE_DEFAULTS
+ 
+ # For gcc-initial, we need to tell gcc that the C library will be
+ # providing the ssp support, as it can't guess it since the C library
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index af020f40c5..6eea73b071 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+-	depends on !BR2_bfin
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 5ca464ad46..ca71349cb3 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -215,16 +215,8 @@ else
+ HOST_GDB_CONF_OPTS += --without-python
+ endif
+ 
+-# workaround a bug if in-tree build is used for bfin sim
+-define HOST_GDB_BFIN_SIM_WORKAROUND
+-	$(RM) $(@D)/sim/common/tconfig.h
+-endef
 -
-diff --git a/package/gdb/7.11.1/0003-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/7.11.1/0002-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-similarity index 100%
-rename from package/gdb/7.11.1/0003-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-rename to package/gdb/7.11.1/0002-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-diff --git a/package/gdb/7.11.1/0004-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/7.11.1/0003-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-similarity index 100%
-rename from package/gdb/7.11.1/0004-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-rename to package/gdb/7.11.1/0003-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-diff --git a/package/gdb/7.11.1/0005-Fix-gdbserver-build-on-uClibc-noMMU.patch b/package/gdb/7.11.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch
-similarity index 100%
-rename from package/gdb/7.11.1/0005-Fix-gdbserver-build-on-uClibc-noMMU.patch
-rename to package/gdb/7.11.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch
-diff --git a/package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch b/package/gdb/7.11.1/0005-use-asm-sgidefs.h.patch
-similarity index 100%
-rename from package/gdb/7.11.1/0006-use-asm-sgidefs.h.patch
-rename to package/gdb/7.11.1/0005-use-asm-sgidefs.h.patch
+ ifeq ($(BR2_PACKAGE_HOST_GDB_SIM),y)
+ HOST_GDB_CONF_OPTS += --enable-sim
+-ifeq ($(BR2_bfin),y)
+-HOST_GDB_PRE_CONFIGURE_HOOKS += HOST_GDB_BFIN_SIM_WORKAROUND
+-endif
+ else
+ HOST_GDB_CONF_OPTS += --disable-sim
+ endif
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 0e24b25441..0747cc8d7c 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -53,7 +53,7 @@ config BR2_PTHREADS_NATIVE
+ 
+ config BR2_PTHREADS
+ 	bool "linuxthreads"
+-	depends on BR2_bfin || BR2_m68k || BR2_microblaze || BR2_or1k || BR2_arm || BR2_armeb || BR2_xtensa
++	depends on BR2_m68k || BR2_microblaze || BR2_or1k || BR2_arm || BR2_armeb || BR2_xtensa
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PTHREADS_NONE
+@@ -95,7 +95,6 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	string
+ 	default "arc"	   if BR2_arcle || BR2_arceb
+ 	default "arm"	   if BR2_arm	|| BR2_armeb
+-	default "bfin"	   if BR2_bfin
+ 	default "m68k"	   if BR2_m68k
+ 	default "microblaze"   if BR2_microblaze
+ 	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index e2ef1e7ef3..121ddb4fa4 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -431,7 +431,6 @@ config BR2_TOOLCHAIN_HAS_MNAN_OPTION
+ config BR2_TOOLCHAIN_HAS_SYNC_1
+ 	bool
+ 	default y
+-	depends on !BR2_bfin
+ 	depends on !BR2_m68k_cf
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_sparc
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 0ab7e8db97..2f6624d217 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -29,7 +29,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	bool "uClibc-ng"
+ 	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
+ 		   BR2_arm     || BR2_armeb    || \
+-		   BR2_bfin    || BR2_i386   || BR2_m68k   || BR2_microblaze || \
++		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
+ 		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
