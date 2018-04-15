@@ -1,40 +1,153 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Apr 2018 10:43:43 +0200
-Subject: [Buildroot] [PATCH 1/1] flatbuffers: bump to version 1.9.0
-Message-ID: <20180415084343.8982-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Apr 2018 14:02:30 +0200
+Subject: [Buildroot] [RFC PATCH 2/3] download/git: recover dirty cache
+In-Reply-To: <5ad0f6ccb81f_19073fa45f41a968589e3@ultri4.mail>
+References: <20180412174846.GF4221@scaer>
+ <5ad0f6ccb81f_19073fa45f41a968589e3@ultri4.mail>
+Message-ID: <20180415120230.GA21958@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/flatbuffers/flatbuffers.hash | 2 +-
- package/flatbuffers/flatbuffers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Ricardo, All,
 
-diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
-index bd39ca385b..a8f23f4ef9 100644
---- a/package/flatbuffers/flatbuffers.hash
-+++ b/package/flatbuffers/flatbuffers.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	c45029c0a0f1a88d416af143e34de96b3091642722aa2d8c090916c6d1498c2e	flatbuffers-v1.8.0.tar.gz
-+sha256	5ca5491e4260cacae30f1a5786d109230db3f3a6e5a0eb45d0d0608293d247e3	flatbuffers-v1.9.0.tar.gz
- sha256	7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3	LICENSE.txt
-diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
-index 2b640ecc2a..26d9307892 100644
---- a/package/flatbuffers/flatbuffers.mk
-+++ b/package/flatbuffers/flatbuffers.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLATBUFFERS_VERSION = v1.8.0
-+FLATBUFFERS_VERSION = v1.9.0
- FLATBUFFERS_SITE = $(call github,google,flatbuffers,$(FLATBUFFERS_VERSION))
- FLATBUFFERS_LICENSE = Apache-2.0
- FLATBUFFERS_LICENSE_FILES = LICENSE.txt
+On 2018-04-13 15:28 -0300, Ricardo Martincoski spake thusly:
+> On Thu, Apr 12, 2018 at 02:48 PM, Yann E. MORIN wrote:
+> > On 2018-04-12 06:28 -0300, Ricardo Martincoski spake thusly:
+> >> When performing the checkout, use -f to allow it to occur even if there
+> >> are untracked files that would be overwritten or removed.
+> >> 
+> >> Use git clean to remove any untracked files before generating the
+> >> tarball. Use the second -f to ensure the repo is pristine even if
+> >> previous checked out ref contained a submodule that is not present in
+> >> the ref just checked out.
+> [snip]
+> > 
+> > I'm not very happy of those tricks... If the repos is broken, it may be
+> > in a state that repairing it is not even possible at all, in case a
+> > critical git data is missing/damaged.
+> 
+> I created the series thinking only on git repos that are sane but have a dirty
+> worktree. I should have used "dirty worktree" in the commit log.
+
+Right, these are indeed two different cases.
+
+> Rethinking now, taking into account a broken repo, and also the fact that the
+> default download directory is inside buildroot, this patch is a bit dangerous.
+> 
+> With a completely broken repo in the git cache, the commands called by the
+> download script end up executed in any repo that eventually contains that file
+> (parent \(of parent \)\+ directory), so:
+> $ cd buildroot
+> $ git init dl/package/git
+> $ cd dl/package/git
+> $ rm .git/HEAD # simulate a completely broken repo
+> $ git <command>
+> The git command would be executed in the buildroot tree.
+> A fetch to the wrong repo is bad, but not that bad.
+> A checkout would fail.
+> But checkout -f and git clean would succeed, potentially making the user to lose
+> changes.
+
+Arg, indeed that is dangerous...
+
+> I will change this patch to Changes Requested.
+> 
+> A way to avoid this, once the script entered the directory, is to force the
+> git-dir:
+> $ git --git-dir=.git <command>
+> This command would fail for a too-much-broken repo.
+
+We recently reverted use of -C becasue it was not supported by old git
+versions. What is the oldest git version to support --git-dir? It seems
+it was introduced in v.1.4.2, dated 2006-08-12. Is that old enough that
+all the distros we care about have that version or later?
+
+> This is important also if we test the repo with git fsck before ditch+restart,
+> otherwise it would be possible to return OK based on the wrong repo.
+> 
+> > 
+> > If the repo is broken, either:
+> > 
+> >   - we ditch the repository and restart frm scratch,
+> > 
+> >   - or we just bail out and tell the user what hapened, so they can take
+> >     action (e.g. remove the broken repo manually).
+> 
+> When the repo is broken (detectable by git fsck) I agree this is the best
+> approach.
+> 
+> But I think a sane git repo (detectable by git fsck) that is in a dirty state
+> (in the sense of git clean) is a different case.
+> It can happen for example if a previous checkout operation was abruptly
+> interrupted during a git checkout. In this case it seems to me a bit extreme
+> (but not incorrect of course) to remove the repo and restart from scratch.
+> 
+> For the case a file from the worktree is missing the current 'git checkout'
+> succeeds and the problem shows up as a hash mismatch.
+> Using 'git checkout -f' the repo is recovered.
+> For the case a git object needed by the checkout is missing the current 'git
+> checkout' succeeds and the problem shows up as a hash mismatch.
+> Using 'git checkout -f' the checkout fails like this:
+>  error: invalid object
+> 
+> The git clean makes sure, among other things, that the worktree is clean even in
+> the case the previous checkout contained a submodule that is no longer present
+> in the new checkout. Maybe there is another command that ensures this, but I
+> don't know about yet.
+> Maybe I am missing something, but as I see, for a package with submodule, if
+> a submodule is removed from the upstream project, it would trigger a
+> ditch+restart too. Again, I think this is a bit extreme (more than git clean
+> -ffdx) but not wrong.
+> 
+> In order to detect broken repos (and trigger the ditch) we could start the
+> script by running fsck. Right?
+
+So, basically, we would do something along those lines:
+
+    _git() {
+        eval ${GIT} --git-dir=.git "${@}"
+    }
+
+    _git fsck || { rm -rf ${git_cache}; exec "${0}" "${@}"; exit 1; }
+    _git fetch
+    _git fetch -t
+    _git checkout ${ref}
+    _git clean -dX
+    _git checkout -- .
+    _git submodules update
+
+Of course, that would require using appropriate options to fsck to bail
+out.
+
+But what to do if any if the following actions fails? Should we simply
+exit, or should we clean up and clone again?
+
+I can see shere that could go wrong: the ref does not exist, so the
+first checkout fails, so we ditch the repository, clone again, and
+checkout again fails...
+
+My opinion, for what it's worth, is to clan only on the fsck. Any other
+failure should be left to the user to handle. Maybe with just a little
+message saying something like:
+
+    If you are not sure how to solve this, remove ${cache_dir}.
+
+Thoughts?
+
+> Do you have a local patch for this ditch+restart? Or should I create one?
+
+I am working on that...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
