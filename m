@@ -1,78 +1,40 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Apr 2018 10:23:39 +0200
-Subject: [Buildroot] [PATCH 1/1] libglib2: fix gobject with gcc <= 4.7
-Message-ID: <20180415082339.5520-1-fontaine.fabrice@gmail.com>
+Date: Sun, 15 Apr 2018 10:31:43 +0200
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.6
+Message-ID: <20180415083143.7342-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch under upstream review: https://bugzilla.gnome.org/show_bug.cgi?id=795138
-
-Fixes:
- - http://autobuild.buildroot.net/results/b29a2f868438a2210873ea72f491db63175848be
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...0003-gobject-fix-compilation-with-gcc-4.7.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch b/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
-new file mode 100644
-index 0000000000..ed43674b2b
---- /dev/null
-+++ b/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
-@@ -0,0 +1,49 @@
-+From a2b27c0d038ad76cc8016999f8788245da97e946 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 10 Apr 2018 19:18:57 +0200
-+Subject: [PATCH] gobject: fix compilation with gcc <= 4.7
-+
-+On gcc 4.7, we got the following error:
-+
-+i686-nptl-linux-gnu-gcc --version
-+> i686-nptl-linux-gnu-gcc (crosstool-NG 1.20.0) 4.7.4
-+> $ echo '#include <glib-object.h>' | i686-nptl-linux-gnu-gcc -x c -I
-+staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall
-+-Werror -c - -o /tmp/foo.o
-+> In file included from
-+staging/usr/include/glib-2.0/gobject/gbinding.h:29:0,
-+>                  from staging/usr/include/glib-2.0/glib-object.h:23,
-+>                  from <stdin>:1:
-+> staging/usr/include/glib-2.0/gobject/gobject.h: In function
-+'g_set_object':
-+> staging/usr/include/glib-2.0/gobject/gobject.h:725:5: error: value
-+computed is not used [-Werror=unused-value]
-+> cc1: all warnings being treated as errors
-+
-+This error has been added by commit 3fae39a5d742afe73741f5fd7aa24e3ae8182f06
-+So enable the new g_set_object definition only if gcc >= 4.8
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/b29a2f868438a2210873ea72f491db63175848be
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ gobject/gobject.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gobject/gobject.h b/gobject/gobject.h
-+index 9830663ce..838046fe0 100644
-+--- a/gobject/gobject.h
-++++ b/gobject/gobject.h
-+@@ -507,7 +507,7 @@ GLIB_AVAILABLE_IN_ALL
-+ void        g_object_remove_weak_pointer      (GObject        *object, 
-+                                                gpointer       *weak_pointer_location);
-+ 
-+-#if defined(__GNUC__) && !defined(__cplusplus) && GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_56
-++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)) && !defined(__cplusplus) && GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_56
-+ /* Make reference APIs type safe with macros */
-+ #define g_object_ref(Obj)      ((__typeof__(Obj)) (g_object_ref) (Obj))
-+ #define g_object_ref_sink(Obj) ((__typeof__(Obj)) (g_object_ref_sink) (Obj))
-+-- 
-+2.14.1
-+
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index b4a6d00cca..fd511afe6c 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 a8252abef9c4e0e672fe247cb46318f00a0aa975e455c8d943ae91492249dc3a  cjson-v1.7.5.tar.gz
++sha256 d1ca2665b34fea164a877637b4ad1624aa23390fe75de91b88e18c5d6ec91978  cjson-v1.7.6.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 60bb73945a..fabfe5df3b 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.7.5
++CJSON_VERSION = v1.7.6
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
 2.14.1
