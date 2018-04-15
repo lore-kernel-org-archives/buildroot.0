@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Apr 2018 14:08:04 +0200
-Subject: [Buildroot] [RFC PATCH 3/3] download/git: unshallow when
- fetching all refs
-In-Reply-To: <5ad0f7a9dc541_19073fa45f48c644591ea@ultri4.mail>
-References: <20180412173326.GD4221@scaer>
- <5ad0f7a9dc541_19073fa45f48c644591ea@ultri4.mail>
-Message-ID: <20180415120804.GB21958@scaer>
+Date: Sun, 15 Apr 2018 14:12:22 +0200
+Subject: [Buildroot] [RFC PATCH 1/3] download/git: fix fetch all refs
+ for old git
+In-Reply-To: <5ad0f591ed5a9_19072aca94e3dabc58762@ultri4.mail>
+References: <20180412174237.GE4221@scaer>
+ <5ad0f591ed5a9_19072aca94e3dabc58762@ultri4.mail>
+Message-ID: <20180415121222.GC21958@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,65 +14,34 @@ To: buildroot@busybox.net
 
 Ricardo, All,
 
-On 2018-04-13 15:32 -0300, Ricardo Martincoski spake thusly:
-> On Thu, Apr 12, 2018 at 02:33 PM, Yann E. MORIN wrote:
-> > On 2018-04-12 13:28 +0200, Thomas Petazzoni spake thusly:
+On 2018-04-13 15:23 -0300, Ricardo Martincoski spake thusly:
+> On Thu, Apr 12, 2018 at 02:42 PM, Yann E. MORIN wrote:
+> >> -    _git fetch origin -t
+> >> +    _git fetch origin -u "'+refs/tags/*:refs/tags/*'" "'+refs/heads/*:refs/remotes/origin/*'"
+> > Why don't we just run:
+> >     git fetch origin
+> >     git fetch origin -t
 > 
-> >> > One scenario in buildroot development that would trigger this sequence
-> >> > is for example when a package is bumped on master branch, some users
-> >> > create the git cache at this time, then the bump is reverted.
-> >> > 
-> >> > Another scenario is when giving maintenance to a product version that
-> >> > uses one version of buildroot using the same build farm that uses a
-> >> > newer version of buildroot.
-> >> 
-> >> In the light of this, wouldn't it be simpler to stop doing shallow
-> >> clones at all ? A shallow clone did make a lot of sense back when we
-> >> didn't cache the Git repositories. But now that we are caching the
-> >> results, does it make sense to keep the complexity of the code to use
-> >> shallow clones ?
-> >> 
-> >> Note that this is really an open question, there are possibly some
-> >> convincing argument for us to keep a shallow clone strategy.
-> > 
-> > Indeed, I don't think it makes sense anymore...
-> > 
-> > So, intead of fixing it, let's just do full clones now.
-> 
-> I agree it is less needed now than before.
+> One extra connection to the server ...
+> but much more readable/maintainable!
+> I will do. I will change this patch to Changes Requested.
 
-OK.
+Thanks. I don't care much about an extra round-trip to the server,
+especially if that makes the code easier to read.
 
-> The worst scenario (linux trees) is covered by:
-> - the use of tarballs from GitHub in the defconfigs, for newcomers who sometimes
->   just want to use a defconfig, add few packages and use the image in a new
->   board;
-> - in the long run, due to the git cache feature.
-> 
-> But I think people will miss this feature. At least I will.
+> > As I understand it:
+> >                     ancient git         | new git
+> > --------------------------------------------------------------------
+> > git fetch     | fetch all refs but tags | fetches all refs but tags
+> > git fetch -t  | fetches only tags       | fetch all refs and tags
+> Nit: actually 'git fetch' does fetch some tags, but not necessarily all. Only
+> tags in commits also reachable by branches are fetched.
 
-Except for the linux git tree and a very few other packages we get from
-git, most git tree are reasonably sized, so that the overhead of doign a
-full clone is not much as comp[ared to the shallow clone.
+OK, but overall, we would cover all cases with the two git-fetch,
+whether we use an old git or a newer one, and that's the important
+info.
 
-And since it also makes our code much simpler and more maintaineable,
-that's still a win for me...
-
-> In the case of someone always using tags from a linux repo, this person
-> would never need to download the full repo if the shallow fetch remains.
-> 
-> When someone wants just to try a package, for example, a debug tool, which
-> maybe will never be used again, this person would need to do a full clone,
-> instead of potentially do a shallow fetch.
-> 
-> The repo for some packages can be located on slow servers (not necessarily a
-> package in the tree, it can be on a br2-external).
-> 
-> And the least appealing argument: I was willing to recreate
-> http://patchwork.ozlabs.org/patch/702006/ on top of the new infra.
-
-I'm still not convinced any more than I previously was. I.e. I still think
-we should go with full clone.
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
