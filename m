@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 21:12:19 +0200
-Subject: [Buildroot] [PATCH 1/1] libcap-ng: fix compilation without
- pthread.h
-In-Reply-To: <20180415081849.5241-1-fontaine.fabrice@gmail.com>
-References: <20180415081849.5241-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180415211219.5e3b004e@windsurf.numericable.fr>
+Date: Sun, 15 Apr 2018 21:12:31 +0200
+Subject: [Buildroot] [git commit] systemd: add compatibility symlink for
+ 'shutdown'
+Message-ID: <20180415191234.C121188625@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=36ed046623129bb879ef50cd40dcc65b27c9da0f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 15 Apr 2018 10:18:49 +0200, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/6132f33fb282fda3c39deb292784b9006c9e7872
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Fix-compilation-without-pthread.h.patch   | 47 ++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch
+In addition to the 'halt', 'poweroff', 'reboot' symlinks pointing to
+systemctl, add 'shutdown'.
 
-You're now patching configure.ac, so autoreconf is needed. I've added
-that and applied. Thanks!
+Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/systemd/systemd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 76b7e8382f..db7fb43636 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -340,6 +340,7 @@ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/halt
+ 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/poweroff
+ 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/reboot
++	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/shutdown
+ 	ln -fs ../../../lib/systemd/system/multi-user.target \
+ 		$(TARGET_DIR)/etc/systemd/system/default.target
+ endef
