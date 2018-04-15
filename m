@@ -1,42 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 20:36:51 +0200
-Subject: [Buildroot] [git commit] cjson: bump to version 1.7.6
-Message-ID: <20180415183719.3179887BC4@busybox.osuosl.org>
+Date: Sun, 15 Apr 2018 20:37:11 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <20180415183719.4427687BC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eed67b2c6b44063110295bbd28aa9b3ad7603d44
+commit: https://git.buildroot.net/buildroot/commit/?id=338f32634069ce2610132fa70974a5b429ccc51c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index b4a6d00cca..fd511afe6c 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 a8252abef9c4e0e672fe247cb46318f00a0aa975e455c8d943ae91492249dc3a  cjson-v1.7.5.tar.gz
-+sha256 d1ca2665b34fea164a877637b4ad1624aa23390fe75de91b88e18c5d6ec91978  cjson-v1.7.6.tar.gz
- sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 60bb73945a..fabfe5df3b 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CJSON_VERSION = v1.7.5
-+CJSON_VERSION = v1.7.6
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5bec53fd98..4b4c8ddf9e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -250,8 +250,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.127"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.93"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.128"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.94"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
