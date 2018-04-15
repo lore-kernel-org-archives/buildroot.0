@@ -1,61 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 21:42:57 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: remove only tarballs from
- download dir
-In-Reply-To: <20180413133431.19449-1-ricardo.martincoski@gmail.com>
-References: <20180413133431.19449-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180415214257.1e90704a@windsurf.numericable.fr>
+Date: Sun, 15 Apr 2018 21:44:55 +0200
+Subject: [Buildroot] [git commit] ethtool: bump to version 4.15
+Message-ID: <20180415194457.68E7788073@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=84e26fbb7fb7e3fece7dc4961ee842fdaffda0b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 13 Apr 2018 10:34:31 -0300, Ricardo Martincoski wrote:
+Add the LICENSE file to license files.
 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 33d0ae9..6a01151 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -291,6 +291,9 @@ def prepare_build(**kwargs):
->      # recursively find files under root
->      def find_files(root):
->          for r, d, f in os.walk(root):
-> +            if '.git' in d:
-> +                d[:] = list()
-> +                continue
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ethtool/ethtool.hash | 3 ++-
+ package/ethtool/ethtool.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Just to check how this is supposed to work. We have this:
-
- dl/<package>/git/.git
-
-Correct ?
-
-So you're idea is that when we are inside dl/<package>/git/, one of the
-sub-directories is .git, and therefore we shouldn't remove anything in
-dl/<package>/git/ ?
-
-My concern is that I'm not sure if what you've done prevents from
-removing files inside dl/<package>/git or only inside
-dl/<package>/git/.git. I would find it more to do something like:
-
-	if "git" in d:
-		d.remove("git")
-
-but perhaps you haven't done this for some good reason ?
-
-Another concern is how to fix those autobuilders that have already
-removed some random files from their cached Git repositories? Should we
-ask the people who run those autobuilders to entirely wipe the download
-folders of their autobuilder instances ? Or do we have a smart (but
-simple) thing to do to avoid this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 39e10ff34e..9704a54b0d 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,4 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	b7c1a380007d30eaf261a63b3cfc000f9d93f9eb7626dcd48b5d2a733af99cba	ethtool-4.13.tar.xz
++sha256	71f7fd32483ffdc7c6c4d882e230714eb101df0a46cbe396dbeb8ac78f1ef91a	ethtool-4.15.tar.xz
+ # Locally calculated
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index d8ebba5fae..be587f5083 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 4.13
++ETHTOOL_VERSION = 4.15
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
+-ETHTOOL_LICENSE_FILES = COPYING
++ETHTOOL_LICENSE_FILES = LICENSE COPYING
+ ETHTOOL_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_ETHTOOL_PRETTY_PRINT),--enable-pretty-dump,--disable-pretty-dump)
+ 
