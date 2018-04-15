@@ -1,55 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Apr 2018 14:12:22 +0200
-Subject: [Buildroot] [RFC PATCH 1/3] download/git: fix fetch all refs
- for old git
-In-Reply-To: <5ad0f591ed5a9_19072aca94e3dabc58762@ultri4.mail>
-References: <20180412174237.GE4221@scaer>
- <5ad0f591ed5a9_19072aca94e3dabc58762@ultri4.mail>
-Message-ID: <20180415121222.GC21958@scaer>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 15 Apr 2018 12:31:49 -0300 (BRT)
+Subject: [Buildroot] [PATCH 1/2] modem-manager: fix test of unset
+ variable in init script
+In-Reply-To: <20180414180725.4964d59d@windsurf>
+References: <20180413162521.7078-1-casantos@datacom.ind.br>
+ <20180413162521.7078-2-casantos@datacom.ind.br>
+ <20180414180725.4964d59d@windsurf>
+Message-ID: <650761555.1610.1523806309320.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: "buildroot" <buildroot@buildroot.org>, "Aleksander Morgado" <aleksander@aleksander.es>
+> Sent: Saturday, April 14, 2018 1:07:25 PM
+> Subject: Re: [Buildroot] [PATCH 1/2] modem-manager: fix test of unset variable in init script
 
-On 2018-04-13 15:23 -0300, Ricardo Martincoski spake thusly:
-> On Thu, Apr 12, 2018 at 02:42 PM, Yann E. MORIN wrote:
-> >> -    _git fetch origin -t
-> >> +    _git fetch origin -u "'+refs/tags/*:refs/tags/*'" "'+refs/heads/*:refs/remotes/origin/*'"
-> > Why don't we just run:
-> >     git fetch origin
-> >     git fetch origin -t
+> Hello,
 > 
-> One extra connection to the server ...
-> but much more readable/maintainable!
-> I will do. I will change this patch to Changes Requested.
+> On Fri, 13 Apr 2018 13:25:20 -0300, Carlos Santos wrote:
+>> MODEMMANAGER_BIN was never set. Fortunately it did not break the script
+>> execution due to the permissive behavior of "test":
+>> 
+>>     $ test -x non-existing || echo error
+>>     error
+>>     $ test -x  || echo error
+>>     test -x && echo success
+>>     success
+>> 
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>> ---
+>>  package/modem-manager/S44modem-manager | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/package/modem-manager/S44modem-manager
+>> b/package/modem-manager/S44modem-manager
+>> index cf6d89601d..05803fe198 100755
+>> --- a/package/modem-manager/S44modem-manager
+>> +++ b/package/modem-manager/S44modem-manager
+>> @@ -3,6 +3,7 @@
+>>  # Starts ModemManager
+>>  #
+>>  
+>> +MODEMMANAGER_BIN=/usr/sbin/ModemManager
+>>  PIDFILE=/var/run/ModemManager.pid
+>>  
+>>  [ -x $MODEMMANAGER_BIN ] || exit 0
+> 
+> In fact, I think this test doesn't make sense. It just exits without
+> any error if the binary doesn't exists, which is silly.
+> 
+> I'm advocating for removing such tests altogether, which would make the
+> MODEMMANAGER_BIN variable unnecessary.
 
-Thanks. I don't care much about an extra round-trip to the server,
-especially if that makes the code easier to read.
+I think the original purpose of these test was allowing the user to
+disable the service by chmod'ing -x the executable file. We discussed
+a similar situation in
 
-> > As I understand it:
-> >                     ancient git         | new git
-> > --------------------------------------------------------------------
-> > git fetch     | fetch all refs but tags | fetches all refs but tags
-> > git fetch -t  | fetches only tags       | fetch all refs and tags
-> Nit: actually 'git fetch' does fetch some tags, but not necessarily all. Only
-> tags in commits also reachable by branches are fetched.
+   https://patchwork.ozlabs.org/patch/818897/
 
-OK, but overall, we would cover all cases with the two git-fetch,
-whether we use an old git or a newer one, and that's the important
-info.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
+[which by the way is still in my endless to-do list]
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
