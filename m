@@ -1,57 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 20:18:08 +0200
-Subject: [Buildroot] [PATCH 1/2] modem-manager: fix test of unset
- variable in init script
-In-Reply-To: <650761555.1610.1523806309320.JavaMail.zimbra@datacom.ind.br>
-References: <20180413162521.7078-1-casantos@datacom.ind.br>
- <20180413162521.7078-2-casantos@datacom.ind.br>
- <20180414180725.4964d59d@windsurf>
- <650761555.1610.1523806309320.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20180415201808.013e84f3@windsurf.numericable.fr>
+Date: Sun, 15 Apr 2018 20:19:09 +0200
+Subject: [Buildroot] [git commit] libglib2: fix gobject with gcc <= 4.7
+Message-ID: <20180415181921.792358846E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f9b6ec3b59746f3eddd387772ad60aa6bc52aa60
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 15 Apr 2018 12:31:49 -0300 (BRT), Carlos Santos wrote:
+Patch under upstream review: https://bugzilla.gnome.org/show_bug.cgi?id=795138
 
-> >> +MODEMMANAGER_BIN=/usr/sbin/ModemManager
-> >>  PIDFILE=/var/run/ModemManager.pid
-> >>  
-> >>  [ -x $MODEMMANAGER_BIN ] || exit 0  
-> > 
-> > In fact, I think this test doesn't make sense. It just exits without
-> > any error if the binary doesn't exists, which is silly.
-> > 
-> > I'm advocating for removing such tests altogether, which would make the
-> > MODEMMANAGER_BIN variable unnecessary.  
-> 
-> I think the original purpose of these test was allowing the user to
-> disable the service by chmod'ing -x the executable file. We discussed
-> a similar situation in
-> 
->    https://patchwork.ozlabs.org/patch/818897/
-> 
-> [which by the way is still in my endless to-do list]
+Fixes:
+ - http://autobuild.buildroot.net/results/b29a2f868438a2210873ea72f491db63175848be
 
-Well, if you look at my feedback on this patch, I was already saying
-that the test to check whether radvd was executable or not was not
-useful.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...0003-gobject-fix-compilation-with-gcc-4.7.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-I don't think making a binary program non-executable as a way of
-disabling its startup at boot time is very common. Probably a
-ENABLED=true/false variable in /etc/default/<service> is more common.
-
-So, I think we should remove all those [ -x /usr/sbin/<foo> ] checks in
-our init scripts.
-
-Cc'ing Peter, Arnout and Yann to gather additional opinions on this.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch b/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
+new file mode 100644
+index 0000000000..fc672513ee
+--- /dev/null
++++ b/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
+@@ -0,0 +1,50 @@
++From a2b27c0d038ad76cc8016999f8788245da97e946 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 10 Apr 2018 19:18:57 +0200
++Subject: [PATCH] gobject: fix compilation with gcc <= 4.7
++
++On gcc 4.7, we got the following error:
++
++i686-nptl-linux-gnu-gcc --version
++> i686-nptl-linux-gnu-gcc (crosstool-NG 1.20.0) 4.7.4
++> $ echo '#include <glib-object.h>' | i686-nptl-linux-gnu-gcc -x c -I
++staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall
++-Werror -c - -o /tmp/foo.o
++> In file included from
++staging/usr/include/glib-2.0/gobject/gbinding.h:29:0,
++>                  from staging/usr/include/glib-2.0/glib-object.h:23,
++>                  from <stdin>:1:
++> staging/usr/include/glib-2.0/gobject/gobject.h: In function
++'g_set_object':
++> staging/usr/include/glib-2.0/gobject/gobject.h:725:5: error: value
++computed is not used [-Werror=unused-value]
++> cc1: all warnings being treated as errors
++
++This error has been added by commit 3fae39a5d742afe73741f5fd7aa24e3ae8182f06
++So enable the new g_set_object definition only if gcc >= 4.8
++
++Fixes:
++ - http://autobuild.buildroot.net/results/b29a2f868438a2210873ea72f491db63175848be
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream-status: https://bugzilla.gnome.org/show_bug.cgi?id=795138
++---
++ gobject/gobject.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gobject/gobject.h b/gobject/gobject.h
++index 9830663ce..838046fe0 100644
++--- a/gobject/gobject.h
+++++ b/gobject/gobject.h
++@@ -507,7 +507,7 @@ GLIB_AVAILABLE_IN_ALL
++ void        g_object_remove_weak_pointer      (GObject        *object, 
++                                                gpointer       *weak_pointer_location);
++ 
++-#if defined(__GNUC__) && !defined(__cplusplus) && GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_56
+++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)) && !defined(__cplusplus) && GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_56
++ /* Make reference APIs type safe with macros */
++ #define g_object_ref(Obj)      ((__typeof__(Obj)) (g_object_ref) (Obj))
++ #define g_object_ref_sink(Obj) ((__typeof__(Obj)) (g_object_ref_sink) (Obj))
++-- 
++2.14.1
++
