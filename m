@@ -1,63 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 20:43:27 +0200
-Subject: [Buildroot] [PATCH 1/1] libcurl: fix building against libressl
-In-Reply-To: <20180413123931.7604-1-aduskett@gmail.com>
-References: <20180413123931.7604-1-aduskett@gmail.com>
-Message-ID: <20180415204327.5bc05597@windsurf.numericable.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Apr 2018 20:58:28 +0200
+Subject: [Buildroot] [PATCH 1/2] modem-manager: fix test of unset
+ variable in init script
+In-Reply-To: <20180415201808.013e84f3@windsurf.numericable.fr>
+References: <20180413162521.7078-1-casantos@datacom.ind.br>
+ <20180413162521.7078-2-casantos@datacom.ind.br>
+ <20180414180725.4964d59d@windsurf>
+ <650761555.1610.1523806309320.JavaMail.zimbra@datacom.ind.br>
+ <20180415201808.013e84f3@windsurf.numericable.fr>
+Message-ID: <20180415185828.GD21958@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Fri, 13 Apr 2018 08:39:31 -0400, Adam Duskett wrote:
-> LibreSSL 2.7.x breaks libcurl 7.59.0 with the error:
-> error: static declaration of ?OpenSSL_version_num? follows non-static
-> declaration
+On 2018-04-15 20:18 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 15 Apr 2018 12:31:49 -0300 (BRT), Carlos Santos wrote:
+> > >> +MODEMMANAGER_BIN=/usr/sbin/ModemManager
+> > >>  PIDFILE=/var/run/ModemManager.pid
+> > >>  
+> > >>  [ -x $MODEMMANAGER_BIN ] || exit 0  
+> > > 
+> > > In fact, I think this test doesn't make sense. It just exits without
+> > > any error if the binary doesn't exists, which is silly.
+> > > 
+> > > I'm advocating for removing such tests altogether, which would make the
+> > > MODEMMANAGER_BIN variable unnecessary.  
+> > 
+> > I think the original purpose of these test was allowing the user to
+> > disable the service by chmod'ing -x the executable file. We discussed
+> > a similar situation in
+> > 
+> >    https://patchwork.ozlabs.org/patch/818897/
+> > 
+> > [which by the way is still in my endless to-do list]
 > 
-> This failure has since been fixed upstream with commit:
-> https://github.com/curl/curl/commit/7c90c93c0b061da81f69fabdd57125b2783c15fb
+> Well, if you look at my feedback on this patch, I was already saying
+> that the test to check whether radvd was executable or not was not
+> useful.
 > 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  ...-curl-fix-building-against-libressl-2.7.2.patch | 91 ++++++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
+> I don't think making a binary program non-executable as a way of
+> disabling its startup at boot time is very common. Probably a
+> ENABLED=true/false variable in /etc/default/<service> is more common.
 > 
-> diff --git a/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch b/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
-> new file mode 100644
-> index 0000000000..e5d6f686e8
-> --- /dev/null
-> +++ b/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
-> @@ -0,0 +1,91 @@
-> +From 7a67b6561da8e42505e09014a5c97b19e1a93532 Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <aduskett@gmail.com>
-> +Date: Fri, 13 Apr 2018 08:31:37 -0400
-> +Subject: [PATCH] curl: fix building against libressl 2.7.2
+> So, I think we should remove all those [ -x /usr/sbin/<foo> ] checks in
+> our init scripts.
+> 
+> Cc'ing Peter, Arnout and Yann to gather additional opinions on this.
 
-Since the issue has been fixed upstream, the fix should be a backport
-from upstream commit, not a different commit authored by you.
+I agree with Thomas.
 
-I.e:
+This is a position we already stated quite a few times in the past.
 
-$ git clone https://github.com/curl/curl.git
-$ cd curl/
-$ git checkout curl-7_59_0
-$ git cherry-pick 7c90c93c0b061da81f69fabdd57125b2783c15fb
-$ git format-patch HEAD^
+If one does not want the daemon, then just remove it and the init script
+from a post-build script. If it is about debugging, just remove the
+startup script on the target, or just 'exit 0' at the top of it.
 
-and then edit the patch to add your Signed-off-by below the one from
-the original author, and use that in package/libcurl/.
+Regards,
+Yann E. MORIN.
 
-Could you rework your patch by doing this ? I could have done it
-myself, but I preferred to explain the process for doing it properly :)
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
