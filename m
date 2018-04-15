@@ -1,57 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 22:05:32 +0200
-Subject: [Buildroot] [git commit] ffmpeg: remove Blackfin related patch
-Message-ID: <20180415200629.98011886C4@busybox.osuosl.org>
+Date: Sun, 15 Apr 2018 22:05:40 +0200
+Subject: [Buildroot] [git commit] libpng: remove Blackfin patch
+Message-ID: <20180415200630.162408831B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81d494dfb051e495094e408cca15bc573ed793bd
+commit: https://git.buildroot.net/buildroot/commit/?id=f4db607f1d77150b543c3d1136db83236a336eda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And renumber remaining patches.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../ffmpeg/0001-bfin-disable-optimization.patch    | 26 ----------------------
- ...g-pthreads.patch => 0001-ffmpeg-pthreads.patch} |  0
- 2 files changed, 26 deletions(-)
+ ...-prefix-to-symbol-names-in-version-script.patch | 55 ----------------------
+ 1 file changed, 55 deletions(-)
 
-diff --git a/package/ffmpeg/0001-bfin-disable-optimization.patch b/package/ffmpeg/0001-bfin-disable-optimization.patch
+diff --git a/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch b/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
 deleted file mode 100644
-index 1d8a4f015d..0000000000
---- a/package/ffmpeg/0001-bfin-disable-optimization.patch
+index de772225ba..0000000000
+--- a/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
 +++ /dev/null
-@@ -1,26 +0,0 @@
--Fix bfin compile error
+@@ -1,55 +0,0 @@
+-From 473fdecd9a580b45251480b8ccbbb1927c598310 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Thu, 26 May 2016 16:27:13 -0300
+-Subject: [PATCH] Don't append prefix to symbol names in version script
 -
--See gcc bug report:
--https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77311
+-Even if Blackfin GNU toolchain add prefix '_' to all symbols,
+-symbol prefix is not accepted in the link flag --version-script.
+-Don't append prefix in the symbols in the version script file.
 -
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Original patch by: Sonic Zhang <sonic.zhang@analog.com>
 -
--diff -Nur ffmpeg-2.8.7.orig/libavcodec/hevcdsp_template.c ffmpeg-2.8.7/libavcodec/hevcdsp_template.c
----- ffmpeg-2.8.7.orig/libavcodec/hevcdsp_template.c	2016-03-29 04:25:16.000000000 +0200
--+++ ffmpeg-2.8.7/libavcodec/hevcdsp_template.c	2016-08-12 21:32:36.728178969 +0200
--@@ -1517,7 +1517,14 @@
-- #define TQ2 pix[2  * xstride + 3 * ystride]
-- #define TQ3 pix[3  * xstride + 3 * ystride]
+-[Gustavo: update for 1.6.22]
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-[Julien: update for 1.6.25]
+-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+-
+-[Bernd: update for 1.6.29]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- Makefile.am | 2 +-
+- Makefile.in | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 3430dca..db6a7a2 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -245,7 +245,7 @@ contrib/tools/pngfix.o: pnglibconf.h
+- # interfering with the symbol file format.
+- SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0'\
+- 		-DPNGLIB_VERSION='@PNGLIB_VERSION@'\
+--		-DSYMBOL_PREFIX='$(SYMBOL_PREFIX)'\
+-+		-DSYMBOL_PREFIX=''\
+- 		-DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE
 - 
---static void FUNC(hevc_loop_filter_luma)(uint8_t *_pix,
--+// Blackfin gcc 6.1.x fails with
--+// unable to find a register to spill in class CCREGS
--+#if defined(__bfin__)
--+#define disable_opt __attribute__ ((optimize("O1")))
--+#else
--+#define disable_opt 
--+#endif
--+static void disable_opt FUNC(hevc_loop_filter_luma)(uint8_t *_pix,
--                                         ptrdiff_t _xstride, ptrdiff_t _ystride,
--                                         int beta, int *_tc,
--                                         uint8_t *_no_p, uint8_t *_no_q)
-diff --git a/package/ffmpeg/0002-ffmpeg-pthreads.patch b/package/ffmpeg/0001-ffmpeg-pthreads.patch
-similarity index 100%
-rename from package/ffmpeg/0002-ffmpeg-pthreads.patch
-rename to package/ffmpeg/0001-ffmpeg-pthreads.patch
+- if DO_PNG_PREFIX
+-diff --git a/Makefile.in b/Makefile.in
+-index 4e67782..5f468d9 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -766,7 +766,7 @@ SUFFIXES = .chk .out
+- # interfering with the symbol file format.
+- SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0' \
+- 	-DPNGLIB_VERSION='@PNGLIB_VERSION@' \
+--	-DSYMBOL_PREFIX='$(SYMBOL_PREFIX)' -DPNG_NO_USE_READ_MACROS \
+-+	-DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS \
+- 	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_9)
+- 
+- # EXT_LIST is a list of the possibly library directory extensions, this exists
+--- 
+-2.7.3
+-
