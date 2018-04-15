@@ -1,36 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 21:59:20 +0200
-Subject: [Buildroot] [git commit] zeromq: add libunwind as an optional
+Date: Sun, 15 Apr 2018 22:02:53 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: add libunwind as an optional
  dependency
-Message-ID: <20180415200239.DC7F68641E@busybox.osuosl.org>
+In-Reply-To: <20180415193957.7328-1-asafka7@gmail.com>
+References: <20180415193957.7328-1-asafka7@gmail.com>
+Message-ID: <20180415220253.271cc544@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d0ef33bb74a96d9bf05bf3e36454a808175cfc3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/zeromq/zeromq.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Sun, 15 Apr 2018 22:39:57 +0300, Asaf Kahlon wrote:
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/zeromq/zeromq.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 2682a567de..8273cad763 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -51,4 +51,11 @@ else
- ZEROMQ_CONF_OPTS += --without-libsodium
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+ZEROMQ_DEPENDENCIES += libunwind
-+ZEROMQ_CONF_OPTS += --enable-libunwind
-+else
-+ZEROMQ_CONF_OPTS += --disable-libunwind
-+endif
-+
- $(eval $(autotools-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
