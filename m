@@ -1,88 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 22:05:45 +0200
-Subject: [Buildroot] [git commit] wayland: remove Blackfin patch
-Message-ID: <20180415200630.5EF898831B@busybox.osuosl.org>
+Date: Sun, 15 Apr 2018 22:05:31 +0200
+Subject: [Buildroot] [git commit] cairo: remove Blackfin related patch
+Message-ID: <20180415200629.84E27886C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33946320e57c1f79bb2fa7d33bc10f25006efdc0
+commit: https://git.buildroot.net/buildroot/commit/?id=60d62753d64208ef40f8fec1f3b892da032438b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And renumber remaining patch.
+And renumber the remaining patches.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...hitectures-with-non-empty-__USER_LABEL_PR.patch | 57 ----------------------
- ...01-configure-add-option-to-disable-tests.patch} |  0
- 2 files changed, 57 deletions(-)
+ package/cairo/0001-blackfin-build-fix.patch        | 55 ----------------------
+ ...ork-build.patch => 0001-fix-nofork-build.patch} |  0
+ ...-49-build.patch => 0002-fix-gcc-49-build.patch} |  0
+ 3 files changed, 55 deletions(-)
 
-diff --git a/package/wayland/0001-Support-architectures-with-non-empty-__USER_LABEL_PR.patch b/package/wayland/0001-Support-architectures-with-non-empty-__USER_LABEL_PR.patch
+diff --git a/package/cairo/0001-blackfin-build-fix.patch b/package/cairo/0001-blackfin-build-fix.patch
 deleted file mode 100644
-index abefcff274..0000000000
---- a/package/wayland/0001-Support-architectures-with-non-empty-__USER_LABEL_PR.patch
+index 0e8dd3ad65..0000000000
+--- a/package/cairo/0001-blackfin-build-fix.patch
 +++ /dev/null
-@@ -1,57 +0,0 @@
--From 0a337328411d5b3f37b169a83b6fee3f1726130f Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 26 May 2016 15:57:33 +0200
--Subject: [PATCH] Support architectures with non-empty __USER_LABEL_PREFIX__
+@@ -1,55 +0,0 @@
+-Fix build on platforms where __USER_LABEL_PREFIX__ is not empty
 -
--On some architectures (like Blackfin), a C symbol does not directly
--match with assembly symbols. The C symbol references are in fact all
--prefixed by a so-called "user label prefix". So when a symbol defined
--in an assembly file needs to be referenced from C, this symbol should
--be prefixed by the "user label prefix".
+-On most platforms, a C language symbol and its assembly equivalent are
+-identical. However, on the Blackfin architecture, this isn't the case,
+-the corresponding C language symbol in assembly is prepended with a
+-"_". Blackfin therefore has __USER_LABEL_PREFIX__ defined to "_".
 -
--This commit updates dtddata.S to take into account
--__USER_LABEL_PREFIX__ when it exists.
+-Cairo already has some code to cope with __USER_LABEL_PREFIX__, but
+-this code isn't completely correct: it prepends both assembly symbols
+-and C symbols with __USER_LABEL_PREFIX__, which cannot work.
+-
+-This patch fixes that by using the existing slim_hidden_asmname() to
+-define assembly symbols, and introduce a new slim_hidden_realname()
+-for C symbols.
 -
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- src/dtddata.S | 19 +++++++++++++------
-- 1 file changed, 13 insertions(+), 6 deletions(-)
 -
--diff --git a/src/dtddata.S b/src/dtddata.S
--index ce51133..ad2a4db 100644
----- a/src/dtddata.S
--+++ b/src/dtddata.S
--@@ -30,17 +30,24 @@
-- 
-- /* from: http://www.linuxjournal.com/content/embedding-file-executable-aka-hello-world-version-5967#comment-348129 */
-- 
--+#ifdef __USER_LABEL_PREFIX__
--+#define CONCAT1(a, b) CONCAT2(a, b)
--+#define CONCAT2(a, b) a ## b
--+#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
--+#else
--+#endif
--+
-- .macro binfile name file
-- 	.p2align 2
---	.globl \name\()_begin
---\name\()_begin:
--+	.globl SYM(\name\()_begin)
--+SYM(\name\()_begin):
-- 	.incbin "\file"
---\name\()_end:
--+SYM(\name\()_end):
-- 	.byte 0
-- 	.p2align 2
---	.globl \name\()_len
---\name\()_len:
---	.int (\name\()_end - \name\()_begin)
--+	.globl SYM(\name\()_len)
--+SYM(\name\()_len):
--+	.int (SYM(\name\()_end) - SYM(\name\()_begin))
-- .endm
-- 
-- .section .rodata
---- 
--2.7.4
--
-diff --git a/package/wayland/0002-configure-add-option-to-disable-tests.patch b/package/wayland/0001-configure-add-option-to-disable-tests.patch
+-Index: b/src/cairo-compiler-private.h
+-===================================================================
+---- a/src/cairo-compiler-private.h
+-+++ b/src/cairo-compiler-private.h
+-@@ -93,12 +93,13 @@
+- 	__asm__ (slim_hidden_asmname (internal))
+- # define slim_hidden_def1(name, internal)				\
+-   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
+--	__attribute__((__alias__(slim_hidden_asmname(internal))))
+-+	__attribute__((__alias__(slim_hidden_realname(internal))))
+- # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
+- # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
+- # define slim_hidden_ulp2(x)		#x
+- # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
+- # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
+-+# define slim_hidden_realname(name)     #name
+- #else
+- # define slim_hidden_proto(name)		int _cairo_dummy_prototype(void)
+- # define slim_hidden_proto_no_warn(name)	int _cairo_dummy_prototype(void)
+-Index: b/util/cairo-script/cairo-script-private.h
+-===================================================================
+---- a/util/cairo-script/cairo-script-private.h
+-+++ b/util/cairo-script/cairo-script-private.h
+-@@ -109,12 +109,13 @@
+- 	__asm__ (slim_hidden_asmname (internal))
+- # define slim_hidden_def1(name, internal)				\
+-   extern __typeof (name) EXT_##name __asm__(slim_hidden_asmname(name))	\
+--	__attribute__((__alias__(slim_hidden_asmname(internal))))
+-+	__attribute__((__alias__(slim_hidden_realname(internal))))
+- # define slim_hidden_ulp		slim_hidden_ulp1(__USER_LABEL_PREFIX__)
+- # define slim_hidden_ulp1(x)		slim_hidden_ulp2(x)
+- # define slim_hidden_ulp2(x)		#x
+- # define slim_hidden_asmname(name)	slim_hidden_asmname1(name)
+- # define slim_hidden_asmname1(name)	slim_hidden_ulp #name
+-+# define slim_hidden_realname(name)     #name
+- #else
+- # define slim_hidden_proto(name)		int _csi_dummy_prototype(void)
+- # define slim_hidden_proto_no_warn(name)	int _csi_dummy_prototype(void)
+diff --git a/package/cairo/0003-fix-nofork-build.patch b/package/cairo/0001-fix-nofork-build.patch
 similarity index 100%
-rename from package/wayland/0002-configure-add-option-to-disable-tests.patch
-rename to package/wayland/0001-configure-add-option-to-disable-tests.patch
+rename from package/cairo/0003-fix-nofork-build.patch
+rename to package/cairo/0001-fix-nofork-build.patch
+diff --git a/package/cairo/0005-fix-gcc-49-build.patch b/package/cairo/0002-fix-gcc-49-build.patch
+similarity index 100%
+rename from package/cairo/0005-fix-gcc-49-build.patch
+rename to package/cairo/0002-fix-gcc-49-build.patch
