@@ -1,149 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 22:05:28 +0200
-Subject: [Buildroot] [git commit] binutils: remove Blackfin patches
-Message-ID: <20180415200629.5A20F886C4@busybox.osuosl.org>
+Date: Sun, 15 Apr 2018 22:05:45 +0200
+Subject: [Buildroot] [git commit] wayland: remove Blackfin patch
+Message-ID: <20180415200630.5EF898831B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32ab0ff5a9caec7f2a91cbcb36383e6d0687c972
+commit: https://git.buildroot.net/buildroot/commit/?id=33946320e57c1f79bb2fa7d33bc10f25006efdc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And renumber remaining patch.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/binutils/2.27/0905-bfin-rofixup-bug.patch  | 21 ---------------
- .../binutils/2.28.1/0905-bfin-rofixup-bug.patch    | 21 ---------------
- ...LINKER-BUG-.rofixup-section-size-mismatch.patch | 31 ----------------------
- ...LINKER-BUG-.rofixup-section-size-mismatch.patch | 31 ----------------------
- 4 files changed, 104 deletions(-)
+ ...hitectures-with-non-empty-__USER_LABEL_PR.patch | 57 ----------------------
+ ...01-configure-add-option-to-disable-tests.patch} |  0
+ 2 files changed, 57 deletions(-)
 
-diff --git a/package/binutils/2.27/0905-bfin-rofixup-bug.patch b/package/binutils/2.27/0905-bfin-rofixup-bug.patch
+diff --git a/package/wayland/0001-Support-architectures-with-non-empty-__USER_LABEL_PR.patch b/package/wayland/0001-Support-architectures-with-non-empty-__USER_LABEL_PR.patch
 deleted file mode 100644
-index da9d586551..0000000000
---- a/package/binutils/2.27/0905-bfin-rofixup-bug.patch
+index abefcff274..0000000000
+--- a/package/wayland/0001-Support-architectures-with-non-empty-__USER_LABEL_PR.patch
 +++ /dev/null
-@@ -1,21 +0,0 @@
--Fixes: LINKER BUG: .rofixup section size mismatch
+@@ -1,57 +0,0 @@
+-From 0a337328411d5b3f37b169a83b6fee3f1726130f Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Thu, 26 May 2016 15:57:33 +0200
+-Subject: [PATCH] Support architectures with non-empty __USER_LABEL_PREFIX__
 -
--Workaround from adi-toolchain commit:
--af414ec1fb628ddb1562f062f3db49823ca14ca2
--[#6798] binutils-2.21/bfd: temp workaround for rofixup mismatch errors.
+-On some architectures (like Blackfin), a C symbol does not directly
+-match with assembly symbols. The C symbol references are in fact all
+-prefixed by a so-called "user label prefix". So when a symbol defined
+-in an assembly file needs to be referenced from C, this symbol should
+-be prefixed by the "user label prefix".
 -
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-This commit updates dtddata.S to take into account
+-__USER_LABEL_PREFIX__ when it exists.
 -
--diff -Nur binutils-2.26.1.orig/bfd/elf32-bfin.c binutils-2.26.1/bfd/elf32-bfin.c
----- binutils-2.26.1.orig/bfd/elf32-bfin.c	2015-11-13 09:27:40.000000000 +0100
--+++ binutils-2.26.1/bfd/elf32-bfin.c	2016-07-31 00:50:48.357995132 +0200
--@@ -4879,7 +4879,8 @@
-- 
-- 	case R_BFIN_FUNCDESC:
-- 	  picrel->fd++;
---	  picrel->relocsfd++;
--+	  if (bfd_get_section_flags (abfd, sec) & SEC_ALLOC)
--+	    picrel->relocsfd++;
-- 	  break;
-- 
--         /* This relocation describes the C++ object vtable hierarchy.
-diff --git a/package/binutils/2.28.1/0905-bfin-rofixup-bug.patch b/package/binutils/2.28.1/0905-bfin-rofixup-bug.patch
-deleted file mode 100644
-index 5733b219d7..0000000000
---- a/package/binutils/2.28.1/0905-bfin-rofixup-bug.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Fixes: LINKER BUG: .rofixup section size mismatch
--
--Workaround from adi-toolchain commit:
--af414ec1fb628ddb1562f062f3db49823ca14ca2
--[#6798] binutils-2.21/bfd: temp workaround for rofixup mismatch errors.
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--
--diff -Nur binutils-2.26.1.orig/bfd/elf32-bfin.c binutils-2.26.1/bfd/elf32-bfin.c
----- binutils-2.26.1.orig/bfd/elf32-bfin.c	2015-11-13 09:27:40.000000000 +0100
--+++ binutils-2.26.1/bfd/elf32-bfin.c	2016-07-31 00:50:48.357995132 +0200
--@@ -4845,7 +4845,8 @@
-- 
-- 	case R_BFIN_FUNCDESC:
-- 	  picrel->fd++;
---	  picrel->relocsfd++;
--+	  if (bfd_get_section_flags (abfd, sec) & SEC_ALLOC)
--+	    picrel->relocsfd++;
-- 	  break;
-- 
--         /* This relocation describes the C++ object vtable hierarchy.
-diff --git a/package/binutils/2.29.1/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch b/package/binutils/2.29.1/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
-deleted file mode 100644
-index e5409efe14..0000000000
---- a/package/binutils/2.29.1/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 122de3b633f4273826a2d01702d7c515f93ec2be Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Sat, 29 Jul 2017 14:08:20 +0200
--Subject: [PATCH] Fixes: LINKER BUG: .rofixup section size mismatch
--
--Workaround from adi-toolchain commit:
--af414ec1fb628ddb1562f062f3db49823ca14ca2
--[#6798] binutils-2.21/bfd: temp workaround for rofixup mismatch errors.
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- bfd/elf32-bfin.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
+- src/dtddata.S | 19 +++++++++++++------
+- 1 file changed, 13 insertions(+), 6 deletions(-)
 -
--diff --git a/bfd/elf32-bfin.c b/bfd/elf32-bfin.c
--index b3e09bd..660eec5 100644
----- a/bfd/elf32-bfin.c
--+++ b/bfd/elf32-bfin.c
--@@ -4845,7 +4845,8 @@ bfinfdpic_check_relocs (bfd *abfd, struct bfd_link_info *info,
+-diff --git a/src/dtddata.S b/src/dtddata.S
+-index ce51133..ad2a4db 100644
+---- a/src/dtddata.S
+-+++ b/src/dtddata.S
+-@@ -30,17 +30,24 @@
 - 
-- 	case R_BFIN_FUNCDESC:
-- 	  picrel->fd++;
---	  picrel->relocsfd++;
--+	  if (bfd_get_section_flags (abfd, sec) & SEC_ALLOC)
--+	    picrel->relocsfd++;
-- 	  break;
+- /* from: http://www.linuxjournal.com/content/embedding-file-executable-aka-hello-world-version-5967#comment-348129 */
 - 
--         /* This relocation describes the C++ object vtable hierarchy.
+-+#ifdef __USER_LABEL_PREFIX__
+-+#define CONCAT1(a, b) CONCAT2(a, b)
+-+#define CONCAT2(a, b) a ## b
+-+#define SYM(x) CONCAT1 (__USER_LABEL_PREFIX__, x)
+-+#else
+-+#endif
+-+
+- .macro binfile name file
+- 	.p2align 2
+--	.globl \name\()_begin
+--\name\()_begin:
+-+	.globl SYM(\name\()_begin)
+-+SYM(\name\()_begin):
+- 	.incbin "\file"
+--\name\()_end:
+-+SYM(\name\()_end):
+- 	.byte 0
+- 	.p2align 2
+--	.globl \name\()_len
+--\name\()_len:
+--	.int (\name\()_end - \name\()_begin)
+-+	.globl SYM(\name\()_len)
+-+SYM(\name\()_len):
+-+	.int (SYM(\name\()_end) - SYM(\name\()_begin))
+- .endm
+- 
+- .section .rodata
 --- 
--2.9.4
+-2.7.4
 -
-diff --git a/package/binutils/2.30/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch b/package/binutils/2.30/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
-deleted file mode 100644
-index 0ce2cf2288..0000000000
---- a/package/binutils/2.30/0006-Fixes-LINKER-BUG-.rofixup-section-size-mismatch.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From c3bd478ac1b7e83765230505eb08a0acf2fe3867 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Sat, 29 Jul 2017 14:08:20 +0200
--Subject: [PATCH] Fixes: LINKER BUG: .rofixup section size mismatch
--
--Workaround from adi-toolchain commit:
--af414ec1fb628ddb1562f062f3db49823ca14ca2
--[#6798] binutils-2.21/bfd: temp workaround for rofixup mismatch errors.
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-----
-- bfd/elf32-bfin.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/bfd/elf32-bfin.c b/bfd/elf32-bfin.c
--index 478b8d4731..a38519b585 100644
----- a/bfd/elf32-bfin.c
--+++ b/bfd/elf32-bfin.c
--@@ -4655,7 +4655,8 @@ bfinfdpic_check_relocs (bfd *abfd, struct bfd_link_info *info,
-- 
-- 	case R_BFIN_FUNCDESC:
-- 	  picrel->fd++;
---	  picrel->relocsfd++;
--+	  if (bfd_get_section_flags (abfd, sec) & SEC_ALLOC)
--+	    picrel->relocsfd++;
-- 	  break;
-- 
-- 	/* This relocation describes the C++ object vtable hierarchy.
---- 
--2.14.3
--
+diff --git a/package/wayland/0002-configure-add-option-to-disable-tests.patch b/package/wayland/0001-configure-add-option-to-disable-tests.patch
+similarity index 100%
+rename from package/wayland/0002-configure-add-option-to-disable-tests.patch
+rename to package/wayland/0001-configure-add-option-to-disable-tests.patch
