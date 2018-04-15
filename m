@@ -1,87 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 15 Apr 2018 11:22:44 +0300
-Subject: [Buildroot] [PATCH 1/1] libcap-ng: fix compilation without
- pthread.h
-In-Reply-To: <20180415081849.5241-1-fontaine.fabrice@gmail.com>
-References: <20180415081849.5241-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180415082244.t436pxzldjt4zwdl@sapphire.tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 15 Apr 2018 10:23:39 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: fix gobject with gcc <= 4.7
+Message-ID: <20180415082339.5520-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Patch under upstream review: https://bugzilla.gnome.org/show_bug.cgi?id=795138
 
-On Sun, Apr 15, 2018 at 10:18:49AM +0200, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/6132f33fb282fda3c39deb292784b9006c9e7872
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Fix-compilation-without-pthread.h.patch   | 47 ++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch
-> 
-> diff --git a/package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch b/package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch
-> new file mode 100644
-> index 0000000000..eb91d40631
-> --- /dev/null
-> +++ b/package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch
-> @@ -0,0 +1,47 @@
-> +From 1d28cf070933568db8006ce45411723c5369e145 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Tue, 10 Apr 2018 19:54:50 +0200
-> +Subject: [PATCH] Fix compilation without pthread.h
-> +
-> +Commit 7759e6f8469eb33aef1a1d5eba5d300c3a8fcb63 broke compilation on
-> +systems without pthread.h. So add a call to AC_CHECK_HEADERS in
-> +configure.ac and put include <pthread.h> under HAVE_PTHREAD_H define
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.net/results/6132f33fb282fda3c39deb292784b9006c9e7872
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/b29a2f868438a2210873ea72f491db63175848be
 
-Upstream status: https://github.com/stevegrubb/libcap-ng/pull/4
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...0003-gobject-fix-compilation-with-gcc-4.7.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
 
-> +---
-> + configure.ac | 1 +
-> + src/cap-ng.c | 2 ++
-> + 2 files changed, 3 insertions(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 7a99c72..4d6afee 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -56,6 +56,7 @@ AC_CHECK_HEADERS(sys/xattr.h, [], [
-> + 	AC_CHECK_HEADERS(attr/xattr.h, [], [AC_MSG_WARN(attr/xattr.h not found, disabling file system capabilities.)])
-> + 	])
-> + AC_CHECK_HEADERS(linux/securebits.h, [], [])
-> ++AC_CHECK_HEADERS(pthread.h, [], [AC_MSG_WARN(pthread.h not found, disabling pthread_atfork.)])
-> + 
-> + AC_C_CONST
-> + AC_C_INLINE
-> +diff --git a/src/cap-ng.c b/src/cap-ng.c
-> +index db647fd..240d2ba 100644
-> +--- a/src/cap-ng.c
-> ++++ b/src/cap-ng.c
-> +@@ -34,7 +34,9 @@
-> + #include <errno.h>
-> + #include <fcntl.h>
-> + #include <byteswap.h>
-> ++#ifdef HAVE_PTHREAD_H
-> + #include <pthread.h>	// For pthread_atfork
-> ++#endif
-> + #ifdef HAVE_SYSCALL_H
-> + #include <sys/syscall.h>
-> + #endif
-> +-- 
-> +2.14.1
-
-baruch
-
+diff --git a/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch b/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
+new file mode 100644
+index 0000000000..ed43674b2b
+--- /dev/null
++++ b/package/libglib2/0003-gobject-fix-compilation-with-gcc-4.7.patch
+@@ -0,0 +1,49 @@
++From a2b27c0d038ad76cc8016999f8788245da97e946 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 10 Apr 2018 19:18:57 +0200
++Subject: [PATCH] gobject: fix compilation with gcc <= 4.7
++
++On gcc 4.7, we got the following error:
++
++i686-nptl-linux-gnu-gcc --version
++> i686-nptl-linux-gnu-gcc (crosstool-NG 1.20.0) 4.7.4
++> $ echo '#include <glib-object.h>' | i686-nptl-linux-gnu-gcc -x c -I
++staging/usr/include/glib-2.0 -I staging/usr/lib/glib-2.0/include -Wall
++-Werror -c - -o /tmp/foo.o
++> In file included from
++staging/usr/include/glib-2.0/gobject/gbinding.h:29:0,
++>                  from staging/usr/include/glib-2.0/glib-object.h:23,
++>                  from <stdin>:1:
++> staging/usr/include/glib-2.0/gobject/gobject.h: In function
++'g_set_object':
++> staging/usr/include/glib-2.0/gobject/gobject.h:725:5: error: value
++computed is not used [-Werror=unused-value]
++> cc1: all warnings being treated as errors
++
++This error has been added by commit 3fae39a5d742afe73741f5fd7aa24e3ae8182f06
++So enable the new g_set_object definition only if gcc >= 4.8
++
++Fixes:
++ - http://autobuild.buildroot.net/results/b29a2f868438a2210873ea72f491db63175848be
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ gobject/gobject.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gobject/gobject.h b/gobject/gobject.h
++index 9830663ce..838046fe0 100644
++--- a/gobject/gobject.h
+++++ b/gobject/gobject.h
++@@ -507,7 +507,7 @@ GLIB_AVAILABLE_IN_ALL
++ void        g_object_remove_weak_pointer      (GObject        *object, 
++                                                gpointer       *weak_pointer_location);
++ 
++-#if defined(__GNUC__) && !defined(__cplusplus) && GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_56
+++#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)) && !defined(__cplusplus) && GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_56
++ /* Make reference APIs type safe with macros */
++ #define g_object_ref(Obj)      ((__typeof__(Obj)) (g_object_ref) (Obj))
++ #define g_object_ref_sink(Obj) ((__typeof__(Obj)) (g_object_ref_sink) (Obj))
++-- 
++2.14.1
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.14.1
