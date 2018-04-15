@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 21:16:58 +0200
-Subject: [Buildroot] [PATCH] valgrind: allow selection on aarch64
-In-Reply-To: <20180413121314.30943-1-anssi.hannula@bitwise.fi>
-References: <20180413121314.30943-1-anssi.hannula@bitwise.fi>
-Message-ID: <20180415211658.09fc1862@windsurf.numericable.fr>
+Date: Sun, 15 Apr 2018 21:18:52 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/liteboard: Bump U-Boot to
+ 2018.03
+In-Reply-To: <20180413100929.15212-1-m.niestroj@grinn-global.com>
+References: <20180413100929.15212-1-m.niestroj@grinn-global.com>
+Message-ID: <20180415211852.77265e3d@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 13 Apr 2018 15:13:14 +0300, Anssi Hannula wrote:
-> valgrind works fine on aarch64, so allow selecting it on that
-> architecture.
-> 
-> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+On Fri, 13 Apr 2018 12:09:28 +0200, Marcin Niestroj wrote:
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  package/valgrind/Config.in | 2 +-
+>  configs/grinn_liteboard_defconfig | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
