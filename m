@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 21:59:05 +0200
-Subject: [Buildroot] [PATCH] network-manager: support a defaults file in
- the init script
-In-Reply-To: <20180413160027.6089-1-casantos@datacom.ind.br>
-References: <20180413160027.6089-1-casantos@datacom.ind.br>
-Message-ID: <20180415215905.6ee11140@windsurf.numericable.fr>
+Date: Sun, 15 Apr 2018 22:02:22 +0200
+Subject: [Buildroot] [PATCH] autobuild-run: remove only tarballs from
+ download dir
+In-Reply-To: <20180415194915.GE21958@scaer>
+References: <20180413133431.19449-1-ricardo.martincoski@gmail.com>
+ <20180415214257.1e90704a@windsurf.numericable.fr>
+ <20180415194915.GE21958@scaer>
+Message-ID: <20180415220222.6413547a@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +15,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 13 Apr 2018 13:00:27 -0300, Carlos Santos wrote:
-> Sometimes it is useful to pass some parameters to NetworkManager when it
-> starts (e.g. --log-level) instead of editting NetworkManager.conf. Allow
-> the user add a file with a NETWORKMANAGER_ARGS variable containing such
-> flags. This is simpler than overriding the whole startup script (e.g. by
-> means of a rootfs overlay).
+On Sun, 15 Apr 2018 21:49:15 +0200, Yann E. MORIN wrote:
+
+> > Just to check how this is supposed to work. We have this:
+> > 
+> >  dl/<package>/git/.git
+> > 
+> > Correct ?
+> > 
+> > So you're idea is that when we are inside dl/<package>/git/, one of the
+> > sub-directories is .git, and therefore we shouldn't remove anything in
+> > dl/<package>/git/ ?
+> > 
+> > My concern is that I'm not sure if what you've done prevents from
+> > removing files inside dl/<package>/git or only inside
+> > dl/<package>/git/.git. I would find it more to do something like:
+> > 
+> > 	if "git" in d:
+> > 		d.remove("git")
+> > 
+> > but perhaps you haven't done this for some good reason ?
+> > 
+> > Another concern is how to fix those autobuilders that have already
+> > removed some random files from their cached Git repositories? Should we
+> > ask the people who run those autobuilders to entirely wipe the download
+> > folders of their autobuilder instances ? Or do we have a smart (but
+> > simple) thing to do to avoid this ?  
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> For this last part, we've already discused this with Ricardo in another
+> thread: we run git-fsck, and if there is an error, we ditch the git tree
+> and clone from scratch.
 
-I've applied to master. However, a few comments below.
-
-> ---
->  package/network-manager/S45network-manager | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/network-manager/S45network-manager b/package/network-manager/S45network-manager
-> index f39e20d73b..bb4bf164a5 100755
-> --- a/package/network-manager/S45network-manager
-> +++ b/package/network-manager/S45network-manager
-> @@ -1,5 +1,8 @@
->  #!/bin/sh
->  
-> +# Allow a few customizations from a config file
-> +test -r /etc/default/NetworkManager && . /etc/default/NetworkManager
-> +
->  prefix=/usr
->  exec_prefix=/usr
->  sbindir=${exec_prefix}/sbin
-
-Same as the modem-manager discussion: I don't think the
-NETWORKMANAGER_BIN variable, and testing that the binary file is
-executable really makes sense.
-
-> @@ -14,7 +17,7 @@ case "$1" in
->  		printf "Starting NetworkManager ... "
->  		[ ! -d /var/run/NetworkManager ] && install -d /var/run/NetworkManager
->  		if [ -z "$PID" ]; then
-> -			$NETWORKMANAGER_BIN
-> +			$NETWORKMANAGER_BIN $NETWORKMANAGER_ARGS
-
-Any idea why start-stop-daemon is not used ?
-
-Thanks!
+OK, so in practice removing random files inside the git/ folders should
+not cause any problem ?
 
 Thomas
 -- 
