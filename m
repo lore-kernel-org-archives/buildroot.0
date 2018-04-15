@@ -1,423 +1,152 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 22:05:35 +0200
-Subject: [Buildroot] [git commit] gdb/7.10: remove Blackfin patch
-Message-ID: <20180415200629.BEF0B886C4@busybox.osuosl.org>
+Date: Sun, 15 Apr 2018 22:05:37 +0200
+Subject: [Buildroot] [git commit] icu: remove Blackfin patch
+Message-ID: <20180415200629.E4F34886C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed5996ffbfb613fe26e01e4b29030b432d7bc88e
+commit: https://git.buildroot.net/buildroot/commit/?id=ab6d421c58ed9aac610f5d246946c66cd3f2c08d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And renumber remaining patches
+And renumber remaining patches.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0006-Revert-sim-unify-SIM_CPU-definition.patch | 372 ---------------------
- ...-Sync-proc_service-definition-with-GLIBC.patch} |   0
- ...efine-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch} |   0
- ...fine-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch} |   0
- ...0009-Fix-gdbserver-build-on-uClibc-noMMU.patch} |   0
- ...gidefs.h.patch => 0010-use-asm-sgidefs.h.patch} |   0
- 6 files changed, 372 deletions(-)
+ .../icu/0003-detect-compiler-symbol-prefix.patch   | 116 ---------------------
+ ....patch => 0003-link-icudata-as-data-only.patch} |   0
+ ...h => 0004-fix-static-linking-with-icu-uc.patch} |   0
+ 3 files changed, 116 deletions(-)
 
-diff --git a/package/gdb/7.10.1/0006-Revert-sim-unify-SIM_CPU-definition.patch b/package/gdb/7.10.1/0006-Revert-sim-unify-SIM_CPU-definition.patch
+diff --git a/package/icu/0003-detect-compiler-symbol-prefix.patch b/package/icu/0003-detect-compiler-symbol-prefix.patch
 deleted file mode 100644
-index 20b7fb2341..0000000000
---- a/package/gdb/7.10.1/0006-Revert-sim-unify-SIM_CPU-definition.patch
+index 1e9537503b..0000000000
+--- a/package/icu/0003-detect-compiler-symbol-prefix.patch
 +++ /dev/null
-@@ -1,372 +0,0 @@
--From 4d913bb73965fdb9c756e8d5916a829b60aa3a44 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 4 Aug 2016 23:44:24 +0200
--Subject: [PATCH] Revert "sim: unify SIM_CPU definition"
+@@ -1,116 +0,0 @@
+-detect and add compiler symbol prefix to the assembly code
 -
--This reverts commit 20bca71d82598a015de0991196e45f0b5f7ead81.
+-Some compiler, such as Blackfin GNU compiler, prefix a charater to any
+-C symbol in generated assembly code. If any assembly symbol is invoked
+-from C code, it needs to be prefixed as well.
 -
--This change causes a redefinition of SIM_CPU on the Blackfin
--architecture, as it is defined in both the common sim/common/sim-base.h
--and the architecture specific sim/bfin/sim-main.h.
+-Note: since autoreconf doesn't work with this package because automake
+-isn't support
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- sim/arm/sim-main.h        |  3 +++
-- sim/avr/sim-main.h        |  2 ++
-- sim/bfin/sim-main.h       |  2 --
-- sim/common/sim-base.h     |  2 --
-- sim/cr16/sim-main.h       |  2 ++
-- sim/cris/sim-main.h       |  5 +++++
-- sim/d10v/sim-main.h       |  2 ++
-- sim/frv/sim-main.h        | 10 ++++++++++
-- sim/ft32/sim-main.h       |  2 ++
-- sim/h8300/sim-main.h      |  3 +++
-- sim/iq2000/sim-main.h     |  5 +++++
-- sim/lm32/sim-main.h       |  5 +++++
-- sim/m32r/sim-main.h       |  5 +++++
-- sim/m68hc11/sim-main.h    |  3 +++
-- sim/mcore/sim-main.h      |  2 ++
-- sim/microblaze/sim-main.h |  3 +++
-- sim/mips/sim-main.h       |  3 +++
-- sim/mn10300/sim-main.h    |  2 ++
-- sim/moxie/sim-main.h      |  3 +++
-- sim/msp430/sim-main.h     |  3 +++
-- sim/sh/sim-main.h         |  3 +++
-- sim/sh64/sim-main.h       |  5 +++++
-- sim/v850/sim-main.h       |  3 +++
-- 23 files changed, 74 insertions(+), 4 deletions(-)
+-[Ryan: add information about why patching configure is ok]
+-[Gustavo: update for ICU4C 54.1]
 -
--diff --git a/sim/arm/sim-main.h b/sim/arm/sim-main.h
--index 9a37b98..ae622bd 100644
----- a/sim/arm/sim-main.h
--+++ b/sim/arm/sim-main.h
--@@ -20,6 +20,9 @@
-- #define SIM_MAIN_H
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/avr/sim-main.h b/sim/avr/sim-main.h
--index e0cac22..52904e3 100644
----- a/sim/avr/sim-main.h
--+++ b/sim/avr/sim-main.h
--@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- 
-- extern unsigned int pc;
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- struct _sim_cpu {
--diff --git a/sim/bfin/sim-main.h b/sim/bfin/sim-main.h
--index 806fe15..53e1774 100644
----- a/sim/bfin/sim-main.h
--+++ b/sim/bfin/sim-main.h
--@@ -24,8 +24,6 @@
-- #include "sim-basics.h"
-- #include "sim-signal.h"
-- 
---/* TODO: Delete this.  Need to convert bu32/etc... to common sim types
---         and unwind the bfin-sim.h/machs.h include below first though.  */
-- typedef struct _sim_cpu SIM_CPU;
-- 
-- #include "bfin-sim.h"
--diff --git a/sim/common/sim-base.h b/sim/common/sim-base.h
--index 21f61f4..e90e07c 100644
----- a/sim/common/sim-base.h
--+++ b/sim/common/sim-base.h
--@@ -72,8 +72,6 @@ typedef address_word sim_cia;
-- #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
-- #endif
-- 
---/* TODO: Probably should just delete SIM_CPU.  */
---typedef struct _sim_cpu SIM_CPU;
-- typedef struct _sim_cpu sim_cpu;
-- 
-- #include "sim-module.h"
--diff --git a/sim/cr16/sim-main.h b/sim/cr16/sim-main.h
--index a63b93e..1a80229 100644
----- a/sim/cr16/sim-main.h
--+++ b/sim/cr16/sim-main.h
--@@ -24,6 +24,8 @@
-- typedef long int           word;
-- typedef unsigned long int  uword;
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/cris/sim-main.h b/sim/cris/sim-main.h
--index 4dc04a2..fec0039 100644
----- a/sim/cris/sim-main.h
--+++ b/sim/cris/sim-main.h
--@@ -24,6 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- #ifndef SIM_MAIN_H
-- #define SIM_MAIN_H
-- 
--+#define USING_SIM_BASE_H
--+
--+struct _sim_cpu;
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "symcat.h"
-- #include "sim-basics.h"
-- #include "cgen-types.h"
--diff --git a/sim/d10v/sim-main.h b/sim/d10v/sim-main.h
--index 0b87811..a7d59dd 100644
----- a/sim/d10v/sim-main.h
--+++ b/sim/d10v/sim-main.h
--@@ -24,6 +24,8 @@
-- typedef long int           word;
-- typedef unsigned long int  uword;
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/frv/sim-main.h b/sim/frv/sim-main.h
--index d5a67cb..fd12c4f 100644
----- a/sim/frv/sim-main.h
--+++ b/sim/frv/sim-main.h
--@@ -19,6 +19,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- 
-- /* Main header for the frv.  */
-- 
--+#define USING_SIM_BASE_H /* FIXME: quick hack */
--+
--+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
--+/* Set the mask of unsupported traces.  */
--+#define WITH_TRACE \
--+  (~(TRACE_alu | TRACE_decode | TRACE_memory | TRACE_model | TRACE_fpu \
--+     | TRACE_branch | TRACE_debug))
--+
-- /* sim-basics.h includes config.h but cgen-types.h must be included before
--    sim-basics.h and cgen-types.h needs config.h.  */
-- #include "config.h"
--diff --git a/sim/ft32/sim-main.h b/sim/ft32/sim-main.h
--index b27a690..a270a5d 100644
----- a/sim/ft32/sim-main.h
--+++ b/sim/ft32/sim-main.h
--@@ -25,6 +25,8 @@
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "ft32-sim.h"
-- 
-- struct _sim_cpu {
--diff --git a/sim/h8300/sim-main.h b/sim/h8300/sim-main.h
--index 6dbc1ac..e95c4d9 100644
----- a/sim/h8300/sim-main.h
--+++ b/sim/h8300/sim-main.h
--@@ -87,6 +87,9 @@ enum h8_typecodes {
-- };
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- /* Structure used to describe addressing */
--diff --git a/sim/iq2000/sim-main.h b/sim/iq2000/sim-main.h
--index 992520a..ce3baba 100644
----- a/sim/iq2000/sim-main.h
--+++ b/sim/iq2000/sim-main.h
--@@ -4,6 +4,11 @@
-- #ifndef SIM_MAIN_H
-- #define SIM_MAIN_H
-- 
--+#define USING_SIM_BASE_H /* FIXME: quick hack */
--+
--+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- /* sim-basics.h includes config.h but cgen-types.h must be included before
--    sim-basics.h and cgen-types.h needs config.h.  */
-- #include "config.h"
--diff --git a/sim/lm32/sim-main.h b/sim/lm32/sim-main.h
--index 4894e8d..210bb8b 100644
----- a/sim/lm32/sim-main.h
--+++ b/sim/lm32/sim-main.h
--@@ -23,6 +23,11 @@
-- #ifndef SIM_MAIN_H
-- #define SIM_MAIN_H
-- 
--+#define USING_SIM_BASE_H	/* FIXME: quick hack */
--+
--+struct _sim_cpu;		/* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "symcat.h"
-- #include "sim-basics.h"
-- #include "cgen-types.h"
--diff --git a/sim/m32r/sim-main.h b/sim/m32r/sim-main.h
--index cd39e98..74bb513 100644
----- a/sim/m32r/sim-main.h
--+++ b/sim/m32r/sim-main.h
--@@ -3,6 +3,11 @@
-- #ifndef SIM_MAIN_H
-- #define SIM_MAIN_H
-- 
--+#define USING_SIM_BASE_H /* FIXME: quick hack */
--+
--+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "symcat.h"
-- #include "sim-basics.h"
-- #include "cgen-types.h"
--diff --git a/sim/m68hc11/sim-main.h b/sim/m68hc11/sim-main.h
--index d1fc582..4f41db9 100644
----- a/sim/m68hc11/sim-main.h
--+++ b/sim/m68hc11/sim-main.h
--@@ -25,6 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- #define SIM_HANDLES_LMA 1
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-signal.h"
-- #include "sim-base.h"
-- 
--diff --git a/sim/mcore/sim-main.h b/sim/mcore/sim-main.h
--index be50ec1..25698c1 100644
----- a/sim/mcore/sim-main.h
--+++ b/sim/mcore/sim-main.h
--@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- typedef long int           word;
-- typedef unsigned long int  uword;
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/microblaze/sim-main.h b/sim/microblaze/sim-main.h
--index 6781374..6b7b776 100644
----- a/sim/microblaze/sim-main.h
--+++ b/sim/microblaze/sim-main.h
--@@ -20,6 +20,9 @@
-- 
-- #include "microblaze.h"
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- /* The machine state.
--diff --git a/sim/mips/sim-main.h b/sim/mips/sim-main.h
--index 8d698ad..9729804 100644
----- a/sim/mips/sim-main.h
--+++ b/sim/mips/sim-main.h
--@@ -29,6 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- mips_core_signal ((SD), (CPU), (CIA), (MAP), (NR_BYTES), (ADDR), (TRANSFER), (ERROR))
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/mn10300/sim-main.h b/sim/mn10300/sim-main.h
--index 847506e..2ddbfb9 100644
----- a/sim/mn10300/sim-main.h
--+++ b/sim/mn10300/sim-main.h
--@@ -42,6 +42,8 @@
-- #include "itable.h"
-- #include "idecode.h"
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #define WITH_WATCHPOINTS 1
-- 
-- #define SIM_CORE_SIGNAL(SD,CPU,CIA,MAP,NR_BYTES,ADDR,TRANSFER,ERROR)  \
--diff --git a/sim/moxie/sim-main.h b/sim/moxie/sim-main.h
--index b1a64fc..c60437e 100644
----- a/sim/moxie/sim-main.h
--+++ b/sim/moxie/sim-main.h
--@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- #define SIM_MAIN_H
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/msp430/sim-main.h b/sim/msp430/sim-main.h
--index 19c8cca..37bb42d 100644
----- a/sim/msp430/sim-main.h
--+++ b/sim/msp430/sim-main.h
--@@ -23,6 +23,9 @@
-- 
-- #include "sim-basics.h"
-- #include "sim-signal.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "msp430-sim.h"
-- #include "sim-base.h"
-- 
--diff --git a/sim/sh/sim-main.h b/sim/sh/sim-main.h
--index e67df28..e2e17d7 100644
----- a/sim/sh/sim-main.h
--+++ b/sim/sh/sim-main.h
--@@ -20,6 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- #define SIM_MAIN_H
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- typedef struct
--diff --git a/sim/sh64/sim-main.h b/sim/sh64/sim-main.h
--index 7b24ab0..8fb595e 100644
----- a/sim/sh64/sim-main.h
--+++ b/sim/sh64/sim-main.h
--@@ -3,6 +3,11 @@
-- #ifndef SIM_MAIN_H
-- #define SIM_MAIN_H
-- 
--+#define USING_SIM_BASE_H /* FIXME: quick hack */
--+
--+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- /* sim-basics.h includes config.h but cgen-types.h must be included before
--    sim-basics.h and cgen-types.h needs config.h.  */
-- #include "config.h"
--diff --git a/sim/v850/sim-main.h b/sim/v850/sim-main.h
--index 5127d28..16cbd97 100644
----- a/sim/v850/sim-main.h
--+++ b/sim/v850/sim-main.h
--@@ -16,6 +16,9 @@
-- #include "sim-basics.h"
-- #include "sim-signal.h"
-- #include "sim-fpu.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- #include "simops.h"
---- 
--2.7.4
+-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
-diff --git a/package/gdb/7.10.1/0007-Sync-proc_service-definition-with-GLIBC.patch b/package/gdb/7.10.1/0006-Sync-proc_service-definition-with-GLIBC.patch
+-diff -Nura icu.orig/source/configure icu/source/configure
+---- icu.orig/source/configure	2014-12-18 15:49:43.038628644 -0300
+-+++ icu/source/configure	2014-12-18 15:56:05.793832186 -0300
+-@@ -637,6 +637,7 @@
+- ICUDATA_CHAR
+- SAMPLES_TRUE
+- TESTS_TRUE
+-+SYMBOL_PREFIX
+- ICULIBSUFFIXCNAME
+- U_HAVE_LIB_SUFFIX
+- ICULIBSUFFIX
+-@@ -7414,6 +7415,17 @@
+- { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CHECK_UTF16_STRING_RESULT" >&5
+- $as_echo "$CHECK_UTF16_STRING_RESULT" >&6; }
+- 
+-+# Check compiler generated symbol profix
+-+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for symbol prefix" >&5
+-+$as_echo "checking for symbol prefix... " >&6; }
+-+   SYMBOL_PREFIX=`echo "PREFIX=__USER_LABEL_PREFIX__" \
+-+                  | ${CPP-${CC-gcc} -E} - 2>&1 \
+-+                  | ${EGREP-grep} "^PREFIX=" \
+-+                  | sed -e "s:^PREFIX=::" -e "s:__USER_LABEL_PREFIX__::"`
+-+
+-+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMBOL_PREFIX" >&5
+-+$as_echo "$SYMBOL_PREFIX" >&6; }
+-+
+- # Enable/disable extras
+- # Check whether --enable-extras was given.
+- if test "${enable_extras+set}" = set; then :
+-diff -Nura icu.orig/source/data/Makefile.in icu/source/data/Makefile.in
+---- icu.orig/source/data/Makefile.in	2014-12-18 15:49:42.908624160 -0300
+-+++ icu/source/data/Makefile.in	2014-12-18 16:01:32.751110913 -0300
+-@@ -182,11 +182,11 @@
+- packagedata: icupkg.inc $(PKGDATA_LIST) build-local
+- ifneq ($(ENABLE_STATIC),)
+- ifeq ($(PKGDATA_MODE),dll)
+--	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
+-+	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) -m static $(PKGDATA_VERSIONING) $(PKGDATA_LIST)
+- endif
+- endif
+- ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
+--	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
+-+	$(PKGDATA_INVOKE) $(PKGDATA) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(PKGDATA_LIBNAME) $(PKGDATA_LIST)
+- else
+- 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
+- endif
+-@@ -209,11 +209,11 @@
+- endif
+- ifneq ($(ENABLE_STATIC),)
+- ifeq ($(PKGDATA_MODE),dll)
+--	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
+-+	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBSTATICNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_LIBDIR)
+- endif
+- endif
+- ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
+--	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
+-+	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) -T $(OUTTMPDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(PKGDATA_LIBNAME) $(PKGDATA_LIST) -I $(ICUPKGDATA_INSTALL_DIR)
+- else
+- 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(DESTDIR)$(ICUPKGDATA_DIR)
+- endif
+-@@ -224,7 +224,7 @@
+- #### 390 support
+- install390: package390
+- 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
+--	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+-+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+- ifeq ($(PKGDATA_MODE),dll)
+- 	$(INSTALL-L) $(ICUPKGDATA_OUTDIR)/$(FINAL_IMPORT_LIB) $(DESTDIR)$(ICUPKGDATA_DIR)/$(FINAL_IMPORT_LIB)
+- endif
+-@@ -232,7 +232,7 @@
+- #### $(LIB_ICUDATA_NAME)$(STUB_SUFFIX) is the subset data for batch mode
+- package390: $(OUTTMPDIR)/icudata390.lst $(PKGDATA_LIST) ./icupkg.inc packagedata
+- 	ln -s $(ICUDATA_NAME) $(OUTDIR)/build/$(ICUDATA_NAME)$(STUB_SUFFIX)
+--	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
+-+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR_390STUB) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e @SYMBOL_PREFIX@$(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
+- 	cp $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
+- 
+- 
+-diff -Nura icu.orig/source/extra/uconv/Makefile.in icu/source/extra/uconv/Makefile.in
+---- icu.orig/source/extra/uconv/Makefile.in	2014-12-18 15:49:42.986626850 -0300
+-+++ icu/source/extra/uconv/Makefile.in	2014-12-18 15:57:40.558101179 -0300
+-@@ -58,7 +58,8 @@
+- ## Static mode
+- ifeq ($(UCONVMSG_MODE),static)
+- DEFS += -DUCONVMSG_LINK=$(MSGNAME)
+--UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
+-+UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)@SYMBOL_PREFIX@$(MSGNAME).$(A)
+-+
+- LIBS += $(UCONVMSG_LIB)
+- PKGMODE=static
+- INSTALLTO=$(libdir)
+-@@ -152,7 +153,7 @@
+- endif
+- 
+- $(UCONVMSG_LIB): $(RESFILES) $(RESDIR)/$(RESDIR).lst pkgdata.inc
+--	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+-+	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(TOOLBINDIR)/pkgdata -p @SYMBOL_PREFIX@$(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+- 
+- $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
+- 	@-$(RMV) $@
+diff --git a/package/icu/0004-link-icudata-as-data-only.patch b/package/icu/0003-link-icudata-as-data-only.patch
 similarity index 100%
-rename from package/gdb/7.10.1/0007-Sync-proc_service-definition-with-GLIBC.patch
-rename to package/gdb/7.10.1/0006-Sync-proc_service-definition-with-GLIBC.patch
-diff --git a/package/gdb/7.10.1/0008-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/7.10.1/0007-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+rename from package/icu/0004-link-icudata-as-data-only.patch
+rename to package/icu/0003-link-icudata-as-data-only.patch
+diff --git a/package/icu/0005-fix-static-linking-with-icu-uc.patch b/package/icu/0004-fix-static-linking-with-icu-uc.patch
 similarity index 100%
-rename from package/gdb/7.10.1/0008-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-rename to package/gdb/7.10.1/0007-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-diff --git a/package/gdb/7.10.1/0009-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/7.10.1/0008-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-similarity index 100%
-rename from package/gdb/7.10.1/0009-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-rename to package/gdb/7.10.1/0008-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-diff --git a/package/gdb/7.10.1/0010-Fix-gdbserver-build-on-uClibc-noMMU.patch b/package/gdb/7.10.1/0009-Fix-gdbserver-build-on-uClibc-noMMU.patch
-similarity index 100%
-rename from package/gdb/7.10.1/0010-Fix-gdbserver-build-on-uClibc-noMMU.patch
-rename to package/gdb/7.10.1/0009-Fix-gdbserver-build-on-uClibc-noMMU.patch
-diff --git a/package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch b/package/gdb/7.10.1/0010-use-asm-sgidefs.h.patch
-similarity index 100%
-rename from package/gdb/7.10.1/0011-use-asm-sgidefs.h.patch
-rename to package/gdb/7.10.1/0010-use-asm-sgidefs.h.patch
+rename from package/icu/0005-fix-static-linking-with-icu-uc.patch
+rename to package/icu/0004-fix-static-linking-with-icu-uc.patch
