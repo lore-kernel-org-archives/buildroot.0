@@ -1,36 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Apr 2018 22:14:03 +0200
-Subject: [Buildroot] [PATCH] sqlite: avoid use of unsupported -Ofast
- CFLAGS
-In-Reply-To: <1523650954-23449-1-git-send-email-joshua.henderson@microchip.com>
-References: <1523650954-23449-1-git-send-email-joshua.henderson@microchip.com>
-Message-ID: <20180415221403.533eae86@windsurf.numericable.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 15 Apr 2018 17:21:33 -0300 (BRT)
+Subject: [Buildroot] [PATCH] network-manager: support a defaults file in
+ the init script
+In-Reply-To: <20180415215905.6ee11140@windsurf.numericable.fr>
+References: <20180413160027.6089-1-casantos@datacom.ind.br>
+ <20180415215905.6ee11140@windsurf.numericable.fr>
+Message-ID: <2090427318.2803.1523823693523.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Sunday, April 15, 2018 4:59:05 PM
+> Subject: Re: [Buildroot] [PATCH] network-manager: support a defaults file in the init script
 
-On Fri, 13 Apr 2018 13:22:34 -0700, Joshua Henderson wrote:
-> sqlite3 refuses to be built with -ffast-math (a side effect of -Ofast) when it
-> falls back to implementing its own isnan() function.
+> Hello,
 > 
-> sqlite3.c: In function ?sqlite3IsNaN?:
-> sqlite3.c:28554:3: error: #error SQLite will not work correctly with the -ffast-math option of GCC.
+> On Fri, 13 Apr 2018 13:00:27 -0300, Carlos Santos wrote:
+>> Sometimes it is useful to pass some parameters to NetworkManager when it
+>> starts (e.g. --log-level) instead of editting NetworkManager.conf. Allow
+>> the user add a file with a NETWORKMANAGER_ARGS variable containing such
+>> flags. This is simpler than overriding the whole startup script (e.g. by
+>> means of a rootfs overlay).
+>> 
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 > 
-> To work around this, when -Ofast is used replace with -O3.
+> I've applied to master. However, a few comments below.
 > 
-> Signed-off-by: Joshua Henderson <joshua.henderson@microchip.com>
-> ---
->  package/sqlite/sqlite.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>> ---
+>>  package/network-manager/S45network-manager | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/package/network-manager/S45network-manager
+>> b/package/network-manager/S45network-manager
+>> index f39e20d73b..bb4bf164a5 100755
+>> --- a/package/network-manager/S45network-manager
+>> +++ b/package/network-manager/S45network-manager
+>> @@ -1,5 +1,8 @@
+>>  #!/bin/sh
+>>  
+>> +# Allow a few customizations from a config file
+>> +test -r /etc/default/NetworkManager && . /etc/default/NetworkManager
+>> +
+>>  prefix=/usr
+>>  exec_prefix=/usr
+>>  sbindir=${exec_prefix}/sbin
+> 
+> Same as the modem-manager discussion: I don't think the
+> NETWORKMANAGER_BIN variable, and testing that the binary file is
+> executable really makes sense.
+> 
+>> @@ -14,7 +17,7 @@ case "$1" in
+>>  		printf "Starting NetworkManager ... "
+>>  		[ ! -d /var/run/NetworkManager ] && install -d /var/run/NetworkManager
+>>  		if [ -z "$PID" ]; then
+>> -			$NETWORKMANAGER_BIN
+>> +			$NETWORKMANAGER_BIN $NETWORKMANAGER_ARGS
+> 
+> Any idea why start-stop-daemon is not used ?
 
-Applied to master, thanks.
+No idea but I can investigate this later.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
