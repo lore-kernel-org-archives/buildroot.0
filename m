@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Apr 2018 14:02:30 +0200
-Subject: [Buildroot] [RFC PATCH 2/3] download/git: recover dirty cache
-In-Reply-To: <5ad0f6ccb81f_19073fa45f41a968589e3@ultri4.mail>
-References: <20180412174846.GF4221@scaer>
- <5ad0f6ccb81f_19073fa45f41a968589e3@ultri4.mail>
-Message-ID: <20180415120230.GA21958@scaer>
+Date: Sun, 15 Apr 2018 14:08:04 +0200
+Subject: [Buildroot] [RFC PATCH 3/3] download/git: unshallow when
+ fetching all refs
+In-Reply-To: <5ad0f7a9dc541_19073fa45f48c644591ea@ultri4.mail>
+References: <20180412173326.GD4221@scaer>
+ <5ad0f7a9dc541_19073fa45f48c644591ea@ultri4.mail>
+Message-ID: <20180415120804.GB21958@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,133 +14,65 @@ To: buildroot@busybox.net
 
 Ricardo, All,
 
-On 2018-04-13 15:28 -0300, Ricardo Martincoski spake thusly:
-> On Thu, Apr 12, 2018 at 02:48 PM, Yann E. MORIN wrote:
-> > On 2018-04-12 06:28 -0300, Ricardo Martincoski spake thusly:
-> >> When performing the checkout, use -f to allow it to occur even if there
-> >> are untracked files that would be overwritten or removed.
+On 2018-04-13 15:32 -0300, Ricardo Martincoski spake thusly:
+> On Thu, Apr 12, 2018 at 02:33 PM, Yann E. MORIN wrote:
+> > On 2018-04-12 13:28 +0200, Thomas Petazzoni spake thusly:
+> 
+> >> > One scenario in buildroot development that would trigger this sequence
+> >> > is for example when a package is bumped on master branch, some users
+> >> > create the git cache at this time, then the bump is reverted.
+> >> > 
+> >> > Another scenario is when giving maintenance to a product version that
+> >> > uses one version of buildroot using the same build farm that uses a
+> >> > newer version of buildroot.
 > >> 
-> >> Use git clean to remove any untracked files before generating the
-> >> tarball. Use the second -f to ensure the repo is pristine even if
-> >> previous checked out ref contained a submodule that is not present in
-> >> the ref just checked out.
-> [snip]
+> >> In the light of this, wouldn't it be simpler to stop doing shallow
+> >> clones at all ? A shallow clone did make a lot of sense back when we
+> >> didn't cache the Git repositories. But now that we are caching the
+> >> results, does it make sense to keep the complexity of the code to use
+> >> shallow clones ?
+> >> 
+> >> Note that this is really an open question, there are possibly some
+> >> convincing argument for us to keep a shallow clone strategy.
 > > 
-> > I'm not very happy of those tricks... If the repos is broken, it may be
-> > in a state that repairing it is not even possible at all, in case a
-> > critical git data is missing/damaged.
-> 
-> I created the series thinking only on git repos that are sane but have a dirty
-> worktree. I should have used "dirty worktree" in the commit log.
-
-Right, these are indeed two different cases.
-
-> Rethinking now, taking into account a broken repo, and also the fact that the
-> default download directory is inside buildroot, this patch is a bit dangerous.
-> 
-> With a completely broken repo in the git cache, the commands called by the
-> download script end up executed in any repo that eventually contains that file
-> (parent \(of parent \)\+ directory), so:
-> $ cd buildroot
-> $ git init dl/package/git
-> $ cd dl/package/git
-> $ rm .git/HEAD # simulate a completely broken repo
-> $ git <command>
-> The git command would be executed in the buildroot tree.
-> A fetch to the wrong repo is bad, but not that bad.
-> A checkout would fail.
-> But checkout -f and git clean would succeed, potentially making the user to lose
-> changes.
-
-Arg, indeed that is dangerous...
-
-> I will change this patch to Changes Requested.
-> 
-> A way to avoid this, once the script entered the directory, is to force the
-> git-dir:
-> $ git --git-dir=.git <command>
-> This command would fail for a too-much-broken repo.
-
-We recently reverted use of -C becasue it was not supported by old git
-versions. What is the oldest git version to support --git-dir? It seems
-it was introduced in v.1.4.2, dated 2006-08-12. Is that old enough that
-all the distros we care about have that version or later?
-
-> This is important also if we test the repo with git fsck before ditch+restart,
-> otherwise it would be possible to return OK based on the wrong repo.
-> 
+> > Indeed, I don't think it makes sense anymore...
 > > 
-> > If the repo is broken, either:
-> > 
-> >   - we ditch the repository and restart frm scratch,
-> > 
-> >   - or we just bail out and tell the user what hapened, so they can take
-> >     action (e.g. remove the broken repo manually).
+> > So, intead of fixing it, let's just do full clones now.
 > 
-> When the repo is broken (detectable by git fsck) I agree this is the best
-> approach.
+> I agree it is less needed now than before.
+
+OK.
+
+> The worst scenario (linux trees) is covered by:
+> - the use of tarballs from GitHub in the defconfigs, for newcomers who sometimes
+>   just want to use a defconfig, add few packages and use the image in a new
+>   board;
+> - in the long run, due to the git cache feature.
 > 
-> But I think a sane git repo (detectable by git fsck) that is in a dirty state
-> (in the sense of git clean) is a different case.
-> It can happen for example if a previous checkout operation was abruptly
-> interrupted during a git checkout. In this case it seems to me a bit extreme
-> (but not incorrect of course) to remove the repo and restart from scratch.
+> But I think people will miss this feature. At least I will.
+
+Except for the linux git tree and a very few other packages we get from
+git, most git tree are reasonably sized, so that the overhead of doign a
+full clone is not much as comp[ared to the shallow clone.
+
+And since it also makes our code much simpler and more maintaineable,
+that's still a win for me...
+
+> In the case of someone always using tags from a linux repo, this person
+> would never need to download the full repo if the shallow fetch remains.
 > 
-> For the case a file from the worktree is missing the current 'git checkout'
-> succeeds and the problem shows up as a hash mismatch.
-> Using 'git checkout -f' the repo is recovered.
-> For the case a git object needed by the checkout is missing the current 'git
-> checkout' succeeds and the problem shows up as a hash mismatch.
-> Using 'git checkout -f' the checkout fails like this:
->  error: invalid object
+> When someone wants just to try a package, for example, a debug tool, which
+> maybe will never be used again, this person would need to do a full clone,
+> instead of potentially do a shallow fetch.
 > 
-> The git clean makes sure, among other things, that the worktree is clean even in
-> the case the previous checkout contained a submodule that is no longer present
-> in the new checkout. Maybe there is another command that ensures this, but I
-> don't know about yet.
-> Maybe I am missing something, but as I see, for a package with submodule, if
-> a submodule is removed from the upstream project, it would trigger a
-> ditch+restart too. Again, I think this is a bit extreme (more than git clean
-> -ffdx) but not wrong.
+> The repo for some packages can be located on slow servers (not necessarily a
+> package in the tree, it can be on a br2-external).
 > 
-> In order to detect broken repos (and trigger the ditch) we could start the
-> script by running fsck. Right?
+> And the least appealing argument: I was willing to recreate
+> http://patchwork.ozlabs.org/patch/702006/ on top of the new infra.
 
-So, basically, we would do something along those lines:
-
-    _git() {
-        eval ${GIT} --git-dir=.git "${@}"
-    }
-
-    _git fsck || { rm -rf ${git_cache}; exec "${0}" "${@}"; exit 1; }
-    _git fetch
-    _git fetch -t
-    _git checkout ${ref}
-    _git clean -dX
-    _git checkout -- .
-    _git submodules update
-
-Of course, that would require using appropriate options to fsck to bail
-out.
-
-But what to do if any if the following actions fails? Should we simply
-exit, or should we clean up and clone again?
-
-I can see shere that could go wrong: the ref does not exist, so the
-first checkout fails, so we ditch the repository, clone again, and
-checkout again fails...
-
-My opinion, for what it's worth, is to clan only on the fsck. Any other
-failure should be left to the user to handle. Maybe with just a little
-message saying something like:
-
-    If you are not sure how to solve this, remove ${cache_dir}.
-
-Thoughts?
-
-> Do you have a local patch for this ditch+restart? Or should I create one?
-
-I am working on that...
+I'm still not convinced any more than I previously was. I.e. I still think
+we should go with full clone.
 
 Regards,
 Yann E. MORIN.
