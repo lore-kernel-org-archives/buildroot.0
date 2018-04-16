@@ -1,54 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Apr 2018 07:34:53 +0200
-Subject: [Buildroot] [git commit] openvpn: don't test if the binary exists
- in the init script
-Message-ID: <20180416053718.BA45A88325@busybox.osuosl.org>
+Date: Mon, 16 Apr 2018 07:34:37 +0200
+Subject: [Buildroot] [git commit] dmraid: don't test if the binary exists in
+ the init script
+Message-ID: <20180416053717.B6F7F83B4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59520e54fe2849ace596b10354152a380d3c7507
+commit: https://git.buildroot.net/buildroot/commit/?id=e72bb38b9db3d9384398455c1a8e2dcf30140263
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The test doesn't make sense. It just exits without any error if the
 binary doesn't exist, which is silly.
 
-Replace the DAEMON variable, which was used only once, by the full path
-of the binary file.
-
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openvpn/S60openvpn | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/dmraid/S20dmraid | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/openvpn/S60openvpn b/package/openvpn/S60openvpn
-index de82a5095e..bc1ab01c1a 100755
---- a/package/openvpn/S60openvpn
-+++ b/package/openvpn/S60openvpn
-@@ -7,13 +7,11 @@
+diff --git a/package/dmraid/S20dmraid b/package/dmraid/S20dmraid
+index fd2ad9e845..b3bfdcc84b 100644
+--- a/package/dmraid/S20dmraid
++++ b/package/dmraid/S20dmraid
+@@ -2,8 +2,6 @@
  
- test $DEBIAN_SCRIPT_DEBUG && set -v -x
+ set -e
  
--DAEMON=/usr/sbin/openvpn
- CONFIG_DIR=/etc/openvpn
--test -x $DAEMON || exit 0
- test -d $CONFIG_DIR || exit 0
+-[ -x /usr/sbin/dmraid ] || exit 0
+-
+ # try to load module in case that hasn't been done yet
+ modprobe dm-mod >/dev/null 2>&1
  
- start_vpn () {
--    $DAEMON --daemon --writepid /var/run/openvpn.$NAME.pid \
-+    /usr/sbin/openvpn --daemon --writepid /var/run/openvpn.$NAME.pid \
-             --config $CONFIG_DIR/$NAME.conf --cd $CONFIG_DIR || printf " FAILED->"
-     printf " $NAME"
- }
-@@ -79,8 +77,6 @@ reload|force-reload)
-       printf "(restarted)"
-     else
-       kill -HUP `cat $PIDFILE` || true
--#    start-stop-daemon --stop --signal HUP --quiet --oknodo \
--#      --exec $DAEMON --pidfile $PIDFILE
-     printf " $NAME"
-     fi
-   done
