@@ -1,162 +1,42 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 16 Apr 2018 11:17:32 +0200
-Subject: [Buildroot] [PATCH v3 1/2] qt5base: correct eglfs support in
- qmake.conf.in
-In-Reply-To: <0d5204fc-7cae-ea1f-616a-0668f9202d22@micronovasrl.com>
-References: <1510598515-29485-1-git-send-email-giulio.benetti@micronovasrl.com>
- <3b81b4f4-e003-7c28-9e20-c3fa0a490379@mind.be>
- <0d5204fc-7cae-ea1f-616a-0668f9202d22@micronovasrl.com>
-Message-ID: <7ef0dc38-f2e5-1cc2-aceb-89d8e0ada223@micronovasrl.com>
+From: Stefan Becker <chemobejk@gmail.com>
+Date: Mon, 16 Apr 2018 14:44:44 +0300
+Subject: [Buildroot] [PATCH] swupdate: install web application version 2
+In-Reply-To: <20180415195628.4CE0F88476@busybox.osuosl.org>
+References: <20180415195628.4CE0F88476@busybox.osuosl.org>
+Message-ID: <20180416114444.26220-1-chemobejk@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+The old web application under www/ and mongoose API v1 no longer work
+after upgrading to 2018.03. Install web application version 2 from
+examples/www/v2/ to /var/www/swupdate/ instead.
 
-Il 06/04/2018 21:54, Giulio Benetti ha scritto:
-> Hi Arnout,
-> 
-> Il 04/04/2018 23:45, Arnout Vandecappelle ha scritto:
->> ? Hi Giulio,
->>
->> On 13-11-17 19:41, Giulio Benetti wrote:
->>> qt5base: correct eglfs support in qmake.conf.in
->>>
->>> Setting EGLFS_DEVICE_INTEGRATION at the end of qmake.conf like is 
->>> done by commit
->>> 0c219ddb8a doesn't work correctly: it has to be set before the
->>> include(../common/linux_device_post.conf)
->>>
->>> Instead of appending to the file, change it into a qmake.conf.in 
->>> template file
->>> that contains an EGLFS_DEVICE_INTEGRATION assignment and update it 
->>> with sed.
->>>
->>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->>> ---
->>> Changes v1 -> v2:
->>> * write directly to package target qmake.conf
->>> * simplified eglfs backend choice
->>> ? package/qt5/qt5base/{qmake.conf => qmake.conf.in} |? 2 ++
->>> ? package/qt5/qt5base/qt5base.mk??????????????????? | 22 
->>> +++++++++++++++++-----
->>> ? 2 files changed, 19 insertions(+), 5 deletions(-)
->>> ? rename package/qt5/qt5base/{qmake.conf => qmake.conf.in} (95%)
->>>
->>> diff --git a/package/qt5/qt5base/qmake.conf 
->>> b/package/qt5/qt5base/qmake.conf.in
->>> similarity index 95%
->>> rename from package/qt5/qt5base/qmake.conf
->>> rename to package/qt5/qt5base/qmake.conf.in
->>> index 8b6debe..fb698b9 100644
->>> --- a/package/qt5/qt5base/qmake.conf
->>> +++ b/package/qt5/qt5base/qmake.conf.in
->>> @@ -24,5 +24,7 @@ QMAKE_CFLAGS_ISYSTEM?? =
->>> ? # Architecturespecific configuration
->>> ? include(arch.conf)
->>> +EGLFS_DEVICE_INTEGRATION = @EGLFS_DEVICE@
->>
->> ? I've changed this into a single
->>
->> @EGFLS_DEVICE@
->>
->>> +
->>> ? include(../common/linux_device_post.conf)
->>> ? load(qt_config)
->>> diff --git a/package/qt5/qt5base/qt5base.mk 
->>> b/package/qt5/qt5base/qt5base.mk
->>> index b3f9c79..ef99131 100644
->>> --- a/package/qt5/qt5base/qt5base.mk
->>> +++ b/package/qt5/qt5base/qt5base.mk
->>> @@ -240,10 +240,23 @@ 
->>> QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += 
->>> Qt5PrintSupport
->>> ? QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
->>> -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_IMX_GPU_VIV),yy)
->>> -# use vivante backend
->>> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->>> +ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
->>> +QT5BASE_EGLFS_DEVICE = eglfs_viv
->>
->> ... and added the "EGLFS_DEVICE_INTEGRATION = " part here. That way, 
->> we don't
->> need a separate sed expression for the case when no device integration 
->> is set,
->> and the whole QT5BASE_CONFIGURE_QMAKE_CONFIG can be put directly into
->> QT5BASE_CONFIGURE_CMDS.
-> 
-> Yes, it is cleaner this way, thanks!
-> 
->>
->>> +else ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
->>> +QT5BASE_EGLFS_DEVICE = eglfs_mali
->>
->> ? This one should move to the patch adding support for sunxi-mali.
->>
->> ? I've committed to master with those changes, thanks.
->>
->> ? Could you retest with current master? That way, you can also test the
->> sunxi-mali support in Qt 5.10.
-> 
-> Sure I will. I'll be on holydays until 11 april,
-> I've already built everything here.
-> Asap I give it a try and let you know.
-> 
-> Regards,
-> Giulio
+This fix does not address the fact that you can't rebuild the new web
+application under buildroot. That would require host Node.js & npm to
+run the application build. I.e. for now users have to live with the
+example application or apply patches directly to the built version of
+the appication.
 
-Just tested on A20-LiNova1 with Qt 5.10.1 and CinematicExperience.
-It's alive and kicking.
-No problem with QT_QPA_EGLFS_INTEGRATION,
-it works as expected.
+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+---
+ package/swupdate/swupdate.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers!
-
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 8649931eb7..5dce9cd46c 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -125,7 +125,7 @@ define SWUPDATE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
+ 	$(if $(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE), \
+ 		mkdir -p $(TARGET_DIR)/var/www/swupdate; \
+-		cp -dpf $(@D)/www/* $(TARGET_DIR)/var/www/swupdate)
++		cp -dpRf $(@D)/examples/www/v2/* $(TARGET_DIR)/var/www/swupdate)
+ endef
+ 
+ # Checks to give errors that the user can understand
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
-
-> 
->>
->> ? Regards,
->> ? Arnout
->>
->>> +endif
->>> +endif
->>> +
->>> +ifeq ($(QT5BASE_EGLFS_DEVICE),)
->>> ? define QT5BASE_CONFIGURE_QMAKE_CONFIG
->>> -??? echo "EGLFS_DEVICE_INTEGRATION = eglfs_viv" >> \
->>> +??? sed '/@EGLFS_DEVICE@/,+1d' $(QT5BASE_PKGDIR)/qmake.conf.in > \
->>> +??????? $(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
->>> +endef
->>> +else
->>> +define QT5BASE_CONFIGURE_QMAKE_CONFIG
->>> +??? sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
->>> +??????? $(QT5BASE_PKGDIR)/qmake.conf.in > \
->>> ????????? $(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
->>> ? endef
->>> ? endif
->>> @@ -263,8 +276,7 @@ endef
->>> ? endif
->>> ? define QT5BASE_CONFIGURE_CMDS
->>> -??? $(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
->>> -??????? $(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
->>> +??? mkdir -p $(@D)/mkspecs/devices/linux-buildroot-g++/
->>> ????? $(QT5BASE_CONFIGURE_QMAKE_CONFIG)
->>> ????? $(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
->>> ????????? $(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
->>>
->>
-> 
-> 
+2.14.3
