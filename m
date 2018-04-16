@@ -1,49 +1,78 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 15 Apr 2018 23:17:28 -0300
-Subject: [Buildroot] [RFC PATCH 1/3] download/git: fix fetch all refs
- for old git
-References: <20180415121222.GC21958@scaer>
-Message-ID: <5ad407b8c9c0b_5cd72ac50edb1bd898726@ultri4.mail>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 15 Apr 2018 23:29:18 -0300
+Subject: [Buildroot] [PATCH 00/26] init scripts: don't test if binaries exist
+Message-ID: <20180416022944.13644-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As discussed in the mailing list, it is useless to test if a binary file
+exists and/or is executable. Buildroot installs both the executable files and
+their init scripts as part of the same packages. But if it ever happens for
+some reason, the error message from start-stop-daemon or from the shell should
+be pretty clear.
 
-> On 2018-04-13 15:23 -0300, Ricardo Martincoski spake thusly:
->> On Thu, Apr 12, 2018 at 02:42 PM, Yann E. MORIN wrote:
->> >> -    _git fetch origin -t
->> >> +    _git fetch origin -u "'+refs/tags/*:refs/tags/*'" "'+refs/heads/*:refs/remotes/origin/*'"
->> > Why don't we just run:
->> >     git fetch origin
->> >     git fetch origin -t
->> 
->> One extra connection to the server ...
->> but much more readable/maintainable!
->> I will do. I will change this patch to Changes Requested.
-> 
-> Thanks. I don't care much about an extra round-trip to the server,
-> especially if that makes the code easier to read.
+If a variable containing the file name existed (e.g. DAEMON) and was used only
+once it was replaced by the full path of the binary file. Unused variables
+resulting from these simplifications were removed too.
 
-I agree.
-And a few years from now, when we stop supporting distros with git <1.9.0 we
-can remove 'git fetch origin' if we wish.
+Carlos Santos (26):
+  bind: don't test if the binary exists in the init script
+  dbus: don't test if the binary exists in the init script
+  dhcpcd: don't test if the binary exists in the init script
+  dmraid: don't test if the binary exists in the init script
+  dnsmasq: don't test if the binary exists in the init script
+  eudev: don't test if the binary exists in the init script
+  haveged: don't test if the binary exists in the init script
+  modem-manager: don't test if the binary exists in the init script
+  mpd: don't test if the binary exists in the init script
+  neard: don't test if the binary exists in the init script
+  netplug: don't test if the binary exists in the init script
+  netsnmp: don't test if the binaries exist in the init script
+  network-manager: don't test if the binary exists in the init script
+  nfs-utils: don't test if the binary exists in the init script
+  ntp: don't test if the binary exists in the init script
+  openntpd: don't test if the binary exists in the init script
+  openvpn: don't test if the binary exists in the init script
+  proftpd: don't test if the binary exists in the init script
+  prosody: don't test if the binary exists in the init script
+  squid: don't test if the binary exists in the init script
+  tinyhttpd: don't test if the binary exists in the init script
+  tpm2-abrmd: don't test if the binary exists in the init script
+  transmission: don't test if the binary exists in the init script
+  triggerhappy: don't test if the binary exists in the init script
+  tvheadend: don't test if the binary exists in the init script
+  upmpdcli: don't test if the binary exists in the init script
 
-BTW, the order of the commands is important here. Some dumb http servers don't
-work well with old git versions if 'git fetch origin -t' is used first, see:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/62895510
-But in the order you propose (and I see you used in your series) it works fine:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/62897927
-So we are good.
+ package/bind/S81named                      |  1 -
+ package/dbus/S30dbus                       |  3 ---
+ package/dhcpcd/S41dhcpcd                   |  1 -
+ package/dmraid/S20dmraid                   |  2 --
+ package/dnsmasq/S80dnsmasq                 |  1 -
+ package/eudev/S10udev                      |  6 +-----
+ package/haveged/S21haveged                 |  2 --
+ package/modem-manager/S44modem-manager     |  2 --
+ package/mpd/S95mpd                         |  1 -
+ package/neard/S53neard                     |  6 +-----
+ package/netplug/S29netplug                 |  2 --
+ package/netsnmp/S59snmpd                   |  3 ---
+ package/network-manager/S45network-manager | 10 +---------
+ package/nfs-utils/S60nfs                   |  5 -----
+ package/ntp/S49ntp                         |  6 +-----
+ package/openntpd/S49ntp                    |  1 -
+ package/openvpn/S60openvpn                 |  6 +-----
+ package/proftpd/S50proftpd                 |  4 +---
+ package/prosody/S50prosody                 |  6 +-----
+ package/squid/S97squid                     |  1 -
+ package/tinyhttpd/S85tinyhttpd             |  1 -
+ package/tpm2-abrmd/S80tpm2-abrmd           |  8 ++------
+ package/transmission/S92transmission       |  3 ---
+ package/triggerhappy/S10triggerhappy       |  6 +-----
+ package/tvheadend/S99tvheadend             |  5 +----
+ package/upmpdcli/S99upmpdcli               |  6 +-----
+ 26 files changed, 12 insertions(+), 86 deletions(-)
 
-> OK, but overall, we would cover all cases with the two git-fetch,
-> whether we use an old git or a newer one, and that's the important
-> info.
-
-Agreed.
-
-
-Regards,
-Ricardo
+-- 
+2.14.3
