@@ -1,46 +1,30 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon, 16 Apr 2018 11:40:00 -0700
-Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.1.32
-Message-ID: <20180416184000.2449-1-bluemrp9@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 16 Apr 2018 21:39:48 +0200
+Subject: [Buildroot] [PATCH v3 1/6] squashfs: add license hash
+Message-ID: <20180416193953.19924-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://mariadb.com/kb/en/mariadb-10132-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10132-changelog/
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v2 -> v3:
+  - new patch
+---
+ package/squashfs/squashfs.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index cc1e353ab7..b8b2dde374 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.31/
--sha256 ab7641c2fe4e5289da6141766a9c3350e013def56fafd6f1377080bc8048b2e6  mariadb-10.1.31.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.32/
-+sha256 0e2aae6a6a190d07c8e36e87dd43377057fa82651ca3c583462563f3e9369096  mariadb-10.1.32.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 54eafc1702..391655fb0a 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.31
-+MARIADB_VERSION = 10.1.32
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index 82a650022c..4464e62c02 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,2 +1,5 @@
+ # Locally computed
+ sha256 bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779 squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
++
++# License files
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
 -- 
-2.17.0
+2.16.3
