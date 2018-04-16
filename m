@@ -1,10 +1,10 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 15 Apr 2018 23:29:39 -0300
-Subject: [Buildroot] [PATCH 21/26] tinyhttpd: don't test if the binary
- exists in the init script
+Date: Sun, 15 Apr 2018 23:29:36 -0300
+Subject: [Buildroot] [PATCH 18/26] proftpd: don't test if the binary exists
+ in the init script
 In-Reply-To: <20180416022944.13644-1-casantos@datacom.ind.br>
 References: <20180416022944.13644-1-casantos@datacom.ind.br>
-Message-ID: <20180416022944.13644-22-casantos@datacom.ind.br>
+Message-ID: <20180416022944.13644-19-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,34 @@ To: buildroot@busybox.net
 The test doesn't make sense. It just exits without any error if the
 binary doesn't exist, which is silly.
 
+Replace the DAEMON variable, which was used only once, by the full path
+of the binary file.
+
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/tinyhttpd/S85tinyhttpd | 1 -
- 1 file changed, 1 deletion(-)
+ package/proftpd/S50proftpd | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/tinyhttpd/S85tinyhttpd b/package/tinyhttpd/S85tinyhttpd
-index fb512a0375..f3f1de69bf 100755
---- a/package/tinyhttpd/S85tinyhttpd
-+++ b/package/tinyhttpd/S85tinyhttpd
-@@ -3,7 +3,6 @@
- PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
- NAME=tinyhttpd
+diff --git a/package/proftpd/S50proftpd b/package/proftpd/S50proftpd
+index 336680a456..3f9070f26a 100755
+--- a/package/proftpd/S50proftpd
++++ b/package/proftpd/S50proftpd
+@@ -1,15 +1,13 @@
+ #!/bin/sh
  
--test -x /usr/sbin/$NAME || exit 0
- mkdir -p /var/www
+-DAEMON=/usr/sbin/proftpd
+ trap "" HUP
+ trap "" TERM
+-test -f $DAEMON || exit 0
+ [ ! -d /var/run/proftpd ] && mkdir /var/run/proftpd
+ [ ! -f /var/log/wtmp ] && touch /var/log/wtmp
  
- case "$1" in
+ start() {
+ 	printf "Starting ProFTPD: "
+-	$DAEMON
++	/usr/sbin/proftpd
+ 	if [ $? != 0 ]; then
+ 		echo "FAILED"
+ 		exit 1
 -- 
 2.14.3
