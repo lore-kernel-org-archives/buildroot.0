@@ -1,42 +1,53 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 15 Apr 2018 20:18:30 -0300
-Subject: [Buildroot] [PATCH] autobuild-run: remove only tarballs from
- download dir
-References: <20180415194915.GE21958@scaer>
-Message-ID: <5ad3ddc6945b6_e202ab4a3c39380265b0@ultri4.mail>
+From: Romain Reignier <rom.reignier@gmail.com>
+Date: Mon, 16 Apr 2018 02:30:43 +0200
+Subject: [Buildroot] [PATCH 1/1] qt53d: Install missing QML modules,
+ plugins and examples
+Message-ID: <1523838643-10141-1-git-send-email-rom.reignier@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Some files were missing on the first build of qt53d but added later:
+- by qt5base for the plugins because it copies the whole /usr/lib/qt/plugins
+  directory
+- by qt5declarative for the QML modules because it copies the whole
+  /usr/qml directory
 
-On Sun, Apr 15, 2018 at 04:49 PM, Yann E. MORIN wrote:
+The qt53d examples were not installed if BR2_PACKAGE_QT5BASE_EXAMPLES was
+set
 
->> Another concern is how to fix those autobuilders that have already
->> removed some random files from their cached Git repositories? Should we
->> ask the people who run those autobuilders to entirely wipe the download
->> folders of their autobuilder instances ? Or do we have a smart (but
->> simple) thing to do to avoid this ?
-> 
-> For this last part, we've already discused this with Ricardo in another
-> thread: we run git-fsck, and if there is an error, we ditch the git tree
-> and clone from scratch.
-> 
-> See the current work I have to further robustify (does that even exist?)
-> the git backend:
->     https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/git-robust
+Signed-off-by: Romain Reignier <rom.reignier@gmail.com>
+---
+ package/qt5/qt53d/qt53d.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thank you for working on this. I can review the series.
-
-I have some work in progress too (in early stages), but your series cover more
-cases. If you like some lines of code from it, feel free to use them.
-https://gitlab.com/RicardoMartincoski/buildroot/commits/ditch-restart-git-v1
-
-The ditch and re-clone I did in a different way, without calling the script
-again. Maybe I missed something.
-
-
-Regards,
-Ricardo
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index d5a3a8e..6896b00 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -30,11 +30,21 @@ define QT53D_INSTALL_STAGING_CMDS
+ 	$(QT5_LA_PRL_FILES_FIXUP)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT53D_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/qt3d $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),)
+ define QT53D_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
++	$(QT53D_INSTALL_TARGET_EXAMPLES)
+ endef
+ endif
+ 
+-- 
+2.7.4
