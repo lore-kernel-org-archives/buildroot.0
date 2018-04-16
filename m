@@ -1,69 +1,162 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Apr 2018 11:01:55 +0200
-Subject: [Buildroot] [PATCH] autobuild-run: remove only tarballs from
- download dir
-In-Reply-To: <5ad3d0cda358d_54de2ad1cbb08c2828316@ultri4.mail>
-References: <20180415214257.1e90704a@windsurf.numericable.fr>
- <5ad3d0cda358d_54de2ad1cbb08c2828316@ultri4.mail>
-Message-ID: <20180416090155.GA2290@scaer>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 16 Apr 2018 11:17:32 +0200
+Subject: [Buildroot] [PATCH v3 1/2] qt5base: correct eglfs support in
+ qmake.conf.in
+In-Reply-To: <0d5204fc-7cae-ea1f-616a-0668f9202d22@micronovasrl.com>
+References: <1510598515-29485-1-git-send-email-giulio.benetti@micronovasrl.com>
+ <3b81b4f4-e003-7c28-9e20-c3fa0a490379@mind.be>
+ <0d5204fc-7cae-ea1f-616a-0668f9202d22@micronovasrl.com>
+Message-ID: <7ef0dc38-f2e5-1cc2-aceb-89d8e0ada223@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Hi Arnout,
 
-On 2018-04-15 19:23 -0300, Ricardo Martincoski spake thusly:
-> On Sun, Apr 15, 2018 at 04:42 PM, Thomas Petazzoni wrote:
-[--SNIP--]
-> > So you're idea is that when we are inside dl/<package>/git/, one of the
-> > sub-directories is .git, and therefore we shouldn't remove anything in
-> > dl/<package>/git/ ?
+Il 06/04/2018 21:54, Giulio Benetti ha scritto:
+> Hi Arnout,
 > 
-> Yes. My idea is to keep the behavior described in the comment:
-> # Remove 5 random files from the download directory. Removing
-> # random files from the download directory allows to ensure we
-> # regularly re-download files to check that their upstream
-> # location is still correct.
+> Il 04/04/2018 23:45, Arnout Vandecappelle ha scritto:
+>> ? Hi Giulio,
+>>
+>> On 13-11-17 19:41, Giulio Benetti wrote:
+>>> qt5base: correct eglfs support in qmake.conf.in
+>>>
+>>> Setting EGLFS_DEVICE_INTEGRATION at the end of qmake.conf like is 
+>>> done by commit
+>>> 0c219ddb8a doesn't work correctly: it has to be set before the
+>>> include(../common/linux_device_post.conf)
+>>>
+>>> Instead of appending to the file, change it into a qmake.conf.in 
+>>> template file
+>>> that contains an EGLFS_DEVICE_INTEGRATION assignment and update it 
+>>> with sed.
+>>>
+>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>>> ---
+>>> Changes v1 -> v2:
+>>> * write directly to package target qmake.conf
+>>> * simplified eglfs backend choice
+>>> ? package/qt5/qt5base/{qmake.conf => qmake.conf.in} |? 2 ++
+>>> ? package/qt5/qt5base/qt5base.mk??????????????????? | 22 
+>>> +++++++++++++++++-----
+>>> ? 2 files changed, 19 insertions(+), 5 deletions(-)
+>>> ? rename package/qt5/qt5base/{qmake.conf => qmake.conf.in} (95%)
+>>>
+>>> diff --git a/package/qt5/qt5base/qmake.conf 
+>>> b/package/qt5/qt5base/qmake.conf.in
+>>> similarity index 95%
+>>> rename from package/qt5/qt5base/qmake.conf
+>>> rename to package/qt5/qt5base/qmake.conf.in
+>>> index 8b6debe..fb698b9 100644
+>>> --- a/package/qt5/qt5base/qmake.conf
+>>> +++ b/package/qt5/qt5base/qmake.conf.in
+>>> @@ -24,5 +24,7 @@ QMAKE_CFLAGS_ISYSTEM?? =
+>>> ? # Architecturespecific configuration
+>>> ? include(arch.conf)
+>>> +EGLFS_DEVICE_INTEGRATION = @EGLFS_DEVICE@
+>>
+>> ? I've changed this into a single
+>>
+>> @EGFLS_DEVICE@
+>>
+>>> +
+>>> ? include(../common/linux_device_post.conf)
+>>> ? load(qt_config)
+>>> diff --git a/package/qt5/qt5base/qt5base.mk 
+>>> b/package/qt5/qt5base/qt5base.mk
+>>> index b3f9c79..ef99131 100644
+>>> --- a/package/qt5/qt5base/qt5base.mk
+>>> +++ b/package/qt5/qt5base/qt5base.mk
+>>> @@ -240,10 +240,23 @@ 
+>>> QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += 
+>>> Qt5PrintSupport
+>>> ? QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+>>> -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)$(BR2_PACKAGE_IMX_GPU_VIV),yy)
+>>> -# use vivante backend
+>>> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+>>> +ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
+>>> +QT5BASE_EGLFS_DEVICE = eglfs_viv
+>>
+>> ... and added the "EGLFS_DEVICE_INTEGRATION = " part here. That way, 
+>> we don't
+>> need a separate sed expression for the case when no device integration 
+>> is set,
+>> and the whole QT5BASE_CONFIGURE_QMAKE_CONFIG can be put directly into
+>> QT5BASE_CONFIGURE_CMDS.
 > 
-> So we keep testing in autobuilders that the upstream location is correct (the
-> git fetch fails and therefore the download script fails if the server does not
-> respond even in the case we already have the commits and references we need in
-> the cache; it is the correct behavior IMO), and we also test the generation of
-> tarball, but we do not test the re-download with a clean git cache; this could
-> be done later on autobuilder with extra code (maybe remove only 1 git cache
-> every run together to 5 tarballs?), but the most important scenario is already
-> tested: the use of git cache in the long run.
-
-I think that we should also get rid of a full git clone.
-
-> > Another concern is how to fix those autobuilders that have already
-> > removed some random files from their cached Git repositories? Should we
-> > ask the people who run those autobuilders to entirely wipe the download
-> > folders of their autobuilder instances ? Or do we have a smart (but
-> > simple) thing to do to avoid this ?
-> I agree with Yann about the ditch + restart for broken git cache.
-> But if you want, maybe in one autobuilder instance we can manually remove all
-> git caches just to know earlier (before applying Yann's series) that no more
-> download issues will occur, since this change to the script prevents corrupting
-> new git caches.
-> I guess but did not tested this command would be enough:
-> rm -r instance-0/dl/*/git
-> Your call. I have no preference.
+> Yes, it is cleaner this way, thanks!
 > 
-> But leaving at least one instance not fixed (with some git cache broken) can
-> help to test Yann's series.
+>>
+>>> +else ifeq ($(BR2_PACKAGE_SUNXI_MALI),y)
+>>> +QT5BASE_EGLFS_DEVICE = eglfs_mali
+>>
+>> ? This one should move to the patch adding support for sunxi-mali.
+>>
+>> ? I've committed to master with those changes, thanks.
+>>
+>> ? Could you retest with current master? That way, you can also test the
+>> sunxi-mali support in Qt 5.10.
+> 
+> Sure I will. I'll be on holydays until 11 april,
+> I've already built everything here.
+> Asap I give it a try and let you know.
+> 
+> Regards,
+> Giulio
 
-I got my hands on a borked dtv-scan-tables tree, so I can test locally.
+Just tested on A20-LiNova1 with Qt 5.10.1 and CinematicExperience.
+It's alive and kicking.
+No problem with QT_QPA_EGLFS_INTEGRATION,
+it works as expected.
 
-Regards,
-Yann E. MORIN.
+Cheers!
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+> 
+>>
+>> ? Regards,
+>> ? Arnout
+>>
+>>> +endif
+>>> +endif
+>>> +
+>>> +ifeq ($(QT5BASE_EGLFS_DEVICE),)
+>>> ? define QT5BASE_CONFIGURE_QMAKE_CONFIG
+>>> -??? echo "EGLFS_DEVICE_INTEGRATION = eglfs_viv" >> \
+>>> +??? sed '/@EGLFS_DEVICE@/,+1d' $(QT5BASE_PKGDIR)/qmake.conf.in > \
+>>> +??????? $(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+>>> +endef
+>>> +else
+>>> +define QT5BASE_CONFIGURE_QMAKE_CONFIG
+>>> +??? sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
+>>> +??????? $(QT5BASE_PKGDIR)/qmake.conf.in > \
+>>> ????????? $(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+>>> ? endef
+>>> ? endif
+>>> @@ -263,8 +276,7 @@ endef
+>>> ? endif
+>>> ? define QT5BASE_CONFIGURE_CMDS
+>>> -??? $(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qmake.conf \
+>>> -??????? $(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+>>> +??? mkdir -p $(@D)/mkspecs/devices/linux-buildroot-g++/
+>>> ????? $(QT5BASE_CONFIGURE_QMAKE_CONFIG)
+>>> ????? $(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+>>> ????????? $(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+>>>
+>>
+> 
+> 
