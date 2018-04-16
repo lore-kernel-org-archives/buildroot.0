@@ -1,42 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Apr 2018 17:44:23 +0200
-Subject: [Buildroot] [PATCH 1/1] micropython: bump version to v1.9.3
-In-Reply-To: <1523885614.4244.5.camel@flir.com>
-References: <1523885614.4244.5.camel@flir.com>
-Message-ID: <20180416174423.2a0e1c2e@windsurf.numericable.fr>
+Date: Mon, 16 Apr 2018 17:45:39 +0200
+Subject: [Buildroot] [git commit] qt53d: install missing QML modules,
+ plugins and examples
+Message-ID: <20180416154615.0C8B9812F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4fd448c9c1e3ed7ca0f09441bf8a854eb9130190
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 16 Apr 2018 13:28:47 +0000, Blomme, Maarten wrote:
-> (With correct formatting now)
-> 
-> The build step now requires building mpy-cross first.
-> 
-> Signed-off-by: Blomme, Maarten <Maarten.Blomme@flir.com>
-> ---
->  package/micropython-lib/micropython-lib.hash | 2 +-
->  package/micropython-lib/micropython-lib.mk   | 2 +-
->  package/micropython/micropython.hash         | 2 +-
->  package/micropython/micropython.mk           | 7 ++++---
->  4 files changed, 7 insertions(+), 6 deletions(-)
+Some files were missing on the first build of qt53d but added later:
+- by qt5base for the plugins because it copies the whole /usr/lib/qt/plugins
+  directory
+- by qt5declarative for the QML modules because it copies the whole
+  /usr/qml directory
 
-I fixed up the breakage caused by your e-mail client or e-mail server,
-and applied. Sadly in the process I forgot to adjust your commit log to
-remove the "(With correct formatting now)" message, which shouldn't be
-part of the commit log. Such messages should be placed below the "---"
-marker after the Signed-off-by line. This way, they are part of the
-e-mail being sent, but not considered by git as a part of the commit
-log.
+Also, the qt53d examples were not installed if
+BR2_PACKAGE_QT5BASE_EXAMPLES was set.
 
-Thanks!
+Signed-off-by: Romain Reignier <rom.reignier@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt53d/qt53d.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index d5a3a8edcc..6896b00318 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -30,11 +30,21 @@ define QT53D_INSTALL_STAGING_CMDS
+ 	$(QT5_LA_PRL_FILES_FIXUP)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT53D_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/qt3d $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),)
+ define QT53D_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
++	$(QT53D_INSTALL_TARGET_EXAMPLES)
+ endef
+ endif
+ 
