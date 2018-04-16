@@ -1,53 +1,25 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 16 Apr 2018 21:39:49 +0200
-Subject: [Buildroot] [PATCH v3 2/6] zstd: add host libzstd support
-In-Reply-To: <20180416193953.19924-1-ps.report@gmx.net>
-References: <20180416193953.19924-1-ps.report@gmx.net>
-Message-ID: <20180416193953.19924-2-ps.report@gmx.net>
+From: AAlex_ <earthquake.de@freenet.de>
+Date: Mon, 16 Apr 2018 13:18:12 -0700 (MST)
+Subject: [Buildroot] makedev capabilities support - capablities lost
+ after booting the image
+In-Reply-To: <20180416123143.jinljoxct6srmvzf@sapphire.tkos.co.il>
+References: <1523881062231-0.post@n4.nabble.com>
+ <20180416123143.jinljoxct6srmvzf@sapphire.tkos.co.il>
+Message-ID: <1523909892138-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the host only the libzstd library is built (no
-need for host-lz4 host-xz host-zlib dependencies
-because they affect only the cmdline tool).
+Hi, 
+Changed to  ext4, but thanks for the hint.
+Forgot to set the ext4 posix Extension in Kernel.
+Now it works.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v2 -> v3:
-  - fix trailing spaces
-  - clarify the no need for host-lz4 host-xz host-zlib dependency
-    (suggested by Yann E. MORIN)
+Alex
 
-Changes v1 -> v2:
-  - split off host libzstd support (suggested by Yann E. MORIN)
-  - no ZSTD_OPTS for host libarary build
----
- package/zstd/zstd.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index c0fa88026c..98f8f779aa 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -46,4 +46,16 @@ define ZSTD_INSTALL_TARGET_CMDS
- 		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
- endef
- 
-+# note: no 'HAVE_...' options for host library build only
-+define HOST_ZSTD_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
-+		-C $(@D) lib
-+endef
-+
-+define HOST_ZSTD_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
-+		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
--- 
-2.16.3
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
