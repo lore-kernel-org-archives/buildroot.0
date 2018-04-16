@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Apr 2018 07:34:34 +0200
-Subject: [Buildroot] [git commit] dbus: don't test if the binary exists in
+Date: Mon, 16 Apr 2018 07:34:43 +0200
+Subject: [Buildroot] [git commit] mpd: don't test if the binary exists in
  the init script
-Message-ID: <20180416053717.8C0D080F4C@busybox.osuosl.org>
+Message-ID: <20180416053718.2240088325@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7183a0eff9d1d2190b257b5d5cdc54f4cb6b00a7
+commit: https://git.buildroot.net/buildroot/commit/?id=4e1219462670b6ce8d9f4a7717ed579805dffec6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The test doesn't make sense. It just exits without any error if the
@@ -18,20 +18,18 @@ binary doesn't exist, which is silly.
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus/S30dbus | 3 ---
- 1 file changed, 3 deletions(-)
+ package/mpd/S95mpd | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
-index b4bcf9c7aa..52646cea2f 100644
---- a/package/dbus/S30dbus
-+++ b/package/dbus/S30dbus
-@@ -10,9 +10,6 @@
- # pidfile: /var/run/messagebus.pid
- #
+diff --git a/package/mpd/S95mpd b/package/mpd/S95mpd
+index 9f68b45837..a258930b3e 100644
+--- a/package/mpd/S95mpd
++++ b/package/mpd/S95mpd
+@@ -1,7 +1,6 @@
+ #!/bin/sh
  
--# Sanity checks.
--[ -x /usr/bin/dbus-daemon ] || exit 0
--
- # Create needed directories.
- [ -d /var/run/dbus ] || mkdir -p /var/run/dbus
- [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+ # Sanity checks
+-test -f /usr/bin/mpd || exit 0
+ test -f /etc/mpd.conf || exit 0
+ 
+ start() {
