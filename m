@@ -1,10 +1,10 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 15 Apr 2018 23:29:35 -0300
-Subject: [Buildroot] [PATCH 17/26] openvpn: don't test if the binary exists
+Date: Sun, 15 Apr 2018 23:29:37 -0300
+Subject: [Buildroot] [PATCH 19/26] prosody: don't test if the binary exists
  in the init script
 In-Reply-To: <20180416022944.13644-1-casantos@datacom.ind.br>
 References: <20180416022944.13644-1-casantos@datacom.ind.br>
-Message-ID: <20180416022944.13644-18-casantos@datacom.ind.br>
+Message-ID: <20180416022944.13644-20-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,36 +19,37 @@ of the binary file.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/openvpn/S60openvpn | 6 +-----
+ package/prosody/S50prosody | 6 +-----
  1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/openvpn/S60openvpn b/package/openvpn/S60openvpn
-index de82a5095e..bc1ab01c1a 100755
---- a/package/openvpn/S60openvpn
-+++ b/package/openvpn/S60openvpn
-@@ -7,13 +7,11 @@
+diff --git a/package/prosody/S50prosody b/package/prosody/S50prosody
+index 84913a5f83..6fd33671fa 100644
+--- a/package/prosody/S50prosody
++++ b/package/prosody/S50prosody
+@@ -1,7 +1,6 @@
+ #! /bin/sh
  
- test $DEBIAN_SCRIPT_DEBUG && set -v -x
+ NAME=prosody
+-DAEMON=/usr/bin/$NAME
  
--DAEMON=/usr/sbin/openvpn
- CONFIG_DIR=/etc/openvpn
+ # This must match the pidfile field in
+ # /etc/prosody/prosody.cfg.lua
+@@ -9,15 +8,12 @@ DAEMON=/usr/bin/$NAME
+ PIDDIR=/var/run/$NAME
+ PIDFILE=$PIDDIR/$NAME.pid
+ 
+-# Gracefully exit if the package has been removed.
 -test -x $DAEMON || exit 0
- test -d $CONFIG_DIR || exit 0
- 
- start_vpn () {
--    $DAEMON --daemon --writepid /var/run/openvpn.$NAME.pid \
-+    /usr/sbin/openvpn --daemon --writepid /var/run/openvpn.$NAME.pid \
-             --config $CONFIG_DIR/$NAME.conf --cd $CONFIG_DIR || printf " FAILED->"
-     printf " $NAME"
- }
-@@ -79,8 +77,6 @@ reload|force-reload)
-       printf "(restarted)"
-     else
-       kill -HUP `cat $PIDFILE` || true
--#    start-stop-daemon --stop --signal HUP --quiet --oknodo \
--#      --exec $DAEMON --pidfile $PIDFILE
-     printf " $NAME"
-     fi
-   done
+-
+ case "$1" in
+   start)
+     printf "Starting $NAME: "
+     mkdir -p $PIDDIR
+     chown $NAME:$NAME $PIDDIR
+-    start-stop-daemon -S -q -o -x $DAEMON -c $NAME
++    start-stop-daemon -S -q -o -x /usr/bin/prosody -c $NAME
+     [ $? = 0 ] && echo "OK" || echo "FAIL"
+     ;;
+   stop)
 -- 
 2.14.3
