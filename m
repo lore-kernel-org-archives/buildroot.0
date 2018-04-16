@@ -1,39 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Apr 2018 07:34:50 +0200
-Subject: [Buildroot] [git commit] nfs-utils: don't test if the binary exists
- in the init script
-Message-ID: <20180416053718.8317C88325@busybox.osuosl.org>
+Date: Mon, 16 Apr 2018 07:34:51 +0200
+Subject: [Buildroot] [git commit] ntp: don't test if the binary exists in
+ the init script
+Message-ID: <20180416053718.92B2B88325@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=089e1fe414408c82a584c2ebec868e1cbc3f9c6e
+commit: https://git.buildroot.net/buildroot/commit/?id=e8cd0800aa25a9298c0e58cecbae5a30eabba19d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The test doesn't make sense. It just exits without any error if the
 binary doesn't exist, which is silly.
 
+Replace the DAEMON variable, which was used only once, by the full path
+of the binary file.
+
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nfs-utils/S60nfs | 5 -----
- 1 file changed, 5 deletions(-)
+ package/ntp/S49ntp | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-index 893b1e49a6..4183ff6268 100755
---- a/package/nfs-utils/S60nfs
-+++ b/package/nfs-utils/S60nfs
-@@ -3,11 +3,6 @@
- # nfs           This shell script takes care of starting and stopping
- #               the NFS services. Stolen from RedHat FC5.
+diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
+index b4047fceda..35e58746b4 100755
+--- a/package/ntp/S49ntp
++++ b/package/ntp/S49ntp
+@@ -1,10 +1,6 @@
+ #! /bin/sh
  
--[ -x /usr/sbin/rpc.statd ] || exit 0
--[ -x /usr/sbin/rpc.nfsd ] || exit 0
--[ -x /usr/sbin/rpc.mountd ] || exit 0
--[ -x /usr/sbin/exportfs ] || exit 0
+ NAME=ntpd
+-DAEMON=/usr/sbin/$NAME
 -
- mkdir -p /var/lock/subsys
- mkdir -p /run/nfs/sm
- mkdir -p /run/nfs/sm.bak
+-# Gracefully exit if the package has been removed.
+-test -x $DAEMON || exit 0
+ 
+ # Read config file if it is present.
+ if [ -r /etc/default/$NAME ]
+@@ -15,7 +11,7 @@ fi
+ case "$1" in
+   start)
+     printf "Starting $NAME: "
+-    start-stop-daemon -S -q -x $DAEMON -- -g
++    start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
+     [ $? = 0 ] && echo "OK" || echo "FAIL"
+     ;;
+   stop)
