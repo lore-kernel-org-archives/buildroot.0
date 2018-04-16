@@ -1,53 +1,110 @@
-From: Romain Reignier <rom.reignier@gmail.com>
-Date: Mon, 16 Apr 2018 02:30:43 +0200
-Subject: [Buildroot] [PATCH 1/1] qt53d: Install missing QML modules,
- plugins and examples
-Message-ID: <1523838643-10141-1-git-send-email-rom.reignier@gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 15 Apr 2018 23:10:37 -0300
+Subject: [Buildroot] [PATCH v3] radvd: improve startup script
+In-Reply-To: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
+References: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20180416021037.13345-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some files were missing on the first build of qt53d but added later:
-- by qt5base for the plugins because it copies the whole /usr/lib/qt/plugins
-  directory
-- by qt5declarative for the QML modules because it copies the whole
-  /usr/qml directory
+- Add start, stop and restart/reload options.
 
-The qt53d examples were not installed if BR2_PACKAGE_QT5BASE_EXAMPLES was
-set
+- Do nothing if /etc/radvd.conf does not exist instead of printing an
+  error message. It is valid to install radvd without a configuration
+  file. The daemon may be started later by another service with a
+  configuration created at run-time.
 
-Signed-off-by: Romain Reignier <rom.reignier@gmail.com>
+- Print an error message if the kernel does not support IPv6 forwarding,
+  which is required by radvd.
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/qt5/qt53d/qt53d.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Changes v2->v3
+- Don't the test if the binary is executable. It's unlikely to happen
+  because Buildroot installs both radvd and its init script as part of
+  the same package. But if it ever happens for some reason, the error
+  message from start-stop-daemon should be pretty clear (Thomas
+  Petazzoni).
+- Move start and stop to functions and rewrite the error handling code
+  to improve its readability.
+- Add a one second sleep between stop and start, in restart, as made in
+  several other scripts.
 
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index d5a3a8e..6896b00 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -30,11 +30,21 @@ define QT53D_INSTALL_STAGING_CMDS
- 	$(QT5_LA_PRL_FILES_FIXUP)
- endef
+Changes v1->v2
+- Print error message is /usr/sbin/radvd is missing
+- Print error message if /proc/sys/net/ipv6/conf/all/forwarding is
+  missing (kernel does not support IPv6 forwarding)
+- Echo "1" to /proc/sys/net/ipv6/conf/all/forwarding upon start
+---
+ package/radvd/S50radvd | 54 ++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 41 insertions(+), 13 deletions(-)
+
+diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
+index 9f1407c95a..c27ac4302e 100755
+--- a/package/radvd/S50radvd
++++ b/package/radvd/S50radvd
+@@ -1,18 +1,46 @@
+ #!/bin/sh
  
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT53D_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/qt3d $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
+-RADVD=/usr/sbin/radvd
++test -f /etc/radvd.conf || exit 0
+ 
+-echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
+-
+-printf "Starting radvd: "
+-if [ ! -x "${RADVD}" ]; then
+-	echo "missing"
++test -f /proc/sys/net/ipv6/conf/all/forwarding || {
++	echo "Error: radvd requires IPv6 forwarding support."
+ 	exit 1
+-fi
++}
+ 
+-if ${RADVD} ; then
+-	echo "done"
+-else
+-	echo "failed"
+-	exit 1
+-fi
++start() {
++	printf "Starting radvd: "
++	echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
++	start-stop-daemon -S -x /usr/sbin/radvd || {
++		echo "FAIL"
++		exit 1
++	}
++	echo "OK"
++}
 +
- ifeq ($(BR2_STATIC_LIBS),)
- define QT53D_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
-+	$(QT53D_INSTALL_TARGET_EXAMPLES)
- endef
- endif
- 
++stop() {
++	printf "Stopping radvd: "
++	start-stop-daemon -K -q -x /usr/sbin/radvd || {
++		echo "FAIL"
++		exit 1
++	}
++	echo "OK"
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		stop
++		sleep 1
++		start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit 0
 -- 
-2.7.4
+2.14.3
