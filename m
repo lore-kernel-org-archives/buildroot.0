@@ -1,105 +1,125 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 16 Apr 2018 19:25:26 +0300
-Subject: [Buildroot] [PATCH] package/weston: Bump version to 4.0.0
-Message-ID: <20180416162526.23094-1-abrodkin@synopsys.com>
+From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+Date: Mon, 16 Apr 2018 18:18:30 +0200
+Subject: [Buildroot] [ANNOUNCE] mtd-utils-2.0.2 is released
+Message-ID: <278ba797-ccb3-fdc0-290f-50f4642ab66d@sigma-star.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream.
+Hi,
 
-Yann's patch was integrated in upstream, see:
-https://cgit.freedesktop.org/wayland/weston/commit/?id=fa41bdfbc
+mtd-utils-2.0.2 is released.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../0002-shared-struct-timespec-is-in-time.h.patch | 44 ----------------------
- package/weston/weston.hash                         | 10 ++---
- package/weston/weston.mk                           |  2 +-
- 3 files changed, 6 insertions(+), 50 deletions(-)
- delete mode 100644 package/weston/0002-shared-struct-timespec-is-in-time.h.patch
+Tarball:               ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2
+Tarball gpg signature: ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2.asc
+Signed git tag:        git://git.infradead.org/mtd-utils.git v2.0.2
 
-diff --git a/package/weston/0002-shared-struct-timespec-is-in-time.h.patch b/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
-deleted file mode 100644
-index 28476d3225..0000000000
---- a/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 47535b50c4178d62b848b3e9d3524e4f6282c815 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 1 Oct 2017 14:17:21 +0200
--Subject: [PATCH] shared: struct timespec is in time.h
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--On the musl C library, tests/timespec-text.c does not build, with the
--following error:
--
--    In file included from tests/timespec-test.c:36:0:
--    ./shared/timespec-util.h:41:21: warning: ?struct timespec? declared
--    inside parameter list will not be visible outside of this definition
--    or declaration
--     timespec_sub(struct timespec *r,
--                         ^~~~~~~~
--   [...]
--
--Indeed, struct timespec is defined in time.h, so we must include it.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
--Upstream status: submitted
--    https://lists.freedesktop.org/archives/wayland-devel/2017-October/035306.html
-----
-- shared/timespec-util.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/shared/timespec-util.h b/shared/timespec-util.h
--index 576b3e8f..34a120ae 100644
----- a/shared/timespec-util.h
--+++ b/shared/timespec-util.h
--@@ -28,6 +28,7 @@
-- 
-- #include <stdint.h>
-- #include <assert.h>
--+#include <time.h>
-- 
-- #define NSEC_PER_SEC 1000000000
-- 
---- 
--2.11.0
--
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 82c97b8cc0..55d87ac3b1 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-August/034749.html
--md5 9c42a4c51a1b9f35d040fa9d45ada36d  weston-3.0.0.tar.xz
--sha1 0a75c2ee10f2453a073411157bb6ed029080669f  weston-3.0.0.tar.xz
--sha256 cde1d55e8dd70c3cbb3d1ec72f60e60000041579caa1d6a262bd9c35e93723a5  weston-3.0.0.tar.xz
--sha512 b824c39f2a884f6d50d607613f447090621f684c96f7d905f25f6e500dabd03ecb2b1cd1030babc193c3417223cb220103abb792437e1a5ead7229a76b5c7a58  weston-3.0.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2018-April/037768.html
-+md5 33709aa4d5916f89643fca0fc0064b39  weston-4.0.0.tar.xz
-+sha1 df1da4a880920c515162e95b18f3709a46690be7  weston-4.0.0.tar.xz
-+sha256 a0fc0ae7ef83dfbed12abfe9b8096a24a7dd00705e86fa0db1e619ded18b4b58  weston-4.0.0.tar.xz
-+sha512 0af41016ff4eae85779f95b5c5e44b9683f4ef681a8e52256efeebfa38073082b83e039d0db3c94ac22f22f8d8314c9d6cd16611144b260b353fc5bfdd1ded19  weston-4.0.0.tar.xz
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 3d17a61577..e9de56b2c6 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WESTON_VERSION = 3.0.0
-+WESTON_VERSION = 4.0.0
- WESTON_SITE = http://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
--- 
-2.16.2
+
+This release contains mainly bug fixes and cleanups that have accumulated
+since the release of mtd-utils 2.0.1.
+
+
+Changes from 2.0.1 to 2.0.2:
+
+Features:
+ - libmtd: Add support to access OOB available size
+ - mkfs.ubifs: Allow root entry in device table
+
+Fixes:
+ - Fix unit-test header and file paths for out of tree builds
+ - Fix unit test mockup for oobavail sysfs file
+ - misc-utils: flash_erase: Fix Jffs2 type flash erase problem
+ - libmtd_legacy: Fix some function description mismatches
+ - mtd-utils: ubifs: fix typo in without_lzo definition
+ - mtd: tests: check erase block count in page test
+ - mtd: unittests: Stop testing stat() calls
+ - mtd: unittests: Decode arg size from ioctl request
+ - mtd: unittests: Use proper unsigned long type for ioctl requests
+ - mtd: tests: Fix check on ebcnt in nandpagetest
+ - ubi-utils: ubicrc32: process command line arguments first
+ - nandbiterrs: Fix erroneous counter increment in for loop body
+ - jittertest: Use the appropriate versions of abs()
+ - Mark or fix switch cases that fall through
+ - mkfs.ubifs: ignore EOPNOTSUPP when listing extended attributes
+ - misc-utils: initialize "ip" in docfdisk to NULL
+ - mkfs.ubifs: Apply squash-uids to the root node
+
+Cleanup:
+ - ubi-utils: ubiformat.c: convert to integer arithmetic
+ - mtd-utils: common.c: convert to integer arithmetic
+ - Run unit test programs through "make check"
+ - Enable more compiler warning flags, fix warnings
+ - Add no-return attribute to usage() style functions
+ - Remove self-assignments of unused paramters
+ - tests: checkfs: Remove unused source file from makefiles
+ - ubi-tests: io_update: fix missleading indentation
+ - Add ctags files to .gitignore
+ - libscan: fix a comment typo in libscan.h
+ - libmtd: fix a comment typo in dev_node2num
+
+
+
+Raw short log since the 2.0.1 release:
+
+
+Andrea Adami (2):
+      mtd-utils: common.c: convert to integer arithmetic
+      ubi-utils: ubiformat.c: convert to integer arithmetic
+
+Balint Reczey (3):
+      mtd: unittests: Use proper unsigned long type for ioctl requests
+      mtd: unittests: Decode arg size from ioctl request
+      mtd: unittests: Stop testing stat() calls
+
+David Engraf (1):
+      mkfs.ubifs: Allow root entry in device table
+
+David Oberhollenzer (14):
+      ubi-tests: io_update: fix missleading indentation
+      misc-utils: initialize "ip" in docfdisk to NULL
+      tests: checkfs: Remove unused source file from makefiles
+      Remove self-assignments of unused paramters
+      Add no-return attribute to usage() style functions
+      Mark or fix switch cases that fall through
+      jittertest: Use the appropriate versions of abs()
+      Enable further warning flags, address new warnings
+      nandbiterrs: Fix copy & paste fail
+      ubi-utils: ubicrc32: process command line arguments first
+      Run unit test programs through "make check"
+      Fix unit test mockup for oobavail sysfs file
+      Fix unit-test header and file paths for out of tree builds
+      Release mtd-utils-2.0.2
+
+Koen Vandeputte (1):
+      mtd-utils: ubifs: fix typo in without_lzo definition
+
+Paul HENRYS (1):
+      mtd: tests: Fix check on ebcnt in nandpagetest
+
+Pavel Roskin (1):
+      mkfs.ubifs: ignore EOPNOTSUPP when listing extended attributes
+
+Rock Lee (2):
+      libmtd: fix a comment typo in dev_node2num
+      libscan: fix a comment typo in libscan.h
+
+Romain Izard (1):
+      mkfs.ubifs: Apply squash-uids to the root node
+
+Stefan Agner (1):
+      mtd: tests: check erase block count in page test
+
+Uwe Kleine-K?nig (1):
+      Add ctags files to .gitignore
+
+Xiaolei Li (3):
+      libmtd: Add support to access OOB available size
+      libmtd_legacy: Fix some function description mismatches
+      misc-utils: flash_erase: Fix Jffs2 type flash erase problem
+
+
+Regards,
+
+David
