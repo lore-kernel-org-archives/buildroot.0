@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Apr 2018 14:52:28 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: support paths with subdirs
- in LINUX_FIRMWARE_DIRS
-In-Reply-To: <20180415202245.8720-1-thomas.petazzoni@bootlin.com>
-References: <20180415202245.8720-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180416145228.708ac9b0@windsurf.numericable.fr>
+Date: Mon, 16 Apr 2018 14:56:13 +0200
+Subject: [Buildroot] [PATCH v1] valgrind: bump version to 3.13.0
+In-Reply-To: <20180415202241.13595-1-ps.report@gmx.net>
+References: <20180415202241.13595-1-ps.report@gmx.net>
+Message-ID: <20180416145613.5d8d7fb9@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 15 Apr 2018 22:22:45 +0200, Thomas Petazzoni wrote:
-> Following commit cdb7876f63a253254b86637aaac8b255a426b60a
-> ("linux-firmware: add Qualcomm video accelerator and GPU firmware
-> options"), LINUX_FIRMWARE_DIRS can now contain entries with subdirs,
-> such as "qcom/venus-1.8". Such entries are currently not supported by
-> the logic in LINUX_FIRMWARE_INSTALL_DIRS.
+On Sun, 15 Apr 2018 22:22:41 +0200, Peter Seiderer wrote:
+> - update site
+> - remove 0004-Fixes-for-musl-libc.patch (applied upstream, see [1])
 > 
-> Indeed the current logic consists in:
+> [1] https://sourceware.org/git/?p=valgrind.git;a=commit;h=f8f1e9cb434cc97ce16586437407a6ac7e6a74a7
 > 
->  - Removing the destination directory
->  - Copying to the destination directory
-> 
-> Unfortunately, the last step fails if a component of the path leading
-> to the destination directory does not exist. To overcome this, we
-> simply add the appropriate mkdir before the copy.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/54cbca90742faf486e59d95b95a0b0494e47b385/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/linux-firmware/linux-firmware.mk | 1 +
->  1 file changed, 1 insertion(+)
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Applied to master, thanks.
+You're removing the only patch that was touching configure.ac, so I
+believe AUTORECONF = YES is no longer necessary in valgrind.mk. Do you
+confirm ?
+
+Best regards,
 
 Thomas
 -- 
