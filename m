@@ -1,39 +1,46 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 16 Apr 2018 16:07:52 +0200
-Subject: [Buildroot] [PATCH 08/26] modem-manager: don't test if the
- binary exists in the init script
-In-Reply-To: <20180416022944.13644-9-casantos@datacom.ind.br>
-References: <20180416022944.13644-1-casantos@datacom.ind.br>
- <20180416022944.13644-9-casantos@datacom.ind.br>
-Message-ID: <20180416140751.tak7uodrofojmccc@dell5510>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Apr 2018 16:11:16 +0200
+Subject: [Buildroot] [PATCH] legacy: remove options made legacy 5 years ago
+Message-ID: <20180416141116.18834-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> The test doesn't make sense. It just exits without any error if the
-> binary doesn't exist, which is silly.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ Config.in.legacy | 17 -----------------
+ 1 file changed, 17 deletions(-)
 
-> Drop the MODEMMANAGER_BIN variable, which was never initialized.
-
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-
-
-...
-> +++ b/package/modem-manager/S44modem-manager
-> @@ -5,8 +5,6 @@
-
->  PIDFILE=/var/run/ModemManager.pid
-
-> -[ -x $MODEMMANAGER_BIN ] || exit 0
-> -
->  start() {
->  	printf "Starting ModemManager: "
->  	umask 077
-
-
-Kind regards,
-Petr
+diff --git a/Config.in.legacy b/Config.in.legacy
+index eeefea191c..3d8b28c5fe 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -3188,23 +3188,6 @@ config BR2_HAVE_DEVFILES
+ 	  completely from Buildroot.
+ 	  See Buildroot's documentation for more explanations.
+ 
+-###############################################################################
+-comment "Legacy options removed in 2013.05"
+-
+-config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
+-	bool "Realtek 8192 replaced by Realtek 81xx"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX
+-	help
+-	  Now covers the whole Realtek 81xx familly: 8188/8192.
+-
+-config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
+-	bool "Realtek 8712 replaced by Realtek 87xx"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX
+-	help
+-	  Now covers the whole Realtek 87xx familly: 8712/8723.
+-
+ endmenu
+ 
+ endif # !SKIP_LEGACY
+-- 
+2.14.1
