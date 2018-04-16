@@ -1,110 +1,49 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 15 Apr 2018 23:10:37 -0300
-Subject: [Buildroot] [PATCH v3] radvd: improve startup script
-In-Reply-To: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
-References: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20180416021037.13345-1-casantos@datacom.ind.br>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 15 Apr 2018 23:17:28 -0300
+Subject: [Buildroot] [RFC PATCH 1/3] download/git: fix fetch all refs
+ for old git
+References: <20180415121222.GC21958@scaer>
+Message-ID: <5ad407b8c9c0b_5cd72ac50edb1bd898726@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add start, stop and restart/reload options.
+Hello,
 
-- Do nothing if /etc/radvd.conf does not exist instead of printing an
-  error message. It is valid to install radvd without a configuration
-  file. The daemon may be started later by another service with a
-  configuration created at run-time.
+> On 2018-04-13 15:23 -0300, Ricardo Martincoski spake thusly:
+>> On Thu, Apr 12, 2018 at 02:42 PM, Yann E. MORIN wrote:
+>> >> -    _git fetch origin -t
+>> >> +    _git fetch origin -u "'+refs/tags/*:refs/tags/*'" "'+refs/heads/*:refs/remotes/origin/*'"
+>> > Why don't we just run:
+>> >     git fetch origin
+>> >     git fetch origin -t
+>> 
+>> One extra connection to the server ...
+>> but much more readable/maintainable!
+>> I will do. I will change this patch to Changes Requested.
+> 
+> Thanks. I don't care much about an extra round-trip to the server,
+> especially if that makes the code easier to read.
 
-- Print an error message if the kernel does not support IPv6 forwarding,
-  which is required by radvd.
+I agree.
+And a few years from now, when we stop supporting distros with git <1.9.0 we
+can remove 'git fetch origin' if we wish.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
-Changes v2->v3
-- Don't the test if the binary is executable. It's unlikely to happen
-  because Buildroot installs both radvd and its init script as part of
-  the same package. But if it ever happens for some reason, the error
-  message from start-stop-daemon should be pretty clear (Thomas
-  Petazzoni).
-- Move start and stop to functions and rewrite the error handling code
-  to improve its readability.
-- Add a one second sleep between stop and start, in restart, as made in
-  several other scripts.
+BTW, the order of the commands is important here. Some dumb http servers don't
+work well with old git versions if 'git fetch origin -t' is used first, see:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/62895510
+But in the order you propose (and I see you used in your series) it works fine:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/62897927
+So we are good.
 
-Changes v1->v2
-- Print error message is /usr/sbin/radvd is missing
-- Print error message if /proc/sys/net/ipv6/conf/all/forwarding is
-  missing (kernel does not support IPv6 forwarding)
-- Echo "1" to /proc/sys/net/ipv6/conf/all/forwarding upon start
----
- package/radvd/S50radvd | 54 ++++++++++++++++++++++++++++++++++++++------------
- 1 file changed, 41 insertions(+), 13 deletions(-)
+> OK, but overall, we would cover all cases with the two git-fetch,
+> whether we use an old git or a newer one, and that's the important
+> info.
 
-diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
-index 9f1407c95a..c27ac4302e 100755
---- a/package/radvd/S50radvd
-+++ b/package/radvd/S50radvd
-@@ -1,18 +1,46 @@
- #!/bin/sh
- 
--RADVD=/usr/sbin/radvd
-+test -f /etc/radvd.conf || exit 0
- 
--echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
--
--printf "Starting radvd: "
--if [ ! -x "${RADVD}" ]; then
--	echo "missing"
-+test -f /proc/sys/net/ipv6/conf/all/forwarding || {
-+	echo "Error: radvd requires IPv6 forwarding support."
- 	exit 1
--fi
-+}
- 
--if ${RADVD} ; then
--	echo "done"
--else
--	echo "failed"
--	exit 1
--fi
-+start() {
-+	printf "Starting radvd: "
-+	echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
-+	start-stop-daemon -S -x /usr/sbin/radvd || {
-+		echo "FAIL"
-+		exit 1
-+	}
-+	echo "OK"
-+}
-+
-+stop() {
-+	printf "Stopping radvd: "
-+	start-stop-daemon -K -q -x /usr/sbin/radvd || {
-+		echo "FAIL"
-+		exit 1
-+	}
-+	echo "OK"
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		stop
-+		sleep 1
-+		start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+esac
-+
-+exit 0
--- 
-2.14.3
+Agreed.
+
+
+Regards,
+Ricardo
