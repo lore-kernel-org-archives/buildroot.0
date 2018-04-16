@@ -1,31 +1,32 @@
-From: AAlex_ <earthquake.de@freenet.de>
-Date: Mon, 16 Apr 2018 05:17:42 -0700 (MST)
-Subject: [Buildroot] makedev capabilities support - capablities lost after
- booting the image
-Message-ID: <1523881062231-0.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Apr 2018 14:22:06 +0200
+Subject: [Buildroot] [PATCH 1/1] micropython: bump version to v1.9.3
+In-Reply-To: <1523866445.3945.22.camel@flir.com>
+References: <1523866445.3945.22.camel@flir.com>
+Message-ID: <20180416142206.67175bd2@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-setting the cappabilities of an executable via BR2_ROOT_FS_DEVICE_TABLE as
-descripted in [9.5.1. Setting file permissions and ownership and adding
-custom devices nodes] fails.
-When capabilities specified to an file they are set in the disk image, means
-if i mount the disk image file and check via getcap it get the excpected
-capabilities. 
-But if the builroot system boots, the capablities are lost.
-Is there another lib/flag? The buildroot system supports capabilities
-because I set it via an startscript within buildroot system, but this is not
-longer possible because I want to swtich to read only root_fs. This is the
-reason I want to set the capablilities via device_table.
+Hello Marteen,
 
-Regards,
-Alex
+On Mon, 16 Apr 2018 08:09:26 +0000, Blomme, Maarten wrote:
+> The build step now requires building mpy-cross first.
+> 
+> Signed-off-by: Blomme, Maarten <Maarten.Blomme at flir.com<mailto:Maarten.Blomme@flir.com>>
 
+Thanks for your contribution. Unfortunately, you did not use "git
+send-email" to send your patch, so it was line-wrapped by your e-mail
+client, so it cannot be applied anymore.
 
+Could you resend your patch with "git send-email" ?
 
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Thanks a lot!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
