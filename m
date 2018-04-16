@@ -1,64 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Apr 2018 10:34:19 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: support paths with subdirs
- in LINUX_FIRMWARE_DIRS
-In-Reply-To: <20180415202245.8720-1-thomas.petazzoni@bootlin.com>
-References: <20180415202245.8720-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180416083419.GA2394@scaer>
+Date: Mon, 16 Apr 2018 11:01:55 +0200
+Subject: [Buildroot] [PATCH] autobuild-run: remove only tarballs from
+ download dir
+In-Reply-To: <5ad3d0cda358d_54de2ad1cbb08c2828316@ultri4.mail>
+References: <20180415214257.1e90704a@windsurf.numericable.fr>
+ <5ad3d0cda358d_54de2ad1cbb08c2828316@ultri4.mail>
+Message-ID: <20180416090155.GA2290@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Ricardo, All,
 
-On 2018-04-15 22:22 +0200, Thomas Petazzoni spake thusly:
-> Following commit cdb7876f63a253254b86637aaac8b255a426b60a
-> ("linux-firmware: add Qualcomm video accelerator and GPU firmware
-> options"), LINUX_FIRMWARE_DIRS can now contain entries with subdirs,
-> such as "qcom/venus-1.8". Such entries are currently not supported by
-> the logic in LINUX_FIRMWARE_INSTALL_DIRS.
+On 2018-04-15 19:23 -0300, Ricardo Martincoski spake thusly:
+> On Sun, Apr 15, 2018 at 04:42 PM, Thomas Petazzoni wrote:
+[--SNIP--]
+> > So you're idea is that when we are inside dl/<package>/git/, one of the
+> > sub-directories is .git, and therefore we shouldn't remove anything in
+> > dl/<package>/git/ ?
 > 
-> Indeed the current logic consists in:
+> Yes. My idea is to keep the behavior described in the comment:
+> # Remove 5 random files from the download directory. Removing
+> # random files from the download directory allows to ensure we
+> # regularly re-download files to check that their upstream
+> # location is still correct.
 > 
->  - Removing the destination directory
->  - Copying to the destination directory
-> 
-> Unfortunately, the last step fails if a component of the path leading
-> to the destination directory does not exist. To overcome this, we
-> simply add the appropriate mkdir before the copy.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/54cbca90742faf486e59d95b95a0b0494e47b385/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> So we keep testing in autobuilders that the upstream location is correct (the
+> git fetch fails and therefore the download script fails if the server does not
+> respond even in the case we already have the commits and references we need in
+> the cache; it is the correct behavior IMO), and we also test the generation of
+> tarball, but we do not test the re-download with a clean git cache; this could
+> be done later on autobuilder with extra code (maybe remove only 1 git cache
+> every run together to 5 tarballs?), but the most important scenario is already
+> tested: the use of git cache in the long run.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I think that we should also get rid of a full git clone.
+
+> > Another concern is how to fix those autobuilders that have already
+> > removed some random files from their cached Git repositories? Should we
+> > ask the people who run those autobuilders to entirely wipe the download
+> > folders of their autobuilder instances ? Or do we have a smart (but
+> > simple) thing to do to avoid this ?
+> I agree with Yann about the ditch + restart for broken git cache.
+> But if you want, maybe in one autobuilder instance we can manually remove all
+> git caches just to know earlier (before applying Yann's series) that no more
+> download issues will occur, since this change to the script prevents corrupting
+> new git caches.
+> I guess but did not tested this command would be enough:
+> rm -r instance-0/dl/*/git
+> Your call. I have no preference.
+> 
+> But leaving at least one instance not fixed (with some git cache broken) can
+> help to test Yann's series.
+
+I got my hands on a borked dtv-scan-tables tree, so I can test locally.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/linux-firmware/linux-firmware.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index efe5cdd7dd..11231613e9 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -499,6 +499,7 @@ ifneq ($(LINUX_FIRMWARE_DIRS),)
->  define LINUX_FIRMWARE_INSTALL_DIRS
->  	$(foreach d,$(LINUX_FIRMWARE_DIRS), \
->  		rm -rf $(TARGET_DIR)/lib/firmware/$(d); \
-> +		mkdir -p $(dir $(TARGET_DIR)/lib/firmware/$(d)); \
->  		cp -a $(@D)/$(d) $(TARGET_DIR)/lib/firmware/$(d)$(sep))
->  endef
->  endif
-> -- 
-> 2.14.3
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
