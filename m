@@ -1,42 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Apr 2018 16:01:44 +0200
-Subject: [Buildroot] [PATCH 1/1] micropython: bump version to v1.9.3
-In-Reply-To: <1523885614.4244.5.camel@flir.com>
-References: <1523885614.4244.5.camel@flir.com>
-Message-ID: <20180416160144.08709147@windsurf.numericable.fr>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 16 Apr 2018 16:07:52 +0200
+Subject: [Buildroot] [PATCH 08/26] modem-manager: don't test if the
+ binary exists in the init script
+In-Reply-To: <20180416022944.13644-9-casantos@datacom.ind.br>
+References: <20180416022944.13644-1-casantos@datacom.ind.br>
+ <20180416022944.13644-9-casantos@datacom.ind.br>
+Message-ID: <20180416140751.tak7uodrofojmccc@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marteen,
+> The test doesn't make sense. It just exits without any error if the
+> binary doesn't exist, which is silly.
 
-On Mon, 16 Apr 2018 13:28:47 +0000, Blomme, Maarten wrote:
-> (With correct formatting now)
+> Drop the MODEMMANAGER_BIN variable, which was never initialized.
 
-Unfortunately no, the formatting is still not correct, because you
-didn't send with git send-email.
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
 
->  define MICROPYTHON_BUILD_CMDS
-> -$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/unix \
-> +$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
-> +$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
->  $(MICROPYTHON_MAKE_OPTS) \
->  CROSS_COMPILE=$(TARGET_CROSS) \
->  CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS)
->  endef
 
-The lines in this variable are indented in the current code, but are
-not in your patch. Hence the patch is broken.
+...
+> +++ b/package/modem-manager/S44modem-manager
+> @@ -5,8 +5,6 @@
 
-There's a reason why everybody uses git send-email: because it does the
-right thing :-)
+>  PIDFILE=/var/run/ModemManager.pid
 
-Thanks!
+> -[ -x $MODEMMANAGER_BIN ] || exit 0
+> -
+>  start() {
+>  	printf "Starting ModemManager: "
+>  	umask 077
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+Kind regards,
+Petr
