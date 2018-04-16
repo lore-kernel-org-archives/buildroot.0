@@ -1,10 +1,10 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 15 Apr 2018 23:29:19 -0300
-Subject: [Buildroot] [PATCH 01/26] bind: don't test if the binary exists in
- the init script
+Date: Sun, 15 Apr 2018 23:29:23 -0300
+Subject: [Buildroot] [PATCH 05/26] dnsmasq: don't test if the binary exists
+ in the init script
 In-Reply-To: <20180416022944.13644-1-casantos@datacom.ind.br>
 References: <20180416022944.13644-1-casantos@datacom.ind.br>
-Message-ID: <20180416022944.13644-2-casantos@datacom.ind.br>
+Message-ID: <20180416022944.13644-6-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,18 @@ binary doesn't exist, which is silly.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/bind/S81named | 1 -
+ package/dnsmasq/S80dnsmasq | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/package/bind/S81named b/package/bind/S81named
-index bc4bb0f246..1da3008ae2 100644
---- a/package/bind/S81named
-+++ b/package/bind/S81named
-@@ -3,7 +3,6 @@
- CONFIG=/etc/bind/named.conf
- DAEMON=/usr/sbin/named
+diff --git a/package/dnsmasq/S80dnsmasq b/package/dnsmasq/S80dnsmasq
+index d2f8b0f6b4..b052259e87 100755
+--- a/package/dnsmasq/S80dnsmasq
++++ b/package/dnsmasq/S80dnsmasq
+@@ -1,6 +1,5 @@
+ #!/bin/sh
  
--[ -x $DAEMON ] || exit 0
- [ -f $CONFIG ] || exit 0
+-[ -x /usr/sbin/dnsmasq ] || exit 0
+ [ -f /etc/dnsmasq.conf ] || exit 0
  
  case "$1" in
 -- 
