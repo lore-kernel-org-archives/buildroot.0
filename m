@@ -1,50 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Apr 2018 07:34:51 +0200
-Subject: [Buildroot] [git commit] ntp: don't test if the binary exists in
- the init script
-Message-ID: <20180416053718.92B2B88325@busybox.osuosl.org>
+Date: Mon, 16 Apr 2018 07:34:52 +0200
+Subject: [Buildroot] [git commit] openntpd: don't test if the binary exists
+ in the init script
+Message-ID: <20180416053718.A70B588325@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8cd0800aa25a9298c0e58cecbae5a30eabba19d
+commit: https://git.buildroot.net/buildroot/commit/?id=0100c6962d8c91d1c9e0fe1c08790d6778f881ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The test doesn't make sense. It just exits without any error if the
 binary doesn't exist, which is silly.
 
-Replace the DAEMON variable, which was used only once, by the full path
-of the binary file.
-
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ntp/S49ntp | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/openntpd/S49ntp | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/ntp/S49ntp b/package/ntp/S49ntp
-index b4047fceda..35e58746b4 100755
---- a/package/ntp/S49ntp
-+++ b/package/ntp/S49ntp
-@@ -1,10 +1,6 @@
- #! /bin/sh
+diff --git a/package/openntpd/S49ntp b/package/openntpd/S49ntp
+index c211ac835e..7ce46eba28 100755
+--- a/package/openntpd/S49ntp
++++ b/package/openntpd/S49ntp
+@@ -1,6 +1,5 @@
+ #!/bin/sh
  
- NAME=ntpd
--DAEMON=/usr/sbin/$NAME
--
--# Gracefully exit if the package has been removed.
--test -x $DAEMON || exit 0
+-[ -x /usr/sbin/ntpd ] || exit 0
+ [ -f /etc/ntpd.conf ] || exit 0
  
- # Read config file if it is present.
- if [ -r /etc/default/$NAME ]
-@@ -15,7 +11,7 @@ fi
  case "$1" in
-   start)
-     printf "Starting $NAME: "
--    start-stop-daemon -S -q -x $DAEMON -- -g
-+    start-stop-daemon -S -q -x /usr/sbin/ntpd -- -g
-     [ $? = 0 ] && echo "OK" || echo "FAIL"
-     ;;
-   stop)
