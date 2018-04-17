@@ -1,49 +1,34 @@
-From: Laurent GONZALEZ <br22@gezedo.com>
-Date: Tue, 17 Apr 2018 11:39:51 +0200
-Subject: [Buildroot] [PATCH] package/binutils: Cortex-M targets require
- version <2.29
-In-Reply-To: <20180417091958.67203679@windsurf.numericable.fr>
-References: <da109542-e77b-364e-cd54-12c7bbbcead7@gezedo.com>
- <20180417084904.0a80d93c@windsurf.numericable.fr>
- <51708b71-bb77-623e-31c4-54c5cd678a69@gezedo.com>
- <20180417091958.67203679@windsurf.numericable.fr>
-Message-ID: <c799de11-aefe-68f4-6a0a-3d30e6efc8b2@gezedo.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 Apr 2018 12:44:04 +0300
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove Philipp Claves' entry
+Message-ID: <e8dcac2727f9f0569441285fbba7f9a0dafa6672.1523958244.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I resend my previous mail for clarity.
+The email address of Philipp Claves bounces.
 
-On 17/04/2018 09:19, Thomas Petazzoni wrote:
-> Hello Laurent,
->
-> Could you ask Thunderbird to not send a HTML version of your e-mails
-> when sending to this mailing list?
-Thunderbird does so many things on my behalf !
-> On Tue, 17 Apr 2018 09:04:39 +0200, Laurent GONZALEZ wrote:
->
->> Unfortunately, I think binutils will not change. The new adr behavior  
->> broke linux kernel, ffmpeg and ssl. Nowadays, only linux kernel has
->> not been fixed. We can either avoid bintutils <2.29 or patch the
->> kernel.
-> Do you have some pointers/references about this issue ?
-This lkml message is probably the most interresting one in the thread:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ DEVELOPERS | 4 ----
+ 1 file changed, 4 deletions(-)
 
-http://lists.infradead.org/pipermail/linux-arm-kernel/2017-November/543467.html
-
->> Good catch, i'll submit a new patch asap.  
-> Well, as I said, I'm not really convinced by a solution that consists
-> in excluding binutils 2.29 and binutils 2.30 for ARMv7-M. Indeed, once
-> binutils 2.31 is released, we will make binutils 2.30 the default
-> version, and remove support for binutils 2.28.
->
-> Hence the proper solution is to move forward and fix the kernel
-> problem, rather than force the use of older binutils.
-What about:
-
-http://lists.infradead.org/pipermail/linux-arm-kernel/2018-March/565390.html
-
---
-Laurent
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eec278db5001..3bb5f32f1afd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1522,10 +1522,6 @@ F:	package/psplash/
+ F:	package/sispmctl/
+ F:	package/zsh/
+ 
+-N:	Philipp Claves <claves@budelmann-elektronik.com>
+-F:	package/libassuan/
+-F:	package/libgpgme/
+-
+ N:	Philippe Proulx <eeppeliteloop@gmail.com>
+ F:	package/lttng-babeltrace/
+ F:	package/lttng-libust/
+-- 
+2.17.0
