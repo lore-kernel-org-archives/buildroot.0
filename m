@@ -1,7 +1,7 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 17 Apr 2018 22:56:20 +0300
-Subject: [Buildroot] [PATCH] procps-ng: bump to version 3.3.14
-Message-ID: <c11c1e5dccc79f64f44ef802f2da6046828ba1ba.1523994980.git.baruch@tkos.co.il>
+Date: Tue, 17 Apr 2018 22:58:16 +0300
+Subject: [Buildroot] [PATCH v2] procps-ng: bump to version 3.3.14
+Message-ID: <130c35b0d58841519c15a94b2730f675fa63192d.1523995096.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +16,7 @@ Add license files hash.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
+v2: Actually add the license hashes.
 
 Note: procps now uses fopencookie(). musl libc added support for this
 extension in version 1.1.19. autobuilder musl toolchains currently use
@@ -24,9 +25,9 @@ version 1.1.16.
  package/procps-ng/0001-remove-index.patch     | 16 ------
  ...02-use-pkgconfig-for-ncursesw-cflags.patch | 57 -------------------
  ...-include-dlfcn.h-only-when-necessary.patch | 32 -----------
- package/procps-ng/procps-ng.hash              |  7 ++-
+ package/procps-ng/procps-ng.hash              |  9 ++-
  package/procps-ng/procps-ng.mk                |  5 +-
- 5 files changed, 6 insertions(+), 111 deletions(-)
+ 5 files changed, 8 insertions(+), 111 deletions(-)
  delete mode 100644 package/procps-ng/0001-remove-index.patch
  delete mode 100644 package/procps-ng/0002-use-pkgconfig-for-ncursesw-cflags.patch
  delete mode 100644 package/procps-ng/0003-ps-output.c-include-dlfcn.h-only-when-necessary.patch
@@ -155,10 +156,10 @@ index dca28fab1492..000000000000
 -2.7.4
 -
 diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
-index 62d61727b1fd..3655b30fd227 100644
+index 62d61727b1fd..9488af2d9fb4 100644
 --- a/package/procps-ng/procps-ng.hash
 +++ b/package/procps-ng/procps-ng.hash
-@@ -1,3 +1,6 @@
+@@ -1,3 +1,8 @@
  # From http://sourceforge.net/projects/procps-ng/files/Production/
 -md5	957e42e8b193490b2111252e4a2b443c	procps-ng-3.3.12.tar.xz
 -sha1	82c0745f150f1385ca01fe7d24f05f74e31c94c6	procps-ng-3.3.12.tar.xz
@@ -167,6 +168,8 @@ index 62d61727b1fd..3655b30fd227 100644
 +# Locally calculated after checking signature
 +# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-3.3.14.tar.xz.asc
 +sha256 5eda0253999b7d786e690edfa73301b3113c7a67058478866e98e9ff6736726c  procps-ng-3.3.14.tar.xz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  COPYING.LIB
 diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
 index 22ebc1a8fd5d..a6cf774d7bd2 100644
 --- a/package/procps-ng/procps-ng.mk
