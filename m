@@ -1,54 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Apr 2018 14:36:25 +0200
-Subject: [Buildroot] [PATCH 1/1] libcurl: fix building against libressl
-In-Reply-To: <c5a388fe-9d06-15b5-0bc1-a4bf23890b19@mind.be>
-References: <20180413123931.7604-1-aduskett@gmail.com>
- <20180415204327.5bc05597@windsurf.numericable.fr>
- <c5a388fe-9d06-15b5-0bc1-a4bf23890b19@mind.be>
-Message-ID: <20180417143625.17ceda76@windsurf.numericable.fr>
+Date: Tue, 17 Apr 2018 14:54:45 +0200
+Subject: [Buildroot] [git commit] Config.in: fix check-package warning
+Message-ID: <20180417125749.811EB8680A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e58fdc5e913105f3a0812039798292bb63e6a53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Apr 2018 13:41:08 +0200, Arnout Vandecappelle wrote:
+Fixes:
 
-> > I.e:
-> > 
-> > $ git clone https://github.com/curl/curl.git
-> > $ cd curl/
-> > $ git checkout curl-7_59_0
-> > $ git cherry-pick 7c90c93c0b061da81f69fabdd57125b2783c15fb  
-> 
->  Use git cherry-pick -x -s. This will add your Sob right away, and it will
-> record the upstream commit from which it was taken.
+Config.in:203: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+Config.in:204: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
 
-Aah, didn't about -x, definitely useful!
+https://gitlab.com/buildroot.org/buildroot/-/jobs/63334884
 
-> > $ git format-patch HEAD^  
-> 
->  And here, of course, you need to add -N (well, not in this case since it's just
-> a single patch, but in general).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Yes, but indeed since it was a single patch, I omitted the -N.
-
-> > Could you rework your patch by doing this ? I could have done it
-> > myself, but I preferred to explain the process for doing it properly :)  
-> 
->  This should be added to the manual...
-
-True. Honestly, I find our manual badly organized, and I never find
-where things should be added. I'm not against writing documentation
-(see my e-mail about the changes to the download infrastructure), but I
-never find *where* to put those details into our manual.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Config.in b/Config.in
+index c2a1925088..62d2dc3473 100644
+--- a/Config.in
++++ b/Config.in
+@@ -200,9 +200,9 @@ config BR2_DL_DIR
+ 	  If the Linux shell environment has defined the BR2_DL_DIR
+ 	  environment variable, then this overrides this configuration
+ 	  item.
+-	  The directory is organized with a subdirectory for each package.
+-	  Each package has its own $(LIBFOO_DL_DIR) variable that can be used
+-	  to find the correct path.
++	  The directory is organized with a subdirectory for each
++	  package. Each package has its own $(LIBFOO_DL_DIR) variable
++	  that can be used to find the correct path.
+ 
+ 	  The default is $(TOPDIR)/dl
+ 
