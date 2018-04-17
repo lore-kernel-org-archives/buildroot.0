@@ -1,81 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 17 Apr 2018 12:37:11 +0300
-Subject: [Buildroot] [PATCH 1/3] libgpgme: fix run-time compatibility with
- gnupg2 2.2.6
-Message-ID: <d59c6c57aff0a6c8966f33b2ee80bfa6328723f5.1523957833.git.baruch@tkos.co.il>
+From: Laurent GONZALEZ <br22@gezedo.com>
+Date: Tue, 17 Apr 2018 11:39:51 +0200
+Subject: [Buildroot] [PATCH] package/binutils: Cortex-M targets require
+ version <2.29
+In-Reply-To: <20180417091958.67203679@windsurf.numericable.fr>
+References: <da109542-e77b-364e-cd54-12c7bbbcead7@gezedo.com>
+ <20180417084904.0a80d93c@windsurf.numericable.fr>
+ <51708b71-bb77-623e-31c4-54c5cd678a69@gezedo.com>
+ <20180417091958.67203679@windsurf.numericable.fr>
+Message-ID: <c799de11-aefe-68f4-6a0a-3d30e6efc8b2@gezedo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch fixing gpgme_op_verify regression with gnupg2 2.2.6.
+I resend my previous mail for clarity.
 
-https://lists.gnupg.org/pipermail/gnupg-users/2018-April/060230.html
+On 17/04/2018 09:19, Thomas Petazzoni wrote:
+> Hello Laurent,
+>
+> Could you ask Thunderbird to not send a HTML version of your e-mails
+> when sending to this mailing list?
+Thunderbird does so many things on my behalf !
+> On Tue, 17 Apr 2018 09:04:39 +0200, Laurent GONZALEZ wrote:
+>
+>> Unfortunately, I think binutils will not change. The new adr behavior  
+>> broke linux kernel, ffmpeg and ssl. Nowadays, only linux kernel has
+>> not been fixed. We can either avoid bintutils <2.29 or patch the
+>> kernel.
+> Do you have some pointers/references about this issue ?
+This lkml message is probably the most interresting one in the thread:
 
-Cc: Philipp Claves <claves@budelmann-elektronik.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...1-core-Tweak-STATUS_FAILURE-handling.patch | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
+http://lists.infradead.org/pipermail/linux-arm-kernel/2017-November/543467.html
 
-diff --git a/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch b/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
-new file mode 100644
-index 000000000000..ae0e9c549872
---- /dev/null
-+++ b/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
-@@ -0,0 +1,51 @@
-+From b99502274ae5efdf6df0d967900ec3d1e64373d7 Mon Sep 17 00:00:00 2001
-+From: Werner Koch <wk@gnupg.org>
-+Date: Thu, 12 Apr 2018 20:36:30 +0200
-+Subject: [PATCH] core: Tweak STATUS_FAILURE handling.
-+
-+* src/op-support.c (_gpgme_parse_failure): Ignore failures with
-+location "gpg-exit".
-+* tests/gpg/t-verify.c (main): Adjust for the now working checking of
-+the second key.
-+
-+Signed-off-by: Werner Koch <wk@gnupg.org>
-+[baruch: drop test]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit b99502274ae
-+
-+ src/op-support.c     | 10 +++++++++-
-+ tests/gpg/t-verify.c |  8 +++++---
-+ 2 files changed, 14 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/op-support.c b/src/op-support.c
-+index 43cb1c760e0d..e55875f904d0 100644
-+--- a/src/op-support.c
-++++ b/src/op-support.c
-+@@ -400,7 +400,13 @@ _gpgme_parse_plaintext (char *args, char **filenamep)
-+ 
-+ 
-+ /* Parse a FAILURE status line and return the error code.  ARGS is
-+-   modified to contain the location part.  */
-++ * modified to contain the location part.  Note that for now we ignore
-++ * failure codes with a location of gpg-exit; they are too trouble
-++ * some.  Instead we should eventually record that error in the
-++ * context and provide a function to return a fuller error
-++ * description; this could then also show the location of the error
-++ * (e.g. "option- parser") to make it easier for the user to detect
-++ * the actual error. */
-+ gpgme_error_t
-+ _gpgme_parse_failure (char *args)
-+ {
-+@@ -418,6 +424,8 @@ _gpgme_parse_failure (char *args)
-+     *where = '\0';
-+ 
-+   where = args;
-++  if (!strcmp (where, "gpg-exit"))
-++    return 0;
-+ 
-+   return atoi (which);
-+ }
-+-- 
-+2.17.0
-+
--- 
-2.17.0
+>> Good catch, i'll submit a new patch asap.  
+> Well, as I said, I'm not really convinced by a solution that consists
+> in excluding binutils 2.29 and binutils 2.30 for ARMv7-M. Indeed, once
+> binutils 2.31 is released, we will make binutils 2.30 the default
+> version, and remove support for binutils 2.28.
+>
+> Hence the proper solution is to move forward and fix the kernel
+> problem, rather than force the use of older binutils.
+What about:
+
+http://lists.infradead.org/pipermail/linux-arm-kernel/2018-March/565390.html
+
+--
+Laurent
