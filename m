@@ -1,73 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Apr 2018 13:30:04 +0200
-Subject: [Buildroot] [RFC PATCH 2/3] download/git: recover dirty cache
-In-Reply-To: <20180417104213.GB8142@scaer>
-References: <20180415120230.GA21958@scaer>
- <5ad41059af3a7_5cd73ffcbd32b2bc9895d@ultri4.mail>
- <20180416160124.GC2290@scaer> <20180416205614.GE2290@scaer>
- <1ffe206e-4b1e-c233-a511-ba4c3a8cb5f0@armadeus.com>
- <20180417104213.GB8142@scaer>
-Message-ID: <20180417133004.2872797e@windsurf.numericable.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 17 Apr 2018 13:41:08 +0200
+Subject: [Buildroot] [PATCH 1/1] libcurl: fix building against libressl
+In-Reply-To: <20180415204327.5bc05597@windsurf.numericable.fr>
+References: <20180413123931.7604-1-aduskett@gmail.com>
+ <20180415204327.5bc05597@windsurf.numericable.fr>
+Message-ID: <c5a388fe-9d06-15b5-0bc1-a4bf23890b19@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 17 Apr 2018 12:42:13 +0200, Yann E. MORIN wrote:
 
-> Please! ;-)
+On 15-04-18 20:43, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 13 Apr 2018 08:39:31 -0400, Adam Duskett wrote:
+>> LibreSSL 2.7.x breaks libcurl 7.59.0 with the error:
+>> error: static declaration of ?OpenSSL_version_num? follows non-static
+>> declaration
+>>
+>> This failure has since been fixed upstream with commit:
+>> https://github.com/curl/curl/commit/7c90c93c0b061da81f69fabdd57125b2783c15fb
+>>
+>> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>> ---
+>>  ...-curl-fix-building-against-libressl-2.7.2.patch | 91 ++++++++++++++++++++++
+>>  1 file changed, 91 insertions(+)
+>>  create mode 100644 package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
+>>
+>> diff --git a/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch b/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
+>> new file mode 100644
+>> index 0000000000..e5d6f686e8
+>> --- /dev/null
+>> +++ b/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
+>> @@ -0,0 +1,91 @@
+>> +From 7a67b6561da8e42505e09014a5c97b19e1a93532 Mon Sep 17 00:00:00 2001
+>> +From: Adam Duskett <aduskett@gmail.com>
+>> +Date: Fri, 13 Apr 2018 08:31:37 -0400
+>> +Subject: [PATCH] curl: fix building against libressl 2.7.2
+> 
+> Since the issue has been fixed upstream, the fix should be a backport
+> from upstream commit, not a different commit authored by you.
+> 
+> I.e:
+> 
+> $ git clone https://github.com/curl/curl.git
+> $ cd curl/
+> $ git checkout curl-7_59_0
+> $ git cherry-pick 7c90c93c0b061da81f69fabdd57125b2783c15fb
 
-On my side, I looked at the squashfs failures:
+ Use git cherry-pick -x -s. This will add your Sob right away, and it will
+record the upstream commit from which it was taken.
 
-  http://autobuild.buildroot.net/?submitter=Thomas+Petazzoni+(Free+Electrons+server)&reason=%squashfs%
+> $ git format-patch HEAD^
 
-I looked at instance-1 and instance-2, both of which are failing, and
-they look the same on the filesystem.
+ And here, of course, you need to add -N (well, not in this case since it's just
+a single patch, but in general).
 
-instance-2 looks like this:
 
-$ tree -a instance-2/dl/squashfs
-instance-2/dl/squashfs
-|-- git
-|   `-- .git
-|       |-- FETCH_HEAD
-|       |-- HEAD
-|       |-- branches
-|       |-- config
-|       |-- description
-|       |-- hooks
-|       |   |-- applypatch-msg.sample
-|       |   |-- commit-msg.sample
-|       |   |-- post-update.sample
-|       |   |-- pre-applypatch.sample
-|       |   |-- pre-commit.sample
-|       |   |-- pre-rebase.sample
-|       |   |-- prepare-commit-msg.sample
-|       |   `-- update.sample
-|       |-- info
-|       |   `-- exclude
-|       |-- objects
-|       |   |-- info
-|       |   `-- pack
-|       `-- refs
-|           |-- heads
-|           `-- tags
-`-- squashfs-3de1687d7432ea9b302c2db9521996f506c140a3.tar.gz
+> and then edit the patch to add your Signed-off-by below the one from
+> the original author, and use that in package/libcurl/.
+> 
+> Could you rework your patch by doing this ? I could have done it
+> myself, but I preferred to explain the process for doing it properly :)
 
-So basically, there is a tarball of the previous squashfs version, and
-the Git cache doesn't contain anything useful.
+ This should be added to the manual...
 
-See
-http://autobuild.buildroot.net/results/4f8/4f88b0aea78a8c8be245ec26e8e53f32d8a90eb5/build-end.log
-for the actual build failure.
+ Regards,
+ Arnout
 
-Best regards,
+> 
+> Thanks!
+> 
+> Thomas
+> 
 
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
