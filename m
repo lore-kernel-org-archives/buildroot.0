@@ -1,106 +1,143 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Apr 2018 08:55:03 +0200
-Subject: [Buildroot] [git commit] package/weston: Bump version to 4.0.0
-Message-ID: <20180417065931.24AC388382@busybox.osuosl.org>
+Date: Tue, 17 Apr 2018 08:56:40 +0200
+Subject: [Buildroot] [git commit] package/wayland: Bump version to 1.15.0
+Message-ID: <20180417065931.3CC0388382@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8efd0756a724cea096f089aaf036ee82036321ad
+commit: https://git.buildroot.net/buildroot/commit/?id=8813273ba75aebc67ae76e95180d4a00f57d400a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream.
+All hashes provided by upstream.
 
-Yann's patch was integrated in upstream, see:
-https://cgit.freedesktop.org/wayland/weston/commit/?id=fa41bdfbc
+Updated Yann's patch:
+ - Took v2 from https://patchwork.freedesktop.org/patch/143038/
+ - Rebased on top of v1.15
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-shared-struct-timespec-is-in-time.h.patch | 44 ----------------------
- package/weston/weston.hash                         | 10 ++---
- package/weston/weston.mk                           |  2 +-
- 3 files changed, 6 insertions(+), 50 deletions(-)
+ ...001-configure-add-option-to-disable-tests.patch | 39 ++++++++++++----------
+ package/wayland/wayland.hash                       | 10 +++---
+ package/wayland/wayland.mk                         |  2 +-
+ 3 files changed, 28 insertions(+), 23 deletions(-)
 
-diff --git a/package/weston/0002-shared-struct-timespec-is-in-time.h.patch b/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
-deleted file mode 100644
-index 28476d3225..0000000000
---- a/package/weston/0002-shared-struct-timespec-is-in-time.h.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 47535b50c4178d62b848b3e9d3524e4f6282c815 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 1 Oct 2017 14:17:21 +0200
--Subject: [PATCH] shared: struct timespec is in time.h
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--On the musl C library, tests/timespec-text.c does not build, with the
--following error:
--
--    In file included from tests/timespec-test.c:36:0:
--    ./shared/timespec-util.h:41:21: warning: ???struct timespec??? declared
--    inside parameter list will not be visible outside of this definition
--    or declaration
--     timespec_sub(struct timespec *r,
--                         ^~~~~~~~
--   [...]
--
--Indeed, struct timespec is defined in time.h, so we must include it.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
--Upstream status: submitted
--    https://lists.freedesktop.org/archives/wayland-devel/2017-October/035306.html
-----
-- shared/timespec-util.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/shared/timespec-util.h b/shared/timespec-util.h
--index 576b3e8f..34a120ae 100644
----- a/shared/timespec-util.h
--+++ b/shared/timespec-util.h
--@@ -28,6 +28,7 @@
-- 
-- #include <stdint.h>
-- #include <assert.h>
--+#include <time.h>
-- 
-- #define NSEC_PER_SEC 1000000000
-- 
---- 
--2.11.0
--
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 82c97b8cc0..55d87ac3b1 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
+diff --git a/package/wayland/0001-configure-add-option-to-disable-tests.patch b/package/wayland/0001-configure-add-option-to-disable-tests.patch
+index 8c67d9a3bc..c6e4a49681 100644
+--- a/package/wayland/0001-configure-add-option-to-disable-tests.patch
++++ b/package/wayland/0001-configure-add-option-to-disable-tests.patch
+@@ -1,6 +1,6 @@
+-From 33b025e04bf3fa94b74ea3325b3fd7c3f546bcb1 Mon Sep 17 00:00:00 2001
++From 55ae8e1103f4697bfa01a84301a6560b89de5248 Mon Sep 17 00:00:00 2001
+ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 5 Mar 2017 10:06:02 +0100
++Date: Mon, 16 Apr 2018 19:52:34 +0300
+ Subject: [PATCH] configure: add option to disable tests
+ 
+ When building for a product, tests are not needed.
+@@ -11,40 +11,45 @@ available.
+ So, add an option to configure to disable building tests altogether.
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Reviewed-by: Eric Engestrom <eric.engestrom@imgtec.com>
++Tested-by: Eric Engestrom <eric.engestrom@imgtec.com>
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++
+ ---
+-Patch submitted upstream:
+-https://lists.freedesktop.org/archives/wayland-devel/2017-March/033359.html
++Changes v1 -> v2:
++  - fix typo in yes-check  (Eric)
+ ---
+- Makefile.am  | 3 ++-
++ Makefile.am  | 2 ++
+  configure.ac | 8 ++++++++
+- 2 files changed, 10 insertions(+), 1 deletion(-)
++ 2 files changed, 10 insertions(+)
+ 
+ diff --git a/Makefile.am b/Makefile.am
+-index d0c8bd3..9c2541d 100644
++index 741db5ebf9d9..4862d42959f0 100644
+ --- a/Makefile.am
+ +++ b/Makefile.am
+-@@ -143,7 +143,7 @@ libwayland_cursor_la_CFLAGS =			\
+- 	-I$(top_srcdir)/src			\
+- 	-DICONDIR=\"$(ICONDIR)\"
++@@ -160,6 +160,7 @@ pkgconfig_DATA += egl/wayland-egl.pc
++ include_HEADERS += egl/wayland-egl-backend.h
++ pkgconfig_DATA += egl/wayland-egl-backend.pc
+  
+--
+ +if ENABLE_TESTS
+  built_test_programs =				\
+  	array-test				\
+  	client-test				\
+-@@ -258,6 +258,7 @@ os_wrappers_test_LDADD = libtest-runner.la
++@@ -287,6 +288,7 @@ os_wrappers_test_LDADD = libtest-runner.la
+  
+  exec_fd_leak_checker_SOURCES = tests/exec-fd-leak-checker.c
+  exec_fd_leak_checker_LDADD = libtest-runner.la
+ +endif
+  
+  EXTRA_DIST += tests/scanner-test.sh			\
+- 	tests/data/example.xml				\
++ 	protocol/tests.xml				\
+ diff --git a/configure.ac b/configure.ac
+-index b583bef..96a5575 100644
++index c74ee97b24a2..5c94b7b76b06 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -87,10 +87,18 @@ AC_ARG_ENABLE([dtd-validation],
++@@ -89,10 +89,18 @@ AC_ARG_ENABLE([dtd-validation],
+  	      [],
+  	      [enable_dtd_validation=yes])
+  
+@@ -58,11 +63,11 @@ index b583bef..96a5575 100644
+  
+  AM_CONDITIONAL(ENABLE_LIBRARIES, test "x$enable_libraries" = xyes)
+  
+-+AM_CONDITIONAL(ENABLE_TESTS, test "x$enable_tests" = "yes")
+++AM_CONDITIONAL(ENABLE_TESTS, test "x$enable_tests" = xyes)
+ +
+  AC_ARG_WITH(icondir, [  --with-icondir=<dir>    Look for cursor icons here],
+  		     [  ICONDIR=$withval],
+  		     [  ICONDIR=${datadir}/icons])
+ -- 
+-2.7.4
++2.14.3
+ 
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index c46aca2bda..4fa83a4247 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
 @@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-August/034749.html
--md5 9c42a4c51a1b9f35d040fa9d45ada36d  weston-3.0.0.tar.xz
--sha1 0a75c2ee10f2453a073411157bb6ed029080669f  weston-3.0.0.tar.xz
--sha256 cde1d55e8dd70c3cbb3d1ec72f60e60000041579caa1d6a262bd9c35e93723a5  weston-3.0.0.tar.xz
--sha512 b824c39f2a884f6d50d607613f447090621f684c96f7d905f25f6e500dabd03ecb2b1cd1030babc193c3417223cb220103abb792437e1a5ead7229a76b5c7a58  weston-3.0.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2018-April/037768.html
-+md5 33709aa4d5916f89643fca0fc0064b39  weston-4.0.0.tar.xz
-+sha1 df1da4a880920c515162e95b18f3709a46690be7  weston-4.0.0.tar.xz
-+sha256 a0fc0ae7ef83dfbed12abfe9b8096a24a7dd00705e86fa0db1e619ded18b4b58  weston-4.0.0.tar.xz
-+sha512 0af41016ff4eae85779f95b5c5e44b9683f4ef681a8e52256efeebfa38073082b83e039d0db3c94ac22f22f8d8314c9d6cd16611144b260b353fc5bfdd1ded19  weston-4.0.0.tar.xz
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 3d17a61577..e9de56b2c6 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-August/034748.html
+-md5  0235f6075c32c3be61cff94fa0b9f108  wayland-1.14.0.tar.xz
+-sha1 53a443be3bafe73209bbc49ef2cb134ed16e0141  wayland-1.14.0.tar.xz
+-sha256 ed80cabc0961a759a42092e2c39aabfc1ec9a13c86c98bbe2b812f008da27ab8  wayland-1.14.0.tar.xz
+-sha512 bd38b2b8963d4d98d42c270e5d7dbff6323789a173b19b67a18258424fd8adee5021b282c9d7f6dad0bd25aa0160e76aecd8ed803d4eb25d911ef0a81cd713a5  wayland-1.14.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2018-April/037767.html
++md5  b7393c17fdce9a8d383edab656c92fd2  wayland-1.15.0.tar.xz
++sha1 374e07b4f3b7fdfa7c4206cdd48224ea00d69d68  wayland-1.15.0.tar.xz
++sha256 eb3fbebb8559d56a80ad3753ec3db800f587329067962dbf65e14488b4b7aeb0  wayland-1.15.0.tar.xz
++sha512 f908917f1b575d2dc4d9770d3303e2637e8744fcb5c81feb2af2fe82cc51f54e22beaddfbe775fcf9623584169b7a062c75076132abeb888717180bfab53b3a8  wayland-1.15.0.tar.xz
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 10710a8111..827924e402 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 3.0.0
-+WESTON_VERSION = 4.0.0
- WESTON_SITE = http://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+-WAYLAND_VERSION = 1.14.0
++WAYLAND_VERSION = 1.15.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
