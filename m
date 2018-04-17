@@ -1,9 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 17 Apr 2018 01:38:41 -0300
-Subject: [Buildroot] [PATCH] autobuild-run: remove only tarballs from
- download dir
-References: <20180416180925.464f3435@windsurf.numericable.fr>
-Message-ID: <5ad57a51cb61f_2e472aff481fbc845706f@ultri4.mail>
+Date: Tue, 17 Apr 2018 01:45:43 -0300
+Subject: [Buildroot] [RFC PATCH 2/3] download/git: recover dirty cache
+References: <20180416160124.GC2290@scaer>
+Message-ID: <5ad57bf7f1951_56842aaddbffa1a01575b@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +11,85 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, Apr 16, 2018 at 01:09 PM, Thomas Petazzoni wrote:
+On Mon, Apr 16, 2018 at 01:01 PM, Yann E. MORIN wrote:
 
->>      def find_files(root):
->>          for r, d, f in os.walk(root):
->> +            if '.git' in d:
->> +                d[:] = list()
+> On 2018-04-15 23:54 -0300, Ricardo Martincoski spake thusly:
+>> On Sun, Apr 15, 2018 at 09:02 AM, Yann E. MORIN wrote:
+> [--SNIP--]
+>> > Of course, that would require using appropriate options to fsck to bail
+>> > out.
+>> 
+>> Yes. Some interesting ones I listed below:
+>> --no-dangling: AFAIK they cause no harm;
+>> --no-reflogs: not sure;
+>> --full: this is for the case someone is abusing the git cache with alternates,
+>>         should we care?
 > 
-> Python question: is there any advantage in doing d[:] = list() instead
-> of just d = list() ?
+> So I played with git-fsck in quite a few setups, and it irremediably
+> exits with a non-zero status when something is wrong.
+> 
+> However, on my machine, it takes about 8min to fsck the Linux git tree,
+> which is a huge amount of time (much more than it takes to do the build
+> of said kernel).
 
-os.walk returns a mutable object, so d acts similar to a pointer in C language.
-See this:
->>> a=[1,2]
->>> b=a
->>> a=list()
->>> a.append(3)
->>> print(a,b)
-([3], [1, 2])
->>> a=[1,2]
->>> b=a
->>> a[:]=list()
->>> a.append(3)
->>> print(a,b)
-([3], [3])
-If we do just d = list() we are not changing the pointer that os.walk will use
-in the next iteration. In the end, nothing is excluded from the search.
+Argh. Indeed it tests too much. And it takes too much time.
+Sorry my bad suggestion.
 
-> Also, do we need to actually set d to the empty list ? We're anyway
-> doing a continue, and skipping over to the next iteration, where a new
-> value of d will be returned by os.walk(). Am I missing something ?
+> So, I am a bit reluctant at using git-fsck.
+> 
+> I'm trying to see if we can find a faster way to detect if the git tree
+> is sane or not. After all, we only need a sanity check, not repairing.
+> If it is not sane, we ditch it and reclone.
 
-Yes, we need to set it to an empty list. When we detect there is a subdir .git,
-os.walk is already iterating inside the dl/<package>/git directory. d contains
-the list of all immediate subdirs: .git and any subdir that is checked out in
-the git worktree. The next iteration of os.walk will pick up the list of subdirs
-and continue. So in the end, just using 'continue' would exclude only the files
-immediately inside the dl/<package>/git but not subdirs and their files nor the
-.git tree. When we set the list of subdirs to empty is the same as removing all
-elements one by one, but we don't have 'd.remove(all)'.
-The closest valid syntax is:
-del d[:]
+Agreed.
 
-Rethinking now, this use with 'del' is the most correct one.
-d[:] = list() creates a new object of the type list and makes the pointer that
-os.walk uses as subdirs to point to this new object. The old object is dangling,
-nothing points to it anymore and it will hopefully be removed at some point by
-the interpreter (I don't know the internals of the garbage collector).
-del d[:] does not create a new object, but actually removes all elements from
-the list object that already exists.
+> So, maybe just running "git status" or any other fast action should
+> probably be enough.
+
+I think 'git status' tests too much too. It's more related to the worktree
+status than to the repo (objects) status and we don't want to ditch the repo for
+a dirty worktree, git checkout -f and git clean -ffdx fix it for us.
+
+Maybe an even simpler command: 'git log -1' with the right options (to avoid
+failing if a checkout did not occur yet) or even other command, like 'git
+remote' or 'git tag'. But see below...
 
 > 
-> I think I'm also missing how this will prevent from iterating in
-> sub-directories, like git/<something>/foo/. I guess I need to read
-> again how os.walk() is working exactly.
+> Thoughts?
+> 
 
-Me too! Notice it mentions 'using del'.
-"When topdown is True, the caller can modify the dirnames list in-place (perhaps
-using del or slice assignment), and walk() will only recurse into the
-subdirectories whose names remain in dirnames; this can be used to prune the
-search"
+Maybe the solution is to use a reactive approach.
 
-So I will resend after changing to 'del' and adding a comment to the code or
-commit log to clarify why we check for '.git' instead of 'git'.
+With your approach of using --git-dir (or the alternate GIT_DIR=) for every
+command, we don't need a specific command to do the sanity check.
+
+If the repo is totally broken (e.g. .git/HEAD missing) the 'git remote' fails.
+
+If some object that the ref-to-be-checked-out needs is missing, 'git checkout
+-f' fails. Git is smart, it only fails if there is not a checked out copy of the
+file that matches the hash of the missing object.
+If the fetch was successful but the ref we need was not download (i.e. the case
+you described of someone using the wrong ref), the checkout also fails.
+So when the checkout fails we could test if the ref we need is in the local
+repo. If it is not present, we assume the repo is minimally sane and bail out.
+If it is present (and the checkout failed) something really wrong is going on.
+I guess 'git log -1 ref' will return the correct results for this test.
+
+    _git() {
+        eval ${GIT} --git-dir=.git "${@}"
+    }
+    _git init
+    _git remote
+    _git fetch
+    _git fetch -t
+    _git checkout -f ${ref}
+    if failed
+        if git log -1 ref
+            ditch and restart
+        else
+            bail out
+    _git clean -dX
+    _git submodules update
 
 Regards,
 Ricardo
