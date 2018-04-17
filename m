@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Apr 2018 08:50:11 +0200
-Subject: [Buildroot] [PATCH] package/perl: bump perl-cross to fix build
- with gcc-7 on AArch64
-In-Reply-To: <20180416154855.21630-1-yann.morin.1998@free.fr>
-References: <20180416154855.21630-1-yann.morin.1998@free.fr>
-Message-ID: <20180417085011.3ba59ad4@windsurf.numericable.fr>
+Date: Tue, 17 Apr 2018 08:53:27 +0200
+Subject: [Buildroot] [PATCH] usb_modeswitch: set CXX to false when C++
+ is missing
+In-Reply-To: <9c1fc72919be11ec00af92b2c0ba452d23f32144.1523937628.git.baruch@tkos.co.il>
+References: <9c1fc72919be11ec00af92b2c0ba452d23f32144.1523937628.git.baruch@tkos.co.il>
+Message-ID: <20180417085327.3da9c6bb@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 16 Apr 2018 17:48:55 +0200, Yann E. MORIN wrote:
-> Reported-by: Ellie Reeves <ellierevves@gmail.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> Cc: Ellie Reeves <ellierevves@gmail.com>
+On Tue, 17 Apr 2018 07:00:28 +0300, Baruch Siach wrote:
+> Similar to the openocd fix in commit 5966e2dc54 (package/openocd: fix
+> fallout after no-C++ fixups) the jimctl that is bundled with
+> usb_modeswitch also wants to find a binary. This broke with commit
+> 4cd1ab158 (core: alternate solution to disable C++). Revert to 'false'
+> instead of 'no' here as well.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/b4d/b4d4e925763cb6558af915f9781afe07fc557ebc/
+> http://autobuild.buildroot.net/results/61b/61b9dc2148df2e8fd0b30e62aedbfd30bb755e19/
+> http://autobuild.buildroot.net/results/468/468a7e6b049f159fbb4e79d3a12b53ca890f6933/
+> 
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/perl/perl.hash | 2 +-
->  package/perl/perl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> This fix is also applicable to the 2018.02.x branch.
+> ---
+>  package/usb_modeswitch/usb_modeswitch.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Fran?ois Perrad submitted another patch that bumps both perl and
-perl-cross, so I've applied Fran?ois patch instead.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
