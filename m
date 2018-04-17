@@ -1,88 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Apr 2018 18:48:23 +0200
-Subject: [Buildroot] [PATCH 4/4] download/git: always do full-clone
-In-Reply-To: <cover.1523983687.git.yann.morin.1998@free.fr>
-References: <cover.1523983687.git.yann.morin.1998@free.fr>
-Message-ID: <62d815cfe104e4d172ca4d51e1d56e577f737b87.1523983687.git.yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 17 Apr 2018 19:25:03 +0200
+Subject: [Buildroot] [PATCH 1/1] mpd: add mms support
+In-Reply-To: <20180409111515.7669d88c@windsurf>
+References: <20180407115230.22559-1-fontaine.fabrice@gmail.com>
+ <20180409111515.7669d88c@windsurf>
+Message-ID: <CAPi7W83n1qEf_maHrOaT-Ljv0w0ErOmHvAZmFU4UVgoJQLz6HA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently attempt a shallow clone, as tentative to save bandwidth and
-download time.
+Dear Thomas,
 
-However, now that we keep the git tree as a cache, it may happen that we
-need to checkout an earlier commit, and that would not be present with a
-shallow clone.
+2018-04-09 11:15 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-Furthermore, the shallow fetch is already really btroken, and just
-happens by chance. Consider the following actions, which are basivcally
-what happens today:
+> Hello,
+>
+> On Sat,  7 Apr 2018 13:52:30 +0200, Fabrice Fontaine wrote:
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/mpd/Config.in | 6 ++++++
+> >  package/mpd/mpd.mk    | 7 +++++++
+> >  2 files changed, 13 insertions(+)
+> >
+> > diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+> > index 6c7468e173..831e4ab0d7 100644
+> > --- a/package/mpd/Config.in
+> > +++ b/package/mpd/Config.in
+> > @@ -180,6 +180,12 @@ config BR2_PACKAGE_MPD_CURL
+> >       help
+> >         Enable curl streaming (http) support.
+> >
+> > +config BR2_PACKAGE_MPD_LIBMMS
+> > +     bool "mms"
+> > +     select BR2_PACKAGE_LIBMMS
+> > +     help
+> > +       Enable MMS support.
+>
+> Shouldn't we propagate the dependencies of the libmms package ?
+>
+> I suppose most (all ?) of them are already covered by the
+> BR2_PACKAGE_MPD option, but shouldn't we propagate them anyway, in case
+> we change the dependencies of BR2_PACKAGE_MPD in the future ?
+>
+> Do we a clear policy on this ?
+>
+All libmms dependencies are already covered by mpd package.
+It don't know if we have a clear policy for all packages.
+However, for samba support, BR2_USE_MMU, BR2_USE_WCHAR and
+BR2_TOOLCHAIN_HAS_THREADS_NPTL have not been propagated to mpd.
+Same thing for jack support and BR2_USE_MMU / BR2_TOOLCHAIN_HAS_THREADS.
 
-    mkdir git
-    git init git
-    cd git
-    git remote add origin https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-    git fetch origin --depth 1 v4.17-rc1
-    if ! git fetch origin v4.17-rc1:v4.17-rc1 ; then
-        echo "warning"
-    fi
-    git checkout v4.17-rc1
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 
-The checkout succeeds just because of the git-fetch in the if-condition,
-which is initially there to fetch the special refs from github MRs, or
-gerrit reviews. That fails, but we jsut print a warning. If we were to
-ever remove support for special refs, then the checkout would fail.
+Best Regards,
 
-The whole purpose of the git cache is to actually save bandwith and
-download time, but in the long run. For one-offs, people would
-preferably use a wget download (e.g. with the github macro) instead of
-a git clone.
-
-We switch to always doing a full clone. It is nore correct, and pays off
-in the long run...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
- support/download/git | 23 +++--------------------
- 1 file changed, 3 insertions(+), 20 deletions(-)
-
-diff --git a/support/download/git b/support/download/git
-index e71ff029cd..6a4d1f937b 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -63,26 +63,9 @@ fi
- 
- _git remote set-url origin "'${uri}'"
- 
--# Try to fetch with limited depth, since it is faster than a full clone - but
--# that only works if the version is a ref (tag or branch). Before trying to do
--# a shallow clone we check if ${cset} is in the list provided by git ls-remote.
--# If not we fallback to a full fetch.
--#
--# Messages for the type of clone used are provided to ease debugging in
--# case of problems
--git_done=0
--if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
--    printf "Doing a shallow fetch\n"
--    if _git fetch "${@}" --depth 1 origin "'${cset}'"; then
--        git_done=1
--    else
--        printf "Shallow fetch failed, falling back to fetching all refs\n"
--    fi
--fi
--if [ ${git_done} -eq 0 ]; then
--    printf "Fetching all references\n"
--    _git fetch origin -t
--fi
-+printf "Fetching all references\n"
-+_git fetch origin
-+_git fetch origin -t
- 
- # Try to get the special refs exposed by some forges (pull-requests for
- # github, changes for gerrit...). There is no easy way to know whether
--- 
-2.14.1
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180417/695ce1ae/attachment.html>
