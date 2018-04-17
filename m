@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Apr 2018 09:00:07 +0200
-Subject: [Buildroot] [PATCH] package/wayland: Bump version to 1.15.0
-In-Reply-To: <20180416165830.43193-1-abrodkin@synopsys.com>
-References: <20180416165830.43193-1-abrodkin@synopsys.com>
-Message-ID: <20180417090007.3eab6fa6@windsurf.numericable.fr>
+Date: Tue, 17 Apr 2018 09:00:24 +0200
+Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.1.32
+In-Reply-To: <20180416184000.2449-1-bluemrp9@gmail.com>
+References: <20180416184000.2449-1-bluemrp9@gmail.com>
+Message-ID: <20180417090024.2805390c@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 16 Apr 2018 19:58:30 +0300, Alexey Brodkin wrote:
-> All hashes provided by upstream.
+On Mon, 16 Apr 2018 11:40:00 -0700, Ryan Coe wrote:
+> Release notes: https://mariadb.com/kb/en/mariadb-10132-release-notes/
+> Changelog: https://mariadb.com/kb/en/mariadb-10132-changelog/
 > 
-> Updated Yann's patch:
->  - Took v2 from https://patchwork.freedesktop.org/patch/143038/
->  - Rebased on top of v1.15
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 > ---
->  ...002-configure-add-option-to-disable-tests.patch | 39 ++++++++++++----------
->  package/wayland/wayland.hash                       | 10 +++---
->  package/wayland/wayland.mk                         |  2 +-
->  3 files changed, 28 insertions(+), 23 deletions(-)
+>  package/mariadb/mariadb.hash | 4 ++--
+>  package/mariadb/mariadb.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
