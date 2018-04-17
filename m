@@ -1,86 +1,249 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Apr 2018 13:41:08 +0200
-Subject: [Buildroot] [PATCH 1/1] libcurl: fix building against libressl
-In-Reply-To: <20180415204327.5bc05597@windsurf.numericable.fr>
-References: <20180413123931.7604-1-aduskett@gmail.com>
- <20180415204327.5bc05597@windsurf.numericable.fr>
-Message-ID: <c5a388fe-9d06-15b5-0bc1-a4bf23890b19@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 Apr 2018 14:54:44 +0300
+Subject: [Buildroot] [PATCH] zeromq: needs NPTL
+Message-ID: <9d5f2d7a7183fa0d7c9cabc93ca4462755477429.1523966084.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The recent zeromq version bump to 4.2.5 added a call to
+pthread_condattr_setclock() which is only provided by the NPTL
+implementation of pthreads. Add this dependency to zeromq and all
+reverse dependencies recursively.
 
+Fixes:
+http://autobuild.buildroot.net/results/2d0/2d070074097270a1e6973bc19e2bded2a7023c49/
+http://autobuild.buildroot.net/results/1ce/1ce6d6f0f6390f552954a09f7dc753e0baa86675/
+http://autobuild.buildroot.net/results/97c/97c5b9f3bc2c94f8476e884b9a3163bbf2dad8d4/
 
-On 15-04-18 20:43, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 13 Apr 2018 08:39:31 -0400, Adam Duskett wrote:
->> LibreSSL 2.7.x breaks libcurl 7.59.0 with the error:
->> error: static declaration of ?OpenSSL_version_num? follows non-static
->> declaration
->>
->> This failure has since been fixed upstream with commit:
->> https://github.com/curl/curl/commit/7c90c93c0b061da81f69fabdd57125b2783c15fb
->>
->> Signed-off-by: Adam Duskett <aduskett@gmail.com>
->> ---
->>  ...-curl-fix-building-against-libressl-2.7.2.patch | 91 ++++++++++++++++++++++
->>  1 file changed, 91 insertions(+)
->>  create mode 100644 package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
->>
->> diff --git a/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch b/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
->> new file mode 100644
->> index 0000000000..e5d6f686e8
->> --- /dev/null
->> +++ b/package/libcurl/0001-curl-fix-building-against-libressl-2.7.2.patch
->> @@ -0,0 +1,91 @@
->> +From 7a67b6561da8e42505e09014a5c97b19e1a93532 Mon Sep 17 00:00:00 2001
->> +From: Adam Duskett <aduskett@gmail.com>
->> +Date: Fri, 13 Apr 2018 08:31:37 -0400
->> +Subject: [PATCH] curl: fix building against libressl 2.7.2
-> 
-> Since the issue has been fixed upstream, the fix should be a backport
-> from upstream commit, not a different commit authored by you.
-> 
-> I.e:
-> 
-> $ git clone https://github.com/curl/curl.git
-> $ cd curl/
-> $ git checkout curl-7_59_0
-> $ git cherry-pick 7c90c93c0b061da81f69fabdd57125b2783c15fb
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/circus/Config.in       | 6 +++---
+ package/cppzmq/Config.in       | 6 +++---
+ package/czmq/Config.in         | 6 +++---
+ package/filemq/Config.in       | 6 +++---
+ package/mongrel2/Config.in     | 6 +++---
+ package/php-zmq/Config.in      | 6 +++---
+ package/python-pyzmq/Config.in | 6 +++---
+ package/zeromq/Config.in       | 6 +++---
+ package/zmqpp/Config.in        | 6 +++---
+ package/zyre/Config.in         | 6 +++---
+ 10 files changed, 30 insertions(+), 30 deletions(-)
 
- Use git cherry-pick -x -s. This will add your Sob right away, and it will
-record the upstream commit from which it was taken.
-
-> $ git format-patch HEAD^
-
- And here, of course, you need to add -N (well, not in this case since it's just
-a single patch, but in general).
-
-
-> and then edit the patch to add your Signed-off-by below the one from
-> the original author, and use that in package/libcurl/.
-> 
-> Could you rework your patch by doing this ? I could have done it
-> myself, but I preferred to explain the process for doing it properly :)
-
- This should be added to the manual...
-
- Regards,
- Arnout
-
-> 
-> Thanks!
-> 
-> Thomas
-> 
-
+diff --git a/package/circus/Config.in b/package/circus/Config.in
+index f1cd93c73396..e09d87549cb0 100644
+--- a/package/circus/Config.in
++++ b/package/circus/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_CIRCUS
+ 	bool "circus"
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	depends on BR2_INSTALL_LIBSTDCPP # pyzmq -> zeromq
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # pyzmq -> zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pyzmq -> zeromq
+ 	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
+ 	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
+ 	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
+@@ -14,6 +14,6 @@ config BR2_PACKAGE_CIRCUS
+ 
+ 	  https://circus.readthedocs.org/en/latest/
+ 
+-comment "circus needs Python and a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++comment "circus needs Python and a toolchain w/ C++, NPTL"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
+diff --git a/package/cppzmq/Config.in b/package/cppzmq/Config.in
+index c984c15c96b9..d0ae0c22c2ab 100644
+--- a/package/cppzmq/Config.in
++++ b/package/cppzmq/Config.in
+@@ -1,12 +1,12 @@
+ config BR2_PACKAGE_CPPZMQ
+ 	bool "cppzmq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
+ 
+ 	  http://github.com/zeromq/cppzmq
+ 
+-comment "cppzmq needs a toolchain w/ C++, threads"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++comment "cppzmq needs a toolchain w/ C++, NPTL"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+diff --git a/package/czmq/Config.in b/package/czmq/Config.in
+index 71389fce5147..d4ca46c36c5c 100644
+--- a/package/czmq/Config.in
++++ b/package/czmq/Config.in
+@@ -2,13 +2,13 @@ config BR2_PACKAGE_CZMQ
+ 	bool "czmq"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  High-level C Binding for 0MQ
+ 
+ 	  http://czmq.zeromq.org/
+ 
+-comment "czmq needs a toolchain w/ C++, threads"
++comment "czmq needs a toolchain w/ C++, NPTL"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+diff --git a/package/filemq/Config.in b/package/filemq/Config.in
+index b4720c1d4c20..b015e2ead16f 100644
+--- a/package/filemq/Config.in
++++ b/package/filemq/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_FILEMQ
+ 	bool "filemq"
+ 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
+ 	depends on BR2_USE_MMU # czmq
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_CZMQ
+@@ -11,6 +11,6 @@ config BR2_PACKAGE_FILEMQ
+ 
+ 	  http://github.com/zeromq/filemq
+ 
+-comment "filemq needs a toolchain w/ C++, threads"
++comment "filemq needs a toolchain w/ C++, NPTL"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+index a9b09b786ce3..09bc8bd0a2ee 100644
+--- a/package/mongrel2/Config.in
++++ b/package/mongrel2/Config.in
+@@ -7,15 +7,15 @@ config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+ 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+ 		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_sparc || BR2_x86_64)
+ 
+-comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, dynamic library"
++comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, NPTL, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+ 		!BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+ 
+ config BR2_PACKAGE_MONGREL2
+ 	bool "mongrel2"
+ 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
+ 	depends on !BR2_STATIC_LIBS # uses dlopen()
+ 	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/php-zmq/Config.in b/package/php-zmq/Config.in
+index 058f93d9a862..3f7406b262ac 100644
+--- a/package/php-zmq/Config.in
++++ b/package/php-zmq/Config.in
+@@ -1,11 +1,11 @@
+-comment "php-zmq needs a toolchain w/ C++, threads"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++comment "php-zmq needs a toolchain w/ C++, NPTL"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+ 
+ config BR2_PACKAGE_PHP_ZMQ
+ 	bool "php-zmq"
+ 	depends on BR2_PACKAGE_PHP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  ZeroMQ messaging bindings for PHP
+diff --git a/package/python-pyzmq/Config.in b/package/python-pyzmq/Config.in
+index 8f33a635c86e..250191251940 100644
+--- a/package/python-pyzmq/Config.in
++++ b/package/python-pyzmq/Config.in
+@@ -1,13 +1,13 @@
+ config BR2_PACKAGE_PYTHON_PYZMQ
+ 	bool "python-pyzmq"
+ 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  This package contains the python language binding for zeromq.
+ 
+ 	  http://zeromq.org/bindings:python
+ 
+-comment "python-pyzmq needs a toolchain w/ C++, threads"
++comment "python-pyzmq needs a toolchain w/ C++, NPTL"
+ 	depends on BR2_PACKAGE_PYTHON
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index 69be9f002c59..25e438ae0739 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -1,10 +1,10 @@
+-comment "zeromq needs a toolchain w/ C++, threads"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++comment "zeromq needs a toolchain w/ C++, NPTL"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+ 
+ config BR2_PACKAGE_ZEROMQ
+ 	bool "zeromq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+index 8dad80e45198..b9d4dcfd646e 100644
+--- a/package/zmqpp/Config.in
++++ b/package/zmqpp/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_ZMQPP
+ 	# c++1x support
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
+@@ -13,8 +13,8 @@ config BR2_PACKAGE_ZMQPP
+ 
+ 	  http://github.com/benjamg/zmqpp
+ 
+-comment "zmqpp needs a toolchain w/ C++, threads, gcc >= 4.7"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++comment "zmqpp needs a toolchain w/ C++, NPTL, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+ if BR2_PACKAGE_ZMQPP
+diff --git a/package/zyre/Config.in b/package/zyre/Config.in
+index 21a0884ec62c..340e9775c526 100644
+--- a/package/zyre/Config.in
++++ b/package/zyre/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_ZYRE
+ 	bool "zyre"
+ 	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
+ 	depends on BR2_USE_MMU # czmq
+ 	select BR2_PACKAGE_CZMQ
+ 	select BR2_PACKAGE_ZEROMQ
+@@ -11,6 +11,6 @@ config BR2_PACKAGE_ZYRE
+ 
+ 	  http://zyre.org
+ 
+-comment "zyre needs a toolchain w/ C++, threads"
++comment "zyre needs a toolchain w/ C++, NPTL"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.0
