@@ -1,37 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Apr 2018 10:58:06 +0200
-Subject: [Buildroot] [git commit] nmap: fix check-package warning
-Message-ID: <20180418090250.212A988739@busybox.osuosl.org>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 18 Apr 2018 05:03:39 -0400
+Subject: [Buildroot] [PATCH v2 1/1] prosody: add dependency on shared
+ libraries
+Message-ID: <1524042219-12498-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27043c7a2536b9d1c8770b8c1c36b53a98efac0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The prosody package uses several Lua packages that require shared libraries.
+Therefore, prosody must require shared libraries too.
 
-Fixes:
+Fixes: http://autobuild.buildroot.net/results/b126bce0bbd111f021ed5be7c8773fef2a8f8579
 
-package/nmap/nmap.mk:88: expected indent with tabs
-93 lines processed
-1 warnings generated
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nmap/nmap.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 391215dbf4..1c89b5424e 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -85,7 +85,7 @@ endif
- # Add a symlink to "nc" if none of the competing netcats is selected
- ifeq ($(BR2_PACKAGE_NMAP_NCAT):$(BR2_PACKAGE_NETCAT)$(BR2_PACKAGE_NETCAT_OPENBSD),y:)
- define NMAP_INSTALL_NCAT_SYMLINK
--        ln -fs ncat $(TARGET_DIR)/usr/bin/nc
-+	ln -fs ncat $(TARGET_DIR)/usr/bin/nc
- endef
- NMAP_POST_INSTALL_TARGET_HOOKS += NMAP_INSTALL_NCAT_SYMLINK
- endif
+Note: this bug was reported as a luaexpat build error, but the fault is really due to
+prosody.  When the autobuilder's defconfig is applied, the following is emitted:
+
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASEC which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAEXPAT which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAFILESYSTEM which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASOCKET which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASEC which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAEXPAT which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAFILESYSTEM which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASOCKET which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+
+v1 -> v2
+--------
+- Add luasocket to depends-on "# pkgs" comment.
+---
+ package/prosody/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index ef26e27..133b0b1 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PROSODY
+ 	bool "prosody"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+ 	select BR2_PACKAGE_LUASEC # runtime
+ 	select BR2_PACKAGE_LUASOCKET # runtime
+@@ -15,6 +16,6 @@ config BR2_PACKAGE_PROSODY
+ 
+ 	  https://prosody.im
+ 
+-comment "prosody needs the lua interpreter"
+-	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
++comment "prosody needs the lua interpreter, dynamic library"
++	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+-- 
+2.7.4
