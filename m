@@ -1,38 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 18 Apr 2018 13:13:34 +0300
-Subject: [Buildroot] [PATCH v2] procps-ng: bump to version 3.3.14
-In-Reply-To: <20180418120400.2845e55c@windsurf.numericable.fr>
-References: <130c35b0d58841519c15a94b2730f675fa63192d.1523995096.git.baruch@tkos.co.il>
- <20180418120400.2845e55c@windsurf.numericable.fr>
-Message-ID: <20180418101334.wq7wxgd5owwsiona@tarshish>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 18 Apr 2018 12:17:36 +0200 (CEST)
+Subject: [Buildroot] Rust runtime tests issues
+In-Reply-To: <20180417150658.5dd5b4cc@windsurf.numericable.fr>
+Message-ID: <779874370.225301500.1524046656503.JavaMail.root@zimbra32-e6.priv.proxad.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi!
 
-On Wed, Apr 18, 2018 at 12:04:00PM +0200, Thomas Petazzoni wrote:
-> On Tue, 17 Apr 2018 22:58:16 +0300, Baruch Siach wrote:
+> The Rust tests in support/testing/ are consistently failing:
 > 
-> > Note: procps now uses fopencookie(). musl libc added support for this
-> > extension in version 1.1.19. autobuilder musl toolchains currently use
-> > version 1.1.16.
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/63334941
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/63334942
 > 
-> I have started a new build of all the br-* pre-built toolchains with
-> the latest Git master. I'll wait for this to finish, deploy the
-> toolchains, and then apply this patch, if that's OK for you.
+> Do you think you could have a look, and see what's not working, and fix
+> those tests ?
 
-That's perfectly fine with me.
+The build 63334942 fails as follow:
 
-While at it, you might want to look into the issue of libgcc link failure in 
-static musl toolchains. This issue currently affects lm-sensors and multicat. 
-See http://patchwork.ozlabs.org/patch/883243/.
+======================================================================
+ERROR: test_run (tests.package.test_rust.TestRustBin)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_rust.py", line 80, in test_run
+    self.build_test_prog()
+  File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_rust.py", line 39, in build_test_prog
+    raise SystemError("Cargo init failed")
+SystemError: Cargo init failed```
+```
 
-baruch
+The exception is raised because the execution of the command to 
+create a dummy test program "hello-world", with the previously built
+version of host-cargo, fails.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+From the file TestRustBin-build.log found in the artifacts.zip of job
+63334942, we can see:
+
+```
+error: Failed to create project `hello-world` at `/tmp/tmpOEzb1U-br2-testing-rust/hello-world`                                                                                                 
+                                                                                                                                                                                               
+Caused by:                                                                                                                                                                                     
+  could not determine the current user, please set $USER 
+```
+
+As the run-time test on CI apparently runs through Docker, should some setup 
+related to $USER be added to it?
+
+--
+ELB
