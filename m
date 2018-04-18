@@ -1,62 +1,41 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 18 Apr 2018 05:03:39 -0400
-Subject: [Buildroot] [PATCH v2 1/1] prosody: add dependency on shared
- libraries
-Message-ID: <1524042219-12498-1-git-send-email-danomimanchego123@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Apr 2018 11:46:48 +0200
+Subject: [Buildroot] [git commit] package/wmctrl: x-includes and x-libraries
+ must be set for cross-compiling
+Message-ID: <20180418094654.8BA0288272@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The prosody package uses several Lua packages that require shared libraries.
-Therefore, prosody must require shared libraries too.
+commit: https://git.buildroot.net/buildroot/commit/?id=046c5e25634bbf827c43617bf1967ab469418908
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes: http://autobuild.buildroot.net/results/b126bce0bbd111f021ed5be7c8773fef2a8f8579
+set x-includes and x-libraries configure option for cross-compiling.
+wmctrl can use poisoned paths if these options are not passed to
+configure script.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/7e5/7e5cba8a5650a00e10d1a5528f38cb2bf772aee1
 
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
+ package/wmctrl/wmctrl.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Note: this bug was reported as a luaexpat build error, but the fault is really due to
-prosody.  When the autobuilder's defconfig is applied, the following is emitted:
-
-warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASEC which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
-warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAEXPAT which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
-warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAFILESYSTEM which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
-warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASOCKET which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
-warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASEC which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
-warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAEXPAT which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
-warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAFILESYSTEM which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
-warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASOCKET which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
-
-v1 -> v2
---------
-- Add luasocket to depends-on "# pkgs" comment.
----
- package/prosody/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/prosody/Config.in b/package/prosody/Config.in
-index ef26e27..133b0b1 100644
---- a/package/prosody/Config.in
-+++ b/package/prosody/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PROSODY
- 	bool "prosody"
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
- 	select BR2_PACKAGE_LUAEXPAT # runtime
- 	select BR2_PACKAGE_LUASEC # runtime
- 	select BR2_PACKAGE_LUASOCKET # runtime
-@@ -15,6 +16,6 @@ config BR2_PACKAGE_PROSODY
+diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+index 0d4aeebc1d..36ad3513ff 100644
+--- a/package/wmctrl/wmctrl.mk
++++ b/package/wmctrl/wmctrl.mk
+@@ -11,4 +11,8 @@ WMCTRL_LICENSE_FILES = COPYING
  
- 	  https://prosody.im
+ WMCTRL_DEPENDENCIES = libglib2 xlib_libX11 xlib_libXmu
  
--comment "prosody needs the lua interpreter"
--	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
-+comment "prosody needs the lua interpreter, dynamic library"
-+	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
--- 
-2.7.4
++WMCTRL_CONF_OPTS = \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
++
+ $(eval $(autotools-package))
