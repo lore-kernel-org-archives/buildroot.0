@@ -1,102 +1,92 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Apr 2018 10:04:53 +0200
-Subject: [Buildroot] [PATCH 3/4] download/git: ensure we can checkout
- repos with submodule conversions
-In-Reply-To: <5ad6b7cbf192b_23c22af60ee98304189d9@ultri4.mail>
-References: <a45b9ba78d527d29cfd5cc0daf4c767c7feb8643.1523983687.git.yann.morin.1998@free.fr>
- <5ad6b7cbf192b_23c22af60ee98304189d9@ultri4.mail>
-Message-ID: <627eaa46-0acb-9753-15a0-d805abb18164@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Apr 2018 10:40:21 +0200
+Subject: [Buildroot] [PATCH 0/4] support/download: make the git backend
+ more robust
+In-Reply-To: <cover.1523983687.git.yann.morin.1998@free.fr>
+References: <cover.1523983687.git.yann.morin.1998@free.fr>
+Message-ID: <20180418104021.14be6fe9@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Tue, 17 Apr 2018 18:48:19 +0200, Yann E. MORIN wrote:
 
-On 18-04-18 05:13, Ricardo Martincoski wrote:
-> Hello,
-> 
-> Really sorry I did finished the review/tests today to send by tags.
-> 
-> Could you double-check the --force option for git 1.7.1? I am not sure we would
-> have a workaround for this if it is not supported.
+> Yann E. MORIN (4):
+>       download/git: ensure we always work in the expected repository
+>       download/git: ensure we have a sane repository
+>       download/git: ensure we can checkout repos with submodule conversions
+>       download/git: always do full-clone
 
- The help of 1.7.1 says:
+I have not yet tested with this patch series applied, but with the
+current master, I see a difference in behavior between what happens on
+my machine (recent Fedora system) and my build server (ancient Debian).
 
-git submodule [--quiet] update [--init] [-N|--no-fetch] [--rebase] [--reference
-<repository>] [--merge] [--recursive] [--] [<path>...]
+Note: on both cases, the DL_DIR/squashfs folder was entirely removed,
+so we start from a situation where there is no Git cache.
 
-No force there... Checking the code, I don't see any handling of -f or --force.
+On my machine, fetching squashfs works fine:
 
-> Also a question and some typos.
-> 
-> On Tue, Apr 17, 2018 at 01:48 PM, Yann E. MORIN wrote:
-[snip]
->> +# files after the checkout.
->> +find . -type f -name .git -exec rm {} +
-> 
-> In the unlikely case some user tries to abuse the git cache by first populating
-> it using the 'git multiple working trees' feature the main
-> dl/<package>/git/.git would be a file too. After this command all git commands
-> will fail.
-> But... well... that is expected! The user should not mess with the git cache,
-> it is there to be used solely by buildroot.
-> So we are good IMO.
+thomas at windsurf:~/projets/buildroot (master)$ make host-squashfs-extract
+/usr/bin/make -j1 O=/home/thomas/projets/buildroot/output HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++" silentoldconfig
+>>> host-squashfs e38956b92f738518c29734399629e7cdb33072d3 Downloading
+Initialized empty Git repository in /home/thomas/dl/squashfs/git/.git/
+Fetching all references
+remote: Counting objects: 8972, done.
+remote: Total 8972 (delta 0), reused 0 (delta 0)
+Receiving objects: 100% (8972/8972), 1.56 MiB | 1.66 MiB/s, done.
+Resolving deltas: 100% (6544/6544), done.
+From https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools
+ * [new branch]      lz4        -> origin/lz4
+ * [new branch]      master     -> origin/master
+ * [new branch]      stable     -> origin/stable
+warning: refname 'e38956b92f738518c29734399629e7cdb33072d3' is ambiguous.
+Git normally never creates a ref that ends with 40 hex characters
+because it will be ignored when you just specify 40-hex. These refs
+may be created by mistake. For example,
 
- +1
+  git checkout -b $br $(git rev-parse ...)
 
- That said, IMO it would be better if the git cache were a bare repo, and that
-we did the checkout outside of the repo. But I don't think that works well with
-submodules. Submodules are annoying...
+where "$br" is somehow empty and a 40-hex ref is created. Please
+examine these refs and maybe delete them. Turn this message off by
+running "git config advice.objectNameWarning false"
+squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz: OK (sha256: bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779)
+>>> host-squashfs e38956b92f738518c29734399629e7cdb33072d3 Extracting
+gzip -d -c /home/thomas/dl/squashfs/squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz | tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/host-squashfs-e38956b92f738518c29734399629e7cdb33072d3   -xf -
 
-> 
->> +
->> +# Restore repository to the new, clean-checkout state.
->> +_git clean -ffdx
->> +_git checkout -- .
-> 
-> So it is needed to checkout the .git files again? Or did I miss something?
+On my build server however, it fails badly:
 
- I'm missing the point as well. Clearly needs a comment :-)
+test at build:~/buildroot$ make host-squashfs-extract
+>>> host-squashfs e38956b92f738518c29734399629e7cdb33072d3 Downloading
+Initialized empty Git repository in /home/test/dl/squashfs/git/.git/
+Fetching all references
+Could not fetch special ref 'e38956b92f738518c29734399629e7cdb33072d3'; assuming it is not special.
+fatal: reference is not a tree: e38956b92f738518c29734399629e7cdb33072d3
+--2018-04-18 07:28:31--  http://sources.buildroot.net/squashfs/squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.166.48, 104.27.167.48, 2400:cb00:2048:1::681b:a730, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.27.166.48|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2018-04-18 07:28:31 ERROR 404: Not Found.
 
-> 
-> Long time since I developed using submodules, so I now forgot some catches.
-> Anyway I will play with those commands tomorrow to try to understand.
-> 
-> [snip]
->> -    _git submodule update --init --recursive
->> +    _git submodule update --init --recursive --force
-> 
-> It seems --force does not exist on git 1.7.1.
-> It is still possible I did something wrong when creating the docker image.
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63519024
+--2018-04-18 07:28:31--  http://sources.buildroot.net/squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.166.48, 104.27.167.48, 2400:cb00:2048:1::681b:a630, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.27.166.48|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2018-04-18 07:28:31 ERROR 404: Not Found.
 
- No, it doesn't exist.
+make: *** [/home/test/buildroot/output/build/host-squashfs-e38956b92f738518c29734399629e7cdb33072d3/.stamp_downloaded] Error 1
 
- Note that git 1.7.1 also doesn't have the .git files in the submodules; the
-submodules have .git directories, i.e. they're indistinguishable from normal
-repos. I think that that is not a problem for this patch, since I think git
-1.7.1 *will* kill .git directories when doing git clean --ffdx, but I'm not
-sure. Note that this implies that submodules will *not* be cached...
+My machine has Git 2.14.3, the build server has Git 1.7.10.4. I've
+tested with another git-fetched package, "ubus", and I have the same
+behavior.
 
- I'm liking the bare repos more and more :-)
+Best regards,
 
- Regards,
- Arnout
-
-> It does work for git 1.8.3.
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63525858
-> 
-> 
-> Regards,
-> Ricardo
-> 
-
+Thomas Petazzoni
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
