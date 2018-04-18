@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Apr 2018 00:27:40 +0200
-Subject: [Buildroot] [PATCH RESEND] core: enhance printvars for
- variables with newlines
-In-Reply-To: <20180416115855.26762-1-chemobejk@gmail.com>
-References: <CAOJ2eMdEHvZeJ6rECyRkzMZN0UYJ2CYK4yMgR9d89P%2B-tWYJYw@mail.gmail.com>
- <20180416115855.26762-1-chemobejk@gmail.com>
-Message-ID: <fc8f1cc6-e9ba-9cfe-df4a-4b80792d6434@mind.be>
+Date: Thu, 19 Apr 2018 00:40:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdb: don't remove support files
+ if python chosen
+In-Reply-To: <1523389042-66122-1-git-send-email-jzaddach@cisco.com>
+References: <1523389042-66122-1-git-send-email-jzaddach@cisco.com>
+Message-ID: <9d52d1d0-ddf4-64c2-a7a4-5fb5ec28bb2c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,109 +13,50 @@ To: buildroot@busybox.net
 
 
 
-On 16-04-18 13:58, Stefan Becker wrote:
-> If the variable content has newlines in it then the currently dumped
-> content can't be fed again to GNU make. Add the option DEFINE_VARS which
-> causes the variables to be dumped using
+On 10-04-18 21:37, Jonas Zaddach wrote:
+> If one wants to use GDB with python support on the target, you need the support
+> files installed by GDB. These get usually deleted to save some space, so I just
+> wrapped the Makefile code deleting them in a conditional block depending on if
+> python support is active or not.
 > 
->    define VAR
->    ... line 1 ...
->    ... line 2 ...
->    ...
->    endef
+> Signed-off-by: Jonas Zaddach <jzaddach@cisco.com>
+> ---
+>  package/gdb/gdb.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 7e86ba0..5c915da 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -164,11 +164,13 @@ endif
+>  
+>  # This removes some unneeded Python scripts and XML target description
+>  # files that are not useful for a normal usage of the debugger.
 
- I'm still not convinced that this is such a great idea.
+ Are the XML files also needed, or only the .py files?
 
-1. As explained in reply to your first iteration, there shouldn't be a need for
-including Buildroot variables in a surrounding Makefile.
+ It's especially surprising that you'd need those syscalls files for different
+architectures than the target...
 
-2. At least equally relevant would be output that is appropriate for Python,
-JSON, ...
+ But anyway, it's just about 200K.
 
-3. The implementation is not complete. In case of RAW_VARS, it's pretty hard to
-use in practice because also all the referenced variables would need to be
-retrieved. In the expanded case, any remaining $ will be interpreted by your
-surrounding make instead of being passed down to the shell like they should. Try
-e.g. CANFESTIVAL_INSTALL_TARGET_CMDS.
+ One small nit: I'd leave the comment within the condition. Otherwise:
 
-Note that QUOTED_VARS is not perfect either, mainly because there are some make
-variables that are not legal shell variables (e.g. all the 4th stuff).
-
- So, if anything changes in here, I'd rather have some output that is in some
-intermediate format that can easily be converted into or parsed by shell,
-python, etc.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> 
-> Updated the manual accordingly.
-> 
-> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-> ---
->  Makefile                  | 10 +++++++---
->  docs/manual/make-tips.txt | 20 ++++++++++++++++++++
->  2 files changed, 27 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 0724f28f45..3e27195de0 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -974,9 +974,13 @@ printvars:
->  		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
->  		$(if $(filter-out environment% default automatic, \
->  				$(origin $V)), \
-> -		$(if $(QUOTED_VARS),\
-> -			$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
-> -			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
-> +		$(if $(DEFINE_VARS), \
-> +			$(info define $V) \
-> +			$(info $(if $(RAW_VARS),$(value $V),$($V))) \
-> +			$(info endef), \
-> +			$(if $(QUOTED_VARS),\
-> +				$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
-> +				$(info $V=$(if $(RAW_VARS),$(value $V),$($V)))))))
->  # ' Syntax colouring...
+> +ifneq ($(BR2_PACKAGE_GDB_PYTHON),y)
+>  define GDB_REMOVE_UNNEEDED_FILES
+>  	$(RM) -rf $(TARGET_DIR)/usr/share/gdb
+>  endef
 >  
->  .PHONY: clean
-> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-> index ea1d825bef..ba87e5d873 100644
-> --- a/docs/manual/make-tips.txt
-> +++ b/docs/manual/make-tips.txt
-> @@ -92,6 +92,8 @@ It is possible to tweak the output using some variables:
+>  GDB_POST_INSTALL_TARGET_HOOKS += GDB_REMOVE_UNNEEDED_FILES
+> +endif
 >  
->  - +VARS+ will limit the listing to variables which names match the
->    specified make-pattern
-> +- +DEFINE_VARS+, if set to +YES+, will use define...endef to preserve
-> +  newlines in the value
->  - +QUOTED_VARS+, if set to +YES+, will single-quote the value
->  - +RAW_VARS+, if set to +YES+, will print the unexpanded value
->  
-> @@ -106,6 +108,24 @@ For example:
->   BUSYBOX_RDEPENDENCIES=ncurses util-linux
->  ----
->  
-> +----
-> + $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES DEFINE_VARS=YES
-> + define BUSYBOX_DEPENDENCIES
-> + skeleton toolchain
-> + endef
-> + define BUSYBOX_FINAL_ALL_DEPENDENCIES
-> + skeleton toolchain
-> + endef
-> + define BUSYBOX_FINAL_DEPENDENCIES
-> + skeleton toolchain
-> + endef
-> + define BUSYBOX_FINAL_PATCH_DEPENDENCIES
-> + endef
-> + define BUSYBOX_RDEPENDENCIES
-> + ncurses util-linux'linux-pam skeleton toolchain host-skeleton host-ccache
-> + endef
-> +----
-> +
->  ----
->   $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES QUOTED_VARS=YES
->   BUSYBOX_DEPENDENCIES='skeleton toolchain'
+>  # This installs the gdbserver somewhere into the $(HOST_DIR) so that
+>  # it becomes an integral part of the SDK, if the toolchain generated
 > 
 
 -- 
