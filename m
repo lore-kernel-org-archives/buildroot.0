@@ -1,41 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Apr 2018 16:25:10 +0200
-Subject: [Buildroot] [PATCH 1/1] pixiewps: added missing dependency
-In-Reply-To: <1524060503-16067-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <1524060503-16067-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <20180418162510.719ad915@windsurf.numericable.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 18 Apr 2018 11:33:42 -0300 (BRT)
+Subject: [Buildroot] modem-manager: build issue
+In-Reply-To: <CAGm1_kusSpWv2dmQyzerpouB+LUvf84jZAi6rBMyZdieUUosow@mail.gmail.com>
+References: <CAGm1_kusSpWv2dmQyzerpouB+LUvf84jZAi6rBMyZdieUUosow@mail.gmail.com>
+Message-ID: <1730967127.450971.1524062022318.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guillaume,
+> From: "Yegor Yefremov" <yegorslists@googlemail.com>
+> To: "buildroot" <buildroot@buildroot.org>
+> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Carlos Santos" <casantos@datacom.ind.br>, "Aleksander
+> Morgado" <aleksander@aleksander.es>
+> Sent: Wednesday, April 18, 2018 9:32:06 AM
+> Subject: modem-manager: build issue
 
-On Wed, 18 Apr 2018 16:08:23 +0200, Guillaume W. Bres wrote:
+> Current mm 1.6.12 produces following errors both when compiling an ARM
+> or MIPS target:
+> 
+>  CC       ModemManager-mm-base-modem.o
+> mm-base-manager.c: In function ?handle_set_logging?:
+> mm-base-manager.c:680:15: error: assignment from incompatible pointer
+> type [-Werror=incompatible-pointer-types]
+>     ctx->self = g_object_ref (manager);
+>               ^
+> mm-base-manager.c: In function ?handle_scan_devices?:
+> mm-base-manager.c:736:15: error: assignment from incompatible pointer
+> type [-Werror=incompatible-pointer-types]
+>     ctx->self = g_object_ref (manager);
+>               ^
+> mm-device.c: In function ?mm_device_get_plugin?:
+> mm-device.c:628:12: error: return from incompatible pointer type
+> [-Werror=incompatible-pointer-types]
+>     return (self->priv->plugin ?
+> 
+> So far I've seen only one build failure in our autobuilders [0]. I can
+> reproduce this error building mm 1.6.12 locally with my host GCC. But
+> the master branch of mm compiles without any issue. We don't seem to
+> be the only ones who is affected [1], [2].
+> 
+> Any ideas?
+> 
+> [0]
+> http://autobuild.buildroot.net/results/5d9e299ff12726d07e8a584a213c1d2a2e419594/
+> [1]
+> https://fedorapeople.org/groups/risc-v/logs/ModemManager-1.6.12-3.fc28.src.rpm/build.log
+> [2]
+> https://www.linuxquestions.org/questions/slackware-14/slackware-from-scratch-and-x11-4175560702/page19.html
+> 
+> Yegor
 
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS=y
+I'm quite busy right now but will try to reproduce the error tonight.
 
-Should be just depends on BR2_TOOLCHAIN_HAS_THREADS. You can look at
-all the other packages to have examples on how to do things like that.
-
-Also, please add in the commit log something like this:
-
-"""
-Fixes:
-
-   http://autobuild.buildroot.org/results/...
-"""
-
-with an actual error to a build failure reported by the autobuilders.
-The mention "22/46 toolchains have been successfully tested here." is
-not useful because we don't know what "here" means, nor which
-toolchains have been tested.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
