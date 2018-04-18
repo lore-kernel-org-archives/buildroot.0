@@ -1,48 +1,123 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Apr 2018 00:02:56 +0200
-Subject: [Buildroot] ALSA not working /dev/snd/* not mounted
-In-Reply-To: <CAHnuF30ia67wKybZsrsZYfDC+4KF+RRyf5pU-EdTNXG5HA2kVQ@mail.gmail.com>
-References: <CAHnuF30ia67wKybZsrsZYfDC+4KF+RRyf5pU-EdTNXG5HA2kVQ@mail.gmail.com>
-Message-ID: <0379a229-fe2e-942f-4400-fa02c0ebad4d@mind.be>
+Date: Thu, 19 Apr 2018 00:27:40 +0200
+Subject: [Buildroot] [PATCH RESEND] core: enhance printvars for
+ variables with newlines
+In-Reply-To: <20180416115855.26762-1-chemobejk@gmail.com>
+References: <CAOJ2eMdEHvZeJ6rECyRkzMZN0UYJ2CYK4yMgR9d89P%2B-tWYJYw@mail.gmail.com>
+ <20180416115855.26762-1-chemobejk@gmail.com>
+Message-ID: <fc8f1cc6-e9ba-9cfe-df4a-4b80792d6434@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alejandro,
 
-On 16-04-18 17:58, Alejandro Ariel Fachini wrote:
-> Hello:
-> Working on SAM9x35 with buildroot and linux4sam 5.6
-> CODEC wm8731
+
+On 16-04-18 13:58, Stefan Becker wrote:
+> If the variable content has newlines in it then the currently dumped
+> content can't be fed again to GNU make. Add the option DEFINE_VARS which
+> causes the variables to be dumped using
 > 
-> Compiling buildroot with /dev managment auto devtmpfs
-> 
-> when i run the kernel get:
-> ??? input: at91_adc as /devices/soc0/ahb/ahb:apb/f804c000.adc/input/input0?????????
-> ??? wm8731 0-001a: Assuming static MCLK????????????????????????????????????????????
-> ??? 0-001a supply AVDD not found, using dummy regulator????????????????????????????
-> ??? 0-001a supply HPVDD not found, using dummy regulator???????????????????????????
-> ??? 0-001a supply DCVDD not found, using dummy regulator???????????????????????????
-> ??? 0-001a supply DBVDD not found, using dummy regulator???????????????????????????
-> ??? wm8731 0-001a: Failed to issue reset: -121?????????????????????????????????????
-> ??? wm8731: probe of 0-001a failed with error -121
+>    define VAR
+>    ... line 1 ...
+>    ... line 2 ...
+>    ...
+>    endef
 
- Well, it can't be probed, So either there is something wrong with the hardware,
-or it's configured incorrectly in the device tree. For example, maybe it's not
-powered because the regulator is not configured.
+ I'm still not convinced that this is such a great idea.
 
- There is nothing buildroot-related about this issue.
+1. As explained in reply to your first iteration, there shouldn't be a need for
+including Buildroot variables in a surrounding Makefile.
+
+2. At least equally relevant would be output that is appropriate for Python,
+JSON, ...
+
+3. The implementation is not complete. In case of RAW_VARS, it's pretty hard to
+use in practice because also all the referenced variables would need to be
+retrieved. In the expanded case, any remaining $ will be interpreted by your
+surrounding make instead of being passed down to the shell like they should. Try
+e.g. CANFESTIVAL_INSTALL_TARGET_CMDS.
+
+Note that QUOTED_VARS is not perfect either, mainly because there are some make
+variables that are not legal shell variables (e.g. all the 4th stuff).
+
+ So, if anything changes in here, I'd rather have some output that is in some
+intermediate format that can easily be converted into or parsed by shell,
+python, etc.
 
  Regards,
  Arnout
 
-?????????????????????????????????
-> ??? sam9x5-snd-wm8731 sound: ASoC: CODEC DAI wm8731-hifi not??????
-> registered????????????
-> ??? sam9x5-snd-wm8731 sound: ASoC: Platform device allocation failed???
-> [snip]
+> 
+> Updated the manual accordingly.
+> 
+> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+> ---
+>  Makefile                  | 10 +++++++---
+>  docs/manual/make-tips.txt | 20 ++++++++++++++++++++
+>  2 files changed, 27 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 0724f28f45..3e27195de0 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -974,9 +974,13 @@ printvars:
+>  		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+>  		$(if $(filter-out environment% default automatic, \
+>  				$(origin $V)), \
+> -		$(if $(QUOTED_VARS),\
+> -			$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
+> -			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
+> +		$(if $(DEFINE_VARS), \
+> +			$(info define $V) \
+> +			$(info $(if $(RAW_VARS),$(value $V),$($V))) \
+> +			$(info endef), \
+> +			$(if $(QUOTED_VARS),\
+> +				$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
+> +				$(info $V=$(if $(RAW_VARS),$(value $V),$($V)))))))
+>  # ' Syntax colouring...
+>  
+>  .PHONY: clean
+> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+> index ea1d825bef..ba87e5d873 100644
+> --- a/docs/manual/make-tips.txt
+> +++ b/docs/manual/make-tips.txt
+> @@ -92,6 +92,8 @@ It is possible to tweak the output using some variables:
+>  
+>  - +VARS+ will limit the listing to variables which names match the
+>    specified make-pattern
+> +- +DEFINE_VARS+, if set to +YES+, will use define...endef to preserve
+> +  newlines in the value
+>  - +QUOTED_VARS+, if set to +YES+, will single-quote the value
+>  - +RAW_VARS+, if set to +YES+, will print the unexpanded value
+>  
+> @@ -106,6 +108,24 @@ For example:
+>   BUSYBOX_RDEPENDENCIES=ncurses util-linux
+>  ----
+>  
+> +----
+> + $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES DEFINE_VARS=YES
+> + define BUSYBOX_DEPENDENCIES
+> + skeleton toolchain
+> + endef
+> + define BUSYBOX_FINAL_ALL_DEPENDENCIES
+> + skeleton toolchain
+> + endef
+> + define BUSYBOX_FINAL_DEPENDENCIES
+> + skeleton toolchain
+> + endef
+> + define BUSYBOX_FINAL_PATCH_DEPENDENCIES
+> + endef
+> + define BUSYBOX_RDEPENDENCIES
+> + ncurses util-linux'linux-pam skeleton toolchain host-skeleton host-ccache
+> + endef
+> +----
+> +
+>  ----
+>   $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES QUOTED_VARS=YES
+>   BUSYBOX_DEPENDENCIES='skeleton toolchain'
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
