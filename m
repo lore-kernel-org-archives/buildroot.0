@@ -1,88 +1,83 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 18 Apr 2018 00:01:26 +0200
-Subject: [Buildroot] [PATCH] add Radeon SI driver to mesa3d package
-In-Reply-To: <9C4B57AF-E8C0-4BC6-80C7-C72006371825@gamecodehq.com>
-References: <9C4B57AF-E8C0-4BC6-80C7-C72006371825@gamecodehq.com>
-Message-ID: <3b815480-8436-8b94-ff8d-37701c2b34da@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Wed, 18 Apr 2018 00:13:15 -0300
+Subject: [Buildroot] [PATCH 3/4] download/git: ensure we can checkout
+ repos with submodule conversions
+References: <a45b9ba78d527d29cfd5cc0daf4c767c7feb8643.1523983687.git.yann.morin.1998@free.fr>
+Message-ID: <5ad6b7cbf192b_23c22af60ee98304189d9@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michal,
+Hello,
 
-Thanks for your contribution!
+Really sorry I did finished the review/tests today to send by tags.
 
-Please follow the manual for submitting patches [1] and add your SoB line [2]
-otherwise Buildroot maintainers can't merge your patch.
+Could you double-check the --force option for git 1.7.1? I am not sure we would
+have a workaround for this if it is not supported.
+Also a question and some typos.
 
-The commit title should be "package/mesa3d: add Radeon SI support"
+On Tue, Apr 17, 2018 at 01:48 PM, Yann E. MORIN wrote:
 
-[1] http://nightly.buildroot.org/manual.html#submitting-patches
-[2]
-http://nightly.buildroot.org/manual.html#_format_and_licensing_of_the_package_patches
+> When a repository has had a sub-dir <-> submodule conversion, checking
+> out a working copy from before/after the conversion can leave along a
+> few untracked files, expecially the .git files from submodules.
 
-Le 17/04/2018 ? 22:55, Micha? Kalbarczyk a ?crit?:
-> Hi, after lates changes in mesa3d package, there is easy way to add radeonsi driver. 
+s/expecially/especially/
+I think it's a typo, not a US/UK thing.
+
 > 
-> This is a diff:
-> 
-> diff --git a/var/folders/f0/4ht96w1s5rd7gqvlml56p71c0000gn/T//WhRTic_Config.in b/package/mesa3d/Config.in
-> index bd3d050e29..3670ee455c 100644
-> --- a/var/folders/f0/4ht96w1s5rd7gqvlml56p71c0000gn/T//WhRTic_Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -114,6 +114,26 @@ comment "R600 driver needs a uClibc or glibc toolchain when llvm is enabled"
->  	depends on BR2_PACKAGE_MESA3D_LLVM
->  	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-> 
-> +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
-> +	bool "Gallium Radeon SI driver"
-> +	depends on BR2_i386 || BR2_x86_64
-> +	depends on !BR2_PACKAGE_MESA3D_LLVM || \
-> +		(BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
-> +			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
-> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> +	select BR2_PACKAGE_LIBDRM_RADEON
+> Ideally, we'd use "git submodule deinit --all" before the checkout to
+> the new ref, but deinit was only introduced in v1.8.3, which is still
+> not available in some enterprise-grade distros (RHEEL6 still has 1.7.1
 
-what's about a "select BR2_PACKAGE_LIBDRM_AMDGPU" ?
-mesa3d is checking for both.
+s/RHEEL6/RHEL6/
 
-Otherwise, the patch looks good.
-Can you send an updated version?
+> AFAIK).
+[snip]
+> +# We would need to deregister _current_ submodules before we checkout.
+> +# git-clean (which is used below) does not get rid of .git files (no
+> +# git command, but git-submodule, ever touches .git files or dirs);
+> +# Using "git submodule deinit --all" would remove all the files for
+> +# all submodules, including the corresponding .git files. However, it
+> +# was only introduced with git-1.8.3, which is too recent for some
+> +# entreprise-grade distros. So, we fall-back to just removing .git
 
-Best regards,
-Romain
+s/entreprise/enterprise/
 
-> +	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
-> +	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
-> +	select BR2_PACKAGE_MESA3D_NEEDS_XA
-> +	help
-> +	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
+> +# files after the checkout.
+> +find . -type f -name .git -exec rm {} +
+
+In the unlikely case some user tries to abuse the git cache by first populating
+it using the 'git multiple working trees' feature the main
+dl/<package>/git/.git would be a file too. After this command all git commands
+will fail.
+But... well... that is expected! The user should not mess with the git cache,
+it is there to be used solely by buildroot.
+So we are good IMO.
+
 > +
-> +# Radeon SI needs libelf when Mesa3D is built with LLVM support
-> +# musl is not currently compatible with elfutils
-> +comment "Radeon SI driver needs a uClibc or glibc toolchain when llvm is enabled"
-> +	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-> +
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
->  	bool "Gallium vmware svga driver"
->  	depends on BR2_i386 || BR2_x86_64
-> diff --git a/var/folders/f0/4ht96w1s5rd7gqvlml56p71c0000gn/T//OPIX1a_mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 506f84274f..e89b895c18 100644
-> --- a/var/folders/f0/4ht96w1s5rd7gqvlml56p71c0000gn/T//OPIX1a_mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -80,6 +80,7 @@ endif
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv imx
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
-> +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> +# Restore repository to the new, clean-checkout state.
+> +_git clean -ffdx
+> +_git checkout -- .
+
+So it is needed to checkout the .git files again? Or did I miss something?
+
+Long time since I developed using submodules, so I now forgot some catches.
+Anyway I will play with those commands tomorrow to try to understand.
+
+[snip]
+> -    _git submodule update --init --recursive
+> +    _git submodule update --init --recursive --force
+
+It seems --force does not exist on git 1.7.1.
+It is still possible I did something wrong when creating the docker image.
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63519024
+
+It does work for git 1.8.3.
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63525858
+
+
+Regards,
+Ricardo
