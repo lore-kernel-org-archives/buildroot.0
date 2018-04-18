@@ -1,41 +1,102 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 18 Apr 2018 08:07:33 +0200
-Subject: [Buildroot] [PATCH] dhcpc: bump to version 7.0.3
-Message-ID: <20180418060733.705-1-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 18 Apr 2018 10:04:53 +0200
+Subject: [Buildroot] [PATCH 3/4] download/git: ensure we can checkout
+ repos with submodule conversions
+In-Reply-To: <5ad6b7cbf192b_23c22af60ee98304189d9@ultri4.mail>
+References: <a45b9ba78d527d29cfd5cc0daf4c767c7feb8643.1523983687.git.yann.morin.1998@free.fr>
+ <5ad6b7cbf192b_23c22af60ee98304189d9@ultri4.mail>
+Message-ID: <627eaa46-0acb-9753-15a0-d805abb18164@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/dhcpcd/dhcpcd.hash | 2 +-
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index 3be3f7ff51..7aafdbad4d 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated from download (no sig, hash)
--sha256	6f9674dc7e27e936cc787175404a6171618675ecfb6903ab9887b1b66a87d69e	dhcpcd-6.11.5.tar.xz
-+sha256	a255d9aecceb1c77a9862f1c0d31a48ba37aab5ef2ca5ad76fc7a907b6ea292e	dhcpcd-7.0.3.tar.xz
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index dc5c69b86b..1bb0dd8a51 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DHCPCD_VERSION = 6.11.5
-+DHCPCD_VERSION = 7.0.3
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_DEPENDENCIES = host-pkgconf
+On 18-04-18 05:13, Ricardo Martincoski wrote:
+> Hello,
+> 
+> Really sorry I did finished the review/tests today to send by tags.
+> 
+> Could you double-check the --force option for git 1.7.1? I am not sure we would
+> have a workaround for this if it is not supported.
+
+ The help of 1.7.1 says:
+
+git submodule [--quiet] update [--init] [-N|--no-fetch] [--rebase] [--reference
+<repository>] [--merge] [--recursive] [--] [<path>...]
+
+No force there... Checking the code, I don't see any handling of -f or --force.
+
+> Also a question and some typos.
+> 
+> On Tue, Apr 17, 2018 at 01:48 PM, Yann E. MORIN wrote:
+[snip]
+>> +# files after the checkout.
+>> +find . -type f -name .git -exec rm {} +
+> 
+> In the unlikely case some user tries to abuse the git cache by first populating
+> it using the 'git multiple working trees' feature the main
+> dl/<package>/git/.git would be a file too. After this command all git commands
+> will fail.
+> But... well... that is expected! The user should not mess with the git cache,
+> it is there to be used solely by buildroot.
+> So we are good IMO.
+
+ +1
+
+ That said, IMO it would be better if the git cache were a bare repo, and that
+we did the checkout outside of the repo. But I don't think that works well with
+submodules. Submodules are annoying...
+
+> 
+>> +
+>> +# Restore repository to the new, clean-checkout state.
+>> +_git clean -ffdx
+>> +_git checkout -- .
+> 
+> So it is needed to checkout the .git files again? Or did I miss something?
+
+ I'm missing the point as well. Clearly needs a comment :-)
+
+> 
+> Long time since I developed using submodules, so I now forgot some catches.
+> Anyway I will play with those commands tomorrow to try to understand.
+> 
+> [snip]
+>> -    _git submodule update --init --recursive
+>> +    _git submodule update --init --recursive --force
+> 
+> It seems --force does not exist on git 1.7.1.
+> It is still possible I did something wrong when creating the docker image.
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63519024
+
+ No, it doesn't exist.
+
+ Note that git 1.7.1 also doesn't have the .git files in the submodules; the
+submodules have .git directories, i.e. they're indistinguishable from normal
+repos. I think that that is not a problem for this patch, since I think git
+1.7.1 *will* kill .git directories when doing git clean --ffdx, but I'm not
+sure. Note that this implies that submodules will *not* be cached...
+
+ I'm liking the bare repos more and more :-)
+
+ Regards,
+ Arnout
+
+> It does work for git 1.8.3.
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63525858
+> 
+> 
+> Regards,
+> Ricardo
+> 
+
 -- 
-2.17.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
