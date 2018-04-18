@@ -1,84 +1,90 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Wed, 18 Apr 2018 16:24:32 +0200
-Subject: [Buildroot] [PATCH 1/3] dropbear: Use macro to set options
-Message-ID: <20180418142434.7268-1-stefan.sorensen@spectralink.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 18 Apr 2018 21:19:12 +0200
+Subject: [Buildroot] [PATCH] package/flann: fix build with cmake >= 3.11
+Message-ID: <20180418191912.25410-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a macro for editing options.h according to the Buildroot
-configuration, replacing individual sed scripts.
+CMake 3.11 changed the behaviour of add_library() that break the existing
+flann CMake code.
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+From [1]:
+"add_library() and add_executable() commands can now be called without
+ any sources and will not complain as long as sources are added later
+ via the target_sources() command."
+
+This issue is already reported upstream [2] with a proposed solution.
+
+Fixes:
+http://autobuild.buildroot.net/results/b2f/b2febfaf8c44ce477b3e4a5b9b976fd25e8d7454
+
+[1] https://cmake.org/cmake/help/v3.11/release/3.11.html
+[2] https://github.com/mariusmuja/flann/issues/369
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Davide Viti <zinosat@tiscali.it>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dropbear/dropbear.mk | 37 +++++++++++++++---------------------
- 1 file changed, 15 insertions(+), 22 deletions(-)
+ .../flann/0001-src-cpp-fix-cmake-3.11-build.patch  | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 01a1a07b76..dc1fee207f 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -32,24 +32,25 @@ endef
- 
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_FIX_XAUTH
- 
--define DROPBEAR_ENABLE_REVERSE_DNS
--	$(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
-+define DROPBEAR_SET_OPT # (define, option)
-+	if [ 'x$(2)' = 'xy' -o 'x$(2)' = 'x!' ]; then \
-+		$(SED) 's:.*\(#define $(1)\)\([^A-Z0-9_]\|$$\).*:\1 1:' $(@D)/options.h; \
-+	else \
-+		$(SED) 's:.*\(#define $(1)\)\([^A-Z0-9_]\|$$\).*:/*\1*/:' $(@D)/options.h; \
-+	fi
- endef
- 
--define DROPBEAR_BUILD_SMALL
--	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
-+define DROPBEAR_SET_OPTIONS
-+	$(call DROPBEAR_SET_OPT,DROPBEAR_SMALL_CODE,$(BR2_PACKAGE_DROPBEAR_SMALL))
-+	$(call DROPBEAR_SET_OPT,NO_FAST_EXPTMOD,$(BR2_PACKAGE_DROPBEAR_SMALL))
-+	$(call DROPBEAR_SET_OPT,DO_HOST_LOOKUP,$(BR2_PACKAGE_DROPBEAR_ENABLE_REVERSE_DNS))
-+	$(call DROPBEAR_SET_OPT,NON_INETD_MODE,$(BR2_USE_MMU))
-+	$(call DROPBEAR_SET_OPT,DROPBEAR_BLOWFISH,!$(BR2_PACKAGE_DROPBEAR_SMALL))
-+	$(call DROPBEAR_SET_OPT,DROPBEAR_TWOFISH128,!$(BR2_PACKAGE_DROPBEAR_SMALL))
-+	$(call DROPBEAR_SET_OPT,DROPBEAR_TWOFISH256,!$(BR2_PACKAGE_DROPBEAR_SMALL))
- endef
- 
--define DROPBEAR_BUILD_FEATURED
--	$(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
--	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
--	$(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
--	$(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
--endef
--
--define DROPBEAR_DISABLE_STANDALONE
--	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
--endef
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SET_OPTIONS
- 
- define DROPBEAR_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
-@@ -64,19 +65,11 @@ define DROPBEAR_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
- 		$(TARGET_DIR)/etc/init.d/S50dropbear
- endef
--else
--DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
--endif
--
--ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
--DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
- endif
- 
- ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
--DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_SMALL
- DROPBEAR_CONF_OPTS += --disable-zlib
- else
--DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
- DROPBEAR_DEPENDENCIES += zlib
- endif
- 
+diff --git a/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
+new file mode 100644
+index 0000000000..5542c3cfc8
+--- /dev/null
++++ b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
+@@ -0,0 +1,48 @@
++From fa5ec96a94646492a3f908e12905b3e48a8e800b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 18 Apr 2018 20:24:13 +0200
++Subject: [PATCH] src/cpp: fix cmake >= 3.11 build
++
++Upstream status: Pending
++
++https://github.com/mariusmuja/flann/issues/369
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/cpp/CMakeLists.txt | 4 ++--
++ src/cpp/empty.cpp      | 1 +
++ 2 files changed, 3 insertions(+), 2 deletions(-)
++ create mode 100644 src/cpp/empty.cpp
++
++diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
++index b44a735..a816863 100644
++--- a/src/cpp/CMakeLists.txt
+++++ b/src/cpp/CMakeLists.txt
++@@ -29,7 +29,7 @@ if (BUILD_CUDA_LIB)
++ endif()
++ 
++ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
++-    add_library(flann_cpp SHARED "")
+++    add_library(flann_cpp SHARED "empty.cpp")
++     set_target_properties(flann_cpp PROPERTIES LINKER_LANGUAGE CXX)
++     target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
++ 
++@@ -85,7 +85,7 @@ if (BUILD_C_BINDINGS)
++     set_property(TARGET flann_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++ 
++     if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
++-        add_library(flann SHARED "")
+++        add_library(flann SHARED "empty.cpp")
++         set_target_properties(flann PROPERTIES LINKER_LANGUAGE CXX)
++         target_link_libraries(flann -Wl,-whole-archive flann_s -Wl,-no-whole-archive)
++     else()
++diff --git a/src/cpp/empty.cpp b/src/cpp/empty.cpp
++new file mode 100644
++index 0000000..40a8c17
++--- /dev/null
+++++ b/src/cpp/empty.cpp
++@@ -0,0 +1 @@
+++/* empty */
++-- 
++2.14.3
++
 -- 
-2.17.0
+2.14.3
