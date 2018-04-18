@@ -1,50 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Apr 2018 23:58:20 +0200
-Subject: [Buildroot] [PATCH 2/3] dropbear: Add configuration options for
- security features
-In-Reply-To: <20180418142434.7268-2-stefan.sorensen@spectralink.com>
-References: <20180418142434.7268-1-stefan.sorensen@spectralink.com>
- <20180418142434.7268-2-stefan.sorensen@spectralink.com>
-Message-ID: <533c6880-ac31-b6cc-166f-7c973ecdef5e@mind.be>
+Date: Thu, 19 Apr 2018 00:02:56 +0200
+Subject: [Buildroot] ALSA not working /dev/snd/* not mounted
+In-Reply-To: <CAHnuF30ia67wKybZsrsZYfDC+4KF+RRyf5pU-EdTNXG5HA2kVQ@mail.gmail.com>
+References: <CAHnuF30ia67wKybZsrsZYfDC+4KF+RRyf5pU-EdTNXG5HA2kVQ@mail.gmail.com>
+Message-ID: <0379a229-fe2e-942f-4400-fa02c0ebad4d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Alejandro,
 
-
-On 18-04-18 16:24, Stefan S?rensen wrote:
-> The dropbear server provides no runtime configuration of ciphers, key
-> exchange algorithms, etc., but must rather be configured compile time.
-> With no configurability the default settings will be use which may not
-> be desired in all scenearios.
+On 16-04-18 17:58, Alejandro Ariel Fachini wrote:
+> Hello:
+> Working on SAM9x35 with buildroot and linux4sam 5.6
+> CODEC wm8731
 > 
-> These new options allow the selection of
->   Ciphers (AES128, AES256, 3DES, BLowfish, Twofish128, Twofish256)
->   Cipher modes (CBC, CTR)
->   Integrity algorithms (SHA1, SHA1-96, SHA2-256, SHA2-512, MD5)
->   Key exchange algorithms (RSA, DSS, ECDSA, Curve25519, ECDH)
->   Authenticaton types (Password, Pubkey)
+> Compiling buildroot with /dev managment auto devtmpfs
 > 
-> No defaults are changed.
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> ---
->  package/dropbear/Config.in   | 163 +++++++++++++++++++++++++++++++++++
+> when i run the kernel get:
+> ??? input: at91_adc as /devices/soc0/ahb/ahb:apb/f804c000.adc/input/input0?????????
+> ??? wm8731 0-001a: Assuming static MCLK????????????????????????????????????????????
+> ??? 0-001a supply AVDD not found, using dummy regulator????????????????????????????
+> ??? 0-001a supply HPVDD not found, using dummy regulator???????????????????????????
+> ??? 0-001a supply DCVDD not found, using dummy regulator???????????????????????????
+> ??? 0-001a supply DBVDD not found, using dummy regulator???????????????????????????
+> ??? wm8731 0-001a: Failed to issue reset: -121?????????????????????????????????????
+> ??? wm8731: probe of 0-001a failed with error -121
 
- Do we really want so many configuration options?
+ Well, it can't be probed, So either there is something wrong with the hardware,
+or it's configured incorrectly in the device tree. For example, maybe it's not
+powered because the regulator is not configured.
 
- It is already possible to customize options.h through a patch in
-BR2_GLOBAL_PATCH_DIR. I admit that that's a little hackish, so as an alternative
-you could add an option to supply a custom options.h.
+ There is nothing buildroot-related about this issue.
 
  Regards,
  Arnout
 
->  package/dropbear/dropbear.mk |  25 +++++-
->  2 files changed, 185 insertions(+), 3 deletions(-)
-[snip]
+?????????????????????????????????
+> ??? sam9x5-snd-wm8731 sound: ASoC: CODEC DAI wm8731-hifi not??????
+> registered????????????
+> ??? sam9x5-snd-wm8731 sound: ASoC: Platform device allocation failed???
+> [snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
