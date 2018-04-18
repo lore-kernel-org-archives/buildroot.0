@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Apr 2018 23:55:14 +0200
-Subject: [Buildroot] [PATCH 1/1] reaver: add missing dependency on non
- static lib.
-In-Reply-To: <1524069781-671-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <1524069781-671-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <42941498-53f1-e48d-5a75-78493ad701d6@mind.be>
+Date: Wed, 18 Apr 2018 23:58:20 +0200
+Subject: [Buildroot] [PATCH 2/3] dropbear: Add configuration options for
+ security features
+In-Reply-To: <20180418142434.7268-2-stefan.sorensen@spectralink.com>
+References: <20180418142434.7268-1-stefan.sorensen@spectralink.com>
+ <20180418142434.7268-2-stefan.sorensen@spectralink.com>
+Message-ID: <533c6880-ac31-b6cc-166f-7c973ecdef5e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +14,37 @@ To: buildroot@busybox.net
 
 
 
-On 18-04-18 18:43, Guillaume W. Bres wrote:
-> Fixes
+On 18-04-18 16:24, Stefan S?rensen wrote:
+> The dropbear server provides no runtime configuration of ciphers, key
+> exchange algorithms, etc., but must rather be configured compile time.
+> With no configurability the default settings will be use which may not
+> be desired in all scenearios.
 > 
-> 	http://autobuild.buildroot.net/results/519b4347f496c043ddecdf15f57efb0b3addee42
-> 	http://autobuild.buildroot.net/results/c3daad76473a704e379634e3b87d51468a353f41
+> These new options allow the selection of
+>   Ciphers (AES128, AES256, 3DES, BLowfish, Twofish128, Twofish256)
+>   Cipher modes (CBC, CTR)
+>   Integrity algorithms (SHA1, SHA1-96, SHA2-256, SHA2-512, MD5)
+>   Key exchange algorithms (RSA, DSS, ECDSA, Curve25519, ECDH)
+>   Authenticaton types (Password, Pubkey)
 > 
-> lpcap is not found when BR2_STATIC_LIBS=y
+> No defaults are changed.
+> 
+> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+> ---
+>  package/dropbear/Config.in   | 163 +++++++++++++++++++++++++++++++++++
 
- Instead of just blindly disabling static, it's worthwhile to try to fix it
-instead. You can use the pattern that is used in e.g. arp-scan:
+ Do we really want so many configuration options?
 
-ifeq ($(BR2_STATIC_LIBS),y)
-REAVER_CONF_OPTS += \
- 	LDFLAGS="$(TARGET_LDFLAGS) `$(STAGING_DIR)/usr/bin/pcap-config --static
---additional-libs`"
-endif
-
-(untested).
+ It is already possible to customize options.h through a patch in
+BR2_GLOBAL_PATCH_DIR. I admit that that's a little hackish, so as an alternative
+you could add an option to supply a custom options.h.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->  package/reaver/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/reaver/Config.in b/package/reaver/Config.in
-> index 0fd8ab7..3e73d0e 100644
-> --- a/package/reaver/Config.in
-> +++ b/package/reaver/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_REAVER
->  	bool "reaver"
-> +	depends on !BR2_STATIC_LIBS
->  	select BR2_PACKAGE_LIBPCAP
->  	help
->  	  Reaver is a tool to audit networks against brute WPS pins
-> @@ -7,3 +8,6 @@ config BR2_PACKAGE_REAVER
->  
->  	  https://code.google.com/archive/p/reaver-wps/wikis/README.wiki
->  	  https://github.com/t6x/reaver-wps-fork-t6x
-> +
-> +comment "reaver needs a toolchain w/ dynamic library"
-> +	depends on BR2_STATIC_LIBS
-> 
+>  package/dropbear/dropbear.mk |  25 +++++-
+>  2 files changed, 185 insertions(+), 3 deletions(-)
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
