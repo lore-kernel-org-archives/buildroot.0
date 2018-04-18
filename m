@@ -1,64 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Apr 2018 10:52:25 +0200
-Subject: [Buildroot] [PATCH 0/4] support/download: make the git backend
- more robust
-In-Reply-To: <20180418104021.14be6fe9@windsurf.numericable.fr>
-References: <cover.1523983687.git.yann.morin.1998@free.fr>
- <20180418104021.14be6fe9@windsurf.numericable.fr>
-Message-ID: <20180418105225.747e611e@windsurf.numericable.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 18 Apr 2018 04:55:59 -0400
+Subject: [Buildroot] [PATCH 1/1] prosody: add dependency on shared libraries
+Message-ID: <1524041759-11496-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The prosody package uses several Lua packages that require shared libraries.
+Therefore, prosody must require shared libraries too.
 
-On Wed, 18 Apr 2018 10:40:21 +0200, Thomas Petazzoni wrote:
+Fixes: http://autobuild.buildroot.net/results/b126bce0bbd111f021ed5be7c8773fef2a8f8579
 
-> I have not yet tested with this patch series applied, but with the
-> current master, I see a difference in behavior between what happens on
-> my machine (recent Fedora system) and my build server (ancient Debian).
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-No change with the patch series applied. It does a full clone, but
-fails after that:
+---
 
-test at build:~/buildroot$ rm -rf ~/dl/squashfs/
-test at build:~/buildroot$ make host-squashfs-extract
->>> host-squashfs e38956b92f738518c29734399629e7cdb33072d3 Downloading
-Initialized empty Git repository in /home/test/dl/squashfs/git/.git/
-Fetching all references 
-remote: Counting objects: 8972, done.
-remote: Total 8972 (delta 0), reused 0 (delta 0)
-Receiving objects: 100% (8972/8972), 1.56 MiB | 2.51 MiB/s, done.
-Resolving deltas: 100% (6544/6544), done.
-From https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools
- * [new branch]      lz4        -> origin/lz4
- * [new branch]      master     -> origin/master
- * [new branch]      stable     -> origin/stable
-Could not fetch special ref 'e38956b92f738518c29734399629e7cdb33072d3'; assuming it is not special.
-ERROR: squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz has wrong sha256 hash:
-ERROR: expected: bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779
-ERROR: got     : c7a61e3bcabb716b268f5a341055ac5ecda8b9f2b42025f82926f201ff5c8881
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
---2018-04-18 08:41:14--  http://sources.buildroot.net/squashfs/squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.166.48, 104.27.167.48, 2400:cb00:2048:1::681b:a730, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.27.166.48|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2018-04-18 08:41:14 ERROR 404: Not Found.
+Note: this bug was reported as a luaexpat build error, but the fault is really due to
+prosody.  When the autobuilder's defconfig is applied, the following is emitted:
 
---2018-04-18 08:41:14--  http://sources.buildroot.net/squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.166.48, 104.27.167.48, 2400:cb00:2048:1::681b:a730, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.27.166.48|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2018-04-18 08:41:14 ERROR 404: Not Found.
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASEC which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAEXPAT which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAFILESYSTEM which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASOCKET which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASEC which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAEXPAT which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAFILESYSTEM which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASOCKET which has unmet direct dependencies (!BR2_STATIC_LIBS && BR2_PACKAGE_HAS_LUAINTERPRETER)
+---
+ package/prosody/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-make: *** [/home/test/buildroot/output/build/host-squashfs-e38956b92f738518c29734399629e7cdb33072d3/.stamp_downloaded] Error 1
-
-Best regards,
-
-Thomas
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index ef26e27..32fa648 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PROSODY
+ 	bool "prosody"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_STATIC_LIBS # luasec, luaexpat, luafilesystem
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+ 	select BR2_PACKAGE_LUASEC # runtime
+ 	select BR2_PACKAGE_LUASOCKET # runtime
+@@ -15,6 +16,6 @@ config BR2_PACKAGE_PROSODY
+ 
+ 	  https://prosody.im
+ 
+-comment "prosody needs the lua interpreter"
+-	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
++comment "prosody needs the lua interpreter, dynamic library"
++	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
