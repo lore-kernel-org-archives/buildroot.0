@@ -1,92 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Apr 2018 10:40:21 +0200
-Subject: [Buildroot] [PATCH 0/4] support/download: make the git backend
- more robust
-In-Reply-To: <cover.1523983687.git.yann.morin.1998@free.fr>
-References: <cover.1523983687.git.yann.morin.1998@free.fr>
-Message-ID: <20180418104021.14be6fe9@windsurf.numericable.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 18 Apr 2018 04:52:15 -0400
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-04-17
+In-Reply-To: <20180418060044.E69E820D99@mail.bootlin.com>
+References: <20180418060044.E69E820D99@mail.bootlin.com>
+Message-ID: <CANxTyt6m03+PsZa6245eLU2gpj=B0BP_3ojprtR13OwAyDS2=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, Dushara,
 
-On Tue, 17 Apr 2018 18:48:19 +0200, Yann E. MORIN wrote:
+On Wed, Apr 18, 2018 at 2:00 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> This is the list of Buildroot build failures that occured on
+> 2018-04-17, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+>
+> Results for the 'master' branch
+> ===============================
+>
+> Build failures related to your packages:
+>
+>          sh4 |               luaexpat-1.3.0-1 | http://autobuild.buildroot.net/results/b126bce0bbd111f021ed5be7c8773fef2a8f8579
+>
+> --
+> http://autobuild.buildroot.net
 
-> Yann E. MORIN (4):
->       download/git: ensure we always work in the expected repository
->       download/git: ensure we have a sane repository
->       download/git: ensure we can checkout repos with submodule conversions
->       download/git: always do full-clone
+This bug was reported as a luaexpat build error, but the fault is
+really due to prosody.  When the autobuilder's defconfig is applied,
+the following is emitted:
 
-I have not yet tested with this patch series applied, but with the
-current master, I see a difference in behavior between what happens on
-my machine (recent Fedora system) and my build server (ancient Debian).
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASEC which has
+unmet direct dependencies (!BR2_STATIC_LIBS &&
+BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAEXPAT which has
+unmet direct dependencies (!BR2_STATIC_LIBS &&
+BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAFILESYSTEM which
+has unmet direct dependencies (!BR2_STATIC_LIBS &&
+BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASOCKET which has
+unmet direct dependencies (!BR2_STATIC_LIBS &&
+BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASEC which has
+unmet direct dependencies (!BR2_STATIC_LIBS &&
+BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAEXPAT which has
+unmet direct dependencies (!BR2_STATIC_LIBS &&
+BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUAFILESYSTEM which
+has unmet direct dependencies (!BR2_STATIC_LIBS &&
+BR2_PACKAGE_HAS_LUAINTERPRETER)
+warning: (BR2_PACKAGE_PROSODY) selects BR2_PACKAGE_LUASOCKET which has
+unmet direct dependencies (!BR2_STATIC_LIBS &&
+BR2_PACKAGE_HAS_LUAINTERPRETER)
 
-Note: on both cases, the DL_DIR/squashfs folder was entirely removed,
-so we start from a situation where there is no Git cache.
+I will send in a patch to make prosody depend on !BR2_STATIC_LIBS shortly.
 
-On my machine, fetching squashfs works fine:
-
-thomas at windsurf:~/projets/buildroot (master)$ make host-squashfs-extract
-/usr/bin/make -j1 O=/home/thomas/projets/buildroot/output HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++" silentoldconfig
->>> host-squashfs e38956b92f738518c29734399629e7cdb33072d3 Downloading
-Initialized empty Git repository in /home/thomas/dl/squashfs/git/.git/
-Fetching all references
-remote: Counting objects: 8972, done.
-remote: Total 8972 (delta 0), reused 0 (delta 0)
-Receiving objects: 100% (8972/8972), 1.56 MiB | 1.66 MiB/s, done.
-Resolving deltas: 100% (6544/6544), done.
-From https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools
- * [new branch]      lz4        -> origin/lz4
- * [new branch]      master     -> origin/master
- * [new branch]      stable     -> origin/stable
-warning: refname 'e38956b92f738518c29734399629e7cdb33072d3' is ambiguous.
-Git normally never creates a ref that ends with 40 hex characters
-because it will be ignored when you just specify 40-hex. These refs
-may be created by mistake. For example,
-
-  git checkout -b $br $(git rev-parse ...)
-
-where "$br" is somehow empty and a 40-hex ref is created. Please
-examine these refs and maybe delete them. Turn this message off by
-running "git config advice.objectNameWarning false"
-squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz: OK (sha256: bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779)
->>> host-squashfs e38956b92f738518c29734399629e7cdb33072d3 Extracting
-gzip -d -c /home/thomas/dl/squashfs/squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz | tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/host-squashfs-e38956b92f738518c29734399629e7cdb33072d3   -xf -
-
-On my build server however, it fails badly:
-
-test at build:~/buildroot$ make host-squashfs-extract
->>> host-squashfs e38956b92f738518c29734399629e7cdb33072d3 Downloading
-Initialized empty Git repository in /home/test/dl/squashfs/git/.git/
-Fetching all references
-Could not fetch special ref 'e38956b92f738518c29734399629e7cdb33072d3'; assuming it is not special.
-fatal: reference is not a tree: e38956b92f738518c29734399629e7cdb33072d3
---2018-04-18 07:28:31--  http://sources.buildroot.net/squashfs/squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.166.48, 104.27.167.48, 2400:cb00:2048:1::681b:a730, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.27.166.48|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2018-04-18 07:28:31 ERROR 404: Not Found.
-
---2018-04-18 07:28:31--  http://sources.buildroot.net/squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.166.48, 104.27.167.48, 2400:cb00:2048:1::681b:a630, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.27.166.48|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2018-04-18 07:28:31 ERROR 404: Not Found.
-
-make: *** [/home/test/buildroot/output/build/host-squashfs-e38956b92f738518c29734399629e7cdb33072d3/.stamp_downloaded] Error 1
-
-My machine has Git 2.14.3, the build server has Git 1.7.10.4. I've
-tested with another git-fetched package, "ubus", and I have the same
-behavior.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Danomi -
