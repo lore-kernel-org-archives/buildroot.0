@@ -1,52 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Apr 2018 23:10:24 +0200
-Subject: [Buildroot] [git commit] download/git: be sure we do fetch something
-Message-ID: <20180419211049.195AC88830@busybox.osuosl.org>
+Date: Thu, 19 Apr 2018 23:13:35 +0200
+Subject: [Buildroot] [git commit] syslog-ng: bump version header in conf
+ file to 3.10
+Message-ID: <20180419211431.319BD88836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2b71e852dc4200ce48715a9e9b5ed44379bfec8
+commit: https://git.buildroot.net/buildroot/commit/?id=905f8d814ad21af9c3fd22ececce0824cb20db80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The different versions of git will behave in different ways when
-fetching remote references, as summarised by the table below:
+Remove a runtime warning message about configuration file being too old.
 
-              |     ancient git         | new git
---------------------------------------------------------------------
-git fetch     | fetch all refs but tags | fetches all refs but tags
-git fetch -t  | fetches only tags       | fetch all refs and tags
+Do the same as commit 3dad25466d "syslog-ng: Bump version header in conf
+file to 3.9". Package version of syslog-ng is 3.10.1, so bump version
+number in syslog-ng.conf to 3.10.
 
-(git-fetch may still fetch tags, but only if reachable from a branch)
+Also add a comment to avoid the same warning message reappears when the
+package is bumped.
 
-So, to cover all the bases, we do a simple fetch, to be sure we have
-branches, followed by the existing fetch -t, to get extra tags.
-
-Fixes:
-    http://autobuild.buildroot.net/results/0a2/0a238a7f55ea56c33b639ad03ed5796143426889/build-end.log
-
-Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Cc: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/git | 1 +
- 1 file changed, 1 insertion(+)
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ package/syslog-ng/syslog-ng.mk   | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/support/download/git b/support/download/git
-index 1172310186..c48ad36b1a 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -81,6 +81,7 @@ if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
- fi
- if [ ${git_done} -eq 0 ]; then
-     printf "Fetching all references\n"
-+    _git fetch origin
-     _git fetch origin -t
- fi
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index a3384eebc3..e767255d71 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+- at version: 3.9
++ at version: 3.10
  
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 325fac5842..2b6f2c09e9 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -4,6 +4,8 @@
+ #
+ ################################################################################
+ 
++# When updating the version, please check at runtime if the version in
++# syslog-ng.conf header needs to be updated
+ SYSLOG_NG_VERSION = 3.10.1
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
