@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Apr 2018 01:18:26 +0200
-Subject: [Buildroot] [PATCH 1/1] reaver: add missing dependency on non
- static lib.
-In-Reply-To: <CAJe0E3fi6_Yj6SEqkGp2s5h4nDZgQdDK_egJCoA9CjRLqaLMyQ@mail.gmail.com>
-References: <1524069781-671-1-git-send-email-guillaume.bressaix@gmail.com>
- <42941498-53f1-e48d-5a75-78493ad701d6@mind.be>
- <CAJe0E3fi6_Yj6SEqkGp2s5h4nDZgQdDK_egJCoA9CjRLqaLMyQ@mail.gmail.com>
-Message-ID: <b81b22a0-c300-0133-a925-bfbfa44b1013@mind.be>
+Date: Fri, 20 Apr 2018 01:30:57 +0200
+Subject: [Buildroot] [PATCH 3/4] download/git: ensure we can checkout
+ repos with submodule conversions
+In-Reply-To: <20180419195948.GD30285@scaer>
+References: <a45b9ba78d527d29cfd5cc0daf4c767c7feb8643.1523983687.git.yann.morin.1998@free.fr>
+ <5ad6b7cbf192b_23c22af60ee98304189d9@ultri4.mail>
+ <627eaa46-0acb-9753-15a0-d805abb18164@mind.be> <20180419195948.GD30285@scaer>
+Message-ID: <41022455-a486-da38-00fa-53c07432fa97@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +14,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-[Please don't top-post, but reply in-line like I do below.]
 
-On 19-04-18 23:35, Guillaume William Bres wrote:
-> Thank you, yes you are right.
+On 19-04-18 21:59, Yann E. MORIN wrote:
+> Arnout, Ricardo, All,
 > 
-> I improved my methods, I reproduced the build error here by copying the config
-> file. I improved things a little bit with
+> On 2018-04-18 10:04 +0200, Arnout Vandecappelle spake thusly:
+[snip]
+>>  Note that git 1.7.1 also doesn't have the .git files in the submodules; the
+>> submodules have .git directories, i.e. they're indistinguishable from normal
+>> repos. I think that that is not a problem for this patch, since I think git
+>> 1.7.1 *will* kill .git directories when doing git clean --ffdx, but I'm not
+>> sure. Note that this implies that submodules will *not* be cached...
+>>
+>>  I'm liking the bare repos more and more :-)
 > 
-> ifeq ($(BR2_STATIC_LIBS),y) # --static seems to cause the pb
-> REAVER_CONF_ENV += ac_cv_lib_pcap_pcap_open_live=yes
-> endif
-> 
-> it's less dramatic but still a dirty work around:?
-> libpcap is properly selected by the package, so has been previously downloaded &
-> installed by buildroot. -lpcap is properly passed to the linker from my first
-> submission. Yet pcap_open_live test by configure still fails. My understanding
-> is the line I just added avoids testing "pcap_open_live" which causes a failure.
-> Dunno if you're okay with that.
-> 
-> Make now actually proceeds further & produces some new errors, yet still somehow
-> related to pcap, I could use your input on them:
-> 
-> step that fails now:
-> $buildroot/output/host/mips64el-buildroot-linux-uclibc/sysroot/usr/lib64/../lib64/libpcap.a(pcap-dbus.o):
-> In function `dbus_write':
-> pcap-dbus.c:(.text+0x48): undefined reference to `dbus_message_demarshal'
-> pcap-dbus.c:(.text+0x8c): undefined reference to `dbus_message_demarshal'
+> But then, we can't have submodules stored in a bare repo, because we
+> need a workign copy to have the list of submodules, and their
+> versions...
 
- It's the same issue, but now with a different symptom.
+ It's *possible* to do things fully "manually", e.g. with some plumbing commands:
 
- The issue is that libpcap itself is linked against other libraries. In the
-dynamic library case, there are NEEDED entries in the .so file that point to
-these other libraries. In this case, the linker will implicitly search for those
-other libraries as if they had been given with -l on the command line. However,
-in a static .a library, these NEEDED entries don't exist. Therefore, the linker
-can't know that when you link with -lpcap, that it also needs to do -ldbus etc.
-Therefore you get undefined reference errors.
+export GIT_DIR=/path/to/bare/repo
+blob=$(git ls-tree $cset .gitmodules | awk '{print $3}')
+if [ "$blob" ]; then
+  tmpfile=$(git unpack-file $blob)
+  etc. etc.
 
- The solution, as I wrote, is to use pcap-config, which will enumerate all the
-libraries that libpcap needs.
 
  Regards,
  Arnout
-
-> 
-> I started googling & looking at dbus related packages but haven't made any
-> progress yet
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
