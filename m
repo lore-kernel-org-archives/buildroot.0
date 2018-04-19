@@ -1,46 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Apr 2018 22:46:02 +0200
-Subject: [Buildroot] [PATCH] multicat: bump to version 2.2
-In-Reply-To: <c2ce3c90b5f2b419e3d2e621db03832c5bae1901.1524115717.git.baruch@tkos.co.il>
-References: <c2ce3c90b5f2b419e3d2e621db03832c5bae1901.1524115717.git.baruch@tkos.co.il>
-Message-ID: <20180419224602.77ec8ed4@windsurf.numericable.fr>
+From: Joshua Henderson <joshua.henderson@microchip.com>
+Date: Thu, 19 Apr 2018 13:47:51 -0700
+Subject: [Buildroot] [PATCH 1/1] package/x264: bump version
+In-Reply-To: <20180411161845.7d6b3f49@windsurf>
+References: <20180410191044.19425-1-bernd.kuhls@t-online.de>
+ <20180411161845.7d6b3f49@windsurf>
+Message-ID: <1231759d-6acc-92f1-32f7-88cc55c7a1b1@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 04/11/2018 07:18 AM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 10 Apr 2018 21:10:44 +0200, Bernd Kuhls wrote:
+>> Added license hash.
+>>
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> ---
+>>  package/x264/x264.hash | 3 ++-
+>>  package/x264/x264.mk   | 2 +-
+>>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> Applied to master, thanks.
+> 
 
-On Thu, 19 Apr 2018 08:28:37 +0300, Baruch Siach wrote:
-> Drop upstream patches.
-> 
-> Add upstream patch fixing build with musl libc.
-> 
-> Add license file hash.
-> 
-> Set LDLIBS to TARGET_LDFLAGS for TARGET_LDFLAGS to be added to the link
-> commands. Makefile does not use the LDFLAGS environment variable. This
-> fixes static linking.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../0001-Fix-build-with-musl-libc.patch       | 62 +++++++++++++++++++
->  .../multicat/0001-Fix-missing-pthread.patch   | 20 ------
->  package/multicat/0002-Fix-musl-build.patch    | 47 --------------
->  ...Fix-have-clock-nanosleep-with-uclibc.patch | 24 -------
->  package/multicat/multicat.hash                |  7 ++-
->  package/multicat/multicat.mk                  |  6 +-
->  6 files changed, 70 insertions(+), 96 deletions(-)
->  create mode 100644 package/multicat/0001-Fix-build-with-musl-libc.patch
->  delete mode 100644 package/multicat/0001-Fix-missing-pthread.patch
->  delete mode 100644 package/multicat/0002-Fix-musl-build.patch
->  delete mode 100644 package/multicat/0003-Fix-have-clock-nanosleep-with-uclibc.patch
+There seems to be some disagreement with the hash in this commit on master.
 
-Applied to master, thanks.
+I can reproduce the same expected result that is also showing up on autobuild
+in several places.  For example:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+    http://autobuild.buildroot.org/results/442/442bc92891e75d4d8cbf3dc400fe248bb3a1a52c//build-end.log
+
+I tracked this down to hash changing whether or not you have the following
+commit, which is currently on master.
+
+commit 54785851eeb775720aac8a0b6b423fda26ac8f27
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sat Apr 7 23:26:14 2018 +0200
+
+    download/git: fix transform-name
+
+    When a package contains a relative symlink which first component is '..'
+    (thus pointing one directory higher), for example package 'meh' contains
+    this symlink:
+
+        foo/bar -> ../buz
+
+    then it would be stored as 'meh-version./buz' because of the
+    transform-name pattern replacement.
+
+    Fix it to only match the leading './'.
+
+So, maybe just a race condition bringing in the x264 hash file update?  Is there
+something else going on here or is the simple fix to just change the hash?
+
+Josh
