@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Apr 2018 22:38:45 +0200
-Subject: [Buildroot] [PATCH 1/4] download/git: ensure we always work in
- the expected repository
-In-Reply-To: <e9b0b62a20acfcd0641cbfee758982245a19b8fa.1523983687.git.yann.morin.1998@free.fr>
+Date: Thu, 19 Apr 2018 22:38:49 +0200
+Subject: [Buildroot] [PATCH 2/4] download/git: ensure we have a sane
+ repository
+In-Reply-To: <8019bec4b6420d014d263c2c3e12e3c985a2ef0d.1523983687.git.yann.morin.1998@free.fr>
 References: <cover.1523983687.git.yann.morin.1998@free.fr>
- <e9b0b62a20acfcd0641cbfee758982245a19b8fa.1523983687.git.yann.morin.1998@free.fr>
-Message-ID: <20180419223845.704c48eb@windsurf.numericable.fr>
+ <8019bec4b6420d014d263c2c3e12e3c985a2ef0d.1523983687.git.yann.morin.1998@free.fr>
+Message-ID: <20180419223849.79dc8705@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 Apr 2018 18:48:20 +0200, Yann E. MORIN wrote:
-> git always look directories up until it finds a repository. In case
-> the git cache is broken, it may no longer be identified as a repository,
-> and git will look higher in the directories until it finds one.
+On Tue, 17 Apr 2018 18:48:21 +0200, Yann E. MORIN wrote:
+> There are cases where a repository might be broken, e.g. when a previous
+> operation was killed or otherwise failed unexpectedly.
 > 
-> In the default conditions, this would be Buildroot's own git tree
-> (because DL_DIR is a subdir of Buildroot), but in some situations may
-> very well be any repository the user has Buildroot in, like a
-> br2-external tree...
+> We fix that by always initialising the repository, as suggested by
+> Ricardo. git-init is safe on an otherwise-healthy repository:
 > 
-> So, we force git to use our git cache and never look elsewhere, as
-> Suggested by Ricardo.
+>     Running git init in an existing repository is safe. It will not
+>     overwrite things that are already there. [...]
 > 
-> Use GIT_DIR, as it has been there for ages now, while --git-dir was
-> only introduced later (even if most distros ship an later version),
-> as suggested by Arnout.
+> Using git-init will just ensure that we have the strictly required files
+> to form a sane tree. Any blob that is still missing would get fetched
+> later on.
 > 
-> Also fix the one call to git that was not using the wrapper.
-> 
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
@@ -40,8 +36,8 @@ On Tue, 17 Apr 2018 18:48:20 +0200, Yann E. MORIN wrote:
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  support/download/git | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+>  support/download/git | 18 ++++++++++--------
+>  1 file changed, 10 insertions(+), 8 deletions(-)
 
 Applied to master, thanks.
 
