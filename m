@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Apr 2018 22:38:49 +0200
-Subject: [Buildroot] [PATCH 2/4] download/git: ensure we have a sane
- repository
-In-Reply-To: <8019bec4b6420d014d263c2c3e12e3c985a2ef0d.1523983687.git.yann.morin.1998@free.fr>
-References: <cover.1523983687.git.yann.morin.1998@free.fr>
- <8019bec4b6420d014d263c2c3e12e3c985a2ef0d.1523983687.git.yann.morin.1998@free.fr>
-Message-ID: <20180419223849.79dc8705@windsurf.numericable.fr>
+Date: Thu, 19 Apr 2018 22:42:54 +0200
+Subject: [Buildroot] [git commit] tslib: update to 1.16
+Message-ID: <20180419204311.131D388811@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b50a2b40a22295064aebe622e0c35e5fd4530a40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Apr 2018 18:48:21 +0200, Yann E. MORIN wrote:
-> There are cases where a repository might be broken, e.g. when a previous
-> operation was killed or otherwise failed unexpectedly.
-> 
-> We fix that by always initialising the repository, as suggested by
-> Ricardo. git-init is safe on an otherwise-healthy repository:
-> 
->     Running git init in an existing repository is safe. It will not
->     overwrite things that are already there. [...]
-> 
-> Using git-init will just ensure that we have the strictly required files
-> to form a sane tree. Any blob that is still missing would get fetched
-> later on.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/download/git | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
+For those who wonder what happend, as usual, there's a changelog summary:
+https://github.com/kergoth/tslib/releases
 
-Applied to master, thanks.
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index f0c6ff842f..76cd79516b 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/kergoth/tslib/releases/download/1.15/tslib-1.15.tar.xz.sha256
+-sha256  7ce48807cab655076d71a1ceef3ed0ab8a25df98074981d4a8fd1477ee5f710c  tslib-1.15.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.16/tslib-1.16.tar.xz.sha256
++sha256  c9a54651337a701a66b074c603c313225579995a7910e519bbc7b1dcdab9a755  tslib-1.16.tar.xz
+ 
+ # Locally computed
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 3ba94d2568..0d8b31863b 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.15
++TSLIB_VERSION = 1.16
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
