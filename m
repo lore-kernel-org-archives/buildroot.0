@@ -1,162 +1,122 @@
-From: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
-Date: Thu, 19 Apr 2018 11:37:22 +0200
-Subject: [Buildroot] [PATCH 1/1] New board: FriendlyARM NanoPi Duo
-Message-ID: <20180419093722.10667-1-sven.haardiek@iotec-gmbh.de>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 19 Apr 2018 12:32:03 +0200
+Subject: [Buildroot] [PATCH] package/tk: new package
+Message-ID: <1524133923-11881-1-git-send-email-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a new board the FriendlyARM NanoPi Duo.
+Use the same version as tcl package.
 
-- Due to the missing defconfigs and DTS in the mainline kernel and uboot, I
-  used the ones from the FriendlyARM github page.
-
-- Most of the configuration was copied from the other friendlyarm boards.
-
-Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- board/friendlyarm/nanopi-duo/boot.cmd     |  8 ++++++
- board/friendlyarm/nanopi-duo/genimage.cfg | 33 +++++++++++++++++++++
- board/friendlyarm/nanopi-duo/readme.txt   | 35 +++++++++++++++++++++++
- configs/friendlyarm_nanopi_duo_defconfig  | 31 ++++++++++++++++++++
- 4 files changed, 107 insertions(+)
- create mode 100644 board/friendlyarm/nanopi-duo/boot.cmd
- create mode 100644 board/friendlyarm/nanopi-duo/genimage.cfg
- create mode 100644 board/friendlyarm/nanopi-duo/readme.txt
- create mode 100644 configs/friendlyarm_nanopi_duo_defconfig
+tcl and tk should be updated together.
+---
+ DEVELOPERS           |  1 +
+ package/Config.in    |  1 +
+ package/tk/Config.in | 18 ++++++++++++++++++
+ package/tk/tk.hash   |  3 +++
+ package/tk/tk.mk     | 31 +++++++++++++++++++++++++++++++
+ 5 files changed, 54 insertions(+)
+ create mode 100644 package/tk/Config.in
+ create mode 100644 package/tk/tk.hash
+ create mode 100644 package/tk/tk.mk
 
-diff --git a/board/friendlyarm/nanopi-duo/boot.cmd b/board/friendlyarm/nanopi-duo/boot.cmd
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eec278d..b33722e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1621,6 +1621,7 @@ F:	package/stress-ng/
+ F:	package/supertux/
+ F:	package/supertuxkart/
+ F:	package/terminology/
++F:	package/tk/
+ F:	package/upower/
+ F:	package/xenomai/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index ddbbcff..ecd9b8f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -302,6 +302,7 @@ comment "Graphic libraries"
+ 	source "package/sdl2_mixer/Config.in"
+ 	source "package/sdl2_net/Config.in"
+ 	source "package/sdl2_ttf/Config.in"
++	source "package/tk/Config.in"
+ 
+ comment "Other GUIs"
+ 	source "package/qt/Config.in"
+diff --git a/package/tk/Config.in b/package/tk/Config.in
 new file mode 100644
-index 0000000000..56a2893b4d
+index 0000000..507b0bf
 --- /dev/null
-+++ b/board/friendlyarm/nanopi-duo/boot.cmd
-@@ -0,0 +1,8 @@
-+setenv fdt_high ffffffff
++++ b/package/tk/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_TK
++	bool "tk"
++	depends on BR2_USE_MMU # tcl
++	depends on BR2_TOOLCHAIN_HAS_THREADS # tcl
++	depends on !BR2_STATIC_LIBS # tcl
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_TCL
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXFT
++	help
++	  A windowing toolkit for use with tcl
 +
-+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
++	  http://www.tcl.tk
 +
-+fatload mmc 0 $kernel_addr_r zImage
-+fatload mmc 0 $fdt_addr_r sun8i-h2-plus-nanopi-duo.dtb
-+
-+bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/friendlyarm/nanopi-duo/genimage.cfg b/board/friendlyarm/nanopi-duo/genimage.cfg
++comment "tk needs a toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_XORG7
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/tk/tk.hash b/package/tk/tk.hash
 new file mode 100644
-index 0000000000..8b3cc1fe75
+index 0000000..5fc0b6f
 --- /dev/null
-+++ b/board/friendlyarm/nanopi-duo/genimage.cfg
-@@ -0,0 +1,33 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+            "sun8i-h2-plus-nanopi-duo.dtb",
-+            "boot.scr"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition spl {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8192
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/friendlyarm/nanopi-duo/readme.txt b/board/friendlyarm/nanopi-duo/readme.txt
++++ b/package/tk/tk.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 d62c371a71b4744ed830e3c21d27968c31dba74dd2c45f36b9b071e6d88eb19d  tk8.6.6-src.tar.gz
++sha256 2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198  license.terms
+diff --git a/package/tk/tk.mk b/package/tk/tk.mk
 new file mode 100644
-index 0000000000..b8b6024171
+index 0000000..97c3ae6
 --- /dev/null
-+++ b/board/friendlyarm/nanopi-duo/readme.txt
-@@ -0,0 +1,35 @@
-+Intro
-+=====
-+
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the Nanopi DUO. With the current configuration
-+it will bring-up the board, and allow access through the serial console.
-+
-+Nanopi DUO link:
-+http://www.nanopi.org/Nanopi-Duo_Feature.html
-+
-+Wiki link:
-+http://wiki.friendlyarm.com/wiki/index.php/NanoPi_Duo
-+
-+How to build
-+============
-+
-+    $ make friendlyarm_nanopi_duo_defconfig
-+    $ make
-+
-+Note: you will need access to the internet to download the required
-+sources.
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+  $ sudo sync
-+
-+Insert the micro SDcard in your Nanopi DUO and power it up. The console is on
-+the serial line, 115200 8N1.
-diff --git a/configs/friendlyarm_nanopi_duo_defconfig b/configs/friendlyarm_nanopi_duo_defconfig
-new file mode 100644
-index 0000000000..8539deaccf
---- /dev/null
-+++ b/configs/friendlyarm_nanopi_duo_defconfig
++++ b/package/tk/tk.mk
 @@ -0,0 +1,31 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_VFPV4=y
-+BR2_TARGET_GENERIC_HOSTNAME="nanopi-duo"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi DUO"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-duo/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/friendlyarm/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="sunxi-4.16.y"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-nanopi-duo"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/friendlyarm/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="sunxi-v2017.x"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_h3"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-duo/boot.cmd"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++################################################################################
++#
++# tk
++#
++################################################################################
++
++TK_VERSION_MAJOR = 8.6
++TK_VERSION = $(TK_VERSION_MAJOR).6
++TK_SOURCE = tk$(TK_VERSION)-src.tar.gz
++TK_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TK_VERSION)
++TK_LICENSE = tcl license
++TK_LICENSE_FILES = license.terms
++TK_SUBDIR = unix
++TK_INSTALL_STAGING = YES
++
++TK_DEPENDENCIES = tcl xlib_libX11 xlib_libXft
++
++# hopefully our strtod is not buggy
++TK_CONF_ENV = tcl_cv_strtod_buggy=no
++
++TK_CONF_OPTS = --disable-rpath \
++	--with-tcl=$(BUILD_DIR)/tcl-$(TCL_VERSION)/unix \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
++
++define TK_WISH_SYMLINK
++	ln -sf /usr/bin/wish$(TK_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/wish
++endef
++TK_POST_INSTALL_TARGET_HOOKS += TK_WISH_SYMLINK
++
++$(eval $(autotools-package))
 -- 
-2.17.0
+2.7.4
