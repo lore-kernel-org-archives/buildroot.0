@@ -1,55 +1,47 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 18 Apr 2018 21:59:27 -0300
-Subject: [Buildroot] [PATCH 3/4] download/git: ensure we can checkout
- repos with submodule conversions
-References: <627eaa46-0acb-9753-15a0-d805abb18164@mind.be>
-Message-ID: <5ad7e9ef931d4_7af12abb1f0d94cc418cc@ultri4.mail>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 19 Apr 2018 07:50:37 +0300
+Subject: [Buildroot] [PATCH v2] procps-ng: bump to version 3.3.14
+In-Reply-To: <20180418195646.mcvsrncysos7xe6t@tarshish>
+References: <130c35b0d58841519c15a94b2730f675fa63192d.1523995096.git.baruch@tkos.co.il>
+ <20180418120400.2845e55c@windsurf.numericable.fr>
+ <20180418101334.wq7wxgd5owwsiona@tarshish>
+ <20180418132251.0d1d735c@windsurf.numericable.fr>
+ <20180418195646.mcvsrncysos7xe6t@tarshish>
+Message-ID: <20180419045037.q3byc4jlraj5stbv@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, Apr 18, 2018 at 05:04 AM, Arnout Vandecappelle wrote:
-
-> On 18-04-18 05:13, Ricardo Martincoski wrote:
->>> +    _git submodule update --init --recursive --force
->> 
->> It seems --force does not exist on git 1.7.1.
->> It is still possible I did something wrong when creating the docker image.
->> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63519024
+On Wed, Apr 18, 2018 at 10:56:46PM +0300, Baruch Siach wrote:
+> On Wed, Apr 18, 2018 at 01:22:51PM +0200, Thomas Petazzoni wrote:
+> > On Wed, 18 Apr 2018 13:13:34 +0300, Baruch Siach wrote:
+> > > While at it, you might want to look into the issue of libgcc link failure 
+> > > in static musl toolchains. This issue currently affects lm-sensors and 
+> > > multicat. See http://patchwork.ozlabs.org/patch/883243/.
+> > 
+> > I did have a look at this issue two weeks ago or so, and like you, I
+> > concluded that there was a toolchain issue. I guess it should be
+> > reported to musl upstream. It may not be a musl issue per-se, perhaps
+> > more a musl-into-gcc integration issue, but they might be able to help.
+> > Do you think you could contact the musl folks about this ?
 > 
->  No, it doesn't exist.
-> 
->  Note that git 1.7.1 also doesn't have the .git files in the submodules; the
-> submodules have .git directories, i.e. they're indistinguishable from normal
-> repos. I think that that is not a problem for this patch, since I think git
-> 1.7.1 *will* kill .git directories when doing git clean --ffdx, but I'm not
-> sure. Note that this implies that submodules will *not* be cached...
+> Reverting recent musl libc version bumps does not help. I reproduced this 
+> issue with versions 1.1.18 and 1.1.16, with gcc 6.x and 7.x. Static only musl 
+> toolchain might be something that never actually worked. I wonder how the 
+> presence of shared libc in autobuilder pre-built musl toolchains makes static 
+> link work.
 
-And that also implies the hash will not match.
+Answering my own wonder: the executables that the pre-built musl toolchain 
+generates are not static. So adding -static seems like the right solution 
+after all. What do you think?
 
-So for this patch too, let's take a step back...
+baruch
 
-In release 2018.02.1 we have 2 packages in the tree with submodules:
-They... well... don't work with git 1.7.1
-
-azure-iot-sdk-c: download hungs forever
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63672026
-I tested locally using git 1.7.1 without buildroot: for azure-iot-sdk-c git
-itself hangs forever on 'git submodule update --init --recursive'.
-
-sunxi-mali: has a hash mismatch (due to the .git dir from submodule)
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/63549538
-
-And no one complained as far as I can remember.
-So by supporting git 1.7.1 with submodules, it seems to me we will add
-complexity for a combination that nobody is using.
-
-Thoughts?
-
-
-Regards,
-Ricardo
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
