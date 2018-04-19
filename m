@@ -1,36 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Apr 2018 23:36:09 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Philipp Claves' entry
-Message-ID: <20180419213612.C424A8888D@busybox.osuosl.org>
+Date: Thu, 19 Apr 2018 23:36:18 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove Philipp Claves' entry
+In-Reply-To: <e8dcac2727f9f0569441285fbba7f9a0dafa6672.1523958244.git.baruch@tkos.co.il>
+References: <e8dcac2727f9f0569441285fbba7f9a0dafa6672.1523958244.git.baruch@tkos.co.il>
+Message-ID: <20180419233618.080ce376@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5301ddebb0e31edf804e434d6b900261504c6b6d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The email address of Philipp Claves bounces.
+On Tue, 17 Apr 2018 12:44:04 +0300, Baruch Siach wrote:
+> The email address of Philipp Claves bounces.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  DEVELOPERS | 4 ----
+>  1 file changed, 4 deletions(-)
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index eec278db50..3bb5f32f1a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1522,10 +1522,6 @@ F:	package/psplash/
- F:	package/sispmctl/
- F:	package/zsh/
- 
--N:	Philipp Claves <claves@budelmann-elektronik.com>
--F:	package/libassuan/
--F:	package/libgpgme/
--
- N:	Philippe Proulx <eeppeliteloop@gmail.com>
- F:	package/lttng-babeltrace/
- F:	package/lttng-libust/
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
