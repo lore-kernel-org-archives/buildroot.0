@@ -1,75 +1,92 @@
 From: Stefan Becker <chemobejk@gmail.com>
-Date: Thu, 19 Apr 2018 10:14:40 +0300
-Subject: [Buildroot] [PATCH RESEND] core: enhance printvars for
- variables with newlines
-In-Reply-To: <fc8f1cc6-e9ba-9cfe-df4a-4b80792d6434@mind.be>
-References: <CAOJ2eMdEHvZeJ6rECyRkzMZN0UYJ2CYK4yMgR9d89P%2B-tWYJYw@mail.gmail.com>
- <20180416115855.26762-1-chemobejk@gmail.com>
- <fc8f1cc6-e9ba-9cfe-df4a-4b80792d6434@mind.be>
-Message-ID: <CAOJ2eMc+3Bx40nWF=VALh6JzeaNVWPekyCGXAL2=a_YX4yJWug@mail.gmail.com>
+Date: Thu, 19 Apr 2018 10:40:54 +0300
+Subject: [Buildroot] [PATCH v2] core: enhance printvars for variables with
+ newlines
+In-Reply-To: <CAOJ2eMc+3Bx40nWF=VALh6JzeaNVWPekyCGXAL2=a_YX4yJWug@mail.gmail.com>
+References: <CAOJ2eMc+3Bx40nWF=VALh6JzeaNVWPekyCGXAL2=a_YX4yJWug@mail.gmail.com>
+Message-ID: <20180419074054.4075-1-chemobejk@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The current output formats of printvars do not preserve newlines. Add
+the option MULTILINE_VARS which causes the variable content to be dumped
+in a format that preserves newlines:
 
-On Thu, Apr 19, 2018 at 1:27 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  I'm still not convinced that this is such a great idea.
->
-> 1. As explained in reply to your first iteration, there shouldn't be a need for
-> including Buildroot variables in a surrounding Makefile.
+   MULTILINE_VAR_START VAR
+   ... line 1 ...
+   ... line 2 ...
+   ...
+   MULTILINE_VAR_END VAR
 
-There is nothing you can say that will change the fact that a
-monolithic meta build system is too slow for the CI of our own
-components. So let's just agree to disagree on this point.
+Updated the manual accordingly.
 
-> 2. At least equally relevant would be output that is appropriate for Python,
-> JSON, ...
+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+---
+ Makefile                  | 10 +++++++---
+ docs/manual/make-tips.txt | 20 ++++++++++++++++++++
+ 2 files changed, 27 insertions(+), 3 deletions(-)
 
-I see your point. How about this instead?
-
-$ external/scripts/buildstep.sh printvars MULTILINE_VARS=1
-VARS="CANFESTIVAL_INSTALL_TARGET_CMDS"
-MULTILINE_VAR_START CANFESTIVAL_INSTALL_TARGET_CMDS
-        for d in src drivers ; do
-PATH="/workarea/stefanb/repos/buildroot-new/output/host/bin:/workarea/stefanb/repos/buildroot-new/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/home/stefanb/.local/bin:/home/stefanb/bin"
-/usr/bin/make -j1 -C ./$d install
-PYTHON=/workarea/stefanb/repos/buildroot-new/output/host/bin/python2
-DESTDIR=/workarea/stefanb/repos/buildroot-new/output/target || exit 1
-; done
-MULTILINE_VAR_END CANFESTIVAL_INSTALL_TARGET_CMDS
-
-i.e. the consumer of the MULTILINE_VARS=1 output is then responsible
-to post process it into the format he requires, e.g. for my intended
-purpose I would use
-
-... | sed  \
-    -e 's/^MULTILINE_VAR_START \(.\+\)$/define \1/' \
-    -e 's/^MULTILINE_VAR_END .\+$/endef/'
-
-> 3. The implementation is not complete. In case of RAW_VARS, it's pretty hard to
-> use in practice because also all the referenced variables would need to be
-> retrieved. In the expanded case, any remaining $ will be interpreted by your
-> surrounding make instead of being passed down to the shell like they should. Try
-> e.g. CANFESTIVAL_INSTALL_TARGET_CMDS.
->
-> Note that QUOTED_VARS is not perfect either, mainly because there are some make
-> variables that are not legal shell variables (e.g. all the 4th stuff).
-
-IMHO RAW_VARS, as-is today, is only meant to produce human readable
-format for debug purposes. I.e. RAW_VARS=1 with any of the formats
-none/QUOTE_VARS/MULTILINE_VARS will not be usable for post-processing,
-unless the post-processing knows how to parse for variables and
-request them.
-
-Fixing RAW_VARS in such a way that any variable detected would be
-added to VARS list and then recurse to get all referenced variables,
-is outside the scope of my change.
-
-Or alternatively: drop RAW_VARS support from
-QUOTED_VARS/MULTILINE_VARS branches.
-
-Regards, Stefan
+diff --git a/Makefile b/Makefile
+index 54f940659c..bd78da8362 100644
+--- a/Makefile
++++ b/Makefile
+@@ -979,9 +979,13 @@ printvars:
+ 		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
+-		$(if $(QUOTED_VARS),\
+-			$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
+-			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
++		$(if $(MULTILINE_VARS), \
++			$(info MULTILINE_VAR_START $V) \
++			$(info $(if $(RAW_VARS),$(value $V),$($V))) \
++			$(info MULTILINE_VAR_END $V), \
++			$(if $(QUOTED_VARS),\
++				$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
++				$(info $V=$(if $(RAW_VARS),$(value $V),$($V)))))))
+ # ' Syntax colouring...
+ 
+ .PHONY: clean
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index ea1d825bef..c796bd73e2 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -92,6 +92,8 @@ It is possible to tweak the output using some variables:
+ 
+ - +VARS+ will limit the listing to variables which names match the
+   specified make-pattern
++- +MULTILINE_VARS+, if set to +YES+, will use a start and end marker around
++  the variable content to preserve newlines in the value
+ - +QUOTED_VARS+, if set to +YES+, will single-quote the value
+ - +RAW_VARS+, if set to +YES+, will print the unexpanded value
+ 
+@@ -106,6 +108,24 @@ For example:
+  BUSYBOX_RDEPENDENCIES=ncurses util-linux
+ ----
+ 
++----
++ $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES MULTILINE_VARS=YES
++ MULTILINE_VAR_START BUSYBOX_DEPENDENCIES
++ skeleton toolchain
++ MULTILINE_VAR_END BUSYBOX_DEPENDENCIES
++ MULTILINE_VAR_START BUSYBOX_FINAL_ALL_DEPENDENCIES
++ skeleton toolchain
++ MULTILINE_VAR_END BUSYBOX_FINAL_ALL_DEPENDENCIES
++ MULTILINE_VAR_START BUSYBOX_FINAL_DEPENDENCIES
++ skeleton toolchain
++ MULTILINE_VAR_END BUSYBOX_FINAL_DEPENDENCIES
++ MULTILINE_VAR_START BUSYBOX_FINAL_PATCH_DEPENDENCIES
++ MULTILINE_VAR_END BUSYBOX_FINAL_PATCH_DEPENDENCIES
++ MULTILINE_VAR_START BUSYBOX_RDEPENDENCIES
++ ncurses util-linux'linux-pam skeleton toolchain host-skeleton host-ccache
++ MULTILINE_VAR_END BUSYBOX_RDEPENDENCIES
++----
++
+ ----
+  $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES QUOTED_VARS=YES
+  BUSYBOX_DEPENDENCIES='skeleton toolchain'
+-- 
+2.14.3
