@@ -1,39 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Apr 2018 23:32:32 +0200
-Subject: [Buildroot] [PATCH 1/1] grub2: force -fno-stack-protector in
- CPPFLAGS
-In-Reply-To: <20180419083659.22462-2-tarek_el-sherbiny@waters.com>
-References: <20180419083659.22462-1-tarek_el-sherbiny@waters.com>
- <20180419083659.22462-2-tarek_el-sherbiny@waters.com>
-Message-ID: <20180419233232.2eabba59@windsurf.numericable.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 19 Apr 2018 21:33:03 +0000
+Subject: [Buildroot] [Bug 10961] [Buildroot 2018.02] Grub2 fails to build
+ for x86_64 when BR2_SSP_ALL is enabled
+In-Reply-To: <bug-10961-163@https.bugs.busybox.net/>
+References: <bug-10961-163@https.bugs.busybox.net/>
+Message-ID: <bug-10961-163-as3TbEDVi7@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10961
 
-On Thu, 19 Apr 2018 09:36:59 +0100, tarek_el-sherbiny at waters.com wrote:
-> From: Tarek El-Sherbiny <tarek_el-sherbiny@waters.com>
-> 
-> The last commit which implements this workaround is now broken by
-> commit 20a4583ebf7fe97ea22a1ea11621dd44a8114ca5
-> This commit will force no-stack-protector in CPPFLAGS instead of
-> CFLAGS to work with buildroot 2018_02
-> 
-> Signed-off-by: Tarek El-Sherbiny <tarek_el-sherbiny@waters.com>
-> ---
->  boot/grub2/grub2.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Thanks, I've applied, after reworking a bit the commit log, and adding
-a reference to your bug report.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=523b27afa941bc0a78f7b2eae8e97329c112782d.
 Thanks!
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
