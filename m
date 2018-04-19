@@ -1,59 +1,66 @@
-From: Joshua Henderson <joshua.henderson@microchip.com>
-Date: Thu, 19 Apr 2018 13:47:51 -0700
-Subject: [Buildroot] [PATCH 1/1] package/x264: bump version
-In-Reply-To: <20180411161845.7d6b3f49@windsurf>
-References: <20180410191044.19425-1-bernd.kuhls@t-online.de>
- <20180411161845.7d6b3f49@windsurf>
-Message-ID: <1231759d-6acc-92f1-32f7-88cc55c7a1b1@microchip.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Apr 2018 22:46:33 +0200
+Subject: [Buildroot] [git commit] lz4: bump to version 1.8.1.2
+Message-ID: <20180419204925.A8B5688826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/11/2018 07:18 AM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 10 Apr 2018 21:10:44 +0200, Bernd Kuhls wrote:
->> Added license hash.
->>
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> ---
->>  package/x264/x264.hash | 3 ++-
->>  package/x264/x264.mk   | 2 +-
->>  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> Applied to master, thanks.
-> 
+commit: https://git.buildroot.net/buildroot/commit/?id=e93fec6673eee4106a824cd357b2853cf8908a03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There seems to be some disagreement with the hash in this commit on master.
+Use lib and lz4 make targets to avoid build of the manual generator, and
+the examples. Both of them use the target compiler to build host tools.
 
-I can reproduce the same expected result that is also showing up on autobuild
-in several places.  For example:
+Add license files hashes.
 
-    http://autobuild.buildroot.org/results/442/442bc92891e75d4d8cbf3dc400fe248bb3a1a52c//build-end.log
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lz4/lz4.hash | 4 +++-
+ package/lz4/lz4.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-I tracked this down to hash changing whether or not you have the following
-commit, which is currently on master.
-
-commit 54785851eeb775720aac8a0b6b423fda26ac8f27
-Author: Yann E. MORIN <yann.morin.1998@free.fr>
-Date:   Sat Apr 7 23:26:14 2018 +0200
-
-    download/git: fix transform-name
-
-    When a package contains a relative symlink which first component is '..'
-    (thus pointing one directory higher), for example package 'meh' contains
-    this symlink:
-
-        foo/bar -> ../buz
-
-    then it would be stored as 'meh-version./buz' because of the
-    transform-name pattern replacement.
-
-    Fix it to only match the leading './'.
-
-So, maybe just a race condition bringing in the x264 hash file update?  Is there
-something else going on here or is the simple fix to just change the hash?
-
-Josh
+diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+index 5048503f80..bdc43d1e66 100644
+--- a/package/lz4/lz4.hash
++++ b/package/lz4/lz4.hash
+@@ -1,2 +1,4 @@
+ # sha256 locally computed
+-sha256 0190cacd63022ccb86f44fa5041dc6c3804407ad61550ca21c382827319e7e7e  lz4-v1.7.5.tar.gz
++sha256 12f3a9e776a923275b2dc78ae138b4967ad6280863b77ff733028ce89b8123f9  lz4-v1.8.1.2.tar.gz
++sha256 d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index de8c311a31..c88329f797 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LZ4_VERSION = v1.7.5
++LZ4_VERSION = v1.8.1.2
+ LZ4_SITE = $(call github,lz4,lz4,$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
+@@ -18,7 +18,7 @@ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ endif
+ 
+ define HOST_LZ4_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) lib lz4
+ endef
+ 
+ define HOST_LZ4_INSTALL_CMDS
+@@ -27,7 +27,7 @@ define HOST_LZ4_INSTALL_CMDS
+ endef
+ 
+ define LZ4_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) lib lz4
+ endef
+ 
+ define LZ4_INSTALL_STAGING_CMDS
