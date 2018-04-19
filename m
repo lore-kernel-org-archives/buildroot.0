@@ -1,122 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Apr 2018 10:08:13 +0200
-Subject: [Buildroot] [PATCH v2] core: enhance printvars for variables
- with newlines
-In-Reply-To: <20180419074054.4075-1-chemobejk@gmail.com>
-References: <CAOJ2eMc+3Bx40nWF=VALh6JzeaNVWPekyCGXAL2=a_YX4yJWug@mail.gmail.com>
- <20180419074054.4075-1-chemobejk@gmail.com>
-Message-ID: <20180419080813.GA30285@scaer>
+From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
+Date: Thu, 19 Apr 2018 07:57:29 +0000
+Subject: [Buildroot] [PATCH 2/3] dropbear: Add configuration options for
+ security features
+In-Reply-To: <533c6880-ac31-b6cc-166f-7c973ecdef5e@mind.be>
+References: <20180418142434.7268-1-stefan.sorensen@spectralink.com>
+ <20180418142434.7268-2-stefan.sorensen@spectralink.com>
+ <533c6880-ac31-b6cc-166f-7c973ecdef5e@mind.be>
+Message-ID: <11a83465fbdd005cfcd1db11902f7607c4269373.camel@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
-
-On 2018-04-19 10:40 +0300, Stefan Becker spake thusly:
-> The current output formats of printvars do not preserve newlines.
-
-This is wrong, as I explained in my reply to your previous iteration:
-
-    http://lists.busybox.net/pipermail/buildroot/2018-April/219369.html
-
-I am still not convinced by this new iteration... Basically, it changes
-the start and stop makers from 'define' and 'endef' to MULTILINE_VAR_START
-and MULTILINE_VAR_END; this is no real improvement. Note: I've seen your
-other reply that sugest changing the marker so something else, and I
-don;t think this is a better improvement either...
-
-But I'm leaving this new iteration open for more reviews by others.
-
-Regards,
-Yann E. MORIN.
-
-> Add
-> the option MULTILINE_VARS which causes the variable content to be dumped
-> in a format that preserves newlines:
+On Wed, 2018-04-18 at 23:58 +0200, Arnout Vandecappelle wrote:
 > 
->    MULTILINE_VAR_START VAR
->    ... line 1 ...
->    ... line 2 ...
->    ...
->    MULTILINE_VAR_END VAR
-> 
-> Updated the manual accordingly.
-> 
-> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-> ---
->  Makefile                  | 10 +++++++---
->  docs/manual/make-tips.txt | 20 ++++++++++++++++++++
->  2 files changed, 27 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 54f940659c..bd78da8362 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -979,9 +979,13 @@ printvars:
->  		$(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
->  		$(if $(filter-out environment% default automatic, \
->  				$(origin $V)), \
-> -		$(if $(QUOTED_VARS),\
-> -			$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
-> -			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
-> +		$(if $(MULTILINE_VARS), \
-> +			$(info MULTILINE_VAR_START $V) \
-> +			$(info $(if $(RAW_VARS),$(value $V),$($V))) \
-> +			$(info MULTILINE_VAR_END $V), \
-> +			$(if $(QUOTED_VARS),\
-> +				$(info $V='$(subst ','\'',$(if $(RAW_VARS),$(value $V),$($V)))'), \
-> +				$(info $V=$(if $(RAW_VARS),$(value $V),$($V)))))))
->  # ' Syntax colouring...
->  
->  .PHONY: clean
-> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-> index ea1d825bef..c796bd73e2 100644
-> --- a/docs/manual/make-tips.txt
-> +++ b/docs/manual/make-tips.txt
-> @@ -92,6 +92,8 @@ It is possible to tweak the output using some variables:
->  
->  - +VARS+ will limit the listing to variables which names match the
->    specified make-pattern
-> +- +MULTILINE_VARS+, if set to +YES+, will use a start and end marker around
-> +  the variable content to preserve newlines in the value
->  - +QUOTED_VARS+, if set to +YES+, will single-quote the value
->  - +RAW_VARS+, if set to +YES+, will print the unexpanded value
->  
-> @@ -106,6 +108,24 @@ For example:
->   BUSYBOX_RDEPENDENCIES=ncurses util-linux
->  ----
->  
-> +----
-> + $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES MULTILINE_VARS=YES
-> + MULTILINE_VAR_START BUSYBOX_DEPENDENCIES
-> + skeleton toolchain
-> + MULTILINE_VAR_END BUSYBOX_DEPENDENCIES
-> + MULTILINE_VAR_START BUSYBOX_FINAL_ALL_DEPENDENCIES
-> + skeleton toolchain
-> + MULTILINE_VAR_END BUSYBOX_FINAL_ALL_DEPENDENCIES
-> + MULTILINE_VAR_START BUSYBOX_FINAL_DEPENDENCIES
-> + skeleton toolchain
-> + MULTILINE_VAR_END BUSYBOX_FINAL_DEPENDENCIES
-> + MULTILINE_VAR_START BUSYBOX_FINAL_PATCH_DEPENDENCIES
-> + MULTILINE_VAR_END BUSYBOX_FINAL_PATCH_DEPENDENCIES
-> + MULTILINE_VAR_START BUSYBOX_RDEPENDENCIES
-> + ncurses util-linux'linux-pam skeleton toolchain host-skeleton host-ccache
-> + MULTILINE_VAR_END BUSYBOX_RDEPENDENCIES
-> +----
-> +
->  ----
->   $ make -s printvars VARS=BUSYBOX_%DEPENDENCIES QUOTED_VARS=YES
->   BUSYBOX_DEPENDENCIES='skeleton toolchain'
-> -- 
-> 2.14.3
-> 
+> On 18-04-18 16:24, Stefan S?rensen wrote:
+> > 
+> > These new options allow the selection of
+> >   Ciphers (AES128, AES256, 3DES, BLowfish, Twofish128, Twofish256)
+> >   Cipher modes (CBC, CTR)
+> >   Integrity algorithms (SHA1, SHA1-96, SHA2-256, SHA2-512, MD5)
+> >   Key exchange algorithms (RSA, DSS, ECDSA, Curve25519, ECDH)
+> >   Authenticaton types (Password, Pubkey)
+> > 
+> > No defaults are changed.
+> > 
+> > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+> > ---
+>  package/dropbear/Config.in   | 163
+> +++++++++++++++++++++++++++++++++++
+>  Do we really want so many configuration options?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Yes, it is a lot of options. So what about:
+
+   By default, enable the common and secure options (AES, CTR, SHA2,  
+   ECDSA, Curve25519, Pubkey).
+
+   Add an option to enable legacy/insecure options (3DES, CBC, SHA1-96, 
+   MD5, RSA).
+
+   Add an option to enable password authentication
+
+   Drop Blowfish and Twofish configuration.
+
+
+Stefan
