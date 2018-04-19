@@ -1,48 +1,42 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Thu, 19 Apr 2018 07:57:29 +0000
-Subject: [Buildroot] [PATCH 2/3] dropbear: Add configuration options for
- security features
-In-Reply-To: <533c6880-ac31-b6cc-166f-7c973ecdef5e@mind.be>
-References: <20180418142434.7268-1-stefan.sorensen@spectralink.com>
- <20180418142434.7268-2-stefan.sorensen@spectralink.com>
- <533c6880-ac31-b6cc-166f-7c973ecdef5e@mind.be>
-Message-ID: <11a83465fbdd005cfcd1db11902f7607c4269373.camel@spectralink.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Thu, 19 Apr 2018 10:14:24 +0200
+Subject: [Buildroot] [PATCH] configs: add openssl for kernel where
+ necessary
+In-Reply-To: <20180418203634.30100-1-vincent.stehle@laposte.net>
+References: <20180418203634.30100-1-vincent.stehle@laposte.net>
+Message-ID: <789c3248-327e-2c69-208d-c88bc72363b2@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2018-04-18 at 23:58 +0200, Arnout Vandecappelle wrote:
+Hi Vincent,
+
+Thanks for noticing grinn_chiliboard_defconfig! Please also add
+grinn_liteboard_defconfig, as it has the same build issues with
+missing openssl.
+
+Regards,
+Marcin
+
+On 18.04.2018 22:36, Vincent Stehle wrote:
+> From: Vincent Stehl? <vincent.stehle@laposte.net>
 > 
-> On 18-04-18 16:24, Stefan S?rensen wrote:
-> > 
-> > These new options allow the selection of
-> >   Ciphers (AES128, AES256, 3DES, BLowfish, Twofish128, Twofish256)
-> >   Cipher modes (CBC, CTR)
-> >   Integrity algorithms (SHA1, SHA1-96, SHA2-256, SHA2-512, MD5)
-> >   Key exchange algorithms (RSA, DSS, ECDSA, Curve25519, ECDH)
-> >   Authenticaton types (Password, Pubkey)
-> > 
-> > No defaults are changed.
-> > 
-> > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> > ---
->  package/dropbear/Config.in   | 163
-> +++++++++++++++++++++++++++++++++++
->  Do we really want so many configuration options?
-
-Yes, it is a lot of options. So what about:
-
-   By default, enable the common and secure options (AES, CTR, SHA2,  
-   ECDSA, Curve25519, Pubkey).
-
-   Add an option to enable legacy/insecure options (3DES, CBC, SHA1-96, 
-   MD5, RSA).
-
-   Add an option to enable password authentication
-
-   Drop Blowfish and Twofish configuration.
+> Add host-openssl to those configs, which need it for the Linux kernel build.
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
+> Cc: Fabio Estevam <fabio.estevam@nxp.com>
+> ---
+>   configs/freescale_t1040d4rdb_defconfig | 1 +
+>   configs/grinn_chiliboard_defconfig     | 1 + >   configs/mx25pdk_defconfig              | 1 +
+>   configs/wandboard_defconfig            | 1 +
+>   configs/warp7_defconfig                | 1 +
+>   5 files changed, 5 insertions(+)
+> <snip>
 
 
-Stefan
+-- 
+Marcin Niestroj
