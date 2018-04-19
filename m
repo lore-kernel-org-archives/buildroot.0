@@ -1,43 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 19 Apr 2018 08:35:52 +0000
-Subject: [Buildroot] [Bug 10961] [Buildroot 2018.02] Grub2 fails to build
- for x86_64 when BR2_SSP_ALL is enabled
-In-Reply-To: <bug-10961-163@https.bugs.busybox.net/>
-References: <bug-10961-163@https.bugs.busybox.net/>
-Message-ID: <bug-10961-163-AUKMDn735z@https.bugs.busybox.net/>
+From: tarek_el-sherbiny at waters.com <tarek_el-sherbiny@waters.com>
+Date: Thu, 19 Apr 2018 09:36:58 +0100
+Subject: [Buildroot] [PATCH 0/1] grub2: force -fno-stack-protector in
+ CPPFLAGS
+Message-ID: <20180419083659.22462-1-tarek_el-sherbiny@waters.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10961
+From: Tarek El-Sherbiny <tarek_el-sherbiny@waters.com>
 
---- Comment #2 from Tarek El-Sherbiny <tarek_el-sherbiny@waters.com> ---
-Hi Yann,
+grub2 fails to configure when BR2_SSP_ALL is enabled, with the following configure error:
 
-Thanks for getting back to me. I certainly would like to submit the patch to
-the mailing list.
-The reason I didn't because my corporate  mail server forces this
-confidentiality footer at the bottom of any email:
+checking for target linking format... unknown
+configure: error: no suitable link format found
+package/pkg-generic.mk:211: recipe for target 'output/build/grub2-2.02/.stamp_configured' failed
 
-=========================================================== The information in
-this email is confidential, and is intended solely for the addressee(s). Access
-to this email by anyone else is unauthorized and therefore prohibited. If you
-are not the intended recipient you are notified that disclosing, copying,
-distributing or taking any action in reliance on the contents of this
-information is strictly prohibited and may be unlawful.
-===========================================================
+This problem has been previously fixed by here:
+commit 2a27294e9ade6130a12ced9a1f152c51431a870e
 
-I asked the IT and legal departments if we can have a different policy for
-opensource community but they did not welcome the idea.
+However, a more recent change which was introduced in 2018.02.x branch has broken the build:
+commit 20a4583ebf7fe97ea22a1ea11621dd44a8114ca5
+
+This patch will implement the same workaround but for the correct flags.
 
 
-I will just submit the patch anyway ....
+Tarek El-Sherbiny (1):
+  grub2: force -fno-stack-protector in CPPFLAGS
 
-Best Regards,
-Tarek
+ boot/grub2/grub2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
+
+
+===========================================================
+The information in this email is confidential, and is intended solely for the addressee(s). 
+Access to this email by anyone else is unauthorized and therefore prohibited.  If you are 
+not the intended recipient you are notified that disclosing, copying, distributing or taking 
+any action in reliance on the contents of this information is strictly prohibited and may be unlawful.
+===========================================================
