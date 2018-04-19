@@ -1,50 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Apr 2018 22:51:28 +0200
-Subject: [Buildroot] [PATCH] download/git: be sure we do fetch something
-Message-ID: <20180419205128.28139-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Apr 2018 22:54:08 +0200
+Subject: [Buildroot] [PATCH] package/flann: fix build with cmake >= 3.11
+In-Reply-To: <20180418191912.25410-1-romain.naour@gmail.com>
+References: <20180418191912.25410-1-romain.naour@gmail.com>
+Message-ID: <20180419225408.2ba57fb6@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The different versions of git will behave in different ways when
-fetching remote references, as sumarised by the table below:
+Hello Romain,
 
-              |     ancient git         | new git
---------------------------------------------------------------------
-git fetch     | fetch all refs but tags | fetches all refs but tags
-git fetch -t  | fetches only tags       | fetch all refs and tags
+On Wed, 18 Apr 2018 21:19:12 +0200, Romain Naour wrote:
 
-(git-fetch may still fetch tags, but only if reachable from a branch)
+> From [1]:
+> "add_library() and add_executable() commands can now be called without
+>  any sources and will not complain as long as sources are added later
+>  via the target_sources() command."
 
-So, to cover all the bases, we do a simple fetch, to be sure we have
-branches, followed by the existing fetch -t, to get extra tags.
+I must be misunderstanding something then. The code currently is:
 
-Fixes:
-    http://autobuild.buildroot.net/results/0a2/0a238a7f55ea56c33b639ad03ed5796143426889/build-end.log
+add_library(flann_cpp SHARED "")
 
-Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- support/download/git | 1 +
- 1 file changed, 1 insertion(+)
+So it has no source code, and this works fine with CMake < 3.11. And
+you're saying that it's only in CMake >= 3.11 that having no source
+code is valid.
 
-diff --git a/support/download/git b/support/download/git
-index 1172310186..c48ad36b1a 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -81,6 +81,7 @@ if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
- fi
- if [ ${git_done} -eq 0 ]; then
-     printf "Fetching all references\n"
-+    _git fetch origin
-     _git fetch origin -t
- fi
- 
+And you fix that by adding a dummy source code file. I'm totally
+confused here.
+
+Also, why do they build a library with nothing inside ? Does it make
+sense ?
+
+Thanks,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
