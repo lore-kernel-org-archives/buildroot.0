@@ -1,31 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Apr 2018 22:43:17 +0200
-Subject: [Buildroot] [PATCH] tslib: update to 1.16
-In-Reply-To: <20180419134305.24732-1-martink@posteo.de>
-References: <20180419134305.24732-1-martink@posteo.de>
-Message-ID: <20180419224317.3d5eb457@windsurf.numericable.fr>
+Date: Thu, 19 Apr 2018 22:43:42 +0200
+Subject: [Buildroot] [git commit] dhcpc: bump to version 7.0.3
+Message-ID: <20180419204352.8BF6588817@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b99e52aaff6d8a6662dbaf3140c9c8a3694541e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 19 Apr 2018 15:43:05 +0200, Martin Kepplinger wrote:
-> For those who wonder what happend, as usual, there's a changelog summary:
-> https://github.com/kergoth/tslib/releases
-> 
-> Signed-off-by: Martin Kepplinger <martink@posteo.de>
-> ---
->  package/tslib/tslib.hash | 4 ++--
->  package/tslib/tslib.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Use sha256 checksum from *.distinfo.asc file.
 
-Applied to master, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dhcpcd/dhcpcd.hash | 4 ++--
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 3be3f7ff51..99b7fe786e 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated from download (no sig, hash)
+-sha256	6f9674dc7e27e936cc787175404a6171618675ecfb6903ab9887b1b66a87d69e	dhcpcd-6.11.5.tar.xz
++# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-7.0.3.tar.xz.distinfo.asc
++sha256	a255d9aecceb1c77a9862f1c0d31a48ba37aab5ef2ca5ad76fc7a907b6ea292e	dhcpcd-7.0.3.tar.xz
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index dc5c69b86b..1bb0dd8a51 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 6.11.5
++DHCPCD_VERSION = 7.0.3
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
