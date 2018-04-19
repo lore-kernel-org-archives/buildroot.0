@@ -1,133 +1,162 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 19 Apr 2018 12:46:36 +0300
-Subject: [Buildroot] [PATCH 2/2] lz4: improve static only build support
-In-Reply-To: <d7eb4454e9b67f918eef87dddff7e93616748b36.1524131196.git.baruch@tkos.co.il>
-References: <d7eb4454e9b67f918eef87dddff7e93616748b36.1524131196.git.baruch@tkos.co.il>
-Message-ID: <0d4f47355e8ecd124338524f94947fd7cd3e3cb0.1524131196.git.baruch@tkos.co.il>
+From: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+Date: Thu, 19 Apr 2018 11:37:22 +0200
+Subject: [Buildroot] [PATCH 1/1] New board: FriendlyARM NanoPi Duo
+Message-ID: <20180419093722.10667-1-sven.haardiek@iotec-gmbh.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current method of supporting static only build, removal of all lines
-that match the SHARED regex from lib/Makefile, is crude and fragile.
-Instead, patch lib/Makefile to allow disable of shared libraries.
+Introduce a new board the FriendlyARM NanoPi Duo.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+- Due to the missing defconfigs and DTS in the mainline kernel and uboot, I
+  used the ones from the FriendlyARM github page.
+
+- Most of the configuration was copied from the other friendlyarm boards.
+
+Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
 ---
- ...ib-allow-to-disable-shared-libraries.patch | 59 +++++++++++++++++++
- package/lz4/lz4.mk                            | 17 +++---
- 2 files changed, 67 insertions(+), 9 deletions(-)
- create mode 100644 package/lz4/0001-lib-allow-to-disable-shared-libraries.patch
+ board/friendlyarm/nanopi-duo/boot.cmd     |  8 ++++++
+ board/friendlyarm/nanopi-duo/genimage.cfg | 33 +++++++++++++++++++++
+ board/friendlyarm/nanopi-duo/readme.txt   | 35 +++++++++++++++++++++++
+ configs/friendlyarm_nanopi_duo_defconfig  | 31 ++++++++++++++++++++
+ 4 files changed, 107 insertions(+)
+ create mode 100644 board/friendlyarm/nanopi-duo/boot.cmd
+ create mode 100644 board/friendlyarm/nanopi-duo/genimage.cfg
+ create mode 100644 board/friendlyarm/nanopi-duo/readme.txt
+ create mode 100644 configs/friendlyarm_nanopi_duo_defconfig
 
-diff --git a/package/lz4/0001-lib-allow-to-disable-shared-libraries.patch b/package/lz4/0001-lib-allow-to-disable-shared-libraries.patch
+diff --git a/board/friendlyarm/nanopi-duo/boot.cmd b/board/friendlyarm/nanopi-duo/boot.cmd
 new file mode 100644
-index 000000000000..4f89e85577b3
+index 0000000000..56a2893b4d
 --- /dev/null
-+++ b/package/lz4/0001-lib-allow-to-disable-shared-libraries.patch
-@@ -0,0 +1,59 @@
-+From 95bde2a4ae4a92e984a5783ca1f09f44bf04fadb Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 19 Apr 2018 12:28:11 +0300
-+Subject: [PATCH] lib: allow to disable shared libraries
++++ b/board/friendlyarm/nanopi-duo/boot.cmd
+@@ -0,0 +1,8 @@
++setenv fdt_high ffffffff
 +
-+Just like BUILD_STATIC=no disables static libraries, BUILD_SHARED=no
-+disabled shared libraries. This is useful to support toolchains that do
-+not support shared libraries.
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/lz4/lz4/pull/504
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-h2-plus-nanopi-duo.dtb
 +
-+ lib/Makefile | 5 +++++
-+ 1 file changed, 5 insertions(+)
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/friendlyarm/nanopi-duo/genimage.cfg b/board/friendlyarm/nanopi-duo/genimage.cfg
+new file mode 100644
+index 0000000000..8b3cc1fe75
+--- /dev/null
++++ b/board/friendlyarm/nanopi-duo/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++            "sun8i-h2-plus-nanopi-duo.dtb",
++            "boot.scr"
++		}
++	}
++	size = 16M
++}
 +
-+diff --git a/lib/Makefile b/lib/Makefile
-+index dd33f50351a8..976d57cd75ed 100644
-+--- a/lib/Makefile
-++++ b/lib/Makefile
-+@@ -42,6 +42,7 @@ LIBVER_MINOR := $(shell echo $(LIBVER_MINOR_SCRIPT))
-+ LIBVER_PATCH := $(shell echo $(LIBVER_PATCH_SCRIPT))
-+ LIBVER  := $(shell echo $(LIBVER_SCRIPT))
-+ 
-++BUILD_SHARED:=yes
-+ BUILD_STATIC:=yes
-+ 
-+ CPPFLAGS+= -DXXH_NAMESPACE=LZ4_
-+@@ -92,6 +93,7 @@ ifeq ($(BUILD_STATIC),yes)  # can be disabled on command line
-+ endif
-+ 
-+ $(LIBLZ4): $(SRCFILES)
-++ifeq ($(BUILD_SHARED),yes)  # can be disabled on command line
-+ 	@echo compiling dynamic library $(LIBVER)
-+ ifneq (,$(filter Windows%,$(OS)))
-+ 	@$(CC) $(FLAGS) -DLZ4_DLL_EXPORT=1 -shared $^ -o dll\$@.dll
-+@@ -102,6 +104,7 @@ else
-+ 	@ln -sf $@ liblz4.$(SHARED_EXT_MAJOR)
-+ 	@ln -sf $@ liblz4.$(SHARED_EXT)
-+ endif
-++endif
-+ 
-+ liblz4: $(LIBLZ4)
-+ 
-+@@ -159,9 +162,11 @@ ifeq ($(BUILD_STATIC),yes)
-+ 	@$(INSTALL_DATA) liblz4.a $(DESTDIR)$(LIBDIR)/liblz4.a
-+ 	@$(INSTALL_DATA) lz4frame_static.h $(DESTDIR)$(INCLUDEDIR)/lz4frame_static.h
-+ endif
-++ifeq ($(BUILD_SHARED),yes)
-+ 	@$(INSTALL_PROGRAM) liblz4.$(SHARED_EXT_VER) $(DESTDIR)$(LIBDIR)
-+ 	@ln -sf liblz4.$(SHARED_EXT_VER) $(DESTDIR)$(LIBDIR)/liblz4.$(SHARED_EXT_MAJOR)
-+ 	@ln -sf liblz4.$(SHARED_EXT_VER) $(DESTDIR)$(LIBDIR)/liblz4.$(SHARED_EXT)
-++endif
-+ 	@echo Installing headers in $(INCLUDEDIR)
-+ 	@$(INSTALL_DATA) lz4.h $(DESTDIR)$(INCLUDEDIR)/lz4.h
-+ 	@$(INSTALL_DATA) lz4hc.h $(DESTDIR)$(INCLUDEDIR)/lz4hc.h
-+-- 
-+2.17.0
++image sdcard.img {
++	hdimage {
++	}
 +
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index c88329f7979e..d98dac00eab6 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -9,12 +9,10 @@ LZ4_SITE = $(call github,lz4,lz4,$(LZ4_VERSION))
- LZ4_INSTALL_STAGING = YES
- LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
- LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
-+LZ4_MAKE_OPTS = DESTDIR=$(STAGING_DIR) PREFIX=/usr
- 
- ifeq ($(BR2_STATIC_LIBS),y)
--define LZ4_DISABLE_SHARED
--	$(SED) '/SHARED/d' $(@D)/lib/Makefile
--endef
--LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
-+LZ4_MAKE_OPTS += BUILD_SHARED=no
- endif
- 
- define HOST_LZ4_BUILD_CMDS
-@@ -27,17 +25,18 @@ define HOST_LZ4_INSTALL_CMDS
- endef
- 
- define LZ4_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) lib lz4
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(LZ4_MAKE_OPTS) \
-+		-C $(@D) lib lz4
- endef
- 
- define LZ4_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(STAGING_DIR) \
--		PREFIX=/usr install -C $(@D)
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(LZ4_MAKE_OPTS) \
-+		install -C $(@D)
- endef
- 
- define LZ4_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) \
--		PREFIX=/usr install -C $(@D)
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(LZ4_MAKE_OPTS) \
-+		install -C $(@D)
- endef
- 
- $(eval $(generic-package))
++	partition spl {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/friendlyarm/nanopi-duo/readme.txt b/board/friendlyarm/nanopi-duo/readme.txt
+new file mode 100644
+index 0000000000..b8b6024171
+--- /dev/null
++++ b/board/friendlyarm/nanopi-duo/readme.txt
+@@ -0,0 +1,35 @@
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Nanopi DUO. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++Nanopi DUO link:
++http://www.nanopi.org/Nanopi-Duo_Feature.html
++
++Wiki link:
++http://wiki.friendlyarm.com/wiki/index.php/NanoPi_Duo
++
++How to build
++============
++
++    $ make friendlyarm_nanopi_duo_defconfig
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your Nanopi DUO and power it up. The console is on
++the serial line, 115200 8N1.
+diff --git a/configs/friendlyarm_nanopi_duo_defconfig b/configs/friendlyarm_nanopi_duo_defconfig
+new file mode 100644
+index 0000000000..8539deaccf
+--- /dev/null
++++ b/configs/friendlyarm_nanopi_duo_defconfig
+@@ -0,0 +1,31 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++BR2_TARGET_GENERIC_HOSTNAME="nanopi-duo"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi DUO"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-duo/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/friendlyarm/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="sunxi-4.16.y"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-nanopi-duo"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/friendlyarm/u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="sunxi-v2017.x"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_h3"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-duo/boot.cmd"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.17.0
