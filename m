@@ -1,11 +1,9 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Thu, 19 Apr 2018 15:16:51 +0000
-Subject: [Buildroot] [arc-buildroot] Re: [PATCH]
- configs/snps_arc*_defconfig: update linux version
-In-Reply-To: <20180419161502.6414c2e8@windsurf.numericable.fr>
-References: <20180419135524.44727-1-Evgeniy.Didin@synopsys.com>
- <20180419161502.6414c2e8@windsurf.numericable.fr>
-Message-ID: <1524151010.7288.3.camel@synopsys.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 19 Apr 2018 12:47:15 -0300
+Subject: [Buildroot] [PATCH 1/4] download/git: ensure we always work in
+ the expected repository
+References: <e9b0b62a20acfcd0641cbfee758982245a19b8fa.1523983687.git.yann.morin.1998@free.fr>
+Message-ID: <5ad8ba0337d9a_7cd62ad9dda4536c17646@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +12,60 @@ To: buildroot@busybox.net
 
 Hello,
 
-> Hello,
+On Tue, Apr 17, 2018 at 01:48 PM, Yann E. MORIN wrote:
+
+> git always look directories up until it finds a repository. In case
+> the git cache is broken, it may no longer be identified as a repository,
+> and git will look higher in the directories until it finds one.
 > 
-> On Thu, 19 Apr 2018 16:55:24 +0300, Evgeniy Didin wrote:
-> > With this commit we update Linux kernel version to 4.16.3
-> > and Linux headers version to 4.16.
-> > For some configs we switch headers version to be independent from
-> > Linux kernel version.
+> In the default conditions, this would be Buildroot's own git tree
+> (because DL_DIR is a subdir of Buildroot), but in some situations may
+> very well be any repository the user has Buildroot in, like a
+> br2-external tree...
 > 
-> Why ? The change doesn't make you independent at all from the Linux
-> kernel version, and causes two kernel tarballs to be downloaded instead
-> of one, which isn't nice.
+> So, we force git to use our git cache and never look elsewhere, as
+> Suggested by Ricardo.
 > 
-> Could you justify this change ?
+> Use GIT_DIR, as it has been there for ages now, while --git-dir was
+> only introduced later (even if most distros ship an later version),
+> as suggested by Arnout.
+> 
+> Also fix the one call to git that was not using the wrapper.
+> 
+> Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-With option BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1*=y
-BR2_KERNEL_HEADERS_AS_KERNEL parameter is set.
-Defconfig is meant as a starting point for work with the board.
-In these case if user wants to change version of Linux kernel,
-such error appears:
----------------------------->8---------------------------------
-Incorrect selection of kernel headers: expected 4.16.x, got 4.15.x,
-----------------------------8<---------------------------------
-Also in case of choosing new kernel rc's, error 404 occurs.
-For inexperienced users, these errors may not be obvious.
+Acked-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[download script bails out for a completely broken git cache, avoiding changes
+ to the buildroot repo when the broken git cache is in a subdir (the default)]
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-> (side note: could you use my @bootlin.com address instead of
-> @free-electrons.com. The DEVELOPERS file has been updated since quite
-> some time about this already. Thanks a lot!)
 
-Sure
+Tests performed:
 
-Best regards,
-Evgeniy Didin
+I choose dt-utils as its version is a tag, so it does not trigger the problem
+with git<1.9.0 fixed by patch 4.
+
+1) Create an empty dir in the place of git cache and download:
+ Using current master 56823d6:
+  git 1.7.1: [process hungs and the buildroot repo had its origin url changed]
+  git 1.8.3 and 2.11.0: [the buildroot repo had its origin url changed and also
+                   the commit from dt-utils is check out in the buildroot repo]
+ Current master + this patch:
+  git 1.7.1 and 1.8.3 and 2.11.0: [download script bails out as expected,
+                                   falling back to backup site]
+2) Download with no initial git cache
+ Current master + this patch:
+  git 1.7.1: [works fine, fetch all refs]
+  git 1.8.3 and 2.11.0: [works fine, shallow fetch]
+
+Commands used and outputs:
+https://gist.github.com/ricardo-martincoski/ea341b69a4ebeadf38e4ab02ba33adf8
+
+
+Regards,
+Ricardo
