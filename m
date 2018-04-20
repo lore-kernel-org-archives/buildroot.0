@@ -1,109 +1,56 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Fri, 20 Apr 2018 11:32:25 +0530
-Subject: [Buildroot] [PATCH] package/tk: new package
-In-Reply-To: <1524133923-11881-1-git-send-email-romain.naour@smile.fr>
-References: <1524133923-11881-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <CA+NV+V=_u1-QDROdCfe7vORZ1iUxTwqq0S+CEk-gcNE_Pr91ng@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 20 Apr 2018 08:33:08 +0200
+Subject: [Buildroot] [git commit] dhcpcd: fix legal info
+Message-ID: <20180420063321.9ACE58816D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 19, 2018 at 4:02 PM, Romain Naour <romain.naour@smile.fr> wrote:
-> Use the same version as tcl package.
->
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
-> tcl and tk should be updated together.
-> ---
->  DEVELOPERS           |  1 +
->  package/Config.in    |  1 +
->  package/tk/Config.in | 18 ++++++++++++++++++
->  package/tk/tk.hash   |  3 +++
->  package/tk/tk.mk     | 31 +++++++++++++++++++++++++++++++
->  5 files changed, 54 insertions(+)
->  create mode 100644 package/tk/Config.in
->  create mode 100644 package/tk/tk.hash
->  create mode 100644 package/tk/tk.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index eec278d..b33722e 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1621,6 +1621,7 @@ F:        package/stress-ng/
->  F:     package/supertux/
->  F:     package/supertuxkart/
->  F:     package/terminology/
-> +F:     package/tk/
->  F:     package/upower/
->  F:     package/xenomai/
->
-> diff --git a/package/Config.in b/package/Config.in
-> index ddbbcff..ecd9b8f 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -302,6 +302,7 @@ comment "Graphic libraries"
->         source "package/sdl2_mixer/Config.in"
->         source "package/sdl2_net/Config.in"
->         source "package/sdl2_ttf/Config.in"
-> +       source "package/tk/Config.in"
->
->  comment "Other GUIs"
->         source "package/qt/Config.in"
-> diff --git a/package/tk/Config.in b/package/tk/Config.in
-> new file mode 100644
-> index 0000000..507b0bf
-> --- /dev/null
-> +++ b/package/tk/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_TK
-> +       bool "tk"
-> +       depends on BR2_USE_MMU # tcl
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS # tcl
-> +       depends on !BR2_STATIC_LIBS # tcl
-> +       depends on BR2_PACKAGE_XORG7
-> +       select BR2_PACKAGE_TCL
-> +       select BR2_PACKAGE_XLIB_LIBX11
-> +       select BR2_PACKAGE_XLIB_LIBXFT
-> +       help
-> +         A windowing toolkit for use with tcl
-> +
-> +         http://www.tcl.tk
-> +
-> +comment "tk needs a toolchain w/ threads, dynamic library"
-> +       depends on BR2_USE_MMU
-> +       depends on BR2_PACKAGE_XORG7
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> diff --git a/package/tk/tk.hash b/package/tk/tk.hash
-> new file mode 100644
-> index 0000000..5fc0b6f
-> --- /dev/null
-> +++ b/package/tk/tk.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 d62c371a71b4744ed830e3c21d27968c31dba74dd2c45f36b9b071e6d88eb19d  tk8.6.6-src.tar.gz
-> +sha256 2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198  license.terms
-> diff --git a/package/tk/tk.mk b/package/tk/tk.mk
-> new file mode 100644
-> index 0000000..97c3ae6
-> --- /dev/null
-> +++ b/package/tk/tk.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# tk
-> +#
-> +################################################################################
-> +
-> +TK_VERSION_MAJOR = 8.6
-> +TK_VERSION = $(TK_VERSION_MAJOR).6
-> +TK_SOURCE = tk$(TK_VERSION)-src.tar.gz
-> +TK_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TK_VERSION)
-> +TK_LICENSE = tcl license
+commit: https://git.buildroot.net/buildroot/commit/?id=f97bbcd5f6c981cc18a09b72832e973ff43aa33e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-SPDX short identifier for TCL/TK license is TCL. So license string
-here should be just TCL.
+The latest version bump to 7.0.3 moved dhcpcd.c to under src/. Since the
+tarball now has a LICENSE file, use that instead.
 
-Thanks,
-Rahul
+While at it, add a hash for that file.
+
+Fixes:
+http://autobuild.buildroot.net/results/f57/f5790e0a82a3b814d828d18eb71a3f6c422bb2b8/
+http://autobuild.buildroot.net/results/6b9/6b930827913f9b4d2602d5777f4243ba7b295ca7/
+http://autobuild.buildroot.net/results/603/603eda004a502f613e9b92cea4fb8cc9e4068255/
+
+Cc: John Stile <johns@msli.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dhcpcd/dhcpcd.hash | 2 ++
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 99b7fe786e..605e87609e 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,4 @@
+ # sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-7.0.3.tar.xz.distinfo.asc
+ sha256	a255d9aecceb1c77a9862f1c0d31a48ba37aab5ef2ca5ad76fc7a907b6ea292e	dhcpcd-7.0.3.tar.xz
++# Locally calculated
++sha256	b120a64b92cfb2453b61df4457a3c0eb163ef9c1c397822826756a31581f3947	LICENSE
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 1bb0dd8a51..92a78cd7ad 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -9,7 +9,7 @@ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
+ DHCPCD_LICENSE = BSD-2-Clause
+-DHCPCD_LICENSE_FILES = dhcpcd.c
++DHCPCD_LICENSE_FILES = LICENSE
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DHCPCD_CONFIG_OPTS += --enable-static
