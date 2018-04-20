@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 15:59:57 +0200
-Subject: [Buildroot] [git commit] usb_modeswitch: set CXX to false when
- C++ is missing
-In-Reply-To: <20180417064556.EC9CE88036@busybox.osuosl.org>
-References: <20180417064556.EC9CE88036@busybox.osuosl.org>
-Message-ID: <20180420155957.58f2bc90@windsurf.numericable.fr>
+Date: Fri, 20 Apr 2018 16:00:32 +0200
+Subject: [Buildroot] [git commit] package/wmctrl: x-includes and
+ x-libraries must be set for cross-compiling
+In-Reply-To: <20180418094654.8BA0288272@busybox.osuosl.org>
+References: <20180418094654.8BA0288272@busybox.osuosl.org>
+Message-ID: <20180420160032.7f74e16e@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +15,43 @@ Peter,
 
 This commit should be backported to 2018.02.x to solve:
 
-  http://autobuild.buildroot.net/results/e39ca3c19e96c0c1979eb6ab59e9b2e1dc64a76c/
+  http://autobuild.buildroot.net/results/7e5cba8a5650a00e10d1a5528f38cb2bf772aee1/
 
-Thanks!
+Thanks,
 
 Thomas
 
-On Tue, 17 Apr 2018 08:45:42 +0200, Thomas Petazzoni wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=107e3ebf45931adfc9c995dbb5db3bf1d17311d3
+On Wed, 18 Apr 2018 11:46:48 +0200, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=046c5e25634bbf827c43617bf1967ab469418908
 > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> Similar to the openocd fix in commit 5966e2dc54 (package/openocd: fix
-> fallout after no-C++ fixups) the jimctl that is bundled with
-> usb_modeswitch also wants to find a binary. This broke with commit
-> 4cd1ab158 (core: alternate solution to disable C++). Revert to 'false'
-> instead of 'no' here as well.
+> set x-includes and x-libraries configure option for cross-compiling.
+> wmctrl can use poisoned paths if these options are not passed to
+> configure script.
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/b4d/b4d4e925763cb6558af915f9781afe07fc557ebc/
-> http://autobuild.buildroot.net/results/61b/61b9dc2148df2e8fd0b30e62aedbfd30bb755e19/
-> http://autobuild.buildroot.net/results/468/468a7e6b049f159fbb4e79d3a12b53ca890f6933/
+> http://autobuild.buildroot.net/results/7e5/7e5cba8a5650a00e10d1a5528f38cb2bf772aee1
 > 
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: J?r?me Pouiller <jezz@sysmic.org>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/usb_modeswitch/usb_modeswitch.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/wmctrl/wmctrl.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-> index 8e6b433913..d0c33cc187 100644
-> --- a/package/usb_modeswitch/usb_modeswitch.mk
-> +++ b/package/usb_modeswitch/usb_modeswitch.mk
-> @@ -28,6 +28,7 @@ USB_MODESWITCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+> diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+> index 0d4aeebc1d..36ad3513ff 100644
+> --- a/package/wmctrl/wmctrl.mk
+> +++ b/package/wmctrl/wmctrl.mk
+> @@ -11,4 +11,8 @@ WMCTRL_LICENSE_FILES = COPYING
 >  
->  define USB_MODESWITCH_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-> +		$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
->  		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
->  		JIM_CONFIGURE_OPTS="--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME)" \
->  		-C $(@D) $(USB_MODESWITCH_BUILD_TARGETS)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  WMCTRL_DEPENDENCIES = libglib2 xlib_libX11 xlib_libXmu
+>  
+> +WMCTRL_CONF_OPTS = \
+> +	--x-includes=$(STAGING_DIR)/usr/include \
+> +	--x-libraries=$(STAGING_DIR)/usr/lib
+> +
+>  $(eval $(autotools-package))
 
 
 
