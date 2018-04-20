@@ -1,72 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 08:56:44 +0200
-Subject: [Buildroot] [arc-buildroot] Re: [PATCH]
- configs/snps_arc*_defconfig: update linux version
-In-Reply-To: <1524151010.7288.3.camel@synopsys.com>
-References: <20180419135524.44727-1-Evgeniy.Didin@synopsys.com>
- <20180419161502.6414c2e8@windsurf.numericable.fr>
- <1524151010.7288.3.camel@synopsys.com>
-Message-ID: <20180420085644.0adf07e3@windsurf.numericable.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 20 Apr 2018 09:28:09 +0200
+Subject: [Buildroot] modem-manager: build issue
+In-Reply-To: <20180420083813.0a2eac51@windsurf.numericable.fr>
+References: <CAGm1_kusSpWv2dmQyzerpouB+LUvf84jZAi6rBMyZdieUUosow@mail.gmail.com>
+ <1730967127.450971.1524062022318.JavaMail.zimbra@datacom.ind.br>
+ <1847604074.751187.1524194593095.JavaMail.zimbra@datacom.ind.br>
+ <20180420083813.0a2eac51@windsurf.numericable.fr>
+Message-ID: <CAGm1_kuEqW+Mito5P8rMxdM+zrCFAxpu2TzsZa=mvDAK8d1e1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Evgeniy,
-
-On Thu, 19 Apr 2018 15:16:51 +0000, Evgeniy Didin wrote:
+On Fri, Apr 20, 2018 at 8:38 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 > Hello,
-> 
-> > Hello,
-> > 
-> > On Thu, 19 Apr 2018 16:55:24 +0300, Evgeniy Didin wrote:  
-> > > With this commit we update Linux kernel version to 4.16.3
-> > > and Linux headers version to 4.16.
-> > > For some configs we switch headers version to be independent from
-> > > Linux kernel version.  
-> > 
-> > Why ? The change doesn't make you independent at all from the Linux
-> > kernel version, and causes two kernel tarballs to be downloaded instead
-> > of one, which isn't nice.
-> > 
-> > Could you justify this change ?  
-> 
-> With option BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1*=y
-> BR2_KERNEL_HEADERS_AS_KERNEL parameter is set.
+>
+> On Fri, 20 Apr 2018 00:23:13 -0300 (BRT), Carlos Santos wrote:
+>
+>> There is a macro defined in build/libglib2-2.56.1/gobject/gobject.h which
+>> leads to the assignment errors:
+>>
+>>   511 /* Make reference APIs type safe with macros */
+>>   512 #define g_object_ref(Obj)      ((__typeof__(Obj)) (g_object_ref) (Obj))
+>>
+>> The problem can be easily reproduced with this sample code:
+>>
+>> $ cat /tmp/test.c
+>> extern void *g_object_ref(void *);
+>>
+>> /* Make reference APIs type safe with macros */
+>> #define g_object_ref(Obj)      ((__typeof__(Obj)) (g_object_ref) (Obj))
+>>
+>> extern double *new_double(int *);
+>>
+>> double *new_double(int *ip) {
+>>   double *dp;
+>>   dp = g_object_ref(ip);
+>>   return dp;
+>> }
+>>
+>> $ gcc -Wall -Werror -c /tmp/test.c -o /tmp/test.o
+>> /tmp/test.c: In function ?new_context?:
+>> /tmp/test.c:19:13: error: assignment from incompatible pointer type [-Werror=incompatible-pointer-types]
+>>    ctx->self = g_object_ref(om);
+>>              ^
+>> cc1: all warnings being treated as errors
+>
+> Thanks for the investigation!
+>
+>> So in order to fix the build of ModemManager it would be necessary to either
+>> compile it without -Werror (with the risk of letting undesired assignments
+>> happen) or fix all the occurrences of the offending assignments.
+>
+> If the patch to fix all the occurrences is small enough, we can do this
+> in Buildroot, and submit upstream.
+>
+> If the patch is larger, then disabling -Werror is a better solution for
+> us, and report the issue upstream (or contribute the fix).
 
-Yes, and this is what we want.
+I still wonder why the upstream MM doesn't have any compilation
+issues. cflags also have -Werror:
 
-> Defconfig is meant as a starting point for work with the board.
-> In these case if user wants to change version of Linux kernel,
-> such error appears:
-> ---------------------------->8---------------------------------  
-> Incorrect selection of kernel headers: expected 4.16.x, got 4.15.x,
-> ----------------------------8<---------------------------------
-> Also in case of choosing new kernel rc's, error 404 occurs.
-> For inexperienced users, these errors may not be obvious.
+cflags:                  -Wall -Werror -std=gnu89 -g -O2
+-Wmissing-declarations -Wmissing-prototypes
+-Wdeclaration-after-statement -Wno-unused-parameter -Wno-sign-compare
+-Wno-deprecated-declarations -Wno-unused-but-set-variable
+-Wformat-security
 
-I do understand your concern. However, it is actually even worse if
-your defconfig selects 4.16 kernel headers: if the user changes
-the kernel version itself from 4.16 to 4.10, the user will
-run a 4.10 kernel, with a toolchain compiled against 4.16 kernel
-headers, which isn't good.
+And the code is also the same (src/mm-base-manager.c):
 
-Also, specifying a fixed kernel headers version like you're doing means
-that the kernel source code gets downloaded twice.
+typedef struct {
+    MMBaseManager *self;
+    GDBusMethodInvocation *invocation;
+    gchar *level;
+} SetLoggingContext;
 
-In addition all our defconfigs use this principle, and we are not going
-to change this principle for just a few defconfigs. Either we change
-this for all defconfigs, or we keep it as is for all defconfigs.
-Therefore, I would recommend you to bump the Linux kernel version in
-the snps_arc_* defconfigs without changing this, and if you really
-think the current situation is not convenient, open up the discussion
-inn a broader way.
+static gboolean
+handle_set_logging (MmGdbusOrgFreedesktopModemManager1 *manager,
+                    GDBusMethodInvocation *invocation,
+                    const gchar *level)
+{
+    SetLoggingContext *ctx;
 
-Thanks!
+    ctx = g_new0 (SetLoggingContext, 1);
+    ctx->self = g_object_ref (manager);
+    ctx->invocation = g_object_ref (invocation);
+    ctx->level = g_strdup (level);
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+    mm_auth_provider_authorize (ctx->self->priv->authp,
+                                invocation,
+                                MM_AUTHORIZATION_MANAGER_CONTROL,
+                                ctx->self->priv->authp_cancellable,
+                                (GAsyncReadyCallback)set_logging_auth_ready,
+                                ctx);
+    return TRUE;
+}
+
+@Aleksander: any ETA for 1.8.0?
+
+Yegor
