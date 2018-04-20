@@ -1,55 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 16:35:59 +0200
-Subject: [Buildroot] [git commit] bootstrap: bump to version 4.1.0
-Message-ID: <20180420143629.AFAE88271F@busybox.osuosl.org>
+Date: Fri, 20 Apr 2018 16:36:04 +0200
+Subject: [Buildroot] [git commit] libuv: bump to version 1.20.1
+Message-ID: <20180420143629.F08FE83F35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31b207a5db0fa8482be64da3b434ed575ab583b3
+commit: https://git.buildroot.net/buildroot/commit/?id=d5d305d40c9d65e0e51f4dfe6a43b4766a250bef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also install bootstrap.min.css.map as it is referenced from
-bootstrap.min.css.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bootstrap/bootstrap.hash | 4 ++--
- package/bootstrap/bootstrap.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
-index 32ef9c4bbb..ed29f9c529 100644
---- a/package/bootstrap/bootstrap.hash
-+++ b/package/bootstrap/bootstrap.hash
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index c14b2d4971..df021c567b 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256	fa1caaaf640c32c553d0b323da1036f2232703d64a1d22c3a2ec84ace68c791a	bootstrap-4.0.0-dist.zip
--sha256	8c1a4c25634d5841924aab1848acc9dcbc3d5672183053c8b71ff2139b65d7c3	css/bootstrap.css
-+sha256	75c0325fd82e29cf524e28d8be7716c216cc507ba85b087ab36868209236aa01  bootstrap-4.1.0-dist.zip
-+sha256	0ce7fbe215cdf921ed87d00a374404681d5d24898589a7fe60e068d09289b4ba  css/bootstrap.css
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
-index 005dd9a714..0699485f52 100644
---- a/package/bootstrap/bootstrap.mk
-+++ b/package/bootstrap/bootstrap.mk
+ # Locally calculated
+-sha256  6d36f18f556cc288813032a168fd9181b45d9e66e3e18e54a8dbdfd8ea3c3dba  libuv-v1.20.0.tar.gz
++sha256  abc9106789c15a1c8009ab3d114a5b44bd6e240b183240f47e28aa542eea07b4  libuv-v1.20.1.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 54ce6bdaa6..6d1a4acc01 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOOTSTRAP_VERSION = 4.0.0
-+BOOTSTRAP_VERSION = 4.1.0
- BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
- BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
- BOOTSTRAP_LICENSE = MIT
-@@ -17,6 +17,8 @@ endef
- define BOOTSTRAP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css \
- 		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css
-+	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css.map \
-+		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css.map
- 	$(INSTALL) -m 0644 -D $(@D)/js/bootstrap.min.js \
- 		$(TARGET_DIR)/var/www/bootstrap/js/bootstrap.min.js
- endef
+-LIBUV_VERSION = v1.20.0
++LIBUV_VERSION = v1.20.1
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
