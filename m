@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 16:36:59 +0200
-Subject: [Buildroot] [PATCH] bootstrap: bump to version 4.1.0
-In-Reply-To: <20180420113004.11271-1-yegorslists@googlemail.com>
-References: <20180420113004.11271-1-yegorslists@googlemail.com>
-Message-ID: <20180420163659.56fe1d27@windsurf.numericable.fr>
+Date: Fri, 20 Apr 2018 16:42:55 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.16.3
+In-Reply-To: <1524225228-9082-1-git-send-email-festevam@gmail.com>
+References: <1524225228-9082-1-git-send-email-festevam@gmail.com>
+Message-ID: <20180420164255.22e349c9@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 20 Apr 2018 13:30:04 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Also install bootstrap.min.css.map as it is referenced from
-> bootstrap.min.css.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, 20 Apr 2018 08:53:47 -0300, Fabio Estevam wrote:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  package/bootstrap/bootstrap.hash | 4 ++--
->  package/bootstrap/bootstrap.mk   | 4 +++-
->  2 files changed, 5 insertions(+), 3 deletions(-)
+>  linux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Both applied to master, thanks.
 
 Thomas
 -- 
