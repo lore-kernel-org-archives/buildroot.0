@@ -1,55 +1,48 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 20 Apr 2018 13:30:04 +0200
-Subject: [Buildroot] [PATCH] bootstrap: bump to version 4.1.0
-Message-ID: <20180420113004.11271-1-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 20 Apr 2018 13:37:42 +0200
+Subject: [Buildroot] [PATCH 0/4] openjdk
+In-Reply-To: <20180206143952.12332-1-thomas.de_schampheleire@nokia.com>
+References: <20180206143952.12332-1-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180420133742.3d20ee49@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Also install bootstrap.min.css.map as it is referenced from
-bootstrap.min.css.
+On Tue,  6 Feb 2018 15:39:48 +0100, Thomas De Schampheleire wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/bootstrap/bootstrap.hash | 4 ++--
- package/bootstrap/bootstrap.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+> This series is the result of some effort that was spent in the past to get
+> openjdk build without crazy dependencies on e.g. X11, cups, etc. if all you need
+> is some basic Java.
+> It was made in the context of PowerPC on an older Buildroot release.
+> 
+> This series is sent not so much for immediate integration in mainline
+> Buildroot, but rather to help others that are interested in openjdk support.
+> They could use this series as a starting point and possibly improve it.
+> 
+> The openjdk variant used is Zero.
+> In order to build the more performant Zero Shark, one needs LLVM JIT.
+> 
+> The size optimization patches may need to be converted in actual config options,
+> as not all use cases may desire them.
 
-diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
-index 32ef9c4bbb..ed29f9c529 100644
---- a/package/bootstrap/bootstrap.hash
-+++ b/package/bootstrap/bootstrap.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	fa1caaaf640c32c553d0b323da1036f2232703d64a1d22c3a2ec84ace68c791a	bootstrap-4.0.0-dist.zip
--sha256	8c1a4c25634d5841924aab1848acc9dcbc3d5672183053c8b71ff2139b65d7c3	css/bootstrap.css
-+sha256	75c0325fd82e29cf524e28d8be7716c216cc507ba85b087ab36868209236aa01  bootstrap-4.1.0-dist.zip
-+sha256	0ce7fbe215cdf921ed87d00a374404681d5d24898589a7fe60e068d09289b4ba  css/bootstrap.css
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
-index 005dd9a714..0699485f52 100644
---- a/package/bootstrap/bootstrap.mk
-+++ b/package/bootstrap/bootstrap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOOTSTRAP_VERSION = 4.0.0
-+BOOTSTRAP_VERSION = 4.1.0
- BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
- BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
- BOOTSTRAP_LICENSE = MIT
-@@ -17,6 +17,8 @@ endef
- define BOOTSTRAP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css \
- 		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css
-+	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css.map \
-+		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css.map
- 	$(INSTALL) -m 0644 -D $(@D)/js/bootstrap.min.js \
- 		$(TARGET_DIR)/var/www/bootstrap/js/bootstrap.min.js
- endef
+I'm wondering what to do with this patch series. Thomas DS says it is
+not really ready for integration, and was mainly sent to help others
+who might be interested in OpenJDK.
+
+Is there anyone interested in picking up this patch series and fixing
+the remaining issues ?
+
+Does anyone disagrees with marking those patches as "Changes Requested"
+in patchwork ?
+
+Thanks,
+
+Thomas
 -- 
-2.17.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
