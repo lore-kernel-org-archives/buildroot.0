@@ -1,80 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 16:07:13 +0200
-Subject: [Buildroot] [PATCH] bluez5_utils: add patch to fix readline issue
-Message-ID: <20180420140713.16271-1-thomas.petazzoni@bootlin.com>
+Date: Fri, 20 Apr 2018 16:08:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: needs readline
+In-Reply-To: <20180420122013.43fbd215@windsurf.numericable.fr>
+References: <20180113224532.2715-1-bernd.kuhls@t-online.de>
+ <20180114053204.qzh6l3xgqywgcmyr@sapphire.tkos.co.il>
+ <ver4jexs69.ln2@ID-313208.user.individual.net>
+ <20180118044042.4cclk2qlu6fb37ha@tarshish>
+ <1520024398.13943.5.camel@embedded.rocks>
+ <20180420122013.43fbd215@windsurf.numericable.fr>
+Message-ID: <20180420160835.263e4ee3@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since bluez5_utils 5.49, some code using readline was compiled even if
-readline was not available. After this issue was reported upstream, a
-patch was proposed by an upstream developer to address the issue. This
-commit integrates this patch (under review upstream), which fixes the
-problem.
+Hello,
 
-Fixes:
+On Fri, 20 Apr 2018 12:20:13 +0200, Thomas Petazzoni wrote:
 
-  http://autobuild.buildroot.net/results/3e266a79acab8b8eb33360f7afbc1cd6db46f7cb/
+> > Any news on this issue? Would be great to have this fixed before the
+> > next release.  
+> 
+> I've sent an e-mail to upstream about this:
+> 
+>   https://marc.info/?l=linux-bluetooth&m=152421846903323&w=2
+> 
+> Let's see if they answer, and what they answer.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...Is-shall-only-be-build-if-readline-is-pre.patch | 32 ++++++++++++++++++++++
- package/bluez5_utils/bluez5_utils.mk               |  2 ++
- 2 files changed, 34 insertions(+)
- create mode 100644 package/bluez5_utils/0001-bt_shell-APIs-shall-only-be-build-if-readline-is-pre.patch
+They answered, and proposed a patch to fix it, which works. I've
+submitted a Buildroot patch to integrate it:
 
-diff --git a/package/bluez5_utils/0001-bt_shell-APIs-shall-only-be-build-if-readline-is-pre.patch b/package/bluez5_utils/0001-bt_shell-APIs-shall-only-be-build-if-readline-is-pre.patch
-new file mode 100644
-index 0000000000..394742b680
---- /dev/null
-+++ b/package/bluez5_utils/0001-bt_shell-APIs-shall-only-be-build-if-readline-is-pre.patch
-@@ -0,0 +1,32 @@
-+From 654444dd8faf02b46f41d81f3d9c623d57bdd399 Mon Sep 17 00:00:00 2001
-+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-+Date: Fri, 20 Apr 2018 16:04:17 +0200
-+Subject: [PATCH] bt_shell APIs shall only be build if readline is present on
-+ the system since it currently depend on it.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream-status: https://marc.info/?l=linux-bluetooth&m=152422938306592&w=2
-+---
-+ Makefile.am | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index daf34b6ca..9c3c17139 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -119,7 +119,11 @@ shared_sources = src/shared/io.h src/shared/timeout.h \
-+ 			src/shared/gatt-server.h src/shared/gatt-server.c \
-+ 			src/shared/gatt-db.h src/shared/gatt-db.c \
-+ 			src/shared/gap.h src/shared/gap.c \
-+-			src/shared/tty.h src/shared/shell.c src/shared/shell.h
-++			src/shared/tty.h
-++
-++if READLINE
-++shared_sources += src/shared/shell.c src/shared/shell.h
-++endif
-+ 
-+ src_libshared_glib_la_SOURCES = $(shared_sources) \
-+ 				src/shared/io-glib.c \
-+-- 
-+2.14.3
-+
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index e1c67bd622..3189855624 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -11,6 +11,8 @@ BLUEZ5_UTILS_INSTALL_STAGING = YES
- BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2
- BLUEZ5_UTILS_LICENSE = GPL-2.0+, LGPL-2.1+
- BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
-+# 0001-bt_shell-APIs-shall-only-be-build-if-readline-is-pre.patch
-+BLUEZ5_UTILS_AUTORECONF = YES
- 
- BLUEZ5_UTILS_CONF_OPTS = \
- 	--enable-tools \
+  https://patchwork.ozlabs.org/patch/901944/
+
+And therefore I'll mark the older patch proposed by Bernd as Superseded.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-2.14.3
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
