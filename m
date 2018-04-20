@@ -1,34 +1,46 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 20 Apr 2018 08:53:48 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{14, 15, 16}.x series
-In-Reply-To: <1524225228-9082-1-git-send-email-festevam@gmail.com>
-References: <1524225228-9082-1-git-send-email-festevam@gmail.com>
-Message-ID: <1524225228-9082-2-git-send-email-festevam@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 20 Apr 2018 14:33:35 +0200
+Subject: [Buildroot] [PATCH 0/4] openjdk
+In-Reply-To: <20180420133742.3d20ee49@windsurf.numericable.fr>
+References: <20180206143952.12332-1-thomas.de_schampheleire@nokia.com>
+ <20180420133742.3d20ee49@windsurf.numericable.fr>
+Message-ID: <20180420123335.GD12688@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thomas, All,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4b4c8dd..9d32687 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -256,7 +256,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.33"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.17"	if BR2_KERNEL_HEADERS_4_15
--	default "4.16.2"	if BR2_KERNEL_HEADERS_4_16
-+	default "4.14.35"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
-+	default "4.16.3"	if BR2_KERNEL_HEADERS_4_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+On 2018-04-20 13:37 +0200, Thomas Petazzoni spake thusly:
+> On Tue,  6 Feb 2018 15:39:48 +0100, Thomas De Schampheleire wrote:
+> > This series is the result of some effort that was spent in the past to get
+> > openjdk build without crazy dependencies on e.g. X11, cups, etc. if all you need
+> > is some basic Java.
+
+Java? Meh... ;-)
+
+> I'm wondering what to do with this patch series. Thomas DS says it is
+> not really ready for integration, and was mainly sent to help others
+> who might be interested in OpenJDK.
+> 
+> Is there anyone interested in picking up this patch series and fixing
+> the remaining issues ?
+> 
+> Does anyone disagrees with marking those patches as "Changes Requested"
+> in patchwork ?
+
+Sorry, I'm not really interested in pursuing that effort. So, just mark
+them as RFC or Deferred... Or even Changes Requeste, as you see fit...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
