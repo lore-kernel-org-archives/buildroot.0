@@ -1,54 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Apr 2018 11:25:16 +0200
-Subject: [Buildroot] [PATCH 3/4] download/git: ensure we can checkout
- repos with submodule conversions
-In-Reply-To: <41022455-a486-da38-00fa-53c07432fa97@mind.be>
-References: <a45b9ba78d527d29cfd5cc0daf4c767c7feb8643.1523983687.git.yann.morin.1998@free.fr>
- <5ad6b7cbf192b_23c22af60ee98304189d9@ultri4.mail>
- <627eaa46-0acb-9753-15a0-d805abb18164@mind.be>
- <20180419195948.GD30285@scaer>
- <41022455-a486-da38-00fa-53c07432fa97@mind.be>
-Message-ID: <20180420092516.GA12688@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 20 Apr 2018 11:55:22 +0200
+Subject: [Buildroot] [PATCH] uclibc: backport upstream patch adding fcntl
+ definitions on OpenRISC
+Message-ID: <20180420095522.30646-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+A number of fcntl.h definitions were missing on OpenRISC in uClibc-ng,
+causing build failures such as:
 
-On 2018-04-20 01:30 +0200, Arnout Vandecappelle spake thusly:
-> On 19-04-18 21:59, Yann E. MORIN wrote:
-> > On 2018-04-18 10:04 +0200, Arnout Vandecappelle spake thusly:
-[--SNIP--]
-> >>  I'm liking the bare repos more and more :-)
-> > But then, we can't have submodules stored in a bare repo, because we
-> > need a workign copy to have the list of submodules, and their
-> > versions...
-> 
->  It's *possible* to do things fully "manually", e.g. with some plumbing commands:
-> 
-> export GIT_DIR=/path/to/bare/repo
-> blob=$(git ls-tree $cset .gitmodules | awk '{print $3}')
-> if [ "$blob" ]; then
->   tmpfile=$(git unpack-file $blob)
->   etc. etc.
+gfile.c: In function 'splice_stream_with_progress':
+gfile.c:3017:35: error: 'F_SETPIPE_SZ' undeclared (first use in this function)
+   buffer_size = fcntl (buffer[1], F_SETPIPE_SZ, 1024 * 1024);
 
-I hope you were only joking there... ;-)
+This comit backports a patch that was merged in upstream uClibc-ng,
+which addresses this problem.
 
-No, no, no... We don't want to go that route, reinventing the git
-internals in a shell script... Even I can't find this appealing...
+Fixes:
 
-Well, that could be fun to write...
-No, don't look down the deep ravine... ;-]
+  http://autobuild.buildroot.net/results/182ebbba6c7466b07e965e5120d919cbcf5e9da6/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...dd-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/uclibc/0002-or1k-add-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch
 
+diff --git a/package/uclibc/0002-or1k-add-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch b/package/uclibc/0002-or1k-add-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch
+new file mode 100644
+index 0000000000..b81c5921b9
+--- /dev/null
++++ b/package/uclibc/0002-or1k-add-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch
+@@ -0,0 +1,36 @@
++From f42d18f06084b6db90c104fb5404a91602e9b904 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 12 Apr 2018 23:24:59 +0200
++Subject: [PATCH] or1k: add F_{DUPFD_CLOEXEC, SETPIPE_SZ, GETPIPE_SZ}
++
++Those definitions exist on all other architectures, but were not
++present in or1k specific headers when or1k support was merged.
++
++On the kernel side, their support is completely architecture
++independent, so we just need those definitions to make those fcntl()
++calls available on or1k.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream-status: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=f42d18f06084b6db90c104fb5404a91602e9b904
++---
++ libc/sysdeps/linux/or1k/bits/fcntl.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/libc/sysdeps/linux/or1k/bits/fcntl.h b/libc/sysdeps/linux/or1k/bits/fcntl.h
++index bd6a8c511..a82ede424 100644
++--- a/libc/sysdeps/linux/or1k/bits/fcntl.h
+++++ b/libc/sysdeps/linux/or1k/bits/fcntl.h
++@@ -102,6 +102,10 @@
++ # define F_SETLEASE	1024	/* Set a lease.	 */
++ # define F_GETLEASE	1025	/* Enquire what lease is active.  */
++ # define F_NOTIFY	1026	/* Request notfications on a directory.	 */
+++# define F_DUPFD_CLOEXEC 1030	/* Duplicate file descriptor with
+++				   close-on-exit set on new fd.  */
+++# define F_SETPIPE_SZ	1031    /* Set pipe page size array.  */
+++# define F_GETPIPE_SZ	1032    /* Get pipe page size array.  */
++ #endif
++ 
++ /* For F_[GET|SET]FL.  */
++-- 
++2.14.3
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.3
