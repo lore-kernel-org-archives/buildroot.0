@@ -1,53 +1,103 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Apr 2018 01:30:57 +0200
-Subject: [Buildroot] [PATCH 3/4] download/git: ensure we can checkout
- repos with submodule conversions
-In-Reply-To: <20180419195948.GD30285@scaer>
-References: <a45b9ba78d527d29cfd5cc0daf4c767c7feb8643.1523983687.git.yann.morin.1998@free.fr>
- <5ad6b7cbf192b_23c22af60ee98304189d9@ultri4.mail>
- <627eaa46-0acb-9753-15a0-d805abb18164@mind.be> <20180419195948.GD30285@scaer>
-Message-ID: <41022455-a486-da38-00fa-53c07432fa97@mind.be>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 20 Apr 2018 00:23:13 -0300 (BRT)
+Subject: [Buildroot] modem-manager: build issue
+In-Reply-To: <1730967127.450971.1524062022318.JavaMail.zimbra@datacom.ind.br>
+References: <CAGm1_kusSpWv2dmQyzerpouB+LUvf84jZAi6rBMyZdieUUosow@mail.gmail.com>
+ <1730967127.450971.1524062022318.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <1847604074.751187.1524194593095.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> From: "Carlos Santos" <casantos@datacom.ind.br>
+> To: "Yegor Yefremov" <yegorslists@googlemail.com>
+> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Aleksander Morgado" <aleksander@aleksander.es>,
+> "buildroot" <buildroot@buildroot.org>
+> Sent: Wednesday, April 18, 2018 11:33:42 AM
+> Subject: Re: [Buildroot] modem-manager: build issue
 
-
-On 19-04-18 21:59, Yann E. MORIN wrote:
-> Arnout, Ricardo, All,
+>> From: "Yegor Yefremov" <yegorslists@googlemail.com>
+>> To: "buildroot" <buildroot@buildroot.org>
+>> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Carlos Santos"
+>> <casantos@datacom.ind.br>, "Aleksander
+>> Morgado" <aleksander@aleksander.es>
+>> Sent: Wednesday, April 18, 2018 9:32:06 AM
+>> Subject: modem-manager: build issue
 > 
-> On 2018-04-18 10:04 +0200, Arnout Vandecappelle spake thusly:
-[snip]
->>  Note that git 1.7.1 also doesn't have the .git files in the submodules; the
->> submodules have .git directories, i.e. they're indistinguishable from normal
->> repos. I think that that is not a problem for this patch, since I think git
->> 1.7.1 *will* kill .git directories when doing git clean --ffdx, but I'm not
->> sure. Note that this implies that submodules will *not* be cached...
->>
->>  I'm liking the bare repos more and more :-)
+>> Current mm 1.6.12 produces following errors both when compiling an ARM
+>> or MIPS target:
+>> 
+>>  CC       ModemManager-mm-base-modem.o
+>> mm-base-manager.c: In function ?handle_set_logging?:
+>> mm-base-manager.c:680:15: error: assignment from incompatible pointer
+>> type [-Werror=incompatible-pointer-types]
+>>     ctx->self = g_object_ref (manager);
+>>               ^
+>> mm-base-manager.c: In function ?handle_scan_devices?:
+>> mm-base-manager.c:736:15: error: assignment from incompatible pointer
+>> type [-Werror=incompatible-pointer-types]
+>>     ctx->self = g_object_ref (manager);
+>>               ^
+>> mm-device.c: In function ?mm_device_get_plugin?:
+>> mm-device.c:628:12: error: return from incompatible pointer type
+>> [-Werror=incompatible-pointer-types]
+>>     return (self->priv->plugin ?
+>> 
+>> So far I've seen only one build failure in our autobuilders [0]. I can
+>> reproduce this error building mm 1.6.12 locally with my host GCC. But
+>> the master branch of mm compiles without any issue. We don't seem to
+>> be the only ones who is affected [1], [2].
+>> 
+>> Any ideas?
+>> 
+>> [0]
+>> http://autobuild.buildroot.net/results/5d9e299ff12726d07e8a584a213c1d2a2e419594/
+>> [1]
+>> https://fedorapeople.org/groups/risc-v/logs/ModemManager-1.6.12-3.fc28.src.rpm/build.log
+>> [2]
+>> https://www.linuxquestions.org/questions/slackware-14/slackware-from-scratch-and-x11-4175560702/page19.html
+>> 
+>> Yegor
 > 
-> But then, we can't have submodules stored in a bare repo, because we
-> need a workign copy to have the list of submodules, and their
-> versions...
+> I'm quite busy right now but will try to reproduce the error tonight.
 
- It's *possible* to do things fully "manually", e.g. with some plumbing commands:
+There is a macro defined in build/libglib2-2.56.1/gobject/gobject.h which
+leads to the assignment errors:
 
-export GIT_DIR=/path/to/bare/repo
-blob=$(git ls-tree $cset .gitmodules | awk '{print $3}')
-if [ "$blob" ]; then
-  tmpfile=$(git unpack-file $blob)
-  etc. etc.
+  511 /* Make reference APIs type safe with macros */
+  512 #define g_object_ref(Obj)      ((__typeof__(Obj)) (g_object_ref) (Obj))
 
+The problem can be easily reproduced with this sample code:
 
- Regards,
- Arnout
+$ cat /tmp/test.c
+extern void *g_object_ref(void *);
+
+/* Make reference APIs type safe with macros */
+#define g_object_ref(Obj)      ((__typeof__(Obj)) (g_object_ref) (Obj))
+
+extern double *new_double(int *);
+
+double *new_double(int *ip) {
+  double *dp;
+  dp = g_object_ref(ip);
+  return dp;
+}
+
+$ gcc -Wall -Werror -c /tmp/test.c -o /tmp/test.o
+/tmp/test.c: In function ?new_context?:
+/tmp/test.c:19:13: error: assignment from incompatible pointer type [-Werror=incompatible-pointer-types]
+   ctx->self = g_object_ref(om);
+             ^
+cc1: all warnings being treated as errors
+
+So in order to fix the build of ModemManager it would be necessary to either
+compile it without -Werror (with the risk of letting undesired assignments
+happen) or fix all the occurrences of the offending assignments.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
