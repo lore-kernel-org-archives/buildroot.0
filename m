@@ -1,71 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 12:31:55 +0200
-Subject: [Buildroot] [PATCH] lxc: fix offsetof() related musl build issue
-Message-ID: <20180420103155.4203-1-thomas.petazzoni@bootlin.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 20 Apr 2018 13:30:04 +0200
+Subject: [Buildroot] [PATCH] bootstrap: bump to version 4.1.0
+Message-ID: <20180420113004.11271-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch that fixes a build issue with musl due to the
-fact that offsetof() is used without including <stddef.h>.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fixes:
+Also install bootstrap.min.css.map as it is referenced from
+bootstrap.min.css.
 
-  http://autobuild.buildroot.net/results/3c6e34cbcd43aba4dd2b18687bd89fc369c9dab7/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...ools-lxc_monitor-include-missing-stddef.h.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch
+ package/bootstrap/bootstrap.hash | 4 ++--
+ package/bootstrap/bootstrap.mk   | 4 +++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch b/package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch
-new file mode 100644
-index 0000000000..525d5d72b0
---- /dev/null
-+++ b/package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch
-@@ -0,0 +1,40 @@
-+From 77d407537f57c3fb92787bdda1eeaec7941d344f Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Fri, 20 Apr 2018 12:26:33 +0200
-+Subject: [PATCH] lxc/tools/lxc_monitor: include missing <stddef.h>
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+lxc_monitor.c uses offsetof(), so it should include
-+<stddef.h>. Otherwise the build fails with the musl C library:
-+
-+tools/lxc_monitor.c: In function ?lxc_abstract_unix_connect?:
-+tools/lxc_monitor.c:324:9: warning: implicit declaration of function ?offsetof? [-Wimplicit-function-declaration]
-+         offsetof(struct sockaddr_un, sun_path) + len + 1);
-+         ^~~~~~~~
-+tools/lxc_monitor.c:324:18: error: expected expression before ?struct?
-+         offsetof(struct sockaddr_un, sun_path) + len + 1);
-+                  ^~~~~~
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream-status: https://github.com/lxc/lxc/pull/2285
-+---
-+ src/lxc/tools/lxc_monitor.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/lxc/tools/lxc_monitor.c b/src/lxc/tools/lxc_monitor.c
-+index 72dca8e2..c60e14ff 100644
-+--- a/src/lxc/tools/lxc_monitor.c
-++++ b/src/lxc/tools/lxc_monitor.c
-+@@ -30,6 +30,7 @@
-+ #include <libgen.h>
-+ #include <poll.h>
-+ #include <regex.h>
-++#include <stddef.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-- 
-+2.14.3
-+
+diff --git a/package/bootstrap/bootstrap.hash b/package/bootstrap/bootstrap.hash
+index 32ef9c4bbb..ed29f9c529 100644
+--- a/package/bootstrap/bootstrap.hash
++++ b/package/bootstrap/bootstrap.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	fa1caaaf640c32c553d0b323da1036f2232703d64a1d22c3a2ec84ace68c791a	bootstrap-4.0.0-dist.zip
+-sha256	8c1a4c25634d5841924aab1848acc9dcbc3d5672183053c8b71ff2139b65d7c3	css/bootstrap.css
++sha256	75c0325fd82e29cf524e28d8be7716c216cc507ba85b087ab36868209236aa01  bootstrap-4.1.0-dist.zip
++sha256	0ce7fbe215cdf921ed87d00a374404681d5d24898589a7fe60e068d09289b4ba  css/bootstrap.css
+diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
+index 005dd9a714..0699485f52 100644
+--- a/package/bootstrap/bootstrap.mk
++++ b/package/bootstrap/bootstrap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOTSTRAP_VERSION = 4.0.0
++BOOTSTRAP_VERSION = 4.1.0
+ BOOTSTRAP_SITE = https://github.com/twbs/bootstrap/releases/download/v$(BOOTSTRAP_VERSION)
+ BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
+ BOOTSTRAP_LICENSE = MIT
+@@ -17,6 +17,8 @@ endef
+ define BOOTSTRAP_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css \
+ 		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css
++	$(INSTALL) -m 0644 -D $(@D)/css/bootstrap.min.css.map \
++		$(TARGET_DIR)/var/www/bootstrap/css/bootstrap.min.css.map
+ 	$(INSTALL) -m 0644 -D $(@D)/js/bootstrap.min.js \
+ 		$(TARGET_DIR)/var/www/bootstrap/js/bootstrap.min.js
+ endef
 -- 
-2.14.3
+2.17.0
