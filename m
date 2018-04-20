@@ -1,126 +1,60 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 20 Apr 2018 10:29:01 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/tk: new package
-In-Reply-To: <1524212941-5792-1-git-send-email-romain.naour@smile.fr>
-References: <1524212941-5792-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <1524212941-5792-3-git-send-email-romain.naour@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 20 Apr 2018 10:48:27 +0200
+Subject: [Buildroot] [git commit] download/git: fix transform regexp for
+ older tar versions
+Message-ID: <20180420084844.4BE5488900@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the same version as tcl package.
+commit: https://git.buildroot.net/buildroot/commit/?id=6e2f5d0254de75dfe59d27b3c4b45007c109e0bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Older versions of tar (e.g. 1.27.1) incorrectly interpret the escaping
+of the regexp separator, and generate broken tarballs.
+
+For example, given the following transform expression:
+    --transform="s/^\.\//squashfs-e38956b92f738518c29734399629e7cdb33072d3\//"
+
+the resulting paths in the generated tarball would be:
+    squashfs-e38956b92f738518c29734399629e7cdb33072d3\/
+
+i.e. a directory which last character is indeed a '\'.
+
+We fix that by using a separator which is very unlikely to occur in a
+filename.
+
+Fixes:
+    http://autobuild.buildroot.org/results/742/7427f34e5c9f6d043b0fe6ad2c66cc0f31d2b24f/
+
+and probably a slew of others as well...
+
+Take this opportunity to fix indentation on the following line
+(leading spaces, not TABs).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-tcl and tk should be updated together.
+ support/download/git | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v2: use SPDX license format
----
- DEVELOPERS           |  1 +
- package/Config.in    |  1 +
- package/tk/Config.in | 18 ++++++++++++++++++
- package/tk/tk.hash   |  3 +++
- package/tk/tk.mk     | 31 +++++++++++++++++++++++++++++++
- 5 files changed, 54 insertions(+)
- create mode 100644 package/tk/Config.in
- create mode 100644 package/tk/tk.hash
- create mode 100644 package/tk/tk.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3bb5f32..63361b6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1617,6 +1617,7 @@ F:	package/stress-ng/
- F:	package/supertux/
- F:	package/supertuxkart/
- F:	package/terminology/
-+F:	package/tk/
- F:	package/upower/
- F:	package/xenomai/
+diff --git a/support/download/git b/support/download/git
+index c48ad36b1a..bf05c595a5 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -121,8 +121,8 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
  
-diff --git a/package/Config.in b/package/Config.in
-index ddbbcff..ecd9b8f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -302,6 +302,7 @@ comment "Graphic libraries"
- 	source "package/sdl2_mixer/Config.in"
- 	source "package/sdl2_net/Config.in"
- 	source "package/sdl2_ttf/Config.in"
-+	source "package/tk/Config.in"
+ # Create GNU-format tarballs, since that's the format of the tarballs on
+ # sources.buildroot.org and used in the *.hash files
+-tar cf - --transform="s/^\.\//${basename}\//" \
+-	--numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
++tar cf - --transform="s#^\./#${basename}/#" \
++         --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+          -T "${output}.list.sorted" >"${output}.tar"
+ gzip -6 -n <"${output}.tar" >"${output}"
  
- comment "Other GUIs"
- 	source "package/qt/Config.in"
-diff --git a/package/tk/Config.in b/package/tk/Config.in
-new file mode 100644
-index 0000000..507b0bf
---- /dev/null
-+++ b/package/tk/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_TK
-+	bool "tk"
-+	depends on BR2_USE_MMU # tcl
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # tcl
-+	depends on !BR2_STATIC_LIBS # tcl
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_TCL
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXFT
-+	help
-+	  A windowing toolkit for use with tcl
-+
-+	  http://www.tcl.tk
-+
-+comment "tk needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_XORG7
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/tk/tk.hash b/package/tk/tk.hash
-new file mode 100644
-index 0000000..5fc0b6f
---- /dev/null
-+++ b/package/tk/tk.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 d62c371a71b4744ed830e3c21d27968c31dba74dd2c45f36b9b071e6d88eb19d  tk8.6.6-src.tar.gz
-+sha256 2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198  license.terms
-diff --git a/package/tk/tk.mk b/package/tk/tk.mk
-new file mode 100644
-index 0000000..102d368
---- /dev/null
-+++ b/package/tk/tk.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# tk
-+#
-+################################################################################
-+
-+TK_VERSION_MAJOR = 8.6
-+TK_VERSION = $(TK_VERSION_MAJOR).6
-+TK_SOURCE = tk$(TK_VERSION)-src.tar.gz
-+TK_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TK_VERSION)
-+TK_LICENSE = TCL
-+TK_LICENSE_FILES = license.terms
-+TK_SUBDIR = unix
-+TK_INSTALL_STAGING = YES
-+
-+TK_DEPENDENCIES = tcl xlib_libX11 xlib_libXft
-+
-+# hopefully our strtod is not buggy
-+TK_CONF_ENV = tcl_cv_strtod_buggy=no
-+
-+TK_CONF_OPTS = --disable-rpath \
-+	--with-tcl=$(BUILD_DIR)/tcl-$(TCL_VERSION)/unix \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
-+
-+define TK_WISH_SYMLINK
-+	ln -sf /usr/bin/wish$(TK_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/wish
-+endef
-+TK_POST_INSTALL_TARGET_HOOKS += TK_WISH_SYMLINK
-+
-+$(eval $(autotools-package))
--- 
-2.7.4
