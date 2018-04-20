@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 08:40:40 +0200
-Subject: [Buildroot] [PATCH v2] dhcpcd: fix legal info
-In-Reply-To: <50e5f9d5db91fc7ab921a69fe1eead1d78a9cfad.1524201815.git.baruch@tkos.co.il>
-References: <50e5f9d5db91fc7ab921a69fe1eead1d78a9cfad.1524201815.git.baruch@tkos.co.il>
-Message-ID: <20180420084040.581681cc@windsurf.numericable.fr>
+Date: Fri, 20 Apr 2018 08:40:43 +0200
+Subject: [Buildroot] [PATCH] lz4: fix host build with glibc older than
+ 2.17
+In-Reply-To: <81c4c77f0304c32bd46c98bdd34da22c62c4c51e.1524197840.git.baruch@tkos.co.il>
+References: <81c4c77f0304c32bd46c98bdd34da22c62c4c51e.1524197840.git.baruch@tkos.co.il>
+Message-ID: <20180420084043.256c7e27@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 20 Apr 2018 08:23:35 +0300, Baruch Siach wrote:
-> The latest version bump to 7.0.3 moved dhcpcd.c to under src/. Since the
-> tarball now has a LICENSE file, use that instead.
+On Fri, 20 Apr 2018 07:17:20 +0300, Baruch Siach wrote:
+> glibc before 2.17 require the -lrt linker option for clock_gettime(). We
+> do not support pre 2.17 glibc for the target anymore, but there are
+> still host platforms with these versions. Add upstream patch to skip use
+> of clock_gettime() with older glibc versions.
 > 
-> While at it, add a hash for that file.
+> Should fix:
+> http://autobuild.buildroot.net/results/bc5/bc5d6447ab16a61d9dcf56723106f0b107826ef4/
+> http://autobuild.buildroot.net/results/7dd/7dd47bef902845a0f7803f1a6c702ec154855858/
+> http://autobuild.buildroot.net/results/952/9523dbc767dc325befabeb9240c4009e78779c7d/
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/f57/f5790e0a82a3b814d828d18eb71a3f6c422bb2b8/
-> http://autobuild.buildroot.net/results/6b9/6b930827913f9b4d2602d5777f4243ba7b295ca7/
-> http://autobuild.buildroot.net/results/603/603eda004a502f613e9b92cea4fb8cc9e4068255/
-> 
-> Cc: John Stile <johns@msli.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
-> v2: Use LICENSE as license file (Rahul Bedarkar)
-> ---
->  package/dhcpcd/dhcpcd.hash | 2 ++
->  package/dhcpcd/dhcpcd.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
+>  ...rictive-conditions-for-clock_gettime.patch | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 package/lz4/0001-use-more-restrictive-conditions-for-clock_gettime.patch
 
 Applied to master, thanks.
 
