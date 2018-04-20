@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 16:42:55 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.16.3
-In-Reply-To: <1524225228-9082-1-git-send-email-festevam@gmail.com>
-References: <1524225228-9082-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180420164255.22e349c9@windsurf.numericable.fr>
+Date: Fri, 20 Apr 2018 16:43:04 +0200
+Subject: [Buildroot] [PATCH 1/1] libuv: bump to version 1.20.1
+In-Reply-To: <20180420141650.4191-1-asafka7@gmail.com>
+References: <20180420141650.4191-1-asafka7@gmail.com>
+Message-ID: <20180420164304.1d794351@windsurf.numericable.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 20 Apr 2018 08:53:47 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+On Fri, 20 Apr 2018 17:16:50 +0300, Asaf Kahlon wrote:
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libuv/libuv.hash | 2 +-
+>  package/libuv/libuv.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to master, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
