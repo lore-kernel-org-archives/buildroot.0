@@ -1,53 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Apr 2018 10:56:07 +0200
-Subject: [Buildroot] [PATCH] download/git: fix transform regexp for
- older tar versions
-In-Reply-To: <20180420073632.5047-1-yann.morin.1998@free.fr>
-References: <20180420073632.5047-1-yann.morin.1998@free.fr>
-Message-ID: <20180420105607.6c0b4218@windsurf.numericable.fr>
+Date: Fri, 20 Apr 2018 10:56:16 +0200
+Subject: [Buildroot] [git commit] package/tcl: update license to SPDX format
+Message-ID: <20180420085712.CA0EF888FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8fa4e9792917ae6beb2782ea5938cc4cf0d3f1e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Apr 2018 09:36:32 +0200, Yann E. MORIN wrote:
-> Older versions of tar (e.g. 1.27.1) incorrectly interpret the escaping
-> of the regexp separator, and generate broken tarballs.
-> 
-> For example, given the following transform expression:
->     --transform="s/^\.\//squashfs-e38956b92f738518c29734399629e7cdb33072d3\//"
-> 
-> the resulting paths in the generated tarball would be:
->     squashfs-e38956b92f738518c29734399629e7cdb33072d3\/
-> 
-> i.e. a directory which last character is indeed a '\'.
-> 
-> We fix that by using a separator which is very unlikely to occur in a
-> filename.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/742/7427f34e5c9f6d043b0fe6ad2c66cc0f31d2b24f/
-> 
-> and probably a slew of others as well...
-> 
-> Take this opportunity to fix indetation on the following line (leading
-> spaces, not tABs).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  support/download/git | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+While at it add the license file hash.
 
-Applied to master, thanks.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tcl/tcl.hash | 1 +
+ package/tcl/tcl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
+index b344d26589..359b5433c2 100644
+--- a/package/tcl/tcl.hash
++++ b/package/tcl/tcl.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 a265409781e4b3edcc4ef822533071b34c3dc6790b893963809b9fe221befe07  tcl8.6.6-src.tar.gz
++sha256 c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16  license.terms
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index ffef9cf8bd..b9fb7afbc6 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -8,7 +8,7 @@ TCL_VERSION_MAJOR = 8.6
+ TCL_VERSION = $(TCL_VERSION_MAJOR).6
+ TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
+ TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
+-TCL_LICENSE = tcl license
++TCL_LICENSE = TCL
+ TCL_LICENSE_FILES = license.terms
+ TCL_SUBDIR = unix
+ TCL_INSTALL_STAGING = YES
