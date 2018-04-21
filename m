@@ -1,37 +1,51 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 21 Apr 2018 23:50:46 +0300
-Subject: [Buildroot] [PATCH v2] lz4: improve static only build support
-In-Reply-To: <20180421144510.47a1ccf4@windsurf>
-References: <e5fee55fc78a363b247f0eb8594aa9f40d3a1526.1524199966.git.baruch@tkos.co.il>
- <20180421144510.47a1ccf4@windsurf>
-Message-ID: <20180421205046.4ehdpnv2obhiigv5@tarshish>
+Date: Sat, 21 Apr 2018 23:58:52 +0300
+Subject: [Buildroot] [PATCH] lz4: don't build library and tools in parallel
+Message-ID: <a05bf34066818014319e5f1f388a7f8ea0d52493.1524344332.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Since commit e93fec6673e (lz4: bump to version 1.8.1.2) we use two make
+targets, 'lib' and 'lz4'. Both targets depend on the static library.
+When these targets run in parallel the two make instances that build the
+static library race against each other. Split these targets to ensure
+build order.
 
-On Sat, Apr 21, 2018 at 02:45:10PM +0200, Thomas Petazzoni wrote:
-> On Fri, 20 Apr 2018 07:52:46 +0300, Baruch Siach wrote:
-> > The current method of supporting static only build, removal of all lines
-> > that match the SHARED regex from lib/Makefile, is crude and fragile.
-> > Instead, patch lib/Makefile to allow disable of shared libraries.
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> Not sure if it is due to this patch or the one bumping to 1.8.1.2, but
-> lz4 now fails to build in some configurations:
-> 
->   http://autobuild.buildroot.net/results/a8d/a8d956ff420f6a265c5c00b33646dbbc24ce2d48/build-end.log
+Should fix:
+http://autobuild.buildroot.net/results/a8d/a8d956ff420f6a265c5c00b33646dbbc24ce2d48/
 
-Sees to be a parallel build issue caused by the version bump patch. I'll post 
-a patch.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/lz4/lz4.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-baruch
-
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index a77f6b5f5fb5..b17bc8ada90f 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -15,7 +15,8 @@ LZ4_MAKE_OPTS += BUILD_SHARED=no
+ endif
+ 
+ define HOST_LZ4_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) lib lz4
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) lib
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) lz4
+ endef
+ 
+ define HOST_LZ4_INSTALL_CMDS
+@@ -25,7 +26,9 @@ endef
+ 
+ define LZ4_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(LZ4_MAKE_OPTS) \
+-		-C $(@D) lib lz4
++		-C $(@D) lib
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(LZ4_MAKE_OPTS) \
++		-C $(@D) lz4
+ endef
+ 
+ define LZ4_INSTALL_STAGING_CMDS
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.17.0
