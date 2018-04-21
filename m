@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Apr 2018 14:45:10 +0200
-Subject: [Buildroot] [PATCH v2] lz4: improve static only build support
-In-Reply-To: <e5fee55fc78a363b247f0eb8594aa9f40d3a1526.1524199966.git.baruch@tkos.co.il>
-References: <e5fee55fc78a363b247f0eb8594aa9f40d3a1526.1524199966.git.baruch@tkos.co.il>
-Message-ID: <20180421144510.47a1ccf4@windsurf>
+Date: Sat, 21 Apr 2018 14:50:24 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.9.x series
+Message-ID: <20180421125128.B0EC3811F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=26148a247f3757b0ee7f24b10f13c0451f25a9ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Apr 2018 07:52:46 +0300, Baruch Siach wrote:
-> The current method of supporting static only build, removal of all lines
-> that match the SHARED regex from lib/Makefile, is crude and fragile.
-> Instead, patch lib/Makefile to allow disable of shared libraries.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Not sure if it is due to this patch or the one bumping to 1.8.1.2, but
-lz4 now fails to build in some configurations:
-
-  http://autobuild.buildroot.net/results/a8d/a8d956ff420f6a265c5c00b33646dbbc24ce2d48/build-end.log
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9d32687c0e..68ac47cebe 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -251,7 +251,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.128"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.94"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.95"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
