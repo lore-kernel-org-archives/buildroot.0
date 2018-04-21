@@ -1,38 +1,30 @@
-From: Guillaume William Bres <guillaume.bressaix@gmail.com>
-Date: Sat, 21 Apr 2018 10:28:45 +0200
-Subject: [Buildroot] [PATCH v2 1/1] reaver: add missing dependency on
- non static lib.
-In-Reply-To: <20180420205635.4dc1958d@windsurf.numericable.fr>
-References: <1524248835-4552-1-git-send-email-guillaume.bressaix@gmail.com>
- <20180420205635.4dc1958d@windsurf.numericable.fr>
-Message-ID: <CAJe0E3dFPMersauTKG+PTBT38ji=8t3Usq064ULMzQxKEHt=aA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Apr 2018 10:49:58 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 4.9.x series
+Message-ID: <20180421084958.28153-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-04-20 20:56 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Hello,
->
-> On Fri, 20 Apr 2018 20:27:15 +0200, Guillaume W. Bres wrote:
->
-> > +ifeq ($(BR2_STATIC_LIBS),y)
-> > +REAVER_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static
-> --additional-libs`"
-> > +REAVER_CONF_OPTS += LDFLAGS="`$(STAGING_DIR)/usr/bin/pcap-config
-> --static --additional-libs`"
-> > +endif
->
-> Are you sure you need both LIBS and LDFLAGS ?
->
->
-yes I confirm this configuration does not build without these two lines.
-"LIBS+=" caused "./configure" to pass, but then "make" failed with missing
-reference to -ldbus-1.
-"LDFLAGS+=" caused "make" to pass. LDFLAGS on its own does not solve the
-"./configure" issue
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180421/7f4bbc88/attachment.html>
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9d32687c0e..68ac47cebe 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -251,7 +251,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.128"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.94"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.95"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+-- 
+2.14.2
