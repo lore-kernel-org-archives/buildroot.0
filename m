@@ -1,35 +1,31 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 22 Apr 2018 00:05:10 +0300
-Subject: [Buildroot] [PATCH v2] lz4: improve static only build support
-In-Reply-To: <20180420084143.3b20bd3a@windsurf.numericable.fr>
-References: <e5fee55fc78a363b247f0eb8594aa9f40d3a1526.1524199966.git.baruch@tkos.co.il>
- <20180420084143.3b20bd3a@windsurf.numericable.fr>
-Message-ID: <20180421210510.v4zwz6y57z7stryx@tarshish>
+Date: Sun, 22 Apr 2018 00:09:40 +0300
+Subject: [Buildroot] [PATCH v2 1/1] reaver: add missing dependency on
+ non static lib.
+In-Reply-To: <1524248835-4552-1-git-send-email-guillaume.bressaix@gmail.com>
+References: <1524248835-4552-1-git-send-email-guillaume.bressaix@gmail.com>
+Message-ID: <20180421210940.dnnaqvoh25ld3wpx@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Guillaume,
 
-On Fri, Apr 20, 2018 at 08:41:43AM +0200, Thomas Petazzoni wrote:
-> On Fri, 20 Apr 2018 07:52:46 +0300, Baruch Siach wrote:
-> > +Just like BUILD_STATIC=no disables static libraries, BUILD_SHARED=no
-> > +disabled shared libraries. This is useful to support toolchains that do
-> > +not support shared libraries.
+On Fri, Apr 20, 2018 at 08:27:15PM +0200, Guillaume W. Bres wrote:
+> Fixes 
 > 
-> Why aren't we using BUILD_STATIC=no when BR2_SHARED_LIBS=y, to disable
-> the build of the static library ?
+> 	http://autobuild.buildroot.net/results/0fb387f0544e962e5080ea966864f325fbaf4117
 > 
-> Admittedly, it isn't a huge improvement, but for consistency it would
-> be good to do that.
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> ---
+> 
+> v2: static libs are now allowed. I used Arnout's suggestion
+> which caused ./configure to pass. Then there was a linker problem
+> that was solved by using the trick on LDFLAGS this time. Build now passes.
 
-Many other packages build both shared and static libraries when 
-BR2_SHARED_LIBS=y. This particular case is easy enough to fix, though.
-
-Is there any advantage to not building the static library when 
-BR2_SHARED_LIBS=y other than the small build time reduction?
+The patch title is wrong now. Should be something like "fix static build".
 
 baruch
 
