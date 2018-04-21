@@ -1,43 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Apr 2018 14:59:16 +0200
-Subject: [Buildroot] [PATCH] uclibc: backport upstream patch adding
- fcntl definitions on OpenRISC
-In-Reply-To: <20180420095522.30646-1-thomas.petazzoni@bootlin.com>
-References: <20180420095522.30646-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180421145916.6714b7bd@windsurf>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sat, 21 Apr 2018 10:00:10 -0300
+Subject: [Buildroot] [PATCH v2] modem-manager: support a defaults file in
+ the init script
+Message-ID: <20180421130010.7702-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Sometimes it is useful to pass some parameters to ModemManager when it
+starts (e.g. --log-level). Allow the user add a file with such flags in
+a MODEMMANAGER_ARGS variable. This is simpler than overriding the whole
+startup script (e.g. by means of a rootfs overlay).
 
-On Fri, 20 Apr 2018 11:55:22 +0200, Thomas Petazzoni wrote:
-> A number of fcntl.h definitions were missing on OpenRISC in uClibc-ng,
-> causing build failures such as:
-> 
-> gfile.c: In function 'splice_stream_with_progress':
-> gfile.c:3017:35: error: 'F_SETPIPE_SZ' undeclared (first use in this function)
->    buffer_size = fcntl (buffer[1], F_SETPIPE_SZ, 1024 * 1024);
-> 
-> This comit backports a patch that was merged in upstream uClibc-ng,
-> which addresses this problem.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/182ebbba6c7466b07e965e5120d919cbcf5e9da6/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...dd-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/uclibc/0002-or1k-add-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+Changes v1->v2
+  - Rebase after commit ef0b7e7521 (modem-manager: don't test if the
+    binary exists in the init script).
+---
+ package/modem-manager/S44modem-manager | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/modem-manager/S44modem-manager b/package/modem-manager/S44modem-manager
+index a3f5003aa1..416c1e2ee6 100755
+--- a/package/modem-manager/S44modem-manager
++++ b/package/modem-manager/S44modem-manager
+@@ -3,13 +3,16 @@
+ # Starts ModemManager
+ #
+ 
++# Allow a few customizations from a config file
++test -r /etc/default/ModemManager && . /etc/default/ModemManager
++
+ PIDFILE=/var/run/ModemManager.pid
+ 
+ start() {
+ 	printf "Starting ModemManager: "
+ 	umask 077
+ 	start-stop-daemon -S -q -b -m -p $PIDFILE \
+-		--exec /usr/sbin/ModemManager
++		--exec /usr/sbin/ModemManager -- $MODEMMANAGER_ARGS
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop() {
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.3
