@@ -1,35 +1,38 @@
-From: Aleksey Kislitsa <aleksey.kislitsa@gmail.com>
-Date: Sat, 21 Apr 2018 11:24:03 +0300
-Subject: [Buildroot] [PATCH 2/2] Has been added configs for OrangePI-2G-IOT
- Has been removed blob modem.bin. Has beenadded script for loading this blob
- at build time
-In-Reply-To: <20180421082403.11536-1-aleksey.kislitsa@gmail.com>
-References: <20180421082403.11536-1-aleksey.kislitsa@gmail.com>
-Message-ID: <20180421082403.11536-2-aleksey.kislitsa@gmail.com>
+From: Guillaume William Bres <guillaume.bressaix@gmail.com>
+Date: Sat, 21 Apr 2018 10:28:45 +0200
+Subject: [Buildroot] [PATCH v2 1/1] reaver: add missing dependency on
+ non static lib.
+In-Reply-To: <20180420205635.4dc1958d@windsurf.numericable.fr>
+References: <1524248835-4552-1-git-send-email-guillaume.bressaix@gmail.com>
+ <20180420205635.4dc1958d@windsurf.numericable.fr>
+Message-ID: <CAJe0E3dFPMersauTKG+PTBT38ji=8t3Usq064ULMzQxKEHt=aA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Aleksey Kislitsa <aleksey.kislitsa@gmail.com>
----
- configs/orangepi_2g-iot_defconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+2018-04-20 20:56 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-diff --git a/configs/orangepi_2g-iot_defconfig b/configs/orangepi_2g-iot_defconfig
-index 1dabce9c12..05d84cd19c 100644
---- a/configs/orangepi_2g-iot_defconfig
-+++ b/configs/orangepi_2g-iot_defconfig
-@@ -21,8 +21,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--#BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/RDA8810/u-boot-RDA8810.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="board/orangepi/orangepi-2g-iot/patches/u-boot"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/orangepi-xunlong/OrangePiRDA_uboot.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
- BR2_TARGET_UBOOT_PATCH="board/orangepi/orangepi-2g-iot/patches/u-boot"
- BR2_TARGET_UBOOT_BOARDNAME="rda8810"
--- 
-2.11.0
+> Hello,
+>
+> On Fri, 20 Apr 2018 20:27:15 +0200, Guillaume W. Bres wrote:
+>
+> > +ifeq ($(BR2_STATIC_LIBS),y)
+> > +REAVER_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static
+> --additional-libs`"
+> > +REAVER_CONF_OPTS += LDFLAGS="`$(STAGING_DIR)/usr/bin/pcap-config
+> --static --additional-libs`"
+> > +endif
+>
+> Are you sure you need both LIBS and LDFLAGS ?
+>
+>
+yes I confirm this configuration does not build without these two lines.
+"LIBS+=" caused "./configure" to pass, but then "make" failed with missing
+reference to -ldbus-1.
+"LDFLAGS+=" caused "make" to pass. LDFLAGS on its own does not solve the
+"./configure" issue
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180421/7f4bbc88/attachment.html>
