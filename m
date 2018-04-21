@@ -1,59 +1,37 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat, 21 Apr 2018 15:19:40 +0200
-Subject: [Buildroot] [PATCH v2] modem-manager: support a defaults file
- in the init script
-In-Reply-To: <20180421130010.7702-1-casantos@datacom.ind.br>
-References: <20180421130010.7702-1-casantos@datacom.ind.br>
-Message-ID: <20180421131939.GA13287@x230>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 21 Apr 2018 23:50:46 +0300
+Subject: [Buildroot] [PATCH v2] lz4: improve static only build support
+In-Reply-To: <20180421144510.47a1ccf4@windsurf>
+References: <e5fee55fc78a363b247f0eb8594aa9f40d3a1526.1524199966.git.baruch@tkos.co.il>
+ <20180421144510.47a1ccf4@windsurf>
+Message-ID: <20180421205046.4ehdpnv2obhiigv5@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carlos,
+Hi Thomas,
 
-> Sometimes it is useful to pass some parameters to ModemManager when it
-> starts (e.g. --log-level). Allow the user add a file with such flags in
-> a MODEMMANAGER_ARGS variable. This is simpler than overriding the whole
-> startup script (e.g. by means of a rootfs overlay).
+On Sat, Apr 21, 2018 at 02:45:10PM +0200, Thomas Petazzoni wrote:
+> On Fri, 20 Apr 2018 07:52:46 +0300, Baruch Siach wrote:
+> > The current method of supporting static only build, removal of all lines
+> > that match the SHARED regex from lib/Makefile, is crude and fragile.
+> > Instead, patch lib/Makefile to allow disable of shared libraries.
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> Not sure if it is due to this patch or the one bumping to 1.8.1.2, but
+> lz4 now fails to build in some configurations:
+> 
+>   http://autobuild.buildroot.net/results/a8d/a8d956ff420f6a265c5c00b33646dbbc24ce2d48/build-end.log
 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
-> Changes v1->v2
->   - Rebase after commit ef0b7e7521 (modem-manager: don't test if the
->     binary exists in the init script).
-> ---
->  package/modem-manager/S44modem-manager | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+Sees to be a parallel build issue caused by the version bump patch. I'll post 
+a patch.
 
-> diff --git a/package/modem-manager/S44modem-manager b/package/modem-manager/S44modem-manager
-> index a3f5003aa1..416c1e2ee6 100755
-> --- a/package/modem-manager/S44modem-manager
-> +++ b/package/modem-manager/S44modem-manager
-> @@ -3,13 +3,16 @@
->  # Starts ModemManager
+baruch
 
-
-> +# Allow a few customizations from a config file
-> +test -r /etc/default/ModemManager && . /etc/default/ModemManager
-> +
-Out of curiosity, what is supposed to be in /etc/default/ModemManager ?
-
->  PIDFILE=/var/run/ModemManager.pid
-
->  start() {
->  	printf "Starting ModemManager: "
->  	umask 077
->  	start-stop-daemon -S -q -b -m -p $PIDFILE \
-> -		--exec /usr/sbin/ModemManager
-> +		--exec /usr/sbin/ModemManager -- $MODEMMANAGER_ARGS
-LGTM.
-
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  }
->  stop() {
-
-
-Kind regards,
-Petr
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
