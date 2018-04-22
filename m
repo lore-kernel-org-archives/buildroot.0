@@ -1,65 +1,108 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Apr 2018 11:07:55 +0200
-Subject: [Buildroot] [PATCH 6/6 v2] download/git: add warning not to use or
- git cache
-In-Reply-To: <cover.1524388060.git.yann.morin.1998@free.fr>
+Date: Sun, 22 Apr 2018 11:46:06 +0200
+Subject: [Buildroot] [PATCH 2/6 v2] download/git: try to recover from
+ utterly-broken repositories
+In-Reply-To: <8f347509db00c8c2108a5a9fef1b8862fcf3b8b0.1524388060.git.yann.morin.1998@free.fr>
 References: <cover.1524388060.git.yann.morin.1998@free.fr>
-Message-ID: <cb54e8b49b631790559e87749f106a1ab9352128.1524388060.git.yann.morin.1998@free.fr>
+ <8f347509db00c8c2108a5a9fef1b8862fcf3b8b0.1524388060.git.yann.morin.1998@free.fr>
+Message-ID: <20180422094606.GH12688@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We really want the user not to use our git cache manually, or their
-changes (committed or not) may eventually get lost.
+All,
 
-So, add a warning file, not unlike the one we put in the target/
-directory, to warn the user not to use the git tree.
+On 2018-04-22 11:07 +0200, Yann E. MORIN spake thusly:
+> In some cases, the repository may be in a state we can't automatically
+> recover from, especially since we must still support oldish git versions
+> that do not provide the necessary commands or options thereof.
+> 
+> As a last-ditch recovery, delete the repository and recreate the cache
+> from scratch.
 
-Ideally, we would have carried this file in support/misc/, but the git
-backend does not have acces to it: the working directory is somewhere
-unknown, and TOPDIR is not exported in the environment.
+As Thomas noticed on IRC, this commit would remove the local git cache
+in case the user enters an invalid changeset (typo in sha1 or tag name,
+or whatnot).
 
-So, we have to carry it in-line in the backend instead.
+A missing commit should not be considered as a broken repository,
+especially since re-cloning from scratch would not help solve the
+issue.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- support/download/git | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+I already have a local change that will avoid trashing a git cache in
+that case (using git rev-parse). I'll wait for some more reviews before
+submitting again...
 
-diff --git a/support/download/git b/support/download/git
-index 84cc6be94e..8764474153 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -72,6 +72,24 @@ _git() {
-     eval GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
- }
- 
-+# Create a warning file, that the user should not use the git cache.
-+# It's ours. Our precious.
-+cat <<-_EOF_ >"${dl_dir}/git.readme"
-+	IMPORTANT NOTE!
-+
-+	The git tree located in this directory is for the exclusive use
-+	by Buildroot, which uses it as a local cache to reduce bandwidth
-+	usage.
-+
-+	Buildroot *will* trash any changes in that tree whenever it needs
-+	to use it. Buildroot may even remove it in case it detects the
-+	repository may have been damaged or corrupted.
-+
-+	Do *not* work in that directory; your changes will eventually get
-+	lost. Do *not* even use it as a remote, or as the source for new
-+	worktrees.
-+_EOF_
-+
- # Initialise a repository in the git cache. If the repository already
- # existed, this is a noop, unless the repository was broken, in which
- # case this magically restores it to working conditions. In the latter
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  support/download/git | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/support/download/git b/support/download/git
+> index 19a3e8ebee..ebd04bc7b3 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -16,6 +16,30 @@ set -e
+>  # Environment:
+>  #   GIT      : the git command to call
+>  
+> +# Save out path and options in case we need to call ourselves again
+> +myname="${0}"
+> +declare -a OPTS=("${@}")
+> +
+> +# This function is called when an error occurs. Its job is to attempt a
+> +# clone from scratch (only once!) in case the git tree is borked, or in
+> +# case an unexpected and unsupported situation arises with submodules
+> +# or uncomitted stuff (e.g. if the user manually mucked around in the
+> +# git cache).
+> +_on_error() {
+> +    local ret=${?}
+> +
+> +    if ${BR_GIT_BACKEND_FIRST_FAULT:-false}; then
+> +        printf "Double-fault in git-cache"
+> +        exit ${ret}
+> +    fi
+> +    export BR_GIT_BACKEND_FIRST_FAULT=true
+> +
+> +    popd >/dev/null
+> +    rm -rf "${git_cache}"
+> +
+> +    exec "${myname}" "${OPTS[@]}" || exit ${ret}
+> +}
+> +
+>  verbose=
+>  recurse=0
+>  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+> @@ -39,6 +63,9 @@ git_cache="${dl_dir}/git"
+>  mkdir -p "${git_cache}"
+>  pushd "${git_cache}" >/dev/null
+>  
+> +# Any error now should try to recover
+> +trap _on_error ERR
+> +
+>  # Caller needs to single-quote its arguments to prevent them from
+>  # being expanded a second time (in case there are spaces in them)
+>  _git() {
+> -- 
+> 2.14.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
