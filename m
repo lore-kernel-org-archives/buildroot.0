@@ -1,37 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Apr 2018 23:38:08 +0200
-Subject: [Buildroot] [PATCH] lz4: don't build library and tools in
- parallel
-In-Reply-To: <a05bf34066818014319e5f1f388a7f8ea0d52493.1524344332.git.baruch@tkos.co.il>
-References: <a05bf34066818014319e5f1f388a7f8ea0d52493.1524344332.git.baruch@tkos.co.il>
-Message-ID: <20180422233808.48ca70a4@windsurf>
+Date: Sun, 22 Apr 2018 23:38:27 +0200
+Subject: [Buildroot] [git commit] modem-manager: support a defaults file in
+ the init script
+Message-ID: <20180422213833.BD0C588321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f5b14df1104c66a12b1203620afcf9bcb4ff22c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Apr 2018 23:58:52 +0300, Baruch Siach wrote:
-> Since commit e93fec6673e (lz4: bump to version 1.8.1.2) we use two make
-> targets, 'lib' and 'lz4'. Both targets depend on the static library.
-> When these targets run in parallel the two make instances that build the
-> static library race against each other. Split these targets to ensure
-> build order.
-> 
-> Should fix:
-> http://autobuild.buildroot.net/results/a8d/a8d956ff420f6a265c5c00b33646dbbc24ce2d48/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/lz4/lz4.mk | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+Sometimes it is useful to pass some parameters to ModemManager when it
+starts (e.g. --log-level). Allow the user add a file with such flags in
+a MODEMMANAGER_ARGS variable. This is simpler than overriding the whole
+startup script (e.g. by means of a rootfs overlay).
 
-Applied to master, thanks.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/modem-manager/S44modem-manager | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/modem-manager/S44modem-manager b/package/modem-manager/S44modem-manager
+index a3f5003aa1..416c1e2ee6 100755
+--- a/package/modem-manager/S44modem-manager
++++ b/package/modem-manager/S44modem-manager
+@@ -3,13 +3,16 @@
+ # Starts ModemManager
+ #
+ 
++# Allow a few customizations from a config file
++test -r /etc/default/ModemManager && . /etc/default/ModemManager
++
+ PIDFILE=/var/run/ModemManager.pid
+ 
+ start() {
+ 	printf "Starting ModemManager: "
+ 	umask 077
+ 	start-stop-daemon -S -q -b -m -p $PIDFILE \
+-		--exec /usr/sbin/ModemManager
++		--exec /usr/sbin/ModemManager -- $MODEMMANAGER_ARGS
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop() {
