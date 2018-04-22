@@ -1,60 +1,132 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Apr 2018 15:26:00 +0200
-Subject: [Buildroot] [PATCH] udftools: add patch to fix build on musl
-Message-ID: <20180422132600.18820-1-thomas.petazzoni@bootlin.com>
+From: Vincent Stehle <vincent.stehle@laposte.net>
+Date: Sun, 22 Apr 2018 16:38:24 +0200
+Subject: [Buildroot] [PATCH v2] configs: add openssl for kernel where
+ necessary
+In-Reply-To: <789c3248-327e-2c69-208d-c88bc72363b2@grinn-global.com>
+References: <789c3248-327e-2c69-208d-c88bc72363b2@grinn-global.com>
+Message-ID: <20180422143824.11072-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+From: Vincent Stehl? <vincent.stehle@laposte.net>
 
-  http://autobuild.buildroot.net/results/e77a96bd2a73c8255fd078022b11e8c47a4c712e/
+Add host-openssl to those configs, which need it for the Linux kernel build.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
+Cc: Fabio Estevam <fabio.estevam@nxp.com>
+
 ---
- ...up-pktsetup.c-do-not-include-bits-types.h.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch
 
-diff --git a/package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch b/package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch
-new file mode 100644
-index 0000000000..4d842821aa
---- /dev/null
-+++ b/package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch
-@@ -0,0 +1,32 @@
-+From 8da4dde42cc25294819ad078432d85437e4a12ee Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 22 Apr 2018 15:05:46 +0200
-+Subject: [PATCH] pktsetup/pktsetup.c: do not include <bits/types.h>
-+
-+This header is not a standard header, and is for example not provided
-+by the musl C library.
-+
-+This change has been tested by building udftools against glibc, uClibc
-+and musl.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream-status: https://github.com/pali/udftools/pull/16
-+---
-+ pktsetup/pktsetup.c | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/pktsetup/pktsetup.c b/pktsetup/pktsetup.c
-+index 8b3df51..81ed142 100644
-+--- a/pktsetup/pktsetup.c
-++++ b/pktsetup/pktsetup.c
-+@@ -27,7 +27,6 @@
-+ #include <sys/stat.h>
-+ #include <unistd.h>
-+ #include <getopt.h>
-+-#include <bits/types.h>
-+ #include <sys/types.h>
-+ #include <string.h>
-+ #include <limits.h>
-+-- 
-+2.14.3
-+
+On Thu, Apr 19, 2018 at 10:14:24AM +0200, Marcin Niestroj wrote:
+> Thanks for noticing grinn_chiliboard_defconfig! Please also add
+> grinn_liteboard_defconfig, as it has the same build issues with
+> missing openssl.
+
+Hi Marcin,
+
+Here you go!
+
+I also updated mx6cubox_defconfig while at it.
+
+Best regards,
+
+Vincent.
+
+
+ configs/freescale_t1040d4rdb_defconfig | 1 +
+ configs/grinn_chiliboard_defconfig     | 1 +
+ configs/grinn_liteboard_defconfig      | 1 +
+ configs/mx25pdk_defconfig              | 1 +
+ configs/mx6cubox_defconfig             | 1 +
+ configs/wandboard_defconfig            | 1 +
+ configs/warp7_defconfig                | 1 +
+ 7 files changed, 7 insertions(+)
+
+diff --git a/configs/freescale_t1040d4rdb_defconfig b/configs/freescale_t1040d4rdb_defconfig
+index b8d162736c..df44046ef5 100644
+--- a/configs/freescale_t1040d4rdb_defconfig
++++ b/configs/freescale_t1040d4rdb_defconfig
+@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/t1040d4rdb"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_CPIO=y
+diff --git a/configs/grinn_chiliboard_defconfig b/configs/grinn_chiliboard_defconfig
+index 07fa0b3797..81d7bae911 100644
+--- a/configs/grinn_chiliboard_defconfig
++++ b/configs/grinn_chiliboard_defconfig
+@@ -10,6 +10,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-chiliboard"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
+index f644d36f06..5f3ca07552 100644
+--- a/configs/grinn_liteboard_defconfig
++++ b/configs/grinn_liteboard_defconfig
+@@ -10,6 +10,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-liteboard"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+index f86ce7af02..ec4f8b8289 100644
+--- a/configs/mx25pdk_defconfig
++++ b/configs/mx25pdk_defconfig
+@@ -32,3 +32,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index 6357720aa4..2996c375ff 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -24,6 +24,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 406bd113ff..4265fdcfb0 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -24,6 +24,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 344c4430b0..e1744d8275 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.15"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ # U-Boot
+ BR2_TARGET_UBOOT=y
 -- 
-2.14.3
+2.17.0
