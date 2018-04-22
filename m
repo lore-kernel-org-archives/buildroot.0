@@ -1,113 +1,128 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Apr 2018 23:20:05 +0200
-Subject: [Buildroot] [PATCH 3/3] udftools: fix static linking against
- readline
-In-Reply-To: <20180422212005.13062-1-thomas.petazzoni@bootlin.com>
-References: <20180422212005.13062-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180422212005.13062-4-thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Apr 2018 23:34:30 +0200
+Subject: [Buildroot] [git commit] strace: fix build for m68k
+Message-ID: <20180422213441.BC33888325@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-One program of udftools uses the readline library, but fails to build
-in static linking configurations. In order to fix this, we teach
-udftools configure.ac to use pkg-config to detect the readline
-library, and to use the proper flags provided by pkg-config.
+commit: https://git.buildroot.net/buildroot/commit/?id=9b994104652a0e404f0d4d3b3823939c2f3aa0cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This obviously requires an autoreconf of the package, and the addition
-of host-pkgconf in the dependencies.
+Add upstream patch fixing build for m68k target.
 
 Fixes:
+http://autobuild.buildroot.net/results/bef/befdcb3f87c0490cd623520403b9467ec7359950/
+http://autobuild.buildroot.net/results/ddb/ddb7616991468bc45d85aa1b56bec2cb5eb897c4/
 
-  http://autobuild.buildroot.net/results/113a94049d89b8f065112e5d4482667a7b7fb843/
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...c-detect-readline-via-pkg-config-when-pos.patch | 60 ++++++++++++++++++++++
- package/udftools/udftools.mk                       |  3 +-
- 2 files changed, 62 insertions(+), 1 deletion(-)
- create mode 100644 package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
+ package/strace/0001-m68k-fix-build.patch | 97 ++++++++++++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
-diff --git a/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch b/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
+diff --git a/package/strace/0001-m68k-fix-build.patch b/package/strace/0001-m68k-fix-build.patch
 new file mode 100644
-index 0000000000..f73db99ca2
+index 0000000000..9675eaaa3c
 --- /dev/null
-+++ b/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
-@@ -0,0 +1,60 @@
-+From bdacf0101fea1dad2c89996b27cb4b9caee9109c Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 22 Apr 2018 22:28:09 +0200
-+Subject: [PATCH] configure.ac: detect readline via pkg-config when possible
++++ b/package/strace/0001-m68k-fix-build.patch
+@@ -0,0 +1,97 @@
++From 6ebf6c4f9e5ebca123a5b5f24afe67cf0473cf92 Mon Sep 17 00:00:00 2001
++From: "Dmitry V. Levin" <ldv@altlinux.org>
++Date: Wed, 21 Feb 2018 23:03:27 +0000
++Subject: [PATCH] m68k: fix build
 +
-+pkg-config automatically handles static linking situations, where for
-+example readline is linked against ncurses, and therefore -lncurses
-+needs to be passed in addition to -lreadline.
++When <sys/reg.h> is included after <linux/ptrace.h>, the build fails
++on m68k with the following diagnostics:
 +
-+This proposal uses pkg-config when available. If pkg-config is not
-+found, or readline is not found via pkg-config, we fallback to the
-+existing AC_CHECK_LIB(). This AC_CHECK_LIB() test is modified to set
-+READLINE_LIBS, like PKG_CHECK_MODULES() does. The Makefile.am
-+consequently uses READLINE_LIBS instead of hardcoding -lreadline.
++  In file included from /usr/include/linux/ptrace.h:101:0,
++                   from ptrace.h:51,
++                   from sigreturn.c:2:
++  /usr/include/m68k-linux-gnu/sys/reg.h:26:3: error: expected identifier
++  before numeric constant
++     PT_D1 = 0,
++     ^
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Apparently, the only architecture where strace needs definitions
++provided by <sys/reg.h> is x86_64, other three (m68k, tile, and x86)
++are fine with definitions already provided by <linux/ptrace.h>.
++
++Fix the issue by getting rid of <sys/reg.h> and defining necessary
++macros in linux/x86_64/arch_regs.h file.
++
++* configure.ac (AC_CHECK_HEADERS): Remove sys/reg.h.
++* regs.h: Do not include <sys/reg.h>.
++* linux/x86_64/arch_regs.h (R15, R14, R13, R12, RBP, RBX, R11, R10,
++R9, R8, RAX, RCX, RDX, RSI, RDI, ORIG_RAX, RIP, CS, EFLAGS, RSP, SS,
++FS_BASE, GS_BASE, DS, ES, FS, GS): New macros.
++* NEWS: Mention this fix.
++
++Fixes: v4.21~21 ("Include <sys/ptrace.h> early")
++[baruch: drop the NEWS and configure.ac hunks]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ configure.ac      | 14 ++++++++++++--
-+ wrudf/Makefile.am |  2 +-
-+ 2 files changed, 13 insertions(+), 3 deletions(-)
++Upstream status: commit 6ebf6c4f9e5e
 +
-+diff --git a/configure.ac b/configure.ac
-+index 95fbba3..62b1caa 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -9,8 +9,18 @@ AC_PROG_CC
-+ AC_DISABLE_SHARED
-+ AM_PROG_LIBTOOL
-+ 
-+-dnl Checks for libraries.
-+-AC_CHECK_LIB(readline, readline, [ ], AC_MSG_ERROR([cannot find -lreadline.]))
-++PKG_PROG_PKG_CONFIG
++ NEWS                     |  3 +++
++ configure.ac             |  1 -
++ linux/x86_64/arch_regs.h | 29 +++++++++++++++++++++++++++++
++ regs.h                   |  5 -----
++ 4 files changed, 32 insertions(+), 6 deletions(-)
++
++diff --git a/linux/x86_64/arch_regs.h b/linux/x86_64/arch_regs.h
++index c2ccee671d4f..d502ca4bf202 100644
++--- a/linux/x86_64/arch_regs.h
+++++ b/linux/x86_64/arch_regs.h
++@@ -1,2 +1,31 @@
++ extern uint32_t *const i386_esp_ptr;
++ extern uint64_t *const x86_64_rsp_ptr;
 ++
-++dnl Checks for libraries, by using pkg-config when available
-++if test -n "${PKG_CONFIG}" ; then
-++  PKG_CHECK_MODULES([READLINE], [readline], [readline_found=yes], [readline_found=no])
-++fi
-++
-++if test "${readline_found}" != "yes" ; then
-++  AC_CHECK_LIB(readline, readline,
-++               [AC_SUBST([READLINE_LIBS], [-lreadline])],
-++               AC_MSG_ERROR([cannot find -lreadline.]))
-++fi
+++/* <asm/ptrace.h> does not provide these definitions.  */
+++#define R15		0
+++#define R14		1
+++#define R13		2
+++#define R12		3
+++#define RBP		4
+++#define RBX		5
+++#define R11		6
+++#define R10		7
+++#define R9		8
+++#define R8		9
+++#define RAX		10
+++#define RCX		11
+++#define RDX		12
+++#define RSI		13
+++#define RDI		14
+++#define ORIG_RAX	15
+++#define RIP		16
+++#define CS		17
+++#define EFLAGS		18
+++#define RSP		19
+++#define SS		20
+++#define FS_BASE		21
+++#define GS_BASE		22
+++#define DS		23
+++#define ES		24
+++#define FS		25
+++#define GS		26
++diff --git a/regs.h b/regs.h
++index d89581d7dd3f..7a044cef8fbf 100644
++--- a/regs.h
+++++ b/regs.h
++@@ -2,11 +2,6 @@
++ #define STRACE_REGS_H
 + 
-+ dnl Checks for header files.
-+ AC_HEADER_STDC
-+diff --git a/wrudf/Makefile.am b/wrudf/Makefile.am
-+index fe1c269..e3ab85b 100644
-+--- a/wrudf/Makefile.am
-++++ b/wrudf/Makefile.am
-+@@ -1,5 +1,5 @@
-+ bin_PROGRAMS = wrudf
-+-wrudf_LDADD = $(top_builddir)/libudffs/libudffs.la -lreadline
-++wrudf_LDADD = $(top_builddir)/libudffs/libudffs.la $(READLINE_LIBS)
-+ wrudf_SOURCES = wrudf.c wrudf-cmnd.c wrudf-desc.c wrudf-cdrw.c wrudf-cdr.c ide-pc.c wrudf.h ide-pc.h ../include/ecma_167.h ../include/osta_udf.h ../include/bswap.h
++ #include <sys/user.h>
++-
++-#ifdef HAVE_SYS_REG_H
++-# include <sys/reg.h>
++-#endif
++-
++ #include "arch_regs.h"
 + 
-+ AM_CPPFLAGS = -I$(top_srcdir)/include -D_GNU_SOURCE -DDEBUG
++ #endif /* !STRACE_REGS_H */
 +-- 
-+2.14.3
++2.17.0
 +
-diff --git a/package/udftools/udftools.mk b/package/udftools/udftools.mk
-index 2d3477a51c..e5bf59137e 100644
---- a/package/udftools/udftools.mk
-+++ b/package/udftools/udftools.mk
-@@ -8,6 +8,7 @@ UDFTOOLS_VERSION = 2.0
- UDFTOOLS_SITE = https://github.com/pali/udftools/releases/download/$(UDFTOOLS_VERSION)
- UDFTOOLS_LICENSE = GPL-2.0+
- UDFTOOLS_LICENSE_FILES = COPYING
--UDFTOOLS_DEPENDENCIES = readline
-+UDFTOOLS_AUTORECONF = YES
-+UDFTOOLS_DEPENDENCIES = readline host-pkgconf
- 
- $(eval $(autotools-package))
--- 
-2.14.3
