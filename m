@@ -1,48 +1,27 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Apr 2018 11:07:54 +0200
-Subject: [Buildroot] [PATCH 5/6 v2] download/git: always do full-clone
+Date: Sun, 22 Apr 2018 11:07:55 +0200
+Subject: [Buildroot] [PATCH 6/6 v2] download/git: add warning not to use or
+ git cache
 In-Reply-To: <cover.1524388060.git.yann.morin.1998@free.fr>
 References: <cover.1524388060.git.yann.morin.1998@free.fr>
-Message-ID: <940d28f516386ec4118bbc7d75e2d854eda28bc8.1524388060.git.yann.morin.1998@free.fr>
+Message-ID: <cb54e8b49b631790559e87749f106a1ab9352128.1524388060.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently attempt a shallow clone, as tentative to save bandwidth and
-download time.
+We really want the user not to use our git cache manually, or their
+changes (committed or not) may eventually get lost.
 
-However, now that we keep the git tree as a cache, it may happen that we
-need to checkout an earlier commit, and that would not be present with a
-shallow clone.
+So, add a warning file, not unlike the one we put in the target/
+directory, to warn the user not to use the git tree.
 
-Furthermore, the shallow fetch is already really broken, and just
-happens to work by chance. Consider the following actions, which are
-basically what happens today:
+Ideally, we would have carried this file in support/misc/, but the git
+backend does not have acces to it: the working directory is somewhere
+unknown, and TOPDIR is not exported in the environment.
 
-    mkdir git
-    git init git
-    cd git
-    git remote add origin https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-    git fetch origin --depth 1 v4.17-rc1
-    if ! git fetch origin v4.17-rc1:v4.17-rc1 ; then
-        echo "warning"
-    fi
-    git checkout v4.17-rc1
-
-The checkout succeeds just because of the git-fetch in the if-condition,
-which is initially there to fetch the special refs from github PRs, or
-gerrit reviews. That fails, but we just print a warning. If we were to
-ever remove support for special refs, then the checkout would fail.
-
-The whole purpose of the git cache is to actually save bandwidth and
-download time, but in the long run. For one-offs, people would
-preferably use a wget download (e.g. with the github macro) instead of
-a git clone.
-
-We switch to always doing a full clone. It is more correct, and pays off
-in the long run...
+So, we have to carry it in-line in the backend instead.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
@@ -50,43 +29,37 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/download/git | 24 +++---------------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+ support/download/git | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/support/download/git b/support/download/git
-index 344e253b1d..84cc6be94e 100755
+index 84cc6be94e..8764474153 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -90,27 +90,9 @@ fi
+@@ -72,6 +72,24 @@ _git() {
+     eval GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
+ }
  
- _git remote set-url origin "'${uri}'"
- 
--# Try to fetch with limited depth, since it is faster than a full clone - but
--# that only works if the version is a ref (tag or branch). Before trying to do
--# a shallow clone we check if ${cset} is in the list provided by git ls-remote.
--# If not we fallback to a full fetch.
--#
--# Messages for the type of clone used are provided to ease debugging in
--# case of problems
--git_done=0
--if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
--    printf "Doing a shallow fetch\n"
--    if _git fetch "${@}" --depth 1 origin "'${cset}'"; then
--        git_done=1
--    else
--        printf "Shallow fetch failed, falling back to fetching all refs\n"
--    fi
--fi
--if [ ${git_done} -eq 0 ]; then
--    printf "Fetching all references\n"
--    _git fetch origin
--    _git fetch origin -t
--fi
-+printf "Fetching all references\n"
-+_git fetch origin
-+_git fetch origin -t
- 
- # Try to get the special refs exposed by some forges (pull-requests for
- # github, changes for gerrit...). There is no easy way to know whether
++# Create a warning file, that the user should not use the git cache.
++# It's ours. Our precious.
++cat <<-_EOF_ >"${dl_dir}/git.readme"
++	IMPORTANT NOTE!
++
++	The git tree located in this directory is for the exclusive use
++	by Buildroot, which uses it as a local cache to reduce bandwidth
++	usage.
++
++	Buildroot *will* trash any changes in that tree whenever it needs
++	to use it. Buildroot may even remove it in case it detects the
++	repository may have been damaged or corrupted.
++
++	Do *not* work in that directory; your changes will eventually get
++	lost. Do *not* even use it as a remote, or as the source for new
++	worktrees.
++_EOF_
++
+ # Initialise a repository in the git cache. If the repository already
+ # existed, this is a noop, unless the repository was broken, in which
+ # case this magically restores it to working conditions. In the latter
 -- 
 2.14.1
