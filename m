@@ -1,74 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Apr 2018 11:07:52 +0200
-Subject: [Buildroot] [PATCH 0/6 v2] support/download: make the git backend
- even more robust
-Message-ID: <cover.1524388060.git.yann.morin.1998@free.fr>
+Date: Sun, 22 Apr 2018 11:07:50 +0200
+Subject: [Buildroot] [PATCH 1/6 v2] download/git: run all git commands in
+ the current directory
+In-Reply-To: <cover.1524388060.git.yann.morin.1998@free.fr>
+References: <cover.1524388060.git.yann.morin.1998@free.fr>
+Message-ID: <dbf0fb7bf945d54ce2f667c00977513181f74dfd.1524388060.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+That way, we can pushd earlier, which will help with last-ditch recovery
+in a followup commit.
 
-This series makes our git backend even more robust than wht we currently
-have. Especially, it will try to recover from a repository that was so
-utterly butchered that even a git-init can't salvage it.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ support/download/git | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-The most significant changes are:
-
-  - ensure we can checkout from an unclean state;
-
-  - ensure we can checkout across changes in submodules setup;
-
-  - as a last-ditch recovery, trah the loccal cache and clone again from
-    scratch.
-
-Additionally, we also remove support for shallow clones, because they
-were in fact fundamentally broken, and did only work by chance.
-
-Finally, we add a warning file, that the user should not use our git
-cache for development, neither directly in it or as a remote or the
-origin for worktrees.
-
-Thanks a lot to Ricardo, Arnout and Thomas for their inputs during the
-discussions that led to this series. :-)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit d4158df6c19c76ea3405975b87f13b1c092a40e0
-
-  bluez5_utils: add patch to fix readline issue (2018-04-21 14:53:01 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to cb54e8b49b631790559e87749f106a1ab9352128
-
-  download/git: add warning not to use or git cache (2018-04-22 10:59:30 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      download/git: run all git commands in the current directory
-      download/git: try to recover from utterly-broken repositories
-      download/git: ensure we checkout to a clean state
-      download/git: ensure we can checkout repos with submodule conversions
-      download/git: always do full-clone
-      download/git: add warning not to use or git cache
-
- support/download/git | 108 ++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 82 insertions(+), 26 deletions(-)
-
+diff --git a/support/download/git b/support/download/git
+index bf05c595a5..19a3e8ebee 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -34,8 +34,10 @@ done
+ 
+ shift $((OPTIND-1)) # Get rid of our options
+ 
+-# We want to check if a cache of the git clone of this repo already exists.
++# Create and cd into the directory that will contain the local git cache
+ git_cache="${dl_dir}/git"
++mkdir -p "${git_cache}"
++pushd "${git_cache}" >/dev/null
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -52,9 +54,7 @@ _git() {
+ # We can still go through the wrapper, because 'init' does not use the
+ # path pointed to by GIT_DIR, but really uses the directory passed as
+ # argument.
+-_git init "'${git_cache}'"
+-
+-pushd "${git_cache}" >/dev/null
++_git init .
+ 
+ # Ensure the repo has an origin (in case a previous run was killed).
+ if ! _git remote |grep -q -E '^origin$'; then
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
