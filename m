@@ -1,60 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Apr 2018 10:28:28 +0200
-Subject: [Buildroot] [PATCH v2] lz4: improve static only build support
-In-Reply-To: <20180421210510.v4zwz6y57z7stryx@tarshish>
-References: <e5fee55fc78a363b247f0eb8594aa9f40d3a1526.1524199966.git.baruch@tkos.co.il>
- <20180420084143.3b20bd3a@windsurf.numericable.fr>
- <20180421210510.v4zwz6y57z7stryx@tarshish>
-Message-ID: <20180422102828.01dd1455@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Apr 2018 11:07:52 +0200
+Subject: [Buildroot] [PATCH 0/6 v2] support/download: make the git backend
+ even more robust
+Message-ID: <cover.1524388060.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+Hello All!
 
-On Sun, 22 Apr 2018 00:05:10 +0300, Baruch Siach wrote:
+This series makes our git backend even more robust than wht we currently
+have. Especially, it will try to recover from a repository that was so
+utterly butchered that even a git-init can't salvage it.
 
-> > Admittedly, it isn't a huge improvement, but for consistency it would
-> > be good to do that.  
-> 
-> Many other packages build both shared and static libraries when 
-> BR2_SHARED_LIBS=y.
+The most significant changes are:
 
-Yes, I know. I don't know how strict we want to be about this. Probably
-not too much because it doesn't matter that much.
+  - ensure we can checkout from an unclean state;
 
-> This particular case is easy enough to fix, though.
+  - ensure we can checkout across changes in submodules setup;
 
-Yes, that's the point: for this package, it's super easy to fix, so
-it's nice to do it.
+  - as a last-ditch recovery, trah the loccal cache and clone again from
+    scratch.
 
-> Is there any advantage to not building the static library when 
-> BR2_SHARED_LIBS=y other than the small build time reduction?
+Additionally, we also remove support for shallow clones, because they
+were in fact fundamentally broken, and did only work by chance.
 
-In some cases there is more than a "small build time reduction".
+Finally, we add a warning file, that the user should not use our git
+cache for development, neither directly in it or as a remote or the
+origin for worktrees.
 
-The object files that go in a shared library must be built with -fPIC.
-Such object files can also be used in a static library, but the code is
-not as optimized as it could be, and therefore object files that go in
-a static library should ideally not be built with -fPIC. I believe some
-packages (but not many) do build their object files twice, once with
--fPIC for the shared library, once without -fPIC for the static
-library. This creates more than a "small build time reduction".
+Thanks a lot to Ricardo, Arnout and Thomas for their inputs during the
+discussions that led to this series. :-)
 
-From the commit log of commit f1d3e09895b245da9d54bbaef36e5de95269034e:
 
-    For example, a static+shared build of libglib2 takes 1 minutes and 59
-    seconds, with a final build directory of 96 MB. A shared-only build of
-    libglib2 takes only 1 minutes and 31 seconds (almost a 25% reduction
-    of the build time), and the final build directory weights 89 MB (a
-    reduction of almost 8%).
+Regards,
+Yann E. MORIN.
 
-Best regards,
 
-Thomas
+The following changes since commit d4158df6c19c76ea3405975b87f13b1c092a40e0
+
+  bluez5_utils: add patch to fix readline issue (2018-04-21 14:53:01 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to cb54e8b49b631790559e87749f106a1ab9352128
+
+  download/git: add warning not to use or git cache (2018-04-22 10:59:30 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      download/git: run all git commands in the current directory
+      download/git: try to recover from utterly-broken repositories
+      download/git: ensure we checkout to a clean state
+      download/git: ensure we can checkout repos with submodule conversions
+      download/git: always do full-clone
+      download/git: add warning not to use or git cache
+
+ support/download/git | 108 ++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 82 insertions(+), 26 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
