@@ -1,108 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Apr 2018 11:46:06 +0200
-Subject: [Buildroot] [PATCH 2/6 v2] download/git: try to recover from
- utterly-broken repositories
-In-Reply-To: <8f347509db00c8c2108a5a9fef1b8862fcf3b8b0.1524388060.git.yann.morin.1998@free.fr>
-References: <cover.1524388060.git.yann.morin.1998@free.fr>
- <8f347509db00c8c2108a5a9fef1b8862fcf3b8b0.1524388060.git.yann.morin.1998@free.fr>
-Message-ID: <20180422094606.GH12688@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Apr 2018 12:28:40 +0200
+Subject: [Buildroot] [git commit] support/config-fragments/autobuild: update
+ OpenRISC pre-built toolchain
+Message-ID: <20180422102852.2540B887B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=473819bbdcae23b04462b196967f65859da5a25a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-04-22 11:07 +0200, Yann E. MORIN spake thusly:
-> In some cases, the repository may be in a state we can't automatically
-> recover from, especially since we must still support oldish git versions
-> that do not provide the necessary commands or options thereof.
-> 
-> As a last-ditch recovery, delete the repository and recreate the cache
-> from scratch.
+The toolchain has been rebuilt after commit
+7fb6fe883a6ee360aa861fdae93d7441f9f5d52d, which adds more fcntl()
+definitions in uClibc for OpenRISC.
 
-As Thomas noticed on IRC, this commit would remove the local git cache
-in case the user enters an invalid changeset (typo in sha1 or tag name,
-or whatnot).
+Fixes:
 
-A missing commit should not be considered as a broken repository,
-especially since re-cloning from scratch would not help solve the
-issue.
+  http://autobuild.buildroot.net/results/664e7ee968e46b7ac0054ce4d5d4f9a82201550e/
 
-I already have a local change that will avoid trashing a git cache in
-that case (using git rev-parse). I'll wait for some more reviews before
-submitting again...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/config-fragments/autobuild/br-openrisc-uclibc.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  support/download/git | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/support/download/git b/support/download/git
-> index 19a3e8ebee..ebd04bc7b3 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -16,6 +16,30 @@ set -e
->  # Environment:
->  #   GIT      : the git command to call
->  
-> +# Save out path and options in case we need to call ourselves again
-> +myname="${0}"
-> +declare -a OPTS=("${@}")
-> +
-> +# This function is called when an error occurs. Its job is to attempt a
-> +# clone from scratch (only once!) in case the git tree is borked, or in
-> +# case an unexpected and unsupported situation arises with submodules
-> +# or uncomitted stuff (e.g. if the user manually mucked around in the
-> +# git cache).
-> +_on_error() {
-> +    local ret=${?}
-> +
-> +    if ${BR_GIT_BACKEND_FIRST_FAULT:-false}; then
-> +        printf "Double-fault in git-cache"
-> +        exit ${ret}
-> +    fi
-> +    export BR_GIT_BACKEND_FIRST_FAULT=true
-> +
-> +    popd >/dev/null
-> +    rm -rf "${git_cache}"
-> +
-> +    exec "${myname}" "${OPTS[@]}" || exit ${ret}
-> +}
-> +
->  verbose=
->  recurse=0
->  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-> @@ -39,6 +63,9 @@ git_cache="${dl_dir}/git"
->  mkdir -p "${git_cache}"
->  pushd "${git_cache}" >/dev/null
->  
-> +# Any error now should try to recover
-> +trap _on_error ERR
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _git() {
-> -- 
-> 2.14.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/support/config-fragments/autobuild/br-openrisc-uclibc.config b/support/config-fragments/autobuild/br-openrisc-uclibc.config
+index 1cbb205613..a346c83e4c 100644
+--- a/support/config-fragments/autobuild/br-openrisc-uclibc.config
++++ b/support/config-fragments/autobuild/br-openrisc-uclibc.config
+@@ -1,7 +1,7 @@
+ BR2_or1k=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-openrisc-full-2018.02-891-g046c5e2.tar.bz2"
++BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-openrisc-full-2018.02-925-gd4158df.tar.bz2"
+ BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+ BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
+ BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
