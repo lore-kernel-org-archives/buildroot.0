@@ -1,38 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 23 Apr 2018 19:27:52 +0000
-Subject: [Buildroot] [Bug 4748] enhance vi applet to allowing
- viewing/editing arbitrarily large files
-In-Reply-To: <bug-4748-163@https.bugs.busybox.net/>
-References: <bug-4748-163@https.bugs.busybox.net/>
-Message-ID: <bug-4748-163-lIpbWR6eVI@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 23 Apr 2018 21:59:53 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/solidrun_macchiatobin_*: use a Git
+ commit for ATF
+Message-ID: <20180423195954.30215-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4748
+The version of the ARM Trusted Firmware from Marvell was a Git branch,
+not a Git commit, leading to unreproducible results. So let's use a
+Git commit instead, which is the latest available from the branch that
+was previously used.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/solidrun_macchiatobin_mainline_defconfig | 2 +-
+ configs/solidrun_macchiatobin_marvell_defconfig  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Version|2015.11                     |unspecified
-         Resolution|FIXED                       |---
-          Component|Other                       |Other
-              Build|Ipad4th generation          |
-               Host|Apple                       |
-   Target Milestone|2015.11                     |---
-                 OS|Linux                       |All
-            Product|buildroot                   |Busybox
-             Status|RESOLVED                    |REOPENED
-                 CC|buildroot at uclibc.org        |
-           Hardware|All                         |PC
-             Target|iCloud activation           |
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Revert the changes done by some silly spammer.
-
+diff --git a/configs/solidrun_macchiatobin_mainline_defconfig b/configs/solidrun_macchiatobin_mainline_defconfig
+index dd797d709c..17fb9d02a2 100644
+--- a/configs/solidrun_macchiatobin_mainline_defconfig
++++ b/configs/solidrun_macchiatobin_mainline_defconfig
+@@ -7,7 +7,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="43965481990fd92e9666cf9371a8cf478055ec7c"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+diff --git a/configs/solidrun_macchiatobin_marvell_defconfig b/configs/solidrun_macchiatobin_marvell_defconfig
+index 33700e1b45..acc8d1589e 100644
+--- a/configs/solidrun_macchiatobin_marvell_defconfig
++++ b/configs/solidrun_macchiatobin_marvell_defconfig
+@@ -7,7 +7,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="43965481990fd92e9666cf9371a8cf478055ec7c"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.3
