@@ -1,43 +1,34 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 23 Apr 2018 11:57:49 -0400
-Subject: [Buildroot] [PATCH 1/1] go: bump to 1.10
-In-Reply-To: <87y3i7q8fw.fsf@dell.be.48ers.dk>
-References: <20180219072718.28895-1-christian@paral.in>
- <87po3js3j3.fsf@dell.be.48ers.dk> <87y3i7q8fw.fsf@dell.be.48ers.dk>
-Message-ID: <877eoxc3uq.fsf@paral.in>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 23 Apr 2018 18:14:02 +0200
+Subject: [Buildroot] [PATCH v6 0/4] llvm for mesa3d
+In-Reply-To: <20180411161452.25043-1-valentin.korenblit@smile.fr>
+References: <20180411161452.25043-1-valentin.korenblit@smile.fr>
+Message-ID: <9bbfe5da-723f-f0ce-6894-e277e6d7bd77@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi All,
 
-Peter Korsgaard <peter@korsgaard.com> writes:
-> What is common for all the failures is that the target arch == host arch
-> (x86-64) AND the C library is different (musl/uclibc-ng).
->
-> I did a quick test here and the reason is that host-go gets linked with
-> the target C library:
->
-> ls -lah build/host-go-1.10/bin/go
-> -rwxr-xr-x 1 peko peko 11M Apr  1 16:44 build/host-go-1.10/bin/go
->
-> ./build/host-go-1.10/bin/go
-> zsh: no such file or directory: ./build/host-go-1.10/bin/go
->
-> ldd ./build/host-go-1.10/bin/go
->         linux-vdso.so.1 (0x00007ffcd2bae000)
->         libc.so.0 => not found
->
-> libc.so.0 is uClibc-ng.
->
-> Care to take a look?
+Le 11/04/2018 ? 18:14, Valentin Korenblit a ?crit?:
+> Hello all,
+> 
+[...]
+> 
+> 
+> Valentin Korenblit (4):
+>   package/clang: new package
+>   package/libclc: new package
+>   package/mesa3d: enable OpenCL support
+>   package/clinfo: new package
 
-I haven't had a chance to check on this yet. I'm puzzled why the
-behavior would be different between glibc and uclibc.
+The next 2018.05-rc1 is near, it would be great if the remaining patches from
+llvm/clang series can be reviewed or merged :)
 
-Will do some testing when possible.
+I know there are some annoying issues with dl cache infra and a lot of patches
+to review but the llvm/clang series should be ok for 2018.05.
 
-Best,
-Christian Stewart
+Best regards,
+Romain
