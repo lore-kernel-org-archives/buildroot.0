@@ -1,80 +1,156 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Apr 2018 15:42:43 +0200
-Subject: [Buildroot] [PATCH] binutils: replace hard-links with
- soft-links to fix rpath
-In-Reply-To: <20180423150412.145444ff@windsurf>
-References: <20180422122350.16293-1-thomas.petazzoni@bootlin.com>
- <20180423092228.GO12688@scaer> <20180423150412.145444ff@windsurf>
-Message-ID: <20180423134243.GA22035@scaer>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon, 23 Apr 2018 17:05:30 +0200
+Subject: [Buildroot] [PATCH] package/fail2ban: new package
+Message-ID: <1524495930-7061-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fail2ban scans log files (e.g. /var/log/apache/error_log)
+and bans IPs that show malicious behaviours.
 
-On 2018-04-23 15:04 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 23 Apr 2018 11:22:28 +0200, Yann E. MORIN wrote:
-> > However, I wanted to reproduce the build failures, and here, with
-> > current master, so I built a toolchain with buildroot [0], but none
-> > of binutils programs is linked with libfl:
-[--SNIP--]
-> And indeed in the build process, I have:
-> /bin/sh ./libtool --tag=CC   --mode=link /usr/bin/gcc -W -Wall -Wstrict-prototypes -Wmissing-prototypes -Wshadow -Wstack-usage=262144 -I./../zlib -O2 -I/home/thomas/projets/buildroot/output/host/include  -L/home/thomas/projets/buildroot/output/host/lib -Wl,-rpath,/home/thomas/projets/buildroot/output/host/lib -o ar arparse.o arlex.o ar.o not-ranlib.o arsup.o rename.o binemul.o emul_vanilla.o bucomm.o version.o filemode.o ../bfd/libbfd.la ../libiberty/libiberty.a -lfl  -ldl
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/Config.in                 |  1 +
+ package/fail2ban/Config.in        | 14 ++++++++++++++
+ package/fail2ban/S60fail2ban      | 23 +++++++++++++++++++++++
+ package/fail2ban/fail2ban.hash    |  2 ++
+ package/fail2ban/fail2ban.mk      | 28 ++++++++++++++++++++++++++++
+ package/fail2ban/fail2ban.service | 17 +++++++++++++++++
+ 6 files changed, 85 insertions(+)
+ create mode 100644 package/fail2ban/Config.in
+ create mode 100644 package/fail2ban/S60fail2ban
+ create mode 100644 package/fail2ban/fail2ban.hash
+ create mode 100644 package/fail2ban/fail2ban.mk
+ create mode 100644 package/fail2ban/fail2ban.service
 
-And I too have a similar linking command, with your defconfig:
-
-/bin/sh ./libtool --tag=CC   --mode=link /usr/bin/gcc -W -Wall -Wstrict-prototypes -Wmissing-prototypes -Wshadow -Wstack-usage=262144 -I./../zlib -O2 -I/home/ymorin/dev/buildroot/O2/host/include  -static-libstdc++ -static-libgcc -L/home/ymorin/dev/buildroot/O2/host/lib -Wl,-rpath,/home/ymorin/dev/buildroot/O2/host/lib -o ar arparse.o arlex.o ar.o not-ranlib.o arsup.o rename.o binemul.o emul_vanilla.o bucomm.o version.o filemode.o ../bfd/libbfd.la ../libiberty/libiberty.a -lfl  -ldl
-
-which is turned into an actual link command:
-
-libtool: link: /usr/bin/gcc -W -Wall -Wstrict-prototypes -Wmissing-prototypes -Wshadow -Wstack-usage=262144 -I./../zlib -O2 -I/home/ymorin/dev/buildroot/O2/host/include -static-libstdc++ -static-libgcc -Wl,-rpath -Wl,/home/ymorin/dev/buildroot/O2/host/lib -o ar arparse.o arlex.o ar.o not-ranlib.o arsup.o rename.o binemul.o emul_vanilla.o bucomm.o version.o filemode.o -L/home/ymorin/dev/buildroot/O2/host/lib ../bfd/.libs/libbfd.a -L/home/ymorin/dev/buildroot/O2/build/host-binutils-arc-2018.03-rc1/zlib -lz ../libiberty/libiberty.a /home/ymorin/dev/buildroot/O2/host/lib/libfl.so -lm -ldl -Wl,-rpath -Wl,/home/ymorin/dev/buildroot/O2/host/lib -Wl,-rpath -Wl,/home/ymorin/dev/buildroot/O2/host/lib
-
-So we can see that, yes, libfl.so *is* pulled in. Yet:
-
-readelf -d host/arc-buildroot-linux-uclibc/bin/ar
-Dynamic section at offset 0xd6a30 contains 29 entries:
-  Tag        Type                         Name/Value
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
- 0x000000000000001d (RUNPATH)            Library runpath: [/home/ymorin/dev/buildroot/O2/host/lib]
-[--SNIP--]
-
-So, WTF?
-
-I'll be trying on another machine with an older system...
-
-Regards,
-Yann E. MORIN.
-
-> To be honest, this is a bit weird, because for the other binutils,
-> which we build from a tarball, host-flex is not needed, and we don't
-> link against libfl.
-> 
-> See binutils/Makefile.am:
-> 
-> ar_LDADD = $(BFDLIB) $(LIBIBERTY) $(LEXLIB) $(LIBINTL)
-> 
-> and binutils/configure does check for the availability of a lex library. 
-> 
-> That being said, regardless of libfl specifically, I believe this
-> problem of hard links between binaries in different directories really
-> affects binutils anyway, and therefore, it makes sense to fix those to
-> use symlinks instead.
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
+diff --git a/package/Config.in b/package/Config.in
+index ecd9b8f..2ff123b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1700,6 +1700,7 @@ menu "Networking applications"
+ 	source "package/ejabberd/Config.in"
+ 	source "package/ethtool/Config.in"
+ 	source "package/faifa/Config.in"
++	source "package/fail2ban/Config.in"
+ 	source "package/fastd/Config.in"
+ 	source "package/fcgiwrap/Config.in"
+ 	source "package/flannel/Config.in"
+diff --git a/package/fail2ban/Config.in b/package/fail2ban/Config.in
+new file mode 100644
+index 0000000..cf82526
+--- /dev/null
++++ b/package/fail2ban/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_FAIL2BAN
++	bool "fail2ban"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Fail2ban scans log files (e.g. /var/log/apache/error_log) and bans IPs
++	  that show the malicious signs -- too many password failures, seeking
++	  for exploits, etc. Out of the box Fail2Ban comes with filters for
++	  various services (apache, courier, ssh, etc).
++
++	  Fail2Ban is able to reduce the rate of incorrect authentications
++	  attempts however it cannot eliminate the risk that weak authentication
++	  presents.
++
++	  https://www.fail2ban.org
+diff --git a/package/fail2ban/S60fail2ban b/package/fail2ban/S60fail2ban
+new file mode 100644
+index 0000000..92559e9
+--- /dev/null
++++ b/package/fail2ban/S60fail2ban
+@@ -0,0 +1,23 @@
++#!/bin/sh
++
++case "$1" in
++	start)
++		printf "Starting fail2ban: "
++		start-stop-daemon -S -q -m -p /run/fail2ban.pid \
++			-b -x fail2ban-server -- -xf start
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		printf "Stopping fail2ban: "
++		start-stop-daemon -K -q -p /run/fail2ban.pid
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	restart)
++		"$0" stop
++		sleep 1
++		"$0" start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		;;
++esac
+diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
+new file mode 100644
+index 0000000..eff6457
+--- /dev/null
++++ b/package/fail2ban/fail2ban.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256  7ee3fd0e94d58c94298718b25e6bcfa96932712b7aa683580e162403f68d40c8  fail2ban-0.10.3.1.tar.gz
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+new file mode 100644
+index 0000000..7e65f1d
+--- /dev/null
++++ b/package/fail2ban/fail2ban.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# fail2ban
++#
++################################################################################
++
++FAIL2BAN_VERSION = 0.10.3.1
++FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
++FAIL2BAN_LICENSE = GPL-2.0+
++FAIL2BAN_LICENSE_FILES = README.md
++FAIL2BAN_SETUP_TYPE = setuptools
++FAIL2BAN_INSTALL_TARGET_OPTS = --root=$(TARGET_DIR) --prefix=/usr
++
++define FAIL2BAN_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/fail2ban/S60fail2ban \
++		$(TARGET_DIR)/etc/init.d/S60fail2ban
++endef
++
++define FAIL2BAN_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/fail2ban/fail2ban.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/fail2ban.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib//systemd/system/fail2ban.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/fail2ban.service
++	$(SED) 's/@BINDIR@/\/usr\/bin/g' $(TARGET_DIR)/usr/lib/systemd/system/fail2ban.service
++endef
++
++$(eval $(python-package))
+diff --git a/package/fail2ban/fail2ban.service b/package/fail2ban/fail2ban.service
+new file mode 100644
+index 0000000..1ec8068
+--- /dev/null
++++ b/package/fail2ban/fail2ban.service
+@@ -0,0 +1,17 @@
++[Unit]
++Description=Fail2Ban Service
++Documentation=man:fail2ban(1)
++After=network.target iptables.service firewalld.service ip6tables.service ipset.service
++PartOf=iptables.service firewalld.service ip6tables.service ipset.service
++
++[Service]
++Type=simple
++ExecStart=/usr/bin/fail2ban-server -xf start
++ExecStop=/usr/bin/fail2ban-client stop
++ExecReload=/usr/bin/fail2ban-client reload
++PIDFile=/run/fail2ban/fail2ban.pid
++Restart=on-failure
++RestartPreventExitStatus=0 255
++
++[Install]
++WantedBy=multi-user.target
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
