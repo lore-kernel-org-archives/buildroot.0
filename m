@@ -1,85 +1,110 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Apr 2018 10:18:23 +0200
-Subject: [Buildroot] [PATCH v3 6/6] squashfs: add zstd support
-In-Reply-To: <20180416193953.19924-6-ps.report@gmx.net>
-References: <20180416193953.19924-1-ps.report@gmx.net>
- <20180416193953.19924-6-ps.report@gmx.net>
-Message-ID: <20180423081823.GN12688@scaer>
+Date: Mon, 23 Apr 2018 11:22:28 +0200
+Subject: [Buildroot] [PATCH] binutils: replace hard-links with
+ soft-links to fix rpath
+In-Reply-To: <20180422122350.16293-1-thomas.petazzoni@bootlin.com>
+References: <20180422122350.16293-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180423092228.GO12688@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Thomas, All,
 
-On 2018-04-16 21:39 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On 2018-04-22 14:23 +0200, Thomas Petazzoni spake thusly:
+> binutils installs its binaries both as bin/<tuple>-<tool> and as
+> <tuple>/bin/<tool>, and hardlinks are used to reduce disk space
+> consumption. This causes a problem for host-binutils with our rpath
+> fixing logic done by "make sdk".
+> 
+> Indeed, the fix-rpath script starts by fixing up the rpath of
+> bin/<tuple>-<tool>, and sets the RPATH to $ORIGIN/../lib/. Then
+> fix-rpath moves on to <tuple>/bin/<tool>, and doesn't find the library
+> the tool depends on, and clears the RPATH. The result is that the
+> binutils tool are not usable.
+> 
+> Note that this is only visible currently on the ARC architecture,
+> because on this architecture, binutils is fetched from git, which
+> causes host-flex to be built, and some binutils tools to use the libfl
+> shared library. Therefore, the binutils tools don't use just the
+> standard C library (which is provided by the system) but also libfl
+> from $(HOST_DIR)/lib, and therefore if the RPATH isn't set correctly,
+> those tools don't work properly.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+So I wanted to test this, and it does what's on the can.
+
+However, I wanted to reproduce the build failures, and here, with
+current master, so I built a toolchain with buildroot [0], but none
+of binutils programs is linked with libfl:
+
+    $ for i in host/arc-buildroot-linux-uclibc/bin/*; do
+        readelf -d "${i}" |grep NEEDED
+    done |sort -u
+     0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+     0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
+
+I checked, and I don't have libfl on my system, neither static not
+shared, so it cant even have picked the static one from my system.
+
+And indeed, libnl can build:
+
+    checking the archiver (/home/ymorin/dev/buildroot/O/host/bin/arc-buildroot-linux-uclibc-ar)interface... ar
+
+So, I don't see the point...
+
+[0] with this defconfig:
+BR2_arcle=y
+BR2_archs38=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> Changes v2 -> v3:
->   - move up the zstd section to keep gzip as default (suggested by
->     Yann E. MORIN)
+> In order to address this, this comit adds a post-install hook to
+> host-binutils that replaces those hard links by symbolic links. It is
+> worth mentioning that library loading and RPATH usage occurs *after*
+> resolving the symbolic links, which makes this solution work.
 > 
-> Changes v1 -> v2:
->   - split off target zstd support (suggested by Yann E. MORIN)
-> ---
->  package/squashfs/Config.in   | 6 ++++++
->  package/squashfs/squashfs.mk | 9 ++++++++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
+> Fixes:
 > 
-> diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
-> index 70c0fc9808..c16ebbf27f 100644
-> --- a/package/squashfs/Config.in
-> +++ b/package/squashfs/Config.in
-> @@ -41,6 +41,12 @@ config BR2_PACKAGE_SQUASHFS_XZ
->  	help
->  	  Support XZ compression algorithm
->  
-> +config BR2_PACKAGE_SQUASHFS_ZSTD
-> +	bool "zstd support"
-> +	select BR2_PACKAGE_ZSTD
-> +	help
-> +	  Support ZSTD compression algorithm
-> +
+>   http://autobuild.buildroot.net/results/b2562b05d397d4e1ffe0f8d2f4ce4c84ab6feae1/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/binutils/binutils.mk | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index 13cd02b491..b24e4334c2 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -130,5 +130,17 @@ ifeq ($(BR2_BINUTILS_ENABLE_LTO),y)
+>  HOST_BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
 >  endif
 >  
->  comment "squashfs needs a toolchain w/ threads"
-> diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-> index 67025ac68a..7467342c48 100644
-> --- a/package/squashfs/squashfs.mk
-> +++ b/package/squashfs/squashfs.mk
-> @@ -9,7 +9,7 @@ SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
->  SQUASHFS_SITE_METHOD = git
->  SQUASHFS_LICENSE = GPL-2.0+
->  SQUASHFS_LICENSE_FILES = COPYING
-> -SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1 ZSTD_SUPPORT=0
-> +SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
->  
->  ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
->  SQUASHFS_DEPENDENCIES += lz4
-> @@ -39,6 +39,13 @@ else
->  SQUASHFS_MAKE_ARGS += LZO_SUPPORT=0
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SQUASHFS_ZSTD),y)
-> +SQUASHFS_DEPENDENCIES += zstd
-> +SQUASHFS_MAKE_ARGS += ZSTD_SUPPORT=1 COMP_DEFAULT=zstd
-> +else
-> +SQUASHFS_MAKE_ARGS += ZSTD_SUPPORT=0
-> +endif
+> +# Hardlinks between binaries in different directories cause a problem
+> +# with rpath fixup, so we de-hardlink those binaries, and replace them
+> +# with symbolic links.
+> +BINUTILS_TOOLS = ar as ld ld.bfd nm objcopy objdump ranlib readelf strip
+> +define HOST_BINUTILS_FIXUP_HARDLINKS
+> +	$(foreach tool,$(BINUTILS_TOOLS),\
+> +		rm -f $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool) ; \
+> +		ln -s ../../bin/$(GNU_TARGET_NAME)-$(tool) $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool)
+> +	)
+> +endef
+> +HOST_BINUTILS_POST_INSTALL_HOOKS += HOST_BINUTILS_FIXUP_HARDLINKS
 > +
->  ifeq ($(BR2_PACKAGE_SQUASHFS_GZIP),y)
->  SQUASHFS_DEPENDENCIES += zlib
->  SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=1 COMP_DEFAULT=gzip
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
 > -- 
-> 2.16.3
+> 2.14.3
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
