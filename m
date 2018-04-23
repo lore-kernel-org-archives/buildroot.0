@@ -1,34 +1,43 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 23 Apr 2018 18:14:02 +0200
-Subject: [Buildroot] [PATCH v6 0/4] llvm for mesa3d
-In-Reply-To: <20180411161452.25043-1-valentin.korenblit@smile.fr>
-References: <20180411161452.25043-1-valentin.korenblit@smile.fr>
-Message-ID: <9bbfe5da-723f-f0ce-6894-e277e6d7bd77@smile.fr>
+From: Jim Brennan <jbrennan@impinj.com>
+Date: Mon, 23 Apr 2018 18:52:54 +0000
+Subject: [Buildroot] [PATCH 1/1] package/rauc: Version bump to 0.4
+Message-ID: <A61A99D3-7BCE-418B-891C-BE32A020324B@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Version 0.4 supports bootloader updates to eMMC boot partitions.
 
-Le 11/04/2018 ? 18:14, Valentin Korenblit a ?crit?:
-> Hello all,
-> 
-[...]
-> 
-> 
-> Valentin Korenblit (4):
->   package/clang: new package
->   package/libclc: new package
->   package/mesa3d: enable OpenCL support
->   package/clinfo: new package
+Signed-off-by: Jim Brennan <jbrennan@impinj.com>
+---
+ package/rauc/rauc.hash | 4 ++--
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-The next 2018.05-rc1 is near, it would be great if the remaining patches from
-llvm/clang series can be reviewed or merged :)
-
-I know there are some annoying issues with dl cache infra and a lot of patches
-to review but the llvm/clang series should be ok for 2018.05.
-
-Best regards,
-Romain
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 91d7c1d62e..a16340f185 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v0.3/rauc-0.3.tar.xz.asc
+-sha256 dc01bfb08b1830376782f9a51cfec290171519267ab97cc909435da9ac6d6d98 rauc-0.3.tar.xz
++# https://github.com/rauc/rauc/releases/download/v0.4/rauc-0.4.tar.xz.asc
++sha256 89656b6330ac1f31293d450f5179896397c588ab52e77ec229382a6abd125d35 rauc-0.4.tar.xz
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 63fbc53022..f1705a8c33 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 0.3
++RAUC_VERSION = 0.4
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
+-- 
+2.11.0
