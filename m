@@ -1,69 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Apr 2018 09:45:35 +0200
-Subject: [Buildroot] [PATCH] scanpypi: add support for the new PyPI
- infrastructure
-In-Reply-To: <CAGm1_kvbhepzGM2=a874z44X5HMh0aZH8P83W6uj3QmAyCNDfg@mail.gmail.com>
-References: <20180418095542.22608-1-yegorslists@googlemail.com>
- <8dcadea4-a60f-6085-2059-394b562addd4@mind.be>
- <CAGm1_kvbhepzGM2=a874z44X5HMh0aZH8P83W6uj3QmAyCNDfg@mail.gmail.com>
-Message-ID: <b066b70b-964b-6aee-e3e4-7af5862bbe2b@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 23 Apr 2018 09:56:48 +0200
+Subject: [Buildroot] [PATCH v3 2/6] zstd: add host libzstd support
+In-Reply-To: <20180416193953.19924-2-ps.report@gmx.net>
+References: <20180416193953.19924-1-ps.report@gmx.net>
+ <20180416193953.19924-2-ps.report@gmx.net>
+Message-ID: <20180423075648.GK12688@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter, All,
 
-
-On 19-04-18 08:57, Yegor Yefremov wrote:
-> Hi Arnout,
+On 2018-04-16 21:39 +0200, Peter Seiderer spake thusly:
+> For the host only the libzstd library is built (no
+> need for host-lz4 host-xz host-zlib dependencies
+> because they affect only the cmdline tool).
 > 
-> On Wed, Apr 18, 2018 at 11:22 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>
->> On 18-04-18 11:55, yegorslists at googlemail.com wrote:
->>> From: Yegor Yefremov <yegorslists@googlemail.com>
-[snip]
->>> @@ -529,22 +529,23 @@ class BuildrootPackage():
->>>          path_to_hash = os.path.join(self.pkg_dir, pkg_hash)
->>>          print('Creating {filename}...'.format(filename=path_to_hash))
->>>          lines = []
->>> -        if self.used_url['md5_digest']:
->>> -            md5_comment = '# md5 from {url}, sha256 locally computed\n'.format(
->>> +        if self.used_url['digests']['md5'] and self.used_url['digests']['sha256']:
->>
->>  If there is a sha256, there is no point adding the md5.
->>
->>  If there is no sha256 for whatever reason (can this happen?), we don't get any
->> hash at all...
->>
->>  So I think this should be (pseudocode):
->>
->> if self.used_url['digests']['sha256']:
->>     hash_header = '# sha256 from ...'
->>     ...
->> else if self.used_url['digests']['md5']:
->>     hash_header = '# md5 from {url}, sha256 locally computed\n'
->>     # original code
-> 
-> You're right. We don't need md5 at all. And I doubt there are any
-> packages without sha256 as those checksums will be calculated and put
-> into JSON automatically (at least I believe it is so). I've seen
-> sha256 checksum for older package version so it seems to be
-> consistent.
-> 
-> What do you think?
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
- If usually there is a sha256, just support the sha256. If it is missing then
-the md5 can be added manually.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Regards,
- Arnout
+Just a note, see below...
+
+> ---
+> Changes v2 -> v3:
+>   - fix trailing spaces
+>   - clarify the no need for host-lz4 host-xz host-zlib dependency
+>     (suggested by Yann E. MORIN)
+> 
+> Changes v1 -> v2:
+>   - split off host libzstd support (suggested by Yann E. MORIN)
+>   - no ZSTD_OPTS for host libarary build
+> ---
+>  package/zstd/zstd.mk | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+> index c0fa88026c..98f8f779aa 100644
+> --- a/package/zstd/zstd.mk
+> +++ b/package/zstd/zstd.mk
+> @@ -46,4 +46,16 @@ define ZSTD_INSTALL_TARGET_CMDS
+>  		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/programs install
+>  endef
+>  
+> +# note: no 'HAVE_...' options for host library build only
+> +define HOST_ZSTD_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+> +		-C $(@D) lib
+> +endef
+> +
+> +define HOST_ZSTD_INSTALL_CMDS
+> +	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+> +		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
+
+For the build command, you do:      -C $(@D) lib
+while for the install, you do:      -C $(@D)/lib install
+
+It is not very consistent (not your fault, just the package's). But
+would it be possible to build with: -C $(@D)/lib
+
+This way, we would get a semblance of artificial consistency...
+
+But that does not bar this from be applied as is...
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +
+>  $(eval $(generic-package))
+> +$(eval $(host-generic-package))
+> -- 
+> 2.16.3
+> 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
