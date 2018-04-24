@@ -1,47 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 24 Apr 2018 17:24:19 +0200
-Subject: [Buildroot] 'make foo-menuconfig' broken when host-ncurses was built
-Message-ID: <cb69fcf8-5af1-eafd-5fbb-bb0339831877@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Apr 2018 18:34:10 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: default to kconfig buildsystem for
+ latest version
+Message-ID: <20180424163410.16587-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+By default, the builsystem for uboot defaults to 'legacy', while the
+default version is very well capable of using the 'kconfig' buildsystem
+instead.
 
- My colleague David observed that since a month or so, the dialogs of 'make
-linux-menuconfig' looked pretty garbled. After a bit of debugging, it turns out
-that the problem is mixing host-ncurses with recent (6.0+) system ncurses. Based
-on the output, I suspect it's mixing an 8-bit ncurses library with widechar
-termcap files.
+Having the 'legacy' buildsystem be the default in that case makes it
+quite inconvenient for users: they would expect to be able to use e.g.
+uboot-menuconfig et al. with the default uboot version.
 
- This issue is caused by dde090c299 linux: fix passing of host CFLAGS and LDFLAGS
+Switch to using 'kconfig' when we use the latest version. Keep the
+'legacy' as default for everything else.
 
- What happens is that kconfig uses pkg-config to discover the ncurses
-installation. Since our host-ncurses doesn't install a pc file (and in linux.mk
-we anyway don't pass the approprate PKG_CONFIG_* variables), this will pick up
-the system's pkg-config settings. However, we set HOSTCC="/usr/bin/gcc -O2
--I.../host/include -L.../host/lib -Wl,-rpath,.../host/lib" on the linux make
-command line, so it *will* actually pick up our host-ncurses library. On my
-system, 'pkg-config --libs ncurses' returns '-lncurses -ltinfo'. Our ncurses
-only has libncurses.so, so libtinfo.so will be picked up from the host.
+Also, invert the 'legacy' and 'kconfig' entries in the choice: it is
+nicer to have the recent and future-proodf entry first.
 
- The question is how to resolve this. The correct thing to do would be to
-install the .pc file, and to do what Thomas proposed a while ago:
-$(HOST_DIR)/bin/pkg-config returns the host config, $(CROSS_COMPILE)pkg-config
-returns the target config. But this will probably result in breakage of a lot of
-packages...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ boot/uboot/Config.in | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
- Any better ideas?
-
- Regards,
- Arnout
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index b980745d1b..95c17e3986 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -6,20 +6,21 @@ config BR2_TARGET_UBOOT
+ if BR2_TARGET_UBOOT
+ choice
+ 	prompt "Build system"
++	default BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+ 
+-config BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+-	bool "Legacy"
+-	help
+-	  Select this option if you use an old U-Boot (older than
+-	  2015.04), so that we use the old build system.
+-
+ config BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+ 	bool "Kconfig"
+ 	help
+ 	  Select this option if you use a recent U-Boot version (2015.04
+ 	  or newer), so that we use the Kconfig build system.
+ 
++config BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
++	bool "Legacy"
++	help
++	  Select this option if you use an old U-Boot (older than
++	  2015.04), so that we use the old build system.
++
+ endchoice
+ 
+ if BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.14.1
