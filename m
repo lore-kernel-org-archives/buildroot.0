@@ -1,66 +1,200 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 24 Apr 2018 23:37:49 +0200
-Subject: [Buildroot] Rust runtime tests issues
-In-Reply-To: <779874370.225301500.1524046656503.JavaMail.root@zimbra32-e6.priv.proxad.net>
-References: <20180417150658.5dd5b4cc@windsurf.numericable.fr>
- <779874370.225301500.1524046656503.JavaMail.root@zimbra32-e6.priv.proxad.net>
-Message-ID: <20180424213749.GA10466@itchy>
+From: Chris Lesiak <chris.lesiak@licor.com>
+Date: Tue, 24 Apr 2018 13:56:06 -0500
+Subject: [Buildroot] [PATCH] Makefile: Update mtime of $(TARGET_DIR)/usr
+In-Reply-To: <20180422213741.GJ12688@scaer>
+References: <20180416153339.23002-1-chris.lesiak@licor.com>
+ <20180416201823.GD2290@scaer>
+ <3b2d2a19-20ef-60dd-4a21-112cacff0c53@licor.com>
+ <20180422213741.GJ12688@scaer>
+Message-ID: <ebcdd3fe-3a9c-c54e-1cda-d36051db7775@licor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-04-18 12:17, Eric Le Bihan wrote:
-> Hi!
->
-> > The Rust tests in support/testing/ are consistently failing:
-> >
-> >   https://gitlab.com/buildroot.org/buildroot/-/jobs/63334941
-> >   https://gitlab.com/buildroot.org/buildroot/-/jobs/63334942
-> >
-> > Do you think you could have a look, and see what's not working, and fix
-> > those tests ?
->
-> The build 63334942 fails as follow:
->
-> ======================================================================
-> ERROR: test_run (tests.package.test_rust.TestRustBin)
-> ----------------------------------------------------------------------
-> Traceback (most recent call last):
->   File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_rust.py", line 80, in test_run
->     self.build_test_prog()
->   File "/builds/buildroot.org/buildroot/support/testing/tests/package/test_rust.py", line 39, in build_test_prog
->     raise SystemError("Cargo init failed")
-> SystemError: Cargo init failed```
-> ```
->
-> The exception is raised because the execution of the command to
-> create a dummy test program "hello-world", with the previously built
-> version of host-cargo, fails.
->
-> From the file TestRustBin-build.log found in the artifacts.zip of job
-> 63334942, we can see:
->
-> ```
-> error: Failed to create project `hello-world` at `/tmp/tmpOEzb1U-br2-testing-rust/hello-world`
->
-> Caused by:
->   could not determine the current user, please set $USER
-> ```
->
-> As the run-time test on CI apparently runs through Docker, should some setup
-> related to $USER be added to it?
+On 04/22/2018 04:37 PM, Yann E. MORIN wrote:
 
-I built the Docker image using support/docker/Dockerfile.
+> Chris, All,
+>
+> On 2018-04-16 16:27 -0500, Chris Lesiak spake thusly:
+>> On 04/16/2018 03:18 PM, Yann E. MORIN wrote:
+>>> On 2018-04-16 10:33 -0500, Chris Lesiak spake thusly:
+>>>> For the systemd-update-done.service to function, updates to /usr
+>>>> must be followed by an update of the modification time of /usr.
+>>>> If updates were always created with a clean build, the mtime of
+>>>> /usr would automatically be newer than in the old build; but
+>>>> especially during development, that may not always be the case.
+>>>> So touch $(TARGET_DIR)/usr as the last step of target-finalize.
+>>>>
+>>>> For more details, see:
+>>>> http://0pointer.de/public/systemd-man/systemd-update-done.service.html
+>>> I'm not sure I folowed corretly.. So let me try to rephrase with my own
+>>> understanding of the issue.
+>>>
+>>> If /usr it not mtime-newer than /var and /etc, then the laters will not
+>>> be correctly populated with vendor-provided resources (aka factory
+>>> settings).
+>> That is correct except in detail.  The mtime of /usr is compared to the
+>> mtime of /etc/.updated and /var/.updated, not the /etc and /var directories
+>> themselves.
+>>
+>> The systemd-update-done.service transfers the mtime of /usr to /etc/.updated
+>> and /var/.updated.  Other services that want to run when the system has been
+>> updated will arrange themselves to run before systemd-update-done.service
+>> and condition themselves on ConditionNeedsUpdate=/etc and/or
+>> ConditionNeedsUpdate=/var.
+> OK, thanks.
+>
+>>> This is especially critical after a build, so that the
+>>> first-boot condition get correctly detected, so that populating /var
+>>> and /etc gets triggered.
+>>>
+>>> So, we touch /usr so that the first-boot condition is correctly
+>>> detected.
+>> It isn't the ConditionFirstBoot I'm concerned with here, but
+>> ConditionNeedsUpdate.
+>>
+>> ConditionFirstBoot will be true only if /etc is not populated.  If
+>> /etc/machine-id exists, then /etc is considered to be populated.
+> ACK.
+>
+>>> Subsequent updates to /usr at runtime are not covered by this trick,
+>>> obviously.
+>>>
+>>> Right?
+>> Maybe you have some data to refute this, but without a package manager, I
+>> suspect that most buildroot users do updates of a device by replacing the
+>> entire contents of /usr and maybe even /.  In my particular case I use fwup
+>> to replace /usr with a ping/pong scheme alternating between two partitions.
+> I even think that most use a read-only filesystem, so they update by
+> just dumping the new image onto the raw device (either with a dual-bank,
+> or a main vs. rescue sytems).
+>
+>> Updating using rsync -t (and without -O) would also benefit from touching
+>> /usr at build time.
+>>
+>> Other update mechanisms might need to touch /usr at runtime.
+> OK, so I eventually understood what it is good for. In fact, it is not
+> usefull for the first system one builds, but for the next versions.
+>
+> The mtime of /usr of (say) version 2 will be more recent than the mtime
+> of /etc/.updated and/or /var/.updated of a system running version 1.
+>
+> Then, when the /usr version 2 is dumped into a /usr of the running
+> system, the /etc/.updated and/or /var/.updated will be older than /usr,
+> which would kick the update mechanism.
+>
+> Correct?
 
-Running 'docker run buildroot printenv' shows that only $HOME is
-defined. To define $USER to br-user and make cargo happy, should Docker
-be invoked with "-e USER=br-user" or should it be best to patch
-support/testing/tests/package/test_rust.py to add it to the environment
-when calling subprocess.call()?
+Yes.
+
+>
+> If so, I see a very big issue with this mechanism. For example:
+>
+>      date    what
+>      0       build version 1
+>      1       version is flahes onto a device, boxed and shipped
+>      2       build version 2
+>      3       the device with version 1 is received, unboxed and booted
+>      4       that device downloads version 2 and updates to it
+>
+> As you can see, the /etc/.updated and/or /var/.updated will dated '3'
+> but the mtime of /usr version 2 will be 2 (because touched at build
+> time).
+
+Not quite.
+
+If systemd-update-done if working correctly, then on date 3, 
+/etc/.updated and /var/.updated will get created with mtime 0, not mtime 
+3.? Then on date 4, /etc/.updated and /var/.updated will get updated 
+(because 0 is less than 2) to mtime 2.
+
+When /etc/.updated and /var/.updated are originally created and then 
+again when they are updated, their mtime will match the mtime of /usr, 
+not the current time when systemd-update-done runs.
+
+>
+> Thus, when the system eventually updates to version 2, the mtime does
+> not trigger an update.
+>
+> So, if you want to be able to correctly trigger the update mchanism, I
+> think the touch should be done by your extractor at runtime, right after
+> extracting the content of /usr.
+>
+> Unless I missed something (very likely), in which case I'm ready to be
+> lectured. ;-)
+
+Thanks for reviewing this and asking questions.? It caused me to dig a 
+little deeper and find a systemd-update-done regression in v234 that 
+will be fixed in v239.? See: https://github.com/systemd/systemd/issues/8806
 
 Regards,
+Chris Lesiak
 
---
-ELB
+>
+> Regards,
+> Yann E. MORIN.
+>
+>>> Regards,
+>>> Yann E. MORIN.
+>>>
+>>>> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+>>>> ---
+>>>>   Makefile | 2 ++
+>>>>   1 file changed, 2 insertions(+)
+>>>>
+>>>> diff --git a/Makefile b/Makefile
+>>>> index 957ba6634a..12a53840c0 100644
+>>>> --- a/Makefile
+>>>> +++ b/Makefile
+>>>> @@ -761,6 +761,8 @@ endif
+>>>>                $(call MESSAGE,"Executing post-build script $(s)"); \
+>>>>                $(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>>>>
+>>>> +     touch $(TARGET_DIR)/usr
+>>>> +
+>>>>   .PHONY: target-post-image
+>>>>   target-post-image: $(TARGETS_ROOTFS) target-finalize
+>>>>        @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+>>>> --
+>>>> 2.14.3
+>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>> --
+>>> .-----------------.--------------------.------------------.--------------------.
+>>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>>> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>>> '------------------------------^-------^------------------^--------------------'
+>>>
+>> --
+>> Chris Lesiak
+>> Principal Design Engineer, Software
+>> LI-COR Biosciences
+>> chris.lesiak at licor.com
+>>
+>> Any opinions expressed are those of the author and
+>> do not necessarily represent those of his employer.
+>>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+>
+
+-- 
+Chris Lesiak
+Principal Design Engineer, Software
+LI-COR Biosciences
+chris.lesiak at licor.com
+
+Any opinions expressed are those of the author and
+do not necessarily represent those of his employer.
