@@ -1,200 +1,49 @@
-From: Chris Lesiak <chris.lesiak@licor.com>
-Date: Tue, 24 Apr 2018 13:56:06 -0500
-Subject: [Buildroot] [PATCH] Makefile: Update mtime of $(TARGET_DIR)/usr
-In-Reply-To: <20180422213741.GJ12688@scaer>
-References: <20180416153339.23002-1-chris.lesiak@licor.com>
- <20180416201823.GD2290@scaer>
- <3b2d2a19-20ef-60dd-4a21-112cacff0c53@licor.com>
- <20180422213741.GJ12688@scaer>
-Message-ID: <ebcdd3fe-3a9c-c54e-1cda-d36051db7775@licor.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Tue, 24 Apr 2018 18:51:52 -0700
+Subject: [Buildroot] Chromium
+In-Reply-To: <8319B51E-D49A-4E02-A69E-16602EF168EF@gamecodehq.com>
+References: <5B0BF4C3-9DC5-4199-BB4E-2B303C3EF2C8@gamecodehq.com>
+ <20180423212505.68654293@windsurf>
+ <8319B51E-D49A-4E02-A69E-16602EF168EF@gamecodehq.com>
+Message-ID: <CAMWSM7ibdR6QbSD2xePPVfcKBe538G=tXcABE9jJSifDS4LdgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/22/2018 04:37 PM, Yann E. MORIN wrote:
+Micha?,
 
-> Chris, All,
+On Tue, Apr 24, 2018 at 5:01 AM, Micha? Kalbarczyk
+<michal@gamecodehq.com> wrote:
+> Thanks for the reply,
 >
-> On 2018-04-16 16:27 -0500, Chris Lesiak spake thusly:
->> On 04/16/2018 03:18 PM, Yann E. MORIN wrote:
->>> On 2018-04-16 10:33 -0500, Chris Lesiak spake thusly:
->>>> For the systemd-update-done.service to function, updates to /usr
->>>> must be followed by an update of the modification time of /usr.
->>>> If updates were always created with a clean build, the mtime of
->>>> /usr would automatically be newer than in the old build; but
->>>> especially during development, that may not always be the case.
->>>> So touch $(TARGET_DIR)/usr as the last step of target-finalize.
->>>>
->>>> For more details, see:
->>>> http://0pointer.de/public/systemd-man/systemd-update-done.service.html
->>> I'm not sure I folowed corretly.. So let me try to rephrase with my own
->>> understanding of the issue.
->>>
->>> If /usr it not mtime-newer than /var and /etc, then the laters will not
->>> be correctly populated with vendor-provided resources (aka factory
->>> settings).
->> That is correct except in detail.  The mtime of /usr is compared to the
->> mtime of /etc/.updated and /var/.updated, not the /etc and /var directories
->> themselves.
->>
->> The systemd-update-done.service transfers the mtime of /usr to /etc/.updated
->> and /var/.updated.  Other services that want to run when the system has been
->> updated will arrange themselves to run before systemd-update-done.service
->> and condition themselves on ConditionNeedsUpdate=/etc and/or
->> ConditionNeedsUpdate=/var.
-> OK, thanks.
->
->>> This is especially critical after a build, so that the
->>> first-boot condition get correctly detected, so that populating /var
->>> and /etc gets triggered.
->>>
->>> So, we touch /usr so that the first-boot condition is correctly
->>> detected.
->> It isn't the ConditionFirstBoot I'm concerned with here, but
->> ConditionNeedsUpdate.
->>
->> ConditionFirstBoot will be true only if /etc is not populated.  If
->> /etc/machine-id exists, then /etc is considered to be populated.
-> ACK.
->
->>> Subsequent updates to /usr at runtime are not covered by this trick,
->>> obviously.
->>>
->>> Right?
->> Maybe you have some data to refute this, but without a package manager, I
->> suspect that most buildroot users do updates of a device by replacing the
->> entire contents of /usr and maybe even /.  In my particular case I use fwup
->> to replace /usr with a ping/pong scheme alternating between two partitions.
-> I even think that most use a read-only filesystem, so they update by
-> just dumping the new image onto the raw device (either with a dual-bank,
-> or a main vs. rescue sytems).
->
->> Updating using rsync -t (and without -O) would also benefit from touching
->> /usr at build time.
->>
->> Other update mechanisms might need to touch /usr at runtime.
-> OK, so I eventually understood what it is good for. In fact, it is not
-> usefull for the first system one builds, but for the next versions.
->
-> The mtime of /usr of (say) version 2 will be more recent than the mtime
-> of /etc/.updated and/or /var/.updated of a system running version 1.
->
-> Then, when the /usr version 2 is dumped into a /usr of the running
-> system, the /etc/.updated and/or /var/.updated will be older than /usr,
-> which would kick the update mechanism.
->
-> Correct?
+> How should I start?
 
-Yes.
+The manual is as good a place as any. Chapter 17 details adding new
+packages to Buildroot:
+https://buildroot.org/downloads/manual/manual.html#adding-packages
 
->
-> If so, I see a very big issue with this mechanism. For example:
->
->      date    what
->      0       build version 1
->      1       version is flahes onto a device, boxed and shipped
->      2       build version 2
->      3       the device with version 1 is received, unboxed and booted
->      4       that device downloads version 2 and updates to it
->
-> As you can see, the /etc/.updated and/or /var/.updated will dated '3'
-> but the mtime of /usr version 2 will be 2 (because touched at build
-> time).
+You'll need to figure out what toolchain requirements Chromium has, as
+well as build dependencies.
 
-Not quite.
+Chromium has quite a few compile-time options, and quite a few
+dependencies for "desktop Linux" (GN arg 'is_desktop_linux'),
+including dbus, glib2, gio, gtk2/3, X11, cups, and more.
 
-If systemd-update-done if working correctly, then on date 3, 
-/etc/.updated and /var/.updated will get created with mtime 0, not mtime 
-3.? Then on date 4, /etc/.updated and /var/.updated will get updated 
-(because 0 is less than 2) to mtime 2.
+It might not be a bad idea to start with a ChromeOS build (GN arg
+target_os="chromeos") to disable a lot of these optional dependencies.
 
-When /etc/.updated and /var/.updated are originally created and then 
-again when they are updated, their mtime will match the mtime of /usr, 
-not the current time when systemd-update-done runs.
+A feature complete package may also allow the user to select the
+features they want from Kconfig, which would select the dependencies
+for a given feature when enabled. See the the Buildroot packages
+'mesa3d' and 'x11r7' for examples.
 
->
-> Thus, when the system eventually updates to version 2, the mtime does
-> not trigger an update.
->
-> So, if you want to be able to correctly trigger the update mchanism, I
-> think the touch should be done by your extractor at runtime, right after
-> extracting the content of /usr.
->
-> Unless I missed something (very likely), in which case I'm ready to be
-> lectured. ;-)
+To see the available build options for Chromium, run:
+    gn args --list out/Default
 
-Thanks for reviewing this and asking questions.? It caused me to dig a 
-little deeper and find a systemd-update-done regression in v234 that 
-will be fixed in v239.? See: https://github.com/systemd/systemd/issues/8806
+This will give you an idea of what can be toggled, and what's
+necessary for the build.
 
-Regards,
-Chris Lesiak
-
->
-> Regards,
-> Yann E. MORIN.
->
->>> Regards,
->>> Yann E. MORIN.
->>>
->>>> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
->>>> ---
->>>>   Makefile | 2 ++
->>>>   1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/Makefile b/Makefile
->>>> index 957ba6634a..12a53840c0 100644
->>>> --- a/Makefile
->>>> +++ b/Makefile
->>>> @@ -761,6 +761,8 @@ endif
->>>>                $(call MESSAGE,"Executing post-build script $(s)"); \
->>>>                $(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->>>>
->>>> +     touch $(TARGET_DIR)/usr
->>>> +
->>>>   .PHONY: target-post-image
->>>>   target-post-image: $(TARGETS_ROOTFS) target-finalize
->>>>        @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->>>> --
->>>> 2.14.3
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>> --
->>> .-----------------.--------------------.------------------.--------------------.
->>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->>> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->>> '------------------------------^-------^------------------^--------------------'
->>>
->> --
->> Chris Lesiak
->> Principal Design Engineer, Software
->> LI-COR Biosciences
->> chris.lesiak at licor.com
->>
->> Any opinions expressed are those of the author and
->> do not necessarily represent those of his employer.
->>
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
->
-
--- 
-Chris Lesiak
-Principal Design Engineer, Software
-LI-COR Biosciences
-chris.lesiak at licor.com
-
-Any opinions expressed are those of the author and
-do not necessarily represent those of his employer.
+Best,
+Joseph
