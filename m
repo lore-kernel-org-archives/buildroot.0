@@ -1,36 +1,35 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Wed, 25 Apr 2018 13:25:17 +0000
-Subject: [Buildroot] [PATCH 1/4] package/Makefile.in: Do not use
- CPPFLAGS for hardening options
-In-Reply-To: <CANQCQpb6MvkmiSidYuTsPyCd9XV1G_wfmzXYTmxjOwS29fBFDg@mail.gmail.com>
-References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
- <CANQCQpbaywbogjHpXaiQkBsS1Sas2R7tJiP2yW8mfxHrqq2_oQ@mail.gmail.com>
- <d7ea7773c97c50f67188c891b06a057576de7bee.camel@spectralink.com>
- <CANQCQpb6MvkmiSidYuTsPyCd9XV1G_wfmzXYTmxjOwS29fBFDg@mail.gmail.com>
-Message-ID: <8158bad217afaf84aa37154a77f0d483a954daef.camel@spectralink.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Apr 2018 15:29:55 +0200
+Subject: [Buildroot] [git commit] lz4: disable static library on shared only
+Message-ID: <20180425133014.8954E88D19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2018-04-25 at 08:12 -0500, Matthew Weber wrote:
-> 
-> I'm not familiar with that plugin, I'd be curious if you're approach
-> would allow us to define a few test scenarios to add to the Buildroot
-> test suite.
+commit: https://git.buildroot.net/buildroot/commit/?id=1667fe58106aa5bdb63e0c8db2e34c605947464a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Annobin also records some other hardening flags and the optimization
-level used in the build. This has so far revealed a long list of
-packages where the Buildroot flags are not propagated to the build.
-> 
-> Would the plugin require a internal toolchain build or just specific
-> external prebuilt requirements?
+Don't build the static library when BR2_SHARED_LIBS=y, to reduce build
+time.
 
-I just requires a gcc built with plugin support - I have testet with
-both internal and external.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lz4/lz4.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reading the generated data however requires at lest binutils 2.30 I
-believe.
-
-Stefan
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index b17bc8ada9..c5540124e9 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -12,6 +12,8 @@ LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LZ4_MAKE_OPTS += BUILD_SHARED=no
++else ifeq ($(BR2_SHARED_LIBS),y)
++LZ4_MAKE_OPTS += BUILD_STATIC=no
+ endif
+ 
+ define HOST_LZ4_BUILD_CMDS
