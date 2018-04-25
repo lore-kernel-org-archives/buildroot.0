@@ -1,45 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 21:36:20 +0200
-Subject: [Buildroot] [git commit] package/rauc: Version bump to 0.4
-Message-ID: <20180425193623.E2FC088D9C@busybox.osuosl.org>
+Date: Wed, 25 Apr 2018 21:36:44 +0200
+Subject: [Buildroot] [git commit] udftools: add patch to fix build on musl
+Message-ID: <20180425193649.1337888DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efac5b38b97444b787a17e7a567de45ad4080cd1
+commit: https://git.buildroot.net/buildroot/commit/?id=b95d260a93aa334b9333083d93f6de837cbb170d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Version 0.4 supports bootloader updates to eMMC boot partitions.
+Fixes:
 
-Signed-off-by: Jim Brennan <jbrennan@impinj.com>
+  http://autobuild.buildroot.net/results/e77a96bd2a73c8255fd078022b11e8c47a4c712e/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...up-pktsetup.c-do-not-include-bits-types.h.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index 91d7c1d62e..a16340f185 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v0.3/rauc-0.3.tar.xz.asc
--sha256 dc01bfb08b1830376782f9a51cfec290171519267ab97cc909435da9ac6d6d98 rauc-0.3.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v0.4/rauc-0.4.tar.xz.asc
-+sha256 89656b6330ac1f31293d450f5179896397c588ab52e77ec229382a6abd125d35 rauc-0.4.tar.xz
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 63fbc53022..f1705a8c33 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RAUC_VERSION = 0.3
-+RAUC_VERSION = 0.4
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+diff --git a/package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch b/package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch
+new file mode 100644
+index 0000000000..4d842821aa
+--- /dev/null
++++ b/package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch
+@@ -0,0 +1,32 @@
++From 8da4dde42cc25294819ad078432d85437e4a12ee Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 22 Apr 2018 15:05:46 +0200
++Subject: [PATCH] pktsetup/pktsetup.c: do not include <bits/types.h>
++
++This header is not a standard header, and is for example not provided
++by the musl C library.
++
++This change has been tested by building udftools against glibc, uClibc
++and musl.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream-status: https://github.com/pali/udftools/pull/16
++---
++ pktsetup/pktsetup.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/pktsetup/pktsetup.c b/pktsetup/pktsetup.c
++index 8b3df51..81ed142 100644
++--- a/pktsetup/pktsetup.c
+++++ b/pktsetup/pktsetup.c
++@@ -27,7 +27,6 @@
++ #include <sys/stat.h>
++ #include <unistd.h>
++ #include <getopt.h>
++-#include <bits/types.h>
++ #include <sys/types.h>
++ #include <string.h>
++ #include <limits.h>
++-- 
++2.14.3
++
