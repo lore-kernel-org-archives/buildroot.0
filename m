@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 21:29:17 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/solidrun_macchiatobin_*: use a
- Git commit for ATF
-In-Reply-To: <20180423195954.30215-1-thomas.petazzoni@bootlin.com>
-References: <20180423195954.30215-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180425212917.169b1162@windsurf>
+Date: Wed, 25 Apr 2018 21:29:23 +0200
+Subject: [Buildroot] [PATCH] support/testing: fix ATF Vexpress test case
+In-Reply-To: <20180423201456.3303-1-thomas.petazzoni@bootlin.com>
+References: <20180423201456.3303-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180425212923.4418350b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 23 Apr 2018 21:59:53 +0200, Thomas Petazzoni wrote:
-> The version of the ARM Trusted Firmware from Marvell was a Git branch,
-> not a Git commit, leading to unreproducible results. So let's use a
-> Git commit instead, which is the latest available from the branch that
-> was previously used.
+On Mon, 23 Apr 2018 22:14:56 +0200, Thomas Petazzoni wrote:
+> This test case currently fails to build with:
+> 
+> ./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
+> context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
+> context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
+> 
+> This issue has been fixed upstream in commit
+> 10c252c14b7f446c0b49ef1aafbd5d37804577dd, available since v1.3. So
+> while we bump, let's bump to the latest version of ATF, v1.5.
+> 
+> Fixes:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/64360659
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  configs/solidrun_macchiatobin_mainline_defconfig | 2 +-
->  configs/solidrun_macchiatobin_marvell_defconfig  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  support/testing/tests/boot/test_atf.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Both applied.
+Applied to master, thanks.
 
 Thomas
 -- 
