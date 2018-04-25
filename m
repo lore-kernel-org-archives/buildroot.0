@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 21:35:50 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: default to kconfig buildsystem
- for latest version
-In-Reply-To: <20180424163410.16587-1-yann.morin.1998@free.fr>
-References: <20180424163410.16587-1-yann.morin.1998@free.fr>
-Message-ID: <20180425213550.361af846@windsurf>
+Date: Wed, 25 Apr 2018 21:36:20 +0200
+Subject: [Buildroot] [git commit] package/rauc: Version bump to 0.4
+Message-ID: <20180425193623.E2FC088D9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=efac5b38b97444b787a17e7a567de45ad4080cd1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 24 Apr 2018 18:34:10 +0200, Yann E. MORIN wrote:
-> By default, the builsystem for uboot defaults to 'legacy', while the
-> default version is very well capable of using the 'kconfig' buildsystem
-> instead.
-> 
-> Having the 'legacy' buildsystem be the default in that case makes it
-> quite inconvenient for users: they would expect to be able to use e.g.
-> uboot-menuconfig et al. with the default uboot version.
-> 
-> Switch to using 'kconfig' when we use the latest version. Keep the
-> 'legacy' as default for everything else.
-> 
-> Also, invert the 'legacy' and 'kconfig' entries in the choice: it is
-> nicer to have the recent and future-proodf entry first.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  boot/uboot/Config.in | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
+Version 0.4 supports bootloader updates to eMMC boot partitions.
 
-Applied to master, thanks.
+Signed-off-by: Jim Brennan <jbrennan@impinj.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rauc/rauc.hash | 4 ++--
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 91d7c1d62e..a16340f185 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v0.3/rauc-0.3.tar.xz.asc
+-sha256 dc01bfb08b1830376782f9a51cfec290171519267ab97cc909435da9ac6d6d98 rauc-0.3.tar.xz
++# https://github.com/rauc/rauc/releases/download/v0.4/rauc-0.4.tar.xz.asc
++sha256 89656b6330ac1f31293d450f5179896397c588ab52e77ec229382a6abd125d35 rauc-0.4.tar.xz
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 63fbc53022..f1705a8c33 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 0.3
++RAUC_VERSION = 0.4
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
