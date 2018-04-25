@@ -1,43 +1,64 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 25 Apr 2018 22:43:22 +0200
-Subject: [Buildroot] [PATCH 1/2] core/pkg-infra: set no-check-hash only
- for main download
-In-Reply-To: <225d2666517e3f008a4674456c4fbfd0db13fdf8.1524685305.git.yann.morin.1998@free.fr>
-References: <cover.1524685305.git.yann.morin.1998@free.fr>
- <225d2666517e3f008a4674456c4fbfd0db13fdf8.1524685305.git.yann.morin.1998@free.fr>
-Message-ID: <16ae8208-b212-38d3-27c3-a167a94d74ad@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Apr 2018 22:47:46 +0200
+Subject: [Buildroot] [git commit] gnupg2: security bump to version 2.2.6
+Message-ID: <20180425204805.C660480238@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=3db93884a442f6d0742ada5d8ed7818e24223ace
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 25/04/2018 21:41, Yann E. MORIN wrote:
-> Currently, when the main download if from an SCM, we exclude all
-> downloads from being hash-checked, on the assumption that we don't
-> have hashes for downloads from an SCM.
-> 
-> However, the exclusion s computed on the DOWNLOAD macro, which is
-> called for each download of a package, thus effectively disabling
-> hash checks for extra downloads, even though those are only ever
-> download with wget.
-> 
-> What we really wanted to do, in fact, was to exclude just the main
-> download.
-> 
-> We fix that by appending the main source file to the global list of
-> excluded files, from within the generic-package infra itself.
-> 
-> Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Fixes CVE-2018-9234: Unenforced configuration allows for apparently
+valid certifications actually signed by signing subkeys.
 
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Remove --disable-doc from configure options. We pass this options to all
+autotools packages.
 
--- 
-Luca
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 9cc8e4c913..155295244e 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q1/000420.html
+-sha1 9dec110397e460b3950943e18f5873a4f277f216  gnupg-2.2.5.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000421.html
++sha1 295298debcc2c12f02a2f2fdf04aecb6d6aae396  gnupg-2.2.6.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.5.tar.bz2.sig
+-sha256 3fa189a32d4fb62147874eb1389047c267d9ba088f57ab521cb0df46f08aef57  gnupg-2.2.5.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.6.tar.bz2.sig
++sha256 e64d8c5fa2d05938a5080cb784a98ac21be0812f2a26f844b18f0d6a0e711984  gnupg-2.2.6.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index ba5370902f..4d84bfbb9e 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.2.5
++GNUPG2_VERSION = 2.2.6
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
+@@ -13,7 +13,7 @@ GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libnpth \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
+ 
+ GNUPG2_CONF_OPTS = \
+-	--disable-rpath --disable-regex --disable-doc \
++	--disable-rpath --disable-regex \
+ 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
+ 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
+ 	--with-libassuan-prefix=$(STAGING_DIR)/usr \
