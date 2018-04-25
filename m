@@ -1,102 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 23:33:44 +0200
-Subject: [Buildroot] [PATCH 1/1] cowpatty: new package
-In-Reply-To: <1523624400-3162-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <1523624400-3162-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <20180425233344.12628892@windsurf>
+Date: Wed, 25 Apr 2018 23:34:18 +0200
+Subject: [Buildroot] [git commit] squashfs: add license hash
+Message-ID: <20180425213425.55FC788E0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guillaume,
+commit: https://git.buildroot.net/buildroot/commit/?id=10d4c1222ae99abf409a471b4649fdb1861bcf80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 13 Apr 2018 15:00:00 +0200, Guillaume W. Bres wrote:
-> CowPatty is a C based tool to identify weak WPA passphrases
-> contained in a pcap file.
-> 
-> Use the github.com/gwbres/cowpatty fork at the moment because Makefile in the mainstream is faulty.
-> (-lssl flag is missing and some recipes had to be reordered).
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/squashfs/squashfs.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Please use the original upstream, and add some patches (generated with
-git format-patch) in package/cowpatty/ to fix the problems. Ideally,
-those patches should be submitted to the upstream project.
-
-> I will have the buildroot configuration eventually point to the original mainstrean as soon as
-> Makefile is corrected.
-
-Please don't use "I" in commit logs, but rather a formulation like: "Due
-to <foo>, we chose to use ..."
-
-Also, please wrap your commit logs to 72 characters.
-
-> The package is easy to build, it requires the -lssl -lpcap and -lcrypto flags.
-> Build tests passed for the 7 default toolchains with a simple
-> config snippet made of "BR2_PACKAGE_COWPATTY=y". But please
-> double check the proposed dependencies & package selections.
-
-Messages such as "please double check the proposed ..." should not be
-part of the commit log.
-
-> I set the package to select libpcap & libopenssl at the moment.
-
-Ditto.
-
-> Tested & used on RPI 1 & 3 here:
-> 
-> 	/usr/bin/cowpatty -r eap-test.dump -f dict -s somethingclever
-> 	[...]
-> 	1079 passphrases tested in 97.18 seconds:  11.10 passphrases/second
-> 
-> I put the package in network apps. but this is more of a util. tool
-> than anything, so you might want to change that to.
-
-Don't use "I" as well here.
-
-May I suggest that you read the commit logs from other contributors, to
-see how they are typically written, and that you take inspiration from
-this ?
-
-> diff --git a/package/cowpatty/cowpatty.mk b/package/cowpatty/cowpatty.mk
-> new file mode 100644
-> index 0000000..8c7ec23
-> --- /dev/null
-> +++ b/package/cowpatty/cowpatty.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# cowpatty
-> +#
-> +################################################################################
-> +
-> +COWPATTY_VERSION = 83fd1589c142676d26cabe1d56e9ff8bb288683a
-> +COWPATTY_SITE = $(call github,gwbres,cowpatty,$(COWPATTY_VERSION))
-> +COWPATTY_LICENSE = GPL-2.0+
-
-The license seems to be GPL-2.0, not GPL-2.0+. Do you see any evidence
-that it is "version 2 or later" ?
-
-> +COWPATTY_LICENSE_FILES = COPYING
-> +
-> +COWPATTY_DEPENDENCIES = libpcap
-> +COWPATTY_DEPENDENCIES += libopenssl
-
-Just one line is enough.
-
-Did you verify static linking with libpcap + libnl enabled ? It might
-very well fail like it did for the "reaver" package.
-
-> +
-> +define COWPATTY_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
-
-Please try to use $(TARGET_CONFIGURE_OPTS) instead of CC=$(TARGET_CC).
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index 82a650022c..4464e62c02 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,2 +1,5 @@
+ # Locally computed
+ sha256 bd0aa3011320b8ebee68aa406060de277bef16daf81bad5b9f70cbea6db1a779 squashfs-e38956b92f738518c29734399629e7cdb33072d3.tar.gz
++
++# License files
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
