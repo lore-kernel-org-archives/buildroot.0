@@ -1,59 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 25 Apr 2018 21:41:50 +0200
-Subject: [Buildroot] [PATCH 0/2] core/download: fix extra downloads for
- scm-based main downloads
-Message-ID: <cover.1524685305.git.yann.morin.1998@free.fr>
+Date: Wed, 25 Apr 2018 21:41:53 +0200
+Subject: [Buildroot] [PATCH 2/2] core/pkg-infra: don't enforce site-method
+ for extra downloads
+In-Reply-To: <cover.1524685305.git.yann.morin.1998@free.fr>
+References: <cover.1524685305.git.yann.morin.1998@free.fr>
+Message-ID: <58a86c2e2f56abb66012e88c26f5e8c1d6737a2d.1524685305.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The site method only ever applies to the main download, while extra
+downloads are always to be fetches with wget.
 
-As reported by Luca [0], when the main download for a package is from an
-SCM (gt, hg...), then extra downloads are also attempted using the same
-site method.
+However, the site method is prepended to the URL from within the
+DOWNLOAD macro (well, a variable evaluated in the DOWNLOAD macro),
+which is called for each download of a package, thus effectively
+prepending the site method to all downloads, even the extra ones (and
+the patches).
 
-This is due to the big rework of the download infra, when we introduced
-the git cache feature.
+We fix that by prepending the site method from within the
+generic-package infra, so that it only applies to the main download.
 
-It is to be noted that, before that big rewrite, the error was a silent
-failure (and would have thus failed later), while we now detect that
-failure at download time (rather than at extract or later).
+For that, we move the main _SOURCE out of the foreach loop, so that
+we can prepend the site-method to it, without impacting the other
+downloads.
 
+Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/pkg-download.mk | 2 +-
+ package/pkg-generic.mk  | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit babc94e9dd4a1a04c4a0befdb6d32236a30b8ea8
-
-  mbedtls: security bump to version 2.7.2 (2018-04-25 15:29:57 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 58a86c2e2f56abb66012e88c26f5e8c1d6737a2d
-
-  core/pkg-infra: don't enforce site-method for extra downloads (2018-04-25 21:28:49 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      core/pkg-infra: set no-check-hash only for main download
-      core/pkg-infra: don't enforce site-method for extra downloads
-
- package/pkg-download.mk | 4 +---
- package/pkg-generic.mk  | 7 ++++++-
- 2 files changed, 7 insertions(+), 4 deletions(-)
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 2d9b0d4a41..2ca6ccf44d 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -82,7 +82,7 @@ endif
+ 
+ ifeq ($(BR2_PRIMARY_SITE_ONLY),)
+ DOWNLOAD_URIS += \
+-	-u $($(PKG)_SITE_METHOD)+$(patsubst %/,%,$(dir $(call qstrip,$(1))))
++	-u $(patsubst %/,%,$(dir $(call qstrip,$(1))))
+ ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+ DOWNLOAD_URIS += \
+ 	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 02a56e3d94..1affdb7f71 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -486,7 +486,8 @@ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
+ 
+ $(2)_ALL_DOWNLOADS = \
+-	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
++	$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE) \
++	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+ 		$$(if $$(findstring ://,$$(p)),$$(p),\
+ 			$$($(2)_SITE)/$$(p)))
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
