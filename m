@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 21:37:00 +0200
-Subject: [Buildroot] [PATCH] udftools: add patch to fix build on musl
-In-Reply-To: <20180422132600.18820-1-thomas.petazzoni@bootlin.com>
-References: <20180422132600.18820-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180425213700.4cef45ae@windsurf>
+Date: Wed, 25 Apr 2018 21:38:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rauc: Version bump to 0.4
+In-Reply-To: <A61A99D3-7BCE-418B-891C-BE32A020324B@impinj.com>
+References: <A61A99D3-7BCE-418B-891C-BE32A020324B@impinj.com>
+Message-ID: <20180425213834.0a8b0de2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 22 Apr 2018 15:26:00 +0200, Thomas Petazzoni wrote:
-> Fixes:
+On Mon, 23 Apr 2018 18:52:54 +0000, Jim Brennan wrote:
+> Version 0.4 supports bootloader updates to eMMC boot partitions.
 > 
->   http://autobuild.buildroot.net/results/e77a96bd2a73c8255fd078022b11e8c47a4c712e/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Jim Brennan <jbrennan@impinj.com>
 > ---
->  ...up-pktsetup.c-do-not-include-bits-types.h.patch | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/udftools/0001-pktsetup-pktsetup.c-do-not-include-bits-types.h.patch
+>  package/rauc/rauc.hash | 4 ++--
+>  package/rauc/rauc.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
