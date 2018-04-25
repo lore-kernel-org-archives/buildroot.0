@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 21:27:39 +0200
-Subject: [Buildroot] EXTRA_DOWNLOADS broken when SITE_METHOD = git
-In-Reply-To: <447cff1a-80c7-dde0-7991-6ecf530bdb1c@lucaceresoli.net>
-References: <447cff1a-80c7-dde0-7991-6ecf530bdb1c@lucaceresoli.net>
-Message-ID: <20180425212739.6f0fafbd@windsurf>
+Date: Wed, 25 Apr 2018 21:27:51 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.16.4
+In-Reply-To: <1524566338-4841-1-git-send-email-festevam@gmail.com>
+References: <1524566338-4841-1-git-send-email-festevam@gmail.com>
+Message-ID: <20180425212751.7fce6f3e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 25 Apr 2018 10:56:05 +0200, Luca Ceresoli wrote:
+On Tue, 24 Apr 2018 07:38:57 -0300, Fabio Estevam wrote:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  linux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I noticed a problem with the EXTRA_DOWNLOADS for packages whose "main"
-> download happens using git (most likely applies to other SCMs too).
-
-Thanks for the report.
-
-I think this illustrates (once again) that we desperately need some
-tests for the download infrastructure. I'm adding Ricardo in Cc, who
-already started working on such topic.
-
-Best regards,
+Both applied. Thanks!
 
 Thomas
 -- 
