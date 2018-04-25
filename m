@@ -1,39 +1,35 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 25 Apr 2018 08:43:33 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: default to kconfig buildsystem
- for latest version
-In-Reply-To: <20180425063930.jo3ixqrw64gewttb@dell5510>
-References: <20180424163410.16587-1-yann.morin.1998@free.fr>
- <20180425063930.jo3ixqrw64gewttb@dell5510>
-Message-ID: <CAGm1_kvigpDGnyRktF9QJt7bsrPHDG8VixhA3vM2Xq8HRj=HEA@mail.gmail.com>
+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
+Date: Wed, 25 Apr 2018 08:45:16 +0200
+Subject: [Buildroot] [PATCH 2/4] package/Makefile.in: Add missing options to
+ LDFLAGS for full RELRO build
+In-Reply-To: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
+References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
+Message-ID: <20180425064518.31797-2-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 25, 2018 at 8:39 AM, Petr Vorel <petr.vorel@gmail.com> wrote:
-> Hi Yann,
->
->> By default, the builsystem for uboot defaults to 'legacy', while the
->> default version is very well capable of using the 'kconfig' buildsystem
->> instead.
->
->> Having the 'legacy' buildsystem be the default in that case makes it
->> quite inconvenient for users: they would expect to be able to use e.g.
->> uboot-menuconfig et al. with the default uboot version.
->
->> Switch to using 'kconfig' when we use the latest version. Keep the
->> 'legacy' as default for everything else.
->
->> Also, invert the 'legacy' and 'kconfig' entries in the choice: it is
->> nicer to have the recent and future-proodf entry first.
->
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Tested-by: Petr Vorel <petr.vorel@gmail.com>
->
-> Good idea :).
+The options for a full RELRO build should also be added to LDFLAGS.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+---
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yegor
+diff --git a/package/Makefile.in b/package/Makefile.in
+index d72a5494ab..1cbf34e0df 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -159,7 +159,7 @@ TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
+ TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
+ else ifeq ($(BR2_RELRO_FULL),y)
+ TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
+-TARGET_LDFLAGS += -pie
++TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
+ endif
+ 
+ ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+-- 
+2.14.3
