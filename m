@@ -1,41 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 21:29:23 +0200
-Subject: [Buildroot] [PATCH] support/testing: fix ATF Vexpress test case
-In-Reply-To: <20180423201456.3303-1-thomas.petazzoni@bootlin.com>
-References: <20180423201456.3303-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180425212923.4418350b@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 25 Apr 2018 21:34:15 +0200
+Subject: [Buildroot] [PATCH] support/scripts: drop xorg-release script
+References: <20180425192402.12995-1-thomas.petazzoni@bootlin.com>
+Message-ID: <nq17rexnpj.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Wed, 25 Apr 2018 21:24:02 +0200 schrieb Thomas Petazzoni:
 
-On Mon, 23 Apr 2018 22:14:56 +0200, Thomas Petazzoni wrote:
-> This test case currently fails to build with:
-> 
-> ./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
-> context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
-> context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
-> 
-> This issue has been fixed upstream in commit
-> 10c252c14b7f446c0b49ef1aafbd5d37804577dd, available since v1.3. So
-> while we bump, let's bump to the latest version of ATF, v1.5.
-> 
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/64360659
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/testing/tests/boot/test_atf.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Therefore, let's drop the xorg-release script in order to silence all
+> those flake8 warnings:
 
-Applied to master, thanks.
+Hi Thomas,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I never used this script, therefore:
+
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Regards, Bernd
