@@ -1,64 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 22:47:46 +0200
-Subject: [Buildroot] [git commit] gnupg2: security bump to version 2.2.6
-Message-ID: <20180425204805.C660480238@busybox.osuosl.org>
+Date: Wed, 25 Apr 2018 22:48:00 +0200
+Subject: [Buildroot] [git commit] libgpg-error: bump to version 1.29
+Message-ID: <20180425204805.E83538123C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3db93884a442f6d0742ada5d8ed7818e24223ace
+commit: https://git.buildroot.net/buildroot/commit/?id=4a92ee34daaf1515a048ce5ae59d9d4c6939de39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2018-9234: Unenforced configuration allows for apparently
-valid certifications actually signed by signing subkeys.
+Drop upstream patch.
 
-Remove --disable-doc from configure options. We pass this options to all
-autotools packages.
-
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...gression-on-arm64-due-to-invalid-use-of-v.patch | 59 ----------------------
+ package/libgpg-error/libgpg-error.hash             |  4 +-
+ package/libgpg-error/libgpg-error.mk               |  2 +-
+ 3 files changed, 3 insertions(+), 62 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 9cc8e4c913..155295244e 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
+diff --git a/package/libgpg-error/0001-core-Fix-regression-on-arm64-due-to-invalid-use-of-v.patch b/package/libgpg-error/0001-core-Fix-regression-on-arm64-due-to-invalid-use-of-v.patch
+deleted file mode 100644
+index a37337a090..0000000000
+--- a/package/libgpg-error/0001-core-Fix-regression-on-arm64-due-to-invalid-use-of-v.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 791177de023574223eddf7288eb7c5a0721ac623 Mon Sep 17 00:00:00 2001
+-From: Werner Koch <wk@gnupg.org>
+-Date: Sun, 18 Mar 2018 17:39:43 +0100
+-Subject: [PATCH] core: Fix regression on arm64 due to invalid use of va_list.
+-
+-* src/logging.c (_gpgrt_log_printhex): Provide a dummy arg instead of
+-NULL.
+---
+-
+-Fix
+-Suggested-by: Jakub Wilk <jwilk@jwilk.net>
+-
+-Signed-off-by: Werner Koch <wk@gnupg.org>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 791177de023
+-
+- src/logging.c | 18 ++++++++++++++----
+- 1 file changed, 14 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/logging.c b/src/logging.c
+-index 1a4f6203d16d..d01f974e4545 100644
+---- a/src/logging.c
+-+++ b/src/logging.c
+-@@ -1090,9 +1090,10 @@ _gpgrt_log_flush (void)
+- 
+- 
+- /* Print a hexdump of (BUFFER,LENGTH).  With FMT passed as NULL print
+-- * just the raw dump, with FMT being an empty string, print a trailing
+-- * linefeed, otherwise print an entire debug line with the expanded
+-- * FMT followed by a possible wrapped hexdump and a final LF.  */
+-+ * just the raw dump (in this case ARG_PTR is not used), with FMT
+-+ * being an empty string, print a trailing linefeed, otherwise print
+-+ * an entire debug line with the expanded FMT followed by a possible
+-+ * wrapped hexdump and a final LF.  */
+- void
+- _gpgrt_logv_printhex (const void *buffer, size_t length,
+-                       const char *fmt, va_list arg_ptr)
+-@@ -1150,7 +1151,16 @@ _gpgrt_log_printhex (const void *buffer, size_t length,
+-       va_end (arg_ptr);
+-     }
+-   else
+--    _gpgrt_logv_printhex (buffer, length, NULL, NULL);
+-+    {
+-+      /* va_list is not necessary a pointer and thus we can't use NULL
+-+       * because that would conflict with platforms using a straight
+-+       * struct for it (e.g. arm64).  We use a dummy variable instead;
+-+       * the static is a simple way zero it out so to not get
+-+       * complains about uninitialized use.  */
+-+      static va_list dummy_argptr;
+-+
+-+      _gpgrt_logv_printhex (buffer, length, NULL, dummy_argptr);
+-+    }
+- }
+- 
+- 
+--- 
+-2.16.2
+-
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index fd08aa54d8..0e6304de66 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
 @@ -1,6 +1,6 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q1/000420.html
--sha1 9dec110397e460b3950943e18f5873a4f277f216  gnupg-2.2.5.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000421.html
-+sha1 295298debcc2c12f02a2f2fdf04aecb6d6aae396  gnupg-2.2.6.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.5.tar.bz2.sig
--sha256 3fa189a32d4fb62147874eb1389047c267d9ba088f57ab521cb0df46f08aef57  gnupg-2.2.5.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.6.tar.bz2.sig
-+sha256 e64d8c5fa2d05938a5080cb784a98ac21be0812f2a26f844b18f0d6a0e711984  gnupg-2.2.6.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index ba5370902f..4d84bfbb9e 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.28.tar.bz2.sig
+-sha256 3edb957744905412f30de3e25da18682cbe509541e18cd3b8f9df695a075da49  libgpg-error-1.28.tar.bz2
++# https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.29.tar.bz2.sig
++sha256 ece926fa5719d17a7ad8da618712cfa2f8a796ab2f2af9d544c5bb093383b1ea  libgpg-error-1.29.tar.bz2
+ # Locally calculated
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index f704203556..862cb44eef 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.5
-+GNUPG2_VERSION = 2.2.6
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
-@@ -13,7 +13,7 @@ GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libnpth \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
- 
- GNUPG2_CONF_OPTS = \
--	--disable-rpath --disable-regex --disable-doc \
-+	--disable-rpath --disable-regex \
- 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
- 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
- 	--with-libassuan-prefix=$(STAGING_DIR)/usr \
+-LIBGPG_ERROR_VERSION = 1.28
++LIBGPG_ERROR_VERSION = 1.29
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
