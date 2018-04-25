@@ -1,56 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 23:25:12 +0200
-Subject: [Buildroot] [PATCH v3] radvd: improve startup script
-In-Reply-To: <20180416021037.13345-1-casantos@datacom.ind.br>
-References: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
- <20180416021037.13345-1-casantos@datacom.ind.br>
-Message-ID: <20180425232512.081aa142@windsurf>
+Date: Wed, 25 Apr 2018 23:33:44 +0200
+Subject: [Buildroot] [PATCH 1/1] cowpatty: new package
+In-Reply-To: <1523624400-3162-1-git-send-email-guillaume.bressaix@gmail.com>
+References: <1523624400-3162-1-git-send-email-guillaume.bressaix@gmail.com>
+Message-ID: <20180425233344.12628892@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Guillaume,
 
-On Sun, 15 Apr 2018 23:10:37 -0300, Carlos Santos wrote:
+On Fri, 13 Apr 2018 15:00:00 +0200, Guillaume W. Bres wrote:
+> CowPatty is a C based tool to identify weak WPA passphrases
+> contained in a pcap file.
+> 
+> Use the github.com/gwbres/cowpatty fork at the moment because Makefile in the mainstream is faulty.
+> (-lssl flag is missing and some recipes had to be reordered).
 
-> -RADVD=/usr/sbin/radvd
-> +test -f /etc/radvd.conf || exit 0
+Please use the original upstream, and add some patches (generated with
+git format-patch) in package/cowpatty/ to fix the problems. Ideally,
+those patches should be submitted to the upstream project.
 
-I'm still not impressed by silent exit cases. Shouldn't we let radvd
-fail to start and complain about the lack of radvd.conf ?
+> I will have the buildroot configuration eventually point to the original mainstrean as soon as
+> Makefile is corrected.
 
-> +start() {
-> +	printf "Starting radvd: "
-> +	echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
-> +	start-stop-daemon -S -x /usr/sbin/radvd || {
-> +		echo "FAIL"
-> +		exit 1
-> +	}
+Please don't use "I" in commit logs, but rather a formulation like: "Due
+to <foo>, we chose to use ..."
 
-Can we use the
+Also, please wrap your commit logs to 72 characters.
 
-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> The package is easy to build, it requires the -lssl -lpcap and -lcrypto flags.
+> Build tests passed for the 7 default toolchains with a simple
+> config snippet made of "BR2_PACKAGE_COWPATTY=y". But please
+> double check the proposed dependencies & package selections.
 
-syntax that we use in almost all other init scripts ?
+Messages such as "please double check the proposed ..." should not be
+part of the commit log.
 
-> +	echo "OK"
-> +}
+> I set the package to select libpcap & libopenssl at the moment.
+
+Ditto.
+
+> Tested & used on RPI 1 & 3 here:
+> 
+> 	/usr/bin/cowpatty -r eap-test.dump -f dict -s somethingclever
+> 	[...]
+> 	1079 passphrases tested in 97.18 seconds:  11.10 passphrases/second
+> 
+> I put the package in network apps. but this is more of a util. tool
+> than anything, so you might want to change that to.
+
+Don't use "I" as well here.
+
+May I suggest that you read the commit logs from other contributors, to
+see how they are typically written, and that you take inspiration from
+this ?
+
+> diff --git a/package/cowpatty/cowpatty.mk b/package/cowpatty/cowpatty.mk
+> new file mode 100644
+> index 0000000..8c7ec23
+> --- /dev/null
+> +++ b/package/cowpatty/cowpatty.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# cowpatty
+> +#
+> +################################################################################
 > +
-> +stop() {
-> +	printf "Stopping radvd: "
-> +	start-stop-daemon -K -q -x /usr/sbin/radvd || {
-> +		echo "FAIL"
-> +		exit 1
-> +	}
+> +COWPATTY_VERSION = 83fd1589c142676d26cabe1d56e9ff8bb288683a
+> +COWPATTY_SITE = $(call github,gwbres,cowpatty,$(COWPATTY_VERSION))
+> +COWPATTY_LICENSE = GPL-2.0+
 
-Ditto here.
+The license seems to be GPL-2.0, not GPL-2.0+. Do you see any evidence
+that it is "version 2 or later" ?
 
-Also, can we use a pid file managed by start-stop-daemon, like
-S50dropbear is doing (and many other init scripts) ?
+> +COWPATTY_LICENSE_FILES = COPYING
+> +
+> +COWPATTY_DEPENDENCIES = libpcap
+> +COWPATTY_DEPENDENCIES += libopenssl
 
-Thanks!
+Just one line is enough.
+
+Did you verify static linking with libpcap + libnl enabled ? It might
+very well fail like it did for the "reaver" package.
+
+> +
+> +define COWPATTY_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
+
+Please try to use $(TARGET_CONFIGURE_OPTS) instead of CC=$(TARGET_CC).
+
+Thanks,
 
 Thomas
 -- 
