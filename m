@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 21:26:05 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.16.4
-Message-ID: <20180425192619.0AF3087BF8@busybox.osuosl.org>
+Date: Wed, 25 Apr 2018 21:27:39 +0200
+Subject: [Buildroot] EXTRA_DOWNLOADS broken when SITE_METHOD = git
+In-Reply-To: <447cff1a-80c7-dde0-7991-6ecf530bdb1c@lucaceresoli.net>
+References: <447cff1a-80c7-dde0-7991-6ecf530bdb1c@lucaceresoli.net>
+Message-ID: <20180425212739.6f0fafbd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e7fb5b7714aef3717864fb5030c0d33b9c3bc69
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 25 Apr 2018 10:56:05 +0200, Luca Ceresoli wrote:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 26c2da13ec..7cc0137b00 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -116,7 +116,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.16.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.16.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+> I noticed a problem with the EXTRA_DOWNLOADS for packages whose "main"
+> download happens using git (most likely applies to other SCMs too).
+
+Thanks for the report.
+
+I think this illustrates (once again) that we desperately need some
+tests for the download infrastructure. I'm adding Ricardo in Cc, who
+already started working on such topic.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
