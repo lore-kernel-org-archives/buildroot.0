@@ -1,49 +1,142 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 23:06:43 +0200
-Subject: [Buildroot] EXTRA_DOWNLOADS broken when SITE_METHOD = git
-In-Reply-To: <5ae0ec96133d8_66723ff59b414878241cd@ultri4.mail>
-References: <20180425212739.6f0fafbd@windsurf>
- <5ae0ec96133d8_66723ff59b414878241cd@ultri4.mail>
-Message-ID: <20180425230643.39b21596@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 25 Apr 2018 23:17:49 +0200
+Subject: [Buildroot] [PATCH v2] package/flann: fix build with cmake >= 3.11
+Message-ID: <20180425211749.27138-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+CMake < 3.11 doesn't support add_library() without any source file
+(i.e add_library(foo SHARED)). But flann CMake use a trick that use
+an empty string "" as source list (i.e add_library(foo SHARED "")).
+This look like a bug in CMake < 3.11.
 
-On Wed, 25 Apr 2018 18:01:10 -0300, Ricardo Martincoski wrote:
+With CMake >= 3.11, the new behaviour of add_library() break the
+existing flann CMake code.
 
-> I am currently refreshing my series with test cases for the git download infra.
+From CMake Changelog [1]:
+"add_library() and add_executable() commands can now be called without
+ any sources and will not complain as long as sources are added later
+ via the target_sources() command."
 
-Excellent! We will have to extend it to cover other download methods.
-For example, the CVS backend got broken as a result of the recent
-download infra changes.
+Note: flann CMake code doesn't use target_sources() since no source file
+are provided intentionally since the flann shared library is created by
+linking with the flann_cpp_s static library with this line:
 
-> I think I can reuse the fixtures added by the series (static repo, br2-external)
-> in order to add a test case for EXTRA_DOWNLOADS with SITE_METHOD = git.
-> 
-> A simple solution probably will add one or few files to
-> http://autobuild.buildroot.net/artefacts/
-> to be used by the test case.
+target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
 
-That can easily be done. I have no idea how scalable and future proof
-this "artefacts" location is going to be, but we can start by using
-that, and move to a better solution in the future if needed.
+If you try to use "add_library(flann_cpp SHARED ${CPP_SOURCES})" (as it should
+be normally done), the link fail due to already defined symbol.
 
-> Another way is to add a http server to the docker image to serve files added to
-> support/testing to be used by the test case.
+They are building the shared version using the static library "to speedup the
+build time" [3]
 
-This also works. Seems a bit more complicated, no ?
+This issue is already reported upstream [2] with a proposed solution.
 
-> Yet another solution would be to build and run an image with a http server. The
-> files to be served would be added to support/testing and copied to the image.
+Fixes:
+http://autobuild.buildroot.net/results/b2f/b2febfaf8c44ce477b3e4a5b9b976fd25e8d7454
 
-I did not understand this solution.
+[1] https://cmake.org/cmake/help/v3.11/release/3.11.html
+[2] https://github.com/mariusmuja/flann/issues/369
+[3] https://github.com/mariusmuja/flann/commit/0fd62b43be2fbb0b8d791ee36290791224dc030c
 
-Thomas
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Davide Viti <zinosat@tiscali.it>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: improve the commit log (ThomasP)
+---
+ .../flann/0001-src-cpp-fix-cmake-3.11-build.patch  | 80 ++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+ create mode 100644 package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
+
+diff --git a/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
+new file mode 100644
+index 0000000000..b37bedcf6d
+--- /dev/null
++++ b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
+@@ -0,0 +1,80 @@
++From fa5ec96a94646492a3f908e12905b3e48a8e800b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 18 Apr 2018 20:24:13 +0200
++Subject: [PATCH] src/cpp: fix cmake >= 3.11 build
++
++CMake < 3.11 doesn't support add_library() without any source file
++(i.e add_library(foo SHARED)). But flann CMake use a trick that use
++an empty string "" as source list (i.e add_library(foo SHARED "")).
++This look like a bug in CMake < 3.11.
++
++With CMake >= 3.11, the new behaviour of add_library() break the
++existing flann CMake code.
++
++From CMake Changelog [1]:
++"add_library() and add_executable() commands can now be called without
++ any sources and will not complain as long as sources are added later
++ via the target_sources() command."
++
++Note: flann CMake code doesn't use target_sources() since no source file
++are provided intentionally since the flann shared library is created by
++linking with the flann_cpp_s static library with this line:
++
++target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
++
++If you try to use "add_library(flann_cpp SHARED ${CPP_SOURCES})" (as it should
++be normally done), the link fail due to already defined symbol.
++
++They are building the shared version using the static library "to speedup the
++build time" [3]
++
++This issue is already reported upstream [2] with a proposed solution.
++
++Upstream status: Pending
++
++Fixes:
++http://autobuild.buildroot.net/results/b2f/b2febfaf8c44ce477b3e4a5b9b976fd25e8d7454
++
++[1] https://cmake.org/cmake/help/v3.11/release/3.11.html
++[2] https://github.com/mariusmuja/flann/issues/369
++[3] https://github.com/mariusmuja/flann/commit/0fd62b43be2fbb0b8d791ee36290791224dc030c
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/cpp/CMakeLists.txt | 4 ++--
++ src/cpp/empty.cpp      | 1 +
++ 2 files changed, 3 insertions(+), 2 deletions(-)
++ create mode 100644 src/cpp/empty.cpp
++
++diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
++index b44a735..a816863 100644
++--- a/src/cpp/CMakeLists.txt
+++++ b/src/cpp/CMakeLists.txt
++@@ -29,7 +29,7 @@ if (BUILD_CUDA_LIB)
++ endif()
++ 
++ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
++-    add_library(flann_cpp SHARED "")
+++    add_library(flann_cpp SHARED "empty.cpp")
++     set_target_properties(flann_cpp PROPERTIES LINKER_LANGUAGE CXX)
++     target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
++ 
++@@ -85,7 +85,7 @@ if (BUILD_C_BINDINGS)
++     set_property(TARGET flann_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++ 
++     if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
++-        add_library(flann SHARED "")
+++        add_library(flann SHARED "empty.cpp")
++         set_target_properties(flann PROPERTIES LINKER_LANGUAGE CXX)
++         target_link_libraries(flann -Wl,-whole-archive flann_s -Wl,-no-whole-archive)
++     else()
++diff --git a/src/cpp/empty.cpp b/src/cpp/empty.cpp
++new file mode 100644
++index 0000000..40a8c17
++--- /dev/null
+++++ b/src/cpp/empty.cpp
++@@ -0,0 +1 @@
+++/* empty */
++-- 
++2.14.3
++
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.3
