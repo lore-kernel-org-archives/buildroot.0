@@ -1,30 +1,21 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 25 Apr 2018 18:04:28 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] support/kconfig: Add missing target to
- README.buildroot
-Message-ID: <20180425160429.21330-1-petr.vorel@gmail.com>
+Date: Wed, 25 Apr 2018 18:13:18 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] support/kconfig: Add missing target
+ to README.buildroot
+In-Reply-To: <20180425160429.21330-1-petr.vorel@gmail.com>
+References: <20180425160429.21330-1-petr.vorel@gmail.com>
+Message-ID: <20180425161316.gtlpmj76dzawdcx6@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- support/kconfig/README.buildroot | 1 +
- 1 file changed, 1 insertion(+)
+Hi,
 
-diff --git a/support/kconfig/README.buildroot b/support/kconfig/README.buildroot
-index 62e3a11b1e..3140713b39 100644
---- a/support/kconfig/README.buildroot
-+++ b/support/kconfig/README.buildroot
-@@ -15,6 +15,7 @@ Then verify the toplevel targets work:
- 	config
- 	defconfig
- 	menuconfig
-+	nconfig
- 	xconfig
- 	gconfig
- 	oldconfig
--- 
-2.16.3
+second message with actual work on kconfig is waiting for approval as 379K is over 300K
+limit :(.
+
+
+Kind regards,
+Petr
