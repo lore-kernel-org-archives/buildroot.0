@@ -1,142 +1,82 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 25 Apr 2018 23:17:49 +0200
-Subject: [Buildroot] [PATCH v2] package/flann: fix build with cmake >= 3.11
-Message-ID: <20180425211749.27138-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Apr 2018 23:22:46 +0200
+Subject: [Buildroot] Rust runtime tests issues
+In-Reply-To: <779874370.225301500.1524046656503.JavaMail.root@zimbra32-e6.priv.proxad.net>
+References: <20180417150658.5dd5b4cc@windsurf.numericable.fr>
+ <779874370.225301500.1524046656503.JavaMail.root@zimbra32-e6.priv.proxad.net>
+Message-ID: <20180425232246.0f23f469@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CMake < 3.11 doesn't support add_library() without any source file
-(i.e add_library(foo SHARED)). But flann CMake use a trick that use
-an empty string "" as source list (i.e add_library(foo SHARED "")).
-This look like a bug in CMake < 3.11.
+Hello Eric,
 
-With CMake >= 3.11, the new behaviour of add_library() break the
-existing flann CMake code.
+On Wed, 18 Apr 2018 12:17:36 +0200 (CEST), Eric Le Bihan wrote:
 
-From CMake Changelog [1]:
-"add_library() and add_executable() commands can now be called without
- any sources and will not complain as long as sources are added later
- via the target_sources() command."
+> The exception is raised because the execution of the command to 
+> create a dummy test program "hello-world", with the previously built
+> version of host-cargo, fails.
+> 
+> From the file TestRustBin-build.log found in the artifacts.zip of job
+> 63334942, we can see:
+> 
+> ```
+> error: Failed to create project `hello-world` at `/tmp/tmpOEzb1U-br2-testing-rust/hello-world`                                                                                                 
+>                                                                                                                                                                                                
+> Caused by:                                                                                                                                                                                     
+>   could not determine the current user, please set $USER 
+> ```
+> 
+> As the run-time test on CI apparently runs through Docker, should some setup 
+> related to $USER be added to it?
 
-Note: flann CMake code doesn't use target_sources() since no source file
-are provided intentionally since the flann shared library is created by
-linking with the flann_cpp_s static library with this line:
+Why does it need to have a USER variable defined ? It seems weird to
+require details about the user running the build. The code seems to do
+this:
 
-target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
+fn discover_author() -> CargoResult<(String, Option<String>)> {
+    let cwd = env::current_dir()?;
+    let git_config = if let Ok(repo) = GitRepository::discover(&cwd) {
+        repo.config().ok().or_else(|| GitConfig::open_default().ok())
+    } else {
+        GitConfig::open_default().ok()
+    };
+    let git_config = git_config.as_ref();
+    let name_variables = ["CARGO_NAME", "GIT_AUTHOR_NAME", "GIT_COMMITTER_NAME",
+                         "USER", "USERNAME", "NAME"];
+    let name = get_environment_variable(&name_variables[0..3])
+                        .or_else(|| git_config.and_then(|g| g.get_string("user.name").ok()))
+                        .or_else(|| get_environment_variable(&name_variables[3..]));
 
-If you try to use "add_library(flann_cpp SHARED ${CPP_SOURCES})" (as it should
-be normally done), the link fail due to already defined symbol.
+    let name = match name {
+        Some(name) => name,
+        None => {
+            let username_var = if cfg!(windows) {"USERNAME"} else {"USER"};
+            bail!("could not determine the current user, please set ${}",
+                  username_var)
+        }
+    };
+    let email_variables = ["CARGO_EMAIL", "GIT_AUTHOR_EMAIL", "GIT_COMMITTER_EMAIL",
+                          "EMAIL"];
+    let email = get_environment_variable(&email_variables[0..3])
+                          .or_else(|| git_config.and_then(|g| g.get_string("user.email").ok()))
+                          .or_else(|| get_environment_variable(&email_variables[3..]));
 
-They are building the shared version using the static library "to speedup the
-build time" [3]
+    let name = name.trim().to_string();
+    let email = email.map(|s| s.trim().to_string());
 
-This issue is already reported upstream [2] with a proposed solution.
+    Ok((name, email))
+}
 
-Fixes:
-http://autobuild.buildroot.net/results/b2f/b2febfaf8c44ce477b3e4a5b9b976fd25e8d7454
+Should we set CARGO_NAME and CARGO_EMAIL ? Only when building cargo ?
+Everytime cargo is used ?
 
-[1] https://cmake.org/cmake/help/v3.11/release/3.11.html
-[2] https://github.com/mariusmuja/flann/issues/369
-[3] https://github.com/mariusmuja/flann/commit/0fd62b43be2fbb0b8d791ee36290791224dc030c
+Best regards,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Davide Viti <zinosat@tiscali.it>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: improve the commit log (ThomasP)
----
- .../flann/0001-src-cpp-fix-cmake-3.11-build.patch  | 80 ++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
-
-diff --git a/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
-new file mode 100644
-index 0000000000..b37bedcf6d
---- /dev/null
-+++ b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
-@@ -0,0 +1,80 @@
-+From fa5ec96a94646492a3f908e12905b3e48a8e800b Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Wed, 18 Apr 2018 20:24:13 +0200
-+Subject: [PATCH] src/cpp: fix cmake >= 3.11 build
-+
-+CMake < 3.11 doesn't support add_library() without any source file
-+(i.e add_library(foo SHARED)). But flann CMake use a trick that use
-+an empty string "" as source list (i.e add_library(foo SHARED "")).
-+This look like a bug in CMake < 3.11.
-+
-+With CMake >= 3.11, the new behaviour of add_library() break the
-+existing flann CMake code.
-+
-+From CMake Changelog [1]:
-+"add_library() and add_executable() commands can now be called without
-+ any sources and will not complain as long as sources are added later
-+ via the target_sources() command."
-+
-+Note: flann CMake code doesn't use target_sources() since no source file
-+are provided intentionally since the flann shared library is created by
-+linking with the flann_cpp_s static library with this line:
-+
-+target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
-+
-+If you try to use "add_library(flann_cpp SHARED ${CPP_SOURCES})" (as it should
-+be normally done), the link fail due to already defined symbol.
-+
-+They are building the shared version using the static library "to speedup the
-+build time" [3]
-+
-+This issue is already reported upstream [2] with a proposed solution.
-+
-+Upstream status: Pending
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/b2f/b2febfaf8c44ce477b3e4a5b9b976fd25e8d7454
-+
-+[1] https://cmake.org/cmake/help/v3.11/release/3.11.html
-+[2] https://github.com/mariusmuja/flann/issues/369
-+[3] https://github.com/mariusmuja/flann/commit/0fd62b43be2fbb0b8d791ee36290791224dc030c
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/cpp/CMakeLists.txt | 4 ++--
-+ src/cpp/empty.cpp      | 1 +
-+ 2 files changed, 3 insertions(+), 2 deletions(-)
-+ create mode 100644 src/cpp/empty.cpp
-+
-+diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
-+index b44a735..a816863 100644
-+--- a/src/cpp/CMakeLists.txt
-++++ b/src/cpp/CMakeLists.txt
-+@@ -29,7 +29,7 @@ if (BUILD_CUDA_LIB)
-+ endif()
-+ 
-+ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
-+-    add_library(flann_cpp SHARED "")
-++    add_library(flann_cpp SHARED "empty.cpp")
-+     set_target_properties(flann_cpp PROPERTIES LINKER_LANGUAGE CXX)
-+     target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
-+ 
-+@@ -85,7 +85,7 @@ if (BUILD_C_BINDINGS)
-+     set_property(TARGET flann_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
-+ 
-+     if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
-+-        add_library(flann SHARED "")
-++        add_library(flann SHARED "empty.cpp")
-+         set_target_properties(flann PROPERTIES LINKER_LANGUAGE CXX)
-+         target_link_libraries(flann -Wl,-whole-archive flann_s -Wl,-no-whole-archive)
-+     else()
-+diff --git a/src/cpp/empty.cpp b/src/cpp/empty.cpp
-+new file mode 100644
-+index 0000000..40a8c17
-+--- /dev/null
-++++ b/src/cpp/empty.cpp
-+@@ -0,0 +1 @@
-++/* empty */
-+-- 
-+2.14.3
-+
+Thomas
 -- 
-2.14.3
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
