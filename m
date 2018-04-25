@@ -1,52 +1,47 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Wed, 25 Apr 2018 08:45:17 +0200
-Subject: [Buildroot] [PATCH 3/4] package/Makefile.in: Remove RELRO linker
- flags from CFLAGS
-In-Reply-To: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
-References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
-Message-ID: <20180425064518.31797-3-stefan.sorensen@spectralink.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 25 Apr 2018 10:56:05 +0200
+Subject: [Buildroot] EXTRA_DOWNLOADS broken when SITE_METHOD = git
+Message-ID: <447cff1a-80c7-dde0-7991-6ecf530bdb1c@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The RELRO related flags are for the linker, not the compiler, so they belong
-in LDFLAGS.
+Hi,
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
----
- package/Makefile.in | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+I noticed a problem with the EXTRA_DOWNLOADS for packages whose "main"
+download happens using git (most likely applies to other SCMs too).
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 1cbf34e0df..4525b8e79f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -141,9 +141,6 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
- 
--TARGET_CFLAGS_RELRO = -Wl,-z,relro
--TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
--
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
- ifeq ($(BR2_SSP_REGULAR),y)
-@@ -155,11 +152,10 @@ TARGET_HARDENED += -fstack-protector-all
- endif
- 
- ifeq ($(BR2_RELRO_PARTIAL),y)
--TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
--TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
-+TARGET_LDFLAGS += -Wl,-z,relro
- else ifeq ($(BR2_RELRO_FULL),y)
--TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
--TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
-+TARGET_HARDENED += -fPIE
-+TARGET_LDFLAGS += -pie -Wl,-z,now -Wl,-z,relro
- endif
- 
- ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+With the following defconfig:
+
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BOARDNAME="foo"
+BR2_TARGET_UBOOT_CUSTOM_GIT=y
+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2018.03"
+
+and the following line added to boot/uboot/uboot.mk:
+
+UBOOT_EXTRA_DOWNLOADS += https://buildroot.org/images/logo.png
+
+With Buildroot 2018.02, 'make uboot-source' downloads only the main git
+sources. The URL mentioned in UBOOT_EXTRA_DOWNLOADS is ignored.
+
+With Buildroot master (2018.02-934-gf5b14df1104c), the same command
+tries to download the UBOOT_EXTRA_DOWNLOADS using git and of course it
+fails:
+
+Reinitialized existing Git repository in <...>/dl/uboot/git/.git/
+Doing a shallow fetch
+fatal: repository 'https://buildroot.org/images/' not found
+Shallow fetch failed, falling back to fetching all refs
+Fetching all references
+fatal: repository 'https://buildroot.org/images/' not found
+
+I think both behaviors are wrong: EXTRA_DOWNLOADS should always use wget
+or cp, just as the manual says, and common sense suggests.
+
+Regards,
 -- 
-2.14.3
+Luca
