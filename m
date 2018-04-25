@@ -1,79 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 23:22:46 +0200
-Subject: [Buildroot] Rust runtime tests issues
-In-Reply-To: <779874370.225301500.1524046656503.JavaMail.root@zimbra32-e6.priv.proxad.net>
-References: <20180417150658.5dd5b4cc@windsurf.numericable.fr>
- <779874370.225301500.1524046656503.JavaMail.root@zimbra32-e6.priv.proxad.net>
-Message-ID: <20180425232246.0f23f469@windsurf>
+Date: Wed, 25 Apr 2018 23:25:12 +0200
+Subject: [Buildroot] [PATCH v3] radvd: improve startup script
+In-Reply-To: <20180416021037.13345-1-casantos@datacom.ind.br>
+References: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
+ <20180416021037.13345-1-casantos@datacom.ind.br>
+Message-ID: <20180425232512.081aa142@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eric,
+Hello,
 
-On Wed, 18 Apr 2018 12:17:36 +0200 (CEST), Eric Le Bihan wrote:
+On Sun, 15 Apr 2018 23:10:37 -0300, Carlos Santos wrote:
 
-> The exception is raised because the execution of the command to 
-> create a dummy test program "hello-world", with the previously built
-> version of host-cargo, fails.
-> 
-> From the file TestRustBin-build.log found in the artifacts.zip of job
-> 63334942, we can see:
-> 
-> ```
-> error: Failed to create project `hello-world` at `/tmp/tmpOEzb1U-br2-testing-rust/hello-world`                                                                                                 
->                                                                                                                                                                                                
-> Caused by:                                                                                                                                                                                     
->   could not determine the current user, please set $USER 
-> ```
-> 
-> As the run-time test on CI apparently runs through Docker, should some setup 
-> related to $USER be added to it?
+> -RADVD=/usr/sbin/radvd
+> +test -f /etc/radvd.conf || exit 0
 
-Why does it need to have a USER variable defined ? It seems weird to
-require details about the user running the build. The code seems to do
-this:
+I'm still not impressed by silent exit cases. Shouldn't we let radvd
+fail to start and complain about the lack of radvd.conf ?
 
-fn discover_author() -> CargoResult<(String, Option<String>)> {
-    let cwd = env::current_dir()?;
-    let git_config = if let Ok(repo) = GitRepository::discover(&cwd) {
-        repo.config().ok().or_else(|| GitConfig::open_default().ok())
-    } else {
-        GitConfig::open_default().ok()
-    };
-    let git_config = git_config.as_ref();
-    let name_variables = ["CARGO_NAME", "GIT_AUTHOR_NAME", "GIT_COMMITTER_NAME",
-                         "USER", "USERNAME", "NAME"];
-    let name = get_environment_variable(&name_variables[0..3])
-                        .or_else(|| git_config.and_then(|g| g.get_string("user.name").ok()))
-                        .or_else(|| get_environment_variable(&name_variables[3..]));
+> +start() {
+> +	printf "Starting radvd: "
+> +	echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
+> +	start-stop-daemon -S -x /usr/sbin/radvd || {
+> +		echo "FAIL"
+> +		exit 1
+> +	}
 
-    let name = match name {
-        Some(name) => name,
-        None => {
-            let username_var = if cfg!(windows) {"USERNAME"} else {"USER"};
-            bail!("could not determine the current user, please set ${}",
-                  username_var)
-        }
-    };
-    let email_variables = ["CARGO_EMAIL", "GIT_AUTHOR_EMAIL", "GIT_COMMITTER_EMAIL",
-                          "EMAIL"];
-    let email = get_environment_variable(&email_variables[0..3])
-                          .or_else(|| git_config.and_then(|g| g.get_string("user.email").ok()))
-                          .or_else(|| get_environment_variable(&email_variables[3..]));
+Can we use the
 
-    let name = name.trim().to_string();
-    let email = email.map(|s| s.trim().to_string());
+	[ $? = 0 ] && echo "OK" || echo "FAIL"
 
-    Ok((name, email))
-}
+syntax that we use in almost all other init scripts ?
 
-Should we set CARGO_NAME and CARGO_EMAIL ? Only when building cargo ?
-Everytime cargo is used ?
+> +	echo "OK"
+> +}
+> +
+> +stop() {
+> +	printf "Stopping radvd: "
+> +	start-stop-daemon -K -q -x /usr/sbin/radvd || {
+> +		echo "FAIL"
+> +		exit 1
+> +	}
 
-Best regards,
+Ditto here.
+
+Also, can we use a pid file managed by start-stop-daemon, like
+S50dropbear is doing (and many other init scripts) ?
+
+Thanks!
 
 Thomas
 -- 
