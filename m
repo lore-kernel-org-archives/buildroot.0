@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 22:30:45 +0200
-Subject: [Buildroot] [PATCH 1/4] package/Makefile.in: Do not use
- CPPFLAGS for hardening options
-In-Reply-To: <CANQCQpbaywbogjHpXaiQkBsS1Sas2R7tJiP2yW8mfxHrqq2_oQ@mail.gmail.com>
-References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
- <CANQCQpbaywbogjHpXaiQkBsS1Sas2R7tJiP2yW8mfxHrqq2_oQ@mail.gmail.com>
-Message-ID: <20180425223045.7d20bd11@windsurf>
+Date: Wed, 25 Apr 2018 22:32:36 +0200
+Subject: [Buildroot] [PATCH v3 1/1] reaver: fix build errors with static
+ lib
+In-Reply-To: <1524412319-6836-1-git-send-email-guillaume.bressaix@gmail.com>
+References: <1524412319-6836-1-git-send-email-guillaume.bressaix@gmail.com>
+Message-ID: <20180425223236.1cf3befe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 25 Apr 2018 07:50:37 -0500, Matthew Weber wrote:
+On Sun, 22 Apr 2018 17:51:59 +0200, Guillaume W. Bres wrote:
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 
-> Thanks for sending this series.  When we added the initial support we
-> debated on doing a few things differently at some point with how this
-> is implemented.  First, Buildroot uses a toolchain wrapper where it
-> could inject these flags vs appending like the current design does.
-> This would allow all the packages with flag ordering issues and no
-> formal releases, to not carry a patch in buildroot for the long term.
+This commit log was way too short, and lacked a reference to the
+autobuilder failure being fixed. I've fixed that when applying.
 
-For the record: there is no flag ordering issue with PIE, contrary to
-what we discussed in Brussels.
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +REAVER_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
+> +REAVER_CONF_OPTS += LDFLAGS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
 
-I think it is something I discussed further with my colleague Antoine
-Tenart (in Cc). Basically, the issue is not that there is an ordering
-requirement between -pie and -shared. The issue is that -pie and
--shared are incompatible with each other.
+Other issues/improvements here:
 
-Passing -pie before -shared just papers over the problem, and basically
--shared "wins". Indeed, there is no point for a shared library to be
-compiled PIE. PIE only makes sense for executables. Shared libraries
-already need to be compiled as PIC, regardless of whether PIE is used
-or not for executables.
+ - We generally pass such variables in <pkg>_CONF_ENV
 
-The issue is of course that we hardly have control over when PIE is
-used vs. PIC. But I think it's important to make it clear what the
-exact problem is: it's not a flag ordering problem.
+ - A single <pkg>_CONF_ENV assignment is enough
 
-Best regards,
+ - LDFLAGS shouldn't be overridden entirely: $(TARGET_LDFLAGS) still
+   needs to be passed.
+
+I've fixed those different problems, and applied. See the final commit
+at:
+
+  https://git.buildroot.org/buildroot/commit/?id=559416ffe2039d1cac94e348bd28e963adf008a4
+
+Thanks!
 
 Thomas
 -- 
