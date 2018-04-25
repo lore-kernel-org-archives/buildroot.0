@@ -1,47 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 22:57:44 +0200
-Subject: [Buildroot] [PATCH 1/4] package/Makefile.in: Do not use
- CPPFLAGS for hardening options
-In-Reply-To: <d7ea7773c97c50f67188c891b06a057576de7bee.camel@spectralink.com>
-References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
- <CANQCQpbaywbogjHpXaiQkBsS1Sas2R7tJiP2yW8mfxHrqq2_oQ@mail.gmail.com>
- <d7ea7773c97c50f67188c891b06a057576de7bee.camel@spectralink.com>
-Message-ID: <20180425225744.016e6040@windsurf>
+Date: Wed, 25 Apr 2018 22:57:57 +0200
+Subject: [Buildroot] [PATCH 1/3] libgpgme: fix run-time compatibility
+ with gnupg2 2.2.6
+In-Reply-To: <d59c6c57aff0a6c8966f33b2ee80bfa6328723f5.1523957833.git.baruch@tkos.co.il>
+References: <d59c6c57aff0a6c8966f33b2ee80bfa6328723f5.1523957833.git.baruch@tkos.co.il>
+Message-ID: <20180425225757.10e33054@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stefan,
+Hello,
 
-On Wed, 25 Apr 2018 13:08:18 +0000, S?rensen, Stefan wrote:
-> On Wed, 2018-04-25 at 07:50 -0500, Matthew Weber wrote:
+On Tue, 17 Apr 2018 12:37:11 +0300, Baruch Siach wrote:
+> Add upstream patch fixing gpgme_op_verify regression with gnupg2 2.2.6.
 > 
-> > Thanks for sending this series.  When we added the initial support we
-> > debated on doing a few things differently at some point with how this
-> > is implemented.  First, Buildroot uses a toolchain wrapper where it
-> > could inject these flags vs appending like the current design does.  
+> https://lists.gnupg.org/pipermail/gnupg-users/2018-April/060230.html
 > 
-> Personally I prefer that flags are appended - when injecting them
-> through the wrapper, they are invisible in the build logs. 
+> Cc: Philipp Claves <claves@budelmann-elektronik.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...1-core-Tweak-STATUS_FAILURE-handling.patch | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
 
-The problem with appended flags is that you are never sure they will be
-passed. Indeed, some packages ignore the CFLAGS/LDFLAGS passed on the
-command line. Having such flags in the wrapper ensures they are
-*always* passed.
-
-In addition, having such flags passed in the wrapper ensures that they
-are passed even if you build something with the Buildroot toolchain, but
-outside of Buildroot itself.
-
-As part of the latest Buildroot hackathon, Arnout (added in Cc) and I
-reviewed the usage of our flags, we concluded that hardening flags
-should be passed through the wrapper. I have some notes about our
-discussion, but haven't cleaned them up yet so they haven't been posted
-so far.
-
-Best regards,
+Series applied. Thanks!
 
 Thomas
 -- 
