@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Apr 2018 22:21:46 +0200
-Subject: [Buildroot] [git commit] reaver: fix static link build issue
-Message-ID: <20180425202258.0AFAA88DA7@busybox.osuosl.org>
+Date: Wed, 25 Apr 2018 22:30:45 +0200
+Subject: [Buildroot] [PATCH 1/4] package/Makefile.in: Do not use
+ CPPFLAGS for hardening options
+In-Reply-To: <CANQCQpbaywbogjHpXaiQkBsS1Sas2R7tJiP2yW8mfxHrqq2_oQ@mail.gmail.com>
+References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
+ <CANQCQpbaywbogjHpXaiQkBsS1Sas2R7tJiP2yW8mfxHrqq2_oQ@mail.gmail.com>
+Message-ID: <20180425223045.7d20bd11@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=559416ffe2039d1cac94e348bd28e963adf008a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-When libpcap itself is linked against other libraries, reaver fails to
-build as it doesn't link with libpcap dependencies. This patch fixes
-that by using the pcap-config program.
+On Wed, 25 Apr 2018 07:50:37 -0500, Matthew Weber wrote:
 
-Fixes:
+> Thanks for sending this series.  When we added the initial support we
+> debated on doing a few things differently at some point with how this
+> is implemented.  First, Buildroot uses a toolchain wrapper where it
+> could inject these flags vs appending like the current design does.
+> This would allow all the packages with flag ordering issues and no
+> formal releases, to not carry a patch in buildroot for the long term.
 
-  http://autobuild.buildroot.net/results/899fd633288d5cd5aa221413cded857e4f743194/
+For the record: there is no flag ordering issue with PIE, contrary to
+what we discussed in Brussels.
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/reaver/reaver.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+I think it is something I discussed further with my colleague Antoine
+Tenart (in Cc). Basically, the issue is not that there is an ordering
+requirement between -pie and -shared. The issue is that -pie and
+-shared are incompatible with each other.
 
-diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
-index 90d1727bad..d9a621a847 100644
---- a/package/reaver/reaver.mk
-+++ b/package/reaver/reaver.mk
-@@ -14,4 +14,10 @@ REAVER_LICENSE_FILES = docs/LICENSE
- REAVER_SUBDIR = src
- REAVER_DEPENDENCIES = libpcap
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+REAVER_CONF_ENV += \
-+	LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`" \
-+	LDFLAGS="$(TARGET_LDFLAGS) `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
-+endif
-+
- $(eval $(autotools-package))
+Passing -pie before -shared just papers over the problem, and basically
+-shared "wins". Indeed, there is no point for a shared library to be
+compiled PIE. PIE only makes sense for executables. Shared libraries
+already need to be compiled as PIC, regardless of whether PIE is used
+or not for executables.
+
+The issue is of course that we hardly have control over when PIE is
+used vs. PIC. But I think it's important to make it clear what the
+exact problem is: it's not a flag ordering problem.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
