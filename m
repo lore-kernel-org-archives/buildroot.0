@@ -1,68 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 25 Apr 2018 21:41:52 +0200
-Subject: [Buildroot] [PATCH 1/2] core/pkg-infra: set no-check-hash only for
- main download
-In-Reply-To: <cover.1524685305.git.yann.morin.1998@free.fr>
-References: <cover.1524685305.git.yann.morin.1998@free.fr>
-Message-ID: <225d2666517e3f008a4674456c4fbfd0db13fdf8.1524685305.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Apr 2018 22:21:46 +0200
+Subject: [Buildroot] [git commit] reaver: fix static link build issue
+Message-ID: <20180425202258.0AFAA88DA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, when the main download if from an SCM, we exclude all
-downloads from being hash-checked, on the assumption that we don't
-have hashes for downloads from an SCM.
+commit: https://git.buildroot.net/buildroot/commit/?id=559416ffe2039d1cac94e348bd28e963adf008a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However, the exclusion s computed on the DOWNLOAD macro, which is
-called for each download of a package, thus effectively disabling
-hash checks for extra downloads, even though those are only ever
-download with wget.
+When libpcap itself is linked against other libraries, reaver fails to
+build as it doesn't link with libpcap dependencies. This patch fixes
+that by using the pcap-config program.
 
-What we really wanted to do, in fact, was to exclude just the main
-download.
+Fixes:
 
-We fix that by appending the main source file to the global list of
-excluded files, from within the generic-package infra itself.
+  http://autobuild.buildroot.net/results/899fd633288d5cd5aa221413cded857e4f743194/
 
-Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-download.mk | 2 --
- package/pkg-generic.mk  | 4 ++++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/reaver/reaver.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 2c4ad3ba2c..2d9b0d4a41 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -92,8 +92,6 @@ endif
+diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
+index 90d1727bad..d9a621a847 100644
+--- a/package/reaver/reaver.mk
++++ b/package/reaver/reaver.mk
+@@ -14,4 +14,10 @@ REAVER_LICENSE_FILES = docs/LICENSE
+ REAVER_SUBDIR = src
+ REAVER_DEPENDENCIES = libpcap
  
- define DOWNLOAD
- 	$(Q)mkdir -p $($(PKG)_DL_DIR)
--	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),
--		BR_NO_CHECK_HASH_FOR=$(notdir $(call qstrip,$(1)))) \
- 	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
- 		-c '$($(PKG)_DL_VERSION)' \
- 		-d '$($(PKG)_DL_DIR)' \
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1c9dd1d734..02a56e3d94 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -481,6 +481,10 @@ ifndef $(2)_PATCH
-  endif
- endif
- 
-+ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE)),)
-+BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
++ifeq ($(BR2_STATIC_LIBS),y)
++REAVER_CONF_ENV += \
++	LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`" \
++	LDFLAGS="$(TARGET_LDFLAGS) `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
 +endif
 +
- $(2)_ALL_DOWNLOADS = \
- 	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
- 		$$(if $$(findstring ://,$$(p)),$$(p),\
--- 
-2.14.1
+ $(eval $(autotools-package))
