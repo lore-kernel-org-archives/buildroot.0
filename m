@@ -1,71 +1,102 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 25 Apr 2018 19:12:56 -0300
-Subject: [Buildroot] EXTRA_DOWNLOADS broken when SITE_METHOD = git
-References: <20180425230643.39b21596@windsurf>
-Message-ID: <5ae0fd68220fa_1c132ac0f16476fc46085@ultri4.mail>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 25 Apr 2018 21:08:19 -0300 (BRT)
+Subject: [Buildroot] [PATCH v3] radvd: improve startup script
+In-Reply-To: <20180425232512.081aa142@windsurf>
+References: <1506478569-8657-1-git-send-email-casantos@datacom.ind.br>
+ <20180416021037.13345-1-casantos@datacom.ind.br>
+ <20180425232512.081aa142@windsurf>
+Message-ID: <1735406129.182527.1524701299831.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Wednesday, April 25, 2018 6:25:12 PM
+> Subject: Re: [Buildroot] [PATCH v3] radvd: improve startup script
 
-On Wed, Apr 25, 2018 at 06:06 PM, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> On Wed, 25 Apr 2018 18:01:10 -0300, Ricardo Martincoski wrote:
+> Hello,
 > 
->> I am currently refreshing my series with test cases for the git download infra.
+> On Sun, 15 Apr 2018 23:10:37 -0300, Carlos Santos wrote:
 > 
-> Excellent! We will have to extend it to cover other download methods.
-> For example, the CVS backend got broken as a result of the recent
-> download infra changes.
-
-ACK
-
->> A simple solution probably will add one or few files to
->> http://autobuild.buildroot.net/artefacts/
->> to be used by the test case.
+>> -RADVD=/usr/sbin/radvd
+>> +test -f /etc/radvd.conf || exit 0
 > 
-> That can easily be done. I have no idea how scalable and future proof
-> this "artefacts" location is going to be, but we can start by using
-> that, and move to a better solution in the future if needed.
+> I'm still not impressed by silent exit cases. Shouldn't we let radvd
+> fail to start and complain about the lack of radvd.conf ?
 
-Indeed it won't scale well if we need different files for different test cases.
-I will try the docker image first. If it shows up too complex, then I fallback
-to this one.
+Hum, yes, but as already discussed in a different thread there is no
+standard regarding these cases.
 
->> Another way is to add a http server to the docker image to serve files added to
->> support/testing to be used by the test case.
+So far I'm just following the example existing in other start-up scripts:
+
+    $ grep 'test -f .* || exit' package/*/S[0-9]*
+    package/dhcp/S80dhcp-relay:test -f /usr/sbin/dhcrelay || exit 0
+    package/dhcp/S80dhcp-server:test -f /usr/sbin/dhcpd || exit 0
+    package/dhcp/S80dhcp-server:test -f /etc/dhcp/dhcpd.conf || exit 0
+    package/mpd/S95mpd:test -f /etc/mpd.conf || exit 0
+
+>> +start() {
+>> +	printf "Starting radvd: "
+>> +	echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
+>> +	start-stop-daemon -S -x /usr/sbin/radvd || {
+>> +		echo "FAIL"
+>> +		exit 1
+>> +	}
 > 
-> This also works. Seems a bit more complicated, no ?
-
-A bit more complicated, yes. Maybe not too much.
-I will play with the docker image to check.
-
-The only downside is that we "lose" the ability to run few test cases in a local
-computer without the docker image.
-But the test cases are meant to be run in the GitLab CI anyway, and one can
-always download the docker image and run the test cases inside it. It also
-generates more reproducible results. So in the end we don't lose much IMO.
-
->> Yet another solution would be to build and run an image with a http server. The
->> files to be served would be added to support/testing and copied to the image.
+> Can we use the
 > 
-> I did not understand this solution.
+>	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> 
+> syntax that we use in almost all other init scripts ?
 
-We could have a defconfig on the test case with a http server enabled and adding
-files from a subfolder of support/testing to the image. The test infra then
-builds an image and runs it on qemu. A port forwarding must be set up on the
-command that calls qemu in order to the docker image to have access to the http
-server inside the qemu.
-Then the test case would request a second build that only downloads things: the
-main download from the git server and the extra download from the http server
-inside qemu.
-Solution 2 (server on the docker image) seems easier and more future-proof than
-this one, as we could end up with a failure unrelated to the download infra
-caused by a bug on the http server when its package version is bumped.
+No, because the echo "FAIL" command succeeds, masking the error result:
 
+    $ (false; [ $? = 0 ] && echo "OK" || echo "FAIL";); echo $?
+    FAIL
+    0
 
-Regards,
-Ricardo
+instead of
+
+    $ (false || { echo "FAIL"; exit 1; }; echo "OK";); echo $?
+    FAIL
+    1
+
+Moreover shellcheck complains that it is bad syntax:
+
+    $ shellcheck package/radvd/S50radvd 
+
+    In package/radvd/S50radvd line 14:
+            [ $? = 0 ] && echo "OK" || echo "FAIL"
+              ^-- SC2181: Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
+
+In fact many Buildroot start-up scripts make shellcheck have heart
+attacks. :-)
+
+> 
+>> +	echo "OK"
+>> +}
+>> +
+>> +stop() {
+>> +	printf "Stopping radvd: "
+>> +	start-stop-daemon -K -q -x /usr/sbin/radvd || {
+>> +		echo "FAIL"
+>> +		exit 1
+>> +	}
+> 
+> Ditto here.
+> 
+> Also, can we use a pid file managed by start-stop-daemon, like
+> S50dropbear is doing (and many other init scripts) ?
+
+Yes, but I'd prefer make this change in a different patch if you don't
+mind, since it requires additional testing.
+
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
