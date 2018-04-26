@@ -1,46 +1,73 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 26 Apr 2018 00:01:51 -0300
-Subject: [Buildroot] [PATCH 5/7 v3] download/git: ensure we checkout to
- a clean state
-References: <912437d7c2ce182df06651c58edb301ee1830a06.1524426211.git.yann.morin.1998@free.fr>
-Message-ID: <5ae1411f954e7_797d2acbf57d0d34599bb@ultri4.mail>
+From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date: Thu, 26 Apr 2018 11:03:14 +0530
+Subject: [Buildroot] [PATCH 0/3] Fix udftools in static linking scenarios
+In-Reply-To: <20180422212005.13062-1-thomas.petazzoni@bootlin.com>
+References: <20180422212005.13062-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CA+NV+Vkr04dq4b78zXPMG1mV7Trz8KQP3=6si+7LJjJsrwmpfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Apr 23, 2018 at 2:50 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> This set of 3 patches aim at fixing the build of udftools in static
+> linking scenarios.
+>
+> The first patch is a somewhat unrelated fix, which is really trivial,
+> and not specific to static linking.
+>
+> The second patch fixes the readline package to install a pkg-config
+> file.
+>
+> The third patch fixes the udftools package to use the readline
+> pkg-config file.
+>
+> The overall solution is I believe the most correct one (use a
+> pkg-config file), but is admittedly a bit complex and requires to
+> autoreconf two more packages. If people don't like it, I'll be happy
+> to change it to just pass "-lncurses" when building udftools, which
+> would achieve the same effect.
 
-On Sun, Apr 22, 2018 at 04:44 PM, Yann E. MORIN wrote:
+Using pkg-config file is indeed a correct fix. But I think we should
+understand why readline doesn't install .pc file by default. This
+might be a reason that it is outdated and incorrect. Yes, in past we
+have fixed static linking with readline for many packages by passing
+it's private libraries.
 
-> Force the checkout to ignore any local changes. This allows recovering
+May be if we first upstream readline changes with .pc installation in
+autotools files, it would be nice to use fix. Otherwise, we need to
+maintain patch and .pc file updated (in case of any changes in list of
+private libraries).
 
-Nit: actually it does not 'ignore' local changes. It overwrites them. Right?
-The help says "to throw away local changes".
+Thanks,
+Rahul
 
-> from a previous partial checkout (e.g. killed by the user, or by a CI
-> job...)
-
-This patch covers *some* cases of partial checkout, but not all.
-A partial checkout also can lead to untracked files.
-
-An easy way to check this is to run on a linux tree:
-git checkout -f v4.14 
-git checkout -f v4.4 # ctrl+c when the checkout is around 50%
-git checkout -f v4.5
-git status
-
-Without the next patch, that brings 'git clean', when previously there is an
-untracked file in the worktree, all git commands succeed, but that file is
-included in the tarball and the hash mismatches.
-
-Can we bring 'git clean' to this patch?
-Or do we adjust the commit title/message?
-
-> 
-> git checkout -f has been supported since the inception of git, so we can
-> use it without any second thought.
-
-Regards,
-Ricardo
+>
+> Thanks,
+>
+> Thomas
+>
+> Thomas Petazzoni (3):
+>   udftool: add missing dependency on readline
+>   readline: install a .pc file
+>   udftools: fix static linking against readline
+>
+>  ...c-readline.pc.in-fix-Requires.private-val.patch | 62 ++++++++++++++++++++++
+>  package/readline/readline.mk                       | 17 +++++-
+>  ...c-detect-readline-via-pkg-config-when-pos.patch | 60 +++++++++++++++++++++
+>  package/udftools/udftools.mk                       |  2 +
+>  4 files changed, 139 insertions(+), 2 deletions(-)
+>  create mode 100644 package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch
+>  create mode 100644 package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
+>
+> --
+> 2.14.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
