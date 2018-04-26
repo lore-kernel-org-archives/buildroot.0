@@ -1,53 +1,44 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Thu, 26 Apr 2018 17:55:17 +0200
-Subject: [Buildroot] [PATCH v4 02/13] security hardening: add RELFO,
- FORTIFY options
-In-Reply-To: <1516766992-48428-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1516766992-48428-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CAJtjsKb1+dDbkhYw5ZHoTzRSpRfxxygATWoHpjLQ=1ngZWG0fQ@mail.gmail.com>
+From: John Keeping <john@metanate.com>
+Date: Thu, 26 Apr 2018 17:27:31 +0100
+Subject: [Buildroot] [PATCH] support/scripts/check-uniq-files: ignore
+ reinstalled packages
+Message-ID: <20180426162731.4710-1-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+If a package is rebuilt, then any files it installs will be listed
+multiple times in the file list and check-uniq-files will report that
+these files are touched by more than one package even though it is the
+same package listed multiple times.
 
-This is a late reply but we encounter a build failure in our system
-due to changes in this patch, which I believe are wrong. See below.
+Switch to storing the package names in a set so that each package can
+only appear once.
 
-On Wed, Jan 24, 2018 at 5:09 AM, Matt Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> +
-> +ifeq ($(BR2_SSP_REGULAR),y)
-> +TARGET_CPPFLAGS += -fstack-protector
-> +else ifeq ($(BR2_SSP_STRONG),y)
-> +TARGET_CPPFLAGS += -fstack-protector-strong
-> +else ifeq ($(BR2_SSP_ALL),y)
-> +TARGET_CPPFLAGS += -fstack-protector-all
-> +endif
-...
->
-> -ifeq ($(BR2_SSP_REGULAR),y)
-> -TARGET_CFLAGS += -fstack-protector
-> -TARGET_CXXFLAGS += -fstack-protector
-> -TARGET_FCFLAGS += -fstack-protector
-> -else ifeq ($(BR2_SSP_STRONG),y)
-> -TARGET_CFLAGS += -fstack-protector-strong
-> -TARGET_CXXFLAGS += -fstack-protector-strong
-> -TARGET_FCFLAGS += -fstack-protector-strong
-> -else ifeq ($(BR2_SSP_ALL),y)
-> -TARGET_CFLAGS += -fstack-protector-all
-> -TARGET_CXXFLAGS += -fstack-protector-all
-> -TARGET_FCFLAGS += -fstack-protector-all
-> -endif
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ support/scripts/check-uniq-files | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I don't think -fstack-protector* flags belongs to the preprocessor flags.
-Why did you move them from CFLAGS and CXXFLAGS? Your commit message
-suggests this was an proposition from Arnout but I can't find his
-email where he says that.
-
-Best regards,
+diff --git a/support/scripts/check-uniq-files b/support/scripts/check-uniq-files
+index fbc6b5d6e7..eb92724e42 100755
+--- a/support/scripts/check-uniq-files
++++ b/support/scripts/check-uniq-files
+@@ -24,11 +24,11 @@ def main():
+         sys.stderr.write('No type was provided\n')
+         return False
+ 
+-    file_to_pkg = defaultdict(list)
++    file_to_pkg = defaultdict(set)
+     with open(args.packages_file_list[0], 'rb') as pkg_file_list:
+         for line in pkg_file_list.readlines():
+             pkg, _, file = line.rstrip(b'\n').partition(b',')
+-            file_to_pkg[file].append(pkg)
++            file_to_pkg[file].add(pkg)
+ 
+     for file in file_to_pkg:
+         if len(file_to_pkg[file]) > 1:
 -- 
-Johan
+2.17.0
