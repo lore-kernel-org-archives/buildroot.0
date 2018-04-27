@@ -1,56 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Apr 2018 22:50:45 +0200
-Subject: [Buildroot] [PATCH] support/scripts: drop xorg-release script
-In-Reply-To: <20180425192402.12995-1-thomas.petazzoni@bootlin.com>
-References: <20180425192402.12995-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180427225045.68c9983c@windsurf>
+Date: Fri, 27 Apr 2018 23:09:17 +0200
+Subject: [Buildroot] [git commit] package/gdb: don't remove support files if
+ python chosen
+Message-ID: <20180427210947.D078088ED5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fa5ca6974d2504dccc35f43dcabcf30f076d8685
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 25 Apr 2018 21:24:02 +0200, Thomas Petazzoni wrote:
-> This script causes a large number of flake8 warnings, is rarely used
-> (but even never used), and is going to be replaced at some point by
-> the improved pkg-stats that will give details about the upstream
-> version available for all packages, not just X.org packages.
-> 
-> Therefore, let's drop the xorg-release script in order to silence all
-> those flake8 warnings:
-> 
-> support/scripts/xorg-release:36:1: E302 expected 2 blank lines, found 1
-> support/scripts/xorg-release:58:27: E201 whitespace after '{'
-> support/scripts/xorg-release:58:44: E203 whitespace before ':'
-> support/scripts/xorg-release:58:54: E202 whitespace before '}'
-> support/scripts/xorg-release:63:1: E305 expected 2 blank lines after class or function definition, found 1
-> support/scripts/xorg-release:64:15: E261 at least two spaces before inline comment
-> support/scripts/xorg-release:67:32: E261 at least two spaces before inline comment
-> support/scripts/xorg-release:86:1: E302 expected 2 blank lines, found 1
-> support/scripts/xorg-release:95:1: E302 expected 2 blank lines, found 1
-> support/scripts/xorg-release:107:1: E302 expected 2 blank lines, found 1
-> support/scripts/xorg-release:115:20: W601 .has_key() is deprecated, use 'in'
-> support/scripts/xorg-release:123:34: E201 whitespace after '{'
-> support/scripts/xorg-release:124:46: E203 whitespace before ':'
-> support/scripts/xorg-release:124:50: E202 whitespace before '}'
-> support/scripts/xorg-release:127:1: E302 expected 2 blank lines, found 1
-> support/scripts/xorg-release:141:15: W601 .has_key() is deprecated, use 'in'
-> support/scripts/xorg-release:146:21: W601 .has_key() is deprecated, use 'in'
-> support/scripts/xorg-release:176:1: E305 expected 2 blank lines after class or function definition, found 1
-> support/scripts/xorg-release:180:1: W391 blank line at end of file
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/scripts/xorg-release | 180 -------------------------------------------
->  1 file changed, 180 deletions(-)
->  delete mode 100755 support/scripts/xorg-release
+If one wants to use GDB with python support on the target, you need the support
+files installed by GDB. These get usually deleted to save some space, so I just
+wrapped the Makefile code deleting them in a conditional block depending on if
+python support is active or not.
 
-Applied to master, thanks.
+Signed-off-by: Jonas Zaddach <jzaddach@cisco.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas:
+ - use positive logic "if python is disabled"
+ - put the comment inside the condition, as suggested by Arnout]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gdb/gdb.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index ca71349cb3..215f473cc0 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -164,6 +164,7 @@ else
+ GDB_CONF_OPTS += --without-zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GDB_PYTHON),)
+ # This removes some unneeded Python scripts and XML target description
+ # files that are not useful for a normal usage of the debugger.
+ define GDB_REMOVE_UNNEEDED_FILES
+@@ -171,6 +172,7 @@ define GDB_REMOVE_UNNEEDED_FILES
+ endef
+ 
+ GDB_POST_INSTALL_TARGET_HOOKS += GDB_REMOVE_UNNEEDED_FILES
++endif
+ 
+ # This installs the gdbserver somewhere into the $(HOST_DIR) so that
+ # it becomes an integral part of the SDK, if the toolchain generated
