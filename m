@@ -1,94 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Apr 2018 08:00:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-04-26
-Message-ID: <20180427060011.1193420999@mail.bootlin.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 27 Apr 2018 08:44:41 +0200
+Subject: [Buildroot] [PATCH 1/1] python-subprocess32: new package
+In-Reply-To: <20180426182356.14447-1-asafka7@gmail.com>
+References: <20180426182356.14447-1-asafka7@gmail.com>
+Message-ID: <CAGm1_ku32sVwGOs7wiigjX3tteC-6MASVgftcyjhcNA__hVcqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, Apr 26, 2018 at 8:23 PM, Asaf Kahlon <asafka7@gmail.com> wrote:
+> A backport of the Python 3 subprocess module for use on Python 2.
+>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  DEVELOPERS                                          |  1 +
+>  package/Config.in                                   |  1 +
+>  package/python-subprocess32/Config.in               |  8 ++++++++
+>  .../python-subprocess32/python-subprocess32.hash    |  4 ++++
+>  package/python-subprocess32/python-subprocess32.mk  | 13 +++++++++++++
+>  5 files changed, 27 insertions(+)
+>  create mode 100644 package/python-subprocess32/Config.in
+>  create mode 100644 package/python-subprocess32/python-subprocess32.hash
+>  create mode 100644 package/python-subprocess32/python-subprocess32.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 63361b6fb6..64cc5874e7 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -190,6 +190,7 @@ F:  package/stress/
+>
+>  N:     Asaf Kahlon <asafka7@gmail.com>
+>  F:     package/python-jsonmodels/
+> +F:     package/python-subprocess32/
+>  F:     package/python-yieldfrom/
+>  F:     package/zeromq/
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index ecd9b8f082..4ea8512e4e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -938,6 +938,7 @@ menu "External python modules"
+>         source "package/python-sortedcontainers//Config.in"
+>         source "package/python-spidev/Config.in"
+>         source "package/python-sqlalchemy/Config.in"
+> +       source "package/python-subprocess32/Config.in"
+>         source "package/python-systemd/Config.in"
+>         source "package/python-tabledata/Config.in"
+>         source "package/python-tempora/Config.in"
+> diff --git a/package/python-subprocess32/Config.in b/package/python-subprocess32/Config.in
+> new file mode 100644
+> index 0000000000..ea5bf8c41e
+> --- /dev/null
+> +++ b/package/python-subprocess32/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_SUBPROCESS32
+> +       bool "python-subprocess32"
+> +       depends on BR2_PACKAGE_PYTHON
+> +       help
+> +         A backport of the Python 3 subprocess module for use
+> +         on Python 2
+> +
+> +         https://github.com/google/python-subprocess32
+> diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
+> new file mode 100644
+> index 0000000000..17a54b0034
+> --- /dev/null
+> +++ b/package/python-subprocess32/python-subprocess32.hash
+> @@ -0,0 +1,4 @@
+> +# sha256 from https://pypi.org/pypi/subprocess32/json
+> +sha256 1e450a4a4c53bf197ad6402c564b9f7a53539385918ef8f12bdf430a61036590  subprocess32-3.2.7.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
+> diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
+> new file mode 100644
+> index 0000000000..7b02428270
+> --- /dev/null
+> +++ b/package/python-subprocess32/python-subprocess32.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# python-subprocess32
+> +#
+> +################################################################################
+> +
+> +PYTHON_SUBPROCESS32_VERSION = 3.2.7
+> +PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
+> +PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/b8/2f/49e53b0d0e94611a2dc624a1ad24d41b6d94d0f1b0a078443407ea2214c2
+> +PYTHON_SUBPROCESS32_SETUP_TYPE = distutils
+> +PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
 
-Build statistics for 2018-04-26
-===============================
+This licese type seems to be Python-2.0
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  19 |   0 |   0 |  19 |
-      master | 171 |  42 |   1 | 214 |
+Yegor
 
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                     lxc-3.0.0 | 10
-           libfreeimage-3.17.0 | 6 
-                   flann-1.9.1 | 5 
-                  host-go-1.10 | 4 
-                  zeromq-4.2.5 | 4 
-                 host-rauc-0.4 | 2 
-                  udftools-2.0 | 2 
-               asterisk-14.7.6 | 1 
-                         boost | 1 
-                cifs-utils-6.7 | 1 
-             host-gauche-0.9.5 | 1 
-                   jamvm-2.0.0 | 1 
-               libupnpp-0.16.1 | 1 
-               log4cplus-1.1.2 | 1 
-                 mplayer-1.3.0 | 1 
-              procps-ng-3.3.14 | 1 
-   qt5quickcontrols-legal-info | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                asterisk-14.7.6 | NOK | http://autobuild.buildroot.net/results/7707b5255766ebf0f95bb56a8b8d56389a16665a |     
-microblazeel |                          boost | TIM | http://autobuild.buildroot.net/results/059acdcbc1d099ac07e0d43ed895a435d6bbf230 |     
-       sparc |                 cifs-utils-6.7 | NOK | http://autobuild.buildroot.net/results/62982e6e712898db2a46affd3caad777eab9a095 |     
-        i686 |                    flann-1.9.1 | NOK | http://autobuild.buildroot.net/results/0623c62f2b392e1ac685d1dee3112f0518f28224 |     
-     powerpc |                    flann-1.9.1 | NOK | http://autobuild.buildroot.net/results/d994f6a37695d034b1f571d1ea8c88ac61390231 |     
-        or1k |                    flann-1.9.1 | NOK | http://autobuild.buildroot.net/results/866dd80423873b05728eac5819a42d4e440d099e |     
-         arm |                    flann-1.9.1 | NOK | http://autobuild.buildroot.net/results/29676e4b742d891c2d628927a64c4f81d09af1e5 |     
-      x86_64 |                    flann-1.9.1 | NOK | http://autobuild.buildroot.net/results/3cf2bcf06a352e501f35ccb3323c756e35140621 |     
-     powerpc |              host-gauche-0.9.5 | NOK | http://autobuild.buildroot.net/results/0f6aafec1ba52cfa0047f697e022d0208d8476ee |     
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/f309de9f6b07cc6723d5e0b3b55bc804401ce1f3 | ORPH
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/466c4e6a3115ca10df3f99f70b211bb71fad70ac | ORPH
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/5786eb2e89fb687f6f94ae2df721ab28374639ee | ORPH
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/75d2de32ed697df341f282c6c43fce7503c807ae | ORPH
-microblazeel |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/a3226fefea5e1356f15a20ee4cd465d6a561ff00 |     
-      x86_64 |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/1e5ba9d0c3fc252bb922894c4d45a4f571f8a823 |     
-      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/87f6c7f89d43d87743baa02e8c9080ded46c534c | ORPH
- powerpc64le |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/44e8a12f71fe6511024966c3c7387781eb9ea959 |     
-      mipsel |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/fcd5809fa777c39bb52b636ce13a3faa56103903 |     
-       nios2 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/cfc5c2dd61b503b187ca411e540c027068cfe8ec |     
-       nios2 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/ce2ed6919ac073652621d890c171405596dbe729 |     
-    mips64el |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/c2757beb237234d26539d8ad918187299b6fffb2 |     
-       nios2 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/831cef51f73def9e6565a75f1ff3d404b4245f6b |     
-         arm |                libupnpp-0.16.1 | NOK | http://autobuild.buildroot.net/results/50b012f20c6e2ef85c21f887ee9a102ea33e86d2 |     
-         arm |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/638194c430a37e2cbe3f98c3e9a54096e3c28ac8 |     
-     sparc64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/1c5786b057e4c66b2fb46d5d41d3a0edd9fa88f5 |     
-         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/b8535ac465ef8fb3fd64ccda1f1b6d7949e02002 |     
-    mips64el |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/f2c56f239c35d4d07135190c169d4c2486d599b5 |     
-      x86_64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/d8266502a985a4586979bd5f6fc1a5e1b3060e08 |     
-         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/865dc185a61b87828b6ed6ee4bc43bd116658576 |     
-      xtensa |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/41336bbfc7d8c17a16d40e0369ff037cb287affd |     
-         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/1adc747158284dededd62a9671be94c8ecc5d8bc |     
-    mips64el |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/5cba06d47c6f870b53274c69f33b8efa75ea2b16 |     
-         arc |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/c84c806ac426819258a4ae31917d11ec053677bc |     
-         arc |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/01f2f541ff0f69e10b8ad8cfe52d2f6e333c710a |     
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/2dec969455c0797d1016e7a99804c1bba51a2e25 |     
-     sparc64 |               procps-ng-3.3.14 | NOK | http://autobuild.buildroot.net/results/b02bd2e4032287d3c5c58255d621ef785c5d1380 | ORPH
-     aarch64 |    qt5quickcontrols-legal-info | NOK | http://autobuild.buildroot.net/results/56eb8015371d55c9f897a6143ba1a3676366802b |     
-        i586 |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/4862d78fd754172cc855a82d82b888e5db90e200 |     
-         arm |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/977fac11a95710669d2a35ad92fe6c7ff3fe954e |     
-       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/b800902509e656fd600df4e4d275c0255ad0b2a6 |     
-       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/787c392459692195c291886cea4c7737181fad93 |     
-       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/0de99cb6c6a767401e0384796c0415be820d248a |     
-       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/0b94432040d06b8be637094e538ac0e7908ed884 |     
-
-
--- 
-http://autobuild.buildroot.net
+> +
+> +$(eval $(python-package))
+> --
+> 2.17.0
+>
