@@ -1,83 +1,42 @@
-From: Florian Fainelli <f.fainelli@gmail.com>
-Date: Fri, 27 Apr 2018 09:45:50 -0700
-Subject: [Buildroot] [PATCH RFC] legal-info: add option to store
- manifest in rootfs
-In-Reply-To: <fcf05ec0-3482-d265-c186-64492601e8a6@lucaceresoli.net>
-References: <20180426193252.19616-1-yann.morin.1998@free.fr>
- <20180427154650.3710e52e@windsurf>
- <fcf05ec0-3482-d265-c186-64492601e8a6@lucaceresoli.net>
-Message-ID: <493e92eb-bd7b-f750-58a0-fe1fd1a237ca@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Apr 2018 18:52:15 +0200
+Subject: [Buildroot] [PATCH] libsigrokdecode: bump version to 0.5.1
+Message-ID: <20180427165215.30683-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+And add a license hash.
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsigrokdecode/libsigrokdecode.hash | 3 ++-
+ package/libsigrokdecode/libsigrokdecode.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-On 04/27/2018 09:33 AM, Luca Ceresoli wrote:
-> Hi,
-> 
-> On 27/04/2018 15:46, Thomas Petazzoni wrote:
->> Yann, Florian,
->>
->> On Thu, 26 Apr 2018 21:32:52 +0200, Yann E. MORIN wrote:
->>> Some users want to be able to easily ship the manifest of the legal-info
->>> directly in the target filesystem.
->>>
->>> Those users currently hack their ways around, usign a post-build script
->>> that calls back to generate legal-info; this is a bit hackish...
->>>
->>> Add an option to that effect.
->>>
->>> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> Cc: Florian Fainelli <f.fainelli@gmail.com>
->>> Cc: Luca Ceresoli <luca@lucaceresoli.net>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->>
->> I'd like to challenge the usefulness of having the manifest on the
->> target. What is the actual use case ?
->>
->> Indeed, for license compliance of copyleft license (i.e at least GPL,
->> LGPL), having the name of the software package, its version and its
->> license is not sufficient, you also need to provide the full
->> corresponding source code.
-> 
-> I think this is partially wrong. I also think the patch is partially
-> wrong. And I even think the entire world is partially wrong, but that's
-> another story. :)
-> 
-> GPL asks (in certain cases) to display the copyright notice and the
-> license (or a link to it) (more or less) (and remember IANAL:). Android
-> phones are a good esample of it: in the last item of the last menu entry
-> of some obscure app there is an insanely long cat of license texts. One
-> might want to do a similar thing on a device with a suitable GUI. I
-> think this is a reasonable way to be compliant, although there are other
-> ways.
-> 
-> Hence this patch makes sense to me, but it is insufficient. It should
-> also store the license text in the rootfs, in order for a GUI
-> application to be able to load that text and visualize it.
-> 
-> Providing the full corresponding source code is a different topic IMO.
-> It is allowed by the GPL that the device does not contain it, and there
-> are obvious techincal motivations not to do so. But the license (that
-> one must make available) states one has the right of asking and
-> receiving the code. Continuing with the above example, the Android
-> phones do not contain the full source code.
-> 
->> So what is the need for having just the manifest ? Obviously the
->> complexity of the patch is low, but it's yet another Config.in option,
->> so I'd like to be sure there is a real, useful use case for it.
-> 
-> As I said the patch (with additions) would make sense. I'm not saying it
-> should be applied, but we should provide users with an alternative. Uhm,
-> maybe one can do 'make legal-info; cp <legal-stuff> ${ROOTFS}/usr/share'
-> in a post-build script?
-
-That is what I am currently doing, though I would rather see that as a
-more global, and less platform specific option if there is usability for
-other people.
+diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
+index a4914b2592..c2e15f61cb 100644
+--- a/package/libsigrokdecode/libsigrokdecode.hash
++++ b/package/libsigrokdecode/libsigrokdecode.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256	4aa8579ecea9b421b8ac048a9b18c27e63206839f269374398d89c14a47bd1c1	libsigrokdecode-0.5.0.tar.gz
++sha256	493d8b555ae4c245a5feebbd94de33aec7ee85a4f16bc3f4c3985961b459b51e  libsigrokdecode-0.5.1.tar.gz
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
+index 95e6e69af3..8b4802a7f3 100644
+--- a/package/libsigrokdecode/libsigrokdecode.mk
++++ b/package/libsigrokdecode/libsigrokdecode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSIGROKDECODE_VERSION = 0.5.0
++LIBSIGROKDECODE_VERSION = 0.5.1
+ LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
+ LIBSIGROKDECODE_LICENSE = GPL-3.0+
+ LIBSIGROKDECODE_LICENSE_FILES = COPYING
 -- 
-Florian
+2.11.0
