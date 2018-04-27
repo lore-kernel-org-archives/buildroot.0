@@ -1,47 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Apr 2018 18:25:01 +0200
-Subject: [Buildroot] [git commit] package/znc: bump version to 1.6.6
-Message-ID: <20180427163133.B70C388E76@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 27 Apr 2018 18:33:24 +0200
+Subject: [Buildroot] [PATCH RFC] legal-info: add option to store
+ manifest in rootfs
+In-Reply-To: <20180427154650.3710e52e@windsurf>
+References: <20180426193252.19616-1-yann.morin.1998@free.fr>
+ <20180427154650.3710e52e@windsurf>
+Message-ID: <fcf05ec0-3482-d265-c186-64492601e8a6@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=621363f5ac15713697edd9f1c176814db599f28d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Added license hash, switched _UPSTREAM to an upstream directory which
-also contains older release tarballs.
+On 27/04/2018 15:46, Thomas Petazzoni wrote:
+> Yann, Florian,
+> 
+> On Thu, 26 Apr 2018 21:32:52 +0200, Yann E. MORIN wrote:
+>> Some users want to be able to easily ship the manifest of the legal-info
+>> directly in the target filesystem.
+>>
+>> Those users currently hack their ways around, usign a post-build script
+>> that calls back to generate legal-info; this is a bit hackish...
+>>
+>> Add an option to that effect.
+>>
+>> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Florian Fainelli <f.fainelli@gmail.com>
+>> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> I'd like to challenge the usefulness of having the manifest on the
+> target. What is the actual use case ?
+> 
+> Indeed, for license compliance of copyleft license (i.e at least GPL,
+> LGPL), having the name of the software package, its version and its
+> license is not sufficient, you also need to provide the full
+> corresponding source code.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/znc/znc.hash | 3 ++-
- package/znc/znc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+I think this is partially wrong. I also think the patch is partially
+wrong. And I even think the entire world is partially wrong, but that's
+another story. :)
 
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index b242933e9d..67c00ca217 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 2f0225d49c53a01f8d94feea4619a6fe92857792bb3401a4eb1edd65f0342aca  znc-1.6.5.tar.gz
-+sha256 7fb841bc71dc1749b1dc081e9eaf22ceb56ebb03c6b1d8804a4f9eb8bbd59525  znc-1.6.6.tar.gz
-+sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 5783200ef6..79db580da2 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--ZNC_VERSION = 1.6.5
--ZNC_SITE = http://znc.in/releases
-+ZNC_VERSION = 1.6.6
-+ZNC_SITE = http://znc.in/releases/archive
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
- ZNC_DEPENDENCIES = host-pkgconf
+GPL asks (in certain cases) to display the copyright notice and the
+license (or a link to it) (more or less) (and remember IANAL:). Android
+phones are a good esample of it: in the last item of the last menu entry
+of some obscure app there is an insanely long cat of license texts. One
+might want to do a similar thing on a device with a suitable GUI. I
+think this is a reasonable way to be compliant, although there are other
+ways.
+
+Hence this patch makes sense to me, but it is insufficient. It should
+also store the license text in the rootfs, in order for a GUI
+application to be able to load that text and visualize it.
+
+Providing the full corresponding source code is a different topic IMO.
+It is allowed by the GPL that the device does not contain it, and there
+are obvious techincal motivations not to do so. But the license (that
+one must make available) states one has the right of asking and
+receiving the code. Continuing with the above example, the Android
+phones do not contain the full source code.
+
+> So what is the need for having just the manifest ? Obviously the
+> complexity of the patch is low, but it's yet another Config.in option,
+> so I'd like to be sure there is a real, useful use case for it.
+
+As I said the patch (with additions) would make sense. I'm not saying it
+should be applied, but we should provide users with an alternative. Uhm,
+maybe one can do 'make legal-info; cp <legal-stuff> ${ROOTFS}/usr/share'
+in a post-build script?
+
+-- 
+Luca
