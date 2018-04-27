@@ -1,83 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Apr 2018 22:28:11 +0200
-Subject: [Buildroot] [PATCH 2/2] procps-ng: fix build for sparc
-In-Reply-To: <e08f94156180d57615133a39d0def220668814d5.1524804032.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 27 Apr 2018 07:40:33 +0300")
-References: <cd7b2acad0806087a77f051a284df39802c8ff74.1524804032.git.baruch@tkos.co.il>
- <e08f94156180d57615133a39d0def220668814d5.1524804032.git.baruch@tkos.co.il>
-Message-ID: <871sf0z95w.fsf@dell.be.48ers.dk>
+Date: Fri, 27 Apr 2018 22:25:15 +0200
+Subject: [Buildroot] [git commit] libuv: bump version to 1.20.2
+Message-ID: <20180427202830.F2C5788EA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eddc316307dd0f7586f881bd6ad240690ce14e8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add a patch taken from upstream bug report to fix wrong signal undefined
- > in sparc.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Fixes:
- > http://autobuild.buildroot.net/results/b02/b02bd2e4032287d3c5c58255d621ef785c5d1380/
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- >  .../0001-proc-sig-fix-build-for-sparc.patch   | 43 +++++++++++++++++++
- >  1 file changed, 43 insertions(+)
- >  create mode 100644 package/procps-ng/0001-proc-sig-fix-build-for-sparc.patch
-
- > diff --git a/package/procps-ng/0001-proc-sig-fix-build-for-sparc.patch
- > b/package/procps-ng/0001-proc-sig-fix-build-for-sparc.patch
- > new file mode 100644
- > index 000000000000..74f822aea357
- > --- /dev/null
- > +++ b/package/procps-ng/0001-proc-sig-fix-build-for-sparc.patch
- > @@ -0,0 +1,43 @@
- > +From 070feb7c5ebd0f2ca721ca5d75bdd3fd8cffe961 Mon Sep 17 00:00:00 2001
- > +From: Baruch Siach <baruch@tkos.co.il>
- > +Date: Fri, 27 Apr 2018 07:34:57 +0300
- > +Subject: [PATCH] proc/sig: fix build for sparc
- > +
- > +The code undefines SIGLOST which breaks references to SIGPWR.
- > +
- > +Taken from a patch suggested in upstream bug report #93.
- > +
- > +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > +---
- > +Upstream status: https://gitlab.com/procps-ng/procps/issues/93
- > +---
- > + proc/sig.c | 6 +-----
- > + 1 file changed, 1 insertion(+), 5 deletions(-)
- > +
- > +diff --git a/proc/sig.c b/proc/sig.c
- > +index b883185fc28a..6ca9512cc70c 100644
- > +--- a/proc/sig.c
- > ++++ b/proc/sig.c
- > +@@ -52,10 +52,6 @@
- > + #  undef SIGSTKFLT
- > + #endif
- > + 
- > +-#if !defined(__GNU__) && defined(SIGLOST)
- > +-#  undef SIGLOST
- > +-#endif
- > +-
- > + #ifndef SIGRTMIN
- > + #  warning Standards require that <signal.h> define SIGRTMIN; assuming 32
- > + #  define SIGRTMIN 32
- > +@@ -87,7 +83,7 @@ static const mapstruct sigtable[] = {
- > +   {"ILL",    SIGILL},
- > +   {"INT",    SIGINT},
- > +   {"KILL",   SIGKILL},
- > +-#ifdef SIGLOST
- > ++#if defined(__GNU__)
-
-It might have been nicer to do:
-
-#if defined(__GNU__) && defined(SIGLOST)
-
-To keep the behaviour for the __GNU__ case, but ok.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index df021c567b..899fae2817 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  abc9106789c15a1c8009ab3d114a5b44bd6e240b183240f47e28aa542eea07b4  libuv-v1.20.1.tar.gz
++sha256  a5e62a6ed3c25a712477b55ce923e7f49af95b80319f88b9c950200d65427793  libuv-v1.20.2.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 6d1a4acc01..d857d64c49 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.20.1
++LIBUV_VERSION = v1.20.2
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
