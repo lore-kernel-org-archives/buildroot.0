@@ -1,42 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Apr 2018 18:52:15 +0200
-Subject: [Buildroot] [PATCH] libsigrokdecode: bump version to 0.5.1
-Message-ID: <20180427165215.30683-1-peter@korsgaard.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri, 27 Apr 2018 13:53:08 -0400
+Subject: [Buildroot] [PATCH v6 1/3] gstreamer1 packages: explicitly disable
+ introspection
+Message-ID: <20180427175310.25464-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And add a license hash.
+To get GStreamer ready for introspection, we must first explicitly
+disable gstreamer1, plugins base and plugins bad from using introspection.
+If not, adding the gobject-introspection will result in these packages
+failing to build because setting the _GIR_EXTRA_LIBS_PATH variable is required.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The other gstreamer1 packages do not require setting the _GIR_EXTRA_LIBS_PATH
+variable.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/libsigrokdecode/libsigrokdecode.hash | 3 ++-
- package/libsigrokdecode/libsigrokdecode.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Changes v1 -> v4:
+  - Add patch to series.
+  - Change TARGET_MAKE_ENV += GIR_EXTRA_LIBS_PATH to
+    PACKAGE_GIR_EXTRA_LIBS_PATH.
 
-diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
-index a4914b2592..c2e15f61cb 100644
---- a/package/libsigrokdecode/libsigrokdecode.hash
-+++ b/package/libsigrokdecode/libsigrokdecode.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256	4aa8579ecea9b421b8ac048a9b18c27e63206839f269374398d89c14a47bd1c1	libsigrokdecode-0.5.0.tar.gz
-+sha256	493d8b555ae4c245a5feebbd94de33aec7ee85a4f16bc3f4c3985961b459b51e  libsigrokdecode-0.5.1.tar.gz
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
-index 95e6e69af3..8b4802a7f3 100644
---- a/package/libsigrokdecode/libsigrokdecode.mk
-+++ b/package/libsigrokdecode/libsigrokdecode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes v4 -> v5:
+  - Change --enable-introspection=no to --disable-introspection (Yann)
+
+Changes v5 -> v6:
+  - None
+
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 3 ++-
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 3 ++-
+ package/gstreamer1/gstreamer1/gstreamer1.mk               | 1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 83cb94be81..a4adc0e49e 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -21,7 +21,8 @@ GST1_PLUGINS_BAD_CONF_OPTS = \
+ 	--disable-winks \
+ 	--disable-android_media \
+ 	--disable-apple_media \
+-	--disable-acm
++	--disable-acm \
++	--disable-introspection
  
--LIBSIGROKDECODE_VERSION = 0.5.0
-+LIBSIGROKDECODE_VERSION = 0.5.1
- LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
- LIBSIGROKDECODE_LICENSE = GPL-3.0+
- LIBSIGROKDECODE_LICENSE_FILES = COPYING
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_BAD_CONF_OPTS += \
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 10361ee3c6..2d183ce572 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -14,7 +14,8 @@ GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
+ # gio_unix_2_0 is only used for tests
+ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	--disable-examples \
+-	--disable-valgrind
++	--disable-valgrind \
++	--disable-introspection
+ 
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_BASE_CONF_OPTS += \
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index ea9f29a4f3..b00057a374 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -17,6 +17,7 @@ GSTREAMER1_CONF_OPTS = \
+ 	--disable-failing-tests \
+ 	--disable-valgrind \
+ 	--disable-benchmarks \
++	--disable-introspection \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
+ 	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
 -- 
-2.11.0
+2.14.3
