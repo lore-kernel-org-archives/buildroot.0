@@ -1,39 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Apr 2018 23:11:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gdb: don't remove support files
- if python chosen
-In-Reply-To: <1523389042-66122-1-git-send-email-jzaddach@cisco.com>
-References: <1523389042-66122-1-git-send-email-jzaddach@cisco.com>
-Message-ID: <20180427231100.3d53f3ac@windsurf>
+Date: Fri, 27 Apr 2018 23:11:52 +0200
+Subject: [Buildroot] [git commit] python-daemonize: new package
+Message-ID: <20180427212255.84F6588EDE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2609bc2e4e9b70277445081e1c7d097a04836576
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 10 Apr 2018 12:37:22 -0700, Jonas Zaddach wrote:
-> If one wants to use GDB with python support on the target, you need the support
-> files installed by GDB. These get usually deleted to save some space, so I just
-> wrapped the Makefile code deleting them in a conditional block depending on if
-> python support is active or not.
-> 
-> Signed-off-by: Jonas Zaddach <jzaddach@cisco.com>
-> ---
->  package/gdb/gdb.mk | 2 ++
->  1 file changed, 2 insertions(+)
+Library to enable your code run as a daemon process on Unix-like
+systems.
 
-Applied to master after doing the following changes:
+Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-daemonize/Config.in             |  8 ++++++++
+ package/python-daemonize/python-daemonize.hash |  3 +++
+ package/python-daemonize/python-daemonize.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
 
-    [Thomas:
-     - use positive logic "if python is disabled"
-     - put the comment inside the condition, as suggested by Arnout]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 63361b6fb6..bc7ee95584 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1067,6 +1067,7 @@ F:	boot/afboot-stm32/
+ 
+ N:	Lionel Flandrin <lionel@svkt.org>
+ F:	package/python-babel/
++F:	package/python-daemonize/
+ F:	package/python-flask/
+ F:	package/python-flask-babel/
+ F:	package/python-gunicorn/
+diff --git a/package/Config.in b/package/Config.in
+index ecd9b8f082..4b8249ad3d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -763,6 +763,7 @@ menu "External python modules"
+ 	source "package/python-cssselect/Config.in"
+ 	source "package/python-cssutils/Config.in"
+ 	source "package/python-daemon/Config.in"
++	source "package/python-daemonize/Config.in"
+ 	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
+ 	source "package/python-decorator/Config.in"
+diff --git a/package/python-daemonize/Config.in b/package/python-daemonize/Config.in
+new file mode 100644
+index 0000000000..3fa5ed3688
+--- /dev/null
++++ b/package/python-daemonize/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_DAEMONIZE
++       bool "python-daemonize"
++       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++       help
++         Library to enable your code run as a daemon process on Unix-like
++         systems.
++
++         https://pypi.python.org/pypi/daemonize
+diff --git a/package/python-daemonize/python-daemonize.hash b/package/python-daemonize/python-daemonize.hash
+new file mode 100644
+index 0000000000..d2111a3193
+--- /dev/null
++++ b/package/python-daemonize/python-daemonize.hash
+@@ -0,0 +1,3 @@
++# From https://pypi.python.org/pypi/daemonize/json
++md5    6759005b12dfeea0d4305f8536b4b0c2  daemonize-2.4.7.tar.gz
++sha256 c0194e861826be456c7c69985825ac7b79632d8ac7ad4cde8e12fee7971468c8  daemonize-2.4.7.tar.gz
+diff --git a/package/python-daemonize/python-daemonize.mk b/package/python-daemonize/python-daemonize.mk
+new file mode 100644
+index 0000000000..bfcfe93378
+--- /dev/null
++++ b/package/python-daemonize/python-daemonize.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-daemonize
++#
++################################################################################
++
++PYTHON_DAEMONIZE_VERSION = 2.4.7
++PYTHON_DAEMONIZE_SOURCE = daemonize-$(PYTHON_DAEMONIZE_VERSION).tar.gz
++PYTHON_DAEMONIZE_SITE = https://pypi.python.org/packages/84/15/923e3fe48239adf5d697c29e04a3f868d3e4ce8539aab29d6abe784db5be
++PYTHON_DAEMONIZE_SETUP_TYPE = setuptools
++PYTHON_DAEMONIZE_LICENSE = MIT
++PYTHON_DAEMONIZE_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
