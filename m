@@ -1,48 +1,56 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Fri, 27 Apr 2018 11:33:37 +0000
-Subject: [Buildroot] [BUG] package host-ncurses cause display incorrect
- when 'make linux-menuconfig'
-In-Reply-To: <CAFkzVZYME-faSz7vrbny4Nb9BSexWWJcJ4F8dyT_Uk_sz3-Dww@mail.gmail.com>
-References: <CAFkzVZYME-faSz7vrbny4Nb9BSexWWJcJ4F8dyT_Uk_sz3-Dww@mail.gmail.com>
-Message-ID: <CAFkzVZYkk-fH9OBr3PVgf84HofDuBeqt28v+GTOocfRKWNttHg@mail.gmail.com>
+From: David Barbion <davidb@230ruedubac.fr>
+Date: Fri, 27 Apr 2018 13:51:43 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-firmware: add amdgpu firmware blobs.
+Message-ID: <20180427115143.20338-1-davidb@230ruedubac.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnount,
+Add support for Volcanic Islands (VI), Sea Islands (CI) and Southern
+Islands (SI) cards.
 
-I just found your patch
-[Buildroot] [PATCH] package/ncurses: enable widechar for host build
-sloved my question.
+This firmware files will be needed if linux kernel is compiled with
+amdgpu enabled.
 
-Thanks very much.
+Signed-off-by: David Barbion <davidb@230ruedubac.fr>
+---
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 2 files changed, 10 insertions(+)
 
-Scott Fan
-
-
-On Fri, Apr 27, 2018 at 6:52 PM Scott Fan <fancp2007@gmail.com> wrote:
-
-> Hi, all:
->
-> I found when the BR2_PACKAGE_NCURSES config selected, AFTER building
-> completed, if i run 'make linux-menuconfig', screen will show various
-> unreadable char such as the attached.
->
-> If  i remove the following two lines:
-> NCURSES_DEPENDENCIES = host-ncurses
-> $(eval $(host-autotools-package))
->
-> then the display issue will not again. It is obvious that when building
-> the host-ncurses, it has incorrect configuration.
->
-> Any one can help me?
->
-> Thanks very much.
->
-> Scott Fan
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180427/fe9ebbe4/attachment.html>
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index f93561ee14..3e65c36be4 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -29,6 +29,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RADEON
+ 	help
+ 	  Firmware files for AMD Radeon video cards.
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_AMDGPU
++	bool "AMD GPU video card firmware"
++	help
++	  Firmware files for AMD GPU video cards.
++
+ endmenu # Video
+ 
+ menu "Bluetooth firmware"
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 82680937aa..119ea5d015 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -24,6 +24,11 @@ LINUX_FIRMWARE_DIRS += radeon
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.radeon
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMDGPU),y)
++LINUX_FIRMWARE_DIRS += amdgpu
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.amdgpu
++endif
++
+ # Intel Wireless Bluetooth
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IBT),y)
+ LINUX_FIRMWARE_FILES += intel/ibt-*
+-- 
+2.17.0
