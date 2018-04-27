@@ -1,101 +1,36 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Fri, 27 Apr 2018 12:05:57 +0000
-Subject: [Buildroot] [PATCH] package/ncurses: enable widechar for host
- build
-In-Reply-To: <20180426190845.21415-1-arnout@mind.be>
-References: <cb69fcf8-5af1-eafd-5fbb-bb0339831877@mind.be>
- <20180426190845.21415-1-arnout@mind.be>
-Message-ID: <CAFkzVZZZjqAXLnRiBpDtzRytYS5pEZ+fHVO70=neXYqYCBc=zg@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 27 Apr 2018 08:05:10 -0500
+Subject: [Buildroot] [PATCH v4 02/13] security hardening: add RELFO,
+ FORTIFY options
+In-Reply-To: <CAJtjsKb1+dDbkhYw5ZHoTzRSpRfxxygATWoHpjLQ=1ngZWG0fQ@mail.gmail.com>
+References: <1516766992-48428-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1516766992-48428-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <CAJtjsKb1+dDbkhYw5ZHoTzRSpRfxxygATWoHpjLQ=1ngZWG0fQ@mail.gmail.com>
+Message-ID: <CANQCQpZCkSXDtXBEoo8XKdfA9384cwK1UheURZ5jq9y5adbr6Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Arnout:
+Johan,
 
-I suggest you to adjust your patch from
-
-HOST_NCURSES_CONF_OPTS = \
---with-shared \
---without-gpm \
---without-manpages \
---without-cxx \
---without-cxx-binding \
---without-ada \
---enable-widec \
---without-normal
-
-to
-
-HOST_NCURSES_CONF_OPTS = \
---enable-widec \
---with-shared \
---without-gpm \
---without-manpages \
---without-cxx \
---without-cxx-binding \
---without-ada \
---without-normal
-
-just for more cleanly.
-
-
-Thanks.
-
-Scott Fan
-
-
-On Fri, Apr 27, 2018 at 3:08 AM Arnout Vandecappelle (Essensium/Mind) <
-arnout@mind.be> wrote:
-
-> Kconfig uses pkg-config to find the ncurses or ncursesw library. If the
-> ncursesw package is found with pkg-config, it will #include <ncursesw.h>.
-> Since Buildroot's host-ncurses doesn't install a .pc file, and linux.mk
-> anyway doesn't pass the pkg-config options to find the host pkg-config
-> files, Kconfig will always find the system's ncursesw.h.
+On Thu, Apr 26, 2018 at 10:55 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
+> Hi Matt,
 >
-> However, since commit dde090c299 (linux: fix passing of host CFLAGS and
-> LDFLAGS) HOST_LDFLAGS is passed to the linux build system. Thus, if
-> host-ncurses was already built before 'make linux-menuconfig' is called,
-> the build will pick up libncurses from the host directory, which is NOT
-> widechar. Thus, two different ncurses configurations are mixed into the
-> final mconf program. This will result in serious breakage in the
-> rendering of the menus (lots of @ and question mark characters).
+[snip]
 >
-> As a workaround, just build host-ncurses with widechar support. That
-> makes it compatible with ncursesw.h picked up from the host. Clearly,
-> this is not a robust solution. But it's simple, it works, and it
-> shouldn't hurt to build host-ncurses with widechar support (we can
-> safely assume that the system doesn't have a non-widechare uClibc
-> library...).
+> I don't think -fstack-protector* flags belongs to the preprocessor flags.
+> Why did you move them from CFLAGS and CXXFLAGS? Your commit message
+> suggests this was an proposition from Arnout but I can't find his
+> email where he says that.
 >
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: David De Grave <david.degrave@essensium.com>
-> ---
->  package/ncurses/ncurses.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> index 90cf4a4dc5..9942d3f0bd 100644
-> --- a/package/ncurses/ncurses.mk
-> +++ b/package/ncurses/ncurses.mk
-> @@ -153,6 +153,7 @@ HOST_NCURSES_CONF_OPTS = \
->         --without-cxx \
->         --without-cxx-binding \
->         --without-ada \
-> +       --enable-widec \
->         --without-normal
->
->  $(eval $(autotools-package))
-> --
-> 2.17.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180427/bb98b8ee/attachment.html>
+
+There's a new patchset proposed this week which should resolve this.
+I also noticed a couple other half/full RELO issues too after things
+were merged, my testing on that original set missed some cases.
+
+Pending patches(I've tested these and they look good for my test case)
+http://patchwork.ozlabs.org/project/buildroot/list/?series=40826
+
+Matt
