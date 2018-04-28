@@ -1,28 +1,62 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Apr 2018 16:23:22 +0200
-Subject: [Buildroot] [PATCH 1/1] libcgicc: add hash of license files
-Message-ID: <20180428142322.27167-1-fontaine.fabrice@gmail.com>
+Date: Sat, 28 Apr 2018 16:24:17 +0200
+Subject: [Buildroot] [PATCH 1/1] boinc: replace systemd script
+Message-ID: <20180428142417.27268-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove buildroot systemd script to use the script embedded by boinc
+since version 7.9.1.
+Set BOINC_USERS to be able to use this script
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libcgicc/libcgicc.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/boinc/boinc-client.service | 10 ----------
+ package/boinc/boinc.mk             |  6 ++++--
+ 2 files changed, 4 insertions(+), 12 deletions(-)
+ delete mode 100644 package/boinc/boinc-client.service
 
-diff --git a/package/libcgicc/libcgicc.hash b/package/libcgicc/libcgicc.hash
-index eb99115833..6fd19e305c 100644
---- a/package/libcgicc/libcgicc.hash
-+++ b/package/libcgicc/libcgicc.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
- sha256	2a17b976248de03447f9e36d6ce18a80749990d8543e2dfeea09c413eb67f7f0	cgicc-3.2.19.tar.gz
+diff --git a/package/boinc/boinc-client.service b/package/boinc/boinc-client.service
+deleted file mode 100644
+index 9de940e938..0000000000
+--- a/package/boinc/boinc-client.service
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[Unit]
+-Description=BOINC client
+-After=network.target
+-
+-[Service]
+-ExecStart=/usr/bin/boinc_client
+-Restart=always
+-
+-[Install]
+-WantedBy=multi-user.target
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index aa32e6965a..61931aed65 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -45,14 +45,16 @@ endef
+ 
+ BOINC_POST_INSTALL_TARGET_HOOKS += BOINC_REMOVE_UNNEEDED_FILE
+ 
++define BOINC_USERS
++	boinc -1 boinc -1 * /var/lib/boinc - BOINC user
++endef
 +
-+# Hash for license files:
-+sha256  a2e480f5e8afd7c587a3c0ac2ed3b73ed4b10fa3a553dea26e7b661c7cedda72  COPYING.LIB
-+sha256  0fd15977dc962abf3eced509b1cf5356f9784939742d67a635671141023a11da  COPYING.DOC
+ define BOINC_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/boinc/S99boinc-client \
+ 		$(TARGET_DIR)/etc/init.d/S99boinc-client
+ endef
+ 
+ define BOINC_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/boinc/boinc-client.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/boinc-client.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../usr/lib/systemd/system/boinc-client.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/boinc-client.service
 -- 
 2.14.1
