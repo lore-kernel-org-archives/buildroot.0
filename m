@@ -1,30 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 15:12:55 +0200
-Subject: [Buildroot] [PATCH 1/1] abootimg: new package
-In-Reply-To: <1522846449-22363-1-git-send-email-julien.boibessot@free.fr>
-References: <1522846449-22363-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20180428151255.70f316a6@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Apr 2018 15:16:11 +0200
+Subject: [Buildroot] [PATCH 1/1] libcec: add hash for license file
+Message-ID: <20180428131611.26734-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcec/libcec.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Wed,  4 Apr 2018 14:54:09 +0200, julien.boibessot at free.fr wrote:
-
-> +ABOOTIMG_VERSION = 7e127fee6a3981f6b0a50ce9910267cd501e09d4
-> +ABOOTIMG_SITE = $(call github,ggrandou,abootimg,$(ABOOTIMG_VERSION))
-> +ABOOTIMG_LICENSE = GPLv2
-
-The proper encoding for this license is GPL-2.0, and in fact the
-license is GPLv2 or later, so the correct value here was GPL-2.0+.
-
-Applied with this fixed. Thanks!
-
-Thomas
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 5416c20fec..e7264b40ca 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
++sha256 3618005b3db4eb8ede7292d233e6c41605cb8dcbd33e8790eff6e29c1e4f3789  COPYING
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
