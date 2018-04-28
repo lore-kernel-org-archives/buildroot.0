@@ -1,50 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 18:44:58 +0200
-Subject: [Buildroot] [PATCH 1/1] .gitignore: ignore outgoing directory
-In-Reply-To: <20180422080532.GG12688@scaer>
-References: <20180308142907.3006-1-chrismcc@gmail.com>
- <20180422080532.GG12688@scaer>
-Message-ID: <20180428184458.310770ce@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Apr 2018 18:51:36 +0200
+Subject: [Buildroot] [PATCH 1/1] mpd: enable cdio-paranoia support
+Message-ID: <20180428165136.29617-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mpd/Config.in | 6 ++++++
+ package/mpd/mpd.mk    | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-On Sun, 22 Apr 2018 10:05:32 +0200, Yann E. MORIN wrote:
-> Christopher, All,
-> 
-> On 2018-03-08 06:29 -0800, Christopher McCrory spake thusly:
-> > The buildroot documentation for submitting patches creates a new
-> > directory "outgoing".  This prevents git from nagging about untracked
-> > files.
-> > 
-> > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>  
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Peter, this is a candidate for 2018.02.x as well, I guess. ;-)
-
-I'd like to challenge this patch: I am not super convinced. Creating a
-outgoing/ directory is not "git format-patch" default behavior. By
-default, the patches go in the current folder.
-
-It's only the Buildroot manual that suggests to put them in an
-outgoing/ folder (I'm not sure why). My feeling is that the Buildroot
-manual just gives an example, and really users could put their patches
-in any other folder, and we're not going to add all random folders
-in .gitignore.
-
-So I would say no to this patch, and therefore disagree with Yann's
-Acked-by. Peter, Arnout, could you chime in and give your opinion about
-this ?
-
-Best regards,
-
-Thomas
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 831e4ab0d7..857f212477 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -174,6 +174,12 @@ config BR2_PACKAGE_MPD_TWOLAME
+ 
+ comment "Input plugins"
+ 
++config BR2_PACKAGE_MPD_CDIO_PARANOIA
++	bool "cdio-paranoia"
++	select BR2_PACKAGE_LIBCDIO_PARANOIA
++	help
++	  Enable cdio-paranoia support.
++
+ config BR2_PACKAGE_MPD_CURL
+ 	bool "curl"
+ 	select BR2_PACKAGE_LIBCURL
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 64471d4da5..d41ffe1571 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -59,6 +59,13 @@ else
+ MPD_CONF_OPTS += --disable-bzip2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_CDIO_PARANOIA),y)
++MPD_DEPENDENCIES += libcdio-paranoia
++MPD_CONF_OPTS += --enable-cdio-paranoia
++else
++MPD_CONF_OPTS += --disable-cdio-paranoia
++endif
++
+ ifeq ($(BR2_PACKAGE_MPD_CURL),y)
+ MPD_DEPENDENCIES += libcurl
+ MPD_CONF_OPTS += --enable-curl
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
