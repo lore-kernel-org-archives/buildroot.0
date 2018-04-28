@@ -1,52 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 17:38:11 +0200
-Subject: [Buildroot] [git commit] dropbear: unbundle libtomath & libtomcrypt
-Message-ID: <20180428154800.2DF377FCD3@busybox.osuosl.org>
+Date: Sat, 28 Apr 2018 17:49:41 +0200
+Subject: [Buildroot] [V4 1/2] dropbear: bump to version 2018.76
+In-Reply-To: <20180328083827.31540-1-francois.perrad@gadz.org>
+References: <20180328083827.31540-1-francois.perrad@gadz.org>
+Message-ID: <20180428174941.711ad03b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf9b5522d1f8488b1c7e74822eff9f3ac69d8821
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-DROPBEAR_SMALL_CODE could be only honored with bundled libtomcrypt
+On Wed, 28 Mar 2018 10:38:26 +0200, Francois Perrad wrote:
+> with this new version:
+>   - "configure --enable-static" should now be used instead of
+>     "make STATIC=1"
+>   - any customised options should be put in localoptions.h
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/dropbear/dropbear.hash |  2 +-
+>  package/dropbear/dropbear.mk   | 31 ++++++++++++++-----------------
+>  2 files changed, 15 insertions(+), 18 deletions(-)
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dropbear/Config.in   | 1 +
- package/dropbear/dropbear.mk | 5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+I've applied to master, after doing some minor changes:
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index 6700778161..5d6b83b6d1 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_DROPBEAR
- 	bool "dropbear"
- 	select BR2_PACKAGE_ZLIB if !BR2_PACKAGE_DROPBEAR_SMALL
-+	select BR2_PACKAGE_LIBTOMCRYPT if !BR2_PACKAGE_DROPBEAR_SMALL
- 	help
- 	  A small SSH 2 server designed for small memory environments.
- 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 10cb99b5e4..1da1a559a3 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -76,10 +76,11 @@ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
- endif
- 
- ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
--DROPBEAR_CONF_OPTS += --disable-zlib
-+DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
- else
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
--DROPBEAR_DEPENDENCIES += zlib
-+DROPBEAR_DEPENDENCIES += zlib libtomcrypt
-+DROPBEAR_CONF_OPTS += --disable-bundled-libtom
- endif
- 
- ifneq ($(BR2_PACKAGE_DROPBEAR_WTMP),y)
+ - DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH was moved
+   closer to where DROPBEAR_SVR_PASSWORD_AUTH is defined
+
+ - A comment was added on top of DROPBEAR_SVR_PASSWORD_AUTH to explain
+   why we're doing this.
+
+In addition, after applying/pushing your commit, I had a build failure
+with non-SSP toolchains, so I made a separate commit to fix this:
+https://git.buildroot.org/buildroot/commit/?id=b0aafef6198ee292c4f426295e92cc9b601c2338
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
