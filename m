@@ -1,107 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 18:53:32 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: add tainting support
-In-Reply-To: <1520326085-18337-2-git-send-email-angelo@amarulasolutions.com>
-References: <1520326085-18337-1-git-send-email-angelo@amarulasolutions.com>
- <1520326085-18337-2-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180428185332.7d805102@windsurf>
+Date: Sat, 28 Apr 2018 18:53:49 +0200
+Subject: [Buildroot] [git commit] bluez-alsa: new package
+Message-ID: <20180428165441.B104589020@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=36f2d55eff9118c9a13dca7c77efdd4b781bd77c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  6 Mar 2018 09:48:04 +0100, Angelo Compagnucci wrote:
+bluez-alsa is a Bluetooth Audio ALSA Backend.
 
-> +# Check here if there are packages declaring they harm
-> +# the reproducibility of the build
-> +.PHONY: check-tainted
-> +check-tainted:
-> +ifneq ($(BR2_REPRODUCIBLE),)
-> +ifneq ($(BR2_TAINTED_BY),)
+Note that we are using the latest commit from git master branch
+instead of the latest version tag v1.2.0 which is almost a year old
+and is 64 commits behind master.
 
-I don't think BR2_REPRODUCIBLE has anything to do with this 'tainting'
-thing.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+[Thomas:
+ - simplify the comments in the "depends on"
+ - move the Config.in comment below the hcitop option to let
+   menuconfig properly indent the hcitop option under bluez-alsa]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Config.in                  |  1 +
+ package/bluez-alsa/Config.in       | 36 +++++++++++++++++++++++++++++++
+ package/bluez-alsa/bluez-alsa.hash |  3 +++
+ package/bluez-alsa/bluez-alsa.mk   | 43 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 83 insertions(+)
 
-BR2_REPRODUCIBLE is about getting binary identical results given a
-Buildroot configuration. But even with BR2_REPRODUCIBLE disabled,
-Buildroot aims at building the same source code, which the nodejs npm
-stuff does not allow to do. So the 'tainting' happens regardless of
-whether BR2_REPRODUCIBLE=y or not.
-
-If you remove the BR2_REPRODUCIBLE condition, then the Buildroot build
-would always fail as soon as one package taints the build, so I'm not
-sure a hard failure is a good approach here. Perhaps just a warning at
-the end of the build ?
-
->  .PHONY: target-post-image
-> -target-post-image: $(TARGETS_ROOTFS) target-finalize
-> +target-post-image: check-tainted $(TARGETS_ROOTFS) target-finalize
->  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->  		$(call MESSAGE,"Executing post-image script $(s)"); \
->  		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> @@ -1063,6 +1074,7 @@ help:
->  	@echo '  source                 - download all sources needed for offline-build'
->  	@echo '  external-deps          - list external packages used'
->  	@echo '  legal-info             - generate info about license compliance'
-> +	@echo '  check-tainted          - check if any selected package harms build reproducibility'
-
-Not sure it is really useful to make this a first class target,
-documented in the help text. A warning at the end of the build is
-probably enough.
-
-Or maybe simply mention it as a Config.in comment ?
-
-comment "WARNING: nodejs modules will make your build non reproducible!"
-	depends on BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL != ""
-
->  	@echo '  printvars              - dump all the internal variables'
->  	@echo
->  	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index a2a12e7..e643ecf 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -556,6 +556,10 @@ ifndef $(2)_REDISTRIBUTE
->   endif
->  endif
->  
-> +ifdef $(2)_TAINTS
-> + BR2_TAINTED_BY+=$$($(2)_RAWNAME)
-> +endif
-
-I think "TAINTS" is very vague. Unfortunately, I don't have a good
-proposal. In addition, it's not only about tainting the build in terms
-of reproducibility, but also about the lack of integration with the
-download and legal infrastructures.
-
-I'm not sure what a good name for this would be. I've added Arnout in
-Cc, he often has interesting (and creative) ideas on such topics.
-
-> +# Save a legal warning if tainted
-> +ifneq ($$(call qstrip,$$($(2)_TAINTS)),)
-
-Implementation detail: you always use the construct:
-
-ifneq ($(var),)
-
-which is negative logic. Please use:
-
-ifeq ($(var),YES)
-
-instead. Of course, unless the variable really is empty vs. non-empty,
-but that isn't the case here.
-
-Also, your patch series was sent at a time where patchwork was missing
-some patches, so your PATCH 2/2 was not recorded. It would be useful if
-you could resend this patch series.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/Config.in b/package/Config.in
+index d5ba5cd36c..8be48816e6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -13,6 +13,7 @@ menu "Audio and video applications"
+ 	source "package/atest/Config.in"
+ 	source "package/aumix/Config.in"
+ 	source "package/bellagio/Config.in"
++	source "package/bluez-alsa/Config.in"
+ 	source "package/dvblast/Config.in"
+ 	source "package/dvdauthor/Config.in"
+ 	source "package/dvdrw-tools/Config.in"
+diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
+new file mode 100644
+index 0000000000..317762057c
+--- /dev/null
++++ b/package/bluez-alsa/Config.in
+@@ -0,0 +1,36 @@
++config BR2_PACKAGE_BLUEZ_ALSA
++	bool "bluez-alsa"
++	depends on !BR2_STATIC_LIBS # bluez5
++	depends on !BR2_PACKAGE_BLUEZ_UTILS # bluez5
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5
++	depends on BR2_USE_MMU # bluez5 -> dbus
++	depends on BR2_USE_WCHAR # libglib2
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_BLUEZ5_UTILS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_SBC
++	help
++	  Bluetooth Audio ALSA Backend.
++
++	  https://github.com/Arkq/bluez-alsa
++
++if BR2_PACKAGE_BLUEZ_ALSA
++
++config BR2_PACKAGE_BLUEZ_ALSA_HCITOP
++	bool "hcitop"
++	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
++	select BR2_PACKAGE_BSD
++	select BR2_PACKAGE_NCURSES
++	help
++	  Enable top-like monitoring tool for HCI.
++
++endif
++
++comment "bluez-alsa needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_BLUEZ_UTILS
+diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
+new file mode 100644
+index 0000000000..b96c37cc46
+--- /dev/null
++++ b/package/bluez-alsa/bluez-alsa.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256  dfa48e991a6bbb194a9161deb949371155150dabd5cfc1453a8df754b7cbdc84  bluez-alsa-9045edb436ea755f395a2e09e4525b5defad286a.tar.gz
++sha256  c90a0081b0526834f700d084e48819b18d11453ecb030c9b7de0d2cc3e3711a5  LICENSE.txt
+diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
+new file mode 100644
+index 0000000000..3ba237a6b7
+--- /dev/null
++++ b/package/bluez-alsa/bluez-alsa.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# bluez-alsa
++#
++################################################################################
++
++BLUEZ_ALSA_VERSION = 9045edb436ea755f395a2e09e4525b5defad286a
++BLUEZ_ALSA_SITE = $(call github,Arkq,bluez-alsa,$(BLUEZ_ALSA_VERSION))
++BLUEZ_ALSA_LICENSE = MIT
++BLUEZ_ALSA_LICENSE_FILES = LICENSE.txt
++BLUEZ_ALSA_DEPENDENCIES = alsa-lib bluez5_utils libglib2 sbc host-pkgconf
++
++# git repo, no configure
++BLUEZ_ALSA_AUTORECONF = YES
++
++# Autoreconf requires an existing m4 directory
++define BLUEZ_ALSA_MKDIR_M4
++	mkdir -p $(@D)/m4
++endef
++BLUEZ_ALSA_POST_PATCH_HOOKS += BLUEZ_ALSA_MKDIR_M4
++
++BLUEZ_ALSA_CONF_OPTS = \
++	--enable-aplay \
++	--disable-debug-time \
++	--disable-pcm-test \
++	--with-alsaplugindir=/usr/lib/alsa-lib \
++	--with-alsadatadir=/usr/share/alsa
++
++ifeq ($(BR2_PACKAGE_FDK_AAC),y)
++BLUEZ_ALSA_DEPENDENCIES += fdk-aac
++BLUEZ_ALSA_CONF_OPTS += --enable-aac
++else
++BLUEZ_ALSA_CONF_OPTS += --disable-aac
++endif
++
++ifeq ($(BR2_PACKAGE_BLUEZ_ALSA_HCITOP),y)
++BLUEZ_ALSA_DEPENDENCIES += libbsd ncurses
++BLUEZ_ALSA_CONF_OPTS += --enable-hcitop
++else
++BLUEZ_ALSA_CONF_OPTS += --disable-hcitop
++endif
++
++$(eval $(autotools-package))
