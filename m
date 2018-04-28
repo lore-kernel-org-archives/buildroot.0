@@ -1,30 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 12:33:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.8.1
-In-Reply-To: <20180428101147.4680-1-bernd.kuhls@t-online.de>
-References: <20180428101147.4680-1-bernd.kuhls@t-online.de>
-Message-ID: <20180428123352.2e86222a@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Apr 2018 14:02:50 +0200
+Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.10.1
+Message-ID: <20180428120250.9135-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/boinc/boinc.hash | 2 +-
+ package/boinc/boinc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Sat, 28 Apr 2018 12:11:47 +0200, Bernd Kuhls wrote:
-> Release notes: https://www.samba.org/samba/history/samba-4.8.1.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/samba4/samba4.hash | 4 ++--
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+index 8f44982246..564096c745 100644
+--- a/package/boinc/boinc.hash
++++ b/package/boinc/boinc.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 ed5f3dcdc8d1cc5277529afb701377e77d1ff89711368a7456553bf249940bad  boinc-7.8.6.tar.gz
++sha256 5c77752a5cbb69b2dc0343c5aea331f2ec73410d9f33f5f50867e4071e799609  boinc-7.10.1.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index 3cb97b3f8d..aa32e6965a 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-BOINC_VERSION_MAJOR = 7.8
+-BOINC_VERSION = $(BOINC_VERSION_MAJOR).6
++BOINC_VERSION_MAJOR = 7.10
++BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
+ # client_release can be used to build the Client and Manager but not the Server
+ # part. The Server currently has no versioning (see
+ # https://github.com/BOINC/boinc/pull/1798).
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
