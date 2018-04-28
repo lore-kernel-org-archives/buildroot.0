@@ -1,59 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Apr 2018 22:00:00 +0200
-Subject: [Buildroot] [PATCH] Makefile: Update mtime of $(TARGET_DIR)/usr
-In-Reply-To: <ebcdd3fe-3a9c-c54e-1cda-d36051db7775@licor.com>
-References: <20180416153339.23002-1-chris.lesiak@licor.com>
- <20180416201823.GD2290@scaer>
- <3b2d2a19-20ef-60dd-4a21-112cacff0c53@licor.com>
- <20180422213741.GJ12688@scaer>
- <ebcdd3fe-3a9c-c54e-1cda-d36051db7775@licor.com>
-Message-ID: <20180428200000.GC2922@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Apr 2018 22:00:43 +0200
+Subject: [Buildroot] [PATCH 1/1] libcrossguid: bump to version 0.2.2
+Message-ID: <20180428200043.2509-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris, All,
+ - Add hash for license file
+ - guid.cpp and guid.h have been renamed Guid.cpp and Guid.hpp (they
+will be renamed back to guid.cpp and guid.hpp in next release)
+ - Continue to use package-generic infrastructure as cmake doesn't work
+   properly with this version. Commit such as https://github.com/graeme-hill/crossguid/commit/974def4e0ad62b8fea17d6dee7c4f9b0d65eaa2c is needed. Migration on cmake should be done in next package release.
 
-On 2018-04-24 13:56 -0500, Chris Lesiak spake thusly:
-> >     date    what
-> >     0       build version 1
-> >     1       version is flahes onto a device, boxed and shipped
-> >     2       build version 2
-> >     3       the device with version 1 is received, unboxed and booted
-> >     4       that device downloads version 2 and updates to it
-> >
-> >As you can see, the /etc/.updated and/or /var/.updated will dated '3'
-> >but the mtime of /usr version 2 will be 2 (because touched at build
-> >time).
-> 
-> Not quite.
-> 
-> If systemd-update-done if working correctly, then on date 3, /etc/.updated
-> and /var/.updated will get created with mtime 0, not mtime 3.? Then on date
-> 4, /etc/.updated and /var/.updated will get updated (because 0 is less than
-> 2) to mtime 2.
-> 
-> When /etc/.updated and /var/.updated are originally created and then again
-> when they are updated, their mtime will match the mtime of /usr, not the
-> current time when systemd-update-done runs.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcrossguid/libcrossguid.hash | 3 ++-
+ package/libcrossguid/libcrossguid.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-OK, makes sense. Thanks for the clraification.
-
-So, this touch is eventually mostly usefull for a read-only rootfs, in
-fact (for a read-only rootfs, the touch could be done by the update
-mechanis).
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libcrossguid/libcrossguid.hash b/package/libcrossguid/libcrossguid.hash
+index a991da56a0..08791947ce 100644
+--- a/package/libcrossguid/libcrossguid.hash
++++ b/package/libcrossguid/libcrossguid.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
++sha256 48321928473c682b0cdc7e17bbd3390f79f4b98ab22fef3b81a852dda81fd195  libcrossguid-v0.2.2.tar.gz
++sha256 779e58787f966a1552f68d5ec041513cef68785dae4a519dbda7bc0b86eda20e  LICENSE
+diff --git a/package/libcrossguid/libcrossguid.mk b/package/libcrossguid/libcrossguid.mk
+index 46d9a9dcc6..46daaec206 100644
+--- a/package/libcrossguid/libcrossguid.mk
++++ b/package/libcrossguid/libcrossguid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCROSSGUID_VERSION = 8f399e8bd4252be9952f3dfa8199924cc8487ca4
++LIBCROSSGUID_VERSION = v0.2.2
+ LIBCROSSGUID_SITE = $(call github,graeme-hill,crossguid,$(LIBCROSSGUID_VERSION))
+ LIBCROSSGUID_LICENSE = MIT
+ LIBCROSSGUID_LICENSE_FILES = LICENSE
+@@ -15,14 +15,14 @@ LIBCROSSGUID_DEPENDENCIES = util-linux
+ 
+ define LIBCROSSGUID_BUILD_CMDS
+ 	(cd $(@D); $(TARGET_CXX) $(TARGET_CXXFLAGS) -std=c++11 -DGUID_LIBUUID \
+-		-c guid.cpp -o guid.o)
++		-c Guid.cpp -o guid.o)
+ 	(cd $(@D); $(TARGET_AR) rvs libcrossguid.a guid.o)
+ endef
+ 
+ define LIBCROSSGUID_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 644 $(@D)/libcrossguid.a \
+ 		$(STAGING_DIR)/usr/lib/libcrossguid.a
+-	$(INSTALL) -D -m 644 $(@D)/guid.h $(STAGING_DIR)/usr/include/guid.h
++	$(INSTALL) -D -m 644 $(@D)/Guid.hpp $(STAGING_DIR)/usr/include/guid.h
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
