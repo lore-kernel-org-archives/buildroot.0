@@ -1,63 +1,72 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Apr 2018 22:00:43 +0200
-Subject: [Buildroot] [PATCH 1/1] libcrossguid: bump to version 0.2.2
-Message-ID: <20180428200043.2509-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Apr 2018 22:01:33 +0200
+Subject: [Buildroot] [git commit] linux-firmware: add amdgpu firmware blobs
+Message-ID: <20180428200149.23F4389078@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- - Add hash for license file
- - guid.cpp and guid.h have been renamed Guid.cpp and Guid.hpp (they
-will be renamed back to guid.cpp and guid.hpp in next release)
- - Continue to use package-generic infrastructure as cmake doesn't work
-   properly with this version. Commit such as https://github.com/graeme-hill/crossguid/commit/974def4e0ad62b8fea17d6dee7c4f9b0d65eaa2c is needed. Migration on cmake should be done in next package release.
+commit: https://git.buildroot.net/buildroot/commit/?id=5f4ad10470762275380b555632fc59807acc210d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add support for Volcanic Islands (VI), Sea Islands (CI) and Southern
+Islands (SI) cards.
+
+This firmware files will be needed if linux kernel is compiled with
+amdgpu enabled.
+
+Signed-off-by: David Barbion <davidb@230ruedubac.fr>
+[Thomas: add hash for LICENSE.amdgpu]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcrossguid/libcrossguid.hash | 3 ++-
- package/libcrossguid/libcrossguid.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/linux-firmware/Config.in           | 5 +++++
+ package/linux-firmware/linux-firmware.hash | 1 +
+ package/linux-firmware/linux-firmware.mk   | 5 +++++
+ 3 files changed, 11 insertions(+)
 
-diff --git a/package/libcrossguid/libcrossguid.hash b/package/libcrossguid/libcrossguid.hash
-index a991da56a0..08791947ce 100644
---- a/package/libcrossguid/libcrossguid.hash
-+++ b/package/libcrossguid/libcrossguid.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index fb64c527f9..074bcc6c78 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -19,6 +19,11 @@ endmenu # Audio
+ 
+ menu "Video firmware"
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_AMDGPU
++	bool "AMD GPU video card firmware"
++	help
++	  Firmware files for AMD GPU video cards.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_I915
+ 	bool "Intel i915 video card firmware"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index c766689fc1..0106db2ffb 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,6 +1,7 @@
  # Locally calculated
--sha256 022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
-+sha256 48321928473c682b0cdc7e17bbd3390f79f4b98ab22fef3b81a852dda81fd195  libcrossguid-v0.2.2.tar.gz
-+sha256 779e58787f966a1552f68d5ec041513cef68785dae4a519dbda7bc0b86eda20e  LICENSE
-diff --git a/package/libcrossguid/libcrossguid.mk b/package/libcrossguid/libcrossguid.mk
-index 46d9a9dcc6..46daaec206 100644
---- a/package/libcrossguid/libcrossguid.mk
-+++ b/package/libcrossguid/libcrossguid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ sha256 d253f7abb32e0407bcc840a5bddba1dc20190bb4a4bb6d40512f279fde384671 linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz
+ sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
++sha256 448a367f518ff62c0501ded89c3da03cd3b632aa05bf62b4d5b969b136476d96 LICENSE.amdgpu
+ sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
+ sha256 802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2 LICENCE.atheros_firmware
+ sha256 3b5eb392b2d9d8c46d6aae26d06c187e5ea3029b12d13bc2b8deb8b3ce6bfa53 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 11231613e9..46ab9d5ffe 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -14,6 +14,11 @@ LINUX_FIRMWARE_FILES += intel/fw_sst_0f28.bin-48kHz_i2s_master
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.fw_sst_0f28
+ endif
  
--LIBCROSSGUID_VERSION = 8f399e8bd4252be9952f3dfa8199924cc8487ca4
-+LIBCROSSGUID_VERSION = v0.2.2
- LIBCROSSGUID_SITE = $(call github,graeme-hill,crossguid,$(LIBCROSSGUID_VERSION))
- LIBCROSSGUID_LICENSE = MIT
- LIBCROSSGUID_LICENSE_FILES = LICENSE
-@@ -15,14 +15,14 @@ LIBCROSSGUID_DEPENDENCIES = util-linux
- 
- define LIBCROSSGUID_BUILD_CMDS
- 	(cd $(@D); $(TARGET_CXX) $(TARGET_CXXFLAGS) -std=c++11 -DGUID_LIBUUID \
--		-c guid.cpp -o guid.o)
-+		-c Guid.cpp -o guid.o)
- 	(cd $(@D); $(TARGET_AR) rvs libcrossguid.a guid.o)
- endef
- 
- define LIBCROSSGUID_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/libcrossguid.a \
- 		$(STAGING_DIR)/usr/lib/libcrossguid.a
--	$(INSTALL) -D -m 644 $(@D)/guid.h $(STAGING_DIR)/usr/include/guid.h
-+	$(INSTALL) -D -m 644 $(@D)/Guid.hpp $(STAGING_DIR)/usr/include/guid.h
- endef
- 
- $(eval $(generic-package))
--- 
-2.14.1
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMDGPU),y)
++LINUX_FIRMWARE_DIRS += amdgpu
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.amdgpu
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_I915),y)
+ LINUX_FIRMWARE_DIRS += i915
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.i915
