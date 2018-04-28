@@ -1,92 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Apr 2018 21:34:49 +0200
-Subject: [Buildroot] [PATCH 7/7 v4] download/git: always do full-clone
-In-Reply-To: <cover.1524944063.git.yann.morin.1998@free.fr>
-References: <cover.1524944063.git.yann.morin.1998@free.fr>
-Message-ID: <b047fa7d0f366bfe767231112121e22cfc88f0de.1524944063.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Apr 2018 21:49:56 +0200
+Subject: [Buildroot] [PATCH 1/1] .gitignore: ignore outgoing directory
+In-Reply-To: <20180428165522.GB2922@scaer>
+References: <20180308142907.3006-1-chrismcc@gmail.com>
+ <20180422080532.GG12688@scaer> <20180428184458.310770ce@windsurf>
+ <20180428165522.GB2922@scaer>
+Message-ID: <20180428214956.1eaff29f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently attempt a shallow clone, as tentative to save bandwidth and
-download time.
+Hello,
 
-However, now that we keep the git tree as a cache, it may happen that we
-need to checkout an earlier commit, and that would not be present with a
-shallow clone.
+On Sat, 28 Apr 2018 18:55:22 +0200, Yann E. MORIN wrote:
 
-Furthermore, the shallow fetch is already really broken, and just
-happens to work by chance. Consider the following actions, which are
-basically what happens today:
+> > It's only the Buildroot manual that suggests to put them in an
+> > outgoing/ folder (I'm not sure why).  
+> 
+> And I'm not even sure why we even creat the patches locally, when it is
+> perfectly possible to send them directly, e.g. to send the last three
+> patches:
+> 
+>     git send-email --to buidlroot at buildroot.org HEAD^^^..
 
-    mkdir git
-    git init git
-    cd git
-    git remote add origin https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-    git fetch origin --depth 1 v4.17-rc1
-    if ! git fetch origin v4.17-rc1:v4.17-rc1 ; then
-        echo "warning"
-    fi
-    git checkout v4.17-rc1
+I think for people beginning with git and patches, it is good to use
+format-patch, so that you can check what the patches look like before
+sending them.
 
-The checkout succeeds just because of the git-fetch in the if-condition,
-which is initially there to fetch the special refs from github PRs, or
-gerrit reviews. That fails, but we just print a warning. If we were to
-ever remove support for special refs, then the checkout would fail.
+Best regards,
 
-The whole purpose of the git cache is to actually save bandwidth and
-download time, but in the long run. For one-offs, people would
-preferably use a wget download (e.g. with the github macro) instead of
-a git clone.
-
-We switch to always doing a full clone. It is more correct, and pays off
-in the long run...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- support/download/git | 24 +++---------------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
-
-diff --git a/support/download/git b/support/download/git
-index b98a5d6143..a41dad339b 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -111,27 +111,9 @@ fi
- 
- _git remote set-url origin "'${uri}'"
- 
--# Try to fetch with limited depth, since it is faster than a full clone - but
--# that only works if the version is a ref (tag or branch). Before trying to do
--# a shallow clone we check if ${cset} is in the list provided by git ls-remote.
--# If not we fallback to a full fetch.
--#
--# Messages for the type of clone used are provided to ease debugging in
--# case of problems
--git_done=0
--if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
--    printf "Doing a shallow fetch\n"
--    if _git fetch "${@}" --depth 1 origin "'${cset}'"; then
--        git_done=1
--    else
--        printf "Shallow fetch failed, falling back to fetching all refs\n"
--    fi
--fi
--if [ ${git_done} -eq 0 ]; then
--    printf "Fetching all references\n"
--    _git fetch origin
--    _git fetch origin -t
--fi
-+printf "Fetching all references\n"
-+_git fetch origin
-+_git fetch origin -t
- 
- # Try to get the special refs exposed by some forges (pull-requests for
- # github, changes for gerrit...). There is no easy way to know whether
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
