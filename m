@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 22:08:03 +0200
-Subject: [Buildroot] [PATCH 1/1] libconfig: bump to version 1.7.2
-In-Reply-To: <20180428173305.11060-1-fontaine.fabrice@gmail.com>
-References: <20180428173305.11060-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180428220803.46c1dec2@windsurf>
+Date: Sat, 28 Apr 2018 22:08:08 +0200
+Subject: [Buildroot] [PATCH 1/1] libconfuse: bump to version 3.2.1
+In-Reply-To: <20180428185714.21252-1-fontaine.fabrice@gmail.com>
+References: <20180428185714.21252-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180428220808.40766d84@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 28 Apr 2018 19:33:05 +0200, Fabrice Fontaine wrote:
->  - Update site to github
->  - Add hash for license file
->  - Add patch to disable documentation (sent upstream:
-> https://github.com/hyperrealm/libconfig/pull/116)
+On Sat, 28 Apr 2018 20:57:14 +0200, Fabrice Fontaine wrote:
+> Add hash for license file
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../libconfig/0001-Add-disable-doc-option.patch    | 54 ++++++++++++++++++++++
->  package/libconfig/Config.in                        |  2 +-
->  package/libconfig/libconfig.hash                   |  3 +-
->  package/libconfig/libconfig.mk                     |  6 ++-
->  4 files changed, 61 insertions(+), 4 deletions(-)
->  create mode 100644 package/libconfig/0001-Add-disable-doc-option.patch
+>  package/libconfuse/libconfuse.hash | 7 ++++---
+>  package/libconfuse/libconfuse.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
