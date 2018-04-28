@@ -1,33 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 15:33:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add Radeon SI support
-In-Reply-To: <591797C1-62B3-4F20-8E68-1ABAE1E66218@gamecodehq.com>
-References: <591797C1-62B3-4F20-8E68-1ABAE1E66218@gamecodehq.com>
-Message-ID: <20180428153351.7bbcf526@windsurf>
+Date: Sat, 28 Apr 2018 15:39:00 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: add libatomic linkage when
+ available
+In-Reply-To: <20180426195309.26042-1-asafka7@gmail.com>
+References: <20180426195309.26042-1-asafka7@gmail.com>
+Message-ID: <20180428153900.0f809228@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Asaf,
 
-On Fri, 27 Apr 2018 16:07:06 +0200, Micha? Kalbarczyk wrote:
-> From adff41d0ec39d5e89ce713c88edb0ee6468c7236 Mon Sep 17 00:00:00 2001
-> From: =?UTF-8?q?Micha=C5=82=20Kalbarczyk?= <fazibear@gmail.com>
-> Date: Fri, 27 Apr 2018 15:49:15 +0200
-> Subject: [PATCH 1/1] package/mesa3d: add Radeon SI support
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
+On Thu, 26 Apr 2018 22:53:09 +0300, Asaf Kahlon wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/ff5f7d3bcd713db9c9d92a746d6ad7134748fe16
+> http://autobuild.buildroot.net/results/9a743da1c3be673288c3482a9e7ddea12750206f
+> http://autobuild.buildroot.net/results/818b12387e6117569c4fab310b98c11fac80c047
 > 
-> Signed-off-by: Micha? Kalbarczyk <fazibear@gmail.com>
+> If libatomic is available, it should be added to LIBS in CONF_ENV, since without
+> it we can get into a state in which symbols like __atomic_fetch_sub_4,
+> __atomic_compare_exchange_4 and __atomic_fetch_add_4 can't be found.
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/mesa3d/Config.in | 20 ++++++++++++++++++++
->  package/mesa3d/mesa3d.mk |  1 +
->  2 files changed, 21 insertions(+)
+>  package/zeromq/zeromq.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+> index 8273cad763..214bd9e35c 100644
+> --- a/package/zeromq/zeromq.mk
+> +++ b/package/zeromq/zeromq.mk
+> @@ -58,4 +58,8 @@ else
+>  ZEROMQ_CONF_OPTS += --disable-libunwind
+>  endif
+>  
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +ZEROMQ_CONF_OPTS += LIBS=-latomic
+> +endif
 
-Applied to master, thanks.
+While this does fix the problem, I don't think it's the most ideal fix.
+Indeed, the solution should be upstreamed. Currently, zeromq
+configure.ac uses LIBZMQ_CHECK_ATOMIC_INTRINSICS, which is implemented
+in acinclude.m4, to detect the availability of atomic intrinsics.
+
+It goes like this:
+
+AC_DEFUN([LIBZMQ_CHECK_ATOMIC_INTRINSICS], [{
+    AC_MSG_CHECKING(whether compiler supports __atomic_Xxx intrinsics)
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+/* atomic intrinsics test */
+int v = 0;
+int main (int, char **)
+{
+    int t = __atomic_add_fetch (&v, 1, __ATOMIC_ACQ_REL);
+    return t;
+}
+    ])],
+    [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" ; $1],
+    [AC_MSG_RESULT(no)  ; libzmq_cv_has_atomic_instrisics="no"  ; $2]
+    )
+}])
+
+It does only an AC_COMPILE_IFELSE(), so it succeeds on Sparc, as the
+need for -latomic only appears at link time.
+
+So I believe it should be changed to test with AC_LINK_IFELSE, and if
+it fails, test with AC_LINK_IFELSE with -latomic, to determine
+
+ (1) If atomic intrinsics are available
+
+ (2) If -latomic is needed to use atomic intrinsics
+
+Do you think you could have a look at implementing something like this ?
+
+That being said, I agree that a number of other packages in Buildroot
+are fixed by just passing LIBS=-latomic.
+
+Best regards,
 
 Thomas
 -- 
