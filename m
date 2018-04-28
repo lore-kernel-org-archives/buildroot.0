@@ -1,187 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 12:48:48 +0200
-Subject: [Buildroot] [git commit] package/clang: new package
-Message-ID: <20180428124239.90AF088F31@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Apr 2018 14:43:15 +0200
+Subject: [Buildroot] [PATCH 1/1] libcgicc: bump to version 3.2.19
+Message-ID: <20180428124315.17503-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86defeeab61728fc29639110a3c28a2824294bdb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Use tar.gz archive (tar.bz2 is not available since 3.2.17)
 
-This patch provides Clang tools and libraries for the host and
-libclang for the target.
-
-host-clang is needed to build libclc, which is provided in a follow-up
-patch.
-
-We need libclang for the target because it is used by most of OpenCL
-implementations.
-
-A later patch in this series will enable Clover, the OpenCL
-implementation part of Mesa3D, which requires libclang.
-
-clang-tblgen must be copied to HOST_DIR as it is not installed by
-default but is needed for cross-compilation:
-http://lists.llvm.org/pipermail/cfe-dev/2015-June/043318.html
-
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-[Thomas:
- - Add Config.in comment about BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- - Minor reformatting/rewrapping of comments in .mk file]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/clang/Config.in  | 26 +++++++++++++++++
- package/clang/clang.hash |  3 ++
- package/clang/clang.mk   | 74 ++++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 105 insertions(+)
+ package/libcgicc/libcgicc.hash | 2 +-
+ package/libcgicc/libcgicc.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 25edcf97b3..b281245df2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1912,6 +1912,7 @@ F:	package/dropwatch/
- F:	package/tstools/
+diff --git a/package/libcgicc/libcgicc.hash b/package/libcgicc/libcgicc.hash
+index 313478d468..eb99115833 100644
+--- a/package/libcgicc/libcgicc.hash
++++ b/package/libcgicc/libcgicc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	d94a2b5dec6d5eb6f05f114e2c7a64aeb7da71708ebe7b5f32bd6ebde1dfbc96	cgicc-3.2.16.tar.bz2
++sha256	2a17b976248de03447f9e36d6ce18a80749990d8543e2dfeea09c413eb67f7f0	cgicc-3.2.19.tar.gz
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index 09df3a1bcb..e9ce4043f5 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- N:	Valentin Korenblit <valentin.korenblit@smile.fr>
-+F:	package/clang/
- F:	package/llvm/
- 
- N:	Vanya Sergeev <vsergeev@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 8614a9b216..66f6d10058 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1485,6 +1485,7 @@ menu "Other"
- 	source "package/bctoolbox/Config.in"
- 	source "package/bdwgc/Config.in"
- 	source "package/boost/Config.in"
-+	source "package/clang/Config.in"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cppcms/Config.in"
-diff --git a/package/clang/Config.in b/package/clang/Config.in
-new file mode 100644
-index 0000000000..80f03c80b7
---- /dev/null
-+++ b/package/clang/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_CLANG
-+	bool "clang"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR # std::wstring
-+	select BR2_PACKAGE_LLVM
-+	help
-+	  Clang is a C/C++, Objective C/C++ and OpenCL C front-end
-+	  for the LLVM compiler.
-+
-+	  http://clang.llvm.org
-+
-+comment "clang needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8, dynamic library"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+
-+comment "clang needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
-new file mode 100644
-index 0000000000..a5bf909814
---- /dev/null
-+++ b/package/clang/clang.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 135f6c9b0cd2da1aff2250e065946258eb699777888df39ca5a5b4fe5e23d0ff cfe-5.0.1.src.tar.xz
-+sha256 de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6 LICENSE.TXT
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-new file mode 100644
-index 0000000000..88bce9af0b
---- /dev/null
-+++ b/package/clang/clang.mk
-@@ -0,0 +1,74 @@
-+################################################################################
-+#
-+# clang
-+#
-+################################################################################
-+
-+CLANG_VERSION = 5.0.1
-+CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
-+CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
-+CLANG_LICENSE = NCSA
-+CLANG_LICENSE_FILES = LICENSE.TXT
-+CLANG_SUPPORTS_IN_SOURCE_BUILD = NO
-+CLANG_INSTALL_STAGING = YES
-+
-+HOST_CLANG_DEPENDENCIES = host-llvm host-libxml2
-+CLANG_DEPENDENCIES = llvm host-clang
-+
-+# This option is needed, otherwise multiple shared libs
-+# (libclangAST.so, libclangBasic.so, libclangFrontend.so, etc.) will
-+# be generated. As a final shared lib containing all these components
-+# (libclang.so) is also generated, this resulted in the following
-+# error when trying to use tools that use libclang:
-+# $ CommandLine Error: Option 'track-memory' registered more than once!
-+# $ LLVM ERROR: inconsistency in registered CommandLine options
-+# By setting BUILD_SHARED_LIBS to OFF, we generate multiple static
-+# libraries (the same way as host's clang build) and finally
-+# libclang.so to be installed on the target.
-+CLANG_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
-+
-+# Default is Debug build, which requires considerably more disk space
-+# and build time. Release build is selected for host and target
-+# because the linker can run out of memory in Debug mode.
-+HOST_CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-+CLANG_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-+
-+CLANG_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
-+
-+# We need to build tools because libclang is a tool
-+HOST_CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
-+CLANG_CONF_OPTS += -DCLANG_BUILD_TOOLS=ON
-+
-+HOST_CLANG_CONF_OPTS += \
-+	-DCLANG_BUILD_EXAMPLES=OFF \
-+	-DCLANG_INCLUDE_DOCS=OFF \
-+	-DCLANG_INCLUDE_TESTS=OFF
-+
-+CLANG_CONF_OPTS += \
-+	-DCLANG_BUILD_EXAMPLES=OFF \
-+	-DCLANG_INCLUDE_DOCS=OFF \
-+	-DCLANG_INCLUDE_TESTS=OFF
-+
-+HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config
-+CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(STAGING_DIR)/usr/bin/llvm-config \
-+	-DCLANG_TABLEGEN:FILEPATH=$(HOST_DIR)/usr/bin/clang-tblgen \
-+	-DLLVM_TABLEGEN_EXE:FILEPATH=$(HOST_DIR)/usr/bin/llvm-tblgen
-+
-+# Clang can't be used as compiler on the target since there are no
-+# development files (headers) and other build tools. So remove clang
-+# binaries from target.
-+define CLANG_DELETE_BINARIES_FROM_TARGET
-+	rm -f $(TARGET_DIR)/usr/bin/clang*
-+endef
-+CLANG_POST_INSTALL_TARGET_HOOKS += CLANG_DELETE_BINARIES_FROM_TARGET
-+
-+# clang-tblgen is not installed by default, however it is necessary
-+# for cross-compiling clang
-+define HOST_CLANG_INSTALL_CLANG_TBLGEN
-+	$(INSTALL) -D -m 0755 $(HOST_CLANG_BUILDDIR)/bin/clang-tblgen \
-+		$(HOST_DIR)/usr/bin/clang-tblgen
-+endef
-+HOST_CLANG_POST_INSTALL_HOOKS = HOST_CLANG_INSTALL_CLANG_TBLGEN
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+-LIBCGICC_VERSION = 3.2.16
++LIBCGICC_VERSION = 3.2.19
+ LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
+-LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.bz2
++LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.gz
+ LIBCGICC_LICENSE = LGPL-3.0+ (library), GFDL-1.2+ (docs)
+ LIBCGICC_LICENSE_FILES = COPYING.LIB COPYING.DOC
+ LIBCGICC_INSTALL_STAGING = YES
+-- 
+2.14.1
