@@ -1,49 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Apr 2018 21:34:48 +0200
-Subject: [Buildroot] [PATCH 6/7 v4] download/git: ensure we can checkout
- repos with submodule conversions
+Date: Sat, 28 Apr 2018 21:34:49 +0200
+Subject: [Buildroot] [PATCH 7/7 v4] download/git: always do full-clone
 In-Reply-To: <cover.1524944063.git.yann.morin.1998@free.fr>
 References: <cover.1524944063.git.yann.morin.1998@free.fr>
-Message-ID: <cc5f8b3c613a2a48d69abb15fa841035cacb0036.1524944063.git.yann.morin.1998@free.fr>
+Message-ID: <b047fa7d0f366bfe767231112121e22cfc88f0de.1524944063.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a git tree has had sub-dir <-> sub-module conversions, or has had
-submodules added or removed over the course of time, checking out a
-changeset across those conversions/additions/removals may leave
-untracked files, or may fail because of a conflict of type.
+We currently attempt a shallow clone, as tentative to save bandwidth and
+download time.
 
-So, before we checkout the new changeset, we forcibly remove the
-submodules. The new set of submodules, if any, will be restored later.
+However, now that we keep the git tree as a cache, it may happen that we
+need to checkout an earlier commit, and that would not be present with a
+shallow clone.
 
-Ideally, we would use a native git command: git submodule deinit --all.
-However, that was only introduced in git 1.8.3 which, while not being
-recent by modern standards, is still too old for some enterprise-grade
-distributions (RHEL6 only has git-1.7.1).
+Furthermore, the shallow fetch is already really broken, and just
+happens to work by chance. Consider the following actions, which are
+basically what happens today:
 
-So, instead, we just use git submodule foreach, to rm -rf the submodules
-directory.
+    mkdir git
+    git init git
+    cd git
+    git remote add origin https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+    git fetch origin --depth 1 v4.17-rc1
+    if ! git fetch origin v4.17-rc1:v4.17-rc1 ; then
+        echo "warning"
+    fi
+    git checkout v4.17-rc1
 
-Again, we would ideally use 'cd $toplevel && rm -rf $path', but
-$toplevel was only introduced in git 1.7.2. $path has always been there.
+The checkout succeeds just because of the git-fetch in the if-condition,
+which is initially there to fetch the special refs from github PRs, or
+gerrit reviews. That fails, but we just print a warning. If we were to
+ever remove support for special refs, then the checkout would fail.
 
-So, instead, we just cd back one level, and remove the basename of the
-directory.
+The whole purpose of the git cache is to actually save bandwidth and
+download time, but in the long run. For one-offs, people would
+preferably use a wget download (e.g. with the github macro) instead of
+a git clone.
 
-Eventually, we need to get rid of now-empty and untracked directories,
-that were parents of a removed submodule. For example. ./foo/bar/ was a
-submodule, so ./foo/bar/ was removed, which left ./foo/ around.
-
-Yet again, recent-ish git versions would have removed it during the
-forced checkout, but old-ish versions (e.g. 1.7.1) do not remove it with
-the forced checkout.
-
-Instead we rely on the already used forced-forced clean of directories,
-untracked, and ignored content, to really get rid of extra stuff we are
-not interested in.
+We switch to always doing a full clone. It is more correct, and pays off
+in the long run...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
@@ -51,53 +50,43 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/download/git | 29 ++++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+ support/download/git | 24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
 diff --git a/support/download/git b/support/download/git
-index ca8c94fa3b..b98a5d6143 100755
+index b98a5d6143..a41dad339b 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -152,12 +152,39 @@ if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
-     exit 1
- fi
+@@ -111,27 +111,9 @@ fi
  
-+# The new cset we want to checkout might have different submodules, or
-+# have sub-dirs converted to/from a submodule. So we would need to
-+# deregister _current_ submodules before we checkout.
-+#
-+# Using "git submodule deinit --all" would remove all the files for
-+# all submodules, including the corresponding .git files or directories.
-+# However, it  was only introduced with git-1.8.3, which is too recent
-+# for some enterprise-grade distros.
-+#
-+# So, we fall-back to just removing all submodules directories. We do
-+# not need to be recursive, as removing a submodule will de-facto remove
-+# its own submodules.
-+#
-+# For recent git versions, the repository for submodules is stored
-+# inside the repository of the super repository, so the following will
-+# only remove the working copies of submodules, effectively caching the
-+# submodules.
-+#
-+# For older versions however, the repository is stored in the .git/ of
-+# the submodule directory, so the following will effectively remove the
-+# the working copy as well as the repository, which means submodules
-+# will not be cached for older versions.
-+#
-+cmd='printf "Deregistering submodule \"%s\"\n" "${path}" && cd .. && rm -rf "${path##*/}"'
-+_git submodule --quiet foreach "'${cmd}'"
-+
- # Checkout the required changeset, so that we can update the required
- # submodules.
- _git checkout -f -q "'${cset}'"
+ _git remote set-url origin "'${uri}'"
  
- # Get rid of now-untracked directories (in case a git operation was
--# interrupted in a previous run).
-+# interrupted in a previous run, or to get rid of empty directories
-+# that were parrents of submodules removed above).
- _git clean -ffdx
+-# Try to fetch with limited depth, since it is faster than a full clone - but
+-# that only works if the version is a ref (tag or branch). Before trying to do
+-# a shallow clone we check if ${cset} is in the list provided by git ls-remote.
+-# If not we fallback to a full fetch.
+-#
+-# Messages for the type of clone used are provided to ease debugging in
+-# case of problems
+-git_done=0
+-if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
+-    printf "Doing a shallow fetch\n"
+-    if _git fetch "${@}" --depth 1 origin "'${cset}'"; then
+-        git_done=1
+-    else
+-        printf "Shallow fetch failed, falling back to fetching all refs\n"
+-    fi
+-fi
+-if [ ${git_done} -eq 0 ]; then
+-    printf "Fetching all references\n"
+-    _git fetch origin
+-    _git fetch origin -t
+-fi
++printf "Fetching all references\n"
++_git fetch origin
++_git fetch origin -t
  
- # Get date of commit to generate a reproducible archive.
+ # Try to get the special refs exposed by some forges (pull-requests for
+ # github, changes for gerrit...). There is no easy way to know whether
 -- 
 2.14.1
