@@ -1,37 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 17:51:46 +0200
-Subject: [Buildroot] [PATCH 1/3] dropbear: Use macro to set options
-In-Reply-To: <20180418142434.7268-1-stefan.sorensen@spectralink.com>
-References: <20180418142434.7268-1-stefan.sorensen@spectralink.com>
-Message-ID: <20180428175146.0d4d6406@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 28 Apr 2018 17:52:51 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mesa3d: add missing elfutils
+ dependency with R600 driver
+Message-ID: <20180428155252.27526-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stefan,
+Commit "add dependency on elfutils for R600 with LLVM" [1] select
+elfutils package at Kconfig level without adding it the make dependency.
 
-On Wed, 18 Apr 2018 16:24:32 +0200, Stefan S?rensen wrote:
-> Introduce a macro for editing options.h according to the Buildroot
-> configuration, replacing individual sed scripts.
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+Enabling r600 support lead to a build issue when building from
+scratch with "make mesa3d":
+checking for RADEON... yes
+configure: error: r600 requires libelf when using llvm
 
-I have merged some patches from Fran?ois Perrad (submitted before your
-series) that bump Dropbear to 2018.76. And the mechanism to tweak
-options has changed quite a bit.
+elfutils dependency is needed by r600 with llvm support and radeonSI.
 
-You now simply needs to add #define in a file called localoptions.h,
-overriding the default option values.
+[1] 92fda8761aa8024be53a8edb8c102d1ba6401bce
 
-Could you rebase your patch series on top of the latest dropbear
-changes ?
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Valentin Korenblit <valentin.korenblit@smile.fr>
+---
+ package/mesa3d/mesa3d.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks!
-
-Thomas
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 9857b597cf..2529c7d8e6 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -38,6 +38,10 @@ MESA3D_CONF_OPTS += \
+ 	--with-llvm-prefix=$(STAGING_DIR)/usr \
+ 	--enable-llvm-shared-libs \
+ 	--enable-llvm
++# R600 needs libelf when Mesa3D is built with LLVM support
++ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600),)
++MESA3D_DEPENDENCIES += elfutils
++endif
+ else
+ # Avoid automatic search of llvm-config
+ MESA3D_CONF_OPTS += --disable-llvm
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.3
