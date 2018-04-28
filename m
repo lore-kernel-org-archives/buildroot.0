@@ -1,123 +1,65 @@
-From: =?UTF-8?Q?Micha=C5=82_Kalbarczyk?= <michal@gamecodehq.com>
-Date: Sat, 28 Apr 2018 14:59:21 +0000
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add Radeon SI support
-In-Reply-To: <2c8ac98c-ab4d-9e5a-5496-3265311bfcc2@gmail.com>
-References: <591797C1-62B3-4F20-8E68-1ABAE1E66218@gamecodehq.com>
- <2c8ac98c-ab4d-9e5a-5496-3265311bfcc2@gmail.com>
-Message-ID: <CAGbXN6J+YOpOFSYEYk2CzuwibNre4RJDOxVRwpj6rpMhLZ-2-A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Apr 2018 17:15:12 +0200
+Subject: [Buildroot] [PATCH RFC] legal-info: add option to store
+ manifest in rootfs
+In-Reply-To: <e8f0d25b-5d96-9b31-4203-4074f804680c@gmail.com>
+References: <20180426193252.19616-1-yann.morin.1998@free.fr>
+ <20180427154650.3710e52e@windsurf>
+ <fcf05ec0-3482-d265-c186-64492601e8a6@lucaceresoli.net>
+ <20180427200245.GA14947@scaer>
+ <0862ab07-5d01-eaf2-9da6-d50bf13f029f@lucaceresoli.net>
+ <e8f0d25b-5d96-9b31-4203-4074f804680c@gmail.com>
+Message-ID: <20180428151512.GA2922@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I get it now. It works for me because I have selected LIB_RADEON and
-MESA3D_LLVM in my defconfig. I?ll create another patch. Should i post it in
-this thread or create another one?
+Florian, All,
 
-On Sat, 28 Apr 2018 at 15:55, Romain Naour <romain.naour@gmail.com> wrote:
+On 2018-04-27 14:39 -0700, Florian Fainelli spake thusly:
+[--SNIP--]
+> Let's drop this, I was not thinking this would go into such a lengthy
+> discussion,
 
-> Hi Michal,
->
-> Le 27/04/2018 ? 16:07, Micha? Kalbarczyk a ?crit :
-> > From adff41d0ec39d5e89ce713c88edb0ee6468c7236 Mon Sep 17 00:00:00 2001
-> > From: =?UTF-8?q?Micha=C5=82=20Kalbarczyk?= <fazibear@gmail.com>
-> > Date: Fri, 27 Apr 2018 15:49:15 +0200
-> > Subject: [PATCH 1/1] package/mesa3d: add Radeon SI support
-> > MIME-Version: 1.0
-> > Content-Type: text/plain; charset=UTF-8
-> > Content-Transfer-Encoding: 8bit
->
-> Thanks for this contribution!
-> I know it's too late since the patch is already applied but here is my
-> review.
->
-> > Signed-off-by: Micha? Kalbarczyk <fazibear@gmail.com>
-> > ---
-> >  package/mesa3d/Config.in | 20 ++++++++++++++++++++
-> >  package/mesa3d/mesa3d.mk |  1 +
-> >  2 files changed, 21 insertions(+)
-> >
-> > diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> > index bd3d050e29..cbaa20370f 100644
-> > --- a/package/mesa3d/Config.in
-> > +++ b/package/mesa3d/Config.in
-> > @@ -108,6 +108,26 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-> >       help
-> >         Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
-> >
-> > +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
-> > +     bool "Gallium Radeon SI driver"
-> > +     depends on BR2_i386 || BR2_x86_64
-> > +     depends on !BR2_PACKAGE_MESA3D_LLVM || \
->
-> The RadeonSI support require LLVM.
->
-> checking for AMDGPU... yes
-> configure: error: --enable-llvm is required when building radeonsi
->
-> > +             (BR2_PACKAGE_MESA3D_LLVM && (BR2_TOOLCHAIN_USES_UCLIBC || \
-> > +                     BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
-> > +     select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> > +     select BR2_PACKAGE_LIBDRM_AMDGPU
->
-> In my previous review, mesa is checking for libdrm-amdgpu and
-> libdrm-radeon [1]
->
-> checking for EXPAT... yes
-> checking for RADEON... no
-> configure: error: Package requirements (libdrm >= 2.4.71 libdrm_radeon >=
-> 2.4.71)
->
-> > +     select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
-> > +     select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
-> > +     select BR2_PACKAGE_MESA3D_NEEDS_XA
-> > +     help
-> > +       Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
-> > +
-> > +# Radeon SI needs libelf when Mesa3D is built with LLVM support
-> > +# musl is not currently compatible with elfutils
-> > +comment "Radeon SI driver needs a uClibc or glibc toolchain when llvm
-> is enabled"
-> > +     depends on BR2_PACKAGE_MESA3D_LLVM
-> > +     depends on !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
->
-> The comment should be updated accordingly since llvm is mandatory.
->
-> Best regards,
-> Romain
->
-> [1] http://lists.busybox.net/pipermail/buildroot/2018-April/219308.html
->
-> > +
-> >  # R600 needs libelf when Mesa3D is built with LLVM support
-> >  # musl is not currently compatible with elfutils
-> >  comment "R600 driver needs a uClibc or glibc toolchain when llvm is
-> enabled"
-> > diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> > index e93490c042..9857b597cf 100644
-> > --- a/package/mesa3d/mesa3d.mk
-> > +++ b/package/mesa3d/mesa3d.mk
-> > @@ -80,6 +80,7 @@ endif
-> >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  +=
-> etnaviv imx
-> >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  +=
-> nouveau
-> >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     +=
-> r600
-> > +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) +=
-> radeonsi
-> >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     +=
-> svga
-> >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   +=
-> swrast
-> >  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      +=
-> vc4
-> > --
-> > 2.17.0
-> >
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180428/f93d07fb/attachment.html>
+That's been just 4-5 mails so far. This is *far* from being a lengthy
+discussion, especialy by Buildroot standards! ;-]
+
+> I will keep the local hack I have with make legal-info in
+> post-build.sh. Thanks a lot for your help Yann!
+
+Alternatively, you can use a br2-external tree, with:
+
+  - Config.in is empty
+
+  - external.desc contains:
+        name: LEGAL_IN_TARGET
+        desc: Isntall legal-info in rootfs
+
+  - external.mk contains something like:
+        target-finalize: legal-info
+
+        TARGET_FINALIZE_LEGAL_INFO_DIR = $(TARGET_DIR)/usr/share/legal-info
+
+        define TARGET_FINALIZE_LEGAL_INFO
+            $(INSTALL) -D -m 0644 $(LEGAL_MANIFEST_CSV_TARGET) \
+                $(TARGET_FINALIZE_LEGAL_INFO_DIR)/$(notdir $(LEGAL_MANIFEST_CSV_TARGET))
+            mkdir -p $(TARGET_FINALIZE_LEGAL_INFO_DIR)/licenses
+            cp -a $(LICENSE_FILES_DIR_TARGET)/* \
+                $(TARGET_FINALIZE_LEGAL_INFO_DIR)/licenses/
+        endef
+        TARGET_FINALIZE_HOOKS += TARGET_FINALIZE_LEGAL_INFO
+
+I've slightly tested that, and it seems to be working...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
