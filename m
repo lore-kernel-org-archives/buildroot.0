@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Apr 2018 14:02:50 +0200
-Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.10.1
-Message-ID: <20180428120250.9135-1-fontaine.fabrice@gmail.com>
+Date: Sat, 28 Apr 2018 14:26:27 +0200
+Subject: [Buildroot] [PATCH 1/1] libcgi: add license file (with its hash)
+Message-ID: <20180428122627.11025-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,34 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcgi/libcgi.hash | 3 +++
+ package/libcgi/libcgi.mk   | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 8f44982246..564096c745 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 ed5f3dcdc8d1cc5277529afb701377e77d1ff89711368a7456553bf249940bad  boinc-7.8.6.tar.gz
-+sha256 5c77752a5cbb69b2dc0343c5aea331f2ec73410d9f33f5f50867e4071e799609  boinc-7.10.1.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 3cb97b3f8d..aa32e6965a 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/libcgi/libcgi.hash b/package/libcgi/libcgi.hash
+index 3d9f791ed2..f071cc0aea 100644
+--- a/package/libcgi/libcgi.hash
++++ b/package/libcgi/libcgi.hash
+@@ -1,2 +1,5 @@
+ # From https://github.com/rafaelsteil/libcgi/releases/download/v1.1/libcgi-1.1.tar.gz.sha256sum
+ sha256  128445f2f828e84905d51bd53d11e2e08c489df3a07225ff9f198c1318092fe6  libcgi-1.1.tar.gz
++
++# Hash for license file:
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
+index 0d51de7542..d1e403fdf1 100644
+--- a/package/libcgi/libcgi.mk
++++ b/package/libcgi/libcgi.mk
+@@ -9,5 +9,6 @@ LIBCGI_SITE = https://github.com/rafaelsteil/libcgi/releases/download/v$(LIBCGI_
  
--BOINC_VERSION_MAJOR = 7.8
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).6
-+BOINC_VERSION_MAJOR = 7.10
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
+ LIBCGI_INSTALL_STAGING = YES
+ LIBCGI_LICENSE = LGPL-2.1+
++LIBCGI_LICENSE_FILES = COPYING
+ 
+ $(eval $(cmake-package))
 -- 
 2.14.1
