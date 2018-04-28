@@ -1,36 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 22:05:28 +0200
-Subject: [Buildroot] [PATCH 1/1] linux-firmware: add amdgpu firmware
- blobs.
-In-Reply-To: <20180427115143.20338-1-davidb@230ruedubac.fr>
-References: <20180427115143.20338-1-davidb@230ruedubac.fr>
-Message-ID: <20180428220528.54e5eb6d@windsurf>
+Date: Sat, 28 Apr 2018 22:05:53 +0200
+Subject: [Buildroot] [git commit] libconfuse: bump to version 3.2.1
+Message-ID: <20180428200717.51CA989077@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello David,
+commit: https://git.buildroot.net/buildroot/commit/?id=634cc0eba0bf1afe8e400db0f752ef0355e30b4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 27 Apr 2018 13:51:43 +0200, David Barbion wrote:
-> Add support for Volcanic Islands (VI), Sea Islands (CI) and Southern
-> Islands (SI) cards.
-> 
-> This firmware files will be needed if linux kernel is compiled with
-> amdgpu enabled.
-> 
-> Signed-off-by: David Barbion <davidb@230ruedubac.fr>
-> ---
->  package/linux-firmware/Config.in         | 5 +++++
->  package/linux-firmware/linux-firmware.mk | 5 +++++
->  2 files changed, 10 insertions(+)
+Add hash for license file
 
-I've updated linux-firmware.hash with the hash for LICENSE.amdgpu and
-applied. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libconfuse/libconfuse.hash | 7 ++++---
+ package/libconfuse/libconfuse.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
+index 826a9263f5..fa77af9cd1 100644
+--- a/package/libconfuse/libconfuse.hash
++++ b/package/libconfuse/libconfuse.hash
+@@ -1,4 +1,5 @@
+-# From https://github.com/martinh/libconfuse/releases/download/v3.2/confuse-3.2.tar.xz.md5
+-md5  84259ac3bd495645ab2fe61654917232  confuse-3.2.tar.xz
++# From https://github.com/martinh/libconfuse/releases/download/v3.2.1/confuse-3.2.1.tar.xz.md5
++md5  ebd66bb669cf43e62a23ed00d475ba67  confuse-3.2.1.tar.xz
+ # Locally computed
+-sha256  a46abb8696026d314197b6a70ae1a1c296342a9a68aa69b1935709c1477a4e48  confuse-3.1.tar.xz
++sha256  23c63272baf2ef4e2cbbafad2cf57de7eb81f006ec347c00b954819824add25e  confuse-3.2.1.tar.xz
++sha256  dc3ff4b62f851dd2e94a151061ffeb7d28ddfc880a442068dc5283dbaa927306  LICENSE
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index 431fefd4c7..9f265ae25f 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCONFUSE_VERSION = 3.2
++LIBCONFUSE_VERSION = 3.2.1
+ LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
+ LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
+ LIBCONFUSE_INSTALL_STAGING = YES
