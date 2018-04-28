@@ -1,65 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 18:58:39 +0200
-Subject: [Buildroot] [PATCH] bluez-alsa: new package
-In-Reply-To: <20180406081924.4473-1-joerg.krause@embedded.rocks>
-References: <20180406081924.4473-1-joerg.krause@embedded.rocks>
-Message-ID: <20180428185839.1417a42d@windsurf>
+Date: Sat, 28 Apr 2018 18:59:02 +0200
+Subject: [Buildroot] [git commit] libcdaudio: add hash for license file
+Message-ID: <20180428170128.E1B2689035@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bd2606f480898b4168b38fa3745071d6c80f6814
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  6 Apr 2018 10:19:24 +0200, J?rg Krause wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcdaudio/libcdaudio.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-> diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
-> new file mode 100644
-> index 0000000000..6713c089a2
-> --- /dev/null
-> +++ b/package/bluez-alsa/Config.in
-> @@ -0,0 +1,35 @@
-> +config BR2_PACKAGE_BLUEZ_ALSA
-> +	bool "bluez-alsa"
-> +	depends on !BR2_STATIC_LIBS # bluez5 uses dlfcn
-> +	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with bluez4 version
-
-No need to duplicate the explanation about those options, just write
-where they come from, i.e just "bluez5" in this case.
-
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5
-> +	depends on BR2_USE_MMU # bluez5 -> dbus
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	select BR2_PACKAGE_ALSA_LIB
-> +	select BR2_PACKAGE_BLUEZ5_UTILS
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_SBC
-> +	help
-> +	  Bluetooth Audio ALSA Backend.
-> +
-> +	  https://github.com/Arkq/bluez-alsa
-> +
-> +comment "bluez-alsa needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on BR2_USE_MMU
-
-This comment should either go at the top of the Config.in file, or at
-the bottom. If you put it like this between the main option and the
-sub-options, the sub-options are no longer indented properly by
-"menuconfig".
-
-Also, I've added a "depends on !BR2_PACKAGE_BLUEZ_UTILS" so that the
-comment doesn't appear when bluez4 is enabled.
-
-Applied with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcdaudio/libcdaudio.hash b/package/libcdaudio/libcdaudio.hash
+index f8e1112c59..67df7c5e41 100644
+--- a/package/libcdaudio/libcdaudio.hash
++++ b/package/libcdaudio/libcdaudio.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  5fdaf9af5ac4f75c0215d000b82b128fd054a582f81cc4f039a1e7fe69335ebb  libcdaudio-0.99.12p2.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
