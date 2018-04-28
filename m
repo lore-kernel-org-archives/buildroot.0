@@ -1,43 +1,38 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 28 Apr 2018 19:28:00 +0200
-Subject: [Buildroot] [PATCH 1/4] package/mesa3d: radeonSI: specify drm
- platform
-Message-ID: <20180428172803.11179-1-romain.naour@gmail.com>
+Date: Sat, 28 Apr 2018 19:28:01 +0200
+Subject: [Buildroot] [PATCH 2/4] package/mesa3d: RadeonSI needs
+ libdrm-radeon and libdrm-amdgpu
+In-Reply-To: <20180428172803.11179-1-romain.naour@gmail.com>
+References: <20180428172803.11179-1-romain.naour@gmail.com>
+Message-ID: <20180428172803.11179-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_PACKAGE_MESA3D_OPENGL_EGL is selected with RadeonSI drvier,
-mesa platform must be specified with drm.
-
 Fixes:
-hecking for RADEON... yes
-checking for AMDGPU... yes
-configure: error: radeonsi requires one of these:
-                  1) --with-platforms=drm (X, Wayland, offscreen rendering based on DRM)
-                  2) --with-platforms=surfaceless (offscreen only)
-                  3) --with-platforms=android (Android only)
-                  Recommended options: drm,x11
+checking for EXPAT... yes
+checking for RADEON... no
+configure: error: Package requirements (libdrm >= 2.4.71 libdrm_radeon >= 2.4.71)
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Micha? Kalbarczyk <michal@gamecodehq.com>
 ---
- package/mesa3d/mesa3d.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 9857b597cf..7534bc0833 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -167,6 +167,8 @@ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
- MESA3D_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI),y)
-+MESA3D_PLATFORMS = drm
- endif
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- MESA3D_DEPENDENCIES += wayland wayland-protocols
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1984e4f11c..32337a36a4 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -122,6 +122,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+ 			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_AMDGPU
++	select BR2_PACKAGE_LIBDRM_RADEON
+ 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
 -- 
 2.14.3
