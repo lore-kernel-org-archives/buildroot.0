@@ -1,93 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 12:30:39 +0200
-Subject: [Buildroot] [git commit] python-subprocess32: new package
-Message-ID: <20180428103042.8605188E79@busybox.osuosl.org>
+Date: Sat, 28 Apr 2018 12:33:15 +0200
+Subject: [Buildroot] [git commit] package/freeswitch-mod-bcg729: bump
+ version to v1.0.4
+Message-ID: <20180428103337.5000288ECF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bc02beb946afa077a6be8a4784da58467d67fc4
+commit: https://git.buildroot.net/buildroot/commit/?id=14bac1202a7f0f0423c549c3d5cd8411b5743c18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A backport of the Python 3 subprocess module for use on Python 2.
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                           |  1 +
- package/Config.in                                    |  1 +
- package/python-subprocess32/Config.in                |  8 ++++++++
- package/python-subprocess32/python-subprocess32.hash |  4 ++++
- package/python-subprocess32/python-subprocess32.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash | 2 +-
+ package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9685a53886..25edcf97b3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -191,6 +191,7 @@ F:	package/stress/
+diff --git a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
+index 67804883bc..475556ebe9 100644
+--- a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
++++ b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 135f545ad0eef49d1228f8d66a4e66f1ff5f1f8fdf115e88c1df3df8df49fdcb  freeswitch-mod-bcg729-c504eea91f225014380ae17c00b35e7173e316ad.tar.gz
++sha256 0dec5b78f655e175936806396b89b4997c8e543a1c84683a19ea2b6f36e01d7e  freeswitch-mod-bcg729-v1.0.4.tar.gz
+ sha256 bb4680b13c3190429464a8308a07d7d891e6454349fb7be856e02405b25b1195  LICENSE
+diff --git a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
+index 15f9375f2b..98324b2a08 100644
+--- a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
++++ b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Asaf Kahlon <asafka7@gmail.com>
- F:	package/python-jsonmodels/
-+F:	package/python-subprocess32/
- F:	package/python-yieldfrom/
- F:	package/zeromq/
- 
-diff --git a/package/Config.in b/package/Config.in
-index bdc02025cf..8614a9b216 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -939,6 +939,7 @@ menu "External python modules"
- 	source "package/python-sortedcontainers//Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-sqlalchemy/Config.in"
-+	source "package/python-subprocess32/Config.in"
- 	source "package/python-systemd/Config.in"
- 	source "package/python-tabledata/Config.in"
- 	source "package/python-tempora/Config.in"
-diff --git a/package/python-subprocess32/Config.in b/package/python-subprocess32/Config.in
-new file mode 100644
-index 0000000000..a936b064b0
---- /dev/null
-+++ b/package/python-subprocess32/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SUBPROCESS32
-+	bool "python-subprocess32"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  A backport of the Python 3 subprocess module for use
-+	  on Python 2.
-+
-+	  https://github.com/google/python-subprocess32
-diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
-new file mode 100644
-index 0000000000..17a54b0034
---- /dev/null
-+++ b/package/python-subprocess32/python-subprocess32.hash
-@@ -0,0 +1,4 @@
-+# sha256 from https://pypi.org/pypi/subprocess32/json
-+sha256	1e450a4a4c53bf197ad6402c564b9f7a53539385918ef8f12bdf430a61036590  subprocess32-3.2.7.tar.gz
-+# Locally computed sha256 checksums
-+sha256	826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
-diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
-new file mode 100644
-index 0000000000..483bf5333f
---- /dev/null
-+++ b/package/python-subprocess32/python-subprocess32.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-subprocess32
-+#
-+################################################################################
-+
-+PYTHON_SUBPROCESS32_VERSION = 3.2.7
-+PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
-+PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/b8/2f/49e53b0d0e94611a2dc624a1ad24d41b6d94d0f1b0a078443407ea2214c2
-+PYTHON_SUBPROCESS32_SETUP_TYPE = distutils
-+PYTHON_SUBPROCESS32_LICENSE = Python-2.0
-+PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+-FREESWITCH_MOD_BCG729_VERSION = c504eea91f225014380ae17c00b35e7173e316ad
++FREESWITCH_MOD_BCG729_VERSION = v1.0.4
+ FREESWITCH_MOD_BCG729_SITE = $(call github,xadhoom,mod_bcg729,$(FREESWITCH_MOD_BCG729_VERSION))
+ FREESWITCH_MOD_BCG729_LICENSE = MPL-1.1
+ FREESWITCH_MOD_BCG729_LICENSE_FILES = LICENSE
