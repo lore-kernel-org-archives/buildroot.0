@@ -1,44 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Apr 2018 12:11:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.8.1
-Message-ID: <20180428101147.4680-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Apr 2018 12:17:39 +0200
+Subject: [Buildroot] [PATCH v2 5/5] python-flask-bootstrap: new package
+In-Reply-To: <CAGm1_ksX5tTpYNsv8yTRKUAsw6e0NfFBDpv+xeqzvjSPyWTx8A@mail.gmail.com>
+References: <20180206132506.30389-1-aduskett@gmail.com>
+ <20180206132506.30389-5-aduskett@gmail.com>
+ <20180427233344.56c57c66@windsurf>
+ <CAGm1_ksX5tTpYNsv8yTRKUAsw6e0NfFBDpv+xeqzvjSPyWTx8A@mail.gmail.com>
+Message-ID: <20180428121739.373473de@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.8.1.html
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Sat, 28 Apr 2018 07:15:01 +0200, Yegor Yefremov wrote:
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 36e2ff79be..85d0e18b52 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.8.0.tar.asc
--sha256 87d9b585dbd8628e79aabb6e621a94bd20a072a00762e78e0899fad22fc18fb7  samba-4.8.0.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.8.1.tar.asc
-+sha256 8ef7367507f16b7a5e2f6aed5bcdbd1143feca79aa2a07c9b21292b17d7f789d  samba-4.8.1.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index a5ebe59ef3..c77bc04a89 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.8.0
-+SAMBA4_VERSION = 4.8.1
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+> I've looked at this file
+> https://github.com/mbr/flask-bootstrap/blob/master/LICENSE
+
+This file isn't distributed in the tarball from Pypi, at least I don't
+remember seeing it yesterday when I looked at the package source code.
+
+> The author also mentions Apache-2.0 license as the license of the
+> original project.
+
+And so, is this package just under BSD-3c, or under BSD-3c and
+Apache-2.0 ?
+
+I'm not sure what the "original Bootstrap files" are, whether they are
+distributed with python-flask-bootstrap or not.
+
+Thomas
 -- 
-2.14.2
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
