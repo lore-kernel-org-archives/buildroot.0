@@ -1,37 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 18:35:46 +0200
-Subject: [Buildroot] [V2] chipmunk: new package
-In-Reply-To: <20180411100146.19494-1-francois.perrad@gadz.org>
-References: <20180411100146.19494-1-francois.perrad@gadz.org>
-Message-ID: <20180428183546.48e1e8f1@windsurf>
+Date: Sat, 28 Apr 2018 18:36:02 +0200
+Subject: [Buildroot] [git commit] mpd: add mms support
+Message-ID: <20180428163609.33ACE89016@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b3d8129a11b03fe9309c6cd8d585cdb7453332b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 11 Apr 2018 12:01:46 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/chipmunk/Config.in     | 12 ++++++++++++
->  package/chipmunk/chipmunk.hash |  5 +++++
->  package/chipmunk/chipmunk.mk   | 16 ++++++++++++++++
->  5 files changed, 35 insertions(+)
->  create mode 100644 package/chipmunk/Config.in
->  create mode 100644 package/chipmunk/chipmunk.hash
->  create mode 100644 package/chipmunk/chipmunk.mk
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpd/Config.in | 6 ++++++
+ package/mpd/mpd.mk    | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-I've applied, after adding some logic to make use of the BUILD_STATIC,
-BUILD_SHARED and INSTALL_STATIC options.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 6c7468e173..831e4ab0d7 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -180,6 +180,12 @@ config BR2_PACKAGE_MPD_CURL
+ 	help
+ 	  Enable curl streaming (http) support.
+ 
++config BR2_PACKAGE_MPD_LIBMMS
++	bool "mms"
++	select BR2_PACKAGE_LIBMMS
++	help
++	  Enable MMS support.
++
+ config BR2_PACKAGE_MPD_LIBNFS
+ 	bool "nfs"
+ 	# libnfs -> libtirpc
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 639c8c1981..64471d4da5 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -120,6 +120,13 @@ else
+ MPD_CONF_OPTS += --disable-libmpdclient
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_LIBMMS),y)
++MPD_DEPENDENCIES += libmms
++MPD_CONF_OPTS += --enable-mms
++else
++MPD_CONF_OPTS += --disable-mms
++endif
++
+ ifeq ($(BR2_PACKAGE_MPD_LIBNFS),y)
+ MPD_DEPENDENCIES += libnfs
+ MPD_CONF_OPTS += --enable-nfs
