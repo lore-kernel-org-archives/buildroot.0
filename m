@@ -1,33 +1,27 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 28 Apr 2018 20:58:31 +0200
-Subject: [Buildroot] [PATCH 1/1] python-fastentrypoints: new package
-In-Reply-To: <20180428150928.561b58cc@windsurf>
-References: <20180409180403.11728-1-asafka7@gmail.com>
- <20180409210122.12173e62@windsurf>
- <CALFsTFWyq9tYd+qS+YG3KJ1smzkcNhMTO_D4-2QCVoyR1qUiDA@mail.gmail.com>
- <CALFsTFXFgO0S49gJug+gJ1bGsNq16j56cpiLMpFMrN6Zdoz5dA@mail.gmail.com>
- <20180428150928.561b58cc@windsurf>
-Message-ID: <CAGm1_kvEhaVDU9siruB2dAbBXff6V+BGu4BQcEd5T94s1bTYjw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Apr 2018 21:03:27 +0200
+Subject: [Buildroot] [PATCH 1/1] libcroco: add hash for license file
+Message-ID: <20180428190327.22470-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 28, 2018 at 3:09 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Tue, 10 Apr 2018 23:02:12 +0300, Asaf Kahlon wrote:
->
->> Is there anything new with my patch? Should I add/change something?
->
-> I'd like to hear from Yegor about this patch. Yegor, could you comment
-> on this patch ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcroco/libcroco.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I'm OK with this patch. This package could be helpful for the
-python-crossbar testing as it takes ages to start crossbar script.
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Yegor
+diff --git a/package/libcroco/libcroco.hash b/package/libcroco/libcroco.hash
+index 83d2ffe515..809671c5ee 100644
+--- a/package/libcroco/libcroco.hash
++++ b/package/libcroco/libcroco.hash
+@@ -1,2 +1,5 @@
+ # From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.12.sha256sum
+ sha256	ddc4b5546c9fb4280a5017e2707fbd4839034ed1aba5b7d4372212f34f84f860	libcroco-0.6.12.tar.xz
++
++# Hash for license file:
++sha256	94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23	COPYING.LIB
+-- 
+2.14.1
