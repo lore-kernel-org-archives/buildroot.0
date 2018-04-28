@@ -1,70 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Apr 2018 18:55:22 +0200
-Subject: [Buildroot] [PATCH 1/1] .gitignore: ignore outgoing directory
-In-Reply-To: <20180428184458.310770ce@windsurf>
-References: <20180308142907.3006-1-chrismcc@gmail.com>
- <20180422080532.GG12688@scaer> <20180428184458.310770ce@windsurf>
-Message-ID: <20180428165522.GB2922@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Apr 2018 18:58:39 +0200
+Subject: [Buildroot] [PATCH] bluez-alsa: new package
+In-Reply-To: <20180406081924.4473-1-joerg.krause@embedded.rocks>
+References: <20180406081924.4473-1-joerg.krause@embedded.rocks>
+Message-ID: <20180428185839.1417a42d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2018-04-28 18:44 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 22 Apr 2018 10:05:32 +0200, Yann E. MORIN wrote:
-> > Christopher, All,
-> > 
-> > On 2018-03-08 06:29 -0800, Christopher McCrory spake thusly:
-> > > The buildroot documentation for submitting patches creates a new
-> > > directory "outgoing".  This prevents git from nagging about untracked
-> > > files.
-> > > 
-> > > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>  
-> > 
-> > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > Peter, this is a candidate for 2018.02.x as well, I guess. ;-)
-> 
-> I'd like to challenge this patch: I am not super convinced. Creating a
-> outgoing/ directory is not "git format-patch" default behavior. By
-> default, the patches go in the current folder.
-> 
-> It's only the Buildroot manual that suggests to put them in an
-> outgoing/ folder (I'm not sure why).
+On Fri,  6 Apr 2018 10:19:24 +0200, J?rg Krause wrote:
 
-And I'm not even sure why we even creat the patches locally, when it is
-perfectly possible to send them directly, e.g. to send the last three
-patches:
+> diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
+> new file mode 100644
+> index 0000000000..6713c089a2
+> --- /dev/null
+> +++ b/package/bluez-alsa/Config.in
+> @@ -0,0 +1,35 @@
+> +config BR2_PACKAGE_BLUEZ_ALSA
+> +	bool "bluez-alsa"
+> +	depends on !BR2_STATIC_LIBS # bluez5 uses dlfcn
+> +	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with bluez4 version
 
-    git send-email --to buidlroot at buildroot.org HEAD^^^..
+No need to duplicate the explanation about those options, just write
+where they come from, i.e just "bluez5" in this case.
 
-Regards,
-Yann E. MORIN.
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5
+> +	depends on BR2_USE_MMU # bluez5 -> dbus
+> +	depends on BR2_USE_WCHAR # libglib2
+> +	select BR2_PACKAGE_ALSA_LIB
+> +	select BR2_PACKAGE_BLUEZ5_UTILS
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_SBC
+> +	help
+> +	  Bluetooth Audio ALSA Backend.
+> +
+> +	  https://github.com/Arkq/bluez-alsa
+> +
+> +comment "bluez-alsa needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> +	depends on BR2_USE_MMU
 
-> My feeling is that the Buildroot
-> manual just gives an example, and really users could put their patches
-> in any other folder, and we're not going to add all random folders
-> in .gitignore.
-> 
-> So I would say no to this patch, and therefore disagree with Yann's
-> Acked-by. Peter, Arnout, could you chime in and give your opinion about
-> this ?
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+This comment should either go at the top of the Config.in file, or at
+the bottom. If you put it like this between the main option and the
+sub-options, the sub-options are no longer indented properly by
+"menuconfig".
 
+Also, I've added a "depends on !BR2_PACKAGE_BLUEZ_UTILS" so that the
+comment doesn't appear when bluez4 is enabled.
+
+Applied with those changes. Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
