@@ -1,32 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 22:08:51 +0200
-Subject: [Buildroot] [PATCH 1/1] libcrossguid: bump to version 0.2.2
-In-Reply-To: <20180428200043.2509-1-fontaine.fabrice@gmail.com>
-References: <20180428200043.2509-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180428220851.08e10ddc@windsurf>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 28 Apr 2018 22:13:05 +0200
+Subject: [Buildroot] [PATCH 2/4] package/mesa3d: RadeonSI needs
+ libdrm-radeon and libdrm-amdgpu
+In-Reply-To: <20180428220403.208e1cf4@windsurf>
+References: <20180428172803.11179-1-romain.naour@gmail.com>
+ <20180428172803.11179-2-romain.naour@gmail.com>
+ <20180428220403.208e1cf4@windsurf>
+Message-ID: <ceba3978-c594-f62f-2621-afc3a5f0a642@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sat, 28 Apr 2018 22:00:43 +0200, Fabrice Fontaine wrote:
->  - Add hash for license file
->  - guid.cpp and guid.h have been renamed Guid.cpp and Guid.hpp (they
-> will be renamed back to guid.cpp and guid.hpp in next release)
->  - Continue to use package-generic infrastructure as cmake doesn't work
->    properly with this version. Commit such as https://github.com/graeme-hill/crossguid/commit/974def4e0ad62b8fea17d6dee7c4f9b0d65eaa2c is needed. Migration on cmake should be done in next package release.
+Le 28/04/2018 ? 22:04, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Sat, 28 Apr 2018 19:28:01 +0200, Romain Naour wrote:
+>> Fixes:
+>> checking for EXPAT... yes
+>> checking for RADEON... no
+>> configure: error: Package requirements (libdrm >= 2.4.71 libdrm_radeon >= 2.4.71)
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Micha? Kalbarczyk <michal@gamecodehq.com>
+>> ---
+>>  package/mesa3d/Config.in | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+>> index 1984e4f11c..32337a36a4 100644
+>> --- a/package/mesa3d/Config.in
+>> +++ b/package/mesa3d/Config.in
+>> @@ -122,6 +122,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+>>  			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
+>>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>>  	select BR2_PACKAGE_LIBDRM_AMDGPU
+>> +	select BR2_PACKAGE_LIBDRM_RADEON
+> 
+> So it needs both libdrm_radeon and libdrm_amdgpu ?
 
-The formatting of the commit log is not really great. Bullets in the
-list are not aligned, and it's not wrapped to 72 characters. I've fixed
-that and applied. Thanks!
+Indeed, see [1]
+
+xradeonsi)
+  HAVE_GALLIUM_RADEONSI=yes
+  PKG_CHECK_MODULES([RADEON], [libdrm >= $LIBDRM_RADEON_REQUIRED libdrm_radeon
+>= $LIBDRM_RADEON_REQUIRED])
+  PKG_CHECK_MODULES([AMDGPU], [libdrm >= $LIBDRM_AMDGPU_REQUIRED libdrm_amdgpu
+>= $LIBDRM_AMDGPU_REQUIRED])
+  require_libdrm "radeonsi"
+  radeon_llvm_check $LLVM_REQUIRED_RADEONSI "radeonsi"
+  if test "x$enable_egl" = xyes; then
+  require_basic_egl "radeonsi"
+  fi
+;;
+
+[1] https://github.com/mesa3d/mesa/blob/master/configure.ac#L2618
 
 Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> Thomas
+> 
