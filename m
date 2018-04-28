@@ -1,25 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Apr 2018 15:12:08 +0200
-Subject: [Buildroot] [PATCH 1/1] libcddb: add hash for license file
-Message-ID: <20180428131208.25729-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Apr 2018 15:12:55 +0200
+Subject: [Buildroot] [PATCH 1/1] abootimg: new package
+In-Reply-To: <1522846449-22363-1-git-send-email-julien.boibessot@free.fr>
+References: <1522846449-22363-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20180428151255.70f316a6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcddb/libcddb.hash | 1 +
- 1 file changed, 1 insertion(+)
+Hello,
 
-diff --git a/package/libcddb/libcddb.hash b/package/libcddb/libcddb.hash
-index 9e60683ea3..55dbbcbe13 100644
---- a/package/libcddb/libcddb.hash
-+++ b/package/libcddb/libcddb.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256	35ce0ee1741ea38def304ddfe84a958901413aa829698357f0bee5bb8f0a223b	libcddb-1.3.2.tar.bz2
-+sha256	7a4436f9ec37603356791c87de3bc444989befd2682d29efb3d97604e04c1852	COPYING 
+On Wed,  4 Apr 2018 14:54:09 +0200, julien.boibessot at free.fr wrote:
+
+> +ABOOTIMG_VERSION = 7e127fee6a3981f6b0a50ce9910267cd501e09d4
+> +ABOOTIMG_SITE = $(call github,ggrandou,abootimg,$(ABOOTIMG_VERSION))
+> +ABOOTIMG_LICENSE = GPLv2
+
+The proper encoding for this license is GPL-2.0, and in fact the
+license is GPLv2 or later, so the correct value here was GPL-2.0+.
+
+Applied with this fixed. Thanks!
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
