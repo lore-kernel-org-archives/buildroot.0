@@ -1,97 +1,50 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 28 Apr 2018 11:11:50 +0300
-Subject: [Buildroot] [PATCH v3 1/1] python-subprocess32: new package
-Message-ID: <20180428081150.19423-1-asafka7@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 28 Apr 2018 10:44:00 +0200
+Subject: [Buildroot] [PATCH 1/2] website: footer.html: use 1.7.1 release
+ of clipboard.js
+In-Reply-To: <20180427195017.18344-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 27 Apr 2018 21:50:16 +0200")
+References: <20180427195017.18344-1-peter@korsgaard.com>
+Message-ID: <87k1sryb3j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A backport of the Python 3 subprocess module for use on Python 2.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
-v2: set _LICENSE to "Python-2.0".
-v3: add dot at the end of Config.in help text.
+ > The clipboard javascript code causes an error:
+ > Uncaught TypeError: Illegal constructor
+ >     at buildroot.js:58
 
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/python-subprocess32/Config.in              |  8 ++++++++
- .../python-subprocess32/python-subprocess32.hash   |  4 ++++
- package/python-subprocess32/python-subprocess32.mk | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-subprocess32/Config.in
- create mode 100644 package/python-subprocess32/python-subprocess32.hash
- create mode 100644 package/python-subprocess32/python-subprocess32.mk
+ > Which is caused by a recent change in upstream clipboard.js:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 63361b6fb6..64cc5874e7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -190,6 +190,7 @@ F:	package/stress/
- 
- N:	Asaf Kahlon <asafka7@gmail.com>
- F:	package/python-jsonmodels/
-+F:	package/python-subprocess32/
- F:	package/python-yieldfrom/
- F:	package/zeromq/
- 
-diff --git a/package/Config.in b/package/Config.in
-index ecd9b8f082..4ea8512e4e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -938,6 +938,7 @@ menu "External python modules"
- 	source "package/python-sortedcontainers//Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-sqlalchemy/Config.in"
-+	source "package/python-subprocess32/Config.in"
- 	source "package/python-systemd/Config.in"
- 	source "package/python-tabledata/Config.in"
- 	source "package/python-tempora/Config.in"
-diff --git a/package/python-subprocess32/Config.in b/package/python-subprocess32/Config.in
-new file mode 100644
-index 0000000000..a936b064b0
---- /dev/null
-+++ b/package/python-subprocess32/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SUBPROCESS32
-+	bool "python-subprocess32"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  A backport of the Python 3 subprocess module for use
-+	  on Python 2.
-+
-+	  https://github.com/google/python-subprocess32
-diff --git a/package/python-subprocess32/python-subprocess32.hash b/package/python-subprocess32/python-subprocess32.hash
-new file mode 100644
-index 0000000000..17a54b0034
---- /dev/null
-+++ b/package/python-subprocess32/python-subprocess32.hash
-@@ -0,0 +1,4 @@
-+# sha256 from https://pypi.org/pypi/subprocess32/json
-+sha256	1e450a4a4c53bf197ad6402c564b9f7a53539385918ef8f12bdf430a61036590  subprocess32-3.2.7.tar.gz
-+# Locally computed sha256 checksums
-+sha256	826b43437249d39422642f695154d064da64de92eb1476048a615f50bc1beb4a  LICENSE
-diff --git a/package/python-subprocess32/python-subprocess32.mk b/package/python-subprocess32/python-subprocess32.mk
-new file mode 100644
-index 0000000000..483bf5333f
---- /dev/null
-+++ b/package/python-subprocess32/python-subprocess32.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-subprocess32
-+#
-+################################################################################
-+
-+PYTHON_SUBPROCESS32_VERSION = 3.2.7
-+PYTHON_SUBPROCESS32_SOURCE = subprocess32-$(PYTHON_SUBPROCESS32_VERSION).tar.gz
-+PYTHON_SUBPROCESS32_SITE = https://files.pythonhosted.org/packages/b8/2f/49e53b0d0e94611a2dc624a1ad24d41b6d94d0f1b0a078443407ea2214c2
-+PYTHON_SUBPROCESS32_SETUP_TYPE = distutils
-+PYTHON_SUBPROCESS32_LICENSE = Python-2.0
-+PYTHON_SUBPROCESS32_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+ > https://github.com/zenorocha/clipboard.js/releases/tag/v2.0.0
+
+ > Changes constructor from new Clipboard() to new ClipboardJS()
+
+ > The issue was that we were using the master version of clipboard.js instead
+ > of a specific release.  Fix it by using the 1.7.1 version (latest release
+ > before the constructor change) instead.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  docs/website/footer.html | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/docs/website/footer.html b/docs/website/footer.html
+ > index 279c8b1b5c..60a8872f77 100644
+ > --- a/docs/website/footer.html
+ > +++ b/docs/website/footer.html
+ > @@ -1,6 +1,6 @@
+ >  	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+ >  	<script src="https://oss.maxcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ > -	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
+ > +	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v2.0.0/dist/clipboard.min.js"></script>
+
+Ehh, this was naturally meant to be v1.7.1, I forgot to save muy
+buffer. I've fixed it now.
+
 -- 
-2.17.0
+Bye, Peter Korsgaard
