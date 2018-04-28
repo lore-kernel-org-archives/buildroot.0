@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 15:29:52 +0200
-Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.10.1
-In-Reply-To: <20180428120250.9135-1-fontaine.fabrice@gmail.com>
-References: <20180428120250.9135-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180428152952.6e1c2427@windsurf>
+Date: Sat, 28 Apr 2018 15:30:02 +0200
+Subject: [Buildroot] [PATCH 1/1] libcgi: add license file (with its hash)
+In-Reply-To: <20180428122627.11025-1-fontaine.fabrice@gmail.com>
+References: <20180428122627.11025-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180428153002.4adaabf8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 28 Apr 2018 14:02:50 +0200, Fabrice Fontaine wrote:
+On Sat, 28 Apr 2018 14:26:27 +0200, Fabrice Fontaine wrote:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/boinc/boinc.hash | 2 +-
->  package/boinc/boinc.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libcgi/libcgi.hash | 3 +++
+>  package/libcgi/libcgi.mk   | 1 +
+>  2 files changed, 4 insertions(+)
 
 Applied to master, thanks.
 
