@@ -1,54 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 23:40:33 +0200
-Subject: [Buildroot] [PATCH v2] imx-alsa-plugins: new package
-In-Reply-To: <20180201132629.13188-1-joerg.krause@embedded.rocks>
-References: <20180201132629.13188-1-joerg.krause@embedded.rocks>
-Message-ID: <20180428234033.385df291@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 29 Apr 2018 00:00:31 +0200
+Subject: [Buildroot] [PATCH 1/1] libcsv: add hash for license file
+Message-ID: <20180428220031.4216-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gary,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcsv/libcsv.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-Since you often look after all the Freescale/NXP stuff, would you mind
-reviewing this patch from J?rg ?
-
-You can also find it on patchwork at
-https://patchwork.ozlabs.org/patch/868232/.
-
-Thanks!
-
-Thomas
-
-On Thu,  1 Feb 2018 14:26:29 +0100, J?rg Krause wrote:
-> Freescale specific alsa-lib plugins for the i.MX processor family.
-> 
-> For now, the only provided plugin is:
->   * Rate Converter Plugin Using Freescale ASRC Resampler
-> 
-> The ASRC hardware resampler can be found on i.MX53 and most i.MX 6
-> processors.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> v2:
->  * Fix comment sections (Marcus Folkesson and Baruch Siach)
-> ---
->  package/freescale-imx/Config.in                    |  1 +
->  package/freescale-imx/imx-alsa-plugins/Config.in   | 25 ++++++++++++++++++++++
->  .../imx-alsa-plugins/imx-alsa-plugins.hash         |  3 +++
->  .../imx-alsa-plugins/imx-alsa-plugins.mk           | 21 ++++++++++++++++++
->  4 files changed, 50 insertions(+)
->  create mode 100644 package/freescale-imx/imx-alsa-plugins/Config.in
->  create mode 100644 package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.hash
->  create mode 100644 package/freescale-imx/imx-alsa-plugins/imx-alsa-plugins.mk
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/libcsv/libcsv.hash b/package/libcsv/libcsv.hash
+index e35c44f9b3..33a521d256 100644
+--- a/package/libcsv/libcsv.hash
++++ b/package/libcsv/libcsv.hash
+@@ -1,2 +1,3 @@
+ #locally computed
+ sha256 d9c0431cb803ceb9896ce74f683e6e5a0954e96ae1d9e4028d6e0f967bebd7e4  libcsv-3.0.3.tar.gz
++sha256 6876b170378d38f65aadd271485f0a5c45beaa043a7d3de5e1636ec927922c83  COPYING.LESSER
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
