@@ -1,42 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 22:04:03 +0200
-Subject: [Buildroot] [PATCH 2/4] package/mesa3d: RadeonSI needs
- libdrm-radeon and libdrm-amdgpu
-In-Reply-To: <20180428172803.11179-2-romain.naour@gmail.com>
-References: <20180428172803.11179-1-romain.naour@gmail.com>
- <20180428172803.11179-2-romain.naour@gmail.com>
-Message-ID: <20180428220403.208e1cf4@windsurf>
+Date: Sat, 28 Apr 2018 22:05:28 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-firmware: add amdgpu firmware
+ blobs.
+In-Reply-To: <20180427115143.20338-1-davidb@230ruedubac.fr>
+References: <20180427115143.20338-1-davidb@230ruedubac.fr>
+Message-ID: <20180428220528.54e5eb6d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello David,
 
-On Sat, 28 Apr 2018 19:28:01 +0200, Romain Naour wrote:
-> Fixes:
-> checking for EXPAT... yes
-> checking for RADEON... no
-> configure: error: Package requirements (libdrm >= 2.4.71 libdrm_radeon >= 2.4.71)
+On Fri, 27 Apr 2018 13:51:43 +0200, David Barbion wrote:
+> Add support for Volcanic Islands (VI), Sea Islands (CI) and Southern
+> Islands (SI) cards.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Micha? Kalbarczyk <michal@gamecodehq.com>
+> This firmware files will be needed if linux kernel is compiled with
+> amdgpu enabled.
+> 
+> Signed-off-by: David Barbion <davidb@230ruedubac.fr>
 > ---
->  package/mesa3d/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 1984e4f11c..32337a36a4 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -122,6 +122,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
->  			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->  	select BR2_PACKAGE_LIBDRM_AMDGPU
-> +	select BR2_PACKAGE_LIBDRM_RADEON
+>  package/linux-firmware/Config.in         | 5 +++++
+>  package/linux-firmware/linux-firmware.mk | 5 +++++
+>  2 files changed, 10 insertions(+)
 
-So it needs both libdrm_radeon and libdrm_amdgpu ?
+I've updated linux-firmware.hash with the hash for LICENSE.amdgpu and
+applied. Thanks!
 
 Thomas
 -- 
