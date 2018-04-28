@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Apr 2018 23:09:22 +0200
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.30
-In-Reply-To: <20180428203314.GA24480@waldemar-brodkorb.de>
-References: <20180428203314.GA24480@waldemar-brodkorb.de>
-Message-ID: <20180428230922.1d2f789b@windsurf>
+Date: Sat, 28 Apr 2018 23:09:40 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: concentrate on uClibc
+Message-ID: <20180428210944.AD0DD8100F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=12868ebd0d10d2de44e064fc8a198eaae92a6180
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 28 Apr 2018 22:33:14 +0200, Waldemar Brodkorb wrote:
-> Patches are upstream.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  ...0001-utils-fix-compile-of-msgfmt-msgmerge.patch | 48 ----------------------
->  ...dd-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch | 36 ----------------
->  package/uclibc/uclibc.hash                         |  2 +-
->  package/uclibc/uclibc.mk                           |  2 +-
->  4 files changed, 2 insertions(+), 86 deletions(-)
->  delete mode 100644 package/uclibc/0001-utils-fix-compile-of-msgfmt-msgmerge.patch
->  delete mode 100644 package/uclibc/0002-or1k-add-F_-DUPFD_CLOEXEC-SETPIPE_SZ-GETPIPE_SZ.patch
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3a4ad60044..45a8979e97 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1952,11 +1952,6 @@ N:	Wade Berrier <wberrier@gmail.com>
+ F:	package/ngrep/
+ 
+ N:	Waldemar Brodkorb <wbx@openadk.org>
+-F:	arch/Config.in.m68k
+-F:	arch/Config.in.or1k
+-F:	arch/Config.in.sparc
+-F:	package/glibc/
+-F:	package/mksh/
+ F:	package/uclibc/
+ F:	package/uclibc-ng-test/
+ 
