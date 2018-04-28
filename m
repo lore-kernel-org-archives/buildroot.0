@@ -1,53 +1,107 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Apr 2018 18:51:36 +0200
-Subject: [Buildroot] [PATCH 1/1] mpd: enable cdio-paranoia support
-Message-ID: <20180428165136.29617-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 28 Apr 2018 18:53:32 +0200
+Subject: [Buildroot] [PATCH 1/2] Makefile: add tainting support
+In-Reply-To: <1520326085-18337-2-git-send-email-angelo@amarulasolutions.com>
+References: <1520326085-18337-1-git-send-email-angelo@amarulasolutions.com>
+ <1520326085-18337-2-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180428185332.7d805102@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mpd/Config.in | 6 ++++++
- package/mpd/mpd.mk    | 7 +++++++
- 2 files changed, 13 insertions(+)
+Hello,
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 831e4ab0d7..857f212477 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -174,6 +174,12 @@ config BR2_PACKAGE_MPD_TWOLAME
- 
- comment "Input plugins"
- 
-+config BR2_PACKAGE_MPD_CDIO_PARANOIA
-+	bool "cdio-paranoia"
-+	select BR2_PACKAGE_LIBCDIO_PARANOIA
-+	help
-+	  Enable cdio-paranoia support.
-+
- config BR2_PACKAGE_MPD_CURL
- 	bool "curl"
- 	select BR2_PACKAGE_LIBCURL
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 64471d4da5..d41ffe1571 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -59,6 +59,13 @@ else
- MPD_CONF_OPTS += --disable-bzip2
- endif
- 
-+ifeq ($(BR2_PACKAGE_MPD_CDIO_PARANOIA),y)
-+MPD_DEPENDENCIES += libcdio-paranoia
-+MPD_CONF_OPTS += --enable-cdio-paranoia
-+else
-+MPD_CONF_OPTS += --disable-cdio-paranoia
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPD_CURL),y)
- MPD_DEPENDENCIES += libcurl
- MPD_CONF_OPTS += --enable-curl
+On Tue,  6 Mar 2018 09:48:04 +0100, Angelo Compagnucci wrote:
+
+> +# Check here if there are packages declaring they harm
+> +# the reproducibility of the build
+> +.PHONY: check-tainted
+> +check-tainted:
+> +ifneq ($(BR2_REPRODUCIBLE),)
+> +ifneq ($(BR2_TAINTED_BY),)
+
+I don't think BR2_REPRODUCIBLE has anything to do with this 'tainting'
+thing.
+
+BR2_REPRODUCIBLE is about getting binary identical results given a
+Buildroot configuration. But even with BR2_REPRODUCIBLE disabled,
+Buildroot aims at building the same source code, which the nodejs npm
+stuff does not allow to do. So the 'tainting' happens regardless of
+whether BR2_REPRODUCIBLE=y or not.
+
+If you remove the BR2_REPRODUCIBLE condition, then the Buildroot build
+would always fail as soon as one package taints the build, so I'm not
+sure a hard failure is a good approach here. Perhaps just a warning at
+the end of the build ?
+
+>  .PHONY: target-post-image
+> -target-post-image: $(TARGETS_ROOTFS) target-finalize
+> +target-post-image: check-tainted $(TARGETS_ROOTFS) target-finalize
+>  	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+>  		$(call MESSAGE,"Executing post-image script $(s)"); \
+>  		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+> @@ -1063,6 +1074,7 @@ help:
+>  	@echo '  source                 - download all sources needed for offline-build'
+>  	@echo '  external-deps          - list external packages used'
+>  	@echo '  legal-info             - generate info about license compliance'
+> +	@echo '  check-tainted          - check if any selected package harms build reproducibility'
+
+Not sure it is really useful to make this a first class target,
+documented in the help text. A warning at the end of the build is
+probably enough.
+
+Or maybe simply mention it as a Config.in comment ?
+
+comment "WARNING: nodejs modules will make your build non reproducible!"
+	depends on BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL != ""
+
+>  	@echo '  printvars              - dump all the internal variables'
+>  	@echo
+>  	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index a2a12e7..e643ecf 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -556,6 +556,10 @@ ifndef $(2)_REDISTRIBUTE
+>   endif
+>  endif
+>  
+> +ifdef $(2)_TAINTS
+> + BR2_TAINTED_BY+=$$($(2)_RAWNAME)
+> +endif
+
+I think "TAINTS" is very vague. Unfortunately, I don't have a good
+proposal. In addition, it's not only about tainting the build in terms
+of reproducibility, but also about the lack of integration with the
+download and legal infrastructures.
+
+I'm not sure what a good name for this would be. I've added Arnout in
+Cc, he often has interesting (and creative) ideas on such topics.
+
+> +# Save a legal warning if tainted
+> +ifneq ($$(call qstrip,$$($(2)_TAINTS)),)
+
+Implementation detail: you always use the construct:
+
+ifneq ($(var),)
+
+which is negative logic. Please use:
+
+ifeq ($(var),YES)
+
+instead. Of course, unless the variable really is empty vs. non-empty,
+but that isn't the case here.
+
+Also, your patch series was sent at a time where patchwork was missing
+some patches, so your PATCH 2/2 was not recorded. It would be useful if
+you could resend this patch series.
+
+Best regards,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
