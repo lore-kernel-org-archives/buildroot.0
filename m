@@ -1,25 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 00:00:31 +0200
-Subject: [Buildroot] [PATCH 1/1] libcsv: add hash for license file
-Message-ID: <20180428220031.4216-1-fontaine.fabrice@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 29 Apr 2018 00:14:13 +0200
+Subject: [Buildroot] [PATCH 1/1] support/testing: set $USER in rust tests
+Message-ID: <20180428221413.1833-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+When the run-time tests to build rust and rust-bin packages are run via Docker,
+the $USER environment variable is not set, which makes cargo fail when
+initializing the test project.
+
+So add it to make cargo happy.
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/libcsv/libcsv.hash | 1 +
+ support/testing/tests/package/test_rust.py | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libcsv/libcsv.hash b/package/libcsv/libcsv.hash
-index e35c44f9b3..33a521d256 100644
---- a/package/libcsv/libcsv.hash
-+++ b/package/libcsv/libcsv.hash
-@@ -1,2 +1,3 @@
- #locally computed
- sha256 d9c0431cb803ceb9896ce74f683e6e5a0954e96ae1d9e4028d6e0f967bebd7e4  libcsv-3.0.3.tar.gz
-+sha256 6876b170378d38f65aadd271485f0a5c45beaa043a7d3de5e1636ec927922c83  COPYING.LESSER
+diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
+index e6c0de2214..2dc814f99d 100644
+--- a/support/testing/tests/package/test_rust.py
++++ b/support/testing/tests/package/test_rust.py
+@@ -21,6 +21,7 @@ class TestRustBase(infra.basetest.BRTest):
+     def build_test_prog(self):
+         hostdir = os.path.join(self.builddir, 'host')
+         env = os.environ.copy()
++        env["USER"] = "br-user"
+         env["PATH"] = "{}:".format(os.path.join(hostdir, 'bin')) + env["PATH"]
+         env["CARGO_HOME"] = os.path.join(hostdir, 'usr', 'share', 'cargo')
+         env["RUST_TARGET_PATH"] = os.path.join(hostdir, 'etc', 'rustc')
 -- 
-2.14.1
+2.14.3
