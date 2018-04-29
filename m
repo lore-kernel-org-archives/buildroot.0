@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 22:18:30 +0200
-Subject: [Buildroot] [PATCH 1/1] libftdi1: add hash for license files
-Message-ID: <20180429201830.30322-1-fontaine.fabrice@gmail.com>
+Date: Sun, 29 Apr 2018 22:19:32 +0200
+Subject: [Buildroot] [PATCH 1/1] libfuse: add hash for license files
+Message-ID: <20180429201932.30382-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libftdi1/libftdi1.hash | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libfuse/libfuse.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
-index 40512a7fc3..f17543fa03 100644
---- a/package/libftdi1/libftdi1.hash
-+++ b/package/libftdi1/libftdi1.hash
-@@ -1,3 +1,8 @@
- # Locally computed after checking the signature
- # https://www.intra2net.com/en/developer/libftdi/download/libftdi1-1.4.tar.bz2.sig
- sha256  ec36fb49080f834690c24008328a5ef42d3cf584ef4060f3a35aa4681cb31b74  libftdi1-1.4.tar.bz2
+diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
+index 60bdf63990..f02c78418e 100644
+--- a/package/libfuse/libfuse.hash
++++ b/package/libfuse/libfuse.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated after checking pgp signature
+ sha256	832432d1ad4f833c20e13b57cf40ce5277a9d33e483205fc63c78111b3358874	fuse-2.9.7.tar.gz
 +
 +# Hash for license files:
-+sha256  524f46428bf72bb8c6acfeca4909551fd2e0bdbb5305406d38382f4056095c56  LICENSE
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.GPL
-+sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING.LIB
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LIB
 -- 
 2.14.1
