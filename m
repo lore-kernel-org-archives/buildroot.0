@@ -1,25 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 23:10:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-requests fix dependencies
-In-Reply-To: <20180429125339.28057-1-sven.haardiek@iotec-gmbh.de> (Sven
- Haardiek's message of "Sun, 29 Apr 2018 14:53:39 +0200")
-References: <20180429125339.28057-1-sven.haardiek@iotec-gmbh.de>
-Message-ID: <87d0yhpvm6.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 23:09:10 +0200
+Subject: [Buildroot] [git commit] package/python-requests: needs hashlib for
+ python 2
+Message-ID: <20180429211020.0C86588EC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Haardiek <sven.haardiek@iotec-gmbh.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c2f6f6630294fa256a4f66db5a4ab1f920b0a65
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Requests need hashlib to run with Pyhton 2. Otherwise it is not possible to
- > import, due to missing e.g. md5. There is a variable BR2_PACKAGE_PYTHON_HASHLIB
- > to make it work.
+Requests need hashlib to run with Python 2. Otherwise it is not possible to
+import, due to missing e.g. md5.
 
- > Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+[Peter: tweak commit message]
+Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-requests/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed after tweaking the commit message a bit, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
+index d2726fb26a..30158b8d25 100644
+--- a/package/python-requests/Config.in
++++ b/package/python-requests/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_REQUESTS
+ 	select BR2_PACKAGE_PYTHON_CHARDET # runtime
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
+ 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
++	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
