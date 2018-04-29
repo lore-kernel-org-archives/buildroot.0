@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 16:08:50 +0200
-Subject: [Buildroot] [git commit] libasplib: add hash for license file
-Message-ID: <20180429142028.07EBF8821B@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 16:10:40 +0200
+Subject: [Buildroot] [git commit] libargtable2: add hash for license file
+Message-ID: <20180429142028.36A3C81D87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15d85dd65bad09ca5ffe40109e431aa5bc5cd1db
+commit: https://git.buildroot.net/buildroot/commit/?id=8fcaa6af9307b221324446fa77fa8f32d7add625
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libasplib/libasplib.hash | 1 +
+ package/libargtable2/libargtable2.hash | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libasplib/libasplib.hash b/package/libasplib/libasplib.hash
-index 76534e528d..db8e920334 100644
---- a/package/libasplib/libasplib.hash
-+++ b/package/libasplib/libasplib.hash
+diff --git a/package/libargtable2/libargtable2.hash b/package/libargtable2/libargtable2.hash
+index 9addbc54b9..7df3a18041 100644
+--- a/package/libargtable2/libargtable2.hash
++++ b/package/libargtable2/libargtable2.hash
 @@ -1,2 +1,3 @@
- # Locally calculated
- sha256 68e117348fa17592dde7672477e927119a0e477103ced1d3a57d92e30880a147  libasplib-be7fac89218a84b75f7598e3d76625ece99296f2.tar.gz
-+sha256 12ac5047f2af0522f06798b1589ffc4599bc29c91f954d7874e0320634e777c0  LICENSE
+ # Locally computed:
+ sha256  8f77e8a7ced5301af6e22f47302fdbc3b1ff41f2b83c43c77ae5ca041771ddbf  argtable2-13.tar.gz
++sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING
