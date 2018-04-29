@@ -1,33 +1,36 @@
-From: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
-Date: Sun, 29 Apr 2018 13:40:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-requests fix dependencies
-Message-ID: <20180429114038.25035-1-sven.haardiek@iotec-gmbh.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 29 Apr 2018 13:59:48 +0200
+Subject: [Buildroot] [PATCH] speex: remove useless BUILD_CMDS
+Message-ID: <20180429115948.22436-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Requests need hashlib to run. Otherwise it is not possible to import, due to
-missing e.g. md5.
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+SPEEX_BUILD_CMDS is useless, because it's exactly defined to the
+default value of <pkg>_BUILDS_CMDS for autotools packages.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/python-requests/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/speex/speex.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
-index d2726fb26a..d51b4079cb 100644
---- a/package/python-requests/Config.in
-+++ b/package/python-requests/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_PYTHON_REQUESTS
- 	select BR2_PACKAGE_PYTHON_CHARDET # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
-+	select BR2_PACKAGE_PYTHON_HASHLIB # runtime
-+	select BR2_PACKAGE_PYTHON3_HASHLIB # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
- 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+diff --git a/package/speex/speex.mk b/package/speex/speex.mk
+index 1b278ea23d..3c188b631e 100644
+--- a/package/speex/speex.mk
++++ b/package/speex/speex.mk
+@@ -31,8 +31,4 @@ endef
+ 
+ SPEEX_POST_CONFIGURE_HOOKS += SPEEX_LIBTOOL_FIXUP
+ 
+-define SPEEX_BUILD_CMDS
+-	$($(PKG)_MAKE_ENV) $(MAKE) $($(PKG)_MAKE_OPTS) -C $(@D)/$($(PKG)_SUBDIR)
+-endef
+-
+ $(eval $(autotools-package))
 -- 
-2.17.0
+2.14.1
