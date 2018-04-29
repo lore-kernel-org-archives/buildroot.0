@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 19:27:48 +0200
-Subject: [Buildroot] [PATCH 1/1] libenca: add hash for license file
-In-Reply-To: <20180429145827.5646-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 16:58:27 +0200")
-References: <20180429145827.5646-1-fontaine.fabrice@gmail.com>
-Message-ID: <87h8ntsz1n.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 19:28:13 +0200
+Subject: [Buildroot] [PATCH 1/1] libesmtp: add hash for license files
+In-Reply-To: <20180429150553.8036-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 17:05:53 +0200")
+References: <20180429150553.8036-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d0yhsz0y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
