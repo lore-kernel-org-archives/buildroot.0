@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 19:28:52 +0200
-Subject: [Buildroot] [PATCH 1/1] libestr: add hash for license file
-In-Reply-To: <20180429150932.8675-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 17:09:32 +0200")
-References: <20180429150932.8675-1-fontaine.fabrice@gmail.com>
-Message-ID: <874ljtsyzv.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 19:29:03 +0200
+Subject: [Buildroot] [PATCH 1/1] libev: add hash for license file
+In-Reply-To: <20180429151230.9671-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 17:12:30 +0200")
+References: <20180429151230.9671-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zi1lrkf4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
