@@ -1,76 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 12:15:35 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/uclibc: Fix
- ffmpeg build on aarch64
-Message-ID: <20180429101623.CD60E811CF@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 29 Apr 2018 12:36:53 +0200
+Subject: [Buildroot] [PATCH 1/1] libass: bump to version 0.14.0
+Message-ID: <20180429103653.593-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=488b4d36bc980703a65522940525f91be1c845bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+- Switch from yasm to nasm: see
+  https://github.com/libass/libass/commit/0ce4c19a5f273fa8200cd84a578a618634a5d507
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- Add hash for license file
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-sys-ucontext.h-include-bits-sigcontext.h.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ package/libass/libass.hash | 3 ++-
+ package/libass/libass.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch b/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch
-new file mode 100644
-index 0000000000..0a1fdf6cb8
---- /dev/null
-+++ b/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch
-@@ -0,0 +1,49 @@
-+From 1c27982bb8a007bb1a6a29db8e6efb1f40975879 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 28 Jan 2018 13:59:30 +0100
-+Subject: [PATCH 1/1] aarch64/sys/ucontext.h: include bits/sigcontext.h
-+
-+Fixes a buildroot build error with ffmpeg
-+
-+In file included from /home/bernd/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/include/signal.h:329:0,
-+                 from fftools/ffmpeg.h:26,
-+                 from fftools/ffmpeg_opt.c:23:
-+/home/bernd/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/include/sys/ucontext.h:52:16:
-+ error: field 'uc_mcontext' has incomplete type
-+     mcontext_t uc_mcontext;
-+                ^~~~~~~~~~~
-+
-+using this defconfig:
-+
-+BR2_aarch64=y
-+BR2_PACKAGE_FFMPEG=y
-+
-+sys/ucontext.h for other archs already include bits/sigcontext.h,
-+on aarch64 this is needed as well.
-+
-+Patch sent upstream:
-+https://mailman.uclibc-ng.org/pipermail/devel/2018-January/001622.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libc/sysdeps/linux/aarch64/sys/ucontext.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/libc/sysdeps/linux/aarch64/sys/ucontext.h b/libc/sysdeps/linux/aarch64/sys/ucontext.h
-+index d17458896..dc7303b54 100644
-+--- a/libc/sysdeps/linux/aarch64/sys/ucontext.h
-++++ b/libc/sysdeps/linux/aarch64/sys/ucontext.h
-+@@ -26,6 +26,10 @@
-+ 
-+ #include <sys/procfs.h>
-+ 
-++/* We need the signal context definitions even if they are not used
-++   included in <signal.h>.  */
-++#include <bits/sigcontext.h>
-++
-+ typedef elf_greg_t greg_t;
-+ 
-+ /* Container for all general registers.  */
-+-- 
-+2.11.0
-+
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index d98b163f38..74ea5f921d 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 7065e5f5fb76e46f2042a62e7c68d81e5482dbeeda24644db1bd066e44da7e9d  libass-0.13.7.tar.xz
++sha256 881f2382af48aead75b7a0e02e65d88c5ebd369fe46bc77d9270a94aa8fd38a2  libass-0.14.0.tar.xz
++sha256 f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index 41f027d4c7..50600963ed 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBASS_VERSION = 0.13.7
++LIBASS_VERSION = 0.14.0
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+@@ -18,10 +18,10 @@ LIBASS_DEPENDENCIES = \
+ 	libfribidi \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+-# configure: WARNING: Install yasm for a significantly faster libass build.
++# configure: WARNING: Install nasm for a significantly faster libass build.
+ # only for Intel archs
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+-LIBASS_DEPENDENCIES += host-yasm
++LIBASS_DEPENDENCIES += host-nasm
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+-- 
+2.14.1
