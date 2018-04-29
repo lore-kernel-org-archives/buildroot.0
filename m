@@ -1,39 +1,27 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 29 Apr 2018 10:52:00 +0200
-Subject: [Buildroot] [PATCH 1/2] python-watchdog: add support for uClibc
-In-Reply-To: <20180428233507.479ea87f@windsurf>
-References: <1518787921-32089-1-git-send-email-yegorslists@googlemail.com>
- <20180428233507.479ea87f@windsurf>
-Message-ID: <CAGm1_kvSkCjMFU9TvENubQCX3-YGTLVJet-1vYYefK+LsKRkAg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 29 Apr 2018 10:52:55 +0200
+Subject: [Buildroot] [PATCH 1/1] libaacs: add hash for license file
+Message-ID: <20180429085255.12757-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 28, 2018 at 11:35 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Fri, 16 Feb 2018 14:32:00 +0100, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> This patch fixes uClibc detection.
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->>  ...dd-a-workaround-to-support-uClibc-library.patch | 43 ++++++++++++++++++++++
->>  1 file changed, 43 insertions(+)
->>  create mode 100644 package/python-watchdog/0001-Add-a-workaround-to-support-uClibc-library.patch
->
-> Applied to master, thanks. Did you submit this patch upstream ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libaacs/libaacs.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I'll do this, but the project seems to be abandoned :-(
-
-Yegor
-
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/libaacs/libaacs.hash b/package/libaacs/libaacs.hash
+index 84947e0c3b..22310295f8 100644
+--- a/package/libaacs/libaacs.hash
++++ b/package/libaacs/libaacs.hash
+@@ -1,2 +1,5 @@
+ # From http://download.videolan.org/pub/videolan/libaacs/0.9.0/libaacs-0.9.0.tar.bz2.sha512
+ sha512 b9c658db22a0966486070d3b762509a7c0120469ab29d1e57c1b624cad309701de8b92455ec649db4d731be4a5c29c38fb4f99bb7617dbb4254270284a1903f6  libaacs-0.9.0.tar.bz2
++
++# Hash for license file:
++sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
+-- 
+2.14.1
