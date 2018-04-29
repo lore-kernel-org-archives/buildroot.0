@@ -1,41 +1,27 @@
-From: John Keeping <john@metanate.com>
-Date: Sun, 29 Apr 2018 14:07:14 +0100
-Subject: [Buildroot] [PATCH] core/pkg-generic: only save latest package list
-Message-ID: <20180429130714.14312-1-john@metanate.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 29 Apr 2018 15:08:37 +0200
+Subject: [Buildroot] [PATCH 1/1] libdvbsi: add hash for license file
+Message-ID: <20180429130837.1047-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When rebuilding a package, simply appending the package's file list to
-the global list means that the package list grows for every rebuild, as
-does the time taken to check for files installed by multiple packages.
-Furthermore, we get false positives where a file is reported as being
-installed by multiple copies of the same package.
-
-With this approach we may end up with orphaned files in the target
-filesystem if a package that has been updated and rebuilt no longer
-installs the same set of files, but we know that only a clean build will
-produce reliable results.  In fact it may be helpful to identify these
-orphaned files as evidence that the build is not clean.
-
-Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-generic.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libdvbsi/libdvbsi.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1c9dd1d734..edc2c9349c 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -64,6 +64,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- # $(3): suffix of file  (optional)
- define step_pkg_size_inner
- 	cd $(2); \
-+	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt; \
- 	find . \( -type f -o -type l \) \
- 		-newer $($(PKG)_DIR)/.stamp_built \
- 		-exec printf '$(1),%s\n' {} + \
+diff --git a/package/libdvbsi/libdvbsi.hash b/package/libdvbsi/libdvbsi.hash
+index 7454625afe..3628fdbdbe 100644
+--- a/package/libdvbsi/libdvbsi.hash
++++ b/package/libdvbsi/libdvbsi.hash
+@@ -1,2 +1,5 @@
+ # From http://www.saftware.de/libdvbsi++/libdvbsi++-0.3.7.tar.bz2.md5
+ md5	7eb50352c06b17c499a6d51e18e99ec5	libdvbsi++-0.3.7.tar.bz2
++
++# Hash for license file:
++sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	COPYING
 -- 
-2.17.0
+2.14.1
