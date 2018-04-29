@@ -1,46 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Apr 2018 10:00:16 +0200
-Subject: [Buildroot] [git commit] python-daemonize: fix check-package
- warnings
-Message-ID: <20180429080041.1D24088D90@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 Apr 2018 10:17:37 +0200
+Subject: [Buildroot] [RFC v1 1/2] libopenssl: bump version to 1.1.0h
+References: <20180417211921.18718-1-ps.report@gmx.net>
+ <0a63a86c-322f-6508-5cc3-5a37ff0e5dad@gmail.com>
+Message-ID: <1mbgrexjul.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32b4b2f0f1f46cd4ad20e1774cc62f8f3ec64cd9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am Fri, 20 Apr 2018 08:29:52 -0700 schrieb Ryan Coe:
 
-Fixes:
+> I'm also getting the following error on host-libopenssl:
+[...]
+> *** ERROR: package host-libopenssl installs executables without proper
+> RPATH:
+> ***?? /home/ryan/devel/buildroot/output/host/bin/openssl
 
-package/python-daemonize/Config.in:2: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/python-daemonize/Config.in:3: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/python-daemonize/Config.in:4: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/python-daemonize/Config.in:5: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-package/python-daemonize/Config.in:6: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+Hi,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-daemonize/Config.in | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+adding
 
-diff --git a/package/python-daemonize/Config.in b/package/python-daemonize/Config.in
-index 3fa5ed3688..d34e35c41c 100644
---- a/package/python-daemonize/Config.in
-+++ b/package/python-daemonize/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PYTHON_DAEMONIZE
--       bool "python-daemonize"
--       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
--       help
--         Library to enable your code run as a daemon process on Unix-like
--         systems.
-+	bool "python-daemonize"
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	help
-+	  Library to enable your code run as a daemon process on
-+	  Unix-like systems.
- 
--         https://pypi.python.org/pypi/daemonize
-+	  https://pypi.python.org/pypi/daemonize
+	-Wl,-rpath,'$(HOST_DIR)/lib' \
+
+to HOST_LIBOPENSSL_CONFIGURE_CMDS fixes the problem for me.
+For details read host-libopenssl-1.1.0h/NOTES.UNIX.
+
+Regards, Bernd
