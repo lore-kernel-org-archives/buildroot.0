@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 11:54:47 +0200
-Subject: [Buildroot] [PATCH 1/1] libargtable2: add hash for license file
-Message-ID: <20180429095447.15988-1-fontaine.fabrice@gmail.com>
+Date: Sun, 29 Apr 2018 12:09:26 +0200
+Subject: [Buildroot] [PATCH 1/1] libart: add hash for license file
+Message-ID: <20180429100926.16968-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +10,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libargtable2/libargtable2.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/libart/libart.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libargtable2/libargtable2.hash b/package/libargtable2/libargtable2.hash
-index 9addbc54b9..7df3a18041 100644
---- a/package/libargtable2/libargtable2.hash
-+++ b/package/libargtable2/libargtable2.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  8f77e8a7ced5301af6e22f47302fdbc3b1ff41f2b83c43c77ae5ca041771ddbf  argtable2-13.tar.gz
-+sha256  d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f  COPYING
+diff --git a/package/libart/libart.hash b/package/libart/libart.hash
+index 769c3bfeab..105277b1f2 100644
+--- a/package/libart/libart.hash
++++ b/package/libart/libart.hash
+@@ -1,2 +1,5 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3/libart_lgpl-2.3.21.sha256sum
+ sha256	2a10b1c884bb37c7bd5c5eba59dbd0d28bf68e64a42d7f2083c836f60f8e98fa	libart_lgpl-2.3.21.tar.gz
++
++# Hash for license file:
++sha256	d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5	COPYING
 -- 
 2.14.1
