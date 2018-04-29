@@ -1,29 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:16:32 +0200
-Subject: [Buildroot] [git commit] libart: add hash for license file
-Message-ID: <20180429162018.A12908901E@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 18:17:00 +0200
+Subject: [Buildroot] [git commit] libbroadvoice: add hash for license file
+Message-ID: <20180429162018.B5A028901E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92ba3b7f5c2497ba227474bf73f523be5036b98d
+commit: https://git.buildroot.net/buildroot/commit/?id=f3c912decf1c85246015e4f190ce4262ecf18dd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libart/libart.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/libbroadvoice/libbroadvoice.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libart/libart.hash b/package/libart/libart.hash
-index 769c3bfeab..105277b1f2 100644
---- a/package/libart/libart.hash
-+++ b/package/libart/libart.hash
-@@ -1,2 +1,5 @@
- # From http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3/libart_lgpl-2.3.21.sha256sum
- sha256	2a10b1c884bb37c7bd5c5eba59dbd0d28bf68e64a42d7f2083c836f60f8e98fa	libart_lgpl-2.3.21.tar.gz
-+
-+# Hash for license file:
-+sha256	d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5	COPYING
+diff --git a/package/libbroadvoice/libbroadvoice.hash b/package/libbroadvoice/libbroadvoice.hash
+index e339aa4436..6d5afa8dbe 100644
+--- a/package/libbroadvoice/libbroadvoice.hash
++++ b/package/libbroadvoice/libbroadvoice.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256 b68c91d5af6e493c3d4fc3be04825e109a7593fe4de8c18ec75546004eeb4749  libbroadvoice-f65b0f50c8c767229fbf1758370880abc0d78564.tar.gz
++sha256 2550586c993ce4a8c23c8b11968ea36192116a896a2504799cc65307d769c094  COPYING
