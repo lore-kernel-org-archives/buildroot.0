@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:17:32 +0200
-Subject: [Buildroot] [PATCH 1/1] libbson: bump to version 1.9.4
-In-Reply-To: <20180429122855.20295-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 14:28:55 +0200")
-References: <20180429122855.20295-1-fontaine.fabrice@gmail.com>
-Message-ID: <87efiyugv7.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 18:20:17 +0200
+Subject: [Buildroot] [PATCH 1/1] libdaemon: add hash for license file
+In-Reply-To: <20180429123352.20959-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 14:33:52 +0200")
+References: <20180429123352.20959-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7tmugqm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,6 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add hash for license file
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
