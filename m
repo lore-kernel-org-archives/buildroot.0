@@ -1,28 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 14:52:49 +0200
-Subject: [Buildroot] [PATCH 1/1] libdvbcsa: add hash for license file
-Message-ID: <20180429125249.26182-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 Apr 2018 15:00:45 +0200
+Subject: [Buildroot] [RFC v1 1/2] libopenssl: bump version to 1.1.0h
+References: <20180417211921.18718-1-ps.report@gmx.net>
+Message-ID: <t8sgrexjul.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libdvbcsa/libdvbcsa.hash | 3 +++
- 1 file changed, 3 insertions(+)
+Am Tue, 17 Apr 2018 23:19:20 +0200 schrieb Peter Seiderer:
 
-diff --git a/package/libdvbcsa/libdvbcsa.hash b/package/libdvbcsa/libdvbcsa.hash
-index d8360e60bc..55ad51b595 100644
---- a/package/libdvbcsa/libdvbcsa.hash
-+++ b/package/libdvbcsa/libdvbcsa.hash
-@@ -2,3 +2,6 @@
- sha256	4db78af5cdb2641dfb1136fe3531960a477c9e3e3b6ba19a2754d046af3f456d	libdvbcsa-1.1.0.tar.gz
- # From http://download.videolan.org/pub/videolan/libdvbcsa/1.1.0/libdvbcsa-1.1.0.tar.gz.sha1
- sha1	5f4640a7e93ae6494f24a881414e5c343f803365				libdvbcsa-1.1.0.tar.gz
-+
-+# Hash for license file:
-+sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
--- 
-2.14.1
+> --- a/package/libopenssl/libopenssl.mk
+> +++ b/package/libopenssl/libopenssl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+################################################################################
+>  
+> -LIBOPENSSL_VERSION = 1.0.2o
+> +LIBOPENSSL_VERSION = 1.1.0h
+>  LIBOPENSSL_SITE = http://www.openssl.org/source
+>  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+>  LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+
+Hi Peter,
+
+freeswitch will need a bump to its master branch, the current release 
+version 1.6.20 is not compatible with openssl 1.1.x. I am using the 
+master branch for months now without problems.
+
+To build ca-certificates the libopenssl package needs this upstream
+patch: https://github.com/openssl/openssl/
+commit/00701e5ea84861b74d9d624f21a6b3fcb12e8acd Otherwise you will run 
+into https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=894282
+
+Regards, Bernd
