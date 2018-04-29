@@ -1,19 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 16:15:58 +0200
-Subject: [Buildroot] [PATCH 1/1] libatasmart: add hash for license file
-In-Reply-To: <20180429104145.2454-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 12:41:45 +0200")
-References: <20180429104145.2454-1-fontaine.fabrice@gmail.com>
-Message-ID: <87po2iw129.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 16:17:32 +0200
+Subject: [Buildroot] [PATCH] speex: remove useless BUILD_CMDS
+In-Reply-To: <20180429115948.22436-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 29 Apr 2018 13:59:48 +0200")
+References: <20180429115948.22436-1-yann.morin.1998@free.fr>
+Message-ID: <87lgd6w0zn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > SPEEX_BUILD_CMDS is useless, because it's exactly defined to the
+ > default value of <pkg>_BUILDS_CMDS for autotools packages.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
