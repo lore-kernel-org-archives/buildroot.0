@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:09:32 +0200
-Subject: [Buildroot] [PATCH 1/1] libaacs: add hash for license file
-In-Reply-To: <20180429085255.12757-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 10:52:55 +0200")
-References: <20180429085255.12757-1-fontaine.fabrice@gmail.com>
-Message-ID: <87vacauh8j.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 18:09:59 +0200
+Subject: [Buildroot] [PATCH 1/1] libao: add hash for license file
+In-Reply-To: <20180429094752.14013-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 11:47:52 +0200")
+References: <20180429094752.14013-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r2myuh7s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
