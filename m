@@ -1,25 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 12:41:45 +0200
-Subject: [Buildroot] [PATCH 1/1] libatasmart: add hash for license file
-Message-ID: <20180429104145.2454-1-fontaine.fabrice@gmail.com>
+From: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+Date: Sun, 29 Apr 2018 13:40:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-requests fix dependencies
+Message-ID: <20180429114038.25035-1-sven.haardiek@iotec-gmbh.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libatasmart/libatasmart.hash | 1 +
- 1 file changed, 1 insertion(+)
+Requests need hashlib to run. Otherwise it is not possible to import, due to
+missing e.g. md5.
 
-diff --git a/package/libatasmart/libatasmart.hash b/package/libatasmart/libatasmart.hash
-index 8733d07964..b661332a77 100644
---- a/package/libatasmart/libatasmart.hash
-+++ b/package/libatasmart/libatasmart.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	61f0ea345f63d28ab2ff0dc352c22271661b66bf09642db3a4049ac9dbdb0f8d	libatasmart-0.19.tar.xz
-+sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	LGPL
+Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+---
+ package/python-requests/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
+index d2726fb26a..d51b4079cb 100644
+--- a/package/python-requests/Config.in
++++ b/package/python-requests/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_PYTHON_REQUESTS
+ 	select BR2_PACKAGE_PYTHON_CHARDET # runtime
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
+ 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
++	select BR2_PACKAGE_PYTHON_HASHLIB # runtime
++	select BR2_PACKAGE_PYTHON3_HASHLIB # runtime
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
 -- 
-2.14.1
+2.17.0
