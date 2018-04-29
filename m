@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:48:23 +0200
-Subject: [Buildroot] [PATCH 1/1] libdvbcsa: add hash for license file
-In-Reply-To: <20180429125249.26182-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 14:52:49 +0200")
-References: <20180429125249.26182-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k1sqt0vc.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 18:49:10 +0200
+Subject: [Buildroot] [PATCH 1/1] libdvbsi: add hash for license file
+In-Reply-To: <20180429130837.1047-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 15:08:37 +0200")
+References: <20180429130837.1047-1-fontaine.fabrice@gmail.com>
+Message-ID: <87fu3et0u1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
