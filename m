@@ -1,107 +1,118 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 29 Apr 2018 18:40:05 +0000
-Subject: [Buildroot] [PATCH 1/1] zeromq: add libatomic linkage when
- available
-In-Reply-To: <20180428153900.0f809228@windsurf>
-References: <20180426195309.26042-1-asafka7@gmail.com>
- <20180428153900.0f809228@windsurf>
-Message-ID: <CALFsTFVARKTJVVrkBwAKt9Qud3EiNo6tDO4UhAwtnWvWG3kOyQ@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 29 Apr 2018 15:49:48 -0300
+Subject: [Buildroot] [PATCH 4/7 v4] download/git: try to recover from
+ utterly-broken repositories
+References: <00452014a5e11c7f6f594e2e1f14b9ed0f38d92e.1524944063.git.yann.morin.1998@free.fr>
+Message-ID: <5ae613cc5cf4b_578e2ac686f651905014e@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-I completely agree that the solution should be on upstream, and the current
-solution is easiest one but not the best one. I'll try to build a patch on
-the upstream and send it here.
+Using the previous iteration I tested adding '&& false' after the git checkout
+command and the trap worked as expected.
 
-Asaf.
+But since this patch is not easy to me to review (my bash scripts use a small
+subset of bash features), I decided to do more extensive testing. I think I
+found something to be changed. Could you double-check? See at the end.
 
-On Sat, Apr 28, 2018, 09:39 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-wrote:
+On Sat, Apr 28, 2018 at 04:34 PM, Yann E. MORIN wrote:
 
-> Hello Asaf,
->
-> On Thu, 26 Apr 2018 22:53:09 +0300, Asaf Kahlon wrote:
-> > Fixes:
-> >
-> http://autobuild.buildroot.net/results/ff5f7d3bcd713db9c9d92a746d6ad7134748fe16
-> >
-> http://autobuild.buildroot.net/results/9a743da1c3be673288c3482a9e7ddea12750206f
-> >
-> http://autobuild.buildroot.net/results/818b12387e6117569c4fab310b98c11fac80c047
-> >
-> > If libatomic is available, it should be added to LIBS in CONF_ENV, since
-> without
-> > it we can get into a state in which symbols like __atomic_fetch_sub_4,
-> > __atomic_compare_exchange_4 and __atomic_fetch_add_4 can't be found.
-> >
-> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> > ---
-> >  package/zeromq/zeromq.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-> > index 8273cad763..214bd9e35c 100644
-> > --- a/package/zeromq/zeromq.mk
-> > +++ b/package/zeromq/zeromq.mk
-> > @@ -58,4 +58,8 @@ else
-> >  ZEROMQ_CONF_OPTS += --disable-libunwind
-> >  endif
-> >
-> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > +ZEROMQ_CONF_OPTS += LIBS=-latomic
-> > +endif
->
-> While this does fix the problem, I don't think it's the most ideal fix.
-> Indeed, the solution should be upstreamed. Currently, zeromq
-> configure.ac uses LIBZMQ_CHECK_ATOMIC_INTRINSICS, which is implemented
-> in acinclude.m4, to detect the availability of atomic intrinsics.
->
-> It goes like this:
->
-> AC_DEFUN([LIBZMQ_CHECK_ATOMIC_INTRINSICS], [{
->     AC_MSG_CHECKING(whether compiler supports __atomic_Xxx intrinsics)
->     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-> /* atomic intrinsics test */
-> int v = 0;
-> int main (int, char **)
-> {
->     int t = __atomic_add_fetch (&v, 1, __ATOMIC_ACQ_REL);
->     return t;
-> }
->     ])],
->     [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" ; $1],
->     [AC_MSG_RESULT(no)  ; libzmq_cv_has_atomic_instrisics="no"  ; $2]
->     )
-> }])
->
-> It does only an AC_COMPILE_IFELSE(), so it succeeds on Sparc, as the
-> need for -latomic only appears at link time.
->
-> So I believe it should be changed to test with AC_LINK_IFELSE, and if
-> it fails, test with AC_LINK_IFELSE with -latomic, to determine
->
->  (1) If atomic intrinsics are available
->
->  (2) If -latomic is needed to use atomic intrinsics
->
-> Do you think you could have a look at implementing something like this ?
->
-> That being said, I agree that a number of other packages in Buildroot
-> are fixed by just passing LIBS=-latomic.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180429/a2dce3f6/attachment.html>
+> +++ b/support/download/git
+> @@ -16,6 +16,33 @@ set -e
+>  # Environment:
+>  #   GIT      : the git command to call
+>  
+> +# Save out path and options in case we need to call ourselves again
+
+s/out/our/ ?
+
+> +myname="${0}"
+> +declare -a OPTS=("${@}")
+
+It looks OK to me.
+Similar syntax is used in support/scripts/check-bin-arch and no one using old
+bash versions complained so far.
+I didn't checked the bash version available on RHEL6 neither the bash source
+code.
+
+> +
+> +# This function is called when an error occurs. Its job is to attempt a
+> +# clone from scratch (only once!) in case the git tree is borked, or in
+> +# case an unexpected and unsupported situation arises with submodules
+> +# or uncomitted stuff (e.g. if the user manually mucked around in the
+
+s/uncomitted/uncommitted/ ?
+
+> +# git cache).
+> +_on_error() {
+> +    local ret=${?}
+> +
+> +    printf "Detected a corrupted git cache.\n" >&2
+> +    if ${BR_GIT_BACKEND_FIRST_FAULT:-false}; then
+> +        printf "This is the second time in a row; bailing out\n" >&2
+> +        exit ${ret}
+> +    fi
+> +    export BR_GIT_BACKEND_FIRST_FAULT=true
+> +
+> +    printf "Removing it and starting afresh.\n" >&2
+> +
+> +    popd >/dev/null
+> +    rm -rf "${git_cache}"
+> +
+> +    exec "${myname}" "${OPTS[@]}" || exit ${ret}
+> +}
+> +
+>  verbose=
+>  recurse=0
+>  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
+> @@ -39,6 +66,9 @@ git_cache="${dl_dir}/git"
+>  mkdir -p "${git_cache}"
+>  pushd "${git_cache}" >/dev/null
+>  
+> +# Any error now should try to recover
+> +trap _on_error ERR
+> +
+>  # Caller needs to single-quote its arguments to prevent them from
+>  # being expanded a second time (in case there are spaces in them)
+>  _git() {
+
+It seems the trap is not executed when a git command fails.
+
+I first created a git cache. I used squashfs because it is small, its server is
+fast, and it has hash to check against.
+I removed .git/index in the cache so the next git init will create a brand new
+one leaving lots of untracked files to be overwritten. Since the -f is not yet
+added to git checkout (it belongs to a later patch) it should trigger a
+ditch+restart, but it didn't.
+I recreated the cache from scratch and replaced .git/HEAD with a directory. This
+way the cache is broken and git init does not recovers it, as expected, leading
+'git remote' to fail. It also should trigger a ditch+restart, but it didn't.
+
+With the help of [1] I found in the bash manual, not mentioned in the SHELL
+BUILTIN COMMANDS/trap section, only in the FUNCTIONS section:
+"FUNCTIONS" [...]
+"All other aspects of the shell execution environment are identical between a
+ function and its caller with these exceptions:" [...]
+"the ERR trap is not inherited unless the -o errtrace shell option has been
+ enabled."
+
+As a dirty hack I repeated the trap inside _git:
+  _git() {
+ +    trap _on_error ERR
+It fixes the 2 cases I mentioned above.
+
+Maybe the proper fix is to enable errtrace, but I didn't tested it, neither I
+know all the implications of using this for all the other cases.
+From the manual:
+"-E      If set, any trap on ERR is inherited by shell functions, command
+ substitutions, and commands executed in a subshell environment. The ERR trap is
+ normally not inherited in such cases."
+
+[1] https://unix.stackexchange.com/questions/419017/return-trap-in-bash-not-executing-for-function
+
+Regards,
+Ricardo
