@@ -1,59 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 12:13:48 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] Revert "package/bash: add
- /bin/bash to /etc/shells"
-Message-ID: <20180429101623.BC650811CF@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 12:15:35 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/uclibc: Fix
+ ffmpeg build on aarch64
+Message-ID: <20180429101623.CD60E811CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b8a5cf1a65cde54c7713f9d82c90f62cbef39fa
+commit: https://git.buildroot.net/buildroot/commit/?id=488b4d36bc980703a65522940525f91be1c845bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Commit 4d279697af added /bin/bash to /etc/shells. In the default
-skeleton, however, /etc/shells doesn't exist, so in fact it creates
-this file, containing only /bin/bash. Therefore, when bash is selected,
-/bin/sh does not appear in /etc/shells and bash is the only shell
-allowed. Since /bin/sh is the shell that is used for root in the
-default skeleton's /etc/passwd, root is no longer able to log in.
-
-The proper solution is to add all available shells to /etc/shells. For
-now, however, just revert commit 4d279697af as a stop-gap measure. That
-way, the default situation still works, and only people who update
-/etc/passwd with additional logins but don't update /etc/shells will
-suffer.
-
-This reverts commit 4d279697afbf8fb295274784103be2b837113d5e.
-
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=10896
-
-Cc: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Romain Naour <romain.naour@smile.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bash/bash.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ ...-sys-ucontext.h-include-bits-sigcontext.h.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index e9384911a0..6e58f0fd64 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -39,14 +39,10 @@ BASH_CONF_ENV += bash_cv_getenv_redef=yes
- endif
- endif
- 
--# Add /bin/bash to /etc/shells otherwise some login tools like dropbear
--# can reject the user connexion. See man shells.
- define BASH_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
- 	rm -f $(TARGET_DIR)/bin/bashbug
--	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
--		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
- endef
- 
- $(eval $(autotools-package))
+diff --git a/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch b/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch
+new file mode 100644
+index 0000000000..0a1fdf6cb8
+--- /dev/null
++++ b/package/uclibc/0001-aarch64-sys-ucontext.h-include-bits-sigcontext.h.patch
+@@ -0,0 +1,49 @@
++From 1c27982bb8a007bb1a6a29db8e6efb1f40975879 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 28 Jan 2018 13:59:30 +0100
++Subject: [PATCH 1/1] aarch64/sys/ucontext.h: include bits/sigcontext.h
++
++Fixes a buildroot build error with ffmpeg
++
++In file included from /home/bernd/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/include/signal.h:329:0,
++                 from fftools/ffmpeg.h:26,
++                 from fftools/ffmpeg_opt.c:23:
++/home/bernd/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/include/sys/ucontext.h:52:16:
++ error: field 'uc_mcontext' has incomplete type
++     mcontext_t uc_mcontext;
++                ^~~~~~~~~~~
++
++using this defconfig:
++
++BR2_aarch64=y
++BR2_PACKAGE_FFMPEG=y
++
++sys/ucontext.h for other archs already include bits/sigcontext.h,
++on aarch64 this is needed as well.
++
++Patch sent upstream:
++https://mailman.uclibc-ng.org/pipermail/devel/2018-January/001622.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libc/sysdeps/linux/aarch64/sys/ucontext.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/libc/sysdeps/linux/aarch64/sys/ucontext.h b/libc/sysdeps/linux/aarch64/sys/ucontext.h
++index d17458896..dc7303b54 100644
++--- a/libc/sysdeps/linux/aarch64/sys/ucontext.h
+++++ b/libc/sysdeps/linux/aarch64/sys/ucontext.h
++@@ -26,6 +26,10 @@
++ 
++ #include <sys/procfs.h>
++ 
+++/* We need the signal context definitions even if they are not used
+++   included in <signal.h>.  */
+++#include <bits/sigcontext.h>
+++
++ typedef elf_greg_t greg_t;
++ 
++ /* Container for all general registers.  */
++-- 
++2.11.0
++
