@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 14:06:27 +0200
-Subject: [Buildroot] [PATCH 1/1] libb64: add hash for license file
-Message-ID: <20180429120627.3947-1-fontaine.fabrice@gmail.com>
+Date: Sun, 29 Apr 2018 14:09:49 +0200
+Subject: [Buildroot] [PATCH 1/1] libbdplus: add hash for license file
+Message-ID: <20180429120949.5188-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,19 +10,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libb64/libb64.hash | 3 +++
+ package/libbdplus/libbdplus.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/libb64/libb64.hash b/package/libb64/libb64.hash
-index 012a7b0b00..0ed8065f12 100644
---- a/package/libb64/libb64.hash
-+++ b/package/libb64/libb64.hash
-@@ -1,3 +1,6 @@
- # sha1 from sourceforge, sha256 locally computed
- sha1  04b3e21b8c951d27f02fe91249ca3474554af0b9  libb64-1.2.1.zip
- sha256  20106f0ba95cfd9c35a13c71206643e3fb3e46512df3e2efb2fdbf87116314b2  libb64-1.2.1.zip
+diff --git a/package/libbdplus/libbdplus.hash b/package/libbdplus/libbdplus.hash
+index 552cd71c89..6abc0e4970 100644
+--- a/package/libbdplus/libbdplus.hash
++++ b/package/libbdplus/libbdplus.hash
+@@ -1,2 +1,5 @@
+ # From http://download.videolan.org/pub/videolan/libbdplus/0.1.2/libbdplus-0.1.2.tar.bz2.sha512
+ sha512	e00e7bc9f52b9275646593b753ba646b052255be94a7241965f4dbe4734f8f6a072973ed4b9997957f939236b0633897c295749f79e232188430795be5b5087b	libbdplus-0.1.2.tar.bz2
 +
 +# Hash for license file:
-+sha256  834b7afa1b3c40289a3be775d3625016be1c0d7ea7a4a26c1eb207f53dc961d8  LICENSE
++sha256	592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c	COPYING
 -- 
 2.14.1
