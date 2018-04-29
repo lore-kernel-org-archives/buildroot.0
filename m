@@ -1,27 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:17:41 +0200
-Subject: [Buildroot] [git commit] libdaemon: add hash for license file
-Message-ID: <20180429162018.E55A48901E@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 18:17:29 +0200
+Subject: [Buildroot] [git commit] libbson: bump to version 1.9.4
+Message-ID: <20180429162018.CD4CB8901E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d4d2a6c00bb13a29849d02a3db13d7271d4967e
+commit: https://git.buildroot.net/buildroot/commit/?id=170b111312f4f0a5547dd8a984e9b1bcd81f45b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdaemon/libdaemon.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/libbson/libbson.hash | 4 +++-
+ package/libbson/libbson.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdaemon/libdaemon.hash b/package/libdaemon/libdaemon.hash
-index 8dbbb5a358..b510321828 100644
---- a/package/libdaemon/libdaemon.hash
-+++ b/package/libdaemon/libdaemon.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
+index 27abe90bfd..b20a0cd8d4 100644
+--- a/package/libbson/libbson.hash
++++ b/package/libbson/libbson.hash
+@@ -1,2 +1,4 @@
  # Locally calculated
- sha256 fd23eb5f6f986dcc7e708307355ba3289abe03cc381fc47a80bca4a50aa6b834 libdaemon-0.14.tar.gz
-+sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861 LICENSE
+-sha256	aad410123e4bd8a9804c3c3d79e03344e2df104872594dc2cf19605d492944ba libbson-1.6.2.tar.gz
++sha256	c3cc230a3451bf7fedc5bb34c3191fd23d841e65ec415301f6c77e531924b769 libbson-1.9.4.tar.gz
++sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
++sha256	8dc5cb3146b026715e6c145621c7732f36c295d825b7b3a03076ad3f238db48e THIRD_PARTY_NOTICES
+diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
+index 8a71fc394c..2c9cbc7fe0 100644
+--- a/package/libbson/libbson.mk
++++ b/package/libbson/libbson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBSON_VERSION = 1.6.2
++LIBBSON_VERSION = 1.9.4
+ LIBBSON_SITE = https://github.com/mongodb/libbson/releases/download/$(LIBBSON_VERSION)
+ LIBBSON_LICENSE = Apache-2.0, MIT (jsonl), ISC (b64), Zlib (md5)
+ LIBBSON_LICENSE_FILES = COPYING THIRD_PARTY_NOTICES
