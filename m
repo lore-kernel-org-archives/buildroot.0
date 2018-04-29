@@ -1,35 +1,47 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 29 Apr 2018 00:14:13 +0200
-Subject: [Buildroot] [PATCH 1/1] support/testing: set $USER in rust tests
-Message-ID: <20180428221413.1833-1-eric.le.bihan.dev@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 29 Apr 2018 07:26:56 +0300
+Subject: [Buildroot] [PATCH] glibc: install the obsolete libnsl
+In-Reply-To: <0418f92d-f988-da20-4561-dbf786afed94@gmail.com>
+References: <d9f3b3cf8413fcabd4468a6057ee399a3968d20d.1520956780.git.baruch@tkos.co.il>
+ <0418f92d-f988-da20-4561-dbf786afed94@gmail.com>
+Message-ID: <20180429042656.udrq5dqw4q2p3btk@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the run-time tests to build rust and rust-bin packages are run via Docker,
-the $USER environment variable is not set, which makes cargo fail when
-initializing the test project.
+Hi Romain,
 
-So add it to make cargo happy.
+On Sat, Apr 28, 2018 at 04:51:39PM +0200, Romain Naour wrote:
+> Le 13/03/2018 ? 16:59, Baruch Siach a ?crit?:
+> > glibc 2.27 stopped installing libnsl by default. Restore libnsl install
+> > to fix packages, like exim, that use that library.
+> 
+> Do you know if libnsl can be disabled from exim ?
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- support/testing/tests/package/test_rust.py | 1 +
- 1 file changed, 1 insertion(+)
+Of course. We already do that for non-glibc targets. See 
+EXIM_REMOVE_LIBNSL_FROM_MAKEFILE in exim.mk.
 
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index e6c0de2214..2dc814f99d 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -21,6 +21,7 @@ class TestRustBase(infra.basetest.BRTest):
-     def build_test_prog(self):
-         hostdir = os.path.join(self.builddir, 'host')
-         env = os.environ.copy()
-+        env["USER"] = "br-user"
-         env["PATH"] = "{}:".format(os.path.join(hostdir, 'bin')) + env["PATH"]
-         env["CARGO_HOME"] = os.path.join(hostdir, 'usr', 'share', 'cargo')
-         env["RUST_TARGET_PATH"] = os.path.join(hostdir, 'etc', 'rustc')
+> Is exim is the only remaining program still using/supporting libnsl ?
+
+I don't know.
+
+> libnsl from Glibc doesn't build with the upcoming gcc 8, it's not even build
+> tested by Glibc maintainers (build-many-glibcs.py test script) see [1].
+> 
+> Maybe we can provide libnsl from a package that provide an updated version of
+> this library [2]?
+> 
+> Can you have a look?
+
+The simplest solution would be to disable libnsl in exim unconditionally, 
+remove libnsl support in glibc, and deal with any other libnsl users as we 
+encounter them.
+
+baruch
+
 -- 
-2.14.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
