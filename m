@@ -1,42 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 12:14:24 +0200
-Subject: [Buildroot] [PATCH 2018.02.x] Revert "package/bash: add
- /bin/bash to /etc/shells"
-In-Reply-To: <20180417100109.19655-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Tue, 17 Apr 2018 12:01:09 +0200")
-References: <20180417100109.19655-1-arnout@mind.be>
-Message-ID: <87fu3exqtb.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 12:16:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: Fix ffmpeg build on
+ aarch64
+In-Reply-To: <20180128152024.6994-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 28 Jan 2018 16:20:24 +0100")
+References: <20180128152024.6994-1-bernd.kuhls@t-online.de>
+Message-ID: <87bme2xqql.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Commit 4d279697af added /bin/bash to /etc/shells. In the default
- > skeleton, however, /etc/shells doesn't exist, so in fact it creates
- > this file, containing only /bin/bash. Therefore, when bash is selected,
- > /bin/sh does not appear in /etc/shells and bash is the only shell
- > allowed. Since /bin/sh is the shell that is used for root in the
- > default skeleton's /etc/passwd, root is no longer able to log in.
-
- > The proper solution is to add all available shells to /etc/shells. For
- > now, however, just revert commit 4d279697af as a stop-gap measure. That
- > way, the default situation still works, and only people who update
- > /etc/passwd with additional logins but don't update /etc/shells will
- > suffer.
-
- > This reverts commit 4d279697afbf8fb295274784103be2b837113d5e.
-
- > Fixes: https://bugs.busybox.net/show_bug.cgi?id=10896
-
- > Cc: Romain Naour <romain.naour@smile.fr>
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- > This is for the 2018.02.x branch; master should take the series at
- > http://patchwork.ozlabs.org/project/buildroot/list/?series=24357
- > I believe that series is too invasive for the 2018.02.x branch.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2018.02.x, thanks.
 
