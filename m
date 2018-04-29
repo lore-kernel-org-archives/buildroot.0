@@ -1,27 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 12:09:26 +0200
-Subject: [Buildroot] [PATCH 1/1] libart: add hash for license file
-Message-ID: <20180429100926.16968-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 29 Apr 2018 12:14:24 +0200
+Subject: [Buildroot] [PATCH 2018.02.x] Revert "package/bash: add
+ /bin/bash to /etc/shells"
+In-Reply-To: <20180417100109.19655-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Tue, 17 Apr 2018 12:01:09 +0200")
+References: <20180417100109.19655-1-arnout@mind.be>
+Message-ID: <87fu3exqtb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libart/libart.hash | 3 +++
- 1 file changed, 3 insertions(+)
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-diff --git a/package/libart/libart.hash b/package/libart/libart.hash
-index 769c3bfeab..105277b1f2 100644
---- a/package/libart/libart.hash
-+++ b/package/libart/libart.hash
-@@ -1,2 +1,5 @@
- # From http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3/libart_lgpl-2.3.21.sha256sum
- sha256	2a10b1c884bb37c7bd5c5eba59dbd0d28bf68e64a42d7f2083c836f60f8e98fa	libart_lgpl-2.3.21.tar.gz
-+
-+# Hash for license file:
-+sha256	d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5	COPYING
+ > Commit 4d279697af added /bin/bash to /etc/shells. In the default
+ > skeleton, however, /etc/shells doesn't exist, so in fact it creates
+ > this file, containing only /bin/bash. Therefore, when bash is selected,
+ > /bin/sh does not appear in /etc/shells and bash is the only shell
+ > allowed. Since /bin/sh is the shell that is used for root in the
+ > default skeleton's /etc/passwd, root is no longer able to log in.
+
+ > The proper solution is to add all available shells to /etc/shells. For
+ > now, however, just revert commit 4d279697af as a stop-gap measure. That
+ > way, the default situation still works, and only people who update
+ > /etc/passwd with additional logins but don't update /etc/shells will
+ > suffer.
+
+ > This reverts commit 4d279697afbf8fb295274784103be2b837113d5e.
+
+ > Fixes: https://bugs.busybox.net/show_bug.cgi?id=10896
+
+ > Cc: Romain Naour <romain.naour@smile.fr>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ > This is for the 2018.02.x branch; master should take the series at
+ > http://patchwork.ozlabs.org/project/buildroot/list/?series=24357
+ > I believe that series is too invasive for the 2018.02.x branch.
+
+Committed to 2018.02.x, thanks.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
