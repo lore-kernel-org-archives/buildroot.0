@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:49:40 +0200
-Subject: [Buildroot] [PATCH 1/1] libdvdcss: bump to version 1.4.2
-In-Reply-To: <20180429132115.5491-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 15:21:15 +0200")
-References: <20180429132115.5491-1-fontaine.fabrice@gmail.com>
-Message-ID: <87bme2t0t7.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 18:50:30 +0200
+Subject: [Buildroot] [PATCH 1/1] libdvdread: bump to version 6.0.0
+In-Reply-To: <20180429133143.16343-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 15:31:43 +0200")
+References: <20180429133143.16343-1-fontaine.fabrice@gmail.com>
+Message-ID: <877eoqt0rt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
