@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Apr 2018 09:57:32 +0200
-Subject: [Buildroot] [git commit] support/testing: set $USER in rust tests
-Message-ID: <20180429075829.779EB890F3@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 09:57:36 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: Fix typo for chipmunk package
+Message-ID: <20180429075829.96E96890D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09a5eb427a6d9160e74ab56941640c02334eabf1
+commit: https://git.buildroot.net/buildroot/commit/?id=e971fec855e11703639d072e7c345cb075e8083a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the run-time tests to build rust and rust-bin packages are run via Docker,
-the $USER environment variable is not set, which makes cargo fail when
-initializing the test project.
-
-So add it to make cargo happy.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_rust.py | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index e6c0de2214..2dc814f99d 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -21,6 +21,7 @@ class TestRustBase(infra.basetest.BRTest):
-     def build_test_prog(self):
-         hostdir = os.path.join(self.builddir, 'host')
-         env = os.environ.copy()
-+        env["USER"] = "br-user"
-         env["PATH"] = "{}:".format(os.path.join(hostdir, 'bin')) + env["PATH"]
-         env["CARGO_HOME"] = os.path.join(hostdir, 'usr', 'share', 'cargo')
-         env["RUST_TARGET_PATH"] = os.path.join(hostdir, 'etc', 'rustc')
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f270db5bb3..5fe2f98e95 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -706,7 +706,7 @@ F:	board/olimex/a20_olinuxino
+ F:	configs/olimex_a20_olinuxino_*
+ F:	package/4th/
+ F:	package/botan/
+-F:	pacakge/chipmunk/
++F:	package/chipmunk/
+ F:	package/dado/
+ F:	package/ficl/
+ F:	package/gdbm/
