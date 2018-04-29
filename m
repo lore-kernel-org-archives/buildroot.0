@@ -1,53 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 21:32:42 +0200
-Subject: [Buildroot] [git commit] libmatroska: bump to version 1.4.9
-Message-ID: <20180429193602.A190C8A421@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 21:37:36 +0200
+Subject: [Buildroot] [PATCH] libtomcrypt: fix headers installation path
+In-Reply-To: <dea7363d337047b65baf36ceb7945e5ec6777f80.1525026592.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 29 Apr 2018 21:29:52 +0300")
+References: <dea7363d337047b65baf36ceb7945e5ec6777f80.1525026592.git.baruch@tkos.co.il>
+Message-ID: <87wowppzwf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3a26031c785db185912548691f35c69f28c3888
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-- Use tar.xz (tar.bz2 is not available since 1.4.8)
-- Use cmake infrastructure (autotools has been removed)
-- Add hash for license file
+ > libtomcrypt installs its headers by default in /usr/local/include under
+ > the staging sysroot. This patch is not in the default search patch of
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libmatroska/libmatroska.hash | 3 ++-
- package/libmatroska/libmatroska.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+s/patch/path/.
 
-diff --git a/package/libmatroska/libmatroska.hash b/package/libmatroska/libmatroska.hash
-index 275af63995..e42a9b2824 100644
---- a/package/libmatroska/libmatroska.hash
-+++ b/package/libmatroska/libmatroska.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	d3efaa9f6d3964351a05bea0f848a8d5dc570e4791f179816ce9a93730296bd7	libmatroska-1.4.4.tar.bz2
-+sha256	38a61dd5d87c070928b5deb3922b63b2b83c09e2e4a10f9393eecb6afa9795c8	libmatroska-1.4.9.tar.xz
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL
-diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
-index 18ea505af0..b8d0d84d35 100644
---- a/package/libmatroska/libmatroska.mk
-+++ b/package/libmatroska/libmatroska.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--LIBMATROSKA_VERSION = 1.4.4
--LIBMATROSKA_SOURCE = libmatroska-$(LIBMATROSKA_VERSION).tar.bz2
-+LIBMATROSKA_VERSION = 1.4.9
-+LIBMATROSKA_SOURCE = libmatroska-$(LIBMATROSKA_VERSION).tar.xz
- LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
- LIBMATROSKA_INSTALL_STAGING = YES
- LIBMATROSKA_LICENSE = LGPL-2.1+
- LIBMATROSKA_LICENSE_FILES = LICENSE.LGPL
- LIBMATROSKA_DEPENDENCIES = libebml host-pkgconf
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
