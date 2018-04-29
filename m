@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 23:04:19 +0200
-Subject: [Buildroot] [PATCH 1/1] libftdi1: add hash for license files
-In-Reply-To: <20180429201830.30322-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 22:18:30 +0200")
-References: <20180429201830.30322-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o9i1pvvw.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 23:04:44 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself to some packages
+In-Reply-To: <20180429202358.31506-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 22:23:58 +0200")
+References: <20180429202358.31506-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k1sppvv7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
+ > Add myself to libcgicc, libconfig, libcue, libebml and libmatroska
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
