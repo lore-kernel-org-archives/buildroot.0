@@ -1,46 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:52:44 +0200
-Subject: [Buildroot] [git commit] package/cups: bump version to 2.2.7
-Message-ID: <20180429165327.02C178A35C@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 18:49:21 +0200
+Subject: [Buildroot] [git commit] libdvdcss: bump to version 1.4.2
+Message-ID: <20180429165326.9B3EF805FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7c2541954597242a1c379d218aea4e295ce35cd
+commit: https://git.buildroot.net/buildroot/commit/?id=9b203aadcce027fd9cf5795bc3e5330c2457e69a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added license hash.
+Add hash for license file
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
-Signed-off-by: Bernd Kuhls &lt;<a href="mailto:bernd.kuhls@t-online.de" target="_blank" rel="noreferrer">bernd.kuhls at t-online.de</a>&gt;<br>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups/cups.hash | 3 ++-
- package/cups/cups.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libdvdcss/libdvdcss.hash | 7 +++++--
+ package/libdvdcss/libdvdcss.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index d4f20b60db..a19b3b09a6 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,2 +1,3 @@
- # Locally calculated:
--sha256 a8795e2aa54dcfbdc9ff254a770f0d7154e35c981bca5b3369050c5193ab5a21  cups-2.2.5-source.tar.gz
-+sha256 3c4b637b737077565ccdfbd5f61785d03f49461ae736fcc2c0ffaf41d2c6ea6a  cups-2.2.7-source.tar.gz
-+sha256 6e0e0ffbde118aae709f7ef65590de9071e8b2cd322f84fd645c6b64f3cc452c  LICENSE.txt
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 0726d8a37f..54271d5fc7 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
+diff --git a/package/libdvdcss/libdvdcss.hash b/package/libdvdcss/libdvdcss.hash
+index 57abd77a29..1e1b03ed20 100644
+--- a/package/libdvdcss/libdvdcss.hash
++++ b/package/libdvdcss/libdvdcss.hash
+@@ -1,2 +1,5 @@
+-# From http://download.videolan.org/pub/videolan/libdvdcss/1.4.0/libdvdcss-1.4.0.tar.bz2.sha256
+-sha256	2089375984800df29a4817b37f3123c1706723342d6dab4d0a8b75c25c2c845a	libdvdcss-1.4.0.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdcss/1.4.2/libdvdcss-1.4.2.tar.bz2.sha256
++sha256	78c2ed77ec9c0d8fbed7bf7d3abc82068b8864be494cfad165821377ff3f2575	libdvdcss-1.4.2.tar.bz2
++
++# Hash for license file:
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/libdvdcss/libdvdcss.mk b/package/libdvdcss/libdvdcss.mk
+index e5ba3af20b..0593d556e1 100644
+--- a/package/libdvdcss/libdvdcss.mk
++++ b/package/libdvdcss/libdvdcss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUPS_VERSION = 2.2.5
-+CUPS_VERSION = 2.2.7
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = GPL-2.0, LGPL-2.0
+-LIBDVDCSS_VERSION = 1.4.0
++LIBDVDCSS_VERSION = 1.4.2
+ LIBDVDCSS_SOURCE = libdvdcss-$(LIBDVDCSS_VERSION).tar.bz2
+ LIBDVDCSS_SITE = http://www.videolan.org/pub/videolan/libdvdcss/$(LIBDVDCSS_VERSION)
+ LIBDVDCSS_INSTALL_STAGING = YES
