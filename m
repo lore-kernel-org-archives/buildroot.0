@@ -1,45 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:17:29 +0200
-Subject: [Buildroot] [git commit] libbson: bump to version 1.9.4
-Message-ID: <20180429162018.CD4CB8901E@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 18:16:32 +0200
+Subject: [Buildroot] [git commit] libart: add hash for license file
+Message-ID: <20180429162018.A12908901E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=170b111312f4f0a5547dd8a984e9b1bcd81f45b1
+commit: https://git.buildroot.net/buildroot/commit/?id=92ba3b7f5c2497ba227474bf73f523be5036b98d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbson/libbson.hash | 4 +++-
- package/libbson/libbson.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/libart/libart.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libbson/libbson.hash b/package/libbson/libbson.hash
-index 27abe90bfd..b20a0cd8d4 100644
---- a/package/libbson/libbson.hash
-+++ b/package/libbson/libbson.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256	aad410123e4bd8a9804c3c3d79e03344e2df104872594dc2cf19605d492944ba libbson-1.6.2.tar.gz
-+sha256	c3cc230a3451bf7fedc5bb34c3191fd23d841e65ec415301f6c77e531924b769 libbson-1.9.4.tar.gz
-+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-+sha256	8dc5cb3146b026715e6c145621c7732f36c295d825b7b3a03076ad3f238db48e THIRD_PARTY_NOTICES
-diff --git a/package/libbson/libbson.mk b/package/libbson/libbson.mk
-index 8a71fc394c..2c9cbc7fe0 100644
---- a/package/libbson/libbson.mk
-+++ b/package/libbson/libbson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBSON_VERSION = 1.6.2
-+LIBBSON_VERSION = 1.9.4
- LIBBSON_SITE = https://github.com/mongodb/libbson/releases/download/$(LIBBSON_VERSION)
- LIBBSON_LICENSE = Apache-2.0, MIT (jsonl), ISC (b64), Zlib (md5)
- LIBBSON_LICENSE_FILES = COPYING THIRD_PARTY_NOTICES
+diff --git a/package/libart/libart.hash b/package/libart/libart.hash
+index 769c3bfeab..105277b1f2 100644
+--- a/package/libart/libart.hash
++++ b/package/libart/libart.hash
+@@ -1,2 +1,5 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/libart_lgpl/2.3/libart_lgpl-2.3.21.sha256sum
+ sha256	2a10b1c884bb37c7bd5c5eba59dbd0d28bf68e64a42d7f2083c836f60f8e98fa	libart_lgpl-2.3.21.tar.gz
++
++# Hash for license file:
++sha256	d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5	COPYING
