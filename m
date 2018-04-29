@@ -1,9 +1,10 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 29 Apr 2018 11:33:41 -0300
-Subject: [Buildroot] [PATCH v4] testing/tests/download: add git hash test
+Date: Sun, 29 Apr 2018 11:33:42 -0300
+Subject: [Buildroot] [PATCH v4] testing/tests/download: test case for git
+ refs
 In-Reply-To: <20180429143349.24010-1-ricardo.martincoski@gmail.com>
 References: <20180429143349.24010-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180429143349.24010-5-ricardo.martincoski@gmail.com>
+Message-ID: <20180429143349.24010-6-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +13,26 @@ To: buildroot@busybox.net
 
 From: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 
-Add one test case to ensure the hash is checked for git packages:
- - correct hash;
- - wrong hash;
- - no hash file.
+All upcoming tests for git refs will rely on the return code of make to
+determine whether a git ref can be downloaded or not and also to
+determine whether the downloaded content is correct (all of this taking
+advantage of the check-hash mechanism already in place for git
+packages).
+So to avoid false results i.e. in the case the check-hash mechanism
+become broken in the master branch, add some sanity checks before the
+actual test of download git refs.
 
-Add required infra:
- - a GitRemote class, that can start a git server in the host machine to
-   emulate a remote git server under the control of the test;
- - a new base class, called GitTestBase, that inherits from BRTest and
-   must be subclassed by all git test cases.
-   Its setUp() method takes care of configuring the build with a
-   br2-external, avoiding to hit http://sources.buildroot.net by using
-   an empty BR2_BACKUP_SITE. It also avoids downloading not
-   pre-installed dependencies (i.e. lzip) every time by calling 'make
-   dependencies' using the common dl directory, and it instantiates the
-   GitRemote object.
+Add the minimum test case for git refs containing only sanity checks.
+Reuse the commit in the static repo.
+Add a br2-external with two packages to check that:
+ - trying to download an invalid sha1 generates an error;
+ - downloading a valid sha1 that contains unexpected content generates
+   an error.
 
-Besides the Python scripts, add some fixtures used during the tests:
- - a br2-external (git-hash) with one package for each part of the test
-   case;
- - a static git bare repo (repo.git) to be served using GitRemote class.
-
-Neither the br2-external nor the check hash functionalities are the
-subject of these tests per se, so for simplicity limit the check to the
-error codes and don't look for the messages in the log.
-
-Thanks to Arnout for the hint about how to add a bare repo to test.
+In order to ease the maintenance and review, each upcoming patch adding
+checks to this test case will add at same time the commits to the static
+repo, the equivalent packages to the br2-external and code to the test
+case.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 Cc: Arnout Vandecappelle <arnout@mind.be>
@@ -49,349 +43,170 @@ Layout of static repo with the series applied until this patch:
  * a238b1d (HEAD -> master) initial
 
 Changes v3 -> v4:
-  - remove call to 'make dependencies';
-  - merge generic git base file to the main test case as the first was
-    only used by the second;
-  - use variable naming similar to builder;
-  - move useful methods to the base class;
-  - rename logfile to -gitremote (it will become handy when adding the
-    http server on a later patch);
-  - use more columns (our limit is now 132);
-  - merge start to __init__ as it was called only there;
-  - remove temp variable used only once (port_arg);
-  - use a more future-proof string format for the port arg (it will
-    become handy when adding the http server on a later patch);
-  - use simpler code to raise exception if there is no free port;
-  - fix the range for ports to use;
+  - move useful methods to the git base class;
   - br2_external is now a list;
 
 Changes v2 -> v3:
-  - renumber 5 -> 6;
-  - rebase after removing patch 3 "allow to override logfile" from the
-    series and adding new patches 4 "split runtime test from BRTest" and
-    5 "support br2-external";
-  - merge part of old patch 4 (very minimal GitTestBase) to old patch 5
-    (Arnout Vandecappelle);
-  - merge and tweak part of commit log from old patch 4;
-  - move GITREMOTE_PORT_NUMBER to external.mk (Arnout Vandecappelle);
-  - use dosctrings;
-  - start git remote from __init__ (Arnout Vandecappelle), but I kept a
-    separate method and call start();
-  - remove dead code (Arnout Vandecappelle);
-  - use the same git repo for all tests (Arnout Vandecappelle);
-  - rename the file to test_git and merge the 3 test cases in one, since
-    the feature "check hash for git packages" is only OK if all work
-    well and also because the test does not take too much time;
-  - update commit log accordingly.
+  - rewrite from v2, using an static repo;
+  - separate on this patch the bare minimum static repo (actually reuse
+    from previous commit), the next patches on the series will gradually
+    add new commits to the static repo together to the equivalent
+    packages and call to check_download. This approach allows better
+    maintenance, even during the review of the series, because a patch
+    can be more easily reworked/discarded/reordered;
 
-Changes v1 -> v2 (patch 4):
-  - new patch
-Changes v1 -> v2 (patch 5):
-  - use git daemon + git:// instead of ssh (Arnout);
-  - remove __main__ handling since the test infra already does that;
-  - use the logging support from test infra;
+Changes v1 -> v2:
+  - rename the main test file to testgit (Arnout). Actually I broke it
+    down to a common gitbase and the two test_git_refs and test_git_hash
+    (this last one is new, in the previous patch);
+  - remove some weird/wrong TODO I had in v1 code (Arnout);
+  - use the same structure for test cases as used in the test infra;
+  - raise an exception when the download fails (Arnout). I did not add
+    code for this since I let the builder class to raise it;
+  - I reimplemented git_util as gitrepo. Arnout suggested to use it as
+    module and I first implemented that way locally, but then I created
+    test cases for submodules and I realized now I have a reason to use
+    a class (see next patch);
+  - move package (now called foo) to a BR2_EXTERNAL (Arnout);
+  - override BR2_DL_DIR when calling make (Arnout);
+  - the test infra uses O= so I don't need to;
+  - instead of removing the files in the dl/ folder, use a different dir
+    as dl/ dir since now each repo has a different name;
+  - open the tarball to check its contents (Arnout). I create a fresh
+    clone of the repo before the test to compare against;
+  - this patch is not checking for the actual sha1 anymore, it can be
+    done later. But the check for the contents should cover most cases;
+  - my old argument to not test only the support/download/dl-wrapper is
+    not valid anymore since I mimic the logic from the scripts to know
+    the name of the tarball. But I still think calling make ...-source
+    has better maintenance. And also the previous patch (test for hash
+    of packages with git method) can use the same base class;
   - this patch is part of series 1/3 of a new version of
     http://patchwork.ozlabs.org/patch/690097/
 ---
- .gitlab-ci.yml                                     |   1 +
- support/testing/tests/download/__init__.py         |   0
- .../tests/download/br2-external/git-hash/Config.in |   0
- .../download/br2-external/git-hash/external.desc   |   1 +
- .../download/br2-external/git-hash/external.mk     |   4 ++
- .../br2-external/git-hash/package/bad/bad.hash     |   1 +
- .../br2-external/git-hash/package/bad/bad.mk       |  10 +++++
- .../br2-external/git-hash/package/good/good.hash   |   1 +
- .../br2-external/git-hash/package/good/good.mk     |  10 +++++
- .../br2-external/git-hash/package/nohash/nohash.mk |  10 +++++
- .../download/git-remote/repo.git/.gitattributes    |   1 +
- .../tests/download/git-remote/repo.git/HEAD        |   1 +
- .../tests/download/git-remote/repo.git/config      |   4 ++
- .../99/f2e3e1cb15f9b52fa29f66d380dda061d917ab      | Bin 0 -> 49 bytes
- .../a2/38b1dfcd825d47d834af3c5223417c8411d90d      | Bin 0 -> 152 bytes
- .../e7/9c5e8f964493290a409888d5413a737e8e5dd5      | Bin 0 -> 23 bytes
- .../download/git-remote/repo.git/refs/heads/master |   1 +
- support/testing/tests/download/gitremote.py        |  44 +++++++++++++++++++++
- support/testing/tests/download/test_git.py         |  43 ++++++++++++++++++++
- 19 files changed, 132 insertions(+)
- create mode 100644 support/testing/tests/download/__init__.py
- create mode 100644 support/testing/tests/download/br2-external/git-hash/Config.in
- create mode 100644 support/testing/tests/download/br2-external/git-hash/external.desc
- create mode 100644 support/testing/tests/download/br2-external/git-hash/external.mk
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/bad/bad.hash
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/bad/bad.mk
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/good/good.hash
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/good/good.mk
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/nohash/nohash.mk
- create mode 100644 support/testing/tests/download/git-remote/repo.git/.gitattributes
- create mode 100644 support/testing/tests/download/git-remote/repo.git/HEAD
- create mode 100644 support/testing/tests/download/git-remote/repo.git/config
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/99/f2e3e1cb15f9b52fa29f66d380dda061d917ab
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/a2/38b1dfcd825d47d834af3c5223417c8411d90d
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/e7/9c5e8f964493290a409888d5413a737e8e5dd5
- create mode 100644 support/testing/tests/download/git-remote/repo.git/refs/heads/master
- create mode 100644 support/testing/tests/download/gitremote.py
- create mode 100644 support/testing/tests/download/test_git.py
+ .gitlab-ci.yml                                        |  1 +
+ .../tests/download/br2-external/git-refs/Config.in    |  0
+ .../download/br2-external/git-refs/external.desc      |  1 +
+ .../tests/download/br2-external/git-refs/external.mk  |  4 ++++
+ .../package/git-wrong-content/git-wrong-content.hash  |  2 ++
+ .../package/git-wrong-content/git-wrong-content.mk    | 11 +++++++++++
+ .../git-refs/package/git-wrong-sha1/git-wrong-sha1.mk | 11 +++++++++++
+ support/testing/tests/download/test_git.py            | 19 +++++++++++++++++++
+ 8 files changed, 49 insertions(+)
+ create mode 100644 support/testing/tests/download/br2-external/git-refs/Config.in
+ create mode 100644 support/testing/tests/download/br2-external/git-refs/external.desc
+ create mode 100644 support/testing/tests/download/br2-external/git-refs/external.mk
+ create mode 100644 support/testing/tests/download/br2-external/git-refs/package/git-wrong-content/git-wrong-content.hash
+ create mode 100644 support/testing/tests/download/br2-external/git-refs/package/git-wrong-content/git-wrong-content.mk
+ create mode 100644 support/testing/tests/download/br2-external/git-refs/package/git-wrong-sha1/git-wrong-sha1.mk
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 568fb7fc19..42559e0365 100644
+index 42559e0365..26e2af3799 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -266,6 +266,7 @@ tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
- tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
+@@ -267,6 +267,7 @@ tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
  tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone: *runtime_test
  tests.core.test_timezone.TestNoTimezone: *runtime_test
-+tests.download.test_git.TestGitHash: *runtime_test
+ tests.download.test_git.TestGitHash: *runtime_test
++tests.download.test_git.TestGitRefs: *runtime_test
  tests.fs.test_ext.TestExt2: *runtime_test
  tests.fs.test_ext.TestExt2r1: *runtime_test
  tests.fs.test_ext.TestExt3: *runtime_test
-diff --git a/support/testing/tests/download/__init__.py b/support/testing/tests/download/__init__.py
+diff --git a/support/testing/tests/download/br2-external/git-refs/Config.in b/support/testing/tests/download/br2-external/git-refs/Config.in
 new file mode 100644
 index 0000000000..e69de29bb2
-diff --git a/support/testing/tests/download/br2-external/git-hash/Config.in b/support/testing/tests/download/br2-external/git-hash/Config.in
+diff --git a/support/testing/tests/download/br2-external/git-refs/external.desc b/support/testing/tests/download/br2-external/git-refs/external.desc
 new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/support/testing/tests/download/br2-external/git-hash/external.desc b/support/testing/tests/download/br2-external/git-hash/external.desc
-new file mode 100644
-index 0000000000..41316c8b25
+index 0000000000..69f40d46c6
 --- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/external.desc
++++ b/support/testing/tests/download/br2-external/git-refs/external.desc
 @@ -0,0 +1 @@
-+name: GIT_HASH
-diff --git a/support/testing/tests/download/br2-external/git-hash/external.mk b/support/testing/tests/download/br2-external/git-hash/external.mk
++name: GIT_REFS
+diff --git a/support/testing/tests/download/br2-external/git-refs/external.mk b/support/testing/tests/download/br2-external/git-refs/external.mk
 new file mode 100644
-index 0000000000..4646dfe2b0
+index 0000000000..ab38c27eb7
 --- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/external.mk
++++ b/support/testing/tests/download/br2-external/git-refs/external.mk
 @@ -0,0 +1,4 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_GIT_HASH_PATH)/package/*/*.mk))
++include $(sort $(wildcard $(BR2_EXTERNAL_GIT_REFS_PATH)/package/*/*.mk))
 +
 +# Get the git server port number from the test infra
 +GITREMOTE_PORT_NUMBER ?= 9418
-diff --git a/support/testing/tests/download/br2-external/git-hash/package/bad/bad.hash b/support/testing/tests/download/br2-external/git-hash/package/bad/bad.hash
+diff --git a/support/testing/tests/download/br2-external/git-refs/package/git-wrong-content/git-wrong-content.hash b/support/testing/tests/download/br2-external/git-refs/package/git-wrong-content/git-wrong-content.hash
 new file mode 100644
-index 0000000000..b9e1baec84
+index 0000000000..47b2b8b7d7
 --- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/package/bad/bad.hash
-@@ -0,0 +1 @@
-+sha256  0000000000000000000000000000000000000000000000000000000000000000  bad-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
-diff --git a/support/testing/tests/download/br2-external/git-hash/package/bad/bad.mk b/support/testing/tests/download/br2-external/git-hash/package/bad/bad.mk
++++ b/support/testing/tests/download/br2-external/git-refs/package/git-wrong-content/git-wrong-content.hash
+@@ -0,0 +1,2 @@
++ sha256  04715901977503d1df650e0959f4d31d8e7b105e2ac99a2182e0652b8f13baa1  git-wrong-content-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
++ sha256  0000000000000000000000000000000000000000000000000000000000000000  file
+diff --git a/support/testing/tests/download/br2-external/git-refs/package/git-wrong-content/git-wrong-content.mk b/support/testing/tests/download/br2-external/git-refs/package/git-wrong-content/git-wrong-content.mk
 new file mode 100644
-index 0000000000..5497bd6bfe
+index 0000000000..786224dad9
 --- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/package/bad/bad.mk
-@@ -0,0 +1,10 @@
++++ b/support/testing/tests/download/br2-external/git-refs/package/git-wrong-content/git-wrong-content.mk
+@@ -0,0 +1,11 @@
 +################################################################################
 +#
-+# bad
++# git-wrong-content
 +#
 +################################################################################
 +
-+BAD_VERSION = a238b1dfcd825d47d834af3c5223417c8411d90d
-+BAD_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
++GIT_WRONG_CONTENT_VERSION = a238b1dfcd825d47d834af3c5223417c8411d90d
++GIT_WRONG_CONTENT_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
++GIT_WRONG_CONTENT_LICENSE_FILES = file
 +
 +$(eval $(generic-package))
-diff --git a/support/testing/tests/download/br2-external/git-hash/package/good/good.hash b/support/testing/tests/download/br2-external/git-hash/package/good/good.hash
+diff --git a/support/testing/tests/download/br2-external/git-refs/package/git-wrong-sha1/git-wrong-sha1.mk b/support/testing/tests/download/br2-external/git-refs/package/git-wrong-sha1/git-wrong-sha1.mk
 new file mode 100644
-index 0000000000..9e92ab8ab9
+index 0000000000..f9d0d2226c
 --- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/package/good/good.hash
-@@ -0,0 +1 @@
-+sha256  d00ae598e9e770d607621a86766030b42eaa58156cb8d482b043969da7963c23  good-a238b1dfcd825d47d834af3c5223417c8411d90d.tar.gz
-diff --git a/support/testing/tests/download/br2-external/git-hash/package/good/good.mk b/support/testing/tests/download/br2-external/git-hash/package/good/good.mk
-new file mode 100644
-index 0000000000..0f0eefd944
---- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/package/good/good.mk
-@@ -0,0 +1,10 @@
++++ b/support/testing/tests/download/br2-external/git-refs/package/git-wrong-sha1/git-wrong-sha1.mk
+@@ -0,0 +1,11 @@
 +################################################################################
 +#
-+# good
++# git-wrong-sha1
 +#
 +################################################################################
 +
-+GOOD_VERSION = a238b1dfcd825d47d834af3c5223417c8411d90d
-+GOOD_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
++GIT_WRONG_SHA1_VERSION = 0000000000000000000000000000000000000000
++GIT_WRONG_SHA1_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
++GIT_WRONG_SHA1_LICENSE_FILES = file
 +
 +$(eval $(generic-package))
-diff --git a/support/testing/tests/download/br2-external/git-hash/package/nohash/nohash.mk b/support/testing/tests/download/br2-external/git-hash/package/nohash/nohash.mk
-new file mode 100644
-index 0000000000..1da19d88c6
---- /dev/null
-+++ b/support/testing/tests/download/br2-external/git-hash/package/nohash/nohash.mk
-@@ -0,0 +1,10 @@
-+################################################################################
-+#
-+# nohash
-+#
-+################################################################################
-+
-+NOHASH_VERSION = a238b1dfcd825d47d834af3c5223417c8411d90d
-+NOHASH_SITE = git://localhost:$(GITREMOTE_PORT_NUMBER)/repo.git
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/download/git-remote/repo.git/.gitattributes b/support/testing/tests/download/git-remote/repo.git/.gitattributes
-new file mode 100644
-index 0000000000..eb50c64a21
---- /dev/null
-+++ b/support/testing/tests/download/git-remote/repo.git/.gitattributes
-@@ -0,0 +1 @@
-+objects/*/* binary
-diff --git a/support/testing/tests/download/git-remote/repo.git/HEAD b/support/testing/tests/download/git-remote/repo.git/HEAD
-new file mode 100644
-index 0000000000..cb089cd89a
---- /dev/null
-+++ b/support/testing/tests/download/git-remote/repo.git/HEAD
-@@ -0,0 +1 @@
-+ref: refs/heads/master
-diff --git a/support/testing/tests/download/git-remote/repo.git/config b/support/testing/tests/download/git-remote/repo.git/config
-new file mode 100644
-index 0000000000..07d359d07c
---- /dev/null
-+++ b/support/testing/tests/download/git-remote/repo.git/config
-@@ -0,0 +1,4 @@
-+[core]
-+	repositoryformatversion = 0
-+	filemode = true
-+	bare = true
-diff --git a/support/testing/tests/download/git-remote/repo.git/objects/99/f2e3e1cb15f9b52fa29f66d380dda061d917ab b/support/testing/tests/download/git-remote/repo.git/objects/99/f2e3e1cb15f9b52fa29f66d380dda061d917ab
-new file mode 100644
-index 0000000000000000000000000000000000000000..9db72668cf9374b0b85a25a19f30084fd460072d
-GIT binary patch
-literal 49
-zcmb<m)YkO!4K*-JGB7bPFg6VIIDN)5wZcw)UHz=nDZYB`lCt5lYr9_mN?Omvz#_so
-F4FHVv5b^*3
-
-literal 0
-HcmV?d00001
-
-diff --git a/support/testing/tests/download/git-remote/repo.git/objects/a2/38b1dfcd825d47d834af3c5223417c8411d90d b/support/testing/tests/download/git-remote/repo.git/objects/a2/38b1dfcd825d47d834af3c5223417c8411d90d
-new file mode 100644
-index 0000000000000000000000000000000000000000..31b6bcf34de247d14531c70b36e28d895ba20af3
-GIT binary patch
-literal 152
-zcmV;J0B8Sr0j<tW4#FT1Kw;OMVlL1IsFY%i at d9r21jApQv_OKm@b)%w;oi9Y7BA10
-zl&FE!)2`JJz?dk*5QMWrMPrqWC`}wkKTO<v<fHILXtWHU?OrNe$zk;cE?667R~`$&
-zv3{^mUp&tVY3*G}ClHEjqx7`b(D8wDw&^y}!k==CGBv`Lu^Y`f_^!m*+1KHhS@s5O
-G+F(P1IZe3$
-
-literal 0
-HcmV?d00001
-
-diff --git a/support/testing/tests/download/git-remote/repo.git/objects/e7/9c5e8f964493290a409888d5413a737e8e5dd5 b/support/testing/tests/download/git-remote/repo.git/objects/e7/9c5e8f964493290a409888d5413a737e8e5dd5
-new file mode 100644
-index 0000000000000000000000000000000000000000..df2037a2d2d30afb20e31cd558c92c2edabe7cf6
-GIT binary patch
-literal 23
-fcmb<m^geacKWIb3i8H5lPWqgA$i$$b%kl;Qg;xrl
-
-literal 0
-HcmV?d00001
-
-diff --git a/support/testing/tests/download/git-remote/repo.git/refs/heads/master b/support/testing/tests/download/git-remote/repo.git/refs/heads/master
-new file mode 100644
-index 0000000000..b6bccc1c17
---- /dev/null
-+++ b/support/testing/tests/download/git-remote/repo.git/refs/heads/master
-@@ -0,0 +1 @@
-+a238b1dfcd825d47d834af3c5223417c8411d90d
-diff --git a/support/testing/tests/download/gitremote.py b/support/testing/tests/download/gitremote.py
-new file mode 100644
-index 0000000000..60bc49fbf8
---- /dev/null
-+++ b/support/testing/tests/download/gitremote.py
-@@ -0,0 +1,44 @@
-+# subprocess does not kill the child daemon when a test case fails by raising
-+# an exception. So use pexpect instead.
-+import pexpect
-+
-+import infra
-+
-+GIT_REMOTE_PORT_INITIAL = 9418
-+GIT_REMOTE_PORT_LAST = GIT_REMOTE_PORT_INITIAL + 99
-+
-+
-+class GitRemote(object):
-+    def __init__(self, builddir, serveddir, logtofile):
-+        """
-+        Start a local git server.
-+
-+        In order to support test cases in parallel, select the port the
-+        server will listen to in runtime. Since there is no reliable way
-+        to allocate the port prior to starting the server (another
-+        process in the host machine can use the port between it is
-+        selected from a list and it is really allocated to the server)
-+        try to start the server in a port and in the case it is already
-+        in use, try the next one in the allowed range.
-+        """
-+        self.daemon = None
-+        self.port = None
-+        self.logfile = infra.open_log_file(builddir, "gitremote", logtofile)
-+
-+        daemon_cmd = ["git", "daemon", "--reuseaddr", "--verbose", "--listen=localhost", "--export-all",
-+                      "--base-path={}".format(serveddir)]
-+        for port in range(GIT_REMOTE_PORT_INITIAL, GIT_REMOTE_PORT_LAST + 1):
-+            cmd = daemon_cmd + ["--port={port}".format(port=port)]
-+            self.logfile.write("> starting git remote with '{}'\n".format(" ".join(cmd)))
-+            self.daemon = pexpect.spawn(cmd[0], cmd[1:], logfile=self.logfile)
-+            ret = self.daemon.expect(["Ready to rumble",
-+                                      "Address already in use"])
-+            if ret == 0:
-+                self.port = port
-+                return
-+        raise SystemError("Could not find a free port to run git remote")
-+
-+    def stop(self):
-+        if self.daemon is None:
-+            return
-+        self.daemon.terminate(force=True)
 diff --git a/support/testing/tests/download/test_git.py b/support/testing/tests/download/test_git.py
-new file mode 100644
-index 0000000000..14fc8e4da3
---- /dev/null
+index 14fc8e4da3..fdfc858233 100644
+--- a/support/testing/tests/download/test_git.py
 +++ b/support/testing/tests/download/test_git.py
-@@ -0,0 +1,43 @@
-+import os
-+
-+import infra
-+from gitremote import GitRemote
-+
-+
-+class GitTestBase(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_BACKUP_SITE=""
-+        """
-+    gitremotedir = infra.filepath("tests/download/git-remote")
-+    gitremote = None
-+
-+    def setUp(self):
-+        super(GitTestBase, self).setUp()
-+        self.gitremote = GitRemote(self.builddir, self.gitremotedir, self.logtofile)
-+
-+    def tearDown(self):
-+        self.show_msg("Cleaning up")
-+        if self.gitremote:
-+            self.gitremote.stop()
-+        if self.b and not self.keepbuilds:
-+            self.b.delete()
-+
-+    def check_hash(self, package):
+@@ -32,6 +32,15 @@ class GitTestBase(infra.basetest.BRTest):
+                       "{}-source".format(package)],
+                      env)
+ 
++    def check_download(self, package):
 +        # store downloaded tarball inside the output dir so the test infra
 +        # cleans it up at the end
 +        env = {"BR2_DL_DIR": os.path.join(self.builddir, "dl"),
 +               "GITREMOTE_PORT_NUMBER": str(self.gitremote.port)}
 +        self.b.build(["{}-dirclean".format(package),
-+                      "{}-source".format(package)],
++                      "{}-legal-info".format(package)],
 +                     env)
 +
+ 
+ class TestGitHash(GitTestBase):
+     br2_external = [infra.filepath("tests/download/br2-external/git-hash")]
+@@ -41,3 +50,13 @@ class TestGitHash(GitTestBase):
+             self.check_hash("bad")
+         self.check_hash("good")
+         self.check_hash("nohash")
 +
-+class TestGitHash(GitTestBase):
-+    br2_external = [infra.filepath("tests/download/br2-external/git-hash")]
++
++class TestGitRefs(GitTestBase):
++    br2_external = [infra.filepath("tests/download/br2-external/git-refs")]
 +
 +    def test_run(self):
 +        with self.assertRaises(SystemError):
-+            self.check_hash("bad")
-+        self.check_hash("good")
-+        self.check_hash("nohash")
++            self.check_download("git-wrong-content")
++        with self.assertRaises(SystemError):
++            self.check_download("git-wrong-sha1")
 -- 
 2.14.1
