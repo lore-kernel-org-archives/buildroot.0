@@ -1,51 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 20:00:21 +0200
-Subject: [Buildroot] [PATCH 1/1] libmatroska: bump to version 1.4.9
-Message-ID: <20180429180021.19938-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 29 Apr 2018 21:29:52 +0300
+Subject: [Buildroot] [PATCH] libtomcrypt: fix headers installation path
+Message-ID: <dea7363d337047b65baf36ceb7945e5ec6777f80.1525026592.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Use tar.xz (tar.bz2 is not available since 1.4.8)
-- Use cmake infrastructure (autotools has been removed)
-- Add hash for license file
+libtomcrypt installs its headers by default in /usr/local/include under
+the staging sysroot. This patch is not in the default search patch of
+some toolchains. This breaks the build of dropbear. Set the PREFIX make
+variable to fix that.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+While at it, split the long install command for better readability.
+
+Fixes (dropbear):
+http://autobuild.buildroot.net/results/215/2157679e276623ae875d1b31f3e5a68caf586536/
+http://autobuild.buildroot.net/results/956/956d254675e6500c19c3bb7ccdf12ce136858720/
+http://autobuild.buildroot.net/results/01e/01ec89a81c4ec6e36e2f81b5a9394050a91df654/
+
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libmatroska/libmatroska.hash | 3 ++-
- package/libmatroska/libmatroska.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/libtomcrypt/libtomcrypt.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libmatroska/libmatroska.hash b/package/libmatroska/libmatroska.hash
-index 275af63995..e42a9b2824 100644
---- a/package/libmatroska/libmatroska.hash
-+++ b/package/libmatroska/libmatroska.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	d3efaa9f6d3964351a05bea0f848a8d5dc570e4791f179816ce9a93730296bd7	libmatroska-1.4.4.tar.bz2
-+sha256	38a61dd5d87c070928b5deb3922b63b2b83c09e2e4a10f9393eecb6afa9795c8	libmatroska-1.4.9.tar.xz
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL
-diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
-index 18ea505af0..b8d0d84d35 100644
---- a/package/libmatroska/libmatroska.mk
-+++ b/package/libmatroska/libmatroska.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
+diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
+index 974ef3f2f2fd..ff6222cc91ee 100644
+--- a/package/libtomcrypt/libtomcrypt.mk
++++ b/package/libtomcrypt/libtomcrypt.mk
+@@ -20,7 +20,9 @@ define LIBTOMCRYPT_BUILD_CMDS
+ endef
  
--LIBMATROSKA_VERSION = 1.4.4
--LIBMATROSKA_SOURCE = libmatroska-$(LIBMATROSKA_VERSION).tar.bz2
-+LIBMATROSKA_VERSION = 1.4.9
-+LIBMATROSKA_SOURCE = libmatroska-$(LIBMATROSKA_VERSION).tar.xz
- LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
- LIBMATROSKA_INSTALL_STAGING = YES
- LIBMATROSKA_LICENSE = LGPL-2.1+
- LIBMATROSKA_LICENSE_FILES = LICENSE.LGPL
- LIBMATROSKA_DEPENDENCIES = libebml host-pkgconf
+ define LIBTOMCRYPT_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" NODOCS=1 INSTALL_USER=$(shell id -u) INSTALL_GROUP=$(shell id -g) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" \
++		PREFIX=/usr NODOCS=1 INSTALL_USER=$(shell id -u) \
++		INSTALL_GROUP=$(shell id -g) install
+ endef
  
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+ $(eval $(generic-package))
 -- 
-2.14.1
+2.17.0
