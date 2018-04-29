@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Apr 2018 14:15:20 +0200
-Subject: [Buildroot] [PATCH 1/3] package: declare target variant before host
- variant
+Date: Sun, 29 Apr 2018 14:15:22 +0200
+Subject: [Buildroot] [PATCH 3/3] package/pkg-generic: add check that target
+ variant is defined before host variant
 In-Reply-To: <cover.1525004110.git.yann.morin.1998@free.fr>
 References: <cover.1525004110.git.yann.morin.1998@free.fr>
-Message-ID: <1671d47bee0a30a162dd9389c0d0fa63706e3bd8.1525004110.git.yann.morin.1998@free.fr>
+Message-ID: <f3fbc309610c9ff7df8d06ba1aad1f9369e5cdac.1525004110.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,80 +13,49 @@ To: buildroot@busybox.net
 
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Our package infrastructure uses inheritance of a number of values from
-the target package to the host package, which assumes the target
-package is defined before the host package. In addition, future
-changes are going to make this requirement even more important.
-
-Therefore, let's fix the android-tools, gauche, lcms2,
-linux-syscall-support and pngquant packages, so that they declare
-their target variant before their host variant, like all other
-packages in Buildroot.
+Update the documentation accordingly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[yann.morin.1998 at free.fr: slight rephrasing in error message, update manual]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/android-tools/android-tools.mk                 | 2 +-
- package/gauche/gauche.mk                               | 2 +-
- package/lcms2/lcms2.mk                                 | 2 +-
- package/linux-syscall-support/linux-syscall-support.mk | 2 +-
- package/pngquant/pngquant.mk                           | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ docs/manual/adding-packages-generic.txt | 6 ++++--
+ package/pkg-generic.mk                  | 6 ++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
-index 11e0a15a7f..879d788e3a 100644
---- a/package/android-tools/android-tools.mk
-+++ b/package/android-tools/android-tools.mk
-@@ -81,5 +81,5 @@ define ANDROID_TOOLS_INSTALL_TARGET_CMDS
- 		$(INSTALL) -D -m 0755 $(@D)/build-$(t)/$(t) $(TARGET_DIR)/usr/bin/$(t)$(sep))
- endef
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 62906d92bb..7e1f246752 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -179,8 +179,10 @@ some tools to be installed on the host. If the package name is
+ variables of other packages, if they depend on +libfoo+ or
+ +host-libfoo+.
  
--$(eval $(host-generic-package))
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/package/gauche/gauche.mk b/package/gauche/gauche.mk
-index 1e1ee390af..0b4185f5bf 100644
---- a/package/gauche/gauche.mk
-+++ b/package/gauche/gauche.mk
-@@ -29,5 +29,5 @@ endif
- # here.
- GAUCHE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+-The call to the +generic-package+ and/or +host-generic-package+ macro *must* be
+-at the end of the +.mk+ file, after all variable definitions.
++The call to the +generic-package+ and/or +host-generic-package+ macro
++*must* be at the end of the +.mk+ file, after all variable definitions.
++The call to +host-generic-package+ *must* be after the call to
+++generic-package+, if any.
  
--$(eval $(host-autotools-package))
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 29f8ac8dee..f61563dea4 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -31,5 +31,5 @@ else
- LCMS2_CONF_OPTS += --without-zlib
- endif
+ For the target package, the +generic-package+ uses the variables defined by
+ the .mk file and prefixed by the uppercased package name:
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1c9dd1d734..bd47ca1964 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -646,6 +646,12 @@ $(2)_POST_LEGAL_INFO_HOOKS      ?=
+ $(2)_TARGET_FINALIZE_HOOKS      ?=
+ $(2)_ROOTFS_PRE_CMD_HOOKS       ?=
  
--$(eval $(host-autotools-package))
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/linux-syscall-support/linux-syscall-support.mk b/package/linux-syscall-support/linux-syscall-support.mk
-index b8145de496..050c5058ab 100644
---- a/package/linux-syscall-support/linux-syscall-support.mk
-+++ b/package/linux-syscall-support/linux-syscall-support.mk
-@@ -25,5 +25,5 @@ define HOST_LINUX_SYSCALL_SUPPORT_INSTALL_CMDS
- 		$(HOST_DIR)/include/linux_syscall_support.h
- endef
++ifeq ($$($(2)_TYPE),target)
++ifneq ($$(HOST_$(2)_KCONFIG_VAR),)
++$$(error "Package $(1) defines host variant before target variant!")
++endif
++endif
++
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
  
--$(eval $(host-generic-package))
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
-index 1ce8359d40..f181d6fb47 100644
---- a/package/pngquant/pngquant.mk
-+++ b/package/pngquant/pngquant.mk
-@@ -51,5 +51,5 @@ define HOST_PNGQUANT_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
--$(eval $(host-generic-package))
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
 -- 
 2.14.1
