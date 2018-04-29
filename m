@@ -1,28 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 10:49:44 +0200
-Subject: [Buildroot] [PATCH 1/1] libcuefile: add hash for license file
-Message-ID: <20180429084944.11808-1-fontaine.fabrice@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 29 Apr 2018 10:52:00 +0200
+Subject: [Buildroot] [PATCH 1/2] python-watchdog: add support for uClibc
+In-Reply-To: <20180428233507.479ea87f@windsurf>
+References: <1518787921-32089-1-git-send-email-yegorslists@googlemail.com>
+ <20180428233507.479ea87f@windsurf>
+Message-ID: <CAGm1_kvSkCjMFU9TvENubQCX3-YGTLVJet-1vYYefK+LsKRkAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcuefile/libcuefile.hash | 3 +++
- 1 file changed, 3 insertions(+)
+On Sat, Apr 28, 2018 at 11:35 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Fri, 16 Feb 2018 14:32:00 +0100, yegorslists at googlemail.com wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> This patch fixes uClibc detection.
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  ...dd-a-workaround-to-support-uClibc-library.patch | 43 ++++++++++++++++++++++
+>>  1 file changed, 43 insertions(+)
+>>  create mode 100644 package/python-watchdog/0001-Add-a-workaround-to-support-uClibc-library.patch
+>
+> Applied to master, thanks. Did you submit this patch upstream ?
 
-diff --git a/package/libcuefile/libcuefile.hash b/package/libcuefile/libcuefile.hash
-index 57db91f322..47c0c2fd76 100644
---- a/package/libcuefile/libcuefile.hash
-+++ b/package/libcuefile/libcuefile.hash
-@@ -2,3 +2,6 @@
- md5	1a6ac52e1080fd54f0f59372345f1e4e	libcuefile_r475.tar.gz
- # Calculated based on the hash above
- sha256	b681ca6772b3f64010d24de57361faecf426ee6182f5969fcf29b3f649133fe7	libcuefile_r475.tar.gz
-+
-+# Hash for license file:
-+sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
--- 
-2.14.1
+I'll do this, but the project seems to be abandoned :-(
+
+Yegor
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
