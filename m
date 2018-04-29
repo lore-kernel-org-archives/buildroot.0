@@ -1,36 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 23:09:10 +0200
-Subject: [Buildroot] [git commit] package/python-requests: needs hashlib for
- python 2
-Message-ID: <20180429211020.0C86588EC2@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 23:22:16 +0200
+Subject: [Buildroot] [git commit] libyaml: add hash for license file
+Message-ID: <20180429212223.4E00080422@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c2f6f6630294fa256a4f66db5a4ab1f920b0a65
+commit: https://git.buildroot.net/buildroot/commit/?id=1e933fa9801620e9b0c22b35880ab88ba98149cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Requests need hashlib to run with Python 2. Otherwise it is not possible to
-import, due to missing e.g. md5.
-
-[Peter: tweak commit message]
-Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-requests/Config.in | 1 +
+ package/libyaml/libyaml.hash | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
-index d2726fb26a..30158b8d25 100644
---- a/package/python-requests/Config.in
-+++ b/package/python-requests/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_REQUESTS
- 	select BR2_PACKAGE_PYTHON_CHARDET # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
-+	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
- 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
+index 44b04a3365..d4a0c335c3 100644
+--- a/package/libyaml/libyaml.hash
++++ b/package/libyaml/libyaml.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729  yaml-0.1.7.tar.gz
++sha256 d0d8b09800a45cd982e9568fc7669d9c1a4c330e275a821bbe24d54366d16fe9  LICENSE
