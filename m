@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 16:17:53 +0200
-Subject: [Buildroot] [git commit] libaio: add hash for license file
-Message-ID: <20180429142028.A47148821B@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 16:19:26 +0200
+Subject: [Buildroot] [git commit] libbdplus: add hash for license file
+Message-ID: <20180429142028.DC03E8821B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d41f916fb9b82ebbdbb6e995fdf1b1e7331e689
+commit: https://git.buildroot.net/buildroot/commit/?id=3f1f0244cd93e4c3f259e08891c058a2ab68cf01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libaio/libaio.hash | 3 +++
+ package/libbdplus/libbdplus.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/libaio/libaio.hash b/package/libaio/libaio.hash
-index 7aa8961fbf..5917e2f783 100644
---- a/package/libaio/libaio.hash
-+++ b/package/libaio/libaio.hash
+diff --git a/package/libbdplus/libbdplus.hash b/package/libbdplus/libbdplus.hash
+index 552cd71c89..6abc0e4970 100644
+--- a/package/libbdplus/libbdplus.hash
++++ b/package/libbdplus/libbdplus.hash
 @@ -1,2 +1,5 @@
- # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/liba/libaio/libaio_0.3.110-1.dsc
- sha256	e019028e631725729376250e32b473012f7cb68e1f7275bfc1bbcdd0f8745f7e	libaio_0.3.110.orig.tar.gz
+ # From http://download.videolan.org/pub/videolan/libbdplus/0.1.2/libbdplus-0.1.2.tar.bz2.sha512
+ sha512	e00e7bc9f52b9275646593b753ba646b052255be94a7241965f4dbe4734f8f6a072973ed4b9997957f939236b0633897c295749f79e232188430795be5b5087b	libbdplus-0.1.2.tar.bz2
 +
 +# Hash for license file:
-+sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING
++sha256	592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c	COPYING
