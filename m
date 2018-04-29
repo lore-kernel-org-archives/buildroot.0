@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 19:29:21 +0200
-Subject: [Buildroot] [PATCH 1/1] libevent: add hash for license file
-In-Reply-To: <20180429151540.11070-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 17:15:40 +0200")
-References: <20180429151540.11070-1-fontaine.fabrice@gmail.com>
-Message-ID: <87vac9rkem.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 19:29:31 +0200
+Subject: [Buildroot] [PATCH 1/1] libexif: add hash for license file
+In-Reply-To: <20180429152034.12719-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 17:20:34 +0200")
+References: <20180429152034.12719-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r2mxrkec.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
