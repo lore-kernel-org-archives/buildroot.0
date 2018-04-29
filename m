@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Apr 2018 09:57:38 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.4.x series
-Message-ID: <20180429075829.A3604890D9@busybox.osuosl.org>
+Date: Sun, 29 Apr 2018 09:57:30 +0200
+Subject: [Buildroot] [git commit] libcsv: add hash for license file
+Message-ID: <20180429075829.6D3EF890D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5772a14d0bdd93a144672685c84951e9497b746e
+commit: https://git.buildroot.net/buildroot/commit/?id=554a0350b825dffc26f652e20895f3ea71af929b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcsv/libcsv.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 53452cfb25..e36047f9c7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -250,7 +250,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.129"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.130"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.96"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+diff --git a/package/libcsv/libcsv.hash b/package/libcsv/libcsv.hash
+index e35c44f9b3..33a521d256 100644
+--- a/package/libcsv/libcsv.hash
++++ b/package/libcsv/libcsv.hash
+@@ -1,2 +1,3 @@
+ #locally computed
+ sha256 d9c0431cb803ceb9896ce74f683e6e5a0954e96ae1d9e4028d6e0f967bebd7e4  libcsv-3.0.3.tar.gz
++sha256 6876b170378d38f65aadd271485f0a5c45beaa043a7d3de5e1636ec927922c83  COPYING.LESSER
