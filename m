@@ -1,25 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Apr 2018 12:16:16 +0200
-Subject: [Buildroot] [PATCH 1/1] libasplib: add hash for license file
-Message-ID: <20180429101616.19043-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 29 Apr 2018 12:13:48 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] Revert "package/bash: add
+ /bin/bash to /etc/shells"
+Message-ID: <20180429101623.BC650811CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libasplib/libasplib.hash | 1 +
- 1 file changed, 1 insertion(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=8b8a5cf1a65cde54c7713f9d82c90f62cbef39fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-diff --git a/package/libasplib/libasplib.hash b/package/libasplib/libasplib.hash
-index 76534e528d..db8e920334 100644
---- a/package/libasplib/libasplib.hash
-+++ b/package/libasplib/libasplib.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 68e117348fa17592dde7672477e927119a0e477103ced1d3a57d92e30880a147  libasplib-be7fac89218a84b75f7598e3d76625ece99296f2.tar.gz
-+sha256 12ac5047f2af0522f06798b1589ffc4599bc29c91f954d7874e0320634e777c0  LICENSE
--- 
-2.14.1
+Commit 4d279697af added /bin/bash to /etc/shells. In the default
+skeleton, however, /etc/shells doesn't exist, so in fact it creates
+this file, containing only /bin/bash. Therefore, when bash is selected,
+/bin/sh does not appear in /etc/shells and bash is the only shell
+allowed. Since /bin/sh is the shell that is used for root in the
+default skeleton's /etc/passwd, root is no longer able to log in.
+
+The proper solution is to add all available shells to /etc/shells. For
+now, however, just revert commit 4d279697af as a stop-gap measure. That
+way, the default situation still works, and only people who update
+/etc/passwd with additional logins but don't update /etc/shells will
+suffer.
+
+This reverts commit 4d279697afbf8fb295274784103be2b837113d5e.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=10896
+
+Cc: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Romain Naour <romain.naour@smile.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bash/bash.mk | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index e9384911a0..6e58f0fd64 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -39,14 +39,10 @@ BASH_CONF_ENV += bash_cv_getenv_redef=yes
+ endif
+ endif
+ 
+-# Add /bin/bash to /etc/shells otherwise some login tools like dropbear
+-# can reject the user connexion. See man shells.
+ define BASH_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
+ 	rm -f $(TARGET_DIR)/bin/bashbug
+-	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
+-		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
+ endef
+ 
+ $(eval $(autotools-package))
