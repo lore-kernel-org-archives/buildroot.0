@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Apr 2018 18:50:30 +0200
-Subject: [Buildroot] [PATCH 1/1] libdvdread: bump to version 6.0.0
-In-Reply-To: <20180429133143.16343-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Apr 2018 15:31:43 +0200")
-References: <20180429133143.16343-1-fontaine.fabrice@gmail.com>
-Message-ID: <877eoqt0rt.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Apr 2018 18:51:06 +0200
+Subject: [Buildroot] [PATCH 1/1] libdvdnav: bump to version 6.0.0
+In-Reply-To: <20180429133623.20781-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 29 Apr 2018 15:36:23 +0200")
+References: <20180429133623.20781-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736zet0qt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
