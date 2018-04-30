@@ -1,57 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 22:49:55 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] qt53d: install missing
- QML modules, plugins and examples
-Message-ID: <20180501073415.63B4288036@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 22:51:36 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] usb_modeswitch: set CXX
+ to false when C++ is missing
+Message-ID: <20180501073415.A740F890ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89c7c422858e138eb29813866684a4e69a47896b
+commit: https://git.buildroot.net/buildroot/commit/?id=b058d288ef1d0150c368647cc1ada6dfead24f6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Some files were missing on the first build of qt53d but added later:
-- by qt5base for the plugins because it copies the whole /usr/lib/qt/plugins
-  directory
-- by qt5declarative for the QML modules because it copies the whole
-  /usr/qml directory
+Similar to the openocd fix in commit 5966e2dc54 (package/openocd: fix
+fallout after no-C++ fixups) the jimctl that is bundled with
+usb_modeswitch also wants to find a binary. This broke with commit
+4cd1ab158 (core: alternate solution to disable C++). Revert to 'false'
+instead of 'no' here as well.
 
-Also, the qt53d examples were not installed if
-BR2_PACKAGE_QT5BASE_EXAMPLES was set.
+Fixes:
+http://autobuild.buildroot.net/results/b4d/b4d4e925763cb6558af915f9781afe07fc557ebc/
+http://autobuild.buildroot.net/results/61b/61b9dc2148df2e8fd0b30e62aedbfd30bb755e19/
+http://autobuild.buildroot.net/results/468/468a7e6b049f159fbb4e79d3a12b53ca890f6933/
 
-Signed-off-by: Romain Reignier <rom.reignier@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4fd448c9c1e3ed7ca0f09441bf8a854eb9130190)
+(cherry picked from commit 107e3ebf45931adfc9c995dbb5db3bf1d17311d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt53d/qt53d.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/usb_modeswitch/usb_modeswitch.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index fcb743db21..bdcc665b94 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -30,11 +30,21 @@ define QT53D_INSTALL_STAGING_CMDS
- 	$(QT5_LA_PRL_FILES_FIXUP)
- endef
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index c67d4cd583..8dd712f264 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -28,6 +28,7 @@ USB_MODESWITCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
  
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT53D_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/qt3d $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),)
- define QT53D_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
-+	$(QT53D_INSTALL_TARGET_EXAMPLES)
- endef
- endif
- 
+ define USB_MODESWITCH_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
+ 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
+ 		JIM_CONFIGURE_OPTS="--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME)" \
+ 		-C $(@D) $(USB_MODESWITCH_BUILD_TARGETS)
