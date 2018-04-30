@@ -1,12 +1,13 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 30 Apr 2018 10:17:23 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-25
-In-Reply-To: <20180430091509.3a9cdff2@windsurf>
-References: <20180426060013.EAB262079F@mail.bootlin.com>
- <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
- <20180430091509.3a9cdff2@windsurf>
-Message-ID: <cab2ab99-f53c-448f-7cdb-77456a189664@smile.fr>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Mon, 30 Apr 2018 10:35:08 +0200
+Subject: [Buildroot] [PATCH v6 2/4] package/libclc: new package
+In-Reply-To: <20180430100256.74a03f09@windsurf>
+References: <20180411161452.25043-1-valentin.korenblit@smile.fr>
+ <20180411161452.25043-3-valentin.korenblit@smile.fr>
+ <20180428150630.297aa631@windsurf>
+ <89066f3f-55f7-8d7e-8773-67221c027cea@smile.fr>
+ <20180430100256.74a03f09@windsurf>
+Message-ID: <bce77230-8818-1da1-9b15-6714142d6774@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,51 +16,66 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Le 30/04/2018 ? 09:15, Thomas Petazzoni a ?crit?:
+On 30/04/2018 10:02, Thomas Petazzoni wrote:
 > Hello,
-> 
-> On Mon, 30 Apr 2018 00:15:18 +0200, Romain Naour wrote:
-> 
->>> Detail of failures
->>> ------------------
->>>
->>> microblazeel |                          boost | TIM | http://autobuild.buildroot.net/results/b42d68c66d8ea035845a28c5530ef0682fd95713 |     
->>> microblazeel |                   flare-engine | TIM | http://autobuild.buildroot.net/results/af976a4805fb8b3f0c17a8e3a1f901b2255caa0b |       
->>
->> I tried to reproduce this issue with the upcoming gcc 8.1 for microblaze but
->> flare-engire build fine with it.
->>
->> git bisect helped to find a patch [1] fixing an infinite loop in RTL DSE
->> optimizer. Also, back porting the patch to gcc 7.3.0 fix the issue.
->>
->> Since this patch is not specific to microblaze, but in gcc's code, I'm not sure
->> what we need to do.
->> Either back port the patch to affected gcc version and take the risk to break
->> something with other architecture or optimization level.
->> Or add BR2_TOOLCHAIN_HAS_GCC_BUG_85180 option and wait for gcc 8.
->>
->> Maybe it's easier to add an autobuilder exception for boost and flare-engine on
->> microblaze?
->>
->> It's not clear if other architecture can be affected.
->>
->> Thoughts?
-> 
-> First of all, thanks for this investigation!
+>
+> On Mon, 30 Apr 2018 09:54:10 +0200, Valentin Korenblit wrote:
+>
+>>>> diff --git a/package/libclc/Config.in b/package/libclc/Config.in
+>>>> new file mode 100644
+>>>> index 0000000000..a0f388c4e1
+>>>> --- /dev/null
+>>>> +++ b/package/libclc/Config.in
+>>>> @@ -0,0 +1,22 @@
+>>>> +config BR2_PACKAGE_LIBCLC
+>>>> +	bool "libclc"
+>>>> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+>>>> +	depends on BR2_HOST_GCC_AT_LEAST_4_8
+>>>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>>>> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>>>> +	depends on BR2_INSTALL_LIBSTDCPP
+>>>> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
+>>>> +	depends on !BR2_STATIC_LIBS
+>>>> +	depends on BR2_USE_WCHAR # std::wstring
+>>> You seem to have replicated here all the dependencies of the target
+>>> LLVM package. However, you only depend on host-llvm and host-clang. Are
+>>> you sure all those dependencies are needed by libclc ?
+>> Actually, it wouldn't make sense to have libclc without target LLVM, but it
+>> is true that it is not a build dependency, so I'll remove them.
+> Is target LLVM a runtime dependency for libclc ? Could you explain a
+> bit the interaction between libclc and target LLVM, so that we can
+> decide what is the best way to express this dependency ?
 
-You're welcome
+Yes, it is a runtime dependency. libclc is a library that provides device
+builtin functions defined in the OpenCL specification in LLVM IR bitcode.
+At some point, they will need to be processed by the LLVM code generator,
+AMDGPU backend in this case, as this library is required by the OpenCL
+implementation of Mesa (Clover) which targets GPUs using either R600 or
+RadeonSI Gallium drivers.
 
-> I believe we need to report this to upstream gcc (i.e that gcc 7.x is
-> affected) and see if they backport to the gcc 7.x branch. If they do,
-> then the solution is simple: also backport the patch on our side, until
-> they do a new 7.x release.
-
-For now I don't have an account in the gcc bugzilla to reply to the bug report.
-I've asked for a new account, It should be activated in few days.
+>
+>>>> +# C++ compiler is used to build a small tool (prepare-builtins) for the host.
+>>>> +# It must be built with the C++ compiler from the host
+>>>> +LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
+>>>> +	--prefix="/usr" \
+>>>> +	--includedir="/usr/local/include" \
+>>> I'm not a big fan of /usr/local/include. Perhaps we should use
+>>> something really special like /usr/share/libclc/ or something like
+>>> this ?
+>> Perfect, I'll change it to that directory
+> Thanks!
+>
+>>>> +	--pkgconfigdir="/usr/lib/pkgconfig" \
+>>>> +	--with-cxx-compiler=$(HOSTCXX)
+>>> Weird for a target package to use the host compiler, no ?
+>> Yes, it is used only in the target utils/prepare-builtins.o, all the
+>> other stuff is compiled with host-clang.
+> OK.
+>
+> Thanks!
+>
+> Thomas
 
 Best regards,
-Romain
 
-> 
-> Thomas
-> 
+Valentin
