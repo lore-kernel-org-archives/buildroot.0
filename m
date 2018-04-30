@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Apr 2018 17:42:25 +0200
-Subject: [Buildroot] [PATCH 1/1] libgsm: add hash for license file
-In-Reply-To: <20180430125458.14606-1-fontaine.fabrice@gmail.com>
-References: <20180430125458.14606-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180430174225.35f5209d@windsurf>
+Date: Mon, 30 Apr 2018 17:42:29 +0200
+Subject: [Buildroot] [PATCH 1/1] libgtk2: bump to version 2.24.32
+In-Reply-To: <20180430153203.11110-1-fontaine.fabrice@gmail.com>
+References: <20180430153203.11110-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180430174229.4a2b6f89@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 30 Apr 2018 14:54:58 +0200, Fabrice Fontaine wrote:
+On Mon, 30 Apr 2018 17:32:03 +0200, Fabrice Fontaine wrote:
+> Add hash for license file
+> 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libgsm/libgsm.hash | 1 +
->  1 file changed, 1 insertion(+)
+>  package/libgtk2/libgtk2.hash | 7 +++++--
+>  package/libgtk2/libgtk2.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
