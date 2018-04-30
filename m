@@ -1,42 +1,25 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Apr 2018 22:25:33 +0200
-Subject: [Buildroot] [PATCH 1/1] libhttpparser: bump to version 1.8.1
-Message-ID: <20180430202533.13830-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 22:30:43 +0200
+Subject: [Buildroot] [PATCH 1/1] libical: add hash for license file
+Message-ID: <20180430203043.14599-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libhttpparser/libhttpparser.hash | 3 ++-
- package/libhttpparser/libhttpparser.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libical/libical.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
-index 8ffceb24d9..acbf3787f9 100644
---- a/package/libhttpparser/libhttpparser.hash
-+++ b/package/libhttpparser/libhttpparser.hash
+diff --git a/package/libical/libical.hash b/package/libical/libical.hash
+index 5c42cdcc61..7edb29bd28 100644
+--- a/package/libical/libical.hash
++++ b/package/libical/libical.hash
 @@ -1,2 +1,3 @@
  # Locally computed:
--sha256 7277c6f99bf6fc272eb5d8fc3dca01e7cc1d4ae609b5d2c5d5e18added98479d  libhttpparser-v2.8.0.tar.gz
-+sha256 51615f68b8d67eadfd2482decc63b3e55d749ce0055502bbb5b0032726d22d96  libhttpparser-v2.8.1.tar.gz
-+sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
-diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
-index 5f50d877d9..c71e043cdc 100644
---- a/package/libhttpparser/libhttpparser.mk
-+++ b/package/libhttpparser/libhttpparser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBHTTPPARSER_VERSION = v2.8.0
-+LIBHTTPPARSER_VERSION = v2.8.1
- LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
- LIBHTTPPARSER_INSTALL_STAGING = YES
- LIBHTTPPARSER_LICENSE = MIT
+ sha256	089ce3c42d97fbd7a5d4b3c70adbdd82115dd306349c1f5c46a8fb3f8c949592	libical-1.0.1.tar.gz
++sha256	c393726f82e6f21df5262110215f6a4382b32046d10afdcfcc49338aa7a191f2	LICENSE
 -- 
 2.14.1
