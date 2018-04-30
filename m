@@ -1,38 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 22:41:01 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] systemd: add
- compatibility symlink for 'shutdown'
-Message-ID: <20180501073415.3F30B7FE9E@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 22:49:55 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qt53d: install missing
+ QML modules, plugins and examples
+Message-ID: <20180501073415.63B4288036@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=178e4f27aec523fc7f6f3ad370cc1c4dc7194feb
+commit: https://git.buildroot.net/buildroot/commit/?id=89c7c422858e138eb29813866684a4e69a47896b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-In addition to the 'halt', 'poweroff', 'reboot' symlinks pointing to
-systemctl, add 'shutdown'.
+Some files were missing on the first build of qt53d but added later:
+- by qt5base for the plugins because it copies the whole /usr/lib/qt/plugins
+  directory
+- by qt5declarative for the QML modules because it copies the whole
+  /usr/qml directory
 
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Also, the qt53d examples were not installed if
+BR2_PACKAGE_QT5BASE_EXAMPLES was set.
+
+Signed-off-by: Romain Reignier <rom.reignier@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 36ed046623129bb879ef50cd40dcc65b27c9da0f)
+(cherry picked from commit 4fd448c9c1e3ed7ca0f09441bf8a854eb9130190)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/qt5/qt53d/qt53d.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 3bc322cd51..9600fe9eb0 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -329,6 +329,7 @@ define SYSTEMD_INSTALL_INIT_HOOK
- 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/halt
- 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/poweroff
- 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/reboot
-+	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/shutdown
- 	ln -fs ../../../lib/systemd/system/multi-user.target \
- 		$(TARGET_DIR)/etc/systemd/system/default.target
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index fcb743db21..bdcc665b94 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -30,11 +30,21 @@ define QT53D_INSTALL_STAGING_CMDS
+ 	$(QT5_LA_PRL_FILES_FIXUP)
  endef
+ 
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT53D_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/qt3d $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),)
+ define QT53D_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
++	$(QT53D_INSTALL_TARGET_EXAMPLES)
+ endef
+ endif
+ 
