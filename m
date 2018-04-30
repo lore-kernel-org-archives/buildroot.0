@@ -1,49 +1,29 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Apr 2018 14:47:20 +0200
-Subject: [Buildroot] [PATCH 1/1] libgphoto2: bump to version 2.5.17
-Message-ID: <20180430124720.11749-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 14:52:03 +0200
+Subject: [Buildroot] [PATCH 1/1] libgsasl: add hash for license files
+Message-ID: <20180430125203.13667-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libgphoto2/libgphoto2.hash | 9 +++++----
- package/libgphoto2/libgphoto2.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libgsasl/libgsasl.hash | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
-index 1afe275ce3..e0590df89b 100644
---- a/package/libgphoto2/libgphoto2.hash
-+++ b/package/libgphoto2/libgphoto2.hash
-@@ -1,6 +1,7 @@
--# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.13/
--md5 73bf5b3d94c8c6f5fad9ea6b5e561843 libgphoto2-2.5.13.tar.bz2
--sha1 cef2d2f1930f8ada16a63aca15683188231a626a libgphoto2-2.5.13.tar.bz2
-+# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.17/
-+md5 ae78e7a7936a6962c3a22b256bee1869 libgphoto2-2.5.17.tar.bz2
-+sha1 b55167bbb73518c5b7f67f90e619c46d05005c7d libgphoto2-2.5.17.tar.bz2
- 
- # Locally calculated hash
--sha256 ceaacbdf187d1cd1aed5336991f46b0100f6960b6c8383f9aeab98f1f64780ef libgphoto2-2.5.13.tar.bz2
-+sha256 417464f0a313fa937e8a71cdf18a371cf01e750830195cd63ae31da0d092b555 libgphoto2-2.5.17.tar.bz2
-+sha256 ebc385a0b1d477be5177ed6d9129557aa59a3ad0f26ebe7dd97ee942a0fb68ee COPYING
-diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
-index f6dadf1f45..2828fcb36f 100644
---- a/package/libgphoto2/libgphoto2.mk
-+++ b/package/libgphoto2/libgphoto2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPHOTO2_VERSION = 2.5.13
-+LIBGPHOTO2_VERSION = 2.5.17
- LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
- # Project is maintained on github but github tarball doesn't have
- # configure, so use tarballs from SourceForge
+diff --git a/package/libgsasl/libgsasl.hash b/package/libgsasl/libgsasl.hash
+index 4205927168..82bfe339c6 100644
+--- a/package/libgsasl/libgsasl.hash
++++ b/package/libgsasl/libgsasl.hash
+@@ -1,2 +1,7 @@
+ # Locally calculated after checking pgp signature
+ sha256	3adfb49f9c92a719dea855fd1840d698cde55d4648d332a69032ba8bea207720	libgsasl-1.8.0.tar.gz
++
++# Hash for license files:
++sha256	4eb54155afd4684d7e9423f6037e5cc887ae4d8818e83d3af93350ebd4a8e6eb	README
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LIB
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
 -- 
 2.14.1
