@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Apr 2018 22:30:43 +0200
-Subject: [Buildroot] [PATCH 1/1] libical: add hash for license file
-Message-ID: <20180430203043.14599-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 22:34:27 +0200
+Subject: [Buildroot] [PATCH 1/1] libiconv: add hash for license files
+Message-ID: <20180430203427.15808-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +10,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libical/libical.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/libiconv/libiconv.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libical/libical.hash b/package/libical/libical.hash
-index 5c42cdcc61..7edb29bd28 100644
---- a/package/libical/libical.hash
-+++ b/package/libical/libical.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256	089ce3c42d97fbd7a5d4b3c70adbdd82115dd306349c1f5c46a8fb3f8c949592	libical-1.0.1.tar.gz
-+sha256	c393726f82e6f21df5262110215f6a4382b32046d10afdcfcc49338aa7a191f2	LICENSE
+diff --git a/package/libiconv/libiconv.hash b/package/libiconv/libiconv.hash
+index 440daee51e..93ad555e15 100644
+--- a/package/libiconv/libiconv.hash
++++ b/package/libiconv/libiconv.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated after checking pgp signature
+ sha256	ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178	libiconv-1.15.tar.gz
++
++# Hash for license files:
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++sha256	56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d	COPYING.LIB
 -- 
 2.14.1
