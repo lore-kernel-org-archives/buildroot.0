@@ -1,61 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 22:17:55 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x]
- support/scripts/fix-rpath: exclude /lib/firmware in the target
-Message-ID: <20180501073414.EB20588036@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 22:22:20 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
+ 9}.x series
+Message-ID: <20180501073415.1862788036@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4b2233c449ebafe2dfdb70ea3adfa7c35cd768b
+commit: https://git.buildroot.net/buildroot/commit/?id=13e633c36bed4a6c6462ee4c9d6aa24a48ab32bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The /lib/firmware directory contains random firmware for various
-devices. It happens that some of them might be or appear to be ELF
-files, but they shouldn't be checked by fix-rpath. For example, one of
-the Qualcomm VPU firmware file appears to be an ELF file, but patchelf
-isn't happy about it:
-
-$ ./output/host/bin/patchelf --print-rpath output/target/lib/firmware/qcom/venus-4.2/venus.b00
-patchelf: patchelf.cc:387: void ElfFile<Elf_Ehdr, Elf_Phdr, Elf_Shdr, Elf_Addr, Elf_Off, Elf_Dyn, Elf_Sym>::parse() [with Elf_Ehdr = Elf32_Ehdr; Elf_Phdr = Elf32_Phdr; Elf_Shdr = Elf32_Shdr; Elf_Addr = unsigned int; Elf_Off = unsigned int; Elf_Dyn = Elf32_Dyn; Elf_Sym = Elf32_Sym]: Assertion `shstrtabIndex < shdrs.size()' failed.
-Aborted (core dumped)
-
-Even though patchelf definitely shouldn't crash, it anyway doesn't
-make sense to check ELF files in /lib/firmware, so let's exclude this
-directory from our check.
-
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 184cb52f6d9368c333c79665080e7808c5713117)
+(cherry picked from commit 338f32634069ce2610132fa70974a5b429ccc51c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/fix-rpath | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index 15705a3b0d..fa138ca15a 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -56,6 +56,7 @@ EOF
- # ELF files should not be in these sub-directories
- HOST_EXCLUDEPATHS="/share/terminfo"
- STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
-+TARGET_EXCLUDEPATHS="/lib/firmware"
- 
- main() {
-     local rootdir
-@@ -106,6 +107,11 @@ main() {
- 
-         target)
-             rootdir="${TARGET_DIR}"
-+
-+            for excludepath in ${TARGET_EXCLUDEPATHS}; do
-+                find_args+=( "-path" "${TARGET_DIR}""${excludepath}" "-prune" "-o" )
-+            done
-+
-             # we don't want $ORIGIN-based rpaths but absolute paths without rootdir.
-             # we also want to remove rpaths pointing to /lib or /usr/lib.
-             sanitize_extra_args+=( "--no-standard-lib-dirs" )
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index bbdd535e26..409a0bbf9d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -242,8 +242,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.127"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.93"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.128"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.94"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
