@@ -1,68 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Apr 2018 17:38:26 +0200
-Subject: [Buildroot] [git commit] libcue: fix build without C++
-Message-ID: <20180430154010.BA969807E5@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 17:38:32 +0200
+Subject: [Buildroot] [git commit] sdl2_image: security bump to version 2.0.3
+Message-ID: <20180430154011.33139807E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a09b3eecfb0e9c6e28cacc7abf6cbe94d508e2d
+commit: https://git.buildroot.net/buildroot/commit/?id=5fb8fbbb3e776a186731ae929244a82ea2db1878
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, CMake assumes that the project is using both C and C++. By
-explicitly passing 'C' as argument of the project() macro, we tell
-CMake that only C is used, which prevents CMake from checking if a C++
-compiler exists.
-Patch sent upstream: https://github.com/lipnitsk/libcue/pull/17
+Fixes the following security issues:
 
-Fixes:
- - http://autobuild.buildroot.net/results/a5344d18dbdc86705853fbf8a66d5304de07a9b2
+CVE-2017-12122: An exploitable code execution vulnerability exists in the
+ILBM image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+ILBM image can cause a heap overflow resulting in code execution.  An
+attacker can display a specially crafted image to trigger this
+vulnerability.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+CVE-2017-14440: An exploitable code execution vulnerability exists in the
+ILBM image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+ILBM image can cause a stack overflow resulting in code execution.  An
+attacker can display a specially crafted image to trigger this
+vulnerability.
+
+CVE-2017-14441: An exploitable code execution vulnerability exists in the
+ICO image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+ICO image can cause an integer overflow, cascading to a heap overflow
+resulting in code execution.  An attacker can display a specially crafted
+image to trigger this vulnerability.
+
+CVE-2017-14442: An exploitable code execution vulnerability exists in the
+BMP image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+BMP image can cause a stack overflow resulting in code execution.  An
+attacker can display a specially crafted image to trigger this
+vulnerability.
+
+CVE-2017-14448: An exploitable code execution vulnerability exists in the
+XCF image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+XCF image can cause a heap overflow resulting in code execution.  An
+attacker can display a specially crafted image to trigger this
+vulnerability.
+
+CVE-2017-14449: A double-Free vulnerability exists in the XCF image
+rendering functionality of SDL2_image-2.0.2.  A specially crafted XCF image
+can cause a Double-Free situation to occur.  An attacker can display a
+specially crafted image to trigger this vulnerability.
+
+CVE-2017-14450: A buffer overflow vulnerability exists in the GIF image
+parsing functionality of SDL2_image-2.0.2.  A specially crafted GIF image
+can lead to a buffer overflow on a global section.  An attacker can display
+an image to trigger this vulnerability.
+
+For details, see the announcement:
+
+https://discourse.libsdl.org/t/sdl-image-2-0-3-released/23958
+
+Also add a hash for the license file while we're at it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-libcue-is-only-implemented-in-C.patch     | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/sdl2_image/sdl2_image.hash | 3 ++-
+ package/sdl2_image/sdl2_image.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcue/0001-libcue-is-only-implemented-in-C.patch b/package/libcue/0001-libcue-is-only-implemented-in-C.patch
-new file mode 100644
-index 0000000000..bb36172ad1
---- /dev/null
-+++ b/package/libcue/0001-libcue-is-only-implemented-in-C.patch
-@@ -0,0 +1,34 @@
-+From 285dd7fe70878e85f121b990f59e72105ef27688 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 30 Apr 2018 13:06:00 +0200
-+Subject: [PATCH] libcue is only implemented in C
-+
-+By default, CMake assumes that the project is using both C and C++. By
-+explicitly passing 'C' as argument of the project() macro, we tell
-+CMake that only C is used, which prevents CMake from checking if a C++
-+compiler exists.
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/a5344d18dbdc86705853fbf8a66d5304de07a9b2
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 1e4ca25..8c3a1bd 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -5,7 +5,7 @@ SET(PACKAGE_SOVERSION 2)
-+ 
-+ CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
-+ 
-+-PROJECT(libcue)
-++PROJECT(libcue C)
-+ 
-+ include(GNUInstallDirs)
-+ 
-+-- 
-+2.14.1
-+
+diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
+index 26d0a88cb5..cf3253526c 100644
+--- a/package/sdl2_image/sdl2_image.hash
++++ b/package/sdl2_image/sdl2_image.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 3a3eafbceea5125c04be585373bfd8b3a18f259bd7eae3efc4e6d8e60e0d7f64  SDL2_image-2.0.1.tar.gz
++sha256 3510c25da735ffcd8ce3b65073150ff4f7f9493b866e85b83738083b556d2368  SDL2_image-2.0.3.tar.gz
++sha256 13240ed78c8726c510b9634976430d3d3a9ea2d1ced3214119766e9e71568a35  COPYING.txt
+diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+index 71a9634023..8c1c5f6e1a 100644
+--- a/package/sdl2_image/sdl2_image.mk
++++ b/package/sdl2_image/sdl2_image.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_IMAGE_VERSION = 2.0.1
++SDL2_IMAGE_VERSION = 2.0.3
+ SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
+ SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL2_IMAGE_INSTALL_STAGING = YES
