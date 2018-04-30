@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Apr 2018 17:41:52 +0200
-Subject: [Buildroot] [PATCH 1/4] libfm: bump to version 1.3.0.2
-In-Reply-To: <20180429190906.25476-1-fontaine.fabrice@gmail.com>
-References: <20180429190906.25476-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180430174152.0441ac19@windsurf>
+Date: Mon, 30 Apr 2018 17:42:00 +0200
+Subject: [Buildroot] [PATCH 1/1] libcue: fix build without C++
+In-Reply-To: <20180430111511.6881-1-fontaine.fabrice@gmail.com>
+References: <20180430111511.6881-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180430174200.4fb82988@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 29 Apr 2018 21:09:03 +0200, Fabrice Fontaine wrote:
-> Add hash for license files
+On Mon, 30 Apr 2018 13:15:11 +0200, Fabrice Fontaine wrote:
+> By default, CMake assumes that the project is using both C and C++. By
+> explicitly passing 'C' as argument of the project() macro, we tell
+> CMake that only C is used, which prevents CMake from checking if a C++
+> compiler exists.
+> Patch sent upstream: https://github.com/lipnitsk/libcue/pull/17
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/a5344d18dbdc86705853fbf8a66d5304de07a9b2
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../libfm/0001-modules-fix-cross-compilation.patch | 27 ++++++++++++++++++++++
->  package/libfm/libfm.hash                           |  8 +++++--
->  package/libfm/libfm.mk                             |  4 +++-
->  3 files changed, 36 insertions(+), 3 deletions(-)
->  create mode 100644 package/libfm/0001-modules-fix-cross-compilation.patch
+>  .../0001-libcue-is-only-implemented-in-C.patch     | 34 ++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/libcue/0001-libcue-is-only-implemented-in-C.patch
 
-Series applied, thanks. Please make sure to submit
-package/libfm/0001-modules-fix-cross-compilation.patch to the upstream
-project. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
