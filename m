@@ -1,109 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 23:12:43 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] mbedtls: security bump to
- version 2.7.2
-Message-ID: <20180501073416.C699A890BC@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 23:18:05 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] support/testing: fix
+ Marvell ATF source code
+Message-ID: <20180501073417.36BFD88285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5d35dff852c915351caf71aa593c816a078f2c4
+commit: https://git.buildroot.net/buildroot/commit/?id=9a750136290c28729c324ccdb3df33f3f9c72b58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The release announcement mentions these security fixes:
+The version of the ARM Trusted Firmware from Marvell was a Git branch,
+not a Git commit, leading to unreproducible results. So let's use a
+Git commit instead, which is the latest available from the branch that
+was previously used.
 
-  Defend against Bellcore glitch attacks by verifying the results of RSA
-  private key operations.
+More specifically, this branch has recently seen a fix that is needed
+for ATF to build properly with recent gcc versions:
 
-  Fix implementation of the truncated HMAC extension. The previous
-  implementation allowed an offline 2^80 brute force attack on the HMAC
-  key of a single, uninterrupted connection (with no resumption of the
-  session).
+  https://github.com/MarvellEmbeddedProcessors/atf-marvell/commit/c96ec59f8b819123a06e1839ab5578030cf263b0
 
-  Reject CRLs containing unsupported critical extensions.
-
-  Fix a buffer overread in ssl_parse_server_key_exchange() that could
-  cause a crash on invalid input. (CVE-2018-9988)
-
-  Fix a buffer overread in ssl_parse_server_psk_hint() that could cause
-  a crash on invalid input. (CVE-2018-9989)
-
-Drop upstream patch.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit babc94e9dd4a1a04c4a0befdb6d32236a30b8ea8)
+(cherry picked from commit ac260a2acec20f30705fdfd3911ff966c1f4a0df)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-dhm-Fix-typo-in-RFC-5114-constants.patch  | 33 ----------------------
- package/mbedtls/mbedtls.hash                       |  6 ++--
- package/mbedtls/mbedtls.mk                         |  2 +-
- 3 files changed, 4 insertions(+), 37 deletions(-)
+ support/testing/tests/boot/test_atf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch b/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
-deleted file mode 100644
-index effaf3d931..0000000000
---- a/package/mbedtls/0001-dhm-Fix-typo-in-RFC-5114-constants.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 129f50838bf14f4e1319f06f41c827fae9cc4b73 Mon Sep 17 00:00:00 2001
--From: Jaeden Amero <jaeden.amero@arm.com>
--Date: Thu, 8 Feb 2018 14:25:36 +0000
--Subject: [PATCH] dhm: Fix typo in RFC 5114 constants
--
--We accidentally named the constant MBEDTLS_DHM_RFC5114_MODP_P instead of
--MBEDTLS_DHM_RFC5114_MODP_2048_P.
--
--Fixes #1358
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream commit 129f50838bf
--
-- include/mbedtls/dhm.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/mbedtls/dhm.h b/include/mbedtls/dhm.h
--index da2e66b111b6..00fafd8d16f4 100644
----- a/include/mbedtls/dhm.h
--+++ b/include/mbedtls/dhm.h
--@@ -372,7 +372,7 @@ MBEDTLS_DEPRECATED typedef char const * mbedtls_deprecated_constant_t;
--  * in <em>RFC-5114: Additional Diffie-Hellman Groups for Use with
--  * IETF Standards</em>.
--  */
---#define MBEDTLS_DHM_RFC5114_MODP_P                              \
--+#define MBEDTLS_DHM_RFC5114_MODP_2048_P                         \
--     MBEDTLS_DEPRECATED_STRING_CONSTANT(                         \
--         "AD107E1E9123A9D0D660FAA79559C51FA20D64E5683B9FD1"      \
--         "B54B1597B61D0A75E6FA141DF95A56DBAF9A3C407BA1DF15"      \
---- 
--2.16.1
--
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index a62c0f58de..f5331bed15 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,5 +1,5 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.7.0-2.1.10-and-1.3.22-released
--sha1	01ffebf679c8696cc941c41224fa73d8944d2c85	mbedtls-2.7.0-apache.tgz
--sha256	aeb66d6cd43aa1c79c145d15845c655627a7fc30d624148aaafbb6c36d7f55ef	mbedtls-2.7.0-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.8.0-2.7.2-and-2.1.11-released
-+sha1	e36d7cbdc2ed0a5d5659385840e8fbb4d351234e	mbedtls-2.7.2-apache.tgz
-+sha256	fd38c2bb5fbe1ffd3e7fdcdd71130986f2010f25b3a5575eb8ded0dd3bc573d7	mbedtls-2.7.2-apache.tgz
- # Locally calculated
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 7c26ea95ee..ca44ee3713 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.7.0
-+MBEDTLS_VERSION = 2.7.2
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
+index c623ab8c8b..75cea01fc8 100644
+--- a/support/testing/tests/boot/test_atf.py
++++ b/support/testing/tests/boot/test_atf.py
+@@ -63,7 +63,7 @@ class TestATFMarvell(infra.basetest.BRTest):
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
+-        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="atf-v1.3-armada-17.10"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="43965481990fd92e9666cf9371a8cf478055ec7c"
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+         BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
