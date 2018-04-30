@@ -1,42 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 22:50:07 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] qt5: qt5websockets:
- install missing qml modules
-Message-ID: <20180501073415.85FDF890BC@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 22:53:31 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/wmctrl:
+ x-includes and x-libraries must be set for cross-compiling
+Message-ID: <20180501073415.C5DAD890ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdce9595946da261719a3f40315741b2ec61c290
+commit: https://git.buildroot.net/buildroot/commit/?id=ba7372fcd2b46a1617336bd422490533edd9f14d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-QML modules for QtWebSockets are located in /usr/qml/QtWebSockets since
-Qt 5.5.
+set x-includes and x-libraries configure option for cross-compiling.
+wmctrl can use poisoned paths if these options are not passed to
+configure script.
 
-/usr/qml/Qt/WebSockets still exists for compatibility reasons, but
-it contains only a qmldir file which points to ../../QtWebSockets/.
+Fixes:
+http://autobuild.buildroot.net/results/7e5/7e5cba8a5650a00e10d1a5528f38cb2bf772aee1
 
-see also: http://doc.qt.io/qt-5.6/qtwebsockets-qmlmodule.html
-
-Signed-off-by: Manfred Schlaegl <manfred.schlaegl@ginzinger.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4f726cef4c5709cf4f894e436b4022989adc9e9f)
+(cherry picked from commit 046c5e25634bbf827c43617bf1967ab469418908)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5websockets/qt5websockets.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/wmctrl/wmctrl.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
-index 4cb2aed1db..661bc83e52 100644
---- a/package/qt5/qt5websockets/qt5websockets.mk
-+++ b/package/qt5/qt5websockets/qt5websockets.mk
-@@ -41,6 +41,7 @@ endef
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
- define QT5WEBSOCKETS_INSTALL_TARGET_QMLS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/WebSockets $(TARGET_DIR)/usr/qml/Qt/
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebSockets $(TARGET_DIR)/usr/qml/
- endef
- endif
+diff --git a/package/wmctrl/wmctrl.mk b/package/wmctrl/wmctrl.mk
+index 0d4aeebc1d..36ad3513ff 100644
+--- a/package/wmctrl/wmctrl.mk
++++ b/package/wmctrl/wmctrl.mk
+@@ -11,4 +11,8 @@ WMCTRL_LICENSE_FILES = COPYING
  
+ WMCTRL_DEPENDENCIES = libglib2 xlib_libX11 xlib_libXmu
+ 
++WMCTRL_CONF_OPTS = \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
++
+ $(eval $(autotools-package))
