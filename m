@@ -1,294 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Apr 2018 17:43:48 +0200
-Subject: [Buildroot] [git commit] package/qemu: declare target variant
- before host variant
-Message-ID: <20180430154405.2610A7FAFD@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 17:43:49 +0200
+Subject: [Buildroot] [git commit] package/pkg-generic: add check that target
+ variant is defined before host variant
+Message-ID: <20180430154405.4F6668A4DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ae7b21e0b4d49575dace799424f1dda5f5d2465
+commit: https://git.buildroot.net/buildroot/commit/?id=38860fb21fb28bc79895a7807d5b07a0395a8668
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Our package infrastructure uses inheritance of a number of values from
-the target package to the host package, which assumes the target
-package is defined before the host package. In addition, future
-changes are going to make this requirement even more important.
-
-Therefore, let's fix the qemu package so that it declares its target
-variant before its host variant, like all other packages in
-Buildroot. We handle qemu separately from other packages, because
-unlike other packages, it didn't had the "eval" for the host and
-target packages at the end of the file, but rather all variables
-related to the host variant first, then the call to the package
-infrastructure for the host variant, then the variables related to the
-target variant, and finally the call to the package infrastructure for
-the target variant. We are inverting the order of those two big parts
-in this commit.
+Update the documentation accordingly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[yann.morin.1998 at free.fr: slight rephrasing in error message, update manual]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qemu/qemu.mk | 242 +++++++++++++++++++++++++--------------------------
- 1 file changed, 121 insertions(+), 121 deletions(-)
+ docs/manual/adding-packages-generic.txt | 6 ++++--
+ package/pkg-generic.mk                  | 6 ++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index f6f4a2b870..0a6a6c0609 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -14,6 +14,127 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
- #       individual source files.
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 62906d92bb..7e1f246752 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -179,8 +179,10 @@ some tools to be installed on the host. If the package name is
+ variables of other packages, if they depend on +libfoo+ or
+ +host-libfoo+.
  
- #-------------------------------------------------------------
-+# Target-qemu
-+
-+QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib pixman
-+
-+# Need the LIBS variable because librt and libm are
-+# not automatically pulled. :-(
-+QEMU_LIBS = -lrt -lm
-+
-+QEMU_OPTS =
-+
-+QEMU_VARS = \
-+	LIBTOOL=$(HOST_DIR)/bin/libtool \
-+	PYTHON=$(HOST_DIR)/bin/python2 \
-+	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+
-+# If we want to specify only a subset of targets, we must still enable all
-+# of them, so that QEMU properly builds its list of default targets, from
-+# which it then checks if the specified sub-set is valid. That's what we
-+# do in the first part of the if-clause.
-+# Otherwise, if we do not want to pass a sub-set of targets, we then need
-+# to either enable or disable -user and/or -system emulation appropriately.
-+# That's what we do in the else-clause.
-+ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
-+QEMU_OPTS += --enable-system --enable-linux-user
-+QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
-+else
-+
-+ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
-+QEMU_OPTS += --enable-system
-+else
-+QEMU_OPTS += --disable-system
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QEMU_LINUX_USER),y)
-+QEMU_OPTS += --enable-linux-user
-+else
-+QEMU_OPTS += --disable-linux-user
-+endif
-+
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
-+QEMU_OPTS += --enable-sdl
-+QEMU_DEPENDENCIES += sdl
-+QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
-+else
-+QEMU_OPTS += --disable-sdl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QEMU_FDT),y)
-+QEMU_OPTS += --enable-fdt
-+QEMU_DEPENDENCIES += dtc
-+else
-+QEMU_OPTS += --disable-fdt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QEMU_TOOLS),y)
-+QEMU_OPTS += --enable-tools
-+else
-+QEMU_OPTS += --disable-tools
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSSH2),y)
-+QEMU_OPTS += --enable-libssh2
-+QEMU_DEPENDENCIES += libssh2
-+else
-+QEMU_OPTS += --disable-libssh2
-+endif
-+
-+# Override CPP, as it expects to be able to call it like it'd
-+# call the compiler.
-+define QEMU_CONFIGURE_CMDS
-+	( cd $(@D); \
-+		LIBS='$(QEMU_LIBS)' \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		CPP="$(TARGET_CC) -E" \
-+		$(QEMU_VARS) \
-+		./configure \
-+			--prefix=/usr \
-+			--cross-prefix=$(TARGET_CROSS) \
-+			--with-system-pixman \
-+			--audio-drv-list= \
-+			--enable-kvm \
-+			--enable-attr \
-+			--enable-vhost-net \
-+			--disable-bsd-user \
-+			--disable-xen \
-+			--disable-slirp \
-+			--disable-vnc \
-+			--disable-virtfs \
-+			--disable-brlapi \
-+			--disable-curses \
-+			--disable-curl \
-+			--disable-bluez \
-+			--disable-vde \
-+			--disable-linux-aio \
-+			--disable-cap-ng \
-+			--disable-docs \
-+			--disable-spice \
-+			--disable-rbd \
-+			--disable-libiscsi \
-+			--disable-usb-redir \
-+			--disable-strip \
-+			--disable-seccomp \
-+			--disable-sparse \
-+			$(QEMU_OPTS) \
-+	)
-+endef
-+
-+define QEMU_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QEMU_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(QEMU_MAKE_ENV) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
-+
-+#-------------------------------------------------------------
- # Host-qemu
+-The call to the +generic-package+ and/or +host-generic-package+ macro *must* be
+-at the end of the +.mk+ file, after all variable definitions.
++The call to the +generic-package+ and/or +host-generic-package+ macro
++*must* be at the end of the +.mk+ file, after all variable definitions.
++The call to +host-generic-package+ *must* be after the call to
+++generic-package+, if any.
  
- HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
-@@ -147,124 +268,3 @@ $(eval $(host-generic-package))
+ For the target package, the +generic-package+ uses the variables defined by
+ the .mk file and prefixed by the uppercased package name:
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1c9dd1d734..bd47ca1964 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -646,6 +646,12 @@ $(2)_POST_LEGAL_INFO_HOOKS      ?=
+ $(2)_TARGET_FINALIZE_HOOKS      ?=
+ $(2)_ROOTFS_PRE_CMD_HOOKS       ?=
  
- # variable used by other packages
- QEMU_USER = $(HOST_DIR)/bin/qemu-$(HOST_QEMU_ARCH)
--
--#-------------------------------------------------------------
--# Target-qemu
--
--QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib pixman
--
--# Need the LIBS variable because librt and libm are
--# not automatically pulled. :-(
--QEMU_LIBS = -lrt -lm
--
--QEMU_OPTS =
--
--QEMU_VARS = \
--	LIBTOOL=$(HOST_DIR)/bin/libtool \
--	PYTHON=$(HOST_DIR)/bin/python2 \
--	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
--
--# If we want to specify only a subset of targets, we must still enable all
--# of them, so that QEMU properly builds its list of default targets, from
--# which it then checks if the specified sub-set is valid. That's what we
--# do in the first part of the if-clause.
--# Otherwise, if we do not want to pass a sub-set of targets, we then need
--# to either enable or disable -user and/or -system emulation appropriately.
--# That's what we do in the else-clause.
--ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
--QEMU_OPTS += --enable-system --enable-linux-user
--QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
--else
--
--ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
--QEMU_OPTS += --enable-system
--else
--QEMU_OPTS += --disable-system
--endif
--
--ifeq ($(BR2_PACKAGE_QEMU_LINUX_USER),y)
--QEMU_OPTS += --enable-linux-user
--else
--QEMU_OPTS += --disable-linux-user
--endif
--
--endif
--
--ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
--QEMU_OPTS += --enable-sdl
--QEMU_DEPENDENCIES += sdl
--QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
--else
--QEMU_OPTS += --disable-sdl
--endif
--
--ifeq ($(BR2_PACKAGE_QEMU_FDT),y)
--QEMU_OPTS += --enable-fdt
--QEMU_DEPENDENCIES += dtc
--else
--QEMU_OPTS += --disable-fdt
--endif
--
--ifeq ($(BR2_PACKAGE_QEMU_TOOLS),y)
--QEMU_OPTS += --enable-tools
--else
--QEMU_OPTS += --disable-tools
--endif
--
--ifeq ($(BR2_PACKAGE_LIBSSH2),y)
--QEMU_OPTS += --enable-libssh2
--QEMU_DEPENDENCIES += libssh2
--else
--QEMU_OPTS += --disable-libssh2
--endif
--
--# Override CPP, as it expects to be able to call it like it'd
--# call the compiler.
--define QEMU_CONFIGURE_CMDS
--	( cd $(@D); \
--		LIBS='$(QEMU_LIBS)' \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CPP="$(TARGET_CC) -E" \
--		$(QEMU_VARS) \
--		./configure \
--			--prefix=/usr \
--			--cross-prefix=$(TARGET_CROSS) \
--			--with-system-pixman \
--			--audio-drv-list= \
--			--enable-kvm \
--			--enable-attr \
--			--enable-vhost-net \
--			--disable-bsd-user \
--			--disable-xen \
--			--disable-slirp \
--			--disable-vnc \
--			--disable-virtfs \
--			--disable-brlapi \
--			--disable-curses \
--			--disable-curl \
--			--disable-bluez \
--			--disable-vde \
--			--disable-linux-aio \
--			--disable-cap-ng \
--			--disable-docs \
--			--disable-spice \
--			--disable-rbd \
--			--disable-libiscsi \
--			--disable-usb-redir \
--			--disable-strip \
--			--disable-seccomp \
--			--disable-sparse \
--			$(QEMU_OPTS) \
--	)
--endef
--
--define QEMU_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--endef
--
--define QEMU_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(QEMU_MAKE_ENV) DESTDIR=$(TARGET_DIR) install
--endef
--
--$(eval $(generic-package))
++ifeq ($$($(2)_TYPE),target)
++ifneq ($$(HOST_$(2)_KCONFIG_VAR),)
++$$(error "Package $(1) defines host variant before target variant!")
++endif
++endif
++
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+ 
