@@ -1,52 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 23:26:36 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/gdb: don't remove
- support files if python chosen
-Message-ID: <20180501073418.41169807AA@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 23:23:34 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] wireguard: bump version
+ to 0.0.20180304
+Message-ID: <20180501073417.C172988285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f92052857e9792cd0eeaf3175edb496a58a3f49c
+commit: https://git.buildroot.net/buildroot/commit/?id=434415abd0cff74aeb827425e4c34a707abd0a41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-If one wants to use GDB with python support on the target, you need the support
-files installed by GDB. These get usually deleted to save some space, so I just
-wrapped the Makefile code deleting them in a conditional block depending on if
-python support is active or not.
-
-Signed-off-by: Jonas Zaddach <jzaddach@cisco.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas:
- - use positive logic "if python is disabled"
- - put the comment inside the condition, as suggested by Arnout]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit fa5ca6974d2504dccc35f43dcabcf30f076d8685)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 54e210522faf7dff3e68e22bb802102f891098c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/gdb.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 5ca464ad46..ad81818a35 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -164,6 +164,7 @@ else
- GDB_CONF_OPTS += --without-zlib
- endif
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 4961d4fd14..969b9e1962 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-February/002406.html
+-sha256 4ac4c4e4ad4dc2cf9dcb831b0cf347567ccea675ca524528cf5a4d9dccb2fe52  WireGuard-0.0.20180218.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-March/002446.html
++sha256 efb1652f0da67fb2731040439b6abb820a5e2f1bc177aa15c5dce68ea3327787  WireGuard-0.0.20180304.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index aa86b5782b..7c5e6a3e09 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_GDB_PYTHON),)
- # This removes some unneeded Python scripts and XML target description
- # files that are not useful for a normal usage of the debugger.
- define GDB_REMOVE_UNNEEDED_FILES
-@@ -171,6 +172,7 @@ define GDB_REMOVE_UNNEEDED_FILES
- endef
- 
- GDB_POST_INSTALL_TARGET_HOOKS += GDB_REMOVE_UNNEEDED_FILES
-+endif
- 
- # This installs the gdbserver somewhere into the $(HOST_DIR) so that
- # it becomes an integral part of the SDK, if the toolchain generated
+-WIREGUARD_VERSION = 0.0.20180218
++WIREGUARD_VERSION = 0.0.20180304
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
