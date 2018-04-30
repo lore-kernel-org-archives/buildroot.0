@@ -1,40 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 23:37:41 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] support/testing: set
- $USER in rust tests
-Message-ID: <20180501073418.C90CA8271A@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 23:26:36 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/gdb: don't remove
+ support files if python chosen
+Message-ID: <20180501073418.41169807AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=692e9d1a62847cb4bc6f9f5714c65fa676e9124f
+commit: https://git.buildroot.net/buildroot/commit/?id=f92052857e9792cd0eeaf3175edb496a58a3f49c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-When the run-time tests to build rust and rust-bin packages are run via Docker,
-the $USER environment variable is not set, which makes cargo fail when
-initializing the test project.
+If one wants to use GDB with python support on the target, you need the support
+files installed by GDB. These get usually deleted to save some space, so I just
+wrapped the Makefile code deleting them in a conditional block depending on if
+python support is active or not.
 
-So add it to make cargo happy.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Jonas Zaddach <jzaddach@cisco.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas:
+ - use positive logic "if python is disabled"
+ - put the comment inside the condition, as suggested by Arnout]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 09a5eb427a6d9160e74ab56941640c02334eabf1)
+
+(cherry picked from commit fa5ca6974d2504dccc35f43dcabcf30f076d8685)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_rust.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/gdb/gdb.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/testing/tests/package/test_rust.py b/support/testing/tests/package/test_rust.py
-index e6c0de2214..2dc814f99d 100644
---- a/support/testing/tests/package/test_rust.py
-+++ b/support/testing/tests/package/test_rust.py
-@@ -21,6 +21,7 @@ class TestRustBase(infra.basetest.BRTest):
-     def build_test_prog(self):
-         hostdir = os.path.join(self.builddir, 'host')
-         env = os.environ.copy()
-+        env["USER"] = "br-user"
-         env["PATH"] = "{}:".format(os.path.join(hostdir, 'bin')) + env["PATH"]
-         env["CARGO_HOME"] = os.path.join(hostdir, 'usr', 'share', 'cargo')
-         env["RUST_TARGET_PATH"] = os.path.join(hostdir, 'etc', 'rustc')
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 5ca464ad46..ad81818a35 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -164,6 +164,7 @@ else
+ GDB_CONF_OPTS += --without-zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GDB_PYTHON),)
+ # This removes some unneeded Python scripts and XML target description
+ # files that are not useful for a normal usage of the debugger.
+ define GDB_REMOVE_UNNEEDED_FILES
+@@ -171,6 +172,7 @@ define GDB_REMOVE_UNNEEDED_FILES
+ endef
+ 
+ GDB_POST_INSTALL_TARGET_HOOKS += GDB_REMOVE_UNNEEDED_FILES
++endif
+ 
+ # This installs the gdbserver somewhere into the $(HOST_DIR) so that
+ # it becomes an integral part of the SDK, if the toolchain generated
