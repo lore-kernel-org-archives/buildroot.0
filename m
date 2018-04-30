@@ -1,52 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 23:20:12 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] gnupg2: bump to version
- 2.2.5
-Message-ID: <20180501073417.65F3388285@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 23:19:40 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libgpgme: fix run-time
+ compatibility with gnupg2 2.2.6
+Message-ID: <20180501073417.4F95788285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41c236f735c9b362ba29d01eb8cf6f74321c7850
+commit: https://git.buildroot.net/buildroot/commit/?id=66882e2e4e0195181b62001d2cea1ec02fa86d2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Add upstream patch fixing gpgme_op_verify regression with gnupg2 2.2.6.
+
+https://lists.gnupg.org/pipermail/gnupg-users/2018-April/060230.html
+
+Cc: Philipp Claves <claves@budelmann-elektronik.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 379c34739082f3906ccf4877b85a2e714606bffe)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5be60127e559d80daf27eea2248f206f9ac6d69c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../0001-core-Tweak-STATUS_FAILURE-handling.patch  | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index a003da668b..9cc8e4c913 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,6 +1,6 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000419.html
--sha1 732266e8888c6f41c084d043c7a0058332ff3580  gnupg-2.2.4.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q1/000420.html
-+sha1 9dec110397e460b3950943e18f5873a4f277f216  gnupg-2.2.5.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.4.tar.bz2.sig
--sha256 401a3e64780fdfa6d7670de0880aa5c9d589b3db7a7098979d7606cec546f2ec  gnupg-2.2.4.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.5.tar.bz2.sig
-+sha256 3fa189a32d4fb62147874eb1389047c267d9ba088f57ab521cb0df46f08aef57  gnupg-2.2.5.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 980fae342b..ba5370902f 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.2.4
-+GNUPG2_VERSION = 2.2.5
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+diff --git a/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch b/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
+new file mode 100644
+index 0000000000..ae0e9c5498
+--- /dev/null
++++ b/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
+@@ -0,0 +1,51 @@
++From b99502274ae5efdf6df0d967900ec3d1e64373d7 Mon Sep 17 00:00:00 2001
++From: Werner Koch <wk@gnupg.org>
++Date: Thu, 12 Apr 2018 20:36:30 +0200
++Subject: [PATCH] core: Tweak STATUS_FAILURE handling.
++
++* src/op-support.c (_gpgme_parse_failure): Ignore failures with
++location "gpg-exit".
++* tests/gpg/t-verify.c (main): Adjust for the now working checking of
++the second key.
++
++Signed-off-by: Werner Koch <wk@gnupg.org>
++[baruch: drop test]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit b99502274ae
++
++ src/op-support.c     | 10 +++++++++-
++ tests/gpg/t-verify.c |  8 +++++---
++ 2 files changed, 14 insertions(+), 4 deletions(-)
++
++diff --git a/src/op-support.c b/src/op-support.c
++index 43cb1c760e0d..e55875f904d0 100644
++--- a/src/op-support.c
+++++ b/src/op-support.c
++@@ -400,7 +400,13 @@ _gpgme_parse_plaintext (char *args, char **filenamep)
++ 
++ 
++ /* Parse a FAILURE status line and return the error code.  ARGS is
++-   modified to contain the location part.  */
+++ * modified to contain the location part.  Note that for now we ignore
+++ * failure codes with a location of gpg-exit; they are too trouble
+++ * some.  Instead we should eventually record that error in the
+++ * context and provide a function to return a fuller error
+++ * description; this could then also show the location of the error
+++ * (e.g. "option- parser") to make it easier for the user to detect
+++ * the actual error. */
++ gpgme_error_t
++ _gpgme_parse_failure (char *args)
++ {
++@@ -418,6 +424,8 @@ _gpgme_parse_failure (char *args)
++     *where = '\0';
++ 
++   where = args;
+++  if (!strcmp (where, "gpg-exit"))
+++    return 0;
++ 
++   return atoi (which);
++ }
++-- 
++2.17.0
++
