@@ -1,65 +1,121 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 30 Apr 2018 00:15:18 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-25
-In-Reply-To: <20180426060013.EAB262079F@mail.bootlin.com>
-References: <20180426060013.EAB262079F@mail.bootlin.com>
-Message-ID: <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 29 Apr 2018 21:25:22 -0300
+Subject: [Buildroot] [PATCH 6/7 v4] download/git: ensure we can checkout
+ repos with submodule conversions
+References: <cc5f8b3c613a2a48d69abb15fa841035cacb0036.1524944063.git.yann.morin.1998@free.fr>
+Message-ID: <5ae66272e0719_1c642b148183f0fc45385@ultri4.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Hello,
 
-Le 26/04/2018 ? 08:00, Thomas Petazzoni a ?crit?:
-> Hello,
+On Sat, Apr 28, 2018 at 04:34 PM, Yann E. MORIN wrote:
+
+> When a git tree has had sub-dir <-> sub-module conversions, or has had
+> submodules added or removed over the course of time, checking out a
+> changeset across those conversions/additions/removals may leave
+> untracked files, or may fail because of a conflict of type.
 > 
-> Build statistics for 2018-04-25
-> ===============================
+> So, before we checkout the new changeset, we forcibly remove the
+> submodules. The new set of submodules, if any, will be restored later.
 > 
->       branch |  OK | NOK | TIM | TOT |
->    2018.02.x |  31 |   3 |   0 |  34 |
->       master | 170 |  54 |   3 | 227 |
+> Ideally, we would use a native git command: git submodule deinit --all.
+> However, that was only introduced in git 1.8.3 which, while not being
+> recent by modern standards, is still too old for some enterprise-grade
+> distributions (RHEL6 only has git-1.7.1).
 > 
-> Results for branch 'master'
-> ===========================
+> So, instead, we just use git submodule foreach, to rm -rf the submodules
+> directory.
 > 
-> Classification of failures by reason
-> ------------------------------------
->
->                          boost | 1 
->                   flare-engine | 1 
+> Again, we would ideally use 'cd $toplevel && rm -rf $path', but
+> $toplevel was only introduced in git 1.7.2. $path has always been there.
 > 
-> Detail of failures
-> ------------------
+> So, instead, we just cd back one level, and remove the basename of the
+> directory.
 > 
-> microblazeel |                          boost | TIM | http://autobuild.buildroot.net/results/b42d68c66d8ea035845a28c5530ef0682fd95713 |     
-> microblazeel |                   flare-engine | TIM | http://autobuild.buildroot.net/results/af976a4805fb8b3f0c17a8e3a1f901b2255caa0b |     
+> Eventually, we need to get rid of now-empty and untracked directories,
+> that were parents of a removed submodule. For example. ./foo/bar/ was a
+> submodule, so ./foo/bar/ was removed, which left ./foo/ around.
+> 
+> Yet again, recent-ish git versions would have removed it during the
+> forced checkout, but old-ish versions (e.g. 1.7.1) do not remove it with
+> the forced checkout.
+> 
+> Instead we rely on the already used forced-forced clean of directories,
+> untracked, and ignored content, to really get rid of extra stuff we are
+> not interested in.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I tried to reproduce this issue with the upcoming gcc 8.1 for microblaze but
-flare-engire build fine with it.
+[I do not use submodules in a daily basis, but the changes seem OK.
+ With the typo in a comment in the code fixed, please add]
+ Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-git bisect helped to find a patch [1] fixing an infinite loop in RTL DSE
-optimizer. Also, back porting the patch to gcc 7.3.0 fix the issue.
+[with patches until this one applied: I confirmed [0] using git 2.14.1 and a
+ fake remote alternating between submodule <-> subdir that this patch is needed.
+ I did *not* tested using recursive submodules by the lack of time to do.
+ As a sanity check to see that all git commands used are supported by various
+ git versions, I also downloaded the current version of sunxi-mali with an empty
+ git cache, using git versions 1.7.1, 1.8.3, 2.11.0, 2.14.1. All git commands
+ succeed, only the hash for git 1.7.1 mismatched as expected and described in
+ the review of the previous patch]
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-Since this patch is not specific to microblaze, but in gcc's code, I'm not sure
-what we need to do.
-Either back port the patch to affected gcc version and take the risk to break
-something with other architecture or optimization level.
-Or add BR2_TOOLCHAIN_HAS_GCC_BUG_85180 option and wait for gcc 8.
 
-Maybe it's easier to add an autobuilder exception for boost and flare-engine on
-microblaze?
+[snip]
+>  # Get rid of now-untracked directories (in case a git operation was
+> -# interrupted in a previous run).
+> +# interrupted in a previous run, or to get rid of empty directories
+> +# that were parrents of submodules removed above).
 
-It's not clear if other architecture can be affected.
+s/parrents/parents/
 
-Thoughts?
+>  _git clean -ffdx
+>  
+>  # Get date of commit to generate a reproducible archive.
+> -- 
+> 2.14.1
 
-Best regards,
-Romain
+[0] Test performed:
+To test this patch I first created a local clone for sunxi-mali, then I
+converted the submodule to a subdir using [1] and I exported the local repo
+using 'git daemon'.
+Then I used Buildroot with an empty git cache, without this patch (but with
+previous patches applied), removing sunxi-mali.hash and changing sunxi-mali.mk
+to point to my local repo at the commit I created, to generate the tarball for
+this new commit. I calculated the sha256sum, recovered the original .hash file
+and added the new hash to it.
+With the same Buildroot tree and again with an empty cache, I downloaded the new
+version and the hash matched.
+I changed the sunxi-mali version back to its original value (the site version
+still pointing to my local repo), I downloaded the "old" version without
+emptying the cache and the hash matched.
+Finally I changed the sunxi-mali version once again to the commit I created,
+downloaded the "new" version without emptying the cache, the log shows [2] and
+the hash mismatched.
 
-[1]
-https://github.com/gcc-mirror/gcc/commit/df03ebc3574a0d7893127e3b9754a01abf2d8b70
-[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+Then I applied this patch and did the same sequence.
+The hashes match for both "old" and "new" package versions, independent of the
+previously checked out cset in the git cache.
+
+[1] commands to convert submodule to subdir:
+git rm lib/mali/
+mkdir lib/mali
+cd lib/mali
+git init
+git remote add origin https://github.com/linux-sunxi/sunxi-mali-proprietary.git
+git fetch
+git checkout 1c5063f43cdc9de341c0d63b2e3921cab86c7742
+rm -rf .git/
+cd -
+git add lib/mali/
+git commit
+
+[2] warning: unable to rmdir lib/mali: Directory not empty
+
+
+Regards,
+Ricardo
