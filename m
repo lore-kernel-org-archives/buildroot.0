@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Apr 2018 22:34:27 +0200
-Subject: [Buildroot] [PATCH 1/1] libiconv: add hash for license files
-Message-ID: <20180430203427.15808-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 22:38:03 +0200
+Subject: [Buildroot] [PATCH 1/1] libid3tag: add hash for license files
+Message-ID: <20180430203803.17107-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,19 +10,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libiconv/libiconv.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libid3tag/libid3tag.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libiconv/libiconv.hash b/package/libiconv/libiconv.hash
-index 440daee51e..93ad555e15 100644
---- a/package/libiconv/libiconv.hash
-+++ b/package/libiconv/libiconv.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
- sha256	ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178	libiconv-1.15.tar.gz
-+
-+# Hash for license files:
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-+sha256	56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d	COPYING.LIB
+diff --git a/package/libid3tag/libid3tag.hash b/package/libid3tag/libid3tag.hash
+index fb02882db7..82ad59d9ac 100644
+--- a/package/libid3tag/libid3tag.hash
++++ b/package/libid3tag/libid3tag.hash
+@@ -1,2 +1,4 @@
+ # Locally computed:
+ sha256  63da4f6e7997278f8a3fef4c6a372d342f705051d1eeb6a46a86b03610e26151  libid3tag-0.15.1b.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  7f12ad28dc075763e91b91bfa60fad04062380011ddad8f6bac21dd7b1f44367  COPYRIGHT
 -- 
 2.14.1
