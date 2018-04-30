@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Apr 2018 17:41:17 +0200
-Subject: [Buildroot] [PATCH 1/2] sdl2: bump version to 2.0.8
-In-Reply-To: <20180430120459.8438-1-peter@korsgaard.com>
-References: <20180430120459.8438-1-peter@korsgaard.com>
-Message-ID: <20180430174117.439e1c59@windsurf>
+Date: Mon, 30 Apr 2018 17:41:52 +0200
+Subject: [Buildroot] [PATCH 1/4] libfm: bump to version 1.3.0.2
+In-Reply-To: <20180429190906.25476-1-fontaine.fabrice@gmail.com>
+References: <20180429190906.25476-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180430174152.0441ac19@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 30 Apr 2018 14:04:58 +0200, Peter Korsgaard wrote:
-> Drop now upstreamed patch.
+On Sun, 29 Apr 2018 21:09:03 +0200, Fabrice Fontaine wrote:
+> Add hash for license files
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../sdl2/0001-make-cross-compiler-friendly.patch   | 167 ---------------------
->  package/sdl2/sdl2.hash                             |   4 +-
->  package/sdl2/sdl2.mk                               |   2 +-
->  3 files changed, 3 insertions(+), 170 deletions(-)
->  delete mode 100644 package/sdl2/0001-make-cross-compiler-friendly.patch
+>  .../libfm/0001-modules-fix-cross-compilation.patch | 27 ++++++++++++++++++++++
+>  package/libfm/libfm.hash                           |  8 +++++--
+>  package/libfm/libfm.mk                             |  4 +++-
+>  3 files changed, 36 insertions(+), 3 deletions(-)
+>  create mode 100644 package/libfm/0001-modules-fix-cross-compilation.patch
 
-Series applied. Thanks!
+Series applied, thanks. Please make sure to submit
+package/libfm/0001-modules-fix-cross-compilation.patch to the upstream
+project. Thanks!
 
 Thomas
 -- 
