@@ -1,25 +1,90 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Apr 2018 13:57:09 +0200
-Subject: [Buildroot] [PATCH 1/1] libglu: add hash for license file
-Message-ID: <20180430115709.24662-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Apr 2018 14:04:59 +0200
+Subject: [Buildroot] [PATCH 2/2] sdl2_image: security bump to version 2.0.3
+In-Reply-To: <20180430120459.8438-1-peter@korsgaard.com>
+References: <20180430120459.8438-1-peter@korsgaard.com>
+Message-ID: <20180430120459.8438-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libglu/libglu.hash | 1 +
- 1 file changed, 1 insertion(+)
+Fixes the following security issues:
 
-diff --git a/package/libglu/libglu.hash b/package/libglu/libglu.hash
-index 784386e0ca..468787864e 100644
---- a/package/libglu/libglu.hash
-+++ b/package/libglu/libglu.hash
+CVE-2017-12122: An exploitable code execution vulnerability exists in the
+ILBM image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+ILBM image can cause a heap overflow resulting in code execution.  An
+attacker can display a specially crafted image to trigger this
+vulnerability.
+
+CVE-2017-14440: An exploitable code execution vulnerability exists in the
+ILBM image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+ILBM image can cause a stack overflow resulting in code execution.  An
+attacker can display a specially crafted image to trigger this
+vulnerability.
+
+CVE-2017-14441: An exploitable code execution vulnerability exists in the
+ICO image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+ICO image can cause an integer overflow, cascading to a heap overflow
+resulting in code execution.  An attacker can display a specially crafted
+image to trigger this vulnerability.
+
+CVE-2017-14442: An exploitable code execution vulnerability exists in the
+BMP image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+BMP image can cause a stack overflow resulting in code execution.  An
+attacker can display a specially crafted image to trigger this
+vulnerability.
+
+CVE-2017-14448: An exploitable code execution vulnerability exists in the
+XCF image rendering functionality of SDL2_image-2.0.2.  A specially crafted
+XCF image can cause a heap overflow resulting in code execution.  An
+attacker can display a specially crafted image to trigger this
+vulnerability.
+
+CVE-2017-14449: A double-Free vulnerability exists in the XCF image
+rendering functionality of SDL2_image-2.0.2.  A specially crafted XCF image
+can cause a Double-Free situation to occur.  An attacker can display a
+specially crafted image to trigger this vulnerability.
+
+CVE-2017-14450: A buffer overflow vulnerability exists in the GIF image
+parsing functionality of SDL2_image-2.0.2.  A specially crafted GIF image
+can lead to a buffer overflow on a global section.  An attacker can display
+an image to trigger this vulnerability.
+
+For details, see the announcement:
+
+https://discourse.libsdl.org/t/sdl-image-2-0-3-released/23958
+
+Also add a hash for the license file while we're at it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sdl2_image/sdl2_image.hash | 3 ++-
+ package/sdl2_image/sdl2_image.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
+index 26d0a88cb5..cf3253526c 100644
+--- a/package/sdl2_image/sdl2_image.hash
++++ b/package/sdl2_image/sdl2_image.hash
 @@ -1,2 +1,3 @@
- # locally computed
- sha256  3d19cca9b26ec4048dd22e3d294acd43e080a3205a29ff47765bd514571ea8f9  glu-9.0.0.tar.gz
-+sha256  84187ce0fd0153769675cb7f3301583eb27393f66b57c5604999a1d805a9184c  include/GL/glu.h
+ # Locally calculated
+-sha256 3a3eafbceea5125c04be585373bfd8b3a18f259bd7eae3efc4e6d8e60e0d7f64  SDL2_image-2.0.1.tar.gz
++sha256 3510c25da735ffcd8ce3b65073150ff4f7f9493b866e85b83738083b556d2368  SDL2_image-2.0.3.tar.gz
++sha256 13240ed78c8726c510b9634976430d3d3a9ea2d1ced3214119766e9e71568a35  COPYING.txt
+diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+index 71a9634023..8c1c5f6e1a 100644
+--- a/package/sdl2_image/sdl2_image.mk
++++ b/package/sdl2_image/sdl2_image.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_IMAGE_VERSION = 2.0.1
++SDL2_IMAGE_VERSION = 2.0.3
+ SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
+ SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL2_IMAGE_INSTALL_STAGING = YES
 -- 
-2.14.1
+2.11.0
