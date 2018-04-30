@@ -1,46 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 22:51:36 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] usb_modeswitch: set CXX
- to false when C++ is missing
-Message-ID: <20180501073415.A740F890ED@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 22:50:07 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qt5: qt5websockets:
+ install missing qml modules
+Message-ID: <20180501073415.85FDF890BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b058d288ef1d0150c368647cc1ada6dfead24f6c
+commit: https://git.buildroot.net/buildroot/commit/?id=cdce9595946da261719a3f40315741b2ec61c290
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Similar to the openocd fix in commit 5966e2dc54 (package/openocd: fix
-fallout after no-C++ fixups) the jimctl that is bundled with
-usb_modeswitch also wants to find a binary. This broke with commit
-4cd1ab158 (core: alternate solution to disable C++). Revert to 'false'
-instead of 'no' here as well.
+QML modules for QtWebSockets are located in /usr/qml/QtWebSockets since
+Qt 5.5.
 
-Fixes:
-http://autobuild.buildroot.net/results/b4d/b4d4e925763cb6558af915f9781afe07fc557ebc/
-http://autobuild.buildroot.net/results/61b/61b9dc2148df2e8fd0b30e62aedbfd30bb755e19/
-http://autobuild.buildroot.net/results/468/468a7e6b049f159fbb4e79d3a12b53ca890f6933/
+/usr/qml/Qt/WebSockets still exists for compatibility reasons, but
+it contains only a qmldir file which points to ../../QtWebSockets/.
 
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+see also: http://doc.qt.io/qt-5.6/qtwebsockets-qmlmodule.html
+
+Signed-off-by: Manfred Schlaegl <manfred.schlaegl@ginzinger.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 107e3ebf45931adfc9c995dbb5db3bf1d17311d3)
+(cherry picked from commit 4f726cef4c5709cf4f894e436b4022989adc9e9f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch/usb_modeswitch.mk | 1 +
+ package/qt5/qt5websockets/qt5websockets.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index c67d4cd583..8dd712f264 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -28,6 +28,7 @@ USB_MODESWITCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
+index 4cb2aed1db..661bc83e52 100644
+--- a/package/qt5/qt5websockets/qt5websockets.mk
++++ b/package/qt5/qt5websockets/qt5websockets.mk
+@@ -41,6 +41,7 @@ endef
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+ define QT5WEBSOCKETS_INSTALL_TARGET_QMLS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/WebSockets $(TARGET_DIR)/usr/qml/Qt/
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebSockets $(TARGET_DIR)/usr/qml/
+ endef
+ endif
  
- define USB_MODESWITCH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
- 		CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE -Wall -I." \
- 		JIM_CONFIGURE_OPTS="--host=$(GNU_TARGET_NAME) --build=$(GNU_HOST_NAME)" \
- 		-C $(@D) $(USB_MODESWITCH_BUILD_TARGETS)
