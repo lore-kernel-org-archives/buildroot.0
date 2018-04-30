@@ -1,52 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Apr 2018 20:57:00 +0200
-Subject: [Buildroot] [PATCH 1/1] libgudev: bump to version 232
-Message-ID: <20180430185700.11497-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 21:01:34 +0200
+Subject: [Buildroot] [PATCH 1/1] gtksourceview: bump to version 3.24.7
+Message-ID: <20180430190134.10372-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add --disable-umockdev (enabled by default)
-Add hash for license file
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libgudev/libgudev.hash | 7 +++++--
- package/libgudev/libgudev.mk   | 3 ++-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/gtksourceview/gtksourceview.hash | 4 ++--
+ package/gtksourceview/gtksourceview.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgudev/libgudev.hash b/package/libgudev/libgudev.hash
-index a6c1d6b535..138ae93d71 100644
---- a/package/libgudev/libgudev.hash
-+++ b/package/libgudev/libgudev.hash
-@@ -1,2 +1,5 @@
--# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/230/libgudev-230.sha256sum
--sha256 a2e77faced0c66d7498403adefcc0707105e03db71a2b2abd620025b86347c18  libgudev-230.tar.xz
-+# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/232/libgudev-232.sha256sum
-+sha256 ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860  libgudev-232.tar.xz
-+
-+# Hash for license file:
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
-index fce710a1c2..50432c461e 100644
---- a/package/libgudev/libgudev.mk
-+++ b/package/libgudev/libgudev.mk
-@@ -4,12 +4,13 @@
- #
+diff --git a/package/gtksourceview/gtksourceview.hash b/package/gtksourceview/gtksourceview.hash
+index feaae5e29f..3b78b7062b 100644
+--- a/package/gtksourceview/gtksourceview.hash
++++ b/package/gtksourceview/gtksourceview.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.24/gtksourceview-3.24.6.sha256sum:
+-sha256	7aa6bdfebcdc73a763dddeaa42f190c40835e6f8495bb9eb8f78587e2577c188	gtksourceview-3.24.6.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.24/gtksourceview-3.24.7.sha256sum:
++sha256	a5c20d3a6347533689358f3ea52486409f6dd41d5a69c65eab7570cfaffee8e6	gtksourceview-3.24.7.tar.xz
+ 
+ # Locally computed:
+ sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
+diff --git a/package/gtksourceview/gtksourceview.mk b/package/gtksourceview/gtksourceview.mk
+index 2a33ed4bdb..ae1d3ff295 100644
+--- a/package/gtksourceview/gtksourceview.mk
++++ b/package/gtksourceview/gtksourceview.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBGUDEV_VERSION = 230
-+LIBGUDEV_VERSION = 232
- LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
- LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
- LIBGUDEV_INSTALL_STAGING = YES
- LIBGUDEV_DEPENDENCIES = host-pkgconf udev libglib2
- LIBGUDEV_LICENSE = LGPL-2.1+
- LIBGUDEV_LICENSE_FILES = COPYING
-+LIBGUDEV_CONF_OPTS = --disable-umockdev
- 
- $(eval $(autotools-package))
+ GTKSOURCEVIEW_VERSION_MAJOR = 3.24
+-GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).6
++GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).7
+ GTKSOURCEVIEW_SOURCE = gtksourceview-$(GTKSOURCEVIEW_VERSION).tar.xz
+ GTKSOURCEVIEW_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(GTKSOURCEVIEW_VERSION_MAJOR)
 -- 
 2.14.1
