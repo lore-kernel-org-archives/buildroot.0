@@ -1,70 +1,65 @@
-From: John Keeping <john@metanate.com>
-Date: Mon, 30 Apr 2018 17:56:30 +0100
-Subject: [Buildroot] [PATCH] core/pkg-generic: only save latest package
- list
-In-Reply-To: <20180430164728.GB2470@scaer>
-References: <20180429130714.14312-1-john@metanate.com>
- <20180430164728.GB2470@scaer>
-Message-ID: <20180430175630.32e3ae24.john@metanate.com>
+From: Chris Lesiak <chris.lesiak@licor.com>
+Date: Mon, 30 Apr 2018 12:14:11 -0500
+Subject: [Buildroot] [PATCH v2] Makefile: Update mtime of $(TARGET_DIR)/usr
+ in target-finalize
+In-Reply-To: <20180416153339.23002-1-chris.lesiak@licor.com>
+References: <20180416153339.23002-1-chris.lesiak@licor.com>
+Message-ID: <20180430171411.21920-1-chris.lesiak@licor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 30 Apr 2018 18:47:28 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+The systemd ConditionNeedsUpdate option is useful when offline updates
+of the vendor operating system resources in /usr require updating of
+/etc or /var on the next following boot.
 
-> John, All,
-> 
-> On 2018-04-29 14:07 +0100, John Keeping spake thusly:
-> > When rebuilding a package, simply appending the package's file list
-> > to the global list means that the package list grows for every
-> > rebuild, as does the time taken to check for files installed by
-> > multiple packages. Furthermore, we get false positives where a file
-> > is reported as being installed by multiple copies of the same
-> > package.
-> > 
-> > With this approach we may end up with orphaned files in the target
-> > filesystem if a package that has been updated and rebuilt no longer
-> > installs the same set of files, but we know that only a clean build
-> > will produce reliable results.  In fact it may be helpful to
-> > identify these orphaned files as evidence that the build is not
-> > clean.
-> > 
-> > Signed-off-by: John Keeping <john@metanate.com>
-> > ---
-> >  package/pkg-generic.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 1c9dd1d734..edc2c9349c 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -64,6 +64,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
-> >  # $(3): suffix of file  (optional)
-> >  define step_pkg_size_inner
-> >  	cd $(2); \
-> > +	$(SED) '/^$(1),/d'
-> > $(BUILD_DIR)/packages-file-list$(3).txt; \  
-> 
-> Since BUILD_DIR is a fully-qualified path, I would have put it as the
-> first line of the macros, and thus it would not have required the
-> trailing '\':
-> 
->     $(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
->     cd $(2); \
->     find [...]
+Two examples of services making use of this option are
+systemd-hwdb-update.service and systemd-sysusers.service.
 
-This will cause a build error if packages-file-list$(3).txt doesn't
-exist, which will be the case for the first package built.
+ConditionNeedsUpdate=/etc will be true if the mtime of /etc/.updated
+is older than the mtime of /usr.  After services conditional on
+ConditionNeedsUpdate have run, systemd-update-done.service will
+synch the mtime of /usr to /etc/.updated so that the condition will
+be false on subsequent boots.
 
-We could use:
+For systems with writable /usr partitions where updates are done to
+the running system, the update program will touch /usr as a final step.
+But with Buildroot, where updates are often done by dumping a new
+image onto the device, and where /usr is on a filesystem mounted
+read-only, touching /usr as part of the update process is not practical.
+Instead, it should be done a build time.
 
-      -$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
+For testers, please note that systemd-update-done in v234 added a
+regression where the mtime of /etc/.updated is set to the current time
+instead of the mtime or /usr.  This will be fixed in v239.
 
-but then make will log that it is ignoring an error.
+For more details, see:
+http://0pointer.de/public/systemd-man/systemd.unit.html
+http://0pointer.de/public/systemd-man/systemd-update-done.service.html
 
+Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+Changed v1 --> v2
+  - Provide a more detailed commit message.
+---
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-John
+diff --git a/Makefile b/Makefile
+index 8004cc2925..479ce74dc1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -761,6 +761,8 @@ endif
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
++	touch $(TARGET_DIR)/usr
++
+ .PHONY: target-post-image
+ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+-- 
+2.14.3
