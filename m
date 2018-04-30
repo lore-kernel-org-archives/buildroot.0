@@ -1,46 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 23:03:11 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/tcllib: update
- license to SPDX format
-Message-ID: <20180501073416.7C289890BC@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 23:14:02 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
+ 9, 14, 16}.x series
+Message-ID: <20180501073416.EC4688A51D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d4f5dbafae8b99897bd3ee5389296b09ca35208
+commit: https://git.buildroot.net/buildroot/commit/?id=0f6ea6901920acbf2df521271bebd0792262c1ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-While at it add the license file hash.
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+[Peter: drop 4.16.x change]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2c82d7c605e53d3687ff63f31e135ec7ce92ea05)
+(cherry picked from commit e13a22f17a5041557a080150f1d260181fa99bee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcllib/tcllib.hash | 1 +
- package/tcllib/tcllib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tcllib/tcllib.hash b/package/tcllib/tcllib.hash
-index eb990a2aba..d08b5a172a 100644
---- a/package/tcllib/tcllib.hash
-+++ b/package/tcllib/tcllib.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  0db9e17d6c0f44d3ca2df2ea5023e35c0f3767e7008c3cb26d201446eb68add1  tcllib-1.13.tar.bz2
-+sha256  530ec70eb11a455bd582d86b6d74c2dd7cc367d90b8bbdd59fcb43ae02f95a4b  license.terms
-diff --git a/package/tcllib/tcllib.mk b/package/tcllib/tcllib.mk
-index bd98dd641e..dfa35c8941 100644
---- a/package/tcllib/tcllib.mk
-+++ b/package/tcllib/tcllib.mk
-@@ -7,7 +7,7 @@
- TCLLIB_VERSION = 1.13
- TCLLIB_SOURCE = tcllib-$(TCLLIB_VERSION).tar.bz2
- TCLLIB_SITE = http://downloads.sourceforge.net/project/tcllib/tcllib/$(TCLLIB_VERSION)
--TCLLIB_LICENSE = tcl license
-+TCLLIB_LICENSE = TCL
- TCLLIB_LICENSE_FILES = license.terms
- TCLLIB_DEPENDENCIES = host-tcl
- TCLLIB_CONF_ENV = ac_cv_path_tclsh="$(HOST_DIR)/bin/tclsh$(TCL_VERSION_MAJOR)"
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3e2bbf10aa..1824fdb181 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.128"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.95"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.129"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.96"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.35"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.36"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
