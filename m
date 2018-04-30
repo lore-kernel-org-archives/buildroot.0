@@ -1,45 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Apr 2018 20:43:31 +0200
-Subject: [Buildroot] [PATCH 1/1] libgtk3: bump to version 3.22.30
-Message-ID: <20180430184331.25875-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 30 Apr 2018 20:48:35 +0200
+Subject: [Buildroot] [PATCH v3 5/6] zstd: add libzstd support
+In-Reply-To: <20180425234831.0c8c6ce4@windsurf>
+References: <20180416193953.19924-1-ps.report@gmx.net>
+ <20180416193953.19924-5-ps.report@gmx.net>
+ <20180425234831.0c8c6ce4@windsurf>
+Message-ID: <20180430204835.26458341@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Hello Yann, Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libgtk3/libgtk3.hash | 7 +++++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+On Wed, 25 Apr 2018 23:48:31 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 0f259e9a1c..b7a89901dd 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.15.sha256sum
--sha256 c8a012c2a99132629ab043f764a2b7cb6388483a015cd15c7a4288bec3590fdb  gtk+-3.22.15.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.30.sha256sum
-+sha256 a1a4a5c12703d4e1ccda28333b87ff462741dc365131fbc94c218ae81d9a6567  gtk+-3.22.30.tar.xz
-+
-+# Hash for license file:
-+sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index b4a8b8c517..1b85d00aae 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).15
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).30
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
--- 
-2.14.1
+> Hello,
+> 
+> On Mon, 16 Apr 2018 21:39:52 +0200, Peter Seiderer wrote:
+> > Add patch to split libzstd install target into pc, static, shared
+> > and includes target. Call only the needed ones for the buildroot
+> > staging/target install steps (respect the static/shared configuration).
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v2 -> v3:
+> >   - split libray install targets for static/shared
+> >     (suggested by Yann E. MORIN)  
+> 
+> Applied to master after implementing the suggestion from Yann:
+
+Thanks for review, suggestions and fixing it on the fly....
+
+> 
+>     [Thomas: as suggested by Yann E. Morin, refactor the build/install
+>     commands to use only one invocation, with intermediate ZSTD_BUILD_LIBS
+>     and ZSTD_INSTALL_LIBS variables, defined depending on whether
+>     static/shared/static+shared is selected.]
+> 
+> Also, did you submit the patch upstream ?
+
+Just done, see [1]...
+
+Regards,
+Peter
+
+[1] https://github.com/facebook/zstd/pull/1114
+
+> 
+> Thanks!
+> 
+> Thomas
