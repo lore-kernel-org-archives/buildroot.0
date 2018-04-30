@@ -1,40 +1,33 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 30 Apr 2018 12:57:00 -0500
-Subject: [Buildroot] [PATCH 3/4] package/Makefile.in: Remove RELRO
- linker flags from CFLAGS
-In-Reply-To: <20180425064518.31797-3-stefan.sorensen@spectralink.com>
-References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
- <20180425064518.31797-3-stefan.sorensen@spectralink.com>
-Message-ID: <CANQCQpbyDWsyEQ4ERFfpQ=h_5fU_QnXNcKN-ULOKhMf1e7FLDg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 30 Apr 2018 21:28:47 +0300
+Subject: [Buildroot] [PATCH] sdl2: update license file hash
+Message-ID: <d2cefeedde196a7c6a05d8002fc686b26d31ec48.1525112927.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan,
+Copyright year update.
 
-On Wed, Apr 25, 2018 at 1:45 AM, Stefan S?rensen
-<stefan.sorensen@spectralink.com> wrote:
-> The RELRO related flags are for the linker, not the compiler, so they belong
-> in LDFLAGS.
->
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> ---
->  package/Makefile.in | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
->
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 1cbf34e0df..4525b8e79f 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -141,9 +141,6 @@ ifeq ($(BR2_DEBUG_3),y)
->  TARGET_DEBUGGING = -g3
->  endif
->
-> -TARGET_CFLAGS_RELRO = -Wl,-z,relro
-> -TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
-> -
+Fixes:
+http://autobuild.buildroot.net/results/2c8/2c865463a4b7524114518c04dce9c94252433460/
 
-If you remove these flags from CFLAGS then packages that link with gcc
-vs explicitly ld won't get the flag.
+Cc: Guillaume Gardet <guillaume.gardet@oliseo.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/sdl2/sdl2.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 9cf2c417880c..997b4a5d4fcb 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.8.tar.gz.sig
+ sha256 edc77c57308661d576e843344d8638e025a7818bff73f8fbfab09c3c5fd092ec  SDL2-2.0.8.tar.gz
+ # Locally calculated
+-sha256 bbd2edb1789c33de29bb9f8d1dbe2774584a9ce8c4e3162944b7a3a447f5e85d  COPYING.txt
++sha256 61e627031e1160bf8b9bdbc9cda27656d422ea8eaab199b64b4a4a4168437154  COPYING.txt
+-- 
+2.17.0
