@@ -1,104 +1,67 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 30 Apr 2018 13:08:36 +0200
-Subject: [Buildroot] [PATCH 1/1] python-influxdb: new
-In-Reply-To: <20180430102117.27271-1-sven.haardiek@iotec-gmbh.de>
-References: <20180430102117.27271-1-sven.haardiek@iotec-gmbh.de>
-Message-ID: <CAGm1_ks_PuB4GkCcwe8jWmxP4hUig-SBZhoF4XiRzU0w43my4A@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 13:15:11 +0200
+Subject: [Buildroot] [PATCH 1/1] libcue: fix build without C++
+Message-ID: <20180430111511.6881-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sven,
+By default, CMake assumes that the project is using both C and C++. By
+explicitly passing 'C' as argument of the project() macro, we tell
+CMake that only C is used, which prevents CMake from checking if a C++
+compiler exists.
+Patch sent upstream: https://github.com/lipnitsk/libcue/pull/17
 
+Fixes:
+ - http://autobuild.buildroot.net/results/a5344d18dbdc86705853fbf8a66d5304de07a9b2
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-libcue-is-only-implemented-in-C.patch     | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/libcue/0001-libcue-is-only-implemented-in-C.patch
 
-On Mon, Apr 30, 2018 at 12:21 PM, Sven Haardiek
-<sven.haardiek@iotec-gmbh.de> wrote:
-> InfluxDB client.
->
-> Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
-
-the patch title should be "python-influxdb: new package".
-
-Please also add yourself to the DEVELOPERS file.
-
-With these changes applied you can add my:
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Yegor
-
-> ---
->  package/Config.in                            |  1 +
->  package/python-influxdb/Config.in            | 10 ++++++++++
->  package/python-influxdb/python-influxdb.hash |  5 +++++
->  package/python-influxdb/python-influxdb.mk   | 14 ++++++++++++++
->  4 files changed, 30 insertions(+)
->  create mode 100644 package/python-influxdb/Config.in
->  create mode 100644 package/python-influxdb/python-influxdb.hash
->  create mode 100644 package/python-influxdb/python-influxdb.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d3b67d40de..fe36d31867 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -807,6 +807,7 @@ menu "External python modules"
->         source "package/python-id3/Config.in"
->         source "package/python-idna/Config.in"
->         source "package/python-incremental/Config.in"
-> +       source "package/python-influxdb/Config.in"
->         source "package/python-iniparse/Config.in"
->         source "package/python-iowait/Config.in"
->         source "package/python-ipaddr/Config.in"
-> diff --git a/package/python-influxdb/Config.in b/package/python-influxdb/Config.in
-> new file mode 100644
-> index 0000000000..a848e4f2ae
-> --- /dev/null
-> +++ b/package/python-influxdb/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_INFLUXDB
-> +       bool "python-influxdb"
-> +       select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-> +       select BR2_PACKAGE_PYTHON_PYTZ # runtime
-> +       select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       help
-> +         InfluxDB client.
-> +
-> +         https://github.com/influxdb/influxdb-python
-> diff --git a/package/python-influxdb/python-influxdb.hash b/package/python-influxdb/python-influxdb.hash
-> new file mode 100644
-> index 0000000000..28f2825c95
-> --- /dev/null
-> +++ b/package/python-influxdb/python-influxdb.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/influxdb/json
-> +md5    dec1e6fe9770c36290d38fb2a37fba25  influxdb-5.0.0.tar.gz
-> +sha256 6adba2ddfd5781a06b5204339e679d66645bf6cc2b7f493eb9d7c8986d714e80  influxdb-5.0.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 70146f78d168b33ac5903490a918469e22a801a8d3a81103f3d8706dc0024c9a  LICENSE
-> diff --git a/package/python-influxdb/python-influxdb.mk b/package/python-influxdb/python-influxdb.mk
-> new file mode 100644
-> index 0000000000..1571cbd47a
-> --- /dev/null
-> +++ b/package/python-influxdb/python-influxdb.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-influxdb
-> +#
-> +################################################################################
-> +
-> +PYTHON_INFLUXDB_VERSION = 5.0.0
-> +PYTHON_INFLUXDB_SOURCE = influxdb-$(PYTHON_INFLUXDB_VERSION).tar.gz
-> +PYTHON_INFLUXDB_SITE = https://files.pythonhosted.org/packages/95/26/33e7b85b72a0df2dc00af4c1b9f5df3e7d0aea29ae4f8f65a83f7024c4e2
-> +PYTHON_INFLUXDB_SETUP_TYPE = setuptools
-> +PYTHON_INFLUXDB_LICENSE = MIT
-> +PYTHON_INFLUXDB_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.17.0
->
+diff --git a/package/libcue/0001-libcue-is-only-implemented-in-C.patch b/package/libcue/0001-libcue-is-only-implemented-in-C.patch
+new file mode 100644
+index 0000000000..bb36172ad1
+--- /dev/null
++++ b/package/libcue/0001-libcue-is-only-implemented-in-C.patch
+@@ -0,0 +1,34 @@
++From 285dd7fe70878e85f121b990f59e72105ef27688 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 30 Apr 2018 13:06:00 +0200
++Subject: [PATCH] libcue is only implemented in C
++
++By default, CMake assumes that the project is using both C and C++. By
++explicitly passing 'C' as argument of the project() macro, we tell
++CMake that only C is used, which prevents CMake from checking if a C++
++compiler exists.
++
++Fixes:
++ - http://autobuild.buildroot.net/results/a5344d18dbdc86705853fbf8a66d5304de07a9b2
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 1e4ca25..8c3a1bd 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -5,7 +5,7 @@ SET(PACKAGE_SOVERSION 2)
++ 
++ CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
++ 
++-PROJECT(libcue)
+++PROJECT(libcue C)
++ 
++ include(GNUInstallDirs)
++ 
++-- 
++2.14.1
++
+-- 
+2.14.1
