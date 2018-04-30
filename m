@@ -1,90 +1,219 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 14:04:59 +0200
-Subject: [Buildroot] [PATCH 2/2] sdl2_image: security bump to version 2.0.3
-In-Reply-To: <20180430120459.8438-1-peter@korsgaard.com>
-References: <20180430120459.8438-1-peter@korsgaard.com>
-Message-ID: <20180430120459.8438-2-peter@korsgaard.com>
+Date: Mon, 30 Apr 2018 14:04:58 +0200
+Subject: [Buildroot] [PATCH 1/2] sdl2: bump version to 2.0.8
+Message-ID: <20180430120459.8438-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
-
-CVE-2017-12122: An exploitable code execution vulnerability exists in the
-ILBM image rendering functionality of SDL2_image-2.0.2.  A specially crafted
-ILBM image can cause a heap overflow resulting in code execution.  An
-attacker can display a specially crafted image to trigger this
-vulnerability.
-
-CVE-2017-14440: An exploitable code execution vulnerability exists in the
-ILBM image rendering functionality of SDL2_image-2.0.2.  A specially crafted
-ILBM image can cause a stack overflow resulting in code execution.  An
-attacker can display a specially crafted image to trigger this
-vulnerability.
-
-CVE-2017-14441: An exploitable code execution vulnerability exists in the
-ICO image rendering functionality of SDL2_image-2.0.2.  A specially crafted
-ICO image can cause an integer overflow, cascading to a heap overflow
-resulting in code execution.  An attacker can display a specially crafted
-image to trigger this vulnerability.
-
-CVE-2017-14442: An exploitable code execution vulnerability exists in the
-BMP image rendering functionality of SDL2_image-2.0.2.  A specially crafted
-BMP image can cause a stack overflow resulting in code execution.  An
-attacker can display a specially crafted image to trigger this
-vulnerability.
-
-CVE-2017-14448: An exploitable code execution vulnerability exists in the
-XCF image rendering functionality of SDL2_image-2.0.2.  A specially crafted
-XCF image can cause a heap overflow resulting in code execution.  An
-attacker can display a specially crafted image to trigger this
-vulnerability.
-
-CVE-2017-14449: A double-Free vulnerability exists in the XCF image
-rendering functionality of SDL2_image-2.0.2.  A specially crafted XCF image
-can cause a Double-Free situation to occur.  An attacker can display a
-specially crafted image to trigger this vulnerability.
-
-CVE-2017-14450: A buffer overflow vulnerability exists in the GIF image
-parsing functionality of SDL2_image-2.0.2.  A specially crafted GIF image
-can lead to a buffer overflow on a global section.  An attacker can display
-an image to trigger this vulnerability.
-
-For details, see the announcement:
-
-https://discourse.libsdl.org/t/sdl-image-2-0-3-released/23958
-
-Also add a hash for the license file while we're at it.
+Drop now upstreamed patch.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2_image/sdl2_image.hash | 3 ++-
- package/sdl2_image/sdl2_image.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ .../sdl2/0001-make-cross-compiler-friendly.patch   | 167 ---------------------
+ package/sdl2/sdl2.hash                             |   4 +-
+ package/sdl2/sdl2.mk                               |   2 +-
+ 3 files changed, 3 insertions(+), 170 deletions(-)
+ delete mode 100644 package/sdl2/0001-make-cross-compiler-friendly.patch
 
-diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
-index 26d0a88cb5..cf3253526c 100644
---- a/package/sdl2_image/sdl2_image.hash
-+++ b/package/sdl2_image/sdl2_image.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/sdl2/0001-make-cross-compiler-friendly.patch b/package/sdl2/0001-make-cross-compiler-friendly.patch
+deleted file mode 100644
+index 10dcf74656..0000000000
+--- a/package/sdl2/0001-make-cross-compiler-friendly.patch
++++ /dev/null
+@@ -1,167 +0,0 @@
+-From 4cbd2fbfcbfe94b5826907f59ee963c69860e522 Mon Sep 17 00:00:00 2001
+-From: "Guillermo A. Amaral" <g@maral.me>
+-Date: Thu, 18 Jan 2018 09:23:58 -0800
+-Subject: [PATCH] Make rpi video cross-compiler friendly.
+-
+-* Stops using fixed path to find GLES/EGL libs.
+-* Tries pkg-config to locate bcm_host.
+-
+-Signed-off-by: Guillermo A. Amaral <g@maral.me>
+----
+- cmake/sdlchecks.cmake | 15 ++++++++++-----
+- configure             | 48 ++++++++++++++++++++++++++++++++++++++++++++++--
+- configure.in          |  8 ++++++--
+- src/video/SDL_egl.c   | 12 ++++++------
+- 4 files changed, 68 insertions(+), 15 deletions(-)
+-
+-diff --git a/cmake/sdlchecks.cmake b/cmake/sdlchecks.cmake
+-index e2e89a2..fc715f1 100644
+---- a/cmake/sdlchecks.cmake
+-+++ b/cmake/sdlchecks.cmake
+-@@ -1127,15 +1127,19 @@ endmacro()
+- # - n/a
+- macro(CheckRPI)
+-   if(VIDEO_RPI)
+--    set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
+--    set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
+--    set(VIDEO_RPI_LIBS bcm_host )
+-+    pkg_check_modules(VIDEO_RPI bcm_host brcmegl)
+-+    if (NOT VIDEO_RPI_FOUND)
+-+      set(VIDEO_RPI_INCLUDE_DIRS "/opt/vc/include" "/opt/vc/include/interface/vcos/pthreads" "/opt/vc/include/interface/vmcs_host/linux/" )
+-+      set(VIDEO_RPI_LIBRARY_DIRS "/opt/vc/lib" )
+-+      set(VIDEO_RPI_LIBRARIES bcm_host )
+-+      set(VIDEO_RPI_LDFLAGS "-Wl,-rpath,/opt/vc/lib")
+-+    endif()
+-     listtostr(VIDEO_RPI_INCLUDE_DIRS VIDEO_RPI_INCLUDE_FLAGS "-I")
+-     listtostr(VIDEO_RPI_LIBRARY_DIRS VIDEO_RPI_LIBRARY_FLAGS "-L")
+- 
+-     set(ORIG_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+-     set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
+--    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBS}")
+-+    set(CMAKE_REQUIRED_LIBRARIES "${VIDEO_RPI_LIBRARIES}")
+-     check_c_source_compiles("
+-         #include <bcm_host.h>
+-         int main(int argc, char **argv) {}" HAVE_VIDEO_RPI)
+-@@ -1147,8 +1151,9 @@ macro(CheckRPI)
+-       set(SDL_VIDEO_DRIVER_RPI 1)
+-       file(GLOB VIDEO_RPI_SOURCES ${SDL2_SOURCE_DIR}/src/video/raspberry/*.c)
+-       set(SOURCE_FILES ${SOURCE_FILES} ${VIDEO_RPI_SOURCES})
+--      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBS})
+-+      list(APPEND EXTRA_LIBS ${VIDEO_RPI_LIBRARIES})
+-       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${VIDEO_RPI_INCLUDE_FLAGS} ${VIDEO_RPI_LIBRARY_FLAGS}")
+-+      list(APPEND EXTRA_LDFLAGS ${VIDEO_RPI_LDFLAGS})
+-     endif(SDL_VIDEO AND HAVE_VIDEO_RPI)
+-   endif(VIDEO_RPI)
+- endmacro(CheckRPI)
+-diff --git a/configure b/configure
+-index b622085..d42a22a 100755
+---- a/configure
+-+++ b/configure
+-@@ -19485,12 +19485,56 @@ else
+- fi
+- 
+-     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
+--        if test x$ARCH = xnetbsd; then
+-+        # Extract the first word of "pkg-config", so it can be a program name with args.
+-+set dummy pkg-config; ac_word=$2
+-+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-+$as_echo_n "checking for $ac_word... " >&6; }
+-+if ${ac_cv_path_PKG_CONFIG+:} false; then :
+-+  $as_echo_n "(cached) " >&6
+-+else
+-+  case $PKG_CONFIG in
+-+  [\\/]* | ?:[\\/]*)
+-+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+-+  ;;
+-+  *)
+-+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-+for as_dir in $PATH
+-+do
+-+  IFS=$as_save_IFS
+-+  test -z "$as_dir" && as_dir=.
+-+    for ac_exec_ext in '' $ac_executable_extensions; do
+-+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+-+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-+    break 2
+-+  fi
+-+done
+-+  done
+-+IFS=$as_save_IFS
+-+
+-+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+-+  ;;
+-+esac
+-+fi
+-+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+-+if test -n "$PKG_CONFIG"; then
+-+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+-+$as_echo "$PKG_CONFIG" >&6; }
+-+else
+-+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-+$as_echo "no" >&6; }
+-+fi
+-+
+-+
+-+        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
+-+            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
+-+            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
+-+        elif test x$ARCH = xnetbsd; then
+-             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
+-             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
+-         else
+-             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
+--            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+-+            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host"
+-         fi
+- 
+-         # Save the original compiler flags and libraries
+-diff --git a/configure.in b/configure.in
+-index 5ac2130..450bf62 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -1563,12 +1563,16 @@ CheckRPI()
+- AC_HELP_STRING([--enable-video-rpi], [use Raspberry Pi video driver [[default=yes]]]),
+-                   , enable_video_rpi=yes)
+-     if test x$enable_video = xyes -a x$enable_video_rpi = xyes; then
+--        if test x$ARCH = xnetbsd; then
+-+        AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+-+        if test x$PKG_CONFIG != xno && $PKG_CONFIG --exists bcm_host; then
+-+            RPI_CFLAGS=`$PKG_CONFIG --cflags bcm_host brcmegl`
+-+            RPI_LDFLAGS=`$PKG_CONFIG --libs bcm_host brcmegl`
+-+        elif test x$ARCH = xnetbsd; then
+-             RPI_CFLAGS="-I/usr/pkg/include -I/usr/pkg/include/interface/vcos/pthreads -I/usr/pkg/include/interface/vmcs_host/linux"
+-             RPI_LDFLAGS="-Wl,-R/usr/pkg/lib -L/usr/pkg/lib -lbcm_host"
+-         else
+-             RPI_CFLAGS="-I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux"
+--            RPI_LDFLAGS="-L/opt/vc/lib -lbcm_host"
+-+            RPI_LDFLAGS="-Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host"
+-         fi
+- 
+-         # Save the original compiler flags and libraries
+-diff --git a/src/video/SDL_egl.c b/src/video/SDL_egl.c
+-index 9ccc2c3..23a7f2d 100644
+---- a/src/video/SDL_egl.c
+-+++ b/src/video/SDL_egl.c
+-@@ -44,12 +44,12 @@
+- 
+- #if SDL_VIDEO_DRIVER_RPI
+- /* Raspbian places the OpenGL ES/EGL binaries in a non standard path */
+--#define DEFAULT_EGL "/opt/vc/lib/libbrcmEGL.so"
+--#define DEFAULT_OGL_ES2 "/opt/vc/lib/libbrcmGLESv2.so"
+--#define ALT_EGL "/opt/vc/lib/libEGL.so"
+--#define ALT_OGL_ES2 "/opt/vc/lib/libGLESv2.so"
+--#define DEFAULT_OGL_ES_PVR "/opt/vc/lib/libGLES_CM.so"
+--#define DEFAULT_OGL_ES "/opt/vc/lib/libGLESv1_CM.so"
+-+#define DEFAULT_EGL "libbrcmEGL.so"
+-+#define DEFAULT_OGL_ES2 "libbrcmGLESv2.so"
+-+#define ALT_EGL "libEGL.so"
+-+#define ALT_OGL_ES2 "libGLESv2.so"
+-+#define DEFAULT_OGL_ES_PVR "libGLES_CM.so"
+-+#define DEFAULT_OGL_ES "libGLESv1_CM.so"
+- 
+- #elif SDL_VIDEO_DRIVER_ANDROID || SDL_VIDEO_DRIVER_VIVANTE
+- /* Android */
+--- 
+-2.13.6
+-
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 588f8f49ef..9cf2c41788 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.7.tar.gz.sig
+-sha256 ee35c74c4313e2eda104b14b1b86f7db84a04eeab9430d56e001cea268bf4d5e  SDL2-2.0.7.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.8.tar.gz.sig
++sha256 edc77c57308661d576e843344d8638e025a7818bff73f8fbfab09c3c5fd092ec  SDL2-2.0.8.tar.gz
  # Locally calculated
--sha256 3a3eafbceea5125c04be585373bfd8b3a18f259bd7eae3efc4e6d8e60e0d7f64  SDL2_image-2.0.1.tar.gz
-+sha256 3510c25da735ffcd8ce3b65073150ff4f7f9493b866e85b83738083b556d2368  SDL2_image-2.0.3.tar.gz
-+sha256 13240ed78c8726c510b9634976430d3d3a9ea2d1ced3214119766e9e71568a35  COPYING.txt
-diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
-index 71a9634023..8c1c5f6e1a 100644
---- a/package/sdl2_image/sdl2_image.mk
-+++ b/package/sdl2_image/sdl2_image.mk
+ sha256 bbd2edb1789c33de29bb9f8d1dbe2774584a9ce8c4e3162944b7a3a447f5e85d  COPYING.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 6508e6b962..bd71485f18 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_IMAGE_VERSION = 2.0.1
-+SDL2_IMAGE_VERSION = 2.0.3
- SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
- SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
- SDL2_IMAGE_INSTALL_STAGING = YES
+-SDL2_VERSION = 2.0.7
++SDL2_VERSION = 2.0.8
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
 -- 
 2.11.0
