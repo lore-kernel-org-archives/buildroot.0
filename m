@@ -1,70 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 30 Apr 2018 22:21:35 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-28
-In-Reply-To: <20180429060019.11112209D4@mail.bootlin.com>
-References: <20180429060019.11112209D4@mail.bootlin.com>
-Message-ID: <20180430222135.7aee3a71@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 22:25:33 +0200
+Subject: [Buildroot] [PATCH 1/1] libhttpparser: bump to version 1.8.1
+Message-ID: <20180430202533.13830-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Apr 2018 08:00:19 +0200 (CEST), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Add hash for license file
 
-> Results for branch 'master'
-> ===========================
-[...]   
->          arm |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/a58007263355e2734a8074d52b1b26b88973c39e |     
->         m68k |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/7d6fd0872efd23c7de552ab637956902b43c3f58 |     
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libhttpparser/libhttpparser.hash | 3 ++-
+ package/libhttpparser/libhttpparser.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-
-A problem with the log4cplus configure time detection of clock_nanosleep() and later compile
-failure with the used toolchain br-arm-cortex-m4-full-2018.02-891-g046c5e2.tar.bz2:
-
-  sleep.cxx: In function 'int log4cplus::helpers::unix_nanosleep(const timespec*, timespec*)':
-  sleep.cxx:55:56: error: 'clock_nanosleep' was not declared in this scope
-       return clock_nanosleep (CLOCK_REALTIME, 0, req, rem);
-
-
-The clock_nanosleep() configure detections uses the following:
-
-	$ cat test_clock_nanosleep_002.cxx
-
-  extern "C" char clock_nanosleep ();
-
-  int main(int argc, char* argv[]) {
-  	return clock_nanosleep();
-  }
-
-
-	$ ./host/usr/bin/arm-linux-g++ test_clock_nanosleep_002.cxx
-
-...and compiles without errors, because libc.a defines clock_nanosleep:
-
-	$ nm -A staging/usr/lib/*.a | grep clock_nano
-  staging/usr/lib/libc.a:clock_nanosleep.o:00000000 T clock_nanosleep
-
-
-But the definition in the staging/usr/include/time.h header file is disabled:
-
-  334 #  if defined __USE_XOPEN2K && defined __UCLIBC_HAS_ADVANCED_REALTIME__
-  335 #   ifdef __UCLIBC_HAS_THREADS_NATIVE__
-  336 /* High-resolution sleep with the specified clock.
-  337 
-  338    This function is a cancellation point and therefore not marked with
-  339    __THROW.  */
-  340 extern int clock_nanosleep (clockid_t __clock_id, int __flags,
-  341                             const struct timespec *__req,
-  342                             struct timespec *__rem);
-  343 
-
-
-I think because __UCLIBC_HAS_THREADS_NATIVE__ is not defined...
-
-Maybe it is possible to overwrite the check via ac_cv_search_clock_nanosleep, but not sure
-which are the right conditions for this...
-
-Regards,
-Peter
+diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
+index 8ffceb24d9..acbf3787f9 100644
+--- a/package/libhttpparser/libhttpparser.hash
++++ b/package/libhttpparser/libhttpparser.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 7277c6f99bf6fc272eb5d8fc3dca01e7cc1d4ae609b5d2c5d5e18added98479d  libhttpparser-v2.8.0.tar.gz
++sha256 51615f68b8d67eadfd2482decc63b3e55d749ce0055502bbb5b0032726d22d96  libhttpparser-v2.8.1.tar.gz
++sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index 5f50d877d9..c71e043cdc 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHTTPPARSER_VERSION = v2.8.0
++LIBHTTPPARSER_VERSION = v2.8.1
+ LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,$(LIBHTTPPARSER_VERSION))
+ LIBHTTPPARSER_INSTALL_STAGING = YES
+ LIBHTTPPARSER_LICENSE = MIT
+-- 
+2.14.1
