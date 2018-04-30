@@ -1,117 +1,144 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 23:22:06 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libgpg-error: bump to
- version 1.29
-Message-ID: <20180501073417.AA74F88285@busybox.osuosl.org>
+Date: Mon, 30 Apr 2018 23:25:55 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/flann: fix build
+ with cmake >= 3.11
+Message-ID: <20180501073418.235D4890BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be25dfa62a0a6aa93263b5779a7c0a845bab0f5f
+commit: https://git.buildroot.net/buildroot/commit/?id=45a39b3e2ba42b72d19bfcef30db1b8da9ead51a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Drop upstream patch.
+CMake < 3.11 doesn't support add_library() without any source file
+(i.e add_library(foo SHARED)). But flann CMake use a trick that use
+an empty string "" as source list (i.e add_library(foo SHARED "")).
+This look like a bug in CMake < 3.11.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+With CMake >= 3.11, the new behaviour of add_library() break the
+existing flann CMake code.
+
+From CMake Changelog [1]:
+"add_library() and add_executable() commands can now be called without
+ any sources and will not complain as long as sources are added later
+ via the target_sources() command."
+
+Note: flann CMake code doesn't use target_sources() since no source file
+are provided intentionally since the flann shared library is created by
+linking with the flann_cpp_s static library with this line:
+
+target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
+
+If you try to use "add_library(flann_cpp SHARED ${CPP_SOURCES})" (as it should
+be normally done), the link fail due to already defined symbol.
+
+They are building the shared version using the static library "to speedup the
+build time" [3]
+
+This issue is already reported upstream [2] with a proposed solution.
+
+Fixes:
+http://autobuild.buildroot.net/results/b2f/b2febfaf8c44ce477b3e4a5b9b976fd25e8d7454
+
+[1] https://cmake.org/cmake/help/v3.11/release/3.11.html
+[2] https://github.com/mariusmuja/flann/issues/369
+[3] https://github.com/mariusmuja/flann/commit/0fd62b43be2fbb0b8d791ee36290791224dc030c
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Davide Viti <zinosat@tiscali.it>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4a92ee34daaf1515a048ce5ae59d9d4c6939de39)
+(cherry picked from commit 0c469478f64d0ddaf72c0622a1830d855306d51c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...gression-on-arm64-due-to-invalid-use-of-v.patch | 59 ----------------------
- package/libgpg-error/libgpg-error.hash             |  4 +-
- package/libgpg-error/libgpg-error.mk               |  2 +-
- 3 files changed, 3 insertions(+), 62 deletions(-)
+ .../flann/0001-src-cpp-fix-cmake-3.11-build.patch  | 80 ++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
-diff --git a/package/libgpg-error/0001-core-Fix-regression-on-arm64-due-to-invalid-use-of-v.patch b/package/libgpg-error/0001-core-Fix-regression-on-arm64-due-to-invalid-use-of-v.patch
-deleted file mode 100644
-index a37337a090..0000000000
---- a/package/libgpg-error/0001-core-Fix-regression-on-arm64-due-to-invalid-use-of-v.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 791177de023574223eddf7288eb7c5a0721ac623 Mon Sep 17 00:00:00 2001
--From: Werner Koch <wk@gnupg.org>
--Date: Sun, 18 Mar 2018 17:39:43 +0100
--Subject: [PATCH] core: Fix regression on arm64 due to invalid use of va_list.
--
--* src/logging.c (_gpgrt_log_printhex): Provide a dummy arg instead of
--NULL.
----
--
--Fix
--Suggested-by: Jakub Wilk <jwilk@jwilk.net>
--
--Signed-off-by: Werner Koch <wk@gnupg.org>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 791177de023
--
-- src/logging.c | 18 ++++++++++++++----
-- 1 file changed, 14 insertions(+), 4 deletions(-)
--
--diff --git a/src/logging.c b/src/logging.c
--index 1a4f6203d16d..d01f974e4545 100644
----- a/src/logging.c
--+++ b/src/logging.c
--@@ -1090,9 +1090,10 @@ _gpgrt_log_flush (void)
-- 
-- 
-- /* Print a hexdump of (BUFFER,LENGTH).  With FMT passed as NULL print
--- * just the raw dump, with FMT being an empty string, print a trailing
--- * linefeed, otherwise print an entire debug line with the expanded
--- * FMT followed by a possible wrapped hexdump and a final LF.  */
--+ * just the raw dump (in this case ARG_PTR is not used), with FMT
--+ * being an empty string, print a trailing linefeed, otherwise print
--+ * an entire debug line with the expanded FMT followed by a possible
--+ * wrapped hexdump and a final LF.  */
-- void
-- _gpgrt_logv_printhex (const void *buffer, size_t length,
--                       const char *fmt, va_list arg_ptr)
--@@ -1150,7 +1151,16 @@ _gpgrt_log_printhex (const void *buffer, size_t length,
--       va_end (arg_ptr);
--     }
--   else
---    _gpgrt_logv_printhex (buffer, length, NULL, NULL);
--+    {
--+      /* va_list is not necessary a pointer and thus we can't use NULL
--+       * because that would conflict with platforms using a straight
--+       * struct for it (e.g. arm64).  We use a dummy variable instead;
--+       * the static is a simple way zero it out so to not get
--+       * complains about uninitialized use.  */
--+      static va_list dummy_argptr;
--+
--+      _gpgrt_logv_printhex (buffer, length, NULL, dummy_argptr);
--+    }
-- }
-- 
-- 
---- 
--2.16.2
--
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index fd08aa54d8..0e6304de66 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.28.tar.bz2.sig
--sha256 3edb957744905412f30de3e25da18682cbe509541e18cd3b8f9df695a075da49  libgpg-error-1.28.tar.bz2
-+# https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.29.tar.bz2.sig
-+sha256 ece926fa5719d17a7ad8da618712cfa2f8a796ab2f2af9d544c5bb093383b1ea  libgpg-error-1.29.tar.bz2
- # Locally calculated
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index f704203556..862cb44eef 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPG_ERROR_VERSION = 1.28
-+LIBGPG_ERROR_VERSION = 1.29
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+diff --git a/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
+new file mode 100644
+index 0000000000..b37bedcf6d
+--- /dev/null
++++ b/package/flann/0001-src-cpp-fix-cmake-3.11-build.patch
+@@ -0,0 +1,80 @@
++From fa5ec96a94646492a3f908e12905b3e48a8e800b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 18 Apr 2018 20:24:13 +0200
++Subject: [PATCH] src/cpp: fix cmake >= 3.11 build
++
++CMake < 3.11 doesn't support add_library() without any source file
++(i.e add_library(foo SHARED)). But flann CMake use a trick that use
++an empty string "" as source list (i.e add_library(foo SHARED "")).
++This look like a bug in CMake < 3.11.
++
++With CMake >= 3.11, the new behaviour of add_library() break the
++existing flann CMake code.
++
++From CMake Changelog [1]:
++"add_library() and add_executable() commands can now be called without
++ any sources and will not complain as long as sources are added later
++ via the target_sources() command."
++
++Note: flann CMake code doesn't use target_sources() since no source file
++are provided intentionally since the flann shared library is created by
++linking with the flann_cpp_s static library with this line:
++
++target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
++
++If you try to use "add_library(flann_cpp SHARED ${CPP_SOURCES})" (as it should
++be normally done), the link fail due to already defined symbol.
++
++They are building the shared version using the static library "to speedup the
++build time" [3]
++
++This issue is already reported upstream [2] with a proposed solution.
++
++Upstream status: Pending
++
++Fixes:
++http://autobuild.buildroot.net/results/b2f/b2febfaf8c44ce477b3e4a5b9b976fd25e8d7454
++
++[1] https://cmake.org/cmake/help/v3.11/release/3.11.html
++[2] https://github.com/mariusmuja/flann/issues/369
++[3] https://github.com/mariusmuja/flann/commit/0fd62b43be2fbb0b8d791ee36290791224dc030c
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/cpp/CMakeLists.txt | 4 ++--
++ src/cpp/empty.cpp      | 1 +
++ 2 files changed, 3 insertions(+), 2 deletions(-)
++ create mode 100644 src/cpp/empty.cpp
++
++diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
++index b44a735..a816863 100644
++--- a/src/cpp/CMakeLists.txt
+++++ b/src/cpp/CMakeLists.txt
++@@ -29,7 +29,7 @@ if (BUILD_CUDA_LIB)
++ endif()
++ 
++ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
++-    add_library(flann_cpp SHARED "")
+++    add_library(flann_cpp SHARED "empty.cpp")
++     set_target_properties(flann_cpp PROPERTIES LINKER_LANGUAGE CXX)
++     target_link_libraries(flann_cpp -Wl,-whole-archive flann_cpp_s -Wl,-no-whole-archive)
++ 
++@@ -85,7 +85,7 @@ if (BUILD_C_BINDINGS)
++     set_property(TARGET flann_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
++ 
++     if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_COMPILER_IS_GNUCC)
++-        add_library(flann SHARED "")
+++        add_library(flann SHARED "empty.cpp")
++         set_target_properties(flann PROPERTIES LINKER_LANGUAGE CXX)
++         target_link_libraries(flann -Wl,-whole-archive flann_s -Wl,-no-whole-archive)
++     else()
++diff --git a/src/cpp/empty.cpp b/src/cpp/empty.cpp
++new file mode 100644
++index 0000000..40a8c17
++--- /dev/null
+++++ b/src/cpp/empty.cpp
++@@ -0,0 +1 @@
+++/* empty */
++-- 
++2.14.3
++
