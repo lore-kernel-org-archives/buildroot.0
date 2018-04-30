@@ -1,54 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 30 Apr 2018 20:48:35 +0200
-Subject: [Buildroot] [PATCH v3 5/6] zstd: add libzstd support
-In-Reply-To: <20180425234831.0c8c6ce4@windsurf>
-References: <20180416193953.19924-1-ps.report@gmx.net>
- <20180416193953.19924-5-ps.report@gmx.net>
- <20180425234831.0c8c6ce4@windsurf>
-Message-ID: <20180430204835.26458341@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 20:57:00 +0200
+Subject: [Buildroot] [PATCH 1/1] libgudev: bump to version 232
+Message-ID: <20180430185700.11497-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann, Thomas,
+Add --disable-umockdev (enabled by default)
+Add hash for license file
 
-On Wed, 25 Apr 2018 23:48:31 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libgudev/libgudev.hash | 7 +++++--
+ package/libgudev/libgudev.mk   | 3 ++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-> Hello,
-> 
-> On Mon, 16 Apr 2018 21:39:52 +0200, Peter Seiderer wrote:
-> > Add patch to split libzstd install target into pc, static, shared
-> > and includes target. Call only the needed ones for the buildroot
-> > staging/target install steps (respect the static/shared configuration).
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v2 -> v3:
-> >   - split libray install targets for static/shared
-> >     (suggested by Yann E. MORIN)  
-> 
-> Applied to master after implementing the suggestion from Yann:
-
-Thanks for review, suggestions and fixing it on the fly....
-
-> 
->     [Thomas: as suggested by Yann E. Morin, refactor the build/install
->     commands to use only one invocation, with intermediate ZSTD_BUILD_LIBS
->     and ZSTD_INSTALL_LIBS variables, defined depending on whether
->     static/shared/static+shared is selected.]
-> 
-> Also, did you submit the patch upstream ?
-
-Just done, see [1]...
-
-Regards,
-Peter
-
-[1] https://github.com/facebook/zstd/pull/1114
-
-> 
-> Thanks!
-> 
-> Thomas
+diff --git a/package/libgudev/libgudev.hash b/package/libgudev/libgudev.hash
+index a6c1d6b535..138ae93d71 100644
+--- a/package/libgudev/libgudev.hash
++++ b/package/libgudev/libgudev.hash
+@@ -1,2 +1,5 @@
+-# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/230/libgudev-230.sha256sum
+-sha256 a2e77faced0c66d7498403adefcc0707105e03db71a2b2abd620025b86347c18  libgudev-230.tar.xz
++# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/232/libgudev-232.sha256sum
++sha256 ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860  libgudev-232.tar.xz
++
++# Hash for license file:
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
+index fce710a1c2..50432c461e 100644
+--- a/package/libgudev/libgudev.mk
++++ b/package/libgudev/libgudev.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBGUDEV_VERSION = 230
++LIBGUDEV_VERSION = 232
+ LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
+ LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
+ LIBGUDEV_INSTALL_STAGING = YES
+ LIBGUDEV_DEPENDENCIES = host-pkgconf udev libglib2
+ LIBGUDEV_LICENSE = LGPL-2.1+
+ LIBGUDEV_LICENSE_FILES = COPYING
++LIBGUDEV_CONF_OPTS = --disable-umockdev
+ 
+ $(eval $(autotools-package))
+-- 
+2.14.1
