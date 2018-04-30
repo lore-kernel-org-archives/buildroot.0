@@ -1,47 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Apr 2018 09:36:42 +0200
-Subject: [Buildroot] [git commit] libgee: bump to version 0.20.1
-Message-ID: <20180430073717.6930D8A484@busybox.osuosl.org>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Mon, 30 Apr 2018 09:54:10 +0200
+Subject: [Buildroot] [PATCH v6 2/4] package/libclc: new package
+In-Reply-To: <20180428150630.297aa631@windsurf>
+References: <20180411161452.25043-1-valentin.korenblit@smile.fr>
+ <20180411161452.25043-3-valentin.korenblit@smile.fr>
+ <20180428150630.297aa631@windsurf>
+Message-ID: <89066f3f-55f7-8d7e-8773-67221c027cea@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1b96eda611a95b903ade41a65263764e2696694
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Add hash for license file
+On 28/04/2018 15:06, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 11 Apr 2018 18:14:50 +0200, Valentin Korenblit wrote:
+>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 62770790a1..f376fad3a2 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -283,6 +283,7 @@ comment "Graphic libraries"
+>>   	source "package/fbv/Config.in"
+>>   	source "package/freerdp/Config.in"
+>>   	source "package/imagemagick/Config.in"
+>> +	source "package/libclc/Config.in"
+>>   	source "package/linux-fusion/Config.in"
+>>   	source "package/lite/Config.in"
+>>   	source "package/mesa3d/Config.in"
+>> diff --git a/package/libclc/Config.in b/package/libclc/Config.in
+>> new file mode 100644
+>> index 0000000000..a0f388c4e1
+>> --- /dev/null
+>> +++ b/package/libclc/Config.in
+>> @@ -0,0 +1,22 @@
+>> +config BR2_PACKAGE_LIBCLC
+>> +	bool "libclc"
+>> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+>> +	depends on BR2_HOST_GCC_AT_LEAST_4_8
+>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +	depends on BR2_INSTALL_LIBSTDCPP
+>> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
+>> +	depends on !BR2_STATIC_LIBS
+>> +	depends on BR2_USE_WCHAR # std::wstring
+> You seem to have replicated here all the dependencies of the target
+> LLVM package. However, you only depend on host-llvm and host-clang. Are
+> you sure all those dependencies are needed by libclc ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgee/libgee.hash | 7 +++++--
- package/libgee/libgee.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+Actually, it wouldn't make sense to have libclc without target LLVM, but it
+is true that it is not a build dependency, so I'll remove them.
 
-diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
-index 83ac810156..77f39d6b69 100644
---- a/package/libgee/libgee.hash
-+++ b/package/libgee/libgee.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.1.sha256sum
--sha256	99686bbe5a9c89ba9502c25f61314ee8efa0dd2a1159c9a639afc1458c2839a2	libgee-0.18.1.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.20/libgee-0.20.1.sha256sum
-+sha256	bb2802d29a518e8c6d2992884691f06ccfcc25792a5686178575c7111fea4630	libgee-0.20.1.tar.xz
-+
-+# Hash for license file:
-+sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
-diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
-index 9d87169e44..264ba98946 100644
---- a/package/libgee/libgee.mk
-+++ b/package/libgee/libgee.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGEE_VERSION_MAJOR = 0.18
-+LIBGEE_VERSION_MAJOR = 0.20
- LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).1
- LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
- LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
+>> +# There are only two releases: release_35 and release_38, but the last
+>> +# commit is from 2 years ago. Master has some recent activity.
+>> +LIBCLC_VERSION = 00236279a293b3737dee08c14f25923a889d2795
+>> +LIBCLC_SITE = https://git.llvm.org/git/libclc
+>> +LIBCLC_SITE_METHOD = git
+>> +LIBCLC_LICENSE = NCSA
+>> +LIBCLC_LICENSE_FILES = LICENSE.TXT
+>> +
+>> +LIBCLC_DEPENDENCIES = host-clang host-llvm
+>> +LIBCLC_INSTALL_STAGING = YES
+>> +
+>> +# C++ compiler is used to build a small tool (prepare-builtins) for the host.
+>> +# It must be built with the C++ compiler from the host
+>> +LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
+>> +	--prefix="/usr" \
+>> +	--includedir="/usr/local/include" \
+> I'm not a big fan of /usr/local/include. Perhaps we should use
+> something really special like /usr/share/libclc/ or something like
+> this ?
+
+Perfect, I'll change it to that directory
+
+>> +	--pkgconfigdir="/usr/lib/pkgconfig" \
+>> +	--with-cxx-compiler=$(HOSTCXX)
+> Weird for a target package to use the host compiler, no ?
+
+Yes, it is used only in the target utils/prepare-builtins.o, all the
+other stuff is compiled with host-clang.
+
+>> +define LIBCLC_CONFIGURE_CMDS
+>> +	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
+> Is the configure.py script compatible with both Python 2.x and Python
+> 3.x ?
+
+I believe it is, but I'll check it.
+
+> Best regards,
+>
+> Thomas
+
+Thanks,
+
+Valentin
