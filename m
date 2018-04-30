@@ -1,61 +1,49 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Apr 2018 14:23:22 +0200
-Subject: [Buildroot] [PATCH v2,1/1] libebml: fix build on some toolchains
-Message-ID: <20180430122322.25218-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Apr 2018 14:47:20 +0200
+Subject: [Buildroot] [PATCH 1/1] libgphoto2: bump to version 2.5.17
+Message-ID: <20180430124720.11749-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace climits include by limits (retrieve upstream patch from:
-https://github.com/Matroska-Org/libebml/commit/e46906b80e7662fb78d305f576412f9fa4a22218)
-
-Fixes:
- - http://autobuild.buildroot.net/results/3c2402a7052acb67fc7e03ad2ff27e84534aaa36
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update patch with upstream reference and SoB
+ package/libgphoto2/libgphoto2.hash | 9 +++++----
+ package/libgphoto2/libgphoto2.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
- ...bmlSInteger-Use-limits-instead-of-climits.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
-
-diff --git a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch b/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
-new file mode 100644
-index 0000000000..d6e906fe7b
---- /dev/null
-+++ b/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
-@@ -0,0 +1,28 @@
-+From e46906b80e7662fb78d305f576412f9fa4a22218 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Hugo=20Beauz=C3=A9e-Luyssen?= <hugo@beauzee.fr>
-+Date: Mon, 23 Apr 2018 12:05:42 +0200
-+Subject: [PATCH] EbmlSInteger: Use <limits> instead of <climits>
-+
-+The former is the proper header to use for std::numerical_limits
-+
-+Retrieved from:
-+https://github.com/Matroska-Org/libebml/commit/e46906b80e7662fb78d305f576412f9fa4a22218
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/EbmlSInteger.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/EbmlSInteger.cpp b/src/EbmlSInteger.cpp
-+index 33f3637..b930f7d 100644
-+--- a/src/EbmlSInteger.cpp
-++++ b/src/EbmlSInteger.cpp
-+@@ -33,7 +33,7 @@
-+   \author Moritz Bunkus <moritz @ bunkus.org>
-+ */
-+ #include <cassert>
-+-#include <climits>
-++#include <limits>
-+ 
-+ #include "ebml/EbmlSInteger.h"
-+ 
+diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
+index 1afe275ce3..e0590df89b 100644
+--- a/package/libgphoto2/libgphoto2.hash
++++ b/package/libgphoto2/libgphoto2.hash
+@@ -1,6 +1,7 @@
+-# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.13/
+-md5 73bf5b3d94c8c6f5fad9ea6b5e561843 libgphoto2-2.5.13.tar.bz2
+-sha1 cef2d2f1930f8ada16a63aca15683188231a626a libgphoto2-2.5.13.tar.bz2
++# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.17/
++md5 ae78e7a7936a6962c3a22b256bee1869 libgphoto2-2.5.17.tar.bz2
++sha1 b55167bbb73518c5b7f67f90e619c46d05005c7d libgphoto2-2.5.17.tar.bz2
+ 
+ # Locally calculated hash
+-sha256 ceaacbdf187d1cd1aed5336991f46b0100f6960b6c8383f9aeab98f1f64780ef libgphoto2-2.5.13.tar.bz2
++sha256 417464f0a313fa937e8a71cdf18a371cf01e750830195cd63ae31da0d092b555 libgphoto2-2.5.17.tar.bz2
++sha256 ebc385a0b1d477be5177ed6d9129557aa59a3ad0f26ebe7dd97ee942a0fb68ee COPYING
+diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+index f6dadf1f45..2828fcb36f 100644
+--- a/package/libgphoto2/libgphoto2.mk
++++ b/package/libgphoto2/libgphoto2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPHOTO2_VERSION = 2.5.13
++LIBGPHOTO2_VERSION = 2.5.17
+ LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
+ # Project is maintained on github but github tarball doesn't have
+ # configure, so use tarballs from SourceForge
 -- 
 2.14.1
