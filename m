@@ -1,26 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 09:37:35 +0200
-Subject: [Buildroot] [PATCH] sdl2: update license file hash
-In-Reply-To: <d2cefeedde196a7c6a05d8002fc686b26d31ec48.1525112927.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 30 Apr 2018 21:28:47 +0300")
-References: <d2cefeedde196a7c6a05d8002fc686b26d31ec48.1525112927.git.baruch@tkos.co.il>
-Message-ID: <87k1snj074.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 01 May 2018 09:46:57 +0200
+Subject: [Buildroot] [RFC v1 1/2] libopenssl: bump version to 1.1.0h
+References: <20180417211921.18718-1-ps.report@gmx.net>
+Message-ID: <hkilrexprh.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Am Tue, 17 Apr 2018 23:19:20 +0200 schrieb Peter Seiderer:
 
- > Copyright year update.
- > Fixes:
- > http://autobuild.buildroot.net/results/2c8/2c865463a4b7524114518c04dce9c94252433460/
+> +# crypto/async/arch/../arch/async_posix.h:32:5: error: unknown type 
+name ?ucontext_t?
+> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> +LIBOPENSSL_CFLAGS += -DOPENSSL_NO_ASYNC
+> +endif
 
- > Cc: Guillaume Gardet <guillaume.gardet@oliseo.fr>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Hi Peter,
 
-Committed to 2018.02.x, thanks.
+this CFLAG is needed for musl as well:
+https://wiki.musl-libc.org/open-issues.html
+"Legacy functions operating on ucontext_t (getcontext, setcontext, 
+makecontext, swapcontext) are not implemented."
 
--- 
-Bye, Peter Korsgaard
+Otherwise the build fails:
+
+./libcrypto.so: undefined reference to `getcontext'
+./libcrypto.so: undefined reference to `setcontext'
+./libcrypto.so: undefined reference to `makecontext'
+
+Regards, Bernd
