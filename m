@@ -1,49 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 23:01:39 +0200
-Subject: [Buildroot] [PATCH 1/2] core/pkg-infra: set no-check-hash only
- for main download
-In-Reply-To: <225d2666517e3f008a4674456c4fbfd0db13fdf8.1524685305.git.yann.morin.1998@free.fr>
-References: <cover.1524685305.git.yann.morin.1998@free.fr>
- <225d2666517e3f008a4674456c4fbfd0db13fdf8.1524685305.git.yann.morin.1998@free.fr>
-Message-ID: <20180501230139.1e298518@windsurf.home>
+Date: Tue, 1 May 2018 23:02:01 +0200
+Subject: [Buildroot] [git commit] libiscsi: add hash for license files
+Message-ID: <20180501210207.5B66F81139@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e711623912d0db2866a60e9daf6dbe89959de574
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 25 Apr 2018 21:41:52 +0200, Yann E. MORIN wrote:
-> Currently, when the main download if from an SCM, we exclude all
-> downloads from being hash-checked, on the assumption that we don't
-> have hashes for downloads from an SCM.
-> 
-> However, the exclusion s computed on the DOWNLOAD macro, which is
-> called for each download of a package, thus effectively disabling
-> hash checks for extra downloads, even though those are only ever
-> download with wget.
-> 
-> What we really wanted to do, in fact, was to exclude just the main
-> download.
-> 
-> We fix that by appending the main source file to the global list of
-> excluded files, from within the generic-package infra itself.
-> 
-> Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/pkg-download.mk | 2 --
->  package/pkg-generic.mk  | 4 ++++
->  2 files changed, 4 insertions(+), 2 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libiscsi/libiscsi.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libiscsi/libiscsi.hash b/package/libiscsi/libiscsi.hash
+index 4f7d1af50e..0688f2dd2f 100644
+--- a/package/libiscsi/libiscsi.hash
++++ b/package/libiscsi/libiscsi.hash
+@@ -1,2 +1,5 @@
+ # Locally computed:
+ sha256 464d104e12533dc11f0dd7662cbc2f01c132f94aa4f5bd519e3413ef485830e8  libiscsi-1.18.0.tar.gz
++sha256 88e3eccc48722b2a0eaff456dda94b8e8e123848d01f631969bec8e3c6c6eb85  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENCE-GPL-2.txt
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
