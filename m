@@ -1,54 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 May 2018 11:48:24 +0200
-Subject: [Buildroot] [git commit] libgudev: bump to version 232
-Message-ID: <20180501095048.7667983471@busybox.osuosl.org>
+Date: Tue, 1 May 2018 11:48:09 +0200
+Subject: [Buildroot] [git commit] libgtk3: bump to version 3.22.30
+Message-ID: <20180501095048.6102283471@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cfa33d5ad7694ccc7329f0fd2c5f6d50ee00a5a
+commit: https://git.buildroot.net/buildroot/commit/?id=a63e1019d62cf308527a448c3cf59d81bfb942c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add --disable-umockdev (enabled by default)
 Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgudev/libgudev.hash | 7 +++++--
- package/libgudev/libgudev.mk   | 3 ++-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/libgtk3/libgtk3.hash | 7 +++++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgudev/libgudev.hash b/package/libgudev/libgudev.hash
-index a6c1d6b535..138ae93d71 100644
---- a/package/libgudev/libgudev.hash
-+++ b/package/libgudev/libgudev.hash
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 0f259e9a1c..b7a89901dd 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
 @@ -1,2 +1,5 @@
--# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/230/libgudev-230.sha256sum
--sha256 a2e77faced0c66d7498403adefcc0707105e03db71a2b2abd620025b86347c18  libgudev-230.tar.xz
-+# From: http://ftp.gnome.org/pub/GNOME/sources/libgudev/232/libgudev-232.sha256sum
-+sha256 ee4cb2b9c573cdf354f6ed744f01b111d4b5bed3503ffa956cefff50489c7860  libgudev-232.tar.xz
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.15.sha256sum
+-sha256 c8a012c2a99132629ab043f764a2b7cb6388483a015cd15c7a4288bec3590fdb  gtk+-3.22.15.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.30.sha256sum
++sha256 a1a4a5c12703d4e1ccda28333b87ff462741dc365131fbc94c218ae81d9a6567  gtk+-3.22.30.tar.xz
 +
 +# Hash for license file:
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
-index fce710a1c2..50432c461e 100644
---- a/package/libgudev/libgudev.mk
-+++ b/package/libgudev/libgudev.mk
-@@ -4,12 +4,13 @@
- #
++sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index b4a8b8c517..1b85d00aae 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBGUDEV_VERSION = 230
-+LIBGUDEV_VERSION = 232
- LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
- LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
- LIBGUDEV_INSTALL_STAGING = YES
- LIBGUDEV_DEPENDENCIES = host-pkgconf udev libglib2
- LIBGUDEV_LICENSE = LGPL-2.1+
- LIBGUDEV_LICENSE_FILES = COPYING
-+LIBGUDEV_CONF_OPTS = --disable-umockdev
- 
- $(eval $(autotools-package))
+ LIBGTK3_VERSION_MAJOR = 3.22
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).15
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).30
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPL-2.0+
