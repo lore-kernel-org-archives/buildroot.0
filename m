@@ -1,29 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 08:52:18 +0200
-Subject: [Buildroot] [PATCH 1/1] qt53d: Install missing QML modules,
- plugins and examples
-In-Reply-To: <1523838643-10141-1-git-send-email-rom.reignier@gmail.com>
- (Romain Reignier's message of "Mon, 16 Apr 2018 02:30:43 +0200")
-References: <1523838643-10141-1-git-send-email-rom.reignier@gmail.com>
-Message-ID: <87in87ookd.fsf@dell.be.48ers.dk>
+Date: Tue, 01 May 2018 08:52:57 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5: qt5websockets: install missing qml
+ modules
+In-Reply-To: <3fc9a546-61c8-d7bf-f0eb-b757cae0dfe2@ginzinger.com> (Manfred
+ Schlaegl's message of "Wed, 11 Apr 2018 14:40:37 +0200")
+References: <3fc9a546-61c8-d7bf-f0eb-b757cae0dfe2@ginzinger.com>
+Message-ID: <87efivooja.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Reignier <rom.reignier@gmail.com> writes:
+>>>>> "Manfred" == Manfred Schlaegl <manfred.schlaegl@ginzinger.com> writes:
 
- > Some files were missing on the first build of qt53d but added later:
- > - by qt5base for the plugins because it copies the whole /usr/lib/qt/plugins
- >   directory
- > - by qt5declarative for the QML modules because it copies the whole
- >   /usr/qml directory
+ > QML modules for QtWebSockets are located in /usr/qml/QtWebSockets since
+ > Qt 5.5.
 
- > The qt53d examples were not installed if BR2_PACKAGE_QT5BASE_EXAMPLES was
- > set
+ > /usr/qml/Qt/WebSockets still exists for compatibility reasons, but
+ > it contains only a qmldir file which points to ../../QtWebSockets/.
 
- > Signed-off-by: Romain Reignier <rom.reignier@gmail.com>
+ > see also: http://doc.qt.io/qt-5.6/qtwebsockets-qmlmodule.html
+
+ > Signed-off-by: Manfred Schlaegl <manfred.schlaegl@ginzinger.com>
 
 Committed to 2018.02.x, thanks.
 
