@@ -1,19 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 09:30:36 +0200
-Subject: [Buildroot] [PATCH 1/1] libcgi: add license file (with its hash)
-In-Reply-To: <20180428122627.11025-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 28 Apr 2018 14:26:27 +0200")
-References: <20180428122627.11025-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r2mvkf37.fsf@dell.be.48ers.dk>
+Date: Tue, 01 May 2018 09:32:09 +0200
+Subject: [Buildroot] [PATCH 1/2] python-watchdog: add support for uClibc
+In-Reply-To: <1518787921-32089-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 16 Feb 2018 14:32:00
+ +0100")
+References: <1518787921-32089-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87muxjkf0m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > This patch fixes uClibc detection.
+
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed to 2018.02.x, thanks.
 
