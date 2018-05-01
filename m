@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 15:36:44 +0200
-Subject: [Buildroot] [PATCH 2/2] cups: disable pam support
-In-Reply-To: <20180501112230.eac3ejv6vo54jujb@tarshish> (Baruch Siach's
- message of "Tue, 1 May 2018 14:22:30 +0300")
-References: <91db976709291253cb9914a411a9d75872165f75.1525115956.git.baruch@tkos.co.il>
- <399e1f6584e1296686974096bc97c027988f3899.1525115956.git.baruch@tkos.co.il>
- <87zi1jg0x0.fsf@dell.be.48ers.dk>
- <20180501112230.eac3ejv6vo54jujb@tarshish>
-Message-ID: <87r2mvfqfn.fsf@dell.be.48ers.dk>
+Date: Tue, 1 May 2018 15:36:22 +0200
+Subject: [Buildroot] [git commit] cups: disable pam support
+Message-ID: <20180501133651.3148F8A5DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d3221806b94bd7f26d70a1e82c2b01d311202c61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Make the build consistent.
 
- >> Committed, thanks.
+Cc: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Baruch Siach &lt;<a href="mailto:baruch@tkos.co.il" target="_blank" rel="noreferrer">baruch at tkos.co.il</a>&gt;<br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cups/cups.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Not in master as of 24c1751a002b.
-
-Sorry, it is now.
-
- >> Any specific reason to unconditionally disable this and not enable when
- >> linux-pam is available?
-
- > I guess that PAM integration takes more than just dependency declaration and 
- > --enable-pam. But I did not look too deeply into that.
-
-Ok.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 54271d5fc7..8f33824879 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -24,6 +24,7 @@ CUPS_CONF_OPTS = \
+ 	--without-java \
+ 	--without-php \
+ 	--disable-gssapi \
++	--disable-pam \
+ 	--libdir=/usr/lib
+ CUPS_CONFIG_SCRIPTS = cups-config
+ CUPS_DEPENDENCIES = \
