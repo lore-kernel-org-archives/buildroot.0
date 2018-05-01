@@ -1,29 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 23:02:01 +0200
-Subject: [Buildroot] [git commit] libiscsi: add hash for license files
-Message-ID: <20180501210207.5B66F81139@busybox.osuosl.org>
+Date: Tue, 1 May 2018 23:01:42 +0200
+Subject: [Buildroot] [PATCH 2/2] core/pkg-infra: don't enforce
+ site-method for extra downloads
+In-Reply-To: <58a86c2e2f56abb66012e88c26f5e8c1d6737a2d.1524685305.git.yann.morin.1998@free.fr>
+References: <cover.1524685305.git.yann.morin.1998@free.fr>
+ <58a86c2e2f56abb66012e88c26f5e8c1d6737a2d.1524685305.git.yann.morin.1998@free.fr>
+Message-ID: <20180501230142.6f40e946@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e711623912d0db2866a60e9daf6dbe89959de574
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libiscsi/libiscsi.hash | 3 +++
- 1 file changed, 3 insertions(+)
+On Wed, 25 Apr 2018 21:41:53 +0200, Yann E. MORIN wrote:
+> The site method only ever applies to the main download, while extra
+> downloads are always to be fetches with wget.
+> 
+> However, the site method is prepended to the URL from within the
+> DOWNLOAD macro (well, a variable evaluated in the DOWNLOAD macro),
+> which is called for each download of a package, thus effectively
+> prepending the site method to all downloads, even the extra ones (and
+> the patches).
+> 
+> We fix that by prepending the site method from within the
+> generic-package infra, so that it only applies to the main download.
+> 
+> For that, we move the main _SOURCE out of the foreach loop, so that
+> we can prepend the site-method to it, without impacting the other
+> downloads.
+> 
+> Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/pkg-download.mk | 2 +-
+>  package/pkg-generic.mk  | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libiscsi/libiscsi.hash b/package/libiscsi/libiscsi.hash
-index 4f7d1af50e..0688f2dd2f 100644
---- a/package/libiscsi/libiscsi.hash
-+++ b/package/libiscsi/libiscsi.hash
-@@ -1,2 +1,5 @@
- # Locally computed:
- sha256 464d104e12533dc11f0dd7662cbc2f01c132f94aa4f5bd519e3413ef485830e8  libiscsi-1.18.0.tar.gz
-+sha256 88e3eccc48722b2a0eaff456dda94b8e8e123848d01f631969bec8e3c6c6eb85  COPYING
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENCE-GPL-2.txt
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
