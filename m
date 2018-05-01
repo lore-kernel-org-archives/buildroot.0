@@ -1,27 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 21:41:00 +0200
-Subject: [Buildroot] [git commit] libg7221: add hash for license file
-Message-ID: <20180501194104.C5A5283D37@busybox.osuosl.org>
+Date: Tue, 1 May 2018 21:41:44 +0200
+Subject: [Buildroot] [git commit] bluez-alsa: fix select of libbsd
+Message-ID: <20180501194213.657B085200@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a1938f1bd05f6fe2f5d3fe28146c95bbf22aa98
+commit: https://git.buildroot.net/buildroot/commit/?id=fb0432ca624c24801f7b74c5e805442ec85018fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+bluez-alsa/Config.in must select BR2_PACKAGE_LIBBSD, not the
+non-existing BR2_PACKAGE_BSD.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ab6751615ac058d892258be9e7a8e110e68c62c5/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libg7221/libg7221.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/bluez-alsa/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libg7221/libg7221.hash b/package/libg7221/libg7221.hash
-index d1472a6c69..09023f9543 100644
---- a/package/libg7221/libg7221.hash
-+++ b/package/libg7221/libg7221.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 330dafa58d37a585a866167bc33f8fbe06dbcfc9a69cad43fab0b6702ebf2393  libg7221-dbfc29d4806ecdace50379a2f4d68a992a6fec34.tar.gz
-+sha256 26cc5f718279b45dbe34e25a2d29b2c8ca487bd9ab11b2d68c9318ff59d5c645  COPYING
+diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
+index f082f4b838..1753da48f9 100644
+--- a/package/bluez-alsa/Config.in
++++ b/package/bluez-alsa/Config.in
+@@ -21,7 +21,7 @@ if BR2_PACKAGE_BLUEZ_ALSA
+ config BR2_PACKAGE_BLUEZ_ALSA_HCITOP
+ 	bool "hcitop"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	select BR2_PACKAGE_BSD
++	select BR2_PACKAGE_LIBBSD
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Enable top-like monitoring tool for HCI.
