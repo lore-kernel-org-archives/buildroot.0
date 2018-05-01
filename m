@@ -1,59 +1,55 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 1 May 2018 19:01:21 +0200
-Subject: [Buildroot] [PATCH] glibc: install the obsolete libnsl
-In-Reply-To: <20180429042656.udrq5dqw4q2p3btk@sapphire.tkos.co.il>
-References: <d9f3b3cf8413fcabd4468a6057ee399a3968d20d.1520956780.git.baruch@tkos.co.il>
- <0418f92d-f988-da20-4561-dbf786afed94@gmail.com>
- <20180429042656.udrq5dqw4q2p3btk@sapphire.tkos.co.il>
-Message-ID: <14ab0499-0a98-0bf3-3acb-3918450e0773@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 1 May 2018 19:41:18 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: concentrate on uClibc
+In-Reply-To: <20180428225858.0cd63f20@windsurf>
+References: <20180428203511.GA24621@waldemar-brodkorb.de>
+ <20180428225858.0cd63f20@windsurf>
+Message-ID: <20180501174118.GE31635@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hi,
+Thomas Petazzoni wrote,
 
-Le 29/04/2018 ? 06:26, Baruch Siach a ?crit?:
-> Hi Romain,
+> Hello,
 > 
-> On Sat, Apr 28, 2018 at 04:51:39PM +0200, Romain Naour wrote:
->> Le 13/03/2018 ? 16:59, Baruch Siach a ?crit?:
->>> glibc 2.27 stopped installing libnsl by default. Restore libnsl install
->>> to fix packages, like exim, that use that library.
->>
->> Do you know if libnsl can be disabled from exim ?
+> On Sat, 28 Apr 2018 22:35:12 +0200, Waldemar Brodkorb wrote:
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >  DEVELOPERS | 5 -----
+> >  1 file changed, 5 deletions(-)
+> > 
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 3a4ad60..45a8979 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -1952,11 +1952,6 @@ N:	Wade Berrier <wberrier@gmail.com>
+> >  F:	package/ngrep/
+> >  
+> >  N:	Waldemar Brodkorb <wbx@openadk.org>
+> > -F:	arch/Config.in.m68k
+> > -F:	arch/Config.in.or1k
+> > -F:	arch/Config.in.sparc
+> > -F:	package/glibc/
+> > -F:	package/mksh/
+> >  F:	package/uclibc/
+> >  F:	package/uclibc-ng-test/
 > 
-> Of course. We already do that for non-glibc targets. See 
-> EXIM_REMOVE_LIBNSL_FROM_MAKEFILE in exim.mk.
-> 
->> Is exim is the only remaining program still using/supporting libnsl ?
-> 
-> I don't know.
-> 
->> libnsl from Glibc doesn't build with the upcoming gcc 8, it's not even build
->> tested by Glibc maintainers (build-many-glibcs.py test script) see [1].
->>
->> Maybe we can provide libnsl from a package that provide an updated version of
->> this library [2]?
->>
->> Can you have a look?
-> 
-> The simplest solution would be to disable libnsl in exim unconditionally, 
-> remove libnsl support in glibc, and deal with any other libnsl users as we 
-> encounter them.
+> I understand the wish to concentrate on a smaller number of topics.
+> However, who is going to take care of the m68k, sparc and OpenRISC
+> architecture in Buildroot? I think besides you, not many people were
+> interested by those architectures, and they cause fairly frequent
+> issues at the toolchain level. Do you have a proposal here ?
 
-Ok, let's remove nsl unconditionally from exim and disable the deprecated libnsl
-from glibc. I'll post a new series doing so.
+I keep responding on the build failure summary mails before a
+release. The normal buildroot mails are more informative for me
+then the summary for the architectures I subscribed. There I can see
+if it is really specific architecture issue or the failure shows up on many
+others. And I am always interested in other uClibc-ng toolchain
+related issues on other exotic architectures. (microblaze, nios2, ..)
 
-Btw, Fedora 28 has switched to the external libnsl in order to support IPV6 [1].
-Interested people can add a new libnsl package later.
-
-Best regards,
-Romain
-
-|1] https://fedoraproject.org/wiki/Changes/NISIPv6
-
-> 
-> baruch
-> 
+best regards
+ Waldemar
