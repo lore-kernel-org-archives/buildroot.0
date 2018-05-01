@@ -1,52 +1,43 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  1 May 2018 22:05:07 +0200
-Subject: [Buildroot] [PATCH 1/2] package/exim: remove libnsl linking with
- Glibc.
-Message-ID: <20180501200508.13974-1-romain.naour@gmail.com>
+Date: Tue,  1 May 2018 22:05:08 +0200
+Subject: [Buildroot] [PATCH 2/2] Revert "glibc: install the obsolete libnsl"
+In-Reply-To: <20180501200508.13974-1-romain.naour@gmail.com>
+References: <20180501200508.13974-1-romain.naour@gmail.com>
+Message-ID: <20180501200508.13974-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnsl has been deprecated from Glibc and no other libc provide it.
-Also there is no libnsl package in Buildroot yet, so remove -lnsl for
-all toolchains.
+libnsl from Glibc is deprecated and should not be used anymore.
+libnsl is now an separate library that can be packaged later if
+necessary [1].
 
-libnsl is now a library that can be packaged later if needed. [1]
-
-Note: Fedora 28 has switched to the new libnsl library that bring
-IPV6 support. [2]
+Note: libnsl from Glibc doesn't build with gcc 8 due new warning [2].
 
 [1] https://github.com/thkukuk/libnsl.git
-[2] https://fedoraproject.org/wiki/Changes/NISIPv6
+[2] http://patchwork.sourceware.org/patch/26437
+
+This reverts commit 398747f5fafca8c07e696612d8eded53d4f935c7.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Baruch Siach <baruch@tkos.co.il>
 ---
- package/exim/exim.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/glibc/glibc.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 37eab501a4..bc3a8eefd5 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -72,13 +72,13 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
- endef
- endif
- 
--# only glibc provides libnsl, remove -lnsl for all other toolchains
-+# libnsl has been deprecated from Glibc and no other libc provide it.
-+# There is no libnsl package in Buildroot yet.
-+# Remove -lnsl for all toolchains.
- # http://bugs.exim.org/show_bug.cgi?id=1564
--ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
- define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
- 	$(SED) 's/-lnsl//g' $(@D)/OS/Makefile-Linux
- endef
--endif
- 
- # musl does not provide struct ip_options nor struct ip_opts (but it is
- # available with both glibc and uClibc)
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 3ab673c0cc..0d406c195e 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -100,7 +100,6 @@ define GLIBC_CONFIGURE_CMDS
+ 		--disable-profile \
+ 		--without-gd \
+ 		--enable-obsolete-rpc \
+-		--enable-obsolete-nsl \
+ 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
+ 		--with-headers=$(STAGING_DIR)/usr/include)
+ 	$(GLIBC_ADD_MISSING_STUB_H)
 -- 
 2.14.3
