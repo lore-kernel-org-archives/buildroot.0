@@ -1,27 +1,18 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 May 2018 10:44:09 +0200
-Subject: [Buildroot] [PATCH 1/7 v5] download/git: add warning not to use our
- git cache
+Date: Tue,  1 May 2018 10:44:10 +0200
+Subject: [Buildroot] [PATCH 2/7 v5] download/git: run all git commands in
+ the current directory
 In-Reply-To: <cover.1525164241.git.yann.morin.1998@free.fr>
 References: <cover.1525164241.git.yann.morin.1998@free.fr>
-Message-ID: <5e2081998de90532c315df1aaeb064e5324bee4d.1525164241.git.yann.morin.1998@free.fr>
+Message-ID: <4391a8c286ace9244f750cca693bd265095cbb9e.1525164241.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We really want the user not to use our git cache manually, or their
-changes (committed or not) may eventually get lost.
-
-So, add a warning file, not unlike the one we put in the target/
-directory, to warn the user not to use the git tree.
-
-Ideally, we would have carried this file in support/misc/, but the git
-backend does not have access to it: the working directory is somewhere
-unknown, and TOPDIR is not exported in the environment.
-
-So, we have to carry it in-line in the backend instead.
+That way, we can pushd earlier, which will help with last-ditch recovery
+in a followup commit.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
@@ -31,37 +22,35 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- support/download/git | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ support/download/git | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/support/download/git b/support/download/git
-index bf05c595a5..3b5c8a6cfe 100755
+index 3b5c8a6cfe..60d6c24f1e 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -43,6 +43,24 @@ _git() {
-     eval GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
- }
+@@ -34,8 +34,10 @@ done
  
-+# Create a warning file, that the user should not use the git cache.
-+# It's ours. Our precious.
-+cat <<-_EOF_ >"${dl_dir}/git.readme"
-+	IMPORTANT NOTE!
-+
-+	The git tree located in this directory is for the exclusive use
-+	by Buildroot, which uses it as a local cache to reduce bandwidth
-+	usage.
-+
-+	Buildroot *will* trash any changes in that tree whenever it needs
-+	to use it. Buildroot may even remove it in case it detects the
-+	repository may have been damaged or corrupted.
-+
-+	Do *not* work in that directory; your changes will eventually get
-+	lost. Do *not* even use it as a remote, or as the source for new
-+	worktrees; your commits will eventually get lost.
-+_EOF_
-+
- # Initialise a repository in the git cache. If the repository already
- # existed, this is a noop, unless the repository was broken, in which
- # case this magically restores it to working conditions. In the latter
+ shift $((OPTIND-1)) # Get rid of our options
+ 
+-# We want to check if a cache of the git clone of this repo already exists.
++# Create and cd into the directory that will contain the local git cache
+ git_cache="${dl_dir}/git"
++mkdir -p "${git_cache}"
++pushd "${git_cache}" >/dev/null
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -70,9 +72,7 @@ _EOF_
+ # We can still go through the wrapper, because 'init' does not use the
+ # path pointed to by GIT_DIR, but really uses the directory passed as
+ # argument.
+-_git init "'${git_cache}'"
+-
+-pushd "${git_cache}" >/dev/null
++_git init .
+ 
+ # Ensure the repo has an origin (in case a previous run was killed).
+ if ! _git remote |grep -q -E '^origin$'; then
 -- 
 2.14.1
