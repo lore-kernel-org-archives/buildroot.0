@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  1 May 2018 09:46:46 -0400
-Subject: [Buildroot] [PATCH v5 4/9] gst1-rtsp-server: bump to 1.14.0
+Date: Tue,  1 May 2018 09:46:48 -0400
+Subject: [Buildroot] [PATCH v5 6/9] gst1-libav: bump to 1.14.0
 In-Reply-To: <20180501134651.8876-1-aduskett@gmail.com>
 References: <20180501134651.8876-1-aduskett@gmail.com>
-Message-ID: <20180501134651.8876-4-aduskett@gmail.com>
+Message-ID: <20180501134651.8876-6-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,32 +17,32 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Changes v1 -> v5:
   - none
 
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 5 +++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
+ package/gstreamer1/gst1-libav/gst1-libav.hash | 5 +++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index 95c8eef832..239e44ccd3 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index f9a287c590..5889386bec 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
 @@ -1,2 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.12.4.tar.xz.sha256sum
--sha256 7660112ebd59838f1054796b38109dcbe32f0a040e3a252a68a81055aeaa56a9 gst-rtsp-server-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.0.tar.xz.sha256sum
-+sha256 6b65a077bed815f6d3157ebea503cc9f3c32d289af2756b7ff7e3958744d9756 gst-rtsp-server-1.14.0.tar.xz
-+sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index d6a82ee654..5edd8737c1 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+-# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.12.4.tar.xz.sha256sum
+-sha256 2a56aa5d2d8cd912f2bce17f174713d2c417ca298f1f9c28ee66d4aa1e1d9e62 gst-libav-1.12.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.14.0.tar.xz.sha256sum
++sha256 fb134b4d3e054746ef8b922ff157b0c7903d1fdd910708a45add66954da7ef89 gst-libav-1.14.0.tar.xz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 7450b759f1..91782eaa9a 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_RTSP_SERVER_VERSION = 1.12.4
-+GST1_RTSP_SERVER_VERSION = 1.14.0
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
+-GST1_LIBAV_VERSION = 1.12.4
++GST1_LIBAV_VERSION = 1.14.0
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
+ GST1_LIBAV_CONF_OPTS = --with-system-libav
 -- 
 2.14.3
