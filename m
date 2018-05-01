@@ -1,11 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 1 May 2018 10:12:20 -0500
-Subject: [Buildroot] [PATCH 2/4] package/Makefile.in: Add missing
- options to LDFLAGS for full RELRO build
-In-Reply-To: <20180425064518.31797-2-stefan.sorensen@spectralink.com>
+Date: Tue, 1 May 2018 10:13:55 -0500
+Subject: [Buildroot] [PATCH 4/4] package/Makefile.in: Use gcc spec files
+ for PIE build flags
+In-Reply-To: <20180425064518.31797-4-stefan.sorensen@spectralink.com>
 References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
- <20180425064518.31797-2-stefan.sorensen@spectralink.com>
-Message-ID: <CANQCQpbqT0F8Gai-VW-bh7wZ1XM86JSjVcjck07vvGkhdR+WCg@mail.gmail.com>
+ <20180425064518.31797-4-stefan.sorensen@spectralink.com>
+Message-ID: <CANQCQpZPtJrZgTv2xOuOEJG9EhWik6=qd0v7sDhHR+r6zni3bw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,10 +16,20 @@ Stefan,
 
 On Wed, Apr 25, 2018 at 1:45 AM, Stefan S?rensen
 <stefan.sorensen@spectralink.com> wrote:
-> The options for a full RELRO build should also be added to LDFLAGS.
+> The PIE build flags are only intended for building executables and can not be
+> used in relocateable links (-r), static builds and shared library build -
+> including the flags here causes build errors.
+>
+> So instead of parsing the PIE flags directly on the command line to gcc,
+> include them in a gcc spec file where it is possible to only apply the flags
+> when other incompatible flags are not set.
+>
+> This method and the spec files are from the Fedora build system.
 >
 > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
-
+Thank you for this approach, I had a patchset reworking packages to
+deal with cases of "-r", static and shared.  This eliminates that and
+makes a wrapper approach much easier as the next step.
 
 Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
