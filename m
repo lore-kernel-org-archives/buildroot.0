@@ -1,47 +1,225 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 May 2018 11:48:09 +0200
-Subject: [Buildroot] [git commit] libgtk3: bump to version 3.22.30
-Message-ID: <20180501095048.6102283471@busybox.osuosl.org>
+Date: Tue, 1 May 2018 11:49:07 +0200
+Subject: [Buildroot] [git commit] cups: fix build without PAM
+Message-ID: <20180501095048.88CD08A555@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a63e1019d62cf308527a448c3cf59d81bfb942c3
+commit: https://git.buildroot.net/buildroot/commit/?id=d11d46e33ced07ad4e8382fee3d8fe54d261f475
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+Add upstream patch removing MD5 code that builds when PAM is not
+enabled.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/48d/48d53bdeceafdbb51756d5c0b9936ce7c98b4ddc/
+http://autobuild.buildroot.net/results/13c/13cb03a8d0ae215c418fe2520a27b2940efd4a39/
+http://autobuild.buildroot.net/results/fd3/fd3c56b60bb0411b38dc7279880d1fab7228c20a/
+
+Cc: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Baruch Siach &lt;<a href="mailto:baruch@tkos.co.il" target="_blank" rel="noreferrer">baruch at tkos.co.il</a>&gt;<br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.hash | 7 +++++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ .../0005-Fix-builds-without-PAM-Issue-5283.patch   | 189 +++++++++++++++++++++
+ 1 file changed, 189 insertions(+)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 0f259e9a1c..b7a89901dd 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.15.sha256sum
--sha256 c8a012c2a99132629ab043f764a2b7cb6388483a015cd15c7a4288bec3590fdb  gtk+-3.22.15.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.30.sha256sum
-+sha256 a1a4a5c12703d4e1ccda28333b87ff462741dc365131fbc94c218ae81d9a6567  gtk+-3.22.30.tar.xz
+diff --git a/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch b/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
+new file mode 100644
+index 0000000000..ff242f8276
+--- /dev/null
++++ b/package/cups/0005-Fix-builds-without-PAM-Issue-5283.patch
+@@ -0,0 +1,189 @@
++From 570933a6a3597371bae1beeb754ee8711d6305ab Mon Sep 17 00:00:00 2001
++From: Michael R Sweet <michael.r.sweet@gmail.com>
++Date: Mon, 2 Apr 2018 20:05:13 -0400
++Subject: [PATCH] Fix builds without PAM (Issue #5283)
 +
-+# Hash for license file:
-+sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index b4a8b8c517..1b85d00aae 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).15
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).30
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPL-2.0+
++[baruch: drop CHANGES.md hunk]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 570933a6a3
++
++ CHANGES.md       |   8 ++-
++ scheduler/auth.c | 134 ++---------------------------------------------
++ 2 files changed, 11 insertions(+), 131 deletions(-)
++
++diff --git a/scheduler/auth.c b/scheduler/auth.c
++index 8b134b5d7257..fa4e2715de34 100644
++--- a/scheduler/auth.c
+++++ b/scheduler/auth.c
++@@ -1,8 +1,8 @@
++ /*
++  * Authorization routines for the CUPS scheduler.
++  *
++- * Copyright 2007-2016 by Apple Inc.
++- * Copyright 1997-2007 by Easy Software Products, all rights reserved.
+++ * Copyright ?? 2007-2018 by Apple Inc.
+++ * Copyright ????1997-2007 by Easy Software Products, all rights reserved.
++  *
++  * This file contains Kerberos support code, copyright 2006 by
++  * Jelmer Vernooij.
++@@ -71,9 +71,6 @@ static int		check_authref(cupsd_client_t *con, const char *right);
++ static int		compare_locations(cupsd_location_t *a,
++ 			                  cupsd_location_t *b);
++ static cupsd_authmask_t	*copy_authmask(cupsd_authmask_t *am, void *data);
++-#if !HAVE_LIBPAM
++-static char		*cups_crypt(const char *pw, const char *salt);
++-#endif /* !HAVE_LIBPAM */
++ static void		free_authmask(cupsd_authmask_t *am, void *data);
++ #if HAVE_LIBPAM
++ static int		pam_func(int, const struct pam_message **,
++@@ -694,14 +691,14 @@ cupsdAuthorize(cupsd_client_t *con)	/* I - Client connection */
++ 	    * client...
++ 	    */
++ 
++-	    pass = cups_crypt(password, pw->pw_passwd);
+++	    pass = crypt(password, pw->pw_passwd);
++ 
++ 	    if (!pass || strcmp(pw->pw_passwd, pass))
++ 	    {
++ #  ifdef HAVE_SHADOW_H
++ 	      if (spw)
++ 	      {
++-		pass = cups_crypt(password, spw->sp_pwdp);
+++		pass = crypt(password, spw->sp_pwdp);
++ 
++ 		if (pass == NULL || strcmp(spw->sp_pwdp, pass))
++ 		{
++@@ -1995,129 +1992,6 @@ copy_authmask(cupsd_authmask_t *mask,	/* I - Existing auth mask */
++ }
++ 
++ 
++-#if !HAVE_LIBPAM
++-/*
++- * 'cups_crypt()' - Encrypt the password using the DES or MD5 algorithms,
++- *                  as needed.
++- */
++-
++-static char *				/* O - Encrypted password */
++-cups_crypt(const char *pw,		/* I - Password string */
++-           const char *salt)		/* I - Salt (key) string */
++-{
++-  if (!strncmp(salt, "$1$", 3))
++-  {
++-   /*
++-    * Use MD5 passwords without the benefit of PAM; this is for
++-    * Slackware Linux, and the algorithm was taken from the
++-    * old shadow-19990827/lib/md5crypt.c source code... :(
++-    */
++-
++-    int			i;		/* Looping var */
++-    unsigned long	n;		/* Output number */
++-    int			pwlen;		/* Length of password string */
++-    const char		*salt_end;	/* End of "salt" data for MD5 */
++-    char		*ptr;		/* Pointer into result string */
++-    _cups_md5_state_t	state;		/* Primary MD5 state info */
++-    _cups_md5_state_t	state2;		/* Secondary MD5 state info */
++-    unsigned char	digest[16];	/* MD5 digest result */
++-    static char		result[120];	/* Final password string */
++-
++-
++-   /*
++-    * Get the salt data between dollar signs, e.g. $1$saltdata$md5.
++-    * Get a maximum of 8 characters of salt data after $1$...
++-    */
++-
++-    for (salt_end = salt + 3; *salt_end && (salt_end - salt) < 11; salt_end ++)
++-      if (*salt_end == '$')
++-        break;
++-
++-   /*
++-    * Compute the MD5 sum we need...
++-    */
++-
++-    pwlen = strlen(pw);
++-
++-    _cupsMD5Init(&state);
++-    _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
++-    _cupsMD5Append(&state, (unsigned char *)salt, salt_end - salt);
++-
++-    _cupsMD5Init(&state2);
++-    _cupsMD5Append(&state2, (unsigned char *)pw, pwlen);
++-    _cupsMD5Append(&state2, (unsigned char *)salt + 3, salt_end - salt - 3);
++-    _cupsMD5Append(&state2, (unsigned char *)pw, pwlen);
++-    _cupsMD5Finish(&state2, digest);
++-
++-    for (i = pwlen; i > 0; i -= 16)
++-      _cupsMD5Append(&state, digest, i > 16 ? 16 : i);
++-
++-    for (i = pwlen; i > 0; i >>= 1)
++-      _cupsMD5Append(&state, (unsigned char *)((i & 1) ? "" : pw), 1);
++-
++-    _cupsMD5Finish(&state, digest);
++-
++-    for (i = 0; i < 1000; i ++)
++-    {
++-      _cupsMD5Init(&state);
++-
++-      if (i & 1)
++-        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
++-      else
++-        _cupsMD5Append(&state, digest, 16);
++-
++-      if (i % 3)
++-        _cupsMD5Append(&state, (unsigned char *)salt + 3, salt_end - salt - 3);
++-
++-      if (i % 7)
++-        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
++-
++-      if (i & 1)
++-        _cupsMD5Append(&state, digest, 16);
++-      else
++-        _cupsMD5Append(&state, (unsigned char *)pw, pwlen);
++-
++-      _cupsMD5Finish(&state, digest);
++-    }
++-
++-   /*
++-    * Copy the final sum to the result string and return...
++-    */
++-
++-    memcpy(result, salt, (size_t)(salt_end - salt));
++-    ptr = result + (salt_end - salt);
++-    *ptr++ = '$';
++-
++-    for (i = 0; i < 5; i ++, ptr += 4)
++-    {
++-      n = ((((unsigned)digest[i] << 8) | (unsigned)digest[i + 6]) << 8);
++-
++-      if (i < 4)
++-        n |= (unsigned)digest[i + 12];
++-      else
++-        n |= (unsigned)digest[5];
++-
++-      to64(ptr, n, 4);
++-    }
++-
++-    to64(ptr, (unsigned)digest[11], 2);
++-    ptr += 2;
++-    *ptr = '\0';
++-
++-    return (result);
++-  }
++-  else
++-  {
++-   /*
++-    * Use the standard crypt() function...
++-    */
++-
++-    return (crypt(pw, salt));
++-  }
++-}
++-#endif /* !HAVE_LIBPAM */
++-
++-
++ /*
++  * 'free_authmask()' - Free function for auth masks.
++  */
++-- 
++2.17.0
++
