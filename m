@@ -1,36 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 May 2018 15:36:22 +0200
-Subject: [Buildroot] [git commit] cups: disable pam support
-Message-ID: <20180501133651.3148F8A5DA@busybox.osuosl.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue,  1 May 2018 09:46:43 -0400
+Subject: [Buildroot] [PATCH v5 1/9] gstreamer1: bump to 1.14.0
+Message-ID: <20180501134651.8876-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3221806b94bd7f26d70a1e82c2b01d311202c61
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also add hash for license file.
 
-Make the build consistent.
-
-Cc: Olivier Schonken <olivier.schonken@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Olivier Schonken <olivier.schonken@gmail.com>
-Signed-off-by: Baruch Siach &lt;<a href="mailto:baruch@tkos.co.il" target="_blank" rel="noreferrer">baruch at tkos.co.il</a>&gt;<br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/cups/cups.mk | 1 +
- 1 file changed, 1 insertion(+)
+Changes v1 -> v5:
+  - none
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 54271d5fc7..8f33824879 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -24,6 +24,7 @@ CUPS_CONF_OPTS = \
- 	--without-java \
- 	--without-php \
- 	--disable-gssapi \
-+	--disable-pam \
- 	--libdir=/usr/lib
- CUPS_CONFIG_SCRIPTS = cups-config
- CUPS_DEPENDENCIES = \
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 5 +++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index f8af907562..05b1d9d26c 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.12.4.tar.xz.sha256sum
+-sha256 5a8704aa4c2eeb04da192c4a9942f94f860ac1a585de90d9f914bac26a970674 gstreamer-1.12.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.14.0.tar.xz.sha256sum
++sha256 fc361367f0d4b780a868a8833f9f30b9c9f4ac9faea4e6b251db8b4b0398466e gstreamer-1.14.0.tar.xz
++sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index ea9f29a4f3..d30f28594b 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.12.4
++GSTREAMER1_VERSION = 1.14.0
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
+-- 
+2.14.3
