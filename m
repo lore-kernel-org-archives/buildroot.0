@@ -1,42 +1,25 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  1 May 2018 22:29:29 +0200
-Subject: [Buildroot] [PATCH 1/1] libiio: bump to version 0.14
-Message-ID: <20180501202929.18679-1-fontaine.fabrice@gmail.com>
+Date: Tue,  1 May 2018 22:33:39 +0200
+Subject: [Buildroot] [PATCH 1/1] libimxvpuapi: add hash for license file
+Message-ID: <20180501203339.19778-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libiio/libiio.hash | 3 ++-
- package/libiio/libiio.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libimxvpuapi/libimxvpuapi.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
-index 027e2a072b..fbb4bccb90 100644
---- a/package/libiio/libiio.hash
-+++ b/package/libiio/libiio.hash
+diff --git a/package/libimxvpuapi/libimxvpuapi.hash b/package/libimxvpuapi/libimxvpuapi.hash
+index cd0c8f1f5f..6e0e5d60c9 100644
+--- a/package/libimxvpuapi/libimxvpuapi.hash
++++ b/package/libimxvpuapi/libimxvpuapi.hash
 @@ -1,2 +1,3 @@
- # Locally calculated
--sha256 002d57f35715821efae66479859bc5357b4d8d33bfff1446b4e17b02ae2c10d2  libiio-0.10.tar.gz
-+sha256 12063db7a9366aa00bfd789db30afaddb29686bc29b3ce1e5d4adfe1c3b42527  libiio-0.14.tar.gz
-+sha256 102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  COPYING.txt
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index 3fbd39188a..d2376bca34 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIIO_VERSION = 0.10
-+LIBIIO_VERSION = 0.14
- LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
- LIBIIO_INSTALL_STAGING = YES
- LIBIIO_LICENSE = LGPL-2.1+
+ # locally computed hash
+ sha256 7151e10a24929935bada1d3d87626f17e411575b3a4ac0d86440999ad0100a55  libimxvpuapi-0.10.3.tar.gz
++sha256 4bb33cc4cd956b56b779b501f18cae46a9e26f8c8500cca86ed758b8bc5e1788  LICENSE
 -- 
 2.14.1
