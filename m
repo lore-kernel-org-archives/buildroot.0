@@ -1,38 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 08:56:45 +0200
-Subject: [Buildroot] [PATCH] support/testing: fix ATF Vexpress test case
-In-Reply-To: <20180425212923.4418350b@windsurf> (Thomas Petazzoni's message of
- "Wed, 25 Apr 2018 21:29:23 +0200")
-References: <20180423201456.3303-1-thomas.petazzoni@bootlin.com>
- <20180425212923.4418350b@windsurf>
-Message-ID: <87tvrrlv82.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  1 May 2018 09:10:14 +0200
+Subject: [Buildroot] [PATCH 1/4] package/libplayer: remove mplayer support
+Message-ID: <20180501071017.14270-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ Config.in.legacy               | 6 ++++++
+ package/libplayer/Config.in    | 5 -----
+ package/libplayer/libplayer.mk | 8 +-------
+ 3 files changed, 7 insertions(+), 12 deletions(-)
 
- > Hello,
- > On Mon, 23 Apr 2018 22:14:56 +0200, Thomas Petazzoni wrote:
- >> This test case currently fails to build with:
- >> 
- >> ./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
- >> context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
- >> context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
- >> 
- >> This issue has been fixed upstream in commit
- >> 10c252c14b7f446c0b49ef1aafbd5d37804577dd, available since v1.3. So
- >> while we bump, let's bump to the latest version of ATF, v1.5.
- >> 
- >> Fixes:
- >> 
- >> https://gitlab.com/buildroot.org/buildroot/-/jobs/64360659
- >> 
- >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2018.02.x, thanks.
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3d8b28c5fe..e6b33db199 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,12 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2018.05"
+ 
++config BR2_PACKAGE_LIBPLAYER_MPLAYER
++	bool "mplayer support in libplayer removed"
++	select BR2_LEGACY
++	help
++	  The mplayer package was removed.
++
+ config BR2_PACKAGE_IQVLINUX
+ 	bool "iqvlinux package removed"
+ 	select BR2_LEGACY
+diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
+index 82083a0eea..3cad683248 100644
+--- a/package/libplayer/Config.in
++++ b/package/libplayer/Config.in
+@@ -9,11 +9,6 @@ config BR2_PACKAGE_LIBPLAYER
+ 	  http://libplayer.geexbox.org/
+ 
+ if BR2_PACKAGE_LIBPLAYER
+-config BR2_PACKAGE_LIBPLAYER_MPLAYER
+-	bool "mplayer backend"
+-	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mplayer
+-	select BR2_PACKAGE_MPLAYER
+ 
+ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
+ 	bool "gstreamer backend"
+diff --git a/package/libplayer/libplayer.mk b/package/libplayer/libplayer.mk
+index f4eccedb06..8d139cea0e 100644
+--- a/package/libplayer/libplayer.mk
++++ b/package/libplayer/libplayer.mk
+@@ -20,18 +20,12 @@ define LIBPLAYER_CONFIGURE_CMDS
+ 	./configure \
+ 		--prefix=/usr \
+ 		--cross-compile \
++		--disable-mplayer \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		$(LIBPLAYER_CONF_OPTS) \
+ 	)
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_LIBPLAYER_MPLAYER),y)
+-LIBPLAYER_DEPENDENCIES += mplayer
+-LIBPLAYER_CONF_OPTS += --enable-mplayer
+-else
+-LIBPLAYER_CONF_OPTS += --disable-mplayer
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBPLAYER_GSTREAMER),y)
+ LIBPLAYER_DEPENDENCIES += gstreamer
+ LIBPLAYER_CONF_OPTS += --enable-gstreamer
 -- 
-Bye, Peter Korsgaard
+2.14.2
