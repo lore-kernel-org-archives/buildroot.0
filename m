@@ -1,22 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 08:50:40 +0200
-Subject: [Buildroot] [PATCH 1/1] libglib2: fix license
-In-Reply-To: <20180409202159.1399-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 9 Apr 2018 22:21:59 +0200")
-References: <20180409202159.1399-1-fontaine.fabrice@gmail.com>
-Message-ID: <87vac7oon3.fsf@dell.be.48ers.dk>
+Date: Tue, 01 May 2018 08:51:23 +0200
+Subject: [Buildroot] [PATCH] support/scripts/fix-rpath: exclude
+ /lib/firmware in the target
+In-Reply-To: <20180412115009.8432-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 12 Apr 2018 13:50:09 +0200")
+References: <20180412115009.8432-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87r2mvoolw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > libglib2 is licensed under LGPL-2.1+ and not LGPL-2.0+ since release
- > 2.53.3
+ > The /lib/firmware directory contains random firmware for various
+ > devices. It happens that some of them might be or appear to be ELF
+ > files, but they shouldn't be checked by fix-rpath. For example, one of
+ > the Qualcomm VPU firmware file appears to be an ELF file, but patchelf
+ > isn't happy about it:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > $ ./output/host/bin/patchelf --print-rpath output/target/lib/firmware/qcom/venus-4.2/venus.b00
+ > patchelf: patchelf.cc:387: void ElfFile<Elf_Ehdr, Elf_Phdr, Elf_Shdr, Elf_Addr, Elf_Off, Elf_Dyn, Elf_Sym>::parse() [with Elf_Ehdr = Elf32_Ehdr; Elf_Phdr = Elf32_Phdr; Elf_Shdr = Elf32_Shdr; Elf_Addr = unsigned int; Elf_Off = unsigned int; Elf_Dyn = Elf32_Dyn; Elf_Sym = Elf32_Sym]: Assertion `shstrtabIndex < shdrs.size()' failed.
+ > Aborted (core dumped)
+
+ > Even though patchelf definitely shouldn't crash, it anyway doesn't
+ > make sense to check ELF files in /lib/firmware, so let's exclude this
+ > directory from our check.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.02.x, thanks.
 
