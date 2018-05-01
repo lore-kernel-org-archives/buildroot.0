@@ -1,31 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 22:59:48 +0200
-Subject: [Buildroot] [git commit] core/pkg-infra: set no-check-hash only for
- main download
-Message-ID: <20180501210117.4222C8B3B3@busybox.osuosl.org>
+Date: Tue, 1 May 2018 23:00:16 +0200
+Subject: [Buildroot] [git commit] core/pkg-infra: don't enforce site-method
+ for extra downloads
+Message-ID: <20180501210117.6DD2F82812@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6908c82a8886bd9130e825ccf2d9c58cfa887d23
+commit: https://git.buildroot.net/buildroot/commit/?id=ea55e13236aa7ba76f806785ded2ae28b3dde9e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, when the main download if from an SCM, we exclude all
-downloads from being hash-checked, on the assumption that we don't
-have hashes for downloads from an SCM.
+The site method only ever applies to the main download, while extra
+downloads are always to be fetched with wget.
 
-However, the exclusion is computed on the DOWNLOAD macro, which is
-called for each download of a package, thus effectively disabling
-hash checks for extra downloads, even though those are only ever
-download with wget.
+However, the site method is prepended to the URL from within the
+DOWNLOAD macro (well, a variable evaluated in the DOWNLOAD macro),
+which is called for each download of a package, thus effectively
+prepending the site method to all downloads, even the extra ones (and
+the patches).
 
-What we really wanted to do, in fact, was to exclude just the main
-download.
+We fix that by prepending the site method from within the
+generic-package infra, so that it only applies to the main download.
 
-We fix that by appending the main source file to the global list of
-excluded files, from within the generic-package infra itself.
+For that, we move the main _SOURCE out of the foreach loop, so that
+we can prepend the site-method to it, without impacting the other
+downloads.
 
 Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -36,35 +37,34 @@ Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-download.mk | 2 --
- package/pkg-generic.mk  | 4 ++++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/pkg-download.mk | 2 +-
+ package/pkg-generic.mk  | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 2c4ad3ba2c..2d9b0d4a41 100644
+index 2d9b0d4a41..2ca6ccf44d 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -92,8 +92,6 @@ endif
+@@ -82,7 +82,7 @@ endif
  
- define DOWNLOAD
- 	$(Q)mkdir -p $($(PKG)_DL_DIR)
--	$(Q)$(if $(filter bzr cvs hg svn,$($(PKG)_SITE_METHOD)),
--		BR_NO_CHECK_HASH_FOR=$(notdir $(call qstrip,$(1)))) \
- 	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
- 		-c '$($(PKG)_DL_VERSION)' \
- 		-d '$($(PKG)_DL_DIR)' \
+ ifeq ($(BR2_PRIMARY_SITE_ONLY),)
+ DOWNLOAD_URIS += \
+-	-u $($(PKG)_SITE_METHOD)+$(patsubst %/,%,$(dir $(call qstrip,$(1))))
++	-u $(patsubst %/,%,$(dir $(call qstrip,$(1))))
+ ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
+ DOWNLOAD_URIS += \
+ 	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 87c856407d..28e6c41a7f 100644
+index 28e6c41a7f..e9ee88882c 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -483,6 +483,10 @@ ifndef $(2)_PATCH
-  endif
+@@ -488,7 +488,8 @@ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
  endif
  
-+ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE)),)
-+BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
-+endif
-+
  $(2)_ALL_DOWNLOADS = \
- 	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+-	$$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
++	$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE) \
++	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
  		$$(if $$(findstring ://,$$(p)),$$(p),\
+ 			$$($(2)_SITE)/$$(p)))
+ 
