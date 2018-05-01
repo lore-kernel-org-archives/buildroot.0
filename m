@@ -1,41 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 May 2018 22:57:18 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{9,
- 14, 16}.x series
-Message-ID: <20180501210142.A40818B3BE@busybox.osuosl.org>
+Date: Tue, 1 May 2018 22:58:26 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] core/pkg-generic: only
+ save latest package list
+Message-ID: <20180501210142.E61298B3BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69837f387c2389c3ebc29f1b8e0a11665a0b2fb9
+commit: https://git.buildroot.net/buildroot/commit/?id=a2b029afe5e98dc0ac58db47a3d4ed4eed19f39d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop 4.16.x change]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1b503923497837e48e713b8deb8c3e06a11c9344)
+When rebuilding a package, simply appending the package's file list to
+the global list means that the package list grows for every rebuild, as
+does the time taken to check for files installed by multiple packages.
+Furthermore, we get false positives where a file is reported as being
+installed by multiple copies of the same package.
+
+With this approach we may end up with orphaned files in the target
+filesystem if a package that has been updated and rebuilt no longer
+installs the same set of files, but we know that only a clean build will
+produce reliable results.  In fact it may be helpful to identify these
+orphaned files as evidence that the build is not clean.
+
+Signed-off-by: John Keeping <john@metanate.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d3dca1e9936bcaa0eed226a5bcb8c6a4d1fd1472)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9e87db36b6..5f45136980 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -243,11 +243,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.130"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.96"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.97"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.37"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.38"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3706834a5e..d635516734 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -63,6 +63,8 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ # $(2): base directory to search in
+ # $(3): suffix of file  (optional)
+ define step_pkg_size_inner
++	@touch $(BUILD_DIR)/packages-file-list$(3).txt
++	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
+ 	cd $(2); \
+ 	find . \( -type f -o -type l \) \
+ 		-newer $($(PKG)_DIR)/.stamp_built \
