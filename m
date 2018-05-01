@@ -1,76 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  1 May 2018 09:10:14 +0200
-Subject: [Buildroot] [PATCH 1/4] package/libplayer: remove mplayer support
-Message-ID: <20180501071017.14270-1-bernd.kuhls@t-online.de>
+Date: Tue,  1 May 2018 09:10:16 +0200
+Subject: [Buildroot] [PATCH 3/4] package/tovid: switch from mplayer to mpv
+In-Reply-To: <20180501071017.14270-1-bernd.kuhls@t-online.de>
+References: <20180501071017.14270-1-bernd.kuhls@t-online.de>
+Message-ID: <20180501071017.14270-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The mplayer package will be removed from buildroot, tovid can use mpv
+instead. Support for mpv was added upstream:
+https://github.com/tovid-suite/tovid/commit/05cbce2ea130e50f6bf1599816dd0d7bf3ace91a
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy               | 6 ++++++
- package/libplayer/Config.in    | 5 -----
- package/libplayer/libplayer.mk | 8 +-------
- 3 files changed, 7 insertions(+), 12 deletions(-)
+ package/tovid/Config.in | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3d8b28c5fe..e6b33db199 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.05"
- 
-+config BR2_PACKAGE_LIBPLAYER_MPLAYER
-+	bool "mplayer support in libplayer removed"
-+	select BR2_LEGACY
-+	help
-+	  The mplayer package was removed.
-+
- config BR2_PACKAGE_IQVLINUX
- 	bool "iqvlinux package removed"
- 	select BR2_LEGACY
-diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
-index 82083a0eea..3cad683248 100644
---- a/package/libplayer/Config.in
-+++ b/package/libplayer/Config.in
-@@ -9,11 +9,6 @@ config BR2_PACKAGE_LIBPLAYER
- 	  http://libplayer.geexbox.org/
- 
- if BR2_PACKAGE_LIBPLAYER
--config BR2_PACKAGE_LIBPLAYER_MPLAYER
--	bool "mplayer backend"
+diff --git a/package/tovid/Config.in b/package/tovid/Config.in
+index d8052ea334..0d42785e8a 100644
+--- a/package/tovid/Config.in
++++ b/package/tovid/Config.in
+@@ -6,8 +6,9 @@ config BR2_PACKAGE_TOVID
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
 -	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
 -	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mplayer
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # mpv
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8 # mpv
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC # mpv
+ 	# The below dependencies are runtime dependencies only
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
+ 	select BR2_PACKAGE_DVDAUTHOR
+@@ -16,7 +17,7 @@ config BR2_PACKAGE_TOVID
+ 	select BR2_PACKAGE_IMAGEMAGICK
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_MJPEGTOOLS
 -	select BR2_PACKAGE_MPLAYER
++	select BR2_PACKAGE_MPV
+ 	select BR2_PACKAGE_PROCPS_NG # pgrep and pkill
+ 	select BR2_PACKAGE_SOX
+ 	help
+@@ -30,13 +31,17 @@ config BR2_PACKAGE_TOVID
+ comment "tovid needs a toolchain w/ threads, C++, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 \
+ 		|| !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
  
- config BR2_PACKAGE_LIBPLAYER_GSTREAMER
- 	bool "gstreamer backend"
-diff --git a/package/libplayer/libplayer.mk b/package/libplayer/libplayer.mk
-index f4eccedb06..8d139cea0e 100644
---- a/package/libplayer/libplayer.mk
-+++ b/package/libplayer/libplayer.mk
-@@ -20,18 +20,12 @@ define LIBPLAYER_CONFIGURE_CMDS
- 	./configure \
- 		--prefix=/usr \
- 		--cross-compile \
-+		--disable-mplayer \
- 		$(SHARED_STATIC_LIBS_OPTS) \
- 		$(LIBPLAYER_CONF_OPTS) \
- 	)
- endef
- 
--ifeq ($(BR2_PACKAGE_LIBPLAYER_MPLAYER),y)
--LIBPLAYER_DEPENDENCIES += mplayer
--LIBPLAYER_CONF_OPTS += --enable-mplayer
--else
--LIBPLAYER_CONF_OPTS += --disable-mplayer
--endif
--
- ifeq ($(BR2_PACKAGE_LIBPLAYER_GSTREAMER),y)
- LIBPLAYER_DEPENDENCIES += gstreamer
- LIBPLAYER_CONF_OPTS += --enable-gstreamer
+ comment "tovid depends on python or python3"
+ 	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
 -- 
 2.14.2
