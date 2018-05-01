@@ -1,41 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 15:26:57 +0200
-Subject: [Buildroot] [PATCH v3] core/pkg-generic: only save latest
- package list
-In-Reply-To: <20180501122841.13818-1-john@metanate.com>
-References: <20180501132629.4a4831bb.john@metanate.com>
- <20180501122841.13818-1-john@metanate.com>
-Message-ID: <20180501152657.13c7014f@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 May 2018 15:36:44 +0200
+Subject: [Buildroot] [PATCH 2/2] cups: disable pam support
+In-Reply-To: <20180501112230.eac3ejv6vo54jujb@tarshish> (Baruch Siach's
+ message of "Tue, 1 May 2018 14:22:30 +0300")
+References: <91db976709291253cb9914a411a9d75872165f75.1525115956.git.baruch@tkos.co.il>
+ <399e1f6584e1296686974096bc97c027988f3899.1525115956.git.baruch@tkos.co.il>
+ <87zi1jg0x0.fsf@dell.be.48ers.dk>
+ <20180501112230.eac3ejv6vo54jujb@tarshish>
+Message-ID: <87r2mvfqfn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Tue,  1 May 2018 13:28:41 +0100, John Keeping wrote:
-> When rebuilding a package, simply appending the package's file list to
-> the global list means that the package list grows for every rebuild, as
-> does the time taken to check for files installed by multiple packages.
-> Furthermore, we get false positives where a file is reported as being
-> installed by multiple copies of the same package.
-> 
-> With this approach we may end up with orphaned files in the target
-> filesystem if a package that has been updated and rebuilt no longer
-> installs the same set of files, but we know that only a clean build will
-> produce reliable results.  In fact it may be helpful to identify these
-> orphaned files as evidence that the build is not clean.
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
-> Changes in v3:
-> - Use touch instead of redirect to avoid truncating the file
+Hi,
 
-Applied to master, thanks.
+ >> Committed, thanks.
 
-Thomas
+ > Not in master as of 24c1751a002b.
+
+Sorry, it is now.
+
+ >> Any specific reason to unconditionally disable this and not enable when
+ >> linux-pam is available?
+
+ > I guess that PAM integration takes more than just dependency declaration and 
+ > --enable-pam. But I did not look too deeply into that.
+
+Ok.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
