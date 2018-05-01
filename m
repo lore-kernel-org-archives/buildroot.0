@@ -1,38 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 08:55:59 +0200
-Subject: [Buildroot] [PATCH] mbedtls: security bump to version 2.7.2
-In-Reply-To: <be768b1de8c5908cef3e3acbff3bc03adcefd1a0.1524570502.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 24 Apr 2018 14:48:22 +0300")
-References: <be768b1de8c5908cef3e3acbff3bc03adcefd1a0.1524570502.git.baruch@tkos.co.il>
-Message-ID: <877eonn9ts.fsf@dell.be.48ers.dk>
+Date: Tue, 01 May 2018 08:56:22 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/solidrun_macchiatobin_*: use a
+ Git commit for ATF
+In-Reply-To: <20180423195954.30215-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 23 Apr 2018 21:59:53 +0200")
+References: <20180423195954.30215-1-thomas.petazzoni@bootlin.com>
+Message-ID: <8736zbn9t5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > The release announcement mentions these security fixes:
- >   Defend against Bellcore glitch attacks by verifying the results of RSA
- >   private key operations.
+ > The version of the ARM Trusted Firmware from Marvell was a Git branch,
+ > not a Git commit, leading to unreproducible results. So let's use a
+ > Git commit instead, which is the latest available from the branch that
+ > was previously used.
 
- >   Fix implementation of the truncated HMAC extension. The previous
- >   implementation allowed an offline 2^80 brute force attack on the HMAC
- >   key of a single, uninterrupted connection (with no resumption of the
- >   session).
-
- >   Reject CRLs containing unsupported critical extensions.
-
- >   Fix a buffer overread in ssl_parse_server_key_exchange() that could
- >   cause a crash on invalid input. (CVE-2018-9988)
-
- >   Fix a buffer overread in ssl_parse_server_psk_hint() that could cause
- >   a crash on invalid input. (CVE-2018-9989)
-
- > Drop upstream patch.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.02.x, thanks.
 
