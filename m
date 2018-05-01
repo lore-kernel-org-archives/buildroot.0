@@ -1,19 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 09:32:57 +0200
-Subject: [Buildroot] [PATCH 1/1] linux-headers: bump 4.4.x series
-In-Reply-To: <20180429071722.2361-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 29 Apr 2018 09:17:22 +0200")
-References: <20180429071722.2361-1-bernd.kuhls@t-online.de>
-Message-ID: <87a7tjkeza.fsf@dell.be.48ers.dk>
+Date: Tue, 01 May 2018 09:33:09 +0200
+Subject: [Buildroot] [PATCH] libtomcrypt: fix headers installation path
+In-Reply-To: <dea7363d337047b65baf36ceb7945e5ec6777f80.1525026592.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 29 Apr 2018 21:29:52 +0300")
+References: <dea7363d337047b65baf36ceb7945e5ec6777f80.1525026592.git.baruch@tkos.co.il>
+Message-ID: <876047keyy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > libtomcrypt installs its headers by default in /usr/local/include under
+ > the staging sysroot. This patch is not in the default search patch of
+ > some toolchains. This breaks the build of dropbear. Set the PREFIX make
+ > variable to fix that.
+
+ > While at it, split the long install command for better readability.
+
+ > Fixes (dropbear):
+ > http://autobuild.buildroot.net/results/215/2157679e276623ae875d1b31f3e5a68caf586536/
+ > http://autobuild.buildroot.net/results/956/956d254675e6500c19c3bb7ccdf12ce136858720/
+ > http://autobuild.buildroot.net/results/01e/01ec89a81c4ec6e36e2f81b5a9394050a91df654/
+
+ > Cc: Francois Perrad <francois.perrad@gadz.org>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x, thanks.
 
