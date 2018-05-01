@@ -1,52 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 1 May 2018 21:22:28 +0200
-Subject: [Buildroot] [git commit] download/git: ensure we checkout to a
- clean state
-Message-ID: <20180501192232.642F882627@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] download/git: ensure we can checkout repos
+ with submodule conversions
+Message-ID: <20180501192232.7114582627@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d2e0188890648ac02874667c2d9f6ae0e3d65ce
+commit: https://git.buildroot.net/buildroot/commit/?id=80d8bc6e46da0a2649600419b33a91e4b60fa8d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Force the checkout to ignore and throw away any local changes. This
-allows recovering from a previous partial checkout (e.g. killed by
-the user, or by a CI job...)
+When a git tree has had sub-dir <-> sub-module conversions, or has had
+submodules added or removed over the course of time, checking out a
+changeset across those conversions/additions/removals may leave
+untracked files, or may fail because of a conflict of type.
 
-git checkout -f has been supported since the inception of git, so we
-can use it without any second thought.
+So, before we checkout the new changeset, we forcibly remove the
+submodules. The new set of submodules, if any, will be restored later.
 
-Also do a forced-forced clean, to really get rid of all untracked stuff.
+Ideally, we would use a native git command: git submodule deinit --all.
+However, that was only introduced in git 1.8.3 which, while not being
+recent by modern standards, is still too old for some enterprise-grade
+distributions (RHEL6 only has git-1.7.1).
+
+So, instead, we just use git submodule foreach, to rm -rf the submodules
+directory.
+
+Again, we would ideally use 'cd $toplevel && rm -rf $path', but
+$toplevel was only introduced in git 1.7.2. $path has always been there.
+
+So, instead, we just cd back one level, and remove the basename of the
+directory.
+
+Eventually, we need to get rid of now-empty and untracked directories,
+that were parents of a removed submodule. For example. ./foo/bar/ was a
+submodule, so ./foo/bar/ was removed, which left ./foo/ around.
+
+Yet again, recent-ish git versions would have removed it during the
+forced checkout, but old-ish versions (e.g. 1.7.1) do not remove it with
+the forced checkout.
+
+Instead we rely on the already used forced-forced clean of directories,
+untracked, and ignored content, to really get rid of extra stuff we are
+not interested in.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/git | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ support/download/git | 29 ++++++++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
 
 diff --git a/support/download/git b/support/download/git
-index 39e57aac34..c88249ee63 100755
+index c88249ee63..931694f89c 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -154,7 +154,11 @@ fi
+@@ -152,12 +152,39 @@ if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
+     exit 1
+ fi
  
++# The new cset we want to checkout might have different submodules, or
++# have sub-dirs converted to/from a submodule. So we would need to
++# deregister _current_ submodules before we checkout.
++#
++# Using "git submodule deinit --all" would remove all the files for
++# all submodules, including the corresponding .git files or directories.
++# However, it  was only introduced with git-1.8.3, which is too recent
++# for some enterprise-grade distros.
++#
++# So, we fall-back to just removing all submodules directories. We do
++# not need to be recursive, as removing a submodule will de-facto remove
++# its own submodules.
++#
++# For recent git versions, the repository for submodules is stored
++# inside the repository of the super repository, so the following will
++# only remove the working copies of submodules, effectively caching the
++# submodules.
++#
++# For older versions however, the repository is stored in the .git/ of
++# the submodule directory, so the following will effectively remove the
++# the working copy as well as the repository, which means submodules
++# will not be cached for older versions.
++#
++cmd='printf "Deregistering submodule \"%s\"\n" "${path}" && cd .. && rm -rf "${path##*/}"'
++_git submodule --quiet foreach "'${cmd}'"
++
  # Checkout the required changeset, so that we can update the required
  # submodules.
--_git checkout -q "'${cset}'"
-+_git checkout -f -q "'${cset}'"
-+
-+# Get rid of now-untracked directories (in case a git operation was
-+# interrupted in a previous run).
-+_git clean -ffdx
+ _git checkout -f -q "'${cset}'"
+ 
+ # Get rid of now-untracked directories (in case a git operation was
+-# interrupted in a previous run).
++# interrupted in a previous run, or to get rid of empty directories
++# that were parents of submodules removed above).
+ _git clean -ffdx
  
  # Get date of commit to generate a reproducible archive.
- # %cD is RFC2822, so it's fully qualified, with TZ and all.
