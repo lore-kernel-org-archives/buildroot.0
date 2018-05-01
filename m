@@ -1,70 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 21:53:35 +0200
-Subject: [Buildroot] [PATCH 2/2] sysvinit: add /dev/std{in, out,
- err} symlinks to inittab
-In-Reply-To: <20180404180935.15185-3-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Wed, 4 Apr 2018 20:09:35 +0200")
-References: <20180404180935.15185-1-joerg.krause@embedded.rocks>
- <20180404180935.15185-3-joerg.krause@embedded.rocks>
-Message-ID: <87efivf8zk.fsf@dell.be.48ers.dk>
+Date: Tue, 1 May 2018 21:53:45 +0200
+Subject: [Buildroot] [git commit] skeleton: add /dev/fd, /dev/std{in, out,
+ err} symlinks for static /dev on readonly rootfs
+Message-ID: <20180501195400.B91F388D2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2b21ba2fac486cf550399be7e6247de4e269595a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Some applications, e.g. bashs process subsitution feature, rely on the
- > convention of `/dev/fd` being a symbolic link to `/proc/self/fd`.
+Some applications, e.g. bashs process subsitution feature, rely on the
+convention of `/dev/fd` being a symbolic link to `/proc/self/fd`.
 
- > This symbolic link and his companions `/dev/std*` are created by (e)udev [1],
- > but not by mdev, resulting in the following error when using the following
- > expression:
+When a static /dev is used on a readonly rootfs then the runtime ln
+invocations in the inittab will fail, so we need to add the symlinks at
+build time.  Makedevs doesn't support creating symlinks, so instead add the
+symlinks to the default skeleton.
 
- > ```
- > bash: /dev/fd/62: No such file or directory
- > ```
+For non-static /dev setups, the kernel will mount devtmpfs which shadows the
+/dev of the rootfs, but then the runtime ln invocations in inittab will
+create the symlinks.
 
- > For the sake of simplicity, lets fix this by creating the symlinks in inittab.
- > It is only really needed if eudev isn't used, but it doesn't really hurt to
- > create them even if eudev will recreate them afterwards.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ system/skeleton/dev/fd     | 1 +
+ system/skeleton/dev/stderr | 1 +
+ system/skeleton/dev/stdin  | 1 +
+ system/skeleton/dev/stdout | 1 +
+ 4 files changed, 4 insertions(+)
 
- > Note, that we do not create the symlink `/dev/core` as `/proc/kcore` is
- > not available on all platforms, e.g. ARM, and the feature is not much
- > appreciated [2].
-
- > [1]
- > https://github.com/gentoo/eudev/blob/8943501993322c59a6eb5be456b0d716aafff21e/src/shared/dev-setup.c#L35-L40
- > [2] https://lwn.net/Articles/45315/
-
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
- > ---
- >  package/sysvinit/inittab | 6 +++++-
- >  1 file changed, 5 insertions(+), 1 deletion(-)
-
- > diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
- > index fad91eae8b..608aabce07 100644
- > --- a/package/sysvinit/inittab
- > +++ b/package/sysvinit/inittab
- > @@ -9,7 +9,11 @@ si1::sysinit:/bin/mount -o remount,rw /
- >  si2::sysinit:/bin/mkdir -p /dev/pts
- >  si3::sysinit:/bin/mkdir -p /dev/shm
- >  si4::sysinit:/bin/mount -a
- > -si5::sysinit:/bin/hostname -F /etc/hostname
- > +si5::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
- > +si6::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
- > +si7::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
- > +si8::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
-
-This will fail on static /dev on a readonly rootfs, so I've redirected
-errors to /dev/null.
-
-Committed with that changed, thanks.
-
-I have also added a patch adding these symlinks in the default skeleton
-to handle static /dev on readonly rootfs setups.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/system/skeleton/dev/fd b/system/skeleton/dev/fd
+new file mode 120000
+index 0000000000..10e8ab734e
+--- /dev/null
++++ b/system/skeleton/dev/fd
+@@ -0,0 +1 @@
++../proc/self/fd
+\ No newline at end of file
+diff --git a/system/skeleton/dev/stderr b/system/skeleton/dev/stderr
+new file mode 120000
+index 0000000000..c67586eb4a
+--- /dev/null
++++ b/system/skeleton/dev/stderr
+@@ -0,0 +1 @@
++../proc/self/fd/2
+\ No newline at end of file
+diff --git a/system/skeleton/dev/stdin b/system/skeleton/dev/stdin
+new file mode 120000
+index 0000000000..2825dc0f4f
+--- /dev/null
++++ b/system/skeleton/dev/stdin
+@@ -0,0 +1 @@
++../proc/self/fd/0
+\ No newline at end of file
+diff --git a/system/skeleton/dev/stdout b/system/skeleton/dev/stdout
+new file mode 120000
+index 0000000000..35e0f6203f
+--- /dev/null
++++ b/system/skeleton/dev/stdout
+@@ -0,0 +1 @@
++../proc/self/fd/1
+\ No newline at end of file
