@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 09:32:30 +0200
-Subject: [Buildroot] [PATCH 2/2] python-watchdog: add missing runtime
- dependency
-In-Reply-To: <1518787921-32089-2-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 16 Feb 2018 14:32:01
- +0100")
-References: <1518787921-32089-1-git-send-email-yegorslists@googlemail.com>
- <1518787921-32089-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87in87kf01.fsf@dell.be.48ers.dk>
+Date: Tue, 01 May 2018 09:32:47 +0200
+Subject: [Buildroot] [PATCH 1/1] support/testing: set $USER in rust tests
+In-Reply-To: <20180428221413.1833-1-eric.le.bihan.dev@free.fr> (Eric Le
+ Bihan's message of "Sun, 29 Apr 2018 00:14:13 +0200")
+References: <20180428221413.1833-1-eric.le.bihan.dev@free.fr>
+Message-ID: <87efivkezk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Script watchmedo requires python-setuptools.
+ > When the run-time tests to build rust and rust-bin packages are run via Docker,
+ > the $USER environment variable is not set, which makes cargo fail when
+ > initializing the test project.
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > So add it to make cargo happy.
+
+ > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
 Committed to 2018.02.x, thanks.
 
