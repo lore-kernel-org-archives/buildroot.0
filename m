@@ -1,95 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 1 May 2018 17:01:27 +0200
-Subject: [Buildroot] [PATCH 2/2] qemu: add support for python 3.6
-In-Reply-To: <20180427154055.23272-2-aduskett@gmail.com>
-References: <20180427154055.23272-1-aduskett@gmail.com>
- <20180427154055.23272-2-aduskett@gmail.com>
-Message-ID: <068f2f4d-47c0-4c07-0f71-a5bc90a40ad2@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 1 May 2018 10:05:36 -0500
+Subject: [Buildroot] [PATCH 3/4] package/Makefile.in: Remove RELRO
+ linker flags from CFLAGS
+In-Reply-To: <CANQCQpbyDWsyEQ4ERFfpQ=h_5fU_QnXNcKN-ULOKhMf1e7FLDg@mail.gmail.com>
+References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
+ <20180425064518.31797-3-stefan.sorensen@spectralink.com>
+ <CANQCQpbyDWsyEQ4ERFfpQ=h_5fU_QnXNcKN-ULOKhMf1e7FLDg@mail.gmail.com>
+Message-ID: <CANQCQpbBRyj9imrEdZ8EFnxcRYU+_rJOo4A3iWuZMr=2btvPgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+Stefan,
 
-Le 27/04/2018 ? 17:40, Adam Duskett a ?crit?:
-> qemu 2.12.0 now supports building against python3.
-> see: https://wiki.qemu.org/ChangeLog/2.12#Build_Dependencies
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/qemu/qemu.mk | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 975dfba490..6a24e2848d 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -16,7 +16,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
->  #-------------------------------------------------------------
->  # Host-qemu
->  
-> -HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
-> +HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
->  
->  #       BR ARCH         qemu
->  #       -------         ----
-> @@ -119,6 +119,16 @@ HOST_QEMU_OPTS += --enable-vde
->  HOST_QEMU_DEPENDENCIES += host-vde2
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +HOST_QEMU_DEPENDENCIES += host-python3
-> +QEMU_DEPENDENCIES += host-python3
-> +QEMU_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
-> +else
-> +HOST_QEMU_DEPENDENCIES += host-python
-> +QEMU_DEPENDENCIES += host-python
+On Mon, Apr 30, 2018 at 12:57 PM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Stefan,
+>
+> On Wed, Apr 25, 2018 at 1:45 AM, Stefan S?rensen
+> <stefan.sorensen@spectralink.com> wrote:
+>> The RELRO related flags are for the linker, not the compiler, so they belong
+>> in LDFLAGS.
+>>
+>> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+>> ---
+>>  package/Makefile.in | 10 +++-------
+>>  1 file changed, 3 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/package/Makefile.in b/package/Makefile.in
+>> index 1cbf34e0df..4525b8e79f 100644
+>> --- a/package/Makefile.in
+>> +++ b/package/Makefile.in
+>> @@ -141,9 +141,6 @@ ifeq ($(BR2_DEBUG_3),y)
+>>  TARGET_DEBUGGING = -g3
+>>  endif
+>>
+>> -TARGET_CFLAGS_RELRO = -Wl,-z,relro
+>> -TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
+>> -
+>
+> If you remove these flags from CFLAGS then packages that link with gcc
+> vs explicitly ld won't get the flag.
 
-This doesn't work since you're using QEMU_DEPENDENCIES bellow $(eval
-$(generic-package)).
+Suggest dropping this patch as we want to maintain the ability for gcc
+to use flags when linking an executable directly.
 
-host-python is missing from qemu (target) dependencies.
-
-I had a build issue with make qemu.
-
-Best regards,
-Romain
-
-> +QEMU_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
-> +endif
-> +
->  # Override CPP, as it expects to be able to call it like it'd
->  # call the compiler.
->  define HOST_QEMU_CONFIGURE_CMDS
-> @@ -129,7 +139,7 @@ define HOST_QEMU_CONFIGURE_CMDS
->  		--interp-prefix=$(STAGING_DIR) \
->  		--cc="$(HOSTCC)" \
->  		--host-cc="$(HOSTCC)" \
-> -		--python=$(HOST_DIR)/bin/python2 \
-> +		--python=$(HOST_DIR)/bin/$(QEMU_PYLIBVER) \
->  		--extra-cflags="$(HOST_CFLAGS)" \
->  		--extra-ldflags="$(HOST_LDFLAGS)" \
->  		$(HOST_QEMU_OPTS)
-> @@ -151,7 +161,7 @@ QEMU_USER = $(HOST_DIR)/bin/qemu-$(HOST_QEMU_ARCH)
->  #-------------------------------------------------------------
->  # Target-qemu
->  
-> -QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib pixman
-> +QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman
->  
->  # Need the LIBS variable because librt and libm are
->  # not automatically pulled. :-(
-> @@ -161,8 +171,8 @@ QEMU_OPTS =
->  
->  QEMU_VARS = \
->  	LIBTOOL=$(HOST_DIR)/bin/libtool \
-> -	PYTHON=$(HOST_DIR)/bin/python2 \
-> -	PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-> +	PYTHON=$(HOST_DIR)/bin/$(QEMU_PYLIBVER) \
-> +	PYTHONPATH=$(TARGET_DIR)/usr/lib/$(QEMU_PYLIBVER)/site-packages
->  
->  # If we want to specify only a subset of targets, we must still enable all
->  # of them, so that QEMU properly builds its list of default targets, from
-> 
+Matt
