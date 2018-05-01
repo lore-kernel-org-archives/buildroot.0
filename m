@@ -1,44 +1,49 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 1 May 2018 10:36:20 -0500
-Subject: [Buildroot] [PATCH 4/4] package/Makefile.in: Use gcc spec files
- for PIE build flags
-In-Reply-To: <CANQCQpZPtJrZgTv2xOuOEJG9EhWik6=qd0v7sDhHR+r6zni3bw@mail.gmail.com>
-References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
- <20180425064518.31797-4-stefan.sorensen@spectralink.com>
- <CANQCQpZPtJrZgTv2xOuOEJG9EhWik6=qd0v7sDhHR+r6zni3bw@mail.gmail.com>
-Message-ID: <CANQCQpYyKZzycQX-zfG4r_4aoAd-VjO0ie4cMk6Gp4-djLP-xA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  1 May 2018 19:30:03 +0300
+Subject: [Buildroot] [PATCH] bluez-alsa: needs NPTL
+Message-ID: <8188b2c1ff0529d1b30581a7d7403ad344615dcd.1525192203.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan,
+bluez-alsa calls pthread_setname_np() which is only provided by the NPTL
+pthread implementation.
 
-On Tue, May 1, 2018 at 10:13 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Stefan,
->
-> On Wed, Apr 25, 2018 at 1:45 AM, Stefan S?rensen
-> <stefan.sorensen@spectralink.com> wrote:
->> The PIE build flags are only intended for building executables and can not be
->> used in relocateable links (-r), static builds and shared library build -
->> including the flags here causes build errors.
->>
->> So instead of parsing the PIE flags directly on the command line to gcc,
->> include them in a gcc spec file where it is possible to only apply the flags
->> when other incompatible flags are not set.
->>
->> This method and the spec files are from the Fedora build system.
->>
->> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
->
-> Thank you for this approach, I had a patchset reworking packages to
-> deal with cases of "-r", static and shared.  This eliminates that and
-> makes a wrapper approach much easier as the next step.
->
-> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Fixes:
+http://autobuild.buildroot.net/results/707/707fd46921b1cfda90e9c30be33ca918f2d0cb00/
+http://autobuild.buildroot.net/results/7a6/7a632c2b6b9021aa6edcd5126400de26e2b8ca42/
 
-Just realized when I was cleaning things up this one needs rework with
-the drop of patch 3.  Here's a v2 of this patch.
-http://patchwork.ozlabs.org/patch/907093/
+Cc: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/bluez-alsa/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
+index 317762057c3d..f082f4b83821 100644
+--- a/package/bluez-alsa/Config.in
++++ b/package/bluez-alsa/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_BLUEZ_ALSA
+ 	bool "bluez-alsa"
+ 	depends on !BR2_STATIC_LIBS # bluez5
+ 	depends on !BR2_PACKAGE_BLUEZ_UTILS # bluez5
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5
+ 	depends on BR2_USE_MMU # bluez5 -> dbus
+@@ -28,8 +28,8 @@ config BR2_PACKAGE_BLUEZ_ALSA_HCITOP
+ 
+ endif
+ 
+-comment "bluez-alsa needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++comment "bluez-alsa needs a toolchain w/ wchar, NPTL, headers >= 3.4, dynamic library"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
+-- 
+2.17.0
