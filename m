@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 08:56:22 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/solidrun_macchiatobin_*: use a
- Git commit for ATF
-In-Reply-To: <20180423195954.30215-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 23 Apr 2018 21:59:53 +0200")
+Date: Tue, 01 May 2018 08:56:30 +0200
+Subject: [Buildroot] [PATCH 2/2] support/testing: fix Marvell ATF source
+ code
+In-Reply-To: <20180423195954.30215-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 23 Apr 2018 21:59:54 +0200")
 References: <20180423195954.30215-1-thomas.petazzoni@bootlin.com>
-Message-ID: <8736zbn9t5.fsf@dell.be.48ers.dk>
+ <20180423195954.30215-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87y3h3lv8h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,6 +19,11 @@ To: buildroot@busybox.net
  > not a Git commit, leading to unreproducible results. So let's use a
  > Git commit instead, which is the latest available from the branch that
  > was previously used.
+
+ > More specifically, this branch has recently seen a fix that is needed
+ > for ATF to build properly with recent gcc versions:
+
+ >   https://github.com/MarvellEmbeddedProcessors/atf-marvell/commit/c96ec59f8b819123a06e1839ab5578030cf263b0
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
