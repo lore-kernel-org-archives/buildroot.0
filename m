@@ -1,28 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 08:52:57 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5: qt5websockets: install missing qml
- modules
-In-Reply-To: <3fc9a546-61c8-d7bf-f0eb-b757cae0dfe2@ginzinger.com> (Manfred
- Schlaegl's message of "Wed, 11 Apr 2018 14:40:37 +0200")
-References: <3fc9a546-61c8-d7bf-f0eb-b757cae0dfe2@ginzinger.com>
-Message-ID: <87efivooja.fsf@dell.be.48ers.dk>
+Date: Tue, 01 May 2018 08:53:07 +0200
+Subject: [Buildroot] [PATCH] usb_modeswitch: set CXX to false when C++
+ is missing
+In-Reply-To: <9c1fc72919be11ec00af92b2c0ba452d23f32144.1523937628.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 17 Apr 2018 07:00:28 +0300")
+References: <9c1fc72919be11ec00af92b2c0ba452d23f32144.1523937628.git.baruch@tkos.co.il>
+Message-ID: <87a7tjooj0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Manfred" == Manfred Schlaegl <manfred.schlaegl@ginzinger.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > QML modules for QtWebSockets are located in /usr/qml/QtWebSockets since
- > Qt 5.5.
+ > Similar to the openocd fix in commit 5966e2dc54 (package/openocd: fix
+ > fallout after no-C++ fixups) the jimctl that is bundled with
+ > usb_modeswitch also wants to find a binary. This broke with commit
+ > 4cd1ab158 (core: alternate solution to disable C++). Revert to 'false'
+ > instead of 'no' here as well.
 
- > /usr/qml/Qt/WebSockets still exists for compatibility reasons, but
- > it contains only a qmldir file which points to ../../QtWebSockets/.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b4d/b4d4e925763cb6558af915f9781afe07fc557ebc/
+ > http://autobuild.buildroot.net/results/61b/61b9dc2148df2e8fd0b30e62aedbfd30bb755e19/
+ > http://autobuild.buildroot.net/results/468/468a7e6b049f159fbb4e79d3a12b53ca890f6933/
 
- > see also: http://doc.qt.io/qt-5.6/qtwebsockets-qmlmodule.html
-
- > Signed-off-by: Manfred Schlaegl <manfred.schlaegl@ginzinger.com>
+ > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > This fix is also applicable to the 2018.02.x branch.
 
 Committed to 2018.02.x, thanks.
 
