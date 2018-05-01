@@ -1,43 +1,52 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  1 May 2018 22:05:08 +0200
-Subject: [Buildroot] [PATCH 2/2] Revert "glibc: install the obsolete libnsl"
-In-Reply-To: <20180501200508.13974-1-romain.naour@gmail.com>
-References: <20180501200508.13974-1-romain.naour@gmail.com>
-Message-ID: <20180501200508.13974-2-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 May 2018 22:06:40 +0200
+Subject: [Buildroot] [PATCH 1/1] go: bump to 1.10
+In-Reply-To: <877eoxc3uq.fsf@paral.in> (Christian Stewart's message of "Mon,
+ 23 Apr 2018 11:57:49 -0400")
+References: <20180219072718.28895-1-christian@paral.in>
+ <87po3js3j3.fsf@dell.be.48ers.dk> <87y3i7q8fw.fsf@dell.be.48ers.dk>
+ <877eoxc3uq.fsf@paral.in>
+Message-ID: <87a7tjf8dr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnsl from Glibc is deprecated and should not be used anymore.
-libnsl is now an separate library that can be packaged later if
-necessary [1].
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Note: libnsl from Glibc doesn't build with gcc 8 due new warning [2].
+ > Hi Peter,
+ > Peter Korsgaard <peter@korsgaard.com> writes:
+ >> What is common for all the failures is that the target arch == host arch
+ >> (x86-64) AND the C library is different (musl/uclibc-ng).
+ >> 
+ >> I did a quick test here and the reason is that host-go gets linked with
+ >> the target C library:
+ >> 
+ >> ls -lah build/host-go-1.10/bin/go
+ >> -rwxr-xr-x 1 peko peko 11M Apr  1 16:44 build/host-go-1.10/bin/go
+ >> 
+ >> ./build/host-go-1.10/bin/go
+ >> zsh: no such file or directory: ./build/host-go-1.10/bin/go
+ >> 
+ >> ldd ./build/host-go-1.10/bin/go
+ >> linux-vdso.so.1 (0x00007ffcd2bae000)
+ >> libc.so.0 => not found
+ >> 
+ >> libc.so.0 is uClibc-ng.
+ >> 
+ >> Care to take a look?
 
-[1] https://github.com/thkukuk/libnsl.git
-[2] http://patchwork.sourceware.org/patch/26437
+ > I haven't had a chance to check on this yet. I'm puzzled why the
+ > behavior would be different between glibc and uclibc.
 
-This reverts commit 398747f5fafca8c07e696612d8eded53d4f935c7.
+It probably isn't, but if the host uses glibc and the target you build
+for also uses glibc (and the same architecture), then it probably works
+to link with the target libc instead of the host one.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
----
- package/glibc/glibc.mk | 1 -
- 1 file changed, 1 deletion(-)
+ > Will do some testing when possible.
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 3ab673c0cc..0d406c195e 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -100,7 +100,6 @@ define GLIBC_CONFIGURE_CMDS
- 		--disable-profile \
- 		--without-gd \
- 		--enable-obsolete-rpc \
--		--enable-obsolete-nsl \
- 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
- 		--with-headers=$(STAGING_DIR)/usr/include)
- 	$(GLIBC_ADD_MISSING_STUB_H)
+Thanks!
+
 -- 
-2.14.3
+Bye, Peter Korsgaard
