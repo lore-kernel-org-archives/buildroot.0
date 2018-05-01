@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 22:51:59 +0200
-Subject: [Buildroot] [PATCH] meson: bump version to 0.46.0
-In-Reply-To: <20180501202132.17687-1-eric.le.bihan.dev@free.fr>
-References: <20180501202132.17687-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180501225159.11385362@windsurf.home>
+Date: Tue, 1 May 2018 22:52:03 +0200
+Subject: [Buildroot] [PATCH 1/1] libiio: bump to version 0.14
+In-Reply-To: <20180501202929.18679-1-fontaine.fabrice@gmail.com>
+References: <20180501202929.18679-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180501225203.1dcdc213@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 May 2018 22:21:32 +0200, Eric Le Bihan wrote:
-> Bump version and drop obsolete patch.
+On Tue,  1 May 2018 22:29:29 +0200, Fabrice Fontaine wrote:
+> Add hash for license file
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...NotFoundError-when-restorecon-unavailable.patch | 31 ----------------------
->  package/meson/meson.hash                           |  4 +--
->  package/meson/meson.mk                             |  2 +-
->  3 files changed, 3 insertions(+), 34 deletions(-)
->  delete mode 100644 package/meson/0001-Fix-FileNotFoundError-when-restorecon-unavailable.patch
+>  package/libiio/libiio.hash | 3 ++-
+>  package/libiio/libiio.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
