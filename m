@@ -1,27 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 22:52:06 +0200
-Subject: [Buildroot] [PATCH 1/1] libimxvpuapi: add hash for license file
-In-Reply-To: <20180501203339.19778-1-fontaine.fabrice@gmail.com>
-References: <20180501203339.19778-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180501225206.675c2cb4@windsurf.home>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 01 May 2018 16:56:14 -0400
+Subject: [Buildroot] [PATCH 1/1] go: bump to 1.10
+In-Reply-To: <87a7tjf8dr.fsf@dell.be.48ers.dk>
+References: <20180219072718.28895-1-christian@paral.in>
+ <87po3js3j3.fsf@dell.be.48ers.dk> <87y3i7q8fw.fsf@dell.be.48ers.dk>
+ <877eoxc3uq.fsf@paral.in> <87a7tjf8dr.fsf@dell.be.48ers.dk>
+Message-ID: <87sh7b2iz5.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
-On Tue,  1 May 2018 22:33:39 +0200, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libimxvpuapi/libimxvpuapi.hash | 1 +
->  1 file changed, 1 insertion(+)
+Peter Korsgaard <peter@korsgaard.com> writes:
+> It probably isn't, but if the host uses glibc and the target you build
+> for also uses glibc (and the same architecture), then it probably works
+> to link with the target libc instead of the host one.
 
-Applied to master, thanks.
+Agreed, but it's maybe worth noting that I'm successfully compiling on
+amd64 targeting arm and arm64.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best,
+Christian
