@@ -1,51 +1,52 @@
-From: John Keeping <john@metanate.com>
-Date: Tue,  1 May 2018 12:13:04 +0100
-Subject: [Buildroot] [PATCH v2] core/pkg-generic: only save latest package
- list
-In-Reply-To: <20180430194136.GC2470@scaer>
-References: <20180430194136.GC2470@scaer>
-Message-ID: <20180501111304.17597-1-john@metanate.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 1 May 2018 14:22:30 +0300
+Subject: [Buildroot] [PATCH 2/2] cups: disable pam support
+In-Reply-To: <87zi1jg0x0.fsf@dell.be.48ers.dk>
+References: <91db976709291253cb9914a411a9d75872165f75.1525115956.git.baruch@tkos.co.il>
+ <399e1f6584e1296686974096bc97c027988f3899.1525115956.git.baruch@tkos.co.il>
+ <87zi1jg0x0.fsf@dell.be.48ers.dk>
+Message-ID: <20180501112230.eac3ejv6vo54jujb@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When rebuilding a package, simply appending the package's file list to
-the global list means that the package list grows for every rebuild, as
-does the time taken to check for files installed by multiple packages.
-Furthermore, we get false positives where a file is reported as being
-installed by multiple copies of the same package.
+Hi Peter,
 
-With this approach we may end up with orphaned files in the target
-filesystem if a package that has been updated and rebuilt no longer
-installs the same set of files, but we know that only a clean build will
-produce reliable results.  In fact it may be helpful to identify these
-orphaned files as evidence that the build is not clean.
+On Tue, May 01, 2018 at 11:50:19AM +0200, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+>  > Make the build consistent.
+>  > Cc: Olivier Schonken <olivier.schonken@gmail.com>
+>  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>  > ---
+>  >  package/cups/cups.mk | 1 +
+>  >  1 file changed, 1 insertion(+)
+> 
+>  > diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+>  > index 54271d5fc769..8f33824879ee 100644
+>  > --- a/package/cups/cups.mk
+>  > +++ b/package/cups/cups.mk
+>  > @@ -24,6 +24,7 @@ CUPS_CONF_OPTS = \
+>  >  	--without-java \
+>  >  	--without-php \
+>  >  	--disable-gssapi \
+>  > +	--disable-pam \
+> 
+> Committed, thanks.
 
-Signed-off-by: John Keeping <john@metanate.com>
----
-Changes in v2:
-- Do the sed as a separate step rather than in the same shell invocation
-  as the find (we know that $(BUILD_DIR) is an absolute path); since we
-  no longer ignore the exit status of sed, we also have to ensure that
-  the file exists before executing sed
+Not in master as of 24c1751a002b.
 
- package/pkg-generic.mk | 2 ++
- 1 file changed, 2 insertions(+)
+> Any specific reason to unconditionally disable this and not enable when
+> linux-pam is available?
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bd47ca1964..8ebbacc180 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -63,6 +63,8 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- # $(2): base directory to search in
- # $(3): suffix of file  (optional)
- define step_pkg_size_inner
-+	@>$(BUILD_DIR)/packages-file-list$(3).txt
-+	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
- 	cd $(2); \
- 	find . \( -type f -o -type l \) \
- 		-newer $($(PKG)_DIR)/.stamp_built \
+I guess that PAM integration takes more than just dependency declaration and 
+--enable-pam. But I did not look too deeply into that.
+
+baruch
+
 -- 
-2.17.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
