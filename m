@@ -1,53 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 21:40:47 +0200
-Subject: [Buildroot] [PATCH 1/1] libgdiplus: bump to version 5.6
-In-Reply-To: <20180430190840.11455-1-fontaine.fabrice@gmail.com>
-References: <20180430190840.11455-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180501214047.1d9f818c@windsurf.home>
+Date: Tue, 1 May 2018 21:41:00 +0200
+Subject: [Buildroot] [git commit] libg7221: add hash for license file
+Message-ID: <20180501194104.C5A5283D37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0a1938f1bd05f6fe2f5d3fe28146c95bbf22aa98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Sergio.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libg7221/libg7221.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Mon, 30 Apr 2018 21:08:40 +0200, Fabrice Fontaine wrote:
-
->  # Although there is a LICENSE file thas specifies LGPL or MPL-1.1,
->  # looks like it is incorrect. The actual source files specify that
-> -# they're licensed under MIT, and so does the COPYING file (and they
-> -# all predate the addition of the LICENSE file).
-> +# they're licensed under MIT, and so does the original (before its
-> +# removal/update) COPYING file (and they all predate the addition of
-> +# the LICENSE file).
->  LIBGDIPLUS_LICENSE = MIT
-> -LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
-> +LIBGDIPLUS_LICENSE_FILES = src/carbon-private.h
->  
->  LIBGDIPLUS_INSTALL_STAGING = YES
-
-Hum, this feels weird. They have re-added a COPYING file pointing to
-the LICENSE file, which itself that says LGPL or MPL, so perhaps this
-isn't wrong after all ?
-
-carbon-private.h might be MIT licensed, but the whole work may still be
-released under LGPL or MPL.
-
-See https://github.com/mono/libgdiplus/blob/master/LICENSE
-
-So I believe our assessment that the LICENSE file was wrong when it was
-saying LGPL or MPL-1.1 is not correct, and we should change the license
-details of libgdiplus to LGPL-2.1 or MPL-1.1.
-
-Sergio, you originally contributed libgdiplus, what do you think ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libg7221/libg7221.hash b/package/libg7221/libg7221.hash
+index d1472a6c69..09023f9543 100644
+--- a/package/libg7221/libg7221.hash
++++ b/package/libg7221/libg7221.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256 330dafa58d37a585a866167bc33f8fbe06dbcfc9a69cad43fab0b6702ebf2393  libg7221-dbfc29d4806ecdace50379a2f4d68a992a6fec34.tar.gz
++sha256 26cc5f718279b45dbe34e25a2d29b2c8ca487bd9ab11b2d68c9318ff59d5c645  COPYING
