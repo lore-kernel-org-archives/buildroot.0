@@ -1,76 +1,65 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 1 May 2018 20:04:02 +0200
-Subject: [Buildroot] [PATCH] uclibc: fix ldconfig for x86_64
-Message-ID: <20180501180402.GA19705@waldemar-brodkorb.de>
+Date: Tue, 1 May 2018 20:06:48 +0200
+Subject: [Buildroot] [PATCH] uclibc: fix clock_nanosleep declaration for
+ linuxthreads
+Message-ID: <20180501180648.GA19780@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- ...vert-ldconfig-add-glibc-compatibility-fix.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/uclibc/0001-Revert-ldconfig-add-glibc-compatibility-fix.patch
+Fixes autobuild errors:
+ http://autobuild.buildroot.net/results/a58007263355e2734a8074d52b1b26b88973c39e
+ http://autobuild.buildroot.net/results/7d6fd0872efd23c7de552ab637956902b43c3f58
 
-diff --git a/package/uclibc/0001-Revert-ldconfig-add-glibc-compatibility-fix.patch b/package/uclibc/0001-Revert-ldconfig-add-glibc-compatibility-fix.patch
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Reported-by: Baruch Siach <baruch@tkos.co.il>
+
+---
+ ...declare-clock_nanosleep-not-only-for-NPTL.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/uclibc/0002-librt-declare-clock_nanosleep-not-only-for-NPTL.patch
+
+diff --git a/package/uclibc/0002-librt-declare-clock_nanosleep-not-only-for-NPTL.patch b/package/uclibc/0002-librt-declare-clock_nanosleep-not-only-for-NPTL.patch
 new file mode 100644
-index 0000000..362ece2
+index 0000000..adc6be4
 --- /dev/null
-+++ b/package/uclibc/0001-Revert-ldconfig-add-glibc-compatibility-fix.patch
-@@ -0,0 +1,54 @@
-+From 92d250d387e247029900c9074150f45866b29781 Mon Sep 17 00:00:00 2001
++++ b/package/uclibc/0002-librt-declare-clock_nanosleep-not-only-for-NPTL.patch
+@@ -0,0 +1,36 @@
++From ffea49761b3933924cf1125857e9e737eb4a3b25 Mon Sep 17 00:00:00 2001
 +From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sun, 29 Apr 2018 19:34:11 +0200
-+Subject: [PATCH 1/2] Revert "ldconfig: add glibc compatibility fix"
++Date: Tue, 1 May 2018 19:35:20 +0200
++Subject: [PATCH] librt: declare clock_nanosleep not only for NPTL
 +
-+This reverts commit 2a3bb4daf5778c5875674cd26a3c75b3d460a042.
-+
-+This is breaking ld.so.cache usage. Seen on Gentoo/amd64.
-+
-+Reported-by: "Anthony G. Basile" <basile@freeharbor.net>
++Reported-by: Baruch Siach <baruch@tkos.co.il>
 +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +---
-+ utils/ldconfig.c | 11 ++++++-----
-+ 1 file changed, 6 insertions(+), 5 deletions(-)
++ include/time.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/utils/ldconfig.c b/utils/ldconfig.c
-+index 58939d6..e6b7881 100644
-+--- a/utils/ldconfig.c
-++++ b/utils/ldconfig.c
-+@@ -184,9 +184,10 @@ static char *readsoname(char *name, FILE *infile, int expected_type,
-+ 		res = readsoname32(name, infile, expected_type, type);
-+ 	else {
-+ 		res = readsoname64(name, infile, expected_type, type);
-+-
-+-		// For 64-bit glibc compatibility
-+-		*type |= FLAG_X8664_LIB64;
-++#if 0
-++		/* relies on multilib support which we dont have ... */
-++		*type |= LIB_ELF64;
-++#endif
-+ 	}
++diff --git a/include/time.h b/include/time.h
++index 785c8f6..c29038b 100644
++--- a/include/time.h
+++++ b/include/time.h
++@@ -356,7 +356,7 @@ extern int clock_settime (clockid_t __clock_id, const struct timespec *__tp)
++ #  endif /* __UCLIBC_HAS_REALTIME__ */
 + 
-+ 	return res;
-+@@ -757,7 +758,7 @@ void cache_print(void)
++ #  if defined __USE_XOPEN2K && defined __UCLIBC_HAS_ADVANCED_REALTIME__
++-#   ifdef __UCLIBC_HAS_THREADS_NATIVE__
+++#   ifdef __UCLIBC_HAS_THREADS__
++ /* High-resolution sleep with the specified clock.
 + 
-+ 	for (fd = 0; fd < header->nlibs; fd++) {
-+ 		printf("\t%s ", strs + libent[fd].sooffset);
-+-		switch (libent[fd].flags & ~LIB_ELF64 & FLAG_TYPE_MASK) {
-++		switch (libent[fd].flags & ~LIB_ELF64) {
-+ 		case LIB_DLL:
-+ 			printf("(libc4)");
-+ 			break;
-+@@ -770,7 +771,7 @@ void cache_print(void)
-+ 		case LIB_ELF_LIBC5:
-+ 		case LIB_ELF_LIBC6:
-+ 			printf("(libc%d%s)",
-+-			       (libent[fd].flags & ~LIB_ELF64 & FLAG_TYPE_MASK) + 3,
-++			       (libent[fd].flags & ~LIB_ELF64) + 3,
-+ 			       libent[fd].flags & LIB_ELF64 ? "/64" : "");
-+ 			break;
-+ 		default:
++    This function is a cancellation point and therefore not marked with
++@@ -367,7 +367,7 @@ extern int clock_nanosleep (clockid_t __clock_id, int __flags,
++ 
++ /* Return clock ID for CPU-time clock.  */
++ extern int clock_getcpuclockid (pid_t __pid, clockid_t *__clock_id) __THROW;
++-#   endif /* __UCLIBC_HAS_THREADS_NATIVE__ */
+++#   endif /* __UCLIBC_HAS_THREADS__ */
++ #  endif
++ 
++ #  if defined __UCLIBC_HAS_REALTIME__
 +-- 
 +2.1.4
 +
