@@ -1,13 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 May 2018 21:52:47 +0200
-Subject: [Buildroot] [PATCH 1/2] busybox: add /dev/std{in, out,
+Date: Tue, 01 May 2018 21:53:35 +0200
+Subject: [Buildroot] [PATCH 2/2] sysvinit: add /dev/std{in, out,
  err} symlinks to inittab
-In-Reply-To: <20180404180935.15185-2-joerg.krause@embedded.rocks>
+In-Reply-To: <20180404180935.15185-3-joerg.krause@embedded.rocks>
  (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Wed, 4 Apr 2018 20:09:34 +0200")
+ Krause"'s message of "Wed, 4 Apr 2018 20:09:35 +0200")
 References: <20180404180935.15185-1-joerg.krause@embedded.rocks>
- <20180404180935.15185-2-joerg.krause@embedded.rocks>
-Message-ID: <87in87f90w.fsf@dell.be.48ers.dk>
+ <20180404180935.15185-3-joerg.krause@embedded.rocks>
+Message-ID: <87efivf8zk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -41,26 +41,30 @@ To: buildroot@busybox.net
 
  > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
  > ---
- >  package/busybox/inittab | 4 ++++
- >  1 file changed, 4 insertions(+)
+ >  package/sysvinit/inittab | 6 +++++-
+ >  1 file changed, 5 insertions(+), 1 deletion(-)
 
- > diff --git a/package/busybox/inittab b/package/busybox/inittab
- > index 3f49f6bd7a..0f6b8cbe37 100644
- > --- a/package/busybox/inittab
- > +++ b/package/busybox/inittab
- > @@ -19,6 +19,10 @@
- >  ::sysinit:/bin/mkdir -p /dev/pts
- >  ::sysinit:/bin/mkdir -p /dev/shm
- >  ::sysinit:/bin/mount -a
- > +::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
- > +::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
- > +::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
- > +::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
+ > diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+ > index fad91eae8b..608aabce07 100644
+ > --- a/package/sysvinit/inittab
+ > +++ b/package/sysvinit/inittab
+ > @@ -9,7 +9,11 @@ si1::sysinit:/bin/mount -o remount,rw /
+ >  si2::sysinit:/bin/mkdir -p /dev/pts
+ >  si3::sysinit:/bin/mkdir -p /dev/shm
+ >  si4::sysinit:/bin/mount -a
+ > -si5::sysinit:/bin/hostname -F /etc/hostname
+ > +si5::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
+ > +si6::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
+ > +si7::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
+ > +si8::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
 
 This will fail on static /dev on a readonly rootfs, so I've redirected
 errors to /dev/null.
 
 Committed with that changed, thanks.
+
+I have also added a patch adding these symlinks in the default skeleton
+to handle static /dev on readonly rootfs setups.
 
 -- 
 Bye, Peter Korsgaard
