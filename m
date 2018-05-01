@@ -1,88 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 May 2018 10:44:11 +0200
-Subject: [Buildroot] [PATCH 0/7 v5] support/download: make the git backend
- even more robust
-Message-ID: <cover.1525164241.git.yann.morin.1998@free.fr>
+Date: Tue,  1 May 2018 10:44:09 +0200
+Subject: [Buildroot] [PATCH 1/7 v5] download/git: add warning not to use our
+ git cache
+In-Reply-To: <cover.1525164241.git.yann.morin.1998@free.fr>
+References: <cover.1525164241.git.yann.morin.1998@free.fr>
+Message-ID: <5e2081998de90532c315df1aaeb064e5324bee4d.1525164241.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+We really want the user not to use our git cache manually, or their
+changes (committed or not) may eventually get lost.
 
-This series makes our git backend even more robust than what we
-currently have. Especially, it will try to recover from a repository
-that was so utterly butchered that even a git-init can't salvage it.
+So, add a warning file, not unlike the one we put in the target/
+directory, to warn the user not to use the git tree.
 
-The most significant changes are:
+Ideally, we would have carried this file in support/misc/, but the git
+backend does not have access to it: the working directory is somewhere
+unknown, and TOPDIR is not exported in the environment.
 
-  - ensure we can checkout from an unclean state;
+So, we have to carry it in-line in the backend instead.
 
-  - ensure we can checkout across changes in submodules setup;
-
-  - as a last-ditch recovery, trash the local cache and clone again
-    from scratch.
-
-Additionally, we also remove support for shallow clones, because they
-were in fact fundamentally broken, and did only work by chance.
-
-Finally, we add a warning file, that the user should not use our git
-cache for development, neither directly in it nor as a remote or the
-origin for worktrees.
-
-Thanks a lot to Ricardo, Arnout and Thomas for their inputs during the
-discussions that led to this series. :-)
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-Changes v4 -> v5:
-  - fix trapping in the _git fuction  (Ricardo)
-  - carry reviews and tests by Ricardo
-  - typoes  (Ricardo)
+ support/download/git | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-Changes v3 -> v4:
-  - git clean --ffdx  is needed in the same patch that fircs the
-    checkout  (Ricardo)
-
-Changes v2 -> v3:
-  - do not trash the cache if the cset is missing  (Thomas)
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 5a8f887e7ab6c28b2d5a4c01266bc75943cea90c
-
-  sdl2: update license file hash (2018-05-01 09:35:41 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 657e448ced76f18222d9987baf7bca48d550f13b
-
-  download/git: always do full-clone (2018-05-01 10:41:02 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (7):
-      download/git: add warning not to use our git cache
-      download/git: run all git commands in the current directory
-      download/git: quickly exit when the cset does not exist
-      download/git: try to recover from utterly-broken repositories
-      download/git: ensure we checkout to a clean state
-      download/git: ensure we can checkout repos with submodule conversions
-      download/git: always do full-clone
-
- support/download/git | 123 ++++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 96 insertions(+), 27 deletions(-)
-
+diff --git a/support/download/git b/support/download/git
+index bf05c595a5..3b5c8a6cfe 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -43,6 +43,24 @@ _git() {
+     eval GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
+ }
+ 
++# Create a warning file, that the user should not use the git cache.
++# It's ours. Our precious.
++cat <<-_EOF_ >"${dl_dir}/git.readme"
++	IMPORTANT NOTE!
++
++	The git tree located in this directory is for the exclusive use
++	by Buildroot, which uses it as a local cache to reduce bandwidth
++	usage.
++
++	Buildroot *will* trash any changes in that tree whenever it needs
++	to use it. Buildroot may even remove it in case it detects the
++	repository may have been damaged or corrupted.
++
++	Do *not* work in that directory; your changes will eventually get
++	lost. Do *not* even use it as a remote, or as the source for new
++	worktrees; your commits will eventually get lost.
++_EOF_
++
+ # Initialise a repository in the git cache. If the repository already
+ # existed, this is a noop, unless the repository was broken, in which
+ # case this magically restores it to working conditions. In the latter
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
