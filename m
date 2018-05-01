@@ -1,54 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 1 May 2018 21:22:28 +0200
-Subject: [Buildroot] [git commit] download/git: quickly exit when the cset
- does not exist
-Message-ID: <20180501192232.44BB381383@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] download/git: always do full-clone
+Message-ID: <20180501192232.803F382627@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=428a0649fff33b43243d64e9e1556bc00811e9b6
+commit: https://git.buildroot.net/buildroot/commit/?id=4f54c959dc18cb3ca56e8f54b358fc219352d7bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Check that the given cset is indeed something we can checkout. If not,
-then exit early.
+We currently attempt a shallow clone, as tentative to save bandwidth and
+download time.
 
-This will be useful when a later commit will trap any failing git
-command to try to recover the repository by doing a clone from scratch:
-when the cset is not a commit, it does not mean the repository is broken
-or what, and re-cloning from scratch would not help, so no need to trash
-a good cache.
+However, now that we keep the git tree as a cache, it may happen that we
+need to checkout an earlier commit, and that would not be present with a
+shallow clone.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Furthermore, the shallow fetch is already really broken, and just
+happens to work by chance. Consider the following actions, which are
+basically what happens today:
+
+    mkdir git
+    git init git
+    cd git
+    git remote add origin https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+    git fetch origin --depth 1 v4.17-rc1
+    if ! git fetch origin v4.17-rc1:v4.17-rc1 ; then
+        echo "warning"
+    fi
+    git checkout v4.17-rc1
+
+The checkout succeeds just because of the git-fetch in the if-condition,
+which is initially there to fetch the special refs from github PRs, or
+gerrit reviews. That fails, but we just print a warning. If we were to
+ever remove support for special refs, then the checkout would fail.
+
+The whole purpose of the git cache is to actually save bandwidth and
+download time, but in the long run. For one-offs, people would
+preferably use a wget download (e.g. with the github macro) instead of
+a git clone.
+
+We switch to always doing a full clone. It is more correct, and pays off
+in the long run...
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/git | 7 +++++++
- 1 file changed, 7 insertions(+)
+ support/download/git | 24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
 diff --git a/support/download/git b/support/download/git
-index 60d6c24f1e..bd37a0a8d9 100755
+index 931694f89c..11bb52c1e1 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -114,6 +114,13 @@ if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-     printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
- fi
+@@ -111,27 +111,9 @@ fi
  
-+# Check that the changeset does exist. If it does not, no reason to go
-+# on, we can fast-track to the exit path.
-+if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
-+    printf "Commit '%s' does not exist in this repository\n." "${cset}"
-+    exit 1
-+fi
-+
- # Checkout the required changeset, so that we can update the required
- # submodules.
- _git checkout -q "'${cset}'"
+ _git remote set-url origin "'${uri}'"
+ 
+-# Try to fetch with limited depth, since it is faster than a full clone - but
+-# that only works if the version is a ref (tag or branch). Before trying to do
+-# a shallow clone we check if ${cset} is in the list provided by git ls-remote.
+-# If not we fallback to a full fetch.
+-#
+-# Messages for the type of clone used are provided to ease debugging in
+-# case of problems
+-git_done=0
+-if [ -n "$(_git ls-remote origin "'${cset}'" 2>&1)" ]; then
+-    printf "Doing a shallow fetch\n"
+-    if _git fetch "${@}" --depth 1 origin "'${cset}'"; then
+-        git_done=1
+-    else
+-        printf "Shallow fetch failed, falling back to fetching all refs\n"
+-    fi
+-fi
+-if [ ${git_done} -eq 0 ]; then
+-    printf "Fetching all references\n"
+-    _git fetch origin
+-    _git fetch origin -t
+-fi
++printf "Fetching all references\n"
++_git fetch origin
++_git fetch origin -t
+ 
+ # Try to get the special refs exposed by some forges (pull-requests for
+ # github, changes for gerrit...). There is no easy way to know whether
