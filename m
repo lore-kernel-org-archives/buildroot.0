@@ -1,84 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  1 May 2018 09:52:11 +0200
-Subject: [Buildroot] [PATCH 1/1] Revert "libcrossguid: bump to version 0.2.2"
-Message-ID: <20180501075211.29327-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 May 2018 09:57:21 +0200
+Subject: [Buildroot] [PATCH] bluez5_utils: add patch to fix readline
+ issue
+In-Reply-To: <20180420140713.16271-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 20 Apr 2018 16:07:13 +0200")
+References: <20180420140713.16271-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87fu3biza6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit dededf0ff2177e5aeb051db25e178bb951debce5.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Building the only package depending on libcrossguid, Kodi, breaks due to
-this bump:
+ > Since bluez5_utils 5.49, some code using readline was compiled even if
+ > readline was not available. After this issue was reported upstream, a
+ > patch was proposed by an upstream developer to address the issue. This
+ > commit integrates this patch (under review upstream), which fixes the
+ > problem.
 
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/utils/
-StringUtils.cpp: In static member function ?static std::__cxx11::string
-StringUtils::CreateUUID()?:
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/utils/
-StringUtils.cpp:1194:10: error: ?GuidGenerator? does not name a type
-   static GuidGenerator guidGenerator;
-          ^~~~~~~~~~~~~
-/home/buildroot/br4/output/build/kodi-17.6-Krypton/xbmc/utils/
-StringUtils.cpp:1195:15: error: ?guidGenerator? was not declared in this
-scope
-   auto guid = guidGenerator.newGuid();
-               ^~~~~~~~~~~~~
+ > Fixes:
 
-This happens due to changes in libcrossguid:
-https://github.com/graeme-hill/crossguid/blob/master/README.md
+ >   http://autobuild.buildroot.net/results/3e266a79acab8b8eb33360f7afbc1cd6db46f7cb/
 
-"This is version 0.2 of CrossGuid. If you all already using CrossGuid and
-your code uses GuidGenerator then you are using version 0.1."
+We also have this problem on 2018.02.x which uses bluez5_utils 5.48.1
+(and had it with 5.48 as well), so this applies since 5.49.
 
-Even Kodi master branch has no support for libcrossguid-0.2.x yet so we
-revert the bump.
+Committed to 2018.02.x with the version number refernce fixed, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libcrossguid/libcrossguid.hash | 3 +--
- package/libcrossguid/libcrossguid.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/libcrossguid/libcrossguid.hash b/package/libcrossguid/libcrossguid.hash
-index 08791947ce..a991da56a0 100644
---- a/package/libcrossguid/libcrossguid.hash
-+++ b/package/libcrossguid/libcrossguid.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256 48321928473c682b0cdc7e17bbd3390f79f4b98ab22fef3b81a852dda81fd195  libcrossguid-v0.2.2.tar.gz
--sha256 779e58787f966a1552f68d5ec041513cef68785dae4a519dbda7bc0b86eda20e  LICENSE
-+sha256 022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
-diff --git a/package/libcrossguid/libcrossguid.mk b/package/libcrossguid/libcrossguid.mk
-index 46daaec206..46d9a9dcc6 100644
---- a/package/libcrossguid/libcrossguid.mk
-+++ b/package/libcrossguid/libcrossguid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCROSSGUID_VERSION = v0.2.2
-+LIBCROSSGUID_VERSION = 8f399e8bd4252be9952f3dfa8199924cc8487ca4
- LIBCROSSGUID_SITE = $(call github,graeme-hill,crossguid,$(LIBCROSSGUID_VERSION))
- LIBCROSSGUID_LICENSE = MIT
- LIBCROSSGUID_LICENSE_FILES = LICENSE
-@@ -15,14 +15,14 @@ LIBCROSSGUID_DEPENDENCIES = util-linux
- 
- define LIBCROSSGUID_BUILD_CMDS
- 	(cd $(@D); $(TARGET_CXX) $(TARGET_CXXFLAGS) -std=c++11 -DGUID_LIBUUID \
--		-c Guid.cpp -o guid.o)
-+		-c guid.cpp -o guid.o)
- 	(cd $(@D); $(TARGET_AR) rvs libcrossguid.a guid.o)
- endef
- 
- define LIBCROSSGUID_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 644 $(@D)/libcrossguid.a \
- 		$(STAGING_DIR)/usr/lib/libcrossguid.a
--	$(INSTALL) -D -m 644 $(@D)/Guid.hpp $(STAGING_DIR)/usr/include/guid.h
-+	$(INSTALL) -D -m 644 $(@D)/guid.h $(STAGING_DIR)/usr/include/guid.h
- endef
- 
- $(eval $(generic-package))
 -- 
-2.14.2
+Bye, Peter Korsgaard
