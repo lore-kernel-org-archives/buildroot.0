@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 21:27:27 +0200
-Subject: [Buildroot] [PATCH 1/1] msmtp: add optional support for libgsasl
-In-Reply-To: <20180501190132.983-1-fontaine.fabrice@gmail.com>
-References: <20180501190132.983-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180501212727.799db4ba@windsurf.home>
+Date: Tue, 1 May 2018 21:27:31 +0200
+Subject: [Buildroot] [PATCH 1/1] msmtp: add hash for license file
+In-Reply-To: <20180501191359.5825-1-fontaine.fabrice@gmail.com>
+References: <20180501191359.5825-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180501212731.0fdc854d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 May 2018 21:01:32 +0200, Fabrice Fontaine wrote:
+On Tue,  1 May 2018 21:13:59 +0200, Fabrice Fontaine wrote:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/msmtp/msmtp.mk | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+>  package/msmtp/msmtp.hash | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Applied to master, thanks.
 
