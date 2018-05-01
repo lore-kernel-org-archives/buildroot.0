@@ -1,30 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 15:21:46 +0200
-Subject: [Buildroot] [PATCH 1/1] lftp: bump to version 4.8.3
-In-Reply-To: <20180501125956.28230-1-fontaine.fabrice@gmail.com>
-References: <20180501125956.28230-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180501152146.3d00d84e@windsurf>
+Date: Tue, 1 May 2018 15:21:56 +0200
+Subject: [Buildroot] [git commit] core/pkg-generic: only save latest package
+ list
+Message-ID: <20180501132538.73CE68A5BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d3dca1e9936bcaa0eed226a5bcb8c6a4d1fd1472
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  1 May 2018 14:59:56 +0200, Fabrice Fontaine wrote:
-> Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/lftp/lftp.hash | 9 ++++++---
->  package/lftp/lftp.mk   | 2 +-
->  2 files changed, 7 insertions(+), 4 deletions(-)
+When rebuilding a package, simply appending the package's file list to
+the global list means that the package list grows for every rebuild, as
+does the time taken to check for files installed by multiple packages.
+Furthermore, we get false positives where a file is reported as being
+installed by multiple copies of the same package.
 
-Applied to master, thanks.
+With this approach we may end up with orphaned files in the target
+filesystem if a package that has been updated and rebuilt no longer
+installs the same set of files, but we know that only a clean build will
+produce reliable results.  In fact it may be helpful to identify these
+orphaned files as evidence that the build is not clean.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: John Keeping <john@metanate.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index bd47ca1964..87c856407d 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -63,6 +63,8 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ # $(2): base directory to search in
+ # $(3): suffix of file  (optional)
+ define step_pkg_size_inner
++	@touch $(BUILD_DIR)/packages-file-list$(3).txt
++	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
+ 	cd $(2); \
+ 	find . \( -type f -o -type l \) \
+ 		-newer $($(PKG)_DIR)/.stamp_built \
