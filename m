@@ -1,44 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 May 2018 22:15:38 +0200
-Subject: [Buildroot] [git commit] mutt: bump to version 1.9.5
-Message-ID: <20180501201551.0D8E0819EA@busybox.osuosl.org>
+Date: Tue, 1 May 2018 22:15:42 +0200
+Subject: [Buildroot] [git commit] msmtp: add optional libidn dependency
+Message-ID: <20180501201551.741CF8B253@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bda754dfab08ae7c7b67f640fe3cac9abfb1c0c
+commit: https://git.buildroot.net/buildroot/commit/?id=52443ef73353143ee78a0a0d31747bc853f2f9b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mutt/mutt.hash | 3 ++-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/msmtp/msmtp.mk | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index f6dc472d48..cab8d2db68 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 9b81746d67ffeca5ea44f60893b70dc93c86d4bc10187d4dd360185e4d42ed42  mutt-1.8.3.tar.gz
-+sha256 bf617e64ae4e08a998bef8e42a965a211587e051f1437a3a4884b351a9385753  mutt-1.9.5.tar.gz
-+sha256 732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index b0bf5a7b41..d224138c57 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index b7a830649d..65fd0e4319 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -8,9 +8,7 @@ MSMTP_VERSION = 1.6.6
+ MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
+-MSMTP_CONF_OPTS = \
+-	--without-libidn \
+-	--disable-gai-idn
++MSMTP_CONF_OPTS = --disable-gai-idn
+ MSMTP_LICENSE = GPL-3.0+
+ MSMTP_LICENSE_FILES = COPYING
  
--MUTT_VERSION = 1.8.3
-+MUTT_VERSION = 1.9.5
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+@@ -21,6 +19,13 @@ else
+ MSMTP_CONF_OPTS += --without-libgsasl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBIDN),y)
++MSMTP_CONF_OPTS += --with-libidn
++MSMTP_DEPENDENCIES += libidn
++else
++MSMTP_CONF_OPTS += --without-libidn
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSECRET),y)
+ MSMTP_CONF_OPTS += --with-libsecret
+ MSMTP_DEPENDENCIES += libsecret
