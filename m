@@ -1,26 +1,38 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 01 May 2018 16:56:14 -0400
-Subject: [Buildroot] [PATCH 1/1] go: bump to 1.10
-In-Reply-To: <87a7tjf8dr.fsf@dell.be.48ers.dk>
-References: <20180219072718.28895-1-christian@paral.in>
- <87po3js3j3.fsf@dell.be.48ers.dk> <87y3i7q8fw.fsf@dell.be.48ers.dk>
- <877eoxc3uq.fsf@paral.in> <87a7tjf8dr.fsf@dell.be.48ers.dk>
-Message-ID: <87sh7b2iz5.fsf@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 May 2018 22:56:02 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: RadeonSI needs
+ libdrm-radeon and libdrm-amdgpu
+Message-ID: <20180501205730.108EE8B3A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=3764f8773b89babeb86dd9d5b6b8bccdd77d2c8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <peter@korsgaard.com> writes:
-> It probably isn't, but if the host uses glibc and the target you build
-> for also uses glibc (and the same architecture), then it probably works
-> to link with the target libc instead of the host one.
+Fixes:
+checking for EXPAT... yes
+checking for RADEON... no
+configure: error: Package requirements (libdrm >= 2.4.71 libdrm_radeon >= 2.4.71)
 
-Agreed, but it's maybe worth noting that I'm successfully compiling on
-amd64 targeting arm and arm64.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Micha?? Kalbarczyk <michal@gamecodehq.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best,
-Christian
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 1984e4f11c..32337a36a4 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -122,6 +122,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+ 			BR2_TOOLCHAIN_USES_GLIBC)) # elfutils
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_AMDGPU
++	select BR2_PACKAGE_LIBDRM_RADEON
+ 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
