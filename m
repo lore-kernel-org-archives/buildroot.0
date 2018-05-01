@@ -1,15 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 May 2018 09:35:41 +0200
-Subject: [Buildroot] [git commit] sdl2: update license file hash
-Message-ID: <20180501073603.27AD28A522@busybox.osuosl.org>
+Date: Tue, 1 May 2018 09:36:18 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] sdl2: update license file
+ hash
+Message-ID: <20180501073734.E051E8A526@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a8f887e7ab6c28b2d5a4c01266bc75943cea90c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=6c4685490419d42feb8e3a4697c9ae45b32efe5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Copyright year update.
 
@@ -18,6 +19,8 @@ http://autobuild.buildroot.net/results/2c8/2c865463a4b7524114518c04dce9c94252433
 
 Cc: Guillaume Gardet <guillaume.gardet@oliseo.fr>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5a8f887e7ab6c28b2d5a4c01266bc75943cea90c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/sdl2/sdl2.hash | 2 +-
