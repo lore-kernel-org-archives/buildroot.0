@@ -1,99 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 May 2018 23:51:19 +0200
-Subject: [Buildroot] [PATCH 1/7] libidn2: new package
-In-Reply-To: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
-References: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
-Message-ID: <03d92121-8a91-a2a8-5fc3-e20b130e19f4@mind.be>
+Date: Wed, 2 May 2018 23:54:11 +0200
+Subject: [Buildroot] [PATCH 3/4] package/Makefile.in: Remove RELRO
+ linker flags from CFLAGS
+In-Reply-To: <CANQCQpbyDWsyEQ4ERFfpQ=h_5fU_QnXNcKN-ULOKhMf1e7FLDg@mail.gmail.com>
+References: <20180425064518.31797-1-stefan.sorensen@spectralink.com>
+ <20180425064518.31797-3-stefan.sorensen@spectralink.com>
+ <CANQCQpbyDWsyEQ4ERFfpQ=h_5fU_QnXNcKN-ULOKhMf1e7FLDg@mail.gmail.com>
+Message-ID: <4fcd5eb1-7cd2-319a-a23f-4cbb3ab06c21@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Fabrice,
 
-On 01-05-18 22:40, Fabrice Fontaine wrote:
-> Libidn2 is an implementation of the IDNA2008 + TR46
-> specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
-> TR 46).
+
+On 30-04-18 19:57, Matthew Weber wrote:
+> Stefan,
 > 
-> http://www.gnu.org/software/libidn/
-
- So, basically libidn2 replaces libidn. Do we really want to support both? Yes,
-obviously the API changed, but that happens all the time when bumping packages.
-So, the question is what gives the best user experience...
-
- The problem with adding libidn2 is that a user who currently has libidn and
-libcurl enabled, after updating Buildroot, will suddenly loose IDN support with
-no warning...
-
- On the other hand, if a user has selected libidn and is using it in some
-package outside of Buildroot, then that package will fail to build entirely,
-with no (easy) way to recovery. But how likely is it that libidn is used in an
-external package?
-
- But first, of course, if we want to just bump libidn then we have to make sure
-that all packages support libidn2. That means the following packages have to be
-checked: dnsmasq, ghostscript, libgsasl, mutt, omxplayer, prosody.
-
+> On Wed, Apr 25, 2018 at 1:45 AM, Stefan S?rensen
+> <stefan.sorensen@spectralink.com> wrote:
+>> The RELRO related flags are for the linker, not the compiler, so they belong
+>> in LDFLAGS.
+>>
+>> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+>> ---
+>>  package/Makefile.in | 10 +++-------
+>>  1 file changed, 3 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/package/Makefile.in b/package/Makefile.in
+>> index 1cbf34e0df..4525b8e79f 100644
+>> --- a/package/Makefile.in
+>> +++ b/package/Makefile.in
+>> @@ -141,9 +141,6 @@ ifeq ($(BR2_DEBUG_3),y)
+>>  TARGET_DEBUGGING = -g3
+>>  endif
+>>
+>> -TARGET_CFLAGS_RELRO = -Wl,-z,relro
+>> -TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
+>> -
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[snip]
+> If you remove these flags from CFLAGS then packages that link with gcc
+> vs explicitly ld won't get the flag.
 
-> diff --git a/package/libidn2/Config.in b/package/libidn2/Config.in
-> new file mode 100644
-> index 0000000000..38b1378990
-> --- /dev/null
-> +++ b/package/libidn2/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_LIBIDN2
-> +	bool "libidn2"
+ The intention is that LDFLAGS is used when linking with $CC/$CXX. Linking with
+ld should ideally never be done, except for some special snowflakes like the kernel.
 
- Can it be parallel-installed with libidn or does it need a depends on
-!BR2_PACKAGE_LIBIDN?
-
-> +	help
-> +	  Libidn2 is an implementation of the IDNA2008 + TR46
-> +	  specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
-> +	  TR 46).
-> +
-> +	  http://www.gnu.org/software/libidn/
-[snip]
-> +LIBIDN2_VERSION = 2.0.4
-> +LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
-> +LIBIDN2_LICENSE = GPL-2.0+, LGPL-3.0+
-> +LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
-> +LIBIDN2_DEPENDENCIES = \
-> +	host-pkgconf \
-> +	$(TARGET_NLS_DEPENDENCIES) \
-> +	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> +LIBIDN2_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
-> +LIBIDN2_DEPENDENCIES += libunistring
-
- No --enable/disable option for this?
-
- Also, don't the java and C# bindings exist any more?
-
-> +endif
-> +
-> +define LIBIDN2_REMOVE_BINARY
-> +	rm -f $(TARGET_DIR)/usr/bin/idn2
-> +endef
-
- Small nit: we prefer to have the define of the hook inside the condition as well.
+ The intention is that TARGET_LDFLAGS is used in all linking invocation.
+However, we're pretty sure that for a large number of packages, this isn't
+really the case. That's why we want to move more things into the wrapper.
 
  Regards,
  Arnout
-
-> +
-> +ifneq ($(BR2_PACKAGE_LIBIDN2_BINARY),y)
-> +LIBIDN2_POST_INSTALL_TARGET_HOOKS += LIBIDN2_REMOVE_BINARY
-> +endif
-> +
-> +$(eval $(autotools-package))
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
