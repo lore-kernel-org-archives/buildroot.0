@@ -1,119 +1,98 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 May 2018 23:37:31 +0200
-Subject: [Buildroot] [PATCH 1/1] libgdiplus: bump to version 5.6
-In-Reply-To: <CANu7NGvp9ZFropp5ckpT5B59AVzv=xCM0_ctovdAQ4eU=7W_Qw@mail.gmail.com>
-References: <20180430190840.11455-1-fontaine.fabrice@gmail.com>
- <20180501214047.1d9f818c@windsurf.home>
- <CANu7NGvp9ZFropp5ckpT5B59AVzv=xCM0_ctovdAQ4eU=7W_Qw@mail.gmail.com>
-Message-ID: <c44943bd-29e4-8ebb-1798-ce71f4e2d059@mind.be>
+Date: Wed, 2 May 2018 23:51:19 +0200
+Subject: [Buildroot] [PATCH 1/7] libidn2: new package
+In-Reply-To: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
+References: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
+Message-ID: <03d92121-8a91-a2a8-5fc3-e20b130e19f4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Fabrice,
 
-
-On 02-05-18 19:20, Sergio Prado wrote:
-> Hello,
+On 01-05-18 22:40, Fabrice Fontaine wrote:
+> Libidn2 is an implementation of the IDNA2008 + TR46
+> specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
+> TR 46).
 > 
->> On Mon, 30 Apr 2018 21:08:40 +0200, Fabrice Fontaine wrote:
->>
->> > ?# Although there is a LICENSE file thas specifies LGPL or MPL-1.1,
->> > ?# looks like it is incorrect. The actual source files specify that
->> > -# they're licensed under MIT, and so does the COPYING file (and they
->> > -# all predate the addition of the LICENSE file).
->> > +# they're licensed under MIT, and so does the original (before its
->> > +# removal/update) COPYING file (and they all predate the addition of
->> > +# the LICENSE file).
->> > ?LIBGDIPLUS_LICENSE = MIT
->> > -LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
->> > +LIBGDIPLUS_LICENSE_FILES = src/carbon-private.h
->> >
->> > ?LIBGDIPLUS_INSTALL_STAGING = YES
->>
->> Hum, this feels weird. They have re-added a COPYING file pointing to
->> the LICENSE file, which itself that says LGPL or MPL, so perhaps this
->> isn't wrong after all ?
->>
->> carbon-private.h might be MIT licensed, but the whole work may still be
->> released under LGPL or MPL.
->>
->> See https://github.com/mono/libgdiplus/blob/master/LICENSE
->>
->> So I believe our assessment that the LICENSE file was wrong when it was
->> saying LGPL or MPL-1.1 is not correct, and we should change the license
->> details of libgdiplus to LGPL-2.1 or MPL-1.1.
->>
->> Sergio, you originally contributed libgdiplus, what do you think ?
+> http://www.gnu.org/software/libidn/
+
+ So, basically libidn2 replaces libidn. Do we really want to support both? Yes,
+obviously the API changed, but that happens all the time when bumping packages.
+So, the question is what gives the best user experience...
+
+ The problem with adding libidn2 is that a user who currently has libidn and
+libcurl enabled, after updating Buildroot, will suddenly loose IDN support with
+no warning...
+
+ On the other hand, if a user has selected libidn and is using it in some
+package outside of Buildroot, then that package will fail to build entirely,
+with no (easy) way to recovery. But how likely is it that libidn is used in an
+external package?
+
+ But first, of course, if we want to just bump libidn then we have to make sure
+that all packages support libidn2. That means the following packages have to be
+checked: dnsmasq, ghostscript, libgsasl, mutt, omxplayer, prosody.
+
 > 
-> I agree.
-> 
-> From the git commit logs, initially there was no LICENSE file and the license
-> was MIT, as described in COPYING. Eight months later the LICENSE file was added
-> with the message "Add new license", so we might assume the license changed
-> to?LGPL-2.1 or MPL-1.1, but they forgot to remove COPYING. In 2015 COPYING was
-> removed and added later just because of autotools (based on the commit logs),
-> but now pointing to LICENSE. So looks like our?assessment of the license was
-> wrong, and we should change to LGPL-2.1 or MPL-1.1.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[snip]
 
- So I did some research on this. It's complicated :-)
+> diff --git a/package/libidn2/Config.in b/package/libidn2/Config.in
+> new file mode 100644
+> index 0000000000..38b1378990
+> --- /dev/null
+> +++ b/package/libidn2/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_LIBIDN2
+> +	bool "libidn2"
 
- Since 2004 already, there has been a LICENSE file with the text "Libgdiplus is
-licensed under the terms of the GNU Library GPL or the Mozilla Public License
-1.1." and with the details of the MPL (but not the LGPL!) in MPL-1.1.html.
-However, no license headers in source files were updated.
+ Can it be parallel-installed with libidn or does it need a depends on
+!BR2_PACKAGE_LIBIDN?
 
- In 2009, a spec file was added that says
-License:        LGPL v2.1 only; MOZILLA PUBLIC LICENSE (MPL/NPL); X11/MIT
-This file was added by someone from Novell, and Novell is mentioned in all the
-copyright headers in the source files.
+> +	help
+> +	  Libidn2 is an implementation of the IDNA2008 + TR46
+> +	  specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
+> +	  TR 46).
+> +
+> +	  http://www.gnu.org/software/libidn/
+[snip]
+> +LIBIDN2_VERSION = 2.0.4
+> +LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
+> +LIBIDN2_LICENSE = GPL-2.0+, LGPL-3.0+
+> +LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+> +LIBIDN2_DEPENDENCIES = \
+> +	host-pkgconf \
+> +	$(TARGET_NLS_DEPENDENCIES) \
+> +	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> +LIBIDN2_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
+> +LIBIDN2_DEPENDENCIES += libunistring
 
- I haven't traced exactly when, but at some point contributions started
-requiring copyright assignment to Xamarin. For contributions between the
-addition of the LICENSE file and the copyright assignments, I think the status
-is a little unclear.
+ No --enable/disable option for this?
 
- Since 2016, instead of a copyright assignment, there is a Contributor License
-Agreement which basically licenses the .NET Foundation to relicense the code
-under whatever license they want.
+ Also, don't the java and C# bindings exist any more?
 
- In September 2017, the MPL-1.1 and the LGPL-2.1 license texts were added to the
-LICENSE file, and MPL-1.1.html was removed.
+> +endif
+> +
+> +define LIBIDN2_REMOVE_BINARY
+> +	rm -f $(TARGET_DIR)/usr/bin/idn2
+> +endef
 
- And finally, libgdiplus is part of the Mono project, and the Mono licensing FAQ
-says: "The Mono runtime, compilers and tools and most of the class libraries are
-licensed under the MIT license." (but libgdiplus is not really part of the mono
-runtime, compilers, tools or class libraries; it's an independent library that
-is used by the Mono project, probably by nobody else).
-
-
- Bottom line:
-
-- The license situation really hasn't changed since 2004.
-- Based on the information in the source tarball, it should be (LGPL-2.1 OR
-MPL-1.1) AND MIT.
-- But the intention is probably MIT.
-
- So I've opened an issue[1] to clarify the situation. I've also marked the v2 of
-this patch as Deferred and delegated to me.
+ Small nit: we prefer to have the define of the hook inside the condition as well.
 
  Regards,
  Arnout
 
-[1] https://github.com/mono/libgdiplus/issues/375
-
-
-> 
-> Best regards,
-> 
-> Sergio Prado
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +
+> +ifneq ($(BR2_PACKAGE_LIBIDN2_BINARY),y)
+> +LIBIDN2_POST_INSTALL_TARGET_HOOKS += LIBIDN2_REMOVE_BINARY
+> +endif
+> +
+> +$(eval $(autotools-package))
 > 
 
 -- 
