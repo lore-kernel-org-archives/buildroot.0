@@ -1,71 +1,45 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Wed, 02 May 2018 18:23:50 +0000
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <20180502175722.GA31449@scaer>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180502175722.GA31449@scaer>
-Message-ID: <CAOJ2eMf-+1JfvVcwKKFX1BPj36gbSV+Vc58ShJj61UzrGCe16Q@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  2 May 2018 21:33:19 +0300
+Subject: [Buildroot] [PATCH] python-subprocess32: needs kernel headers v3.10
+ on MIPS N64
+Message-ID: <6d664294ed5afa0b91e3cf3c32c30fac38d573f0.1525285999.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+MIPS N64 ABI has been missing getdents64 wire up until kernel version
+3.10. Make python-subprocess32 depend on newer headers for MIPS N64.
 
-On Wed, May 2, 2018 at 8:57 PM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+Fixes:
+http://autobuild.buildroot.net/results/af1/af1c0dbfcc27fa93992de57f986657d65163800e/
+http://autobuild.buildroot.net/results/e5f/e5f9e96d02512359348886a9db3aa4cea9db2081/
+http://autobuild.buildroot.net/results/8ba/8ba4c75d724b45c4fe10b4b6c90602b68a811fac/
 
->
-> But what if the libxcrypt package is not installed? Since crypt is only
-> optional in POSIX, there is no guarantee that libxcrypt is even present
-> on a system, especially now that glibc has decided to no longer provide
-> it by default, and given that even --enable-obsolete-crypt does not even
-> declare _XOPEN_CRYPT...
->
+Cc: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/python-subprocess32/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-If crypt() is provided by libxcrypt instead of glibc, then this should be
-automatically handled by package dependencies, i.e.
-
-$ rpm -q --provides libxcrypt
-...
-libcrypt.so.1()(64bit)
-libcrypt.so.1(GLIBC_2.2.5)(64bit)
-libcrypt.so.1(OW_CRYPT_1.0)(64bit)
-libcrypt.so.1(XCRYPT_2.0)(64bit)
-$ rpm -q --whatrequires 'libcrypt.so.1()(64bit)' | wc -l
-57
-$ rpm -q --whatrequires 'libcrypt.so.1(XCRYPT_2.0)(64bit)' | wc -l
-26
-
-The first one ensures that pre-F28 binaries still continue to work on
-Fedora 28. The latter ones have obviously been rebuilt against libxcrypt.so
-already.
-
-As for the development stuff:
-
-$ rpm -ql libxcrypt-devel
-/lib64/libcrypt.so
-/usr/include/crypt.h
-...
-$ rpm -q --provides libxcrypt-devel
-libxcrypt-devel = 4.0.0-5.fc28
-libxcrypt-devel(x86-64) = 4.0.0-5.fc28
-pkgconfig(libxcrypt) = 4.0.0
-$ rpm -q --whatrequires 'libxcrypt-devel(x86-64)'
-glibc-devel-2.27-8.fc28.x86_64
-
-So at least on Fedora 28 this is handled in a backward compatible way, i.e.
-if I want to compile against glibc I also get libxcrypt-devel and therefore
-crypt.h.
-
-In short: I updated 2 systems from F27 to F28 and automatically have
-libxcrypt and libxcrypt-devel available after the update. On the remaining
-F27 system I can see that libxcrypt isn't available at all, i.e. it is a
-new F28 feature.
-
-Just my ?0.02, Stefan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180502/6b8ecc97/attachment.html>
+diff --git a/package/python-subprocess32/Config.in b/package/python-subprocess32/Config.in
+index a936b064b0e6..d7fe84f1e621 100644
+--- a/package/python-subprocess32/Config.in
++++ b/package/python-subprocess32/Config.in
+@@ -1,8 +1,13 @@
+ config BR2_PACKAGE_PYTHON_SUBPROCESS32
+ 	bool "python-subprocess32"
+ 	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_MIPS_NABI64
+ 	help
+ 	  A backport of the Python 3 subprocess module for use
+ 	  on Python 2.
+ 
+ 	  https://github.com/google/python-subprocess32
++
++comment "python-subprocess32 needs a toolchain w/ headers >= 3.10 on MIPS N64"
++	depends on BR2_MIPS_NABI64
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+-- 
+2.17.0
