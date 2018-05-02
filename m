@@ -1,44 +1,51 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Wed,  2 May 2018 12:05:08 +0300
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build host
-Message-ID: <20180502090508.12893-1-chemobejk@gmail.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Wed,  2 May 2018 11:05:34 +0200
+Subject: [Buildroot] [PATCH 1/2] package/clang: delete unnecessary files
+ from target
+Message-ID: <20180502090535.29498-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-crypt() is an optional glibc feature. Some distros, like Fedora 28, are
-phasing it out to be replaced with libxcrypt [1]. Unfortunately this
-change is only ABI compatible, not source code compatible, i.e. the code
-will compile with warnings about undefined crypt(), but the resulting
-binary will crash.
+Delete:
+	Binaries in: /usr/bin
+		     /usr/libexec
 
-Follow the guidance in the Fedora bug and include crypt.h when
-_XOPEN_CRYPT is not defined.
+	Directories: /usr/lib/clang
+		     /usr/share/clang
+		     /usr/share/opt-viewer
+		     /usr/share/scan-build
+		     /usr/share/scan-view
 
-[1] https://bugzilla.redhat.com/show_bug.cgi?id=1566464
+	Manual:	     /usr/share/man/man1/scan-build.1
 
-Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 ---
- package/mkpasswd/mkpasswd.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/clang/clang.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/mkpasswd/mkpasswd.c b/package/mkpasswd/mkpasswd.c
-index 5820f32501..fd16230468 100644
---- a/package/mkpasswd/mkpasswd.c
-+++ b/package/mkpasswd/mkpasswd.c
-@@ -44,6 +44,11 @@
- #include <sys/time.h>
- #endif
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index 88bce9af0b..a599dc0ae6 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -56,9 +56,14 @@ CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(STAGING_DIR)/usr/bin/llvm-config \
  
-+/* glibc without crypt() */
-+#ifndef _XOPEN_CRYPT
-+#include <crypt.h>
-+#endif
-+
- /* Application-specific */
- #include "utils.h"
+ # Clang can't be used as compiler on the target since there are no
+ # development files (headers) and other build tools. So remove clang
+-# binaries from target.
++# binaries and some other unnecessary files from target.
+ define CLANG_DELETE_BINARIES_FROM_TARGET
+-	rm -f $(TARGET_DIR)/usr/bin/clang*
++	cd $(TARGET_DIR)/usr/bin && rm -f clang* c-index-test git-clang-format \
++		scan-build scan-view
++	cd $(TARGET_DIR)/usr/libexec && rm -f c++-analyzer ccc-analyzer
++	cd $(TARGET_DIR)/usr/share && rm -rf clang opt-viewer scan-build scan-view \
++		man/man1/scan-build.1
++	rm -rf $(TARGET_DIR)/usr/lib/clang
+ endef
+ CLANG_POST_INSTALL_TARGET_HOOKS += CLANG_DELETE_BINARIES_FROM_TARGET
  
 -- 
-2.17.0
+2.14.3
