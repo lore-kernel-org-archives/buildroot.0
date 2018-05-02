@@ -1,29 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 May 2018 09:05:23 +0200
-Subject: [Buildroot] [git commit] s6-linux-init: update license hash
-Message-ID: <20180502070620.9BDFD8A50E@busybox.osuosl.org>
+Date: Wed, 2 May 2018 09:01:23 +0200
+Subject: [Buildroot] [git commit] execline: update license hash
+Message-ID: <20180502070620.8F7AF8B431@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12c06de68aa4e783d6d7617154d90fbba185a320
+commit: https://git.buildroot.net/buildroot/commit/?id=78a6f05895c7d9286a33daaba9fda00cd4d2802e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Copyright year update.
 
+Fixes:
+http://autobuild.buildroot.net/results/6f0dcacbba4abd48927ccae044c32e07a96a50a4/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/s6-linux-init/s6-linux-init.hash | 2 +-
+ package/execline/execline.hash | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
-index f658b259cb..8f3c7fa297 100644
---- a/package/s6-linux-init/s6-linux-init.hash
-+++ b/package/s6-linux-init/s6-linux-init.hash
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+index ea10ff1f96..6bf3ccff64 100644
+--- a/package/execline/execline.hash
++++ b/package/execline/execline.hash
 @@ -1,3 +1,3 @@
  # Locally generated
- sha256 d4ac9b8bde3e678353c85dad1a2a25066a40f843c53840c4210839068635ed7e  s6-linux-init-0.4.0.0.tar.gz
--sha256 43cdbc05eceb0781d71a0661bbb6b9335efc4b733fbd02847c0c6667fd440993  COPYING
-+sha256 1377d3b18a31de11e8bb06f0f46888a23bc16cbc57285035793bf7e7943bbcb3  COPYING
+ sha256 f6993094766652041c21fde9c07ef53a3cd4b93a64123d9578fb4997a2cefca1  execline-2.5.0.0.tar.gz
+-sha256 6ee77e7199d69b707ab864ea7a838f9562717aaa41c89413bdb2cf835f95052f  COPYING
++sha256 3eadcf980c40da0f257b8292d805ff41e5e5a908c1942315d9a627732e1aa012  COPYING
