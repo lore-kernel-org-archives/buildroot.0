@@ -1,32 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 May 2018 11:37:15 +0200
-Subject: [Buildroot] [PATCH 2/2] package/llvm: delete LLVMHello.so from
- /usr/lib
-In-Reply-To: <20180502090535.29498-2-valentin.korenblit@smile.fr>
-References: <20180502090535.29498-1-valentin.korenblit@smile.fr>
- <20180502090535.29498-2-valentin.korenblit@smile.fr>
-Message-ID: <20180502113715.205d78a2@windsurf.home>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 2 May 2018 11:37:27 +0200
+Subject: [Buildroot] [PATCH v2 5/5] python-flask-bootstrap: new package
+In-Reply-To: <20180428121739.373473de@windsurf>
+References: <20180206132506.30389-1-aduskett@gmail.com>
+ <20180206132506.30389-5-aduskett@gmail.com>
+ <20180427233344.56c57c66@windsurf>
+ <CAGm1_ksX5tTpYNsv8yTRKUAsw6e0NfFBDpv+xeqzvjSPyWTx8A@mail.gmail.com>
+ <20180428121739.373473de@windsurf>
+Message-ID: <CAGm1_ksPpWCW8QRPEeUdHPZEt1SyRaCvWTaKWanhaUvavftDXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sat, Apr 28, 2018 at 12:17 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Sat, 28 Apr 2018 07:15:01 +0200, Yegor Yefremov wrote:
+>
+>> I've looked at this file
+>> https://github.com/mbr/flask-bootstrap/blob/master/LICENSE
+>
+> This file isn't distributed in the tarball from Pypi, at least I don't
+> remember seeing it yesterday when I looked at the package source code.
+>
+>> The author also mentions Apache-2.0 license as the license of the
+>> original project.
+>
+> And so, is this package just under BSD-3c, or under BSD-3c and
+> Apache-2.0 ?
+>
+> I'm not sure what the "original Bootstrap files" are, whether they are
+> distributed with python-flask-bootstrap or not.
 
-On Wed,  2 May 2018 11:05:35 +0200, Valentin Korenblit wrote:
-> LLVMHello.so contains the Hello World example of an
-> LLVM pass. It is not needed on the target.
-> 
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-> ---
->  package/llvm/llvm.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+I've opened an issue: https://github.com/mbr/flask-bootstrap/issues/181
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yegor
