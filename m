@@ -1,41 +1,29 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 2 May 2018 08:54:52 +0200
-Subject: [Buildroot] python-pip
-In-Reply-To: <CAF_dkJC3g+8LOcchfafNMEUUpdBFfpEQJrJVb9RQiR9CKynwxQ@mail.gmail.com>
-References: <CAF_dkJC3g+8LOcchfafNMEUUpdBFfpEQJrJVb9RQiR9CKynwxQ@mail.gmail.com>
-Message-ID: <CAGm1_kt6bhJVNtEAy-0kV8D0fH=9DPM=yoYphhKt=U2tZgGSzg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 2 May 2018 09:05:23 +0200
+Subject: [Buildroot] [git commit] s6-linux-init: update license hash
+Message-ID: <20180502070620.9BDFD8A50E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Patrick,
+commit: https://git.buildroot.net/buildroot/commit/?id=12c06de68aa4e783d6d7617154d90fbba185a320
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, May 1, 2018 at 10:22 PM, Patrick Doyle <wpdster@gmail.com> wrote:
-> What are the chances of (re-?)adding python-pip to buildroot?
->
-> I found http://lists.busybox.net/pipermail/buildroot/2013-July/075194.html
-> where Rohan Fletcher attempted to add it in 2013.  But I don't see it
-> in the 2018.02 branch.
->
-> Did folks ask questions, Rohan not reply, and nothing ever came of that?
->
-> Yes... I get it... it's not part of the buildroot philosophy to
-> include package management, but I have a use case that makes sense for
-> my application.
->
-> I can resurrect Rohan's patch, or I can stop now, if somebody else has
-> a better suggestion for upgrading Python packages on a deployed
-> system.  (I understand that wheels are the new eggs for Python.
-> Perhaps I should look more carefully at wheels).
->
-> I'll go look at/for that now.
+Copyright year update.
 
-I think, the biggest problem in updating the Python packages on the
-device are the dependencies. Especially external dependencies like C
-libraries etc. like python-smbus-cffi, python-cryptography etc. How
-are you going to handle this in a generic architecture independent
-way?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/s6-linux-init/s6-linux-init.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yegor
+diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
+index f658b259cb..8f3c7fa297 100644
+--- a/package/s6-linux-init/s6-linux-init.hash
++++ b/package/s6-linux-init/s6-linux-init.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+ sha256 d4ac9b8bde3e678353c85dad1a2a25066a40f843c53840c4210839068635ed7e  s6-linux-init-0.4.0.0.tar.gz
+-sha256 43cdbc05eceb0781d71a0661bbb6b9335efc4b733fbd02847c0c6667fd440993  COPYING
++sha256 1377d3b18a31de11e8bb06f0f46888a23bc16cbc57285035793bf7e7943bbcb3  COPYING
