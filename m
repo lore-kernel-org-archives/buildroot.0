@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 2 May 2018 11:37:12 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Merge my two entries
-In-Reply-To: <20180502072638.6552-1-sven.haardiek@iotec-gmbh.de>
-References: <20180502072638.6552-1-sven.haardiek@iotec-gmbh.de>
-Message-ID: <20180502113712.77782102@windsurf.home>
+Date: Wed, 2 May 2018 11:37:15 +0200
+Subject: [Buildroot] [PATCH 2/2] package/llvm: delete LLVMHello.so from
+ /usr/lib
+In-Reply-To: <20180502090535.29498-2-valentin.korenblit@smile.fr>
+References: <20180502090535.29498-1-valentin.korenblit@smile.fr>
+ <20180502090535.29498-2-valentin.korenblit@smile.fr>
+Message-ID: <20180502113715.205d78a2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  2 May 2018 09:26:38 +0200, Sven Haardiek wrote:
-> Merge my two entries in the DEVELOPERS file, because the mail address
-> <sven.haardiek@greenbone.net> is outdated.
+On Wed,  2 May 2018 11:05:35 +0200, Valentin Korenblit wrote:
+> LLVMHello.so contains the Hello World example of an
+> LLVM pass. It is not needed on the target.
 > 
-> Signed-off-by: Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
 > ---
->  DEVELOPERS | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index bbb586e7db..8fc96ea4d1 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1816,8 +1816,6 @@ F:	package/powertop/
->  
->  N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
->  F:	package/python-influxdb/
-> -
-> -N:	Sven Haardiek <sven.haardiek@greenbone.net>
->  F:	package/lcdproc/
+>  package/llvm/llvm.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-This change didn't keep the alphabetic ordering, so I've fixed that and
-applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
