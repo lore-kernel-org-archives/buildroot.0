@@ -1,11 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 2 May 2018 23:25:28 +0200
+Date: Wed, 2 May 2018 23:35:37 +0200
 Subject: [Buildroot] [RFC v1 1/2] libopenssl: bump version to 1.1.0h
-In-Reply-To: <1mbgrexjul.ln2@ID-313208.user.individual.net>
+In-Reply-To: <hkilrexprh.ln2@ID-313208.user.individual.net>
 References: <20180417211921.18718-1-ps.report@gmx.net>
- <0a63a86c-322f-6508-5cc3-5a37ff0e5dad@gmail.com>
- <1mbgrexjul.ln2@ID-313208.user.individual.net>
-Message-ID: <20180502232528.216f0735@gmx.net>
+ <hkilrexprh.ln2@ID-313208.user.individual.net>
+Message-ID: <20180502233537.7b5dd93c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +13,31 @@ To: buildroot@busybox.net
 
 Hello Bernd,
 
-On Sun, 29 Apr 2018 10:17:37 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Tue, 01 May 2018 09:46:57 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Am Fri, 20 Apr 2018 08:29:52 -0700 schrieb Ryan Coe:
+> Am Tue, 17 Apr 2018 23:19:20 +0200 schrieb Peter Seiderer:
 > 
-> > I'm also getting the following error on host-libopenssl:  
-> [...]
-> > *** ERROR: package host-libopenssl installs executables without proper
-> > RPATH:
-> > ***?? /home/ryan/devel/buildroot/output/host/bin/openssl  
-> libopenssl-1.1.0h/NOTES.UNIX
-> Hi,
+> > +# crypto/async/arch/../arch/async_posix.h:32:5: error: unknown type   
+> name ?ucontext_t?
+> > +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> > +LIBOPENSSL_CFLAGS += -DOPENSSL_NO_ASYNC
+> > +endif  
 > 
-> adding
+> Hi Peter,
 > 
-> 	-Wl,-rpath,'$(HOST_DIR)/lib' \
+> this CFLAG is needed for musl as well:
+> https://wiki.musl-libc.org/open-issues.html
+> "Legacy functions operating on ucontext_t (getcontext, setcontext, 
+> makecontext, swapcontext) are not implemented."
 > 
-> to HOST_LIBOPENSSL_CONFIGURE_CMDS fixes the problem for me.
-> For details read host-libopenssl-1.1.0h/NOTES.UNIX.
+> Otherwise the build fails:
+> 
+> ./libcrypto.so: undefined reference to `getcontext'
+> ./libcrypto.so: undefined reference to `setcontext'
+> ./libcrypto.so: undefined reference to `makecontext'
 
-Thanks for the hint (work for me too), will add it to the next version of
-the patch...
+Thanks for the hint, will fix the musl compile at the next
+version of the patch too...
 
 Regards,
 Peter
