@@ -1,25 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  1 May 2018 23:04:40 +0200
-Subject: [Buildroot] [PATCH 1/1] libilbc: add hash for license file
-Message-ID: <20180501210440.23327-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 02 May 2018 01:12:14 +0000
+Subject: [Buildroot] [Bug 5366] Login doesn't work with util-linux versions
+ of login/agetty
+In-Reply-To: <bug-5366-163@https.bugs.busybox.net/>
+References: <bug-5366-163@https.bugs.busybox.net/>
+Message-ID: <bug-5366-163-3D4ibPqLvv@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libilbc/libilbc.hash | 1 +
- 1 file changed, 1 insertion(+)
+https://bugs.busybox.net/show_bug.cgi?id=5366
 
-diff --git a/package/libilbc/libilbc.hash b/package/libilbc/libilbc.hash
-index e6789c5e84..81a0c4e037 100644
---- a/package/libilbc/libilbc.hash
-+++ b/package/libilbc/libilbc.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 70cd6a4f6bbe6dcebfc4293eea7b6200f883d1bf0affa1efba819d44d274e35f  libilbc-829b08c7902ceb87a261279fabb36b6d523c6e07.tar.gz
-+sha256 b7f4cbb4a12cd11a3d1aeda9bd17c99f59b054de4b3ee53045531cd2fa74dd2a  gips_iLBClicense.pdf
+Carlos Santos <casantos@datacom.ind.br> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|REOPENED                    |RESOLVED
+
+--- Comment #15 from Carlos Santos <casantos@datacom.ind.br> ---
+(In reply to Dhananjay Patil from comment #14)
+
+Please do not reopen an old case just because you see a similar problem six
+years later. Both Buildroot and util-linux changed a lot since 2012. Open a new
+bug and attach your defconfig, as well as other information that can be useful
+to reproduce your problem, instead.
+
 -- 
-2.14.1
+You are receiving this mail because:
+You are on the CC list for the bug.
