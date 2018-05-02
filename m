@@ -1,42 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 May 2018 21:31:35 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
- 16}.x series
-Message-ID: <20180502193525.DC1C78B4E3@busybox.osuosl.org>
+Date: Wed, 2 May 2018 21:33:19 +0200
+Subject: [Buildroot] [git commit] libjson: add hash for license file
+Message-ID: <20180502193526.1F8E78B4AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3cce05ac772e7803c81a8e8cb7fdcc1c21129cb
+commit: https://git.buildroot.net/buildroot/commit/?id=de09563ca1e2e49e57eed28dc6f589645d11d0d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/libjson/libjson.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 170a30989e..554f72ce30 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -250,13 +250,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.130"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.97"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.131"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.98"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.38"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.39"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
--	default "4.16.6"	if BR2_KERNEL_HEADERS_4_16
-+	default "4.16.7"	if BR2_KERNEL_HEADERS_4_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libjson/libjson.hash b/package/libjson/libjson.hash
+index f3447ee73d..3d9b26a53d 100644
+--- a/package/libjson/libjson.hash
++++ b/package/libjson/libjson.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  07267a3951038ee2e02d26cc41bf8e275668c38f751240d3e78dc979182e7376  libjson_7.6.1.zip
++sha256  bd62d605bef39ab7ae39f6fa333ba513edb93cfcd56c9c966f1d34e31ff7c69b  License.txt
