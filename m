@@ -1,74 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 May 2018 19:57:22 +0200
+From: Stefan Becker <chemobejk@gmail.com>
+Date: Wed, 02 May 2018 18:23:50 +0000
 Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
  host
-In-Reply-To: <20180502090508.12893-1-chemobejk@gmail.com>
+In-Reply-To: <20180502175722.GA31449@scaer>
 References: <20180502090508.12893-1-chemobejk@gmail.com>
-Message-ID: <20180502175722.GA31449@scaer>
+ <20180502175722.GA31449@scaer>
+Message-ID: <CAOJ2eMf-+1JfvVcwKKFX1BPj36gbSV+Vc58ShJj61UzrGCe16Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+Yann, All,
 
-On 2018-05-02 12:05 +0300, Stefan Becker spake thusly:
-> crypt() is an optional glibc feature. Some distros, like Fedora 28, are
-> phasing it out to be replaced with libxcrypt [1]. Unfortunately this
-> change is only ABI compatible, not source code compatible, i.e. the code
-> will compile with warnings about undefined crypt(), but the resulting
-> binary will crash.
-> 
-> Follow the guidance in the Fedora bug and include crypt.h when
-> _XOPEN_CRYPT is not defined.
-> 
-> [1] https://bugzilla.redhat.com/show_bug.cgi?id=1566464
-> 
-> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-> ---
->  package/mkpasswd/mkpasswd.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/mkpasswd/mkpasswd.c b/package/mkpasswd/mkpasswd.c
-> index 5820f32501..fd16230468 100644
-> --- a/package/mkpasswd/mkpasswd.c
-> +++ b/package/mkpasswd/mkpasswd.c
-> @@ -44,6 +44,11 @@
->  #include <sys/time.h>
->  #endif
->  
-> +/* glibc without crypt() */
-> +#ifndef _XOPEN_CRYPT
-> +#include <crypt.h>
-> +#endif
+On Wed, May 2, 2018 at 8:57 PM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
 
-But what if the libxcrypt package is not installed? Since crypt is only
-optional in POSIX, there is no guarantee that libxcrypt is even present
-on a system, especially now that glibc has decided to no longer provide
-it by default, and given that even --enable-obsolete-crypt does not even
-declare _XOPEN_CRYPT...
+>
+> But what if the libxcrypt package is not installed? Since crypt is only
+> optional in POSIX, there is no guarantee that libxcrypt is even present
+> on a system, especially now that glibc has decided to no longer provide
+> it by default, and given that even --enable-obsolete-crypt does not even
+> declare _XOPEN_CRYPT...
+>
 
-However, until we have another distribution with the new glibc version,
-this fix is good enough since it is at least working as-is on a stock
-Fedora 28.
+If crypt() is provided by libxcrypt instead of glibc, then this should be
+automatically handled by package dependencies, i.e.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+$ rpm -q --provides libxcrypt
+...
+libcrypt.so.1()(64bit)
+libcrypt.so.1(GLIBC_2.2.5)(64bit)
+libcrypt.so.1(OW_CRYPT_1.0)(64bit)
+libcrypt.so.1(XCRYPT_2.0)(64bit)
+$ rpm -q --whatrequires 'libcrypt.so.1()(64bit)' | wc -l
+57
+$ rpm -q --whatrequires 'libcrypt.so.1(XCRYPT_2.0)(64bit)' | wc -l
+26
 
-Regards,
-Yann E. MORIN.
+The first one ensures that pre-F28 binaries still continue to work on
+Fedora 28. The latter ones have obviously been rebuilt against libxcrypt.so
+already.
 
->  /* Application-specific */
->  #include "utils.h"
->  
-> -- 
-> 2.17.0
-> 
+As for the development stuff:
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+$ rpm -ql libxcrypt-devel
+/lib64/libcrypt.so
+/usr/include/crypt.h
+...
+$ rpm -q --provides libxcrypt-devel
+libxcrypt-devel = 4.0.0-5.fc28
+libxcrypt-devel(x86-64) = 4.0.0-5.fc28
+pkgconfig(libxcrypt) = 4.0.0
+$ rpm -q --whatrequires 'libxcrypt-devel(x86-64)'
+glibc-devel-2.27-8.fc28.x86_64
+
+So at least on Fedora 28 this is handled in a backward compatible way, i.e.
+if I want to compile against glibc I also get libxcrypt-devel and therefore
+crypt.h.
+
+In short: I updated 2 systems from F27 to F28 and automatically have
+libxcrypt and libxcrypt-devel available after the update. On the remaining
+F27 system I can see that libxcrypt isn't available at all, i.e. it is a
+new F28 feature.
+
+Just my ?0.02, Stefan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180502/6b8ecc97/attachment.html>
