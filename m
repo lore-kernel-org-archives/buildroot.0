@@ -1,40 +1,30 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 2 May 2018 11:37:27 +0200
-Subject: [Buildroot] [PATCH v2 5/5] python-flask-bootstrap: new package
-In-Reply-To: <20180428121739.373473de@windsurf>
-References: <20180206132506.30389-1-aduskett@gmail.com>
- <20180206132506.30389-5-aduskett@gmail.com>
- <20180427233344.56c57c66@windsurf>
- <CAGm1_ksX5tTpYNsv8yTRKUAsw6e0NfFBDpv+xeqzvjSPyWTx8A@mail.gmail.com>
- <20180428121739.373473de@windsurf>
-Message-ID: <CAGm1_ksPpWCW8QRPEeUdHPZEt1SyRaCvWTaKWanhaUvavftDXA@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed,  2 May 2018 11:53:29 +0200
+Subject: [Buildroot] [PATCH 0/4] Bump Rust packages
+Message-ID: <20180502095333.26940-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 28, 2018 at 12:17 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Sat, 28 Apr 2018 07:15:01 +0200, Yegor Yefremov wrote:
->
->> I've looked at this file
->> https://github.com/mbr/flask-bootstrap/blob/master/LICENSE
->
-> This file isn't distributed in the tarball from Pypi, at least I don't
-> remember seeing it yesterday when I looked at the package source code.
->
->> The author also mentions Apache-2.0 license as the license of the
->> original project.
->
-> And so, is this package just under BSD-3c, or under BSD-3c and
-> Apache-2.0 ?
->
-> I'm not sure what the "original Bootstrap files" are, whether they are
-> distributed with python-flask-bootstrap or not.
+This series provides rust 1.25.0 and cargo 0.26.0.
 
-I've opened an issue: https://github.com/mbr/flask-bootstrap/issues/181
+Eric Le Bihan (4):
+  rust-bin: bump version to 1.25.0
+  rust: bump version to 1.25.0
+  cargo-bin: bump version to 0.26.0
+  cargo: bump version to 0.26.0
 
-Yegor
+ package/cargo-bin/cargo-bin.hash |  8 +++---
+ package/cargo-bin/cargo-bin.mk   |  2 +-
+ package/cargo/cargo.hash         |  6 ++--
+ package/cargo/cargo.mk           |  4 +--
+ package/rust-bin/rust-bin.hash   | 60 ++++++++++++++++++++--------------------
+ package/rust-bin/rust-bin.mk     |  6 ++--
+ package/rust/rust.hash           |  4 +--
+ package/rust/rust.mk             |  2 +-
+ 8 files changed, 46 insertions(+), 46 deletions(-)
+
+--
+2.14.3
