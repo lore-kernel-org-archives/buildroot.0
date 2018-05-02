@@ -1,64 +1,97 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 2 May 2018 22:30:48 +0200
-Subject: [Buildroot] [PATCH v4 10/11] gst1-plugins-base: remove never
- set BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_WAYLAND
-In-Reply-To: <CAFSsvmoHT6DsLvVFGHOH2kps9NrLUftJ-Gf9ZVKmjGEaes7MqQ@mail.gmail.com>
-References: <20180412204543.25535-1-ps.report@gmx.net>
- <20180412204543.25535-3-ps.report@gmx.net>
- <CAFSsvmoHT6DsLvVFGHOH2kps9NrLUftJ-Gf9ZVKmjGEaes7MqQ@mail.gmail.com>
-Message-ID: <20180502223048.7f588908@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 2 May 2018 22:38:54 +0200
+Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
+ host
+In-Reply-To: <CAOJ2eMf-+1JfvVcwKKFX1BPj36gbSV+Vc58ShJj61UzrGCe16Q@mail.gmail.com>
+References: <20180502090508.12893-1-chemobejk@gmail.com>
+ <20180502175722.GA31449@scaer>
+ <CAOJ2eMf-+1JfvVcwKKFX1BPj36gbSV+Vc58ShJj61UzrGCe16Q@mail.gmail.com>
+Message-ID: <0756834a-6d03-8c29-4b5d-975b7ee7e425@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
 
-On Tue, 01 May 2018 12:38:36 +0000, Adam Duskett <aduskett@gmail.com> wrote:
 
-> Peter, all;
+On 02-05-18 20:23, Stefan Becker wrote:
+> Yann, All,
 > 
-> On Thu, Apr 12, 2018 at 4:45 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> On Wed, May 2, 2018 at 8:57 PM Yann E. MORIN <yann.morin.1998@free.fr
+> <mailto:yann.morin.1998@free.fr>> wrote:
 > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >   package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
-> >   1 file changed, 1 insertion(01575fa6cc50bad5b5150f20dfed994e5d294f57+), 1 deletion(-)  
 > 
-> > diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk  
-> b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> > index 71ea964e09..0edc757484 100644
-> > --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> > +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> > @@ -68,7 +68,7 @@ else
-> >   GST1_PLUGINS_BASE_CONF_OPTS += --disable-x11
-> >   endif  
+>     But what if the libxcrypt package is not installed? Since crypt is only
+>     optional in POSIX, there is no guarantee that libxcrypt is even present
+>     on a system, especially now that glibc has decided to no longer provide
+>     it by default, and given that even --enable-obsolete-crypt does not even
+>     declare _XOPEN_CRYPT...
 > 
-> > -ifneq  
-> ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_WAYLAND)$(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_WAYLAND),)
-> > +ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_WAYLAND),)
-> >   GST1_PLUGINS_BASE_CONF_OPTS += --enable-wayland
-> >   GST1_PLUGINS_BASE_DEPENDENCIES += wayland wayland-protocols
-> >   else
-> > --
-> > 2.16.3  
-> This looks good, and I really appreciate you taking the time to make these
-> patches.
-> Do you want me to re-submit my patch series with these patches? Or do you
-> want to merge my series in with these patches last?
+> ?
+> If crypt() is provided by libxcrypt instead of glibc, then this should be
+> automatically handled by package dependencies, i.e.
+> 
+> $ rpm -q --provides libxcrypt
+> ...
+> libcrypt.so.1()(64bit)
+> libcrypt.so.1(GLIBC_2.2.5)(64bit)
+> libcrypt.so.1(OW_CRYPT_1.0)(64bit)
+> libcrypt.so.1(XCRYPT_2.0)(64bit)
+> $ rpm -q --whatrequires 'libcrypt.so.1()(64bit)' | wc -l
+> 57
+> $ rpm -q --whatrequires 'libcrypt.so.1(XCRYPT_2.0)(64bit)' | wc -l
+> 26
+> 
+> The first one ensures that pre-F28 binaries still continue to work on Fedora 28.
+> The latter ones have obviously been rebuilt against libxcrypt.so already.
+> 
+> As for the development stuff:
+> 
+> $ rpm -ql libxcrypt-devel
+> /lib64/libcrypt.so
+> /usr/include/crypt.h
 
-Feel free to merge the provided patches into your patch series (as
-already done ;-) )...
+ And in pre-F28 this header will be provided by glibc-devel, right?
 
-Regards,
-Peter
+ But so in practice we can assume that crypt.h is always present, so why not
+include it unconditionally?
 
+
+ BTW, how is this solved in upstream whois?
+
+ Regards,
+ Arnout
+
+
+> ...
+> $ rpm -q --provides libxcrypt-devel
+> libxcrypt-devel = 4.0.0-5.fc28
+> libxcrypt-devel(x86-64) = 4.0.0-5.fc28
+> pkgconfig(libxcrypt) = 4.0.0
+> $ rpm -q --whatrequires 'libxcrypt-devel(x86-64)'
+> glibc-devel-2.27-8.fc28.x86_64
 > 
-> Thanks!
+> So at least on Fedora 28 this is handled in a backward compatible way, i.e. if I
+> want to compile against glibc I also get libxcrypt-devel and therefore crypt.h.
 > 
-> Adam
+> In short: I updated 2 systems from F27 to F28 and automatically have libxcrypt
+> and libxcrypt-devel available after the update. On the remaining F27 system I
+> can see that libxcrypt isn't available at all, i.e. it is a new F28 feature.
+> 
+> Just my ?0.02, Stefan
+> 
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
