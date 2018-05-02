@@ -1,33 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 02 May 2018 01:12:14 +0000
-Subject: [Buildroot] [Bug 5366] Login doesn't work with util-linux versions
- of login/agetty
-In-Reply-To: <bug-5366-163@https.bugs.busybox.net/>
-References: <bug-5366-163@https.bugs.busybox.net/>
-Message-ID: <bug-5366-163-3D4ibPqLvv@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  2 May 2018 06:49:57 +0300
+Subject: [Buildroot] [PATCH] execline: update license file hash
+Message-ID: <f64dcf477f3f32287a3f231d2d1e0121f4383fdb.1525232997.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5366
+Copyright year update.
 
-Carlos Santos <casantos@datacom.ind.br> changed:
+Fixes:
+http://autobuild.buildroot.net/results/250/250da80ec8d61884193d904a323dc86140c3f37f/
+http://autobuild.buildroot.net/results/82a/82a45ac87270b7c8d8d9e97df865a7a76689b49a/
+http://autobuild.buildroot.net/results/6a1/6a13dc487982bc63e3ac84bc7e6e6ad5208b17b5/
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|REOPENED                    |RESOLVED
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/execline/execline.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- Comment #15 from Carlos Santos <casantos@datacom.ind.br> ---
-(In reply to Dhananjay Patil from comment #14)
-
-Please do not reopen an old case just because you see a similar problem six
-years later. Both Buildroot and util-linux changed a lot since 2012. Open a new
-bug and attach your defconfig, as well as other information that can be useful
-to reproduce your problem, instead.
-
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+index ea10ff1f9694..6bf3ccff6466 100644
+--- a/package/execline/execline.hash
++++ b/package/execline/execline.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+ sha256 f6993094766652041c21fde9c07ef53a3cd4b93a64123d9578fb4997a2cefca1  execline-2.5.0.0.tar.gz
+-sha256 6ee77e7199d69b707ab864ea7a838f9562717aaa41c89413bdb2cf835f95052f  COPYING
++sha256 3eadcf980c40da0f257b8292d805ff41e5e5a908c1942315d9a627732e1aa012  COPYING
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.0
