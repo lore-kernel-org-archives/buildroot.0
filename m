@@ -1,62 +1,74 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 2 May 2018 14:20:53 -0300
-Subject: [Buildroot] [PATCH 1/1] libgdiplus: bump to version 5.6
-In-Reply-To: <20180501214047.1d9f818c@windsurf.home>
-References: <20180430190840.11455-1-fontaine.fabrice@gmail.com>
- <20180501214047.1d9f818c@windsurf.home>
-Message-ID: <CANu7NGvp9ZFropp5ckpT5B59AVzv=xCM0_ctovdAQ4eU=7W_Qw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 2 May 2018 19:57:22 +0200
+Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
+ host
+In-Reply-To: <20180502090508.12893-1-chemobejk@gmail.com>
+References: <20180502090508.12893-1-chemobejk@gmail.com>
+Message-ID: <20180502175722.GA31449@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Stefan, All,
 
-> On Mon, 30 Apr 2018 21:08:40 +0200, Fabrice Fontaine wrote:
->
-> >  # Although there is a LICENSE file thas specifies LGPL or MPL-1.1,
-> >  # looks like it is incorrect. The actual source files specify that
-> > -# they're licensed under MIT, and so does the COPYING file (and they
-> > -# all predate the addition of the LICENSE file).
-> > +# they're licensed under MIT, and so does the original (before its
-> > +# removal/update) COPYING file (and they all predate the addition of
-> > +# the LICENSE file).
-> >  LIBGDIPLUS_LICENSE = MIT
-> > -LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
-> > +LIBGDIPLUS_LICENSE_FILES = src/carbon-private.h
-> >
-> >  LIBGDIPLUS_INSTALL_STAGING = YES
->
-> Hum, this feels weird. They have re-added a COPYING file pointing to
-> the LICENSE file, which itself that says LGPL or MPL, so perhaps this
-> isn't wrong after all ?
->
-> carbon-private.h might be MIT licensed, but the whole work may still be
-> released under LGPL or MPL.
->
-> See https://github.com/mono/libgdiplus/blob/master/LICENSE
->
-> So I believe our assessment that the LICENSE file was wrong when it was
-> saying LGPL or MPL-1.1 is not correct, and we should change the license
-> details of libgdiplus to LGPL-2.1 or MPL-1.1.
->
-> Sergio, you originally contributed libgdiplus, what do you think ?
+On 2018-05-02 12:05 +0300, Stefan Becker spake thusly:
+> crypt() is an optional glibc feature. Some distros, like Fedora 28, are
+> phasing it out to be replaced with libxcrypt [1]. Unfortunately this
+> change is only ABI compatible, not source code compatible, i.e. the code
+> will compile with warnings about undefined crypt(), but the resulting
+> binary will crash.
+> 
+> Follow the guidance in the Fedora bug and include crypt.h when
+> _XOPEN_CRYPT is not defined.
+> 
+> [1] https://bugzilla.redhat.com/show_bug.cgi?id=1566464
+> 
+> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+> ---
+>  package/mkpasswd/mkpasswd.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/mkpasswd/mkpasswd.c b/package/mkpasswd/mkpasswd.c
+> index 5820f32501..fd16230468 100644
+> --- a/package/mkpasswd/mkpasswd.c
+> +++ b/package/mkpasswd/mkpasswd.c
+> @@ -44,6 +44,11 @@
+>  #include <sys/time.h>
+>  #endif
+>  
+> +/* glibc without crypt() */
+> +#ifndef _XOPEN_CRYPT
+> +#include <crypt.h>
+> +#endif
 
-I agree.
+But what if the libxcrypt package is not installed? Since crypt is only
+optional in POSIX, there is no guarantee that libxcrypt is even present
+on a system, especially now that glibc has decided to no longer provide
+it by default, and given that even --enable-obsolete-crypt does not even
+declare _XOPEN_CRYPT...
 
-From the git commit logs, initially there was no LICENSE file and the
-license was MIT, as described in COPYING. Eight months later the LICENSE
-file was added with the message "Add new license", so we might assume the
-license changed to LGPL-2.1 or MPL-1.1, but they forgot to remove COPYING.
-In 2015 COPYING was removed and added later just because of autotools
-(based on the commit logs), but now pointing to LICENSE. So looks like
-our assessment of the license was wrong, and we should change to LGPL-2.1
-or MPL-1.1.
+However, until we have another distribution with the new glibc version,
+this fix is good enough since it is at least working as-is on a stock
+Fedora 28.
 
-Best regards,
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Sergio Prado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180502/45feab23/attachment.html>
+Regards,
+Yann E. MORIN.
+
+>  /* Application-specific */
+>  #include "utils.h"
+>  
+> -- 
+> 2.17.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
