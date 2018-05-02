@@ -1,40 +1,27 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  2 May 2018 21:44:53 +0200
-Subject: [Buildroot] [PATCH 21/32] libgdiplus: fix license
-Message-ID: <20180502194454.22409-1-fontaine.fabrice@gmail.com>
+Date: Wed,  2 May 2018 21:45:29 +0200
+Subject: [Buildroot] [PATCH 1/1] libkrb5: add hash for license file
+Message-ID: <20180502194529.22459-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libgdiplus is licensed under LGPL-2.1 or MPL-1.1 and not MIT, see:
-http://patchwork.ozlabs.org/patch/906830
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libgdiplus/libgdiplus.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ package/libkrb5/libkrb5.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libgdiplus/libgdiplus.mk b/package/libgdiplus/libgdiplus.mk
-index eb1858574d..52032d4f07 100644
---- a/package/libgdiplus/libgdiplus.mk
-+++ b/package/libgdiplus/libgdiplus.mk
-@@ -6,13 +6,8 @@
- 
- LIBGDIPLUS_VERSION = 5.4
- LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
--
--# Although there is a LICENSE file thas specifies LGPL or MPL-1.1,
--# looks like it is incorrect. The actual source files specify that
--# they're licensed under MIT, and so does the COPYING file (and they
--# all predate the addition of the LICENSE file).
--LIBGDIPLUS_LICENSE = MIT
--LIBGDIPLUS_LICENSE_FILES = COPYING src/carbon-private.h
-+LIBGDIPLUS_LICENSE = LGPL-2.1 or MPL-1.1
-+LIBGDIPLUS_LICENSE_FILES = LICENSE
- 
- LIBGDIPLUS_INSTALL_STAGING = YES
- 
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index 59552d7fd4..e9fb0a2ace 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+ sha256	faeb125f83b0fb4cdb2f99f088140631bb47d975982de0956d18c85842969e08	krb5-1.16.tar.gz
++
++# Hash for license file:
++sha256	0b10e357b1adb953b2865dddfab73f95591b3f7c90aa39a8a087c558b1427e51	NOTICE
 -- 
 2.14.1
