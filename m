@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 May 2018 00:58:36 +0200
-Subject: [Buildroot] [PATCH 4/7] core/package: postpone evaluation of
- dependency conditions
-In-Reply-To: <f274c0996622abccd5c65255b936010f37a22d66.1524301847.git.yann.morin.1998@free.fr>
-References: <cover.1524301847.git.yann.morin.1998@free.fr>
- <f274c0996622abccd5c65255b936010f37a22d66.1524301847.git.yann.morin.1998@free.fr>
-Message-ID: <1677c229-612d-2f3e-1975-214e1980c76b@mind.be>
+Date: Thu, 3 May 2018 01:19:59 +0200
+Subject: [Buildroot] 'make foo-menuconfig' broken when host-ncurses was
+ built
+In-Reply-To: <876047f843.fsf@dell.be.48ers.dk>
+References: <cb69fcf8-5af1-eafd-5fbb-bb0339831877@mind.be>
+ <876047f843.fsf@dell.be.48ers.dk>
+Message-ID: <5bca3339-b202-0882-0cb6-a492dc739adc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,113 +14,68 @@ To: buildroot@busybox.net
 
 
 
-On 21-04-18 11:10, Yann E. MORIN wrote:
-> In the pkg-inner macro, all variables, but he positional arguments,
-> must be $$-prefixed, so that they are expanded only when the macro
-> is evaluated in each package, not when the macro is parsed.
+On 01-05-18 22:12, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 > 
-> It is to be noted, though, that the current code, even though incorrect
-> by the above rules, seemed to work. However, the upcoming addition of
-> download dependencies, mimicking that code, would not work unless it
-> was $$-prefixed.
+>  >  Hi all,
+>  >  My colleague David observed that since a month or so, the dialogs of 'make
+>  > linux-menuconfig' looked pretty garbled. After a bit of debugging, it turns out
+>  > that the problem is mixing host-ncurses with recent (6.0+) system ncurses. Based
+>  > on the output, I suspect it's mixing an 8-bit ncurses library with widechar
+>  > termcap files.
 > 
-> So, for consistency sake, and for correctness sake, let's always use
-> the $$-prefix in the inner macro.
+>  >  This issue is caused by dde090c299 linux: fix passing of host CFLAGS and LDFLAGS
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+>  >  What happens is that kconfig uses pkg-config to discover the ncurses
+>  > installation. Since our host-ncurses doesn't install a pc file (and in linux.mk
+>  > we anyway don't pass the approprate PKG_CONFIG_* variables), this will pick up
+>  > the system's pkg-config settings. However, we set HOSTCC="/usr/bin/gcc -O2
+>  > -I.../host/include -L.../host/lib -Wl,-rpath,.../host/lib" on the linux make
+>  > command line, so it *will* actually pick up our host-ncurses library. On my
+>  > system, 'pkg-config --libs ncurses' returns '-lncurses -ltinfo'. Our ncurses
+>  > only has libncurses.so, so libtinfo.so will be picked up from the host.
 > 
-> ---
-> Arnout: you the make expert, any idea why on Earth the single-expansion
-> was working in thefirst place?
+> Ahh :/
 
-[You put me in Cc of too many patches, so I don't notice when you *really* want
-my response :-]
+ See the patch I sent: my analysis was not entirely correct. The issue is not in
+libtinfo.so. The issue is that we include the system's ncursesw.h (which is
+actually called ncurses.h), but linking with buildroot's ncurses library that
+doesn't support widechar. Hence the ^@ everywhere.
 
- In most cases, single-$ will work as well. In this particular case, after first
-expansion you will get:
+ By the way, the issue is not limited to pkg-config: older versions of
+check-lxdialog.sh would just add -I/usr/include/ncurses if they find an
+ncurses.h there, and that ncurses.h might be a widechar version...
 
-ifeq (,)
-FOO_EXTRACT_DEPENDENCIES += host-tar
-endif
-
-which in the $(eval ...) will get evaluated to nothing.
-
- After this patch, after first expansion you get
-
-ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,foo),)
-FOO_EXTRACT_DEPENDENCIES += host-tar
-endif
-
-which the $(eval ...) still evaluates to nothing.
-
-
- The cases where $$ is really needed are fairly rare. The most obvious ones are
-when you have an ifeq() using a variable that is defined in the same
-inner-generic-package expansion. Less obvious but important for consistency is
-to keep the "late binding" property. With single-$, the variable is expanded
-immediately, so if it is still updated later in the makefiles, the new values
-won't be used anymore. This would e.g. break $(1)-show-rdepends.
-
-
- Because it is very hard to remember when exactly you should use $$, we
-introduced the rule: use $$ *everywhere*, except for $(1), $(2) etc. Thomas's
-patches that fixed the dependencies broke that rule.
-
- Unfortunately, this patch still doesn't fix it...
-
-
-> ---
->  package/pkg-generic.mk | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 1c9dd1d734..12e3981752 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -560,26 +560,26 @@ ifneq ($(1),host-skeleton)
->  $(2)_DEPENDENCIES += host-skeleton
->  endif
->  
-> -ifeq ($(filter host-tar host-skeleton host-fakedate,$(1)),)
-> +ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
->  $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
-                                ^^ This should also be $$
+>  >  The question is how to resolve this. The correct thing to do would be to
+>  > install the .pc file, and to do what Thomas proposed a while ago:
+>  > $(HOST_DIR)/bin/pkg-config returns the host config, $(CROSS_COMPILE)pkg-config
+>  > returns the target config. But this will probably result in breakage of a lot of
+>  > packages...
+> 
+>  >  Any better ideas?
+> 
+> Is that really needed? Can't we just change linux.mk to use
+> HOST_MAKE_ENV instead of TARGET_MAKE_ENV (it is a target package, but it
+> only needs to link against host libraries). That wil ensure that the
+> PKG_CONFIG_* environment variables are set, so if we were to install a
+> ncurses(w) pc file for the host, kconfig should find and use it?
 
-and the same below.
+ Unfortunately, we have a fragment in pkg-kconfig.mk that *removes* the
+PKG_CONFIG_* stuff from the environment...
+
+ Also, the same issue may happen for *any* package using (recent) kconfig. I
+didn't find an example that does it, but it's possible that a kconfig-package
+adds TARGET_CONFIGURE_OPTS to FOO_MAKE_ENV, and this would cause the same issue
+(TARGET_CONFIGURE_OPTS includes LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" and
+HOST_LDFLAGS adds -L$(HOST_DIR)/lib).
+
+ So my patch enabling widechar is the simplest solution :-). Not perfect of
+course, because that patch will break again if the host has an ncurses.h which
+is NOT widechar...
 
  Regards,
  Arnout
-
->  endif
->  
-> -ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
-> +ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
->  $(2)_EXTRACT_DEPENDENCIES += $(BR2_XZCAT_HOST_DEPENDENCY)
->  endif
->  
-> -ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
-> +ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
->  $(2)_EXTRACT_DEPENDENCIES += $(BR2_LZIP_HOST_DEPENDENCY)
->  endif
->  
-> -ifeq ($(BR2_CCACHE),y)
-> -ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
-> +ifeq ($$(BR2_CCACHE),y)
-> +ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
->  $(2)_DEPENDENCIES += host-ccache
->  endif
->  endif
->  
-> -ifeq ($(BR2_REPRODUCIBLE),y)
-> -ifeq ($(filter host-skeleton host-fakedate,$(1)),)
-> +ifeq ($$(BR2_REPRODUCIBLE),y)
-> +ifeq ($$(filter host-skeleton host-fakedate,$(1)),)
->  $(2)_DEPENDENCIES += host-fakedate
->  endif
->  endif
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
