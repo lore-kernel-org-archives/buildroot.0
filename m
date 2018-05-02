@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 May 2018 00:40:43 +0200
-Subject: [Buildroot] [PATCH 1/1] dhcpcd: systemv and systemd services
- conflict with NetworkManager
-In-Reply-To: <71FE4BA8-F083-4A73-A05D-262F9C28E9E2@impinj.com>
-References: <71FE4BA8-F083-4A73-A05D-262F9C28E9E2@impinj.com>
-Message-ID: <a48d7bc9-978c-9faa-eda7-83d4c66b9eab@mind.be>
+Date: Thu, 3 May 2018 00:58:36 +0200
+Subject: [Buildroot] [PATCH 4/7] core/package: postpone evaluation of
+ dependency conditions
+In-Reply-To: <f274c0996622abccd5c65255b936010f37a22d66.1524301847.git.yann.morin.1998@free.fr>
+References: <cover.1524301847.git.yann.morin.1998@free.fr>
+ <f274c0996622abccd5c65255b936010f37a22d66.1524301847.git.yann.morin.1998@free.fr>
+Message-ID: <1677c229-612d-2f3e-1975-214e1980c76b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +14,112 @@ To: buildroot@busybox.net
 
 
 
-On 01-05-18 02:02, Jim Brennan wrote:
-> When NetworkManager and dhcpcd packages are both enabled,
-> dhcpcd services and NetworkManager both spawn dhcpcd.  This causes
-> the network port to retrieve an IP address and later lose it a few
-> seconds after startup.
+On 21-04-18 11:10, Yann E. MORIN wrote:
+> In the pkg-inner macro, all variables, but he positional arguments,
+> must be $$-prefixed, so that they are expanded only when the macro
+> is evaluated in each package, not when the macro is parsed.
+> 
+> It is to be noted, though, that the current code, even though incorrect
+> by the above rules, seemed to work. However, the upcoming addition of
+> download dependencies, mimicking that code, would not work unless it
+> was $$-prefixed.
+> 
+> So, for consistency sake, and for correctness sake, let's always use
+> the $$-prefix in the inner macro.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+> ---
+> Arnout: you the make expert, any idea why on Earth the single-expansion
+> was working in thefirst place?
 
- But then the second DHCP client also gets an IP address, so in the end all is
-well, right? I'm not saying that we shouldn't fix this, just trying to
-understand what's really going on.
+[You put me in Cc of too many patches, so I don't notice when you *really* want
+my response :-]
+
+ In most cases, single-$ will work as well. In this particular case, after first
+expansion you will get:
+
+ifeq (,)
+FOO_EXTRACT_DEPENDENCIES += host-tar
+endif
+
+which in the $(eval ...) will get evaluated to nothing.
+
+ After this patch, after first expansion you get
+
+ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,foo),)
+FOO_EXTRACT_DEPENDENCIES += host-tar
+endif
+
+which the $(eval ...) still evaluates to nothing.
 
 
-> This patch prevents dhcpcd services from launching dhcpcd if
-> NetworkManager is enabled.
+ The cases where $$ is really needed are fairly rare. The most obvious ones are
+when you have an ifeq() using a variable that is defined in the same
+inner-generic-package expansion. Less obvious but important for consistency is
+to keep the "late binding" property. With single-$, the variable is expanded
+immediately, so if it is still updated later in the makefiles, the new values
+won't be used anymore. This would e.g. break $(1)-show-rdepends.
 
- I think we need to take a step back here, and look at all the possibly
-conflicting combinations...
 
- We currently have:
+ Because it is very hard to remember when exactly you should use $$, we
+introduced the rule: use $$ *everywhere*, except for $(1), $(2) etc. Thomas's
+patches that fixed the dependencies broke that rule.
 
-- ifupdown-scripts (installed by default if !systemd-networkd)
-- systemd-networkd
-- network-manager
-- dhcpcd
+ Unfortunately, this patch still doesn't fix it...
 
-that can possibly start a DHCP client.
 
- So, if we just select dhcpcd without network-manager, we actually have a
-similar problem: both S40networking and S41dhcpcd will start a DHCP client.
+> ---
+>  package/pkg-generic.mk | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 1c9dd1d734..12e3981752 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -560,26 +560,26 @@ ifneq ($(1),host-skeleton)
+>  $(2)_DEPENDENCIES += host-skeleton
+>  endif
+>  
+> -ifeq ($(filter host-tar host-skeleton host-fakedate,$(1)),)
+> +ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
+>  $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
+                                ^^ This should also be $$
 
- Bottom line: I think the start scripts should just be removed entirely. And
-also, most likely the ifupdown-scripts package should depend on
-!BR2_PACKAGE_NETWORK_MANAGER. Or does the problem not exist for that situation?
+and the same below.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Jim Brennan <jbrennan@impinj.com>
-> ---
->  package/dhcpcd/dhcpcd.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-> index 92a78cd7ad..7536d71869 100644
-> --- a/package/dhcpcd/dhcpcd.mk
-> +++ b/package/dhcpcd/dhcpcd.mk
-> @@ -36,6 +36,7 @@ define DHCPCD_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
->  endef
+>  endif
 >  
-> +ifeq ($(BR2_PACKAGE_NETWORK_MANAGER),)
->  define DHCPCD_INSTALL_INIT_SYSV
->  	$(INSTALL) -m 755 -D package/dhcpcd/S41dhcpcd \
->  		$(TARGET_DIR)/etc/init.d/S41dhcpcd
-> @@ -48,6 +49,7 @@ define DHCPCD_INSTALL_INIT_SYSTEMD
->  	ln -sf ../../../../usr/lib/systemd/system/dhcpcd.service \
->  		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dhcpcd.service
->  endef
-> +endif
+> -ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+> +ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+>  $(2)_EXTRACT_DEPENDENCIES += $(BR2_XZCAT_HOST_DEPENDENCY)
+>  endif
 >  
->  # NOTE: Even though this package has a configure script, it is not generated
->  # using the autotools, so we have to use the generic package infrastructure.
+> -ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+> +ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate,$(1)),)
+>  $(2)_EXTRACT_DEPENDENCIES += $(BR2_LZIP_HOST_DEPENDENCY)
+>  endif
+>  
+> -ifeq ($(BR2_CCACHE),y)
+> -ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
+> +ifeq ($$(BR2_CCACHE),y)
+> +ifeq ($$(filter host-tar host-skeleton host-xz host-lzip host-fakedate host-ccache,$(1)),)
+>  $(2)_DEPENDENCIES += host-ccache
+>  endif
+>  endif
+>  
+> -ifeq ($(BR2_REPRODUCIBLE),y)
+> -ifeq ($(filter host-skeleton host-fakedate,$(1)),)
+> +ifeq ($$(BR2_REPRODUCIBLE),y)
+> +ifeq ($$(filter host-skeleton host-fakedate,$(1)),)
+>  $(2)_DEPENDENCIES += host-fakedate
+>  endif
+>  endif
 > 
 
 -- 
