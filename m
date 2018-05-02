@@ -1,47 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 May 2018 21:32:31 +0200
-Subject: [Buildroot] [git commit] python-subprocess32: needs kernel headers
- v3.10 on MIPS N64
-Message-ID: <20180502193525.EAF748B4E3@busybox.osuosl.org>
+Date: Wed, 2 May 2018 21:33:07 +0200
+Subject: [Buildroot] [git commit] libjpeg: bump to version 9c
+Message-ID: <20180502193526.0B6248B4AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe8d17f99e423285df8daffa88994848b87d9661
+commit: https://git.buildroot.net/buildroot/commit/?id=5cb8c0281b83277ff11e983e092ff32e41bba94f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-MIPS N64 ABI has been missing getdents64 wire up until kernel version
-3.10. Make python-subprocess32 depend on newer headers for MIPS N64.
+Add hash for license file
 
-Fixes:
-http://autobuild.buildroot.net/results/af1/af1c0dbfcc27fa93992de57f986657d65163800e/
-http://autobuild.buildroot.net/results/e5f/e5f9e96d02512359348886a9db3aa4cea9db2081/
-http://autobuild.buildroot.net/results/8ba/8ba4c75d724b45c4fe10b4b6c90602b68a811fac/
-
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-subprocess32/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libjpeg/libjpeg.hash | 3 ++-
+ package/libjpeg/libjpeg.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-subprocess32/Config.in b/package/python-subprocess32/Config.in
-index a936b064b0..d7fe84f1e6 100644
---- a/package/python-subprocess32/Config.in
-+++ b/package/python-subprocess32/Config.in
-@@ -1,8 +1,13 @@
- config BR2_PACKAGE_PYTHON_SUBPROCESS32
- 	bool "python-subprocess32"
- 	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_MIPS_NABI64
- 	help
- 	  A backport of the Python 3 subprocess module for use
- 	  on Python 2.
+diff --git a/package/libjpeg/libjpeg.hash b/package/libjpeg/libjpeg.hash
+index 2ad7dda6cf..7d47f550cb 100644
+--- a/package/libjpeg/libjpeg.hash
++++ b/package/libjpeg/libjpeg.hash
+@@ -1,2 +1,3 @@
+ # locally computed hash
+-sha256	240fd398da741669bf3c90366f58452ea59041cacc741a489b99f2f6a0bad052	jpegsrc.v9b.tar.gz
++sha256	650250979303a649e21f87b5ccd02672af1ea6954b911342ea491f351ceb7122	jpegsrc.v9c.tar.gz
++sha256	31f366acfb6259456d9046eb7f16875e387f8bf029d37ac4c4397bf63f22fd6b	README
+diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+index 95663a9e00..edda2a5a1b 100644
+--- a/package/libjpeg/libjpeg.mk
++++ b/package/libjpeg/libjpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/google/python-subprocess32
-+
-+comment "python-subprocess32 needs a toolchain w/ headers >= 3.10 on MIPS N64"
-+	depends on BR2_MIPS_NABI64
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+-LIBJPEG_VERSION = 9b
++LIBJPEG_VERSION = 9c
+ LIBJPEG_SITE = http://www.ijg.org/files
+ LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
+ LIBJPEG_LICENSE = jpeg-license (BSD-3-Clause-like)
