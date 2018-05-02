@@ -1,42 +1,39 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed,  2 May 2018 16:24:12 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14,
- 16}.x series
-In-Reply-To: <1525289052-8343-1-git-send-email-festevam@gmail.com>
-References: <1525289052-8343-1-git-send-email-festevam@gmail.com>
-Message-ID: <1525289052-8343-2-git-send-email-festevam@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 02 May 2018 21:29:47 +0200
+Subject: [Buildroot] [PATCH] Config.in: add BR2_HOST_GCC_AT_LEAST_8
+In-Reply-To: <20180502100904.29985-1-chemobejk@gmail.com> (Stefan Becker's
+ message of "Wed, 2 May 2018 13:09:04 +0300")
+References: <20180502100904.29985-1-chemobejk@gmail.com>
+Message-ID: <87o9hxetzo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Stefan" == Stefan Becker <chemobejk@gmail.com> writes:
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 170a309..554f72c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -250,13 +250,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.130"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.97"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.131"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.98"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.38"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.39"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
--	default "4.16.6"	if BR2_KERNEL_HEADERS_4_16
-+	default "4.16.7"	if BR2_KERNEL_HEADERS_4_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ > Fedora 28 switched to GCC 8.x.
+ > Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+ > ---
+ >  Config.in | 6 ++++++
+ >  1 file changed, 6 insertions(+)
+
+ > diff --git a/Config.in b/Config.in
+ > index 62d2dc3473..0d24ba6ebc 100644
+ > --- a/Config.in
+ > +++ b/Config.in
+ > @@ -62,6 +62,12 @@ config BR2_HOST_GCC_AT_LEAST_7
+ >  	default y if BR2_HOST_GCC_VERSION = "7"
+ >  	select BR2_HOST_GCC_AT_LEAST_6
+ 
+ > +config BR2_HOST_GCC_AT_LEAST_8
+ > +	bool
+ > +	default y if BR2_HOST_GCC_VERSION = "8"
+ > +	select BR2_HOST_GCC_AT_LEAST_7
+ > +
+
+Committed to 2018.02.x, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
