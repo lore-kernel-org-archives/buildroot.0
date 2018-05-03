@@ -1,93 +1,74 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu,  3 May 2018 18:23:34 +0200
-Subject: [Buildroot] [PATCH v3 2/5] arm-trusted-firmware: generate
- atf-uboot.ub image of bl31.bin
-In-Reply-To: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
-References: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1525364617-23633-3-git-send-email-luca@lucaceresoli.net>
+Date: Thu,  3 May 2018 18:23:32 +0200
+Subject: [Buildroot] [PATCH v3 0/5] Add Xilinx ZynqMP and ZCU106 board
+ support
+Message-ID: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot SPL for the Xilinx ZynqMP SoCs needs ATF in this format to load
-it.
+Hi,
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+this patchset adds basic support for the ZynqMP family of ARM64
+SoC+FPGA by Xilinx and for the ZCU106 board based on it.
 
----
-Changes v2 -> v3 (Thomas):
- - Make the option not ZynqMP-specific
- - Simplify the grep+sed expression to extract the entry point address
- - Rather than hooks, just use directly BUILD_CMDS and INSTALL_IMAGES_CMDS
- - Use $(INSTALL), not install
+This v3 addresses the comments received to v2 (thanks Thomas). The
+main change is that the zynqmp-pmufw-binaries package does not exist
+anymore: instead U-Boot downloads a single file using
+EXTRA_DOWNLOADS. The rest are several sparse improvements that make
+the whole work a lot cleaner.
 
-Changes v1 -> v2: none.
----
- boot/arm-trusted-firmware/Config.in               |  8 ++++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 21 +++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+The ZynqMP sets a few challenges that needed some work besides the
+usual defconfig + readme that is enough for more classic and simple
+SoCs.
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 7aef87cb746c..885d93e62f47 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -71,6 +71,14 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
- 	  typically used on platforms where another bootloader (e.g
- 	  U-Boot) encapsulates ATF BL31.
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT
-+	bool "Build BL31 U-Boot image"
-+	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
-+	help
-+	  Generates a U-Boot image named atf-uboot.ub containing
-+	  bl31.bin.  This is used for example by the Xilinx version of
-+	  U-Boot SPL to load ATF on the ZynqMP SoC.
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 	bool "Use U-Boot as BL33"
- 	depends on BR2_TARGET_UBOOT
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 212bb5049f2b..054a000a1dd3 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -75,15 +75,36 @@ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31),y)
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += bl31
- endif
- 
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT),y)
-+define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_BUILD
-+# Get the entry point address from the elf.
-+	BASE_ADDR=$$($(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | \
-+	             sed -r '/^  Entry point address:\s*(.*)/!d; s//\1/') && \
-+	$(HOST_DIR)/bin/mkimage \
-+		-A arm64 -O arm-trusted-firmware -C none \
-+		-a $${BASE_ADDR} -e $${BASE_ADDR} \
-+		-d $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31.bin \
-+		$(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub
-+endef
-+define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL
-+	$(INSTALL) -m 0644 $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub \
-+		$(BINARIES_DIR)/atf-uboot.ub
-+endef
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RESET_TO_BL31=1
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
-+endif
-+
- define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- 	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
- 	$(TARGET_CONFIGURE_OPTS) \
- 		$(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
- 			$(ARM_TRUSTED_FIRMWARE_MAKE_TARGETS)
-+	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_BUILD)
- endef
- 
- define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
- 	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
-+	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
- endef
- 
- # Configuration check
+First, it requires ARM Trusted Firmware in the U-Boot mkimage format,
+not currently implemented. Nothing really hard here, this is addressed
+in patch 2 (with a trivial preliminary cleanup in patch 1).
+
+Patch 3 allows to pass an externally-supplied init file to U-Boot,
+which is needed to boot boards not supported in the U-Boot source
+code, or on the same boards but with a different configuration.
+
+The next issue is the PMU (Platform Management Unit). It is a
+Microblaze core that handles power and clock gating and the like, and
+reprogramming it at runtime is necessary to boot any modern U-Boot and
+Linux. Since we can't build Microblaze code out of the ARM64
+toolchain, U-Boot obtains a pre-built binary using
+EXTRA_DOWNLOADS. This is added in patch 4.
+
+With all these in place, patch 5 just adds the defconfig and board
+files.
+
+Luca
+
+Luca Ceresoli (5):
+  arm-trusted-firmware: simplify release dir path
+  arm-trusted-firmware: generate atf-uboot.ub image of bl31.bin
+  uboot: zynqmp: allow to use custom psu_init files
+  uboot: zynqmp: generate SPL image with PMUFW binary
+  configs: add Xilinx ZCU106 board (ZynqMP SoC)
+
+ DEVELOPERS                                         |   2 +
+ board/zynqmp/genimage.cfg                          |  28 +++++
+ ...1-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch |  53 ++++++++++
+ .../0002-arm64-zynqmp-Enable-booting-to-ATF.patch  | 115 +++++++++++++++++++++
+ board/zynqmp/post-image.sh                         |  13 +++
+ board/zynqmp/readme.txt                            |  52 ++++++++++
+ boot/arm-trusted-firmware/Config.in                |   8 ++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk  |  24 ++++-
+ boot/uboot/Config.in                               |  43 ++++++++
+ boot/uboot/uboot.mk                                |  35 +++++++
+ configs/zynqmp_zcu106_defconfig                    |  31 ++++++
+ 11 files changed, 403 insertions(+), 1 deletion(-)
+ create mode 100644 board/zynqmp/genimage.cfg
+ create mode 100644 board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
+ create mode 100644 board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.patch
+ create mode 100755 board/zynqmp/post-image.sh
+ create mode 100644 board/zynqmp/readme.txt
+ create mode 100644 configs/zynqmp_zcu106_defconfig
+
 -- 
 2.7.4
