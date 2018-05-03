@@ -1,68 +1,108 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 3 May 2018 23:11:40 +0200
-Subject: [Buildroot] [RFC v1 1/2] libopenssl: bump version to 1.1.0h
-In-Reply-To: <20180502092124.500f37cc@windsurf.home>
-References: <20180417211921.18718-1-ps.report@gmx.net>
- <20180502092124.500f37cc@windsurf.home>
-Message-ID: <20180503231140.584503c5@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 3 May 2018 23:16:38 +0200
+Subject: [Buildroot] [RFC PATCH 1/1] core: add option to disable RPATH
+ sanitation in target tree
+In-Reply-To: <20180503191531.15549-1-ciro.santilli@gmail.com>
+References: <20180503191531.15549-1-ciro.santilli@gmail.com>
+Message-ID: <7eb9b866-3ba4-2cbb-e4e0-8e2540469ec8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
 
-On Wed, 2 May 2018 09:21:24 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> Hello Peter,
-> 
-> On Tue, 17 Apr 2018 23:19:20 +0200, Peter Seiderer wrote:
-> > - remove all parallel build patches (openssl build-system changed)
-> > 
-> > - rebased 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
-> > 
-> > - replaced 0002-cryptodev-Fix-issue-with-signature-generation.patch with
-> >   upstream version
-> > 
-> > - rebased 0003-Reproducible-build-do-not-leak-compiler-path.patch
-> > 
-> > - fix uclibc build failure, use '-DOPENSSL_NO_ASYNC'
-> > 
-> > - remove legacy enable-tlsext configure option
-> > 
-> > - change legacy INSTALL_PREFIX to DESTDIR
-> > 
-> > - remove 'libraries gets installed read only, so strip fails'
-> >   workaround (not needed anymore)
-> > 
-> > - change engine directory from /usr/lib/engines to
-> >   /usr/lib/engines-1.1
-> > 
-> > - change license file hash, no license change, only the following
-> >   hint was removed:
-> > 
-> >     Actually both licenses are BSD-style Open Source licenses.
-> >     In case of any license issues related to OpenSSL please
-> >     contact openssl-core at openssl.org.
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> 
-> This patch has received several comments from different people
-> reporting issues. Since your patch series was sent as RFC and people
-> have reported problems, I'll mark the patches as Changes Requested in
-> patchwork. But of course, please resend a new version when you have
-> some time to work on this.
+On 03-05-18 21:15, Ciro Santilli wrote:
+> Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
+> ---
+> As explained on the Config, the rationale is to speed up BR2_EXTERNAL
+> package development build iteration.
 
-New version will follow soon, will keep it as RFC until more packages
-depending on openssl are compile-/runtime tested with the new version
-(or in case of too much failures maybe an extra openssl-1.1.0 package
-is needed)...
+ I don't see what this has to do with package development. Anyway, when you're
+developing package foo, wouldn't you run 'make foo' rather than just 'make' (and
+thus never even hit that code path)?
 
-Regards,
-Peter
+> This would make users targetting virtual machines happy.
+
+ Huh? Or you mean building in virtual machines?
 
 > 
-> Thanks!
+> It may be argued that embedded images are not supposed to be small,
+> but a counter argument is that there are already in-tree packages
+> that benefit considerably from this, e.g. ltp-testsuite, which drops
+> the build iteration from 18s to 5s on my machine, which is a huge
+> life improvement.
 > 
-> Thomas
+> Additionaly, this will also make it easier for us to find and report
+> the offending packages mentioned at 5f4ca518094f7690536074246ab765f36a213783
+> and push for a correct upstream fix, are we tracking that somewhere?
+
+ No, it falls in the category "not worth the time to try to fix upstream",
+especially since we're talking about things like SELinux which consists of
+dozens of packages that all do it wrong.
+
+> Removing the rpath fix actually makes those packages not work is that it?
+
+ Usually not, the rpaths are mostly useless. They are typically added because
+the executable is linked with a library that may not yet be installed.
+
+
+> I'm not sure if this should be an actual config, thus the RFC.
+> Without the config, it is also possible to use it just as:
+
+ TBH, I don't think it's worth the bother either way. Just skip the entire
+finalize/rootfs creation step if you're not interested.
+
+ Regards,
+ Arnout
+
+> 
+>     make BR2_SANITIZE_RPATH=n
+> 
+>  Config.in | 7 +++++++
+>  Makefile  | 2 ++
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/Config.in b/Config.in
+> index 6b5b2b043c..6b39bd9f8b 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -678,6 +678,13 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+>  	  and external toolchain backends (through the toolchain
+>  	  wrapper).
+>  
+> +config BR2_SANITIZE_RPATH
+> +	bool "sanitize rpath"
+> +	default y
+> +	help
+> +	  You may want to disable this while developing a package with
+> +	  BR2_EXTERNAL to make build iterations faster.
+> +
+>  config BR2_REPRODUCIBLE
+>  	bool "Make the build reproducible (experimental)"
+>  	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
+> diff --git a/Makefile b/Makefile
+> index 54f940659c..a9c1b82b3f 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -743,8 +743,10 @@ endif
+>  	) >  $(TARGET_DIR)/usr/lib/os-release
+>  	ln -sf ../usr/lib/os-release $(TARGET_DIR)/etc
+>  
+> +ifeq ($(BR2_SANITIZE_RPATH),y)
+>  	@$(call MESSAGE,"Sanitizing RPATH in target tree")
+>  	$(TOPDIR)/support/scripts/fix-rpath target
+> +endif
+>  
+>  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+>  		$(call MESSAGE,"Copying overlay $(d)"); \
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
