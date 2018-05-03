@@ -1,60 +1,73 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 3 May 2018 21:08:53 +0300
-Subject: [Buildroot] [PATCH] dropbear: Do not build static binary
-In-Reply-To: <20180503114701.9452-2-stefan.sorensen@spectralink.com>
-References: <20180503114701.9452-1-stefan.sorensen@spectralink.com>
- <20180503114701.9452-2-stefan.sorensen@spectralink.com>
-Message-ID: <20180503180853.2473u472dvxhvwkn@tarshish>
+From: Ciro Santilli <ciro.santilli@gmail.com>
+Date: Thu,  3 May 2018 20:15:31 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] core: add option to disable RPATH
+ sanitation in target tree
+Message-ID: <20180503191531.15549-1-ciro.santilli@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
+---
+As explained on the Config, the rationale is to speed up BR2_EXTERNAL
+package development build iteration.
 
-On Thu, May 03, 2018 at 01:47:00PM +0200, Stefan S?rensen wrote:
-> Dropbear 2018.76 now uses the --enable-static option to indicate that a static
-> binary should be built. This will incorrectly pick up the generic buildroot
-> option intended for building static libraries, causing an unwanted static
-> binary build with BR2_STATIC_LIBS/BR2_SHARED_STATIC_LIBS.
-> 
-> Fix by appending an --disable-static configure flag, overriding the buildroot
-> default.
+This would make users targetting virtual machines happy.
 
-Your sign-off is missing here.
+It may be argued that embedded images are not supposed to be small,
+but a counter argument is that there are already in-tree packages
+that benefit considerably from this, e.g. ltp-testsuite, which drops
+the build iteration from 18s to 5s on my machine, which is a huge
+life improvement.
 
-> ---
->  package/dropbear/dropbear.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-> index 6bfc05fb2b..f47f97d036 100644
-> --- a/package/dropbear/dropbear.mk
-> +++ b/package/dropbear/dropbear.mk
-> @@ -28,9 +28,10 @@ DROPBEAR_MAKE = \
->  	$(MAKE) MULTI=1 SCPPROGRESS=1 \
->  	PROGRAMS="$(DROPBEAR_PROGRAMS)"
->  
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -DROPBEAR_CONF_OPTS += --enable-static
-> -endif
-> +# The generic --enable-static flags is only intended for use when building
-> +# libraries, but dropbear will be built as a static executeable with this
-> +# flag, so we overide it here
-> +DROPBEAR_CONF_OPTS += --disable-static
+Additionaly, this will also make it easier for us to find and report
+the offending packages mentioned at 5f4ca518094f7690536074246ab765f36a213783
+and push for a correct upstream fix, are we tracking that somewhere?
+Removing the rpath fix actually makes those packages not work is that it?
 
-You add --disable-static unconditionally, but we do want to build statically 
-when BR2_STATIC_LIBS=y. So maybe add --disable-static only for 
-BR2_SHARED_STATIC_LIBS=y to counter the effect of --enable-static that 
-Buildroot adds automatically. Would that work for you?
+I'm not sure if this should be an actual config, thus the RFC.
+Without the config, it is also possible to use it just as:
 
->  # Ensure that dropbear doesn't use crypt() when it's not available
->  define DROPBEAR_SVR_PASSWORD_AUTH
+    make BR2_SANITIZE_RPATH=n
 
-baruch
+ Config.in | 7 +++++++
+ Makefile  | 2 ++
+ 2 files changed, 9 insertions(+)
 
+diff --git a/Config.in b/Config.in
+index 6b5b2b043c..6b39bd9f8b 100644
+--- a/Config.in
++++ b/Config.in
+@@ -678,6 +678,13 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	  and external toolchain backends (through the toolchain
+ 	  wrapper).
+ 
++config BR2_SANITIZE_RPATH
++	bool "sanitize rpath"
++	default y
++	help
++	  You may want to disable this while developing a package with
++	  BR2_EXTERNAL to make build iterations faster.
++
+ config BR2_REPRODUCIBLE
+ 	bool "Make the build reproducible (experimental)"
+ 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
+diff --git a/Makefile b/Makefile
+index 54f940659c..a9c1b82b3f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -743,8 +743,10 @@ endif
+ 	) >  $(TARGET_DIR)/usr/lib/os-release
+ 	ln -sf ../usr/lib/os-release $(TARGET_DIR)/etc
+ 
++ifeq ($(BR2_SANITIZE_RPATH),y)
+ 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
+ 	$(TOPDIR)/support/scripts/fix-rpath target
++endif
+ 
+ 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.16.1
