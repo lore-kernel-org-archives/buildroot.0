@@ -1,73 +1,116 @@
-From: Ciro Santilli <ciro.santilli@gmail.com>
-Date: Thu,  3 May 2018 20:15:31 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] core: add option to disable RPATH
- sanitation in target tree
-Message-ID: <20180503191531.15549-1-ciro.santilli@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 May 2018 21:32:01 +0200
+Subject: [Buildroot] [PATCH 4/7] core/package: postpone evaluation of
+ dependency conditions
+In-Reply-To: <1677c229-612d-2f3e-1975-214e1980c76b@mind.be>
+References: <cover.1524301847.git.yann.morin.1998@free.fr>
+ <f274c0996622abccd5c65255b936010f37a22d66.1524301847.git.yann.morin.1998@free.fr>
+ <1677c229-612d-2f3e-1975-214e1980c76b@mind.be>
+Message-ID: <20180503193201.GA2453@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
----
-As explained on the Config, the rationale is to speed up BR2_EXTERNAL
-package development build iteration.
+Arnout, All,
 
-This would make users targetting virtual machines happy.
+On 2018-05-03 00:58 +0200, Arnout Vandecappelle spake thusly:
+> On 21-04-18 11:10, Yann E. MORIN wrote:
+> > In the pkg-inner macro, all variables, but he positional arguments,
+> > must be $$-prefixed, so that they are expanded only when the macro
+> > is evaluated in each package, not when the macro is parsed.
+> > 
+> > It is to be noted, though, that the current code, even though incorrect
+> > by the above rules, seemed to work. However, the upcoming addition of
+> > download dependencies, mimicking that code, would not work unless it
+> > was $$-prefixed.
+> > 
+> > So, for consistency sake, and for correctness sake, let's always use
+> > the $$-prefix in the inner macro.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > 
+> > ---
+> > Arnout: you the make expert, any idea why on Earth the single-expansion
+> > was working in thefirst place?
+> 
+> [You put me in Cc of too many patches, so I don't notice when you *really* want
+> my response :-]
 
-It may be argued that embedded images are not supposed to be small,
-but a counter argument is that there are already in-tree packages
-that benefit considerably from this, e.g. ltp-testsuite, which drops
-the build iteration from 18s to 5s on my machine, which is a huge
-life improvement.
+Well, you were previously part of the discussions that lead to those
+patches about the git backend, and you even partiually reviewed and
+commented on an earlier revision of that git series, so it was only
+natural that I added you in Cc of those patches...
 
-Additionaly, this will also make it easier for us to find and report
-the offending packages mentioned at 5f4ca518094f7690536074246ab765f36a213783
-and push for a correct upstream fix, are we tracking that somewhere?
-Removing the rpath fix actually makes those packages not work is that it?
+>  In most cases, single-$ will work as well. In this particular case, after first
+> expansion you will get:
+> 
+> ifeq (,)
+> FOO_EXTRACT_DEPENDENCIES += host-tar
+> endif
+> 
+> which in the $(eval ...) will get evaluated to nothing.
 
-I'm not sure if this should be an actual config, thus the RFC.
-Without the config, it is also possible to use it just as:
+Well, I might be totally numb here, but an empty string does equal
+another empty string, and thus I'd expect that host-tar be added
+as a dependency...
 
-    make BR2_SANITIZE_RPATH=n
+Which is now weird, because then host-tar would be its own dependency,
+which clearly isn't the case:
 
- Config.in | 7 +++++++
- Makefile  | 2 ++
- 2 files changed, 9 insertions(+)
+    $ make -s printvars VARS=HOST_TAR_FINAL_ALL_DEPENDENCIES
+    HOST_TAR_FINAL_ALL_DEPENDENCIES=host-skeleton
 
-diff --git a/Config.in b/Config.in
-index 6b5b2b043c..6b39bd9f8b 100644
---- a/Config.in
-+++ b/Config.in
-@@ -678,6 +678,13 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
- 	  and external toolchain backends (through the toolchain
- 	  wrapper).
- 
-+config BR2_SANITIZE_RPATH
-+	bool "sanitize rpath"
-+	default y
-+	help
-+	  You may want to disable this while developing a package with
-+	  BR2_EXTERNAL to make build iterations faster.
-+
- config BR2_REPRODUCIBLE
- 	bool "Make the build reproducible (experimental)"
- 	# SOURCE_DATE_EPOCH support in toolchain-wrapper requires GCC 4.4
-diff --git a/Makefile b/Makefile
-index 54f940659c..a9c1b82b3f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -743,8 +743,10 @@ endif
- 	) >  $(TARGET_DIR)/usr/lib/os-release
- 	ln -sf ../usr/lib/os-release $(TARGET_DIR)/etc
- 
-+ifeq ($(BR2_SANITIZE_RPATH),y)
- 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
- 	$(TOPDIR)/support/scripts/fix-rpath target
-+endif
- 
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
+So, an empty string is not the same as another empty string... I'm
+totally clueless now... :-/
+
+>  After this patch, after first expansion you get
+> 
+> ifeq ($(filter host-tar host-skeleton host-xz host-lzip host-fakedate,foo),)
+> FOO_EXTRACT_DEPENDENCIES += host-tar
+> endif
+> 
+> which the $(eval ...) still evaluates to nothing.
+
+There, I do agree...
+
+>  The cases where $$ is really needed are fairly rare. The most obvious ones are
+> when you have an ifeq() using a variable that is defined in the same
+> inner-generic-package expansion. Less obvious but important for consistency is
+> to keep the "late binding" property. With single-$, the variable is expanded
+> immediately, so if it is still updated later in the makefiles, the new values
+> won't be used anymore. This would e.g. break $(1)-show-rdepends.
+> 
+>  Because it is very hard to remember when exactly you should use $$, we
+> introduced the rule: use $$ *everywhere*, except for $(1), $(2) etc. Thomas's
+> patches that fixed the dependencies broke that rule.
+
+OK. I have to admit that I am still not sure what happens, though...
+
+>  Unfortunately, this patch still doesn't fix it...
+
+[--SNIP--]
+> > -ifeq ($(filter host-tar host-skeleton host-fakedate,$(1)),)
+> > +ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
+> >  $(2)_EXTRACT_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
+>                                 ^^ This should also be $$
+> 
+> and the same below.
+
+ACK, will fix.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.16.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
