@@ -1,31 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 May 2018 23:26:02 +0200
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <20180502090508.12893-1-chemobejk@gmail.com> (Stefan Becker's
- message of "Wed, 2 May 2018 12:05:08 +0300")
-References: <20180502090508.12893-1-chemobejk@gmail.com>
-Message-ID: <878t90ctxx.fsf@dell.be.48ers.dk>
+Date: Thu, 03 May 2018 23:26:39 +0200
+Subject: [Buildroot] [PATCH v2] Makefile: Update mtime of
+ $(TARGET_DIR)/usr in target-finalize
+In-Reply-To: <20180430171411.21920-1-chris.lesiak@licor.com> (Chris Lesiak's
+ message of "Mon, 30 Apr 2018 12:14:11 -0500")
+References: <20180416153339.23002-1-chris.lesiak@licor.com>
+ <20180430171411.21920-1-chris.lesiak@licor.com>
+Message-ID: <874ljoctww.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan Becker <chemobejk@gmail.com> writes:
+>>>>> "Chris" == Chris Lesiak <chris.lesiak@licor.com> writes:
 
- > crypt() is an optional glibc feature. Some distros, like Fedora 28, are
- > phasing it out to be replaced with libxcrypt [1]. Unfortunately this
- > change is only ABI compatible, not source code compatible, i.e. the code
- > will compile with warnings about undefined crypt(), but the resulting
- > binary will crash.
+ > The systemd ConditionNeedsUpdate option is useful when offline updates
+ > of the vendor operating system resources in /usr require updating of
+ > /etc or /var on the next following boot.
 
- > Follow the guidance in the Fedora bug and include crypt.h when
- > _XOPEN_CRYPT is not defined.
+ > Two examples of services making use of this option are
+ > systemd-hwdb-update.service and systemd-sysusers.service.
 
- > [1] https://bugzilla.redhat.com/show_bug.cgi?id=1566464
+ > ConditionNeedsUpdate=/etc will be true if the mtime of /etc/.updated
+ > is older than the mtime of /usr.  After services conditional on
+ > ConditionNeedsUpdate have run, systemd-update-done.service will
+ > synch the mtime of /usr to /etc/.updated so that the condition will
+ > be false on subsequent boots.
 
- > Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+ > For systems with writable /usr partitions where updates are done to
+ > the running system, the update program will touch /usr as a final step.
+ > But with Buildroot, where updates are often done by dumping a new
+ > image onto the device, and where /usr is on a filesystem mounted
+ > read-only, touching /usr as part of the update process is not practical.
+ > Instead, it should be done a build time.
+
+ > For testers, please note that systemd-update-done in v234 added a
+ > regression where the mtime of /etc/.updated is set to the current time
+ > instead of the mtime or /usr.  This will be fixed in v239.
+
+ > For more details, see:
+ > http://0pointer.de/public/systemd-man/systemd.unit.html
+ > http://0pointer.de/public/systemd-man/systemd-update-done.service.html
+
+ > Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ > Changed v1 --> v2
+ >   - Provide a more detailed commit message.
 
 Committed to 2018.02.x, thanks.
 
