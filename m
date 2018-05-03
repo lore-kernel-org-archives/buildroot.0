@@ -1,92 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 May 2018 23:04:44 +0200
-Subject: [Buildroot] [PATCH v2] dropbear: Disable legacy/insecure options
-In-Reply-To: <20180503114701.9452-3-stefan.sorensen@spectralink.com> ("Stefan
- =?utf-8?Q?S=C3=B8rensen=22's?= message of "Thu, 3 May 2018 13:47:01 +0200")
-References: <20180503114701.9452-1-stefan.sorensen@spectralink.com>
- <20180503114701.9452-3-stefan.sorensen@spectralink.com>
-Message-ID: <87d0yccuxf.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 3 May 2018 23:05:40 +0200
+Subject: [Buildroot] [RFC v1 1/2] libopenssl: bump version to 1.1.0h
+In-Reply-To: <t8sgrexjul.ln2@ID-313208.user.individual.net>
+References: <20180417211921.18718-1-ps.report@gmx.net>
+ <t8sgrexjul.ln2@ID-313208.user.individual.net>
+Message-ID: <20180503230540.16556bff@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan S?rensen <stefan.sorensen@spectralink.com> writes:
+Hello Bernd,
 
- > Dropbear by default enables a number of algorithms that are now considered
- > insecure and should only be used when legacy support is required:
- >    3DES encryption
- >    Blowfish encryption
- >    SHA1-96 message integrity
- >    CBC encryption mode
- >    DSA public keys
- >    Diffie-Hellman Group1 key exchange
+On Sun, 29 Apr 2018 15:00:45 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
- > So disable them by default, but add a config option for bringing them back.
+> Am Tue, 17 Apr 2018 23:19:20 +0200 schrieb Peter Seiderer:
+> 
+> > --- a/package/libopenssl/libopenssl.mk
+> > +++ b/package/libopenssl/libopenssl.mk
+> > @@ -4,7 +4,7 @@libfreeswitch.so.1.0.0
+> >  #
+> >    
+> ################################################################################
+> >  
+> > -LIBOPENSSL_VERSION = 1.0.2o
+> > +LIBOPENSSL_VERSION = 1.1.0h
+> >  LIBOPENSSL_SITE = http://www.openssl.org/source
+> >  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+> >  LIBOPENSSL_LICENSE = OpenSSL or SSLeay  
+> 
+> Hi Peter,
+> 
+> freeswitch will need a bump to its master branch, the current release 
+> version 1.6.20 is not compatible with openssl 1.1.x. I am using the 
+> master branch for months now without problems.
 
- > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
- > ---
- > Changes in v2:
- >  - Update for 2018.76
- >  - Use single option for legacy/insecure algorithms
+O.k, will add an freeswitch update to the next patch iteration...
 
- >  package/dropbear/Config.in   | 10 ++++++++++
- >  package/dropbear/dropbear.mk | 12 +++++++++++-
- >  2 files changed, 21 insertions(+), 1 deletion(-)
+> 
+> To build ca-certificates the libopenssl package needs this upstream
+> patch: https://github.com/openssl/openssl/
+> commit/00701e5ea84861b74d9d624f21a6b3fcb12e8acd Otherwise you will run 
+> into https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=894282
 
- > diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
- > index 5d6b83b6d1..8c121d0d72 100644
- > --- a/package/dropbear/Config.in
- > +++ b/package/dropbear/Config.in
- > @@ -56,4 +56,14 @@ config BR2_PACKAGE_DROPBEAR_LASTLOG
- >  	  Enable logging of dropbear access to lastlog. Notice that
- >  	  Buildroot does not generate lastlog by default.
- 
- > +config BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO
- > +	bool "enable legacy crypto"
- > +	help
- > +	  Enable legacy and possbibly insecure algorithms:
+And the requested patch...., thanks for the hints...
 
-s/possbibly/possibly/
+Regards,
+Peter
 
-> +	    3DES encryption
- > +	    SHA1-96 message integrity
- > +	    CBC encryption mode
- > +	    DSA public keys
- > +	    Diffie-Hellman Group1 key exchange
- > +
- >  endif
- > diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
- > index f47f97d036..de29d16e74 100644
- > --- a/package/dropbear/dropbear.mk
- > +++ b/package/dropbear/dropbear.mk
- > @@ -41,13 +41,23 @@ define DROPBEAR_SVR_PASSWORD_AUTH
- >  endef
- >  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
- 
- > +define DROPBEAR_DISABLE_LEGACY_CRYPTO
- > +	echo '#define DROPBEAR_3DES 0'                  >> $(@D)/localoptions.h
- > +	echo '#define DROPBEAR_ENABLE_CBC_MODE 0'       >> $(@D)/localoptions.h
- > +	echo '#define DROPBEAR_SHA1_96_HMAC 0'          >> $(@D)/localoptions.h
- > +	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
- > +	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
- > +endef
- > +ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
- > +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
- > +endif
- > +
- >  define DROPBEAR_ENABLE_REVERSE_DNS
- >  	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
- >  endef
- 
- >  define DROPBEAR_BUILD_FEATURED
- >  	echo '#define DROPBEAR_SMALL_CODE 0'            >> $(@D)/localoptions.h
- > -	echo '#define DROPBEAR_BLOWFISH 1'              >> $(@D)/localoptions.h
-
-This is not mentioned in the commit description. If this is also
-considered a legacy algorithm then I guess it is OK to drop it
-unconditioanlly, but it should be mentioned.
-
--- 
-Bye, Peter Korsgaard
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
