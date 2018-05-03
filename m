@@ -1,129 +1,329 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 3 May 2018 23:34:22 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: add tainting support
-In-Reply-To: <20180428185332.7d805102@windsurf>
-References: <1520326085-18337-1-git-send-email-angelo@amarulasolutions.com>
- <1520326085-18337-2-git-send-email-angelo@amarulasolutions.com>
- <20180428185332.7d805102@windsurf>
-Message-ID: <CA+TH9VnVMba-qZi9n8yDo8WYjXpAS5O1XQZGhzQgzrKjinLr3Q@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Thu,  3 May 2018 23:45:45 +0200
+Subject: [Buildroot] [PATCH] package/mender: new package
+Message-ID: <1525383945-8998-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-2018-04-28 18:53 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
-> Hello,
->
-> On Tue,  6 Mar 2018 09:48:04 +0100, Angelo Compagnucci wrote:
->
->> +# Check here if there are packages declaring they harm
->> +# the reproducibility of the build
->> +.PHONY: check-tainted
->> +check-tainted:
->> +ifneq ($(BR2_REPRODUCIBLE),)
->> +ifneq ($(BR2_TAINTED_BY),)
->
-> I don't think BR2_REPRODUCIBLE has anything to do with this 'tainting'
-> thing.
->
-> BR2_REPRODUCIBLE is about getting binary identical results given a
-> Buildroot configuration. But even with BR2_REPRODUCIBLE disabled,
-> Buildroot aims at building the same source code, which the nodejs npm
-> stuff does not allow to do. So the 'tainting' happens regardless of
-> whether BR2_REPRODUCIBLE=y or not.
->
-> If you remove the BR2_REPRODUCIBLE condition, then the Buildroot build
-> would always fail as soon as one package taints the build, so I'm not
-> sure a hard failure is a good approach here. Perhaps just a warning at
-> the end of the build ?
+This patch adds mender, an open source over-the-air (OTA) software
+updater for embedded Linux devices.
 
-Fair enough, will do.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/Config.in                        |  1 +
+ package/mender/Config.in                 | 14 +++++++++
+ package/mender/mender-device-identity    | 52 ++++++++++++++++++++++++++++++++
+ package/mender/mender-inventory-hostinfo | 21 +++++++++++++
+ package/mender/mender-inventory-network  | 47 +++++++++++++++++++++++++++++
+ package/mender/mender.conf               | 14 +++++++++
+ package/mender/mender.hash               |  2 ++
+ package/mender/mender.mk                 | 31 +++++++++++++++++++
+ package/mender/mender.service            | 15 +++++++++
+ package/mender/server.crt                | 22 ++++++++++++++
+ package/mender/tenant.conf               |  0
+ 11 files changed, 219 insertions(+)
+ create mode 100644 package/mender/Config.in
+ create mode 100644 package/mender/mender-device-identity
+ create mode 100644 package/mender/mender-inventory-hostinfo
+ create mode 100644 package/mender/mender-inventory-network
+ create mode 100644 package/mender/mender.conf
+ create mode 100644 package/mender/mender.hash
+ create mode 100644 package/mender/mender.mk
+ create mode 100644 package/mender/mender.service
+ create mode 100644 package/mender/server.crt
+ create mode 100644 package/mender/tenant.conf
 
->
->>  .PHONY: target-post-image
->> -target-post-image: $(TARGETS_ROOTFS) target-finalize
->> +target-post-image: check-tainted $(TARGETS_ROOTFS) target-finalize
->>       @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->>               $(call MESSAGE,"Executing post-image script $(s)"); \
->>               $(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->> @@ -1063,6 +1074,7 @@ help:
->>       @echo '  source                 - download all sources needed for offline-build'
->>       @echo '  external-deps          - list external packages used'
->>       @echo '  legal-info             - generate info about license compliance'
->> +     @echo '  check-tainted          - check if any selected package harms build reproducibility'
->
-> Not sure it is really useful to make this a first class target,
-> documented in the help text. A warning at the end of the build is
-> probably enough.
-
-I think this should be kept especially for CI systems in which it's
-useful to know if a user introduced something that harms the build.
-
-> Or maybe simply mention it as a Config.in comment ?
->
-> comment "WARNING: nodejs modules will make your build non reproducible!"
->         depends on BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL != ""
->
->>       @echo '  printvars              - dump all the internal variables'
->>       @echo
->>       @echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index a2a12e7..e643ecf 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -556,6 +556,10 @@ ifndef $(2)_REDISTRIBUTE
->>   endif
->>  endif
->>
->> +ifdef $(2)_TAINTS
->> + BR2_TAINTED_BY+=$$($(2)_RAWNAME)
->> +endif
->
-> I think "TAINTS" is very vague. Unfortunately, I don't have a good
-> proposal. In addition, it's not only about tainting the build in terms
-> of reproducibility, but also about the lack of integration with the
-> download and legal infrastructures.
-
-Yes, it's not the best name probably, but the concept is here.
-
->
-> I'm not sure what a good name for this would be. I've added Arnout in
-> Cc, he often has interesting (and creative) ideas on such topics.
->
->> +# Save a legal warning if tainted
->> +ifneq ($$(call qstrip,$$($(2)_TAINTS)),)
->
-> Implementation detail: you always use the construct:
->
-> ifneq ($(var),)
->
-> which is negative logic. Please use:
->
-> ifeq ($(var),YES)
->
-> instead. Of course, unless the variable really is empty vs. non-empty,
-> but that isn't the case here.
->
-> Also, your patch series was sent at a time where patchwork was missing
-> some patches, so your PATCH 2/2 was not recorded. It would be useful if
-> you could resend this patch series.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index fe36d31..d87ccbd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2006,6 +2006,7 @@ menu "System tools"
+ 	source "package/kvmtool/Config.in"
+ 	source "package/libostree/Config.in"
+ 	source "package/lxc/Config.in"
++	source "package/mender/Config.in"
+ 	source "package/monit/Config.in"
+ 	source "package/ncdu/Config.in"
+ 	source "package/numactl/Config.in"
+diff --git a/package/mender/Config.in b/package/mender/Config.in
+new file mode 100644
+index 0000000..b80ad4a
+--- /dev/null
++++ b/package/mender/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_MENDER
++	bool "mender"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INIT_SYSTEMD
++
++	help
++	  Mender is an open source over-the-air (OTA) software updater for
++	  embedded Linux devices. Mender comprises a client running at the
++	  embedded device, as well as a server that manages deployments
++	  across many devices.
++
++	  https://github.com/mendersoftware/mender
+diff --git a/package/mender/mender-device-identity b/package/mender/mender-device-identity
+new file mode 100644
+index 0000000..d87f843
+--- /dev/null
++++ b/package/mender/mender-device-identity
+@@ -0,0 +1,52 @@
++#!/bin/sh
++
++# Example script called by Mender agent to collect device identity data. The
++# script needs to be located at
++# $(datadir)/mender/identity/mender-device-identity path for the agent to find
++# it. The script shall exit with non-0 status on errors. In this case the agent
++# will discard any output the script may have produced.
++#
++# The script shall output identity data in <key>=<value> format, one
++# entry per line. Example
++#
++# $ ./mender-device-identity
++# mac=de:ad:ca:fe:00:01
++# cpuid=1112233
++#
++# The example script collects the MAC address of a network interface with the
++# type ARPHRD_ETHER and it will pick the interface with the lowest ifindex
++# number if there are multiple interfaces with that type. The identity data is
++# output in the following format:
++#
++# mac=00:01:02:03:04:05
++#
++
++set -ue
++
++SCN=/sys/class/net
++min=65535
++arphrd_ether=1
++ifdev=
++
++# find iface with lowest ifindex, skip non ARPHRD_ETHER types (lo, sit ...)
++for dev in $SCN/*; do
++    iftype=$(cat $dev/type)
++    if [ $iftype -ne $arphrd_ether ]; then
++        continue
++    fi
++
++    idx=$(cat $dev/ifindex)
++    if [ $idx -lt $min ]; then
++        min=$idx
++        ifdev=$dev
++    fi
++done
++
++if [ -z "$ifdev" ]; then
++    echo "no suitable interfaces found" >&2
++    exit 1
++else
++    echo "using interface $ifdev" >&2
++    # grab MAC address
++    echo "mac=$(cat $ifdev/address)"
++fi
+diff --git a/package/mender/mender-inventory-hostinfo b/package/mender/mender-inventory-hostinfo
+new file mode 100644
+index 0000000..cf508fd
+--- /dev/null
++++ b/package/mender/mender-inventory-hostinfo
+@@ -0,0 +1,21 @@
++#!/bin/sh
++#
++# The example script collects information about current host
++#
++
++set -ue
++
++LC_ALL=C
++export LC_ALL
++
++grep 'model name' /proc/cpuinfo | uniq | awk -F': ' '
++     // { printf("cpu_model=%s\n", $2);}
++'
++echo "kernel=$(cat /proc/version)"
++
++cat /proc/meminfo | awk '
++/MemTotal/ {printf("mem_total_kB=%d\n", $2)}
++'
++
++echo "hostname=$(cat /etc/hostname)"
++
+diff --git a/package/mender/mender-inventory-network b/package/mender/mender-inventory-network
+new file mode 100644
+index 0000000..b017c4e
+--- /dev/null
++++ b/package/mender/mender-inventory-network
+@@ -0,0 +1,47 @@
++#!/bin/sh
++#
++# Example script called by Mender agent to collect inventory data for a
++# particular devce. The script needs to be located in $(datadir)/mender and its
++# name shall start with `mender-inventory-` prefix. The script shall exit with
++# non-0 status on errors. In this case the agent will discard any output the
++# script may have produced.
++#
++# The script shall output inventory data in <key>=<value> format, one entry per
++# line. Entries appearing multiple times will be joined in a list under the same
++# key.
++#
++# $ ./mender-inventory-network
++# mac_br-fbfdad18c33c=02:42:7e:74:96:85
++# network_interfaces=br-fbfdad18c33c
++# ipv4_br-fbfdad18c33c=172.21.0.1/16
++# mac_enp0s25=de:ad:be:ef:bb:05
++# network_interfaces=enp0s25
++# ipv4_enp0s25=123.22.0.197/16
++# ipv4_enp0s25=10.20.20.105/16
++# ipv6_enp0s25=fe80::2aad:beff:feef:bb05/64
++#
++#
++# The example script collects the list of network interfaces, as well as
++# ethernet and IP addresses of each of the interfaces.
++#
++
++set -ue
++
++SCN=/sys/class/net
++min=65535
++ifdev=
++
++# find iface with lowest ifindex, except loopback
++for devpath in $SCN/*; do
++    dev=$(basename $devpath)
++    if [ $dev = "lo" ]; then
++        continue
++    fi
++    echo "mac_$dev=$(cat $devpath/address)"
++    echo "network_interfaces=$dev"
++
++    ip addr show dev $dev | awk -v dev=$dev '
++       /inet / { printf("ipv4_%s=%s\n", dev, $2) }
++       /inet6 / {printf("ipv6_%s=%s\n", dev, $2) }
++    '
++done
+diff --git a/package/mender/mender.conf b/package/mender/mender.conf
+new file mode 100644
+index 0000000..a5c7c54
+--- /dev/null
++++ b/package/mender/mender.conf
+@@ -0,0 +1,14 @@
++{
++  "ClientProtocol": "http",
++  "HttpsClient": {
++    "Certificate": "",
++    "Key": ""
++  },
++  "RootfsPartA": "@MENDER_ROOTFS_PART_A@",
++  "RootfsPartB": "@MENDER_ROOTFS_PART_B@",
++  "UpdatePollIntervalSeconds": @MENDER_UPDATE_POLL_INTERVAL_SECONDS@,
++  "InventoryPollIntervalSeconds": @MENDER_INVENTORY_POLL_INTERVAL_SECONDS@,
++  "RetryPollIntervalSeconds": @MENDER_RETRY_POLL_INTERVAL_SECONDS@,
++  "ServerURL": "@MENDER_SERVER_URL@",
++  "ServerCertificate": "@MENDER_CERT_LOCATION@"
++}
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+new file mode 100644
+index 0000000..574b675
+--- /dev/null
++++ b/package/mender/mender.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 a2fd103185431946c3455fef0c08909d13413a09638463266e5b6889df8163c5 mender-1.2.1.tar.gz
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+new file mode 100644
+index 0000000..40d270c
+--- /dev/null
++++ b/package/mender/mender.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# mender
++#
++################################################################################
++
++MENDER_VERSION = 1.2.1
++MENDER_SOURCE = mender-$(MENDER_VERSION).tar.gz
++MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
++
++define MENDER_INSTALL_TARGET_CMDS
++	$(INSTALL) -dm 0755 $(TARGET_DIR)/etc/mender/
++	$(INSTALL) -dm 0755 $(TARGET_DIR)/var/share/mender/identity/
++	$(INSTALL) -dm 0755 $(TARGET_DIR)/var/share/mender/inventory/
++	$(INSTALL) -D -m 0644 package/mender/mender.conf \
++		$(TARGET_DIR)/etc/mender/mender.conf
++	$(INSTALL) -D -m 0644 package/mender/tenant.conf \
++		$(TARGET_DIR)/etc/mender/mender.conf
++	$(INSTALL) -D -m 0644 package/mender/server.crt \
++		$(TARGET_DIR)/etc/mender/server.crt
++	$(INSTALL) -D -m 0755 package/mender/mender-device-identity \
++		$(TARGET_DIR)/var/share/mender/identity/mender-device-identity
++	$(INSTALL) -D -m 0755 package/mender/mender-inventory-network \
++		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-network
++	$(INSTALL) -D -m 0755 package/mender/mender-inventory-hostinfo \
++		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-hostinfo
++	$(INSTALL) -D -m 0644 package/mender/mender.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/mender.service
++endef
++
++$(eval $(golang-package))
+diff --git a/package/mender/mender.service b/package/mender/mender.service
+new file mode 100644
+index 0000000..ec77fbc
+--- /dev/null
++++ b/package/mender/mender.service
+@@ -0,0 +1,15 @@
++[Unit]
++Description=Mender OTA update service
++After=systemd-resolved.service
++
++[Service]
++Type=idle
++User=root
++Group=root
++ExecStartPre=/bin/mkdir -p -m 0700 /data/mender
++ExecStartPre=/bin/ln -sf /etc/mender/tenant.conf /var/lib/mender/authtentoken
++ExecStart=/usr/bin/mender -daemon
++Restart=on-abort
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/package/mender/server.crt b/package/mender/server.crt
+new file mode 100644
+index 0000000..79a57e1
+--- /dev/null
++++ b/package/mender/server.crt
+@@ -0,0 +1,22 @@
++-----BEGIN CERTIFICATE-----
++MIIBfTCCASOgAwIBAgIJAJOS76a0qWuZMAoGCCqGSM49BAMCMBsxGTAXBgNVBAMM
++EGRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1MjQ2
++WjAbMRkwFwYDVQQDDBBkb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0CAQYIKoZI
++zj0DAQcDQgAE7AVYis6MWGPGQYU1/tlLEnskRifDIhvkRb8Y4nQPekRkLkiBYYT3
++iJ46wHrnejbHaLstU9GRdKWOmOuU6HGdO6NQME4wHQYDVR0OBBYEFGOIU4q++Vz8
++9HuT1jg9V+wFeJcyMB8GA1UdIwQYMBaAFGOIU4q++Vz89HuT1jg9V+wFeJcyMAwG
++A1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIhAPLnEeWPNeN7eDCEYRitBfyO
++X1yf2kzOm4ohBE5GY9gzAiBCq7HOSkzQDkelmQCCCpGXf/UwYNgQJjSoeGfk0j1a
++TQ==
++-----END CERTIFICATE-----
++-----BEGIN CERTIFICATE-----
++MIIBhDCCASmgAwIBAgIJALQrf4QDot4IMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMM
++E3MzLmRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1
++MjQ2WjAeMRwwGgYDVQQDDBNzMy5kb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0C
++AQYIKoZIzj0DAQcDQgAEEc/Y3T+l3DvINePkpvVZORMIdHVs29jgsl48ia7z/NRX
++HlKtKxVGJyFN5Y7sBZeLgBYH3F4Bo3KfmxI7ad0tI6NQME4wHQYDVR0OBBYEFIUm
++cip00QZYpe4ULflbGNJan+Y9MB8GA1UdIwQYMBaAFIUmcip00QZYpe4ULflbGNJa
++n+Y9MAwGA1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSQAwRgIhANHij9VZBDHOUPaC
++pFiagnWnYL2HBR72W1xTKQbrLLTXAiEAvpwA4HzSnGmLd3010+jqQuMRHArN5WaX
++h0fy7niBbIQ=
++-----END CERTIFICATE-----
+diff --git a/package/mender/tenant.conf b/package/mender/tenant.conf
+new file mode 100644
+index 0000000..e69de29
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.7.4
