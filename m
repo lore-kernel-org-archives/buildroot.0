@@ -1,52 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 May 2018 22:04:15 +0200
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <20180503215631.6f62e406@windsurf>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180503215631.6f62e406@windsurf>
-Message-ID: <20180503200415.GC2453@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 May 2018 22:05:25 +0200
+Subject: [Buildroot] [git commit] libksba: add hash for license files
+Message-ID: <20180503200602.8176281E69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=09e669282aa40ff0826406d49ff2666432366996
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-05-03 21:56 +0200, Thomas Petazzoni spake thusly:
-> On Wed,  2 May 2018 12:05:08 +0300, Stefan Becker wrote:
-> > crypt() is an optional glibc feature. Some distros, like Fedora 28, are
-> > phasing it out to be replaced with libxcrypt [1]. Unfortunately this
-> > change is only ABI compatible, not source code compatible, i.e. the code
-> > will compile with warnings about undefined crypt(), but the resulting
-> > binary will crash.
-> > 
-> > Follow the guidance in the Fedora bug and include crypt.h when
-> > _XOPEN_CRYPT is not defined.
-> > 
-> > [1] https://bugzilla.redhat.com/show_bug.cgi?id=1566464
-> > 
-> > Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-> > ---
-> >  package/mkpasswd/mkpasswd.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> 
-> Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libksba/libksba.hash | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Although in the long run, I believe it might be preferrable that we
-ditch our own bundled version, and switch to making our whois package a
-hot pacakge, and use that as the provider for mkpasswd.
-
-Stefan, would you want to do that? ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index f0a38f3de3..8ab7e6efe8 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
+@@ -1,2 +1,9 @@
+ # Locally calculated after checking pgp signature
+ sha256	41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340	libksba-1.3.5.tar.bz2
++
++# Hash for license files:
++sha256	240908e1356ffeb5d0730227b6198dcc8e878375d28632fd813e0ed75b35ccc2	AUTHORS
++sha256	6197b98c6bf69838c624809c509d84333de1bc847155168c0e84527446a27076	COPYING
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING.GPLv2
++sha256	0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf	COPYING.GPLv3
++sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LGPLv3
