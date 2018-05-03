@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 23:15:06 +0200
-Subject: [Buildroot] [git commit] package/zsh: add /bin/zsh to /etc/shells
-Message-ID: <20180503212454.CBAA98B637@busybox.osuosl.org>
+Date: Thu, 3 May 2018 23:15:07 +0200
+Subject: [Buildroot] [git commit] package/bash: add missing double-dollar
+ for /etc/shells
+Message-ID: <20180503212454.E641D8B602@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dbfd500006c630a0299e384965045056fdb4d3b
+commit: https://git.buildroot.net/buildroot/commit/?id=849d748ae61badfbead9630454a6c1c93ee81bb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When zsh is selected, /bin/zsh is not added to /etc/shells
-(see man shells). So, login tools like dropbear reject the ssh
-connections for users using zsh as shell in /etc/passwd.
-
-buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
+Commit 4d279697afbf8fb295274784103be2b837113d5e missed one comment
+from Yann E. Morin about the double-dollar.
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zsh/zsh.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/bash/bash.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index a45c61b931..e798838922 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -35,6 +35,14 @@ else
- ZSH_CONF_OPTS += --disable-pcre
- endif
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index b162d93188..2182bede15 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -45,7 +45,7 @@ define BASH_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
+ 	rm -f $(TARGET_DIR)/bin/bashbug
+-	grep -qsE '^/bin/bash' $(TARGET_DIR)/etc/shells \
++	grep -qsE '^/bin/bash$$' $(TARGET_DIR)/etc/shells \
+ 		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
+ endef
  
-+# Add /bin/zsh to /etc/shells otherwise some login tools like dropbear
-+# can reject the user connection. See man shells.
-+define ZSH_ADD_ZSH_TO_SHELLS
-+	grep -qsE '^/bin/zsh$$' $(TARGET_DIR)/etc/shells \
-+		|| echo "/bin/zsh" >> $(TARGET_DIR)/etc/shells
-+endef
-+ZSH_TARGET_FINALIZE_HOOKS += ZSH_ADD_ZSH_TO_SHELLS
-+
- # Remove versioned zsh-x.y.z binary taking up space
- define ZSH_TARGET_INSTALL_FIXUPS
- 	rm -f $(TARGET_DIR)/bin/zsh-$(ZSH_VERSION)
