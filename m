@@ -1,39 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 21:56:31 +0200
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <20180502090508.12893-1-chemobejk@gmail.com>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
-Message-ID: <20180503215631.6f62e406@windsurf>
+From: Ciro Santilli <ciro.santilli@gmail.com>
+Date: Thu, 3 May 2018 21:01:36 +0100
+Subject: [Buildroot] [PATCH] ltp-testsuite: add
+ --with-open-posix-testsuite
+In-Reply-To: <20180503215504.356b46be@windsurf>
+References: <CAFXrp_cbD89wmzAf44aNjHfQS+ixvMUqMmxFxeLjLbvGDr3FFA@mail.gmail.com>
+ <20180503215504.356b46be@windsurf>
+Message-ID: <CAFXrp_dU0yzejWuHyVrqO2pZPcajqndwbUyP6dBzogWZv9k-jw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, May 3, 2018 at 8:55 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello Ciro,
+>
+> On Thu, 3 May 2018 17:03:16 +0100, Ciro Santilli wrote:
+>> The issues mentioned on the removed comments were resolved,
+>> tested in QEMU x86_64 and aarch64.
+>>
+>> Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
+>> ---
+>> This patch supposes that the removed comments imply that a default
+>> --with-open-posix-testsuite
+>> is desirable (and I confirm that it does not take unreasoble build
+>> time or disk space),
+>> and that there is no generic way to add autotools configs to packages:
+>> https://stackoverflow.com/questions/44341188/how-to-pass-extra-custom-configure-autotools-options-to-a-buildroot-package
+>
+> Thanks for this contribution. However, your patch was corrupted, so it
+> would be nice to use "git send-email" next time to submit a patch.
+>
 
-On Wed,  2 May 2018 12:05:08 +0300, Stefan Becker wrote:
-> crypt() is an optional glibc feature. Some distros, like Fedora 28, are
-> phasing it out to be replaced with libxcrypt [1]. Unfortunately this
-> change is only ABI compatible, not source code compatible, i.e. the code
-> will compile with warnings about undefined crypt(), but the resulting
-> binary will crash.
-> 
-> Follow the guidance in the Fedora bug and include crypt.h when
-> _XOPEN_CRYPT is not defined.
-> 
-> [1] https://bugzilla.redhat.com/show_bug.cgi?id=1566464
-> 
-> Signed-off-by: Stefan Becker <chemobejk@gmail.com>
-> ---
->  package/mkpasswd/mkpasswd.c | 5 +++++
->  1 file changed, 5 insertions(+)
+Ah, sorry about that.
 
-Applied to master, thanks.
+git send-email didn't work on the network I was on, but it works on my
+home network with the exact same git configs.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The problem is described at:
+https://stackoverflow.com/questions/28038662/unable-to-initialize-smtp-properly-using-git
+but none of the answers helped :-(
+
+I wonder if anyone has ever solved it.
+
+> However, since the patch was simple, I fixed it up, and applied. Thanks
+> again!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
