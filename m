@@ -1,175 +1,329 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 3 May 2018 23:48:02 +0200
-Subject: [Buildroot] [RFC v2 3/3] freeswitch: bump to git master
- 8f10ae54a18a19fc6ed938e4f662bd218ba54b5e
-In-Reply-To: <20180503212436.2521-3-ps.report@gmx.net>
-References: <20180503212436.2521-1-ps.report@gmx.net>
- <20180503212436.2521-3-ps.report@gmx.net>
-Message-ID: <20180503234802.5a0e48e6@gmx.net>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Thu,  3 May 2018 23:52:38 +0200
+Subject: [Buildroot] [PATCH v2] package/mender: new package
+Message-ID: <1525384358-26211-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-On Thu,  3 May 2018 23:24:36 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+This patch adds mender, an open source over-the-air (OTA) software
+updater for embedded Linux devices.
 
-> Enables openssl-1.1.0h compatible compile.
-> 
-> - add bootstrap.sh pre-configure call (normal AUTORECONF is broken)
-> - add tiff dependency (bundled tiff source is gone)
-> - rebase (and git format) 001-libvpx-cross.patch patch
-> - update libs/srtp/LICENSE file hash (updated copyright year)
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - new patch (suggested by Bernd Kuhls)
-> 
-> Notes:
->   - needed to disable BR2_COMPILER_PARANOID_UNSAFE_PATH for error
->     free compile
-> ---
->  ...patch => 0001-Fix-cross-compiling-libvpx.patch} | 26 +++++++++++++++-------
->  package/freeswitch/Config.in                       |  1 +
->  package/freeswitch/freeswitch.hash                 | 14 +++++-------
->  package/freeswitch/freeswitch.mk                   | 16 ++++++++++---
->  4 files changed, 37 insertions(+), 20 deletions(-)
->  rename package/freeswitch/{0001-libvpx-cross.patch => 0001-Fix-cross-compiling-libvpx.patch} (71%)
-> 
-> diff --git a/package/freeswitch/0001-libvpx-cross.patch b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-> similarity index 71%
-> rename from package/freeswitch/0001-libvpx-cross.patch
-> rename to package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-> index a2583dac35..6f9e122242 100644
-> --- a/package/freeswitch/0001-libvpx-cross.patch
-> +++ b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-> @@ -1,4 +1,7 @@
-> -Fix cross-compiling libvpx
-> +From 4ba073af7877242a79579b040e3be00bed4275cc Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Thu, 3 May 2018 22:24:23 +0200
-> +Subject: [PATCH] Fix cross-compiling libvpx
->  
->  Freeswitch since version 1.6.7 only uses an in-tree-version of libvpx:
->  https://freeswitch.org/fisheye/changelog/freeswitch?cs=febe0f8dacea2d2a31902b3dc469be757f8c3c4d
-> @@ -10,15 +13,19 @@ package/freeswitch/freeswitch.mk and add target=generic-gnu as
->  configure parameter:
->  https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/libs/libvpx/README#110
->  
-> -And yes, autoreconf is also broken, so we patch Makefile.in instead
-> -of Makefile.am.
-> -
->  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->  
-> -diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
-> ---- freeswitch-1.6.7.org/Makefile.in	2016-04-01 18:09:54.000000000 +0200
-> -+++ freeswitch-1.6.7/Makefile.in	2016-04-22 20:11:37.938961730 +0200
-> -@@ -3491,7 +3491,7 @@
-> +[rebased on freeswitch git master branch]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + Makefile.am | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-> +index 53bd7c66aa..2e4059740a 100644
-> +--- a/Makefile.am
-> ++++ b/Makefile.am
-> +@@ -567,7 +567,7 @@ libs/libzrtp/libzrtp.a:
->   	cd libs/libzrtp && $(MAKE)
->   
->   libs/libvpx/Makefile:
-> @@ -27,3 +34,6 @@ diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
->   
->   libs/libvpx/libvpx.a: libs/libvpx/Makefile
->   	@cd libs/libvpx && $(MAKE)
-> +-- 
-> +2.16.3
-> +
-> diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-> index 1f6459335d..8557d75134 100644
-> --- a/package/freeswitch/Config.in
-> +++ b/package/freeswitch/Config.in
-> @@ -18,6 +18,7 @@ config BR2_PACKAGE_FREESWITCH
->  	select BR2_PACKAGE_PCRE
->  	select BR2_PACKAGE_SPEEX
->  	select BR2_PACKAGE_SQLITE
-> +	select BR2_PACKAGE_TIFF
->  	select BR2_PACKAGE_UTIL_LINUX
->  	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->  	select BR2_PACKAGE_ZLIB
-> diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-> index 25421de99b..2cc8ebc974 100644
-> --- a/package/freeswitch/freeswitch.hash
-> +++ b/package/freeswitch/freeswitch.hash
-> @@ -1,10 +1,7 @@
-> -# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.md5
-> -md5 e9890a2d6ca6f58dd3fa440fdfbf91a0  freeswitch-1.6.20.tar.xz
-> -# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.sha1
-> -sha1 ce284b805e262504cbb1f74796785b4dfa70d5ac  freeswitch-1.6.20.tar.xz
-> -# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.sha256
-> -sha256 dbb0f73109171bd381772b247b8ef581f6a176964619082a1fe031b004086f6b  freeswitch-1.6.20.tar.xz
-> -# Locally computed
-> +# Locally computed:
-> +sha256 56d932c001f3cc53b6ee5d835536b01fceacf1e360a6b48c5c1265eda5d6be86  freeswitch-8f10ae54a18a19fc6ed938e4f662bd218ba54b5e.tar.gz
-> +
-> +# License files:
->  sha256 10299420c1e8602c0daf5a59d022621cd72a9148d1f0f33501edb3db3445c7fe  COPYING
->  sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
->  sha256 1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
-> @@ -12,6 +9,5 @@ sha256 7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/li
->  sha256 e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  libs/sofia-sip/COPYING
->  sha256 b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  libs/sofia-sip/COPYRIGHTS
->  sha256 366576cb0b869cd9e95a4882878607314650488ac635e5df0692180382e9666a  libs/spandsp/COPYING
-> -sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  libs/srtp/LICENSE
-> -sha256 fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  libs/tiff-4.0.2/COPYRIGHT
-> +sha256 8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  libs/srtp/LICENSE
->  sha256 ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/mod/codecs/mod_isac/LICENSE
-> diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-> index 98f2f48356..32a556eba7 100644
-> --- a/package/freeswitch/freeswitch.mk
-> +++ b/package/freeswitch/freeswitch.mk
-> @@ -4,9 +4,11 @@
->  #
->  ################################################################################
->  
-> -FREESWITCH_VERSION = 1.6.20
-> -FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
-> -FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
-> +FREESWITCH_VERSION = 8f10ae54a18a19fc6ed938e4f662bd218ba54b5e
-> +#FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
-> +FREESWITCH_SITE = https://freeswitch.org/stash/scm/fs/freeswitch.git
-> +FREESWITCH_SITE_METHOD = git
-> +#FREESWITCH_AUTORECONF = YES
->  # External modules need headers/libs from staging
->  FREESWITCH_INSTALL_STAGING = YES
->  FREESWITCH_LICENSE = MPL-1.1, \
-> @@ -36,9 +38,17 @@ FREESWITCH_DEPENDENCIES = \
->  	pcre \
->  	speex \
->  	sqlite \
-> +	tiff \
->  	util-linux \
->  	zlib
->  
-> +# run bootstrap.sh (normal AUTORECONF is broken)
-> +define FREESWITCH_RUN_BOOTSTRAP
-> +	cd $(@D) && ./bootstrap.sh
-> +endef
-> +
-> +FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_RUN_BOOTSTRAP
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/Config.in                        |  1 +
+ package/mender/Config.in                 | 14 +++++++++
+ package/mender/mender-device-identity    | 52 ++++++++++++++++++++++++++++++++
+ package/mender/mender-inventory-hostinfo | 21 +++++++++++++
+ package/mender/mender-inventory-network  | 47 +++++++++++++++++++++++++++++
+ package/mender/mender.conf               | 14 +++++++++
+ package/mender/mender.hash               |  2 ++
+ package/mender/mender.mk                 | 31 +++++++++++++++++++
+ package/mender/mender.service            | 15 +++++++++
+ package/mender/server.crt                | 22 ++++++++++++++
+ package/mender/tenant.conf               |  0
+ 11 files changed, 219 insertions(+)
+ create mode 100644 package/mender/Config.in
+ create mode 100644 package/mender/mender-device-identity
+ create mode 100644 package/mender/mender-inventory-hostinfo
+ create mode 100644 package/mender/mender-inventory-network
+ create mode 100644 package/mender/mender.conf
+ create mode 100644 package/mender/mender.hash
+ create mode 100644 package/mender/mender.mk
+ create mode 100644 package/mender/mender.service
+ create mode 100644 package/mender/server.crt
+ create mode 100644 package/mender/tenant.conf
 
-...needs additional:
-
-FREESWITCH_DEPENDENCIES += host-automake host-autoconf host-libtool
-
-Regards,
-Peter
-
-> +
->  # disable display of ClueCon banner in fs_cli
->  FREESWITCH_CONF_ENV += \
->  	disable_cc=yes
+diff --git a/package/Config.in b/package/Config.in
+index fe36d31..d87ccbd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2006,6 +2006,7 @@ menu "System tools"
+ 	source "package/kvmtool/Config.in"
+ 	source "package/libostree/Config.in"
+ 	source "package/lxc/Config.in"
++	source "package/mender/Config.in"
+ 	source "package/monit/Config.in"
+ 	source "package/ncdu/Config.in"
+ 	source "package/numactl/Config.in"
+diff --git a/package/mender/Config.in b/package/mender/Config.in
+new file mode 100644
+index 0000000..b80ad4a
+--- /dev/null
++++ b/package/mender/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_MENDER
++	bool "mender"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INIT_SYSTEMD
++
++	help
++	  Mender is an open source over-the-air (OTA) software updater for
++	  embedded Linux devices. Mender comprises a client running at the
++	  embedded device, as well as a server that manages deployments
++	  across many devices.
++
++	  https://github.com/mendersoftware/mender
+diff --git a/package/mender/mender-device-identity b/package/mender/mender-device-identity
+new file mode 100644
+index 0000000..d87f843
+--- /dev/null
++++ b/package/mender/mender-device-identity
+@@ -0,0 +1,52 @@
++#!/bin/sh
++
++# Example script called by Mender agent to collect device identity data. The
++# script needs to be located at
++# $(datadir)/mender/identity/mender-device-identity path for the agent to find
++# it. The script shall exit with non-0 status on errors. In this case the agent
++# will discard any output the script may have produced.
++#
++# The script shall output identity data in <key>=<value> format, one
++# entry per line. Example
++#
++# $ ./mender-device-identity
++# mac=de:ad:ca:fe:00:01
++# cpuid=1112233
++#
++# The example script collects the MAC address of a network interface with the
++# type ARPHRD_ETHER and it will pick the interface with the lowest ifindex
++# number if there are multiple interfaces with that type. The identity data is
++# output in the following format:
++#
++# mac=00:01:02:03:04:05
++#
++
++set -ue
++
++SCN=/sys/class/net
++min=65535
++arphrd_ether=1
++ifdev=
++
++# find iface with lowest ifindex, skip non ARPHRD_ETHER types (lo, sit ...)
++for dev in $SCN/*; do
++    iftype=$(cat $dev/type)
++    if [ $iftype -ne $arphrd_ether ]; then
++        continue
++    fi
++
++    idx=$(cat $dev/ifindex)
++    if [ $idx -lt $min ]; then
++        min=$idx
++        ifdev=$dev
++    fi
++done
++
++if [ -z "$ifdev" ]; then
++    echo "no suitable interfaces found" >&2
++    exit 1
++else
++    echo "using interface $ifdev" >&2
++    # grab MAC address
++    echo "mac=$(cat $ifdev/address)"
++fi
+diff --git a/package/mender/mender-inventory-hostinfo b/package/mender/mender-inventory-hostinfo
+new file mode 100644
+index 0000000..cf508fd
+--- /dev/null
++++ b/package/mender/mender-inventory-hostinfo
+@@ -0,0 +1,21 @@
++#!/bin/sh
++#
++# The example script collects information about current host
++#
++
++set -ue
++
++LC_ALL=C
++export LC_ALL
++
++grep 'model name' /proc/cpuinfo | uniq | awk -F': ' '
++     // { printf("cpu_model=%s\n", $2);}
++'
++echo "kernel=$(cat /proc/version)"
++
++cat /proc/meminfo | awk '
++/MemTotal/ {printf("mem_total_kB=%d\n", $2)}
++'
++
++echo "hostname=$(cat /etc/hostname)"
++
+diff --git a/package/mender/mender-inventory-network b/package/mender/mender-inventory-network
+new file mode 100644
+index 0000000..b017c4e
+--- /dev/null
++++ b/package/mender/mender-inventory-network
+@@ -0,0 +1,47 @@
++#!/bin/sh
++#
++# Example script called by Mender agent to collect inventory data for a
++# particular devce. The script needs to be located in $(datadir)/mender and its
++# name shall start with `mender-inventory-` prefix. The script shall exit with
++# non-0 status on errors. In this case the agent will discard any output the
++# script may have produced.
++#
++# The script shall output inventory data in <key>=<value> format, one entry per
++# line. Entries appearing multiple times will be joined in a list under the same
++# key.
++#
++# $ ./mender-inventory-network
++# mac_br-fbfdad18c33c=02:42:7e:74:96:85
++# network_interfaces=br-fbfdad18c33c
++# ipv4_br-fbfdad18c33c=172.21.0.1/16
++# mac_enp0s25=de:ad:be:ef:bb:05
++# network_interfaces=enp0s25
++# ipv4_enp0s25=123.22.0.197/16
++# ipv4_enp0s25=10.20.20.105/16
++# ipv6_enp0s25=fe80::2aad:beff:feef:bb05/64
++#
++#
++# The example script collects the list of network interfaces, as well as
++# ethernet and IP addresses of each of the interfaces.
++#
++
++set -ue
++
++SCN=/sys/class/net
++min=65535
++ifdev=
++
++# find iface with lowest ifindex, except loopback
++for devpath in $SCN/*; do
++    dev=$(basename $devpath)
++    if [ $dev = "lo" ]; then
++        continue
++    fi
++    echo "mac_$dev=$(cat $devpath/address)"
++    echo "network_interfaces=$dev"
++
++    ip addr show dev $dev | awk -v dev=$dev '
++       /inet / { printf("ipv4_%s=%s\n", dev, $2) }
++       /inet6 / {printf("ipv6_%s=%s\n", dev, $2) }
++    '
++done
+diff --git a/package/mender/mender.conf b/package/mender/mender.conf
+new file mode 100644
+index 0000000..a5c7c54
+--- /dev/null
++++ b/package/mender/mender.conf
+@@ -0,0 +1,14 @@
++{
++  "ClientProtocol": "http",
++  "HttpsClient": {
++    "Certificate": "",
++    "Key": ""
++  },
++  "RootfsPartA": "@MENDER_ROOTFS_PART_A@",
++  "RootfsPartB": "@MENDER_ROOTFS_PART_B@",
++  "UpdatePollIntervalSeconds": @MENDER_UPDATE_POLL_INTERVAL_SECONDS@,
++  "InventoryPollIntervalSeconds": @MENDER_INVENTORY_POLL_INTERVAL_SECONDS@,
++  "RetryPollIntervalSeconds": @MENDER_RETRY_POLL_INTERVAL_SECONDS@,
++  "ServerURL": "@MENDER_SERVER_URL@",
++  "ServerCertificate": "@MENDER_CERT_LOCATION@"
++}
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+new file mode 100644
+index 0000000..30a04fa
+--- /dev/null
++++ b/package/mender/mender.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 267fa73ad472b034248ee298593b5c52ea0b105fd73c91febb3587280c61bee2 mender-1.4.0.tar.gz
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+new file mode 100644
+index 0000000..c0c4aba
+--- /dev/null
++++ b/package/mender/mender.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# mender
++#
++################################################################################
++
++MENDER_VERSION = 1.4.0
++MENDER_SOURCE = mender-$(MENDER_VERSION).tar.gz
++MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
++
++define MENDER_INSTALL_TARGET_CMDS
++	$(INSTALL) -dm 0755 $(TARGET_DIR)/etc/mender/
++	$(INSTALL) -dm 0755 $(TARGET_DIR)/var/share/mender/identity/
++	$(INSTALL) -dm 0755 $(TARGET_DIR)/var/share/mender/inventory/
++	$(INSTALL) -D -m 0644 package/mender/mender.conf \
++		$(TARGET_DIR)/etc/mender/mender.conf
++	$(INSTALL) -D -m 0644 package/mender/tenant.conf \
++		$(TARGET_DIR)/etc/mender/mender.conf
++	$(INSTALL) -D -m 0644 package/mender/server.crt \
++		$(TARGET_DIR)/etc/mender/server.crt
++	$(INSTALL) -D -m 0755 package/mender/mender-device-identity \
++		$(TARGET_DIR)/var/share/mender/identity/mender-device-identity
++	$(INSTALL) -D -m 0755 package/mender/mender-inventory-network \
++		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-network
++	$(INSTALL) -D -m 0755 package/mender/mender-inventory-hostinfo \
++		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-hostinfo
++	$(INSTALL) -D -m 0644 package/mender/mender.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/mender.service
++endef
++
++$(eval $(golang-package))
+diff --git a/package/mender/mender.service b/package/mender/mender.service
+new file mode 100644
+index 0000000..ec77fbc
+--- /dev/null
++++ b/package/mender/mender.service
+@@ -0,0 +1,15 @@
++[Unit]
++Description=Mender OTA update service
++After=systemd-resolved.service
++
++[Service]
++Type=idle
++User=root
++Group=root
++ExecStartPre=/bin/mkdir -p -m 0700 /data/mender
++ExecStartPre=/bin/ln -sf /etc/mender/tenant.conf /var/lib/mender/authtentoken
++ExecStart=/usr/bin/mender -daemon
++Restart=on-abort
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/package/mender/server.crt b/package/mender/server.crt
+new file mode 100644
+index 0000000..79a57e1
+--- /dev/null
++++ b/package/mender/server.crt
+@@ -0,0 +1,22 @@
++-----BEGIN CERTIFICATE-----
++MIIBfTCCASOgAwIBAgIJAJOS76a0qWuZMAoGCCqGSM49BAMCMBsxGTAXBgNVBAMM
++EGRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1MjQ2
++WjAbMRkwFwYDVQQDDBBkb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0CAQYIKoZI
++zj0DAQcDQgAE7AVYis6MWGPGQYU1/tlLEnskRifDIhvkRb8Y4nQPekRkLkiBYYT3
++iJ46wHrnejbHaLstU9GRdKWOmOuU6HGdO6NQME4wHQYDVR0OBBYEFGOIU4q++Vz8
++9HuT1jg9V+wFeJcyMB8GA1UdIwQYMBaAFGOIU4q++Vz89HuT1jg9V+wFeJcyMAwG
++A1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIhAPLnEeWPNeN7eDCEYRitBfyO
++X1yf2kzOm4ohBE5GY9gzAiBCq7HOSkzQDkelmQCCCpGXf/UwYNgQJjSoeGfk0j1a
++TQ==
++-----END CERTIFICATE-----
++-----BEGIN CERTIFICATE-----
++MIIBhDCCASmgAwIBAgIJALQrf4QDot4IMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMM
++E3MzLmRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1
++MjQ2WjAeMRwwGgYDVQQDDBNzMy5kb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0C
++AQYIKoZIzj0DAQcDQgAEEc/Y3T+l3DvINePkpvVZORMIdHVs29jgsl48ia7z/NRX
++HlKtKxVGJyFN5Y7sBZeLgBYH3F4Bo3KfmxI7ad0tI6NQME4wHQYDVR0OBBYEFIUm
++cip00QZYpe4ULflbGNJan+Y9MB8GA1UdIwQYMBaAFIUmcip00QZYpe4ULflbGNJa
++n+Y9MAwGA1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSQAwRgIhANHij9VZBDHOUPaC
++pFiagnWnYL2HBR72W1xTKQbrLLTXAiEAvpwA4HzSnGmLd3010+jqQuMRHArN5WaX
++h0fy7niBbIQ=
++-----END CERTIFICATE-----
+diff --git a/package/mender/tenant.conf b/package/mender/tenant.conf
+new file mode 100644
+index 0000000..e69de29
+-- 
+2.7.4
