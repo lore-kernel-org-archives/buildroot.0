@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 21:52:43 +0200
-Subject: [Buildroot] [PATCH 1/1] liblinear: bump to version 2.20
-In-Reply-To: <20180503150514.10864-1-fontaine.fabrice@gmail.com>
-References: <20180503150514.10864-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180503215243.6a227a70@windsurf>
+Date: Thu, 3 May 2018 21:52:51 +0200
+Subject: [Buildroot] [PATCH 1/1] libllcp: add hash for license file
+In-Reply-To: <20180503150745.11470-1-fontaine.fabrice@gmail.com>
+References: <20180503150745.11470-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180503215251.337c941d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  3 May 2018 17:05:14 +0200, Fabrice Fontaine wrote:
-> - Slightly update first patch so it can apply on this version
-> - Add hash for license file
-> 
+On Thu,  3 May 2018 17:07:45 +0200, Fabrice Fontaine wrote:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/liblinear/0001-blas-don-t-overwrite-ar-options.patch | 5 +++--
->  package/liblinear/liblinear.hash                             | 3 ++-
->  package/liblinear/liblinear.mk                               | 2 +-
->  3 files changed, 6 insertions(+), 4 deletions(-)
+>  package/libllcp/libllcp.hash | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
