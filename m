@@ -1,164 +1,1122 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  3 May 2018 23:24:36 +0200
-Subject: [Buildroot] [RFC v2 3/3] freeswitch: bump to git master
- 8f10ae54a18a19fc6ed938e4f662bd218ba54b5e
-In-Reply-To: <20180503212436.2521-1-ps.report@gmx.net>
-References: <20180503212436.2521-1-ps.report@gmx.net>
-Message-ID: <20180503212436.2521-3-ps.report@gmx.net>
+Date: Thu,  3 May 2018 23:24:34 +0200
+Subject: [Buildroot] [RFC v2 1/3] libopenssl: bump version to 1.1.0h
+Message-ID: <20180503212436.2521-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enables openssl-1.1.0h compatible compile.
+- remove all parallel build patches (openssl build-system changed)
 
-- add bootstrap.sh pre-configure call (normal AUTORECONF is broken)
-- add tiff dependency (bundled tiff source is gone)
-- rebase (and git format) 001-libvpx-cross.patch patch
-- update libs/srtp/LICENSE file hash (updated copyright year)
+- rebased 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+  to apply to Configurations/unix-Makefile.tmpl (Makefile template)
+
+- replaced 0002-cryptodev-Fix-issue-with-signature-generation.patch with
+  upstream version
+
+- rebased 0003-Reproducible-build-do-not-leak-compiler-path.patch to
+  apply to crypto/build.info (Makefile template)
+
+- fix musl/uclibc build failure, use '-DOPENSSL_NO_ASYNC'
+
+- remove legacy enable-tlsext configure option
+
+- change legacy INSTALL_PREFIX to DESTDIR
+
+- remove 'libraries gets installed read only, so strip fails'
+  workaround (not needed anymore)
+
+- change engine directory from /usr/lib/engines to
+  /usr/lib/engines-1.1
+
+- change license file hash, no license change, only the following
+  hint was removed:
+
+    Actually both licenses are BSD-style Open Source licenses.
+    In case of any license issues related to OpenSSL please
+    contact openssl-core at openssl.org.
+
+- fix host-libopenssl compile setting rpath as decribed in
+  libopenssl-1.1.0h/NOTES.UNIX
+
+- add 0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
+  to fix build of ca-certificates (see [1])
+
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=894282
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
-  - new patch (suggested by Bernd Kuhls)
+  - add OPENSSL_NO_ASYNC workaround for musl compile too
+    (suggested by Bernd Kuhls)
+
+  - fix host-libopenssl compile (reported by Ryan Coe) by setting rpath
+    (suggested by Ryan Coe)
+
+  - fix 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+    and 0003-Reproducible-build-do-not-leak-compiler-path.patch to apply
+    to the Makefile templates (instead of re-generated Makefile)
+    (reported by Ryan Coe)
+
+  - add 0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
+    (suggested by Bernd Kuhls)
 
 Notes:
-  - needed to disable BR2_COMPILER_PARANOID_UNSAFE_PATH for error
-    free compile
----
- ...patch => 0001-Fix-cross-compiling-libvpx.patch} | 26 +++++++++++++++-------
- package/freeswitch/Config.in                       |  1 +
- package/freeswitch/freeswitch.hash                 | 14 +++++-------
- package/freeswitch/freeswitch.mk                   | 16 ++++++++++---
- 4 files changed, 37 insertions(+), 20 deletions(-)
- rename package/freeswitch/{0001-libvpx-cross.patch => 0001-Fix-cross-compiling-libvpx.patch} (71%)
 
-diff --git a/package/freeswitch/0001-libvpx-cross.patch b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-similarity index 71%
-rename from package/freeswitch/0001-libvpx-cross.patch
-rename to package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-index a2583dac35..6f9e122242 100644
---- a/package/freeswitch/0001-libvpx-cross.patch
-+++ b/package/freeswitch/0001-Fix-cross-compiling-libvpx.patch
-@@ -1,4 +1,7 @@
--Fix cross-compiling libvpx
-+From 4ba073af7877242a79579b040e3be00bed4275cc Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 3 May 2018 22:24:23 +0200
-+Subject: [PATCH] Fix cross-compiling libvpx
+ - There was a previous attempt to bump the openssl version by
+   David Mosberger <davidm@egauge.net>. I could not find the
+   corresponding patch in patchwork or on the mailing list,
+   only a reply by Arnout Vandecappelle (see [2]) and the
+   answer by David Mosberger (see [3]).
+
+ - I did only (compile) check openssh yet (and fixed the build
+   failure, see next patch).
+
+[2] http://lists.busybox.net/pipermail/buildroot/2017-August/200859.html
+[3] http://lists.busybox.net/pipermail/buildroot/2017-August/200898.html
+---
+ ...time-building-manpages-if-we-re-not-going.patch |  34 +-
+ ...todev-Fix-issue-with-signature-generation.patch | 585 ++++++++++++---------
+ ...roducible-build-do-not-leak-compiler-path.patch |  28 +-
+ ...-dofile.pl-only-quote-stuff-that-actually.patch |  41 ++
+ package/libopenssl/libopenssl.hash                 |  13 +-
+ package/libopenssl/libopenssl.mk                   |  39 +-
+ 6 files changed, 429 insertions(+), 311 deletions(-)
+ create mode 100644 package/libopenssl/0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
+
+diff --git a/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch b/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+index 10d2b7526c..f20b6f0834 100644
+--- a/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
++++ b/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+@@ -1,27 +1,31 @@
+-From 389efb564fa1453a9da835393eec9006bfae2a52 Mon Sep 17 00:00:00 2001
++From d8f104bffb0c4acb8c5fcdf49628f7d02ed48f7f Mon Sep 17 00:00:00 2001
+ From: Mike Frysinger <vapier@gentoo.org>
+ Date: Sat, 16 May 2015 18:53:51 +0200
+-Subject: Dont waste time building manpages if we're not going to use em.
++Subject: [PATCH] Dont waste time building manpages if we're not going to use
++ em.
  
- Freeswitch since version 1.6.7 only uses an in-tree-version of libvpx:
- https://freeswitch.org/fisheye/changelog/freeswitch?cs=febe0f8dacea2d2a31902b3dc469be757f8c3c4d
-@@ -10,15 +13,19 @@ package/freeswitch/freeswitch.mk and add target=generic-gnu as
- configure parameter:
- https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/libs/libvpx/README#110
+ Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+ [Gustavo: update for parallel-build]
++
++[rebased on openssl-1.1.0h]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- Makefile.org | 2 +-
++ Configurations/unix-Makefile.tmpl | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
--And yes, autoreconf is also broken, so we patch Makefile.in instead
--of Makefile.am.
--
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-diff --git a/Makefile.org b/Makefile.org
+-index 60f07cc..976ceaf 100644
+---- a/Makefile.org
+-+++ b/Makefile.org
+-@@ -527,7 +527,7 @@ dist:
+- dist_pem_h:
+- 	(cd crypto/pem; $(MAKE) -e $(BUILDENV) pem.h; $(MAKE) clean)
++diff --git a/Configurations/unix-Makefile.tmpl b/Configurations/unix-Makefile.tmpl
++index 40cf2c3..777d9ca 100644
++--- a/Configurations/unix-Makefile.tmpl
+++++ b/Configurations/unix-Makefile.tmpl
++@@ -268,7 +268,7 @@ list-tests:
++ 	@echo "Tests are not supported with your chosen Configure options"
++ 	@ : {- output_on() if !$disabled{tests}; "" -}
++ 
++-install: install_sw install_ssldirs install_docs
+++install: install_sw install_ssldirs
+  
+--install: install_docs install_sw
+-+install: install_sw
++ uninstall: uninstall_docs uninstall_sw
+  
+- install_sw:
+- 	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \
+ -- 
+-1.9.1
++2.16.3
  
--diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
----- freeswitch-1.6.7.org/Makefile.in	2016-04-01 18:09:54.000000000 +0200
--+++ freeswitch-1.6.7/Makefile.in	2016-04-22 20:11:37.938961730 +0200
--@@ -3491,7 +3491,7 @@
-+[rebased on freeswitch git master branch]
+diff --git a/package/libopenssl/0002-cryptodev-Fix-issue-with-signature-generation.patch b/package/libopenssl/0002-cryptodev-Fix-issue-with-signature-generation.patch
+index 47295500c0..60ca38afb7 100644
+--- a/package/libopenssl/0002-cryptodev-Fix-issue-with-signature-generation.patch
++++ b/package/libopenssl/0002-cryptodev-Fix-issue-with-signature-generation.patch
+@@ -1,25 +1,32 @@
+-From 90fd7e8f1a316cda86ee442b43fcd7d5e5baeede Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Sat, 16 May 2015 18:55:08 +0200
+-Subject: cryptodev: Fix issue with signature generation
++From 162c230adbb3033fc2c10c01b093477a4ad3ac06 Mon Sep 17 00:00:00 2001
++From: Nikos Mavrogiannopoulos <n.mavrogiannopoulos@gmail.com>
++Date: Tue, 4 Nov 2014 11:35:14 +0100
++Subject: [PATCH] cryptodev: Fix issue with signature generation
+ 
+-Forward port of 0001-cryptodev-Fix-issue-with-signature-generation.patch
+-from http://rt.openssl.org/Ticket/Display.html?id=2770&user=guest&pass=guest
+-It was originally targetted at 1.0.2-beta3.
++That patch also enables support for SHA2 hashes, and
++removes support for hashes that were never supported by
++cryptodev.
+ 
+-Without this patch digest acceleration via cryptodev is broken.
++Reviewed-by: Rich Salz <rsalz@openssl.org>
++Reviewed-by: Richard Levitte <levitte@openssl.org>
++(Merged from https://github.com/openssl/openssl/pull/1784)
+ 
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
++Buildroot comments from the 1.0.2 port:
++  Without this patch digest acceleration via cryptodev is broken.
++  Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++  Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
++
++Upstream: https://github.com/openssl/openssl/commit/efcad82bb81962f9e7620396ee2090035d112b32.patch
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- crypto/engine/eng_cryptodev.c | 195 +++++++++++++++++++++++++++++++-----------
+- 1 file changed, 146 insertions(+), 49 deletions(-)
++ crypto/engine/eng_cryptodev.c | 233 ++++++++++++++++++++++++++++++++----------
++ 1 file changed, 178 insertions(+), 55 deletions(-)
+ 
+ diff --git a/crypto/engine/eng_cryptodev.c b/crypto/engine/eng_cryptodev.c
+-index 926d95c..7021d9a 100644
++index 5572735..4ce7833 100644
+ --- a/crypto/engine/eng_cryptodev.c
+ +++ b/crypto/engine/eng_cryptodev.c
+-@@ -2,6 +2,7 @@
++@@ -11,6 +11,7 @@
+   * Copyright (c) 2002 Bob Beck <beck@openbsd.org>
+   * Copyright (c) 2002 Theo de Raadt
+   * Copyright (c) 2002 Markus Friedl
+@@ -27,7 +34,7 @@ index 926d95c..7021d9a 100644
+   * All rights reserved.
+   *
+   * Redistribution and use in source and binary forms, with or without
+-@@ -72,7 +73,6 @@ struct dev_crypto_state {
++@@ -87,7 +88,6 @@ struct dev_crypto_state {
+      struct session_op d_sess;
+      int d_fd;
+  # ifdef USE_CRYPTODEV_DIGESTS
+@@ -35,19 +42,63 @@ index 926d95c..7021d9a 100644
+      unsigned char digest_res[HASH_MAX_LEN];
+      char *mac_data;
+      int mac_len;
+-@@ -189,8 +189,10 @@ static struct {
++@@ -97,12 +97,12 @@ struct dev_crypto_state {
++ static u_int32_t cryptodev_asymfeat = 0;
++ 
++ static RSA_METHOD *cryptodev_rsa;
++-#ifndef OPENSSL_NO_DSA
+++# ifndef OPENSSL_NO_DSA
++ static DSA_METHOD *cryptodev_dsa = NULL;
++-#endif
++-#ifndef OPENSSL_NO_DH
+++# endif
+++# ifndef OPENSSL_NO_DH
++ static DH_METHOD *cryptodev_dh;
++-#endif
+++# endif
++ 
++ static int get_asym_dev_crypto(void);
++ static int open_dev_crypto(void);
++@@ -135,7 +135,7 @@ static int cryptodev_rsa_nocrt_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa,
++                                        BN_CTX *ctx);
++ static int cryptodev_rsa_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa,
++                                  BN_CTX *ctx);
++-#ifndef OPENSSL_NO_DSA
+++# ifndef OPENSSL_NO_DSA
++ static int cryptodev_dsa_bn_mod_exp(DSA *dsa, BIGNUM *r, const BIGNUM *a,
++                                     const BIGNUM *p, const BIGNUM *m,
++                                     BN_CTX *ctx, BN_MONT_CTX *m_ctx);
++@@ -147,14 +147,14 @@ static DSA_SIG *cryptodev_dsa_do_sign(const unsigned char *dgst, int dlen,
++                                       DSA *dsa);
++ static int cryptodev_dsa_verify(const unsigned char *dgst, int dgst_len,
++                                 DSA_SIG *sig, DSA *dsa);
++-#endif
++-#ifndef OPENSSL_NO_DH
+++# endif
+++# ifndef OPENSSL_NO_DH
++ static int cryptodev_mod_exp_dh(const DH *dh, BIGNUM *r, const BIGNUM *a,
++                                 const BIGNUM *p, const BIGNUM *m, BN_CTX *ctx,
++                                 BN_MONT_CTX *m_ctx);
++ static int cryptodev_dh_compute_key(unsigned char *key, const BIGNUM *pub_key,
++                                     DH *dh);
++-#endif
+++# endif
++ static int cryptodev_ctrl(ENGINE *e, int cmd, long i, void *p,
++                           void (*f) (void));
++ void engine_load_cryptodev_int(void);
++@@ -216,8 +216,10 @@ static struct {
+  static struct {
+      int id;
+      int nid;
+ -    int keylen;
+-+    int digestlen;
+++    int  digestlen;
+  } digests[] = {
+-+#if 0
+++#  if 0
+ +    /* HMAC is not supported */
+      {
+          CRYPTO_MD5_HMAC, NID_hmacWithMD5, 16
+      },
+-@@ -198,15 +200,15 @@ static struct {
++@@ -225,21 +227,30 @@ static struct {
+          CRYPTO_SHA1_HMAC, NID_hmacWithSHA1, 20
+      },
+      {
+@@ -63,14 +114,14 @@ index 926d95c..7021d9a 100644
+ -        CRYPTO_SHA1_KPDK, NID_undef, 0
+ +        CRYPTO_SHA2_512_HMAC, NID_hmacWithSHA512, 64
+      },
+-+#endif
+++#  endif
+      {
+          CRYPTO_MD5, NID_md5, 16
+      },
+-@@ -214,6 +216,15 @@ static struct {
++     {
+          CRYPTO_SHA1, NID_sha1, 20
+      },
+-     {
+++    {
+ +        CRYPTO_SHA2_256, NID_sha256, 32
+ +    },
+ +    {
+@@ -79,11 +130,10 @@ index 926d95c..7021d9a 100644
+ +    {
+ +        CRYPTO_SHA2_512, NID_sha512, 64
+ +    },
+-+    {
++     {
+          0, NID_undef, 0
+      },
+- };
+-@@ -288,13 +299,14 @@ static int get_cryptodev_ciphers(const int **cnids)
++@@ -315,13 +326,14 @@ static int get_cryptodev_ciphers(const int **cnids)
+      static int nids[CRYPTO_ALGORITHM_MAX];
+      struct session_op sess;
+      int fd, i, count = 0;
+@@ -95,60 +145,61 @@ index 926d95c..7021d9a 100644
+      }
+      memset(&sess, 0, sizeof(sess));
+ -    sess.key = (caddr_t) "123456789abcdefghijklmno";
+-+    sess.key = (void*)fake_key;
+++    sess.key = (void *)fake_key;
+  
+      for (i = 0; ciphers[i].id && count < CRYPTO_ALGORITHM_MAX; i++) {
+          if (ciphers[i].nid == NID_undef)
+-@@ -327,18 +339,19 @@ static int get_cryptodev_digests(const int **cnids)
++@@ -352,6 +364,7 @@ static int get_cryptodev_ciphers(const int **cnids)
++ static int get_cryptodev_digests(const int **cnids)
++ {
+      static int nids[CRYPTO_ALGORITHM_MAX];
+++    unsigned char fake_key[CRYPTO_CIPHER_MAX_KEY_LEN];
+      struct session_op sess;
+      int fd, i, count = 0;
+-+    unsigned char fake_key[CRYPTO_CIPHER_MAX_KEY_LEN];
+  
+-     if ((fd = get_dev_crypto()) < 0) {
+-         *cnids = NULL;
++@@ -360,12 +373,12 @@ static int get_cryptodev_digests(const int **cnids)
+          return (0);
+      }
+      memset(&sess, 0, sizeof(sess));
+ -    sess.mackey = (caddr_t) "123456789abcdefghijklmno";
+-+    sess.mackey = fake_key;
+++    sess.mackey = (void *)fake_key;
+      for (i = 0; digests[i].id && count < CRYPTO_ALGORITHM_MAX; i++) {
+          if (digests[i].nid == NID_undef)
+              continue;
+          sess.mac = digests[i].id;
+ -        sess.mackeylen = digests[i].keylen;
+-+        sess.mackeylen = 8;
+++        sess.mackeylen = digests[i].digestlen;
+          sess.cipher = 0;
+          if (ioctl(fd, CIOCGSESSION, &sess) != -1 &&
+              ioctl(fd, CIOCFSESSION, &sess.ses) != -1)
+-@@ -424,14 +437,14 @@ cryptodev_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
++@@ -451,14 +464,14 @@ cryptodev_cipher(EVP_CIPHER_CTX *ctx, unsigned char *out,
+      cryp.ses = sess->ses;
+      cryp.flags = 0;
+      cryp.len = inl;
+ -    cryp.src = (caddr_t) in;
+ -    cryp.dst = (caddr_t) out;
+-+    cryp.src = (void*) in;
+-+    cryp.dst = (void*) out;
+++    cryp.src = (void *) in;
+++    cryp.dst = (void *) out;
+      cryp.mac = 0;
+  
+-     cryp.op = ctx->encrypt ? COP_ENCRYPT : COP_DECRYPT;
++     cryp.op = EVP_CIPHER_CTX_encrypting(ctx) ? COP_ENCRYPT : COP_DECRYPT;
+  
+-     if (ctx->cipher->iv_len) {
+--        cryp.iv = (caddr_t) ctx->iv;
+-+	cryp.iv = (void*) ctx->iv;
+-         if (!ctx->encrypt) {
+-             iiv = in + inl - ctx->cipher->iv_len;
+-             memcpy(save_iv, iiv, ctx->cipher->iv_len);
+-@@ -483,7 +496,7 @@ cryptodev_init_key(EVP_CIPHER_CTX *ctx, const unsigned char *key,
++     if (EVP_CIPHER_CTX_iv_length(ctx) > 0) {
++-        cryp.iv = (caddr_t) EVP_CIPHER_CTX_iv(ctx);
+++        cryp.iv = (void *) EVP_CIPHER_CTX_iv(ctx);
++         if (!EVP_CIPHER_CTX_encrypting(ctx)) {
++             iiv = in + inl - EVP_CIPHER_CTX_iv_length(ctx);
++             memcpy(save_iv, iiv, EVP_CIPHER_CTX_iv_length(ctx));
++@@ -511,7 +524,7 @@ cryptodev_init_key(EVP_CIPHER_CTX *ctx, const unsigned char *key,
+      if ((state->d_fd = get_dev_crypto()) < 0)
+          return (0);
+  
+ -    sess->key = (caddr_t) key;
+-+    sess->key = (void*)key;
+-     sess->keylen = ctx->key_len;
+++    sess->key = (void *) key;
++     sess->keylen = EVP_CIPHER_CTX_key_length(ctx);
+      sess->cipher = cipher;
+  
+-@@ -749,16 +762,6 @@ static int digest_nid_to_cryptodev(int nid)
++@@ -885,16 +898,6 @@ static int digest_nid_to_cryptodev(int nid)
+      return (0);
+  }
+  
+@@ -164,287 +215,313 @@ index 926d95c..7021d9a 100644
+ -
+  static int cryptodev_digest_init(EVP_MD_CTX *ctx)
+  {
+-     struct dev_crypto_state *state = ctx->md_data;
+-@@ -769,7 +772,6 @@ static int cryptodev_digest_init(EVP_MD_CTX *ctx)
+-         printf("cryptodev_digest_init: Can't get digest \n");
+-         return (0);
+-     }
+--
+-     memset(state, 0, sizeof(struct dev_crypto_state));
+- 
+-     if ((state->d_fd = get_dev_crypto()) < 0) {
+-@@ -777,8 +779,8 @@ static int cryptodev_digest_init(EVP_MD_CTX *ctx)
++     struct dev_crypto_state *state = EVP_MD_CTX_md_data(ctx);
++@@ -913,8 +916,8 @@ static int cryptodev_digest_init(EVP_MD_CTX *ctx)
+          return (0);
+      }
+  
+ -    sess->mackey = state->dummy_mac_key;
+--    sess->mackeylen = digest_key_length(ctx->digest->type);
++-    sess->mackeylen = digest_key_length(EVP_MD_CTX_type(ctx));
+ +    sess->mackey = NULL;
+ +    sess->mackeylen = 0;
+      sess->mac = digest;
+  
+      if (ioctl(state->d_fd, CIOCGSESSION, sess) < 0) {
+-@@ -794,8 +796,8 @@ static int cryptodev_digest_init(EVP_MD_CTX *ctx)
+- static int cryptodev_digest_update(EVP_MD_CTX *ctx, const void *data,
+-                                    size_t count)
+- {
+--    struct crypt_op cryp;
+-     struct dev_crypto_state *state = ctx->md_data;
+-+    struct crypt_op cryp;
+-     struct session_op *sess = &state->d_sess;
+- 
+-     if (!data || state->d_fd < 0) {
+-@@ -804,7 +806,7 @@ static int cryptodev_digest_update(EVP_MD_CTX *ctx, const void *data,
+-     }
+- 
+-     if (!count) {
+--        return (0);
+-+        return (1);
+-     }
+- 
+-     if (!(ctx->flags & EVP_MD_CTX_FLAG_ONESHOT)) {
+-@@ -828,9 +830,9 @@ static int cryptodev_digest_update(EVP_MD_CTX *ctx, const void *data,
++@@ -966,9 +969,9 @@ static int cryptodev_digest_update(EVP_MD_CTX *ctx, const void *data,
+      cryp.ses = sess->ses;
+      cryp.flags = 0;
+      cryp.len = count;
+ -    cryp.src = (caddr_t) data;
+-+    cryp.src = (void*) data;
+++    cryp.src = (void *) data;
+      cryp.dst = NULL;
+ -    cryp.mac = (caddr_t) state->digest_res;
+-+    cryp.mac = (void*) state->digest_res;
+++    cryp.mac = (void *) state->digest_res;
+      if (ioctl(state->d_fd, CIOCCRYPT, &cryp) < 0) {
+          printf("cryptodev_digest_update: digest failed\n");
+          return (0);
+-@@ -844,8 +846,6 @@ static int cryptodev_digest_final(EVP_MD_CTX *ctx, unsigned char *md)
+-     struct dev_crypto_state *state = ctx->md_data;
+-     struct session_op *sess = &state->d_sess;
+- 
+--    int ret = 1;
+--
+-     if (!md || state->d_fd < 0) {
+-         printf("cryptodev_digest_final: illegal input\n");
+-         return (0);
+-@@ -859,7 +859,7 @@ static int cryptodev_digest_final(EVP_MD_CTX *ctx, unsigned char *md)
++@@ -997,7 +1000,7 @@ static int cryptodev_digest_final(EVP_MD_CTX *ctx, unsigned char *md)
+          cryp.len = state->mac_len;
+          cryp.src = state->mac_data;
+          cryp.dst = NULL;
+ -        cryp.mac = (caddr_t) md;
+-+	cryp.mac = (void*)md;
+++        cryp.mac = (void *) md;
+          if (ioctl(state->d_fd, CIOCCRYPT, &cryp) < 0) {
+              printf("cryptodev_digest_final: digest failed\n");
+              return (0);
+-@@ -870,7 +870,7 @@ static int cryptodev_digest_final(EVP_MD_CTX *ctx, unsigned char *md)
+- 
+-     memcpy(md, state->digest_res, ctx->digest->md_size);
+- 
+--    return (ret);
+-+    return 1;
+- }
+- 
+- static int cryptodev_digest_cleanup(EVP_MD_CTX *ctx)
+-@@ -921,8 +921,8 @@ static int cryptodev_digest_copy(EVP_MD_CTX *to, const EVP_MD_CTX *from)
++@@ -1057,8 +1060,8 @@ static int cryptodev_digest_copy(EVP_MD_CTX *to, const EVP_MD_CTX *from)
+  
+-     digest = digest_nid_to_cryptodev(to->digest->type);
++     digest = digest_nid_to_cryptodev(EVP_MD_CTX_type(to));
+  
+ -    sess->mackey = dstate->dummy_mac_key;
+--    sess->mackeylen = digest_key_length(to->digest->type);
++-    sess->mackeylen = digest_key_length(EVP_MD_CTX_type(to));
+ +    sess->mackey = NULL;
+ +    sess->mackeylen = 0;
+      sess->mac = digest;
+  
+      dstate->d_fd = get_dev_crypto();
+-@@ -947,32 +947,116 @@ static int cryptodev_digest_copy(EVP_MD_CTX *to, const EVP_MD_CTX *from)
+- 
+- const EVP_MD cryptodev_sha1 = {
+-     NID_sha1,
+--    NID_undef,
+-+    NID_sha1WithRSAEncryption,
+-     SHA_DIGEST_LENGTH,
+-+#if defined(EVP_MD_FLAG_PKEY_METHOD_SIGNATURE) && defined(EVP_MD_FLAG_DIGALGID_ABSENT)
+-+    EVP_MD_FLAG_PKEY_METHOD_SIGNATURE|
+-+    EVP_MD_FLAG_DIGALGID_ABSENT|
+-+#endif
+-     EVP_MD_FLAG_ONESHOT,
+-     cryptodev_digest_init,
+-     cryptodev_digest_update,
+-     cryptodev_digest_final,
+-     cryptodev_digest_copy,
+-     cryptodev_digest_cleanup,
+--    EVP_PKEY_NULL_method,
+-+    EVP_PKEY_RSA_method,
+-     SHA_CBLOCK,
+--    sizeof(struct dev_crypto_state),
+-+    sizeof(EVP_MD *)+sizeof(struct dev_crypto_state),
+- };
++@@ -1110,6 +1113,106 @@ static const EVP_MD *cryptodev_sha1(void)
++     return sha1_md;
++ }
+  
+--const EVP_MD cryptodev_md5 = {
+-+static const EVP_MD cryptodev_sha256 = {
+-+    NID_sha256,
+-+    NID_sha256WithRSAEncryption,
+-+    SHA256_DIGEST_LENGTH, 
+-+#if defined(EVP_MD_FLAG_PKEY_METHOD_SIGNATURE) && defined(EVP_MD_FLAG_DIGALGID_ABSENT)
+-+    EVP_MD_FLAG_PKEY_METHOD_SIGNATURE|
+-+    EVP_MD_FLAG_DIGALGID_ABSENT|
+-+#endif
+-+    EVP_MD_FLAG_ONESHOT,
+-+    cryptodev_digest_init,
+-+    cryptodev_digest_update,
+-+    cryptodev_digest_final,
+-+    cryptodev_digest_copy,
+-+    cryptodev_digest_cleanup,
+-+    EVP_PKEY_RSA_method,
+-+    SHA256_CBLOCK,
+-+    sizeof(EVP_MD *)+sizeof(struct dev_crypto_state),
+-+};
+++static EVP_MD *sha256_md = NULL;
+++static const EVP_MD *cryptodev_sha256(void)
+++{
+++    if (sha256_md == NULL) {
+++        EVP_MD *md;
+ +
+-+static const EVP_MD cryptodev_sha224 = {
+-+    NID_sha224,
+-+    NID_sha224WithRSAEncryption, 
+-+    SHA224_DIGEST_LENGTH, 
+-+#if defined(EVP_MD_FLAG_PKEY_METHOD_SIGNATURE) && defined(EVP_MD_FLAG_DIGALGID_ABSENT)
+-+    EVP_MD_FLAG_PKEY_METHOD_SIGNATURE|
+-+    EVP_MD_FLAG_DIGALGID_ABSENT|
+-+#endif
+-+    EVP_MD_FLAG_ONESHOT,
+-+    cryptodev_digest_init,
+-+    cryptodev_digest_update,
+-+    cryptodev_digest_final,
+-+    cryptodev_digest_copy,
+-+    cryptodev_digest_cleanup,
+-+    EVP_PKEY_RSA_method,
+-+    SHA256_CBLOCK,
+-+    sizeof(EVP_MD *)+sizeof(struct dev_crypto_state),
+-+};
+++        if ((md = EVP_MD_meth_new(NID_sha256, NID_undef)) == NULL
+++            || !EVP_MD_meth_set_result_size(md, SHA_DIGEST_LENGTH)
+++            || !EVP_MD_meth_set_flags(md, EVP_MD_FLAG_ONESHOT)
+++            || !EVP_MD_meth_set_input_blocksize(md, SHA_CBLOCK)
+++            || !EVP_MD_meth_set_app_datasize(md,
+++                                             sizeof(struct dev_crypto_state))
+++            || !EVP_MD_meth_set_init(md, cryptodev_digest_init)
+++            || !EVP_MD_meth_set_update(md, cryptodev_digest_update)
+++            || !EVP_MD_meth_set_final(md, cryptodev_digest_final)
+++            || !EVP_MD_meth_set_copy(md, cryptodev_digest_copy)
+++            || !EVP_MD_meth_set_cleanup(md, cryptodev_digest_cleanup)) {
+++            EVP_MD_meth_free(md);
+++            md = NULL;
+++        }
+++        sha256_md = md;
+++    }
+++    return sha256_md;
+++}
+ +
+-+static const EVP_MD cryptodev_sha384 = {
+-+    NID_sha384,
+-+    NID_sha384WithRSAEncryption, 
+-+    SHA384_DIGEST_LENGTH, 
+-+#if defined(EVP_MD_FLAG_PKEY_METHOD_SIGNATURE) && defined(EVP_MD_FLAG_DIGALGID_ABSENT)
+-+    EVP_MD_FLAG_PKEY_METHOD_SIGNATURE|
+-+    EVP_MD_FLAG_DIGALGID_ABSENT|
+-+#endif
+-+    EVP_MD_FLAG_ONESHOT,
+-+    cryptodev_digest_init,
+-+    cryptodev_digest_update,
+-+    cryptodev_digest_final,
+-+    cryptodev_digest_copy,
+-+    cryptodev_digest_cleanup,
+-+    EVP_PKEY_RSA_method,
+-+    SHA512_CBLOCK,
+-+    sizeof(EVP_MD *)+sizeof(struct dev_crypto_state),
+-+};
+++static EVP_MD *sha224_md = NULL;
+++static const EVP_MD *cryptodev_sha224(void)
+++{
+++    if (sha224_md == NULL) {
+++        EVP_MD *md;
+ +
+-+static const EVP_MD cryptodev_sha512 = {
+-+    NID_sha512,
+-+    NID_sha512WithRSAEncryption, 
+-+    SHA512_DIGEST_LENGTH, 
+-+#if defined(EVP_MD_FLAG_PKEY_METHOD_SIGNATURE) && defined(EVP_MD_FLAG_DIGALGID_ABSENT)
+-+    EVP_MD_FLAG_PKEY_METHOD_SIGNATURE|
+-+    EVP_MD_FLAG_DIGALGID_ABSENT|
+-+#endif
+-+    EVP_MD_FLAG_ONESHOT,
+-+    cryptodev_digest_init,
+-+    cryptodev_digest_update,
+-+    cryptodev_digest_final,
+-+    cryptodev_digest_copy,
+-+    cryptodev_digest_cleanup,
+-+    EVP_PKEY_RSA_method,
+-+    SHA512_CBLOCK,
+-+    sizeof(EVP_MD *)+sizeof(struct dev_crypto_state),
+-+};
+++        if ((md = EVP_MD_meth_new(NID_sha224, NID_undef)) == NULL
+++            || !EVP_MD_meth_set_result_size(md, SHA_DIGEST_LENGTH)
+++            || !EVP_MD_meth_set_flags(md, EVP_MD_FLAG_ONESHOT)
+++            || !EVP_MD_meth_set_input_blocksize(md, SHA_CBLOCK)
+++            || !EVP_MD_meth_set_app_datasize(md,
+++                                             sizeof(struct dev_crypto_state))
+++            || !EVP_MD_meth_set_init(md, cryptodev_digest_init)
+++            || !EVP_MD_meth_set_update(md, cryptodev_digest_update)
+++            || !EVP_MD_meth_set_final(md, cryptodev_digest_final)
+++            || !EVP_MD_meth_set_copy(md, cryptodev_digest_copy)
+++            || !EVP_MD_meth_set_cleanup(md, cryptodev_digest_cleanup)) {
+++            EVP_MD_meth_free(md);
+++            md = NULL;
+++        }
+++        sha224_md = md;
+++    }
+++    return sha224_md;
+++}
+ +
+-+static const EVP_MD cryptodev_md5 = {
+-     NID_md5,
+--    NID_undef,
+-+    NID_md5WithRSAEncryption,
+-     16 /* MD5_DIGEST_LENGTH */ ,
+-+#if defined(EVP_MD_FLAG_PKEY_METHOD_SIGNATURE) && defined(EVP_MD_FLAG_DIGALGID_ABSENT)
+-+    EVP_MD_FLAG_PKEY_METHOD_SIGNATURE|
+-+    EVP_MD_FLAG_DIGALGID_ABSENT|
+-+#endif
+-     EVP_MD_FLAG_ONESHOT,
+-     cryptodev_digest_init,
+-     cryptodev_digest_update,
+-     cryptodev_digest_final,
+-     cryptodev_digest_copy,
+-     cryptodev_digest_cleanup,
+--    EVP_PKEY_NULL_method,
+-+    EVP_PKEY_RSA_method,
+-     64 /* MD5_CBLOCK */ ,
+--    sizeof(struct dev_crypto_state),
+-+    sizeof(EVP_MD *)+sizeof(struct dev_crypto_state),
+- };
+- 
+- # endif                         /* USE_CRYPTODEV_DIGESTS */
+-@@ -992,6 +1076,18 @@ cryptodev_engine_digests(ENGINE *e, const EVP_MD **digest,
+++static EVP_MD *sha384_md = NULL;
+++static const EVP_MD *cryptodev_sha384(void)
+++{
+++    if (sha384_md == NULL) {
+++        EVP_MD *md;
+++
+++        if ((md = EVP_MD_meth_new(NID_sha384, NID_undef)) == NULL
+++            || !EVP_MD_meth_set_result_size(md, SHA_DIGEST_LENGTH)
+++            || !EVP_MD_meth_set_flags(md, EVP_MD_FLAG_ONESHOT)
+++            || !EVP_MD_meth_set_input_blocksize(md, SHA_CBLOCK)
+++            || !EVP_MD_meth_set_app_datasize(md,
+++                                             sizeof(struct dev_crypto_state))
+++            || !EVP_MD_meth_set_init(md, cryptodev_digest_init)
+++            || !EVP_MD_meth_set_update(md, cryptodev_digest_update)
+++            || !EVP_MD_meth_set_final(md, cryptodev_digest_final)
+++            || !EVP_MD_meth_set_copy(md, cryptodev_digest_copy)
+++            || !EVP_MD_meth_set_cleanup(md, cryptodev_digest_cleanup)) {
+++            EVP_MD_meth_free(md);
+++            md = NULL;
+++        }
+++        sha384_md = md;
+++    }
+++    return sha384_md;
+++}
+++
+++static EVP_MD *sha512_md = NULL;
+++static const EVP_MD *cryptodev_sha512(void)
+++{
+++    if (sha512_md == NULL) {
+++        EVP_MD *md;
+++
+++        if ((md = EVP_MD_meth_new(NID_sha512, NID_undef)) == NULL
+++            || !EVP_MD_meth_set_result_size(md, SHA_DIGEST_LENGTH)
+++            || !EVP_MD_meth_set_flags(md, EVP_MD_FLAG_ONESHOT)
+++            || !EVP_MD_meth_set_input_blocksize(md, SHA_CBLOCK)
+++            || !EVP_MD_meth_set_app_datasize(md,
+++                                             sizeof(struct dev_crypto_state))
+++            || !EVP_MD_meth_set_init(md, cryptodev_digest_init)
+++            || !EVP_MD_meth_set_update(md, cryptodev_digest_update)
+++            || !EVP_MD_meth_set_final(md, cryptodev_digest_final)
+++            || !EVP_MD_meth_set_copy(md, cryptodev_digest_copy)
+++            || !EVP_MD_meth_set_cleanup(md, cryptodev_digest_cleanup)) {
+++            EVP_MD_meth_free(md);
+++            md = NULL;
+++        }
+++        sha512_md = md;
+++    }
+++    return sha512_md;
+++}
+++
++ static EVP_MD *md5_md = NULL;
++ static const EVP_MD *cryptodev_md5(void)
++ {
++@@ -1152,6 +1255,18 @@ cryptodev_engine_digests(ENGINE *e, const EVP_MD **digest,
+      case NID_sha1:
+-         *digest = &cryptodev_sha1;
++         *digest = cryptodev_sha1();
+          break;
+-+    case NID_sha224:
+-+        *digest = &cryptodev_sha224;
+-+	break;
+ +    case NID_sha256:
+-+        *digest = &cryptodev_sha256;
+-+	break;
+++        *digest = cryptodev_sha256();
+++        break;
+++    case NID_sha224:
+++        *digest = cryptodev_sha224();
+++        break;
+ +    case NID_sha384:
+-+        *digest = &cryptodev_sha384;
+-+	break;
+++        *digest = cryptodev_sha384();
+++        break;
+ +    case NID_sha512:
+-+    	*digest = &cryptodev_sha512;
+-+	break;
+++        *digest = cryptodev_sha512();
+++        break;
+      default:
+  # endif                         /* USE_CRYPTODEV_DIGESTS */
+          *digest = NULL;
+-@@ -1022,7 +1118,7 @@ static int bn2crparam(const BIGNUM *a, struct crparam *crp)
++@@ -1189,19 +1304,27 @@ static int cryptodev_engine_destroy(ENGINE *e)
++ # ifdef USE_CRYPTODEV_DIGESTS
++     EVP_MD_meth_free(sha1_md);
++     sha1_md = NULL;
+++    EVP_MD_meth_free(sha256_md);
+++    sha256_md = NULL;
+++    EVP_MD_meth_free(sha224_md);
+++    sha224_md = NULL;
+++    EVP_MD_meth_free(sha384_md);
+++    sha384_md = NULL;
+++    EVP_MD_meth_free(sha512_md);
+++    sha512_md = NULL;
++     EVP_MD_meth_free(md5_md);
++     md5_md = NULL;
++ # endif
++     RSA_meth_free(cryptodev_rsa);
++     cryptodev_rsa = NULL;
++-#ifndef OPENSSL_NO_DSA
+++# ifndef OPENSSL_NO_DSA
++     DSA_meth_free(cryptodev_dsa);
++     cryptodev_dsa = NULL;
++-#endif
++-#ifndef OPENSSL_NO_DH
+++# endif
+++# ifndef OPENSSL_NO_DH
++     DH_meth_free(cryptodev_dh);
++     cryptodev_dh = NULL;
++-#endif
+++# endif
++     return 1;
++ }
++ 
++@@ -1225,7 +1348,7 @@ static int bn2crparam(const BIGNUM *a, struct crparam *crp)
++     if (b == NULL)
+          return (1);
+-     memset(b, 0, bytes);
+  
+ -    crp->crp_p = (caddr_t) b;
+-+    crp->crp_p = (void*) b;
+++    crp->crp_p = (void *) b;
+      crp->crp_nbits = bits;
+  
+-     for (i = 0, j = 0; i < a->top; i++) {
+-@@ -1277,7 +1373,7 @@ static DSA_SIG *cryptodev_dsa_do_sign(const unsigned char *dgst, int dlen,
++     BN_bn2bin(a, b);
++@@ -1421,7 +1544,7 @@ cryptodev_rsa_mod_exp(BIGNUM *r0, const BIGNUM *I, RSA *rsa, BN_CTX *ctx)
++     return (ret);
++ }
++ 
++-#ifndef OPENSSL_NO_DSA
+++# ifndef OPENSSL_NO_DSA
++ static int
++ cryptodev_dsa_bn_mod_exp(DSA *dsa, BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
++                          const BIGNUM *m, BN_CTX *ctx, BN_MONT_CTX *m_ctx)
++@@ -1493,7 +1616,7 @@ static DSA_SIG *cryptodev_dsa_do_sign(const unsigned char *dgst, int dlen,
+      kop.crk_op = CRK_DSA_SIGN;
+  
+      /* inputs: dgst dsa->p dsa->q dsa->g dsa->priv_key */
+ -    kop.crk_param[0].crp_p = (caddr_t) dgst;
+-+    kop.crk_param[0].crp_p = (void*)dgst;
+++    kop.crk_param[0].crp_p = (void *) dgst;
+      kop.crk_param[0].crp_nbits = dlen * 8;
+-     if (bn2crparam(dsa->p, &kop.crk_param[1]))
+-         goto err;
+-@@ -1317,7 +1413,7 @@ cryptodev_dsa_verify(const unsigned char *dgst, int dlen,
++     DSA_get0_pqg(dsa, &dsap, &dsaq, &dsag);
++     DSA_get0_key(dsa, NULL, &priv_key);
++@@ -1540,7 +1663,7 @@ cryptodev_dsa_verify(const unsigned char *dgst, int dlen,
+      kop.crk_op = CRK_DSA_VERIFY;
+  
+      /* inputs: dgst dsa->p dsa->q dsa->g dsa->pub_key sig->r sig->s */
+ -    kop.crk_param[0].crp_p = (caddr_t) dgst;
+-+    kop.crk_param[0].crp_p = (void*)dgst;
+++    kop.crk_param[0].crp_p = (void *) dgst;
+      kop.crk_param[0].crp_nbits = dlen * 8;
+-     if (bn2crparam(dsa->p, &kop.crk_param[1]))
+-         goto err;
+-@@ -1398,9 +1494,10 @@ cryptodev_dh_compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh)
++     DSA_get0_pqg(dsa, &p, &q, &g);
++     if (bn2crparam(p, &kop.crk_param[1]))
++@@ -1573,9 +1696,9 @@ cryptodev_dsa_verify(const unsigned char *dgst, int dlen,
++     zapparams(&kop);
++     return (dsaret);
++ }
++-#endif
+++# endif
++ 
++-#ifndef OPENSSL_NO_DH
+++# ifndef OPENSSL_NO_DH
++ static int
++ cryptodev_mod_exp_dh(const DH *dh, BIGNUM *r, const BIGNUM *a,
++                      const BIGNUM *p, const BIGNUM *m, BN_CTX *ctx,
++@@ -1616,7 +1739,7 @@ cryptodev_dh_compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh)
+          goto err;
+      kop.crk_iparams = 3;
+  
+ -    kop.crk_param[3].crp_p = (caddr_t) key;
+--    kop.crk_param[3].crp_nbits = keylen * 8;
+-+    kop.crk_param[3].crp_p = (void*) key;
+-+    kop.crk_param[3].crp_nbits = keylen;
+++    kop.crk_param[3].crp_p = (void *) key;
++     kop.crk_param[3].crp_nbits = keylen * 8;
+      kop.crk_oparams = 1;
+-+    dhret = keylen / 8;
+  
+-     if (ioctl(fd, CIOCKEY, &kop) == -1) {
+-         const DH_METHOD *meth = DH_OpenSSL();
+-@@ -1470,7 +1567,7 @@ void ENGINE_load_cryptodev(void)
++@@ -1631,7 +1754,7 @@ cryptodev_dh_compute_key(unsigned char *key, const BIGNUM *pub_key, DH *dh)
++     return (dhret);
++ }
++ 
++-#endif /* ndef OPENSSL_NO_DH */
+++# endif /* ndef OPENSSL_NO_DH */
++ 
++ /*
++  * ctrl right now is just a wrapper that doesn't do much
++@@ -1679,7 +1802,7 @@ void engine_load_cryptodev_int(void)
+      put_dev_crypto(fd);
+  
+      if (!ENGINE_set_id(engine, "cryptodev") ||
+ -        !ENGINE_set_name(engine, "BSD cryptodev engine") ||
+ +        !ENGINE_set_name(engine, "cryptodev engine") ||
++         !ENGINE_set_destroy_function(engine, cryptodev_engine_destroy) ||
+          !ENGINE_set_ciphers(engine, cryptodev_engine_ciphers) ||
+          !ENGINE_set_digests(engine, cryptodev_engine_digests) ||
+-         !ENGINE_set_ctrl_function(engine, cryptodev_ctrl) ||
++@@ -1708,7 +1831,7 @@ void engine_load_cryptodev_int(void)
++         return;
++     }
++ 
++-#ifndef OPENSSL_NO_DSA
+++# ifndef OPENSSL_NO_DSA
++     cryptodev_dsa = DSA_meth_dup(DSA_OpenSSL());
++     if (cryptodev_dsa != NULL) {
++         DSA_meth_set1_name(cryptodev_dsa, "cryptodev DSA method");
++@@ -1728,9 +1851,9 @@ void engine_load_cryptodev_int(void)
++         ENGINE_free(engine);
++         return;
++     }
++-#endif
+++# endif
++ 
++-#ifndef OPENSSL_NO_DH
+++# ifndef OPENSSL_NO_DH
++     cryptodev_dh = DH_meth_dup(DH_OpenSSL());
++     if (cryptodev_dh != NULL) {
++         DH_meth_set1_name(cryptodev_dh, "cryptodev DH method");
++@@ -1747,7 +1870,7 @@ void engine_load_cryptodev_int(void)
++         ENGINE_free(engine);
++         return;
++     }
++-#endif
+++# endif
++ 
++     ENGINE_add(engine);
++     ENGINE_free(engine);
+ -- 
+-1.9.1
++2.16.3
+ 
+diff --git a/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch b/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
+index eff72c548a..d57028a7bf 100644
+--- a/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
++++ b/package/libopenssl/0003-Reproducible-build-do-not-leak-compiler-path.patch
+@@ -1,26 +1,26 @@
+-From 875fcad2ad84877763cba86c1265b57679b878b0 Mon Sep 17 00:00:00 2001
++From d59673c3694e58a4f1df1b85a5fed8b8b29428b3 Mon Sep 17 00:00:00 2001
+ From: Peter Seiderer <ps.report@gmx.net>
+ Date: Tue, 24 Oct 2017 16:58:32 +0200
+ Subject: [PATCH] Reproducible build: do not leak compiler path
+ 
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- crypto/Makefile | 2 +-
++ crypto/build.info | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/crypto/Makefile b/crypto/Makefile
+-index 7869996..7e63291 100644
+---- a/crypto/Makefile
+-+++ b/crypto/Makefile
+-@@ -55,7 +55,7 @@ top:
+- all: shared
++diff --git a/crypto/build.info b/crypto/build.info
++index 916d24f..a5c4834 100644
++--- a/crypto/build.info
+++++ b/crypto/build.info
++@@ -11,7 +11,7 @@ EXTRA=  ../ms/uplink-x86.pl ../ms/uplink.c ../ms/applink.c \
++         ppccpuid.pl pariscid.pl alphacpuid.pl arm64cpuid.pl armv4cpuid.pl
+  
+- buildinf.h: ../Makefile
+--	$(PERL) $(TOP)/util/mkbuildinf.pl "$(CC) $(CFLAGS)" "$(PLATFORM)" >buildinf.h
+-+	$(PERL) $(TOP)/util/mkbuildinf.pl "$$(basename $(CC)) $(CFLAGS)" "$(PLATFORM)" >buildinf.h
++ DEPEND[cversion.o]=buildinf.h
++-GENERATE[buildinf.h]=../util/mkbuildinf.pl "$(CC) $(CFLAGS_Q)" "$(PLATFORM)"
+++GENERATE[buildinf.h]=../util/mkbuildinf.pl "$$(basename $(CC)) $(CFLAGS_Q)" "$(PLATFORM)"
++ DEPEND[buildinf.h]=../configdata.pm
+  
+- x86cpuid.s:	x86cpuid.pl perlasm/x86asm.pl
+- 	$(PERL) x86cpuid.pl $(PERLASM_SCHEME) $(CFLAGS) $(PROCESSOR) > $@
++ GENERATE[uplink-x86.s]=../ms/uplink-x86.pl $(PERLASM_SCHEME)
+ -- 
+-2.11.0
++2.16.3
+ 
+diff --git a/package/libopenssl/0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch b/package/libopenssl/0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
+new file mode 100644
+index 0000000000..9068af1fcd
+--- /dev/null
++++ b/package/libopenssl/0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
+@@ -0,0 +1,41 @@
++From 5b9bdeeff1ab8d659149306c7b6b984091094b41 Mon Sep 17 00:00:00 2001
++From: Richard Levitte <levitte@openssl.org>
++Date: Wed, 28 Mar 2018 14:46:27 +0200
++Subject: [PATCH] Revert "util/dofile.pl: only quote stuff that actually needs
++ quoting"
++
++This wasn't a good solution, too many things depend on the quotes being
++there consistently.
++
++This reverts commit 49cd47eaababc8c57871b929080fc1357e2ad7b8.
++
++Fixes #5772
++
++Reviewed-by: Rich Salz <rsalz@openssl.org>
++(Merged from https://github.com/openssl/openssl/pull/5773)
++
++Upstream: https://github.com/openssl/openssl/commit/00701e5ea84861b74d9d624f21a6b3fcb12e8acd.patch
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ util/dofile.pl | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 53bd7c66aa..2e4059740a 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -567,7 +567,7 @@ libs/libzrtp/libzrtp.a:
-  	cd libs/libzrtp && $(MAKE)
-  
-  libs/libvpx/Makefile:
-@@ -27,3 +34,6 @@ diff -uNr freeswitch-1.6.7.org/Makefile.in freeswitch-1.6.7/Makefile.in
-  
-  libs/libvpx/libvpx.a: libs/libvpx/Makefile
-  	@cd libs/libvpx && $(MAKE)
++diff --git a/util/dofile.pl b/util/dofile.pl
++index fc72989..a932941 100644
++--- a/util/dofile.pl
+++++ b/util/dofile.pl
++@@ -99,9 +99,9 @@ package main;
++ # This adds quotes (") around the given string, and escapes any $, @, \,
++ # " and ' by prepending a \ to them.
++ sub quotify1 {
++-    my $s = my $orig = shift @_;
+++    my $s = shift @_;
++     $s =~ s/([\$\@\\"'])/\\$1/g;
++-    $s ne $orig || $s =~ /\s/ ? '"'.$s.'"' : $s;
+++    '"'.$s.'"';
++ }
++ 
++ # quotify_l LIST
 +-- 
 +2.16.3
 +
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index 1f6459335d..8557d75134 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_FREESWITCH
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_SPEEX
- 	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_TIFF
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 25421de99b..2cc8ebc974 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,10 +1,7 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.md5
--md5 e9890a2d6ca6f58dd3fa440fdfbf91a0  freeswitch-1.6.20.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.sha1
--sha1 ce284b805e262504cbb1f74796785b4dfa70d5ac  freeswitch-1.6.20.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.20.tar.xz.sha256
--sha256 dbb0f73109171bd381772b247b8ef581f6a176964619082a1fe031b004086f6b  freeswitch-1.6.20.tar.xz
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 48b7471c20..d0f5f0ea4f 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,8 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2o.tar.gz.sha256
+-sha256	ec3f5c9714ba0fd45cb4e087301eb1336c317e0d20b575a125050470e8089e4d	openssl-1.0.2o.tar.gz
 -# Locally computed
-+# Locally computed:
-+sha256 56d932c001f3cc53b6ee5d835536b01fceacf1e360a6b48c5c1265eda5d6be86  freeswitch-8f10ae54a18a19fc6ed938e4f662bd218ba54b5e.tar.gz
+-sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+-sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+-sha256	30cb49489de5041841a74da9155cd4fabfbce33237262ba7cd23974314ae2956	openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+-sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+-sha256	c8f60f4842bbad0353f5d81620e72b168b5638ca3a0a999f5da113b22491612e	LICENSE
++# From https://www.openssl.org/source/openssl-1.1.0h.tar.gz.sha256
++sha256 5835626cde9e99656585fc7aaa2302a73a7e1340bf8c14fd635a62c66802a517 openssl-1.1.0h.tar.gz
 +
-+# License files:
- sha256 10299420c1e8602c0daf5a59d022621cd72a9148d1f0f33501edb3db3445c7fe  COPYING
- sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
- sha256 1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
-@@ -12,6 +9,5 @@ sha256 7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/li
- sha256 e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  libs/sofia-sip/COPYING
- sha256 b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  libs/sofia-sip/COPYRIGHTS
- sha256 366576cb0b869cd9e95a4882878607314650488ac635e5df0692180382e9666a  libs/spandsp/COPYING
--sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  libs/srtp/LICENSE
--sha256 fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  libs/tiff-4.0.2/COPYRIGHT
-+sha256 8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  libs/srtp/LICENSE
- sha256 ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/mod/codecs/mod_isac/LICENSE
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 98f2f48356..32a556eba7 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,9 +4,11 @@
++# License files
++sha256 350c7817af2ef980d3f3922bc5e0bb6a9d9f6cc21e784a699bcd2a31c74a84b1 LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 16a9c2e9d2..e61cc689f6 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.6.20
--FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
--FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
-+FREESWITCH_VERSION = 8f10ae54a18a19fc6ed938e4f662bd218ba54b5e
-+#FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
-+FREESWITCH_SITE = https://freeswitch.org/stash/scm/fs/freeswitch.git
-+FREESWITCH_SITE_METHOD = git
-+#FREESWITCH_AUTORECONF = YES
- # External modules need headers/libs from staging
- FREESWITCH_INSTALL_STAGING = YES
- FREESWITCH_LICENSE = MPL-1.1, \
-@@ -36,9 +38,17 @@ FREESWITCH_DEPENDENCIES = \
- 	pcre \
- 	speex \
- 	sqlite \
-+	tiff \
- 	util-linux \
- 	zlib
+-LIBOPENSSL_VERSION = 1.0.2o
++LIBOPENSSL_VERSION = 1.1.0h
+ LIBOPENSSL_SITE = http://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+@@ -15,11 +15,6 @@ HOST_LIBOPENSSL_DEPENDENCIES = host-zlib
+ LIBOPENSSL_TARGET_ARCH = generic32
+ LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
+ LIBOPENSSL_PROVIDES = openssl
+-LIBOPENSSL_PATCH = \
+-	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
+-	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
+-	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
+-	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
  
-+# run bootstrap.sh (normal AUTORECONF is broken)
-+define FREESWITCH_RUN_BOOTSTRAP
-+	cd $(@D) && ./bootstrap.sh
-+endef
+ # relocation truncated to fit: R_68K_GOT16O
+ ifeq ($(BR2_m68k_cf),y)
+@@ -35,6 +30,20 @@ LIBOPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
+ LIBOPENSSL_DEPENDENCIES += cryptodev
+ endif
+ 
++# fixes the following build failures:
++#
++# - musl
++#   ./libcrypto.so: undefined reference to `getcontext'
++#   ./libcrypto.so: undefined reference to `setcontext'
++#   ./libcrypto.so: undefined reference to `makecontext'
++#
++# - uclibc:
++#   crypto/async/arch/../arch/async_posix.h:32:5: error: unknown type name ?ucontext_t?
++#
++ifneq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_TOOLCHAIN_USES_UCLIBC),)
++LIBOPENSSL_CFLAGS += -DOPENSSL_NO_ASYNC
++endif
 +
-+FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_RUN_BOOTSTRAP
-+
- # disable display of ClueCon banner in fs_cli
- FREESWITCH_CONF_ENV += \
- 	disable_cc=yes
+ # Some architectures are optimized in OpenSSL
+ # Doesn't work for thumb-only (Cortex-M?)
+ ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
+@@ -66,6 +75,7 @@ define HOST_LIBOPENSSL_CONFIGURE_CMDS
+ 		--prefix=$(HOST_DIR) \
+ 		--openssldir=$(HOST_DIR)/etc/ssl \
+ 		--libdir=/lib \
++		-Wl,-rpath,'$(HOST_DIR)/lib' \
+ 		shared \
+ 		zlib-dynamic \
+ 	)
+@@ -86,7 +96,6 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			no-rc5 \
+ 			enable-camellia \
+ 			enable-mdc2 \
+-			enable-tlsext \
+ 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
+ 			$(if $(BR2_STATIC_LIBS),no-dso) \
+ 	)
+@@ -112,7 +121,7 @@ define LIBOPENSSL_BUILD_CMDS
+ endef
+ 
+ define LIBOPENSSL_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define HOST_LIBOPENSSL_INSTALL_CMDS
+@@ -120,7 +129,7 @@ define HOST_LIBOPENSSL_INSTALL_CMDS
+ endef
+ 
+ define LIBOPENSSL_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ 	rm -rf $(TARGET_DIR)/usr/lib/ssl
+ 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
+ endef
+@@ -135,16 +144,6 @@ endef
+ LIBOPENSSL_POST_INSTALL_STAGING_HOOKS += LIBOPENSSL_FIXUP_STATIC_PKGCONFIG
+ endif
+ 
+-ifneq ($(BR2_STATIC_LIBS),y)
+-# libraries gets installed read only, so strip fails
+-define LIBOPENSSL_INSTALL_FIXUPS_SHARED
+-	chmod +w $(TARGET_DIR)/usr/lib/engines/lib*.so
+-	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libcrypto.so.* libssl.so.*); \
+-	do chmod +w $$i; done
+-endef
+-LIBOPENSSL_POST_INSTALL_TARGET_HOOKS += LIBOPENSSL_INSTALL_FIXUPS_SHARED
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PERL),)
+ define LIBOPENSSL_REMOVE_PERL_SCRIPTS
+ 	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
+@@ -162,7 +161,7 @@ endif
+ 
+ ifneq ($(BR2_PACKAGE_LIBOPENSSL_ENGINES),y)
+ define LIBOPENSSL_REMOVE_LIBOPENSSL_ENGINES
+-	rm -rf $(TARGET_DIR)/usr/lib/engines
++	rm -rf $(TARGET_DIR)/usr/lib/engines-1.1
+ endef
+ LIBOPENSSL_POST_INSTALL_TARGET_HOOKS += LIBOPENSSL_REMOVE_LIBOPENSSL_ENGINES
+ endif
 -- 
 2.16.3
