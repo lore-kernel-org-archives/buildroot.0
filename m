@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 May 2018 22:49:33 +0200
-Subject: [Buildroot] [PATCH] ltp-testsuite: add
- --with-open-posix-testsuite
-In-Reply-To: <CAFXrp_cbD89wmzAf44aNjHfQS+ixvMUqMmxFxeLjLbvGDr3FFA@mail.gmail.com>
-References: <CAFXrp_cbD89wmzAf44aNjHfQS+ixvMUqMmxFxeLjLbvGDr3FFA@mail.gmail.com>
-Message-ID: <8fe9c8dd-1b40-71bc-deee-b7a4822674ea@mind.be>
+Date: Thu, 3 May 2018 23:02:33 +0200
+Subject: [Buildroot] Fighting with suid bit
+In-Reply-To: <ffeaf5280e229a536de5f81fba84c99b@chez.com>
+References: <ffeaf5280e229a536de5f81fba84c99b@chez.com>
+Message-ID: <c41fae3e-3307-d3aa-8572-e65028237408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +12,92 @@ To: buildroot@busybox.net
 
 
 
-On 03-05-18 18:03, Ciro Santilli wrote:
-> The issues mentioned on the removed comments were resolved,
-> tested in QEMU x86_64 and aarch64.
+On 03-05-18 18:52, kaneda at chez.com wrote:
+> Hi there,
+> 
+> I'm using buildroot to make a lightweight distro dedicated to retro dev
+> (https://bitbucket.org/SpritesMind/lilu).
+> usually, I find my answer on manual, mailing list or google but this time, I'm
+> lost :
+> 
+> One of my tools need raw io access to parallel port.
+> I solved this using the setuid bit but I'm unable to include it on my FS distro.
+> 
+> This tool has is own package so here is what I tried
+> 
+> define UCON64_INSTALL_TARGET_CMDS
+> ?? $(INSTALL) -D -m 4755 $(@D)/src/ucon64 $(TARGET_DIR)/usr/bin
 
- Would be good to refer to the upstream commit that fixes it:
-ca9561c124408ed0f5ed92c9ac7e092de05b5aed.
+ This might not work, it's possible that the suid bit is lost under fakeroot.
+
+ Note BTW that with -D, you should specify the full path of the target, so
+
+	$(INSTALL) -D -m 4755 $(@D)/src/ucon64 $(TARGET_DIR)/usr/bin/ucon64
+
+> endef
+> 
+> define UCON64_PERMISSIONS
+> ????/usr/bin/ucon64??? f 4755 0 0 - - - - -
+
+ This should work however...
+
+> endef
+> 
+> 
+> or throught buildroot config
+> 
+> 
+> BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt
+> $(BR2_EXTERNAL)/board/neoware/ca21/device_table.txt"
+> 
+> with this device_table.txt :
+> /usr/bin/ucon64???????????????? f??? 4755??? 0??? 0??? -??? -??? -??? -??? -
+> 
+> 
+> I wonder if it's because I'm building a LiveCD with initrd
+> 
+> CONFIG_DEVTMPFS=y
+> CONFIG_DEVTMPFS_MOUNT=y
+> 
+> BR2_TARGET_ROOTFS_ISO9660=y
+> BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="$(BR2_EXTERNAL)/board/neoware/ca21/syslinux.cfg"
+
+ You do have BR2_TARGET_ROOTFS_ISO9660_INITRD=y as well, right? (y is the
+default). I don't think the iso9660 filesystem has support for the suid bit.
 
 
-> Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
-> ---
-> This patch supposes that the removed comments imply that a default
-> --with-open-posix-testsuite
-> is desirable (and I confirm that it does not take unreasoble build
-> time or disk space),
+> BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
+> BR2_TARGET_ROOTFS_TAR_GZIP=y
 
- Indeed, no reason not to enable it.
+ You should also have a rootfs.tar.gz and a rootfs.cpio; can you check in these
+two files whether the suid bit is set?
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> BR2_TARGET_SYSLINUX=y
+> BR2_TARGET_SYSLINUX_ISOLINUX=y
+> BR2_TARGET_SYSLINUX_MBR=y
+> 
+> 
+> 
+> but whatever happens, I have /usr/bin/ucon64 0755 on boot and not 4755, which I
+> could fix with chmod but not perfect....
+
+ Oh, if you can fix it with chmod, it can't be iso9660 since that's readonly. Or
+are you doing something with overlayfs or something?
 
  Regards,
  Arnout
 
-> and that there is no generic way to add autotools configs to packages:
-> https://stackoverflow.com/questions/44341188/how-to-pass-extra-custom-configure-autotools-options-to-a-buildroot-package
 > 
->  package/ltp-testsuite/ltp-testsuite.mk | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
+> any idea , hint , trick ?
+> and sorry if it's a basic issue, I'm not a linux guru ;)
 > 
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk
-> b/package/ltp-testsuite/ltp-testsuite.mk
-> index c47f587836..4584ca45da 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -9,17 +9,8 @@ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
->  LTP_TESTSUITE_SITE =
-> https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
->  LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
->  LTP_TESTSUITE_LICENSE_FILES = COPYING
-> -
-> -# Do not enable Open POSIX testsuite as it doesn't cross-compile
-> -# properly: t0 program is built for the host machine. Notice that due
-> -# to a bug, --without-open-posix-testsuite actually enables the test
-> -# suite.
-> -# See https://github.com/linux-test-project/ltp/issues/143 (invalid
-> -# autoconf test) and
-> -# https://github.com/linux-test-project/ltp/issues/144 (Open POSIX
-> -# testsuite not cross-compiling).
->  LTP_TESTSUITE_CONF_OPTS += \
-> - --with-realtime-testsuite
-> + --with-realtime-testsuite --with-open-posix-testsuite
 > 
->  ifeq ($(BR2_LINUX_KERNEL),y)
->  LTP_TESTSUITE_DEPENDENCIES += linux
+> Regards
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
