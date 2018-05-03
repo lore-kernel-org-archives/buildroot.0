@@ -1,158 +1,75 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 3 May 2018 12:13:16 +0200
-Subject: [Buildroot] [PATCH 1/7] libidn2: new package
-In-Reply-To: <03d92121-8a91-a2a8-5fc3-e20b130e19f4@mind.be>
-References: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
- <03d92121-8a91-a2a8-5fc3-e20b130e19f4@mind.be>
-Message-ID: <CAPi7W81HoFLk6tuue9BRojAxaSH0FhzUPYrv7A6Uxqzfh8yGMA@mail.gmail.com>
+Date: Thu,  3 May 2018 13:33:47 +0200
+Subject: [Buildroot] [PATCH 1/1] ghostscript: bump to version 9.23
+Message-ID: <20180503113347.5008-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+- Remove sha256 (not provided anymore) and keep only sha512
+- Update patch
+- Add hash for license file
 
-2018-05-02 23:51 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ghostscript/0001-Fix-cross-compilation-issue.patch | 4 ++++
+ package/ghostscript/ghostscript.hash                       | 9 +++++----
+ package/ghostscript/ghostscript.mk                         | 4 ++--
+ 3 files changed, 11 insertions(+), 6 deletions(-)
 
->  Hi Fabrice,
->
-> On 01-05-18 22:40, Fabrice Fontaine wrote:
-> > Libidn2 is an implementation of the IDNA2008 + TR46
-> > specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
-> > TR 46).
-> >
-> > http://www.gnu.org/software/libidn/
->
->  So, basically libidn2 replaces libidn. Do we really want to support both?
-> Yes,
-> obviously the API changed, but that happens all the time when bumping
-> packages.
-> So, the question is what gives the best user experience...
->
->  The problem with adding libidn2 is that a user who currently has libidn
-> and
-> libcurl enabled, after updating Buildroot, will suddenly loose IDN support
-> with
-> no warning...
->
-Actually, IDN support on libcurl is already broken in buildroot since
-November 2016 as libcurl only supports libidn2 since version 7.51.0:
-https://github.com/curl/curl/commit/9c91ec778104ae3b744b39444d544e82d5ee9ece
-.
-
->
->  On the other hand, if a user has selected libidn and is using it in some
-> package outside of Buildroot, then that package will fail to build
-> entirely,
-> with no (easy) way to recovery. But how likely is it that libidn is used
-> in an
-> external package?
->
->  But first, of course, if we want to just bump libidn then we have to make
-> sure
-> that all packages support libidn2. That means the following packages have
-> to be
-> checked: dnsmasq, ghostscript, libgsasl, mutt, omxplayer, prosody.
->
-Actually, that's what I have tried to do (see my patch's serie):
-- dnsmaq supports both packages: libidn and libidn2 (and it prefers libidn2)
-- systemd supports both packages but only one can enable at the same time
-(see my patch)
-- ghostscript, ligsasl, mutt, omxplayer, prosody supports only libidn
-- libcurl, wget, gnutls, lftp supports only libidn2 (again that means that
-IDN support is currently broken with libcurl/lftp)
-- whois supports both packages in the version embedded in buildroot
-(5.2.17) but libidn supports will be removed if we bump to latest release
-(5.3.0).
-So, I think the only option is to support both packages in buildroot. Most
-recent packages made the jump to libidn2  but old ones won't be updated any
-time soon.
-
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> [snip]
->
-> > diff --git a/package/libidn2/Config.in b/package/libidn2/Config.in
-> > new file mode 100644
-> > index 0000000000..38b1378990
-> > --- /dev/null
-> > +++ b/package/libidn2/Config.in
-> > @@ -0,0 +1,17 @@
-> > +config BR2_PACKAGE_LIBIDN2
-> > +     bool "libidn2"
->
->  Can it be parallel-installed with libidn or does it need a depends on
-> !BR2_PACKAGE_LIBIDN?
->
-Yes, it can be parallel-installed.
-
->
-> > +     help
-> > +       Libidn2 is an implementation of the IDNA2008 + TR46
-> > +       specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
-> > +       TR 46).
-> > +
-> > +       http://www.gnu.org/software/libidn/
-> [snip]
-> > +LIBIDN2_VERSION = 2.0.4
-> > +LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
-> > +LIBIDN2_LICENSE = GPL-2.0+, LGPL-3.0+
-> > +LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3
-> COPYING.unicode
-> > +LIBIDN2_DEPENDENCIES = \
-> > +     host-pkgconf \
-> > +     $(TARGET_NLS_DEPENDENCIES) \
-> > +     $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> > +LIBIDN2_INSTALL_STAGING = YES
-> > +
-> > +ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
-> > +LIBIDN2_DEPENDENCIES += libunistring
->
->  No --enable/disable option for this?
->
- Nope, there is only a test "$ac_cv_libunistring" = "yes" in configure.ac
-
->
->  Also, don't the java and C# bindings exist any more?
->
-Yes, these bindings don't exist anymore
-
->
-> > +endif
-> > +
-> > +define LIBIDN2_REMOVE_BINARY
-> > +     rm -f $(TARGET_DIR)/usr/bin/idn2
-> > +endef
->
->  Small nit: we prefer to have the define of the hook inside the condition
-> as well.
->
-OK, I can fix this if you want, I have just copy/paste libidn.mk.
-
->
->  Regards,
->  Arnout
->
-> > +
-> > +ifneq ($(BR2_PACKAGE_LIBIDN2_BINARY),y)
-> > +LIBIDN2_POST_INSTALL_TARGET_HOOKS += LIBIDN2_REMOVE_BINARY
-> > +endif
-> > +
-> > +$(eval $(autotools-package))
-> >
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180503/a5746874/attachment.html>
+diff --git a/package/ghostscript/0001-Fix-cross-compilation-issue.patch b/package/ghostscript/0001-Fix-cross-compilation-issue.patch
+index 57e1be61ca..a13c7f8381 100644
+--- a/package/ghostscript/0001-Fix-cross-compilation-issue.patch
++++ b/package/ghostscript/0001-Fix-cross-compilation-issue.patch
+@@ -9,7 +9,10 @@ x86_64-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '
+ Downloaded from
+ http://bugs.ghostscript.com/show_bug.cgi?id=696508#c3
+ 
++Slightly updated to work with 9.23
++
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  configure.ac | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -24,6 +27,7 @@ index d0f62d7..0d49344 100644
+  LIBTIFFDIR='src'
+ -LIBTIFFCONFDIR=''
+ +LIBTIFFCONFDIR='src'
++ TIFFCFLAGS=''
+  
+  TIFFDEVS_ALL='tiffs tiff12nc tiff24nc tiff48nc tiff32nc tiff64nc tiffcrle tifflzw tiffpack tiffgray tiffsep tiffsep1 tiffscaled tiffscaled4 tiffscaled8 tiffscaled24 tiffscaled32'
+  FAX_DEVS_ALL='cfax dfaxlow dfaxhigh fax faxg3 faxg32d faxg4 tiffg3 tiffg32d tiffg4 tfax'
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index 2b36e34831..bb41841012 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,4 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/SHA256SUMS
+-sha256 c1f862e6f40f997dbe3feba89355e8cb05d55818994e10f4932b0dd9b627d1bb  ghostscript-9.22.tar.xz
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/SHA512SUMS
+-sha512 67739ace64090ab1951cba4cb011a5a6829ee60b32ba4157d0f17e744e345ea268335304db6722677ae33565ea5b696c2ff7b889d42a463acf2933c8230523d4  ghostscript-9.22.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/SHA512SUMS
++sha512 0c1f59b743f92f9cf7000b06f6209010e583ef4d6899c20ed245721dea3c08fd58b9e2d1513fe83765ab6be233bc7ab250cf18054e4d09de4073b1111e38035f  ghostscript-9.23.tar.xz
++
++# Hash for license file:
++sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index aa3f63b26e..71bfa2ce49 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GHOSTSCRIPT_VERSION = 9.22
+-GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922
++GHOSTSCRIPT_VERSION = 9.23
++GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923
+ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
+-- 
+2.14.1
