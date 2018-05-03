@@ -1,63 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 May 2018 23:27:34 +0200
-Subject: [Buildroot] [RFC PATCH 1/1] core: add option to disable RPATH
- sanitation in target tree
-In-Reply-To: <CAFXrp_dR2x2L+Eh+q+_zu49=RXBOUk1AOkjjZkggtV+WyW9WBg@mail.gmail.com>
-References: <20180503191531.15549-1-ciro.santilli@gmail.com>
- <7eb9b866-3ba4-2cbb-e4e0-8e2540469ec8@mind.be>
- <CAFXrp_dR2x2L+Eh+q+_zu49=RXBOUk1AOkjjZkggtV+WyW9WBg@mail.gmail.com>
-Message-ID: <eb7da061-cbc0-a22d-5023-c3cd8780faf2@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 May 2018 23:27:48 +0200
+Subject: [Buildroot] [PATCH v3 4/9] package/screen: add /usr/bin/screen
+ to /etc/shells
+In-Reply-To: <20180203145848.GE2369@scaer>
+References: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
+ <1516356909-18620-5-git-send-email-romain.naour@smile.fr>
+ <20180203145848.GE2369@scaer>
+Message-ID: <20180503232748.40be93cd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Sat, 3 Feb 2018 15:58:48 +0100, Yann E. MORIN wrote:
 
-On 03-05-18 23:21, Ciro Santilli wrote:
-> On Thu, May 3, 2018 at 10:16 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>
->> On 03-05-18 21:15, Ciro Santilli wrote:
->>> Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
->>> ---
->>> As explained on the Config, the rationale is to speed up BR2_EXTERNAL
->>> package development build iteration.
->>
->>  I don't see what this has to do with package development. Anyway, when you're
->> developing package foo, wouldn't you run 'make foo' rather than just 'make' (and
->> thus never even hit that code path)?
->>
+> > diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+> > index 8d67c04..37d4336 100644
+> > --- a/package/screen/screen.mk
+> > +++ b/package/screen/screen.mk
+> > @@ -17,7 +17,14 @@ SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+> >  define SCREEN_INSTALL_SCREENRC
+> >  	$(INSTALL) -m 0755 -D $(@D)/etc/screenrc $(TARGET_DIR)/etc/screenrc
+> >  endef
+> > -  
 > 
-> How to test the modification without rebuilding the image to run it on
-> the target?
+> Spurious empty line removal.
 
- Ah, I usually just scp or rsync the (unstripped) binaries to the target system.
-I'll typically write a little script that does something like 'make
-FOO_OVERRIDE_SRCDIR=... foo; ssh target rm -f /usr/bin/foo; scp
-output/target/usr/bin/foo target:/usr/bin; ssh target killall foo; ssh -f target
-foo"
+Indeed, but I believe it's fairly OK, as it allows the hook addition
+below to follow the coding style. I've updated the commit log to
+include the following paragraph:
 
-> 
->>> This would make users targetting virtual machines happy.
->>
->>  Huh? Or you mean building in virtual machines?
->>
-> 
-> No, cross compiling for VMs from host as opposed to real hardware.
+    While at it, drop an empty line between an existing hook definition
+    and its registration, to be consistent with the coding style used in
+    the rest of Buildroot.
 
- What difference does it make whether your target is a VM or real hardware?
+Thanks for the review!
 
- Regards,
- Arnout
-
-[snip]
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
