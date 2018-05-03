@@ -1,43 +1,83 @@
 From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Thu,  3 May 2018 13:47:00 +0200
-Subject: [Buildroot] [PATCH] dropbear: Do not build static binary
+Date: Thu,  3 May 2018 13:47:01 +0200
+Subject: [Buildroot] [PATCH v2] dropbear: Disable legacy/insecure options
 In-Reply-To: <20180503114701.9452-1-stefan.sorensen@spectralink.com>
 References: <20180503114701.9452-1-stefan.sorensen@spectralink.com>
-Message-ID: <20180503114701.9452-2-stefan.sorensen@spectralink.com>
+Message-ID: <20180503114701.9452-3-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dropbear 2018.76 now uses the --enable-static option to indicate that a static
-binary should be built. This will incorrectly pick up the generic buildroot
-option intended for building static libraries, causing an unwanted static
-binary build with BR2_STATIC_LIBS/BR2_SHARED_STATIC_LIBS.
+Dropbear by default enables a number of algorithms that are now considered
+insecure and should only be used when legacy support is required:
+   3DES encryption
+   Blowfish encryption
+   SHA1-96 message integrity
+   CBC encryption mode
+   DSA public keys
+   Diffie-Hellman Group1 key exchange
 
-Fix by appending an --disable-static configure flag, overriding the buildroot
-default.
+So disable them by default, but add a config option for bringing them back.
+
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
- package/dropbear/dropbear.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Changes in v2:
+ - Update for 2018.76
+ - Use single option for legacy/insecure algorithms
 
+ package/dropbear/Config.in   | 10 ++++++++++
+ package/dropbear/dropbear.mk | 12 +++++++++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 5d6b83b6d1..8c121d0d72 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -56,4 +56,14 @@ config BR2_PACKAGE_DROPBEAR_LASTLOG
+ 	  Enable logging of dropbear access to lastlog. Notice that
+ 	  Buildroot does not generate lastlog by default.
+ 
++config BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO
++	bool "enable legacy crypto"
++	help
++	  Enable legacy and possbibly insecure algorithms:
++	    3DES encryption
++	    SHA1-96 message integrity
++	    CBC encryption mode
++	    DSA public keys
++	    Diffie-Hellman Group1 key exchange
++
+ endif
 diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 6bfc05fb2b..f47f97d036 100644
+index f47f97d036..de29d16e74 100644
 --- a/package/dropbear/dropbear.mk
 +++ b/package/dropbear/dropbear.mk
-@@ -28,9 +28,10 @@ DROPBEAR_MAKE = \
- 	$(MAKE) MULTI=1 SCPPROGRESS=1 \
- 	PROGRAMS="$(DROPBEAR_PROGRAMS)"
+@@ -41,13 +41,23 @@ define DROPBEAR_SVR_PASSWORD_AUTH
+ endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
  
--ifeq ($(BR2_STATIC_LIBS),y)
--DROPBEAR_CONF_OPTS += --enable-static
--endif
-+# The generic --enable-static flags is only intended for use when building
-+# libraries, but dropbear will be built as a static executeable with this
-+# flag, so we overide it here
-+DROPBEAR_CONF_OPTS += --disable-static
++define DROPBEAR_DISABLE_LEGACY_CRYPTO
++	echo '#define DROPBEAR_3DES 0'                  >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_ENABLE_CBC_MODE 0'       >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_SHA1_96_HMAC 0'          >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
++endef
++ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
++endif
++
+ define DROPBEAR_ENABLE_REVERSE_DNS
+ 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
+ endef
  
- # Ensure that dropbear doesn't use crypt() when it's not available
- define DROPBEAR_SVR_PASSWORD_AUTH
+ define DROPBEAR_BUILD_FEATURED
+ 	echo '#define DROPBEAR_SMALL_CODE 0'            >> $(@D)/localoptions.h
+-	echo '#define DROPBEAR_BLOWFISH 1'              >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_TWOFISH128 1'            >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_TWOFISH256 1'            >> $(@D)/localoptions.h
+ endef
 -- 
 2.17.0
