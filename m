@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 22:13:02 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: Update mtime of
- $(TARGET_DIR)/usr in target-finalize
-In-Reply-To: <20180430171411.21920-1-chris.lesiak@licor.com>
-References: <20180416153339.23002-1-chris.lesiak@licor.com>
- <20180430171411.21920-1-chris.lesiak@licor.com>
-Message-ID: <20180503221302.2e64878d@windsurf>
+Date: Thu, 3 May 2018 22:14:58 +0200
+Subject: [Buildroot] [PATCH 2/3] readline: install a .pc file
+In-Reply-To: <20180422212005.13062-3-thomas.petazzoni@bootlin.com>
+References: <20180422212005.13062-1-thomas.petazzoni@bootlin.com>
+ <20180422212005.13062-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20180503221458.059ecd7f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 30 Apr 2018 12:14:11 -0500, Chris Lesiak wrote:
-> The systemd ConditionNeedsUpdate option is useful when offline updates
-> of the vendor operating system resources in /usr require updating of
-> /etc or /var on the next following boot.
-> 
-> Two examples of services making use of this option are
-> systemd-hwdb-update.service and systemd-sysusers.service.
-> 
-> ConditionNeedsUpdate=/etc will be true if the mtime of /etc/.updated
-> is older than the mtime of /usr.  After services conditional on
-> ConditionNeedsUpdate have run, systemd-update-done.service will
-> synch the mtime of /usr to /etc/.updated so that the condition will
-> be false on subsequent boots.
-> 
-> For systems with writable /usr partitions where updates are done to
-> the running system, the update program will touch /usr as a final step.
-> But with Buildroot, where updates are often done by dumping a new
-> image onto the device, and where /usr is on a filesystem mounted
-> read-only, touching /usr as part of the update process is not practical.
-> Instead, it should be done a build time.
-> 
-> For testers, please note that systemd-update-done in v234 added a
-> regression where the mtime of /etc/.updated is set to the current time
-> instead of the mtime or /usr.  This will be fixed in v239.
-> 
-> For more details, see:
-> http://0pointer.de/public/systemd-man/systemd.unit.html
-> http://0pointer.de/public/systemd-man/systemd-update-done.service.html
-> 
-> Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-> Changed v1 --> v2
->   - Provide a more detailed commit message.
-> ---
->  Makefile | 2 ++
->  1 file changed, 2 insertions(+)
+On Sun, 22 Apr 2018 23:20:04 +0200, Thomas Petazzoni wrote:
 
-Applied to master, thanks.
+> diff --git a/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch b/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch
+> new file mode 100644
+> index 0000000000..22b479cd91
+> --- /dev/null
+> +++ b/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch
+> @@ -0,0 +1,62 @@
+> +From 7bbf2046fbcf4416ec226ecb3a2b4c6a5c263298 Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +Date: Sun, 22 Apr 2018 23:06:28 +0200
+> +Subject: [PATCH] configure.ac, readline.pc.in: fix Requires.private value
+> +
+> +The provided readline.pc.in hardcodes the fact that readline depends
+> +on the tinfo library. However, different termcap implementation are
+> +supported beyond tinfo. This commit improves the configure.ac script
+> +to define a TERMCAP_PKG_CONFIG_LIB variable, which is then used in
+> +readline.pc.in.
+> +
+> +This for example allows the generated readline.pc to properly contain
+> +"Requires.private: ncurses" when ncurses is used as the termcap
+> +implementation.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+For information, this patch has been applied upstream by the readline
+maintainer. See
+http://git.savannah.gnu.org/cgit/readline.git/commit/?h=devel&id=39cef351237a0d4467d3dc62a7710ea5e619b7e1.
+(Yes it's one of those project that use Git in a very weird way).
+
+Best regards,
 
 Thomas
 -- 
