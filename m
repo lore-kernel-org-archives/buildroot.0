@@ -1,46 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 23:27:48 +0200
-Subject: [Buildroot] [PATCH v3 4/9] package/screen: add /usr/bin/screen
- to /etc/shells
-In-Reply-To: <20180203145848.GE2369@scaer>
-References: <1516356909-18620-1-git-send-email-romain.naour@smile.fr>
- <1516356909-18620-5-git-send-email-romain.naour@smile.fr>
- <20180203145848.GE2369@scaer>
-Message-ID: <20180503232748.40be93cd@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 3 May 2018 23:24:43 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] host-mkpasswd: fix crash
+ on Fedora 28 build host
+Message-ID: <20180503212818.768728B4BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=36e19e3f6a5edb7b644e5269d2b07be3d44c5288
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On Sat, 3 Feb 2018 15:58:48 +0100, Yann E. MORIN wrote:
+crypt() is an optional glibc feature. Some distros, like Fedora 28, are
+phasing it out to be replaced with libxcrypt [1]. Unfortunately this
+change is only ABI compatible, not source code compatible, i.e. the code
+will compile with warnings about undefined crypt(), but the resulting
+binary will crash.
 
-> > diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-> > index 8d67c04..37d4336 100644
-> > --- a/package/screen/screen.mk
-> > +++ b/package/screen/screen.mk
-> > @@ -17,7 +17,14 @@ SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
-> >  define SCREEN_INSTALL_SCREENRC
-> >  	$(INSTALL) -m 0755 -D $(@D)/etc/screenrc $(TARGET_DIR)/etc/screenrc
-> >  endef
-> > -  
-> 
-> Spurious empty line removal.
+Follow the guidance in the Fedora bug and include crypt.h when
+_XOPEN_CRYPT is not defined.
 
-Indeed, but I believe it's fairly OK, as it allows the hook addition
-below to follow the coding style. I've updated the commit log to
-include the following paragraph:
+[1] https://bugzilla.redhat.com/show_bug.cgi?id=1566464
 
-    While at it, drop an empty line between an existing hook definition
-    and its registration, to be consistent with the coding style used in
-    the rest of Buildroot.
+Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3c514c2dc5186c4357b2c0fc2e1c4b47e0f555c7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mkpasswd/mkpasswd.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks for the review!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mkpasswd/mkpasswd.c b/package/mkpasswd/mkpasswd.c
+index 5820f32501..fd16230468 100644
+--- a/package/mkpasswd/mkpasswd.c
++++ b/package/mkpasswd/mkpasswd.c
+@@ -44,6 +44,11 @@
+ #include <sys/time.h>
+ #endif
+ 
++/* glibc without crypt() */
++#ifndef _XOPEN_CRYPT
++#include <crypt.h>
++#endif
++
+ /* Application-specific */
+ #include "utils.h"
+ 
