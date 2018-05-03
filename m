@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 22:06:25 +0200
-Subject: [Buildroot] [PATCH 1/1] libkcapi: bump to version 1.1.0
-In-Reply-To: <20180502200457.25434-1-fontaine.fabrice@gmail.com>
-References: <20180502200457.25434-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180503220625.23b6493d@windsurf>
+Date: Thu, 3 May 2018 22:07:03 +0200
+Subject: [Buildroot] [git commit] mpd-mpc: bump to version 0.30
+Message-ID: <20180503200725.450A08B562@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=99de5ee35b049d0b900f6e464c88e80c730d0dc9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  2 May 2018 22:04:57 +0200, Fabrice Fontaine wrote:
-> - Remove patches (already in version)
-> - Add patch for getrandom (sent upstream:
->   https://github.com/smuellerDD/libkcapi/pull/56)
-> - Add hash for license files
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Fix-getrandom-call-in-kcapi-rng.c.patch   |  31 +++++
->  ...1-Have-sufficient-memory-size-for-message.patch |  31 -----
->  .../0002-Do-not-compile-unused-functions.patch     |  35 ------
->  ...0003-Unify-code-to-read-from-seed-sources.patch | 132 ---------------------
->  ...4-internal.h-make-inline-functions-static.patch | 103 ----------------
->  package/libkcapi/libkcapi.hash                     |   5 +-
->  package/libkcapi/libkcapi.mk                       |   2 +-
->  7 files changed, 36 insertions(+), 303 deletions(-)
->  create mode 100644 package/libkcapi/0001-Fix-getrandom-call-in-kcapi-rng.c.patch
->  delete mode 100644 package/libkcapi/0001-Have-sufficient-memory-size-for-message.patch
->  delete mode 100644 package/libkcapi/0002-Do-not-compile-unused-functions.patch
->  delete mode 100644 package/libkcapi/0003-Unify-code-to-read-from-seed-sources.patch
->  delete mode 100644 package/libkcapi/0004-internal.h-make-inline-functions-static.patch
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpd-mpc/mpd-mpc.hash | 2 +-
+ package/mpd-mpc/mpd-mpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
+index 972d169438..05ec389e2c 100644
+--- a/package/mpd-mpc/mpd-mpc.hash
++++ b/package/mpd-mpc/mpd-mpc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  02f1daec902cb48f8cdaa6fe21c7219f6231b091dddbe437a3a4fb12cb07b9d3  mpc-0.29.tar.xz
++sha256  65fc5b0a8430efe9acbe6e261127960682764b20ab994676371bdc797d867fce  mpc-0.30.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index e16f600491..942530a561 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_MPC_VERSION_MAJOR = 0
+-MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).29
++MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).30
+ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPL-2.0+
