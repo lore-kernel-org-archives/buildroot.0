@@ -1,33 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 22:05:25 +0200
-Subject: [Buildroot] [git commit] libksba: add hash for license files
-Message-ID: <20180503200602.8176281E69@busybox.osuosl.org>
+Date: Thu, 3 May 2018 22:05:24 +0200
+Subject: [Buildroot] [git commit] libkrb5: add hash for license file
+Message-ID: <20180503200602.7711B8B54D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09e669282aa40ff0826406d49ff2666432366996
+commit: https://git.buildroot.net/buildroot/commit/?id=8f5d2c99a9515d1bbc8beb25ddcc8e744d53c7c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libksba/libksba.hash | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libkrb5/libkrb5.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
-index f0a38f3de3..8ab7e6efe8 100644
---- a/package/libksba/libksba.hash
-+++ b/package/libksba/libksba.hash
-@@ -1,2 +1,9 @@
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index 59552d7fd4..e9fb0a2ace 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,2 +1,5 @@
  # Locally calculated after checking pgp signature
- sha256	41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340	libksba-1.3.5.tar.bz2
+ sha256	faeb125f83b0fb4cdb2f99f088140631bb47d975982de0956d18c85842969e08	krb5-1.16.tar.gz
 +
-+# Hash for license files:
-+sha256	240908e1356ffeb5d0730227b6198dcc8e878375d28632fd813e0ed75b35ccc2	AUTHORS
-+sha256	6197b98c6bf69838c624809c509d84333de1bc847155168c0e84527446a27076	COPYING
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING.GPLv2
-+sha256	0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf	COPYING.GPLv3
-+sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LGPLv3
++# Hash for license file:
++sha256	0b10e357b1adb953b2865dddfab73f95591b3f7c90aa39a8a087c558b1427e51	NOTICE
