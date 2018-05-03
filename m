@@ -1,43 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 May 2018 23:23:48 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
- 9, 14, 16}.x series
-Message-ID: <20180503212818.5A43E8B4BE@busybox.osuosl.org>
+Date: Thu, 3 May 2018 23:25:12 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] Makefile: Update mtime of
+ $(TARGET_DIR)/usr in target-finalize
+Message-ID: <20180503212818.913CB8B4BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=314c9050e525e6e1e19663415074ad0fdd972ab1
+commit: https://git.buildroot.net/buildroot/commit/?id=fea6cf8c09c1d8ac7f1a86bd6568e36d10810e14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop 4.16.x change]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c3cce05ac772e7803c81a8e8cb7fdcc1c21129cb)
+The systemd ConditionNeedsUpdate option is useful when offline updates
+of the vendor operating system resources in /usr require updating of
+/etc or /var on the next following boot.
+
+Two examples of services making use of this option are
+systemd-hwdb-update.service and systemd-sysusers.service.
+
+ConditionNeedsUpdate=/etc will be true if the mtime of /etc/.updated
+is older than the mtime of /usr.  After services conditional on
+ConditionNeedsUpdate have run, systemd-update-done.service will
+synch the mtime of /usr to /etc/.updated so that the condition will
+be false on subsequent boots.
+
+For systems with writable /usr partitions where updates are done to
+the running system, the update program will touch /usr as a final step.
+But with Buildroot, where updates are often done by dumping a new
+image onto the device, and where /usr is on a filesystem mounted
+read-only, touching /usr as part of the update process is not practical.
+Instead, it should be done a build time.
+
+For testers, please note that systemd-update-done in v234 added a
+regression where the mtime of /etc/.updated is set to the current time
+instead of the mtime or /usr.  This will be fixed in v239.
+
+For more details, see:
+http://0pointer.de/public/systemd-man/systemd.unit.html
+http://0pointer.de/public/systemd-man/systemd-update-done.service.html
+
+Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bbe5c6dad4da9cd174d5ef21caa73557e4592b31)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5f45136980..7d579325aa 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.130"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.97"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.131"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.98"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.38"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.39"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/Makefile b/Makefile
+index 8004cc2925..479ce74dc1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -761,6 +761,8 @@ endif
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
++	touch $(TARGET_DIR)/usr
++
+ .PHONY: target-post-image
+ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
