@@ -1,75 +1,60 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 3 May 2018 19:21:42 +0200
-Subject: [Buildroot] [PATCH] ltp-testsuite: add
- --with-open-posix-testsuite
-In-Reply-To: <CAFXrp_fe0s-a8F4Zh5h2gP5_krm_6vdqbd1E0MKL-3q8ENfJ6A@mail.gmail.com>
-References: <CAFXrp_cbD89wmzAf44aNjHfQS+ixvMUqMmxFxeLjLbvGDr3FFA@mail.gmail.com>
- <CAFXrp_fe0s-a8F4Zh5h2gP5_krm_6vdqbd1E0MKL-3q8ENfJ6A@mail.gmail.com>
-Message-ID: <20180503172141.GA12815@x230>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 3 May 2018 21:08:53 +0300
+Subject: [Buildroot] [PATCH] dropbear: Do not build static binary
+In-Reply-To: <20180503114701.9452-2-stefan.sorensen@spectralink.com>
+References: <20180503114701.9452-1-stefan.sorensen@spectralink.com>
+ <20180503114701.9452-2-stefan.sorensen@spectralink.com>
+Message-ID: <20180503180853.2473u472dvxhvwkn@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ciro,
+Hi Stefan,
 
-> Ah, learned about get-developers now :-)
-Thanks for tip :)
+On Thu, May 03, 2018 at 01:47:00PM +0200, Stefan S?rensen wrote:
+> Dropbear 2018.76 now uses the --enable-static option to indicate that a static
+> binary should be built. This will incorrectly pick up the generic buildroot
+> option intended for building static libraries, causing an unwanted static
+> binary build with BR2_STATIC_LIBS/BR2_SHARED_STATIC_LIBS.
+> 
+> Fix by appending an --disable-static configure flag, overriding the buildroot
+> default.
 
+Your sign-off is missing here.
 
-> ---------- Forwarded message ----------
-> From: Ciro Santilli <ciro.santilli@gmail.com>
-> Date: Thu, May 3, 2018 at 5:03 PM
-> Subject: [PATCH] ltp-testsuite: add --with-open-posix-testsuite
-> To: buildroot at busybox.net
-
-
-> The issues mentioned on the removed comments were resolved,
-> tested in QEMU x86_64 and aarch64.
-Yes, I've been thinking about reenabling it again last week for the same reason :-).
-Thank you for your patch.
-
-> Signed-off-by: Ciro Santilli <ciro.santilli@gmail.com>
 > ---
-> This patch supposes that the removed comments imply that a default
-> --with-open-posix-testsuite
-> is desirable (and I confirm that it does not take unreasoble build
-> time or disk space),
-> and that there is no generic way to add autotools configs to packages:
-> https://stackoverflow.com/questions/44341188/how-to-pass-extra-custom-configure-autotools-options-to-a-buildroot-package
+>  package/dropbear/dropbear.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+> index 6bfc05fb2b..f47f97d036 100644
+> --- a/package/dropbear/dropbear.mk
+> +++ b/package/dropbear/dropbear.mk
+> @@ -28,9 +28,10 @@ DROPBEAR_MAKE = \
+>  	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+>  	PROGRAMS="$(DROPBEAR_PROGRAMS)"
+>  
+> -ifeq ($(BR2_STATIC_LIBS),y)
+> -DROPBEAR_CONF_OPTS += --enable-static
+> -endif
+> +# The generic --enable-static flags is only intended for use when building
+> +# libraries, but dropbear will be built as a static executeable with this
+> +# flag, so we overide it here
+> +DROPBEAR_CONF_OPTS += --disable-static
 
->  package/ltp-testsuite/ltp-testsuite.mk | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
+You add --disable-static unconditionally, but we do want to build statically 
+when BR2_STATIC_LIBS=y. So maybe add --disable-static only for 
+BR2_SHARED_STATIC_LIBS=y to counter the effect of --enable-static that 
+Buildroot adds automatically. Would that work for you?
 
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk
-> b/package/ltp-testsuite/ltp-testsuite.mk
-> index c47f587836..4584ca45da 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -9,17 +9,8 @@ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
->  LTP_TESTSUITE_SITE =
-> https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
->  LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
->  LTP_TESTSUITE_LICENSE_FILES = COPYING
-> -
-> -# Do not enable Open POSIX testsuite as it doesn't cross-compile
-> -# properly: t0 program is built for the host machine. Notice that due
-> -# to a bug, --without-open-posix-testsuite actually enables the test
-> -# suite.
-> -# See https://github.com/linux-test-project/ltp/issues/143 (invalid
-> -# autoconf test) and
-> -# https://github.com/linux-test-project/ltp/issues/144 (Open POSIX
-> -# testsuite not cross-compiling).
->  LTP_TESTSUITE_CONF_OPTS += \
-> - --with-realtime-testsuite
-> + --with-realtime-testsuite --with-open-posix-testsuite
+>  # Ensure that dropbear doesn't use crypt() when it's not available
+>  define DROPBEAR_SVR_PASSWORD_AUTH
 
->  ifeq ($(BR2_LINUX_KERNEL),y)
->  LTP_TESTSUITE_DEPENDENCIES += linux
+baruch
 
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-
-
-Kind regards,
-Petr
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
