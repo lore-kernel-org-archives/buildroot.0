@@ -1,19 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 23:15:06 +0200
-Subject: [Buildroot] [git commit] package/mksh: add /bin/mksh to /etc/shells
-Message-ID: <20180503212454.DA8C2886DA@busybox.osuosl.org>
+Date: Thu, 3 May 2018 23:12:21 +0200
+Subject: [Buildroot] [git commit] package/dash: add /etc/dash to /etc/shells
+Message-ID: <20180503212454.A6CE38B637@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e05e4de693416e7a099fb87097c21e2b32ae5472
+commit: https://git.buildroot.net/buildroot/commit/?id=129f3276989de6f07ba02eb3fe175f731f2ae9a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When mksh is selected, /bin/mksh is not added to /etc/shells
+When dash is selected, /bin/dash is not added to /etc/shells
 (see man shells). So, login tools like dropbear reject the ssh
-connections for users using mksh as shell in /etc/passwd.
+connections for users using dash as shell in /etc/passwd.
 
 buildroot authpriv.warn dropbear[853]: User 'kubu' has invalid shell, rejected
 
@@ -21,23 +21,23 @@ Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mksh/mksh.mk | 8 ++++++++
+ package/dash/dash.mk | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
-index b5706dbe0f..4fa0e020af 100644
---- a/package/mksh/mksh.mk
-+++ b/package/mksh/mksh.mk
-@@ -21,4 +21,12 @@ define MKSH_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/mksh $(TARGET_DIR)/bin/mksh
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 2ee292b8d3..9a26ebb642 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -28,4 +28,12 @@ define DASH_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(@D)/src/dash $(TARGET_DIR)/bin/dash
  endef
  
-+# Add /bin/mksh to /etc/shells otherwise some login tools like dropbear
++# Add /bin/dash to /etc/shells otherwise some login tools like dropbear
 +# can reject the user connection. See man shells.
-+define MKSH_ADD_MKSH_TO_SHELLS
-+	grep -qsE '^/bin/mksh$$' $(TARGET_DIR)/etc/shells \
-+		|| echo "/bin/mksh" >> $(TARGET_DIR)/etc/shells
++define DASH_ADD_DASH_TO_SHELLS
++	grep -qsE '^/bin/dash$$' $(TARGET_DIR)/etc/shells \
++		|| echo "/bin/dash" >> $(TARGET_DIR)/etc/shells
 +endef
-+MKSH_TARGET_FINALIZE_HOOKS += MKSH_ADD_MKSH_TO_SHELLS
++DASH_TARGET_FINALIZE_HOOKS += DASH_ADD_DASH_TO_SHELLS
 +
- $(eval $(generic-package))
+ $(eval $(autotools-package))
