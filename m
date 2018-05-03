@@ -1,106 +1,63 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Thu, 03 May 2018 06:11:58 +0000
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <0756834a-6d03-8c29-4b5d-975b7ee7e425@mind.be>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180502175722.GA31449@scaer>
- <CAOJ2eMf-+1JfvVcwKKFX1BPj36gbSV+Vc58ShJj61UzrGCe16Q@mail.gmail.com>
- <0756834a-6d03-8c29-4b5d-975b7ee7e425@mind.be>
-Message-ID: <CAOJ2eMeg6zxaVck0rv5BRkYn326WPnWbeo4LASAdMqOTHV==1Q@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu,  3 May 2018 09:58:08 +0200
+Subject: [Buildroot] [PATCH] package/ncurses: enable widechar for host build
+In-Reply-To: <20180426190845.21415-1-arnout@mind.be>
+References: <20180426190845.21415-1-arnout@mind.be>
+Message-ID: <20180503075808.26367-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Kconfig uses either pkg-config or hard-coded /usr/include paths to find
+the ncurses or ncursesw library. If ncursesw is found, it will include
+<ncursesw.h>. Since Buildroot's host-ncurses doesn't install a .pc file,
+and linux.mk anyway doesn't pass the pkg-config options to find the host
+pkg-config files, Kconfig will always find the system's ncursesw.h.
 
-On Wed, May 2, 2018 at 11:38 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+However, since commit dde090c299 (linux: fix passing of host CFLAGS and
+LDFLAGS) HOST_LDFLAGS is passed to the linux build system. Thus, if
+host-ncurses was already built before 'make linux-menuconfig' is called,
+the build will pick up libncurses from the host directory, which is NOT
+widechar. Thus, two different ncurses configurations are mixed into the
+final mconf program. This will result in serious breakage in the
+rendering of the menus (lots of @ and question mark characters).
 
-> And in pre-F28 this header will be provided by glibc-devel, right?
->
-> But so in practice we can assume that crypt.h is always present, so why not
-> include it unconditionally?
->
+As a workaround, just build host-ncurses with widechar support. That
+makes it compatible with ncursesw.h picked up from the host. Clearly,
+this is not a robust solution. But it's simple, it works, and it
+shouldn't hurt to build host-ncurses with widechar support (we can
+safely assume that the system doesn't have a non-widechar uClibc
+library...).
 
-crypt.h and -lcrypt seem to be ancient glibc artefacts. E.g. RedHat 7.x
-glibc-2.2.5 (
-http://rpm.pbone.net/index.php3/stat/4/idpl/38881780/dir/redhat_7.x/com/glibc-devel-2.2.5-44.i386.rpm.html
-).
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: David De Grave <david.degrave@essensium.com>
+Cc: Scott Fan <fancp2007@gmail.com>
+---
+v2:
+ - fix typo in commit message;
+ - extend commit message;
+ - keep alphabetic ordering of configure options (Scott)
 
-For the Fedora 28 change see also:
+Note: I haven't tested what happens on a system which doesn't have
+ncursesw.h. But I guess such a system is so exotic that it's not
+worthwhile to do something special for it.
+---
+ package/ncurses/ncurses.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-*
-https://fedoraproject.org/wiki/Changes/Replace_glibc_libcrypt_with_libxcrypt
-*
-https://src.fedoraproject.org/rpms/glibc/c/2687b3c78b7b05ca9cc568e40464fb7909e9ec6d
-* https://sourceware.org/ml/libc-alpha/2017-08/msg01257.html
-
-So at least on Linux & glibc the guidance
-
-   #define _XOPEN_SOURCE
-
-   #include <stdlib.h>
-   #include <stdio.h>
-   #include <unistd.h>
-
-   #ifndef _XOPEN_CRYPT
-   #include <crypt.h>
-   #endif
-
-   int main(int argc, char **argv)
-   {
-     (void)argc;
-     (void)argv;
-     printf("%s\n", crypt("passwd", "salt"));
-     return(0);
-  }
-
-should be always correct.
-
-Fedora 28 (glibc 2.27 + libcrypt deprecation patch):
-
-$ gcc -Wall -Wextra -Werror -dD -E dummy.c | fgrep -e _CRYPT -e crypt.h -e
-'*crypt '
-    _SC_XOPEN_CRYPT,
-#define _SC_XOPEN_CRYPT _SC_XOPEN_CRYPT
-# 1 "/usr/include/crypt.h" 1 3 4
-# 20 "/usr/include/crypt.h" 3 4
-#define _CRYPT_H 1
-# 63 "/usr/include/crypt.h" 3 4
-extern char *crypt (const char *__phrase, const char *__setting)
-...
-
-Fedora 27  (glibc 2.26):
-
-$ gcc -Wall -Wextra -Werror -dD -E dummy.c | fgrep -e _CRYPT -e crypt.h -e
-'*crypt '
-#define _XOPEN_CRYPT 1
-    _SC_XOPEN_CRYPT,
-#define _SC_XOPEN_CRYPT _SC_XOPEN_CRYPT
-extern char *crypt (const char *__key, const char *__salt)
-
-Ubuntu 14.04 (glibc 2.19):
-
-$ gcc -Wall -Wextra -Werror -dD -E dummy.c | fgrep -e _CRYPT -e crypt.h -e
-'*crypt '
-#define _XOPEN_CRYPT 1
-    _SC_XOPEN_CRYPT,
-#define _SC_XOPEN_CRYPT _SC_XOPEN_CRYPT
-extern char *crypt (const char *__key, const char *__salt)
-
-Buildroot target @master (glibc 2.27):
-
-$ output/host/bin/arm-buildroot-linux-gnueabihf-gcc -Wall -Wextra -Werror
--dD -E dummy.c | fgrep -e _CRYPT -e crypt.h -e '*crypt '
-#undef __ARM_FEATURE_CRYPTO
-#define _XOPEN_CRYPT 1
-    _SC_XOPEN_CRYPT,
-#define _SC_XOPEN_CRYPT _SC_XOPEN_CRYPT
-extern char *crypt (const char *__key, const char *__salt)
-
-Regards, Stefan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180503/a8c28eb0/attachment.html>
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 90cf4a4dc5..f9cd0d3fbd 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -147,6 +147,7 @@ define HOST_NCURSES_BUILD_CMDS
+ endef
+ 
+ HOST_NCURSES_CONF_OPTS = \
++	--enable-widec \
+ 	--with-shared \
+ 	--without-gpm \
+ 	--without-manpages \
+-- 
+2.17.0
