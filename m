@@ -1,49 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 23:15:07 +0200
-Subject: [Buildroot] [git commit] package/bash: use target finalize hook
-Message-ID: <20180503212454.F213F8B602@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 May 2018 23:26:02 +0200
+Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
+ host
+In-Reply-To: <20180502090508.12893-1-chemobejk@gmail.com> (Stefan Becker's
+ message of "Wed, 2 May 2018 12:05:08 +0300")
+References: <20180502090508.12893-1-chemobejk@gmail.com>
+Message-ID: <878t90ctxx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=311c9eebc4dcfb764e3a7082706daf68e0603188
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Stefan" == Stefan Becker <chemobejk@gmail.com> writes:
 
-Arnout reported an issue with the upcoming top-level parallel build.
-The file /etc/shells can be modified by several packages (shell providers)
+ > crypt() is an optional glibc feature. Some distros, like Fedora 28, are
+ > phasing it out to be replaced with libxcrypt [1]. Unfortunately this
+ > change is only ABI compatible, not source code compatible, i.e. the code
+ > will compile with warnings about undefined crypt(), but the resulting
+ > binary will crash.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bash/bash.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ > Follow the guidance in the Fedora bug and include crypt.h when
+ > _XOPEN_CRYPT is not defined.
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 2182bede15..bb52bf3259 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -39,14 +39,18 @@ BASH_CONF_ENV += bash_cv_getenv_redef=yes
- endif
- endif
- 
--# Add /bin/bash to /etc/shells otherwise some login tools like dropbear
--# can reject the user connexion. See man shells.
- define BASH_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
- 	rm -f $(TARGET_DIR)/bin/bashbug
-+endef
-+
-+# Add /bin/bash to /etc/shells otherwise some login tools like dropbear
-+# can reject the user connection. See man shells.
-+define BASH_ADD_MKSH_TO_SHELLS
- 	grep -qsE '^/bin/bash$$' $(TARGET_DIR)/etc/shells \
- 		|| echo "/bin/bash" >> $(TARGET_DIR)/etc/shells
- endef
-+BASH_TARGET_FINALIZE_HOOKS += BASH_ADD_MKSH_TO_SHELLS
- 
- $(eval $(autotools-package))
+ > [1] https://bugzilla.redhat.com/show_bug.cgi?id=1566464
+
+ > Signed-off-by: Stefan Becker <chemobejk@gmail.com>
+
+Committed to 2018.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
