@@ -1,76 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 23:05:58 +0200
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: conditionally add gpl
- license
-In-Reply-To: <1523502130-21870-1-git-send-email-danomimanchego123@gmail.com>
-References: <1523502130-21870-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20180503230558.397043c1@windsurf>
+Date: Thu, 3 May 2018 23:08:11 +0200
+Subject: [Buildroot] [git commit] core/pkg-infra: don't display "foo
+ Downloading" when there's no source
+Message-ID: <20180503210824.509178B607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b55c0c7cd54d13d10109719bfc0f6874c457b12a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 11 Apr 2018 23:02:10 -0400, Danomi Manchego wrote:
-> Currently, GST1_PLUGINS_BAD_LICENSE_FILES starts out set to
-> both the GPL COPYING file and the LGPL COPYING.LIB file, but
-> the GST1_PLUGINS_BAD_LICENSE handling only claims LGPL, and
-> then intelligently adds GPL if needed.  This change moves the
-> GPL file addition to the same conditional clause so that the
-> GPL file is included in the legal-info location only if GPL
-> code is actually used.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Commit ea55e1323 (core/pkg-infra: don't enforce site-method for extra
+downloads) forgot to account for those packages that have nothing to
+download, like the skeleton, or like virtual packages...
 
-I've applied to master, thanks. However, there's a separate but related
-issue. See below.
+The side effect is that the message "foo Downloading" is thus
+displayed when it should not be.
 
-> ---
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> index 83cb94b..9f7cd97 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> @@ -8,9 +8,9 @@ GST1_PLUGINS_BAD_VERSION = 1.12.4
->  GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
->  GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
->  GST1_PLUGINS_BAD_INSTALL_STAGING = YES
-> -GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
-> -# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE if
-> -# enabled.
-> +# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE and
-> +# GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
-> +GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
->  GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
->  
->  GST1_PLUGINS_BAD_CONF_OPTS = \
-> @@ -772,6 +772,7 @@ endif
->  # Add GPL license if GPL licensed plugins enabled.
->  ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
->  GST1_PLUGINS_BAD_LICENSE += GPL
+Fix that.
 
-This way of appending to the LICENSE variable is not very good, because
-the value will then be:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	LGPL-2.0+, LGPL-2.1+ GPL
-
-which isn't very good. We should instead do:
-
-GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), GPL
-
-and actually, "GPL" by itself doesn't mean much, it should be GPL-2.0
-or GPL-3.0.
-
-Would you mind looking into fixing those remaining issues ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index a303dc2e07..8a3b5f90a9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -488,7 +488,7 @@ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
+ 
+ $(2)_ALL_DOWNLOADS = \
+-	$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE) \
++	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+ 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+ 		$$(if $$(findstring ://,$$(p)),$$(p),\
+ 			$$($(2)_SITE)/$$(p)))
