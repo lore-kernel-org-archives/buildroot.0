@@ -1,54 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 May 2018 23:04:03 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-bad: conditionally add gpl
- license
-Message-ID: <20180503210421.71C2C8B602@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 May 2018 23:04:44 +0200
+Subject: [Buildroot] [PATCH v2] dropbear: Disable legacy/insecure options
+In-Reply-To: <20180503114701.9452-3-stefan.sorensen@spectralink.com> ("Stefan
+ =?utf-8?Q?S=C3=B8rensen=22's?= message of "Thu, 3 May 2018 13:47:01 +0200")
+References: <20180503114701.9452-1-stefan.sorensen@spectralink.com>
+ <20180503114701.9452-3-stefan.sorensen@spectralink.com>
+Message-ID: <87d0yccuxf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bbb6b800143b87608cc68351036ae4ccf649c1b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Stefan" == Stefan S?rensen <stefan.sorensen@spectralink.com> writes:
 
-Currently, GST1_PLUGINS_BAD_LICENSE_FILES starts out set to
-both the GPL COPYING file and the LGPL COPYING.LIB file, but
-the GST1_PLUGINS_BAD_LICENSE handling only claims LGPL, and
-then intelligently adds GPL if needed.  This change moves the
-GPL file addition to the same conditional clause so that the
-GPL file is included in the legal-info location only if GPL
-code is actually used.
+ > Dropbear by default enables a number of algorithms that are now considered
+ > insecure and should only be used when legacy support is required:
+ >    3DES encryption
+ >    Blowfish encryption
+ >    SHA1-96 message integrity
+ >    CBC encryption mode
+ >    DSA public keys
+ >    Diffie-Hellman Group1 key exchange
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ > So disable them by default, but add a config option for bringing them back.
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 83cb94be81..9f7cd9777e 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -8,9 +8,9 @@ GST1_PLUGINS_BAD_VERSION = 1.12.4
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
--GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
--# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE if
--# enabled.
-+# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE and
-+# GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
-+GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
- GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
+ > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+ > ---
+ > Changes in v2:
+ >  - Update for 2018.76
+ >  - Use single option for legacy/insecure algorithms
+
+ >  package/dropbear/Config.in   | 10 ++++++++++
+ >  package/dropbear/dropbear.mk | 12 +++++++++++-
+ >  2 files changed, 21 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+ > index 5d6b83b6d1..8c121d0d72 100644
+ > --- a/package/dropbear/Config.in
+ > +++ b/package/dropbear/Config.in
+ > @@ -56,4 +56,14 @@ config BR2_PACKAGE_DROPBEAR_LASTLOG
+ >  	  Enable logging of dropbear access to lastlog. Notice that
+ >  	  Buildroot does not generate lastlog by default.
  
- GST1_PLUGINS_BAD_CONF_OPTS = \
-@@ -772,6 +772,7 @@ endif
- # Add GPL license if GPL licensed plugins enabled.
- ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
- GST1_PLUGINS_BAD_LICENSE += GPL
-+GST1_PLUGINS_BAD_LICENSE_FILES += COPYING
- endif
+ > +config BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO
+ > +	bool "enable legacy crypto"
+ > +	help
+ > +	  Enable legacy and possbibly insecure algorithms:
+
+s/possbibly/possibly/
+
+> +	    3DES encryption
+ > +	    SHA1-96 message integrity
+ > +	    CBC encryption mode
+ > +	    DSA public keys
+ > +	    Diffie-Hellman Group1 key exchange
+ > +
+ >  endif
+ > diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+ > index f47f97d036..de29d16e74 100644
+ > --- a/package/dropbear/dropbear.mk
+ > +++ b/package/dropbear/dropbear.mk
+ > @@ -41,13 +41,23 @@ define DROPBEAR_SVR_PASSWORD_AUTH
+ >  endef
+ >  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
  
- # Add Unknown license if Unknown licensed plugins enabled.
+ > +define DROPBEAR_DISABLE_LEGACY_CRYPTO
+ > +	echo '#define DROPBEAR_3DES 0'                  >> $(@D)/localoptions.h
+ > +	echo '#define DROPBEAR_ENABLE_CBC_MODE 0'       >> $(@D)/localoptions.h
+ > +	echo '#define DROPBEAR_SHA1_96_HMAC 0'          >> $(@D)/localoptions.h
+ > +	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
+ > +	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
+ > +endef
+ > +ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
+ > +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
+ > +endif
+ > +
+ >  define DROPBEAR_ENABLE_REVERSE_DNS
+ >  	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
+ >  endef
+ 
+ >  define DROPBEAR_BUILD_FEATURED
+ >  	echo '#define DROPBEAR_SMALL_CODE 0'            >> $(@D)/localoptions.h
+ > -	echo '#define DROPBEAR_BLOWFISH 1'              >> $(@D)/localoptions.h
+
+This is not mentioned in the commit description. If this is also
+considered a legacy algorithm then I guess it is OK to drop it
+unconditioanlly, but it should be mentioned.
+
+-- 
+Bye, Peter Korsgaard
