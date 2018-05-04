@@ -1,37 +1,81 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 04 May 2018 20:42:45 +0000
-Subject: [Buildroot] [Bug 10986] Installing package attr when already
- supplied by busybox replaces busybox. Resulting in confusing boot/init
- error.
-In-Reply-To: <bug-10986-163@https.bugs.busybox.net/>
-References: <bug-10986-163@https.bugs.busybox.net/>
-Message-ID: <bug-10986-163-7jIi8ZzghK@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 4 May 2018 22:54:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/exim: remove libnsl linking
+ with Glibc.
+In-Reply-To: <20180501223746.1ed2eddf@windsurf.home>
+References: <20180501200508.13974-1-romain.naour@gmail.com>
+ <20180501221254.7f29363b@windsurf.home>
+ <8328c7c8-4c79-20d7-6e7c-425fe3d9fcf7@gmail.com>
+ <20180501223746.1ed2eddf@windsurf.home>
+Message-ID: <f4765e41-16e5-7edd-4fa4-a5d366034464@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10986
+Hi Thomas, Baruch,
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Le 01/05/2018 ? 22:37, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Tue, 1 May 2018 22:19:13 +0200, Romain Naour wrote:
+> 
+>> Le 01/05/2018 ? 22:12, Thomas Petazzoni a ?crit?:
+>>> Hello,
+>>>
+>>> On Tue,  1 May 2018 22:05:07 +0200, Romain Naour wrote:  
+>>>> libnsl has been deprecated from Glibc and no other libc provide it.
+>>>> Also there is no libnsl package in Buildroot yet, so remove -lnsl for
+>>>> all toolchains.
+>>>>
+>>>> libnsl is now a library that can be packaged later if needed. [1]
+>>>>
+>>>> Note: Fedora 28 has switched to the new libnsl library that bring
+>>>> IPV6 support. [2]
+>>>>
+>>>> [1] https://github.com/thkukuk/libnsl.git
+>>>> [2] https://fedoraproject.org/wiki/Changes/NISIPv6  
+>>>
+>>> This commit log doesn't really explain the motivation for the change.
+>>> What is the ultimate goal here ?  
+>>
+>> The motivation is to remove libnsl provided by Glibc. Since the new libnsl is
+>> not packaged in Buildroot. Remove -lnsl from the exim Makefile.
+> 
+> I think the explanation in the commit log should be improved then.
+> 
+> Perhaps something like:
+> 
+> """"
+> glibc now considers its built-in libnsl as being obsolete, and requires
+> passing --enable-obsolete-libnsl to have it built and installed. libnsl
+> is now provided as a separate project, but it isn't packaged yet in
+> Buildroot.
+> 
+> In preparation for dropping --enable-obsolete-libnsl from the glibc
+> package, this commit ensures that exim doesn't use libnsl. It was
+> already the case for uclibc and musl toolchains, so this commit simply
+> extends that to make sure libnsl is also not used with glibc toolchains.
+> """"
+> 
+> Does this capture the problem properly ?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-             Status|NEW                         |ASSIGNED
+Yes
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Hello,
+> 
+> Remains some questions though: why is exim linking with libnsl in the
+> first place ? Doesn't it use symbols from this library ?
 
-Thanks for the report.
+Exim itself doesn't need libnsl.
+Only Exim's nis.so and nisplus.so lookup modules require libnsl but they are not
+even build by default.
 
-I've sent a tentative patch too fix this issue quickly:
-https://patchwork.ozlabs.org/patch/909026/
+For now, we can safely remove -lnsl from exim Makefile.
 
-Regards,
-Yann E. MORIN.
+Best regards,
+Romain
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> 
+> Thomas
+> 
