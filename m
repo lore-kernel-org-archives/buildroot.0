@@ -1,35 +1,65 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Fri, 4 May 2018 06:27:02 +0000
-Subject: [Buildroot] [PATCH] dropbear: Do not build static binary
-In-Reply-To: <20180503180853.2473u472dvxhvwkn@tarshish>
-References: <20180503114701.9452-1-stefan.sorensen@spectralink.com>
- <20180503114701.9452-2-stefan.sorensen@spectralink.com>
- <20180503180853.2473u472dvxhvwkn@tarshish>
-Message-ID: <06a47e87f804576dc13ab3c33a8f9239cc318d9e.camel@spectralink.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Fri, 4 May 2018 09:14:24 +0200
+Subject: [Buildroot] [PATCH v3 1/5] arm-trusted-firmware: simplify
+ release dir path
+In-Reply-To: <1525364617-23633-2-git-send-email-luca@lucaceresoli.net>
+References: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
+ <1525364617-23633-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20180504071424.GA7882@g751.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2018-05-03 at 21:08 +0300, Baruch Siach wrote:
-> > -ifeq ($(BR2_STATIC_LIBS),y)
-> > -DROPBEAR_CONF_OPTS += --enable-static
-> > -endif
-> > +# The generic --enable-static flags is only intended for use when
-> > building
-> > +# libraries, but dropbear will be built as a static executeable
-> > with this
-> > +# flag, so we overide it here
-> > +DROPBEAR_CONF_OPTS += --disable-static
+Hi Luca,
+
+On Thu, May 03, 2018 at 06:23:33PM +0200, Luca Ceresoli wrote:
+> The path to the binary images is very long. Since we are about to make
+> a larger use of it, let's use a variable to make it somewhat shorter.
 > 
-> You add --disable-static unconditionally, but we do want to build
-> statically 
-> when BR2_STATIC_LIBS=y. So maybe add --disable-static only for 
-> BR2_SHARED_STATIC_LIBS=y to counter the effect of --enable-static
-> that Buildroot adds automatically. Would that work for you?
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> ---
+> Changes v2 -> v3: none.
+> Changes v1 -> v2: none.
+> ---
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index 4bac916e3108..212bb5049f2b 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -25,6 +25,7 @@ endif
+>  ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES = YES
+>  
+>  ARM_TRUSTED_FIRMWARE_PLATFORM = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM))
+> +ARM_TRUSTED_FIRMWARE_IMG_DIR = $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release
+>  
+>  ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
+>  	CROSS_COMPILE="$(TARGET_CROSS)" \
+> @@ -82,7 +83,7 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+>  endef
+>  
+>  define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+> -	cp -dpf $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release/*.bin $(BINARIES_DIR)/
+> +	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
 
-The --disable-static causes dropbear to do nothing, i.e. just do a
-normal link, so that will also work with BR2_STATIC_LIBS=y.
+Actually the release folder isn't always in that directory. For
+instance, the tegra platform requires another TARGET_SOC variable and
+the bin files are under
+build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/$(TARGET_SOC)/release/*.bin.
+https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/plat/nvidia-tegra.rst
 
-Stefan
+Don't get me wrong, your patch doesn't break anything, I just wanted to
+inform you of that tegra case. My quick (and dirty) fix was to do a the
+following:
+find $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM) -name "*.bin" -exec cp -dpf {} $(BINARIES_DIR)/ \;
+
+But if you want to have a generic ARM_TRUSTED_FIRMWARE_IMG_DIR I guess
+the solution is to have an optional ARM_TRUSTED_FIRMWARE_TARGET_SOC
+variable added to arm-trusted-firmware.mk.
+
+Regards,
+Gary
