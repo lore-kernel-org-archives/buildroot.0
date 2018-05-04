@@ -1,63 +1,57 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  4 May 2018 23:02:45 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/exim: remove libnsl linking with
- Glibc.
-Message-ID: <20180504210246.29930-1-romain.naour@gmail.com>
+Date: Fri,  4 May 2018 23:02:46 +0200
+Subject: [Buildroot] [PATCH v2 2/2] Revert "glibc: install the obsolete
+ libnsl"
+In-Reply-To: <20180504210246.29930-1-romain.naour@gmail.com>
+References: <20180504210246.29930-1-romain.naour@gmail.com>
+Message-ID: <20180504210246.29930-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc now considers its built-in libnsl as being obsolete, and requires
-passing --enable-obsolete-libnsl to have it built and installed. libnsl
-is now provided as a separate project [1], but it isn't packaged yet in
-Buildroot.
+libnsl from Glibc is deprecated and should not be used anymore.
+Remove libnsl.so.* from GLIBC_LIBS_LIB.
 
-In preparation for dropping --enable-obsolete-libnsl from the glibc
-package, this commit ensures that exim doesn't use libnsl. It was
-already the case for uclibc and musl toolchains, so this commit simply
-extends that to make sure libnsl is also not used with glibc toolchains.
+libnsl is now an separate library that can be packaged later if
+necessary [1].
 
-Only Exim's nis.so and nisplus.so lookup modules require libnsl,
-but they are not build by default. So we can safely remove -lnsl
-from the Makefile-Linux. If someone want these modules, a new libnsl
-package must be added first to provide nsl library.
-
-Note: Fedora 28 has switched to the new libnsl library that bring
-IPV6 support. [2]
+Note: libnsl from Glibc doesn't build with gcc 8 due new warning [2].
 
 [1] https://github.com/thkukuk/libnsl.git
-[2] https://fedoraproject.org/wiki/Changes/NISIPv6
+[2] http://patchwork.sourceware.org/patch/26437
+
+This reverts commit 398747f5fafca8c07e696612d8eded53d4f935c7.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Baruch Siach <baruch@tkos.co.il>
 ---
- package/exim/exim.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+v2: remove libnsl.so.* from GLIBC_LIBS_LIB
+---
+ package/glibc/glibc.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 37eab501a4..586bf3235c 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -72,13 +72,15 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
- endef
- endif
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 3ab673c0cc..c1c5ac687f 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -100,7 +100,6 @@ define GLIBC_CONFIGURE_CMDS
+ 		--disable-profile \
+ 		--without-gd \
+ 		--enable-obsolete-rpc \
+-		--enable-obsolete-nsl \
+ 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
+ 		--with-headers=$(STAGING_DIR)/usr/include)
+ 	$(GLIBC_ADD_MISSING_STUB_H)
+@@ -113,7 +112,7 @@ endef
  
--# only glibc provides libnsl, remove -lnsl for all other toolchains
-+# Only Exim's nis.so and nisplus.so lookup modules require libnsl,
-+# but they are not build by default.
-+# libnsl has been deprecated from Glibc and no other libc provide it.
-+# There is no libnsl package in Buildroot yet.
-+# Remove -lnsl for all toolchains.
- # http://bugs.exim.org/show_bug.cgi?id=1564
--ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
- define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
- 	$(SED) 's/-lnsl//g' $(@D)/OS/Makefile-Linux
- endef
--endif
+ GLIBC_LIBS_LIB = \
+ 	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
+-	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
++	libm.so.* libpthread.so.* libresolv.so.* librt.so.* \
+ 	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
  
- # musl does not provide struct ip_options nor struct ip_opts (but it is
- # available with both glibc and uClibc)
+ ifeq ($(BR2_PACKAGE_GDB),y)
 -- 
 2.14.3
