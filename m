@@ -1,93 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 May 2018 09:23:46 +0200
-Subject: [Buildroot] [PATCH v2] package/mender: new package
-In-Reply-To: <1525384358-26211-1-git-send-email-angelo@amarulasolutions.com>
-References: <1525384358-26211-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180504092346.6b5835db@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 04 May 2018 07:30:39 +0000
+Subject: [Buildroot] [Bug 10986] New: Installing package attr when already
+ supplied by busybox replaces busybox. Resulting in boot confusing boot/init
+ error.
+Message-ID: <bug-10986-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Angelo,
+https://bugs.busybox.net/show_bug.cgi?id=10986
 
-Thanks for pushing this further. We definitely want to have Mender.io
-support in Buildroot, so it's great to see this make progress.
+            Bug ID: 10986
+           Summary: Installing package attr when already supplied by
+                    busybox replaces busybox. Resulting in boot confusing
+                    boot/init error.
+           Product: buildroot
+           Version: unspecified
+          Hardware: Other
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: mzweerspenko+bugzilla at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On Thu,  3 May 2018 23:52:38 +0200, Angelo Compagnucci wrote:
+After clean build (no stress-ng and no attr)
+user at user:/data/buildenv/buildroot$ cp output/target/bin/busybox
+output/target/bin/busybox_orig
+user at user:/data/buildenv/buildroot$ sha256sum output/target/bin/busybox*
+fcdab0b55c09f00e85421dd1ad7249dd49a4a0f22753021ee506aa063e56e44c 
+output/target/bin/busybox
+fcdab0b55c09f00e85421dd1ad7249dd49a4a0f22753021ee506aa063e56e44c 
+output/target/bin/busybox_orig
 
->  package/mender/server.crt                | 22 ++++++++++++++
+After adding and building with stress-ng and attr packages
 
-Not a complete review by far, but I'm wondering if it makes sense to
-include server certificates in Buildroot. I would assume that one would
-want to generate his own certificate instead, no ?
+user at user:/data/buildenv/buildroot$ sha256sum output/target/bin/busybox*
+d088445e2aa618140b000dc1449481adb621ec6485d962bd08dc0539eac0ac84 
+output/target/bin/busybox
+fcdab0b55c09f00e85421dd1ad7249dd49a4a0f22753021ee506aa063e56e44c 
+output/target/bin/busybox_orig
 
-> diff --git a/package/mender/Config.in b/package/mender/Config.in
-> new file mode 100644
-> index 0000000..b80ad4a
-> --- /dev/null
-> +++ b/package/mender/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_MENDER
-> +	bool "mender"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_INIT_SYSTEMD
+user at user:/data/buildenv/buildroot$ ls -l output/target/bin/busybox*
+-rwxr-xr-x 1 remotenerd remotenerd   9800 mei  4 08:38
+output/target/bin/busybox
+-rwxr-xr-x 1 remotenerd remotenerd 535524 mei  4 08:38
+output/target/bin/busybox_orig
 
-Is there anything that makes mender tied to systemd, other than the
-fact that you provide only a systemd mender.service, and no init
-script ?
+<Buildlog>
+Warning: target file "./bin/busybox" is touched by more than one package:
+[u'busybox', u'attr']
+</Buildlog>
 
-> +
+<Symptom>
 
-Unneeded empty new line.
+As attr uses the zero argument for its help page it results in an confusing
+error message
 
+[    2.327505] Freeing unused kernel memory: 1024K
+[    2.355884] usb 2-1: new high-speed USB device number 2 using ci_hdrc
+Usage: init {-n name} [-v value] [-h] file...
+       init {-x name} [-h] file...
+Try `init --help' for more information.
+[    2.386012] Kernel panic - not syncing: Attempted to kill init!
+exitcode=0x00000200
+[    2.386012]
+[    2.386027] CPU1: stopping
+[    2.386036] CPU: 1 PID: 
 
-> +define MENDER_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -dm 0755 $(TARGET_DIR)/etc/mender/
-> +	$(INSTALL) -dm 0755 $(TARGET_DIR)/var/share/mender/identity/
-> +	$(INSTALL) -dm 0755 $(TARGET_DIR)/var/share/mender/inventory/
+</Symptom>
+Tested on an NXP IMX7D
 
-These commands are not needed: the $(INSTALL) -D below, with full
-destination paths, will create the intermediate directories if they
-don't already exist.
+<speculation>
+Other packages that are also supplied by busybox may lead to similar results.
+</speculation>
 
-> +	$(INSTALL) -D -m 0644 package/mender/mender.conf \
-> +		$(TARGET_DIR)/etc/mender/mender.conf
-> +	$(INSTALL) -D -m 0644 package/mender/tenant.conf \
-> +		$(TARGET_DIR)/etc/mender/mender.conf
-
-Are you sure that installing tenant.conf as mender.conf is what you
-want to do here ?
-
-> +	$(INSTALL) -D -m 0644 package/mender/server.crt \
-> +		$(TARGET_DIR)/etc/mender/server.crt
-> +	$(INSTALL) -D -m 0755 package/mender/mender-device-identity \
-> +		$(TARGET_DIR)/var/share/mender/identity/mender-device-identity
-> +	$(INSTALL) -D -m 0755 package/mender/mender-inventory-network \
-> +		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-network
-> +	$(INSTALL) -D -m 0755 package/mender/mender-inventory-hostinfo \
-> +		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-hostinfo
-> +	$(INSTALL) -D -m 0644 package/mender/mender.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/mender.service
-
-Is this enough to enable the systemd service ? In most packages, we do
-a dance like this:
-
-define OLSR_INSTALL_INIT_SYSTEMD
-        $(INSTALL) -D -m 644 package/olsr/olsr.service \
-                $(TARGET_DIR)/usr/lib/systemd/system/olsr.service
-        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-        ln -sf ../../../../usr/lib/systemd/system/olsr.service \
-                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/olsr.service
-endef
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
