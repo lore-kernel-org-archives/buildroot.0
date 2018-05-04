@@ -1,57 +1,37 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  4 May 2018 23:02:46 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Revert "glibc: install the obsolete
- libnsl"
-In-Reply-To: <20180504210246.29930-1-romain.naour@gmail.com>
-References: <20180504210246.29930-1-romain.naour@gmail.com>
-Message-ID: <20180504210246.29930-2-romain.naour@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri,  4 May 2018 23:04:33 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/nodejs: taint the build on
+ external modules
+In-Reply-To: <1525467873-30332-1-git-send-email-angelo@amarulasolutions.com>
+References: <1525467873-30332-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1525467873-30332-2-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnsl from Glibc is deprecated and should not be used anymore.
-Remove libnsl.so.* from GLIBC_LIBS_LIB.
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-libnsl is now an separate library that can be packaged later if
-necessary [1].
+This patch enables the tainting of the build en an
+external module is added.
 
-Note: libnsl from Glibc doesn't build with gcc 8 due new warning [2].
-
-[1] https://github.com/thkukuk/libnsl.git
-[2] http://patchwork.sourceware.org/patch/26437
-
-This reverts commit 398747f5fafca8c07e696612d8eded53d4f935c7.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
-v2: remove libnsl.so.* from GLIBC_LIBS_LIB
----
- package/glibc/glibc.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/nodejs/nodejs.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 3ab673c0cc..c1c5ac687f 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -100,7 +100,6 @@ define GLIBC_CONFIGURE_CMDS
- 		--disable-profile \
- 		--without-gd \
- 		--enable-obsolete-rpc \
--		--enable-obsolete-nsl \
- 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
- 		--with-headers=$(STAGING_DIR)/usr/include)
- 	$(GLIBC_ADD_MISSING_STUB_H)
-@@ -113,7 +112,7 @@ endef
- 
- GLIBC_LIBS_LIB = \
- 	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
--	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
-+	libm.so.* libpthread.so.* libresolv.so.* librt.so.* \
- 	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
- 
- ifeq ($(BR2_PACKAGE_GDB),y)
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 2642525..3cb9209 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -160,6 +160,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
+ # We can only call NPM if there's something to install.
+ #
+ ifneq ($(NODEJS_MODULES_LIST),)
++NODEJS_TAINTS = YES
+ define NODEJS_INSTALL_MODULES
+ 	# If you're having trouble with module installation, adding -d to the
+ 	# npm install call below and setting npm_config_rollback=false can both
 -- 
-2.14.3
+2.7.4
