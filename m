@@ -1,25 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  4 May 2018 23:38:55 +0200
-Subject: [Buildroot] [PATCH 1/1] libmpeg2: add hash for license file
-Message-ID: <20180504213855.4984-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 5 May 2018 00:12:55 +0200
+Subject: [Buildroot] Mainline DT-Overlays
+Message-ID: <b557edfc-c4b5-e1f6-85ac-369d9fbf28b7@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmpeg2/libmpeg2.hash | 1 +
- 1 file changed, 1 insertion(+)
+Hello everybody,
 
-diff --git a/package/libmpeg2/libmpeg2.hash b/package/libmpeg2/libmpeg2.hash
-index c2adb67de0..615d0ea6bf 100644
---- a/package/libmpeg2/libmpeg2.hash
-+++ b/package/libmpeg2/libmpeg2.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  dee22e893cb5fc2b2b6ebd60b88478ab8556cb3b93f9a0d7ce8f3b61851871d4  libmpeg2-0.5.1.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+would it be useful to add a package to compile dt-overlays with new syntax?
+I've gone mad to do it by myself.
+
+I thought about a package that simply accept the base .dts file
+and a list of .dtso files, then it compiles them with "-@" option and 
+installs them(I don't know where at the moment).
+
+I pushed something here based on a Makefile, but it gives the idea:
+https://github.com/micronovasrl/linova-dtoverlays
+
+Best regards
+
 -- 
-2.14.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
