@@ -1,42 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  4 May 2018 22:19:03 +0200
-Subject: [Buildroot] [PATCH 1/1] libndp: bump to version 1.6
-Message-ID: <20180504201903.17172-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  4 May 2018 22:37:26 +0200
+Subject: [Buildroot] [PATCH] package/busybox: disable setfattr when attr
+ package is enabled
+Message-ID: <20180504203726.19657-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+The install procedure of attr is kinda borked: it does not unlink any
+existing destination file during installation, but directly wites into
+it. So, when busybox is instaleld before attr and installs its applets
+as hardlinks, attr will overwrite the setfattr file, thus borking the
+busybox binary and all its applets.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+So, when the attr package is enabled, we disable the setfattr applet.
+
+Fixes: #10986.
+
+Reported-by: mzweerspenko+bugzilla at gmail.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: mzweerspenko+bugzilla at gmail.com
 ---
- package/libndp/libndp.hash | 3 ++-
- package/libndp/libndp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/libndp/libndp.hash b/package/libndp/libndp.hash
-index 51e312dd79..1861e0b4dd 100644
---- a/package/libndp/libndp.hash
-+++ b/package/libndp/libndp.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 42c0a8938d4302c72a42e2d954deef7e4903bb3974da6804a929a3cd0b5b6aa7  libndp-v1.5.tar.gz
-+sha256 565d6c4167f83ec697c762ea002f23e8f0b00828d0749b1ce928f068543e5aad  libndp-v1.6.tar.gz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
-index 4fa1d3331d..3fd8ac7bf9 100644
---- a/package/libndp/libndp.mk
-+++ b/package/libndp/libndp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 60a55a2c78..5f4b18e47f 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -254,6 +254,14 @@ define BUSYBOX_LINUX_PAM
+ endef
+ endif
  
--LIBNDP_VERSION = v1.5
-+LIBNDP_VERSION = v1.6
- LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
- LIBNDP_LICENSE = LGPL-2.1+
- LIBNDP_LICENSE_FILES = COPYING
++# attr's install procedure is borked and overwrites any existing
++# destination file. So, disable conflicting applets in that case
++ifeq ($(BR2_PACKAGE_ATTR),y)
++define BUSYBOX_DISABLE_ATTR
++	$(call KCONFIG_DISABLE_OPT,CONFIG_SETFATTR,$(BUSYBOX_BUILD_CONFIG))
++endef
++endif
++
+ # Telnet support
+ define BUSYBOX_INSTALL_TELNET_SCRIPT
+ 	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y $(@D)/.config; then \
+@@ -294,6 +302,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_SELINUX)
+ 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
+ 	$(BUSYBOX_MUSL_TWEAKS)
++	$(BUSYBOX_DISABLE_ATTR)
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
 -- 
 2.14.1
