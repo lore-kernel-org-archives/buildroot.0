@@ -1,85 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  4 May 2018 18:01:33 +0200
-Subject: [Buildroot] [PATCH v2,1/1] libupnpp: fix build with uclibc
-Message-ID: <20180504160133.5420-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 4 May 2018 18:24:30 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.2
+Message-ID: <20180504162507.DBD078B6FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to avoid failing with error if host_os doesn't start with
-linux
+commit: https://git.buildroot.net/buildroot/commit/?id=4acca318b1630b6aa0e1113948e7678dd902b8a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes:
- - http://autobuild.buildroot.net/results/cfb332a169863bcb3e6bc6ee7d6f6199f856b0b8
- - http://autobuild.buildroot.net/results/2f6f464f6360ed9ea4c238f503d2c3b8ab3cbd86
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update patch to check for uclinux instead of assuming that default is
-   linux
+ CHANGES  | 31 +++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 33 insertions(+), 2 deletions(-)
 
- ...cross-compilation-with-uclibc-on-arm-m68k.patch | 36 ++++++++++++++++++++++
- package/libupnpp/libupnpp.mk                       |  2 ++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch
-
-diff --git a/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch b/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch
-new file mode 100644
-index 0000000000..2c0a4ec79f
---- /dev/null
-+++ b/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch
-@@ -0,0 +1,36 @@
-+From 2828c2535d4380419ec5114cc3a0564d3686aba9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 4 May 2018 11:45:59 +0200
-+Subject: [PATCH] Fix cross-compilation with uclibc on arm/m68k
+diff --git a/CHANGES b/CHANGES
+index 09cf7c3f85..c11118efd3 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,34 @@
++2018.02.2, Released May 4th, 2018
 +
-+Commit 3f1132ecd27186fa3f1a87ead6a0389802baccbb breaks cross-compilation
-+with uclibc on arm and m68k because host_os is set to
-+arm-buildroot-uclinux-uclibc or m68k-buildroot-uclinux-uclibc so add
-+uclinux to the linux case
++	Important / security related fixes.
 +
-+Fixes:
-+ - http://autobuild.buildroot.net/results/cfb332a169863bcb3e6bc6ee7d6f6199f856b0b8
-+ - http://autobuild.buildroot.net/results/2f6f464f6360ed9ea4c238f503d2c3b8ab3cbd86
++	Tweak package size/file instrumentation to better handle
++	package rebuilds.
 +
-+[Sent upstream]: https://opensourceprojects.eu/p/libupnpp/code/merge-requests/3
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++	Revert /etc/shells creation when bash is enabled.
 +
-+diff --git a/configure.ac b/configure.ac
-+index 8903b72..3bb354c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -35,7 +35,7 @@ build_linux=no
-+ build_mac=no
-+ # Detect the target system
-+ case "${host_os}" in
-+-    linux*) build_linux=yes;;
-++    linux*|uclinux*) build_linux=yes;;
-+     darwin*) build_mac=yes;;
-+     *) AC_MSG_ERROR(["OS $host_os is not supported"]);;
-+ esac
-+-- 
-+2.14.1
++	Exclude /lib/firmware from the rpath fixup logic, as it may
++	contain non-native ELF files.
 +
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index b4e9e88fa9..852a72e822 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
-@@ -10,6 +10,8 @@ LIBUPNPP_LICENSE = LGPL-2.1+
- LIBUPNPP_LICENSE_FILES = COPYING
- LIBUPNPP_INSTALL_STAGING = YES
- LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
-+# We're patching configure.ac
-+LIBUPNPP_AUTORECONF = YES
++	Scanpypi: Support the new PyPi infrastructure.
++
++	Handle GCC 8.x on the host.
++
++	Ensure timestamp of /usr is updated to support the systemd
++	ConditionNeedsUpdate option.
++
++	Updated/fixed packages: bluez5_utils, flann, gdb, gnupg2,
++	grub2, libcec, libcgi, libglib2, libgpg-error, libgpgme,
++	libtomcrypt, mbedtls, mkpasswd, php, python, python-requests,
++	python-watchdog, qt53d, qt5websockets, sdl2, sdl2_image,
++	syslog-ng, systemd, tcl, tcllib, uclibc, usb_modeswitch,
++	wireguard, wmctrl
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10896: /bin/sh not in /etc/shells
++	#10961: Grub2 fails to build for x86_64 when BR2_SSP_ALL is enabled
++
+ 2018.02.1, Released April 9th, 2018
  
- # configure script fails to link against the dependencies of libupnp
- # and libcurl causing detection to fail when statically linking
--- 
-2.14.1
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 479ce74dc1..864a15ba0a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.02.1
++export BR2_VERSION := 2018.02.2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1523310000
++BR2_VERSION_EPOCH = 1525450000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
