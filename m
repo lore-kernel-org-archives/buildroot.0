@@ -1,34 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  4 May 2018 13:26:08 +0200
-Subject: [Buildroot] [PATCH 1/1] log4cplus: fix license
-Message-ID: <20180504112608.28081-1-fontaine.fabrice@gmail.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Fri,  4 May 2018 13:46:00 +0200
+Subject: [Buildroot] [PATCH v7 0/3] Enable OpenCL support in Mesa 3D
+Message-ID: <20180504114603.10135-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some files of log4cplus are licensed under BSD-2-Clause as stated in
-LICENSE file: "Each file of log4cplus source is licensed using either
-two clause BSD license or Apache license 2.0."
+This series is the continuation of the series "llvm for mesa3d".
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/log4cplus/log4cplus.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-index 292fa66d49..b4a57c36c3 100644
---- a/package/log4cplus/log4cplus.mk
-+++ b/package/log4cplus/log4cplus.mk
-@@ -7,7 +7,7 @@
- LOG4CPLUS_VERSION = 1.1.2
- LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
- LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
--LOG4CPLUS_LICENSE = Apache-2.0
-+LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause
- LOG4CPLUS_LICENSE_FILES = LICENSE
- LOG4CPLUS_INSTALL_STAGING = YES
- 
+Changes v6 -> v7:
+
+*libclc headers installed to /usr/share/clc
+*Remove libclc dependencies on target llvm
+*Add OpenCL support for RadeonSI
+
+Valentin Korenblit (3):
+  package/libclc: new package
+  package/mesa3d: enable OpenCL support
+  package/clinfo: new package
+
+ DEVELOPERS                                      |  2 ++
+ package/Config.in                               |  2 ++
+ package/clinfo/Config.in                        |  9 ++++++
+ package/clinfo/clinfo.hash                      |  2 ++
+ package/clinfo/clinfo.mk                        | 23 ++++++++++++++
+ package/libclc/Config.in                        | 10 ++++++
+ package/libclc/libclc.hash                      |  3 ++
+ package/libclc/libclc.mk                        | 42 +++++++++++++++++++++++++
+ package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch | 26 +++++++++++++++
+ package/mesa3d/Config.in                        |  9 ++++++
+ package/mesa3d/mesa3d.mk                        |  9 ++++++
+ 11 files changed, 137 insertions(+)
+ create mode 100644 package/clinfo/Config.in
+ create mode 100644 package/clinfo/clinfo.hash
+ create mode 100644 package/clinfo/clinfo.mk
+ create mode 100644 package/libclc/Config.in
+ create mode 100644 package/libclc/libclc.hash
+ create mode 100644 package/libclc/libclc.mk
+ create mode 100644 package/mesa3d/0003-set-LIBCLC_INCLUDEDIR.patch
+
 -- 
-2.14.1
+2.14.3
