@@ -1,28 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 May 2018 09:15:25 +0200
-Subject: [Buildroot] [git commit] liblog4c-localtime: add hash for license
- file
-Message-ID: <20180504071549.F2C2E8B6CC@busybox.osuosl.org>
+Date: Fri, 4 May 2018 09:15:27 +0200
+Subject: [Buildroot] [git commit] liblogging: bump to version 1.0.6
+Message-ID: <20180504071550.19A948B6CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d27f1743e88692ae48bc4d83c653b8a8b5e2780f
+commit: https://git.buildroot.net/buildroot/commit/?id=2ad629210fbef51e81a88adfc3fd62b8ed4d09e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liblog4c-localtime/liblog4c-localtime.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/liblogging/liblogging.hash | 5 ++++-
+ package/liblogging/liblogging.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/liblog4c-localtime/liblog4c-localtime.hash b/package/liblog4c-localtime/liblog4c-localtime.hash
-index 2e4e6417ce..c638d7325f 100644
---- a/package/liblog4c-localtime/liblog4c-localtime.hash
-+++ b/package/liblog4c-localtime/liblog4c-localtime.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 a1f68d8251509c0171f8bfea42f9e2a5255a4185f7dcbe67f584aa09709b2496  liblog4c-localtime-v1.0.tar.gz
-+sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/liblogging/liblogging.hash b/package/liblogging/liblogging.hash
+index f5674a1c6d..618689b49b 100644
+--- a/package/liblogging/liblogging.hash
++++ b/package/liblogging/liblogging.hash
+@@ -1,2 +1,5 @@
+ # From http://www.liblogging.org/
+-sha256	310dc1691279b7a669d383581fe4b0babdc7bf75c9b54a24e51e60428624890b	liblogging-1.0.5.tar.gz
++sha256	338c6174e5c8652eaa34f956be3451f7491a4416ab489aef63151f802b00bf93	liblogging-1.0.6.tar.gz
++
++# Hash for license file:
++sha256	a5626f700d3ee92513673b5f43733af5b651d9e7a9157d4bd81ceb9c89ec04b0	COPYING
+diff --git a/package/liblogging/liblogging.mk b/package/liblogging/liblogging.mk
+index ec57a0ac35..c756891a86 100644
+--- a/package/liblogging/liblogging.mk
++++ b/package/liblogging/liblogging.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBLOGGING_VERSION = 1.0.5
++LIBLOGGING_VERSION = 1.0.6
+ LIBLOGGING_SITE = http://download.rsyslog.com/liblogging
+ LIBLOGGING_LICENSE = BSD-2-Clause
+ LIBLOGGING_LICENSE_FILES = COPYING
