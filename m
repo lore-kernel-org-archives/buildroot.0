@@ -1,46 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 May 2018 09:15:30 +0200
-Subject: [Buildroot] [git commit] libgpg-error: bump to version 1.31
-Message-ID: <20180504071550.5A9DC8B6CC@busybox.osuosl.org>
+Date: Fri, 4 May 2018 09:15:29 +0200
+Subject: [Buildroot] [git commit] libgpgme: bump to version 1.11.1
+Message-ID: <20180504071550.4236A8B6CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9788ecc7fd0aed0c8f15ff1288cf3823787e4164
+commit: https://git.buildroot.net/buildroot/commit/?id=36795821e467ce257825fb05f1886aedba6079da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop upstream patch.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgpg-error/libgpg-error.hash | 4 ++--
- package/libgpg-error/libgpg-error.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-core-Tweak-STATUS_FAILURE-handling.patch  | 51 ----------------------
+ package/libgpgme/libgpgme.hash                     |  8 ++--
+ package/libgpgme/libgpgme.mk                       |  2 +-
+ 3 files changed, 5 insertions(+), 56 deletions(-)
 
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index 0e6304de66..608f9c62d7 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch b/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
+deleted file mode 100644
+index ae0e9c5498..0000000000
+--- a/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From b99502274ae5efdf6df0d967900ec3d1e64373d7 Mon Sep 17 00:00:00 2001
+-From: Werner Koch <wk@gnupg.org>
+-Date: Thu, 12 Apr 2018 20:36:30 +0200
+-Subject: [PATCH] core: Tweak STATUS_FAILURE handling.
+-
+-* src/op-support.c (_gpgme_parse_failure): Ignore failures with
+-location "gpg-exit".
+-* tests/gpg/t-verify.c (main): Adjust for the now working checking of
+-the second key.
+-
+-Signed-off-by: Werner Koch <wk@gnupg.org>
+-[baruch: drop test]
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit b99502274ae
+-
+- src/op-support.c     | 10 +++++++++-
+- tests/gpg/t-verify.c |  8 +++++---
+- 2 files changed, 14 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/op-support.c b/src/op-support.c
+-index 43cb1c760e0d..e55875f904d0 100644
+---- a/src/op-support.c
+-+++ b/src/op-support.c
+-@@ -400,7 +400,13 @@ _gpgme_parse_plaintext (char *args, char **filenamep)
+- 
+- 
+- /* Parse a FAILURE status line and return the error code.  ARGS is
+--   modified to contain the location part.  */
+-+ * modified to contain the location part.  Note that for now we ignore
+-+ * failure codes with a location of gpg-exit; they are too trouble
+-+ * some.  Instead we should eventually record that error in the
+-+ * context and provide a function to return a fuller error
+-+ * description; this could then also show the location of the error
+-+ * (e.g. "option- parser") to make it easier for the user to detect
+-+ * the actual error. */
+- gpgme_error_t
+- _gpgme_parse_failure (char *args)
+- {
+-@@ -418,6 +424,8 @@ _gpgme_parse_failure (char *args)
+-     *where = '\0';
+- 
+-   where = args;
+-+  if (!strcmp (where, "gpg-exit"))
+-+    return 0;
+- 
+-   return atoi (which);
+- }
+--- 
+-2.17.0
+-
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index 6bd595c5ac..54c7bf7a09 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000418.html
+-sha1 77d3390887da25ed70b7ac04392360efbdca501f  gpgme-1.10.0.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000423.html
++sha1 95b1fc427871ca8d30d6d3b1985c816fe0b5077b  gpgme-1.11.1.tar.bz2
  # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.29.tar.bz2.sig
--sha256 ece926fa5719d17a7ad8da618712cfa2f8a796ab2f2af9d544c5bb093383b1ea  libgpg-error-1.29.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.31.tar.bz2.sig
-+sha256 40d0a823c9329478063903192a1f82496083b277265904878f4bc09e0db7a4ef  libgpg-error-1.31.tar.bz2
+-# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.10.0.tar.bz2.sig
+-sha256 1a8fed1197c3b99c35f403066bb344a26224d292afc048cfdfc4ccd5690a0693  gpgme-1.10.0.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.11.1.tar.bz2.sig
++sha256 2d1b111774d2e3dd26dcd7c251819ce4ef774ec5e566251eb9308fa7542fbd6f  gpgme-1.11.1.tar.bz2
  # Locally calculated
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 862cb44eef..aed5a517b0 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
+ sha256 ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 5c46c7c561..03402cf382 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPG_ERROR_VERSION = 1.29
-+LIBGPG_ERROR_VERSION = 1.31
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+-LIBGPGME_VERSION = 1.10.0
++LIBGPGME_VERSION = 1.11.1
+ LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPL-2.1+
