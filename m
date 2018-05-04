@@ -1,337 +1,73 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Fri,  4 May 2018 11:21:59 +0200
-Subject: [Buildroot] [PATCH v3] package/mender: new package
-Message-ID: <1525425719-28459-1-git-send-email-angelo@amarulasolutions.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  4 May 2018 12:23:47 +0300
+Subject: [Buildroot] [PATCH] can-utils: bump to version 2018.02.0
+Message-ID: <0bf9c9bf22aabf811a28ce68c8025827829fa9fd.1525425827.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Disable for musl. can-utils now uses the error() glibc extension.
 
-This patch add mender, an open source over-the-air (OTA) software
-updater for embedded Linux devices.
+Use Makefile as license file.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Change homepage link to the github repo. The README.md file is much more
+informative than the elinux.org wiki page.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes:
-v2-v3:
-* Fixing path error (suggested by Thomas)
-* Fixing installation of service file (suggested by Thomas)
+ package/can-utils/Config.in      | 7 ++++---
+ package/can-utils/can-utils.hash | 3 ++-
+ package/can-utils/can-utils.mk   | 3 ++-
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-
- package/Config.in                        |  1 +
- package/mender/Config.in                 | 13 ++++++++
- package/mender/mender-device-identity    | 52 ++++++++++++++++++++++++++++++++
- package/mender/mender-inventory-hostinfo | 21 +++++++++++++
- package/mender/mender-inventory-network  | 47 +++++++++++++++++++++++++++++
- package/mender/mender.conf               | 14 +++++++++
- package/mender/mender.hash               |  2 ++
- package/mender/mender.mk                 | 34 +++++++++++++++++++++
- package/mender/mender.service            | 15 +++++++++
- package/mender/server.crt                | 22 ++++++++++++++
- package/mender/tenant.conf               |  0
- 11 files changed, 221 insertions(+)
- create mode 100644 package/mender/Config.in
- create mode 100644 package/mender/mender-device-identity
- create mode 100644 package/mender/mender-inventory-hostinfo
- create mode 100644 package/mender/mender-inventory-network
- create mode 100644 package/mender/mender.conf
- create mode 100644 package/mender/mender.hash
- create mode 100644 package/mender/mender.mk
- create mode 100644 package/mender/mender.service
- create mode 100644 package/mender/server.crt
- create mode 100644 package/mender/tenant.conf
-
-diff --git a/package/Config.in b/package/Config.in
-index fe36d31..d87ccbd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2006,6 +2006,7 @@ menu "System tools"
- 	source "package/kvmtool/Config.in"
- 	source "package/libostree/Config.in"
- 	source "package/lxc/Config.in"
-+	source "package/mender/Config.in"
- 	source "package/monit/Config.in"
- 	source "package/ncdu/Config.in"
- 	source "package/numactl/Config.in"
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-new file mode 100644
-index 0000000..183930d
---- /dev/null
-+++ b/package/mender/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_MENDER
-+	bool "mender"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INIT_SYSTEMD
-+	help
-+	  Mender is an open source over-the-air (OTA) software updater for
-+	  embedded Linux devices. Mender comprises a client running at the
-+	  embedded device, as well as a server that manages deployments
-+	  across many devices.
-+
-+	  https://github.com/mendersoftware/mender
-diff --git a/package/mender/mender-device-identity b/package/mender/mender-device-identity
-new file mode 100644
-index 0000000..d87f843
---- /dev/null
-+++ b/package/mender/mender-device-identity
-@@ -0,0 +1,52 @@
-+#!/bin/sh
-+
-+# Example script called by Mender agent to collect device identity data. The
-+# script needs to be located at
-+# $(datadir)/mender/identity/mender-device-identity path for the agent to find
-+# it. The script shall exit with non-0 status on errors. In this case the agent
-+# will discard any output the script may have produced.
-+#
-+# The script shall output identity data in <key>=<value> format, one
-+# entry per line. Example
-+#
-+# $ ./mender-device-identity
-+# mac=de:ad:ca:fe:00:01
-+# cpuid=1112233
-+#
-+# The example script collects the MAC address of a network interface with the
-+# type ARPHRD_ETHER and it will pick the interface with the lowest ifindex
-+# number if there are multiple interfaces with that type. The identity data is
-+# output in the following format:
-+#
-+# mac=00:01:02:03:04:05
-+#
-+
-+set -ue
-+
-+SCN=/sys/class/net
-+min=65535
-+arphrd_ether=1
-+ifdev=
-+
-+# find iface with lowest ifindex, skip non ARPHRD_ETHER types (lo, sit ...)
-+for dev in $SCN/*; do
-+    iftype=$(cat $dev/type)
-+    if [ $iftype -ne $arphrd_ether ]; then
-+        continue
-+    fi
-+
-+    idx=$(cat $dev/ifindex)
-+    if [ $idx -lt $min ]; then
-+        min=$idx
-+        ifdev=$dev
-+    fi
-+done
-+
-+if [ -z "$ifdev" ]; then
-+    echo "no suitable interfaces found" >&2
-+    exit 1
-+else
-+    echo "using interface $ifdev" >&2
-+    # grab MAC address
-+    echo "mac=$(cat $ifdev/address)"
-+fi
-diff --git a/package/mender/mender-inventory-hostinfo b/package/mender/mender-inventory-hostinfo
-new file mode 100644
-index 0000000..cf508fd
---- /dev/null
-+++ b/package/mender/mender-inventory-hostinfo
-@@ -0,0 +1,21 @@
-+#!/bin/sh
-+#
-+# The example script collects information about current host
-+#
-+
-+set -ue
-+
-+LC_ALL=C
-+export LC_ALL
-+
-+grep 'model name' /proc/cpuinfo | uniq | awk -F': ' '
-+     // { printf("cpu_model=%s\n", $2);}
-+'
-+echo "kernel=$(cat /proc/version)"
-+
-+cat /proc/meminfo | awk '
-+/MemTotal/ {printf("mem_total_kB=%d\n", $2)}
-+'
-+
-+echo "hostname=$(cat /etc/hostname)"
-+
-diff --git a/package/mender/mender-inventory-network b/package/mender/mender-inventory-network
-new file mode 100644
-index 0000000..b017c4e
---- /dev/null
-+++ b/package/mender/mender-inventory-network
-@@ -0,0 +1,47 @@
-+#!/bin/sh
-+#
-+# Example script called by Mender agent to collect inventory data for a
-+# particular devce. The script needs to be located in $(datadir)/mender and its
-+# name shall start with `mender-inventory-` prefix. The script shall exit with
-+# non-0 status on errors. In this case the agent will discard any output the
-+# script may have produced.
-+#
-+# The script shall output inventory data in <key>=<value> format, one entry per
-+# line. Entries appearing multiple times will be joined in a list under the same
-+# key.
-+#
-+# $ ./mender-inventory-network
-+# mac_br-fbfdad18c33c=02:42:7e:74:96:85
-+# network_interfaces=br-fbfdad18c33c
-+# ipv4_br-fbfdad18c33c=172.21.0.1/16
-+# mac_enp0s25=de:ad:be:ef:bb:05
-+# network_interfaces=enp0s25
-+# ipv4_enp0s25=123.22.0.197/16
-+# ipv4_enp0s25=10.20.20.105/16
-+# ipv6_enp0s25=fe80::2aad:beff:feef:bb05/64
-+#
-+#
-+# The example script collects the list of network interfaces, as well as
-+# ethernet and IP addresses of each of the interfaces.
-+#
-+
-+set -ue
-+
-+SCN=/sys/class/net
-+min=65535
-+ifdev=
-+
-+# find iface with lowest ifindex, except loopback
-+for devpath in $SCN/*; do
-+    dev=$(basename $devpath)
-+    if [ $dev = "lo" ]; then
-+        continue
-+    fi
-+    echo "mac_$dev=$(cat $devpath/address)"
-+    echo "network_interfaces=$dev"
-+
-+    ip addr show dev $dev | awk -v dev=$dev '
-+       /inet / { printf("ipv4_%s=%s\n", dev, $2) }
-+       /inet6 / {printf("ipv6_%s=%s\n", dev, $2) }
-+    '
-+done
-diff --git a/package/mender/mender.conf b/package/mender/mender.conf
-new file mode 100644
-index 0000000..a5c7c54
---- /dev/null
-+++ b/package/mender/mender.conf
-@@ -0,0 +1,14 @@
-+{
-+  "ClientProtocol": "http",
-+  "HttpsClient": {
-+    "Certificate": "",
-+    "Key": ""
-+  },
-+  "RootfsPartA": "@MENDER_ROOTFS_PART_A@",
-+  "RootfsPartB": "@MENDER_ROOTFS_PART_B@",
-+  "UpdatePollIntervalSeconds": @MENDER_UPDATE_POLL_INTERVAL_SECONDS@,
-+  "InventoryPollIntervalSeconds": @MENDER_INVENTORY_POLL_INTERVAL_SECONDS@,
-+  "RetryPollIntervalSeconds": @MENDER_RETRY_POLL_INTERVAL_SECONDS@,
-+  "ServerURL": "@MENDER_SERVER_URL@",
-+  "ServerCertificate": "@MENDER_CERT_LOCATION@"
-+}
-diff --git a/package/mender/mender.hash b/package/mender/mender.hash
-new file mode 100644
-index 0000000..30a04fa
---- /dev/null
-+++ b/package/mender/mender.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 267fa73ad472b034248ee298593b5c52ea0b105fd73c91febb3587280c61bee2 mender-1.4.0.tar.gz
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-new file mode 100644
-index 0000000..6a4c995
---- /dev/null
-+++ b/package/mender/mender.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# mender
-+#
-+################################################################################
-+
-+MENDER_VERSION = 1.4.0
-+MENDER_SOURCE = mender-$(MENDER_VERSION).tar.gz
-+MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
-+
-+define MENDER_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 package/mender/mender.conf \
-+		$(TARGET_DIR)/etc/mender/mender.conf
-+	$(INSTALL) -D -m 0644 package/mender/tenant.conf \
-+		$(TARGET_DIR)/etc/mender/tenant.conf
-+	$(INSTALL) -D -m 0644 package/mender/server.crt \
-+		$(TARGET_DIR)/etc/mender/server.crt
-+	$(INSTALL) -D -m 0755 package/mender/mender-device-identity \
-+		$(TARGET_DIR)/var/share/mender/identity/mender-device-identity
-+	$(INSTALL) -D -m 0755 package/mender/mender-inventory-network \
-+		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-network
-+	$(INSTALL) -D -m 0755 package/mender/mender-inventory-hostinfo \
-+		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-hostinfo
-+endef
-+
-+define MENDER_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/mender/mender.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/mender.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/mender.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mender.service
-+endef
-+
-+$(eval $(golang-package))
-diff --git a/package/mender/mender.service b/package/mender/mender.service
-new file mode 100644
-index 0000000..ec77fbc
---- /dev/null
-+++ b/package/mender/mender.service
-@@ -0,0 +1,15 @@
-+[Unit]
-+Description=Mender OTA update service
-+After=systemd-resolved.service
-+
-+[Service]
-+Type=idle
-+User=root
-+Group=root
-+ExecStartPre=/bin/mkdir -p -m 0700 /data/mender
-+ExecStartPre=/bin/ln -sf /etc/mender/tenant.conf /var/lib/mender/authtentoken
-+ExecStart=/usr/bin/mender -daemon
-+Restart=on-abort
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/mender/server.crt b/package/mender/server.crt
-new file mode 100644
-index 0000000..79a57e1
---- /dev/null
-+++ b/package/mender/server.crt
-@@ -0,0 +1,22 @@
-+-----BEGIN CERTIFICATE-----
-+MIIBfTCCASOgAwIBAgIJAJOS76a0qWuZMAoGCCqGSM49BAMCMBsxGTAXBgNVBAMM
-+EGRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1MjQ2
-+WjAbMRkwFwYDVQQDDBBkb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0CAQYIKoZI
-+zj0DAQcDQgAE7AVYis6MWGPGQYU1/tlLEnskRifDIhvkRb8Y4nQPekRkLkiBYYT3
-+iJ46wHrnejbHaLstU9GRdKWOmOuU6HGdO6NQME4wHQYDVR0OBBYEFGOIU4q++Vz8
-+9HuT1jg9V+wFeJcyMB8GA1UdIwQYMBaAFGOIU4q++Vz89HuT1jg9V+wFeJcyMAwG
-+A1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIhAPLnEeWPNeN7eDCEYRitBfyO
-+X1yf2kzOm4ohBE5GY9gzAiBCq7HOSkzQDkelmQCCCpGXf/UwYNgQJjSoeGfk0j1a
-+TQ==
-+-----END CERTIFICATE-----
-+-----BEGIN CERTIFICATE-----
-+MIIBhDCCASmgAwIBAgIJALQrf4QDot4IMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMM
-+E3MzLmRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1
-+MjQ2WjAeMRwwGgYDVQQDDBNzMy5kb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0C
-+AQYIKoZIzj0DAQcDQgAEEc/Y3T+l3DvINePkpvVZORMIdHVs29jgsl48ia7z/NRX
-+HlKtKxVGJyFN5Y7sBZeLgBYH3F4Bo3KfmxI7ad0tI6NQME4wHQYDVR0OBBYEFIUm
-+cip00QZYpe4ULflbGNJan+Y9MB8GA1UdIwQYMBaAFIUmcip00QZYpe4ULflbGNJa
-+n+Y9MAwGA1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSQAwRgIhANHij9VZBDHOUPaC
-+pFiagnWnYL2HBR72W1xTKQbrLLTXAiEAvpwA4HzSnGmLd3010+jqQuMRHArN5WaX
-+h0fy7niBbIQ=
-+-----END CERTIFICATE-----
-diff --git a/package/mender/tenant.conf b/package/mender/tenant.conf
-new file mode 100644
-index 0000000..e69de29
+diff --git a/package/can-utils/Config.in b/package/can-utils/Config.in
+index bfa522d9899e..1800eca042da 100644
+--- a/package/can-utils/Config.in
++++ b/package/can-utils/Config.in
+@@ -2,13 +2,14 @@ config BR2_PACKAGE_CAN_UTILS
+ 	bool "can-utils"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
++	depends on !BR2_TOOLCHAIN_USES_MUSL # error()
+ 	help
+ 	  SocketCAN is a set of open source CAN drivers and a
+ 	  networking stack.
+ 	  This package provides various tools for this stack.
+ 
+-	  http://elinux.org/Can-utils
++	  https://github.com/linux-can/can-utils
+ 
+-comment "can-utils needs a toolchain w/ NPTL"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++comment "can-utils needs a glibc or uClibc toolchain w/ NPTL"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+index 64c4cf6692c5..2034c35a874f 100644
+--- a/package/can-utils/can-utils.hash
++++ b/package/can-utils/can-utils.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256  c4b6b347c1c165a64c1156bb8816bce557945dd770f61b8bdc8fdb7c0744af27  can-utils-c3305fdd515464153d20199db232b6124bc962c0.tar.gz
++sha256  370ad4b19447c29099f7300548f1a3362d6e123c4a6a827dbbd3110bc2c26839  can-utils-v2018.02.0.tar.gz
++sha256  c258939ebb09c3857f5fc7704a449e5077cc881090c87b38f9a81332b96fa075  Makefile
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index 45d5e29fecee..bff4d21fef0b 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-CAN_UTILS_VERSION = c3305fdd515464153d20199db232b6124bc962c0
++CAN_UTILS_VERSION = v2018.02.0
+ CAN_UTILS_SITE = $(call github,linux-can,can-utils,$(CAN_UTILS_VERSION))
+ CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0, GPL-2.0+
++CAN_UTILS_LICENSE_FILES = Makefile
+ CAN_UTILS_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
-2.7.4
+2.17.0
