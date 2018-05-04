@@ -1,118 +1,46 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 4 May 2018 17:05:17 +0200
-Subject: [Buildroot] [PATCH v3 1/5] arm-trusted-firmware: simplify
- release dir path
-In-Reply-To: <23162528-4cf5-1c96-72ad-9fbae0dee698@lucaceresoli.net>
-References: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
- <1525364617-23633-2-git-send-email-luca@lucaceresoli.net>
- <20180504071424.GA7882@g751.home>
- <23162528-4cf5-1c96-72ad-9fbae0dee698@lucaceresoli.net>
-Message-ID: <20180504150517.GA14382@g751.home>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 4 May 2018 17:05:37 +0200
+Subject: [Buildroot] [PATCH] package/clang: link libclang against
+ libLLVM.so
+In-Reply-To: <20180504122743.13589-1-valentin.korenblit@smile.fr>
+References: <20180504122743.13589-1-valentin.korenblit@smile.fr>
+Message-ID: <20180504170537.0a7a9c09@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca,
+Hello,
 
-On Fri, May 04, 2018 at 03:46:06PM +0200, Luca Ceresoli wrote:
-> Hi Gary,
+On Fri,  4 May 2018 14:27:43 +0200, Valentin Korenblit wrote:
+> libclang.so is statically linking against all LLVM static libraries
+> instead of linking dynamically against libLLVM.so.
 > 
-> On 04/05/2018 09:14, Gary Bisson wrote:
-> > Hi Luca,
-> > 
-> > On Thu, May 03, 2018 at 06:23:33PM +0200, Luca Ceresoli wrote:
-> >> The path to the binary images is very long. Since we are about to make
-> >> a larger use of it, let's use a variable to make it somewhat shorter.
-> >>
-> >> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> >>
-> >> ---
-> >> Changes v2 -> v3: none.
-> >> Changes v1 -> v2: none.
-> >> ---
-> >>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 3 ++-
-> >>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> >> index 4bac916e3108..212bb5049f2b 100644
-> >> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> >> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> >> @@ -25,6 +25,7 @@ endif
-> >>  ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES = YES
-> >>  
-> >>  ARM_TRUSTED_FIRMWARE_PLATFORM = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM))
-> >> +ARM_TRUSTED_FIRMWARE_IMG_DIR = $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release
-> >>  
-> >>  ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
-> >>  	CROSS_COMPILE="$(TARGET_CROSS)" \
-> >> @@ -82,7 +83,7 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
-> >>  endef
-> >>  
-> >>  define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
-> >> -	cp -dpf $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release/*.bin $(BINARIES_DIR)/
-> >> +	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
-> > 
-> > Actually the release folder isn't always in that directory. For
-> > instance, the tegra platform requires another TARGET_SOC variable and
-> > the bin files are under
-> > build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/$(TARGET_SOC)/release/*.bin.
-> > https://github.com/ARM-software/arm-trusted-firmware/blob/master/docs/plat/nvidia-tegra.rst
-> > 
-> > Don't get me wrong, your patch doesn't break anything, I just wanted to
-> > inform you of that tegra case. My quick (and dirty) fix was to do a the
-> > following:
-> > find $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM) -name "*.bin" -exec cp -dpf {} $(BINARIES_DIR)/ \;
+> This patch fixes this problem partially: libclang links against libLLVM.so
+> but the following LLVM libraries are still being linked statically:
 > 
-> So if I understood correctly the current .mk file would not work for
-> tegra, both with and without my patch.
-
-Exactly.
-
-> Also your 'find' solution cannot work from ARM_TRUSTED_FIRMWARE_IMG_DIR
-> as I defined it, because of the added '/release' dir.
-
-Yes, that is why I bring it up here. I planned on sending that 'find'
-trick as a RFC although I don't expect that solution to be accepted.
-
-> > But if you want to have a generic ARM_TRUSTED_FIRMWARE_IMG_DIR I guess
-> > the solution is to have an optional ARM_TRUSTED_FIRMWARE_TARGET_SOC
-> > variable added to arm-trusted-firmware.mk.
+> libLLVMOption.a
+> libLLVMMCParser.a
+> libLLVMProfileData.a
+> libLLVMBitReader.a
+> libLLVMBinaryFormat.a
+> libLLVMCore.a
+> libLLVMMC.a
+> libLLVMSupport.a
+> libLLVMDemangle.a
 > 
-> Well, using 'find' would be a simpler trick without clobbering the
-> Config.in space. But then in patch 2 I use ARM_TRUSTED_FIRMWARE_IMG_DIR
-> in several places, and using plain 'find' there would introduce
-> additional problems.
+> This problem comes out when clang is not built as a subproject of
+> LLVM (llvm/tools/clang).
 
-Yes. And to be honest, there's no real Tegra support in Buildroot right
-now so I'm not against your series. Just wanted people to know about
-that case.
+Is this a problem you have discussed with upstream ? Has the patch
+you did on the clang CMakeLists.txt any chance from being accepted
+upstream ?
 
-> Do you think there is a way to extract the TARGET_SOC value
-> automatically, in order to avoid yet another Config.in variable in ATF?
-> I'm afraid I'm not optimistic on this...
+Thanks!
 
-Me neither, I don't see a way to extract the TARGET_SOC.
-
-> An alternative, under the assumption that only one *.bin file is
-> generated, is: find that file wherever it is, and use the path to it
-> everywhere to reference to it. Pseudocode (perhaps better done in pure
-> make):
-> 
->   ARM_TRUSTED_FIRMWARE_IMG = $(dir $(shell \
->     find $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM) -name "*.bin" | \
->     head -n1))
-> 
-> This would avoid any additional variables and give us the path of the
-> binary. Do you think it could work?
-
-Yes I think that would work but I'm not fond of that 'find' command in
-the first place. In my opinion having a TARGET_SOC variable, even if
-empty for most platforms, is a more elegant solution.
-
-But, I've CC'd Sergey to help in that decision process since he's the
-one maintaining the package.
-
-Regards,
-Gary
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
