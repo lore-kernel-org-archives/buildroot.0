@@ -1,109 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 May 2018 09:15:29 +0200
-Subject: [Buildroot] [git commit] libgpgme: bump to version 1.11.1
-Message-ID: <20180504071550.4236A8B6CC@busybox.osuosl.org>
+Date: Fri, 4 May 2018 09:15:32 +0200
+Subject: [Buildroot] [git commit] gnupg2: bump to version 2.2.7
+Message-ID: <20180504071550.737A78B6CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36795821e467ce257825fb05f1886aedba6079da
+commit: https://git.buildroot.net/buildroot/commit/?id=429c6f21b329f56199158e109d956da9bb37dc3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patch.
-
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-core-Tweak-STATUS_FAILURE-handling.patch  | 51 ----------------------
- package/libgpgme/libgpgme.hash                     |  8 ++--
- package/libgpgme/libgpgme.mk                       |  2 +-
- 3 files changed, 5 insertions(+), 56 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch b/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
-deleted file mode 100644
-index ae0e9c5498..0000000000
---- a/package/libgpgme/0001-core-Tweak-STATUS_FAILURE-handling.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From b99502274ae5efdf6df0d967900ec3d1e64373d7 Mon Sep 17 00:00:00 2001
--From: Werner Koch <wk@gnupg.org>
--Date: Thu, 12 Apr 2018 20:36:30 +0200
--Subject: [PATCH] core: Tweak STATUS_FAILURE handling.
--
--* src/op-support.c (_gpgme_parse_failure): Ignore failures with
--location "gpg-exit".
--* tests/gpg/t-verify.c (main): Adjust for the now working checking of
--the second key.
--
--Signed-off-by: Werner Koch <wk@gnupg.org>
--[baruch: drop test]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit b99502274ae
--
-- src/op-support.c     | 10 +++++++++-
-- tests/gpg/t-verify.c |  8 +++++---
-- 2 files changed, 14 insertions(+), 4 deletions(-)
--
--diff --git a/src/op-support.c b/src/op-support.c
--index 43cb1c760e0d..e55875f904d0 100644
----- a/src/op-support.c
--+++ b/src/op-support.c
--@@ -400,7 +400,13 @@ _gpgme_parse_plaintext (char *args, char **filenamep)
-- 
-- 
-- /* Parse a FAILURE status line and return the error code.  ARGS is
---   modified to contain the location part.  */
--+ * modified to contain the location part.  Note that for now we ignore
--+ * failure codes with a location of gpg-exit; they are too trouble
--+ * some.  Instead we should eventually record that error in the
--+ * context and provide a function to return a fuller error
--+ * description; this could then also show the location of the error
--+ * (e.g. "option- parser") to make it easier for the user to detect
--+ * the actual error. */
-- gpgme_error_t
-- _gpgme_parse_failure (char *args)
-- {
--@@ -418,6 +424,8 @@ _gpgme_parse_failure (char *args)
--     *where = '\0';
-- 
--   where = args;
--+  if (!strcmp (where, "gpg-exit"))
--+    return 0;
-- 
--   return atoi (which);
-- }
---- 
--2.17.0
--
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index 6bd595c5ac..54c7bf7a09 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2017q4/000418.html
--sha1 77d3390887da25ed70b7ac04392360efbdca501f  gpgme-1.10.0.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000423.html
-+sha1 95b1fc427871ca8d30d6d3b1985c816fe0b5077b  gpgme-1.11.1.tar.bz2
- # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.10.0.tar.bz2.sig
--sha256 1a8fed1197c3b99c35f403066bb344a26224d292afc048cfdfc4ccd5690a0693  gpgme-1.10.0.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.11.1.tar.bz2.sig
-+sha256 2d1b111774d2e3dd26dcd7c251819ce4ef774ec5e566251eb9308fa7542fbd6f  gpgme-1.11.1.tar.bz2
- # Locally calculated
- sha256 ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 5c46c7c561..03402cf382 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 155295244e..f5cc95cb1b 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000421.html
+-sha1 295298debcc2c12f02a2f2fdf04aecb6d6aae396  gnupg-2.2.6.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000424.html
++sha1 e222cda63409a86992369df8976f6c7511e10ea0  gnupg-2.2.7.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.6.tar.bz2.sig
+-sha256 e64d8c5fa2d05938a5080cb784a98ac21be0812f2a26f844b18f0d6a0e711984  gnupg-2.2.6.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.7.tar.bz2.sig
++sha256 d95b361ee6ef7eff86af40c8c72bf9313736ac9f7010d6604d78bf83818e976e  gnupg-2.2.7.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 4d84bfbb9e..0823921b0b 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPGME_VERSION = 1.10.0
-+LIBGPGME_VERSION = 1.11.1
- LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPL-2.1+
+-GNUPG2_VERSION = 2.2.6
++GNUPG2_VERSION = 2.2.7
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
