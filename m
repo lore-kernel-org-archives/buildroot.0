@@ -1,68 +1,43 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Fri, 4 May 2018 08:32:27 +0000
-Subject: [Buildroot] [RFC PATCH 1/2] annobin: New package
-In-Reply-To: <6d1f56f4-c708-9855-59e4-58df59a296c0@mind.be>
-References: <20180503143147.5301-1-stefan.sorensen@spectralink.com>
- <20180503143147.5301-2-stefan.sorensen@spectralink.com>
- <6d1f56f4-c708-9855-59e4-58df59a296c0@mind.be>
-Message-ID: <a7a208243fe391b22171c9a67099814afb1d429a.camel@spectralink.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 4 May 2018 11:01:28 +0200
+Subject: [Buildroot] [PATCH 0/3] Fix udftools in static linking scenarios
+In-Reply-To: <CA+NV+Vkr04dq4b78zXPMG1mV7Trz8KQP3=6si+7LJjJsrwmpfg@mail.gmail.com>
+References: <20180422212005.13062-1-thomas.petazzoni@bootlin.com>
+ <CA+NV+Vkr04dq4b78zXPMG1mV7Trz8KQP3=6si+7LJjJsrwmpfg@mail.gmail.com>
+Message-ID: <20180504110128.500a5d1d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2018-05-04 at 00:13 +0200, Arnout Vandecappelle wrote:
+Hello,
 
-> > +A lot of packages build with a mix of -fPIC and -fPIE, so bump
-> > this down from a failure to just issuing a warning.
+On Thu, 26 Apr 2018 11:03:14 +0530, Rahul Bedarkar wrote:
+
+> Using pkg-config file is indeed a correct fix. But I think we should
+> understand why readline doesn't install .pc file by default. This
+> might be a reason that it is outdated and incorrect. Yes, in past we
+> have fixed static linking with readline for many packages by passing
+> it's private libraries.
 > 
-> Is that really the case? I mean, if an executable contains code
-> (directly, not in a shared library) that has not been compiled with
-> -fPIE/-fpie, then the executable is not (or may not be) completely
-> position-independent, right?
+> May be if we first upstream readline changes with .pc installation in
+> autotools files, it would be nice to use fix. Otherwise, we need to
+> maintain patch and .pc file updated (in case of any changes in list of
+> private libraries).
 
-You are right, it does not fail on the mixed static+pic/pie case - it
-turns out that the original script does not fail on the pure static
-case. I will add a fix for this.
+My readline patch fixing the .pc file contents was merged upstream:
 
-> TBH, I don't really understand how this position independent
-> executable is used in the end. Does the kernel's ELF loader perform
-> ASLR while loading it?
+  https://lists.gnu.org/archive/html/bug-readline/2018-05/msg00000.html
 
-I believe so - I think that the executable it handled more or less like
-a shared library.
+And I've submitted another patch that does install the .pc file:
 
-> > +	bool "annobin"
-> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
-> 
->  Can you add a comment explaining why 6 is the minimum, and not 4.5
-> (first GCC supporting plugins)?
+  https://lists.gnu.org/archive/html/bug-readline/2018-05/msg00002.html
 
-To be honest, I don't recall why this was added. I will test it and
-drop  it if not needed.
+Best regards,
 
-> > +	  Enabling this will slightly (1-2%) increase the size of
-> > +	  built binaries.
-> 
->  Really? Isn't this info stripped off in the strip step?
-
-No, this is not touched by strip. It is intended that you should be
-able to verify the final binaries - though this is probably more
-relevant on ordianry Linux distributions.
-
->  HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS +=
-> > $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
-> > +ifeq ($(BR2_TOOLCHAIN_ANNOBIN_GCC_PLUGIN),y)
-> > +HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS +=
-> > -DBR_ANNOBIN_GCC_PLUGIN='"$(ANNOBIN_GCC_PLUGIN)"'
-> 
->  Is there a reason to repeat this in gcc-final.mk and pkg-toolchain-
-> external.mk, rather than specifying it once in toolchain/toolchain-
-> wrapper.mk (like most of the wrapper options)?
-
-Adding it in toolchain/toolchain-wrapper.mk will also cause it to be
-added in the wrapper of gcc-initial, requiring that the annobin plugin
-be built much earlier.
-
-Stefan
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
