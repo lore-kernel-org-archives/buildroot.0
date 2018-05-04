@@ -1,85 +1,100 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  4 May 2018 12:05:38 +0200
-Subject: [Buildroot] [PATCH 1/1] libupnpp: fix build with uclibc
-Message-ID: <20180504100538.21898-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 4 May 2018 12:35:06 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] annobin: New package
+In-Reply-To: <a7a208243fe391b22171c9a67099814afb1d429a.camel@spectralink.com>
+References: <20180503143147.5301-1-stefan.sorensen@spectralink.com>
+ <20180503143147.5301-2-stefan.sorensen@spectralink.com>
+ <6d1f56f4-c708-9855-59e4-58df59a296c0@mind.be>
+ <a7a208243fe391b22171c9a67099814afb1d429a.camel@spectralink.com>
+Message-ID: <2b0a115e-bcae-7c7d-ee1e-7fabc9768379@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to avoid failing with error if host_os doesn't start with
-linux
 
-Fixes:
- - http://autobuild.buildroot.net/results/cfb332a169863bcb3e6bc6ee7d6f6199f856b0b8
- - http://autobuild.buildroot.net/results/2f6f464f6360ed9ea4c238f503d2c3b8ab3cbd86
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...cross-compilation-with-uclibc-on-arm-m68k.patch | 40 ++++++++++++++++++++++
- package/libupnpp/libupnpp.mk                       |  2 ++
- 2 files changed, 42 insertions(+)
- create mode 100644 package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch
+On 04-05-18 10:32, S?rensen, Stefan wrote:
+> On Fri, 2018-05-04 at 00:13 +0200, Arnout Vandecappelle wrote:
+> 
+>>> +A lot of packages build with a mix of -fPIC and -fPIE, so bump
+>>> this down from a failure to just issuing a warning.
+>>
+>> Is that really the case? I mean, if an executable contains code
+>> (directly, not in a shared library) that has not been compiled with
+>> -fPIE/-fpie, then the executable is not (or may not be) completely
+>> position-independent, right?
+> 
+> You are right, it does not fail on the mixed static+pic/pie case - it
+> turns out that the original script does not fail on the pure static
+> case. I will add a fix for this.
 
-diff --git a/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch b/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch
-new file mode 100644
-index 0000000000..2ccdaca274
---- /dev/null
-+++ b/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch
-@@ -0,0 +1,40 @@
-+From 9f6ed4d81426e257394a78009152b1f3590bd991 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 4 May 2018 11:45:59 +0200
-+Subject: [PATCH] Fix cross-compilation with uclibc on arm/m68k
-+
-+Commit 3f1132ecd27186fa3f1a87ead6a0389802baccbb breaks cross-compilation
-+with uclibc on arm and m68k because host_os is set to
-+arm-buildroot-uclinux-uclibc or m68k-buildroot-uclinux-uclibc.
-+
-+To fix this, assume that default is linux and remove "host_os not
-+supported" error.
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/cfb332a169863bcb3e6bc6ee7d6f6199f856b0b8
-+ - http://autobuild.buildroot.net/results/2f6f464f6360ed9ea4c238f503d2c3b8ab3cbd86
-+
-+[Sent upstream]: https://opensourceprojects.eu/p/libupnpp/code/merge-requests/2
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 8903b72..cd3c298 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -35,9 +35,8 @@ build_linux=no
-+ build_mac=no
-+ # Detect the target system
-+ case "${host_os}" in
-+-    linux*) build_linux=yes;;
-+     darwin*) build_mac=yes;;
-+-    *) AC_MSG_ERROR(["OS $host_os is not supported"]);;
-++    *) build_linux=yes;;
-+ esac
-+ # Pass the conditionals to automake
-+ AM_CONDITIONAL([LINUX], [test "$build_linux" = "yes"])
-+-- 
-+2.14.1
-+
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index b4e9e88fa9..852a72e822 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
-@@ -10,6 +10,8 @@ LIBUPNPP_LICENSE = LGPL-2.1+
- LIBUPNPP_LICENSE_FILES = COPYING
- LIBUPNPP_INSTALL_STAGING = YES
- LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
-+# We're patching configure.ac
-+LIBUPNPP_AUTORECONF = YES
- 
- # configure script fails to link against the dependencies of libupnp
- # and libcurl causing detection to fail when statically linking
+ So can you explain in the commit log of the patch why exactly it is needed
+then? And maybe whatever you do would be upstreamable in the end?
+
+
+>> TBH, I don't really understand how this position independent
+>> executable is used in the end. Does the kernel's ELF loader perform
+>> ASLR while loading it?
+> 
+> I believe so - I think that the executable it handled more or less like
+> a shared library.
+> 
+>>> +	bool "annobin"
+>>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
+>>
+>>  Can you add a comment explaining why 6 is the minimum, and not 4.5
+>> (first GCC supporting plugins)?
+> 
+> To be honest, I don't recall why this was added. 
+
+ That's exactly why there should be a comment :-)
+
+> I will test it and
+> drop  it if not needed.
+> 
+>>> +	  Enabling this will slightly (1-2%) increase the size of
+>>> +	  built binaries.
+>>
+>>  Really? Isn't this info stripped off in the strip step?
+> 
+> No, this is not touched by strip. It is intended that you should be
+> able to verify the final binaries - though this is probably more
+> relevant on ordianry Linux distributions.
+
+ Really really? I haven't tried it, but the documentation of annobin says that
+it will store the information in a NOTES section, and we strip with
+--remove-section=.note so it should be gone.
+
+ Oh, hang on, it's stores in a .note.something section, and our strip command is
+missing a * at the end. Which is probably a bug, I think we really do want to
+strip off the notes in the target... But that's a pretty dramatic change.
+
+
+>>  HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS +=
+>>> $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
+>>> +ifeq ($(BR2_TOOLCHAIN_ANNOBIN_GCC_PLUGIN),y)
+>>> +HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS +=
+>>> -DBR_ANNOBIN_GCC_PLUGIN='"$(ANNOBIN_GCC_PLUGIN)"'
+>>
+>>  Is there a reason to repeat this in gcc-final.mk and pkg-toolchain-
+>> external.mk, rather than specifying it once in toolchain/toolchain-
+>> wrapper.mk (like most of the wrapper options)?
+> 
+> Adding it in toolchain/toolchain-wrapper.mk will also cause it to be
+> added in the wrapper of gcc-initial, requiring that the annobin plugin
+> be built much earlier.
+
+ Ah indeed, I forgot that we now build the wrapper for gcc-initial as well.
+
+ Regards,
+ Arnout
+
 -- 
-2.14.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
