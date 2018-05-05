@@ -1,96 +1,48 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat,  5 May 2018 15:09:44 +0300
-Subject: [Buildroot] [PATCH 2/2] python-reentry: new package
-In-Reply-To: <20180505120944.18604-1-asafka7@gmail.com>
-References: <20180505120944.18604-1-asafka7@gmail.com>
-Message-ID: <20180505120944.18604-2-asafka7@gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sat, 5 May 2018 10:47:42 -0300 (BRT)
+Subject: [Buildroot] [PATCH] Makefile: check rootfs overlays with
+ BR2_ROOTFS_MERGED_USR enabled
+In-Reply-To: <20180505100100.GA2481@scaer>
+References: <20180503121958.9462-1-casantos@datacom.ind.br>
+ <20180505100100.GA2481@scaer>
+Message-ID: <898911315.1288101.1525528062390.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A plugin manager based on setuptools entry points mechanism.
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Saturday, May 5, 2018 7:01:00 AM
+> Subject: Re: [Buildroot] [PATCH] Makefile: check rootfs overlays with BR2_ROOTFS_MERGED_USR enabled
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-reentry/Config.in           |  8 ++++++++
- package/python-reentry/python-reentry.hash |  4 ++++
- package/python-reentry/python-reentry.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-reentry/Config.in
- create mode 100644 package/python-reentry/python-reentry.hash
- create mode 100644 package/python-reentry/python-reentry.mk
+> Carlos, All,
+> 
+> On 2018-05-03 09:19 -0300, Carlos Santos spake thusly:
+>> Since commit 0db34529f48 we use rsync with the --keep-dirlinks option to
+>> prevent overlays from accidentally overwriding /{usr,bin,sbin,lib} links
+>> when BR2_ROOTFS_MERGED_USR option is enabled. Unfortunately this also
+>> prevents replacing a symlink by a directory on purpose (e.g. /var/log,
+>> to persist system logs).
+> 
+> In that case, I suggest your use a post-build script instead.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7c0b7f0f28..261c556ad8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -192,6 +192,7 @@ F:	package/stress/
- N:	Asaf Kahlon <asafka7@gmail.com>
- F:	package/python-jsonmodels/
- F:	package/python-py/
-+F:	package/python-reentry/
- F:	package/python-subprocess32/
- F:	package/python-yieldfrom/
- F:	package/zeromq/
-diff --git a/package/Config.in b/package/Config.in
-index 5c3c92d68b..6d57a2fd43 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -914,6 +914,7 @@ menu "External python modules"
- 	source "package/python-pyzmq/Config.in"
- 	source "package/python-raven/Config.in"
- 	source "package/python-remi/Config.in"
-+	source "package/python-reentry/Config.in"
- 	source "package/python-requests/Config.in"
- 	source "package/python-requests-oauthlib/Config.in"
- 	source "package/python-requests-toolbelt/Config.in"
-diff --git a/package/python-reentry/Config.in b/package/python-reentry/Config.in
-new file mode 100644
-index 0000000000..25c721724a
---- /dev/null
-+++ b/package/python-reentry/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_REENTRY
-+	bool "python-reentry"
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_CLICK # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_PY # runtime
-+	help
-+	  A plugin manager based on setuptools entry points mechanism.
-diff --git a/package/python-reentry/python-reentry.hash b/package/python-reentry/python-reentry.hash
-new file mode 100644
-index 0000000000..7a3bbf4d99
---- /dev/null
-+++ b/package/python-reentry/python-reentry.hash
-@@ -0,0 +1,4 @@
-+# sha256 from https://pypi.org/pypi/reentry/json
-+sha256	00df980d8c61713f5002d4d893ba6ea38e9a721cd04aef5a520b974e700ab550  reentry-1.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	4ae7f3216208a7e2327236e95bcd2397b2495f1c2298c708986c893bea608509  LICENSE
-diff --git a/package/python-reentry/python-reentry.mk b/package/python-reentry/python-reentry.mk
-new file mode 100644
-index 0000000000..d3f0e03ef0
---- /dev/null
-+++ b/package/python-reentry/python-reentry.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-reentry
-+#
-+################################################################################
-+
-+PYTHON_REENTRY_VERSION = 1.2.0
-+PYTHON_REENTRY_SOURCE = reentry-$(PYTHON_REENTRY_VERSION).tar.gz
-+PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/e2/b4/46dfac6613302fea51454a01aebedae9440aff9d813aedbbc5f687552e3b
-+PYTHON_REENTRY_SETUP_TYPE = setuptools
-+PYTHON_REENTRY_LICENSE = MIT
-+PYTHON_REENTRY_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+That was my first approach.
+
+> In facct, I think that any modifications that change the layout of the
+> filesystem should be done as a post-build script rather than an overlay.
+> 
+> So, I am pretty much reluctant to see this patch go in.
+
+This change does not prevent the user from using a post-build but I'd
+prefer to let Buildroot check the correctness of user changes as much
+as possible instead of just prohibiting them.
+
+Overlays are simpler to create and less error prone than scripts. They
+are also self-documented, since a "find" or "tree" command shows the
+resulting structure.
+
 -- 
-2.17.0
+Carlos Santos (Casantos) - DATACOM, P&D
