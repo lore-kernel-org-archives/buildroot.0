@@ -1,56 +1,109 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 May 2018 11:43:04 +0200
-Subject: [Buildroot] [PATCH v2,1/1] zmqpp: fix build with or1k and gcc < 6
-Message-ID: <20180505094304.6621-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 May 2018 12:01:00 +0200
+Subject: [Buildroot] [PATCH] Makefile: check rootfs overlays with
+ BR2_ROOTFS_MERGED_USR enabled
+In-Reply-To: <20180503121958.9462-1-casantos@datacom.ind.br>
+References: <20180503121958.9462-1-casantos@datacom.ind.br>
+Message-ID: <20180505100100.GA2481@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use CONFIG variable to disable optimizations when or1k and gcc < 6 are
-detected otherwise set CONFIG to release or debug depending on
-BR2_ENABLE_DEBUG
+Carlos, All,
 
-Fixes:
- - http://autobuild.buildroot.net/results/523e58eefba7ef23a09ef53160da22190ccbb098
+On 2018-05-03 09:19 -0300, Carlos Santos spake thusly:
+> Since commit 0db34529f48 we use rsync with the --keep-dirlinks option to
+> prevent overlays from accidentally overwriding /{usr,bin,sbin,lib} links
+> when BR2_ROOTFS_MERGED_USR option is enabled. Unfortunately this also
+> prevents replacing a symlink by a directory on purpose (e.g. /var/log,
+> to persist system logs).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Enhance patch by setting CONFIG to debug if BR2_ENABLE_DEBUG is set
+In that case, I suggest your use a post-build script instead.
 
- package/zmqpp/zmqpp.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+In facct, I think that any modifications that change the layout of the
+filesystem should be done as a post-build script rather than an overlay.
 
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index f576527463..e57f7de4ea 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -12,6 +12,15 @@ ZMQPP_LICENSE = MPL-2.0
- ZMQPP_LICENSE_FILES = LICENSE
- ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
- ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
-+ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),debug,release)
-+
-+# gcc bug internal compiler error: in merge_overlapping_regs, at
-+# regrename.c:304. This bug is fixed since gcc 6.
-+# By setting CONFIG to empty, all optimizations such as -funroll-loops
-+# -ffast-math -finline-functions -fomit-frame-pointer are disabled
-+ifeq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
-+ZMQPP_CONFIG =
-+endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- ZMQPP_LDFLAGS += -latomic
-@@ -31,7 +40,7 @@ endif
- 
- define ZMQPP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		LDFLAGS="$(ZMQPP_LDFLAGS)" \
-+		CONFIG=$(ZMQPP_CONFIG) LDFLAGS="$(ZMQPP_LDFLAGS)" \
- 		$(ZMQPP_MAKE_OPTS) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),client,library) -C $(@D)
- endef
- 
+So, I am pretty much reluctant to see this patch go in.
+
+Regards,
+Yann E. MORIN.
+
+> Steps to reproduce:
+> 
+> - enable BR2_ROOTFS_MERGED_USR and BR2_PACKAGE_SKELETON_INIT_SYSV
+> - mkdir some_path/rootfs-overlay/var/log
+> - enable BR2_ROOTFS_OVERLAY="some_path/rootfs-overlay"
+> - run 'make'
+> - 'target/var/log' is still a symlink to '../tmp', not a directory
+> 
+> Fix the problem by adding a step in target-finalize that checks each
+> overlay, using the same criteria used in skeleton-custom.mk.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  Makefile | 33 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 32 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 957ba6634a..1b306f8556 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -751,9 +751,40 @@ endif
+>  	@$(call MESSAGE,"Sanitizing RPATH in target tree")
+>  	$(TOPDIR)/support/scripts/fix-rpath target
+>  
+> +# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+> +# counterparts are appropriately setup as symlinks ones to the others.
+> +ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+> +
+> +	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+> +		$(call MESSAGE,"Sanity check in overlay $(d)"); \
+> +		lib_inode=$$(stat -c '%i' $(d)/lib/. 2>/dev/null || true); \
+> +		bin_inode=$$(stat -c '%i' $(d)/bin/. 2>/dev/null || true); \
+> +		sbin_inode=$$(stat -c '%i' $(d)/sbin/. 2>/dev/null || true); \
+> +		usr_lib_inode=$$(stat -c '%i' $(d)/usr/lib/. 2>/dev/null || true); \
+> +		usr_bin_inode=$$(stat -c '%i' $(d)/usr/bin/. 2>/dev/null || true); \
+> +		usr_sbin_inode=$$(stat -c '%i' $(d)/usr/sbin/. 2>/dev/null || true); \
+> +		not_merged_dirs=""; \
+> +		test -z "$$lib_inode" || \
+> +			test "$$lib_inode" = "$$usr_lib_inode" || \
+> +				not_merged_dirs="$$not_merged_dirs /lib"; \
+> +		test -z "$$bin_inode" || \
+> +			test "$$bin_inode" = "$$usr_bin_inode" || \
+> +				not_merged_dirs="$$not_merged_dirs /bin"; \
+> +		test -z "$$sbin_inode" || \
+> +			test "$$sbin_inode" = "$$usr_sbin_inode" || \
+> +				not_merged_dirs="$$not_merged_dirs /sbin"; \
+> +		test -n "$$not_merged_dirs" && { \
+> +			echo "ERROR: The custom skeleton in $(d) is not" \
+> +				"using a merged /usr for the following directories:" \
+> +				$$not_merged_dirs; \
+> +			exit 1; \
+> +		} || true)
+> +
+> +endif # merged /usr
+> +
+>  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+>  		$(call MESSAGE,"Copying overlay $(d)"); \
+> -		rsync -a --ignore-times --keep-dirlinks $(RSYNC_VCS_EXCLUSIONS) \
+> +		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+>  			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+>  			$(d)/ $(TARGET_DIR)$(sep))
+>  
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
