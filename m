@@ -1,32 +1,38 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Sat,  5 May 2018 22:13:11 +0200
-Subject: [Buildroot] [PATCH 2/2] package/aufs: remove redundant ':' sign
-In-Reply-To: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-References: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <1525551191-7113-2-git-send-email-jerzy.m.grzegorek@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 06 May 2018 00:26:48 +0200
+Subject: [Buildroot] [PATCH] package/busybox: disable setfattr when attr
+ package is enabled
+In-Reply-To: <20180505155853.GD14524@scaer> (Yann E. MORIN's message of "Sat, 
+ 5 May 2018 17:58:53 +0200")
+References: <20180504203726.19657-1-yann.morin.1998@free.fr>
+ <87tvrmuxvw.fsf@dell.be.48ers.dk> <20180505155853.GD14524@scaer>
+Message-ID: <878t8xvivr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
----
- package/aufs/aufs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
-index 55dbf94..6cd05d8 100644
---- a/package/aufs/aufs.mk
-+++ b/package/aufs/aufs.mk
-@@ -15,7 +15,7 @@ else ifeq ($(BR2_PACKAGE_AUFS_SERIES),4)
- AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
- endif
- 
--ifeq ($(BR_BUILDING):$(BR2_PACKAGE_AUFS):$(AUFS_VERSION),y:y:)
-+ifeq ($(BR_BUILDING)$(BR2_PACKAGE_AUFS):$(AUFS_VERSION),yy:)
- $(error No aufs version specified)
- endif
- 
+Hi,
+
+ >> It would be nicer to instead fix the attr build system. I took a quick
+ >> look, and the problem seems to be that installation is done with their
+ >> own install-sh script which uses cp (and no --remove-destination).
+ >> 
+ >> I *THINK* a fix would just be to change the 'INSTALL =' line in
+ >> include/buildmacros to use normal install instead of this install-sh
+ >> script.
+ >> 
+ >> Could you give that a try?
+
+ > I'm first going to bump to the latest version, 2.4.48 (from 2.4.47),
+ > because 2.4.48 has had a complete overhaul of its buildsystem.
+
+ > If that gets too comples, then I'll try to fix the current attr code.
+
+Ok, thanks!
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
