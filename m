@@ -1,116 +1,98 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 May 2018 19:13:42 +0200
-Subject: [Buildroot] [PATCH 1/1] lcms2: bump to version 2.9
-Message-ID: <20180505171342.21931-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 5 May 2018 20:13:58 +0200
+Subject: [Buildroot] [PATCH] Makefile: check rootfs overlays with
+ BR2_ROOTFS_MERGED_USR enabled
+In-Reply-To: <20180505152120.GC14524@scaer>
+References: <20180503121958.9462-1-casantos@datacom.ind.br>
+ <20180505100100.GA2481@scaer>
+ <898911315.1288101.1525528062390.JavaMail.zimbra@datacom.ind.br>
+ <20180505144527.GA14524@scaer> <87h8nmuoya.fsf@dell.be.48ers.dk>
+ <20180505152120.GC14524@scaer>
+Message-ID: <9bb6e746-404e-6bb3-e67f-c018235eb2ab@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove two patches (already in version)
-- Add hash for license file
+ TL;DR: I'm with Peter and Carlos on this one.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...Fix-lcms2.pc.in-thread-library-dependency.patch | 26 ---------------------
- .../0002-Added-an-extra-check-to-MLU-bounds.patch  | 27 ----------------------
- package/lcms2/lcms2.hash                           |  7 +++---
- package/lcms2/lcms2.mk                             |  2 +-
- 4 files changed, 5 insertions(+), 57 deletions(-)
- delete mode 100644 package/lcms2/0001-Fix-lcms2.pc.in-thread-library-dependency.patch
- delete mode 100644 package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch
+On 05-05-18 17:21, Yann E. MORIN wrote:
+> Peter, All,
+> 
+> On 2018-05-05 17:01 +0200, Peter Korsgaard spake thusly:
+>>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>  >> > So, I am pretty much reluctant to see this patch go in.
+>>  > But I'd prefer we keep things simple in Buildroot, and since there is
+>>  > already a way to do it, I don't mind that overlays do not provide this
+>>  > solution. A post-build script is way more versatile when it comes to
+>>  > changing the layout.
+>>
+>> Yes, with a post-build script you have full flexibility, but we have
+>> quite a lot of helper functionality to handle "common" fixups in a
+>> simpler way than though a post-build script, E.G. stripping, removing
+>> .py files, overlays, ..
+>>
+>> This restriction for overlays isn't obvious and wasn't originally there
+>> (before the merged /usr support), so it is arguably a regression (but
+>> for an edge case as this afaik is the first report of it).
+> 
+> I still believe that such *modifications* to the layout be actually not
+> supported with overlays.
 
-diff --git a/package/lcms2/0001-Fix-lcms2.pc.in-thread-library-dependency.patch b/package/lcms2/0001-Fix-lcms2.pc.in-thread-library-dependency.patch
-deleted file mode 100644
-index f8c0d00d30..0000000000
---- a/package/lcms2/0001-Fix-lcms2.pc.in-thread-library-dependency.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 0b55fd4e0935a0231ca258fde631a95215df2f72 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Fri, 11 Nov 2016 23:29:56 +0100
--Subject: [PATCH] Fix lcms2.pc.in thread library dependency.
--
--Needed (sometimes) for static linking.
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- lcms2.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lcms2.pc.in b/lcms2.pc.in
--index b715f59..5b4213c 100644
----- a/lcms2.pc.in
--+++ b/lcms2.pc.in
--@@ -7,5 +7,5 @@ Name: @PACKAGE@
-- Description: LCMS Color Management Library
-- Version: @VERSION@
-- Libs: -L${libdir} -llcms2
---Libs.private: @LIB_MATH@ 
--+Libs.private: @LIB_MATH@ @LIB_THREAD@
-- Cflags: -I${includedir}
---- 
--2.8.1
--
-diff --git a/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch b/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch
-deleted file mode 100644
-index 9a5d9dd4e9..0000000000
---- a/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 5ca71a7bc18b6897ab21d815d15e218e204581e2 Mon Sep 17 00:00:00 2001
--From: Marti <marti.maria@tktbrainpower.com>
--Date: Mon, 15 Aug 2016 23:31:39 +0200
--Subject: [PATCH] Added an extra check to MLU bounds
--
--Thanks to Ibrahim el-sayed for spotting the bug
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/cmstypes.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/cmstypes.c b/src/cmstypes.c
--index cb61860..c7328b9 100644
----- a/src/cmstypes.c
--+++ b/src/cmstypes.c
--@@ -1460,6 +1460,7 @@ void *Type_MLU_Read(struct _cms_typehandler_struct* self, cmsIOHANDLER* io, cmsU
-- 
--         // Check for overflow
--         if (Offset < (SizeOfHeader + 8)) goto Error;
--+        if ((Offset + Len) > SizeOfTag + 8) goto Error;
-- 
--         // True begin of the string
--         BeginOfThisString = Offset - SizeOfHeader - 8;
---- 
--2.11.0
--
-diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
-index 1cf1017c54..248a08cf87 100644
---- a/package/lcms2/lcms2.hash
-+++ b/package/lcms2/lcms2.hash
-@@ -1,4 +1,5 @@
--# From https://sourceforge.net/projects/lcms/files/lcms/2.8
--sha1 e9535ec4a572b8fc7a1c405c35e6f4dc97714197 lcms2-2.8.tar.gz
-+# From https://sourceforge.net/projects/lcms/files/lcms/2.9
-+sha1 60bea9875e017dd1c466e988c2ad98f8766e4e55 lcms2-2.9.tar.gz
- # Locally computed:
--sha256 66d02b229d2ea9474e62c2b6cd6720fde946155cd1d0d2bffdab829790a0fb22 lcms2-2.8.tar.gz
-+sha256 48c6fdf98396fa245ed86e622028caf49b96fa22f3e5734f853f806fbc8e7d20 lcms2-2.9.tar.gz
-+sha256 c725daac91a9259ce5e195683c0eeb797d345035c36ac5ba114c9fa80e11639a COPYING
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index f61563dea4..b6c292b762 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LCMS2_VERSION = 2.8
-+LCMS2_VERSION = 2.9
- LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = COPYING
+ I too believe that overlays are a much simpler way to make modifications than
+either post-build scripts or packages. In fact, I think post-build scripts are a
+PITA :-)
+
+
+> Today, someone wants to be able to overrids /var/log from a symlink to a
+> directory to be able to store remanent data there. But then, that will
+> require a modification in fstab to mount an actual filesystem there.
+
+ Or an init script (or service file).
+
+> And
+> such a modification would be done by a post-build script (if it comes
+> from an overlay, there is no way this will work as-is between buildroot
+> versions, becasue buildroot may add/remove stuff in there as well).
+
+ Well, Buildroot shouldn't do that, because it breaks top-level parallel build.
+In fact, Buildroot will now issue a warning when two packages touch the same
+file - fstab is part of skeleton so no other package should touch it. [Not that
+it matters in this discussion, but currently only libselinux modifies fstab.]
+
+ And anyway, if you overwrite a file with your overlay, you supposedly know what
+you're doing.
+
+
+> So, a post-build script is really needed anyway...
+> 
+> And then, someone will want to change something else, e.g. a file to a
+> symlink or a directory to a symlink or whatever...
+> 
+> Also, overlays are not copied under fakeroot (but OK, post-build script
+> neither, but we have fakeroot-scripts). So, if one wants special rights,
+> it's not possible with overlays either...
+
+ BR2_ROOTFS_DEVICE_TABLE?
+
+
+ Regards,
+ Arnout
+
+> So, really, overlays are not as nice as one may think...
+> 
+> As I said, in the long run, they are more a liability than anything
+> else.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
 -- 
-2.14.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
