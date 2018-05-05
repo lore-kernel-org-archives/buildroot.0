@@ -1,68 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 May 2018 11:21:18 +0200
-Subject: [Buildroot] [git commit] nasm: Fix compilation with GCC 8
-Message-ID: <20180505092204.531518B51B@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  5 May 2018 11:43:04 +0200
+Subject: [Buildroot] [PATCH v2,1/1] zmqpp: fix build with or1k and gcc < 6
+Message-ID: <20180505094304.6621-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3aa64a0e828eca3669cbd1fa3fb9fef69dacf74e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Use CONFIG variable to disable optimizations when or1k and gcc < 6 are
+detected otherwise set CONFIG to release or debug depending on
+BR2_ENABLE_DEBUG
 
-host-nasm fails to compile with GCC 8:
+Fixes:
+ - http://autobuild.buildroot.net/results/523e58eefba7ef23a09ef53160da22190ccbb098
 
-In file included from ./include/nasm.h:46,
-                 from asm/nasm.c:47:
-./include/nasmlib.h:194:1: error: ???pure??? attribute on function returning ???void??? [-Werror=attributes]
- void pure_func seg_init(void);
- ^~~~
-
-Pull a patch from upstream that removes the stale declaration of
-seg_init, which was eliminated a long time ago.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../nasm/0001-nasmlib-Drop-unused-seg_init.patch   | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Changes v1 -> v2:
+ - Enhance patch by setting CONFIG to debug if BR2_ENABLE_DEBUG is set
 
-diff --git a/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch b/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
-new file mode 100644
-index 0000000000..a18d121bfb
---- /dev/null
-+++ b/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
-@@ -0,0 +1,32 @@
-+From 5eb1838b4d3752fd863d19442943983a2a5ee87c Mon Sep 17 00:00:00 2001
-+From: Cyrill Gorcunov <gorcunov@gmail.com>
-+Date: Sat, 10 Feb 2018 00:33:41 +0300
-+Subject: [PATCH] nasmlib: Drop unused seg_init
+ package/zmqpp/zmqpp.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+index f576527463..e57f7de4ea 100644
+--- a/package/zmqpp/zmqpp.mk
++++ b/package/zmqpp/zmqpp.mk
+@@ -12,6 +12,15 @@ ZMQPP_LICENSE = MPL-2.0
+ ZMQPP_LICENSE_FILES = LICENSE
+ ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
+ ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
++ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),debug,release)
 +
-+The helper has been eliminated in 2c4a4d5810d0a59b033a07876a2648ef5d4c2859
-+
-+https://bugzilla.nasm.us/show_bug.cgi?id=3392461
-+
-+Signed-off-by: Cyrill Gorcunov <gorcunov@gmail.com>
-+---
-+ include/nasmlib.h | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/include/nasmlib.h b/include/nasmlib.h
-+index 79e866b5..fee1b5ea 100644
-+--- a/include/nasmlib.h
-++++ b/include/nasmlib.h
-+@@ -188,10 +188,8 @@ int64_t readnum(char *str, bool *error);
-+ int64_t readstrnum(char *str, int length, bool *warn);
-+ 
-+ /*
-+- * seg_init: Initialise the segment-number allocator.
-+  * seg_alloc: allocate a hitherto unused segment number.
-+  */
-+-void pure_func seg_init(void);
-+ int32_t pure_func seg_alloc(void);
-+ 
-+ /*
-+-- 
-+2.17.0
-+
++# gcc bug internal compiler error: in merge_overlapping_regs, at
++# regrename.c:304. This bug is fixed since gcc 6.
++# By setting CONFIG to empty, all optimizations such as -funroll-loops
++# -ffast-math -finline-functions -fomit-frame-pointer are disabled
++ifeq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
++ZMQPP_CONFIG =
++endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ ZMQPP_LDFLAGS += -latomic
+@@ -31,7 +40,7 @@ endif
+ 
+ define ZMQPP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		LDFLAGS="$(ZMQPP_LDFLAGS)" \
++		CONFIG=$(ZMQPP_CONFIG) LDFLAGS="$(ZMQPP_LDFLAGS)" \
+ 		$(ZMQPP_MAKE_OPTS) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),client,library) -C $(@D)
+ endef
+ 
+-- 
+2.14.1
