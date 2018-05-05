@@ -1,85 +1,73 @@
-From: kaneda at chez.com <kaneda@chez.com>
-Date: Sun, 06 May 2018 00:39:04 +0200
-Subject: [Buildroot] Fighting with suid bit
-In-Reply-To: <87bmdvwmy9.fsf@dell.be.48ers.dk>
-References: <ffeaf5280e229a536de5f81fba84c99b@chez.com>
- <c41fae3e-3307-d3aa-8572-e65028237408@mind.be>
- <94873ecfb7c2d71d61d4ce5d76fd3cfb@chez.com>
- <87bmdvwmy9.fsf@dell.be.48ers.dk>
-Message-ID: <01bcd0bb46db1d23d1ff9e66371da64c@chez.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 5 May 2018 19:59:47 -0300
+Subject: [Buildroot] defconfig build issues
+In-Reply-To: <20180505215257.6745fc2f@windsurf>
+References: <20180505215257.6745fc2f@windsurf>
+Message-ID: <CAOMZO5CdrcKNO81YPBhvy4_YsevA40y6GF5RU7OnL7xcnGN45Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Shame on me !
-You make me check my buildroot version and, unfortunatly, I was using an 
-old buildroot git commit.
+Hi Thomas,
 
-I so switched to 2018.02.x branch.
-Some hours later (distclean power), I can confirm suid bit is no longer 
-lost on cpio archive.
+On Sat, May 5, 2018 at 4:52 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-Thanks for your help
+> freescale_imx6sololiteevk_defconfig
+> ===================================
+>
+> Error: No BOOT_FROM tag in board/freescale/mx6slevk/imximage.cfg.cfgtmp
+> arch/arm/imx-common/Makefile:91: recipe for target 'u-boot-dtb.imx' failed
+>
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/66561693
+>
+> I think this has already been fixed in other defconfigs.
 
+Yes, this has been fixed in U-Boot mainline.
 
-Le 2018-05-04 15:49, Peter Korsgaard a ?crit?:
->>>>>> "kaneda" == kaneda  <kaneda@chez.com> writes:
-> 
->  > Hi,
->  > It seems you got something here....
-> 
-> 
->  > /target
->  > - ucon64 is 4755
->  > - udevadm is 4755
-> 
-> 
->  > rootfs.tar.gz
->  > - ucon64 is 4755
->  > - udevadm is 4755
-> 
-> 
->  > rootfs.cpio
->  > - ucon64 is 0755
->  > - udevadm is 0755
-> 
-> 
->  > As you can see, it's not only my own file, but also udevadm
-> 
-> What buildroot version are you on? I just did a quick test on 2018.02.x
-> with the following config:
-> 
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_IPUTILS=y
-> BR2_TARGET_ROOTFS_CPIO=y
-> 
-> (the iputils package has a few setuid binaries):
-> 
-> tar -tvf rootfs.tar | grep ping
-> -rwsr-xr-x 0/0           43264 2018-05-04 15:35 ./bin/ping
-> -rwxr-xr-x 0/0           12108 2018-05-04 15:35 ./sbin/arping
-> 
-> cpio -ivt < rootfs.cpio | grep ping
-> -rwxr-xr-x   1 root     root        12108 May  4 15:35 sbin/arping
-> -rwsr-xr-x   1 root     root        43264 May  4 15:35 bin/ping
-> 
-> So that looks sensible.
-> 
-> I also tried it on current master with the same results:
-> 
-> tar -tvf rootfs.tar | grep ping
-> -rwsr-xr-x 0/0           43264 2018-05-04 15:44 ./bin/ping
-> -rwxr-xr-x 0/0           12108 2018-05-04 15:44 ./sbin/arping
-> 
-> cpio -ivt < rootfs.cpio | grep ping
-> -rwxr-xr-x   1 root     root        12108 May  4 15:44 sbin/arping
-> -rwsr-xr-x   1 root     root        43264 May  4 15:44 bin/ping
-> 
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I think I will send a patch removing this target as we have a
+imx6ulevk_defconfig target that is based on U-Boot and kernel
+mainline.
+
+I prefer to maintain the mainline version rather than the target based
+on NXP U-Boot and kernel versions.
+
+> freescale_imx31_3stack_defconfig
+> ================================
+>
+> arch/arm/mach-imx/built-in.o: In function `init_mmdc_lpddr2_settings':
+> platform-spi_imx.c:(.text+0x8f18): undefined reference to `imx6sll_lpddr2_freq_change'
+> arch/arm/mach-imx/built-in.o: In function `imx6ul_cpuidle_init':
+> platform-spi_imx.c:(.init.text+0x195c): undefined reference to `mx6ull_lpm_wfi_end'
+> platform-spi_imx.c:(.init.text+0x1960): undefined reference to `mx6ull_lpm_wfi_start'
+> platform-spi_imx.c:(.init.text+0x1964): undefined reference to `imx6ull_low_power_idle'
+> arch/arm/mach-imx/built-in.o: In function `imx6sl_init_late':
+> platform-spi_imx.c:(.init.text+0x56f0): undefined reference to `imx6sll_cpuidle_init'
+> Makefile:969: recipe for target 'vmlinux' failed
+>
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/66561688
+>
+> I've already reported this a while ago. Any fix coming in the near future ?
+
+The 4.9 NXP kernel does not support mx31. I don't have access to this
+board, so I will send a patch removing it.
+
+If someone is interested on this board, then a patch adding a
+defconfig based on U-Boot and kernel mainline can be added later.
+
+>
+> freescale_imx6ulevk_defconfig
+> =============================
+>
+> ./scripts/dtc-version.sh: line 17: dtc: command not found
+> ./scripts/dtc-version.sh: line 18: dtc: command not found
+> *** Your dtc is too old, please upgrade to dtc 1.4 or newer
+>
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/66561695
+>
+> This one is easy: U-Boot needs DTC, just one option to add in the defconfig.
+
+Same here. Will drop this one as we have imx6ulevk_defconfig target
+which uses mainline U-Boot and kernel.
