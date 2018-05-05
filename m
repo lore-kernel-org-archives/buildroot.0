@@ -1,65 +1,97 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 5 May 2018 16:51:31 +0200
-Subject: [Buildroot] [PATCH v2] uclibc: fix clock_nanosleep declaration
-Message-ID: <20180505145130.GA16360@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 05 May 2018 16:54:51 +0200
+Subject: [Buildroot] [PATCH] Makefile: check rootfs overlays with
+ BR2_ROOTFS_MERGED_USR enabled
+In-Reply-To: <20180503121958.9462-1-casantos@datacom.ind.br> (Carlos Santos's
+ message of "Thu, 3 May 2018 09:19:58 -0300")
+References: <20180503121958.9462-1-casantos@datacom.ind.br>
+Message-ID: <87lgcyup8k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes autobuild errors:
- http://autobuild.buildroot.net/results/a58007263355e2734a8074d52b1b26b88973c39e
- http://autobuild.buildroot.net/results/7d6fd0872efd23c7de552ab637956902b43c3f58
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Reported-by: Baruch Siach <baruch@tkos.co.il>
----
-v1 -> v2: declare the functions independent from thread support
----
- ...re-clock_nanosleep-independent-of-thread-.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
+ > Since commit 0db34529f48 we use rsync with the --keep-dirlinks option to
+ > prevent overlays from accidentally overwriding /{usr,bin,sbin,lib} links
+ > when BR2_ROOTFS_MERGED_USR option is enabled. Unfortunately this also
+ > prevents replacing a symlink by a directory on purpose (e.g. /var/log,
+ > to persist system logs).
 
-diff --git a/package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch b/package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
-new file mode 100644
-index 0000000..bb9ef18
---- /dev/null
-+++ b/package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
-@@ -0,0 +1,34 @@
-+From 368a1df04a32c3b95859b0ca588da8548a5f39ca Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Tue, 1 May 2018 19:35:20 +0200
-+Subject: [PATCH] librt: declare clock_nanosleep independent of thread support
-+
-+Reported-by: Baruch Siach <baruch@tkos.co.il>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ include/time.h | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/include/time.h b/include/time.h
-+index 785c8f6..1a14089 100644
-+--- a/include/time.h
-++++ b/include/time.h
-+@@ -356,7 +356,6 @@ extern int clock_settime (clockid_t __clock_id, const struct timespec *__tp)
-+ #  endif /* __UCLIBC_HAS_REALTIME__ */
-+ 
-+ #  if defined __USE_XOPEN2K && defined __UCLIBC_HAS_ADVANCED_REALTIME__
-+-#   ifdef __UCLIBC_HAS_THREADS_NATIVE__
-+ /* High-resolution sleep with the specified clock.
-+ 
-+    This function is a cancellation point and therefore not marked with
-+@@ -367,7 +366,6 @@ extern int clock_nanosleep (clockid_t __clock_id, int __flags,
-+ 
-+ /* Return clock ID for CPU-time clock.  */
-+ extern int clock_getcpuclockid (pid_t __pid, clockid_t *__clock_id) __THROW;
-+-#   endif /* __UCLIBC_HAS_THREADS_NATIVE__ */
-+ #  endif
-+ 
-+ #  if defined __UCLIBC_HAS_REALTIME__
-+-- 
-+2.1.4
-+
+ > Steps to reproduce:
+
+ > - enable BR2_ROOTFS_MERGED_USR and BR2_PACKAGE_SKELETON_INIT_SYSV
+ > - mkdir some_path/rootfs-overlay/var/log
+ > - enable BR2_ROOTFS_OVERLAY="some_path/rootfs-overlay"
+ > - run 'make'
+ > - 'target/var/log' is still a symlink to '../tmp', not a directory
+
+Funny enough I ran into the exact same issue (also with /var/log)
+yesterday, and I agree that it isn't really obvious why it doesn't work
+whereas overwriting symlinks to files does work (E.G. our
+/etc/resolv.conf -> /tmp/resolv.conf can be overridden by an overlay
+containing /etc/resolv.conf).
+
+
+ > Fix the problem by adding a step in target-finalize that checks each
+ > overlay, using the same criteria used in skeleton-custom.mk.
+
+It would be good if we could refactor this so we wouldn't have two
+copies of the same code, either by moving it to a variable or simply
+checking TARGET_DIR after overlays and post-build scripts?
+
+
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+ > ---
+ >  Makefile | 33 ++++++++++++++++++++++++++++++++-
+ >  1 file changed, 32 insertions(+), 1 deletion(-)
+
+ > diff --git a/Makefile b/Makefile
+ > index 957ba6634a..1b306f8556 100644
+ > --- a/Makefile
+ > +++ b/Makefile
+ > @@ -751,9 +751,40 @@ endif
+ >  	@$(call MESSAGE,"Sanitizing RPATH in target tree")
+ >  	$(TOPDIR)/support/scripts/fix-rpath target
+ 
+ > +# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+ > +# counterparts are appropriately setup as symlinks ones to the others.
+ > +ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+ > +
+ > +	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+ > +		$(call MESSAGE,"Sanity check in overlay $(d)"); \
+ > +		lib_inode=$$(stat -c '%i' $(d)/lib/. 2>/dev/null || true); \
+ > +		bin_inode=$$(stat -c '%i' $(d)/bin/. 2>/dev/null || true); \
+ > +		sbin_inode=$$(stat -c '%i' $(d)/sbin/. 2>/dev/null || true); \
+ > +		usr_lib_inode=$$(stat -c '%i' $(d)/usr/lib/. 2>/dev/null || true); \
+ > +		usr_bin_inode=$$(stat -c '%i' $(d)/usr/bin/. 2>/dev/null || true); \
+ > +		usr_sbin_inode=$$(stat -c '%i' $(d)/usr/sbin/. 2>/dev/null || true); \
+ > +		not_merged_dirs=""; \
+ > +		test -z "$$lib_inode" || \
+ > +			test "$$lib_inode" = "$$usr_lib_inode" || \
+ > +				not_merged_dirs="$$not_merged_dirs /lib"; \
+ > +		test -z "$$bin_inode" || \
+ > +			test "$$bin_inode" = "$$usr_bin_inode" || \
+ > +				not_merged_dirs="$$not_merged_dirs /bin"; \
+ > +		test -z "$$sbin_inode" || \
+ > +			test "$$sbin_inode" = "$$usr_sbin_inode" || \
+ > +				not_merged_dirs="$$not_merged_dirs /sbin"; \
+ > +		test -n "$$not_merged_dirs" && { \
+ > +			echo "ERROR: The custom skeleton in $(d) is not" \
+
+s/custom skeleton/overlay/
+
+>  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+ >  		$(call MESSAGE,"Copying overlay $(d)"); \
+ > -		rsync -a --ignore-times --keep-dirlinks $(RSYNC_VCS_EXCLUSIONS) \
+ > +		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+ >  			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+ >  			$(d)/ $(TARGET_DIR)$(sep))
+
+This is afaik now identical to the SYSTEM_RSYNC logic we have in
+system/system.mk, so it would be nicer to use that variable here.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
