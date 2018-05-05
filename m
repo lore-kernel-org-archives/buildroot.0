@@ -1,97 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 May 2018 16:54:51 +0200
+Date: Sat, 05 May 2018 17:01:01 +0200
 Subject: [Buildroot] [PATCH] Makefile: check rootfs overlays with
  BR2_ROOTFS_MERGED_USR enabled
-In-Reply-To: <20180503121958.9462-1-casantos@datacom.ind.br> (Carlos Santos's
- message of "Thu, 3 May 2018 09:19:58 -0300")
+In-Reply-To: <20180505144527.GA14524@scaer> (Yann E. MORIN's message of "Sat, 
+ 5 May 2018 16:45:27 +0200")
 References: <20180503121958.9462-1-casantos@datacom.ind.br>
-Message-ID: <87lgcyup8k.fsf@dell.be.48ers.dk>
+ <20180505100100.GA2481@scaer>
+ <898911315.1288101.1525528062390.JavaMail.zimbra@datacom.ind.br>
+ <20180505144527.GA14524@scaer>
+Message-ID: <87h8nmuoya.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Since commit 0db34529f48 we use rsync with the --keep-dirlinks option to
- > prevent overlays from accidentally overwriding /{usr,bin,sbin,lib} links
- > when BR2_ROOTFS_MERGED_USR option is enabled. Unfortunately this also
- > prevents replacing a symlink by a directory on purpose (e.g. /var/log,
- > to persist system logs).
+Hi,
 
- > Steps to reproduce:
+ >> > So, I am pretty much reluctant to see this patch go in.
+ >> 
+ >> This change does not prevent the user from using a post-build but I'd
+ >> prefer to let Buildroot check the correctness of user changes as much
+ >> as possible instead of just prohibiting them.
 
- > - enable BR2_ROOTFS_MERGED_USR and BR2_PACKAGE_SKELETON_INIT_SYSV
- > - mkdir some_path/rootfs-overlay/var/log
- > - enable BR2_ROOTFS_OVERLAY="some_path/rootfs-overlay"
- > - run 'make'
- > - 'target/var/log' is still a symlink to '../tmp', not a directory
+ > It's not about prohibiting them.
 
-Funny enough I ran into the exact same issue (also with /var/log)
-yesterday, and I agree that it isn't really obvious why it doesn't work
-whereas overwriting symlinks to files does work (E.G. our
-/etc/resolv.conf -> /tmp/resolv.conf can be overridden by an overlay
-containing /etc/resolv.conf).
+ > But I'd prefer we keep things simple in Buildroot, and since there is
+ > already a way to do it, I don't mind that overlays do not provide this
+ > solution. A post-build script is way more versatile when it comes to
+ > changing the layout.
 
+Yes, with a post-build script you have full flexibility, but we have
+quite a lot of helper functionality to handle "common" fixups in a
+simpler way than though a post-build script, E.G. stripping, removing
+.py files, overlays, ..
 
- > Fix the problem by adding a step in target-finalize that checks each
- > overlay, using the same criteria used in skeleton-custom.mk.
-
-It would be good if we could refactor this so we wouldn't have two
-copies of the same code, either by moving it to a variable or simply
-checking TARGET_DIR after overlays and post-build scripts?
-
-
- > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
- > ---
- >  Makefile | 33 ++++++++++++++++++++++++++++++++-
- >  1 file changed, 32 insertions(+), 1 deletion(-)
-
- > diff --git a/Makefile b/Makefile
- > index 957ba6634a..1b306f8556 100644
- > --- a/Makefile
- > +++ b/Makefile
- > @@ -751,9 +751,40 @@ endif
- >  	@$(call MESSAGE,"Sanitizing RPATH in target tree")
- >  	$(TOPDIR)/support/scripts/fix-rpath target
- 
- > +# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
- > +# counterparts are appropriately setup as symlinks ones to the others.
- > +ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- > +
- > +	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- > +		$(call MESSAGE,"Sanity check in overlay $(d)"); \
- > +		lib_inode=$$(stat -c '%i' $(d)/lib/. 2>/dev/null || true); \
- > +		bin_inode=$$(stat -c '%i' $(d)/bin/. 2>/dev/null || true); \
- > +		sbin_inode=$$(stat -c '%i' $(d)/sbin/. 2>/dev/null || true); \
- > +		usr_lib_inode=$$(stat -c '%i' $(d)/usr/lib/. 2>/dev/null || true); \
- > +		usr_bin_inode=$$(stat -c '%i' $(d)/usr/bin/. 2>/dev/null || true); \
- > +		usr_sbin_inode=$$(stat -c '%i' $(d)/usr/sbin/. 2>/dev/null || true); \
- > +		not_merged_dirs=""; \
- > +		test -z "$$lib_inode" || \
- > +			test "$$lib_inode" = "$$usr_lib_inode" || \
- > +				not_merged_dirs="$$not_merged_dirs /lib"; \
- > +		test -z "$$bin_inode" || \
- > +			test "$$bin_inode" = "$$usr_bin_inode" || \
- > +				not_merged_dirs="$$not_merged_dirs /bin"; \
- > +		test -z "$$sbin_inode" || \
- > +			test "$$sbin_inode" = "$$usr_sbin_inode" || \
- > +				not_merged_dirs="$$not_merged_dirs /sbin"; \
- > +		test -n "$$not_merged_dirs" && { \
- > +			echo "ERROR: The custom skeleton in $(d) is not" \
-
-s/custom skeleton/overlay/
-
->  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- >  		$(call MESSAGE,"Copying overlay $(d)"); \
- > -		rsync -a --ignore-times --keep-dirlinks $(RSYNC_VCS_EXCLUSIONS) \
- > +		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
- >  			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- >  			$(d)/ $(TARGET_DIR)$(sep))
-
-This is afaik now identical to the SYSTEM_RSYNC logic we have in
-system/system.mk, so it would be nicer to use that variable here.
+This restriction for overlays isn't obvious and wasn't originally there
+(before the merged /usr support), so it is arguably a regression (but
+for an edge case as this afaik is the first report of it).
 
 -- 
 Bye, Peter Korsgaard
