@@ -1,38 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 00:26:48 +0200
-Subject: [Buildroot] [PATCH] package/busybox: disable setfattr when attr
- package is enabled
-In-Reply-To: <20180505155853.GD14524@scaer> (Yann E. MORIN's message of "Sat, 
- 5 May 2018 17:58:53 +0200")
-References: <20180504203726.19657-1-yann.morin.1998@free.fr>
- <87tvrmuxvw.fsf@dell.be.48ers.dk> <20180505155853.GD14524@scaer>
-Message-ID: <878t8xvivr.fsf@dell.be.48ers.dk>
+From: kaneda at chez.com <kaneda@chez.com>
+Date: Sun, 06 May 2018 00:39:04 +0200
+Subject: [Buildroot] Fighting with suid bit
+In-Reply-To: <87bmdvwmy9.fsf@dell.be.48ers.dk>
+References: <ffeaf5280e229a536de5f81fba84c99b@chez.com>
+ <c41fae3e-3307-d3aa-8572-e65028237408@mind.be>
+ <94873ecfb7c2d71d61d4ce5d76fd3cfb@chez.com>
+ <87bmdvwmy9.fsf@dell.be.48ers.dk>
+Message-ID: <01bcd0bb46db1d23d1ff9e66371da64c@chez.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Shame on me !
+You make me check my buildroot version and, unfortunatly, I was using an 
+old buildroot git commit.
 
-Hi,
+I so switched to 2018.02.x branch.
+Some hours later (distclean power), I can confirm suid bit is no longer 
+lost on cpio archive.
 
- >> It would be nicer to instead fix the attr build system. I took a quick
- >> look, and the problem seems to be that installation is done with their
- >> own install-sh script which uses cp (and no --remove-destination).
- >> 
- >> I *THINK* a fix would just be to change the 'INSTALL =' line in
- >> include/buildmacros to use normal install instead of this install-sh
- >> script.
- >> 
- >> Could you give that a try?
+Thanks for your help
 
- > I'm first going to bump to the latest version, 2.4.48 (from 2.4.47),
- > because 2.4.48 has had a complete overhaul of its buildsystem.
 
- > If that gets too comples, then I'll try to fix the current attr code.
-
-Ok, thanks!
-
--- 
-Bye, Peter Korsgaard
+Le 2018-05-04 15:49, Peter Korsgaard a ?crit?:
+>>>>>> "kaneda" == kaneda  <kaneda@chez.com> writes:
+> 
+>  > Hi,
+>  > It seems you got something here....
+> 
+> 
+>  > /target
+>  > - ucon64 is 4755
+>  > - udevadm is 4755
+> 
+> 
+>  > rootfs.tar.gz
+>  > - ucon64 is 4755
+>  > - udevadm is 4755
+> 
+> 
+>  > rootfs.cpio
+>  > - ucon64 is 0755
+>  > - udevadm is 0755
+> 
+> 
+>  > As you can see, it's not only my own file, but also udevadm
+> 
+> What buildroot version are you on? I just did a quick test on 2018.02.x
+> with the following config:
+> 
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_IPUTILS=y
+> BR2_TARGET_ROOTFS_CPIO=y
+> 
+> (the iputils package has a few setuid binaries):
+> 
+> tar -tvf rootfs.tar | grep ping
+> -rwsr-xr-x 0/0           43264 2018-05-04 15:35 ./bin/ping
+> -rwxr-xr-x 0/0           12108 2018-05-04 15:35 ./sbin/arping
+> 
+> cpio -ivt < rootfs.cpio | grep ping
+> -rwxr-xr-x   1 root     root        12108 May  4 15:35 sbin/arping
+> -rwsr-xr-x   1 root     root        43264 May  4 15:35 bin/ping
+> 
+> So that looks sensible.
+> 
+> I also tried it on current master with the same results:
+> 
+> tar -tvf rootfs.tar | grep ping
+> -rwsr-xr-x 0/0           43264 2018-05-04 15:44 ./bin/ping
+> -rwxr-xr-x 0/0           12108 2018-05-04 15:44 ./sbin/arping
+> 
+> cpio -ivt < rootfs.cpio | grep ping
+> -rwxr-xr-x   1 root     root        12108 May  4 15:44 sbin/arping
+> -rwsr-xr-x   1 root     root        43264 May  4 15:44 bin/ping
+> 
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
