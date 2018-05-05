@@ -1,7 +1,9 @@
 From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Sat,  5 May 2018 22:13:10 +0200
-Subject: [Buildroot] [PATCH 1/2] package/assimp: remove redundant ':' sign
-Message-ID: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+Date: Sat,  5 May 2018 22:13:11 +0200
+Subject: [Buildroot] [PATCH 2/2] package/aufs: remove redundant ':' sign
+In-Reply-To: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+References: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+Message-ID: <1525551191-7113-2-git-send-email-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,20 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 ---
- package/assimp/assimp.mk | 2 +-
+ package/aufs/aufs.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index 4d44748..e391145 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -20,7 +20,7 @@ endif
- # not passed) in gcc versions 5.x or older. The -Os optimization level
- # causes a "unable to find a register to spill in class
- # ?GENERAL_REGS?" error. -O2 works fine.
--ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:y:)
-+ifeq ($(BR2_sh)$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),yy:)
- ASSIMP_CXXFLAGS += -O2
+diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
+index 55dbf94..6cd05d8 100644
+--- a/package/aufs/aufs.mk
++++ b/package/aufs/aufs.mk
+@@ -15,7 +15,7 @@ else ifeq ($(BR2_PACKAGE_AUFS_SERIES),4)
+ AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
+ endif
+ 
+-ifeq ($(BR_BUILDING):$(BR2_PACKAGE_AUFS):$(AUFS_VERSION),y:y:)
++ifeq ($(BR_BUILDING)$(BR2_PACKAGE_AUFS):$(AUFS_VERSION),yy:)
+ $(error No aufs version specified)
  endif
  
 -- 
