@@ -1,70 +1,1388 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 22:16:59 +0200
-Subject: [Buildroot] [git commit] binutils: replace hard-links with
- soft-links to fix rpath
-Message-ID: <20180506203223.436798B867@busybox.osuosl.org>
+Date: Sun, 6 May 2018 22:51:35 +0200
+Subject: [Buildroot] [git commit] libfreeimage: correct
+ 0005-Manage-powf64-with-glibc.patch line endings
+Message-ID: <20180506205632.673C48045A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9cffb6af464c5c049daa93d557e485ea61f14a8
+commit: https://git.buildroot.net/buildroot/commit/?id=d5eeda49583a090d8f8265aed1461d9ae4450ca8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-binutils installs its binaries both as bin/<tuple>-<tool> and as
-<tuple>/bin/<tool>, and hardlinks are used to reduce disk space
-consumption. This causes a problem for host-binutils with our rpath
-fixing logic done by "make sdk".
-
-Indeed, the fix-rpath script starts by fixing up the rpath of
-bin/<tuple>-<tool>, and sets the RPATH to $ORIGIN/../lib/. Then
-fix-rpath moves on to <tuple>/bin/<tool>, and doesn't find the library
-the tool depends on, and clears the RPATH. The result is that the
-binutils tool are not usable.
-
-Note that this is only visible currently on the ARC architecture,
-because on this architecture, binutils is fetched from git, which
-causes host-flex to be built, and some binutils tools to use the libfl
-shared library. Therefore, the binutils tools don't use just the
-standard C library (which is provided by the system) but also libfl
-from $(HOST_DIR)/lib, and therefore if the RPATH isn't set correctly,
-those tools don't work properly.
-
-In order to address this, this comit adds a post-install hook to
-host-binutils that replaces those hard links by symbolic links. It is
-worth mentioning that library loading and RPATH usage occurs *after*
-resolving the symbolic links, which makes this solution work.
-
 Fixes:
+http://autobuild.buildroot.net/results/131/131f97d2c3525794163e5c7863bb8b8523fb05ba/
 
-  http://autobuild.buildroot.net/results/b2562b05d397d4e1ffe0f8d2f4ce4c84ab6feae1/
+The libfreeimage source code uses DOS line endings, which gets stripped by
+patchwork so the patch no longer applies.  Fix it by converting line endings
+of the patch hunks to DOS (but not the patch meta data).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/binutils.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ .../0005-Manage-powf64-with-glibc.patch            | 1296 ++++++++++----------
+ 1 file changed, 648 insertions(+), 648 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 13cd02b491..b24e4334c2 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -130,5 +130,17 @@ ifeq ($(BR2_BINUTILS_ENABLE_LTO),y)
- HOST_BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
- endif
+diff --git a/package/libfreeimage/0005-Manage-powf64-with-glibc.patch b/package/libfreeimage/0005-Manage-powf64-with-glibc.patch
+index f85aef541f..948ba06eb9 100644
+--- a/package/libfreeimage/0005-Manage-powf64-with-glibc.patch
++++ b/package/libfreeimage/0005-Manage-powf64-with-glibc.patch
+@@ -17,709 +17,709 @@ index 6bf607d..3e52cec 100644
+ --- a/Source/LibRawLite/dcraw/dcraw.c
+ +++ b/Source/LibRawLite/dcraw/dcraw.c
+ @@ -6727,7 +6727,7 @@ static float powf_lim(float a, float b, float limup)
+- {
+-   return (b>limup || b < -limup)?0.f:powf(a,b);
+- }
+--static float powf64(float a, float b)
+-+static float powf_64(float a, float b)
+- {
+-   return powf_lim(a,b,64.f);
+- }
++ {
++   return (b>limup || b < -limup)?0.f:powf(a,b);
++ }
++-static float powf64(float a, float b)
+++static float powf_64(float a, float b)
++ {
++   return powf_lim(a,b,64.f);
++ }
+ @@ -6764,7 +6764,7 @@ static float _CanonConvert2EV(short in)
+- static float _CanonConvertAperture(short in)
+- {
+-   if (in == (short)0xffe0) return 0.0f;
+--  else return powf64(2.0f, _CanonConvert2EV(in) / 2.0f);
+-+  else return powf_64(2.0f, _CanonConvert2EV(in) / 2.0f);
+- }
+- 
+- void CLASS setCanonBodyFeatures (unsigned id)
++ static float _CanonConvertAperture(short in)
++ {
++   if (in == (short)0xffe0) return 0.0f;
++-  else return powf64(2.0f, _CanonConvert2EV(in) / 2.0f);
+++  else return powf_64(2.0f, _CanonConvert2EV(in) / 2.0f);
++ }
++ 
++ void CLASS setCanonBodyFeatures (unsigned id)
+ @@ -7046,15 +7046,15 @@ void CLASS processNikonLensData (uchar *LensData, unsigned len)
+-     imgdata.lens.nikon.NikonLensIDNumber = LensData[i];
+-     imgdata.lens.nikon.NikonLensFStops = LensData[i + 1];
+-     imgdata.lens.makernotes.LensFStops = (float)imgdata.lens.nikon.NikonLensFStops /12.0f;
+--    imgdata.lens.makernotes.MinFocal = 5.0f * powf64(2.0f, (float)LensData[i + 2] / 24.0f);
+--    imgdata.lens.makernotes.MaxFocal = 5.0f * powf64(2.0f, (float)LensData[i + 3] / 24.0f);
+--    imgdata.lens.makernotes.MaxAp4MinFocal = powf64(2.0f, (float)LensData[i + 4] / 24.0f);
+--    imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(2.0f, (float)LensData[i + 5] / 24.0f);
+-+    imgdata.lens.makernotes.MinFocal = 5.0f * powf_64(2.0f, (float)LensData[i + 2] / 24.0f);
+-+    imgdata.lens.makernotes.MaxFocal = 5.0f * powf_64(2.0f, (float)LensData[i + 3] / 24.0f);
+-+    imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(2.0f, (float)LensData[i + 4] / 24.0f);
+-+    imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(2.0f, (float)LensData[i + 5] / 24.0f);
+-     imgdata.lens.nikon.NikonMCUVersion = LensData[i + 6];
+-     if (i != 2)
+-       {
+--        imgdata.lens.makernotes.CurFocal = 5.0f * powf64(2.0f, (float)LensData[i - 1] / 24.0f);
+--        imgdata.lens.nikon.NikonEffectiveMaxAp = powf64(2.0f, (float)LensData[i + 7] / 24.0f);
+-+        imgdata.lens.makernotes.CurFocal = 5.0f * powf_64(2.0f, (float)LensData[i - 1] / 24.0f);
+-+        imgdata.lens.nikon.NikonEffectiveMaxAp = powf_64(2.0f, (float)LensData[i + 7] / 24.0f);
+-       }
+-     imgdata.lens.makernotes.LensID =
+-       (unsigned long long) LensData[i] << 56 |
++     imgdata.lens.nikon.NikonLensIDNumber = LensData[i];
++     imgdata.lens.nikon.NikonLensFStops = LensData[i + 1];
++     imgdata.lens.makernotes.LensFStops = (float)imgdata.lens.nikon.NikonLensFStops /12.0f;
++-    imgdata.lens.makernotes.MinFocal = 5.0f * powf64(2.0f, (float)LensData[i + 2] / 24.0f);
++-    imgdata.lens.makernotes.MaxFocal = 5.0f * powf64(2.0f, (float)LensData[i + 3] / 24.0f);
++-    imgdata.lens.makernotes.MaxAp4MinFocal = powf64(2.0f, (float)LensData[i + 4] / 24.0f);
++-    imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(2.0f, (float)LensData[i + 5] / 24.0f);
+++    imgdata.lens.makernotes.MinFocal = 5.0f * powf_64(2.0f, (float)LensData[i + 2] / 24.0f);
+++    imgdata.lens.makernotes.MaxFocal = 5.0f * powf_64(2.0f, (float)LensData[i + 3] / 24.0f);
+++    imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(2.0f, (float)LensData[i + 4] / 24.0f);
+++    imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(2.0f, (float)LensData[i + 5] / 24.0f);
++     imgdata.lens.nikon.NikonMCUVersion = LensData[i + 6];
++     if (i != 2)
++       {
++-        imgdata.lens.makernotes.CurFocal = 5.0f * powf64(2.0f, (float)LensData[i - 1] / 24.0f);
++-        imgdata.lens.nikon.NikonEffectiveMaxAp = powf64(2.0f, (float)LensData[i + 7] / 24.0f);
+++        imgdata.lens.makernotes.CurFocal = 5.0f * powf_64(2.0f, (float)LensData[i - 1] / 24.0f);
+++        imgdata.lens.nikon.NikonEffectiveMaxAp = powf_64(2.0f, (float)LensData[i + 7] / 24.0f);
++       }
++     imgdata.lens.makernotes.LensID =
++       (unsigned long long) LensData[i] << 56 |
+ @@ -7563,11 +7563,11 @@ void CLASS process_Sony_0x9050 (uchar * buf, unsigned id)
+-     {
+-       if (buf[0])
+-         imgdata.lens.makernotes.MaxAp =
+--          my_roundf(powf64(2.0f, ((float)SonySubstitution[buf[0]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+-+          my_roundf(powf_64(2.0f, ((float)SonySubstitution[buf[0]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+- 
+-       if (buf[1])
+-         imgdata.lens.makernotes.MinAp =
+--          my_roundf(powf64(2.0f, ((float)SonySubstitution[buf[1]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+-+          my_roundf(powf_64(2.0f, ((float)SonySubstitution[buf[1]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+-     }
+- 
+-   if (imgdata.lens.makernotes.CameraMount != LIBRAW_MOUNT_FixedLens)
++     {
++       if (buf[0])
++         imgdata.lens.makernotes.MaxAp =
++-          my_roundf(powf64(2.0f, ((float)SonySubstitution[buf[0]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+++          my_roundf(powf_64(2.0f, ((float)SonySubstitution[buf[0]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
++ 
++       if (buf[1])
++         imgdata.lens.makernotes.MinAp =
++-          my_roundf(powf64(2.0f, ((float)SonySubstitution[buf[1]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+++          my_roundf(powf_64(2.0f, ((float)SonySubstitution[buf[1]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
++     }
++ 
++   if (imgdata.lens.makernotes.CameraMount != LIBRAW_MOUNT_FixedLens)
+ @@ -7577,7 +7577,7 @@ void CLASS process_Sony_0x9050 (uchar * buf, unsigned id)
+-           lid = SonySubstitution[buf[0x3d]] << 8 |
+-             SonySubstitution[buf[0x3c]];
+-           imgdata.lens.makernotes.CurAp =
+--            powf64(2.0f, ((float)lid/256.0f - 16.0f) / 2.0f);
+-+            powf_64(2.0f, ((float)lid/256.0f - 16.0f) / 2.0f);
+-         }
+-       if (buf[0x105] && (imgdata.lens.makernotes.LensMount != LIBRAW_MOUNT_Canon_EF))
+-         imgdata.lens.makernotes.LensMount =
++           lid = SonySubstitution[buf[0x3d]] << 8 |
++             SonySubstitution[buf[0x3c]];
++           imgdata.lens.makernotes.CurAp =
++-            powf64(2.0f, ((float)lid/256.0f - 16.0f) / 2.0f);
+++            powf_64(2.0f, ((float)lid/256.0f - 16.0f) / 2.0f);
++         }
++       if (buf[0x105] && (imgdata.lens.makernotes.LensMount != LIBRAW_MOUNT_Canon_EF))
++         imgdata.lens.makernotes.LensMount =
+ @@ -7957,7 +7957,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-           {
+-             unsigned char cc;
+-             fread(&cc, 1, 1, ifp);
+--            iso_speed = (int)(100.0 * powf64(2.0, (double)(cc) / 12.0 - 5.0));
+-+            iso_speed = (int)(100.0 * powf_64(2.0, (double)(cc) / 12.0 - 5.0));
+-             break;
+-           }
+-       }
++           {
++             unsigned char cc;
++             fread(&cc, 1, 1, ifp);
++-            iso_speed = (int)(100.0 * powf64(2.0, (double)(cc) / 12.0 - 5.0));
+++            iso_speed = (int)(100.0 * powf_64(2.0, (double)(cc) / 12.0 - 5.0));
++             break;
++           }
++       }
+ @@ -7989,7 +7989,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-           }
+-           break;
+-         case 0x1002:
+--          imgdata.lens.makernotes.CurAp = powf64(2.0f, getreal(type)/2);
+-+          imgdata.lens.makernotes.CurAp = powf_64(2.0f, getreal(type)/2);
+-           break;
+-         case 0x20100201:
+-           imgdata.lens.makernotes.LensID =
++           }
++           break;
++         case 0x1002:
++-          imgdata.lens.makernotes.CurAp = powf64(2.0f, getreal(type)/2);
+++          imgdata.lens.makernotes.CurAp = powf_64(2.0f, getreal(type)/2);
++           break;
++         case 0x20100201:
++           imgdata.lens.makernotes.LensID =
+ @@ -8009,10 +8009,10 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-           fread(imgdata.lens.makernotes.Lens, len, 1, ifp);
+-           break;
+-         case 0x20100205:
+--          imgdata.lens.makernotes.MaxAp4MinFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100206:
+--          imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100207:
+-           imgdata.lens.makernotes.MinFocal = (float)get2();
++           fread(imgdata.lens.makernotes.Lens, len, 1, ifp);
++           break;
++         case 0x20100205:
++-          imgdata.lens.makernotes.MaxAp4MinFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100206:
++-          imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100207:
++           imgdata.lens.makernotes.MinFocal = (float)get2();
+ @@ -8023,7 +8023,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-             imgdata.lens.makernotes.MaxFocal = imgdata.lens.makernotes.MinFocal;
+-           break;
+-         case 0x2010020a:
+--          imgdata.lens.makernotes.MaxAp4CurFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100301:
+-           imgdata.lens.makernotes.TeleconverterID = fgetc(ifp) << 8;
++             imgdata.lens.makernotes.MaxFocal = imgdata.lens.makernotes.MinFocal;
++           break;
++         case 0x2010020a:
++-          imgdata.lens.makernotes.MaxAp4CurFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100301:
++           imgdata.lens.makernotes.TeleconverterID = fgetc(ifp) << 8;
+ @@ -8121,13 +8121,13 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-                 if (table_buf[iLensData+9] &&
+-                     (fabs(imgdata.lens.makernotes.CurFocal) < 0.1f))
+-                   imgdata.lens.makernotes.CurFocal =
+--                    10*(table_buf[iLensData+9]>>2) * powf64(4, (table_buf[iLensData+9] & 0x03)-2);
+-+                    10*(table_buf[iLensData+9]>>2) * powf_64(4, (table_buf[iLensData+9] & 0x03)-2);
+-                 if (table_buf[iLensData+10] & 0xf0)
+-                   imgdata.lens.makernotes.MaxAp4CurFocal =
+--                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+-+                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+-                 if (table_buf[iLensData+10] & 0x0f)
+-                   imgdata.lens.makernotes.MinAp4CurFocal =
+--                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+-+                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+-                 if (
+-                     (imgdata.lens.makernotes.CamID != 0x12e6c) &&	// K-r
+-                     (imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
++                 if (table_buf[iLensData+9] &&
++                     (fabs(imgdata.lens.makernotes.CurFocal) < 0.1f))
++                   imgdata.lens.makernotes.CurFocal =
++-                    10*(table_buf[iLensData+9]>>2) * powf64(4, (table_buf[iLensData+9] & 0x03)-2);
+++                    10*(table_buf[iLensData+9]>>2) * powf_64(4, (table_buf[iLensData+9] & 0x03)-2);
++                 if (table_buf[iLensData+10] & 0xf0)
++                   imgdata.lens.makernotes.MaxAp4CurFocal =
++-                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+++                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
++                 if (table_buf[iLensData+10] & 0x0f)
++                   imgdata.lens.makernotes.MinAp4CurFocal =
++-                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+++                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
++                 if (
++                     (imgdata.lens.makernotes.CamID != 0x12e6c) &&	// K-r
++                     (imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
+ @@ -8148,14 +8148,14 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-                     if ((table_buf[iLensData+14] > 1) &&
+-                         (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
+-                       imgdata.lens.makernotes.MaxAp4CurFocal =
+--                        powf64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+-+                        powf_64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+-                   }
+-                 else if ((imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
+-                          (table_buf[iLensData+15] > 1) &&
+-                          (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
+-                   {
+-                     imgdata.lens.makernotes.MaxAp4CurFocal =
+--                      powf64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+-+                      powf_64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+-                   }
+-               }
+-             free(table_buf);
++                     if ((table_buf[iLensData+14] > 1) &&
++                         (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
++                       imgdata.lens.makernotes.MaxAp4CurFocal =
++-                        powf64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+++                        powf_64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
++                   }
++                 else if ((imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
++                          (table_buf[iLensData+15] > 1) &&
++                          (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
++                   {
++                     imgdata.lens.makernotes.MaxAp4CurFocal =
++-                      powf64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+++                      powf_64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
++                   }
++               }
++             free(table_buf);
+ @@ -8321,7 +8321,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-                   lid = (((ushort)table_buf[2])<<8) |
+-                     ((ushort)table_buf[3]);
+-                   imgdata.lens.makernotes.CurAp =
+--                    powf64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+-+                    powf_64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+-                 }
+-               break;
+-             case 1536:
++                   lid = (((ushort)table_buf[2])<<8) |
++                     ((ushort)table_buf[3]);
++                   imgdata.lens.makernotes.CurAp =
++-                    powf64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+++                    powf_64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
++                 }
++               break;
++             case 1536:
+ @@ -8801,7 +8801,7 @@ void CLASS parse_makernote (int base, int uptag)
+-           }
+-           break;
+-         case 0x1002:
+--          imgdata.lens.makernotes.CurAp = powf64(2.0f, getreal(type)/2);
+-+          imgdata.lens.makernotes.CurAp = powf_64(2.0f, getreal(type)/2);
+-           break;
+-         case 0x20100201:
+-           imgdata.lens.makernotes.LensID =
++           }
++           break;
++         case 0x1002:
++-          imgdata.lens.makernotes.CurAp = powf64(2.0f, getreal(type)/2);
+++          imgdata.lens.makernotes.CurAp = powf_64(2.0f, getreal(type)/2);
++           break;
++         case 0x20100201:
++           imgdata.lens.makernotes.LensID =
+ @@ -8821,10 +8821,10 @@ void CLASS parse_makernote (int base, int uptag)
+-           fread(imgdata.lens.makernotes.Lens, len, 1, ifp);
+-           break;
+-         case 0x20100205:
+--          imgdata.lens.makernotes.MaxAp4MinFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100206:
+--          imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100207:
+-           imgdata.lens.makernotes.MinFocal = (float)get2();
++           fread(imgdata.lens.makernotes.Lens, len, 1, ifp);
++           break;
++         case 0x20100205:
++-          imgdata.lens.makernotes.MaxAp4MinFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100206:
++-          imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100207:
++           imgdata.lens.makernotes.MinFocal = (float)get2();
+ @@ -8835,7 +8835,7 @@ void CLASS parse_makernote (int base, int uptag)
+-             imgdata.lens.makernotes.MaxFocal = imgdata.lens.makernotes.MinFocal;
+-           break;
+-         case 0x2010020a:
+--          imgdata.lens.makernotes.MaxAp4CurFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100301:
+-           imgdata.lens.makernotes.TeleconverterID = fgetc(ifp) << 8;
++             imgdata.lens.makernotes.MaxFocal = imgdata.lens.makernotes.MinFocal;
++           break;
++         case 0x2010020a:
++-          imgdata.lens.makernotes.MaxAp4CurFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100301:
++           imgdata.lens.makernotes.TeleconverterID = fgetc(ifp) << 8;
+ @@ -8993,13 +8993,13 @@ void CLASS parse_makernote (int base, int uptag)
+-               {
+-                 if (table_buf[iLensData+9] && (fabs(imgdata.lens.makernotes.CurFocal) < 0.1f))
+-                   imgdata.lens.makernotes.CurFocal =
+--                    10*(table_buf[iLensData+9]>>2) * powf64(4, (table_buf[iLensData+9] & 0x03)-2);
+-+                    10*(table_buf[iLensData+9]>>2) * powf_64(4, (table_buf[iLensData+9] & 0x03)-2);
+-                 if (table_buf[iLensData+10] & 0xf0)
+-                   imgdata.lens.makernotes.MaxAp4CurFocal =
+--                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+-+                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+-                 if (table_buf[iLensData+10] & 0x0f)
+-                   imgdata.lens.makernotes.MinAp4CurFocal =
+--                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+-+                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+-                 if (
+-                     (imgdata.lens.makernotes.CamID != 0x12e6c) &&	// K-r
+-                     (imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
++               {
++                 if (table_buf[iLensData+9] && (fabs(imgdata.lens.makernotes.CurFocal) < 0.1f))
++                   imgdata.lens.makernotes.CurFocal =
++-                    10*(table_buf[iLensData+9]>>2) * powf64(4, (table_buf[iLensData+9] & 0x03)-2);
+++                    10*(table_buf[iLensData+9]>>2) * powf_64(4, (table_buf[iLensData+9] & 0x03)-2);
++                 if (table_buf[iLensData+10] & 0xf0)
++                   imgdata.lens.makernotes.MaxAp4CurFocal =
++-                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+++                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
++                 if (table_buf[iLensData+10] & 0x0f)
++                   imgdata.lens.makernotes.MinAp4CurFocal =
++-                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+++                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
++                 if (
++                     (imgdata.lens.makernotes.CamID != 0x12e6c) &&	// K-r
++                     (imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
+ @@ -9020,14 +9020,14 @@ void CLASS parse_makernote (int base, int uptag)
+-                     if ((table_buf[iLensData+14] > 1) &&
+-                         (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
+-                       imgdata.lens.makernotes.MaxAp4CurFocal =
+--                        powf64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+-+                        powf_64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+-                   }
+-                 else if ((imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
+-                          (table_buf[iLensData+15] > 1) &&
+-                          (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
+-                   {
+-                     imgdata.lens.makernotes.MaxAp4CurFocal =
+--                      powf64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+-+                      powf_64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+-                   }
+-               }
+-             free(table_buf);
++                     if ((table_buf[iLensData+14] > 1) &&
++                         (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
++                       imgdata.lens.makernotes.MaxAp4CurFocal =
++-                        powf64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+++                        powf_64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
++                   }
++                 else if ((imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
++                          (table_buf[iLensData+15] > 1) &&
++                          (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
++                   {
++                     imgdata.lens.makernotes.MaxAp4CurFocal =
++-                      powf64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+++                      powf_64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
++                   }
++               }
++             free(table_buf);
+ @@ -9188,7 +9188,7 @@ void CLASS parse_makernote (int base, int uptag)
+-                   lid = (((ushort)table_buf[2])<<8) |
+-                     ((ushort)table_buf[3]);
+-                   imgdata.lens.makernotes.CurAp =
+--                    powf64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+-+                    powf_64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+-                 }
+-               break;
+-             case 1536:
++                   lid = (((ushort)table_buf[2])<<8) |
++                     ((ushort)table_buf[3]);
++                   imgdata.lens.makernotes.CurAp =
++-                    powf64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+++                    powf_64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
++                 }
++               break;
++             case 1536:
+ @@ -9273,15 +9273,15 @@ void CLASS parse_makernote (int base, int uptag)
+-       {
+-         unsigned char cc;
+-         fread(&cc,1,1,ifp);
+--        iso_speed = int(100.0 * powf64(2.0f,float(cc)/12.0-5.0));
+-+        iso_speed = int(100.0 * powf_64(2.0f,float(cc)/12.0-5.0));
+-       }
+-     if (tag == 4 && len > 26 && len < 35) {
+-       if ((i=(get4(),get2())) != 0x7fff && (!iso_speed || iso_speed == 65535))
+--	iso_speed = 50 * powf64(2.0, i/32.0 - 4);
+-+	iso_speed = 50 * powf_64(2.0, i/32.0 - 4);
+-       if ((i=(get2(),get2())) != 0x7fff && !aperture)
+--	aperture = powf64(2.0, i/64.0);
+-+	aperture = powf_64(2.0, i/64.0);
+-       if ((i=get2()) != 0xffff && !shutter)
+--	shutter = powf64(2.0, (short) i/-32.0);
+-+	shutter = powf_64(2.0, (short) i/-32.0);
+-       wbi = (get2(),get2());
+-       shot_order = (get2(),get2());
+-     }
++       {
++         unsigned char cc;
++         fread(&cc,1,1,ifp);
++-        iso_speed = int(100.0 * powf64(2.0f,float(cc)/12.0-5.0));
+++        iso_speed = int(100.0 * powf_64(2.0f,float(cc)/12.0-5.0));
++       }
++     if (tag == 4 && len > 26 && len < 35) {
++       if ((i=(get4(),get2())) != 0x7fff && (!iso_speed || iso_speed == 65535))
++-	iso_speed = 50 * powf64(2.0, i/32.0 - 4);
+++	iso_speed = 50 * powf_64(2.0, i/32.0 - 4);
++       if ((i=(get2(),get2())) != 0x7fff && !aperture)
++-	aperture = powf64(2.0, i/64.0);
+++	aperture = powf_64(2.0, i/64.0);
++       if ((i=get2()) != 0xffff && !shutter)
++-	shutter = powf64(2.0, (short) i/-32.0);
+++	shutter = powf_64(2.0, (short) i/-32.0);
++       wbi = (get2(),get2());
++       shot_order = (get2(),get2());
++     }
+ @@ -9732,7 +9732,7 @@ void CLASS parse_exif (int base)
+-         imgdata.lens.Lens[0] = 0;
+-       break;
+-     case 0x9205:
+--      imgdata.lens.EXIF_MaxAp = powf64(2.0f, (getreal(type) / 2.0f));
+-+      imgdata.lens.EXIF_MaxAp = powf_64(2.0f, (getreal(type) / 2.0f));
+-       break;
+- #endif
+-       case 33434:  shutter = getreal(type);		break;
++         imgdata.lens.Lens[0] = 0;
++       break;
++     case 0x9205:
++-      imgdata.lens.EXIF_MaxAp = powf64(2.0f, (getreal(type) / 2.0f));
+++      imgdata.lens.EXIF_MaxAp = powf_64(2.0f, (getreal(type) / 2.0f));
++       break;
++ #endif
++       case 33434:  shutter = getreal(type);		break;
+ @@ -9745,10 +9745,10 @@ void CLASS parse_exif (int base)
+-       case 36867:
+-       case 36868:  get_timestamp(0);			break;
+-       case 37377:  if ((expo = -getreal(type)) < 128 && shutter == 0.)
+--          shutter = powf64(2.0, expo);		break;
+-+          shutter = powf_64(2.0, expo);		break;
+-       case 37378:
+-         if (fabs(ape = getreal(type))<256.0)
+--          aperture = powf64(2.0, ape/2);
+-+          aperture = powf_64(2.0, ape/2);
+-         break;
+-       case 37385:  flash_used = getreal(type);          break;
+-       case 37386:  focal_len = getreal(type);		break;
++       case 36867:
++       case 36868:  get_timestamp(0);			break;
++       case 37377:  if ((expo = -getreal(type)) < 128 && shutter == 0.)
++-          shutter = powf64(2.0, expo);		break;
+++          shutter = powf_64(2.0, expo);		break;
++       case 37378:
++         if (fabs(ape = getreal(type))<256.0)
++-          aperture = powf64(2.0, ape/2);
+++          aperture = powf_64(2.0, ape/2);
++         break;
++       case 37385:  flash_used = getreal(type);          break;
++       case 37386:  focal_len = getreal(type);		break;
+ @@ -10361,7 +10361,7 @@ int CLASS parse_tiff_ifd (int base)
+-         imgdata.lens.Lens[0] = 0;
+-       break;
+-     case 0x9205:
+--				imgdata.lens.EXIF_MaxAp = powf64(2.0f, (getreal(type) / 2.0f));
+-+				imgdata.lens.EXIF_MaxAp = powf_64(2.0f, (getreal(type) / 2.0f));
+-       break;
+- // IB end
+- #endif
++         imgdata.lens.Lens[0] = 0;
++       break;
++     case 0x9205:
++-				imgdata.lens.EXIF_MaxAp = powf64(2.0f, (getreal(type) / 2.0f));
+++				imgdata.lens.EXIF_MaxAp = powf_64(2.0f, (getreal(type) / 2.0f));
++       break;
++ // IB end
++ #endif
+ @@ -11130,22 +11130,22 @@ void CLASS parse_ciff (int offset, int length, int depth)
+-       thumb_length = len;
+-     }
+-     if (type == 0x1818) {
+--      shutter = powf64(2.0f, -int_to_float((get4(),get4())));
+--      aperture = powf64(2.0f, int_to_float(get4())/2);
+-+      shutter = powf_64(2.0f, -int_to_float((get4(),get4())));
+-+      aperture = powf_64(2.0f, int_to_float(get4())/2);
+- #ifdef LIBRAW_LIBRARY_BUILD
+- 			imgdata.lens.makernotes.CurAp = aperture;
+- #endif
+-     }
+-     if (type == 0x102a) {
+- 			//      iso_speed = pow (2.0, (get4(),get2())/32.0 - 4) * 50;
+--      iso_speed = powf64(2.0f, ((get2(),get2()) + get2())/32.0f - 5.0f) * 100.0f;
+-+      iso_speed = powf_64(2.0f, ((get2(),get2()) + get2())/32.0f - 5.0f) * 100.0f;
+- #ifdef LIBRAW_LIBRARY_BUILD
+-       aperture  = _CanonConvertAperture((get2(),get2()));
+-       imgdata.lens.makernotes.CurAp = aperture;
+- #else
+--      aperture  = powf64(2.0, (get2(),(short)get2())/64.0);
+-+      aperture  = powf_64(2.0, (get2(),(short)get2())/64.0);
+- #endif
+--      shutter   = powf64(2.0,-((short)get2())/32.0);
+-+      shutter   = powf_64(2.0,-((short)get2())/32.0);
+-       wbi = (get2(),get2());
+-       if (wbi > 17) wbi = 0;
+-       fseek (ifp, 32, SEEK_CUR);
++       thumb_length = len;
++     }
++     if (type == 0x1818) {
++-      shutter = powf64(2.0f, -int_to_float((get4(),get4())));
++-      aperture = powf64(2.0f, int_to_float(get4())/2);
+++      shutter = powf_64(2.0f, -int_to_float((get4(),get4())));
+++      aperture = powf_64(2.0f, int_to_float(get4())/2);
++ #ifdef LIBRAW_LIBRARY_BUILD
++ 			imgdata.lens.makernotes.CurAp = aperture;
++ #endif
++     }
++     if (type == 0x102a) {
++ 			//      iso_speed = pow (2.0, (get4(),get2())/32.0 - 4) * 50;
++-      iso_speed = powf64(2.0f, ((get2(),get2()) + get2())/32.0f - 5.0f) * 100.0f;
+++      iso_speed = powf_64(2.0f, ((get2(),get2()) + get2())/32.0f - 5.0f) * 100.0f;
++ #ifdef LIBRAW_LIBRARY_BUILD
++       aperture  = _CanonConvertAperture((get2(),get2()));
++       imgdata.lens.makernotes.CurAp = aperture;
++ #else
++-      aperture  = powf64(2.0, (get2(),(short)get2())/64.0);
+++      aperture  = powf_64(2.0, (get2(),(short)get2())/64.0);
++ #endif
++-      shutter   = powf64(2.0,-((short)get2())/32.0);
+++      shutter   = powf_64(2.0,-((short)get2())/32.0);
++       wbi = (get2(),get2());
++       if (wbi > 17) wbi = 0;
++       fseek (ifp, 32, SEEK_CUR);
+ @@ -11349,8 +11349,8 @@ void CLASS parse_phase_one (int base)
+-       setPhaseOneFeatures(unique_id);
+-       break;
+-     case 0x0401:
+--      if (type == 4) imgdata.lens.makernotes.CurAp =  powf64(2.0f, (int_to_float(data)/2.0f));
+--      else imgdata.lens.makernotes.CurAp = powf64(2.0f, (getreal(type)/2.0f));
+-+      if (type == 4) imgdata.lens.makernotes.CurAp =  powf_64(2.0f, (int_to_float(data)/2.0f));
+-+      else imgdata.lens.makernotes.CurAp = powf_64(2.0f, (getreal(type)/2.0f));
+-       break;
+-     case 0x0403:
+-       if (type == 4) imgdata.lens.makernotes.CurFocal =  int_to_float(data);
++       setPhaseOneFeatures(unique_id);
++       break;
++     case 0x0401:
++-      if (type == 4) imgdata.lens.makernotes.CurAp =  powf64(2.0f, (int_to_float(data)/2.0f));
++-      else imgdata.lens.makernotes.CurAp = powf64(2.0f, (getreal(type)/2.0f));
+++      if (type == 4) imgdata.lens.makernotes.CurAp =  powf_64(2.0f, (int_to_float(data)/2.0f));
+++      else imgdata.lens.makernotes.CurAp = powf_64(2.0f, (getreal(type)/2.0f));
++       break;
++     case 0x0403:
++       if (type == 4) imgdata.lens.makernotes.CurFocal =  int_to_float(data);
+ @@ -11364,16 +11364,16 @@ void CLASS parse_phase_one (int base)
+-       break;
+-     case 0x0414:
+-       if (type == 4) {
+--      	imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, (int_to_float(data)/2.0f));
+-+      	imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, (int_to_float(data)/2.0f));
+-       } else {
+--        imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, (getreal(type) / 2.0f));
+-+        imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, (getreal(type) / 2.0f));
+-       }
+-       break;
+-     case 0x0415:
+-       if (type == 4) {
+--      	imgdata.lens.makernotes.MinAp4CurFocal = powf64(2.0f, (int_to_float(data)/2.0f));
+-+      	imgdata.lens.makernotes.MinAp4CurFocal = powf_64(2.0f, (int_to_float(data)/2.0f));
+-       } else {
+--        imgdata.lens.makernotes.MinAp4CurFocal = powf64(2.0f, (getreal(type) / 2.0f));
+-+        imgdata.lens.makernotes.MinAp4CurFocal = powf_64(2.0f, (getreal(type) / 2.0f));
+-       }
+-       break;
+-     case 0x0416:
++       break;
++     case 0x0414:
++       if (type == 4) {
++-      	imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, (int_to_float(data)/2.0f));
+++      	imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, (int_to_float(data)/2.0f));
++       } else {
++-        imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, (getreal(type) / 2.0f));
+++        imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, (getreal(type) / 2.0f));
++       }
++       break;
++     case 0x0415:
++       if (type == 4) {
++-      	imgdata.lens.makernotes.MinAp4CurFocal = powf64(2.0f, (int_to_float(data)/2.0f));
+++      	imgdata.lens.makernotes.MinAp4CurFocal = powf_64(2.0f, (int_to_float(data)/2.0f));
++       } else {
++-        imgdata.lens.makernotes.MinAp4CurFocal = powf64(2.0f, (getreal(type) / 2.0f));
+++        imgdata.lens.makernotes.MinAp4CurFocal = powf_64(2.0f, (getreal(type) / 2.0f));
++       }
++       break;
++     case 0x0416:
+ @@ -13324,15 +13324,15 @@ void CLASS identify()
+-       case 18: iso_speed = 320; break;
+-       case 19: iso_speed = 400; break;
+-     }
+--    shutter = powf64(2.0f, (((float)get4())/8.0f)) / 16000.0f;
+-+    shutter = powf_64(2.0f, (((float)get4())/8.0f)) / 16000.0f;
+-     FORC4 cam_mul[c ^ (c >> 1)] = get4();
+-     fseek (ifp, 88, SEEK_SET);
+--    aperture = powf64(2.0f, ((float)get4())/16.0f);
+-+    aperture = powf_64(2.0f, ((float)get4())/16.0f);
+-     fseek (ifp, 112, SEEK_SET);
+-     focal_len = get4();
+- #ifdef LIBRAW_LIBRARY_BUILD
+-     fseek (ifp, 104, SEEK_SET);
+--    imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, ((float)get4())/16.0f);
+-+    imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, ((float)get4())/16.0f);
+-     fseek (ifp, 124, SEEK_SET);
+-     fread(imgdata.lens.makernotes.Lens, 32, 1, ifp);
+-     imgdata.lens.makernotes.CameraMount = LIBRAW_MOUNT_Contax_N;
++       case 18: iso_speed = 320; break;
++       case 19: iso_speed = 400; break;
++     }
++-    shutter = powf64(2.0f, (((float)get4())/8.0f)) / 16000.0f;
+++    shutter = powf_64(2.0f, (((float)get4())/8.0f)) / 16000.0f;
++     FORC4 cam_mul[c ^ (c >> 1)] = get4();
++     fseek (ifp, 88, SEEK_SET);
++-    aperture = powf64(2.0f, ((float)get4())/16.0f);
+++    aperture = powf_64(2.0f, ((float)get4())/16.0f);
++     fseek (ifp, 112, SEEK_SET);
++     focal_len = get4();
++ #ifdef LIBRAW_LIBRARY_BUILD
++     fseek (ifp, 104, SEEK_SET);
++-    imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, ((float)get4())/16.0f);
+++    imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, ((float)get4())/16.0f);
++     fseek (ifp, 124, SEEK_SET);
++     fread(imgdata.lens.makernotes.Lens, 32, 1, ifp);
++     imgdata.lens.makernotes.CameraMount = LIBRAW_MOUNT_Contax_N;
+ diff --git a/Source/LibRawLite/internal/dcraw_common.cpp b/Source/LibRawLite/internal/dcraw_common.cpp
+ index a936a93..0fc4d81 100644
+ --- a/Source/LibRawLite/internal/dcraw_common.cpp
+ +++ b/Source/LibRawLite/internal/dcraw_common.cpp
+ @@ -5543,7 +5543,7 @@ static float powf_lim(float a, float b, float limup)
+- {
+-   return (b>limup || b < -limup)?0.f:powf(a,b);
+- }
+--static float powf64(float a, float b)
+-+static float powf_64(float a, float b)
+- {
+-   return powf_lim(a,b,64.f);
+- }
++ {
++   return (b>limup || b < -limup)?0.f:powf(a,b);
++ }
++-static float powf64(float a, float b)
+++static float powf_64(float a, float b)
++ {
++   return powf_lim(a,b,64.f);
++ }
+ @@ -5580,7 +5580,7 @@ static float _CanonConvert2EV(short in)
+- static float _CanonConvertAperture(short in)
+- {
+-   if (in == (short)0xffe0) return 0.0f;
+--  else return powf64(2.0f, _CanonConvert2EV(in) / 2.0f);
+-+  else return powf_64(2.0f, _CanonConvert2EV(in) / 2.0f);
+- }
+- 
+- void CLASS setCanonBodyFeatures (unsigned id)
++ static float _CanonConvertAperture(short in)
++ {
++   if (in == (short)0xffe0) return 0.0f;
++-  else return powf64(2.0f, _CanonConvert2EV(in) / 2.0f);
+++  else return powf_64(2.0f, _CanonConvert2EV(in) / 2.0f);
++ }
++ 
++ void CLASS setCanonBodyFeatures (unsigned id)
+ @@ -5862,15 +5862,15 @@ void CLASS processNikonLensData (uchar *LensData, unsigned len)
+-     imgdata.lens.nikon.NikonLensIDNumber = LensData[i];
+-     imgdata.lens.nikon.NikonLensFStops = LensData[i + 1];
+-     imgdata.lens.makernotes.LensFStops = (float)imgdata.lens.nikon.NikonLensFStops /12.0f;
+--    imgdata.lens.makernotes.MinFocal = 5.0f * powf64(2.0f, (float)LensData[i + 2] / 24.0f);
+--    imgdata.lens.makernotes.MaxFocal = 5.0f * powf64(2.0f, (float)LensData[i + 3] / 24.0f);
+--    imgdata.lens.makernotes.MaxAp4MinFocal = powf64(2.0f, (float)LensData[i + 4] / 24.0f);
+--    imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(2.0f, (float)LensData[i + 5] / 24.0f);
+-+    imgdata.lens.makernotes.MinFocal = 5.0f * powf_64(2.0f, (float)LensData[i + 2] / 24.0f);
+-+    imgdata.lens.makernotes.MaxFocal = 5.0f * powf_64(2.0f, (float)LensData[i + 3] / 24.0f);
+-+    imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(2.0f, (float)LensData[i + 4] / 24.0f);
+-+    imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(2.0f, (float)LensData[i + 5] / 24.0f);
+-     imgdata.lens.nikon.NikonMCUVersion = LensData[i + 6];
+-     if (i != 2)
+-       {
+--        imgdata.lens.makernotes.CurFocal = 5.0f * powf64(2.0f, (float)LensData[i - 1] / 24.0f);
+--        imgdata.lens.nikon.NikonEffectiveMaxAp = powf64(2.0f, (float)LensData[i + 7] / 24.0f);
+-+        imgdata.lens.makernotes.CurFocal = 5.0f * powf_64(2.0f, (float)LensData[i - 1] / 24.0f);
+-+        imgdata.lens.nikon.NikonEffectiveMaxAp = powf_64(2.0f, (float)LensData[i + 7] / 24.0f);
+-       }
+-     imgdata.lens.makernotes.LensID =
+-       (unsigned long long) LensData[i] << 56 |
++     imgdata.lens.nikon.NikonLensIDNumber = LensData[i];
++     imgdata.lens.nikon.NikonLensFStops = LensData[i + 1];
++     imgdata.lens.makernotes.LensFStops = (float)imgdata.lens.nikon.NikonLensFStops /12.0f;
++-    imgdata.lens.makernotes.MinFocal = 5.0f * powf64(2.0f, (float)LensData[i + 2] / 24.0f);
++-    imgdata.lens.makernotes.MaxFocal = 5.0f * powf64(2.0f, (float)LensData[i + 3] / 24.0f);
++-    imgdata.lens.makernotes.MaxAp4MinFocal = powf64(2.0f, (float)LensData[i + 4] / 24.0f);
++-    imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(2.0f, (float)LensData[i + 5] / 24.0f);
+++    imgdata.lens.makernotes.MinFocal = 5.0f * powf_64(2.0f, (float)LensData[i + 2] / 24.0f);
+++    imgdata.lens.makernotes.MaxFocal = 5.0f * powf_64(2.0f, (float)LensData[i + 3] / 24.0f);
+++    imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(2.0f, (float)LensData[i + 4] / 24.0f);
+++    imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(2.0f, (float)LensData[i + 5] / 24.0f);
++     imgdata.lens.nikon.NikonMCUVersion = LensData[i + 6];
++     if (i != 2)
++       {
++-        imgdata.lens.makernotes.CurFocal = 5.0f * powf64(2.0f, (float)LensData[i - 1] / 24.0f);
++-        imgdata.lens.nikon.NikonEffectiveMaxAp = powf64(2.0f, (float)LensData[i + 7] / 24.0f);
+++        imgdata.lens.makernotes.CurFocal = 5.0f * powf_64(2.0f, (float)LensData[i - 1] / 24.0f);
+++        imgdata.lens.nikon.NikonEffectiveMaxAp = powf_64(2.0f, (float)LensData[i + 7] / 24.0f);
++       }
++     imgdata.lens.makernotes.LensID =
++       (unsigned long long) LensData[i] << 56 |
+ @@ -6379,11 +6379,11 @@ void CLASS process_Sony_0x9050 (uchar * buf, unsigned id)
+-     {
+-       if (buf[0])
+-         imgdata.lens.makernotes.MaxAp =
+--          my_roundf(powf64(2.0f, ((float)SonySubstitution[buf[0]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+-+          my_roundf(powf_64(2.0f, ((float)SonySubstitution[buf[0]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+- 
+-       if (buf[1])
+-         imgdata.lens.makernotes.MinAp =
+--          my_roundf(powf64(2.0f, ((float)SonySubstitution[buf[1]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+-+          my_roundf(powf_64(2.0f, ((float)SonySubstitution[buf[1]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+-     }
+- 
+-   if (imgdata.lens.makernotes.CameraMount != LIBRAW_MOUNT_FixedLens)
++     {
++       if (buf[0])
++         imgdata.lens.makernotes.MaxAp =
++-          my_roundf(powf64(2.0f, ((float)SonySubstitution[buf[0]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+++          my_roundf(powf_64(2.0f, ((float)SonySubstitution[buf[0]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
++ 
++       if (buf[1])
++         imgdata.lens.makernotes.MinAp =
++-          my_roundf(powf64(2.0f, ((float)SonySubstitution[buf[1]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
+++          my_roundf(powf_64(2.0f, ((float)SonySubstitution[buf[1]] / 8.0 - 1.06f) / 2.0f)*10.0f) / 10.0f;
++     }
++ 
++   if (imgdata.lens.makernotes.CameraMount != LIBRAW_MOUNT_FixedLens)
+ @@ -6393,7 +6393,7 @@ void CLASS process_Sony_0x9050 (uchar * buf, unsigned id)
+-           lid = SonySubstitution[buf[0x3d]] << 8 |
+-             SonySubstitution[buf[0x3c]];
+-           imgdata.lens.makernotes.CurAp =
+--            powf64(2.0f, ((float)lid/256.0f - 16.0f) / 2.0f);
+-+            powf_64(2.0f, ((float)lid/256.0f - 16.0f) / 2.0f);
+-         }
+-       if (buf[0x105] && (imgdata.lens.makernotes.LensMount != LIBRAW_MOUNT_Canon_EF))
+-         imgdata.lens.makernotes.LensMount =
++           lid = SonySubstitution[buf[0x3d]] << 8 |
++             SonySubstitution[buf[0x3c]];
++           imgdata.lens.makernotes.CurAp =
++-            powf64(2.0f, ((float)lid/256.0f - 16.0f) / 2.0f);
+++            powf_64(2.0f, ((float)lid/256.0f - 16.0f) / 2.0f);
++         }
++       if (buf[0x105] && (imgdata.lens.makernotes.LensMount != LIBRAW_MOUNT_Canon_EF))
++         imgdata.lens.makernotes.LensMount =
+ @@ -6773,7 +6773,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-           {
+-             unsigned char cc;
+-             fread(&cc, 1, 1, ifp);
+--            iso_speed = (int)(100.0 * powf64(2.0, (double)(cc) / 12.0 - 5.0));
+-+            iso_speed = (int)(100.0 * powf_64(2.0, (double)(cc) / 12.0 - 5.0));
+-             break;
+-           }
+-       }
++           {
++             unsigned char cc;
++             fread(&cc, 1, 1, ifp);
++-            iso_speed = (int)(100.0 * powf64(2.0, (double)(cc) / 12.0 - 5.0));
+++            iso_speed = (int)(100.0 * powf_64(2.0, (double)(cc) / 12.0 - 5.0));
++             break;
++           }
++       }
+ @@ -6805,7 +6805,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-           }
+-           break;
+-         case 0x1002:
+--          imgdata.lens.makernotes.CurAp = powf64(2.0f, getreal(type)/2);
+-+          imgdata.lens.makernotes.CurAp = powf_64(2.0f, getreal(type)/2);
+-           break;
+-         case 0x20100201:
+-           imgdata.lens.makernotes.LensID =
++           }
++           break;
++         case 0x1002:
++-          imgdata.lens.makernotes.CurAp = powf64(2.0f, getreal(type)/2);
+++          imgdata.lens.makernotes.CurAp = powf_64(2.0f, getreal(type)/2);
++           break;
++         case 0x20100201:
++           imgdata.lens.makernotes.LensID =
+ @@ -6825,10 +6825,10 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-           fread(imgdata.lens.makernotes.Lens, len, 1, ifp);
+-           break;
+-         case 0x20100205:
+--          imgdata.lens.makernotes.MaxAp4MinFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100206:
+--          imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100207:
+-           imgdata.lens.makernotes.MinFocal = (float)get2();
++           fread(imgdata.lens.makernotes.Lens, len, 1, ifp);
++           break;
++         case 0x20100205:
++-          imgdata.lens.makernotes.MaxAp4MinFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100206:
++-          imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100207:
++           imgdata.lens.makernotes.MinFocal = (float)get2();
+ @@ -6839,7 +6839,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-             imgdata.lens.makernotes.MaxFocal = imgdata.lens.makernotes.MinFocal;
+-           break;
+-         case 0x2010020a:
+--          imgdata.lens.makernotes.MaxAp4CurFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100301:
+-           imgdata.lens.makernotes.TeleconverterID = fgetc(ifp) << 8;
++             imgdata.lens.makernotes.MaxFocal = imgdata.lens.makernotes.MinFocal;
++           break;
++         case 0x2010020a:
++-          imgdata.lens.makernotes.MaxAp4CurFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100301:
++           imgdata.lens.makernotes.TeleconverterID = fgetc(ifp) << 8;
+ @@ -6937,13 +6937,13 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-                 if (table_buf[iLensData+9] &&
+-                     (fabs(imgdata.lens.makernotes.CurFocal) < 0.1f))
+-                   imgdata.lens.makernotes.CurFocal =
+--                    10*(table_buf[iLensData+9]>>2) * powf64(4, (table_buf[iLensData+9] & 0x03)-2);
+-+                    10*(table_buf[iLensData+9]>>2) * powf_64(4, (table_buf[iLensData+9] & 0x03)-2);
+-                 if (table_buf[iLensData+10] & 0xf0)
+-                   imgdata.lens.makernotes.MaxAp4CurFocal =
+--                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+-+                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+-                 if (table_buf[iLensData+10] & 0x0f)
+-                   imgdata.lens.makernotes.MinAp4CurFocal =
+--                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+-+                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+-                 if (
+-                     (imgdata.lens.makernotes.CamID != 0x12e6c) &&	// K-r
+-                     (imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
++                 if (table_buf[iLensData+9] &&
++                     (fabs(imgdata.lens.makernotes.CurFocal) < 0.1f))
++                   imgdata.lens.makernotes.CurFocal =
++-                    10*(table_buf[iLensData+9]>>2) * powf64(4, (table_buf[iLensData+9] & 0x03)-2);
+++                    10*(table_buf[iLensData+9]>>2) * powf_64(4, (table_buf[iLensData+9] & 0x03)-2);
++                 if (table_buf[iLensData+10] & 0xf0)
++                   imgdata.lens.makernotes.MaxAp4CurFocal =
++-                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+++                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
++                 if (table_buf[iLensData+10] & 0x0f)
++                   imgdata.lens.makernotes.MinAp4CurFocal =
++-                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+++                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
++                 if (
++                     (imgdata.lens.makernotes.CamID != 0x12e6c) &&	// K-r
++                     (imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
+ @@ -6964,14 +6964,14 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-                     if ((table_buf[iLensData+14] > 1) &&
+-                         (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
+-                       imgdata.lens.makernotes.MaxAp4CurFocal =
+--                        powf64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+-+                        powf_64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+-                   }
+-                 else if ((imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
+-                          (table_buf[iLensData+15] > 1) &&
+-                          (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
+-                   {
+-                     imgdata.lens.makernotes.MaxAp4CurFocal =
+--                      powf64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+-+                      powf_64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+-                   }
+-               }
+-             free(table_buf);
++                     if ((table_buf[iLensData+14] > 1) &&
++                         (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
++                       imgdata.lens.makernotes.MaxAp4CurFocal =
++-                        powf64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+++                        powf_64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
++                   }
++                 else if ((imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
++                          (table_buf[iLensData+15] > 1) &&
++                          (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
++                   {
++                     imgdata.lens.makernotes.MaxAp4CurFocal =
++-                      powf64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+++                      powf_64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
++                   }
++               }
++             free(table_buf);
+ @@ -7137,7 +7137,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
+-                   lid = (((ushort)table_buf[2])<<8) |
+-                     ((ushort)table_buf[3]);
+-                   imgdata.lens.makernotes.CurAp =
+--                    powf64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+-+                    powf_64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+-                 }
+-               break;
+-             case 1536:
++                   lid = (((ushort)table_buf[2])<<8) |
++                     ((ushort)table_buf[3]);
++                   imgdata.lens.makernotes.CurAp =
++-                    powf64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+++                    powf_64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
++                 }
++               break;
++             case 1536:
+ @@ -7617,7 +7617,7 @@ void CLASS parse_makernote (int base, int uptag)
+-           }
+-           break;
+-         case 0x1002:
+--          imgdata.lens.makernotes.CurAp = powf64(2.0f, getreal(type)/2);
+-+          imgdata.lens.makernotes.CurAp = powf_64(2.0f, getreal(type)/2);
+-           break;
+-         case 0x20100201:
+-           imgdata.lens.makernotes.LensID =
++           }
++           break;
++         case 0x1002:
++-          imgdata.lens.makernotes.CurAp = powf64(2.0f, getreal(type)/2);
+++          imgdata.lens.makernotes.CurAp = powf_64(2.0f, getreal(type)/2);
++           break;
++         case 0x20100201:
++           imgdata.lens.makernotes.LensID =
+ @@ -7637,10 +7637,10 @@ void CLASS parse_makernote (int base, int uptag)
+-           fread(imgdata.lens.makernotes.Lens, len, 1, ifp);
+-           break;
+-         case 0x20100205:
+--          imgdata.lens.makernotes.MaxAp4MinFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100206:
+--          imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100207:
+-           imgdata.lens.makernotes.MinFocal = (float)get2();
++           fread(imgdata.lens.makernotes.Lens, len, 1, ifp);
++           break;
++         case 0x20100205:
++-          imgdata.lens.makernotes.MaxAp4MinFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4MinFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100206:
++-          imgdata.lens.makernotes.MaxAp4MaxFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4MaxFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100207:
++           imgdata.lens.makernotes.MinFocal = (float)get2();
+ @@ -7651,7 +7651,7 @@ void CLASS parse_makernote (int base, int uptag)
+-             imgdata.lens.makernotes.MaxFocal = imgdata.lens.makernotes.MinFocal;
+-           break;
+-         case 0x2010020a:
+--          imgdata.lens.makernotes.MaxAp4CurFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+-+          imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
+-           break;
+-         case 0x20100301:
+-           imgdata.lens.makernotes.TeleconverterID = fgetc(ifp) << 8;
++             imgdata.lens.makernotes.MaxFocal = imgdata.lens.makernotes.MinFocal;
++           break;
++         case 0x2010020a:
++-          imgdata.lens.makernotes.MaxAp4CurFocal = powf64(sqrt(2.0f), get2() / 256.0f);
+++          imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(sqrt(2.0f), get2() / 256.0f);
++           break;
++         case 0x20100301:
++           imgdata.lens.makernotes.TeleconverterID = fgetc(ifp) << 8;
+ @@ -7809,13 +7809,13 @@ void CLASS parse_makernote (int base, int uptag)
+-               {
+-                 if (table_buf[iLensData+9] && (fabs(imgdata.lens.makernotes.CurFocal) < 0.1f))
+-                   imgdata.lens.makernotes.CurFocal =
+--                    10*(table_buf[iLensData+9]>>2) * powf64(4, (table_buf[iLensData+9] & 0x03)-2);
+-+                    10*(table_buf[iLensData+9]>>2) * powf_64(4, (table_buf[iLensData+9] & 0x03)-2);
+-                 if (table_buf[iLensData+10] & 0xf0)
+-                   imgdata.lens.makernotes.MaxAp4CurFocal =
+--                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+-+                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+-                 if (table_buf[iLensData+10] & 0x0f)
+-                   imgdata.lens.makernotes.MinAp4CurFocal =
+--                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+-+                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+-                 if (
+-                     (imgdata.lens.makernotes.CamID != 0x12e6c) &&	// K-r
+-                     (imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
++               {
++                 if (table_buf[iLensData+9] && (fabs(imgdata.lens.makernotes.CurFocal) < 0.1f))
++                   imgdata.lens.makernotes.CurFocal =
++-                    10*(table_buf[iLensData+9]>>2) * powf64(4, (table_buf[iLensData+9] & 0x03)-2);
+++                    10*(table_buf[iLensData+9]>>2) * powf_64(4, (table_buf[iLensData+9] & 0x03)-2);
++                 if (table_buf[iLensData+10] & 0xf0)
++                   imgdata.lens.makernotes.MaxAp4CurFocal =
++-                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
+++                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0xf0) >>4)/4.0f);
++                 if (table_buf[iLensData+10] & 0x0f)
++                   imgdata.lens.makernotes.MinAp4CurFocal =
++-                    powf64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
+++                    powf_64(2.0f, (float)((table_buf[iLensData+10] & 0x0f) + 10)/4.0f);
++                 if (
++                     (imgdata.lens.makernotes.CamID != 0x12e6c) &&	// K-r
++                     (imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
+ @@ -7836,14 +7836,14 @@ void CLASS parse_makernote (int base, int uptag)
+-                     if ((table_buf[iLensData+14] > 1) &&
+-                         (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
+-                       imgdata.lens.makernotes.MaxAp4CurFocal =
+--                        powf64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+-+                        powf_64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+-                   }
+-                 else if ((imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
+-                          (table_buf[iLensData+15] > 1) &&
+-                          (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
+-                   {
+-                     imgdata.lens.makernotes.MaxAp4CurFocal =
+--                      powf64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+-+                      powf_64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+-                   }
+-               }
+-             free(table_buf);
++                     if ((table_buf[iLensData+14] > 1) &&
++                         (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
++                       imgdata.lens.makernotes.MaxAp4CurFocal =
++-                        powf64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
+++                        powf_64(2.0f, (float)((table_buf[iLensData+14] & 0x7f) -1)/32.0f);
++                   }
++                 else if ((imgdata.lens.makernotes.CamID != 0x12e76) &&	// K-5
++                          (table_buf[iLensData+15] > 1) &&
++                          (fabs(imgdata.lens.makernotes.MaxAp4CurFocal) < 0.7f))
++                   {
++                     imgdata.lens.makernotes.MaxAp4CurFocal =
++-                      powf64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
+++                      powf_64(2.0f, (float)((table_buf[iLensData+15] & 0x7f) -1)/32.0f);
++                   }
++               }
++             free(table_buf);
+ @@ -8004,7 +8004,7 @@ void CLASS parse_makernote (int base, int uptag)
+-                   lid = (((ushort)table_buf[2])<<8) |
+-                     ((ushort)table_buf[3]);
+-                   imgdata.lens.makernotes.CurAp =
+--                    powf64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+-+                    powf_64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+-                 }
+-               break;
+-             case 1536:
++                   lid = (((ushort)table_buf[2])<<8) |
++                     ((ushort)table_buf[3]);
++                   imgdata.lens.makernotes.CurAp =
++-                    powf64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
+++                    powf_64(2.0f, ((float)lid/8.0f-1.0f)/2.0f);
++                 }
++               break;
++             case 1536:
+ @@ -8089,15 +8089,15 @@ void CLASS parse_makernote (int base, int uptag)
+-       {
+-         unsigned char cc;
+-         fread(&cc,1,1,ifp);
+--        iso_speed = int(100.0 * powf64(2.0f,float(cc)/12.0-5.0));
+-+        iso_speed = int(100.0 * powf_64(2.0f,float(cc)/12.0-5.0));
+-       }
+-     if (tag == 4 && len > 26 && len < 35) {
+-       if ((i=(get4(),get2())) != 0x7fff && (!iso_speed || iso_speed == 65535))
+--	iso_speed = 50 * powf64(2.0, i/32.0 - 4);
+-+	iso_speed = 50 * powf_64(2.0, i/32.0 - 4);
+-       if ((i=(get2(),get2())) != 0x7fff && !aperture)
+--	aperture = powf64(2.0, i/64.0);
+-+	aperture = powf_64(2.0, i/64.0);
+-       if ((i=get2()) != 0xffff && !shutter)
+--	shutter = powf64(2.0, (short) i/-32.0);
+-+	shutter = powf_64(2.0, (short) i/-32.0);
+-       wbi = (get2(),get2());
+-       shot_order = (get2(),get2());
+-     }
++       {
++         unsigned char cc;
++         fread(&cc,1,1,ifp);
++-        iso_speed = int(100.0 * powf64(2.0f,float(cc)/12.0-5.0));
+++        iso_speed = int(100.0 * powf_64(2.0f,float(cc)/12.0-5.0));
++       }
++     if (tag == 4 && len > 26 && len < 35) {
++       if ((i=(get4(),get2())) != 0x7fff && (!iso_speed || iso_speed == 65535))
++-	iso_speed = 50 * powf64(2.0, i/32.0 - 4);
+++	iso_speed = 50 * powf_64(2.0, i/32.0 - 4);
++       if ((i=(get2(),get2())) != 0x7fff && !aperture)
++-	aperture = powf64(2.0, i/64.0);
+++	aperture = powf_64(2.0, i/64.0);
++       if ((i=get2()) != 0xffff && !shutter)
++-	shutter = powf64(2.0, (short) i/-32.0);
+++	shutter = powf_64(2.0, (short) i/-32.0);
++       wbi = (get2(),get2());
++       shot_order = (get2(),get2());
++     }
+ @@ -8548,7 +8548,7 @@ void CLASS parse_exif (int base)
+-         imgdata.lens.Lens[0] = 0;
+-       break;
+-     case 0x9205:
+--      imgdata.lens.EXIF_MaxAp = powf64(2.0f, (getreal(type) / 2.0f));
+-+      imgdata.lens.EXIF_MaxAp = powf_64(2.0f, (getreal(type) / 2.0f));
+-       break;
+- #endif
+-       case 33434:  shutter = getreal(type);		break;
++         imgdata.lens.Lens[0] = 0;
++       break;
++     case 0x9205:
++-      imgdata.lens.EXIF_MaxAp = powf64(2.0f, (getreal(type) / 2.0f));
+++      imgdata.lens.EXIF_MaxAp = powf_64(2.0f, (getreal(type) / 2.0f));
++       break;
++ #endif
++       case 33434:  shutter = getreal(type);		break;
+ @@ -8561,10 +8561,10 @@ void CLASS parse_exif (int base)
+-       case 36867:
+-       case 36868:  get_timestamp(0);			break;
+-       case 37377:  if ((expo = -getreal(type)) < 128 && shutter == 0.)
+--          shutter = powf64(2.0, expo);		break;
+-+          shutter = powf_64(2.0, expo);		break;
+-       case 37378:
+-         if (fabs(ape = getreal(type))<256.0)
+--          aperture = powf64(2.0, ape/2);
+-+          aperture = powf_64(2.0, ape/2);
+-         break;
+-       case 37385:  flash_used = getreal(type);          break;
+-       case 37386:  focal_len = getreal(type);		break;
++       case 36867:
++       case 36868:  get_timestamp(0);			break;
++       case 37377:  if ((expo = -getreal(type)) < 128 && shutter == 0.)
++-          shutter = powf64(2.0, expo);		break;
+++          shutter = powf_64(2.0, expo);		break;
++       case 37378:
++         if (fabs(ape = getreal(type))<256.0)
++-          aperture = powf64(2.0, ape/2);
+++          aperture = powf_64(2.0, ape/2);
++         break;
++       case 37385:  flash_used = getreal(type);          break;
++       case 37386:  focal_len = getreal(type);		break;
+ @@ -9171,7 +9171,7 @@ int CLASS parse_tiff_ifd (int base)
+-         imgdata.lens.Lens[0] = 0;
+-       break;
+-     case 0x9205:
+--				imgdata.lens.EXIF_MaxAp = powf64(2.0f, (getreal(type) / 2.0f));
+-+				imgdata.lens.EXIF_MaxAp = powf_64(2.0f, (getreal(type) / 2.0f));
+-       break;
+- // IB end
+- #endif
++         imgdata.lens.Lens[0] = 0;
++       break;
++     case 0x9205:
++-				imgdata.lens.EXIF_MaxAp = powf64(2.0f, (getreal(type) / 2.0f));
+++				imgdata.lens.EXIF_MaxAp = powf_64(2.0f, (getreal(type) / 2.0f));
++       break;
++ // IB end
++ #endif
+ @@ -9940,22 +9940,22 @@ void CLASS parse_ciff (int offset, int length, int depth)
+-       thumb_length = len;
+-     }
+-     if (type == 0x1818) {
+--      shutter = powf64(2.0f, -int_to_float((get4(),get4())));
+--      aperture = powf64(2.0f, int_to_float(get4())/2);
+-+      shutter = powf_64(2.0f, -int_to_float((get4(),get4())));
+-+      aperture = powf_64(2.0f, int_to_float(get4())/2);
+- #ifdef LIBRAW_LIBRARY_BUILD
+- 			imgdata.lens.makernotes.CurAp = aperture;
+- #endif
+-     }
+-     if (type == 0x102a) {
+- 			//      iso_speed = pow (2.0, (get4(),get2())/32.0 - 4) * 50;
+--      iso_speed = powf64(2.0f, ((get2(),get2()) + get2())/32.0f - 5.0f) * 100.0f;
+-+      iso_speed = powf_64(2.0f, ((get2(),get2()) + get2())/32.0f - 5.0f) * 100.0f;
+- #ifdef LIBRAW_LIBRARY_BUILD
+-       aperture  = _CanonConvertAperture((get2(),get2()));
+-       imgdata.lens.makernotes.CurAp = aperture;
+- #else
+--      aperture  = powf64(2.0, (get2(),(short)get2())/64.0);
+-+      aperture  = powf_64(2.0, (get2(),(short)get2())/64.0);
+- #endif
+--      shutter   = powf64(2.0,-((short)get2())/32.0);
+-+      shutter   = powf_64(2.0,-((short)get2())/32.0);
+-       wbi = (get2(),get2());
+-       if (wbi > 17) wbi = 0;
+-       fseek (ifp, 32, SEEK_CUR);
++       thumb_length = len;
++     }
++     if (type == 0x1818) {
++-      shutter = powf64(2.0f, -int_to_float((get4(),get4())));
++-      aperture = powf64(2.0f, int_to_float(get4())/2);
+++      shutter = powf_64(2.0f, -int_to_float((get4(),get4())));
+++      aperture = powf_64(2.0f, int_to_float(get4())/2);
++ #ifdef LIBRAW_LIBRARY_BUILD
++ 			imgdata.lens.makernotes.CurAp = aperture;
++ #endif
++     }
++     if (type == 0x102a) {
++ 			//      iso_speed = pow (2.0, (get4(),get2())/32.0 - 4) * 50;
++-      iso_speed = powf64(2.0f, ((get2(),get2()) + get2())/32.0f - 5.0f) * 100.0f;
+++      iso_speed = powf_64(2.0f, ((get2(),get2()) + get2())/32.0f - 5.0f) * 100.0f;
++ #ifdef LIBRAW_LIBRARY_BUILD
++       aperture  = _CanonConvertAperture((get2(),get2()));
++       imgdata.lens.makernotes.CurAp = aperture;
++ #else
++-      aperture  = powf64(2.0, (get2(),(short)get2())/64.0);
+++      aperture  = powf_64(2.0, (get2(),(short)get2())/64.0);
++ #endif
++-      shutter   = powf64(2.0,-((short)get2())/32.0);
+++      shutter   = powf_64(2.0,-((short)get2())/32.0);
++       wbi = (get2(),get2());
++       if (wbi > 17) wbi = 0;
++       fseek (ifp, 32, SEEK_CUR);
+ @@ -10159,8 +10159,8 @@ void CLASS parse_phase_one (int base)
+-       setPhaseOneFeatures(unique_id);
+-       break;
+-     case 0x0401:
+--      if (type == 4) imgdata.lens.makernotes.CurAp =  powf64(2.0f, (int_to_float(data)/2.0f));
+--      else imgdata.lens.makernotes.CurAp = powf64(2.0f, (getreal(type)/2.0f));
+-+      if (type == 4) imgdata.lens.makernotes.CurAp =  powf_64(2.0f, (int_to_float(data)/2.0f));
+-+      else imgdata.lens.makernotes.CurAp = powf_64(2.0f, (getreal(type)/2.0f));
+-       break;
+-     case 0x0403:
+-       if (type == 4) imgdata.lens.makernotes.CurFocal =  int_to_float(data);
++       setPhaseOneFeatures(unique_id);
++       break;
++     case 0x0401:
++-      if (type == 4) imgdata.lens.makernotes.CurAp =  powf64(2.0f, (int_to_float(data)/2.0f));
++-      else imgdata.lens.makernotes.CurAp = powf64(2.0f, (getreal(type)/2.0f));
+++      if (type == 4) imgdata.lens.makernotes.CurAp =  powf_64(2.0f, (int_to_float(data)/2.0f));
+++      else imgdata.lens.makernotes.CurAp = powf_64(2.0f, (getreal(type)/2.0f));
++       break;
++     case 0x0403:
++       if (type == 4) imgdata.lens.makernotes.CurFocal =  int_to_float(data);
+ @@ -10174,16 +10174,16 @@ void CLASS parse_phase_one (int base)
+-       break;
+-     case 0x0414:
+-       if (type == 4) {
+--      	imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, (int_to_float(data)/2.0f));
+-+      	imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, (int_to_float(data)/2.0f));
+-       } else {
+--        imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, (getreal(type) / 2.0f));
+-+        imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, (getreal(type) / 2.0f));
+-       }
+-       break;
+-     case 0x0415:
+-       if (type == 4) {
+--      	imgdata.lens.makernotes.MinAp4CurFocal = powf64(2.0f, (int_to_float(data)/2.0f));
+-+      	imgdata.lens.makernotes.MinAp4CurFocal = powf_64(2.0f, (int_to_float(data)/2.0f));
+-       } else {
+--        imgdata.lens.makernotes.MinAp4CurFocal = powf64(2.0f, (getreal(type) / 2.0f));
+-+        imgdata.lens.makernotes.MinAp4CurFocal = powf_64(2.0f, (getreal(type) / 2.0f));
+-       }
+-       break;
+-     case 0x0416:
++       break;
++     case 0x0414:
++       if (type == 4) {
++-      	imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, (int_to_float(data)/2.0f));
+++      	imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, (int_to_float(data)/2.0f));
++       } else {
++-        imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, (getreal(type) / 2.0f));
+++        imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, (getreal(type) / 2.0f));
++       }
++       break;
++     case 0x0415:
++       if (type == 4) {
++-      	imgdata.lens.makernotes.MinAp4CurFocal = powf64(2.0f, (int_to_float(data)/2.0f));
+++      	imgdata.lens.makernotes.MinAp4CurFocal = powf_64(2.0f, (int_to_float(data)/2.0f));
++       } else {
++-        imgdata.lens.makernotes.MinAp4CurFocal = powf64(2.0f, (getreal(type) / 2.0f));
+++        imgdata.lens.makernotes.MinAp4CurFocal = powf_64(2.0f, (getreal(type) / 2.0f));
++       }
++       break;
++     case 0x0416:
+ @@ -11996,15 +11996,15 @@ void CLASS identify()
+-       case 18: iso_speed = 320; break;
+-       case 19: iso_speed = 400; break;
+-     }
+--    shutter = powf64(2.0f, (((float)get4())/8.0f)) / 16000.0f;
+-+    shutter = powf_64(2.0f, (((float)get4())/8.0f)) / 16000.0f;
+-     FORC4 cam_mul[c ^ (c >> 1)] = get4();
+-     fseek (ifp, 88, SEEK_SET);
+--    aperture = powf64(2.0f, ((float)get4())/16.0f);
+-+    aperture = powf_64(2.0f, ((float)get4())/16.0f);
+-     fseek (ifp, 112, SEEK_SET);
+-     focal_len = get4();
+- #ifdef LIBRAW_LIBRARY_BUILD
+-     fseek (ifp, 104, SEEK_SET);
+--    imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, ((float)get4())/16.0f);
+-+    imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, ((float)get4())/16.0f);
+-     fseek (ifp, 124, SEEK_SET);
+-     fread(imgdata.lens.makernotes.Lens, 32, 1, ifp);
+-     imgdata.lens.makernotes.CameraMount = LIBRAW_MOUNT_Contax_N;
++       case 18: iso_speed = 320; break;
++       case 19: iso_speed = 400; break;
++     }
++-    shutter = powf64(2.0f, (((float)get4())/8.0f)) / 16000.0f;
+++    shutter = powf_64(2.0f, (((float)get4())/8.0f)) / 16000.0f;
++     FORC4 cam_mul[c ^ (c >> 1)] = get4();
++     fseek (ifp, 88, SEEK_SET);
++-    aperture = powf64(2.0f, ((float)get4())/16.0f);
+++    aperture = powf_64(2.0f, ((float)get4())/16.0f);
++     fseek (ifp, 112, SEEK_SET);
++     focal_len = get4();
++ #ifdef LIBRAW_LIBRARY_BUILD
++     fseek (ifp, 104, SEEK_SET);
++-    imgdata.lens.makernotes.MaxAp4CurFocal = powf64(2.0f, ((float)get4())/16.0f);
+++    imgdata.lens.makernotes.MaxAp4CurFocal = powf_64(2.0f, ((float)get4())/16.0f);
++     fseek (ifp, 124, SEEK_SET);
++     fread(imgdata.lens.makernotes.Lens, 32, 1, ifp);
++     imgdata.lens.makernotes.CameraMount = LIBRAW_MOUNT_Contax_N;
+ -- 
+ 2.14.1
  
-+# Hardlinks between binaries in different directories cause a problem
-+# with rpath fixup, so we de-hardlink those binaries, and replace them
-+# with symbolic links.
-+BINUTILS_TOOLS = ar as ld ld.bfd nm objcopy objdump ranlib readelf strip
-+define HOST_BINUTILS_FIXUP_HARDLINKS
-+	$(foreach tool,$(BINUTILS_TOOLS),\
-+		rm -f $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool) ; \
-+		ln -s ../../bin/$(GNU_TARGET_NAME)-$(tool) $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool)
-+	)
-+endef
-+HOST_BINUTILS_POST_INSTALL_HOOKS += HOST_BINUTILS_FIXUP_HARDLINKS
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
