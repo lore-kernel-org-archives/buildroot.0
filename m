@@ -1,39 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 6 May 2018 21:40:44 +0200
-Subject: [Buildroot] [PATCH 1/1] qemu_arm_vexpress: use latest Linux
- kernel
-In-Reply-To: <20180506163059.5801-1-Florian.LaRoche@googlemail.com>
-References: <20180506163059.5801-1-Florian.LaRoche@googlemail.com>
-Message-ID: <20180506214044.786e3dbd@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 06 May 2018 21:52:33 +0200
+Subject: [Buildroot] [PATCH 1/3] udftool: add missing dependency on
+ readline
+In-Reply-To: <20180422212005.13062-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 22 Apr 2018 23:20:03 +0200")
+References: <20180422212005.13062-1-thomas.petazzoni@bootlin.com>
+ <20180422212005.13062-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87in80pnni.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Florian,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Thanks for your contribution.
+ > udftool/Config.in selects BR2_PACKAGE_READLINE, but udftool does not
+ > depend on it. Readline is not a runtime dependency: one of the udftool
+ > program links against it.
 
-On Sun,  6 May 2018 18:30:59 +0200, Florian La Roche wrote:
-> There should be no reason to keep the qemu_arm_vexpress target
-> on an older kernel release, so change this to build with the latest
-> Linux kernel release for buildroot.
-> 
-> 
-> Signed-off-by: Florian La Roche <Florian.LaRoche@googlemail.com>
+ > This commit fixes this inconsistency.
 
-There is a reason why all defconfigs used a fixed U-Boot / kernel
-version: we want those versions to have been tested and confirmed to
-work on the target platform.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-So, a patch updating to Linux 4.16 would be fine, but not a patch that
-changes to automatically use the latest version.
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
