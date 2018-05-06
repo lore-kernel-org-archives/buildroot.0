@@ -1,112 +1,134 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 21:52:03 +0200
-Subject: [Buildroot] [git commit] udftools: fix static linking against
- readline
-Message-ID: <20180506195333.71CB68B84D@busybox.osuosl.org>
+Date: Sun, 6 May 2018 21:50:01 +0200
+Subject: [Buildroot] [git commit] readline: install a .pc file
+Message-ID: <20180506195333.67A1E8B84D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be8cea224e2122f12e95e4dc2a02c63dd6db1c4e
+commit: https://git.buildroot.net/buildroot/commit/?id=a2d07f1be6b8667c83bdcdbc9fc2af7596b1be10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-One program of udftools uses the readline library, but fails to build
-in static linking configurations. In order to fix this, we teach
-udftools configure.ac to use pkg-config to detect the readline
-library, and to use the proper flags provided by pkg-config.
+Some packages (such as udftools) fail to build against readline in
+static linking configurations. To fix this, we install the .pc file
+provided by readline.
 
-This obviously requires an autoreconf of the package, and the addition
-of host-pkgconf in the dependencies.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/113a94049d89b8f065112e5d4482667a7b7fb843/
+Unfortunately, this .pc file is by default not correct, so a patch is
+added to fix it, and this patch requires to re-autoconf the package
+(but not autoreconf since only autoconf is used).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...c-detect-readline-via-pkg-config-when-pos.patch | 60 ++++++++++++++++++++++
- package/udftools/udftools.mk                       |  3 +-
- 2 files changed, 62 insertions(+), 1 deletion(-)
+ ...c-readline.pc.in-fix-Requires.private-val.patch | 62 ++++++++++++++++++++++
+ package/readline/readline.mk                       | 17 +++++-
+ 2 files changed, 77 insertions(+), 2 deletions(-)
 
-diff --git a/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch b/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
+diff --git a/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch b/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch
 new file mode 100644
-index 0000000000..f73db99ca2
+index 0000000000..22b479cd91
 --- /dev/null
-+++ b/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
-@@ -0,0 +1,60 @@
-+From bdacf0101fea1dad2c89996b27cb4b9caee9109c Mon Sep 17 00:00:00 2001
++++ b/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch
+@@ -0,0 +1,62 @@
++From 7bbf2046fbcf4416ec226ecb3a2b4c6a5c263298 Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 22 Apr 2018 22:28:09 +0200
-+Subject: [PATCH] configure.ac: detect readline via pkg-config when possible
++Date: Sun, 22 Apr 2018 23:06:28 +0200
++Subject: [PATCH] configure.ac, readline.pc.in: fix Requires.private value
 +
-+pkg-config automatically handles static linking situations, where for
-+example readline is linked against ncurses, and therefore -lncurses
-+needs to be passed in addition to -lreadline.
++The provided readline.pc.in hardcodes the fact that readline depends
++on the tinfo library. However, different termcap implementation are
++supported beyond tinfo. This commit improves the configure.ac script
++to define a TERMCAP_PKG_CONFIG_LIB variable, which is then used in
++readline.pc.in.
 +
-+This proposal uses pkg-config when available. If pkg-config is not
-+found, or readline is not found via pkg-config, we fallback to the
-+existing AC_CHECK_LIB(). This AC_CHECK_LIB() test is modified to set
-+READLINE_LIBS, like PKG_CHECK_MODULES() does. The Makefile.am
-+consequently uses READLINE_LIBS instead of hardcoding -lreadline.
++This for example allows the generated readline.pc to properly contain
++"Requires.private: ncurses" when ncurses is used as the termcap
++implementation.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ configure.ac      | 14 ++++++++++++--
-+ wrudf/Makefile.am |  2 +-
-+ 2 files changed, 13 insertions(+), 3 deletions(-)
++ configure.ac   | 8 ++++++++
++ readline.pc.in | 2 +-
++ 2 files changed, 9 insertions(+), 1 deletion(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index 95fbba3..62b1caa 100644
++index fd0cec4..9f85f37 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -9,8 +9,18 @@ AC_PROG_CC
-+ AC_DISABLE_SHARED
-+ AM_PROG_LIBTOOL
++@@ -276,6 +276,13 @@ case "$BUILD_DIR" in
++ *)	;;
++ esac
 + 
-+-dnl Checks for libraries.
-+-AC_CHECK_LIB(readline, readline, [ ], AC_MSG_ERROR([cannot find -lreadline.]))
-++PKG_PROG_PKG_CONFIG
+++case "$TERMCAP_LIB" in
+++-ltinfo)  TERMCAP_PKG_CONFIG_LIB=tinfo ;;
+++-lcurses) TERMCAP_PKG_CONFIG_LIB=ncurses ;;
+++-lncurses) TERMCAP_PKG_CONFIG_LIB=ncurses ;;
+++-ltermcap) TERMCAP_PKG_CONFIG_LIB=termcap ;;
+++esac
 ++
-++dnl Checks for libraries, by using pkg-config when available
-++if test -n "${PKG_CONFIG}" ; then
-++  PKG_CHECK_MODULES([READLINE], [readline], [readline_found=yes], [readline_found=no])
-++fi
-++
-++if test "${readline_found}" != "yes" ; then
-++  AC_CHECK_LIB(readline, readline,
-++               [AC_SUBST([READLINE_LIBS], [-lreadline])],
-++               AC_MSG_ERROR([cannot find -lreadline.]))
-++fi
++ AC_SUBST(BUILD_DIR)
 + 
-+ dnl Checks for header files.
-+ AC_HEADER_STDC
-+diff --git a/wrudf/Makefile.am b/wrudf/Makefile.am
-+index fe1c269..e3ab85b 100644
-+--- a/wrudf/Makefile.am
-++++ b/wrudf/Makefile.am
-+@@ -1,5 +1,5 @@
-+ bin_PROGRAMS = wrudf
-+-wrudf_LDADD = $(top_builddir)/libudffs/libudffs.la -lreadline
-++wrudf_LDADD = $(top_builddir)/libudffs/libudffs.la $(READLINE_LIBS)
-+ wrudf_SOURCES = wrudf.c wrudf-cmnd.c wrudf-desc.c wrudf-cdrw.c wrudf-cdr.c ide-pc.c wrudf.h ide-pc.h ../include/ecma_167.h ../include/osta_udf.h ../include/bswap.h
++ AC_SUBST(CFLAGS)
++@@ -292,6 +299,7 @@ AC_SUBST(host_os)
++ AC_SUBST(LIBVERSION)
 + 
-+ AM_CPPFLAGS = -I$(top_srcdir)/include -D_GNU_SOURCE -DDEBUG
++ AC_SUBST(TERMCAP_LIB)
+++AC_SUBST(TERMCAP_PKG_CONFIG_LIB)
++ 
++ AC_OUTPUT([Makefile doc/Makefile examples/Makefile shlib/Makefile readline.pc],
++ [
++diff --git a/readline.pc.in b/readline.pc.in
++index fbfca8a..a7f2cf3 100644
++--- a/readline.pc.in
+++++ b/readline.pc.in
++@@ -7,6 +7,6 @@ Name: Readline
++ Description: Gnu Readline library for command line editing
++ URL: http://tiswww.cwru.edu/php/chet/readline/rltop.html
++ Version: @LIBVERSION@
++-Requires.private: tinfo
+++Requires.private: @TERMCAP_PKG_CONFIG_LIB@
++ Libs: -L${libdir} -lreadline
++ Cflags: -I${includedir}/readline
 +-- 
 +2.14.3
 +
-diff --git a/package/udftools/udftools.mk b/package/udftools/udftools.mk
-index 2d3477a51c..e5bf59137e 100644
---- a/package/udftools/udftools.mk
-+++ b/package/udftools/udftools.mk
-@@ -8,6 +8,7 @@ UDFTOOLS_VERSION = 2.0
- UDFTOOLS_SITE = https://github.com/pali/udftools/releases/download/$(UDFTOOLS_VERSION)
- UDFTOOLS_LICENSE = GPL-2.0+
- UDFTOOLS_LICENSE_FILES = COPYING
--UDFTOOLS_DEPENDENCIES = readline
-+UDFTOOLS_AUTORECONF = YES
-+UDFTOOLS_DEPENDENCIES = readline host-pkgconf
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index cc5d4f2920..e00c594697 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -7,18 +7,31 @@
+ READLINE_VERSION = 7.0
+ READLINE_SITE = $(BR2_GNU_MIRROR)/readline
+ READLINE_INSTALL_STAGING = YES
+-READLINE_DEPENDENCIES = ncurses
+-HOST_READLINE_DEPENDENCIES = host-ncurses
++READLINE_DEPENDENCIES = ncurses host-autoconf
++HOST_READLINE_DEPENDENCIES = host-ncurses host-autoconf
+ READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes \
+ 	bash_cv_wcwidth_broken=no
+ READLINE_LICENSE = GPL-3.0+
+ READLINE_LICENSE_FILES = COPYING
  
- $(eval $(autotools-package))
++# readline only uses autoconf, not automake, and therefore the regular
++# AUTORECONF = YES doesn't work.
++define READLINE_AUTOCONF
++	cd $(@D); $(HOST_DIR)/bin/autoconf
++endef
++READLINE_PRE_CONFIGURE_HOOKS += READLINE_AUTOCONF
++HOST_READLINE_PRE_CONFIGURE_HOOKS += READLINE_AUTOCONF
++
+ define READLINE_PURGE_EXAMPLES
+ 	rm -rf $(TARGET_DIR)/usr/share/readline
+ endef
+ READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
+ 
++define READLINE_INSTALL_PC_FILE
++	$(INSTALL) -D -m 644 $(@D)/readline.pc $(STAGING_DIR)/usr/lib/pkgconfig/readline.pc
++endef
++READLINE_POST_INSTALL_STAGING_HOOKS += READLINE_INSTALL_PC_FILE
++
+ define READLINE_INSTALL_INPUTRC
+ 	$(INSTALL) -D -m 644 package/readline/inputrc $(TARGET_DIR)/etc/inputrc
+ endef
