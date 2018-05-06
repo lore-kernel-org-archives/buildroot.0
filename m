@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 09:01:42 +0200
-Subject: [Buildroot] [PATCH 1/1] libmad: add hash for license file
-In-Reply-To: <20180504191736.27510-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 4 May 2018 21:17:36 +0200")
-References: <20180504191736.27510-1-fontaine.fabrice@gmail.com>
-Message-ID: <87efiptgh5.fsf@dell.be.48ers.dk>
+Date: Sun, 06 May 2018 09:01:56 +0200
+Subject: [Buildroot] [PATCH 1/1] libmcrypt: add hash for license file
+In-Reply-To: <20180504192120.28561-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 4 May 2018 21:21:20 +0200")
+References: <20180504192120.28561-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7tdtggr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
