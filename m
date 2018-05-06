@@ -1,134 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 21:50:01 +0200
-Subject: [Buildroot] [git commit] readline: install a .pc file
-Message-ID: <20180506195333.67A1E8B84D@busybox.osuosl.org>
+From: Florian La Roche <florian.laroche@googlemail.com>
+Date: Sun,  6 May 2018 22:03:44 +0200
+Subject: [Buildroot] [PATCH 1/1] qemu_arm_vexpress: Linux kernel update to
+ 4.16.7
+Message-ID: <20180506200344.7991-1-Florian.LaRoche@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2d07f1be6b8667c83bdcdbc9fc2af7596b1be10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some packages (such as udftools) fail to build against readline in
-static linking configurations. To fix this, we install the .pc file
-provided by readline.
+Update qemu_arm_vexpress target to Linux kernel 4.16.7.
 
-Unfortunately, this .pc file is by default not correct, so a patch is
-added to fix it, and this patch requires to re-autoconf the package
-(but not autoreconf since only autoconf is used).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Florian La Roche <Florian.LaRoche@googlemail.com>
 ---
- ...c-readline.pc.in-fix-Requires.private-val.patch | 62 ++++++++++++++++++++++
- package/readline/readline.mk                       | 17 +++++-
- 2 files changed, 77 insertions(+), 2 deletions(-)
+ configs/qemu_arm_vexpress_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch b/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch
-new file mode 100644
-index 0000000000..22b479cd91
---- /dev/null
-+++ b/package/readline/0001-configure.ac-readline.pc.in-fix-Requires.private-val.patch
-@@ -0,0 +1,62 @@
-+From 7bbf2046fbcf4416ec226ecb3a2b4c6a5c263298 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 22 Apr 2018 23:06:28 +0200
-+Subject: [PATCH] configure.ac, readline.pc.in: fix Requires.private value
-+
-+The provided readline.pc.in hardcodes the fact that readline depends
-+on the tinfo library. However, different termcap implementation are
-+supported beyond tinfo. This commit improves the configure.ac script
-+to define a TERMCAP_PKG_CONFIG_LIB variable, which is then used in
-+readline.pc.in.
-+
-+This for example allows the generated readline.pc to properly contain
-+"Requires.private: ncurses" when ncurses is used as the termcap
-+implementation.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ configure.ac   | 8 ++++++++
-+ readline.pc.in | 2 +-
-+ 2 files changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index fd0cec4..9f85f37 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -276,6 +276,13 @@ case "$BUILD_DIR" in
-+ *)	;;
-+ esac
-+ 
-++case "$TERMCAP_LIB" in
-++-ltinfo)  TERMCAP_PKG_CONFIG_LIB=tinfo ;;
-++-lcurses) TERMCAP_PKG_CONFIG_LIB=ncurses ;;
-++-lncurses) TERMCAP_PKG_CONFIG_LIB=ncurses ;;
-++-ltermcap) TERMCAP_PKG_CONFIG_LIB=termcap ;;
-++esac
-++
-+ AC_SUBST(BUILD_DIR)
-+ 
-+ AC_SUBST(CFLAGS)
-+@@ -292,6 +299,7 @@ AC_SUBST(host_os)
-+ AC_SUBST(LIBVERSION)
-+ 
-+ AC_SUBST(TERMCAP_LIB)
-++AC_SUBST(TERMCAP_PKG_CONFIG_LIB)
-+ 
-+ AC_OUTPUT([Makefile doc/Makefile examples/Makefile shlib/Makefile readline.pc],
-+ [
-+diff --git a/readline.pc.in b/readline.pc.in
-+index fbfca8a..a7f2cf3 100644
-+--- a/readline.pc.in
-++++ b/readline.pc.in
-+@@ -7,6 +7,6 @@ Name: Readline
-+ Description: Gnu Readline library for command line editing
-+ URL: http://tiswww.cwru.edu/php/chet/readline/rltop.html
-+ Version: @LIBVERSION@
-+-Requires.private: tinfo
-++Requires.private: @TERMCAP_PKG_CONFIG_LIB@
-+ Libs: -L${libdir} -lreadline
-+ Cflags: -I${includedir}/readline
-+-- 
-+2.14.3
-+
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index cc5d4f2920..e00c594697 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -7,18 +7,31 @@
- READLINE_VERSION = 7.0
- READLINE_SITE = $(BR2_GNU_MIRROR)/readline
- READLINE_INSTALL_STAGING = YES
--READLINE_DEPENDENCIES = ncurses
--HOST_READLINE_DEPENDENCIES = host-ncurses
-+READLINE_DEPENDENCIES = ncurses host-autoconf
-+HOST_READLINE_DEPENDENCIES = host-ncurses host-autoconf
- READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes \
- 	bash_cv_wcwidth_broken=no
- READLINE_LICENSE = GPL-3.0+
- READLINE_LICENSE_FILES = COPYING
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index faba6a6c25..34a50aa8d5 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -13,13 +13,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
  
-+# readline only uses autoconf, not automake, and therefore the regular
-+# AUTORECONF = YES doesn't work.
-+define READLINE_AUTOCONF
-+	cd $(@D); $(HOST_DIR)/bin/autoconf
-+endef
-+READLINE_PRE_CONFIGURE_HOOKS += READLINE_AUTOCONF
-+HOST_READLINE_PRE_CONFIGURE_HOOKS += READLINE_AUTOCONF
-+
- define READLINE_PURGE_EXAMPLES
- 	rm -rf $(TARGET_DIR)/usr/share/readline
- endef
- READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
+-# Linux headers same as kernel, a 4.11 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
  
-+define READLINE_INSTALL_PC_FILE
-+	$(INSTALL) -D -m 644 $(@D)/readline.pc $(STAGING_DIR)/usr/lib/pkgconfig/readline.pc
-+endef
-+READLINE_POST_INSTALL_STAGING_HOOKS += READLINE_INSTALL_PC_FILE
-+
- define READLINE_INSTALL_INPUTRC
- 	$(INSTALL) -D -m 644 package/readline/inputrc $(TARGET_DIR)/etc/inputrc
- endef
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+-- 
+2.11.0
