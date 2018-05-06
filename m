@@ -1,32 +1,47 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Sun, 06 May 2018 16:19:35 +0000
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <20180503200415.GC2453@scaer>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
-Message-ID: <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun,  6 May 2018 17:19:43 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ca-certificates: don't hash
+ certificates.crt
+Message-ID: <20180506161944.7451-1-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Copy certificates.crt to /etc/ssl/certs after we run c_rehash to
+prevent it getting hashed by mistake.
 
-On Thu, May 3, 2018 at 11:04 PM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/ca-certificates/ca-certificates.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-> ditch our own bundled version, and switch to making our whois package a
-> hot pacakge, and use that as the provider for mkpasswd.
->
-> Stefan, would you want to do that? ;-)
->
-
-I'll give it a go, but can only work on this in a few weeks when I get some
-free cycles...
-
-Regards, Stefan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180506/25416ee7/attachment.html>
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index cb0e961465..b99e6f47ca 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -30,14 +30,20 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+ 
+ 	# Create symlinks to certificates under /etc/ssl/certs
+ 	# and generate the bundle
++	rm -f $(@D)/ca-certificates.crt
+ 	cd $(TARGET_DIR) ;\
+ 	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
+ 		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
+-		cat $$i >>etc/ssl/certs/ca-certificates.crt ;\
++		cat $$i >>$(@D)/ca-certificates.crt ;\
+ 	done
+ 
+ 	# Create symlinks to the certificates by their hash values
+ 	$(HOST_DIR)/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
++
++	# Install the certificates bundle we just created
++	$(INSTALL) -D -m 644 $(@D)/ca-certificates.crt \
++		$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
++
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.17.0
