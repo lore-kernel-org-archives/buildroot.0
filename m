@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 May 2018 11:37:09 +0200
-Subject: [Buildroot] [PATCH 1/1] libmhash: add hash for license file
-Message-ID: <20180506093709.25014-1-fontaine.fabrice@gmail.com>
+Date: Sun,  6 May 2018 11:38:13 +0200
+Subject: [Buildroot] [PATCH 1/1] libmng: add hash for license file
+Message-ID: <20180506093813.25129-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +10,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libmhash/libmhash.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/libmng/libmng.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libmhash/libmhash.hash b/package/libmhash/libmhash.hash
-index 5ae5686652..06c1fe4897 100644
---- a/package/libmhash/libmhash.hash
-+++ b/package/libmhash/libmhash.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  56521c52a9033779154432d0ae47ad7198914785265e1f570cee21ab248dfef0  mhash-0.9.9.9.tar.bz2
-+sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/libmng/libmng.hash b/package/libmng/libmng.hash
+index a695cc3706..02a493f414 100644
+--- a/package/libmng/libmng.hash
++++ b/package/libmng/libmng.hash
+@@ -1,3 +1,6 @@
+ # From http://sourceforge.net/projects/libmng/files/libmng-devel/2.0.3/
+ md5	e9e899adb1b681b17f14d91e261878c5	libmng-2.0.3.tar.xz
+ sha1	0f141482ffcef6f8cd4413f945a59310ac2e49af	libmng-2.0.3.tar.xz
++
++# Hash for license file:
++sha256	ba280734838eb3f22a85b92a7e62de357d4d4c325029dce723b0cb125c417c35	LICENSE
 -- 
 2.14.1
