@@ -1,82 +1,136 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 09:13:52 +0200
-Subject: [Buildroot] [git commit] libupnpp: fix build with uclibc
-Message-ID: <20180506071548.718A48641C@busybox.osuosl.org>
+Date: Sun, 6 May 2018 09:06:09 +0200
+Subject: [Buildroot] [git commit] libnice: bump to version 0.1.14
+Message-ID: <20180506071548.4AE8B8641C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7987bbe5713baa505b5dc464b718399a79fbcf2f
+commit: https://git.buildroot.net/buildroot/commit/?id=16012f56cade49e7ca5d33ecdd6226c1b19fc4ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add patch to avoid failing with error if host_os doesn't start with
-linux
-
-Fixes:
- - http://autobuild.buildroot.net/results/cfb332a169863bcb3e6bc6ee7d6f6199f856b0b8
- - http://autobuild.buildroot.net/results/2f6f464f6360ed9ea4c238f503d2c3b8ab3cbd86
+- Remove patch (already in version)
+- Add gnutls mandatory dependency
+- Add hash for license files
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...cross-compilation-with-uclibc-on-arm-m68k.patch | 36 ++++++++++++++++++++++
- package/libupnpp/libupnpp.mk                       |  2 ++
- 2 files changed, 38 insertions(+)
+ ...-configure-failure-when-building-without-.patch | 45 ----------------------
+ package/libnice/Config.in                          |  7 +++-
+ package/libnice/libnice.hash                       |  7 +++-
+ package/libnice/libnice.mk                         |  6 +--
+ 4 files changed, 13 insertions(+), 52 deletions(-)
 
-diff --git a/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch b/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch
-new file mode 100644
-index 0000000000..2c0a4ec79f
---- /dev/null
-+++ b/package/libupnpp/0001-Fix-cross-compilation-with-uclibc-on-arm-m68k.patch
-@@ -0,0 +1,36 @@
-+From 2828c2535d4380419ec5114cc3a0564d3686aba9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 4 May 2018 11:45:59 +0200
-+Subject: [PATCH] Fix cross-compilation with uclibc on arm/m68k
-+
-+Commit 3f1132ecd27186fa3f1a87ead6a0389802baccbb breaks cross-compilation
-+with uclibc on arm and m68k because host_os is set to
-+arm-buildroot-uclinux-uclibc or m68k-buildroot-uclinux-uclibc so add
-+uclinux to the linux case
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/cfb332a169863bcb3e6bc6ee7d6f6199f856b0b8
-+ - http://autobuild.buildroot.net/results/2f6f464f6360ed9ea4c238f503d2c3b8ab3cbd86
-+
-+[Sent upstream]: https://opensourceprojects.eu/p/libupnpp/code/merge-requests/3
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 8903b72..3bb354c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -35,7 +35,7 @@ build_linux=no
-+ build_mac=no
-+ # Detect the target system
-+ case "${host_os}" in
-+-    linux*) build_linux=yes;;
-++    linux*|uclinux*) build_linux=yes;;
-+     darwin*) build_mac=yes;;
-+     *) AC_MSG_ERROR(["OS $host_os is not supported"]);;
-+ esac
-+-- 
-+2.14.1
-+
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index b4e9e88fa9..852a72e822 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
-@@ -10,6 +10,8 @@ LIBUPNPP_LICENSE = LGPL-2.1+
- LIBUPNPP_LICENSE_FILES = COPYING
- LIBUPNPP_INSTALL_STAGING = YES
- LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
-+# We're patching configure.ac
-+LIBUPNPP_AUTORECONF = YES
+diff --git a/package/libnice/0001-configure-Fix-configure-failure-when-building-without-.patch b/package/libnice/0001-configure-Fix-configure-failure-when-building-without-.patch
+deleted file mode 100644
+index f6b2eb4cb9..0000000000
+--- a/package/libnice/0001-configure-Fix-configure-failure-when-building-without-.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 81a929ac141aae66b6450e8ce93cb357ed404cda Mon Sep 17 00:00:00 2001
+-From: Timo Gurr <timo.gurr@gmail.com>
+-Date: Mon, 1 Jun 2015 16:10:16 +0200
+-Subject: [PATCH] configure: Fix configure failure when building without
+- gstreamer support
+-
+-Error introduced in 20ea22e0a11a9bdfe4d8125b68083249b694338a, resulting in a
+-configure/build error when building without gstreamer:
+-
+-configure: error: conditional "HAVE_GST_CHECK" was never defined.
+-Usually this means the macro was only invoked conditionally.
+-
+-https://bugs.freedesktop.org/show_bug.cgi?id=90801
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Patch status: upstream
+-
+- configure.ac | 4 +---
+- 1 file changed, 1 insertion(+), 3 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 6031cec..64a571f 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -231,9 +231,6 @@ AS_IF([test "$with_gstreamer" != no], [
+- 		[
+- 		have_gst_check=no
+- 		])
+--
+--	AM_CONDITIONAL(HAVE_GST_CHECK, test "$have_gst_check" = yes)
+--
+- ])
+- 
+- AS_IF([test "$with_gstreamer010" != no], [
+-@@ -260,6 +257,7 @@ AC_SUBST(gstplugindir)
+- AC_SUBST(gstplugin010dir)
+- 
+- AM_CONDITIONAL(WITH_GSTREAMER, test "$with_gstreamer" = yes)
+-+AM_CONDITIONAL(HAVE_GST_CHECK, test "$have_gst_check" = yes)
+- AM_CONDITIONAL(WITH_GSTREAMER010, test "$with_gstreamer010" = yes)
+- 
+- GUPNP_IGD_REQUIRED=0.2.4
+--- 
+-2.10.2
+-
+diff --git a/package/libnice/Config.in b/package/libnice/Config.in
+index c803a31720..af8e814618 100644
+--- a/package/libnice/Config.in
++++ b/package/libnice/Config.in
+@@ -1,8 +1,10 @@
+ config BR2_PACKAGE_LIBNICE
+ 	bool "libnice"
++	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  Libnice is an implementation of the IETF's Interactive
+@@ -15,6 +17,7 @@ config BR2_PACKAGE_LIBNICE
  
- # configure script fails to link against the dependencies of libupnp
- # and libcurl causing detection to fail when statically linking
+ 	  http://nice.freedesktop.org/wiki/
+ 
+-comment "libnice needs a toolchain w/ wchar, threads"
++comment "libnice needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/libnice/libnice.hash b/package/libnice/libnice.hash
+index d08c2d7839..3c1f0d845a 100644
+--- a/package/libnice/libnice.hash
++++ b/package/libnice/libnice.hash
+@@ -1,2 +1,7 @@
+ # Locally computed after checking pgp signature
+-sha256 61112d9f3be933a827c8365f20551563953af6718057928f51f487bfe88419e1 libnice-0.1.13.tar.gz
++sha256 be120ba95d4490436f0da077ffa8f767bf727b82decf2bf499e39becc027809c libnice-0.1.14.tar.gz
++
++# Hash for license files:
++sha256 9246b2ee8b1db30cf03d5d9719ad8bb5edce1cadc85f8cfef319c23d24d950b5 COPYING
++sha256 3b3c75ae6c663c4f93987647eb5463d33dc1602a1aded3ac479773f2c3928e3a COPYING.MPL
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861 COPYING.LGPL
+diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
+index 6afcb7635a..e023728f44 100644
+--- a/package/libnice/libnice.mk
++++ b/package/libnice/libnice.mk
+@@ -4,14 +4,12 @@
+ #
+ ################################################################################
+ 
+-LIBNICE_VERSION = 0.1.13
++LIBNICE_VERSION = 0.1.14
+ LIBNICE_SITE = http://nice.freedesktop.org/releases
+ LIBNICE_LICENSE = MPL-1.1 or LGPL-2.1
+ LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
+-LIBNICE_DEPENDENCIES = libglib2 host-pkgconf
++LIBNICE_DEPENDENCIES = gnutls libglib2 host-pkgconf
+ LIBNICE_INSTALL_STAGING = YES
+-# For 0001-configure-Fix-configure-failure-when-building-without-.patch
+-LIBNICE_AUTORECONF = YES
+ LIBNICE_CONF_OPTS = \
+ 	--without-gstreamer \
+ 	--without-gstreamer-0.10
