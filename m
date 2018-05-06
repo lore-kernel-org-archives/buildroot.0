@@ -1,42 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun,  6 May 2018 08:34:18 +0200
-Subject: [Buildroot] [PATCH] linux: ensure correct make targets are used for
- cuImage/simpleImage.<dtb>
-Message-ID: <20180506063418.6326-1-peter@korsgaard.com>
+Date: Sun, 06 May 2018 08:34:52 +0200
+Subject: [Buildroot] defconfig build issues
+In-Reply-To: <20180505215257.6745fc2f@windsurf> (Thomas Petazzoni's message of
+ "Sat, 5 May 2018 21:52:57 +0200")
+References: <20180505215257.6745fc2f@windsurf>
+Message-ID: <87zi1dthpv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/66561794
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-LINUX_DTS_NAME may end up with a leading space because of the += logic, and
-may contain multiple dts files - Neither of which works when we construct
-the {cu,simple}Image.$(LINUX_DTS_NAME) make target name.
+Hi,
 
-Fix it by using the first word in the variable.
+ > s6lx9_microboard_defconfig
+ > ==========================
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > make[1]: *** No rule to make target 'simpleImage.'.  Stop.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 9e646baffc..b6b91391b6 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -155,9 +155,9 @@ LINUX_IMAGE_NAME = zImage.epapr
- else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
- LINUX_IMAGE_NAME = zImage
- else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
--LINUX_IMAGE_NAME = cuImage.$(LINUX_DTS_NAME)
-+LINUX_IMAGE_NAME = cuImage.$(firstword $(LINUX_DTS_NAME))
- else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
--LINUX_IMAGE_NAME = simpleImage.$(LINUX_DTS_NAME)
-+LINUX_IMAGE_NAME = simpleImage.$(firstword $(LINUX_DTS_NAME))
- else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
- LINUX_IMAGE_NAME = Image
- else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/66561794
+
+ > No idea about this one. I don't think it was failing before, and I
+ > don't think this defconfig has been changed recently. Do we have a
+ > regression in the Linux kernel build logic ?
+
+Yes, looks like it. The make target it tries to call is
+'simpleImage. lx9_mmu', E.G. a space has been added before the list of
+dtbs. I've sent a patch fixing it.
+
+ > raspberrypi3_qt5we_defconfig
+ > ============================
+
+ > Your Buildroot configuration needs a compiler capable of building 32 bits binaries.
+ > If you're running a Debian/Ubuntu distribution, install the g++-multilib package.
+ > For other distributions, refer to their documentation.
+
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/66561791
+
+ > This defconfig includes WebKit, which wants a C++ multilib compiler on
+ > the host, which isn't present in our Docker image used for the gitlab
+ > CI builds. Should we add this to our Docker image ? Should we exclude
+ > this defconfig from the gitlab CI testing ?
+
+I would say yes, we want the defconfigs to be tested.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
