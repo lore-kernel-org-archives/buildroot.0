@@ -1,36 +1,112 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 21:49:09 +0200
-Subject: [Buildroot] [git commit] udftool: add missing dependency on readline
-Message-ID: <20180506195333.60ADF8B84C@busybox.osuosl.org>
+Date: Sun, 6 May 2018 21:52:03 +0200
+Subject: [Buildroot] [git commit] udftools: fix static linking against
+ readline
+Message-ID: <20180506195333.71CB68B84D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eef425146223f220587c32ad880463b1c749660c
+commit: https://git.buildroot.net/buildroot/commit/?id=be8cea224e2122f12e95e4dc2a02c63dd6db1c4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-udftool/Config.in selects BR2_PACKAGE_READLINE, but udftool does not
-depend on it. Readline is not a runtime dependency: one of the udftool
-program links against it.
+One program of udftools uses the readline library, but fails to build
+in static linking configurations. In order to fix this, we teach
+udftools configure.ac to use pkg-config to detect the readline
+library, and to use the proper flags provided by pkg-config.
 
-This commit fixes this inconsistency.
+This obviously requires an autoreconf of the package, and the addition
+of host-pkgconf in the dependencies.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/113a94049d89b8f065112e5d4482667a7b7fb843/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/udftools/udftools.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...c-detect-readline-via-pkg-config-when-pos.patch | 60 ++++++++++++++++++++++
+ package/udftools/udftools.mk                       |  3 +-
+ 2 files changed, 62 insertions(+), 1 deletion(-)
 
+diff --git a/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch b/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
+new file mode 100644
+index 0000000000..f73db99ca2
+--- /dev/null
++++ b/package/udftools/0002-configure.ac-detect-readline-via-pkg-config-when-pos.patch
+@@ -0,0 +1,60 @@
++From bdacf0101fea1dad2c89996b27cb4b9caee9109c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 22 Apr 2018 22:28:09 +0200
++Subject: [PATCH] configure.ac: detect readline via pkg-config when possible
++
++pkg-config automatically handles static linking situations, where for
++example readline is linked against ncurses, and therefore -lncurses
++needs to be passed in addition to -lreadline.
++
++This proposal uses pkg-config when available. If pkg-config is not
++found, or readline is not found via pkg-config, we fallback to the
++existing AC_CHECK_LIB(). This AC_CHECK_LIB() test is modified to set
++READLINE_LIBS, like PKG_CHECK_MODULES() does. The Makefile.am
++consequently uses READLINE_LIBS instead of hardcoding -lreadline.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ configure.ac      | 14 ++++++++++++--
++ wrudf/Makefile.am |  2 +-
++ 2 files changed, 13 insertions(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 95fbba3..62b1caa 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -9,8 +9,18 @@ AC_PROG_CC
++ AC_DISABLE_SHARED
++ AM_PROG_LIBTOOL
++ 
++-dnl Checks for libraries.
++-AC_CHECK_LIB(readline, readline, [ ], AC_MSG_ERROR([cannot find -lreadline.]))
+++PKG_PROG_PKG_CONFIG
+++
+++dnl Checks for libraries, by using pkg-config when available
+++if test -n "${PKG_CONFIG}" ; then
+++  PKG_CHECK_MODULES([READLINE], [readline], [readline_found=yes], [readline_found=no])
+++fi
+++
+++if test "${readline_found}" != "yes" ; then
+++  AC_CHECK_LIB(readline, readline,
+++               [AC_SUBST([READLINE_LIBS], [-lreadline])],
+++               AC_MSG_ERROR([cannot find -lreadline.]))
+++fi
++ 
++ dnl Checks for header files.
++ AC_HEADER_STDC
++diff --git a/wrudf/Makefile.am b/wrudf/Makefile.am
++index fe1c269..e3ab85b 100644
++--- a/wrudf/Makefile.am
+++++ b/wrudf/Makefile.am
++@@ -1,5 +1,5 @@
++ bin_PROGRAMS = wrudf
++-wrudf_LDADD = $(top_builddir)/libudffs/libudffs.la -lreadline
+++wrudf_LDADD = $(top_builddir)/libudffs/libudffs.la $(READLINE_LIBS)
++ wrudf_SOURCES = wrudf.c wrudf-cmnd.c wrudf-desc.c wrudf-cdrw.c wrudf-cdr.c ide-pc.c wrudf.h ide-pc.h ../include/ecma_167.h ../include/osta_udf.h ../include/bswap.h
++ 
++ AM_CPPFLAGS = -I$(top_srcdir)/include -D_GNU_SOURCE -DDEBUG
++-- 
++2.14.3
++
 diff --git a/package/udftools/udftools.mk b/package/udftools/udftools.mk
-index 708fef9ab7..2d3477a51c 100644
+index 2d3477a51c..e5bf59137e 100644
 --- a/package/udftools/udftools.mk
 +++ b/package/udftools/udftools.mk
-@@ -8,5 +8,6 @@ UDFTOOLS_VERSION = 2.0
+@@ -8,6 +8,7 @@ UDFTOOLS_VERSION = 2.0
  UDFTOOLS_SITE = https://github.com/pali/udftools/releases/download/$(UDFTOOLS_VERSION)
  UDFTOOLS_LICENSE = GPL-2.0+
  UDFTOOLS_LICENSE_FILES = COPYING
-+UDFTOOLS_DEPENDENCIES = readline
+-UDFTOOLS_DEPENDENCIES = readline
++UDFTOOLS_AUTORECONF = YES
++UDFTOOLS_DEPENDENCIES = readline host-pkgconf
  
  $(eval $(autotools-package))
