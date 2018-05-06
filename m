@@ -1,107 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 May 2018 22:06:08 +0200
-Subject: [Buildroot] [PATCH 1/1] libkcapi: split BR2_PACKAGE_LIBKCAPI_APPS
-Message-ID: <20180506200608.8992-1-fontaine.fabrice@gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun,  6 May 2018 21:07:24 +0100
+Subject: [Buildroot] [PATCH 0/5] Raspberry pi updates
+Message-ID: <20180506200729.31951-1-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit https://github.com/smuellerDD/libkcapi/commit/af313accf18887b4f6dbd7306c2389ddf271c9b7,
-hasher test application depends on dlfcn.h. To avoid putting all apps
-under !BR2_STATIC_LIBS dependency, split BR2_PACKAGE_LIBKCAPI_APPS into
-several variables.
+Update the raspberry pi kernel and related firmware to their latest version
 
-Moreover, BR2_USE_MMU is only a dependency of BR2_PACKAGE_LIBKCAPI_TEST
-as other applications don't use fork.
+Martin Bark (5):
+  configs/raspberrypi*: bump kernel version
+  configs/raspberrypi3_64_defconfig: add support for rpi3b+
+  package/rpi-firmware: bump version
+  package/rpi-wifi-firmware: bump version
+  package/rpi-bt-firmware: bump version
 
-Finally, enc or dgst applications could be enabled in a next patch if
-needed.
+ board/raspberrypi/genimage-raspberrypi3-64.cfg   | 1 +
+ configs/raspberrypi0_defconfig                   | 2 +-
+ configs/raspberrypi0w_defconfig                  | 2 +-
+ configs/raspberrypi2_defconfig                   | 2 +-
+ configs/raspberrypi3_64_defconfig                | 4 ++--
+ configs/raspberrypi3_defconfig                   | 2 +-
+ configs/raspberrypi3_qt5we_defconfig             | 2 +-
+ configs/raspberrypi_defconfig                    | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.hash     | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.mk       | 9 +++------
+ package/rpi-firmware/rpi-firmware.hash           | 2 +-
+ package/rpi-firmware/rpi-firmware.mk             | 2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
+ 14 files changed, 17 insertions(+), 19 deletions(-)
 
-Fixes:
- - http://autobuild.buildroot.net/results/7c57f3025030eff41a5cde52759821249859caf1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libkcapi/Config.in   | 20 +++++++++++++++-----
- package/libkcapi/libkcapi.mk | 32 +++++++++++++++++++++-----------
- 2 files changed, 36 insertions(+), 16 deletions(-)
-
-diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
-index 2b981777e6..7397cfe800 100644
---- a/package/libkcapi/Config.in
-+++ b/package/libkcapi/Config.in
-@@ -7,11 +7,21 @@ config BR2_PACKAGE_LIBKCAPI
- 
- if BR2_PACKAGE_LIBKCAPI
- 
--config BR2_PACKAGE_LIBKCAPI_APPS
--	bool "build test applications"
-+config BR2_PACKAGE_LIBKCAPI_HASHER
-+	bool "build hasher application"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+
-+comment "hasher application needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_LIBKCAPI_RNGAPP
-+	bool "build rng read application"
-+
-+config BR2_PACKAGE_LIBKCAPI_SPEED
-+	bool "build speed-test program"
-+
-+config BR2_PACKAGE_LIBKCAPI_TEST
-+	bool "build test program"
- 	depends on BR2_USE_MMU # fork()
--	help
--	  Build additional test applications that can provide
--	  performance or algorithm tests.
- 
- endif
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 44469017df..1a45f4f996 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -12,18 +12,28 @@ LIBKCAPI_INSTALL_STAGING = YES
- LIBKCAPI_LICENSE = BSD-3-Clause (library), BSD-3-Clause or GPL-2.0 (programs)
- LIBKCAPI_LICENSE_FILES = COPYING COPYING.gplv2 COPYING.bsd
- 
--ifeq ($(BR2_PACKAGE_LIBKCAPI_APPS),y)
--LIBKCAPI_CONF_OPTS += \
--	--enable-kcapi-speed \
--	--enable-kcapi-test \
--	--enable-kcapi-hasher \
--	--enable-kcapi-rngapp
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
- else
--LIBKCAPI_CONF_OPTS += \
--	--disable-kcapi-speed \
--	--disable-kcapi-test \
--	--disable-kcapi-hasher \
--	--disable-kcapi-rngapp
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-hasher
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_RNGAPP),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-rngapp
-+else
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-rngapp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_SPEED),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-speed
-+else
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-speed
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_TEST),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-test
-+else
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-test
- endif
- 
- $(eval $(autotools-package))
--- 
-2.14.1
+--
+2.17.0
