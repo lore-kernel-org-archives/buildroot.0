@@ -1,39 +1,50 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Sun, 6 May 2018 22:16:30 +0200
-Subject: [Buildroot] boot failure
-In-Reply-To: <2f8b7f67-4819-645d-2c97-c108656e78f5@micronovasrl.com>
-References: <CO2PR01MB197635D773CF49B7A8986DEFCC840@CO2PR01MB1976.prod.exchangelabs.com>
- <87po29qj5g.fsf@dell.be.48ers.dk>
- <2f8b7f67-4819-645d-2c97-c108656e78f5@micronovasrl.com>
-Message-ID: <f49f99ee-cdff-a14d-8470-26917b6605c9@jcz.nl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 06 May 2018 22:18:05 +0200
+Subject: [Buildroot] [PATCH] binutils: replace hard-links with
+ soft-links to fix rpath
+In-Reply-To: <20180422122350.16293-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 22 Apr 2018 14:23:50 +0200")
+References: <20180422122350.16293-1-thomas.petazzoni@bootlin.com>
+Message-ID: <876040pmgy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
-> I'm experimenting the same thing with udev, this is my log:
-> "
-> [??? 5.334345] udevd[83]: starting version 3.2.5
-> [??? 5.352869] random: udevd: uninitialized urandom read (16 bytes read)
-> [??? 5.380840] random: udevd: uninitialized urandom read (16 bytes read)
-> [??? 5.387495] random: udevd: uninitialized urandom read (16 bytes read)
-> [??? 5.468700] udevd[84]: starting eudev-3.2.5
-> [??? 6.445387] urandom_read: 1 callbacks suppressed
-> [??? 6.445397] random: dd: uninitialized urandom read (512 bytes read)
-> [??? 6.561425] random: dbus-uuidgen: uninitialized urandom read (12 bytes read)
-> [??? 6.68793 random: dbus-uuidgen: uninitialized urandom read (8 bytes read)
-> [??? 6.894495] random: crng init done
-> [??? 6.897924] random: 2 urandom warning(s) missed due to ratelimiting
-> "
-> 
-> Since complains with dropbear with Enoch and udev with me,
-> it seems something kernel related, need to debug it.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
+ > binutils installs its binaries both as bin/<tuple>-<tool> and as
+ > <tuple>/bin/<tool>, and hardlinks are used to reduce disk space
+ > consumption. This causes a problem for host-binutils with our rpath
+ > fixing logic done by "make sdk".
 
-Please try using packages like rngd & haveged to make sure all RNG hardware features are used to initialize the kernel random number generator as
-early as possible. If you can generate (sort of random) interrupts during boot that will also help to speed up the initialisation.
+ > Indeed, the fix-rpath script starts by fixing up the rpath of
+ > bin/<tuple>-<tool>, and sets the RPATH to $ORIGIN/../lib/. Then
+ > fix-rpath moves on to <tuple>/bin/<tool>, and doesn't find the library
+ > the tool depends on, and clears the RPATH. The result is that the
+ > binutils tool are not usable.
 
+ > Note that this is only visible currently on the ARC architecture,
+ > because on this architecture, binutils is fetched from git, which
+ > causes host-flex to be built, and some binutils tools to use the libfl
+ > shared library. Therefore, the binutils tools don't use just the
+ > standard C library (which is provided by the system) but also libfl
+ > from $(HOST_DIR)/lib, and therefore if the RPATH isn't set correctly,
+ > those tools don't work properly.
 
-Jaap
+ > In order to address this, this comit adds a post-install hook to
+ > host-binutils that replaces those hard links by symbolic links. It is
+ > worth mentioning that library loading and RPATH usage occurs *after*
+ > resolving the symbolic links, which makes this solution work.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/b2562b05d397d4e1ffe0f8d2f4ce4c84ab6feae1/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
