@@ -1,27 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 09:09:54 +0200
-Subject: [Buildroot] [PATCH] can-utils: bump to version 2018.02.0
-In-Reply-To: <0bf9c9bf22aabf811a28ce68c8025827829fa9fd.1525425827.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 4 May 2018 12:23:47 +0300")
-References: <0bf9c9bf22aabf811a28ce68c8025827829fa9fd.1525425827.git.baruch@tkos.co.il>
-Message-ID: <8736z5s1j1.fsf@dell.be.48ers.dk>
+Date: Sun, 06 May 2018 09:13:11 +0200
+Subject: [Buildroot] [PATCH 1/1] log4cplus: fix license
+In-Reply-To: <20180504112608.28081-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 4 May 2018 13:26:08 +0200")
+References: <20180504112608.28081-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y3gxqmt4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Disable for musl. can-utils now uses the error() glibc extension.
- > Use Makefile as license file.
+ > Some files of log4cplus are licensed under BSD-2-Clause as stated in
+ > LICENSE file: "Each file of log4cplus source is licensed using either
+ > two clause BSD license or Apache license 2.0."
 
- > Change homepage link to the github repo. The README.md file is much more
- > informative than the elinux.org wiki page.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
+Committed, thanks. I see we don't have a hash for the license file, care
+to send a patch adding it?
 
 -- 
 Bye, Peter Korsgaard
