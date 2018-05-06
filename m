@@ -1,35 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 21:53:19 +0200
-Subject: [Buildroot] [PATCH 3/3] udftools: fix static linking against
- readline
-In-Reply-To: <20180422212005.13062-4-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 22 Apr 2018 23:20:05 +0200")
-References: <20180422212005.13062-1-thomas.petazzoni@bootlin.com>
- <20180422212005.13062-4-thomas.petazzoni@bootlin.com>
-Message-ID: <87a7tcpnm8.fsf@dell.be.48ers.dk>
+Date: Sun, 6 May 2018 21:49:09 +0200
+Subject: [Buildroot] [git commit] udftool: add missing dependency on readline
+Message-ID: <20180506195333.60ADF8B84C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eef425146223f220587c32ad880463b1c749660c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > One program of udftools uses the readline library, but fails to build
- > in static linking configurations. In order to fix this, we teach
- > udftools configure.ac to use pkg-config to detect the readline
- > library, and to use the proper flags provided by pkg-config.
+udftool/Config.in selects BR2_PACKAGE_READLINE, but udftool does not
+depend on it. Readline is not a runtime dependency: one of the udftool
+program links against it.
 
- > This obviously requires an autoreconf of the package, and the addition
- > of host-pkgconf in the dependencies.
+This commit fixes this inconsistency.
 
- > Fixes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/udftools/udftools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- >   http://autobuild.buildroot.net/results/113a94049d89b8f065112e5d4482667a7b7fb843/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/udftools/udftools.mk b/package/udftools/udftools.mk
+index 708fef9ab7..2d3477a51c 100644
+--- a/package/udftools/udftools.mk
++++ b/package/udftools/udftools.mk
+@@ -8,5 +8,6 @@ UDFTOOLS_VERSION = 2.0
+ UDFTOOLS_SITE = https://github.com/pali/udftools/releases/download/$(UDFTOOLS_VERSION)
+ UDFTOOLS_LICENSE = GPL-2.0+
+ UDFTOOLS_LICENSE_FILES = COPYING
++UDFTOOLS_DEPENDENCIES = readline
+ 
+ $(eval $(autotools-package))
