@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 09:09:24 +0200
-Subject: [Buildroot] [PATCH] ebtables: drop obsolete comment
-In-Reply-To: <ea16299ab7bb09bf405c84c93b4f5e276246cb35.1525426304.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 4 May 2018 12:31:44 +0300")
-References: <ea16299ab7bb09bf405c84c93b4f5e276246cb35.1525426304.git.baruch@tkos.co.il>
-Message-ID: <877eohs1jv.fsf@dell.be.48ers.dk>
+Date: Sun, 06 May 2018 09:09:54 +0200
+Subject: [Buildroot] [PATCH] can-utils: bump to version 2018.02.0
+In-Reply-To: <0bf9c9bf22aabf811a28ce68c8025827829fa9fd.1525425827.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 4 May 2018 12:23:47 +0300")
+References: <0bf9c9bf22aabf811a28ce68c8025827829fa9fd.1525425827.git.baruch@tkos.co.il>
+Message-ID: <8736z5s1j1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Commit 30c4b5843f (ebtables: enable for musl) enabled musl build, but
- > forgot to remove the comment text. Fix that.
+ > Disable for musl. can-utils now uses the error() glibc extension.
+ > Use Makefile as license file.
+
+ > Change homepage link to the github repo. The README.md file is much more
+ > informative than the elinux.org wiki page.
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
