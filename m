@@ -1,64 +1,143 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 23:19:14 +0200
-Subject: [Buildroot] [git commit] uclibc: fix clock_nanosleep declaration
-Message-ID: <20180506211926.3092B8B87B@busybox.osuosl.org>
+Date: Sun, 6 May 2018 23:18:01 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-ugly: fix x264 compile failure
+Message-ID: <20180506211926.292548B879@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba33728bc3118a6f1d2b4233e7bddb17b2f67f1f
+commit: https://git.buildroot.net/buildroot/commit/?id=8d5667f185d4c0ce2cdaf0800b4f5680256d6a5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes autobuild errors:
- http://autobuild.buildroot.net/results/a58007263355e2734a8074d52b1b26b88973c39e
- http://autobuild.buildroot.net/results/7d6fd0872efd23c7de552ab637956902b43c3f58
+Add upstream patch to fix compile with latest x264 library.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Reported-by: Baruch Siach <baruch@tkos.co.il>
+Fixes [1]:
+
+  gstx264enc.c: In function 'plugin_init':
+  gstx264enc.c:2900:36: error: 'x264_bit_depth' undeclared (first use in this function); did you mean 'x264_picture_t'?
+     default_vtable.x264_bit_depth = &x264_bit_depth;
+                                      ^~~~~~~~~~~~~~
+                                      x264_picture_t
+
+[1] http://autobuild.buildroot.net/results/a766a28c584534b6a30839cfd98428d840bce3f2
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...re-clock_nanosleep-independent-of-thread-.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ ...-build-with-newer-x264-with-support-for-m.patch | 106 +++++++++++++++++++++
+ 1 file changed, 106 insertions(+)
 
-diff --git a/package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch b/package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
+diff --git a/package/gstreamer1/gst1-plugins-ugly/0001-x264enc-fix-build-with-newer-x264-with-support-for-m.patch b/package/gstreamer1/gst1-plugins-ugly/0001-x264enc-fix-build-with-newer-x264-with-support-for-m.patch
 new file mode 100644
-index 0000000000..bb9ef18b4f
+index 0000000000..c7460470ae
 --- /dev/null
-+++ b/package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
-@@ -0,0 +1,34 @@
-+From 368a1df04a32c3b95859b0ca588da8548a5f39ca Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Tue, 1 May 2018 19:35:20 +0200
-+Subject: [PATCH] librt: declare clock_nanosleep independent of thread support
++++ b/package/gstreamer1/gst1-plugins-ugly/0001-x264enc-fix-build-with-newer-x264-with-support-for-m.patch
+@@ -0,0 +1,106 @@
++From ffa7ce1e19ec3930de667f213dcaedb7eb10508e Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
++Date: Wed, 28 Feb 2018 10:07:13 +0000
++Subject: [PATCH] x264enc: fix build with newer x264 with support for multiple
++ bit depths
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Reported-by: Baruch Siach <baruch@tkos.co.il>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++libx264 used to be built for one specific bit depth, and if we
++wanted to support multiple bit depths we would have to dynamically
++load the right .so from different paths. That has changed now, and
++libx264 can include support for multiple depths in the same lib,
++so we don't need to do the dlopen() dance any more. We'll keep
++the vtable stuff around until we can drop support for older x264.
++
++gstx264enc.c:2927:36: error: ???x264_bit_depth??? undeclared
++
++https://bugzilla.gnome.org/show_bug.cgi?id=792111
++
++Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-ugly/patch/ext/x264?id=83c38dc44622611c1f67dd26e4cb383c5aef90f6
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ include/time.h | 2 --
-+ 1 file changed, 2 deletions(-)
++ ext/x264/gstx264enc.c | 35 ++++++++++++++++++++++++++++++++++-
++ 1 file changed, 34 insertions(+), 1 deletion(-)
 +
-+diff --git a/include/time.h b/include/time.h
-+index 785c8f6..1a14089 100644
-+--- a/include/time.h
-++++ b/include/time.h
-+@@ -356,7 +356,6 @@ extern int clock_settime (clockid_t __clock_id, const struct timespec *__tp)
-+ #  endif /* __UCLIBC_HAS_REALTIME__ */
++diff --git a/ext/x264/gstx264enc.c b/ext/x264/gstx264enc.c
++index 4287cf9..d1e4f2b 100644
++--- a/ext/x264/gstx264enc.c
+++++ b/ext/x264/gstx264enc.c
++@@ -117,7 +117,9 @@ struct _GstX264EncVTable
++ {
++   GModule *module;
 + 
-+ #  if defined __USE_XOPEN2K && defined __UCLIBC_HAS_ADVANCED_REALTIME__
-+-#   ifdef __UCLIBC_HAS_THREADS_NATIVE__
-+ /* High-resolution sleep with the specified clock.
+++#if X264_BUILD < 153
++   const int *x264_bit_depth;
+++#endif
++   const int *x264_chroma_format;
++   void (*x264_encoder_close) (x264_t *);
++   int (*x264_encoder_delayed_frames) (x264_t *);
++@@ -170,8 +172,9 @@ load_x264 (const gchar * filename)
++         "' from '%s'. Incompatible version?", filename);
++     goto error;
++   }
++-
+++#if X264_BUILD < 153
++   LOAD_SYMBOL (x264_bit_depth);
+++#endif
++   LOAD_SYMBOL (x264_chroma_format);
++   LOAD_SYMBOL (x264_encoder_close);
++   LOAD_SYMBOL (x264_encoder_delayed_frames);
++@@ -288,6 +291,7 @@ gst_x264_enc_add_x264_chroma_format (GstStructure * s,
++   return ret;
++ }
 + 
-+    This function is a cancellation point and therefore not marked with
-+@@ -367,7 +366,6 @@ extern int clock_nanosleep (clockid_t __clock_id, int __flags,
+++#if X264_BUILD < 153
++ static gboolean
++ load_x264_libraries (void)
++ {
++@@ -326,6 +330,33 @@ load_x264_libraries (void)
++   return TRUE;
++ }
 + 
-+ /* Return clock ID for CPU-time clock.  */
-+ extern int clock_getcpuclockid (pid_t __pid, clockid_t *__clock_id) __THROW;
-+-#   endif /* __UCLIBC_HAS_THREADS_NATIVE__ */
-+ #  endif
-+ 
-+ #  if defined __UCLIBC_HAS_REALTIME__
+++#else /* X264_BUILD >= 153 */
+++
+++static gboolean
+++load_x264_libraries (void)
+++{
+++#if X264_BIT_DEPTH == 0         /* all */
+++  vtable_8bit = &default_vtable;
+++  vtable_10bit = &default_vtable;
+++#elif X264_BIT_DEPTH == 8
+++  vtable_8bit = &default_vtable;
+++#elif X264_BIT_DEPTH == 10
+++  vtable_10bit = &default_vtable;
+++#else
+++#error "unexpected X264_BIT_DEPTH value"
+++#endif
+++
+++#ifdef HAVE_X264_ADDITIONAL_LIBRARIES
+++  GST_WARNING ("Ignoring configured additional libraries %s, using libx264 "
+++      "version enabled for multiple bit depths",
+++      HAVE_X264_ADDITIONAL_LIBRARIES);
+++#endif
+++
+++  return TRUE;
+++}
+++
+++#endif
+++
++ enum
++ {
++   ARG_0,
++@@ -2897,7 +2928,9 @@ plugin_init (GstPlugin * plugin)
++    * if needed. We can't initialize statically because these values are not
++    * constant on Windows. */
++   default_vtable.module = NULL;
+++#if X264_BUILD < 153
++   default_vtable.x264_bit_depth = &x264_bit_depth;
+++#endif
++   default_vtable.x264_chroma_format = &x264_chroma_format;
++   default_vtable.x264_encoder_close = x264_encoder_close;
++   default_vtable.x264_encoder_delayed_frames = x264_encoder_delayed_frames;
 +-- 
-+2.1.4
++2.16.3
 +
