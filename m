@@ -1,39 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 May 2018 13:57:51 +0200
-Subject: [Buildroot] [PATCH] package/patch: fix xattr option
-Message-ID: <20180506115751.6317-1-yann.morin.1998@free.fr>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun, 6 May 2018 14:50:30 +0100
+Subject: [Buildroot] defconfig build issues
+In-Reply-To: <87zi1dthpv.fsf@dell.be.48ers.dk>
+References: <20180505215257.6745fc2f@windsurf>
+ <87zi1dthpv.fsf@dell.be.48ers.dk>
+Message-ID: <CAFGQKxetkjrWB8JK5Xi_xxoKY7oKqZoVmKv3K5p-E8DqxLMTsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The name of fthe configure option is, and has always been,
- --enable-xattr, not --enable-attr. Otherwise, configure
-whines:
-    configure: WARNING: unrecognized options: --enable-attr
+Hi,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/patch/patch.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 6 May 2018 at 07:34, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+> Hi,
+>
+>  > s6lx9_microboard_defconfig
+>  > ==========================
+>
+>  > make[1]: *** No rule to make target 'simpleImage.'.  Stop.
+>
+>  > https://gitlab.com/buildroot.org/buildroot/-/jobs/66561794
+>
+>  > No idea about this one. I don't think it was failing before, and I
+>  > don't think this defconfig has been changed recently. Do we have a
+>  > regression in the Linux kernel build logic ?
+>
+> Yes, looks like it. The make target it tries to call is
+> 'simpleImage. lx9_mmu', E.G. a space has been added before the list of
+> dtbs. I've sent a patch fixing it.
+>
+>  > raspberrypi3_qt5we_defconfig
+>  > ============================
+>
+>  > Your Buildroot configuration needs a compiler capable of building 32 bits binaries.
+>  > If you're running a Debian/Ubuntu distribution, install the g++-multilib package.
+>  > For other distributions, refer to their documentation.
+>
+>  > https://gitlab.com/buildroot.org/buildroot/-/jobs/66561791
 
-diff --git a/package/patch/patch.mk b/package/patch/patch.mk
-index 33f0039d60..d581682c70 100644
---- a/package/patch/patch.mk
-+++ b/package/patch/patch.mk
-@@ -11,10 +11,10 @@ PATCH_LICENSE = GPL-3.0+
- PATCH_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_ATTR),y)
--PATCH_CONF_OPTS += --enable-attr
-+PATCH_CONF_OPTS += --enable-xattr
- PATCH_DEPENDENCIES += attr
- else
--PATCH_CONF_OPTS += --disable-attr
-+PATCH_CONF_OPTS += --disable-xattr
- endif
- 
- $(eval $(autotools-package))
--- 
-2.14.1
+support/docker/Dockerfile already installs g++-multilib but the image
+buildroot/base:20180205.0730 lacks it.  It looks like g++-multilib was
+added just after the image was created in commit
+27d22296927d7e4ec0965f2bdaa272b1e8ea15e7
+
+So i think this should already be fixed, you just need to update the
+buildroot/base image
+
+Thanks
+
+Martin
+
+>
+>  > This defconfig includes WebKit, which wants a C++ multilib compiler on
+>  > the host, which isn't present in our Docker image used for the gitlab
+>  > CI builds. Should we add this to our Docker image ? Should we exclude
+>  > this defconfig from the gitlab CI testing ?
+>
+> I would say yes, we want the defconfigs to be tested.
+>
+> --
+> Bye, Peter Korsgaard
