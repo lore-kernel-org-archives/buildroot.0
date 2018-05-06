@@ -1,21 +1,22 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 09:04:08 +0200
-Subject: [Buildroot] [PATCH 1/1] libmpeg2: add hash for license file
-In-Reply-To: <20180504213855.4984-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 4 May 2018 23:38:55 +0200")
-References: <20180504213855.4984-1-fontaine.fabrice@gmail.com>
-Message-ID: <87sh75s1sn.fsf@dell.be.48ers.dk>
+From: Enoch W. <ixew@hotmail.com>
+Date: Sun, 6 May 2018 07:04:51 +0000
+Subject: [Buildroot] boot failure
+Message-ID: <CO2PR01MB197635D773CF49B7A8986DEFCC840@CO2PR01MB1976.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi,
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Recent buildroot versions, updated from git master, start getting stuck with:
 
-Committed, thanks.
+random: dropbear: uninitialized urandom read (32 bytes read)
 
--- 
-Bye, Peter Korsgaard
+Any clue?
+
+Thanks, Enoch.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180506/581db351/attachment.html>
