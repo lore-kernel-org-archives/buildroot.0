@@ -1,50 +1,27 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 May 2018 11:35:07 +0200
-Subject: [Buildroot] [PATCH 1/1] log4cplus: bump to version 2.0.0
-Message-ID: <20180506093507.24850-1-fontaine.fabrice@gmail.com>
+Date: Sun,  6 May 2018 11:36:24 +0200
+Subject: [Buildroot] [PATCH 1/1] libmemcached: add hash for license file
+Message-ID: <20180506093624.24923-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- LICENSE has been updated to add threadpool license (BSD-like)
-- Add hash for license file
-
-Fixes:
- - http://autobuild.buildroot.net/results/a4690fd3e46354776f6d6addd17226622c5f4961
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/log4cplus/log4cplus.hash | 3 ++-
- package/log4cplus/log4cplus.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libmemcached/libmemcached.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/log4cplus/log4cplus.hash b/package/log4cplus/log4cplus.hash
-index 395e9fe535..2f1d24a855 100644
---- a/package/log4cplus/log4cplus.hash
-+++ b/package/log4cplus/log4cplus.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256  999427580cded403b4edc8a85088621f27493c489f08b9f564fb5fe76c16a883  log4cplus-1.1.2.tar.xz
-+sha256  8c85e769c3dbec382ed4db91f15e5bc24ba979f810262723781f2fc596339bf4  log4cplus-2.0.0.tar.xz
-+sha256  91d7e42ff80e74c4c94e5ad353375fa0358cd0abbf43f5fe957097cdbd4e2c4d  LICENSE
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-index b4a57c36c3..890d2ee8f5 100644
---- a/package/log4cplus/log4cplus.mk
-+++ b/package/log4cplus/log4cplus.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--LOG4CPLUS_VERSION = 1.1.2
-+LOG4CPLUS_VERSION = 2.0.0
- LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
- LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
--LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause
-+LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
- LOG4CPLUS_LICENSE_FILES = LICENSE
- LOG4CPLUS_INSTALL_STAGING = YES
- 
+diff --git a/package/libmemcached/libmemcached.hash b/package/libmemcached/libmemcached.hash
+index 85df58f01e..77d7c478bc 100644
+--- a/package/libmemcached/libmemcached.hash
++++ b/package/libmemcached/libmemcached.hash
+@@ -1,2 +1,5 @@
+ # From https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz/+md5
+ md5	b3958716b4e53ddc5992e6c49d97e819	libmemcached-1.0.18.tar.gz
++
++# Hash for license file:
++sha256	4e9032d0f539276db05519ee3d09ca6167d2134ec91c556e8c80ef3efe633fd2	COPYING
 -- 
 2.14.1
