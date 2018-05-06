@@ -1,43 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 17:35:00 +0200
-Subject: [Buildroot] [git commit] linux: ensure correct make targets are
- used for cuImage/simpleImage.<dtb>
-Message-ID: <20180506153533.946FF8B800@busybox.osuosl.org>
+Date: Sun, 6 May 2018 17:36:37 +0200
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: update after removal of
+ freescale defconfigs
+Message-ID: <20180506153657.50C1F8B803@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=978a997c81f41702bc039f89a20129ef65060801
+commit: https://git.buildroot.net/buildroot/commit/?id=e607881f201337198a0bb2d69c5c8507a1ebfde9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/66561794
-
-LINUX_DTS_NAME may end up with a leading space because of the += logic, and
-may contain multiple dts files - Neither of which works when we construct
-the {cu,simple}Image.$(LINUX_DTS_NAME) make target name.
-
-Fix it by using the first word in the variable.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .gitlab-ci.yml | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 9e646baffc..b6b91391b6 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -155,9 +155,9 @@ LINUX_IMAGE_NAME = zImage.epapr
- else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
- LINUX_IMAGE_NAME = zImage
- else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
--LINUX_IMAGE_NAME = cuImage.$(LINUX_DTS_NAME)
-+LINUX_IMAGE_NAME = cuImage.$(firstword $(LINUX_DTS_NAME))
- else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
--LINUX_IMAGE_NAME = simpleImage.$(LINUX_DTS_NAME)
-+LINUX_IMAGE_NAME = simpleImage.$(firstword $(LINUX_DTS_NAME))
- else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
- LINUX_IMAGE_NAME = Image
- else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 568fb7fc19..e80491cdde 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -125,14 +125,11 @@ engicam_imx6qdl_icore_rqs_defconfig: *defconfig
+ engicam_imx6ul_geam_defconfig: *defconfig
+ engicam_imx6ul_isiot_defconfig: *defconfig
+ freescale_imx28evk_defconfig: *defconfig
+-freescale_imx31_3stack_defconfig: *defconfig
+ freescale_imx6dlsabreauto_defconfig: *defconfig
+ freescale_imx6dlsabresd_defconfig: *defconfig
+ freescale_imx6qsabreauto_defconfig: *defconfig
+ freescale_imx6qsabresd_defconfig: *defconfig
+-freescale_imx6sololiteevk_defconfig: *defconfig
+ freescale_imx6sxsabresd_defconfig: *defconfig
+-freescale_imx6ulevk_defconfig: *defconfig
+ freescale_imx7dsabresd_defconfig: *defconfig
+ freescale_imx8mqevk_defconfig: *defconfig
+ freescale_p1025twr_defconfig: *defconfig
