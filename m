@@ -1,90 +1,134 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun,  6 May 2018 18:31:15 -0300
-Subject: [Buildroot] [PATCH 3/4] Makefile: check rootfs overlays with
- BR2_ROOTFS_MERGED_USR enabled
-In-Reply-To: <20180506213116.25084-1-casantos@datacom.ind.br>
-References: <20180506213116.25084-1-casantos@datacom.ind.br>
-Message-ID: <20180506213116.25084-4-casantos@datacom.ind.br>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  7 May 2018 00:09:01 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] libkcapi: split BR2_PACKAGE_LIBKCAPI_APPS
+Message-ID: <20180506220901.10094-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 0db34529f48 we use rsync with the --keep-dirlinks option to
-prevent overlays from accidentally overwriding /{usr,bin,sbin,lib} links
-when BR2_ROOTFS_MERGED_USR option is enabled. Unfortunately this also
-prevents replacing a symlink by a directory on purpose (e.g. /var/log,
-to persist system logs).
+Since commit https://github.com/smuellerDD/libkcapi/commit/af313accf18887b4f6dbd7306c2389ddf271c9b7,
+hasher test application depends on dlfcn.h. To avoid putting all apps
+under !BR2_STATIC_LIBS dependency, split BR2_PACKAGE_LIBKCAPI_APPS into
+several variables.
 
-Steps to reproduce:
+Moreover, BR2_USE_MMU is only a dependency of BR2_PACKAGE_LIBKCAPI_TEST
+as other applications don't use fork.
 
-- enable BR2_ROOTFS_MERGED_USR and BR2_PACKAGE_SKELETON_INIT_SYSV
-- mkdir some_path/rootfs-overlay/var/log
-- enable BR2_ROOTFS_OVERLAY="some_path/rootfs-overlay"
-- run 'make'
-- 'target/var/log' is still a symlink to '../tmp', not a directory
+Finally, enc or dgst applications could be enabled in a next patch if
+needed.
 
-Fix the problem by adding a step in target-finalize that checks each
-overlay, using the same criteria used in skeleton-custom.mk.
+Fixes:
+ - http://autobuild.buildroot.net/results/7c57f3025030eff41a5cde52759821249859caf1
 
-Add a paragraph to the documentation clarifying that rootfs overlays
-should not contain /bin, /lib or /sbin.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Makefile                         | 20 +++++++++++++++++---
- docs/manual/customize-rootfs.txt |  5 +++++
- 2 files changed, 22 insertions(+), 3 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Update Config.in.legacy
 
-diff --git a/Makefile b/Makefile
-index c024c65f78..dc51269143 100644
---- a/Makefile
-+++ b/Makefile
-@@ -746,11 +746,25 @@ endif
- 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
- 	$(TOPDIR)/support/scripts/fix-rpath target
+ Config.in.legacy             | 11 +++++++++++
+ package/libkcapi/Config.in   | 20 +++++++++++++++-----
+ package/libkcapi/libkcapi.mk | 32 +++++++++++++++++++++-----------
+ 3 files changed, 47 insertions(+), 16 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3d8b28c5fe..c51984a3b9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,17 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2018.05"
  
-+# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
-+# counterparts are appropriately setup as symlinks ones to the others.
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++config BR2_PACKAGE_LIBKCAPI_APPS
++	bool "libkcapi test applications removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LIBKCAPI_HASHER if !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBKCAPI_RNGAPP
++	select BR2_PACKAGE_LIBKCAPI_SPEED
++	select BR2_PACKAGE_LIBKCAPI_TEST
++	help
++	  Test applications (hasher, rng read, speed-test, test) now
++	  have their own configuration options in the libkcapi menu.
 +
-+	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-+		$(call MESSAGE,"Sanity check in overlay $(d)"); \
-+		not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
-+		test -n "$$not_merged_dirs" && { \
-+			echo "ERROR: The overlay in $(d) is not" \
-+				"using a merged /usr for the following directories:" \
-+				$$not_merged_dirs; \
-+			exit 1; \
-+		} || true$(sep))
-+
-+endif # merged /usr
-+
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
--		rsync -a --ignore-times --keep-dirlinks $(RSYNC_VCS_EXCLUSIONS) \
--			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
--			$(d)/ $(TARGET_DIR)$(sep))
-+		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
+ config BR2_PACKAGE_IQVLINUX
+ 	bool "iqvlinux package removed"
+ 	select BR2_LEGACY
+diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
+index 2b981777e6..7397cfe800 100644
+--- a/package/libkcapi/Config.in
++++ b/package/libkcapi/Config.in
+@@ -7,11 +7,21 @@ config BR2_PACKAGE_LIBKCAPI
  
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-build script $(s)"); \
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 8982e03498..5dbbe86044 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -22,6 +22,11 @@ A filesystem overlay is a tree of files that is copied directly
-   etc., files called +.empty+ and files ending in +~+ are excluded from
-   the copy.
- +
-+Overlays should not contain the '/bin', '/lib' or '/sbin' paths, since
-+  they are created during the build, either as directories or as
-+  symbolic links to their counterparts under 'usr', depending on the
-+  system configuration.
-++
- As shown in xref:customize-dir-structure[], the recommended path for
-   this overlay is +board/<company>/<boardname>/rootfs-overlay+.
+ if BR2_PACKAGE_LIBKCAPI
  
+-config BR2_PACKAGE_LIBKCAPI_APPS
+-	bool "build test applications"
++config BR2_PACKAGE_LIBKCAPI_HASHER
++	bool "build hasher application"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++
++comment "hasher application needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
++config BR2_PACKAGE_LIBKCAPI_RNGAPP
++	bool "build rng read application"
++
++config BR2_PACKAGE_LIBKCAPI_SPEED
++	bool "build speed-test program"
++
++config BR2_PACKAGE_LIBKCAPI_TEST
++	bool "build test program"
+ 	depends on BR2_USE_MMU # fork()
+-	help
+-	  Build additional test applications that can provide
+-	  performance or algorithm tests.
+ 
+ endif
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index 44469017df..1a45f4f996 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -12,18 +12,28 @@ LIBKCAPI_INSTALL_STAGING = YES
+ LIBKCAPI_LICENSE = BSD-3-Clause (library), BSD-3-Clause or GPL-2.0 (programs)
+ LIBKCAPI_LICENSE_FILES = COPYING COPYING.gplv2 COPYING.bsd
+ 
+-ifeq ($(BR2_PACKAGE_LIBKCAPI_APPS),y)
+-LIBKCAPI_CONF_OPTS += \
+-	--enable-kcapi-speed \
+-	--enable-kcapi-test \
+-	--enable-kcapi-hasher \
+-	--enable-kcapi-rngapp
++ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
+ else
+-LIBKCAPI_CONF_OPTS += \
+-	--disable-kcapi-speed \
+-	--disable-kcapi-test \
+-	--disable-kcapi-hasher \
+-	--disable-kcapi-rngapp
++LIBKCAPI_CONF_OPTS += --disable-kcapi-hasher
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_RNGAPP),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-rngapp
++else
++LIBKCAPI_CONF_OPTS += --disable-kcapi-rngapp
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_SPEED),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-speed
++else
++LIBKCAPI_CONF_OPTS += --disable-kcapi-speed
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_TEST),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-test
++else
++LIBKCAPI_CONF_OPTS += --disable-kcapi-test
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.17.0
+2.14.1
