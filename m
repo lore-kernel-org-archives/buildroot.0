@@ -1,43 +1,25 @@
 From: Florian La Roche <florian.laroche@googlemail.com>
-Date: Sun,  6 May 2018 22:03:44 +0200
-Subject: [Buildroot] [PATCH 1/1] qemu_arm_vexpress: Linux kernel update to
- 4.16.7
-Message-ID: <20180506200344.7991-1-Florian.LaRoche@googlemail.com>
+Date: Sun, 6 May 2018 21:58:39 +0200
+Subject: [Buildroot] [PATCH 1/1] qemu_arm_vexpress: use latest Linux
+ kernel
+In-Reply-To: <20180506214044.786e3dbd@windsurf>
+References: <20180506163059.5801-1-Florian.LaRoche@googlemail.com>
+ <20180506214044.786e3dbd@windsurf>
+Message-ID: <CANZrA2YFuy1MBA89hnyC5J=GeeO5hHj-CZ8z6g9NMYLYAunknA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Thomas,
 
-Update qemu_arm_vexpress target to Linux kernel 4.16.7.
+2018-05-06 21:40 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+> So, a patch updating to Linux 4.16 would be fine, but not a patch that
+> changes to automatically use the latest version.
 
+Ok. I'll send in a new patch for a known current version.
 
-Signed-off-by: Florian La Roche <Florian.LaRoche@googlemail.com>
----
- configs/qemu_arm_vexpress_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Best regards,
 
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index faba6a6c25..34a50aa8d5 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -13,13 +13,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Linux headers same as kernel, a 4.11 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
-+# Linux headers same as kernel, a 4.16 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
--- 
-2.11.0
+Florian La Roche
