@@ -1,27 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 17:34:34 +0200
-Subject: [Buildroot] [git commit] libmhash: add hash for license file
-Message-ID: <20180506153533.8AB3F811A4@busybox.osuosl.org>
+Date: Sun, 6 May 2018 17:32:24 +0200
+Subject: [Buildroot] [git commit] package/patch: fix xattr option
+Message-ID: <20180506153533.509C18B800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10caac5be476d530be7977a618b801ee12ad1dd2
+commit: https://git.buildroot.net/buildroot/commit/?id=990fff065c915ecce1196adc283252f8d192d54a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The name of the configure option is, and has always been,
+ --enable-xattr, not --enable-attr. Otherwise, configure
+whines:
+    configure: WARNING: unrecognized options: --enable-attr
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmhash/libmhash.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/patch/patch.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmhash/libmhash.hash b/package/libmhash/libmhash.hash
-index 5ae5686652..06c1fe4897 100644
---- a/package/libmhash/libmhash.hash
-+++ b/package/libmhash/libmhash.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  56521c52a9033779154432d0ae47ad7198914785265e1f570cee21ab248dfef0  mhash-0.9.9.9.tar.bz2
-+sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/patch/patch.mk b/package/patch/patch.mk
+index 33f0039d60..d581682c70 100644
+--- a/package/patch/patch.mk
++++ b/package/patch/patch.mk
+@@ -11,10 +11,10 @@ PATCH_LICENSE = GPL-3.0+
+ PATCH_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_PACKAGE_ATTR),y)
+-PATCH_CONF_OPTS += --enable-attr
++PATCH_CONF_OPTS += --enable-xattr
+ PATCH_DEPENDENCIES += attr
+ else
+-PATCH_CONF_OPTS += --disable-attr
++PATCH_CONF_OPTS += --disable-xattr
+ endif
+ 
+ $(eval $(autotools-package))
