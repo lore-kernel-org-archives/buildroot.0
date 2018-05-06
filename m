@@ -1,30 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 17:34:18 +0200
-Subject: [Buildroot] [git commit] libmnl: add hash for license file
-Message-ID: <20180506153533.81CB88B800@busybox.osuosl.org>
+Date: Sun, 6 May 2018 17:35:00 +0200
+Subject: [Buildroot] [git commit] linux: ensure correct make targets are
+ used for cuImage/simpleImage.<dtb>
+Message-ID: <20180506153533.946FF8B800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b02e3303fcfc1ff09588ee022c7994c8b9d97f28
+commit: https://git.buildroot.net/buildroot/commit/?id=978a997c81f41702bc039f89a20129ef65060801
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/66561794
+
+LINUX_DTS_NAME may end up with a leading space because of the += logic, and
+may contain multiple dts files - Neither of which works when we construct
+the {cu,simple}Image.$(LINUX_DTS_NAME) make target name.
+
+Fix it by using the first word in the variable.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmnl/libmnl.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ linux/linux.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmnl/libmnl.hash b/package/libmnl/libmnl.hash
-index 98385b857c..e5bb2fa603 100644
---- a/package/libmnl/libmnl.hash
-+++ b/package/libmnl/libmnl.hash
-@@ -1,3 +1,6 @@
- # From ftp://ftp.netfilter.org/pub/libmnl/libmnl-1.0.4.tar.bz2.{md5sum,sha1sum}
- md5	be9b4b5328c6da1bda565ac5dffadb2d	libmnl-1.0.4.tar.bz2
- sha1	2db40dea612e88c62fd321906be40ab5f8f1685a	libmnl-1.0.4.tar.bz2
-+
-+# Hash for license file:
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 9e646baffc..b6b91391b6 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -155,9 +155,9 @@ LINUX_IMAGE_NAME = zImage.epapr
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
+ LINUX_IMAGE_NAME = zImage
+ else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
+-LINUX_IMAGE_NAME = cuImage.$(LINUX_DTS_NAME)
++LINUX_IMAGE_NAME = cuImage.$(firstword $(LINUX_DTS_NAME))
+ else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
+-LINUX_IMAGE_NAME = simpleImage.$(LINUX_DTS_NAME)
++LINUX_IMAGE_NAME = simpleImage.$(firstword $(LINUX_DTS_NAME))
+ else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
+ LINUX_IMAGE_NAME = Image
+ else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
