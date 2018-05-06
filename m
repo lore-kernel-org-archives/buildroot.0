@@ -1,35 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 08:07:24 +0200
-Subject: [Buildroot] [git commit] package/Config.in: fix alphabetical order
-Message-ID: <20180506062027.B0E6C8B518@busybox.osuosl.org>
+Date: Sun,  6 May 2018 08:34:18 +0200
+Subject: [Buildroot] [PATCH] linux: ensure correct make targets are used for
+ cuImage/simpleImage.<dtb>
+Message-ID: <20180506063418.6326-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2031689b41dcae848d21e2f789ab0fa265ec30cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/66561794
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+LINUX_DTS_NAME may end up with a leading space because of the += logic, and
+may contain multiple dts files - Neither of which works when we construct
+the {cu,simple}Image.$(LINUX_DTS_NAME) make target name.
+
+Fix it by using the first word in the variable.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ linux/linux.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index fe36d31867..b613a1865c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -493,10 +493,10 @@ endmenu
- 	source "package/rpi-userland/Config.in"
- 	source "package/rs485conf/Config.in"
- 	source "package/rtl8188eu/Config.in"
-+	source "package/rtl8189fs/Config.in"
- 	source "package/rtl8723bs/Config.in"
- 	source "package/rtl8723bu/Config.in"
- 	source "package/rtl8821au/Config.in"
--	source "package/rtl8189fs/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/setserial/Config.in"
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 9e646baffc..b6b91391b6 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -155,9 +155,9 @@ LINUX_IMAGE_NAME = zImage.epapr
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
+ LINUX_IMAGE_NAME = zImage
+ else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
+-LINUX_IMAGE_NAME = cuImage.$(LINUX_DTS_NAME)
++LINUX_IMAGE_NAME = cuImage.$(firstword $(LINUX_DTS_NAME))
+ else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
+-LINUX_IMAGE_NAME = simpleImage.$(LINUX_DTS_NAME)
++LINUX_IMAGE_NAME = simpleImage.$(firstword $(LINUX_DTS_NAME))
+ else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
+ LINUX_IMAGE_NAME = Image
+ else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
+-- 
+2.11.0
