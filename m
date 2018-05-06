@@ -1,36 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 09:01:16 +0200
-Subject: [Buildroot] [git commit] libkrb5: add dependency on host-bison
-Message-ID: <20180506071547.EDCDC8641C@busybox.osuosl.org>
+Date: Sun, 6 May 2018 09:02:35 +0200
+Subject: [Buildroot] [git commit] libndp: bump to version 1.6
+Message-ID: <20180506071548.1A8778641C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a78abab1b3afcff73c987ffc31de8950d9e9eb9f
+commit: https://git.buildroot.net/buildroot/commit/?id=71e1de6d5d5e613b550ec48bd05ecb150f161b5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libkrb5 needs yacc
-
-Fixes:
- - http://autobuild.buildroot.net/results/0bd0011978ecf0958ad459ae1aace564f4dde870
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libkrb5/libkrb5.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libndp/libndp.hash | 3 ++-
+ package/libndp/libndp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index 0390507304..0b4ba6be65 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -10,6 +10,7 @@ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
- LIBKRB5_SUBDIR = src
- LIBKRB5_LICENSE = MIT
- LIBKRB5_LICENSE_FILES = NOTICE
-+LIBKRB5_DEPENDENCIES = host-bison
- LIBKRB5_INSTALL_STAGING = YES
+diff --git a/package/libndp/libndp.hash b/package/libndp/libndp.hash
+index 51e312dd79..1861e0b4dd 100644
+--- a/package/libndp/libndp.hash
++++ b/package/libndp/libndp.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 42c0a8938d4302c72a42e2d954deef7e4903bb3974da6804a929a3cd0b5b6aa7  libndp-v1.5.tar.gz
++sha256 565d6c4167f83ec697c762ea002f23e8f0b00828d0749b1ce928f068543e5aad  libndp-v1.6.tar.gz
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
+index 4fa1d3331d..3fd8ac7bf9 100644
+--- a/package/libndp/libndp.mk
++++ b/package/libndp/libndp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # The configure script uses AC_TRY_RUN tests to check for those values,
+-LIBNDP_VERSION = v1.5
++LIBNDP_VERSION = v1.6
+ LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
+ LIBNDP_LICENSE = LGPL-2.1+
+ LIBNDP_LICENSE_FILES = COPYING
