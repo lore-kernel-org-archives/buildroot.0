@@ -1,20 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 17:33:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical
- order
-In-Reply-To: <1525600641-4386-1-git-send-email-jerzy.m.grzegorek@gmail.com>
- (Jerzy Grzegorek's message of "Sun, 6 May 2018 11:57:21 +0200")
-References: <1525600641-4386-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <87h8nkre85.fsf@dell.be.48ers.dk>
+Date: Sun, 06 May 2018 17:33:25 +0200
+Subject: [Buildroot] [PATCH 1/1] libmemcached: add hash for license file
+In-Reply-To: <20180506093624.24923-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 6 May 2018 11:36:24 +0200")
+References: <20180506093624.24923-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d0y8re7u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
