@@ -1,28 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 May 2018 11:56:51 +0200
-Subject: [Buildroot] [PATCH 1/1] libnetfilter_acct: add hash for license file
-Message-ID: <20180506095651.5267-1-fontaine.fabrice@gmail.com>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Sun,  6 May 2018 11:57:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical order
+Message-ID: <1525600641-4386-1-git-send-email-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 ---
- package/libnetfilter_acct/libnetfilter_acct.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libnetfilter_acct/libnetfilter_acct.hash b/package/libnetfilter_acct/libnetfilter_acct.hash
-index 7c38664612..0d37c43677 100644
---- a/package/libnetfilter_acct/libnetfilter_acct.hash
-+++ b/package/libnetfilter_acct/libnetfilter_acct.hash
-@@ -1,3 +1,6 @@
- # From ftp://ftp.netfilter.org/pub/libnetfilter_acct/libnetfilter_acct-1.0.3.tar.bz2.{md5sum,sha1sum}
- md5	814b2972b2f5c740ff87510bc109168b	libnetfilter_acct-1.0.3.tar.bz2
- sha1	4b9073e4aa989b0f000c8da1ab01b22fceed52b2	libnetfilter_acct-1.0.3.tar.bz2
-+
-+# Hash for license file:
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/Config.in b/package/Config.in
+index b527769..85bb3ae 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -948,7 +948,6 @@ menu "External python modules"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
+ 	source "package/python-texttable/Config.in"
+-	source "package/python-typepy/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
+ 	source "package/python-toml/Config.in"
+@@ -958,6 +957,7 @@ menu "External python modules"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+ 	source "package/python-txtorcon/Config.in"
++	source "package/python-typepy/Config.in"
+ 	source "package/python-u-msgpack/Config.in"
+ 	source "package/python-ubjson/Config.in"
+ 	source "package/python-ujson/Config.in"
 -- 
-2.14.1
+1.9.1
