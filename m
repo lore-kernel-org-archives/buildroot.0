@@ -1,27 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 May 2018 09:01:50 +0200
-Subject: [Buildroot] [git commit] libmcrypt: add hash for license file
-Message-ID: <20180506071548.128168641C@busybox.osuosl.org>
+Date: Sun, 6 May 2018 09:08:55 +0200
+Subject: [Buildroot] [git commit] package/freeswitch: add optional support
+ for postgresql
+Message-ID: <20180506071548.520C58641C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4f7d233390e10841eb18a9ef98a8b7cac5cf7f6
+commit: https://git.buildroot.net/buildroot/commit/?id=71b9679034a4d9cea66a5fe900ff560ac83e3663
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmcrypt/libmcrypt.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/freeswitch/freeswitch.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/libmcrypt/libmcrypt.hash b/package/libmcrypt/libmcrypt.hash
-index d0d3a9c977..30b57522b8 100644
---- a/package/libmcrypt/libmcrypt.hash
-+++ b/package/libmcrypt/libmcrypt.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  e4eb6c074bbab168ac47b947c195ff8cef9d51a211cdd18ca9c9ef34d27a373e  libmcrypt-2.5.8.tar.gz
-+sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 98f2f48356..4d490b0730 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -275,6 +275,17 @@ FREESWITCH_DEPENDENCIES += opencv
+ FREESWITCH_ENABLED_MODULES += applications/mod_cv
+ endif
+ 
++ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
++FREESWITCH_CONF_ENV += \
++	ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
++FREESWITCH_CONF_OPTS += \
++	--enable-core-pgsql-pkgconfig \
++	--enable-core-pgsql-support
++FREESWITCH_DEPENDENCIES += postgresql
++else
++FREESWITCH_CONF_OPTS += --disable-core-pgsql-support
++endif
++
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
