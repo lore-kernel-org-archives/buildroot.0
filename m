@@ -1,117 +1,48 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun,  6 May 2018 15:04:03 -0400
-Subject: [Buildroot] [PATCH 2/2] gst1-plugins-bad: update plugin licenses
-In-Reply-To: <1525633443-942-1-git-send-email-danomimanchego123@gmail.com>
-References: <1525633443-942-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1525633443-942-2-git-send-email-danomimanchego123@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 06 May 2018 21:22:06 +0200
+Subject: [Buildroot] defconfig build issues
+In-Reply-To: <5917efea-77e3-e66d-7d2b-b0225f041d4f@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 6 May 2018 17:27:04 +0200")
+References: <20180505215257.6745fc2f@windsurf>
+ <87zi1dthpv.fsf@dell.be.48ers.dk>
+ <CAFGQKxetkjrWB8JK5Xi_xxoKY7oKqZoVmKv3K5p-E8DqxLMTsQ@mail.gmail.com>
+ <5917efea-77e3-e66d-7d2b-b0225f041d4f@mind.be>
+Message-ID: <87muxcpp29.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update several of the licenses annotated in the gst1-plugins-bad.mk file.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-1. Specify GPL-2.0 in license info.
-* All of the *.[ch] that specify GPL also specify version 2 or later.
+ > On 06-05-18 15:50, Martin Bark wrote:
+ >> Hi,
+ >> 
+ >> On 6 May 2018 at 07:34, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >>>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+ > [snip]
+ >>> > raspberrypi3_qt5we_defconfig
+ >>> > ============================
+ >>> 
+ >>> > Your Buildroot configuration needs a compiler capable of building 32 bits binaries.
+ >>> > If you're running a Debian/Ubuntu distribution, install the g++-multilib package.
+ >>> > For other distributions, refer to their documentation.
+ >>> 
+ >>> > https://gitlab.com/buildroot.org/buildroot/-/jobs/66561791
+ >> 
+ >> support/docker/Dockerfile already installs g++-multilib but the image
+ >> buildroot/base:20180205.0730 lacks it.  It looks like g++-multilib was
+ >> added just after the image was created in commit
+ >> 27d22296927d7e4ec0965f2bdaa272b1e8ea15e7
+ >> 
+ >> So i think this should already be fixed, you just need to update the
+ >> buildroot/base image
 
-2. Remove GPL from audiovisualizers.
-* Changlog notes move from GPL to LGPL. (2015-04-25)
-* docs/plugins/inspect/plugin-audiovisualizers.xml claims "LGPL".
-* All *.[ch] files under ./gst/audiovisualizers says "GNU Library General Public License".
+ >  Or rather, 12b08c2be639e26ba0983d7dbdb3bddd91355f4c should be backported to
+ > 2018.02.
 
-3. Add GPL to yadif.
-* Changelog notes that yadif is "GPL". (2013-02-07)
-* docs/plugins/inspect/plugin-yadif.xml calims "GPL".
-* All *.[ch] files under ./gst/yadif says "GNU General Public License" except for one "GNU Library General Public License".
+Ahh - Committed to 2018.02.x, thanks.
 
-4. Remove UNKNOWN from fdk_aac.
-* docs/plugins/inspect/plugin-fdkaac.xml claims "LGPL".
-* All *.[ch] files under ./ext/fdkaac says "GNU Lesser" or "GNU Library General Public License".
-
-5. Add BSD-2c to dtls.
-* docs/plugins/inspect/plugin-dtls.xml calims "BSD".
-* All *.[ch] files under ./gst/dtls has BSD-2c text.
-
-6. Add BSD-2c to openh264.
-* Changelog notes that openh264 is "BSD-2". (2014-10-03)
-* docs/plugins/inspect/plugin-openh264.xml calims "BSD".
-* All *.[ch] files under ./ext/openh264 has BSD-2c text.
-
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index b001c33..90e2209 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -8,7 +8,7 @@ GST1_PLUGINS_BAD_VERSION = 1.12.4
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
--# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE and
-+# Additional plugin licenses will be appended to GST1_PLUGINS_BAD_LICENSE and
- # GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
- GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
- GST1_PLUGINS_BAD_LICENSE := LGPL-2.0+, LGPL-2.1+
-@@ -198,7 +198,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOVISUALIZERS),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-audiovisualizers
--GST1_PLUGINS_BAD_HAS_GPL_LICENSE = y
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-audiovisualizers
- endif
-@@ -514,6 +513,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_YADIF),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-yadif
-+GST1_PLUGINS_BAD_HAS_GPL_LICENSE = y
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-yadif
- endif
-@@ -585,7 +585,6 @@ endif
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FDK_AAC),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-fdk_aac
- GST1_PLUGINS_BAD_DEPENDENCIES += fdk-aac
--GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE = y
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-fdk_aac
- endif
-@@ -632,6 +631,7 @@ endif
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DTLS),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-dtls
- GST1_PLUGINS_BAD_DEPENDENCIES += openssl
-+GST1_PLUGINS_BAD_HAS_BSD2C_LICENSE = y
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-dtls
- endif
-@@ -682,6 +682,7 @@ endif
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENH264),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-openh264
- GST1_PLUGINS_BAD_DEPENDENCIES += libopenh264
-+GST1_PLUGINS_BAD_HAS_BSD2C_LICENSE = y
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-openh264
- endif
-@@ -771,10 +772,15 @@ endif
- 
- # Add GPL license if GPL licensed plugins enabled.
- ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
--GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), GPL
-+GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), GPL-2.0+
- GST1_PLUGINS_BAD_LICENSE_FILES += COPYING
- endif
- 
-+# Add BSD license if BSD licensed plugins enabled.
-+ifeq ($(GST1_PLUGINS_BAD_HAS_BSD2C_LICENSE),y)
-+GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), BSD-2-Clause
-+endif
-+
- # Add Unknown license if Unknown licensed plugins enabled.
- ifeq ($(GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE),y)
- GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), UNKNOWN
 -- 
-2.7.4
+Bye, Peter Korsgaard
