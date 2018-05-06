@@ -1,39 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 08:37:09 +0200
-Subject: [Buildroot] Fighting with suid bit
-In-Reply-To: <01bcd0bb46db1d23d1ff9e66371da64c@chez.com> (kaneda@chez.com's
- message of "Sun, 06 May 2018 00:39:04 +0200")
-References: <ffeaf5280e229a536de5f81fba84c99b@chez.com>
- <c41fae3e-3307-d3aa-8572-e65028237408@mind.be>
- <94873ecfb7c2d71d61d4ce5d76fd3cfb@chez.com>
- <87bmdvwmy9.fsf@dell.be.48ers.dk>
- <01bcd0bb46db1d23d1ff9e66371da64c@chez.com>
-Message-ID: <87vac1thm2.fsf@dell.be.48ers.dk>
+Date: Sun, 06 May 2018 09:00:11 +0200
+Subject: [Buildroot] [PATCH 1/3] configs/freescale_imx6sololiteevk:
+ Remove target
+In-Reply-To: <1525561944-1511-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Sat, 5 May 2018 20:12:22 -0300")
+References: <1525561944-1511-1-git-send-email-festevam@gmail.com>
+Message-ID: <87r2mptgjo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "kaneda" == kaneda  <kaneda@chez.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Shame on me !
- > You make me check my buildroot version and, unfortunatly, I was using
- > an old buildroot git commit.
+ > Currently this target fails to build:
+ > Error: No BOOT_FROM tag in board/freescale/mx6slevk/imximage.cfg.cfgtmp
+ > arch/arm/imx-common/Makefile:91: recipe for target 'u-boot-dtb.imx' failed
 
-Out of interest, what (git sha1) version was that?
+ > This problem has been already solved in upstream U-Boot, but not
+ > on NXP version of U-Boot.
 
+ > To avoid the maintainance burden of keeping two defconfigs for the
+ > same board, remove freescale_imx6sololiteevk_defconfig in favor
+ > of imx6slevk_defconfig, which uses U-Boot and kernel mainline.
 
- > I so switched to 2018.02.x branch.
- > Some hours later (distclean power), I can confirm suid bit is no
- > longer lost on cpio archive.
+ > Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/66561693
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Ok, great!
-
-
- > Thanks for your help
-
-You're welcome.
+Committed all 3, thanks.
 
 -- 
 Bye, Peter Korsgaard
