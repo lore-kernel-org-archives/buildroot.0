@@ -1,29 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 17:35:16 +0200
-Subject: [Buildroot] [PATCH] linux: ensure correct make targets are used
- for cuImage/simpleImage.<dtb>
-In-Reply-To: <20180506063418.6326-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 6 May 2018 08:34:18 +0200")
-References: <20180506063418.6326-1-peter@korsgaard.com>
-Message-ID: <87r2mopzkb.fsf@dell.be.48ers.dk>
+Date: Sun, 6 May 2018 17:33:12 +0200
+Subject: [Buildroot] [git commit] package/Config.in: fix alphabetical order
+Message-ID: <20180506153533.5C5AC8B800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c80817360dc7ea3526a907be6b326a18a374fba2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/66561794
- > LINUX_DTS_NAME may end up with a leading space because of the += logic, and
- > may contain multiple dts files - Neither of which works when we construct
- > the {cu,simple}Image.$(LINUX_DTS_NAME) make target name.
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fix it by using the first word in the variable.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index b613a1865c..a48abf9470 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -948,7 +948,6 @@ menu "External python modules"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
+ 	source "package/python-texttable/Config.in"
+-	source "package/python-typepy/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
+ 	source "package/python-toml/Config.in"
+@@ -958,6 +957,7 @@ menu "External python modules"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+ 	source "package/python-txtorcon/Config.in"
++	source "package/python-typepy/Config.in"
+ 	source "package/python-u-msgpack/Config.in"
+ 	source "package/python-ubjson/Config.in"
+ 	source "package/python-ujson/Config.in"
