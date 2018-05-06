@@ -1,54 +1,39 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sun,  6 May 2018 21:07:29 +0100
-Subject: [Buildroot] [PATCH 5/5] package/rpi-bt-firmware: bump version
-In-Reply-To: <20180506200729.31951-1-martin@barkynet.com>
-References: <20180506200729.31951-1-martin@barkynet.com>
-Message-ID: <20180506200729.31951-6-martin@barkynet.com>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Sun, 6 May 2018 22:16:30 +0200
+Subject: [Buildroot] boot failure
+In-Reply-To: <2f8b7f67-4819-645d-2c97-c108656e78f5@micronovasrl.com>
+References: <CO2PR01MB197635D773CF49B7A8986DEFCC840@CO2PR01MB1976.prod.exchangelabs.com>
+ <87po29qj5g.fsf@dell.be.48ers.dk>
+ <2f8b7f67-4819-645d-2c97-c108656e78f5@micronovasrl.com>
+Message-ID: <f49f99ee-cdff-a14d-8470-26917b6605c9@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
- package/rpi-bt-firmware/rpi-bt-firmware.mk   | 9 +++------
- 2 files changed, 4 insertions(+), 7 deletions(-)
+Hello all,
+> I'm experimenting the same thing with udev, this is my log:
+> "
+> [??? 5.334345] udevd[83]: starting version 3.2.5
+> [??? 5.352869] random: udevd: uninitialized urandom read (16 bytes read)
+> [??? 5.380840] random: udevd: uninitialized urandom read (16 bytes read)
+> [??? 5.387495] random: udevd: uninitialized urandom read (16 bytes read)
+> [??? 5.468700] udevd[84]: starting eudev-3.2.5
+> [??? 6.445387] urandom_read: 1 callbacks suppressed
+> [??? 6.445397] random: dd: uninitialized urandom read (512 bytes read)
+> [??? 6.561425] random: dbus-uuidgen: uninitialized urandom read (12 bytes read)
+> [??? 6.68793 random: dbus-uuidgen: uninitialized urandom read (8 bytes read)
+> [??? 6.894495] random: crng init done
+> [??? 6.897924] random: 2 urandom warning(s) missed due to ratelimiting
+> "
+> 
+> Since complains with dropbear with Enoch and udev with me,
+> it seems something kernel related, need to debug it.
 
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-index 553a7e4298..043706a1b8 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 beade89c5c072158b6cf18cf741d2695980fd6a4533dab3897bebf90c0631a30  rpi-bt-firmware-18d7c931aff0a8a78360b9b9eaeb15d1224fb907.tar.gz
-+sha256 c219f1d232fb80fbf23e7f2ed97d9c495855355a36dda373a8985c699ee1dd4b  rpi-bt-firmware-b5307312a172c8d87d44f6df32f5e24f1c19770e.tar.gz
- sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-index bbb40854e8..b1c0aa7c94 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-@@ -4,17 +4,14 @@
- #
- ################################################################################
- 
--RPI_BT_FIRMWARE_VERSION = 18d7c931aff0a8a78360b9b9eaeb15d1224fb907
-+RPI_BT_FIRMWARE_VERSION = b5307312a172c8d87d44f6df32f5e24f1c19770e
- RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
- RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
- RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
- 
--RPI_BT_FIRMWARE_FILES = brcm/BCM43430A1.hcd BCM4345C0.hcd
--
- define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
--	$(foreach file,$(RPI_BT_FIRMWARE_FILES),\
--		$(INSTALL) -D -m 0644 $(@D)/firmware/$(file) $(TARGET_DIR)/lib/firmware/$(notdir $(file))
--	)
-+	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
-+	$(INSTALL) -m 0644 $(@D)/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/brcm
- endef
- 
- $(eval $(generic-package))
--- 
-2.17.0
+
+Please try using packages like rngd & haveged to make sure all RNG hardware features are used to initialize the kernel random number generator as
+early as possible. If you can generate (sort of random) interrupts during boot that will also help to speed up the initialisation.
+
+
+Jaap
