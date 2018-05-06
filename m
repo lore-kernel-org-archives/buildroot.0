@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 May 2018 09:05:45 +0200
-Subject: [Buildroot] [PATCH 1/1] lcms2: bump to version 2.9
-In-Reply-To: <20180505171342.21931-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 5 May 2018 19:13:42 +0200")
-References: <20180505171342.21931-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k1shs1py.fsf@dell.be.48ers.dk>
+Date: Sun, 06 May 2018 09:07:53 +0200
+Subject: [Buildroot] [PATCH 1/1] libnice: bump to version 0.1.14
+In-Reply-To: <20180504211812.11080-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 4 May 2018 23:18:12 +0200")
+References: <20180504211812.11080-1-fontaine.fabrice@gmail.com>
+Message-ID: <87fu35s1me.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Remove two patches (already in version)
- > - Add hash for license file
+ > - Remove patch (already in version)
+ > - Add gnutls mandatory dependency
+ > - Add hash for license files
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
