@@ -1,44 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 May 2018 11:42:29 +0200
-Subject: [Buildroot] [PATCH 1/1] libnice: add gstreamer support
-Message-ID: <20180506094229.25363-1-fontaine.fabrice@gmail.com>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Sun, 6 May 2018 18:46:37 +0900
+Subject: [Buildroot] Automatic module loading with mdev is broken?
+Message-ID: <CAFr9PX=M4VCMcakZsENMXBW8Xi3BcKkrVCTdARu=nCvK-A5ovg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libnice/libnice.mk | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Hi all,
 
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-index e023728f44..49c29f9a60 100644
---- a/package/libnice/libnice.mk
-+++ b/package/libnice/libnice.mk
-@@ -10,8 +10,19 @@ LIBNICE_LICENSE = MPL-1.1 or LGPL-2.1
- LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
- LIBNICE_DEPENDENCIES = gnutls libglib2 host-pkgconf
- LIBNICE_INSTALL_STAGING = YES
--LIBNICE_CONF_OPTS = \
--	--without-gstreamer \
--	--without-gstreamer-0.10
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
-+LIBNICE_CONF_OPTS += --with-gstreamer-0.10
-+LIBNICE_DEPENDENCIES += gst-plugins-base
-+else
-+LIBNICE_CONF_OPTS += --without-gstreamer-0.10
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
-+LIBNICE_CONF_OPTS += --with-gstreamer
-+LIBNICE_DEPENDENCIES += gst1-plugins-base
-+else
-+LIBNICE_CONF_OPTS += --without-gstreamer
-+endif
- 
- $(eval $(autotools-package))
--- 
-2.14.1
+I'm trying to get automatic module loading with mdev and it looks like
+it was broken with this commit
+b4fc5a180c81689a982d5c595844331684c14f51
+(https://github.com/buildroot/buildroot/commit/b4fc5a180c81689a982d5c595844331684c14f51)
+or has maybe regressed?
+
+Anyhow the previous version of the line that the commit changed works
+(the modules I expect to get loaded get loaded).
+The changed version results in nothing being loaded.
+
+I think it's to do with this part "xargs -0 sort -u -z". Sort is
+taking in the big list of files correctly and sorting them but the
+result
+seems to still have new lines in it. So when that is passed to xargs
+(which is expecting the items to be null terminated) again
+to run modprobe the module aliases don't match and thus nothing gets loaded.
+
+This *works* for me but I'm not sure if it's right:
+
+diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+index 63ca955b1c..71693e7a9d 100644
+--- a/package/busybox/S10mdev
++++ b/package/busybox/S10mdev
+@@ -9,7 +9,7 @@ case "$1" in
+       echo /sbin/mdev >/proc/sys/kernel/hotplug
+       /sbin/mdev -s
+       # coldplug modules
+-       find /sys/ -name modalias -print0 | xargs -0 sort -u -z |
+xargs -0 modprobe -abq
++       find /sys/ -name modalias -print0 | xargs -0 sort -u -z | tr
+-d '\n' | xargs -0 modprobe -abq
+       ;;
+  stop)
+       ;;
+
+Cheers,
+
+Daniel
