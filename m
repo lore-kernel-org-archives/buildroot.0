@@ -1,55 +1,86 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 6 May 2018 21:39:51 +0300
-Subject: [Buildroot] [PATCH] dropbear: Do not build static binary
-In-Reply-To: <06a47e87f804576dc13ab3c33a8f9239cc318d9e.camel@spectralink.com>
-References: <20180503114701.9452-1-stefan.sorensen@spectralink.com>
- <20180503114701.9452-2-stefan.sorensen@spectralink.com>
- <20180503180853.2473u472dvxhvwkn@tarshish>
- <06a47e87f804576dc13ab3c33a8f9239cc318d9e.camel@spectralink.com>
-Message-ID: <20180506183951.6ld7c2jipihhruyc@tarshish>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun, 6 May 2018 15:03:25 -0400
+Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: conditionally add gpl
+ license
+In-Reply-To: <20180503230558.397043c1@windsurf>
+References: <1523502130-21870-1-git-send-email-danomimanchego123@gmail.com>
+ <20180503230558.397043c1@windsurf>
+Message-ID: <CANxTyt54TTEeCr-jRYmYFKvEEdaT7j0DqmFQ=vgwOp3mVqmi4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi S?rensen,
+Thomas,
 
-On Fri, May 04, 2018 at 06:27:02AM +0000, S?rensen, Stefan wrote:
-> On Thu, 2018-05-03 at 21:08 +0300, Baruch Siach wrote:
-> > > -ifeq ($(BR2_STATIC_LIBS),y)
-> > > -DROPBEAR_CONF_OPTS += --enable-static
-> > > -endif
-> > > +# The generic --enable-static flags is only intended for use when
-> > > building
-> > > +# libraries, but dropbear will be built as a static executeable
-> > > with this
-> > > +# flag, so we overide it here
-> > > +DROPBEAR_CONF_OPTS += --disable-static
-> > 
-> > You add --disable-static unconditionally, but we do want to build
-> > statically 
-> > when BR2_STATIC_LIBS=y. So maybe add --disable-static only for 
-> > BR2_SHARED_STATIC_LIBS=y to counter the effect of --enable-static
-> > that Buildroot adds automatically. Would that work for you?
-> 
-> The --disable-static causes dropbear to do nothing, i.e. just do a
-> normal link, so that will also work with BR2_STATIC_LIBS=y.
 
-So if --disable-static is a NOP why do we need it at all?
+On Thu, May 3, 2018 at 5:05 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Wed, 11 Apr 2018 23:02:10 -0400, Danomi Manchego wrote:
+>> Currently, GST1_PLUGINS_BAD_LICENSE_FILES starts out set to
+>> both the GPL COPYING file and the LGPL COPYING.LIB file, but
+>> the GST1_PLUGINS_BAD_LICENSE handling only claims LGPL, and
+>> then intelligently adds GPL if needed.  This change moves the
+>> GPL file addition to the same conditional clause so that the
+>> GPL file is included in the legal-info location only if GPL
+>> code is actually used.
+>>
+>> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>
+> I've applied to master, thanks. However, there's a separate but related
+> issue. See below.
+>
+>> ---
+>>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 ++++---
+>>  1 file changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+>> index 83cb94b..9f7cd97 100644
+>> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+>> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+>> @@ -8,9 +8,9 @@ GST1_PLUGINS_BAD_VERSION = 1.12.4
+>>  GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+>>  GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
+>>  GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+>> -GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
+>> -# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE if
+>> -# enabled.
+>> +# Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE and
+>> +# GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
+>> +GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
+>>  GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
+>>
+>>  GST1_PLUGINS_BAD_CONF_OPTS = \
+>> @@ -772,6 +772,7 @@ endif
+>>  # Add GPL license if GPL licensed plugins enabled.
+>>  ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
+>>  GST1_PLUGINS_BAD_LICENSE += GPL
+>
+> This way of appending to the LICENSE variable is not very good, because
+> the value will then be:
+>
+>         LGPL-2.0+, LGPL-2.1+ GPL
+>
+> which isn't very good. We should instead do:
+>
+> GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), GPL
+>
+> and actually, "GPL" by itself doesn't mean much, it should be GPL-2.0
+> or GPL-3.0.
+>
+> Would you mind looking into fixing those remaining issues ?
 
-As far as I can see, the only effect of --enable-static is to add -static to 
-dropbear binaries link command line via LDFLAGS. This is the expected 
-behaviour for BR2_STATIC_LIBS=y. Since BR2_STATIC_LIBS=y is sometimes used 
-with external toolchains that provide both shared and static libraries, the 
--static link option is required to produce static binaries. Your patch seems 
-to break this use case.
+Okay, I'll send in a couple patches.
+Danomi -
 
-What is this patch meant to fix?
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
