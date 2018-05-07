@@ -1,227 +1,231 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 7 May 2018 11:01:38 -0700
-Subject: [Buildroot] [PATCH 2/2] python-kivy: new package
-In-Reply-To: <CAGm1_ksqz1gKSeadvO49ApzBA0Cw0cjWEsOXbWB4PhPyy933yg@mail.gmail.com>
-References: <20180507030032.22819-1-joseph.kogut@gmail.com>
- <20180507030032.22819-2-joseph.kogut@gmail.com>
- <CAGm1_ksqz1gKSeadvO49ApzBA0Cw0cjWEsOXbWB4PhPyy933yg@mail.gmail.com>
-Message-ID: <CAMWSM7gxFD9bhmmh+qL+KH1KO78r-j43kHC3XyuK+pHybHrx4Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  7 May 2018 20:25:16 +0200
+Subject: [Buildroot] [PATCH 0/5] package: bump attr and acl,
+ fix builds of dependees
+Message-ID: <cover.1525717511.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Hello All!
 
-On Mon, May 7, 2018 at 3:05 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Hi Joseph,
->
-> On Mon, May 7, 2018 at 5:00 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
->> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
->> ---
->>  DEVELOPERS                                    |  1 +
->>  package/Config.in                             |  1 +
->>  .../0001-remove-getconf-dependency.patch      | 43 +++++++++++++++++
->>  package/python-kivy/Config.in                 | 16 +++++++
->>  package/python-kivy/python-kivy.hash          |  4 ++
->>  package/python-kivy/python-kivy.mk            | 48 +++++++++++++++++++
->>  6 files changed, 113 insertions(+)
->>  create mode 100644 package/python-kivy/0001-remove-getconf-dependency.patch
->>  create mode 100644 package/python-kivy/Config.in
->>  create mode 100644 package/python-kivy/python-kivy.hash
->>  create mode 100644 package/python-kivy/python-kivy.mk
->>
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index 3ddb292894..c44f8f7145 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -935,6 +935,7 @@ F:  configs/qemu_ppc64le_pseries_defconfig
->>  N:     Joseph Kogut <joseph.kogut@gmail.com>
->>  F:     package/gconf/
->>  F:     package/python-cython/
->> +F:     package/python-kivy/
->>  F:     package/python-raven/
->>  F:     package/python-schedule/
->>  F:     package/python-websockets/
->> diff --git a/package/Config.in b/package/Config.in
->> index a48abf9470..97b3110951 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -823,6 +823,7 @@ menu "External python modules"
->>         source "package/python-jsonschema/Config.in"
->>         source "package/python-json-schema-validator/Config.in"
->>         source "package/python-keyring/Config.in"
->> +       source "package/python-kivy/Config.in"
->>         source "package/python-libconfig/Config.in"
->>         source "package/python-libusb1/Config.in"
->>         source "package/python-lmdb/Config.in"
->> diff --git a/package/python-kivy/0001-remove-getconf-dependency.patch b/package/python-kivy/0001-remove-getconf-dependency.patch
->> new file mode 100644
->> index 0000000000..76b5f0b428
->> --- /dev/null
->> +++ b/package/python-kivy/0001-remove-getconf-dependency.patch
->> @@ -0,0 +1,43 @@
->> +From e5d2bc2db2235e05a1095f384c7358b255b50b09 Mon Sep 17 00:00:00 2001
->> +From: Joseph Kogut <joseph.kogut@gmail.com>
->> +Date: Thu, 3 May 2018 16:30:42 -0700
->> +Subject: [PATCH] input: probesysfs: remove getconf dependency
->> +
->> +Remove the dependency on getconf to get LONG_BIT value, in order to
->> +improve portability to Linux systems without Glibc and/or getconf.
->> +---
->> + kivy/input/providers/probesysfs.py | 7 ++-----
->> + 1 file changed, 2 insertions(+), 5 deletions(-)
->> +
->> +diff --git a/kivy/input/providers/probesysfs.py b/kivy/input/providers/probesysfs.py
->> +index 8021d67e51..6bc424ecfa 100644
->> +--- a/kivy/input/providers/probesysfs.py
->> ++++ b/kivy/input/providers/probesysfs.py
->> +@@ -47,6 +47,7 @@
->> +     ProbeSysfsHardwareProbe = None
->> +
->> + else:
->> ++    import ctypes
->> +     from re import match, IGNORECASE
->> +     from glob import glob
->> +     from subprocess import Popen, PIPE
->> +@@ -89,7 +90,7 @@ def get_capabilities(self):
->> +                 return []
->> +
->> +             capabilities = []
->> +-            long_bit = getconf("LONG_BIT")
->> ++            long_bit = ctypes.sizeof(ctypes.c_long) * 8
->> +             for i, word in enumerate(line.split(" ")):
->> +                 word = int(word, 16)
->> +                 subcapabilities = [bool(word & 1 << i)
->> +@@ -112,10 +113,6 @@ def getout(*args):
->> +         except OSError:
->> +             return ''
->> +
->> +-    def getconf(var):
->> +-        output = getout("getconf", var)
->> +-        return int(output)
->> +-
->> +     def query_xinput():
->> +         global _cache_xinput
->> +         if _cache_xinput is None:
->> diff --git a/package/python-kivy/Config.in b/package/python-kivy/Config.in
->> new file mode 100644
->> index 0000000000..ac901eef80
->> --- /dev/null
->> +++ b/package/python-kivy/Config.in
->> @@ -0,0 +1,16 @@
->> +config BR2_PACKAGE_PYTHON_KIVY
->> +       bool "python-kivy"
->> +       select BR2_PACKAGE_HOST_PYTHON_CYTHON
->> +       select BR2_PACKAGE_LIBPNG # runtime
->> +       select BR2_PACKAGE_MTDEV
->> +       select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
->> +       select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
->> +       depends on BR2_PACKAGE_HAS_LIBGL
->> +       help
->> +         A software library for rapid development of hardware-accelerated
->> +         multitouch applications.
->> +
->> +         http://kivy.org
->> +
->> +comment "python-kivy needs OpenGL"
->> +       depends on !BR2_PACKAGE_HAS_LIBGL
->> diff --git a/package/python-kivy/python-kivy.hash b/package/python-kivy/python-kivy.hash
->> new file mode 100644
->> index 0000000000..a7ef55fd32
->> --- /dev/null
->> +++ b/package/python-kivy/python-kivy.hash
->> @@ -0,0 +1,4 @@
->> +# sha256 locally computed
->> +sha256 53a4eb32b6f6ecb7dcf02ddf3631af247e43fd44eba74ca51fb20a82cd4c9589  python-kivy-5f6c66eba79e1f9360f2fba79ee2c4cc6a91ed13.tar.gz
->> +# License file, locally calculated
->> +sha256 282b3d8735ef6cbdcf8cc480947d50e0aea4ad1cc931d41f3f6a6bc23956f2d6  LICENSE
->> diff --git a/package/python-kivy/python-kivy.mk b/package/python-kivy/python-kivy.mk
->> new file mode 100644
->> index 0000000000..bec0a1aee8
->> --- /dev/null
->> +++ b/package/python-kivy/python-kivy.mk
->> @@ -0,0 +1,48 @@
->> +################################################################################
->> +#
->> +# python-kivy
->> +#
->> +################################################################################
->> +
->> +PYTHON_KIVY_VERSION = 5f6c66eba79e1f9360f2fba79ee2c4cc6a91ed13
->> +PYTHON_KIVY_SITE = $(call github,kivy,kivy,$(PYTHON_KIVY_VERSION))
->> +PYTHON_KIVY_SETUP_TYPE = distutils
->> +PYTHON_KIVY_LICENSE = MIT
->> +PYTHON_KIVY_LICENSE_FILES = LICENSE
->> +PYTHON_KIVY_DEPENDENCIES = host-python-cython libgl libpng mtdev
->
-> is libpng really a runtime dependency?
->
-> Yegor
->
+This series is an attempt at bumping the attr and acl packages to a
+later version.
 
-Are you asking if libpng is legitimately a runtime dependency, or if
-it is also a build dependency? I don't think Kivy requires libpng to
-build.
+The crux of the changes is to get an attr package that no longer behaves
+silly [0]. attr has had a complete overhaul of it buildsystem, making it
+fully autotools-based, which fixes quite a few idiosyncracies of the
+previous hand-rolled one.
 
-Running:
+However, this means that attr no longer installs its own copy of xattr.h,
+on the assumption that it has been provided by glibc "for ages" [1] [2]
+[3] [4]. This means that a few packages have to be fixed now, of which acl.
 
-    find output/target/lib/python3.6/site-packages/kivy/ -name "*.so"
--exec ldd {} \; | grep libpng
+Speaking of acl, that one had no release for the past 5 years, and still
+got quite some amount of activity in the git tree. So, we update to an
+arbitrary tag from the git tree, i.e. the latest as of today.
 
-Yields:
+Two packages then need fixing because they still use attr/xattr.h:
+stress-ng, which we bump and fix (so that we can send the fix upstream
+easily), and lua-flu, which we simply fix (after sending the patch
+upstream).
 
-    libpng16.so.16 => /usr/lib/libpng16.so.16 (0x00007f907f73e000)
-    libpng16.so.16 => /usr/lib/libpng16.so.16 (0x00007fc24cd1d000)
-    libpng16.so.16 => /usr/lib/libpng16.so.16 (0x00007f9405e83000)
-    libpng16.so.16 => /usr/lib/libpng16.so.16 (0x00007f32b2e6f000)
-    libpng16.so.16 => /usr/lib/libpng16.so.16 (0x00007fb2fd18f000)
-    libpng16.so.16 => /usr/lib/libpng16.so.16 (0x00007f9427cd5000)
+Of all packages that depend on attr or acl:
+
+    sys  -> checks for, and uses <sys/xattr.h>   => Order means order
+    attr -> checks for, and uses <attr/xattr.h>  => they are tested for.
+    acl  -> checks for, and uses <acl/libacl.h> and/or -lacl
+    patched    -> patch added to uses <sys/xattr.h>
+    no xattr.h -> does not check for <attr/xattr.h> or <sys/xattr.h>,
+                  but uses other <attr/*.h> and -lattr
+
+    acl                 ACK, sys
+    coreutils           ACK, sys-attr
+    host-acl            ACK, sys
+    host-fakeroot       ACK, sys
+    host-pseudo         ACK, sys
+    libarchive          ACK, attr-sys
+    logrotate           ACK, acl
+    lua-flu             ACK, patched, sys
+    mtd                 ACK, sys
+    netatalk            ACK, acl, attr-sys
+    patch               ACK, no xattr.h
+    rpm                 ACK, acl
+    rsync               ACK, acl, attr-sys
+    samba4              ACK, attr-sys [*]
+    stress-ng           ACK, patched, sys
+    systemd             ACK, acl
+    tar                 ACK, acl, sys
+    vim                 ACK, acl [**]
+    xorriso             ACK, acl, patched, sys
+
+[*] in my testing, I had a systemd-based system, and samba4 failed to
+install (I'll investigate separately). But at least, it did detect and
+use <sys/xattr.h> correctly, and the build succeeded. It even installed
+OK, but our SAMBA4_INSTALL_INIT_SYSTEMD is borked (missing source file.)
+
+[**] vim uses xattr to add support for SMACK. Before this series, it did
+detect xattr, but failed to deteect a feature of it [4], so it always
+disabled SMACK support. Now, it does not detect xattr at all, so it
+doesn't enable SMACK either. So, even though we have a regression about
+the detections of xattr.h, we have no regression in functionality.
+
+Now, let's see some test-pkg configs and results:
+
+    $ cat attr-nommu.cfg
+    BR2_PACKAGE_ACL=y
+    BR2_PACKAGE_ATTR=y
+    BR2_PACKAGE_LIBARCHIVE=y
+    BR2_PACKAGE_MTD=y
+    BR2_PACKAGE_MTD_MKFSJFFS2=y
+    BR2_PACKAGE_MTD_MKFSUBIFS=y
+    $ ./utils/test-pkg -c attr-nommu.cfg -d $(pwd)/test-nommu
+                                 br-arm-full [1/6]: OK
+                      br-arm-cortex-a9-glibc [2/6]: OK
+                       br-arm-cortex-m4-full [3/6]: OK
+                              br-x86-64-musl [4/6]: OK
+                          br-arm-full-static [5/6]: OK
+                    armv5-ctng-linux-gnueabi [6/6]: OK
+    6 builds, 0 skipped, 0 build failed, 0 legal-info failed
+
+    $ cat attr-mmu.cfg
+    BR2_PACKAGE_ACL=y
+    BR2_PACKAGE_ATTR=y
+    BR2_PACKAGE_COREUTILS=y
+    BR2_PACKAGE_LIBARCHIVE=y
+    BR2_PACKAGE_LOGROTATE=y
+    BR2_PACKAGE_MTD=y
+    BR2_PACKAGE_MTD_MKFSJFFS2=y
+    BR2_PACKAGE_MTD_MKFSUBIFS=y
+    BR2_PACKAGE_NETATALK=y
+    BR2_PACKAGE_PATCH=y
+    BR2_PACKAGE_RPM=y
+    BR2_PACKAGE_RSYNC=y
+    BR2_PACKAGE_SAMBA4=y
+    BR2_PACKAGE_TAR=y
+    BR2_PACKAGE_VIM=y
+    BR2_PACKAGE_XORRISO=y
+    $ ./utils/test-pkg -c attr-mmu.cfg -d $(pwd)/test-mmu
+                                 br-arm-full [1/6]: OK
+                      br-arm-cortex-a9-glibc [2/6]: OK
+                       br-arm-cortex-m4-full [3/6]: SKIPPED
+                              br-x86-64-musl [4/6]: SKIPPED
+                          br-arm-full-static [5/6]: SKIPPED
+                    armv5-ctng-linux-gnueabi [6/6]: OK
+    6 builds, 3 skipped, 0 build failed, 0 legal-info failed
+
+    Notes:
+      - for mtd, the two utilities that use xattr are explcitly enabled;
+      - for br-arm-cortex-m4-full, that's because it is a static
+        build, so a lot of packages are disabled;
+      - for br-x86-64-musl, samba4 is not available for musl;
+      - for br-arm-full-static, again it is a static build.
+
+    $ cat attr-mmu-glibc.cfg
+    BR2_PACKAGE_ACL=y
+    BR2_PACKAGE_ATTR=y
+    BR2_PACKAGE_COREUTILS=y
+    BR2_PACKAGE_LIBARCHIVE=y
+    BR2_PACKAGE_LUA=y
+    BR2_PACKAGE_LUA_FLU=y
+    BR2_PACKAGE_LOGROTATE=y
+    BR2_PACKAGE_MTD=y
+    BR2_PACKAGE_MTD_MKFSJFFS2=y
+    BR2_PACKAGE_MTD_MKFSUBIFS=y
+    BR2_PACKAGE_NETATALK=y
+    BR2_PACKAGE_PATCH=y
+    BR2_PACKAGE_RPM=y
+    BR2_PACKAGE_RSYNC=y
+    BR2_PACKAGE_SAMBA4=y
+    BR2_PACKAGE_STRESS_NG=y
+    BR2_PACKAGE_TAR=y
+    BR2_PACKAGE_VIM=y
+    BR2_PACKAGE_XORRISO=y
+    $ ./utils/test-pkg -c attr-mmu-glibc.cfg  -d $(pwd)/test-mmu-glibc
+                                 br-arm-full [1/6]: SKIPPED
+                      br-arm-cortex-a9-glibc [2/6]: OK
+                       br-arm-cortex-m4-full [3/6]: SKIPPED
+                              br-x86-64-musl [4/6]: SKIPPED
+                          br-arm-full-static [5/6]: SKIPPED
+                    armv5-ctng-linux-gnueabi [6/6]: OK
+    6 builds, 4 skipped, 0 build failed, 0 legal-info failed
+
+    Notes:
+      - br-arm-full: stress-ng only for glibc;
+      - br-arm-cortex-m4-full: it's a static build;
+      - br-x86-64-musl: stress-ng and smaba4 not avail on musl;
+      - br-arm-full-static: static build
+
+Now, I also build-tested systemd with a custom config (not with
+test-pkg).
+
+Note: I'll send the patches upstream asap.
+
+[0] https://bugs.busybox.net/show_bug.cgi?id=10986
+[1] https://git.savannah.gnu.org/cgit/attr.git/commit/?id=7921157890d07858d092f4003ca4c6bae9fd2c38)
+[1] glibc: since 2.5: https://sourceware.org/git/?p=glibc.git;a=commit;h=0ecb606cb6cf65de1d9fc8a919bceb4be476c602
+[2] uClibc: since 2004: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d503d1d6c62506ba6fb51c04a9703039e71d11a9
+[3] musl: since 2012 (a year after initial release): http://git.musl-libc.org/cgit/musl/commit/?id=207460d09742304941f1a010a89fc2efa46bcb29
+[4] checking for XATTR_NAME_SMACKEXEC in linux/xattr.h... no
 
 
-It seems several modules are linked with libpng, though I'm unsure if
-any of its symbols are used. Kivy is capable of using multiple image
-providers, and sdl2_image should be enough. Regardless, Kivy currently
-won't start without libpng.
+Regards,
+Yann E. MORIN.
 
->> +
->> +ifeq ($(BR2_PACKAGE_GSTREAMER),y)
->> +       PYTHON_KIVY_DEPENDENCIES += gstreamer
->> +       PYTHON_KIVY_ENV += USE_GSTREAMER=1
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
->> +       PYTHON_KIVY_DEPENDENCIES += libegl
->> +       PYTHON_KIVY_ENV += USE_EGL=1
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_X11)$(BR2_PACKAGE_SDL2_IMAGE)$(BR2_PACKAGE_SDL2_MIXER)$(BR2_PACKAGE_SDL2_TTF),yyyyy)
->> +       PYTHON_KIVY_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
->> +       PYTHON_KIVY_ENV += USE_SDL2=1
->> +       PYTHON_KIVY_ENV += KIVY_SDL2_PATH=$(STAGING_DIR)/usr/include/SDL2
->> +else
->> +       PYTHON_KIVY_ENV += USE_SDL2=0
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_WAYLAND),y)
->> +       PYTHON_KIVY_DEPENDENCIES += wayland
->> +       PYTHON_KIVY_ENV += USE_WAYLAND=1
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
->> +       PYTHON_KIVY_DEPENDENCIES += xserver_xorg-server
->> +       PYTHON_KIVY_ENV += USE_X11=1
->> +endif
->> +
->> +define PYTHON_KIVY_REMOVE_EXAMPLES
->> +       rm -rf $(TARGET_DIR)/usr/share/kivy-examples
->> +endef
->> +
->> +PYTHON_KIVY_POST_INSTALL_TARGET_HOOKS += PYTHON_KIVY_REMOVE_EXAMPLES
->> +
->> +$(eval $(python-package))
->> --
->> 2.17.0
->>
+
+The following changes since commit ba33728bc3118a6f1d2b4233e7bddb17b2f67f1f
+
+  uclibc: fix clock_nanosleep declaration (2018-05-06 23:19:14 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 6e7e5621022a8e788dc3cc8e04f123959e6de050
+
+  package/attr: bump version (2018-05-07 20:23:33 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/lua-flu: fix to use system xattr header
+      package/stress-ng: bump version, fix to use system xattr header
+      package/xorriso: fix to use system xattr header
+      package/acl: bump version
+      package/attr: bump version
+
+ package/acl/0001-support-static-installation.patch |  29 --
+ ...2-add-__acl_-prefixes-to-internal-symbols.patch | 292 ---------------------
+ package/acl/acl.hash                               |   2 +-
+ package/acl/acl.mk                                 |  60 ++---
+ .../attr/0001-support-static-installation.patch    |  29 --
+ .../0002-avoid-glibc-specific-decls-defines.patch  |  37 ---
+ package/attr/0003-portability-fixes.patch          |  37 ---
+ package/attr/attr.hash                             |   2 +-
+ package/attr/attr.mk                               |  43 +--
+ package/lua-flu/0001-use-system-xattr-h.patch      | 161 ++++++++++++
+ package/stress-ng/0001-xattr-from-libc.patch       |  49 ++++
+ package/stress-ng/stress-ng.hash                   |   2 +-
+ package/stress-ng/stress-ng.mk                     |   3 +-
+ package/xorriso/0001-use-sys-xattr.h.patch         |  30 +++
+ package/xorriso/xorriso.mk                         |  10 +
+ 15 files changed, 283 insertions(+), 503 deletions(-)
+ delete mode 100644 package/acl/0001-support-static-installation.patch
+ delete mode 100644 package/acl/0002-add-__acl_-prefixes-to-internal-symbols.patch
+ delete mode 100644 package/attr/0001-support-static-installation.patch
+ delete mode 100644 package/attr/0002-avoid-glibc-specific-decls-defines.patch
+ delete mode 100644 package/attr/0003-portability-fixes.patch
+ create mode 100644 package/lua-flu/0001-use-system-xattr-h.patch
+ create mode 100644 package/stress-ng/0001-xattr-from-libc.patch
+ create mode 100644 package/xorriso/0001-use-sys-xattr.h.patch
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
