@@ -1,90 +1,54 @@
-From: s.vineeth amalraj <vineeth.laesr@gmail.com>
-Date: Mon, 7 May 2018 12:32:39 +0530
-Subject: [Buildroot] regarding creating my own customized package in
- buildroot and use it in my OS in Raspberry Pi
-Message-ID: <CANMfZMiHNh87+NfnNfYiKpOZGx5uKXwytgF9g2CQhViP5CTfrg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 May 2018 09:08:11 +0200
+Subject: [Buildroot] [PATCH 2/4] skeleton-custom: install /bin, /lib,
+ and /sbin
+In-Reply-To: <20180506213116.25084-3-casantos@datacom.ind.br>
+References: <20180506213116.25084-1-casantos@datacom.ind.br>
+ <20180506213116.25084-3-casantos@datacom.ind.br>
+Message-ID: <20180507090811.18489751@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sir,
+Hello Carlos,
 
-I am Vineeth. I would like to create a simple python package in my
-customized os for RPi-3. I could able to see the package name in the make
-menuconfig after following the steps below, but when building it says no
-file (in my case tamiltest.c) is present and make error is coming.
+On Sun,  6 May 2018 18:31:14 -0300, Carlos Santos wrote:
+> skeleton-custom does not install the required /bin, /lib and /sbin
+> directories (or symlinks), which may result in an imcomplete tree, The
+> user could add the required directories/symlinks to the skeleton but
+> they maye be invalid, depending on the state of BR2_ROOTFS_MERGED_USR.
 
+maye -> may
 
-Kindly help me out with this. Below are the steps which I followed. Thank
-you!
+> 
+> Steps to reproduce:
+> 
+> - Enable BR2_ROOTFS_MERGED_USR and BR2_INIT_SYSTEMD
+> - Set BR2_ROOTFS_SKELETON_CUSTOM_PATH to "system/skeleton"
+> - Run "make skeleton"
+> - target/{bin.lib,sbin} will not exist
+> 
+> Add calls to SYSTEM_USR_SYMLINKS_OR_DIRS to INSTALL_TARGET_CMDS and
+> INSTALL_STAGING_CMDS, so the required directories or symlinks are
+> created.
+> 
+> Add a paragraph to the documentation clarifying that custom skeletons
+> should not contain /bin, /lib or /sbin.
 
-1. Created a package (i.e folder) named *"tamil"* under
-/home/sands/Documents/vineeth/buildroot-at91/package.
-2. Inside *tamil* folder, I created 2 files named *tamil.mk
-<http://tamil.mk/>* and *Config.in*
+Maybe I don't understand the full scope of the problem, but to me, it
+looks weird that the full contents of the skeleton (default or custom)
+are not copied to the target root filesystem. It goes against the basic
+expectations of what the skeleton is.
 
-3.Under *Config.in*  the below code is pasted:
+Of course, I am fine with checking that the skeleton complies with the
+BR2_ROOTFS_MERGED_USR option, but preventing the skeleton from
+having /bin, /lib and /sbin looks weird. So much that it needs to be
+mentioned in the documentation.
 
-*config BR2_PACKAGE_TAMIL*
-*       bool "tamil"*
-*       help*
-*               This is sample tamil package.*
-*        https://en.wikipedia.org/wiki/Tamils
-<https://en.wikipedia.org/wiki/Tamils>*
-
-4. Next under *tamil.mk <http://tamil.mk/>* file the below code is pasted:
-
-*TAMIL_MODULE_VERSION = 1.0*
-*TAMIL_SITE = /home/sands/Documents/vineeth/testtamil.c*
-*TAMIL_SITE_METHOD = local*
-*TAMIL_LICENSE = GPLv2*
-*TAMIL_LICENSE_FILES = COPYING*
-*TAMIL_MODULE_MAKE_OPTS = \*
-*        CONFIG_DUMMY1= \*
-*        CONFIG_DUMMY2=y*
-
-*define KERNEL_MODULE_BUILD_CMDS*
-*        $(MAKE) -C '$(@D)' LINUX_DIR='$(LINUX_DIR)' CC='$(TARGET_CC)'
-LD='$(TARGET_LD)' modules*
-*endef*
-
-*$(eval $(kernel-module))*
-*$(eval $(generic-package))*
-
-5.Then in the *buildroot-->package-->Config.in file*, add the below lines (
-*Note:* this Config.in is different. this is only used to display our
-created package name in the make menuconfig)
-
-*menu "My tamil package"*
-*        source "package/tamil/Config.in"*
-*endmenu*
-
-
-6. I created a file named *testtamil.c* and saved in /home/sands/Documents/
-vineeth/testtamil.c.  and in the file testtamil.c i have pasted the below
-code:
-
-*#include<stdio.h>*
-*int main()*
-*{*
-*printf("tamil is tested\n");*
-*printf("working fine");*
-
-*return 1;*
-*}*
-
-*Issue:* This is reflecting in *make menuconfig* but not building and
-getting make error and below is the error which i faced.
-
-ERROR: /home/sands/Documents/vineeth/testtamil.c does not exist
-package/pkg-generic.mk:194: recipe for target '/home/sands/Documents/vineeth
-/buildroot-at91/output/build/tamil/.stamp_rsynced' failed
-make[1]: *** [/home/sands/Documents/vineeth/buildroot-at91/output/build/tamil/.stamp_rsynced]
-Error 1
-Makefile:79: recipe for target '_all' failed
-make: *** [_all] Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180507/a04f36c3/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
