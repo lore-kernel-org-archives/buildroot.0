@@ -1,100 +1,197 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 7 May 2018 12:04:15 +0200
-Subject: [Buildroot] [PATCH 1/2] python-cython: new package
-In-Reply-To: <20180507030032.22819-1-joseph.kogut@gmail.com>
+Date: Mon, 7 May 2018 12:05:41 +0200
+Subject: [Buildroot] [PATCH 2/2] python-kivy: new package
+In-Reply-To: <20180507030032.22819-2-joseph.kogut@gmail.com>
 References: <20180507030032.22819-1-joseph.kogut@gmail.com>
-Message-ID: <CAGm1_kt1EtUsjdddM0Rn9y0tb9QR059LQJj9he=B+DqTAdvE0A@mail.gmail.com>
+ <20180507030032.22819-2-joseph.kogut@gmail.com>
+Message-ID: <CAGm1_ksqz1gKSeadvO49ApzBA0Cw0cjWEsOXbWB4PhPyy933yg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Joseph,
+
 On Mon, May 7, 2018 at 5:00 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
 > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
 > ---
->  DEVELOPERS                               |  1 +
->  package/Config.in.host                   |  1 +
->  package/python-cython/Config.in.host     |  7 +++++++
->  package/python-cython/python-cython.hash |  6 ++++++
->  package/python-cython/python-cython.mk   | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-cython/Config.in.host
->  create mode 100644 package/python-cython/python-cython.hash
->  create mode 100644 package/python-cython/python-cython.mk
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in                             |  1 +
+>  .../0001-remove-getconf-dependency.patch      | 43 +++++++++++++++++
+>  package/python-kivy/Config.in                 | 16 +++++++
+>  package/python-kivy/python-kivy.hash          |  4 ++
+>  package/python-kivy/python-kivy.mk            | 48 +++++++++++++++++++
+>  6 files changed, 113 insertions(+)
+>  create mode 100644 package/python-kivy/0001-remove-getconf-dependency.patch
+>  create mode 100644 package/python-kivy/Config.in
+>  create mode 100644 package/python-kivy/python-kivy.hash
+>  create mode 100644 package/python-kivy/python-kivy.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 24d134cb70..3ddb292894 100644
+> index 3ddb292894..c44f8f7145 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -934,6 +934,7 @@ F:  configs/qemu_ppc64le_pseries_defconfig
->
+> @@ -935,6 +935,7 @@ F:  configs/qemu_ppc64le_pseries_defconfig
 >  N:     Joseph Kogut <joseph.kogut@gmail.com>
 >  F:     package/gconf/
-> +F:     package/python-cython/
+>  F:     package/python-cython/
+> +F:     package/python-kivy/
 >  F:     package/python-raven/
 >  F:     package/python-schedule/
 >  F:     package/python-websockets/
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index a8a4c1f802..38543e7390 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -43,6 +43,7 @@ menu "Host utilities"
->         source "package/pkgconf/Config.in.host"
->         source "package/pru-software-support/Config.in.host"
->         source "package/pwgen/Config.in.host"
-> +       source "package/python-cython/Config.in.host"
->         source "package/python-lxml/Config.in.host"
->         source "package/python-six/Config.in.host"
->         source "package/python-xlrd/Config.in.host"
-> diff --git a/package/python-cython/Config.in.host b/package/python-cython/Config.in.host
+> diff --git a/package/Config.in b/package/Config.in
+> index a48abf9470..97b3110951 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -823,6 +823,7 @@ menu "External python modules"
+>         source "package/python-jsonschema/Config.in"
+>         source "package/python-json-schema-validator/Config.in"
+>         source "package/python-keyring/Config.in"
+> +       source "package/python-kivy/Config.in"
+>         source "package/python-libconfig/Config.in"
+>         source "package/python-libusb1/Config.in"
+>         source "package/python-lmdb/Config.in"
+> diff --git a/package/python-kivy/0001-remove-getconf-dependency.patch b/package/python-kivy/0001-remove-getconf-dependency.patch
 > new file mode 100644
-> index 0000000000..b69e59b718
+> index 0000000000..76b5f0b428
 > --- /dev/null
-> +++ b/package/python-cython/Config.in.host
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_PYTHON_CYTHON
-> +       bool "host python-cython"
+> +++ b/package/python-kivy/0001-remove-getconf-dependency.patch
+> @@ -0,0 +1,43 @@
+> +From e5d2bc2db2235e05a1095f384c7358b255b50b09 Mon Sep 17 00:00:00 2001
+> +From: Joseph Kogut <joseph.kogut@gmail.com>
+> +Date: Thu, 3 May 2018 16:30:42 -0700
+> +Subject: [PATCH] input: probesysfs: remove getconf dependency
+> +
+> +Remove the dependency on getconf to get LONG_BIT value, in order to
+> +improve portability to Linux systems without Glibc and/or getconf.
+> +---
+> + kivy/input/providers/probesysfs.py | 7 ++-----
+> + 1 file changed, 2 insertions(+), 5 deletions(-)
+> +
+> +diff --git a/kivy/input/providers/probesysfs.py b/kivy/input/providers/probesysfs.py
+> +index 8021d67e51..6bc424ecfa 100644
+> +--- a/kivy/input/providers/probesysfs.py
+> ++++ b/kivy/input/providers/probesysfs.py
+> +@@ -47,6 +47,7 @@
+> +     ProbeSysfsHardwareProbe = None
+> +
+> + else:
+> ++    import ctypes
+> +     from re import match, IGNORECASE
+> +     from glob import glob
+> +     from subprocess import Popen, PIPE
+> +@@ -89,7 +90,7 @@ def get_capabilities(self):
+> +                 return []
+> +
+> +             capabilities = []
+> +-            long_bit = getconf("LONG_BIT")
+> ++            long_bit = ctypes.sizeof(ctypes.c_long) * 8
+> +             for i, word in enumerate(line.split(" ")):
+> +                 word = int(word, 16)
+> +                 subcapabilities = [bool(word & 1 << i)
+> +@@ -112,10 +113,6 @@ def getout(*args):
+> +         except OSError:
+> +             return ''
+> +
+> +-    def getconf(var):
+> +-        output = getout("getconf", var)
+> +-        return int(output)
+> +-
+> +     def query_xinput():
+> +         global _cache_xinput
+> +         if _cache_xinput is None:
+> diff --git a/package/python-kivy/Config.in b/package/python-kivy/Config.in
+> new file mode 100644
+> index 0000000000..ac901eef80
+> --- /dev/null
+> +++ b/package/python-kivy/Config.in
+> @@ -0,0 +1,16 @@
+> +config BR2_PACKAGE_PYTHON_KIVY
+> +       bool "python-kivy"
+> +       select BR2_PACKAGE_HOST_PYTHON_CYTHON
+> +       select BR2_PACKAGE_LIBPNG # runtime
+> +       select BR2_PACKAGE_MTDEV
+> +       select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
+> +       select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
+> +       depends on BR2_PACKAGE_HAS_LIBGL
 > +       help
-> +         The Cython compiler for writing C extensions for the Python
-> +         language.
+> +         A software library for rapid development of hardware-accelerated
+> +         multitouch applications.
 > +
-> +         http://cython.org/
-> diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+> +         http://kivy.org
+> +
+> +comment "python-kivy needs OpenGL"
+> +       depends on !BR2_PACKAGE_HAS_LIBGL
+> diff --git a/package/python-kivy/python-kivy.hash b/package/python-kivy/python-kivy.hash
 > new file mode 100644
-> index 0000000000..3b918dc704
+> index 0000000000..a7ef55fd32
 > --- /dev/null
-> +++ b/package/python-cython/python-cython.hash
-> @@ -0,0 +1,6 @@
-> +# md5 from https://pypi.python.org/pypi/Cython/json, sha256 locally computed
-> +md5    6149238287d662bd5d5e572482252493  Cython-0.27.3.tar.gz
-> +sha256 6a00512de1f2e3ce66ba35c5420babaef1fe2d9c43a8faab4080b0dbcc26bc64  Cython-0.27.3.tar.gz
-> +# License files, locally calculated
-> +sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
-> +sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-> diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+> +++ b/package/python-kivy/python-kivy.hash
+> @@ -0,0 +1,4 @@
+> +# sha256 locally computed
+> +sha256 53a4eb32b6f6ecb7dcf02ddf3631af247e43fd44eba74ca51fb20a82cd4c9589  python-kivy-5f6c66eba79e1f9360f2fba79ee2c4cc6a91ed13.tar.gz
+> +# License file, locally calculated
+> +sha256 282b3d8735ef6cbdcf8cc480947d50e0aea4ad1cc931d41f3f6a6bc23956f2d6  LICENSE
+> diff --git a/package/python-kivy/python-kivy.mk b/package/python-kivy/python-kivy.mk
 > new file mode 100644
-> index 0000000000..88eab83416
+> index 0000000000..bec0a1aee8
 > --- /dev/null
-> +++ b/package/python-cython/python-cython.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/python-kivy/python-kivy.mk
+> @@ -0,0 +1,48 @@
 > +################################################################################
 > +#
-> +# cython
+> +# python-kivy
 > +#
 > +################################################################################
 > +
-> +PYTHON_CYTHON_VERSION = 0.27.3
-> +PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
-> +PYTHON_CYTHON_SITE = https://pypi.python.org/packages/ee/2a/c4d2cdd19c84c32d978d18e9355d1ba9982a383de87d0fcb5928553d37f4
-> +PYTHON_CYTHON_SETUP_TYPE = setuptools
-> +PYTHON_CYTHON_LICENSE = Apache-2.0
-> +PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+> +PYTHON_KIVY_VERSION = 5f6c66eba79e1f9360f2fba79ee2c4cc6a91ed13
+> +PYTHON_KIVY_SITE = $(call github,kivy,kivy,$(PYTHON_KIVY_VERSION))
+> +PYTHON_KIVY_SETUP_TYPE = distutils
+> +PYTHON_KIVY_LICENSE = MIT
+> +PYTHON_KIVY_LICENSE_FILES = LICENSE
+> +PYTHON_KIVY_DEPENDENCIES = host-python-cython libgl libpng mtdev
+
+is libpng really a runtime dependency?
+
+Yegor
+
 > +
-> +$(eval $(host-python-package))
+> +ifeq ($(BR2_PACKAGE_GSTREAMER),y)
+> +       PYTHON_KIVY_DEPENDENCIES += gstreamer
+> +       PYTHON_KIVY_ENV += USE_GSTREAMER=1
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
+> +       PYTHON_KIVY_DEPENDENCIES += libegl
+> +       PYTHON_KIVY_ENV += USE_EGL=1
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_X11)$(BR2_PACKAGE_SDL2_IMAGE)$(BR2_PACKAGE_SDL2_MIXER)$(BR2_PACKAGE_SDL2_TTF),yyyyy)
+> +       PYTHON_KIVY_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
+> +       PYTHON_KIVY_ENV += USE_SDL2=1
+> +       PYTHON_KIVY_ENV += KIVY_SDL2_PATH=$(STAGING_DIR)/usr/include/SDL2
+> +else
+> +       PYTHON_KIVY_ENV += USE_SDL2=0
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_WAYLAND),y)
+> +       PYTHON_KIVY_DEPENDENCIES += wayland
+> +       PYTHON_KIVY_ENV += USE_WAYLAND=1
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
+> +       PYTHON_KIVY_DEPENDENCIES += xserver_xorg-server
+> +       PYTHON_KIVY_ENV += USE_X11=1
+> +endif
+> +
+> +define PYTHON_KIVY_REMOVE_EXAMPLES
+> +       rm -rf $(TARGET_DIR)/usr/share/kivy-examples
+> +endef
+> +
+> +PYTHON_KIVY_POST_INSTALL_TARGET_HOOKS += PYTHON_KIVY_REMOVE_EXAMPLES
+> +
+> +$(eval $(python-package))
 > --
 > 2.17.0
 >
