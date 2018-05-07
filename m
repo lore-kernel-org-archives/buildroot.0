@@ -1,24 +1,32 @@
-From: Daniel Palmer <daniel@0x0f.com>
-Date: Mon, 7 May 2018 17:30:52 +0900
-Subject: [Buildroot] Automatic module loading with mdev is broken?
-In-Reply-To: <87sh74nevl.fsf@dell.be.48ers.dk>
-References: <CAFr9PX=M4VCMcakZsENMXBW8Xi3BcKkrVCTdARu=nCvK-A5ovg@mail.gmail.com>
- <87sh74nevl.fsf@dell.be.48ers.dk>
-Message-ID: <CAFr9PX=ddYhUua7VTCDTBBsPWDzmV-F3xWy2VcxKf_ko7cdQSA@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon,  7 May 2018 10:50:42 +0200
+Subject: [Buildroot] [PATCH] support/download/file: fix file:// protocol
+ handling
+Message-ID: <1525683042-21087-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+This patch removes the file:// prefix from file url before passing it
+to the cp command. It fixes also a missing / between url directory
+and file part.
 
-Your change works but looking at the text of the original change that
-caused the regression 'First alias in question is "platform:Fixed MDIO
-bus".' it seems it would fail with that? The driver that creates that
-alias still exists ->
-https://github.com/torvalds/linux/blob/master/drivers/net/phy/fixed_phy.c#L261
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ support/download/file | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
-
-Daniel
+diff --git a/support/download/file b/support/download/file
+index fefd6d2..6dd37b0 100755
+--- a/support/download/file
++++ b/support/download/file
+@@ -40,4 +40,4 @@ _localfiles() {
+     eval ${LOCALFILES} "${@}"
+ }
+ 
+-_localfiles ${verbose} "'${dir}${file}'" "'${output}'"
++_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
+-- 
+2.7.4
