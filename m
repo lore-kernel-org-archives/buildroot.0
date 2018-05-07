@@ -1,138 +1,135 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  7 May 2018 23:20:30 +0200
-Subject: [Buildroot] [PATCH 1/2] clamav: reformat patches as Git-formatted
- patches
-Message-ID: <20180507212031.31337-1-thomas.petazzoni@bootlin.com>
+Date: Mon,  7 May 2018 23:20:31 +0200
+Subject: [Buildroot] [PATCH 2/2] clamav: add patch to fix build failure
+ caused by lack of libcurl
+In-Reply-To: <20180507212031.31337-1-thomas.petazzoni@bootlin.com>
+References: <20180507212031.31337-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180507212031.31337-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ClamAV is using Git upstream
-(https://github.com/Cisco-Talos/clamav-devel), so it makes sense to
-use Git-formatted patches.
+When json-c is enabled but libcurl is disabled, clamav tries to build
+the clamsubmit program, which fails with:
+
+  CC       clamsubmit.o
+clamsubmit.c:6:23: fatal error: curl/curl.h: No such file or directory
+ #include <curl/curl.h>
+
+This is due to an incorrect curl-config detection logic, leading to
+/bin/curl-config being present making the configure script believe
+that curl is available, even when --without-libcurl is explicitly
+passed.
+
+This commit adds a patch, submitted upstream, which fixes this
+problem.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/c43d2ebd8ab30016969d642dbd71c297dc5f6bab/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...roto.c-fix-build-error-due-to-missing-soc.patch | 34 ++++++++++++++++++++++
- package/clamav/0001-clamdscan.patch                | 21 -------------
- ...use-backtrace-if-using-uClibc-without-ba.patch} | 22 ++++++++++----
- 3 files changed, 51 insertions(+), 26 deletions(-)
- create mode 100644 package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
- delete mode 100644 package/clamav/0001-clamdscan.patch
- rename package/clamav/{0002-backtrace-uClibc.patch => 0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch} (53%)
+ ...zation-libs-curl.m4-fix-curl-config-detec.patch | 75 ++++++++++++++++++++++
+ package/clamav/clamav.mk                           |  2 +
+ 2 files changed, 77 insertions(+)
+ create mode 100644 package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
 
-diff --git a/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch b/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
+diff --git a/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch b/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
 new file mode 100644
-index 0000000000..daac677eaa
+index 0000000000..1d26b099b9
 --- /dev/null
-+++ b/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
-@@ -0,0 +1,34 @@
-+From 52fda6e6689e22866a39ec4273713fb6035c38b2 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 7 May 2018 23:14:46 +0200
-+Subject: [PATCH] clamdscan/proto.c: fix build error due to missing sockaddr_un
-+ definition
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
+@@ -0,0 +1,75 @@
++From 6b6ff53b5931c162be13504a1efc53fc5212f9d1 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Mon, 7 May 2018 22:57:34 +0200
++Subject: [PATCH] m4/reorganization/libs/curl.m4: fix curl-config detection
++ logic
 +
-+proto.c: In function ?dconnect?:
-+proto.c:86:67: error: invalid application of ?sizeof? to incomplete type ?struct sockaddr_un?
-+             if (connect(sockd, (struct sockaddr *)&nixsock, sizeof(nixsock)) == 0)
++The current logic in curl.m4 doesn't behave properly when
++--without-libcurl is passed to the ./configure script.
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Upstream-status: http://lurker.clamav.net/message/20140928.130829.5494fd68.en.html
++Indeed, in this case what happens is that:
++
++ (1) Since --without-libcurl is passed, LIBCURL_HOME is set to nothing
++
++ (2) find_curl is set to "no"
++
++ (3) Due to find_curl being "no", LIBCURL_HOME is not set to
++     /usr/local and remains empty
++
++ (4) We test if $LIBCURL_HOME/bin/curl_config exists, which is
++     equivalent to testing if /bin/curl-config exists. So curl.m4 is
++     looking at /bin/curl-config, which is irrelevant in a
++     cross-compilation context: it is not because the build machine
++     has libcurl installed that it is available for the target.
++
++     Due to this mistake, it sets have_curl="yes"
++
++Due to this, the ./configure script assumes it can build the
++clamsubmit program, which fails at build time because curl/curl.h
++doesn't exist.
++
++To fix this, this commit rewrites the curl-config detection logic with
++a simpler loop. If find_curl=yes, it means we have to find libcurl
++ourselves, so we iterate over /usr/local and /usr, and check if a
++bin/curl-config binary is available there. If so, we use this path as
++LIBCURL_HOME and set have_curl="yes".
++
++This preserves the existing behavior, while fixing the situation where
++--without-libcurl is passed, but /bin/curl-config exists.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream-status: https://github.com/Cisco-Talos/clamav-devel/pull/87
 +---
-+ clamdscan/proto.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ m4/reorganization/libs/curl.m4 | 15 +++++----------
++ 1 file changed, 5 insertions(+), 10 deletions(-)
 +
-+diff --git a/clamdscan/proto.c b/clamdscan/proto.c
-+index 0205f6da0..d3396732f 100644
-+--- a/clamdscan/proto.c
-++++ b/clamdscan/proto.c
-+@@ -42,6 +42,7 @@
-+ #include <sys/stat.h>
-+ #include <fcntl.h>
-+ #include <sys/types.h>
-++#include <sys/un.h>
-+ #ifdef HAVE_SYS_SELECT_H
-+ #include <sys/select.h>
-+ #endif
++diff --git a/m4/reorganization/libs/curl.m4 b/m4/reorganization/libs/curl.m4
++index 2a5966ee7..b6a9c2137 100644
++--- a/m4/reorganization/libs/curl.m4
+++++ b/m4/reorganization/libs/curl.m4
++@@ -19,17 +19,12 @@ fi
++ [find_curl="yes"])
++ 
++ if test "X$find_curl" = "Xyes"; then
++-    LIBCURL_HOME=/usr/local
++-fi
++-if test -f "$LIBCURL_HOME/bin/curl-config"; then
++-    have_curl="yes"
++-else
++-    if test "X$find_curl" = "Xyes"; then
++-        LIBCURL_HOME=/usr
++-        if test -f "$LIBCURL_HOME/bin/curl-config"; then
++-            have_curl="yes"
+++    for p in /usr/local /usr ; do
+++        if test -f "${p}/bin/curl-config"; then
+++           LIBCURL_HOME=$p
+++           have_curl="yes"
++         fi
++-    fi
+++    done
++ fi
++ 
++ if test "X$have_curl" = "Xyes"; then
 +-- 
 +2.14.3
 +
-diff --git a/package/clamav/0001-clamdscan.patch b/package/clamav/0001-clamdscan.patch
-deleted file mode 100644
-index c395ae1600..0000000000
---- a/package/clamav/0001-clamdscan.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Fixes build error
--
--proto.c: In function ?dconnect?:
--proto.c:86:67: error: invalid application of ?sizeof? to incomplete type ?struct sockaddr_un?
--             if (connect(sockd, (struct sockaddr *)&nixsock, sizeof(nixsock)) == 0)
--
--Patch sent upstream: http://lurker.clamav.net/message/20140928.130829.5494fd68.en.html
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr clamav-0.98.3.org/clamdscan/proto.c clamav-0.98.3/clamdscan/proto.c
----- clamav-0.98.3.org/clamdscan/proto.c	2014-05-06 20:39:56.000000000 +0200
--+++ clamav-0.98.3/clamdscan/proto.c	2014-05-10 10:41:44.000000000 +0200
--@@ -35,6 +35,7 @@
-- #include <sys/stat.h>
-- #include <fcntl.h>
-- #include <sys/types.h>
--+#include <sys/un.h>
-- #ifdef HAVE_SYS_SELECT_H
-- #include <sys/select.h>
-- #endif
-diff --git a/package/clamav/0002-backtrace-uClibc.patch b/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
-similarity index 53%
-rename from package/clamav/0002-backtrace-uClibc.patch
-rename to package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
-index 82ad67307d..e99a9742ec 100644
---- a/package/clamav/0002-backtrace-uClibc.patch
-+++ b/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
-@@ -1,4 +1,8 @@
--mbox: do not use backtrace if using uClibc without backtrace support
-+From 053bac34b9f0f947c58fcdf80ac03d5a6b05aa12 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Mon, 7 May 2018 23:15:58 +0200
-+Subject: [PATCH] mbox: do not use backtrace if using uClibc without backtrace
-+ support
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 2711ca2a86..c0138a8944 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -16,6 +16,8 @@ CLAMAV_DEPENDENCIES = \
+ 	openssl \
+ 	zlib \
+ 	$(TARGET_NLS_DEPENDENCIES)
++# 0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
++CLAMAV_AUTORECONF = YES
  
- Since uClibc can be configured without support for backtrace, disable
- the backtrace if we are building with a uClibc that was built without
-@@ -8,10 +12,15 @@ This is a bit hacky, and would greatly benefit from a test in ./configure
- instead, but does nicely as a quick fix for now.
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--diff -durN clamav-0.98.4.orig/libclamav/mbox.c clamav-0.98.4/libclamav/mbox.c
----- clamav-0.98.4.orig/libclamav/mbox.c	2014-05-21 17:25:05.000000000 +0200
--+++ clamav-0.98.4/libclamav/mbox.c	2014-11-16 17:21:04.885383286 +0100
--@@ -83,7 +83,7 @@
-+---
-+ libclamav/mbox.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libclamav/mbox.c b/libclamav/mbox.c
-+index 71f540c0a..4851297a9 100644
-+--- a/libclamav/mbox.c
-++++ b/libclamav/mbox.c
-+@@ -98,7 +98,7 @@
-  #include <features.h>
-  #endif
-  
-@@ -20,3 +29,6 @@ diff -durN clamav-0.98.4.orig/libclamav/mbox.c clamav-0.98.4/libclamav/mbox.c
-  #define HAVE_BACKTRACE
-  #endif
-  #endif
-+-- 
-+2.14.3
-+
+ # mmap cannot be detected when cross-compiling, needed for mempool support
+ CLAMAV_CONF_ENV = \
 -- 
 2.14.3
