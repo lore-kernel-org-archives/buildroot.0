@@ -1,187 +1,117 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sun,  6 May 2018 20:00:32 -0700
-Subject: [Buildroot] [PATCH 2/2] python-kivy: new package
-In-Reply-To: <20180507030032.22819-1-joseph.kogut@gmail.com>
-References: <20180507030032.22819-1-joseph.kogut@gmail.com>
-Message-ID: <20180507030032.22819-2-joseph.kogut@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  7 May 2018 08:00:23 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-05-06
+Message-ID: <20180507060023.E26CE207B7@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- .../0001-remove-getconf-dependency.patch      | 43 +++++++++++++++++
- package/python-kivy/Config.in                 | 16 +++++++
- package/python-kivy/python-kivy.hash          |  4 ++
- package/python-kivy/python-kivy.mk            | 48 +++++++++++++++++++
- 6 files changed, 113 insertions(+)
- create mode 100644 package/python-kivy/0001-remove-getconf-dependency.patch
- create mode 100644 package/python-kivy/Config.in
- create mode 100644 package/python-kivy/python-kivy.hash
- create mode 100644 package/python-kivy/python-kivy.mk
+Hello,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3ddb292894..c44f8f7145 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -935,6 +935,7 @@ F:	configs/qemu_ppc64le_pseries_defconfig
- N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/gconf/
- F:	package/python-cython/
-+F:	package/python-kivy/
- F:	package/python-raven/
- F:	package/python-schedule/
- F:	package/python-websockets/
-diff --git a/package/Config.in b/package/Config.in
-index a48abf9470..97b3110951 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -823,6 +823,7 @@ menu "External python modules"
- 	source "package/python-jsonschema/Config.in"
- 	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-keyring/Config.in"
-+	source "package/python-kivy/Config.in"
- 	source "package/python-libconfig/Config.in"
- 	source "package/python-libusb1/Config.in"
- 	source "package/python-lmdb/Config.in"
-diff --git a/package/python-kivy/0001-remove-getconf-dependency.patch b/package/python-kivy/0001-remove-getconf-dependency.patch
-new file mode 100644
-index 0000000000..76b5f0b428
---- /dev/null
-+++ b/package/python-kivy/0001-remove-getconf-dependency.patch
-@@ -0,0 +1,43 @@
-+From e5d2bc2db2235e05a1095f384c7358b255b50b09 Mon Sep 17 00:00:00 2001
-+From: Joseph Kogut <joseph.kogut@gmail.com>
-+Date: Thu, 3 May 2018 16:30:42 -0700
-+Subject: [PATCH] input: probesysfs: remove getconf dependency
-+
-+Remove the dependency on getconf to get LONG_BIT value, in order to
-+improve portability to Linux systems without Glibc and/or getconf.
-+---
-+ kivy/input/providers/probesysfs.py | 7 ++-----
-+ 1 file changed, 2 insertions(+), 5 deletions(-)
-+
-+diff --git a/kivy/input/providers/probesysfs.py b/kivy/input/providers/probesysfs.py
-+index 8021d67e51..6bc424ecfa 100644
-+--- a/kivy/input/providers/probesysfs.py
-++++ b/kivy/input/providers/probesysfs.py
-+@@ -47,6 +47,7 @@
-+     ProbeSysfsHardwareProbe = None
-+ 
-+ else:
-++    import ctypes
-+     from re import match, IGNORECASE
-+     from glob import glob
-+     from subprocess import Popen, PIPE
-+@@ -89,7 +90,7 @@ def get_capabilities(self):
-+                 return []
-+ 
-+             capabilities = []
-+-            long_bit = getconf("LONG_BIT")
-++            long_bit = ctypes.sizeof(ctypes.c_long) * 8
-+             for i, word in enumerate(line.split(" ")):
-+                 word = int(word, 16)
-+                 subcapabilities = [bool(word & 1 << i)
-+@@ -112,10 +113,6 @@ def getout(*args):
-+         except OSError:
-+             return ''
-+ 
-+-    def getconf(var):
-+-        output = getout("getconf", var)
-+-        return int(output)
-+-
-+     def query_xinput():
-+         global _cache_xinput
-+         if _cache_xinput is None:
-diff --git a/package/python-kivy/Config.in b/package/python-kivy/Config.in
-new file mode 100644
-index 0000000000..ac901eef80
---- /dev/null
-+++ b/package/python-kivy/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PYTHON_KIVY
-+	bool "python-kivy"
-+	select BR2_PACKAGE_HOST_PYTHON_CYTHON
-+	select BR2_PACKAGE_LIBPNG # runtime
-+	select BR2_PACKAGE_MTDEV
-+	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
-+	select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	help
-+	  A software library for rapid development of hardware-accelerated
-+	  multitouch applications.
-+
-+	  http://kivy.org
-+
-+comment "python-kivy needs OpenGL"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/python-kivy/python-kivy.hash b/package/python-kivy/python-kivy.hash
-new file mode 100644
-index 0000000000..a7ef55fd32
---- /dev/null
-+++ b/package/python-kivy/python-kivy.hash
-@@ -0,0 +1,4 @@
-+# sha256 locally computed
-+sha256	53a4eb32b6f6ecb7dcf02ddf3631af247e43fd44eba74ca51fb20a82cd4c9589  python-kivy-5f6c66eba79e1f9360f2fba79ee2c4cc6a91ed13.tar.gz
-+# License file, locally calculated
-+sha256	282b3d8735ef6cbdcf8cc480947d50e0aea4ad1cc931d41f3f6a6bc23956f2d6  LICENSE
-diff --git a/package/python-kivy/python-kivy.mk b/package/python-kivy/python-kivy.mk
-new file mode 100644
-index 0000000000..bec0a1aee8
---- /dev/null
-+++ b/package/python-kivy/python-kivy.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# python-kivy
-+#
-+################################################################################
-+
-+PYTHON_KIVY_VERSION = 5f6c66eba79e1f9360f2fba79ee2c4cc6a91ed13
-+PYTHON_KIVY_SITE = $(call github,kivy,kivy,$(PYTHON_KIVY_VERSION))
-+PYTHON_KIVY_SETUP_TYPE = distutils
-+PYTHON_KIVY_LICENSE = MIT
-+PYTHON_KIVY_LICENSE_FILES = LICENSE
-+PYTHON_KIVY_DEPENDENCIES = host-python-cython libgl libpng mtdev
-+
-+ifeq ($(BR2_PACKAGE_GSTREAMER),y)
-+	PYTHON_KIVY_DEPENDENCIES += gstreamer
-+	PYTHON_KIVY_ENV += USE_GSTREAMER=1
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
-+	PYTHON_KIVY_DEPENDENCIES += libegl
-+	PYTHON_KIVY_ENV += USE_EGL=1
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_X11)$(BR2_PACKAGE_SDL2_IMAGE)$(BR2_PACKAGE_SDL2_MIXER)$(BR2_PACKAGE_SDL2_TTF),yyyyy)
-+	PYTHON_KIVY_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
-+	PYTHON_KIVY_ENV += USE_SDL2=1
-+	PYTHON_KIVY_ENV += KIVY_SDL2_PATH=$(STAGING_DIR)/usr/include/SDL2
-+else
-+	PYTHON_KIVY_ENV += USE_SDL2=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+	PYTHON_KIVY_DEPENDENCIES += wayland
-+	PYTHON_KIVY_ENV += USE_WAYLAND=1
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+	PYTHON_KIVY_DEPENDENCIES += xserver_xorg-server
-+	PYTHON_KIVY_ENV += USE_X11=1
-+endif
-+
-+define PYTHON_KIVY_REMOVE_EXAMPLES
-+	rm -rf $(TARGET_DIR)/usr/share/kivy-examples
-+endef
-+
-+PYTHON_KIVY_POST_INSTALL_TARGET_HOOKS += PYTHON_KIVY_REMOVE_EXAMPLES
-+
-+$(eval $(python-package))
+Build statistics for 2018-05-06
+===============================
+
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  23 |   1 |   0 |  24 |
+      master | 198 |  52 |   2 | 252 |
+
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                      qt-4.8.7 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/278bf21d17149880806cf4bdf3c43be2c4c87c4c | ORPH
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+           libfreeimage-3.17.0 | 21
+                     lxc-3.0.0 | 9 
+                  zeromq-4.2.5 | 4 
+                cifs-utils-6.7 | 3 
+                  udftools-2.0 | 3 
+                clamav-0.100.0 | 2 
+                 host-rauc-0.4 | 2 
+               libupnpp-0.16.1 | 2 
+               log4cplus-1.1.2 | 2 
+                    gst-ffmpeg | 1 
+      gst1-plugins-ugly-1.12.4 | 1 
+                  host-go-1.10 | 1 
+                        libnss | 1 
+                 mplayer-1.3.0 | 1 
+                        zip-30 | 1 
+
+
+Detail of failures
+------------------
+
+       sparc |                 cifs-utils-6.7 | NOK | http://autobuild.buildroot.net/results/a5342890f39bdccae1324e7d3dbe0eab1aad28e5 |     
+       sparc |                 cifs-utils-6.7 | NOK | http://autobuild.buildroot.net/results/616918dc67a91572d62cdf25b8747dc2656dfa2c |     
+       sparc |                 cifs-utils-6.7 | NOK | http://autobuild.buildroot.net/results/72c0832f6e0cf67bb51b962d669418d77f8ea72c |     
+         arc |                 clamav-0.100.0 | NOK | http://autobuild.buildroot.net/results/746d5d870286aec108a3aa25711f9bb6dbe2050b |     
+microblazeel |                 clamav-0.100.0 | NOK | http://autobuild.buildroot.net/results/c43d2ebd8ab30016969d642dbd71c297dc5f6bab |     
+microblazeel |                     gst-ffmpeg | TIM | http://autobuild.buildroot.net/results/02c49c5ddb422e5a58e74c90f426caa55110b106 |     
+   powerpc64 |       gst1-plugins-ugly-1.12.4 | NOK | http://autobuild.buildroot.net/results/f4609691ec87c42ca5899d3c24a70e11618be487 |     
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/3636b1ac5756a782fd7578186508aaf9d105e3e9 | ORPH
+         arc |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/11debbc3c4388596a0b0efe42d159bc1b9182b93 |     
+    mips64el |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/c2ec7326b277a9487e4e169135a94f859d919542 |     
+      mipsel |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/d77f8d2648ea3e792c745a9eae7a575b44fde82a |     
+        i686 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/218bbbf36a9d310e3682e02e45a730793274098b |     
+      mipsel |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/f1d441339f7a4eef6655aea1078bfa5264e626fa |     
+      x86_64 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/131f97d2c3525794163e5c7863bb8b8523fb05ba |     
+       nios2 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/5e2b345b7a69bdd329819cd2a7fbd14dfaee8762 |     
+        i586 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/a7d21c62f14953dd48ed9339fc29f5b5ecffada7 |     
+         arm |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/475579558f6656f7f71e4443471a9343789fd130 |     
+        i686 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/d789bb918d14d573789eff8be7d3462411e22ba1 |     
+      x86_64 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/025f51e65591645d2932235c5be1669fd06169ea |     
+      x86_64 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/b4752ec2e75e0c80cd5dd69a737f6d366fbe54ef |     
+      x86_64 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/4ddd391c0680109483fa0eedf129e2d0b1a4a848 |     
+       nios2 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/76ef90a05a704e927053e9ad6a806389ff95bd34 |     
+    mips64el |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/8820df57529bdd9f4713f3e63f2fd52fa34277c6 |     
+   powerpc64 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/61189571cb34e2a9b97ca1aa4958f5b84bdb1c7a |     
+    mips64el |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/1a42a09993516cced77c99f94ba96db5b0255029 |     
+         arm |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/4788502705d15ba48e631a4ad83b419059be37dc |     
+        m68k |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/81d53bbe369ab36be30e26022a89fc8c69a9bd4e |     
+      mipsel |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/37bc0247e898b02788b301226331045ddb0717a9 |     
+         arm |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/1211e8ecde40a5146e1345d598dafab61e1cbf80 |     
+        i686 |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/92e07da76d7f393dda324df5fb5f13f432a37c44 |     
+        or1k |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/a5b565b272b1236f472eaa47b6545169b256a4fb |     
+microblazeel |                         libnss | TIM | http://autobuild.buildroot.net/results/c973d3a73b5ce75d678e4419c5db2dcf9016aa29 |     
+        m68k |                libupnpp-0.16.1 | NOK | http://autobuild.buildroot.net/results/001e9fc2bd973444c92563f8f5eddb74c85cd997 |     
+        m68k |                libupnpp-0.16.1 | NOK | http://autobuild.buildroot.net/results/5152e01d4dbf7ab3f053f44ea2a8eb9765b7e902 |     
+        m68k |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/6a8ebe8e66004f766175dbc5ac62cd72c24bc872 |     
+         arm |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/7427f23ceada2884ee03b84c8202edd4f11e415e |     
+        m68k |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/ac2d3ce7120c9bf811f4205d84fac05eaa414923 |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/183ed85d7a0b26aa87c300d8fc5323831a87d483 |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/2d1372d12ca94ea647d80264cfd40c166e4a3fba |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/ef823b0b7dc75e18e6a875d18abbdf530397d02d |     
+      x86_64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/fc4000c7b348bdc85eab1ce85dcdb9d9dbbbb3cc |     
+         arc |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/db50d3490f7f4ef23ac2c41ca98e51fa3ad35bdf |     
+    mips64el |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/acc28762239d92184b3ff2aff3be801c1a81eb68 |     
+     sparc64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/79a885a12e3f73ff5c20f6e3bdf0cd7908fcb3b4 |     
+         arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/1e361ef5c8ee20a9524d6a204c204b3e19bf5641 |     
+    mips64el |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/1be1be9d961b01146204cdce7cfa3dbe7e286f53 |     
+         arm |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/b088955699ab9417896b35f67edc37e2dcadf21a |     
+         arm |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/4d34c795f1f377f456cb3aa511726b68ccb89dc1 |     
+         arm |                   udftools-2.0 | NOK | http://autobuild.buildroot.net/results/f0f0db00f141d16c42b83eee59cbe18d21c0a6a4 |     
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/b149aa2ee00e4d6a53c884cf99ecb2dd8af58b65 |     
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/e4b3616ac2695d3b6898185a70da6509b1faa2b8 |     
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/6e79326f2dd9b1bbb00cbfd228430b7a6b675214 |     
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/103100d642bbc0ca7b19270791600819d2c64cbc |     
+         arm |                         zip-30 | NOK | http://autobuild.buildroot.net/results/674a9703f86449cdf100629369d7293ad78d6f13 |     
+
+
 -- 
-2.17.0
+http://autobuild.buildroot.net
