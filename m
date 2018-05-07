@@ -1,86 +1,61 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon,  7 May 2018 11:44:29 -0300
-Subject: [Buildroot] [PATCH v3 3/5] Makefile: check rootfs overlays with
- BR2_ROOTFS_MERGED_USR enabled
+Date: Mon,  7 May 2018 11:44:31 -0300
+Subject: [Buildroot] [PATCH v3 5/5] system: allow selecting merged /usr
+ along with custom rootfs skeleton
 In-Reply-To: <20180507144431.14488-1-casantos@datacom.ind.br>
 References: <20180507144431.14488-1-casantos@datacom.ind.br>
-Message-ID: <20180507144431.14488-4-casantos@datacom.ind.br>
+Message-ID: <20180507144431.14488-6-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a step to target-finalize that checks each rootfs overlay, following
-the criteria established for custom skeletons and using the same script
-uesd by skeleton-custom.mk.
-
-Add a paragraph to the documentation clarifying that rootfs overlays
-don't need to contain /bin, /lib or /sbin and must not contain them when
-BR2_ROOTFS_MERGED_USR is enabled.
+If the user is brave enough to use a custom rootfs skeleton then we must
+not prevent using merged /usr too. Actually it is already possible to do
+this, although indirectly, by selecting BR2_INIT_SYSTEMD.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
 Changes v1->v2:
 
 - Rebase series to HEAD of master branch
-- Rework commit message and documentation, as suggested by Thomas
-  Petazzoni
-
-Changes v2-v3:
-
-- Move the removal of --keep-dirlinks in the call to rsync to a separate
-  patch.
 ---
- Makefile                         | 16 ++++++++++++++++
- docs/manual/customize-rootfs.txt |  8 ++++++++
- 2 files changed, 24 insertions(+)
+ system/Config.in | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index c024c65f78..64c97ce6e2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -746,6 +746,22 @@ endif
- 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
- 	$(TOPDIR)/support/scripts/fix-rpath target
+diff --git a/system/Config.in b/system/Config.in
+index d14a864ca5..911cd424ba 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -31,10 +31,6 @@ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+ 	help
+ 	  Path to custom target skeleton.
  
-+# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
-+# counterparts are appropriately setup as symlinks ones to the others.
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
-+
-+	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-+		$(call MESSAGE,"Sanity check in overlay $(d)"); \
-+		not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
-+		test -n "$$not_merged_dirs" && { \
-+			echo "ERROR: The overlay in $(d) is not" \
-+				"using a merged /usr for the following directories:" \
-+				$$not_merged_dirs; \
-+			exit 1; \
-+		} || true$(sep))
-+
-+endif # merged /usr
-+
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		rsync -a --ignore-times --keep-dirlinks $(RSYNC_VCS_EXCLUSIONS) \
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 9d3a62ddaf..bb6d8da6bf 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -22,6 +22,14 @@ A filesystem overlay is a tree of files that is copied directly
-   etc., files called +.empty+ and files ending in +~+ are excluded from
-   the copy.
- +
-+Filesystem overlays don't need to contain the '/bin', '/lib' or '/sbin'
-+  directories, since they are created automatically during the build.
-+  When +BR2_ROOTFS_MERGED_USR+ is enabled, then the overlay must not
-+  contain the '/bin', '/lib' or '/sbin' directories, as Buildroot will
-+  create them as symbolic links to the relevant folders in '/usr'.  In
-+  such a situation, should the overlay have any programs or libraries,
-+  they should be placed in '/usr/bin', '/usr/sbin' and '/usr/lib'.
-++
- As shown in xref:customize-dir-structure[], the recommended path for
-   this overlay is +board/<company>/<boardname>/rootfs-overlay+.
+-# dummy config so merged /usr workarounds can also be activated for
+-# custom rootfs skeleton
+-config BR2_ROOTFS_MERGED_USR
+-
+ endif
  
+ if BR2_ROOTFS_SKELETON_DEFAULT
+@@ -209,8 +205,6 @@ config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+ 	help
+ 	  Support extended attributes handling in device tables
+ 
+-if BR2_ROOTFS_SKELETON_DEFAULT
+-
+ config BR2_ROOTFS_MERGED_USR
+ 	bool "Use symlinks to /usr for /bin, /sbin and /lib"
+ 	help
+@@ -223,6 +217,8 @@ config BR2_ROOTFS_MERGED_USR
+ 	  symlinks to their counterparts in /usr. In this case, /usr can
+ 	  not be a separate filesystem.
+ 
++if BR2_ROOTFS_SKELETON_DEFAULT
++
+ config BR2_TARGET_ENABLE_ROOT_LOGIN
+ 	bool "Enable root login with password"
+ 	default y
 -- 
 2.14.3
