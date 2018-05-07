@@ -1,89 +1,19 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon,  7 May 2018 12:57:41 +0200
-Subject: [Buildroot] [RFC PATCH 7/7] enlightenment: convert to pkg-meson
- infra
-In-Reply-To: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
-References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180507105741.31747-8-eric.le.bihan.dev@free.fr>
+From: s.vineeth amalraj <vineeth.laesr@gmail.com>
+Date: Mon, 7 May 2018 16:35:08 +0530
+Subject: [Buildroot] can't create own package
+Message-ID: <CANMfZMgxMC2jf26FfKJ7gX6zyLfg0bj2nePxWKc1hh0yrrNbyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/enlightenment/enlightenment.mk | 30 ++++++------------------------
- 1 file changed, 6 insertions(+), 24 deletions(-)
+Dear Sir,
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 480e9e9da8..5bc1c5d6de 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -13,14 +13,10 @@ ENLIGHTENMENT_LICENSE_FILES = COPYING
- ENLIGHTENMENT_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-efl \
--	host-meson \
- 	efl \
- 	xcb-util-keysyms
- 
--ENLIGHTENMENT_MESON_OPTS += \
--	--prefix=/usr \
--	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
--	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
-+ENLIGHTENMENT_CONF_OPTS = \
- 	-Dedje-cc=$(HOST_DIR)/bin/edje_cc \
- 	-Deet=$(HOST_DIR)/bin/eet \
- 	-Deldbus-codegen=$(HOST_DIR)/bin/eldbus-codegen \
-@@ -30,38 +26,24 @@ ENLIGHTENMENT_MESON_OPTS += \
- ENLIGHTENMENT_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--ENLIGHTENMENT_MESON_OPTS += -Dsystemd=true
-+ENLIGHTENMENT_CONF_OPTS += -Dsystemd=true
- ENLIGHTENMENT_DEPENDENCIES += systemd
- else
--ENLIGHTENMENT_MESON_OPTS += -Dsystemd=false
-+ENLIGHTENMENT_CONF_OPTS += -Dsystemd=false
- endif
- 
- # alsa backend needs mixer support
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
--ENLIGHTENMENT_MESON_OPTS += -Dmixer=true
-+ENLIGHTENMENT_CONF_OPTS += -Dmixer=true
- ENLIGHTENMENT_DEPENDENCIES += alsa-lib
- else
--ENLIGHTENMENT_MESON_OPTS += -Dmixer=false
-+ENLIGHTENMENT_CONF_OPTS += -Dmixer=false
- endif
- 
- ifeq ($(BR2_PACKAGE_XKEYBOARD_CONFIG),y)
- ENLIGHTENMENT_DEPENDENCIES += xkeyboard-config
- endif
- 
--define ENLIGHTENMENT_CONFIGURE_CMDS
--	rm -rf $(@D)/build
--	mkdir -p $(@D)/build
--	$(TARGET_MAKE_ENV) meson $(ENLIGHTENMENT_MESON_OPTS) $(@D) $(@D)/build
--endef
--
--define ENLIGHTENMENT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
--endef
--
--define ENLIGHTENMENT_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
--endef
--
- define ENLIGHTENMENT_REMOVE_DOCUMENTATION
- 	rm -rf $(TARGET_DIR)/usr/share/enlightenment/doc/
- 	rm -f $(TARGET_DIR)/usr/share/enlightenment/COPYING
-@@ -69,4 +51,4 @@ define ENLIGHTENMENT_REMOVE_DOCUMENTATION
- endef
- ENLIGHTENMENT_POST_INSTALL_TARGET_HOOKS += ENLIGHTENMENT_REMOVE_DOCUMENTATION
- 
--$(eval $(generic-package))
-+$(eval $(meson-package))
--- 
-2.14.3
+I followed your comments and created a folder and TAMIL_SITE points to a
+folder now. I am able to build without any error. But am not able to view
+that in my newly built OS. Or couldn't use that package in my OS. I am not
+able to sort where the issue is? Kindly help. Thank you!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180507/56abf56b/attachment.html>
