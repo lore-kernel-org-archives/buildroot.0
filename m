@@ -1,53 +1,50 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  7 May 2018 15:29:59 -0500
-Subject: [Buildroot] [PATCH v3 0/6] CPE ID Support
-Message-ID: <1525725005-41435-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Mon,  7 May 2018 15:30:02 -0500
+Subject: [Buildroot] [PATCH v3 3/6] cpe-info: only report target pkgs
+In-Reply-To: <1525725005-41435-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1525725005-41435-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1525725005-41435-4-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series begins adding CPE identifier support to Buildroot. The
-intent is to establish and maintain a baseline of CPE IDs, one for each
-package. Each of these IDs ties back to a NIST database entry for the
-respective piece of software, which is linked to specific vunderabilities.
+The reporting of host packages causes some duplication and complicates
+what is really in the targets configuration. For the purpose of the
+first version of this patchset, its assumed that host packages aren't
+relevant for the configuration and we only report the target's
+contents.
 
-Within Buildroot, a CPE report can be generated (like legal-info) that
-captures a target build's list of CPE IDs. This report can then be
-checked for validity using the pkgstat script or another third party tool.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
+v1 -> v2
+[Thomas P
+ - select if target vs selecting not host
 
-The pkgstats script has been extended to provide CPE ID checking of
-matching/requires update/new as part of its html output.
+v3
+ - Fixed host build error because cpe-info wasn't defined
+---
+ package/pkg-generic.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-As part of testing this series, the following branch contains a series
-of fixups required to make these specific packages match the database.
-(I can submit these to the mailing list but there are ~70 of them)
-
-https://github.com/rc-matthew-l-weber/buildroot/tree/cpe-info-github
-Commit 14c3ee6 to 567732d
-
-A follow-on patchset will be submitted adding support for pkgstat generation
-of CPE updates in XML and Buildroot manual updates for guidance on submission
-of those XML database updates to the NIST organization. (We'd like to get
-feedback on this series first to save us effort on the update XML stuff)
-
-
-Matt Weber (6):
-  cpe-info: new make target
-  cpe-info: id prefix/suffix
-  cpe-info: only report target pkgs
-  cpe-info: update manual for new pkg vars
-  support/scripts/pkgstat: add target CPE reporting
-  support/scripts/pkgstat: add CPE status reporting
-
- Makefile                                |  17 +++-
- docs/manual/adding-packages-generic.txt | 117 +++++++++++++--------
- package/Makefile.in                     |   4 +
- package/pkg-generic.mk                  |  21 ++++
- package/pkg-utils.mk                    |   8 ++
- support/scripts/pkg-stats               | 175 ++++++++++++++++++++++++++++----
- 6 files changed, 281 insertions(+), 61 deletions(-)
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b56fefa..5d77c83 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -874,10 +874,12 @@ endif
+ 
+ $(1)-cpe-info: PKG=$(2)
+ $(1)-cpe-info:
++ifeq ($$($(2)_TYPE),target)
+ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	@$$(call MESSAGE,"Collecting cpe info")
+ 	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
++endif # ifeq ($$($(2)_TYPE),target)
+ 
+ # legal-info: declare dependencies and set values used later for the manifest
+ ifneq ($$($(2)_LICENSE_FILES),)
 -- 
 1.9.1
