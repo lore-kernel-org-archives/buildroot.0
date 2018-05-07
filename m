@@ -1,58 +1,107 @@
-From: Florian La Roche <florian.laroche@googlemail.com>
-Date: Mon,  7 May 2018 22:22:38 +0200
-Subject: [Buildroot] [PATCH 1/1] socrates_cyclone5_defconfig: adjust to
- current kernel and u-boot
-Message-ID: <20180507202238.2499-1-Florian.LaRoche@googlemail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon,  7 May 2018 23:26:23 +0300
+Subject: [Buildroot] [PATCH v2 1/1] zeromq: check if -latomic is needed
+Message-ID: <20180507202623.29498-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/b149aa2ee00e4d6a53c884cf99ecb2dd8af58b65/
+http://autobuild.buildroot.net/results/e4b3616ac2695d3b6898185a70da6509b1faa2b8/
 
-Adjust socrates_cyclone5_defconfig to current Altera/upstream sources.
+Patch the package to check if -latomic is needed to be added, depending on the
+result of AC_LINK_IFELSE.
 
+The patch was sent to upstream, see:
+https://github.com/zeromq/libzmq/pull/3083
 
-Signed-off-by: Florian La Roche <Florian.LaRoche@googlemail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- configs/socrates_cyclone5_defconfig | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/configs/socrates_cyclone5_defconfig b/configs/socrates_cyclone5_defconfig
-index 7995f9acfb..e79a8e9129 100644
---- a/configs/socrates_cyclone5_defconfig
-+++ b/configs/socrates_cyclone5_defconfig
-@@ -3,12 +3,14 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_NEON=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/altera/socrates_cyclone5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,altera-opensource,linux-socfpga,rel_socfpga-4.1.33-ltsi_17.07.02_pr)/linux-rel_socfpga-4.1.33-ltsi_17.07.02_pr.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,altera-opensource,linux-socfpga,socfpga-4.16)/linux-socfpga_socfpga-4.16.tar.gz"
-+# BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+# BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
- BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_socrates"
-@@ -16,9 +18,11 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2017.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-+# BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+# BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga.git"
-+# BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="socfpga_v2017.09"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="socfpga_socrates"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
+v2: fix typos and small refactoring.
+
+ ...nclude.m4-check-if-latomic-is-needed.patch | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch
+
+diff --git a/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch b/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch
+new file mode 100644
+index 0000000000..6f3671c4a0
+--- /dev/null
++++ b/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch
+@@ -0,0 +1,70 @@
++From 9f4ca582555b208d065f730b5ce3b1901136b275 Mon Sep 17 00:00:00 2001
++From: Asaf Kahlon <asafka7@gmail.com>
++Date: Mon, 7 May 2018 23:19:09 +0300
++Subject: [PATCH 1/1] acinclude.m4: check if -latomic is needed
++
++On some cases, -latomic is needed for linking, and since the current
++acinclude.m4 checks only compilation we can sometimes miss the need for -latomic
++and the linking process will fail.
++Therefore, the AC_CHECK_IFELSE was replaced with AC_LINK_IFELSE. If the first
++try fails, we try to link again with -latomic and add LIBS="-latomic" in case we
++succeeded.
++
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
++---
++ acinclude.m4 | 32 ++++++++++++++++++++++++++++----
++ 1 file changed, 28 insertions(+), 4 deletions(-)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index f648ed0f..aa35195f 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -668,7 +668,7 @@ dnl # Check if compiler supoorts __atomic_Xxx intrinsics
++ dnl ################################################################################
++ AC_DEFUN([LIBZMQ_CHECK_ATOMIC_INTRINSICS], [{
++     AC_MSG_CHECKING(whether compiler supports __atomic_Xxx intrinsics)
++-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+++    AC_LINK_IFELSE([AC_LANG_SOURCE([
++ /* atomic intrinsics test */
++ int v = 0;
++ int main (int, char **)
++@@ -677,9 +677,33 @@ int main (int, char **)
++     return t;
++ }
++     ])],
++-    [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" ; $1],
++-    [AC_MSG_RESULT(no)  ; libzmq_cv_has_atomic_instrisics="no"  ; $2]
++-    )
+++    [libzmq_cv_has_atomic_instrisics="yes"],
+++    [libzmq_cv_has_atomic_instrisics="no"])
+++
+++    if test "x$libzmq_cv_has_atomic_instrisics" = "xno"; then
+++        save_LDFLAGS=$LDFLAGS
+++        LDFLAGS="$LDFLAGS -latomic"
+++        AC_LINK_IFELSE([AC_LANG_SOURCE([
+++        /* atomic intrinsics test */
+++        int v = 0;
+++        int main (int, char **)
+++        {
+++            int t = __atomic_add_fetch (&v, 1, __ATOMIC_ACQ_REL);
+++            return t;
+++        }
+++        ])],
+++        [libzmq_cv_has_atomic_instrisics="yes" LIBS="-latomic"],
+++        [libzmq_cv_has_atomic_instrisics="no"])
+++        LDFLAGS=$save_LDFLAGS
+++    fi
+++
+++    if test "x$libzmq_cv_has_atomic_instrisics" = "xyes"; then
+++        AC_MSG_RESULT(yes)
+++        $1
+++    else
+++        AC_MSG_RESULT(no)
+++        $2
+++    fi
++ }])
++ 
++ dnl ################################################################################
++-- 
++2.17.0
++
 -- 
-2.11.0
+2.17.0
