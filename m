@@ -1,15 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 15:51:21 +0200
-Subject: [Buildroot] [PATCH v2 3/4] Makefile: check rootfs overlays with
- BR2_ROOTFS_MERGED_USR enabled
-In-Reply-To: <823032015.70033.1525699718063.JavaMail.zimbra@datacom.com.br>
-References: <20180507124640.7759-1-casantos@datacom.ind.br>
- <20180507124640.7759-4-casantos@datacom.ind.br>
- <20180507145443.6515b0a3@windsurf>
- <34105483.57140.1525698346092.JavaMail.zimbra@datacom.com.br>
- <20180507151002.16e5f66d@windsurf>
- <823032015.70033.1525699718063.JavaMail.zimbra@datacom.com.br>
-Message-ID: <20180507155121.5c7d6eb7@windsurf>
+Date: Mon, 7 May 2018 16:42:12 +0200
+Subject: [Buildroot] [PATCH 1/2] package/assimp: remove redundant ':'
+ sign
+In-Reply-To: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+References: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
+Message-ID: <20180507164212.52eac52b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,20 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 7 May 2018 10:28:38 -0300 (BRT), Carlos Santos wrote:
-
-> > Agreed, but I don't see what it has to do with "check rootfs overlays
-> > with BR2_ROOTFS_MERGED_USR enabled".  
+On Sat,  5 May 2018 22:13:10 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+> ---
+>  package/assimp/assimp.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Hum, well, agree.
-> 
-> [grumpy mode on]
+> diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+> index 4d44748..e391145 100644
+> --- a/package/assimp/assimp.mk
+> +++ b/package/assimp/assimp.mk
+> @@ -20,7 +20,7 @@ endif
+>  # not passed) in gcc versions 5.x or older. The -Os optimization level
+>  # causes a "unable to find a register to spill in class
+>  # ?GENERAL_REGS?" error. -O2 works fine.
+> -ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:y:)
+> +ifeq ($(BR2_sh)$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),yy:)
 
-Sorry about the nitpicking. It's not so much about being picky, but
-mainly to make sure I (and perhaps others?) understand correctly the
-changes you've made. I'm sorry if that makes you grumpy, it's
-definitely not my intention. I do appreciate a lot the contributions
-you make and their quality.
+I don't find the ":" to be really redundant. Yes, this ":" is not
+technically needed, but it makes the construct very clear and avoids
+any possible confusion.
+
+So I think my preference would be to keep things as-is. I know in other
+places we don't put a ":" when we need both options to be "y". But when
+we have a case where some options need to be "y", some options need to
+be empty, I find having a ":" between each to be clearer.
 
 Best regards,
 
