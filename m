@@ -1,55 +1,72 @@
-From: M ZV <giometriq@gmail.com>
-Date: Mon, 7 May 2018 19:30:32 +0430
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
- <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
-Message-ID: <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 May 2018 17:02:56 +0200
+Subject: [Buildroot] [RFC PATCH 1/7] pkg-meson: new infrastructure
+In-Reply-To: <20180507105741.31747-2-eric.le.bihan.dev@free.fr>
+References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
+ <20180507105741.31747-2-eric.le.bihan.dev@free.fr>
+Message-ID: <20180507170256.2ef06b2f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hello,
+Hello,
 
+On Mon,  7 May 2018 12:57:35 +0200, Eric Le Bihan wrote:
+> Add a new infrastructure to ease the development of packages that use Meson as
+> their build system.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
->
-> On Thu, May 3, 2018 at 11:04 PM Yann E. MORIN <yann.morin.1998@free.fr>
-> wrote:
->
->> ditch our own bundled version, and switch to making our whois package a
->> hot pacakge, and use that as the provider for mkpasswd.
->>
->> Stefan, would you want to do that? ;-)
->>
->
-> I'll give it a go, but can only work on this in a few weeks when I get
-> some free cycles...
->
-> Regards, Stefan
->
->
-We're using mkpasswd specifically for a single task (skeleton-init-common
-root password generation). I'm already tackling building this on Alpine
-(musl environment) and facing
-multiple issues: had to use -lintl for linking (that libintl musl/glibc can
-of worms) and of course, it only makes md5 hashes since all SHA
-functionalities are disabled on non-glibc systems via its header.
+Thanks for working on this!
 
-Can we just use a couple of python code using crypt.crypt(...), since
-python is already a requirement. One less package to maintain is a good
-news (buildroots already brimming with a mind boggling number of packages).
+> +define inner-meson-package
+> +
+> +$(2)_CONF_ENV		?=
+> +$(2)_CONF_OPTS		?=
+> +$(2)_NINJA		= $(HOST)/bin/ninja
 
-By the way, my first post here, I hope I'm not coming off as a nagging
-pedestrian just adding noise. I highly appreciate the effort you guys are
-putting into this.
-Thank you.
+Does this one really needs to be a per-package variable ? It's defined
+with "=" so it doesn't even allow a package to customize this value
+(but I don't think it would be necessary for packages to customize this
+value anyway).
 
-(My apologies for double posting - it seems, at first, I didn't reply to
-all)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180507/f55c7698/attachment.html>
+> +$(2)_NINJA_ENV		?=
+> +$(2)_NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+
+Same question for this one.
+
+> +define $(2)_CONFIGURE_CMDS
+> +	rm -rf $$($$(PKG)_SRCDIR)/build
+> +	mkdir -p $$($$(PKG)_SRCDIR)/build
+> +	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) meson \
+> +		--prefix=/usr \
+> +		--libdir=/usr/lib \
+> +		--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
+> +		--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+> +		--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
+
+So meson is really not consistent, and some options are "--name=value",
+and some others are "--name value" ?
+
+> +#
+> +# Host installation step. Only define it if not already defined by the
+> +# package .mk file.
+> +#
+> +ifndef $(2)_INSTALL_CMDS
+> +define $(2)_INSTALL_CMDS
+> +	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(HOST_DIR) \
+
+DESTDIR=$$(HOST_DIR) is not correct for host installations, since you
+already build for prefix=$(HOST_DIR).
+
+Other than those questions/issues, looks good to me overall.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
