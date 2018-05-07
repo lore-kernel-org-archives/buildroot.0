@@ -1,41 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 21:23:31 +0200
-Subject: [Buildroot] [PATCH 2/5] package/stress-ng: bump version,
- fix to use system xattr header
-In-Reply-To: <e3aef063f700d64bcb91d0b139ebef0a834e85b3.1525717511.git.yann.morin.1998@free.fr>
-References: <cover.1525717511.git.yann.morin.1998@free.fr>
- <e3aef063f700d64bcb91d0b139ebef0a834e85b3.1525717511.git.yann.morin.1998@free.fr>
-Message-ID: <20180507212331.5d66b669@windsurf>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 7 May 2018 21:38:50 +0200
+Subject: [Buildroot] [RFC PATCH 1/7] pkg-meson: new infrastructure
+In-Reply-To: <20180507170256.2ef06b2f@windsurf>
+References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
+ <20180507105741.31747-2-eric.le.bihan.dev@free.fr>
+ <20180507170256.2ef06b2f@windsurf>
+Message-ID: <20180507193850.GA15375@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi!
 
-On Mon,  7 May 2018 20:25:17 +0200, Yann E. MORIN wrote:
+On 18-05-07 17:02:56, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Mon,  7 May 2018 12:57:35 +0200, Eric Le Bihan wrote:
+> > Add a new infrastructure to ease the development of packages that use Meson as
+> > their build system.
+> >
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>
+> Thanks for working on this!
+>
+> > +define inner-meson-package
+> > +
+> > +$(2)_CONF_ENV		?=
+> > +$(2)_CONF_OPTS		?=
+> > +$(2)_NINJA		= $(HOST)/bin/ninja
+>
+> Does this one really needs to be a per-package variable ? It's defined
+> with "=" so it doesn't even allow a package to customize this value
+> (but I don't think it would be necessary for packages to customize this
+> value anyway).
+>
+> > +$(2)_NINJA_ENV		?=
+> > +$(2)_NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+>
+> Same question for this one.
 
-> diff --git a/package/stress-ng/0001-xattr-from-libc.patch b/package/stress-ng/0001-xattr-from-libc.patch
-> new file mode 100644
-> index 0000000000..0064b54470
-> --- /dev/null
-> +++ b/package/stress-ng/0001-xattr-from-libc.patch
-> @@ -0,0 +1,49 @@
-> +Use system <sys/xattr.h>
-> +
-> +The one from attr is no longer installed with latest version.
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I used variables for ninja executable path and options to avoid
+cluttering the *_CMDS parts. These are, indeed, not meant to be
+customized. So, I'll drop them.
 
-Git-formatted patch, please ?
+> > +define $(2)_CONFIGURE_CMDS
+> > +	rm -rf $$($$(PKG)_SRCDIR)/build
+> > +	mkdir -p $$($$(PKG)_SRCDIR)/build
+> > +	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) meson \
+> > +		--prefix=/usr \
+> > +		--libdir=/usr/lib \
+> > +		--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
+> > +		--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+> > +		--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
+>
+> So meson is really not consistent, and some options are "--name=value",
+> and some others are "--name value" ?
 
-Git repo is at git://kernel.ubuntu.com/cking/stress-ng.git.
+No. Both patterns are valid for any option. I'll use "--name=value" for
+consistency.
 
-Thanks!
+> > +#
+> > +# Host installation step. Only define it if not already defined by the
+> > +# package .mk file.
+> > +#
+> > +ifndef $(2)_INSTALL_CMDS
+> > +define $(2)_INSTALL_CMDS
+> > +	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(HOST_DIR) \
+>
+> DESTDIR=$$(HOST_DIR) is not correct for host installations, since you
+> already build for prefix=$(HOST_DIR).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+OK, I'll drop it.
+
+> Other than those questions/issues, looks good to me overall.
+
+Thanks for the review.
+
+Regards,
+
+--
+ELB
