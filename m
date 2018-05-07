@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 09:13:12 +0200
-Subject: [Buildroot] [PATCH 3/4] Makefile: check rootfs overlays with
- BR2_ROOTFS_MERGED_USR enabled
-In-Reply-To: <20180506213116.25084-4-casantos@datacom.ind.br>
-References: <20180506213116.25084-1-casantos@datacom.ind.br>
- <20180506213116.25084-4-casantos@datacom.ind.br>
-Message-ID: <20180507091312.4848b555@windsurf>
+Date: Mon, 7 May 2018 09:16:35 +0200
+Subject: [Buildroot] regarding creating my own customized package in
+ buildroot and use it in my OS in Raspberry Pi
+In-Reply-To: <CANMfZMiHNh87+NfnNfYiKpOZGx5uKXwytgF9g2CQhViP5CTfrg@mail.gmail.com>
+References: <CANMfZMiHNh87+NfnNfYiKpOZGx5uKXwytgF9g2CQhViP5CTfrg@mail.gmail.com>
+Message-ID: <20180507091635.028c4a6b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,70 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  6 May 2018 18:31:15 -0300, Carlos Santos wrote:
+On Mon, 7 May 2018 12:32:39 +0530, s.vineeth amalraj wrote:
 
-> Fix the problem by adding a step in target-finalize that checks each
-> overlay, using the same criteria used in skeleton-custom.mk.
+> I am Vineeth. I would like to create a simple python package in my
+
+You're saying "python package" here, but below, you try to build a C
+program.
+
+> 4. Next under *tamil.mk <http://tamil.mk/>* file the below code is pasted:
 > 
-> Add a paragraph to the documentation clarifying that rootfs overlays
-> should not contain /bin, /lib or /sbin.
+> *TAMIL_MODULE_VERSION = 1.0*
+> *TAMIL_SITE = /home/sands/Documents/vineeth/testtamil.c*
 
-Same comment here: I'm sure plenty of people want to add some stuff to
-their filesystem (scripts, etc.) that might need to be in /bin or /sbin
-(/lib is less likely).
+This should be a folder, not a file. I also recommend to use a relative
+path, for example:
 
-So I'm not a big fan of this additional constraint, just like I said
-for the skeleton case.
+	TAMIL_SITE = $(TOPDIR)/../tamil/
+
+> *TAMIL_SITE_METHOD = local*
+> *TAMIL_LICENSE = GPLv2*
+> *TAMIL_LICENSE_FILES = COPYING*
+> *TAMIL_MODULE_MAKE_OPTS = \*
+> *        CONFIG_DUMMY1= \*
+> *        CONFIG_DUMMY2=y*
+> 
+> *define KERNEL_MODULE_BUILD_CMDS*
+> *        $(MAKE) -C '$(@D)' LINUX_DIR='$(LINUX_DIR)' CC='$(TARGET_CC)'
+> LD='$(TARGET_LD)' modules*
+> *endef*
+> 
+> *$(eval $(kernel-module))*
+
+Why are you trying to build it as a kernel module ? The program source
+code you have below is just a user-space program.
+
+> 6. I created a file named *testtamil.c* and saved in /home/sands/Documents/
+> vineeth/testtamil.c.  and in the file testtamil.c i have pasted the below
+> code:
+> 
+> *#include<stdio.h>*
+> *int main()*
+> *{*
+> *printf("tamil is tested\n");*
+> *printf("working fine");*
+> 
+> *return 1;*
+> *}*
+
+This is just a user-space program. Why do you think you need to use the
+"kernel-module" infrastructure ?
+
+> *Issue:* This is reflecting in *make menuconfig* but not building and
+> getting make error and below is the error which i faced.
+> 
+> ERROR: /home/sands/Documents/vineeth/testtamil.c does not exist
+> package/pkg-generic.mk:194: recipe for target '/home/sands/Documents/vineeth
+> /buildroot-at91/output/build/tamil/.stamp_rsynced' failed
+> make[1]: *** [/home/sands/Documents/vineeth/buildroot-at91/output/build/tamil/.stamp_rsynced]
+> Error 1
+> Makefile:79: recipe for target '_all' failed
+> make: *** [_all] Error 2
+
+Please make sure TAMIL_SITE points to a folder, not a file.
+
+Best regards,
 
 Thomas
 -- 
