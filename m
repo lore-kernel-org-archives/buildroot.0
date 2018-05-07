@@ -1,87 +1,61 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon,  7 May 2018 09:46:38 -0300
-Subject: [Buildroot] [PATCH v2 2/4] skeleton-custom: install /bin, /lib,
- and /sbin
+Date: Mon,  7 May 2018 09:46:40 -0300
+Subject: [Buildroot] [PATCH v2 4/4] system: allow selecting merged /usr
+ along with custom rootfs skeleton
 In-Reply-To: <20180507124640.7759-1-casantos@datacom.ind.br>
 References: <20180507124640.7759-1-casantos@datacom.ind.br>
-Message-ID: <20180507124640.7759-3-casantos@datacom.ind.br>
+Message-ID: <20180507124640.7759-5-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-skeleton-custom does not install the required /bin, /lib and /sbin
-directories (or symlinks), which may result in an imcomplete tree, The
-user could add the required directories/symlinks to the skeleton but
-they may be invalid, depending on the state of BR2_ROOTFS_MERGED_USR.
-
-Steps to reproduce:
-
-- Enable BR2_ROOTFS_MERGED_USR and BR2_INIT_SYSTEMD
-- Set BR2_ROOTFS_SKELETON_CUSTOM_PATH to "system/skeleton"
-- Run "make skeleton"
-- target/{bin.lib,sbin} will not exist
-
-Add calls to SYSTEM_USR_SYMLINKS_OR_DIRS to INSTALL_TARGET_CMDS and
-INSTALL_STAGING_CMDS, so the required directories or symlinks are
-created.
-
-Add a paragraph to the documentation clarifying that custom skeletons
-don't need to contain /bin, /lib or /sbin and must not contain them when
-BR2_ROOTFS_MERGED_USR is enabled.
+If the user is brave enough to use a custom rootfs skeleton then we must
+not prevent using merged /usr too. Actually it is already possible to do
+this, although indirectly, by selecting BR2_INIT_SYSTEMD.
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
 Changes v1->v2:
 
 - Rebase series to HEAD of master branch
-- Rework commit message and documentation, as suggested by Thomas
-  Petazzoni
 ---
- docs/manual/customize-rootfs.txt           | 9 +++++++++
- package/skeleton-custom/skeleton-custom.mk | 2 ++
- 2 files changed, 11 insertions(+)
+ system/Config.in | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 44fc460670..9d3a62ddaf 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -100,6 +100,15 @@ To enable this feature, enable config option
-   +System configuration+ menu. If you specify a relative path, it will
-   be relative to the root of the Buildroot tree.
- +
-+Custom skeletons don't need to contain the '/bin', '/lib' or '/sbin'
-+  directories, since they are created automatically during the build.
-+  When +BR2_ROOTFS_MERGED_USR+ is enabled, then the custom skeleton must
-+  not contain the '/bin', '/lib' or '/sbin' directories, as Buildroot
-+  will create them as symbolic links to the relevant folders in '/usr'.
-+  In such a situation, should the skeleton have any programs or
-+  libraries, they should be placed in '/usr/bin', '/usr/sbin' and
-+  '/usr/lib'.
-++
- This method is not recommended because it duplicates the entire
-   skeleton, which prevents taking advantage of the fixes or improvements
-   brought to the default skeleton in later Buildroot releases.
-diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-index b1cddd9146..01cd62794d 100644
---- a/package/skeleton-custom/skeleton-custom.mk
-+++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -43,6 +43,7 @@ endif
- # things we customise in the custom skeleton.
- define SKELETON_CUSTOM_INSTALL_TARGET_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(TARGET_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(TARGET_DIR))
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
- 		$(TARGET_DIR_WARNING_FILE)
-@@ -54,6 +55,7 @@ endef
- # skeleton to staging.
- define SKELETON_CUSTOM_INSTALL_STAGING_CMDS
- 	$(call SYSTEM_RSYNC,$(SKELETON_CUSTOM_PATH),$(STAGING_DIR))
-+	$(call SYSTEM_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
- 	$(call SYSTEM_LIB_SYMLINK,$(STAGING_DIR))
- endef
+diff --git a/system/Config.in b/system/Config.in
+index d14a864ca5..911cd424ba 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -31,10 +31,6 @@ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+ 	help
+ 	  Path to custom target skeleton.
  
+-# dummy config so merged /usr workarounds can also be activated for
+-# custom rootfs skeleton
+-config BR2_ROOTFS_MERGED_USR
+-
+ endif
+ 
+ if BR2_ROOTFS_SKELETON_DEFAULT
+@@ -209,8 +205,6 @@ config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+ 	help
+ 	  Support extended attributes handling in device tables
+ 
+-if BR2_ROOTFS_SKELETON_DEFAULT
+-
+ config BR2_ROOTFS_MERGED_USR
+ 	bool "Use symlinks to /usr for /bin, /sbin and /lib"
+ 	help
+@@ -223,6 +217,8 @@ config BR2_ROOTFS_MERGED_USR
+ 	  symlinks to their counterparts in /usr. In this case, /usr can
+ 	  not be a separate filesystem.
+ 
++if BR2_ROOTFS_SKELETON_DEFAULT
++
+ config BR2_TARGET_ENABLE_ROOT_LOGIN
+ 	bool "Enable root login with password"
+ 	default y
 -- 
 2.14.3
