@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 23:26:48 +0200
-Subject: [Buildroot] [PATCH 1/1] python-websockets: backport fix for
- upstream issue #350
-In-Reply-To: <20180507205733.2433-1-joseph.kogut@gmail.com>
-References: <20180507205733.2433-1-joseph.kogut@gmail.com>
-Message-ID: <20180507232648.1d54fa66@windsurf>
+Date: Mon, 7 May 2018 23:38:51 +0200
+Subject: [Buildroot] [PATCH v2,1/1] libupnpp: fix build with uclibc
+In-Reply-To: <20180504160133.5420-1-fontaine.fabrice@gmail.com>
+References: <20180504160133.5420-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180507233851.76e14c33@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  7 May 2018 13:57:33 -0700, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  package/python-websockets/python-websockets.hash | 1 +
->  package/python-websockets/python-websockets.mk   | 1 +
->  2 files changed, 2 insertions(+)
+On Fri,  4 May 2018 18:01:33 +0200, Fabrice Fontaine wrote:
+> Add patch to avoid failing with error if host_os doesn't start with
+> linux
 > 
-> diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
-> index 18947cc60a..4fa2fba1e1 100644
-> --- a/package/python-websockets/python-websockets.hash
-> +++ b/package/python-websockets/python-websockets.hash
-> @@ -2,3 +2,4 @@
->  md5	9e8c6b3c70def4146d75fbb0f52bdfc7  websockets-4.0.1.tar.gz
->  sha256	da4d4fbe059b0453e726d6d993760065d69b823a27efc3040402a6fcfe6a1ed9  websockets-4.0.1.tar.gz
->  sha256	2cd4d416e432ca7fda2c103b38b852f8d3cb327d70c3db44410b9fe97e6c4d73  LICENSE
-> +sha256  c43360df2209d8af756297af7d8d1ff0a98483fc2d6551be80f309a6a6671ece  402059e4a46a764632eba8a669f5b012f173ee7b.patch
-> diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
-> index 7c5cf8c4e7..e0a701af43 100644
-> --- a/package/python-websockets/python-websockets.mk
-> +++ b/package/python-websockets/python-websockets.mk
-> @@ -10,5 +10,6 @@ PYTHON_WEBSOCKETS_SITE = https://pypi.python.org/packages/b6/12/6194aac840c65253
->  PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
->  PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
->  PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
-> +PYTHON_WEBSOCKETS_PATCH += https://github.com/aaugustin/websockets/commit/402059e4a46a764632eba8a669f5b012f173ee7b.patch
+> Fixes:
+>  - http://autobuild.buildroot.net/results/cfb332a169863bcb3e6bc6ee7d6f6199f856b0b8
+>  - http://autobuild.buildroot.net/results/2f6f464f6360ed9ea4c238f503d2c3b8ab3cbd86
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Please store the patch locally in Buildroot's package folder.
-Downloading patches from Github doesn't work because they don't have
-stable contents, and therefore a stable hash.
+Note: the commit title is not correct: libupnpp builds perfectly fine
+with uClibc already, as long as it's on MMU-capable systems, where the
+OS part of the tuple is "linux". It's only no-MMU systems that are
+affected by the problem, because the OS part of the tuple is "uclinux".
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
