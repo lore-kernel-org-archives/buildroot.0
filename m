@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon,  7 May 2018 12:57:37 +0200
-Subject: [Buildroot] [RFC PATCH 3/7] libmpdclient: convert to pkg-meson infra
+Date: Mon,  7 May 2018 12:57:39 +0200
+Subject: [Buildroot] [RFC PATCH 5/7] ncmpc: convert to pkg-meson infra
 In-Reply-To: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
 References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180507105741.31747-4-eric.le.bihan.dev@free.fr>
+Message-ID: <20180507105741.31747-6-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/libmpdclient/libmpdclient.mk | 32 +-------------------------------
- 1 file changed, 1 insertion(+), 31 deletions(-)
+ package/ncmpc/ncmpc.mk | 27 +++------------------------
+ 1 file changed, 3 insertions(+), 24 deletions(-)
 
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index 6ff27241c0..c04536eb88 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -11,35 +11,5 @@ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_
- LIBMPDCLIENT_INSTALL_STAGING = YES
- LIBMPDCLIENT_LICENSE = BSD-3-Clause
- LIBMPDCLIENT_LICENSE_FILES = COPYING
--LIBMPDCLIENT_DEPENDENCIES = host-meson
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 1d464b72de..d70ed46ea9 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -8,15 +8,11 @@ NCMPC_VERSION_MAJOR = 0
+ NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).29
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+-NCMPC_DEPENDENCIES = host-meson host-pkgconf libglib2 libmpdclient ncurses
++NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
+ NCMPC_LICENSE = GPL-2.0+
+ NCMPC_LICENSE_FILES = COPYING
  
--LIBMPDCLIENT_CONF_OPTS += \
+-NCMPC_CONF_OPTS += \
 -	--prefix=/usr \
--	--libdir=/usr/lib \
--	--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
+-	-Dcurses=ncurses \
 -	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
 -	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
++NCMPC_CONF_OPTS = -Dcurses=ncurses
+ 
+ ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
+ NCMPC_DEPENDENCIES += lirc-tools
+@@ -25,21 +21,4 @@ else
+ NCMPC_CONF_OPTS += -Dlirc=false
+ endif
+ 
+-NCMPC_NINJA_OPTS = $(if $(VERBOSE),-v)
 -
--LIBMPDCLIENT_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
--
--define LIBMPDCLIENT_CONFIGURE_CMDS
+-define NCMPC_CONFIGURE_CMDS
 -	rm -rf $(@D)/build
 -	mkdir -p $(@D)/build
--	$(TARGET_MAKE_ENV) meson $(LIBMPDCLIENT_CONF_OPTS) $(@D) $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(NCMPC_CONF_OPTS) $(@D) $(@D)/build
 -endef
 -
--define LIBMPDCLIENT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build
+-define NCMPC_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja $(NCMPC_NINJA_OPTS) -C $(@D)/build
 -endef
 -
--define LIBMPDCLIENT_INSTALL_TARGET_CMDS
+-define NCMPC_INSTALL_TARGET_CMDS
 -	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
--		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
--endef
--
--define LIBMPDCLIENT_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
--		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+-		ninja $(NCMPC_NINJA_OPTS) -C $(@D)/build install
 -endef
 -
 -$(eval $(generic-package))
