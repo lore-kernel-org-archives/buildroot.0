@@ -1,124 +1,90 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon,  7 May 2018 09:46:37 -0300
-Subject: [Buildroot] [PATCH v2 1/4] skeleton-custom: use a script to check
- merged usr structure
-In-Reply-To: <20180507124640.7759-1-casantos@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 May 2018 14:54:43 +0200
+Subject: [Buildroot] [PATCH v2 3/4] Makefile: check rootfs overlays with
+ BR2_ROOTFS_MERGED_USR enabled
+In-Reply-To: <20180507124640.7759-4-casantos@datacom.ind.br>
 References: <20180507124640.7759-1-casantos@datacom.ind.br>
-Message-ID: <20180507124640.7759-2-casantos@datacom.ind.br>
+ <20180507124640.7759-4-casantos@datacom.ind.br>
+Message-ID: <20180507145443.6515b0a3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce support/scripts/check-merged-usr.sh, a script that check if a
-given path complies to the merged /usr requirements:
+Hello,
 
-    /
-    /bin -> usr/bin
-    /lib -> usr/lib
-    /sbin -> usr/sbin
-    /usr/bin/
-    /usr/lib/
-    /usr/sbin/
+On Mon,  7 May 2018 09:46:39 -0300, Carlos Santos wrote:
+> Since commit 0db34529f48 we use rsync with the --keep-dirlinks option to
+> prevent overlays from accidentally overwriding /{usr,bin,sbin,lib} links
+> when BR2_ROOTFS_MERGED_USR option is enabled. Unfortunately this also
+> prevents replacing a symlink by a directory on purpose (e.g. /var/log,
+> to persist system logs).
+> 
+> Steps to reproduce:
+> 
+> - enable BR2_ROOTFS_MERGED_USR and BR2_PACKAGE_SKELETON_INIT_SYSV
+> - mkdir some_path/rootfs-overlay/var/log
+> - enable BR2_ROOTFS_OVERLAY="some_path/rootfs-overlay"
+> - run 'make'
+> - 'target/var/log' is still a symlink to '../tmp', not a directory
+> 
+> Fix the problem by adding a step in target-finalize that checks each
+> overlay, using the same criteria used in skeleton-custom.mk.
+> 
+> Add a paragraph to the documentation clarifying that rootfs overlays
+> don't need to contain /bin, /lib or /sbin and must not contain them when
+> BR2_ROOTFS_MERGED_USR is enabled.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+> Changes v1->v2:
+> 
+> - Rebase series to HEAD of master branch
+> - Rework commit message and documentation, as suggested by Thomas
+>   Petazzoni
+> ---
+>  Makefile                         | 20 +++++++++++++++++---
+>  docs/manual/customize-rootfs.txt |  8 ++++++++
+>  2 files changed, 25 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index c024c65f78..dc51269143 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -746,11 +746,25 @@ endif
+>  	@$(call MESSAGE,"Sanitizing RPATH in target tree")
+>  	$(TOPDIR)/support/scripts/fix-rpath target
+>  
+> +# For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+> +# counterparts are appropriately setup as symlinks ones to the others.
+> +ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+> +
+> +	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+> +		$(call MESSAGE,"Sanity check in overlay $(d)"); \
+> +		not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
+> +		test -n "$$not_merged_dirs" && { \
+> +			echo "ERROR: The overlay in $(d) is not" \
+> +				"using a merged /usr for the following directories:" \
+> +				$$not_merged_dirs; \
+> +			exit 1; \
+> +		} || true$(sep))
+> +
+> +endif # merged /usr
+> +
+>  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+>  		$(call MESSAGE,"Copying overlay $(d)"); \
+> -		rsync -a --ignore-times --keep-dirlinks $(RSYNC_VCS_EXCLUSIONS) \
+> -			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+> -			$(d)/ $(TARGET_DIR)$(sep))
+> +		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
 
-Use this script in skeleton-custom.mk instead of a bunch of variables
-filled by $(shell ...) macros. The same script will be used to check
-rootfs overlays, in a forthcoming change.
+This specific chunk is not directly related to checking that overlays
+comply with the merged /usr rule, so shouldn't this be in a separate
+commit ?
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
-Changes v1->v2:
-
-- Rebase series to HEAD of master branch
----
- package/skeleton-custom/skeleton-custom.mk | 23 +-----------------
- support/scripts/check-merged-usr.sh        | 39 ++++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+), 22 deletions(-)
- create mode 100755 support/scripts/check-merged-usr.sh
-
-diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-index 8c57531782..b1cddd9146 100644
---- a/package/skeleton-custom/skeleton-custom.mk
-+++ b/package/skeleton-custom/skeleton-custom.mk
-@@ -23,32 +23,11 @@ $(error No path specified for the custom skeleton)
- endif
- endif
- 
--# Extract the inode numbers for all of those directories. In case any is
--# a symlink, we want to get the inode of the pointed-to directory, so we
--# append '/.' to be sure we get the target directory. Since the symlinks
--# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
--# all of them.
--#
--SKELETON_CUSTOM_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/lib/. 2>/dev/null)
--SKELETON_CUSTOM_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/bin/. 2>/dev/null)
--SKELETON_CUSTOM_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/sbin/. 2>/dev/null)
--SKELETON_CUSTOM_USR_LIB_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/lib/. 2>/dev/null)
--SKELETON_CUSTOM_USR_BIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/bin/. 2>/dev/null)
--SKELETON_CUSTOM_USR_SBIN_INODE = $(shell stat -c '%i' $(SKELETON_CUSTOM_PATH)/usr/sbin/. 2>/dev/null)
--
- # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
- # counterparts are appropriately setup as symlinks ones to the others.
- ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- 
--ifneq ($(SKELETON_CUSTOM_LIB_INODE),$(SKELETON_CUSTOM_USR_LIB_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /lib
--endif
--ifneq ($(SKELETON_CUSTOM_BIN_INODE),$(SKELETON_CUSTOM_USR_BIN_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /bin
--endif
--ifneq ($(SKELETON_CUSTOM_SBIN_INODE),$(SKELETON_CUSTOM_USR_SBIN_INODE))
--SKELETON_CUSTOM_NOT_MERGED_USR_DIRS += /sbin
--endif
-+SKELETON_CUSTOM_NOT_MERGED_USR_DIRS = $(shell support/scripts/check-merged-usr.sh $(SKELETON_CUSTOM_PATH))
- 
- endif # merged /usr
- 
-diff --git a/support/scripts/check-merged-usr.sh b/support/scripts/check-merged-usr.sh
-new file mode 100755
-index 0000000000..74c43c89fd
---- /dev/null
-+++ b/support/scripts/check-merged-usr.sh
-@@ -0,0 +1,39 @@
-+#!/bin/sh
-+#
-+# Check if a given custom skeleton or overlay complies to the merged /usr
-+# requirements:
-+# /
-+# /bin -> usr/bin
-+# /lib -> usr/lib
-+# /sbin -> usr/sbin
-+# /usr/bin/
-+# /usr/lib/
-+# /usr/sbin/
-+#
-+# Output: the list non-compliant paths (empty if compliant).
-+#
-+
-+# Extract the inode numbers for all of those directories. In case any is
-+# a symlink, we want to get the inode of the pointed-to directory, so we
-+# append '/.' to be sure we get the target directory. Since the symlinks
-+# can be anyway (/bin -> /usr/bin or /usr/bin -> /bin), we do that for
-+# all of them.
-+#
-+lib_inode=$(stat -c '%i' "${1}/lib/." 2>/dev/null)
-+bin_inode=$(stat -c '%i' "${1}/bin/." 2>/dev/null)
-+sbin_inode=$(stat -c '%i' "${1}/sbin/." 2>/dev/null)
-+usr_lib_inode=$(stat -c '%i' "${1}/usr/lib/." 2>/dev/null)
-+usr_bin_inode=$(stat -c '%i' "${1}/usr/bin/." 2>/dev/null)
-+usr_sbin_inode=$(stat -c '%i' "${1}/usr/sbin/." 2>/dev/null)
-+
-+not_merged_dirs=""
-+test -z "$lib_inode" || \
-+	test "$lib_inode" = "$usr_lib_inode" || \
-+		not_merged_dirs="/lib"
-+test -z "$bin_inode" || \
-+	test "$bin_inode" = "$usr_bin_inode" || \
-+		not_merged_dirs="$not_merged_dirs /bin"
-+test -z "$sbin_inode" || \
-+	test "$sbin_inode" = "$usr_sbin_inode" || \
-+		not_merged_dirs="$not_merged_dirs /sbin"
-+echo "${not_merged_dirs# }"
+Thomas
 -- 
-2.14.3
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
