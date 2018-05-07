@@ -1,56 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 21:22:28 +0200
-Subject: [Buildroot] [PATCH 1/5] package/lua-flu: fix to use system
- xattr header
-In-Reply-To: <1905e7c3bd8c0711980e23dbd19d0b9040640b44.1525717511.git.yann.morin.1998@free.fr>
+Date: Mon, 7 May 2018 21:23:31 +0200
+Subject: [Buildroot] [PATCH 2/5] package/stress-ng: bump version,
+ fix to use system xattr header
+In-Reply-To: <e3aef063f700d64bcb91d0b139ebef0a834e85b3.1525717511.git.yann.morin.1998@free.fr>
 References: <cover.1525717511.git.yann.morin.1998@free.fr>
- <1905e7c3bd8c0711980e23dbd19d0b9040640b44.1525717511.git.yann.morin.1998@free.fr>
-Message-ID: <20180507212228.42f1f716@windsurf>
+ <e3aef063f700d64bcb91d0b139ebef0a834e85b3.1525717511.git.yann.morin.1998@free.fr>
+Message-ID: <20180507212331.5d66b669@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hello,
 
-On Mon,  7 May 2018 20:25:16 +0200, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/lua-flu/0001-use-system-xattr-h.patch | 161 ++++++++++++++++++++++++++
->  1 file changed, 161 insertions(+)
->  create mode 100644 package/lua-flu/0001-use-system-xattr-h.patch
-> 
-> diff --git a/package/lua-flu/0001-use-system-xattr-h.patch b/package/lua-flu/0001-use-system-xattr-h.patch
+On Mon,  7 May 2018 20:25:17 +0200, Yann E. MORIN wrote:
+
+> diff --git a/package/stress-ng/0001-xattr-from-libc.patch b/package/stress-ng/0001-xattr-from-libc.patch
 > new file mode 100644
-> index 0000000000..fda03b60c6
+> index 0000000000..0064b54470
 > --- /dev/null
-> +++ b/package/lua-flu/0001-use-system-xattr-h.patch
-> @@ -0,0 +1,161 @@
+> +++ b/package/stress-ng/0001-xattr-from-libc.patch
+> @@ -0,0 +1,49 @@
 > +Use system <sys/xattr.h>
 > +
 > +The one from attr is no longer installed with latest version.
 > +
 > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This could have been a Mercurial-formatted patch. I think you know how
-to use Mercurial :-)
+Git-formatted patch, please ?
 
-> +diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua
-> +--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua	2015-03-31 18:54:19.000000000 +0200
-> ++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua	2018-05-06 09:22:28.499324049 +0200
-> +@@ -327,7 +327,7 @@
-> + 				name = "fs.getxattr";
-> + 				parameters = {"path", "name"};
-> + 				results = {"value"};
-> +-				doc = [[Get an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.]];
-> ++				doc = [[Get an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.]];
-
-I do understand all the attr/xattr.h -> sys/xattr.h changes, but I
-don't understand the ENOATTR -> ENODATA changes. Has the ENOATTR error
-code disappeared ? What makes ENODATA a suitable replacement ?
+Git repo is at git://kernel.ubuntu.com/cking/stress-ng.git.
 
 Thanks!
 
