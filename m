@@ -1,83 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 May 2018 08:45:02 +0200
-Subject: [Buildroot] Automatic module loading with mdev is broken?
-In-Reply-To: <CAFr9PX=M4VCMcakZsENMXBW8Xi3BcKkrVCTdARu=nCvK-A5ovg@mail.gmail.com>
- (Daniel Palmer's message of "Sun, 6 May 2018 18:46:37 +0900")
-References: <CAFr9PX=M4VCMcakZsENMXBW8Xi3BcKkrVCTdARu=nCvK-A5ovg@mail.gmail.com>
-Message-ID: <87sh74nevl.fsf@dell.be.48ers.dk>
+From: s.vineeth amalraj <vineeth.laesr@gmail.com>
+Date: Mon, 7 May 2018 12:32:39 +0530
+Subject: [Buildroot] regarding creating my own customized package in
+ buildroot and use it in my OS in Raspberry Pi
+Message-ID: <CANMfZMiHNh87+NfnNfYiKpOZGx5uKXwytgF9g2CQhViP5CTfrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Palmer <daniel@0x0f.com> writes:
+Dear Sir,
 
- > Hi all,
- > I'm trying to get automatic module loading with mdev and it looks like
- > it was broken with this commit
- > b4fc5a180c81689a982d5c595844331684c14f51
- > (https://github.com/buildroot/buildroot/commit/b4fc5a180c81689a982d5c595844331684c14f51)
- > or has maybe regressed?
-
- > Anyhow the previous version of the line that the commit changed works
- > (the modules I expect to get loaded get loaded).
- > The changed version results in nothing being loaded.
-
- > I think it's to do with this part "xargs -0 sort -u -z". Sort is
- > taking in the big list of files correctly and sorting them but the
- > result
- > seems to still have new lines in it. So when that is passed to xargs
- > (which is expecting the items to be null terminated) again
- > to run modprobe the module aliases don't match and thus nothing gets loaded.
-
- > This *works* for me but I'm not sure if it's right:
-
-Hmm, you are right. sort -z means that the lines in the input files
-should be zero terminated and not newline terminated in addition to
-outputting zero terminated strings.
-
-The lines in modalias files are newline terminated, and not zero, E.G.:
-
-hexdump -C /sys/devices/LNXSYSTM:00/LNXCPU:00/modalias
-00000000  61 63 70 69 3a 4c 4e 58  43 50 55 3a 0a           |acpi:LNXCPU:.|
-
-The modalias entries themselves afaik never contains spaces, those can
-only happen in the path name to the modalias file (as b4fc5a180c81
-showed):
-
-find /sys -name modalias | xargs cat | egrep '[[:space:]]'
-
-So I guess we can just do:
-
-find /sys/ -name modalias -print0 | xargs -0 sort u | xargs modprobe -abq
-
-Can you give that a try? Thanks.
+I am Vineeth. I would like to create a simple python package in my
+customized os for RPi-3. I could able to see the package name in the make
+menuconfig after following the steps below, but when building it says no
+file (in my case tamiltest.c) is present and make error is coming.
 
 
- > diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
- > index 63ca955b1c..71693e7a9d 100644
- > --- a/package/busybox/S10mdev
- > +++ b/package/busybox/S10mdev
- > @@ -9,7 +9,7 @@ case "$1" in
- >        echo /sbin/mdev >/proc/sys/kernel/hotplug
- >        /sbin/mdev -s
- >        # coldplug modules
- > -       find /sys/ -name modalias -print0 | xargs -0 sort -u -z |
- > xargs -0 modprobe -abq
- > +       find /sys/ -name modalias -print0 | xargs -0 sort -u -z | tr
- > -d '\n' | xargs -0 modprobe -abq
- >        ;;
- >   stop)
- >        ;;
+Kindly help me out with this. Below are the steps which I followed. Thank
+you!
 
- > Cheers,
+1. Created a package (i.e folder) named *"tamil"* under
+/home/sands/Documents/vineeth/buildroot-at91/package.
+2. Inside *tamil* folder, I created 2 files named *tamil.mk
+<http://tamil.mk/>* and *Config.in*
 
- > Daniel
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+3.Under *Config.in*  the below code is pasted:
 
--- 
-Bye, Peter Korsgaard
+*config BR2_PACKAGE_TAMIL*
+*       bool "tamil"*
+*       help*
+*               This is sample tamil package.*
+*        https://en.wikipedia.org/wiki/Tamils
+<https://en.wikipedia.org/wiki/Tamils>*
+
+4. Next under *tamil.mk <http://tamil.mk/>* file the below code is pasted:
+
+*TAMIL_MODULE_VERSION = 1.0*
+*TAMIL_SITE = /home/sands/Documents/vineeth/testtamil.c*
+*TAMIL_SITE_METHOD = local*
+*TAMIL_LICENSE = GPLv2*
+*TAMIL_LICENSE_FILES = COPYING*
+*TAMIL_MODULE_MAKE_OPTS = \*
+*        CONFIG_DUMMY1= \*
+*        CONFIG_DUMMY2=y*
+
+*define KERNEL_MODULE_BUILD_CMDS*
+*        $(MAKE) -C '$(@D)' LINUX_DIR='$(LINUX_DIR)' CC='$(TARGET_CC)'
+LD='$(TARGET_LD)' modules*
+*endef*
+
+*$(eval $(kernel-module))*
+*$(eval $(generic-package))*
+
+5.Then in the *buildroot-->package-->Config.in file*, add the below lines (
+*Note:* this Config.in is different. this is only used to display our
+created package name in the make menuconfig)
+
+*menu "My tamil package"*
+*        source "package/tamil/Config.in"*
+*endmenu*
+
+
+6. I created a file named *testtamil.c* and saved in /home/sands/Documents/
+vineeth/testtamil.c.  and in the file testtamil.c i have pasted the below
+code:
+
+*#include<stdio.h>*
+*int main()*
+*{*
+*printf("tamil is tested\n");*
+*printf("working fine");*
+
+*return 1;*
+*}*
+
+*Issue:* This is reflecting in *make menuconfig* but not building and
+getting make error and below is the error which i faced.
+
+ERROR: /home/sands/Documents/vineeth/testtamil.c does not exist
+package/pkg-generic.mk:194: recipe for target '/home/sands/Documents/vineeth
+/buildroot-at91/output/build/tamil/.stamp_rsynced' failed
+make[1]: *** [/home/sands/Documents/vineeth/buildroot-at91/output/build/tamil/.stamp_rsynced]
+Error 1
+Makefile:79: recipe for target '_all' failed
+make: *** [_all] Error 2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180507/a04f36c3/attachment.html>
