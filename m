@@ -1,69 +1,39 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 7 May 2018 08:16:48 -0300 (BRT)
-Subject: [Buildroot] [PATCH 2/4] skeleton-custom: install /bin, /lib,
- and /sbin
-In-Reply-To: <20180507090811.18489751@windsurf>
-References: <20180506213116.25084-1-casantos@datacom.ind.br>
- <20180506213116.25084-3-casantos@datacom.ind.br>
- <20180507090811.18489751@windsurf>
-Message-ID: <1990732966.12593.1525691808010.JavaMail.zimbra@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 May 2018 13:24:32 +0200
+Subject: [Buildroot] [PATCH] support/download/file: fix file:// protocol
+ handling
+In-Reply-To: <1525683042-21087-1-git-send-email-angelo@amarulasolutions.com>
+References: <1525683042-21087-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180507132432.32241f44@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "buildroot" <buildroot@buildroot.org>, "yann morin 1998" <yann.morin.1998@gmail.com>, "Thomas De Schampheleire"
-> <thomas.de_schampheleire@nokia.com>
-> Sent: Monday, May 7, 2018 4:08:11 AM
-> Subject: Re: [Buildroot] [PATCH 2/4] skeleton-custom: install /bin, /lib, and /sbin
+Hello Angelo,
 
-> Hello Carlos,
+On Mon,  7 May 2018 10:50:42 +0200, Angelo Compagnucci wrote:
+> This patch removes the file:// prefix from file url before passing it
+> to the cp command. It fixes also a missing / between url directory
+> and file part.
 > 
-> On Sun,  6 May 2018 18:31:14 -0300, Carlos Santos wrote:
->> skeleton-custom does not install the required /bin, /lib and /sbin
->> directories (or symlinks), which may result in an imcomplete tree, The
->> user could add the required directories/symlinks to the skeleton but
->> they maye be invalid, depending on the state of BR2_ROOTFS_MERGED_USR.
-> 
-> maye -> may
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-:-)
+I think it would be good to add a specific example that was failing for
+you: an example defconfig, and the relevant part of the build log. This
+will help in the future if we wonder why this change was done.
 
-> 
->> 
->> Steps to reproduce:
->> 
->> - Enable BR2_ROOTFS_MERGED_USR and BR2_INIT_SYSTEMD
->> - Set BR2_ROOTFS_SKELETON_CUSTOM_PATH to "system/skeleton"
->> - Run "make skeleton"
->> - target/{bin.lib,sbin} will not exist
->> 
->> Add calls to SYSTEM_USR_SYMLINKS_OR_DIRS to INSTALL_TARGET_CMDS and
->> INSTALL_STAGING_CMDS, so the required directories or symlinks are
->> created.
->> 
->> Add a paragraph to the documentation clarifying that custom skeletons
->> should not contain /bin, /lib or /sbin.
-> 
-> Maybe I don't understand the full scope of the problem, but to me, it
-> looks weird that the full contents of the skeleton (default or custom)
-> are not copied to the target root filesystem. It goes against the basic
-> expectations of what the skeleton is.
-> 
-> Of course, I am fine with checking that the skeleton complies with the
-> BR2_ROOTFS_MERGED_USR option, but preventing the skeleton from
-> having /bin, /lib and /sbin looks weird. So much that it needs to be
-> mentioned in the documentation.
+Indeed, your commit log describes *what* is done (which is easily
+guessed by looking at the code itself), but not *why* it is done.
 
-Notice that I used ?should? in the documentation, not ?must?. It is
-still OK to have /bin, /lib and /sbin in custom skeletons and rootfs
-overlays if BR2_ROOTFS_MERGED_USR is not set.
+I think it is especially important to explain that it is a regression
+(and since when).
 
+Thanks!
+
+Thomas
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
