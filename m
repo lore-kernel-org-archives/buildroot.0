@@ -1,7 +1,9 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Mon,  7 May 2018 17:44:00 -0300
-Subject: [Buildroot] [PATCH 1/3] uboot: bump to version 2018.05
-Message-ID: <1525725842-3078-1-git-send-email-festevam@gmail.com>
+Date: Mon,  7 May 2018 17:44:01 -0300
+Subject: [Buildroot] [PATCH 2/3] uboot-tools: bump to version 2018.05
+In-Reply-To: <1525725842-3078-1-git-send-email-festevam@gmail.com>
+References: <1525725842-3078-1-git-send-email-festevam@gmail.com>
+Message-ID: <1525725842-3078-2-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/uboot-tools/uboot-tools.hash | 2 +-
+ package/uboot-tools/uboot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 95c17e3..482711c 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -39,7 +39,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2018.03"
-+	bool "2018.05"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -87,7 +87,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2018.03"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2018.05"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
 index 788c169..17840d8 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
 @@ -1,2 +1,2 @@
  # Locally computed:
 -sha256  7e7477534409d5368eb1371ffde6820f0f79780a1a1f676161c48442cb303dfd  u-boot-2018.03.tar.bz2
 +sha256  4da13c2a6139a78cc08608f21fd4741db27eda336cfad7ab8264fda923b9c048  u-boot-2018.05.tar.bz2
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 882576d..b247c21 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UBOOT_TOOLS_VERSION = 2018.03
++UBOOT_TOOLS_VERSION = 2018.05
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPL-2.0+
 -- 
 2.7.4
