@@ -1,35 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 13:11:15 +0200
-Subject: [Buildroot] can't create own package
-In-Reply-To: <CANMfZMgxMC2jf26FfKJ7gX6zyLfg0bj2nePxWKc1hh0yrrNbyQ@mail.gmail.com>
-References: <CANMfZMgxMC2jf26FfKJ7gX6zyLfg0bj2nePxWKc1hh0yrrNbyQ@mail.gmail.com>
-Message-ID: <20180507131115.179c0405@windsurf>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 7 May 2018 08:16:48 -0300 (BRT)
+Subject: [Buildroot] [PATCH 2/4] skeleton-custom: install /bin, /lib,
+ and /sbin
+In-Reply-To: <20180507090811.18489751@windsurf>
+References: <20180506213116.25084-1-casantos@datacom.ind.br>
+ <20180506213116.25084-3-casantos@datacom.ind.br>
+ <20180507090811.18489751@windsurf>
+Message-ID: <1990732966.12593.1525691808010.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: "buildroot" <buildroot@buildroot.org>, "yann morin 1998" <yann.morin.1998@gmail.com>, "Thomas De Schampheleire"
+> <thomas.de_schampheleire@nokia.com>
+> Sent: Monday, May 7, 2018 4:08:11 AM
+> Subject: Re: [Buildroot] [PATCH 2/4] skeleton-custom: install /bin, /lib, and /sbin
 
-On Mon, 7 May 2018 16:35:08 +0530, s.vineeth amalraj wrote:
+> Hello Carlos,
+> 
+> On Sun,  6 May 2018 18:31:14 -0300, Carlos Santos wrote:
+>> skeleton-custom does not install the required /bin, /lib and /sbin
+>> directories (or symlinks), which may result in an imcomplete tree, The
+>> user could add the required directories/symlinks to the skeleton but
+>> they maye be invalid, depending on the state of BR2_ROOTFS_MERGED_USR.
+> 
+> maye -> may
 
-> I followed your comments and created a folder and TAMIL_SITE points to a
-> folder now. I am able to build without any error. But am not able to view
-> that in my newly built OS. Or couldn't use that package in my OS. I am not
-> able to sort where the issue is? Kindly help. Thank you!
+:-)
 
-Please don't create a new thread, but instead reply to the existing
-e-mail.
+> 
+>> 
+>> Steps to reproduce:
+>> 
+>> - Enable BR2_ROOTFS_MERGED_USR and BR2_INIT_SYSTEMD
+>> - Set BR2_ROOTFS_SKELETON_CUSTOM_PATH to "system/skeleton"
+>> - Run "make skeleton"
+>> - target/{bin.lib,sbin} will not exist
+>> 
+>> Add calls to SYSTEM_USR_SYMLINKS_OR_DIRS to INSTALL_TARGET_CMDS and
+>> INSTALL_STAGING_CMDS, so the required directories or symlinks are
+>> created.
+>> 
+>> Add a paragraph to the documentation clarifying that custom skeletons
+>> should not contain /bin, /lib or /sbin.
+> 
+> Maybe I don't understand the full scope of the problem, but to me, it
+> looks weird that the full contents of the skeleton (default or custom)
+> are not copied to the target root filesystem. It goes against the basic
+> expectations of what the skeleton is.
+> 
+> Of course, I am fine with checking that the skeleton complies with the
+> BR2_ROOTFS_MERGED_USR option, but preventing the skeleton from
+> having /bin, /lib and /sbin looks weird. So much that it needs to be
+> mentioned in the documentation.
 
-Also, you don't provide enough details: if you don't provide your .mk
-file, and the build log, we can't guess what you have done and provide
-some help and guidance.
+Notice that I used ?should? in the documentation, not ?must?. It is
+still OK to have /bin, /lib and /sbin in custom skeletons and rootfs
+overlays if BR2_ROOTFS_MERGED_USR is not set.
 
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
