@@ -1,47 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  7 May 2018 20:35:01 +0200
-Subject: [Buildroot] [PATCH v2] busybox: S01mdev: fix module autoloading
-Message-ID: <20180507183501.13778-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 May 2018 21:22:28 +0200
+Subject: [Buildroot] [PATCH 1/5] package/lua-flu: fix to use system
+ xattr header
+In-Reply-To: <1905e7c3bd8c0711980e23dbd19d0b9040640b44.1525717511.git.yann.morin.1998@free.fr>
+References: <cover.1525717511.git.yann.morin.1998@free.fr>
+ <1905e7c3bd8c0711980e23dbd19d0b9040640b44.1525717511.git.yann.morin.1998@free.fr>
+Message-ID: <20180507212228.42f1f716@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit b4fc5a180c (package/busybox: support spaces in module aliases in
-mdev) changed the mdev coldplugging to handle sysfs path elements and
-modalias values containing spaces.  This unfortunately doesn't work as was
-recently reported:
+Hello Yann,
 
-http://lists.busybox.net/pipermail/buildroot/2018-May/220903.html
+On Mon,  7 May 2018 20:25:16 +0200, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
+> Cc: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/lua-flu/0001-use-system-xattr-h.patch | 161 ++++++++++++++++++++++++++
+>  1 file changed, 161 insertions(+)
+>  create mode 100644 package/lua-flu/0001-use-system-xattr-h.patch
+> 
+> diff --git a/package/lua-flu/0001-use-system-xattr-h.patch b/package/lua-flu/0001-use-system-xattr-h.patch
+> new file mode 100644
+> index 0000000000..fda03b60c6
+> --- /dev/null
+> +++ b/package/lua-flu/0001-use-system-xattr-h.patch
+> @@ -0,0 +1,161 @@
+> +Use system <sys/xattr.h>
+> +
+> +The one from attr is no longer installed with latest version.
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The problem is that sort -z also expects the fields of the input files to be
-zero terminated, which is not the case for modalias sysfs entries.
+This could have been a Mercurial-formatted patch. I think you know how
+to use Mercurial :-)
 
-So drop the -z option to sort.  Spaces in modalias entries could be handled
-with the xargs -d '\n' option, but that is unfortunately not supported by
-the busybox applet.  Instead, use tr to convert newlines to zeros so we can
-use xargs -0.
+> +diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua
+> +--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua	2015-03-31 18:54:19.000000000 +0200
+> ++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua	2018-05-06 09:22:28.499324049 +0200
+> +@@ -327,7 +327,7 @@
+> + 				name = "fs.getxattr";
+> + 				parameters = {"path", "name"};
+> + 				results = {"value"};
+> +-				doc = [[Get an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.]];
+> ++				doc = [[Get an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.]];
 
-Reported-by: Daniel Palmer <daniel@0x0f.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/busybox/S10mdev | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I do understand all the attr/xattr.h -> sys/xattr.h changes, but I
+don't understand the ENOATTR -> ENODATA changes. Has the ENOATTR error
+code disappeared ? What makes ENODATA a suitable replacement ?
 
-diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
-index 63ca955b1c..7075b77016 100644
---- a/package/busybox/S10mdev
-+++ b/package/busybox/S10mdev
-@@ -9,7 +9,8 @@ case "$1" in
- 	echo /sbin/mdev >/proc/sys/kernel/hotplug
- 	/sbin/mdev -s
- 	# coldplug modules
--	find /sys/ -name modalias -print0 | xargs -0 sort -u -z | xargs -0 modprobe -abq
-+	find /sys/ -name modalias -print0 | xargs -0 sort -u | tr '\n' '\0' | \
-+	    xargs -0 modprobe -abq
- 	;;
-   stop)
- 	;;
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
