@@ -1,36 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 13:24:32 +0200
-Subject: [Buildroot] [PATCH] support/download/file: fix file:// protocol
- handling
-In-Reply-To: <1525683042-21087-1-git-send-email-angelo@amarulasolutions.com>
-References: <1525683042-21087-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180507132432.32241f44@windsurf>
+Date: Mon, 7 May 2018 13:28:50 +0200
+Subject: [Buildroot] [PATCH 2/4] skeleton-custom: install /bin, /lib,
+ and /sbin
+In-Reply-To: <1990732966.12593.1525691808010.JavaMail.zimbra@datacom.com.br>
+References: <20180506213116.25084-1-casantos@datacom.ind.br>
+ <20180506213116.25084-3-casantos@datacom.ind.br>
+ <20180507090811.18489751@windsurf>
+ <1990732966.12593.1525691808010.JavaMail.zimbra@datacom.com.br>
+Message-ID: <20180507132850.6149ac14@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Angelo,
+Hello Carlos,
 
-On Mon,  7 May 2018 10:50:42 +0200, Angelo Compagnucci wrote:
-> This patch removes the file:// prefix from file url before passing it
-> to the cp command. It fixes also a missing / between url directory
-> and file part.
+On Mon, 7 May 2018 08:16:48 -0300 (BRT), Carlos Santos wrote:
+
+> > Of course, I am fine with checking that the skeleton complies with the
+> > BR2_ROOTFS_MERGED_USR option, but preventing the skeleton from
+> > having /bin, /lib and /sbin looks weird. So much that it needs to be
+> > mentioned in the documentation.  
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Notice that I used ?should? in the documentation, not ?must?. It is
+> still OK to have /bin, /lib and /sbin in custom skeletons and rootfs
+> overlays if BR2_ROOTFS_MERGED_USR is not set.
 
-I think it would be good to add a specific example that was failing for
-you: an example defconfig, and the relevant part of the build log. This
-will help in the future if we wonder why this change was done.
+Ah, OK, but then the explanation should be worded differently. What
+about something like:
 
-Indeed, your commit log describes *what* is done (which is easily
-guessed by looking at the code itself), but not *why* it is done.
+"""
 
-I think it is especially important to explain that it is a regression
-(and since when).
+When +BR2_ROOTFS_MERGED_USR+ is enabled, then the custom skeleton must
+not contain the +/bin+, +/lib+ or +/sbin+ directories, as Buildroot
+will create them as symbolic links to the relevant folders in +/usr+.
+In such a situation, should the skeleton have any programs or
+libraries, they should be placed in +/usr/bin+, +/usr/sbin+ and
++/usr/lib+.
 
-Thanks!
+"""
+
+Or something along those lines.
 
 Thomas
 -- 
