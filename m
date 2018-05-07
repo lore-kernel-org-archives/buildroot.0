@@ -1,157 +1,81 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  7 May 2018 15:30:04 -0500
-Subject: [Buildroot] [PATCH v3 5/6] support/scripts/pkgstat: add target CPE
- reporting
+Date: Mon,  7 May 2018 15:30:01 -0500
+Subject: [Buildroot] [PATCH v3 2/6] cpe-info: id prefix/suffix
 In-Reply-To: <1525725005-41435-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1525725005-41435-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1525725005-41435-6-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1525725005-41435-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There are two types of software cpe prefixes, one for applications and
+one for operating systems. Note: There is a third type for hardware.
+
+This patchset determines which should be used and stores that
+information with the package for later use when assembling the CPE
+report.
+
+There is also a suffix which we just default to wildcards at this
+point.
+
+Refs:
+   https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
+   https://cpe.mitre.org/specification/
+
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- support/scripts/pkg-stats | 103 ++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 86 insertions(+), 17 deletions(-)
+Changes
+v1 -> v2
+[Thomas P
+ - Change to using a filter on pkg name value vs ifelse
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 43f7e8d..144c00c 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -24,9 +24,15 @@ from collections import defaultdict
- import re
- import subprocess
- import sys
-+import urllib2
-+import xmltodict
-+import gzip
-+from StringIO import StringIO
-+import csv
+v3
+[Arnout
+ - Moved CPE prefix and suffix defines to package/Makefile.in
+---
+ package/Makefile.in    | 4 ++++
+ package/pkg-generic.mk | 8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 4325f7b..ae69c4e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -395,6 +395,10 @@ TARGET_CONFIGURE_ARGS = \
  
- INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
+ ################################################################################
  
-+CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
- 
- class Package:
-     all_licenses = list()
-@@ -484,6 +490,62 @@ def dump_html(packages, stats, output):
-         dump_gen_info(f)
-         f.write(html_footer)
- 
-+class CPE:
-+    all_cpes = dict()
++CPE_PREFIX_OS = cpe:2.3:o
++CPE_PREFIX_APP = cpe:2.3:a
++CPE_SUFFIX = *:*:*:*:*:*:*
 +
-+    def get_xml_dict(self):
-+        print "CPE: Fetching xml manifest..."
-+        try:
-+            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
-+            print "CPE: Unzipping xml manifest..."
-+            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
-+            print "CPE: Converting xml manifest to dict..."
-+            self.all_cpes = xmltodict.parse(cpe_file)
-+        except urllib2.HTTPError, e:
-+            print "HTTP Error:", e.code, url
-+        except urllib2.URLError, e:
-+            print "URL Error:", e.reason, url
-+
-+    def find_partial(self,cpe_str):
-+        print "CPE: Searching for partial [%s]" % cpe_str
-+        for cpe in self.all_cpes['cpe-list']['cpe-item']:
-+            if cpe_str in cpe['cpe-23:cpe23-item']['@name']:
-+                return cpe['cpe-23:cpe23-item']['@name']
-+
-+    def find(self,cpe_str):
-+        print "CPE: Searching for [%s]" % cpe_str
-+        for cpe in self.all_cpes['cpe-list']['cpe-item']:
-+            if cpe['cpe-23:cpe23-item']['@name'] == cpe_str:
-+                return cpe['cpe-23:cpe23-item']['@name']
-+
-+def get_target_cpe_report(cpe_report_file, cpe_dict):
-+    report_cpe_exact_match = ""
-+    report_cpe_needing_update = ""
-+    report_cpe_missing = ""
-+
-+    print "CPE: Checking for matches..."
-+    with open(cpe_report_file) as cpe_file:
-+        cpe_list = csv.reader(cpe_file)
-+        for cpe in cpe_list:
-+            if "CPE ID" not in cpe[0]:
-+                result = cpe_dict.find(cpe[0])
-+                if not result:
-+                    cpe_no_version = cpe[0].split(":")[0]+":"+cpe[0].split(":")[1]+":"+cpe[0].split(":")[2]+":"+cpe[0].split(":")[3]+":"+cpe[0].split(":")[4]
-+                    result = cpe_dict.find_partial(cpe_no_version)
-+                    if not result:
-+                        report_cpe_missing += cpe[0] + "\n"
-+                    else:
-+                        report_cpe_needing_update += cpe[0] + "\n"
-+                else:
-+                    report_cpe_exact_match += cpe[0] + "\n"
-+    print "CPE: Found EXACT match:"
-+    print report_cpe_exact_match
-+    print "CPE: Found but REQUIRES UPDATE:"
-+    print report_cpe_needing_update
-+    print "CPE: Not found (proposing the following to be added):"
-+    print report_cpe_missing
-+
-+
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ NLS_OPTS = --enable-nls
+ TARGET_NLS_DEPENDENCIES = host-gettext
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 67ac436..b56fefa 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -866,11 +866,17 @@ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
+ $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
+ $(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
  
- def parse_args():
-     parser = argparse.ArgumentParser()
-@@ -493,6 +555,8 @@ def parse_args():
-                         help='Number of packages')
-     parser.add_argument('-p', dest='packages', action='store',
-                         help='List of packages (comma separated)')
-+    parser.add_argument('-c', dest='cpe_report', action='store',
-+                        help='Buildroot CPE Report (csv format)')
-     return parser.parse_args()
++ifneq ($(filter linux linux-headers,$(1)),)
++$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
++else
++$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
++endif
++
+ $(1)-cpe-info: PKG=$(2)
+ $(1)-cpe-info:
+ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	@$$(call MESSAGE,"Collecting cpe info")
+-	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
++	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
  
- 
-@@ -505,22 +569,27 @@ def __main__():
-         package_list = args.packages.split(",")
-     else:
-         package_list = None
--    print "Build package list ..."
--    packages = get_pkglist(args.npackages, package_list)
--    print "Getting package make info ..."
--    package_init_make_info()
--    print "Getting package details ..."
--    for pkg in packages:
--        pkg.set_infra()
--        pkg.set_license()
--        pkg.set_hash_info()
--        pkg.set_patch_count()
--        pkg.set_check_package_warnings()
--        pkg.set_current_version()
--    print "Calculate stats"
--    stats = calculate_stats(packages)
--    print "Write HTML"
--    dump_html(packages, stats, args.output)
--
-+    if args.cpe_report:
-+        print "Performing Target CPE Report Analysis..."
-+        cpe_dict = CPE()
-+        cpe_dict.get_xml_dict()
-+        get_target_cpe_report(args.cpe_report,cpe_dict)
-+    else:
-+       print "Build package list ..."
-+       packages = get_pkglist(args.npackages, package_list)
-+       print "Getting package make info ..."
-+       package_init_make_info()
-+       print "Getting package details ..."
-+       for pkg in packages:
-+          pkg.set_infra()
-+          pkg.set_license()
-+          pkg.set_hash_info()
-+          pkg.set_patch_count()
-+          pkg.set_check_package_warnings()
-+          pkg.set_current_version()
-+       print "Calculate stats"
-+       stats = calculate_stats(packages)
-+       print "Write HTML"
-+       dump_html(packages, stats, args.output)
- 
- __main__()
+ # legal-info: declare dependencies and set values used later for the manifest
 -- 
 1.9.1
