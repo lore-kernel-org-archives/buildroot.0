@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon,  7 May 2018 12:57:38 +0200
-Subject: [Buildroot] [RFC PATCH 4/7] systemd: convert to pkg-meson infra
+Date: Mon,  7 May 2018 12:57:37 +0200
+Subject: [Buildroot] [RFC PATCH 3/7] libmpdclient: convert to pkg-meson infra
 In-Reply-To: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
 References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180507105741.31747-5-eric.le.bihan.dev@free.fr>
+Message-ID: <20180507105741.31747-4-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +12,46 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/systemd/systemd.mk | 32 +++-----------------------------
- 1 file changed, 3 insertions(+), 29 deletions(-)
+ package/libmpdclient/libmpdclient.mk | 32 +-------------------------------
+ 1 file changed, 1 insertion(+), 31 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index db7fb43636..c52e4923a0 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -12,7 +12,6 @@ SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	host-gperf \
- 	host-intltool \
--	host-meson \
- 	kmod \
- 	libcap \
- 	util-linux
-@@ -26,10 +25,6 @@ SYSTEMD_DEPENDENCIES += busybox
- endif
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 6ff27241c0..c04536eb88 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -11,35 +11,5 @@ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_
+ LIBMPDCLIENT_INSTALL_STAGING = YES
+ LIBMPDCLIENT_LICENSE = BSD-3-Clause
+ LIBMPDCLIENT_LICENSE_FILES = COPYING
+-LIBMPDCLIENT_DEPENDENCIES = host-meson
  
- SYSTEMD_CONF_OPTS += \
+-LIBMPDCLIENT_CONF_OPTS += \
 -	--prefix=/usr \
--	--libdir='/usr/lib' \
+-	--libdir=/usr/lib \
+-	--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
 -	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
--	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
- 	-Drootlibdir='/usr/lib' \
- 	-Dblkid=true \
- 	-Dman=false \
-@@ -399,28 +394,7 @@ define SYSTEMD_INSTALL_INIT_SYSTEMD
- 	$(SYSTEMD_INSTALL_NETWORK_CONFS)
- endef
- 
--SYSTEMD_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
-+SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
-+SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
- 
--SYSTEMD_ENV = $(TARGET_MAKE_ENV) $(HOST_UTF8_LOCALE_ENV)
+-	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
 -
--define SYSTEMD_CONFIGURE_CMDS
+-LIBMPDCLIENT_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+-
+-define LIBMPDCLIENT_CONFIGURE_CMDS
 -	rm -rf $(@D)/build
 -	mkdir -p $(@D)/build
--	$(SYSTEMD_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(LIBMPDCLIENT_CONF_OPTS) $(@D) $(@D)/build
 -endef
 -
--define SYSTEMD_BUILD_CMDS
--	$(SYSTEMD_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
+-define LIBMPDCLIENT_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build
 -endef
 -
--define SYSTEMD_INSTALL_TARGET_CMDS
--	$(SYSTEMD_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
--		-C $(@D)/build install
+-define LIBMPDCLIENT_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
+-		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
 -endef
 -
--define SYSTEMD_INSTALL_STAGING_CMDS
--	$(SYSTEMD_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
--		-C $(@D)/build install
+-define LIBMPDCLIENT_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
+-		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
 -endef
 -
 -$(eval $(generic-package))
