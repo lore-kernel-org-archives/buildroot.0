@@ -1,95 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 17:08:55 +0200
-Subject: [Buildroot] [RFC PATCH 2/7] docs/manual: document pkg-meson
- infra
-In-Reply-To: <20180507105741.31747-3-eric.le.bihan.dev@free.fr>
-References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
- <20180507105741.31747-3-eric.le.bihan.dev@free.fr>
-Message-ID: <20180507170855.3bf884fa@windsurf>
+Date: Mon, 7 May 2018 17:27:40 +0200
+Subject: [Buildroot] [mfgtools][PATCH] mfgtools: Allow target build
+In-Reply-To: <1525444322-25581-1-git-send-email-vincent.prince.fr@gmail.com>
+References: <1525444322-25581-1-git-send-email-vincent.prince.fr@gmail.com>
+Message-ID: <20180507172740.129d7641@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Vincent,
 
-On Mon,  7 May 2018 12:57:36 +0200, Eric Le Bihan wrote:
-> Update documentation about adding meson-based packages with instructions for
-> using pkg-meson infrastructure.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Thanks for this contribution!
 
-Looks good overall.
+On Fri,  4 May 2018 16:32:02 +0200, Vincent Prince wrote:
 
+> diff --git a/package/mfgtools/0001-Fix-CXXFLAGS-in-CMakeList.patch b/package/mfgtools/0001-Fix-CXXFLAGS-in-CMakeList.patch
+> new file mode 100644
+> index 0000000..91933df
+> --- /dev/null
+> +++ b/package/mfgtools/0001-Fix-CXXFLAGS-in-CMakeList.patch
+> @@ -0,0 +1,58 @@
+> +--- a/MfgToolLib/CMakeLists.txt
+> ++++ b/MfgToolLib/CMakeLists.txt
 
-> -47: $(eval $(generic-package))
-> +16: ifeq ($(BR2_PACKAGE_BAZ),y)
-> +17: FOO_CONF_OPTS += -Dbaz
-> +18: endif
+All patches need a description + Signed-off-by. See
+https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
 
-I know it wasn't in the example previously, but would it make sense to
-add:
+> diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
+> index e4663a8..24a9d9f 100644
+> --- a/package/mfgtools/mfgtools.mk
+> +++ b/package/mfgtools/mfgtools.mk
+> @@ -11,19 +11,35 @@ MFGTOOLS_LICENSE = BSD-3-Clause or CPOL
+>  MFGTOOLS_LICENSE_FILES = LICENSE README.txt
+>  HOST_MFGTOOLS_DEPENDENCIES = host-libusb
+>  
+> +MFGTOOLS_CFLAGS = \
+> +	$(CFLAGS) $(LDFLAGS) -std=c++11 -lpthread \
 
-FOO_DEPENDENCIES += baz
+CFLAGS and LDFLAGS don't have any meaning in Buildroot, you probably
+meant TARGET_CFLAGS and TARGET_LDFLAGS.
 
-inside this condition ? It is quite common that external packages
-enabling features for a given package are build dependencies of that
-package.
+> +	-L$(@D)/MfgToolLib -lMfgToolLib -I$(@D)/MfgToolLib \
+> +	-lusb-1.0 -I$(TARGET_DIR)/usr/include/libusb-1.0 \
 
-> +==== +meson-package+ reference
-> +
-> +The main macro of the Meson package infrastructure is +meson-package+. It is
-> +similar to the +generic-package+ macro.
-> +
-> +Just like the generic infrastructure, the Meson infrastructure works by defining
-> +a number of variables before calling the +meson-package+ macro.
-> +
-> +First, all the package metadata information variables that exist in the generic
-> +infrastructure also exist in the Meson infrastructure: +FOO_VERSION+,
-> ++FOO_SOURCE+, +FOO_PATCH+, +FOO_SITE+, +FOO_SUBDIR+, +FOO_DEPENDENCIES+,
-> ++FOO_INSTALL_STAGING+, +FOO_INSTALL_TARGET+.
-> +
-> +A few additional variables, specific to the Meson infrastructure, can also be
-> +defined. Many of them are only useful in very specific cases, typical packages
-> +will therefore only use a few of them.
-> +
-> +* +FOO_CONF_ENV+, to specify additional environment variables to pass to
-> +  +meson+ for the configuration step. By default, empty.
-> +
-> +* +FOO_CONF_OPTS+, to specify additional options to pass to +meson+ for the
-> +  configuration step. By default, empty.
-> +
-> +* +FOO_NINJA_ENV+, to specify additional environment variables to pass to
-> +  +ninja+, meson companion tool in charge of the build operations. By default,
-> +  empty.
+You can't use header files from TARGET_DIR, since you have no guarantee
+that they are installed here. The headers are in STAGING_DIR instead.
 
-Regarding the variable naming, I'm wondering if FOO_CONF_{ENV,OPTS} and
-FOO_NINJA_ENV is very consistent.
+> +define MFGTOOLS_CLI_BUILD
+> +	$(CONFIGURE_OPTS) $(MAKE) CC="$(TARGET_CXX)" \
 
-Indeed, either you name the options after the step to which they apply:
-FOO_CONF_ENV, FOO_CONF_OPTS, FOO_BUILD_ENV. Or after the tool to which
-they apply: FOO_MESON_ENV, FOO_MESON_OPTS, FOO_NINJA_ENV.
+CONFIGURE_OPTS don't exist in Buildroot, it's TARGET_CONFIGURE_OPTS.
+THen you don't need to pass CC="$(TARGET_CXX)", because it's part of
+TARGET_CONFIGURE_OPTS.
 
-But:
+> +define MFGTOOLS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 755 $(@D)/MfgToolLib/libMfgToolLib.so \
+> +		$(TARGET_DIR)/usr/lib/libMfgToolLib.so
+> +	$(INSTALL) -D -m 755 $(@D)/TestPrgm/mfgtoolcli \
+> +		$(TARGET_DIR)/usr/bin/mfgtoolcli
+> +endef
 
- - We already use this inconsistent notation: CONF_ENV and MAKE_ENV for
-   autotools packages
+Add a blank line here.
 
- - Ninja options are not only used at build time, but also at install
-   time.
+>  define HOST_MFGTOOLS_INSTALL_CMDS
+>  	$(INSTALL) -D -m 755 $(@D)/MfgToolLib/libMfgToolLib.so \
+>  		$(HOST_DIR)/lib/libMfgToolLib.so
+> @@ -31,4 +47,5 @@ define HOST_MFGTOOLS_INSTALL_CMDS
+>  		$(HOST_DIR)/bin/mfgtoolcli
+>  endef
+>  
+> +$(eval $(cmake-package))
+>  $(eval $(host-cmake-package))
 
- - Renaming FOO_CONF_OPTS to FOO_MESON_OPTS would really be weird, and
-   FOO_CONF_OPTS definitely makes a lot more sense.
+Could you rework your patch according to those comments, and send an
+updated version ?
 
-Conclusion: don't change anything, your current naming is my preference.
-
-However, I think you forgot to mention the existence of a host variant
-for Meson packages. The other package infrastructures say: "The ability
-to have target and host packages is also available, with the
-host-cmake-package macro."
-
-Best regards,
+Thanks a lot!
 
 Thomas
 -- 
