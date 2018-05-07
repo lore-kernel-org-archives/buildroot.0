@@ -1,64 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  7 May 2018 22:30:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.0.3
-Message-ID: <20180507203049.31058-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 May 2018 22:32:41 +0200
+Subject: [Buildroot] [PATCH 2/5] package/stress-ng: bump version,
+ fix to use system xattr header
+In-Reply-To: <20180507212331.5d66b669@windsurf>
+References: <cover.1525717511.git.yann.morin.1998@free.fr>
+ <e3aef063f700d64bcb91d0b139ebef0a834e85b3.1525717511.git.yann.morin.1998@free.fr>
+ <20180507212331.5d66b669@windsurf>
+Message-ID: <20180507203241.GG14524@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+Thomas, All,
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 3a1e62fe66..5a8e3f9b84 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.0.2
-+MESA3D_HEADERS_VERSION = 18.0.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 734df00306..983c0e65e5 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-April/000423.html
--md5 3c303da98ec2ce37c795baeba5aee31e  mesa-18.0.2.tar.xz
--sha1 2c8a500c48fdf68949328506916405936d99ee97  mesa-18.0.2.tar.xz
--sha256 98fa159768482dc568b9f8bf0f36c7acb823fa47428ffd650b40784f16b9e7b3  mesa-18.0.2.tar.xz
--sha512 77d24d01c4c22596d28421aeb74932ff232730a4f556ae1a2e8777ece2876e4e352679575385c065505df4a2a83d2c1cf30db92dcf88038417e36a2768332d7e  mesa-18.0.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-May/000426.html
-+md5 b260580a26b71a5e52c608e3fe6d08a6  mesa-18.0.3.tar.xz
-+sha1 2c12c9f69eb7ba787dd1245b53bb98ceb08362d3  mesa-18.0.3.tar.xz
-+sha256 099d9667327a76a61741a533f95067d76ea71a656e66b91507b3c0caf1d49e30  mesa-18.0.3.tar.xz
-+sha512 decd050bab049d17bcde3f832d4da0ffdb80f147c99377a162739bbe72fd6fd32b51e56e6fc66895b8c30fc19a1815bae164b21aa557816c3998ad18c1ffca2d  mesa-18.0.3.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index fb9189741f..d897c0d4c2 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.0.2
-+MESA3D_VERSION = 18.0.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+On 2018-05-07 21:23 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  7 May 2018 20:25:17 +0200, Yann E. MORIN wrote:
+> > diff --git a/package/stress-ng/0001-xattr-from-libc.patch b/package/stress-ng/0001-xattr-from-libc.patch
+> > new file mode 100644
+> > index 0000000000..0064b54470
+> > --- /dev/null
+> > +++ b/package/stress-ng/0001-xattr-from-libc.patch
+> > @@ -0,0 +1,49 @@
+> > +Use system <sys/xattr.h>
+> > +
+> > +The one from attr is no longer installed with latest version.
+> > +
+> > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Git-formatted patch, please ?
+
+Woops...
+
+> Git repo is at git://kernel.ubuntu.com/cking/stress-ng.git.
+
+I already send the patch to Colin (I hven't found a mailing list for
+it).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
