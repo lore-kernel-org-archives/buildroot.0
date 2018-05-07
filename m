@@ -1,19 +1,24 @@
-From: s.vineeth amalraj <vineeth.laesr@gmail.com>
-Date: Mon, 7 May 2018 13:56:56 +0530
-Subject: [Buildroot] how to create a very basic package using buildroot
-Message-ID: <CANMfZMiNkN=C-cRLqYQEaC6mtfgytN-R4FKAXhJ_TSkjDrydmw@mail.gmail.com>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Mon, 7 May 2018 17:30:52 +0900
+Subject: [Buildroot] Automatic module loading with mdev is broken?
+In-Reply-To: <87sh74nevl.fsf@dell.be.48ers.dk>
+References: <CAFr9PX=M4VCMcakZsENMXBW8Xi3BcKkrVCTdARu=nCvK-A5ovg@mail.gmail.com>
+ <87sh74nevl.fsf@dell.be.48ers.dk>
+Message-ID: <CAFr9PX=ddYhUua7VTCDTBBsPWDzmV-F3xWy2VcxKf_ko7cdQSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sir,
+Hi Peter,
 
-Kindly help me to build a basic package for C. I tried to create and build
-a package and it is build. But the problem is, I am not able to view that
-in the bin folder after building the OS. Please let me know how to view the
-package which i created. Many thanks!!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180507/58c58e1c/attachment.html>
+Your change works but looking at the text of the original change that
+caused the regression 'First alias in question is "platform:Fixed MDIO
+bus".' it seems it would fail with that? The driver that creates that
+alias still exists ->
+https://github.com/torvalds/linux/blob/master/drivers/net/phy/fixed_phy.c#L261
+
+Cheers,
+
+Daniel
