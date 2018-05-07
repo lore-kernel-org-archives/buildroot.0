@@ -1,48 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 16:42:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/assimp: remove redundant ':'
- sign
-In-Reply-To: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-References: <1525551191-7113-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <20180507164212.52eac52b@windsurf>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon,  7 May 2018 11:44:26 -0300
+Subject: [Buildroot] [PATCH v3 0/5] Improve verification of custom rootfs
+ skeletons and overlays
+Message-ID: <20180507144431.14488-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This series makes some improvements in the verification of custom rootfs
+skeletons and overlays, regarding mergerd /usr:
 
-On Sat,  5 May 2018 22:13:10 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-> ---
->  package/assimp/assimp.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-> index 4d44748..e391145 100644
-> --- a/package/assimp/assimp.mk
-> +++ b/package/assimp/assimp.mk
-> @@ -20,7 +20,7 @@ endif
->  # not passed) in gcc versions 5.x or older. The -Os optimization level
->  # causes a "unable to find a register to spill in class
->  # ?GENERAL_REGS?" error. -O2 works fine.
-> -ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:y:)
-> +ifeq ($(BR2_sh)$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),yy:)
+Patch 1 adds a script to check if a given path complies to the merged /usr
+requirements and makes skeleton-custom.mk use it instead of a bunch of
+variables filled by $(shell ...) macros.
 
-I don't find the ":" to be really redundant. Yes, this ":" is not
-technically needed, but it makes the construct very clear and avoids
-any possible confusion.
+Patch 2 ensures that /bin, /lib and /sbin are created for custom skeletons,
+either as directories or symlinks, according to BR2_ROOTFS_MERGED_USR. 
 
-So I think my preference would be to keep things as-is. I know in other
-places we don't put a ":" when we need both options to be "y". But when
-we have a case where some options need to be "y", some options need to
-be empty, I find having a ":" between each to be clearer.
+Patch 3 uses the script added in patch 1 to check rootfs overlays, in
+target-finalize.
 
-Best regards,
+Patch 4 allows rootfs overlays to override symbolic links on purpose (e.g.
+/var/log, to persist system logs).
 
-Thomas
+Patch 5 removes the restriction of using merged /usr only with the default
+skeleton or when systemd is selected.
+
+Carlos Santos (5):
+  skeleton-custom: use a script to check merged usr structure
+  skeleton-custom: install /bin, /lib, and /sbin
+  Makefile: check rootfs overlays with BR2_ROOTFS_MERGED_USR enabled
+  Makefile: allow rootfs overlays to override symbolic links
+  system: allow selecting merged /usr along with custom rootfs skeleton
+
+ Makefile                                   | 20 ++++++++++++---
+ docs/manual/customize-rootfs.txt           | 17 +++++++++++++
+ package/skeleton-custom/skeleton-custom.mk | 25 +++----------------
+ support/scripts/check-merged-usr.sh        | 39 ++++++++++++++++++++++++++++++
+ system/Config.in                           |  8 ++----
+ 5 files changed, 78 insertions(+), 31 deletions(-)
+ create mode 100755 support/scripts/check-merged-usr.sh
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.3
