@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 17:02:56 +0200
-Subject: [Buildroot] [RFC PATCH 1/7] pkg-meson: new infrastructure
-In-Reply-To: <20180507105741.31747-2-eric.le.bihan.dev@free.fr>
+Date: Mon, 7 May 2018 17:08:55 +0200
+Subject: [Buildroot] [RFC PATCH 2/7] docs/manual: document pkg-meson
+ infra
+In-Reply-To: <20180507105741.31747-3-eric.le.bihan.dev@free.fr>
 References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
- <20180507105741.31747-2-eric.le.bihan.dev@free.fr>
-Message-ID: <20180507170256.2ef06b2f@windsurf>
+ <20180507105741.31747-3-eric.le.bihan.dev@free.fr>
+Message-ID: <20180507170855.3bf884fa@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,57 +14,82 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  7 May 2018 12:57:35 +0200, Eric Le Bihan wrote:
-> Add a new infrastructure to ease the development of packages that use Meson as
-> their build system.
+On Mon,  7 May 2018 12:57:36 +0200, Eric Le Bihan wrote:
+> Update documentation about adding meson-based packages with instructions for
+> using pkg-meson infrastructure.
 > 
 > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Thanks for working on this!
+Looks good overall.
 
-> +define inner-meson-package
+
+> -47: $(eval $(generic-package))
+> +16: ifeq ($(BR2_PACKAGE_BAZ),y)
+> +17: FOO_CONF_OPTS += -Dbaz
+> +18: endif
+
+I know it wasn't in the example previously, but would it make sense to
+add:
+
+FOO_DEPENDENCIES += baz
+
+inside this condition ? It is quite common that external packages
+enabling features for a given package are build dependencies of that
+package.
+
+> +==== +meson-package+ reference
 > +
-> +$(2)_CONF_ENV		?=
-> +$(2)_CONF_OPTS		?=
-> +$(2)_NINJA		= $(HOST)/bin/ninja
+> +The main macro of the Meson package infrastructure is +meson-package+. It is
+> +similar to the +generic-package+ macro.
+> +
+> +Just like the generic infrastructure, the Meson infrastructure works by defining
+> +a number of variables before calling the +meson-package+ macro.
+> +
+> +First, all the package metadata information variables that exist in the generic
+> +infrastructure also exist in the Meson infrastructure: +FOO_VERSION+,
+> ++FOO_SOURCE+, +FOO_PATCH+, +FOO_SITE+, +FOO_SUBDIR+, +FOO_DEPENDENCIES+,
+> ++FOO_INSTALL_STAGING+, +FOO_INSTALL_TARGET+.
+> +
+> +A few additional variables, specific to the Meson infrastructure, can also be
+> +defined. Many of them are only useful in very specific cases, typical packages
+> +will therefore only use a few of them.
+> +
+> +* +FOO_CONF_ENV+, to specify additional environment variables to pass to
+> +  +meson+ for the configuration step. By default, empty.
+> +
+> +* +FOO_CONF_OPTS+, to specify additional options to pass to +meson+ for the
+> +  configuration step. By default, empty.
+> +
+> +* +FOO_NINJA_ENV+, to specify additional environment variables to pass to
+> +  +ninja+, meson companion tool in charge of the build operations. By default,
+> +  empty.
 
-Does this one really needs to be a per-package variable ? It's defined
-with "=" so it doesn't even allow a package to customize this value
-(but I don't think it would be necessary for packages to customize this
-value anyway).
+Regarding the variable naming, I'm wondering if FOO_CONF_{ENV,OPTS} and
+FOO_NINJA_ENV is very consistent.
 
-> +$(2)_NINJA_ENV		?=
-> +$(2)_NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+Indeed, either you name the options after the step to which they apply:
+FOO_CONF_ENV, FOO_CONF_OPTS, FOO_BUILD_ENV. Or after the tool to which
+they apply: FOO_MESON_ENV, FOO_MESON_OPTS, FOO_NINJA_ENV.
 
-Same question for this one.
+But:
 
-> +define $(2)_CONFIGURE_CMDS
-> +	rm -rf $$($$(PKG)_SRCDIR)/build
-> +	mkdir -p $$($$(PKG)_SRCDIR)/build
-> +	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) meson \
-> +		--prefix=/usr \
-> +		--libdir=/usr/lib \
-> +		--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
-> +		--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
-> +		--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
+ - We already use this inconsistent notation: CONF_ENV and MAKE_ENV for
+   autotools packages
 
-So meson is really not consistent, and some options are "--name=value",
-and some others are "--name value" ?
+ - Ninja options are not only used at build time, but also at install
+   time.
 
-> +#
-> +# Host installation step. Only define it if not already defined by the
-> +# package .mk file.
-> +#
-> +ifndef $(2)_INSTALL_CMDS
-> +define $(2)_INSTALL_CMDS
-> +	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(HOST_DIR) \
+ - Renaming FOO_CONF_OPTS to FOO_MESON_OPTS would really be weird, and
+   FOO_CONF_OPTS definitely makes a lot more sense.
 
-DESTDIR=$$(HOST_DIR) is not correct for host installations, since you
-already build for prefix=$(HOST_DIR).
+Conclusion: don't change anything, your current naming is my preference.
 
-Other than those questions/issues, looks good to me overall.
+However, I think you forgot to mention the existence of a host variant
+for Meson packages. The other package infrastructures say: "The ability
+to have target and host packages is also available, with the
+host-cmake-package macro."
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
