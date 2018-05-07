@@ -1,134 +1,93 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  7 May 2018 00:09:01 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] libkcapi: split BR2_PACKAGE_LIBKCAPI_APPS
-Message-ID: <20180506220901.10094-1-fontaine.fabrice@gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sun,  6 May 2018 20:00:31 -0700
+Subject: [Buildroot] [PATCH 1/2] python-cython: new package
+Message-ID: <20180507030032.22819-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit https://github.com/smuellerDD/libkcapi/commit/af313accf18887b4f6dbd7306c2389ddf271c9b7,
-hasher test application depends on dlfcn.h. To avoid putting all apps
-under !BR2_STATIC_LIBS dependency, split BR2_PACKAGE_LIBKCAPI_APPS into
-several variables.
-
-Moreover, BR2_USE_MMU is only a dependency of BR2_PACKAGE_LIBKCAPI_TEST
-as other applications don't use fork.
-
-Finally, enc or dgst applications could be enabled in a next patch if
-needed.
-
-Fixes:
- - http://autobuild.buildroot.net/results/7c57f3025030eff41a5cde52759821249859caf1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update Config.in.legacy
+ DEVELOPERS                               |  1 +
+ package/Config.in.host                   |  1 +
+ package/python-cython/Config.in.host     |  7 +++++++
+ package/python-cython/python-cython.hash |  6 ++++++
+ package/python-cython/python-cython.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-cython/Config.in.host
+ create mode 100644 package/python-cython/python-cython.hash
+ create mode 100644 package/python-cython/python-cython.mk
 
- Config.in.legacy             | 11 +++++++++++
- package/libkcapi/Config.in   | 20 +++++++++++++++-----
- package/libkcapi/libkcapi.mk | 32 +++++++++++++++++++++-----------
- 3 files changed, 47 insertions(+), 16 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3d8b28c5fe..c51984a3b9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,17 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.05"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 24d134cb70..3ddb292894 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -934,6 +934,7 @@ F:	configs/qemu_ppc64le_pseries_defconfig
  
-+config BR2_PACKAGE_LIBKCAPI_APPS
-+	bool "libkcapi test applications removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LIBKCAPI_HASHER if !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBKCAPI_RNGAPP
-+	select BR2_PACKAGE_LIBKCAPI_SPEED
-+	select BR2_PACKAGE_LIBKCAPI_TEST
-+	help
-+	  Test applications (hasher, rng read, speed-test, test) now
-+	  have their own configuration options in the libkcapi menu.
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
+ F:	package/gconf/
++F:	package/python-cython/
+ F:	package/python-raven/
+ F:	package/python-schedule/
+ F:	package/python-websockets/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index a8a4c1f802..38543e7390 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -43,6 +43,7 @@ menu "Host utilities"
+ 	source "package/pkgconf/Config.in.host"
+ 	source "package/pru-software-support/Config.in.host"
+ 	source "package/pwgen/Config.in.host"
++	source "package/python-cython/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
+ 	source "package/python-six/Config.in.host"
+ 	source "package/python-xlrd/Config.in.host"
+diff --git a/package/python-cython/Config.in.host b/package/python-cython/Config.in.host
+new file mode 100644
+index 0000000000..b69e59b718
+--- /dev/null
++++ b/package/python-cython/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_PYTHON_CYTHON
++       bool "host python-cython"
++       help
++         The Cython compiler for writing C extensions for the Python
++         language.
 +
- config BR2_PACKAGE_IQVLINUX
- 	bool "iqvlinux package removed"
- 	select BR2_LEGACY
-diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
-index 2b981777e6..7397cfe800 100644
---- a/package/libkcapi/Config.in
-+++ b/package/libkcapi/Config.in
-@@ -7,11 +7,21 @@ config BR2_PACKAGE_LIBKCAPI
- 
- if BR2_PACKAGE_LIBKCAPI
- 
--config BR2_PACKAGE_LIBKCAPI_APPS
--	bool "build test applications"
-+config BR2_PACKAGE_LIBKCAPI_HASHER
-+	bool "build hasher application"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
++         http://cython.org/
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+new file mode 100644
+index 0000000000..3b918dc704
+--- /dev/null
++++ b/package/python-cython/python-cython.hash
+@@ -0,0 +1,6 @@
++# md5 from https://pypi.python.org/pypi/Cython/json, sha256 locally computed
++md5    6149238287d662bd5d5e572482252493  Cython-0.27.3.tar.gz
++sha256 6a00512de1f2e3ce66ba35c5420babaef1fe2d9c43a8faab4080b0dbcc26bc64  Cython-0.27.3.tar.gz
++# License files, locally calculated
++sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
++sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+new file mode 100644
+index 0000000000..88eab83416
+--- /dev/null
++++ b/package/python-cython/python-cython.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# cython
++#
++################################################################################
 +
-+comment "hasher application needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
++PYTHON_CYTHON_VERSION = 0.27.3
++PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
++PYTHON_CYTHON_SITE = https://pypi.python.org/packages/ee/2a/c4d2cdd19c84c32d978d18e9355d1ba9982a383de87d0fcb5928553d37f4
++PYTHON_CYTHON_SETUP_TYPE = setuptools
++PYTHON_CYTHON_LICENSE = Apache-2.0
++PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 +
-+config BR2_PACKAGE_LIBKCAPI_RNGAPP
-+	bool "build rng read application"
-+
-+config BR2_PACKAGE_LIBKCAPI_SPEED
-+	bool "build speed-test program"
-+
-+config BR2_PACKAGE_LIBKCAPI_TEST
-+	bool "build test program"
- 	depends on BR2_USE_MMU # fork()
--	help
--	  Build additional test applications that can provide
--	  performance or algorithm tests.
- 
- endif
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 44469017df..1a45f4f996 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -12,18 +12,28 @@ LIBKCAPI_INSTALL_STAGING = YES
- LIBKCAPI_LICENSE = BSD-3-Clause (library), BSD-3-Clause or GPL-2.0 (programs)
- LIBKCAPI_LICENSE_FILES = COPYING COPYING.gplv2 COPYING.bsd
- 
--ifeq ($(BR2_PACKAGE_LIBKCAPI_APPS),y)
--LIBKCAPI_CONF_OPTS += \
--	--enable-kcapi-speed \
--	--enable-kcapi-test \
--	--enable-kcapi-hasher \
--	--enable-kcapi-rngapp
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
- else
--LIBKCAPI_CONF_OPTS += \
--	--disable-kcapi-speed \
--	--disable-kcapi-test \
--	--disable-kcapi-hasher \
--	--disable-kcapi-rngapp
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-hasher
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_RNGAPP),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-rngapp
-+else
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-rngapp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_SPEED),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-speed
-+else
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-speed
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_TEST),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-test
-+else
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-test
- endif
- 
- $(eval $(autotools-package))
++$(eval $(host-python-package))
 -- 
-2.14.1
+2.17.0
