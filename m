@@ -1,38 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 17:46:58 +0200
-Subject: [Buildroot] [PATCH 1/1] zeromq: add libatomic linkage when
- available
-In-Reply-To: <CALFsTFVARKTJVVrkBwAKt9Qud3EiNo6tDO4UhAwtnWvWG3kOyQ@mail.gmail.com>
-References: <20180426195309.26042-1-asafka7@gmail.com>
- <20180428153900.0f809228@windsurf>
- <CALFsTFVARKTJVVrkBwAKt9Qud3EiNo6tDO4UhAwtnWvWG3kOyQ@mail.gmail.com>
-Message-ID: <20180507174658.274b4937@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  7 May 2018 18:03:01 +0200
+Subject: [Buildroot] [PATCH] busybox: S01mdev: fix module autoloading
+Message-ID: <20180507160301.29361-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Asaf,
+Commit b4fc5a180c (package/busybox: support spaces in module aliases in
+mdev) changed the mdev coldplugging to handle sysfs path elements containing
+spaces.  This unfortunately doesn't work as was recently reported:
 
-On Sun, 29 Apr 2018 18:40:05 +0000, Asaf Kahlon wrote:
+http://lists.busybox.net/pipermail/buildroot/2018-May/220903.html
 
-> I completely agree that the solution should be on upstream, and the current
-> solution is easiest one but not the best one. I'll try to build a patch on
-> the upstream and send it here.
+The problem is that sort -z also expects the fields of the input files to be
+zero terminated, which is not the case for modalias sysfs entries.
 
-Do you have any news about this ? If needed, you can leverage some code
-from Mesa3D, which I've just patched earlier today:
+To my knowledge, no modalias entries contain spaces so fix it by dropping
+the -z option to sort and adjusting the xargs invocation to match.  The find
+invocation and first xargs invocation still uses -print0 / -0, so sysfs
+paths containing spaces are still handled correctly.
 
-  https://lists.freedesktop.org/archives/mesa-dev/2018-May/194214.html
+Spaces in modalias entries could be handled with the xargs -d '\n' option,
+but that is unfortunately not supported by the busybox applet.
 
-It would be nice to have a patch in the near future, to fix this build
-issue. Let me know if you need help for this.
+Reported-by: Daniel Palmer <daniel@0x0f.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/S10mdev | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+index 63ca955b1c..2ba391a5df 100644
+--- a/package/busybox/S10mdev
++++ b/package/busybox/S10mdev
+@@ -9,7 +9,7 @@ case "$1" in
+ 	echo /sbin/mdev >/proc/sys/kernel/hotplug
+ 	/sbin/mdev -s
+ 	# coldplug modules
+-	find /sys/ -name modalias -print0 | xargs -0 sort -u -z | xargs -0 modprobe -abq
++	find /sys/ -name modalias -print0 | xargs -0 sort -u | xargs modprobe -abq
+ 	;;
+   stop)
+ 	;;
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
