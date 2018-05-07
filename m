@@ -1,30 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 17:45:25 +0200
-Subject: [Buildroot] [PATCH 1/1] lxc: fix build with static libcap and
- shared gnutls
-In-Reply-To: <20180407162234.12848-1-fontaine.fabrice@gmail.com>
-References: <20180407162234.12848-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180507174525.269b774e@windsurf>
+Date: Mon, 7 May 2018 17:46:58 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: add libatomic linkage when
+ available
+In-Reply-To: <CALFsTFVARKTJVVrkBwAKt9Qud3EiNo6tDO4UhAwtnWvWG3kOyQ@mail.gmail.com>
+References: <20180426195309.26042-1-asafka7@gmail.com>
+ <20180428153900.0f809228@windsurf>
+ <CALFsTFVARKTJVVrkBwAKt9Qud3EiNo6tDO4UhAwtnWvWG3kOyQ@mail.gmail.com>
+Message-ID: <20180507174658.274b4937@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Asaf,
 
-On Sat,  7 Apr 2018 18:22:34 +0200, Fabrice Fontaine wrote:
+On Sun, 29 Apr 2018 18:40:05 +0000, Asaf Kahlon wrote:
 
-> diff --git a/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch b/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
-> new file mode 100644
-> index 0000000000..9a0dcbe55a
-> --- /dev/null
-> +++ b/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
+> I completely agree that the solution should be on upstream, and the current
+> solution is easiest one but not the best one. I'll try to build a patch on
+> the upstream and send it here.
 
-There was already a 0001 patch, so I renumbered this one to 0002. I've
-also added the upstream status. And applied. Thanks!
+Do you have any news about this ? If needed, you can leverage some code
+from Mesa3D, which I've just patched earlier today:
 
-Best regards,
+  https://lists.freedesktop.org/archives/mesa-dev/2018-May/194214.html
+
+It would be nice to have a patch in the near future, to fix this build
+issue. Let me know if you need help for this.
+
+Thanks!
 
 Thomas
 -- 
