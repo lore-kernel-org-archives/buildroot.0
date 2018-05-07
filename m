@@ -1,100 +1,109 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 7 May 2018 11:55:04 +0200
-Subject: [Buildroot] [PATCH 1/2] python-py: new package
-In-Reply-To: <20180505120944.18604-1-asafka7@gmail.com>
+Date: Mon, 7 May 2018 11:59:18 +0200
+Subject: [Buildroot] [PATCH 2/2] python-reentry: new package
+In-Reply-To: <20180505120944.18604-2-asafka7@gmail.com>
 References: <20180505120944.18604-1-asafka7@gmail.com>
-Message-ID: <CAGm1_ksuGy_dswqob+GSaupGY9Ry6NAv8FeCou4LwEARstFh4Q@mail.gmail.com>
+ <20180505120944.18604-2-asafka7@gmail.com>
+Message-ID: <CAGm1_kttV-F6gZxNY7fTKLEn9jxX1JF3wOUrNZWY8USSEgeiyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Asaf,
+
 On Sat, May 5, 2018 at 2:09 PM, Asaf Kahlon <asafka7@gmail.com> wrote:
-> library with cross-python path, ini-parsing, io, code, log facilities.
+> A plugin manager based on setuptools entry points mechanism.
 >
 > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Yegor
-
 > ---
->  DEVELOPERS                       |  1 +
->  package/Config.in                |  1 +
->  package/python-py/Config.in      |  7 +++++++
->  package/python-py/python-py.hash |  4 ++++
->  package/python-py/python-py.mk   | 14 ++++++++++++++
->  5 files changed, 27 insertions(+)
->  create mode 100644 package/python-py/Config.in
->  create mode 100644 package/python-py/python-py.hash
->  create mode 100644 package/python-py/python-py.mk
+>  DEVELOPERS                                 |  1 +
+>  package/Config.in                          |  1 +
+>  package/python-reentry/Config.in           |  8 ++++++++
+>  package/python-reentry/python-reentry.hash |  4 ++++
+>  package/python-reentry/python-reentry.mk   | 14 ++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/python-reentry/Config.in
+>  create mode 100644 package/python-reentry/python-reentry.hash
+>  create mode 100644 package/python-reentry/python-reentry.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 24d134cb70..7c0b7f0f28 100644
+> index 7c0b7f0f28..261c556ad8 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -191,6 +191,7 @@ F:  package/stress/
->
+> @@ -192,6 +192,7 @@ F:  package/stress/
 >  N:     Asaf Kahlon <asafka7@gmail.com>
 >  F:     package/python-jsonmodels/
-> +F:     package/python-py/
+>  F:     package/python-py/
+> +F:     package/python-reentry/
 >  F:     package/python-subprocess32/
 >  F:     package/python-yieldfrom/
 >  F:     package/zeromq/
 > diff --git a/package/Config.in b/package/Config.in
-> index fe36d31867..5c3c92d68b 100644
+> index 5c3c92d68b..6d57a2fd43 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -869,6 +869,7 @@ menu "External python modules"
->         source "package/python-psycopg2/Config.in"
->         source "package/python-ptyprocess/Config.in"
->         source "package/python-pudb/Config.in"
-> +       source "package/python-py/Config.in"
->         source "package/python-pyasn/Config.in"
->         source "package/python-pyasn-modules/Config.in"
->         source "package/python-pycli/Config.in"
-> diff --git a/package/python-py/Config.in b/package/python-py/Config.in
+> @@ -914,6 +914,7 @@ menu "External python modules"
+>         source "package/python-pyzmq/Config.in"
+>         source "package/python-raven/Config.in"
+>         source "package/python-remi/Config.in"
+> +       source "package/python-reentry/Config.in"
+
+wrong alphabetical order
+
+>         source "package/python-requests/Config.in"
+>         source "package/python-requests-oauthlib/Config.in"
+>         source "package/python-requests-toolbelt/Config.in"
+> diff --git a/package/python-reentry/Config.in b/package/python-reentry/Config.in
 > new file mode 100644
-> index 0000000000..354372f5b4
+> index 0000000000..25c721724a
 > --- /dev/null
-> +++ b/package/python-py/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_PY
-> +       bool "python-py"
+> +++ b/package/python-reentry/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_REENTRY
+> +       bool "python-reentry"
+> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+> +       select BR2_PACKAGE_PYTHON_CLICK # runtime
+> +       select BR2_PACKAGE_PYTHON_SIX # runtime
+> +       select BR2_PACKAGE_PYTHON_PY # runtime
 > +       help
-> +         library with cross-python path, ini-parsing, io, code, log
-> +         facilities.
-> +
-> +         http://py.readthedocs.io/
-> diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
+> +         A plugin manager based on setuptools entry points mechanism.
+
+No project site URL. PyPI page would do the job, if nothing else can be found.
+
+https://pypi.org/project/reentry/
+
+Yegor
+
+> diff --git a/package/python-reentry/python-reentry.hash b/package/python-reentry/python-reentry.hash
 > new file mode 100644
-> index 0000000000..66a96fd4c1
+> index 0000000000..7a3bbf4d99
 > --- /dev/null
-> +++ b/package/python-py/python-py.hash
+> +++ b/package/python-reentry/python-reentry.hash
 > @@ -0,0 +1,4 @@
-> +# sha256 from https://pypi.org/pypi/py/json
-> +sha256 29c9fab495d7528e80ba1e343b958684f4ace687327e6f789a94bf3d1915f881  py-1.5.3.tar.gz
+> +# sha256 from https://pypi.org/pypi/reentry/json
+> +sha256 00df980d8c61713f5002d4d893ba6ea38e9a721cd04aef5a520b974e700ab550  reentry-1.2.0.tar.gz
 > +# Locally computed sha256 checksums
-> +sha256 2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-> diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
+> +sha256 4ae7f3216208a7e2327236e95bcd2397b2495f1c2298c708986c893bea608509  LICENSE
+> diff --git a/package/python-reentry/python-reentry.mk b/package/python-reentry/python-reentry.mk
 > new file mode 100644
-> index 0000000000..1e3f2393da
+> index 0000000000..d3f0e03ef0
 > --- /dev/null
-> +++ b/package/python-py/python-py.mk
+> +++ b/package/python-reentry/python-reentry.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-py
+> +# python-reentry
 > +#
 > +################################################################################
 > +
-> +PYTHON_PY_VERSION = 1.5.3
-> +PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
-> +PYTHON_PY_SITE = https://files.pythonhosted.org/packages/f7/84/b4c6e84672c4ceb94f727f3da8344037b62cee960d80e999b1cd9b832d83
-> +PYTHON_PY_SETUP_TYPE = setuptools
-> +PYTHON_PY_LICENSE = MIT
-> +PYTHON_PY_LICENSE_FILES = LICENSE
+> +PYTHON_REENTRY_VERSION = 1.2.0
+> +PYTHON_REENTRY_SOURCE = reentry-$(PYTHON_REENTRY_VERSION).tar.gz
+> +PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/e2/b4/46dfac6613302fea51454a01aebedae9440aff9d813aedbbc5f687552e3b
+> +PYTHON_REENTRY_SETUP_TYPE = setuptools
+> +PYTHON_REENTRY_LICENSE = MIT
+> +PYTHON_REENTRY_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(python-package))
 > --
