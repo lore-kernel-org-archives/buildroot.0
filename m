@@ -1,143 +1,190 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  7 May 2018 15:30:00 -0500
-Subject: [Buildroot] [PATCH v3 1/6] cpe-info: new make target
+Date: Mon,  7 May 2018 15:30:05 -0500
+Subject: [Buildroot] [PATCH v3 6/6] support/scripts/pkgstat: add CPE status
+ reporting
 In-Reply-To: <1525725005-41435-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1525725005-41435-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1525725005-41435-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1525725005-41435-7-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Similar to make legal-info, produce a csv delimited file containing
-all selected packages CPE identification.
-
-Have the pkg infra define CPE_ID_* defaults using the package name
-for the vendor and name as most CPE IDs seem to align with that
-assumption. Also use the pkg version as the CPE ID's version field.
-
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-Changes
-v2
-[Thomas P
- - Moved comment on conditionals back to this patchset where
-   the conditional is created vs later
+ support/scripts/pkg-stats | 80 ++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 76 insertions(+), 4 deletions(-)
 
-v3
-[Thomas P
- - Merged infra define CPE_ID_*  into this patch
- - Report all packages vs restricting to just allowing based on if
-   the VENDOR was set (v2). This now represents Thomas P's original
-   idea to report everything.  At first I felt I should restrict
-   the reporting to those CPE IDs we had made sure were correct.
-   Turns out we should have actually let the script handle fixing
-   the CPEs and just make a complete design of this up front.
-
-[Matt
- - Moved to using the _project on all vendors instead of just name
----
- Makefile               | 17 ++++++++++++++++-
- package/pkg-generic.mk | 13 +++++++++++++
- package/pkg-utils.mk   |  8 ++++++++
- 3 files changed, 37 insertions(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index c024c65..71632bb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -146,7 +146,7 @@ nobuild_targets := source %-source \
- 	clean distclean help show-targets graph-depends \
- 	%-graph-depends %-show-depends %-show-version \
- 	graph-build graph-size list-defconfigs \
--	savedefconfig printvars
-+	savedefconfig printvars cpe-info %-cpe-info
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-@@ -233,6 +233,7 @@ LEGAL_MANIFEST_CSV_TARGET = $(LEGAL_INFO_DIR)/manifest.csv
- LEGAL_MANIFEST_CSV_HOST = $(LEGAL_INFO_DIR)/host-manifest.csv
- LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
-+CPE_MANIFEST_CSV = $(BASE_DIR)/cpe-manifest.csv
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 144c00c..82057f1 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -38,6 +38,7 @@ class Package:
+     all_licenses = list()
+     all_license_files = list()
+     all_versions = dict()
++    all_cpe_id = dict()
  
- BR2_CONFIG = $(CONFIG_DIR)/.config
+     def __init__(self, name, path):
+         self.name = name
+@@ -49,6 +50,8 @@ class Package:
+         self.patch_count = 0
+         self.warnings = 0
+         self.current_version = None
++        self.cpe_id = None
++        self.has_cpe = False
  
-@@ -802,6 +803,19 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
- 		mv .legal-info.sha256 legal-info.sha256)
- 	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
+     def pkgvar(self):
+         return self.name.upper().replace("-", "_")
+@@ -122,6 +125,22 @@ class Package:
+                 self.warnings = int(m.group(1))
+                 return
  
-+.PHONY: cpe-info-clean
-+cpe-info-clean:
-+	@rm -f $(CPE_MANIFEST_CSV)
++    def set_cpe_info(self, cpe_dict):
++        """
++        Fills in the .has_cpe field
++        """
++        var = self.pkgvar()
++        if var in self.all_cpe_id:
++            self.cpe_id = self.all_cpe_id[var]
++        result = cpe_dict.find(self.cpe_id)
++        if not result:
++            result = cpe_dict.find_partial(cpe_dict.get_cpe_no_version(self.cpe_id))
++            if result:
++                self.has_cpe = "Update"
++            # Unset case for has_cpe is assumed missing/does not exist
++        else:
++            self.has_cpe = cpe_dict.get_nvd_url(self.cpe_id)
 +
-+.PHONY: cpe-info-prepare
-+cpe-info-prepare:
-+	@$(call MESSAGE,"Gathering CPE info")
-+	@$(call cpe-manifest,CPE ID,CVE PATCHED,PACKAGE,VERSION,SOURCE SITE)
-+
-+.PHONY: cpe-info
-+cpe-info: cpe-info-clean cpe-info-prepare $(foreach p,$(PACKAGES),$(p)-cpe-info)
-+	@echo "CPE info produced in $(CPE_MANIFEST_CSV)"
-+
- .PHONY: show-targets
- show-targets:
- 	@echo $(sort $(PACKAGES)) $(sort $(TARGETS_ROOTFS))
-@@ -1070,6 +1084,7 @@ help:
- 	@echo '  source                 - download all sources needed for offline-build'
- 	@echo '  external-deps          - list external packages used'
- 	@echo '  legal-info             - generate info about license compliance'
-+	@echo '  cpe-info               - generate info about security CPE identification'
- 	@echo '  printvars              - dump all the internal variables'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 8a3b5f9..67ac436 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -861,6 +861,18 @@ else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
- endif
+     def __eq__(self, other):
+         return self.path == other.path
  
-+$(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
-+$(2)_CPE_ID_NAME ?= $$($(2)_NAME)
-+$(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
-+$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
+@@ -260,6 +279,22 @@ def package_init_make_info():
+ 
+         Package.all_versions[pkgvar] = value
+ 
++    # CPE ID
++    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
++                                 "-s", "printvars", "VARS=%_CPE_ID"])
++    for l in o.splitlines():
++        # Get variable name and value
++        pkgvar, value = l.split("=")
 +
-+$(1)-cpe-info: PKG=$(2)
-+$(1)-cpe-info:
-+ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-+	@$$(call MESSAGE,"Collecting cpe info")
-+	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
-+endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
++        # Strip _CPE_ID
++        pkgvar = pkgvar[:-7]
 +
- # legal-info: declare dependencies and set values used later for the manifest
- ifneq ($$($(2)_LICENSE_FILES),)
- $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
-@@ -1002,6 +1014,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
- 	$(1)-clean-for-reconfigure \
- 	$(1)-clean-for-reinstall \
- 	$(1)-configure \
-+	$(1)-cpe-info \
- 	$(1)-depends \
- 	$(1)-dirclean \
- 	$(1)-external-deps \
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index c3acc22..11a2457 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -95,3 +95,11 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
- 	} && \
- 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
- endef
++        if pkgvar == "LINUX":
++            Package.all_cpe_id[pkgvar] = "cpe:2.3:o:" + value + ":*:*:*:*:*:*:*"
++        elif pkgvar == "LINUX_HEADERS":
++            Package.all_cpe_id[pkgvar] = "cpe:2.3:o:" + value + ":*:*:*:*:*:*:*"
++        else:
++            Package.all_cpe_id[pkgvar] = "cpe:2.3:a:" + value + ":*:*:*:*:*:*:*"
+ 
+ def calculate_stats(packages):
+     stats = defaultdict(int)
+@@ -285,6 +320,12 @@ def calculate_stats(packages):
+             stats["hash"] += 1
+         else:
+             stats["no-hash"] += 1
++        if pkg.has_cpe == "Update":
++            stats["update-cpe"] += 1
++        elif pkg.has_cpe:
++            stats["cpe"] += 1
++        else:
++            stats["no-cpe"] += 1
+         stats["patches"] += pkg.patch_count
+     return stats
+ 
+@@ -428,6 +469,20 @@ def dump_html_pkg(f, pkg):
+     f.write("  <td class=\"%s\">%d</td>\n" %
+             (" ".join(td_class), pkg.warnings))
+ 
++    # CPE Valid
++    td_class = ["centered"]
++    if not pkg.has_cpe:
++        td_class.append("wrong")
++        f.write("  <td class=\"%s\">%s</td>\n" %
++                (" ".join(td_class), boolean_str(pkg.has_cpe)))
++    elif pkg.has_cpe == "Update":
++        td_class.append("wrong")
++        f.write("  <td class=\"%s\">Update</td>\n" %
++                (" ".join(td_class)))
++    else:
++        td_class.append("correct")
++        f.write("  <td class=\"%s\"><a href=\"%s\">%s</a></td>\n" %
++                (" ".join(td_class), pkg.has_cpe, boolean_str(pkg.has_cpe)))
+     f.write(" </tr>\n")
+ 
+ 
+@@ -443,6 +498,7 @@ def dump_html_all_pkgs(f, packages):
+ <td class=\"centered\">Hash file</td>
+ <td class=\"centered\">Current version</td>
+ <td class=\"centered\">Warnings</td>
++<td class=\"centered\">CPE Valid</td>
+ </tr>
+ """)
+     for pkg in sorted(packages):
+@@ -469,6 +525,12 @@ def dump_html_stats(f, stats):
+             stats["hash"])
+     f.write(" <tr><td>Packages not having a hash file</td><td>%s</td></tr>\n" %
+             stats["no-hash"])
++    f.write(" <tr><td>Packages having a registered CPE</td><td>%s</td></tr>\n" %
++            stats["cpe"])
++    f.write(" <tr><td>Packages needing CPE update</td><td>%s</td></tr>\n" %
++            stats["update-cpe"])
++    f.write(" <tr><td>Packages missing a registered CPE</td><td>%s</td></tr>\n" %
++            stats["no-cpe"])
+     f.write(" <tr><td>Total number of patches</td><td>%s</td></tr>\n" %
+             stats["patches"])
+     f.write("</table>\n")
+@@ -518,6 +580,16 @@ class CPE:
+             if cpe['cpe-23:cpe23-item']['@name'] == cpe_str:
+                 return cpe['cpe-23:cpe23-item']['@name']
+ 
++    def get_cpe_no_version(self, cpe):
++        return cpe.split(":")[0]+":"+cpe.split(":")[1]+ \
++               ":"+cpe.split(":")[2]+":"+cpe.split(":")[3]+ \
++               ":"+cpe.split(":")[4]
 +
-+#
-+# cpe-info helper functions
-+#
++    def get_nvd_url(self, cpe_str):
++        return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
++               urllib2.quote(cpe_str) + \
++               "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
 +
-+define cpe-manifest # cpe, cve patched, pkg name, version, url
-+	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(CPE_MANIFEST_CSV)
-+endef
+ def get_target_cpe_report(cpe_report_file, cpe_dict):
+     report_cpe_exact_match = ""
+     report_cpe_needing_update = ""
+@@ -530,8 +602,7 @@ def get_target_cpe_report(cpe_report_file, cpe_dict):
+             if "CPE ID" not in cpe[0]:
+                 result = cpe_dict.find(cpe[0])
+                 if not result:
+-                    cpe_no_version = cpe[0].split(":")[0]+":"+cpe[0].split(":")[1]+":"+cpe[0].split(":")[2]+":"+cpe[0].split(":")[3]+":"+cpe[0].split(":")[4]
+-                    result = cpe_dict.find_partial(cpe_no_version)
++                    result = cpe_dict.find_partial(cpe_dict.get_cpe_no_version(cpe[0]))
+                     if not result:
+                         report_cpe_missing += cpe[0] + "\n"
+                     else:
+@@ -569,10 +640,10 @@ def __main__():
+         package_list = args.packages.split(",")
+     else:
+         package_list = None
++    cpe_dict = CPE()
++    cpe_dict.get_xml_dict()
+     if args.cpe_report:
+         print "Performing Target CPE Report Analysis..."
+-        cpe_dict = CPE()
+-        cpe_dict.get_xml_dict()
+         get_target_cpe_report(args.cpe_report,cpe_dict)
+     else:
+        print "Build package list ..."
+@@ -587,6 +658,7 @@ def __main__():
+           pkg.set_patch_count()
+           pkg.set_check_package_warnings()
+           pkg.set_current_version()
++          pkg.set_cpe_info(cpe_dict)
+        print "Calculate stats"
+        stats = calculate_stats(packages)
+        print "Write HTML"
 -- 
 1.9.1
