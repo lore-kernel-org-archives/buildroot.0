@@ -1,162 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  7 May 2018 13:50:36 +0200
-Subject: [Buildroot] [PATCH] mesa3d: fix build with gcc <= 4.7 on some
- architectures
-Message-ID: <20180507115036.25768-1-thomas.petazzoni@bootlin.com>
+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
+Date: Mon,  7 May 2018 14:10:31 +0200
+Subject: [Buildroot] [RFC PATCH v2] toolchain: Integrate annobin gcc plugin
+In-Reply-To: <20180507121032.25794-1-stefan.sorensen@spectralink.com>
+References: <20180507121032.25794-1-stefan.sorensen@spectralink.com>
+Message-ID: <20180507121032.25794-3-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure.ac check for atomic intrinsics assumes that if an atomic
-intrinsic is not available, it's because we must link with
-libatomic. Except that libatomic is not always available, for example
-with gcc <= 4.7.
+This patch integrates the annobin gcc plugin into the toolchain by adding a
+-fplugin=<path>/annobin.so flag to the toolchain wrapper.
 
-To fix this, this commit adds a patch that reworks the atomic check in
-configure.ac. It has been submitted upstream, and tested in a number
-of different combinations.
+This introduces a dependency on the host-annobin package to the toolchain,
+so in order to break the circular dependency, the dependency on the toolchain
+in the annobin package is shortcircuted to either toolchain-buildroot or
+toolchain-external.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/b045488d880a4013ed82937e7115b7636867e01d/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
- .../0003-configure.ac-rework-latomic-check.patch   | 124 +++++++++++++++++++++
- 1 file changed, 124 insertions(+)
- create mode 100644 package/mesa3d/0003-configure.ac-rework-latomic-check.patch
+ package/annobin/annobin.mk                             | 8 +++++++-
+ package/gcc/gcc-final/gcc-final.mk                     | 3 +++
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 3 +++
+ toolchain/toolchain-wrapper.c                          | 3 +++
+ toolchain/toolchain/toolchain.mk                       | 4 ++++
+ 5 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/0003-configure.ac-rework-latomic-check.patch b/package/mesa3d/0003-configure.ac-rework-latomic-check.patch
-new file mode 100644
-index 0000000000..ee8107d2ad
---- /dev/null
-+++ b/package/mesa3d/0003-configure.ac-rework-latomic-check.patch
-@@ -0,0 +1,124 @@
-+From 5865c7cb4e4ed1d63699e384ea52984448adfec9 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Mon, 7 May 2018 10:36:10 +0200
-+Subject: [PATCH] configure.ac: rework -latomic check
+diff --git a/package/annobin/annobin.mk b/package/annobin/annobin.mk
+index 32a5d4b6f0..c1ee4e84f2 100644
+--- a/package/annobin/annobin.mk
++++ b/package/annobin/annobin.mk
+@@ -8,7 +8,13 @@ ANNOBIN_VERSION = 5.6
+ ANNOBIN_SOURCE = annobin-$(ANNOBIN_VERSION).tar.xz
+ ANNOBIN_SITE = https://nickc.fedorapeople.org
+ 
+-HOST_ANNOBIN_DEPENDENCIES += toolchain
++# toolchain depends on host-annobin, so shortcircuit the reverse
++# dependency to avoid a circular dependency
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
++HOST_ANNOBIN_DEPENDENCIES += toolchain-buildroot
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
++HOST_ANNOBIN_DEPENDENCIES += toolchain-external
++endif
+ 
+ # The plugin has to be configured with the same arcane configure
+ # scripts used by gcc, this prevents regeneration of the scripts.
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 9897d18682..2dd28b7a40 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -116,6 +116,9 @@ endef
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+ 
+ HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
++ifeq ($(BR2_PACKAGE_HOST_ANNOBIN),y)
++HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ANNOBIN_GCC_PLUGIN='"$(HOST_ANNOBIN_GCC_PLUGIN)"'
++endif
+ HOST_GCC_FINAL_POST_BUILD_HOOKS += TOOLCHAIN_WRAPPER_BUILD
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += TOOLCHAIN_WRAPPER_INSTALL
+ # Note: this must be done after CREATE_CC_SYMLINKS, otherwise the
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 8b2c283654..73af6777ed 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -241,6 +241,9 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
+ 	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOST_ANNOBIN),y)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ANNOBIN_GCC_PLUGIN='"$(HOST_ANNOBIN_GCC_PLUGIN)"'
++endif
+ 
+ #
+ # The following functions creates the symbolic links needed to get the
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index c5eb813dd0..d45c9d4f59 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -94,6 +94,9 @@ static char *predef_args[] = {
+ #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
+ 	"-EB",
+ #endif
++#ifdef BR_ANNOBIN_GCC_PLUGIN
++        "-fplugin=" BR_ANNOBIN_GCC_PLUGIN,
++#endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+ #endif
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index 91c9ca2eff..5e59e277a1 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -10,6 +10,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+ TOOLCHAIN_DEPENDENCIES += toolchain-external
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOST_ANNOBIN),y)
++TOOLCHAIN_DEPENDENCIES += host-annobin
++endif
 +
-+The configure.ac logic added in commit
-+2ef7f23820a67e958c2252bd81eb0458903ebf33 ("configure: check if
-+-latomic is needed for __atomic_*") makes the assumption that if a
-+64-bit atomic intrinsic test program fails to link without -latomic,
-+it is because we must use -latomic.
-+
-+Unfortunately, this is not completely correct: libatomic only appeared
-+in gcc 4.8, and therefore gcc versions before that will not have
-+libatomic, and therefore don't provide atomic intrinsics for all
-+architectures. This issue was for example encountered on PowerPC with
-+a gcc 4.7 toolchain, where the build fails with:
-+
-+powerpc-ctng_e500v2-linux-gnuspe/bin/ld: cannot find -latomic
-+
-+This commit aims at fixing that, by not assuming -latomic is
-+available. The commit re-organizes the atomic intrinsics detection as
-+follows:
-+
-+ (1) Test if a program using 64-bit atomic intrinsics links properly,
-+     without -latomic. If this is the case, we have atomic intrinsics,
-+     and we're good to go.
-+
-+ (2) If (1) has failed, then test to link the same program, but this
-+     time with -latomic in LDFLAGS. If this is the case, then we have
-+     atomic intrinsics, provided we link with -latomic.
-+
-+This has been tested in three situations:
-+
-+ - On x86-64, where atomic instrinsics are all built-in, with no need
-+   for libatomic. In this case, config.log contains:
-+
-+   GCC_ATOMIC_BUILTINS_SUPPORTED_FALSE='#'
-+   GCC_ATOMIC_BUILTINS_SUPPORTED_TRUE=''
-+   LIBATOMIC_LIBS=''
-+
-+   This means: atomic intrinsics are available, and we don't need to
-+   link with libatomic.
-+
-+ - On NIOS2, where atomic intrinsics are available, but some of them
-+   (64-bit ones) require using libatomic. In this case, config.log
-+   contains:
-+
-+   GCC_ATOMIC_BUILTINS_SUPPORTED_FALSE='#'
-+   GCC_ATOMIC_BUILTINS_SUPPORTED_TRUE=''
-+   LIBATOMIC_LIBS='-latomic'
-+
-+   This means: atomic intrinsics are available, and we need to link
-+   with libatomic.
-+
-+ - On PowerPC with an old gcc 4.7 toolchain, where 32-bit atomic
-+   instrinsics are available, but not 64-bit atomic instrinsics, and
-+   there is no libatomic. In this case, config.log contains:
-+
-+   GCC_ATOMIC_BUILTINS_SUPPORTED_FALSE=''
-+   GCC_ATOMIC_BUILTINS_SUPPORTED_TRUE='#'
-+
-+   With means that atomic intrinsics are not usable.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream-status: https://lists.freedesktop.org/archives/mesa-dev/2018-May/194214.html
-+---
-+ configure.ac | 37 +++++++++++++++++++++----------------
-+ 1 file changed, 21 insertions(+), 16 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f1fbdcc6c7..c94e547874 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -433,26 +433,31 @@ fi
-+ AM_CONDITIONAL([SSE41_SUPPORTED], [test x$SSE41_SUPPORTED = x1])
-+ AC_SUBST([SSE41_CFLAGS], $SSE41_CFLAGS)
-+ 
-+-dnl Check for new-style atomic builtins
-+-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-++dnl Check for new-style atomic builtins. We first check without linking to
-++dnl -latomic.
-++AC_LINK_IFELSE([AC_LANG_SOURCE([[
-++#include <stdint.h>
-+ int main() {
-+-    int n;
-+-    return __atomic_load_n(&n, __ATOMIC_ACQUIRE);
-++    uint64_t n;
-++    return (int)__atomic_load_n(&n, __ATOMIC_ACQUIRE);
-+ }]])], GCC_ATOMIC_BUILTINS_SUPPORTED=1)
-++
-++dnl If that didn't work, we try linking with -latomic, which is needed on some
-++dnl platforms.
-++if test "x$GCC_ATOMIC_BUILTINS_SUPPORTED" != x1; then
-++   save_LDFLAGS=$LDFLAGS
-++   LDFLAGS="$LDFLAGS -latomic"
-++   AC_LINK_IFELSE([AC_LANG_SOURCE([[
-++   #include <stdint.h>
-++   int main() {
-++        uint64_t n;
-++        return (int)__atomic_load_n(&n, __ATOMIC_ACQUIRE);
-++   }]])], GCC_ATOMIC_BUILTINS_SUPPORTED=1 LIBATOMIC_LIBS="-latomic")
-++   LDFLAGS=$save_LDFLAGS
-++fi
-++
-+ if test "x$GCC_ATOMIC_BUILTINS_SUPPORTED" = x1; then
-+     DEFINES="$DEFINES -DUSE_GCC_ATOMIC_BUILTINS"
-+-    dnl On some platforms, new-style atomics need a helper library
-+-    AC_MSG_CHECKING(whether -latomic is needed)
-+-    AC_LINK_IFELSE([AC_LANG_SOURCE([[
-+-    #include <stdint.h>
-+-    uint64_t v;
-+-    int main() {
-+-        return (int)__atomic_load_n(&v, __ATOMIC_ACQUIRE);
-+-    }]])], GCC_ATOMIC_BUILTINS_NEED_LIBATOMIC=no, GCC_ATOMIC_BUILTINS_NEED_LIBATOMIC=yes)
-+-    AC_MSG_RESULT($GCC_ATOMIC_BUILTINS_NEED_LIBATOMIC)
-+-    if test "x$GCC_ATOMIC_BUILTINS_NEED_LIBATOMIC" = xyes; then
-+-        LIBATOMIC_LIBS="-latomic"
-+-    fi
-+ fi
-+ AC_SUBST([LIBATOMIC_LIBS])
-+ 
-+-- 
-+2.14.3
-+
+ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+ # Apply a hack that Rick Felker suggested[1] to avoid conflicts between libc
 -- 
-2.14.3
+2.17.0
