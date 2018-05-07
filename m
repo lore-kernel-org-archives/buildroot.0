@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 May 2018 17:44:55 +0200
+Date: Mon, 7 May 2018 17:45:25 +0200
 Subject: [Buildroot] [PATCH 1/1] lxc: fix build with static libcap and
  shared gnutls
-In-Reply-To: <CAPi7W80B9u5MkAaha=Lu6O6J1-4FAKbkN-+bgwgnrGxa5a4Dvg@mail.gmail.com>
+In-Reply-To: <20180407162234.12848-1-fontaine.fabrice@gmail.com>
 References: <20180407162234.12848-1-fontaine.fabrice@gmail.com>
- <20180503214024.71d04136@windsurf>
- <CAPi7W80B9u5MkAaha=Lu6O6J1-4FAKbkN-+bgwgnrGxa5a4Dvg@mail.gmail.com>
-Message-ID: <20180507174455.34af249b@windsurf>
+Message-ID: <20180507174525.269b774e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 3 May 2018 23:47:17 +0200, Fabrice Fontaine wrote:
+On Sat,  7 Apr 2018 18:22:34 +0200, Fabrice Fontaine wrote:
 
-> > Do you think you could have a look into this ?
-> >  
-> The issue was more subtle, init_lxc is a simple binary that LXC wants to be
-> statically linked if it founds a static version of the only library that it
-> needs: libcap. Indeed, this binary doesn't need gnutls or any other
-> dependencies such as selinux or seccomp that are needed for liblxc.
-> However, because AC_CHECK_LIB was added with its default behavior of adding
-> gnutls to the global LIBS variable, linking of init_lxc was failing because
-> gnutls was not static.
-> So, I think my patch is the right fix and it has been merged upstream:
-> https://github.com/lxc/lxc/commit/49bc916b1daa79cffe38fae32059bcdd985c8c8e.
-> Moreover, the issue was raised because when BR2_SHARED_LIBS is set, the
-> libcap package installs the static and the shared version of the library, I
-> made a patch to change this behavior but I've not send it as it didn't fix
-> the root cause of the issue.
+> diff --git a/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch b/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
+> new file mode 100644
+> index 0000000000..9a0dcbe55a
+> --- /dev/null
+> +++ b/package/lxc/0001-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
 
-OK, I understand better. It makes sense now thanks!
+There was already a 0001 patch, so I renumbered this one to 0002. I've
+also added the upstream status. And applied. Thanks!
+
+Best regards,
 
 Thomas
 -- 
