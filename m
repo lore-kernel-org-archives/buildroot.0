@@ -1,61 +1,55 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon,  7 May 2018 11:44:31 -0300
-Subject: [Buildroot] [PATCH v3 5/5] system: allow selecting merged /usr
- along with custom rootfs skeleton
-In-Reply-To: <20180507144431.14488-1-casantos@datacom.ind.br>
-References: <20180507144431.14488-1-casantos@datacom.ind.br>
-Message-ID: <20180507144431.14488-6-casantos@datacom.ind.br>
+From: M ZV <giometriq@gmail.com>
+Date: Mon, 7 May 2018 19:30:32 +0430
+Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
+ host
+In-Reply-To: <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
+References: <20180502090508.12893-1-chemobejk@gmail.com>
+ <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
+ <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
+Message-ID: <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the user is brave enough to use a custom rootfs skeleton then we must
-not prevent using merged /usr too. Actually it is already possible to do
-this, although indirectly, by selecting BR2_INIT_SYSTEMD.
+ Hello,
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
-Changes v1->v2:
 
-- Rebase series to HEAD of master branch
----
- system/Config.in | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+>
+> On Thu, May 3, 2018 at 11:04 PM Yann E. MORIN <yann.morin.1998@free.fr>
+> wrote:
+>
+>> ditch our own bundled version, and switch to making our whois package a
+>> hot pacakge, and use that as the provider for mkpasswd.
+>>
+>> Stefan, would you want to do that? ;-)
+>>
+>
+> I'll give it a go, but can only work on this in a few weeks when I get
+> some free cycles...
+>
+> Regards, Stefan
+>
+>
+We're using mkpasswd specifically for a single task (skeleton-init-common
+root password generation). I'm already tackling building this on Alpine
+(musl environment) and facing
+multiple issues: had to use -lintl for linking (that libintl musl/glibc can
+of worms) and of course, it only makes md5 hashes since all SHA
+functionalities are disabled on non-glibc systems via its header.
 
-diff --git a/system/Config.in b/system/Config.in
-index d14a864ca5..911cd424ba 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -31,10 +31,6 @@ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
- 	help
- 	  Path to custom target skeleton.
- 
--# dummy config so merged /usr workarounds can also be activated for
--# custom rootfs skeleton
--config BR2_ROOTFS_MERGED_USR
--
- endif
- 
- if BR2_ROOTFS_SKELETON_DEFAULT
-@@ -209,8 +205,6 @@ config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
- 	help
- 	  Support extended attributes handling in device tables
- 
--if BR2_ROOTFS_SKELETON_DEFAULT
--
- config BR2_ROOTFS_MERGED_USR
- 	bool "Use symlinks to /usr for /bin, /sbin and /lib"
- 	help
-@@ -223,6 +217,8 @@ config BR2_ROOTFS_MERGED_USR
- 	  symlinks to their counterparts in /usr. In this case, /usr can
- 	  not be a separate filesystem.
- 
-+if BR2_ROOTFS_SKELETON_DEFAULT
-+
- config BR2_TARGET_ENABLE_ROOT_LOGIN
- 	bool "Enable root login with password"
- 	default y
--- 
-2.14.3
+Can we just use a couple of python code using crypt.crypt(...), since
+python is already a requirement. One less package to maintain is a good
+news (buildroots already brimming with a mind boggling number of packages).
+
+By the way, my first post here, I hope I'm not coming off as a nagging
+pedestrian just adding noise. I highly appreciate the effort you guys are
+putting into this.
+Thank you.
+
+(My apologies for double posting - it seems, at first, I didn't reply to
+all)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180507/f55c7698/attachment.html>
