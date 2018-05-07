@@ -1,107 +1,86 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon,  7 May 2018 23:26:23 +0300
-Subject: [Buildroot] [PATCH v2 1/1] zeromq: check if -latomic is needed
-Message-ID: <20180507202623.29498-1-asafka7@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 May 2018 22:29:34 +0200
+Subject: [Buildroot] [PATCH 1/5] package/lua-flu: fix to use system
+ xattr header
+In-Reply-To: <20180507212228.42f1f716@windsurf>
+References: <20180507212228.42f1f716@windsurf>
+Message-ID: <20180507202934.GF14524@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/b149aa2ee00e4d6a53c884cf99ecb2dd8af58b65/
-http://autobuild.buildroot.net/results/e4b3616ac2695d3b6898185a70da6509b1faa2b8/
+Thomas,All,
 
-Patch the package to check if -latomic is needed to be added, depending on the
-result of AC_LINK_IFELSE.
+On 2018-05-07 21:22 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  7 May 2018 20:25:16 +0200, Yann E. MORIN wrote:
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
+> > Cc: Francois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  package/lua-flu/0001-use-system-xattr-h.patch | 161 ++++++++++++++++++++++++++
+> >  1 file changed, 161 insertions(+)
+> >  create mode 100644 package/lua-flu/0001-use-system-xattr-h.patch
+> > 
+> > diff --git a/package/lua-flu/0001-use-system-xattr-h.patch b/package/lua-flu/0001-use-system-xattr-h.patch
+> > new file mode 100644
+> > index 0000000000..fda03b60c6
+> > --- /dev/null
+> > +++ b/package/lua-flu/0001-use-system-xattr-h.patch
+> > @@ -0,0 +1,161 @@
+> > +Use system <sys/xattr.h>
+> > +
+> > +The one from attr is no longer installed with latest version.
+> > +
+> > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> This could have been a Mercurial-formatted patch. I think you know how
+> to use Mercurial :-)
 
-The patch was sent to upstream, see:
-https://github.com/zeromq/libzmq/pull/3083
+Well, to be hionest,m I was indeed preparing the patch for submission
+upstream (now done: https://bitbucket.org/doub/flu/pull-requests/1) and
+I really struggled using hg... :-/
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
+> > +diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua
+> > +--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua	2015-03-31 18:54:19.000000000 +0200
+> > ++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua	2018-05-06 09:22:28.499324049 +0200
+> > +@@ -327,7 +327,7 @@
+> > + 				name = "fs.getxattr";
+> > + 				parameters = {"path", "name"};
+> > + 				results = {"value"};
+> > +-				doc = [[Get an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.]];
+> > ++				doc = [[Get an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.]];
+> 
+> I do understand all the attr/xattr.h -> sys/xattr.h changes, but I
+> don't understand the ENOATTR -> ENODATA changes. Has the ENOATTR error
+> code disappeared ? What makes ENODATA a suitable replacement ?
 
-v2: fix typos and small refactoring.
+Oh, right; I forgot to explain that one.
 
- ...nclude.m4-check-if-latomic-is-needed.patch | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch
+attr, in <attr/xattr.h>, was doing:
 
-diff --git a/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch b/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch
-new file mode 100644
-index 0000000000..6f3671c4a0
---- /dev/null
-+++ b/package/zeromq/0002-acinclude.m4-check-if-latomic-is-needed.patch
-@@ -0,0 +1,70 @@
-+From 9f4ca582555b208d065f730b5ce3b1901136b275 Mon Sep 17 00:00:00 2001
-+From: Asaf Kahlon <asafka7@gmail.com>
-+Date: Mon, 7 May 2018 23:19:09 +0300
-+Subject: [PATCH 1/1] acinclude.m4: check if -latomic is needed
-+
-+On some cases, -latomic is needed for linking, and since the current
-+acinclude.m4 checks only compilation we can sometimes miss the need for -latomic
-+and the linking process will fail.
-+Therefore, the AC_CHECK_IFELSE was replaced with AC_LINK_IFELSE. If the first
-+try fails, we try to link again with -latomic and add LIBS="-latomic" in case we
-+succeeded.
-+
-+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-+---
-+ acinclude.m4 | 32 ++++++++++++++++++++++++++++----
-+ 1 file changed, 28 insertions(+), 4 deletions(-)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index f648ed0f..aa35195f 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -668,7 +668,7 @@ dnl # Check if compiler supoorts __atomic_Xxx intrinsics
-+ dnl ################################################################################
-+ AC_DEFUN([LIBZMQ_CHECK_ATOMIC_INTRINSICS], [{
-+     AC_MSG_CHECKING(whether compiler supports __atomic_Xxx intrinsics)
-+-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-++    AC_LINK_IFELSE([AC_LANG_SOURCE([
-+ /* atomic intrinsics test */
-+ int v = 0;
-+ int main (int, char **)
-+@@ -677,9 +677,33 @@ int main (int, char **)
-+     return t;
-+ }
-+     ])],
-+-    [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" ; $1],
-+-    [AC_MSG_RESULT(no)  ; libzmq_cv_has_atomic_instrisics="no"  ; $2]
-+-    )
-++    [libzmq_cv_has_atomic_instrisics="yes"],
-++    [libzmq_cv_has_atomic_instrisics="no"])
-++
-++    if test "x$libzmq_cv_has_atomic_instrisics" = "xno"; then
-++        save_LDFLAGS=$LDFLAGS
-++        LDFLAGS="$LDFLAGS -latomic"
-++        AC_LINK_IFELSE([AC_LANG_SOURCE([
-++        /* atomic intrinsics test */
-++        int v = 0;
-++        int main (int, char **)
-++        {
-++            int t = __atomic_add_fetch (&v, 1, __ATOMIC_ACQ_REL);
-++            return t;
-++        }
-++        ])],
-++        [libzmq_cv_has_atomic_instrisics="yes" LIBS="-latomic"],
-++        [libzmq_cv_has_atomic_instrisics="no"])
-++        LDFLAGS=$save_LDFLAGS
-++    fi
-++
-++    if test "x$libzmq_cv_has_atomic_instrisics" = "xyes"; then
-++        AC_MSG_RESULT(yes)
-++        $1
-++    else
-++        AC_MSG_RESULT(no)
-++        $2
-++    fi
-+ }])
-+ 
-+ dnl ################################################################################
-+-- 
-+2.17.0
-+
+    #ifndef ENOATTR
+    # define ENOATTR ENODATA
+    #endif
+
+Ergo, ENOATTR is just ENODATA.
+
+Regards,
+Yann E. MORIN.
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
 -- 
-2.17.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
