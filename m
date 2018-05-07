@@ -1,121 +1,107 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 7 May 2018 22:59:51 +0200
-Subject: [Buildroot] [PATCH 3/5] package/xorriso: fix to use system
- xattr header
-In-Reply-To: <32ddfdf7660b00f7d067ce1c0b7c4f50786b0d5a.1525717511.git.yann.morin.1998@free.fr>
-References: <cover.1525717511.git.yann.morin.1998@free.fr>
- <32ddfdf7660b00f7d067ce1c0b7c4f50786b0d5a.1525717511.git.yann.morin.1998@free.fr>
-Message-ID: <20180507205951.GI14524@scaer>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 7 May 2018 23:15:23 +0200
+Subject: [Buildroot] [PATCH v2 2/2] python-reentry: new package
+In-Reply-To: <20180507203429.31102-1-asafka7@gmail.com>
+References: <20180507203429.31102-1-asafka7@gmail.com>
+Message-ID: <CAGm1_kv5_-g116XPy0eQXjsCv9P2iJztzeDAwZyNaAp-2vgoEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+On Mon, May 7, 2018 at 10:34 PM, Asaf Kahlon <asafka7@gmail.com> wrote:
+> A plugin manager based on setuptools entry points mechanism.
+>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-On 2018-05-07 20:25 +0200, Yann E. MORIN spake thusly:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Steve Kenton <skenton@ou.edu>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
 > ---
->  package/xorriso/0001-use-sys-xattr.h.patch | 30 ++++++++++++++++++++++++++++++
->  package/xorriso/xorriso.mk                 | 10 ++++++++++
->  2 files changed, 40 insertions(+)
->  create mode 100644 package/xorriso/0001-use-sys-xattr.h.patch
-> 
-> diff --git a/package/xorriso/0001-use-sys-xattr.h.patch b/package/xorriso/0001-use-sys-xattr.h.patch
+>
+> v2: add pypi site to package/python-reentry/Config.in and put the package in the
+> correct place on package/Config.in.
+>
+>  DEVELOPERS                                 |  1 +
+>  package/Config.in                          |  1 +
+>  package/python-reentry/Config.in           | 10 ++++++++++
+>  package/python-reentry/python-reentry.hash |  4 ++++
+>  package/python-reentry/python-reentry.mk   | 14 ++++++++++++++
+>  5 files changed, 30 insertions(+)
+>  create mode 100644 package/python-reentry/Config.in
+>  create mode 100644 package/python-reentry/python-reentry.hash
+>  create mode 100644 package/python-reentry/python-reentry.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 7c0b7f0f28..261c556ad8 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -192,6 +192,7 @@ F:  package/stress/
+>  N:     Asaf Kahlon <asafka7@gmail.com>
+>  F:     package/python-jsonmodels/
+>  F:     package/python-py/
+> +F:     package/python-reentry/
+>  F:     package/python-subprocess32/
+>  F:     package/python-yieldfrom/
+>  F:     package/zeromq/
+> diff --git a/package/Config.in b/package/Config.in
+> index a922c67a8e..b7234f3a7d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -913,6 +913,7 @@ menu "External python modules"
+>         source "package/python-pyyaml/Config.in"
+>         source "package/python-pyzmq/Config.in"
+>         source "package/python-raven/Config.in"
+> +       source "package/python-reentry/Config.in"
+>         source "package/python-remi/Config.in"
+>         source "package/python-requests/Config.in"
+>         source "package/python-requests-oauthlib/Config.in"
+> diff --git a/package/python-reentry/Config.in b/package/python-reentry/Config.in
 > new file mode 100644
-> index 0000000000..89cd530d1d
+> index 0000000000..18518f2c3f
 > --- /dev/null
-> +++ b/package/xorriso/0001-use-sys-xattr.h.patch
-> @@ -0,0 +1,30 @@
-> +Use system <sys/xattr.h>
+> +++ b/package/python-reentry/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PYTHON_REENTRY
+> +       bool "python-reentry"
+> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+> +       select BR2_PACKAGE_PYTHON_CLICK # runtime
+> +       select BR2_PACKAGE_PYTHON_SIX # runtime
+> +       select BR2_PACKAGE_PYTHON_PY # runtime
+> +       help
+> +         A plugin manager based on setuptools entry points mechanism.
 > +
-> +The one from attr is no longer installed with latest version.
+> +         https://pypi.org/project/reentry/
+> diff --git a/package/python-reentry/python-reentry.hash b/package/python-reentry/python-reentry.hash
+> new file mode 100644
+> index 0000000000..7a3bbf4d99
+> --- /dev/null
+> +++ b/package/python-reentry/python-reentry.hash
+> @@ -0,0 +1,4 @@
+> +# sha256 from https://pypi.org/pypi/reentry/json
+> +sha256 00df980d8c61713f5002d4d893ba6ea38e9a721cd04aef5a520b974e700ab550  reentry-1.2.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 4ae7f3216208a7e2327236e95bcd2397b2495f1c2298c708986c893bea608509  LICENSE
+> diff --git a/package/python-reentry/python-reentry.mk b/package/python-reentry/python-reentry.mk
+> new file mode 100644
+> index 0000000000..d3f0e03ef0
+> --- /dev/null
+> +++ b/package/python-reentry/python-reentry.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-reentry
+> +#
+> +################################################################################
 > +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Before Thomas whines about a git-formatted patch...
-
-The git tree, or rather the git tree*s*, are bizarelly arranged.
-
-Upstream is at https://www.gnu.org/software/xorriso/, which points to
-http://libburnia-project.org/, which is a redirect to a mattermost
-instance (you know, a slightly glorified irc client with fancy bells and
-whisttles for millenials ;-])...
-
-But then, digigng a bit unearthes what appears to be the upstream git
-trees, at https://dev.lovelyhq.com/explore/projects
-
-Then, there is no tree for xorriso. Instead, it seems to be part of
-another tree, https://dev.lovelyhq.com/libburnia/libisoburn.
-
-Alas, this is not all the story yet, as the code from the tarball does
-not match the one from the tree: there are more things in the tarball
-than in the tree, notably libisofs, which is in its own git tree
-https://dev.lovelyhq.com/libburnia/libisofs.
-
-So, again, we can't carry a git-formatted patch for xorriso...
-
-But I'll be sending them patches to each of their impacted trees...
-Tomorrow...
-
-Regards,
-Yann E. MORIN.
-
-> +diff -durN xorriso-1.4.6.orig/configure.ac xorriso-1.4.6/configure.ac
-> +--- xorriso-1.4.6.orig/configure.ac	2016-09-16 15:51:33.000000000 +0200
-> ++++ xorriso-1.4.6/configure.ac	2018-05-06 23:45:38.377153069 +0200
-> +@@ -264,7 +264,7 @@
-> + dnl Check whether there is the header for Linux xattr.
-> + dnl If not, erase this macro which would enable use of listxattr and others
-> +         XATTR_DEF="-DLibisofs_with_aaip_xattR"
-> +-        AC_CHECK_HEADER(attr/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
-> ++        AC_CHECK_HEADER(sys/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
-> +                                                    XATTR_DEF= ), XATTR_DEF= )
-> +     fi
-> + elif test x"$LIBBURNIA_SUPP_FATTR" = xextattr
-> +diff -durN xorriso-1.4.6.orig/libisofs/aaip-os-linux.c xorriso-1.4.6/libisofs/aaip-os-linux.c
-> +--- xorriso-1.4.6.orig/libisofs/aaip-os-linux.c	2016-09-16 15:51:34.000000000 +0200
-> ++++ xorriso-1.4.6/libisofs/aaip-os-linux.c	2018-05-06 23:47:25.764941583 +0200
-> +@@ -30,7 +30,7 @@
-> + #endif
-> + 
-> + #ifdef Libisofs_with_aaip_xattR
-> +-#include <attr/xattr.h>
-> ++#include <sys/xattr.h>
-> + #endif
-> + 
-> + 
-> diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
-> index 1f095911f8..2dda1e8d73 100644
-> --- a/package/xorriso/xorriso.mk
-> +++ b/package/xorriso/xorriso.mk
-> @@ -8,6 +8,16 @@ XORRISO_VERSION = 1.4.6
->  XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
->  XORRISO_LICENSE = GPL-3.0+
->  XORRISO_LICENSE_FILES = COPYING COPYRIGHT
+> +PYTHON_REENTRY_VERSION = 1.2.0
+> +PYTHON_REENTRY_SOURCE = reentry-$(PYTHON_REENTRY_VERSION).tar.gz
+> +PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/e2/b4/46dfac6613302fea51454a01aebedae9440aff9d813aedbbc5f687552e3b
+> +PYTHON_REENTRY_SETUP_TYPE = setuptools
+> +PYTHON_REENTRY_LICENSE = MIT
+> +PYTHON_REENTRY_LICENSE_FILES = LICENSE
 > +
-> +# 0001-use-sys-xattr.h.patch
-> +XORRISO_AUTORECONF = YES
-> +
-> +define XORRSISO_AUTOTOOLS_NEWS
-> +	@touch $(@D)/NEWS
-> +endef
-> +XORRISO_POST_PATCH_HOOKS += XORRSISO_AUTOTOOLS_NEWS
-> +HOST_XORRISO_POST_PATCH_HOOKS += XORRSISO_AUTOTOOLS_NEWS
-> +
->  # Disable everything until we actually need those features, and add the correct
->  # host libraries
->  HOST_XORRISO_CONF_OPTS = \
-> -- 
-> 2.14.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> +$(eval $(python-package))
+> --
+> 2.17.0
+>
