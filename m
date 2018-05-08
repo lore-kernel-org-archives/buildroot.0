@@ -1,58 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  8 May 2018 22:40:20 +0200
-Subject: [Buildroot] [PATCH 7/7 v2] fs: always depend on build host-tar if
- needed
+Date: Tue,  8 May 2018 22:40:19 +0200
+Subject: [Buildroot] [PATCH 6/7 v2] core/package: add host-tar dependency
+ for downloads from repositories
 In-Reply-To: <cover.1525812011.git.yann.morin.1998@free.fr>
 References: <cover.1525812011.git.yann.morin.1998@free.fr>
-Message-ID: <d8b722a2f2638142b1a68c7c5bd7ced36d2f34db.1525812011.git.yann.morin.1998@free.fr>
+Message-ID: <03be0fca5aee707e535261e66588d3b47bed4e0c.1525812011.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the filesystems do not depend on building host-tar when it is
-needed, even though all of them have to extract the intermediate tarball.
+Three of our download backends need a host tar that can generate
+reproducible archives: cvs, git, and svn. The other two, hbzr and hg,
+use their internal implementation.
 
-However, in degenerate (but legally valid) configurations with no
-user-selectable package selected, host-tar would not be built, so the
-rootfs images would use whatever improper tar the system has.
-
-Add the conditional dependency to host-tar to the rootfs-common
-intermediate image. Since this is the internal step that all real rootfs
-generators depend on, they now properly depend on host-tar when needed.
-
-In practice, when host-tar is needed, it will always be built before the
-rootfs inages, because it is a dependency of all packages (except a very
-few, like the skeleton), of which host-fakeroot, which is a mandatory
-dependency of rootfs-comon anyway. But for consistency sake, let's
-explicitly add host-tar as a dependency to rootfs-common too.
-
-Note that rootfs-tar already had that dependency, and we leave it as-is
-because it is semantically correct, even if superfluous.
+So, for those three that need it, and a dependency on host-tar when the
+system tar is not appropriate.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
-Note: yes, I had a randpackageconfig turn up a configuration with no
-user-selectable package enabled... I should just stop coding and go
-play bingo. Too bad there is no big jackpot tonight... ;-]
----
- fs/common.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 9baf367729..d106783813 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -63,6 +63,7 @@ ROOTFS_COMMON_TARGET_DIR = $(FS_DIR)/target
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 78aa751b0d..f654241bf7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -567,6 +567,10 @@ ifneq ($(1),host-skeleton)
+ $(2)_DEPENDENCIES += host-skeleton
+ endif
  
- ROOTFS_COMMON_DEPENDENCIES = \
- 	host-fakeroot host-makedevs \
-+	$(BR2_TAR_HOST_DEPENDENCY) \
- 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
- 
- $(ROOTFS_COMMON_TAR): ROOTFS=COMMON
++ifneq ($$(filter cvs git svn,$$($(2)_SITE_METHOD)),)
++$(2)_DOWNLOAD_DEPENDENCIES += $(BR2_TAR_HOST_DEPENDENCY)
++endif
++
+ ifeq ($$(filter host-tar host-skeleton host-fakedate,$(1)),)
+ $(2)_EXTRACT_DEPENDENCIES += $$(BR2_TAR_HOST_DEPENDENCY)
+ endif
 -- 
 2.14.1
