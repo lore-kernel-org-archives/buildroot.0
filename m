@@ -1,34 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 May 2018 15:23:07 +0200
-Subject: [Buildroot] [PATCH 1/2] python-cython: new package
-In-Reply-To: <20180507030032.22819-1-joseph.kogut@gmail.com>
-References: <20180507030032.22819-1-joseph.kogut@gmail.com>
-Message-ID: <20180508152307.09856569@windsurf.home>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 8 May 2018 08:23:42 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-04-25
+In-Reply-To: <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
+References: <20180426060013.EAB262079F@mail.bootlin.com>
+ <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
+Message-ID: <CANQCQpaTbUMwcPu0TU5Q0FQ2Df5B+8kBW2SwXF4mX1Kinc1WsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Romain,
 
-On Sun,  6 May 2018 20:00:31 -0700, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  DEVELOPERS                               |  1 +
->  package/Config.in.host                   |  1 +
->  package/python-cython/Config.in.host     |  7 +++++++
->  package/python-cython/python-cython.hash |  6 ++++++
->  package/python-cython/python-cython.mk   | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-cython/Config.in.host
->  create mode 100644 package/python-cython/python-cython.hash
->  create mode 100644 package/python-cython/python-cython.mk
+On Sun, Apr 29, 2018 at 5:15 PM, Romain Naour <romain.naour@gmail.com> wrote:
+>
+> Hi All,
+>
+> git bisect helped to find a patch [1] fixing an infinite loop in RTL DSE
 
-Applied to master, thanks.
+I've got another microblaze bug I'm working on identifying between
+GCC6.4 and 7.3.  Any general tips on bisecting GCC?  (What seems to be
+working is the following.... I went into buildroot and rewrote the GCC
+initial/final/toplevel mk to use a local site method and removed all
+source/version stuff.  Then built (for now) ignoring the buildroot
+patches against released versions.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matt
