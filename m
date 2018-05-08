@@ -1,105 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 May 2018 11:13:36 +0200
-Subject: [Buildroot] [git commit] lxc: fix build with static libcap and
- shared gnutls
-Message-ID: <20180508091345.6531E8B8B4@busybox.osuosl.org>
+Date: Tue, 8 May 2018 11:14:47 +0200
+Subject: [Buildroot] Analysis of build results for 2018-05-06
+In-Reply-To: <20180508043238.c3fv3552a7yo26he@tarshish>
+References: <20180507060023.E26CE207B7@mail.bootlin.com>
+ <20180507234635.4d21612b@windsurf>
+ <20180508043238.c3fv3552a7yo26he@tarshish>
+Message-ID: <20180508111447.73787b34@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dda21a5234ee50b2c20ac0e8dc3e5cbc36662b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.net/results/b655d6853c25a195df28d91512b3ffb6c654fc90
+On Tue, 8 May 2018 07:32:38 +0300, Baruch Siach wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Thomas:
- - add Upstream-status
- - use proper numbering]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...tion-with-static-libcap-and-shared-gnutls.patch | 73 ++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+> > >          arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/ef823b0b7dc75e18e6a875d18abbdf530397d02d |     
+> > >       x86_64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/fc4000c7b348bdc85eab1ce85dcdb9d9dbbbb3cc |     
+> > >          arc |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/db50d3490f7f4ef23ac2c41ca98e51fa3ad35bdf |     
+> > >     mips64el |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/acc28762239d92184b3ff2aff3be801c1a81eb68 |     
+> > >      sparc64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/79a885a12e3f73ff5c20f6e3bdf0cd7908fcb3b4 |     
+> > >          arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/1e361ef5c8ee20a9524d6a204c204b3e19bf5641 |       
+> > 
+> > These issues should all be fixed by:
+> > 
+> >   52dcec570e056502c4f9e7b4640bca2bd2db8c23 lxc: fix build with static libcap and shared gnutls  
+> 
+> This commit is not is current master as of ba33728bc31.
 
-diff --git a/package/lxc/0002-Fix-compilation-with-static-libcap-and-shared-gnutls.patch b/package/lxc/0002-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
-new file mode 100644
-index 0000000000..04837b3eef
---- /dev/null
-+++ b/package/lxc/0002-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
-@@ -0,0 +1,73 @@
-+From 49bc916b1daa79cffe38fae32059bcdd985c8c8e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 7 Apr 2018 15:48:46 +0200
-+Subject: [PATCH] Fix compilation with static libcap and shared gnutls
-+
-+Commit c06ed219c47098f34485d408410b6ecc94a40877 has broken
-+compilation with a static libcap and a shared gnutls.
-+This results in a build failure on init_lxc_static if gnutls is
-+a shared library as init_lxc_static is built with -all-static option
-+(see src/lxc/Makefile.am) and AC_CHECK_LIB adds gnutls to LIBS.
-+
-+This commit fix the issue by removing default behavior of AC_CHECK_LIB
-+and handling manually GNUTLS_LIBS and HAVE_LIBGNUTLS
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/b655d6853c25a195df28d91512b3ffb6c654fc90
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream-status: https://github.com/lxc/lxc/commit/49bc916b1daa79cffe38fae32059bcdd985c8c8e
-+---
-+ configure.ac        | 2 +-
-+ src/lxc/Makefile.am | 8 ++++++--
-+ 2 files changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 50c99836..2467bb54 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -263,7 +263,7 @@ AM_CONDITIONAL([ENABLE_GNUTLS], [test "x$enable_gnutls" = "xyes"])
-+ 
-+ AM_COND_IF([ENABLE_GNUTLS],
-+ 	[AC_CHECK_HEADER([gnutls/gnutls.h],[],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
-+-	AC_CHECK_LIB([gnutls], [gnutls_hash_fast],[],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
-++	AC_CHECK_LIB([gnutls], [gnutls_hash_fast],[true],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
-+ 	AC_SUBST([GNUTLS_LIBS], [-lgnutls])])
-+ 
-+ # SELinux
-+diff --git a/src/lxc/Makefile.am b/src/lxc/Makefile.am
-+index c8d76836..0662d83d 100644
-+--- a/src/lxc/Makefile.am
-++++ b/src/lxc/Makefile.am
-+@@ -175,6 +175,10 @@ if ENABLE_APPARMOR
-+ AM_CFLAGS += -DHAVE_APPARMOR
-+ endif
-+ 
-++if ENABLE_GNUTLS
-++AM_CFLAGS += -DHAVE_LIBGNUTLS
-++endif
-++
-+ if ENABLE_SELINUX
-+ AM_CFLAGS += -DHAVE_SELINUX
-+ endif
-+@@ -196,7 +200,7 @@ liblxc_la_LDFLAGS = \
-+ 	-Wl,-soname,liblxc.so.$(firstword $(subst ., , at LXC_ABI@)) \
-+ 	-version-info @LXC_ABI_MAJOR@
-+ 
-+-liblxc_la_LIBADD = $(CAP_LIBS) $(SELINUX_LIBS) $(SECCOMP_LIBS)
-++liblxc_la_LIBADD = $(CAP_LIBS) $(GNUTLS_LIBS) $(SELINUX_LIBS) $(SECCOMP_LIBS)
-+ 
-+ bin_SCRIPTS=
-+ 
-+@@ -243,7 +247,7 @@ AM_LDFLAGS = -Wl,-E
-+ if ENABLE_RPATH
-+ AM_LDFLAGS += -Wl,-rpath -Wl,$(libdir)
-+ endif
-+-LDADD=liblxc.la @CAP_LIBS@ @SELINUX_LIBS@ @SECCOMP_LIBS@
-++LDADD=liblxc.la @CAP_LIBS@ @GNUTLS_LIBS@ @SELINUX_LIBS@ @SECCOMP_LIBS@
-+ 
-+ if ENABLE_TOOLS
-+ lxc_attach_SOURCES = tools/lxc_attach.c tools/arguments.c tools/tool_utils.c
-+-- 
-+2.14.1
-+
+Argh indeed, my bad. I applied it locally, didn't push it, and then
+due to a git reset --hard, it got lost. I've now re-applied that
+commit, and pushed this time.
+
+Thanks for the heads-up!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
