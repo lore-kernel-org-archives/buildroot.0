@@ -1,76 +1,37 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 8 May 2018 06:48:27 +0300
-Subject: [Buildroot] [PATCH v2 1/1] python-websockets: backport fix for
- upstream issue #350
-In-Reply-To: <20180507221823.6364-1-joseph.kogut@gmail.com>
-References: <20180507205733.2433-1-joseph.kogut@gmail.com>
- <20180507221823.6364-1-joseph.kogut@gmail.com>
-Message-ID: <20180508034827.rsz55f6wyu6jmps2@tarshish>
+Date: Tue, 8 May 2018 07:32:38 +0300
+Subject: [Buildroot] Analysis of build results for 2018-05-06
+In-Reply-To: <20180507234635.4d21612b@windsurf>
+References: <20180507060023.E26CE207B7@mail.bootlin.com>
+ <20180507234635.4d21612b@windsurf>
+Message-ID: <20180508043238.c3fv3552a7yo26he@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joseph,
-
-On Mon, May 07, 2018 at 03:18:23PM -0700, Joseph Kogut wrote:
-> Fetch from: https://github.com/aaugustin/websockets/commit/402059e4a46a764632eba8a669f5b012f173ee7b.patch
+On Mon, May 07, 2018 at 11:46:35PM +0200, Thomas Petazzoni wrote:
+> >         m68k |                      lxc-3.0.0 | NOK | 
+> >          http://autobuild.buildroot.net/results/ac2d3ce7120c9bf811f4205d84fac05eaa414923 
+> >          |     arm |                      lxc-3.0.0 | NOK | 
+> >          http://autobuild.buildroot.net/results/183ed85d7a0b26aa87c300d8fc5323831a87d483 
+> >          |     arm |                      lxc-3.0.0 | NOK | 
+> >          http://autobuild.buildroot.net/results/2d1372d12ca94ea647d80264cfd40c166e4a3fba 
+> >          |     
+> >          arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/ef823b0b7dc75e18e6a875d18abbdf530397d02d |     
+> >       x86_64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/fc4000c7b348bdc85eab1ce85dcdb9d9dbbbb3cc |     
+> >          arc |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/db50d3490f7f4ef23ac2c41ca98e51fa3ad35bdf |     
+> >     mips64el |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/acc28762239d92184b3ff2aff3be801c1a81eb68 |     
+> >      sparc64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/79a885a12e3f73ff5c20f6e3bdf0cd7908fcb3b4 |     
+> >          arm |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/1e361ef5c8ee20a9524d6a204c204b3e19bf5641 |     
 > 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
-> Changes v1 -> v2:
-> 	- Include patch locally (suggested by Thomas)
+> These issues should all be fixed by:
 > 
->  ...59e4a46a764632eba8a669f5b012f173ee7b.patch | 256 ++++++++++++++++++
->  1 file changed, 256 insertions(+)
->  create mode 100644 package/python-websockets/402059e4a46a764632eba8a669f5b012f173ee7b.patch
-> 
-> diff --git a/package/python-websockets/402059e4a46a764632eba8a669f5b012f173ee7b.patch b/package/python-websockets/402059e4a46a764632eba8a669f5b012f173ee7b.patch
+>   52dcec570e056502c4f9e7b4640bca2bd2db8c23 lxc: fix build with static libcap and shared gnutls
 
-The patch file name should be numbered. See the patch naming conversion in 
-section 18.1.2 of the manual:
+This commit is not is current master as of ba33728bc31.
 
-  https://buildroot.org/downloads/manual/manual.html#_providing_patches
-
-You can easily generate this patch using 'git format-patch':
-
-  git format-patch -N --no-thread -s -1 402059e4a46a76
-
-> new file mode 100644
-> index 0000000000..62e93bdd2e
-> --- /dev/null
-> +++ b/package/python-websockets/402059e4a46a764632eba8a669f5b012f173ee7b.patch
-> @@ -0,0 +1,256 @@
-> +From 402059e4a46a764632eba8a669f5b012f173ee7b Mon Sep 17 00:00:00 2001
-> +From: Aymeric Augustin <aymeric.augustin@m4x.org>
-> +Date: Tue, 1 May 2018 17:05:05 +0200
-> +Subject: [PATCH] Fix behavior of recv() in the CLOSING state.
-> +
-> +The behavior wasn't tested correctly: in some test cases, the connection
-> +had already moved to the CLOSED state, where the close code and reason
-> +are already known.
-> +
-> +Refactor half_close_connection_{local,remote} to allow multiple runs of
-> +the event loop while remaining in the CLOSING state. Refactor affected
-> +tests accordingly.
-> +
-> +I verified that all tests in the CLOSING state were behaving is intended
-> +by inserting debug statements in recv/send/ping/pong and running:
-> +
-> +$ PYTHONASYNCIODEBUG=1 python -m unittest -v websockets.test_protocol.{Client,Server}Tests.test_{recv,send,ping,pong}_on_closing_connection_{local,remote}
-> +
-> +Fix #317, #327, #350, #357.
-
-Your sign-off is missing. The -s option for git format-patch adds that for 
-you.
-
-> +---
-> + websockets/protocol.py      | 10 +++---
-> + websockets/test_protocol.py | 78 +++++++++++++++++++++++++++++++++++----------
-> + 2 files changed, 66 insertions(+), 22 deletions(-)
-
-baruch
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
