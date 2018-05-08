@@ -1,185 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 May 2018 22:43:45 +0200
-Subject: [Buildroot] package_installation_problem
-In-Reply-To: <CAAp1OY35UgMMmtK-CG+Y3JKLLy78u+KRbOwtR-FugwrVr804ww@mail.gmail.com>
-References: <CAAp1OY35UgMMmtK-CG+Y3JKLLy78u+KRbOwtR-FugwrVr804ww@mail.gmail.com>
-Message-ID: <28d9248a-a811-d361-adfe-05ad4c5a0635@mind.be>
+Date: Tue, 8 May 2018 22:53:24 +0200
+Subject: [Buildroot] ubi filesytem issue
+In-Reply-To: <1525768603017-0.post@n4.nabble.com>
+References: <1525768603017-0.post@n4.nabble.com>
+Message-ID: <1d185052-8431-9398-581e-97a6e8ef4ac8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Abinaya,
 
- I don't see anything immediately wrong with what you posted. Well, there's a
-lot wrong (see below), but nothing that would cause the executable not to be
-installed.
 
- Can you check that the package is indeed built? I.e., output/build/water*
-exists and contains the ammu executable. If it isn't, then you either didn't
-select the package, or you didn't do 'make' after selecting it.
-
- Also, if you run 'make', then modify something in the water sources, then run
-'make' again, the package will not be rebuilt. You have to do that explictily:
-'make water-dirclean; make'.
-
- By the way, please avoid using HTML mail.
-
-On 08-05-18 11:21, abinaya m wrote:
-> Dear sir,
-> ? ? ?i am abi.i would like to? created a simple c program with Make file that
-> output want to be store in /etc/bin file for customized os of
-
- I guess you mean /bin, not /etc/bin.
-
-> *atmel-sama5-D3-xplained*. There is no error after "make".but the executable
-> file is not present in bin file after make.now only i started buildroot from the
-> scratch.kindly help me sir.
+On 08-05-18 10:36, nikh wrote:
+> Hi,
 > 
-> i followed these steps:
+> I am nikh,
 > 
-> *STEP 1:*
-> *
-> *
-> *create a folder as "asd"?in /?/home/laptop105/sama5_abi/abi_package/asd Directory?
+> I am trying to build rootfs in ubi format using buildroot. I am using
+> sama5d3_xplained board.
+> I am using nand flash based booting.
+> I build a root file system based on the information from the following site,
+> http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild#How_to_build_Buildroot_for_AT91
 > 
-> *inside the directory water.c and Makefile
-> 
-> *water.c file:*
-> ? ? ? ? ? ? ? ? #include <stdio.h>
-> ? ? ? ? ? ? ? ? int main(){
-> while(1)
-> {
-> printf("bulidroot world\n");
-> sleep(1);
-> }
-> return 0;
-> }
-> 
-> *Makefile:*
-> 
-> 
-> OBJS=water.o
-> 
-> all:water
+> I successfully got the ubi format rootfs image. I used a demo script to
+> flash at91 bootstrap, u-boot, u-bootenv, device tree, zImage and root file
+> system.
 
- You don't define a 'water' target... So I guess you actually used a different
-makefile, otherwise it would error out.
+[snip]
 
-> 
-> helloworld:$(OBJS)
-> $(CC) $(LDFLAGS) -o ammu $(OBJS)
-> 
-> $(OBJS): %.o:%.c
-> $(CC) $(CFLAGS) -c -o $@ $<
-> clean:
-> rm -f $ (OBJ)
-> 
-> install:
-> cp ammu $ (DESTDIR) / bin / ammu
+> ubi0 error: 0xc041cd7c: bad VID header offset 512, expected 2048
 
- I guess there are actually no spaces there, or it would error out. Well, you
-never call the install target anyway.
+ Looks like you created a UBI image with VID header offset 512 instead of 2048.
+How did you create the UBI partition? The easiest way is to do it on the device
+itself (after e.g. booting from SD card), then you can just ubiattach the empty
+partition and a correct UBI will be automatically created in it. If you created
+the UBI image from Buildroot, then the BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE option
+is used. This defaults to 0x800 (512 bytes) but has to be 0x2000 (2048 bytes) in
+your case.
 
-> 
-> *STEP 2:*
-> ? ? ? directory ---> bulidroot-at91/package/water? ?inside that Config.in &
-> water.mk <http://water.mk>
-> 
-> *Config.in:*
-> ? ? ? ? config BR2_PACKAGE_WATER
-> ? ? bool "water"
-> ? ? help
-> ? ? ? Hello World package says hello world to you
-> ? ? ? see http://water.com for more on this software
-> 
-> *water.mk <http://water.mk>:*
-> 
-> 
-> WATER_VERSION:= 1.0.0
-
- Buildroot has the convention to use = assignments, not :=, except in the cases
-where really needed. Also we put spaces around the =.
-
-> WATER_SITE:= /home/laptop105/sama5_abi/abi_package/asd
-
- It's probably better to use a relative path here (relative to buildroot dir).
-
-> WATER_SITE_METHOD:=local
-> WATER_INSTALL_TARGET:=YES
-
- This is the default so not needed.
-
-> 
-> define WATER_BUILD_CMDS
-> ? ? ? ? $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-> endef
-> 
-> define WATER_INSTALL_TARGET_CMDS
-> ? ? ? ? $(INSTALL) -D -m 0755 $(@D)/ammu $(TARGET_DIR)/bin
-
- You should give the full path as the last argument, so:
-
-	$(INSTALL) -D -m 0755 $(@D)/ammu $(TARGET_DIR)/bin/ammu
-
-
-> endef
-> 
-> define WATER_PERMISSIONS
-> ? ? ? ?/bin/ammuf 4755 0 0 - - - - - 
-
- You really want to make it setuid? Normally, you shouldn't need a _PERMISSIONS
-entry at all.
-
-> endef
-> 
-> $(eval $(generic-package))
-> 
-> *STEP 3:**
-> *
-> *
-> *
-> *buildroot-at91/package/Config.in inside the? file i put*
-> *
-> *
-> *
-> menu "Misc"
-> ? ? *source "package/water/Config.in"*
-> endmenu
-> 
-> *
-> *
-> *STEP 4:*
-> *? ??*
-> *? ? ? ? ? ? ? ? ? ? make atmel_sama5d3_xplained_mmc_defconfig*
-> *? ? ? ? ? ? ? ? ? ? make menuconfig*
-> *
-
- Another 'make' is needed here.
+ Actually, nowadays it's next to impossible to find a small-page flash (i.e.
+with MINIOSIZE=512), so perhaps we should change the default.
 
  Regards,
  Arnout
 
-> *
-> 
-> *
-> *
-> *
-> *
-> 
-> 
-> Thanks
-> With regards?
-> abinaya
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> ubi0 error: 0xc041cd30: bad EC header
+> Erase counter header dump:
+>         magic          0x55424923
+>         version        1
+>         ec             0
+>         vid_hdr_offset 512
+>         data_offset    2048
+>         image_seq      1825409418
+>         hdr_crc        0x3358adb
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
