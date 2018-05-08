@@ -1,29 +1,38 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  8 May 2018 17:58:29 +0200
-Subject: [Buildroot] [PATCH] support/download/file: remove set -x
-Message-ID: <1525795109-22746-1-git-send-email-angelo@amarulasolutions.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  8 May 2018 18:11:36 +0200
+Subject: [Buildroot] [PATCH 1/1] libcap: only install shared version
+Message-ID: <20180508161136.13531-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- support/download/file | 1 -
- 1 file changed, 1 deletion(-)
+If BR2_SHARED_LIBS is set, only install shared version of library
+(continue to build both libraries through all target as there is no
+libcap.so target but only a libcap.so.$(VERSION).$(MINOR))
 
-diff --git a/support/download/file b/support/download/file
-index 6dd37b0..e52fcf2 100755
---- a/support/download/file
-+++ b/support/download/file
-@@ -2,7 +2,6 @@
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcap/libcap.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 48c2cb3456..247fd8a58f 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -20,8 +20,12 @@ LIBCAP_MAKE_TARGET = libcap.a libcap.pc
+ LIBCAP_MAKE_INSTALL_TARGET = install-static
+ else
+ LIBCAP_MAKE_TARGET = all
++ifeq ($(BR2_SHARED_LIBS),y)
++LIBCAP_MAKE_INSTALL_TARGET = install-shared
++else
+ LIBCAP_MAKE_INSTALL_TARGET = install
+ endif
++endif
  
- # We want to catch any unexpected failure, and exit immediately
- set -e
--set -x
- 
- # Download helper for cp, to be called from the download wrapper script
- #
+ LIBCAP_MAKE_FLAGS = \
+ 	BUILD_CC="$(HOSTCC)" \
 -- 
-2.7.4
+2.14.1
