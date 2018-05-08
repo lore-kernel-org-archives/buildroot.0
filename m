@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 May 2018 14:55:38 +0200
-Subject: [Buildroot] [PATCH 1/1] python-raven: bump to version 6.7.0
-In-Reply-To: <20180507230349.9443-1-joseph.kogut@gmail.com>
-References: <20180507230349.9443-1-joseph.kogut@gmail.com>
-Message-ID: <20180508145538.35f34474@windsurf.home>
+Date: Tue, 8 May 2018 14:56:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.0.3
+In-Reply-To: <20180507203049.31058-1-bernd.kuhls@t-online.de>
+References: <20180507203049.31058-1-bernd.kuhls@t-online.de>
+Message-ID: <20180508145600.499e4317@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  7 May 2018 16:03:49 -0700, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+On Mon,  7 May 2018 22:30:49 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/python-raven/python-raven.hash | 6 +++---
->  package/python-raven/python-raven.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+>  package/mesa3d/mesa3d.hash               | 10 +++++-----
+>  package/mesa3d/mesa3d.mk                 |  2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
 Applied to master, thanks.
 
