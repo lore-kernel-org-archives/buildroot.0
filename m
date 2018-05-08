@@ -1,55 +1,45 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  8 May 2018 18:05:17 +0300
-Subject: [Buildroot] [PATCH 1/3] busybox: remove musl specific tweaks
-Message-ID: <ea3c437cb4b462525feff0325c137d4b27717422.1525791919.git.baruch@tkos.co.il>
+Date: Tue,  8 May 2018 18:43:02 +0300
+Subject: [Buildroot] [PATCH] wget: security bump to version 1.19.5
+Message-ID: <e453953371b3ff38359cb895d57bab0fd078f6c1.1525794182.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Busybox build fine under current musl using its provided shadow
-passwords and utmp/wtmp support.
+Fixes CVE-2018-0494: cookie injection vulnerability.
 
-Cc: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/busybox/busybox.mk | 16 ----------------
- 1 file changed, 16 deletions(-)
+ package/wget/wget.hash | 4 ++--
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 60a55a2c78a0..7033c4304a94 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -156,21 +156,6 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
- endef
- endif
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index ab0d1d1dfd46..eee4a5194ec9 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/wget/wget-1.19.4.tar.lz.sig
+-sha256 2fc0ffb965a8dc8f1e4a89cbe834c0ae7b9c22f559ebafc84c7874ad1866559a  wget-1.19.4.tar.lz
++# https://ftp.gnu.org/gnu/wget/wget-1.19.5.tar.lz.sig
++sha256 29fbe6f3d5408430c572a63fe32bd43d5860f32691173dfd84edc06869edca75  wget-1.19.5.tar.lz
+ # Locally calculated
+ sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 23e4c8accaa2..72a73cce7971 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# We also need to use internal shadow password functions when using
--# the musl C library, since some of them are not yet implemented by
--# musl.
--#
--# Do not use utmp/wmtp support. wmtp support is not available in musl,
--# and utmp support is not sufficient for Busybox.
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--define BUSYBOX_MUSL_TWEAKS
--	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_PWD_GRP,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_SHADOW,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_UTMP,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_WTMP,$(BUSYBOX_BUILD_CONFIG))
--endef
--endif
--
- define BUSYBOX_INSTALL_UDHCPC_SCRIPT
- 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
-@@ -293,7 +278,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
- 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
--	$(BUSYBOX_MUSL_TWEAKS)
- endef
- 
- define BUSYBOX_CONFIGURE_CMDS
+-WGET_VERSION = 1.19.4
++WGET_VERSION = 1.19.5
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
 -- 
 2.17.0
