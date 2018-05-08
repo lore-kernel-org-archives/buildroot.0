@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 May 2018 14:55:35 +0200
-Subject: [Buildroot] [PATCH] sudo: bump to version 1.8.23
-In-Reply-To: <8f724478de642846964735c3f6341dacbc9a3eb0.1525776241.git.baruch@tkos.co.il>
-References: <8f724478de642846964735c3f6341dacbc9a3eb0.1525776241.git.baruch@tkos.co.il>
-Message-ID: <20180508145535.76674d70@windsurf.home>
+Date: Tue, 8 May 2018 14:55:38 +0200
+Subject: [Buildroot] [PATCH 1/1] python-raven: bump to version 6.7.0
+In-Reply-To: <20180507230349.9443-1-joseph.kogut@gmail.com>
+References: <20180507230349.9443-1-joseph.kogut@gmail.com>
+Message-ID: <20180508145538.35f34474@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  8 May 2018 13:44:01 +0300, Baruch Siach wrote:
-> Use += for the SUDO_CONF_ENV conditional assignment to avoid override of
-> SUDO_CONF_ENV assignments that might be added in the future.
-> 
-> Add license file hash.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Mon,  7 May 2018 16:03:49 -0700, Joseph Kogut wrote:
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 > ---
->  package/sudo/sudo.hash | 4 +++-
->  package/sudo/sudo.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 3 deletions(-)
+>  package/python-raven/python-raven.hash | 6 +++---
+>  package/python-raven/python-raven.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
