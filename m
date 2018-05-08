@@ -1,30 +1,132 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 8 May 2018 08:23:42 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-25
-In-Reply-To: <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
-References: <20180426060013.EAB262079F@mail.bootlin.com>
- <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
-Message-ID: <CANQCQpaTbUMwcPu0TU5Q0FQ2Df5B+8kBW2SwXF4mX1Kinc1WsA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 May 2018 15:23:14 +0200
+Subject: [Buildroot] [git commit] libkcapi: split BR2_PACKAGE_LIBKCAPI_APPS
+Message-ID: <20180508132341.662FA8B8FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+commit: https://git.buildroot.net/buildroot/commit/?id=f64211501d42a33ddf3a2dffee24d620ed24cd5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Apr 29, 2018 at 5:15 PM, Romain Naour <romain.naour@gmail.com> wrote:
->
-> Hi All,
->
-> git bisect helped to find a patch [1] fixing an infinite loop in RTL DSE
+Since commit https://github.com/smuellerDD/libkcapi/commit/af313accf18887b4f6dbd7306c2389ddf271c9b7,
+hasher test application depends on dlfcn.h. To avoid putting all apps
+under !BR2_STATIC_LIBS dependency, split BR2_PACKAGE_LIBKCAPI_APPS into
+several variables.
 
-I've got another microblaze bug I'm working on identifying between
-GCC6.4 and 7.3.  Any general tips on bisecting GCC?  (What seems to be
-working is the following.... I went into buildroot and rewrote the GCC
-initial/final/toplevel mk to use a local site method and removed all
-source/version stuff.  Then built (for now) ignoring the buildroot
-patches against released versions.
+Moreover, BR2_USE_MMU is only a dependency of BR2_PACKAGE_LIBKCAPI_TEST
+as other applications don't use fork.
 
-Matt
+Finally, enc or dgst applications could be enabled in a next patch if
+needed.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/7c57f3025030eff41a5cde52759821249859caf1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy             | 11 +++++++++++
+ package/libkcapi/Config.in   | 20 +++++++++++++++-----
+ package/libkcapi/libkcapi.mk | 32 +++++++++++++++++++++-----------
+ 3 files changed, 47 insertions(+), 16 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3d8b28c5fe..c51984a3b9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,17 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2018.05"
+ 
++config BR2_PACKAGE_LIBKCAPI_APPS
++	bool "libkcapi test applications removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LIBKCAPI_HASHER if !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBKCAPI_RNGAPP
++	select BR2_PACKAGE_LIBKCAPI_SPEED
++	select BR2_PACKAGE_LIBKCAPI_TEST
++	help
++	  Test applications (hasher, rng read, speed-test, test) now
++	  have their own configuration options in the libkcapi menu.
++
+ config BR2_PACKAGE_IQVLINUX
+ 	bool "iqvlinux package removed"
+ 	select BR2_LEGACY
+diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
+index 2b981777e6..7397cfe800 100644
+--- a/package/libkcapi/Config.in
++++ b/package/libkcapi/Config.in
+@@ -7,11 +7,21 @@ config BR2_PACKAGE_LIBKCAPI
+ 
+ if BR2_PACKAGE_LIBKCAPI
+ 
+-config BR2_PACKAGE_LIBKCAPI_APPS
+-	bool "build test applications"
++config BR2_PACKAGE_LIBKCAPI_HASHER
++	bool "build hasher application"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++
++comment "hasher application needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
++config BR2_PACKAGE_LIBKCAPI_RNGAPP
++	bool "build rng read application"
++
++config BR2_PACKAGE_LIBKCAPI_SPEED
++	bool "build speed-test program"
++
++config BR2_PACKAGE_LIBKCAPI_TEST
++	bool "build test program"
+ 	depends on BR2_USE_MMU # fork()
+-	help
+-	  Build additional test applications that can provide
+-	  performance or algorithm tests.
+ 
+ endif
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index 44469017df..1a45f4f996 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -12,18 +12,28 @@ LIBKCAPI_INSTALL_STAGING = YES
+ LIBKCAPI_LICENSE = BSD-3-Clause (library), BSD-3-Clause or GPL-2.0 (programs)
+ LIBKCAPI_LICENSE_FILES = COPYING COPYING.gplv2 COPYING.bsd
+ 
+-ifeq ($(BR2_PACKAGE_LIBKCAPI_APPS),y)
+-LIBKCAPI_CONF_OPTS += \
+-	--enable-kcapi-speed \
+-	--enable-kcapi-test \
+-	--enable-kcapi-hasher \
+-	--enable-kcapi-rngapp
++ifeq ($(BR2_PACKAGE_LIBKCAPI_HASHER),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-hasher
+ else
+-LIBKCAPI_CONF_OPTS += \
+-	--disable-kcapi-speed \
+-	--disable-kcapi-test \
+-	--disable-kcapi-hasher \
+-	--disable-kcapi-rngapp
++LIBKCAPI_CONF_OPTS += --disable-kcapi-hasher
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_RNGAPP),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-rngapp
++else
++LIBKCAPI_CONF_OPTS += --disable-kcapi-rngapp
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_SPEED),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-speed
++else
++LIBKCAPI_CONF_OPTS += --disable-kcapi-speed
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_TEST),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-test
++else
++LIBKCAPI_CONF_OPTS += --disable-kcapi-test
+ endif
+ 
+ $(eval $(autotools-package))
