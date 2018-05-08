@@ -1,68 +1,91 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 May 2018 22:30:50 +0200
-Subject: [Buildroot] [PATCH] package/ncurses: enable widechar for host
- build
-In-Reply-To: <20180508153139.0d807f82@windsurf.home>
-References: <20180426190845.21415-1-arnout@mind.be>
- <20180503075808.26367-1-arnout@mind.be> <20180503194507.GB2453@scaer>
- <20180508153139.0d807f82@windsurf.home>
-Message-ID: <076570fa-ba56-34bc-7b71-3fa726e81e75@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  8 May 2018 22:40:17 +0200
+Subject: [Buildroot] [PATCH 0/7 v2] dependencies: ensure availability of
+ host-tar, cleanups in graphs
+Message-ID: <cover.1525812011.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello All!
+
+This series brings two major changes:
+
+ 1- consistency cleanups in the dependency graph
+
+ 2- ensure that host-tar is available when we need it
+
+The first part, covering the first three patches, is mostly a cleanup
+pass, to ensure the graph is not too cluttered, but yet does not miss
+out any package. This is pretty trivial, except for the first patch,
+which has a detailed commit log: in some conditions, we may have missed
+packages from the dependency graph. We did not have that situation with
+our internal packages so far, but the host-skeleton cut-off really
+uncovered it: when a package with no dependency is also a cut-off
+point (to avoid cluterring), and is not a top-level dependency, then
+that package is not displayed in the dependency graph, not even as a
+dependency of 'ALL'. Fixing is pretty trivial: add any newly-discovered
+package asa dependency of 'ALL'; transitivity removal will clanup the
+mess afterward.
+
+The second part, not much more complex either, ensures that host-tar is
+built and installed before a download backend, that _locally_ generates
+a tarball, is called. When a package downloaded from a repository is
+downloaded 'early' in the build process, it may well be so-downloaded
+before host-tar was built, because host-tar is only an extract
+dependency (so far), so the system tar is used, which may generate
+archives that do not match the hash we have for them.
+
+As such, a new type of dependency is added, that guarantees ordering
+before the download step. Then, host-tar is added as a download
+dependency to packages which site method is one of the repository-based
+downloads that call to tar: cvs, git and svn (bzr and hg use their
+internal tarball generator).
+
+Finally, the filesystems are made to depend on host-tar when it is
+needed, too, because we do generate the intermediate tarball, which is
+then extracted by all filesystems.
 
 
-On 08-05-18 15:31, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 3 May 2018 21:45:07 +0200, Yann E. MORIN wrote:
-> 
->> What about overriding HOSTCC when calling linux-menuconfig:
->>
->>     diff --git a/linux/linux.mk b/linux/linux.mk
->>     index 9e646baffc..75a256ff9e 100644
->>     --- a/linux/linux.mk
->>     +++ b/linux/linux.mk
->>     @@ -235,7 +235,7 @@ LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
->>      endif
->>      LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
->>      LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
->>     -LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
->>     +LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC)"
->>      
->>      # If no package has yet set it, set it from the Kconfig option
->>      LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
->>
->> We should not need any library from HOST_DIR when we run menuconfig.
->>
->> Note: we may still want to enable widechar in host-ncurses for other
->> reasons, though. But with the proposdal above, there is no lopnger any
->> mix of system ncurses vs our own.
-> 
-> Arnout, any comment on Yann's proposal? I have to say my preference
-> goes to Yann's solution, as it's the one that ensures there is no
-> mixing of ncurses between the one we build in HOST_DIR and the one
-> provided by the system.
+Regards,
+Yann E. MORIN.
 
- As noted in another thread, the same problem might occur for another package.
-Basically, kconfig will fail if we pass the normal HOST_CONFIGURE_OPTS. But I
-guess it's not likely that we ever have a package that does that, since kconfig
-packages are normally target packages, and kconfig doesn't listen to
-CFLAGS_FOR_BUILD/LDFLAGS_FOR_BUILD.
 
- So OK, Yann, can you prepare a patch? I've marked this patch as Rejected.
+The following changes since commit 6ac12d8b18b4e1ebd8b11279e98068d2b3ba449e
 
- Regards,
- Arnout
+  Revert "libcrossguid: bump to version 0.2.2" (2018-05-08 15:39:16 +0200)
 
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to d8b722a2f2638142b1a68c7c5bd7ced36d2f34db
+
+  fs: always depend on build host-tar if needed (2018-05-08 22:38:29 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      support/graph-depends: ensure all packages get graphed
+      support/graph-depends: also cut on host-skeleton
+      support/graph-depends: also cut on host-tar
+      core/package: postpone evaluation of dependency conditions
+      core/package: add possibility to declare download dependencies
+      core/package: add host-tar dependency for downloads from repositories
+      fs: always depend on build host-tar if needed
+
+ fs/common.mk                  |  1 +
+ package/pkg-generic.mk        | 27 +++++++++++++++++----------
+ support/scripts/graph-depends | 19 ++++++++++++++++++-
+ 3 files changed, 36 insertions(+), 11 deletions(-)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
