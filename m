@@ -1,63 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 08 May 2018 12:41:04 +0000
-Subject: [Buildroot] [Bug 10996] New: bogus musl ARM toolchain
-Message-ID: <bug-10996-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 May 2018 14:54:45 +0200
+Subject: [Buildroot] [git commit] python-raven: bump to version 6.7.0
+Message-ID: <20180508125444.959A28B8C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10996
+commit: https://git.buildroot.net/buildroot/commit/?id=cd2313cb3846a231dc1a48aaa9f4583565d56b1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-            Bug ID: 10996
-           Summary: bogus musl ARM toolchain
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: thomas.petazzoni at free-electrons.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-raven/python-raven.hash | 6 +++---
+ package/python-raven/python-raven.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-The following defconfig doesn't build:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_STATIC_LIBS=y
-BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-BR2_PACKAGE_ZIP=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-It doesn't build because the toolchain is broken, and doesn't manage to link a
-simple program like this:
-
-$ cat foo.c 
-int main(void) { mktime(); return 0; }
-
- ./output/host/bin/arm-linux-gcc -o foo foo.c
-foo.c: In function ?main?:
-foo.c:1:18: warning: implicit declaration of function ?mktime?
-[-Wimplicit-function-declaration]
- int main(void) { mktime(); return 0; }
-                  ^~~~~~
-/home/thomas/projets/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/6.4.0/libgcc.a(_dvmd_lnx.o):
-In function `__aeabi_idiv0':
-/home/thomas/projets/buildroot/output/build/host-gcc-final-6.4.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1354:
-undefined reference to `raise'
-collect2: error: ld returned 1 exit status
-
-This is causing the following build issues in our autobuilders:
-http://autobuild.buildroot.net/?reason=zip%&libc=musl.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
+index 66452a7fc1..ce21886e76 100644
+--- a/package/python-raven/python-raven.hash
++++ b/package/python-raven/python-raven.hash
+@@ -1,5 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
+-md5	4471e9e881da64f057ee7740345a6b27  raven-6.5.0.tar.gz
+-sha256	84da75114739191bdf2388f296ffd6177e83567a7fbaf2701e034ad6026e4f3b  raven-6.5.0.tar.gz
++# md5, sha256 from https://pypi.python.org/pypi/raven/json
++md5	35398b2447d337315e0069c2580d3468  raven-6.7.0.tar.gz
++sha256	f908e9b39f02580e7f822030d119ed3b2e8d32300a2fec6373e5827d588bbae7  raven-6.7.0.tar.gz
+ # License file, locally calculated
+ sha256	5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233  LICENSE
+diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
+index 4a4cdee353..4aa49f5b37 100644
+--- a/package/python-raven/python-raven.mk
++++ b/package/python-raven/python-raven.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_RAVEN_VERSION = 6.5.0
++PYTHON_RAVEN_VERSION = 6.7.0
+ PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
+-PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e0/26/1bdd4431f59ff92fee7f2378b7d54eb175eb69f68c40c6c9b15161f6774f
++PYTHON_RAVEN_SITE = https://files.pythonhosted.org/packages/d7/54/7d199f893a0ac01f8df9b7ec39c0f3ac19146e78b33401b1f4984c9d3583
+ PYTHON_RAVEN_SETUP_TYPE = setuptools
+ PYTHON_RAVEN_LICENSE = BSD-3-Clause
+ PYTHON_RAVEN_LICENSE_FILES = LICENSE
