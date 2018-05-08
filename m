@@ -1,9 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 May 2018 22:53:24 +0200
-Subject: [Buildroot] ubi filesytem issue
-In-Reply-To: <1525768603017-0.post@n4.nabble.com>
-References: <1525768603017-0.post@n4.nabble.com>
-Message-ID: <1d185052-8431-9398-581e-97a6e8ef4ac8@mind.be>
+Date: Tue, 8 May 2018 23:00:23 +0200
+Subject: [Buildroot] [RFC PATCH 1/7] pkg-meson: new infrastructure
+In-Reply-To: <20180507221244.GC15375@ned>
+References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
+ <20180507105741.31747-2-eric.le.bihan.dev@free.fr>
+ <20180507170256.2ef06b2f@windsurf> <20180507193850.GA15375@ned>
+ <20180507214356.3a087000@windsurf> <20180507221244.GC15375@ned>
+Message-ID: <c0524a93-eaad-3e61-f8bc-f9b17271d468@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +15,111 @@ To: buildroot@busybox.net
 
 
 
-On 08-05-18 10:36, nikh wrote:
-> Hi,
-> 
-> I am nikh,
-> 
-> I am trying to build rootfs in ubi format using buildroot. I am using
-> sama5d3_xplained board.
-> I am using nand flash based booting.
-> I build a root file system based on the information from the following site,
-> http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild#How_to_build_Buildroot_for_AT91
-> 
-> I successfully got the ubi format rootfs image. I used a demo script to
-> flash at91 bootstrap, u-boot, u-bootenv, device tree, zImage and root file
-> system.
+On 08-05-18 00:12, Eric Le Bihan wrote:
+> On 18-05-07 21:43:56, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Mon, 7 May 2018 21:38:50 +0200, Eric Le Bihan wrote:
+>>
 
 [snip]
+>>>>> +	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) meson \
+>>>>> +		--prefix=/usr \
+>>>>> +		--libdir=/usr/lib \
+>>>>> +		--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
+>>>>> +		--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+>>>>> +		--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
+>>>>
+>>>> So meson is really not consistent, and some options are "--name=value",
+>>>> and some others are "--name value" ?
+>>>
+>>> No. Both patterns are valid for any option. I'll use "--name=value" for
+>>> consistency.
+>>
+>> It would be great to use --name=value everywhere then, including in the
+>> packages using the meson-package infrastructure. This should perhaps be
+>> noted in the manual, when describing the <pkg>_CONF_OPTS variable.
+> 
+> The --name=value pattern is used for options related to Meson behavior
+> and general project configuration, whereas the -Dname=value one is used
 
-> ubi0 error: 0xc041cd7c: bad VID header offset 512, expected 2048
+ No, it's about --name=value or --name value.
 
- Looks like you created a UBI image with VID header offset 512 instead of 2048.
-How did you create the UBI partition? The easiest way is to do it on the device
-itself (after e.g. booting from SD card), then you can just ubiattach the empty
-partition and a correct UBI will be automatically created in it. If you created
-the UBI image from Buildroot, then the BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE option
-is used. This defaults to 0x800 (512 bytes) but has to be 0x2000 (2048 bytes) in
-your case.
+> for project feature activation/customization. So <pkg>_CONF_OPTS should
+> most of the time contains elements using the latter (except when
+> overriding sysconfdir or such locations).
+> 
+> In case of boolean options, Meson assumes that "-Dbaz" means
+> "-Dbaz=true". Should the example in the infrastructure documentation
 
- Actually, nowadays it's next to impossible to find a small-page flash (i.e.
-with MINIOSIZE=512), so perhaps we should change the default.
+ We prefer explicit, so -Dbaz=true
+
+> look like this:
+> 
+> ```
+> ifeq ($(BR2_PACKAGE_BAZ),y)
+> FOO_CONF_OPTS += -Dbaz=true
+> FOO_DEPENDENCIES += baz
+> else
+> FOO_CONF_OPTS += -Dbaz=false
+> endif
+
+ Yes.
+
+> ```
+> 
+> Or like this:
+> 
+> ```
+> ifeq ($(BR2_PACKAGE_BAZ),y)
+> FOO_CONF_OPTS += -Dbaz
+> FOO_DEPENDENCIES += baz
+> endif
+
+ No. We certainly want the -Dbaz=false option (I guess in meson there is also a
+possibility to let an option default to true, right?). So for symmetry it's
+better to do -Dbaz=true as well then.
+
+> ```
+> 
+>>>> DESTDIR=$$(HOST_DIR) is not correct for host installations, since you
+>>>> already build for prefix=$(HOST_DIR).
+>>>
+>>> OK, I'll drop it.
+>>
+>> OK. Did you test the host variant of the meson-package infrastructure ?
+> 
+> Good advice! Testing the host variant of a custom library+executable
+> project brought out that Meson does not automically sets RPATH [1],
+> which makes support/scripts/check-host-rpath unhappy, and that it
+
+ If that is the case, it means you don't properly pass HOST_LDFLAGS, which is A
+Bad Thing (tm).
+
+ Indeed, looking at your patch, I see none of the host options are passed. You
+certainly need to pass HOST_MAKE_ENV in the environment to make pkg-config is
+used correctly. And then you should also make sure that HOSTCC etc. are passed
+correctly - remember that it's possible to use a different host compiler by
+passing HOSTCC in the environment (and I'm actually using that feature!).
 
  Regards,
  Arnout
 
-> ubi0 error: 0xc041cd30: bad EC header
-> Erase counter header dump:
->         magic          0x55424923
->         version        1
->         ec             0
->         vid_hdr_offset 512
->         data_offset    2048
->         image_seq      1825409418
->         hdr_crc        0x3358adb
-[snip]
+> defaults --libdir to "lib64" instead of "lib" [2]. So I'll fix the host
+> variant accordingly.
+> 
+> [1] http://mesonbuild.com/Reference-manual.html#executable
+> [2] http://mesonbuild.com/Reference-manual.html#get_option
+> 
+> Regards,
+> 
+> --
+> ELB
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
