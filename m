@@ -1,103 +1,96 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 May 2018 23:37:21 +0200
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
- <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
- <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
-Message-ID: <1fdbacbd-e80f-8735-89c8-2ca92224ee9a@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 8 May 2018 23:42:45 +0200
+Subject: [Buildroot] [PATCH 1/2] zstd: fix host headers installation
+In-Reply-To: <d9cdc06bb6718534ed51a927f7adeab442a4e110.1525803977.git.baruch@tkos.co.il>
+References: <d9cdc06bb6718534ed51a927f7adeab442a4e110.1525803977.git.baruch@tkos.co.il>
+Message-ID: <20180508234245.48d5accb@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[Added Matt as
+Hello Baruch,
 
-On 07-05-18 17:00, M ZV wrote:
-> Hello,?
-> ?
-> 
-> 
->     On Thu, May 3, 2018 at 11:04 PM Yann E. MORIN <yann.morin.1998@free.fr
->     <mailto:yann.morin.1998@free.fr>> wrote:
-> 
->         ditch our own bundled version, and switch to making our whois package a
->         hot pacakge, and use that as the provider for mkpasswd.
-> 
->         Stefan, would you want to do that? ;-)
-> 
-> 
->     I'll give it a go, but can only work on this in a few weeks when I get some
->     free cycles...
-> 
->     Regards, Stefan
-> 
-> 
-> We're using?mkpasswd specifically for a single task (skeleton-init-common root
-> password generation). I'm already tackling building this on Alpine (musl
+On Tue,  8 May 2018 21:26:16 +0300, Baruch Siach <baruch@tkos.co.il> wrote:
 
- Yes, Alpine is a pain :-)
-
-> environment) and facing?
-> multiple issues: had to use -lintl for linking (that libintl musl/glibc can of
-> worms) and of course, it only makes md5 hashes since all SHA functionalities are
-> disabled on non-glibc systems via its header.
+> If host-zstd builds when $(HOST_DIR)/include has not been created yet,
+> the install-includes target does not create this directory. Instead, the
+> install command copies the headers over $(HOST_DIR)/include, thus
+> creating a regular file instead of a directory. This leads to the
+> following installation failure:
 > 
-> Can we just use a couple of python code using?crypt.crypt(...), since python is
-> already a requirement. One less package to maintain is a good news (buildroots
-> already brimming with a mind boggling?number of packages).
-
- Great idea! Indeed, the python script would be rather trivial - mostly
-generating salt.
-
- Probably, when doing that, more of the mkusers script could migrate to python.
-But to start with it could be a python "oneliner":
-
-	dd if=/dev/urandom bs=1 count=12 | python -c "
-			import sys, crypt, base64
-			salt = sys.stdin.read()
-			b64salt = base64.b64encode(salt, './')
-			b64salt = b64salt.strip('=')
-			print(crypt.crypt('${password}',
-				'${PASSWD_METHOD}' + b64salt))"
-
-
- Normally, I'd say I want to avoid calling python in the normal build path
-(because of python overhead, because it's a hard-to-reproduce environment,
-because of python2/3 uncertainty, ...). However, that ship has sailed with the
-introduction of check-uniq-files.
-
-
- Would you like to prepare a patch introducing the python-based approach? It
-should be two patches: the first one introducing the python script in mkusers,
-the second one removing the mkpasswd package.
-
-
- Regards,
- Arnout
-
-> By the way, my first post here, I hope I'm not coming off as a nagging
-> pedestrian just adding noise. I highly appreciate the effort you guys are
-> putting into this.
-> Thank you.
+> Installing includes
+> install: cannot create directory ?.../host/usr/include/?: File exists
+> Makefile:166: recipe for target 'install-pc' failed
+> make[1]: *** [install-pc] Error 1
 > 
-> (My apologies for double posting - it seems, at first, I didn't reply to all)
+> Add a patch to fix that.
 > 
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...ate-include-directory-before-headers.patch | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)run_test_pkg_libtsm.sh
+>  create mode 100644 package/zstd/0002-lib-Makefile-create-include-directory-before-headers.patch
 > 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> diff --git a/package/zstd/0002-lib-Makefile-create-include-directory-before-headers.patch b/package/zstd/0002-lib-Makefile-create-include-directory-before-headers.patch
+> new file mode 100644
+> index 000000000000..e95f8c0be48c
+> --- /dev/null
+> +++ b/package/zstd/0002-lib-Makefile-create-include-directory-before-headers.patch
+> @@ -0,0 +1,45 @@
+> +From 9a0643b633c00e86db059e3790bdea7155fb6dc9 Mon Sep 17 00:00:00 2001
+> +From: Baruch Siach <baruch@tkos.co.il>
+> +Date: Tue, 8 May 2018 20:43:28 +0300
+> +Subject: [PATCH] lib/Makefile: create include directory before headers
+> + installation
+> +
+> +Make sure that $(INCLUDEDIR) exists before copying the headers there.
+> +Otherwise, the contest of header files is copied over
+> +$(DESTDIR)$(INCLUDEDIR), making it a regular file.
+> +
+> +While at it, remove $(DESTDIR)$(INCLUDEDIR) from the list of directories
+> +to create in the install-pc target. The install-pc target does not need
+> +this directory.
+> +
+> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +---
+> +Upstream status: https://github.com/facebook/zstd/pull/1123
+> +run_test_pkg_libtsm.sh
+> + lib/Makefile | 3 ++-
+> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/lib/Makefile b/lib/Makefile
+> +index f64f192d4724..d8178c7a58a0 100644
+> +--- a/lib/Makefile
+> ++++ b/lib/Makefile
+> +@@ -163,7 +163,7 @@ install: install-pc install-static install-shared install-includes
+> + 	@echo zstd static and shared library installed
+> + 
+> + install-pc: libzstd.pc
+> +-	@$(INSTALL) -d -m 755 $(DESTDIR)$(PKGCONFIGDIR)/ $(DESTDIR)$(INCLUDEDIR)/
+> ++	@$(INSTALL) -d -m 755 $(DESTDIR)$(PKGCONFIGDIR)/
+> + 	@$(INSTALL_DATA) libzstd.pc $(DESTDIR)$(PKGCONFIGDIR)/
+> + 
+> + install-static: libzstd.a
+> +@@ -178,6 +178,7 @@ install-shared: libzstd
+> + 
+> + install-includes:
+> + 	@echo Installing includes
+> ++	@$(INSTALL) -d -m 755 $(DESTDIR)$(INCLUDEDIR)/
+> + 	@$(INSTALL_DATA) zstd.h $(DESTDIR)$(INCLUDEDIR)
+> + 	@$(INSTALL_DATA) common/zstd_errors.h $(DESTDIR)$(INCLUDEDIR)
+> + 	@$(INSTALL_DATA) deprecated/zbuff.h $(DESTDIR)$(INCLUDEDIR)     # prototypes generate deprecation warnings
+> +-- 
+> +2.17.0
+> +
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thanks for catching this (a follow up patch or a v2 version doing the same for the
+libs as suggested on the upstream pull request would be nice), neverless:
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
