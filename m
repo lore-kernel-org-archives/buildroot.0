@@ -1,39 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 May 2018 14:25:54 +0200
-Subject: [Buildroot] Analysis of build results for 2018-05-06
-In-Reply-To: <20180508095718.geg4ousamb3ae2xi@tarshish>
-References: <20180507060023.E26CE207B7@mail.bootlin.com>
- <20180507234635.4d21612b@windsurf>
- <20180508043238.c3fv3552a7yo26he@tarshish>
- <20180508111447.73787b34@windsurf>
- <20180508095718.geg4ousamb3ae2xi@tarshish>
-Message-ID: <20180508142554.36d4dfa8@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 08 May 2018 12:41:04 +0000
+Subject: [Buildroot] [Bug 10996] New: bogus musl ARM toolchain
+Message-ID: <bug-10996-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10996
 
-On Tue, 8 May 2018 12:57:18 +0300, Baruch Siach wrote:
+            Bug ID: 10996
+           Summary: bogus musl ARM toolchain
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: thomas.petazzoni at free-electrons.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> > Argh indeed, my bad. I applied it locally, didn't push it, and then
-> > due to a git reset --hard, it got lost. I've now re-applied that
-> > commit, and pushed this time.  
-> 
-> Since you have the commit ID you could restore the original commit with
-> 
->   git checkout -b lxc-fix 52dcec570e05
+The following defconfig doesn't build:
 
-That's what I did, with:
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_STATIC_LIBS=y
+BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_PACKAGE_ZIP=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-	git cherry-pick 52dcec570e05
+It doesn't build because the toolchain is broken, and doesn't manage to link a
+simple program like this:
 
-Thanks :-)
+$ cat foo.c 
+int main(void) { mktime(); return 0; }
 
-Thomas
+ ./output/host/bin/arm-linux-gcc -o foo foo.c
+foo.c: In function ?main?:
+foo.c:1:18: warning: implicit declaration of function ?mktime?
+[-Wimplicit-function-declaration]
+ int main(void) { mktime(); return 0; }
+                  ^~~~~~
+/home/thomas/projets/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/6.4.0/libgcc.a(_dvmd_lnx.o):
+In function `__aeabi_idiv0':
+/home/thomas/projets/buildroot/output/build/host-gcc-final-6.4.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1354:
+undefined reference to `raise'
+collect2: error: ld returned 1 exit status
+
+This is causing the following build issues in our autobuilders:
+http://autobuild.buildroot.net/?reason=zip%&libc=musl.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
