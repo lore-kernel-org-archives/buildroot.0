@@ -1,47 +1,31 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon,  7 May 2018 16:03:49 -0700
-Subject: [Buildroot] [PATCH 1/1] python-raven: bump to version 6.7.0
-Message-ID: <20180507230349.9443-1-joseph.kogut@gmail.com>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Tue, 08 May 2018 00:56:17 +0000
+Subject: [Buildroot] Analysis of build results for 2018-05-06
+In-Reply-To: <20180507234635.4d21612b@windsurf>
+References: <20180507060023.E26CE207B7@mail.bootlin.com>
+ <20180507234635.4d21612b@windsurf>
+Message-ID: <CAFt09wMuFXc7cijYZzj0i7cxvKmcCnLkdsoOnkCn5TOfNBSuMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- package/python-raven/python-raven.hash | 6 +++---
- package/python-raven/python-raven.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Thomas,
 
-diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
-index 66452a7fc1..ce21886e76 100644
---- a/package/python-raven/python-raven.hash
-+++ b/package/python-raven/python-raven.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
--md5	4471e9e881da64f057ee7740345a6b27  raven-6.5.0.tar.gz
--sha256	84da75114739191bdf2388f296ffd6177e83567a7fbaf2701e034ad6026e4f3b  raven-6.5.0.tar.gz
-+# md5, sha256 from https://pypi.python.org/pypi/raven/json
-+md5	35398b2447d337315e0069c2580d3468  raven-6.7.0.tar.gz
-+sha256	f908e9b39f02580e7f822030d119ed3b2e8d32300a2fec6373e5827d588bbae7  raven-6.7.0.tar.gz
- # License file, locally calculated
- sha256	5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233  LICENSE
-diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
-index 4a4cdee353..4aa49f5b37 100644
---- a/package/python-raven/python-raven.mk
-+++ b/package/python-raven/python-raven.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_RAVEN_VERSION = 6.5.0
-+PYTHON_RAVEN_VERSION = 6.7.0
- PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
--PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e0/26/1bdd4431f59ff92fee7f2378b7d54eb175eb69f68c40c6c9b15161f6774f
-+PYTHON_RAVEN_SITE = https://files.pythonhosted.org/packages/d7/54/7d199f893a0ac01f8df9b7ec39c0f3ac19146e78b33401b1f4984c9d3583
- PYTHON_RAVEN_SETUP_TYPE = setuptools
- PYTHON_RAVEN_LICENSE = BSD-3-Clause
- PYTHON_RAVEN_LICENSE_FILES = LICENSE
--- 
-2.17.0
+On Mon, May 7, 2018 at 4:46 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+[snip]
+> > microblazeel |                         libnss | TIM |
+http://autobuild.buildroot.net/results/c973d3a73b5ce75d678e4419c5db2dcf9016aa29
+|
+
+> Also causes compiler hangs on Microblaze it seems:
+
+>    http://autobuild.buildroot.net/?reason=libnss
+
+> Anybody to see whether this issue is fixed with gcc 7.x or gcc 8.x ?
+
+Seems to build fine with 7.x and I rebuild with 6.x to confirm that 6.x
+still hangs/fails.
