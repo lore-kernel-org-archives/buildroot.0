@@ -1,76 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 May 2018 15:34:28 +0200
-Subject: [Buildroot] [PATCH v2] support/download/file: fix file://
- protocol handling
-In-Reply-To: <1525786111-6206-1-git-send-email-angelo@amarulasolutions.com>
-References: <1525786111-6206-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180508133428.GO14524@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 May 2018 15:35:22 +0200
+Subject: [Buildroot] [git commit] uclibc: fix ldconfig for x86_64
+Message-ID: <20180508133613.04A898C004@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=fcac93eeabfbce374c814aa493164d81eed2f016
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the respin.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...vert-ldconfig-add-glibc-compatibility-fix.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-On 2018-05-08 15:28 +0200, Angelo Compagnucci spake thusly:
-> When a file is used a source for download using the file:// protocol, a
-> malformed url is passed to the file download script which then crashes.
-> Following an example of a wrong path passed to the script:
-> 
-> eval cp -v ''\''file:///home/angelo/DEV/TOOLCHAINSarmv7-eabihf--glibc--bleeding-edge-2017.11-1.tar.bz2'\''' ''\''/home/angelo/DEV/BUILDROOT/br_qemu_arm/build/.armv7-eabihf--glibc--bleeding-edge-2017.11-1.tar.bz2.f403PT/output'\'''.
-> 
-> Path passed to cp lacks of a / between dir and file part of the url,
-> moreover it presents a wrong file:// prefix.
-
-Well, the misisng / is indeed incorrect.
-
-However, the leading protocol is expected: the dl-wrapper calls all
-backend scripts with the exact same set of options and semantics. It's
-is then up to the backend scripts to interpret that as they see fit.
-
-So, it is not "semantically wrong"; it *is* correct.
-
-The bug lies in the fact that the 'file' backend did not strip out the
-protocol part when calling the actual tool; we missed that during the
-download overhaul.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> Fixes:
-> 
-> cp: cannot stat
-> 'file:///home/angelo/DEV/TOOLCHAINSarmv7-eabihf--glibc--bleeding-edge-2017.11-1.tar.bz2':
-> No such file or directory
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  support/download/file | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/download/file b/support/download/file
-> index fefd6d2..6dd37b0 100755
-> --- a/support/download/file
-> +++ b/support/download/file
-> @@ -40,4 +40,4 @@ _localfiles() {
->      eval ${LOCALFILES} "${@}"
->  }
->  
-> -_localfiles ${verbose} "'${dir}${file}'" "'${output}'"
-> +_localfiles ${verbose} "'${dir##file://}/${file}'" "'${output}'"
-> -- 
-> 2.7.4
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/uclibc/0001-Revert-ldconfig-add-glibc-compatibility-fix.patch b/package/uclibc/0001-Revert-ldconfig-add-glibc-compatibility-fix.patch
+new file mode 100644
+index 0000000000..7ba3b2866d
+--- /dev/null
++++ b/package/uclibc/0001-Revert-ldconfig-add-glibc-compatibility-fix.patch
+@@ -0,0 +1,54 @@
++From 92d250d387e247029900c9074150f45866b29781 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Sun, 29 Apr 2018 19:34:11 +0200
++Subject: [PATCH] Revert "ldconfig: add glibc compatibility fix"
++
++This reverts commit 2a3bb4daf5778c5875674cd26a3c75b3d460a042.
++
++This is breaking ld.so.cache usage. Seen on Gentoo/amd64.
++
++Reported-by: "Anthony G. Basile" <basile@freeharbor.net>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ utils/ldconfig.c | 11 ++++++-----
++ 1 file changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/utils/ldconfig.c b/utils/ldconfig.c
++index 58939d6..e6b7881 100644
++--- a/utils/ldconfig.c
+++++ b/utils/ldconfig.c
++@@ -184,9 +184,10 @@ static char *readsoname(char *name, FILE *infile, int expected_type,
++ 		res = readsoname32(name, infile, expected_type, type);
++ 	else {
++ 		res = readsoname64(name, infile, expected_type, type);
++-
++-		// For 64-bit glibc compatibility
++-		*type |= FLAG_X8664_LIB64;
+++#if 0
+++		/* relies on multilib support which we dont have ... */
+++		*type |= LIB_ELF64;
+++#endif
++ 	}
++ 
++ 	return res;
++@@ -757,7 +758,7 @@ void cache_print(void)
++ 
++ 	for (fd = 0; fd < header->nlibs; fd++) {
++ 		printf("\t%s ", strs + libent[fd].sooffset);
++-		switch (libent[fd].flags & ~LIB_ELF64 & FLAG_TYPE_MASK) {
+++		switch (libent[fd].flags & ~LIB_ELF64) {
++ 		case LIB_DLL:
++ 			printf("(libc4)");
++ 			break;
++@@ -770,7 +771,7 @@ void cache_print(void)
++ 		case LIB_ELF_LIBC5:
++ 		case LIB_ELF_LIBC6:
++ 			printf("(libc%d%s)",
++-			       (libent[fd].flags & ~LIB_ELF64 & FLAG_TYPE_MASK) + 3,
+++			       (libent[fd].flags & ~LIB_ELF64) + 3,
++ 			       libent[fd].flags & LIB_ELF64 ? "/64" : "");
++ 			break;
++ 		default:
++-- 
++2.1.4
++
