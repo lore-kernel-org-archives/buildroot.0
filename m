@@ -1,49 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 May 2018 14:54:45 +0200
-Subject: [Buildroot] [git commit] python-raven: bump to version 6.7.0
-Message-ID: <20180508125444.959A28B8C6@busybox.osuosl.org>
+Date: Tue, 8 May 2018 14:54:46 +0200
+Subject: [Buildroot] [git commit] sudo: bump to version 1.8.23
+Message-ID: <20180508125444.9CD268B8B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd2313cb3846a231dc1a48aaa9f4583565d56b1d
+commit: https://git.buildroot.net/buildroot/commit/?id=ce58ae893d7dc2c6209abb6353b96376e137c261
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Use += for the SUDO_CONF_ENV conditional assignment to avoid override of
+SUDO_CONF_ENV assignments that might be added in the future.
+
+Add license file hash.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-raven/python-raven.hash | 6 +++---
- package/python-raven/python-raven.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/sudo/sudo.hash | 4 +++-
+ package/sudo/sudo.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-raven/python-raven.hash b/package/python-raven/python-raven.hash
-index 66452a7fc1..ce21886e76 100644
---- a/package/python-raven/python-raven.hash
-+++ b/package/python-raven/python-raven.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/raven/json, sha256 locally computed
--md5	4471e9e881da64f057ee7740345a6b27  raven-6.5.0.tar.gz
--sha256	84da75114739191bdf2388f296ffd6177e83567a7fbaf2701e034ad6026e4f3b  raven-6.5.0.tar.gz
-+# md5, sha256 from https://pypi.python.org/pypi/raven/json
-+md5	35398b2447d337315e0069c2580d3468  raven-6.7.0.tar.gz
-+sha256	f908e9b39f02580e7f822030d119ed3b2e8d32300a2fec6373e5827d588bbae7  raven-6.7.0.tar.gz
- # License file, locally calculated
- sha256	5ce9459bc19ced99cc9eb135d4f559ed01e336354bdf16dd998be85aa688c233  LICENSE
-diff --git a/package/python-raven/python-raven.mk b/package/python-raven/python-raven.mk
-index 4a4cdee353..4aa49f5b37 100644
---- a/package/python-raven/python-raven.mk
-+++ b/package/python-raven/python-raven.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 80448ff792..3f20ccb15e 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,2 +1,4 @@
+ # From: http://www.sudo.ws/download.html
+-sha256 74c5746cd33a814e2431c39faf0d76f7f8a697379bd073862e3b156cf0d76368  sudo-1.8.21p2.tar.gz
++sha256 d863d29b6fc87bc784a3223350e2b28a2ff2c4738f0fb8f1c92bb38c3017e679  sudo-1.8.23.tar.gz
++# Locally calculated
++sha256 b6625a7b58e9469a7adfd1732960579a19fe84b3508030f9a31641283e2250b8  doc/LICENSE
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 77a95bd65e..136b6c6915 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_RAVEN_VERSION = 6.5.0
-+PYTHON_RAVEN_VERSION = 6.7.0
- PYTHON_RAVEN_SOURCE = raven-$(PYTHON_RAVEN_VERSION).tar.gz
--PYTHON_RAVEN_SITE = https://pypi.python.org/packages/e0/26/1bdd4431f59ff92fee7f2378b7d54eb175eb69f68c40c6c9b15161f6774f
-+PYTHON_RAVEN_SITE = https://files.pythonhosted.org/packages/d7/54/7d199f893a0ac01f8df9b7ec39c0f3ac19146e78b33401b1f4984c9d3583
- PYTHON_RAVEN_SETUP_TYPE = setuptools
- PYTHON_RAVEN_LICENSE = BSD-3-Clause
- PYTHON_RAVEN_LICENSE_FILES = LICENSE
+-SUDO_VERSION = 1.8.21p2
++SUDO_VERSION = 1.8.23
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
+@@ -45,7 +45,7 @@ SUDO_CONF_OPTS += --with-ldap
+ # it will fail with "undefined reference" errors.
+ ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_OPENSSL),yy)
+ SUDO_DEPENDENCIES += host-pkgconf
+-SUDO_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
++SUDO_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
+ endif
+ else
+ SUDO_CONF_OPTS += --without-ldap
