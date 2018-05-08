@@ -1,59 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  8 May 2018 22:40:18 +0200
-Subject: [Buildroot] [PATCH 5/7 v2] core/package: add possibility to declare
- download dependencies
+Date: Tue,  8 May 2018 22:40:20 +0200
+Subject: [Buildroot] [PATCH 7/7 v2] fs: always depend on build host-tar if
+ needed
 In-Reply-To: <cover.1525812011.git.yann.morin.1998@free.fr>
 References: <cover.1525812011.git.yann.morin.1998@free.fr>
-Message-ID: <3af4779f52443d88c1c324e847403de63a206efe.1525812011.git.yann.morin.1998@free.fr>
+Message-ID: <d8b722a2f2638142b1a68c7c5bd7ced36d2f34db.1525812011.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some packages, we may need to have a certain set of host-tools built
-before the download of said packages are attempted. For example, when
-the system tar is not suitable, we will want to build our own tar before
-we attempt a git download (because we generate a tarball in the git
-backend).
+Currently, the filesystems do not depend on building host-tar when it is
+needed, even though all of them have to extract the intermediate tarball.
 
-Mimick the _EXTRACT_DEPENDENCIES, and introduce _DOWNLOAD_DEPENDENCIES.
-As for _EXTRACT_DEPENDENCIES, we do not document _DOWNLOAD_DEPENDENCIES,
-on the assumption that it is mostly for internal use.
+However, in degenerate (but legally valid) configurations with no
+user-selectable package selected, host-tar would not be built, so the
+rootfs images would use whatever improper tar the system has.
+
+Add the conditional dependency to host-tar to the rootfs-common
+intermediate image. Since this is the internal step that all real rootfs
+generators depend on, they now properly depend on host-tar when needed.
+
+In practice, when host-tar is needed, it will always be built before the
+rootfs inages, because it is a dependency of all packages (except a very
+few, like the skeleton), of which host-fakeroot, which is a mandatory
+dependency of rootfs-comon anyway. But for consistency sake, let's
+explicitly add host-tar as a dependency to rootfs-common too.
+
+Note that rootfs-tar already had that dependency, and we leave it as-is
+because it is semantically correct, even if superfluous.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-generic.mk | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9d1fec396a..78aa751b0d 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -593,11 +593,13 @@ endif
+---
+Note: yes, I had a randpackageconfig turn up a configuration with no
+user-selectable package enabled... I should just stop coding and go
+play bingo. Too bad there is no big jackpot tonight... ;-]
+---
+ fs/common.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/common.mk b/fs/common.mk
+index 9baf367729..d106783813 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -63,6 +63,7 @@ ROOTFS_COMMON_TARGET_DIR = $(FS_DIR)/target
  
- # Eliminate duplicates in dependencies
- $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
-+$(2)_FINAL_DOWNLOAD_DEPENDENCIES = $$(sort $$($(2)_DOWNLOAD_DEPENDENCIES))
- $(2)_FINAL_EXTRACT_DEPENDENCIES = $$(sort $$($(2)_EXTRACT_DEPENDENCIES))
- $(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
- $(2)_FINAL_ALL_DEPENDENCIES = \
- 	$$(sort \
- 		$$($(2)_FINAL_DEPENDENCIES) \
-+		$$($(2)_FINAL_DOWNLOAD_DEPENDENCIES) \
- 		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
- 		$$($(2)_FINAL_PATCH_DEPENDENCIES))
+ ROOTFS_COMMON_DEPENDENCIES = \
+ 	host-fakeroot host-makedevs \
++	$(BR2_TAR_HOST_DEPENDENCY) \
+ 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
  
-@@ -730,6 +732,7 @@ $$($(2)_TARGET_EXTRACT): | $$($(2)_FINAL_EXTRACT_DEPENDENCIES)
- $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
- 
- $(1)-source:		$$($(2)_TARGET_SOURCE)
-+$$($(2)_TARGET_SOURCE): | $$($(2)_FINAL_DOWNLOAD_DEPENDENCIES)
- 
- $(1)-all-source:	$(1)-legal-source
- $(1)-legal-info:	$(1)-legal-source
+ $(ROOTFS_COMMON_TAR): ROOTFS=COMMON
 -- 
 2.14.1
