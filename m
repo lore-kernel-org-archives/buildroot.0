@@ -1,58 +1,78 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 08 May 2018 03:46:21 +0000
-Subject: [Buildroot] [PATCH v2 1/1] zeromq: check if -latomic is needed
-In-Reply-To: <20180507232430.7d507c55@windsurf>
-References: <20180507202623.29498-1-asafka7@gmail.com>
- <20180507232430.7d507c55@windsurf>
-Message-ID: <CALFsTFV4MUFtydH3nC2M=h5W+3bn+gp54MAciwOzGKEvddym8g@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 8 May 2018 06:48:27 +0300
+Subject: [Buildroot] [PATCH v2 1/1] python-websockets: backport fix for
+ upstream issue #350
+In-Reply-To: <20180507221823.6364-1-joseph.kogut@gmail.com>
+References: <20180507205733.2433-1-joseph.kogut@gmail.com>
+ <20180507221823.6364-1-joseph.kogut@gmail.com>
+Message-ID: <20180508034827.rsz55f6wyu6jmps2@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sure, I'll send an update on the upstream.
-Would it be necessary to send a new patch here? It will probably be the
-same code, just the pull request link on the commit message will change
-(and we won't be able to have a link with all the patch anyway since half
-of it was already merged).
+Hi Joseph,
 
-Thanks,
-Asaf.
+On Mon, May 07, 2018 at 03:18:23PM -0700, Joseph Kogut wrote:
+> Fetch from: https://github.com/aaugustin/websockets/commit/402059e4a46a764632eba8a669f5b012f173ee7b.patch
+> 
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+> Changes v1 -> v2:
+> 	- Include patch locally (suggested by Thomas)
+> 
+>  ...59e4a46a764632eba8a669f5b012f173ee7b.patch | 256 ++++++++++++++++++
+>  1 file changed, 256 insertions(+)
+>  create mode 100644 package/python-websockets/402059e4a46a764632eba8a669f5b012f173ee7b.patch
+> 
+> diff --git a/package/python-websockets/402059e4a46a764632eba8a669f5b012f173ee7b.patch b/package/python-websockets/402059e4a46a764632eba8a669f5b012f173ee7b.patch
 
-On Tue, May 8, 2018, 00:24 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-wrote:
+The patch file name should be numbered. See the patch naming conversion in 
+section 18.1.2 of the manual:
 
-> Hello,
->
-> On Mon,  7 May 2018 23:26:23 +0300, Asaf Kahlon wrote:
-> > Fixes:
-> >
-> http://autobuild.buildroot.net/results/b149aa2ee00e4d6a53c884cf99ecb2dd8af58b65/
-> >
-> http://autobuild.buildroot.net/results/e4b3616ac2695d3b6898185a70da6509b1faa2b8/
-> >
-> > Patch the package to check if -latomic is needed to be added, depending
-> on the
-> > result of AC_LINK_IFELSE.
->
-> Thanks for this new iteration.
->
-> > The patch was sent to upstream, see:
-> > https://github.com/zeromq/libzmq/pull/3083
->
-> Sadly, this pull request corresponds to the previous iteration, and it
-> has been merged. Perhaps you can send a follow-up patch upstream to
-> improve the situation ?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180508/877c8506/attachment.html>
+  https://buildroot.org/downloads/manual/manual.html#_providing_patches
+
+You can easily generate this patch using 'git format-patch':
+
+  git format-patch -N --no-thread -s -1 402059e4a46a76
+
+> new file mode 100644
+> index 0000000000..62e93bdd2e
+> --- /dev/null
+> +++ b/package/python-websockets/402059e4a46a764632eba8a669f5b012f173ee7b.patch
+> @@ -0,0 +1,256 @@
+> +From 402059e4a46a764632eba8a669f5b012f173ee7b Mon Sep 17 00:00:00 2001
+> +From: Aymeric Augustin <aymeric.augustin@m4x.org>
+> +Date: Tue, 1 May 2018 17:05:05 +0200
+> +Subject: [PATCH] Fix behavior of recv() in the CLOSING state.
+> +
+> +The behavior wasn't tested correctly: in some test cases, the connection
+> +had already moved to the CLOSED state, where the close code and reason
+> +are already known.
+> +
+> +Refactor half_close_connection_{local,remote} to allow multiple runs of
+> +the event loop while remaining in the CLOSING state. Refactor affected
+> +tests accordingly.
+> +
+> +I verified that all tests in the CLOSING state were behaving is intended
+> +by inserting debug statements in recv/send/ping/pong and running:
+> +
+> +$ PYTHONASYNCIODEBUG=1 python -m unittest -v websockets.test_protocol.{Client,Server}Tests.test_{recv,send,ping,pong}_on_closing_connection_{local,remote}
+> +
+> +Fix #317, #327, #350, #357.
+
+Your sign-off is missing. The -s option for git format-patch adds that for 
+you.
+
+> +---
+> + websockets/protocol.py      | 10 +++---
+> + websockets/test_protocol.py | 78 +++++++++++++++++++++++++++++++++++----------
+> + 2 files changed, 66 insertions(+), 22 deletions(-)
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
