@@ -1,42 +1,45 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 8 May 2018 19:36:31 +0200
-Subject: [Buildroot] [PATCH] Revert "zeromq: needs NPTL"
-In-Reply-To: <20180508153420.0c334f27@windsurf.home>
-References: <20180505160530.GA1774@waldemar-brodkorb.de>
- <20180508153420.0c334f27@windsurf.home>
-Message-ID: <20180508173631.GP31635@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  8 May 2018 21:26:17 +0300
+Subject: [Buildroot] [PATCH 2/2] zstd: bump to version 1.3.4
+In-Reply-To: <d9cdc06bb6718534ed51a927f7adeab442a4e110.1525803977.git.baruch@tkos.co.il>
+References: <d9cdc06bb6718534ed51a927f7adeab442a4e110.1525803977.git.baruch@tkos.co.il>
+Message-ID: <c4d659d810a4d47b42546d74a013f01ac7f62cba.1525803977.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/zstd/zstd.hash | 2 +-
+ package/zstd/zstd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Hello,
-> 
-> Thanks Waldemar for fixing this issue. Some questions below, though.
-> 
-> On Sat, 5 May 2018 18:05:31 +0200, Waldemar Brodkorb wrote:
-> > This reverts commit 1e2a8d4111f57e79c1848c7a70c6501e2bdacd58.
-> > 
-> > Latest uClibc-ng release supports the missing functions even for
-> 
-> What is "Latest" ? 1.0.30 ?
-
-Yes, 1.0.30. Or do you know of any newer release? ;)
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index 51e5fc245ca3..f7aadfb5db75 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 a77c47153ee7de02626c5b2a097005786b71688be61e9fb81806a011f90b297b zstd-v1.3.3.tar.gz
++sha256 92e41b6e8dd26bbd46248e8aa1d86f1551bc221a796277ae9362954f26d605a9 zstd-v1.3.4.tar.gz
  
-> In fact, it's not even in an uClibc-ng release I believe, it's fixed by
-> 0002-librt-declare-clock_nanosleep-independent-of-thread-.patch, which
-> will be part of 1.0.31. Is this correct ?
-
-No. ZeroMQ introduced the usage of pthread_condattr_{s,g}etclock(),
-which was added here 04a676f3c8d2443499f27612f69ee88e12089e61 for
-Linuxthreads.
-It compiled very well without the hotfix for clock_nanosleep
-declaration added via
-0002-librt-declare-clock_nanosleep-independent-of-thread-.patch.
-
-best regards
- Waldemar
+ # License files (locally computed as well)
+ sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index c74c8f24b63f..4915cee07d50 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZSTD_VERSION = v1.3.3
++ZSTD_VERSION = v1.3.4
+ ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+ ZSTD_INSTALL_STAGING = YES
+ ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+-- 
+2.17.0
