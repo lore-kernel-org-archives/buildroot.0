@@ -1,36 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 May 2018 10:54:46 +0200
-Subject: [Buildroot] [PATCH v2/next 2/4] woff2: new package
-In-Reply-To: <20180323185942.60252-3-aperez@igalia.com>
-References: <20180323185942.60252-1-aperez@igalia.com>
- <20180323185942.60252-3-aperez@igalia.com>
-Message-ID: <20180509105446.204b06e6@windsurf.home>
+Date: Wed, 9 May 2018 10:56:52 +0200
+Subject: [Buildroot] [PATCH 1/1] log4cplus: bump to version 2.0.0
+In-Reply-To: <20180506093507.24850-1-fontaine.fabrice@gmail.com>
+References: <20180506093507.24850-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180509105652.3f6fcea1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian,
+Hello Fabrice,
 
-On Fri, 23 Mar 2018 20:59:40 +0200, Adrian Perez de Castro wrote:
-> Add the woff2 package to Builroot. This is needed by webkitgtk from
-> version 2.20.0 onwards. WebKitGTK+ used to bundle a copy of the library,
-> but it stopped doing so now that the upstream is has been making
-> releases.
+On Sun,  6 May 2018 11:35:07 +0200, Fabrice Fontaine wrote:
+> - LICENSE has been updated to add threadpool license (BSD-like)
+> - Add hash for license file
 > 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Fixes:
+>  - http://autobuild.buildroot.net/results/a4690fd3e46354776f6d6addd17226622c5f4961
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-This package causes a build failure on m68k:
+Causes new build failures:
 
-  http://autobuild.buildroot.net/results/78d/78d25015ac464c985e5a550ce9a80d85080dc6f2/build-end.log
+  http://autobuild.buildroot.net/?reason=log4cplus-2.0.0
 
-  http://autobuild.buildroot.net/?reason=woff2-1.0.2
+Could you have a look ?
 
-It's a compiler issue. It would be nice to investigate whether it has
-been fixed in newer versions of gcc, if a workaround or fix is possible.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
