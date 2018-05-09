@@ -1,38 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 May 2018 10:43:05 +0200
-Subject: [Buildroot] [PATCH v2,1/1] libcap: only install shared version
-Message-ID: <20180509084305.18797-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 9 May 2018 10:48:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/znc: bump version to 1.7.0
+In-Reply-To: <20180506092903.25598-1-bernd.kuhls@t-online.de>
+References: <20180506092903.25598-1-bernd.kuhls@t-online.de>
+Message-ID: <20180509104820.54939511@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If BR2_SHARED_LIBS is set, only install shared version of library
-(continue to build both libraries through all target as there is no
-libcap.so target but only a libcap.so.$(VERSION).$(MINOR))
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update to have a clearer approach
+On Sun,  6 May 2018 11:29:03 +0200, Bernd Kuhls wrote:
+> Increased minimum gcc version to 4.8 as mentioned in the Changelog:
+> https://wiki.znc.in/ChangeLog/1.7.0
+> 
+> Removed all patches:
+> - 0001 was applied upstream:
+> https://github.com/znc/znc/commit/483074cbf82a48a3ff01838fcbaec00553d1882c
+> 
+> - 0002 is not needed anymore after upstream switched Csocket to a git
+>   submodule:
+> https://github.com/znc/znc/commit/9166e6ed40f0c7a85eee0d024b12510c13863f55#diff-8a725997e024d92d67b33a90cffb8342
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- package/libcap/libcap.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Causes a build failure:
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 48c2cb3456..a947fa0686 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -18,6 +18,9 @@ HOST_LIBCAP_DEPENDENCIES = host-gperf
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBCAP_MAKE_TARGET = libcap.a libcap.pc
- LIBCAP_MAKE_INSTALL_TARGET = install-static
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+LIBCAP_MAKE_TARGET = all
-+LIBCAP_MAKE_INSTALL_TARGET = install-shared
- else
- LIBCAP_MAKE_TARGET = all
- LIBCAP_MAKE_INSTALL_TARGET = install
+  http://autobuild.buildroot.net/?reason=znc-1.7.0
+
+Could you have a look ?
+
+Thanks,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
