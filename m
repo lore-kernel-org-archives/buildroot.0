@@ -1,42 +1,52 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 May 2018 12:23:52 +0200
-Subject: [Buildroot] [PATCH 1/1] libhdhomerun: bump to version 20180327
-Message-ID: <20180509102352.26237-1-fontaine.fabrice@gmail.com>
+Date: Wed,  9 May 2018 12:28:49 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself to some packages
+Message-ID: <20180509102849.26411-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Add myself to lcms2, liblockfile, libnetfilter_conntrack,
+libnetfilter_queue and whois
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libhdhomerun/libhdhomerun.hash | 3 ++-
- package/libhdhomerun/libhdhomerun.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ DEVELOPERS | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
-index 0938889d88..ed972ddfc1 100644
---- a/package/libhdhomerun/libhdhomerun.hash
-+++ b/package/libhdhomerun/libhdhomerun.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 0cb392231961fab6c226c69012503e2ebe46ac0f13512689bd37d6cf9ee838a1  libhdhomerun_20170930.tgz
-+sha256 d91fd3782f9a0834242f7110c44067647843602f8e95052045250b7c229ccbd5  libhdhomerun_20180327.tgz
-+sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
-index 10aff88e6a..5e32370a9d 100644
---- a/package/libhdhomerun/libhdhomerun.mk
-+++ b/package/libhdhomerun/libhdhomerun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3ddb292894..f085261ac2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -677,6 +677,7 @@ F:	package/gupnp-tools/
+ F:	package/hiredis/
+ F:	package/i2pd/
+ F:	package/igd2-for-linux/
++F:	package/lcms2/
+ F:	package/lftp/
+ F:	package/libcap-ng/
+ F:	package/libcdio-paranoia/
+@@ -690,8 +691,11 @@ F:	package/libgtk2/
+ F:	package/libgtk3/
+ F:	package/libidn/
+ F:	package/libjpeg/
++F:	package/liblockfile/
+ F:	package/libmatroska/
+ F:	package/libmpdclient/
++F:	package/libnetfilter_conntrack/
++F:	package/libnetfilter_queue/
+ F:	package/libupnp/
+ F:	package/libupnp18/
+ F:	package/minissdpd/
+@@ -703,6 +707,7 @@ F:	package/rygel/
+ F:	package/safeclib/
+ F:	package/tinycbor/
+ F:	package/tinydtls/
++F:	package/whois/
  
--LIBHDHOMERUN_VERSION = 20170930
-+LIBHDHOMERUN_VERSION = 20180327
- LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
- LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
- LIBHDHOMERUN_LICENSE = LGPL-2.1+
+ N:	Falco Hyfing <hyfinglists@gmail.com>
+ F:	package/python-pymodbus/
 -- 
 2.14.1
