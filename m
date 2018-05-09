@@ -1,39 +1,54 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Wed, 09 May 2018 08:35:20 +0200
-Subject: [Buildroot] regarding creating my own customized package in
- buildroot and use it in my OS in Raspberry Pi
-In-Reply-To: <mailman.7.1525694405.18540.buildroot@busybox.net>
-References: <mailman.7.1525694405.18540.buildroot@busybox.net>
-Message-ID: <2fb49bd5b94a59b1a12e1a3813beb321@umbiko.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 9 May 2018 09:22:54 +0200
+Subject: [Buildroot] [PATCH] Revert "zeromq: needs NPTL"
+In-Reply-To: <20180508173631.GP31635@waldemar-brodkorb.de>
+References: <20180505160530.GA1774@waldemar-brodkorb.de>
+ <20180508153420.0c334f27@windsurf.home>
+ <20180508173631.GP31635@waldemar-brodkorb.de>
+Message-ID: <20180509092254.24a64713@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vineeth,
+Hello,
 
-> ... I am able to build without any error. But am not able to view
-> that in my newly built OS. Or couldn't use that package in my OS. I am 
-> not
-> able to sort where the issue is? Kindly help. Thank you!
+On Tue, 8 May 2018 19:36:31 +0200, Waldemar Brodkorb wrote:
 
-you are probably missing code in your makefile(s) for installing your 
-package. You need to copy the executable to the target root filesystem 
-somehow, otherwise it will not show up in the target system.
+> > Thanks Waldemar for fixing this issue. Some questions below, though.
+> > 
+> > On Sat, 5 May 2018 18:05:31 +0200, Waldemar Brodkorb wrote:  
+> > > This reverts commit 1e2a8d4111f57e79c1848c7a70c6501e2bdacd58.
+> > > 
+> > > Latest uClibc-ng release supports the missing functions even for  
+> > 
+> > What is "Latest" ? 1.0.30 ?  
+> 
+> Yes, 1.0.30. Or do you know of any newer release? ;)
 
-Usually this code is placed in the project's makefile [1] and executed 
-by the buildroot environment, but you could also place instructions 
-directly into your buildroot .mk file.
+No, but the problem with saying "Latest uClibc-ng release" in a commit
+log is that it's not going to be very informative 6 months or 2 years
+from now, when someone reads the commit log :-)
 
-For a quick-and-dirty solution you might check existing packages [2] for 
-examples what could be done. For a reference I would recommend section 
-17.5 of the buildroot manual [3].
+Saying "Since uClibc-ng 1.0.30, the missing functions are supported"
+makes it very clear, and will remain useful in the future.
 
-Kind regards,
-Andreas
+> > In fact, it's not even in an uClibc-ng release I believe, it's fixed by
+> > 0002-librt-declare-clock_nanosleep-independent-of-thread-.patch, which
+> > will be part of 1.0.31. Is this correct ?  
+> 
+> No. ZeroMQ introduced the usage of pthread_condattr_{s,g}etclock(),
+> which was added here 04a676f3c8d2443499f27612f69ee88e12089e61 for
+> Linuxthreads.
+> It compiled very well without the hotfix for clock_nanosleep
+> declaration added via
+> 0002-librt-declare-clock_nanosleep-independent-of-thread-.patch.
 
-[1] It should have a section to handle the 'make install' command.
-[2] E.g. package/b43-firmware, package/tcping
-[3] 
-https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_with_specific_build_systems
+OK, thanks for the explanation!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
