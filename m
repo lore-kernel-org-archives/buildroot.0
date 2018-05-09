@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 May 2018 09:22:54 +0200
-Subject: [Buildroot] [PATCH] Revert "zeromq: needs NPTL"
-In-Reply-To: <20180508173631.GP31635@waldemar-brodkorb.de>
-References: <20180505160530.GA1774@waldemar-brodkorb.de>
- <20180508153420.0c334f27@windsurf.home>
- <20180508173631.GP31635@waldemar-brodkorb.de>
-Message-ID: <20180509092254.24a64713@windsurf.home>
+Date: Wed, 9 May 2018 09:47:43 +0200
+Subject: [Buildroot] [PATCH 1/1] libcap: only install shared version
+In-Reply-To: <20180508161136.13531-1-fontaine.fabrice@gmail.com>
+References: <20180508161136.13531-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180509094743.6eb34b9b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +12,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 8 May 2018 19:36:31 +0200, Waldemar Brodkorb wrote:
+On Tue,  8 May 2018 18:11:36 +0200, Fabrice Fontaine wrote:
 
-> > Thanks Waldemar for fixing this issue. Some questions below, though.
-> > 
-> > On Sat, 5 May 2018 18:05:31 +0200, Waldemar Brodkorb wrote:  
-> > > This reverts commit 1e2a8d4111f57e79c1848c7a70c6501e2bdacd58.
-> > > 
-> > > Latest uClibc-ng release supports the missing functions even for  
-> > 
-> > What is "Latest" ? 1.0.30 ?  
-> 
-> Yes, 1.0.30. Or do you know of any newer release? ;)
+> diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+> index 48c2cb3456..247fd8a58f 100644
+> --- a/package/libcap/libcap.mk
+> +++ b/package/libcap/libcap.mk
+> @@ -20,8 +20,12 @@ LIBCAP_MAKE_TARGET = libcap.a libcap.pc
+>  LIBCAP_MAKE_INSTALL_TARGET = install-static
+>  else
+>  LIBCAP_MAKE_TARGET = all
+> +ifeq ($(BR2_SHARED_LIBS),y)
+> +LIBCAP_MAKE_INSTALL_TARGET = install-shared
+> +else
+>  LIBCAP_MAKE_INSTALL_TARGET = install
+>  endif
+> +endif
 
-No, but the problem with saying "Latest uClibc-ng release" in a commit
-log is that it's not going to be very informative 6 months or 2 years
-from now, when someone reads the commit log :-)
+I think we could use a clearer approach:
 
-Saying "Since uClibc-ng 1.0.30, the missing functions are supported"
-makes it very clear, and will remain useful in the future.
+ifeq ($(BR2_STATIC_LIBS),y)
+LIBCAP_MAKE_TARGET = libcap.a libcap.pc
+LIBCAP_MAKE_INSTALL_TARGET = install-static
+else if ($(BR2_SHARED_LIBS),y)
+LIBCAP_MAKE_TARGET = all
+LIBCAP_MAKE_INSTALL_TARGET = install-shared
+else
+LIBCAP_MAKE_TARGET = all
+LIBCAP_MAKE_INSTALL_TARGET = install
+endif
 
-> > In fact, it's not even in an uClibc-ng release I believe, it's fixed by
-> > 0002-librt-declare-clock_nanosleep-independent-of-thread-.patch, which
-> > will be part of 1.0.31. Is this correct ?  
-> 
-> No. ZeroMQ introduced the usage of pthread_condattr_{s,g}etclock(),
-> which was added here 04a676f3c8d2443499f27612f69ee88e12089e61 for
-> Linuxthreads.
-> It compiled very well without the hotfix for clock_nanosleep
-> declaration added via
-> 0002-librt-declare-clock_nanosleep-independent-of-thread-.patch.
+is a lot clearer to me.
 
-OK, thanks for the explanation!
+Best regards,
 
 Thomas
 -- 
