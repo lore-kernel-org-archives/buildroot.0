@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 May 2018 23:31:31 +0200
-Subject: [Buildroot] [PATCH] support/dependencies: check that PATH does
- not contain CWD
-In-Reply-To: <20180509175924.10867-1-yann.morin.1998@free.fr>
-References: <20180509175924.10867-1-yann.morin.1998@free.fr>
-Message-ID: <20180509233131.6747ce52@windsurf.home>
+Date: Wed, 9 May 2018 23:32:56 +0200
+Subject: [Buildroot] [PATCH 1/1] dbus-glib: Bump to version 0.110
+In-Reply-To: <20180509154715.24517-1-petr.vorel@gmail.com>
+References: <20180509154715.24517-1-petr.vorel@gmail.com>
+Message-ID: <20180509233256.2bb5ce25@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  9 May 2018 19:59:24 +0200, Yann E. MORIN wrote:
-> ... and simplify the test code for PATH and LD_LIBRARY_PATH.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+On Wed,  9 May 2018 17:47:15 +0200, Petr Vorel wrote:
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  support/dependencies/dependencies.sh | 59 ++++++++++++++----------------------
->  1 file changed, 23 insertions(+), 36 deletions(-)
+>  package/dbus-glib/dbus-glib.hash | 2 +-
+>  package/dbus-glib/dbus-glib.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-This commit log was a bit terse, and didn't give any details about the
-specific bug report we had on IRC that lead to this bug fix. So I've
-extended the commit log quite a bit, and applied to master. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
