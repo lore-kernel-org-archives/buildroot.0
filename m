@@ -1,90 +1,50 @@
-From: nikh kkvv <nikhkkv@gmail.com>
-Date: Wed, 9 May 2018 20:16:24 +0530
-Subject: [Buildroot] ubi filesytem issue
-In-Reply-To: <1d185052-8431-9398-581e-97a6e8ef4ac8@mind.be>
-References: <1525768603017-0.post@n4.nabble.com>
- <1d185052-8431-9398-581e-97a6e8ef4ac8@mind.be>
-Message-ID: <CAJqXeOz4z-PB+J_HrJoQEXtY=Kp7=gZpA3Gr7MHWTSbvVxFBeQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 9 May 2018 17:49:30 +0300
+Subject: [Buildroot] [PATCH] xfsprogs: bump to 4.16.1
+In-Reply-To: <1525876323-62495-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1525876323-62495-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180509144929.gl66sxuweg7lytsg@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Matt,
 
-Thanks for the replay,
-Issue due to sub page size and issue solved.
+On Wed, May 09, 2018 at 09:32:03AM -0500, Matt Weber wrote: 
+> diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+> index dffcc28..6411d74 100644
+> --- a/package/xfsprogs/xfsprogs.mk
+> +++ b/package/xfsprogs/xfsprogs.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -XFSPROGS_VERSION = 4.15.1
+> +XFSPROGS_VERSION = 4.16.1
+>  XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
+>  XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
+>  XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
+> @@ -20,10 +20,6 @@ XFSPROGS_CONF_OPTS = \
+>  	INSTALL_GROUP=root \
+>  	--enable-static
+>  
+> -ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
+> -XFSPROGS_DEPENDENCIES += libunistring
+> -endif
+> -
+>  XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
+>  
+>  $(eval $(autotools-package))
 
-Regards
-Nikhil
+libicu should be an optional dependency instead of libunistring.
 
-On Wed, May 9, 2018 at 2:23 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+Have you tested build with libicu?
 
->
->
-> On 08-05-18 10:36, nikh wrote:
-> > Hi,
-> >
-> > I am nikh,
-> >
-> > I am trying to build rootfs in ubi format using buildroot. I am using
-> > sama5d3_xplained board.
-> > I am using nand flash based booting.
-> > I build a root file system based on the information from the following
-> site,
-> > http://www.at91.com/linux4sam/bin/view/Linux4SAM/
-> BuildRootBuild#How_to_build_Buildroot_for_AT91
-> >
-> > I successfully got the ubi format rootfs image. I used a demo script to
-> > flash at91 bootstrap, u-boot, u-bootenv, device tree, zImage and root
-> file
-> > system.
->
-> [snip]
->
-> > ubi0 error: 0xc041cd7c: bad VID header offset 512, expected 2048
->
->  Looks like you created a UBI image with VID header offset 512 instead of
-> 2048.
-> How did you create the UBI partition? The easiest way is to do it on the
-> device
-> itself (after e.g. booting from SD card), then you can just ubiattach the
-> empty
-> partition and a correct UBI will be automatically created in it. If you
-> created
-> the UBI image from Buildroot, then the BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
-> option
-> is used. This defaults to 0x800 (512 bytes) but has to be 0x2000 (2048
-> bytes) in
-> your case.
->
->  Actually, nowadays it's next to impossible to find a small-page flash
-> (i.e.
-> with MINIOSIZE=512), so perhaps we should change the default.
->
->  Regards,
->  Arnout
->
-> > ubi0 error: 0xc041cd30: bad EC header
-> > Erase counter header dump:
-> >         magic          0x55424923
-> >         version        1
-> >         ec             0
-> >         vid_hdr_offset 512
-> >         data_offset    2048
-> >         image_seq      1825409418
-> >         hdr_crc        0x3358adb
-> [snip]
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180509/adf64e4f/attachment.html>
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
