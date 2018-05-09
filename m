@@ -1,19 +1,30 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 9 May 2018 18:46:21 +0200
-Subject: [Buildroot] [PATCH v2 1/2] support/kconfig: Add missing target
- to README.buildroot
-In-Reply-To: <20180509164412.31596-1-petr.vorel@gmail.com>
-References: <20180509164412.31596-1-petr.vorel@gmail.com>
-Message-ID: <20180509164620.dofdgougee4rh42j@dell5510>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed,  9 May 2018 13:54:02 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.16.8
+Message-ID: <1525884843-7282-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-the second patch is again waiting for approval as it's too big.
-
-Kind regards,
-Petr
+diff --git a/linux/Config.in b/linux/Config.in
+index cc946b0..e202061 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.16.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.16.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.7.4
