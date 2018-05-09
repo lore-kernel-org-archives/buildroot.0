@@ -1,34 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 May 2018 10:53:14 +0200
-Subject: [Buildroot] xfsprogs failing to build on your autobuilder
-Message-ID: <20180509105314.2bc6d8d9@windsurf.home>
+Date: Wed, 9 May 2018 10:54:46 +0200
+Subject: [Buildroot] [PATCH v2/next 2/4] woff2: new package
+In-Reply-To: <20180323185942.60252-3-aperez@igalia.com>
+References: <20180323185942.60252-1-aperez@igalia.com>
+ <20180323185942.60252-3-aperez@igalia.com>
+Message-ID: <20180509105446.204b06e6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+Hello Adrian,
 
-Since yesterday, xfsprogs has started failing to build, but it seems to
-happen only your autobuilder (4 times so far):
+On Fri, 23 Mar 2018 20:59:40 +0200, Adrian Perez de Castro wrote:
+> Add the woff2 package to Builroot. This is needed by webkitgtk from
+> version 2.20.0 onwards. WebKitGTK+ used to bundle a copy of the library,
+> but it stopped doing so now that the upstream is has been making
+> releases.
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-  http://autobuild.buildroot.net/?reason=xfsprogs-4.15.1
+This package causes a build failure on m68k:
 
-xfsprogs hadn't failed to build since March 24th, and it suddenly
-started failing to build again (but with a different error) since
-yesterday, just on your autobuilder.
+  http://autobuild.buildroot.net/results/78d/78d25015ac464c985e5a550ce9a80d85080dc6f2/build-end.log
 
-It fails with:
+  http://autobuild.buildroot.net/?reason=woff2-1.0.2
 
-make[3]: *** No rule to make target `-lrt', needed by `xfs_scrub'.  Stop.
-
-I don't immediately in the commits from the last few days what could
-cause this. It fails on different architectures, with internal and
-external toolchains, with uclibc and glibc. Seems weird.
-
-Could you see if you can reproduce locally, and understand what's going
-on ?
+It's a compiler issue. It would be nice to investigate whether it has
+been fixed in newer versions of gcc, if a workaround or fix is possible.
 
 Thanks!
 
