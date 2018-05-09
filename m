@@ -1,10 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 9 May 2018 10:04:15 -0500
+Date: Wed, 9 May 2018 10:30:37 -0500
 Subject: [Buildroot] [PATCH] xfsprogs: bump to 4.16.1
-In-Reply-To: <20180509165536.14b0c47b@windsurf.home>
+In-Reply-To: <CANQCQpZ6_vZT5bvgX36ANzJtAafA3YQ48ziXw1te1mG6Sc-POw@mail.gmail.com>
 References: <1525876323-62495-1-git-send-email-matthew.weber@rockwellcollins.com>
  <20180509165536.14b0c47b@windsurf.home>
-Message-ID: <CANQCQpZ6_vZT5bvgX36ANzJtAafA3YQ48ziXw1te1mG6Sc-POw@mail.gmail.com>
+ <CANQCQpZ6_vZT5bvgX36ANzJtAafA3YQ48ziXw1te1mG6Sc-POw@mail.gmail.com>
+Message-ID: <CANQCQpafU4LUcCKy3qQp0LYbMM40wrcCqMGB=F55G4muxD=WOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +14,36 @@ To: buildroot@busybox.net
 
 Thomas,
 
-On Wed, May 9, 2018 at 9:55 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
+On Wed, May 9, 2018 at 10:04 AM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Thomas,
 >
-> On Wed,  9 May 2018 09:32:03 -0500, Matt Weber wrote:
->
->> diff --git a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
->> index 74636c2..9030a2a 100644
->> --- a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
->> +++ b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
->> @@ -14,6 +14,8 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>  [Sent upstream: https://www.spinics.net/lists/xfs/msg36149.html]
->>  [baruch: update for v4.15.1; extend to include scrub]
->>  Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> +[matt: update for v4.16.1; adjusted libunistring -> libicu]
->> +Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->>  ---
->>   mdrestore/Makefile | 2 +-
->>   scrub/Makefile     | 2 +-
->> @@ -38,8 +40,8 @@ index 063279400262..949f6fd8ba94 100644
->>  +++ b/scrub/Makefile
->>  @@ -70,7 +70,7 @@ xfs_scrub.c
+> On Wed, May 9, 2018 at 9:55 AM, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>> Hello,
 >>
->> - LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBPTHREAD) $(LIBUNISTRING) $(LIBRT)
->> - LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBUNISTRING) $(LIBRT)
->> + LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBPTHREAD) $(LIBICU_LIBS) $(LIBRT)
->> + LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG)
->
-> Does this also remove $(LIBRT) ?
->
+>> On Wed,  9 May 2018 09:32:03 -0500, Matt Weber wrote:
+>>
+>>> diff --git a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
 
-I read this https://patchwork.kernel.org/patch/10296957/ as the LIBRT
-isn't an issue after switching to LIBICU (Not that LIBRT is removed).
-Do you guys have more context on why LIBRT would be pulled out?
+>>> diff --git a/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch b/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
 
-> Why is this now done in patch 0001, while it was done in
->
->
->> diff --git a/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch b/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
-[snip]
->> ---- a/scrub/Makefile
->> -+++ b/scrub/Makefile
->> -@@ -69,7 +69,7 @@ vfs.c \
->> - xfs_scrub.c
->> -
->> - LLDLIBS += $(LIBHANDLE) $(LIBFROG) $(LIBPTHREAD) $(LIBUNISTRING) $(LIBRT)
->> --LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBUNISTRING) $(LIBRT)
->> -+LTDEPENDENCIES += $(LIBHANDLE) $(LIBFROG) $(LIBRT)
->
-> this patch before ?
->
+So between the above two patches, the behavior where we remove
+$(LIBUNISTRING) in the 0005 isn't needed when switching to $(LIBICU),
+as configure defines that variable only when icu is detected.  I've
+kicked off a test-pkg config for icu enabled/disabled with the
+following update to my v1 of this patchset.
 
-Didn't realize I should set up the makefile for optional inclusion of
-LIBICU.  I'll revisit as part of testing the selective libicu
-dependency.
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -20,6 +20,10 @@ XFSPROGS_CONF_OPTS = \
+        INSTALL_GROUP=root \
+        --enable-static
 
-Matt
++ifeq ($(BR2_PACKAGE_ICU),y)
++XFSPROGS_DEPENDENCIES += icu
++endif
++
+ XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
+
+ $(eval $(autotools-package))
