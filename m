@@ -1,122 +1,124 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 May 2018 22:22:54 +0200
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <1fdbacbd-e80f-8735-89c8-2ca92224ee9a@mind.be>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
- <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
- <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
- <1fdbacbd-e80f-8735-89c8-2ca92224ee9a@mind.be>
-Message-ID: <20180509202254.GA9837@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 9 May 2018 22:28:49 +0200
+Subject: [Buildroot] [git commit] CHANGES: update in preparation for
+ 2018.05-rc1
+Message-ID: <20180509202910.C3B228C5F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-M ZV, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=54e3bcb8934004f417d79e1a6a8b4bbc64f954cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-05-08 23:37 +0200, Arnout Vandecappelle spake thusly:
-> On 07-05-18 17:00, M ZV wrote:
-> > Hello,?
-> > We're using?mkpasswd specifically for a single task (skeleton-init-common root
-> > password generation). I'm already tackling building this on Alpine (musl
->  Yes, Alpine is a pain :-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ CHANGES | 97 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
-Meh, yes... :-(
-
-However, all the tricks required to actually build with musl are known.
-Except we only have code to handle that for target packages.
-
-For host pacakges, it is more tricky to do, though...
-
-> > environment) and facing?
-> > multiple issues: had to use -lintl for linking (that libintl musl/glibc can of
-> > worms) and of course, it only makes md5 hashes since all SHA functionalities are
-> > disabled on non-glibc systems via its header.
-> > 
-> > Can we just use a couple of python code using?crypt.crypt(...), since python is
-> > already a requirement. One less package to maintain is a good news (buildroots
-> > already brimming with a mind boggling?number of packages).
-> 
->  Great idea! Indeed, the python script would be rather trivial - mostly
-> generating salt.
-
-I don't like that we reinvent such tools... Especially when dealing with
-security-related tools...
-
->  Probably, when doing that, more of the mkusers script could migrate to python.
-> But to start with it could be a python "oneliner":
-> 
-> 	dd if=/dev/urandom bs=1 count=12 | python -c "
-
-This is not optimal. Better to do a single read instead of 12: bs=12
-count=1
-
-> 			import sys, crypt, base64
-> 			salt = sys.stdin.read()
-
-Why such convoluted code to read 12 bytes of random data? Why not use
-Python's builtins for that?
-
-    https://docs.python.org/3/library/secrets.html
-
-    import secrets
-    blob = secrets.token_bytes(12)
-
-> 			b64salt = base64.b64encode(salt, './')
-> 			b64salt = b64salt.strip('=')
-> 			print(crypt.crypt('${password}',
-> 				'${PASSWD_METHOD}' + b64salt))"
-> 
-> 
->  Normally, I'd say I want to avoid calling python in the normal build path
-> (because of python overhead, because it's a hard-to-reproduce environment,
-> because of python2/3 uncertainty, ...). However, that ship has sailed with the
-> introduction of check-uniq-files.
-> 
-> 
->  Would you like to prepare a patch introducing the python-based approach? It
-> should be two patches: the first one introducing the python script in mkusers,
-> the second one removing the mkpasswd package.
-
-Sorry, I am not too convinced that writing our own tool is good...
-
-Regards,
-Yann E. MORIN.
-
-> 
->  Regards,
->  Arnout
-> 
-> > By the way, my first post here, I hope I'm not coming off as a nagging
-> > pedestrian just adding noise. I highly appreciate the effort you guys are
-> > putting into this.
-> > Thank you.
-> > 
-> > (My apologies for double posting - it seems, at first, I didn't reply to all)
-> > 
-> > 
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/CHANGES b/CHANGES
+index 29a4937a9d..1ca80c244e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,100 @@
++2018.05-rc1, Released May 9th, 2018
++
++	Toolchain: glibc bumped to 2.27, musl bumped to 1.1.19,
++	uClibc-ng 1.0.30, Linux kernel headers bumped to 4.16.x.
++
++	Architecture: support for the Blackfin architecture has been
++	removed.
++
++	Numerous packages updated to have hashes for their license
++	files.
++
++	Systemd can now be built with uClibc toolchains.
++
++	Linux: addition of BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF and
++	BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL to support building Linux
++	kernel configurations that need libelf on the host or openssl
++	on the host.
++
++	Coding style:
++	- all Python scripts are now verified with flake8
++	- check-package extended to check all Config.in and .mk files
++	  in tree, not only the ones in package/
++
++	Infrastructure:
++
++	- The download infrastructure has seen a major overhaul, with
++	  the main visible new feature being Git caching: a package
++	  fetched from Git no longer needs to be re-cloned entirely
++	  everytime its version is changed. Anoter visible change is
++	  that the download folder now has subfolders per package. See
++	  http://lists.busybox.net/pipermail/buildroot/2018-April/217923.html
++	  for more details about those changes.
++
++	- The logic that generates the root filesystem images has been
++	  reworked, with the main goal of allowing several filesystem
++	  images to be produced in parallel, also a requirement for
++	  top-level parallel build. Now, a .tar filesystem image is
++	  always created, and re-extracted in a private directory to
++	  create each format-specific filesystem image.
++
++	- A new package infrastructure was introduced for Go-based
++	  packages: golang-package.
++
++	- Dependencies on extraction tools are now handled as proper
++	  per-package dependencies, using
++	  <pkg>_EXTRACT_DEPENDENCIES. Beyond a cleanup, this is also a
++	  preparation step for top-level parallel build support.
++
++	- When a file being downloaded is part of a package with a
++	  .hash file, but there is no hash listed for this file, the
++	  file is now preserved in the download directory rather than
++	  removed. This helps when updating a package, as it gives the
++	  ability to easily calculate the hash of the file.
++
++	- Addition of '<pkg>-show-recursive-depends' and
++	  '<pkg>-show-recursive-rdepends' make targets, to
++	  respectively display the recursive list of dependencies and
++	  the recursive list of reverse dependencies of a given
++	  package.
++
++	- The /etc/shells file is now automatically generated with the
++	  list of shell programs installed on the system.
++
++	- Addition of -Ofast optimization level as an available
++	  option.
++
++	Major updates: Go updated to 1.10, Erlang bumped to 20.3, Qt5
++	bumped to 5.10.1.
++
++	New packages: 18xx-ti-utils, abootimg, bluez-alsa, brotli,
++	chipmunk, clang, docker-compose, docker-proxy, flare-engine,
++	flare-game, gst1-interpipe, gstreamer1-editing-services,
++	hackrf, i2pd, imx-alsa-plugins, imx-mkimage, libcdio-paranoia,
++	libkrb5, llvm, pixiewps, python-backports-ssl-match-hostname,
++	python-cached-property, python-cython, python-docker,
++	python-dockerpty, python-docker-pycreds,
++	python-flask-sqlalchemy, python-functools32, python-influxdb,
++	python-json-models, python-libusb1, python-networkx,
++	python-psycopg2, python-pymodbus, python-sqlalchemy,
++	python-subprocess32, python-texttable,
++	python-websocket-client, python-yieldfrom, quotatool, reaver,
++	snort, sunxi-mali-mainline, sunxi-mali-mainline-driver, tk,
++	tpm2-abrmd, tpm2-tools, tpm2-tss, udftools, vte, woff2.
++
++	New defconfigs: ARC HS Development Kit, Arcturus ucls1012a,
++	Freescale i.MX6UL EVK (with vendor kernel), Freescale i.MX6
++	SoloLite EVK (with vendor kernel), Freescale i.MX31 3Stack,
++	Freescale i.MX8Q EVK Freescale p1025twr, Freescale t1040d4rdb,
++	Qemu PPC64 E5500, SolidRun ClearFog Base, Tinker RK3288, Vyasa
++	RK3288,
++
++	Removed packages: iqvlinux, kodi-adsp-*, mplayer
++
++	Removed defconfigs: ci40, firefly_rk3288,
++	freescale_p1010rdb_pa, freescale_mpc8315erdb, riotboard,
++	teliv_evk_pro3
++
+ 2018.02.1, Released April 9th, 2018
+ 
+ 	Important / security related fixes.
