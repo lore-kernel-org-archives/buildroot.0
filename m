@@ -1,52 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 9 May 2018 12:13:59 +0300
-Subject: [Buildroot] xfsprogs failing to build on your autobuilder
-In-Reply-To: <20180509105314.2bc6d8d9@windsurf.home>
-References: <20180509105314.2bc6d8d9@windsurf.home>
-Message-ID: <20180509091359.uqfkbtzw7xpuvht7@sapphire.tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  9 May 2018 11:33:28 +0200
+Subject: [Buildroot] [PATCH 1/1] log4cplus: add C++11 dependencies
+Message-ID: <20180509093328.25493-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+log4cplus uses std::future which is a C++11 feature affected by the gcc
+bug 64735
 
-On Wed, May 09, 2018 at 10:53:14AM +0200, Thomas Petazzoni wrote:
-> Hello Matt,
-> 
-> Since yesterday, xfsprogs has started failing to build, but it seems to
-> happen only your autobuilder (4 times so far):
-> 
->   http://autobuild.buildroot.net/?reason=xfsprogs-4.15.1
-> 
-> xfsprogs hadn't failed to build since March 24th, and it suddenly
-> started failing to build again (but with a different error) since
-> yesterday, just on your autobuilder.
-> 
-> It fails with:
-> 
-> make[3]: *** No rule to make target `-lrt', needed by `xfs_scrub'.  Stop.
-> 
-> I don't immediately in the commits from the last few days what could
-> cause this. It fails on different architectures, with internal and
-> external toolchains, with uclibc and glibc. Seems weird.
-> 
-> Could you see if you can reproduce locally, and understand what's going
-> on ?
+Fixes:
+ - http://autobuild.buildroot.net/results/4f4e9ed5dd5bad76eeee5d151e958f22603615b3
 
-I think that the xfsprogs Makefile used check the host librt for the -lrt 
-dependency. This issue is a similar to the -lunistring dependency that 
-Buildroot commit a81601589 removed. Upstream developer Darrick J. Wong 
-indicated[1] that all this code is going to be removed in a future release. So 
-I think that bumping to v4.16.1 would fix the issue, but I didn't check that 
-yet.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/log4cplus/Config.in | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-[1] https://patchwork.kernel.org/patch/10296957/
-
-baruch
-
+diff --git a/package/log4cplus/Config.in b/package/log4cplus/Config.in
+index 8a112a4e8f..fd224dd270 100644
+--- a/package/log4cplus/Config.in
++++ b/package/log4cplus/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_LOG4CPLUS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	help
+ 	  log4cplus is a simple to use C++ logging API providing
+ 	  thread-safe, flexible, and arbitrarily granular control
+@@ -11,5 +13,9 @@ config BR2_PACKAGE_LOG4CPLUS
+ 
+ 	  http://sourceforge.net/projects/log4cplus
+ 
+-comment "log4cplus needs a toolchain w/ C++, wchar, threads"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
++comment "log4cplus needs a toolchain w/ C++, wchar, threads, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++comment "log4cplus needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.14.1
