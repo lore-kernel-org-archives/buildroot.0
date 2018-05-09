@@ -1,49 +1,39 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 9 May 2018 10:30:37 -0500
-Subject: [Buildroot] [PATCH] xfsprogs: bump to 4.16.1
-In-Reply-To: <CANQCQpZ6_vZT5bvgX36ANzJtAafA3YQ48ziXw1te1mG6Sc-POw@mail.gmail.com>
-References: <1525876323-62495-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20180509165536.14b0c47b@windsurf.home>
- <CANQCQpZ6_vZT5bvgX36ANzJtAafA3YQ48ziXw1te1mG6Sc-POw@mail.gmail.com>
-Message-ID: <CANQCQpafU4LUcCKy3qQp0LYbMM40wrcCqMGB=F55G4muxD=WOA@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed,  9 May 2018 17:47:15 +0200
+Subject: [Buildroot] [PATCH 1/1] dbus-glib: Bump to version 0.110
+Message-ID: <20180509154715.24517-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/dbus-glib/dbus-glib.hash | 2 +-
+ package/dbus-glib/dbus-glib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, May 9, 2018 at 10:04 AM, Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> Thomas,
->
-> On Wed, May 9, 2018 at 9:55 AM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->> Hello,
->>
->> On Wed,  9 May 2018 09:32:03 -0500, Matt Weber wrote:
->>
->>> diff --git a/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch b/package/xfsprogs/0001-mdrestore-do-not-do-dynamic-linking-of-libtool-libra.patch
-
->>> diff --git a/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch b/package/xfsprogs/0005-xfs_scrub-fix-cross-compile-with-libunistring.patch
-
-So between the above two patches, the behavior where we remove
-$(LIBUNISTRING) in the 0005 isn't needed when switching to $(LIBICU),
-as configure defines that variable only when icu is detected.  I've
-kicked off a test-pkg config for icu enabled/disabled with the
-following update to my v1 of this patchset.
-
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -20,6 +20,10 @@ XFSPROGS_CONF_OPTS = \
-        INSTALL_GROUP=root \
-        --enable-static
-
-+ifeq ($(BR2_PACKAGE_ICU),y)
-+XFSPROGS_DEPENDENCIES += icu
-+endif
-+
- XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
-
- $(eval $(autotools-package))
+diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
+index 732ae97c86..8a80b71b45 100644
+--- a/package/dbus-glib/dbus-glib.hash
++++ b/package/dbus-glib/dbus-glib.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 9f340c7e2352e9cdf113893ca77ca9075d9f8d5e81476bf2bf361099383c602c  dbus-glib-0.108.tar.gz
++sha256 7ce4760cf66c69148f6bd6c92feaabb8812dee30846b24cd0f7395c436d7e825  dbus-glib-0.110.tar.gz
+diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
+index 2257c8e4f9..372942e1c3 100644
+--- a/package/dbus-glib/dbus-glib.mk
++++ b/package/dbus-glib/dbus-glib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_GLIB_VERSION = 0.108
++DBUS_GLIB_VERSION = 0.110
+ DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
+ DBUS_GLIB_INSTALL_STAGING = YES
+ DBUS_GLIB_LICENSE = AFL-2.1 or GPL-2.0+
+-- 
+2.16.3
