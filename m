@@ -1,54 +1,122 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 May 2018 23:18:26 +0200
-Subject: [Buildroot] [git commit] docs/website: update news.html for
- 2018.05-rc1
-Message-ID: <20180509211826.34DC08C96D@busybox.osuosl.org>
+Date: Wed, 9 May 2018 23:26:18 +0200
+Subject: [Buildroot] [git commit] support/dependencies: check that PATH does
+ not contain CWD
+Message-ID: <20180509212615.84AEA8C972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b73e9e3d21426d5029044a4c53665917c2342c41
+commit: https://git.buildroot.net/buildroot/commit/?id=72703d02b96bb1f7f94f705d3a7199599b1bc980
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+A person on IRC reported a build failure with the util-linux package,
+looking like this:
+
+for I in uname26 linux32 linux64        ; do \
+	cd /home/aep/consulting/chargery/tracker/output/target/usr/bin && ln -sf setarch $I ; \
+done
+[...]
+/bin/sh: line 1: ./ln: cannot execute binary file: Exec format error
+/bin/sh: line 1: ./ln: cannot execute binary file: Exec format error
+/bin/sh: line 1: ./ln: cannot execute binary file: Exec format error
+
+The issue was an empty path in the PATH variable, which means "current
+working directory", causing a "ln" binary built by util-linux for the
+target to be used instead of the system-provided "ln".
+
+We already check a number of things in the PATH and LD_LIBRARY_PATH
+variables in support/dependencies/dependencies.sh, but we were not
+checking that PATH did not contain an empty path.
+
+This commit fixes that and takes this opportunity to simplify the test
+code for PATH and LD_LIBRARY_PATH.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Thomas: improve commit log.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/news.html | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ support/dependencies/dependencies.sh | 59 ++++++++++++++----------------------
+ 1 file changed, 23 insertions(+), 36 deletions(-)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 90305f5cc3..cb70b7119b 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,30 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 985b1d863b..f98678973b 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -11,27 +11,30 @@ if test $? != 0 ; then
+ 	exit 1
+ fi
  
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.05-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>9 May 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of changes all over the
-+	  tree, see the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.05-rc1">CHANGES</a>
-+	  file for details and read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-May/221257.html">announcement</a>.
-+	</p>
-+
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.02-rc1.tar.bz2">2018.05-rc1
-+	    release candidate</a>, and report any problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-# sanity check for CWD in LD_LIBRARY_PATH
+-# try not to rely on egrep..
+-if test -n "$LD_LIBRARY_PATH" ; then
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep '::' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':TRiGGER_end' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
+-	if test $? = 0; then
+-		echo
+-		echo "You seem to have the current working directory in your"
+-		echo "LD_LIBRARY_PATH environment variable. This doesn't work."
+-		exit 1;
+-	fi
+-fi;
++# Sanity check for CWD in LD_LIBRARY_PATH
++case ":${LD_LIBRARY_PATH:-unset}:" in
++(*::*|*:.:*)
++	echo
++	echo "You seem to have the current working directory in your"
++	echo "LD_LIBRARY_PATH environment variable. This doesn't work."
++	exit 1
++	;;
++esac
+ 
+-# PATH should not contain a newline, otherwise it fails in spectacular ways
+-# as soon as PATH is referenced in a package rule
+-case "${PATH}" in
++# Sanity check for CWD in PATH. Having the current working directory
++# in the PATH makes various packages (e.g. toolchain, coreutils...)
++# build process break.
++# PATH should not contain a newline, otherwise it fails in spectacular
++# ways as soon as PATH is referenced in a package rule
++# An empty PATH is technically possible, but in practice we would not
++# even arrive here if that was the case.
++case ":${PATH:-unset}:" in
++(*::*|*:.:*)
++	echo
++	echo "You seem to have the current working directory in your"
++	echo "PATH environment variable. This doesn't work."
++	exit 1
++	;;
+ (*"
+ "*)	printf "\n"
+ 	# Break the '\n' sequence, or a \n is printed (which is not what we want).
+@@ -41,22 +44,6 @@ case "${PATH}" in
+ 	;;
+ esac
+ 
+-# sanity check for CWD in PATH. Having the current working directory
+-# in the PATH makes the toolchain build process break.
+-# try not to rely on egrep..
+-if test -n "$PATH" ; then
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
+-	if test $? = 0; then
+-		echo
+-		echo "You seem to have the current working directory in your"
+-		echo "PATH environment variable. This doesn't work."
+-		exit 1;
+-	fi
+-fi;
+-
+ if test -n "$PERL_MM_OPT" ; then
+ 	echo
+ 	echo "You have PERL_MM_OPT defined because Perl local::lib"
