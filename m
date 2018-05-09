@@ -1,48 +1,52 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 May 2018 11:33:28 +0200
-Subject: [Buildroot] [PATCH 1/1] log4cplus: add C++11 dependencies
-Message-ID: <20180509093328.25493-1-fontaine.fabrice@gmail.com>
+Date: Wed, 9 May 2018 11:37:10 +0200
+Subject: [Buildroot] [PATCH 1/1] log4cplus: bump to version 2.0.0
+In-Reply-To: <20180509105652.3f6fcea1@windsurf.home>
+References: <20180506093507.24850-1-fontaine.fabrice@gmail.com>
+ <20180509105652.3f6fcea1@windsurf.home>
+Message-ID: <CAPi7W83akXrLFj64DgVg+4UrhAe2dhyZB_mDigDC_o1M4AJH1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-log4cplus uses std::future which is a C++11 feature affected by the gcc
-bug 64735
+Dear Thomas,
 
-Fixes:
- - http://autobuild.buildroot.net/results/4f4e9ed5dd5bad76eeee5d151e958f22603615b3
+2018-05-09 10:56 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/log4cplus/Config.in | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> Hello Fabrice,
+>
+> On Sun,  6 May 2018 11:35:07 +0200, Fabrice Fontaine wrote:
+> > - LICENSE has been updated to add threadpool license (BSD-like)
+> > - Add hash for license file
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.net/results/a4690fd3e46354776f6d6addd17226
+> 622c5f4961
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Causes new build failures:
+>
+>   http://autobuild.buildroot.net/?reason=log4cplus-2.0.0
+>
+> Could you have a look ?
+>
+Sure, I sent a patch.
 
-diff --git a/package/log4cplus/Config.in b/package/log4cplus/Config.in
-index 8a112a4e8f..fd224dd270 100644
---- a/package/log4cplus/Config.in
-+++ b/package/log4cplus/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_LOG4CPLUS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	help
- 	  log4cplus is a simple to use C++ logging API providing
- 	  thread-safe, flexible, and arbitrarily granular control
-@@ -11,5 +13,9 @@ config BR2_PACKAGE_LOG4CPLUS
- 
- 	  http://sourceforge.net/projects/log4cplus
- 
--comment "log4cplus needs a toolchain w/ C++, wchar, threads"
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+comment "log4cplus needs a toolchain w/ C++, wchar, threads, gcc >= 4.7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+
-+comment "log4cplus needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--- 
-2.14.1
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180509/b840a646/attachment.html>
