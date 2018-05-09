@@ -1,200 +1,84 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 9 May 2018 07:38:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] python-kivy: new package
-In-Reply-To: <20180508213158.9572-1-joseph.kogut@gmail.com>
-References: <20180507030032.22819-1-joseph.kogut@gmail.com>
- <20180508213158.9572-1-joseph.kogut@gmail.com>
-Message-ID: <CAGm1_kv2LEo7wfC14PZ2Yu34=LuGnMXwnEBn0n0iCJ7=M9OP9Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  9 May 2018 08:00:14 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-05-08
+Message-ID: <20180509060014.861B7207BB@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 8, 2018 at 11:31 PM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Hello,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Build statistics for 2018-05-08
+===============================
 
-> ---
-> Changes v1 -> v2:
->         - Remove unnecessary build dependencies (suggested by Yegor)
->         - Require toolchain w/ glibc, as Kivy builds with others, but
->           seems to segfault with (at least) musl.
->
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  .../0001-remove-getconf-dependency.patch      | 43 +++++++++++++++++
->  package/python-kivy/Config.in                 | 18 +++++++
->  package/python-kivy/python-kivy.hash          |  4 ++
->  package/python-kivy/python-kivy.mk            | 48 +++++++++++++++++++
->  6 files changed, 115 insertions(+)
->  create mode 100644 package/python-kivy/0001-remove-getconf-dependency.patch
->  create mode 100644 package/python-kivy/Config.in
->  create mode 100644 package/python-kivy/python-kivy.hash
->  create mode 100644 package/python-kivy/python-kivy.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3ddb292894..c44f8f7145 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -935,6 +935,7 @@ F:  configs/qemu_ppc64le_pseries_defconfig
->  N:     Joseph Kogut <joseph.kogut@gmail.com>
->  F:     package/gconf/
->  F:     package/python-cython/
-> +F:     package/python-kivy/
->  F:     package/python-raven/
->  F:     package/python-schedule/
->  F:     package/python-websockets/
-> diff --git a/package/Config.in b/package/Config.in
-> index a48abf9470..97b3110951 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -823,6 +823,7 @@ menu "External python modules"
->         source "package/python-jsonschema/Config.in"
->         source "package/python-json-schema-validator/Config.in"
->         source "package/python-keyring/Config.in"
-> +       source "package/python-kivy/Config.in"
->         source "package/python-libconfig/Config.in"
->         source "package/python-libusb1/Config.in"
->         source "package/python-lmdb/Config.in"
-> diff --git a/package/python-kivy/0001-remove-getconf-dependency.patch b/package/python-kivy/0001-remove-getconf-dependency.patch
-> new file mode 100644
-> index 0000000000..76b5f0b428
-> --- /dev/null
-> +++ b/package/python-kivy/0001-remove-getconf-dependency.patch
-> @@ -0,0 +1,43 @@
-> +From e5d2bc2db2235e05a1095f384c7358b255b50b09 Mon Sep 17 00:00:00 2001
-> +From: Joseph Kogut <joseph.kogut@gmail.com>
-> +Date: Thu, 3 May 2018 16:30:42 -0700
-> +Subject: [PATCH] input: probesysfs: remove getconf dependency
-> +
-> +Remove the dependency on getconf to get LONG_BIT value, in order to
-> +improve portability to Linux systems without Glibc and/or getconf.
-> +---
-> + kivy/input/providers/probesysfs.py | 7 ++-----
-> + 1 file changed, 2 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/kivy/input/providers/probesysfs.py b/kivy/input/providers/probesysfs.py
-> +index 8021d67e51..6bc424ecfa 100644
-> +--- a/kivy/input/providers/probesysfs.py
-> ++++ b/kivy/input/providers/probesysfs.py
-> +@@ -47,6 +47,7 @@
-> +     ProbeSysfsHardwareProbe = None
-> +
-> + else:
-> ++    import ctypes
-> +     from re import match, IGNORECASE
-> +     from glob import glob
-> +     from subprocess import Popen, PIPE
-> +@@ -89,7 +90,7 @@ def get_capabilities(self):
-> +                 return []
-> +
-> +             capabilities = []
-> +-            long_bit = getconf("LONG_BIT")
-> ++            long_bit = ctypes.sizeof(ctypes.c_long) * 8
-> +             for i, word in enumerate(line.split(" ")):
-> +                 word = int(word, 16)
-> +                 subcapabilities = [bool(word & 1 << i)
-> +@@ -112,10 +113,6 @@ def getout(*args):
-> +         except OSError:
-> +             return ''
-> +
-> +-    def getconf(var):
-> +-        output = getout("getconf", var)
-> +-        return int(output)
-> +-
-> +     def query_xinput():
-> +         global _cache_xinput
-> +         if _cache_xinput is None:
-> diff --git a/package/python-kivy/Config.in b/package/python-kivy/Config.in
-> new file mode 100644
-> index 0000000000..7cc30b5774
-> --- /dev/null
-> +++ b/package/python-kivy/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_PYTHON_KIVY
-> +       bool "python-kivy"
-> +       select BR2_PACKAGE_HOST_PYTHON_CYTHON
-> +       select BR2_PACKAGE_LIBPNG # runtime
-> +       select BR2_PACKAGE_MTDEV # runtime
-> +       select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
-> +       select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
-> +       depends on BR2_PACKAGE_HAS_LIBGL
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC
-> +       help
-> +         A software library for rapid development of hardware-accelerated
-> +         multitouch applications.
-> +
-> +         http://kivy.org
-> +
-> +comment "python-kivy needs OpenGL and a glibc toolchain"
-> +       depends on !BR2_PACKAGE_HAS_LIBGL
-> +       depends on !BR2_TOOLCHAIN_USES_GLIBC
-> diff --git a/package/python-kivy/python-kivy.hash b/package/python-kivy/python-kivy.hash
-> new file mode 100644
-> index 0000000000..a7ef55fd32
-> --- /dev/null
-> +++ b/package/python-kivy/python-kivy.hash
-> @@ -0,0 +1,4 @@
-> +# sha256 locally computed
-> +sha256 53a4eb32b6f6ecb7dcf02ddf3631af247e43fd44eba74ca51fb20a82cd4c9589  python-kivy-5f6c66eba79e1f9360f2fba79ee2c4cc6a91ed13.tar.gz
-> +# License file, locally calculated
-> +sha256 282b3d8735ef6cbdcf8cc480947d50e0aea4ad1cc931d41f3f6a6bc23956f2d6  LICENSE
-> diff --git a/package/python-kivy/python-kivy.mk b/package/python-kivy/python-kivy.mk
-> new file mode 100644
-> index 0000000000..19b1e9435c
-> --- /dev/null
-> +++ b/package/python-kivy/python-kivy.mk
-> @@ -0,0 +1,48 @@
-> +################################################################################
-> +#
-> +# python-kivy
-> +#
-> +################################################################################
-> +
-> +PYTHON_KIVY_VERSION = 5f6c66eba79e1f9360f2fba79ee2c4cc6a91ed13
-> +PYTHON_KIVY_SITE = $(call github,kivy,kivy,$(PYTHON_KIVY_VERSION))
-> +PYTHON_KIVY_SETUP_TYPE = distutils
-> +PYTHON_KIVY_LICENSE = MIT
-> +PYTHON_KIVY_LICENSE_FILES = LICENSE
-> +PYTHON_KIVY_DEPENDENCIES = host-python-cython libgl
-> +
-> +ifeq ($(BR2_PACKAGE_GSTREAMER),y)
-> +       PYTHON_KIVY_DEPENDENCIES += gstreamer
-> +       PYTHON_KIVY_ENV += USE_GSTREAMER=1
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
-> +       PYTHON_KIVY_DEPENDENCIES += libegl
-> +       PYTHON_KIVY_ENV += USE_EGL=1
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_X11)$(BR2_PACKAGE_SDL2_IMAGE)$(BR2_PACKAGE_SDL2_MIXER)$(BR2_PACKAGE_SDL2_TTF),yyyyy)
-> +       PYTHON_KIVY_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
-> +       PYTHON_KIVY_ENV += USE_SDL2=1
-> +       PYTHON_KIVY_ENV += KIVY_SDL2_PATH=$(STAGING_DIR)/usr/include/SDL2
-> +else
-> +       PYTHON_KIVY_ENV += USE_SDL2=0
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WAYLAND),y)
-> +       PYTHON_KIVY_DEPENDENCIES += wayland
-> +       PYTHON_KIVY_ENV += USE_WAYLAND=1
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-> +       PYTHON_KIVY_DEPENDENCIES += xserver_xorg-server
-> +       PYTHON_KIVY_ENV += USE_X11=1
-> +endif
-> +
-> +define PYTHON_KIVY_REMOVE_EXAMPLES
-> +       rm -rf $(TARGET_DIR)/usr/share/kivy-examples
-> +endef
-> +
-> +PYTHON_KIVY_POST_INSTALL_TARGET_HOOKS += PYTHON_KIVY_REMOVE_EXAMPLES
-> +
-> +$(eval $(python-package))
-> --
-> 2.17.0
->
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  33 |   0 |   0 |  33 |
+      master | 179 |  31 |   2 | 212 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                     lxc-3.0.0 | 8 
+                  host-go-1.10 | 4 
+               log4cplus-1.1.2 | 3 
+                  zeromq-4.2.5 | 3 
+              traceroute-2.1.0 | 2 
+               xfsprogs-4.15.1 | 2 
+                apr-util-1.6.1 | 1 
+                cifs-utils-6.7 | 1 
+                  flare-engine | 1 
+                 host-rauc-0.4 | 1 
+                   jamvm-2.0.0 | 1 
+                        libnss | 1 
+               log4cplus-2.0.0 | 1 
+           python-numpy-1.13.3 | 1 
+                      qt-4.8.7 | 1 
+            qt5location-5.10.1 | 1 
+                   strace-4.21 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                 apr-util-1.6.1 | NOK | http://autobuild.buildroot.net/results/241ed78b93ce86c859e175530fa485711ff61615 |     
+       sparc |                 cifs-utils-6.7 | NOK | http://autobuild.buildroot.net/results/320d9ef970c3f9bc963733974759ed1a7990285d |     
+microblazeel |                   flare-engine | TIM | http://autobuild.buildroot.net/results/78e385ed2f042208f110d5627b0157923ca6e8b9 |     
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/c70dbf3956ada46481949de617103304a2062fb6 | ORPH
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/4f8cb9664b5b79c4f192b723556841aae9328460 | ORPH
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/a43e8244de6604fe400d1ac40dbf9db2a5b3ccf4 | ORPH
+      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/63e41826e784fbf597c4efbe4b48d90aa7aa5839 | ORPH
+microblazeel |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/31cc2c2c168937193523be7c6ba9d7199001a2cd |     
+      mipsel |                    jamvm-2.0.0 | NOK | http://autobuild.buildroot.net/results/bd15b6d07b183c3aaaedaabc656eab3d5f0c702d | ORPH
+microblazeel |                         libnss | TIM | http://autobuild.buildroot.net/results/72c8564be5ef508cb5eb05bb9d7bd9321881203b |     
+         arm |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/644139f50facc8c81edbeb776e959b3da771f00e |     
+        m68k |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/216d32964b81ecb275f843c5d675e9cf81395c8e |     
+        m68k |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/fe9e06941c4e286e9e81352cdaa557bb5ae0af20 |     
+       nios2 |                log4cplus-2.0.0 | NOK | http://autobuild.buildroot.net/results/ab756b2f9a886226e465ad41c8e4dfa79951c346 |     
+    mips64el |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/381bcf6681aedd2979f13bf22cf5bcbf77206241 |     
+      mipsel |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/734513a3e74e8634dac9034422171b8ec6883716 |     
+      xtensa |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/61dde96aa6f0e840e00ae3bc1f60eeb993499b0e |     
+    mips64el |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/d1f2d680a300211e3d540838843e41714decc966 |     
+      mipsel |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/3e3163ef02279ddc5ef5f51f43d6c973d5d6fedd |     
+    mips64el |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/82fb45ba8b5748c65083e337325ad3087156e155 |     
+     powerpc |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/1432ec9c6f09ce8e4fc985ef357fa75a6af1d6fd |     
+   powerpc64 |                      lxc-3.0.0 | NOK | http://autobuild.buildroot.net/results/ec733385d8aa379cf8851f8e7839b9744a7ee310 |     
+     aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/83b7441f5a95d22bf593c4d8d0ebb0d0bf3f629c |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/7b4dfdef111a146e3f2ed6ac2bcd9d87db21acfa | ORPH
+      x86_64 |             qt5location-5.10.1 | NOK | http://autobuild.buildroot.net/results/302dca95a97417cf4e0c4814e490da7cc10f1d58 |     
+      x86_64 |                    strace-4.21 | NOK | http://autobuild.buildroot.net/results/3452419498c074ca66f36f0f87263fa10662ac86 |     
+     aarch64 |               traceroute-2.1.0 | NOK | http://autobuild.buildroot.net/results/a28db975b265c07714da9dd6f2beb7264abd1876 |     
+     aarch64 |               traceroute-2.1.0 | NOK | http://autobuild.buildroot.net/results/b46ed486a18a2f7c15b729a0bb8434d8ada4dddd |     
+     aarch64 |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/68c57c27a6ccd1f8b46e81d30aac04861e91149b | ORPH
+         arc |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/cfbb6e9a1eb2b527496c4fc3d63c36f83f3099d3 | ORPH
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/cd3519032809c67c71d955ce60c9288e94e05fb2 |     
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/4b7ccc5a2234a0f81269f20cc36b63a275841c3b |     
+       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/0b6fc254ba00d134f3e1fda40f9c1d585f1e4c59 |     
+
+
+-- 
+http://autobuild.buildroot.net
