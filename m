@@ -1,62 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 May 2018 10:40:58 +0200
-Subject: [Buildroot] [RFC PATCH 1/7] pkg-meson: new infrastructure
-In-Reply-To: <20180509224128.GA11938@ned>
-References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
- <20180507105741.31747-2-eric.le.bihan.dev@free.fr>
- <20180507170256.2ef06b2f@windsurf> <20180507193850.GA15375@ned>
- <20180507214356.3a087000@windsurf> <20180507221244.GC15375@ned>
- <c0524a93-eaad-3e61-f8bc-f9b17271d468@mind.be>
- <20180509224128.GA11938@ned>
-Message-ID: <20180510104058.5bee486b@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 10 May 2018 11:35:00 +0200
+Subject: [Buildroot] [PATCH 1/1] cups-filters: fix avahi dependency
+Message-ID: <20180510093500.15672-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eric,
+avahi support requires avahi-client, which needs avahi-daemon and dbus
 
-On Thu, 10 May 2018 00:41:28 +0200, Eric Le Bihan wrote:
+Fixes:
+ - http://autobuild.buildroot.net/results/5c326bb56199000eb0e53a4d0f3c6c13be71cda0
 
-> I added $$(HOST_CONFIGURE_OPTS), CFLAGS="$$(HOST_CFLAGS)" and
-> LDFLAGS="$$(HOST_LDFLAGS)"
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cups-filters/cups-filters.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-HOST_CONFIGURE_OPTS already contains CFLAGS=$(HOST_CFLAGS) and
-LDFLAGS=$(HOST_LDFLAGS), so there is no need to use them in addition to
-$(HOST_CONFIGURE_OPTS).
-
-> before invoking Meson (as done in pkg-autotools.mk) and now it
-> politely informs me that it will take these flags into account:
-
-I don't understand why we are passing CFLAGS=$(HOST_CFLAGS) and
-LDFLAGS=$(HOST_LDFLAGS) in pkg-autotools.mk, it seems totally useless
-since they are already in $(HOST_CONFIGURE_OPTS).
-
-They have been here in pkg-autotools.mk since we reworked the autotools
-infrastructure on top of the generic package infrastructure, back in
-2009. It's however later that CFLAGS and LDFLAGS have been added in
-HOST_CONFIGURE_OPTS.
-
-This should be fixed.
-
-> The recommended workaround is to define install_rpath [4] in for the
-> executable target, but this requires patching the sources of the
-> Meson-based package when building its host variant, which does not sound
-> very sensible.
-> 
-> So it looks like the workaround used in NixOS [5], i.e. patching the
-> host variant of Meson itself to remove the RPATH strip step, is
-> preferable until upstream Meson settles on this topic. I'll send another
-> patch for the meson package where this step is done in a post-extract
-> hook of the host variant.
-
-Why not a patch against Meson itself ?
-
-Thanks,
-
-Thomas
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 82ea46dd94..131e58246e 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -40,7 +40,8 @@ else
+ CUPS_FILTERS_CONF_OPTS += --disable-dbus
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_AVAHI),y)
++# avahi support requires avahi-client, which needs avahi-daemon and dbus
++ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
+ CUPS_FILTERS_DEPENDENCIES += avahi
+ CUPS_FILTERS_CONF_OPTS += --enable-avahi
+ else
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
