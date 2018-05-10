@@ -1,175 +1,40 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 10 May 2018 13:00:43 -0500
-Subject: [Buildroot] [PATCH v3 5/6] support/scripts/pkgstat: add target
- CPE reporting
-In-Reply-To: <5af3b6756e2f4_1bd62aeb50fcbdd4909df@ultri5.mail>
-References: <1525725005-41435-6-git-send-email-matthew.weber@rockwellcollins.com>
- <5af3b6756e2f4_1bd62aeb50fcbdd4909df@ultri5.mail>
-Message-ID: <CANQCQpZy_hSjLfaHG0ay0Jq5Z3uBYa+zuEK_PXm1qMFHpsBp2g@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 10 May 2018 21:07:34 +0300
+Subject: [Buildroot] [PATCH 1/1] libuv: bump to version 1.20.3
+Message-ID: <20180510180734.17160-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, May 9, 2018 at 10:03 PM, Ricardo Martincoski
-<ricardo.martincoski@gmail.com> wrote:
-> Hello,
->
-> This is not a complete code-review, but it seems you will send a new iteration.
->
-> When sending new iteration(s) of this series, could you run flake8 on patches 5
-> and 6 and fix all warnings?
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/67435667
->
->
-> On Mon, May 07, 2018 at 05:30 PM, Matt Weber wrote:
->
->> support/scripts/pkgstat: add target CPE reporting
->
-> For this patch and also for patch 6, one of these prefixes would be better:
-> support/scripts/pkg-stats: ...
-> pkg-stats: ...
-
-Noted, I'm actually just going to also collapse the patch 5 and 6
-together (easier to manage with flake8/pep8 updates).
-
->
-> [snip]
->> +    def get_xml_dict(self):
->> +        print "CPE: Fetching xml manifest..."
->> +        try:
->> +            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
->> +            print "CPE: Unzipping xml manifest..."
->> +            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
->> +            print "CPE: Converting xml manifest to dict..."
->> +            self.all_cpes = xmltodict.parse(cpe_file)
->> +        except urllib2.HTTPError, e:
->> +            print "HTTP Error:", e.code, url
->> +        except urllib2.URLError, e:
->> +            print "URL Error:", e.reason, url
->
-> (after fixing the warning from flake8)
-> If the download fails the script continues and dies like this:
->
-> CPE: Fetching xml manifest...
-> URL Error: [Errno -2] Name or service not known
-> CPE: Checking for matches...
-> CPE: Searching for [cpe:2.3:a:gnu:bash:4.4.18:*:*:*:*:*:*:*]
-> Traceback (most recent call last):
->   File "support/scripts/pkg-stats", line 595, in <module>
->     __main__()
->   File "support/scripts/pkg-stats", line 576, in __main__
->     get_target_cpe_report(args.cpe_report,cpe_dict)
->   File "support/scripts/pkg-stats", line 531, in get_target_cpe_report
->     result = cpe_dict.find(cpe[0])
->   File "support/scripts/pkg-stats", line 517, in find
->     for cpe in self.all_cpes['cpe-list']['cpe-item']:
-> KeyError: 'cpe-list'
->
-> Maybe this is what you want:
->         except ...
->             print ...
->             sys.exit(1)
-
-Fixed by adding exit
-
->
-> [snip]
->> +def get_target_cpe_report(cpe_report_file, cpe_dict):
->> +    report_cpe_exact_match = ""
->> +    report_cpe_needing_update = ""
->> +    report_cpe_missing = ""
->> +
->> +    print "CPE: Checking for matches..."
->> +    with open(cpe_report_file) as cpe_file:
->> +        cpe_list = csv.reader(cpe_file)
->> +        for cpe in cpe_list:
->> +            if "CPE ID" not in cpe[0]:
->
-> The .csv file contains always only one header, right?
-> If so, you could do like it is done on utils/size-stats-compare (code not
-> tested):
->         cpe_list = csv.reader(cpe_file)
->         header = next(cpe_list)
->         (... code to validate the header ...)
->         for cpe in cpe_list:
->             (... assume it is an entry, not a header...)
->
-
-Yeah, that works and is cleaner.
-
-
->> +                result = cpe_dict.find(cpe[0])
->> +                if not result:
->> +                    cpe_no_version = cpe[0].split(":")[0]+":"+cpe[0].split(":")[1]+":"+cpe[0].split(":")[2]+":"+cpe[0].split(":")[3]+":"+cpe[0].split(":")[4]
->
-> Could this long line be replaced by this one?
->                     cpe_no_version = ":".join(cpe[0].split(":", 5)[:5])
->
-
-Yep.   "".join(cpe.split(":")[:5])
-
-> [snip]
->>  def parse_args():
->>      parser = argparse.ArgumentParser()
->> @@ -493,6 +555,8 @@ def parse_args():
->>                          help='Number of packages')
->>      parser.add_argument('-p', dest='packages', action='store',
->>                          help='List of packages (comma separated)')
->> +    parser.add_argument('-c', dest='cpe_report', action='store',
->> +                        help='Buildroot CPE Report (csv format)')
->
-> What do you think about this help instead:
->                      help='CPE Report generated by make cpe-info (csv format)')
-
-Sounds good.
-
-> [snip]
->> +    if args.cpe_report:
->> +        print "Performing Target CPE Report Analysis..."
->> +        cpe_dict = CPE()
->> +        cpe_dict.get_xml_dict()
->> +        get_target_cpe_report(args.cpe_report,cpe_dict)
->
-> Is this code supposed to be used only to debug the script?
-
-Debug.  However we're working on a follow on patch that will add an
-option to generate the xml files used to update a CPE entry.  When
-that's added we may optional this output unless a xml output file is
-provided.
-
-> I ask this because this code branch still requires a '-o file' to be passed,
-> but it does not use it.
->
-> For the first case (only to debug the script) maybe it is acceptable as is.
->
-
-I will remove the -o and instead do something like the following?
-
-    elif args.output:
-        print "Build package list ..."
-        packages = get_pkglist(args.npackages, package_list)
-        print "Getting package make info ..."
-        package_init_make_info()
-        print "Getting package details ..."
-        for pkg in packages:
-           pkg.set_infra()
-           pkg.set_license()
-           pkg.set_hash_info()
-           pkg.set_patch_count()
-           pkg.set_check_package_warnings()
-           pkg.set_current_version()
-           pkg.set_cpe_info(cpe_dict)
-        print "Calculate stats"
-        stats = calculate_stats(packages)
-        print "Write HTML"
-        dump_html(packages, stats, args.output)
-    else:
-        print "Please provide the -o HTML output file arg"
-
-
-
-Matt
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 899fae2817..e877e0a1e9 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a5e62a6ed3c25a712477b55ce923e7f49af95b80319f88b9c950200d65427793  libuv-v1.20.2.tar.gz
++sha256  43a388687194a15d5f3cc1980d53c405020a3586254c620e5f3c4d241bb9da05  libuv-v1.20.3.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index d857d64c49..83b39ac7a2 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.20.2
++LIBUV_VERSION = v1.20.3
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+-- 
+2.17.0
