@@ -1,84 +1,34 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 10 May 2018 08:24:11 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-25
-In-Reply-To: <56ce1d9d-7b2a-1cda-52e3-a01094e6713a@gmail.com>
-References: <20180426060013.EAB262079F@mail.bootlin.com>
- <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
- <20180430091509.3a9cdff2@windsurf>
- <cab2ab99-f53c-448f-7cdb-77456a189664@smile.fr>
- <56ce1d9d-7b2a-1cda-52e3-a01094e6713a@gmail.com>
-Message-ID: <CANQCQpZzeALsKx7GFMUD_jSSn+=YS9KZBoOeuf7dUR8Um1pJDQ@mail.gmail.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Thu, 10 May 2018 16:37:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5cinex: fix download
+Message-ID: <1525963046-17540-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain/Thomas
+From: Julien <julien.boibessot@armadeus.com>
 
-On Wed, May 9, 2018 at 5:21 AM, Romain Naour <romain.naour@gmail.com> wrote:
-> Le 30/04/2018 ? 10:17, Romain Naour a ?crit :
->> Hi Thomas,
->>
->> Le 30/04/2018 ? 09:15, Thomas Petazzoni a ?crit :
->>> Hello,
->>>
->>> On Mon, 30 Apr 2018 00:15:18 +0200, Romain Naour wrote:
->>>
->>>>> Detail of failures
->>>>> ------------------
->>>>>
->>>>> microblazeel |                          boost | TIM | http://autobuild.buildroot.net/results/b42d68c66d8ea035845a28c5530ef0682fd95713 |
->>>>> microblazeel |                   flare-engine | TIM | http://autobuild.buildroot.net/results/af976a4805fb8b3f0c17a8e3a1f901b2255caa0b |
->>>>
->>>> I tried to reproduce this issue with the upcoming gcc 8.1 for microblaze but
->>>> flare-engire build fine with it.
->>>>
->>>> git bisect helped to find a patch [1] fixing an infinite loop in RTL DSE
->>>> optimizer. Also, back porting the patch to gcc 7.3.0 fix the issue.
->>>>
->>>> Since this patch is not specific to microblaze, but in gcc's code, I'm not sure
->>>> what we need to do.
->>>> Either back port the patch to affected gcc version and take the risk to break
->>>> something with other architecture or optimization level.
->>>> Or add BR2_TOOLCHAIN_HAS_GCC_BUG_85180 option and wait for gcc 8.
->>>>
->>>> Maybe it's easier to add an autobuilder exception for boost and flare-engine on
->>>> microblaze?
->>>>
->>>> It's not clear if other architecture can be affected.
->>>>
->>>> Thoughts?
->>>
->>> First of all, thanks for this investigation!
->>
->> You're welcome
->>
->>> I believe we need to report this to upstream gcc (i.e that gcc 7.x is
->>> affected) and see if they backport to the gcc 7.x branch. If they do,
->>> then the solution is simple: also backport the patch on our side, until
->>> they do a new 7.x release.
->>
->> For now I don't have an account in the gcc bugzilla to reply to the bug report.
->> I've asked for a new account, It should be activated in few days.
->
-> Richard Biener replied
-> "The bug isn't a regression so technically it doesn't qualify.  OTOH it
-> looks reasonably safe to backport and the bug is annoying."
->
-> I'm waiting for the backport in the gcc-7-branch.
->
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+BR dl-wrapper tries to get Qt5_CinematicExperience_%22rpi_%221.0.tgz, which fails, so fix archive name...
 
-I backed up and applied this bug's patch to 6.x as a last attempt to
-resolve what I was observing with libnss (the build was successful).
-I posted more detail in the bug report Romain referenced.  There
-wasn't an actual commit to track down on this issue, it feels like it
-was a backport introducing a design flaw and this patch just prevents
-a infinite runaway of the optimization step.
+Signed-off-by: Julien <julien.boibessot@armadeus.com>
+---
+ package/qt5cinex/qt5cinex.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It does look like they have now decided to not backport this to 7.x,
-so unsure what you guys think about applying it to buildroot.
-
-Matt
+diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
+index d9254f5..89c38ee 100644
+--- a/package/qt5cinex/qt5cinex.mk
++++ b/package/qt5cinex/qt5cinex.mk
+@@ -8,7 +8,7 @@ QT5CINEX_VERSION = 1.0
+ QT5CINEX_SITE = http://quitcoding.com/download
+ 
+ ifeq ($(BR2_PACKAGE_QT5CINEX_HD),y)
+-QT5CINEX_HD = "rpi_"
++QT5CINEX_HD = rpi_
+ endif
+ 
+ QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_HD)$(QT5CINEX_VERSION).tgz
+-- 
+2.7.4
