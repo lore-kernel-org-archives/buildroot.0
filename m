@@ -1,78 +1,144 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 10 May 2018 00:41:28 +0200
-Subject: [Buildroot] [RFC PATCH 1/7] pkg-meson: new infrastructure
-In-Reply-To: <c0524a93-eaad-3e61-f8bc-f9b17271d468@mind.be>
-References: <20180507105741.31747-1-eric.le.bihan.dev@free.fr>
- <20180507105741.31747-2-eric.le.bihan.dev@free.fr>
- <20180507170256.2ef06b2f@windsurf> <20180507193850.GA15375@ned>
- <20180507214356.3a087000@windsurf> <20180507221244.GC15375@ned>
- <c0524a93-eaad-3e61-f8bc-f9b17271d468@mind.be>
-Message-ID: <20180509224128.GA11938@ned>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 10 May 2018 00:03:17 -0300
+Subject: [Buildroot] [PATCH v3 5/6] support/scripts/pkgstat: add target
+ CPE reporting
+References: <1525725005-41435-6-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <5af3b6756e2f4_1bd62aeb50fcbdd4909df@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-On 18-05-08 23:00:23, Arnout Vandecappelle wrote:
+Hello,
+
+This is not a complete code-review, but it seems you will send a new iteration.
+
+When sending new iteration(s) of this series, could you run flake8 on patches 5
+and 6 and fix all warnings?
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/67435667
+
+
+On Mon, May 07, 2018 at 05:30 PM, Matt Weber wrote:
+
+> support/scripts/pkgstat: add target CPE reporting
+
+For this patch and also for patch 6, one of these prefixes would be better:
+support/scripts/pkg-stats: ...
+pkg-stats: ...
 
 [snip]
+> +    def get_xml_dict(self):
+> +        print "CPE: Fetching xml manifest..."
+> +        try:
+> +            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
+> +            print "CPE: Unzipping xml manifest..."
+> +            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
+> +            print "CPE: Converting xml manifest to dict..."
+> +            self.all_cpes = xmltodict.parse(cpe_file)
+> +        except urllib2.HTTPError, e:
+> +            print "HTTP Error:", e.code, url
+> +        except urllib2.URLError, e:
+> +            print "URL Error:", e.reason, url
 
-> >> OK. Did you test the host variant of the meson-package infrastructure ?
-> >
-> > Good advice! Testing the host variant of a custom library+executable
-> > project brought out that Meson does not automically sets RPATH [1],
-> > which makes support/scripts/check-host-rpath unhappy, and that it
->
->  If that is the case, it means you don't properly pass HOST_LDFLAGS, which is A
-> Bad Thing (tm).
->
->  Indeed, looking at your patch, I see none of the host options are passed. You
-> certainly need to pass HOST_MAKE_ENV in the environment to make pkg-config is
-> used correctly. And then you should also make sure that HOSTCC etc. are passed
-> correctly - remember that it's possible to use a different host compiler by
-> passing HOSTCC in the environment (and I'm actually using that feature!).
+(after fixing the warning from flake8)
+If the download fails the script continues and dies like this:
 
-I added $$(HOST_CONFIGURE_OPTS), CFLAGS="$$(HOST_CFLAGS)" and
-LDFLAGS="$$(HOST_LDFLAGS)" before invoking Meson (as done in
-pkg-autotools.mk) and now it politely informs me that it will take these
-flags into account:
+CPE: Fetching xml manifest...
+URL Error: [Errno -2] Name or service not known
+CPE: Checking for matches...
+CPE: Searching for [cpe:2.3:a:gnu:bash:4.4.18:*:*:*:*:*:*:*]
+Traceback (most recent call last):
+  File "support/scripts/pkg-stats", line 595, in <module>
+    __main__()
+  File "support/scripts/pkg-stats", line 576, in __main__
+    get_target_cpe_report(args.cpe_report,cpe_dict)
+  File "support/scripts/pkg-stats", line 531, in get_target_cpe_report
+    result = cpe_dict.find(cpe[0])
+  File "support/scripts/pkg-stats", line 517, in find
+    for cpe in self.all_cpes['cpe-list']['cpe-item']:
+KeyError: 'cpe-list'
 
-```
-Appending CFLAGS from environment: '-O2 -I/home/eric/build/test-meson-package/qemu/arm/vexpress/host/include'
-Appending LDFLAGS from environment: '-L/home/eric/build/test-meson-package/qemu/arm/vexpress/host/lib -Wl,-rpath,/home/eric/build/test-meson-package/qemu/arm/vexpress/host/lib'
-Appending CPPFLAGS from environment: '-I/home/eric/build/test-meson-package/qemu/arm/vexpress/host/include'
-```
+Maybe this is what you want:
+        except ...
+            print ...
+            sys.exit(1)
 
-But as stated in issue 1411 [1], Meson *does strip* RPATH [2] when
-installing the executable of a library+executable project [3] in
-$(HOST_DIR)/bin:
+[snip]
+> +def get_target_cpe_report(cpe_report_file, cpe_dict):
+> +    report_cpe_exact_match = ""
+> +    report_cpe_needing_update = ""
+> +    report_cpe_missing = ""
+> +
+> +    print "CPE: Checking for matches..."
+> +    with open(cpe_report_file) as cpe_file:
+> +        cpe_list = csv.reader(cpe_file)
+> +        for cpe in cpe_list:
+> +            if "CPE ID" not in cpe[0]:
+           
+The .csv file contains always only one header, right?
+If so, you could do like it is done on utils/size-stats-compare (code not
+tested):
+        cpe_list = csv.reader(cpe_file)
+        header = next(cpe_list)
+        (... code to validate the header ...)
+        for cpe in cpe_list:
+            (... assume it is an entry, not a header...)
 
-```
-$ readelf -a /home/eric/build/test-meson-package/qemu/arm/vexpress/build/host-hello-meson-custom/build/tools/hello-meson-tool | grep -e PATH
- 0x000000000000000f (RPATH)              Library rpath: [/home/eric/build/test-meson-package/qemu/arm/vexpress/host/lib:$ORIGIN/../hello-meson]
-$ readelf -a /home/eric/build/test-meson-package/qemu/arm/vexpress/host/bin/hello-meson-tool | grep -e PATH
-```
+> +                result = cpe_dict.find(cpe[0])
+> +                if not result:
+> +                    cpe_no_version = cpe[0].split(":")[0]+":"+cpe[0].split(":")[1]+":"+cpe[0].split(":")[2]+":"+cpe[0].split(":")[3]+":"+cpe[0].split(":")[4]
 
-The recommended workaround is to define install_rpath [4] in for the
-executable target, but this requires patching the sources of the
-Meson-based package when building its host variant, which does not sound
-very sensible.
+Could this long line be replaced by this one?
+                    cpe_no_version = ":".join(cpe[0].split(":", 5)[:5])
 
-So it looks like the workaround used in NixOS [5], i.e. patching the
-host variant of Meson itself to remove the RPATH strip step, is
-preferable until upstream Meson settles on this topic. I'll send another
-patch for the meson package where this step is done in a post-extract
-hook of the host variant.
+[snip]
+>  def parse_args():
+>      parser = argparse.ArgumentParser()
+> @@ -493,6 +555,8 @@ def parse_args():
+>                          help='Number of packages')
+>      parser.add_argument('-p', dest='packages', action='store',
+>                          help='List of packages (comma separated)')
+> +    parser.add_argument('-c', dest='cpe_report', action='store',
+> +                        help='Buildroot CPE Report (csv format)')
 
-[1] https://github.com/mesonbuild/meson/issues/1411
-[2] https://github.com/mesonbuild/meson/blob/dc91aad42009f739f9e6d73221efc071626c28a3/mesonbuild/scripts/meson_install.py#L396
-[3] https://github.com/mesonbuild/meson/issues/314#issuecomment-157658562
-[4] https://github.com/mesonbuild/meson/issues/314#issuecomment-326909424
-[5] https://github.com/NixOS/nixpkgs/pull/28444#issuecomment-324033323
+What do you think about this help instead:
+                     help='CPE Report generated by make cpe-info (csv format)')
+or something like this?
+
+>      return parser.parse_args()
+>  
+>  
+> @@ -505,22 +569,27 @@ def __main__():
+[snip]
+> +    if args.cpe_report:
+> +        print "Performing Target CPE Report Analysis..."
+> +        cpe_dict = CPE()
+> +        cpe_dict.get_xml_dict()
+> +        get_target_cpe_report(args.cpe_report,cpe_dict)
+
+Is this code supposed to be used only to debug the script?
+Or is its output to stdout supposed to used by the user to get a list of
+packages without cpe info?
+
+I ask this because this code branch still requires a '-o file' to be passed,
+but it does not use it.
+
+For the first case (only to debug the script) maybe it is acceptable as is.
+
+But for the second case (script to be called by the end user), it is not nice to
+require an argument that is not used. required=True could then be removed from
+"parser.add_argument('-o'," and the check could be moved to __main__ (code not
+tested):
+def __main__():
+    args = parse_args()
+    if args.output is None and args.cpe_report is None:
+        print "ERROR: either argument -o or -c required"
+        sys.exit(1)
+    if args.output and args.cpe_report:
+        print "ERROR: -o and -c are mutually exclusive"
+        sys.exit(1)
+
 
 Regards,
-
---
-ELB
+Ricardo
