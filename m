@@ -1,209 +1,330 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 10 May 2018 13:58:53 -0500
-Subject: [Buildroot] [PATCH v4 4/5] cpe-info: update manual for new pkg vars
+Date: Thu, 10 May 2018 13:58:54 -0500
+Subject: [Buildroot] [PATCH v4 5/5] support/scripts/pkgstats: add CPE
+ reporting
 In-Reply-To: <1525978734-35706-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1525978734-35706-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1525978734-35706-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1525978734-35706-6-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Provide guidance on setting up the *_CPE_* and *_CVE_* variables.
+Pkg status now includes CPE as an item reported in the html
+output (stat summary and for each pkg)
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Option added to allow analysis of a specific Buildroot target's
+'make cpe-info' reports accuracy against CPE database.
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
 Changes
-v2
-[Thomas P
- - Reworded LIBFOO_CVE_PATCHED description
+v3 -> v4
+ - Collapsed patch 5 and 6 together into this single patch
 
-[Matt W
- - Added definition for new preset variables to auto-gen the CPE ID
- - Added example LIBFOO_CPE_ID_VENDOR to LIBFOO
+[Eric
+ - added except handling around file io
+ - fixed condition where buildroot isn't generating a CPE
+   string as part of the infra and output that is the case.
+   (eventually these probably could be fixed but there aren't
+   many at this point)
+
+[Ricardo
+ - fixed patch naming and resolved flake8 issues
+ - added except handling to have proper exits
+ - cleaned up csv file header skippin
+ - condensed partial cve string split
+ - updated help txt as suggested
+ - reworked output file requirement.  Removed -o as required but
+   added check if provided when -c isn't used
 
 v3
- - Updated to make *_CPE_VENDOR optional
- - Changed wording around _CPE_ID as there is only one defined now
+ - New patch
 ---
- docs/manual/adding-packages-generic.txt | 117 ++++++++++++++++++++------------
- 1 file changed, 74 insertions(+), 43 deletions(-)
+ support/scripts/pkg-stats | 188 +++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 170 insertions(+), 18 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 7e1f246..45f0279 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -24,57 +24,59 @@ system is based on hand-written Makefiles or shell scripts.
- 09: LIBFOO_SITE = http://www.foosoftware.org/download
- 10: LIBFOO_LICENSE = GPL-3.0+
- 11: LIBFOO_LICENSE_FILES = COPYING
--12: LIBFOO_INSTALL_STAGING = YES
--13: LIBFOO_CONFIG_SCRIPTS = libfoo-config
--14: LIBFOO_DEPENDENCIES = host-libaaa libbbb
--15:
--16: define LIBFOO_BUILD_CMDS
--17:	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
--18: endef
--19:
--20: define LIBFOO_INSTALL_STAGING_CMDS
--21:	$(INSTALL) -D -m 0755 $(@D)/libfoo.a $(STAGING_DIR)/usr/lib/libfoo.a
--22:	$(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
--23:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
--24: endef
--25:
--26: define LIBFOO_INSTALL_TARGET_CMDS
--27:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
--28:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
--29: endef
--30:
--31: define LIBFOO_USERS
--32:	foo -1 libfoo -1 * - - - LibFoo daemon
--33: endef
--34:
--35: define LIBFOO_DEVICES
--36:	/dev/foo  c  666  0  0	42  0  -  -  -
--37: endef
--38:
--39: define LIBFOO_PERMISSIONS
--40:	/bin/foo  f  4755  foo  libfoo	 -  -  -  -  -
--41: endef
--42:
--43: $(eval $(generic-package))
-+12: LIBFOO_CPE_ID_VENDOR = foosoftware
-+13: LIBFOO_INSTALL_STAGING = YES
-+14: LIBFOO_CONFIG_SCRIPTS = libfoo-config
-+15: LIBFOO_DEPENDENCIES = host-libaaa libbbb
-+16:
-+17: define LIBFOO_BUILD_CMDS
-+18:	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-+19: endef
-+20:
-+21: define LIBFOO_INSTALL_STAGING_CMDS
-+22:	$(INSTALL) -D -m 0755 $(@D)/libfoo.a $(STAGING_DIR)/usr/lib/libfoo.a
-+23:	$(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
-+24:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
-+25: endef
-+26:
-+27: define LIBFOO_INSTALL_TARGET_CMDS
-+28:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
-+29:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
-+30: endef
-+31:
-+32: define LIBFOO_USERS
-+33:	foo -1 libfoo -1 * - - - LibFoo daemon
-+34: endef
-+35:
-+36: define LIBFOO_DEVICES
-+37:	/dev/foo  c  666  0  0	42  0  -  -  -
-+38: endef
-+39:
-+40: define LIBFOO_PERMISSIONS
-+41:	/bin/foo  f  4755  foo  libfoo	 -  -  -  -  -
-+42: endef
-+43:
-+44: $(eval $(generic-package))
- --------------------------------
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 43f7e8d..c28d397 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -24,14 +24,22 @@ from collections import defaultdict
+ import re
+ import subprocess
+ import sys
++import urllib2
++import xmltodict
++import gzip
++from StringIO import StringIO
++import csv
  
--The Makefile begins on line 7 to 11 with metadata information: the
-+The Makefile begins on line 7 to 12 with metadata information: the
- version of the package (+LIBFOO_VERSION+), the name of the
- tarball containing the package (+LIBFOO_SOURCE+) (xz-ed tarball recommended)
- the Internet location at which the tarball can be downloaded from
--(+LIBFOO_SITE+), the license (+LIBFOO_LICENSE+) and file with the
--license text (+LIBFOO_LICENSE_FILES+). All variables must start with
-+(+LIBFOO_SITE+), the license (+LIBFOO_LICENSE+), the file with the
-+license text (+LIBFOO_LICENSE_FILES+) and the vendor for vunerability
-+analysis (+LIBFOO_CPE_ID_VENDOR+). All variables must start with
- the same prefix, +LIBFOO_+ in this case. This prefix is always the
- uppercased version of the package name (see below to understand where
- the package name is defined).
+ INFRA_RE = re.compile("\$\(eval \$\(([a-z-]*)-package\)\)")
  
--On line 12, we specify that this package wants to install something to
-+On line 13, we specify that this package wants to install something to
- the staging space. This is often needed for libraries, since they must
- install header files and other development files in the staging space.
- This will ensure that the commands listed in the
- +LIBFOO_INSTALL_STAGING_CMDS+ variable will be executed.
- 
--On line 13, we specify that there is some fixing to be done to some
-+On line 14, we specify that there is some fixing to be done to some
- of the 'libfoo-config' files that were installed during
- +LIBFOO_INSTALL_STAGING_CMDS+ phase.
- These *-config files are executable shell script files that are
-@@ -122,14 +124,14 @@ IMAGEMAGICK_CONFIG_SCRIPTS = \
- --------------------------------
- ================================
- 
--On line 14, we specify the list of dependencies this package relies
-+On line 15, we specify the list of dependencies this package relies
- on. These dependencies are listed in terms of lower-case package names,
- which can be packages for the target (without the +host-+
- prefix) or packages for the host (with the +host-+) prefix).
- Buildroot will ensure that all these packages are built and installed
- 'before' the current package starts its configuration.
- 
--The rest of the Makefile, lines 16..29, defines what should be done
-+The rest of the Makefile, lines 17..29, defines what should be done
- at the different steps of the package configuration, compilation and
- installation.
- +LIBFOO_BUILD_CMDS+ tells what steps should be performed to
-@@ -142,16 +144,16 @@ All these steps rely on the +$(@D)+ variable, which
- contains the directory where the source code of the package has been
- extracted.
- 
--On lines 31..43, we define a user that is used by this package (e.g.
-+On lines 32..44, we define a user that is used by this package (e.g.
- to run a daemon as non-root) (+LIBFOO_USERS+).
- 
--On line 35..37, we define a device-node file used by this package
-+On line 36..38, we define a device-node file used by this package
- (+LIBFOO_DEVICES+).
- 
--On line 39..41, we define the permissions to set to specific files
-+On line 40..42, we define the permissions to set to specific files
- installed by this package (+LIBFOO_PERMISSIONS+).
- 
--Finally, on line 43, we call the +generic-package+ function, which
-+Finally, on line 44, we call the +generic-package+ function, which
- generates, according to the variables defined previously, all the
- Makefile code necessary to make your package working.
- 
-@@ -469,6 +471,35 @@ information is (assuming the package name is +libfoo+) :
-   locations, `/lib/firmware`, `/usr/lib/firmware`, `/lib/modules`,
-   `/usr/lib/modules`, and `/usr/share`, which are automatically excluded.
- 
-+* +LIBFOO_CPE_ID_VENDOR+
-+  This variable is optional. It only must be defined if the package name
-+  does not match what the CPE ID uses for the vendor. By default it's set
-+  to <pkg-name>_project.
++CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
 +
-+* +LIBFOO_CPE_ID_NAME+
-+  This variable is optional. It only must be defined if the package name
-+  does not match what the CPE ID uses for the name. By default it's set
-+  to <pkg-name>.
-+
-+* +LIBFOO_CPE_ID_VERSION+
-+  This variable is optional. By default it's set to <pkg-version>.
-+
-+* +LIBFOO_CPE_ID+ is optional, as the package infrastructure hangles the
-+  default case of a single package's Common Product Enumeration (CPE)
-+  identification string. +make cpe-info+ copies all of these into a
-+  +cpe-manifest.csv+ file. To identify a package's possible CPE,
-+  the National Vunerability Database can be searched at
-+  https://nvd.nist.gov/products/cpe/search.
-+
-+* +LIBFOO_CVE_PATCHED+ is a space-separated list of the package's Common
-+  Vunerability Enumeration (CVE) identification strings. This list
-+  enumerates CVEs which are fixed by patches added in Buildroot. This
-+  allows the CPE reporting to provide additional detail on CVEs which
-+  have been fixed, even if Buildroot is not yet using an updated upstream
-+  release including the fix. This variable is optional. If it is not
-+  defined, the +CVE PATCHED+ field will appear empty in the manifest
-+  file for this package.
-+
- The recommended way to define these variables is to use the following
- syntax:
  
+ class Package:
+     all_licenses = list()
+     all_license_files = list()
+     all_versions = dict()
++    all_cpe_id = dict()
+ 
+     def __init__(self, name, path):
+         self.name = name
+@@ -43,6 +51,8 @@ class Package:
+         self.patch_count = 0
+         self.warnings = 0
+         self.current_version = None
++        self.cpe_id = None
++        self.has_cpe = False
+ 
+     def pkgvar(self):
+         return self.name.upper().replace("-", "_")
+@@ -116,6 +126,25 @@ class Package:
+                 self.warnings = int(m.group(1))
+                 return
+ 
++    def set_cpe_info(self, cpe_dict):
++        """
++        Fills in the .has_cpe field
++        """
++        var = self.pkgvar()
++        if var in self.all_cpe_id:
++            self.cpe_id = self.all_cpe_id[var]
++        if self.cpe_id is None:
++            print("BR Infra Not building CPE for pkg: [%s]" % var)
++            return
++        result = cpe_dict.find(self.cpe_id)
++        if not result:
++            result = cpe_dict.find_partial(cpe_dict.get_cpe_no_version(self.cpe_id))
++            if result:
++                self.has_cpe = "Update"
++            # Unset case for has_cpe is assumed missing/does not exist
++        else:
++            self.has_cpe = cpe_dict.get_nvd_url(self.cpe_id)
++
+     def __eq__(self, other):
+         return self.path == other.path
+ 
+@@ -254,6 +283,23 @@ def package_init_make_info():
+ 
+         Package.all_versions[pkgvar] = value
+ 
++    # CPE ID
++    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
++                                 "-s", "printvars", "VARS=%_CPE_ID"])
++    for l in o.splitlines():
++        # Get variable name and value
++        pkgvar, value = l.split("=")
++
++        # Strip _CPE_ID
++        pkgvar = pkgvar[:-7]
++
++        if pkgvar == "LINUX":
++            Package.all_cpe_id[pkgvar] = "cpe:2.3:o:" + value + ":*:*:*:*:*:*:*"
++        elif pkgvar == "LINUX_HEADERS":
++            Package.all_cpe_id[pkgvar] = "cpe:2.3:o:" + value + ":*:*:*:*:*:*:*"
++        else:
++            Package.all_cpe_id[pkgvar] = "cpe:2.3:a:" + value + ":*:*:*:*:*:*:*"
++
+ 
+ def calculate_stats(packages):
+     stats = defaultdict(int)
+@@ -279,6 +325,12 @@ def calculate_stats(packages):
+             stats["hash"] += 1
+         else:
+             stats["no-hash"] += 1
++        if pkg.has_cpe == "Update":
++            stats["update-cpe"] += 1
++        elif pkg.has_cpe:
++            stats["cpe"] += 1
++        else:
++            stats["no-cpe"] += 1
+         stats["patches"] += pkg.patch_count
+     return stats
+ 
+@@ -422,6 +474,20 @@ def dump_html_pkg(f, pkg):
+     f.write("  <td class=\"%s\">%d</td>\n" %
+             (" ".join(td_class), pkg.warnings))
+ 
++    # CPE Valid
++    td_class = ["centered"]
++    if not pkg.has_cpe:
++        td_class.append("wrong")
++        f.write("  <td class=\"%s\">%s</td>\n" %
++                (" ".join(td_class), boolean_str(pkg.has_cpe)))
++    elif pkg.has_cpe == "Update":
++        td_class.append("wrong")
++        f.write("  <td class=\"%s\">Update</td>\n" %
++                (" ".join(td_class)))
++    else:
++        td_class.append("correct")
++        f.write("  <td class=\"%s\"><a href=\"%s\">%s</a></td>\n" %
++                (" ".join(td_class), pkg.has_cpe, boolean_str(pkg.has_cpe)))
+     f.write(" </tr>\n")
+ 
+ 
+@@ -437,6 +503,7 @@ def dump_html_all_pkgs(f, packages):
+ <td class=\"centered\">Hash file</td>
+ <td class=\"centered\">Current version</td>
+ <td class=\"centered\">Warnings</td>
++<td class=\"centered\">CPE Valid</td>
+ </tr>
+ """)
+     for pkg in sorted(packages):
+@@ -463,6 +530,12 @@ def dump_html_stats(f, stats):
+             stats["hash"])
+     f.write(" <tr><td>Packages not having a hash file</td><td>%s</td></tr>\n" %
+             stats["no-hash"])
++    f.write(" <tr><td>Packages having a registered CPE</td><td>%s</td></tr>\n" %
++            stats["cpe"])
++    f.write(" <tr><td>Packages needing CPE update</td><td>%s</td></tr>\n" %
++            stats["update-cpe"])
++    f.write(" <tr><td>Packages missing a registered CPE</td><td>%s</td></tr>\n" %
++            stats["no-cpe"])
+     f.write(" <tr><td>Total number of patches</td><td>%s</td></tr>\n" %
+             stats["patches"])
+     f.write("</table>\n")
+@@ -485,42 +558,121 @@ def dump_html(packages, stats, output):
+         f.write(html_footer)
+ 
+ 
++class CPE:
++    all_cpes = dict()
++
++    def get_xml_dict(self):
++        print("CPE: Fetching xml manifest...")
++        try:
++            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
++            print("CPE: Unzipping xml manifest...")
++            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
++            print("CPE: Converting xml manifest to dict...")
++            self.all_cpes = xmltodict.parse(cpe_file)
++        except urllib2.HTTPError:
++            print("CPE: HTTP Error: %s" % CPE_XML_URL)
++            sys.exit(1)
++        except urllib2.URLError:
++            print("CPE: URL Error: %s" % CPE_XML_URL)
++            sys.exit(1)
++
++    def find_partial(self, cpe_str):
++        print("CPE: Searching for partial [%s]" % cpe_str)
++        for cpe in self.all_cpes['cpe-list']['cpe-item']:
++            if cpe_str in cpe['cpe-23:cpe23-item']['@name']:
++                return cpe['cpe-23:cpe23-item']['@name']
++
++    def find(self, cpe_str):
++        print("CPE: Searching for [%s]" % cpe_str)
++        for cpe in self.all_cpes['cpe-list']['cpe-item']:
++            if cpe['cpe-23:cpe23-item']['@name'] == cpe_str:
++                return cpe['cpe-23:cpe23-item']['@name']
++
++    def get_cpe_no_version(self, cpe):
++        return "".join(cpe.split(":")[:5])
++
++    def get_nvd_url(self, cpe_str):
++        return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
++                urllib2.quote(cpe_str) + \
++                "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
++
++
++def get_target_cpe_report(cpe_report_file, cpe_dict):
++    report_cpe_exact_match = ""
++    report_cpe_needing_update = ""
++    report_cpe_missing = ""
++
++    print("CPE: Checking for matches...")
++    try:
++        with open(cpe_report_file) as cpe_file:
++            cpe_list = csv.reader(cpe_file)
++            next(cpe_list)  # make cpe-info has a one line header
++            for cpe in cpe_list:
++                result = cpe_dict.find(cpe[0])
++                if not result:
++                    result = cpe_dict.find_partial(cpe_dict.get_cpe_no_version(cpe[0]))
++                    if not result:
++                        report_cpe_missing += cpe[0] + "\n"
++                    else:
++                        report_cpe_needing_update += cpe[0] + "\n"
++                else:
++                    report_cpe_exact_match += cpe[0] + "\n"
++    except (OSError, IOError) as e:
++        print("CPE: report csv file (%s): %s" % (e.errno, e.strerror))
++        sys.exit(1)
++
++    print("CPE: Found EXACT match:\n" + report_cpe_exact_match)
++    print("CPE: Found but REQUIRES UPDATE:\n" + report_cpe_needing_update)
++    print("CPE: Not found (proposing the following to be added):\n" + report_cpe_missing)
++
++
+ def parse_args():
+     parser = argparse.ArgumentParser()
+-    parser.add_argument('-o', dest='output', action='store', required=True,
++    parser.add_argument('-o', dest='output', action='store',
+                         help='HTML output file')
+     parser.add_argument('-n', dest='npackages', type=int, action='store',
+                         help='Number of packages')
+     parser.add_argument('-p', dest='packages', action='store',
+                         help='List of packages (comma separated)')
++    parser.add_argument('-c', dest='cpe_report', action='store',
++                        help='CPE Report generated by make cpe-info (csv format)')
+     return parser.parse_args()
+ 
+ 
+ def __main__():
+     args = parse_args()
+     if args.npackages and args.packages:
+-        print "ERROR: -n and -p are mutually exclusive"
++        print("ERROR: -n and -p are mutually exclusive")
+         sys.exit(1)
+     if args.packages:
+         package_list = args.packages.split(",")
+     else:
+         package_list = None
+-    print "Build package list ..."
+-    packages = get_pkglist(args.npackages, package_list)
+-    print "Getting package make info ..."
+-    package_init_make_info()
+-    print "Getting package details ..."
+-    for pkg in packages:
+-        pkg.set_infra()
+-        pkg.set_license()
+-        pkg.set_hash_info()
+-        pkg.set_patch_count()
+-        pkg.set_check_package_warnings()
+-        pkg.set_current_version()
+-    print "Calculate stats"
+-    stats = calculate_stats(packages)
+-    print "Write HTML"
+-    dump_html(packages, stats, args.output)
++    cpe_dict = CPE()
++    cpe_dict.get_xml_dict()
++    if args.cpe_report:
++        print("Performing Target CPE Report Analysis...")
++        get_target_cpe_report(args.cpe_report, cpe_dict)
++    elif args.output:
++        print("Build package list ...")
++        packages = get_pkglist(args.npackages, package_list)
++        print("Getting package make info ...")
++        package_init_make_info()
++        print("Getting package details ...")
++        for pkg in packages:
++            pkg.set_infra()
++            pkg.set_license()
++            pkg.set_hash_info()
++            pkg.set_patch_count()
++            pkg.set_check_package_warnings()
++            pkg.set_current_version()
++            pkg.set_cpe_info(cpe_dict)
++        print("Calculate stats")
++        stats = calculate_stats(packages)
++        print("Write HTML")
++        dump_html(packages, stats, args.output)
++    else:
++        print("Please provide the -o HTML output file arg")
+ 
+ 
+ __main__()
 -- 
 1.9.1
