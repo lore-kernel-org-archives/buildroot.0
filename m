@@ -1,89 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 May 2018 08:00:16 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-05-09
-Message-ID: <20180510060016.A06A4203B7@mail.bootlin.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 10 May 2018 09:17:49 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libdrm: bump version to 2.4.92
+Message-ID: <20180510071749.20563-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Build statistics for 2018-05-09
-===============================
-
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  30 |   2 |   0 |  32 |
-      master | 189 |  22 |   3 | 214 |
-
-Results for branch '2018.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-     glibc-arc-2017.09-release | 1 
-                 mesa3d-17.3.6 | 1 
-
-
-Detail of failures
-------------------
-
-         arc |      glibc-arc-2017.09-release | NOK | http://autobuild.buildroot.net/results/e027b9e6283ec42bdc0d412c85d9d8fa1917e53a | ORPH
-     powerpc |                  mesa3d-17.3.6 | NOK | http://autobuild.buildroot.net/results/92c087dbb37f82601703cedeeea50d2e309b399c |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                  host-go-1.10 | 5 
-                        libnss | 3 
-                cifs-utils-6.7 | 2 
-               log4cplus-2.0.0 | 2 
-                      qt-4.8.7 | 2 
-                   woff2-1.0.2 | 2 
-               xfsprogs-4.15.1 | 2 
-           bash-completion-2.8 | 1 
-              ghostscript-9.23 | 1 
-                 host-rauc-0.4 | 1 
-                     php-7.2.5 | 1 
-              traceroute-2.1.0 | 1 
-              wireshark-2.2.14 | 1 
-                     znc-1.7.0 | 1 
-
-
-Detail of failures
-------------------
-
-        mips |            bash-completion-2.8 | NOK | http://autobuild.buildroot.net/results/612afccb9f459121d339aa23baed29364138d73c | ORPH
-       sparc |                 cifs-utils-6.7 | NOK | http://autobuild.buildroot.net/results/158f2fb2ef800e9e1a42d59b3f92bcd411265c74 |     
-       sparc |                 cifs-utils-6.7 | NOK | http://autobuild.buildroot.net/results/be060c98f29b468187f6679cef6474f18f675a7a |     
-         arm |               ghostscript-9.23 | NOK | http://autobuild.buildroot.net/results/b535f39432b473b5639b7d532fdc77064d165828 |     
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/47651c8feb292610a3f0dcde84ec7054ae155e9b | ORPH
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/50ea06824ac2eec863828694570c3c958fbbb2cb | ORPH
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/dc4750e831193cbb6491a783a8c6065d049430a9 | ORPH
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/fd34089a7343a7abbfdd6aef97e263549db6e58b | ORPH
-      x86_64 |                   host-go-1.10 | NOK | http://autobuild.buildroot.net/results/ffa62e3d567eaf5ba6ee605dfc70674e5cb2d2ae | ORPH
-    mips64el |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/a7f4cd593cfb3a4811e5be5fcc7727d01e114b55 |     
-microblazeel |                         libnss | TIM | http://autobuild.buildroot.net/results/eff30c0870be2429ab1e0e58570f50ee4eab4667 |     
-microblazeel |                         libnss | TIM | http://autobuild.buildroot.net/results/831121524e80b0eebabc5e6333eeefb0e3ea8e72 |     
-microblazeel |                         libnss | TIM | http://autobuild.buildroot.net/results/3d7035d1a204b3989e5eefc4169aa08267b351dc |     
-         arm |                log4cplus-2.0.0 | NOK | http://autobuild.buildroot.net/results/e3e6e028d35c1a43b0aa25d1c5942a2569e85505 |     
-         arm |                log4cplus-2.0.0 | NOK | http://autobuild.buildroot.net/results/4f4e9ed5dd5bad76eeee5d151e958f22603615b3 |     
-         arm |                      php-7.2.5 | NOK | http://autobuild.buildroot.net/results/8200b4c3d101e72ec00a9ac86802a3b8b6578296 | ORPH
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/ef6f4bf437cdb2d005d1df9685e730ca7296f14f | ORPH
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/332b041ac6de8cb7b0a960b001fd061e98ad1fdc | ORPH
-     aarch64 |               traceroute-2.1.0 | NOK | http://autobuild.buildroot.net/results/38cd6c4dedaef17e312095482db71394693617a9 |     
-        i686 |               wireshark-2.2.14 | NOK | http://autobuild.buildroot.net/results/28a586d954038464216b7a3d40e3ef2f45dc0bf5 | ORPH
-        m68k |                    woff2-1.0.2 | NOK | http://autobuild.buildroot.net/results/78d25015ac464c985e5a550ce9a80d85080dc6f2 |     
-        m68k |                    woff2-1.0.2 | NOK | http://autobuild.buildroot.net/results/6c97a08e6ca2e914d54fbb525b3f0bb90023ef07 |     
-   powerpc64 |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/e8840a5b894a5bcba4a3e873975e6dbe03a6f6ac | ORPH
-         arm |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/95307f0f56c7ead1bd1f0ab0049aeb8b30fdc11c | ORPH
-         arc |                      znc-1.7.0 | NOK | http://autobuild.buildroot.net/results/9e44159820789f1d25efcbd24318b0e05e132371 |     
-
-
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index bc15ecf79f..52624b6a02 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002853.html
+-md5 23d87cda92700b710a37d9b8edaa9f54  libdrm-2.4.91.tar.bz2
+-sha1 44e42ce3cd41666e343ba393c73f6f1ad9fe1e74  libdrm-2.4.91.tar.bz2
+-sha256 634a0ed0cc1eff06f48674b1da81aafa661a9f001e7a4f43dde81076886dc800  libdrm-2.4.91.tar.bz2
+-sha512 07578c00c121ba37033db7172590e26d1545f81c242bbce2cfb7fb904bde504822c275d6468e5c5d20360d0046ae73d9b058aa0459ba35eb11927141cc998772  libdrm-2.4.91.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2018-May/176249.html
++md5 f9b00d985f82d0be6ecc20c799acc89e  libdrm-2.4.92.tar.bz2
++sha1 aad04c8e35cd3ab589ff085b20f75ba43e086647  libdrm-2.4.92.tar.bz2
++sha256 e9e48fdb4de139dc4d9880aa1473158a16ff6aff63d14341367bd30a51ff39fa  libdrm-2.4.92.tar.bz2
++sha512 9b75584d8957d298125884d490b74c0a641725d17088ba47f3dc2ec9d06519d8387eb464c024ee11712b31b17fb84e1a9a52bd4ebc7c316beb7d2f8711dc9eb2  libdrm-2.4.92.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 8f533d72d7..06b1144616 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.91
++LIBDRM_VERSION = 2.4.92
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
-http://autobuild.buildroot.net
+2.14.2
