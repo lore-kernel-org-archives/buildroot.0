@@ -1,152 +1,93 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 May 2018 18:55:41 +0300
-Subject: [Buildroot] [PATCH] strace: bump to version 4.22
-Message-ID: <d297d7a102534e460ed89cf33ad9ee85d4e4ecc5.1525967741.git.baruch@tkos.co.il>
+From: M ZV <giometriq@gmail.com>
+Date: Thu, 10 May 2018 20:32:10 +0430
+Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
+ host
+In-Reply-To: <20180509202254.GA9837@scaer>
+References: <20180502090508.12893-1-chemobejk@gmail.com>
+ <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
+ <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
+ <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
+ <1fdbacbd-e80f-8735-89c8-2ca92224ee9a@mind.be> <20180509202254.GA9837@scaer>
+Message-ID: <CAF7Xa=1p1KcbY8zUfmU+8bStTeUBo3c3buooD-cHmWFpOKj+xw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch.
+Hello,
+Arnout, Yann, All,
 
-Update license file hash; copyright year update.
+I just noticed there are actually two places host-mkpasswd is being used:
+root account (skeleton-init-common.mk) and users table. I think,
+if we're going to replace mkpasswd with a script, this all should go through
+one single point somehow (something like support/scripts/crypt_wrapper).
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/strace/0001-m68k-fix-build.patch | 97 ------------------------
- package/strace/strace.hash               |  6 +-
- package/strace/strace.mk                 |  2 +-
- 3 files changed, 4 insertions(+), 101 deletions(-)
- delete mode 100644 package/strace/0001-m68k-fix-build.patch
+On Thu, May 10, 2018 at 12:52 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> I don't like that we reinvent such tools... Especially when dealing with
+> security-related tools...
+>
+>>       dd if=/dev/urandom bs=1 count=12 | python -c "
+>
+> This is not optimal. Better to do a single read instead of 12: bs=12
+> count=1
+>
+>>                       import sys, crypt, base64
+>>                       salt = sys.stdin.read()
+>
+> Why such convoluted code to read 12 bytes of random data? Why not use
+> Python's builtins for that?
+>
+>     https://docs.python.org/3/library/secrets.html
+>
+>     import secrets
+>     blob = secrets.token_bytes(12)
+>
 
-diff --git a/package/strace/0001-m68k-fix-build.patch b/package/strace/0001-m68k-fix-build.patch
-deleted file mode 100644
-index 9675eaaa3c71..000000000000
---- a/package/strace/0001-m68k-fix-build.patch
-+++ /dev/null
-@@ -1,97 +0,0 @@
--From 6ebf6c4f9e5ebca123a5b5f24afe67cf0473cf92 Mon Sep 17 00:00:00 2001
--From: "Dmitry V. Levin" <ldv@altlinux.org>
--Date: Wed, 21 Feb 2018 23:03:27 +0000
--Subject: [PATCH] m68k: fix build
--
--When <sys/reg.h> is included after <linux/ptrace.h>, the build fails
--on m68k with the following diagnostics:
--
--  In file included from /usr/include/linux/ptrace.h:101:0,
--                   from ptrace.h:51,
--                   from sigreturn.c:2:
--  /usr/include/m68k-linux-gnu/sys/reg.h:26:3: error: expected identifier
--  before numeric constant
--     PT_D1 = 0,
--     ^
--
--Apparently, the only architecture where strace needs definitions
--provided by <sys/reg.h> is x86_64, other three (m68k, tile, and x86)
--are fine with definitions already provided by <linux/ptrace.h>.
--
--Fix the issue by getting rid of <sys/reg.h> and defining necessary
--macros in linux/x86_64/arch_regs.h file.
--
--* configure.ac (AC_CHECK_HEADERS): Remove sys/reg.h.
--* regs.h: Do not include <sys/reg.h>.
--* linux/x86_64/arch_regs.h (R15, R14, R13, R12, RBP, RBX, R11, R10,
--R9, R8, RAX, RCX, RDX, RSI, RDI, ORIG_RAX, RIP, CS, EFLAGS, RSP, SS,
--FS_BASE, GS_BASE, DS, ES, FS, GS): New macros.
--* NEWS: Mention this fix.
--
--Fixes: v4.21~21 ("Include <sys/ptrace.h> early")
--[baruch: drop the NEWS and configure.ac hunks]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 6ebf6c4f9e5e
--
-- NEWS                     |  3 +++
-- configure.ac             |  1 -
-- linux/x86_64/arch_regs.h | 29 +++++++++++++++++++++++++++++
-- regs.h                   |  5 -----
-- 4 files changed, 32 insertions(+), 6 deletions(-)
--
--diff --git a/linux/x86_64/arch_regs.h b/linux/x86_64/arch_regs.h
--index c2ccee671d4f..d502ca4bf202 100644
----- a/linux/x86_64/arch_regs.h
--+++ b/linux/x86_64/arch_regs.h
--@@ -1,2 +1,31 @@
-- extern uint32_t *const i386_esp_ptr;
-- extern uint64_t *const x86_64_rsp_ptr;
--+
--+/* <asm/ptrace.h> does not provide these definitions.  */
--+#define R15		0
--+#define R14		1
--+#define R13		2
--+#define R12		3
--+#define RBP		4
--+#define RBX		5
--+#define R11		6
--+#define R10		7
--+#define R9		8
--+#define R8		9
--+#define RAX		10
--+#define RCX		11
--+#define RDX		12
--+#define RSI		13
--+#define RDI		14
--+#define ORIG_RAX	15
--+#define RIP		16
--+#define CS		17
--+#define EFLAGS		18
--+#define RSP		19
--+#define SS		20
--+#define FS_BASE		21
--+#define GS_BASE		22
--+#define DS		23
--+#define ES		24
--+#define FS		25
--+#define GS		26
--diff --git a/regs.h b/regs.h
--index d89581d7dd3f..7a044cef8fbf 100644
----- a/regs.h
--+++ b/regs.h
--@@ -2,11 +2,6 @@
-- #define STRACE_REGS_H
-- 
-- #include <sys/user.h>
---
---#ifdef HAVE_SYS_REG_H
---# include <sys/reg.h>
---#endif
---
-- #include "arch_regs.h"
-- 
-- #endif /* !STRACE_REGS_H */
---- 
--2.17.0
--
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 21da83058e9f..f50e89c0607a 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking signature
--# https://strace.io/files/4.21/strace-4.21.tar.xz.asc
--sha256	5c7688db44073e94c59a5627744e5699454419824cc8166e8bcfd7ec58375c37	strace-4.21.tar.xz
--sha256	ea7ff222f36c9df0aa2924a8f7c7d2aec3ea11e752feba4b15ec79b695b6236a	COPYING
-+# https://strace.io/files/4.22/strace-4.22.tar.xz.asc
-+sha256	068cd09264c95e4d591bbcd3ea08f99a693ed8663cd5169b0fdad72eb5bdb39d	strace-4.22.tar.xz
-+sha256	df862ba273812c589fd69acc74197a25d38c5295baccab00a62d39d1894c0253	COPYING
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 1cb0c88c4f3e..d96f18c854e3 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 4.21
-+STRACE_VERSION = 4.22
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = BSD-3-Clause
--- 
-2.17.0
+I actually like Arnout way of using /dev/urandom. The more we make use of
+system resources (and less responsibility for python) the better.
+
+>
+> Sorry, I am not too convinced that writing our own tool is good...
+>
+> Regards,
+> Yann E. MORIN.
+
+To be honest, like all of you, I'm also very uncomfortable replacing
+mkpasswd with
+a python solution. There're three reasons that made me convinced this
+is the right thing to do.
+
+First, it's cryptographically sound. We're not going to roll our own
+hash algorithm.
+It?s simply making a LIBC crypt(3) function call. Like mkpasswd, this is just a
+system/libc call wrapper.
+
+Second, host-mkpasswd (which is carved out of another package to be a
+lightweight
+buildroot?s own bundle) apparently needs periodic attention (as can be
+seen in the
+mailing list archive throughout the years). In my case it actually
+built the shadow
+with empty password for the root (SHA functions are ignored for musl)
+without throwing
+ any errors. I know these blatant failures are easily caught by the
+developer before any kind
+of release but they all reveal how rapidly this package is going
+through bit-rot.
+
+And finally, this (python or perl script) seems to be the only
+cross-distribution solution
+that actually works without adding hundreds of lines of code (or a
+full-blown whois package)
+to the build infrastructure with their own specific libc compatibility
+patches and version bumps.
+And it works on Alpine!
+
+I personally settle for a code that is aesthetically wanting or
+philosophically unschooled
+if the alternative is to take more of the maintainers? attention and time.
+An absolute rare commodity we can ill afford.
+
+Thank you.
+Mike Z. Vand
