@@ -1,34 +1,47 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Thu, 10 May 2018 16:37:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5cinex: fix download
-Message-ID: <1525963046-17540-1-git-send-email-julien.boibessot@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 10 May 2018 18:42:12 +0300
+Subject: [Buildroot] [PATCH] strace: disable (again) mpers for musl
+Message-ID: <60b22528a49993d727f4d3f45f761af03e7a8736.1525966932.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien <julien.boibessot@armadeus.com>
+It turns out that mpers support in strace still does not play nicely
+with musl libc. As explained in commit 7892a778b (package/strace:
+disable libmpers with musl toolchains) headers mixup causes gcc header
+to be included, instead of the musl one, resulting in conflicting types.
+Commit 1088372941 (strace: bump to version 4.21) incorrectly enabled
+mpers for musl. Revert that.
 
-BR dl-wrapper tries to get Qt5_CinematicExperience_%22rpi_%221.0.tgz, which fails, so fix archive name...
+Fixes:
+http://autobuild.buildroot.net/results/345/3452419498c074ca66f36f0f87263fa10662ac86/
 
-Signed-off-by: Julien <julien.boibessot@armadeus.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/qt5cinex/qt5cinex.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/strace/strace.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
-index d9254f5..89c38ee 100644
---- a/package/qt5cinex/qt5cinex.mk
-+++ b/package/qt5cinex/qt5cinex.mk
-@@ -8,7 +8,7 @@ QT5CINEX_VERSION = 1.0
- QT5CINEX_SITE = http://quitcoding.com/download
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 0529d79af6fb..1cb0c88c4f3e 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -11,6 +11,14 @@ STRACE_LICENSE = BSD-3-Clause
+ STRACE_LICENSE_FILES = COPYING
+ STRACE_CONF_OPTS = --enable-mpers=check
  
- ifeq ($(BR2_PACKAGE_QT5CINEX_HD),y)
--QT5CINEX_HD = "rpi_"
-+QT5CINEX_HD = rpi_
- endif
- 
- QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_HD)$(QT5CINEX_VERSION).tgz
++# strace bundle some kernel headers to build libmpers, this mixes userspace
++# headers and kernel headers which break the build with musl.
++# The stddef.h from gcc is used instead of the one from musl.
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++STRACE_CONF_OPTS += st_cv_m32_mpers=no \
++	st_cv_mx32_mpers=no
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ STRACE_DEPENDENCIES += libunwind
+ STRACE_CONF_OPTS += --with-libunwind
 -- 
-2.7.4
+2.17.0
