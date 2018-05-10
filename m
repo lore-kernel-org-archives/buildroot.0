@@ -1,81 +1,296 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 10 May 2018 13:58:51 -0500
-Subject: [Buildroot] [PATCH v4 2/5] cpe-info: id prefix/suffix
-In-Reply-To: <1525978734-35706-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1525978734-35706-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1525978734-35706-3-git-send-email-matthew.weber@rockwellcollins.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Thu, 10 May 2018 15:17:12 -0700
+Subject: [Buildroot] [PATCH v3 1/1] python-websockets: backport fix for
+ upstream issue #350
+In-Reply-To: <20180507221823.6364-1-joseph.kogut@gmail.com>
+References: <20180507221823.6364-1-joseph.kogut@gmail.com>
+Message-ID: <20180510221712.13031-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are two types of software cpe prefixes, one for applications and
-one for operating systems. Note: There is a third type for hardware.
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 
-This patchset determines which should be used and stores that
-information with the package for later use when assembling the CPE
-report.
+Changes v2 -> v3:
+	- Fix missing Signed-off-by for included patch (suggested by
+	  Baruch)
+	- Fix patch naming (suggested by Baruch) 
 
-There is also a suffix which we just default to wildcards at this
-point.
-
-Refs:
-   https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
-   https://cpe.mitre.org/specification/
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Changes v1 -> v2:
+	- Include patch locally (suggested by Thomas)
 ---
-Changes
-v1 -> v2
-[Thomas P
- - Change to using a filter on pkg name value vs ifelse
+ ...ehavior-of-recv-in-the-CLOSING-state.patch | 261 ++++++++++++++++++
+ 1 file changed, 261 insertions(+)
+ create mode 100644 package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
 
-v3
-[Arnout
- - Moved CPE prefix and suffix defines to package/Makefile.in
----
- package/Makefile.in    | 4 ++++
- package/pkg-generic.mk | 8 +++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 4325f7b..ae69c4e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -395,6 +395,10 @@ TARGET_CONFIGURE_ARGS = \
- 
- ################################################################################
- 
-+CPE_PREFIX_OS = cpe:2.3:o
-+CPE_PREFIX_APP = cpe:2.3:a
-+CPE_SUFFIX = *:*:*:*:*:*:*
+diff --git a/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch b/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
+new file mode 100644
+index 0000000000..cb97b36bde
+--- /dev/null
++++ b/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
+@@ -0,0 +1,261 @@
++From 402059e4a46a764632eba8a669f5b012f173ee7b Mon Sep 17 00:00:00 2001
++From: Aymeric Augustin <aymeric.augustin@m4x.org>
++Date: Tue, 1 May 2018 17:05:05 +0200
++Subject: [PATCH] Fix behavior of recv() in the CLOSING state.
 +
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- NLS_OPTS = --enable-nls
- TARGET_NLS_DEPENDENCIES = host-gettext
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 67ac436..b56fefa 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -866,11 +866,17 @@ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
- $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
- $(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
- 
-+ifneq ($(filter linux linux-headers,$(1)),)
-+$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
-+else
-+$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
-+endif
++The behavior wasn't tested correctly: in some test cases, the connection
++had already moved to the CLOSED state, where the close code and reason
++are already known.
 +
- $(1)-cpe-info: PKG=$(2)
- $(1)-cpe-info:
- ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- 	@$$(call MESSAGE,"Collecting cpe info")
--	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
-+	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
- endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- 
- # legal-info: declare dependencies and set values used later for the manifest
++Refactor half_close_connection_{local,remote} to allow multiple runs of
++the event loop while remaining in the CLOSING state. Refactor affected
++tests accordingly.
++
++I verified that all tests in the CLOSING state were behaving is intended
++by inserting debug statements in recv/send/ping/pong and running:
++
++$ PYTHONASYNCIODEBUG=1 python -m unittest -v websockets.test_protocol.{Client,Server}Tests.test_{recv,send,ping,pong}_on_closing_connection_{local,remote}
++
++Fix #317, #327, #350, #357.
++
++Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
++---
++ websockets/protocol.py      | 10 ++---
++ websockets/test_protocol.py | 78 +++++++++++++++++++++++++++++--------
++ 2 files changed, 66 insertions(+), 22 deletions(-)
++
++diff --git a/websockets/protocol.py b/websockets/protocol.py
++index f8121a1..7583fe9 100644
++--- a/websockets/protocol.py
+++++ b/websockets/protocol.py
++@@ -303,7 +303,7 @@ class WebSocketCommonProtocol(asyncio.StreamReaderProtocol):
++         # Don't yield from self.ensure_open() here because messages could be
++         # received before the closing frame even if the connection is closing.
++ 
++-        # Wait for a message until the connection is closed
+++        # Wait for a message until the connection is closed.
++         next_message = asyncio_ensure_future(
++             self.messages.get(), loop=self.loop)
++         try:
++@@ -315,15 +315,15 @@ class WebSocketCommonProtocol(asyncio.StreamReaderProtocol):
++             next_message.cancel()
++             raise
++ 
++-        # Now there's no need to yield from self.ensure_open(). Either a
++-        # message was received or the connection was closed.
++-
++         if next_message in done:
++             return next_message.result()
++         else:
++             next_message.cancel()
++             if not self.legacy_recv:
++-                raise ConnectionClosed(self.close_code, self.close_reason)
+++                assert self.state in [State.CLOSING, State.CLOSED]
+++                # Wait until the connection is closed to raise
+++                # ConnectionClosed with the correct code and reason.
+++                yield from self.ensure_open()
++ 
++     @asyncio.coroutine
++     def send(self, data):
++diff --git a/websockets/test_protocol.py b/websockets/test_protocol.py
++index 70348fb..bfd4e3b 100644
++--- a/websockets/test_protocol.py
+++++ b/websockets/test_protocol.py
++@@ -105,7 +105,7 @@ class CommonTests:
++         self.loop.call_soon(self.loop.stop)
++         self.loop.run_forever()
++ 
++-    def make_drain_slow(self, delay=3 * MS):
+++    def make_drain_slow(self, delay=MS):
++         # Process connection_made in order to initialize self.protocol.writer.
++         self.run_loop_once()
++ 
++@@ -174,6 +174,8 @@ class CommonTests:
++         # Empty the outgoing data stream so we can make assertions later on.
++         self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
++ 
+++        assert self.protocol.state is State.CLOSED
+++
++     def half_close_connection_local(self, code=1000, reason='close'):
++         """
++         Start a closing handshake but do not complete it.
++@@ -181,31 +183,56 @@ class CommonTests:
++         The main difference with `close_connection` is that the connection is
++         left in the CLOSING state until the event loop runs again.
++ 
+++        The current implementation returns a task that must be awaited or
+++        cancelled, else asyncio complains about destroying a pending task.
+++
++         """
++         close_frame_data = serialize_close(code, reason)
++-        # Trigger the closing handshake from the local side.
++-        self.ensure_future(self.protocol.close(code, reason))
+++        # Trigger the closing handshake from the local endpoint.
+++        close_task = self.ensure_future(self.protocol.close(code, reason))
++         self.run_loop_once()    # wait_for executes
++         self.run_loop_once()    # write_frame executes
++         # Empty the outgoing data stream so we can make assertions later on.
++         self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
++-        # Prepare the response to the closing handshake from the remote side.
++-        self.loop.call_soon(
++-            self.receive_frame, Frame(True, OP_CLOSE, close_frame_data))
++-        self.loop.call_soon(self.receive_eof_if_client)
+++
+++        assert self.protocol.state is State.CLOSING
+++
+++        # Complete the closing sequence at 1ms intervals so the test can run
+++        # at each point even it goes back to the event loop several times.
+++        self.loop.call_later(
+++            MS, self.receive_frame, Frame(True, OP_CLOSE, close_frame_data))
+++        self.loop.call_later(2 * MS, self.receive_eof_if_client)
+++
+++        # This task must be awaited or cancelled by the caller.
+++        return close_task
++ 
++     def half_close_connection_remote(self, code=1000, reason='close'):
++         """
++-        Receive a closing handshake.
+++        Receive a closing handshake but do not complete it.
++ 
++         The main difference with `close_connection` is that the connection is
++         left in the CLOSING state until the event loop runs again.
++ 
++         """
+++        # On the server side, websockets completes the closing handshake and
+++        # closes the TCP connection immediately. Yield to the event loop after
+++        # sending the close frame to run the test while the connection is in
+++        # the CLOSING state.
+++        if not self.protocol.is_client:
+++            self.make_drain_slow()
+++
++         close_frame_data = serialize_close(code, reason)
++-        # Trigger the closing handshake from the remote side.
+++        # Trigger the closing handshake from the remote endpoint.
++         self.receive_frame(Frame(True, OP_CLOSE, close_frame_data))
++-        self.receive_eof_if_client()
+++        self.run_loop_once()    # read_frame executes
+++        # Empty the outgoing data stream so we can make assertions later on.
+++        self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
+++
+++        assert self.protocol.state is State.CLOSING
+++
+++        # Complete the closing sequence at 1ms intervals so the test can run
+++        # at each point even it goes back to the event loop several times.
+++        self.loop.call_later(2 * MS, self.receive_eof_if_client)
++ 
++     def process_invalid_frames(self):
++         """
++@@ -335,11 +362,13 @@ class CommonTests:
++         self.assertEqual(data, b'tea')
++ 
++     def test_recv_on_closing_connection_local(self):
++-        self.half_close_connection_local()
+++        close_task = self.half_close_connection_local()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.recv())
++ 
+++        self.loop.run_until_complete(close_task)    # cleanup
+++
++     def test_recv_on_closing_connection_remote(self):
++         self.half_close_connection_remote()
++ 
++@@ -421,24 +450,29 @@ class CommonTests:
++         self.assertNoFrameSent()
++ 
++     def test_send_on_closing_connection_local(self):
++-        self.half_close_connection_local()
+++        close_task = self.half_close_connection_local()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.send('foobar'))
+++
++         self.assertNoFrameSent()
++ 
+++        self.loop.run_until_complete(close_task)    # cleanup
+++
++     def test_send_on_closing_connection_remote(self):
++         self.half_close_connection_remote()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.send('foobar'))
++-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
+++
+++        self.assertNoFrameSent()
++ 
++     def test_send_on_closed_connection(self):
++         self.close_connection()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.send('foobar'))
+++
++         self.assertNoFrameSent()
++ 
++     # Test the ping coroutine.
++@@ -466,24 +500,29 @@ class CommonTests:
++         self.assertNoFrameSent()
++ 
++     def test_ping_on_closing_connection_local(self):
++-        self.half_close_connection_local()
+++        close_task = self.half_close_connection_local()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.ping())
+++
++         self.assertNoFrameSent()
++ 
+++        self.loop.run_until_complete(close_task)    # cleanup
+++
++     def test_ping_on_closing_connection_remote(self):
++         self.half_close_connection_remote()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.ping())
++-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
+++
+++        self.assertNoFrameSent()
++ 
++     def test_ping_on_closed_connection(self):
++         self.close_connection()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.ping())
+++
++         self.assertNoFrameSent()
++ 
++     # Test the pong coroutine.
++@@ -506,24 +545,29 @@ class CommonTests:
++         self.assertNoFrameSent()
++ 
++     def test_pong_on_closing_connection_local(self):
++-        self.half_close_connection_local()
+++        close_task = self.half_close_connection_local()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.pong())
+++
++         self.assertNoFrameSent()
++ 
+++        self.loop.run_until_complete(close_task)    # cleanup
+++
++     def test_pong_on_closing_connection_remote(self):
++         self.half_close_connection_remote()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.pong())
++-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
+++
+++        self.assertNoFrameSent()
++ 
++     def test_pong_on_closed_connection(self):
++         self.close_connection()
++ 
++         with self.assertRaises(ConnectionClosed):
++             self.loop.run_until_complete(self.protocol.pong())
+++
++         self.assertNoFrameSent()
++ 
++     # Test the protocol's logic for acknowledging pings with pongs.
++-- 
++2.17.0
++
 -- 
-1.9.1
+2.17.0
