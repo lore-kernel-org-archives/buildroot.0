@@ -1,71 +1,175 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 May 2018 18:43:37 +0200
-Subject: [Buildroot] [PATCH] docs/manual: using a branch name as FPP_VERSION
- does not work
-Message-ID: <20180510164337.14578-1-yann.morin.1998@free.fr>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 10 May 2018 13:00:43 -0500
+Subject: [Buildroot] [PATCH v3 5/6] support/scripts/pkgstat: add target
+ CPE reporting
+In-Reply-To: <5af3b6756e2f4_1bd62aeb50fcbdd4909df@ultri5.mail>
+References: <1525725005-41435-6-git-send-email-matthew.weber@rockwellcollins.com>
+ <5af3b6756e2f4_1bd62aeb50fcbdd4909df@ultri5.mail>
+Message-ID: <CANQCQpZy_hSjLfaHG0ay0Jq5Z3uBYa+zuEK_PXm1qMFHpsBp2g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For various reasons, we've always suggested users to avoid using a
-branch as version string for their packages, because it does not work
-as a they would expect:
+Ricardo,
 
-  - it is not reproducible, because the branch may change between two
-    builds that are done at different times;
+On Wed, May 9, 2018 at 10:03 PM, Ricardo Martincoski
+<ricardo.martincoski@gmail.com> wrote:
+> Hello,
+>
+> This is not a complete code-review, but it seems you will send a new iteration.
+>
+> When sending new iteration(s) of this series, could you run flake8 on patches 5
+> and 6 and fix all warnings?
+> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/67435667
+>
+>
+> On Mon, May 07, 2018 at 05:30 PM, Matt Weber wrote:
+>
+>> support/scripts/pkgstat: add target CPE reporting
+>
+> For this patch and also for patch 6, one of these prefixes would be better:
+> support/scripts/pkg-stats: ...
+> pkg-stats: ...
 
-  - it does not even follow the branch, as Buildroot anyway generates
-    a local tarball.
+Noted, I'm actually just going to also collapse the patch 5 and 6
+together (easier to manage with flake8/pep8 updates).
 
-Yet, until recently, using a branch name would just work (with the
-above limitations): the git tree was cloned, the branch checked out,
-and the tarball created.
+>
+> [snip]
+>> +    def get_xml_dict(self):
+>> +        print "CPE: Fetching xml manifest..."
+>> +        try:
+>> +            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
+>> +            print "CPE: Unzipping xml manifest..."
+>> +            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
+>> +            print "CPE: Converting xml manifest to dict..."
+>> +            self.all_cpes = xmltodict.parse(cpe_file)
+>> +        except urllib2.HTTPError, e:
+>> +            print "HTTP Error:", e.code, url
+>> +        except urllib2.URLError, e:
+>> +            print "URL Error:", e.reason, url
+>
+> (after fixing the warning from flake8)
+> If the download fails the script continues and dies like this:
+>
+> CPE: Fetching xml manifest...
+> URL Error: [Errno -2] Name or service not known
+> CPE: Checking for matches...
+> CPE: Searching for [cpe:2.3:a:gnu:bash:4.4.18:*:*:*:*:*:*:*]
+> Traceback (most recent call last):
+>   File "support/scripts/pkg-stats", line 595, in <module>
+>     __main__()
+>   File "support/scripts/pkg-stats", line 576, in __main__
+>     get_target_cpe_report(args.cpe_report,cpe_dict)
+>   File "support/scripts/pkg-stats", line 531, in get_target_cpe_report
+>     result = cpe_dict.find(cpe[0])
+>   File "support/scripts/pkg-stats", line 517, in find
+>     for cpe in self.all_cpes['cpe-list']['cpe-item']:
+> KeyError: 'cpe-list'
+>
+> Maybe this is what you want:
+>         except ...
+>             print ...
+>             sys.exit(1)
 
-But with the advent of the git caching, using a branch name does not
-work anymore. Indeed, we now do a git-fetch, and that does not create
-local branches. So we can't check out a branch, because it does not
-exist locally.
+Fixed by adding exit
 
-Update the manual to state that using a branch does not work. Remove
-the 'stable' example, as it looked like the name of a stable branch;
-instead, replace it with a version string that ressemble a tag.
+>
+> [snip]
+>> +def get_target_cpe_report(cpe_report_file, cpe_dict):
+>> +    report_cpe_exact_match = ""
+>> +    report_cpe_needing_update = ""
+>> +    report_cpe_missing = ""
+>> +
+>> +    print "CPE: Checking for matches..."
+>> +    with open(cpe_report_file) as cpe_file:
+>> +        cpe_list = csv.reader(cpe_file)
+>> +        for cpe in cpe_list:
+>> +            if "CPE ID" not in cpe[0]:
+>
+> The .csv file contains always only one header, right?
+> If so, you could do like it is done on utils/size-stats-compare (code not
+> tested):
+>         cpe_list = csv.reader(cpe_file)
+>         header = next(cpe_list)
+>         (... code to validate the header ...)
+>         for cpe in cpe_list:
+>             (... assume it is an entry, not a header...)
+>
 
-Fix the layout of the manual by making the version examples an actual
-bulleted list.
+Yeah, that works and is cleaner.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-generic.txt | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 7e1f246752..8ea8ce6037 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -199,12 +199,12 @@ information is (assuming the package name is +libfoo+) :
- * +LIBFOO_VERSION+, mandatory, must contain the version of the
-   package. Note that if +HOST_LIBFOO_VERSION+ doesn't exist, it is
-   assumed to be the same as +LIBFOO_VERSION+. It can also be a
--  revision number, branch or tag for packages that are fetched
--  directly from their revision control system. +
--  Examples: +
--    +LIBFOO_VERSION = 0.1.2+ +
--    +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+ +
--    +LIBFOO_VERSION = stable+
-+  revision number or a tag for packages that are fetched directly
-+  from their revision control system. Do not use a branch name as
-+  version; it does not work. Examples:
-+  ** a version for a release tarball: +LIBFOO_VERSION = 0.1.2+
-+  ** a sha1 for a git tree: +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+
-+  ** a tag for a git tree +LIBFOO_VERSION = v0.1.2+
- 
- * +LIBFOO_SOURCE+ may contain the name of the tarball of the package,
-   which Buildroot will use to download the tarball from
--- 
-2.14.1
+>> +                result = cpe_dict.find(cpe[0])
+>> +                if not result:
+>> +                    cpe_no_version = cpe[0].split(":")[0]+":"+cpe[0].split(":")[1]+":"+cpe[0].split(":")[2]+":"+cpe[0].split(":")[3]+":"+cpe[0].split(":")[4]
+>
+> Could this long line be replaced by this one?
+>                     cpe_no_version = ":".join(cpe[0].split(":", 5)[:5])
+>
+
+Yep.   "".join(cpe.split(":")[:5])
+
+> [snip]
+>>  def parse_args():
+>>      parser = argparse.ArgumentParser()
+>> @@ -493,6 +555,8 @@ def parse_args():
+>>                          help='Number of packages')
+>>      parser.add_argument('-p', dest='packages', action='store',
+>>                          help='List of packages (comma separated)')
+>> +    parser.add_argument('-c', dest='cpe_report', action='store',
+>> +                        help='Buildroot CPE Report (csv format)')
+>
+> What do you think about this help instead:
+>                      help='CPE Report generated by make cpe-info (csv format)')
+
+Sounds good.
+
+> [snip]
+>> +    if args.cpe_report:
+>> +        print "Performing Target CPE Report Analysis..."
+>> +        cpe_dict = CPE()
+>> +        cpe_dict.get_xml_dict()
+>> +        get_target_cpe_report(args.cpe_report,cpe_dict)
+>
+> Is this code supposed to be used only to debug the script?
+
+Debug.  However we're working on a follow on patch that will add an
+option to generate the xml files used to update a CPE entry.  When
+that's added we may optional this output unless a xml output file is
+provided.
+
+> I ask this because this code branch still requires a '-o file' to be passed,
+> but it does not use it.
+>
+> For the first case (only to debug the script) maybe it is acceptable as is.
+>
+
+I will remove the -o and instead do something like the following?
+
+    elif args.output:
+        print "Build package list ..."
+        packages = get_pkglist(args.npackages, package_list)
+        print "Getting package make info ..."
+        package_init_make_info()
+        print "Getting package details ..."
+        for pkg in packages:
+           pkg.set_infra()
+           pkg.set_license()
+           pkg.set_hash_info()
+           pkg.set_patch_count()
+           pkg.set_check_package_warnings()
+           pkg.set_current_version()
+           pkg.set_cpe_info(cpe_dict)
+        print "Calculate stats"
+        stats = calculate_stats(packages)
+        print "Write HTML"
+        dump_html(packages, stats, args.output)
+    else:
+        print "Please provide the -o HTML output file arg"
+
+
+
+Matt
