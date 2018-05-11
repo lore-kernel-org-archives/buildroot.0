@@ -1,43 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 11 May 2018 17:48:26 +0300
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 11 May 2018 16:57:56 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2018-05-10
-In-Reply-To: <CANQCQpaXv50gaegjR954LMBd1FLj0U3jefnG_DSVAMujzv-qWQ@mail.gmail.com>
+In-Reply-To: <20180511144826.mtmjci4ppvacqorg@tarshish>
 References: <20180511060052.6B11C208B6@mail.bootlin.com>
  <CANQCQpaXv50gaegjR954LMBd1FLj0U3jefnG_DSVAMujzv-qWQ@mail.gmail.com>
-Message-ID: <20180511144826.mtmjci4ppvacqorg@tarshish>
+ <20180511144826.mtmjci4ppvacqorg@tarshish>
+Message-ID: <20180511165756.3fa9daa8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+Hello,
 
-On Fri, May 11, 2018 at 08:34:14AM -0500, Matthew Weber wrote:
-> On Fri, May 11, 2018 at 1:00 AM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> > Hello,
-> >
-> > Build statistics for 2018-05-10
-> > ===============================
-> >
-> [snip]
-> >      aarch64 |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/fca52a8ad6900650b2df8cbdb0c8868d2a5401ab | ORPH
-> >         i686 |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/f5276b04b0aa2ab9e96f10c0032ff97d8b343d24 | ORPH
-> >          arc |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/e2a1d5ff88f750bd60f41e36dc1c6fb41c66293b | ORPH
-> >      powerpc |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/db7dd6c07a77be4792680ba6f8b116090b470259 | ORPH
+On Fri, 11 May 2018 17:48:26 +0300, Baruch Siach wrote:
+
+> > Fixed by: http://patchwork.ozlabs.org/patch/911114/  
 > 
-> Fixed by: http://patchwork.ozlabs.org/patch/911114/
+> traceroute fails[1] for a similar reason on your autobuilder, this time 
+> because of -lm. I wonder what makes your machine special?
+> 
+> [1] http://autobuild.buildroot.net/?reason=traceroute-2.1.0
 
-traceroute fails[1] for a similar reason on your autobuilder, this time 
-because of -lm. I wonder what makes your machine special?
+Yes, I'm not a big fan of the "let's bump xfsprogs" solution, while all
+the build failures for xfsprogs happen only on Matt's machine:
 
-[1] http://autobuild.buildroot.net/?reason=traceroute-2.1.0
+  http://autobuild.buildroot.net/?reason=xfsprogs%
 
-baruch
+And so are the traceroute failures:
 
+  http://autobuild.buildroot.net/?reason=traceroute%
+
+We need to understand that.
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
