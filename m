@@ -1,64 +1,47 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 11 May 2018 08:52:14 -0300 (BRT)
-Subject: [Buildroot] BUG: BR-2018.05-rc1 cannot build dahdi-linux 2.11.1
-In-Reply-To: <1526036020.685182559@f413.i.mail.ru>
-References: <1526036020.685182559@f413.i.mail.ru>
-Message-ID: <1933348917.58346.1526039534346.JavaMail.zimbra@datacom.com.br>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 11 May 2018 13:58:06 +0200
+Subject: [Buildroot] [PATCH/next 3/6] package/perl-uri: bump version to 1.74
+In-Reply-To: <20180511115809.1647-1-bernd.kuhls@t-online.de>
+References: <20180511115809.1647-1-bernd.kuhls@t-online.de>
+Message-ID: <20180511115809.1647-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "***** *****" <zyama.abel@mail.ru>
-> To: "buildroot" <buildroot@busybox.net>
-> Sent: Friday, May 11, 2018 7:53:40 AM
-> Subject: [Buildroot] BUG: BR-2018.05-rc1 cannot build dahdi-linux 2.11.1
+Added license hash.
 
-> --2018-05-11 10:40:40--
-> [
-> http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz
-> |
-> http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz
-> ]
-> Resolving proxy.telros.lan (proxy.myname.lan)... 192.35.10.45
-> Connecting to proxy.telros.lan (proxy.myname.lan)|192.35.10.45|:2020...
-> connected.
-> Proxy request sent, awaiting response... 200 OK
-> Length: 210601 (206K) [application/x-gzip]
-> Saving to:
-> '/buildroot/output/build/.dahdi-fw-te436-10017.tar.gz.s6cXtq/output'
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/perl-uri/perl-uri.hash | 6 ++++--
+ package/perl-uri/perl-uri.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-> /buildroot/output/build/.dahdi-fw-te436-
-> 100%[=================================================================================>]
-> 205.67K --.-KB/s in 0.05s
-
-> 2018-05-11 10:40:40 (4.20 MB/s) -
-> '/buildroot/output/build/.dahdi-fw-te436-10017.tar.gz.s6cXtq/output'
-> saved [210601/210601]
-
-> dahdi-fw-te436-10017.tar.gz: OK (sha256:
-> 0980f4a8d191c6872aa27d971758046f0e7827ac161549f2cc1b0eeab0ae9333)
-> >>> dahdi-linux 2.11.1 Extracting
-> gzip -d -c /buildroot/dl/dahdi-linux/dahdi-linux-2.11.1.tar.gz | tar
-> --strip-components=1 -C /buildroot/output/build/dahdi-linux-2.11.1 -xf
-> -
-> cp "/buildroot/dl"/dahdi-fwload-vpmadt032-1.25.0.tar.gz
-> /buildroot/output/build/dahdi-linux-2.11.1/drivers/dahdi/firmware/dahdi-fwload-vpmadt032-1.25.0.tar.gz
-> cp: cannot stat '/buildroot/dl/dahdi-fwload-vpmadt032-1.25.0.tar.gz': No
-> such file or directory
-> package/ [ http://pkg-generic.mk:156/ | pkg-generic.mk:156 ] : recipe for target
-> '/buildroot/output/build/dahdi-linux-2.11.1/.stamp_extracted' failed
-> make: *** [/buildroot/output/build/dahdi-linux-2.11.1/.stamp_extracted]
-> Error 1
-
-[CC Yann]
-
-The dahdi-linux recipe is boken since commit 514291f39ef06, AFAICT.
-Notice that it attempts to copy from $(BR2_DL_DIR)/$(f) while it
-should copy from $(BR2_DL_DIR)/dahdi-linux/$(f).
-
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index 5f27230e5e..c8bf47d437 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
+@@ -1,3 +1,5 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    37d44a08e599aa945b32a9434ffe00a5 URI-1.73.tar.gz
+-sha256 cca7ab4a6f63f3ccaacae0f2e1337e8edf84137e73f18548ec7d659f23efe413 URI-1.73.tar.gz
++md5    892f7183b178af40f205ba37128225db URI-1.74.tar.gz
++sha256 a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d URI-1.74.tar.gz
++# Locally computed
++sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e  LICENSE
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index 690a0eb8c7..10a5bb8bda 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_URI_VERSION = 1.73
++PERL_URI_VERSION = 1.74
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+ PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_URI_LICENSE = Artistic or GPL-1.0+
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.14.2
