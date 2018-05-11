@@ -1,42 +1,43 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 11 May 2018 07:31:33 +0300
-Subject: [Buildroot] [PATCH] libusb: bump to version 1.0.22
-Message-ID: <7b57c5d0a7b56afaf3bc9091fc0a951a704316ba.1526013093.git.baruch@tkos.co.il>
+Date: Fri, 11 May 2018 07:45:08 +0300
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.8
+Message-ID: <a1da19c3dc1b4052e1810a03d36ae10b0bdd1a03.1526013908.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add license file hash.
-
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libusb/libusb.hash | 3 ++-
- package/libusb/libusb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
-index 0415aab50913..7e9d2a2ad2ad 100644
---- a/package/libusb/libusb.hash
-+++ b/package/libusb/libusb.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b1824b  libusb-1.0.21.tar.bz2
-+sha256 75aeb9d59a4fdb800d329a545c2e6799f732362193b465ea198f2aa275518157  libusb-1.0.22.tar.bz2
-+sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index f0bb9e333546..8d7aed1619cc 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 66fce31461bb..91d270eb13da 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.6.tar.gz.asc
+-sha256	621b902a07badec16c9e43eda43903cd0e1e69e11b13143da71c1889b062f116  dbus-1.12.6.tar.gz
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.8.tar.gz.asc
++sha256	e2dc99e7338303393b6663a98320aba6a63421bcdaaf571c8022f815e5896eb3  dbus-1.12.8.tar.gz
+ # Locally calculated
+ sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 8771412be4b1..8cf4367bf2cd 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBUSB_VERSION_MAJOR = 1.0
--LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).21
-+LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).22
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
- LIBUSB_LICENSE = LGPL-2.1+
+-DBUS_VERSION = 1.12.6
++DBUS_VERSION = 1.12.8
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 -- 
 2.17.0
