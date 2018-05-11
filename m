@@ -1,70 +1,92 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 May 2018 17:44:28 +0200
-Subject: [Buildroot] [PATCH] tmux: bump to version 2.7
-In-Reply-To: <32bee885111be89f59e496e5ff088c7a5bf8cf9d.1526016439.git.baruch@tkos.co.il>
-References: <32bee885111be89f59e496e5ff088c7a5bf8cf9d.1526016439.git.baruch@tkos.co.il>
-Message-ID: <20180511154428.GB9837@scaer>
+Date: Fri, 11 May 2018 17:50:58 +0200
+Subject: [Buildroot] [PATCHv2] docs/manual: using a branch name as
+ FOO_VERSION does not work
+Message-ID: <20180511155058.26875-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+For various reasons, we've always suggested users to avoid using a
+branch as version string for their packages, because it does not work
+as a they would expect:
 
-On 2018-05-11 08:27 +0300, Baruch Siach spake thusly:
-> Add COPYING to license files.
-> 
-> Update README hash; contest change unrelated to license.
+  - it is not reproducible, because the branch may change between two
+    builds that are done at different times;
 
-"contest"? Did you mean "contains" or "context"?
+  - it does not even follow the branch, as Buildroot anyway generates
+    a local tarball, which it will reuse on subsequent builds.
+    Furthermore, since we fetch and not pull, any existing local branch
+    is not updated.
 
-Regards,
-Yann E. MORIN.
+Yet, until recently, using a branch name would just work (with the
+above limitations): the git tree was cloned, the branch checked out,
+and the tarball created.
 
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/tmux/tmux.hash | 5 +++--
->  package/tmux/tmux.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-> index 752bbb45164f..27a3ccaaeb61 100644
-> --- a/package/tmux/tmux.hash
-> +++ b/package/tmux/tmux.hash
-> @@ -1,3 +1,4 @@
->  # Locally computed:
-> -sha256 b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  tmux-2.6.tar.gz
-> -sha256 94e2b1feb1202d3308cc7ab7ec42278d24f10562394bdf269f44649327c8198f  README
-> +sha256 9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  tmux-2.7.tar.gz
-> +sha256 59ad3f5d323cb6b97bb3882c454e6176519cd580b2d4db43c5161517385569f1  README
-> +sha256 ce75f1345a76c93bd0f413d1b93ff1baa0669f34a7242779a00c1b862b4f813a  COPYING
-> diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-> index e380227475a7..deae99717b6a 100644
-> --- a/package/tmux/tmux.mk
-> +++ b/package/tmux/tmux.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -TMUX_VERSION = 2.6
-> +TMUX_VERSION = 2.7
->  TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
->  TMUX_LICENSE = ISC
-> -TMUX_LICENSE_FILES = README
-> +TMUX_LICENSE_FILES = README COPYING
->  TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
->  
->  # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
-> -- 
-> 2.17.0
-> 
+But with the advent of the git caching, using a branch name does not
+work anymore. Indeed, we now do a git-fetch, and that does not create
+local master branch. So we can't check out master, because it does not
+exist locally. And for other branches, as noticed above, the local
+branch does not get udpated to the remote one.
 
+Furthermore, the local branches are only created by chance, again as a
+side-effect of trying to fetch the "special refs".
+
+So, we can't say that we reliably support the use of a branch name.
+
+Update the manual to state that using a branch does not work. Remove
+the 'stable' example, as it looked like the name of a stable branch;
+instead, replace it with a version string that ressemble a tag.
+
+Fix the layout of the manual by making the version examples an actual
+bulleted list.
+
+Note: the above is only entirely true for git. For Mercurial, CVS and
+subversion, the status may be mixed, but nonetheless, using branches is
+still a bad idea, if at least because it is not reproducible, and
+because Buildroot does not even follow the branch. So, we do not
+differentiate between the various SCMs, and just flatly state that using
+a branch name is not supported.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+
+---
+Changes v1 -> v2:
+  - enhance commit log with additional details  (Ricardo)
+  - blurb about
+  - typoes in commit log  (Ricardo)
+---
+ docs/manual/adding-packages-generic.txt | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 7e1f246752..8ea8ce6037 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -199,12 +199,12 @@ information is (assuming the package name is +libfoo+) :
+ * +LIBFOO_VERSION+, mandatory, must contain the version of the
+   package. Note that if +HOST_LIBFOO_VERSION+ doesn't exist, it is
+   assumed to be the same as +LIBFOO_VERSION+. It can also be a
+-  revision number, branch or tag for packages that are fetched
+-  directly from their revision control system. +
+-  Examples: +
+-    +LIBFOO_VERSION = 0.1.2+ +
+-    +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+ +
+-    +LIBFOO_VERSION = stable+
++  revision number or a tag for packages that are fetched directly
++  from their revision control system. Do not use a branch name as
++  version; it does not work. Examples:
++  ** a version for a release tarball: +LIBFOO_VERSION = 0.1.2+
++  ** a sha1 for a git tree: +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+
++  ** a tag for a git tree +LIBFOO_VERSION = v0.1.2+
+ 
+ * +LIBFOO_SOURCE+ may contain the name of the tarball of the package,
+   which Buildroot will use to download the tarball from
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
