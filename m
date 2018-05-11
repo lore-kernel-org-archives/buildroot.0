@@ -1,50 +1,48 @@
-From: Anisse Astier <anisse@astier.eu>
-Date: Fri, 11 May 2018 12:10:20 +0200
-Subject: [Buildroot] [PATCH 3/3] go: bump to version 1.10.2
-In-Reply-To: <20180511101020.10295-1-anisse@astier.eu>
-References: <20180511101020.10295-1-anisse@astier.eu>
-Message-ID: <20180511101020.10295-4-anisse@astier.eu>
+From: =?UTF-8?B?KioqKiogKioqKio=?= <zyama.abel@mail.ru>
+Date: Fri, 11 May 2018 13:53:40 +0300
+Subject: [Buildroot] =?utf-8?q?BUG=3A_BR-2018=2E05-rc1_cannot_build_dahdi?=
+ =?utf-8?q?-linux_2=2E11=2E1?=
+Message-ID: <1526036020.685182559@f413.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump contains many bug fixes, as well as the following security
-issue, patched in Go 1.10.1:
 
-CVE-2018-7187: The "go get" implementation in Go 1.9.4, when the
--insecure command-line option is used, does not validate the import path
-(get/vcs.go only checks for "://" anywhere in the string), which allows
-remote attackers to execute arbitrary OS commands via a crafted web
-site.
+--2018-05-11 10:40:40--? ?
+http://downloads.digium.com/pu b/telephony/firmware/releases/ dahdi-fw-te436-10017.tar.gz
+Resolving proxy.telros.lan (proxy.myname.lan)... 192.35.10.45
+Connecting to proxy.telros.lan (proxy.myname.lan)|192.35.10.4 5|:2020... ?
+connected.
+Proxy request sent, awaiting response... 200 OK
+Length: 210601 (206K) [application/x-gzip]
+Saving to: ?
+'/buildroot/output/build/.dahd i-fw-te436-10017.tar.gz.s6cXtq /output'
 
-Signed-off-by: Anisse Astier <anisse@astier.eu>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+/buildroot/output/build/.dahdi -fw-te436- ?
+100%[========================= ============================== ==========================>] ?
+205.67K? --.-KB/s? ? in 0.05s
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 73c1578d0b..9f5b80e9f5 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,2 +1,2 @@
- # From https://golang.org/dl/
--sha256	f3de49289405fda5fd1483a8fe6bd2fa5469e005fd567df64485c4fa000c7f24	go1.10.src.tar.gz
-+sha256	6264609c6b9cd8ed8e02ca84605d727ce1898d74efa79841660b2e3e985a98bd	go1.10.2.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
-index bc5aca2bb7..8d899141f2 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.10
-+GO_VERSION = 1.10.2
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
--- 
-2.13.6
+2018-05-11 10:40:40 (4.20 MB/s) - ?
+'/buildroot/output/build/.dahd i-fw-te436-10017.tar.gz.s6cXtq /output' ?
+saved [210601/210601]
+
+dahdi-fw-te436-10017.tar.gz: OK (sha256: ?
+0980f4a8d191c6872aa27d97175804 6f0e7827ac161549f2cc1b0eeab0ae 9333)
+>>> dahdi-linux 2.11.1 Extracting
+gzip -d -c /buildroot/dl/dahdi-linux/dahd i-linux-2.11.1.tar.gz | tar ?
+--strip-components=1 -C /buildroot/output/build/dahdi- linux-2.11.1? ?-xf ?
+-
+cp "/buildroot/dl"/dahdi-fwload-v pmadt032-1.25.0.tar.gz ?
+/buildroot/output/build/dahdi- linux-2.11.1/drivers/dahdi/fir mware/dahdi-fwload-vpmadt032- 1.25.0.tar.gz
+cp: cannot stat '/buildroot/dl/dahdi-fwload-vp madt032-1.25.0.tar.gz': No ?
+such file or directory
+package/ pkg-generic.mk:156 : recipe for target ?
+'/buildroot/output/build/dahdi -linux-2.11.1/.stamp_extracted ' failed
+make: *** [/buildroot/output/build/dahdi -linux-2.11.1/.stamp_extracted ]
+Error 1
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180511/cbf6300f/attachment.html>
