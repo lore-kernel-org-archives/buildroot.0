@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 23:21:45 +0200
-Subject: [Buildroot] [PATCH v3 1/1] python-websockets: backport fix for
- upstream issue #350
-In-Reply-To: <20180510221712.13031-1-joseph.kogut@gmail.com>
-References: <20180507221823.6364-1-joseph.kogut@gmail.com>
- <20180510221712.13031-1-joseph.kogut@gmail.com>
-Message-ID: <20180511232145.52c7f2de@windsurf.home>
+Date: Fri, 11 May 2018 23:22:01 +0200
+Subject: [Buildroot] [git commit] package/clang: link libclang against
+ libLLVM.so
+Message-ID: <20180511212131.9E5418CA99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joseph,
+commit: https://git.buildroot.net/buildroot/commit/?id=95fc31239962ae488b159f83e8fc436c10b1128c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 10 May 2018 15:17:12 -0700, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> 
-> Changes v2 -> v3:
-> 	- Fix missing Signed-off-by for included patch (suggested by
-> 	  Baruch)
-> 	- Fix patch naming (suggested by Baruch) 
-> 
-> Changes v1 -> v2:
-> 	- Include patch locally (suggested by Thomas)
+libclang.so is statically linking against all LLVM static libraries
+instead of linking dynamically against libLLVM.so.
 
-The changelog is good, but it should be...
+This patch fixes this problem by setting LLVM_LINK_LLVM_DYLIB to ON.
 
-> ---
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/clang/clang.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-... below this sign.
-
-Otherwise the changelog is preserved in the commit description when
-applying the patch, which is not what we want.
-
-I've fixed that up and applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index 8d86c5edda..14d6441c9a 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -85,5 +85,9 @@ define HOST_CLANG_INSTALL_CLANG_TBLGEN
+ endef
+ HOST_CLANG_POST_INSTALL_HOOKS = HOST_CLANG_INSTALL_CLANG_TBLGEN
+ 
++# This option must be enabled to link libclang dynamically against libLLVM.so
++HOST_CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
++CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
