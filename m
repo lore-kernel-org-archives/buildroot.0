@@ -1,48 +1,82 @@
-From: =?UTF-8?B?KioqKiogKioqKio=?= <zyama.abel@mail.ru>
-Date: Fri, 11 May 2018 13:53:40 +0300
-Subject: [Buildroot] =?utf-8?q?BUG=3A_BR-2018=2E05-rc1_cannot_build_dahdi?=
- =?utf-8?q?-linux_2=2E11=2E1?=
-Message-ID: <1526036020.685182559@f413.i.mail.ru>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 11 May 2018 13:09:28 +0200
+Subject: [Buildroot] [PATCH 1/3] go: patch to fix cross-compilation
+ support
+In-Reply-To: <20180511101020.10295-2-anisse@astier.eu>
+References: <20180511101020.10295-1-anisse@astier.eu>
+ <20180511101020.10295-2-anisse@astier.eu>
+Message-ID: <20180511130928.6211a644@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
---2018-05-11 10:40:40--? ?
-http://downloads.digium.com/pu b/telephony/firmware/releases/ dahdi-fw-te436-10017.tar.gz
-Resolving proxy.telros.lan (proxy.myname.lan)... 192.35.10.45
-Connecting to proxy.telros.lan (proxy.myname.lan)|192.35.10.4 5|:2020... ?
-connected.
-Proxy request sent, awaiting response... 200 OK
-Length: 210601 (206K) [application/x-gzip]
-Saving to: ?
-'/buildroot/output/build/.dahd i-fw-te436-10017.tar.gz.s6cXtq /output'
+Thanks a lot Anisse for those patches!
 
-/buildroot/output/build/.dahdi -fw-te436- ?
-100%[========================= ============================== ==========================>] ?
-205.67K? --.-KB/s? ? in 0.05s
+On Fri, 11 May 2018 12:10:18 +0200, Anisse Astier wrote:
+> This patches the go toolchain with upstream-proposed patch by Angelo in
+> order to fix cross-compilation when building a go toolchain for a target
+> that has the same os and arch as host, but a different libc. This should
+> fix the buildroot autobuild failures on x86_64 musl/uclibc targets.
+> 
+> This patch should go as soon as it's accepted or a similar upstream
+> feature is merged.
 
-2018-05-11 10:40:40 (4.20 MB/s) - ?
-'/buildroot/output/build/.dahd i-fw-te436-10017.tar.gz.s6cXtq /output' ?
-saved [210601/210601]
+The commit log of the patch that fixes the build issue should have a
+reference to the autobuilder failure being fixed, such as:
 
-dahdi-fw-te436-10017.tar.gz: OK (sha256: ?
-0980f4a8d191c6872aa27d97175804 6f0e7827ac161549f2cc1b0eeab0ae 9333)
->>> dahdi-linux 2.11.1 Extracting
-gzip -d -c /buildroot/dl/dahdi-linux/dahd i-linux-2.11.1.tar.gz | tar ?
---strip-components=1 -C /buildroot/output/build/dahdi- linux-2.11.1? ?-xf ?
--
-cp "/buildroot/dl"/dahdi-fwload-v pmadt032-1.25.0.tar.gz ?
-/buildroot/output/build/dahdi- linux-2.11.1/drivers/dahdi/fir mware/dahdi-fwload-vpmadt032- 1.25.0.tar.gz
-cp: cannot stat '/buildroot/dl/dahdi-fwload-vp madt032-1.25.0.tar.gz': No ?
-such file or directory
-package/ pkg-generic.mk:156 : recipe for target ?
-'/buildroot/output/build/dahdi -linux-2.11.1/.stamp_extracted ' failed
-make: *** [/buildroot/output/build/dahdi -linux-2.11.1/.stamp_extracted ]
-Error 1
+Fixes:
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180511/cbf6300f/attachment.html>
+  http://autobuild.buildroot.org/...
+
+> I'm adding myself to the DEVELOPERS file in order to get CC-ed to future
+> build failures.
+
+This should be done as part of a separate patch.
+
+
+> diff --git a/package/go/0001-cmd-dist-explicit-option-for-crosscompilation.patch b/package/go/0001-cmd-dist-explicit-option-for-crosscompilation.patch
+> new file mode 100644
+> index 0000000000..a779179609
+> --- /dev/null
+> +++ b/package/go/0001-cmd-dist-explicit-option-for-crosscompilation.patch
+> @@ -0,0 +1,52 @@
+> +From acb08e41dad7f0e642149449564f7276bca3ada4 Mon Sep 17 00:00:00 2001
+> +From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> +Date: Tue, 8 May 2018 16:08:44 +0200
+> +Subject: [PATCH] cmd/dist: explicit option for crosscompilation
+> +
+> +If GOHOSTOS == GOOS || GOHOSTARCH == GOARCH the go build system assume
+> +it's not cross compiling and uses the same compiler for both
+> +CC_FOR_TARGET and CC even if they are declared different. During go
+> +compilation, this produces the error:
+> +
+> +fork/exec
+> +/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-2/output/build/host-go-1.10/bin/go:
+> +no such file or directory
+> +
+> +cause the go binary produced is linked against a different libc and
+> +cannot be run on the host machine.
+> +
+> +This is a problem in case the cross compilation mandates a different
+> +toolchain for host and target like happens in cross compilation
+> +environments like buildroot. This patch adds GO_ASSUME_CROSSCOMPILING
+> +varible to assure that in case of cross compilation CC_FOR_TARGET can be
+> +different from CC.
+> +
+> +Fixes #25177
+> +
+> +Change-Id: I4833c6d522407e29b039ca5660fd79df81e4b7ed
+
+This should have your Signed-off-by as well.
+
+Other than that, looks good to me. Could you respin a new version ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
