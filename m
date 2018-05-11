@@ -1,296 +1,107 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 10 May 2018 15:17:12 -0700
-Subject: [Buildroot] [PATCH v3 1/1] python-websockets: backport fix for
- upstream issue #350
-In-Reply-To: <20180507221823.6364-1-joseph.kogut@gmail.com>
-References: <20180507221823.6364-1-joseph.kogut@gmail.com>
-Message-ID: <20180510221712.13031-1-joseph.kogut@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 10 May 2018 23:59:12 -0300
+Subject: [Buildroot] [PATCH] docs/manual: using a branch name as
+ FPP_VERSION does not work
+References: <20180510164337.14578-1-yann.morin.1998@free.fr>
+Message-ID: <5af50700ef2bd_74473fa2980c3aa8143d@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Hello,
 
-Changes v2 -> v3:
-	- Fix missing Signed-off-by for included patch (suggested by
-	  Baruch)
-	- Fix patch naming (suggested by Baruch) 
+TL;DR: I agree with your change to the manual, but I have some nitpick for your
+explanation.
 
-Changes v1 -> v2:
-	- Include patch locally (suggested by Thomas)
----
- ...ehavior-of-recv-in-the-CLOSING-state.patch | 261 ++++++++++++++++++
- 1 file changed, 261 insertions(+)
- create mode 100644 package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
+On Thu, May 10, 2018 at 01:43 PM, Yann E. MORIN wrote:
 
-diff --git a/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch b/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
-new file mode 100644
-index 0000000000..cb97b36bde
---- /dev/null
-+++ b/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
-@@ -0,0 +1,261 @@
-+From 402059e4a46a764632eba8a669f5b012f173ee7b Mon Sep 17 00:00:00 2001
-+From: Aymeric Augustin <aymeric.augustin@m4x.org>
-+Date: Tue, 1 May 2018 17:05:05 +0200
-+Subject: [PATCH] Fix behavior of recv() in the CLOSING state.
-+
-+The behavior wasn't tested correctly: in some test cases, the connection
-+had already moved to the CLOSED state, where the close code and reason
-+are already known.
-+
-+Refactor half_close_connection_{local,remote} to allow multiple runs of
-+the event loop while remaining in the CLOSING state. Refactor affected
-+tests accordingly.
-+
-+I verified that all tests in the CLOSING state were behaving is intended
-+by inserting debug statements in recv/send/ping/pong and running:
-+
-+$ PYTHONASYNCIODEBUG=1 python -m unittest -v websockets.test_protocol.{Client,Server}Tests.test_{recv,send,ping,pong}_on_closing_connection_{local,remote}
-+
-+Fix #317, #327, #350, #357.
-+
-+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-+---
-+ websockets/protocol.py      | 10 ++---
-+ websockets/test_protocol.py | 78 +++++++++++++++++++++++++++++--------
-+ 2 files changed, 66 insertions(+), 22 deletions(-)
-+
-+diff --git a/websockets/protocol.py b/websockets/protocol.py
-+index f8121a1..7583fe9 100644
-+--- a/websockets/protocol.py
-++++ b/websockets/protocol.py
-+@@ -303,7 +303,7 @@ class WebSocketCommonProtocol(asyncio.StreamReaderProtocol):
-+         # Don't yield from self.ensure_open() here because messages could be
-+         # received before the closing frame even if the connection is closing.
-+ 
-+-        # Wait for a message until the connection is closed
-++        # Wait for a message until the connection is closed.
-+         next_message = asyncio_ensure_future(
-+             self.messages.get(), loop=self.loop)
-+         try:
-+@@ -315,15 +315,15 @@ class WebSocketCommonProtocol(asyncio.StreamReaderProtocol):
-+             next_message.cancel()
-+             raise
-+ 
-+-        # Now there's no need to yield from self.ensure_open(). Either a
-+-        # message was received or the connection was closed.
-+-
-+         if next_message in done:
-+             return next_message.result()
-+         else:
-+             next_message.cancel()
-+             if not self.legacy_recv:
-+-                raise ConnectionClosed(self.close_code, self.close_reason)
-++                assert self.state in [State.CLOSING, State.CLOSED]
-++                # Wait until the connection is closed to raise
-++                # ConnectionClosed with the correct code and reason.
-++                yield from self.ensure_open()
-+ 
-+     @asyncio.coroutine
-+     def send(self, data):
-+diff --git a/websockets/test_protocol.py b/websockets/test_protocol.py
-+index 70348fb..bfd4e3b 100644
-+--- a/websockets/test_protocol.py
-++++ b/websockets/test_protocol.py
-+@@ -105,7 +105,7 @@ class CommonTests:
-+         self.loop.call_soon(self.loop.stop)
-+         self.loop.run_forever()
-+ 
-+-    def make_drain_slow(self, delay=3 * MS):
-++    def make_drain_slow(self, delay=MS):
-+         # Process connection_made in order to initialize self.protocol.writer.
-+         self.run_loop_once()
-+ 
-+@@ -174,6 +174,8 @@ class CommonTests:
-+         # Empty the outgoing data stream so we can make assertions later on.
-+         self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
-+ 
-++        assert self.protocol.state is State.CLOSED
-++
-+     def half_close_connection_local(self, code=1000, reason='close'):
-+         """
-+         Start a closing handshake but do not complete it.
-+@@ -181,31 +183,56 @@ class CommonTests:
-+         The main difference with `close_connection` is that the connection is
-+         left in the CLOSING state until the event loop runs again.
-+ 
-++        The current implementation returns a task that must be awaited or
-++        cancelled, else asyncio complains about destroying a pending task.
-++
-+         """
-+         close_frame_data = serialize_close(code, reason)
-+-        # Trigger the closing handshake from the local side.
-+-        self.ensure_future(self.protocol.close(code, reason))
-++        # Trigger the closing handshake from the local endpoint.
-++        close_task = self.ensure_future(self.protocol.close(code, reason))
-+         self.run_loop_once()    # wait_for executes
-+         self.run_loop_once()    # write_frame executes
-+         # Empty the outgoing data stream so we can make assertions later on.
-+         self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
-+-        # Prepare the response to the closing handshake from the remote side.
-+-        self.loop.call_soon(
-+-            self.receive_frame, Frame(True, OP_CLOSE, close_frame_data))
-+-        self.loop.call_soon(self.receive_eof_if_client)
-++
-++        assert self.protocol.state is State.CLOSING
-++
-++        # Complete the closing sequence at 1ms intervals so the test can run
-++        # at each point even it goes back to the event loop several times.
-++        self.loop.call_later(
-++            MS, self.receive_frame, Frame(True, OP_CLOSE, close_frame_data))
-++        self.loop.call_later(2 * MS, self.receive_eof_if_client)
-++
-++        # This task must be awaited or cancelled by the caller.
-++        return close_task
-+ 
-+     def half_close_connection_remote(self, code=1000, reason='close'):
-+         """
-+-        Receive a closing handshake.
-++        Receive a closing handshake but do not complete it.
-+ 
-+         The main difference with `close_connection` is that the connection is
-+         left in the CLOSING state until the event loop runs again.
-+ 
-+         """
-++        # On the server side, websockets completes the closing handshake and
-++        # closes the TCP connection immediately. Yield to the event loop after
-++        # sending the close frame to run the test while the connection is in
-++        # the CLOSING state.
-++        if not self.protocol.is_client:
-++            self.make_drain_slow()
-++
-+         close_frame_data = serialize_close(code, reason)
-+-        # Trigger the closing handshake from the remote side.
-++        # Trigger the closing handshake from the remote endpoint.
-+         self.receive_frame(Frame(True, OP_CLOSE, close_frame_data))
-+-        self.receive_eof_if_client()
-++        self.run_loop_once()    # read_frame executes
-++        # Empty the outgoing data stream so we can make assertions later on.
-++        self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
-++
-++        assert self.protocol.state is State.CLOSING
-++
-++        # Complete the closing sequence at 1ms intervals so the test can run
-++        # at each point even it goes back to the event loop several times.
-++        self.loop.call_later(2 * MS, self.receive_eof_if_client)
-+ 
-+     def process_invalid_frames(self):
-+         """
-+@@ -335,11 +362,13 @@ class CommonTests:
-+         self.assertEqual(data, b'tea')
-+ 
-+     def test_recv_on_closing_connection_local(self):
-+-        self.half_close_connection_local()
-++        close_task = self.half_close_connection_local()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.recv())
-+ 
-++        self.loop.run_until_complete(close_task)    # cleanup
-++
-+     def test_recv_on_closing_connection_remote(self):
-+         self.half_close_connection_remote()
-+ 
-+@@ -421,24 +450,29 @@ class CommonTests:
-+         self.assertNoFrameSent()
-+ 
-+     def test_send_on_closing_connection_local(self):
-+-        self.half_close_connection_local()
-++        close_task = self.half_close_connection_local()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.send('foobar'))
-++
-+         self.assertNoFrameSent()
-+ 
-++        self.loop.run_until_complete(close_task)    # cleanup
-++
-+     def test_send_on_closing_connection_remote(self):
-+         self.half_close_connection_remote()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.send('foobar'))
-+-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
-++
-++        self.assertNoFrameSent()
-+ 
-+     def test_send_on_closed_connection(self):
-+         self.close_connection()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.send('foobar'))
-++
-+         self.assertNoFrameSent()
-+ 
-+     # Test the ping coroutine.
-+@@ -466,24 +500,29 @@ class CommonTests:
-+         self.assertNoFrameSent()
-+ 
-+     def test_ping_on_closing_connection_local(self):
-+-        self.half_close_connection_local()
-++        close_task = self.half_close_connection_local()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.ping())
-++
-+         self.assertNoFrameSent()
-+ 
-++        self.loop.run_until_complete(close_task)    # cleanup
-++
-+     def test_ping_on_closing_connection_remote(self):
-+         self.half_close_connection_remote()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.ping())
-+-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
-++
-++        self.assertNoFrameSent()
-+ 
-+     def test_ping_on_closed_connection(self):
-+         self.close_connection()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.ping())
-++
-+         self.assertNoFrameSent()
-+ 
-+     # Test the pong coroutine.
-+@@ -506,24 +545,29 @@ class CommonTests:
-+         self.assertNoFrameSent()
-+ 
-+     def test_pong_on_closing_connection_local(self):
-+-        self.half_close_connection_local()
-++        close_task = self.half_close_connection_local()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.pong())
-++
-+         self.assertNoFrameSent()
-+ 
-++        self.loop.run_until_complete(close_task)    # cleanup
-++
-+     def test_pong_on_closing_connection_remote(self):
-+         self.half_close_connection_remote()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.pong())
-+-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
-++
-++        self.assertNoFrameSent()
-+ 
-+     def test_pong_on_closed_connection(self):
-+         self.close_connection()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.pong())
-++
-+         self.assertNoFrameSent()
-+ 
-+     # Test the protocol's logic for acknowledging pings with pongs.
-+-- 
-+2.17.0
-+
--- 
-2.17.0
+> docs/manual: using a branch name as FPP_VERSION does not work
+
+s/FPP/FOO/
+
+> For various reasons, we've always suggested users to avoid using a
+> branch as version string for their packages, because it does not work
+> as a they would expect:
+
+OK.
+
+>   - it is not reproducible, because the branch may change between two
+>     builds that are done at different times;
+
+OK.
+
+>   - it does not even follow the branch, as Buildroot anyway generates
+>     a local tarball.
+
+It does not follow the branch because:
+1) Buildroot reuses any local tarball it already generated;
+2) with the tarballs for the package removed, when a remote branch was once
+   checked out by the git download infra (by chance, see below) it creates a
+   local branch. When the remote adds a commit to the branch, the download infra
+   fetches the new commits updating origin/branch but the local branch is not
+   updated.
+
+> Yet, until recently, using a branch name would just work (with the
+> above limitations): the git tree was cloned, the branch checked out,
+> and the tarball created.
+> 
+> But with the advent of the git caching, using a branch name does not
+> work anymore.
+
+It does not work ... in a reliable way.
+Actually it works *by chance* due to fetch for the special ref. Yes, once again.
+
+I just realized I have to update again my series adding automated tests for the
+git download infra as it should not test named branches or named feature
+branches anymore. BTW those tests pass because I did not used 'master'.
+
+If you remove the code for named special refs then the behavior is consistent: a
+named branch or named feature branch never works.
+Well, unless someone is crazy enough to prepend the branch name with 'origin/'
+in the _VERSION variable. I don't think we should add more complexity to the
+script to prevent this.
+
+> work anymore. Indeed, we now do a git-fetch, and that does not create
+> local branches. So we can't check out a branch, because it does not
+> exist locally.
+
+Actually the local branch is created on checkout.
+With an empty git cache the only branch that does not work is 'master'.
+
+For example, if you first download dl-tools using its current version (a tag)
+and then change _VERSION to 'master' and download again it works (by chance as
+describe above).
+Starting with an empty git cache and _VERSION set to 'master' does not work
+because the 'git rev-parse' fails.
+Also using an empty git cache and _VERSION set to 'topic/blockdev' does work
+(again by chance).
+
+> Update the manual to state that using a branch does not work. Remove
+
+It does not work for git. CVS branch probably still works (I did not tested).
+But maybe... we don't care: too much details for the manual. The end game is to
+discourage the use of branches as it is not good practice, if some kinds of
+branch works by chance, then OK IMO. But Buildroot does not guarantee that
+branches work (for simplicity the manual will say it does not work), anyone can
+still exploit the infra to download a named branch at its own risk, but not for
+packages in the tree.
+
+> the 'stable' example, as it looked like the name of a stable branch;
+> instead, replace it with a version string that ressemble a tag.
+> 
+> Fix the layout of the manual by making the version examples an actual
+> bulleted list.
+
+By opening the output html in the web browser, I checked the layout is much
+nicer after this patch.
+
+
+After all the nitpicking above, I must still say: I am not against applying this
+patch after fixing when applying only the typo in the title. Anyone can search
+the mailing list for these details.
+
+
+Regards,
+Ricardo
