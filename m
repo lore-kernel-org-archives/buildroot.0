@@ -1,43 +1,64 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Fri, 11 May 2018 13:47:52 +0200
-Subject: [Buildroot] [PATCH v2] package/clang: link libclang against
- libLLVM.so
-Message-ID: <20180511114752.16980-1-valentin.korenblit@smile.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 11 May 2018 08:52:14 -0300 (BRT)
+Subject: [Buildroot] BUG: BR-2018.05-rc1 cannot build dahdi-linux 2.11.1
+In-Reply-To: <1526036020.685182559@f413.i.mail.ru>
+References: <1526036020.685182559@f413.i.mail.ru>
+Message-ID: <1933348917.58346.1526039534346.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libclang.so is statically linking against all LLVM static libraries
-instead of linking dynamically against libLLVM.so.
+> From: "***** *****" <zyama.abel@mail.ru>
+> To: "buildroot" <buildroot@busybox.net>
+> Sent: Friday, May 11, 2018 7:53:40 AM
+> Subject: [Buildroot] BUG: BR-2018.05-rc1 cannot build dahdi-linux 2.11.1
 
-This patch fixes this problem by setting LLVM_LINK_LLVM_DYLIB to ON.
+> --2018-05-11 10:40:40--
+> [
+> http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz
+> |
+> http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz
+> ]
+> Resolving proxy.telros.lan (proxy.myname.lan)... 192.35.10.45
+> Connecting to proxy.telros.lan (proxy.myname.lan)|192.35.10.45|:2020...
+> connected.
+> Proxy request sent, awaiting response... 200 OK
+> Length: 210601 (206K) [application/x-gzip]
+> Saving to:
+> '/buildroot/output/build/.dahdi-fw-te436-10017.tar.gz.s6cXtq/output'
 
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
----
+> /buildroot/output/build/.dahdi-fw-te436-
+> 100%[=================================================================================>]
+> 205.67K --.-KB/s in 0.05s
 
-Changes v1 -> v2
+> 2018-05-11 10:40:40 (4.20 MB/s) -
+> '/buildroot/output/build/.dahdi-fw-te436-10017.tar.gz.s6cXtq/output'
+> saved [210601/210601]
 
-*Avoid patching libclang's CMakeLists.txt
-*Use LLVM_LINK_LLVM_DYLIB=ON
+> dahdi-fw-te436-10017.tar.gz: OK (sha256:
+> 0980f4a8d191c6872aa27d971758046f0e7827ac161549f2cc1b0eeab0ae9333)
+> >>> dahdi-linux 2.11.1 Extracting
+> gzip -d -c /buildroot/dl/dahdi-linux/dahdi-linux-2.11.1.tar.gz | tar
+> --strip-components=1 -C /buildroot/output/build/dahdi-linux-2.11.1 -xf
+> -
+> cp "/buildroot/dl"/dahdi-fwload-vpmadt032-1.25.0.tar.gz
+> /buildroot/output/build/dahdi-linux-2.11.1/drivers/dahdi/firmware/dahdi-fwload-vpmadt032-1.25.0.tar.gz
+> cp: cannot stat '/buildroot/dl/dahdi-fwload-vpmadt032-1.25.0.tar.gz': No
+> such file or directory
+> package/ [ http://pkg-generic.mk:156/ | pkg-generic.mk:156 ] : recipe for target
+> '/buildroot/output/build/dahdi-linux-2.11.1/.stamp_extracted' failed
+> make: *** [/buildroot/output/build/dahdi-linux-2.11.1/.stamp_extracted]
+> Error 1
 
- package/clang/clang.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+[CC Yann]
 
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index 8d86c5edda..14d6441c9a 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -85,5 +85,9 @@ define HOST_CLANG_INSTALL_CLANG_TBLGEN
- endef
- HOST_CLANG_POST_INSTALL_HOOKS = HOST_CLANG_INSTALL_CLANG_TBLGEN
- 
-+# This option must be enabled to link libclang dynamically against libLLVM.so
-+HOST_CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
-+CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+The dahdi-linux recipe is boken since commit 514291f39ef06, AFAICT.
+Notice that it attempts to copy from $(BR2_DL_DIR)/$(f) while it
+should copy from $(BR2_DL_DIR)/dahdi-linux/$(f).
+
 -- 
-2.14.3
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
