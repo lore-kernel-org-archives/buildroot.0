@@ -1,48 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 11 May 2018 13:58:08 +0200
-Subject: [Buildroot] [PATCH/next 5/6] package/perl-mailtools: bump version
- to 2.20
-In-Reply-To: <20180511115809.1647-1-bernd.kuhls@t-online.de>
-References: <20180511115809.1647-1-bernd.kuhls@t-online.de>
-Message-ID: <20180511115809.1647-5-bernd.kuhls@t-online.de>
+From: =?UTF-8?B?KioqKiogKioqKio=?= <zyama.abel@mail.ru>
+Date: Fri, 11 May 2018 14:58:29 +0300
+Subject: [Buildroot] 
+ =?utf-8?q?BUG=3A_BR-2018=2E05-rc1_cannot_build_dahdi?=
+ =?utf-8?q?-linux_2=2E11=2E1?=
+In-Reply-To: <1933348917.58346.1526039534346.JavaMail.zimbra@datacom.com.br>
+References: <1526036020.685182559@f413.i.mail.ru>
+ <1933348917.58346.1526039534346.JavaMail.zimbra@datacom.com.br>
+Message-ID: <1526039909.526243231@f402.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Thank you. I know about $(BR2_DL_DIR)/dahdi-linux/$(f)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/perl-mailtools/perl-mailtools.hash | 6 ++++--
- package/perl-mailtools/perl-mailtools.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
-index cb33453ecd..9fb91cbd26 100644
---- a/package/perl-mailtools/perl-mailtools.hash
-+++ b/package/perl-mailtools/perl-mailtools.hash
-@@ -1,3 +1,5 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    a00b9d3c3dec64bd15de8c50f1b73d05 MailTools-2.19.tar.gz
--sha256 c17ed702efea8eab56fe92961c07cd4980cee26ca6f13aff2688dc8af69c5e1a MailTools-2.19.tar.gz
-+md5    53e9d35256c3fd7cef0e4a24b15e9512 MailTools-2.20.tar.gz
-+sha256 f55606f7a9cc342ee9d5f996e2b6a4c0047e2ee47cd88c3250ecf0d0c5fb3196 MailTools-2.20.tar.gz
-+# Locally computed
-+sha256 734d5b1bd212de832aea99e94c98d56217ea9519d900a29c0547538f596a9b26  README
-diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
-index 75079f9e8b..ae595bbfcf 100644
---- a/package/perl-mailtools/perl-mailtools.mk
-+++ b/package/perl-mailtools/perl-mailtools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_MAILTOOLS_VERSION = 2.19
-+PERL_MAILTOOLS_VERSION = 2.20
- PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
- PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
- PERL_MAILTOOLS_DEPENDENCIES = perl-timedate
--- 
-2.14.2
+???????, 11 ??? 2018, 14:52 +03:00 ?? Carlos Santos <casantos@datacom.ind.br>:
+>> From: "***** *****" < zyama.abel@mail.ru >
+>> To: "buildroot" < buildroot@busybox.net >
+>> Sent: Friday, May 11, 2018 7:53:40 AM
+>> Subject: [Buildroot] BUG: BR-2018.05-rc1 cannot build dahdi-linux 2.11.1
+>
+>> --2018-05-11 10:40:40--
+>> [
+>>  http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz
+>> |
+>>  http://downloads.digium.com/pub/telephony/firmware/releases/dahdi-fw-te436-10017.tar.gz
+>> ]
+>> Resolving proxy.telros.lan (proxy.myname.lan)... 192.35.10.45
+>> Connecting to proxy.telros.lan (proxy.myname.lan)|192.35.10.45|:2020...
+>> connected.
+>> Proxy request sent, awaiting response... 200 OK
+>> Length: 210601 (206K) [application/x-gzip]
+>> Saving to:
+>> '/buildroot/output/build/.dahdi-fw-te436-10017.tar.gz.s6cXtq/output'
+>
+>> /buildroot/output/build/.dahdi-fw-te436-
+>> 100%[=================================================================================>]
+>> 205.67K --.-KB/s in 0.05s
+>
+>> 2018-05-11 10:40:40 (4.20 MB/s) -
+>> '/buildroot/output/build/.dahdi-fw-te436-10017.tar.gz.s6cXtq/output'
+>> saved [210601/210601]
+>
+>> dahdi-fw-te436-10017.tar.gz: OK (sha256:
+>> 0980f4a8d191c6872aa27d971758046f0e7827ac161549f2cc1b0eeab0ae9333)
+>> >>> dahdi-linux 2.11.1 Extracting
+>> gzip -d -c /buildroot/dl/dahdi-linux/dahdi-linux-2.11.1.tar.gz | tar
+>> --strip-components=1 -C /buildroot/output/build/dahdi-linux-2.11.1 -xf
+>> -
+>> cp "/buildroot/dl"/dahdi-fwload-vpmadt032-1.25.0.tar.gz
+>> /buildroot/output/build/dahdi-linux-2.11.1/drivers/dahdi/firmware/dahdi-fwload-vpmadt032-1.25.0.tar.gz
+>> cp: cannot stat '/buildroot/dl/dahdi-fwload-vpmadt032-1.25.0.tar.gz': No
+>> such file or directory
+>> package/ [  http://pkg-generic.mk:156/ | pkg-generic.mk:156 ] : recipe for target
+>> '/buildroot/output/build/dahdi-linux-2.11.1/.stamp_extracted' failed
+>> make: *** [/buildroot/output/build/dahdi-linux-2.11.1/.stamp_extracted]
+>> Error 1
+>
+>[CC Yann]
+>
+>The dahdi-linux recipe is boken since commit 514291f39ef06, AFAICT.
+>Notice that it attempts to copy from $(BR2_DL_DIR)/$(f) while it
+>should copy from $(BR2_DL_DIR)/dahdi-linux/$(f).
+>
+>-- 
+>Carlos Santos (Casantos) - DATACOM, P&D
+>?Marched towards the enemy, spear upright, armed with the certainty
+>that only the ignorant can have.? ? Epitaph of a volunteer
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180511/989ce026/attachment.html>
