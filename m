@@ -1,50 +1,47 @@
 From: Anisse Astier <anisse@astier.eu>
-Date: Fri, 11 May 2018 22:50:37 +0200
-Subject: [Buildroot] [PATCH v2 5/5] go: bump to version 1.10.2
-In-Reply-To: <20180511205037.10078-1-anisse@astier.eu>
-References: <20180511205037.10078-1-anisse@astier.eu>
-Message-ID: <20180511205037.10078-6-anisse@astier.eu>
+Date: Fri, 11 May 2018 22:50:32 +0200
+Subject: [Buildroot] [PATCH v2 0/5] package/go: fixes
+Message-ID: <20180511205037.10078-1-anisse@astier.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump contains many bug fixes, as well as the following security
-issue, patched in Go 1.10.1:
+Hi,
 
-CVE-2018-7187: The "go get" implementation in Go 1.9.4, when the
--insecure command-line option is used, does not validate the import path
-(get/vcs.go only checks for "://" anywhere in the string), which allows
-remote attackers to execute arbitrary OS commands via a crafted web
-site.
+In this patch series, you'll find a fix to the build issues in the go
+package, as well as a debug feature and a minor version bump.
 
-Signed-off-by: Anisse Astier <anisse@astier.eu>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Regards,
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 73c1578d0b..9f5b80e9f5 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,2 +1,2 @@
- # From https://golang.org/dl/
--sha256	f3de49289405fda5fd1483a8fe6bd2fa5469e005fd567df64485c4fa000c7f24	go1.10.src.tar.gz
-+sha256	6264609c6b9cd8ed8e02ca84605d727ce1898d74efa79841660b2e3e985a98bd	go1.10.2.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 6e2612481d..73f14cc78f 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.10
-+GO_VERSION = 1.10.2
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Anisse
+
+--
+Changes since v1:
+ - rebase on top of Angelo's contribution, with my added sign-off to
+   honor Developer Certificate of Origin
+ - second patch now contains only cleanup
+ - fix verbose variable scope pollution
+ - DEVELOPERS modification is now a standalone patch
+
+
+
+Angelo Compagnucci (1):
+  package/go: fixing host go cross compilation
+
+Anisse Astier (4):
+  go: cleanup cross-compilation support
+  go: add self to developers to get cc-ed for build failures
+  go: honor building with V=1 for debugging purposes
+  go: bump to version 1.10.2
+
+ DEVELOPERS                                         |  3 ++
+ ...d.go-explicit-option-for-crosscompilation.patch | 40 ++++++++++++++++++++++
+ package/go/go.hash                                 |  2 +-
+ package/go/go.mk                                   | 35 ++++++-------------
+ 4 files changed, 54 insertions(+), 26 deletions(-)
+ create mode 100644 package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+
 -- 
 2.14.3
