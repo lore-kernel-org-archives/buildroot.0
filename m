@@ -1,54 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 May 2018 18:29:54 +0200
-Subject: [Buildroot] [PATCH 0/2] packages;
- fix last remnants of hard-coded BR2_DL_DIR
-Message-ID: <cover.1526056187.git.yann.morin.1998@free.fr>
+Date: Fri, 11 May 2018 18:29:56 +0200
+Subject: [Buildroot] [PATCH 1/2] package/asterisk: use package's DL_DIR
+In-Reply-To: <cover.1526056187.git.yann.morin.1998@free.fr>
+References: <cover.1526056187.git.yann.morin.1998@free.fr>
+Message-ID: <2a78d5915aa60e734043b5be2382202c96b608d7.1526056187.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Sicne we reworked the download infra, the location for packages to look
+for their files has moved to a per-package directory.
 
-Two packages, asterisk and dahdi-linux, were overlooked when we did the
-transition to a per-package download directory, which means they are now
-failing because they can't find their extra files.
+For systems where a download of the asterisk sound files was already
+done in a version prior to the rework, all was working fine so far,
+because the files were indeed in the main DL directory.
 
-This series fixes that.
+But for systems where the download is first attempted after the rework,
+the files are not found (even though they are properly downloaded).
 
+Fix the location where asterisk looks for its extra files.
 
-Regards,
-Yann E. MORIN.
+Reported-by: ***** ***** <zyama.abel@mail.ru>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: ***** ***** <zyama.abel@mail.ru>
+Cc: Carlos Santos <casantos@datacom.ind.br>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/asterisk/asterisk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-The following changes since commit 72703d02b96bb1f7f94f705d3a7199599b1bc980
-
-  support/dependencies: check that PATH does not contain CWD (2018-05-09 23:26:18 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 7cf1082497a62fa2ea47b0357101efa33b453aac
-
-  package/dahdi-linux: use package's DL_DIR (2018-05-11 18:10:20 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/asterisk: use package's DL_DIR
-      package/dahdi-linux: use package's DL_DIR
-
- package/asterisk/asterisk.mk       | 2 +-
- package/dahdi-linux/dahdi-linux.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 28b85da562..f2f210b524 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -102,7 +102,7 @@ ASTERISK_CONF_OPTS = \
+ 	--with-libxml2 \
+ 	--with-ncurses="$(STAGING_DIR)/usr" \
+ 	--with-sqlite3="$(STAGING_DIR)/usr" \
+-	--with-sounds-cache=$(BR2_DL_DIR)
++	--with-sounds-cache=$(ASTERISK_DL_DIR)
+ 
+ # avcodec are from ffmpeg. There is virtually zero chance this could
+ # even work; asterisk is looking for ffmpeg/avcodec.h which has not
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
