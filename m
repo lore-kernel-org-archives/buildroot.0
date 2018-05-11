@@ -1,89 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 23:05:30 +0200
-Subject: [Buildroot] [git commit] go: cleanup cross-compilation support
-Message-ID: <20180511211520.E99398CA72@busybox.osuosl.org>
+Date: Fri, 11 May 2018 23:10:27 +0200
+Subject: [Buildroot] [git commit] go: security bump to version 1.10.2
+Message-ID: <20180511211521.0DB398CA8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72c29925637ee51c505d9d12e22564573ab83e29
+commit: https://git.buildroot.net/buildroot/commit/?id=81815b85a20d09b8346322ad025c2bb430d17ed3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we fixed cross-compilation in the go package, cleanup the build
-to remove the workaround added in 60c5c96ae109dcea48e0997b5e6e6645ac9b86
-"package/go: Build host tools with host CC". We only need a single pass
-to build the go toolchain.
+This bump contains many bug fixes, as well as the following security
+issue, patched in Go 1.10.1:
+
+CVE-2018-7187: The "go get" implementation in Go 1.9.4, when the
+-insecure command-line option is used, does not validate the import path
+(get/vcs.go only checks for "://" anywhere in the string), which allows
+remote attackers to execute arbitrary OS commands via a crafted web
+site.
 
 Signed-off-by: Anisse Astier <anisse@astier.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/go/go.mk | 27 +++++----------------------
- 1 file changed, 5 insertions(+), 22 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 73c1578d0b..9f5b80e9f5 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,2 +1,2 @@
+ # From https://golang.org/dl/
+-sha256	f3de49289405fda5fd1483a8fe6bd2fa5469e005fd567df64485c4fa000c7f24	go1.10.src.tar.gz
++sha256	6264609c6b9cd8ed8e02ca84605d727ce1898d74efa79841660b2e3e985a98bd	go1.10.2.src.tar.gz
 diff --git a/package/go/go.mk b/package/go/go.mk
-index 6af58f04be..b70c5d49d8 100644
+index 6e2612481d..73f14cc78f 100644
 --- a/package/go/go.mk
 +++ b/package/go/go.mk
-@@ -58,13 +58,7 @@ else
- HOST_GO_CGO_ENABLED = 0
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# The go build system doesn't have the notion of cross compiling, but just the
--# notion of architecture.  When the host and target architectures are different
--# it expects to be given a target cross compiler in CC_FOR_TARGET.  When the
--# architectures are the same it will use CC_FOR_TARGET for both host and target
--# compilation.  To work around this limitation build and install a set of
--# compiler and tool binaries built with CC_FOR_TARGET set to the host compiler.
--# Also, the go build system is not compatible with ccache, so use
-+# The go build system is not compatible with ccache, so use
- # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
- HOST_GO_MAKE_ENV = \
- 	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_ROOT) \
-@@ -82,25 +76,14 @@ HOST_GO_TARGET_CC = \
- 	CC_FOR_TARGET="$(TARGET_CC)" \
- 	CXX_FOR_TARGET="$(TARGET_CXX)"
+-GO_VERSION = 1.10
++GO_VERSION = 1.10.2
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
--HOST_GO_HOST_CC = \
--	CC_FOR_TARGET=$(HOSTCC_NOCCACHE) \
--	CXX_FOR_TARGET=$(HOSTCXX_NOCCACHE)
--
--HOST_GO_TMP = $(@D)/host-go-tmp
--
- define HOST_GO_BUILD_CMDS
- 	cd $(@D)/src && \
--		$(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) CGO_ENABLED=0 ./make.bash
--	mkdir -p $(HOST_GO_TMP)
--	mv $(@D)/pkg/tool $(HOST_GO_TMP)/
--	mv $(@D)/bin/ $(HOST_GO_TMP)/
--	cd $(@D)/src && \
- 		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) ./make.bash
- endef
- 
- define HOST_GO_INSTALL_CMDS
--	$(INSTALL) -D -m 0755 $(HOST_GO_TMP)/bin/go $(HOST_GO_ROOT)/bin/go
--	$(INSTALL) -D -m 0755 $(HOST_GO_TMP)/bin/gofmt $(HOST_GO_ROOT)/bin/gofmt
-+	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_ROOT)/bin/go
-+	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_ROOT)/bin/gofmt
- 
- 	ln -sf ../lib/go/bin/go $(HOST_DIR)/bin/
- 	ln -sf ../lib/go/bin/gofmt $(HOST_DIR)/bin/
-@@ -109,7 +92,7 @@ define HOST_GO_INSTALL_CMDS
- 
- 	mkdir -p $(HOST_GO_ROOT)/pkg
- 	cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(HOST_GO_ROOT)/pkg/
--	cp -a $(HOST_GO_TMP)/tool $(HOST_GO_ROOT)/pkg/
-+	cp -a $(@D)/pkg/tool $(HOST_GO_ROOT)/pkg/
- 
- 	# There is a known issue which requires the go sources to be installed
- 	# https://golang.org/issue/2775
-@@ -117,7 +100,7 @@ define HOST_GO_INSTALL_CMDS
- 
- 	# Set all file timestamps to prevent the go compiler from rebuilding any
- 	# built in packages when programs are built.
--	find $(HOST_GO_ROOT) -type f -exec touch -r $(HOST_GO_TMP)/bin/go {} \;
-+	find $(HOST_GO_ROOT) -type f -exec touch -r $(@D)/bin/go {} \;
- endef
- 
- $(eval $(host-generic-package))
