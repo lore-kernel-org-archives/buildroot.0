@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 22:30:33 +0200
-Subject: [Buildroot] [PATCH] libostree: bump to version 2018.5
-In-Reply-To: <20180511173145.26731-1-marcus.folkesson@gmail.com>
-References: <20180511173145.26731-1-marcus.folkesson@gmail.com>
-Message-ID: <20180511223033.4bb13611@windsurf.home>
+Date: Fri, 11 May 2018 22:31:04 +0200
+Subject: [Buildroot] [PATCH] libusb: bump to version 1.0.22
+In-Reply-To: <7b57c5d0a7b56afaf3bc9091fc0a951a704316ba.1526013093.git.baruch@tkos.co.il>
+References: <7b57c5d0a7b56afaf3bc9091fc0a951a704316ba.1526013093.git.baruch@tkos.co.il>
+Message-ID: <20180511223104.50ab038f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 11 May 2018 19:31:45 +0200, Marcus Folkesson wrote:
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+On Fri, 11 May 2018 07:31:33 +0300, Baruch Siach wrote:
+> Add license file hash.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/libostree/libostree.hash | 2 +-
->  package/libostree/libostree.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libusb/libusb.hash | 3 ++-
+>  package/libusb/libusb.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
