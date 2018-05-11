@@ -1,31 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 22:40:23 +0200
-Subject: [Buildroot] [PATCH] mtd: bump to version 2.0.2
-In-Reply-To: <98e041e9fca43ea6994cfe577e2a98202717c63c.1525978266.git.baruch@tkos.co.il>
-References: <98e041e9fca43ea6994cfe577e2a98202717c63c.1525978266.git.baruch@tkos.co.il>
-Message-ID: <20180511224023.561f8891@windsurf.home>
+From: Anisse Astier <anisse@astier.eu>
+Date: Fri, 11 May 2018 22:50:36 +0200
+Subject: [Buildroot] [PATCH v2 4/5] go: honor building with V=1 for
+ debugging purposes
+In-Reply-To: <20180511205037.10078-1-anisse@astier.eu>
+References: <20180511205037.10078-1-anisse@astier.eu>
+Message-ID: <20180511205037.10078-5-anisse@astier.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Anisse Astier <anisse@astier.eu>
+---
+ package/go/go.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-On Thu, 10 May 2018 21:51:06 +0300, Baruch Siach wrote:
-> Add license file hash.
-> 
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/mtd/mtd.hash | 5 +++--
->  package/mtd/mtd.mk   | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
-
-Applied to next, thanks.
-
-Thomas
+diff --git a/package/go/go.mk b/package/go/go.mk
+index b70c5d49d8..6e2612481d 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -78,7 +78,8 @@ HOST_GO_TARGET_CC = \
+ 
+ define HOST_GO_BUILD_CMDS
+ 	cd $(@D)/src && \
+-		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) ./make.bash
++		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
++		./make.bash $(if $(VERBOSE),-v)
+ endef
+ 
+ define HOST_GO_INSTALL_CMDS
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.3
