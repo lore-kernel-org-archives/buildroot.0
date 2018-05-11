@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 11 May 2018 13:58:06 +0200
-Subject: [Buildroot] [PATCH/next 3/6] package/perl-uri: bump version to 1.74
+Date: Fri, 11 May 2018 13:58:05 +0200
+Subject: [Buildroot] [PATCH/next 2/6] package/perl-net-http: bump version to
+ 6.18
 In-Reply-To: <20180511115809.1647-1-bernd.kuhls@t-online.de>
 References: <20180511115809.1647-1-bernd.kuhls@t-online.de>
-Message-ID: <20180511115809.1647-3-bernd.kuhls@t-online.de>
+Message-ID: <20180511115809.1647-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +15,34 @@ Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/perl-uri/perl-uri.hash | 6 ++++--
- package/perl-uri/perl-uri.mk   | 2 +-
+ package/perl-net-http/perl-net-http.hash | 6 ++++--
+ package/perl-net-http/perl-net-http.mk   | 2 +-
  2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index 5f27230e5e..c8bf47d437 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
+diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
+index ff59a0d9d3..21cd6308f2 100644
+--- a/package/perl-net-http/perl-net-http.hash
++++ b/package/perl-net-http/perl-net-http.hash
 @@ -1,3 +1,5 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    37d44a08e599aa945b32a9434ffe00a5 URI-1.73.tar.gz
--sha256 cca7ab4a6f63f3ccaacae0f2e1337e8edf84137e73f18548ec7d659f23efe413 URI-1.73.tar.gz
-+md5    892f7183b178af40f205ba37128225db URI-1.74.tar.gz
-+sha256 a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d URI-1.74.tar.gz
+-md5    068fa02fd3c8a5b63316025b5a24844c Net-HTTP-6.17.tar.gz
+-sha256 1e8624b1618dc6f7f605f5545643ebb9b833930f4d7485d4124aa2f2f26d1611 Net-HTTP-6.17.tar.gz
++md5    6da11a7db0e933b7684148e1fb32006a Net-HTTP-6.18.tar.gz
++sha256 7e42df2db7adce3e0eb4f78b88c450f453f5380f120fd5411232e03374ba951c Net-HTTP-6.18.tar.gz
 +# Locally computed
-+sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e  LICENSE
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index 690a0eb8c7..10a5bb8bda 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
++sha256 49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79  LICENSE
+diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
+index f13614e346..12bd50f848 100644
+--- a/package/perl-net-http/perl-net-http.mk
++++ b/package/perl-net-http/perl-net-http.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_URI_VERSION = 1.73
-+PERL_URI_VERSION = 1.74
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_URI_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_HTTP_VERSION = 6.17
++PERL_NET_HTTP_VERSION = 6.18
+ PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
+ PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_NET_HTTP_DEPENDENCIES = perl-uri
 -- 
 2.14.2
