@@ -1,53 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 13:11:21 +0200
-Subject: [Buildroot] [PATCH 2/3] go: honor building with V=1 for
- debugging purposes
-In-Reply-To: <20180511101020.10295-3-anisse@astier.eu>
-References: <20180511101020.10295-1-anisse@astier.eu>
- <20180511101020.10295-3-anisse@astier.eu>
-Message-ID: <20180511131121.28481b7d@windsurf.home>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Fri, 11 May 2018 13:37:28 +0200
+Subject: [Buildroot] [PATCH] package/clang: link libclang against
+ libLLVM.so
+In-Reply-To: <20180504170537.0a7a9c09@windsurf>
+References: <20180504122743.13589-1-valentin.korenblit@smile.fr>
+ <20180504170537.0a7a9c09@windsurf>
+Message-ID: <88dbfcfe-444b-7f8c-e7d4-e98fbe3703f1@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Anisse,
+Hi Thomas,
 
-On Fri, 11 May 2018 12:10:19 +0200, Anisse Astier wrote:
-> Signed-off-by: Anisse Astier <anisse@astier.eu>
-> ---
->  package/go/go.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index 37bb9801c2..bc5aca2bb7 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -76,10 +76,13 @@ HOST_GO_TARGET_CC = \
->  	CC_FOR_TARGET="$(TARGET_CC)" \
->  	CXX_FOR_TARGET="$(TARGET_CXX)"
->  
-> +ifneq ($(V),)
-> +VERBOSE=-v
+On 04/05/2018 17:05, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Fri,  4 May 2018 14:27:43 +0200, Valentin Korenblit wrote:
+>> libclang.so is statically linking against all LLVM static libraries
+>> instead of linking dynamically against libLLVM.so.
+>>
+>> This patch fixes this problem partially: libclang links against libLLVM.so
+>> but the following LLVM libraries are still being linked statically:
+>>
+>> libLLVMOption.a
+>> libLLVMMCParser.a
+>> libLLVMProfileData.a
+>> libLLVMBitReader.a
+>> libLLVMBinaryFormat.a
+>> libLLVMCore.a
+>> libLLVMMC.a
+>> libLLVMSupport.a
+>> libLLVMDemangle.a
+>>
+>> This problem comes out when clang is not built as a subproject of
+>> LLVM (llvm/tools/clang).
+> Is this a problem you have discussed with upstream ? Has the patch
+> you did on the clang CMakeLists.txt any chance from being accepted
+> upstream ?
 
-Please name the variable GO_VERBOSE and not just VERBOSE. Remember that
-Buildroot has a global namespace of make variables, so if you define
-VERBOSE here, you override the value of the VERBOSE variable defined in
-the main Makefile.
+I didn't, because I was not really convinced about this patch. I've
+just found the appropriate solution.
 
-Also, please use VERBOSE instead of testing $(V).
+We need to set DLLVM_LINK_LLVM_DYLIB=ON in clang.mk. I'll send the
+patch now.
 
-Perhaps do just like cargo.mk is doing:
+>
+> Thanks!
+>
+> Thomas
 
-HOST_CARGO_SNAP_OPTS = \
-        --release \
-        $(if $(VERBOSE),--verbose)
+Best regards,
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Valentin
