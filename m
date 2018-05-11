@@ -1,44 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 11 May 2018 14:13:37 +0000
-Subject: [Buildroot] [Bug 11011] New: BUildroot for Raspberry Pi 2
-Message-ID: <bug-11011-163@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 11 May 2018 17:48:26 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-05-10
+In-Reply-To: <CANQCQpaXv50gaegjR954LMBd1FLj0U3jefnG_DSVAMujzv-qWQ@mail.gmail.com>
+References: <20180511060052.6B11C208B6@mail.bootlin.com>
+ <CANQCQpaXv50gaegjR954LMBd1FLj0U3jefnG_DSVAMujzv-qWQ@mail.gmail.com>
+Message-ID: <20180511144826.mtmjci4ppvacqorg@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11011
+Hi Matt,
 
-            Bug ID: 11011
-           Summary: BUildroot for Raspberry Pi 2
-           Product: buildroot
-           Version: 2018.02.1
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: umamahesh.y at hcl.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Fri, May 11, 2018 at 08:34:14AM -0500, Matthew Weber wrote:
+> On Fri, May 11, 2018 at 1:00 AM, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > Hello,
+> >
+> > Build statistics for 2018-05-10
+> > ===============================
+> >
+> [snip]
+> >      aarch64 |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/fca52a8ad6900650b2df8cbdb0c8868d2a5401ab | ORPH
+> >         i686 |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/f5276b04b0aa2ab9e96f10c0032ff97d8b343d24 | ORPH
+> >          arc |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/e2a1d5ff88f750bd60f41e36dc1c6fb41c66293b | ORPH
+> >      powerpc |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/db7dd6c07a77be4792680ba6f8b116090b470259 | ORPH
+> 
+> Fixed by: http://patchwork.ozlabs.org/patch/911114/
 
-Hi
-I am running latest buildroot version (2018.02.1) with kernel version 4.14 on
-Raspberry Pi 2, I am unable to up the i2c interface and RTC interface. 
+traceroute fails[1] for a similar reason on your autobuilder, this time 
+because of -lm. I wonder what makes your machine special?
 
-With i2cdetect -l it doesn't list anything. 
+[1] http://autobuild.buildroot.net/?reason=traceroute-2.1.0
 
-RTC it fails to register with /dev/rtc.
-
-There is no dev nodes for i2c and rtc created by default.
-
-Please suggest.
-
-I wanted i2c and rtc running asap.
+baruch
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
