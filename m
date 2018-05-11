@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 22:31:04 +0200
-Subject: [Buildroot] [PATCH] libusb: bump to version 1.0.22
-In-Reply-To: <7b57c5d0a7b56afaf3bc9091fc0a951a704316ba.1526013093.git.baruch@tkos.co.il>
-References: <7b57c5d0a7b56afaf3bc9091fc0a951a704316ba.1526013093.git.baruch@tkos.co.il>
-Message-ID: <20180511223104.50ab038f@windsurf.home>
+Date: Fri, 11 May 2018 22:31:08 +0200
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.8
+In-Reply-To: <a1da19c3dc1b4052e1810a03d36ae10b0bdd1a03.1526013908.git.baruch@tkos.co.il>
+References: <a1da19c3dc1b4052e1810a03d36ae10b0bdd1a03.1526013908.git.baruch@tkos.co.il>
+Message-ID: <20180511223108.78cf9620@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 11 May 2018 07:31:33 +0300, Baruch Siach wrote:
-> Add license file hash.
-> 
+On Fri, 11 May 2018 07:45:08 +0300, Baruch Siach wrote:
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/libusb/libusb.hash | 3 ++-
->  package/libusb/libusb.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  package/dbus/dbus.hash | 4 ++--
+>  package/dbus/dbus.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to next, thanks.
 
