@@ -1,38 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 22:38:29 +0200
-Subject: [Buildroot] [PATCH] strace: disable (again) mpers for musl
-In-Reply-To: <60b22528a49993d727f4d3f45f761af03e7a8736.1525966932.git.baruch@tkos.co.il>
-References: <60b22528a49993d727f4d3f45f761af03e7a8736.1525966932.git.baruch@tkos.co.il>
-Message-ID: <20180511223829.63afd3db@windsurf.home>
+Date: Fri, 11 May 2018 22:39:40 +0200
+Subject: [Buildroot] [git commit branch/next] mtd: bump to version 2.0.2
+Message-ID: <20180511203933.5918C8CA6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ea7218774624d6d3dfe76d1e2f1e6a5dab446dce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 10 May 2018 18:42:12 +0300, Baruch Siach wrote:
-> It turns out that mpers support in strace still does not play nicely
-> with musl libc. As explained in commit 7892a778b (package/strace:
-> disable libmpers with musl toolchains) headers mixup causes gcc header
-> to be included, instead of the musl one, resulting in conflicting types.
-> Commit 1088372941 (strace: bump to version 4.21) incorrectly enabled
-> mpers for musl. Revert that.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/345/3452419498c074ca66f36f0f87263fa10662ac86/
-> 
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/strace/strace.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+Add license file hash.
 
-Applied to master, thanks.
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mtd/mtd.hash | 5 +++--
+ package/mtd/mtd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
+index c452654bfb..4bd0cda097 100644
+--- a/package/mtd/mtd.hash
++++ b/package/mtd/mtd.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.1.tar.bz2.asc
+-sha256	312baa0446e4e728ceb413c53533e41e547d1c13ffa0752b2f879fd289fc2f63	mtd-utils-2.0.1.tar.bz2
++# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2.asc
++sha256	fb3de61be8e932abb424e8ea3c30298f553d5f970ad158a737bb303bbf9660b8	mtd-utils-2.0.2.tar.bz2
++sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 7094aad89e..83bd6a6ae9 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MTD_VERSION = 2.0.1
++MTD_VERSION = 2.0.2
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
+ MTD_LICENSE = GPL-2.0
