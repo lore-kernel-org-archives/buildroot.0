@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 22:02:46 +0200
-Subject: [Buildroot] [git commit branch/next] package/perl-net-http: bump
- version to 6.18
-Message-ID: <20180511200232.394D781593@busybox.osuosl.org>
+Date: Fri, 11 May 2018 22:02:50 +0200
+Subject: [Buildroot] [git commit branch/next] package/perl-mailtools: bump
+ version to 2.20
+Message-ID: <20180511200232.5C03C8C9E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27eff884fa822bf96897c0e5b1118a6daa541188
+commit: https://git.buildroot.net/buildroot/commit/?id=1dc663fd875aa96262a8f2a3a3850a2035b2fd52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Added license hash.
@@ -17,32 +17,32 @@ Added license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-net-http/perl-net-http.hash | 6 ++++--
- package/perl-net-http/perl-net-http.mk   | 2 +-
+ package/perl-mailtools/perl-mailtools.hash | 6 ++++--
+ package/perl-mailtools/perl-mailtools.mk   | 2 +-
  2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
-index ff59a0d9d3..21cd6308f2 100644
---- a/package/perl-net-http/perl-net-http.hash
-+++ b/package/perl-net-http/perl-net-http.hash
+diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
+index cb33453ecd..9fb91cbd26 100644
+--- a/package/perl-mailtools/perl-mailtools.hash
++++ b/package/perl-mailtools/perl-mailtools.hash
 @@ -1,3 +1,5 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    068fa02fd3c8a5b63316025b5a24844c Net-HTTP-6.17.tar.gz
--sha256 1e8624b1618dc6f7f605f5545643ebb9b833930f4d7485d4124aa2f2f26d1611 Net-HTTP-6.17.tar.gz
-+md5    6da11a7db0e933b7684148e1fb32006a Net-HTTP-6.18.tar.gz
-+sha256 7e42df2db7adce3e0eb4f78b88c450f453f5380f120fd5411232e03374ba951c Net-HTTP-6.18.tar.gz
+-md5    a00b9d3c3dec64bd15de8c50f1b73d05 MailTools-2.19.tar.gz
+-sha256 c17ed702efea8eab56fe92961c07cd4980cee26ca6f13aff2688dc8af69c5e1a MailTools-2.19.tar.gz
++md5    53e9d35256c3fd7cef0e4a24b15e9512 MailTools-2.20.tar.gz
++sha256 f55606f7a9cc342ee9d5f996e2b6a4c0047e2ee47cd88c3250ecf0d0c5fb3196 MailTools-2.20.tar.gz
 +# Locally computed
-+sha256 49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79  LICENSE
-diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
-index f13614e346..12bd50f848 100644
---- a/package/perl-net-http/perl-net-http.mk
-+++ b/package/perl-net-http/perl-net-http.mk
++sha256 734d5b1bd212de832aea99e94c98d56217ea9519d900a29c0547538f596a9b26  README
+diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
+index 75079f9e8b..ae595bbfcf 100644
+--- a/package/perl-mailtools/perl-mailtools.mk
++++ b/package/perl-mailtools/perl-mailtools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_HTTP_VERSION = 6.17
-+PERL_NET_HTTP_VERSION = 6.18
- PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
- PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_NET_HTTP_DEPENDENCIES = perl-uri
+-PERL_MAILTOOLS_VERSION = 2.19
++PERL_MAILTOOLS_VERSION = 2.20
+ PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
+ PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
+ PERL_MAILTOOLS_DEPENDENCIES = perl-timedate
