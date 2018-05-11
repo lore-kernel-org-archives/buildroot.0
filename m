@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 22:39:40 +0200
-Subject: [Buildroot] [git commit branch/next] mtd: bump to version 2.0.2
-Message-ID: <20180511203933.5918C8CA6F@busybox.osuosl.org>
+Date: Fri, 11 May 2018 22:39:38 +0200
+Subject: [Buildroot] [git commit branch/next] libuv: bump to version 1.20.3
+Message-ID: <20180511203933.503A78CA6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea7218774624d6d3dfe76d1e2f1e6a5dab446dce
+commit: https://git.buildroot.net/buildroot/commit/?id=5da10dc54c571aa91d71140da9b803cc0782825b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add license file hash.
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mtd/mtd.hash | 5 +++--
- package/mtd/mtd.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-index c452654bfb..4bd0cda097 100644
---- a/package/mtd/mtd.hash
-+++ b/package/mtd/mtd.hash
-@@ -1,3 +1,4 @@
- # Locally calculated after checking pgp signature
--# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.1.tar.bz2.asc
--sha256	312baa0446e4e728ceb413c53533e41e547d1c13ffa0752b2f879fd289fc2f63	mtd-utils-2.0.1.tar.bz2
-+# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2.asc
-+sha256	fb3de61be8e932abb424e8ea3c30298f553d5f970ad158a737bb303bbf9660b8	mtd-utils-2.0.2.tar.bz2
-+sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 7094aad89e..83bd6a6ae9 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 899fae2817..e877e0a1e9 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a5e62a6ed3c25a712477b55ce923e7f49af95b80319f88b9c950200d65427793  libuv-v1.20.2.tar.gz
++sha256  43a388687194a15d5f3cc1980d53c405020a3586254c620e5f3c4d241bb9da05  libuv-v1.20.3.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index d857d64c49..83b39ac7a2 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MTD_VERSION = 2.0.1
-+MTD_VERSION = 2.0.2
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- MTD_LICENSE = GPL-2.0
+-LIBUV_VERSION = v1.20.2
++LIBUV_VERSION = v1.20.3
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
