@@ -1,31 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 23:22:08 +0200
-Subject: [Buildroot] [PATCH v2] package/clang: link libclang against
- libLLVM.so
-In-Reply-To: <20180511114752.16980-1-valentin.korenblit@smile.fr>
-References: <20180511114752.16980-1-valentin.korenblit@smile.fr>
-Message-ID: <20180511232208.0cf4d052@windsurf.home>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Fri, 11 May 2018 14:26:32 -0700
+Subject: [Buildroot] [PATCH v3 1/1] python-websockets: backport fix for
+ upstream issue #350
+In-Reply-To: <20180511232145.52c7f2de@windsurf.home>
+References: <20180507221823.6364-1-joseph.kogut@gmail.com>
+ <20180510221712.13031-1-joseph.kogut@gmail.com>
+ <20180511232145.52c7f2de@windsurf.home>
+Message-ID: <CAMWSM7ieYa4F00gTZyVp_oqGTFVpeJogR8PLqF5qs+4d=hHyGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Fri, 11 May 2018 13:47:52 +0200, Valentin Korenblit wrote:
-> libclang.so is statically linking against all LLVM static libraries
-> instead of linking dynamically against libLLVM.so.
-> 
-> This patch fixes this problem by setting LLVM_LINK_LLVM_DYLIB to ON.
-> 
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-> ---
+On Fri, May 11, 2018 at 2:21 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello Joseph,
+>
+> On Thu, 10 May 2018 15:17:12 -0700, Joseph Kogut wrote:
+>> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>>
+>> Changes v2 -> v3:
+>>       - Fix missing Signed-off-by for included patch (suggested by
+>>         Baruch)
+>>       - Fix patch naming (suggested by Baruch)
+>>
+>> Changes v1 -> v2:
+>>       - Include patch locally (suggested by Thomas)
+>
+> The changelog is good, but it should be...
+>
+>> ---
+>
+> ... below this sign.
+>
 
-Applied to master, thanks.
+Whoops, I'm not sure how I missed that.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Otherwise the changelog is preserved in the commit description when
+> applying the patch, which is not what we want.
+>
+> I've fixed that up and applied to master. Thanks!
+>
+
+Thanks.
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
