@@ -1,43 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 14:55:53 +0200
-Subject: [Buildroot] [PATCH 1/3] go: patch to fix cross-compilation
- support
-In-Reply-To: <20180511123845.fymqzohfcow7o4n6@bifrost>
-References: <20180511101020.10295-1-anisse@astier.eu>
- <20180511101020.10295-2-anisse@astier.eu>
- <20180511130928.6211a644@windsurf.home>
- <20180511123845.fymqzohfcow7o4n6@bifrost>
-Message-ID: <20180511145553.0f1fc46d@windsurf.home>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 11 May 2018 08:34:14 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-05-10
+In-Reply-To: <20180511060052.6B11C208B6@mail.bootlin.com>
+References: <20180511060052.6B11C208B6@mail.bootlin.com>
+Message-ID: <CANQCQpaXv50gaegjR954LMBd1FLj0U3jefnG_DSVAMujzv-qWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Fri, 11 May 2018 14:38:45 +0200, anisse at astier.eu wrote:
+On Fri, May 11, 2018 at 1:00 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> Build statistics for 2018-05-10
+> ===============================
+>
+[snip]
+>      aarch64 |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/fca52a8ad6900650b2df8cbdb0c8868d2a5401ab | ORPH
+>         i686 |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/f5276b04b0aa2ab9e96f10c0032ff97d8b343d24 | ORPH
+>          arc |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/e2a1d5ff88f750bd60f41e36dc1c6fb41c66293b | ORPH
+>      powerpc |                xfsprogs-4.15.1 | NOK | http://autobuild.buildroot.net/results/db7dd6c07a77be4792680ba6f8b116090b470259 | ORPH
 
-> > > I'm adding myself to the DEVELOPERS file in order to get CC-ed to future
-> > > build failures.  
-> > 
-> > This should be done as part of a separate patch.  
-> 
-> That's what I thought, but the documentation stated otherwise:
-> "[...] please add yourself to the DEVELOPERS file. This should be done
-> in the same patch creating or modifying the package. [...]"
-> 
-> https://buildroot.org/downloads/manual/manual.html#submitting-patches
-
-I think our documentation is wrong. It should be in the same patch when
-creating the package, but not when modifying the package.
-
-> Will be in the next version.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixed by: http://patchwork.ozlabs.org/patch/911114/
