@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 23:29:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5cinex: fix download
-In-Reply-To: <1525963046-17540-1-git-send-email-julien.boibessot@free.fr>
-References: <1525963046-17540-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20180511232923.0170eb84@windsurf.home>
+Date: Fri, 11 May 2018 23:30:51 +0200
+Subject: [Buildroot] [git commit] package/qt5cinex: fix download
+Message-ID: <20180511213035.0B47C8D1F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=01b9b56173727989c23bb4828a9088483c3a7de2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 10 May 2018 16:37:26 +0200, julien.boibessot at free.fr wrote:
-> From: Julien <julien.boibessot@armadeus.com>
-> 
-> BR dl-wrapper tries to get Qt5_CinematicExperience_%22rpi_%221.0.tgz, which fails, so fix archive name...
-> 
-> Signed-off-by: Julien <julien.boibessot@armadeus.com>
-> ---
->  package/qt5cinex/qt5cinex.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The Buildroot dl-wrapper tries to download
+Qt5_CinematicExperience_%22rpi_%221.0.tgz, which fails, so this commit
+fixes the archive name by removing useless double quotes.
 
-Applied to master after slightly improving the commit description.
-Thanks!
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5cinex/qt5cinex.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
+index d9254f53c5..89c38ee3f5 100644
+--- a/package/qt5cinex/qt5cinex.mk
++++ b/package/qt5cinex/qt5cinex.mk
+@@ -8,7 +8,7 @@ QT5CINEX_VERSION = 1.0
+ QT5CINEX_SITE = http://quitcoding.com/download
+ 
+ ifeq ($(BR2_PACKAGE_QT5CINEX_HD),y)
+-QT5CINEX_HD = "rpi_"
++QT5CINEX_HD = rpi_
+ endif
+ 
+ QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_HD)$(QT5CINEX_VERSION).tgz
