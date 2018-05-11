@@ -1,51 +1,42 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 11 May 2018 08:27:19 +0300
-Subject: [Buildroot] [PATCH] tmux: bump to version 2.7
-Message-ID: <32bee885111be89f59e496e5ff088c7a5bf8cf9d.1526016439.git.baruch@tkos.co.il>
+Date: Fri, 11 May 2018 08:51:53 +0300
+Subject: [Buildroot] [PATCH] uhubctl: bump to version 2.0.0
+Message-ID: <4f93a6c8fb65b20df67c7d55c204c59300fa0d9c.1526017913.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add COPYING to license files.
+Add license file hash.
 
-Update README hash; contest change unrelated to license.
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/tmux/tmux.hash | 5 +++--
- package/tmux/tmux.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/uhubctl/uhubctl.hash | 3 ++-
+ package/uhubctl/uhubctl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-index 752bbb45164f..27a3ccaaeb61 100644
---- a/package/tmux/tmux.hash
-+++ b/package/tmux/tmux.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
--sha256 b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  tmux-2.6.tar.gz
--sha256 94e2b1feb1202d3308cc7ab7ec42278d24f10562394bdf269f44649327c8198f  README
-+sha256 9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  tmux-2.7.tar.gz
-+sha256 59ad3f5d323cb6b97bb3882c454e6176519cd580b2d4db43c5161517385569f1  README
-+sha256 ce75f1345a76c93bd0f413d1b93ff1baa0669f34a7242779a00c1b862b4f813a  COPYING
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index e380227475a7..deae99717b6a 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
+index 6afee905bf46..3724f3fbf9b8 100644
+--- a/package/uhubctl/uhubctl.hash
++++ b/package/uhubctl/uhubctl.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 dfc85571ad86a071bf7a0db7cadf97a870e628777e47176520de6866b4f042b6 uhubctl-047bb1e392efd3e0ea5d5caf351e20761e12cd44.tar.gz
++sha256 4c31278b2c03e5be5a696c3088bc86cf2557a70e00f697799c163aba18e3c40e uhubctl-v2.0.0.tar.gz
++sha256 3260a6cd23e2677be1fa0815785cd5fa499d363a033f58cc299e12220662d486 LICENSE
+diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
+index 74845001baca..3d2adb347e76 100644
+--- a/package/uhubctl/uhubctl.mk
++++ b/package/uhubctl/uhubctl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TMUX_VERSION = 2.6
-+TMUX_VERSION = 2.7
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
--TMUX_LICENSE_FILES = README
-+TMUX_LICENSE_FILES = README COPYING
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
- 
- # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
+-UHUBCTL_VERSION = 047bb1e392efd3e0ea5d5caf351e20761e12cd44
++UHUBCTL_VERSION = v2.0.0
+ UHUBCTL_SITE = $(call github,mvp,uhubctl,$(UHUBCTL_VERSION))
+ UHUBCTL_LICENSE = GPL-2.0
+ UHUBCTL_LICENSE_FILES = LICENSE
 -- 
 2.17.0
