@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 May 2018 22:39:38 +0200
-Subject: [Buildroot] [git commit branch/next] libuv: bump to version 1.20.3
-Message-ID: <20180511203933.503A78CA6F@busybox.osuosl.org>
+Date: Fri, 11 May 2018 22:39:37 +0200
+Subject: [Buildroot] [git commit branch/next] firmware-imx: bump to version
+ 7.4
+Message-ID: <20180511203933.478288CA6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5da10dc54c571aa91d71140da9b803cc0782825b
+commit: https://git.buildroot.net/buildroot/commit/?id=40e99050c81a9885789aa8b0b64a013ddedda190
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+This update includes GA version of the DDR training binaries for i.MX8M.
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 899fae2817..e877e0a1e9 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index ca8556fa21..dd0e13a7cf 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  a5e62a6ed3c25a712477b55ce923e7f49af95b80319f88b9c950200d65427793  libuv-v1.20.2.tar.gz
-+sha256  43a388687194a15d5f3cc1980d53c405020a3586254c620e5f3c4d241bb9da05  libuv-v1.20.3.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index d857d64c49..83b39ac7a2 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
+-sha256 3e107d83ed2367c9565250d6ff3903cc604bf4d9aa505391260ead0f51ceb8d9  firmware-imx-7.2.bin
++sha256 8a8ec439d014e928f42c49bab1c382914ec5b4f1041df28e5d687eb194bd07ab  firmware-imx-7.4.bin
+ sha256 faf01d10e484879247963eb97d96622a980232e22a35e487dfe53b13708b686a  EULA
+ sha256 0f34f6175247762e2e1c38319aadf657a53f00ce124e569dfc61b30451549e7a  COPYING
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 351496a7a7..b9756fc2bf 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUV_VERSION = v1.20.2
-+LIBUV_VERSION = v1.20.3
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-FIRMWARE_IMX_VERSION = 7.2
++FIRMWARE_IMX_VERSION = 7.4
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ 
