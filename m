@@ -1,42 +1,54 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 11 May 2018 11:13:28 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-05-10
-In-Reply-To: <20180511173533.2a43aa9f@windsurf.home>
-References: <20180511060052.6B11C208B6@mail.bootlin.com>
- <CANQCQpaXv50gaegjR954LMBd1FLj0U3jefnG_DSVAMujzv-qWQ@mail.gmail.com>
- <20180511144826.mtmjci4ppvacqorg@tarshish>
- <CANQCQpaHtYa3DwxLu_337Zhocm1jdEfX5ZUuo_YSwp4r1Ti7UA@mail.gmail.com>
- <20180511173533.2a43aa9f@windsurf.home>
-Message-ID: <CANQCQpa3nFjuax6K1Csw+099m4LsS99MVYfTxTAKDW2SGK1F8w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 11 May 2018 18:29:54 +0200
+Subject: [Buildroot] [PATCH 0/2] packages;
+ fix last remnants of hard-coded BR2_DL_DIR
+Message-ID: <cover.1526056187.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 11, 2018 at 10:35 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Fri, 11 May 2018 10:30:16 -0500, Matthew Weber wrote:
->
->> > traceroute fails[1] for a similar reason on your autobuilder, this time
->> > because of -lm. I wonder what makes your machine special?
->> >
->> > [1] http://autobuild.buildroot.net/?reason=traceroute-2.1.0
->>
->>
->> I'll take a look.  Nothing to special about it.  I know the version of
->> make is 3.8.1 so that we can build older kernels.....
->
-> You said "make 3.81" on IRC, not "make 3.8.1". Which one is true ?
->
-> My autobuilder also has "make 3.81", and I don't think it exhibits
-> those build failures.
->
+Hello All!
 
-Oops, sorry.
+Two packages, asterisk and dahdi-linux, were overlooked when we did the
+transition to a per-package download directory, which means they are now
+failing because they can't find their extra files.
 
-# make --version
-GNU Make 3.81
+This series fixes that.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 72703d02b96bb1f7f94f705d3a7199599b1bc980
+
+  support/dependencies: check that PATH does not contain CWD (2018-05-09 23:26:18 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 7cf1082497a62fa2ea47b0357101efa33b453aac
+
+  package/dahdi-linux: use package's DL_DIR (2018-05-11 18:10:20 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/asterisk: use package's DL_DIR
+      package/dahdi-linux: use package's DL_DIR
+
+ package/asterisk/asterisk.mk       | 2 +-
+ package/dahdi-linux/dahdi-linux.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
