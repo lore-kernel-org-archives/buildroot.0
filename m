@@ -1,43 +1,51 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 11 May 2018 07:45:08 +0300
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.12.8
-Message-ID: <a1da19c3dc1b4052e1810a03d36ae10b0bdd1a03.1526013908.git.baruch@tkos.co.il>
+Date: Fri, 11 May 2018 08:27:19 +0300
+Subject: [Buildroot] [PATCH] tmux: bump to version 2.7
+Message-ID: <32bee885111be89f59e496e5ff088c7a5bf8cf9d.1526016439.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add COPYING to license files.
+
+Update README hash; contest change unrelated to license.
+
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tmux/tmux.hash | 5 +++--
+ package/tmux/tmux.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 66fce31461bb..91d270eb13da 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.6.tar.gz.asc
--sha256	621b902a07badec16c9e43eda43903cd0e1e69e11b13143da71c1889b062f116  dbus-1.12.6.tar.gz
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.8.tar.gz.asc
-+sha256	e2dc99e7338303393b6663a98320aba6a63421bcdaaf571c8022f815e5896eb3  dbus-1.12.8.tar.gz
- # Locally calculated
- sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 8771412be4b1..8cf4367bf2cd 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index 752bbb45164f..27a3ccaaeb61 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,3 +1,4 @@
+ # Locally computed:
+-sha256 b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  tmux-2.6.tar.gz
+-sha256 94e2b1feb1202d3308cc7ab7ec42278d24f10562394bdf269f44649327c8198f  README
++sha256 9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  tmux-2.7.tar.gz
++sha256 59ad3f5d323cb6b97bb3882c454e6176519cd580b2d4db43c5161517385569f1  README
++sha256 ce75f1345a76c93bd0f413d1b93ff1baa0669f34a7242779a00c1b862b4f813a  COPYING
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index e380227475a7..deae99717b6a 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--DBUS_VERSION = 1.12.6
-+DBUS_VERSION = 1.12.8
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+-TMUX_VERSION = 2.6
++TMUX_VERSION = 2.7
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+-TMUX_LICENSE_FILES = README
++TMUX_LICENSE_FILES = README COPYING
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+ 
+ # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
 -- 
 2.17.0
