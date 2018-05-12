@@ -1,57 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 May 2018 17:01:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/znc: python support depends on
- icu
-In-Reply-To: <20180509172553.856-1-bernd.kuhls@t-online.de>
-References: <20180509172553.856-1-bernd.kuhls@t-online.de>
-Message-ID: <20180512150137.GA27677@scaer>
+Date: Sat, 12 May 2018 17:07:17 +0200
+Subject: [Buildroot] [PATCH] support/download/file: remove set -x
+In-Reply-To: <1525795109-22746-1-git-send-email-angelo@amarulasolutions.com>
+References: <1525795109-22746-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180512150717.GB27677@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Angelo, All,
 
-On 2018-05-09 19:25 +0200, Bernd Kuhls spake thusly:
-> Upstream checks for icu when build with python support:
-> https://github.com/znc/znc/commit/4fe4a45dd62411ba9ede04750ca44f071e7d6cbb
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/9e4/9e44159820789f1d25efcbd24318b0e05e132371/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 2018-05-08 17:58 +0200, Angelo Compagnucci spake thusly:
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 > ---
->  package/znc/znc.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  support/download/file | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-> index 33ac266dd3..2a04c66377 100644
-> --- a/package/znc/znc.mk
-> +++ b/package/znc/znc.mk
-> @@ -32,7 +32,8 @@ else
->  ZNC_CONF_OPTS += --disable-zlib
->  endif
+> diff --git a/support/download/file b/support/download/file
+> index 6dd37b0..e52fcf2 100755
+> --- a/support/download/file
+> +++ b/support/download/file
+> @@ -2,7 +2,6 @@
 >  
-> -ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +# python support depends on icu
-> +ifeq ($(BR2_PACKAGE_ICU)$(BR2_PACKAGE_PYTHON3),yy)
+>  # We want to catch any unexpected failure, and exit immediately
+>  set -e
+> -set -x
 
-There is already an ICU conditrional above, so I was wondering if we
-could comonalise the code...
+Damn, yes! :-)
 
-In the end, I am not so sure that is important, though, so:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  ZNC_DEPENDENCIES += python3 host-swig
->  ZNC_CONF_OPTS += --enable-python=python3
->  else
+>  # Download helper for cp, to be called from the download wrapper script
+>  #
 > -- 
-> 2.14.2
+> 2.7.4
 > 
 > _______________________________________________
 > buildroot mailing list
