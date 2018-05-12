@@ -1,81 +1,117 @@
 From: Olof Johansson <olof@lixom.net>
-Date: Sat, 12 May 2018 10:51:13 -0700
+Date: Sat, 12 May 2018 11:16:57 -0700
 Subject: [Buildroot] Tesla is using Buildroot
-In-Reply-To: <CAMWSM7gzGhpgRB-xXqNreQtvwR27d+UQuGUZ35_5uwhNY6gonA@mail.gmail.com>
+In-Reply-To: <704976570.261553.1526089365924.JavaMail.zimbra@datacom.com.br>
 References: <20180511172314.28ba9f80@windsurf.home>
  <20180511215508.GA28572@jaya>
  <BLUPR0601MB705720B009168FB33EC2CA5FB9E0@BLUPR0601MB705.namprd06.prod.outlook.com>
  <704976570.261553.1526089365924.JavaMail.zimbra@datacom.com.br>
- <20180512142738.GB3674@momiji.home>
- <CAMWSM7gzGhpgRB-xXqNreQtvwR27d+UQuGUZ35_5uwhNY6gonA@mail.gmail.com>
-Message-ID: <CAOesGMimW+-9zEaSoJk0-Xjwg7O6-NJ3fXMYDdkzGRDUSaKB9A@mail.gmail.com>
+Message-ID: <CAOesGMgNZaSuzXyUF_cMRniNrgYB1=gUcKrYyC+kDpzUHmcA+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, May 12, 2018 at 10:06 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> On Sat, May 12, 2018 at 6:27 AM, Adrian Perez de Castro
-> <aperez@igalia.com> wrote:
->> On Fri, 11 May 2018 22:42:45 -0300 (BRT), Carlos Santos <casantos@datacom.ind.br> wrote:
->>> > From: "ratbert90" <aduskett@gmail.com>
->>> > To: anisse at astier.eu, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
->>> > Cc: "Olof Johansson" <olof@lixom.net>, buildroot at uclibc.org
->>> > Sent: Friday, May 11, 2018 10:22:49 PM
->>> > Subject: Re: [Buildroot] Tesla is using Buildroot
->>> >
->>> > [...]
->>> >
->>> > - there's a tesla-verity package which seems to be a custom init that
->>> > checks the validity of the verity metadata and interacts with
->>> > firmware to check soc lock status before calling dmsetup.
->>> > - there are a few packages that look like backports: python-dateutil,
->>> > nanomsg, python-pytz, python-jsonschema
->>> > - tesla-binutils is a "real" host binutils (non-cross)
->>> > - there's tesla-libsystemd stub that builds a libsystemd with stubbed
->>> > functions
->>>
->>> Makes me wonder why they don't use a BR2_EXTERNAL.
->>
->> Probably because (AFAIK) it is not yet possible to override base package in
->> a BR2_EXTERNAL. I have tripped on this myself a couple of times, and ended
->> up providing a top-level Makefile in the repo for my BR2_EXTERNAL which
->> downloads a certain version of the Buildroot tarball and applies a couple
->> of patches over it, then proceeds to chain up to the Buildroot Makefiles
->> passing the path BR2_EXTERNAL path down to them (so from the point of view
->> of somebody building, they just download the BR2_EXTERNAL repo and do ?make
->> foo_defconfig && make?).
+On Fri, May 11, 2018 at 6:42 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
+>> From: "ratbert90" <aduskett@gmail.com>
+>> To: anisse at astier.eu, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+>> Cc: "Olof Johansson" <olof@lixom.net>, buildroot at uclibc.org
+>> Sent: Friday, May 11, 2018 10:22:49 PM
+>> Subject: Re: [Buildroot] Tesla is using Buildroot
 >
-> I do the same thing. The top level Makefile exports BR2_EXTERNAL="..",
-> there's a target for cloning and checking out a specific Buildroot
-> revision, then there's a wildcard pattern at the end to pass any
-> unrecognized targets up to Buildroot's Makefile, so things like
-> "linux-menuconfig" still work.
+>> This is pretty neat! The main website should really have a prominent list of
+>> companies that use Buildroot.
 >
-> It keeps my project repos nicely separated from upstream, and makes it
-> easy to pull in upstream changes.
+>> Google/Tesla/GoPro etc etc. It would be good advertisement!
 >
-> I also have a few custom targets for taking the generated filesystem
-> images, and packing them up with an installer and manifest.
+>> Adam
 >
-> It would be nice if the manual covered some of these approaches,
-> because when I first started using Buildroot, it wasn't immediately
-> apparent how to do what I needed. Some examples would go a long way in
-> that regard, I might see what I can do about that later.
+>> From: buildroot <buildroot-bounces@busybox.net> on behalf of anisse at astier.eu
+>> <anisse@astier.eu>
+>> Sent: Friday, May 11, 2018 5:55:08 PM
+>> To: Thomas Petazzoni
+>> Cc: Olof Johansson; buildroot at uclibc.org
+>> Subject: Re: [Buildroot] Tesla is using Buildroot
+>> Hi,
+>
+>> On Fri, May 11, 2018 at 05:23:14PM +0200, Thomas Petazzoni wrote:
+>> > Hello,
+>
+>> > I met a few engineers from Tesla at the Embedded Linux Conference in
+>> > March, who told me they are using Buildroot. Now that their tree is
+>> > publicly available online, I can share this information.
+>
+>> > Their Buildroot tree is at:
+>
+>>> [ https://github.com/teslamotors/buildroot |
+>> > https://github.com/teslamotors/buildroot ]
+>
+>> > Unfortunately, it looks a bit ugly in terms of commit history: just
+>> > a few huge comments that mix tons of changes together. I was told the
+>> > autopilot configurations are there for now, but infotainment
+>> > configurations should be added in the near future.
+>
+>> > It's of course very nice to see Buildroot being used on board of those
+>> > vehicles!
+>
+>> > Best regards,
+>
+>> > Thomas
+>> > --
+>> > Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+>> > Embedded Linux and Kernel engineering
+>> > [ https://bootlin.com/ | https://bootlin.com ]
+>
+>> I've had a quick look at what's inside. Here is what I found:
+>> - it seems based on buildroot 2016.05, with backports from more recent
+>> versions; but at its core it's still a 2016.05
+>> - there are a few packages tesla-{findutils, grep, bash, gzip, which, rsync}
+>> that are here with old versions to work around GPLv3
+>
+> ... which highlights the need for some mechanism to blacklist licenses
+> and warn the user in the configuration menu that a package cannot be
+> selected because of license restrictions.
 
-I liked the split of having third party software in an upstream-based
-separate buildroot repo, and only proprietary components in
-BR2_EXTERNAL. That way it's easier to separate out the portion you
-need to share for compliance (i.e. see current github contents), while
-having a place to keep confidential material, work on new
-configs/products/prototypes/internal uses that are not yet released,
-etc in the BR2_EXTERNAL. As expressed above, wrapping it with a second
-layer of makefiles makes it relatively easy to deal with.
+I think Kconfig could solve this quite nicely. Make a selection menu
+such that you can choose what licenses you're willing to accept, and
+then make the respective packages depend on the license config
+(depends on LICENSE_GPLV3 etc)
 
-Removing the upstream package and adding it locally really is no
-different from replacing the contents in the repo. A rebase would do
-the same.
+>
+>> - there's a tesla-verity package which seems to be a custom init that
+>> checks the validity of the verity metadata and interacts with
+>> firmware to check soc lock status before calling dmsetup.
+>> - there are a few packages that look like backports: python-dateutil,
+>> nanomsg, python-pytz, python-jsonschema
+>> - tesla-binutils is a "real" host binutils (non-cross)
+>> - there's tesla-libsystemd stub that builds a libsystemd with stubbed
+>> functions
+>
+> Makes me wonder why they don't use a BR2_EXTERNAL.
+
+BR2_EXTERNAL is used but by splitting the contents between the
+buildroot repo and external, and keeping only things you don't want to
+share in the external one (proprietary apps, experimental work, random
+internal stuff that won't ship to the outside world and work on
+unreleased stuff) works well. The way the (separate but corresponding)
+configuration that's published is generated, the reference to
+BR2_EXTERNAL doesn't show up.
+
+>> - it has its own parallel building infrastructure, using the loglinear
+>> tool, first introduced in google fiber's buildroot implementation
+>> [ https://gfiber.googlesource.com/buildroot/ |
+>> https://gfiber.googlesource.com/buildroot/ ]
+>> - many packages are patched to modify behaviour, customize build
+>> options: business as usual
+>> - probably many things I've missed
+
+One thing that I'm not sure has been used all that much elsewhere is
+that there's a recursive invocation to generate the initramfs, and
+then build that into the kernel. Could maybe have been done as two
+separate toplevel builds with postprocessing, but this worked quite
+well.
+
 
 
 -Olof
