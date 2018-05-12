@@ -1,117 +1,33 @@
-From: Olof Johansson <olof@lixom.net>
-Date: Sat, 12 May 2018 11:16:57 -0700
-Subject: [Buildroot] Tesla is using Buildroot
-In-Reply-To: <704976570.261553.1526089365924.JavaMail.zimbra@datacom.com.br>
-References: <20180511172314.28ba9f80@windsurf.home>
- <20180511215508.GA28572@jaya>
- <BLUPR0601MB705720B009168FB33EC2CA5FB9E0@BLUPR0601MB705.namprd06.prod.outlook.com>
- <704976570.261553.1526089365924.JavaMail.zimbra@datacom.com.br>
-Message-ID: <CAOesGMgNZaSuzXyUF_cMRniNrgYB1=gUcKrYyC+kDpzUHmcA+Q@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 12 May 2018 21:26:33 +0300
+Subject: [Buildroot] [PATCH] tmux: bump to version 2.7
+In-Reply-To: <20180511154428.GB9837@scaer>
+References: <32bee885111be89f59e496e5ff088c7a5bf8cf9d.1526016439.git.baruch@tkos.co.il>
+ <20180511154428.GB9837@scaer>
+Message-ID: <20180512182633.nooumsq4zstljs32@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 11, 2018 at 6:42 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
->> From: "ratbert90" <aduskett@gmail.com>
->> To: anisse at astier.eu, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
->> Cc: "Olof Johansson" <olof@lixom.net>, buildroot at uclibc.org
->> Sent: Friday, May 11, 2018 10:22:49 PM
->> Subject: Re: [Buildroot] Tesla is using Buildroot
->
->> This is pretty neat! The main website should really have a prominent list of
->> companies that use Buildroot.
->
->> Google/Tesla/GoPro etc etc. It would be good advertisement!
->
->> Adam
->
->> From: buildroot <buildroot-bounces@busybox.net> on behalf of anisse at astier.eu
->> <anisse@astier.eu>
->> Sent: Friday, May 11, 2018 5:55:08 PM
->> To: Thomas Petazzoni
->> Cc: Olof Johansson; buildroot at uclibc.org
->> Subject: Re: [Buildroot] Tesla is using Buildroot
->> Hi,
->
->> On Fri, May 11, 2018 at 05:23:14PM +0200, Thomas Petazzoni wrote:
->> > Hello,
->
->> > I met a few engineers from Tesla at the Embedded Linux Conference in
->> > March, who told me they are using Buildroot. Now that their tree is
->> > publicly available online, I can share this information.
->
->> > Their Buildroot tree is at:
->
->>> [ https://github.com/teslamotors/buildroot |
->> > https://github.com/teslamotors/buildroot ]
->
->> > Unfortunately, it looks a bit ugly in terms of commit history: just
->> > a few huge comments that mix tons of changes together. I was told the
->> > autopilot configurations are there for now, but infotainment
->> > configurations should be added in the near future.
->
->> > It's of course very nice to see Buildroot being used on board of those
->> > vehicles!
->
->> > Best regards,
->
->> > Thomas
->> > --
->> > Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
->> > Embedded Linux and Kernel engineering
->> > [ https://bootlin.com/ | https://bootlin.com ]
->
->> I've had a quick look at what's inside. Here is what I found:
->> - it seems based on buildroot 2016.05, with backports from more recent
->> versions; but at its core it's still a 2016.05
->> - there are a few packages tesla-{findutils, grep, bash, gzip, which, rsync}
->> that are here with old versions to work around GPLv3
->
-> ... which highlights the need for some mechanism to blacklist licenses
-> and warn the user in the configuration menu that a package cannot be
-> selected because of license restrictions.
+Hi Yann,
 
-I think Kconfig could solve this quite nicely. Make a selection menu
-such that you can choose what licenses you're willing to accept, and
-then make the respective packages depend on the license config
-(depends on LICENSE_GPLV3 etc)
+On Fri, May 11, 2018 at 05:44:28PM +0200, Yann E. MORIN wrote:
+> Baruch, All,
+> 
+> On 2018-05-11 08:27 +0300, Baruch Siach spake thusly:
+> > Add COPYING to license files.
+> > 
+> > Update README hash; contest change unrelated to license.
+> 
+> "contest"? Did you mean "contains" or "context"?
 
->
->> - there's a tesla-verity package which seems to be a custom init that
->> checks the validity of the verity metadata and interacts with
->> firmware to check soc lock status before calling dmsetup.
->> - there are a few packages that look like backports: python-dateutil,
->> nanomsg, python-pytz, python-jsonschema
->> - tesla-binutils is a "real" host binutils (non-cross)
->> - there's tesla-libsystemd stub that builds a libsystemd with stubbed
->> functions
->
-> Makes me wonder why they don't use a BR2_EXTERNAL.
+I meant to say "content". Sorry.
 
-BR2_EXTERNAL is used but by splitting the contents between the
-buildroot repo and external, and keeping only things you don't want to
-share in the external one (proprietary apps, experimental work, random
-internal stuff that won't ship to the outside world and work on
-unreleased stuff) works well. The way the (separate but corresponding)
-configuration that's published is generated, the reference to
-BR2_EXTERNAL doesn't show up.
+baruch
 
->> - it has its own parallel building infrastructure, using the loglinear
->> tool, first introduced in google fiber's buildroot implementation
->> [ https://gfiber.googlesource.com/buildroot/ |
->> https://gfiber.googlesource.com/buildroot/ ]
->> - many packages are patched to modify behaviour, customize build
->> options: business as usual
->> - probably many things I've missed
-
-One thing that I'm not sure has been used all that much elsewhere is
-that there's a recursive invocation to generate the initramfs, and
-then build that into the kernel. Could maybe have been done as two
-separate toplevel builds with postprocessing, but this worked quite
-well.
-
-
-
--Olof
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
