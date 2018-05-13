@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 May 2018 21:19:51 +0200
-Subject: [Buildroot] [PATCH 3/8] libftdi: rename option to have proper
- prefix
-In-Reply-To: <20180513190737.26079-4-thomas.petazzoni@bootlin.com>
+Date: Sun, 13 May 2018 21:21:26 +0200
+Subject: [Buildroot] [PATCH 4/8] ipsec-tools: rename options to have
+ proper prefix
+In-Reply-To: <20180513190737.26079-5-thomas.petazzoni@bootlin.com>
 References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
- <20180513190737.26079-4-thomas.petazzoni@bootlin.com>
-Message-ID: <20180513191951.GG22130@scaer>
+ <20180513190737.26079-5-thomas.petazzoni@bootlin.com>
+Message-ID: <20180513192126.GH22130@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +15,14 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2018-05-13 21:07 +0200, Thomas Petazzoni spake thusly:
-> The option name BR2_PACKAGE_LIBTFDI_CPP obviously had a typo: it
-> should have been named BR2_PACKAGE_LIBFTDI_CPP, and add the necessary
-> Config.in.legacy handling.
+> A number of options in the ipsec-tools package had their Config.in
+> option prefixed by BR2_PACKAGE_IPSEC, while the prefix should be
+> BR2_PACKAGE_IPSEC_TOOLS. This commit fixes that, and adds the
+> necessary Config.in.legacy handling.
+> 
+> Since those options are part of a choice, the legacy handling cannot
+> select the new name of the options, so the legacy handling only
+> informs the user of the rename.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
@@ -27,57 +32,93 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  Config.in.legacy           | 9 +++++++++
->  package/libftdi/Config.in  | 2 +-
->  package/libftdi/libftdi.mk | 2 +-
->  3 files changed, 11 insertions(+), 2 deletions(-)
+>  Config.in.legacy                   | 24 ++++++++++++++++++++++++
+>  package/ipsec-tools/Config.in      |  8 ++++----
+>  package/ipsec-tools/ipsec-tools.mk |  6 +++---
+>  3 files changed, 31 insertions(+), 7 deletions(-)
 > 
 > diff --git a/Config.in.legacy b/Config.in.legacy
-> index 4283888c72..72563031ce 100644
+> index 72563031ce..314e0578d8 100644
 > --- a/Config.in.legacy
 > +++ b/Config.in.legacy
-> @@ -145,6 +145,15 @@ endif
+> @@ -145,6 +145,30 @@ endif
 >  ###############################################################################
 >  comment "Legacy options removed in 2018.05"
 >  
-> +config BR2_PACKAGE_LIBTFDI_CPP
-> +	bool "libftdi C++ bindings option renamed"
+> +config BR2_PACKAGE_IPSEC_SECCTX_DISABLE
+> +	bool "ipsec-tools security context disable option renamed"
 > +	select BR2_LEGACY
-> +	select BR2_PACKAGE_LIBFTDI_CPP
 > +	help
-> +	  The option BR2_PACKAGE_LIBTFDI_CPP was renamed to
-> +	  BR2_PACKAGE_LIBFTDI_CPP in order to fix a typo in the option
-> +	  name.
+> +	  For consistency reasons, the option
+> +	  BR2_PACKAGE_IPSEC_SECCTX_DISABLE was renamed to
+> +	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE.
 > +
->  config BR2_PACKAGE_JQUERY_UI_THEME_BLACK_TIE
->  	bool "jquery-ui-themes option black-tie renamed"
+> +config BR2_PACKAGE_IPSEC_SECCTX_ENABLE
+> +	bool "ipsec-tools SELinux security context enable option renamed"
+> +	select BR2_LEGACY
+> +	help
+> +	  For consistency reasons, the option
+> +	  BR2_PACKAGE_IPSEC_SECCTX_ENABLE was renamed to
+> +	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE.
+> +
+> +config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
+> +	bool "ipsec-tools kernel security context enable option renamed"
+> +	select BR2_LEGACY
+> +	help
+> +	  For consistency reasons, the option
+> +	  BR2_PACKAGE_IPSEC_SECCTX_KERNEL was renamed to
+> +	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL.
+> +
+>  config BR2_PACKAGE_LIBTFDI_CPP
+>  	bool "libftdi C++ bindings option renamed"
 >  	select BR2_LEGACY
-> diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
-> index beb42d34c5..23dae1be1f 100644
-> --- a/package/libftdi/Config.in
-> +++ b/package/libftdi/Config.in
-> @@ -10,7 +10,7 @@ config BR2_PACKAGE_LIBFTDI
+> diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
+> index 1635675a36..59154123e6 100644
+> --- a/package/ipsec-tools/Config.in
+> +++ b/package/ipsec-tools/Config.in
+> @@ -57,17 +57,17 @@ config BR2_PACKAGE_IPSEC_TOOLS_HYBRID
 >  
->  if BR2_PACKAGE_LIBFTDI
+>  choice
+>  	prompt "Security context"
+> -	default BR2_PACKAGE_IPSEC_SECCTX_DISABLE
+> +	default BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE
+>  	help
+>  	  Selects whether or not to enable security context support.
 >  
-> -config BR2_PACKAGE_LIBTFDI_CPP
-> +config BR2_PACKAGE_LIBFTDI_CPP
->  	bool "C++ bindings"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR
-> diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-> index c1952ac68b..cdd77c2e68 100644
-> --- a/package/libftdi/libftdi.mk
-> +++ b/package/libftdi/libftdi.mk
-> @@ -15,7 +15,7 @@ LIBFTDI_AUTORECONF = YES
->  LIBFTDI_CONF_OPTS = --without-examples
+> -config BR2_PACKAGE_IPSEC_SECCTX_DISABLE
+> +config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE
+>  	bool "Disable security context support"
 >  
->  # configure detect it automaticaly so we need to force it
-> -ifeq ($(BR2_PACKAGE_LIBTFDI_CPP),y)
-> +ifeq ($(BR2_PACKAGE_LIBFTDI_CPP),y)
->  LIBFTDI_DEPENDENCIES += boost
->  LIBFTDI_CONF_OPTS += --enable-libftdipp
->  else
+> -config BR2_PACKAGE_IPSEC_SECCTX_ENABLE
+> +config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE
+>  	bool "Enable SELinux security context support"
+>  
+> -config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
+> +config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL
+>  	bool "Enable kernel security context"
+>  
+>  endchoice
+> diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+> index c0b180de55..ddae9a75f3 100644
+> --- a/package/ipsec-tools/ipsec-tools.mk
+> +++ b/package/ipsec-tools/ipsec-tools.mk
+> @@ -68,13 +68,13 @@ else
+>  IPSEC_TOOLS_CONF_OPTS += --disable-hybrid
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_DISABLE),y)
+> +ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE),y)
+>  IPSEC_TOOLS_CONF_OPTS += --enable-security-context=no
+>  endif
+> -ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_ENABLE),y)
+> +ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE),y)
+>  IPSEC_TOOLS_CONF_OPTS += --enable-security-context=yes
+>  endif
+> -ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_KERNEL),y)
+> +ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL),y)
+>  IPSEC_TOOLS_CONF_OPTS += --enable-security-context=kernel
+>  endif
+>  
 > -- 
 > 2.14.3
 > 
