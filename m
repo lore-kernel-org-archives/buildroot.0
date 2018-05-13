@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 23:01:13 +0200
-Subject: [Buildroot] [PATCH 2/2] zstd: bump to version 1.3.4
-In-Reply-To: <c4d659d810a4d47b42546d74a013f01ac7f62cba.1525803977.git.baruch@tkos.co.il>
-References: <d9cdc06bb6718534ed51a927f7adeab442a4e110.1525803977.git.baruch@tkos.co.il>
- <c4d659d810a4d47b42546d74a013f01ac7f62cba.1525803977.git.baruch@tkos.co.il>
-Message-ID: <20180513230113.63ac3fd2@windsurf.home>
+Date: Sun, 13 May 2018 23:01:20 +0200
+Subject: [Buildroot] [PATCH 1/1] cifs-utils: bump to version 6.8
+In-Reply-To: <20180508161537.13609-1-fontaine.fabrice@gmail.com>
+References: <20180508161537.13609-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180513230120.7f9673e4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  8 May 2018 21:26:17 +0300, Baruch Siach wrote:
-> Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Tue,  8 May 2018 18:15:37 +0200, Fabrice Fontaine wrote:
+> - Remove patch (already in version)
+> - Add hash for license file
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/zstd/zstd.hash | 2 +-
->  package/zstd/zstd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...001-mount.cifs-Remove-data_blob.h-include.patch | 32 ----------------------
+>  package/cifs-utils/cifs-utils.hash                 |  5 +++-
+>  package/cifs-utils/cifs-utils.mk                   |  2 +-
+>  3 files changed, 5 insertions(+), 34 deletions(-)
+>  delete mode 100644 package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch
 
 Applied to next, thanks.
 
