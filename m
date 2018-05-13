@@ -1,48 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 May 2018 21:54:03 +0200
-Subject: [Buildroot] [PATCH 0/2] package/jamvm: fix build on MIPS
-In-Reply-To: <20180513214829.3572c662@windsurf.home>
-References: <cover.1526207669.git.yann.morin.1998@free.fr>
- <20180513214829.3572c662@windsurf.home>
-Message-ID: <20180513195403.GL22130@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 13 May 2018 21:54:57 +0200
+Subject: [Buildroot] [git commit] cups-filters: fix avahi dependency
+Message-ID: <20180513195422.A7BB78B8F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=dad6f570af5b7d2ef800c6dc55316933bd4b1803
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-05-13 21:48 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 13 May 2018 12:34:35 +0200, Yann E. MORIN wrote:
-> 
-> > Yann E. MORIN (2):
-> >       package/jamvm: move arch dependency to a symbol
-> >       package/jamvm: restrict on what MIPS procs are allowed
-> 
-> Thanks, series applied to master. To be honest, I don't fully
-> understand the MIPS details, but since we no longer have anyone really
-> taking care of this architecture, it's not a big deal if we exclude too
-> many MIPS variants. They can always be re-enabled later when/if someone
-> complains.
+avahi support requires avahi-client, which needs avahi-daemon and dbus
 
-Neither do I understand entirely either, but this code:
+Fixes:
+ - http://autobuild.buildroot.net/results/5c326bb56199000eb0e53a4d0f3c6c13be71cda0
 
-    swc1 $f1,4($8)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cups-filters/cups-filters.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-will cause binutils to warn if FP ABI is fp32, or error out if it is
-either fpxx or fp64.
-
-Sicne that code in jamvm depends on the use of hard floats, we just
-allow it for soft-float or fp32.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 82ea46dd94..131e58246e 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -40,7 +40,8 @@ else
+ CUPS_FILTERS_CONF_OPTS += --disable-dbus
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_AVAHI),y)
++# avahi support requires avahi-client, which needs avahi-daemon and dbus
++ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
+ CUPS_FILTERS_DEPENDENCIES += avahi
+ CUPS_FILTERS_CONF_OPTS += --enable-avahi
+ else
