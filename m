@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 22:08:02 +0200
-Subject: [Buildroot] [PATCH 1/1] woff2: fix build on m68k
-In-Reply-To: <20180510101101.22094-1-fontaine.fabrice@gmail.com>
-References: <20180510101101.22094-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180513220802.0c4958e9@windsurf.home>
+Date: Sun, 13 May 2018 22:09:01 +0200
+Subject: [Buildroot] [git commit] support/kconfig: Add missing target to
+ README.buildroot
+Message-ID: <20180513200824.4EC778A50A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=04918ca72f7d558022a8679df6519c90a579424a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Waldemar in Cc, since he reported this issue to gcc.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/kconfig/README.buildroot | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Thu, 10 May 2018 12:11:01 +0200, Fabrice Fontaine wrote:
-> Same issue on woff2 than in some other packages such as lcdapi: see
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/6c97a08e6ca2e914d54fbb525b3f0bb90023ef07
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/woff2/woff2.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-
-I've applied to master, but as Yann pointed out, it starts to be a
-problem affecting a number of packages.
-
-The bug report you point out at
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509 has been closed,
-because they say the issue is on binutils side. Has the issue been
-reported to binutils ? Could you try to make this issue move forward ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/kconfig/README.buildroot b/support/kconfig/README.buildroot
+index 62e3a11b1e..3140713b39 100644
+--- a/support/kconfig/README.buildroot
++++ b/support/kconfig/README.buildroot
+@@ -15,6 +15,7 @@ Then verify the toplevel targets work:
+ 	config
+ 	defconfig
+ 	menuconfig
++	nconfig
+ 	xconfig
+ 	gconfig
+ 	oldconfig
