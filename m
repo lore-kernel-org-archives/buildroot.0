@@ -1,42 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 13 May 2018 20:05:59 +0000
-Subject: [Buildroot] [Bug 10996] bogus musl ARM toolchain
-In-Reply-To: <bug-10996-163@https.bugs.busybox.net/>
-References: <bug-10996-163@https.bugs.busybox.net/>
-Message-ID: <bug-10996-163-ZnUpb6PrXo@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 13 May 2018 21:56:09 +0200
+Subject: [Buildroot] [git commit] woff2: fix build on m68k
+Message-ID: <20180513200605.B190C8C5EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10996
+commit: https://git.buildroot.net/buildroot/commit/?id=07ce2885fd6f3cf1c9e72ec2b9a852971ce7c939
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Same issue on woff2 than in some other packages such as lcdapi: see
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
+Fixes:
+ - http://autobuild.buildroot.net/results/6c97a08e6ca2e914d54fbb525b3f0bb90023ef07
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-(In reply to Thomas Petazzoni from comment #1)
-> this happens because we don't pass -static.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/woff2/woff2.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-But the autobuild failure that is referenced does use -static (with \ and
-newlines added for readability):
-
-   
-home/peko/autobuild/instance-1/output/host/bin/arm-buildroot-linux-musleabihf-gcc
-\
-        -c -D_FILE_OFFSET_BITS=64 -Os \
-        -static \
-        -I. -DUNIX -DUIDGID_NOT_16BIT -DLARGE_FILE_SUPPORT -DUNICODE_SUPPORT
--DNO_MKTIME \
-        -DNO_DIR -DHAVE_DIRENT_H -DHAVE_TERMIOS_H util.c
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/woff2/woff2.mk b/package/woff2/woff2.mk
+index b2ff33fe98..2f0206c82b 100644
+--- a/package/woff2/woff2.mk
++++ b/package/woff2/woff2.mk
+@@ -21,4 +21,10 @@ ifneq ($(BR2_SHARED_LIBS),y)
+ WOFF2_CONF_OPTS += -DCMAKE_SKIP_RPATH=ON
+ endif
+ 
++# Internal error, aborting at dw2gencfi.c:215 in emit_expr_encoded
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
++ifeq ($(BR2_m68k_cf),y)
++WOFF2_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -fno-dwarf2-cfi-asm"
++endif
++
+ $(eval $(cmake-package))
