@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 May 2018 21:22:42 +0200
-Subject: [Buildroot] [PATCH 5/8] janus-gateway: rename options to have
+Date: Sun, 13 May 2018 21:31:40 +0200
+Subject: [Buildroot] [PATCH 6/8] ti-sgx-km: rename options to have
  proper prefix
-In-Reply-To: <20180513190737.26079-6-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20180513190737.26079-7-thomas.petazzoni@bootlin.com>
 References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
- <20180513190737.26079-6-thomas.petazzoni@bootlin.com>
-Message-ID: <20180513192242.GI22130@scaer>
+ <20180513190737.26079-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20180513193140.GJ22130@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,11 +15,64 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2018-05-13 21:07 +0200, Thomas Petazzoni spake thusly:
-> The sub-options of the janus-gateway package had their name option
-> prefixed by BR2_PACKAGE_JANUS, while the prefix should be
-> BR2_PACKAGE_JANUS_GATEWAY. This commit fixes that, and adds the
-> necessary Config.in.legacy handling.
+> The sub-options of the ti-sgx-km package had their name option
+> prefixed by BR2_PACKAGE_TI_SGX, while the prefix should be
+> BR2_PACKAGE_TI_SGX_KM. This commit fixes that, and adds the necessary
+> Config.in.legacy handling.
 > 
+> Since those options are part of a choice, the legacy handling cannot
+> select the new name of the options, so the legacy handling only
+> informs the user of the rename.
+
+As I was explaining on IRC, we /could/ have legacy handling for choices.
+This would be done in three parts;
+
+  - the new options replace the old ones in the choice, as we currently
+    do (and as is done in this patch);
+
+  - this choice is given a "name" (see below), so we can redefine it
+    elsewhere;
+
+  - in the legacy menu, we duplicate the choice with the same "name"
+    and the same options, but with a set of "default-if" options.
+
+
+For example:
+
+    # In bar/Config.in:
+    choice BAR
+        bool "bar choice"
+    config BAR_1
+        bool "bar 1"
+    config BAR_2
+        bool "bar 2"
+    endchoice
+
+    # In Config.in.legacy:
+    choice BAR
+        bool "bar choice"
+        default BAR_1 if FOO_1
+        default BAR_2 if FOO_2
+    config BAR_1
+        bool "bar 1"
+    config BAR_2
+        bool "bar 2"
+    endchoice
+
+    config FOO_1
+        bool "foo 1 was renamed"
+    config FOO_2
+        bool "foo 2 was renamed"
+
+(not tested, but it should work).
+
+What is nice with this solution, is that we have the new choice that is
+right near the legacy option so we can chek it, and it automatically
+gets the old setting.
+
+But I am not too convinced, however, because we do not usually use the
+name of a choice elsewhere...
+
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -28,340 +81,112 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  Config.in.legacy                       | 117 +++++++++++++++++++++++++++++++++
->  package/janus-gateway/Config.in        |  28 ++++----
->  package/janus-gateway/janus-gateway.mk |  28 ++++----
->  3 files changed, 145 insertions(+), 28 deletions(-)
+>  Config.in.legacy               | 32 ++++++++++++++++++++++++++++++++
+>  package/ti-sgx-km/Config.in    | 10 +++++-----
+>  package/ti-sgx-km/ti-sgx-km.mk |  8 ++++----
+>  3 files changed, 41 insertions(+), 9 deletions(-)
 > 
 > diff --git a/Config.in.legacy b/Config.in.legacy
-> index 314e0578d8..981306f469 100644
+> index 981306f469..5cf25463ad 100644
 > --- a/Config.in.legacy
 > +++ b/Config.in.legacy
-> @@ -145,6 +145,123 @@ endif
+> @@ -145,6 +145,38 @@ endif
 >  ###############################################################################
 >  comment "Legacy options removed in 2018.05"
 >  
-> +config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
-> +	bool "janus-gateway audio-bridge option renamed"
+> +config BR2_PACKAGE_TI_SGX_AM335X
+> +	bool "ti-sgx-km AM335X option renamed"
 > +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_AUDIO_BRIDGE
 > +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_AUDIO_BRIDGE has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_AUDIO_BRIDGE.
+> +	  For consistency reasons, the option
+> +	  BR2_PACKAGE_TI_SGX_AM335X has been renamed to
+> +	  BR2_PACKAGE_TI_SGX_KM_AM335X.
 > +
-> +config BR2_PACKAGE_JANUS_ECHO_TEST
-> +	bool "janus-gateway echo-test option renamed"
+> +config BR2_PACKAGE_TI_SGX_AM437X
+> +	bool "ti-sgx-km AM437X option renamed"
 > +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_ECHO_TEST
 > +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_ECHO_TEST has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_ECHO_TEST.
+> +	  For consistency reasons, the option
+> +	  BR2_PACKAGE_TI_SGX_AM437X has been renamed to
+> +	  BR2_PACKAGE_TI_SGX_KM_AM437X.
 > +
-> +config BR2_PACKAGE_JANUS_RECORDPLAY
-> +	bool "janus-gateway recordplay option renamed"
+> +config BR2_PACKAGE_TI_SGX_AM4430
+> +	bool "ti-sgx-km AM4430 option renamed"
 > +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_RECORDPLAY
 > +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_RECORDPLAY has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_RECORDPLAY.
+> +	  For consistency reasons, the option
+> +	  BR2_PACKAGE_TI_SGX_AM4430 has been renamed to
+> +	  BR2_PACKAGE_TI_SGX_KM_AM4430.
 > +
-> +config BR2_PACKAGE_JANUS_SIP_GATEWAY
-> +	bool "janus-gateway sip-gateway option renamed"
+> +config BR2_PACKAGE_TI_SGX_AM5430
+> +	bool "ti-sgx-km AM5430 option renamed"
 > +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_SIP_GATEWAY
 > +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_SIP_GATEWAY has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_SIP_GATEWAY.
+> +	  For consistency reasons, the option
+> +	  BR2_PACKAGE_TI_SGX_AM5430 has been renamed to
+> +	  BR2_PACKAGE_TI_SGX_KM_AM5430.
 > +
-> +config BR2_PACKAGE_JANUS_STREAMING
-> +	bool "janus-gateway streaming option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_STREAMING
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_STREAMING has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_STREAMING.
-> +
-> +config BR2_PACKAGE_JANUS_TEXT_ROOM
-> +	bool "janus-gateway text-room option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_TEXT_ROOM
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_TEXT_ROOM has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_TEXT_ROOM.
-> +
-> +config BR2_PACKAGE_JANUS_VIDEO_CALL
-> +	bool "janus-gateway video-call option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_VIDEO_CALL
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_VIDEO_CALL has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_VIDEO_CALL.
-> +
-> +config BR2_PACKAGE_JANUS_VIDEO_ROOM
-> +	bool "janus-gateway video-room option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_VIDEO_ROOM
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_VIDEO_ROOM has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_VIDEO_ROOM.
-> +
-> +config BR2_PACKAGE_JANUS_MQTT
-> +	bool "janus-gateway mqtt option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_MQTT
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_MQTT has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_MQTT.
-> +
-> +config BR2_PACKAGE_JANUS_RABBITMQ
-> +	bool "janus-gateway rabbitmq option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_RABBITMQ
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_RABBITMQ has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_RABBITMQ.
-> +
-> +config BR2_PACKAGE_JANUS_REST
-> +	bool "janus-gateway rest option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_REST
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_REST has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_REST.
-> +
-> +config BR2_PACKAGE_JANUS_UNIX_SOCKETS
-> +	bool "janus-gateway unix-sockets option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_UNIX_SOCKETS
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_UNIX_SOCKETS has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_UNIX_SOCKETS.
-> +
-> +config BR2_PACKAGE_JANUS_WEBSOCKETS
-> +	bool "janus-gateway websockets option renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_JANUS_GATEWAY_WEBSOCKETS
-> +	help
-> +	  For consistency reasons, the janus-gateway option
-> +	  BR2_PACKAGE_JANUS_WEBSOCKETS has been renamed to
-> +	  BR2_PACKAGE_JANUS_GATEWAY_WEBSOCKETS.
-> +
->  config BR2_PACKAGE_IPSEC_SECCTX_DISABLE
->  	bool "ipsec-tools security context disable option renamed"
+>  config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
+>  	bool "janus-gateway audio-bridge option renamed"
 >  	select BR2_LEGACY
-> diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-> index 5bd4e9586b..071183dc5f 100644
-> --- a/package/janus-gateway/Config.in
-> +++ b/package/janus-gateway/Config.in
-> @@ -19,21 +19,21 @@ if BR2_PACKAGE_JANUS_GATEWAY
+> diff --git a/package/ti-sgx-km/Config.in b/package/ti-sgx-km/Config.in
+> index a4c9bb8ca2..db3d3f9ddd 100644
+> --- a/package/ti-sgx-km/Config.in
+> +++ b/package/ti-sgx-km/Config.in
+> @@ -20,26 +20,26 @@ if BR2_PACKAGE_TI_SGX_KM
 >  
->  comment "plugins"
+>  choice
+>  	prompt "Target"
+> -	default BR2_PACKAGE_TI_SGX_AM335X
+> +	default BR2_PACKAGE_TI_SGX_KM_AM335X
+>  	help
+>  	  Select the SOC for which you would like to install drivers.
 >  
-> -config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
-> +config BR2_PACKAGE_JANUS_GATEWAY_AUDIO_BRIDGE
->  	bool "audio bridge"
->  	select BR2_PACKAGE_OPUS
+> -config BR2_PACKAGE_TI_SGX_AM335X
+> +config BR2_PACKAGE_TI_SGX_KM_AM335X
+>  	bool "AM335x"
+>  	help
+>  	  AM335x CPU
 >  
-> -config BR2_PACKAGE_JANUS_ECHO_TEST
-> +config BR2_PACKAGE_JANUS_GATEWAY_ECHO_TEST
->  	bool "echo test"
+> -config BR2_PACKAGE_TI_SGX_AM437X
+> +config BR2_PACKAGE_TI_SGX_KM_AM437X
+>  	bool "AM437x"
+>  	help
+>  	  AM437x CPU
 >  
-> -config BR2_PACKAGE_JANUS_RECORDPLAY
-> +config BR2_PACKAGE_JANUS_GATEWAY_RECORDPLAY
->  	bool "record and play"
+> -config BR2_PACKAGE_TI_SGX_AM4430
+> +config BR2_PACKAGE_TI_SGX_KM_AM4430
+>  	bool "AM4430"
+>  	help
+>  	  AM4430 CPU
 >  
-> -config BR2_PACKAGE_JANUS_SIP_GATEWAY
-> +config BR2_PACKAGE_JANUS_GATEWAY_SIP_GATEWAY
->  	bool "sip gateway"
->  	select BR2_PACKAGE_SOFIA_SIP
+> -config BR2_PACKAGE_TI_SGX_AM5430
+> +config BR2_PACKAGE_TI_SGX_KM_AM5430
+>  	bool "AM5430"
+>  	help
+>  	  AM5430 CPU
+> diff --git a/package/ti-sgx-km/ti-sgx-km.mk b/package/ti-sgx-km/ti-sgx-km.mk
+> index db74da9b4a..0e1bc33902 100644
+> --- a/package/ti-sgx-km/ti-sgx-km.mk
+> +++ b/package/ti-sgx-km/ti-sgx-km.mk
+> @@ -17,13 +17,13 @@ TI_SGX_KM_MAKE_OPTS = \
+>  	KERNELDIR=$(LINUX_DIR) \
+>  	PVR_NULLDRM=1
 >  
-> -config  BR2_PACKAGE_JANUS_STREAMING
-> +config  BR2_PACKAGE_JANUS_GATEWAY_STREAMING
->  	bool "streaming"
->  	# SO_REUSEPORT
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-> @@ -41,22 +41,22 @@ config  BR2_PACKAGE_JANUS_STREAMING
->  comment "streaming plugin needs a toolchain w/ headers >= 3.9"
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
->  
-> -config BR2_PACKAGE_JANUS_TEXT_ROOM
-> +config BR2_PACKAGE_JANUS_GATEWAY_TEXT_ROOM
->  	bool "text room"
->  
-> -config BR2_PACKAGE_JANUS_VIDEO_CALL
-> +config BR2_PACKAGE_JANUS_GATEWAY_VIDEO_CALL
->  	bool "video call"
->  
-> -config BR2_PACKAGE_JANUS_VIDEO_ROOM
-> +config BR2_PACKAGE_JANUS_GATEWAY_VIDEO_ROOM
->  	bool "video room"
->  
-> -config BR2_PACKAGE_JANUS_VOICE_MAIL
-> +config BR2_PACKAGE_JANUS_GATEWAY_VOICE_MAIL
->  	bool "voice mail"
->  	select BR2_PACKAGE_LIBOGG
->  
->  comment "transports"
->  
-> -config BR2_PACKAGE_JANUS_MQTT
-> +config BR2_PACKAGE_JANUS_GATEWAY_MQTT
->  	bool "MQTT"
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> @@ -65,7 +65,7 @@ config BR2_PACKAGE_JANUS_MQTT
->  comment "MQTT transport needs a toolchain w/ threads and dynamic library support"
->  	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
->  
-> -config BR2_PACKAGE_JANUS_RABBITMQ
-> +config BR2_PACKAGE_JANUS_GATEWAY_RABBITMQ
->  	bool "RabbitMQ"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_RABBITMQ_C
-> @@ -73,7 +73,7 @@ config BR2_PACKAGE_JANUS_RABBITMQ
->  comment "RabbitMQ transport needs a toolchain w/ threads"
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS
->  
-> -config BR2_PACKAGE_JANUS_REST
-> +config BR2_PACKAGE_JANUS_GATEWAY_REST
->  	bool "REST (HTTP/HTTPS)"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_LIBMICROHTTPD
-> @@ -81,11 +81,11 @@ config BR2_PACKAGE_JANUS_REST
->  comment "REST transport needs a toolchain w/ threads"
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS
->  
-> -config BR2_PACKAGE_JANUS_UNIX_SOCKETS
-> +config BR2_PACKAGE_JANUS_GATEWAY_UNIX_SOCKETS
->  	bool "Unix Sockets"
->  	default y
->  
-> -config BR2_PACKAGE_JANUS_WEBSOCKETS
-> +config BR2_PACKAGE_JANUS_GATEWAY_WEBSOCKETS
->  	bool "WebSockets"
->  	depends on BR2_USE_MMU
->  	select BR2_PACKAGE_LIBWEBSOCKETS
-> diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-> index c37cda0860..261fc25202 100644
-> --- a/package/janus-gateway/janus-gateway.mk
-> +++ b/package/janus-gateway/janus-gateway.mk
-> @@ -26,91 +26,91 @@ JANUS_GATEWAY_CONF_OPTS = \
->  	--disable-data-channels \
->  	--disable-sample-event-handler
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_AUDIO_BRIDGE),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_AUDIO_BRIDGE),y)
->  JANUS_GATEWAY_DEPENDENCIES += opus
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-audiobridge
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-audiobridge
+> -ifeq ($(BR2_PACKAGE_TI_SGX_AM335X),y)
+> +ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM335X),y)
+>  TI_SGX_KM_PLATFORM_NAME = omap335x
+> -else ifeq ($(BR2_PACKAGE_TI_SGX_AM437X),y)
+> +else ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM437X),y)
+>  TI_SGX_KM_PLATFORM_NAME = omap437x
+> -else ifeq ($(BR2_PACKAGE_TI_SGX_AM4430),y)
+> +else ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM4430),y)
+>  TI_SGX_KM_PLATFORM_NAME = omap4430
+> -else ifeq ($(BR2_PACKAGE_TI_SGX_5430),y)
+> +else ifeq ($(BR2_PACKAGE_TI_SGX_KM_5430),y)
+>  TI_SGX_KM_PLATFORM_NAME = omap5430
 >  endif
 >  
-> -ifeq ($(BR2_PACKAGE_JANUS_ECHO_TEST),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_ECHO_TEST),y)
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-echotest
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-echotest
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_RECORDPLAY),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_RECORDPLAY),y)
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-recordplay
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-recordplay
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_SIP_GATEWAY),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_SIP_GATEWAY),y)
->  JANUS_GATEWAY_DEPENDENCIES += sofia-sip
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-sip
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-sip
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_STREAMING),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_STREAMING),y)
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-streaming
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-streaming
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_TEXT_ROOM),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_TEXT_ROOM),y)
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-textroom
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-textroom
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_VIDEO_CALL),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_VIDEO_CALL),y)
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-videocall
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-videocall
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_VIDEO_ROOM),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_VIDEO_ROOM),y)
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-videoroom
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-videoroom
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_VOICE_MAIL),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_VOICE_MAIL),y)
->  JANUS_GATEWAY_DEPENDENCIES += libogg
->  JANUS_GATEWAY_CONF_OPTS += --enable-plugin-voicemail
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-plugin-voicemail
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_MQTT),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_MQTT),y)
->  JANUS_GATEWAY_DEPENDENCIES += paho-mqtt-c
->  JANUS_GATEWAY_CONF_OPTS += --enable-mqtt
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-mqtt
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_RABBITMQ),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_RABBITMQ),y)
->  JANUS_GATEWAY_DEPENDENCIES += rabbitmq-c
->  JANUS_GATEWAY_CONF_OPTS += --enable-rabbitmq
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-rabbitmq
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_REST),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_REST),y)
->  JANUS_GATEWAY_DEPENDENCIES += libmicrohttpd
->  JANUS_GATEWAY_CONF_OPTS += --enable-rest
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-rest
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_UNIX_SOCKETS),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_UNIX_SOCKETS),y)
->  JANUS_GATEWAY_CONF_OPTS += --enable-unix-sockets
->  else
->  JANUS_GATEWAY_CONF_OPTS += --disable-unix-sockets
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_JANUS_WEBSOCKETS),y)
-> +ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_WEBSOCKETS),y)
->  JANUS_GATEWAY_DEPENDENCIES += libwebsockets
->  JANUS_GATEWAY_CONF_OPTS += --enable-websockets
->  else
 > -- 
 > 2.14.3
 > 
