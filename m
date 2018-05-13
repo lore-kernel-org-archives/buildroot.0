@@ -1,33 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 22:12:05 +0200
-Subject: [Buildroot] [PATCH 0/2] package/attr,acl: fix installation
-In-Reply-To: <cover.1525786905.git.yann.morin.1998@free.fr>
-References: <cover.1525786905.git.yann.morin.1998@free.fr>
-Message-ID: <20180513221205.09da9b62@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 13 May 2018 20:16:32 +0000
+Subject: [Buildroot] [Bug 10996] bogus musl ARM toolchain
+In-Reply-To: <bug-10996-163@https.bugs.busybox.net/>
+References: <bug-10996-163@https.bugs.busybox.net/>
+Message-ID: <bug-10996-163-6ekbgvrVDY@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10996
 
-On Tue,  8 May 2018 15:41:59 +0200, Yann E. MORIN wrote:
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+(In reply to Yann E. MORIN from comment #2)
+Nope, because you're looking at the wrong place. The reason why the build fail
+is because the "configuration" step which detects if mktime() is available or
+not fails and concludes that mktime() is not available. See the string "
+Check for mktime". Due to this, NO_MKTIME is defined, and this code path is
+broken in util.c/timezone.c.
 
-> Yann E. MORIN (2):
->       package/attr: fix install
->       package/ac: fix install
+So there are really two problems:
 
-Both applied, thanks. For the second patch, I fixed the typo in the
-commit title. Thanks for having worked on a temporary workaround
-suitable for master.
+ (1) That is doesn't detect the availability of mktime() because -static is not
+passed during the detection test.
 
-Could you mark the corresponding bug as fixed in our bug tracker ?
+ (2) That the NO_MKTIME case is broken.
 
-Thanks!
+However, I believe (2) is not really relevant for Buildroot, as all three C
+libraries provide mktime(). So all we need to fix is (1).
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
