@@ -1,8 +1,8 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 May 2018 14:22:22 +0200
+Date: Sun, 13 May 2018 14:40:45 +0200
 Subject: [Buildroot] [PATCH] package/rauc: add workaround for older kernel
  headers
-Message-ID: <20180513122222.18412-1-yann.morin.1998@free.fr>
+Message-ID: <20180513124045.25048-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +16,10 @@ Fixes:
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Andrey Yurovsky <yurovsky@gmail.com>
+
+---
+Changes v1 -> v2:
+  - fix header filename
 ---
  ...001-emmc-add-workaround-for-older-kernels.patch | 33 ++++++++++++++++++++++
  1 file changed, 33 insertions(+)
@@ -23,7 +27,7 @@ Cc: Andrey Yurovsky <yurovsky@gmail.com>
 
 diff --git a/package/rauc/0001-emmc-add-workaround-for-older-kernels.patch b/package/rauc/0001-emmc-add-workaround-for-older-kernels.patch
 new file mode 100644
-index 0000000000..2d661e42a5
+index 0000000000..23c9484e61
 --- /dev/null
 +++ b/package/rauc/0001-emmc-add-workaround-for-older-kernels.patch
 @@ -0,0 +1,33 @@
@@ -53,7 +57,7 @@ index 0000000000..2d661e42a5
 + #include <fcntl.h>
 + #include <glib/gstdio.h>
 + #include <linux/major.h>
-++#include <linux/type.h> /* kernel < 3.4 forgot that in mmc/ioctl.h */
+++#include <linux/types.h> /* kernel < 3.4 forgot that in mmc/ioctl.h */
 + #include <linux/mmc/ioctl.h>
 + #include <string.h>
 + #include <sys/ioctl.h>
