@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 21:54:57 +0200
-Subject: [Buildroot] [git commit] cups-filters: fix avahi dependency
-Message-ID: <20180513195422.A7BB78B8F6@busybox.osuosl.org>
+Date: Sun, 13 May 2018 21:55:10 +0200
+Subject: [Buildroot] [PATCH 1/1] cups-filters: fix avahi dependency
+In-Reply-To: <20180510093500.15672-1-fontaine.fabrice@gmail.com>
+References: <20180510093500.15672-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180513215510.7243d07f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dad6f570af5b7d2ef800c6dc55316933bd4b1803
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-avahi support requires avahi-client, which needs avahi-daemon and dbus
+On Thu, 10 May 2018 11:35:00 +0200, Fabrice Fontaine wrote:
+> avahi support requires avahi-client, which needs avahi-daemon and dbus
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/5c326bb56199000eb0e53a4d0f3c6c13be71cda0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/cups-filters/cups-filters.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Fixes:
- - http://autobuild.buildroot.net/results/5c326bb56199000eb0e53a4d0f3c6c13be71cda0
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cups-filters/cups-filters.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 82ea46dd94..131e58246e 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -40,7 +40,8 @@ else
- CUPS_FILTERS_CONF_OPTS += --disable-dbus
- endif
- 
--ifeq ($(BR2_PACKAGE_AVAHI),y)
-+# avahi support requires avahi-client, which needs avahi-daemon and dbus
-+ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
- CUPS_FILTERS_DEPENDENCIES += avahi
- CUPS_FILTERS_CONF_OPTS += --enable-avahi
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
