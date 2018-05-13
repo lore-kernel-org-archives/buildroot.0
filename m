@@ -1,36 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 21:39:57 +0200
-Subject: [Buildroot] [PATCH] libkrb5: disable rpath
-In-Reply-To: <2d3716532e37e7fd57c930fcca6e4656ec7fa649.1526236679.git.baruch@tkos.co.il>
-References: <2d3716532e37e7fd57c930fcca6e4656ec7fa649.1526236679.git.baruch@tkos.co.il>
-Message-ID: <20180513213957.7925756d@windsurf.home>
+Date: Sun, 13 May 2018 21:44:10 +0200
+Subject: [Buildroot] [git commit] snort: fix build on sparc v8
+Message-ID: <20180513194338.D85718B834@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=766f95d1f0fa352fb60bc49454df4c6544b0feaa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 May 2018 21:37:59 +0300, Baruch Siach wrote:
-> The default rpath value for krb5 is /usr/lib. On some hosts this might
-> confuse the build time linker as it looks for target libraries in the
-> host /usr/lib directory.
-> 
-> Should fix:
-> http://autobuild.buildroot.net/results/6df/6df84ed325ddd92248741d2f4737423b1b999489/
-> http://autobuild.buildroot.net/results/049/049f5147288b418402b6e5a4181eff4d426c8d7a/
-> http://autobuild.buildroot.net/results/432/432d5d0295f77cd34b78e70e8b4b7d77ef19ae3c/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libkrb5/libkrb5.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Add patch to remove -mcpu=v9 before checking sparc architecture
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.net/results/59625daa154e3136171dcb89bdc3b8b31dc85021
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/snort/0005-fix-sparc.patch | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/package/snort/0005-fix-sparc.patch b/package/snort/0005-fix-sparc.patch
+new file mode 100644
+index 0000000000..14792d2c59
+--- /dev/null
++++ b/package/snort/0005-fix-sparc.patch
+@@ -0,0 +1,28 @@
++When checking if the architecture supports the %time register
++instruction, do not force -mcpu to v9 while doing so. Otherwise it's
++like "let's see if this v9 instruction exists when I force the compiler
++to think I'm using v9", which is non-sensical.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Naurp ./snort-2.9.11.1-orig/configure.in snort-2.9.11.1/configure.in
++--- ./snort-2.9.11.1-orig/configure.in	2018-05-10 12:20:19.253510678 +0200
+++++ snort-2.9.11.1/configure.in	2018-05-10 12:40:18.547584998 +0200
++@@ -942,8 +942,6 @@ fi
++ 
++ # check for sparc %time register
++ if eval "echo $host_cpu|grep -i sparc >/dev/null"; then
++-    OLD_CFLAGS="$CFLAGS"
++-    CFLAGS="$CFLAGS -mcpu=v9 "
++     AC_MSG_CHECKING([for sparc %time register])
++     AC_RUN_IFELSE(
++     [AC_LANG_PROGRAM(
++@@ -957,8 +955,6 @@ if eval "echo $host_cpu|grep -i sparc >/
++     AC_MSG_RESULT($sparcv9)
++     if test "x$sparcv9" = "xyes"; then
++         AC_DEFINE([SPARCV9],[1],[For sparc v9 with %time register])
++-    else
++-        CFLAGS="$OLD_CFLAGS"
++     fi
++ fi
++ 
