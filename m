@@ -1,37 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 May 2018 09:02:21 +0200
-Subject: [Buildroot] [git commit] libcap: only install shared version
-Message-ID: <20180513193732.D4C2F8C899@busybox.osuosl.org>
+Date: Sun, 13 May 2018 21:38:12 +0200
+Subject: [Buildroot] [git commit] package/rauc: add workaround for older
+ kernel headers
+Message-ID: <20180513193732.E65BB8C899@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7984f2d97b4271c14e0922ef22027edaedd78e59
+commit: https://git.buildroot.net/buildroot/commit/?id=83ae5bc84bc3eeea2b85b63307f95f6cb01ed197
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If BR2_SHARED_LIBS is set, only install shared version of library
-(continue to build both libraries through all target as there is no
-libcap.so target but only a libcap.so.$(VERSION).$(MINOR))
+Fixes:
+    http://autobuild.buildroot.org/results/621/621587906bd2bb27c43b6fcbb051d75f20e32e7c/
+    http://autobuild.buildroot.org/results/52c/52ca760f0227075ca988754bb9eb8df0ea3e1563/
+    ...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Andrey Yurovsky <yurovsky@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcap/libcap.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...001-emmc-add-workaround-for-older-kernels.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 48c2cb3456..a947fa0686 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -18,6 +18,9 @@ HOST_LIBCAP_DEPENDENCIES = host-gperf
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBCAP_MAKE_TARGET = libcap.a libcap.pc
- LIBCAP_MAKE_INSTALL_TARGET = install-static
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+LIBCAP_MAKE_TARGET = all
-+LIBCAP_MAKE_INSTALL_TARGET = install-shared
- else
- LIBCAP_MAKE_TARGET = all
- LIBCAP_MAKE_INSTALL_TARGET = install
+diff --git a/package/rauc/0001-emmc-add-workaround-for-older-kernels.patch b/package/rauc/0001-emmc-add-workaround-for-older-kernels.patch
+new file mode 100644
+index 0000000000..23c9484e61
+--- /dev/null
++++ b/package/rauc/0001-emmc-add-workaround-for-older-kernels.patch
+@@ -0,0 +1,33 @@
++From 7c67c0ef267d470fcec950d2be49507255f39fc5 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 13 May 2018 14:17:44 +0200
++Subject: [PATCH] emmc: add workaround for older kernels
++
++Kernels up to (and including 3.3) forgot to include types.h in their
++mmc/ioctl.h, and thus __u32 (and others) are not defined, causing
++compilation errors:
++
++    http://autobuild.buildroot.org/results/621/621587906bd2bb27c43b6fcbb051d75f20e32e7c/build-end.log
++
++Fix that by explicitly including types.h before mmc/ioctl.h.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ src/emmc.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/emmc.c b/src/emmc.c
++index e8b0b05..2ce3373 100644
++--- a/src/emmc.c
+++++ b/src/emmc.c
++@@ -4,6 +4,7 @@
++ #include <fcntl.h>
++ #include <glib/gstdio.h>
++ #include <linux/major.h>
+++#include <linux/types.h> /* kernel < 3.4 forgot that in mmc/ioctl.h */
++ #include <linux/mmc/ioctl.h>
++ #include <string.h>
++ #include <sys/ioctl.h>
++-- 
++2.14.1
++
