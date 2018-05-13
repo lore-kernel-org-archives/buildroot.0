@@ -1,39 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 21:38:43 +0200
-Subject: [Buildroot] [PATCH] package/rauc: add workaround for older
- kernel headers
-In-Reply-To: <20180513124045.25048-1-yann.morin.1998@free.fr>
-References: <20180513124045.25048-1-yann.morin.1998@free.fr>
-Message-ID: <20180513213843.400ba94f@windsurf.home>
+Date: Sun, 13 May 2018 21:39:01 +0200
+Subject: [Buildroot] [git commit] package/xen: force location of init scripts
+Message-ID: <20180513193821.3DE678B537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=366e42c2cf60ecf9640ad7a57dcbe5d9d287dc02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 May 2018 14:40:45 +0200, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.org/results/621/621587906bd2bb27c43b6fcbb051d75f20e32e7c/
->     http://autobuild.buildroot.org/results/52c/52ca760f0227075ca988754bb9eb8df0ea3e1563/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Andrey Yurovsky <yurovsky@gmail.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - fix header filename
-> ---
->  ...001-emmc-add-workaround-for-older-kernels.patch | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/rauc/0001-emmc-add-workaround-for-older-kernels.patch
+The Xen configure scripts looks at the build host to decide where to
+install the Sys-V startup scripts, and that location differs between
+various distros.
 
-Applied to master, thanks.
+Force the location.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+    http://autobuild.buildroot.org/results/869/869829ab086e824d164c5c5ec7f087ed83993be6/
+    http://autobuild.buildroot.org/results/336/3360e5a9e3d007b4ed77345b5fe93b2dacb6ad49/
+    http://autobuild.buildroot.org/results/29e/29e308ce3cc9c83497ba1c1f98fcda3f48fd03c4/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Alistair Francis <alistair@alistair23.me>
+Reviewed-by: Alistair Francis <alistair@alistair23.me>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xen/xen.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 8ba2b9d5c2..1b741a90f6 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -17,7 +17,9 @@ else ifeq ($(ARCH),arm)
+ XEN_ARCH = arm32
+ endif
+ 
+-XEN_CONF_OPTS = --disable-ocamltools
++XEN_CONF_OPTS = \
++	--disable-ocamltools \
++	--with-initddir=/etc/init.d
+ 
+ XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python2
+ XEN_MAKE_ENV = \
