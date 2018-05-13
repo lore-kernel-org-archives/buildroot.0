@@ -1,20 +1,20 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 21:07:35 +0200
-Subject: [Buildroot] [PATCH 6/8] ti-sgx-km: rename options to have proper
+Date: Sun, 13 May 2018 21:07:33 +0200
+Subject: [Buildroot] [PATCH 4/8] ipsec-tools: rename options to have proper
  prefix
 In-Reply-To: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
 References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180513190737.26079-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20180513190737.26079-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sub-options of the ti-sgx-km package had their name option
-prefixed by BR2_PACKAGE_TI_SGX, while the prefix should be
-BR2_PACKAGE_TI_SGX_KM. This commit fixes that, and adds the necessary
-Config.in.legacy handling.
+A number of options in the ipsec-tools package had their Config.in
+option prefixed by BR2_PACKAGE_IPSEC, while the prefix should be
+BR2_PACKAGE_IPSEC_TOOLS. This commit fixes that, and adds the
+necessary Config.in.legacy handling.
 
 Since those options are part of a choice, the legacy handling cannot
 select the new name of the options, so the legacy handling only
@@ -22,110 +22,91 @@ informs the user of the rename.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy               | 32 ++++++++++++++++++++++++++++++++
- package/ti-sgx-km/Config.in    | 10 +++++-----
- package/ti-sgx-km/ti-sgx-km.mk |  8 ++++----
- 3 files changed, 41 insertions(+), 9 deletions(-)
+ Config.in.legacy                   | 24 ++++++++++++++++++++++++
+ package/ipsec-tools/Config.in      |  8 ++++----
+ package/ipsec-tools/ipsec-tools.mk |  6 +++---
+ 3 files changed, 31 insertions(+), 7 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 981306f469..5cf25463ad 100644
+index 72563031ce..314e0578d8 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -145,6 +145,38 @@ endif
+@@ -145,6 +145,30 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2018.05"
  
-+config BR2_PACKAGE_TI_SGX_AM335X
-+	bool "ti-sgx-km AM335X option renamed"
++config BR2_PACKAGE_IPSEC_SECCTX_DISABLE
++	bool "ipsec-tools security context disable option renamed"
 +	select BR2_LEGACY
 +	help
 +	  For consistency reasons, the option
-+	  BR2_PACKAGE_TI_SGX_AM335X has been renamed to
-+	  BR2_PACKAGE_TI_SGX_KM_AM335X.
++	  BR2_PACKAGE_IPSEC_SECCTX_DISABLE was renamed to
++	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE.
 +
-+config BR2_PACKAGE_TI_SGX_AM437X
-+	bool "ti-sgx-km AM437X option renamed"
++config BR2_PACKAGE_IPSEC_SECCTX_ENABLE
++	bool "ipsec-tools SELinux security context enable option renamed"
 +	select BR2_LEGACY
 +	help
 +	  For consistency reasons, the option
-+	  BR2_PACKAGE_TI_SGX_AM437X has been renamed to
-+	  BR2_PACKAGE_TI_SGX_KM_AM437X.
++	  BR2_PACKAGE_IPSEC_SECCTX_ENABLE was renamed to
++	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE.
 +
-+config BR2_PACKAGE_TI_SGX_AM4430
-+	bool "ti-sgx-km AM4430 option renamed"
++config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
++	bool "ipsec-tools kernel security context enable option renamed"
 +	select BR2_LEGACY
 +	help
 +	  For consistency reasons, the option
-+	  BR2_PACKAGE_TI_SGX_AM4430 has been renamed to
-+	  BR2_PACKAGE_TI_SGX_KM_AM4430.
++	  BR2_PACKAGE_IPSEC_SECCTX_KERNEL was renamed to
++	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL.
 +
-+config BR2_PACKAGE_TI_SGX_AM5430
-+	bool "ti-sgx-km AM5430 option renamed"
-+	select BR2_LEGACY
-+	help
-+	  For consistency reasons, the option
-+	  BR2_PACKAGE_TI_SGX_AM5430 has been renamed to
-+	  BR2_PACKAGE_TI_SGX_KM_AM5430.
-+
- config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
- 	bool "janus-gateway audio-bridge option renamed"
+ config BR2_PACKAGE_LIBTFDI_CPP
+ 	bool "libftdi C++ bindings option renamed"
  	select BR2_LEGACY
-diff --git a/package/ti-sgx-km/Config.in b/package/ti-sgx-km/Config.in
-index a4c9bb8ca2..db3d3f9ddd 100644
---- a/package/ti-sgx-km/Config.in
-+++ b/package/ti-sgx-km/Config.in
-@@ -20,26 +20,26 @@ if BR2_PACKAGE_TI_SGX_KM
+diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
+index 1635675a36..59154123e6 100644
+--- a/package/ipsec-tools/Config.in
++++ b/package/ipsec-tools/Config.in
+@@ -57,17 +57,17 @@ config BR2_PACKAGE_IPSEC_TOOLS_HYBRID
  
  choice
- 	prompt "Target"
--	default BR2_PACKAGE_TI_SGX_AM335X
-+	default BR2_PACKAGE_TI_SGX_KM_AM335X
+ 	prompt "Security context"
+-	default BR2_PACKAGE_IPSEC_SECCTX_DISABLE
++	default BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE
  	help
- 	  Select the SOC for which you would like to install drivers.
+ 	  Selects whether or not to enable security context support.
  
--config BR2_PACKAGE_TI_SGX_AM335X
-+config BR2_PACKAGE_TI_SGX_KM_AM335X
- 	bool "AM335x"
- 	help
- 	  AM335x CPU
+-config BR2_PACKAGE_IPSEC_SECCTX_DISABLE
++config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE
+ 	bool "Disable security context support"
  
--config BR2_PACKAGE_TI_SGX_AM437X
-+config BR2_PACKAGE_TI_SGX_KM_AM437X
- 	bool "AM437x"
- 	help
- 	  AM437x CPU
+-config BR2_PACKAGE_IPSEC_SECCTX_ENABLE
++config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE
+ 	bool "Enable SELinux security context support"
  
--config BR2_PACKAGE_TI_SGX_AM4430
-+config BR2_PACKAGE_TI_SGX_KM_AM4430
- 	bool "AM4430"
- 	help
- 	  AM4430 CPU
+-config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
++config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL
+ 	bool "Enable kernel security context"
  
--config BR2_PACKAGE_TI_SGX_AM5430
-+config BR2_PACKAGE_TI_SGX_KM_AM5430
- 	bool "AM5430"
- 	help
- 	  AM5430 CPU
-diff --git a/package/ti-sgx-km/ti-sgx-km.mk b/package/ti-sgx-km/ti-sgx-km.mk
-index db74da9b4a..0e1bc33902 100644
---- a/package/ti-sgx-km/ti-sgx-km.mk
-+++ b/package/ti-sgx-km/ti-sgx-km.mk
-@@ -17,13 +17,13 @@ TI_SGX_KM_MAKE_OPTS = \
- 	KERNELDIR=$(LINUX_DIR) \
- 	PVR_NULLDRM=1
+ endchoice
+diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+index c0b180de55..ddae9a75f3 100644
+--- a/package/ipsec-tools/ipsec-tools.mk
++++ b/package/ipsec-tools/ipsec-tools.mk
+@@ -68,13 +68,13 @@ else
+ IPSEC_TOOLS_CONF_OPTS += --disable-hybrid
+ endif
  
--ifeq ($(BR2_PACKAGE_TI_SGX_AM335X),y)
-+ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM335X),y)
- TI_SGX_KM_PLATFORM_NAME = omap335x
--else ifeq ($(BR2_PACKAGE_TI_SGX_AM437X),y)
-+else ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM437X),y)
- TI_SGX_KM_PLATFORM_NAME = omap437x
--else ifeq ($(BR2_PACKAGE_TI_SGX_AM4430),y)
-+else ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM4430),y)
- TI_SGX_KM_PLATFORM_NAME = omap4430
--else ifeq ($(BR2_PACKAGE_TI_SGX_5430),y)
-+else ifeq ($(BR2_PACKAGE_TI_SGX_KM_5430),y)
- TI_SGX_KM_PLATFORM_NAME = omap5430
+-ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_DISABLE),y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-security-context=no
+ endif
+-ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_ENABLE),y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-security-context=yes
+ endif
+-ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_KERNEL),y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-security-context=kernel
  endif
  
 -- 
