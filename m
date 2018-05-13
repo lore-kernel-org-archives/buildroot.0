@@ -1,34 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 21:46:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/znc: python support depends on
- icu
-In-Reply-To: <20180509172553.856-1-bernd.kuhls@t-online.de>
-References: <20180509172553.856-1-bernd.kuhls@t-online.de>
-Message-ID: <20180513214652.23a36fff@windsurf.home>
+Date: Sun, 13 May 2018 21:47:30 +0200
+Subject: [Buildroot] [git commit] package/jamvm: move arch dependency to a
+ symbol
+Message-ID: <20180513194657.BD9918C9A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=04d185bfc718c6e1739cf4a7d8f3f0d45df0385a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  9 May 2018 19:25:53 +0200, Bernd Kuhls wrote:
-> Upstream checks for icu when build with python support:
-> https://github.com/znc/znc/commit/4fe4a45dd62411ba9ede04750ca44f071e7d6cbb
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/9e4/9e44159820789f1d25efcbd24318b0e05e132371/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/znc/znc.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/jamvm/Config.in | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+index 57e1a8e6f4..51d5da03b8 100644
+--- a/package/jamvm/Config.in
++++ b/package/jamvm/Config.in
+@@ -1,10 +1,16 @@
++config BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_mips || BR2_mipsel
++	default y if BR2_powerpc
++
+ config BR2_PACKAGE_JAMVM
+ 	bool "jamvm"
++	depends on BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+-		|| BR2_mips || BR2_mipsel || BR2_powerpc
+-	depends on BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_CLASSPATH
+ 	help
+@@ -14,7 +20,6 @@ config BR2_PACKAGE_JAMVM
+ 	  http://jamvm.sf.net
+ 
+ comment "jamvm needs a toolchain w/ threads, dynamic library"
+-	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+-		|| BR2_mips || BR2_mipsel || BR2_powerpc
++	depends on BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
