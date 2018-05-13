@@ -1,47 +1,71 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 13 May 2018 20:59:45 +0200
-Subject: [Buildroot] [PATCH] libkrb5: disable rpath
-In-Reply-To: <2d3716532e37e7fd57c930fcca6e4656ec7fa649.1526236679.git.baruch@tkos.co.il>
-References: <2d3716532e37e7fd57c930fcca6e4656ec7fa649.1526236679.git.baruch@tkos.co.il>
-Message-ID: <88c0c62f-cb6c-4dcc-2b0c-b5b450b21142@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 13 May 2018 21:07:32 +0200
+Subject: [Buildroot] [PATCH 3/8] libftdi: rename option to have proper prefix
+In-Reply-To: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
+References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180513190737.26079-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 13.05.2018 um 20:37 schrieb Baruch Siach:
-> The default rpath value for krb5 is /usr/lib. On some hosts this might
-> confuse the build time linker as it looks for target libraries in the
-> host /usr/lib directory.
-> 
-> Should fix:
-> http://autobuild.buildroot.net/results/6df/6df84ed325ddd92248741d2f4737423b1b999489/
-> http://autobuild.buildroot.net/results/049/049f5147288b418402b6e5a4181eff4d426c8d7a/
-> http://autobuild.buildroot.net/results/432/432d5d0295f77cd34b78e70e8b4b7d77ef19ae3c/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libkrb5/libkrb5.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-> index c40be632786b..d9d7160ae8d5 100644
-> --- a/package/libkrb5/libkrb5.mk
-> +++ b/package/libkrb5/libkrb5.mk
-> @@ -28,7 +28,8 @@ LIBKRB5_CONF_OPTS = \
->  	--without-system-et \
->  	--without-system-ss \
->  	--without-system-verto \
-> -	--without-tcl
-> +	--without-tcl \
-> +	--disable-rpath
->  
->  ifeq ($(BR2_PACKAGE_OPENLDAP),y)
->  LIBKRB5_CONF_OPTS += --with-ldap
-> 
+The option name BR2_PACKAGE_LIBTFDI_CPP obviously had a typo: it
+should have been named BR2_PACKAGE_LIBFTDI_CPP, and add the necessary
+Config.in.legacy handling.
 
-Thank you!
-Sorry for not catching those myself, I just had no clue what was going on here and with the other failures.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy           | 9 +++++++++
+ package/libftdi/Config.in  | 2 +-
+ package/libftdi/libftdi.mk | 2 +-
+ 3 files changed, 11 insertions(+), 2 deletions(-)
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 4283888c72..72563031ce 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,15 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2018.05"
+ 
++config BR2_PACKAGE_LIBTFDI_CPP
++	bool "libftdi C++ bindings option renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LIBFTDI_CPP
++	help
++	  The option BR2_PACKAGE_LIBTFDI_CPP was renamed to
++	  BR2_PACKAGE_LIBFTDI_CPP in order to fix a typo in the option
++	  name.
++
+ config BR2_PACKAGE_JQUERY_UI_THEME_BLACK_TIE
+ 	bool "jquery-ui-themes option black-tie renamed"
+ 	select BR2_LEGACY
+diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
+index beb42d34c5..23dae1be1f 100644
+--- a/package/libftdi/Config.in
++++ b/package/libftdi/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_LIBFTDI
+ 
+ if BR2_PACKAGE_LIBFTDI
+ 
+-config BR2_PACKAGE_LIBTFDI_CPP
++config BR2_PACKAGE_LIBFTDI_CPP
+ 	bool "C++ bindings"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
+index c1952ac68b..cdd77c2e68 100644
+--- a/package/libftdi/libftdi.mk
++++ b/package/libftdi/libftdi.mk
+@@ -15,7 +15,7 @@ LIBFTDI_AUTORECONF = YES
+ LIBFTDI_CONF_OPTS = --without-examples
+ 
+ # configure detect it automaticaly so we need to force it
+-ifeq ($(BR2_PACKAGE_LIBTFDI_CPP),y)
++ifeq ($(BR2_PACKAGE_LIBFTDI_CPP),y)
+ LIBFTDI_DEPENDENCIES += boost
+ LIBFTDI_CONF_OPTS += --enable-libftdipp
+ else
+-- 
+2.14.3
