@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 22:27:13 +0200
-Subject: [Buildroot] [PATCH] wget: security bump to version 1.19.5
-In-Reply-To: <e453953371b3ff38359cb895d57bab0fd078f6c1.1525794182.git.baruch@tkos.co.il>
-References: <e453953371b3ff38359cb895d57bab0fd078f6c1.1525794182.git.baruch@tkos.co.il>
-Message-ID: <20180513222713.33bf79f9@windsurf.home>
+Date: Sun, 13 May 2018 22:28:13 +0200
+Subject: [Buildroot] [PATCH] lynx: add patch to fix static link issue
+In-Reply-To: <20180507200617.2527-1-thomas.petazzoni@bootlin.com>
+References: <20180507200617.2527-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180513222813.1c9ec3d4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  8 May 2018 18:43:02 +0300, Baruch Siach wrote:
-> Fixes CVE-2018-0494: cookie injection vulnerability.
+On Mon,  7 May 2018 22:06:17 +0200, Thomas Petazzoni wrote:
+> The lynx package incorrectly uses target LDFLAGS to build a host tool,
+> which causes a problem when we do a statically link build for the
+> target, on a host machine that doesn't support static linking.
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> A simple patch fixes the problematic makefile, and it has been
+> submitted upstream on the project mailing list.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/38ba2531eeeb4a7985eddd2df8bfaf0b56e6a687/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/wget/wget.hash | 4 ++--
->  package/wget/wget.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...s-don-t-build-host-tools-with-target-LDFL.patch | 41 ++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch
 
 Applied to master, thanks.
 
