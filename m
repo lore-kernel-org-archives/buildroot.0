@@ -1,46 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 21:47:34 +0200
-Subject: [Buildroot] [git commit] package/jamvm: restrict on what MIPS procs
- are allowed
-Message-ID: <20180513194657.C4D6A8C9A0@busybox.osuosl.org>
+Date: Sun, 13 May 2018 21:48:29 +0200
+Subject: [Buildroot] [PATCH 0/2] package/jamvm: fix build on MIPS
+In-Reply-To: <cover.1526207669.git.yann.morin.1998@free.fr>
+References: <cover.1526207669.git.yann.morin.1998@free.fr>
+Message-ID: <20180513214829.3572c662@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67974fe6da0dc346ad40f6b7d373a05aa0b1e1f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-jamvm uses deprecated opcodes to store/load words from the FPU
-coprocessor registers, and in so doing, expects those registers
-to be 32-bit.
+On Sun, 13 May 2018 12:34:35 +0200, Yann E. MORIN wrote:
 
-Thus, restrict the conditions under which jamvm is available
-under mips.
+> Yann E. MORIN (2):
+>       package/jamvm: move arch dependency to a symbol
+>       package/jamvm: restrict on what MIPS procs are allowed
 
-Fixes:
-    http://autobuild.buildroot.org/results/f76/f76e10e4c1ce25b42fb2e5d2012adf2eaf1b2fe1/
-    http://autobuild.buildroot.org/results/162/162d0e41dc9bc6d6f6594ccee0cb4217067fc71f/
-    ...
+Thanks, series applied to master. To be honest, I don't fully
+understand the MIPS details, but since we no longer have anyone really
+taking care of this architecture, it's not a big deal if we exclude too
+many MIPS variants. They can always be re-enabled later when/if someone
+complains.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/jamvm/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks!
 
-diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
-index 51d5da03b8..7717ccaadb 100644
---- a/package/jamvm/Config.in
-+++ b/package/jamvm/Config.in
-@@ -2,7 +2,8 @@ config BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_arm || BR2_armeb
- 	default y if BR2_i386 || BR2_x86_64
--	default y if BR2_mips || BR2_mipsel
-+	default y if (BR2_mips || BR2_mipsel) \
-+		&& (BR2_MIPS_FP32_MODE_32 || BR2_MIPS_SOFT_FLOAT)
- 	default y if BR2_powerpc
- 
- config BR2_PACKAGE_JAMVM
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
