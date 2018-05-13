@@ -1,86 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 23:00:56 +0200
-Subject: [Buildroot] [git commit branch/next] cifs-utils: bump to version 6.8
-Message-ID: <20180513210022.B33F58D2FD@busybox.osuosl.org>
+Date: Sun, 13 May 2018 23:01:13 +0200
+Subject: [Buildroot] [PATCH 2/2] zstd: bump to version 1.3.4
+In-Reply-To: <c4d659d810a4d47b42546d74a013f01ac7f62cba.1525803977.git.baruch@tkos.co.il>
+References: <d9cdc06bb6718534ed51a927f7adeab442a4e110.1525803977.git.baruch@tkos.co.il>
+ <c4d659d810a4d47b42546d74a013f01ac7f62cba.1525803977.git.baruch@tkos.co.il>
+Message-ID: <20180513230113.63ac3fd2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ff41f264cb1858b3f530b1e079d4858c04a1295
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-- Remove patch (already in version)
-- Add hash for license file
+On Tue,  8 May 2018 21:26:17 +0300, Baruch Siach wrote:
+> Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/zstd/zstd.hash | 2 +-
+>  package/zstd/zstd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...001-mount.cifs-Remove-data_blob.h-include.patch | 32 ----------------------
- package/cifs-utils/cifs-utils.hash                 |  5 +++-
- package/cifs-utils/cifs-utils.mk                   |  2 +-
- 3 files changed, 5 insertions(+), 34 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch b/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch
-deleted file mode 100644
-index 6536076577..0000000000
---- a/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 272d523a57a4e8791d625a479128613be5e401f5 Mon Sep 17 00:00:00 2001
--From: Thomas Witt <pyromaniac@exherbo.org>
--Date: Wed, 15 Mar 2017 20:20:44 +0000
--Subject: [PATCH] mount.cifs: Remove data_blob.h include
--
--data_blob.h includes talloc.h from libtalloc, but that is only marked as
--a dependency for cifs.upcall. No symbols from that header are used by
--cifs.mount, so remove it to avoid the libtalloc dependency
--
--Signed-off-by: Thomas Witt <pyromaniac@exherbo.org>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream commit 272d523a57a4
--
-- mount.cifs.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/mount.cifs.c b/mount.cifs.c
--index 13b71ef50303..2612feb4d591 100644
----- a/mount.cifs.c
--+++ b/mount.cifs.c
--@@ -61,7 +61,6 @@
-- #include "mount.h"
-- #include "util.h"
-- #include "resolve_host.h"
---#include "data_blob.h"
-- 
-- #ifndef MS_MOVE 
-- #define MS_MOVE 8192 
---- 
--2.11.0
--
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index ebc9c43e72..fda1573eeb 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	b2f21612474ab012e75accd167aab607a0614ff67efb56ea0f36789fa785cfab	cifs-utils-6.7.tar.bz2
-+sha256	e7d1f6050c43f21f82cd77e288eb756755effd22f0c310fc2c525df9d41dff79	cifs-utils-6.8.tar.bz2
-+
-+# Hash for license file:
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 9044fdf83c..199e8422d5 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CIFS_UTILS_VERSION = 6.7
-+CIFS_UTILS_VERSION = 6.8
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
