@@ -1,40 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 21:46:41 +0200
-Subject: [Buildroot] [git commit] package/znc: python support depends on icu
-Message-ID: <20180513194600.7EA57835F9@busybox.osuosl.org>
+Date: Sun, 13 May 2018 21:46:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/znc: python support depends on
+ icu
+In-Reply-To: <20180509172553.856-1-bernd.kuhls@t-online.de>
+References: <20180509172553.856-1-bernd.kuhls@t-online.de>
+Message-ID: <20180513214652.23a36fff@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f095a5318bb8c33d4435b5727283eb64d539e4c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Upstream checks for icu when build with python support:
-https://github.com/znc/znc/commit/4fe4a45dd62411ba9ede04750ca44f071e7d6cbb
+On Wed,  9 May 2018 19:25:53 +0200, Bernd Kuhls wrote:
+> Upstream checks for icu when build with python support:
+> https://github.com/znc/znc/commit/4fe4a45dd62411ba9ede04750ca44f071e7d6cbb
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/9e4/9e44159820789f1d25efcbd24318b0e05e132371/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/znc/znc.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Fixes
-http://autobuild.buildroot.net/results/9e4/9e44159820789f1d25efcbd24318b0e05e132371/
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/znc/znc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 33ac266dd3..2a04c66377 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -32,7 +32,8 @@ else
- ZNC_CONF_OPTS += --disable-zlib
- endif
- 
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+# python support depends on icu
-+ifeq ($(BR2_PACKAGE_ICU)$(BR2_PACKAGE_PYTHON3),yy)
- ZNC_DEPENDENCIES += python3 host-swig
- ZNC_CONF_OPTS += --enable-python=python3
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
