@@ -1,87 +1,162 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 May 2018 22:43:23 +0200
-Subject: [Buildroot] [git commit branch/next] gqrx: bump to version 2.11.4
-Message-ID: <20180513204316.1B0548C9A2@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 May 2018 22:44:16 +0200
+Subject: [Buildroot] [PATCH 1/2] clamav: reformat patches as
+ Git-formatted patches
+In-Reply-To: <20180507212031.31337-1-thomas.petazzoni@bootlin.com>
+References: <20180507212031.31337-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180513204416.GN22130@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd82d624b5b92a330ccbcfa1131ae0ea7ab9c9d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Thomas, All,
 
-Add hashes for license files, and drop the patch that was a backport
-from an upstream commit.
+On 2018-05-07 23:20 +0200, Thomas Petazzoni spake thusly:
+> ClamAV is using Git upstream
+> (https://github.com/Cisco-Talos/clamav-devel), so it makes sense to
+> use Git-formatted patches.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 ------------------------
- package/gqrx/gqrx.hash                           |  4 ++-
- package/gqrx/gqrx.mk                             |  2 +-
- 3 files changed, 4 insertions(+), 36 deletions(-)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-deleted file mode 100644
-index 22ec1effe9..0000000000
---- a/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
--From: Valentin Ochs <a@0au.de>
--Date: Fri, 21 Oct 2016 20:12:50 +0200
--Subject: [PATCH] Cosmetic & readability changes
--
--Backport patch from
--https://github.com/csete/gqrx/commit/e6baaee4968345a53e977f593362267a91041cff
--
--Fix compilation in gcc-6
--
--Signed-off-by: Valentin Ochs <a@0au.de>
--Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-----
--diff --git a/src/qtgui/plotter.cpp b/src/qtgui/plotter.cpp
--index e491632..b877546 100644
----- a/src/qtgui/plotter.cpp
--+++ b/src/qtgui/plotter.cpp
--@@ -1336,8 +1336,11 @@ void CPlotter::drawOverlay()
-- #endif
-- 
--             int level = 0;
---            for (; level < nLevels && tagEnd[level] > x; level++);
---                level %= nLevels;
--+            while(level < nLevels && tagEnd[level] > x)
--+                level++;
--+            
--+            if(level == nLevels)
--+                level = 0;
-- 
--             tagEnd[level] = x + nameWidth + slant - 1;
--             m_BookmarkTags.append(qMakePair<QRect, qint64>(QRect(x, level * levelHeight, nameWidth + slant, fontHeight), bookmarks[i].frequency));
---- 
--2.10.2
--
-diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-index bb52a616d7..7c1fc9852f 100644
---- a/package/gqrx/gqrx.hash
-+++ b/package/gqrx/gqrx.hash
-@@ -1,2 +1,4 @@
- # Locally calculated:
--sha256 2736a963dac4051ca8ae91a440ee6643ef7d26c9de5b9c83a369d5fc9328d453  gqrx-v2.6.1.tar.gz
-+sha256 c4e836c552dc99bf383ca84b2ddc0c67e3d05b073676318e2a011bcd463303ef  gqrx-v2.11.4.tar.gz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256 7cc22ce5ee61df62e427ec43b8130de149edee3cafb5af4f18d59b6dc3958faf  LICENSE-CTK
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-index 2a7651c252..b51bb23eaf 100644
---- a/package/gqrx/gqrx.mk
-+++ b/package/gqrx/gqrx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GQRX_VERSION = v2.6.1
-+GQRX_VERSION = v2.11.4
- GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
- GQRX_LICENSE = GPL-3.0+, Apache-2.0
- GQRX_LICENSE_FILES = COPYING LICENSE-CTK
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...roto.c-fix-build-error-due-to-missing-soc.patch | 34 ++++++++++++++++++++++
+>  package/clamav/0001-clamdscan.patch                | 21 -------------
+>  ...use-backtrace-if-using-uClibc-without-ba.patch} | 22 ++++++++++----
+>  3 files changed, 51 insertions(+), 26 deletions(-)
+>  create mode 100644 package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
+>  delete mode 100644 package/clamav/0001-clamdscan.patch
+>  rename package/clamav/{0002-backtrace-uClibc.patch => 0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch} (53%)
+> 
+> diff --git a/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch b/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
+> new file mode 100644
+> index 0000000000..daac677eaa
+> --- /dev/null
+> +++ b/package/clamav/0001-clamdscan-proto.c-fix-build-error-due-to-missing-soc.patch
+> @@ -0,0 +1,34 @@
+> +From 52fda6e6689e22866a39ec4273713fb6035c38b2 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Mon, 7 May 2018 23:14:46 +0200
+> +Subject: [PATCH] clamdscan/proto.c: fix build error due to missing sockaddr_un
+> + definition
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +proto.c: In function ?dconnect?:
+> +proto.c:86:67: error: invalid application of ?sizeof? to incomplete type ?struct sockaddr_un?
+> +             if (connect(sockd, (struct sockaddr *)&nixsock, sizeof(nixsock)) == 0)
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Upstream-status: http://lurker.clamav.net/message/20140928.130829.5494fd68.en.html
+> +---
+> + clamdscan/proto.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/clamdscan/proto.c b/clamdscan/proto.c
+> +index 0205f6da0..d3396732f 100644
+> +--- a/clamdscan/proto.c
+> ++++ b/clamdscan/proto.c
+> +@@ -42,6 +42,7 @@
+> + #include <sys/stat.h>
+> + #include <fcntl.h>
+> + #include <sys/types.h>
+> ++#include <sys/un.h>
+> + #ifdef HAVE_SYS_SELECT_H
+> + #include <sys/select.h>
+> + #endif
+> +-- 
+> +2.14.3
+> +
+> diff --git a/package/clamav/0001-clamdscan.patch b/package/clamav/0001-clamdscan.patch
+> deleted file mode 100644
+> index c395ae1600..0000000000
+> --- a/package/clamav/0001-clamdscan.patch
+> +++ /dev/null
+> @@ -1,21 +0,0 @@
+> -Fixes build error
+> -
+> -proto.c: In function ?dconnect?:
+> -proto.c:86:67: error: invalid application of ?sizeof? to incomplete type ?struct sockaddr_un?
+> -             if (connect(sockd, (struct sockaddr *)&nixsock, sizeof(nixsock)) == 0)
+> -
+> -Patch sent upstream: http://lurker.clamav.net/message/20140928.130829.5494fd68.en.html
+> -
+> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> -
+> -diff -uNr clamav-0.98.3.org/clamdscan/proto.c clamav-0.98.3/clamdscan/proto.c
+> ---- clamav-0.98.3.org/clamdscan/proto.c	2014-05-06 20:39:56.000000000 +0200
+> -+++ clamav-0.98.3/clamdscan/proto.c	2014-05-10 10:41:44.000000000 +0200
+> -@@ -35,6 +35,7 @@
+> - #include <sys/stat.h>
+> - #include <fcntl.h>
+> - #include <sys/types.h>
+> -+#include <sys/un.h>
+> - #ifdef HAVE_SYS_SELECT_H
+> - #include <sys/select.h>
+> - #endif
+> diff --git a/package/clamav/0002-backtrace-uClibc.patch b/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+> similarity index 53%
+> rename from package/clamav/0002-backtrace-uClibc.patch
+> rename to package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+> index 82ad67307d..e99a9742ec 100644
+> --- a/package/clamav/0002-backtrace-uClibc.patch
+> +++ b/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+> @@ -1,4 +1,8 @@
+> -mbox: do not use backtrace if using uClibc without backtrace support
+> +From 053bac34b9f0f947c58fcdf80ac03d5a6b05aa12 Mon Sep 17 00:00:00 2001
+> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +Date: Mon, 7 May 2018 23:15:58 +0200
+> +Subject: [PATCH] mbox: do not use backtrace if using uClibc without backtrace
+> + support
+>  
+>  Since uClibc can be configured without support for backtrace, disable
+>  the backtrace if we are building with a uClibc that was built without
+> @@ -8,10 +12,15 @@ This is a bit hacky, and would greatly benefit from a test in ./configure
+>  instead, but does nicely as a quick fix for now.
+>  
+>  Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> -diff -durN clamav-0.98.4.orig/libclamav/mbox.c clamav-0.98.4/libclamav/mbox.c
+> ---- clamav-0.98.4.orig/libclamav/mbox.c	2014-05-21 17:25:05.000000000 +0200
+> -+++ clamav-0.98.4/libclamav/mbox.c	2014-11-16 17:21:04.885383286 +0100
+> -@@ -83,7 +83,7 @@
+> +---
+> + libclamav/mbox.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/libclamav/mbox.c b/libclamav/mbox.c
+> +index 71f540c0a..4851297a9 100644
+> +--- a/libclamav/mbox.c
+> ++++ b/libclamav/mbox.c
+> +@@ -98,7 +98,7 @@
+>   #include <features.h>
+>   #endif
+>   
+> @@ -20,3 +29,6 @@ diff -durN clamav-0.98.4.orig/libclamav/mbox.c clamav-0.98.4/libclamav/mbox.c
+>   #define HAVE_BACKTRACE
+>   #endif
+>   #endif
+> +-- 
+> +2.14.3
+> +
+> -- 
+> 2.14.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
