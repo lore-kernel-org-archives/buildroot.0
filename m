@@ -1,85 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 14 May 2018 08:25:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/asterisk: Fix issues building
- without SSL
-Message-ID: <20180514062519.655-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 14 May 2018 08:57:06 +0200
+Subject: [Buildroot] [PATCH 1/2] modem-manager: fix test of unset
+ variable in init script
+In-Reply-To: <eb2e030a-c7de-60e5-b92f-4c0eb02742f1@mind.be>
+References: <20180413162521.7078-1-casantos@datacom.ind.br>
+ <20180413162521.7078-2-casantos@datacom.ind.br>
+ <20180414180725.4964d59d@windsurf>
+ <650761555.1610.1523806309320.JavaMail.zimbra@datacom.ind.br>
+ <20180415201808.013e84f3@windsurf.numericable.fr>
+ <20180415185828.GD21958@scaer>
+ <1990213039.2807.1523823774902.JavaMail.zimbra@datacom.ind.br>
+ <eb2e030a-c7de-60e5-b92f-4c0eb02742f1@mind.be>
+Message-ID: <20180514085706.086830e9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/7d0/7d069dd5629e406cecd17bacfa818e7c8e6b2064/
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...006-build-fix-issues-building-without-ssl.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/asterisk/0006-build-fix-issues-building-without-ssl.patch
+On Mon, 16 Apr 2018 17:53:25 +0200, Arnout Vandecappelle wrote:
 
-diff --git a/package/asterisk/0006-build-fix-issues-building-without-ssl.patch b/package/asterisk/0006-build-fix-issues-building-without-ssl.patch
-new file mode 100644
-index 0000000000..b02031e5ab
---- /dev/null
-+++ b/package/asterisk/0006-build-fix-issues-building-without-ssl.patch
-@@ -0,0 +1,57 @@
-+From 999e0c17d7e4139d36730752a34fbfde18a4f9f1 Mon Sep 17 00:00:00 2001
-+From: Corey Farrell <git@cfware.com>
-+Date: Sun, 19 Nov 2017 14:52:59 -0500
-+Subject: [PATCH] Build: Fix issues building without SSL.
-+
-+* Fix conditional in libasteriskssl.
-+* Use variables produced by configure to link the SSL and uuid libraries
-+  into libasteriskpj.so instead of hard-coding them.
-+
-+ASTERISK-27431
-+
-+Change-Id: I3977931fd3ef8c4e4376349ccddb354eb839b58d
-+
-+Downloaded from upstream master branch
-+https://github.com/asterisk/asterisk/commit/999e0c17d7e4139d36730752a34fbfde18a4f9f1
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ main/Makefile         | 4 ++--
-+ main/libasteriskssl.c | 2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/main/Makefile b/main/Makefile
-+index 08d1f65580e..c724e2012b0 100644
-+--- a/main/Makefile
-++++ b/main/Makefile
-+@@ -273,7 +273,7 @@ endif
-+ 
-+ $(ASTPJ_LIB).$(ASTPJ_SO_VERSION): _ASTLDFLAGS+=-Wl,-soname=$(ASTPJ_LIB).$(ASTPJ_SO_VERSION) $(PJ_LDFLAGS)
-+ $(ASTPJ_LIB).$(ASTPJ_SO_VERSION): _ASTCFLAGS+=-fPIC -DAST_MODULE=\"asteriskpj\" -DAST_NOT_MODULE $(PJ_CFLAGS)
-+-$(ASTPJ_LIB).$(ASTPJ_SO_VERSION): LIBS+=$(PJPROJECT_LDLIBS) -lssl -lcrypto -luuid -lm -lpthread $(RT_LIB)
-++$(ASTPJ_LIB).$(ASTPJ_SO_VERSION): LIBS+=$(PJPROJECT_LDLIBS) $(OPENSSL_LIB) $(UUID_LIB) -lm -lpthread $(RT_LIB)
-+ ifeq ($(GNU_LD),1)
-+     $(ASTPJ_LIB).$(ASTPJ_SO_VERSION): SO_SUPPRESS_SYMBOLS=-Wl,--version-script,libasteriskpj.exports,--warn-common
-+ endif
-+@@ -298,7 +298,7 @@ ASTPJ_LIB:=libasteriskpj.dylib
-+ # /lib or /usr/lib
-+ $(ASTPJ_LIB): _ASTLDFLAGS+=-dynamiclib -install_name $(ASTLIBDIR)/$(ASTPJ_LIB) $(PJ_LDFLAGS)
-+ $(ASTPJ_LIB): _ASTCFLAGS+=-fPIC -DAST_MODULE=\"asteriskpj\" $(PJ_CFLAGS) -DAST_NOT_MODULE
-+-$(ASTPJ_LIB): LIBS+=$(PJPROJECT_LIBS)  -lssl -lcrypto -luuid -lm -lpthread $(RT_LIB)
-++$(ASTPJ_LIB): LIBS+=$(PJPROJECT_LIBS)  $(OPENSSL_LIB) $(UUID_LIB) -lm -lpthread $(RT_LIB)
-+ $(ASTPJ_LIB): SOLINK=$(DYLINK)
-+ 
-+ # Special rules for building a shared library (not a dynamically loadable module)
-+diff --git a/main/libasteriskssl.c b/main/libasteriskssl.c
-+index 8b19e247da9..e2e256f8ffe 100644
-+--- a/main/libasteriskssl.c
-++++ b/main/libasteriskssl.c
-+@@ -37,7 +37,7 @@
-+ #endif
-+ 
-+ #if defined(HAVE_OPENSSL) && \
-+-	!defined(OPENSSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-++	(!defined(OPENSSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER))
-+ 
-+ #include <dlfcn.h>
-+ 
+> > So I will prepare a series removing the tests from the startup scripts.  
+> 
+>  Well, part of the position we already stated a few times in the past is that we
+> should make our sysvinit scripts conform to a pattern. So I think the optimal
+> approach is:
+> 
+> 1. Update the sysvinit scripts of one or two packages to conform to this
+> pattern. Note that we have not really discussed the actual pattern, just a few
+> preferences (e.g. don't test for the existence of the daemon). So it is
+> important to update only one or two scripts so we can get convergence on the
+> desired pattern, before updating many more packages.
+> 
+> 2. Document this pattern in the manual. For me, it would be sufficient to refer
+> to an existing sysvinit script rather than repeating it in the manual.
+> 
+> 3. Update more packages.
+> 
+> 4. Add some support to check-package to identify common mistakes in the pattern.
+
+Agreed on this plan.
+
+Anybody interested in this effort ?
+
+Best regards,
+
+Thomas
 -- 
-2.14.2
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
