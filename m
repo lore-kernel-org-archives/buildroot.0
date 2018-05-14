@@ -1,36 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 14 May 2018 06:23:56 +0300
-Subject: [Buildroot] [PATCH] skeleton: create include/ directory
-Message-ID: <9873d2e0023b87545478d0615eb5d97bcbd82c2c.1526268236.git.baruch@tkos.co.il>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 14 May 2018 01:00:02 -0300
+Subject: [Buildroot] [PATCH 5/8] janus-gateway: rename options to have
+ proper prefix
+References: <20180513190737.26079-6-thomas.petazzoni@bootlin.com>
+Message-ID: <5af909c299d5_3efa3fd79e064b8074891@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't rely on a random host package to create the include/ directory for
-us. Some packages do the wrong thing since they implicitly assume that
-this directory exists already. Commit a557aedad2 (zstd: fix host headers
-installation) shows an example of that.
+Hello,
 
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/skeleton/skeleton.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, May 13, 2018 at 04:07 PM, Thomas Petazzoni wrote:
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index efcf420d7243..9d97f02f08bf 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -16,6 +16,7 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
- define HOST_SKELETON_INSTALL_CMDS
- 	$(Q)ln -snf . $(HOST_DIR)/usr
- 	$(Q)mkdir -p $(HOST_DIR)/lib
-+	$(Q)mkdir -p $(HOST_DIR)/include
- 	$(Q)case $(HOSTARCH) in \
- 		(*64) ln -snf lib $(HOST_DIR)/lib64;; \
- 		(*)   ln -snf lib $(HOST_DIR)/lib32;; \
--- 
-2.17.0
+> -config  BR2_PACKAGE_JANUS_STREAMING
+> +config  BR2_PACKAGE_JANUS_GATEWAY_STREAMING
+
+Could we remove the extra space after 'config' in the same patch?
+It can be done while applying.
+
+I checked and this is the only occurrence in the tree.
+$ grep 'config  ' $(find * -name 'Config.*')
+
+
+Regards,
+Ricardo
