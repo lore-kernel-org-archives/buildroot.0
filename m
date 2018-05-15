@@ -1,31 +1,44 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 14 May 2018 16:52:56 -0700
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself for libnss
-In-Reply-To: <20180514235256.23480-1-joseph.kogut@gmail.com>
-References: <20180514235256.23480-1-joseph.kogut@gmail.com>
-Message-ID: <20180514235256.23480-2-joseph.kogut@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 15 May 2018 08:00:17 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-05-14
+Message-ID: <20180515060017.B486F208A6@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Hello,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 43b1668343..656dead14c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -941,6 +941,7 @@ F:	configs/qemu_ppc64le_pseries_defconfig
- 
- N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/gconf/
-+F:	package/libnss/
- F:	package/python-cython/
- F:	package/python-raven/
- F:	package/python-schedule/
+Build statistics for 2018-05-14
+===============================
+
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  24 |   0 |   0 |  24 |
+      master | 261 |   4 |   1 | 266 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                    efl-1.20.7 | 1 
+                  flare-engine | 1 
+                     php-7.2.5 | 1 
+                qt5base-5.10.1 | 1 
+           uboot-tools-2018.03 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |                     efl-1.20.7 | NOK | http://autobuild.buildroot.net/results/115fa4552d0bbac159baa9c6bfe127a5c241f3a3 |     
+microblazeel |                   flare-engine | TIM | http://autobuild.buildroot.net/results/d93d51270e100bc01ca652f7bf2d4cbb0c9d9601 |     
+        i686 |                      php-7.2.5 | NOK | http://autobuild.buildroot.net/results/5fbd965d206377cb37e8cd4f731b265c0cfcdeb1 | ORPH
+        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/5168ce8759ac763acfebad86dbf5730a44a834d8 |     
+         arm |            uboot-tools-2018.03 | NOK | http://autobuild.buildroot.net/results/7702d5df36a6532aafdbe6e9e62709bbfa058b54 |     
+
+
 -- 
-2.17.0
+http://autobuild.buildroot.net
