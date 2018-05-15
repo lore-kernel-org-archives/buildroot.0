@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 May 2018 23:39:59 +0200
-Subject: [Buildroot] [PATCH] skeleton: create include/ directory
-In-Reply-To: <20180514080315.049085b2@windsurf.home>
-References: <9873d2e0023b87545478d0615eb5d97bcbd82c2c.1526268236.git.baruch@tkos.co.il>
- <20180514080315.049085b2@windsurf.home>
-Message-ID: <9adcf72e-831b-9190-2b52-a28d86a9526e@mind.be>
+Date: Tue, 15 May 2018 23:52:33 +0200
+Subject: [Buildroot] [PATCH 6/8] ti-sgx-km: rename options to have
+ proper prefix
+In-Reply-To: <20180513193140.GJ22130@scaer>
+References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
+ <20180513190737.26079-7-thomas.petazzoni@bootlin.com>
+ <20180513193140.GJ22130@scaer>
+Message-ID: <e477cbd2-f662-b196-0c2c-f6959e42e983@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,75 +15,220 @@ To: buildroot@busybox.net
 
 
 
-On 14-05-18 08:03, Thomas Petazzoni wrote:
-> Hello,
+On 13-05-18 21:31, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> On Mon, 14 May 2018 06:23:56 +0300, Baruch Siach wrote:
->> Don't rely on a random host package to create the include/ directory for
->> us. Some packages do the wrong thing since they implicitly assume that
->> this directory exists already. Commit a557aedad2 (zstd: fix host headers
->> installation) shows an example of that.
+> On 2018-05-13 21:07 +0200, Thomas Petazzoni spake thusly:
+>> The sub-options of the ti-sgx-km package had their name option
+>> prefixed by BR2_PACKAGE_TI_SGX, while the prefix should be
+>> BR2_PACKAGE_TI_SGX_KM. This commit fixes that, and adds the necessary
+>> Config.in.legacy handling.
 >>
->> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->>  package/skeleton/skeleton.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
->> index efcf420d7243..9d97f02f08bf 100644
->> --- a/package/skeleton/skeleton.mk
->> +++ b/package/skeleton/skeleton.mk
->> @@ -16,6 +16,7 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
->>  define HOST_SKELETON_INSTALL_CMDS
->>  	$(Q)ln -snf . $(HOST_DIR)/usr
->>  	$(Q)mkdir -p $(HOST_DIR)/lib
->> +	$(Q)mkdir -p $(HOST_DIR)/include
+>> Since those options are part of a choice, the legacy handling cannot
+>> select the new name of the options, so the legacy handling only
+>> informs the user of the rename.
 > 
-> Following the zstd patch, I was discussing this with Yann on IRC, and
-> my thinking is that we normally shouldn't have to do something like
-> this. Packages that install stuff in ${prefix}/include should create
-> this folder as needed.
+> As I was explaining on IRC, we /could/ have legacy handling for choices.
+> This would be done in three parts;
 > 
-> Now, it is true that we already create $(STAGING_DIR)/include, and it
-> doesn't cost much to create such a directory ahead of time.
+>   - the new options replace the old ones in the choice, as we currently
+>     do (and as is done in this patch);
+> 
+>   - this choice is given a "name" (see below), so we can redefine it
+>     elsewhere;
+> 
+>   - in the legacy menu, we duplicate the choice with the same "name"
+>     and the same options, but with a set of "default-if" options.
+> 
+> 
+> For example:
+> 
+>     # In bar/Config.in:
+>     choice BAR
+>         bool "bar choice"
+>     config BAR_1
+>         bool "bar 1"
+>     config BAR_2
+>         bool "bar 2"
+>     endchoice
+> 
+>     # In Config.in.legacy:
+>     choice BAR
+>         bool "bar choice"
+>         default BAR_1 if FOO_1
+>         default BAR_2 if FOO_2
+>     config BAR_1
+>         bool "bar 1"
+>     config BAR_2
+>         bool "bar 2"
+>     endchoice
+> 
+>     config FOO_1
+>         bool "foo 1 was renamed"
+>     config FOO_2
+>         bool "foo 2 was renamed"
+> 
+> (not tested, but it should work).
 
- Well, basically, for any problem that is really due to the package build system
-that is wrong (which is 90% of the problems we are dealing with :-), we have two
-options:
-- an upstreamable patch;
-- a sweeping catch-all change to Buildroot that fixes all packages.
+ I tested, it works, but it needlessly repeats the user-visible choice in the
+legacy menu. This is simpler and works as well:
 
- Although upstreamable patches are nice because we improve the world, there are
-a couple of disadvantages:
-- it's a Sisyphean task, upstreams will make the same mistakes all over;
-- it's more work for us;
-- we have more breakage;
-- we have a significant number of packages without upstream (dead, or never
-there cfr. vendor-supplied code dumps).
+# In bar/Config.in:
+choice BAR
+	bool "bar choice"
+config BAR_1
+	bool "bar 1"
+config BAR_2
+	bool "bar 2"
+endchoice
 
- Therefore, the sweeping catch-all fix is pretty attractive. So I would actually
-say we prefer such a solution iff:
+# In Config.in.legacy:
+choice BAR
+	default BAR_1 if FOO_1
+	default BAR_2 if FOO_2
+endchoice
 
-1. it is simple (maintainable);
-2. it is effective (guaranteed to fix the problem in all cases);
-3. it is harmless (guaranteed not to break anything that used to work);
-4. it is logical (when you see it, you don't think wtf?);
-5. it is needed for several packages.
+config FOO_1
+	bool "foo 1 was renamed"
+config FOO_2
+	bool "foo 2 was renamed"
 
- We already have quite a number of sweeping catch-alls that don't satisfy these
-criteria, e.g. toolchain wrapper, libtool patching.
 
- This patch, on the other hand, fits the criteria nicely. Except for the 5th
-one, but IMO that one is less important.
+> What is nice with this solution, is that we have the new choice that is
+> right near the legacy option so we can chek it, and it automatically
+> gets the old setting.
+> 
+> But I am not too convinced, however, because we do not usually use the
+> name of a choice elsewhere...
 
- Bottom line:
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Legacy is pretty special anyway. I do think it's worthwhile it to do this properly.
 
  Regards,
  Arnout
+
+> 
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> ---
+>>  Config.in.legacy               | 32 ++++++++++++++++++++++++++++++++
+>>  package/ti-sgx-km/Config.in    | 10 +++++-----
+>>  package/ti-sgx-km/ti-sgx-km.mk |  8 ++++----
+>>  3 files changed, 41 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/Config.in.legacy b/Config.in.legacy
+>> index 981306f469..5cf25463ad 100644
+>> --- a/Config.in.legacy
+>> +++ b/Config.in.legacy
+>> @@ -145,6 +145,38 @@ endif
+>>  ###############################################################################
+>>  comment "Legacy options removed in 2018.05"
+>>  
+>> +config BR2_PACKAGE_TI_SGX_AM335X
+>> +	bool "ti-sgx-km AM335X option renamed"
+>> +	select BR2_LEGACY
+>> +	help
+>> +	  For consistency reasons, the option
+>> +	  BR2_PACKAGE_TI_SGX_AM335X has been renamed to
+>> +	  BR2_PACKAGE_TI_SGX_KM_AM335X.
+>> +
+>> +config BR2_PACKAGE_TI_SGX_AM437X
+>> +	bool "ti-sgx-km AM437X option renamed"
+>> +	select BR2_LEGACY
+>> +	help
+>> +	  For consistency reasons, the option
+>> +	  BR2_PACKAGE_TI_SGX_AM437X has been renamed to
+>> +	  BR2_PACKAGE_TI_SGX_KM_AM437X.
+>> +
+>> +config BR2_PACKAGE_TI_SGX_AM4430
+>> +	bool "ti-sgx-km AM4430 option renamed"
+>> +	select BR2_LEGACY
+>> +	help
+>> +	  For consistency reasons, the option
+>> +	  BR2_PACKAGE_TI_SGX_AM4430 has been renamed to
+>> +	  BR2_PACKAGE_TI_SGX_KM_AM4430.
+>> +
+>> +config BR2_PACKAGE_TI_SGX_AM5430
+>> +	bool "ti-sgx-km AM5430 option renamed"
+>> +	select BR2_LEGACY
+>> +	help
+>> +	  For consistency reasons, the option
+>> +	  BR2_PACKAGE_TI_SGX_AM5430 has been renamed to
+>> +	  BR2_PACKAGE_TI_SGX_KM_AM5430.
+>> +
+>>  config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
+>>  	bool "janus-gateway audio-bridge option renamed"
+>>  	select BR2_LEGACY
+>> diff --git a/package/ti-sgx-km/Config.in b/package/ti-sgx-km/Config.in
+>> index a4c9bb8ca2..db3d3f9ddd 100644
+>> --- a/package/ti-sgx-km/Config.in
+>> +++ b/package/ti-sgx-km/Config.in
+>> @@ -20,26 +20,26 @@ if BR2_PACKAGE_TI_SGX_KM
+>>  
+>>  choice
+>>  	prompt "Target"
+>> -	default BR2_PACKAGE_TI_SGX_AM335X
+>> +	default BR2_PACKAGE_TI_SGX_KM_AM335X
+>>  	help
+>>  	  Select the SOC for which you would like to install drivers.
+>>  
+>> -config BR2_PACKAGE_TI_SGX_AM335X
+>> +config BR2_PACKAGE_TI_SGX_KM_AM335X
+>>  	bool "AM335x"
+>>  	help
+>>  	  AM335x CPU
+>>  
+>> -config BR2_PACKAGE_TI_SGX_AM437X
+>> +config BR2_PACKAGE_TI_SGX_KM_AM437X
+>>  	bool "AM437x"
+>>  	help
+>>  	  AM437x CPU
+>>  
+>> -config BR2_PACKAGE_TI_SGX_AM4430
+>> +config BR2_PACKAGE_TI_SGX_KM_AM4430
+>>  	bool "AM4430"
+>>  	help
+>>  	  AM4430 CPU
+>>  
+>> -config BR2_PACKAGE_TI_SGX_AM5430
+>> +config BR2_PACKAGE_TI_SGX_KM_AM5430
+>>  	bool "AM5430"
+>>  	help
+>>  	  AM5430 CPU
+>> diff --git a/package/ti-sgx-km/ti-sgx-km.mk b/package/ti-sgx-km/ti-sgx-km.mk
+>> index db74da9b4a..0e1bc33902 100644
+>> --- a/package/ti-sgx-km/ti-sgx-km.mk
+>> +++ b/package/ti-sgx-km/ti-sgx-km.mk
+>> @@ -17,13 +17,13 @@ TI_SGX_KM_MAKE_OPTS = \
+>>  	KERNELDIR=$(LINUX_DIR) \
+>>  	PVR_NULLDRM=1
+>>  
+>> -ifeq ($(BR2_PACKAGE_TI_SGX_AM335X),y)
+>> +ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM335X),y)
+>>  TI_SGX_KM_PLATFORM_NAME = omap335x
+>> -else ifeq ($(BR2_PACKAGE_TI_SGX_AM437X),y)
+>> +else ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM437X),y)
+>>  TI_SGX_KM_PLATFORM_NAME = omap437x
+>> -else ifeq ($(BR2_PACKAGE_TI_SGX_AM4430),y)
+>> +else ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM4430),y)
+>>  TI_SGX_KM_PLATFORM_NAME = omap4430
+>> -else ifeq ($(BR2_PACKAGE_TI_SGX_5430),y)
+>> +else ifeq ($(BR2_PACKAGE_TI_SGX_KM_5430),y)
+>>  TI_SGX_KM_PLATFORM_NAME = omap5430
+>>  endif
+>>  
+>> -- 
+>> 2.14.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
