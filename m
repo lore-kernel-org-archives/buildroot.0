@@ -1,98 +1,66 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 15 May 2018 16:56:22 +0200
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Bump to version 20180515
-Message-ID: <20180515145622.30102-1-petr.vorel@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 15 May 2018 16:59:41 +0200
+Subject: [Buildroot] [PATCH 1/1] snort: fix build on sparc v8
+In-Reply-To: <20180515144128.602fea19@windsurf>
+References: <20180510111748.26293-1-fontaine.fabrice@gmail.com>
+ <20180513214550.529cba8c@windsurf.home>
+ <CANu7NGtFKmJdQoT_-ecuUyG3Apctxm-6u7kjiYPeHOqkbk-L2w@mail.gmail.com>
+ <20180515144128.602fea19@windsurf>
+Message-ID: <CAPi7W82SzgTdc+i20=pDWhgJA7qqTrrUu16BnEFeqONckzZ+vA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dropped patch applied by upstream + LTP_TESTSUITE_AUTORECONF = YES which
-this patch required and thus not needed any more.
+Dear Thomas,
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- ...x-numa-v2-detection-for-cross-compilation.patch | 37 ----------------------
- package/ltp-testsuite/ltp-testsuite.hash           |  4 +--
- package/ltp-testsuite/ltp-testsuite.mk             |  5 +--
- 3 files changed, 3 insertions(+), 43 deletions(-)
- delete mode 100644 package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+2018-05-15 14:41 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-diff --git a/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch b/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
-deleted file mode 100644
-index 6ad1db046e..0000000000
---- a/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 01c134f30be755a43af12a4ae2c31177d04be790 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <pvorel@suse.cz>
--Date: Mon, 29 Jan 2018 10:31:40 +0100
--Subject: [PATCH] numa: Fix numa v2 detection for cross compilation
--
--Changed to AC_COMPILE_IFELSE as AC_RUN_IFELSE cannot be run while
--cross compiling.
--
--Bug found by Buildroot project.
--
--Signed-off-by: Petr Vorel <pvorel@suse.cz>
--Reported-by: Baruch Siach <baruch@tkos.co.il>
-----
-- m4/ltp-numa.m4 | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/m4/ltp-numa.m4 b/m4/ltp-numa.m4
--index fc3383e97..633f54c18 100644
----- a/m4/ltp-numa.m4
--+++ b/m4/ltp-numa.m4
--@@ -28,11 +28,11 @@ AC_DEFUN([LTP_CHECK_SYSCALL_NUMA], [
-- 	AC_CHECK_HEADERS([numa.h numaif.h], [], [have_numa_headers=no])
-- 
-- 	if test "x$have_numa_headers" != "xno"; then
---		AC_RUN_IFELSE([AC_LANG_PROGRAM([
--+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-- #include <numa.h>
-- 		], [
-- #if LIBNUMA_API_VERSION < 2
---exit(1);
--+# error Required numa headers >= 2
-- #endif
-- 		])], [have_numa_headers_v2=yes])
-- 	fi
---- 
--2.16.0
--
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index d75d204385..93ab41d3b7 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,2 +1,2 @@
--# From: https://github.com/linux-test-project/ltp/releases/download/20180118/ltp-full-20180118.tar.xz.sha1
--sha1 2e643f1e29cd89efc8059729f60237a427fd409e  ltp-full-20180118.tar.xz
-+# From: https://github.com/linux-test-project/ltp/releases/download/20180515/ltp-full-20180515.tar.xz.sha1
-+sha1 db424d391987ff62664662210ef98cd42c7cc6b5  ltp-full-20180515.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index f5ea4344ed..b536dbd369 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20180118
-+LTP_TESTSUITE_VERSION = 20180515
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
-@@ -57,9 +57,6 @@ LTP_TESTSUITE_CONF_ENV += \
- 	LIBS="$(LTP_TESTSUITE_LIBS)" \
- 	SYSROOT="$(STAGING_DIR)"
- 
--# Required by patch 0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
--LTP_TESTSUITE_AUTORECONF = YES
--
- # Requires uClibc fts and bessel support, normally not enabled
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- define LTP_TESTSUITE_REMOVE_UNSUPPORTED
--- 
-2.16.3
+> Hello,
+>
+> On Mon, 14 May 2018 13:56:29 -0300, Sergio Prado wrote:
+>
+> > > However, I haven't been able to find an upstream Git repository for
+> > > Snort, so I'm wondering how the existing Git-formatted patches have
+> > > been generated. Perhaps from a repository created locally using git
+> > > init+git add ?
+> > >
+> > > Sergio, since you added the snort package, how did you generate the
+> > > patches ?
+> >
+> > Yes, I manually created the git repository to generate the patches.
+>
+> OK, that explains the Git-formatted patches, without any obvious
+> upstream Git repository available online.
+>
+So, do you want to reformat my patch? What is the best practice, should we
+always send git formatted patch even if there is no official Git
+repository?
+
+>
+> > I have also sent the patches upstream and ping one time after a
+> > month, but got no responses so far.
+>
+> OK, too bad. Is snort unmaintained ? Is upstream focused on this snort3
+> project ?
+>
+Actually snort is most widely used than snort3. snort3 is still in alpha. I
+have a patch for snort3 package but snort and snort3 don't use the same
+version of daq library :-/
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180515/267fddff/attachment.html>
