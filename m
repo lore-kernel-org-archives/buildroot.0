@@ -1,8 +1,8 @@
 From: David De Grave (Essensium/Mind) <david.degrave@mind.be>
-Date: Tue, 15 May 2018 11:24:29 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/iucode-tool: Add systemd service
+Date: Tue, 15 May 2018 12:18:02 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/iucode-tool: Add systemd service
  config
-Message-ID: <20180515092429.3763-1-david.degrave@mind.be>
+Message-ID: <20180515101802.6040-1-david.degrave@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,10 @@ Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
 ---
 Changes v1 -> v2
-       - Added 'RemainAfterExist=yes' to the unit file.
-       - Change the path from absolute to relative.
+	- Add 'RemainAfterExist=yes' to the unit file.
+	- Change the link target to relative.
+Changes v2 -> v3
+	- Fixed copy/paste error in the link target.
 ---
  package/iucode-tool/iucode-tool.mk |  8 ++++++++
  package/iucode-tool/iucode.service | 10 ++++++++++
@@ -24,7 +26,7 @@ Changes v1 -> v2
  create mode 100644 package/iucode-tool/iucode.service
 
 diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-index fb746c3cb8..192a264a62 100644
+index fb746c3cb8..38f9da438e 100644
 --- a/package/iucode-tool/iucode-tool.mk
 +++ b/package/iucode-tool/iucode-tool.mk
 @@ -18,4 +18,12 @@ define IUCODE_TOOL_INSTALL_INIT_SYSV
@@ -35,7 +37,7 @@ index fb746c3cb8..192a264a62 100644
 +	$(INSTALL) -D -m 644 package/iucode-tool/iucode.service \
 +		$(TARGET_DIR)/usr/lib/systemd/system/iucode.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/iucode.service \
++	ln -sf ../../../../usr/lib/systemd/system/iucode.service \
 +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iucode.service
 +endef
 +
