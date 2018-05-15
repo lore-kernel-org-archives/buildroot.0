@@ -1,176 +1,70 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 15 May 2018 21:51:53 +0200
-Subject: [Buildroot] [RFC PATCH v2 2/8] docs/manual: document pkg-meson infra
+Date: Tue, 15 May 2018 21:51:54 +0200
+Subject: [Buildroot] [RFC PATCH v2 3/8] meson: prevent RPATH stripping
 In-Reply-To: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
 References: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180515195159.6694-3-eric.le.bihan.dev@free.fr>
+Message-ID: <20180515195159.6694-4-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update documentation about adding meson-based packages with instructions for
-using pkg-meson infrastructure.
+By default, Meson strips RPATH from the executable it builds [1,2],
+unless explicitly set via install_rpath.
+
+This will make support/scripts/check-host-rpath fail when building the
+host variant of a Meson-based package.
+
+So add a patch to prevent RPATH from being stripped if install_rpath is
+not set and notify user about it.
+
+[1] https://github.com/mesonbuild/meson/issues/2567
+[2] https://github.com/mesonbuild/meson/issues/314#issuecomment-157658562
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- docs/manual/adding-packages-meson.txt | 117 ++++++++++++++++------------------
- 1 file changed, 56 insertions(+), 61 deletions(-)
+ ...y-fix-RPATH-if-install_rpath-is-not-empty.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
 
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-index f8aa08fa91..c52fe10506 100644
---- a/docs/manual/adding-packages-meson.txt
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -1,18 +1,18 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
- 
--=== Integration of Meson-based packages
-+=== Infrastructure for Meson-based packages
- 
- [[meson-package-tutorial]]
- 
- ==== +meson-package+ tutorial
- 
- http://mesonbuild.com[Meson] is an open source build system meant to be both
--extremely fast, and, even more importantly, as user friendly as possible.
-+extremely fast, and, even more importantly, as user friendly as possible. It
-+uses https://ninja-build.org[Ninja] as a companion tool to perform the actual
-+build operations.
- 
--Buildroot does not (yet) provide a dedicated package infrastructure for
--meson-based packages. So, we will explain how to write a +.mk+ file for such a
--package. Let's start with an example:
-+Let's see how to write a +.mk+ file for a Meson-based package, with an example:
- 
- ------------------------------
- 01: ################################################################################
-@@ -28,74 +28,69 @@ package. Let's start with an example:
- 11: FOO_LICENSE_FILES = COPYING
- 12: FOO_INSTALL_STAGING = YES
- 13:
--14: FOO_DEPENDENCIES = host-meson host-pkgconf bar
-+14: FOO_DEPENDENCIES = host-pkgconf bar
- 15:
--16: FOO_CONF_OPTS += \
--17: 	--prefix=/usr \
--18: 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
--19: 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
--20:
--21: FOO_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
-+16: ifeq ($(BR2_PACKAGE_BAZ),y)
-+17: FOO_CONF_OPTS += -Dbaz=true
-+18: FOO_DEPENDENCIES += baz
-+19: else
-+20: FOO_CONF_OPTS += -Dbaz=false
-+21: endif
- 22:
--23: ifeq ($(BR2_PACKAGE_BAZ),y)
--24: FOO_CONF_OPTS += -Dbaz
--25: endif
--26:
--27: define FOO_CONFIGURE_CMDS
--28: 	rm -rf $(@D)/build
--29: 	mkdir -p $(@D)/build
--30: 	$(TARGET_MAKE_ENV) meson $(FOO_CONF_OPTS) $(@D) $(@D)/build
--31: endef
--32:
--33: define FOO_BUILD_CMDS
--34: 	$(TARGET_MAKE_ENV) ninja $(FOO_NINJA_OPTS) -C $(@D)/build
--35: endef
--36:
--37: define FOO_INSTALL_TARGET_CMDS
--38: 	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(FOO_NINJA_OPTS) \
--39: 		-C $(@D)/build install
--40: endef
--41:
--42: define FOO_INSTALL_STAGING_CMDS
--43: 	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) ninja $(FOO_NINJA_OPTS) \
--44: 		-C $(@D)/build install
--45: endef
--46:
--47: $(eval $(generic-package))
-+23: $(eval $(meson-package))
- --------------------------------
- 
- The Makefile starts with the definition of the standard variables for package
- declaration (lines 7 to 11).
- 
--As seen in line 47, it is based on the
--xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
--the variables required by this particular infrastructure, where Meson and its
--companion tool, Ninja, are invoked:
-+On line line 23, we invoke the +meson-package+ macro that generates all the
-+Makefile rules that actually allows the package to be built.
- 
--* +FOO_CONFIGURE_CMDS+: the build directory required by Meson is created, and
--  Meson is invoked to generate the Ninja build file. The options required to
--  configure the cross-compilation of the package are passed via
--  +FOO_CONF_OPTS+.
-+In the example, +host-pkgconf+ and +bar+ are declared as dependencies in
-++FOO_DEPENDENCIES+ at line 14 because the Meson build file of +foo+ uses
-+`pkg-config` to determine the compilation flags and libraries of package +bar+.
- 
--* +FOO_BUILD_CMDS+: Ninja is invoked to perform the build.
-+Note that it is not necessary to add +host-meson+ in the +FOO_DEPENDENCIES+
-+variable of a package, since this basic dependency is automatically added as
-+needed by the Meson package infrastructure.
- 
--* +FOO_INSTALL_TARGET_CMDS+: Ninja is invoked to install the files generated
--  during the build step in the target directory.
--
--* +FOO_INSTALL_STAGING_CMDS+: Ninja is invoked to install the files generated
--  during the build step in the staging directory, as +FOO_INSTALL_STAGING+ is
--  set to "YES".
--
--In order to have Meson available for the build, +FOO_DEPENDENCIES+ needs to
--contain +host-meson+. In the example, +host-pkgconf+ and +bar+ are also
--declared as dependencies because the Meson build file of +foo+ uses `pkg-config`
--to determine the compilation flags and libraries of package +bar+.
--
--If the "baz" package is selected, then support for the "baz" feature in "foo"
--is activated by adding +-Dbaz+ to +FOO_CONF_OPTS+, as specified in the
--+meson_options.txt+ file in "foo" source tree.
-+If the "baz" package is selected, then support for the "baz" feature in "foo" is
-+activated by adding +-Dbaz=true+ to +FOO_CONF_OPTS+ at line 17, as specified in
-+the +meson_options.txt+ file in "foo" source tree. The "baz" package is also
-+added to +FOO_DEPENDENCIES+. Note that the support for +baz+ is explicitly
-+disabled at line 20, if the package is not selected.
- 
- To sum it up, to add a new meson-based package, the Makefile example can be
- copied verbatim then edited to replace all occurences of +FOO+ with the
- uppercase name of the new package and update the values of the standard
- variables.
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+new file mode 100644
+index 0000000000..03c1944258
+--- /dev/null
++++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+@@ -0,0 +1,32 @@
++From 53e4920038d5562b7b672fec8b9469fc02eef4ad Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Thu, 10 May 2018 21:57:49 +0200
++Subject: [PATCH] Only fix RPATH if install_rpath is not empty
 +
-+[[meson-package-reference]]
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ mesonbuild/scripts/meson_install.py | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
 +
-+==== +meson-package+ reference
++diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
++index 013f2a00..f7ff1dcc 100644
++--- a/mesonbuild/scripts/meson_install.py
+++++ b/mesonbuild/scripts/meson_install.py
++@@ -368,7 +368,13 @@ def install_targets(d):
++                     printed_symlink_error = True
++         if os.path.isfile(outname):
++             try:
++-                depfixer.fix_rpath(outname, install_rpath, False)
+++                # Buildroot check-host-rpath script expects RPATH
+++                # But if install_rpath is empty, it will stripped.
+++                # So, preserve it in this case
+++                if install_rpath:
+++                    depfixer.fix_rpath(outname, install_rpath, False)
+++                else:
+++                    print("Skipping RPATH fixing")
++             except SystemExit as e:
++                 if isinstance(e.code, int) and e.code == 0:
++                     pass
++-- 
++2.14.3
 +
-+The main macro of the Meson package infrastructure is +meson-package+. It is
-+similar to the +generic-package+ macro. The ability to have target and host
-+packages is also available, with the +host-meson-package+ macro.
-+
-+Just like the generic infrastructure, the Meson infrastructure works by defining
-+a number of variables before calling the +meson-package+ macro.
-+
-+First, all the package metadata information variables that exist in the generic
-+infrastructure also exist in the Meson infrastructure: +FOO_VERSION+,
-++FOO_SOURCE+, +FOO_PATCH+, +FOO_SITE+, +FOO_SUBDIR+, +FOO_DEPENDENCIES+,
-++FOO_INSTALL_STAGING+, +FOO_INSTALL_TARGET+.
-+
-+A few additional variables, specific to the Meson infrastructure, can also be
-+defined. Many of them are only useful in very specific cases, typical packages
-+will therefore only use a few of them.
-+
-+* +FOO_CONF_ENV+, to specify additional environment variables to pass to
-+  +meson+ for the configuration step. By default, empty.
-+
-+* +FOO_CONF_OPTS+, to specify additional options to pass to +meson+ for the
-+  configuration step. By default, empty.
-+
-+* +FOO_NINJA_ENV+, to specify additional environment variables to pass to
-+  +ninja+, meson companion tool in charge of the build operations. By default,
-+  empty.
 -- 
 2.14.3
