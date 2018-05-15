@@ -1,44 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 May 2018 08:00:17 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-05-14
-Message-ID: <20180515060017.B486F208A6@mail.bootlin.com>
+From: David De Grave (Essensium/Mind) <david.degrave@mind.be>
+Date: Tue, 15 May 2018 11:24:29 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/iucode-tool: Add systemd service
+ config
+Message-ID: <20180515092429.3763-1-david.degrave@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Alex Suykov <alex.suykov@gmail.com>
 
-Build statistics for 2018-05-14
-===============================
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
+---
+Changes v1 -> v2
+       - Added 'RemainAfterExist=yes' to the unit file.
+       - Change the path from absolute to relative.
+---
+ package/iucode-tool/iucode-tool.mk |  8 ++++++++
+ package/iucode-tool/iucode.service | 10 ++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/iucode-tool/iucode.service
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  24 |   0 |   0 |  24 |
-      master | 261 |   4 |   1 | 266 |
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                    efl-1.20.7 | 1 
-                  flare-engine | 1 
-                     php-7.2.5 | 1 
-                qt5base-5.10.1 | 1 
-           uboot-tools-2018.03 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |                     efl-1.20.7 | NOK | http://autobuild.buildroot.net/results/115fa4552d0bbac159baa9c6bfe127a5c241f3a3 |     
-microblazeel |                   flare-engine | TIM | http://autobuild.buildroot.net/results/d93d51270e100bc01ca652f7bf2d4cbb0c9d9601 |     
-        i686 |                      php-7.2.5 | NOK | http://autobuild.buildroot.net/results/5fbd965d206377cb37e8cd4f731b265c0cfcdeb1 | ORPH
-        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/5168ce8759ac763acfebad86dbf5730a44a834d8 |     
-         arm |            uboot-tools-2018.03 | NOK | http://autobuild.buildroot.net/results/7702d5df36a6532aafdbe6e9e62709bbfa058b54 |     
-
-
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index fb746c3cb8..192a264a62 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -18,4 +18,12 @@ define IUCODE_TOOL_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S00iucode-tool
+ endef
+ 
++define IUCODE_TOOL_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/iucode-tool/iucode.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/iucode.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/iucode.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iucode.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/iucode-tool/iucode.service b/package/iucode-tool/iucode.service
+new file mode 100644
+index 0000000000..d99acc6a54
+--- /dev/null
++++ b/package/iucode-tool/iucode.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Upload microcode into the processor
++
++[Service]
++Type=oneshot
++ExecStart=/usr/sbin/iucode_tool -k /usr/share/misc/intel-microcode.dat
++RemainAfterExit=yes
++
++[Install]
++WantedBy=multi-user.target
 -- 
-http://autobuild.buildroot.net
+2.13.6
