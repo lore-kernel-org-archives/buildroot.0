@@ -1,43 +1,39 @@
-From: Anssi Hannula <anssi.hannula@bitwise.fi>
-Date: Tue, 15 May 2018 16:34:42 +0300
-Subject: [Buildroot] [PATCH] gdb: actually disable gdbserver if
- BR2_PACKAGE_GDB_SERVER is unset
-Message-ID: <20180515133442.16607-1-anssi.hannula@bitwise.fi>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 15 May 2018 11:28:08 -0300
+Subject: [Buildroot] [PATCH 1/1] snort: fix build on sparc v8
+In-Reply-To: <20180515144128.602fea19@windsurf>
+References: <20180510111748.26293-1-fontaine.fabrice@gmail.com>
+ <20180513214550.529cba8c@windsurf.home>
+ <CANu7NGtFKmJdQoT_-ecuUyG3Apctxm-6u7kjiYPeHOqkbk-L2w@mail.gmail.com>
+ <20180515144128.602fea19@windsurf>
+Message-ID: <CANu7NGvqbQtWRQwO6p0RCr528maWLaNTkrnbdHDkXfnLHv5HZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gdb configure script is given --enable-gdbserver when
-BR2_PACKAGE_GDB_SERVER is set, but it is not given --disable-gdbserver
-when BR2_PACKAGE_GDB_SERVER is unset.
+Hello,
 
-gdb gdb/configure.ac defaults to enabling gdbserver in "native"
-(host=target) cases, which is always the case when buildroot builds a
-gdb which runs on the target hardware. The gdbserver will overwrite
-BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY gdbserver, if any.
+> > I have also sent the patches upstream and ping one time after a
+> > month, but got no responses so far.
+>
+> OK, too bad. Is snort unmaintained ? Is upstream focused on this snort3
+> project ?
 
-Fix that by passing --disable-gdbserver when BR2_PACKAGE_GDB_SERVER is
-unset.
+As far as I know, it is still maintained. The last release is
+from 2017-12-06. But I think brand new features are being implemented in
+3.X.
 
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
----
- package/gdb/gdb.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I could bump to 3.X, but since there are some compatibility issues between
+2.X and 3.X, that would impact 2.X users. We could also have both versions
+in Buildroot.
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index b69193af51..b2e07602f3 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -109,7 +109,7 @@ GDB_CONF_OPTS = \
- 	--without-x \
- 	--disable-sim \
- 	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
--	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver) \
-+	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver,--disable-gdbserver) \
- 	--with-curses \
- 	--without-included-gettext \
- 	--disable-werror \
--- 
-2.16.3
+What do you think?
+
+Best regards,
+
+Sergio Prado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180515/3a2e86c3/attachment.html>
