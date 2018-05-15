@@ -1,62 +1,44 @@
-From: David De Grave (Essensium/Mind) <david.degrave@mind.be>
-Date: Tue, 15 May 2018 12:18:02 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/iucode-tool: Add systemd service
- config
-Message-ID: <20180515101802.6040-1-david.degrave@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 15 May 2018 14:41:28 +0200
+Subject: [Buildroot] [PATCH 1/1] snort: fix build on sparc v8
+In-Reply-To: <CANu7NGtFKmJdQoT_-ecuUyG3Apctxm-6u7kjiYPeHOqkbk-L2w@mail.gmail.com>
+References: <20180510111748.26293-1-fontaine.fabrice@gmail.com>
+ <20180513214550.529cba8c@windsurf.home>
+ <CANu7NGtFKmJdQoT_-ecuUyG3Apctxm-6u7kjiYPeHOqkbk-L2w@mail.gmail.com>
+Message-ID: <20180515144128.602fea19@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alex Suykov <alex.suykov@gmail.com>
+Hello,
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
----
-Changes v1 -> v2
-	- Add 'RemainAfterExist=yes' to the unit file.
-	- Change the link target to relative.
-Changes v2 -> v3
-	- Fixed copy/paste error in the link target.
----
- package/iucode-tool/iucode-tool.mk |  8 ++++++++
- package/iucode-tool/iucode.service | 10 ++++++++++
- 2 files changed, 18 insertions(+)
- create mode 100644 package/iucode-tool/iucode.service
+On Mon, 14 May 2018 13:56:29 -0300, Sergio Prado wrote:
 
-diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-index fb746c3cb8..38f9da438e 100644
---- a/package/iucode-tool/iucode-tool.mk
-+++ b/package/iucode-tool/iucode-tool.mk
-@@ -18,4 +18,12 @@ define IUCODE_TOOL_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S00iucode-tool
- endef
- 
-+define IUCODE_TOOL_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/iucode-tool/iucode.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/iucode.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/iucode.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iucode.service
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/iucode-tool/iucode.service b/package/iucode-tool/iucode.service
-new file mode 100644
-index 0000000000..d99acc6a54
---- /dev/null
-+++ b/package/iucode-tool/iucode.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Upload microcode into the processor
-+
-+[Service]
-+Type=oneshot
-+ExecStart=/usr/sbin/iucode_tool -k /usr/share/misc/intel-microcode.dat
-+RemainAfterExit=yes
-+
-+[Install]
-+WantedBy=multi-user.target
+> > However, I haven't been able to find an upstream Git repository for
+> > Snort, so I'm wondering how the existing Git-formatted patches have
+> > been generated. Perhaps from a repository created locally using git
+> > init+git add ?
+> >
+> > Sergio, since you added the snort package, how did you generate the
+> > patches ?  
+> 
+> Yes, I manually created the git repository to generate the patches.
+
+OK, that explains the Git-formatted patches, without any obvious
+upstream Git repository available online.
+
+> I have also sent the patches upstream and ping one time after a
+> month, but got no responses so far.
+
+OK, too bad. Is snort unmaintained ? Is upstream focused on this snort3
+project ?
+
+Best regards,
+
+Thomas
 -- 
-2.13.6
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
