@@ -1,70 +1,61 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 15 May 2018 21:51:54 +0200
-Subject: [Buildroot] [RFC PATCH v2 3/8] meson: prevent RPATH stripping
+Date: Tue, 15 May 2018 21:51:55 +0200
+Subject: [Buildroot] [RFC PATCH v2 4/8] libmpdclient: convert to pkg-meson
+ infra
 In-Reply-To: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
 References: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180515195159.6694-4-eric.le.bihan.dev@free.fr>
+Message-ID: <20180515195159.6694-5-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, Meson strips RPATH from the executable it builds [1,2],
-unless explicitly set via install_rpath.
-
-This will make support/scripts/check-host-rpath fail when building the
-host variant of a Meson-based package.
-
-So add a patch to prevent RPATH from being stripped if install_rpath is
-not set and notify user about it.
-
-[1] https://github.com/mesonbuild/meson/issues/2567
-[2] https://github.com/mesonbuild/meson/issues/314#issuecomment-157658562
-
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- ...y-fix-RPATH-if-install_rpath-is-not-empty.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+ package/libmpdclient/libmpdclient.mk | 32 +-------------------------------
+ 1 file changed, 1 insertion(+), 31 deletions(-)
 
-diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-new file mode 100644
-index 0000000000..03c1944258
---- /dev/null
-+++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-@@ -0,0 +1,32 @@
-+From 53e4920038d5562b7b672fec8b9469fc02eef4ad Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Thu, 10 May 2018 21:57:49 +0200
-+Subject: [PATCH] Only fix RPATH if install_rpath is not empty
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ mesonbuild/scripts/meson_install.py | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
-+index 013f2a00..f7ff1dcc 100644
-+--- a/mesonbuild/scripts/meson_install.py
-++++ b/mesonbuild/scripts/meson_install.py
-+@@ -368,7 +368,13 @@ def install_targets(d):
-+                     printed_symlink_error = True
-+         if os.path.isfile(outname):
-+             try:
-+-                depfixer.fix_rpath(outname, install_rpath, False)
-++                # Buildroot check-host-rpath script expects RPATH
-++                # But if install_rpath is empty, it will stripped.
-++                # So, preserve it in this case
-++                if install_rpath:
-++                    depfixer.fix_rpath(outname, install_rpath, False)
-++                else:
-++                    print("Skipping RPATH fixing")
-+             except SystemExit as e:
-+                 if isinstance(e.code, int) and e.code == 0:
-+                     pass
-+-- 
-+2.14.3
-+
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 6ff27241c0..c04536eb88 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -11,35 +11,5 @@ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_
+ LIBMPDCLIENT_INSTALL_STAGING = YES
+ LIBMPDCLIENT_LICENSE = BSD-3-Clause
+ LIBMPDCLIENT_LICENSE_FILES = COPYING
+-LIBMPDCLIENT_DEPENDENCIES = host-meson
+ 
+-LIBMPDCLIENT_CONF_OPTS += \
+-	--prefix=/usr \
+-	--libdir=/usr/lib \
+-	--default-library $(if $(BR2_STATIC_LIBS),static,shared) \
+-	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+-	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
+-
+-LIBMPDCLIENT_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+-
+-define LIBMPDCLIENT_CONFIGURE_CMDS
+-	rm -rf $(@D)/build
+-	mkdir -p $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(LIBMPDCLIENT_CONF_OPTS) $(@D) $(@D)/build
+-endef
+-
+-define LIBMPDCLIENT_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build
+-endef
+-
+-define LIBMPDCLIENT_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
+-		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+-endef
+-
+-define LIBMPDCLIENT_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
+-		ninja $(LIBMPDCLIENT_NINJA_OPTS) -C $(@D)/build install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(meson-package))
 -- 
 2.14.3
