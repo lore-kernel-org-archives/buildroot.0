@@ -1,9 +1,9 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 15 May 2018 21:51:56 +0200
-Subject: [Buildroot] [RFC PATCH v2 5/8] systemd: convert to pkg-meson infra
+Date: Tue, 15 May 2018 21:51:57 +0200
+Subject: [Buildroot] [RFC PATCH v2 6/8] ncmpc: convert to pkg-meson infra
 In-Reply-To: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
 References: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180515195159.6694-6-eric.le.bihan.dev@free.fr>
+Message-ID: <20180515195159.6694-7-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +12,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/systemd/systemd.mk | 32 +++-----------------------------
- 1 file changed, 3 insertions(+), 29 deletions(-)
+ package/ncmpc/ncmpc.mk | 27 +++------------------------
+ 1 file changed, 3 insertions(+), 24 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index db7fb43636..c52e4923a0 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -12,7 +12,6 @@ SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	host-gperf \
- 	host-intltool \
--	host-meson \
- 	kmod \
- 	libcap \
- 	util-linux
-@@ -26,10 +25,6 @@ SYSTEMD_DEPENDENCIES += busybox
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 1d464b72de..d70ed46ea9 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -8,15 +8,11 @@ NCMPC_VERSION_MAJOR = 0
+ NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).29
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+-NCMPC_DEPENDENCIES = host-meson host-pkgconf libglib2 libmpdclient ncurses
++NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
+ NCMPC_LICENSE = GPL-2.0+
+ NCMPC_LICENSE_FILES = COPYING
+ 
+-NCMPC_CONF_OPTS += \
+-	--prefix=/usr \
+-	-Dcurses=ncurses \
+-	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+-	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
++NCMPC_CONF_OPTS = -Dcurses=ncurses
+ 
+ ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
+ NCMPC_DEPENDENCIES += lirc-tools
+@@ -25,21 +21,4 @@ else
+ NCMPC_CONF_OPTS += -Dlirc=false
  endif
  
- SYSTEMD_CONF_OPTS += \
--	--prefix=/usr \
--	--libdir='/usr/lib' \
--	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
--	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
- 	-Drootlibdir='/usr/lib' \
- 	-Dblkid=true \
- 	-Dman=false \
-@@ -399,28 +394,7 @@ define SYSTEMD_INSTALL_INIT_SYSTEMD
- 	$(SYSTEMD_INSTALL_NETWORK_CONFS)
- endef
- 
--SYSTEMD_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
-+SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
-+SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
- 
--SYSTEMD_ENV = $(TARGET_MAKE_ENV) $(HOST_UTF8_LOCALE_ENV)
+-NCMPC_NINJA_OPTS = $(if $(VERBOSE),-v)
 -
--define SYSTEMD_CONFIGURE_CMDS
+-define NCMPC_CONFIGURE_CMDS
 -	rm -rf $(@D)/build
 -	mkdir -p $(@D)/build
--	$(SYSTEMD_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(NCMPC_CONF_OPTS) $(@D) $(@D)/build
 -endef
 -
--define SYSTEMD_BUILD_CMDS
--	$(SYSTEMD_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
+-define NCMPC_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja $(NCMPC_NINJA_OPTS) -C $(@D)/build
 -endef
 -
--define SYSTEMD_INSTALL_TARGET_CMDS
--	$(SYSTEMD_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
--		-C $(@D)/build install
--endef
--
--define SYSTEMD_INSTALL_STAGING_CMDS
--	$(SYSTEMD_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
--		-C $(@D)/build install
+-define NCMPC_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
+-		ninja $(NCMPC_NINJA_OPTS) -C $(@D)/build install
 -endef
 -
 -$(eval $(generic-package))
