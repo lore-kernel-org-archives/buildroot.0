@@ -1,36 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 May 2018 20:41:38 +0200
-Subject: [Buildroot] [PATCH 1/1] libkcapi: depends on
- BR2_TOOLCHAIN_HAS_SYNC_4
-Message-ID: <20180515184138.21923-1-fontaine.fabrice@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 15 May 2018 21:51:51 +0200
+Subject: [Buildroot] [RFC PATCH v2 0/8] Add pkg-meson infrastructure
+Message-ID: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit
-https://github.com/smuellerDD/libkcapi/commit/4d0a5c235536b5f679e6a9b0c847f56c9cfc3835,
-libkcapi uses __sync_add_and_fetch_4 and __sync_sub_and_fetch_4
+This series adds an infrastructure for Meson-based packages and converts the
+existing ones.
 
-Fixes:
- - http://autobuild.buildroot.net/results/de5e136ea433633d836bff1d2ac1d3b461391b83
+v1->v2:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libkcapi/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+- drop use of package variables for program paths and options.
+- fix host variant support.
+- fix RPATH stripping.
+- improve documentation.
 
-diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
-index 7397cfe800..1dbcdc381b 100644
---- a/package/libkcapi/Config.in
-+++ b/package/libkcapi/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBKCAPI
- 	bool "libkcapi"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	help
- 	  Linux Kernel Crypto API userspace interface library
- 
+Eric Le Bihan (8):
+  pkg-meson: new infrastructure
+  docs/manual: document pkg-meson infra
+  meson: prevent RPATH stripping
+  libmpdclient: convert to pkg-meson infra
+  systemd: convert to pkg-meson infra
+  ncmpc: convert to pkg-meson infra
+  mpd-mpc: convert to pkg-meson infra
+  enlightenment: convert to pkg-meson infra
+
+ DEVELOPERS                                         |   1 +
+ docs/manual/adding-packages-meson.txt              | 117 +++++++--------
+ package/Makefile.in                                |   1 +
+ package/enlightenment/enlightenment.mk             |  30 +---
+ package/libmpdclient/libmpdclient.mk               |  32 +---
+ ...y-fix-RPATH-if-install_rpath-is-not-empty.patch |  32 ++++
+ package/mpd-mpc/mpd-mpc.mk                         |  26 +---
+ package/ncmpc/ncmpc.mk                             |  27 +---
+ package/pkg-meson.mk                               | 166 +++++++++++++++++++++
+ package/systemd/systemd.mk                         |  32 +---
+ 10 files changed, 271 insertions(+), 193 deletions(-)
+ create mode 100644 package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+ create mode 100644 package/pkg-meson.mk
+
 -- 
-2.14.1
+2.14.3
