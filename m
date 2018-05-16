@@ -1,105 +1,47 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 16 May 2018 15:58:56 +0200
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.1
-Message-ID: <20180516135856.29408-1-brgl@bgdev.pl>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 16 May 2018 17:12:57 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/exim: remove libnsl linking
+ with Glibc.
+In-Reply-To: <20180504210246.29930-1-romain.naour@gmail.com>
+References: <20180504210246.29930-1-romain.naour@gmail.com>
+Message-ID: <70ad90d2-a090-3cea-d850-1a4122f75ed5@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a minor release the main feature of which are the
-object-oriented bindings for C++ and Python3. Other than that there's
-a couple bug-fixes and minor improvements all around.
+Hi Romain,
 
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
----
- package/libgpiod/Config.in     | 20 ++++++++++++++++++++
- package/libgpiod/libgpiod.hash |  2 +-
- package/libgpiod/libgpiod.mk   | 20 ++++++++++++++++++--
- 3 files changed, 39 insertions(+), 3 deletions(-)
+On 04/05/2018 23:02, Romain Naour wrote:
+> glibc now considers its built-in libnsl as being obsolete, and requires
+> passing --enable-obsolete-libnsl to have it built and installed. libnsl
+> is now provided as a separate project [1], but it isn't packaged yet in
+> Buildroot.
+> 
+> In preparation for dropping --enable-obsolete-libnsl from the glibc
+> package, this commit ensures that exim doesn't use libnsl. It was
+> already the case for uclibc and musl toolchains, so this commit simply
+> extends that to make sure libnsl is also not used with glibc toolchains.
+> 
+> Only Exim's nis.so and nisplus.so lookup modules require libnsl,
+> but they are not build by default. So we can safely remove -lnsl
+> from the Makefile-Linux. If someone want these modules, a new libnsl
+> package must be added first to provide nsl library.>
+> Note: Fedora 28 has switched to the new libnsl library that bring
+> IPV6 support. [2]
 
-diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
-index 63a7cb6e78..c10f11cc15 100644
---- a/package/libgpiod/Config.in
-+++ b/package/libgpiod/Config.in
-@@ -14,6 +14,26 @@ config BR2_PACKAGE_LIBGPIOD_TOOLS
- 	help
- 	  Include a set of command-line tools for managing GPIOs.
- 
-+config BR2_PACKAGE_LIBGPIODCXX
-+	bool "install C++ bindings"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	help
-+	  Build C++ bindings for libgpiod.
-+
-+comment "C++ bindings need a toolchain w/ C++, gcc >= 4.8"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
-+config BR2_PACKAGE_LIBGPIOD_PYTHON
-+	bool "install python bindings"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  Build Python3 bindings for libgpiod.
-+
-+comment "Python bindings need python3"
-+	depends on !BR2_PACKAGE_PYTHON3
-+
- endif
- 
- comment "libgpiod needs kernel headers >= 4.8"
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 9ed4b59ab9..1d217f6048 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 972924195367f5fb045c023d65340c4b7dfc8764499516be446553865208dedc  libgpiod-1.0.1.tar.xz
-+sha256 9758466468a7ef3f5e30c182c1303abef6241e665cda4d82a64328a7474838c1  libgpiod-1.1.tar.xz
- # Hash for license file
- sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index 7f8fa4b7dd..3a829c11c8 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = 1.0.1
-+LIBGPIOD_VERSION = 1.1
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
- LIBGPIOD_LICENSE_FILES = COPYING
- LIBGPIOD_INSTALL_STAGING = YES
--
- LIBGPIOD_DEPENDENCIES = host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_LIBGPIOD_TOOLS),y)
-@@ -19,4 +18,21 @@ else
- LIBGPIOD_CONF_OPTS += --disable-tools
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGPIODCXX),y)
-+LIBGPIOD_CONF_OPTS += --enable-bindings-cxx
-+else
-+LIBGPIOD_CONF_OPTS += --disable-bindings-cxx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGPIOD_PYTHON),y)
-+LIBGPIOD_CONF_OPTS += --enable-bindings-python
-+LIBGPIOD_DEPENDENCIES += python3 host-python3
-+LIBGPIOD_CONF_ENV += \
-+	PYTHON=$(HOST_DIR)/bin/python3 \
-+	PYTHON_CPPFLAGS="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
-+	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
-+else
-+LIBGPIOD_CONF_OPTS += --disable-bindings-python
-+endif
-+
- $(eval $(autotools-package))
+...and this triggered host toolchain issues such as:
+
+http://autobuild.buildroot.net/results/a362dfef9e5187931431000c54f03f841d17c847/
+
+The reason is that the host tools generates by exim (namely buildconfig)
+are built out of build-br/Makefile, which is assembled by concatenating
+together several makefiles including OS/Makefile-Linux. So the
+buildconfig tool will try to link against libnsl, but that's not needed.
+
+As a positive side effect, this patch fixes the above issue.
+
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 -- 
-2.17.0
+Luca
