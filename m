@@ -1,75 +1,105 @@
-From: Vincent Prince <vincent.prince.fr@gmail.com>
-Date: Wed, 16 May 2018 11:16:05 +0200
-Subject: [Buildroot] [PATCH] imx_usb_loader: Allow target build
-Message-ID: <1526462165-1544-1-git-send-email-vincent.prince.fr@gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 16 May 2018 15:58:56 +0200
+Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.1
+Message-ID: <20180516135856.29408-1-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
----
- package/Config.in                        |  1 +
- package/imx-usb-loader/Config.in         | 10 ++++++++++
- package/imx-usb-loader/imx-usb-loader.mk |  8 ++++++++
- 3 files changed, 19 insertions(+)
- create mode 100644 package/imx-usb-loader/Config.in
+This is a minor release the main feature of which are the
+object-oriented bindings for C++ and Python3. Other than that there's
+a couple bug-fixes and minor improvements all around.
 
-diff --git a/package/Config.in b/package/Config.in
-index 2be6c64..3cf53ed 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -186,6 +186,7 @@ menu "Filesystem and flash utilities"
- 	source "package/genext2fs/Config.in"
- 	source "package/genpart/Config.in"
- 	source "package/genromfs/Config.in"
-+	source "package/imx-usb-loader/Config.in"
- 	source "package/mfgtools/Config.in"
- 	source "package/mmc-utils/Config.in"
- 	source "package/mtd/Config.in"
-diff --git a/package/imx-usb-loader/Config.in b/package/imx-usb-loader/Config.in
-new file mode 100644
-index 0000000..41585e2
---- /dev/null
-+++ b/package/imx-usb-loader/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_IMX_USB_LOADER
-+	bool "imx-usb-loader"
-+	depends on BR2_arm
-+    select BR2_PACKAGE_LIBUSB
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ package/libgpiod/Config.in     | 20 ++++++++++++++++++++
+ package/libgpiod/libgpiod.hash |  2 +-
+ package/libgpiod/libgpiod.mk   | 20 ++++++++++++++++++--
+ 3 files changed, 39 insertions(+), 3 deletions(-)
+
+diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
+index 63a7cb6e78..c10f11cc15 100644
+--- a/package/libgpiod/Config.in
++++ b/package/libgpiod/Config.in
+@@ -14,6 +14,26 @@ config BR2_PACKAGE_LIBGPIOD_TOOLS
+ 	help
+ 	  Include a set of command-line tools for managing GPIOs.
+ 
++config BR2_PACKAGE_LIBGPIODCXX
++	bool "install C++ bindings"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
 +	help
-+	  This package contains tools to download and execute code
-+	  on Freescale i.MX5/i.MX6 and Vybrid SoCs through the
-+	  Serial Download Protocol.
++	  Build C++ bindings for libgpiod.
 +
-+	  https://github.com/boundarydevices/imx_usb_loader
-diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
-index 946a1f3..22698dd 100644
---- a/package/imx-usb-loader/imx-usb-loader.mk
-+++ b/package/imx-usb-loader/imx-usb-loader.mk
-@@ -8,14 +8,22 @@ IMX_USB_LOADER_VERSION = 7e77787c83288a421080a9bf2f67063931f561be
- IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
- IMX_USB_LOADER_LICENSE = LGPL-2.1+
- IMX_USB_LOADER_LICENSE_FILES = COPYING
-+IMX_USB_LOADER_DEPENDENCIES = libusb 
- HOST_IMX_USB_LOADER_DEPENDENCIES = host-libusb host-pkgconf
++comment "C++ bindings need a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++config BR2_PACKAGE_LIBGPIOD_PYTHON
++	bool "install python bindings"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Build Python3 bindings for libgpiod.
++
++comment "Python bindings need python3"
++	depends on !BR2_PACKAGE_PYTHON3
++
+ endif
  
-+define IMX_USB_LOADER_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
- define HOST_IMX_USB_LOADER_BUILD_CMDS
- 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
+ comment "libgpiod needs kernel headers >= 4.8"
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 9ed4b59ab9..1d217f6048 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 972924195367f5fb045c023d65340c4b7dfc8764499516be446553865208dedc  libgpiod-1.0.1.tar.xz
++sha256 9758466468a7ef3f5e30c182c1303abef6241e665cda4d82a64328a7474838c1  libgpiod-1.1.tar.xz
+ # Hash for license file
+ sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 7f8fa4b7dd..3a829c11c8 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
  
-+define IMX_USB_LOADER_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) prefix=$(TARGET_DIR) install
-+endef
- define HOST_IMX_USB_LOADER_INSTALL_CMDS
- 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
- endef
+-LIBGPIOD_VERSION = 1.0.1
++LIBGPIOD_VERSION = 1.1
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
+ LIBGPIOD_LICENSE_FILES = COPYING
+ LIBGPIOD_INSTALL_STAGING = YES
+-
+ LIBGPIOD_DEPENDENCIES = host-pkgconf
  
-+$(eval $(generic-package))
- $(eval $(host-generic-package))
+ ifeq ($(BR2_PACKAGE_LIBGPIOD_TOOLS),y)
+@@ -19,4 +18,21 @@ else
+ LIBGPIOD_CONF_OPTS += --disable-tools
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBGPIODCXX),y)
++LIBGPIOD_CONF_OPTS += --enable-bindings-cxx
++else
++LIBGPIOD_CONF_OPTS += --disable-bindings-cxx
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGPIOD_PYTHON),y)
++LIBGPIOD_CONF_OPTS += --enable-bindings-python
++LIBGPIOD_DEPENDENCIES += python3 host-python3
++LIBGPIOD_CONF_ENV += \
++	PYTHON=$(HOST_DIR)/bin/python3 \
++	PYTHON_CPPFLAGS="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
++	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
++else
++LIBGPIOD_CONF_OPTS += --disable-bindings-python
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.7.4
+2.17.0
