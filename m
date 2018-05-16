@@ -1,47 +1,54 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 16 May 2018 17:12:57 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/exim: remove libnsl linking
- with Glibc.
-In-Reply-To: <20180504210246.29930-1-romain.naour@gmail.com>
-References: <20180504210246.29930-1-romain.naour@gmail.com>
-Message-ID: <70ad90d2-a090-3cea-d850-1a4122f75ed5@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 16 May 2018 17:16:18 +0200
+Subject: [Buildroot] [PATCH 6/8] ti-sgx-km: rename options to have
+ proper prefix
+In-Reply-To: <20180516090052.21e0af47@windsurf>
+References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
+ <20180513190737.26079-7-thomas.petazzoni@bootlin.com>
+ <20180513193140.GJ22130@scaer> <e477cbd2-f662-b196-0c2c-f6959e42e983@mind.be>
+ <20180516090052.21e0af47@windsurf>
+Message-ID: <fb6a5c78-7556-4110-b52b-ea6cef274c88@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
 
-On 04/05/2018 23:02, Romain Naour wrote:
-> glibc now considers its built-in libnsl as being obsolete, and requires
-> passing --enable-obsolete-libnsl to have it built and installed. libnsl
-> is now provided as a separate project [1], but it isn't packaged yet in
-> Buildroot.
+
+On 16-05-18 09:00, Thomas Petazzoni wrote:
+> Hello,
 > 
-> In preparation for dropping --enable-obsolete-libnsl from the glibc
-> package, this commit ensures that exim doesn't use libnsl. It was
-> already the case for uclibc and musl toolchains, so this commit simply
-> extends that to make sure libnsl is also not used with glibc toolchains.
+> On Tue, 15 May 2018 23:52:33 +0200, Arnout Vandecappelle wrote:
 > 
-> Only Exim's nis.so and nisplus.so lookup modules require libnsl,
-> but they are not build by default. So we can safely remove -lnsl
-> from the Makefile-Linux. If someone want these modules, a new libnsl
-> package must be added first to provide nsl library.>
-> Note: Fedora 28 has switched to the new libnsl library that bring
-> IPV6 support. [2]
+>>> What is nice with this solution, is that we have the new choice that is
+>>> right near the legacy option so we can chek it, and it automatically
+>>> gets the old setting.
+>>>
+>>> But I am not too convinced, however, because we do not usually use the
+>>> name of a choice elsewhere...  
+>>
+>>  Legacy is pretty special anyway. I do think it's worthwhile it to do this properly.
+> 
+> Is this an Acked-by to the approach this patch series has taken in
+> terms of handling the Config.in choice option renaming ?
 
-...and this triggered host toolchain issues such as:
+ Er, no, it's a NACK. I *do* think it's worthwhile to properly select the new
+option.
 
-http://autobuild.buildroot.net/results/a362dfef9e5187931431000c54f03f841d17c847/
+ Regards,
+ Arnout
 
-The reason is that the host tools generates by exim (namely buildconfig)
-are built out of build-br/Makefile, which is assembled by concatenating
-together several makefiles including OS/Makefile-Linux. So the
-buildconfig tool will try to link against libnsl, but that's not needed.
+> 
+> Thanks! :-)
+> 
+> Thomas
+> 
 
-As a positive side effect, this patch fixes the above issue.
-
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 -- 
-Luca
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
