@@ -1,58 +1,33 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 15 May 2018 21:24:12 -0300
-Subject: [Buildroot] [PATCH 2/2] imx8mqevk: readme: Write the SoC name in
- capital letters
-In-Reply-To: <1526430252-28624-1-git-send-email-festevam@gmail.com>
-References: <1526430252-28624-1-git-send-email-festevam@gmail.com>
-Message-ID: <1526430252-28624-2-git-send-email-festevam@gmail.com>
+Date: Wed, 16 May 2018 00:10:53 -0300
+Subject: [Buildroot] [PATCH] configs/mx53loco: Adjust comment to reflect the
+ real kernel version
+Message-ID: <1526440253-838-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+The kernel used is from 4.16 version, so adjust the comment.
 
-Use "i.MX8MQ" (in capital letters) for the SoC name for better
-readability.
-
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- board/freescale/imx8mqevk/readme.txt | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ configs/mx53loco_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/freescale/imx8mqevk/readme.txt b/board/freescale/imx8mqevk/readme.txt
-index cb7e1dc..1840290 100644
---- a/board/freescale/imx8mqevk/readme.txt
-+++ b/board/freescale/imx8mqevk/readme.txt
-@@ -1,8 +1,8 @@
- ***************************
--Freescale i.MX8mq EVK board
-+Freescale i.MX8MQ EVK board
- ***************************
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 16dde35..ae56fca 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,7 +2,7 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
  
--This file documents the Buildroot support for the Freescale i.MX8mq
-+This file documents the Buildroot support for the Freescale i.MX8MQ
- EVK board.
+-# Linux headers same as kernel, a 4.15 series
++# Linux headers same as kernel, a 4.16 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
  
- Hardware support
-@@ -14,7 +14,7 @@ support for GPU, VPU and other HW features.
- Build
- =====
- 
--First, configure Buildroot for the i.MX8mq EVK board:
-+First, configure Buildroot for the i.MX8MQ EVK board:
- 
-   make freescale_imx8mqevk_defconfig
- 
-@@ -58,7 +58,7 @@ command as root:
- For details about the medium image layout, see the definition in
- board/freescale/common/imx/genimage.cfg.template_imx8.
- 
--Boot the i.MX8mq EVK board
-+Boot the i.MX8MQ EVK board
- ==========================
- 
- To boot your newly created system:
+ # System
 -- 
 2.7.4
