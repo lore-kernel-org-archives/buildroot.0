@@ -1,8 +1,10 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 15 May 2018 21:24:11 -0300
-Subject: [Buildroot] [PATCH 1/2] imx8mqevk: readme: Put switch configuration
- for SD card boot
-Message-ID: <1526430252-28624-1-git-send-email-festevam@gmail.com>
+Date: Tue, 15 May 2018 21:24:12 -0300
+Subject: [Buildroot] [PATCH 2/2] imx8mqevk: readme: Write the SoC name in
+ capital letters
+In-Reply-To: <1526430252-28624-1-git-send-email-festevam@gmail.com>
+References: <1526430252-28624-1-git-send-email-festevam@gmail.com>
+Message-ID: <1526430252-28624-2-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,27 +13,46 @@ To: buildroot@busybox.net
 
 From: Fabio Estevam <fabio.estevam@nxp.com>
 
-Improve the documentation by adding the configuration of SW801 and SW802
-switches for SD card boot.
+Use "i.MX8MQ" (in capital letters) for the SoC name for better
+readability.
 
 Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- board/freescale/imx8mqevk/readme.txt | 3 +++
- 1 file changed, 3 insertions(+)
+ board/freescale/imx8mqevk/readme.txt | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/board/freescale/imx8mqevk/readme.txt b/board/freescale/imx8mqevk/readme.txt
-index d50dd6e..cb7e1dc 100644
+index cb7e1dc..1840290 100644
 --- a/board/freescale/imx8mqevk/readme.txt
 +++ b/board/freescale/imx8mqevk/readme.txt
-@@ -63,6 +63,9 @@ Boot the i.MX8mq EVK board
+@@ -1,8 +1,8 @@
+ ***************************
+-Freescale i.MX8mq EVK board
++Freescale i.MX8MQ EVK board
+ ***************************
+ 
+-This file documents the Buildroot support for the Freescale i.MX8mq
++This file documents the Buildroot support for the Freescale i.MX8MQ
+ EVK board.
+ 
+ Hardware support
+@@ -14,7 +14,7 @@ support for GPU, VPU and other HW features.
+ Build
+ =====
+ 
+-First, configure Buildroot for the i.MX8mq EVK board:
++First, configure Buildroot for the i.MX8MQ EVK board:
+ 
+   make freescale_imx8mqevk_defconfig
+ 
+@@ -58,7 +58,7 @@ command as root:
+ For details about the medium image layout, see the definition in
+ board/freescale/common/imx/genimage.cfg.template_imx8.
+ 
+-Boot the i.MX8mq EVK board
++Boot the i.MX8MQ EVK board
+ ==========================
  
  To boot your newly created system:
- - insert the SD card in the SD slot of the board;
-+- Configure the switches as follows:
-+SW801:	ON	ON	OFF	OFF
-+SW802:	ON	OFF
- - put a micro USB cable into the Debug USB Port and connect using a terminal
-   emulator at 115200 bps, 8n1;
- - power on the board.
 -- 
 2.7.4
