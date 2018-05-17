@@ -1,95 +1,45 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 17 May 2018 20:38:24 +0200
-Subject: [Buildroot] [PATCH] libopusenc: new package
-Message-ID: <20180517183824.16742-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 17 May 2018 20:53:03 +0200
+Subject: [Buildroot] [git commit] package/clang: bump to version 5.0.2
+Message-ID: <20180517185220.4F43981215@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libopusenc library provides a high-level API for encoding opus audio files
-and live streams.
+commit: https://git.buildroot.net/buildroot/commit/?id=31e4328728dd78f4df7499d5e310be597a759907
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+5.0.2  is API and ABI compatible with 5.0.0 and 5.0.1 and includes
+mitigations for CVE-2017-5715 (Spectre Variant 2) for X86 and MIPS.
+
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/libopusenc/Config.in       |  7 +++++++
- package/libopusenc/libopusenc.hash |  3 +++
- package/libopusenc/libopusenc.mk   | 16 ++++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/libopusenc/Config.in
- create mode 100644 package/libopusenc/libopusenc.hash
- create mode 100644 package/libopusenc/libopusenc.mk
+ package/clang/clang.hash | 2 +-
+ package/clang/clang.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b910a86a8c..7fc7e354d0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1045,6 +1045,7 @@ F:	configs/bananapro_defconfig
- F:	package/augeas/
- F:	package/bctoolbox/
- F:	package/freescale-imx/imx-alsa-plugins/
-+F:	package/libopusenc/
- F:	package/libshout/
- F:	package/libupnpp/
- F:	package/luv/
-diff --git a/package/Config.in b/package/Config.in
-index ecee4938c9..1d6ddee8ec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1359,6 +1359,7 @@ menu "Multimedia"
- 	source "package/libmpeg2/Config.in"
- 	source "package/libogg/Config.in"
- 	source "package/libopenh264/Config.in"
-+	source "package/libopusenc/Config.in"
- 	source "package/libplayer/Config.in"
- 	source "package/libtheora/Config.in"
- 	source "package/libvpx/Config.in"
-diff --git a/package/libopusenc/Config.in b/package/libopusenc/Config.in
-new file mode 100644
-index 0000000000..610aba926e
---- /dev/null
-+++ b/package/libopusenc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBOPUSENC
-+	bool "libopusenc"
-+	help
-+	  The libopusenc library provides a high-level API for
-+	  encoding opus audio files and live streams.
-+
-+	  http://opus-codec.org
-diff --git a/package/libopusenc/libopusenc.hash b/package/libopusenc/libopusenc.hash
-new file mode 100644
-index 0000000000..1eea51b6bc
---- /dev/null
-+++ b/package/libopusenc/libopusenc.hash
-@@ -0,0 +1,3 @@
-+# From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
-+sha256  02e6e0b14cbbe0569d948a46420f9c9a81d93bba32dc576a4007cbf96da68ef3  libopusenc-0.1.1.tar.gz
-+sha256  93b17ab56b8230127fea532be0dcb4e6d71e66ab5e8ce5d6ae8785d7288b164f  COPYING
-diff --git a/package/libopusenc/libopusenc.mk b/package/libopusenc/libopusenc.mk
-new file mode 100644
-index 0000000000..0debe85c71
---- /dev/null
-+++ b/package/libopusenc/libopusenc.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libopusenc
-+#
-+################################################################################
-+
-+LIBOPUSENC_VERSION = 0.1.1
-+LIBOPUSENC_SITE = https://downloads.xiph.org/releases/opus
-+LIBOPUSENC_LICENSE = BSD-3-Clause
-+LIBOPUSENC_LICENSE_FILES = COPYING
-+LIBOPUSENC_INSTALL_STAGING = YES
-+LIBOPUSENC_DEPENDENCIES = host-pkgconf opus
-+
-+LIBOPUSENC_CONF_OPTS = --disable-examples
-+
-+$(eval $(autotools-package))
--- 
-2.17.0
+diff --git a/package/clang/clang.hash b/package/clang/clang.hash
+index a5bf909814..bf54f9bb53 100644
+--- a/package/clang/clang.hash
++++ b/package/clang/clang.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 135f6c9b0cd2da1aff2250e065946258eb699777888df39ca5a5b4fe5e23d0ff cfe-5.0.1.src.tar.xz
++sha256 fa9ce9724abdb68f166deea0af1f71ca0dfa9af8f7e1261f2cae63c280282800  cfe-5.0.2.src.tar.xz
+ sha256 de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6 LICENSE.TXT
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index 14d6441c9a..ae0140c783 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLANG_VERSION = 5.0.1
++CLANG_VERSION = 5.0.2
+ CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
+ CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
+ CLANG_LICENSE = NCSA
