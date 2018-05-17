@@ -1,76 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 May 2018 23:51:53 +0200
-Subject: [Buildroot] [PATCH] faketime: add patch to disable -Werror
-Message-ID: <20180517215153.23753-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 17 May 2018 23:53:20 +0200
+Subject: [Buildroot] [git commit branch/next] package/tzdata: bump version
+ to 2018e
+Message-ID: <20180517215231.D14A180424@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-faketime currently doesn't build on host machines that use gcc 8.x due
-to stricter checks done by gcc, and the fact that it is built with
--Werror.
+commit: https://git.buildroot.net/buildroot/commit/?id=878a197210f2860e8fb8c3fe181dc2b60d46e6d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As a simple stop-gap measure, this commit patches the faketime
-Makefile to not use -Werror anymore.
-
-The actual fixes for the gcc 8.x issues have been submitted upstream
-at https://github.com/wolfcw/libfaketime/pull/161, but disabling
--Werror is a much smaller fix.
-
-Also, it is worth mentioning that removing -Werror makes the existing
-patch 0001-Disable-the-non-null-compare-warning-error.patch (which was
-just disabling one specific warning). We nonetheless keep this patch
-around as it is a backport from upstream.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/bd223dfa1c4baa68e427d4941bd2e9917e22da84/
-
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-src-Makefile-disable-Werror.patch         | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/faketime/0002-src-Makefile-disable-Werror.patch
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/faketime/0002-src-Makefile-disable-Werror.patch b/package/faketime/0002-src-Makefile-disable-Werror.patch
-new file mode 100644
-index 0000000000..e1e3b321b8
---- /dev/null
-+++ b/package/faketime/0002-src-Makefile-disable-Werror.patch
-@@ -0,0 +1,32 @@
-+From bcde6e6f34c3cf78a254315c5caa530db91802fb Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 17 May 2018 23:41:03 +0200
-+Subject: [PATCH] src/Makefile: disable -Werror
-+
-+gcc 8.x has enabled additional warnings that break the build due to
-+-Werror, so let's drop -Werror for now. A set of patches has been
-+submitted upstream (https://github.com/wolfcw/libfaketime/pull/161) to
-+properly fix the gcc 8.x issues, but in the mean time, disabling
-+-Werror is a simpler option.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index bbbd476..6b0d2cd 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -67,7 +67,7 @@ INSTALL ?= install
-+ PREFIX ?= /usr/local
-+ LIBDIRNAME ?= /lib/faketime
-+ 
-+-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-++CFLAGS += -std=gnu99 -Wall -Wextra -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-+ LIB_LDFLAGS += -shared
-+ LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
-+ LDADD += -ldl -lm -lrt
-+-- 
-+2.14.3
-+
--- 
-2.14.3
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index cfcd49ef26..6a0ea17ce9 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,2 +1,2 @@
+-# From http://mm.icann.org/pipermail/tz-announce/2018-January/000048.html
+-sha512 0575c87c9ffcde7b7f62b0df928d8a0e8d93f832b5ef7227b3d8431686f851f1fd5372c7e768f2979830352433b31df7f3979a00c28ea3973a3a0987ebbfb835	tzdata2018c.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
++sha512 d059fcd381b2f6ecdafcd68fdd2a00451d1bf9b1affeb164ae7cabca2e022d499e77f0706ec3f3091b8e84c2211aa66da6c90937108771f1bf070cfebc105cae	tzdata2018e.tar.gz
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 28323e84e7..e20c946208 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2018c
++TZDATA_VERSION = 2018e
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
