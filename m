@@ -1,45 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 May 2018 23:56:01 +0200
-Subject: [Buildroot] [git commit branch/next] package/libuio: bump to 0.2.8
-Message-ID: <20180517221014.89E7D83476@busybox.osuosl.org>
+Date: Thu, 17 May 2018 23:55:59 +0200
+Subject: [Buildroot] [git commit branch/next] package/protobuf: bump to
+ version 3.5.1
+Message-ID: <20180517221014.81D0E8A5DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc8c206026028edb4747df9b8f032b206ccdba6c
+commit: https://git.buildroot.net/buildroot/commit/?id=454aa2da5e79ec8627f1d66ac640ec7bb04025dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-After years of inactivity, several bugfixes and features are merged
+GRPC requires protobuf 3.5.0+
 
 Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuio/libuio.hash | 2 +-
- package/libuio/libuio.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuio/libuio.hash b/package/libuio/libuio.hash
-index 6afe7dea8b..ce2f86ee19 100644
---- a/package/libuio/libuio.hash
-+++ b/package/libuio/libuio.hash
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index fa02440a40..4492487efb 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 57f9617f75d20f7912b270568cffdf098fe9d0c1ca690c002e949be8424aa4e6 libuio-940861de278cb794bf9d775b76a4d1d4f9108607.tar.gz
-+sha256 1494375bd493ef1a1b868ce2cbc7d29f3f9f692c21f70689eae28566e56f2c15 libuio-ca28ff0f69d89a789a47552c72db5a43d280710b.tar.gz
-diff --git a/package/libuio/libuio.mk b/package/libuio/libuio.mk
-index 8f72253add..13429ec0f1 100644
---- a/package/libuio/libuio.mk
-+++ b/package/libuio/libuio.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--# v0.2.7
--LIBUIO_VERSION = 940861de278cb794bf9d775b76a4d1d4f9108607
-+# v0.2.8
-+LIBUIO_VERSION = ca28ff0f69d89a789a47552c72db5a43d280710b
- LIBUIO_SITE = $(call github,Linutronix,libuio,$(LIBUIO_VERSION))
- LIBUIO_LICENSE = LGPL-2.1 (library), GPL-2.0 (programs)
- LIBUIO_LICENSE_FILES = COPYING
+-sha256 2bb34b4a8211a30d12ef29fd8660995023d119c99fbab2e5fe46f17528c9cc78 protobuf-cpp-3.4.1.tar.gz
++sha256 c28dba8782da2cfea1e11c61d335958c31a9c1bc553063546af9cbe98f204092 protobuf-cpp-3.5.1.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index d2782ddcfd..1440589c14 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.4.1
++PROTOBUF_VERSION = 3.5.1
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 91cab4ecc0..9c7606ce34 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 1faa722cf475c8e4c43ddb393d6f1477f1a56c93be38a1c8e367c358db476b5f protobuf-python-3.4.1.tar.gz
++sha256 13d3c15ebfad8c28bee203dd4a0f6e600d2a7d2243bac8b5d0e517466500fcae protobuf-python-3.5.1.tar.gz
