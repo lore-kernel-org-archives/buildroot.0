@@ -1,30 +1,95 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 17 May 2018 11:11:21 -0500
-Subject: [Buildroot] Migrating from buildroot-2016-08 to -2018-02
-In-Reply-To: <CADj18OWYtg91U=KqSuCyC8G5cp8zDD7z6p2Y+z-NxmhE4cpa3w@mail.gmail.com>
-References: <CADj18OWYtg91U=KqSuCyC8G5cp8zDD7z6p2Y+z-NxmhE4cpa3w@mail.gmail.com>
-Message-ID: <CANQCQpZ4rmixSsSVBad9obWVDwLxeT1U5q1XpZw7fkzSOffc3w@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 17 May 2018 20:38:24 +0200
+Subject: [Buildroot] [PATCH] libopusenc: new package
+Message-ID: <20180517183824.16742-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pascal,
+The libopusenc library provides a high-level API for encoding opus audio files
+and live streams.
 
-On Thu, May 17, 2018 at 10:40 AM, Pascal K <pascalkrauth@gmail.com> wrote:
->
-> Hello everyone,
->
-> I just tried to replace our buildroot-2016-08 environment with buildroot-2018-02 and run into a small problem.
->
-> Usually I tried to create a new out-of-Tree, out-of-Source build using:
-> "make BR2_EXTERNAL=../ O=../../beaglebone_build beaglebone_defconfig" from the buildroot main directory, which did create the directory "beaglebone_build" and took care of the configuration.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/libopusenc/Config.in       |  7 +++++++
+ package/libopusenc/libopusenc.hash |  3 +++
+ package/libopusenc/libopusenc.mk   | 16 ++++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/libopusenc/Config.in
+ create mode 100644 package/libopusenc/libopusenc.hash
+ create mode 100644 package/libopusenc/libopusenc.mk
 
-I can get you a bit further.  Need to use absolute paths for your
-BR2_EXTERNAL and for good measure I do the same for O= but I'm not
-sure that one is required.  Also any place you used BR2_EXTERNAL you
-now need to use the new name based on your external.desc file's
-defined name.
-
-Matt
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b910a86a8c..7fc7e354d0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1045,6 +1045,7 @@ F:	configs/bananapro_defconfig
+ F:	package/augeas/
+ F:	package/bctoolbox/
+ F:	package/freescale-imx/imx-alsa-plugins/
++F:	package/libopusenc/
+ F:	package/libshout/
+ F:	package/libupnpp/
+ F:	package/luv/
+diff --git a/package/Config.in b/package/Config.in
+index ecee4938c9..1d6ddee8ec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1359,6 +1359,7 @@ menu "Multimedia"
+ 	source "package/libmpeg2/Config.in"
+ 	source "package/libogg/Config.in"
+ 	source "package/libopenh264/Config.in"
++	source "package/libopusenc/Config.in"
+ 	source "package/libplayer/Config.in"
+ 	source "package/libtheora/Config.in"
+ 	source "package/libvpx/Config.in"
+diff --git a/package/libopusenc/Config.in b/package/libopusenc/Config.in
+new file mode 100644
+index 0000000000..610aba926e
+--- /dev/null
++++ b/package/libopusenc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBOPUSENC
++	bool "libopusenc"
++	help
++	  The libopusenc library provides a high-level API for
++	  encoding opus audio files and live streams.
++
++	  http://opus-codec.org
+diff --git a/package/libopusenc/libopusenc.hash b/package/libopusenc/libopusenc.hash
+new file mode 100644
+index 0000000000..1eea51b6bc
+--- /dev/null
++++ b/package/libopusenc/libopusenc.hash
+@@ -0,0 +1,3 @@
++# From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
++sha256  02e6e0b14cbbe0569d948a46420f9c9a81d93bba32dc576a4007cbf96da68ef3  libopusenc-0.1.1.tar.gz
++sha256  93b17ab56b8230127fea532be0dcb4e6d71e66ab5e8ce5d6ae8785d7288b164f  COPYING
+diff --git a/package/libopusenc/libopusenc.mk b/package/libopusenc/libopusenc.mk
+new file mode 100644
+index 0000000000..0debe85c71
+--- /dev/null
++++ b/package/libopusenc/libopusenc.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libopusenc
++#
++################################################################################
++
++LIBOPUSENC_VERSION = 0.1.1
++LIBOPUSENC_SITE = https://downloads.xiph.org/releases/opus
++LIBOPUSENC_LICENSE = BSD-3-Clause
++LIBOPUSENC_LICENSE_FILES = COPYING
++LIBOPUSENC_INSTALL_STAGING = YES
++LIBOPUSENC_DEPENDENCIES = host-pkgconf opus
++
++LIBOPUSENC_CONF_OPTS = --disable-examples
++
++$(eval $(autotools-package))
+-- 
+2.17.0
