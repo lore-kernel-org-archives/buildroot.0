@@ -1,58 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 May 2018 22:19:51 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/exim: remove libnsl linking
- and fix native tools build
-In-Reply-To: <20180517072140.6432-1-romain.naour@gmail.com>
-References: <20180517072140.6432-1-romain.naour@gmail.com>
-Message-ID: <20180517221951.5f101b52@windsurf>
+Date: Thu, 17 May 2018 22:20:51 +0200
+Subject: [Buildroot] [git commit] configs/mx53loco: Adjust comment to
+ reflect the real kernel version
+Message-ID: <20180517202001.33C7A88EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a5ff200b0df12babdf22658ddd386498f5ccd69f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 May 2018 09:21:39 +0200, Romain Naour wrote:
-> glibc now considers its built-in libnsl as being obsolete, and requires
-> passing --enable-obsolete-libnsl to have it built and installed. libnsl
-> is now provided as a separate project [1], but it isn't packaged yet in
-> Buildroot.
-> 
-> In preparation for dropping --enable-obsolete-libnsl from the glibc
-> package, this commit ensures that exim doesn't use libnsl. It was
-> already the case for uclibc and musl toolchains, so this commit simply
-> extends that to make sure libnsl is also not used with glibc toolchains.
-> 
-> Only Exim's nis.so and nisplus.so lookup modules require libnsl,
-> but they are not build by default. So we can safely remove -lnsl
-> from the Makefile-Linux. If someone want these modules, a new libnsl
-> package must be added first to provide nsl library.
-> 
-> This also fixes the following build error on recent distributions where
-> libnsl is not installed (e.g. Fedora 28 which has switched to the new
-> libnsl library that brings IPV6 support. [2]):
-> 
->   /bin/sh ../scripts/Configure-os.c
->   /usr/bin/gcc buildconfig.c
->   /usr/bin/ld: cannot find -lnsl
->   collect2: error: ld returned 1 exit status
+The kernel used is from 4.16 version, so adjust the comment.
 
-I don't really agree that this patch is the good solution for this
-specific problem. The good approach is to not use $(LIBS) at all when
-building the buildconfig host program. I've committed this:
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/mx53loco_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  https://git.buildroot.org/buildroot/commit/?id=b872d829d092059ae8d5e86115d1515164d01a74
-
-That being said, I believe your change is still useful, but doing it as
-a patch to exim like Baruch proposed is a better solution.
-
-Could you rework your patch, and its commit log, according to this ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 16dde351bd..ae56fcad8c 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,7 +2,7 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 4.15 series
++# Linux headers same as kernel, a 4.16 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ 
+ # System
