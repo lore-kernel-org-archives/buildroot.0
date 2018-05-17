@@ -1,38 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 May 2018 22:03:04 +0200
-Subject: [Buildroot] [PATCH] package/llvm: fix host-llvm build with GCC8
-In-Reply-To: <20180516152635.19330-1-valentin.korenblit@smile.fr>
-References: <20180516152635.19330-1-valentin.korenblit@smile.fr>
-Message-ID: <20180517220304.71f7ab40@windsurf>
+Date: Thu, 17 May 2018 22:16:25 +0200
+Subject: [Buildroot] [git commit] exim: do not link buildconfig with $(LIBS)
+Message-ID: <20180517201720.DE36588E63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b872d829d092059ae8d5e86115d1515164d01a74
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 May 2018 17:26:35 +0200, Valentin Korenblit wrote:
-> This patch fixes the build of lli for host-llvm when using GCC 8.
-> 
-> It was taken from llvm-5.0 package for Fedora 28.
-> 
-> Link to bug: https://bugzilla.redhat.com/show_bug.cgi?id=1540620
-> 
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/824c70e982d8ec7e518cf4db058767df42db6b04/
-> 
-> Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-> ---
->  ...turn-type-in-ORC-readMem-client-interface.patch | 37 ++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch
+The existing patch 0001-Build-buildconfig-for-the-host.patch changes
+the exim build system to use the host compiler to build the
+"buildconfig" program instead of the cross-compiler.
 
-Applied to master, thanks.
+However, it still uses $(LIBS) which lists the target libraries to
+link with, which shouldn't be used. Since buildconfig doesn't use any
+library beyond the C library, we can simply drop using $(LIBS).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This will fix build failures of exim on Fedora 28, where libnsl is no
+longer provided by the C library, causing build failures such as:
+
+/usr/bin/gcc buildconfig.c
+/usr/bin/ld: cannot find -lnsl
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ac78fe18657558b3c12c03c08bf1081d7c06ca85/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/exim/0001-Build-buildconfig-for-the-host.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/exim/0001-Build-buildconfig-for-the-host.patch b/package/exim/0001-Build-buildconfig-for-the-host.patch
+index a926fbdab3..87eb527974 100644
+--- a/package/exim/0001-Build-buildconfig-for-the-host.patch
++++ b/package/exim/0001-Build-buildconfig-for-the-host.patch
+@@ -17,7 +17,7 @@ index 29a6ad3..420ba60 100644
+ -	@echo "$(CC) buildconfig.c"
+ -	$(FE)$(CC) $(CFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
+ +	@echo "$(HOSTCC) buildconfig.c"
+-+	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
+++	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c
+  
+  
+  # Target for the exicyclog utility script
