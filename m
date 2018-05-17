@@ -1,49 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 May 2018 22:16:25 +0200
-Subject: [Buildroot] [git commit] exim: do not link buildconfig with $(LIBS)
-Message-ID: <20180517201720.DE36588E63@busybox.osuosl.org>
+Date: Thu, 17 May 2018 22:19:51 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/exim: remove libnsl linking
+ and fix native tools build
+In-Reply-To: <20180517072140.6432-1-romain.naour@gmail.com>
+References: <20180517072140.6432-1-romain.naour@gmail.com>
+Message-ID: <20180517221951.5f101b52@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b872d829d092059ae8d5e86115d1515164d01a74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The existing patch 0001-Build-buildconfig-for-the-host.patch changes
-the exim build system to use the host compiler to build the
-"buildconfig" program instead of the cross-compiler.
+On Thu, 17 May 2018 09:21:39 +0200, Romain Naour wrote:
+> glibc now considers its built-in libnsl as being obsolete, and requires
+> passing --enable-obsolete-libnsl to have it built and installed. libnsl
+> is now provided as a separate project [1], but it isn't packaged yet in
+> Buildroot.
+> 
+> In preparation for dropping --enable-obsolete-libnsl from the glibc
+> package, this commit ensures that exim doesn't use libnsl. It was
+> already the case for uclibc and musl toolchains, so this commit simply
+> extends that to make sure libnsl is also not used with glibc toolchains.
+> 
+> Only Exim's nis.so and nisplus.so lookup modules require libnsl,
+> but they are not build by default. So we can safely remove -lnsl
+> from the Makefile-Linux. If someone want these modules, a new libnsl
+> package must be added first to provide nsl library.
+> 
+> This also fixes the following build error on recent distributions where
+> libnsl is not installed (e.g. Fedora 28 which has switched to the new
+> libnsl library that brings IPV6 support. [2]):
+> 
+>   /bin/sh ../scripts/Configure-os.c
+>   /usr/bin/gcc buildconfig.c
+>   /usr/bin/ld: cannot find -lnsl
+>   collect2: error: ld returned 1 exit status
 
-However, it still uses $(LIBS) which lists the target libraries to
-link with, which shouldn't be used. Since buildconfig doesn't use any
-library beyond the C library, we can simply drop using $(LIBS).
+I don't really agree that this patch is the good solution for this
+specific problem. The good approach is to not use $(LIBS) at all when
+building the buildconfig host program. I've committed this:
 
-This will fix build failures of exim on Fedora 28, where libnsl is no
-longer provided by the C library, causing build failures such as:
+  https://git.buildroot.org/buildroot/commit/?id=b872d829d092059ae8d5e86115d1515164d01a74
 
-/usr/bin/gcc buildconfig.c
-/usr/bin/ld: cannot find -lnsl
+That being said, I believe your change is still useful, but doing it as
+a patch to exim like Baruch proposed is a better solution.
 
-Fixes:
+Could you rework your patch, and its commit log, according to this ?
 
-  http://autobuild.buildroot.net/results/ac78fe18657558b3c12c03c08bf1081d7c06ca85/
+Thanks a lot!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/exim/0001-Build-buildconfig-for-the-host.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/exim/0001-Build-buildconfig-for-the-host.patch b/package/exim/0001-Build-buildconfig-for-the-host.patch
-index a926fbdab3..87eb527974 100644
---- a/package/exim/0001-Build-buildconfig-for-the-host.patch
-+++ b/package/exim/0001-Build-buildconfig-for-the-host.patch
-@@ -17,7 +17,7 @@ index 29a6ad3..420ba60 100644
- -	@echo "$(CC) buildconfig.c"
- -	$(FE)$(CC) $(CFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
- +	@echo "$(HOSTCC) buildconfig.c"
--+	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
-++	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c
-  
-  
-  # Target for the exicyclog utility script
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
