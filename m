@@ -1,35 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 May 2018 22:22:28 +0200
-Subject: [Buildroot] [PATCH 1/1] libkcapi: depends on
- BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <20180515184138.21923-1-fontaine.fabrice@gmail.com>
-References: <20180515184138.21923-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180517222228.2f666ad2@windsurf>
+Date: Thu, 17 May 2018 22:32:01 +0200
+Subject: [Buildroot] [git commit] libnss: backport upstream patch to fix
+ build with gcc 8.x
+Message-ID: <20180517203159.7ED998A455@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=45cf64ca0c0070151e4321e218e20cae5d730797
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 May 2018 20:41:38 +0200, Fabrice Fontaine wrote:
-> Since commit
-> https://github.com/smuellerDD/libkcapi/commit/4d0a5c235536b5f679e6a9b0c847f56c9cfc3835,
-> libkcapi uses __sync_add_and_fetch_4 and __sync_sub_and_fetch_4
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/de5e136ea433633d836bff1d2ac1d3b461391b83
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libkcapi/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+This commit backports upstream patch
+https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
+to our libnss package to fix the build with gcc 8.x.
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  http://autobuild.buildroot.net/results/1ca35171200286fa032b24606aaa50de6a2d449e/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-Avoid-stringop-truncation-warning-r-fran.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
+new file mode 100644
+index 0000000000..c14880b117
+--- /dev/null
++++ b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
+@@ -0,0 +1,33 @@
++From f0ce70989526fc9a0223398c99ea0d09777ea5df Mon Sep 17 00:00:00 2001
++From: Martin Thomson <martin.thomson@gmail.com>
++Date: Thu, 15 Feb 2018 16:34:02 +1100
++Subject: [PATCH] Bug 1438426 - Avoid stringop-truncation warning, r=franziskus
++
++--HG--
++extra : rebase_source : 4ea1630d0da0ce3523309e3da33ee50961682242
++
++Upstream-commit: https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
++[Thomas: edited after git format-patch to add the nss/ prefix needed
++for the patch to apply properly on the source code extracted by the
++tarball.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ nss/coreconf/nsinstall/pathsub.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/nss/coreconf/nsinstall/pathsub.c b/nss/coreconf/nsinstall/pathsub.c
++index a42a9f30a..c31a946f0 100644
++--- a/nss/coreconf/nsinstall/pathsub.c
+++++ b/nss/coreconf/nsinstall/pathsub.c
++@@ -212,7 +212,7 @@ reversepath(char *inpath, char *name, int len, char *outpath)
++ 	    xchdir("..");
++ 	} else {
++ 	    cp -= 3;
++-	    strncpy(cp, "../", 3);
+++	    memcpy(cp, "../", 3);
++ 	    xchdir(buf);
++ 	}
++     }
++-- 
++2.14.3
++
