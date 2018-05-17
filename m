@@ -1,64 +1,55 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 17 May 2018 10:20:46 +0300
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.1
-In-Reply-To: <CAMRc=MfkUTd5Fz0ABqdwfdN5Au+YTY6GuV2YQqz6cDf8=S9eqQ@mail.gmail.com>
-References: <20180516135856.29408-1-brgl@bgdev.pl>
- <0ff358a9-2d87-b5cb-e1ac-be7294751618@mind.be>
- <CAMRc=MfkUTd5Fz0ABqdwfdN5Au+YTY6GuV2YQqz6cDf8=S9eqQ@mail.gmail.com>
-Message-ID: <20180517072046.wuwor6uyf2tajtca@tarshish>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 17 May 2018 09:21:40 +0200
+Subject: [Buildroot] [PATCH v3 2/2] Revert "glibc: install the obsolete
+ libnsl"
+In-Reply-To: <20180517072140.6432-1-romain.naour@gmail.com>
+References: <20180517072140.6432-1-romain.naour@gmail.com>
+Message-ID: <20180517072140.6432-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bartosz,
+libnsl from Glibc is deprecated and should not be used anymore.
+Remove libnsl.so.* from GLIBC_LIBS_LIB.
 
-On Thu, May 17, 2018 at 09:00:38AM +0200, Bartosz Golaszewski wrote:
-> 2018-05-16 23:48 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
-> > On 16-05-18 15:58, Bartosz Golaszewski wrote:
-> >> This is a minor release the main feature of which are the
-> >> object-oriented bindings for C++ and Python3. Other than that there's
-> >> a couple bug-fixes and minor improvements all around.
-> >
-> >  So for -next, I guess?
-> >
-> >> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> >> ---
-> >>  package/libgpiod/Config.in     | 20 ++++++++++++++++++++
-> >>  package/libgpiod/libgpiod.hash |  2 +-
-> >>  package/libgpiod/libgpiod.mk   | 20 ++++++++++++++++++--
-> >>  3 files changed, 39 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
-> >> index 63a7cb6e78..c10f11cc15 100644
-> >> --- a/package/libgpiod/Config.in
-> >> +++ b/package/libgpiod/Config.in
-> >> @@ -14,6 +14,26 @@ config BR2_PACKAGE_LIBGPIOD_TOOLS
-> >>       help
-> >>         Include a set of command-line tools for managing GPIOs.
-> >>
-> >> +config BR2_PACKAGE_LIBGPIODCXX
-> >> +     bool "install C++ bindings"
-> >> +     depends on BR2_INSTALL_LIBSTDCPP
-> >> +     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> >
-> >  Is there really a need to make these bindings optional? We try to avoid too
-> > many Config.in options. So only if the bindings are relatively large on target
-> > it's worthwhile to make them optional (more than, say 20% of libgpiod itself,
-> > after stripping).
-> 
-> The basic library and tools only require a libc and recent kernel
-> headers. I don't want users of very simple systems to carry all those
-> dependencies for C++ and Python if they're not using it.
+libnsl is now an separate library that can be packaged later if
+necessary [1].
 
-You don't need to. You can make BR2_INSTALL_LIBSTDCPP an optional dependency. 
-If it is defined, install the C++ binding. Same goes for Python. That is what 
-Arnout suggests.
+Note: libnsl from Glibc doesn't build with gcc 8 due new warning [2].
 
-baruch
+[1] https://github.com/thkukuk/libnsl.git
+[2] http://patchwork.sourceware.org/patch/26437
 
+This reverts commit 398747f5fafca8c07e696612d8eded53d4f935c7.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+---
+ package/glibc/glibc.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 3ab673c0cc..c1c5ac687f 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -100,7 +100,6 @@ define GLIBC_CONFIGURE_CMDS
+ 		--disable-profile \
+ 		--without-gd \
+ 		--enable-obsolete-rpc \
+-		--enable-obsolete-nsl \
+ 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
+ 		--with-headers=$(STAGING_DIR)/usr/include)
+ 	$(GLIBC_ADD_MISSING_STUB_H)
+@@ -113,7 +112,7 @@ endef
+ 
+ GLIBC_LIBS_LIB = \
+ 	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
+-	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
++	libm.so.* libpthread.so.* libresolv.so.* librt.so.* \
+ 	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
+ 
+ ifeq ($(BR2_PACKAGE_GDB),y)
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.14.3
