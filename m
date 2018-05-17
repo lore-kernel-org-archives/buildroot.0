@@ -1,64 +1,40 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 17 May 2018 10:10:54 +0200
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.1
-In-Reply-To: <20180517072046.wuwor6uyf2tajtca@tarshish>
-References: <20180516135856.29408-1-brgl@bgdev.pl>
- <0ff358a9-2d87-b5cb-e1ac-be7294751618@mind.be>
- <CAMRc=MfkUTd5Fz0ABqdwfdN5Au+YTY6GuV2YQqz6cDf8=S9eqQ@mail.gmail.com>
- <20180517072046.wuwor6uyf2tajtca@tarshish>
-Message-ID: <CAMRc=Mf4ZEqxxFPLdJF5P1JGUohTZrxcfGHVxmSTZR2FBTK_Rg@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 17 May 2018 10:38:09 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2018e
+Message-ID: <20180517093810.23075-1-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-05-17 9:20 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-> Hi Bartosz,
->
-> On Thu, May 17, 2018 at 09:00:38AM +0200, Bartosz Golaszewski wrote:
->> 2018-05-16 23:48 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->> > On 16-05-18 15:58, Bartosz Golaszewski wrote:
->> >> This is a minor release the main feature of which are the
->> >> object-oriented bindings for C++ and Python3. Other than that there's
->> >> a couple bug-fixes and minor improvements all around.
->> >
->> >  So for -next, I guess?
->> >
->> >> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
->> >> ---
->> >>  package/libgpiod/Config.in     | 20 ++++++++++++++++++++
->> >>  package/libgpiod/libgpiod.hash |  2 +-
->> >>  package/libgpiod/libgpiod.mk   | 20 ++++++++++++++++++--
->> >>  3 files changed, 39 insertions(+), 3 deletions(-)
->> >>
->> >> diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
->> >> index 63a7cb6e78..c10f11cc15 100644
->> >> --- a/package/libgpiod/Config.in
->> >> +++ b/package/libgpiod/Config.in
->> >> @@ -14,6 +14,26 @@ config BR2_PACKAGE_LIBGPIOD_TOOLS
->> >>       help
->> >>         Include a set of command-line tools for managing GPIOs.
->> >>
->> >> +config BR2_PACKAGE_LIBGPIODCXX
->> >> +     bool "install C++ bindings"
->> >> +     depends on BR2_INSTALL_LIBSTDCPP
->> >> +     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
->> >
->> >  Is there really a need to make these bindings optional? We try to avoid too
->> > many Config.in options. So only if the bindings are relatively large on target
->> > it's worthwhile to make them optional (more than, say 20% of libgpiod itself,
->> > after stripping).
->>
->> The basic library and tools only require a libc and recent kernel
->> headers. I don't want users of very simple systems to carry all those
->> dependencies for C++ and Python if they're not using it.
->
-> You don't need to. You can make BR2_INSTALL_LIBSTDCPP an optional dependency.
-> If it is defined, install the C++ binding. Same goes for Python. That is what
-> Arnout suggests.
->
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/zic/zic.hash | 4 ++--
+ package/zic/zic.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I'm afraid I don't understand. Could you maybe point me to some example?
-
-Bart
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index df578fe1b3..6b7994731c 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,2 @@
+-# From http://mm.icann.org/pipermail/tz-announce/2018-January/000048.html
+-sha512 21988e876479e38661d41ea4c7b5218ba14b979739d7ba8d49a2d343bb9f37c654056ab21c046a6652715f012e4ca33c4aa109b1ec3ac5d0244dd3a7ea9ed6d2	tzcode2018c.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
++sha512 4a245cae2d0922b24539a94cf4a8ccc2bba1ee696e0aaefecb41c7c8d78724a7fcea6039909336177b8b26fec8fc47719e3e56ca9839dbaf52f9a4fec84d4717	tzcode2018e.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index aba8bc5b3f..224b7ab407 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZIC_VERSION = 2018c
++ZIC_VERSION = 2018e
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = http://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
+-- 
+2.17.0
