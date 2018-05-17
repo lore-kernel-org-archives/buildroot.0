@@ -1,108 +1,30 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 17 May 2018 18:08:09 +0200
-Subject: [Buildroot] [PATCH v2] libgpiod: bump version to v1.1
-In-Reply-To: <20180517153943.6z3gdc2syss42rlz@tarshish>
-References: <20180517125656.31922-1-brgl@bgdev.pl>
- <20180517153943.6z3gdc2syss42rlz@tarshish>
-Message-ID: <CAMRc=Mca6ZxdG=VKZB4KHn0Um=51mik_mJ-rimEZMFH5LPw4Rw@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 17 May 2018 11:11:21 -0500
+Subject: [Buildroot] Migrating from buildroot-2016-08 to -2018-02
+In-Reply-To: <CADj18OWYtg91U=KqSuCyC8G5cp8zDD7z6p2Y+z-NxmhE4cpa3w@mail.gmail.com>
+References: <CADj18OWYtg91U=KqSuCyC8G5cp8zDD7z6p2Y+z-NxmhE4cpa3w@mail.gmail.com>
+Message-ID: <CANQCQpZ4rmixSsSVBad9obWVDwLxeT1U5q1XpZw7fkzSOffc3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-05-17 17:39 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-> Hi Bartosz,
->
-> On Thu, May 17, 2018 at 02:56:56PM +0200, Bartosz Golaszewski wrote:
->> This is a minor release the main feature of which are the
->> object-oriented bindings for C++ and Python3. Other than that there's
->> a couple bug-fixes and minor improvements all around.
->>
->> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
->> ---
->> v1 -> v2:
->> - install bindings conditionally based on already selected dependencies
->>   rather than adding new Config options
->>
->>  package/libgpiod/libgpiod.hash |  2 +-
->>  package/libgpiod/libgpiod.mk   | 20 ++++++++++++++++++--
->>  2 files changed, 19 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
->> index 9ed4b59ab9..1d217f6048 100644
->> --- a/package/libgpiod/libgpiod.hash
->> +++ b/package/libgpiod/libgpiod.hash
->> @@ -1,4 +1,4 @@
->>  # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
->> -sha256 972924195367f5fb045c023d65340c4b7dfc8764499516be446553865208dedc  libgpiod-1.0.1.tar.xz
->> +sha256 9758466468a7ef3f5e30c182c1303abef6241e665cda4d82a64328a7474838c1  libgpiod-1.1.tar.xz
->>  # Hash for license file
->>  sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
->> diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
->> index 7f8fa4b7dd..8c9429b81b 100644
->> --- a/package/libgpiod/libgpiod.mk
->> +++ b/package/libgpiod/libgpiod.mk
->> @@ -4,13 +4,12 @@
->>  #
->>  ################################################################################
->>
->> -LIBGPIOD_VERSION = 1.0.1
->> +LIBGPIOD_VERSION = 1.1
->>  LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
->>  LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
->>  LIBGPIOD_LICENSE = LGPL-2.1+
->>  LIBGPIOD_LICENSE_FILES = COPYING
->>  LIBGPIOD_INSTALL_STAGING = YES
->> -
->>  LIBGPIOD_DEPENDENCIES = host-pkgconf
->>
->>  ifeq ($(BR2_PACKAGE_LIBGPIOD_TOOLS),y)
->> @@ -19,4 +18,21 @@ else
->>  LIBGPIOD_CONF_OPTS += --disable-tools
->>  endif
->>
->> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
->
-> Your v1 patch had a dependency on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8. To reflect
-> that here you need:
->
-> ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),yy)
->
+Pascal,
 
-Indeed.
-
->> +LIBGPIOD_CONF_OPTS += --enable-bindings-cxx
->> +else
->> +LIBGPIOD_CONF_OPTS += --disable-bindings-cxx
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
->> +LIBGPIOD_CONF_OPTS += --enable-bindings-python
->> +LIBGPIOD_DEPENDENCIES += python3 host-python3
+On Thu, May 17, 2018 at 10:40 AM, Pascal K <pascalkrauth@gmail.com> wrote:
 >
-> Why do you need host-python3? python3 depends on host-python3 already, so
-> technically it's redundant anyway. Still, if you really need python3 for the
-> build it makes sense to specify this dependency directly.
+> Hello everyone,
 >
-
-I'm calling python-config from the staging dir. I'll double check and
-remove it if  it's unneeded.
-
->> +LIBGPIOD_CONF_ENV += \
->> +     PYTHON=$(HOST_DIR)/bin/python3 \
->> +     PYTHON_CPPFLAGS="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
->> +     PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
->> +else
->> +LIBGPIOD_CONF_OPTS += --disable-bindings-python
->> +endif
->> +
->>  $(eval $(autotools-package))
+> I just tried to replace our buildroot-2016-08 environment with buildroot-2018-02 and run into a small problem.
 >
-> baruch
+> Usually I tried to create a new out-of-Tree, out-of-Source build using:
+> "make BR2_EXTERNAL=../ O=../../beaglebone_build beaglebone_defconfig" from the buildroot main directory, which did create the directory "beaglebone_build" and took care of the configuration.
 
-I'm done for the day and leaving for a three-week vacation tomorrow,
-so I'll get back to it after I'm back.
+I can get you a bit further.  Need to use absolute paths for your
+BR2_EXTERNAL and for good measure I do the same for O= but I'm not
+sure that one is required.  Also any place you used BR2_EXTERNAL you
+now need to use the new name based on your external.desc file's
+defined name.
 
-Best regards,
-Bartosz Golaszewski
+Matt
