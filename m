@@ -1,50 +1,72 @@
-From: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
-Date: Thu, 17 May 2018 21:29:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/protobuf: bump to version 3.5.1
-Message-ID: <20180517192900.164160-1-martijn.de.gouw@prodrive-technologies.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 17 May 2018 22:01:53 +0200
+Subject: [Buildroot] [git commit] package/llvm: fix host-llvm build with GCC8
+Message-ID: <20180517200136.0CFB188E29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GRPC requires protobuf 3.5.0+
+commit: https://git.buildroot.net/buildroot/commit/?id=db3dd600256e4ce3ba18496ea3e15c993489b598
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+This patch fixes the build of lli for host-llvm when using GCC 8.
+
+It was taken from llvm-5.0 package for Fedora 28.
+
+Link to bug: https://bugzilla.redhat.com/show_bug.cgi?id=1540620
+
+Fixes:
+
+http://autobuild.buildroot.net/results/824c70e982d8ec7e518cf4db058767df42db6b04/
+
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ ...turn-type-in-ORC-readMem-client-interface.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index fa02440a40..4492487efb 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 2bb34b4a8211a30d12ef29fd8660995023d119c99fbab2e5fe46f17528c9cc78 protobuf-cpp-3.4.1.tar.gz
-+sha256 c28dba8782da2cfea1e11c61d335958c31a9c1bc553063546af9cbe98f204092 protobuf-cpp-3.5.1.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index d2782ddcfd..1440589c14 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works, as they share the same
- # version/site variables.
--PROTOBUF_VERSION = 3.4.1
-+PROTOBUF_VERSION = 3.5.1
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 91cab4ecc0..9c7606ce34 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 1faa722cf475c8e4c43ddb393d6f1477f1a56c93be38a1c8e367c358db476b5f protobuf-python-3.4.1.tar.gz
-+sha256 13d3c15ebfad8c28bee203dd4a0f6e600d2a7d2243bac8b5d0e517466500fcae protobuf-python-3.5.1.tar.gz
--- 
-2.11.0
+diff --git a/package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch b/package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch
+new file mode 100644
+index 0000000000..0343b4c7e8
+--- /dev/null
++++ b/package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch
+@@ -0,0 +1,37 @@
++From 72ea6ea635d5b5a88f411710daf7e1d340d232d8 Mon Sep 17 00:00:00 2001
++From: Tilmann Scheller <tschelle@redhat.com>
++Date: Thu, 1 Feb 2018 11:40:01 -0600
++Subject: [PATCH] Fix return type in ORC readMem() client interface.
++
++GCC 8.0.1 detects the type mismatch and causes the compilation to fail. Clang
++and earlier versions of GCC don't detect the issue.
++
++Fixes rhbz#1540620.
++
++This patch was taken from llvm5.0-5.0.1-7.fc28.src.rpm
++
++Link to bug: https://bugzilla.redhat.com/show_bug.cgi?id=1540620
++
++Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
++---
++ include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h b/include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h
++index da02250ba16..bed472e2e0e 100644
++--- a/include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h
+++++ b/include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h
++@@ -713,8 +713,8 @@ private:
++ 
++   uint32_t getTrampolineSize() const { return RemoteTrampolineSize; }
++ 
++-  Expected<std::vector<char>> readMem(char *Dst, JITTargetAddress Src,
++-                                      uint64_t Size) {
+++  Expected<std::vector<uint8_t>> readMem(char *Dst, JITTargetAddress Src,
+++                                         uint64_t Size) {
++     // Check for an 'out-of-band' error, e.g. from an MM destructor.
++     if (ExistingError)
++       return std::move(ExistingError);
++-- 
++2.14.3
++
