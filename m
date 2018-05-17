@@ -1,66 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 May 2018 22:32:01 +0200
-Subject: [Buildroot] [git commit] libnss: backport upstream patch to fix
- build with gcc 8.x
-Message-ID: <20180517203159.7ED998A455@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 17 May 2018 23:19:18 +0200
+Subject: [Buildroot] [PATCH 3/3] weston: add weston-imx variant when
+ using imx-gpu-viv
+In-Reply-To: <20180517130810.GA6584@g751.home>
+References: <20180516155201.10279-1-gary.bisson@boundarydevices.com>
+ <20180516155201.10279-4-gary.bisson@boundarydevices.com>
+ <2d58cd37-effa-a5bf-5f9b-6d1e143062db@mind.be>
+ <20180517130810.GA6584@g751.home>
+Message-ID: <a461da37-e484-57b9-be4d-f91ffbea9cae@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45cf64ca0c0070151e4321e218e20cae5d730797
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit backports upstream patch
-https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
-to our libnss package to fix the build with gcc 8.x.
 
-Fixes:
+On 17-05-18 15:08, Gary Bisson wrote:
+> Hi Arnout,
+> 
+> On Wed, May 16, 2018 at 11:24:17PM +0200, Arnout Vandecappelle wrote:
+>>
+>>
+>> On 16-05-18 17:52, Gary Bisson wrote:
+[snip]
+>>> +ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
+>>> +ifeq ($(BR2_PACKAGE_IMX_GPU_G2D),y)
+>>
+>> WESTON_CONF_OPTS += --enable-imxg2d
+> 
+> Ok, I forgot you wanted that --enable-xxx options to be explicit
+> although it ends up in the 'unrecognized options'.
 
-  http://autobuild.buildroot.net/results/1ca35171200286fa032b24606aaa50de6a2d449e/
+ So I took a look at the configure.ac, and of course they got it wrong;
+--enable-imxg2d will disable it. So your patch was correct.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-Avoid-stringop-truncation-warning-r-fran.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ Reading documentation is apparently difficult :-)
 
-diff --git a/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
-new file mode 100644
-index 0000000000..c14880b117
---- /dev/null
-+++ b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
-@@ -0,0 +1,33 @@
-+From f0ce70989526fc9a0223398c99ea0d09777ea5df Mon Sep 17 00:00:00 2001
-+From: Martin Thomson <martin.thomson@gmail.com>
-+Date: Thu, 15 Feb 2018 16:34:02 +1100
-+Subject: [PATCH] Bug 1438426 - Avoid stringop-truncation warning, r=franziskus
-+
-+--HG--
-+extra : rebase_source : 4ea1630d0da0ce3523309e3da33ee50961682242
-+
-+Upstream-commit: https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
-+[Thomas: edited after git format-patch to add the nss/ prefix needed
-+for the patch to apply properly on the source code extracted by the
-+tarball.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ nss/coreconf/nsinstall/pathsub.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/nss/coreconf/nsinstall/pathsub.c b/nss/coreconf/nsinstall/pathsub.c
-+index a42a9f30a..c31a946f0 100644
-+--- a/nss/coreconf/nsinstall/pathsub.c
-++++ b/nss/coreconf/nsinstall/pathsub.c
-+@@ -212,7 +212,7 @@ reversepath(char *inpath, char *name, int len, char *outpath)
-+ 	    xchdir("..");
-+ 	} else {
-+ 	    cp -= 3;
-+-	    strncpy(cp, "../", 3);
-++	    memcpy(cp, "../", 3);
-+ 	    xchdir(buf);
-+ 	}
-+     }
-+-- 
-+2.14.3
-+
+ Since I'm not entirely convinced of the config option myself anyway:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> 
+> Thanks for the review. I'll add that in the V2 once it is decided what
+> to do about the config option.
+> 
+> Regards,
+> Gary
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
