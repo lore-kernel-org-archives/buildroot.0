@@ -1,53 +1,43 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 17 May 2018 08:24:27 -0500
-Subject: [Buildroot] [PATCH] linux: don't override HOSTCC for kconfig
-In-Reply-To: <20180517123921.16086-1-arnout@mind.be>
-References: <20180517123921.16086-1-arnout@mind.be>
-Message-ID: <CANQCQpY+HguhU-GuKWASvRWSp8X5r-uBqAJ=epO29yAbjqmbWA@mail.gmail.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Thu, 17 May 2018 15:31:14 +0200
+Subject: [Buildroot] [PATCH 1/2] package/llvm: bump to version 5.0.2
+Message-ID: <20180517133115.24114-1-valentin.korenblit@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+5.0.2  is API and ABI compatible with 5.0.0 and 5.0.1 and includes
+mitigations for CVE-2017-5715 (Spectre Variant 2) for X86 and MIPS.
 
-On Thu, May 17, 2018 at 7:39 AM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> Kconfig uses either pkg-config or hard-coded /usr/include paths to find
-> the ncurses or ncursesw library. If ncursesw is found, it will include
-> <ncursesw.h>. Since Buildroot's host-ncurses doesn't install a .pc file,
-> and linux.mk anyway doesn't pass the pkg-config options to find the host
-> pkg-config files, Kconfig will always find the system's ncursesw.h.
->
-> However, since commit dde090c299 (linux: fix passing of host CFLAGS and
-> LDFLAGS) HOST_LDFLAGS is passed to the linux build system. Thus, if
-> host-ncurses was already built before 'make linux-menuconfig' is called,
-> the build will pick up libncurses from the host directory, which is NOT
-> widechar. Thus, two different ncurses configurations are mixed into the
-> final mconf program. This will result in serious breakage in the
-> rendering of the menus (lots of @ and question mark characters).
->
-> As a workaround (suggested by Yann), don't pass HOST_CFLAGS and
-> HOST_LDFLAGS when running kconfig commands. For kconfig, we should never
-> need host packages anyway. This way, the kconfig calls will always use
-> the system's ncurses and never our host-ncurses.
->
-> Note that the same problem could pop up for other kconfig packages as
-> well if we ever pass HOST_CFLAGS/HOST_LDFLAGS to them. We could force
-> HOSTCC=$(HOSTCC) directly in kconfig-package. However, for now there
-> are no other packages that exhibit this problem, so this can be
-> revisited when they do.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: David De Grave <david.degrave@essensium.com>
-> Cc: Scott Fan <fancp2007@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->
+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+---
+ package/llvm/llvm.hash | 2 +-
+ package/llvm/llvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Didn't realize this was causing some issues we've been observing on
-the LTS tag.  We also noticed the content in the menu was incorrect at
-points but it never affected the saved config unless you re-saved.
-Thanks for the fix.
-
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+index 3e998c4328..14f8bb4488 100644
+--- a/package/llvm/llvm.hash
++++ b/package/llvm/llvm.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 5fa7489fc0225b11821cab0362f5813a05f2bcf2533e8a4ea9c9c860168807b0	llvm-5.0.1.src.tar.xz
++sha256 d522eda97835a9c75f0b88ddc81437e5edbb87dc2740686cb8647763855c2b3c  llvm-5.0.2.src.tar.xz
+ sha256 abd4d8794808bacb1eb6924d49efafd9ab6eef88faaaeb5d3cfa13ee3670d672 LICENSE.TXT
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 978f176f28..3abf428989 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LLVM_VERSION = 5.0.1
++LLVM_VERSION = 5.0.2
+ LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = NCSA
+-- 
+2.14.3
