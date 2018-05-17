@@ -1,45 +1,98 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Thu, 17 May 2018 15:31:15 +0200
-Subject: [Buildroot] [PATCH 2/2] package/clang: bump to version 5.0.2
-In-Reply-To: <20180517133115.24114-1-valentin.korenblit@smile.fr>
-References: <20180517133115.24114-1-valentin.korenblit@smile.fr>
-Message-ID: <20180517133115.24114-2-valentin.korenblit@smile.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 17 May 2018 18:39:43 +0300
+Subject: [Buildroot] [PATCH v2] libgpiod: bump version to v1.1
+In-Reply-To: <20180517125656.31922-1-brgl@bgdev.pl>
+References: <20180517125656.31922-1-brgl@bgdev.pl>
+Message-ID: <20180517153943.6z3gdc2syss42rlz@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-5.0.2  is API and ABI compatible with 5.0.0 and 5.0.1 and includes
-mitigations for CVE-2017-5715 (Spectre Variant 2) for X86 and MIPS.
+Hi Bartosz,
 
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
----
- package/clang/clang.hash | 2 +-
- package/clang/clang.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, May 17, 2018 at 02:56:56PM +0200, Bartosz Golaszewski wrote:
+> This is a minor release the main feature of which are the
+> object-oriented bindings for C++ and Python3. Other than that there's
+> a couple bug-fixes and minor improvements all around.
+> 
+> Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> ---
+> v1 -> v2:
+> - install bindings conditionally based on already selected dependencies
+>   rather than adding new Config options
+> 
+>  package/libgpiod/libgpiod.hash |  2 +-
+>  package/libgpiod/libgpiod.mk   | 20 ++++++++++++++++++--
+>  2 files changed, 19 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+> index 9ed4b59ab9..1d217f6048 100644
+> --- a/package/libgpiod/libgpiod.hash
+> +++ b/package/libgpiod/libgpiod.hash
+> @@ -1,4 +1,4 @@
+>  # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+> -sha256 972924195367f5fb045c023d65340c4b7dfc8764499516be446553865208dedc  libgpiod-1.0.1.tar.xz
+> +sha256 9758466468a7ef3f5e30c182c1303abef6241e665cda4d82a64328a7474838c1  libgpiod-1.1.tar.xz
+>  # Hash for license file
+>  sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+> diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+> index 7f8fa4b7dd..8c9429b81b 100644
+> --- a/package/libgpiod/libgpiod.mk
+> +++ b/package/libgpiod/libgpiod.mk
+> @@ -4,13 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -LIBGPIOD_VERSION = 1.0.1
+> +LIBGPIOD_VERSION = 1.1
+>  LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+>  LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+>  LIBGPIOD_LICENSE = LGPL-2.1+
+>  LIBGPIOD_LICENSE_FILES = COPYING
+>  LIBGPIOD_INSTALL_STAGING = YES
+> -
+>  LIBGPIOD_DEPENDENCIES = host-pkgconf
+>  
+>  ifeq ($(BR2_PACKAGE_LIBGPIOD_TOOLS),y)
+> @@ -19,4 +18,21 @@ else
+>  LIBGPIOD_CONF_OPTS += --disable-tools
+>  endif
+>  
+> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
 
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
-index a5bf909814..bf54f9bb53 100644
---- a/package/clang/clang.hash
-+++ b/package/clang/clang.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256 135f6c9b0cd2da1aff2250e065946258eb699777888df39ca5a5b4fe5e23d0ff cfe-5.0.1.src.tar.xz
-+sha256 fa9ce9724abdb68f166deea0af1f71ca0dfa9af8f7e1261f2cae63c280282800  cfe-5.0.2.src.tar.xz
- sha256 de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6 LICENSE.TXT
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index 14d6441c9a..ae0140c783 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLANG_VERSION = 5.0.1
-+CLANG_VERSION = 5.0.2
- CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
- CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
- CLANG_LICENSE = NCSA
+Your v1 patch had a dependency on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8. To reflect 
+that here you need:
+
+ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),yy)
+
+> +LIBGPIOD_CONF_OPTS += --enable-bindings-cxx
+> +else
+> +LIBGPIOD_CONF_OPTS += --disable-bindings-cxx
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +LIBGPIOD_CONF_OPTS += --enable-bindings-python
+> +LIBGPIOD_DEPENDENCIES += python3 host-python3
+
+Why do you need host-python3? python3 depends on host-python3 already, so 
+technically it's redundant anyway. Still, if you really need python3 for the 
+build it makes sense to specify this dependency directly.
+
+> +LIBGPIOD_CONF_ENV += \
+> +	PYTHON=$(HOST_DIR)/bin/python3 \
+> +	PYTHON_CPPFLAGS="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
+> +	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
+> +else
+> +LIBGPIOD_CONF_OPTS += --disable-bindings-python
+> +endif
+> +
+>  $(eval $(autotools-package))
+
+baruch
+
 -- 
-2.14.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
