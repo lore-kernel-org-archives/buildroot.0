@@ -1,68 +1,77 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 17 May 2018 14:39:21 +0200
-Subject: [Buildroot] [PATCH] linux: don't override HOSTCC for kconfig
-Message-ID: <20180517123921.16086-1-arnout@mind.be>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 17 May 2018 14:56:56 +0200
+Subject: [Buildroot] [PATCH v2] libgpiod: bump version to v1.1
+Message-ID: <20180517125656.31922-1-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kconfig uses either pkg-config or hard-coded /usr/include paths to find
-the ncurses or ncursesw library. If ncursesw is found, it will include
-<ncursesw.h>. Since Buildroot's host-ncurses doesn't install a .pc file,
-and linux.mk anyway doesn't pass the pkg-config options to find the host
-pkg-config files, Kconfig will always find the system's ncursesw.h.
+This is a minor release the main feature of which are the
+object-oriented bindings for C++ and Python3. Other than that there's
+a couple bug-fixes and minor improvements all around.
 
-However, since commit dde090c299 (linux: fix passing of host CFLAGS and
-LDFLAGS) HOST_LDFLAGS is passed to the linux build system. Thus, if
-host-ncurses was already built before 'make linux-menuconfig' is called,
-the build will pick up libncurses from the host directory, which is NOT
-widechar. Thus, two different ncurses configurations are mixed into the
-final mconf program. This will result in serious breakage in the
-rendering of the menus (lots of @ and question mark characters).
-
-As a workaround (suggested by Yann), don't pass HOST_CFLAGS and
-HOST_LDFLAGS when running kconfig commands. For kconfig, we should never
-need host packages anyway. This way, the kconfig calls will always use
-the system's ncurses and never our host-ncurses.
-
-Note that the same problem could pop up for other kconfig packages as
-well if we ever pass HOST_CFLAGS/HOST_LDFLAGS to them. We could force
-HOSTCC=$(HOSTCC) directly in kconfig-package. However, for now there
-are no other packages that exhibit this problem, so this can be
-revisited when they do.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: David De Grave <david.degrave@essensium.com>
-Cc: Scott Fan <fancp2007@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 ---
-v3: override LINUX_KCONFIG_OPTS instead of building host-ncurses with
-    wchar
----
- linux/linux.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+v1 -> v2:
+- install bindings conditionally based on already selected dependencies
+  rather than adding new Config options
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index b6b91391b6..6b5f5344ed 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -235,7 +235,14 @@ LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
- endif
- LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
- LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
--LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
-+
-+# LINUX_MAKE_FLAGS overrides HOSTCC to allow the kernel build to find our
-+# host-openssl and host-libelf. However, this triggers a bug in the kconfig
-+# build script that causes it to build with /usr/include/ncurses.h (which is
-+# typically wchar) but link with $(HOST_DIR)/lib/libncurses.so (which is not).
-+# We don't actually need any host-package for kconfig, so remove the HOSTCC
-+# override again.
-+LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC)"
+ package/libgpiod/libgpiod.hash |  2 +-
+ package/libgpiod/libgpiod.mk   | 20 ++++++++++++++++++--
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 9ed4b59ab9..1d217f6048 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 972924195367f5fb045c023d65340c4b7dfc8764499516be446553865208dedc  libgpiod-1.0.1.tar.xz
++sha256 9758466468a7ef3f5e30c182c1303abef6241e665cda4d82a64328a7474838c1  libgpiod-1.1.tar.xz
+ # Hash for license file
+ sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 7f8fa4b7dd..8c9429b81b 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
  
- # If no package has yet set it, set it from the Kconfig option
- LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
+-LIBGPIOD_VERSION = 1.0.1
++LIBGPIOD_VERSION = 1.1
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
+ LIBGPIOD_LICENSE_FILES = COPYING
+ LIBGPIOD_INSTALL_STAGING = YES
+-
+ LIBGPIOD_DEPENDENCIES = host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_LIBGPIOD_TOOLS),y)
+@@ -19,4 +18,21 @@ else
+ LIBGPIOD_CONF_OPTS += --disable-tools
+ endif
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++LIBGPIOD_CONF_OPTS += --enable-bindings-cxx
++else
++LIBGPIOD_CONF_OPTS += --disable-bindings-cxx
++endif
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++LIBGPIOD_CONF_OPTS += --enable-bindings-python
++LIBGPIOD_DEPENDENCIES += python3 host-python3
++LIBGPIOD_CONF_ENV += \
++	PYTHON=$(HOST_DIR)/bin/python3 \
++	PYTHON_CPPFLAGS="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
++	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`"
++else
++LIBGPIOD_CONF_OPTS += --disable-bindings-python
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.17.0
