@@ -1,59 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 May 2018 20:54:17 +0200
-Subject: [Buildroot] [PATCH] linux: don't override HOSTCC for kconfig
-In-Reply-To: <20180517123921.16086-1-arnout@mind.be>
-References: <20180517123921.16086-1-arnout@mind.be>
-Message-ID: <20180517205417.02d688a5@windsurf>
+From: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+Date: Thu, 17 May 2018 21:29:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/protobuf: bump to version 3.5.1
+Message-ID: <20180517192900.164160-1-martijn.de.gouw@prodrive-technologies.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+GRPC requires protobuf 3.5.0+
 
-On Thu, 17 May 2018 14:39:21 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Kconfig uses either pkg-config or hard-coded /usr/include paths to find
-> the ncurses or ncursesw library. If ncursesw is found, it will include
-> <ncursesw.h>. Since Buildroot's host-ncurses doesn't install a .pc file,
-> and linux.mk anyway doesn't pass the pkg-config options to find the host
-> pkg-config files, Kconfig will always find the system's ncursesw.h.
-> 
-> However, since commit dde090c299 (linux: fix passing of host CFLAGS and
-> LDFLAGS) HOST_LDFLAGS is passed to the linux build system. Thus, if
-> host-ncurses was already built before 'make linux-menuconfig' is called,
-> the build will pick up libncurses from the host directory, which is NOT
-> widechar. Thus, two different ncurses configurations are mixed into the
-> final mconf program. This will result in serious breakage in the
-> rendering of the menus (lots of @ and question mark characters).
-> 
-> As a workaround (suggested by Yann), don't pass HOST_CFLAGS and
-> HOST_LDFLAGS when running kconfig commands. For kconfig, we should never
-> need host packages anyway. This way, the kconfig calls will always use
-> the system's ncurses and never our host-ncurses.
-> 
-> Note that the same problem could pop up for other kconfig packages as
-> well if we ever pass HOST_CFLAGS/HOST_LDFLAGS to them. We could force
-> HOSTCC=$(HOSTCC) directly in kconfig-package. However, for now there
-> are no other packages that exhibit this problem, so this can be
-> revisited when they do.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: David De Grave <david.degrave@essensium.com>
-> Cc: Scott Fan <fancp2007@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> v3: override LINUX_KCONFIG_OPTS instead of building host-ncurses with
->     wchar
-> ---
->  linux/linux.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+---
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index fa02440a40..4492487efb 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 2bb34b4a8211a30d12ef29fd8660995023d119c99fbab2e5fe46f17528c9cc78 protobuf-cpp-3.4.1.tar.gz
++sha256 c28dba8782da2cfea1e11c61d335958c31a9c1bc553063546af9cbe98f204092 protobuf-cpp-3.5.1.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index d2782ddcfd..1440589c14 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.4.1
++PROTOBUF_VERSION = 3.5.1
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 91cab4ecc0..9c7606ce34 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 1faa722cf475c8e4c43ddb393d6f1477f1a56c93be38a1c8e367c358db476b5f protobuf-python-3.4.1.tar.gz
++sha256 13d3c15ebfad8c28bee203dd4a0f6e600d2a7d2243bac8b5d0e517466500fcae protobuf-python-3.5.1.tar.gz
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
