@@ -1,35 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 18 May 2018 14:33:05 +0200
-Subject: [Buildroot] [PATCH 1/4] nfs-utils: add host package
-In-Reply-To: <20180518143217.3c5f445a@windsurf>
-References: <4b1f3623de3a8a4386f76d0f3cdd36b7c9b230dd.1526643119.git.baruch@tkos.co.il>
- <20180518143217.3c5f445a@windsurf>
-Message-ID: <20180518143305.2592575b@windsurf>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 18 May 2018 08:05:00 -0500
+Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: flake8 print()
+ cleanup
+Message-ID: <1526648700-15130-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ support/scripts/pkg-stats | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-On Fri, 18 May 2018 14:32:17 +0200, Thomas Petazzoni wrote:
-
-> Ah, I was looking for a solution to this rpcgen problem.
-> 
-> It is worth mentioning that we have a big patch in the libtirpc package
-> to add the source code for rpcgen. So perhaps this should be removed,
-> and libtirpc should depend on host-nfs-utils.
-
-Forget that: I saw your patch that does *exactly* this.
-
-I should read *all* the patches in the queue before replying to the
-first ones :-)
-
-Best regards,
-
-Thomas
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 43f7e8d..b7b00e8 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -499,17 +499,17 @@ def parse_args():
+ def __main__():
+     args = parse_args()
+     if args.npackages and args.packages:
+-        print "ERROR: -n and -p are mutually exclusive"
++        print("ERROR: -n and -p are mutually exclusive")
+         sys.exit(1)
+     if args.packages:
+         package_list = args.packages.split(",")
+     else:
+         package_list = None
+-    print "Build package list ..."
++    print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
+-    print "Getting package make info ..."
++    print("Getting package make info ...")
+     package_init_make_info()
+-    print "Getting package details ..."
++    print("Getting package details ...")
+     for pkg in packages:
+         pkg.set_infra()
+         pkg.set_license()
+@@ -517,9 +517,9 @@ def __main__():
+         pkg.set_patch_count()
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+-    print "Calculate stats"
++    print("Calculate stats")
+     stats = calculate_stats(packages)
+-    print "Write HTML"
++    print("Write HTML")
+     dump_html(packages, stats, args.output)
+ 
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+1.9.1
