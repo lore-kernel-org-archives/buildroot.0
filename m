@@ -1,49 +1,48 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 18 May 2018 08:07:51 -0500
-Subject: [Buildroot] [PATCH v4 5/5] support/scripts/pkgstats: add CPE
- reporting
-In-Reply-To: <5afe4c1839fcf_1eae2ae8fa169d84698de@ultri5.mail>
-References: <CANQCQpYhWzrvpbRqfVm__nrdGe7_ThfW9smmCD4CKSBKk4ySwg@mail.gmail.com>
- <5afe4c1839fcf_1eae2ae8fa169d84698de@ultri5.mail>
-Message-ID: <CANQCQpbxNjEzyjQp14kQuh-HNQ2q5eCr-9PLq_K9XvoEqHukFg@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Fri, 18 May 2018 18:25:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/node: bump version to 8.11.2
+In-Reply-To: <20180517235531.73c4fe40@windsurf>
+References: <20180516223011.32410-1-martin@barkynet.com>
+ <20180517235531.73c4fe40@windsurf>
+Message-ID: <CAFGQKxfS0N5HKFHzBMyBJRr2dZhXb-VCGVEGCFBcJzr8vMR_QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo,
+On 17 May 2018 at 22:55, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-On Thu, May 17, 2018 at 10:44 PM, Ricardo Martincoski
-<ricardo.martincoski@gmail.com> wrote:
 > Hello,
 >
-> On Fri, May 18, 2018 at 12:21 AM, Matthew Weber wrote:
+> On Wed, 16 May 2018 23:30:11 +0100, Martin Bark wrote:
+> > See https://nodejs.org/en/blog/release/v8.11.2/
+> >
+> > Signed-off-by: Martin Bark <martin@barkynet.com>
+> > ---
+> >  package/nodejs/nodejs.hash | 4 ++--
+> >  package/nodejs/nodejs.mk   | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
 >
->> I caught Arnout on IRC today and my v5 patchset reflects his
->> suggestion.  Ended up calling the class/module file
->> support/scripts/cpedb.py and support/scripts/cpe-report for the
->
-> Good names IMO.
->
-> Just for reference, in the same machine with v5 takes 3m13,630s to run pkg-stats.
-> In the current master: 1m40,318s
->
->> checker script.  I do see what you mean about a user facing script.
->> What do others think?
->
-> Let's wait for more input.
->
-> But if for any reason you send a v6, I would suggest to:
-> Merge patch 7 back to 5.
-> Split patch 6 into one changing print to print(), and another one
-> adding CPE report.
+> Applied to next, thanks.
 >
 
-I just split the  print to print() out into a seperate
-http://patchwork.ozlabs.org/patch/916300/.
+Thanks Thomas.  Any chance you could apply my rpi and ca-certificates patch
+sets to next too?
 
-I'll respin v6 after more feedback and fold the cpe-report in with the
-cpedb (7 into 5).
+Thanks
 
-Matt
+Martin
+
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180518/73a1940c/attachment.html>
