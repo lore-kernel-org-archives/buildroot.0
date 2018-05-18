@@ -1,51 +1,41 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 18 May 2018 12:45:24 +0200
-Subject: [Buildroot] [PATCH] pkg-generic: error out with 'local' site method
- and no _SITE
-Message-ID: <20180518104524.4630-1-arnout@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 18 May 2018 14:31:59 +0300
+Subject: [Buildroot] [PATCH 4/4] autofs: depend on host-nfs-utils
+In-Reply-To: <4b1f3623de3a8a4386f76d0f3cdd36b7c9b230dd.1526643119.git.baruch@tkos.co.il>
+References: <4b1f3623de3a8a4386f76d0f3cdd36b7c9b230dd.1526643119.git.baruch@tkos.co.il>
+Message-ID: <2dca4fb600a77a0ac01b225a30d137b8721ff3fe.1526643119.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'local' site method is easily confused with the 'file' site method,
-making people create packages like this:
+host-nfs-utils provides the host rpcgen utility. This fixes the build on
+recent Fedora systems that removed rpcgen from the glibc package.
 
-    FOO_SITE_METHOD = local
-    FOO_SOURCE = foo.tar.gz
+Fixes:
+http://autobuild.buildroot.net/results/383/383bc8462f32a226645c9b792b8d65a25d74529d/
+http://autobuild.buildroot.net/results/0c0/0c00f72512754b721813e13f0828d3a942f7b955/
+http://autobuild.buildroot.net/results/50b/50b66d2a3c8264f618d7aa813b10050ed147209f/
 
-    $(eval $(generic-package))
-
-Due to the intricacies of the generic package infra, this does not
-cause an error; instead, the foo.tar.gz tarball that happens to be
-present in the download directory will be used. This behaviour differs
-greatly from what is specified in the manual.
-
-Instead, error out immediately if a package specifies the 'local' site
-method but does not specify a _SITE.
-
-See also
-https://stackoverflow.com/questions/50364655/including-patches-to-build-root
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/pkg-generic.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/autofs/autofs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 8a3b5f90a9..988f2d34e3 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -520,6 +520,9 @@ ifeq ($$($(2)_SITE_METHOD),local)
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- $(2)_OVERRIDE_SRCDIR = $$($(2)_SITE)
- endif
-+ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-+$$(error $(1) has local site method, but `$(2)_SITE_METHOD` is not defined)
-+endif
- endif
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index 87a218441e34..e7c65ef4b09c 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -9,7 +9,7 @@ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
+ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPL-2.0+
+ AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
+-AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf
++AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf host-nfs-utils
  
- ifndef $(2)_LICENSE
+ # autofs looks on the build machine for the path of modprobe, so tell
+ # it explicitly where it will be located on the target.
 -- 
 2.17.0
