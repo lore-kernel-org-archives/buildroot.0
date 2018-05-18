@@ -1,60 +1,100 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 17 May 2018 22:13:13 -0500
-Subject: [Buildroot] [PATCH v5 0/7] CPE ID Support
-Message-ID: <1526613200-48452-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Thu, 17 May 2018 22:13:20 -0500
+Subject: [Buildroot] [PATCH v5 7/7] support/scripts/cpe-report: new script
+In-Reply-To: <1526613200-48452-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1526613200-48452-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1526613200-48452-8-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series begins adding CPE identifier support to Buildroot. The
-intent is to establish and maintain a baseline of CPE IDs, one for each
-package. Each of these IDs ties back to a NIST database entry for the
-respective piece of software, which is linked to specific vunderabilities.
+The script supports looking up all the CPEs provided in a
+make cpe-info csv file export from a target Buildroot build.
+It checks the current version and suggests a CPE needs update
+or possibly initial submission to NIST.
 
-Within Buildroot, a CPE report can be generated (like legal-info) that
-captures a target build's list of CPE IDs. This report can then be
-checked for validity using the new support/scripts/cpe-report or another
-third party tool. The script uses a new cpedb.py helper to search and
-identify the validity of the CPE strings.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
+v5
+[Ricardo
+ - Updated v4 comments about general flake formatting cleanup
+ - Incorporated parts of patch 1/2 suggestions for optimizations
 
-The pkgstats script has been extended to provide CPE ID checking of
-matching/requires update/new as part of its html output.  It also uses
-the new cpedb.py helper.
+[Ricardo/Arnout
+ - Collectly, decided to move cpe report analysis to this
+   script and use a seperate module cpedb class
 
-As part of testing this series, the following branch contains a series
-of fixups required to make these specific packages match the database.
-(I can submit these to the mailing list but there are ~70 of them)
+[Arnout
+ - Rename cpe_dict to instead be cpedb
 
-https://github.com/rc-matthew-l-weber/buildroot/tree/cpe-info-github
-Commit 14c3ee6 to 567732d
-
-A follow-on patchset will be submitted adding support for pkgstat generation
-of CPE updates in XML and Buildroot manual updates for guidance on submission
-of those XML database updates to the NIST organization. (We'd like to get
-feedback on this series first to save us effort on the update XML stuff)
-
-Matt Weber (7):
-  cpe-info: new make target
-  cpe-info: id prefix/suffix
-  cpe-info: only report target pkgs
-  cpe-info: update manual for new pkg vars
-  support/scripts/cpedb.py: new CPE XML helper
-  support/scripts/pkg-stats: add CPE reporting
-  support/scripts/cpe-report: new script
-
- Makefile                                |  17 ++++-
- docs/manual/adding-packages-generic.txt | 117 ++++++++++++++++++++------------
- package/Makefile.in                     |   4 ++
- package/pkg-generic.mk                  |  21 ++++++
- package/pkg-utils.mk                    |   8 +++
- support/scripts/cpe-report              |  53 +++++++++++++++
- support/scripts/cpedb.py                |  52 ++++++++++++++
- support/scripts/pkg-stats               |  80 ++++++++++++++++++++--
- 8 files changed, 302 insertions(+), 50 deletions(-)
+v1 -> v4
+ - Patch did not exist and was part of pkg-stats file
+---
+ support/scripts/cpe-report | 53 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
  create mode 100755 support/scripts/cpe-report
- create mode 100644 support/scripts/cpedb.py
 
+diff --git a/support/scripts/cpe-report b/support/scripts/cpe-report
+new file mode 100755
+index 0000000..036eab2
+--- /dev/null
++++ b/support/scripts/cpe-report
+@@ -0,0 +1,53 @@
++#!/usr/bin/env python
++
++import argparse
++import sys
++import csv
++from cpedb import CPEDB
++
++
++def get_target_cpe_report(cpe_report_file, cpedb):
++    report_cpe_exact_match = ""
++    report_cpe_needing_update = ""
++    report_cpe_missing = ""
++
++    print("CPE: Checking for matches...")
++    try:
++        with open(cpe_report_file) as cpe_file:
++            cpe_list = csv.reader(cpe_file)
++            next(cpe_list)  # make cpe-info has a one line header
++            for cpe in cpe_list:
++                result = cpedb.find(cpe[0])
++                if not result:
++                    result = cpedb.find_partial(cpedb.get_cpe_no_version(cpe[0]))
++                    if not result:
++                        report_cpe_missing += cpe[0] + "\n"
++                    else:
++                        report_cpe_needing_update += cpe[0] + "\n"
++                else:
++                    report_cpe_exact_match += cpe[0] + "\n"
++    except (OSError, IOError) as e:
++        print("CPE: report csv file (%s): %s" % (e.errno, e.strerror))
++        sys.exit(1)
++
++    print("CPE: Found EXACT match:\n" + report_cpe_exact_match)
++    print("CPE: Found but REQUIRES UPDATE:\n" + report_cpe_needing_update)
++    print("CPE: Not found (proposing the following to be added):\n" + report_cpe_missing)
++
++
++def parse_args():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('-c', dest='cpe_report', action='store', required=True,
++                        help='CPE Report generated by make cpe-info (csv format)')
++    return parser.parse_args()
++
++
++def __main__():
++    args = parse_args()
++    cpedb = CPEDB()
++    cpedb.get_xml_dict()
++    print("Performing Target CPE Report Analysis...")
++    get_target_cpe_report(args.cpe_report, cpedb)
++
++
++__main__()
 -- 
 1.9.1
