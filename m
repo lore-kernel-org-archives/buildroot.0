@@ -1,100 +1,81 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 17 May 2018 22:13:20 -0500
-Subject: [Buildroot] [PATCH v5 7/7] support/scripts/cpe-report: new script
+Date: Thu, 17 May 2018 22:13:15 -0500
+Subject: [Buildroot] [PATCH v5 2/7] cpe-info: id prefix/suffix
 In-Reply-To: <1526613200-48452-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1526613200-48452-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1526613200-48452-8-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1526613200-48452-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The script supports looking up all the CPEs provided in a
-make cpe-info csv file export from a target Buildroot build.
-It checks the current version and suggests a CPE needs update
-or possibly initial submission to NIST.
+There are two types of software cpe prefixes, one for applications and
+one for operating systems. Note: There is a third type for hardware.
+
+This patchset determines which should be used and stores that
+information with the package for later use when assembling the CPE
+report.
+
+There is also a suffix which we just default to wildcards at this
+point.
+
+Refs:
+   https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
+   https://cpe.mitre.org/specification/
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
 Changes
-v5
-[Ricardo
- - Updated v4 comments about general flake formatting cleanup
- - Incorporated parts of patch 1/2 suggestions for optimizations
+v1 -> v2
+[Thomas P
+ - Change to using a filter on pkg name value vs ifelse
 
-[Ricardo/Arnout
- - Collectly, decided to move cpe report analysis to this
-   script and use a seperate module cpedb class
-
+v3
 [Arnout
- - Rename cpe_dict to instead be cpedb
-
-v1 -> v4
- - Patch did not exist and was part of pkg-stats file
+ - Moved CPE prefix and suffix defines to package/Makefile.in
 ---
- support/scripts/cpe-report | 53 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100755 support/scripts/cpe-report
+ package/Makefile.in    | 4 ++++
+ package/pkg-generic.mk | 8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/cpe-report b/support/scripts/cpe-report
-new file mode 100755
-index 0000000..036eab2
---- /dev/null
-+++ b/support/scripts/cpe-report
-@@ -0,0 +1,53 @@
-+#!/usr/bin/env python
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 4325f7b..ae69c4e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -395,6 +395,10 @@ TARGET_CONFIGURE_ARGS = \
+ 
+ ################################################################################
+ 
++CPE_PREFIX_OS = cpe:2.3:o
++CPE_PREFIX_APP = cpe:2.3:a
++CPE_SUFFIX = *:*:*:*:*:*:*
 +
-+import argparse
-+import sys
-+import csv
-+from cpedb import CPEDB
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ NLS_OPTS = --enable-nls
+ TARGET_NLS_DEPENDENCIES = host-gettext
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 67ac436..b56fefa 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -866,11 +866,17 @@ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
+ $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
+ $(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
+ 
++ifneq ($(filter linux linux-headers,$(1)),)
++$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
++else
++$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
++endif
 +
-+
-+def get_target_cpe_report(cpe_report_file, cpedb):
-+    report_cpe_exact_match = ""
-+    report_cpe_needing_update = ""
-+    report_cpe_missing = ""
-+
-+    print("CPE: Checking for matches...")
-+    try:
-+        with open(cpe_report_file) as cpe_file:
-+            cpe_list = csv.reader(cpe_file)
-+            next(cpe_list)  # make cpe-info has a one line header
-+            for cpe in cpe_list:
-+                result = cpedb.find(cpe[0])
-+                if not result:
-+                    result = cpedb.find_partial(cpedb.get_cpe_no_version(cpe[0]))
-+                    if not result:
-+                        report_cpe_missing += cpe[0] + "\n"
-+                    else:
-+                        report_cpe_needing_update += cpe[0] + "\n"
-+                else:
-+                    report_cpe_exact_match += cpe[0] + "\n"
-+    except (OSError, IOError) as e:
-+        print("CPE: report csv file (%s): %s" % (e.errno, e.strerror))
-+        sys.exit(1)
-+
-+    print("CPE: Found EXACT match:\n" + report_cpe_exact_match)
-+    print("CPE: Found but REQUIRES UPDATE:\n" + report_cpe_needing_update)
-+    print("CPE: Not found (proposing the following to be added):\n" + report_cpe_missing)
-+
-+
-+def parse_args():
-+    parser = argparse.ArgumentParser()
-+    parser.add_argument('-c', dest='cpe_report', action='store', required=True,
-+                        help='CPE Report generated by make cpe-info (csv format)')
-+    return parser.parse_args()
-+
-+
-+def __main__():
-+    args = parse_args()
-+    cpedb = CPEDB()
-+    cpedb.get_xml_dict()
-+    print("Performing Target CPE Report Analysis...")
-+    get_target_cpe_report(args.cpe_report, cpedb)
-+
-+
-+__main__()
+ $(1)-cpe-info: PKG=$(2)
+ $(1)-cpe-info:
+ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	@$$(call MESSAGE,"Collecting cpe info")
+-	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
++	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 
+ # legal-info: declare dependencies and set values used later for the manifest
 -- 
 1.9.1
