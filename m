@@ -1,67 +1,83 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 19 May 2018 15:45:34 +0200
-Subject: [Buildroot] [PATCH 1/1] mbdedtls: security bump to version 2.9.0
-Message-ID: <20180519134534.3463-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 19 May 2018 17:37:32 +0200
+Subject: [Buildroot] [PATCH for-next] package/terminology: bump version to
+ 1.2.1
+Message-ID: <20180519153732.17320-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extract from release announcement:
+Switch to meson build system introduced with 1.2.0 release.
+Handle NLS option with BR2_SYSTEM_ENABLE_NLS.
+Add license file hash.
 
-- (2.9, 2.7, 2.1) Fixed an issue in the X.509 module which could lead
-to a buffer overread during certificate validation. Additionally, the
-issue could also lead to unnecessary callback checks being made or to
-some validation checks to be omitted. The overread could be triggered
-remotely, while the other issues would require a non DER-compliant
-certificate to be correctly signed by a trusted CA, or a trusted CA with
-a non DER-compliant certificate. Found by luocm. Fixes #825.
+See release note:
+(1.2.0) https://sourceforge.net/p/enlightenment/mailman/message/36294478/
+(1.2.1) https://sourceforge.net/p/enlightenment/mailman/message/36317484/
 
-- (2.9, 2.7, 2.1) Fixed the buffer length assertion in the
-ssl_parse_certificate_request() function which could lead to an
-arbitrary overread of the message buffer. The overreads could be caused
-by receiving a malformed algorithms section which was too short. In
-builds with debug output, this overread data was output with the debug
-data.
-
-- (2.9, 2.7, 2.1) Fixed a client-side bug in the validation of the
-server's ciphersuite choice which could potentially lead to the client
-accepting a ciphersuite it didn't offer or a ciphersuite that could not
-be used with the TLS or DTLS version chosen by the server. This could
-lead to corruption of internal data structures for some configurations.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/mbedtls/mbedtls.hash | 6 +++---
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/terminology/terminology.hash |  5 +++--
+ package/terminology/terminology.mk   | 32 ++++++++++++++++++++++++++++----
+ 2 files changed, 31 insertions(+), 6 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index f5331bed15..b94a671239 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,5 +1,5 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.8.0-2.7.2-and-2.1.11-released
--sha1	e36d7cbdc2ed0a5d5659385840e8fbb4d351234e	mbedtls-2.7.2-apache.tgz
--sha256	fd38c2bb5fbe1ffd3e7fdcdd71130986f2010f25b3a5575eb8ded0dd3bc573d7	mbedtls-2.7.2-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.9.0-2.7.3-and-2.1.12-released
-+sha1	e87dbb46bbe050c1978dc07fb7f1c709ac6314f7	mbedtls-2.9.0-apache.tgz
-+sha256	a06a9b43e583b7e6707becfeeb13d88ed00f25fee31a5386cb3a3014c454bad8	mbedtls-2.9.0-apache.tgz
- # Locally calculated
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index ca44ee3713..aa199c831a 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+index 81ae5d8d61..f341d5c2f7 100644
+--- a/package/terminology/terminology.hash
++++ b/package/terminology/terminology.hash
+@@ -1,2 +1,3 @@
+-# From https://sourceforge.net/p/enlightenment/mailman/message/36026490/
+-sha256	da12b8a24ca5248b2d292d9b1e19cabc61ae29b21f96d4b6f4f3e7b4feeecc16	terminology-1.1.1.tar.xz
++# From https://sourceforge.net/p/enlightenment/mailman/message/36317484/
++sha256  ac8673a129ed78ef669a8c04e7a136f5ca95226ce5ef375a451421bac41828c6  terminology-1.2.1.tar.xz
++sha256  605988548c7a52562d6f64d936a579b53f690e62ca92261b6a440bf9023ff521  COPYING
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index ed811b3a85..af37187d90 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -4,13 +4,37 @@
+ #
  ################################################################################
  
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.7.2
-+MBEDTLS_VERSION = 2.9.0
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+-TERMINOLOGY_VERSION = 1.1.1
++TERMINOLOGY_VERSION = 1.2.1
+ TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2-Clause
+ TERMINOLOGY_LICENSE_FILES = COPYING
+ 
+-TERMINOLOGY_DEPENDENCIES = efl host-pkgconf
+-TERMINOLOGY_CONF_OPTS = --with-edje-cc=$(HOST_DIR)/bin/edje_cc
++TERMINOLOGY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) efl host-meson host-pkgconf
++TERMINOLOGY_MESON_OPTS = \
++	--prefix=/usr \
++	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
++	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
++	-Dedje-cc=$(HOST_DIR)/bin/edje_cc
+ 
+-$(eval $(autotools-package))
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++TERMINOLOGY_MESON_OPTS += -Dnls=true
++else
++TERMINOLOGY_MESON_OPTS += -Dnls=false
++endif
++
++define TERMINOLOGY_CONFIGURE_CMDS
++	rm -rf $(@D)/build
++	mkdir -p $(@D)/build
++	$(TARGET_MAKE_ENV) meson $(TERMINOLOGY_MESON_OPTS) $(@D) $(@D)/build
++endef
++
++define TERMINOLOGY_BUILD_CMDS
++	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
++endef
++
++define TERMINOLOGY_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
++endef
++
++$(eval $(generic-package))
 -- 
-2.14.1
+2.14.3
