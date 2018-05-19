@@ -1,30 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 23:13:10 +0200
-Subject: [Buildroot] [PATCH 1/2] libnss: bump to version 3.37
-In-Reply-To: <20180514235256.23480-1-joseph.kogut@gmail.com>
-References: <20180514235256.23480-1-joseph.kogut@gmail.com>
-Message-ID: <20180519231310.33004567@windsurf>
+Date: Sat, 19 May 2018 23:13:23 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself for libnss
+Message-ID: <20180519211230.A923581234@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b1cb30bc0434b48544a1b3c72323b8b1a0015f47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 May 2018 16:52:55 -0700, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  ...-Build-Hacl_Poly1305_64_o_on_Aarch64.patch | 38 -------------------
->  package/libnss/libnss.hash                    |  2 +-
->  package/libnss/libnss.mk                      |  2 +-
->  3 files changed, 2 insertions(+), 40 deletions(-)
->  delete mode 100644 package/libnss/0003-Build-Hacl_Poly1305_64_o_on_Aarch64.patch
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 43b1668343..656dead14c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -941,6 +941,7 @@ F:	configs/qemu_ppc64le_pseries_defconfig
+ 
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
+ F:	package/gconf/
++F:	package/libnss/
+ F:	package/python-cython/
+ F:	package/python-raven/
+ F:	package/python-schedule/
