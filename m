@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 14:26:46 +0200
-Subject: [Buildroot] [PATCH v1] qt5wayland: fix
- hardwareintegration/client/xcomposite-egl compile
-In-Reply-To: <20180519053912.8296-1-ps.report@gmx.net>
-References: <20180519053912.8296-1-ps.report@gmx.net>
-Message-ID: <20180519142646.7fe46677@windsurf>
+Date: Sat, 19 May 2018 14:29:14 +0200
+Subject: [Buildroot] [PATCH] imx_usb_loader: Allow target build
+In-Reply-To: <1526462165-1544-1-git-send-email-vincent.prince.fr@gmail.com>
+References: <1526462165-1544-1-git-send-email-vincent.prince.fr@gmail.com>
+Message-ID: <20180519142914.22ffe1b6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 19 May 2018 07:39:12 +0200, Peter Seiderer wrote:
-> Add upstream patch, fixes [1]:
-> 
->   ../../../hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglwindow.cpp: In member function 'void QtWaylandClient::QWaylandXCompositeEGLWindow::createEglSurface()':
->   ../../../hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglwindow.cpp:124:82: error: invalid conversion from 'Window {aka long unsigned int}' to 'EGLNativeWindowType {aka void*}' [-fpermissive]
->        m_surface = eglCreateWindowSurface(m_glxIntegration->eglDisplay(), m_config, m_xWindow,0);
->                                                                                     ^~~~~~~~~
->   In file included from ../../../hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglclientbufferintegration.h:57:0,
->                    from ../../../hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglwindow.h:46,
->                    from ../../../hardwareintegration/client/xcomposite-egl/qwaylandxcompositeeglwindow.cpp:40:
->   .../host/arm-buildroot-linux-musleabihf/sysroot/usr/include/EGL/egl.h:265:31: note:   initializing argument 3 of 'void* eglCreateWindowSurface(EGLDisplay, EGLConfig, EGLNativeWindowType, const EGLint*)'
->  EGLAPI EGLSurface EGLAPIENTRY eglCreateWindowSurface(EGLDisplay dpy, EGLConfig config,
-> 
-> [1] http://autobuild.buildroot.net/results/9bcc76ed9e23c0d525f20b4da7f3bb5efe3083d4
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...0001-Fix-compilation-for-Renesas-R-Car-M3.patch | 44 ++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 package/qt5/qt5wayland/5.10.1/0001-Fix-compilation-for-Renesas-R-Car-M3.patch
+On Wed, 16 May 2018 11:16:05 +0200, Vincent Prince wrote:
+> Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
 
-Applied to master, thanks.
+Could you give some details on the use case for having a target package
+for the imx_usb_loader ? Are you building a system with Buildroot that
+itself is responsible for loading a bootloader over USB to a separate
+i.MX6 target ? If not, what is your use case ?
+
+> diff --git a/package/imx-usb-loader/Config.in b/package/imx-usb-loader/Config.in
+> new file mode 100644
+> index 0000000..41585e2
+> --- /dev/null
+> +++ b/package/imx-usb-loader/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_IMX_USB_LOADER
+> +	bool "imx-usb-loader"
+> +	depends on BR2_arm
+
+Why do you have this dependency ? If your use case is as explained
+above to build a Buildroot system that itself will be responsible for
+loading over USB the bootloader of a separate i.MX6 device, then this
+system may be running on something else than an ARM platform.
+
+> +    select BR2_PACKAGE_LIBUSB
+
+Indentation is wrong for this line, it should be indented with one tab.
+I can fix this up when applying once the use case is clearer.
+
+Best regards,
 
 Thomas
 -- 
