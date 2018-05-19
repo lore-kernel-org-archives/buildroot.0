@@ -1,177 +1,130 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 May 2018 23:33:29 +0200
-Subject: [Buildroot] [git commit] package/mono: bump to version 5.12.0.226
-Message-ID: <20180602101014.2D8A88199C@busybox.osuosl.org>
+Date: Sat, 19 May 2018 22:56:26 +0200
+Subject: [Buildroot] [git commit] librtlsdr: bump to version v0.5.4
+Message-ID: <20180602101011.936E67FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80821d3ed8e5607d259386abe5e3f98625614d11
+commit: https://git.buildroot.net/buildroot/commit/?id=da64e35f389df21c911f9ea7cf672e247f1aeedb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps mono to version 5.12.0.226 and it's monolite dependency
-to version 1051200002, doing so it removes also a couple of upstreamed
-patches.
-This new mono version requires also a different option for
-managing aot, so this patch refactors also the configure options.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...4-fixing-initialization-of-have-vasprintf.patch | 29 ----------------------
- ...6-Remove-unit-tests-from-mono-compilation.patch | 29 ----------------------
- package/mono/mono.hash                             |  2 +-
- package/mono/mono.mk                               | 21 +++++++---------
- package/monolite/monolite.hash                     |  2 +-
- package/monolite/monolite.mk                       |  2 +-
- 6 files changed, 12 insertions(+), 73 deletions(-)
+ ...01-disable_shared_library_target_in_build.patch | 80 ----------------------
+ package/librtlsdr/librtlsdr.hash                   |  4 +-
+ package/librtlsdr/librtlsdr.mk                     |  2 +-
+ 3 files changed, 4 insertions(+), 82 deletions(-)
 
-diff --git a/package/mono/0004-fixing-initialization-of-have-vasprintf.patch b/package/mono/0004-fixing-initialization-of-have-vasprintf.patch
+diff --git a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
 deleted file mode 100644
-index 55648593a5..0000000000
---- a/package/mono/0004-fixing-initialization-of-have-vasprintf.patch
+index b763c48b2e..0000000000
+--- a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--From 1c3d615d93b20d10c2729478d5104977dd9af23f Mon Sep 17 00:00:00 2001
--From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
--Date: Wed, 5 Aug 2015 12:59:45 +0200
--Subject: [PATCH] Fixing initialization of have_vasprintf
+@@ -1,80 +0,0 @@
+-librtlsdr: disable shared library target in build
 -
--This patch initialize properly have_vasprintf in case vasprint function is found.
--Solves multiple definition of `vasprintf' error in case vasprint is not properly detected.
+-Disable shared library target if BUILD_SHARED_LIBS if OFF.
 -
--Patch is upstream:
--
--   https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
--
--Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+-Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
 ----
-- eglib/configure.ac | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/eglib/configure.ac b/eglib/configure.ac
--index 5281419..4bf91e5 100644
----- a/eglib/configure.ac
--+++ b/eglib/configure.ac
--@@ -135,6 +135,7 @@ AC_CHECK_SIZEOF(void *)
-- AC_CHECK_SIZEOF(long)
-- AC_CHECK_SIZEOF(long long)
-- AC_CHECK_FUNCS(strlcpy stpcpy strtok_r rewinddir vasprintf)
--+AC_CHECK_FUNC(vasprintf, have_vasprintf=yes)
-- AC_CHECK_FUNCS(getrlimit)
+-diff -Nurp librtlsdr-v0.5.3_orig/src/CMakeLists.txt librtlsdr-v0.5.3/src/CMakeLists.txt
+---- librtlsdr-v0.5.3_orig/src/CMakeLists.txt	2014-09-24 17:31:40.610337074 +0530
+-+++ librtlsdr-v0.5.3/src/CMakeLists.txt	2014-09-24 17:32:38.838334632 +0530
+-@@ -20,6 +20,7 @@
+- ########################################################################
+- # Setup library
+- ########################################################################
+-+if(BUILD_SHARED_LIBS)
+- add_library(rtlsdr_shared SHARED
+-     librtlsdr.c
+-     tuner_e4k.c
+-@@ -37,6 +38,7 @@ set_target_properties(rtlsdr_shared PROP
+- set_target_properties(rtlsdr_shared PROPERTIES OUTPUT_NAME rtlsdr)
+- set_target_properties(rtlsdr_shared PROPERTIES SOVERSION ${MAJOR_VERSION})
+- set_target_properties(rtlsdr_shared PROPERTIES VERSION ${LIBVER})
+-+endif()
 - 
-- #
-diff --git a/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch b/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
-deleted file mode 100644
-index a3e88e73a2..0000000000
---- a/package/mono/0006-Remove-unit-tests-from-mono-compilation.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 26e31fc54af591bdd88d6a4a79b7fa91c57f4b0c Mon Sep 17 00:00:00 2001
--From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
--Date: Thu, 10 Aug 2017 23:30:05 +0200
--Subject: [PATCH] Remove unit-tests from mono compilation
--
--This patch fixes compiling errors with unit-tests under linux.
--
--Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-----
-- mono/Makefile.am | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/mono/Makefile.am b/mono/Makefile.am
--index 8c9c2cb..7af36ec 100644
----- a/mono/Makefile.am
--+++ b/mono/Makefile.am
--@@ -34,7 +34,7 @@ monotouch-do-clean:
-- 	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target); \
--     done;
-- else
---SUBDIRS = $(btls_dirs) arch utils cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
--+SUBDIRS = $(btls_dirs) arch utils cil metadata $(sgen_dirs) mini dis tests benchmark profiler
-- endif
-- endif
---DIST_SUBDIRS = btls arch utils cil metadata $(sgen_dirs) mini dis tests unit-tests benchmark profiler
--+DIST_SUBDIRS = btls arch utils cil metadata $(sgen_dirs) mini dis tests benchmark profiler
---- 
--2.7.4
--
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index 850395022f..47e34424ad 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 2a2f5c2a214a9980c086ac7561a5dd106f13d823a630de218eabafe1d995c5b4  mono-5.4.0.201.tar.bz2
-+sha256 f0636baa0c1399805526142e799cb697ddccf736e506cf1a30a870eaa2830a89  mono-5.12.0.226.tar.bz2
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 802c1d4402..2d60fc68fd 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
+- add_library(rtlsdr_static STATIC
+-     librtlsdr.c
+-@@ -71,6 +73,12 @@ if(NOT WIN32)
+- set_target_properties(rtlsdr_static PROPERTIES OUTPUT_NAME rtlsdr)
+- endif()
+- 
+-+if(BUILD_SHARED_LIBS)
+-+set(rtlsdr_lib rtlsdr_shared)
+-+else()
+-+set(rtlsdr_lib rtlsdr_static)
+-+endif()
+-+
+- ########################################################################
+- # Build utility
+- ########################################################################
+-@@ -81,33 +89,33 @@ add_executable(rtl_fm rtl_fm.c)
+- add_executable(rtl_eeprom rtl_eeprom.c)
+- add_executable(rtl_adsb rtl_adsb.c)
+- add_executable(rtl_power rtl_power.c)
+--set(INSTALL_TARGETS rtlsdr_shared rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
+-+set(INSTALL_TARGETS ${rtlsdr_lib} rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
+- 
+--target_link_libraries(rtl_sdr rtlsdr_shared convenience_static
+-+target_link_libraries(rtl_sdr ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_tcp rtlsdr_shared convenience_static
+-+target_link_libraries(rtl_tcp ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_test rtlsdr_shared convenience_static
+-+target_link_libraries(rtl_test ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_fm rtlsdr_shared convenience_static
+-+target_link_libraries(rtl_fm ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_eeprom rtlsdr_shared convenience_static
+-+target_link_libraries(rtl_eeprom ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_adsb rtlsdr_shared convenience_static
+-+target_link_libraries(rtl_adsb ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+--target_link_libraries(rtl_power rtlsdr_shared convenience_static
+-+target_link_libraries(rtl_power ${rtlsdr_lib} convenience_static
+-     ${LIBUSB_LIBRARIES}
+-     ${CMAKE_THREAD_LIBS_INIT}
+- )
+diff --git a/package/librtlsdr/librtlsdr.hash b/package/librtlsdr/librtlsdr.hash
+index 24bca467b1..9184196d9a 100644
+--- a/package/librtlsdr/librtlsdr.hash
++++ b/package/librtlsdr/librtlsdr.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256 98fb5c34ac94d6f2235a0bb41a08f8bed7949e1d1b91ea57a7c1110191ea58de  librtlsdr-v0.5.3.tar.gz
++sha256 6fd0d298c1a18fc8005b0c2f6199b08bc15e3fb4f4312f551eea2ae269c940c5  librtlsdr-v0.5.4.tar.gz
++# License file, locally calculated
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
+index ca0a43829d..02b3d31fd9 100644
+--- a/package/librtlsdr/librtlsdr.mk
++++ b/package/librtlsdr/librtlsdr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONO_VERSION = 5.4.0.201
-+MONO_VERSION = 5.12.0.226
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
-@@ -17,13 +17,15 @@ MONO_INSTALL_STAGING = YES
- # patching configure.ac
- MONO_AUTORECONF = YES
- 
--# Disable managed code (mcs folder) from building
--MONO_CONF_OPTS = --with-mcs-docs=no \
-+MONO_COMMON_CONF_OPTS = --with-mcs-docs=no \
- 	--with-ikvm-native=no \
--	--enable-minimal=profiler,debug,aot \
--	--disable-mcs-build \
-+	--enable-minimal=profiler,debug \
- 	--enable-static \
--	--disable-btls
-+	--disable-btls \
-+	--disable-system-aot
-+
-+# Disable managed code (mcs folder) from building
-+MONO_CONF_OPTS = $(MONO_COMMON_CONF_OPTS) --disable-mcs-build
- 
- # The libraries have been built by the host-mono build. Since they are
- # architecture-independent, we simply copy them to the target.
-@@ -42,12 +44,7 @@ MONO_DEPENDENCIES += host-mono
- 
- ## Mono managed
- 
--HOST_MONO_CONF_OPTS = --with-mcs-docs=no \
--	--disable-libraries \
--	--with-ikvm-native=no \
--	--enable-minimal=profiler,debug,aot \
--	--enable-static \
--	--disable-btls
-+HOST_MONO_CONF_OPTS = $(MONO_COMMON_CONF_OPTS) --disable-libraries
- 
- # ensure monolite is used
- HOST_MONO_MAKE_OPTS += EXTERNAL_MCS=false
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 76f54678d3..77810a9511 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 8c893c3eb3efb5006e19fb45a878860265c3f47fbaf2470be47612e84725d9fd  monolite-linux-1050400003-latest.tar.gz
-+sha256 fece21adc06118fa5d79d3621a5fc702ec354abf83be29a36f8718645a2dc058  monolite-linux-1051200002-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index 80b2af9544..4e1d548994 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONOLITE_VERSION = 1050400003
-+MONOLITE_VERSION = 1051200002
- MONOLITE_SITE = http://download.mono-project.com/monolite
- MONOLITE_SOURCE = monolite-linux-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPL-2.0 or commercial
+-LIBRTLSDR_VERSION = v0.5.3
++LIBRTLSDR_VERSION = v0.5.4
+ LIBRTLSDR_SITE = $(call github,steve-m,librtlsdr,$(LIBRTLSDR_VERSION))
+ LIBRTLSDR_LICENSE = GPL-2.0+
+ LIBRTLSDR_LICENSE_FILES = COPYING
