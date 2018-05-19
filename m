@@ -1,70 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 21:50:14 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 18.0.4
-Message-ID: <20180602101011.38C70802C0@busybox.osuosl.org>
+Date: Sat, 19 May 2018 22:44:15 +0200
+Subject: [Buildroot] [git commit] configs/snps_arc*_defconfig: update linux
+ version
+Message-ID: <20180602101011.5AF7F7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f18ca0e7bb0e522846296139cdf0f8039d7dca1c
+commit: https://git.buildroot.net/buildroot/commit/?id=63bf9e71d6153f5a8e73e191cff8ff39f409026b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See:
-https://lists.freedesktop.org/archives/mesa-dev/2018-May/195215.html
+With this commit we update Linux kernel version to 4.16.8
+and Linux headers version to 4.16.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ configs/snps_arc700_axs101_defconfig  | 6 +++---
+ configs/snps_archs38_axs103_defconfig | 6 +++---
+ configs/snps_archs38_haps_defconfig   | 6 +++---
+ configs/snps_archs38_hsdk_defconfig   | 6 +++---
+ configs/snps_archs38_vdk_defconfig    | 6 +++---
+ 5 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 5a8e3f9b84..18c98a7f9e 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/configs/snps_arc700_axs101_defconfig b/configs/snps_arc700_axs101_defconfig
+index 0fefaf4aa8..8a4814286e 100644
+--- a/configs/snps_arc700_axs101_defconfig
++++ b/configs/snps_arc700_axs101_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.0.3
-+MESA3D_HEADERS_VERSION = 18.0.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 983c0e65e5..9b9f01703c 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-May/000426.html
--md5 b260580a26b71a5e52c608e3fe6d08a6  mesa-18.0.3.tar.xz
--sha1 2c12c9f69eb7ba787dd1245b53bb98ceb08362d3  mesa-18.0.3.tar.xz
--sha256 099d9667327a76a61741a533f95067d76ea71a656e66b91507b3c0caf1d49e30  mesa-18.0.3.tar.xz
--sha512 decd050bab049d17bcde3f832d4da0ffdb80f147c99377a162739bbe72fd6fd32b51e56e6fc66895b8c30fc19a1815bae164b21aa557816c3998ad18c1ffca2d  mesa-18.0.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-May/000429.html
-+md5 ef525adaff7f31bedd4c5134bc313da9  mesa-18.0.4.tar.xz
-+sha1 4bbee07d8eb42625f215f49d39a657fabdc2f29d  mesa-18.0.4.tar.xz
-+sha256 1f3bcfe7cef0a5c20dae2b41df5d7e0a985e06be0183fa4d43b6068fcba2920f  mesa-18.0.4.tar.xz
-+sha512 f9a14be46c209661ceb318add1611481445d13b47e95c7a5d2a5e5ecfdd5d2c3fa9c2b16b30035bbb8d61ccc7cb65bfa6698ac8b040273e5ab045a951a67752c  mesa-18.0.3.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index d897c0d4c2..1b2fca1f90 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.0.3
-+MESA3D_VERSION = 18.0.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+diff --git a/configs/snps_archs38_axs103_defconfig b/configs/snps_archs38_axs103_defconfig
+index 39ceeae433..11069a5d9d 100644
+--- a/configs/snps_archs38_axs103_defconfig
++++ b/configs/snps_archs38_axs103_defconfig
+@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ 
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+diff --git a/configs/snps_archs38_haps_defconfig b/configs/snps_archs38_haps_defconfig
+index 6583c1ec3a..2ef49b4d44 100644
+--- a/configs/snps_archs38_haps_defconfig
++++ b/configs/snps_archs38_haps_defconfig
+@@ -7,12 +7,12 @@ BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="haps_hs_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+index 125063b444..40aed984db 100644
+--- a/configs/snps_archs38_hsdk_defconfig
++++ b/configs/snps_archs38_hsdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arcle=y
+ BR2_archs38=y
+ 
+-# Linux headers
+-BR2_KERNEL_HEADERS_4_14=y
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="hsdk"
+@@ -13,7 +13,7 @@ BR2_SYSTEM_DHCP="eth0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
+ 
+diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
+index 46b539beec..129e3267e5 100644
+--- a/configs/snps_archs38_vdk_defconfig
++++ b/configs/snps_archs38_vdk_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.16 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
