@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 21:44:01 +0200
-Subject: [Buildroot] [git commit] arch: add BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-Message-ID: <20180602101014.47AAF8199C@busybox.osuosl.org>
+Date: Sat, 19 May 2018 22:43:30 +0200
+Subject: [Buildroot] [git commit] skeleton: create include/ directory
+Message-ID: <20180602101011.5293F7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9216bc1d01983be22ce2119efb98b5684cd714a
+commit: https://git.buildroot.net/buildroot/commit/?id=967d302e8bbb409c5b5106b0c87091d47f01a890
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new symbol will be used by architectures introduced with gcc 8 and
-by external toolchains based on gcc 8.
+Don't rely on a random host package to create the include/ directory for
+us. Some packages do the wrong thing since they implicitly assume that
+this directory exists already. Commit a557aedad2 (zstd: fix host headers
+installation) shows an example of that.
 
-[1] https://gcc.gnu.org/gcc-8/changes.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/skeleton/skeleton.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index a66ea0d03b..a16012bdfd 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -282,6 +282,10 @@ config BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	bool
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 
-+config BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-+	bool
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+
- # The following string values are defined by the individual
- # Config.in.$ARCH files
- config BR2_ARCH
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index efcf420d72..9d97f02f08 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -16,6 +16,7 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
+ define HOST_SKELETON_INSTALL_CMDS
+ 	$(Q)ln -snf . $(HOST_DIR)/usr
+ 	$(Q)mkdir -p $(HOST_DIR)/lib
++	$(Q)mkdir -p $(HOST_DIR)/include
+ 	$(Q)case $(HOSTARCH) in \
+ 		(*64) ln -snf lib $(HOST_DIR)/lib64;; \
+ 		(*)   ln -snf lib $(HOST_DIR)/lib32;; \
