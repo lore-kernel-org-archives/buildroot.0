@@ -1,57 +1,54 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 19 May 2018 20:58:27 +0200
-Subject: [Buildroot] [PATCH v4 for-next 2/2] Revert "glibc: install the
- obsolete libnsl"
-In-Reply-To: <20180519185827.23898-1-romain.naour@gmail.com>
-References: <20180519185827.23898-1-romain.naour@gmail.com>
-Message-ID: <20180519185827.23898-2-romain.naour@gmail.com>
+Date: Sat, 19 May 2018 21:01:48 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/exim: remove libnsl linking
+ and fix native tools build
+In-Reply-To: <20180517072627.wkekm5mbofgjo36h@tarshish>
+References: <20180517072140.6432-1-romain.naour@gmail.com>
+ <20180517072627.wkekm5mbofgjo36h@tarshish>
+Message-ID: <775bdd3d-e233-0347-8a02-d5ee2c08d3ca@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnsl from Glibc is deprecated and should not be used anymore.
-Remove libnsl.so.* from GLIBC_LIBS_LIB.
+Hi Baruch,
 
-libnsl is now an separate library that can be packaged later if
-necessary [1].
+Le 17/05/2018 ? 09:26, Baruch Siach a ?crit?:
+> Hi Romain,
+> 
+> On Thu, May 17, 2018 at 09:21:39AM +0200, Romain Naour wrote:
+> 
+> [snip]
+> 
+>> -# only glibc provides libnsl, remove -lnsl for all other toolchains
+>> +# Only Exim's nis.so and nisplus.so lookup modules require libnsl,
+>> +# but they are not build by default.
+>> +# libnsl has been deprecated from Glibc and no other libc provide it.
+>> +# There is no libnsl package in Buildroot yet.
+>> +# Remove -lnsl for all toolchains.
+>>  # http://bugs.exim.org/show_bug.cgi?id=1564
+>> -ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+>> +# This also fixes a host build issue on recent distributions where
+>> +# libnsl is not installed by default.
+>>  define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
+>>  	$(SED) 's/-lnsl//g' $(@D)/OS/Makefile-Linux
+>>  endef
+>> -endif
+> 
+> It only occurred to me now. Since this is now unconditional we should use a 
+> regular patch. sed is used here only because the modification used to be 
+> conditional, and we don't do conditional patching. But this no longer holds.
 
-Note: libnsl from Glibc doesn't build with gcc 8 due new warning [2].
+Ok, It's done in the v4.
+Thanks for the review!
 
-[1] https://github.com/thkukuk/libnsl.git
-[2] http://patchwork.sourceware.org/patch/26437
+Best regards,
+Romain
 
-This reverts commit 398747f5fafca8c07e696612d8eded53d4f935c7.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
----
-v2: remove libnsl.so.* from GLIBC_LIBS_LIB
----
- package/glibc/glibc.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 3ab673c0cc..c1c5ac687f 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -100,7 +100,6 @@ define GLIBC_CONFIGURE_CMDS
- 		--disable-profile \
- 		--without-gd \
- 		--enable-obsolete-rpc \
--		--enable-obsolete-nsl \
- 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
- 		--with-headers=$(STAGING_DIR)/usr/include)
- 	$(GLIBC_ADD_MISSING_STUB_H)
-@@ -113,7 +112,7 @@ endef
- 
- GLIBC_LIBS_LIB = \
- 	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
--	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
-+	libm.so.* libpthread.so.* libresolv.so.* librt.so.* \
- 	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
- 
- ifeq ($(BR2_PACKAGE_GDB),y)
--- 
-2.14.3
+> 
+>>  # musl does not provide struct ip_options nor struct ip_opts (but it is
+>>  # available with both glibc and uClibc)
+> 
+> baruch
+> 
