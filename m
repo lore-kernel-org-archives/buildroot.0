@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 10:30:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/node: bump version to 8.11.2
-In-Reply-To: <CAFGQKxfS0N5HKFHzBMyBJRr2dZhXb-VCGVEGCFBcJzr8vMR_QQ@mail.gmail.com>
-References: <20180516223011.32410-1-martin@barkynet.com>
- <20180517235531.73c4fe40@windsurf>
- <CAFGQKxfS0N5HKFHzBMyBJRr2dZhXb-VCGVEGCFBcJzr8vMR_QQ@mail.gmail.com>
-Message-ID: <20180519103043.5f2ebc7f@windsurf>
+Date: Sat, 19 May 2018 10:38:14 +0200
+Subject: [Buildroot] [PATCH] pkg-generic: error out with 'local' site
+ method and no _SITE
+In-Reply-To: <20180518104524.4630-1-arnout@mind.be>
+References: <20180518104524.4630-1-arnout@mind.be>
+Message-ID: <20180519103814.5cf1abae@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 18 May 2018 18:25:07 +0100, Martin Bark wrote:
+On Fri, 18 May 2018 12:45:24 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-> Thanks Thomas.  Any chance you could apply my rpi and ca-certificates patch
-> sets to next too?
+> +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+> +$$(error $(1) has local site method, but `$(2)_SITE_METHOD` is not defined)
+> +endif
 
-Yes, sure, this will happen at some point. But as usual we have 200+
-patches in the list to be reviewed, so there are plenty of other
-patches besides yours. If you can help reviewing and testing patches
-submitted by others, that would definitely help.
-
-Best regards,
+Are you sure it shouldn't be "$(2)_SITE" is not defined ?
 
 Thomas
 -- 
