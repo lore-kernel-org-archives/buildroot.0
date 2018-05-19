@@ -1,33 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 22:47:00 +0200
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: Bump to version 20180515
-In-Reply-To: <20180515145622.30102-1-petr.vorel@gmail.com>
-References: <20180515145622.30102-1-petr.vorel@gmail.com>
-Message-ID: <20180519224700.752d4196@windsurf>
+Date: Sat, 19 May 2018 22:47:22 +0200
+Subject: [Buildroot] [git commit branch/next] uclibc: ARC: Don't mess with
+ CPU selection
+Message-ID: <20180519204622.E7F7B7FDE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9cb6caf891588302d04baa4bbe84d672736ca502
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 15 May 2018 16:56:22 +0200, Petr Vorel wrote:
-> Dropped patch applied by upstream + LTP_TESTSUITE_AUTORECONF = YES which
-> this patch required and thus not needed any more.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  ...x-numa-v2-detection-for-cross-compilation.patch | 37 ----------------------
->  package/ltp-testsuite/ltp-testsuite.hash           |  4 +--
->  package/ltp-testsuite/ltp-testsuite.mk             |  5 +--
->  3 files changed, 3 insertions(+), 43 deletions(-)
->  delete mode 100644 package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+Since uClibc-ng commit cde74b83f9b2 "ARC: remove special CFLAGS/LDFLAGS handling"
+i.e. starting v1.0.23 CONFIG_ARC_CPU_xx options are not used.
 
-Applied to next, thanks.
+Instead uClibc relies on toolchain defaults or build-system CFLAGS
+for selection of ARC-specific code (i.e. distinguishes between
+ARCompact and ARCv2 ISAs).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+So we drop corresponding quirks from Buildroot as well.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uclibc/Config.in | 7 -------
+ package/uclibc/uclibc.mk | 6 ------
+ 2 files changed, 13 deletions(-)
+
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 0747cc8d7c..a566881852 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -106,13 +106,6 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	default "i386"	   if BR2_i386
+ 	default "x86_64"   if BR2_x86_64
+ 
+-config BR2_UCLIBC_ARC_TYPE
+-	string
+-	default "ARC_CPU_700"	if BR2_arc750d
+-	default "ARC_CPU_700"	if BR2_arc770d
+-	default "ARC_CPU_HS"	if BR2_archs38
+-	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
+-
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+ 	default "O32" if BR2_MIPS_OABI32
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 7de9219873..bb44da28b4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -82,11 +82,6 @@ endif
+ #
+ 
+ ifeq ($(UCLIBC_TARGET_ARCH),arc)
+-UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
+-define UCLIBC_ARC_TYPE_CONFIG
+-	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
+-endef
+-
+ UCLIBC_ARC_PAGE_SIZE = CONFIG_ARC_PAGE_SIZE_$(call qstrip,$(BR2_ARC_PAGE_SIZE))
+ define UCLIBC_ARC_PAGE_SIZE_CONFIG
+ 	$(SED) '/CONFIG_ARC_PAGE_SIZE_*/d' $(@D)/.config
+@@ -387,7 +382,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
+ 	$(UCLIBC_MMU_CONFIG)
+ 	$(UCLIBC_BINFMT_CONFIG)
+-	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARC_ATOMICS_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
