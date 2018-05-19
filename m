@@ -1,76 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 13:47:57 +0200
-Subject: [Buildroot] [git commit] faketime: add patch to disable -Werror
-Message-ID: <20180519114658.887A588397@busybox.osuosl.org>
+Date: Sat, 19 May 2018 13:48:21 +0200
+Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: use
+ parenthesis for print
+Message-ID: <20180519114829.C5DAC883DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=968f2fbd7d99b7b6b875709acf13501be21aa26e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=eb04235783abe58a6a7f8ecc8f9ab46a6d03b543
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-faketime currently doesn't build on host machines that use gcc 8.x due
-to stricter checks done by gcc, and the fact that it is built with
--Werror.
+Use Python 3 style print calls, in order to make pkg-stats Python 3
+compliant.
 
-As a simple stop-gap measure, this commit patches the faketime
-Makefile to not use -Werror anymore.
-
-The actual fixes for the gcc 8.x issues have been submitted upstream
-at https://github.com/wolfcw/libfaketime/pull/161, but disabling
--Werror is a much smaller fix.
-
-Also, it is worth mentioning that removing -Werror makes the existing
-patch 0001-Disable-the-non-null-compare-warning-error.patch (which was
-just disabling one specific warning). We nonetheless keep this patch
-around as it is a backport from upstream.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/bd223dfa1c4baa68e427d4941bd2e9917e22da84/
-
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-src-Makefile-disable-Werror.patch         | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ support/scripts/pkg-stats | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/faketime/0002-src-Makefile-disable-Werror.patch b/package/faketime/0002-src-Makefile-disable-Werror.patch
-new file mode 100644
-index 0000000000..e1e3b321b8
---- /dev/null
-+++ b/package/faketime/0002-src-Makefile-disable-Werror.patch
-@@ -0,0 +1,32 @@
-+From bcde6e6f34c3cf78a254315c5caa530db91802fb Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 17 May 2018 23:41:03 +0200
-+Subject: [PATCH] src/Makefile: disable -Werror
-+
-+gcc 8.x has enabled additional warnings that break the build due to
-+-Werror, so let's drop -Werror for now. A set of patches has been
-+submitted upstream (https://github.com/wolfcw/libfaketime/pull/161) to
-+properly fix the gcc 8.x issues, but in the mean time, disabling
-+-Werror is a simpler option.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index bbbd476..6b0d2cd 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -67,7 +67,7 @@ INSTALL ?= install
-+ PREFIX ?= /usr/local
-+ LIBDIRNAME ?= /lib/faketime
-+ 
-+-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-++CFLAGS += -std=gnu99 -Wall -Wextra -Wno-nonnull-compare -DFAKE_STAT -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"'
-+ LIB_LDFLAGS += -shared
-+ LDFLAGS += -Wl,--version-script=libfaketime.map -lpthread
-+ LDADD += -ldl -lm -lrt
-+-- 
-+2.14.3
-+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 43f7e8d543..b7b00e8634 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -499,17 +499,17 @@ def parse_args():
+ def __main__():
+     args = parse_args()
+     if args.npackages and args.packages:
+-        print "ERROR: -n and -p are mutually exclusive"
++        print("ERROR: -n and -p are mutually exclusive")
+         sys.exit(1)
+     if args.packages:
+         package_list = args.packages.split(",")
+     else:
+         package_list = None
+-    print "Build package list ..."
++    print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
+-    print "Getting package make info ..."
++    print("Getting package make info ...")
+     package_init_make_info()
+-    print "Getting package details ..."
++    print("Getting package details ...")
+     for pkg in packages:
+         pkg.set_infra()
+         pkg.set_license()
+@@ -517,9 +517,9 @@ def __main__():
+         pkg.set_patch_count()
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+-    print "Calculate stats"
++    print("Calculate stats")
+     stats = calculate_stats(packages)
+-    print "Write HTML"
++    print("Write HTML")
+     dump_html(packages, stats, args.output)
+ 
+ 
