@@ -1,83 +1,70 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 19 May 2018 17:37:32 +0200
-Subject: [Buildroot] [PATCH for-next] package/terminology: bump version to
- 1.2.1
-Message-ID: <20180519153732.17320-1-romain.naour@gmail.com>
+Date: Sat, 19 May 2018 17:41:46 +0200
+Subject: [Buildroot] [PATCH] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.0.4
+Message-ID: <20180519154146.17885-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to meson build system introduced with 1.2.0 release.
-Handle NLS option with BR2_SYSTEM_ENABLE_NLS.
-Add license file hash.
-
-See release note:
-(1.2.0) https://sourceforge.net/p/enlightenment/mailman/message/36294478/
-(1.2.1) https://sourceforge.net/p/enlightenment/mailman/message/36317484/
+See:
+https://lists.freedesktop.org/archives/mesa-dev/2018-May/195215.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/terminology/terminology.hash |  5 +++--
- package/terminology/terminology.mk   | 32 ++++++++++++++++++++++++++++----
- 2 files changed, 31 insertions(+), 6 deletions(-)
+This is a bugfix release.
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
-index 81ae5d8d61..f341d5c2f7 100644
---- a/package/terminology/terminology.hash
-+++ b/package/terminology/terminology.hash
-@@ -1,2 +1,3 @@
--# From https://sourceforge.net/p/enlightenment/mailman/message/36026490/
--sha256	da12b8a24ca5248b2d292d9b1e19cabc61ae29b21f96d4b6f4f3e7b4feeecc16	terminology-1.1.1.tar.xz
-+# From https://sourceforge.net/p/enlightenment/mailman/message/36317484/
-+sha256  ac8673a129ed78ef669a8c04e7a136f5ca95226ce5ef375a451421bac41828c6  terminology-1.2.1.tar.xz
-+sha256  605988548c7a52562d6f64d936a579b53f690e62ca92261b6a440bf9023ff521  COPYING
-diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
-index ed811b3a85..af37187d90 100644
---- a/package/terminology/terminology.mk
-+++ b/package/terminology/terminology.mk
-@@ -4,13 +4,37 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 5a8e3f9b84..18c98a7f9e 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 18.0.3
++MESA3D_HEADERS_VERSION = 18.0.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 983c0e65e5..9b9f01703c 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2018-May/000426.html
+-md5 b260580a26b71a5e52c608e3fe6d08a6  mesa-18.0.3.tar.xz
+-sha1 2c12c9f69eb7ba787dd1245b53bb98ceb08362d3  mesa-18.0.3.tar.xz
+-sha256 099d9667327a76a61741a533f95067d76ea71a656e66b91507b3c0caf1d49e30  mesa-18.0.3.tar.xz
+-sha512 decd050bab049d17bcde3f832d4da0ffdb80f147c99377a162739bbe72fd6fd32b51e56e6fc66895b8c30fc19a1815bae164b21aa557816c3998ad18c1ffca2d  mesa-18.0.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2018-May/000429.html
++md5 ef525adaff7f31bedd4c5134bc313da9  mesa-18.0.4.tar.xz
++sha1 4bbee07d8eb42625f215f49d39a657fabdc2f29d  mesa-18.0.4.tar.xz
++sha256 1f3bcfe7cef0a5c20dae2b41df5d7e0a985e06be0183fa4d43b6068fcba2920f  mesa-18.0.4.tar.xz
++sha512 f9a14be46c209661ceb318add1611481445d13b47e95c7a5d2a5e5ecfdd5d2c3fa9c2b16b30035bbb8d61ccc7cb65bfa6698ac8b040273e5ab045a951a67752c  mesa-18.0.3.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+ sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index d897c0d4c2..1b2fca1f90 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--TERMINOLOGY_VERSION = 1.1.1
-+TERMINOLOGY_VERSION = 1.2.1
- TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
- TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
- TERMINOLOGY_LICENSE = BSD-2-Clause
- TERMINOLOGY_LICENSE_FILES = COPYING
- 
--TERMINOLOGY_DEPENDENCIES = efl host-pkgconf
--TERMINOLOGY_CONF_OPTS = --with-edje-cc=$(HOST_DIR)/bin/edje_cc
-+TERMINOLOGY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) efl host-meson host-pkgconf
-+TERMINOLOGY_MESON_OPTS = \
-+	--prefix=/usr \
-+	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-+	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
-+	-Dedje-cc=$(HOST_DIR)/bin/edje_cc
- 
--$(eval $(autotools-package))
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+TERMINOLOGY_MESON_OPTS += -Dnls=true
-+else
-+TERMINOLOGY_MESON_OPTS += -Dnls=false
-+endif
-+
-+define TERMINOLOGY_CONFIGURE_CMDS
-+	rm -rf $(@D)/build
-+	mkdir -p $(@D)/build
-+	$(TARGET_MAKE_ENV) meson $(TERMINOLOGY_MESON_OPTS) $(@D) $(@D)/build
-+endef
-+
-+define TERMINOLOGY_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
-+endef
-+
-+define TERMINOLOGY_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
-+endef
-+
-+$(eval $(generic-package))
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 18.0.3
++MESA3D_VERSION = 18.0.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.14.3
