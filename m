@@ -1,41 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 23:04:04 +0200
-Subject: [Buildroot] [git commit] uboot-tools: bump to version 2018.05
-Message-ID: <20180602101011.A81E07F972@busybox.osuosl.org>
+Date: Sat, 19 May 2018 13:48:21 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: use parenthesis
+ for print
+Message-ID: <20180602101010.DC2FF7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=536805cfcc8068e3786c51a0c07def23ebe6cfea
+commit: https://git.buildroot.net/buildroot/commit/?id=eb04235783abe58a6a7f8ecc8f9ab46a6d03b543
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Use Python 3 style print calls, in order to make pkg-stats Python 3
+compliant.
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uboot-tools/uboot-tools.hash | 2 +-
- package/uboot-tools/uboot-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index 788c1696f8..17840d8d9b 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  7e7477534409d5368eb1371ffde6820f0f79780a1a1f676161c48442cb303dfd  u-boot-2018.03.tar.bz2
-+sha256  4da13c2a6139a78cc08608f21fd4741db27eda336cfad7ab8264fda923b9c048  u-boot-2018.05.tar.bz2
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 882576d2d5..b247c2173d 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 43f7e8d543..b7b00e8634 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -499,17 +499,17 @@ def parse_args():
+ def __main__():
+     args = parse_args()
+     if args.npackages and args.packages:
+-        print "ERROR: -n and -p are mutually exclusive"
++        print("ERROR: -n and -p are mutually exclusive")
+         sys.exit(1)
+     if args.packages:
+         package_list = args.packages.split(",")
+     else:
+         package_list = None
+-    print "Build package list ..."
++    print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
+-    print "Getting package make info ..."
++    print("Getting package make info ...")
+     package_init_make_info()
+-    print "Getting package details ..."
++    print("Getting package details ...")
+     for pkg in packages:
+         pkg.set_infra()
+         pkg.set_license()
+@@ -517,9 +517,9 @@ def __main__():
+         pkg.set_patch_count()
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+-    print "Calculate stats"
++    print("Calculate stats")
+     stats = calculate_stats(packages)
+-    print "Write HTML"
++    print("Write HTML")
+     dump_html(packages, stats, args.output)
  
--UBOOT_TOOLS_VERSION = 2018.03
-+UBOOT_TOOLS_VERSION = 2018.05
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
+ 
