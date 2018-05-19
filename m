@@ -1,48 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 13:58:03 +0200
-Subject: [Buildroot] [git commit] package/perl-http-message: bump version to
- 6.16
-Message-ID: <20180602101010.ECBB57FADE@busybox.osuosl.org>
+Date: Sat, 19 May 2018 14:17:54 +0200
+Subject: [Buildroot] [git commit] rustc: enable on powerpc64le architecture
+Message-ID: <20180602101011.0ACC47FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b48636a854e8859ef55584b702dde271ab4fb04
+commit: https://git.buildroot.net/buildroot/commit/?id=811ddf60f44e1f1511332de3cd902415364c5dba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added license hash.
+Rust supports powerpc64le to the same level as powerpc64, so allow it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Sam Bobroff <sbobroff@linux.ibm.com>
+Tested-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Acked-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-http-message/perl-http-message.hash | 6 ++++--
- package/perl-http-message/perl-http-message.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/rustc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-index a34d0456b1..b58792b5af 100644
---- a/package/perl-http-message/perl-http-message.hash
-+++ b/package/perl-http-message/perl-http-message.hash
-@@ -1,3 +1,5 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    e4c6e183860c42cbdff65dcd76c333b0 HTTP-Message-6.14.tar.gz
--sha256 71aab9f10eb4b8ec6e8e3a85fc5acb46ba04db1c93eb99613b184078c5cf2ac9 HTTP-Message-6.14.tar.gz
-+md5    eddd79e2d2975a55bb6ea2e7707e3137 HTTP-Message-6.16.tar.gz
-+sha256 46790ae127946d5cfea5a1e05c1b9f4a045a7c5094fe81f086bbf3341290ebd0 HTTP-Message-6.16.tar.gz
-+# Locally computed
-+sha256 66f0d1e8593d5512d7a8cd90549a976aaae97e4fa9b6097249b3682f14747a6b  LICENSE
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-index 722d6be671..c35796e065 100644
---- a/package/perl-http-message/perl-http-message.mk
-+++ b/package/perl-http-message/perl-http-message.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_HTTP_MESSAGE_VERSION = 6.14
-+PERL_HTTP_MESSAGE_VERSION = 6.16
- PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
- PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_MESSAGE_DEPENDENCIES = perl-encode-locale perl-http-date perl-io-html perl-lwp-mediatypes perl-uri
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+index 1c79eededc..84a8e0f90b 100644
+--- a/package/rustc/Config.in.host
++++ b/package/rustc/Config.in.host
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	default y if BR2_aarch64
+ 	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 \
+ 	        && !(BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI)
+-	default y if BR2_powerpc || BR2_powerpc64
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+ 	default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU_MIPS32R6
+ 	default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
+ 		&& BR2_MIPS_NABI64
