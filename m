@@ -1,40 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 21:37:04 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/iucode-tool: Add systemd
- service config
-In-Reply-To: <20180515101802.6040-1-david.degrave@mind.be>
-References: <20180515101802.6040-1-david.degrave@mind.be>
-Message-ID: <20180519213704.0c6f3bbc@windsurf>
+Date: Sat, 19 May 2018 21:38:28 +0200
+Subject: [Buildroot] [git commit branch/next] Revert "glibc: install the
+ obsolete libnsl"
+Message-ID: <20180519194728.B480E8B428@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=345730c38c8fad89f771cf14e58df125bb15a6fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 15 May 2018 12:18:02 +0200, David De Grave (Essensium/Mind)
-wrote:
-> From: Alex Suykov <alex.suykov@gmail.com>
-> 
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
-> ---
-> Changes v1 -> v2
-> 	- Add 'RemainAfterExist=yes' to the unit file.
-> 	- Change the link target to relative.
-> Changes v2 -> v3
-> 	- Fixed copy/paste error in the link target.
-> ---
->  package/iucode-tool/iucode-tool.mk |  8 ++++++++
->  package/iucode-tool/iucode.service | 10 ++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 package/iucode-tool/iucode.service
+libnsl from Glibc is deprecated and should not be used anymore.
+Remove libnsl.so.* from GLIBC_LIBS_LIB.
 
-Applied to next, thanks.
+libnsl is now an separate library that can be packaged later if
+necessary [1].
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Note: libnsl from Glibc doesn't build with gcc 8 due new warning [2].
+
+[1] https://github.com/thkukuk/libnsl.git
+[2] http://patchwork.sourceware.org/patch/26437
+
+This reverts commit 398747f5fafca8c07e696612d8eded53d4f935c7.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/glibc.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 3ab673c0cc..c1c5ac687f 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -100,7 +100,6 @@ define GLIBC_CONFIGURE_CMDS
+ 		--disable-profile \
+ 		--without-gd \
+ 		--enable-obsolete-rpc \
+-		--enable-obsolete-nsl \
+ 		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
+ 		--with-headers=$(STAGING_DIR)/usr/include)
+ 	$(GLIBC_ADD_MISSING_STUB_H)
+@@ -113,7 +112,7 @@ endef
+ 
+ GLIBC_LIBS_LIB = \
+ 	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
+-	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
++	libm.so.* libpthread.so.* libresolv.so.* librt.so.* \
+ 	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
+ 
+ ifeq ($(BR2_PACKAGE_GDB),y)
