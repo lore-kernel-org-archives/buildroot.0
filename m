@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 21:50:41 +0200
-Subject: [Buildroot] [PATCH for-next] package/terminology: bump version
- to 1.2.1
-In-Reply-To: <20180519153732.17320-1-romain.naour@gmail.com>
-References: <20180519153732.17320-1-romain.naour@gmail.com>
-Message-ID: <20180519215041.2975210f@windsurf>
+Date: Sat, 19 May 2018 21:50:45 +0200
+Subject: [Buildroot] [PATCH] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.0.4
+In-Reply-To: <20180519154146.17885-1-romain.naour@gmail.com>
+References: <20180519154146.17885-1-romain.naour@gmail.com>
+Message-ID: <20180519215045.707c20be@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 19 May 2018 17:37:32 +0200, Romain Naour wrote:
-> Switch to meson build system introduced with 1.2.0 release.
-> Handle NLS option with BR2_SYSTEM_ENABLE_NLS.
-> Add license file hash.
-> 
-> See release note:
-> (1.2.0) https://sourceforge.net/p/enlightenment/mailman/message/36294478/
-> (1.2.1) https://sourceforge.net/p/enlightenment/mailman/message/36317484/
+On Sat, 19 May 2018 17:41:46 +0200, Romain Naour wrote:
+> See:
+> https://lists.freedesktop.org/archives/mesa-dev/2018-May/195215.html
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/terminology/terminology.hash |  5 +++--
->  package/terminology/terminology.mk   | 32 ++++++++++++++++++++++++++++----
->  2 files changed, 31 insertions(+), 6 deletions(-)
+> This is a bugfix release.
+> ---
+>  package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+>  package/mesa3d/mesa3d.hash               | 10 +++++-----
+>  package/mesa3d/mesa3d.mk                 |  2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
 Applied to next, thanks.
 
