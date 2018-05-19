@@ -1,47 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 23:24:13 +0200
-Subject: [Buildroot] [git commit] package/python-can: bump to version 2.1.0
-Message-ID: <20180602101014.D027F836B8@busybox.osuosl.org>
+Date: Sat, 19 May 2018 22:46:54 +0200
+Subject: [Buildroot] [git commit] ltp-testsuite: Bump to version 20180515
+Message-ID: <20180602101011.73E2C7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8519dea4b91b61cf7767c281a68e8a0c46fdc9d5
+commit: https://git.buildroot.net/buildroot/commit/?id=e0d4e6091d76683be04e5bea537497b576c8a809
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps python-can to version 2.1.0.
+Dropped patch applied by upstream + LTP_TESTSUITE_AUTORECONF = YES which
+this patch required and thus not needed any more.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-can/python-can.hash | 4 ++--
- package/python-can/python-can.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...x-numa-v2-detection-for-cross-compilation.patch | 37 ----------------------
+ package/ltp-testsuite/ltp-testsuite.hash           |  4 +--
+ package/ltp-testsuite/ltp-testsuite.mk             |  5 +--
+ 3 files changed, 3 insertions(+), 43 deletions(-)
 
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index bd19d194b6..8a70bb42b7 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/python-can/json, sha256 locally computed
--md5     f653aecf8b9034bbba32cc04ca6a7b6d  python-can-1.5.2.tar.gz
--sha256  edabb426e6cd11c2dc7a98980340135aa0eb02143b0d51bf14e3e6178c131cc3  python-can-1.5.2.tar.gz
-+md5     3310f0aa2a8492d0ff614ecf636ec8a8  python-can-2.1.0.tar.gz
-+sha256  4a5c01dd67feeda35f88e6c12ea14ac8cabd426b9be0cc5f9fd083fe90a9dbfc  python-can-2.1.0.tar.gz
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index a271baea00..9a7e903303 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch b/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+deleted file mode 100644
+index 6ad1db046e..0000000000
+--- a/package/ltp-testsuite/0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 01c134f30be755a43af12a4ae2c31177d04be790 Mon Sep 17 00:00:00 2001
+-From: Petr Vorel <pvorel@suse.cz>
+-Date: Mon, 29 Jan 2018 10:31:40 +0100
+-Subject: [PATCH] numa: Fix numa v2 detection for cross compilation
+-
+-Changed to AC_COMPILE_IFELSE as AC_RUN_IFELSE cannot be run while
+-cross compiling.
+-
+-Bug found by Buildroot project.
+-
+-Signed-off-by: Petr Vorel <pvorel@suse.cz>
+-Reported-by: Baruch Siach <baruch@tkos.co.il>
+----
+- m4/ltp-numa.m4 | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/m4/ltp-numa.m4 b/m4/ltp-numa.m4
+-index fc3383e97..633f54c18 100644
+---- a/m4/ltp-numa.m4
+-+++ b/m4/ltp-numa.m4
+-@@ -28,11 +28,11 @@ AC_DEFUN([LTP_CHECK_SYSCALL_NUMA], [
+- 	AC_CHECK_HEADERS([numa.h numaif.h], [], [have_numa_headers=no])
+- 
+- 	if test "x$have_numa_headers" != "xno"; then
+--		AC_RUN_IFELSE([AC_LANG_PROGRAM([
+-+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+- #include <numa.h>
+- 		], [
+- #if LIBNUMA_API_VERSION < 2
+--exit(1);
+-+# error Required numa headers >= 2
+- #endif
+- 		])], [have_numa_headers_v2=yes])
+- 	fi
+--- 
+-2.16.0
+-
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index d75d204385..93ab41d3b7 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,2 +1,2 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20180118/ltp-full-20180118.tar.xz.sha1
+-sha1 2e643f1e29cd89efc8059729f60237a427fd409e  ltp-full-20180118.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20180515/ltp-full-20180515.tar.xz.sha1
++sha1 db424d391987ff62664662210ef98cd42c7cc6b5  ltp-full-20180515.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index f5ea4344ed..b536dbd369 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CAN_VERSION = 1.5.2
--PYTHON_CAN_SITE = https://pypi.python.org/packages/a1/b1/80f023e2b728c7ebccbf989aec777f3add3dd4cee650573ce5d38132a07c
-+PYTHON_CAN_VERSION = 2.1.0
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/04/87/0d5b0f2f4e5d7f64a44f74b7f0bc1668457e6aa7e90b04ad15c3b9a44411
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
- PYTHON_CAN_SETUP_TYPE = setuptools
+-LTP_TESTSUITE_VERSION = 20180118
++LTP_TESTSUITE_VERSION = 20180515
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+@@ -57,9 +57,6 @@ LTP_TESTSUITE_CONF_ENV += \
+ 	LIBS="$(LTP_TESTSUITE_LIBS)" \
+ 	SYSROOT="$(STAGING_DIR)"
+ 
+-# Required by patch 0002-numa-Fix-numa-v2-detection-for-cross-compilation.patch
+-LTP_TESTSUITE_AUTORECONF = YES
+-
+ # Requires uClibc fts and bessel support, normally not enabled
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ define LTP_TESTSUITE_REMOVE_UNSUPPORTED
