@@ -1,95 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 21:53:52 +0200
-Subject: [Buildroot] [git commit] imx-gpu-viv: add Wayland backend option
-Message-ID: <20180602101011.4110D802C0@busybox.osuosl.org>
+Date: Sat, 19 May 2018 22:47:22 +0200
+Subject: [Buildroot] [git commit] uclibc: ARC: Don't mess with CPU selection
+Message-ID: <20180602101011.7DAAF7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae7e5960a31795707ebdff5952b01881bffbf484
+commit: https://git.buildroot.net/buildroot/commit/?id=9cb6caf891588302d04baa4bbe84d672736ca502
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package has been tested with Wayland back-end using weston-imx
-repository on a i.MX6Q Nitrogen6x:
-https://source.codeaurora.org/external/imx/weston-imx/
-(tag rel_imx_4.9.51_8mq_ga to work with both i.MX6 and i.MX8MQ)
+Since uClibc-ng commit cde74b83f9b2 "ARC: remove special CFLAGS/LDFLAGS handling"
+i.e. starting v1.0.23 CONFIG_ARC_CPU_xx options are not used.
 
-Weston was started as follows:
- # export XDG_RUNTIME_DIR=/tmp
- # weston --tty=1 --device=/dev/fb0
+Instead uClibc relies on toolchain defaults or build-system CFLAGS
+for selection of ARC-specific code (i.e. distinguishes between
+ARCompact and ARCv2 ISAs).
 
-Finally the Vivante sample apps were started from weston-terminal:
- # cd /usr/share/examples/viv_samples/vdk/
- # ./tutorial7
+So we drop corresponding quirks from Buildroot as well.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-gpu-viv/Config.in      | 10 +++++++++-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 10 ++++++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ package/uclibc/Config.in | 7 -------
+ package/uclibc/uclibc.mk | 6 ------
+ 2 files changed, 13 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index cf58ad475c..4e753a41f3 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_IMX_GPU_VIV
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_LIBOPENVG
- 	help
--	  Userspace libraries for Vivante GPU on i.MX6 platforms
-+	  Userspace libraries for Vivante GPU on i.MX platforms
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 0747cc8d7c..a566881852 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -106,13 +106,6 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	default "i386"	   if BR2_i386
+ 	default "x86_64"   if BR2_x86_64
  
- 	  It contains libraries and headers for GLES, OpenCL, and
- 	  OpenVG. It also contains a DRI plugin for X11. It also
-@@ -44,12 +44,20 @@ comment "X11 backend needs Xorg package"
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
- 	bool "Framebuffer"
- 
-+config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
-+	bool "Wayland"
-+	# libdrm needed by gbm_viv.so
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+
- endchoice
- 
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT
+-config BR2_UCLIBC_ARC_TYPE
+-	string
+-	default "ARC_CPU_700"	if BR2_arc750d
+-	default "ARC_CPU_700"	if BR2_arc770d
+-	default "ARC_CPU_HS"	if BR2_archs38
+-	depends on BR2_UCLIBC_TARGET_ARCH = "arc"
+-
+ config BR2_UCLIBC_MIPS_ABI
  	string
- 	default "x11" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
- 	default "fb" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
-+	default "wl" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 	default "O32" if BR2_MIPS_OABI32
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 7de9219873..bb44da28b4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -82,11 +82,6 @@ endif
+ #
  
- config BR2_PACKAGE_PROVIDES_LIBEGL
- 	default "imx-gpu-viv"
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 0dc2072984..a339c22978 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -25,6 +25,10 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
- IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
- endif
- 
-+ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
-+IMX_GPU_VIV_DEPENDENCIES += libdrm wayland
-+endif
-+
- define IMX_GPU_VIV_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_GPU_VIV_DL_DIR)/$(IMX_GPU_VIV_SOURCE))
- endef
-@@ -62,6 +66,12 @@ define IMX_GPU_VIV_FIXUP_PKGCONFIG
- endef
- endif
- 
-+ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
-+define IMX_GPU_VIV_FIXUP_PKGCONFIG
-+	ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
-+endef
-+endif
-+
- ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
- define IMX_GPU_VIV_FIXUP_PKGCONFIG
- 	for lib in egl gbm glesv1_cm glesv2 vg; do \
+ ifeq ($(UCLIBC_TARGET_ARCH),arc)
+-UCLIBC_ARC_TYPE = CONFIG_$(call qstrip,$(BR2_UCLIBC_ARC_TYPE))
+-define UCLIBC_ARC_TYPE_CONFIG
+-	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_ARC_TYPE),$(@D)/.config)
+-endef
+-
+ UCLIBC_ARC_PAGE_SIZE = CONFIG_ARC_PAGE_SIZE_$(call qstrip,$(BR2_ARC_PAGE_SIZE))
+ define UCLIBC_ARC_PAGE_SIZE_CONFIG
+ 	$(SED) '/CONFIG_ARC_PAGE_SIZE_*/d' $(@D)/.config
+@@ -387,7 +382,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
+ 	$(UCLIBC_MMU_CONFIG)
+ 	$(UCLIBC_BINFMT_CONFIG)
+-	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARC_ATOMICS_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
