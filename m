@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 21:50:45 +0200
-Subject: [Buildroot] [PATCH] package/{mesa3d,
- mesa3d-headers}: bump version to 18.0.4
-In-Reply-To: <20180519154146.17885-1-romain.naour@gmail.com>
-References: <20180519154146.17885-1-romain.naour@gmail.com>
-Message-ID: <20180519215045.707c20be@windsurf>
+Date: Sat, 19 May 2018 21:52:04 +0200
+Subject: [Buildroot] [PATCH 1/1] mbdedtls: security bump to version 2.9.0
+In-Reply-To: <20180519134534.3463-1-fontaine.fabrice@gmail.com>
+References: <20180519134534.3463-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180519215204.0d6db3e1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 19 May 2018 17:41:46 +0200, Romain Naour wrote:
-> See:
-> https://lists.freedesktop.org/archives/mesa-dev/2018-May/195215.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> This is a bugfix release.
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk |  2 +-
->  package/mesa3d/mesa3d.hash               | 10 +++++-----
->  package/mesa3d/mesa3d.mk                 |  2 +-
->  3 files changed, 7 insertions(+), 7 deletions(-)
+On Sat, 19 May 2018 15:45:34 +0200, Fabrice Fontaine wrote:
 
-Applied to next, thanks.
+>  MBEDTLS_SITE = https://tls.mbed.org/code/releases
+> -MBEDTLS_VERSION = 2.7.2
+> +MBEDTLS_VERSION = 2.9.0
+
+For master, I think it would make more sense to update to 2.7.3, which
+fixes the same security issues. See
+https://tls.mbed.org/tech-updates/releases/mbedtls-2.9.0-2.7.3-and-2.1.12-released.
+
+Thanks,
 
 Thomas
 -- 
