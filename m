@@ -1,98 +1,140 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 19 May 2018 13:08:04 +0200
-Subject: [Buildroot] Tesla is using Buildroot
-In-Reply-To: <79815658-f349-2b3a-ab08-3035bb08b170@mind.be>
-References: <20180511172314.28ba9f80@windsurf.home>
- <20180511215508.GA28572@jaya>
- <BLUPR0601MB705720B009168FB33EC2CA5FB9E0@BLUPR0601MB705.namprd06.prod.outlook.com>
- <704976570.261553.1526089365924.JavaMail.zimbra@datacom.com.br>
- <20180512142738.GB3674@momiji.home>
- <CAMWSM7gzGhpgRB-xXqNreQtvwR27d+UQuGUZ35_5uwhNY6gonA@mail.gmail.com>
- <CAOesGMimW+-9zEaSoJk0-Xjwg7O6-NJ3fXMYDdkzGRDUSaKB9A@mail.gmail.com>
- <1526320807.30073.31.camel@impinj.com>
- <79815658-f349-2b3a-ab08-3035bb08b170@mind.be>
-Message-ID: <CA+TH9VmeeTym-u-fyAWhOJ8=J9erOE=FmC1dHJLoHjhqgOWGHw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 19 May 2018 13:47:21 +0200
+Subject: [Buildroot] [git commit] libcurl: security bump to version 7.60.0
+Message-ID: <20180519114627.B16138832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-05-15 22:18 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->
->
-> On 14-05-18 20:00, Trent Piepho wrote:
->> On Sat, 2018-05-12 at 10:51 -0700, Olof Johansson wrote:
->>> On Sat, May 12, 2018 at 10:06 AM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
->>>> On Sat, May 12, 2018 at 6:27 AM, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> [snip]
->>>> I do the same thing. The top level Makefile exports BR2_EXTERNAL="..",
->>>> there's a target for cloning and checking out a specific Buildroot
->>>> revision, then there's a wildcard pattern at the end to pass any
->>>> unrecognized targets up to Buildroot's Makefile, so things like
->>>> "linux-menuconfig" still work.
->>
->>> I liked the split of having third party software in an upstream-based
->>> separate buildroot repo, and only proprietary components in
->>> BR2_EXTERNAL. That way it's easier to separate out the portion you
->>> need to share for compliance (i.e. see current github contents), while
->>> having a place to keep confidential material, work on new
->>> configs/products/prototypes/internal uses that are not yet released,
->>> etc in the BR2_EXTERNAL. As expressed above, wrapping it with a second
->>> layer of makefiles makes it relatively easy to deal with.
->>
->> We have a top-level project with a top level Makefile that contains the
->>  BR2_EXTERNAL tree.  I.e., the BR2_EXTERNAL tree is the top level
->> project.  Buildroot exists as a git submodule in a directory of this
->> project.  We can update buildroot by pulling from upstream and rebasing
->> and can git format-patch a patch to send to the list.
->>
->> We patch buildroot if:
->> 1. We think the patch is upstreamable.
->> 2. There appears to be no reasonable way to accomplish what we want
->> otherwise.
->>
->> The top level makefile uses a pattern rule to provide a target for
->> every defconfig that exists in br2-external/configs directory.  It'll
->> call buildroot's build with BR2_EXTERNAL and O set build that defconfig
->> into an output directory.  Or just do a buildroot *_defconfig call but
->> not actually build.
->>
->> buildroot sets itself up so that once you go to the output directory,
->> there is a Makefile that will execute any buildroot target (menuconfig,
->> pkg-rebuild, all, etc.) with BR2_EXTERNAL configured.
->
->  That's *exactly* the setup I've developed for one of my projects. I've been
-> meaning to export this to a buildroot-external superproject that people could
-> reuse...
+commit: https://git.buildroot.net/buildroot/commit/?id=051e2f2d0b3a74ede4cc1865513ebe4c59e7d2ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please do! I'd really would like to have a "best practice" or a sort
-of boilerplate to use when setting up a new project!
+Drop upstream patch.
 
-Thanks!
+This release fixes the security issues listed below.
 
->
->  One thing though: I recently switched from git submodule to git subtree.
-> Submodules are really painful to work with when there are multiple developers
-> who need to change both the supermodule and submodule. I haven't yet gotten
-> around to using the subtree split functionality to export the upstreamable
-> changes again, but it looks pretty convenient to use.
->
->  Regards,
->  Arnout
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+CVE-2018-1000300: curl might overflow a heap based memory buffer when
+closing down an FTP connection with very long server command replies.
 
+  https://curl.haxx.se/docs/adv_2018-82c2.html
 
+CVE-2018-1000301: curl can be tricked into reading data beyond the end
+of a heap based buffer used to store downloaded content.
 
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+  https://curl.haxx.se/docs/adv_2018-b138.html
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-openssl-fix-build-with-LibreSSL-2.7.patch | 75 ----------------------
+ package/libcurl/libcurl.hash                       |  4 +-
+ package/libcurl/libcurl.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 78 deletions(-)
+
+diff --git a/package/libcurl/0001-openssl-fix-build-with-LibreSSL-2.7.patch b/package/libcurl/0001-openssl-fix-build-with-LibreSSL-2.7.patch
+deleted file mode 100644
+index 45ae4e2950..0000000000
+--- a/package/libcurl/0001-openssl-fix-build-with-LibreSSL-2.7.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From de115e14079d12e8826eabaa396677dc40beb5d1 Mon Sep 17 00:00:00 2001
+-From: Bernard Spil <brnrd@FreeBSD.org>
+-Date: Mon, 2 Apr 2018 19:04:06 +0200
+-Subject: [PATCH] openssl: fix build with LibreSSL 2.7
+-
+- - LibreSSL 2.7 implements (most of) OpenSSL 1.1 API
+-
+-Fixes #2319
+-Closes #2447
+-Closes #2448
+-
+-Signed-off-by: Bernard Spil <brnrd@FreeBSD.org>
+-(cherry picked from commit 7c90c93c0b061da81f69fabdd57125b2783c15fb)
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- lib/vtls/openssl.c | 15 +++++++++------
+- 1 file changed, 9 insertions(+), 6 deletions(-)
+-
+-diff --git a/lib/vtls/openssl.c b/lib/vtls/openssl.c
+-index 2a6b3cfac..bbb8ec766 100644
+---- a/lib/vtls/openssl.c
+-+++ b/lib/vtls/openssl.c
+-@@ -104,7 +104,8 @@
+- #endif
+- 
+- #if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && /* OpenSSL 1.1.0+ */ \
+--  !defined(LIBRESSL_VERSION_NUMBER)
+-+    !(defined(LIBRESSL_VERSION_NUMBER) && \
+-+      LIBRESSL_VERSION_NUMBER < 0x20700000L)
+- #define SSLEAY_VERSION_NUMBER OPENSSL_VERSION_NUMBER
+- #define HAVE_X509_GET0_EXTENSIONS 1 /* added in 1.1.0 -pre1 */
+- #define HAVE_OPAQUE_EVP_PKEY 1 /* since 1.1.0 -pre3 */
+-@@ -128,7 +129,8 @@ static unsigned long OpenSSL_version_num(void)
+- #endif
+- 
+- #if (OPENSSL_VERSION_NUMBER >= 0x1000200fL) && /* 1.0.2 or later */ \
+--  !defined(LIBRESSL_VERSION_NUMBER)
+-+    !(defined(LIBRESSL_VERSION_NUMBER) && \
+-+      LIBRESSL_VERSION_NUMBER < 0x20700000L)
+- #define HAVE_X509_GET0_SIGNATURE 1
+- #endif
+- 
+-@@ -147,7 +149,7 @@ static unsigned long OpenSSL_version_num(void)
+-  * Whether SSL_CTX_set_keylog_callback is available.
+-  * OpenSSL: supported since 1.1.1 https://github.com/openssl/openssl/pull/2287
+-  * BoringSSL: supported since d28f59c27bac (committed 2015-11-19)
+-- * LibreSSL: unsupported in at least 2.5.1 (explicitly check for it since it
+-+ * LibreSSL: unsupported in@least 2.7.2 (explicitly check for it since it
+-  *           lies and pretends to be OpenSSL 2.0.0).
+-  */
+- #if (OPENSSL_VERSION_NUMBER >= 0x10101000L && \
+-@@ -259,7 +261,9 @@ static void tap_ssl_key(const SSL *ssl, ssl_tap_state_t *state)
+-   if(!session || !keylog_file_fp)
+-     return;
+- 
+--#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER >= 0x10100000L && \
+-+    !(defined(LIBRESSL_VERSION_NUMBER) && \
+-+      LIBRESSL_VERSION_NUMBER < 0x20700000L)
+-   /* ssl->s3 is not checked in openssl 1.1.0-pre6, but let's assume that
+-    * we have a valid SSL context if we have a non-NULL session. */
+-   SSL_get_client_random(ssl, client_random, SSL3_RANDOM_SIZE);
+-@@ -2082,8 +2086,7 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
+-   case CURL_SSLVERSION_TLSv1_2:
+-   case CURL_SSLVERSION_TLSv1_3:
+-     /* it will be handled later with the context options */
+--#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && \
+--    !defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+-     req_method = TLS_client_method();
+- #else
+-     req_method = SSLv23_client_method();
+--- 
+-2.14.3
+-
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index aec61e3f83..cb1e6e72f2 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.59.0.tar.xz.asc
+-sha256 e44eaabdf916407585bf5c7939ff1161e6242b6b015d3f2f5b758b2a330461fc  curl-7.59.0.tar.xz
++# https://curl.haxx.se/download/curl-7.60.0.tar.xz.asc
++sha256 8736ff8ded89ddf7e926eec7b16f82597d029fc1469f3a551f1fafaac164e6a0  curl-7.60.0.tar.xz
+ sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index a3e66d094c..fbaeaa8975 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.59.0
++LIBCURL_VERSION = 7.60.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
