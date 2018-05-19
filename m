@@ -1,63 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 23:20:08 +0200
-Subject: [Buildroot] [PATCH v2 1/1] gst1-plugins-bad: update plugin
- licenses
-In-Reply-To: <1526263928-5540-1-git-send-email-danomimanchego123@gmail.com>
-References: <1526263928-5540-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20180519232008.6d98ade5@windsurf>
+Date: Sat, 19 May 2018 23:21:13 +0200
+Subject: [Buildroot] [git commit branch/next] python-reentry: new package
+Message-ID: <20180519212101.DC11481263@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cdcc4cd1ec2aa402d35ee248db4fe478c99a9af4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 13 May 2018 22:12:08 -0400, Danomi Manchego wrote:
-> Update several of the licenses annotated in the gst1-plugins-bad.mk file.
-> 
-> 1. Specify GPL-2.0 in license info.
-> * All of the *.[ch] that specify GPL also specify version 2 or later.
-> 
-> 2. Remove GPL from audiovisualizers.
-> * Changlog notes move from GPL to LGPL. (2015-04-25)
-> * docs/plugins/inspect/plugin-audiovisualizers.xml claims "LGPL".
-> * All *.[ch] files under ./gst/audiovisualizers say "GNU Library General Public License".
-> 
-> 3. Add GPL to yadif.
-> * Changelog notes that yadif is "GPL". (2013-02-07)
-> * docs/plugins/inspect/plugin-yadif.xml claims "GPL".
-> * All *.[ch] files under ./gst/yadif say "GNU General Public License" except for one "GNU Library General Public License".
-> 
-> 4. Remove UNKNOWN from fdk_aac.
-> * docs/plugins/inspect/plugin-fdkaac.xml claims "LGPL".
-> * All *.[ch] files under ./ext/fdkaac say "GNU Lesser" or "GNU Library General Public License".
-> 
-> 5. Add BSD-2c to dtls.
-> * docs/plugins/inspect/plugin-dtls.xml claims "BSD".
-> * All *.[ch] files under ./gst/dtls have BSD-2c text.
-> 
-> 6. Add BSD-2c to openh264.
-> * Changelog notes that openh264 is "BSD-2". (2014-10-03)
-> * docs/plugins/inspect/plugin-openh264.xml claims "BSD".
-> * All *.[ch] files under ./ext/openh264 have BSD-2c text.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> ---
-> Changes v1 -> v2
->    - Fix spelling and subject/verb-agreement in commit log, per
->      feedback from Yann E. MORIN.
->    - Add Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+A plugin manager based on setuptools entry points mechanism.
 
-Applied to master, thanks.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/python-reentry/Config.in           | 10 ++++++++++
+ package/python-reentry/python-reentry.hash |  4 ++++
+ package/python-reentry/python-reentry.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7fc7e354d0..f9531944a3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -191,6 +191,7 @@ F:	package/stress/
+ 
+ N:	Asaf Kahlon <asafka7@gmail.com>
+ F:	package/python-jsonmodels/
++F:	package/python-reentry/
+ F:	package/python-subprocess32/
+ F:	package/python-yieldfrom/
+ F:	package/zeromq/
+diff --git a/package/Config.in b/package/Config.in
+index 61210cea36..71a380bc3f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -912,6 +912,7 @@ menu "External python modules"
+ 	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
+ 	source "package/python-raven/Config.in"
++	source "package/python-reentry/Config.in"
+ 	source "package/python-remi/Config.in"
+ 	source "package/python-requests/Config.in"
+ 	source "package/python-requests-oauthlib/Config.in"
+diff --git a/package/python-reentry/Config.in b/package/python-reentry/Config.in
+new file mode 100644
+index 0000000000..18518f2c3f
+--- /dev/null
++++ b/package/python-reentry/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_REENTRY
++	bool "python-reentry"
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_CLICK # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_PY # runtime
++	help
++	  A plugin manager based on setuptools entry points mechanism.
++
++	  https://pypi.org/project/reentry/
+diff --git a/package/python-reentry/python-reentry.hash b/package/python-reentry/python-reentry.hash
+new file mode 100644
+index 0000000000..7a3bbf4d99
+--- /dev/null
++++ b/package/python-reentry/python-reentry.hash
+@@ -0,0 +1,4 @@
++# sha256 from https://pypi.org/pypi/reentry/json
++sha256	00df980d8c61713f5002d4d893ba6ea38e9a721cd04aef5a520b974e700ab550  reentry-1.2.0.tar.gz
++# Locally computed sha256 checksums
++sha256	4ae7f3216208a7e2327236e95bcd2397b2495f1c2298c708986c893bea608509  LICENSE
+diff --git a/package/python-reentry/python-reentry.mk b/package/python-reentry/python-reentry.mk
+new file mode 100644
+index 0000000000..d3f0e03ef0
+--- /dev/null
++++ b/package/python-reentry/python-reentry.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-reentry
++#
++################################################################################
++
++PYTHON_REENTRY_VERSION = 1.2.0
++PYTHON_REENTRY_SOURCE = reentry-$(PYTHON_REENTRY_VERSION).tar.gz
++PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/e2/b4/46dfac6613302fea51454a01aebedae9440aff9d813aedbbc5f687552e3b
++PYTHON_REENTRY_SETUP_TYPE = setuptools
++PYTHON_REENTRY_LICENSE = MIT
++PYTHON_REENTRY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
