@@ -1,43 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 22:44:45 +0200
-Subject: [Buildroot] [PATCH] configs/snps_arc*_defconfig: update u-boot
- version
-In-Reply-To: <20180514081035.5167-1-Evgeniy.Didin@synopsys.com>
-References: <20180514081035.5167-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20180519224445.62da9cef@windsurf>
+Date: Sat, 19 May 2018 22:46:19 +0200
+Subject: [Buildroot] [git commit branch/next] weston: remove dependency on
+ mesa3d to enable egl
+Message-ID: <20180519204520.0C1C68B8DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=17ceb6affc1c422eb73c856b34ae791a33762704
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 14 May 2018 11:10:35 +0300, Evgeniy Didin wrote:
-> With this commit we update u-boot version to 2018.05 for
-> Synopsys boards. U-boot version 2018.05 was released recently
-> and includes significant changes for ARC boards:
->  * Fix for compile-time warning for AXS10x
->  * Add support of platform-specific commands for HSDK
->  * Add support for on-board SPI flash on HSDK
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: arc-buildroot at synopsys.com
-> ---
->  .../0001-axs103-Clean-up-smp_kick_all_cpus.patch   | 48 ---------------
->  ...ort-slave-core-kick-start-on-axs103-v1.1-.patch | 72 ----------------------
->  configs/snps_arc700_axs101_defconfig               |  2 +-
->  configs/snps_archs38_axs103_defconfig              |  3 +-
->  configs/snps_archs38_hsdk_defconfig                |  2 +-
->  5 files changed, 3 insertions(+), 124 deletions(-)
->  delete mode 100644 board/synopsys/axs10x/patches/u-boot/0001-axs103-Clean-up-smp_kick_all_cpus.patch
->  delete mode 100644 board/synopsys/axs10x/patches/u-boot/0002-axs103-Support-slave-core-kick-start-on-axs103-v1.1-.patch
+Other packages can actually provide Wayland libraries like imx-gpu-viv.
 
-Applied to next, thanks.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/weston/weston.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index e9de56b2c6..efe12bc01e 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -50,8 +50,7 @@ else
+ WESTON_CONF_OPTS += --disable-weston-launch
+ endif
+ 
+-# Needs wayland-egl, which normally only mesa provides
+-ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL)$(BR2_PACKAGE_MESA3D_OPENGL_ES),yy)
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND),y)
+ WESTON_CONF_OPTS += --enable-egl
+ WESTON_DEPENDENCIES += libegl
+ else
