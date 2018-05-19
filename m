@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 14:06:47 +0200
-Subject: [Buildroot] [PATCH] libopusenc: new package
-In-Reply-To: <20180517183824.16742-1-joerg.krause@embedded.rocks>
-References: <20180517183824.16742-1-joerg.krause@embedded.rocks>
-Message-ID: <20180519140647.7217eb26@windsurf>
+Date: Sat, 19 May 2018 14:07:10 +0200
+Subject: [Buildroot] [git commit] gdb: actually disable gdbserver if
+ BR2_PACKAGE_GDB_SERVER is unset
+Message-ID: <20180519121600.49E1C88459@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9c7ce893a01b3f1fa81ce41580465a472431064c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 May 2018 20:38:24 +0200, J?rg Krause wrote:
+The gdb configure script is given --enable-gdbserver when
+BR2_PACKAGE_GDB_SERVER is set, but it is not given --disable-gdbserver
+when BR2_PACKAGE_GDB_SERVER is unset.
 
-> diff --git a/package/libopusenc/Config.in b/package/libopusenc/Config.in
-> new file mode 100644
-> index 0000000000..610aba926e
-> --- /dev/null
-> +++ b/package/libopusenc/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBOPUSENC
-> +	bool "libopusenc"
+gdb gdb/configure.ac defaults to enabling gdbserver in "native"
+(host=target) cases, which is always the case when buildroot builds a
+gdb which runs on the target hardware. The gdbserver will overwrite
+BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY gdbserver, if any.
 
-You forgot a "select BR2_PACKAGE_OPUS" here.
+Fix that by passing --disable-gdbserver when BR2_PACKAGE_GDB_SERVER is
+unset.
 
-So I've added that and applied to next. Thanks!
+Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gdb/gdb.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 215f473cc0..5661b4a465 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -109,7 +109,7 @@ GDB_CONF_OPTS = \
+ 	--without-x \
+ 	--disable-sim \
+ 	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
+-	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver) \
++	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver,--disable-gdbserver) \
+ 	--with-curses \
+ 	--without-included-gettext \
+ 	--disable-werror \
