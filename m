@@ -1,42 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 May 2018 18:16:33 +0200
-Subject: [Buildroot] [PATCH 40/42] libphidget: bump to version 2.1.8.20170607
-Message-ID: <20180520161634.30947-1-fontaine.fabrice@gmail.com>
+Date: Sun, 20 May 2018 18:16:56 +0200
+Subject: [Buildroot] [PATCH 1/1] znc: add mandatory dependency on threads
+Message-ID: <20180520161656.30997-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Threads support is mandatory since version 1.7.0:
+https://github.com/znc/znc/commit/582cd635f5a047761b1052a40088ab86e62fffc1
+
+Fixes:
+ - http://autobuild.buildroot.net/results/cc56c7dbee594056288296398772ef9e22846299
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libphidget/libphidget.hash | 3 ++-
- package/libphidget/libphidget.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/znc/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libphidget/libphidget.hash b/package/libphidget/libphidget.hash
-index a89ba367ed..120d6373e1 100644
---- a/package/libphidget/libphidget.hash
-+++ b/package/libphidget/libphidget.hash
-@@ -1,2 +1,3 @@
- # locally computed
--sha256  2d496828a085ada8ff139da9306bd2b8cb987798fee93caf0089dc399195e238  libphidget_2.1.8.20140319.tar.gz
-+sha256  f6da13dc0db057c1a87e0a831e3f5507cd26a32f3ced40f2c0ad783fc244bcd5  libphidget_2.1.8.20170607.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/libphidget/libphidget.mk b/package/libphidget/libphidget.mk
-index 803d5012a4..d84a8b911d 100644
---- a/package/libphidget/libphidget.mk
-+++ b/package/libphidget/libphidget.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/znc/Config.in b/package/znc/Config.in
+index feca2c42f0..4fc7bbb95b 100644
+--- a/package/znc/Config.in
++++ b/package/znc/Config.in
+@@ -4,12 +4,13 @@ config BR2_PACKAGE_ZNC
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Advanced IRC bouncer
  
--LIBPHIDGET_VERSION = 2.1.8.20140319
-+LIBPHIDGET_VERSION = 2.1.8.20170607
- LIBPHIDGET_SOURCE = libphidget_$(LIBPHIDGET_VERSION).tar.gz
- LIBPHIDGET_SITE = https://www.phidgets.com/downloads/phidget21/libraries/linux/libphidget
- LIBPHIDGET_DEPENDENCIES = libusb
+ 	  http://www.znc.in
+ 
+-comment "znc needs a toolchain w/ C++, dynamic library, gcc >= 4.8"
++comment "znc needs a toolchain w/ C++, dynamic library, gcc >= 4.8, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
 -- 
 2.14.1
