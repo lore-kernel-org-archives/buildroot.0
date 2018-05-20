@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 May 2018 10:41:35 +0200
-Subject: [Buildroot] [PATCH 1/1] libnetfilter_log: add hash for license file
-Message-ID: <20180520084135.8256-1-fontaine.fabrice@gmail.com>
+Date: Sun, 20 May 2018 10:44:52 +0200
+Subject: [Buildroot] [PATCH 1/1] libnfc: add hash for license file
+Message-ID: <20180520084452.9227-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,19 +10,16 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libnetfilter_log/libnetfilter_log.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/libnfc/libnfc.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libnetfilter_log/libnetfilter_log.hash b/package/libnetfilter_log/libnetfilter_log.hash
-index 4fe6a9b8b6..292538db5d 100644
---- a/package/libnetfilter_log/libnetfilter_log.hash
-+++ b/package/libnetfilter_log/libnetfilter_log.hash
-@@ -1,3 +1,6 @@
- # From ftp://ftp.netfilter.org/pub/libnetfilter_log/libnetfilter_log-1.0.1.tar.bz2.{md5sum,sha1sum}
- md5	2a4bb0654ae675a52d2e8d1c06090b94	libnetfilter_log-1.0.1.tar.bz2
- sha1	0b95bcb1ad15eea906fa3607cd6c2290bd48d5bd	libnetfilter_log-1.0.1.tar.bz2
-+
-+# Hash for license file:
-+sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	COPYING
+diff --git a/package/libnfc/libnfc.hash b/package/libnfc/libnfc.hash
+index 307e04929a..32decf2d03 100644
+--- a/package/libnfc/libnfc.hash
++++ b/package/libnfc/libnfc.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256 945e74d8e27683f9b8a6f6e529557b305d120df347a960a6a7ead6cb388f4072  libnfc-1.7.1.tar.bz2
++sha256 9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  COPYING
 -- 
 2.14.1
