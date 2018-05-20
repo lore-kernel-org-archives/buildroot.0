@@ -1,65 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 May 2018 16:41:41 +0200
-Subject: [Buildroot] [RFC] [PATCH v2 2/2] support/kconfig: Bump to
- kconfig from Linux 4.17-rc2
-In-Reply-To: <20180520143139.GA14607@x230>
-References: <20180509164412.31596-1-petr.vorel@gmail.com>
- <20180509164412.31596-2-petr.vorel@gmail.com>
- <20180519230311.6a3652fd@windsurf> <20180520142311.GA3453@scaer>
- <20180520143139.GA14607@x230>
-Message-ID: <20180520144141.GB3453@scaer>
+Date: Sun, 20 May 2018 16:44:51 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-05-16
+In-Reply-To: <5afe16031511a_a612ac2d925f5644458@ultri5.mail>
+References: <CAPP7BN2g6Wr6NE9C0ALM9YHf1RcwzFTQ=tyhnpJwR=4rBMxHrg@mail.gmail.com>
+ <5afe16031511a_a612ac2d925f5644458@ultri5.mail>
+Message-ID: <20180520144451.GC3453@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, all,
+Ricrado, All,
 
-On 2018-05-20 16:31 +0200, Petr Vorel spake thusly:
-> > On 2018-05-19 23:03 +0200, Thomas Petazzoni spake thusly:
-> > > If we were to drop the *shipped files, it means we would have to build
-> > > host-flex and host-bison prior to running any "make *config" command.
-> > > This would be really annoying.
+On 2018-05-17 20:53 -0300, Ricardo Martincoski spake thusly:
+> On Thu, May 17, 2018 at 03:51 AM, Erik Larsson wrote:
+> >>          arm | host-imx-mkimage-rel_imx_4.... | NOK | http://autobuild.buildroot.net/results/7c63ab1188a45d4684e159456f561a4e7c39e612 |
+> > 
+> > This error is because the hash is incorrect. But I don't really
+> > understand why. I've downloaded the new source and compared it with
+> > the old source that I had in my dl folder and it's the same. There are
+> > no changes in the git-repo but when I compare the tar.gz file in the
+> > dl folder they differs, just as the test notice. So the simple
+> > solution would be to update the hash value and commit it. But I don't
+> > really like not understanding why this error happens at the first
+> > place.
 > 
-> > And would requier quite a rework of the main Makefile, since we do not
-> > include that pcakge .mk files until we do have a .coinfig file. So
-> > currently, we can't have host-{flex,bison} before we have a .config.
-> Thank you for investigation. IMHO keeping *shipped files is the best
-> option, I'd keep it for a start.
+> By inspecting the tarball [1] with 'tar -tvf' I can see it contains:
+> "imx-mkimage-rel_imx_4.9.51_8mq_ga\\/Makefile"
+> instead of
+> "imx-mkimage-rel_imx_4.9.51_8mq_ga/Makefile"
+> 
+> I believe the hash was calculated (and the tarball [1] was generated) using tar
+> 1.27.1 before 6e2f5d0254 "download/git: fix transform regexp for older tar
+> versions" (Fri Apr 20 09:36:32 2018 +0200), see my tests below.
+> 
+> I think we can safely update the hash value and commit it.
 
 Agreed.
 
-> Later we can switch to require flex and bison, as Thomas suggested (works quite well
-> in linux kernel, I suppose it'd be working for Buildroot as well):
-> > > Alternatively, we could decide to make
-> > > "flex" and "bison" mandatory dependencies of Buildroot, and rely on the
-> > > user to install them on the system rather than building them ourselves.
-> > > The drawback of this is that we would no longer control which version
-> > > of flex/bison gets used.
+Besides, this type of issue would be solved with the series I have
+posted, that adds host-tar as a download-dependency, so that we ensure
+we have a known-working tar to locally generate tarballs:
 
-I initially did not reply further to this part, becuase I seem to
-remember that there was a change in behavious with certain versions of
-flex/bison, that made the output change drastically, and I was afraid we
-could be bitten by this...
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=43275
 
-But in the end, this is not a problem, because we would not care to
-mix-n-match files built with different versions of said tools, as they
-would be those from the distro, always, and never those we ship, since
-we would no longer ship them.
+> When the patch fixing the hash get applied, should the tarball [1] be manually
+> removed? Will it be automatically overwritten by an autobuilder instance?
+> 
+> [1] http://sources.buildroot.net/imx-mkimage/imx-mkimage-rel_imx_4.9.51_8mq_ga.tar.gz
+>     2018-Apr-10 08:10:35    118.1K    application/x-gtar-compressed
 
-And eventually, I now remember that the issue was with gperf changing
-its API (a function prototype changed), and that was causing pain. But
-now, kconfig no longer uses gperf to start with, so no incompatibility
-anymore anyway.
-
-Which would allow us to drop the dependency of linux on host-{flex,bison}
-that we had to add recently.
-
-But this is definitely for later.
+Peter, Thomas, can you remove that tarball after the hash has been
+updated?
 
 Regards,
 Yann E. MORIN.
+
+> Tests:
+> $ git checkout origin/master # 45cf64ca0c
+> $ make defconfig
+> $ ./utils/config --set-str BR2_BACKUP_SITE ""
+> $ rm package/tar/tar.hash
+> $ sed -e 's,^TAR_VERSION .*,TAR_VERSION = 1.27.1,g' -i package/tar/tar.mk
+> $ make host-tar
+> $ BR2_DL_DIR=$(mktemp -d) make host-imx-mkimage-dirclean host-imx-mkimage-source
+> ERROR: expected: 17e8285a346eb19d00780b13916dc281421c5b955707b9f2a662a6734142f1fb
+> ERROR: got     : bc79e11cfbde303e200287fa6624028c8ce5344f8a35ed179b3fe217d74155da
+> $ git revert 6e2f5d0254 # download/git: fix transform regexp for older tar versions
+> $ BR2_DL_DIR=$(mktemp -d) make host-imx-mkimage-dirclean host-imx-mkimage-source
+> imx-mkimage-rel_imx_4.9.51_8mq_ga.tar.gz: OK (sha256: 17e8285a346eb19d00780b13916dc281421c5b955707b9f2a662a6734142f1fb)
+> 
+> Regards,
+> Ricardo
+
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
