@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 15:49:40 +0200
-Subject: [Buildroot] [git commit] proj: upgrade to 5.0.1
-Message-ID: <20180602101012.2C74D7FACD@busybox.osuosl.org>
+Date: Sun, 20 May 2018 18:44:24 +0200
+Subject: [Buildroot] [git commit] libphidget: bump to version 2.1.8.20170607
+Message-ID: <20180602101012.BEE767FA8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a76aabd8842d28747fa8ec62b9c4a19f062b7fb7
+commit: https://git.buildroot.net/buildroot/commit/?id=1417ccecefc94006f7fddac4f761f4f4811bb14e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Add hash for license file
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/proj/proj.hash | 4 ++--
- package/proj/proj.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libphidget/libphidget.hash | 3 ++-
+ package/libphidget/libphidget.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/proj/proj.hash b/package/proj/proj.hash
-index 6a791baae4..aadbc385df 100644
---- a/package/proj/proj.hash
-+++ b/package/proj/proj.hash
-@@ -1,5 +1,5 @@
- # Fetched from http://download.osgeo.org/proj/proj-4.9.3.tar.gz.md5
--md5 d598336ca834742735137c5674b214a1 proj-4.9.3.tar.gz
-+md5 15c8d7d6a8cb945c7878d0ff322a232c proj-5.0.1.tar.gz
- # Locally calculated
--sha256 6984542fea333488de5c82eea58d699e4aff4b359200a9971537cd7e047185f7 proj-4.9.3.tar.gz
-+sha256 a792f78897482ed2c4e2af4e8a1a02e294c64e32b591a635c5294cb9d49fdc8c proj-5.0.1.tar.gz
- sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
-diff --git a/package/proj/proj.mk b/package/proj/proj.mk
-index 6d029bba06..0b239b2bbe 100644
---- a/package/proj/proj.mk
-+++ b/package/proj/proj.mk
+diff --git a/package/libphidget/libphidget.hash b/package/libphidget/libphidget.hash
+index a89ba367ed..120d6373e1 100644
+--- a/package/libphidget/libphidget.hash
++++ b/package/libphidget/libphidget.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+-sha256  2d496828a085ada8ff139da9306bd2b8cb987798fee93caf0089dc399195e238  libphidget_2.1.8.20140319.tar.gz
++sha256  f6da13dc0db057c1a87e0a831e3f5507cd26a32f3ced40f2c0ad783fc244bcd5  libphidget_2.1.8.20170607.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libphidget/libphidget.mk b/package/libphidget/libphidget.mk
+index 803d5012a4..d84a8b911d 100644
+--- a/package/libphidget/libphidget.mk
++++ b/package/libphidget/libphidget.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PROJ_VERSION = 4.9.3
-+PROJ_VERSION = 5.0.1
- PROJ_SITE = http://download.osgeo.org/proj
- PROJ_LICENSE = MIT
- PROJ_LICENSE_FILES = COPYING
+-LIBPHIDGET_VERSION = 2.1.8.20140319
++LIBPHIDGET_VERSION = 2.1.8.20170607
+ LIBPHIDGET_SOURCE = libphidget_$(LIBPHIDGET_VERSION).tar.gz
+ LIBPHIDGET_SITE = https://www.phidgets.com/downloads/phidget21/libraries/linux/libphidget
+ LIBPHIDGET_DEPENDENCIES = libusb
