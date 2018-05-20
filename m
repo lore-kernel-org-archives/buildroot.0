@@ -1,54 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 12:32:41 +0200
-Subject: [Buildroot] [git commit] package/rpi-bt-firmware: bump version
-Message-ID: <20180602101012.0F52E7FACD@busybox.osuosl.org>
+Date: Sun, 20 May 2018 17:02:15 +0200
+Subject: [Buildroot] [git commit] whois: bump to version 5.3.0
+Message-ID: <20180602101012.96B8381938@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e5837cae71a2676d9c74017e6b1ef23d99ab51c
+commit: https://git.buildroot.net/buildroot/commit/?id=2a9c075fdc945462ea5a530d0128bb6cf2683a02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+- libidn1 support has been removed:
+  https://github.com/rfc1036/whois/commit/5d60bbe102b71c03b9a46eb0a7aada3532bd4481
+- Add hash for license file
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
- package/rpi-bt-firmware/rpi-bt-firmware.mk   | 9 +++------
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/whois/whois.hash | 7 +++++--
+ package/whois/whois.mk   | 9 ++-------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-index 553a7e4298..043706a1b8 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 beade89c5c072158b6cf18cf741d2695980fd6a4533dab3897bebf90c0631a30  rpi-bt-firmware-18d7c931aff0a8a78360b9b9eaeb15d1224fb907.tar.gz
-+sha256 c219f1d232fb80fbf23e7f2ed97d9c495855355a36dda373a8985c699ee1dd4b  rpi-bt-firmware-b5307312a172c8d87d44f6df32f5e24f1c19770e.tar.gz
- sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-index bbb40854e8..b1c0aa7c94 100644
---- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-@@ -4,17 +4,14 @@
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 29623b529f..635066c5e3 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,2 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois/whois_5.2.17.dsc
+-sha256	257585678f571e18964667b41dc6543fe9da6123ac95743660c9c3ae1eba9664	whois_5.2.17.tar.xz
++# From http://snapshot.debian.org/archive/debian/20180121T094839Z/pool/main/w/whois/whois_5.3.0.dsc
++sha256	4d789c403bfb5833c8ae168a5f31be70e34b045bd5d95a54c82a27b0ff135723	whois_5.3.0.tar.xz
++
++# Hash for license file:
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 18071ab6bd..5cd7cde7fd 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--RPI_BT_FIRMWARE_VERSION = 18d7c931aff0a8a78360b9b9eaeb15d1224fb907
-+RPI_BT_FIRMWARE_VERSION = b5307312a172c8d87d44f6df32f5e24f1c19770e
- RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
- RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
- RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+-WHOIS_VERSION = 5.2.17
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois
++WHOIS_VERSION = 5.3.0
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180121T094839Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+ WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
+@@ -22,11 +22,6 @@ WHOIS_EXTRA_LIBS += -liconv
+ WHOIS_MAKE_ENV += HAVE_ICONV=1
+ endif
  
--RPI_BT_FIRMWARE_FILES = brcm/BCM43430A1.hcd BCM4345C0.hcd
+-ifeq ($(BR2_PACKAGE_LIBIDN),y)
+-WHOIS_DEPENDENCIES += libidn
+-WHOIS_MAKE_ENV += HAVE_LIBIDN=1
+-endif
 -
- define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
--	$(foreach file,$(RPI_BT_FIRMWARE_FILES),\
--		$(INSTALL) -D -m 0644 $(@D)/firmware/$(file) $(TARGET_DIR)/lib/firmware/$(notdir $(file))
--	)
-+	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
-+	$(INSTALL) -m 0644 $(@D)/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/brcm
- endef
- 
- $(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+ WHOIS_DEPENDENCIES += libidn2
+ WHOIS_MAKE_ENV += HAVE_LIBIDN2=1
