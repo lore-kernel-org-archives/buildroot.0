@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 18:43:48 +0200
-Subject: [Buildroot] [git commit] libpcap: add hash for license file
-Message-ID: <20180520164257.1CC7D80776@busybox.osuosl.org>
+Date: Sun, 20 May 2018 18:44:03 +0200
+Subject: [Buildroot] [PATCH 1/1] libpcap: add hash for license file
+In-Reply-To: <20180520143112.13607-1-fontaine.fabrice@gmail.com>
+References: <20180520143112.13607-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180520184403.19afbc19@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d22b7b94590290e7115127d8516932e3191dff31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libpcap/libpcap.hash | 3 +++
- 1 file changed, 3 insertions(+)
+On Sun, 20 May 2018 16:31:12 +0200, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libpcap/libpcap.hash | 3 +++
+>  1 file changed, 3 insertions(+)
 
-diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
-index 6894046aff..f8bc1bcfef 100644
---- a/package/libpcap/libpcap.hash
-+++ b/package/libpcap/libpcap.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
- sha256	673dbc69fdc3f5a86fb5759ab19899039a8e5e6c631749e48dcd9c6f0c83541e	libpcap-1.8.1.tar.gz
-+
-+# Hash for license file:
-+sha256	8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd	LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
