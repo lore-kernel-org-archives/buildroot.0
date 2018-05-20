@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 15:50:25 +0200
-Subject: [Buildroot] [PATCH 1/1] liboping: bump to version 1.10.0
-In-Reply-To: <20180520103820.17981-1-fontaine.fabrice@gmail.com>
-References: <20180520103820.17981-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180520155025.52df71fc@windsurf>
+Date: Sun, 20 May 2018 15:50:29 +0200
+Subject: [Buildroot] [PATCH] proj: upgrade to 5.0.1
+In-Reply-To: <1526812747-17589-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1526812747-17589-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <20180520155029.497e75dd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 May 2018 12:38:20 +0200, Fabrice Fontaine wrote:
-> - Rework ncurses dependency to use new --with[out]-ncurses option
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Sun, 20 May 2018 12:39:07 +0200, Zoltan Gyarmati wrote:
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 > ---
->  package/liboping/liboping.hash |  5 ++++-
->  package/liboping/liboping.mk   | 10 ++++++++--
->  2 files changed, 12 insertions(+), 3 deletions(-)
+>  package/proj/proj.hash | 4 ++--
+>  package/proj/proj.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to next, thanks.
 
