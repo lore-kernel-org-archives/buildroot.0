@@ -1,38 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 19:22:43 +0200
-Subject: [Buildroot] [PATCH 0/6] arch/ar: add cortex-m7,
- and cortex-M FPUs
-In-Reply-To: <cover.1519589817.git.yann.morin.1998@free.fr>
-References: <cover.1519589817.git.yann.morin.1998@free.fr>
-Message-ID: <20180520192243.207524ca@windsurf>
+Date: Sun, 20 May 2018 19:23:24 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-bad: fix typo preventing use
+ of the netsim plugin
+Message-ID: <20180520172232.C2ECC815EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=384c1559c08ee4ffd46a0ea2f8df07b9dcd5effa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 25 Feb 2018 21:18:14 +0100, Yann E. MORIN wrote:
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Yann E. MORIN (6):
->       arch/arm: add cortex-m7 core
->       arch/arm: introduce generic FPU internal option
->       arch/arm: add option for FPv4 FPU
->       arch/arm: add options for FPv5 FPU
->       arch/arm: cortex-m4 may have an FPv4 FPU
->       arch/arm: cortex-m7 may have a FPv5 FPU
-
-Entire series applied to next.
-
-As discussed on IRC, I initially screwed up and applied PATCH 1/6 on
-the master branch, so I reverted it, and applied the whole thing on the
-next branch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 90e2209a99..b041014f81 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -378,7 +378,7 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-mxf
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_NETSIM),y)
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NETSIM),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-netsim
+ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-netsim
