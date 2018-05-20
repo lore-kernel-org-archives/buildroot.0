@@ -1,45 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 May 2018 19:01:22 +0200
-Subject: [Buildroot] [git commit] wireguard: bump version to 0.0.20180524
-Message-ID: <20180602101013.8968B8199C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 May 2018 12:32:08 +0200
+Subject: [Buildroot] [git commit] configs/raspberrypi3_64_defconfig: add
+ support for rpi3b+
+Message-ID: <20180602101011.EA9DA7FACD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6b9d59f61b9084b1ae09e26e4bac5d6a1729cf6
+commit: https://git.buildroot.net/buildroot/commit/?id=fbb45f6d7f937e503900a04ff920320c411d8f34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Contains a number of fixes, including fixes for building with GCC 8.
+The kernel now includes the rpi3b+ device tree for aarch64
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
+ configs/raspberrypi3_64_defconfig              | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 6cfc7bb9f0..7701424e4e 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-April/002697.html
--sha256 b58cd2acf9e8d3fe9044c06c0056bd74da1f5673a456f011d36eee3f6fb1da16  WireGuard-0.0.20180420.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-May/002914.html
-+sha256 57614239c1f1a99a367f2c816153acda5bffada66a3b8e3b8215f1625784abc9  WireGuard-0.0.20180524.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 20162e1d0f..ee68dc5580 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+index c5f86527d0..0d0ca750a7 100644
+--- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+@@ -2,6 +2,7 @@ image boot.vfat {
+   vfat {
+     files = {
+       "bcm2710-rpi-3-b.dtb",
++      "bcm2710-rpi-3-b-plus.dtb",
+       "bcm2837-rpi-3-b.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 1a6e378e2c..3d74815fc2 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -16,7 +16,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
  
--WIREGUARD_VERSION = 0.0.20180420
-+WIREGUARD_VERSION = 0.0.20180524
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+ # Build the DTB from the kernel sources
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2837-rpi-3-b"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2837-rpi-3-b"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
