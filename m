@@ -1,108 +1,145 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 18:44:23 +0200
-Subject: [Buildroot] [git commit] oprofile: bump to version 1.2.0
-Message-ID: <20180602101012.B47F07FA8E@busybox.osuosl.org>
+Date: Sun, 20 May 2018 22:24:37 +0200
+Subject: [Buildroot] [git commit] libgit2: new package
+Message-ID: <20180602101013.1E76A8055B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb892295f12b8115b308843c7c53db2254b873af
+commit: https://git.buildroot.net/buildroot/commit/?id=02f6e638c877ebc5b1d142bee077d6a241b99474
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove second patch (already in version)
-- Add hash for license file
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+[Thomas:
+ - Do not select BR2_PACKAGE_ZLIB, because zlib is an optional
+   dependency.
+ - Handle optional dependencies in a more usual way in libgit2.mk:
+   group the addition in _DEPENDENCIES and in _CONF_OPTS for a given
+   library together.
+ - libgit2 can optionally use libssh2, not libssh.
+ - Add the optional dependency on zlib.
+ - Always pass USE_ICONV=ON, the detection works perfectly fine, with
+   both a C library providing iconv support built-in, and with
+   libiconv. If neither provides iconv, it gets disabled automatically
+   as expected.
+ - Add libiconv as an optional dependency.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-Fix-FTBFS-problem-with-GCC-6.patch        | 51 ----------------------
- package/oprofile/oprofile.hash                     |  9 ++--
- package/oprofile/oprofile.mk                       |  2 +-
- 3 files changed, 7 insertions(+), 55 deletions(-)
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/libgit2/Config.in    |  8 +++++++
+ package/libgit2/libgit2.hash |  3 +++
+ package/libgit2/libgit2.mk   | 54 ++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 69 insertions(+)
 
-diff --git a/package/oprofile/0002-Fix-FTBFS-problem-with-GCC-6.patch b/package/oprofile/0002-Fix-FTBFS-problem-with-GCC-6.patch
-deleted file mode 100644
-index 34bf365226..0000000000
---- a/package/oprofile/0002-Fix-FTBFS-problem-with-GCC-6.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 39d4d46a0bd504ac708ffe72df87bf74cd12ad30 Mon Sep 17 00:00:00 2001
--From: William Cohen <wcohen@redhat.com>
--Date: Fri, 5 Feb 2016 17:30:19 -0500
--Subject: [PATCH] Fix FTBFS problem with GCC-6
--
--GCC-6 is pickier about some of the type conversions causing the Fedora
--24 mass rebuild the build of oprofile failed with:
--
--make[3]: Entering directory '/builddir/build/BUILD/oprofile-1.1.0/libutil++'
--g++ -DHAVE_CONFIG_H -I. -I..  -I ../libutil -I ../libop -I ../libpp   -W -Wall -fno-common -ftemplate-depth-50 -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -m32 -march=i686 -mtune=atom -fasynchronous-unwind-tables -c -o op_bfd.o op_bfd.cpp
--op_bfd.cpp: In member function 'void op_bfd::get_symbol_range(symbol_index_t, long long unsigned int&, long long unsigned int&) const':
--op_bfd.cpp:538:47: error: cannot convert 'std::ostream {aka std::basic_ostream<char>}' to 'const bool' in initialization
--  bool const verbose = cverb << (vbfd & vlevel1);
--                                               ^
--op_bfd.cpp:546:7: error: in argument to unary !
--  if (!verbose)
--       ^~~~~~~
--
--Avoid the intermediate bool type to make GCC-6 happy.
--
--Signed-off-by: William Cohen <wcohen@redhat.com>
--[Backported from upstream]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- libutil++/op_bfd.cpp | 4 +---
-- 1 file changed, 1 insertion(+), 3 deletions(-)
--
--diff --git a/libutil++/op_bfd.cpp b/libutil++/op_bfd.cpp
--index 389c920..f2eb42b 100644
----- a/libutil++/op_bfd.cpp
--+++ b/libutil++/op_bfd.cpp
--@@ -535,15 +535,13 @@ void op_bfd::get_symbol_range(symbol_index_t sym_idx,
-- {
-- 	op_bfd_symbol const & sym = syms[sym_idx];
-- 
---	bool const verbose = cverb << (vbfd & vlevel1);
---
-- 	if (anon_obj)
-- 		start = sym.vma();
-- 	else
-- 		start = sym.filepos();
-- 	end = start + sym.size();
-- 
---	if (!verbose)
--+	if (!(cverb << (vbfd & vlevel1)))
-- 		return;
-- 
-- 	io_state state(cverb << (vbfd & vlevel1));
---- 
--2.5.5
--
-diff --git a/package/oprofile/oprofile.hash b/package/oprofile/oprofile.hash
-index cc15ed1100..737137e0dd 100644
---- a/package/oprofile/oprofile.hash
-+++ b/package/oprofile/oprofile.hash
-@@ -1,3 +1,6 @@
--# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.1.0/
--sha1	38c0d8812fe605f6ddd1cd183a482aa7605c0e81	oprofile-1.1.0.tar.gz
--md5	248c4c069f9476f427fa7195563f9867		oprofile-1.1.0.tar.gz
-+# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.2.0/
-+sha1	7bf28b74953bd042ff23dc53c399be96d37f144c	oprofile-1.2.0.tar.gz
-+md5	4fcd3920984dcb607314b2e225086c3a		oprofile-1.2.0.tar.gz
-+
-+# Hash for license file:
-+sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 4e0278eb2a..2b82194406 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 978ba9625c..78c356fed9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1394,6 +1394,9 @@ N:	Naumann Andreas <ANaumann@ultratronik.de>
+ F:	package/evemu/
+ F:	package/libevdev/
  
--OPROFILE_VERSION = 1.1.0
-+OPROFILE_VERSION = 1.2.0
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPL-2.0+
- OPROFILE_LICENSE_FILES = COPYING
++N:	Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++F:	package/libgit2/
++
+ N:	Nicolas Serafini <nicolas.serafini@sensefly.com>
+ F:	package/exiv2/
+ F:	package/nvidia-tegra23/nvidia-tegra23-binaries/
+diff --git a/package/Config.in b/package/Config.in
+index 6c0583a745..b66f27a083 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1101,6 +1101,7 @@ menu "Database"
+ 	source "package/hiredis/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
++	source "package/libgit2/Config.in"
+ 	source "package/libpqxx/Config.in"
+ 	source "package/mongodb/Config.in"
+ 	source "package/mysql/Config.in"
+diff --git a/package/libgit2/Config.in b/package/libgit2/Config.in
+new file mode 100644
+index 0000000000..24a1f3b5a9
+--- /dev/null
++++ b/package/libgit2/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBGIT2
++	bool "libgit2"
++	help
++	  libgit2 is a portable, pure C implementation of the Git core
++	  methods provided as a linkable library with a solid API,
++	  allowing to build Git functionality into your application.
++
++	  https://github.com/libgit2/libgit2
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+new file mode 100644
+index 0000000000..cc09af3627
+--- /dev/null
++++ b/package/libgit2/libgit2.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256	6a62393e0ceb37d02fe0d5707713f504e7acac9006ef33da1e88960bd78b6eac  libgit2-v0.26.0.tar.gz
++sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+new file mode 100644
+index 0000000000..277a8d46ac
+--- /dev/null
++++ b/package/libgit2/libgit2.mk
+@@ -0,0 +1,54 @@
++################################################################################
++#
++# libgit2
++#
++################################################################################
++
++LIBGIT2_VERSION = v0.26.0
++LIBGIT2_SITE = $(call github,libgit2,libgit2,$(LIBGIT2_VERSION))
++LIBGIT2_LICENSE = GPL-2.0 with linking exception
++LIBGIT2_LICENSE_FILES = COPYING
++LIBGIT2_INSTALL_STAGING = YES
++
++LIBGIT2_CONF_OPTS = \
++	-DUSE_GSSAPI=OFF \
++	-DBUILD_CLAR=OFF \
++	-DUSE_ICONV=ON \
++	-DTHREADSAFE=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
++
++# If libiconv is available (for !locale toolchains), then we can use
++# it for iconv support. Note that USE_ICONV=ON is still correct even
++# without libiconv because (1) most toolchain have iconv support
++# without libiconv and (2) even if USE_ICONV=ON but iconv support is
++# not available, libgit2 simply avoids using iconv.
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++LIBGIT2_DEPENDENCIES += libiconv
++endif
++
++# No option to explicitly enable/disable zlib
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBGIT2_DEPENDENCIES += zlib
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSSH2),y)
++LIBGIT2_DEPENDENCIES += libssh2
++LIBGIT2_CONF_OPTS += -DUSE_SSH=ON
++else
++LIBGIT2_CONF_OPTS += -DUSE_SSH=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBGIT2_DEPENDENCIES += openssl
++LIBGIT2_CONF_OPTS += -DUSE_OPENSSL=ON
++else
++LIBGIT2_CONF_OPTS += -DUSE_OPENSSL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++LIBGIT2_DEPENDENCIES += libcurl
++LIBGIT2_CONF_OPTS += -DCURL=ON
++else
++LIBGIT2_CONF_OPTS += -DCURL=OFF
++endif
++
++$(eval $(cmake-package))
