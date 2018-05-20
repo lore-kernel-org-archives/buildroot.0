@@ -1,43 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 11:41:44 +0200
-Subject: [Buildroot] [git commit branch/next] python-cython: fix
- check-package warnings
-Message-ID: <20180520094104.B6CA9812EF@busybox.osuosl.org>
+Date: Sun, 20 May 2018 11:43:15 +0200
+Subject: [Buildroot] [git commit] mbedtls: security bump to version 2.7.3
+Message-ID: <20180520094217.94A44811B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e06c3117665c5aabe94f1bbab7fb709e2953226
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=a335d32a5f31dec4f23c89ce9f496fac6eba3d69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Extract from release announcement:
 
-package/python-cython/Config.in.host:2: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/python-cython/Config.in.host:3: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-package/python-cython/Config.in.host:4: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-package/python-cython/Config.in.host:5: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+- (2.9, 2.7, 2.1) Fixed an issue in the X.509 module which could lead
+to a buffer overread during certificate validation. Additionally, the
+issue could also lead to unnecessary callback checks being made or to
+some validation checks to be omitted. The overread could be triggered
+remotely, while the other issues would require a non DER-compliant
+certificate to be correctly signed by a trusted CA, or a trusted CA with
+a non DER-compliant certificate. Found by luocm. Fixes #825.
 
+- (2.9, 2.7, 2.1) Fixed the buffer length assertion in the
+ssl_parse_certificate_request() function which could lead to an
+arbitrary overread of the message buffer. The overreads could be caused
+by receiving a malformed algorithms section which was too short. In
+builds with debug output, this overread data was output with the debug
+data.
+
+- (2.9, 2.7, 2.1) Fixed a client-side bug in the validation of the
+server's ciphersuite choice which could potentially lead to the client
+accepting a ciphersuite it didn't offer or a ciphersuite that could not
+be used with the TLS or DTLS version chosen by the server. This could
+lead to corruption of internal data structures for some configurations.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-cython/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/mbedtls/mbedtls.hash | 6 +++---
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cython/Config.in.host b/package/python-cython/Config.in.host
-index b69e59b718..69d32d5ab3 100644
---- a/package/python-cython/Config.in.host
-+++ b/package/python-cython/Config.in.host
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_HOST_PYTHON_CYTHON
--       bool "host python-cython"
--       help
--         The Cython compiler for writing C extensions for the Python
--         language.
-+	bool "host python-cython"
-+	help
-+	  The Cython compiler for writing C extensions for the Python
-+	  language.
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index f5331bed15..16f03fb7d8 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.8.0-2.7.2-and-2.1.11-released
+-sha1	e36d7cbdc2ed0a5d5659385840e8fbb4d351234e	mbedtls-2.7.2-apache.tgz
+-sha256	fd38c2bb5fbe1ffd3e7fdcdd71130986f2010f25b3a5575eb8ded0dd3bc573d7	mbedtls-2.7.2-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.9.0-2.7.3-and-2.1.12-released
++sha1	8352f6713a9ee695f6f19e893c0e85941af71967	mbedtls-2.7.3-apache.tgz
++sha256	05282af7d95fedb2430c248ffe3081646800b8dae9071f8da11a07100963d765	mbedtls-2.7.3-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index ca44ee3713..e6012dcb3f 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--         http://cython.org/
-+	  http://cython.org/
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.7.2
++MBEDTLS_VERSION = 2.7.3
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
