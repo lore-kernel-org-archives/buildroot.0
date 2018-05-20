@@ -1,52 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 22:27:31 +0200
-Subject: [Buildroot] [PATCH 1/1] libgit2: New package.
-In-Reply-To: <20180214111351.4801-2-nicolas.cavallari@green-communications.fr>
-References: <20180214111351.4801-1-nicolas.cavallari@green-communications.fr>
- <20180214111351.4801-2-nicolas.cavallari@green-communications.fr>
-Message-ID: <20180520222731.6757154c@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 20 May 2018 22:42:54 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-04-25
+In-Reply-To: <CANQCQpZzeALsKx7GFMUD_jSSn+=YS9KZBoOeuf7dUR8Um1pJDQ@mail.gmail.com>
+ (Matthew Weber's message of "Thu, 10 May 2018 08:24:11 -0500")
+References: <20180426060013.EAB262079F@mail.bootlin.com>
+ <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
+ <20180430091509.3a9cdff2@windsurf>
+ <cab2ab99-f53c-448f-7cdb-77456a189664@smile.fr>
+ <56ce1d9d-7b2a-1cda-52e3-a01094e6713a@gmail.com>
+ <CANQCQpZzeALsKx7GFMUD_jSSn+=YS9KZBoOeuf7dUR8Um1pJDQ@mail.gmail.com>
+Message-ID: <87zi0unjn5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-On Wed, 14 Feb 2018 12:13:51 +0100, Nicolas Cavallari wrote:
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
->  DEVELOPERS                   |  3 +++
->  package/Config.in            |  1 +
->  package/libgit2/Config.in    |  9 +++++++++
->  package/libgit2/libgit2.hash |  3 +++
->  package/libgit2/libgit2.mk   | 25 +++++++++++++++++++++++++
->  5 files changed, 41 insertions(+)
->  create mode 100644 package/libgit2/Config.in
->  create mode 100644 package/libgit2/libgit2.hash
->  create mode 100644 package/libgit2/libgit2.mk
+Hi,
 
-So, I've applied to next, but I had to change quite a few things that
-were not really correct:
+ >> I'm waiting for the backport in the gcc-7-branch.
+ >> 
+ >> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
 
-    [Thomas:
-     - Do not select BR2_PACKAGE_ZLIB, because zlib is an optional
-       dependency.
-     - Handle optional dependencies in a more usual way in libgit2.mk:
-       group the addition in _DEPENDENCIES and in _CONF_OPTS for a given
-       library together.
-     - libgit2 can optionally use libssh2, not libssh.
-     - Add the optional dependency on zlib.
-     - Always pass USE_ICONV=ON, the detection works perfectly fine, with
-       both a C library providing iconv support built-in, and with
-       libiconv. If neither provides iconv, it gets disabled automatically
-       as expected.
-     - Add libiconv as an optional dependency.]
+ > I backed up and applied this bug's patch to 6.x as a last attempt to
+ > resolve what I was observing with libnss (the build was successful).
+ > I posted more detail in the bug report Romain referenced.  There
+ > wasn't an actual commit to track down on this issue, it feels like it
+ > was a backport introducing a design flaw and this patch just prevents
+ > a infinite runaway of the optimization step.
 
-Thanks!
+ > It does look like they have now decided to not backport this to 7.x,
+ > so unsure what you guys think about applying it to buildroot.
 
-Thomas
+Hmm, I don't really feel confident adding patches that upstream find too
+scary. What is the alternative? Does this only affect libnss on
+Microblaze?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
