@@ -1,29 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 12:30:25 +0200
-Subject: [Buildroot] [git commit] libogg: add hash for license file
-Message-ID: <20180520102928.CFA178123A@busybox.osuosl.org>
+Date: Sun, 20 May 2018 12:32:24 +0200
+Subject: [Buildroot] [git commit branch/next] package/rpi-wifi-firmware:
+ bump version
+Message-ID: <20180520103452.8516E81239@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6c9b95ccd422f146047f3eb4d2c201009bbdb3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=7608198c5cea38f4eb0122fb413f5c9e61ff6b7e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libogg/libogg.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libogg/libogg.hash b/package/libogg/libogg.hash
-index 0c65b8e1a9..d6962a55ed 100644
---- a/package/libogg/libogg.hash
-+++ b/package/libogg/libogg.hash
-@@ -1,2 +1,5 @@
- # From: http://www.xiph.org/downloads/
- sha256 4f3fc6178a533d392064f14776b23c397ed4b9f48f5de297aba73b643f955c08 libogg-1.3.3.tar.xz
-+
-+# Hash for license file:
-+sha256 d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814 COPYING
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+index bc0d7c8b02..4659f2a6b8 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 beade89c5c072158b6cf18cf741d2695980fd6a4533dab3897bebf90c0631a30  rpi-wifi-firmware-18d7c931aff0a8a78360b9b9eaeb15d1224fb907.tar.gz
++sha256 c219f1d232fb80fbf23e7f2ed97d9c495855355a36dda373a8985c699ee1dd4b  rpi-wifi-firmware-b5307312a172c8d87d44f6df32f5e24f1c19770e.tar.gz
+ sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+index 32dd3e519b..7e8dbada09 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_WIFI_FIRMWARE_VERSION = 18d7c931aff0a8a78360b9b9eaeb15d1224fb907
++RPI_WIFI_FIRMWARE_VERSION = b5307312a172c8d87d44f6df32f5e24f1c19770e
+ RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
+ RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
