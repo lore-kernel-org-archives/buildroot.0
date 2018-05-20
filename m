@@ -1,62 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 13:48:21 +0200
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: use parenthesis
- for print
-Message-ID: <20180602101010.DC2FF7FADE@busybox.osuosl.org>
+Date: Sun, 20 May 2018 12:32:24 +0200
+Subject: [Buildroot] [git commit] package/rpi-wifi-firmware: bump version
+Message-ID: <20180602101012.06E2C7FACD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb04235783abe58a6a7f8ecc8f9ab46a6d03b543
+commit: https://git.buildroot.net/buildroot/commit/?id=7608198c5cea38f4eb0122fb413f5c9e61ff6b7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use Python 3 style print calls, in order to make pkg-stats Python 3
-compliant.
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
+ package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 43f7e8d543..b7b00e8634 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -499,17 +499,17 @@ def parse_args():
- def __main__():
-     args = parse_args()
-     if args.npackages and args.packages:
--        print "ERROR: -n and -p are mutually exclusive"
-+        print("ERROR: -n and -p are mutually exclusive")
-         sys.exit(1)
-     if args.packages:
-         package_list = args.packages.split(",")
-     else:
-         package_list = None
--    print "Build package list ..."
-+    print("Build package list ...")
-     packages = get_pkglist(args.npackages, package_list)
--    print "Getting package make info ..."
-+    print("Getting package make info ...")
-     package_init_make_info()
--    print "Getting package details ..."
-+    print("Getting package details ...")
-     for pkg in packages:
-         pkg.set_infra()
-         pkg.set_license()
-@@ -517,9 +517,9 @@ def __main__():
-         pkg.set_patch_count()
-         pkg.set_check_package_warnings()
-         pkg.set_current_version()
--    print "Calculate stats"
-+    print("Calculate stats")
-     stats = calculate_stats(packages)
--    print "Write HTML"
-+    print("Write HTML")
-     dump_html(packages, stats, args.output)
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+index bc0d7c8b02..4659f2a6b8 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 beade89c5c072158b6cf18cf741d2695980fd6a4533dab3897bebf90c0631a30  rpi-wifi-firmware-18d7c931aff0a8a78360b9b9eaeb15d1224fb907.tar.gz
++sha256 c219f1d232fb80fbf23e7f2ed97d9c495855355a36dda373a8985c699ee1dd4b  rpi-wifi-firmware-b5307312a172c8d87d44f6df32f5e24f1c19770e.tar.gz
+ sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+index 32dd3e519b..7e8dbada09 100644
+--- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
++++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
+-RPI_WIFI_FIRMWARE_VERSION = 18d7c931aff0a8a78360b9b9eaeb15d1224fb907
++RPI_WIFI_FIRMWARE_VERSION = b5307312a172c8d87d44f6df32f5e24f1c19770e
+ RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
+ RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
