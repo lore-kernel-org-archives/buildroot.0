@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 18:43:50 +0200
-Subject: [Buildroot] [git commit] libpciaccess: add hash for license file
-Message-ID: <20180520164257.2C7127FA1D@busybox.osuosl.org>
+Date: Sun, 20 May 2018 18:43:48 +0200
+Subject: [Buildroot] [git commit] libpcap: add hash for license file
+Message-ID: <20180520164257.1CC7D80776@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1d28bc3d1e4cdca25e84f49ffa16d51b01c855d
+commit: https://git.buildroot.net/buildroot/commit/?id=d22b7b94590290e7115127d8516932e3191dff31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libpciaccess/libpciaccess.hash | 3 +++
+ package/libpcap/libpcap.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/libpciaccess/libpciaccess.hash b/package/libpciaccess/libpciaccess.hash
-index b73c27c290..651f0462b7 100644
---- a/package/libpciaccess/libpciaccess.hash
-+++ b/package/libpciaccess/libpciaccess.hash
-@@ -3,3 +3,6 @@ md5 8f436e151d5106a9cfaa71857a066d33  libpciaccess-0.14.tar.bz2
- sha1 f70a958bf4e744cb4ee93be64e9bc52ac05cdaeb  libpciaccess-0.14.tar.bz2
- sha256 3df543e12afd41fea8eac817e48cbfde5aed8817b81670a4e9e493bb2f5bf2a4  libpciaccess-0.14.tar.bz2
- sha512 bf40214dfd22f2a223f7c948566e6eaa4bfed60116e71b3eb19f6fe7ab2c4546649eb0416c06d5983e476ea5e27de036936646eb5f800ea97763b6d1f1976f4b  libpciaccess-0.14.tar.bz2
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index 6894046aff..f8bc1bcfef 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+ sha256	673dbc69fdc3f5a86fb5759ab19899039a8e5e6c631749e48dcd9c6f0c83541e	libpcap-1.8.1.tar.gz
 +
 +# Hash for license file:
-+sha256 47012fd746980d1712ac4f3841ab6164bda1d2b84880760e45dbe1e1dc07f608  COPYING
++sha256	8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd	LICENSE
