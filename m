@@ -1,55 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 16:16:32 +0200
-Subject: [Buildroot] [PATCH 6/7] systemd: add optional dependency on
- libidn2
-In-Reply-To: <20180501204038.20000-6-fontaine.fabrice@gmail.com>
-References: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
- <20180501204038.20000-6-fontaine.fabrice@gmail.com>
-Message-ID: <20180520161632.0fe82ac8@windsurf>
+Date: Sun, 20 May 2018 16:11:00 +0200
+Subject: [Buildroot] [git commit branch/next] gnutls: add optional libidn2
+ support
+Message-ID: <20180520141552.808CF81239@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f48d3ff58b0584b6e64fdc3ea453e088af40dfba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue,  1 May 2018 22:40:37 +0200, Fabrice Fontaine wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gnutls/gnutls.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> +# Both options can't be selected at the same time so prefer libidn2
-> +ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-> +SYSTEMD_DEPENDENCIES += libidn2
-> +SYSTEMD_CONF_OPTS += -Dlibidn2=true
-> +else
-> +SYSTEMD_CONF_OPTS += -Dlibidn2=false
->  ifeq ($(BR2_PACKAGE_LIBIDN),y)
->  SYSTEMD_DEPENDENCIES += libidn
->  SYSTEMD_CONF_OPTS += -Dlibidn=true
->  else
->  SYSTEMD_CONF_OPTS += -Dlibidn=false
->  endif
-> +endif
-
-This was a bit complicated so I've replaced with:
-
-# Both options can't be selected at the same time so prefer libidn2
-ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-SYSTEMD_DEPENDENCIES += libidn2
-SYSTEMD_CONF_OPTS += -Dlibidn2=true -Dlibidn=false
-else ifeq ($(BR2_PACKAGE_LIBIDN),y)
-SYSTEMD_DEPENDENCIES += libidn
-SYSTEMD_CONF_OPTS += -Dlibidn=true -Dlibidn2=false
-else
-SYSTEMD_CONF_OPTS += -Dlibidn=false -Dlibidn2=true
-endif
-
-which I believe is simpler and more in line with what we do in
-Buildroot usually.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 6be7c6e27e..3d1a627781 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -68,6 +68,13 @@ else
+ GNUTLS_CONF_OPTS += --without-idn
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBIDN2),y)
++GNUTLS_CONF_OPTS += --with-libidn2
++GNUTLS_DEPENDENCIES += libidn2
++else
++GNUTLS_CONF_OPTS += --without-libidn2
++endif
++
+ ifeq ($(BR2_PACKAGE_P11_KIT),y)
+ GNUTLS_CONF_OPTS += --with-p11-kit
+ GNUTLS_DEPENDENCIES += p11-kit
