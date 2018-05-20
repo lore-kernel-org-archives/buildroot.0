@@ -1,43 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 16:12:25 +0200
-Subject: [Buildroot] [git commit] systemd: add optional dependency on libidn2
-Message-ID: <20180602101012.723E67FACD@busybox.osuosl.org>
+Date: Sun, 20 May 2018 12:32:41 +0200
+Subject: [Buildroot] [git commit] package/rpi-bt-firmware: bump version
+Message-ID: <20180602101012.0F52E7FACD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ded5d6af4f0198036183f00de190569d7578bc3
+commit: https://git.buildroot.net/buildroot/commit/?id=8e5837cae71a2676d9c74017e6b1ef23d99ab51c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Thomas: simplify ifeq/else/endif sequence.]
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/systemd.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.mk   | 9 +++------
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index db7fb43636..1e4b257731 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -75,11 +75,15 @@ else
- SYSTEMD_CONF_OPTS += -Daudit=false
- endif
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+index 553a7e4298..043706a1b8 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 beade89c5c072158b6cf18cf741d2695980fd6a4533dab3897bebf90c0631a30  rpi-bt-firmware-18d7c931aff0a8a78360b9b9eaeb15d1224fb907.tar.gz
++sha256 c219f1d232fb80fbf23e7f2ed97d9c495855355a36dda373a8985c699ee1dd4b  rpi-bt-firmware-b5307312a172c8d87d44f6df32f5e24f1c19770e.tar.gz
+ sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+index bbb40854e8..b1c0aa7c94 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+@@ -4,17 +4,14 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBIDN),y)
-+# Both options can't be selected at the same time so prefer libidn2
-+ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-+SYSTEMD_DEPENDENCIES += libidn2
-+SYSTEMD_CONF_OPTS += -Dlibidn2=true -Dlibidn=false
-+else ifeq ($(BR2_PACKAGE_LIBIDN),y)
- SYSTEMD_DEPENDENCIES += libidn
--SYSTEMD_CONF_OPTS += -Dlibidn=true
-+SYSTEMD_CONF_OPTS += -Dlibidn=true -Dlibidn2=false
- else
--SYSTEMD_CONF_OPTS += -Dlibidn=false
-+SYSTEMD_CONF_OPTS += -Dlibidn=false -Dlibidn2=true
- endif
+-RPI_BT_FIRMWARE_VERSION = 18d7c931aff0a8a78360b9b9eaeb15d1224fb907
++RPI_BT_FIRMWARE_VERSION = b5307312a172c8d87d44f6df32f5e24f1c19770e
+ RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
+ RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
  
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+-RPI_BT_FIRMWARE_FILES = brcm/BCM43430A1.hcd BCM4345C0.hcd
+-
+ define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
+-	$(foreach file,$(RPI_BT_FIRMWARE_FILES),\
+-		$(INSTALL) -D -m 0644 $(@D)/firmware/$(file) $(TARGET_DIR)/lib/firmware/$(notdir $(file))
+-	)
++	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
++	$(INSTALL) -m 0644 $(@D)/firmware/brcm/*.hcd $(TARGET_DIR)/lib/firmware/brcm
+ endef
+ 
+ $(eval $(generic-package))
