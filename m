@@ -1,63 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 17:02:15 +0200
-Subject: [Buildroot] [git commit] whois: bump to version 5.3.0
-Message-ID: <20180602101012.96B8381938@busybox.osuosl.org>
+Date: Sun, 20 May 2018 19:15:07 +0200
+Subject: [Buildroot] [git commit] arch/arm: cortex-m7 may have a FPv5 FPU
+Message-ID: <20180602101013.0A7288055B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a9c075fdc945462ea5a530d0128bb6cf2683a02
+commit: https://git.buildroot.net/buildroot/commit/?id=3e44065ab5af177103cbf26724e48e300cffee5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- libidn1 support has been removed:
-  https://github.com/rfc1036/whois/commit/5d60bbe102b71c03b9a46eb0a7aada3532bd4481
-- Add hash for license file
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/whois/whois.hash | 7 +++++--
- package/whois/whois.mk   | 9 ++-------
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ arch/Config.in.arm | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 29623b529f..635066c5e3 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,2 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois/whois_5.2.17.dsc
--sha256	257585678f571e18964667b41dc6543fe9da6123ac95743660c9c3ae1eba9664	whois_5.2.17.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20180121T094839Z/pool/main/w/whois/whois_5.3.0.dsc
-+sha256	4d789c403bfb5833c8ae168a5f31be70e34b045bd5d95a54c82a27b0ff135723	whois_5.3.0.tar.xz
-+
-+# Hash for license file:
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 18071ab6bd..5cd7cde7fd 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WHOIS_VERSION = 5.2.17
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20170727T214450Z/pool/main/w/whois
-+WHOIS_VERSION = 5.3.0
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180121T094839Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
- WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
-@@ -22,11 +22,6 @@ WHOIS_EXTRA_LIBS += -liconv
- WHOIS_MAKE_ENV += HAVE_ICONV=1
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBIDN),y)
--WHOIS_DEPENDENCIES += libidn
--WHOIS_MAKE_ENV += HAVE_LIBIDN=1
--endif
--
- ifeq ($(BR2_PACKAGE_LIBIDN2),y)
- WHOIS_DEPENDENCIES += libidn2
- WHOIS_MAKE_ENV += HAVE_LIBIDN2=1
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index aadd14f5fc..f0488b4685 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -272,6 +272,7 @@ config BR2_cortex_m4
+ config BR2_cortex_m7
+ 	bool "cortex-M7"
+ 	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_MAYBE_HAS_FPV5
+ 	select BR2_ARM_CPU_ARMV7M
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ endif # !BR2_ARCH_IS_64
