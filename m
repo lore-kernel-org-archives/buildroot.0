@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 15:51:30 +0200
-Subject: [Buildroot] [PATCH 1/1] libosip2: add hash for license file
-In-Reply-To: <20180520114641.20195-1-fontaine.fabrice@gmail.com>
-References: <20180520114641.20195-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180520155130.340ea694@windsurf>
+Date: Sun, 20 May 2018 16:15:45 +0200
+Subject: [Buildroot] [PATCH 1/7] libidn2: new package
+In-Reply-To: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
+References: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180520161545.7ca05e2d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 May 2018 13:46:41 +0200, Fabrice Fontaine wrote:
+On Tue,  1 May 2018 22:40:32 +0200, Fabrice Fontaine wrote:
+> Libidn2 is an implementation of the IDNA2008 + TR46
+> specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
+> TR 46).
+> 
+> http://www.gnu.org/software/libidn/
+> 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libosip2/libosip2.hash | 3 +++
->  1 file changed, 3 insertions(+)
+>  DEVELOPERS                   |  1 +
+>  package/Config.in            |  1 +
+>  package/libidn2/Config.in    | 17 +++++++++++++++++
+>  package/libidn2/libidn2.hash |  8 ++++++++
+>  package/libidn2/libidn2.mk   | 29 +++++++++++++++++++++++++++++
+>  5 files changed, 56 insertions(+)
+>  create mode 100644 package/libidn2/Config.in
+>  create mode 100644 package/libidn2/libidn2.hash
+>  create mode 100644 package/libidn2/libidn2.mk
 
-Applied to master, thanks.
+I've applied the entire series to next. I've made a few changes, so
+I'll comment on the two patches on which I did changes.
+
+On this patch, here are the changes I made:
+
+    [Thomas:
+     - Use positive logic to test the BR2_PACKAGE_LIBIDN2_BINARY
+       condition.
+     - Put the definition of LIBIDN2_REMOVE_BINARY inside the
+       BR2_PACKAGE_LIBIDN2_BINARY condition, as suggested by Arnout.
+     - Adjust license details: library is under GPL-2.0+ or LGPL-3.0+,
+       while the command line tool is under GPL-3.0+.]
+
+Best regards,
 
 Thomas
 -- 
