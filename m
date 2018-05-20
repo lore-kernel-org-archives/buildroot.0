@@ -1,43 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 20 May 2018 22:42:54 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-04-25
-In-Reply-To: <CANQCQpZzeALsKx7GFMUD_jSSn+=YS9KZBoOeuf7dUR8Um1pJDQ@mail.gmail.com>
- (Matthew Weber's message of "Thu, 10 May 2018 08:24:11 -0500")
-References: <20180426060013.EAB262079F@mail.bootlin.com>
- <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
- <20180430091509.3a9cdff2@windsurf>
- <cab2ab99-f53c-448f-7cdb-77456a189664@smile.fr>
- <56ce1d9d-7b2a-1cda-52e3-a01094e6713a@gmail.com>
- <CANQCQpZzeALsKx7GFMUD_jSSn+=YS9KZBoOeuf7dUR8Um1pJDQ@mail.gmail.com>
-Message-ID: <87zi0unjn5.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 May 2018 23:46:27 +0200
+Subject: [Buildroot] [PATCH v2 1/3] uwsgi: new package
+In-Reply-To: <20180202140601.21285-1-aduskett@gmail.com>
+References: <20180202140601.21285-1-aduskett@gmail.com>
+Message-ID: <20180520234627.5484405e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+Hello,
 
-Hi,
+On Fri,  2 Feb 2018 09:05:59 -0500, Adam Duskett wrote:
+> Uwsgi is a web server gateway interface written in python that is
+> meant to be flexible and plugin oriented.
+> 
+> To get it to cross compile, 2 small patches had to be created:
+> 
+> The first fixes the build system attempting to link against /usr/lib
+> instead of sysconfig.PREFIX.
+> 
+> The second adds a way to specify a location for xml2-config, as the
+> build-system currently just blindly calls out xml2-config which
+> can be on the host machine.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
- >> I'm waiting for the backport in the gcc-7-branch.
- >> 
- >> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+I am sorry, but this is again not up to the level of quality that I
+would expect from an experienced contributor like you.
 
- > I backed up and applied this bug's patch to 6.x as a last attempt to
- > resolve what I was observing with libnss (the build was successful).
- > I posted more detail in the bug report Romain referenced.  There
- > wasn't an actual commit to track down on this issue, it feels like it
- > was a backport introducing a design flaw and this patch just prevents
- > a infinite runaway of the optimization step.
+ (1) It fails to build with uClibc, first because it includes
+     <execinfo.h> when __GLIBC__ is defined. I've fixed that.
 
- > It does look like they have now decided to not backport this to 7.x,
- > so unsure what you guys think about applying it to buildroot.
+ (2) It still fails to build with uClibc, because a workaround for a
+     glibc 2.2.3 bug gets enabled with uClibc and doesn't build. I've
+     fixed that.
 
-Hmm, I don't really feel confident adding patches that upstream find too
-scary. What is the alternative? Does this only affect libnss on
-Microblaze?
+ (3) You make util-linux, pcre, jansson and libxml2 mandatory
+     dependencies, but they are not. You can customize
+     buildconf/base.ini to disable these. I was able to do a uwsgi
+     build with none of those dependencies enabled.
 
+ (4) I've done a build with python-setuptools on the target, and uwsgi
+     works just fine.
+
+So this clearly needs to be reworked. Could you have another look at
+this package, and make an improved submission ?
+
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
