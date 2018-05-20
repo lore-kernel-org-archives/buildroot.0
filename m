@@ -1,289 +1,190 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 May 2018 18:10:57 +0200
-Subject: [Buildroot] [git commit] python-websockets: backport fix for
- upstream issue #350
-Message-ID: <20180602101013.64FEE8199C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 May 2018 15:50:03 +0200
+Subject: [Buildroot] [git commit] zmqpp: bump to version 4.2.0
+Message-ID: <20180602101012.356857FACD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08753b088909b447f989f9d211c74a18bb677294
+commit: https://git.buildroot.net/buildroot/commit/?id=b8f19aae299bb94705698554f9ac5555b95a5bcd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 439e2add6c39bb128e1a5f1fb624ecfb99948d5e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...Fix-behavior-of-recv-in-the-CLOSING-state.patch | 261 +++++++++++++++++++++
- 1 file changed, 261 insertions(+)
+- Merge both patches in a single one and slighlty update it to keep
+  current behavior (BUILD_STATIC set to yes by default) to be able to
+  send it upstream: https://github.com/zeromq/zmqpp/pull/218. Patch has
+  been merged upstream.
+- Add hash for license file
 
-diff --git a/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch b/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
-new file mode 100644
-index 0000000000..cb97b36bde
---- /dev/null
-+++ b/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
-@@ -0,0 +1,261 @@
-+From 402059e4a46a764632eba8a669f5b012f173ee7b Mon Sep 17 00:00:00 2001
-+From: Aymeric Augustin <aymeric.augustin@m4x.org>
-+Date: Tue, 1 May 2018 17:05:05 +0200
-+Subject: [PATCH] Fix behavior of recv() in the CLOSING state.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ow-building-shared-or-static-library-only.patch | 51 +++++++++++++---------
+ ...-Install-static-library-for-static-builds.patch | 33 --------------
+ package/zmqpp/zmqpp.hash                           |  3 +-
+ package/zmqpp/zmqpp.mk                             |  2 +-
+ 4 files changed, 33 insertions(+), 56 deletions(-)
+
+diff --git a/package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch b/package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch
+index 70caee8162..04fad80f32 100644
+--- a/package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch
++++ b/package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch
+@@ -1,33 +1,42 @@
+-From 02ad67e60ef698ee47f6ee53b36e5b89c2fd71e7 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Wed, 24 Feb 2016 10:07:11 -0300
+-Subject: [PATCH 1/2] Allow building shared or static library only
++From 93005632eca13d8eda409f6e9496fd5dd69e75b0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 4 May 2018 18:38:31 +0200
++Subject: [PATCH] Allow building shared or static library only
+ MIME-Version: 1.0
+ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
+ 
+-[Gustavo: update for 4.1.2]
++Patchs retrieved from:
++ - https://git.buildroot.net/buildroot/tree/package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch
++ - https://git.buildroot.net/buildroot/tree/package/zmqpp/0002-Install-static-library-for-static-builds.patch
+ 
++Both patches have been merged in a single one and slightly updated to
++keep default behavior of building and installing static library
++(BUILD_STATIC is set to yes by default)
 +
-+The behavior wasn't tested correctly: in some test cases, the connection
-+had already moved to the CLOSED state, where the close code and reason
-+are already known.
-+
-+Refactor half_close_connection_{local,remote} to allow multiple runs of
-+the event loop while remaining in the CLOSING state. Refactor affected
-+tests accordingly.
-+
-+I verified that all tests in the CLOSING state were behaving is intended
-+by inserting debug statements in recv/send/ping/pong and running:
-+
-+$ PYTHONASYNCIODEBUG=1 python -m unittest -v websockets.test_protocol.{Client,Server}Tests.test_{recv,send,ping,pong}_on_closing_connection_{local,remote}
-+
-+Fix #317, #327, #350, #357.
-+
-+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-+---
-+ websockets/protocol.py      | 10 ++---
-+ websockets/test_protocol.py | 78 +++++++++++++++++++++++++++++--------
-+ 2 files changed, 66 insertions(+), 22 deletions(-)
-+
-+diff --git a/websockets/protocol.py b/websockets/protocol.py
-+index f8121a1..7583fe9 100644
-+--- a/websockets/protocol.py
-++++ b/websockets/protocol.py
-+@@ -303,7 +303,7 @@ class WebSocketCommonProtocol(asyncio.StreamReaderProtocol):
-+         # Don't yield from self.ensure_open() here because messages could be
-+         # received before the closing frame even if the connection is closing.
-+ 
-+-        # Wait for a message until the connection is closed
-++        # Wait for a message until the connection is closed.
-+         next_message = asyncio_ensure_future(
-+             self.messages.get(), loop=self.loop)
-+         try:
-+@@ -315,15 +315,15 @@ class WebSocketCommonProtocol(asyncio.StreamReaderProtocol):
-+             next_message.cancel()
-+             raise
-+ 
-+-        # Now there's no need to yield from self.ensure_open(). Either a
-+-        # message was received or the connection was closed.
-+-
-+         if next_message in done:
-+             return next_message.result()
-+         else:
-+             next_message.cancel()
-+             if not self.legacy_recv:
-+-                raise ConnectionClosed(self.close_code, self.close_reason)
-++                assert self.state in [State.CLOSING, State.CLOSED]
-++                # Wait until the connection is closed to raise
-++                # ConnectionClosed with the correct code and reason.
-++                yield from self.ensure_open()
-+ 
-+     @asyncio.coroutine
-+     def send(self, data):
-+diff --git a/websockets/test_protocol.py b/websockets/test_protocol.py
-+index 70348fb..bfd4e3b 100644
-+--- a/websockets/test_protocol.py
-++++ b/websockets/test_protocol.py
-+@@ -105,7 +105,7 @@ class CommonTests:
-+         self.loop.call_soon(self.loop.stop)
-+         self.loop.run_forever()
-+ 
-+-    def make_drain_slow(self, delay=3 * MS):
-++    def make_drain_slow(self, delay=MS):
-+         # Process connection_made in order to initialize self.protocol.writer.
-+         self.run_loop_once()
-+ 
-+@@ -174,6 +174,8 @@ class CommonTests:
-+         # Empty the outgoing data stream so we can make assertions later on.
-+         self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
-+ 
-++        assert self.protocol.state is State.CLOSED
-++
-+     def half_close_connection_local(self, code=1000, reason='close'):
-+         """
-+         Start a closing handshake but do not complete it.
-+@@ -181,31 +183,56 @@ class CommonTests:
-+         The main difference with `close_connection` is that the connection is
-+         left in the CLOSING state until the event loop runs again.
-+ 
-++        The current implementation returns a task that must be awaited or
-++        cancelled, else asyncio complains about destroying a pending task.
-++
-+         """
-+         close_frame_data = serialize_close(code, reason)
-+-        # Trigger the closing handshake from the local side.
-+-        self.ensure_future(self.protocol.close(code, reason))
-++        # Trigger the closing handshake from the local endpoint.
-++        close_task = self.ensure_future(self.protocol.close(code, reason))
-+         self.run_loop_once()    # wait_for executes
-+         self.run_loop_once()    # write_frame executes
-+         # Empty the outgoing data stream so we can make assertions later on.
-+         self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
-+-        # Prepare the response to the closing handshake from the remote side.
-+-        self.loop.call_soon(
-+-            self.receive_frame, Frame(True, OP_CLOSE, close_frame_data))
-+-        self.loop.call_soon(self.receive_eof_if_client)
-++
-++        assert self.protocol.state is State.CLOSING
-++
-++        # Complete the closing sequence at 1ms intervals so the test can run
-++        # at each point even it goes back to the event loop several times.
-++        self.loop.call_later(
-++            MS, self.receive_frame, Frame(True, OP_CLOSE, close_frame_data))
-++        self.loop.call_later(2 * MS, self.receive_eof_if_client)
-++
-++        # This task must be awaited or cancelled by the caller.
-++        return close_task
-+ 
-+     def half_close_connection_remote(self, code=1000, reason='close'):
-+         """
-+-        Receive a closing handshake.
-++        Receive a closing handshake but do not complete it.
-+ 
-+         The main difference with `close_connection` is that the connection is
-+         left in the CLOSING state until the event loop runs again.
-+ 
-+         """
-++        # On the server side, websockets completes the closing handshake and
-++        # closes the TCP connection immediately. Yield to the event loop after
-++        # sending the close frame to run the test while the connection is in
-++        # the CLOSING state.
-++        if not self.protocol.is_client:
-++            self.make_drain_slow()
-++
-+         close_frame_data = serialize_close(code, reason)
-+-        # Trigger the closing handshake from the remote side.
-++        # Trigger the closing handshake from the remote endpoint.
-+         self.receive_frame(Frame(True, OP_CLOSE, close_frame_data))
-+-        self.receive_eof_if_client()
-++        self.run_loop_once()    # read_frame executes
-++        # Empty the outgoing data stream so we can make assertions later on.
-++        self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
-++
-++        assert self.protocol.state is State.CLOSING
-++
-++        # Complete the closing sequence at 1ms intervals so the test can run
-++        # at each point even it goes back to the event loop several times.
-++        self.loop.call_later(2 * MS, self.receive_eof_if_client)
-+ 
-+     def process_invalid_frames(self):
-+         """
-+@@ -335,11 +362,13 @@ class CommonTests:
-+         self.assertEqual(data, b'tea')
-+ 
-+     def test_recv_on_closing_connection_local(self):
-+-        self.half_close_connection_local()
-++        close_task = self.half_close_connection_local()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.recv())
-+ 
-++        self.loop.run_until_complete(close_task)    # cleanup
-++
-+     def test_recv_on_closing_connection_remote(self):
-+         self.half_close_connection_remote()
-+ 
-+@@ -421,24 +450,29 @@ class CommonTests:
-+         self.assertNoFrameSent()
-+ 
-+     def test_send_on_closing_connection_local(self):
-+-        self.half_close_connection_local()
-++        close_task = self.half_close_connection_local()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.send('foobar'))
-++
-+         self.assertNoFrameSent()
-+ 
-++        self.loop.run_until_complete(close_task)    # cleanup
-++
-+     def test_send_on_closing_connection_remote(self):
-+         self.half_close_connection_remote()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.send('foobar'))
-+-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
-++
-++        self.assertNoFrameSent()
-+ 
-+     def test_send_on_closed_connection(self):
-+         self.close_connection()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.send('foobar'))
-++
-+         self.assertNoFrameSent()
-+ 
-+     # Test the ping coroutine.
-+@@ -466,24 +500,29 @@ class CommonTests:
-+         self.assertNoFrameSent()
-+ 
-+     def test_ping_on_closing_connection_local(self):
-+-        self.half_close_connection_local()
-++        close_task = self.half_close_connection_local()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.ping())
-++
-+         self.assertNoFrameSent()
-+ 
-++        self.loop.run_until_complete(close_task)    # cleanup
-++
-+     def test_ping_on_closing_connection_remote(self):
-+         self.half_close_connection_remote()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.ping())
-+-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
-++
-++        self.assertNoFrameSent()
-+ 
-+     def test_ping_on_closed_connection(self):
-+         self.close_connection()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.ping())
-++
-+         self.assertNoFrameSent()
-+ 
-+     # Test the pong coroutine.
-+@@ -506,24 +545,29 @@ class CommonTests:
-+         self.assertNoFrameSent()
-+ 
-+     def test_pong_on_closing_connection_local(self):
-+-        self.half_close_connection_local()
-++        close_task = self.half_close_connection_local()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.pong())
-++
-+         self.assertNoFrameSent()
-+ 
-++        self.loop.run_until_complete(close_task)    # cleanup
-++
-+     def test_pong_on_closing_connection_remote(self):
-+         self.half_close_connection_remote()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.pong())
-+-        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
-++
-++        self.assertNoFrameSent()
-+ 
-+     def test_pong_on_closed_connection(self):
-+         self.close_connection()
-+ 
-+         with self.assertRaises(ConnectionClosed):
-+             self.loop.run_until_complete(self.protocol.pong())
-++
-+         self.assertNoFrameSent()
-+ 
-+     # Test the protocol's logic for acknowledging pings with pongs.
-+-- 
-+2.17.0
-+
++[Upstream status: merged (https://github.com/zeromq/zmqpp/pull/218)]
+ Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+- Makefile | 19 +++++++++++++++----
+- 1 file changed, 15 insertions(+), 4 deletions(-)
++ Makefile | 24 ++++++++++++++++++++----
++ 1 file changed, 20 insertions(+), 4 deletions(-)
+ 
+ diff --git a/Makefile b/Makefile
+-index 9df5996..86c8fac 100644
++index 689acaa..e43054c 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -79,6 +79,8 @@ ifeq ($(UNAME_S),Darwin)
++@@ -81,6 +81,9 @@ ifeq ($(UNAME_S),Darwin)
+  endif
+  
+  
+ +BUILD_SHARED   ?= yes
+++BUILD_STATIC   ?= yes
+ +
+  CONFIG_FLAGS =
+  ifeq ($(CONFIG),debug)
+  	CONFIG_FLAGS = -g -fno-inline -ftemplate-depth-1000
+-@@ -93,13 +95,22 @@ ifneq (,$(findstring $(CONFIG),release loadtest))
++@@ -95,13 +98,22 @@ ifneq (,$(findstring $(CONFIG),release loadtest))
+  	CONFIG_FLAGS = -O3 -funroll-loops -ffast-math -finline-functions -fomit-frame-pointer -DNO_DEBUG_LOG -DNO_TRACE_LOG -DNDEBUG
+  endif
+  
+@@ -51,20 +60,25 @@ index 9df5996..86c8fac 100644
+  COMMON_LIBS = -lzmq
+  
+  LIBRARY_LIBS =
+-@@ -147,10 +158,11 @@ install:
+- 	mkdir -p $(INCLUDEDIR)/$(LIBRARY_DIR)
++@@ -150,11 +162,15 @@ install:
+  	mkdir -p $(LIBDIR)
++ 	mkdir -p $(PKGCONFIGDIR)
+  	install -m 644 $(ALL_LIBRARY_INCLUDES) $(INCLUDEDIR)/$(LIBRARY_DIR)
+-+ifeq ($(BUILD_SHARED),yes)
+- 	install -m 755 $(BUILD_PATH)/$(LIBRARY_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_FULL_VERSION_SHARED)
++-	install -m 755 $(BUILD_PATH)/$(LIBRARY_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_FULL_VERSION_SHARED)
+ -	install -m 755 $(BUILD_PATH)/$(LIBRARY_ARCHIVE) $(LIBDIR)/$(LIBRARY_ARCHIVE)
++ 	install -m 755 $(BUILD_PATH)/$(PKGCONFIG_FILE) $(PKGCONFIGDIR)/$(PKGCONFIG_FILE)
+++ifeq ($(BUILD_SHARED),yes)
+++	install -m 755 $(BUILD_PATH)/$(LIBRARY_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_FULL_VERSION_SHARED)
+  	ln -sf $(LIBRARY_FULL_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_VERSION_SHARED)
+  	ln -sf $(LIBRARY_FULL_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_SHARED)
+ +endif
+++ifeq ($(BUILD_STATIC),yes)
+++	install -m 755 $(BUILD_PATH)/$(LIBRARY_ARCHIVE) $(LIBDIR)/$(LIBRARY_ARCHIVE)
+++endif
+  	if [ -f $(BUILD_PATH)/$(CLIENT_TARGET) ]; then install -m 755 $(BUILD_PATH)/$(CLIENT_TARGET) $(BINDIR); fi
+  	$(LDCONFIG)
+  	@echo "use make installcheck to test the install"
+-@@ -172,7 +184,7 @@ clean:
++@@ -176,7 +192,7 @@ clean:
+  
+  client: $(CLIENT_TARGET)
+  
+@@ -73,11 +87,6 @@ index 9df5996..86c8fac 100644
+  
+  #
+  # BUILD Targets
+-@@ -211,4 +223,3 @@ test: $(TESTS_TARGET)
+- $(OBJECT_PATH)/%.o: $(SRC_PATH)/%.cpp
+- 	-mkdir -p $(dir $@)
+- 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(COMMON_FLAGS) $(CONFIG_FLAGS) -c -o $@ $<
+--
+ -- 
+-2.4.10
++2.14.1
+ 
+diff --git a/package/zmqpp/0002-Install-static-library-for-static-builds.patch b/package/zmqpp/0002-Install-static-library-for-static-builds.patch
+deleted file mode 100644
+index 402f85e263..0000000000
+--- a/package/zmqpp/0002-Install-static-library-for-static-builds.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 283676e2e8f15bedca20c3d94caeecfdebe11ffd Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Mon, 23 Nov 2015 22:53:09 +0100
+-Subject: [PATCH 2/2] Install static library for static builds
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-[Gustavo: update for 4.1.2]
+-
+-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- Makefile | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/Makefile b/Makefile
+-index 86c8fac..fbaff63 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -163,6 +163,9 @@ ifeq ($(BUILD_SHARED),yes)
+- 	ln -sf $(LIBRARY_FULL_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_VERSION_SHARED)
+- 	ln -sf $(LIBRARY_FULL_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_SHARED)
+- endif
+-+ifeq ($(BUILD_STATIC),yes)
+-+	install -m 755 $(BUILD_PATH)/$(LIBRARY_ARCHIVE) $(LIBDIR)/$(LIBRARY_ARCHIVE)
+-+endif
+- 	if [ -f $(BUILD_PATH)/$(CLIENT_TARGET) ]; then install -m 755 $(BUILD_PATH)/$(CLIENT_TARGET) $(BINDIR); fi
+- 	$(LDCONFIG)
+- 	@echo "use make installcheck to test the install"
+--- 
+-2.4.10
+-
+diff --git a/package/zmqpp/zmqpp.hash b/package/zmqpp/zmqpp.hash
+index 63c6a34f0c..c440b2aca2 100644
+--- a/package/zmqpp/zmqpp.hash
++++ b/package/zmqpp/zmqpp.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	831ad02df64034268d910c30f9fb1b1e631ad810182951af9d7d622650831eb5  zmqpp-4.1.2.tar.gz
++sha256 c1d4587df3562f73849d9e5f8c932ca7dcfc7d8bec31f62d7f35073ef81f4d29  zmqpp-4.2.0.tar.gz
++sha256 fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+index f576527463..b4cb055737 100644
+--- a/package/zmqpp/zmqpp.mk
++++ b/package/zmqpp/zmqpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZMQPP_VERSION = 4.1.2
++ZMQPP_VERSION = 4.2.0
+ ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
+ ZMQPP_INSTALL_STAGING = YES
+ ZMQPP_DEPENDENCIES = zeromq
