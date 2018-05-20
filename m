@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 18:43:19 +0200
-Subject: [Buildroot] [PATCH 1/1] whois: bump to version 5.3.0
-In-Reply-To: <20180520142906.13060-1-fontaine.fabrice@gmail.com>
-References: <20180520142906.13060-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180520184319.0b08a73b@windsurf>
+Date: Sun, 20 May 2018 18:43:31 +0200
+Subject: [Buildroot] [PATCH 1/1] libpam-tacplus: bump to version
+ 1.5.0-beta.2
+In-Reply-To: <20180520143326.13993-1-fontaine.fabrice@gmail.com>
+References: <20180520143326.13993-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180520184331.6dea293a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 May 2018 16:29:06 +0200, Fabrice Fontaine wrote:
-> - libidn1 support has been removed:
->   https://github.com/rfc1036/whois/commit/5d60bbe102b71c03b9a46eb0a7aada3532bd4481
+On Sun, 20 May 2018 16:33:26 +0200, Fabrice Fontaine wrote:
+> - Remove LIBPAM_TACPLUS_AUTORECONF_OPTS as m4 directory doesn't exist
+>   anymore
+> - Add patch to fix getrandom call (sent upstream)
 > - Add hash for license file
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/whois/whois.hash | 7 +++++--
->  package/whois/whois.mk   | 9 ++-------
->  2 files changed, 7 insertions(+), 9 deletions(-)
+>  .../0001-Fix-getrandom-call-in-magic.c.patch       | 30 ++++++++++++++++++++++
+>  package/libpam-tacplus/libpam-tacplus.hash         |  3 ++-
+>  package/libpam-tacplus/libpam-tacplus.mk           |  3 +--
+>  3 files changed, 33 insertions(+), 3 deletions(-)
+>  create mode 100644 package/libpam-tacplus/0001-Fix-getrandom-call-in-magic.c.patch
 
 Applied to next, thanks.
 
