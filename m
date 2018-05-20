@@ -1,27 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 May 2018 12:21:11 +0200
-Subject: [Buildroot] [PATCH 1/1] libogg: add hash for license file
-Message-ID: <20180520102111.25327-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 May 2018 11:56:57 +0200
+Subject: [Buildroot] [git commit branch/next] quazip: upgrade to 0.7.5 and
+ the new, Github upstream
+Message-ID: <20180520102832.4ACFF81269@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libogg/libogg.hash | 3 +++
- 1 file changed, 3 insertions(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=e9d61fa4b6fa1050a4494d585c30ab32b663b841
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/libogg/libogg.hash b/package/libogg/libogg.hash
-index 0c65b8e1a9..d6962a55ed 100644
---- a/package/libogg/libogg.hash
-+++ b/package/libogg/libogg.hash
-@@ -1,2 +1,5 @@
- # From: http://www.xiph.org/downloads/
- sha256 4f3fc6178a533d392064f14776b23c397ed4b9f48f5de297aba73b643f955c08 libogg-1.3.3.tar.xz
-+
-+# Hash for license file:
-+sha256 d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814 COPYING
--- 
-2.14.1
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/quazip/quazip.hash | 4 ++--
+ package/quazip/quazip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+index 87bf7c2c50..4e9af16a1a 100644
+--- a/package/quazip/quazip.hash
++++ b/package/quazip/quazip.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
+-sha256 2ad4f354746e8260d46036cde1496c223ec79765041ea28eb920ced015e269b5 quazip-0.7.3.tar.gz
++# From github release page
++sha256 f3a56647d4706c9daef411e40e3884702e2bd770e980145c3899321788ba8bb2 quazip-0.7.5.tar.gz
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index 09037a54ce..7bef2fe7d9 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-QUAZIP_VERSION = 0.7.3
+-QUAZIP_SITE = http://sourceforge.net/projects/quazip/files/quazip/$(QUAZIP_VERSION)
++QUAZIP_VERSION = 0.7.5
++QUAZIP_SITE = $(call github,stachenov,quazip,$(QUAZIP_VERSION))
+ QUAZIP_INSTALL_STAGING = YES
+ QUAZIP_DEPENDENCIES = \
+ 	zlib \
