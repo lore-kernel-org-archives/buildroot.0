@@ -1,27 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 May 2018 13:46:41 +0200
-Subject: [Buildroot] [PATCH 1/1] libosip2: add hash for license file
-Message-ID: <20180520114641.20195-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 May 2018 15:29:58 +0200
+Subject: [Buildroot] [git commit] package/transmission: fix systemd support
+Message-ID: <20180520132911.B069481000@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libosip2/libosip2.hash | 3 +++
- 1 file changed, 3 insertions(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=b27bcedccbecaecfbbfdb69ba5c24f1f0e3fc064
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
-index 9ff2d9a98a..c6df5f2362 100644
---- a/package/libosip2/libosip2.hash
-+++ b/package/libosip2/libosip2.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
- sha256	c9a18b0c760506d150017cdb1fa5c1cefe12b8dcbbf9a7e784eb75af376e96cd	libosip2-3.6.0.tar.gz
-+
-+# Hash for license file:
-+sha256	8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de	COPYING
--- 
-2.14.1
+Patch 0006-libsystemd.patch backports an upstream commit which renames
+the systemd configure option.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/transmission/transmission.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 4e78604fdb..32e8e70789 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -49,9 +49,9 @@ TRANSMISSION_CONF_OPTS += --enable-daemon
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ TRANSMISSION_DEPENDENCIES += systemd
+-TRANSMISSION_CONF_OPTS += --with-systemd-daemon
++TRANSMISSION_CONF_OPTS += --with-systemd
+ else
+-TRANSMISSION_CONF_OPTS += --without-systemd-daemon
++TRANSMISSION_CONF_OPTS += --without-systemd
+ endif
+ 
+ define TRANSMISSION_USERS
