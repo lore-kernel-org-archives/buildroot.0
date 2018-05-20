@@ -1,44 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 20:20:59 +0200
-Subject: [Buildroot] [git commit] chrony: S49chrony: drop /etc/chrony.conf
- check
-Message-ID: <20180602101013.A3C398199C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 May 2018 11:41:44 +0200
+Subject: [Buildroot] [git commit] python-cython: fix check-package warnings
+Message-ID: <20180602101011.C69EE7FACD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=424db89a26c922e6a8e667b970a9863721371d68
+commit: https://git.buildroot.net/buildroot/commit/?id=0e06c3117665c5aabe94f1bbab7fb709e2953226
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With CHRONY_ARGS in /etc/default/chrony, chrony may asked to use an
-alternative configuration file (with the -f option), so drop the explicit
-/etc/chrony.conf check.
+Fixes:
 
-In case the configuration file isn't present chrony will anyway loudly
-complain which is preferable to this silent failure:
+package/python-cython/Config.in.host:2: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
+package/python-cython/Config.in.host:3: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
+package/python-cython/Config.in.host:4: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+package/python-cython/Config.in.host:5: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
 
-chronyd -f /non/existing/file.conf
-Could not open configuration file /non/existing/file.conf : No such file or directory
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/chrony/S49chrony | 2 --
- 1 file changed, 2 deletions(-)
+ package/python-cython/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/chrony/S49chrony b/package/chrony/S49chrony
-index 5abb3b2582..f75233fe5e 100755
---- a/package/chrony/S49chrony
-+++ b/package/chrony/S49chrony
-@@ -4,8 +4,6 @@
+diff --git a/package/python-cython/Config.in.host b/package/python-cython/Config.in.host
+index b69e59b718..69d32d5ab3 100644
+--- a/package/python-cython/Config.in.host
++++ b/package/python-cython/Config.in.host
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_HOST_PYTHON_CYTHON
+-       bool "host python-cython"
+-       help
+-         The Cython compiler for writing C extensions for the Python
+-         language.
++	bool "host python-cython"
++	help
++	  The Cython compiler for writing C extensions for the Python
++	  language.
  
- [ -r /etc/default/chrony ] && . /etc/default/chrony
- 
--[ -f /etc/chrony.conf ] || exit 0
--
- case "$1" in
-   start)
- 	printf "Starting chrony: "
+-         http://cython.org/
++	  http://cython.org/
