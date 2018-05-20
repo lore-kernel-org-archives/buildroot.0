@@ -1,31 +1,45 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 20 May 2018 13:11:14 -0400
-Subject: [Buildroot] [PATCH] gst1-plugins-bad: fix typo preventing use of
- the netsim plugin
-Message-ID: <1526836274-2875-1-git-send-email-danomimanchego123@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 May 2018 19:13:29 +0200
+Subject: [Buildroot] [git commit] Revert "arch/arm: add cortex-m7 core"
+Message-ID: <20180520171244.348F6812D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=87f0536474daffa6f1ee8ae73b37eda3fab75b67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 90e2209..b041014 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -378,7 +378,7 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-mxf
- endif
+This reverts commit 43884e7f5011cbd70a9a17bfd87041953cfa74ee, which
+was intended for the next branch, not master.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ arch/Config.in.arm | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 7651d10927..c99a995db2 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -241,11 +241,6 @@ config BR2_cortex_m4
+ 	bool "cortex-M4"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7M
+-config BR2_cortex_m7
+-	bool "cortex-M7"
+-	select BR2_ARM_CPU_HAS_THUMB2
+-	select BR2_ARM_CPU_ARMV7M
+-	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ endif # !BR2_ARCH_IS_64
  
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_NETSIM),y)
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NETSIM),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-netsim
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-netsim
--- 
-2.7.4
+ comment "armv8 cores"
+@@ -721,7 +716,6 @@ config BR2_GCC_TARGET_CPU
+ 	# armv7m
+ 	default "cortex-m3"	if BR2_cortex_m3
+ 	default "cortex-m4"	if BR2_cortex_m4
+-	default "cortex-m7"	if BR2_cortex_m7
+ 	# armv8a
+ 	default "cortex-a32"	if BR2_cortex_a32
+ 	default "cortex-a35"	if BR2_cortex_a35
