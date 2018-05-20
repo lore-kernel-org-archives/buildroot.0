@@ -1,47 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 May 2018 21:16:38 +0200
-Subject: [Buildroot] [PATCH 40/42] libphidget: bump to version
- 2.1.8.20170607
-In-Reply-To: <20180520184632.463355d0@windsurf>
-References: <20180520161634.30947-1-fontaine.fabrice@gmail.com>
- <20180520184632.463355d0@windsurf>
-Message-ID: <CAPi7W82eQxJw3u+W_wKpf_qscwWsvzfbh+is8zR5OcALWb5A0w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 May 2018 21:51:58 +0200
+Subject: [Buildroot] [git commit branch/next] ejabberd: Call
+ check-erlang-lib script directly from its location
+Message-ID: <20180520195144.147E7811E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=44acf13f65a328592e431c7992ff1eab2e124b77
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-2018-05-20 18:46 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+Avoid installing check-erlang-lib in the directory where the tarball is
+extracted. Instead, use an absolute path to its actual location, i.e.:
+$(TOPDIR)/$(EJABBERD_PKGDIR)/check-erlang-lib
 
-> Hello,
->
-> On Sun, 20 May 2018 18:16:33 +0200, Fabrice Fontaine wrote:
-> > Add hash for license file
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/libphidget/libphidget.hash | 3 ++-
-> >  package/libphidget/libphidget.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 2 deletions(-)
->
-> This patch 40/42 looks like a mistake, and was not in patchwork, so I
-> supposed you removed it from patchwork. Correct ?
->
-Yes, this was a mistake, I set it as unapplicable in patchwork.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ejabberd/ejabberd.mk | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180520/02f26236/attachment.html>
+diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+index 0f7af9b83e..acd52e5b38 100644
+--- a/package/ejabberd/ejabberd.mk
++++ b/package/ejabberd/ejabberd.mk
+@@ -23,24 +23,15 @@ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ EJABBERD_DEPENDENCIES += linux-pam
+ endif
+ 
+-# Install check-erlang-lib script to the directory in which the
+-# package has been uncompressed, so it is available during the
+-# configure step.
+-define EJABBERD_INSTALL_CHECK_ERLANG_LIB
+-	$(INSTALL) -m 0755 $(EJABBERD_PKGDIR)/check-erlang-lib \
+-		$(@D)/check-erlang-lib
+-endef
+-
+-EJABBERD_POST_EXTRACT_HOOKS += EJABBERD_INSTALL_CHECK_ERLANG_LIB
+-
+ EJABBERD_ERLANG_LIBS = sasl public_key mnesia inets compiler
+ 
+ # Guess answers for these tests, configure will bail out otherwise
+ # saying error: cannot run test program while cross compiling.
++EJABBERD_CHECK_LIB = $(TOPDIR)/$(EJABBERD_PKGDIR)/check-erlang-lib
+ EJABBERD_CONF_ENV = \
+ 	ac_cv_erlang_root_dir="$(HOST_DIR)/lib/erlang" \
+ 	$(foreach lib,$(EJABBERD_ERLANG_LIBS), \
+-		ac_cv_erlang_lib_dir_$(lib)="`./check-erlang-lib $(lib)`")
++		ac_cv_erlang_lib_dir_$(lib)="`$(EJABBERD_CHECK_LIB) $(lib)`")
+ 
+ EJABBERD_CONF_OPTS = \
+ 	--enable-system-deps \
