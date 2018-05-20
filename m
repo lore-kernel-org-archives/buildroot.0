@@ -1,29 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 15:51:13 +0200
-Subject: [Buildroot] [git commit] libosip2: add hash for license file
-Message-ID: <20180520135018.BADD281320@busybox.osuosl.org>
+Date: Sun, 20 May 2018 15:50:57 +0200
+Subject: [Buildroot] [PATCH 1/1] zmqpp: bump to version 4.2.0
+In-Reply-To: <20180520114054.18909-1-fontaine.fabrice@gmail.com>
+References: <20180520114054.18909-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180520155057.47323455@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12e55e4df5a4ef88246162b3f197a5891eda0da8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libosip2/libosip2.hash | 3 +++
- 1 file changed, 3 insertions(+)
+On Sun, 20 May 2018 13:40:54 +0200, Fabrice Fontaine wrote:
+> - Merge both patches in a single one and slighlty update it to keep
+>   current behavior (BUILD_STATIC set to yes by default) to be able to
+>   send it upstream: https://github.com/zeromq/zmqpp/pull/218. Patch has
+>   been merged upstream.
+> - Add hash for license file
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ow-building-shared-or-static-library-only.patch | 51 +++++++++++++---------
+>  ...-Install-static-library-for-static-builds.patch | 33 --------------
+>  package/zmqpp/zmqpp.hash                           |  3 +-
+>  package/zmqpp/zmqpp.mk                             |  2 +-
+>  4 files changed, 33 insertions(+), 56 deletions(-)
+>  delete mode 100644 package/zmqpp/0002-Install-static-library-for-static-builds.patch
 
-diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
-index 9ff2d9a98a..c6df5f2362 100644
---- a/package/libosip2/libosip2.hash
-+++ b/package/libosip2/libosip2.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
- sha256	c9a18b0c760506d150017cdb1fa5c1cefe12b8dcbbf9a7e784eb75af376e96cd	libosip2-3.6.0.tar.gz
-+
-+# Hash for license file:
-+sha256	8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de	COPYING
+Applied to next, thanks. Thanks for taking the time to submit the
+patches upstream, it is good to see them merged!
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
