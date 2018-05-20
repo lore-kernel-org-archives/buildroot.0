@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 23:46:27 +0200
+Date: Sun, 20 May 2018 23:50:09 +0200
 Subject: [Buildroot] [PATCH v2 1/3] uwsgi: new package
 In-Reply-To: <20180202140601.21285-1-aduskett@gmail.com>
 References: <20180202140601.21285-1-aduskett@gmail.com>
-Message-ID: <20180520234627.5484405e@windsurf>
+Message-ID: <20180520235009.27ab4388@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,26 +27,20 @@ On Fri,  2 Feb 2018 09:05:59 -0500, Adam Duskett wrote:
 > 
 > Signed-off-by: Adam Duskett <aduskett@gmail.com>
 
-I am sorry, but this is again not up to the level of quality that I
-would expect from an experienced contributor like you.
+A few minor nits below.
 
- (1) It fails to build with uClibc, first because it includes
-     <execinfo.h> when __GLIBC__ is defined. I've fixed that.
+> +UWSGI_LICENSE = GPL2
 
- (2) It still fails to build with uClibc, because a workaround for a
-     glibc 2.2.3 bug gets enabled with uClibc and doesn't build. I've
-     fixed that.
+This is not a valid SPDX license code.
 
- (3) You make util-linux, pcre, jansson and libxml2 mandatory
-     dependencies, but they are not. You can customize
-     buildconf/base.ini to disable these. I was able to do a uwsgi
-     build with none of those dependencies enabled.
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +    UWSGI_DEPENDENCIES += openssl
 
- (4) I've done a build with python-setuptools on the target, and uwsgi
-     works just fine.
+Don't indent such lines.
 
-So this clearly needs to be reworked. Could you have another look at
-this package, and make an improved submission ?
+(This is the type of minor nits I would have fixed myself when
+applying, but considering the other issues pointed out in my other
+e-mail, I can't apply this patch for the moment.)
 
 Thanks!
 
