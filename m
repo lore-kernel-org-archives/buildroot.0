@@ -1,35 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 12:47:01 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] zmqpp: fix build with or1k and gcc < 6
-In-Reply-To: <20180505094304.6621-1-fontaine.fabrice@gmail.com>
-References: <20180505094304.6621-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180520124701.38535b44@windsurf>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun, 20 May 2018 12:02:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/node: bump version to 8.11.2
+In-Reply-To: <20180519103043.5f2ebc7f@windsurf>
+References: <20180516223011.32410-1-martin@barkynet.com>
+ <20180517235531.73c4fe40@windsurf>
+ <CAFGQKxfS0N5HKFHzBMyBJRr2dZhXb-VCGVEGCFBcJzr8vMR_QQ@mail.gmail.com>
+ <20180519103043.5f2ebc7f@windsurf>
+Message-ID: <CAFGQKxfVO7x+_ymv1NPu924fdtiC7vovKZi3jcxiNdttFvHs6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Sat,  5 May 2018 11:43:04 +0200, Fabrice Fontaine wrote:
-> Use CONFIG variable to disable optimizations when or1k and gcc < 6 are
-> detected otherwise set CONFIG to release or debug depending on
-> BR2_ENABLE_DEBUG
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/523e58eefba7ef23a09ef53160da22190ccbb098
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Enhance patch by setting CONFIG to debug if BR2_ENABLE_DEBUG is set
+On 19 May 2018 at 09:30, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-Applied to master, thanks.
+> Hello,
+>
+> On Fri, 18 May 2018 18:25:07 +0100, Martin Bark wrote:
+>
+> > Thanks Thomas.  Any chance you could apply my rpi and ca-certificates
+> patch
+> > sets to next too?
+>
+> Yes, sure, this will happen at some point. But as usual we have 200+
+> patches in the list to be reviewed, so there are plenty of other
+> patches besides yours. If you can help reviewing and testing patches
+> submitted by others, that would definitely help.
+>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yes good point.  I'll have a go at reviewing and testing some patches.
+
+Thanks
+
+Martin
+
+
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180520/f8d6759a/attachment-0001.html>
