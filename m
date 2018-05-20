@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 15:49:01 +0200
-Subject: [Buildroot] [PATCH 1/4] package/transmission: bump version to
- 2.9.4
-In-Reply-To: <20180502060540.11628-1-bernd.kuhls@t-online.de>
-References: <20180502060540.11628-1-bernd.kuhls@t-online.de>
-Message-ID: <20180520154901.26887f95@windsurf>
+Date: Sun, 20 May 2018 15:49:40 +0200
+Subject: [Buildroot] [git commit branch/next] proj: upgrade to 5.0.1
+Message-ID: <20180520134903.7079981018@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a76aabd8842d28747fa8ec62b9c4a19f062b7fb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed,  2 May 2018 08:05:37 +0200, Bernd Kuhls wrote:
-> Removed patch 0003, a different fix was committed upstream:
-> https://github.com/transmission/transmission/commit/b21a6140e963491f146293c9b0a2863a9ae99ad3
-> 
-> Renumbered remaining patches.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...tp-include.patch => 0003-fix-utp-include.patch} |  0
->  package/transmission/0003-miniupnpc-cross.patch    | 31 ----------------------
->  ...nce-1.0.18-has-sys-quota.h-synced-with-G.patch} |  0
->  ...0006-libsystemd.patch => 0005-libsystemd.patch} |  0
->  package/transmission/transmission.hash             |  2 +-
->  package/transmission/transmission.mk               |  2 +-
->  6 files changed, 2 insertions(+), 33 deletions(-)
->  rename package/transmission/{0004-fix-utp-include.patch => 0003-fix-utp-include.patch} (100%)
->  delete mode 100644 package/transmission/0003-miniupnpc-cross.patch
->  rename package/transmission/{0005-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch => 0004-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch} (100%)
->  rename package/transmission/{0006-libsystemd.patch => 0005-libsystemd.patch} (100%)
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/proj/proj.hash | 4 ++--
+ package/proj/proj.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index 6a791baae4..aadbc385df 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+ # Fetched from http://download.osgeo.org/proj/proj-4.9.3.tar.gz.md5
+-md5 d598336ca834742735137c5674b214a1 proj-4.9.3.tar.gz
++md5 15c8d7d6a8cb945c7878d0ff322a232c proj-5.0.1.tar.gz
+ # Locally calculated
+-sha256 6984542fea333488de5c82eea58d699e4aff4b359200a9971537cd7e047185f7 proj-4.9.3.tar.gz
++sha256 a792f78897482ed2c4e2af4e8a1a02e294c64e32b591a635c5294cb9d49fdc8c proj-5.0.1.tar.gz
+ sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 6d029bba06..0b239b2bbe 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROJ_VERSION = 4.9.3
++PROJ_VERSION = 5.0.1
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
