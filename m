@@ -1,30 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 18:51:45 +0200
-Subject: [Buildroot] [PATCH 1/6] arch/arm: add cortex-m7 core
-In-Reply-To: <87dbe541bbacbe1cbdcacec6d1fa4cbf67585a0d.1519589817.git.yann.morin.1998@free.fr>
-References: <cover.1519589817.git.yann.morin.1998@free.fr>
- <87dbe541bbacbe1cbdcacec6d1fa4cbf67585a0d.1519589817.git.yann.morin.1998@free.fr>
-Message-ID: <20180520185145.0feb1fa4@windsurf>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun, 20 May 2018 13:11:14 -0400
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: fix typo preventing use of
+ the netsim plugin
+Message-ID: <1526836274-2875-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sun, 25 Feb 2018 21:18:13 +0100, Yann E. MORIN wrote:
-> Nothing fancy, just a plain Cortex-M, armv7-M core...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  arch/Config.in.arm | 6 ++++++
->  1 file changed, 6 insertions(+)
-
-Applied to next, thanks.
-
-Thomas
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 90e2209..b041014 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -378,7 +378,7 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-mxf
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_NETSIM),y)
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NETSIM),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-netsim
+ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-netsim
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
