@@ -1,30 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 18:49:30 +0200
-Subject: [Buildroot] [git commit] libpam-radius-auth: add hash for license
- file
-Message-ID: <20180520164859.1D770812E1@busybox.osuosl.org>
+Date: Sun, 20 May 2018 18:51:28 +0200
+Subject: [Buildroot] [git commit] arch/arm: add cortex-m7 core
+Message-ID: <20180520165030.3A67681201@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=747323706798d394c938c2db969c20af9aa053e3
+commit: https://git.buildroot.net/buildroot/commit/?id=43884e7f5011cbd70a9a17bfd87041953cfa74ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Nothing fancy, just a plain Cortex-M, armv7-M core...
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libpam-radius-auth/libpam-radius-auth.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/Config.in.arm | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libpam-radius-auth/libpam-radius-auth.hash b/package/libpam-radius-auth/libpam-radius-auth.hash
-index ffd7404df3..3e8dc02558 100644
---- a/package/libpam-radius-auth/libpam-radius-auth.hash
-+++ b/package/libpam-radius-auth/libpam-radius-auth.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking PGP signature
- sha256	  742d79fc39824726c098e746bd3dc3484f983f5ee082c621c1e848b2c3725305	pam_radius-1.4.0.tar.gz
-+
-+# Hash for license file:
-+sha256	  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34	LICENSE
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index c99a995db2..7651d10927 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -241,6 +241,11 @@ config BR2_cortex_m4
+ 	bool "cortex-M4"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7M
++config BR2_cortex_m7
++	bool "cortex-M7"
++	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7M
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ endif # !BR2_ARCH_IS_64
+ 
+ comment "armv8 cores"
+@@ -716,6 +721,7 @@ config BR2_GCC_TARGET_CPU
+ 	# armv7m
+ 	default "cortex-m3"	if BR2_cortex_m3
+ 	default "cortex-m4"	if BR2_cortex_m4
++	default "cortex-m7"	if BR2_cortex_m7
+ 	# armv8a
+ 	default "cortex-a32"	if BR2_cortex_a32
+ 	default "cortex-a35"	if BR2_cortex_a35
