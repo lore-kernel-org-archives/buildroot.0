@@ -1,54 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 16:50:09 +0200
-Subject: [Buildroot] [RFC] [PATCH v2 2/2] support/kconfig: Bump to
- kconfig from Linux 4.17-rc2
-In-Reply-To: <20180520144141.GB3453@scaer>
-References: <20180509164412.31596-1-petr.vorel@gmail.com>
- <20180509164412.31596-2-petr.vorel@gmail.com>
- <20180519230311.6a3652fd@windsurf> <20180520142311.GA3453@scaer>
- <20180520143139.GA14607@x230> <20180520144141.GB3453@scaer>
-Message-ID: <20180520165009.56b44d9b@windsurf>
+Date: Sun, 20 May 2018 16:57:22 +0200
+Subject: [Buildroot] [git commit branch/next] package/strace: enable
+ demangling of C++ symbol names in stack trace
+Message-ID: <20180520145817.A8052812DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=191d3c2b27c7460873b0d6786f02774db0822970
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 20 May 2018 16:41:41 +0200, Yann E. MORIN wrote:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/strace/strace.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> I initially did not reply further to this part, becuase I seem to
-> remember that there was a change in behavious with certain versions of
-> flex/bison, that made the output change drastically, and I was afraid we
-> could be bitten by this...
-> 
-> But in the end, this is not a problem, because we would not care to
-> mix-n-match files built with different versions of said tools, as they
-> would be those from the distro, always, and never those we ship, since
-> we would no longer ship them.
-> 
-> And eventually, I now remember that the issue was with gperf changing
-> its API (a function prototype changed), and that was causing pain. But
-> now, kconfig no longer uses gperf to start with, so no incompatibility
-> anymore anyway.
-> 
-> Which would allow us to drop the dependency of linux on host-{flex,bison}
-> that we had to add recently.
-
-If we start relying on the system-installed flex and bison, then we
-should remove host-flex and host-bison entirely, not only for the linux
-package. The question is whether bison and flex both behave in a
-reasonably similar way regardless of which version is used.
-
-When I see that even "tar" does not have a sufficiently stable
-behavior (which forces us to build host-tar), I'm a bit worried about
-more complex tools such as flex and bison.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 4d42085819..7b3ff184fb 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -18,6 +18,14 @@ else
+ STRACE_CONF_OPTS += --without-libunwind
+ endif
+ 
++# Demangling symbols in stack trace needs libunwind and libiberty.
++ifeq ($(BR2_PACKAGE_BINUTILS)$(BR2_PACKAGE_LIBUNWIND),yy)
++STRACE_DEPENDENCIES += binutils
++STRACE_CONF_OPTS += --with-libiberty=check
++else
++STRACE_CONF_OPTS += --without-libiberty
++endif
++
+ define STRACE_REMOVE_STRACE_GRAPH
+ 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
+ endef
