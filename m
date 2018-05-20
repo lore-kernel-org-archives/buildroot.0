@@ -1,45 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 19:25:20 +0200
-Subject: [Buildroot] [PATCH 1/2] ltrace: remove bogus comment in
- Config.in file
-In-Reply-To: <20180519205502.23746-1-thomas.petazzoni@bootlin.com>
-References: <20180519205502.23746-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180520192520.15cf72bc@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 20 May 2018 19:27:04 +0200
+Subject: [Buildroot] [PATCH 0/6] arch/ar: add cortex-m7,
+ and cortex-M FPUs
+In-Reply-To: <20180520192243.207524ca@windsurf>
+References: <cover.1519589817.git.yann.morin.1998@free.fr>
+ <20180520192243.207524ca@windsurf>
+Message-ID: <20180520172704.GD3453@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Sat, 19 May 2018 22:55:01 +0200, Thomas Petazzoni wrote:
-> In commit dfaa18af00dfcff71a0159adaafb0880e58fa6a1 ("ltrace: disable
-> on mips/mipsel"), ltrace was disabled on mips/mipsel due to build
-> issues, and a comment was added in the Config.in file to explain that
-> even though ltrace has mips/mipsel support, it isn't enabled because
-> it doesn't build.
+On 2018-05-20 19:22 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 25 Feb 2018 21:18:14 +0100, Yann E. MORIN wrote:
+> > Yann E. MORIN (6):
+> >       arch/arm: add cortex-m7 core
+> >       arch/arm: introduce generic FPU internal option
+> >       arch/arm: add option for FPv4 FPU
+> >       arch/arm: add options for FPv5 FPU
+> >       arch/arm: cortex-m4 may have an FPv4 FPU
+> >       arch/arm: cortex-m7 may have a FPv5 FPU
 > 
-> Then, in commit d23cce19c299e3010ba2dca84ab4ad35eff3cdbb ("ltrace:
-> enable for mips/mipsel"), the build of ltrace on mips/mipsel was
-> re-enabled, because it has been fixed upstream.
-> 
-> However, the comment in the Config.in comment was not removed in this
-> commit. Due to this, we have a comment that says "we don't allow
-> enabling ltrace on mips/mipsel" and the line right below precisely
-> allows to enable ltrace on mips/mipsel.
-> 
-> Fix this inconsistency by removing the no longer valid comment.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/ltrace/Config.in | 4 ----
->  1 file changed, 4 deletions(-)
+> Entire series applied to next.
 
-I've applied those two patches to master.
+Thank you! ;-)
 
-Thomas
+> As discussed on IRC, I initially screwed up and applied PATCH 1/6 on
+> the master branch, so I reverted it, and applied the whole thing on the
+> next branch.
+
+Fortunately, a highly-sedulous vigilante was quick to notice the issue
+and prompt the revert! ;-]
+
+Thanks! ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
