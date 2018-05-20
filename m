@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 16:15:45 +0200
-Subject: [Buildroot] [PATCH 1/7] libidn2: new package
-In-Reply-To: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
+Date: Sun, 20 May 2018 16:16:32 +0200
+Subject: [Buildroot] [PATCH 6/7] systemd: add optional dependency on
+ libidn2
+In-Reply-To: <20180501204038.20000-6-fontaine.fabrice@gmail.com>
 References: <20180501204038.20000-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180520161545.7ca05e2d@windsurf>
+ <20180501204038.20000-6-fontaine.fabrice@gmail.com>
+Message-ID: <20180520161632.0fe82ac8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +14,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 May 2018 22:40:32 +0200, Fabrice Fontaine wrote:
-> Libidn2 is an implementation of the IDNA2008 + TR46
-> specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
-> TR 46).
-> 
-> http://www.gnu.org/software/libidn/
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/libidn2/Config.in    | 17 +++++++++++++++++
->  package/libidn2/libidn2.hash |  8 ++++++++
->  package/libidn2/libidn2.mk   | 29 +++++++++++++++++++++++++++++
->  5 files changed, 56 insertions(+)
->  create mode 100644 package/libidn2/Config.in
->  create mode 100644 package/libidn2/libidn2.hash
->  create mode 100644 package/libidn2/libidn2.mk
+On Tue,  1 May 2018 22:40:37 +0200, Fabrice Fontaine wrote:
 
-I've applied the entire series to next. I've made a few changes, so
-I'll comment on the two patches on which I did changes.
+> +# Both options can't be selected at the same time so prefer libidn2
+> +ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+> +SYSTEMD_DEPENDENCIES += libidn2
+> +SYSTEMD_CONF_OPTS += -Dlibidn2=true
+> +else
+> +SYSTEMD_CONF_OPTS += -Dlibidn2=false
+>  ifeq ($(BR2_PACKAGE_LIBIDN),y)
+>  SYSTEMD_DEPENDENCIES += libidn
+>  SYSTEMD_CONF_OPTS += -Dlibidn=true
+>  else
+>  SYSTEMD_CONF_OPTS += -Dlibidn=false
+>  endif
+> +endif
 
-On this patch, here are the changes I made:
+This was a bit complicated so I've replaced with:
 
-    [Thomas:
-     - Use positive logic to test the BR2_PACKAGE_LIBIDN2_BINARY
-       condition.
-     - Put the definition of LIBIDN2_REMOVE_BINARY inside the
-       BR2_PACKAGE_LIBIDN2_BINARY condition, as suggested by Arnout.
-     - Adjust license details: library is under GPL-2.0+ or LGPL-3.0+,
-       while the command line tool is under GPL-3.0+.]
+# Both options can't be selected at the same time so prefer libidn2
+ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+SYSTEMD_DEPENDENCIES += libidn2
+SYSTEMD_CONF_OPTS += -Dlibidn2=true -Dlibidn=false
+else ifeq ($(BR2_PACKAGE_LIBIDN),y)
+SYSTEMD_DEPENDENCIES += libidn
+SYSTEMD_CONF_OPTS += -Dlibidn=true -Dlibidn2=false
+else
+SYSTEMD_CONF_OPTS += -Dlibidn=false -Dlibidn2=true
+endif
 
-Best regards,
+which I believe is simpler and more in line with what we do in
+Buildroot usually.
+
+Thanks!
 
 Thomas
 -- 
