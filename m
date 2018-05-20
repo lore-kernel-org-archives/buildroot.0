@@ -1,51 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 11:43:23 +0200
-Subject: [Buildroot] [PATCH 1/1] mbedtls: security bump to version 2.7.3
-In-Reply-To: <20180520081101.6039-1-fontaine.fabrice@gmail.com>
-References: <20180520081101.6039-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180520114323.6525586d@windsurf>
+Date: Sun, 20 May 2018 11:43:47 +0200
+Subject: [Buildroot] [git commit] libmodplug: add hash for license file
+Message-ID: <20180520095026.62D1E80404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e54c22429766faad882c37362bd138037b15e6ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 May 2018 10:11:01 +0200, Fabrice Fontaine wrote:
-> Extract from release announcement:
-> 
-> - (2.9, 2.7, 2.1) Fixed an issue in the X.509 module which could lead
-> to a buffer overread during certificate validation. Additionally, the
-> issue could also lead to unnecessary callback checks being made or to
-> some validation checks to be omitted. The overread could be triggered
-> remotely, while the other issues would require a non DER-compliant
-> certificate to be correctly signed by a trusted CA, or a trusted CA with
-> a non DER-compliant certificate. Found by luocm. Fixes #825.
-> 
-> - (2.9, 2.7, 2.1) Fixed the buffer length assertion in the
-> ssl_parse_certificate_request() function which could lead to an
-> arbitrary overread of the message buffer. The overreads could be caused
-> by receiving a malformed algorithms section which was too short. In
-> builds with debug output, this overread data was output with the debug
-> data.
-> 
-> - (2.9, 2.7, 2.1) Fixed a client-side bug in the validation of the
-> server's ciphersuite choice which could potentially lead to the client
-> accepting a ciphersuite it didn't offer or a ciphersuite that could not
-> be used with the TLS or DTLS version chosen by the server. This could
-> lead to corruption of internal data structures for some configurations.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mbedtls/mbedtls.hash | 6 +++---
->  package/mbedtls/mbedtls.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmodplug/libmodplug.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libmodplug/libmodplug.hash b/package/libmodplug/libmodplug.hash
+index 0077e26ccd..d50a56eeda 100644
+--- a/package/libmodplug/libmodplug.hash
++++ b/package/libmodplug/libmodplug.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  77462d12ee99476c8645cb5511363e3906b88b33a6b54362b4dbc0f39aa2daad  libmodplug-0.8.8.5.tar.gz
++sha256  49942e7b3b175f549e751feb08b5270ca6f6c5fb7a1be9f9517db275ec32c92e  COPYING
