@@ -1,118 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 12:32:00 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi*: bump kernel version
-Message-ID: <20180602101011.E1D767FACD@busybox.osuosl.org>
+Date: Sun, 20 May 2018 19:01:34 +0200
+Subject: [Buildroot] [git commit] arch/arm: introduce generic FPU internal
+ option
+Message-ID: <20180602101012.DB14D8055B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b677b490f7055963ac1f5a15856a6eab904ccbc7
+commit: https://git.buildroot.net/buildroot/commit/?id=7f7701301edc18042d6bd47b7ca3aae7c597670f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now based on 4.14.39 (from 4.14.29)
+Currently, we consider that any VFP FPU is a superset of VFPv2, and thus
+we use VFPv2 as a way to detect that a VFP is used.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+However, for Cortex-M cores, the optional FPU is not a superset of
+VFPv2; it is even not a VFP [0].
+
+As a consequence, we can no longer consider VFPv2 as a indication that
+an FPU is present.
+
+So, we introduce two new internal options, BR2_ARM_CPU_MAYBE_HAS_FPU and
+BR2_ARM_CPU_HAS_FPU, which we use to consider the presence of an FPU.
+
+[0] https://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/raspberrypi0_defconfig       | 2 +-
- configs/raspberrypi0w_defconfig      | 2 +-
- configs/raspberrypi2_defconfig       | 2 +-
- configs/raspberrypi3_64_defconfig    | 2 +-
- configs/raspberrypi3_defconfig       | 2 +-
- configs/raspberrypi3_qt5we_defconfig | 2 +-
- configs/raspberrypi_defconfig        | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+ arch/Config.in.arm | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 62c55fee20..ccf35da7de 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 7651d10927..c2f3f8d9a3 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -6,12 +6,21 @@ config BR2_ARM_CPU_HAS_NEON
+ config BR2_ARM_CPU_MAYBE_HAS_NEON
+ 	bool
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,865ddc1393f558198e7e7ce70928ff2e49c4f7f6)/linux-865ddc1393f558198e7e7ce70928ff2e49c4f7f6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
++# For some cores, the FPU is optional
++config BR2_ARM_CPU_MAYBE_HAS_FPU
++	bool
++
++config BR2_ARM_CPU_HAS_FPU
++	bool
++
+ # for some cores, VFPv2 is optional
+ config BR2_ARM_CPU_MAYBE_HAS_VFPV2
+ 	bool
++	select BR2_ARM_CPU_MAYBE_HAS_FPU
  
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index 95195bd5e8..a9defeb22b 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ config BR2_ARM_CPU_HAS_VFPV2
+ 	bool
++	select BR2_ARM_CPU_HAS_FPU
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,865ddc1393f558198e7e7ce70928ff2e49c4f7f6)/linux-865ddc1393f558198e7e7ce70928ff2e49c4f7f6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-0-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index bbb3900e41..b5e5110d00 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ # for some cores, VFPv3 is optional
+ config BR2_ARM_CPU_MAYBE_HAS_VFPV3
+@@ -450,7 +459,7 @@ config BR2_ARM_ENABLE_NEON
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,865ddc1393f558198e7e7ce70928ff2e49c4f7f6)/linux-865ddc1393f558198e7e7ce70928ff2e49c4f7f6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ config BR2_ARM_ENABLE_VFP
+ 	bool "Enable VFP extension support"
+-	depends on BR2_ARM_CPU_MAYBE_HAS_VFPV2
++	depends on BR2_ARM_CPU_MAYBE_HAS_FPU
+ 	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
+ 	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
+ 	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
+@@ -461,7 +470,7 @@ config BR2_ARM_ENABLE_VFP
  
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index df9f89927f..1a6e378e2c 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ choice
+ 	prompt "Target ABI"
+-	default BR2_ARM_EABIHF if BR2_ARM_CPU_HAS_VFPV2
++	default BR2_ARM_EABIHF if BR2_ARM_CPU_HAS_FPU
+ 	default BR2_ARM_EABI
+ 	depends on BR2_arm || BR2_armeb
+ 	help
+@@ -496,7 +505,7 @@ config BR2_ARM_EABI
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,865ddc1393f558198e7e7ce70928ff2e49c4f7f6)/linux-865ddc1393f558198e7e7ce70928ff2e49c4f7f6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ config BR2_ARM_EABIHF
+ 	bool "EABIhf"
+-	depends on BR2_ARM_CPU_HAS_VFPV2
++	depends on BR2_ARM_CPU_HAS_FPU
+ 	help
+ 	  The EABIhf is an extension of EABI which supports the 'hard'
+ 	  floating point model. This model uses the floating point
+@@ -520,7 +529,7 @@ choice
+ 	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
+ 	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
+ 	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
+-	default BR2_ARM_SOFT_FLOAT if !BR2_ARM_CPU_HAS_VFPV2
++	default BR2_ARM_SOFT_FLOAT if !BR2_ARM_CPU_HAS_FPU
  
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 45a76beb6a..856f321433 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,865ddc1393f558198e7e7ce70928ff2e49c4f7f6)/linux-865ddc1393f558198e7e7ce70928ff2e49c4f7f6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index ee76f2b682..f8debfdd31 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,865ddc1393f558198e7e7ce70928ff2e49c4f7f6)/linux-865ddc1393f558198e7e7ce70928ff2e49c4f7f6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 0460117eb8..d068f3e843 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,865ddc1393f558198e7e7ce70928ff2e49c4f7f6)/linux-865ddc1393f558198e7e7ce70928ff2e49c4f7f6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+ config BR2_ARM_SOFT_FLOAT
+ 	bool "Soft float"
