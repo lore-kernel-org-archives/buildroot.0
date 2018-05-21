@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 May 2018 10:00:39 +0200
-Subject: [Buildroot] [PATCH 4/4] package/collectd: allow the grpc plugin
- to be configured
-In-Reply-To: <20180521050550.11898-4-charles.hardin@storagecraft.com>
-References: <20180521050550.11898-1-charles.hardin@storagecraft.com>
- <20180521050550.11898-4-charles.hardin@storagecraft.com>
-Message-ID: <20180521100039.410647f7@windsurf>
+Date: Mon, 21 May 2018 10:19:28 +0200
+Subject: [Buildroot] [PATCH 1/4] nfs-utils: add host package
+In-Reply-To: <20180521060756.3r5e7zspbpvxfjjn@sapphire.tkos.co.il>
+References: <4b1f3623de3a8a4386f76d0f3cdd36b7c9b230dd.1526643119.git.baruch@tkos.co.il>
+ <20180519124412.5d533cf9@windsurf>
+ <20180521060756.3r5e7zspbpvxfjjn@sapphire.tkos.co.il>
+Message-ID: <20180521101928.74cdd62e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +14,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 May 2018 22:05:50 -0700, charles.hardin at storagecraft.com
-wrote:
-> From: Charles Hardin <charles.hardin@storagecraft.com>
-> 
-> Allow collectd to use the gRPC package since that package
-> can now be compiled as part of buildroot. This plugin can
-> be used to push collectd datasets over the network to
-> other instances as needed.
-> 
-> Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
-> ---
->  package/collectd/Config.in   | 6 ++++++
->  package/collectd/collectd.mk | 4 +++-
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-> index ccd3fbe13f..0848e3c343 100644
-> --- a/package/collectd/Config.in
-> +++ b/package/collectd/Config.in
-> @@ -248,6 +248,12 @@ config BR2_PACKAGE_COLLECTD_GPS
->  	  Reports the number of sattelites seen by and precision
->  	  of a GPS receiver.
->  
-> +config BR2_PACKAGE_COLLECTD_GRPC
-> +	bool "grpc"
-> +	select BR2_PACKAGE_GRPC
+On Mon, 21 May 2018 09:07:56 +0300, Baruch Siach wrote:
 
-You need to propagate the dependencies of the gprc package here. For
-example, collectd doesn't need C++ support, while gprc needs C++
-support.
+> > Do you have an idea on how to address this ? Do we need to build
+> > host-libtirpc ?  
+> 
+> I'll take a look.
 
-Best regards,
+Thanks!
+
+> If we need host-libtirpc we would not be able to remove the rpcgen patch since 
+> that would create a circular dependency.
+
+Except if we manage to convince host-libtirpc that it should just
+install the RPC headers, and not do anything that needs rpcgen.
+
+> Why do we actually need rpcgen in libtirpc?
+
+If I remember correctly, it's because it needs to generate the C code
+matching those RPC descriptions:
+
+./tirpc/rpc/rpcb_prot.x
+./tirpc/rpcsvc/crypt.x
+./tirpc/rpcsvc/key_prot.x
+
+But it's been a very long time I did this, and libtirpc has been
+updated multiple times since then.
+
+Alternatively, one approach would be to bundle a pre-generated version
+of those C files instead of having to run rpcgen. Not the nicest
+solution, but that's one solution.
 
 Thomas
 -- 
