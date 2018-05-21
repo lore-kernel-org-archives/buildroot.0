@@ -1,133 +1,114 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 May 2018 23:13:52 +0200
-Subject: [Buildroot] [git commit] libmediaart: rename options to have proper
+Date: Mon, 21 May 2018 23:09:36 +0200
+Subject: [Buildroot] [git commit] ipsec-tools: rename options to have proper
  prefix
-Message-ID: <20180521212027.3AC6D7FFCC@busybox.osuosl.org>
+Message-ID: <20180521212027.1369D7F95E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8553b3988717664a7130bcd58f54eb65cdb8c9e0
+commit: https://git.buildroot.net/buildroot/commit/?id=9d2c5c2540bff90877043c6f8c70a5aebc3304db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Options should be prefixed by BR2_PACKAGE_LIBMEDIAART and not
-BR2_PACKAGE_MEDIAART, but package was using both prefixes.
+A number of options in the ipsec-tools package had their Config.in
+option prefixed by BR2_PACKAGE_IPSEC, while the prefix should be
+BR2_PACKAGE_IPSEC_TOOLS. This commit fixes that, and adds the
+necessary Config.in.legacy handling.
 
-This was found as default symbol was defined as
-BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE (correct prefix), but symbol
-was actually BR2_PACKAGE_MEDIAART_BACKEND_NONE).
+Since those options are part of a choice, the legacy handling cannot
+select the new name of the options, so the legacy handling only
+informs the user of the rename.
 
-This commit therefore renames the incorrectly named options, and adds
-Config.in.legacy handling. Since the options are part of a choice, the
-legacy handling cannot select the new options, and is only here to
-inform the user.
-
-Fixes: c443830a57 libmediaart: new package
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-[Thomas: improve commit log, add Config.in.legacy handling]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  Config.in.legacy                   | 24 ++++++++++++++++++++++++
- package/libmediaart/Config.in      |  8 ++++----
- package/libmediaart/libmediaart.mk |  6 +++---
+ package/ipsec-tools/Config.in      |  8 ++++----
+ package/ipsec-tools/ipsec-tools.mk |  6 +++---
  3 files changed, 31 insertions(+), 7 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 4c00080965..e7b0316a4f 100644
+index 7ec9526710..4e4f499454 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -145,6 +145,30 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2018.05"
  
-+config BR2_PACKAGE_MEDIAART_BACKEND_NONE
-+	bool "libmediaart none backend option renamed"
++config BR2_PACKAGE_IPSEC_SECCTX_DISABLE
++	bool "ipsec-tools security context disable option renamed"
 +	select BR2_LEGACY
 +	help
 +	  For consistency reasons, the option
-+	  BR2_PACKAGE_MEDIAART_BACKEND_NONE has been renamed to
-+	  BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
++	  BR2_PACKAGE_IPSEC_SECCTX_DISABLE was renamed to
++	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE.
 +
-+config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF
-+	bool "libmediaart gdk-pixbuf backend option renamed"
++config BR2_PACKAGE_IPSEC_SECCTX_ENABLE
++	bool "ipsec-tools SELinux security context enable option renamed"
 +	select BR2_LEGACY
 +	help
 +	  For consistency reasons, the option
-+	  BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF has been renamed to
-+	  BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
++	  BR2_PACKAGE_IPSEC_SECCTX_ENABLE was renamed to
++	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE.
 +
-+config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF
-+	bool "libmediaart qt backend option renamed"
++config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
++	bool "ipsec-tools kernel security context enable option renamed"
 +	select BR2_LEGACY
 +	help
 +	  For consistency reasons, the option
-+	  BR2_PACKAGE_MEDIAART_BACKEND_QT has been renamed to
-+	  BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
++	  BR2_PACKAGE_IPSEC_SECCTX_KERNEL was renamed to
++	  BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL.
 +
- config BR2_PACKAGE_TI_SGX_AM335X
- 	bool "ti-sgx-km AM335X option renamed"
+ config BR2_PACKAGE_LIBTFDI_CPP
+ 	bool "libftdi C++ bindings option renamed"
  	select BR2_LEGACY
-diff --git a/package/libmediaart/Config.in b/package/libmediaart/Config.in
-index e5e770d4fc..e073677395 100644
---- a/package/libmediaart/Config.in
-+++ b/package/libmediaart/Config.in
-@@ -20,17 +20,17 @@ choice
- 	prompt "media art backend"
- 	default BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
+diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
+index 1635675a36..59154123e6 100644
+--- a/package/ipsec-tools/Config.in
++++ b/package/ipsec-tools/Config.in
+@@ -57,17 +57,17 @@ config BR2_PACKAGE_IPSEC_TOOLS_HYBRID
  
--config BR2_PACKAGE_MEDIAART_BACKEND_NONE
-+config BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE
- 	bool "none"
+ choice
+ 	prompt "Security context"
+-	default BR2_PACKAGE_IPSEC_SECCTX_DISABLE
++	default BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE
  	help
- 	  With no backend, libmediaart will not be able to process MP3
- 	  album art.
+ 	  Selects whether or not to enable security context support.
  
--config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF
-+config BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF
- 	bool "gdk-pixbuf"
- 	select BR2_PACKAGE_GDK_PIXBUF
+-config BR2_PACKAGE_IPSEC_SECCTX_DISABLE
++config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE
+ 	bool "Disable security context support"
  
--config BR2_PACKAGE_MEDIAART_BACKEND_QT
-+config BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
- 	bool "Qt"
- 	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
-@@ -41,4 +41,4 @@ comment "Qt backend depends on Qt or Qt5"
+-config BR2_PACKAGE_IPSEC_SECCTX_ENABLE
++config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE
+ 	bool "Enable SELinux security context support"
+ 
+-config BR2_PACKAGE_IPSEC_SECCTX_KERNEL
++config BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL
+ 	bool "Enable kernel security context"
  
  endchoice
+diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+index c0b180de55..ddae9a75f3 100644
+--- a/package/ipsec-tools/ipsec-tools.mk
++++ b/package/ipsec-tools/ipsec-tools.mk
+@@ -68,13 +68,13 @@ else
+ IPSEC_TOOLS_CONF_OPTS += --disable-hybrid
+ endif
  
--endif # BR2_PACKAGE_MEDIAART
-+endif # BR2_PACKAGE_LIBMEDIAART
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index db4f1fa2a1..f64210c266 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -15,12 +15,12 @@ LIBMEDIAART_INSTALL_STAGING = YES
- LIBMEDIAART_DEPENDENCIES = libglib2
- LIBMEDIAART_CONF_OPTS = --disable-unit-tests
+-ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_DISABLE),y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_DISABLE),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-security-context=no
+ endif
+-ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_ENABLE),y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_ENABLE),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-security-context=yes
+ endif
+-ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_KERNEL),y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_SECCTX_KERNEL),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-security-context=kernel
+ endif
  
--ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF),y)
-+ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_GDK_PIXBUF),y)
- LIBMEDIAART_DEPENDENCIES += gdk-pixbuf
- LIBMEDIAART_CONF_OPTS += \
- 	--enable-gdkpixbuf \
- 	--disable-qt
--else ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_QT),y)
-+else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_QT),y)
- # qt5 needs c++11 (since qt-5.7)
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-@@ -31,7 +31,7 @@ LIBMEDIAART_DEPENDENCIES += \
- LIBMEDIAART_CONF_OPTS += \
- 	--disable-gdkpixbuf \
- 	--enable-qt
--else ifeq ($(BR2_PACKAGE_MEDIAART_BACKEND_NONE),y)
-+else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE),y)
- LIBMEDIAART_CONF_OPTS += \
- 	--disable-gdkpixbuf \
- 	--disable-qt
