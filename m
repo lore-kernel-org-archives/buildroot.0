@@ -1,39 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 May 2018 17:46:50 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{9, 14, 16}.x series
-Message-ID: <20180521155400.EA98C81882@busybox.osuosl.org>
+Date: Mon, 21 May 2018 17:46:43 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.16.10
+Message-ID: <20180521155400.E5D727FB47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d8afca9c69dc5246736d20d6e6ed266ccb70387
+commit: https://git.buildroot.net/buildroot/commit/?id=127c0f3e474631f143d750b03647d34e80382662
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d37b68afa5..c7640f1ab2 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -251,12 +251,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.131"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.99"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.101"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.40"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.42"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
--	default "4.16.8"	if BR2_KERNEL_HEADERS_4_16
-+	default "4.16.10"	if BR2_KERNEL_HEADERS_4_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index e202061831..29c8c7e4f2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.16.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.16.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
