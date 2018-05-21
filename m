@@ -1,86 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 May 2018 17:54:14 +0200
-Subject: [Buildroot] [PATCH] modem-manager: remove -Werror from CFLAGS
-In-Reply-To: <20180521114529.3513-1-casantos@datacom.ind.br> (Carlos Santos's
- message of "Mon, 21 May 2018 08:45:29 -0300")
-References: <CAGm1_kuEqW+Mito5P8rMxdM+zrCFAxpu2TzsZa=mvDAK8d1e1w@mail.gmail.com>
- <20180521114529.3513-1-casantos@datacom.ind.br>
-Message-ID: <87603hj97d.fsf@dell.be.48ers.dk>
+Date: Mon, 21 May 2018 17:44:47 +0200
+Subject: [Buildroot] [git commit] package/imx-mkimage: update hash
+Message-ID: <20180521155400.D83F481D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a46bddbc222c67f3234bd8cf93dcb3fe225eb2d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > We are aproaching the 2018.05 release and modem-manager is still broken
- > due to warnings like this:
+Due to an update in the tar logic, see commit 6e2f5d0254 (download/git: fix
+transform regexp for older tar versions ) - This hash needs to be updated.
 
- >   mm-base-manager.c: In function 'handle_set_logging':
- >   mm-base-manager.c:680:15: warning: assignment from incompatible pointer type [-Wincompatible-pointer-types]
- ctx-> self = g_object_ref (manager);
- >                  ^
+Fixes:
 
- > There is a macro defined in build/libglib2-2.56.1/gobject/gobject.h
- > which leads to the assignment errors:
+  http://autobuild.buildroot.net/results/7c63ab1188a45d4684e159456f561a4e7c39e612/
 
- >   511 /* Make reference APIs type safe with macros */
- >   512 #define g_object_ref(Obj)      ((__typeof__(Obj)) (g_object_ref) (Obj))
+Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imx-mkimage/imx-mkimage.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > The problem can be easily reproduced with this sample code:
-
- >   $ cat test.c
- >   extern void *g_object_ref(void *);
- >   #define g_object_ref(Obj) ((__typeof__(Obj)) (g_object_ref) (Obj))
- >   extern double *new_double(int *);
- >   double *new_double(int *ip) {
- >     double *dp;
- >     dp = g_object_ref(ip);
- >     return dp;
- >   }
-
- >   $ gcc -Wall -Werror -c /tmp/test.c -o /tmp/test.o
- >   /tmp/test.c: In function ?new_context?:
- >   /tmp/test.c:19:13: error: assignment from incompatible pointer type [-Werror=incompatible-pointer-types]
- ctx-> self = g_object_ref(om);
- >                ^
- >   cc1: all warnings being treated as errors
-
- > Fixing the code would require either changing the 120 ofending calls to
- > g_object_ref or a refactoring to make all types assignment compatible.
- > Let's take a simpler approach, disabling -Werror, and wait for the next
- > release of ModemManager.
-
- > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
- > ---
- >  package/modem-manager/modem-manager.mk | 6 ++++++
- >  1 file changed, 6 insertions(+)
-
- > diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
- > index 100c4a2941..ba4711b6c2 100644
- > --- a/package/modem-manager/modem-manager.mk
- > +++ b/package/modem-manager/modem-manager.mk
- > @@ -19,6 +19,12 @@ else
- >  MODEM_MANAGER_CONF_OPTS += --without-qmi
- >  endif
- 
- > +define MODEM_MANAGER_REMOVE_WERROR
- > +	$(SED) 's: -Werror::' $(@D)/configure
- > +endef
-
--Werror seems to come from m4/compiler_warnings.m4:
-
-AC_ARG_ENABLE(more-warnings,
-        AS_HELP_STRING([--enable-more-warnings], [Maximum compiler warnings]),
-        set_more_warnings="$enableval",set_more_warnings=yes)
-AC_MSG_CHECKING(for more warnings, including -Werror)
-if test "$GCC" = "yes" -a "$set_more_warnings" != "no"; then
-        AC_MSG_RESULT(yes)
-        CFLAGS="-Wall -Werror -std=gnu89 $CFLAGS"
-
-Wouldn't passing --disable-more-warnings work instead of hacking up
-configure?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
+index 5ecb92d22e..e1cbdd973c 100644
+--- a/package/imx-mkimage/imx-mkimage.hash
++++ b/package/imx-mkimage/imx-mkimage.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 17e8285a346eb19d00780b13916dc281421c5b955707b9f2a662a6734142f1fb  imx-mkimage-rel_imx_4.9.51_8mq_ga.tar.gz
++sha256 bc79e11cfbde303e200287fa6624028c8ce5344f8a35ed179b3fe217d74155da  imx-mkimage-rel_imx_4.9.51_8mq_ga.tar.gz
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  iMX8dv/COPYING
