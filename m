@@ -1,79 +1,39 @@
-From: charles.hardin at storagecraft.com <charles.hardin@storagecraft.com>
-Date: Mon, 21 May 2018 10:53:10 -0700
-Subject: [Buildroot] [PATCH v2 5/5] package/collectd: allow the grpc plugin
- to be configured
-In-Reply-To: <20180521175310.18563-1-charles.hardin@storagecraft.com>
-References: <20180521175310.18563-1-charles.hardin@storagecraft.com>
-Message-ID: <20180521175310.18563-6-charles.hardin@storagecraft.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 May 2018 20:10:24 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-04-25
+In-Reply-To: <CANQCQpaJZaMHUjskdyeb4tbWMtkghBtctgnm696bVsct1m=vkw@mail.gmail.com>
+ (Matthew Weber's message of "Mon, 21 May 2018 10:05:12 -0500")
+References: <20180426060013.EAB262079F@mail.bootlin.com>
+ <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
+ <20180430091509.3a9cdff2@windsurf>
+ <cab2ab99-f53c-448f-7cdb-77456a189664@smile.fr>
+ <56ce1d9d-7b2a-1cda-52e3-a01094e6713a@gmail.com>
+ <CANQCQpZzeALsKx7GFMUD_jSSn+=YS9KZBoOeuf7dUR8Um1pJDQ@mail.gmail.com>
+ <87zi0unjn5.fsf@dell.be.48ers.dk>
+ <CANQCQpaJZaMHUjskdyeb4tbWMtkghBtctgnm696bVsct1m=vkw@mail.gmail.com>
+Message-ID: <871se4khgv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Charles Hardin <charles.hardin@storagecraft.com>
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-Allow collectd to use the gRPC package since that package
-can now be compiled as part of buildroot. This plugin can
-be used to push collectd datasets over the network to
-other instances as needed.
+Hi,
 
-Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
----
- package/collectd/Config.in   | 11 +++++++++++
- package/collectd/collectd.mk |  4 +++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ >> Hmm, I don't really feel confident adding patches that upstream find too
+ >> scary. What is the alternative? Does this only affect libnss on
+ >> Microblaze?
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index ccd3fbe13f..5f25f01cb8 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -248,6 +248,17 @@ config BR2_PACKAGE_COLLECTD_GPS
- 	  Reports the number of sattelites seen by and precision
- 	  of a GPS receiver.
- 
-+config BR2_PACKAGE_COLLECTD_GRPC
-+	bool "grpc"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_GRPC
-+	help
-+	  Add support for the gRPC plugin for network communication
-+
-+comment "grpc needs a toolchain w/ C++, threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-+
- config BR2_PACKAGE_COLLECTD_HUGEPAGES
- 	bool "hugepages"
- 	help
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 6c987b2e36..00efee4a18 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -15,7 +15,7 @@ COLLECTD_LICENSE_FILES = COPYING
- # These require unmet dependencies, are fringe, pointless or deprecated
- COLLECTD_PLUGINS_DISABLE = \
- 	amqp apple_sensors aquaero ascent barometer dbi dpdkstat email \
--	gmond grpc hddtemp intel_rdt ipmi java libvirt lpar lvm \
-+	gmond hddtemp intel_rdt ipmi java libvirt lpar lvm \
- 	madwifi mbmon mic multimeter netapp notify_desktop numa \
- 	nut onewire oracle perl pf pinba powerdns python redis routeros \
- 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
-@@ -73,6 +73,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_FSCACHE),--enable-fscache,--disable-fscache) \
- 	$(if $(BR2_PACKAGE_COLLECTD_GPS),--enable-gps,--disable-gps) \
- 	$(if $(BR2_PACKAGE_COLLECTD_GRAPHITE),--enable-write_graphite,--disable-write_graphite) \
-+	$(if $(BR2_PACKAGE_COLLECTD_GRPC),--enable-grpc,--disable-grpc) \
- 	$(if $(BR2_PACKAGE_COLLECTD_HASHED),--enable-match_hashed,--disable-match_hashed) \
- 	$(if $(BR2_PACKAGE_COLLECTD_HUGEPAGES),--enable-hugepages,--disable-hugepages) \
- 	$(if $(BR2_PACKAGE_COLLECTD_INTERFACE),--enable-interface,--disable-interface) \
-@@ -148,6 +149,7 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
- 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
- 	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
-+	$(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
- 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
+ > Correct, only libnss on Microblaze.  Romain had suggested adding a GCC
+ > bug for it instead.  (ie  like BR2_TOOLCHAIN_HAS_GCC_BUG_64735)
+
+I think that is the best solution, yes. libnss luckily does not have a
+lot of reverse dependencies.
+
+Will you send a patch?
+
 -- 
-2.15.1 (Apple Git-101)
+Bye, Peter Korsgaard
