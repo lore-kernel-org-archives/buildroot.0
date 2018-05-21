@@ -1,42 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 May 2018 23:50:27 +0200
-Subject: [Buildroot] [git commit] modem-manager: disable -Werror
-Message-ID: <20180521214934.04F3081434@busybox.osuosl.org>
+Date: Mon, 21 May 2018 23:52:27 +0200
+Subject: [Buildroot] [PATCH] package/gcc: add support for gcc 8.1
+In-Reply-To: <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com> (Romain Naour's
+ message of "Mon, 21 May 2018 17:45:02 +0200")
+References: <20180505105844.5278-1-romain.naour@gmail.com>
+ <20180520124507.23c2a29b@windsurf>
+ <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
+Message-ID: <87bmd8ismc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2136d0872d22923a06c11688b4ea7059f9d40db1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/5d9/5d9e299ff12726d07e8a584a213c1d2a2e419594/
+Hi,
 
-The modem-manager build generates a number of build warnings like:
+ > See the reply from Arnout and Dagg for gcc 4.9:
+ > http://patchwork.ozlabs.org/patch/767087
 
-mm-base-manager.c: In function 'handle_set_logging':
-mm-base-manager.c:680:15: error: assignment from incompatible pointer type [-Werror]
-     ctx->self = g_object_ref (manager);
+ > I'm not sure that the odroidc2 defconfig is able to build with gcc >= 4.9 since
+ > it's stuck at kernel odroidc2-3.14.y and uboot odroidc2-v2015.01.
+ > Dagg, what do we do for this board?
 
-Which cause a build failure because of -Werror.  Pass
---disable-more-warnings to disable -Werror.
+I believe that mainline support for this board is fairly far, so if that
+is the only thing keeping 4.9 around I think we can drop it.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/modem-manager/modem-manager.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 100c4a2941..fe4a7a95da 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -11,6 +11,7 @@ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
- MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
- MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2 libgudev
- MODEM_MANAGER_INSTALL_STAGING = YES
-+MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
- 
- ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
- MODEM_MANAGER_DEPENDENCIES += libqmi
+-- 
+Bye, Peter Korsgaard
