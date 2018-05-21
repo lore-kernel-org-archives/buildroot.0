@@ -1,204 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 May 2018 15:27:20 +0200
-Subject: [Buildroot] [PATCH] wavpack: add upstream security fixes
-Message-ID: <20180521132720.17915-1-peter@korsgaard.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 21 May 2018 10:05:12 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-04-25
+In-Reply-To: <87zi0unjn5.fsf@dell.be.48ers.dk>
+References: <20180426060013.EAB262079F@mail.bootlin.com>
+ <18cd8156-03bc-05cf-5343-dec77dbf01a9@gmail.com>
+ <20180430091509.3a9cdff2@windsurf>
+ <cab2ab99-f53c-448f-7cdb-77456a189664@smile.fr>
+ <56ce1d9d-7b2a-1cda-52e3-a01094e6713a@gmail.com>
+ <CANQCQpZzeALsKx7GFMUD_jSSn+=YS9KZBoOeuf7dUR8Um1pJDQ@mail.gmail.com>
+ <87zi0unjn5.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpaJZaMHUjskdyeb4tbWMtkghBtctgnm696bVsct1m=vkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Peter,
 
-CVE-2018-10536: An issue was discovered in WavPack 5.1.0 and earlier.  The
-WAV parser component contains a vulnerability that allows writing to memory
-because ParseRiffHeaderConfig in riff.c does not reject multiple format
-chunks.
+On Sun, May 20, 2018 at 3:42 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+>
+> Hi,
+>
+>  >> I'm waiting for the backport in the gcc-7-branch.
+>  >>
+>  >> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+>
+>  > I backed up and applied this bug's patch to 6.x as a last attempt to
+>  > resolve what I was observing with libnss (the build was successful).
+>  > I posted more detail in the bug report Romain referenced.  There
+>  > wasn't an actual commit to track down on this issue, it feels like it
+>  > was a backport introducing a design flaw and this patch just prevents
+>  > a infinite runaway of the optimization step.
+>
+>  > It does look like they have now decided to not backport this to 7.x,
+>  > so unsure what you guys think about applying it to buildroot.
+>
+> Hmm, I don't really feel confident adding patches that upstream find too
+> scary. What is the alternative? Does this only affect libnss on
+> Microblaze?
+>
 
-CVE-2018-10537: An issue was discovered in WavPack 5.1.0 and earlier.  The
-W64 parser component contains a vulnerability that allows writing to memory
-because ParseWave64HeaderConfig in wave64.c does not reject multiple format
-chunks.
+Correct, only libnss on Microblaze.  Romain had suggested adding a GCC
+bug for it instead.  (ie  like BR2_TOOLCHAIN_HAS_GCC_BUG_64735)
 
-CVE-2018-10538: An issue was discovered in WavPack 5.1.0 and earlier for WAV
-input.  Out-of-bounds writes can occur because ParseRiffHeaderConfig in
-riff.c does not validate the sizes of unknown chunks before attempting
-memory allocation, related to a lack of integer-overflow protection within a
-bytes_to_copy calculation and subsequent malloc call, leading to
-insufficient memory allocation.
-
-CVE-2018-10539: An issue was discovered in WavPack 5.1.0 and earlier for
-DSDiff input.  Out-of-bounds writes can occur because
-ParseDsdiffHeaderConfig in dsdiff.c does not validate the sizes of unknown
-chunks before attempting memory allocation, related to a lack of
-integer-overflow protection within a bytes_to_copy calculation and
-subsequent malloc call, leading to insufficient memory allocation.
-
-CVE-2018-10540: An issue was discovered in WavPack 5.1.0 and earlier for W64
-input.  Out-of-bounds writes can occur because ParseWave64HeaderConfig in
-wave64.c does not validate the sizes of unknown chunks before attempting
-memory allocation, related to a lack of integer-overflow protection within a
-bytes_to_copy calculation and subsequent malloc call, leading to
-insufficient memory allocation.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...sue-31-issue-32-no-multiple-format-chunks.patch | 64 ++++++++++++++++++
- ...nitize-size-of-unknown-chunks-before-mall.patch | 75 ++++++++++++++++++++++
- 2 files changed, 139 insertions(+)
- create mode 100644 package/wavpack/0005-issue-30-issue-31-issue-32-no-multiple-format-chunks.patch
- create mode 100644 package/wavpack/0006-issue-33-sanitize-size-of-unknown-chunks-before-mall.patch
-
-diff --git a/package/wavpack/0005-issue-30-issue-31-issue-32-no-multiple-format-chunks.patch b/package/wavpack/0005-issue-30-issue-31-issue-32-no-multiple-format-chunks.patch
-new file mode 100644
-index 0000000000..f837a0e966
---- /dev/null
-+++ b/package/wavpack/0005-issue-30-issue-31-issue-32-no-multiple-format-chunks.patch
-@@ -0,0 +1,64 @@
-+From 26cb47f99d481ad9b93eeff80d26e6b63bbd7e15 Mon Sep 17 00:00:00 2001
-+From: David Bryant <david@wavpack.com>
-+Date: Tue, 24 Apr 2018 22:18:07 -0700
-+Subject: [PATCH] issue #30 issue #31 issue #32: no multiple format chunks in
-+ WAV or W64
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cli/riff.c   | 7 ++++++-
-+ cli/wave64.c | 6 ++++++
-+ 2 files changed, 12 insertions(+), 1 deletion(-)
-+
-+diff --git a/cli/riff.c b/cli/riff.c
-+index 7bddf63..5d6452e 100644
-+--- a/cli/riff.c
-++++ b/cli/riff.c
-+@@ -53,7 +53,7 @@ extern int debug_logging_mode;
-+ 
-+ int ParseRiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, WavpackContext *wpc, WavpackConfig *config)
-+ {
-+-    int is_rf64 = !strncmp (fourcc, "RF64", 4), got_ds64 = 0;
-++    int is_rf64 = !strncmp (fourcc, "RF64", 4), got_ds64 = 0, format_chunk = 0;
-+     int64_t total_samples = 0, infilesize;
-+     RiffChunkHeader riff_chunk_header;
-+     ChunkHeader chunk_header;
-+@@ -140,6 +140,11 @@ int ParseRiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpack
-+         else if (!strncmp (chunk_header.ckID, "fmt ", 4)) {     // if it's the format chunk, we want to get some info out of there and
-+             int supported = TRUE, format;                        // make sure it's a .wav file we can handle
-+ 
-++            if (format_chunk++) {
-++                error_line ("%s is not a valid .WAV file!", infilename);
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-+             if (chunk_header.ckSize < 16 || chunk_header.ckSize > sizeof (WaveHeader) ||
-+                 !DoReadFile (infile, &WaveHeader, chunk_header.ckSize, &bcount) ||
-+                 bcount != chunk_header.ckSize) {
-+diff --git a/cli/wave64.c b/cli/wave64.c
-+index fa928a0..0388dc7 100644
-+--- a/cli/wave64.c
-++++ b/cli/wave64.c
-+@@ -53,6 +53,7 @@ int ParseWave64HeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpa
-+     Wave64ChunkHeader chunk_header;
-+     Wave64FileHeader filehdr;
-+     WaveHeader WaveHeader;
-++    int format_chunk = 0;
-+     uint32_t bcount;
-+ 
-+     infilesize = DoGetFileSize (infile);
-+@@ -104,6 +105,11 @@ int ParseWave64HeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpa
-+         if (!memcmp (chunk_header.ckID, fmt_guid, sizeof (fmt_guid))) {
-+             int supported = TRUE, format;
-+ 
-++            if (format_chunk++) {
-++                error_line ("%s is not a valid .W64 file!", infilename);
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-+             chunk_header.ckSize = (chunk_header.ckSize + 7) & ~7L;
-+ 
-+             if (chunk_header.ckSize < 16 || chunk_header.ckSize > sizeof (WaveHeader) ||
-+-- 
-+2.11.0
-+
-diff --git a/package/wavpack/0006-issue-33-sanitize-size-of-unknown-chunks-before-mall.patch b/package/wavpack/0006-issue-33-sanitize-size-of-unknown-chunks-before-mall.patch
-new file mode 100644
-index 0000000000..76ebce66d6
---- /dev/null
-+++ b/package/wavpack/0006-issue-33-sanitize-size-of-unknown-chunks-before-mall.patch
-@@ -0,0 +1,75 @@
-+From 6f8bb34c2993a48ab9afbe353e6d0cff7c8d821d Mon Sep 17 00:00:00 2001
-+From: David Bryant <david@wavpack.com>
-+Date: Tue, 24 Apr 2018 17:27:01 -0700
-+Subject: [PATCH] issue #33, sanitize size of unknown chunks before malloc()
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ cli/dsdiff.c | 9 ++++++++-
-+ cli/riff.c   | 9 ++++++++-
-+ cli/wave64.c | 9 ++++++++-
-+ 3 files changed, 24 insertions(+), 3 deletions(-)
-+
-+diff --git a/cli/dsdiff.c b/cli/dsdiff.c
-+index c016df9..fa56bbb 100644
-+--- a/cli/dsdiff.c
-++++ b/cli/dsdiff.c
-+@@ -279,7 +279,14 @@ int ParseDsdiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpa
-+         else {          // just copy unknown chunks to output file
-+ 
-+             int bytes_to_copy = (int)(((dff_chunk_header.ckDataSize) + 1) & ~(int64_t)1);
-+-            char *buff = malloc (bytes_to_copy);
-++            char *buff;
-++
-++            if (bytes_to_copy < 0 || bytes_to_copy > 4194304) {
-++                error_line ("%s is not a valid .DFF file!", infilename);
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-++            buff = malloc (bytes_to_copy);
-+ 
-+             if (debug_logging_mode)
-+                 error_line ("extra unknown chunk \"%c%c%c%c\" of %d bytes",
-+diff --git a/cli/riff.c b/cli/riff.c
-+index de98c1e..7bddf63 100644
-+--- a/cli/riff.c
-++++ b/cli/riff.c
-+@@ -286,7 +286,14 @@ int ParseRiffHeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpack
-+         else {          // just copy unknown chunks to output file
-+ 
-+             int bytes_to_copy = (chunk_header.ckSize + 1) & ~1L;
-+-            char *buff = malloc (bytes_to_copy);
-++            char *buff;
-++
-++            if (bytes_to_copy < 0 || bytes_to_copy > 4194304) {
-++                error_line ("%s is not a valid .WAV file!", infilename);
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-++            buff = malloc (bytes_to_copy);
-+ 
-+             if (debug_logging_mode)
-+                 error_line ("extra unknown chunk \"%c%c%c%c\" of %d bytes",
-+diff --git a/cli/wave64.c b/cli/wave64.c
-+index 591d640..fa928a0 100644
-+--- a/cli/wave64.c
-++++ b/cli/wave64.c
-+@@ -241,7 +241,14 @@ int ParseWave64HeaderConfig (FILE *infile, char *infilename, char *fourcc, Wavpa
-+         }
-+         else {          // just copy unknown chunks to output file
-+             int bytes_to_copy = (chunk_header.ckSize + 7) & ~7L;
-+-            char *buff = malloc (bytes_to_copy);
-++            char *buff;
-++
-++            if (bytes_to_copy < 0 || bytes_to_copy > 4194304) {
-++                error_line ("%s is not a valid .W64 file!", infilename);
-++                return WAVPACK_SOFT_ERROR;
-++            }
-++
-++            buff = malloc (bytes_to_copy);
-+ 
-+             if (debug_logging_mode)
-+                 error_line ("extra unknown chunk \"%c%c%c%c\" of %d bytes",
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Matt
