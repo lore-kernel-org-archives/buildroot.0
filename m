@@ -1,56 +1,71 @@
 From: charles.hardin at storagecraft.com <charles.hardin@storagecraft.com>
-Date: Mon, 21 May 2018 10:53:06 -0700
-Subject: [Buildroot] [PATCH v2 1/5] package/protobuf: bump to version 3.5.1
+Date: Mon, 21 May 2018 10:53:07 -0700
+Subject: [Buildroot] [PATCH v2 2/5] package/protobuf: add a patch for mips
+ big endian
 In-Reply-To: <20180521175310.18563-1-charles.hardin@storagecraft.com>
 References: <20180521175310.18563-1-charles.hardin@storagecraft.com>
-Message-ID: <20180521175310.18563-2-charles.hardin@storagecraft.com>
+Message-ID: <20180521175310.18563-3-charles.hardin@storagecraft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+From: Charles Hardin <charles.hardin@storagecraft.com>
 
-GRPC requires protobuf 3.5.0+
+This patch got submitted as a pull upstream, but hasn't
+been approved or yanked in yet. So, adding it here
+for now until an upstream solution is determined.
 
-Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 454aa2da5e79ec8627f1d66ac640ec7bb04025dc)
+Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ ...w-a-compilation-under-mips-big-endian-wit.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index fa02440a40..4492487efb 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 2bb34b4a8211a30d12ef29fd8660995023d119c99fbab2e5fe46f17528c9cc78 protobuf-cpp-3.4.1.tar.gz
-+sha256 c28dba8782da2cfea1e11c61d335958c31a9c1bc553063546af9cbe98f204092 protobuf-cpp-3.5.1.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index d2782ddcfd..1440589c14 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works, as they share the same
- # version/site variables.
--PROTOBUF_VERSION = 3.4.1
-+PROTOBUF_VERSION = 3.5.1
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 91cab4ecc0..9c7606ce34 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 1faa722cf475c8e4c43ddb393d6f1477f1a56c93be38a1c8e367c358db476b5f protobuf-python-3.4.1.tar.gz
-+sha256 13d3c15ebfad8c28bee203dd4a0f6e600d2a7d2243bac8b5d0e517466500fcae protobuf-python-3.5.1.tar.gz
+diff --git a/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch b/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch
+new file mode 100644
+index 0000000000..b98a459be8
+--- /dev/null
++++ b/package/protobuf/0001-Fix-to-allow-a-compilation-under-mips-big-endian-wit.patch
+@@ -0,0 +1,38 @@
++From d105213bccfa4392eda889a95f808dd9cdf84494 Mon Sep 17 00:00:00 2001
++From: Charles Hardin <charles.hardin@storagecraft.com>
++Date: Mon, 21 May 2018 09:19:30 -0700
++Subject: [PATCH 1/1] Fix to allow a compilation under mips big endian with gcc
++
++The __MIPSEL__ is mips little endian, specific and we needed
++to compile for a big endian mips target that also happened
++to be a mips64, so replaced the __MIPSEL__ with a __mip__
++which should preserve the build on little endian and allow a
++build for a big endian setup.
++
++	$ echo | mips64-linux-gcc -E -dM -
++	... snip snip ...
++	#define __mips__ 1
++	#define __MIPSEB__ 1
++
++Signed-off-by: Charles Hardin <ckhardin@gmail.com>
++Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
++---
++ src/google/protobuf/stubs/platform_macros.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/google/protobuf/stubs/platform_macros.h b/src/google/protobuf/stubs/platform_macros.h
++index c3a64dd2..f9e2bff6 100644
++--- a/src/google/protobuf/stubs/platform_macros.h
+++++ b/src/google/protobuf/stubs/platform_macros.h
++@@ -56,7 +56,7 @@
++ #elif defined(__aarch64__)
++ #define GOOGLE_PROTOBUF_ARCH_AARCH64 1
++ #define GOOGLE_PROTOBUF_ARCH_64_BIT 1
++-#elif defined(__MIPSEL__)
+++#elif defined(__mips__)
++ #if defined(__LP64__)
++ #define GOOGLE_PROTOBUF_ARCH_MIPS64 1
++ #define GOOGLE_PROTOBUF_ARCH_64_BIT 1
++-- 
++2.15.1 (Apple Git-101)
++
 -- 
 2.15.1 (Apple Git-101)
