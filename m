@@ -1,50 +1,64 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 21 May 2018 19:33:19 +0300
-Subject: [Buildroot] [PATCH] arch: drop now useless support for FDPIC
-In-Reply-To: <20180521161706.3151-1-yann.morin.1998@free.fr>
-References: <20180521161706.3151-1-yann.morin.1998@free.fr>
-Message-ID: <20180521163319.yk5hnvqlb5zgtkv4@tarshish>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 21 May 2018 18:42:48 +0200
+Subject: [Buildroot] [PATCH] package/gcc: add support for gcc 8.1
+In-Reply-To: <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
+References: <20180505105844.5278-1-romain.naour@gmail.com>
+ <20180520124507.23c2a29b@windsurf>
+ <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
+Message-ID: <0391e860-5605-1942-28b0-5fa87f51c018@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Thomas,
 
-On Mon, May 21, 2018 at 06:17:06PM +0200, Yann E. MORIN wrote:
-> Now that we dropped support for blackfin, we no longer have any
-> architecture that supports FDPIC, so BR2_ARCH_HAS_FDPIC_SUPPORT
-> is never selected, so we can't select BR2_BINFMT_FDPIC.
+Le 21/05/2018 ? 17:45, Romain Naour a ?crit?:
+> Hi Thomas,
 > 
-> Drop all of that now.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
+> Le 20/05/2018 ? 12:45, Thomas Petazzoni a ?crit?:
+>> Hello Romain,
+>>
+>> Thanks for working on this!
+>>
+>> On Sat,  5 May 2018 12:58:44 +0200, Romain Naour wrote:
+>>> Remove 0860-cilk-fix-build-without-wchar.patch since cilk has
+>>> been removed from gcc.
+>>>
+>>> Rebase 0900-remove-selftests.patch on gcc 8.1.0
+>>>
+>>> Remove upstream patches 0001-m68k-coldfire-pr68467.patch and
+>>> 0892-microblaze-Revert.patch.
+>>>
+>>> Use bz2 release tarball only for gcc 4.9 since all other version
+>>> now use xz tarball.
+>>>
+>>> Runtime tested on x86_64 with binutils 2.30, gcc 8.1.0,
+>>> kernel headers 4.14 and glibc 2.27.
+>>>
+>>> Buildtime tested with glibc with all supported architectures.
+>>>
+>>> Buildtime tested on x86_64 with musl and uClibc-ng
+>>>
+>>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>>> ---
+>>>  package/gcc/8.1.0/0001-uclibc-conf.patch           |  29 ++++
+>>>  package/gcc/8.1.0/0002-arm-softfloat-libgcc.patch  |  45 +++++++
 
-[snip]
+Btw, why we still need these two patches?
+It seems that they are in the gcc package since gcc 4.2.4 (i.e ten years)
 
->  # noMMU binary formats
-> -ifeq ($(BR2_BINFMT_FDPIC),y)
-> -define UCLIBC_BINFMT_CONFIG
-> -	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-> -	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-> -	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-> -	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+For 0001-uclibc-conf.patch, why we need to add a new case for
+i686-pc-linux-uclibc? what's about other target and libc (musl)?
+I believe this can be removed.
 
-Maybe also remove disable of UCLIBC_FORMAT_FDPIC_ELF below? This uClibc config 
-symbol depends on bfin or frv. Both are not supported in Buildroot.
+0002-arm-softfloat-libgcc.patch was added in 2007 [1] for gcc 4.1.2.
+I believe arm soft-float should work out of the box now.
 
-> -endef
-> -endif
->  ifeq ($(BR2_BINFMT_FLAT_ONE),y)
->  define UCLIBC_BINFMT_CONFIG
->  	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+Best regards,
+Romain
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+[1]
+https://git.buildroot.net/buildroot/commit/?id=b2683e4d2c59cb3e8a5fe0e2500ac6625e8f60bf
