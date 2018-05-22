@@ -1,66 +1,41 @@
-From: Charles Hardin <charles.hardin@storagecraft.com>
-Date: Tue, 22 May 2018 17:18:15 +0000
-Subject: [Buildroot] [PATCH v2 1/5] package/protobuf: bump to version
- 3.5.1
-In-Reply-To: <20180522121101.07546890@windsurf>
-References: <20180521175310.18563-1-charles.hardin@storagecraft.com>
- <20180521175310.18563-2-charles.hardin@storagecraft.com>
- <20180522121101.07546890@windsurf>
-Message-ID: <AD5C86F9-A62E-4AC7-94C1-D7AC33C6D672@storagecraft.com>
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Date: Tue, 22 May 2018 19:19:52 +0200
+Subject: [Buildroot] [PATCH 1/1] libgit2: New package.
+In-Reply-To: <20180520222731.6757154c@windsurf>
+References: <20180214111351.4801-1-nicolas.cavallari@green-communications.fr>
+ <20180214111351.4801-2-nicolas.cavallari@green-communications.fr>
+ <20180520222731.6757154c@windsurf>
+Message-ID: <6324c3b1-c745-7375-9535-0c46abb61974@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello, and thanks.
 
-On May 22, 2018, at 3:11 AM, Thomas Petazzoni <thomas.petazzoni at bootlin.com<mailto:thomas.petazzoni@bootlin.com>> wrote:
+On 20/05/2018 22:27, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 14 Feb 2018 12:13:51 +0100, Nicolas Cavallari wrote:
+>> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>> ---
+>>   DEVELOPERS                   |  3 +++
+>>   package/Config.in            |  1 +
+>>   package/libgit2/Config.in    |  9 +++++++++
+>>   package/libgit2/libgit2.hash |  3 +++
+>>   package/libgit2/libgit2.mk   | 25 +++++++++++++++++++++++++
+>>   5 files changed, 41 insertions(+)
+>>   create mode 100644 package/libgit2/Config.in
+>>   create mode 100644 package/libgit2/libgit2.hash
+>>   create mode 100644 package/libgit2/libgit2.mk
+> So, I've applied to next, but I had to change quite a few things that
+> were not really correct:
+>
+>      [Thomas:
+>       - Do not select BR2_PACKAGE_ZLIB, because zlib is an optional
+>         dependency.
+IIRC zlib is not really an optional dependency.? If zlib is not 
+detected, then a bundled version of zlib is compiled in deps/zlib...
 
-Hello Charles,
-
-On Mon, 21 May 2018 10:53:06 -0700, charles.hardin at storagecraft.com<mailto:charles.hardin@storagecraft.com>
-wrote:
-From: Martijn de Gouw <martijn.de.gouw at prodrive-technologies.com<mailto:martijn.de.gouw@prodrive-technologies.com>>
-
-GRPC requires protobuf 3.5.0+
-
-Signed-off-by: Martijn de Gouw <martijn.de.gouw at prodrive-technologies.com<mailto:martijn.de.gouw@prodrive-technologies.com>>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni at bootlin.com<mailto:thomas.petazzoni@bootlin.com>>
-(cherry picked from commit 454aa2da5e79ec8627f1d66ac640ec7bb04025dc)
-
-Why are you sending this patch? It's already in the next branch. Since
-what you're sending is intended for the next branch, you should simply
-base your patches on the next branch, and send only what's not yet in
-next.
-
-
-
-The docs say to rebase against origin/master before submitting a patch not
-origin/next. So, it is unclear if we are suppose to submit a patch series that
-compiles as a set or a patch series that relies on something already in next.
-
-I erred on a duplicated patch at the beginning to try and make sure it was
-understood this patch series requires the bump - else, it won?t compile.
-
-If there is a better a way to do this, then it wasn?t clear from contributing guide.
-
-https://buildroot.org/downloads/manual/manual.html#submitting-patches
-
-
-I'll mark this patch as Not Applicable in our patch tracking system.
-
-Best regards,
-
-Thomas
---
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
-
-Charles
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180522/af1ee5fb/attachment.html>
+I don't think this is desirable, that's why i forced a dependency on zlib.
