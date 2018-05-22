@@ -1,12 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 May 2018 00:08:37 +0200
-Subject: [Buildroot] [PATCH] package/gcc: add support for gcc 8.1
-In-Reply-To: <87bmd8ismc.fsf@dell.be.48ers.dk>
-References: <20180505105844.5278-1-romain.naour@gmail.com>
- <20180520124507.23c2a29b@windsurf>
- <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
- <87bmd8ismc.fsf@dell.be.48ers.dk>
-Message-ID: <cb31aa8e-774c-8608-135b-b371f01242ef@mind.be>
+Date: Wed, 23 May 2018 00:21:05 +0200
+Subject: [Buildroot] [PATCH v2 1/6] libtirpc: add host package
+In-Reply-To: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
+References: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
+Message-ID: <e1a18302-1cb8-40f7-f7b3-b5bcfa389075@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +12,50 @@ To: buildroot@busybox.net
 
 
 
-On 21-05-18 23:52, Peter Korsgaard wrote:
->>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+On 22-05-18 12:30, Baruch Siach wrote:
+> The libtirpc host package is only for two headers that the host rpcgen
+> utility from the nfs-utils package needs to build. glibc used to provide
+> these headers. In version 2.26 glibc deprecated them with its bundled
+> Sun RPC. Recently Fedora stopped enabling Sun RPC in glibc. So we can no
+> longer rely on these headers being present on the host.
 > 
-> Hi,
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2: New patch in this series
+> ---
+>  package/libtirpc/libtirpc.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
->  > See the reply from Arnout and Dagg for gcc 4.9:
->  > http://patchwork.ozlabs.org/patch/767087
-> 
->  > I'm not sure that the odroidc2 defconfig is able to build with gcc >= 4.9 since
->  > it's stuck at kernel odroidc2-3.14.y and uboot odroidc2-v2015.01.
->  > Dagg, what do we do for this board?
-> 
-> I believe that mainline support for this board is fairly far, so if that
-> is the only thing keeping 4.9 around I think we can drop it.
+> diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+> index d9bf22b83eda..703a87725394 100644
+> --- a/package/libtirpc/libtirpc.mk
+> +++ b/package/libtirpc/libtirpc.mk
+> @@ -18,4 +18,14 @@ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
+>  
+>  LIBTIRPC_CONF_OPTS = --disable-gssapi
+>  
+> +# Don't build anything for host; we only need the headers
+> +HOST_LIBTIRPC_CONFIGURE_CMDS = true
+> +HOST_LIBTIRPC_BUILD_CMDS = true
 
- I voted for keeping 4.9 because quite a few chips are stuck with ancient vendor
-kernels and U-Boot. For the kernel I'd accept it, but for U-Boot it's generally
-more difficult to go to an upstream version, there is not much of a security
-reason to bump U-Boot, and backporting the compiler.h changes is not entirely
-trivial. I think keeping the 4.9 option makes the out-of-the-box experience for
-people who are stuck in this situation easier.
-
- Also, "maintaining" the 4.9 version really doesn't pose much of an overhead. At
-least as long as we support multiple gcc versions, and there are no issues
-building gcc 4.9 on recent distros.
-
- So I'm still voting for keeping 4.9, at least until it starts breaking on
-recent distros. If we remove something, remove 5.
+ Since we're not actually using any of the autotools (and since we can't,
+because rpcgen is missing), I'd make it a host-generic-package instead of
+host-autotools-package. There is at least one other package (can't remember
+which one) where we do this.
 
  Regards,
  Arnout
+
+> +
+> +define HOST_LIBTIRPC_INSTALL_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/types.h $(HOST_DIR)/include/rpc/types.h
+> +	$(INSTALL) -D -m 0644 $(@D)/tirpc/netconfig.h $(HOST_DIR)/include/netconfig.h
+> +endef
+> +
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
