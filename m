@@ -1,40 +1,29 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 22 May 2018 08:06:32 +0200
-Subject: [Buildroot] [PATCH] modem-manager: disable -Werror
-In-Reply-To: <87fu2kispe.fsf@dell.be.48ers.dk>
-References: <20180521203923.21315-1-peter@korsgaard.com>
- <87fu2kispe.fsf@dell.be.48ers.dk>
-Message-ID: <20180522060630.ivtpw7fwaioshuwv@dell5510>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 22 May 2018 09:02:33 +0200
+Subject: [Buildroot] [PATCH] package/gcc: add support for gcc 8.1
+In-Reply-To: <87bmd8ismc.fsf@dell.be.48ers.dk>
+References: <20180505105844.5278-1-romain.naour@gmail.com>
+ <20180520124507.23c2a29b@windsurf>
+ <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
+ <87bmd8ismc.fsf@dell.be.48ers.dk>
+Message-ID: <20180522090233.596eb267@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter, Carlos,
+Hello,
 
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+On Mon, 21 May 2018 23:52:27 +0200, Peter Korsgaard wrote:
 
->  > Fixes:
->  > http://autobuild.buildroot.net/results/5d9/5d9e299ff12726d07e8a584a213c1d2a2e419594/
+> I believe that mainline support for this board is fairly far, so if that
+> is the only thing keeping 4.9 around I think we can drop it.
 
->  > The modem-manager build generates a number of build warnings like:
+I agree. We can't keep gcc 4.9 just for the sake of one board.
 
->  > mm-base-manager.c: In function 'handle_set_logging':
->  > mm-base-manager.c:680:15: error: assignment from incompatible pointer type [-Werror]
->  ctx-> self = g_object_ref (manager);
-
->  > Which cause a build failure because of -Werror.  Pass
->  > --disable-more-warnings to disable -Werror.
-
->  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-> Committed, thanks.
-
-Peter, thanks for fixing this issue.
-Carlos, thanks for handling this issue (IMHO you could have assign yourself as modem-manager
-developer in DEVELOPERS).
-
-
-Kind regards,
-Petr
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
