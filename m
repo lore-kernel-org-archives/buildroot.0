@@ -1,47 +1,136 @@
-From: Baker, Derek <Derek-Baker@idexx.com>
-Date: Tue, 22 May 2018 19:10:35 +0000
-Subject: [Buildroot] opkg updates?
-In-Reply-To: <20180522161954.a6d5l3kftp76c3da@tarshish>
-References: <SN6PR02MB3998B8B8B748380B25E9087DF2940@SN6PR02MB3998.namprd02.prod.outlook.com>,
- <20180522161954.a6d5l3kftp76c3da@tarshish>
-Message-ID: <SN6PR02MB3998C6D077D67B6C8CF724E9F2940@SN6PR02MB3998.namprd02.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 22 May 2018 21:10:56 +0200
+Subject: [Buildroot] [PATCH v2 1/5] package/protobuf: bump to version
+ 3.5.1
+In-Reply-To: <AD5C86F9-A62E-4AC7-94C1-D7AC33C6D672@storagecraft.com>
+References: <20180521175310.18563-1-charles.hardin@storagecraft.com>
+ <20180521175310.18563-2-charles.hardin@storagecraft.com>
+ <20180522121101.07546890@windsurf>
+ <AD5C86F9-A62E-4AC7-94C1-D7AC33C6D672@storagecraft.com>
+Message-ID: <20180522211056.359dcfa9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Did you just patch it? If so that's amazing and thanks so much :)
+Hello,
 
-________________________________
-From: Baruch Siach <baruch@tkos.co.il>
-Sent: Tuesday, May 22, 2018 12:19:54 PM
-To: Baker, Derek
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] opkg updates?
+Would it be possible to teach your e-mail client to quote properly in
+the plain text version of the e-mail ? And ideally to not send HTML
+e-mails ?
 
-Hi Derek,
+On Tue, 22 May 2018 17:18:15 +0000, Charles Hardin wrote:
 
-On Tue, May 22, 2018 at 03:46:05PM +0000, Baker, Derek wrote:
-> We've determined that having a more recent version of opkg would make our
-> lives easier, but notice that the opkg version that ships with buildroot is
-> quite old. Are there plans to update that to a more recent version? If not,
-> can someone explain why so I can pass that on to my team? If there are plans
-> to update it, can someone let me know when that might happen?
+> The docs say to rebase against origin/master before submitting a patch not
+> origin/next. So, it is unclear if we are suppose to submit a patch series that
+> compiles as a set or a patch series that relies on something already in next.
+> 
+> I erred on a duplicated patch at the beginning to try and make sure it was
+> understood this patch series requires the bump - else, it won?t compile.
+> 
+> If there is a better a way to do this, then it wasn?t clear from contributing guide.
+> 
+> https://buildroot.org/downloads/manual/manual.html#submitting-patches
 
-opkg has not been updated because nobody sent a patch for doing so. Feel free
-to post a version bump patch to this list.
+As often, documentation is a hint, not always an absolute truth.
 
-We are now in the -rc stage of the upcoming 2018.05 release. Version bump
-patches are applied to the 'next' branch. They will be included in the 2018.08
-release.
+In the general case patches should be based on the master branch,
+indeed.
 
-baruch
+However, between the publication of rc1 and the final version of a
+given release, the master branch is only used for bug fixes, security
+fixes and build fixes. We do not merge version bumps and new packages
+in master during this period of time, which is used to stabilize the
+master branch.
 
---
-     https://urldefense.proofpoint.com/v2/url?u=http-3A__baruch.siach.name_blog_&d=DwIBAg&c=2do6VJGs3LvEOe4OFFM1bA&r=2cGoUGRUBJn6vjecr5REb55imndy_EHk-DK709CIEwQ&m=qv8lccTBJf76eVMzOr0Tt_EqEs_Dp_yRnnS3b8GnLeg&s=fzRnD_l-bTlK3nRj2Wq49wyHv-LUR48EnobH4zRQ7Uw&e=                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, https://urldefense.proofpoint.com/v2/url?u=http-3A__www.tkos.co.il&d=DwIBAg&c=2do6VJGs3LvEOe4OFFM1bA&r=2cGoUGRUBJn6vjecr5REb55imndy_EHk-DK709CIEwQ&m=qv8lccTBJf76eVMzOr0Tt_EqEs_Dp_yRnnS3b8GnLeg&s=-YhxQvYDl1Uj1M-ZvyKRbDtq2MHq86k5ALWId33ISJ4&e= -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180522/3f0ef337/attachment.html>
+However, since we don't want to completely stop merging patches adding
+new packages and updating existing packages, we open a separate "next"
+branch during this period of time. So, if your contribution is
+submitted during this period of time, and provides new packages,
+package updates or anything that doesn't qualify as a "fix", it should
+be based on the next branch.
+
+The calendar for the year is as follows:
+
+ - January: everything goes in master
+
+ - February:
+
+   * Beginning of the month: YYYY.02-rc1 is released
+
+   * Only fixes go in master, everything else goes in next
+
+   * End of the month: YYYY.02 is released, with the contents of the
+     master branch
+
+ - March:
+
+   * The YYYY.05 development cycle opens. Everything in next is merged
+     back into master.
+
+   * All patches contributed are merged in master.
+
+ - April: everything goes in master.
+
+ - May:
+
+   * Beginning of the month: YYYY.05-rc1 is released
+
+   * Only fixes go in master, everything else goes in next
+
+   * End of the month: YYYY.05 is released, with the contents of the
+     master branch
+
+ - June:
+
+   * The YYYY.08 development cycle opens. Everything in next is merged
+     back into master.
+
+   * All patches contributed are merged in master.
+
+ - July: everything goes in master
+
+ - August:
+
+   * Beginning of the month: YYYY.08-rc1 is released
+
+   * Only fixes go in master, everything else goes in next
+
+   * End of the month: YYYY.08 is released, with the contents of the
+     master branch
+
+ - September:
+
+   * The YYYY.11 development cycle opens. Everything in next is merged
+     back into master.
+
+   * All patches contributed are merged in master.
+
+ - October: everything goes in master
+
+ - November:
+
+   * Beginning of the month: YYYY.11-rc1 is released
+
+   * Only fixes go in master, everything else goes in next
+
+   * End of the month: YYYY.11 is released, with the contents of the
+     master branch
+
+ - December:
+
+   * The (YYYY+1).02 development cycle opens. Everything in next is merged
+     back into master.
+
+   * All patches contributed are merged in master.
+
+Does that clarify our development process ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
