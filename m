@@ -1,26 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 May 2018 23:33:54 +0200
-Subject: [Buildroot] [PATCH next] opkg: bump to version 0.3.6
-In-Reply-To: <f4198d4ca1b1cf8b94466e37b220e0e311912f41.1527015411.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 22 May 2018 21:56:51 +0300")
-References: <f4198d4ca1b1cf8b94466e37b220e0e311912f41.1527015411.git.baruch@tkos.co.il>
-Message-ID: <87lgcbz871.fsf@dell.be.48ers.dk>
+Date: Tue, 22 May 2018 23:34:29 +0200
+Subject: [Buildroot] [PATCH 1/1] lttng-tools: Install to staging
+In-Reply-To: <20180522152847.21479-1-jfaith@impinj.com> (John Faith's message
+ of "Tue, 22 May 2018 08:28:47 -0700")
+References: <20180522152847.21479-1-jfaith@impinj.com>
+Message-ID: <87h8mzz862.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "John" == John Faith <jfaith@impinj.com> writes:
 
- > Use upstream provided tarball and hash.
- > The tarball conf/ subdirectory contains symlinks to host automake and
- > libtool scripts. We can't rely on these being present or usable. Remove
- > the symlinks, and keep autoreconf to populate the conf/ subdirectory
- > using Buildroot provided autotools.
+ > Install the LTTng control library headers and shared objects
+ > to staging.
 
- > Cc: Derek Baker <Derek-Baker@idexx.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > The C interface to LTTng described here:
+ > https://lttng.org/docs/v2.10/#doc-liblttng-ctl-lttng
+ > requires including <lttng/lttng.h> and linking against liblttng-ctl,
+ > but those parts are not available unless this package does a staging
+ > install.
+
+ > Signed-off-by: John Faith <jfaith@impinj.com>
 
 Committed to next, thanks.
 
