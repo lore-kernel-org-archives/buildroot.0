@@ -1,47 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 22 May 2018 18:17:41 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-05-21
-In-Reply-To: <20180522060038.2D49D20828@mail.bootlin.com>
-References: <20180522060038.2D49D20828@mail.bootlin.com>
-Message-ID: <20180522151741.6uqpst3wexs33yh6@tarshish>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Tue, 22 May 2018 11:35:46 -0400
+Subject: [Buildroot] [PATCH 1/1] lttng-tools: Install to staging
+In-Reply-To: <20180522152847.21479-1-jfaith@impinj.com>
+References: <20180522152847.21479-1-jfaith@impinj.com>
+Message-ID: <CAB4xu_0gSJpPWzEuCdQ6BQgncFPvq=0b0u6vVdiqR5+1o+agPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+On Tue, May 22, 2018 at 11:28 AM, John Faith <jfaith@impinj.com> wrote:
+>
+> Install the LTTng control library headers and shared objects
+> to staging.
+>
+> The C interface to LTTng described here:
+> https://lttng.org/docs/v2.10/#doc-liblttng-ctl-lttng
+> requires including <lttng/lttng.h> and linking against liblttng-ctl,
+> but those parts are not available unless this package does a staging
+> install.
 
-On Tue, May 22, 2018 at 08:00:38AM +0200, Thomas Petazzoni wrote:
->       mipsel |                   dash-0.5.9.1 | NOK | http://autobuild.buildroot.net/results/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb | ORPH
+Acked-by: Philippe Proulx <eeppeliteloop@gmail.com>
 
-/bin/sh mktokens
-/bin/sh mktokens
-/bin/sh mkbuiltins builtins.def
-/usr/bin/gcc -I. -I..   -g -O2 -Wall    -o mksyntax mksyntax.c
-In file included from mksyntax.c:43:0:
-parser.h: In function 'parser_eof':
-parser.h:100:37: error: 'TEOF' undeclared (first use in this function)
-  return tokpushback && lasttoken == TEOF;
-                                     ^
-
-I could not reproduce this one here. Might be a parallel build issue, where 
-token.h (the generated header that defines TEOF) exists but is still empty 
-when mksyntax.c compiles. Maybe the two invocations of mktokens are racing 
-against each other. But I can't see why mktokens runs twice.
-
-Another option is that the content of token.h is not generated correctly for 
-some reason.
-
-The autobuilder recorded[1] a few occurrences of the same failure (all error 
-from January and before) not only on your machine.
-
-[1] http://autobuild.buildroot.net/?reason=dash-0.5.9.1
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> Signed-off-by: John Faith <jfaith@impinj.com>
+> ---
+>  package/lttng-tools/lttng-tools.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+> index 59f64cc404..0898f09549 100644
+> --- a/package/lttng-tools/lttng-tools.mk
+> +++ b/package/lttng-tools/lttng-tools.mk
+> @@ -7,6 +7,7 @@
+>  LTTNG_TOOLS_VERSION = 2.10.1
+>  LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
+>  LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+> +LTTNG_TOOLS_INSTALL_STAGING = YES
+>  LTTNG_TOOLS_LICENSE = GPL-2.0+, LGPL-2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
+>  LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
+>  LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
+> --
+> 2.14.1
+>
