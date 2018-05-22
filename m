@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 May 2018 23:00:33 +0200
-Subject: [Buildroot] [PATCH] toolchain: GCC bug 85862
-In-Reply-To: <1526934582-53824-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1526934582-53824-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180522230033.0daffecb@windsurf>
+Date: Tue, 22 May 2018 23:06:37 +0200
+Subject: [Buildroot] [PATCH 1/1] libcurl: fix build with ssh2 and static
+ mbedtls
+In-Reply-To: <20180521114108.20916-1-fontaine.fabrice@gmail.com>
+References: <20180521114108.20916-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180522230637.49906e43@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 21 May 2018 15:29:42 -0500, Matt Weber wrote:
-> GCC < 7.x hangs while building libnss for the Microblaze Arch.
-> 
-> Discovered by
-> http://autobuild.buildroot.net/results/158e8ebb39713e1b436a5cc1a1916f46c30694df
-> 
-> Reported:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85862
-> 
-> Simlar to:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=49218
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+On Mon, 21 May 2018 13:41:08 +0200, Fabrice Fontaine wrote:
+> The ssh2 pkg-config file could contain the following lines when build
+> with a static version of mbedtls:
+>    Libs: -L${libdir} -lssh2 /xxx/libmbedcrypto.a
+>    Libs.private: /xxx/libmbedcrypto.a
 
-Beyond the libnss issue, we do have at least three other Microblaze timeouts. However, I think Romain Naour had identified a different issue for those:
+I find it weird to have the same library in both Libs and Libs.private.
 
-http://autobuild.buildroot.net/?status=TIMEOUT&arch=microblazeel
+Either it's a direct dependency of ssh2 and it should be in Libs. Or
+it's an indirect dependency of ssh2 and should only be used when static
+linking, in which case it should be only in Libs.private.
 
-Affected packages: flare-engine, boost, gst-ffmpeg.
+Section thing that looks weird is: why a full path to libmbedcrypto.a
+and not a -l flag ?
 
-Romain, Matt, would it be possible to make progress with those timeouts
-as well ?
+> This static mbedtls library must be used to correctly detect ssh2
+> support and this library must be copied in libcurl.pc otherwise
+> compilation of any application (such as upmpdcli) with libcurl will fail
+> when trying to found mbedtls functions included in libssh2.
+> So, replace pkg-config --libs-only-l by pkg-config --libs.
 
-Thanks a lot!
+That being said, the libcurl change looks good to me. Did you submit it
+upstream ?
+
+Thanks,
 
 Thomas
 -- 
