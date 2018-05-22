@@ -1,31 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 May 2018 00:00:54 +0200
-Subject: [Buildroot] [PATCH] util-linux: Bump to version 2.32
-In-Reply-To: <1526938480.31570.89.camel@impinj.com> (Trent Piepho's message of
- "Mon, 21 May 2018 21:34:41 +0000")
-References: <20180521191623.7049-1-tpiepho@impinj.com>
- <1526938480.31570.89.camel@impinj.com>
-Message-ID: <877enwis89.fsf@dell.be.48ers.dk>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 22 May 2018 07:26:36 +0200
+Subject: [Buildroot] [git commit] libmediaart: rename options to have
+ proper prefix
+In-Reply-To: <20180521212027.3AC6D7FFCC@busybox.osuosl.org>
+References: <20180521212027.3AC6D7FFCC@busybox.osuosl.org>
+Message-ID: <20180522052635.jby4qrgffdhmt3of@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
+Hi Thomas,
 
-Hi,
+> commit: https://git.buildroot.net/buildroot/commit/?id=8553b3988717664a7130bcd58f54eb65cdb8c9e0
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Nevermind, I see I missed this change already being on buildroot/next.
- > If anyone wonders why mke2fs blocks for 2 seconds getting a filesystem
- > UUID on recent kernels on low boot entropy systems, it's because of the
- > problem described here.
+> Options should be prefixed by BR2_PACKAGE_LIBMEDIAART and not
+> BR2_PACKAGE_MEDIAART, but package was using both prefixes.
 
-I actually also hit this on 4.14.39 recently. Perhaps we should include
-this bump (or better just the getrandom changes) on master and on
-2018.02.x?
+> This was found as default symbol was defined as
+> BR2_PACKAGE_LIBMEDIAART_BACKEND_NONE (correct prefix), but symbol
+> was actually BR2_PACKAGE_MEDIAART_BACKEND_NONE).
 
-Care to send a patch for master?
+> This commit therefore renames the incorrectly named options, and adds
+> Config.in.legacy handling. Since the options are part of a choice, the
+> legacy handling cannot select the new options, and is only here to
+> inform the user.
 
--- 
-Bye, Peter Korsgaard
+> Fixes: c443830a57 libmediaart: new package
+
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> [Thomas: improve commit log, add Config.in.legacy handling]
+Thanks a lot for your changes!
+
+
+Kind regards,
+Petr
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  Config.in.legacy                   | 24 ++++++++++++++++++++++++
+>  package/libmediaart/Config.in      |  8 ++++----
+>  package/libmediaart/libmediaart.mk |  6 +++---
+>  3 files changed, 31 insertions(+), 7 deletions(-)
+...
+
+
+Kind regards,
+Petr
