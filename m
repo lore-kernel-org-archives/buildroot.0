@@ -1,70 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 May 2018 23:07:58 +0200
-Subject: [Buildroot] [PATCH v2 2/6] nfs-utils: add host package
-In-Reply-To: <134051d83451aeb788e09c3e4e540806a198fe48.1526985017.git.baruch@tkos.co.il>
-References: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
- <134051d83451aeb788e09c3e4e540806a198fe48.1526985017.git.baruch@tkos.co.il>
-Message-ID: <20180522230758.6a2b0f96@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 22 May 2018 23:17:46 +0200
+Subject: [Buildroot] [git commit branch/next] systemd: add optional
+ dependency on libidn2
+In-Reply-To: <20180520141552.91B5181239@busybox.osuosl.org>
+References: <20180520141552.91B5181239@busybox.osuosl.org>
+Message-ID: <726bd387-4b74-faba-bb22-e6a0edc3291a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 22 May 2018 13:30:13 +0300, Baruch Siach wrote:
-> We only need the host package for the rpcgen utility. glibc deprecated
-> this utility in version 2.26. Fedora has recently removed rpcgen from
-> its glibc package. So we need to build the rpcgen from the nfs-utils
-> package.
+
+On 20-05-18 16:12, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=4ded5d6af4f0198036183f00de190569d7578bc3
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 > 
-> The removal of Sun RPC from glibc also removed RPC headers from glibc.
-> rpcgen needs two of these headers. Add host-libtirpc to provide the RPC
-> headers.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [Thomas: simplify ifeq/else/endif sequence.]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
-> v2: add host-libtirpc dependency (Thomas P)
-> ---
->  package/nfs-utils/nfs-utils.mk | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+>  package/systemd/systemd.mk | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-> index 26112d69f230..c9e79866e42c 100644
-> --- a/package/nfs-utils/nfs-utils.mk
-> +++ b/package/nfs-utils/nfs-utils.mk
-> @@ -24,6 +24,20 @@ NFS_UTILS_CONF_OPTS = \
->  	--with-statedir=/run/nfs \
->  	--with-rpcgen=internal
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index db7fb43636..1e4b257731 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -75,11 +75,15 @@ else
+>  SYSTEMD_CONF_OPTS += -Daudit=false
+>  endif
 >  
-> +HOST_NFS_UTILS_CONF_OPTS = \
-> +	--disable-nfsv4 \
-> +	--disable-nfsv41 \
-> +	--disable-gss \
-> +	--disable-uuid \
-> +	--disable-ipv6 \
-> +	--without-tcp-wrappers \
-> +	--with-statedir=/run/nfs \
-> +	--disable-caps \
-> +	--disable-tirpc \
-> +	--without-systemd \
-> +	--with-rpcgen=internal
-> +HOST_NFS_UTILS_DEPENDENCIES = host-libtirpc
+> -ifeq ($(BR2_PACKAGE_LIBIDN),y)
+> +# Both options can't be selected at the same time so prefer libidn2
+> +ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+> +SYSTEMD_DEPENDENCIES += libidn2
+> +SYSTEMD_CONF_OPTS += -Dlibidn2=true -Dlibidn=false
+> +else ifeq ($(BR2_PACKAGE_LIBIDN),y)
+>  SYSTEMD_DEPENDENCIES += libidn
+> -SYSTEMD_CONF_OPTS += -Dlibidn=true
+> +SYSTEMD_CONF_OPTS += -Dlibidn=true -Dlibidn2=false
+>  else
+> -SYSTEMD_CONF_OPTS += -Dlibidn=false
+> +SYSTEMD_CONF_OPTS += -Dlibidn=false -Dlibidn2=true
 
-This variable lacks host-pkgconf. Without this, the autoreconf fails.
+ Shouldn't this be -Dlibidn2=false ?
 
-With this fixed:
+ Regards,
+ Arnout
 
-Tested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
-I've tested in a Fedora 28 docker container, host-nfs-utils now builds
-rpcgen properly.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
