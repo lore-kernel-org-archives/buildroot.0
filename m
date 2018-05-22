@@ -1,38 +1,23 @@
-From: John Faith <jfaith@impinj.com>
-Date: Tue, 22 May 2018 08:28:47 -0700
-Subject: [Buildroot] [PATCH 1/1] lttng-tools: Install to staging
-Message-ID: <20180522152847.21479-1-jfaith@impinj.com>
+From: Baker, Derek <Derek-Baker@idexx.com>
+Date: Tue, 22 May 2018 15:46:05 +0000
+Subject: [Buildroot] opkg updates?
+Message-ID: <SN6PR02MB3998B8B8B748380B25E9087DF2940@SN6PR02MB3998.namprd02.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install the LTTng control library headers and shared objects
-to staging.
+Hi,
 
-The C interface to LTTng described here:
-https://lttng.org/docs/v2.10/#doc-liblttng-ctl-lttng
-requires including <lttng/lttng.h> and linking against liblttng-ctl,
-but those parts are not available unless this package does a staging
-install.
 
-Signed-off-by: John Faith <jfaith@impinj.com>
----
- package/lttng-tools/lttng-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
+We've determined that having a more recent version of opkg would make our lives easier, but notice that the opkg version that ships with buildroot is quite old. Are there plans to update that to a more recent version? If not, can someone explain why so I can pass that on to my team? If there are plans to update it, can someone let me know when that might happen?
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 59f64cc404..0898f09549 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -7,6 +7,7 @@
- LTTNG_TOOLS_VERSION = 2.10.1
- LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
- LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
-+LTTNG_TOOLS_INSTALL_STAGING = YES
- LTTNG_TOOLS_LICENSE = GPL-2.0+, LGPL-2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
- LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
- LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
--- 
-2.14.1
+
+Thanks
+
+Derek
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180522/c9c850bf/attachment.html>
