@@ -1,13 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 May 2018 21:10:56 +0200
-Subject: [Buildroot] [PATCH v2 1/5] package/protobuf: bump to version
- 3.5.1
-In-Reply-To: <AD5C86F9-A62E-4AC7-94C1-D7AC33C6D672@storagecraft.com>
-References: <20180521175310.18563-1-charles.hardin@storagecraft.com>
- <20180521175310.18563-2-charles.hardin@storagecraft.com>
- <20180522121101.07546890@windsurf>
- <AD5C86F9-A62E-4AC7-94C1-D7AC33C6D672@storagecraft.com>
-Message-ID: <20180522211056.359dcfa9@windsurf>
+Date: Tue, 22 May 2018 21:14:55 +0200
+Subject: [Buildroot] [PATCH 1/1] libgit2: New package.
+In-Reply-To: <6324c3b1-c745-7375-9535-0c46abb61974@green-communications.fr>
+References: <20180214111351.4801-1-nicolas.cavallari@green-communications.fr>
+ <20180214111351.4801-2-nicolas.cavallari@green-communications.fr>
+ <20180520222731.6757154c@windsurf>
+ <6324c3b1-c745-7375-9535-0c46abb61974@green-communications.fr>
+Message-ID: <20180522211455.1757a8b9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,118 +15,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-Would it be possible to teach your e-mail client to quote properly in
-the plain text version of the e-mail ? And ideally to not send HTML
-e-mails ?
+On Tue, 22 May 2018 19:19:52 +0200, Nicolas Cavallari wrote:
 
-On Tue, 22 May 2018 17:18:15 +0000, Charles Hardin wrote:
-
-> The docs say to rebase against origin/master before submitting a patch not
-> origin/next. So, it is unclear if we are suppose to submit a patch series that
-> compiles as a set or a patch series that relies on something already in next.
+> > So, I've applied to next, but I had to change quite a few things that
+> > were not really correct:
+> >
+> >      [Thomas:
+> >       - Do not select BR2_PACKAGE_ZLIB, because zlib is an optional
+> >         dependency.  
+> IIRC zlib is not really an optional dependency.? If zlib is not 
+> detected, then a bundled version of zlib is compiled in deps/zlib...
 > 
-> I erred on a duplicated patch at the beginning to try and make sure it was
-> understood this patch series requires the bump - else, it won?t compile.
-> 
-> If there is a better a way to do this, then it wasn?t clear from contributing guide.
-> 
-> https://buildroot.org/downloads/manual/manual.html#submitting-patches
+> I don't think this is desirable, that's why i forced a dependency on zlib.
 
-As often, documentation is a hint, not always an absolute truth.
+OK, then indeed we want zlib to be a dependency. The thing is that you
+had a select BR2_PACKAGE_ZLIB, but zlib was not in <pkg>_DEPENDENCIES.
 
-In the general case patches should be based on the master branch,
-indeed.
-
-However, between the publication of rc1 and the final version of a
-given release, the master branch is only used for bug fixes, security
-fixes and build fixes. We do not merge version bumps and new packages
-in master during this period of time, which is used to stabilize the
-master branch.
-
-However, since we don't want to completely stop merging patches adding
-new packages and updating existing packages, we open a separate "next"
-branch during this period of time. So, if your contribution is
-submitted during this period of time, and provides new packages,
-package updates or anything that doesn't qualify as a "fix", it should
-be based on the next branch.
-
-The calendar for the year is as follows:
-
- - January: everything goes in master
-
- - February:
-
-   * Beginning of the month: YYYY.02-rc1 is released
-
-   * Only fixes go in master, everything else goes in next
-
-   * End of the month: YYYY.02 is released, with the contents of the
-     master branch
-
- - March:
-
-   * The YYYY.05 development cycle opens. Everything in next is merged
-     back into master.
-
-   * All patches contributed are merged in master.
-
- - April: everything goes in master.
-
- - May:
-
-   * Beginning of the month: YYYY.05-rc1 is released
-
-   * Only fixes go in master, everything else goes in next
-
-   * End of the month: YYYY.05 is released, with the contents of the
-     master branch
-
- - June:
-
-   * The YYYY.08 development cycle opens. Everything in next is merged
-     back into master.
-
-   * All patches contributed are merged in master.
-
- - July: everything goes in master
-
- - August:
-
-   * Beginning of the month: YYYY.08-rc1 is released
-
-   * Only fixes go in master, everything else goes in next
-
-   * End of the month: YYYY.08 is released, with the contents of the
-     master branch
-
- - September:
-
-   * The YYYY.11 development cycle opens. Everything in next is merged
-     back into master.
-
-   * All patches contributed are merged in master.
-
- - October: everything goes in master
-
- - November:
-
-   * Beginning of the month: YYYY.11-rc1 is released
-
-   * Only fixes go in master, everything else goes in next
-
-   * End of the month: YYYY.11 is released, with the contents of the
-     master branch
-
- - December:
-
-   * The (YYYY+1).02 development cycle opens. Everything in next is merged
-     back into master.
-
-   * All patches contributed are merged in master.
-
-Does that clarify our development process ?
-
-Best regards,
+Don't hesitate to send a follow-up patch re-introducing zlib as a
+mandatory dependency.
 
 Thomas
 -- 
