@@ -1,73 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 22 May 2018 21:56:51 +0300
-Subject: [Buildroot] [PATCH next] opkg: bump to version 0.3.6
-Message-ID: <f4198d4ca1b1cf8b94466e37b220e0e311912f41.1527015411.git.baruch@tkos.co.il>
+From: Baker, Derek <Derek-Baker@idexx.com>
+Date: Tue, 22 May 2018 19:10:35 +0000
+Subject: [Buildroot] opkg updates?
+In-Reply-To: <20180522161954.a6d5l3kftp76c3da@tarshish>
+References: <SN6PR02MB3998B8B8B748380B25E9087DF2940@SN6PR02MB3998.namprd02.prod.outlook.com>,
+ <20180522161954.a6d5l3kftp76c3da@tarshish>
+Message-ID: <SN6PR02MB3998C6D077D67B6C8CF724E9F2940@SN6PR02MB3998.namprd02.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use upstream provided tarball and hash.
+Did you just patch it? If so that's amazing and thanks so much :)
 
-The tarball conf/ subdirectory contains symlinks to host automake and
-libtool scripts. We can't rely on these being present or usable. Remove
-the symlinks, and keep autoreconf to populate the conf/ subdirectory
-using Buildroot provided autotools.
+________________________________
+From: Baruch Siach <baruch@tkos.co.il>
+Sent: Tuesday, May 22, 2018 12:19:54 PM
+To: Baker, Derek
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] opkg updates?
 
-Cc: Derek Baker <Derek-Baker@idexx.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/opkg/opkg.hash |  4 ++--
- package/opkg/opkg.mk   | 15 +++++++++++----
- 2 files changed, 13 insertions(+), 6 deletions(-)
+Hi Derek,
 
-diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
-index 80f3f0d1d2ca..321c41dbd051 100644
---- a/package/opkg/opkg.hash
-+++ b/package/opkg/opkg.hash
-@@ -1,2 +1,2 @@
--# Locally computed
--sha256 2ec7157ccf866e49ca139e3632ba1ca9d61dc24382606b55062e423161a530b0  opkg-v0.3.1.tar.gz
-+# From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
-+sha256 f607f0e61be8cf8a3bbd0d2dccd9ec9e9b6c21dd4307b671c600d6eeaf84d30b  opkg-0.3.6.tar.gz
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index 0c7e15ea7523..4d34c6d4d3a2 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
-@@ -4,15 +4,14 @@
- #
- ################################################################################
- 
--OPKG_VERSION = v0.3.1
--OPKG_SITE = http://git.yoctoproject.org/git/opkg
--OPKG_SITE_METHOD = git
--# Uses PKG_CHECK_MODULES() in configure.ac
-+OPKG_VERSION = 0.3.6
-+OPKG_SITE = http://downloads.yoctoproject.org/releases/opkg
- OPKG_DEPENDENCIES = host-pkgconf libarchive
- OPKG_LICENSE = GPL-2.0+
- OPKG_LICENSE_FILES = COPYING
- OPKG_INSTALL_STAGING = YES
- OPKG_CONF_OPTS = --disable-curl
-+# Populate the conf/ directory
- OPKG_AUTORECONF = YES
- 
- # Ensure directory for lockfile exists
-@@ -20,6 +19,14 @@ define OPKG_CREATE_LOCKDIR
- 	mkdir -p $(TARGET_DIR)/usr/lib/opkg
- endef
- 
-+# The conf/ directory contains symlinks to host automake and libtool provided
-+# scripts. Don't rely on them being present.
-+define OPKG_REMOVE_AUTOTOOLS_SYMLINKS
-+	rm $(@D)/conf/*
-+endef
-+
-+OPKG_POST_EXTRACT_HOOKS += OPKG_REMOVE_AUTOTOOLS_SYMLINKS
-+
- ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
- OPKG_CONF_OPTS += --enable-gpg
- OPKG_CONF_ENV += \
--- 
-2.17.0
+On Tue, May 22, 2018 at 03:46:05PM +0000, Baker, Derek wrote:
+> We've determined that having a more recent version of opkg would make our
+> lives easier, but notice that the opkg version that ships with buildroot is
+> quite old. Are there plans to update that to a more recent version? If not,
+> can someone explain why so I can pass that on to my team? If there are plans
+> to update it, can someone let me know when that might happen?
+
+opkg has not been updated because nobody sent a patch for doing so. Feel free
+to post a version bump patch to this list.
+
+We are now in the -rc stage of the upcoming 2018.05 release. Version bump
+patches are applied to the 'next' branch. They will be included in the 2018.08
+release.
+
+baruch
+
+--
+     https://urldefense.proofpoint.com/v2/url?u=http-3A__baruch.siach.name_blog_&d=DwIBAg&c=2do6VJGs3LvEOe4OFFM1bA&r=2cGoUGRUBJn6vjecr5REb55imndy_EHk-DK709CIEwQ&m=qv8lccTBJf76eVMzOr0Tt_EqEs_Dp_yRnnS3b8GnLeg&s=fzRnD_l-bTlK3nRj2Wq49wyHv-LUR48EnobH4zRQ7Uw&e=                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, https://urldefense.proofpoint.com/v2/url?u=http-3A__www.tkos.co.il&d=DwIBAg&c=2do6VJGs3LvEOe4OFFM1bA&r=2cGoUGRUBJn6vjecr5REb55imndy_EHk-DK709CIEwQ&m=qv8lccTBJf76eVMzOr0Tt_EqEs_Dp_yRnnS3b8GnLeg&s=-YhxQvYDl1Uj1M-ZvyKRbDtq2MHq86k5ALWId33ISJ4&e= -
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180522/3f0ef337/attachment.html>
