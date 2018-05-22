@@ -1,49 +1,176 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 22 May 2018 14:15:59 +0300
-Subject: [Buildroot] [PATCH v2 1/6] libtirpc: add host package
-In-Reply-To: <20180522125414.1764d946@windsurf>
-References: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
- <20180522125414.1764d946@windsurf>
-Message-ID: <20180522111559.ahkj7tehlawhks2m@tarshish>
+Date: Tue, 22 May 2018 14:17:56 +0300
+Subject: [Buildroot] [PATCH next] lz4: bump to version 1.8.2
+Message-ID: <4f9f5f58409dd0d19b1db70e43908084339fbc2c.1526987876.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Drop upstream patches.
 
-On Tue, May 22, 2018 at 12:54:14PM +0200, Thomas Petazzoni wrote:
-> On Tue, 22 May 2018 13:30:12 +0300, Baruch Siach wrote:
-> > The libtirpc host package is only for two headers that the host rpcgen
-> > utility from the nfs-utils package needs to build. glibc used to provide
-> > these headers. In version 2.26 glibc deprecated them with its bundled
-> > Sun RPC. Recently Fedora stopped enabling Sun RPC in glibc. So we can no
-> > longer rely on these headers being present on the host.
-> > 
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> Thanks for this new iteration. Did you test this on Fedora 28 ?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...rictive-conditions-for-clock_gettime.patch | 58 ------------------
+ ...ib-allow-to-disable-shared-libraries.patch | 59 -------------------
+ package/lz4/lz4.hash                          |  2 +-
+ package/lz4/lz4.mk                            |  2 +-
+ 4 files changed, 2 insertions(+), 119 deletions(-)
+ delete mode 100644 package/lz4/0001-use-more-restrictive-conditions-for-clock_gettime.patch
+ delete mode 100644 package/lz4/0002-lib-allow-to-disable-shared-libraries.patch
 
-I simulated missing Sun RPC by renaming the /usr/include/rpc{,svc} directories 
-in my host (Debian testing). I symlinked <rpc/netdb.h> to the new location. 
-This in addition to rename of the host rpcgen binary.
-
-> Because when I tried your first iteration, I did install rpc/types.h by
-> hand, but then the build failed again because another rpc/ header was
-> missing, and this is where I gave up.
-
-The only additional header I needed is netconfig.h (not under rpc/).
-
-> I'll try to test your patch series on Fedora 28, but I'm a bit short on
-> time today for this.
-
-No problem. The autobuilder looks pretty clean otherwise.
-
-baruch
-
+diff --git a/package/lz4/0001-use-more-restrictive-conditions-for-clock_gettime.patch b/package/lz4/0001-use-more-restrictive-conditions-for-clock_gettime.patch
+deleted file mode 100644
+index 678f16abb776..000000000000
+--- a/package/lz4/0001-use-more-restrictive-conditions-for-clock_gettime.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 7dba09af47dd3daa1562a6332a643a1a59dba4a8 Mon Sep 17 00:00:00 2001
+-From: Yann Collet <cyan@fb.com>
+-Date: Tue, 16 Jan 2018 10:21:37 -0800
+-Subject: [PATCH] use more restrictive conditions for clock_gettime()
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 7dba09af47dd3
+-
+- programs/util.h | 9 ++++++++-
+- 1 file changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/programs/util.h b/programs/util.h
+-index fc7f63e8140e..a3576d7e3a57 100644
+---- a/programs/util.h
+-+++ b/programs/util.h
+-@@ -141,6 +141,7 @@ extern "C" {
+- *  Time functions
+- ******************************************/
+- #if defined(_WIN32)   /* Windows */
+-+
+-     typedef LARGE_INTEGER UTIL_time_t;
+-     UTIL_STATIC UTIL_time_t UTIL_getTime(void) { UTIL_time_t x; QueryPerformanceCounter(&x); return x; }
+-     UTIL_STATIC U64 UTIL_getSpanTimeMicro(UTIL_time_t clockStart, UTIL_time_t clockEnd)
+-@@ -165,7 +166,9 @@ extern "C" {
+-         }
+-         return 1000000000ULL*(clockEnd.QuadPart - clockStart.QuadPart)/ticksPerSecond.QuadPart;
+-     }
+-+
+- #elif defined(__APPLE__) && defined(__MACH__)
+-+
+-     #include <mach/mach_time.h>
+-     typedef U64 UTIL_time_t;
+-     UTIL_STATIC UTIL_time_t UTIL_getTime(void) { return mach_absolute_time(); }
+-@@ -189,7 +192,9 @@ extern "C" {
+-         }
+-         return ((clockEnd - clockStart) * (U64)rate.numer) / ((U64)rate.denom);
+-     }
+--#elif (PLATFORM_POSIX_VERSION >= 200112L)
+-+
+-+#elif (PLATFORM_POSIX_VERSION >= 200112L) && (defined __UCLIBC__ || ((__GLIBC__ == 2 && __GLIBC_MINOR__ >= 17) || __GLIBC__ > 2))
+-+
+-     #include <time.h>
+-     typedef struct timespec UTIL_time_t;
+-     UTIL_STATIC UTIL_time_t UTIL_getTime(void)
+-@@ -227,7 +232,9 @@ extern "C" {
+-         nano += diff.tv_nsec;
+-         return nano;
+-     }
+-+
+- #else   /* relies on standard C (note : clock_t measurements can be wrong when using multi-threading) */
+-+
+-     typedef clock_t UTIL_time_t;
+-     UTIL_STATIC UTIL_time_t UTIL_getTime(void) { return clock(); }
+-     UTIL_STATIC U64 UTIL_getSpanTimeMicro(UTIL_time_t clockStart, UTIL_time_t clockEnd) { return 1000000ULL * (clockEnd - clockStart) / CLOCKS_PER_SEC; }
+--- 
+-2.17.0
+-
+diff --git a/package/lz4/0002-lib-allow-to-disable-shared-libraries.patch b/package/lz4/0002-lib-allow-to-disable-shared-libraries.patch
+deleted file mode 100644
+index 4f89e85577b3..000000000000
+--- a/package/lz4/0002-lib-allow-to-disable-shared-libraries.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 95bde2a4ae4a92e984a5783ca1f09f44bf04fadb Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 19 Apr 2018 12:28:11 +0300
+-Subject: [PATCH] lib: allow to disable shared libraries
+-
+-Just like BUILD_STATIC=no disables static libraries, BUILD_SHARED=no
+-disabled shared libraries. This is useful to support toolchains that do
+-not support shared libraries.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/lz4/lz4/pull/504
+-
+- lib/Makefile | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/lib/Makefile b/lib/Makefile
+-index dd33f50351a8..976d57cd75ed 100644
+---- a/lib/Makefile
+-+++ b/lib/Makefile
+-@@ -42,6 +42,7 @@ LIBVER_MINOR := $(shell echo $(LIBVER_MINOR_SCRIPT))
+- LIBVER_PATCH := $(shell echo $(LIBVER_PATCH_SCRIPT))
+- LIBVER  := $(shell echo $(LIBVER_SCRIPT))
+- 
+-+BUILD_SHARED:=yes
+- BUILD_STATIC:=yes
+- 
+- CPPFLAGS+= -DXXH_NAMESPACE=LZ4_
+-@@ -92,6 +93,7 @@ ifeq ($(BUILD_STATIC),yes)  # can be disabled on command line
+- endif
+- 
+- $(LIBLZ4): $(SRCFILES)
+-+ifeq ($(BUILD_SHARED),yes)  # can be disabled on command line
+- 	@echo compiling dynamic library $(LIBVER)
+- ifneq (,$(filter Windows%,$(OS)))
+- 	@$(CC) $(FLAGS) -DLZ4_DLL_EXPORT=1 -shared $^ -o dll\$@.dll
+-@@ -102,6 +104,7 @@ else
+- 	@ln -sf $@ liblz4.$(SHARED_EXT_MAJOR)
+- 	@ln -sf $@ liblz4.$(SHARED_EXT)
+- endif
+-+endif
+- 
+- liblz4: $(LIBLZ4)
+- 
+-@@ -159,9 +162,11 @@ ifeq ($(BUILD_STATIC),yes)
+- 	@$(INSTALL_DATA) liblz4.a $(DESTDIR)$(LIBDIR)/liblz4.a
+- 	@$(INSTALL_DATA) lz4frame_static.h $(DESTDIR)$(INCLUDEDIR)/lz4frame_static.h
+- endif
+-+ifeq ($(BUILD_SHARED),yes)
+- 	@$(INSTALL_PROGRAM) liblz4.$(SHARED_EXT_VER) $(DESTDIR)$(LIBDIR)
+- 	@ln -sf liblz4.$(SHARED_EXT_VER) $(DESTDIR)$(LIBDIR)/liblz4.$(SHARED_EXT_MAJOR)
+- 	@ln -sf liblz4.$(SHARED_EXT_VER) $(DESTDIR)$(LIBDIR)/liblz4.$(SHARED_EXT)
+-+endif
+- 	@echo Installing headers in $(INCLUDEDIR)
+- 	@$(INSTALL_DATA) lz4.h $(DESTDIR)$(INCLUDEDIR)/lz4.h
+- 	@$(INSTALL_DATA) lz4hc.h $(DESTDIR)$(INCLUDEDIR)/lz4hc.h
+--- 
+-2.17.0
+-
+diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+index bdc43d1e669b..90bd217cdf0e 100644
+--- a/package/lz4/lz4.hash
++++ b/package/lz4/lz4.hash
+@@ -1,4 +1,4 @@
+ # sha256 locally computed
+-sha256 12f3a9e776a923275b2dc78ae138b4967ad6280863b77ff733028ce89b8123f9  lz4-v1.8.1.2.tar.gz
++sha256 0963fbe9ee90acd1d15e9f09e826eaaf8ea0312e854803caf2db0a6dd40f4464  lz4-v1.8.2.tar.gz
+ sha256 d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index c5540124e920..183df456496e 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LZ4_VERSION = v1.8.1.2
++LZ4_VERSION = v1.8.2
+ LZ4_SITE = $(call github,lz4,lz4,$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.17.0
