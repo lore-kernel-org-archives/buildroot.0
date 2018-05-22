@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 May 2018 21:14:55 +0200
-Subject: [Buildroot] [PATCH 1/1] libgit2: New package.
-In-Reply-To: <6324c3b1-c745-7375-9535-0c46abb61974@green-communications.fr>
-References: <20180214111351.4801-1-nicolas.cavallari@green-communications.fr>
- <20180214111351.4801-2-nicolas.cavallari@green-communications.fr>
- <20180520222731.6757154c@windsurf>
- <6324c3b1-c745-7375-9535-0c46abb61974@green-communications.fr>
-Message-ID: <20180522211455.1757a8b9@windsurf>
+Date: Tue, 22 May 2018 23:00:33 +0200
+Subject: [Buildroot] [PATCH] toolchain: GCC bug 85862
+In-Reply-To: <1526934582-53824-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1526934582-53824-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180522230033.0daffecb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 22 May 2018 19:19:52 +0200, Nicolas Cavallari wrote:
-
-> > So, I've applied to next, but I had to change quite a few things that
-> > were not really correct:
-> >
-> >      [Thomas:
-> >       - Do not select BR2_PACKAGE_ZLIB, because zlib is an optional
-> >         dependency.  
-> IIRC zlib is not really an optional dependency.? If zlib is not 
-> detected, then a bundled version of zlib is compiled in deps/zlib...
+On Mon, 21 May 2018 15:29:42 -0500, Matt Weber wrote:
+> GCC < 7.x hangs while building libnss for the Microblaze Arch.
 > 
-> I don't think this is desirable, that's why i forced a dependency on zlib.
+> Discovered by
+> http://autobuild.buildroot.net/results/158e8ebb39713e1b436a5cc1a1916f46c30694df
+> 
+> Reported:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85862
+> 
+> Simlar to:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=49218
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-OK, then indeed we want zlib to be a dependency. The thing is that you
-had a select BR2_PACKAGE_ZLIB, but zlib was not in <pkg>_DEPENDENCIES.
+Beyond the libnss issue, we do have at least three other Microblaze timeouts. However, I think Romain Naour had identified a different issue for those:
 
-Don't hesitate to send a follow-up patch re-introducing zlib as a
-mandatory dependency.
+http://autobuild.buildroot.net/?status=TIMEOUT&arch=microblazeel
+
+Affected packages: flare-engine, boost, gst-ffmpeg.
+
+Romain, Matt, would it be possible to make progress with those timeouts
+as well ?
+
+Thanks a lot!
 
 Thomas
 -- 
