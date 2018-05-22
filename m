@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 May 2018 23:06:37 +0200
-Subject: [Buildroot] [PATCH 1/1] libcurl: fix build with ssh2 and static
- mbedtls
-In-Reply-To: <20180521114108.20916-1-fontaine.fabrice@gmail.com>
-References: <20180521114108.20916-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180522230637.49906e43@windsurf>
+Date: Tue, 22 May 2018 23:07:58 +0200
+Subject: [Buildroot] [PATCH v2 2/6] nfs-utils: add host package
+In-Reply-To: <134051d83451aeb788e09c3e4e540806a198fe48.1526985017.git.baruch@tkos.co.il>
+References: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
+ <134051d83451aeb788e09c3e4e540806a198fe48.1526985017.git.baruch@tkos.co.il>
+Message-ID: <20180522230758.6a2b0f96@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,55 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 21 May 2018 13:41:08 +0200, Fabrice Fontaine wrote:
-> The ssh2 pkg-config file could contain the following lines when build
-> with a static version of mbedtls:
->    Libs: -L${libdir} -lssh2 /xxx/libmbedcrypto.a
->    Libs.private: /xxx/libmbedcrypto.a
+On Tue, 22 May 2018 13:30:13 +0300, Baruch Siach wrote:
+> We only need the host package for the rpcgen utility. glibc deprecated
+> this utility in version 2.26. Fedora has recently removed rpcgen from
+> its glibc package. So we need to build the rpcgen from the nfs-utils
+> package.
+> 
+> The removal of Sun RPC from glibc also removed RPC headers from glibc.
+> rpcgen needs two of these headers. Add host-libtirpc to provide the RPC
+> headers.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2: add host-libtirpc dependency (Thomas P)
+> ---
+>  package/nfs-utils/nfs-utils.mk | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+> index 26112d69f230..c9e79866e42c 100644
+> --- a/package/nfs-utils/nfs-utils.mk
+> +++ b/package/nfs-utils/nfs-utils.mk
+> @@ -24,6 +24,20 @@ NFS_UTILS_CONF_OPTS = \
+>  	--with-statedir=/run/nfs \
+>  	--with-rpcgen=internal
+>  
+> +HOST_NFS_UTILS_CONF_OPTS = \
+> +	--disable-nfsv4 \
+> +	--disable-nfsv41 \
+> +	--disable-gss \
+> +	--disable-uuid \
+> +	--disable-ipv6 \
+> +	--without-tcp-wrappers \
+> +	--with-statedir=/run/nfs \
+> +	--disable-caps \
+> +	--disable-tirpc \
+> +	--without-systemd \
+> +	--with-rpcgen=internal
+> +HOST_NFS_UTILS_DEPENDENCIES = host-libtirpc
 
-I find it weird to have the same library in both Libs and Libs.private.
+This variable lacks host-pkgconf. Without this, the autoreconf fails.
 
-Either it's a direct dependency of ssh2 and it should be in Libs. Or
-it's an indirect dependency of ssh2 and should only be used when static
-linking, in which case it should be only in Libs.private.
+With this fixed:
 
-Section thing that looks weird is: why a full path to libmbedcrypto.a
-and not a -l flag ?
+Tested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-> This static mbedtls library must be used to correctly detect ssh2
-> support and this library must be copied in libcurl.pc otherwise
-> compilation of any application (such as upmpdcli) with libcurl will fail
-> when trying to found mbedtls functions included in libssh2.
-> So, replace pkg-config --libs-only-l by pkg-config --libs.
+I've tested in a Fedora 28 docker container, host-nfs-utils now builds
+rpcgen properly.
 
-That being said, the libcurl change looks good to me. Did you submit it
-upstream ?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
