@@ -1,28 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 May 2018 23:34:29 +0200
-Subject: [Buildroot] [PATCH 1/1] lttng-tools: Install to staging
-In-Reply-To: <20180522152847.21479-1-jfaith@impinj.com> (John Faith's message
- of "Tue, 22 May 2018 08:28:47 -0700")
-References: <20180522152847.21479-1-jfaith@impinj.com>
-Message-ID: <87h8mzz862.fsf@dell.be.48ers.dk>
+Date: Tue, 22 May 2018 23:34:37 +0200
+Subject: [Buildroot] [PATCH next] lz4: bump to version 1.8.2
+In-Reply-To: <4f9f5f58409dd0d19b1db70e43908084339fbc2c.1526987876.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 22 May 2018 14:17:56 +0300")
+References: <4f9f5f58409dd0d19b1db70e43908084339fbc2c.1526987876.git.baruch@tkos.co.il>
+Message-ID: <87d0xnz85u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Faith <jfaith@impinj.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Install the LTTng control library headers and shared objects
- > to staging.
-
- > The C interface to LTTng described here:
- > https://lttng.org/docs/v2.10/#doc-liblttng-ctl-lttng
- > requires including <lttng/lttng.h> and linking against liblttng-ctl,
- > but those parts are not available unless this package does a staging
- > install.
-
- > Signed-off-by: John Faith <jfaith@impinj.com>
+ > Drop upstream patches.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to next, thanks.
 
