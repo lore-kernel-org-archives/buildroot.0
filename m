@@ -1,68 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 22 May 2018 23:17:46 +0200
-Subject: [Buildroot] [git commit branch/next] systemd: add optional
- dependency on libidn2
-In-Reply-To: <20180520141552.91B5181239@busybox.osuosl.org>
-References: <20180520141552.91B5181239@busybox.osuosl.org>
-Message-ID: <726bd387-4b74-faba-bb22-e6a0edc3291a@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 22 May 2018 23:20:40 +0200
+Subject: [Buildroot] [PATCH] pkg-generic: error out with 'local' site
+ method and no _SITE
+In-Reply-To: <9ba18873-320c-0296-e2be-94f00d180ac4@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 22 May 2018 12:41:33 +0200")
+References: <20180518104524.4630-1-arnout@mind.be>
+ <20180519103814.5cf1abae@windsurf>
+ <9ba18873-320c-0296-e2be-94f00d180ac4@mind.be>
+Message-ID: <871se31j6f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+ > On 19-05-18 10:38, Thomas Petazzoni wrote:
+ >> Hello,
+ >> 
+ >> On Fri, 18 May 2018 12:45:24 +0200, Arnout Vandecappelle
+ >> (Essensium/Mind) wrote:
+ >> 
+ >>> +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ >>> +$$(error $(1) has local site method, but `$(2)_SITE_METHOD` is not defined)
+ >>> +endif
+ >> 
+ >> Are you sure it shouldn't be "$(2)_SITE" is not defined ?
 
-On 20-05-18 16:12, Thomas Petazzoni wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=4ded5d6af4f0198036183f00de190569d7578bc3
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> [Thomas: simplify ifeq/else/endif sequence.]
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/systemd/systemd.mk | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index db7fb43636..1e4b257731 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -75,11 +75,15 @@ else
->  SYSTEMD_CONF_OPTS += -Daudit=false
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_LIBIDN),y)
-> +# Both options can't be selected at the same time so prefer libidn2
-> +ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-> +SYSTEMD_DEPENDENCIES += libidn2
-> +SYSTEMD_CONF_OPTS += -Dlibidn2=true -Dlibidn=false
-> +else ifeq ($(BR2_PACKAGE_LIBIDN),y)
->  SYSTEMD_DEPENDENCIES += libidn
-> -SYSTEMD_CONF_OPTS += -Dlibidn=true
-> +SYSTEMD_CONF_OPTS += -Dlibidn=true -Dlibidn2=false
->  else
-> -SYSTEMD_CONF_OPTS += -Dlibidn=false
-> +SYSTEMD_CONF_OPTS += -Dlibidn=false -Dlibidn2=true
+ >  That was actually intentional. The idea is to allow 'local' packages to set
+ > either _SITE or _OVERRIDE_SRCDIR. The check comes after the assignment to
+ > _OVERRIDE_SRCDIR. The reason for this is: currently, 'local' packages work
+ > correctly if you set _OVERRIDE_SRCDIR instead of _SITE, and I don't see a reason
+ > to make them fail.
 
- Shouldn't this be -Dlibidn2=false ?
+ >  I probably should have explained this in the commit log. It was a bit short :-)
 
- Regards,
- Arnout
-
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Indeed! Will you send an update?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
