@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 May 2018 10:29:07 +0200
-Subject: [Buildroot] [PATCH] package/gcc: add support for gcc 8.1
-In-Reply-To: <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
-References: <20180505105844.5278-1-romain.naour@gmail.com>
- <20180520124507.23c2a29b@windsurf>
- <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
-Message-ID: <20180523102907.40ae9992@windsurf>
+Date: Wed, 23 May 2018 10:32:10 +0200
+Subject: [Buildroot] [PATCH 1/1] Adding support to conditionally build
+ the GNAT Ada compiler in the toolchain.
+In-Reply-To: <51E2F87E-1703-4DE0-BAFA-4FFA1AA0CFC9@gmail.com>
+References: <20180521013248.22532-1-glen.m.cornell@gmail.com>
+ <20180521102905.00f0a365@windsurf>
+ <51E2F87E-1703-4DE0-BAFA-4FFA1AA0CFC9@gmail.com>
+Message-ID: <20180523103210.50c7ac38@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,50 +15,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 21 May 2018 17:45:02 +0200, Romain Naour wrote:
+On Mon, 21 May 2018 07:23:15 -0400, Glen Cornell wrote:
 
-> > Could you split up this patch in several patches:
-> > 
-> >  - One adding the toolchain/Config.in contents for gcc 8.x
-> > 
-> >  - One adding support for gcc 8.x in package/gcc
-> > 
-> >  - One adding support for gcc 8.x in toolchain/toolchain-external  
-> 
-> Previous gcc bump was done in one patch:
-> 
-> (gcc 7)
-> https://git.buildroot.net/buildroot/commit/?id=4314161159ce1556e8c14d1d2e22aaf2a8618b82
-> (gcc 6)
-> https://git.buildroot.net/buildroot/commit/?id=519d83bfa0442439026db4e71e605a5c1347e566
-> 
-> I wanted to use the same method but ok I'll split this patch if you want.
+> Thanks for the comments. I?ll update my patch in accordance with your
+> comments and resubmit. 
 
-I think it makes sense to split it up.
+Great, thanks!
 
-> > It would be good if you could also add a patch to update our default
-> > gcc version to 7.x.  
-> 
-> Ok, this can be done in a followup patch.
+> FYI - the libstdc++.a dependency I found strange as well.  Although I
+> didn?t investigate the nature of the dependency, without it, the
+> build fails
 
-Yes it _should_ be done in a separate patch.
+Then we'll have to do some research on this, because if libstdc++.a is
+really needed on the host machine, we'll have to add a check in
+support/dependencies/dependencies.sh for this.
 
-> > Maybe it's also time to remove gcc 4.9 and gcc 5.x ? I know when gcc
-> > 7.x was added and we changed to gcc 6.x as the default, we should have
-> > removed gcc 4.9, but there was some opposition to this. Hopefully we
-> > can do this removal now ?  
-> 
-> See the reply from Arnout and Dagg for gcc 4.9:
-> http://patchwork.ozlabs.org/patch/767087
-> 
-> I'm not sure that the odroidc2 defconfig is able to build with gcc >= 4.9 since
-> it's stuck at kernel odroidc2-3.14.y and uboot odroidc2-v2015.01.
-> Dagg, what do we do for this board?
-
-So the conclusion from Arnout is to keep 4.9, but to remove gcc 5.
-I'm fine with this, so let's do this.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
