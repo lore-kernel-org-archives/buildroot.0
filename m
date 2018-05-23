@@ -1,54 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 23 May 2018 05:27:13 +0300
-Subject: [Buildroot] opkg updates?
-In-Reply-To: <SN6PR02MB3998C6D077D67B6C8CF724E9F2940@SN6PR02MB3998.namprd02.prod.outlook.com>
-References: <SN6PR02MB3998B8B8B748380B25E9087DF2940@SN6PR02MB3998.namprd02.prod.outlook.com>
- <20180522161954.a6d5l3kftp76c3da@tarshish>
- <SN6PR02MB3998C6D077D67B6C8CF724E9F2940@SN6PR02MB3998.namprd02.prod.outlook.com>
-Message-ID: <20180523022713.qykzwdpvwz7phern@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 23 May 2018 07:58:05 +0200
+Subject: [Buildroot] [PATCH v2 1/6] libtirpc: add host package
+In-Reply-To: <e1a18302-1cb8-40f7-f7b3-b5bcfa389075@mind.be>
+References: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
+ <e1a18302-1cb8-40f7-f7b3-b5bcfa389075@mind.be>
+Message-ID: <20180523075805.3f93b462@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Derek,
+Hello,
 
-On Tue, May 22, 2018 at 07:10:35PM +0000, Baker, Derek wrote:
-> Did you just patch it? If so that's amazing and thanks so much :)
+On Wed, 23 May 2018 00:21:05 +0200, Arnout Vandecappelle wrote:
 
-Peter committed the opkg version bump to the 'next' branch, so it should be in 
-the 2018.08 release.
-
-  https://git.buildroot.org/buildroot/commit/?h=next&id=879aada6c6c4b0331f6231582032f66bd82a3104
-
-baruch
-
-> From: Baruch Siach <baruch@tkos.co.il>
-> Sent: Tuesday, May 22, 2018 12:19:54 PM
-> To: Baker, Derek
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] opkg updates?
+> > +# Don't build anything for host; we only need the headers
+> > +HOST_LIBTIRPC_CONFIGURE_CMDS = true
+> > +HOST_LIBTIRPC_BUILD_CMDS = true  
 > 
-> Hi Derek,
-> 
-> On Tue, May 22, 2018 at 03:46:05PM +0000, Baker, Derek wrote:
-> > We've determined that having a more recent version of opkg would make our
-> > lives easier, but notice that the opkg version that ships with buildroot is
-> > quite old. Are there plans to update that to a more recent version? If not,
-> > can someone explain why so I can pass that on to my team? If there are plans
-> > to update it, can someone let me know when that might happen?
-> 
-> opkg has not been updated because nobody sent a patch for doing so. Feel free
-> to post a version bump patch to this list.
-> 
-> We are now in the -rc stage of the upcoming 2018.05 release. Version bump
-> patches are applied to the 'next' branch. They will be included in the 2018.08
-> release.
-> 
-> baruch
+>  Since we're not actually using any of the autotools (and since we can't,
+> because rpcgen is missing), I'd make it a host-generic-package instead of
+> host-autotools-package. There is at least one other package (can't remember
+> which one) where we do this.
 
+Indeed, this sounds like a good idea.
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
