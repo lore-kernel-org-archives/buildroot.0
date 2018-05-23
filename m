@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 May 2018 08:01:16 +0200
-Subject: [Buildroot] [git commit branch/next] systemd: fix -Dlibidn2 option
- when libidn2 is not available
-Message-ID: <20180523060010.5F5F0821C4@busybox.osuosl.org>
+Date: Wed, 23 May 2018 08:01:43 +0200
+Subject: [Buildroot] [git commit branch/next] systemd: add optional
+ dependency on libidn2
+In-Reply-To: <CAPi7W80i7hYppmX2fnOTcZEThcXT7cA538Aaz9bOFBHdmJMPCQ@mail.gmail.com>
+References: <20180520141552.91B5181239@busybox.osuosl.org>
+ <726bd387-4b74-faba-bb22-e6a0edc3291a@mind.be>
+ <CAPi7W80i7hYppmX2fnOTcZEThcXT7cA538Aaz9bOFBHdmJMPCQ@mail.gmail.com>
+Message-ID: <20180523080143.65f792f9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c75955baff986e61d320693edffb6a735d4aedcd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Commit 4ded5d6af4f0198036183f00de190569d7578bc3 ("systemd: add
-optional dependency on libidn2") contained a mistake: -Dlibidn2=true
-was passed even when neither libidn nor libidn2 are
-available. Obviously it should be -Dlibidn2=false.
+On Tue, 22 May 2018 23:49:38 +0200, Fabrice Fontaine wrote:
 
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/systemd/systemd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > -SYSTEMD_CONF_OPTS += -Dlibidn=false
+> > > +SYSTEMD_CONF_OPTS += -Dlibidn=false -Dlibidn2=true  
+> >
+> >  Shouldn't this be -Dlibidn2=false ?
+> >  
+> Indeed, you're completly right, thanks for spotting the mistake.
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1e4b257731..8f7a9fa93c 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -83,7 +83,7 @@ else ifeq ($(BR2_PACKAGE_LIBIDN),y)
- SYSTEMD_DEPENDENCIES += libidn
- SYSTEMD_CONF_OPTS += -Dlibidn=true -Dlibidn2=false
- else
--SYSTEMD_CONF_OPTS += -Dlibidn=false -Dlibidn2=true
-+SYSTEMD_CONF_OPTS += -Dlibidn=false -Dlibidn2=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+It's not your fault I believe, but mine. I reworked this patch of your
+patch when applying and got it wrong.
+
+I've pushed a commit that fixes that. Thanks Arnout for spotting, and
+sorry Fabrice for this mistake :/
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
