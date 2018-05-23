@@ -1,53 +1,32 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 23 May 2018 13:55:04 -0300
-Subject: [Buildroot] [PATCH] DEVELOPERS: update datacom email addresses
-Message-ID: <20180523165504.27677-1-casantos@datacom.ind.br>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 23 May 2018 17:03:30 +0000
+Subject: [Buildroot] [Bug 11036] C compiler cannot create executables
+In-Reply-To: <bug-11036-163@https.bugs.busybox.net/>
+References: <bug-11036-163@https.bugs.busybox.net/>
+Message-ID: <bug-11036-163-vqZ7pyToYZ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <casantos@datacom.com.br>
+https://bugs.busybox.net/show_bug.cgi?id=11036
 
-We are moving from datacom.ind.br to datacom.com.br. The old domain will
-still be valid for an undefined period (probably forever).
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+OK. Could you try to provide a defconfig that exhibits the problem but does not
+use your own private BR2_EXTERNAL tree, so that we could try to reproduce the
+issue ?
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- DEVELOPERS | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Since it's the toolchain that is failing to build, normally only those options
+would be needed to reproduce the problem:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index efd331d20e..f24ef2752e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -404,7 +404,7 @@ F:	package/pps-tools/
- N:	Carlo Caione <carlo.caione@gmail.com>
- F:	package/sunxi-boards/
- 
--N:	Carlos Santos <casantos@datacom.ind.br>
-+N:	Carlos Santos <casantos@datacom.com.br>
- F:	package/gtest/
- F:	package/libpam-radius-auth/
- F:	package/libpam-tacplus/
-@@ -1596,7 +1596,7 @@ F:	package/libhttpparser/
- N:	Rhys Williams <github@wilberforce.co.nz>
- F:	package/lirc-tools/
- 
--N:	Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-+N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
- F:	package/atop/
- 
- N:	Ricardo Martincoski <ricardo.martincoski@gmail.com>
-@@ -1929,7 +1929,7 @@ F:	package/wayland/
- F:	package/weston/
- F:	toolchain/
- 
--N:	Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
-+N:	Tiago Brusamarello <tiago.brusamarello@datacom.com.br>
- F:	package/aer-inject/
- 
- N:	Timo Ketola <timo.ketola@exertus.fi>
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+
+the other options should not affect the toolchain build, except if your patches
+on gcc/binutils in $(BR2_EXTERNAL_BERNARDO_PATH)/board/bernardo/patches.
+
 -- 
-2.14.3
+You are receiving this mail because:
+You are on the CC list for the bug.
