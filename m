@@ -1,64 +1,53 @@
-From: Himanshu Gusain <himanshu.gusain1989@gmail.com>
-Date: Wed, 23 May 2018 11:17:26 -0500
-Subject: [Buildroot] Bluetooth PAN issues with Buildroot 2015.05
-Message-ID: <CAE8=ow1ZfmUeC24Jhy12cvJf_QfFFFJB9T-ZV1wk5tJNx-hprg@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 23 May 2018 13:55:04 -0300
+Subject: [Buildroot] [PATCH] DEVELOPERS: update datacom email addresses
+Message-ID: <20180523165504.27677-1-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+From: Carlos Santos <casantos@datacom.com.br>
 
+We are moving from datacom.ind.br to datacom.com.br. The old domain will
+still be valid for an undefined period (probably forever).
 
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ DEVELOPERS | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I am having some trouble with the buildroot v 2015.05
-
-
-
-My goal is to connect a linux device running with above buildroot
-
-to an Android device to perform a Bluetooth PAN communication
-
-I have enabled Bluez 5 support in buildroot for that & using below command
-for testing
-
-
-
-
-
-    dbus-send --system --type=method_call --dest=org.bluez
-/org/bluez/hci0/dev_DC_D9_16_E3_3C_1D org.bluez.Network1.Connect
-string:'nap'
-
-
-
-Below is the error I am getting
-
-
-
-    bluetoothd[359]: src/adapter.c:resume_discovery()
-
-    bluetoothd[359]:
-profiles/network/connection.c:connection_connect() id 4374
-
-    bluetoothd[359]: src/adapter.c:connected_callback() hci0 device
-DC:D9:16:E3:3C:1D connected eir_len 15
-
-    netplugd[287]: bnep0: ignoring event
-
-    bluetoothd[359]: bnep: Could not bring up bnep0: Cannot assign
-requested address(99)
-
-    bluetoothd[359]: profiles/network/connection.c:bnep_conn_cb()
-
-    bluetoothd[359]: connect failed Input/output error
-
-
-
-Is there any dependency package I am missing in buildroot ?
-
-I am completely stuck in this issue
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180523/ad4be257/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index efd331d20e..f24ef2752e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -404,7 +404,7 @@ F:	package/pps-tools/
+ N:	Carlo Caione <carlo.caione@gmail.com>
+ F:	package/sunxi-boards/
+ 
+-N:	Carlos Santos <casantos@datacom.ind.br>
++N:	Carlos Santos <casantos@datacom.com.br>
+ F:	package/gtest/
+ F:	package/libpam-radius-auth/
+ F:	package/libpam-tacplus/
+@@ -1596,7 +1596,7 @@ F:	package/libhttpparser/
+ N:	Rhys Williams <github@wilberforce.co.nz>
+ F:	package/lirc-tools/
+ 
+-N:	Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
++N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+ F:	package/atop/
+ 
+ N:	Ricardo Martincoski <ricardo.martincoski@gmail.com>
+@@ -1929,7 +1929,7 @@ F:	package/wayland/
+ F:	package/weston/
+ F:	toolchain/
+ 
+-N:	Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
++N:	Tiago Brusamarello <tiago.brusamarello@datacom.com.br>
+ F:	package/aer-inject/
+ 
+ N:	Timo Ketola <timo.ketola@exertus.fi>
+-- 
+2.14.3
