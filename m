@@ -1,113 +1,65 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 23 May 2018 21:19:04 +0300
-Subject: [Buildroot] [PATCH] procps-ng: security bump to version 3.3.15
-Message-ID: <91aa34326a9720369e4291afea525bd4260677c6.1527099544.git.baruch@tkos.co.il>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 23 May 2018 22:19:10 +0200
+Subject: [Buildroot] [PATCH] package/gcc: add support for gcc 8.1
+In-Reply-To: <cb31aa8e-774c-8608-135b-b371f01242ef@mind.be>
+References: <20180505105844.5278-1-romain.naour@gmail.com>
+ <20180520124507.23c2a29b@windsurf>
+ <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
+ <87bmd8ismc.fsf@dell.be.48ers.dk>
+ <cb31aa8e-774c-8608-135b-b371f01242ef@mind.be>
+Message-ID: <5e270035-af43-1f1f-401c-cfc34b76b435@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch.
+Arnout, All,
 
-This release fixes the issues listed below.
+Le 23/05/2018 ? 00:08, Arnout Vandecappelle a ?crit?:
+> 
+> 
+> On 21-05-18 23:52, Peter Korsgaard wrote:
+>>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>
+>> Hi,
+>>
+>>  > See the reply from Arnout and Dagg for gcc 4.9:
+>>  > http://patchwork.ozlabs.org/patch/767087
+>>
+>>  > I'm not sure that the odroidc2 defconfig is able to build with gcc >= 4.9 since
+>>  > it's stuck at kernel odroidc2-3.14.y and uboot odroidc2-v2015.01.
+>>  > Dagg, what do we do for this board?
+>>
+>> I believe that mainline support for this board is fairly far, so if that
+>> is the only thing keeping 4.9 around I think we can drop it.
+> 
+>  I voted for keeping 4.9 because quite a few chips are stuck with ancient vendor
+> kernels and U-Boot. For the kernel I'd accept it, but for U-Boot it's generally
+> more difficult to go to an upstream version, there is not much of a security
+> reason to bump U-Boot, and backporting the compiler.h changes is not entirely
+> trivial. I think keeping the 4.9 option makes the out-of-the-box experience for
+> people who are stuck in this situation easier.
+> 
+>  Also, "maintaining" the 4.9 version really doesn't pose much of an overhead. At
+> least as long as we support multiple gcc versions, and there are no issues
+> building gcc 4.9 on recent distros.
 
-CVE-2018-1122: Local privilege escalation in top
+gcc 4.9 still build with gcc 8 as host compiler but with a lot of warning.
 
-CVE-2018-1123: Denial of service in ps
+Note that we don't keep any specific version of Binutils for gcc 4.9.x.
+It's not sure that recent Binutils version will be compatible with gcc 4.9.x.
 
-CVE-2018-1124: Local privilege escalation in libprocps
+> 
+>  So I'm still voting for keeping 4.9, at least until it starts breaking on
+> recent distros. If we remove something, remove 5.
 
-CVE-2018-1125: Stack buffer overflow in pgrep
+Ok
 
-CVE-2018-1126: Integer overflow in proc/alloc
+Best regards,
+Romain
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0001-proc-sig-fix-build-for-sparc.patch   | 43 -------------------
- package/procps-ng/procps-ng.hash              |  8 ++--
- package/procps-ng/procps-ng.mk                |  2 +-
- 3 files changed, 5 insertions(+), 48 deletions(-)
- delete mode 100644 package/procps-ng/0001-proc-sig-fix-build-for-sparc.patch
-
-diff --git a/package/procps-ng/0001-proc-sig-fix-build-for-sparc.patch b/package/procps-ng/0001-proc-sig-fix-build-for-sparc.patch
-deleted file mode 100644
-index 74f822aea357..000000000000
---- a/package/procps-ng/0001-proc-sig-fix-build-for-sparc.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 070feb7c5ebd0f2ca721ca5d75bdd3fd8cffe961 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 27 Apr 2018 07:34:57 +0300
--Subject: [PATCH] proc/sig: fix build for sparc
--
--The code undefines SIGLOST which breaks references to SIGPWR.
--
--Taken from a patch suggested in upstream bug report #93.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://gitlab.com/procps-ng/procps/issues/93
-----
-- proc/sig.c | 6 +-----
-- 1 file changed, 1 insertion(+), 5 deletions(-)
--
--diff --git a/proc/sig.c b/proc/sig.c
--index b883185fc28a..6ca9512cc70c 100644
----- a/proc/sig.c
--+++ b/proc/sig.c
--@@ -52,10 +52,6 @@
-- #  undef SIGSTKFLT
-- #endif
-- 
---#if !defined(__GNU__) && defined(SIGLOST)
---#  undef SIGLOST
---#endif
---
-- #ifndef SIGRTMIN
-- #  warning Standards require that <signal.h> define SIGRTMIN; assuming 32
-- #  define SIGRTMIN 32
--@@ -87,7 +83,7 @@ static const mapstruct sigtable[] = {
--   {"ILL",    SIGILL},
--   {"INT",    SIGINT},
--   {"KILL",   SIGKILL},
---#ifdef SIGLOST
--+#if defined(__GNU__)
--   {"LOST",   SIGLOST},  /* Hurd-specific */
-- #endif
--   {"PIPE",   SIGPIPE},
---- 
--2.17.0
--
-diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
-index 9488af2d9fb4..123db992ef89 100644
---- a/package/procps-ng/procps-ng.hash
-+++ b/package/procps-ng/procps-ng.hash
-@@ -1,8 +1,8 @@
- # From http://sourceforge.net/projects/procps-ng/files/Production/
--md5	fce371ccc1c15a67af9d85e4057e559d	procps-ng-3.3.14.tar.xz
--sha1	fcc4631b1185f7250daecee2fcebe15efbbe0d65	procps-ng-3.3.14.tar.xz
-+md5	2b0717a7cb474b3d6dfdeedfbad2eccc	procps-ng-3.3.15.tar.xz
-+sha1	2929bc64f0cf7b2db997eef79b7187658e47230d	procps-ng-3.3.15.tar.xz
- # Locally calculated after checking signature
--# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-3.3.14.tar.xz.asc
--sha256 5eda0253999b7d786e690edfa73301b3113c7a67058478866e98e9ff6736726c  procps-ng-3.3.14.tar.xz
-+# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-3.3.15.tar.xz.asc
-+sha256 10bd744ffcb3de2d591d2f6acf1a54a7ba070fdcc432a855931a5057149f0465  procps-ng-3.3.15.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256 681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  COPYING.LIB
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 0d5ce9ddf085..e1fddea32c22 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROCPS_NG_VERSION = 3.3.14
-+PROCPS_NG_VERSION = 3.3.15
- PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
- PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
- PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
--- 
-2.17.0
+> 
+>  Regards,
+>  Arnout
+> 
