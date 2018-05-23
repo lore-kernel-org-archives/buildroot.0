@@ -1,32 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 23 May 2018 17:03:30 +0000
-Subject: [Buildroot] [Bug 11036] C compiler cannot create executables
-In-Reply-To: <bug-11036-163@https.bugs.busybox.net/>
-References: <bug-11036-163@https.bugs.busybox.net/>
-Message-ID: <bug-11036-163-vqZ7pyToYZ@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 23 May 2018 20:44:48 +0300
+Subject: [Buildroot] [PATCH v3 4/6] samba4: depend on host-nfs-utils
+In-Reply-To: <7a5dc74171a99cf6723c0fd759b8306910d3b088.1527097490.git.baruch@tkos.co.il>
+References: <7a5dc74171a99cf6723c0fd759b8306910d3b088.1527097490.git.baruch@tkos.co.il>
+Message-ID: <d49c5c9cc1503f7384403ca76db4535a5a769b3f.1527097490.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11036
+host-nfs-utils provides the host rpcgen utility. This fixes the build on
+recent Fedora systems that removed rpcgen from the glibc package.
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-OK. Could you try to provide a defconfig that exhibits the problem but does not
-use your own private BR2_EXTERNAL tree, so that we could try to reproduce the
-issue ?
+Fixes:
+http://autobuild.buildroot.net/results/6f8/6f869b8c7c182dfe7f1a291b5952320504540ebf/
+http://autobuild.buildroot.net/results/4c2/4c228dd6369e4fc11b798af6ab2abe06d7473b78/
+http://autobuild.buildroot.net/results/489/489be441abd19fba2b0c39357e64a6adcf773b60/
 
-Since it's the toolchain that is failing to build, normally only those options
-would be needed to reproduce the problem:
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: no change
+---
+ package/samba4/samba4.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-
-the other options should not affect the toolchain build, except if your patches
-on gcc/binutils in $(BR2_EXTERNAL_BERNARDO_PATH)/board/bernardo/patches.
-
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c77bc04a89fe..b03af34cd045 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -11,7 +11,7 @@ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPL-3.0+
+ SAMBA4_LICENSE_FILES = COPYING
+ SAMBA4_DEPENDENCIES = \
+-	host-e2fsprogs host-heimdal host-python \
++	host-e2fsprogs host-heimdal host-python host-nfs-utils \
+ 	e2fsprogs popt python zlib \
+ 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.0
