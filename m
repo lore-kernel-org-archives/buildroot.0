@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 May 2018 10:23:00 +0200
-Subject: [Buildroot] [git commit] nasm: Fix compilation with GCC 8
-In-Reply-To: <20180505092204.531518B51B@busybox.osuosl.org>
-References: <20180505092204.531518B51B@busybox.osuosl.org>
-Message-ID: <20180523102300.50015ac5@windsurf>
+Date: Wed, 23 May 2018 10:29:07 +0200
+Subject: [Buildroot] [PATCH] package/gcc: add support for gcc 8.1
+In-Reply-To: <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
+References: <20180505105844.5278-1-romain.naour@gmail.com>
+ <20180520124507.23c2a29b@windsurf>
+ <71945c16-5343-400c-01fe-44f1d5cb31c2@gmail.com>
+Message-ID: <20180523102907.40ae9992@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +14,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 5 May 2018 11:21:18 +0200, Peter Korsgaard wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=3aa64a0e828eca3669cbd1fa3fb9fef69dacf74e
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> host-nasm fails to compile with GCC 8:
-> 
-> In file included from ./include/nasm.h:46,
->                  from asm/nasm.c:47:
-> ./include/nasmlib.h:194:1: error: ?pure? attribute on function returning ?void? [-Werror=attributes]
->  void pure_func seg_init(void);
->  ^~~~
-> 
-> Pull a patch from upstream that removes the stale declaration of
-> seg_init, which was eliminated a long time ago.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../nasm/0001-nasmlib-Drop-unused-seg_init.patch   | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-> diff --git a/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch b/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
-> new file mode 100644
-> index 0000000000..a18d121bfb
-> --- /dev/null
-> +++ b/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
-> @@ -0,0 +1,32 @@
-> +From 5eb1838b4d3752fd863d19442943983a2a5ee87c Mon Sep 17 00:00:00 2001
-> +From: Cyrill Gorcunov <gorcunov@gmail.com>
-> +Date: Sat, 10 Feb 2018 00:33:41 +0300
-> +Subject: [PATCH] nasmlib: Drop unused seg_init
-> +
-> +The helper has been eliminated in 2c4a4d5810d0a59b033a07876a2648ef5d4c2859
-> +
-> +https://bugzilla.nasm.us/show_bug.cgi?id=3392461
-> +
-> +Signed-off-by: Cyrill Gorcunov <gorcunov@gmail.com>
+On Mon, 21 May 2018 17:45:02 +0200, Romain Naour wrote:
 
-Peter, could you apply this one to 2018.02.x, to fix
-http://autobuild.buildroot.net/results/98a/98a89f7203377d2c8b2f47bfdf00243a8837500e/build-end.log ?
+> > Could you split up this patch in several patches:
+> > 
+> >  - One adding the toolchain/Config.in contents for gcc 8.x
+> > 
+> >  - One adding support for gcc 8.x in package/gcc
+> > 
+> >  - One adding support for gcc 8.x in toolchain/toolchain-external  
+> 
+> Previous gcc bump was done in one patch:
+> 
+> (gcc 7)
+> https://git.buildroot.net/buildroot/commit/?id=4314161159ce1556e8c14d1d2e22aaf2a8618b82
+> (gcc 6)
+> https://git.buildroot.net/buildroot/commit/?id=519d83bfa0442439026db4e71e605a5c1347e566
+> 
+> I wanted to use the same method but ok I'll split this patch if you want.
+
+I think it makes sense to split it up.
+
+> > It would be good if you could also add a patch to update our default
+> > gcc version to 7.x.  
+> 
+> Ok, this can be done in a followup patch.
+
+Yes it _should_ be done in a separate patch.
+
+> > Maybe it's also time to remove gcc 4.9 and gcc 5.x ? I know when gcc
+> > 7.x was added and we changed to gcc 6.x as the default, we should have
+> > removed gcc 4.9, but there was some opposition to this. Hopefully we
+> > can do this removal now ?  
+> 
+> See the reply from Arnout and Dagg for gcc 4.9:
+> http://patchwork.ozlabs.org/patch/767087
+> 
+> I'm not sure that the odroidc2 defconfig is able to build with gcc >= 4.9 since
+> it's stuck at kernel odroidc2-3.14.y and uboot odroidc2-v2015.01.
+> Dagg, what do we do for this board?
+
+So the conclusion from Arnout is to keep 4.9, but to remove gcc 5.
+I'm fine with this, so let's do this.
 
 Thanks!
 
