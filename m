@@ -1,47 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 May 2018 08:02:53 +0200
-Subject: [Buildroot] [PATCH 1/1] libcurl: fix build with ssh2 and static
- mbedtls
-In-Reply-To: <CAPi7W82RE+8-7eLJJ7vu4vsBfOxBHrBWrz0v3ZZG3gt+1XG+fA@mail.gmail.com>
-References: <20180521114108.20916-1-fontaine.fabrice@gmail.com>
- <20180522230637.49906e43@windsurf>
- <CAPi7W82RE+8-7eLJJ7vu4vsBfOxBHrBWrz0v3ZZG3gt+1XG+fA@mail.gmail.com>
-Message-ID: <20180523080253.06426712@windsurf>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 23 May 2018 08:31:38 +0200
+Subject: [Buildroot] [PATCH v2] pkg-generic: error out with 'local' site
+ method and no _SITE
+Message-ID: <20180523063138.11717-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The 'local' site method is easily confused with the 'file' site method,
+making people create packages like this:
 
-On Tue, 22 May 2018 23:43:00 +0200, Fabrice Fontaine wrote:
+    FOO_SITE_METHOD = local
+    FOO_SOURCE = foo.tar.gz
 
-> > Either it's a direct dependency of ssh2 and it should be in Libs. Or
-> > it's an indirect dependency of ssh2 and should only be used when static
-> > linking, in which case it should be only in Libs.private.
-> >
-> > Section thing that looks weird is: why a full path to libmbedcrypto.a
-> > and not a -l flag ?
-> >  
-> Indeed, this seems pretty weird to me too.
-> This patch to libssh2 was added recently to buildroot (see
-> http://patchwork.ozlabs.org/patch/888395) by Baruch (now in cc).
-> It seems that this full path is returned by the AC_LIB_HAVE_LINKFLAGS
-> function, see https://github.com/libssh2/libssh2/blob/master/acinclude.m4.
-> So, perhaps we could find a better patch for libssh2 instead of patching
-> libcurl.
+    $(eval $(generic-package))
 
-Indeed the resulting .pc file from libssh2 looks strange. But however,
-I think your change to libcurl remains valid. 'pkg-config --libs' is
-what should be used to get the linker flags. I don't see why libcurl
-should filter the options and only keep the -l options. Other linker
-options may be important.
+Due to the intricacies of the generic package infra, this does not
+cause an error; instead, the foo.tar.gz tarball that happens to be
+present in the download directory will be used. This behaviour differs
+greatly from what is specified in the manual.
 
-Best regards,
+Instead, error out immediately if a package specifies the 'local' site
+method but does not specify a _SITE.
 
-Thomas
+We check for _OVERRIDE_SRCDIR rather than checking for _SITE, just
+after _OVERRIDE_SRCDIR has been set to _SITE. Indeed, a package that
+sets _OVERRIDE_SRCDIR but not _SITE currently works correctly. There is
+no reason to make it fail.
+
+See also
+https://stackoverflow.com/questions/50364655/including-patches-to-build-root
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+v2: explain in commit message why we check for _OVERRIDE_SRCDIR
+---
+ package/pkg-generic.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8a3b5f90a9..988f2d34e3 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -520,6 +520,9 @@ ifeq ($$($(2)_SITE_METHOD),local)
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ $(2)_OVERRIDE_SRCDIR = $$($(2)_SITE)
+ endif
++ifeq ($$($(2)_OVERRIDE_SRCDIR),)
++$$(error $(1) has local site method, but `$(2)_SITE_METHOD` is not defined)
++endif
+ endif
+ 
+ ifndef $(2)_LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.0
