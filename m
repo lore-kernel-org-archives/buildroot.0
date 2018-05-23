@@ -1,40 +1,45 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 23 May 2018 09:45:48 -0300 (BRT)
-Subject: [Buildroot] [PATCH] util-linux: Bump to version 2.32
-In-Reply-To: <877enwis89.fsf@dell.be.48ers.dk>
-References: <20180521191623.7049-1-tpiepho@impinj.com>
- <1526938480.31570.89.camel@impinj.com> <877enwis89.fsf@dell.be.48ers.dk>
-Message-ID: <857898562.2094800.1527079548616.JavaMail.zimbra@datacom.com.br>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Oufella?= <jerome.oufella@savoirfairelinux.com>
+Date: Wed, 23 May 2018 09:46:08 -0400
+Subject: [Buildroot] [PATCH 1/1] qt-webkit-kiosk: bump to version
+ 1.99.7-4-ga7720e5
+Message-ID: <20180523134608.11936-1-jerome.oufella@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: "Trent Piepho" <tpiepho@impinj.com>
-> Cc: "buildroot" <buildroot@buildroot.org>
-> Sent: Monday, May 21, 2018 7:00:54 PM
-> Subject: Re: [Buildroot] [PATCH] util-linux: Bump to version 2.32
+This brings localstorage support in the app, plus a fix for the build
+issue logged at [1].
 
->>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
-> 
-> Hi,
-> 
-> > Nevermind, I see I missed this change already being on buildroot/next.
-> > If anyone wonders why mke2fs blocks for 2 seconds getting a filesystem
-> > UUID on recent kernels on low boot entropy systems, it's because of the
-> > problem described here.
-> 
-> I actually also hit this on 4.14.39 recently. Perhaps we should include
-> this bump (or better just the getrandom changes) on master and on
-> 2018.02.x?
-> 
-> Care to send a patch for master?
+[1] http://autobuild.buildroot.net/results/f29fa8ef055fe0d41db5944974272530d02ecd29/
 
-Isn't it simpler to cherry-pick commit 4b54bd3ae8, instead?
+Signed-off-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
+---
+ package/qt-webkit-kiosk/qt-webkit-kiosk.hash | 2 +-
+ package/qt-webkit-kiosk/qt-webkit-kiosk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/qt-webkit-kiosk/qt-webkit-kiosk.hash b/package/qt-webkit-kiosk/qt-webkit-kiosk.hash
+index 8097c88c9d..666cb6ce55 100644
+--- a/package/qt-webkit-kiosk/qt-webkit-kiosk.hash
++++ b/package/qt-webkit-kiosk/qt-webkit-kiosk.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 ec05f5bcb202265202a6f3ff74372516ce9beb82206ff67ca2b1b6fcb586ecd2  qt-webkit-kiosk-34efddb0bf0c36c8652f90dcd001db123f286f04.tar.gz
++sha256 07fbc3f5053f55e4ef6566a15b42b74895314b48a0dfd46f0984f96f0fbb3e02  qt-webkit-kiosk-a7720e50f2bd70aad99e0b465f5c4a57aca48127.tar.gz
+diff --git a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
+index c279cbe7ce..a714fca9c9 100644
+--- a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
++++ b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT_WEBKIT_KIOSK_VERSION = 34efddb0bf0c36c8652f90dcd001db123f286f04
++QT_WEBKIT_KIOSK_VERSION = a7720e50f2bd70aad99e0b465f5c4a57aca48127
+ QT_WEBKIT_KIOSK_SITE = https://github.com/sergey-dryabzhinsky/qt-webkit-kiosk.git
+ QT_WEBKIT_KIOSK_SITE_METHOD = git
+ QT_WEBKIT_KIOSK_DEPENDENCIES = qt5webkit qt5multimedia
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.14.3
