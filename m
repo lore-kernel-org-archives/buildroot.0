@@ -1,45 +1,43 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 23 May 2018 20:44:45 +0300
-Subject: [Buildroot] [PATCH v3 1/6] libtirpc: add host package
-Message-ID: <7a5dc74171a99cf6723c0fd759b8306910d3b088.1527097490.git.baruch@tkos.co.il>
+Date: Wed, 23 May 2018 20:44:49 +0300
+Subject: [Buildroot] [PATCH v3 5/6] autofs: depend on host-nfs-utils
+In-Reply-To: <7a5dc74171a99cf6723c0fd759b8306910d3b088.1527097490.git.baruch@tkos.co.il>
+References: <7a5dc74171a99cf6723c0fd759b8306910d3b088.1527097490.git.baruch@tkos.co.il>
+Message-ID: <d7d82d5ec83f8caf5ba13894933a48c7b2e67ff7.1527097490.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libtirpc host package is only for two headers that the host rpcgen
-utility from the nfs-utils package needs to build. glibc used to provide
-these headers. In version 2.26 glibc deprecated them with its bundled
-Sun RPC. Recently Fedora stopped enabling Sun RPC in glibc. So we can no
-longer rely on these headers being present on the host.
+host-nfs-utils provides the host rpcgen utility. This fixes the build on
+recent Fedora systems that removed rpcgen from the glibc package.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+http://autobuild.buildroot.net/results/383/383bc8462f32a226645c9b792b8d65a25d74529d/
+http://autobuild.buildroot.net/results/0c0/0c00f72512754b721813e13f0828d3a942f7b955/
+http://autobuild.buildroot.net/results/50b/50b66d2a3c8264f618d7aa813b10050ed147209f/
+
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-v3: Use host-generic-package since we are not using anything from the
-    autotools infrastructure (Arnout).
-
-v2: New patch in this series
+v2: no change
 ---
- package/libtirpc/libtirpc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/autofs/autofs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index d9bf22b83eda..7bc361dc691d 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -18,4 +18,11 @@ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index 87a218441e34..e7c65ef4b09c 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
+@@ -9,7 +9,7 @@ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
+ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPL-2.0+
+ AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
+-AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf
++AUTOFS_DEPENDENCIES = host-flex host-bison host-pkgconf host-nfs-utils
  
- LIBTIRPC_CONF_OPTS = --disable-gssapi
- 
-+define HOST_LIBTIRPC_INSTALL_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/tirpc/rpc/types.h $(HOST_DIR)/include/rpc/types.h
-+	$(INSTALL) -D -m 0644 $(@D)/tirpc/netconfig.h $(HOST_DIR)/include/netconfig.h
-+endef
-+
- $(eval $(autotools-package))
-+# We are only copying headers; no need for the autotools infrastructure
-+$(eval $(host-generic-package))
+ # autofs looks on the build machine for the path of modprobe, so tell
+ # it explicitly where it will be located on the target.
 -- 
 2.17.0
