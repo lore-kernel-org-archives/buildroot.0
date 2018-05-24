@@ -1,71 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 22:39:49 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] nasm: Fix compilation
- with GCC 8
-Message-ID: <20180524210450.E68DF825F4@busybox.osuosl.org>
+Date: Thu, 24 May 2018 22:44:28 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] log4cplus: fix license
+Message-ID: <20180524210451.2039080177@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a54f8136dc34d7c61b72765d4e7882d9222b1595
+commit: https://git.buildroot.net/buildroot/commit/?id=33903687172b915e8607e03a26870a5ff1c8989a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-host-nasm fails to compile with GCC 8:
+Some files of log4cplus are licensed under BSD-2-Clause as stated in
+LICENSE file: "Each file of log4cplus source is licensed using either
+two clause BSD license or Apache license 2.0."
 
-In file included from ./include/nasm.h:46,
-                 from asm/nasm.c:47:
-./include/nasmlib.h:194:1: error: ???pure??? attribute on function returning ???void??? [-Werror=attributes]
- void pure_func seg_init(void);
- ^~~~
-
-Pull a patch from upstream that removes the stale declaration of
-seg_init, which was eliminated a long time ago.
-
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3aa64a0e828eca3669cbd1fa3fb9fef69dacf74e)
+(cherry picked from commit 6f5a29e502b0245a3225485b34d6d8525b7b5fb6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../nasm/0001-nasmlib-Drop-unused-seg_init.patch   | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/log4cplus/log4cplus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch b/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
-new file mode 100644
-index 0000000000..a18d121bfb
---- /dev/null
-+++ b/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
-@@ -0,0 +1,32 @@
-+From 5eb1838b4d3752fd863d19442943983a2a5ee87c Mon Sep 17 00:00:00 2001
-+From: Cyrill Gorcunov <gorcunov@gmail.com>
-+Date: Sat, 10 Feb 2018 00:33:41 +0300
-+Subject: [PATCH] nasmlib: Drop unused seg_init
-+
-+The helper has been eliminated in 2c4a4d5810d0a59b033a07876a2648ef5d4c2859
-+
-+https://bugzilla.nasm.us/show_bug.cgi?id=3392461
-+
-+Signed-off-by: Cyrill Gorcunov <gorcunov@gmail.com>
-+---
-+ include/nasmlib.h | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/include/nasmlib.h b/include/nasmlib.h
-+index 79e866b5..fee1b5ea 100644
-+--- a/include/nasmlib.h
-++++ b/include/nasmlib.h
-+@@ -188,10 +188,8 @@ int64_t readnum(char *str, bool *error);
-+ int64_t readstrnum(char *str, int length, bool *warn);
-+ 
-+ /*
-+- * seg_init: Initialise the segment-number allocator.
-+  * seg_alloc: allocate a hitherto unused segment number.
-+  */
-+-void pure_func seg_init(void);
-+ int32_t pure_func seg_alloc(void);
-+ 
-+ /*
-+-- 
-+2.17.0
-+
+diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
+index 292fa66d49..b4a57c36c3 100644
+--- a/package/log4cplus/log4cplus.mk
++++ b/package/log4cplus/log4cplus.mk
+@@ -7,7 +7,7 @@
+ LOG4CPLUS_VERSION = 1.1.2
+ LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
+ LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
+-LOG4CPLUS_LICENSE = Apache-2.0
++LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause
+ LOG4CPLUS_LICENSE_FILES = LICENSE
+ LOG4CPLUS_INSTALL_STAGING = YES
+ 
