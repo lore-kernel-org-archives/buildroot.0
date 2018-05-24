@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 23:04:24 +0200
-Subject: [Buildroot] [PATCH 1/1] log4cplus: fix license
-In-Reply-To: <20180504112608.28081-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 4 May 2018 13:26:08 +0200")
-References: <20180504112608.28081-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y3g8bw9z.fsf@dell.be.48ers.dk>
+Date: Thu, 24 May 2018 23:04:36 +0200
+Subject: [Buildroot] [PATCH] package/patch: fix xattr option
+In-Reply-To: <20180506115751.6317-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 6 May 2018 13:57:51 +0200")
+References: <20180506115751.6317-1-yann.morin.1998@free.fr>
+Message-ID: <87tvqwbw9n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Some files of log4cplus are licensed under BSD-2-Clause as stated in
- > LICENSE file: "Each file of log4cplus source is licensed using either
- > two clause BSD license or Apache license 2.0."
+ > The name of fthe configure option is, and has always been,
+ >  --enable-xattr, not --enable-attr. Otherwise, configure
+ > whines:
+ >     configure: WARNING: unrecognized options: --enable-attr
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed to 2018.02.x, thanks.
 
