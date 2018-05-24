@@ -1,36 +1,46 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 24 May 2018 20:51:18 +0300
-Subject: [Buildroot] [PATCH] lrzsz: install symlinks for XMODEM and YMODEM
-Message-ID: <22856a59ac4af71690638f10f2117cd83c853928.1527184278.git.baruch@tkos.co.il>
+Date: Thu, 24 May 2018 20:58:22 +0300
+Subject: [Buildroot] lrzsz package missing X and Y modem support binaries
+In-Reply-To: <3C8219BAE02B894A9C69304A12E8AA06CA23E97B@HED-Exchange.hed.local>
+References: <3C8219BAE02B894A9C69304A12E8AA06CA23E97B@HED-Exchange.hed.local>
+Message-ID: <20180524175822.d5r3ne6b5onv3bxd@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This sets the protocol choice according to the program invocation name.
-That is the common lrzsz installation practice.
+Hi Matthew,
 
-Cc: Matthew Starr <mstarr@hedonline.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/lrzsz/lrzsz.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+On Thu, May 24, 2018 at 05:04:32PM +0000, Matthew Starr wrote:
+> In Linux distributions the lrzsz package would install not only Zmodem (rz, 
+> sz) support binaries but also Xmodem (rx, sx) and Ymodem (rb, sb) support 
+> binaries too.
+> 
+> Why does buildroot's package not also include X and Y modem support 
+> binaries?  Is there a way to add this support?
 
-diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
-index 5dac07a2953e..25ecf3deade0 100644
---- a/package/lrzsz/lrzsz.mk
-+++ b/package/lrzsz/lrzsz.mk
-@@ -24,6 +24,10 @@ define LRZSZ_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/src/lsz $(TARGET_DIR)/usr/bin/sz
- 	ln -sf rz $(TARGET_DIR)/usr/bin/lrz
- 	ln -sf sz $(TARGET_DIR)/usr/bin/lsz
-+	ln -sf rz $(TARGET_DIR)/usr/bin/rb
-+	ln -sf sz $(TARGET_DIR)/usr/bin/sb
-+	ln -sf rz $(TARGET_DIR)/usr/bin/rx
-+	ln -sf sz $(TARGET_DIR)/usr/bin/sx
- endef
- 
- $(eval $(autotools-package))
+I posted a patch adding the XMODEM and YMODEM invocation names.
+
+http://patchwork.ozlabs.org/patch/920028/
+
+> Based on a quick glance of the source of lrzsz I could not spot where the X 
+> and Y modem binaries would come from like in the Linux distributions.
+
+The code checked the invocation name to set the default protocol choice. See 
+the chkinvok() routines in lrz.c and lsz.c.
+
+The binaries that your distro provides are hard-links to the same file. This 
+is what I get on my system:
+
+ls -i /usr/bin/r{x,b,z}
+48730274 /usr/bin/rb  48730274 /usr/bin/rx  48730274 /usr/bin/rz
+
+That is, all names point to the same inode number.
+
+baruch
+
 -- 
-2.17.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
