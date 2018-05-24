@@ -1,97 +1,69 @@
-From: Vincent Prince <vincent.prince.fr@gmail.com>
-Date: Thu, 24 May 2018 15:25:41 +0200
-Subject: [Buildroot] [PATCH] package/nss-myhostname: Add package
-Message-ID: <1527168341-29387-1-git-send-email-vincent.prince.fr@gmail.com>
+From: David PIERRET <david.pierret@smile.fr>
+Date: Thu, 24 May 2018 15:49:37 +0200
+Subject: [Buildroot] Openssh with ssl-engine issue
+Message-ID: <a04bda479b9ef0b4152ecd2e0b8022fe@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also fix nss-mdns hook to work with nss-myhostname
+Hi,
 
-Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
----
- package/Config.in                          |  1 +
- package/nss-mdns/nss-mdns.mk               |  2 +-
- package/nss-myhostname/Config.in           |  7 +++++++
- package/nss-myhostname/nss-myhostname.hash |  2 ++
- package/nss-myhostname/nss-myhostname.mk   | 20 ++++++++++++++++++++
- 5 files changed, 31 insertions(+), 1 deletion(-)
- create mode 100644 package/nss-myhostname/Config.in
- create mode 100644 package/nss-myhostname/nss-myhostname.hash
- create mode 100644 package/nss-myhostname/nss-myhostname.mk
+I am working on an NXP LS1021a CPU with a hardware crypto engine.
+I'm using Buildroot branch 2018.02.x
 
-diff --git a/package/Config.in b/package/Config.in
-index 3cf53ed..3ac0d63 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1426,6 +1426,7 @@ menu "Networking"
- 	source "package/neon/Config.in"
- 	source "package/norm/Config.in"
- 	source "package/nss-mdns/Config.in"
-+	source "package/nss-myhostname/Config.in"
- 	source "package/nss-pam-ldapd/Config.in"
- 	source "package/omniorb/Config.in"
- 	source "package/openldap/Config.in"
-diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
-index 407b942..ee666c7 100644
---- a/package/nss-mdns/nss-mdns.mk
-+++ b/package/nss-mdns/nss-mdns.mk
-@@ -17,6 +17,6 @@ define NSS_MDNS_INSTALL_CONFIG
- 		$(TARGET_DIR)/etc/nsswitch.conf
- endef
- 
--NSS_MDNS_POST_INSTALL_TARGET_HOOKS += NSS_MDNS_INSTALL_CONFIG
-+NSS_MDNS_TARGET_FINALIZE_HOOKS += NSS_MDNS_INSTALL_CONFIG
- 
- $(eval $(autotools-package))
-diff --git a/package/nss-myhostname/Config.in b/package/nss-myhostname/Config.in
-new file mode 100644
-index 0000000..968b911
---- /dev/null
-+++ b/package/nss-myhostname/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_NSS_MYHOSTNAME
-+	bool "nss-myhostname"
-+    depends on !BR2_PACKAGE_SYSTEMD_MYHOSTNAME
-+	help
-+		Name Service Switch module for resolving the local hostname
-+
-+		http://0pointer.de/lennart/projects/nss-myhostname
-diff --git a/package/nss-myhostname/nss-myhostname.hash b/package/nss-myhostname/nss-myhostname.hash
-new file mode 100644
-index 0000000..9e33bec
---- /dev/null
-+++ b/package/nss-myhostname/nss-myhostname.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256  2ba744ea8d578d1c57c85884e94a3042ee17843a5294434d3a7f6c4d67e7caf2 nss-myhostname-0.3.tar.gz
-diff --git a/package/nss-myhostname/nss-myhostname.mk b/package/nss-myhostname/nss-myhostname.mk
-new file mode 100644
-index 0000000..153e1d0
---- /dev/null
-+++ b/package/nss-myhostname/nss-myhostname.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+## nss-myhostname
-+#
-+#################################################################################
-+
-+NSS_MYHOSTNAME_VERSION = 0.3
-+NSS_MYHOSTNAME_SITE = http://0pointer.de/lennart/projects/nss-myhostname
-+NSS_MYHOSTNAME_LICENSE = LGPL-2.1
-+NSS_MYHOSTNAME_LICENSE_FILES = LICENSE
-+NSS_MYHOSTNAME_AUTORECONF = YES
-+
-+define MYHOSTNAME_SET_NSSWITCH
-+    $(SED) '/^hosts:/s/\s*\<myhostname\>//' \
-+		-e 's/\(^hosts:.*\)\(\<files\>\)\(.*\)\(\<dns\>\)\(.*\)/\1\2 myhostname \3\4\5/' -r $(TARGET_DIR)/etc/nsswitch.conf
-+endef
-+
-+NSS_MYHOSTNAME_TARGET_FINALIZE_HOOKS += MYHOSTNAME_SET_NSSWITCH
-+
-+$(eval $(autotools-package))
--- 
-2.7.4
+I have activated cryptodev-linux and my tests with OpenSSL show it 
+works.
+
+However, when I try an SSH connection to the target, the connection 
+fail with the following message :
+
+[...]
+debug1: kex: algorithm: curve25519-sha256 at libssh.org
+debug1: kex: host key algorithm: ecdsa-sha2-nistp256
+debug1: kex: server->client cipher: chacha20-poly1305 at openssh.com MAC: 
+<implicit> compression: none
+debug1: kex: client->server cipher: chacha20-poly1305 at openssh.com MAC: 
+<implicit> compression: none
+debug3: send packet: type 30
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+Connection closed by 192.168.1.43 port 22
+
+On the target side, a call to "strace sshd" shows me the following 
+error:
+
+[...]
+[pid   821] <... poll resumed> )        = 2 ([{fd=7, 
+revents=POLLIN|POLLHUP}, {fd=8, revents=POLLHUP}])
+[pid   837] +++ killed by SIGSYS +++
+[pid   821] read(8, "", 4)              = 0
+[pid   821] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, 
+si_pid=837, si_uid=1001, si_status=SIGSYS, si_utime=3, si_stime=0} ---
+[pid   821] close(8)                    = 0
+[pid   821] poll([{fd=7, events=POLLIN}], 1, -1) = 1 ([{fd=7, 
+revents=POLLIN|POLLHUP}])
+[pid   821] read(7, "", 4)              = 0
+[pid   821] kill(837, SIGKILL)          = 0
+[pid   821] exit_group(255)             = ?
+[pid   821] +++ exited with 255 +++
+
+Note that if the cryptodev module is not inserted, the connection is 
+established correctly.
+
+After some research, I could find this thread : 
+https://archlinuxarm.org/forum/viewtopic.php?f=53&t=11505
+
+The proposed solution does not seem to work on my target.
+The fork process continue to chroot to /var/empty.
+
+[pid  1205] chroot("/var/empty")        = 0
+[pid  1205] chdir("/")                  = 0
+[pid  1205] setgroups32(1, [1001])      = 0
+
+Has this problem ever been encountered?
+I'm aware that the UsePrivilegeSeparation option is deprecated.
+
+Best regards
+
+David Pierret
