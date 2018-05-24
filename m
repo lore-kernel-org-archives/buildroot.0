@@ -1,22 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 23:04:13 +0200
-Subject: [Buildroot] [PATCH] ebtables: drop obsolete comment
-In-Reply-To: <ea16299ab7bb09bf405c84c93b4f5e276246cb35.1525426304.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 4 May 2018 12:31:44 +0300")
-References: <ea16299ab7bb09bf405c84c93b4f5e276246cb35.1525426304.git.baruch@tkos.co.il>
-Message-ID: <8736ygdauq.fsf@dell.be.48ers.dk>
+Date: Thu, 24 May 2018 23:04:24 +0200
+Subject: [Buildroot] [PATCH 1/1] log4cplus: fix license
+In-Reply-To: <20180504112608.28081-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 4 May 2018 13:26:08 +0200")
+References: <20180504112608.28081-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y3g8bw9z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Commit 30c4b5843f (ebtables: enable for musl) enabled musl build, but
- > forgot to remove the comment text. Fix that.
+ > Some files of log4cplus are licensed under BSD-2-Clause as stated in
+ > LICENSE file: "Each file of log4cplus source is licensed using either
+ > two clause BSD license or Apache license 2.0."
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2018.02.x, thanks.
 
