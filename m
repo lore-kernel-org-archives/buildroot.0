@@ -1,51 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 20:15:10 +0200
-Subject: [Buildroot] [PATCH] util-linux: Bump to version 2.32
-In-Reply-To: <1527179352.31570.103.camel@impinj.com> (Trent Piepho's message
- of "Thu, 24 May 2018 16:29:12 +0000")
-References: <20180521191623.7049-1-tpiepho@impinj.com>
- <1526938480.31570.89.camel@impinj.com>
- <877enwis89.fsf@dell.be.48ers.dk>
- <857898562.2094800.1527079548616.JavaMail.zimbra@datacom.com.br>
- <871se1dogl.fsf@dell.be.48ers.dk>
- <1527179352.31570.103.camel@impinj.com>
-Message-ID: <87wovsdioh.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 24 May 2018 18:16:46 +0000
+Subject: [Buildroot] [Bug 11046] New: Git package binaries are ~180MB
+ (compared to ~20MB in stable branches).
+Message-ID: <bug-11046-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=11046
 
-Hi,
+            Bug ID: 11046
+           Summary: Git package binaries are ~180MB (compared to ~20MB in
+                    stable branches).
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: paulstewartis at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
- >> First of all, 4b54bd3ae8 is already on master so the question is just
- >> what we do for 2018.02.x?
- >> 
- >> Just cherrypicking the bump to 2.32 is certainly the easiest, but
- >> perhaps also riskier than just cherry-picking the getrandom() changes:
- >> 
- >> git shortlog v2.31.. -- lib/randutils.c
- >> Carlo Caione (1):
- >> lib/randutils: Do not block on getrandom()
- >> 
- >> Karel Zak (1):
- >> lib/randutils: don't break on EAGAIN, use usleep()
- >> 
- >> On the other hand, util-linux bumps are normally quite safe and we have
- >> not had any issues reported, so perhaps we should just go for 2.32 for
- >> 2018.02.x as well?
+Created attachment 7601
+  --> https://bugs.busybox.net/attachment.cgi?id=7601&action=edit
+Test config from Y Morin.
 
- > If you bump util-linux to 2.32, then systemd < 238 doesn't build
- > without systemd commit 227b8a762fea1458547be2cdf0e6e4aac0079730
+When I build a config with git enabled with 2018.05-rc2 the git binaries in
+/usr/libexec/git-core are over 180MB.  When I build the same config with
+2018.02.2 (and all other stable versions I have used over the last few years)
+the binaries are ~20MB or less.
 
- > core: don't include libmount.h in a header file (#8580)
+Steps to reproduce:
+1. Check out 2018.02.2 from git repo
+2. Build the attached config.
+3. Examine the git-core folder in the image tar file.
+4. Check out 2018.05-rc2 from git repo
+5. Build the attached config.
+6. Examine the git-core folder in the image tar file.
 
-Hrmph, then I guess just backporting those two util-linux commits are a
-better solution for 2018.02.x.
-
-Thanks.
+My build system is openSUSE Leap 42.3 fully patched.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
