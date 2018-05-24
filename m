@@ -1,48 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 23:05:44 +0200
-Subject: [Buildroot] [PATCH] binutils: replace hard-links with
- soft-links to fix rpath
-In-Reply-To: <20180422122350.16293-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 22 Apr 2018 14:23:50 +0200")
-References: <20180422122350.16293-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87h8mwbw7r.fsf@dell.be.48ers.dk>
+Date: Thu, 24 May 2018 23:06:02 +0200
+Subject: [Buildroot] [PATCH v2] busybox: S01mdev: fix module autoloading
+In-Reply-To: <20180507183501.13778-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 7 May 2018 20:35:01 +0200")
+References: <20180507183501.13778-1-peter@korsgaard.com>
+Message-ID: <87d0xkbw79.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > binutils installs its binaries both as bin/<tuple>-<tool> and as
- > <tuple>/bin/<tool>, and hardlinks are used to reduce disk space
- > consumption. This causes a problem for host-binutils with our rpath
- > fixing logic done by "make sdk".
+ > Commit b4fc5a180c (package/busybox: support spaces in module aliases in
+ > mdev) changed the mdev coldplugging to handle sysfs path elements and
+ > modalias values containing spaces.  This unfortunately doesn't work as was
+ > recently reported:
 
- > Indeed, the fix-rpath script starts by fixing up the rpath of
- > bin/<tuple>-<tool>, and sets the RPATH to $ORIGIN/../lib/. Then
- > fix-rpath moves on to <tuple>/bin/<tool>, and doesn't find the library
- > the tool depends on, and clears the RPATH. The result is that the
- > binutils tool are not usable.
+ > http://lists.busybox.net/pipermail/buildroot/2018-May/220903.html
 
- > Note that this is only visible currently on the ARC architecture,
- > because on this architecture, binutils is fetched from git, which
- > causes host-flex to be built, and some binutils tools to use the libfl
- > shared library. Therefore, the binutils tools don't use just the
- > standard C library (which is provided by the system) but also libfl
- > from $(HOST_DIR)/lib, and therefore if the RPATH isn't set correctly,
- > those tools don't work properly.
+ > The problem is that sort -z also expects the fields of the input files to be
+ > zero terminated, which is not the case for modalias sysfs entries.
 
- > In order to address this, this comit adds a post-install hook to
- > host-binutils that replaces those hard links by symbolic links. It is
- > worth mentioning that library loading and RPATH usage occurs *after*
- > resolving the symbolic links, which makes this solution work.
+ > So drop the -z option to sort.  Spaces in modalias entries could be handled
+ > with the xargs -d '\n' option, but that is unfortunately not supported by
+ > the busybox applet.  Instead, use tr to convert newlines to zeros so we can
+ > use xargs -0.
 
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/b2562b05d397d4e1ffe0f8d2f4ce4c84ab6feae1/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Reported-by: Daniel Palmer <daniel@0x0f.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x, thanks.
 
