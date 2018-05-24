@@ -1,75 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 22:42:29 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x]
- configs/freescale_imx6ulevk: Remove target
-Message-ID: <20180524210451.0FDCF80177@busybox.osuosl.org>
+Date: Thu, 24 May 2018 22:55:24 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] binutils: replace
+ hard-links with soft-links to fix rpath
+Message-ID: <20180524210451.414C68197A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd88f5e9bd1838ecb2da487529f58f2df37c811b
+commit: https://git.buildroot.net/buildroot/commit/?id=32cd792bde67aca63f4840cddecc85548ba62dc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Currently this target fails to build:
+binutils installs its binaries both as bin/<tuple>-<tool> and as
+<tuple>/bin/<tool>, and hardlinks are used to reduce disk space
+consumption. This causes a problem for host-binutils with our rpath
+fixing logic done by "make sdk".
 
-./scripts/dtc-version.sh: line 17: dtc: command not found
-./scripts/dtc-version.sh: line 18: dtc: command not found
-*** Your dtc is too old, please upgrade to dtc 1.4 or newer
+Indeed, the fix-rpath script starts by fixing up the rpath of
+bin/<tuple>-<tool>, and sets the RPATH to $ORIGIN/../lib/. Then
+fix-rpath moves on to <tuple>/bin/<tool>, and doesn't find the library
+the tool depends on, and clears the RPATH. The result is that the
+binutils tool are not usable.
 
-Even though the fix for this build failure is easy, I prefer to
-maintain only imx6ulevk_defconfig, which is a target for the
-same board, but uses mainline kernel and U-Boot versions instead.
+Note that this is only visible currently on the ARC architecture,
+because on this architecture, binutils is fetched from git, which
+causes host-flex to be built, and some binutils tools to use the libfl
+shared library. Therefore, the binutils tools don't use just the
+standard C library (which is provided by the system) but also libfl
+from $(HOST_DIR)/lib, and therefore if the RPATH isn't set correctly,
+those tools don't work properly.
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/66561695
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+In order to address this, this comit adds a post-install hook to
+host-binutils that replaces those hard links by symbolic links. It is
+worth mentioning that library loading and RPATH usage occurs *after*
+resolving the symbolic links, which makes this solution work.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/b2562b05d397d4e1ffe0f8d2f4ce4c84ab6feae1/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f24f0ca7772d4cf8196f6b56a9572a6850adbe68)
+(cherry picked from commit f9cffb6af464c5c049daa93d557e485ea61f14a8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/freescale_imx6ulevk_defconfig | 36 -----------------------------------
- 1 file changed, 36 deletions(-)
+ package/binutils/binutils.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
-deleted file mode 100644
-index 76ad101053..0000000000
---- a/configs/freescale_imx6ulevk_defconfig
-+++ /dev/null
-@@ -1,36 +0,0 @@
--# architecture
--BR2_arm=y
--BR2_cortex_a7=y
--
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--
--# system
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
--
--# kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
--
--# bootloader
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
--BR2_TARGET_UBOOT_FORMAT_IMX=y
--
--# required tools to create the microSD image
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--
--# filesystem / image
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 1bd01ecefc..29be5a7e4f 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -136,5 +136,17 @@ ifeq ($(BR2_BINUTILS_ENABLE_LTO),y)
+ HOST_BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
+ endif
+ 
++# Hardlinks between binaries in different directories cause a problem
++# with rpath fixup, so we de-hardlink those binaries, and replace them
++# with symbolic links.
++BINUTILS_TOOLS = ar as ld ld.bfd nm objcopy objdump ranlib readelf strip
++define HOST_BINUTILS_FIXUP_HARDLINKS
++	$(foreach tool,$(BINUTILS_TOOLS),\
++		rm -f $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool) ; \
++		ln -s ../../bin/$(GNU_TARGET_NAME)-$(tool) $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool)
++	)
++endef
++HOST_BINUTILS_POST_INSTALL_HOOKS += HOST_BINUTILS_FIXUP_HARDLINKS
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
