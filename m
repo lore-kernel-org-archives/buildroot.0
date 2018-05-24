@@ -1,37 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 23:06:02 +0200
-Subject: [Buildroot] [PATCH v2] busybox: S01mdev: fix module autoloading
-In-Reply-To: <20180507183501.13778-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 7 May 2018 20:35:01 +0200")
-References: <20180507183501.13778-1-peter@korsgaard.com>
-Message-ID: <87d0xkbw79.fsf@dell.be.48ers.dk>
+Date: Thu, 24 May 2018 22:22:13 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] gst1-plugins-bad: rework
+ license type construction
+Message-ID: <20180524210450.BF8BF825F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9034521cf7c931f7ab4ed3b4aaca3c9b31c0ce0e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Commit b4fc5a180c (package/busybox: support spaces in module aliases in
- > mdev) changed the mdev coldplugging to handle sysfs path elements and
- > modalias values containing spaces.  This unfortunately doesn't work as was
- > recently reported:
+Use "GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), xxxx" construct
+so that the list of licenses is presented as a comma-separated list.
 
- > http://lists.busybox.net/pipermail/buildroot/2018-May/220903.html
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 782deb7a4db68229fa38489ac598f312e4a4df49)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > The problem is that sort -z also expects the fields of the input files to be
- > zero terminated, which is not the case for modalias sysfs entries.
-
- > So drop the -z option to sort.  Spaces in modalias entries could be handled
- > with the xargs -d '\n' option, but that is unfortunately not supported by
- > the busybox applet.  Instead, use tr to convert newlines to zeros so we can
- > use xargs -0.
-
- > Reported-by: Daniel Palmer <daniel@0x0f.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 9f7cd9777e..b001c33592 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -11,7 +11,7 @@ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+ # Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE and
+ # GST1_PLUGINS_BAD_LICENSE_FILES if enabled.
+ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING.LIB
+-GST1_PLUGINS_BAD_LICENSE = LGPL-2.0+, LGPL-2.1+
++GST1_PLUGINS_BAD_LICENSE := LGPL-2.0+, LGPL-2.1+
+ 
+ GST1_PLUGINS_BAD_CONF_OPTS = \
+ 	--disable-examples \
+@@ -771,13 +771,13 @@ endif
+ 
+ # Add GPL license if GPL licensed plugins enabled.
+ ifeq ($(GST1_PLUGINS_BAD_HAS_GPL_LICENSE),y)
+-GST1_PLUGINS_BAD_LICENSE += GPL
++GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), GPL
+ GST1_PLUGINS_BAD_LICENSE_FILES += COPYING
+ endif
+ 
+ # Add Unknown license if Unknown licensed plugins enabled.
+ ifeq ($(GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE),y)
+-GST1_PLUGINS_BAD_LICENSE += UNKNOWN
++GST1_PLUGINS_BAD_LICENSE := $(GST1_PLUGINS_BAD_LICENSE), UNKNOWN
+ endif
+ 
+ # Use the following command to extract license info for plugins.
