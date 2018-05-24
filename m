@@ -1,52 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 22:59:29 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] busybox: S10mdev: fix
- module autoloading
-Message-ID: <20180524210451.4A2958197A@busybox.osuosl.org>
+Date: Thu, 24 May 2018 22:52:51 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: ensure correct
+ make targets are used for cuImage/simpleImage.<dtb>
+Message-ID: <20180524210451.30F6F8197A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a43f5f19397f89209d77aebeaa2d5bec671412a5
+commit: https://git.buildroot.net/buildroot/commit/?id=7c4518d9f371ca55ed23289ece2d37a941134a5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Commit b4fc5a180c (package/busybox: support spaces in module aliases in
-mdev) changed the mdev coldplugging to handle sysfs path elements and
-modalias values containing spaces.  This unfortunately doesn't work as was
-recently reported:
+Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/66561794
 
-http://lists.busybox.net/pipermail/buildroot/2018-May/220903.html
+LINUX_DTS_NAME may end up with a leading space because of the += logic, and
+may contain multiple dts files - Neither of which works when we construct
+the {cu,simple}Image.$(LINUX_DTS_NAME) make target name.
 
-The problem is that sort -z also expects the fields of the input files to be
-zero terminated, which is not the case for modalias sysfs entries.
+Fix it by using the first word in the variable.
 
-So drop the -z option to sort.  Spaces in modalias entries could be handled
-with the xargs -d '\n' option, but that is unfortunately not supported by
-the busybox applet.  Instead, use tr to convert newlines to zeros so we can
-use xargs -0.
-
-Reported-by: Daniel Palmer <daniel@0x0f.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 61717b7b3ef9c6c39f4adcbbb5dced3096f0ed08)
+(cherry picked from commit 978a997c81f41702bc039f89a20129ef65060801)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/S10mdev | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ linux/linux.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
-index 63ca955b1c..7075b77016 100644
---- a/package/busybox/S10mdev
-+++ b/package/busybox/S10mdev
-@@ -9,7 +9,8 @@ case "$1" in
- 	echo /sbin/mdev >/proc/sys/kernel/hotplug
- 	/sbin/mdev -s
- 	# coldplug modules
--	find /sys/ -name modalias -print0 | xargs -0 sort -u -z | xargs -0 modprobe -abq
-+	find /sys/ -name modalias -print0 | xargs -0 sort -u | tr '\n' '\0' | \
-+	    xargs -0 modprobe -abq
- 	;;
-   stop)
- 	;;
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8d14f41c6b..0c78d824e1 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -155,9 +155,9 @@ LINUX_IMAGE_NAME = zImage.epapr
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
+ LINUX_IMAGE_NAME = zImage
+ else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
+-LINUX_IMAGE_NAME = cuImage.$(KERNEL_DTS_NAME)
++LINUX_IMAGE_NAME = cuImage.$(firstword $(KERNEL_DTS_NAME))
+ else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
+-LINUX_IMAGE_NAME = simpleImage.$(KERNEL_DTS_NAME)
++LINUX_IMAGE_NAME = simpleImage.$(firstword $(KERNEL_DTS_NAME))
+ else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
+ LINUX_IMAGE_NAME = Image
+ else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
