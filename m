@@ -1,20 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 23:03:06 +0200
-Subject: [Buildroot] [PATCH] gst1-plugins-bad: fix typo preventing use
- of the netsim plugin
-In-Reply-To: <1526836274-2875-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Sun, 20 May 2018 13:11:14 -0400")
-References: <1526836274-2875-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87fu2gdawl.fsf@dell.be.48ers.dk>
+Date: Thu, 24 May 2018 23:03:29 +0200
+Subject: [Buildroot] [PATCH] nasm: Fix compilation with GCC 8
+In-Reply-To: <20180505023428.32414-1-casantos@datacom.ind.br> (Carlos Santos's
+ message of "Fri, 4 May 2018 23:34:28 -0300")
+References: <20180505023428.32414-1-casantos@datacom.ind.br>
+Message-ID: <87bmd4davy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
- > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+ > host-nasm fails to compile with GCC 8:
+ > In file included from ./include/nasm.h:46,
+ >                  from asm/nasm.c:47:
+ > ./include/nasmlib.h:194:1: error: ?pure? attribute on function returning ?void? [-Werror=attributes]
+ >  void pure_func seg_init(void);
+ >  ^~~~
+
+ > Pull a patch from upstream that removes the stale declaration of
+ > seg_init, which was eliminated a long time ago.
+
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
 Committed to 2018.02.x, thanks.
 
